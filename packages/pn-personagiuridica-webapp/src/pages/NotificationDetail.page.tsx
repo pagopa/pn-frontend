@@ -428,7 +428,6 @@ const NotificationDetail = () => {
                       <NotificationPaymentRecipient
                         payments={userPayments}
                         isCancelled={isCancelled.cancelled}
-                        iun={notification.iun}
                         onPayClick={onPayClick}
                         handleFetchPaymentsInfo={fetchPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}

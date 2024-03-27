@@ -3,34 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [2.3.0](https://github.com/pagopa/pn-frontend/compare/v2.3.0-RC.2...v2.3.0) (2024-01-25)
-
-**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
-
-
-
-
-
-# [2.3.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.3.0-RC.1...v2.3.0-RC.2) (2024-01-24)
-
-
-### Bug Fixes
-
-* **PN-9541:** Logout from ToS and PP page ([#1118](https://github.com/pagopa/pn-frontend/issues/1118)) ([b143072](https://github.com/pagopa/pn-frontend/commit/b143072f7ac4f03383117aa05db7afed7f5c28bf))
-* **pn-9624:** updated vitest config for coverage analysis ([#1115](https://github.com/pagopa/pn-frontend/issues/1115)) ([c940dd9](https://github.com/pagopa/pn-frontend/commit/c940dd9f3be6b78f5c2ef0df0e9628caf05d245a))
-
-
-
-
-
-# [2.3.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.3.0-RC.0...v2.3.0-RC.1) (2024-01-19)
-
-**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
-
-
-
-
-
 ## [2.2.4](https://github.com/pagopa/pn-frontend/compare/v2.2.4-RC.0...v2.2.4) (2024-01-12)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp

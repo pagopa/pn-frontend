@@ -1,10 +1,10 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { fireEvent, initLocalizationForTest, render } from '../../test-utils';
 import AppNotAccessible from '../AppNotAccessible';
 
 describe('AppNotAccessible Component', () => {
-  const assistanceClickHandlerMk = vi.fn();
+  const assistanceClickHandlerMk = jest.fn();
 
   beforeAll(() => {
     initLocalizationForTest();

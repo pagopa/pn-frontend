@@ -13,7 +13,7 @@ import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 import { getConfiguration } from '../../services/configuration.service';
 import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
-import { storageAarOps } from '../../utility/storage';
+import { storageAarOps, storageSpidSelectedOps } from '../../utility/storage';
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -30,8 +30,7 @@ const Login = () => {
   const isMobile = useIsMobile();
   const [params] = useSearchParams();
   const aar = params.get(AppRouteParams.AAR);
-  const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL, ROUTE_PRIVACY_POLICY } =
-    getConfiguration();
+  const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL } = getConfiguration();
 
   if (aar !== null && aar !== '') {
     storageAarOps.write(aar);
@@ -42,6 +41,7 @@ const Login = () => {
   }, []);
 
   const goCIE = () => {
+    storageSpidSelectedOps.write(SPID_CIE_ENTITY_ID);
     window.location.assign(
       `${URL_API_LOGIN}/login?entityID=${SPID_CIE_ENTITY_ID}&authLevel=SpidL2&RelayState=send`
     );
@@ -76,7 +76,6 @@ const Login = () => {
         surname: undefined,
         email: undefined,
       }}
-      privacyPolicyHref={ROUTE_PRIVACY_POLICY}
     >
       <Grid container direction="column" my={isMobile ? 4 : 16} id="loginPage">
         <Grid container item justifyContent="center">

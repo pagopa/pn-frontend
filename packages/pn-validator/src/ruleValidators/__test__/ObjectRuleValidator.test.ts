@@ -1,4 +1,3 @@
-import { vi } from 'vitest';
 import { Validator } from '../../Validator';
 import { IsEmpty } from '../../rules/IsEmpty';
 import { InnerValidator } from '../../rules/InnerValidator';
@@ -6,25 +5,25 @@ import { ObjectRuleValidator } from '../ObjectRuleValidator';
 
 class DummyValidator extends Validator<any> {}
 
-const pushRuleMk = vi.fn();
+const pushRuleMk = jest.fn();
 const dummyRuleValidator = new ObjectRuleValidator(pushRuleMk);
 
-vi.mock('../../rules/IsEmpty', () => {
+jest.mock('../../rules/IsEmpty', () => {
   return {
-    IsEmpty: vi.fn(),
+    IsEmpty: jest.fn(),
   };
 });
 
-vi.mock('../../rules/InnerValidator', () => {
+jest.mock('../../rules/InnerValidator', () => {
   return {
-    InnerValidator: vi.fn(),
+    InnerValidator: jest.fn(),
   };
 });
 
 describe('Test ObjectRuleValidator', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    vi.resetAllMocks();
+    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   it('check if methods exist', () => {

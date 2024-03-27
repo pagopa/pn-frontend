@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { disableConsoleLogging, fireEvent, render } from '../../../../test-utils';
 import PnTableBodyCell from '../PnTableBodyCell';
@@ -6,7 +6,7 @@ import PnTableBodyCell from '../PnTableBodyCell';
 describe('PnTableBodyCell', () => {
   disableConsoleLogging('error');
 
-  const mockFn = vi.fn();
+  const mockFn = jest.fn();
 
   it('render component', () => {
     const { container, queryByTestId } = render(

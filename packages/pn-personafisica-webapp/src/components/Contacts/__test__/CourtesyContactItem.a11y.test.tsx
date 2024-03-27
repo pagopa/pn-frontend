@@ -1,10 +1,10 @@
-import { vi } from 'vitest';
+import * as React from 'react';
 
 import { RenderResult, act, axe, fireEvent, render } from '../../../__test__/test-utils';
 import CourtesyContactItem, { CourtesyFieldType } from '../CourtesyContactItem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -15,7 +15,7 @@ vi.mock('react-i18next', () => ({
 describe('CourtesyContactItem component - accessibility tests', () => {
   const INPUT_VALID_PHONE = '3331234567';
   const VALID_EMAIL = 'prova@pagopa.it';
-  let result: RenderResult;
+  let result: RenderResult | undefined;
 
   it('type "phone" - no phone added - does not have basic accessibility issues', async () => {
     await act(async () => {
@@ -30,8 +30,10 @@ describe('CourtesyContactItem component - accessibility tests', () => {
       );
     });
 
-    const results = await axe(result.container);
-    expect(results).toHaveNoViolations();
+    if (result) {
+      const results = await axe(result.container);
+      expect(results).toHaveNoViolations();
+    }
   });
 
   it('type "phone" - phone added - does not have basic accessibility issues', async () => {
@@ -47,8 +49,10 @@ describe('CourtesyContactItem component - accessibility tests', () => {
       );
     });
 
-    const results = await axe(result.container);
-    expect(results).toHaveNoViolations();
+    if (result) {
+      const results = await axe(result.container);
+      expect(results).toHaveNoViolations();
+    }
   });
 
   it('type "phone" - phone added (edit mode) - does not have basic accessibility issues', async () => {
@@ -64,11 +68,13 @@ describe('CourtesyContactItem component - accessibility tests', () => {
       );
     });
 
-    const editButton = result.getByRole('button', { name: 'button.modifica' });
-    fireEvent.click(editButton);
+    const editButton = result?.getByRole('button', { name: 'button.modifica' });
+    fireEvent.click(editButton!);
 
-    const results = await axe(result.container);
-    expect(results).toHaveNoViolations();
+    if (result) {
+      const results = await axe(result.container);
+      expect(results).toHaveNoViolations();
+    }
   });
 
   it('type "email" - no email added - does not have basic accessibility issues', async () => {
@@ -84,8 +90,10 @@ describe('CourtesyContactItem component - accessibility tests', () => {
       );
     });
 
-    const results = await axe(result.container);
-    expect(results).toHaveNoViolations();
+    if (result) {
+      const results = await axe(result.container);
+      expect(results).toHaveNoViolations();
+    }
   });
 
   it('type "email" - email added - does not have basic accessibility issues', async () => {
@@ -101,8 +109,10 @@ describe('CourtesyContactItem component - accessibility tests', () => {
       );
     });
 
-    const results = await axe(result.container);
-    expect(results).toHaveNoViolations();
+    if (result) {
+      const results = await axe(result.container);
+      expect(results).toHaveNoViolations();
+    }
   });
 
   it('type "email" - email added (edit mode) - does not have basic accessibility issues', async () => {
@@ -118,10 +128,12 @@ describe('CourtesyContactItem component - accessibility tests', () => {
       );
     });
 
-    const editButton = result.getByRole('button', { name: 'button.modifica' });
-    fireEvent.click(editButton);
+    const editButton = result?.getByRole('button', { name: 'button.modifica' });
+    fireEvent.click(editButton!);
 
-    const results = await axe(result.container);
-    expect(results).toHaveNoViolations();
+    if (result) {
+      const results = await axe(result.container);
+      expect(results).toHaveNoViolations();
+    }
   });
 });

@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { vi } from 'vitest';
+import React from 'react';
 
 import {
   createMatchMedia,
@@ -11,12 +10,12 @@ import {
 } from '../../../../test-utils';
 import SmartFilter from '../SmartFilter';
 
-const submitHandler = vi.fn();
-const cancelHandler = vi.fn();
+const submitHandler = jest.fn();
+const cancelHandler = jest.fn();
 
 const ExampleForm = ({ inputUsername = '', inputEmail = '' }) => {
-  const [username, setUsername] = useState(inputUsername);
-  const [email, setEmail] = useState(inputEmail);
+  const [username, setUsername] = React.useState(inputUsername);
+  const [email, setEmail] = React.useState(inputEmail);
   return (
     <SmartFilter
       filterLabel="Filter"

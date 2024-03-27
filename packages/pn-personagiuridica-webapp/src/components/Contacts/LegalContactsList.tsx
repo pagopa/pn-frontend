@@ -97,7 +97,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
                 digitalElemRef.current.editContact();
               }}
             >
-              <Typography mb={1} sx={{ fontWeight: 'bold' }} id="associatedPEC">
+              <Typography mb={1} sx={{ fontWeight: 'bold' }}>
                 {t('legal-contacts.pec-added', { ns: 'recapiti' })}
               </Typography>
               <DigitalContactElem
@@ -106,8 +106,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
                 contactType={LegalChannelType.PEC}
                 fields={[
                   {
-                    id: `legalContacts`,
-                    key: 'legalContactValue',
+                    id: 'value',
                     component: (
                       <TextField
                         id="pec"

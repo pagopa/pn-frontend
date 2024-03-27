@@ -1,16 +1,12 @@
-import { vi } from 'vitest';
+import * as React from 'react';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
 import ConfirmationModal from '../ConfirmationModal';
 
-const mockCancelFunction = vi.fn();
-const mockConfirmFunction = vi.fn();
+const mockCancelFunction = jest.fn();
+const mockConfirmFunction = jest.fn();
 
 describe('ConfirmationModal Component', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('renders the component', () => {
     const { getByRole, getAllByTestId } = render(
       <ConfirmationModal

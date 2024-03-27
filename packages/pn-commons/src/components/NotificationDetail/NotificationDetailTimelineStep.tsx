@@ -14,7 +14,6 @@ import {
   TimelineNotificationSeparator,
 } from '@pagopa/mui-italia';
 
-import { useIsMobile } from '../../hooks';
 import {
   INotificationDetailTimeline,
   LegalFactId,
@@ -53,44 +52,31 @@ type Props = {
 
 /**
  * Timeline step component
+ * @param key unique key
  * @param oppositeContent element on the left
  * @param variant dot type
  * @param content element on the right
  * @param stepPosition step position
  * @param size dot size
  */
-type StepProps = {
-  oppositeContent?: ReactNode;
-  variant?: 'outlined' | 'filled';
-  content?: ReactNode;
-  stepPosition: 'first' | 'middle' | 'last';
-  size?: 'small' | 'default';
-};
-
-const TimelineStepCmp: React.FC<StepProps> = ({
-  oppositeContent,
-  variant,
-  content,
-  stepPosition,
-  size = 'default',
-}) => {
-  const isMobile = useIsMobile();
-  return (
-    <TimelineNotificationItem>
-      <TimelineNotificationOppositeContent sx={{ pr: isMobile ? 1 : 2, justifyContent: 'center' }}>
-        {oppositeContent}
-      </TimelineNotificationOppositeContent>
-      <TimelineNotificationSeparator>
-        <TimelineConnector sx={{ visibility: stepPosition === 'first' ? 'hidden' : 'visible' }} />
-        <TimelineNotificationDot variant={variant} size={size} />
-        <TimelineConnector sx={{ visibility: stepPosition === 'last' ? 'hidden' : 'visible' }} />
-      </TimelineNotificationSeparator>
-      <TimelineNotificationContent sx={{ py: 2, pl: isMobile ? 1 : 5, pr: 0, m: 0 }}>
-        {content}
-      </TimelineNotificationContent>
-    </TimelineNotificationItem>
-  );
-};
+const timelineStepCmp = (
+  key: string | undefined,
+  oppositeContent: ReactNode | undefined,
+  variant: 'outlined' | 'filled' | undefined,
+  content: ReactNode | undefined,
+  stepPosition: 'first' | 'middle' | 'last',
+  size: 'small' | 'default' = 'default'
+) => (
+  <TimelineNotificationItem key={key}>
+    <TimelineNotificationOppositeContent>{oppositeContent}</TimelineNotificationOppositeContent>
+    <TimelineNotificationSeparator>
+      <TimelineConnector sx={{ visibility: stepPosition === 'first' ? 'hidden' : 'visible' }} />
+      <TimelineNotificationDot variant={variant} size={size} />
+      <TimelineConnector sx={{ visibility: stepPosition === 'last' ? 'hidden' : 'visible' }} />
+    </TimelineNotificationSeparator>
+    <TimelineNotificationContent>{content}</TimelineNotificationContent>
+  </TimelineNotificationItem>
+);
 
 /**
  * Notification detail timeline
@@ -152,80 +138,75 @@ const NotificationDetailTimelineStep = ({
     /* eslint-enable functional/immutable-data */
   }
 
-  const macroStep = (
-    <TimelineStepCmp
-      oppositeContent={
-        <Fragment>
-          <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
-            {formatMonthString(timelineStep.activeFrom, language)}
+  const macroStep = timelineStepCmp(
+    undefined,
+    <Fragment>
+      <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
+        {formatMonthString(timelineStep.activeFrom, language)}
+      </Typography>
+      <Typography fontWeight={600} fontSize={18} data-testid="dateItem">
+        {formatDay(timelineStep.activeFrom)}
+      </Typography>
+    </Fragment>,
+    position === 'first' ? 'outlined' : undefined,
+    <Fragment>
+      <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
+        {formatTime(timelineStep.activeFrom)}
+      </Typography>
+      <Chip
+        id={`${notificationStatusInfos.label}-status`}
+        data-testid="itemStatus"
+        label={notificationStatusInfos.label}
+        color={position === 'first' ? notificationStatusInfos.color : 'default'}
+        size={position === 'first' ? 'medium' : 'small'}
+        sx={{
+          opacity:
+            timelineStep.status === NotificationStatus.CANCELLATION_IN_PROGRESS && isParty
+              ? '0.5'
+              : '1',
+        }}
+      />
+      {showHistoryButton && historyButtonLabel ? (
+        <Button
+          data-testid="historyButton"
+          sx={{ paddingLeft: 0, paddingRight: 0, marginTop: '5px' }}
+          startIcon={<UnfoldMoreIcon />}
+          onClick={historyButtonClickHandler}
+        >
+          {historyButtonLabel}
+        </Button>
+      ) : (
+        <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+          <Typography color="text.primary" variant="caption">
+            {notificationStatusInfos.description}
           </Typography>
-          <Typography fontWeight={600} fontSize={18} data-testid="dateItem">
-            {formatDay(timelineStep.activeFrom)}
-          </Typography>
-        </Fragment>
-      }
-      variant={position === 'first' ? 'outlined' : undefined}
-      content={
-        <Fragment>
-          <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
-            {formatTime(timelineStep.activeFrom)}
-          </Typography>
-          <Chip
-            id={`${notificationStatusInfos.label}-status`}
-            data-testid="itemStatus"
-            label={notificationStatusInfos.label}
-            color={position === 'first' ? notificationStatusInfos.color : 'default'}
-            size={position === 'first' ? 'medium' : 'small'}
-            sx={{
-              opacity:
-                timelineStep.status === NotificationStatus.CANCELLATION_IN_PROGRESS && isParty
-                  ? '0.5'
-                  : '1',
-            }}
-          />
-          {showHistoryButton && historyButtonLabel ? (
-            <Button
-              data-testid="historyButton"
-              sx={{ paddingLeft: 0, paddingRight: 0, marginTop: '5px' }}
-              startIcon={<UnfoldMoreIcon />}
-              onClick={historyButtonClickHandler}
-            >
-              {historyButtonLabel}
-            </Button>
-          ) : (
-            <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-              <Typography color="text.primary" variant="caption">
-                {notificationStatusInfos.description}
-              </Typography>
-              {legalFactsIds &&
-                legalFactsIds.length > 0 &&
-                legalFactsIds.map((lf) => (
-                  <ButtonNaked
-                    key={
-                      (lf.file as LegalFactId).key ||
-                      (lf.file as NotificationDetailOtherDocument).documentId
-                    }
-                    startIcon={<AttachFileIcon />}
-                    onClick={() => clickHandler(lf.file)}
-                    color="primary"
-                    sx={{ marginTop: '10px', textAlign: 'left' }}
-                    data-testid="download-legalfact"
-                    disabled={disableDownloads}
-                  >
-                    {getLegalFactLabel(
-                      lf.step,
-                      (lf.file as LegalFactId).category ||
-                        (lf.file as NotificationDetailOtherDocument).documentType,
-                      (lf.file as LegalFactId).key || ''
-                    )}
-                  </ButtonNaked>
-                ))}
-            </Box>
-          )}
-        </Fragment>
-      }
-      stepPosition={position}
-    />
+          {legalFactsIds &&
+            legalFactsIds.length > 0 &&
+            legalFactsIds.map((lf) => (
+              <ButtonNaked
+                key={
+                  (lf.file as LegalFactId).key ||
+                  (lf.file as NotificationDetailOtherDocument).documentId
+                }
+                startIcon={<AttachFileIcon />}
+                onClick={() => clickHandler(lf.file)}
+                color="primary"
+                sx={{ marginTop: '10px', textAlign: 'left' }}
+                data-testid="download-legalfact"
+                disabled={disableDownloads}
+              >
+                {getLegalFactLabel(
+                  lf.step,
+                  (lf.file as LegalFactId).category ||
+                    (lf.file as NotificationDetailOtherDocument).documentType,
+                  (lf.file as LegalFactId).key || ''
+                )}
+              </ButtonNaked>
+            ))}
+        </Box>
+      )}
+    </Fragment>,
+    position
   );
 
   const handleShowMoreClick = () => {
@@ -234,22 +215,21 @@ const NotificationDetailTimelineStep = ({
     setCollapsed(!collapsed);
   };
 
-  const moreLessButton = (
-    <TimelineStepCmp
-      content={
-        <Box data-testid="moreLessButton">
-          <ButtonNaked
-            id="more-less-timeline-step"
-            data-testid="more-less-timeline-step"
-            startIcon={collapsed ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
-            onClick={handleShowMoreClick}
-          >
-            {collapsed ? showMoreButtonLabel : showLessButtonLabel}
-          </ButtonNaked>
-        </Box>
-      }
-      stepPosition="middle"
-    />
+  const moreLessButton = timelineStepCmp(
+    undefined,
+    undefined,
+    undefined,
+    <Box data-testid="moreLessButton">
+      <ButtonNaked
+        id="more-less-timeline-step"
+        data-testid="more-less-timeline-step"
+        startIcon={collapsed ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
+        onClick={handleShowMoreClick}
+      >
+        {collapsed ? showMoreButtonLabel : showLessButtonLabel}
+      </ButtonNaked>
+    </Box>,
+    'middle'
   );
 
   const microStep = (s: INotificationDetailTimeline) => {
@@ -261,67 +241,61 @@ const NotificationDetailTimelineStep = ({
     if (!timelineStatusInfos) {
       return null;
     }
-    return (
-      <TimelineStepCmp
-        key={s.elementId}
-        oppositeContent={
-          <Fragment>
-            <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
-              {formatMonthString(s.timestamp, language)}
-            </Typography>
-            <Typography fontWeight={600} fontSize={18} data-testid="dateItemMicro">
-              {formatDay(s.timestamp)}
-            </Typography>
-          </Fragment>
-        }
-        content={
-          <Fragment>
-            <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
-              {formatTime(s.timestamp)}
-            </Typography>
-            <Typography
-              color="text.primary"
-              fontSize={14}
-              fontWeight={600}
-              variant="caption"
-              letterSpacing="0.5px"
-            >
-              {timelineStatusInfos.label}
-            </Typography>
-            <Box sx={{ overflowWrap: 'anywhere' }}>
-              <Typography color="text.primary" fontSize={14}>
-                {timelineStatusInfos.description}&nbsp;
-                {s.legalFactsIds &&
-                  s.legalFactsIds.length > 0 &&
-                  s.legalFactsIds.map((lf) => (
-                    <Typography
-                      fontSize={14}
-                      display="inline"
-                      variant="button"
-                      color={disableDownloads ? 'text.disabled' : 'primary'}
-                      sx={{ cursor: disableDownloads ? 'default' : 'pointer' }}
-                      onClick={() => clickHandler(lf)}
-                      key={
-                        (lf as LegalFactId).key ||
-                        (lf as NotificationDetailOtherDocument).documentId
-                      }
-                      data-testid="download-legalfact-micro"
-                    >
-                      {getLegalFactLabel(
-                        s,
-                        (lf as LegalFactId).category ||
-                          (lf as NotificationDetailOtherDocument).documentType,
-                        (lf as LegalFactId).key || ''
-                      )}
-                    </Typography>
-                  ))}
-              </Typography>
-            </Box>
-          </Fragment>
-        }
-        stepPosition="middle"
-        size="small"
-      />
+    return timelineStepCmp(
+      s.elementId,
+      <Fragment>
+        <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
+          {formatMonthString(s.timestamp, language)}
+        </Typography>
+        <Typography fontWeight={600} fontSize={18} data-testid="dateItemMicro">
+          {formatDay(s.timestamp)}
+        </Typography>
+      </Fragment>,
+      undefined,
+      <Fragment>
+        <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
+          {formatTime(s.timestamp)}
+        </Typography>
+        <Typography
+          color="text.primary"
+          fontSize={14}
+          fontWeight={600}
+          variant="caption"
+          letterSpacing="0.5px"
+        >
+          {timelineStatusInfos.label}
+        </Typography>
+        <Box sx={{ overflowWrap: 'anywhere' }}>
+          <Typography color="text.primary" fontSize={14}>
+            {timelineStatusInfos.description}&nbsp;
+            {s.legalFactsIds &&
+              s.legalFactsIds.length > 0 &&
+              s.legalFactsIds.map((lf) => (
+                <Typography
+                  fontSize={14}
+                  display="inline"
+                  variant="button"
+                  color={disableDownloads ? 'text.disabled' : 'primary'}
+                  sx={{ cursor: disableDownloads ? 'default' : 'pointer' }}
+                  onClick={() => clickHandler(lf)}
+                  key={
+                    (lf as LegalFactId).key || (lf as NotificationDetailOtherDocument).documentId
+                  }
+                  data-testid="download-legalfact-micro"
+                >
+                  {getLegalFactLabel(
+                    s,
+                    (lf as LegalFactId).category ||
+                      (lf as NotificationDetailOtherDocument).documentType,
+                    (lf as LegalFactId).key || ''
+                  )}
+                </Typography>
+              ))}
+          </Typography>
+        </Box>
+      </Fragment>,
+      'middle',
+      'small'
     );
   };
 

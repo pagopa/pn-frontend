@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
@@ -152,7 +152,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
 
   it('Should call handleDeselectPayment when radio button is selected and is clicked', async () => {
     const item = { ...pagoPAItem, status: PaymentStatus.REQUIRED };
-    const handleDeselectPaymentMk = vi.fn();
+    const handleDeselectPaymentMk = jest.fn();
     const { container } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
@@ -175,7 +175,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
       status: PaymentStatus.FAILED,
       detail: PaymentInfoDetail.GENERIC_ERROR,
     };
-    const handleFetchPaymentsInfoMk = vi.fn();
+    const handleFetchPaymentsInfoMk = jest.fn();
     const { getByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}

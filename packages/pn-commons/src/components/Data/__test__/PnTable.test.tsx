@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { Box } from '@mui/material';
 
@@ -11,8 +11,8 @@ import PnTableBodyRow from '../PnTable/PnTableBodyRow';
 import PnTableHeader from '../PnTable/PnTableHeader';
 import PnTableHeaderCell from '../PnTable/PnTableHeaderCell';
 
-const handleSort = vi.fn();
-const handleColumnClick = vi.fn();
+const handleSort = jest.fn();
+const handleColumnClick = jest.fn();
 
 type Item = { id: string; 'column-1': string; 'column-2': string; 'column-3': string };
 

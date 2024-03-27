@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { RenderResult, fireEvent, waitFor } from '@testing-library/react';
 
 import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';

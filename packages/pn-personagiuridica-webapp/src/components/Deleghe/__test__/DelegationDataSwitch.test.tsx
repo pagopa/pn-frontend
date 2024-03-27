@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { Row } from '@pagopa-pn/pn-commons';
 
@@ -9,7 +9,7 @@ import delegationToItem from '../../../utility/delegation.utility';
 import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../../utility/status.utility';
 import DelegationDataSwitch from '../DelegationDataSwitch';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,

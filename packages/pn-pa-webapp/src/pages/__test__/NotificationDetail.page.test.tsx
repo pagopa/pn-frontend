@@ -1,6 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { Route, Routes } from 'react-router-dom';
-import { vi } from 'vitest';
+import React from 'react';
 
 import {
   AppResponseMessage,
@@ -19,7 +18,16 @@ import {
   notificationDTO,
   notificationDTOMultiRecipient,
 } from '../../__mocks__/NotificationDetail.mock';
-import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import {
   CANCEL_NOTIFICATION,
   NOTIFICATION_DETAIL,
@@ -29,13 +37,16 @@ import {
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
 
+const mockNavigateFn = jest.fn();
+
 // mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useParams: () => ({ id: 'RTRD-UDGU-QTQY-202308-P-1' }),
+  useNavigate: () => mockNavigateFn,
 }));
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -51,33 +62,23 @@ const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number
   return timelineElementDigitalSuccessWorkflow.legalFactsIds![0] as LegalFactId;
 };
 
-describe('NotificationDetail Page', async () => {
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
+describe('NotificationDetail Page', () => {
   const mockLegalIds = getLegalFactIds(notificationDTO, 0);
-  const original = window.location;
 
-  let result: RenderResult;
+  let result: RenderResult | undefined;
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: { href: '', assign: vi.fn() },
-    });
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
+    result = undefined;
     mock.reset();
-    vi.clearAllMocks();
   });
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'location', { configurable: true, value: original });
   });
 
   it('renders NotificationDetail page - mono recipient', async () => {
@@ -90,52 +91,52 @@ describe('NotificationDetail Page', async () => {
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
     expect(mock.history.get[1].url).toContain('/downtime/v1/history');
-    expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result.container.querySelector('h4')).toHaveTextContent(notificationDTO.subject);
-    expect(result.container).toHaveTextContent(notificationDTO.abstract!);
+    expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
+    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationDTO.subject);
+    expect(result?.container).toHaveTextContent(notificationDTO.abstract!);
     // check summary table
-    const notificationDetailTable = result.getByTestId('notificationDetailTable');
+    const notificationDetailTable = result?.getByTestId('notificationDetailTable');
     expect(notificationDetailTable).toBeInTheDocument();
     const tableRows = notificationDetailTable?.querySelectorAll('tr');
-    expect(tableRows[0]).toHaveTextContent(`detail.sender${notificationDTO.senderDenomination}`);
-    expect(tableRows[1]).toHaveTextContent(
+    expect(tableRows![0]).toHaveTextContent(`detail.sender${notificationDTO.senderDenomination}`);
+    expect(tableRows![1]).toHaveTextContent(
       `detail.recipient${notificationDTO.recipients[0].denomination}`
     );
-    expect(tableRows[2]).toHaveTextContent(
+    expect(tableRows![2]).toHaveTextContent(
       `detail.tax-id-citizen-recipient${notificationDTO.recipients[0].taxId}`
     );
     // format date beacuse in UI the date is formatted
-    expect(tableRows[3]).toHaveTextContent(`detail.date${formatDate(notificationDTO.sentAt)}`);
-    expect(tableRows[4]).toHaveTextContent(`detail.iun${notificationDTO.iun}`);
-    expect(tableRows[5]).toHaveTextContent(`detail.groups${notificationDTO.group}`);
+    expect(tableRows![3]).toHaveTextContent(`detail.date${formatDate(notificationDTO.sentAt)}`);
+    expect(tableRows![4]).toHaveTextContent(`detail.iun${notificationDTO.iun}`);
+    expect(tableRows![5]).toHaveTextContent(`detail.groups${notificationDTO.group}`);
     // check documents box
     let notificationDocumentLength: number;
-    const notificationDetailDocuments = result.getAllByTestId('notificationDetailDocuments');
+    const notificationDetailDocuments = result?.getAllByTestId('notificationDetailDocuments');
     if (notificationDTOMultiRecipient.otherDocuments) {
       notificationDocumentLength = notificationDTOMultiRecipient.documents.length;
-      +notificationDTOMultiRecipient.otherDocuments.length;
+      +notificationDTOMultiRecipient.otherDocuments?.length!;
     } else {
       notificationDocumentLength = notificationDTOMultiRecipient.documents.length;
     }
 
     expect(notificationDetailDocuments?.length).toBeGreaterThanOrEqual(notificationDocumentLength);
-    const notificationDetailDocumentsMessage = result.getAllByTestId('documentsMessage');
-    for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage) {
+    const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
+    for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage!) {
       expect(notificationDetailDocumentMessage).toHaveTextContent(
         /detail.download-aar-available|detail.download-message-available|detail.download-message-expired|detail.download-aar-expired/
       );
     }
     // check timeline box
-    const NotificationDetailTimeline = result.getByTestId('NotificationDetailTimeline');
+    const NotificationDetailTimeline = result?.getByTestId('NotificationDetailTimeline');
     expect(NotificationDetailTimeline).toBeInTheDocument();
     // check payment history box
-    const paymentsTable = result.getByTestId('paymentInfoBox');
+    const paymentsTable = result?.getByTestId('paymentInfoBox');
     expect(paymentsTable).toBeInTheDocument();
     // check downtimes box
-    const downtimesBox = result.getByTestId('downtimesBox');
+    const downtimesBox = result?.getByTestId('downtimesBox');
     expect(downtimesBox).toBeInTheDocument();
     // check cancellation alert
-    const alert = result.queryByTestId('alert');
+    const alert = result?.queryByTestId('alert');
     expect(alert).not.toBeInTheDocument();
   });
 
@@ -149,8 +150,8 @@ describe('NotificationDetail Page', async () => {
       result = render(<NotificationDetail />);
     });
     // check documents box
-    const notificationDetailDocumentsMessage = result.getAllByTestId('documentsMessage');
-    for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage) {
+    const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
+    for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage!) {
       expect(notificationDetailDocumentMessage).toHaveTextContent(
         /detail.download-aar-expired|detail.download-message-expired/
       );
@@ -174,8 +175,8 @@ describe('NotificationDetail Page', async () => {
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
     expect(mock.history.get[1].url).toContain('/downtime/v1/history');
-    const documentButton = result.getAllByTestId('documentButton');
-    fireEvent.click(documentButton[0]);
+    const documentButton = result?.getAllByTestId('documentButton');
+    fireEvent.click(documentButton![0]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[2].url).toContain(
@@ -188,37 +189,41 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
-    mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationDTO.iun, mockLegalIds)).reply(200, {
-      retryAfter: 1,
-    });
+    mock
+      .onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationDTO.iun, mockLegalIds as LegalFactId))
+      .reply(200, {
+        retryAfter: 1,
+      });
     await act(async () => {
       result = render(<NotificationDetail />);
     });
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
     expect(mock.history.get[1].url).toContain('/downtime/v1/history');
-    const legalFactButton = result.getAllByTestId('download-legalfact');
-    fireEvent.click(legalFactButton[0]);
+    const legalFactButton = result?.getAllByTestId('download-legalfact');
+    fireEvent.click(legalFactButton![0]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[2].url).toContain(
         `/delivery-push/${notificationDTO.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
     });
-    const docNotAvailableAlert = await waitFor(() => result.getByTestId('docNotAvailableAlert'));
+    const docNotAvailableAlert = await waitFor(() => result?.getByTestId('docNotAvailableAlert'));
     expect(docNotAvailableAlert).toBeInTheDocument();
-    mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationDTO.iun, mockLegalIds)).reply(200, {
-      filename: 'mocked-filename',
-      contentLength: 1000,
-      retryAfter: null,
-      url: 'https://mocked-url-com',
-    });
+    mock
+      .onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationDTO.iun, mockLegalIds as LegalFactId))
+      .reply(200, {
+        filename: 'mocked-filename',
+        contentLength: 1000,
+        retryAfter: null,
+        url: 'https://mocked-url-com',
+      });
     // simulate that legal fact is now available
     await act(async () => {
       await new Promise((r) => setTimeout(r, 1000));
     });
     expect(docNotAvailableAlert).not.toBeInTheDocument();
-    fireEvent.click(legalFactButton[0]);
+    fireEvent.click(legalFactButton![0]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
@@ -244,9 +249,9 @@ describe('NotificationDetail Page', async () => {
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
     expect(mock.history.get[1].url).toContain('/downtime/v1/history');
-    const downtimesBox = result.getByTestId('downtimesBox');
+    const downtimesBox = result?.getByTestId('downtimesBox');
     const legalFactDowntimesButton = downtimesBox?.querySelectorAll('button');
-    fireEvent.click(legalFactDowntimesButton[0]);
+    fireEvent.click(legalFactDowntimesButton![0]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[2].url).toContain(
@@ -256,42 +261,12 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('clicks on the back button - mono recipient', async () => {
-    // restore window location
-    Object.defineProperty(window, 'location', { configurable: true, value: original });
-    // insert two entries into the history, so the initial render will refer to the path /
-    // and when the back button is pressed and so navigate(-1) is invoked,
-    // the path will change to /mock-path
-    window.history.pushState({}, '', '/mock-path');
-    window.history.pushState({}, '', '/');
-
-    // render with an ad-hoc router
     await act(async () => {
-      result = render(
-        <Routes>
-          <Route path={'/mock-path'} element={<div data-testid="mocked-page">hello</div>} />
-          <Route path={'/'} element={<NotificationDetail />} />
-        </Routes>
-      );
+      result = render(<NotificationDetail />);
     });
-
-    // before pressing "back" button - mocked page not present
-    const mockedPageBefore = result.queryByTestId('mocked-page');
-    expect(mockedPageBefore).not.toBeInTheDocument();
-
-    // simulate press of "back" button
-    const backButton = result.getByRole('button', { name: /indietro/i });
-    expect(backButton).toBeInTheDocument();
-    fireEvent.click(backButton);
-
-    // after pressing "back" button - mocked page present
-    await waitFor(() => {
-      const mockedPageAfter = result.queryByTestId('mocked-page');
-      expect(mockedPageAfter).toBeInTheDocument();
-    });
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: { href: '', assign: vi.fn() },
-    });
+    const backButton = result?.getByRole('button', { name: /indietro/i });
+    fireEvent.click(backButton!);
+    expect(mockNavigateFn).toBeCalledTimes(1);
   });
 
   it('errors on api call - mono recipient', async () => {
@@ -307,7 +282,7 @@ describe('NotificationDetail Page', async () => {
         </>
       );
     });
-    const statusApiErrorComponent = result.queryByTestId(
+    const statusApiErrorComponent = result?.queryByTestId(
       `api-error-${NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION}`
     );
     expect(statusApiErrorComponent).toBeInTheDocument();
@@ -320,12 +295,12 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />);
     });
-    const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
-    fireEvent.click(cancelNotificationBtn);
-    const modal = await waitFor(() => result.getByTestId('cancel-notification-modal'));
+    const cancelNotificationBtn = result?.getByTestId('cancelNotificationBtn');
+    fireEvent.click(cancelNotificationBtn!);
+    const modal = await waitFor(() => result?.getByTestId('cancel-notification-modal'));
     expect(modal).toBeInTheDocument();
-    const closeModalBtn = within(modal).getByTestId('modalCloseBtnId');
-    fireEvent.click(closeModalBtn);
+    const closeModalBtn = within(modal!).getByTestId('modalCloseBtnId');
+    fireEvent.click(closeModalBtn!);
     await waitFor(() => expect(modal).not.toBeInTheDocument());
   });
 
@@ -359,17 +334,17 @@ describe('NotificationDetail Page', async () => {
       result = render(<NotificationDetail />);
     });
 
-    const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
-    fireEvent.click(cancelNotificationBtn);
-    const modal = await waitFor(() => result.getByTestId('cancel-notification-modal'));
+    const cancelNotificationBtn = result?.getByTestId('cancelNotificationBtn');
+    fireEvent.click(cancelNotificationBtn!);
+    const modal = await waitFor(() => result?.getByTestId('cancel-notification-modal'));
     expect(modal).toBeInTheDocument();
-    const checkbox = within(modal).getByTestId('checkbox');
+    const checkbox = within(modal!).getByTestId('checkbox');
     fireEvent.click(checkbox);
     const modalCloseAndProceedBtn = await waitFor(() =>
-      within(modal).getByTestId('modalCloseAndProceedBtnId')
+      within(modal!).getByTestId('modalCloseAndProceedBtnId')
     );
     count++;
-    fireEvent.click(modalCloseAndProceedBtn);
+    fireEvent.click(modalCloseAndProceedBtn!);
     await waitFor(() => {
       expect(modal).not.toBeInTheDocument();
     });
@@ -380,9 +355,9 @@ describe('NotificationDetail Page', async () => {
       expect(mock.history.get[2].url).toBe(NOTIFICATION_DETAIL(notificationDTO.iun));
     });
     // check alert cancellation in progress
-    let alert = await waitFor(() => result.getByTestId('alert'));
+    let alert = await waitFor(() => result?.getByTestId('alert'));
     expect(alert).toBeInTheDocument();
-    expect(result.container).toHaveTextContent('detail.alert-cancellation-in-progress');
+    expect(result?.container).toHaveTextContent('detail.alert-cancellation-in-progress');
     expect(cancelNotificationBtn).not.toBeInTheDocument();
   });
 
@@ -395,9 +370,9 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />);
     });
-    const alert = result.getByTestId('alert');
+    const alert = result?.getByTestId('alert');
     expect(alert).toBeInTheDocument();
-    expect(result.container).toHaveTextContent('detail.alert-cancellation-confirmed');
+    expect(result?.container).toHaveTextContent('detail.alert-cancellation-confirmed');
   });
 
   it('renders NotificationDetail page - multi recipient', async () => {
@@ -414,43 +389,43 @@ describe('NotificationDetail Page', async () => {
     expect(mock.history.get[1].url).toContain('/downtime/v1/history');
     // the only thing that change from mono to multi recipient is the data shown in the table and the payments number
     // check summary table
-    const notificationDetailTable = result.getByTestId('notificationDetailTable');
+    const notificationDetailTable = result?.getByTestId('notificationDetailTable');
     expect(notificationDetailTable).toBeInTheDocument();
     const tableRows = notificationDetailTable?.querySelectorAll('tr');
-    expect(tableRows[0]).toHaveTextContent(
+    expect(tableRows![0]).toHaveTextContent(
       `detail.sender${notificationDTOMultiRecipient.senderDenomination}`
     );
     notificationDTOMultiRecipient.recipients.forEach((recipient, index) => {
-      expect(tableRows[1]).toHaveTextContent(
+      expect(tableRows![1]).toHaveTextContent(
         index === 0
           ? `detail.recipients${recipient.denomination} - ${recipient.taxId}`
           : `${recipient.denomination} - ${recipient.taxId}`
       );
     });
-    expect(tableRows[2]).toHaveTextContent(
+    expect(tableRows![2]).toHaveTextContent(
       `detail.date${formatDate(notificationDTOMultiRecipient.sentAt)}`
     );
-    expect(tableRows[3]).toHaveTextContent(`detail.iun${notificationDTOMultiRecipient.iun}`);
-    expect(tableRows[4]).toHaveTextContent(`detail.groups${notificationDTOMultiRecipient.group}`);
+    expect(tableRows![3]).toHaveTextContent(`detail.iun${notificationDTOMultiRecipient.iun}`);
+    expect(tableRows![4]).toHaveTextContent(`detail.groups${notificationDTOMultiRecipient.group}`);
     // check payment history box
-    const paymentsTable = result.getByTestId('paymentInfoBox');
+    const paymentsTable = result?.getByTestId('paymentInfoBox');
     expect(paymentsTable).toBeInTheDocument();
     // check documents box
     let notificationDocumentLength: number;
-    const notificationDetailDocuments = result.getAllByTestId('notificationDetailDocuments');
+    const notificationDetailDocuments = result?.getAllByTestId('notificationDetailDocuments');
     if (notificationDTOMultiRecipient.otherDocuments) {
       notificationDocumentLength = notificationDTOMultiRecipient.documents.length;
-      +notificationDTOMultiRecipient.otherDocuments.length;
+      +notificationDTOMultiRecipient.otherDocuments?.length!;
     } else {
       notificationDocumentLength = notificationDTOMultiRecipient.documents.length;
     }
 
     expect(notificationDetailDocuments?.length).toBeGreaterThanOrEqual(notificationDocumentLength);
     // check timeline box
-    const NotificationDetailTimeline = result.getByTestId('NotificationDetailTimeline');
+    const NotificationDetailTimeline = result?.getByTestId('NotificationDetailTimeline');
     expect(NotificationDetailTimeline).toBeInTheDocument();
     // check downtimes box
-    const downtimesBox = result.getByTestId('downtimesBox');
+    const downtimesBox = result?.getByTestId('downtimesBox');
     expect(downtimesBox).toBeInTheDocument();
   });
 
@@ -469,7 +444,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />);
     });
-    const paymentsTable = result.queryByTestId('paymentInfoBox');
+    const paymentsTable = result?.queryByTestId('paymentInfoBox');
     expect(paymentsTable).not.toBeInTheDocument();
   });
 });

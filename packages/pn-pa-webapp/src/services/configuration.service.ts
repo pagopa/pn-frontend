@@ -17,7 +17,6 @@ interface PaConfigurationFromFile {
   WORK_IN_PROGRESS?: boolean;
   SELFCARE_SEND_PROD_ID: string;
   API_B2B_LINK: string;
-  IS_MANUAL_SEND_ENABLED: boolean;
 }
 
 export interface PaConfiguration extends PaConfigurationFromFile {
@@ -35,7 +34,6 @@ export interface PaConfiguration extends PaConfigurationFromFile {
   WORK_IN_PROGRESS: boolean;
   SELFCARE_SEND_PROD_ID: string;
   API_B2B_LINK: string;
-  IS_MANUAL_SEND_ENABLED: boolean;
 }
 
 class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
@@ -58,7 +56,6 @@ class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
     this.ruleFor('WORK_IN_PROGRESS').isBoolean();
     this.ruleFor('SELFCARE_SEND_PROD_ID').isString();
     this.ruleFor('API_B2B_LINK').isString();
-    this.ruleFor('IS_MANUAL_SEND_ENABLED').isBoolean();
   }
 
   makeRequired(rule: any): void {
@@ -69,7 +66,7 @@ class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
 export function getConfiguration(): PaConfiguration {
   const configurationFromFile = Configuration.get<PaConfigurationFromFile>();
   const IS_DEVELOP = process.env.NODE_ENV === 'development';
-  const APP_VERSION = import.meta.env.VITE_APP_VERSION ?? '';
+  const APP_VERSION = process.env.REACT_APP_VERSION ?? '';
   return {
     ...configurationFromFile,
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID || '',
@@ -85,8 +82,7 @@ export function getConfiguration(): PaConfiguration {
     MIXPANEL_TOKEN: configurationFromFile.MIXPANEL_TOKEN || 'DUMMY',
     WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
     SELFCARE_SEND_PROD_ID: configurationFromFile.SELFCARE_SEND_PROD_ID,
-    API_B2B_LINK: configurationFromFile.API_B2B_LINK || '',
-    IS_MANUAL_SEND_ENABLED: Boolean(configurationFromFile.IS_MANUAL_SEND_ENABLED)
+    API_B2B_LINK: configurationFromFile.API_B2B_LINK || ''
   };
 }
 

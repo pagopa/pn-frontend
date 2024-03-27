@@ -1,18 +1,18 @@
-import { Mock, vi } from 'vitest';
+import React from 'react';
 
 import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor, within } from '../../../test-utils';
 import NotificationDetailDocuments from '../NotificationDetailDocuments';
 
 describe('NotificationDetailDocuments Component', () => {
-  let mockClickFn: Mock;
+  let mockClickFn: jest.Mock;
 
   beforeEach(() => {
-    mockClickFn = vi.fn();
+    mockClickFn = jest.fn();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   it('renders component - no documents', () => {

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Email } from '@mui/icons-material';
 
 import { loggedUser, productsList } from '../../../__mocks__/User.mock';

@@ -1,8 +1,7 @@
 import { getConfiguration } from '../../services/configuration.service';
 import { goToSelfcareLogin } from '../navigation.utility';
-import { vi } from 'vitest';
 
-const exitFn = vi.fn();
+const exitFn = jest.fn();
 
 describe('Tests notification.utility', () => {
   const original = window.location;

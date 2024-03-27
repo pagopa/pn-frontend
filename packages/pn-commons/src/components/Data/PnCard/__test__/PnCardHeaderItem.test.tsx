@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Row } from '../../../../models';
 import { render } from '../../../../test-utils';
 import PnCardHeaderItem from '../PnCardHeaderItem';

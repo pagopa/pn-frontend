@@ -1,11 +1,11 @@
-import { vi } from 'vitest';
+import * as React from 'react';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
 import CourtesyContacts from '../CourtesyContacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -14,7 +14,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('CourtesyContacts Component', async () => {
-  let result: RenderResult;
+  let result: RenderResult | undefined;
 
   it('does not have basic accessibility issues - no contacts', async () => {
     await act(async () => {
@@ -24,8 +24,10 @@ describe('CourtesyContacts Component', async () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
-    const results = await axe(result.container);
-    expect(results).toHaveNoViolations();
+    if (result) {
+      const results = await axe(result.container);
+      expect(results).toHaveNoViolations();
+    }
   });
 
   it('does not have basic accessibility issues - contacts', async () => {
@@ -36,7 +38,9 @@ describe('CourtesyContacts Component', async () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
-    const results = await axe(result.container);
-    expect(results).toHaveNoViolations();
+    if (result) {
+      const results = await axe(result.container);
+      expect(results).toHaveNoViolations();
+    }
   });
 });

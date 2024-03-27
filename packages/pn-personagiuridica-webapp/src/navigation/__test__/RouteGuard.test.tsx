@@ -1,18 +1,10 @@
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { act, render, screen } from '../../__test__/test-utils';
 import RouteGuard from '../RouteGuard';
 import { DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM } from '../routes.const';
-
-const mockNavigateFn = vi.fn(() => {});
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 const mockReduxState = {
   userState: {
@@ -39,7 +31,7 @@ describe('RouteGuard component', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   afterAll(() => {
@@ -73,24 +65,5 @@ describe('RouteGuard component', () => {
       render(<Guard />);
     });
     expect(localStorage.getItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM)).toBe(mockQrCode);
-  });
-
-  it('Get aar from localStorage', async () => {
-    const mockQrCode = 'qr-code';
-    localStorage.setItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM, mockQrCode);
-
-    await act(async () => {
-      render(<Guard />, { preloadedState: mockReduxState });
-    });
-
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(
-      { pathname: '/', search: '?aar=' + mockQrCode },
-      {
-        replace: true,
-      }
-    );
-
-    expect(localStorage.getItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM)).toBeNull();
   });
 });

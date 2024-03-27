@@ -1,10 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
+import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { arrayOfDelegates, arrayOfDelegators } from '../../__mocks__/Delegations.mock';
 import { fireEvent, render, waitFor } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import {
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
@@ -15,7 +16,7 @@ import DelegationsOfTheCompany from '../../components/Deleghe/DelegationsOfTheCo
 import * as routes from '../../navigation/routes.const';
 import Deleghe from '../Deleghe.page';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -23,15 +24,11 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-describe('Deleghe page', async () => {
+describe('Deleghe page', () => {
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {

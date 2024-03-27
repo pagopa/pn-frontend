@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { PaymentsData } from '../../../models';
@@ -26,8 +28,6 @@ describe('NotificationPaymentTite component', () => {
         f24Only={paymentsData.f24Only}
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
-        allPaymentsIsPaid={false}
-        hasMoreThenOnePage={true}
       />
     );
 
@@ -45,8 +45,6 @@ describe('NotificationPaymentTite component', () => {
         f24Only={[]}
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
-        allPaymentsIsPaid={false}
-        hasMoreThenOnePage={true}
       />
     );
 
@@ -64,8 +62,6 @@ describe('NotificationPaymentTite component', () => {
         f24Only={[]}
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
-        allPaymentsIsPaid={false}
-        hasMoreThenOnePage={true}
       />
     );
 
@@ -83,47 +79,11 @@ describe('NotificationPaymentTite component', () => {
         f24Only={paymentsData.f24Only}
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
-        allPaymentsIsPaid={false}
-        hasMoreThenOnePage={true}
       />
     );
 
     expect(container).toHaveTextContent('notifiche - detail.payment.subtitle-f24');
     const faq = queryByTestId('faqNotificationCosts');
     expect(faq).not.toBeInTheDocument();
-  });
-
-  it('should not show title if has only one page and all payments are paid', () => {
-    const { container } = render(
-      <NotificationPaymentTitle
-        pagoPaF24={[]}
-        f24Only={[]}
-        landingSiteUrl="https://www.mocked-url.com"
-        handleTrackEventFn={() => {}}
-        allPaymentsIsPaid={true}
-        hasMoreThenOnePage={false}
-      />
-    );
-
-    expect(container).toBeEmptyDOMElement();
-  });
-
-  it('should show title if all payments are paid but has more than one page', () => {
-    const { container, getByTestId } = render(
-      <NotificationPaymentTitle
-        pagoPaF24={paymentsData.pagoPaF24}
-        f24Only={paymentsData.f24Only}
-        landingSiteUrl="https://www.mocked-url.com"
-        handleTrackEventFn={() => {}}
-        allPaymentsIsPaid={true}
-        hasMoreThenOnePage={true}
-      />
-    );
-
-    expect(container).toHaveTextContent(
-      'notifiche - detail.payment.subtitle-mixed notifiche - detail.payment.how'
-    );
-    const faq = getByTestId('faqNotificationCosts');
-    expect(faq).toBeInTheDocument();
   });
 });

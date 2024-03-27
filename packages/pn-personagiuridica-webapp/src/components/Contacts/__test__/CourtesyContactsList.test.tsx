@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import * as React from 'react';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import { RenderResult, act, render } from '../../../__test__/test-utils';
@@ -7,7 +7,7 @@ import { CourtesyFieldType } from '../CourtesyContactItem';
 import CourtesyContactsList from '../CourtesyContactsList';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -21,7 +21,7 @@ Il flusso completo viene testato nei singoli componenti, dove si potrà testare 
 Andrea Cimini - 11/09/2023
 */
 describe('CourtesyContactsList Component', () => {
-  let result: RenderResult;
+  let result: RenderResult | undefined;
 
   it('renders component - no contacts', async () => {
     await act(async () => {
@@ -31,13 +31,13 @@ describe('CourtesyContactsList Component', () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
-    const phoneInput = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
-    const emailInput = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+    const phoneInput = result?.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
+    const emailInput = result?.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
     expect(phoneInput).toBeInTheDocument();
     expect(phoneInput).toHaveValue('');
     expect(emailInput).toBeInTheDocument();
     expect(emailInput).toHaveValue('');
-    const buttons = result.getAllByRole('button');
+    const buttons = result?.getAllByRole('button');
     expect(buttons![0]).toBeDisabled();
     expect(buttons![1]).toBeDisabled();
     expect(buttons![0].textContent).toMatch('courtesy-contacts.email-add');
@@ -60,15 +60,15 @@ describe('CourtesyContactsList Component', () => {
       (addr) => addr.channelType === CourtesyChannelType.EMAIL && addr.senderId === 'default'
     );
 
-    const phoneInput = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
-    const emailInput = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+    const phoneInput = result?.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
+    const emailInput = result?.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
     expect(phoneInput).not.toBeInTheDocument();
     expect(emailInput).not.toBeInTheDocument();
-    const phoneNumber = result.getByText(defaultPhone!.value);
+    const phoneNumber = result?.getByText(defaultPhone!.value);
     expect(phoneNumber).toBeInTheDocument();
-    const email = result.getByText(defaultEmail!.value);
+    const email = result?.getByText(defaultEmail!.value);
     expect(email).toBeInTheDocument();
-    const buttons = result.getAllByRole('button');
+    const buttons = result?.getAllByRole('button');
     expect(buttons![0]).toBeEnabled();
     expect(buttons![1]).toBeEnabled();
     expect(buttons![0].textContent).toMatch('button.modifica');

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { vi } from 'vitest';
 
 import { act, fireEvent, render } from '../../test-utils';
 import { useMultiEvent } from '../useMultiEvent';
@@ -27,57 +26,43 @@ const Component: React.FC<IProps> = ({ count, interval }) => {
 };
 
 describe('test useMultiEvent hook', () => {
-  beforeAll(() => {
-    vi.useFakeTimers();
-  });
-
-  afterAll(() => {
-    vi.useRealTimers();
-  });
-
-  it('call the completion callback', () => {
+  it('call the completion callback', async () => {
     const count = 5;
     const interval = 100;
     const { getByRole } = render(<Component count={count} interval={interval} />);
     const btn = getByRole('button', { name: 'Click me!' });
     for (let index = 0; index < count; index++) {
+      await new Promise((r) => setTimeout(r, 50));
       fireEvent.click(btn);
-      if (index < count) {
-        vi.advanceTimersByTime(50);
-      }
     }
     const paragraph = getByRole('heading', { name: 'Updated!' });
     expect(paragraph).toBeInTheDocument();
   });
 
-  it("doesn't call the completion callback if event was not called enough times", () => {
+  it("doesn't call the completion callback if event was not called enough times", async () => {
     const count = 5;
     const interval = 100;
     const { getByRole, queryByRole } = render(<Component count={count} interval={interval} />);
     const btn = getByRole('button', { name: 'Click me!' });
     for (let index = 0; index < count - 1; index++) {
+      await new Promise((r) => setTimeout(r, 50));
       fireEvent.click(btn);
-      if (index < count) {
-        vi.advanceTimersByTime(50);
-      }
     }
     const paragraph = queryByRole('heading', { name: 'Updated!' });
     expect(paragraph).not.toBeInTheDocument();
   });
 
-  it("doesn't call the completion callback if interval between event was too wide", () => {
+  it("doesn't call the completion callback if interval between event was too wide", async () => {
     const count = 5;
     const interval = 100;
     const { getByRole, queryByRole } = render(<Component count={count} interval={interval} />);
     const btn = getByRole('button', { name: 'Click me!' });
-    for (let index = 0; index < count; index++) {
-      fireEvent.click(btn);
-      if (index < count) {
-        act(() => {
-          vi.advanceTimersByTime(200);
-        });
+    await act(async () => {
+      for (let index = 0; index < count; index++) {
+        await new Promise((r) => setTimeout(r, 200));
+        fireEvent.click(btn);
       }
-    }
+    });
     const paragraph = queryByRole('heading', { name: 'Updated!' });
     expect(paragraph).not.toBeInTheDocument();
   });

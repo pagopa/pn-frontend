@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { render } from '../../../__test__/test-utils';
 import VerificationCodeComponent from '../VerificationCodeComponent';
 

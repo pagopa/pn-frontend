@@ -42,22 +42,7 @@ type Props = {
   onApiKeys: () => void;
 };
 
-type LinkRemoveFiltersProps = {
-  cleanFilters: () => void;
-  children?: React.ReactNode;
-};
-
-type LinkApiKeyProps = {
-  onApiKeys: () => void;
-  children?: React.ReactNode;
-};
-
-type LinkCreateNotificationProps = {
-  onManualSend: () => void;
-  children?: React.ReactNode;
-};
-
-const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => {
+const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, cleanFilters }) => {
   const { t } = useTranslation(['notifiche']);
   return (
     <Link
@@ -74,7 +59,7 @@ const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFi
   );
 };
 
-const LinkApiKey: React.FC<LinkApiKeyProps> = ({ children, onApiKeys }) => {
+const LinkApiKey: React.FC<{ onApiKeys: () => void }> = ({ children, onApiKeys }) => {
   const { t } = useTranslation(['notifiche']);
   return (
     <Link
@@ -91,7 +76,7 @@ const LinkApiKey: React.FC<LinkApiKeyProps> = ({ children, onApiKeys }) => {
   );
 };
 
-const LinkCreateNotification: React.FC<LinkCreateNotificationProps> = ({
+const LinkCreateNotification: React.FC<{ onManualSend: () => void }> = ({
   children,
   onManualSend,
 }) => {

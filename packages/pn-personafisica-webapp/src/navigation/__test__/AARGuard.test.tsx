@@ -1,8 +1,9 @@
 import MockAdapter from 'axios-mock-adapter';
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { vi } from 'vitest';
 
 import { act, render, screen, waitFor } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import { NOTIFICATION_ID_FROM_QRCODE } from '../../api/notifications/notifications.routes';
 import AARGuard from '../AARGuard';
 import {
@@ -11,15 +12,15 @@ import {
   GET_DETTAGLIO_NOTIFICA_PATH,
 } from '../routes.const';
 
-const mockNavigateFn = vi.fn(() => {});
+const mockNavigateFn = jest.fn(() => {});
 
 // mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigateFn,
 }));
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
@@ -33,16 +34,12 @@ const Guard = () => (
   </Routes>
 );
 
-describe('Notification from QR code', async () => {
+describe('Notification from QR code', () => {
   const original = window.location;
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { search: '' },
@@ -51,7 +48,7 @@ describe('Notification from QR code', async () => {
 
   afterEach(() => {
     mock.reset();
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   afterAll(() => {
@@ -134,21 +131,6 @@ describe('Notification from QR code', async () => {
     const accessDeniedComponent = screen.getByTestId('access-denied');
     expect(accessDeniedComponent).toBeInTheDocument();
     expect(accessDeniedComponent).toHaveTextContent('from-qrcode.not-found');
-  });
-
-  it('invalid recipient accesses to QR code', async () => {
-    const mockQrCode = 'bad-qr-code';
-    window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
-    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: mockQrCode }).reply(404);
-    await act(async () => {
-      render(<Guard />);
-    });
-    const pageComponent = screen.queryByText('Generic Page');
-    const accessDeniedComponent = screen.queryByTestId('access-denied');
-    const titleAccessDeniedComponent = await screen.findByText('from-qrcode.not-found');
-    expect(pageComponent).toBeNull();
-    expect(accessDeniedComponent).toBeTruthy();
-    expect(titleAccessDeniedComponent).toBeInTheDocument();
   });
 
   it('no QR code', async () => {

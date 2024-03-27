@@ -1,10 +1,10 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
 import FormTextField from '../FormTextField';
 
-const mockSetValue = vi.fn();
-const mockBlur = vi.fn();
+const mockSetValue = jest.fn();
+const mockBlur = jest.fn();
 
 const keyName = 'testKey';
 
@@ -23,10 +23,6 @@ const formTestErrors = {
 };
 
 describe('FormTextField Component', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('renders the component', () => {
     const { container } = render(
       <FormTextField

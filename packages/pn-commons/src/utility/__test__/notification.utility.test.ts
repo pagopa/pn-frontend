@@ -33,6 +33,7 @@ import {
 import { initLocalizationForTest } from '../../test-utils';
 import { initLocalization } from '../../utility';
 import { TimelineStepFactory } from '../TimelineUtils/TimelineStepFactory';
+import { formatDate } from '../date.utility';
 import {
   getF24Payments,
   getLegalFactLabel,
@@ -1115,7 +1116,7 @@ describe('Populate pagoPA and F24 payments', () => {
   });
 
   it('With empty external registry it should return the mapped array with only timeline info', () => {
-    const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item) => {
+    const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
       const timelineEvent = notificationToFe.timeline.find(
         (event) =>
           event.category === TimelineCategory.PAYMENT &&

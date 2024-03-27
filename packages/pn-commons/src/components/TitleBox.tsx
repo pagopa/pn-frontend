@@ -23,8 +23,6 @@ type Props = {
   sx?: SxProps<Theme>;
   /** a11y for component */
   ariaLabel?: string;
-  /** paragraph component */
-  children?: React.ReactNode;
 };
 
 /**

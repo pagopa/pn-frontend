@@ -1,9 +1,8 @@
-import { useEffect } from 'react';
-
-import { compileOneTrustPath, rewriteLinks, waitForElement } from '@pagopa-pn/pn-commons';
+import { compileOneTrustPath, useRewriteLinks } from '@pagopa-pn/pn-commons';
+import { useEffect, useState } from 'react';
 
 import * as routes from '../navigation/routes.const';
-import { getConfiguration } from '../services/configuration.service';
+import { getConfiguration } from "../services/configuration.service";
 
 declare const OneTrust: {
   NoticeApi: {
@@ -16,21 +15,25 @@ declare const OneTrust: {
 
 const TermsOfServicePage = () => {
   const { ONE_TRUST_DRAFT_MODE, ONE_TRUST_TOS } = getConfiguration();
+  const [contentLoaded, setContentLoaded] = useState(false);
 
   useEffect(() => {
     if (ONE_TRUST_TOS) {
       OneTrust.NoticeApi.Initialized.then(function () {
         OneTrust.NoticeApi.LoadNotices(
-          [compileOneTrustPath(ONE_TRUST_TOS, ONE_TRUST_DRAFT_MODE)],
+          [
+            compileOneTrustPath(
+              ONE_TRUST_TOS,
+              ONE_TRUST_DRAFT_MODE
+            ),
+          ],
           false
         );
-
-        void waitForElement('.otnotice-content').then(() => {
-          rewriteLinks(routes.TERMS_OF_SERVICE, '.otnotice-content a');
-        });
+        setContentLoaded(true);
       });
     }
   }, []);
+  useRewriteLinks(contentLoaded, routes.TERMS_OF_SERVICE, '.otnotice-content a');
 
   return (
     <>

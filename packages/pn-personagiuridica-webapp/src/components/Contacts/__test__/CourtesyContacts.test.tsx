@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
+import React from 'react';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import {
@@ -7,16 +7,18 @@ import {
   act,
   fireEvent,
   render,
+  testStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 import { COURTESY_CONTACT } from '../../../api/contacts/contacts.routes';
 import { CourtesyChannelType } from '../../../models/contacts';
 import CourtesyContactItem, { CourtesyFieldType } from '../CourtesyContactItem';
 import CourtesyContacts from '../CourtesyContacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -46,17 +48,12 @@ const defaultPhoneAddress = digitalAddresses.courtesy.find(
   (addr) => addr.senderId === 'default' && addr.channelType === CourtesyChannelType.SMS
 );
 
-describe('CourtesyContacts Component', async () => {
+describe('CourtesyContacts Component', () => {
   let mock: MockAdapter;
-  let result: RenderResult;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../../api/apiClients');
-  const testUtils = await import('../../../__test__/test-utils');
+  let result: RenderResult | undefined;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
@@ -75,19 +72,19 @@ describe('CourtesyContacts Component', async () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
-    const avatar = result.getByText('Email');
+    const avatar = result?.getByText('Email');
     expect(avatar).toBeInTheDocument();
-    const title = result.getByRole('heading');
+    const title = result?.getByRole('heading');
     expect(title).toBeInTheDocument();
     expect(title).toHaveTextContent('courtesy-contacts.subtitle');
-    const body = result.getByTestId('DigitalContactsCardBody');
+    const body = result?.getByTestId('DigitalContactsCardBody');
     expect(body).toHaveTextContent('courtesy-contacts.title');
     expect(body).toHaveTextContent('courtesy-contacts.description');
-    const disclaimer = result.getByTestId('contacts disclaimer');
+    const disclaimer = result?.getByTestId('contacts disclaimer');
     expect(disclaimer).toBeInTheDocument();
     // check inputs
-    const phoneInput = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
-    const emailInput = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+    const phoneInput = result?.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
+    const emailInput = result?.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
     expect(phoneInput).toBeInTheDocument();
     expect(emailInput).toBeInTheDocument();
   });
@@ -142,7 +139,7 @@ describe('CourtesyContacts Component', async () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    expect(testUtils.testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       {
         ...defaultPhoneAddress,
         senderName: undefined,
@@ -219,7 +216,7 @@ describe('CourtesyContacts Component', async () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    expect(testUtils.testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       {
         ...defaultPhoneAddress,
         senderName: undefined,
@@ -279,9 +276,7 @@ describe('CourtesyContacts Component', async () => {
       expect(dialogBox).not.toBeVisible();
       expect(mock.history.delete).toHaveLength(1);
     });
-    expect(testUtils.testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual(
-      []
-    );
+    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([]);
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
@@ -347,7 +342,7 @@ describe('CourtesyContacts Component', async () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    expect(testUtils.testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       {
         ...defaultEmailAddress,
         senderName: undefined,
@@ -424,7 +419,7 @@ describe('CourtesyContacts Component', async () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    expect(testUtils.testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       {
         ...defaultEmailAddress,
         senderName: undefined,
@@ -484,9 +479,7 @@ describe('CourtesyContacts Component', async () => {
       expect(dialogBox).not.toBeVisible();
       expect(mock.history.delete).toHaveLength(1);
     });
-    expect(testUtils.testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual(
-      []
-    );
+    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([]);
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>

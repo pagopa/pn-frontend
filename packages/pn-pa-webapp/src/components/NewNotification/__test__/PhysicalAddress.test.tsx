@@ -1,11 +1,11 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { testFormElements } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { render } from '../../../__test__/test-utils';
 import PhysicalAddress from '../PhysicalAddress';
 
-const mockSetValue = vi.fn();
+const mockSetValue = jest.fn();
 
 const formTestValues = {
   address: 'via delle vie',
@@ -19,7 +19,7 @@ const formTestValues = {
   addressDetails: 'scala b quarto piano',
 };
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,

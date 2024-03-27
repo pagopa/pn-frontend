@@ -1,10 +1,10 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { fireEvent, render, screen, waitFor, within } from '../../../test-utils';
 import CodeModal from '../CodeModal';
 
-const cancelButtonMock = vi.fn();
-const confirmButtonMock = vi.fn();
+const cancelButtonMock = jest.fn();
+const confirmButtonMock = jest.fn();
 
 const openedModalComponent = (
   open: boolean,
@@ -34,7 +34,7 @@ describe('CodeModal Component', () => {
   beforeAll(() => {
     Object.assign(window.navigator, {
       clipboard: {
-        writeText: vi.fn().mockImplementation(() => Promise.resolve()),
+        writeText: jest.fn().mockImplementation(() => Promise.resolve()),
       },
     });
   });

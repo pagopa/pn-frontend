@@ -1,25 +1,21 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import AcceptDelegationModal from '../AcceptDelegationModal';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
 }));
 
-const confirmCbk = vi.fn();
-const cancelCbk = vi.fn();
+const confirmCbk = jest.fn();
+const cancelCbk = jest.fn();
 
 describe('AcceptDelegationModal', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('renders CodeModal', async () => {
     render(
       <AcceptDelegationModal

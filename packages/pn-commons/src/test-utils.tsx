@@ -1,8 +1,7 @@
 import mediaQuery from 'css-mediaquery';
-import { ReactElement, ReactNode } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { vi } from 'vitest';
 
 import { ThemeProvider, createTheme } from '@mui/material';
 import { Store, configureStore } from '@reduxjs/toolkit';
@@ -50,8 +49,8 @@ const AllTheProviders = ({
   );
 };
 
-const createTestStore = (preloadedState = {}) =>
-  configureStore({
+const createTestStore = (preloadedState = {}) => {
+  return configureStore({
     reducer: { appState: appStateSlice.reducer },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
@@ -59,6 +58,7 @@ const createTestStore = (preloadedState = {}) =>
       }),
     preloadedState,
   });
+};
 
 const customRender = (
   ui: ReactElement,
@@ -90,7 +90,7 @@ const customRender = (
 /** This function simulate media query and is useful to test differences between mobile and desktop view */
 function createMatchMedia(width: number) {
   return (query: string): MediaQueryList => ({
-    matches: mediaQuery.match(query, { width }),
+    matches: mediaQuery.match(query, { width }) as boolean,
     media: '',
     addListener: () => {},
     removeListener: () => {},
@@ -104,11 +104,11 @@ function createMatchMedia(width: number) {
 /** This function disable the console logging methods */
 function disableConsoleLogging(method: 'log' | 'error' | 'info' | 'warn') {
   beforeAll(() => {
-    vi.spyOn(console, method).mockImplementation(() => {});
+    jest.spyOn(console, method).mockImplementation(jest.fn());
   });
 
   afterAll(() => {
-    vi.restoreAllMocks();
+    jest.restoreAllMocks();
   });
 }
 
@@ -169,7 +169,7 @@ async function testAutocomplete(
     document.querySelector('[role="presentation"][class*="MuiAutocomplete-popper"')
   )) as HTMLElement;
   expect(dropdown).toBeInTheDocument();
-  const dropdownOptionsList = within(dropdown).getByRole('listbox');
+  const dropdownOptionsList = within(dropdown).getByRole('listbox') as HTMLElement;
   expect(dropdownOptionsList).toBeInTheDocument();
   const dropdownOptionsListItems = within(dropdownOptionsList).getAllByRole('option');
   expect(dropdownOptionsListItems).toHaveLength(options.length);
@@ -270,7 +270,7 @@ function initLocalizationForTest() {
   const mockedTranslationFn = (
     namespace: string | Array<string>,
     path: string,
-    data?: { [key: string]: any }
+    data?: { [key: string]: any | undefined }
   ) => (data ? `${namespace} - ${path} - ${JSON.stringify(data)}` : `${namespace} - ${path}`);
   initLocalization(mockedTranslationFn);
 }

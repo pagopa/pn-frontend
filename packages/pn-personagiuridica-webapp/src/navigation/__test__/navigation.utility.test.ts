@@ -1,8 +1,7 @@
-import { vi } from 'vitest';
 import { getConfiguration } from '../../services/configuration.service';
 import { goToLoginPortal } from '../navigation.utility';
 
-const replaceFn = vi.fn();
+const replaceFn = jest.fn();
 
 describe('Tests navigation utility methods', () => {
   const original = window.location;
@@ -15,7 +14,7 @@ describe('Tests navigation utility methods', () => {
   });
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   afterAll((): void => {

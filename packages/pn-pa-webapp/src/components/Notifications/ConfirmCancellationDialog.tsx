@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next';
 import {
   Button,
   Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
   DialogTitle,
   FormControl,
   FormControlLabel,
   Typography,
 } from '@mui/material';
-import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 type Props = {
   showModal: boolean;
@@ -34,9 +36,11 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
   }, [showModal]);
 
   return (
-    <PnDialog open={showModal} data-testid="cancel-notification-modal">
-      <DialogTitle id="dialog-title">{t('detail.cancel-notification-modal.title')}</DialogTitle>
-      <PnDialogContent>
+    <Dialog open={showModal} data-testid="cancel-notification-modal">
+      <DialogTitle id="dialog-title" sx={{ p: 4 }}>
+        {t('detail.cancel-notification-modal.title')}
+      </DialogTitle>
+      <DialogContent sx={{ px: 4, pb: 4 }}>
         <Typography data-testid="dialogText" component="p">
           {payment
             ? t('detail.cancel-notification-modal.message-with-payment')
@@ -63,8 +67,8 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
             />
           </FormControl>
         )}
-      </PnDialogContent>
-      <PnDialogActions>
+      </DialogContent>
+      <DialogActions sx={{ px: 4, pb: 4 }}>
         <Button onClick={onClose} variant="outlined" data-testid="modalCloseBtnId">
           {t('button.indietro', { ns: 'common' })}
         </Button>
@@ -76,8 +80,8 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
         >
           {t('detail.cancel-notification')}
         </Button>
-      </PnDialogActions>
-    </PnDialog>
+      </DialogActions>
+    </Dialog>
   );
 };
 

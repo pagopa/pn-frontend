@@ -20,7 +20,6 @@ import {
 } from '../../models';
 import { formatEurocentToCurrency } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
-import { getPaymentCache, setPaymentCache } from '../../utility/paymentCaching.utility';
 import CustomPagination from '../Pagination/CustomPagination';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
@@ -59,7 +58,6 @@ type Props = {
   isCancelled: boolean;
   timerF24: number;
   landingSiteUrl: string;
-  iun: string;
   getPaymentAttachmentAction: (
     name: PaymentAttachmentSName,
     attachmentIdx?: number
@@ -77,16 +75,14 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   isCancelled,
   timerF24,
   landingSiteUrl,
-  iun,
   getPaymentAttachmentAction,
   onPayClick,
   handleTrackEvent,
   handleFetchPaymentsInfo,
 }) => {
   const { pagoPaF24, f24Only } = payments;
-  const pageFromCache = getPaymentCache(iun)?.currentPaymentPage;
   const [paginationData, setPaginationData] = useState<PaginationData>({
-    page: pageFromCache ?? 0,
+    page: 0,
     size: 5,
     totalElements: payments.pagoPaF24.length,
   });
@@ -103,7 +99,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   const allPaymentsIsPaid = pagoPaF24.every((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED);
   const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
-  const hasMoreThenOnePage = paginationData.totalElements > paginationData.size;
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
@@ -139,14 +134,13 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     }
   };
 
-  const handlePaginate = (pageData: PaginationData) => {
-    setPaginationData(pageData);
-    const paginatedPayments = pagoPaF24.slice(
-      pageData.page * pageData.size,
-      (pageData.page + 1) * pageData.size
+  const handlePaginate = (paginationData: PaginationData) => {
+    setPaginationData(paginationData);
+    const payments = pagoPaF24.slice(
+      paginationData.page * paginationData.size,
+      (paginationData.page + 1) * paginationData.size
     );
-    setPaymentCache({ currentPaymentPage: pageData.page }, iun);
-    handleFetchPaymentsInfo(paginatedPayments ?? []);
+    handleFetchPaymentsInfo(payments ?? []);
     handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_LIST_CHANGE_PAGE);
   };
 
@@ -208,7 +202,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           pagoPaF24={pagoPaF24}
           f24Only={f24Only}
           allPaymentsIsPaid={allPaymentsIsPaid}
-          hasMoreThenOnePage={hasMoreThenOnePage}
         />
       )}
 
@@ -272,7 +265,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                 {loadingPayment && <CircularProgress size={18} sx={{ ml: 1 }} color="inherit" />}
                 {selectedPayment?.amount ? formatEurocentToCurrency(selectedPayment.amount) : null}
               </Button>
-              {selectedPayment?.attachment && (
+              {selectedPayment && selectedPayment?.attachment && (
                 <Button
                   fullWidth
                   variant="outlined"

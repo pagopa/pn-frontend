@@ -1,11 +1,11 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { NotificationStatus } from '../../../models';
 import { createMatchMedia, render } from '../../../test-utils';
 import { formatDate, getNotificationStatusInfos } from '../../../utility';
 import NotificationsDataSwitch from '../NotificationsDataSwitch';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,

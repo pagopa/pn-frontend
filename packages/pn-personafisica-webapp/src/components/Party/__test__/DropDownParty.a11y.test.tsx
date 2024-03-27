@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import { axe, render } from '../../../__test__/test-utils';
 import DropDownPartyMenuItem from '../DropDownParty';
 

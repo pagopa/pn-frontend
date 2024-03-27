@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
+import React from 'react';
 
 import {
   AppResponseMessage,
@@ -15,7 +15,7 @@ import { apiClient } from '../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
 import Dashboard from '../Dashboard.page';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,

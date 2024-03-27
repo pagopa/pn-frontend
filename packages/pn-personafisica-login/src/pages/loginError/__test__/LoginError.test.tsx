@@ -1,6 +1,5 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { vi } from 'vitest';
 
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
@@ -8,11 +7,11 @@ import { render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
 import LoginError from '../LoginError';
 
-const mockNavigateFn = vi.fn();
+const mockNavigateFn = jest.fn();
 let spidErrorCode: string;
 
 // mock imports
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -24,8 +23,8 @@ vi.mock('react-i18next', () => ({
   ),
 }));
 
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigateFn,
   useSearchParams: () => [mockCreateMockedSearchParams(), null],
 }));
@@ -39,13 +38,9 @@ function mockCreateMockedSearchParams() {
 }
 
 describe('LoginError component', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('login technical error - code generic', async () => {
     spidErrorCode = '2';
-    render(
+    const { container } = render(
       <BrowserRouter>
         <LoginError />
       </BrowserRouter>
@@ -62,7 +57,7 @@ describe('LoginError component', () => {
 
   it('login too many retry error - code 19', async () => {
     spidErrorCode = '19';
-    render(
+    const { container } = render(
       <BrowserRouter>
         <LoginError />
       </BrowserRouter>
@@ -79,7 +74,7 @@ describe('LoginError component', () => {
 
   it('login two authentication factor error - code 20', async () => {
     spidErrorCode = '20';
-    render(
+    const { container } = render(
       <BrowserRouter>
         <LoginError />
       </BrowserRouter>
@@ -96,7 +91,7 @@ describe('LoginError component', () => {
 
   it('login waiting for too long error - code 21', async () => {
     spidErrorCode = '21';
-    render(
+    const { container } = render(
       <BrowserRouter>
         <LoginError />
       </BrowserRouter>
@@ -113,7 +108,7 @@ describe('LoginError component', () => {
 
   it('login consent necessary error - code 22', async () => {
     spidErrorCode = '22';
-    render(
+    const { container } = render(
       <BrowserRouter>
         <LoginError />
       </BrowserRouter>
@@ -130,7 +125,7 @@ describe('LoginError component', () => {
 
   it('login spid identity rewoked or suspended error - code 23', async () => {
     spidErrorCode = '23';
-    render(
+    const { container } = render(
       <BrowserRouter>
         <LoginError />
       </BrowserRouter>
@@ -147,7 +142,7 @@ describe('LoginError component', () => {
 
   it('user cancelled the login - code 25', async () => {
     spidErrorCode = '25';
-    render(
+    const { container } = render(
       <BrowserRouter>
         <LoginError />
       </BrowserRouter>
@@ -164,7 +159,7 @@ describe('LoginError component', () => {
 
   it('user used a different spid type - code 30', async () => {
     spidErrorCode = '30';
-    render(
+    const { container } = render(
       <BrowserRouter>
         <LoginError />
       </BrowserRouter>
@@ -181,7 +176,7 @@ describe('LoginError component', () => {
 
   it("user doesn't have the minimum required age - code 1001", async () => {
     spidErrorCode = '1001';
-    render(
+    const { container } = render(
       <BrowserRouter>
         <LoginError />
       </BrowserRouter>

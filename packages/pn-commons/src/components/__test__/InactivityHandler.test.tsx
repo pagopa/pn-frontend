@@ -1,9 +1,9 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { fireEvent, render, waitFor } from '../../test-utils';
 import InactivityHandler from '../InactivityHandler';
 
-const timerExpiredHandler = vi.fn();
+const timerExpiredHandler = jest.fn();
 const inactivityTimer = 2000;
 
 const Component = () => (
@@ -14,8 +14,8 @@ const Component = () => (
 
 describe('InactivityHandler Component', () => {
   beforeEach(() => {
-    vi.resetAllMocks();
-    vi.clearAllMocks();
+    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   it('test inactivity', async () => {

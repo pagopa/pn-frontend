@@ -1,10 +1,10 @@
-import { vi } from 'vitest';
+import * as React from 'react';
 
 import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import InsertLegalContact from '../InsertLegalContact';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -13,7 +13,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('InsertLegalContact component', () => {
-  let result: RenderResult;
+  let result: RenderResult | undefined;
 
   it('does not have basic accessibility issues', async () => {
     await act(async () => {

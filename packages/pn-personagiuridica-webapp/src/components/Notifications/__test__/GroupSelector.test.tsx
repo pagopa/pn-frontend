@@ -1,33 +1,29 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
+import React from 'react';
 
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 import { GET_GROUPS } from '../../../api/external-registries/external-registries-routes';
 import GroupSelector from '../GroupSelector';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
 }));
 
-const onGroupSelectionCbk = vi.fn();
+const onGroupSelectionCbk = jest.fn();
 
-describe('GroupSelector component', async () => {
+describe('GroupSelector component', () => {
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
     mock.reset();
-    vi.clearAllMocks();
   });
 
   afterAll(() => {

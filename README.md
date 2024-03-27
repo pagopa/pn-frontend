@@ -28,7 +28,7 @@ To run test for all packages
 
 To run test for one file
 `cd <package name>`
-`yarn test <filename>`
+`yarn test --testPathPattern=<filename>`
 
 To build all the monorepo
 `yarn build`
@@ -37,10 +37,6 @@ Other scripts
 
 - `yarn refresh:monorepo` reinstalls all the dependencies of the whole workspace
 - `yarn clean` deletes node_modules folder recursively in the workspace
-
-### Development mode
-
-When running the application in development mode, uncheck the "Disable cache" flag in chrome console. Vite uses the dependency pre-building (https://vitejs.dev/guide/dep-pre-bundling) and if the flag is checked, the code is runned twice at start-up.
 
 ### How to contribute
 

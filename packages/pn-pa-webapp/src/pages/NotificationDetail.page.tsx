@@ -49,11 +49,9 @@ import { ServerResponseErrorCode } from '../utility/AppError/types';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
 
-type Props = {
-  notification: NotificationDetailType;
-};
-
-const AlertNotificationCancel: React.FC<Props> = (notification) => {
+const AlertNotificationCancel: React.FC<{ notification: NotificationDetailType }> = (
+  notification
+) => {
   const { t } = useTranslation(['notifiche']);
   const { cancelled, cancellationInProgress } = useIsCancelled(notification);
   if (cancelled || cancellationInProgress) {

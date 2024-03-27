@@ -1,9 +1,18 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
 import ConfirmCancellationDialog from '../ConfirmCancellationDialog';
 
-vi.mock('react-i18next', () => ({
+type Props = {
+  showModal: boolean;
+  onConfirm: React.MouseEventHandler<HTMLButtonElement>;
+  onClose: React.MouseEventHandler<HTMLButtonElement>;
+  payment: boolean;
+};
+
+// const renderConfirmCancellatioDialog = ({ showModal, onConfirm, onClose, payment }: Props) =>
+
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -11,12 +20,12 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('render dialog', () => {
-  const onClose = vi.fn();
-  const onConfirm = vi.fn();
+  const onClose = jest.fn();
+  const onConfirm = jest.fn();
 
   afterEach(() => {
-    vi.resetAllMocks();
-    vi.clearAllMocks();
+    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   it('check dialog text with not payment', async () => {

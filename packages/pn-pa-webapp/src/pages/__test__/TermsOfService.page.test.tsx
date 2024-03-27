@@ -1,19 +1,19 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
 
 import { render } from '../../__test__/test-utils';
 import TermsOfServicePage from '../TermsOfService.page';
 
-vi.mock('../../services/configuration.service', async () => {
+jest.mock('../../services/configuration.service', () => {
   return {
-    ...(await vi.importActual<any>('../../services/configuration.service')),
+    ...jest.requireActual('../../services/configuration.service'),
     getConfiguration: () => ({ ONE_TRUST_DRAFT_MODE: false, ONE_TRUST_TOS: 'mocked-id' }),
   };
 });
 
 describe('TermsOfService page component', () => {
-  const loadNoticesFn = vi.fn();
+  const loadNoticesFn = jest.fn();
 
   beforeAll(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
@@ -28,10 +28,6 @@ describe('TermsOfService page component', () => {
         LoadNotices: loadNoticesFn,
       },
     };
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
   });
 
   it('render component', () => {

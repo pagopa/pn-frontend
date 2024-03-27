@@ -1,9 +1,9 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { fireEvent, initLocalizationForTest, render } from '../../test-utils';
 import { searchStringLimitReachedText, useSearchStringChangeInput } from '../searchString.utility';
 
-const setValueMock = vi.fn();
+const setValueMock = jest.fn();
 
 const Component: React.FC = () => {
   const handleSearchStringChangeInput = useSearchStringChangeInput(10);

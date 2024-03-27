@@ -1,5 +1,4 @@
-import { ReactNode } from 'react';
-import { vi } from 'vitest';
+import React, { ReactNode } from 'react';
 
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
@@ -9,10 +8,10 @@ import { getIDPS } from '../../../utility/IDPS';
 import SpidSelect from '../SpidSelect';
 
 const idps = getIDPS(false, false);
-const mockAssign = vi.fn();
-const backHandler = vi.fn();
+const mockAssign = jest.fn();
+const backHandler = jest.fn();
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({ t: (str: string) => str }),
   Trans: (props: { i18nKey: string; children: ReactNode }) => (
@@ -30,7 +29,7 @@ describe('test spid select page', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   afterAll(() => {

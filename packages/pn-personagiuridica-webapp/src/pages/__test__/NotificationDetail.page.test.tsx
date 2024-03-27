@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
+import React from 'react';
 
 import {
   AppResponseMessage,
@@ -9,14 +9,13 @@ import {
   NotificationDetail as NotificationDetailModel,
   NotificationDetailOtherDocument,
   NotificationStatus,
-  PAYMENT_CACHE_KEY,
   PaymentStatus,
   ResponseEventDispatcher,
   TimelineCategory,
   formatDate,
-  getPaymentCache,
+  getF24Payments,
+  getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
-  setPaymentCache,
 } from '@pagopa-pn/pn-commons';
 
 import { downtimesDTO, simpleDowntimeLogPage } from '../../__mocks__/AppStatus.mock';
@@ -24,7 +23,6 @@ import { userResponse } from '../../__mocks__/Auth.mock';
 import { arrayOfDelegators } from '../../__mocks__/Delegations.mock';
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
-  cachedPayments,
   notificationDTO,
   notificationToFe,
   paymentsData,
@@ -38,6 +36,7 @@ import {
   waitFor,
   within,
 } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
@@ -50,14 +49,14 @@ import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
 
-const mockNavigateFn = vi.fn();
+const mockNavigateFn = jest.fn();
 let mockIsDelegate = false;
 let mockIsFromQrCode = false;
-const mockAssignFn = vi.fn();
+const mockAssignFn = jest.fn();
 
 // mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useParams: () =>
     mockIsDelegate
       ? { id: 'RPTH-YULD-WKMA-202305-T-1', mandateId: '5' }
@@ -66,7 +65,7 @@ vi.mock('react-router-dom', async () => ({
   useLocation: () => ({ state: { fromQrCode: mockIsFromQrCode }, pathname: '/' }),
 }));
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -92,18 +91,14 @@ const delegator = arrayOfDelegators.find(
 /*
 ATTENZIONE: un'evenutale modifica al mock potrebbe causare il fallimento di alcuni test
 */
-describe('NotificationDetail Page', async () => {
+describe('NotificationDetail Page', () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 1);
   const original = window.location;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: { href: '', assign: mockAssignFn },
@@ -111,8 +106,7 @@ describe('NotificationDetail Page', async () => {
   });
 
   afterEach(() => {
-    sessionStorage.removeItem(PAYMENT_CACHE_KEY);
-    vi.clearAllMocks();
+    jest.clearAllMocks();
     mock.reset();
     mockIsFromQrCode = false;
     mockIsDelegate = false;
@@ -661,9 +655,8 @@ describe('NotificationDetail Page', async () => {
     expect(addDomicileBanner).not.toBeInTheDocument();
   });
 
-  // TO-FIX: il test fallisce perchè fakeTimers non funziona bene con waitFor
-  it.skip('should dispatch getNotificationPaymentUrl on pay button click', async () => {
-    vi.useFakeTimers();
+  it('should dispatch getNotificationPaymentUrl on pay button click', async () => {
+    jest.useFakeTimers();
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
       paymentsData.pagoPaF24,
@@ -708,7 +701,7 @@ describe('NotificationDetail Page', async () => {
     // after radio button click, there is a timer of 1 second after that the paymeny is enabled
     // wait...
     act(() => {
-      vi.advanceTimersByTime(1000);
+      jest.advanceTimersByTime(1000);
     });
     expect(payButton).toBeEnabled();
     fireEvent.click(payButton!);
@@ -719,7 +712,6 @@ describe('NotificationDetail Page', async () => {
       expect(mockAssignFn).toBeCalledTimes(1);
       expect(mockAssignFn).toBeCalledWith('https://mocked-url.com');
     });
-    vi.useRealTimers();
   });
 
   it('should show correct paginated payments', async () => {
@@ -732,7 +724,7 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
     mock
       .onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest.slice(0, paginationData.size))
-      .reply(200, paymentInfo.slice(0, paginationData.size));
+      .reply(200, paymentInfo);
 
     await act(async () => {
       result = render(<NotificationDetail />, {
@@ -754,8 +746,6 @@ describe('NotificationDetail Page', async () => {
       ...paginationData,
       page: 1,
     };
-    const paymentCache = getPaymentCache(notificationDTO.iun);
-    expect(paymentCache?.currentPaymentPage).toBe(paginationData.page);
 
     // intercept the next request
     const secondPagePaymentInfoRequest = paymentInfoRequest.slice(
@@ -763,15 +753,7 @@ describe('NotificationDetail Page', async () => {
       (paginationData.page + 1) * paginationData.size
     );
 
-    mock
-      .onPost(NOTIFICATION_PAYMENT_INFO(), secondPagePaymentInfoRequest)
-      .reply(
-        200,
-        paymentInfo.slice(
-          paginationData.page * paginationData.size,
-          (paginationData.page + 1) * paginationData.size
-        )
-      );
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), secondPagePaymentInfoRequest);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(2);
     });
@@ -779,99 +761,5 @@ describe('NotificationDetail Page', async () => {
     // check that the other payments are shown
     const secondPageItems = result?.queryAllByTestId('pagopa-item');
     expect(secondPageItems).toHaveLength(secondPagePaymentInfoRequest.length);
-  });
-
-  it('should load payments from cache when reloading the page, so it does not make the same request twice', async () => {
-    let pagoPaItems: HTMLElement[] | undefined;
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
-    mock
-      .onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest.slice(0, 5))
-      .reply(200, paymentInfo);
-
-    await act(async () => {
-      result = render(<NotificationDetail />, {
-        preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-        },
-      });
-    });
-
-    expect(mock.history.post).toHaveLength(1);
-    pagoPaItems = result?.queryAllByTestId('pagopa-item');
-    expect(pagoPaItems).toHaveLength(5);
-
-    mock.resetHistory();
-
-    await act(async () => {
-      result?.rerender(<NotificationDetail />);
-    });
-
-    expect(mock.history.post).toHaveLength(0);
-    pagoPaItems = result?.queryAllByTestId('pagopa-item');
-    expect(pagoPaItems).toHaveLength(5);
-  });
-
-  it('should call payment info if reload after 3 minutes', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
-    mock
-      .onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest.slice(0, 5))
-      .reply(200, paymentInfo);
-
-    const date = new Date();
-    const isoDate = new Date(date.setMinutes(date.getMinutes() - 3)).toISOString();
-    const cacheWithOldDate = {
-      ...cachedPayments,
-      timestamp: isoDate,
-    };
-    sessionStorage.setItem('payments', JSON.stringify(cacheWithOldDate));
-
-    await act(async () => {
-      result = render(<NotificationDetail />, {
-        preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-        },
-      });
-    });
-
-    expect(mock.history.post).toHaveLength(1);
-    expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
-  });
-
-  it('should fetch only currentPayment if is present in cache', async () => {
-    const currentPayment = {
-      creditorTaxId: paymentsData.pagoPaF24[0].pagoPa?.creditorTaxId ?? '',
-      noticeCode: paymentsData.pagoPaF24[0].pagoPa?.noticeCode ?? '',
-    };
-
-    setPaymentCache(
-      {
-        ...cachedPayments,
-        currentPayment,
-      },
-      notificationDTO.iun
-    );
-
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
-    mock
-      .onPost(NOTIFICATION_PAYMENT_INFO(), [
-        {
-          creditorTaxId: paymentsData.pagoPaF24[0].pagoPa?.creditorTaxId,
-          noticeCode: paymentsData.pagoPaF24[0].pagoPa?.noticeCode,
-        },
-      ])
-      .reply(200, paymentInfo.slice(0, 1));
-
-    await act(async () => {
-      result = render(<NotificationDetail />, {
-        preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-        },
-      });
-    });
-
-    expect(mock.history.post).toHaveLength(1);
-    expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
-    const paymentCache = getPaymentCache(notificationDTO.iun);
-    expect(paymentCache?.currentPayment).toBeUndefined();
   });
 });

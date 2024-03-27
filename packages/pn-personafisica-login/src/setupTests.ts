@@ -2,14 +2,15 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import 'whatwg-fetch';
-
-import { Configuration } from '@pagopa-pn/pn-commons';
 import '@testing-library/jest-dom';
 
 beforeAll(async () => {
+  const { Configuration } = await import('@pagopa-pn/pn-commons');
+
   Configuration.setForTest<any>({
     MIXPANEL_TOKEN: 'ba1f5101fe34a61bb125cbfe587780d8',
+    ONE_TRUST_DRAFT_MODE: false,
+    ONE_TRUST_PP: '133242e7-ad9a-45e5-a417-b7a50c746899',
     OT_DOMAIN_ID: 'fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c-test',
     PAGOPA_HELP_EMAIL: 'destinatari-send@assistenza.pagopa.it',
     PF_URL: 'https://cittadini.dev.notifichedigitali.it',

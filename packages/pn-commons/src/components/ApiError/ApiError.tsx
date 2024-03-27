@@ -8,7 +8,6 @@ type ApiErrorProps = {
   mt?: number;
   mainText?: string;
   apiId?: string;
-  children?: React.ReactNode;
 };
 
 const StyledStack = styled(Stack)`

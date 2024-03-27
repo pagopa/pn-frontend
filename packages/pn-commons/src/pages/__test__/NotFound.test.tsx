@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { initLocalizationForTest, render } from '../../test-utils';
 import NotFound from '../NotFound';
 

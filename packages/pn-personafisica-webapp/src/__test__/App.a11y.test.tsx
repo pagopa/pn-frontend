@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
+import * as React from 'react';
 
 import { ThemeProvider } from '@emotion/react';
 import { theme } from '@pagopa/mui-italia';
@@ -9,6 +9,7 @@ import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { arrayOfDelegators } from '../__mocks__/Delegations.mock';
+import { apiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
 import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
 import { DELEGATIONS_BY_DELEGATE } from '../api/delegations/delegations.routes';
@@ -16,7 +17,7 @@ import { ConsentType } from '../models/consents';
 import { RenderResult, act, axe, render } from './test-utils';
 
 // mock imports
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
@@ -25,7 +26,7 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
+jest.mock('../pages/Dashboard.page', () => () => <div>Generic Page</div>);
 
 const unmockedFetch = global.fetch;
 
@@ -53,15 +54,11 @@ const reduxInitialState = {
   },
 };
 
-describe('App - accessbility tests', async () => {
+describe('App - accessbility tests', () => {
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
     global.fetch = () =>
@@ -80,14 +77,9 @@ describe('App - accessbility tests', async () => {
   });
 
   it('Test if automatic accessibility tests passes - user not logged in', async () => {
-    let renderResult: RenderResult | undefined;
-    await act(async () => {
-      renderResult = render(<Component />);
-    });
-    if (renderResult) {
-      const result = await axe(renderResult.container);
-      expect(result).toHaveNoViolations();
-    }
+    const { container } = render(<Component />);
+    const result = await axe(container);
+    expect(result).toHaveNoViolations();
   });
 
   it('Test if automatic accessibility tests passes - user logged in', async () => {

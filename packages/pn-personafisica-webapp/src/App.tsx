@@ -27,7 +27,7 @@ import {
 import { AppResponseError } from '@pagopa-pn/pn-commons/src/models/AppResponse';
 import { ProductEntity } from '@pagopa/mui-italia';
 
-import { getCurrentEventTypePage } from './navigation/navigation.utility';
+import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
@@ -237,6 +237,7 @@ const ActualApp = () => {
 
   const handleUserLogout = () => {
     void dispatch(logout());
+    goToLoginPortal();
   };
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {

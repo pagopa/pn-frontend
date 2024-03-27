@@ -28,12 +28,10 @@ import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
 import DelegatorsDataSwitch from './DelegationDataSwitch';
 
-type Props = {
-  handleAddDelegationClick: (source: string) => void;
-  children?: React.ReactNode;
-};
-
-const LinkAddDelegate: React.FC<Props> = ({ children, handleAddDelegationClick }) => {
+const LinkAddDelegate: React.FC<{ handleAddDelegationClick: (source: string) => void }> = ({
+  children,
+  handleAddDelegationClick,
+}) => {
   const { t } = useTranslation(['deleghe']);
   return (
     <Link
@@ -157,11 +155,7 @@ const MobileDelegates = () => {
                   </PnCardHeader>
                   <PnCardContent>
                     {cardBody.map((body) => (
-                      <PnCardContentItem
-                        key={body.id}
-                        label={body.label}
-                        wrapValueInTypography={body.wrapValueInTypography}
-                      >
+                      <PnCardContentItem key={body.id} label={body.label}>
                         <DelegatorsDataSwitch data={data} type={body.id} menuType="delegates" />
                       </PnCardContentItem>
                     ))}

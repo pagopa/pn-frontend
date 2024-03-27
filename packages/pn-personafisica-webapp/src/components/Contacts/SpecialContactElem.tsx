@@ -142,8 +142,7 @@ const SpecialContactElem = memo(({ address, recipientId }: Props) => {
             contactType={f.contactType}
             fields={[
               {
-                id: `specialContacts-${f.id}`,
-                key: `specialContactsValue-${f.id}`,
+                id: `value-${f.id}`,
                 component: (
                   <TextField
                     id={f.id}

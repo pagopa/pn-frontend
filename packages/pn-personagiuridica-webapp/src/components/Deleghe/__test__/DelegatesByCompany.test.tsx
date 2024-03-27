@@ -1,16 +1,16 @@
 import MockAdapter from 'axios-mock-adapter';
-import { ReactNode } from 'react';
-import { vi } from 'vitest';
+import React, { ReactNode } from 'react';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 import { REVOKE_DELEGATION } from '../../../api/delegations/delegations.routes';
 import * as routes from '../../../navigation/routes.const';
 import DelegatesByCompany from '../DelegatesByCompany';
 
-const mockNavigateFn = vi.fn();
+const mockNavigateFn = jest.fn();
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -22,29 +22,24 @@ vi.mock('react-i18next', () => ({
   ),
 }));
 
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigateFn,
 }));
 
-describe('Delegates Component - assuming delegates API works properly', async () => {
+describe('Delegates Component - assuming delegates API works properly', () => {
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
     mock.reset();
-    vi.clearAllMocks();
   });
 
   afterAll(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
     mock.restore();
   });
 

@@ -154,8 +154,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
           ref={digitalElemRef}
           fields={[
             {
-              id: `courtesyContacts-${type}`,
-              key: `courtesyContactsValue-${type}`,
+              id: `value-${type}`,
               component: (
                 <TextField
                   id={type}
@@ -230,7 +229,6 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
         </Grid>
         <Grid item lg={4} sm={4} xs={12} alignItems="right">
           <Button
-            id={`courtesy-${type}-button`}
             variant="outlined"
             disabled={!formik.isValid}
             fullWidth
