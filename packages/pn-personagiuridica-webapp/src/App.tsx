@@ -27,6 +27,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
+import { goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
@@ -258,6 +259,7 @@ const ActualApp = () => {
 
   const handleUserLogout = () => {
     void dispatch(logout());
+    goToLoginPortal();
   };
 
   return (

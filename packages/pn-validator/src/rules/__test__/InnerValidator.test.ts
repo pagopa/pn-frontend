@@ -1,12 +1,8 @@
-import { InnerValidator } from '../InnerValidator';
 import { Validator } from './../../Validator';
+import { InnerValidator } from '../InnerValidator';
 
 class Prova {
   property: string;
-
-  constructor(property: string) {
-    this.property = property;
-  }
 }
 
 class ProvaValidator extends Validator<Prova> {

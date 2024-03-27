@@ -15,19 +15,9 @@ type Props = {
   loggedUser?: boolean;
   /** Enables the Terms of Service Link */
   hasTermsOfService?: boolean;
-  /** Url to privacy policy page */
-  privacyPolicyHref?: string;
-  /** Url to terms of service page */
-  termsOfServiceHref?: string;
 };
 
-const Footer: React.FC<Props> = ({
-  onLanguageChanged = () => {},
-  loggedUser = false,
-  hasTermsOfService,
-  privacyPolicyHref,
-  termsOfServiceHref,
-}) => {
+const Footer = ({ onLanguageChanged = () => {}, loggedUser = false, hasTermsOfService }: Props) => {
   const [currentLangCode, setCurrentLangCode] = useState<LangCode>('it');
   const localizedPagoPALink = pagoPALink();
   const changeLanguageHandler = (langCode: LangCode) => {
@@ -44,7 +34,7 @@ const Footer: React.FC<Props> = ({
       }}
       legalInfo={companyLegalInfo()}
       postLoginLinks={postLoginLinks()}
-      preLoginLinks={preLoginLinks(hasTermsOfService, privacyPolicyHref, termsOfServiceHref)}
+      preLoginLinks={preLoginLinks(hasTermsOfService)}
       languages={LANGUAGES}
       onLanguageChanged={changeLanguageHandler}
       currentLangCode={currentLangCode}

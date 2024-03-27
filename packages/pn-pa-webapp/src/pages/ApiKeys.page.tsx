@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Add } from '@mui/icons-material';
-import { Box, Button, InputAdornment, Link, TextField, Typography } from '@mui/material';
+import { Box, Button, Dialog, InputAdornment, Link, TextField, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomPagination,
@@ -28,51 +28,64 @@ import {
 import { setPagination } from '../redux/apiKeys/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { getConfiguration } from '../services/configuration.service';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
 
-const LinkApiB2b: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+import { getConfiguration } from '../services/configuration.service';
+
+const SubTitle = () => {
+  const { t } = useTranslation(['apikeys']);
   const { API_B2B_LINK } = getConfiguration();
-  return <Link href={API_B2B_LINK}>{children}</Link>;
+  return (
+    <Fragment>
+      {t('subtitle.text1')}
+      <Link target="_blank" href={`${API_B2B_LINK}`}>
+        {t('subtitle.text2')}
+        {t('subtitle.text3')}
+        {t('subtitle.text4')} 
+      </Link>
+      {t('subtitle.text5')}
+    </Fragment>
+  );
 };
 
 const TableGroupsId = ({ groups }: { groups?: Array<UserGroup> }) => {
   const { t } = useTranslation(['apikeys']);
   return (
-    <Box>
+    <Box sx={{ my: 3 }}>
       {groups &&
-        groups.map((group, index) => (
-          <Box
-            key={group.name}
-            sx={{
-              display: 'flex',
-              alignContent: 'center',
-              justifyContent: 'center',
-              flexDirection: 'column',
-            }}
-          >
-            <Typography variant="body2" sx={{ mb: 2 }}>
-              <strong>{group.name}</strong>
-            </Typography>
-            <TextField
-              label={t('group-id')}
-              defaultValue={group.id}
-              fullWidth
+        groups.map((group) => (
+          <Fragment key={group.name}>
+            <Box
               sx={{
-                mb: index < groups.length - 1 ? 2 : 0,
+                display: 'flex',
+                alignContent: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
               }}
-              InputProps={{
-                readOnly: true,
-                endAdornment: (
-                  <CopyToClipboardButton
-                    value={() => group.id}
-                    tooltipTitle={t('group-id-copied')}
-                  />
-                ),
-              }}
-            />
-          </Box>
+            >
+              <Typography variant="body2" sx={{ mb: 2 }}>
+                <strong>{group.name}</strong>
+              </Typography>
+              <TextField
+                label={t('group-id')}
+                defaultValue={group.id}
+                fullWidth
+                sx={{
+                  mb: 3,
+                }}
+                InputProps={{
+                  readOnly: true,
+                  endAdornment: (
+                    <CopyToClipboardButton
+                      value={() => group.id}
+                      tooltipTitle={t('group-id-copied')}
+                    />
+                  ),
+                }}
+              ></TextField>
+            </Box>
+          </Fragment>
         ))}
     </Box>
   );
@@ -167,15 +180,9 @@ const ApiKeys = () => {
       <TitleBox
         variantTitle="h4"
         title={t('title')}
-        subTitle={
-          <Trans
-            ns={'apikeys'}
-            i18nKey={'subtitle'}
-            components={[<LinkApiB2b key={'LinkApiB2b'} />]}
-          />
-        }
+        subTitle={<SubTitle />}
         variantSubTitle="body1"
-      />
+      ></TitleBox>
       <Box
         sx={{
           display: isMobile ? 'block' : 'flex',
@@ -223,110 +230,115 @@ const ApiKeys = () => {
           />
         )}
 
-        <Box sx={{ minWidth: isMobile ? '0' : '600px' }}>
-          {modal.view === ModalApiKeyView.VIEW && (
-            <ApiKeyModal
-              aria-modal="true"
-              title={`API Key ${modal.apiKey?.name}`}
-              subTitle={t('copy-api-key-info')}
-              content={
-                <TextField
-                  value={modal.apiKey?.value}
-                  fullWidth={true}
-                  InputProps={{
-                    readOnly: true,
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <CopyToClipboardButton
-                          value={() => modal.apiKey?.value || ''}
-                          tooltipTitle={t('api-key-copied')}
-                        />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              }
-              closeButtonLabel={t('close-button')}
-              closeModalHandler={handleCloseModal}
-            />
-          )}
-          {modal.view === ModalApiKeyView.BLOCK && (
-            <ApiKeyModal
-              title={t('block-api-key')}
-              subTitle={
-                <Trans
-                  i18nKey="block-warning1"
-                  ns="apikeys"
-                  values={{ apiKeyName: modal.apiKey?.name }}
-                />
-              }
-              content={<Typography>{t('block-warning2')}</Typography>}
-              closeButtonLabel={t('cancel-button')}
-              closeModalHandler={handleCloseModal}
-              actionButtonLabel={t('block-button')}
-              actionHandler={() => apiKeyBlocked(modal.apiKey?.id as string)}
-            />
-          )}
-          {modal.view === ModalApiKeyView.ENABLE && (
-            <ApiKeyModal
-              title={t('enable-api-key')}
-              subTitle={
-                <Trans
-                  i18nKey="enable-warning"
-                  ns="apikeys"
-                  values={{ apiKeyName: modal.apiKey?.name }}
-                />
-              }
-              closeButtonLabel={t('cancel-button')}
-              closeModalHandler={handleCloseModal}
-              actionButtonLabel={t('enable-button')}
-              actionHandler={() => apiKeyEnabled(modal.apiKey?.id as string)}
-            />
-          )}
-          {modal.view === ModalApiKeyView.ROTATE && (
-            <ApiKeyModal
-              title={t('rotate-api-key')}
-              subTitle={
-                <Trans
-                  i18nKey="rotate-warning1"
-                  ns="apikeys"
-                  values={{ apiKeyName: modal.apiKey?.name }}
-                />
-              }
-              content={<Typography>{t('rotate-warning2')}</Typography>}
-              closeButtonLabel={t('cancel-button')}
-              closeModalHandler={handleCloseModal}
-              actionButtonLabel={t('rotate-button')}
-              actionHandler={() => apiKeyRotated(modal.apiKey?.id as string)}
-            />
-          )}
-          {modal.view === ModalApiKeyView.DELETE && (
-            <ApiKeyModal
-              title={t('delete-api-key')}
-              subTitle={
-                <Trans
-                  i18nKey="delete-warning"
-                  ns="apikeys"
-                  values={{ apiKeyName: modal.apiKey?.name }}
-                />
-              }
-              closeButtonLabel={t('cancel-button')}
-              closeModalHandler={handleCloseModal}
-              actionButtonLabel={t('delete-button')}
-              actionHandler={() => apiKeyDeleted(modal.apiKey?.id as string)}
-            />
-          )}
-          {modal.view === ModalApiKeyView.VIEW_GROUPS_ID && (
-            <ApiKeyModal
-              title={t('view-groups-id', { apikey: modal.apiKey?.name })}
-              subTitle={t('view-groups-id-message')}
-              subTitleAtBottom
-              content={<TableGroupsId groups={modal.apiKey?.groups} />}
-              closeButtonLabel={t('close-button')}
-              closeModalHandler={handleCloseModal}
-            />
-          )}
-        </Box>
+        <Dialog
+          open={modal.view !== ModalApiKeyView.NONE}
+          onClose={handleCloseModal}
+          aria-modal="true"
+        >
+          <Box sx={{ minWidth: isMobile ? '0' : '600px' }}>
+            {modal.view === ModalApiKeyView.VIEW && (
+              <ApiKeyModal
+                title={`API Key ${modal.apiKey?.name}`}
+                subTitle={t('copy-api-key-info')}
+                content={
+                  <TextField
+                    value={modal.apiKey?.value}
+                    fullWidth={true}
+                    InputProps={{
+                      readOnly: true,
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <CopyToClipboardButton
+                            value={() => modal.apiKey?.value || ''}
+                            tooltipTitle={t('api-key-copied')}
+                          />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                }
+                closeButtonLabel={t('close-button')}
+                closeModalHandler={handleCloseModal}
+              />
+            )}
+            {modal.view === ModalApiKeyView.BLOCK && (
+              <ApiKeyModal
+                title={t('block-api-key')}
+                subTitle={
+                  <Trans
+                    i18nKey="block-warning1"
+                    ns="apikeys"
+                    values={{ apiKeyName: modal.apiKey?.name }}
+                  />
+                }
+                content={<Typography>{t('block-warning2')}</Typography>}
+                closeButtonLabel={t('cancel-button')}
+                closeModalHandler={handleCloseModal}
+                actionButtonLabel={t('block-button')}
+                actionHandler={() => apiKeyBlocked(modal.apiKey?.id as string)}
+              />
+            )}
+            {modal.view === ModalApiKeyView.ENABLE && (
+              <ApiKeyModal
+                title={t('enable-api-key')}
+                subTitle={
+                  <Trans
+                    i18nKey="enable-warning"
+                    ns="apikeys"
+                    values={{ apiKeyName: modal.apiKey?.name }}
+                  />
+                }
+                closeButtonLabel={t('cancel-button')}
+                closeModalHandler={handleCloseModal}
+                actionButtonLabel={t('enable-button')}
+                actionHandler={() => apiKeyEnabled(modal.apiKey?.id as string)}
+              />
+            )}
+            {modal.view === ModalApiKeyView.ROTATE && (
+              <ApiKeyModal
+                title={t('rotate-api-key')}
+                subTitle={
+                  <Trans
+                    i18nKey="rotate-warning1"
+                    ns="apikeys"
+                    values={{ apiKeyName: modal.apiKey?.name }}
+                  />
+                }
+                content={<Typography>{t('rotate-warning2')}</Typography>}
+                closeButtonLabel={t('cancel-button')}
+                closeModalHandler={handleCloseModal}
+                actionButtonLabel={t('rotate-button')}
+                actionHandler={() => apiKeyRotated(modal.apiKey?.id as string)}
+              />
+            )}
+            {modal.view === ModalApiKeyView.DELETE && (
+              <ApiKeyModal
+                title={t('delete-api-key')}
+                subTitle={
+                  <Trans
+                    i18nKey="delete-warning"
+                    ns="apikeys"
+                    values={{ apiKeyName: modal.apiKey?.name }}
+                  />
+                }
+                closeButtonLabel={t('cancel-button')}
+                closeModalHandler={handleCloseModal}
+                actionButtonLabel={t('delete-button')}
+                actionHandler={() => apiKeyDeleted(modal.apiKey?.id as string)}
+              />
+            )}
+            {modal.view === ModalApiKeyView.VIEW_GROUPS_ID && (
+              <ApiKeyModal
+                title={t('view-groups-id', { apikey: modal.apiKey?.name })}
+                subTitle={t('view-groups-id-message')}
+                subTitleAtBottom
+                content={<TableGroupsId groups={modal.apiKey?.groups} />}
+                closeButtonLabel={t('close-button')}
+                closeModalHandler={handleCloseModal}
+              />
+            )}
+          </Box>
+        </Dialog>
       </ApiErrorWrapper>
     </Box>
   );

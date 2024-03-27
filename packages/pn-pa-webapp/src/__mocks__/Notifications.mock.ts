@@ -1,4 +1,4 @@
-import { GetNotificationsResponse, NotificationStatus } from '@pagopa-pn/pn-commons';
+import { GetNotificationsResponse, NotificationStatus, formatDate } from '@pagopa-pn/pn-commons';
 
 export const notificationsDTO: GetNotificationsResponse = {
   resultsPage: [

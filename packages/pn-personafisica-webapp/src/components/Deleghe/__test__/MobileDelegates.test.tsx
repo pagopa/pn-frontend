@@ -1,20 +1,19 @@
-import { ReactNode } from 'react';
-import { vi } from 'vitest';
+import React, { ReactNode } from 'react';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
-import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import MobileDelegates from '../MobileDelegates';
 
-const mockNavigateFn = vi.fn();
+const mockNavigateFn = jest.fn();
 
 // mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigateFn,
 }));
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -27,10 +26,6 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('MobileDelegates Component', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('renders the empty state', () => {
     const { container, queryAllByTestId, getByTestId } = render(<MobileDelegates />);
     expect(container).toHaveTextContent(/deleghe.delegatesTitle/i);

@@ -36,12 +36,7 @@ type Props = {
   currentDelegator?: Delegator;
 };
 
-type LinkRemoveFiltersProps = {
-  cleanFilters: () => void;
-  children?: React.ReactNode;
-};
-
-const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => {
+const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, cleanFilters }) => {
   const { t } = useTranslation('notifiche');
   return (
     <Link
@@ -58,7 +53,7 @@ const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFi
   );
 };
 
-const LinkRouteContacts: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+const LinkRouteContacts: React.FC = ({ children }) => {
   const { t } = useTranslation('notifiche');
   const navigate = useNavigate();
   const goToContactsPage = () => {

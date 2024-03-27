@@ -1,10 +1,13 @@
-import { ReactNode, memo, useCallback, useState } from 'react';
+import { ReactNode, memo, useCallback, useMemo, useState } from 'react';
 
 import {
   Alert,
   AlertTitle,
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
   DialogContentText,
   DialogTitle,
   Divider,
@@ -12,10 +15,8 @@ import {
 } from '@mui/material';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
+import { useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
-import PnDialog from '../PnDialog/PnDialog';
-import PnDialogActions from '../PnDialog/PnDialogActions';
-import PnDialogContent from '../PnDialog/PnDialogContent';
 import CodeInput from './CodeInput';
 
 type Props = {
@@ -68,6 +69,8 @@ const CodeModal = memo(
     errorMessage,
   }: Props) => {
     const [code, setCode] = useState(initialValues);
+    const isMobile = useIsMobile();
+    const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
     const codeIsValid = code.every((v) => v);
 
     const changeHandler = useCallback((inputsValues: Array<string>) => {
@@ -82,7 +85,7 @@ const CodeModal = memo(
     };
 
     return (
-      <PnDialog
+      <Dialog
         open={open}
         // onClose={handleClose}
         aria-labelledby="dialog-title"
@@ -90,14 +93,18 @@ const CodeModal = memo(
         data-testid="codeDialog"
         disableEscapeKeyDown
       >
-        <DialogTitle id="dialog-title">{title}</DialogTitle>
-        <PnDialogContent>
-          <DialogContentText id="dialog-description">{subtitle}</DialogContentText>
-          <Divider sx={{ my: 2 }} />
-          <Typography fontSize={16} fontWeight={600}>
+        <DialogTitle id="dialog-title" sx={{ textAlign: textPosition, pt: 4, px: 4 }}>
+          {title}
+        </DialogTitle>
+        <DialogContent sx={{ px: 4 }}>
+          <DialogContentText id="dialog-description" sx={{ textAlign: textPosition }}>
+            {subtitle}
+          </DialogContentText>
+          <Divider sx={{ margin: '20px 0' }} />
+          <Typography fontSize={16} fontWeight={600} sx={{ textAlign: textPosition }}>
             {codeSectionTitle}
           </Typography>
-          <Box sx={{ mt: 2 }}>
+          <Box sx={{ mt: 2, textAlign: textPosition }}>
             <CodeInput
               initialValues={initialValues}
               isReadOnly={isReadOnly}
@@ -118,23 +125,37 @@ const CodeModal = memo(
               />
             )}
           </Box>
-          {codeSectionAdditional && <Box sx={{ mt: 2 }}>{codeSectionAdditional}</Box>}
+          <Box sx={{ marginTop: '10px', textAlign: textPosition }}>{codeSectionAdditional}</Box>
+          <Divider sx={{ margin: '20px 0' }} />
           {hasError && (
-            <Alert id="error-alert" data-testid="errorAlert" severity="error" sx={{ mt: 2 }}>
-              <AlertTitle id="codeModalErrorTitle" data-testid="CodeModal error title">
-                {errorTitle}
-              </AlertTitle>
+            <Alert
+              id="error-alert"
+              data-testid="errorAlert"
+              severity="error"
+              sx={{ textAlign: textPosition }}
+            >
+              <AlertTitle data-testid="CodeModal error title">{errorTitle}</AlertTitle>
               {errorMessage}
             </Alert>
           )}
-        </PnDialogContent>
-        <PnDialogActions>
+        </DialogContent>
+        <DialogActions
+          disableSpacing={isMobile}
+          sx={{
+            textAlign: textPosition,
+            flexDirection: isMobile ? 'column-reverse' : 'row',
+            px: 4,
+            pb: 4,
+          }}
+        >
           {cancelLabel && cancelCallback && (
             <Button
               id="code-cancel-button"
               variant="outlined"
               onClick={cancelCallback}
+              fullWidth={isMobile}
               data-testid="codeCancelButton"
+              sx={{ mt: isMobile ? 2 : 0 }}
             >
               {cancelLabel}
             </Button>
@@ -146,12 +167,13 @@ const CodeModal = memo(
               data-testid="codeConfirmButton"
               onClick={confirmHandler}
               disabled={!codeIsValid}
+              fullWidth={isMobile}
             >
               {confirmLabel}
             </Button>
           )}
-        </PnDialogActions>
-      </PnDialog>
+        </DialogActions>
+      </Dialog>
     );
   }
 );

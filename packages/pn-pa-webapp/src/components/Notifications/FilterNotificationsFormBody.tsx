@@ -103,11 +103,7 @@ const FilterNotificationsFormBody = ({
         label={t('filters.fiscal-code-tax-code')}
         name="recipientId"
         error={formikInstance.touched.recipientId && Boolean(formikInstance.errors.recipientId)}
-        helperText={
-          formikInstance.touched.recipientId &&
-          formikInstance.errors.recipientId &&
-          String(formikInstance.errors.recipientId)
-        }
+        helperText={formikInstance.touched.recipientId && formikInstance.errors.recipientId}
         size="small"
         fullWidth={isMobile}
         sx={{ marginBottom: isMobile ? '20px' : '0' }}
@@ -120,11 +116,7 @@ const FilterNotificationsFormBody = ({
         label={t('filters.iun')}
         name="iunMatch"
         error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
-        helperText={
-          formikInstance.touched.iunMatch &&
-          formikInstance.errors.iunMatch &&
-          String(formikInstance.errors.iunMatch)
-        }
+        helperText={formikInstance.touched.iunMatch && formikInstance.errors.iunMatch}
         size="small"
         fullWidth={isMobile}
         sx={{ marginBottom: isMobile ? '20px' : '0' }}
@@ -134,7 +126,7 @@ const FilterNotificationsFormBody = ({
       <CustomDatePicker
         language={i18n.language}
         label={t('filters.data_da')}
-        format={DATE_FORMAT}
+        inputFormat={DATE_FORMAT}
         value={startDate}
         onChange={(value: DatePickerTypes) => {
           void formikInstance.setFieldValue('startDate', value || tenYearsAgo).then(() => {
@@ -142,22 +134,24 @@ const FilterNotificationsFormBody = ({
             trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, { source: 'from date' });
           });
         }}
-        slotProps={{
-          textField: {
-            id: 'startDate',
-            name: 'startDate',
-            size: 'small',
-            'aria-label': t('filters.data_da-aria-label'), // aria-label for (TextField + Button) Group
-            inputProps: {
+        renderInput={(params) => (
+          <TextField
+            id="startDate"
+            name="startDate"
+            size="small"
+            {...params}
+            aria-label={t('filters.data_da-aria-label')} // aria-label for (TextField + Button) Group
+            inputProps={{
+              ...params.inputProps,
               inputMode: 'text',
-              placeholder: 'gg/mm/aaaa',
-              type: 'text',
               'aria-label': t('filters.data_da-input-aria-label'),
-            },
-            fullWidth: isMobile,
-            sx: { marginBottom: isMobile ? '20px' : '0' },
-          },
-        }}
+              type: 'text',
+              placeholder: 'gg/mm/aaaa',
+            }}
+            fullWidth={isMobile}
+            sx={{ marginBottom: isMobile ? '20px' : '0' }}
+          />
+        )}
         disableFuture={true}
         minDate={tenYearsAgo}
         maxDate={endDate ? endDate : undefined}
@@ -165,7 +159,7 @@ const FilterNotificationsFormBody = ({
       <CustomDatePicker
         language={i18n.language}
         label={t('filters.data_a')}
-        format={DATE_FORMAT}
+        inputFormat={DATE_FORMAT}
         value={endDate}
         onChange={(value: DatePickerTypes) => {
           void formikInstance.setFieldValue('endDate', value || today).then(() => {
@@ -173,22 +167,24 @@ const FilterNotificationsFormBody = ({
             setEndDate(value);
           });
         }}
-        slotProps={{
-          textField: {
-            id: 'endDate',
-            name: 'endDate',
-            size: 'small',
-            'aria-label': t('filters.data_a-aria-label'),
-            inputProps: {
+        renderInput={(params) => (
+          <TextField
+            id="endDate"
+            name="endDate"
+            size="small"
+            {...params}
+            aria-label={t('filters.data_a-aria-label')} // aria-label for (TextField + Button) Group
+            inputProps={{
+              ...params.inputProps,
               inputMode: 'text',
-              placeholder: 'gg/mm/aaaa',
-              type: 'text',
               'aria-label': t('filters.data_a-input-aria-label'),
-            },
-            fullWidth: isMobile,
-            sx: { marginBottom: isMobile ? '20px' : '0' },
-          },
-        }}
+              type: 'text',
+              placeholder: 'gg/mm/aaaa',
+            }}
+            fullWidth={isMobile}
+            sx={{ marginBottom: isMobile ? '20px' : '0' }}
+          />
+        )}
         disableFuture={true}
         minDate={startDate ? startDate : tenYearsAgo}
       />

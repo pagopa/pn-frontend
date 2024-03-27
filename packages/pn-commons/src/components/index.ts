@@ -70,7 +70,6 @@ import { SpecialContactsProvider, useSpecialContactsContext } from './SpecialCon
 import TabPanel from './TabPanel';
 import TimedMessage from './TimedMessage/TimedMessage';
 import TitleBox from './TitleBox';
-import { IllusQuestion } from './Illustrations/IllusQuestion';
 
 export {
   ApiError,
@@ -146,5 +145,4 @@ export {
   PnCardActions,
   PnCard,
   PnCardHeaderItem,
-  IllusQuestion
 };

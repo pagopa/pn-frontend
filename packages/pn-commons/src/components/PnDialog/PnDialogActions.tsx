@@ -7,8 +7,7 @@ import { ReactComponent } from '../../models/PnDialog';
 
 const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
   const isMobile = useIsMobile();
-  const paddingSize = useMemo(() => (isMobile ? 3 : 4), [isMobile]);
-  const gapSize = useMemo(() => (isMobile ? 0 : 1), [isMobile]);
+  const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
 
   const buttons: Array<ReactComponent> | undefined = Children.toArray(props.children).filter(
     (child) => isValidElement(child) && child.type === Button
@@ -19,7 +18,7 @@ const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
       ? cloneElement(button, {
           ...button.props,
           fullWidth: isMobile,
-          sx: { marginBottom: isMobile && index > 0 ? 2 : 0, ...button.props.sx },
+          sx: { ...button.props.sx, marginBottom: isMobile && index > 0 ? 2 : 0 },
         })
       : button
   );
@@ -27,14 +26,13 @@ const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
   return (
     <DialogActions
       data-testid="dialog-actions"
-      disableSpacing={isMobile}
       {...props}
+      disableSpacing={isMobile}
       sx={{
+        textAlign: textPosition,
         flexDirection: isMobile ? 'column-reverse' : 'row',
-        p: paddingSize,
-        pt: 0,
-        gap: gapSize,
-        ...props.sx,
+        p: isMobile ? 3 : 4,
+        pt: 2,
       }}
     >
       {enrichedButtons}

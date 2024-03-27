@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 
 import { Box, DialogActions, DialogContent, Grid } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import {
   CustomMobileDialog,
   CustomMobileDialogContent,
@@ -32,6 +33,13 @@ type Props = {
   /** Delegator */
   currentDelegator?: Delegator;
 };
+
+const useStyles = makeStyles({
+  helperTextFormat: {
+    // Use existing space / prevents shifting content below field
+    alignItems: 'flex',
+  },
+});
 
 function isFilterApplied(filtersCount: number): boolean {
   return filtersCount > 0;
@@ -65,6 +73,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
+  const classes = useStyles();
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
   const emptyValues = {
@@ -188,14 +197,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   ) : (
     <form onSubmit={formik.handleSubmit} data-testid="filter-form">
       <Box sx={{ flexGrow: 1, mt: 3 }}>
-        <Grid
-          container
-          spacing={1}
-          sx={{
-            // Use existing space / prevents shifting content below field
-            alignItems: 'flex',
-          }}
-        >
+        <Grid container spacing={1} className={classes.helperTextFormat}>
           <FilterNotificationsFormBody
             formikInstance={formik}
             startDate={startDate}

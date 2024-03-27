@@ -1,11 +1,22 @@
-import { vi } from 'vitest';
+import React from 'react';
 
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { configureStore, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { payments } from '../../../__mocks__/NotificationDetail.mock';
 import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../../models';
-import { act, createTestStore, fireEvent, render, waitFor } from '../../../test-utils';
+import { appStateReducer } from '../../../redux';
+import { act, fireEvent, render, waitFor } from '../../../test-utils';
 import NotificationPaymentF24Item from '../NotificationPaymentF24Item';
+
+function createTestStore() {
+  return configureStore({
+    reducer: { appState: appStateReducer },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
+  });
+}
 
 let counter = 0;
 const downloadUrl = 'https://www.mocked-url.com';
@@ -51,11 +62,12 @@ const getPaymentAttachment = createAsyncThunk<
 describe('NotificationPaymentF24Item Component', () => {
   const f24Item = payments.find((item) => !item.pagoPa && item.f24)?.f24 as F24PaymentDetails;
   const TIMERF24 = 5000;
-  const store = createTestStore();
+  let store;
 
   const original = window.location;
 
   beforeAll(() => {
+    store = createTestStore();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: { href: '' },
@@ -82,7 +94,7 @@ describe('NotificationPaymentF24Item Component', () => {
       <NotificationPaymentF24Item
         f24Item={item}
         timerF24={TIMERF24}
-        getPaymentAttachmentAction={vi.fn()}
+        getPaymentAttachmentAction={jest.fn()}
       />
     );
     expect(container).toHaveTextContent(item.title);
@@ -99,7 +111,7 @@ describe('NotificationPaymentF24Item Component', () => {
       <NotificationPaymentF24Item
         f24Item={item}
         timerF24={TIMERF24}
-        getPaymentAttachmentAction={vi.fn()}
+        getPaymentAttachmentAction={jest.fn()}
         isPagoPaAttachment
       />
     );
@@ -112,7 +124,7 @@ describe('NotificationPaymentF24Item Component', () => {
   });
 
   it('should call function handleDownloadAttachment when click on download button', () => {
-    const getPaymentAttachmentActionMk = vi.fn();
+    const getPaymentAttachmentActionMk = jest.fn();
     const item = { ...f24Item, attachmentIdx: 1 };
     const { getByTestId } = render(
       <NotificationPaymentF24Item
@@ -131,123 +143,134 @@ describe('NotificationPaymentF24Item Component', () => {
   });
 
   it('immediatly dowload the attachment', async () => {
+    jest.useFakeTimers();
+    let result;
     const item = { ...f24Item, attachmentIdx: 1 };
-    const { getByTestId } = render(
-      <NotificationPaymentF24Item
-        f24Item={item}
-        timerF24={TIMERF24}
-        getPaymentAttachmentAction={(
-          name: PaymentAttachmentSName,
-          attachmentIdx?: number | undefined
-        ) => getPaymentAttachmentActionMk('immediatly', name, attachmentIdx)}
-      />
-    );
-    const downloadButton = getByTestId('download-f24-button');
+    act(() => {
+      result = render(
+        <NotificationPaymentF24Item
+          f24Item={item}
+          timerF24={TIMERF24}
+          getPaymentAttachmentAction={(
+            name: PaymentAttachmentSName,
+            attachmentIdx?: number | undefined
+          ) => getPaymentAttachmentActionMk('immediatly', name, attachmentIdx)}
+        />
+      );
+    });
+    const downloadButton = result.getByTestId('download-f24-button');
     fireEvent.click(downloadButton);
     // if the api immediatly returns the url, we dowload the file
-    const downloadingMessage = getByTestId('f24-download-message');
+    const downloadingMessage = await waitFor(() => result.getByTestId('f24-download-message'));
     expect(downloadingMessage).toBeInTheDocument();
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-in-progress');
+    jest.advanceTimersByTime(300);
     await waitFor(() => {
       expect(downloadingMessage).not.toBeInTheDocument();
     });
     expect(window.location.href).toBe(downloadUrl);
   });
 
-  // TO-FIX: il test fallisce perchè sembra che in jest 27, useFakeTimers non funzioni correttamente
-  it.skip('download the attachment after retryAfter', async () => {
-    vi.useFakeTimers();
+  it('download the attachment after retryAfter', async () => {
+    jest.useFakeTimers();
+    let result;
     const item = { ...f24Item, attachmentIdx: 1 };
-    const { getByTestId } = render(
-      <NotificationPaymentF24Item
-        f24Item={item}
-        timerF24={TIMERF24}
-        getPaymentAttachmentAction={(
-          name: PaymentAttachmentSName,
-          attachmentIdx?: number | undefined
-        ) => getPaymentAttachmentActionMk('ready', name, attachmentIdx)}
-      />
-    );
-    const downloadButton = getByTestId('download-f24-button');
+    act(() => {
+      result = render(
+        <NotificationPaymentF24Item
+          f24Item={item}
+          timerF24={TIMERF24}
+          getPaymentAttachmentAction={(
+            name: PaymentAttachmentSName,
+            attachmentIdx?: number | undefined
+          ) => getPaymentAttachmentActionMk('ready', name, attachmentIdx)}
+        />
+      );
+    });
+    const downloadButton = result.getByTestId('download-f24-button');
     fireEvent.click(downloadButton);
     // show downloading message and after recall the api to download the file
-    const downloadingMessage = getByTestId('f24-download-message');
+    const downloadingMessage = await waitFor(() => result.getByTestId('f24-download-message'));
     expect(downloadingMessage).toBeInTheDocument();
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-in-progress');
     // wait...
     act(() => {
-      vi.advanceTimersByTime((retryAfterDelay - 1000) / 2 + 200);
+      jest.advanceTimersByTime((retryAfterDelay - 1000) / 2);
     });
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-waiting');
     // wait...
     act(() => {
-      vi.advanceTimersByTime((retryAfterDelay - 1000) / 2);
+      jest.advanceTimersByTime((retryAfterDelay - 1000) / 2);
     });
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-ongoing');
     // download the file
     act(() => {
-      vi.advanceTimersByTime(1000);
+      jest.advanceTimersByTime(1000);
     });
     await waitFor(() => {
       expect(downloadingMessage).not.toBeInTheDocument();
     });
     expect(window.location.href).toBe(downloadUrl);
-    vi.useRealTimers();
   });
 
-  // TO-FIX: il test fallisce perchè sembra che in jest 27, useFakeTimers non funzioni correttamente
-  it.skip('should show error when interval is finished', async () => {
-    vi.useFakeTimers();
+  it('should show error when interval is finished', async () => {
+    jest.useFakeTimers();
+    let result;
     const item = { ...f24Item, attachmentIdx: 1 };
-    const { getByTestId } = render(
-      <NotificationPaymentF24Item
-        f24Item={item}
-        timerF24={TIMERF24}
-        getPaymentAttachmentAction={(
-          name: PaymentAttachmentSName,
-          attachmentIdx?: number | undefined
-        ) => getPaymentAttachmentActionMk('not-ready', name, attachmentIdx)}
-      />
-    );
-    const downloadButton = getByTestId('download-f24-button');
+    await act(async () => {
+      result = render(
+        <NotificationPaymentF24Item
+          f24Item={item}
+          timerF24={TIMERF24}
+          getPaymentAttachmentAction={(
+            name: PaymentAttachmentSName,
+            attachmentIdx?: number | undefined
+          ) => getPaymentAttachmentActionMk('not-ready', name, attachmentIdx)}
+        />
+      );
+    });
+    const downloadButton = result.getByTestId('download-f24-button');
     fireEvent.click(downloadButton);
     // show downloading message and after recall the api to download the file
-    const downloadingMessage = await waitFor(() => getByTestId('f24-download-message'));
+    const downloadingMessage = await waitFor(() => result.getByTestId('f24-download-message'));
     expect(downloadingMessage).toBeInTheDocument();
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-in-progress');
     // wait...
     act(() => {
-      vi.advanceTimersByTime((retryAfterDelay - 1000) / 2);
+      jest.advanceTimersByTime((retryAfterDelay - 1000) / 2);
     });
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-waiting');
     // wait...
     act(() => {
-      vi.advanceTimersByTime((retryAfterDelay - 1000) / 2);
+      jest.advanceTimersByTime((retryAfterDelay - 1000) / 2);
     });
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-ongoing');
     // show the error
-    vi.advanceTimersByTime(1000);
-    const error = await waitFor(() => getByTestId('f24-maxTime-error'));
+    jest.advanceTimersByTime(1000);
+    const error = await waitFor(() => result.getByTestId('f24-maxTime-error'));
     expect(error).toBeInTheDocument();
     expect(error).toHaveTextContent('detail.payment.f24-download-error');
-    vi.useRealTimers();
   });
 
   it('should show error when api goes in error', async () => {
+    jest.useFakeTimers();
+    let result;
     const item = { ...f24Item, attachmentIdx: 1 };
-    const { getByTestId } = render(
-      <NotificationPaymentF24Item
-        f24Item={item}
-        timerF24={TIMERF24}
-        getPaymentAttachmentAction={(
-          name: PaymentAttachmentSName,
-          attachmentIdx?: number | undefined
-        ) => getPaymentAttachmentActionMk('error', name, attachmentIdx)}
-      />
-    );
-    const downloadButton = getByTestId('download-f24-button');
+    await act(async () => {
+      result = render(
+        <NotificationPaymentF24Item
+          f24Item={item}
+          timerF24={TIMERF24}
+          getPaymentAttachmentAction={(
+            name: PaymentAttachmentSName,
+            attachmentIdx?: number | undefined
+          ) => getPaymentAttachmentActionMk('error', name, attachmentIdx)}
+        />
+      );
+    });
+    const downloadButton = result.getByTestId('download-f24-button');
     fireEvent.click(downloadButton);
-    const error = await waitFor(() => getByTestId('f24-maxTime-error'));
+    const error = await waitFor(() => result.getByTestId('f24-maxTime-error'));
     expect(error).toBeInTheDocument();
     expect(error).toHaveTextContent('detail.payment.f24-download-error');
   });

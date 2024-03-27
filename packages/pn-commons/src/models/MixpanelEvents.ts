@@ -64,8 +64,6 @@ export type EventNotificationDetailType = {
   contains_multipayment: 'yes' | 'no';
   count_payment: number;
   contains_f24: 'yes' | 'no';
-  first_time_opening: boolean;
-  source: 'QRcode' | 'LISTA_NOTIFICHE';
 };
 
 export type EventMandateNotificationsListType = {

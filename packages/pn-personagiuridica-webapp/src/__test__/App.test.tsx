@@ -1,13 +1,14 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
+import React from 'react';
 
-import { ThemeProvider } from '@mui/material';
+import { ThemeProvider } from '@emotion/react';
 import { theme } from '@pagopa/mui-italia';
 
 import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
+import { apiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
 import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
 import { COUNT_DELEGATORS } from '../api/delegations/delegations.routes';
@@ -16,7 +17,7 @@ import { ConsentType } from '../models/consents';
 import { PNRole, PartyRole } from '../redux/auth/types';
 import { RenderResult, act, render } from './test-utils';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
@@ -25,7 +26,7 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
+jest.mock('../pages/Notifiche.page', () => () => <div>Generic Page</div>);
 
 const unmockedFetch = global.fetch;
 
@@ -53,15 +54,12 @@ const reduxInitialState = {
   },
 };
 
-describe('App', async () => {
+describe('App', () => {
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../api/apiClients');
+  const original = window.location;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
     global.fetch = () =>
@@ -72,7 +70,7 @@ describe('App', async () => {
 
   afterEach(() => {
     mock.reset();
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   afterAll(() => {

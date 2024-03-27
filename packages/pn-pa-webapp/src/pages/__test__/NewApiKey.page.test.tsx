@@ -1,6 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { Route, Routes } from 'react-router-dom';
-import { vi } from 'vitest';
+import React from 'react';
 
 import {
   testAutocomplete,
@@ -11,35 +10,40 @@ import {
 import { mockGroups } from '../../__mocks__/ApiKeys.mock';
 import { newApiKeyDTO, newApiKeyResponse } from '../../__mocks__/NewApiKey.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import { CREATE_APIKEY } from '../../api/apiKeys/apiKeys.routes';
 import { GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import NewApiKey from '../NewApiKey.page';
 
+const mockNavigateFn = jest.fn();
+
 // mock imports
-vi.mock('react-i18next', () => ({
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigateFn,
+}));
+
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
 }));
 
-describe('NewApiKey component', async () => {
-  let result: RenderResult;
+describe('NewApiKey component', () => {
+  let result: RenderResult | undefined;
+
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
+    result = undefined;
     mock.reset();
-    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -52,12 +56,12 @@ describe('NewApiKey component', async () => {
     await act(async () => {
       result = render(<NewApiKey />);
     });
-    expect(result.container).toHaveTextContent(/page-title/i);
-    const form = result.getByTestId('new-api-key-form');
-    testFormElements(form, 'name', 'form-placeholder-name');
-    testFormElements(form, 'groups', 'form-placeholder-groups');
-    const submitButton = within(form).getByTestId('submit-new-api-key');
-    expect(submitButton).toBeDisabled();
+    expect(result?.container).toHaveTextContent(/page-title/i);
+    const form = result?.getByTestId('new-api-key-form');
+    testFormElements(form!, 'name', 'form-placeholder-name');
+    testFormElements(form!, 'groups', 'form-placeholder-groups');
+    const submitButton = within(form!).getByTestId('submit-new-api-key');
+    expect(submitButton!).toBeDisabled();
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/ext-registry/pa/v1/groups?statusFilter=ACTIVE');
   });
@@ -67,22 +71,22 @@ describe('NewApiKey component', async () => {
     await act(async () => {
       result = render(<NewApiKey />);
     });
-    const form = result.getByTestId('new-api-key-form');
+    const form = result?.getByTestId('new-api-key-form');
 
     // initial status: empty form, submit is disabled, no error message
-    const submitButton = within(form).getByTestId('submit-new-api-key');
+    const submitButton = within(form!).getByTestId('submit-new-api-key');
     expect(submitButton).toBeDisabled();
-    expect(result.container).not.toHaveTextContent(/form-error-name/);
+    expect(result?.container).not.toHaveTextContent(/form-error-name/);
 
     // fill api key name: valid form, submit is enabled, no error message
-    await testInput(form, 'name', newApiKeyDTO.name);
+    await testInput(form!, 'name', newApiKeyDTO.name);
     expect(submitButton).toBeEnabled();
-    expect(result.container).not.toHaveTextContent(/form-error-name/);
+    expect(result?.container).not.toHaveTextContent(/form-error-name/);
 
     // set back api key name to empty text field, submit is disabled, error message shown
-    await testInput(form, 'name', '');
+    await testInput(form!, 'name', '');
     expect(submitButton).toBeDisabled();
-    expect(result.container).toHaveTextContent(/form-error-name/);
+    expect(result?.container).toHaveTextContent(/form-error-name/);
   });
 
   it('changes form values and clicks on confirm', async () => {
@@ -92,20 +96,20 @@ describe('NewApiKey component', async () => {
     await act(async () => {
       result = render(<NewApiKey />);
     });
-    const form = result.getByTestId('new-api-key-form');
-    await testInput(form, 'name', newApiKeyDTO.name);
+    const form = result?.getByTestId('new-api-key-form');
+    await testInput(form!, 'name', newApiKeyDTO.name);
     await testAutocomplete(
-      form,
+      form!,
       'groups',
       mockGroups.map((g) => ({ id: g.id, name: g.name })),
       true,
       0
     );
-    const submitButton = within(form).getByTestId('submit-new-api-key');
+    const submitButton = within(form!).getByTestId('submit-new-api-key');
     expect(submitButton).toBeEnabled();
-    fireEvent.click(submitButton);
+    fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(result.container).toHaveTextContent(/api-key-succesfully-generated/);
+      expect(result?.container).toHaveTextContent(/api-key-succesfully-generated/);
     });
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/ext-registry/pa/v1/groups?statusFilter=ACTIVE');
@@ -115,42 +119,21 @@ describe('NewApiKey component', async () => {
   });
 
   it('clicks on the breadcrumb button', async () => {
-    // simulate the current URL
-    window.history.pushState({}, '', '/new-api-key');
-
-    // render using an ad-hoc router
     await act(async () => {
-      result = render(
-        <Routes>
-          <Route path="/new-api-key" element={<NewApiKey />} />
-          <Route
-            path={routes.API_KEYS}
-            element={<div data-testid="mock-api-keys-page">hello</div>}
-          />
-        </Routes>
-      );
+      result = render(<NewApiKey />);
     });
-    // the mocked ApiKeys page does not appear before we click the corresponding link
-    const mockApiKeysPageBefore = result.queryByTestId('mock-api-keys-page');
-    expect(mockApiKeysPageBefore).not.toBeInTheDocument();
-
-    // simulate click on the breadcrumb link ...
-    const links = result.getAllByRole('link');
-    expect(links[0]).toHaveTextContent(/title/i);
-    expect(links[0]).toHaveAttribute('href', routes.API_KEYS);
-    fireEvent.click(links[0]);
-
-    // ... hence prompt must be shown
-    const promptDialog = await waitFor(() => result.getByTestId('promptDialog'));
+    const links = result?.getAllByRole('link');
+    expect(links![0]).toHaveTextContent(/title/i);
+    expect(links![0]).toHaveAttribute('href', routes.API_KEYS);
+    fireEvent.click(links![0]);
+    // prompt must be shown
+    const promptDialog = await waitFor(() => result?.getByTestId('promptDialog'));
     expect(promptDialog).toBeInTheDocument();
-    const confirmExitBtn = within(promptDialog).getByTestId('confirmExitBtn');
-    expect(confirmExitBtn).toBeInTheDocument();
+    const confirmExitBtn = within(promptDialog!).getByTestId('confirmExitBtn');
     fireEvent.click(confirmExitBtn);
-
-    // after clicking the "confirm" button in the prompt, the mocked ApiKeys page should be rendered
     await waitFor(() => {
-      const mockApiKeysPageAfter = result.queryByTestId('mock-api-keys-page');
-      expect(mockApiKeysPageAfter).toBeInTheDocument();
+      expect(mockNavigateFn).toBeCalledTimes(1);
+      expect(mockNavigateFn).toBeCalledWith(routes.API_KEYS);
     });
   });
 });

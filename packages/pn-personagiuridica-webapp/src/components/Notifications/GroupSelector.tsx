@@ -1,12 +1,11 @@
 import { MouseEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Box, Button, Menu, MenuItem } from '@mui/material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-import { getGroups } from '../../redux/delegation/actions';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { getGroups } from '../../redux/delegation/actions';
 
 type Props = {
   currentGroup: string;

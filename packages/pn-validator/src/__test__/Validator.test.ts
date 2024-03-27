@@ -4,21 +4,11 @@ import { ValidatorOptions } from '../types/ValidatorOptions';
 class DummySubClass {
   propertyOne: string;
   propertyTwo: string;
-
-  constructor(propertyOne: string, propertyTwo: string) {
-    this.propertyOne = propertyOne;
-    this.propertyTwo = propertyTwo;
-  }
 }
 
 class DummyClass {
   property: string;
   subProperty: DummySubClass[];
-
-  constructor(property: string, subProperty: DummySubClass[]) {
-    this.property = property;
-    this.subProperty = subProperty;
-  }
 }
 
 class SubDummyValidator extends Validator<DummySubClass> {

@@ -1,13 +1,13 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
 
 import { render } from '../../__test__/test-utils';
 import PrivacyPolicyPage from '../PrivacyPolicy.page';
 
-vi.mock('../../services/configuration.service', async () => {
+jest.mock('../../services/configuration.service', () => {
   return {
-    ...(await vi.importActual<any>('../../services/configuration.service')),
+    ...jest.requireActual('../../services/configuration.service'),
     getConfiguration: () => ({
       ONE_TRUST_DRAFT_MODE: false,
       ONE_TRUST_PP: 'mocked-id',
@@ -16,7 +16,7 @@ vi.mock('../../services/configuration.service', async () => {
 });
 
 describe('test the Privacy Policy page', () => {
-  const loadNoticesFn = vi.fn();
+  const loadNoticesFn = jest.fn();
 
   beforeAll(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
@@ -31,10 +31,6 @@ describe('test the Privacy Policy page', () => {
         LoadNotices: loadNoticesFn,
       },
     };
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
   });
 
   it('check that Privacy Policy page container is rendered', () => {

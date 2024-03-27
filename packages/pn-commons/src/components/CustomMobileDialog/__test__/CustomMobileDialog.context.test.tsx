@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import React from 'react';
 
 import { RenderResult, fireEvent, render, waitFor } from '../../../test-utils';
 import {

@@ -1,29 +1,25 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import SyncFeedback from '../SyncFeedback';
 
-const mockNavigateFn = vi.fn();
+const mockNavigateFn = jest.fn();
 
 // mock imports
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
 }));
 
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigateFn,
 }));
 
 describe('SyncFeedback Component', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('renders SyncFeedback', () => {
     // render component
     const result = render(<SyncFeedback />);

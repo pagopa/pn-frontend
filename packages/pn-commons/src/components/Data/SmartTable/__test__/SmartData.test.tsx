@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { Box } from '@mui/material';
 
@@ -18,9 +18,9 @@ import SmartData from '../SmartData';
 import SmartHeader from '../SmartHeader';
 import SmartHeaderCell from '../SmartHeaderCell';
 
-const handleSort = vi.fn();
-const handleColumnClick = vi.fn();
-const clickActionMockFn = vi.fn();
+const handleSort = jest.fn();
+const handleColumnClick = jest.fn();
+const clickActionMockFn = jest.fn();
 
 type Item = {
   'column-1': string;
@@ -103,9 +103,9 @@ const RenderSmartData: React.FC<{
             </SmartBodyCell>
           ))}
           <SmartActions>
-            <Box data-testid="mockedAction" onClick={clickActionMockFn}>
+            <div data-testid="mockedAction" onClick={clickActionMockFn}>
               Mocked action
-            </Box>
+            </div>
           </SmartActions>
         </SmartBodyRow>
       ))}

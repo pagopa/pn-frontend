@@ -1,43 +1,38 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
+import React from 'react';
 
-import { Row } from '@pagopa-pn/pn-commons';
 import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
   UPDATE_DELEGATION,
 } from '../../../api/delegations/delegations.routes';
-import { DelegationColumnData, DelegationStatus } from '../../../models/Deleghe';
+import { DelegationStatus } from '../../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
 }));
 
-const actionCbk = vi.fn();
+const actionCbk = jest.fn();
 
-describe('DelegationElements', async () => {
+describe('DelegationElements', () => {
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
     mock.reset();
-    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -193,7 +188,7 @@ describe('DelegationElements', async () => {
       <Menu
         menuType="delegates"
         id="111"
-        row={{ id: 'row-id', name: 'Mario Rossi', verificationCode } as Row<DelegationColumnData>}
+        row={{ id: 'row-id', name: 'Mario Rossi', verificationCode }}
       />
     );
     const menuIcon = getByTestId('delegationMenuIcon');
@@ -221,7 +216,7 @@ describe('DelegationElements', async () => {
       <Menu
         menuType="delegates"
         id="111"
-        row={{ id: 'row-id', name: 'Mario Rossi' } as Row<DelegationColumnData>}
+        row={{ id: 'row-id', name: 'Mario Rossi' }}
         onAction={actionCbk}
       />
     );
@@ -230,7 +225,7 @@ describe('DelegationElements', async () => {
     const menu = getByTestId('delegationMenu');
     const revoke = menu.querySelectorAll('[role="menuitem"]')[1];
     fireEvent.click(revoke);
-    const showDialog = await waitFor(() => screen.getByTestId('confirmationDialog'));
+    const showDialog = await waitFor(() => screen.getByTestId('dialogStack'));
     const revokeButton = within(showDialog).getAllByTestId('dialogAction')[1];
     fireEvent.click(revokeButton);
     await waitFor(() => {
@@ -243,18 +238,14 @@ describe('DelegationElements', async () => {
 
   it('check close confimationDialog', async () => {
     const { getByTestId } = render(
-      <Menu
-        menuType="delegates"
-        id="111"
-        row={{ id: 'row-id', name: 'Mario Rossi' } as Row<DelegationColumnData>}
-      />
+      <Menu menuType="delegates" id="111" row={{ id: 'row-id', name: 'Mario Rossi' }} />
     );
     const menuIcon = getByTestId('delegationMenuIcon');
     fireEvent.click(menuIcon);
     const menu = getByTestId('delegationMenu');
     const revoke = menu.querySelectorAll('[role="menuitem"]')[1];
     fireEvent.click(revoke);
-    const showDialog = await waitFor(() => screen.getByTestId('confirmationDialog'));
+    const showDialog = await waitFor(() => screen.getByTestId('dialogStack'));
     const cancelButton = within(showDialog).getAllByTestId('dialogAction')[0];
     fireEvent.click(cancelButton!);
     await waitFor(() => {
@@ -265,18 +256,14 @@ describe('DelegationElements', async () => {
   it('check reject for delegator', async () => {
     mock.onPatch(REJECT_DELEGATION('111')).reply(204);
     const { getByTestId } = render(
-      <Menu
-        menuType="delegators"
-        id="111"
-        row={{ id: 'row-id', name: 'Mario Rossi' } as Row<DelegationColumnData>}
-      />
+      <Menu menuType="delegators" id="111" row={{ id: 'row-id', name: 'Mario Rossi' }} />
     );
     const menuIcon = getByTestId('delegationMenuIcon');
     fireEvent.click(menuIcon);
     const menu = getByTestId('delegationMenu');
     const reject = menu.querySelectorAll('[role="menuitem"]')[0];
     fireEvent.click(reject);
-    const showDialog = await waitFor(() => screen.getByTestId('confirmationDialog'));
+    const showDialog = await waitFor(() => screen.getByTestId('dialogStack'));
     const rejectButton = within(showDialog).getAllByTestId('dialogAction')[1];
     fireEvent.click(rejectButton);
     await waitFor(() => {
@@ -291,13 +278,7 @@ describe('DelegationElements', async () => {
       <Menu
         menuType="delegators"
         id="111"
-        row={
-          {
-            id: 'row-id',
-            name: 'Mario Rossi',
-            status: DelegationStatus.ACTIVE,
-          } as Row<DelegationColumnData>
-        }
+        row={{ id: 'row-id', name: 'Mario Rossi', status: DelegationStatus.ACTIVE }}
       />
     );
     const menuIcon = getByTestId('delegationMenuIcon');
@@ -317,14 +298,12 @@ describe('DelegationElements', async () => {
       <Menu
         menuType="delegators"
         id="111"
-        row={
-          {
-            id: 'row-id',
-            name: 'Mario Rossi',
-            status: DelegationStatus.ACTIVE,
-            groups: [groups[1]],
-          } as Row<DelegationColumnData>
-        }
+        row={{
+          id: 'row-id',
+          name: 'Mario Rossi',
+          status: DelegationStatus.ACTIVE,
+          groups: [groups[1]],
+        }}
       />,
       {
         preloadedState: {
@@ -360,14 +339,12 @@ describe('DelegationElements', async () => {
       <Menu
         menuType="delegators"
         id="4"
-        row={
-          {
-            id: 'row-id',
-            name: 'Mario Rossi',
-            status: DelegationStatus.ACTIVE,
-            groups: [groups[1]] as Array<{ id: string; name: string }>,
-          } as Row<DelegationColumnData>
-        }
+        row={{
+          id: 'row-id',
+          name: 'Mario Rossi',
+          status: DelegationStatus.ACTIVE,
+          groups: [groups[1]],
+        }}
         onAction={actionCbk}
       />,
       {

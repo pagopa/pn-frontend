@@ -5,7 +5,6 @@ import {
   DOWNTIME_LEGAL_FACT_DETAILS,
   KnownFunctionality,
   LegalFactType,
-  PAYMENT_CACHE_KEY,
   PaidDetails,
   PaymentAttachmentSName,
   PaymentStatus,
@@ -289,7 +288,6 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch payment info and not replace the payment if is equal', async () => {
-    sessionStorage.removeItem(PAYMENT_CACHE_KEY);
     const mockedStore = createMockedStore({
       notificationState: {
         notification: notificationToFe,

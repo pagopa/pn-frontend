@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { fireEvent, render, screen, waitFor, within } from '../../../test-utils';
 import CustomMobileDialog from '../CustomMobileDialog';
 import CustomMobileDialogAction from '../CustomMobileDialogAction';

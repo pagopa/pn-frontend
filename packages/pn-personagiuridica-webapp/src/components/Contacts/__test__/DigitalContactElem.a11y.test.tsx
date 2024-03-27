@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import * as React from 'react';
 
 import { TextField } from '@mui/material';
 
@@ -15,7 +15,7 @@ import { LegalChannelType } from '../../../models/contacts';
 import DigitalContactElem from '../DigitalContactElem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -28,11 +28,9 @@ const fields = [
     id: 'label',
     component: 'PEC',
     size: 'variable' as 'variable' | 'auto',
-    key: 'key',
   },
   {
     id: 'value',
-    key: 'key',
     component: (
       <TextField
         id="pec"
@@ -51,7 +49,7 @@ const fields = [
 ];
 
 describe('DigitalContactElem Component - accessibility tests', () => {
-  let result: RenderResult;
+  let result: RenderResult | undefined;
 
   it('does not have basic accessibility issues', async () => {
     // render component
@@ -100,9 +98,9 @@ describe('DigitalContactElem Component - accessibility tests', () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
-    const buttons = result.container.querySelectorAll('button');
+    const buttons = result?.container.querySelectorAll('button');
     fireEvent.click(buttons![0]);
-    const input = await waitFor(() => result.container.querySelector('[name="pec"]'));
+    const input = await waitFor(() => result?.container.querySelector('[name="pec"]'));
     expect(input).toBeInTheDocument();
 
     if (result) {
@@ -132,7 +130,7 @@ describe('DigitalContactElem Component - accessibility tests', () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
-    const buttons = result.container.querySelectorAll('button');
+    const buttons = result?.container.querySelectorAll('button');
     fireEvent.click(buttons![1]);
     const dialog = await waitFor(() => screen.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();

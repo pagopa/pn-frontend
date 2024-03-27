@@ -1,5 +1,4 @@
-import { vi } from 'vitest';
-
+import React from 'react';
 import { TextField } from '@mui/material';
 
 import {
@@ -17,7 +16,7 @@ import * as trackingFunctions from '../../../utility/mixpanel';
 import DigitalContactElem from '../DigitalContactElem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -30,11 +29,9 @@ const fields = [
     id: 'label',
     component: 'PEC',
     size: 'variable' as 'variable' | 'auto',
-    key: 'key',
   },
   {
     id: 'value',
-    key: 'key',
     component: (
       <TextField
         id="pec"
@@ -52,12 +49,12 @@ const fields = [
   },
 ];
 
-const mockResetModifyValue = vi.fn();
-const mockDeleteCbk = vi.fn();
-const mockOnConfirm = vi.fn();
+const mockResetModifyValue = jest.fn();
+const mockDeleteCbk = jest.fn();
+const mockOnConfirm = jest.fn();
 // mock tracking
-const createTrackEventSpy = vi.spyOn(trackingFunctions, 'trackEventByType');
-const mockTrackEventFn = vi.fn();
+const createTrackEventSpy = jest.spyOn(trackingFunctions, 'trackEventByType');
+const mockTrackEventFn = jest.fn();
 
 /*
 In questo test viene testato solo il rendering dei componenti e non il flusso.
@@ -75,11 +72,11 @@ describe('DigitalContactElem Component', () => {
 
   afterEach(() => {
     result = undefined;
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   afterAll(() => {
-    vi.restoreAllMocks();
+    jest.restoreAllMocks();
   });
 
   it('renders component', async () => {
@@ -112,9 +109,9 @@ describe('DigitalContactElem Component', () => {
   });
 
   it('edits contact', async () => {
-    vi.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress').mockResolvedValueOnce({
-      pecValid: true,
-    } as DigitalAddress);
+    jest
+      .spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
+      .mockResolvedValueOnce({ pecValid: true } as DigitalAddress);
     // render component
     await act(async () => {
       result = render(
@@ -163,7 +160,7 @@ describe('DigitalContactElem Component', () => {
   });
 
   it('remove contact', async () => {
-    vi.spyOn(api.ContactsApi, 'deleteLegalAddress').mockResolvedValueOnce('mocked-senderId');
+    jest.spyOn(api.ContactsApi, 'deleteLegalAddress').mockResolvedValueOnce('mocked-senderId');
     // render component
     await act(async () => {
       result = render(

@@ -1,16 +1,16 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { render } from '../../test-utils';
 import { useUnload } from '../useUnload';
 
-const MockComponent = ({ fn }: { fn: () => void }) => {
+const MockComponent = ({ fn }) => {
   useUnload(fn);
   return <div>Mock Component</div>;
 };
 
 describe('useUnload', () => {
   it("should call the provided function on 'beforeunload'", () => {
-    const mockCallback = vi.fn();
+    const mockCallback = jest.fn();
     const { unmount } = render(<MockComponent fn={mockCallback} />);
     // Trigger the beforeunload event
     window.dispatchEvent(new Event('beforeunload'));

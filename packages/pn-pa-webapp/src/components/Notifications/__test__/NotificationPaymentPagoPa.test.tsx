@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
+import React from 'react';
 
 import {
   PaymentAttachmentSName,
@@ -11,38 +11,34 @@ import {
 
 import { notificationToFeMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 import { NOTIFICATION_PAYMENT_ATTACHMENT } from '../../../api/notifications/notifications.routes';
 import NotificationPaymentPagoPa from '../NotificationPaymentPagoPa';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
 }));
 
-vi.mock('@pagopa-pn/pn-commons', async () => {
-  const original = await vi.importActual<any>('@pagopa-pn/pn-commons');
+jest.mock('@pagopa-pn/pn-commons', () => {
+  const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
-    downloadDocument: vi.fn(),
+    downloadDocument: jest.fn(),
   };
 });
 
-describe('NotificationPaymentPagoPa Component', async () => {
+describe('NotificationPaymentPagoPa Component', () => {
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
     mock.reset();
-    vi.clearAllMocks();
   });
 
   afterAll(() => {

@@ -1,11 +1,11 @@
+import React from 'react';
 import { MemoryRouter, Route, Routes, useNavigate } from 'react-router-dom';
-import { vi } from 'vitest';
 
 import { fireEvent, render, waitFor } from '../../test-utils';
 import { usePrompt } from '../usePrompt';
 
-const mockConfirm = vi.fn();
-const mockCancel = vi.fn();
+const mockConfirm = jest.fn();
+const mockCancel = jest.fn();
 
 const PromptComponent = () => {
   const navigate = useNavigate();

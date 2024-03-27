@@ -2,16 +2,22 @@ import _ from 'lodash';
 import { FC, ReactNode, createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Box, Button, DialogContentText, DialogTitle, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Typography,
+} from '@mui/material';
 import {
   AppResponse,
   AppResponsePublisher,
   CodeModal,
   DisclaimerModal,
   ErrorMessage,
-  PnDialog,
-  PnDialogActions,
-  PnDialogContent,
   appStateActions,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -54,7 +60,7 @@ const DigitalContactsCodeVerificationContext = createContext<
   IDigitalContactsCodeVerificationContext | undefined
 >(undefined);
 
-const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({ children }) => {
+const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.contactsState.digitalAddresses
@@ -280,10 +286,12 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
             ` ${modalProps.value}`
           }
           subtitle={
-            <Trans
-              i18nKey={`${modalProps.labelRoot}.${modalProps.labelType}-verify-descr`}
-              ns="recapiti"
-            />
+            <Typography variant="body1">
+              <Trans
+                i18nKey={`${modalProps.labelRoot}.${modalProps.labelType}-verify-descr`}
+                ns="recapiti"
+              />
+            </Typography>
           }
           open={open}
           initialValues={new Array(5).fill('')}
@@ -319,7 +327,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
           errorMessage={errorMessage?.content}
         />
       )}
-      <PnDialog
+      <Dialog
         open={isConfirmationModalVisible}
         onClose={handleDiscard}
         aria-labelledby="dialog-title"
@@ -329,35 +337,33 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
         <DialogTitle id="dialog-title">
           {t(`common.duplicate-contact-title`, { value: modalProps.value, ns: 'recapiti' })}
         </DialogTitle>
-        <PnDialogContent>
+        <DialogContent>
           <DialogContentText id="dialog-description">
             {t(`common.duplicate-contact-descr`, { value: modalProps.value, ns: 'recapiti' })}
           </DialogContentText>
-        </PnDialogContent>
-        <PnDialogActions>
+        </DialogContent>
+        <DialogActions>
           <Button onClick={handleDiscard} variant="outlined">
             {t('button.annulla')}
           </Button>
           <Button onClick={handleConfirm} variant="contained">
             {t('button.conferma')}
           </Button>
-        </PnDialogActions>
-      </PnDialog>
-      <PnDialog open={pecValidationOpen} data-testid="validationDialog">
-        <DialogTitle id="dialog-title">
+        </DialogActions>
+      </Dialog>
+      <Dialog open={pecValidationOpen} data-testid="validationDialog">
+        <DialogTitle id="dialog-title" sx={{ pt: 4, px: 4 }}>
           {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
         </DialogTitle>
-        <PnDialogContent>
-          <DialogContentText>
-            {t('legal-contacts.validation-progress-content', { ns: 'recapiti' })}
-          </DialogContentText>
-        </PnDialogContent>
-        <PnDialogActions>
+        <DialogContent sx={{ px: 4 }}>
+          {t('legal-contacts.validation-progress-content', { ns: 'recapiti' })}
+        </DialogContent>
+        <DialogActions sx={{ pb: 4, px: 4 }}>
           <Button onClick={() => setPecValidationOpen(false)} variant="contained">
             {t('button.conferma')}
           </Button>
-        </PnDialogActions>
-      </PnDialog>
+        </DialogActions>
+      </Dialog>
     </DigitalContactsCodeVerificationContext.Provider>
   );
 };

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { userResponse } from '../../__mocks__/Auth.mock';

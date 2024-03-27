@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { TextField } from '@mui/material';
 
@@ -12,10 +12,12 @@ import {
 } from '../../../__test__/test-utils';
 import * as api from '../../../api/contacts/Contacts.api';
 import { DigitalAddress, LegalChannelType } from '../../../models/contacts';
+import { TrackEventType } from '../../../utility/events';
+import * as trackingFunctions from '../../../utility/mixpanel';
 import DigitalContactElem from '../DigitalContactElem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -28,11 +30,9 @@ const fields = [
     id: 'label',
     component: 'PEC',
     size: 'variable' as 'variable' | 'auto',
-    key: 'key',
   },
   {
     id: 'value',
-    key: 'key',
     component: (
       <TextField
         id="pec"
@@ -50,9 +50,9 @@ const fields = [
   },
 ];
 
-const mockResetModifyValue = vi.fn();
-const mockDeleteCbk = vi.fn();
-const mockOnConfirm = vi.fn();
+const mockResetModifyValue = jest.fn();
+const mockDeleteCbk = jest.fn();
+const mockOnConfirm = jest.fn();
 
 /*
 In questo test viene testato solo il rendering dei componenti e non il flusso.
@@ -66,16 +66,16 @@ describe('DigitalContactElem Component', () => {
 
   afterEach(() => {
     result = undefined;
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   afterAll(() => {
-    vi.restoreAllMocks();
+    jest.restoreAllMocks();
   });
 
   it('renders component', async () => {
     // render component
-    act(() => {
+    await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <DigitalContactElem
@@ -103,9 +103,9 @@ describe('DigitalContactElem Component', () => {
   });
 
   it('edits contact', async () => {
-    vi.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress').mockResolvedValueOnce({
-      pecValid: true,
-    } as DigitalAddress);
+    jest
+      .spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
+      .mockResolvedValueOnce({ pecValid: true } as DigitalAddress);
     // render component
     await act(async () => {
       result = render(
@@ -154,7 +154,7 @@ describe('DigitalContactElem Component', () => {
   });
 
   it('remove contact', async () => {
-    vi.spyOn(api.ContactsApi, 'deleteLegalAddress').mockResolvedValueOnce('mocked-senderId');
+    jest.spyOn(api.ContactsApi, 'deleteLegalAddress').mockResolvedValueOnce('mocked-senderId');
     // render component
     await act(async () => {
       result = render(
@@ -182,10 +182,10 @@ describe('DigitalContactElem Component', () => {
     expect(dialog).toHaveTextContent('mocked-body');
     let dialogButtons = dialog?.querySelectorAll('button');
     expect(dialogButtons).toHaveLength(2);
-    expect(dialogButtons[0]).toHaveTextContent('button.annulla');
-    expect(dialogButtons[1]).toHaveTextContent('button.conferma');
+    expect(dialogButtons![0]).toHaveTextContent('button.annulla');
+    expect(dialogButtons![1]).toHaveTextContent('button.conferma');
     // click on cancel
-    fireEvent.click(dialogButtons[0]);
+    fireEvent.click(dialogButtons![0]);
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
     });
@@ -193,7 +193,7 @@ describe('DigitalContactElem Component', () => {
     fireEvent.click(buttons![1]);
     dialog = await waitFor(() => screen.getByRole('dialog'));
     dialogButtons = dialog?.querySelectorAll('button');
-    fireEvent.click(dialogButtons[1]);
+    fireEvent.click(dialogButtons![1]);
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
     });
@@ -227,7 +227,7 @@ describe('DigitalContactElem Component', () => {
     const dialog = await waitFor(() => screen.getByRole('dialog'));
     const dialogButtons = dialog?.querySelectorAll('button');
     expect(dialogButtons).toHaveLength(1);
-    expect(dialogButtons[0]).toHaveTextContent('button.close');
+    expect(dialogButtons![0]).toHaveTextContent('button.close');
   });
 
   it('save disabled', async () => {

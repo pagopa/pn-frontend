@@ -1,5 +1,7 @@
+import { renderHook } from '@testing-library/react-hooks';
+
 import { exampleDowntimeLogPage } from '../../__mocks__/AppStatus.mock';
-import { initLocalizationForTest, renderHook } from '../../test-utils';
+import { initLocalizationForTest } from '../../test-utils';
 import { useFieldSpecs } from '../useFieldSpecs';
 
 describe('useFieldSpecs', () => {

@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
 
@@ -6,7 +6,7 @@ import { render } from '../../__test__/test-utils';
 import ParticipatingEntities from '../ParticipatingEntities.page';
 
 describe('test the Participating Entities page', () => {
-  const loadNoticesFn = vi.fn();
+  const loadNoticesFn = jest.fn();
 
   beforeAll(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore

@@ -33,10 +33,6 @@ export function useBlocker(blocker: Blocker, when = true): void {
     });
 
     // clean up function
-    return () => {
-      if (unblock) {
-        return unblock();
-      }
-    };
+    return () => unblock();
   }, [navigator, blocker, when]);
 }

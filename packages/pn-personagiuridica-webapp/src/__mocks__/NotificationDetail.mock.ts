@@ -12,18 +12,15 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
   PaidDetails,
-  PaymentCache,
   PaymentsData,
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
   getF24Payments,
   getPagoPaF24Payments,
-  populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
 import { parseNotificationDetailForRecipient } from '../utility/notification.utility';
-import { paymentInfo } from './ExternalRegistry.mock';
 
 export const payments: Array<NotificationDetailPayment> = [
   {
@@ -510,14 +507,3 @@ export const overrideNotificationMock = (overrideObj: object): NotificationDetai
 export const cancelledNotificationToFe = parseNotificationDetailForRecipient(
   _.cloneDeep(cancelledNotificationDTO)
 );
-
-export const cachedPayments: PaymentCache = {
-  iun: notificationDTO.iun,
-  timestamp: new Date().toISOString(),
-  currentPaymentPage: 0,
-  payments: populatePaymentsPagoPaF24(
-    notificationDTO.timeline,
-    paymentsData.pagoPaF24,
-    paymentInfo
-  ),
-};

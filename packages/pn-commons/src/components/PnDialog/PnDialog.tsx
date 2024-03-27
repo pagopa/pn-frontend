@@ -1,15 +1,14 @@
 import { Children, cloneElement, isValidElement, useMemo } from 'react';
-
 import { Dialog, DialogProps, DialogTitle } from '@mui/material';
 
 import { useIsMobile } from '../../hooks';
 import { ReactComponent } from '../../models/PnDialog';
-import PnDialogActions from './PnDialogActions';
 import PnDialogContent from './PnDialogContent';
+import PnDialogActions from './PnDialogActions';
 
 const PnDialog: React.FC<DialogProps> = (props) => {
   const isMobile = useIsMobile();
-  const paddingSize = useMemo(() => (isMobile ? 3 : 4), [isMobile]);
+  const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
 
   const title: ReactComponent = Children.toArray(props.children).find(
     (child) => isValidElement(child) && child.type === DialogTitle
@@ -18,7 +17,7 @@ const PnDialog: React.FC<DialogProps> = (props) => {
   const enrichedTitle = isValidElement(title)
     ? cloneElement(title, {
         ...title.props,
-        sx: { p: paddingSize, pb: 2, ...title.props.sx },
+        sx: { ...title.props.sx, textAlign: textPosition, p: isMobile ? 3 : 4, pb: 2 },
       })
     : title;
 
@@ -26,22 +25,14 @@ const PnDialog: React.FC<DialogProps> = (props) => {
     (child) => isValidElement(child) && child.type === PnDialogContent
   );
 
-  const paddingTop = isMobile ? 3 : 4;
-  const enrichedContent = isValidElement(content)
-    ? cloneElement(content, {
-        ...content.props,
-        sx: { pt: title ? 0 : paddingTop, ...content.props.sx },
-      })
-    : content;
-
   const actions: ReactComponent = Children.toArray(props.children).find(
     (child) => isValidElement(child) && child.type === PnDialogActions
   );
 
   return (
-    <Dialog data-testid="dialog" {...props}>
+    <Dialog {...props} data-testid="dialog">
       {title && enrichedTitle}
-      {content && enrichedContent}
+      {content}
       {actions}
     </Dialog>
   );

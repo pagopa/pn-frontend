@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import { axe, render } from '../../../__test__/test-utils';
 import ConfirmationModal from '../ConfirmationModal';
 
@@ -13,7 +15,7 @@ describe('ConfirmationModal Component - accessibility tests', () => {
         onConfirmLabel="Conferma"
       />
     );
-    const results = await axe(result.container);
+    const results = await axe(result?.container);
     expect(results).toHaveNoViolations();
   });
 });

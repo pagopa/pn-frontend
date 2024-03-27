@@ -8,7 +8,6 @@ type Props = {
   goToHomePage: () => void;
   message?: string;
   subtitle?: string;
-  icon?: JSX.Element;
 };
 
 const AccessDenied: React.FC<Props> = ({
@@ -17,7 +16,6 @@ const AccessDenied: React.FC<Props> = ({
   goToHomePage,
   message,
   subtitle,
-  icon,
 }) => {
   const finalMessage =
     message ??
@@ -38,14 +36,12 @@ const AccessDenied: React.FC<Props> = ({
       sx={{ minHeight: '50vh' }}
       data-testid="access-denied"
     >
-      {icon && <Box mt={11}>{icon}</Box>}
-
-      <Box mt={2}>
+      <Box mt={4}>
         <Typography align="center" color="text.primary" variant="h4" id="login-page-title">
           {finalMessage}
         </Typography>
       </Box>
-      <Box my={2} maxWidth={700}>
+      <Box my={2}>
         <Typography align="center" color="text.primary" variant="body1">
           {finalSubTitle}
         </Typography>
@@ -61,7 +57,7 @@ const AccessDenied: React.FC<Props> = ({
           }}
         >
           {isLogged
-            ? getLocalizedOrDefaultLabel('common', 'button.go-to-home', 'Vai alla homepage')
+            ? getLocalizedOrDefaultLabel('common', 'button.go-to-home', 'Vai alla home page')
             : getLocalizedOrDefaultLabel('common', 'button.go-to-login', 'Accedi')}
         </Button>
       </Box>

@@ -2,8 +2,6 @@
   "title": "Notifiche",
   "subtitle": "Qui trovi tutte le notifiche inviate dall'ente. Puoi filtrarle per Codice Fiscale, Codice IUN, data di invio e stato.",
   "new-notification-button": "Invia una notifica",
-  "manual-send-disabled-message": "In questo momento, non è possibile inviare nuove notifiche.",
-  "manual-send-disabled-action": "Controlla lo stato della piattaforma",
   "filters": {
     "fiscal-code-tax-code": "Codice Fiscale",
     "iun": "Codice IUN",

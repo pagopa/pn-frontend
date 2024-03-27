@@ -1,6 +1,12 @@
 {
   "title": "API Key",
-  "subtitle": "SEND offers APIs for <0>sending notifications and access to information</0> about their status. Here you can generate and manage API Keys to be used to authenticate the organisation's requests.",
+  "subtitle": {
+    "text1": "SEND offers APIs for ",
+    "text2": "sending notifications",
+    "text3": " and ",
+    "text4": "access to information",
+    "text5": " about their status. Here you can generate and manage API Keys to be used to authenticate the organisation's requests."
+  },
   "error-fecth-api-keys": "Could not retrieve list of API Keys",
   "api-key-succesfully-generated": "API Key successfully generated!",
   "copy-the-api-key": "To allow integration, copy the code and enter it into the organisation's proprietary platform.",

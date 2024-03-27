@@ -28,7 +28,6 @@ export const AppStatusBar = ({ status }: { status: AppCurrentStatus }) => {
     <Stack
       component="div"
       data-testid="app-status-bar"
-      id="appStatusBar"
       direction={isMobile ? 'column' : 'row'}
       justifyContent="center"
       alignItems="center"

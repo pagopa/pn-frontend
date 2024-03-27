@@ -1,17 +1,13 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import userEvent from '@testing-library/user-event';
 
-import { act, fireEvent, render, theme, waitFor } from '../../../test-utils';
+import { fireEvent, render, theme, waitFor } from '../../../test-utils';
 import CodeInput from '../CodeInput';
 
-const handleChangeMock = vi.fn();
+const handleChangeMock = jest.fn();
 
 describe('CodeInput Component', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('renders CodeInput (empty inputs)', () => {
     // render component
     const { getAllByTestId } = render(
@@ -86,24 +82,24 @@ describe('CodeInput Component', () => {
     });
     // change the value of the input and check that it is updated correctly
     // set the cursor position to the end
-    act(() => (codeInputs[2] as HTMLInputElement).focus());
+    (codeInputs[2] as HTMLInputElement).focus();
     (codeInputs[2] as HTMLInputElement).setSelectionRange(1, 1);
     // when we try to edit an input, we insert a second value and after, based on cursor position, we change the value
     // we must use userEvent because the keyboard event must trigger also the change event (fireEvent doesn't do that)
-    await userEvent.keyboard('4');
+    userEvent.keyboard('4');
     await waitFor(() => {
       expect(codeInputs[2]).toHaveValue('4');
     });
     // move the cursor at the start of the input and try to edit again
-    act(() => (codeInputs[2] as HTMLInputElement).focus());
+    (codeInputs[2] as HTMLInputElement).focus();
     (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
-    await userEvent.keyboard('3');
+    userEvent.keyboard('3');
     await waitFor(() => {
       expect(codeInputs[2]).toHaveValue('3');
     });
     // delete the value
-    act(() => (codeInputs[2] as HTMLInputElement).focus());
-    await userEvent.keyboard('{Backspace}');
+    (codeInputs[2] as HTMLInputElement).focus();
+    userEvent.keyboard('[Backspace]');
     await waitFor(() => {
       expect(codeInputs[2]).toHaveValue('');
     });
@@ -111,12 +107,12 @@ describe('CodeInput Component', () => {
 
   it('keyboard events', async () => {
     // render component
-    const { getAllByTestId } = render(
+    const { getAllByTestId, container } = render(
       <CodeInput initialValues={new Array(5).fill('1')} onChange={handleChangeMock} />
     );
     // focus on first input and moove to the next
     const codeInputs = getAllByTestId(/code-input-[0-4]/);
-    act(() => (codeInputs[0] as HTMLInputElement).focus());
+    (codeInputs[0] as HTMLInputElement).focus();
     // press enter
     fireEvent.keyDown(codeInputs[0], { key: 'Enter', code: 'Enter' });
     await waitFor(() => {
@@ -144,7 +140,7 @@ describe('CodeInput Component', () => {
       expect(document.body).toBe(document.activeElement);
     });
     // focus on last input and moove back
-    act(() => (codeInputs[4] as HTMLInputElement).focus());
+    (codeInputs[4] as HTMLInputElement).focus();
     // press backspace
     fireEvent.keyDown(codeInputs[4], { key: 'Backspace', code: 'Backspace' });
     await waitFor(() => {
@@ -161,7 +157,7 @@ describe('CodeInput Component', () => {
       expect(codeInputs[1]).toBe(document.activeElement);
     });
     // focus on first element and try to go back
-    act(() => (codeInputs[0] as HTMLInputElement).focus());
+    (codeInputs[0] as HTMLInputElement).focus();
     fireEvent.keyDown(codeInputs[0], { key: 'Backspace', code: 'Backspace' });
     // nothing happens
     await waitFor(() => {

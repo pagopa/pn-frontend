@@ -1,5 +1,5 @@
+import { Grid, Typography, Avatar } from '@mui/material';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import { Avatar, Grid, Typography } from '@mui/material';
 
 type DropDownPartyProps = {
   name: string;

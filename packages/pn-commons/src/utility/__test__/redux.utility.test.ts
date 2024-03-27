@@ -1,9 +1,7 @@
-import { vi } from 'vitest';
-
 import { performThunkAction } from '../redux.utility';
 
 // Mock an asynchronous action function for testing
-const mockAsyncAction = async (params: string) => {
+const mockAsyncAction = async (params) => {
   if (params === 'error') {
     throw new Error('Test Error');
   } else if (params === 'error_response_no_status') {
@@ -27,10 +25,10 @@ const mockAsyncAction = async (params: string) => {
 describe('performThunkAction', () => {
   it('should call the action function with the provided parameters', async () => {
     const params = 'testParams';
-    const actionSpy = vi.fn(mockAsyncAction);
+    const actionSpy = jest.fn(mockAsyncAction);
     const thunkAction = performThunkAction(actionSpy);
 
-    await thunkAction(params, { rejectWithValue: vi.fn() });
+    await thunkAction(params, { rejectWithValue: jest.fn() });
 
     expect(actionSpy).toHaveBeenCalledWith(params);
   });
@@ -40,14 +38,14 @@ describe('performThunkAction', () => {
     const expectedResult = `Result for ${params}`;
     const thunkAction = performThunkAction(mockAsyncAction);
 
-    const result = await thunkAction(params, { rejectWithValue: vi.fn() });
+    const result = await thunkAction(params, { rejectWithValue: jest.fn() });
 
     expect(result).toBe(expectedResult);
   });
 
   it('should call rejectWithValue with a parsed error on failure - no error response', async () => {
     const errorParams = 'error';
-    const rejectWithValueSpy = vi.fn();
+    const rejectWithValueSpy = jest.fn();
     const thunkAction = performThunkAction(mockAsyncAction);
 
     await thunkAction(errorParams, { rejectWithValue: rejectWithValueSpy });
@@ -58,7 +56,7 @@ describe('performThunkAction', () => {
 
   it('should call rejectWithValue with a parsed error on failure - error without status', async () => {
     const errorParams = 'error_response_no_status';
-    const rejectWithValueSpy = vi.fn();
+    const rejectWithValueSpy = jest.fn();
     const thunkAction = performThunkAction(mockAsyncAction);
 
     await thunkAction(errorParams, { rejectWithValue: rejectWithValueSpy });
@@ -71,7 +69,7 @@ describe('performThunkAction', () => {
 
   it('should call rejectWithValue with a parsed error on failure - error with all data', async () => {
     const errorParams = 'error_response';
-    const rejectWithValueSpy = vi.fn();
+    const rejectWithValueSpy = jest.fn();
     const thunkAction = performThunkAction(mockAsyncAction);
 
     await thunkAction(errorParams, { rejectWithValue: rejectWithValueSpy });

@@ -1,6 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { ReactNode } from 'react';
-import { vi } from 'vitest';
+import React, { ReactNode } from 'react';
 
 import {
   ConsentUser,
@@ -9,20 +8,21 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { fireEvent, render, waitFor } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import { SET_CONSENTS } from '../../api/consents/consents.routes';
 import { ConsentActionType, ConsentType } from '../../models/consents';
 import * as routes from '../../navigation/routes.const';
 import ToSAcceptance from '../ToSAcceptance.page';
 
-const mockNavigateFn = vi.fn();
+const mockNavigateFn = jest.fn();
 
 // mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigateFn,
 }));
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   Trans: (props: { i18nKey: string; components: Array<ReactNode> }) => (
     <>
@@ -46,20 +46,15 @@ const privacyConsent: ConsentUser = {
   consentVersion: 'mocked-version-1',
 };
 
-describe('test Terms of Service page', async () => {
+describe('test Terms of Service page', () => {
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
     mock.reset();
-    vi.clearAllMocks();
   });
 
   afterAll(() => {

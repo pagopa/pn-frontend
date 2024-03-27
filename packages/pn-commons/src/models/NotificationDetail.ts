@@ -213,12 +213,11 @@ export interface SendDigitalDetails extends BaseDetails {
 }
 
 export interface PaidDetails extends BaseDetails {
-  paymentSourceChannel?: string;
-  recipientType?: RecipientType;
+  paymentSourceChannel: string;
+  recipientType: RecipientType;
   amount?: number;
   creditorTaxId: string;
   noticeCode: string;
-  uncertainPaymentDate?: boolean;
 }
 
 // PN-1647

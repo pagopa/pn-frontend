@@ -58,18 +58,6 @@ type Props = {
   onAction?: (data: any) => void;
 };
 
-type OrganizationsListProps = {
-  organizations: Array<string>;
-  textVariant?: Variant;
-  visibleItems?: number;
-};
-
-type AcceptButtonProps = {
-  id: string;
-  name: string;
-  onAccept: () => void;
-};
-
 export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
@@ -99,11 +87,6 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
         : TrackEventType.DELEGATION_DELEGATOR_REJECT;
     trackEventByType(eventToTrack);
     setShowConfirmationModal(true);
-    setAnchorEl(null);
-  };
-
-  const handleOpenUpdateModalClick = () => {
-    setShowUpdateModal(true);
     setAnchorEl(null);
   };
 
@@ -172,7 +155,6 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
           onAction(groups);
         }
       });
-    handleCloseAcceptModal();
   };
 
   useEffect(() => {
@@ -227,7 +209,11 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
     if (row?.status === DelegationStatus.ACTIVE && groups.length) {
       // eslint-disable-next-line functional/immutable-data
       menuItems.push(
-        <MenuItem id="update-delegation-button" key="update" onClick={handleOpenUpdateModalClick}>
+        <MenuItem
+          id="update-delegation-button"
+          key="update"
+          onClick={() => setShowUpdateModal(true)}
+        >
           {t('deleghe.update')}
         </MenuItem>
       );
@@ -275,7 +261,6 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
       )}
 
       <IconButton
-        id={`delegation-menu-icon-${id}`}
         onClick={handleClick}
         data-testid="delegationMenuIcon"
         aria-label="menu-aria-label"
@@ -283,7 +268,6 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
         <MoreVertIcon fontSize={'small'} />
       </IconButton>
       <MUIMenu
-        id={`delegation-menu-${id}`}
         anchorEl={anchorEl}
         open={openMenu}
         onClose={handleClose}
@@ -295,11 +279,11 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
   );
 };
 
-export const OrganizationsList: React.FC<OrganizationsListProps> = ({
-  organizations,
-  textVariant,
-  visibleItems,
-}) => {
+export const OrganizationsList: React.FC<{
+  organizations: Array<string>;
+  textVariant?: Variant;
+  visibleItems?: number;
+}> = ({ organizations, textVariant, visibleItems }) => {
   const { t } = useTranslation(['deleghe']);
   return (
     <>
@@ -325,7 +309,11 @@ export const OrganizationsList: React.FC<OrganizationsListProps> = ({
   );
 };
 
-export const AcceptButton: React.FC<AcceptButtonProps> = ({ id, name, onAccept }) => {
+export const AcceptButton: React.FC<{ id: string; name: string; onAccept: () => void }> = ({
+  id,
+  name,
+  onAccept,
+}) => {
   const { t } = useTranslation(['deleghe']);
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();

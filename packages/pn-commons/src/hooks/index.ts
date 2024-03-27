@@ -5,6 +5,7 @@ import { useIsCancelled } from './useIsCancelled';
 import { useIsMobile } from './useIsMobile';
 import { useMultiEvent } from './useMultiEvent';
 import { useProcess } from './useProcess';
+import { useRewriteLinks } from './useRewriteLinks';
 import { useSessionCheck } from './useSessionCheck';
 import { useTracking } from './useTracking';
 import { useUnload } from './useUnload';
@@ -18,6 +19,7 @@ export {
   useTracking,
   useDownloadDocument,
   useProcess,
+  useRewriteLinks,
   useHasPermissions,
   downloadDocument,
   useIsCancelled,

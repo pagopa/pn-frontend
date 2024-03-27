@@ -1,3 +1,4 @@
+import React from 'react';
 import { DialogTitle } from '@mui/material';
 
 import { createMatchMedia, render } from '../../../test-utils';
@@ -20,7 +21,7 @@ describe('PnDialog Component', () => {
     expect(content).toBeInTheDocument();
     const subtitle = queryByTestId('dialog-title');
     expect(subtitle).toBeInTheDocument();
-    expect(subtitle).toHaveStyle('padding: 32px 32px 16px 32px;');
+    expect(subtitle).toHaveStyle('text-align: left');
     const otherContent = queryByTestId('dialog-other-content');
     expect(otherContent).toBeInTheDocument();
   });
@@ -40,7 +41,7 @@ describe('PnDialog Component', () => {
     expect(content).toBeInTheDocument();
     const subtitle = queryByTestId('dialog-title');
     expect(subtitle).toBeInTheDocument();
-    expect(subtitle).toHaveStyle('padding: 24px 24px 16px 24px');
+    expect(subtitle).toHaveStyle('text-align: center');
     const otherContent = queryByTestId('dialog-other-content');
     expect(otherContent).toBeInTheDocument();
   });

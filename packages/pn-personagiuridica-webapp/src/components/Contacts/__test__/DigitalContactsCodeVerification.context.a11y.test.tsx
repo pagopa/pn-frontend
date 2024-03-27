@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import * as React from 'react';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import {
@@ -20,7 +20,7 @@ import {
   showDialog,
 } from './DigitalContactsCodeVerification.context.test-utils';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -35,25 +35,26 @@ Il componente, infatti, si trova in pn-commons e qualora sia necessario un test 
 Andrea Cimini - 11/09/2023
 */
 describe('DigitalContactsCodeVerification Context - accessibility tests', () => {
-  let result: RenderResult;
+  let result: RenderResult | undefined;
 
   afterEach(() => {
-    vi.clearAllMocks();
+    result = undefined;
+    jest.clearAllMocks();
   });
 
   afterAll(() => {
-    vi.restoreAllMocks();
+    jest.restoreAllMocks();
   });
 
   it('does not have basic accessibility issues (code modal)', async () => {
-    vi.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress').mockResolvedValueOnce(void 0);
+    jest.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress').mockResolvedValueOnce(void 0);
     // render component
     result = render(
       <DigitalContactsCodeVerificationProvider>
         <Component type={LegalChannelType.PEC} value={pecValue} senderId={senderId} />
       </DigitalContactsCodeVerificationProvider>
     );
-    const dialog = await showDialog(result);
+    const dialog = await showDialog(result!);
     expect(dialog).toBeInTheDocument();
     if (result) {
       const res = await axe(result.container);
@@ -96,7 +97,7 @@ describe('DigitalContactsCodeVerification Context - accessibility tests', () => 
   });
 
   it('does not have basic accessibility issues (try to add an already existing contact)', async () => {
-    vi.spyOn(api.ContactsApi, 'createOrUpdateCourtesyAddress').mockResolvedValueOnce(void 0);
+    jest.spyOn(api.ContactsApi, 'createOrUpdateCourtesyAddress').mockResolvedValueOnce(void 0);
     // render component
     result = render(
       <DigitalContactsCodeVerificationProvider>
@@ -109,7 +110,7 @@ describe('DigitalContactsCodeVerification Context - accessibility tests', () => 
     );
     const button = screen.getByRole('button', { name: 'Click me' });
     fireEvent.click(button);
-    const duplicateDialog = await waitFor(() => result.getByTestId('duplicateDialog'));
+    const duplicateDialog = await waitFor(() => result?.getByTestId('duplicateDialog'));
     expect(duplicateDialog).toBeInTheDocument();
     if (result) {
       const res = await axe(result.container);

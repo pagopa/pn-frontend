@@ -1,10 +1,9 @@
-import { useEffect } from 'react';
-import { vi } from 'vitest';
+import React, { useEffect } from 'react';
 
 import { render } from '../../test-utils';
 import { useSessionCheck } from '../useSessionCheck';
 
-const mockFn = vi.fn();
+const mockFn = jest.fn();
 
 const Component = ({ delay }: { delay: number }) => {
   const sessionCheck = useSessionCheck(1, mockFn);
@@ -19,10 +18,6 @@ const Component = ({ delay }: { delay: number }) => {
 };
 
 describe('test useSessionCheck hook', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('hook should call callback', async () => {
     render(<Component delay={-10} />);
     await new Promise((r) => setTimeout(r, 10));

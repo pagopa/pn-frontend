@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import * as React from 'react';
 
 import { TextField } from '@mui/material';
 
@@ -15,7 +15,7 @@ import { LegalChannelType } from '../../../models/contacts';
 import DigitalContactElem from '../DigitalContactElem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -28,11 +28,9 @@ const fields = [
     id: 'label',
     component: 'PEC',
     size: 'variable' as 'variable' | 'auto',
-    key: 'key',
   },
   {
     id: 'value',
-    key: 'key',
     component: (
       <TextField
         id="pec"

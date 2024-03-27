@@ -1,5 +1,5 @@
 import { configureAxe, toHaveNoViolations } from 'jest-axe';
-import { ReactElement, ReactNode } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 

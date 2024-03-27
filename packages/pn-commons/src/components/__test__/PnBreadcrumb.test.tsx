@@ -1,22 +1,18 @@
-import { vi } from 'vitest';
+import React from 'react';
 
 import { fireEvent, initLocalizationForTest, render } from '../../test-utils';
 import PnBreadcrumb from '../PnBreadcrumb';
 
-const mockBackActionHandler = vi.fn();
+const mockBackActionHandler = jest.fn();
 
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockBackActionHandler,
 }));
 
 describe('BreadcrumbLink Component', () => {
   beforeAll(() => {
     initLocalizationForTest();
-  });
-
-  beforeEach(() => {
-    vi.clearAllMocks();
   });
 
   it('renders breadcrumb link', () => {

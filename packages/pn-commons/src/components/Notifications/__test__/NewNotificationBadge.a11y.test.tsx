@@ -1,4 +1,5 @@
 import { axe } from 'jest-axe';
+import React from 'react';
 
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
 

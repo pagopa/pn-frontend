@@ -62,12 +62,10 @@ const initialEmptyValues: {
   taxId: '',
 };
 
-type Props = {
-  clearFiltersHandler: () => void;
-  children?: React.ReactNode;
-};
-
-const LinkRemoveFilters: React.FC<Props> = ({ children, clearFiltersHandler }) => {
+const LinkRemoveFilters: React.FC<{ clearFiltersHandler: () => void }> = ({
+  children,
+  clearFiltersHandler,
+}) => {
   const { t } = useTranslation(['deleghe']);
   return (
     <Link

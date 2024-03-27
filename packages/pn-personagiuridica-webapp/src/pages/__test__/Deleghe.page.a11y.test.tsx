@@ -1,32 +1,29 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
+import React from 'react';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { arrayOfDelegates, arrayOfDelegators } from '../../__mocks__/Delegations.mock';
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import {
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
 } from '../../api/delegations/delegations.routes';
 import Deleghe from '../Deleghe.page';
 
-vi.mock('react-i18next', () => ({
+jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
 }));
 
-describe('Deleghe page - accessibility tests', async () => {
+describe('Deleghe page - accessibility tests', () => {
   let result: RenderResult;
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {

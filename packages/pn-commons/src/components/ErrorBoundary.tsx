@@ -7,9 +7,9 @@ import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 type Props = {
   sx?: SxProps;
+  printError?: boolean;
   eventTrackingCallback?: (error: Error, errorInfo: ErrorInfo) => void;
   eventTrackingCallbackRefreshPage?: () => void;
-  children?: React.ReactNode;
 };
 
 type State = { hasError: boolean };

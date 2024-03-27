@@ -1,6 +1,6 @@
 import { ValidatorBuilder } from '../ValidatorBuilder';
 
-const checkCommonRules = (rules: any) => {
+const checkCommonRules = (rules) => {
   expect(rules.isNull).toBeDefined();
   expect(rules.isUndefined).toBeDefined();
   expect(rules.isEqual).toBeDefined();

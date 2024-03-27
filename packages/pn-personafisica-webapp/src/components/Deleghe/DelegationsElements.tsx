@@ -73,20 +73,13 @@ export const Menu = (props: any) => {
   return (
     <>
       <IconButton
-        id={`delegation-menu-icon-${props.id}`}
         onClick={handleClick}
         data-testid="delegationMenuIcon"
         aria-label="Delegation Menu Icon"
       >
         <MoreVertIcon fontSize={'small'} />
       </IconButton>
-      <MUIMenu
-        id={`delegation-menu-${props.id}`}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        data-testid="delegationMenu"
-      >
+      <MUIMenu anchorEl={anchorEl} open={open} onClose={handleClose} data-testid="delegationMenu">
         {getMenuItemElements()}
       </MUIMenu>
     </>
