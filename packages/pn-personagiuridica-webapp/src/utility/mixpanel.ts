@@ -7,7 +7,7 @@ import { events, TrackEventType } from './events';
  */
 export const trackingMiddleware: Middleware =
   () => (next: Dispatch<AnyAction>) =>
-    interceptDispatch(next, TrackEventType, events, process.env.NODE_ENV);
+    interceptDispatch(next, events, {}, process.env.NODE_ENV);
 
 /**
  * Function to track events outside redux

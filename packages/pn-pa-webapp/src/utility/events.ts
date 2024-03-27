@@ -46,7 +46,7 @@ export enum TrackEventType {
   USER_LOGOUT = 'logout/fulfilled',
   USER_NAV_ITEM = 'USER_NAV_ITEM',
   APIKEYS_TABLE_PAGINATION = 'APIKEYS_TABLE_PAGINATION',
-  APIKEYS_TABLE_SIZE = 'APIKEYS_TABLE_SIZE',
+  APIKEYS_TABLE_SIZE = 'APIKEYS_TABLE_SIZE'
 }
 
 export const events: EventsType = {

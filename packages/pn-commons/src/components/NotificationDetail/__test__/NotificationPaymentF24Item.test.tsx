@@ -83,6 +83,8 @@ describe('NotificationPaymentF24Item Component', () => {
         f24Item={item}
         timerF24={TIMERF24}
         getPaymentAttachmentAction={vi.fn()}
+        disableDownload={false}
+        handleDownload={() => {}}
       />
     );
     expect(container).toHaveTextContent(item.title);
@@ -101,6 +103,8 @@ describe('NotificationPaymentF24Item Component', () => {
         timerF24={TIMERF24}
         getPaymentAttachmentAction={vi.fn()}
         isPagoPaAttachment
+        disableDownload={false}
+        handleDownload={() => {}}
       />
     );
     expect(container).toHaveTextContent('detail.payment.download-f24');
@@ -119,6 +123,8 @@ describe('NotificationPaymentF24Item Component', () => {
         f24Item={item}
         timerF24={TIMERF24}
         getPaymentAttachmentAction={getPaymentAttachmentActionMk}
+        disableDownload={false}
+        handleDownload={() => {}}
       />
     );
     const downloadButton = getByTestId('download-f24-button');
@@ -140,6 +146,8 @@ describe('NotificationPaymentF24Item Component', () => {
           name: PaymentAttachmentSName,
           attachmentIdx?: number | undefined
         ) => getPaymentAttachmentActionMk('immediatly', name, attachmentIdx)}
+        disableDownload={false}
+        handleDownload={() => {}}
       />
     );
     const downloadButton = getByTestId('download-f24-button');
@@ -166,6 +174,8 @@ describe('NotificationPaymentF24Item Component', () => {
           name: PaymentAttachmentSName,
           attachmentIdx?: number | undefined
         ) => getPaymentAttachmentActionMk('ready', name, attachmentIdx)}
+        disableDownload={false}
+        handleDownload={() => {}}
       />
     );
     const downloadButton = getByTestId('download-f24-button');
@@ -207,6 +217,8 @@ describe('NotificationPaymentF24Item Component', () => {
           name: PaymentAttachmentSName,
           attachmentIdx?: number | undefined
         ) => getPaymentAttachmentActionMk('not-ready', name, attachmentIdx)}
+        disableDownload={false}
+        handleDownload={() => {}}
       />
     );
     const downloadButton = getByTestId('download-f24-button');
@@ -243,6 +255,8 @@ describe('NotificationPaymentF24Item Component', () => {
           name: PaymentAttachmentSName,
           attachmentIdx?: number | undefined
         ) => getPaymentAttachmentActionMk('error', name, attachmentIdx)}
+        disableDownload={false}
+        handleDownload={() => {}}
       />
     );
     const downloadButton = getByTestId('download-f24-button');

@@ -739,14 +739,14 @@ describe('NotificationDetail Page', async () => {
     expect(pagoPaItems).toHaveLength(5);
   });
 
-  it('should call payment info if reload after 3 minutes', async () => {
+  it('should call payment info if reload after 6 minutes', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
     mock
       .onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest.slice(0, 5))
       .reply(200, paymentInfo);
 
     const date = new Date();
-    const isoDate = new Date(date.setMinutes(date.getMinutes() - 3)).toISOString();
+    const isoDate = new Date(date.setMinutes(date.getMinutes() - 6)).toISOString();
     const cacheWithOldDate = {
       ...cachedPayments,
       timestamp: isoDate,

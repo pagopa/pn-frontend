@@ -11,7 +11,7 @@ import {
   PaymentAttachmentNameType,
   PaymentNotice,
 } from '@pagopa-pn/pn-commons';
-
+import { DownloadFileResponse, DocType } from '../../redux/notification/types';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { NotificationId } from '../../models/Notifications';
 import { Delegator } from '../../redux/delegation/types';
@@ -29,11 +29,11 @@ import {
   NOTIFICATION_PAYMENT_URL,
 } from './notifications.routes';
 
-const getDownloadUrl = (response: AxiosResponse): { url: string } => {
+const getDownloadUrl = (response: AxiosResponse, docType?: DocType): DownloadFileResponse => {
   if (response.data) {
-    return response.data as { url: string };
+    return { ...response.data, docType } as DownloadFileResponse;
   }
-  return { url: '' };
+  return { url: '' } as DownloadFileResponse;
 };
 
 export const NotificationsApi = {
@@ -95,7 +95,7 @@ export const NotificationsApi = {
       .then((response) => response.data),
 
   /**
-   * Gets current user notification document
+   * Gets current user notification document aka Atto Notificato
    * @param  {string} iun
    * @param  {number} documentIndex
    * @param  {string} mandateId
@@ -105,13 +105,13 @@ export const NotificationsApi = {
     iun: string,
     documentIndex: string,
     mandateId?: string
-  ): Promise<{ url: string }> =>
+  ): Promise<DownloadFileResponse> =>
     apiClient
-      .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex, mandateId))
+      .get<DownloadFileResponse>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex, mandateId))
       .then((response) => getDownloadUrl(response)),
 
   /**
-   *
+   * Get notification AAR document
    * @param  {string} iun
    * @param  {NotificationDetailOtherDocument} otherDocument
    * @returns Promise
@@ -120,15 +120,15 @@ export const NotificationsApi = {
     iun: string,
     otherDocument: NotificationDetailOtherDocument,
     mandateId?: string
-  ): Promise<{ url: string }> =>
+  ): Promise<DownloadFileResponse> =>
     apiClient
-      .get<{ url: string }>(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {
+      .get<DownloadFileResponse>(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {
         params: { documentId: otherDocument.documentId, mandateId },
       })
-      .then((response) => getDownloadUrl(response)),
+      .then((response) => getDownloadUrl(response, DocType.AAR)),
 
   /**
-   * Gets current user notification legalfact
+   * Gets current user notification legalfact aka AO3
    * @param  {string} iun
    * @param  {LegalFactId} legalFact
    * @param  {string} mandateId
@@ -138,10 +138,10 @@ export const NotificationsApi = {
     iun: string,
     legalFact: LegalFactId,
     mandateId?: string
-  ): Promise<{ url: string }> =>
+  ): Promise<DownloadFileResponse> =>
     apiClient
-      .get<{ url: string }>(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact, mandateId))
-      .then((response) => getDownloadUrl(response)),
+      .get<DownloadFileResponse>(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact, mandateId))
+      .then((response) => getDownloadUrl(response, DocType.AO3)),
 
   /**
    * Gets current user specified Payment Attachment
