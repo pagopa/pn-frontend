@@ -66,16 +66,14 @@ export enum PFEventsType {
   // --- PROFILE_PROPERTY
   SEND_PAYMENTS_COUNT = 'SEND_PAYMENTS_COUNT',
   SEND_NOTIFICATIONS_COUNT = 'SEND_NOTIFICATIONS_COUNT',
-  SEND_HAS_PEC = 'SEND_HAS_PEC',
-  SEND_HAS_SMS = 'SEND_HAS_SMS',
-  SEND_HAS_EMAIL = 'SEND_HAS_EMAIL',
-  SEND_HAS_IO = 'SEND_HAS_IO',
   SEND_HAS_MANDATE = 'SEND_HAS_MANDATE',
   SEND_MANDATE_GIVEN = 'SEND_MANDATE_GIVEN',
+  SEND_HAS_ADDRESSES = 'SEND_HAS_ADDRESSES',
 }
 
 export const eventsActionsMap: Record<string, PFEventsType> = {
   'getReceivedNotificationOtherDocument/fulfilled': PFEventsType.SEND_DOWNLOAD_RESPONSE,
   'getReceivedNotificationLegalfact/fulfilled': PFEventsType.SEND_DOWNLOAD_RESPONSE,
   'exchangeToken/fulfilled': PFEventsType.SEND_AUTH_SUCCESS,
+  'getDigitalAddresses/fulfilled': PFEventsType.SEND_HAS_ADDRESSES,
 };

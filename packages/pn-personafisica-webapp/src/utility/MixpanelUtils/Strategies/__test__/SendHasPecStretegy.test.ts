@@ -3,7 +3,7 @@ import { EventPropertyType } from '@pagopa-pn/pn-commons';
 import { digitalAddresses } from '../../../../__mocks__/Contacts.mock';
 import { arrayOfDelegators } from '../../../../__mocks__/Delegations.mock';
 import { DelegationStatus } from '../../../status.utility';
-import { SendHasPecStrategy } from '../SendHasPecStrategy';
+import { SendHasPecStrategy } from '../SendHasAddressesStrategy';
 
 describe('Mixpanel - Has Pec Strategy', () => {
   it('should return mandate given event', () => {

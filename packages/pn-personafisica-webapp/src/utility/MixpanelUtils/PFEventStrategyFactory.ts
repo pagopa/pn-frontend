@@ -8,6 +8,7 @@ import { SendAddMandateUXSuccessStrategy } from './Strategies/SendAddMandateUXSu
 import { SendDownloadCertificateOpposable } from './Strategies/SendDownloadCertificateOpposable';
 import { SendDownloadResponseStrategy } from './Strategies/SendDownloadResponse';
 import { SendGenericErrorStrategy } from './Strategies/SendGenericErrorStrategy';
+import { SendHasAddressesStrategy } from './Strategies/SendHasAddressesStrategy';
 import { SendHasMandateStrategy } from './Strategies/SendHasMandateStrategy';
 import { SendMandateGivenStrategy } from './Strategies/SendMandateGivenStrategy';
 import { SendNotificationCountStrategy } from './Strategies/SendNotificationCount';
@@ -32,9 +33,11 @@ import { UXActionStrategy } from './Strategies/UXActionStrategy';
 import { UXErrorStrategy } from './Strategies/UXErrorStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
 
+// TODO: resolve the complexity and the max switch cases
 class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
   // eslint-disable-next-line complexity
   getStrategy(eventType: PFEventsType): EventStrategy | null {
+    // eslint-disable-next-line sonarjs/max-switch-cases
     switch (eventType) {
       case PFEventsType.SEND_VIEW_PROFILE:
         return new SendViewProfileStrategy();
@@ -134,8 +137,8 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
       case PFEventsType.SEND_NOTIFICATION_NOT_ALLOWED:
         return new TechScreenViewStrategy();
 
-      // case PFEventsType.SEND_HAS_PEC:
-      //   return new SendHasPecStrategy();
+      case PFEventsType.SEND_HAS_ADDRESSES:
+        return new SendHasAddressesStrategy();
       case PFEventsType.SEND_NOTIFICATIONS_COUNT:
         return new SendNotificationCountStrategy();
       case PFEventsType.SEND_PAYMENTS_COUNT:

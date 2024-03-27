@@ -16,7 +16,7 @@ export type EventsType = {
 };
 
 type BaseTrackedEvent = {
-  event_category: string;
+  event_category?: string;
   event_type?: EventAction | string;
 };
 
