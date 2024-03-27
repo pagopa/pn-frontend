@@ -48,8 +48,8 @@ export default abstract class EventStrategyFactory<T extends string> {
 
     const eventParameters = strategy.performComputations(data);
 
-    Object.entries(eventParameters).forEach(([type, parameters]) => {
+    for (const [type, parameters] of Object.entries(eventParameters)) {
       trackEvent(type as EventPropertyType, eventType, process.env.NODE_ENV!, parameters);
-    });
+    }
   }
 }
