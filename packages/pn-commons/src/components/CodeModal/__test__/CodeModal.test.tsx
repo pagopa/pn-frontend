@@ -1,6 +1,8 @@
 import { vi } from 'vitest';
 
-import { fireEvent, render, screen, waitFor, within } from '../../../test-utils';
+import userEvent from '@testing-library/user-event';
+
+import { act, fireEvent, render, screen, waitFor, within } from '../../../test-utils';
 import CodeModal from '../CodeModal';
 
 const cancelButtonMock = vi.fn();
@@ -132,5 +134,43 @@ describe('CodeModal Component', () => {
     const errorAlert = within(dialog).getByTestId('errorAlert');
     expect(errorAlert).toBeInTheDocument();
     expect(errorAlert).toHaveTextContent('mocked-errorMessage');
+  });
+
+  it('shows error in case of letters as input values', async () => {
+    // render component
+    render(openedModalComponent(true));
+    const dialog = screen.getByTestId('codeDialog');
+    const codeInputs = within(dialog).getAllByTestId(/code-input-[0-4]/);
+    fireEvent.change(codeInputs[0], { target: { value: 'A' } });
+    const errorAlert = screen.getByTestId('errorTypeAlert');
+    expect(errorAlert).toBeInTheDocument();
+    expect(errorAlert).toHaveTextContent('mocked-errorTypeMessage');
+  });
+
+  it('error in case of letters (pasted)', async () => {
+    // render component
+    render(openedModalComponent(true));
+    const dialog = screen.getByTestId('codeDialog');
+    const codeInputs = within(dialog).getAllByTestId(/code-input-[0-4]/);
+    act(() => (codeInputs[2] as HTMLInputElement).focus());
+    (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
+    const codePasted = 'abcd';
+    await userEvent.paste(codePasted);
+    const errorAlert = screen.getByTestId('errorTypeAlert');
+    expect(errorAlert).toBeInTheDocument();
+    expect(errorAlert).toHaveTextContent('mocked-errorTypeMessage');
+  });
+
+  it('error in case of short code (pasted)', async () => {
+    // render component
+    render(openedModalComponent(true));
+    const dialog = screen.getByTestId('codeDialog');
+    const codeInputs = within(dialog).getAllByTestId(/code-input-[0-4]/);
+    act(() => (codeInputs[2] as HTMLInputElement).focus());
+    (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
+    const codePasted = '123';
+    await userEvent.paste(codePasted);
+    const button = screen.getByTestId('codeConfirmButton');
+    expect(button).toBeDisabled();
   });
 });

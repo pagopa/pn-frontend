@@ -222,4 +222,21 @@ describe('CodeInput Component', () => {
       }
     });
   });
+
+  it('accepts first 5 digits in case of too long code (pasted)', async () => {
+    // render component
+    const { getAllByTestId } = render(
+      <CodeInput
+        initialValues={new Array(5).fill('')}
+        onChange={handleChangeMock}
+        onInputError={inputErrorHandlerMock}
+      />
+    );
+    const codeInputs = getAllByTestId(/code-input-[0-4]/);
+    act(() => (codeInputs[2] as HTMLInputElement).focus());
+    (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
+    const codePasted = '123456'; // too long code
+    await userEvent.paste(codePasted);
+    expect(handleChangeMock).toHaveBeenCalledWith(['1', '2', '3', '4', '5']);
+  });
 });
