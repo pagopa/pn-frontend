@@ -33,7 +33,7 @@ describe('PnDialogActions Component', () => {
   });
 
   it('renders component - mobile', () => {
-    window.matchMedia = createMatchMedia(800);
+    window.matchMedia = createMatchMedia(500);
     const { queryByTestId, queryAllByTestId } = render(
       <PnDialogActions
         sx={{
