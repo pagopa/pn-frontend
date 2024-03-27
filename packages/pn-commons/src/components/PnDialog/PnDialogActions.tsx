@@ -6,8 +6,7 @@ import { useIsMobile } from '../../hooks';
 import { ReactComponent } from '../../models/PnDialog';
 
 const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
-  const isMobile = useIsMobile();
-
+  const isMobile = useIsMobile('sm');
   const buttons: Array<ReactComponent> | undefined = Children.toArray(props.children).filter(
     (child) => isValidElement(child) && child.type === Button
   );
@@ -16,9 +15,9 @@ const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
     isValidElement(button)
       ? cloneElement(button, {
           ...button.props,
+          fullWidth: isMobile,
           sx: {
-            marginBottom: { xs: index > 0 ? 2 : 0, sm: 0 },
-            width: { xs: 1, sm: 'auto' },
+            marginBottom: index > 0 && isMobile ? 2 : 0,
             ...button.props.sx,
           },
         })
@@ -31,10 +30,10 @@ const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
       disableSpacing={isMobile}
       {...props}
       sx={{
-        flexDirection: { xs: 'column-reverse', sm: 'row' },
-        p: { xs: 3, sm: 4 },
-        pt: { xs: 0, sm: 0 },
-        gap: { xs: 0, sm: 1 },
+        flexDirection: isMobile ? 'column-reverse' : 'row',
+        p: isMobile ? 3 : 4,
+        pt: 0,
+        gap: isMobile ? 0 : 1,
         ...props.sx,
       }}
     >
