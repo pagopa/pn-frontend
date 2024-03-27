@@ -6,8 +6,8 @@ import { useBlocker } from './useBlocker';
 
 export function usePrompt(
   when: boolean,
-  callbackCancel: () => void,
-  callbackConfirm: () => void
+  callbackCancel?: () => void,
+  callbackConfirm?: () => void
 ): [boolean, () => void, () => void] {
   const location = useLocation();
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ export function usePrompt(
 
   const cancelNavigation = useCallback(() => {
     setShowPrompt(false);
-    callbackCancel();
+    callbackCancel?.();
   }, []);
 
   // handle blocking when user click on another route prompt will be shown
@@ -37,7 +37,7 @@ export function usePrompt(
   const confirmNavigation = useCallback(() => {
     setShowPrompt(false);
     setConfirmedNavigation(true);
-    callbackConfirm();
+    callbackConfirm?.();
   }, []);
 
   useEffect(() => {
