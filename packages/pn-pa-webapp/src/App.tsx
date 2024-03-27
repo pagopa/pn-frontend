@@ -213,7 +213,7 @@ const ActualApp = () => {
     });
     /* eslint-disable-next-line functional/immutable-data */
     window.location.href = sessionToken
-      ? `${SELFCARE_BASE_URL}/assistenza`
+      ? `${SELFCARE_BASE_URL}/assistenza?productId=${productId}`
       : `mailto:${configuration.PAGOPA_HELP_EMAIL}`;
   };
 
