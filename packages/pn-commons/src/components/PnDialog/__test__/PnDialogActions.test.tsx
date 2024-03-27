@@ -44,9 +44,7 @@ describe('PnDialogActions Component', () => {
         }}
       >
         <Button data-testid="button">Test confirm button</Button>
-        <Button sx={{ marginBottom: 2, width: 1 }} data-testid="button">
-          Test cancel button
-        </Button>
+        <Button data-testid="button">Test cancel button</Button>
       </PnDialogActions>
     );
 
