@@ -20,6 +20,7 @@ import {
   PaidDetails,
   PaymentDetails,
   PaymentStatus,
+  ResponseStatus,
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
@@ -421,13 +422,13 @@ export function getLegalFactLabel(
     timelineStep.category === TimelineCategory.SEND_DIGITAL_FEEDBACK &&
     legalFactType === LegalFactType.PEC_RECEIPT
   ) {
-    if ((timelineStep.details as SendDigitalDetails).responseStatus === 'OK') {
+    if ((timelineStep.details as SendDigitalDetails).responseStatus === ResponseStatus.OK) {
       return `${receiptLabel} ${getLocalizedOrDefaultLabel(
         'notifications',
         'detail.timeline.legalfact.pec-receipt-delivered',
         'di consegna PEC'
       )}`;
-    } else if ((timelineStep.details as SendDigitalDetails).responseStatus === 'KO') {
+    } else if ((timelineStep.details as SendDigitalDetails).responseStatus === ResponseStatus.KO) {
       return `${receiptLabel} ${getLocalizedOrDefaultLabel(
         'notifications',
         'detail.timeline.legalfact.pec-receipt-not-delivered',

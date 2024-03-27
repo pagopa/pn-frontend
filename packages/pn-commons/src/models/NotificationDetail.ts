@@ -4,32 +4,23 @@ import { NotificationStatus } from './NotificationStatus';
 
 /** Notification Detail */
 export interface NotificationDetail {
-  idempotenceToken?: string;
-  paProtocolNumber: string;
   subject: string;
   abstract?: string;
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
-  notificationFeePolicy: NotificationFeePolicy;
   cancelledIun?: string;
-  physicalCommunicationType: PhysicalCommunicationType;
   senderDenomination?: string;
   paymentExpirationDate?: string;
-  senderTaxId?: string;
   group?: string;
-  senderPaId: string;
   iun: string;
   sentAt: string;
-  cancelledByIun?: string;
   documentsAvailable?: boolean;
   notificationStatus: NotificationStatus;
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<INotificationDetailTimeline>;
   amount?: number;
-  radd?: INotificationDetailTimeline;
-
-  // only fe
   otherDocuments?: Array<NotificationDetailDocument>;
+  radd?: INotificationDetailTimeline;
 }
 
 export type PaymentsData = {
@@ -49,20 +40,11 @@ export interface PaymentDetails {
 
 export type NotificationDetailTimelineDetails =
   | BaseDetails
-  | AarDetails
-  | ViewedDetails
   | AnalogWorkflowDetails
-  | DigitalWorkflowDetails
-  | AddressInfoDetails
-  | PublicRegistryCallDetails
-  | PublicRegistryResponseDetails
-  | RequestRefusedDetails
-  | ScheduleDigitalWorkflowDetails
   | SendCourtesyMessageDetails
   | SendDigitalDetails
   | SendPaperDetails
   | PaidDetails
-  | RaddDetails
   // PN-1647
   | NotHandledDetails;
 
@@ -86,15 +68,12 @@ export interface INotificationDetailTimeline {
   legalFactsIds?: Array<LegalFactId | NotificationDetailOtherDocument>;
   category: TimelineCategory;
   details: NotificationDetailTimelineDetails;
-  // only fe
   hidden?: boolean;
   index?: number;
 }
 
 export enum ResponseStatus {
   OK = 'OK',
-  PROGRESS = 'PROGRESS',
-  PROGRESS_WITH_RETRY = 'PROGRESS_WITH_RETRY',
   KO = 'KO',
 }
 
@@ -104,7 +83,7 @@ export enum ResponseStatus {
     - Indagine: Indica la ricevuta dell'analisi dell'indagine
     - 23L: Indica la ricevuta 23L
  */
-export interface AnalogFlowAttachment {
+interface AnalogFlowAttachment {
   id: string;
   documentType: string;
   url: string;
@@ -124,7 +103,6 @@ export interface SendPaperDetails extends AnalogWorkflowDetails {
 export interface PrepareAnalogDomicileFailureDetails extends BaseDetails {
   foundAddress?: PhysicalAddress;
   failureCause?: string;
-  prepareRequestId?: string;
 }
 
 interface BaseDetails {
@@ -132,88 +110,18 @@ interface BaseDetails {
   eventTimestamp?: string;
 }
 
-interface DelegateInfo {
-  internalId: string;
-  taxId: string;
-  operatorUuid: string;
-  mandateId: string;
-  denomination: string;
-  delegateType: RecipientType;
-}
-
-export interface ViewedDetails extends BaseDetails {
-  delegateInfo?: DelegateInfo;
-}
-
-export interface AarDetails {
-  recIndex?: number;
-  errors?: Array<string>;
-  generatedAarUrl?: string;
-  numberOfPages?: number;
-}
-
 export interface AnalogWorkflowDetails extends BaseDetails {
   physicalAddress?: PhysicalAddress;
 }
 
-export interface DigitalWorkflowDetails extends BaseDetails {
-  digitalAddress?: DigitalAddress;
-}
-
-interface AddressInfoDetails extends BaseDetails {
-  digitalAddressSource: AddressSource;
-  isAvailable: boolean;
-  attemptDate: string;
-}
-
-enum ContactPhase {
-  CHOOSE_DELIVERY = 'CHOOSE_DELIVERY',
-  SEND_ATTEMPT = 'SEND_ATTEMPT ',
-}
-
-interface PublicRegistryCallDetails extends BaseDetails {
-  deliveryMode: DeliveryMode;
-  contactPhase: ContactPhase;
-  sentAttemptMade: number;
-  sendDate: string;
-}
-
-interface PublicRegistryResponseDetails extends BaseDetails {
-  digitalAddress: DigitalAddress;
-  physicalAddress: PhysicalAddress;
-}
-
-interface RequestRefusedDetails extends BaseDetails {
-  errors: Array<string>;
-}
-
-interface ScheduleDigitalWorkflowDetails extends BaseDetails, DigitalAddress {
-  digitalAddress: DigitalAddress;
-  digitalAddressSource: AddressSource;
-  sentAttemptMade: number;
-  lastAttemptDate: string;
-}
-
 export interface SendCourtesyMessageDetails extends BaseDetails {
   digitalAddress: DigitalAddress;
-  sendDate: string;
-  ioSendMessageResult?: AppIoCourtesyMessageEventType;
 }
 
 export interface SendDigitalDetails extends BaseDetails {
   digitalAddress?: DigitalAddress;
-  responseStatus?: 'OK' | 'KO';
+  responseStatus?: ResponseStatus;
   deliveryDetailCode?: string;
-  // ---------------------------------------------------
-  // the following fields are present in some digital-flow-related events,
-  // but they currently have no influence in the behavior of PN frontend.
-  // I keep them just because they are included in several test notification structures
-  // ---------------------------------------------------
-  // Carlos Lombardi, 2023.04.18
-  // ---------------------------------------------------
-  digitalAddressSource?: AddressSource;
-  retryNumber?: number;
-  notificationDate?: string;
 }
 
 export interface PaidDetails extends BaseDetails {
@@ -224,13 +132,6 @@ export interface PaidDetails extends BaseDetails {
   noticeCode: string;
   uncertainPaymentDate?: boolean;
   notRefinedRecipientIndexes?: Array<number>;
-}
-
-export interface RaddDetails extends BaseDetails {
-  recIndex?: number;
-  eventTimestamp?: string;
-  raddType?: string;
-  raddTransactionId?: string;
 }
 
 // PN-1647
@@ -266,11 +167,6 @@ export interface NotificationDetailDocument extends Attachment {
   documentId?: string;
   documentType?: string;
   recIndex?: number;
-}
-
-export enum NotificationFeePolicy {
-  FLAT_RATE = 'FLAT_RATE',
-  DELIVERY_MODE = 'DELIVERY_MODE',
 }
 
 export interface PaymentAttachment {
@@ -322,6 +218,7 @@ export enum NotificationDeliveryMode {
   ANALOG = 'analog',
   DIGITAL = 'digital',
 }
+
 export interface NotificationStatusHistory {
   status: NotificationStatus;
   activeFrom: string;
@@ -400,27 +297,6 @@ export enum RecipientType {
   PG = 'PG',
 }
 
-enum DeliveryMode {
-  DIGITAL = 'DIGITAL',
-  ANALOG = 'ANALOG ',
-}
-
-// PN-4484 - only the messages of the SENT_COURTESY kind are meaningful to the user
-enum AppIoCourtesyMessageEventType {
-  // message effettively sent
-  SENT_COURTESY = 'SENT_COURTESY',
-  // sent a kind of internal message (which don't actually arrive to the user) about "OPTIN"
-  SENT_OPTIN = 'SENT_OPTIN',
-  // another event related to "OPTIN" internal messages
-  NOT_SENT_OPTIN_ALREADY_SENT = 'NOT_SENT_OPTIN_ALREADY_SENT',
-}
-
-export enum AddressSource {
-  PLATFORM = 'PLATFORM',
-  SPECIAL = 'SPECIAL',
-  GENERAL = 'GENERAL',
-}
-
 export enum LegalFactType {
   AAR = 'AAR',
   SENDER_ACK = 'SENDER_ACK',
@@ -452,17 +328,9 @@ export interface NotificationDetailTableRow {
   value: ReactNode;
 }
 
-export type DigitalDetails =
-  | DigitalWorkflowDetails
-  | PublicRegistryResponseDetails
-  | ScheduleDigitalWorkflowDetails
-  | SendCourtesyMessageDetails
-  | SendDigitalDetails;
+export type DigitalDetails = SendCourtesyMessageDetails | SendDigitalDetails;
 
-export type AnalogDetails =
-  | SendPaperDetails
-  | AnalogWorkflowDetails
-  | PublicRegistryResponseDetails;
+export type AnalogDetails = SendPaperDetails | AnalogWorkflowDetails;
 
 /** External Registries  */
 export enum PaymentInfoDetail {

@@ -37,12 +37,9 @@ import {
   ProfilePropertyType,
 } from './MixpanelEvents';
 import {
-  AarDetails,
-  AddressSource,
   AnalogDetails,
   AnalogWorkflowDetails,
   DigitalDomicileType,
-  DigitalWorkflowDetails,
   ExtRegistriesPaymentDetails,
   F24PaymentDetails,
   INotificationDetailTimeline,
@@ -57,7 +54,6 @@ import {
   NotificationDetailRecipient,
   NotificationDetailTableRow,
   NotificationDetailTimelineDetails,
-  NotificationFeePolicy,
   NotificationStatusHistory,
   PagoPAPaymentFullDetails,
   PaidDetails,
@@ -77,7 +73,6 @@ import {
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
-  ViewedDetails,
 } from './NotificationDetail';
 import { NotificationStatus } from './NotificationStatus';
 import {
@@ -98,13 +93,11 @@ import { BasicUser, ConsentUser, basicNoLoggedUserData } from './User';
 export {
   basicNoLoggedUserData,
   NotificationStatus,
-  NotificationFeePolicy,
   NotificationDeliveryMode,
   TimelineCategory,
   DigitalDomicileType,
   RecipientType,
   ResponseStatus,
-  AddressSource,
   LegalFactType,
   EventPageType,
   EventDowntimeType,
@@ -163,9 +156,6 @@ export type {
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
-  DigitalWorkflowDetails,
-  AarDetails,
-  ViewedDetails,
   SideMenuItem,
   Sort,
   AppResponse,

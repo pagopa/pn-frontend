@@ -5,21 +5,17 @@ import {
   GetNotificationsParams,
   GetNotificationsResponse,
   LegalFactId,
-  NotificationDetail,
   NotificationDetailOtherDocument,
   PaymentAttachment,
   PaymentAttachmentNameType,
   PaymentNotice,
 } from '@pagopa-pn/pn-commons';
-import { DownloadFileResponse, DocType } from '../../redux/notification/types';
-import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
+
 import { NotificationId } from '../../models/Notifications';
-import { Delegator } from '../../redux/delegation/types';
-import { parseNotificationDetailForRecipient } from '../../utility/notification.utility';
+import { DocType, DownloadFileResponse } from '../../redux/notification/types';
 import { apiClient } from '../apiClients';
 import {
   NOTIFICATIONS_LIST,
-  NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
@@ -55,33 +51,6 @@ export const NotificationsApi = {
         moreResult: false,
         nextPagesKey: [],
       };
-    }),
-
-  /**
-   * Gets current user notification detail
-   * @param  {string} iun
-   * @param  {string} currentUserTaxId
-   * @param  {Array<Delegator>} delegatorsFromStore
-   * @param  {string} mandateId
-   * @returns Promise
-   */
-  getReceivedNotification: (
-    iun: string,
-    currentUserTaxId: string,
-    delegatorsFromStore: Array<Delegator>,
-    mandateId?: string
-  ): Promise<NotificationDetailForRecipient> =>
-    apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun, mandateId)).then((response) => {
-      if (response.data) {
-        return parseNotificationDetailForRecipient(
-          response.data,
-          currentUserTaxId,
-          delegatorsFromStore,
-          mandateId
-        );
-      } else {
-        return {} as NotificationDetailForRecipient;
-      }
     }),
 
   /**

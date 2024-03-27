@@ -22,7 +22,6 @@ import {
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
   NOTIFICATIONS_LIST,
-  NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
@@ -67,13 +66,6 @@ describe('Notifications api tests', () => {
       status: '',
     });
     expect(res).toStrictEqual(notificationsToFe);
-  });
-
-  it('getSentNotification filtered by iun', async () => {
-    const iun = notificationDTOMultiRecipient.iun;
-    mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationDTOMultiRecipient);
-    const res = await NotificationsApi.getSentNotification(iun);
-    expect(res).toStrictEqual(notificationDTOMultiRecipient);
   });
 
   it('getSentNotificationDocument', async () => {

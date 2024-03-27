@@ -4,7 +4,6 @@ import {
   GetNotificationsParams,
   GetNotificationsResponse,
   LegalFactId,
-  NotificationDetail,
   NotificationDetailOtherDocument,
   PaymentAttachment,
   PaymentAttachmentNameType,
@@ -18,7 +17,6 @@ import {
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
   NOTIFICATIONS_LIST,
-  NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
@@ -52,19 +50,6 @@ export const NotificationsApi = {
         moreResult: false,
         nextPagesKey: [],
       };
-    }),
-
-  /**
-   * Gets current user notification detail
-   * @param  {string} iun
-   * @returns Promise
-   */
-  getSentNotification: (iun: string): Promise<NotificationDetail> =>
-    apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun)).then((response) => {
-      if (response.data) {
-        return response.data;
-      }
-      return {} as NotificationDetail;
     }),
 
   /**

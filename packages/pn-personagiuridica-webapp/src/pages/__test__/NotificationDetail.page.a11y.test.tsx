@@ -10,10 +10,7 @@ import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import {
-  NOTIFICATION_DETAIL,
-  NOTIFICATION_PAYMENT_INFO,
-} from '../../api/notifications/notifications.routes';
+import { NOTIFICATION_PAYMENT_INFO } from '../../api/notifications/notifications.routes';
 import NotificationDetail from '../NotificationDetail.page';
 
 let mockIsDelegate = false;
@@ -62,7 +59,7 @@ describe('NotificationDetail Page - accessibility tests', async () => {
   });
 
   it('renders NotificationDetail page', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
@@ -81,7 +78,9 @@ describe('NotificationDetail Page - accessibility tests', async () => {
   it('renders NotificationDetail page with delegator logged', async () => {
     mockIsDelegate = true;
     mock
-      .onGet(NOTIFICATION_DETAIL(notificationDTO.iun, delegator?.mandateId))
+      .onGet(
+        `/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${delegator?.mandateId}`
+      )
       .reply(200, notificationDTO);
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
