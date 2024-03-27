@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { vi } from 'vitest';
 
 import { axe, render } from '../../../__test__/test-utils';
 import DigitalContactsCard from '../DigitalContactsCard';
@@ -8,7 +8,7 @@ const subTitle = 'Mocked subtitle';
 const actions = <button>Click me</button>;
 const body = <div data-testid="body">Body</div>;
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,

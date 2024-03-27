@@ -2,15 +2,14 @@
   "name": "send-monorepo",
   "private": true,
   "devDependencies": {
-    "@craco/craco": "^7.0.0",
     "lerna": "^6.4.1"
   },
   "scripts": {
     "postinstall": "lerna bootstrap",
-    "start:pa": "lerna exec --scope @pagopa-pn/pn-pa-webapp -- yarn start",
-    "start:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn start",
-    "start:pg": "lerna exec --scope @pagopa-pn/pn-personagiuridica-webapp -- yarn start",
-    "start:login": "lerna exec --scope @pagopa-pn/pn-personafisica-login -- yarn start",
+    "start:pa": "lerna exec --scope @pagopa-pn/pn-pa-webapp -- yarn dev",
+    "start:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn dev",
+    "start:pg": "lerna exec --scope @pagopa-pn/pn-personagiuridica-webapp -- yarn dev",
+    "start:login": "lerna exec --scope @pagopa-pn/pn-personafisica-login -- yarn dev",
     "build:pa": "lerna run build --include-dependencies --scope @pagopa-pn/pn-pa-webapp --scope @pagopa-pn/pn-commons",
     "build:pf": "lerna run build --include-dependencies --scope @pagopa-pn/pn-personafisica-webapp --scope @pagopa-pn/pn-commons --scope @pagopa-pn/pn-validator",
     "build:pg": "lerna run build --include-dependencies --scope @pagopa-pn/pn-personagiuridica-webapp --scope @pagopa-pn/pn-commons --scope @pagopa-pn/pn-validator",
@@ -27,21 +26,7 @@
       "packages/**"
     ]
   },
-  "dependencies": {
-    "@types/node": "*",
-    "autoprefixer": "^10.0.2",
-    "postcss": "^8.1.0",
-    "react": "17.0.2",
-    "typescript": "^5.2.2"
-  },
   "resolutions": {
-    "**/@svgr/webpack": "^6.5.1",
-    "**/tsconfig-paths": "^4.1.2",
-    "**/file-loader/loader-utils": "^2.0.4",
-    "**/react-scripts/react-dev-utils/loader-utils": "^3.2.1",
-    "**/recursive-readdir": "^2.2.3",
-    "**/terser": "^5.16.1",
-    "**/react-scripts/react-dev-utils/fork-ts-checker-webpack-plugin": "6.5.3",
-    "**/@babel/traverse": "^7.23.2"
+    "**/tsconfig-paths": "^4.1.2"
   }
 }

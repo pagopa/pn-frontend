@@ -1,7 +1,9 @@
-import { AccessDenied, LoadingPage } from '@pagopa-pn/pn-commons';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+
+import { AccessDenied, IllusQuestion, LoadingPage } from '@pagopa-pn/pn-commons';
+
 import { NotificationsApi } from '../api/notifications/Notifications.api';
 import { NotificationId } from '../models/Notifications';
 import {
@@ -55,11 +57,12 @@ const AARGuard = () => {
   if (!aar) {
     return <Outlet />;
   }
-
   if (fetchError) {
     return (
       <AccessDenied
+        icon={<IllusQuestion />}
         message={t('from-qrcode.not-found')}
+        subtitle={t('from-qrcode.not-found-subtitle')}
         isLogged={true}
         goToHomePage={() => navigate(NOTIFICHE, { replace: true })}
         goToLogin={() => {}}

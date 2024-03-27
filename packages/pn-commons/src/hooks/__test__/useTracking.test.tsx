@@ -1,25 +1,34 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { vi } from 'vitest';
 
+import { renderHook } from '../../test-utils';
 import { mixpanelInit } from '../../utility/mixpanel.utility';
 import { useTracking } from '../useTracking';
 
-global.OneTrust = {
-  OnConsentChanged: jest.fn(),
+type globalOnTrust = typeof globalThis & {
+  OneTrust: { OnConsentChanged: (cbk: () => void) => void };
+};
+
+(global as globalOnTrust).OneTrust = {
+  OnConsentChanged: vi.fn(),
 };
 
 // Mock the mixpanelInit function
-jest.mock('../../utility/mixpanel.utility', () => ({
-  mixpanelInit: jest.fn(),
+vi.mock('../../utility/mixpanel.utility', () => ({
+  mixpanelInit: vi.fn(),
 }));
 
 describe('useTracking', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should initialize Mixpanel when OneTrust consent is given', () => {
     const mixpanelToken = 'your-mixpanel-token';
     const nodeEnv = 'test';
 
     // Mock OneTrust
-    const originalOnConsentChanged = global.OneTrust.OnConsentChanged;
-    global.OneTrust.OnConsentChanged = jest.fn((callback) => {
+    const originalOnConsentChanged = (global as globalOnTrust).OneTrust.OnConsentChanged;
+    (global as globalOnTrust).OneTrust.OnConsentChanged = vi.fn((callback) => {
       callback();
     });
 
@@ -39,7 +48,7 @@ describe('useTracking', () => {
     expect(mixpanelInit).toHaveBeenCalledWith(mixpanelToken, nodeEnv);
 
     // Restore original values
-    global.OneTrust.OnConsentChanged = originalOnConsentChanged;
+    (global as globalOnTrust).OneTrust.OnConsentChanged = originalOnConsentChanged;
     Object.defineProperty(Document.prototype, 'cookie', {
       get: originalDocumentCookie,
     });
@@ -50,8 +59,8 @@ describe('useTracking', () => {
     const nodeEnv = 'test';
 
     // Mock OneTrust
-    const originalOnConsentChanged = global.OneTrust.OnConsentChanged;
-    global.OneTrust.OnConsentChanged = jest.fn((callback) => {
+    const originalOnConsentChanged = (global as globalOnTrust).OneTrust.OnConsentChanged;
+    (global as globalOnTrust).OneTrust.OnConsentChanged = vi.fn(() => {
       // Simulate no consent
     });
 
@@ -71,7 +80,7 @@ describe('useTracking', () => {
     expect(mixpanelInit).not.toHaveBeenCalled();
 
     // Restore original values
-    global.OneTrust.OnConsentChanged = originalOnConsentChanged;
+    (global as globalOnTrust).OneTrust.OnConsentChanged = originalOnConsentChanged;
     Object.defineProperty(Document.prototype, 'cookie', {
       get: originalDocumentCookie,
     });

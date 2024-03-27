@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Button } from '@mui/material';
 
 import { createMatchMedia, render } from '../../../test-utils';
@@ -18,7 +16,7 @@ describe('PnDialogActions Component', () => {
     const actions = queryByTestId('dialog-actions');
     expect(actions).toBeInTheDocument();
     expect(actions).toHaveClass('MuiDialogActions-spacing');
-    expect(actions).toHaveStyle('text-align: left; flex-direction: row');
+    expect(actions).toHaveStyle('flex-direction: row; padding: 0px 32px 32px 32px;');
     const buttons = queryAllByTestId('button');
     expect(buttons).toHaveLength(2);
     for (const button of buttons) {
@@ -29,7 +27,7 @@ describe('PnDialogActions Component', () => {
 
   it('renders component - mobile', () => {
     window.matchMedia = createMatchMedia(800);
-    const { container, queryByTestId, queryAllByTestId } = render(
+    const { queryByTestId, queryAllByTestId } = render(
       <PnDialogActions>
         <Button data-testid="button">Test confirm button</Button>
         <Button data-testid="button">Test cancel button</Button>
@@ -39,7 +37,7 @@ describe('PnDialogActions Component', () => {
     const actions = queryByTestId('dialog-actions');
     expect(actions).toBeInTheDocument();
     expect(actions).not.toHaveClass('MuiDialogActions-spacing');
-    expect(actions).toHaveStyle('text-align: center; flex-direction: column-reverse');
+    expect(actions).toHaveStyle('flex-direction: column-reverse; padding: 0px 24px 24px 24px;');
     const buttons = queryAllByTestId('button');
     expect(buttons).toHaveLength(2);
     buttons.forEach((button, index) => {

@@ -35,7 +35,8 @@
     "aria-label-route-contacts": "Vai ai tuoi recapiti"
   },
   "from-qrcode": {
-    "not-found": "Link alla notifica non trovato"
+    "not-found": "Non puoi leggere questa notifica",
+    "not-found-subtitle": "Può essere letta solo dal destinatario o da un suo delegato. Per leggerla, chiedi al destinatario di effettuare l’accesso a SEND e delegarti."
   },
   "detail": {
     "document-not-available": "Il documento sarà scaricabile tra pochi minuti. Puoi riprovare ricaricando la pagina o cliccando sul link del documento richiesto",

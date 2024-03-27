@@ -22,13 +22,13 @@ export default function ConfirmationModal({
 }: Props) {
   return (
     <PnDialog
+      id="confirmation-dialog"
       open={open}
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
       maxWidth="lg"
     >
       <DialogTitle id="confirmation-dialog-delegations">{title}</DialogTitle>
-
       <PnDialogActions>
         <Button
           id="dialog-close-button"

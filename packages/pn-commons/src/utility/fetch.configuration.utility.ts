@@ -5,7 +5,7 @@
 
 export async function fetchConfiguration(): Promise<any> {
   try {
-    const res = await fetch('conf/config.json', {
+    const res = await fetch(import.meta.env.BASE_URL + 'conf/config.json', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

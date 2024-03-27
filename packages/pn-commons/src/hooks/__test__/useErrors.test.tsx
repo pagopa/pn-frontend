@@ -1,23 +1,31 @@
-import React from 'react';
+import { FC, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 
-import { renderHook } from '@testing-library/react-hooks';
+import { EnhancedStore } from '@reduxjs/toolkit';
 
-import { appStateActions } from '../../redux/slices/appStateSlice';
-import { createTestStore } from '../../test-utils';
+import { AppStateState, appStateActions } from '../../redux/slices/appStateSlice';
+import { createTestStore, renderHook } from '../../test-utils';
 import { useErrors } from '../useErrors';
 
-const TestStoreProvider = ({ children, store }) => {
+const TestStoreProvider = ({
+  children,
+  store,
+}: {
+  children: ReactNode;
+  store: EnhancedStore<{ appState: AppStateState }>;
+}) => {
   return <Provider store={store}>{children}</Provider>;
 };
 
 describe('useErrors', () => {
-  let store;
-  let wrapper;
+  let store: EnhancedStore<{ appState: AppStateState }>;
+  let wrapper: FC<{ children: ReactNode }>;
 
   beforeAll(() => {
     store = createTestStore();
-    wrapper = ({ children }) => <TestStoreProvider store={store}>{children}</TestStoreProvider>;
+    wrapper = ({ children }: { children: ReactNode }) => (
+      <TestStoreProvider store={store}>{children}</TestStoreProvider>
+    );
   });
 
   it('should return false when there are no errors', () => {

@@ -1,6 +1,8 @@
+import { useSelector } from 'react-redux';
+
 import { CircularProgress, Modal } from '@mui/material';
 import { Box } from '@mui/system';
-import { useSelector } from 'react-redux';
+
 import { appStateSelectors } from '../../redux';
 
 export function LoadingOverlay() {
@@ -17,7 +19,7 @@ export function LoadingOverlay() {
           outline: 0,
         }}
       >
-        <CircularProgress role="loadingSpinner" sx={{ color: 'white' }}/>
+        <CircularProgress id="spinner-loading" role="loadingSpinner" sx={{ color: 'white' }} />
       </Box>
     </Modal>
   );

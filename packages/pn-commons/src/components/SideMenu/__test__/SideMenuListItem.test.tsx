@@ -1,12 +1,12 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { sideMenuItems } from '../../../__mocks__/SideMenu.mock';
 import { fireEvent, getById, queryById, render, waitFor, within } from '../../../test-utils';
 import SideMenuListItem from '../SideMenuListItem';
 
-const handleLinkClick = jest.fn();
-const handleOnSelect = jest.fn();
-const mockOpenFn = jest.fn();
+const handleLinkClick = vi.fn();
+const handleOnSelect = vi.fn();
+const mockOpenFn = vi.fn();
 
 describe('SideMenuListItem', () => {
   const original = window.open;
@@ -19,7 +19,7 @@ describe('SideMenuListItem', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   afterAll((): void => {

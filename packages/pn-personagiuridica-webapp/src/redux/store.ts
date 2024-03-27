@@ -1,7 +1,7 @@
 import logger from 'redux-logger';
 
 import { appStateReducer } from '@pagopa-pn/pn-commons';
-import { configureStore } from '@reduxjs/toolkit';
+import { Middleware, MiddlewareArray, configureStore } from '@reduxjs/toolkit';
 
 import { getConfiguration } from '../services/configuration.service';
 import { trackingMiddleware } from '../utility/mixpanel';
@@ -33,7 +33,8 @@ const createStore = (logReduxActions?: boolean) => {
     reducer: appReducers,
     middleware: (getDefaultMiddleware) =>
       additionalMiddlewares.reduce(
-        (array, middleware) => (middleware ? array.concat(middleware) : array),
+        (array, middleware) =>
+          (middleware ? array.concat(middleware) : array) as MiddlewareArray<[Middleware]>,
         getDefaultMiddleware({ serializableCheck: false })
       ),
   });

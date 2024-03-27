@@ -65,7 +65,7 @@ class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
 export function getConfiguration(): PgConfiguration {
   const configurationFromFile = Configuration.get<PgConfigurationFromFile>();
   const IS_DEVELOP = process.env.NODE_ENV === 'development';
-  const VERSION = process.env.REACT_APP_VERSION ?? '';
+  const VERSION = import.meta.env.VITE_APP_VERSION ?? '';
   return {
     ...configurationFromFile,
     DISABLE_INACTIVITY_HANDLER: Boolean(configurationFromFile.DISABLE_INACTIVITY_HANDLER),

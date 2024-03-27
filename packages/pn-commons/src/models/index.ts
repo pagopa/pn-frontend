@@ -86,6 +86,7 @@ import {
   NotificationColumnData,
 } from './Notifications';
 import { PaginationData } from './Pagination';
+import { PaymentCache } from './PaymentCache';
 import { CardElement, CardSort } from './PnCard';
 import { Column, Row, Sort } from './PnTable';
 import { Product } from './Products';
@@ -190,4 +191,5 @@ export type {
   Institution,
   PartyEntityWithUrl,
   Product,
+  PaymentCache,
 };

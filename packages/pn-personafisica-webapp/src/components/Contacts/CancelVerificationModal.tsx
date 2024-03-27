@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Button, DialogContentText, DialogTitle } from '@mui/material';
+import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 import { resetPecValidation } from '../../redux/contact/reducers';
 import { useAppDispatch } from '../../redux/hooks';
@@ -22,22 +23,24 @@ const CancelVerificationModal = ({ open, handleClose }: Props) => {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} data-testid="cancelVerificationModal">
-      <DialogTitle id="dialog-title" sx={{ pt: 4, px: 4 }}>
+    <PnDialog open={open} onClose={handleClose} data-testid="cancelVerificationModal">
+      <DialogTitle id="dialog-title">
         {t('legal-contacts.validation-cancel-title', { ns: 'recapiti' })}
       </DialogTitle>
-      <DialogContent sx={{ px: 4 }}>
-        {t('legal-contacts.validation-cancel-content', { ns: 'recapiti' })}
-      </DialogContent>
-      <DialogActions sx={{ pb: 4, px: 4 }}>
+      <PnDialogContent>
+        <DialogContentText>
+          {t('legal-contacts.validation-cancel-content', { ns: 'recapiti' })}
+        </DialogContentText>
+      </PnDialogContent>
+      <PnDialogActions>
         <Button onClick={handleClose} variant="outlined">
           {t('button.annulla')}
         </Button>
         <Button onClick={handleConfirm} variant="contained">
           {t('button.conferma')}
         </Button>
-      </DialogActions>
-    </Dialog>
+      </PnDialogActions>
+    </PnDialog>
   );
 };
 
