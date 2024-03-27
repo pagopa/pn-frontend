@@ -3,7 +3,7 @@ import { EventPropertyType, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-co
 export class SendPaymentsCountStrategy implements EventStrategy {
   performComputations(): TrackedEvent {
     return {
-      [EventPropertyType.INCREMENTAL]: false,
+      [EventPropertyType.INCREMENTAL]: {},
     };
   }
 }

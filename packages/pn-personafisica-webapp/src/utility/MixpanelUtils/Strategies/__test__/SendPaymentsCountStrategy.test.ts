@@ -8,7 +8,7 @@ describe('Mixpanel - Payments Count Strategy', () => {
 
     const paymentCountEvent = strategy.performComputations();
     expect(paymentCountEvent).toEqual({
-      [EventPropertyType.INCREMENTAL]: false,
+      [EventPropertyType.INCREMENTAL]: {},
     });
   });
 });

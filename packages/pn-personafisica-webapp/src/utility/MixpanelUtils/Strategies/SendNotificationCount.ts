@@ -13,9 +13,8 @@ type SendGenericError = {
 export class SendNotificationCountStrategy implements EventStrategy {
   performComputations({ timeline }: SendGenericError): TrackedEvent {
     if (timeline.findIndex((el) => el.category === TimelineCategory.NOTIFICATION_VIEWED) === -1) {
-      // Return false to track only eventName without properties (see callMixpanelTrackingMethod)
       return {
-        [EventPropertyType.INCREMENTAL]: false,
+        [EventPropertyType.INCREMENTAL]: {},
       };
     }
     return {};

@@ -1,4 +1,5 @@
 // leave default import for mixpanel, using named once it won't work
+import _ from 'lodash';
 import mixpanel from 'mixpanel-browser';
 
 import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
@@ -25,7 +26,11 @@ function callMixpanelTrackingMethod(
       mixpanel.people.set({ event_name: properties });
       break;
     case EventPropertyType.INCREMENTAL:
-      mixpanel.people.increment(properties ? { event_name: properties } : event_name);
+      const hasProperties =
+        !_.isNil(properties) && (typeof properties === 'object' || typeof properties === 'string')
+          ? !_.isEmpty(properties)
+          : true;
+      mixpanel.people.increment(hasProperties ? { event_name: properties } : event_name);
       break;
     case EventPropertyType.SUPER_PROPERTY:
       mixpanel.register({ event_name: properties });
