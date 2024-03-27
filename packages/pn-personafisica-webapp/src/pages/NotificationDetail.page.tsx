@@ -404,7 +404,7 @@ const NotificationDetail = () => {
       event as unknown as PFEventsType,
       event === EventPaymentRecipientType.SEND_PAYMENT_STATUS ||
         event === EventPaymentRecipientType.SEND_PAYMENT_DETAIL_ERROR
-        ? { param }
+        ? param
         : undefined
     );
   };
