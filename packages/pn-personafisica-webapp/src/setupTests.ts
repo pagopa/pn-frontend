@@ -11,7 +11,7 @@ window.getComputedStyle = (elt) => getComputedStyle(elt);
 
 beforeAll(() => {
   Configuration.setForTest<any>({
-    API_BASE_URL: 'mock-api-base-url',
+    API_BASE_URL: 'https://mock-api-base-url',
     DISABLE_INACTIVITY_HANDLER: true,
     ONE_TRUST_DRAFT_MODE: false,
     ONE_TRUST_PARTICIPATING_ENTITIES: 'mocked-id',

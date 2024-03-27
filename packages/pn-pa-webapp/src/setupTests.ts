@@ -10,7 +10,7 @@ import { initStore } from './redux/store';
 
 beforeAll(() => {
   Configuration.setForTest<any>({
-    API_BASE_URL: 'https://mock-api-base-url:',
+    API_BASE_URL: 'https://mock-api-base-url',
     DISABLE_INACTIVITY_HANDLER: true,
     ONE_TRUST_DRAFT_MODE: true,
     ONE_TRUST_PP: '365c84c5-9329-4ec5-89f5-e53572eda132',
