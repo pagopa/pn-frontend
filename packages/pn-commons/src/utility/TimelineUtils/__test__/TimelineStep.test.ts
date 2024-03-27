@@ -1,4 +1,4 @@
-import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { TimelineCategory } from '../../../models';
 import { initLocalizationForTest } from '../../../test-utils';
 import { TimelineStep, TimelineStepInfo } from '../TimelineStep';
@@ -66,12 +66,12 @@ describe('TimelineStep', () => {
   it('nameAndTaxId', () => {
     const payload = {
       step: getTimelineElem(TimelineCategory.NOT_HANDLED, { recIndex: 0 }),
-      recipient: notificationToFe.recipients[0],
+      recipient: notificationDTO.recipients[0],
       isMultiRecipient: false,
     };
     expect(mockTimelineStep.nameAndTaxId(payload)).toStrictEqual({
-      name: notificationToFe.recipients[0].denomination,
-      taxId: `(${notificationToFe.recipients[0].taxId})`,
+      name: notificationDTO.recipients[0].denomination,
+      taxId: `(${notificationDTO.recipients[0].taxId})`,
     });
   });
 

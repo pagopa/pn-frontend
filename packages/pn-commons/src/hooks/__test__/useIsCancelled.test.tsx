@@ -1,4 +1,4 @@
-import { notificationToFe } from '../../__mocks__/NotificationDetail.mock';
+import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';
 import { NotificationDetail, NotificationStatus, TimelineCategory } from '../../models';
 import { render } from '../../test-utils';
 import { useIsCancelled } from '../useIsCancelled';
@@ -22,7 +22,7 @@ const Component: React.FC<Props> = ({ notification }) => {
 
 describe('useIsCancelled test', () => {
   it("notification isn't cancelled", () => {
-    const { getByTestId } = render(<Component notification={notificationToFe} />);
+    const { getByTestId } = render(<Component notification={notificationDTO} />);
 
     expect(getByTestId('cancellationInProgress')).toHaveTextContent('false');
     expect(getByTestId('cancellationInTimeline')).toHaveTextContent('false');
@@ -31,7 +31,7 @@ describe('useIsCancelled test', () => {
   it('notification is cancelled', () => {
     const { getByTestId } = render(
       <Component
-        notification={{ ...notificationToFe, notificationStatus: NotificationStatus.CANCELLED }}
+        notification={{ ...notificationDTO, notificationStatus: NotificationStatus.CANCELLED }}
       />
     );
 
@@ -44,7 +44,7 @@ describe('useIsCancelled test', () => {
     const { getByTestId } = render(
       <Component
         notification={{
-          ...notificationToFe,
+          ...notificationDTO,
           notificationStatus: NotificationStatus.CANCELLATION_IN_PROGRESS,
         }}
       />
@@ -59,9 +59,9 @@ describe('useIsCancelled test', () => {
     const { getByTestId } = render(
       <Component
         notification={{
-          ...notificationToFe,
+          ...notificationDTO,
           timeline: [
-            ...notificationToFe.timeline,
+            ...notificationDTO.timeline,
             {
               elementId: 'NOTIFICATION_CANCELLATION_REQUEST.HYTD-ERPH-WDUE-202308-H-1',
               timestamp: '2033-08-14T13:42:54.17675939Z',

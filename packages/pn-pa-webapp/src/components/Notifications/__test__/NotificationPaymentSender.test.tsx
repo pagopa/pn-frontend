@@ -7,8 +7,8 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import {
-  notificationToFe,
-  notificationToFeMultiRecipient,
+  notificationDTO,
+  notificationDTOMultiRecipient,
 } from '../../../__mocks__/NotificationDetail.mock';
 import {
   RenderResult,
@@ -37,18 +37,18 @@ async function selectRecipient(recipientToSelect: number) {
   const selectOptionsList = await within(selectOptionsContainer!).findByRole('listbox');
   expect(selectOptionsList).toBeInTheDocument();
   const selectOptionsListItems = await within(selectOptionsList).findAllByRole('option');
-  expect(selectOptionsListItems).toHaveLength(notificationToFeMultiRecipient.recipients.length);
+  expect(selectOptionsListItems).toHaveLength(notificationDTOMultiRecipient.recipients.length);
   selectOptionsListItems.forEach((opt, index) => {
     expect(opt).toHaveTextContent(
-      notificationToFeMultiRecipient.recipients[index].denomination +
+      notificationDTOMultiRecipient.recipients[index].denomination +
         ' - ' +
-        notificationToFeMultiRecipient.recipients[index].taxId
+        notificationDTOMultiRecipient.recipients[index].taxId
     );
   });
   fireEvent.click(selectOptionsListItems[recipientToSelect]);
   await waitFor(() => {
     expect(selectInput).toHaveValue(
-      notificationToFeMultiRecipient.recipients[recipientToSelect].taxId
+      notificationDTOMultiRecipient.recipients[recipientToSelect].taxId
     );
   });
 }
@@ -73,9 +73,9 @@ describe('NotificationPaymentSender Component', () => {
     // render component
     const { container, queryByTestId, getAllByTestId } = render(
       <NotificationPaymentSender
-        iun={notificationToFe.iun}
-        recipients={notificationToFe.recipients}
-        timeline={notificationToFe.timeline}
+        iun={notificationDTO.iun}
+        recipients={notificationDTO.recipients}
+        timeline={notificationDTO.timeline}
       />
     );
     expect(container).toHaveTextContent('payment.title');
@@ -83,16 +83,16 @@ describe('NotificationPaymentSender Component', () => {
     const recipientsSelect = queryByTestId('recipients-select');
     expect(recipientsSelect).not.toBeInTheDocument();
     const paymentItems = getAllByTestId('payment-item');
-    expect(paymentItems).toHaveLength(getPaymentsCount(0, notificationToFe.recipients, 'pagoPa'));
+    expect(paymentItems).toHaveLength(getPaymentsCount(0, notificationDTO.recipients, 'pagoPa'));
   });
 
   it('renders component - multi recipient', () => {
     // render component
     const { container, getByTestId, queryAllByTestId } = render(
       <NotificationPaymentSender
-        iun={notificationToFeMultiRecipient.iun}
-        recipients={notificationToFeMultiRecipient.recipients}
-        timeline={notificationToFeMultiRecipient.timeline}
+        iun={notificationDTOMultiRecipient.iun}
+        recipients={notificationDTOMultiRecipient.recipients}
+        timeline={notificationDTOMultiRecipient.timeline}
       />
     );
     expect(container).toHaveTextContent('payment.title');
@@ -109,9 +109,9 @@ describe('NotificationPaymentSender Component', () => {
     await act(async () => {
       result = render(
         <NotificationPaymentSender
-          iun={notificationToFeMultiRecipient.iun}
-          recipients={notificationToFeMultiRecipient.recipients}
-          timeline={notificationToFeMultiRecipient.timeline}
+          iun={notificationDTOMultiRecipient.iun}
+          recipients={notificationDTOMultiRecipient.recipients}
+          timeline={notificationDTOMultiRecipient.timeline}
         />
       );
     });
@@ -122,24 +122,24 @@ describe('NotificationPaymentSender Component', () => {
     let f24Items = result?.queryAllByTestId('f24');
     numberOfPagoPaPayments = getPaymentsCount(
       0,
-      notificationToFeMultiRecipient.recipients,
+      notificationDTOMultiRecipient.recipients,
       'pagoPa'
     );
     expect(paymentItems).toHaveLength(numberOfPagoPaPayments > 5 ? 5 : numberOfPagoPaPayments);
     expect(f24Items).toHaveLength(
-      getPaymentsCount(0, notificationToFeMultiRecipient.recipients, 'f24')
+      getPaymentsCount(0, notificationDTOMultiRecipient.recipients, 'f24')
     );
     await selectRecipient(1);
     paymentItems = result?.queryAllByTestId('payment-item');
     f24Items = result?.queryAllByTestId('f24');
     numberOfPagoPaPayments = getPaymentsCount(
       1,
-      notificationToFeMultiRecipient.recipients,
+      notificationDTOMultiRecipient.recipients,
       'pagoPa'
     );
     expect(paymentItems).toHaveLength(numberOfPagoPaPayments > 5 ? 5 : numberOfPagoPaPayments);
     expect(f24Items).toHaveLength(
-      getPaymentsCount(1, notificationToFeMultiRecipient.recipients, 'f24')
+      getPaymentsCount(1, notificationDTOMultiRecipient.recipients, 'f24')
     );
   });
 
@@ -149,9 +149,9 @@ describe('NotificationPaymentSender Component', () => {
     await act(async () => {
       result = render(
         <NotificationPaymentSender
-          iun={notificationToFeMultiRecipient.iun}
-          recipients={notificationToFeMultiRecipient.recipients}
-          timeline={notificationToFeMultiRecipient.timeline}
+          iun={notificationDTOMultiRecipient.iun}
+          recipients={notificationDTOMultiRecipient.recipients}
+          timeline={notificationDTOMultiRecipient.timeline}
         />
       );
     });
@@ -159,7 +159,7 @@ describe('NotificationPaymentSender Component', () => {
     await selectRecipient(1);
 
     const paginationBox = result?.queryByTestId('pagination-box');
-    if (getPaymentsCount(1, notificationToFeMultiRecipient.recipients, 'pagoPa') > 5) {
+    if (getPaymentsCount(1, notificationDTOMultiRecipient.recipients, 'pagoPa') > 5) {
       expect(paginationBox).toBeInTheDocument();
     } else {
       expect(paginationBox).not.toBeInTheDocument();
@@ -172,9 +172,9 @@ describe('NotificationPaymentSender Component', () => {
     await act(async () => {
       result = render(
         <NotificationPaymentSender
-          iun={notificationToFeMultiRecipient.iun}
-          recipients={notificationToFeMultiRecipient.recipients}
-          timeline={notificationToFeMultiRecipient.timeline}
+          iun={notificationDTOMultiRecipient.iun}
+          recipients={notificationDTOMultiRecipient.recipients}
+          timeline={notificationDTOMultiRecipient.timeline}
         />
       );
     });
@@ -184,7 +184,7 @@ describe('NotificationPaymentSender Component', () => {
     let paginationData: PaginationData = {
       page: 0,
       size: 5,
-      totalElements: getPaymentsCount(1, notificationToFeMultiRecipient.recipients, 'pagoPa'),
+      totalElements: getPaymentsCount(1, notificationDTOMultiRecipient.recipients, 'pagoPa'),
     };
 
     // should show first 5 payments

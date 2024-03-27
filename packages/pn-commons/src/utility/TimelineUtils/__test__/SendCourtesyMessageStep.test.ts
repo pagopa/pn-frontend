@@ -1,4 +1,4 @@
-import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { DigitalDomicileType, TimelineCategory } from '../../../models';
 import { initLocalizationForTest } from '../../../test-utils';
 import { SendCourtesyMessageStep } from '../SendCourtesyMessageStep';
@@ -17,7 +17,7 @@ describe('SendCourtesyMessageStep', () => {
     });
     const payload = {
       step: timelineElem,
-      recipient: notificationToFe.recipients[0],
+      recipient: notificationDTO.recipients[0],
       isMultiRecipient: false,
     };
     const sendCourtesyMessageStep = new SendCourtesyMessageStep();
@@ -54,7 +54,7 @@ describe('SendCourtesyMessageStep', () => {
     });
     const payload = {
       step: timelineElem,
-      recipient: notificationToFe.recipients[0],
+      recipient: notificationDTO.recipients[0],
       isMultiRecipient: false,
     };
     const sendCourtesyMessageStep = new SendCourtesyMessageStep();
@@ -91,7 +91,7 @@ describe('SendCourtesyMessageStep', () => {
     });
     const payload = {
       step: timelineElem,
-      recipient: notificationToFe.recipients[0],
+      recipient: notificationDTO.recipients[0],
       isMultiRecipient: false,
     };
     const sendCourtesyMessageStep = new SendCourtesyMessageStep();

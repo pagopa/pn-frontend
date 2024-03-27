@@ -84,7 +84,7 @@ const pagoPaSchema: yup.SchemaOf<PagoPAPaymentFullDetails> = yup
     recIndex: yup.number().optional(),
     uncertainPaymentDate: yup.boolean().optional(),
     eventTimestamp: yup.string().optional(),
-    notRefinedRecipientIndexes: yup.array(yup.number()).optional(),
+    notRefinedRecipientIndexes: yup.array().of(yup.number()).optional(),
   })
   .noUnknown(true);
 

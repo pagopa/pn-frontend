@@ -1,4 +1,4 @@
-import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { TimelineCategory } from '../../../models';
 import { NotHandledStep } from '../NotHandledStep';
 
@@ -8,7 +8,7 @@ const timelineElem = getTimelineElem(TimelineCategory.NOT_HANDLED, {
 });
 const payload = {
   step: timelineElem,
-  recipient: notificationToFe.recipients[0],
+  recipient: notificationDTO.recipients[0],
   isMultiRecipient: false,
 };
 

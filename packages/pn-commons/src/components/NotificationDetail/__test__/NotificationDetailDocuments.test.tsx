@@ -1,6 +1,6 @@
 import { Mock, vi } from 'vitest';
 
-import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor, within } from '../../../test-utils';
 import NotificationDetailDocuments from '../NotificationDetailDocuments';
 
@@ -35,7 +35,7 @@ describe('NotificationDetailDocuments Component', () => {
     const { getAllByTestId, getByTestId, container } = render(
       <NotificationDetailDocuments
         title="Mocked title"
-        documents={notificationToFe.documents}
+        documents={notificationDTO.documents}
         clickHandler={mockClickFn}
         documentsAvailable
         downloadFilesMessage="Mocked download message"
@@ -43,9 +43,9 @@ describe('NotificationDetailDocuments Component', () => {
     );
     expect(container).toHaveTextContent(/Mocked title/i);
     const notificationDetailDocuments = getAllByTestId('notificationDetailDocuments');
-    expect(notificationDetailDocuments).toHaveLength(notificationToFe.documents.length);
+    expect(notificationDetailDocuments).toHaveLength(notificationDTO.documents.length);
     notificationDetailDocuments.forEach((doc, index) => {
-      const currentDoc = notificationToFe.documents[index];
+      const currentDoc = notificationDTO.documents[index];
       if (currentDoc.title) {
         expect(doc).toHaveTextContent(currentDoc.title);
       } else {
@@ -62,7 +62,7 @@ describe('NotificationDetailDocuments Component', () => {
     const { getAllByTestId } = render(
       <NotificationDetailDocuments
         title="Mocked title"
-        documents={notificationToFe.documents}
+        documents={notificationDTO.documents}
         clickHandler={mockClickFn}
         documentsAvailable
       />
@@ -80,7 +80,7 @@ describe('NotificationDetailDocuments Component', () => {
     const { getAllByTestId } = render(
       <NotificationDetailDocuments
         title="Mocked title"
-        documents={notificationToFe.documents}
+        documents={notificationDTO.documents}
         clickHandler={mockClickFn}
         documentsAvailable
         disableDownloads
@@ -98,15 +98,15 @@ describe('NotificationDetailDocuments Component', () => {
     const { getAllByTestId } = render(
       <NotificationDetailDocuments
         title="Mocked title"
-        documents={notificationToFe.documents}
+        documents={notificationDTO.documents}
         clickHandler={mockClickFn}
         documentsAvailable={false}
       />
     );
     const notificationDetailDocuments = getAllByTestId('notificationDetailDocuments');
-    expect(notificationDetailDocuments).toHaveLength(notificationToFe.documents.length);
+    expect(notificationDetailDocuments).toHaveLength(notificationDTO.documents.length);
     notificationDetailDocuments.forEach((doc, index) => {
-      const currentDoc = notificationToFe.documents[index];
+      const currentDoc = notificationDTO.documents[index];
       if (currentDoc.title) {
         expect(doc).toHaveTextContent(currentDoc.title);
       } else {

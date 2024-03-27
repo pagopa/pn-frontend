@@ -1,4 +1,4 @@
-import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { TimelineCategory } from '../../../models';
 import { PrepareAnalogDomicileFailureDetails } from '../../../models/NotificationDetail';
 import { initLocalization } from '../../../utility/localization.utility';
@@ -36,7 +36,7 @@ describe('PrepareAnalogDomicileFailureStep', () => {
     } as PrepareAnalogDomicileFailureDetails);
     const payload = {
       step: timelineElem,
-      recipient: notificationToFe.recipients[0],
+      recipient: notificationDTO.recipients[0],
       isMultiRecipient: false,
     };
     // mono recipient
@@ -74,7 +74,7 @@ describe('PrepareAnalogDomicileFailureStep', () => {
     } as PrepareAnalogDomicileFailureDetails);
     const payload = {
       step: timelineElem,
-      recipient: notificationToFe.recipients[0],
+      recipient: notificationDTO.recipients[0],
       isMultiRecipient: false,
     };
     // mono recipient
@@ -113,7 +113,7 @@ describe('PrepareAnalogDomicileFailureStep', () => {
     } as PrepareAnalogDomicileFailureDetails);
     const payload = {
       step: timelineElem,
-      recipient: notificationToFe.recipients[0],
+      recipient: notificationDTO.recipients[0],
       isMultiRecipient: false,
     };
     // mono recipient

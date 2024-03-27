@@ -1,11 +1,11 @@
-import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { createMatchMedia, fireEvent, render, waitFor } from '../../../test-utils';
 import NotificationDetailTimeline from '../NotificationDetailTimeline';
 
 describe('NotificationDetailTimeline', () => {
   // Define mock data for props
-  const recipients = notificationToFe.recipients;
-  const statusHistory = notificationToFe.notificationStatusHistory;
+  const recipients = notificationDTO.recipients;
+  const statusHistory = notificationDTO.notificationStatusHistory;
   const title = 'Notification Title';
   const historyButtonLabel = 'History';
   const showMoreButtonLabel = 'Show More';

@@ -1,8 +1,8 @@
 import { vi } from 'vitest';
 
 import {
-  notificationToFe,
-  notificationToFeMultiRecipient,
+  notificationDTO,
+  notificationDTOMultiRecipient,
 } from '../../../__mocks__/NotificationDetail.mock';
 import { render } from '../../../__test__/test-utils';
 import { PNRole } from '../../../models/user';
@@ -22,7 +22,7 @@ describe('NotificationDetailTableSender Component', () => {
     // render component
     const { getByTestId, getAllByTestId } = render(
       <NotificationDetailTableSender
-        notification={notificationToFe}
+        notification={notificationDTO}
         onCancelNotification={mockCancelHandler}
       />
     );
@@ -31,17 +31,17 @@ describe('NotificationDetailTableSender Component', () => {
     const cancelNotificationBtn = getByTestId('cancelNotificationBtn');
     expect(cancelNotificationBtn).toBeInTheDocument();
     const recipientRow = getByTestId('recipientRow');
-    expect(recipientRow).toHaveTextContent(notificationToFe.recipients[0].denomination);
+    expect(recipientRow).toHaveTextContent(notificationDTO.recipients[0].denomination);
     const recipientsRow = getAllByTestId('recipients');
     expect(recipientsRow).toHaveLength(1);
-    expect(recipientsRow[0]).toHaveTextContent(notificationToFe.recipients[0].taxId);
+    expect(recipientsRow[0]).toHaveTextContent(notificationDTO.recipients[0].taxId);
   });
 
   it('renders component - multi recipient', () => {
     // render component
     const { getByTestId, queryByTestId, getAllByTestId } = render(
       <NotificationDetailTableSender
-        notification={notificationToFeMultiRecipient}
+        notification={notificationDTOMultiRecipient}
         onCancelNotification={mockCancelHandler}
       />
     );
@@ -52,10 +52,10 @@ describe('NotificationDetailTableSender Component', () => {
     const recipientRow = queryByTestId('recipientRow');
     expect(recipientRow).not.toBeInTheDocument();
     const recipientsRow = getAllByTestId('recipients');
-    expect(recipientsRow).toHaveLength(notificationToFeMultiRecipient.recipients.length);
+    expect(recipientsRow).toHaveLength(notificationDTOMultiRecipient.recipients.length);
     recipientsRow.forEach((row, index) => {
       expect(row).toHaveTextContent(
-        `${notificationToFeMultiRecipient.recipients[index].denomination} - ${notificationToFeMultiRecipient.recipients[index].taxId}`
+        `${notificationDTOMultiRecipient.recipients[index].denomination} - ${notificationDTOMultiRecipient.recipients[index].taxId}`
       );
     });
   });
@@ -64,7 +64,7 @@ describe('NotificationDetailTableSender Component', () => {
     // render component
     const { queryByTestId } = render(
       <NotificationDetailTableSender
-        notification={notificationToFe}
+        notification={notificationDTO}
         onCancelNotification={mockCancelHandler}
       />,
       {

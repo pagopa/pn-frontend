@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { getF24Payments } from '@pagopa-pn/pn-commons';
 
-import { notificationToFeMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
+import { notificationDTOMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import NotificationPaymentF24 from '../NotificationPaymentF24';
 
@@ -14,7 +14,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 const f24Payments = getF24Payments(
-  notificationToFeMultiRecipient.recipients[0].payments ?? [],
+  notificationDTOMultiRecipient.recipients[0].payments ?? [],
   0,
   false
 );
@@ -23,7 +23,7 @@ describe('NotificationPaymentF24 Component', () => {
   it('renders component - no remaining items', () => {
     // render component
     const { container, queryByTestId, queryAllByTestId } = render(
-      <NotificationPaymentF24 iun={notificationToFeMultiRecipient.iun} payments={f24Payments} />
+      <NotificationPaymentF24 iun={notificationDTOMultiRecipient.iun} payments={f24Payments} />
     );
     expect(container).toHaveTextContent('payment.f24-attached');
     const f24Elem = queryAllByTestId('f24');
@@ -45,7 +45,7 @@ describe('NotificationPaymentF24 Component', () => {
       })),
     ];
     const { queryAllByTestId, queryByTestId } = render(
-      <NotificationPaymentF24 iun={notificationToFeMultiRecipient.iun} payments={f24LotPayments} />
+      <NotificationPaymentF24 iun={notificationDTOMultiRecipient.iun} payments={f24LotPayments} />
     );
     const f24Elem = queryAllByTestId('f24');
     expect(f24Elem).toHaveLength(5);

@@ -1,4 +1,4 @@
-import { NotificationDetail, parseNotificationDetail } from '@pagopa-pn/pn-commons';
+import { NotificationDetail } from '@pagopa-pn/pn-commons';
 
 import { NotificationDetailForRecipient } from '../models/NotificationDetail';
 
@@ -23,12 +23,9 @@ export function parseNotificationDetailForRecipient(
     properRecipientIndexes.length === 1 ? properRecipientIndexes[0] : -1;
   const currentRecipient = notification.recipients[currentRecipientIndex];
 
-  // do the changes common to the pa and pf
-  const commonNotificationDetailForFe = parseNotificationDetail(notification);
-
   return {
-    ...commonNotificationDetailForFe,
-    otherDocuments: commonNotificationDetailForFe.otherDocuments?.filter(
+    ...notification,
+    otherDocuments: notification.otherDocuments?.filter(
       (d) => d.recIndex === currentRecipientIndex
     ),
     currentRecipient,

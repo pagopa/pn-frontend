@@ -1,4 +1,4 @@
-import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { TimelineCategory } from '../../../models';
 import { initLocalizationForTest } from '../../../test-utils';
 import { ScheduleDigitalWorkflowStep } from '../ScheduleDigitalWorkflowStep';
@@ -6,7 +6,7 @@ import { ScheduleDigitalWorkflowStep } from '../ScheduleDigitalWorkflowStep';
 const timelineElem = getTimelineElem(TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW, {});
 const payload = {
   step: timelineElem,
-  recipient: notificationToFe.recipients[0],
+  recipient: notificationDTO.recipients[0],
   isMultiRecipient: false,
 };
 

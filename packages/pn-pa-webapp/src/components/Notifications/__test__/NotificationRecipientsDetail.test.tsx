@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 import {
-  notificationToFeMultiRecipient,
+  notificationDTOMultiRecipient,
   recipients,
 } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
@@ -37,8 +37,8 @@ describe('NotificationRecipientsDetail Component', () => {
   it('renders component - no remaining items', () => {
     const { queryAllByTestId, queryByTestId } = render(
       <NotificationRecipientsDetail
-        recipients={notificationToFeMultiRecipient.recipients}
-        iun={notificationToFeMultiRecipient.iun}
+        recipients={notificationDTOMultiRecipient.recipients}
+        iun={notificationDTOMultiRecipient.iun}
       />
     );
     const recipientsElem = queryAllByTestId('recipients');
@@ -54,8 +54,8 @@ describe('NotificationRecipientsDetail Component', () => {
 
   it('renders component - remaining items', async () => {
     const recipients = [
-      ...notificationToFeMultiRecipient.recipients,
-      ...notificationToFeMultiRecipient.recipients.map((recipient) => ({
+      ...notificationDTOMultiRecipient.recipients,
+      ...notificationDTOMultiRecipient.recipients.map((recipient) => ({
         ...recipient,
         taxId: recipient.taxId.split('').reverse().join(''),
         denomination: recipient.denomination.split('').reverse().join(''),
@@ -64,7 +64,7 @@ describe('NotificationRecipientsDetail Component', () => {
     const { queryAllByTestId, queryByTestId } = render(
       <NotificationRecipientsDetail
         recipients={recipients}
-        iun={notificationToFeMultiRecipient.iun}
+        iun={notificationDTOMultiRecipient.iun}
       />
     );
     const recipientsElem = queryAllByTestId('recipients');

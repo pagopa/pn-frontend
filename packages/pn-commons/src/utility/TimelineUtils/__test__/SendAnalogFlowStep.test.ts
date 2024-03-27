@@ -1,4 +1,4 @@
-import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { TimelineCategory } from '../../../models';
 import { initLocalizationForTest } from '../../../test-utils';
 import { SendAnalogFlowStep } from '../SendAnalogFlowStep';
@@ -7,7 +7,7 @@ import { TimelineStepPayload } from '../TimelineStep';
 let timelineElem = getTimelineElem(TimelineCategory.SEND_ANALOG_DOMICILE, {});
 const payload: TimelineStepPayload = {
   step: timelineElem,
-  recipient: notificationToFe.recipients[0],
+  recipient: notificationDTO.recipients[0],
   isMultiRecipient: false,
   allStepsForThisStatus: [],
 };

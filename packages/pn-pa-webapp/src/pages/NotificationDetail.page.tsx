@@ -110,6 +110,22 @@ const NotificationDetail: React.FC = () => {
     (recipient) => recipient.payments && recipient.payments.length > 0
   );
 
+  const showInfoMessageIfRetryAfter = (response: {
+    url: string;
+    retryAfter?: number | undefined;
+  }) => {
+    if (response.retryAfter) {
+      dispatch(
+        appStateActions.addInfo({
+          title: '',
+          message: t(`detail.document-not-available`, {
+            ns: 'notifiche',
+          }),
+        })
+      );
+    }
+  };
+
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
@@ -118,18 +134,7 @@ const NotificationDetail: React.FC = () => {
         getSentNotificationOtherDocument({ iun: notification.iun, otherDocument: document })
       )
         .unwrap()
-        .then((response) => {
-          if (response.retryAfter) {
-            dispatch(
-              appStateActions.addInfo({
-                title: '',
-                message: t(`detail.document-not-available`, {
-                  ns: 'notifiche',
-                }),
-              })
-            );
-          }
-        });
+        .then(showInfoMessageIfRetryAfter);
     } else {
       const documentIndex = document as string;
       void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
@@ -153,18 +158,7 @@ const NotificationDetail: React.FC = () => {
         })
       )
         .unwrap()
-        .then((response) => {
-          if (response.retryAfter) {
-            dispatch(
-              appStateActions.addInfo({
-                title: '',
-                message: t(`detail.document-not-available`, {
-                  ns: 'notifiche',
-                }),
-              })
-            );
-          }
-        });
+        .then(showInfoMessageIfRetryAfter);
     } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
       const otherDocument = legalFact as NotificationDetailOtherDocument;
       void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }));

@@ -14,6 +14,7 @@ import { GroupStatus } from './../../models/user';
 const API_DELIVERY_PREFIX = 'delivery';
 const API_DELIVERY_PUSH_PREFIX = 'delivery-push';
 const API_EXTERNAL_REGISTRY_PREFIX = 'ext-registry';
+const API_BFF_PREFIX = 'bff';
 
 // Segments
 const API_NOTIFICATIONS_BASE = 'notifications';
@@ -84,9 +85,9 @@ export function NOTIFICATIONS_LIST(params: GetNotificationsParams<string>) {
 
 export function NOTIFICATION_DETAIL(iun: string) {
   return compileRoute({
-    prefix: API_DELIVERY_PREFIX,
+    prefix: API_BFF_PREFIX,
     path: API_NOTIFICATION_DETAIL_PATH,
-    version: API_VERSION_SEGMENT_2_3,
+    version: API_VERSION_SEGMENT,
     params: {
       [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
     },
