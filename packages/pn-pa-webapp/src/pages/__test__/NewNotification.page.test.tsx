@@ -2,12 +2,27 @@ import MockAdapter from 'axios-mock-adapter';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
+import {
+  AppMessage,
+  AppResponseMessage,
+  ResponseEventDispatcher,
+  errorFactoryManager,
+} from '@pagopa-pn/pn-commons';
+
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { newNotification, newNotificationGroups } from '../../__mocks__/NewNotification.mock';
-import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  waitFor,
+  within,
+} from '../../__test__/test-utils';
 import { CREATE_NOTIFICATION, GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
+import { PAAppErrorFactory } from '../../utility/AppError/PAAppErrorFactory';
 import { newNotificationMapper } from '../../utility/notification.utility';
 import NewNotification from '../NewNotification.page';
 
@@ -260,6 +275,79 @@ describe('NewNotification Page without payment', async () => {
     });
     const finalStep = result.getByTestId('finalStep');
     expect(finalStep).toBeInTheDocument();
+  });
+
+  it('notification failed for duplicated protocol number', async () => {
+    const mappedNotification = newNotificationMapper(newNotification);
+    const mockResponse = {
+      type: 'GENERIC_ERROR',
+      status: 409,
+      errors: [
+        {
+          code: 'PN_GENERIC_INVALIDPARAMETER_DUPLICATED',
+          element: 'Duplicated notification for senderPaId##paProtocolNumber##idempotenceToken',
+        },
+      ],
+    };
+    mock.onPost(CREATE_NOTIFICATION(), mappedNotification).reply(409, mockResponse);
+
+    await act(async () => {
+      const Component = () => {
+        errorFactoryManager.factory = new PAAppErrorFactory((path, ns) => `${path}.${ns}`);
+        return (
+          <>
+            <ResponseEventDispatcher />
+            <AppResponseMessage />
+            <AppMessage />
+            <NewNotification />
+          </>
+        );
+      };
+      result = render(<Component />, {
+        preloadedState: {
+          newNotificationState: { notification: newNotification, groups: [] },
+          userState: { user: userResponse },
+        },
+      });
+    });
+    // STEP 1
+    let buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
+    expect(buttonSubmit).toBeEnabled();
+    const preliminaryInformation = result.getByTestId('preliminaryInformationsForm');
+    expect(preliminaryInformation).toBeInTheDocument();
+    fireEvent.click(buttonSubmit);
+    // STEP 2
+    await waitFor(() => {
+      expect(preliminaryInformation).not.toBeInTheDocument();
+    });
+    buttonSubmit = result.getByTestId('step-submit');
+    const recipientForm = result.getByTestId('recipientForm');
+    expect(recipientForm).toBeInTheDocument();
+    fireEvent.click(buttonSubmit);
+    // STEP 3
+    await waitFor(() => {
+      expect(recipientForm).not.toBeInTheDocument();
+    });
+    buttonSubmit = result.getByTestId('step-submit');
+    const attachmentsForm = result.getByTestId('attachmentsForm');
+    expect(attachmentsForm).toBeInTheDocument();
+    // FINAL
+    fireEvent.click(buttonSubmit);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+    });
+    const finalStep = result.queryByTestId('finalStep');
+    expect(finalStep).not.toBeInTheDocument();
+
+    // check if toast is in the document
+    const snackBar = await waitFor(() => result.getByTestId('snackBarContainer'));
+    expect(snackBar).toBeInTheDocument();
+    expect(snackBar).toHaveTextContent(
+      'new-notification.errors.invalid_parameter_protocol_number_duplicate.title.notifiche'
+    );
+    expect(snackBar).toHaveTextContent(
+      'new-notification.errors.invalid_parameter_protocol_number_duplicate.message.notifiche'
+    );
   });
 });
 

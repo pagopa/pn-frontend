@@ -28,6 +28,7 @@ import { IUN_regex, formatIun } from './iun.utility';
 import { lazyRetry } from './lazyRetry.utility';
 import { initLocalization } from './localization.utility';
 import {
+  checkRaddInTimeline,
   getF24Payments,
   getLegalFactLabel,
   getNotificationAllowedStatus,
@@ -124,4 +125,5 @@ export {
   PAYMENT_CACHE_KEY,
   rewriteLinks,
   dateIsLessThan10Years,
+  checkRaddInTimeline,
 };
