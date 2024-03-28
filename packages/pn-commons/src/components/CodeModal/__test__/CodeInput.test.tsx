@@ -6,6 +6,7 @@ import { act, fireEvent, render, theme, waitFor } from '../../../test-utils';
 import CodeInput from '../CodeInput';
 
 const handleChangeMock = vi.fn();
+const inputErrorHandlerMock = vi.fn();
 
 describe('CodeInput Component', () => {
   const user = userEvent.setup();
@@ -17,7 +18,11 @@ describe('CodeInput Component', () => {
   it('renders CodeInput (empty inputs)', () => {
     // render component
     const { getAllByTestId } = render(
-      <CodeInput initialValues={new Array(5).fill('')} onChange={handleChangeMock} />
+      <CodeInput
+        initialValues={new Array(5).fill('')}
+        onChange={handleChangeMock}
+        onInputError={inputErrorHandlerMock}
+      />
     );
     const codeInputs = getAllByTestId(/code-input-[0-4]/);
     expect(codeInputs).toHaveLength(5);
@@ -29,7 +34,12 @@ describe('CodeInput Component', () => {
   it('renders CodeInput with error (empty inputs)', () => {
     // render component
     const { getAllByTestId } = render(
-      <CodeInput initialValues={new Array(5).fill('')} onChange={handleChangeMock} hasError />
+      <CodeInput
+        initialValues={new Array(5).fill('')}
+        onChange={handleChangeMock}
+        onInputError={inputErrorHandlerMock}
+        hasError
+      />
     );
     const codeInputs = getAllByTestId(/codeInput\([0-4]\)/);
     expect(codeInputs).toHaveLength(5);
@@ -48,7 +58,12 @@ describe('CodeInput Component', () => {
   it('renders CodeInput read only (empty inputs)', () => {
     // render component
     const { getAllByTestId } = render(
-      <CodeInput initialValues={new Array(5).fill('')} onChange={handleChangeMock} isReadOnly />
+      <CodeInput
+        initialValues={new Array(5).fill('')}
+        onChange={handleChangeMock}
+        onInputError={inputErrorHandlerMock}
+        isReadOnly
+      />
     );
     const codeInputs = getAllByTestId(/codeInput\([0-4]\)/);
     expect(codeInputs).toHaveLength(5);
@@ -64,7 +79,11 @@ describe('CodeInput Component', () => {
   it('renders CodeInput (filled inputs)', () => {
     // render component
     const { getAllByTestId } = render(
-      <CodeInput initialValues={new Array(5).fill('1')} onChange={handleChangeMock} />
+      <CodeInput
+        initialValues={new Array(5).fill('1')}
+        onChange={handleChangeMock}
+        onInputError={inputErrorHandlerMock}
+      />
     );
     const codeInputs = getAllByTestId(/code-input-[0-4]/);
     expect(codeInputs).toHaveLength(5);
@@ -76,7 +95,11 @@ describe('CodeInput Component', () => {
   it('handles change event', async () => {
     // render component
     const { getAllByTestId } = render(
-      <CodeInput initialValues={new Array(5).fill('')} onChange={handleChangeMock} />
+      <CodeInput
+        initialValues={new Array(5).fill('')}
+        onChange={handleChangeMock}
+        onInputError={inputErrorHandlerMock}
+      />
     );
     const codeInputs = getAllByTestId(/code-input-[0-4]/);
     fireEvent.change(codeInputs[2], { target: { value: '3' } });
@@ -119,14 +142,18 @@ describe('CodeInput Component', () => {
       expect(codeInputs[1]).toHaveFocus();
     });
     await waitFor(() => {
-      expect(codeInputs[2]).toHaveValue('');
+      expect(codeInputs[2]).toBeEmptyDOMElement();
     });
   });
 
   it('keyboard events', async () => {
     // render component
     const { getAllByTestId } = render(
-      <CodeInput initialValues={new Array(5).fill('1')} onChange={handleChangeMock} />
+      <CodeInput
+        initialValues={new Array(5).fill('1')}
+        onChange={handleChangeMock}
+        onInputError={inputErrorHandlerMock}
+      />
     );
     // focus on first input and moove to the next
     const codeInputs = getAllByTestId(/code-input-[0-4]/);
@@ -181,5 +208,49 @@ describe('CodeInput Component', () => {
     await waitFor(() => {
       expect(codeInputs[0]).toHaveFocus();
     });
+  });
+
+  it('handles paste event', async () => {
+    // render component
+    const { getAllByTestId } = render(
+      <CodeInput
+        initialValues={new Array(5).fill('')}
+        onChange={handleChangeMock}
+        onInputError={inputErrorHandlerMock}
+      />
+    );
+    const codeInputs = getAllByTestId(/code-input-[0-4]/);
+
+    // paste the value of the input and check that it is updated correctly
+    // set the cursor position to the beggining
+    act(() => (codeInputs[2] as HTMLInputElement).focus());
+    (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
+
+    // we must use userEvent because the keyboard event must trigger also the change event (fireEvent doesn't do that)
+    const codePasted = '12345';
+    await userEvent.paste(codePasted);
+
+    await waitFor(() => {
+      for (let i = 0; i < codeInputs.length; i++) {
+        expect(codeInputs[i]).toHaveValue(codePasted[i]);
+      }
+    });
+  });
+
+  it('accepts first 5 digits in case of too long code (pasted)', async () => {
+    // render component
+    const { getAllByTestId } = render(
+      <CodeInput
+        initialValues={new Array(5).fill('')}
+        onChange={handleChangeMock}
+        onInputError={inputErrorHandlerMock}
+      />
+    );
+    const codeInputs = getAllByTestId(/code-input-[0-4]/);
+    act(() => (codeInputs[2] as HTMLInputElement).focus());
+    (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
+    const codePasted = '123456'; // too long code
+    await userEvent.paste(codePasted);
+    expect(handleChangeMock).toHaveBeenCalledWith(['1', '2', '3', '4', '5']);
   });
 });
