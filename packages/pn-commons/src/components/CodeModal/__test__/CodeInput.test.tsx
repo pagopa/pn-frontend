@@ -8,6 +8,8 @@ import CodeInput from '../CodeInput';
 const handleChangeMock = vi.fn();
 
 describe('CodeInput Component', () => {
+  const user = userEvent.setup();
+
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -82,7 +84,7 @@ describe('CodeInput Component', () => {
     await waitFor(() => {
       expect(handleChangeMock).toBeCalledTimes(2);
       // check focus on next elem
-      expect(codeInputs[3]).toBe(document.activeElement);
+      expect(codeInputs[3]).toHaveFocus();
     });
     // change the value of the input and check that it is updated correctly
     // set the cursor position to the end
@@ -90,20 +92,32 @@ describe('CodeInput Component', () => {
     (codeInputs[2] as HTMLInputElement).setSelectionRange(1, 1);
     // when we try to edit an input, we insert a second value and after, based on cursor position, we change the value
     // we must use userEvent because the keyboard event must trigger also the change event (fireEvent doesn't do that)
-    await userEvent.keyboard('4');
+    await user.keyboard('4');
+    // next element will be focused
+    await waitFor(() => {
+      expect(codeInputs[3]).toHaveFocus();
+    });
     await waitFor(() => {
       expect(codeInputs[2]).toHaveValue('4');
     });
     // move the cursor at the start of the input and try to edit again
     act(() => (codeInputs[2] as HTMLInputElement).focus());
     (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
-    await userEvent.keyboard('3');
+    await user.keyboard('3');
+    // next element will be focused
+    await waitFor(() => {
+      expect(codeInputs[3]).toHaveFocus();
+    });
     await waitFor(() => {
       expect(codeInputs[2]).toHaveValue('3');
     });
     // delete the value
     act(() => (codeInputs[2] as HTMLInputElement).focus());
-    await userEvent.keyboard('{Backspace}');
+    await user.keyboard('{Backspace}');
+    // previous element will be focused
+    await waitFor(() => {
+      expect(codeInputs[1]).toHaveFocus();
+    });
     await waitFor(() => {
       expect(codeInputs[2]).toHaveValue('');
     });
@@ -120,52 +134,52 @@ describe('CodeInput Component', () => {
     // press enter
     fireEvent.keyDown(codeInputs[0], { key: 'Enter', code: 'Enter' });
     await waitFor(() => {
-      expect(codeInputs[1]).toBe(document.activeElement);
+      expect(codeInputs[1]).toHaveFocus();
     });
     // press tab
     fireEvent.keyDown(codeInputs[1], { key: 'Tab', code: 'Tab' });
     await waitFor(() => {
-      expect(codeInputs[2]).toBe(document.activeElement);
+      expect(codeInputs[2]).toHaveFocus();
     });
     // press arrow right
     fireEvent.keyDown(codeInputs[2], { key: 'ArrowRight', code: 'ArrowRight' });
     await waitFor(() => {
-      expect(codeInputs[3]).toBe(document.activeElement);
+      expect(codeInputs[3]).toHaveFocus();
     });
     // press delete
     fireEvent.keyDown(codeInputs[3], { key: 'Delete', code: 'Delete' });
     await waitFor(() => {
-      expect(codeInputs[4]).toBe(document.activeElement);
+      expect(codeInputs[4]).toHaveFocus();
     });
     // press the same value of the input
     // we reach the end, so we have to lost the focus
     fireEvent.keyDown(codeInputs[4], { key: '1', code: 'Digit1' });
     await waitFor(() => {
-      expect(document.body).toBe(document.activeElement);
+      expect(document.body).toHaveFocus();
     });
     // focus on last input and moove back
     act(() => (codeInputs[4] as HTMLInputElement).focus());
     // press backspace
     fireEvent.keyDown(codeInputs[4], { key: 'Backspace', code: 'Backspace' });
     await waitFor(() => {
-      expect(codeInputs[3]).toBe(document.activeElement);
+      expect(codeInputs[3]).toHaveFocus();
     });
     // press arrow left
     fireEvent.keyDown(codeInputs[3], { key: 'ArrowLeft', code: 'ArrowLeft' });
     await waitFor(() => {
-      expect(codeInputs[2]).toBe(document.activeElement);
+      expect(codeInputs[2]).toHaveFocus();
     });
     // press tab and shift key
     fireEvent.keyDown(codeInputs[2], { key: 'Tab', code: 'Tab', shiftKey: true });
     await waitFor(() => {
-      expect(codeInputs[1]).toBe(document.activeElement);
+      expect(codeInputs[1]).toHaveFocus();
     });
     // focus on first element and try to go back
     act(() => (codeInputs[0] as HTMLInputElement).focus());
     fireEvent.keyDown(codeInputs[0], { key: 'Backspace', code: 'Backspace' });
     // nothing happens
     await waitFor(() => {
-      expect(codeInputs[0]).toBe(document.activeElement);
+      expect(codeInputs[0]).toHaveFocus();
     });
   });
 });

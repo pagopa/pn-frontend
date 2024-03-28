@@ -26,7 +26,7 @@ describe('PnDialogActions Component', () => {
   });
 
   it('renders component - mobile', () => {
-    window.matchMedia = createMatchMedia(800);
+    window.matchMedia = createMatchMedia(500);
     const { queryByTestId, queryAllByTestId } = render(
       <PnDialogActions>
         <Button data-testid="button">Test confirm button</Button>
@@ -41,8 +41,9 @@ describe('PnDialogActions Component', () => {
     const buttons = queryAllByTestId('button');
     expect(buttons).toHaveLength(2);
     buttons.forEach((button, index) => {
-      expect(button).toHaveClass('MuiButton-fullWidth');
-      expect(button).toHaveStyle(index === 0 ? 'margin-bottom: 0' : 'margin-bottom: 16px');
+      expect(button).toHaveStyle(
+        index === 0 ? 'margin-bottom: 0' : 'margin-bottom: 16px; width: 100%'
+      );
     });
   });
 });
