@@ -7,14 +7,7 @@ describe('PnDialogActions Component', () => {
   it('renders component - desktop', () => {
     window.matchMedia = createMatchMedia(2000);
     const { queryByTestId, queryAllByTestId } = render(
-      <PnDialogActions
-        sx={{
-          flexDirection: 'row',
-          p: 4,
-          pt: 0,
-          gap: 1,
-        }}
-      >
+      <PnDialogActions>
         <Button data-testid="button">Test confirm button</Button>
         <Button data-testid="button">Test cancel button</Button>
       </PnDialogActions>
@@ -35,14 +28,7 @@ describe('PnDialogActions Component', () => {
   it('renders component - mobile', () => {
     window.matchMedia = createMatchMedia(500);
     const { queryByTestId, queryAllByTestId } = render(
-      <PnDialogActions
-        sx={{
-          flexDirection: 'column-reverse',
-          p: 3,
-          pt: 0,
-          gap: 0,
-        }}
-      >
+      <PnDialogActions>
         <Button data-testid="button">Test confirm button</Button>
         <Button data-testid="button">Test cancel button</Button>
       </PnDialogActions>
