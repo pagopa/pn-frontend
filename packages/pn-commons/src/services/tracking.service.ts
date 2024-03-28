@@ -4,7 +4,7 @@ import mixpanel from 'mixpanel-browser';
 
 import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 
-import { EventPropertyType } from '../models/MixpanelEvents';
+import { ActionMeta, EventPropertyType } from '../models/MixpanelEvents';
 import { EventStrategyFactory } from '../utility';
 
 /**
@@ -68,12 +68,14 @@ export function trackEvent(
 }
 
 export const interceptDispatch =
-  (
+  <T extends string>(
     next: Dispatch<AnyAction>,
-    eventStrategyFactory: EventStrategyFactory<any>,
-    eventsActionsMap: Record<string, string>
+    eventStrategyFactory: EventStrategyFactory<T>,
+    eventsActionsMap: Record<string, T>
   ) =>
-  (action: PayloadAction<any, string, any>): void | PayloadAction<any, string, any> => {
+  (
+    action: PayloadAction<any, string, ActionMeta>
+  ): void | PayloadAction<any, string, ActionMeta> => {
     if (eventsActionsMap[action.type]) {
       const eventName = eventsActionsMap[action.type];
       const data = { payload: action.payload, params: action.meta?.arg };

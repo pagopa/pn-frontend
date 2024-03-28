@@ -30,6 +30,12 @@ export type ProfileMapAttributes = {
   shouldBlock?: (payload?: any, meta?: any) => boolean;
 };
 
+export type ActionMeta = {
+  requestId: string;
+  requestStatus: string;
+  arg: any;
+};
+
 export enum EventAction {
   ACTION = 'action',
   ERROR = 'error',

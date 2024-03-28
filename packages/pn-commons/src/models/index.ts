@@ -23,6 +23,7 @@ import { EventType } from './EventType';
 import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
 import { Institution, PartyEntityWithUrl } from './Institutions';
 import {
+  ActionMeta,
   EventAction,
   EventCategory,
   EventCreatedDelegationType,
@@ -201,4 +202,5 @@ export type {
   TrackedEvent,
   EventStrategy,
   EventType,
+  ActionMeta,
 };
