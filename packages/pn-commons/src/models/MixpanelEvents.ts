@@ -30,18 +30,6 @@ export type ProfileMapAttributes = {
   shouldBlock?: (payload?: any, meta?: any) => boolean;
 };
 
-export type ProfilePropertiesActionsMap = {
-  [key: string]: ProfileMapAttributes;
-};
-
-// Type for interceptors
-export type MixpanelActionMap<T> = {
-  [key: string]: {
-    eventName: T;
-    eventType: Array<EventPropertyType>;
-  };
-};
-
 export enum EventAction {
   ACTION = 'action',
   ERROR = 'error',

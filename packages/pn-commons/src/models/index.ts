@@ -35,9 +35,7 @@ import {
   EventPaymentStatusType,
   EventPropertyType,
   EventsType,
-  MixpanelActionMap,
   ProfileMapAttributes,
-  ProfilePropertiesActionsMap,
   TrackedEvent,
 } from './MixpanelEvents';
 import {
@@ -199,10 +197,8 @@ export type {
   PartyEntityWithUrl,
   Product,
   PaymentCache,
-  ProfilePropertiesActionsMap,
   ProfileMapAttributes,
   TrackedEvent,
   EventStrategy,
   EventType,
-  MixpanelActionMap,
 };

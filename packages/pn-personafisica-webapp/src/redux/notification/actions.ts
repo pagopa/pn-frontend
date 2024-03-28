@@ -137,8 +137,7 @@ export const getNotificationPaymentInfo = createAsyncThunk<
           });
 
           if (updatedPayment[0].status === PaymentStatus.SUCCEEDED) {
-            // setSuperOrProfilePropertyValues(ProfilePropertyType.INCREMENTAL, 'SEND_PAYMENTS_COUNT');
-            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENTS_COUNT, undefined);
+            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENTS_COUNT);
           }
 
           const payments = populatePaymentsPagoPaF24(

@@ -59,7 +59,6 @@ export function trackEvent(
     console.log(event_name, properties, propertyType);
   } else {
     try {
-      // mixpanel.track(event_name, properties);
       callMixpanelTrackingMethod(propertyType, event_name, properties);
     } catch (_) {
       // eslint-disable-next-line no-console
