@@ -34,26 +34,9 @@ export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
         address.value !== IOAllowedValues.DISABLED);
     const allAddresses = await ContactsApi.getDigitalAddresses();
 
-    const legalAddresses = allAddresses.legal.filter(isDefaultAddress);
-    const courtesyAddresses = allAddresses.courtesy.filter(isDefaultAddress);
-
-    // PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_HAS_PEC, { legalAddresses }, [
-    //   EventPropertyType.PROFILE,
-    //   EventPropertyType.SUPER_PROPERTY,
-    // ]);
-    // PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_HAS_SMS, courtesyAddresses, [
-    //   EventPropertyType.PROFILE,
-    //   EventPropertyType.SUPER_PROPERTY,
-    // ]);
-    // PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_HAS_EMAIL, courtesyAddresses, [
-    //   EventPropertyType.PROFILE,
-    //   EventPropertyType.SUPER_PROPERTY,
-    // ]);
-    // PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_HAS_IO, courtesyAddresses, [
-    //   EventPropertyType.PROFILE,
-    //   EventPropertyType.SUPER_PROPERTY,
-    // ]);
-
-    return [...legalAddresses, ...courtesyAddresses];
+    return [
+      ...allAddresses.legal.filter(isDefaultAddress),
+      ...allAddresses.courtesy.filter(isDefaultAddress),
+    ];
   })
 );

@@ -7,8 +7,10 @@ describe('Mixpanel - Download Response Strategy', () => {
     const strategy = new SendDownloadResponseStrategy();
 
     const downloadCertificate = strategy.performComputations({
-      url: 'url',
-      docType: 'docType',
+      payload: {
+        url: 'url',
+        docType: 'docType',
+      },
     });
     expect(downloadCertificate).toEqual({
       [EventPropertyType.TRACK]: {
@@ -23,7 +25,12 @@ describe('Mixpanel - Download Response Strategy', () => {
   it('should return retry_after if url is not available and empty docType if is not present', () => {
     const strategy = new SendDownloadResponseStrategy();
 
-    const downloadResponseEvent = strategy.performComputations({});
+    const downloadResponseEvent = strategy.performComputations({
+      payload: {
+        url: undefined,
+        docType: undefined,
+      },
+    });
     expect(downloadResponseEvent).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,

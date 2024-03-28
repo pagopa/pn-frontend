@@ -1,16 +1,22 @@
 import { EventStrategy, EventStrategyFactory } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
+import { SendAcceptDelegationStrategy } from './Strategies/SendAcceptDelegationStrategy';
 import { SendAddContactActionStrategy } from './Strategies/SendAddContactActionStrategy';
 import { SendAddContactScreenViewStrategy } from './Strategies/SendAddContactScreenViewStrategy';
+import { SendAddCourtesyAddressStrategy } from './Strategies/SendAddCourtesyAddressStrategy';
+import { SendAddLegalAddressStrategy } from './Strategies/SendAddLegalAddressStrategy';
 import { SendAddMandateUXConversionStrategy } from './Strategies/SendAddMandateUXConversionStrategy';
 import { SendAddMandateUXSuccessStrategy } from './Strategies/SendAddMandateUXSuccessStrategy';
+import { SendDisableIOStrategy } from './Strategies/SendDisableIOStrategy';
 import { SendDownloadCertificateOpposable } from './Strategies/SendDownloadCertificateOpposable';
 import { SendDownloadResponseStrategy } from './Strategies/SendDownloadResponse';
+import { SendEnableIOStrategy } from './Strategies/SendEnableIOStrategy';
 import { SendGenericErrorStrategy } from './Strategies/SendGenericErrorStrategy';
 import { SendHasAddressesStrategy } from './Strategies/SendHasAddressesStrategy';
+import { SendHasMandateGivenStrategy } from './Strategies/SendHasMandateGivensStrategy';
+import { SendHasMandateLoginStrategy } from './Strategies/SendHasMandateLoginStrategy';
 import { SendHasMandateStrategy } from './Strategies/SendHasMandateStrategy';
-import { SendMandateGivenStrategy } from './Strategies/SendMandateGivenStrategy';
 import { SendNotificationCountStrategy } from './Strategies/SendNotificationCount';
 import { SendNotificationDetailStrategy } from './Strategies/SendNotificationDetailStrategy';
 import { SendNotificationStatusDetailStrategy } from './Strategies/SendNotificationStatusDetail';
@@ -20,6 +26,8 @@ import { SendPaymentStatusStrategy } from './Strategies/SendPaymentStatusStrateg
 import { SendPaymentsCountStrategy } from './Strategies/SendPaymentsCountStrategy';
 import { SendRefreshPageStrategy } from './Strategies/SendRefreshPageStrategy';
 import { SendRemoveContactSuccessStrategy } from './Strategies/SendRemoveContactSuccess';
+import { SendRemoveCourtesyAddressStrategy } from './Strategies/SendRemoveCourtesyAddress';
+import { SendRemoveLegalAddressStrategy } from './Strategies/SendRemoveLegalAddress';
 import { SendServiceStatusStrategy } from './Strategies/SendServiceStatusStrategy';
 import { SendToastErrorStrategy } from './Strategies/SendToastErrorStrategy';
 import { SendViewContactDetailsStrategy } from './Strategies/SendViewContactDetailsStrategy';
@@ -139,14 +147,30 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
 
       case PFEventsType.SEND_HAS_ADDRESSES:
         return new SendHasAddressesStrategy();
+      case PFEventsType.SEND_HAS_MANDATE_LOGIN:
+        return new SendHasMandateLoginStrategy();
+      case PFEventsType.SEND_MANDATE_GIVEN:
+        return new SendHasMandateGivenStrategy();
+      case PFEventsType.SEND_HAS_MANDATE:
+        return new SendHasMandateStrategy();
+      case PFEventsType.SEND_DISABLE_IO:
+        return new SendDisableIOStrategy();
+      case PFEventsType.SEND_ENABLE_IO:
+        return new SendEnableIOStrategy();
+      case PFEventsType.SEND_ACCEPT_DELEGATION:
+        return new SendAcceptDelegationStrategy();
+      case PFEventsType.SEND_REMOVE_LEGAL_ADDRESS:
+        return new SendRemoveLegalAddressStrategy();
+      case PFEventsType.SEND_ADD_LEGAL_ADDRESS:
+        return new SendAddLegalAddressStrategy();
       case PFEventsType.SEND_NOTIFICATIONS_COUNT:
         return new SendNotificationCountStrategy();
       case PFEventsType.SEND_PAYMENTS_COUNT:
         return new SendPaymentsCountStrategy();
-      case PFEventsType.SEND_HAS_MANDATE:
-        return new SendHasMandateStrategy();
-      case PFEventsType.SEND_MANDATE_GIVEN:
-        return new SendMandateGivenStrategy();
+      case PFEventsType.SEND_REMOVE_COURTESY_ADDRESS:
+        return new SendRemoveCourtesyAddressStrategy();
+      case PFEventsType.SEND_ADD_COURTESY_ADDRESS:
+        return new SendAddCourtesyAddressStrategy();
       default:
         return null;
     }

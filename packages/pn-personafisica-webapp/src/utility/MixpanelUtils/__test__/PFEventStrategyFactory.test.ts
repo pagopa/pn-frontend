@@ -1,14 +1,21 @@
 import { PFEventsType } from '../../../models/PFEventsType';
 import PFEventStrategyFactory from '../PFEventStrategyFactory';
+import { SendAcceptDelegationStrategy } from '../Strategies/SendAcceptDelegationStrategy';
 import { SendAddContactActionStrategy } from '../Strategies/SendAddContactActionStrategy';
 import { SendAddContactScreenViewStrategy } from '../Strategies/SendAddContactScreenViewStrategy';
+import { SendAddCourtesyAddressStrategy } from '../Strategies/SendAddCourtesyAddressStrategy';
+import { SendAddLegalAddressStrategy } from '../Strategies/SendAddLegalAddressStrategy';
 import { SendAddMandateUXConversionStrategy } from '../Strategies/SendAddMandateUXConversionStrategy';
 import { SendAddMandateUXSuccessStrategy } from '../Strategies/SendAddMandateUXSuccessStrategy';
+import { SendDisableIOStrategy } from '../Strategies/SendDisableIOStrategy';
 import { SendDownloadCertificateOpposable } from '../Strategies/SendDownloadCertificateOpposable';
 import { SendDownloadResponseStrategy } from '../Strategies/SendDownloadResponse';
+import { SendEnableIOStrategy } from '../Strategies/SendEnableIOStrategy';
 import { SendGenericErrorStrategy } from '../Strategies/SendGenericErrorStrategy';
+import { SendHasAddressesStrategy } from '../Strategies/SendHasAddressesStrategy';
+import { SendHasMandateGivenStrategy } from '../Strategies/SendHasMandateGivensStrategy';
+import { SendHasMandateLoginStrategy } from '../Strategies/SendHasMandateLoginStrategy';
 import { SendHasMandateStrategy } from '../Strategies/SendHasMandateStrategy';
-import { SendMandateGivenStrategy } from '../Strategies/SendMandateGivenStrategy';
 import { SendNotificationCountStrategy } from '../Strategies/SendNotificationCount';
 import { SendNotificationStatusDetailStrategy } from '../Strategies/SendNotificationStatusDetail';
 import { SendPaymentDetailErrorStrategy } from '../Strategies/SendPaymentDetailErrorStrategy';
@@ -17,6 +24,8 @@ import { SendPaymentStatusStrategy } from '../Strategies/SendPaymentStatusStrate
 import { SendPaymentsCountStrategy } from '../Strategies/SendPaymentsCountStrategy';
 import { SendRefreshPageStrategy } from '../Strategies/SendRefreshPageStrategy';
 import { SendRemoveContactSuccessStrategy } from '../Strategies/SendRemoveContactSuccess';
+import { SendRemoveCourtesyAddressStrategy } from '../Strategies/SendRemoveCourtesyAddress';
+import { SendRemoveLegalAddressStrategy } from '../Strategies/SendRemoveLegalAddress';
 import { SendServiceStatusStrategy } from '../Strategies/SendServiceStatusStrategy';
 import { SendToastErrorStrategy } from '../Strategies/SendToastErrorStrategy';
 import { SendViewContactDetailsStrategy } from '../Strategies/SendViewContactDetailsStrategy';
@@ -187,30 +196,6 @@ describe('Event Strategy Factory', () => {
     });
   });
 
-  it('should return SendNotificationCountStrategy for SEND_NOTIFICATIONS_COUNT event', () => {
-    expect(factory.getStrategy(PFEventsType.SEND_NOTIFICATIONS_COUNT)).toBeInstanceOf(
-      SendNotificationCountStrategy
-    );
-  });
-
-  it('should return SendPaymentsCountStrategy for SEND_PAYMENTS_COUNT event', () => {
-    expect(factory.getStrategy(PFEventsType.SEND_PAYMENTS_COUNT)).toBeInstanceOf(
-      SendPaymentsCountStrategy
-    );
-  });
-
-  it('should return SendHasMandateStrategy for SEND_HAS_MANDATE event', () => {
-    expect(factory.getStrategy(PFEventsType.SEND_HAS_MANDATE)).toBeInstanceOf(
-      SendHasMandateStrategy
-    );
-  });
-
-  it('should return SendMandateGivenStrategy for SEND_MANDATE_GIVEN event', () => {
-    expect(factory.getStrategy(PFEventsType.SEND_MANDATE_GIVEN)).toBeInstanceOf(
-      SendMandateGivenStrategy
-    );
-  });
-
   it('should return UXActionStrategy for UX Action events', () => {
     const eventTypes = [
       PFEventsType.SEND_DOWNLOAD_ATTACHMENT,
@@ -267,6 +252,80 @@ describe('Event Strategy Factory', () => {
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(TechScreenViewStrategy);
     });
+  });
+
+  it('should return SendHasAddressesStrategy for SEND_HAS_ADDRESSES event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_HAS_ADDRESSES)).toBeInstanceOf(
+      SendHasAddressesStrategy
+    );
+  });
+
+  it('should return SendHasMandateGivenStrategy for SEND_HAS_MANDATE_LOGIN event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_HAS_MANDATE_LOGIN)).toBeInstanceOf(
+      SendHasMandateLoginStrategy
+    );
+  });
+
+  it('should return SendMandateGivenStrategy for SEND_MANDATE_GIVEN event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_MANDATE_GIVEN)).toBeInstanceOf(
+      SendHasMandateGivenStrategy
+    );
+  });
+
+  it('should return SendHasMandateStrategy for SEND_HAS_MANDATE event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_HAS_MANDATE)).toBeInstanceOf(
+      SendHasMandateStrategy
+    );
+  });
+
+  it('should return SendDisableIOStrategy for SEND_DISABLE_IO event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_DISABLE_IO)).toBeInstanceOf(SendDisableIOStrategy);
+  });
+
+  it('should return SendEnableIOStrategy for SEND_ENABLE_IO event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_ENABLE_IO)).toBeInstanceOf(SendEnableIOStrategy);
+  });
+
+  it('should return SendAcceptDelegationStrategy for SEND_ACCEPT_DELEGATION event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_ACCEPT_DELEGATION)).toBeInstanceOf(
+      SendAcceptDelegationStrategy
+    );
+  });
+
+  it('should return SendRemoveLegalAddressStrategy for SEND_REMOVE_LEGAL_ADDRESS event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_REMOVE_LEGAL_ADDRESS)).toBeInstanceOf(
+      SendRemoveLegalAddressStrategy
+    );
+  });
+
+  it('should return SendAddLegalAddressStrategy for SEND_ADD_LEGAL_ADDRESS event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_ADD_LEGAL_ADDRESS)).toBeInstanceOf(
+      SendAddLegalAddressStrategy
+    );
+  });
+
+  it('should return SendNotificationCountStrategy for SEND_NOTIFICATIONS_COUNT event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_NOTIFICATIONS_COUNT)).toBeInstanceOf(
+      SendNotificationCountStrategy
+    );
+  });
+
+  it('should return SendPaymentsCountStrategy for SEND_PAYMENTS_COUNT event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_PAYMENTS_COUNT)).toBeInstanceOf(
+      SendPaymentsCountStrategy
+    );
+  });
+
+  it('should return SendRemoveCourtesyAddressStrategy for SEND_REMOVE_COURTESY_ADDRESS event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_REMOVE_COURTESY_ADDRESS)).toBeInstanceOf(
+      SendRemoveCourtesyAddressStrategy
+    );
+  });
+
+  it('should return SendAddCourtesyAddressStrategy for SEND_ADD_COURTESY_ADDRESS event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_ADD_COURTESY_ADDRESS)).toBeInstanceOf(
+      SendAddCourtesyAddressStrategy
+    );
   });
 
   it('should return null for unknown event type', () => {

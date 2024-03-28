@@ -23,7 +23,7 @@ function callMixpanelTrackingMethod(
       mixpanel.track(event_name, properties);
       break;
     case EventPropertyType.PROFILE:
-      mixpanel.people.set({ event_name: properties });
+      mixpanel.people.set(properties);
       break;
     case EventPropertyType.INCREMENTAL:
       const hasProperties =
@@ -33,7 +33,7 @@ function callMixpanelTrackingMethod(
       mixpanel.people.increment(hasProperties ? { event_name: properties } : event_name);
       break;
     case EventPropertyType.SUPER_PROPERTY:
-      mixpanel.register({ event_name: properties });
+      mixpanel.register(properties);
       break;
     default:
       mixpanel.track(event_name, properties);
@@ -77,7 +77,8 @@ export const interceptDispatch =
   (action: PayloadAction<any, string, any>): void | PayloadAction<any, string, any> => {
     if (eventsActionsMap[action.type]) {
       const eventName = eventsActionsMap[action.type];
-      eventStrategyFactory.triggerEvent(eventName, action.payload);
+      const data = { payload: action.payload, params: action.meta?.arg };
+      eventStrategyFactory.triggerEvent(eventName, data);
     }
     return next(action);
   };

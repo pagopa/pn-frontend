@@ -69,11 +69,30 @@ export enum PFEventsType {
   SEND_HAS_MANDATE = 'SEND_HAS_MANDATE',
   SEND_MANDATE_GIVEN = 'SEND_MANDATE_GIVEN',
   SEND_HAS_ADDRESSES = 'SEND_HAS_ADDRESSES',
+  SEND_HAS_MANDATE_LOGIN = 'SEND_HAS_MANDATE_LOGIN',
+  SEND_ENABLE_IO = 'SEND_ENABLE_IO',
+  SEND_DISABLE_IO = 'SEND_DISABLE_IO',
+  SEND_ACCEPT_DELEGATION = 'SEND_ACCEPT_DELEGATION',
+  SEND_ADD_LEGAL_ADDRESS = 'SEND_ADD_LEGAL_ADDRESS',
+  SEND_REMOVE_LEGAL_ADDRESS = 'SEND_REMOVE_LEGAL_ADDRESS',
+  SEND_REMOVE_COURTESY_ADDRESS = 'SEND_REMOVE_COURTESY_ADDRESS',
+  SEND_ADD_COURTESY_ADDRESS = 'SEND_ADD_COURTESY_ADDRESS',
 }
 
 export const eventsActionsMap: Record<string, PFEventsType> = {
   'getReceivedNotificationOtherDocument/fulfilled': PFEventsType.SEND_DOWNLOAD_RESPONSE,
   'getReceivedNotificationLegalfact/fulfilled': PFEventsType.SEND_DOWNLOAD_RESPONSE,
   'exchangeToken/fulfilled': PFEventsType.SEND_AUTH_SUCCESS,
-  'getDigitalAddresses/fulfilled': PFEventsType.SEND_HAS_ADDRESSES,
+
+  // --- PROFILE_PROPERTY
+  'getDomicileInfo/fulfilled': PFEventsType.SEND_HAS_ADDRESSES,
+  'getSidemenuInformation/fulfilled': PFEventsType.SEND_HAS_MANDATE_LOGIN,
+  'getDelegates/fulfilled': PFEventsType.SEND_MANDATE_GIVEN,
+  'enableIOAddress/fulfilled': PFEventsType.SEND_ENABLE_IO,
+  'disableIOAddress/fulfilled': PFEventsType.SEND_DISABLE_IO,
+  'acceptDelegation/fulfilled': PFEventsType.SEND_ACCEPT_DELEGATION,
+  'createOrUpdateLegalAddress/fulfilled': PFEventsType.SEND_ADD_LEGAL_ADDRESS,
+  'deleteLegalAddress/fulfilled': PFEventsType.SEND_REMOVE_LEGAL_ADDRESS,
+  'deleteCourtesyAddress/fulfilled': PFEventsType.SEND_REMOVE_COURTESY_ADDRESS,
+  'createOrUpdateCourtesyAddress/fulfilled': PFEventsType.SEND_ADD_COURTESY_ADDRESS,
 };

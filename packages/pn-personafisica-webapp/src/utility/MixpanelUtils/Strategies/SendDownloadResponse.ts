@@ -7,8 +7,10 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 type SendDownloadResponse = {
-  url?: string;
-  docType?: string;
+  payload: {
+    url?: string;
+    docType?: string;
+  };
 };
 
 type SendDownloadResponseReturn = {
@@ -18,8 +20,7 @@ type SendDownloadResponseReturn = {
 
 export class SendDownloadResponseStrategy implements EventStrategy {
   performComputations({
-    url,
-    docType,
+    payload: { url, docType },
   }: SendDownloadResponse): TrackedEvent<SendDownloadResponseReturn> {
     return {
       [EventPropertyType.TRACK]: {

@@ -1,6 +1,11 @@
 import { EventPropertyType, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-commons';
 
-import { CourtesyChannelType, DigitalAddresses, IOAllowedValues } from '../../../models/contacts';
+import {
+  CourtesyChannelType,
+  DigitalAddress,
+  IOAllowedValues,
+  LegalChannelType,
+} from '../../../models/contacts';
 
 type SendHasAddresses = {
   SEND_HAS_PEC: 'yes' | 'no';
@@ -9,18 +14,19 @@ type SendHasAddresses = {
   SEND_APPIO_STATUS: 'nd' | 'deactivated' | 'activated';
 };
 
+type SendHasAddressesData = {
+  payload: Array<DigitalAddress>;
+};
+
 export class SendHasAddressesStrategy implements EventStrategy {
-  performComputations(payload: DigitalAddresses): TrackedEvent<SendHasAddresses> {
-    const hasLegalAddresses = payload?.legal?.length > 0;
+  performComputations({ payload }: SendHasAddressesData): TrackedEvent<SendHasAddresses> {
+    const hasLegalAddresses =
+      payload.filter((address) => address.channelType === LegalChannelType.PEC).length > 0;
     const hasCourtesyEmailAddresses =
-      payload?.courtesy?.filter((address) => address.channelType === CourtesyChannelType.EMAIL)
-        .length > 0;
+      payload.filter((address) => address.channelType === CourtesyChannelType.EMAIL).length > 0;
     const hasCourtesySmsAddresses =
-      payload?.courtesy?.filter((address) => address.channelType === CourtesyChannelType.SMS)
-        .length > 0;
-    const contactIO = payload?.courtesy?.find(
-      (address) => address.channelType === CourtesyChannelType.IOMSG
-    );
+      payload?.filter((address) => address.channelType === CourtesyChannelType.SMS).length > 0;
+    const contactIO = payload?.find((address) => address.channelType === CourtesyChannelType.IOMSG);
 
     // eslint-disable-next-line functional/no-let
     let ioStatus: 'nd' | 'deactivated' | 'activated';
