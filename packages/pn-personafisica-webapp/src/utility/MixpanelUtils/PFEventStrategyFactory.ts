@@ -41,78 +41,87 @@ import { UXActionStrategy } from './Strategies/UXActionStrategy';
 import { UXErrorStrategy } from './Strategies/UXErrorStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
 
-const isUXActionStrategy = (eventType: PFEventsType) =>
-  [
-    PFEventsType.SEND_DOWNLOAD_ATTACHMENT,
-    PFEventsType.SEND_DOWNLOAD_RECEIPT_NOTICE,
-    PFEventsType.SEND_START_PAYMENT,
-    PFEventsType.SEND_PAYMENT_DETAIL_REFRESH,
-    PFEventsType.SEND_ADD_MANDATE_START,
-    PFEventsType.SEND_ADD_MANDATE_BACK,
-    PFEventsType.SEND_SHOW_MANDATE_CODE,
-    PFEventsType.SEND_MANDATE_REVOKED,
-    PFEventsType.SEND_MANDATE_REJECTED,
-    PFEventsType.SEND_MANDATE_ACCEPTED,
-    PFEventsType.SEND_ACTIVE_IO_START,
-    PFEventsType.SEND_DEACTIVE_IO_START,
-    PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION,
-    PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION,
-    PFEventsType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO,
-    PFEventsType.SEND_MULTIPAYMENT_MORE_INFO,
-    PFEventsType.SEND_PAYMENT_LIST_CHANGE_PAGE,
-    PFEventsType.SEND_F24_DOWNLOAD,
-    PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE,
-  ].includes(eventType);
+const uxActionStrategy = [
+  PFEventsType.SEND_DOWNLOAD_ATTACHMENT,
+  PFEventsType.SEND_DOWNLOAD_RECEIPT_NOTICE,
+  PFEventsType.SEND_START_PAYMENT,
+  PFEventsType.SEND_PAYMENT_DETAIL_REFRESH,
+  PFEventsType.SEND_ADD_MANDATE_START,
+  PFEventsType.SEND_ADD_MANDATE_BACK,
+  PFEventsType.SEND_SHOW_MANDATE_CODE,
+  PFEventsType.SEND_MANDATE_REVOKED,
+  PFEventsType.SEND_MANDATE_REJECTED,
+  PFEventsType.SEND_MANDATE_ACCEPTED,
+  PFEventsType.SEND_ACTIVE_IO_START,
+  PFEventsType.SEND_DEACTIVE_IO_START,
+  PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION,
+  PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION,
+  PFEventsType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO,
+  PFEventsType.SEND_MULTIPAYMENT_MORE_INFO,
+  PFEventsType.SEND_PAYMENT_LIST_CHANGE_PAGE,
+  PFEventsType.SEND_F24_DOWNLOAD,
+  PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE,
+] as const;
 
-const isSendAddContactActionStrategy = (eventType: PFEventsType) =>
-  [
-    PFEventsType.SEND_ADD_EMAIL_START,
-    PFEventsType.SEND_ADD_SMS_START,
-    PFEventsType.SEND_ADD_PEC_START,
-    PFEventsType.SEND_ADD_PEC_UX_CONVERSION,
-    PFEventsType.SEND_ADD_SMS_UX_CONVERSION,
-    PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION,
-  ].includes(eventType);
+const sendAddContactActionStrategy = [
+  PFEventsType.SEND_ADD_EMAIL_START,
+  PFEventsType.SEND_ADD_SMS_START,
+  PFEventsType.SEND_ADD_PEC_START,
+  PFEventsType.SEND_ADD_PEC_UX_CONVERSION,
+  PFEventsType.SEND_ADD_SMS_UX_CONVERSION,
+  PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION,
+] as const;
 
-const isSendRemoveContactSuccessStrategy = (eventType: PFEventsType) =>
-  [
-    PFEventsType.SEND_REMOVE_EMAIL_SUCCESS,
-    PFEventsType.SEND_REMOVE_SMS_SUCCESS,
-    PFEventsType.SEND_REMOVE_PEC_SUCCESS,
-  ].includes(eventType);
+const sendRemoveContactSuccessStrategy = [
+  PFEventsType.SEND_REMOVE_EMAIL_SUCCESS,
+  PFEventsType.SEND_REMOVE_SMS_SUCCESS,
+  PFEventsType.SEND_REMOVE_PEC_SUCCESS,
+] as const;
 
-const isSendAddContactScreenViewStrategy = (eventType: PFEventsType) =>
-  [
-    PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS,
-    PFEventsType.SEND_ADD_SMS_UX_SUCCESS,
-    PFEventsType.SEND_ADD_PEC_UX_SUCCESS,
-  ].includes(eventType);
+const sendAddContactScreenViewStrategy = [
+  PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS,
+  PFEventsType.SEND_ADD_SMS_UX_SUCCESS,
+  PFEventsType.SEND_ADD_PEC_UX_SUCCESS,
+] as const;
 
-const isUXScreenViewStrategy = (eventType: PFEventsType) =>
-  [
-    PFEventsType.SEND_PROFILE,
-    PFEventsType.SEND_ADD_MANDATE_DATA_INPUT,
-    PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS,
-    PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS,
-  ].includes(eventType);
+const uxScreenViewStrategy = [
+  PFEventsType.SEND_PROFILE,
+  PFEventsType.SEND_ADD_MANDATE_DATA_INPUT,
+  PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS,
+  PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS,
+] as const;
 
-const isUXErrorStrategy = (eventType: PFEventsType) =>
-  [
-    PFEventsType.SEND_MANDATE_ACCEPT_CODE_ERROR,
-    PFEventsType.SEND_ADD_PEC_CODE_ERROR,
-    PFEventsType.SEND_ADD_SMS_CODE_ERROR,
-    PFEventsType.SEND_ADD_EMAIL_CODE_ERROR,
-  ].includes(eventType);
+const uxErrorStrategy = [
+  PFEventsType.SEND_MANDATE_ACCEPT_CODE_ERROR,
+  PFEventsType.SEND_ADD_PEC_CODE_ERROR,
+  PFEventsType.SEND_ADD_SMS_CODE_ERROR,
+  PFEventsType.SEND_ADD_EMAIL_CODE_ERROR,
+] as const;
 
-const isTechStrategy = (eventType: PFEventsType) =>
-  [
-    PFEventsType.SEND_RAPID_ACCESS,
-    PFEventsType.SEND_AUTH_SUCCESS,
-    PFEventsType.SEND_F24_DOWNLOAD_SUCCESS,
-    PFEventsType.SEND_F24_DOWNLOAD_TIMEOUT,
-  ].includes(eventType);
+const techStrategy = [
+  PFEventsType.SEND_RAPID_ACCESS,
+  PFEventsType.SEND_AUTH_SUCCESS,
+  PFEventsType.SEND_F24_DOWNLOAD_SUCCESS,
+  PFEventsType.SEND_F24_DOWNLOAD_TIMEOUT,
+] as const;
 
-const eventStrategy: Partial<Record<PFEventsType, any>> = {
+type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
+  [K in T extends ReadonlyArray<infer U> ? U : never]: string;
+};
+
+const eventStrategy: Record<
+  Exclude<
+    PFEventsType,
+    | ArrayToTuple<typeof uxActionStrategy>
+    | ArrayToTuple<typeof sendAddContactActionStrategy>
+    | ArrayToTuple<typeof sendRemoveContactSuccessStrategy>
+    | ArrayToTuple<typeof sendAddContactScreenViewStrategy>
+    | ArrayToTuple<typeof uxScreenViewStrategy>
+    | ArrayToTuple<typeof uxErrorStrategy>
+    | ArrayToTuple<typeof techStrategy>
+  >,
+  EventStrategy
+> = {
   [PFEventsType.SEND_VIEW_PROFILE]: new SendViewProfileStrategy(),
   [PFEventsType.SEND_VIEW_CONTACT_DETAILS]: new SendViewContactDetailsStrategy(),
   [PFEventsType.SEND_NOTIFICATION_DETAIL]: new SendNotificationDetailStrategy(),
@@ -149,37 +158,47 @@ const eventStrategy: Partial<Record<PFEventsType, any>> = {
   [PFEventsType.SEND_ADD_COURTESY_ADDRESS]: new SendAddCourtesyAddressStrategy(),
 };
 
+const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventStrategy => {
+  if (Object.keys(eventStrategy).includes(value)) {
+    return true;
+  }
+  return false;
+};
+
 class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
   getStrategy(eventType: PFEventsType): EventStrategy | null {
-    if (isUXActionStrategy(eventType)) {
+    if (uxActionStrategy.findIndex((el) => el === eventType) > -1) {
       return new UXActionStrategy();
     }
 
-    if (isSendAddContactActionStrategy(eventType)) {
+    if (sendAddContactActionStrategy.findIndex((el) => el === eventType) > -1) {
       return new SendAddContactActionStrategy();
     }
 
-    if (isSendRemoveContactSuccessStrategy(eventType)) {
+    if (sendRemoveContactSuccessStrategy.findIndex((el) => el === eventType) > -1) {
       return new SendRemoveContactSuccessStrategy();
     }
 
-    if (isSendAddContactScreenViewStrategy(eventType)) {
+    if (sendAddContactScreenViewStrategy.findIndex((el) => el === eventType) > -1) {
       return new SendAddContactScreenViewStrategy();
     }
 
-    if (isUXScreenViewStrategy(eventType)) {
+    if (uxScreenViewStrategy.findIndex((el) => el === eventType) > -1) {
       return new UXScreenViewStrategy();
     }
 
-    if (isUXErrorStrategy(eventType)) {
+    if (uxErrorStrategy.findIndex((el) => el === eventType) > -1) {
       return new UXErrorStrategy();
     }
 
-    if (isTechStrategy(eventType)) {
+    if (techStrategy.findIndex((el) => el === eventType) > -1) {
       return new TechStrategy();
     }
 
-    return eventStrategy[eventType] || null;
+    if (isInEventStrategyMap(eventType)) {
+      return eventStrategy[eventType];
+    }
+    return null;
   }
 }
 
