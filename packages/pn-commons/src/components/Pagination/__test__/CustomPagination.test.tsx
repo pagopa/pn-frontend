@@ -11,7 +11,6 @@ let paginationData: PaginationData = {
 };
 
 const handlePageChange = vi.fn();
-const mockEventTrackingPageSize = vi.fn();
 
 describe('CustomPagination Component', () => {
   afterEach(() => {
@@ -26,11 +25,7 @@ describe('CustomPagination Component', () => {
   it('renders custom pagination', () => {
     // render component
     const { getByTestId } = render(
-      <CustomPagination
-        paginationData={paginationData}
-        eventTrackingCallbackPageSize={mockEventTrackingPageSize}
-        onPageRequest={handlePageChange}
-      />
+      <CustomPagination paginationData={paginationData} onPageRequest={handlePageChange} />
     );
     const itemsPerPageSelector = getByTestId('itemsPerPageSelector');
     expect(itemsPerPageSelector).toBeInTheDocument();
@@ -43,7 +38,6 @@ describe('CustomPagination Component', () => {
     const { queryByTestId } = render(
       <CustomPagination
         paginationData={paginationData}
-        eventTrackingCallbackPageSize={mockEventTrackingPageSize}
         onPageRequest={handlePageChange}
         hideSizeSelector
       />
@@ -54,11 +48,7 @@ describe('CustomPagination Component', () => {
 
   it('changes items per page', async () => {
     const { container, getAllByRole, getByRole } = render(
-      <CustomPagination
-        paginationData={paginationData}
-        eventTrackingCallbackPageSize={mockEventTrackingPageSize}
-        onPageRequest={handlePageChange}
-      />
+      <CustomPagination paginationData={paginationData} onPageRequest={handlePageChange} />
     );
     const button = getById(container, 'rows-per-page');
     expect(button).toHaveTextContent(/50/i);
@@ -71,7 +61,6 @@ describe('CustomPagination Component', () => {
     await waitFor(() => {
       expect(button).toHaveTextContent(/20/i);
       expect(handlePageChange).toBeCalledTimes(1);
-      expect(mockEventTrackingPageSize).toBeCalledTimes(1);
       expect(handlePageChange).toBeCalledWith({
         page: 0,
         size: 20,

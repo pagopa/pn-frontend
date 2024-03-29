@@ -41,6 +41,7 @@ import { IllusCompleted } from '@pagopa/mui-italia';
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import DropDownPartyMenuItem from '../components/Party/DropDownParty';
+import { PFEventsType } from '../models/PFEventsType';
 import { Party } from '../models/party';
 import * as routes from '../navigation/routes.const';
 import { NewDelegationFormProps } from '../redux/delegation/types';
@@ -49,9 +50,8 @@ import { createDelegation, getAllEntities } from '../redux/newDelegation/actions
 import { resetNewDelegation } from '../redux/newDelegation/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 import { generateVCode } from '../utility/delegation.utility';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
 
 const getError = <TTouch, TError>(
   fieldTouched: FormikTouched<TTouch> | boolean | undefined,
@@ -72,7 +72,10 @@ const NuovaDelega = () => {
 
   useEffect(() => {
     if (createdDelegation && created) {
-      trackEventByType(TrackEventType.SEND_ADD_MANDATE_UX_SUCCESS, createdDelegation);
+      PFEventStrategyFactory.triggerEvent(
+        PFEventsType.SEND_ADD_MANDATE_UX_SUCCESS,
+        createdDelegation
+      );
     }
   }, [createdDelegation, created]);
 
@@ -83,10 +86,9 @@ const NuovaDelega = () => {
         values.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? 'all' : 'selected_party',
     });
 
-    trackEventByType(TrackEventType.SEND_ADD_MANDATE_UX_CONVERSION, {
-      person_type: values.selectPersonaFisicaOrPersonaGiuridica,
-      mandate_type:
-        values.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? 'all' : 'selected_party',
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_MANDATE_UX_CONVERSION, {
+      selectPersonaFisicaOrPersonaGiuridica: values.selectPersonaFisicaOrPersonaGiuridica,
+      selectTuttiEntiOrSelezionati: values.selectTuttiEntiOrSelezionati,
     });
     void dispatch(createDelegation(values));
   };
@@ -181,7 +183,7 @@ const NuovaDelega = () => {
   const [loadAllEntities, setLoadAllEntities] = useState(false);
 
   useEffect(() => {
-    trackEventByType(TrackEventType.SEND_ADD_MANDATE_DATA_INPUT);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_MANDATE_DATA_INPUT);
   }, []);
 
   useEffect(() => {
@@ -211,7 +213,7 @@ const NuovaDelega = () => {
   const getOptionLabel = (option: Party) => option.name || '';
 
   const handleGoBackAction = () => {
-    trackEventByType(TrackEventType.SEND_ADD_MANDATE_BACK);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_MANDATE_BACK);
     navigate(routes.DELEGHE);
   };
 

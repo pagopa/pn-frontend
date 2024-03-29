@@ -17,8 +17,6 @@ type Props = {
   pagesToShow?: Array<number>;
   /** custom style */
   sx?: SxProps;
-  /** event tracking function callback for page size */
-  eventTrackingCallbackPageSize?: (pageSize: number) => void;
   /** hide size selector */
   hideSizeSelector?: boolean;
 };
@@ -76,7 +74,6 @@ export default function CustomPagination({
   elementsPerPage = [10, 20, 50],
   pagesToShow,
   sx,
-  eventTrackingCallbackPageSize,
   hideSizeSelector = false,
 }: Props) {
   const size = paginationData.size || elementsPerPage[0];
@@ -99,9 +96,6 @@ export default function CustomPagination({
       // eslint-disable-next-line functional/immutable-data
       paginationData.page = 0;
       onPageRequest(paginationData);
-      if (eventTrackingCallbackPageSize) {
-        eventTrackingCallbackPageSize(selectedSize);
-      }
     }
     handleClose();
   };
