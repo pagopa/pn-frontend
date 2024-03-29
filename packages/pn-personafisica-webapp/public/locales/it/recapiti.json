@@ -134,7 +134,8 @@
       "message": "Generane uno nuovo e inseriscilo."
     },
     "invalid_type_code": {
-      "message": "Questo campo accetta solo valori numerici"
+      "title": "Questo campo accetta solo valori numerici",
+      "message": "Controlla il codice di verifica e inseriscilo di nuovo"
     }
   }
 }

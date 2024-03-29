@@ -76,22 +76,30 @@ const CodeModal = memo(
 
     const { internalHasError, internalErrorTitle, internalErrorMessage } = internalError;
 
-    const codeIsValid = code.every((v) => (Number(v) || v === '0' ? v : false));
+    const codeIsValid = code.every((v) => (!isNaN(Number(v)) ? v : false));
 
     const changeHandler = useCallback((inputsValues: Array<string>) => {
       setCode(inputsValues);
+      if (isNaN(Number(inputsValues.join('')))) {
+        setInternalError({
+          internalHasError: true,
+          internalErrorTitle: getLocalizedOrDefaultLabel(
+            'recapiti',
+            `errors.invalid_type_code.title`
+          ),
+          internalErrorMessage: getLocalizedOrDefaultLabel(
+            'recapiti',
+            `errors.invalid_type_code.message`
+          ),
+        });
+      } else {
+        setInternalError({
+          internalHasError: false,
+          internalErrorTitle: '',
+          internalErrorMessage: '',
+        });
+      }
     }, []);
-
-    const inputErrorHandler = () => {
-      setInternalError({
-        internalHasError: true,
-        internalErrorTitle: errorTitle,
-        internalErrorMessage: getLocalizedOrDefaultLabel(
-          'recapiti',
-          `errors.invalid_type_code.message`
-        ),
-      });
-    };
 
     const confirmHandler = () => {
       if (!confirmCallback) {
@@ -99,6 +107,7 @@ const CodeModal = memo(
       }
       confirmCallback(code);
     };
+
     useEffect(() => {
       setInternalError({
         internalHasError: hasError,
@@ -127,9 +136,8 @@ const CodeModal = memo(
             <CodeInput
               initialValues={initialValues}
               isReadOnly={isReadOnly}
-              hasError={hasError}
+              hasError={internalHasError}
               onChange={changeHandler}
-              onInputError={inputErrorHandler}
             />
             {isReadOnly && (
               <CopyToClipboardButton

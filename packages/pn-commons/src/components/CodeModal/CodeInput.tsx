@@ -15,7 +15,6 @@ import { TextField } from '@mui/material';
 type Props = {
   initialValues: Array<string>;
   onChange: (values: Array<string>) => void;
-  onInputError: () => void;
   isReadOnly?: boolean;
   hasError?: boolean;
 };
@@ -26,9 +25,8 @@ type Props = {
  * @param isReadOnly set if code is in readonly mode
  * @param hasError set if there is an error
  * @param onChange function to listen on inputs changes
- * @param onInputError function to listen on inputs type errors
  */
-const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError }: Props) => {
+const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => {
   const [currentValues, setCurrentValues] = useState(initialValues);
   const inputsRef = useRef(new Array(initialValues.length).fill(undefined));
 
@@ -49,11 +47,14 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError
       return;
     }
     if (index > initialValues.length - 1) {
-      // the variable is to prevent test fail
-      const input = inputsRef.current[index - 1];
-      setTimeout(() => {
-        input.blur();
-      }, 25);
+      for (const input of inputsRef.current) {
+        if (input === document.activeElement) {
+          setTimeout(() => {
+            input.blur();
+          }, 25);
+          break;
+        }
+      }
       return;
     }
     // the variable is to prevent test fail
@@ -93,9 +94,6 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError
       const inputsValues = [...previousValues];
       // eslint-disable-next-line functional/immutable-data
       inputsValues[index] = value;
-      if (!Number(inputsValues[index]) && value !== '' && value !== '0') {
-        onInputError();
-      }
       return inputsValues;
     });
   };
@@ -134,10 +132,6 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError
     const emptyValues = new Array(initialValues.length - values.length).fill('');
     setCurrentValues(values.concat(emptyValues));
     focusInput(values.length);
-
-    if (!Number(maxLengthRequiredCode)) {
-      onInputError();
-    }
   };
 
   useEffect(() => {
