@@ -103,21 +103,16 @@ describe('SideMenu', () => {
 
   it('menu navigation', async () => {
     const mockedAction = vi.fn();
-    const eventTrackingCallback = vi.fn();
     const menuItems = sideMenuItems.map((item) =>
       item.action ? { ...item, action: mockedAction } : item
     );
-    const { getByRole } = render(
-      <SideMenu menuItems={menuItems} eventTrackingCallback={eventTrackingCallback} />
-    );
+    const { getByRole } = render(<SideMenu menuItems={menuItems} />);
     const ul = getByRole('navigation');
     const buttons = within(ul).getAllByTestId(/^sideMenuItem-Item \d$/);
     // no children
     // navigation
     const noChildrenIdx = menuItems.findIndex((item) => !item.children);
     fireEvent.click(buttons[noChildrenIdx]);
-    expect(eventTrackingCallback).toBeCalledTimes(1);
-    expect(eventTrackingCallback).toBeCalledWith(menuItems[noChildrenIdx].route);
     expect(mockNavigate).toBeCalledTimes(1);
     expect(mockNavigate).toBeCalledWith(menuItems[noChildrenIdx].route);
     expect(buttons[noChildrenIdx]).toHaveClass('Mui-selected');
@@ -125,8 +120,6 @@ describe('SideMenu', () => {
     // navigate and open the accordion
     const withChildrenIdx = menuItems.findIndex((item) => item.children && !item.notSelectable);
     fireEvent.click(buttons[withChildrenIdx]);
-    expect(eventTrackingCallback).toBeCalledTimes(2);
-    expect(eventTrackingCallback).toBeCalledWith(menuItems[withChildrenIdx].route);
     expect(mockNavigate).toBeCalledTimes(2);
     expect(mockNavigate).toBeCalledWith(menuItems[withChildrenIdx].route);
     const accordion0 = within(ul).getByTestId(`collapse-${menuItems[withChildrenIdx].label}`);
@@ -138,8 +131,6 @@ describe('SideMenu', () => {
       (item) => item.children && item.notSelectable
     );
     fireEvent.click(buttons[withChildrenAndNotSelectableIdx]);
-    expect(eventTrackingCallback).toBeCalledTimes(3);
-    expect(eventTrackingCallback).toBeCalledWith(menuItems[withChildrenAndNotSelectableIdx].route);
     expect(mockNavigate).toBeCalledTimes(2);
     const accordion1 = within(ul).getByTestId(
       `collapse-${menuItems[withChildrenAndNotSelectableIdx].label}`
@@ -153,8 +144,6 @@ describe('SideMenu', () => {
     // no navigation and action call
     const noChildrenAndNoRouteIdx = menuItems.findIndex((item) => !item.children && !item.route);
     fireEvent.click(buttons[noChildrenAndNoRouteIdx]);
-    expect(eventTrackingCallback).toBeCalledTimes(4);
-    expect(eventTrackingCallback).toBeCalledWith(menuItems[noChildrenAndNoRouteIdx].route);
     expect(mockNavigate).toBeCalledTimes(2);
     expect(mockedAction).toBeCalledTimes(1);
     expect(buttons[noChildrenAndNoRouteIdx]).toHaveClass('Mui-selected');
