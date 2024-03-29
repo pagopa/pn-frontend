@@ -1,4 +1,4 @@
-import { ReactNode, memo, useCallback, useState } from 'react';
+import { ReactNode, memo, useCallback, useEffect, useState } from 'react';
 
 import {
   Alert,
@@ -33,7 +33,6 @@ type Props = {
   hasError?: boolean;
   errorTitle?: string;
   errorMessage?: string;
-  errorInputTypeMessage: string;
 };
 
 /**
@@ -68,10 +67,16 @@ const CodeModal = memo(
     hasError = false,
     errorTitle,
     errorMessage,
-    errorInputTypeMessage,
   }: Props) => {
     const [code, setCode] = useState(initialValues);
-    const [inputTypeError, setInputTypeError] = useState(false);
+    const [internalError, setInternalError] = useState({
+      internalHasError: hasError,
+      internalErrorTitle: errorTitle,
+      internalErrorMessage: errorMessage,
+    });
+
+    const { internalHasError, internalErrorTitle, internalErrorMessage } = internalError;
+
     const codeIsValid = code.every((v) => v);
 
     const changeHandler = useCallback((inputsValues: Array<string>) => {
@@ -79,8 +84,15 @@ const CodeModal = memo(
     }, []);
 
     const inputErrorHandler = () => {
-      console.log('errore di testo');
-      setInputTypeError(true);
+      setInternalError({
+        internalHasError: true,
+        internalErrorTitle: errorTitle,
+        internalErrorMessage: getLocalizedOrDefaultLabel(
+          'recapiti',
+          'errors.invalid_type_code.title',
+          'Questo campo accetta solo valori numerici'
+        ),
+      });
     };
 
     const confirmHandler = () => {
@@ -89,6 +101,13 @@ const CodeModal = memo(
       }
       confirmCallback(code);
     };
+    useEffect(() => {
+      setInternalError({
+        internalHasError: hasError,
+        internalErrorTitle: errorTitle,
+        internalErrorMessage: errorMessage,
+      });
+    }, [hasError, errorTitle, errorMessage]);
 
     return (
       <PnDialog
@@ -129,22 +148,12 @@ const CodeModal = memo(
             )}
           </Box>
           {codeSectionAdditional && <Box sx={{ mt: 2 }}>{codeSectionAdditional}</Box>}
-          {hasError && (
+          {internalHasError && (
             <Alert id="error-alert" data-testid="errorAlert" severity="error" sx={{ mt: 2 }}>
               <AlertTitle id="codeModalErrorTitle" data-testid="CodeModal error title">
-                {errorTitle}
+                {internalErrorTitle}
               </AlertTitle>
-              {errorMessage}
-            </Alert>
-          )}
-          {inputTypeError && !hasError && (
-            <Alert
-              id="error-type-alert"
-              data-testid="errorTypeAlert"
-              severity="error"
-              sx={{ mt: 2 }}
-            >
-              {errorInputTypeMessage}
+              {internalErrorMessage}
             </Alert>
           )}
         </PnDialogContent>

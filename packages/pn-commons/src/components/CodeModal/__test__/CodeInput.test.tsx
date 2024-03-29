@@ -128,7 +128,7 @@ describe('CodeInput Component', () => {
     act(() => (codeInputs[2] as HTMLInputElement).focus());
     await userEvent.keyboard('{Backspace}');
     await waitFor(() => {
-      expect(codeInputs[2]).toBeEmptyDOMElement();
+      expect(codeInputs[2]).toHaveValue('');
     });
   });
 

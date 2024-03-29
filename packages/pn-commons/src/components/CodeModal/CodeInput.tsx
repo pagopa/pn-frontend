@@ -108,6 +108,7 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError
       changeInputValue(value, index);
       return;
     }
+    value = value.replace(/[^a-z\d]/g, '');
     if (value !== '') {
       // case maxLength 2
       if (value.length > 1) {
@@ -122,30 +123,15 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError
 
   const pasteHandler = (event: ClipboardEvent<HTMLDivElement>) => {
     event.preventDefault();
-    const pastedCode = event.clipboardData.getData('text');
-    // Ensure the copied code matches the required length
+    // eslint-disable-next-line functional/no-let
+    let pastedCode = event.clipboardData.getData('text');
+    pastedCode = pastedCode.replace(/[^a-z\d]/g, '');
     const maxLengthRequiredCode = pastedCode.slice(0, initialValues.length);
     const values = maxLengthRequiredCode.split('');
 
-    if (values.length !== initialValues.length) {
-      const lastInput = values.length;
-      focusInput(lastInput);
-      const fillEmptyInputs = () => {
-        if (initialValues.length - values.length !== 0) {
-          // eslint-disable-next-line functional/immutable-data
-          values.push('');
-          fillEmptyInputs();
-        }
-      };
-      fillEmptyInputs();
-    } else {
-      // Focus the last input and set cursor at the end, then remove focus.
-      // it's needed to focus on lastInput before to step on to lastInput + 1
-      const lastInput = values.length - 1;
-      focusInput(lastInput);
-      focusInput(lastInput + 1);
-    }
-    setCurrentValues(values);
+    const emptyValues = new Array(initialValues.length - values.length).fill('');
+    setCurrentValues(values.concat(emptyValues));
+    focusInput(values.length);
 
     if (!Number(maxLengthRequiredCode)) {
       onInputError();
@@ -172,6 +158,7 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError
             maxLength: 2,
             sx: { padding: '16.5px 10px', textAlign: 'center' },
             readOnly: isReadOnly,
+            pattern: '^[0-9a-z]{1}$',
             'data-testid': `code-input-${index}`,
           }}
           onKeyDown={(event) => keyDownHandler(event, index)}
