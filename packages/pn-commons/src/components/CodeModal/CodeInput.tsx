@@ -108,7 +108,8 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError
       changeInputValue(value, index);
       return;
     }
-    value = value.replace(/[^a-zA-Z\d]/g, '');
+    // remove from value those characters that aren't letters neither numbers
+    value = value.replace(/[^a-z\d]/gi, '');
     if (value !== '') {
       // case maxLength 2
       if (value.length > 1) {
@@ -125,10 +126,11 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError
     event.preventDefault();
     // eslint-disable-next-line functional/no-let
     let pastedCode = event.clipboardData.getData('text');
-    pastedCode = pastedCode.replace(/[^a-zA-Z\d]/g, '');
+    pastedCode = pastedCode.replace(/[^a-z\d]/gi, '');
     const maxLengthRequiredCode = pastedCode.slice(0, initialValues.length);
     const values = maxLengthRequiredCode.split('');
-
+    // we create an array with empty values for those cases in which the copied values are less than required ones
+    // initialValues.length - values.length can be only >= 0 because of the slice of pastedCode
     const emptyValues = new Array(initialValues.length - values.length).fill('');
     setCurrentValues(values.concat(emptyValues));
     focusInput(-1);
