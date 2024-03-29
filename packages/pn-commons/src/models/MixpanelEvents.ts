@@ -24,12 +24,6 @@ export type TrackedEvent<T extends object | undefined = undefined> = T extends u
   ? Partial<Record<EventPropertyType, BaseTrackedEvent | string | boolean>>
   : Partial<Record<EventPropertyType, (BaseTrackedEvent & T) | string | boolean>>;
 
-export type ProfileMapAttributes = {
-  profilePropertyType: Array<EventPropertyType>;
-  getAttributes: (payload?: any, meta?: any) => Record<string, string>;
-  shouldBlock?: (payload?: any, meta?: any) => boolean;
-};
-
 export type ActionMeta = {
   requestId: string;
   requestStatus: string;
@@ -119,6 +113,7 @@ export type EventCreatedDelegationType = {
   mandate_type: string;
 };
 
+// TODO: review that enum when implementing PG events
 export enum EventPaymentRecipientType {
   SEND_PAYMENT_DETAIL_REFRESH = 'SEND_PAYMENT_DETAIL_REFRESH',
   SEND_CANCELLED_NOTIFICATION_REFOUND_INFO = 'SEND_CANCELLED_NOTIFICATION_REFOUND_INFO',
