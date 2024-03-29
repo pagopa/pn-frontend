@@ -108,7 +108,8 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError
       changeInputValue(value, index);
       return;
     }
-    value = value.replace(/[^a-z\d]/g, '');
+    // remove from value those characters that aren't letters neither numbers
+    value = value.replace(/[^a-z\d]/gi, '');
     if (value !== '') {
       // case maxLength 2
       if (value.length > 1) {
@@ -125,7 +126,7 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError
     event.preventDefault();
     // eslint-disable-next-line functional/no-let
     let pastedCode = event.clipboardData.getData('text');
-    pastedCode = pastedCode.replace(/[^a-z\d]/g, '');
+    pastedCode = pastedCode.replace(/[^a-z\d]/gi, '');
     const maxLengthRequiredCode = pastedCode.slice(0, initialValues.length);
     const values = maxLengthRequiredCode.split('');
 
@@ -158,7 +159,7 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError
             maxLength: 2,
             sx: { padding: '16.5px 10px', textAlign: 'center' },
             readOnly: isReadOnly,
-            pattern: '^[0-9a-z]{1}$',
+            pattern: '^[0-9a-zA-Z]{1}$',
             'data-testid': `code-input-${index}`,
           }}
           onKeyDown={(event) => keyDownHandler(event, index)}
