@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Box, Button, DialogTitle, Grid, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+
+import { Box, Button, DialogTitle, Grid, Typography } from '@mui/material';
 import {
   CollapsedList,
   NotificationDetailRecipient,

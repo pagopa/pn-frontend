@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { createBrowserHistory } from 'history';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -133,15 +134,16 @@ describe('NuovaDelega page', async () => {
     let result: RenderResult | undefined;
 
     // simulate the current URL
-    window.history.pushState({}, '', '/nuova-delega');
+    const history = createBrowserHistory();
+    history.push(routes.NUOVA_DELEGA);
 
     // render with an ad-hoc router, will render initially NuovaDelega
     // since it corresponds to the top of the mocked history stack
     await act(async () => {
       result = render(
         <Routes>
-          <Route path={'/deleghe'} element={<div data-testid="mocked-page">hello</div>} />
-          <Route path={'/nuova-delega'} element={<NuovaDelega />} />
+          <Route path={routes.DELEGHE} element={<div data-testid="mocked-page">hello</div>} />
+          <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
         </Routes>
       );
     });

@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { createBrowserHistory } from 'history';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -16,6 +17,7 @@ import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/te
 import { apiClient } from '../../api/apiClients';
 import { CREATE_DELEGATION } from '../../api/delegations/delegations.routes';
 import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
+import * as routes from '../../navigation/routes.const';
 import { createDelegationMapper } from '../../redux/newDelegation/actions';
 import NuovaDelega from '../NuovaDelega.page';
 
@@ -125,16 +127,17 @@ describe('NuovaDelega page', async () => {
     // insert two entries into the history, so the initial render will refer to the path /
     // and when the back button is pressed and so navigate(-1) is invoked,
     // the path will change to /mock-path
-    window.history.pushState({}, '', '/mock-path');
-    window.history.pushState({}, '', '/deleghe/delegati/nuova');
+    const history = createBrowserHistory();
+    history.push(routes.NOTIFICHE);
+    history.push(routes.NUOVA_DELEGA);
 
     // render with an ad-hoc router, will render initially NuovaDelega
     // since it corresponds to the top of the mocked history stack
     await act(async () => {
       result = render(
         <Routes>
-          <Route path={'/mock-path'} element={<div data-testid="mocked-page">hello</div>} />
-          <Route path={'/deleghe/delegati/nuova'} element={<NuovaDelega />} />
+          <Route path={routes.NOTIFICHE} element={<div data-testid="mocked-page">hello</div>} />
+          <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
         </Routes>
       );
     });
