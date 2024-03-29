@@ -88,8 +88,7 @@ const CodeModal = memo(
         internalErrorTitle: errorTitle,
         internalErrorMessage: getLocalizedOrDefaultLabel(
           'recapiti',
-          `errors.invalid_type_code.message`,
-          'Questo campo accetta solo valori numericiiiii'
+          `errors.invalid_type_code.message`
         ),
       });
     };

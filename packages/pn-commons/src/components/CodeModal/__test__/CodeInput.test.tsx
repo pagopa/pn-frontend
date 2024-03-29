@@ -226,9 +226,8 @@ describe('CodeInput Component', () => {
     act(() => (codeInputs[2] as HTMLInputElement).focus());
     (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
 
-    // we must use userEvent because the keyboard event must trigger also the change event (fireEvent doesn't do that)
     const codePasted = '12345';
-    await userEvent.paste(codePasted);
+    await user.paste(codePasted);
 
     await waitFor(() => {
       for (let i = 0; i < 5; i++) {
@@ -250,7 +249,7 @@ describe('CodeInput Component', () => {
     act(() => (codeInputs[2] as HTMLInputElement).focus());
     (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
     const codePasted = '123456'; // too long code
-    await userEvent.paste(codePasted);
+    await user.paste(codePasted);
     await waitFor(() => {
       for (let i = 0; i < 5; i++) {
         expect(codeInputs[i]).toHaveValue(codePasted[i]);

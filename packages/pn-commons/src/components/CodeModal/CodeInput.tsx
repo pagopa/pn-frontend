@@ -133,7 +133,7 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError
     // initialValues.length - values.length can be only >= 0 because of the slice of pastedCode
     const emptyValues = new Array(initialValues.length - values.length).fill('');
     setCurrentValues(values.concat(emptyValues));
-    focusInput(-1);
+    focusInput(values.length);
 
     if (!Number(maxLengthRequiredCode)) {
       onInputError();
