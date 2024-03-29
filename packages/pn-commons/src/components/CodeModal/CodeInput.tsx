@@ -129,7 +129,8 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError
     pastedCode = pastedCode.replace(/[^a-z\d]/gi, '');
     const maxLengthRequiredCode = pastedCode.slice(0, initialValues.length);
     const values = maxLengthRequiredCode.split('');
-
+    // we create an array with empty values for those cases in which the copied values are less than required ones
+    // initialValues.length - values.length can be only >= 0 because of the slice of pastedCode
     const emptyValues = new Array(initialValues.length - values.length).fill('');
     setCurrentValues(values.concat(emptyValues));
     focusInput(values.length);
