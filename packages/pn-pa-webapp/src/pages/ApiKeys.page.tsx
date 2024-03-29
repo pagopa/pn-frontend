@@ -29,8 +29,6 @@ import { setPagination } from '../redux/apiKeys/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
 
 const LinkApiB2b: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { API_B2B_LINK } = getConfiguration();
@@ -154,12 +152,7 @@ const ApiKeys = () => {
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
-    trackEventByType(TrackEventType.APIKEYS_TABLE_PAGINATION);
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
-  };
-
-  const handleEventTrackingCallbackPageSize = (pageSize: number) => {
-    trackEventByType(TrackEventType.APIKEYS_TABLE_SIZE, { pageSize });
   };
 
   return (
@@ -218,7 +211,6 @@ const ApiKeys = () => {
               totalElements,
             }}
             onPageRequest={handleChangePage}
-            eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
             pagesToShow={pagesToShow}
           />
         )}
