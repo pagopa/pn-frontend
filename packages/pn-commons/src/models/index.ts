@@ -18,9 +18,12 @@ import {
   isKnownFunctionality,
 } from './AppStatus';
 import { KnownSentiment } from './EmptyState';
+import EventStrategy from './EventStrategy';
+import { EventType } from './EventType';
 import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
 import { Institution, PartyEntityWithUrl } from './Institutions';
 import {
+  ActionMeta,
   EventAction,
   EventCategory,
   EventCreatedDelegationType,
@@ -31,10 +34,9 @@ import {
   EventPageType,
   EventPaymentRecipientType,
   EventPaymentStatusType,
+  EventPropertyType,
   EventsType,
-  ProfileMapAttributes,
-  ProfilePropertiesActionsMap,
-  ProfilePropertyType,
+  TrackedEvent,
 } from './MixpanelEvents';
 import {
   AarDetails,
@@ -122,7 +124,7 @@ export {
   KnownFunctionality,
   AppIoCourtesyMessageEventType,
   PrivateRoute,
-  ProfilePropertyType,
+  EventPropertyType,
 };
 export type {
   AnalogWorkflowDetails,
@@ -195,6 +197,8 @@ export type {
   PartyEntityWithUrl,
   Product,
   PaymentCache,
-  ProfilePropertiesActionsMap,
-  ProfileMapAttributes,
+  TrackedEvent,
+  EventStrategy,
+  EventType,
+  ActionMeta,
 };

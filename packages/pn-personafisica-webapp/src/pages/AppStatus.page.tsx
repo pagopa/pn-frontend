@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { AppStatusRender, GetDowntimeHistoryParams, PaginationData } from '@pagopa-pn/pn-commons';
 
+import { PFEventsType } from '../models/PFEventsType';
 import {
   getCurrentAppStatus,
   getDowntimeLegalFactDocumentDetails,
@@ -16,8 +17,7 @@ import {
 } from '../redux/appStatus/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
+import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const AppStatus = () => {
   const dispatch = useAppDispatch();
@@ -44,13 +44,16 @@ const AppStatus = () => {
   );
 
   const handleTrackDownloadCertificateOpposable3dparties = () => {
-    trackEventByType(TrackEventType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES, {
-      source: 'stato_piattaforma',
-    });
+    PFEventStrategyFactory.triggerEvent(
+      PFEventsType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES,
+      {
+        source: 'stato_piattaforma',
+      }
+    );
   };
 
   useEffect(() => {
-    trackEventByType(TrackEventType.SEND_SERVICE_STATUS, {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_SERVICE_STATUS, {
       service_status_OK: appStatus.currentStatus?.appIsFullyOperative,
     });
   }, [getCurrentAppStatus]);

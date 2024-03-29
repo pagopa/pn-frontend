@@ -31,8 +31,6 @@ import { setPreliminaryInformations } from '../../redux/newNotification/reducers
 import { PreliminaryInformationsPayload } from '../../redux/newNotification/types';
 import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
 
@@ -113,12 +111,10 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
 
   const handleChangeDeliveryMode = (e: ChangeEvent & { target: { value: any } }) => {
     formik.handleChange(e);
-    trackEventByType(TrackEventType.NOTIFICATION_SEND_DELIVERY_MODE, { type: e.target.value });
   };
 
   const handleChangePaymentMode = (e: ChangeEvent & { target: { value: any } }) => {
     formik.handleChange(e);
-    trackEventByType(TrackEventType.NOTIFICATION_SEND_PAYMENT_MODE, { target: e.target.value });
   };
 
   const fetchGroups = useCallback(() => {

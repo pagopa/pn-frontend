@@ -28,8 +28,6 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import * as routes from '../../navigation/routes.const';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
@@ -156,8 +154,6 @@ const MobileNotifications = ({
     } else {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun));
     }
-    // log event
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;

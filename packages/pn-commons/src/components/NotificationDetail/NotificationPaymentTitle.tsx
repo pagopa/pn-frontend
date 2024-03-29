@@ -22,6 +22,7 @@ const NotificationPaymentTitle: React.FC<Props> = ({
 }) => {
   const FAQ_NOTIFICATION_COSTS = '/faq#costi-di-notifica';
   const notificationCostsFaqLink = `${landingSiteUrl}${FAQ_NOTIFICATION_COSTS}`;
+
   const FaqLink = (
     <Link
       href={notificationCostsFaqLink}
