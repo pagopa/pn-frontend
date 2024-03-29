@@ -76,7 +76,7 @@ const CodeModal = memo(
 
     const { internalHasError, internalErrorTitle, internalErrorMessage } = internalError;
 
-    const codeIsValid = code.every((v) => v);
+    const codeIsValid = code.every((v) => (Number(v) || v === '0' ? v : false));
 
     const changeHandler = useCallback((inputsValues: Array<string>) => {
       setCode(inputsValues);
@@ -88,8 +88,8 @@ const CodeModal = memo(
         internalErrorTitle: errorTitle,
         internalErrorMessage: getLocalizedOrDefaultLabel(
           'recapiti',
-          'errors.invalid_type_code.message',
-          'Questo campo accetta solo valori numerici'
+          `errors.invalid_type_code.message`,
+          'Questo campo accetta solo valori numericiiiii'
         ),
       });
     };

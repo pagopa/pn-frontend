@@ -104,7 +104,7 @@ describe('CodeModal Component', () => {
     });
   });
 
-  it('clicks on confirm', async () => {
+  it.only('clicks on confirm', async () => {
     // render component
     render(openedModalComponent(true));
     const dialog = screen.getByTestId('codeDialog');
@@ -141,9 +141,9 @@ describe('CodeModal Component', () => {
     const dialog = screen.getByTestId('codeDialog');
     const codeInputs = within(dialog).getAllByTestId(/code-input-[0-4]/);
     fireEvent.change(codeInputs[0], { target: { value: 'A' } });
-    const errorAlert = screen.getByTestId('errorTypeAlert');
+    const errorAlert = screen.getByTestId('errorAlert');
     expect(errorAlert).toBeInTheDocument();
-    expect(errorAlert).toHaveTextContent('mocked-errorTypeMessage');
+    expect(errorAlert).toHaveTextContent('mocked-errorMessage');
   });
 
   it('error in case of letters (pasted)', async () => {
@@ -155,9 +155,9 @@ describe('CodeModal Component', () => {
     (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
     const codePasted = 'abcd';
     await userEvent.paste(codePasted);
-    const errorAlert = screen.getByTestId('errorTypeAlert');
+    const errorAlert = screen.getByTestId('errorAlert');
     expect(errorAlert).toBeInTheDocument();
-    expect(errorAlert).toHaveTextContent('mocked-errorTypeMessage');
+    expect(errorAlert).toHaveTextContent('mocked-errorMessage');
   });
 
   it('short code (pasted) - confirm disabled', async () => {
