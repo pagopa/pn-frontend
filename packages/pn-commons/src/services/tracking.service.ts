@@ -25,13 +25,14 @@ function callMixpanelTrackingMethod(
     case EventPropertyType.PROFILE:
       mixpanel.people.set(properties);
       break;
-    case EventPropertyType.INCREMENTAL:
+    case EventPropertyType.INCREMENTAL: {
       const hasProperties =
         !_.isNil(properties) && (typeof properties === 'object' || typeof properties === 'string')
           ? !_.isEmpty(properties)
           : true;
       mixpanel.people.increment(hasProperties ? { event_name: properties } : event_name);
       break;
+    }
     case EventPropertyType.SUPER_PROPERTY:
       mixpanel.register(properties);
       break;
