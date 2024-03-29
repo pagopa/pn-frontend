@@ -231,7 +231,7 @@ describe('CodeInput Component', () => {
     await userEvent.paste(codePasted);
 
     await waitFor(() => {
-      for (let i = 0; i < codeInputs.length; i++) {
+      for (let i = 0; i < 5; i++) {
         expect(codeInputs[i]).toHaveValue(codePasted[i]);
       }
     });
@@ -251,6 +251,11 @@ describe('CodeInput Component', () => {
     (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
     const codePasted = '123456'; // too long code
     await userEvent.paste(codePasted);
+    await waitFor(() => {
+      for (let i = 0; i < 5; i++) {
+        expect(codeInputs[i]).toHaveValue(codePasted[i]);
+      }
+    });
     expect(handleChangeMock).toHaveBeenCalledWith(['1', '2', '3', '4', '5']);
   });
 });

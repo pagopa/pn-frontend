@@ -49,7 +49,6 @@ type Props = {
  * @param hasError set if there is an error
  * @param errorTitle title to show when there is an error
  * @param errorMessage message to show when there is an error
- * @param errorInputTypeMessage message to show when there is an error on type of input
  */
 const CodeModal = memo(
   ({
@@ -89,7 +88,7 @@ const CodeModal = memo(
         internalErrorTitle: errorTitle,
         internalErrorMessage: getLocalizedOrDefaultLabel(
           'recapiti',
-          'errors.invalid_type_code.title',
+          'errors.invalid_type_code.message',
           'Questo campo accetta solo valori numerici'
         ),
       });

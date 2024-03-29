@@ -370,7 +370,6 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
           hasError={codeNotValid}
           errorTitle={errorMessage?.title}
           errorMessage={errorMessage?.content}
-          errorInputTypeMessage={t('errors.invalid_type_code.title', { ns: 'recapiti' })}
         />
       )}
       <PnDialog

@@ -26,7 +26,6 @@ const openedModalComponent = (
     confirmCallback={confirmButtonMock}
     hasError={hasError}
     errorMessage="mocked-errorMessage"
-    errorInputTypeMessage="mocked-errorTypeMessage"
     isReadOnly={readonly}
   />
 );
@@ -161,7 +160,7 @@ describe('CodeModal Component', () => {
     expect(errorAlert).toHaveTextContent('mocked-errorTypeMessage');
   });
 
-  it('error in case of short code (pasted)', async () => {
+  it('short code (pasted) - confirm disabled', async () => {
     // render component
     render(openedModalComponent(true));
     const dialog = screen.getByTestId('codeDialog');
