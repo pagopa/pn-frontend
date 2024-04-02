@@ -182,4 +182,44 @@ describe('CodeInput Component', () => {
       expect(codeInputs[0]).toHaveFocus();
     });
   });
+
+  it('handles paste event', async () => {
+    // render component
+    const { getAllByTestId } = render(
+      <CodeInput initialValues={new Array(5).fill('')} onChange={handleChangeMock} />
+    );
+    const codeInputs = getAllByTestId(/code-input-[0-4]/);
+
+    // paste the value of the input and check that it is updated correctly
+    // set the cursor position to the beggining
+    act(() => (codeInputs[2] as HTMLInputElement).focus());
+    (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
+
+    const codePasted = '12345';
+    await user.paste(codePasted);
+
+    await waitFor(() => {
+      for (let i = 0; i < 5; i++) {
+        expect(codeInputs[i]).toHaveValue(codePasted[i]);
+      }
+    });
+  });
+
+  it('accepts first 5 digits in case of too long code (pasted)', async () => {
+    // render component
+    const { getAllByTestId } = render(
+      <CodeInput initialValues={new Array(5).fill('')} onChange={handleChangeMock} />
+    );
+    const codeInputs = getAllByTestId(/code-input-[0-4]/);
+    act(() => (codeInputs[2] as HTMLInputElement).focus());
+    (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
+    const codePasted = '123456'; // too long code
+    await user.paste(codePasted);
+    await waitFor(() => {
+      for (let i = 0; i < 5; i++) {
+        expect(codeInputs[i]).toHaveValue(codePasted[i]);
+      }
+    });
+    expect(handleChangeMock).toHaveBeenCalledWith(['1', '2', '3', '4', '5']);
+  });
 });
