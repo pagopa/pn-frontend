@@ -26,8 +26,6 @@ import {
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { ServerResponseErrorCode } from '../../utility/AppError/types';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
 import AcceptDelegationModal from './AcceptDelegationModal';
 import ConfirmationModal from './ConfirmationModal';
 
@@ -93,11 +91,6 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
     menuType === 'delegates' ? t('deleghe.confirm_revocation') : t('deleghe.confirm_rejection');
 
   const handleOpenModalClick = () => {
-    const eventToTrack =
-      menuType === 'delegates'
-        ? TrackEventType.DELEGATION_DELEGATE_REVOKE
-        : TrackEventType.DELEGATION_DELEGATOR_REJECT;
-    trackEventByType(eventToTrack);
     setShowConfirmationModal(true);
     setAnchorEl(null);
   };
@@ -111,7 +104,6 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
     if (row?.name && row?.verificationCode) {
       setShowCodeModal(true);
       setAnchorEl(null);
-      trackEventByType(TrackEventType.DELEGATION_DELEGATE_VIEW_CODE);
     }
   };
 

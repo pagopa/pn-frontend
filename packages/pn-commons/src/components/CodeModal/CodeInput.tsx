@@ -1,5 +1,6 @@
 import {
   ChangeEvent,
+  ClipboardEvent,
   Fragment,
   KeyboardEvent,
   memo,
@@ -46,11 +47,14 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
       return;
     }
     if (index > initialValues.length - 1) {
-      // the variable is to prevent test fail
-      const input = inputsRef.current[index - 1];
-      setTimeout(() => {
-        input.blur();
-      }, 25);
+      for (const input of inputsRef.current) {
+        if (input === document.activeElement) {
+          setTimeout(() => {
+            input.blur();
+          }, 25);
+          break;
+        }
+      }
       return;
     }
     // the variable is to prevent test fail
@@ -102,8 +106,8 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
       changeInputValue(value, index);
       return;
     }
-    // remove non numeric char from value
-    value = value.replace(/[^\d]/g, '');
+    // remove from value those characters that aren't letters neither numbers
+    value = value.replace(/[^a-z\d]/gi, '');
     if (value !== '') {
       // case maxLength 2
       if (value.length > 1) {
@@ -114,6 +118,20 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
       // focus next element
       focusInput(index + 1);
     }
+  };
+
+  const pasteHandler = (event: ClipboardEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    // eslint-disable-next-line functional/no-let
+    let pastedCode = event.clipboardData.getData('text');
+    pastedCode = pastedCode.replace(/[^a-z\d]/gi, '');
+    const maxLengthRequiredCode = pastedCode.slice(0, initialValues.length);
+    const values = maxLengthRequiredCode.split('');
+    // we create an array with empty values for those cases in which the copied values are less than required ones
+    // initialValues.length - values.length can be only >= 0 because of the slice of pastedCode
+    const emptyValues = new Array(initialValues.length - values.length).fill('');
+    setCurrentValues(values.concat(emptyValues));
+    focusInput(values.length);
   };
 
   useEffect(() => {
@@ -136,13 +154,13 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
             maxLength: 2,
             sx: { padding: '16.5px 10px', textAlign: 'center' },
             readOnly: isReadOnly,
-            pattern: '^[0-9]{1}$',
-            inputMode: 'numeric',
+            pattern: '^[0-9a-zA-Z]{1}$',
             'data-testid': `code-input-${index}`,
           }}
           onKeyDown={(event) => keyDownHandler(event, index)}
           onChange={(event) => changeHandler(event, index)}
           onFocus={(event) => event.target.select()}
+          onPaste={(event) => pasteHandler(event)}
           value={currentValues[index]}
           // eslint-disable-next-line functional/immutable-data
           inputRef={(node) => (inputsRef.current[index] = node)}

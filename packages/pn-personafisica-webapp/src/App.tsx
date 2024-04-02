@@ -28,6 +28,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { ProductEntity } from '@pagopa/mui-italia';
 
+import { PFEventsType } from './models/PFEventsType';
 import { getCurrentEventTypePage } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
@@ -39,9 +40,8 @@ import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/action
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PFAppErrorFactory } from './utility/AppError/PFAppErrorFactory';
-import { TrackEventType } from './utility/events';
+import PFEventStrategyFactory from './utility/MixpanelUtils/PFEventStrategyFactory';
 import showLayoutParts from './utility/layout.utility';
-import { trackEventByType } from './utility/mixpanel';
 import './utility/onetrust';
 
 // TODO: get products list from be (?)
@@ -109,7 +109,9 @@ const App = () => {
       id: 'profile',
       label: t('menu.profilo'),
       onClick: () => {
-        trackEventByType(TrackEventType.SEND_VIEW_PROFILE, { source: 'user_menu' });
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_PROFILE, {
+          source: 'user_menu',
+        });
         navigate(routes.PROFILO);
       },
       icon: <SettingsIcon fontSize="small" color="inherit" />,
@@ -228,7 +230,7 @@ const App = () => {
   };
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
-    trackEventByType(TrackEventType.SEND_GENERIC_ERROR, {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_GENERIC_ERROR, {
       reason: { error: e, errorInfo: eInfo },
     });
   };
@@ -236,7 +238,7 @@ const App = () => {
   const handleEventTrackingCallbackRefreshPage = () => {
     const pageType = getCurrentEventTypePage(pathname);
     if (pageType) {
-      trackEventByType(TrackEventType.SEND_REFRESH_PAGE, { page: pageType });
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REFRESH_PAGE, { page: pageType });
     }
   };
 
@@ -246,7 +248,7 @@ const App = () => {
   ) => {
     const { traceId, status, action } = response;
 
-    trackEventByType(TrackEventType.SEND_TOAST_ERROR, {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_TOAST_ERROR, {
       reason: error.code,
       traceid: traceId,
       page_name: getCurrentEventTypePage(pathname),

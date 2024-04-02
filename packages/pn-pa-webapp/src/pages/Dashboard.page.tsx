@@ -1,7 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { Alert, Box, Button, Typography } from '@mui/material';
 import {
@@ -12,19 +11,15 @@ import {
   calculatePages,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
 import * as routes from '../navigation/routes.const';
-import {
-  DASHBOARD_ACTIONS,
-  getSentNotifications,
-} from '../redux/dashboard/actions';
+import { DASHBOARD_ACTIONS, getSentNotifications } from '../redux/dashboard/actions';
 import { setPagination } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
 import { getConfiguration } from '../services/configuration.service';
 
 const Dashboard = () => {
@@ -53,14 +48,11 @@ const Dashboard = () => {
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_PAGINATION);
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
   };
 
-
   // route to Manual Send
   const handleRouteManualSend = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_SEND);
     navigate(routes.NUOVA_NOTIFICA);
   };
 
@@ -84,10 +76,6 @@ const Dashboard = () => {
     fetchNotifications();
   }, [fetchNotifications]);
 
-  const handleEventTrackingCallbackPageSize = (pageSize: number) => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, { pageSize });
-  };
-
   return (
     <Box p={3}>
       <TitleBox
@@ -103,24 +91,33 @@ const Dashboard = () => {
             <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
               {t('subtitle')}
             </Typography>
-            {getConfiguration().IS_MANUAL_SEND_ENABLED ? <Button
-              id="new-notification-btn"
-              variant="contained"
-              onClick={handleRouteManualSend}
-              aria-label={t('new-notification-button')}
-              data-testid="newNotificationBtn"
-              sx={{ marginBottom: isMobile ? 3 : undefined }}
-            >
-              {t('new-notification-button')}
-            </Button> :
-              <Alert severity="warning" action={
-                <ButtonNaked color="inherit" size="small" onClick={() => navigate(routes.APP_STATUS)}>
-                  {t('manual-send-disabled-action')}
-                </ButtonNaked>
-              }>
+            {getConfiguration().IS_MANUAL_SEND_ENABLED ? (
+              <Button
+                id="new-notification-btn"
+                variant="contained"
+                onClick={handleRouteManualSend}
+                aria-label={t('new-notification-button')}
+                data-testid="newNotificationBtn"
+                sx={{ marginBottom: isMobile ? 3 : undefined }}
+              >
+                {t('new-notification-button')}
+              </Button>
+            ) : (
+              <Alert
+                severity="warning"
+                action={
+                  <ButtonNaked
+                    color="inherit"
+                    size="small"
+                    onClick={() => navigate(routes.APP_STATUS)}
+                  >
+                    {t('manual-send-disabled-action')}
+                  </ButtonNaked>
+                }
+              >
                 {t('manual-send-disabled-message')}
-              </Alert>}
-
+              </Alert>
+            )}
           </Box>
         }
       />
@@ -152,7 +149,6 @@ const Dashboard = () => {
               totalElements,
             }}
             onPageRequest={handleChangePage}
-            eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
             pagesToShow={pagesToShow}
           />
         )}

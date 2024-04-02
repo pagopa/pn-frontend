@@ -132,6 +132,10 @@
     "expired_verification_code": {
       "title": "Il codice è scaduto",
       "message": "Generane uno nuovo e inseriscilo."
+    },
+    "invalid_type_code": {
+      "title": "Questo campo accetta solo valori numerici",
+      "message": "Controlla il codice di verifica e inseriscilo di nuovo"
     }
   }
 }

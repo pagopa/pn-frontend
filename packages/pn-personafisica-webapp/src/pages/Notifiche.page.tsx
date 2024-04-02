@@ -6,15 +6,11 @@ import { Box } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomPagination,
-  EventNotificationsListType,
-  Notification,
   NotificationColumnData,
-  NotificationStatus,
   PaginationData,
   Sort,
   TitleBox,
   calculatePages,
-  isNewNotification,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -22,45 +18,13 @@ import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
+import { PFEventsType } from '../models/PFEventsType';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setMandateId, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { Delegator } from '../redux/delegation/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
-
-const getEventNotifications = (
-  notifications: Array<Notification>,
-  delegators: Array<Delegator>,
-  pagination: {
-    nextPagesKey: Array<string>;
-    size: number;
-    page: number;
-    moreResult: boolean;
-  },
-  domicileBannerType: string
-): EventNotificationsListType => ({
-  ...(domicileBannerType && { banner: domicileBannerType }),
-  delegate: delegators.length > 0,
-  page_number: pagination.page,
-  total_count: notifications.length,
-  unread_count: notifications.filter((n) => isNewNotification(n.notificationStatus)).length,
-  delivered_count: notifications.filter(
-    (n) => n.notificationStatus === NotificationStatus.DELIVERED
-  ).length,
-  opened_count: notifications.filter((n) => n.notificationStatus === NotificationStatus.VIEWED)
-    .length,
-  expired_count: notifications.filter(
-    (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
-  ).length,
-  not_found_count: notifications.filter(
-    (n) => n.notificationStatus === NotificationStatus.UNREACHABLE
-  ).length,
-  cancelled_count: notifications.filter(
-    (n) => n.notificationStatus === NotificationStatus.CANCELLED
-  ).length,
-});
+import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
@@ -112,16 +76,16 @@ const Notifiche = () => {
       .unwrap()
       .then((data) => {
         setPageReady(true);
-        trackEventByType(
+        PFEventStrategyFactory.triggerEvent(
           currentDelegator
-            ? TrackEventType.SEND_NOTIFICATION_DELEGATED
-            : TrackEventType.SEND_YOUR_NOTIFICATION,
-          getEventNotifications(
-            data.resultsPage,
+            ? PFEventsType.SEND_NOTIFICATION_DELEGATED
+            : PFEventsType.SEND_YOUR_NOTIFICATIONS,
+          {
+            notifications: data.resultsPage,
             delegators,
             pagination,
-            domicileBannerTypeRef.current
-          )
+            domicileBannerType: domicileBannerTypeRef.current,
+          }
         );
       })
       .catch(() => setPageReady(true));

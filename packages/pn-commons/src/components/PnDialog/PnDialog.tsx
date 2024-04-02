@@ -1,4 +1,4 @@
-import { Children, cloneElement, isValidElement, useMemo } from 'react';
+import { Children, cloneElement, isValidElement } from 'react';
 
 import { Dialog, DialogProps, DialogTitle } from '@mui/material';
 
@@ -8,9 +8,8 @@ import PnDialogActions from './PnDialogActions';
 import PnDialogContent from './PnDialogContent';
 
 const PnDialog: React.FC<DialogProps> = (props) => {
-  const isMobile = useIsMobile();
-  const paddingSize = useMemo(() => (isMobile ? 3 : 4), [isMobile]);
-
+  const isMobile = useIsMobile('sm');
+  const paddingSize = isMobile ? 3 : 4;
   const title: ReactComponent = Children.toArray(props.children).find(
     (child) => isValidElement(child) && child.type === DialogTitle
   );
@@ -26,11 +25,10 @@ const PnDialog: React.FC<DialogProps> = (props) => {
     (child) => isValidElement(child) && child.type === PnDialogContent
   );
 
-  const paddingTop = isMobile ? 3 : 4;
   const enrichedContent = isValidElement(content)
     ? cloneElement(content, {
         ...content.props,
-        sx: { pt: title ? 0 : paddingTop, ...content.props.sx },
+        sx: { pt: title ? 0 : paddingSize, ...content.props.sx },
       })
     : content;
 

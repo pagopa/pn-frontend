@@ -12,8 +12,6 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useAppDispatch } from '../../redux/hooks';
 import { getPaymentAttachment } from '../../redux/notification/actions';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
 
 type Props = {
   iun: string;
@@ -26,7 +24,6 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
 
   const dowloadHandler = () => {
     if (!_.isNil(payment.recIndex) && payment.attachment) {
-      trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE);
       dispatch(
         getPaymentAttachment({
           iun,
