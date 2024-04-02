@@ -252,9 +252,8 @@ describe('Deleghe page', async () => {
         verificationCode: arrayOfDelegators[0].verificationCode,
       });
     });
-    const error = await waitFor(() => within(dialog).queryByTestId('errorAlert'));
+    const error = await waitFor(() => within(dialog).getByTestId('errorAlert'));
     expect(error).toBeInTheDocument();
-
     // check that accept button is still active in deleghe page
     delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     expect(delegatorsRows).toHaveLength(arrayOfDelegators.length);

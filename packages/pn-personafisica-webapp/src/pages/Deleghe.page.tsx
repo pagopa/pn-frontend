@@ -77,10 +77,14 @@ const Deleghe = () => {
     dispatch(closeAcceptModal());
   };
 
-  const handleAccept = async (code: Array<string>) => {
+  const handleAccept = (code: Array<string>) => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_ACCEPTED);
-    await dispatch(acceptDelegation({ id: acceptId, code: code.join('') }));
-    void dispatch(getSidemenuInformation());
+    dispatch(acceptDelegation({ id: acceptId, code: code.join('') }))
+      .unwrap()
+      .then(() => {
+        void dispatch(getSidemenuInformation());
+      })
+      .catch(() => {});
   };
 
   const delegates = useAppSelector(

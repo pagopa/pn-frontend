@@ -119,7 +119,6 @@ const CodeModal = memo(
     return (
       <PnDialog
         open={open}
-        // onClose={handleClose}
         aria-labelledby="dialog-title"
         aria-describedby="dialog-description"
         data-testid="codeDialog"
