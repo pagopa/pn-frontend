@@ -177,6 +177,10 @@
     "unknown": {
       "title": "Errore",
       "message": "Errore non previsto"
+    },
+    "invalid_type_code": {
+      "title": "Questo campo accetta solo valori numerici",
+      "message": "Controlla il codice di verifica e inseriscilo di nuovo"
     }
   },
   "roles": {
