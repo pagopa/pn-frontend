@@ -10,9 +10,9 @@ import { styled } from '@mui/material/styles';
 import { AppRouteParams, Layout, useIsMobile } from '@pagopa-pn/pn-commons';
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
+import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
+import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 import { storageAarOps } from '../../utility/storage';
 import SpidSelect from './SpidSelect';
 
@@ -38,14 +38,15 @@ const Login = () => {
   }
 
   useEffect(() => {
-    trackEventByType(TrackEventType.SEND_LOGIN);
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN);
   }, []);
 
   const goCIE = () => {
     window.location.assign(
       `${URL_API_LOGIN}/login?entityID=${SPID_CIE_ENTITY_ID}&authLevel=SpidL2&RelayState=send`
     );
-    trackEventByType(TrackEventType.SEND_IDP_SELECTED, {
+
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_IDP_SELECTED, {
       SPID_IDP_NAME: 'CIE',
       SPID_IDP_ID: SPID_CIE_ENTITY_ID,
     });

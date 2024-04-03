@@ -19,8 +19,6 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../../navigation/routes.const';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
 import FilterNotifications from './FilterNotifications';
 import NotificationsDataSwitch from './NotificationsDataSwitch';
 
@@ -160,8 +158,6 @@ const DesktopNotifications = ({
   // Navigation handlers
   const handleRowClick = (row: Row<Notification>) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun));
-    // log event
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;

@@ -1,0 +1,16 @@
+{
+  "title": "Come possiamo aiutarti?",
+  "sub-title": "Indica l’indirizzo email in cui desideri ricevere le risposte dell’assistenza.",
+  "form": {
+    "email": "Inserisci l'indirizzo email",
+    "confirm-email": "Conferma l'indirizzo email",
+    "errors": {
+      "not-valid": "L'indirizzo email non è valido",
+      "required": "Campo obbligatorio",
+      "not-the-same": "L'indirizzo email di conferma non è uguale all'indirizzo email inserito"
+    }
+  },
+  "disclaimer": "Proseguendo dichiari di aver letto la <0>Privacy Policy Assistenza</0>",
+  "exit-title": "Vuoi davvero uscire?",
+  "exit-message": "Se esci, la richiesta di assistenza andrà persa."
+}

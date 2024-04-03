@@ -15,14 +15,19 @@ export type EventsType = {
   };
 };
 
-export type ProfileMapAttributes = {
-  profilePropertyType: Array<ProfilePropertyType>;
-  getAttributes: (payload?: any, meta?: any) => Record<string, string>;
-  shouldBlock?: (payload?: any, meta?: any) => boolean;
+type BaseTrackedEvent = {
+  event_category?: string;
+  event_type?: EventAction | string;
 };
 
-export type ProfilePropertiesActionsMap = {
-  [key: string]: ProfileMapAttributes;
+export type TrackedEvent<T extends object | undefined = undefined> = T extends undefined
+  ? Partial<Record<EventPropertyType, BaseTrackedEvent | string | boolean>>
+  : Partial<Record<EventPropertyType, (BaseTrackedEvent & T) | string | boolean>>;
+
+export type ActionMeta = {
+  requestId: string;
+  requestStatus: string;
+  arg: any;
 };
 
 export enum EventAction {
@@ -43,7 +48,8 @@ export enum EventDowntimeType {
   IN_PROGRESS = 'in_progress',
 }
 
-export enum ProfilePropertyType {
+export enum EventPropertyType {
+  TRACK = 'track',
   PROFILE = 'profile',
   INCREMENTAL = 'incremental',
   SUPER_PROPERTY = 'superProperty',
@@ -107,6 +113,7 @@ export type EventCreatedDelegationType = {
   mandate_type: string;
 };
 
+// TODO: review that enum when implementing PG events
 export enum EventPaymentRecipientType {
   SEND_PAYMENT_DETAIL_REFRESH = 'SEND_PAYMENT_DETAIL_REFRESH',
   SEND_CANCELLED_NOTIFICATION_REFOUND_INFO = 'SEND_CANCELLED_NOTIFICATION_REFOUND_INFO',

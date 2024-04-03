@@ -1,4 +1,4 @@
-import { ErrorInfo, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
@@ -23,7 +23,6 @@ import {
   useHasPermissions,
   useMultiEvent,
   useTracking,
-  useUnload,
 } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
@@ -37,8 +36,6 @@ import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/action
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
-import { TrackEventType } from './utility/events';
-import { trackEventByType } from './utility/mixpanel';
 import './utility/onetrust';
 
 // Cfr. PN-6096
@@ -77,7 +74,6 @@ const ActualApp = () => {
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { pathname } = useLocation();
   const path = pathname.split('/');
-  const source = path[path.length - 1];
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -113,10 +109,6 @@ const ActualApp = () => {
     ],
     [t, organization?.id, i18n.language]
   );
-
-  useUnload(() => {
-    trackEventByType(TrackEventType.APP_UNLOAD);
-  });
 
   useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
 
@@ -185,7 +177,7 @@ const ActualApp = () => {
     menuItems.splice(1, 0, {
       label: t('menu.deleghe'),
       icon: () => <AltRouteIcon />,
-      route: routes.DELEGHEACARICO,
+      route: routes.DELEGHE,
       rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
     });
   }
@@ -227,23 +219,10 @@ const ActualApp = () => {
   };
 
   const handleAssistanceClick = () => {
-    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, {
-      source: sessionToken ? 'postlogin' : 'prelogin',
-    });
     /* eslint-disable-next-line functional/immutable-data */
     window.location.href = sessionToken
       ? `${SELFCARE_BASE_URL}/assistenza`
       : `mailto:${PAGOPA_HELP_EMAIL}`;
-  };
-  const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
-    trackEventByType(TrackEventType.APP_CRASH, {
-      route: source,
-      stacktrace: { error: e, errorInfo: eInfo },
-    });
-  };
-
-  const handleEventTrackingCallbackProductSwitch = (target: string) => {
-    trackEventByType(TrackEventType.USER_PRODUCT_SWITCH, { target });
   };
 
   const [clickVersion] = useMultiEvent({
@@ -267,19 +246,7 @@ const ActualApp = () => {
         showHeader={!isPrivacyPage}
         showFooter={!isPrivacyPage}
         onExitAction={handleUserLogout}
-        eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
-        eventTrackingCallbackProductSwitch={(target) =>
-          handleEventTrackingCallbackProductSwitch(target)
-        }
-        sideMenu={
-          <SideMenu
-            menuItems={menuItems}
-            selfCareItems={selfcareMenuItems}
-            eventTrackingCallback={(target) =>
-              trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
-            }
-          />
-        }
+        sideMenu={<SideMenu menuItems={menuItems} selfCareItems={selfcareMenuItems} />}
         showSideMenu={
           !!sessionToken &&
           tosConsent &&

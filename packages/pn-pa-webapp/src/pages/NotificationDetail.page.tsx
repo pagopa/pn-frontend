@@ -46,8 +46,6 @@ import {
 } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
 
 type Props = {
   notification: NotificationDetailType;
@@ -258,8 +256,6 @@ const NotificationDetail: React.FC = () => {
     []
   );
 
-  const viewMoreTimeline = () => trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE);
-
   useDownloadDocument({ url: legalFactDownloadUrl });
   useDownloadDocument({ url: documentDownloadUrl });
   useDownloadDocument({ url: otherDocumentDownloadUrl });
@@ -375,7 +371,6 @@ const NotificationDetail: React.FC = () => {
                   historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
                   showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
                   showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
-                  eventTrackingCallbackShowMore={viewMoreTimeline}
                 />
               </Box>
             </Grid>

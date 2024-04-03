@@ -10,24 +10,11 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
-
 const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data }) => {
-  const handleEventTrackingTooltip = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
-  };
   const { label, tooltip, color } = getNotificationStatusInfos(data.notificationStatus, {
     recipients: data.recipients,
   });
-  return (
-    <StatusTooltip
-      label={label}
-      tooltip={tooltip}
-      color={color}
-      eventTrackingCallback={handleEventTrackingTooltip}
-    ></StatusTooltip>
-  );
+  return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
 };
 
 const NotificationsDataSwitch: React.FC<{ data: Row<Notification>; type: keyof Notification }> = ({

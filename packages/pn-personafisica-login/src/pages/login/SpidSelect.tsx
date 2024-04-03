@@ -7,13 +7,12 @@ import Grid from '@mui/material/Grid';
 import Icon from '@mui/material/Icon';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import { ProfilePropertyType } from '@pagopa-pn/pn-commons';
 
 import SpidBig from '../../assets/spid_big.svg';
+import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
 import { IdentityProvider, getIDPS } from '../../utility/IDPS';
-import { TrackEventType } from '../../utility/events';
-import { setSuperOrProfilePropertyValues, trackEventByType } from '../../utility/mixpanel';
+import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 import { shuffleList } from '../../utility/utils';
 
 const SpidSelect = ({ onBack }: { onBack: () => void }) => {
@@ -25,16 +24,14 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
   const getSPID = (IDP: IdentityProvider) => {
     sessionStorage.setItem('IDP', IDP.entityId);
 
-    trackEventByType(TrackEventType.SEND_IDP_SELECTED, {
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_IDP_SELECTED, {
       SPID_IDP_NAME: IDP.name,
       SPID_IDP_ID: IDP.entityId,
     });
 
-    setSuperOrProfilePropertyValues(
-      ProfilePropertyType.PROFILE,
-      'SEND_LOGIN_METHOD',
-      IDP.entityId as any // FIX this any
-    );
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_METHOD, {
+      entityID: IDP.entityId,
+    });
 
     window.location.assign(
       `${URL_API_LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2&RelayState=send`

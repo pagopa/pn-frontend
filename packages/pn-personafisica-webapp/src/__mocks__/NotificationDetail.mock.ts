@@ -202,7 +202,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
   },
 ];
 
-const timeline: Array<INotificationDetailTimeline> = [
+export const timeline: Array<INotificationDetailTimeline> = [
   {
     elementId: 'REQUEST_ACCEPTED.IUN_DAPQ-LWQV-DKQH-202308-A-1',
     timestamp: '2023-08-23T07:39:54.877429741Z',

@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.4.0](https://github.com/pagopa/pn-frontend/compare/v2.4.0-RC.0...v2.4.0) (2024-03-07)
+
+**Note:** Version bump only for package send-monorepo
+
+
+
+
+
+# [2.4.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.3.2...v2.4.0-RC.0) (2024-02-27)
+
+
+### Bug Fixes
+
+* **PN-10025:** added aria-label to button with IDP name ([#1138](https://github.com/pagopa/pn-frontend/issues/1138)) ([c24c02b](https://github.com/pagopa/pn-frontend/commit/c24c02be95d92e1e44e5128070d98f0a3c5f3061))
+* **pn-9145:** added test case for duplicated protocol error ([#1120](https://github.com/pagopa/pn-frontend/issues/1120)) ([d2ca754](https://github.com/pagopa/pn-frontend/commit/d2ca754e07ed665211dab7a6d9e92d35b89ddee6))
+
+
+### Features
+
+* **PN-9684:** implemented alert in notificationDetail for alternative-RADD ([#1134](https://github.com/pagopa/pn-frontend/issues/1134)) ([bfc1d4a](https://github.com/pagopa/pn-frontend/commit/bfc1d4ad8d085d5691853fb54d1dad6049ca5f92))
+
+
+### Reverts
+
+* Revert "Release/v2.3.2" (#1143) ([7cfe17e](https://github.com/pagopa/pn-frontend/commit/7cfe17e1dffd43d0ffc7c0081dbdd538e0691fb6)), closes [#1143](https://github.com/pagopa/pn-frontend/issues/1143)
+* Revert "fix(PN-10025): added aria-label to button with IDP name (#1138)" (#1140) ([2559495](https://github.com/pagopa/pn-frontend/commit/25594959e7184c0ae7dc59839845eda7cbd900d5)), closes [#1138](https://github.com/pagopa/pn-frontend/issues/1138) [#1140](https://github.com/pagopa/pn-frontend/issues/1140)
+
+
+
+
+
 ## [2.3.2](https://github.com/pagopa/pn-frontend/compare/v2.3.1...v2.3.2) (2024-02-20)
 
 

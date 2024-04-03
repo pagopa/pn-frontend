@@ -36,8 +36,6 @@ type Props = {
   onLanguageChanged?: (langCode: string) => void;
   /** event callback on app crash  */
   eventTrackingCallbackAppCrash?: (_error: Error, _errorInfo: ErrorInfo) => void;
-  /** Track product switch action */
-  eventTrackingCallbackProductSwitch?: (target: string) => void;
   /** event on assistance click button */
   eventTrackingCallbackRefreshPage?: () => void;
   /** event on refresh page click button */
@@ -53,6 +51,8 @@ type Props = {
   privacyPolicyHref?: string;
   /** Url to terms of service page */
   termsOfServiceHref?: string;
+  /** Enable assistance button */
+  enableAssistanceButton?: boolean;
 };
 
 const Layout: React.FC<Props> = ({
@@ -68,9 +68,8 @@ const Layout: React.FC<Props> = ({
   loggedUser,
   enableUserDropdown,
   userActions,
-  onLanguageChanged = () => { },
+  onLanguageChanged = () => {},
   eventTrackingCallbackAppCrash,
-  eventTrackingCallbackProductSwitch,
   eventTrackingCallbackRefreshPage,
   onAssistanceClick,
   isLogged,
@@ -79,6 +78,7 @@ const Layout: React.FC<Props> = ({
   hasTermsOfService,
   privacyPolicyHref,
   termsOfServiceHref,
+  enableAssistanceButton = true,
 }) => (
   <ErrorBoundary
     sx={{ height: 'calc(100vh - 5px)' }}
@@ -103,8 +103,8 @@ const Layout: React.FC<Props> = ({
             enableDropdown={enableUserDropdown}
             userActions={userActions}
             onAssistanceClick={onAssistanceClick}
-            eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
             isLogged={isLogged}
+            enableAssistanceButton={enableAssistanceButton}
           />
         )}
         <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
