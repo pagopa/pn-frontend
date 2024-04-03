@@ -26,8 +26,6 @@ import { DELEGATION_ACTIONS, getDelegatesByCompany } from '../../redux/delegatio
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utility/delegation.utility';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
 import DelegationDataSwitch from './DelegationDataSwitch';
 
 type Props = {
@@ -69,9 +67,8 @@ const DelegatesByCompany = () => {
   const data = delegationToItem(delegatesByCompany) as Array<Row<DelegationColumnData>>;
   const rows = sortArray(sort.order, sort.orderBy, data);
 
-  const handleAddDelegationClick = (source: string) => {
+  const handleAddDelegationClick = () => {
     navigate(routes.NUOVA_DELEGA);
-    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, { source });
   };
 
   const delegatesColumn: Array<SmartTableData<DelegationColumnData>> = [
@@ -160,7 +157,7 @@ const DelegatesByCompany = () => {
         <Button
           id="add-deleghe"
           variant="outlined"
-          onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
+          onClick={handleAddDelegationClick}
           data-testid="addDeleghe"
         >
           <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />

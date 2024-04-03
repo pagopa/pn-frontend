@@ -36,8 +36,6 @@ type Props = {
   onLanguageChanged?: (langCode: string) => void;
   /** event callback on app crash  */
   eventTrackingCallbackAppCrash?: (_error: Error, _errorInfo: ErrorInfo) => void;
-  /** Track product switch action */
-  eventTrackingCallbackProductSwitch?: (target: string) => void;
   /** event on assistance click button */
   eventTrackingCallbackRefreshPage?: () => void;
   /** event on refresh page click button */
@@ -72,7 +70,6 @@ const Layout: React.FC<Props> = ({
   userActions,
   onLanguageChanged = () => {},
   eventTrackingCallbackAppCrash,
-  eventTrackingCallbackProductSwitch,
   eventTrackingCallbackRefreshPage,
   onAssistanceClick,
   isLogged,
@@ -106,7 +103,6 @@ const Layout: React.FC<Props> = ({
             enableDropdown={enableUserDropdown}
             userActions={userActions}
             onAssistanceClick={onAssistanceClick}
-            eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
             isLogged={isLogged}
             enableAssistanceButton={enableAssistanceButton}
           />

@@ -28,8 +28,6 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { NewNotificationRecipient, PaymentModel } from '../../models/NewNotification';
 import { useAppDispatch } from '../../redux/hooks';
 import { saveRecipients } from '../../redux/newNotification/reducers';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
 import {
   denominationLengthAndCharacters,
   identicalIUV,
@@ -250,13 +248,6 @@ const Recipient: React.FC<Props> = ({
   ) => {
     const checked = (event.target as any).checked;
     const name = (event.target as any).name;
-    if (checked) {
-      trackEventByType(
-        name.endsWith('showPhysicalAddress')
-          ? TrackEventType.NOTIFICATION_SEND_PHYSICAL_ADDRESS
-          : TrackEventType.NOTIFICATION_SEND_DIGITAL_DOMICILE
-      );
-    }
     if (!checked && name.endsWith('showPhysicalAddress')) {
       // reset physical address
       setFieldValue(
@@ -297,9 +288,6 @@ const Recipient: React.FC<Props> = ({
       ...values.recipients,
       { ...singleRecipient, idx: lastRecipientIdx + 1, id: `recipient.${lastRecipientIdx + 1}` },
     ]);
-    trackEventByType(TrackEventType.NOTIFICATION_SEND_MULTIPLE_RECIPIENTS, {
-      recipients: lastRecipientIdx + 1,
-    });
   };
 
   const handleSubmit = (values: FormRecipients) => {
@@ -361,9 +349,6 @@ const Recipient: React.FC<Props> = ({
     // In fact, I would have liked to specify the change through a function, i.e.
     //   setFieldValue(`recipients[${index}]`, (currentValue: any) => ({...currentValue, ...valuesToUpdate}));
     // but unfortunately Formik' setFieldValue is not capable of handling such kind of updates.
-    trackEventByType(TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE, {
-      type: event.currentTarget.value,
-    });
   };
 
   useImperativeHandle(forwardedRef, () => ({

@@ -16,6 +16,7 @@ vi.mock('../../../hooks', () => ({
 describe('ApiErrorWrapper', () => {
   const original = window.location;
   const reloadText = 'Ricarica';
+  const user = userEvent.setup();
 
   beforeAll(() => {
     Object.defineProperty(window, 'location', {
@@ -67,7 +68,7 @@ describe('ApiErrorWrapper', () => {
 
     const reloadItemComponent = screen.getByText(reloadText);
     expect(reloadItemComponent).toBeInTheDocument();
-    await userEvent.click(reloadItemComponent);
+    await user.click(reloadItemComponent);
 
     await waitFor(() => {
       expect(reloadActionMock).toHaveBeenCalled();
@@ -83,7 +84,7 @@ describe('ApiErrorWrapper', () => {
 
     const reloadItemComponent = screen.getByText(reloadText);
     expect(reloadItemComponent).toBeInTheDocument();
-    await userEvent.click(reloadItemComponent);
+    await user.click(reloadItemComponent);
 
     await waitFor(() => {
       expect(window.location.reload).toHaveBeenCalled();

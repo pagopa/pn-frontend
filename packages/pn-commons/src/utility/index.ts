@@ -1,4 +1,5 @@
 import { Configuration } from '../services/configuration.service';
+import EventStrategyFactory from '../utility/MixpanelUtils/EventStrategyFactory';
 import { AppError, AppErrorFactory, UnknownAppError, errorFactoryManager } from './AppError';
 import { AppResponsePublisher, ResponseEventDispatcher } from './AppResponse';
 import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
@@ -122,5 +123,6 @@ export {
   PAYMENT_CACHE_KEY,
   rewriteLinks,
   dateIsLessThan10Years,
+  EventStrategyFactory,
   parseError,
 };

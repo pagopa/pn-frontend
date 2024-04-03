@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { Alert, Box, Link, Typography } from '@mui/material';
 
+import { PFEventsType } from '../../models/PFEventsType';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import * as routes from '../../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { closeDomicileBanner } from '../../redux/sidemenu/reducers';
 import { RootState } from '../../redux/store';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 
 type Props = {
   source?: string;
@@ -30,7 +30,7 @@ const DomicileBanner = forwardRef(({ source = 'home_notifiche' }: Props, ref) =>
   }, [closeDomicileBanner]);
 
   const handleAddDomicile = useCallback(() => {
-    trackEventByType(TrackEventType.SEND_VIEW_CONTACT_DETAILS, { source });
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, { source });
     navigate(routes.RECAPITI);
   }, []);
 

@@ -6,7 +6,6 @@ import { Alert, Box, Button, CircularProgress, Link, RadioGroup, Typography } fr
 import { downloadDocument } from '../../hooks';
 import {
   EventPaymentRecipientType,
-  EventPaymentStatusType,
   F24PaymentDetails,
   NotificationDetailPayment,
   PaginationData,
@@ -14,7 +13,6 @@ import {
   PaymentAttachment,
   PaymentAttachmentSName,
   PaymentDetails,
-  PaymentInfoDetail,
   PaymentStatus,
   PaymentsData,
 } from '../../models';
@@ -27,32 +25,6 @@ import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
 import NotificationPaymentTitle from './NotificationPaymentTitle';
 
 const FAQ_NOTIFICATION_CANCELLED_REFUND = '/faq#notifica-pagata-rimborso';
-
-const getPaymentsStatus = (
-  paginationData: PaginationData,
-  pagoPaF24: Array<PaymentDetails>
-): EventPaymentStatusType => ({
-  page_number: paginationData.page,
-  count_payment: pagoPaF24.length,
-  count_canceled: pagoPaF24.filter(
-    (f) =>
-      f.pagoPa?.status === PaymentStatus.FAILED &&
-      f.pagoPa.detail === PaymentInfoDetail.PAYMENT_CANCELED
-  ).length,
-  count_error: pagoPaF24.filter(
-    (f) =>
-      f.pagoPa?.status === PaymentStatus.FAILED &&
-      f.pagoPa.detail !== PaymentInfoDetail.PAYMENT_CANCELED &&
-      f.pagoPa.detail !== PaymentInfoDetail.PAYMENT_EXPIRED
-  ).length,
-  count_expired: pagoPaF24.filter(
-    (f) =>
-      f.pagoPa?.status === PaymentStatus.FAILED &&
-      f.pagoPa.detail === PaymentInfoDetail.PAYMENT_EXPIRED
-  ).length,
-  count_paid: pagoPaF24.filter((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED).length,
-  count_unpaid: pagoPaF24.filter((f) => f.pagoPa?.status === PaymentStatus.REQUIRED).length,
-});
 
 type Props = {
   payments: PaymentsData;
@@ -160,8 +132,10 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     const paymentsLoaded = paginatedPayments.every((payment) => !payment.isLoading);
     if (paymentsLoaded) {
       // the tracked event wants only the status of the current paged payments
-      const pagePaymentsStatus = getPaymentsStatus(paginationData, paginatedPayments);
-      handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_STATUS, pagePaymentsStatus);
+      handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_STATUS, {
+        paginationData,
+        paginatedPayments,
+      });
     }
   }, [payments]);
 
@@ -287,11 +261,19 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                 </Button>
               )}
               {selectedPayment &&
-              pagoPaF24.find((payment) => payment.pagoPa?.noticeCode === selectedPayment.noticeCode)
-                ?.f24 ? (
+              pagoPaF24.find(
+                (payment) => payment.pagoPa?.noticeCode === selectedPayment?.noticeCode
+              )?.f24 ? (
                 <Box key="attachment" data-testid="f24-download">
                   <NotificationPaymentF24Item
-                    handleTrackDownloadF24={
+                    f24Item={
+                      pagoPaF24.find(
+                        (payment) => payment.pagoPa?.noticeCode === selectedPayment?.noticeCode
+                      )?.f24 as F24PaymentDetails
+                    }
+                    getPaymentAttachmentAction={getPaymentAttachmentAction}
+                    isPagoPaAttachment
+                    handleTrackDownloadF24={() =>
                       void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD)
                     }
                     handleTrackDownloadF24Success={() =>
@@ -300,13 +282,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                     handleTrackDownloadF24Timeout={() =>
                       void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
                     }
-                    f24Item={
-                      pagoPaF24.find(
-                        (payment) => payment.pagoPa?.noticeCode === selectedPayment.noticeCode
-                      )?.f24 as F24PaymentDetails
-                    }
-                    getPaymentAttachmentAction={getPaymentAttachmentAction}
-                    isPagoPaAttachment
                     timerF24={timerF24}
                     disableDownload={areOtherDowloading}
                     handleDownload={setAreOtherDowloading}

@@ -11,7 +11,6 @@ import {
   PaymentDetails,
   PaymentNotice,
   PaymentStatus,
-  ProfilePropertyType,
   checkIfPaymentsIsAlreadyInCache,
   getPaymentCache,
   parseError,
@@ -27,8 +26,8 @@ import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { NotificationReceivedApiFactory } from '../../generated-client';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
-import { TrackEventType } from '../../utility/events';
-import { setSuperOrProfilePropertyValues, trackEventByType } from '../../utility/mixpanel';
+import { PFEventsType } from '../../models/PFEventsType';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { parseNotificationDetailForRecipient } from '../../utility/notification.utility';
 import { RootState, store } from '../store';
 import { DownloadFileResponse, GetReceivedNotificationParams } from './types';
@@ -151,12 +150,12 @@ export const getNotificationPaymentInfo = createAsyncThunk<
             paymentCache.currentPayment,
           ]);
 
-          trackEventByType(TrackEventType.SEND_PAYMENT_OUTCOME, {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENT_OUTCOME, {
             outcome: updatedPayment[0].status,
           });
 
           if (updatedPayment[0].status === PaymentStatus.SUCCEEDED) {
-            setSuperOrProfilePropertyValues(ProfilePropertyType.INCREMENTAL, 'SEND_PAYMENTS_COUNT');
+            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENTS_COUNT);
           }
 
           const payments = populatePaymentsPagoPaF24(

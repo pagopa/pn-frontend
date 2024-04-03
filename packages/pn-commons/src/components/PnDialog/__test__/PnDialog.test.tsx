@@ -26,7 +26,7 @@ describe('PnDialog Component', () => {
   });
 
   it('renders component - mobile', () => {
-    window.matchMedia = createMatchMedia(800);
+    window.matchMedia = createMatchMedia(500);
     const { queryByTestId } = render(
       <PnDialog open>
         <DialogTitle data-testid="dialog-title">Title</DialogTitle>

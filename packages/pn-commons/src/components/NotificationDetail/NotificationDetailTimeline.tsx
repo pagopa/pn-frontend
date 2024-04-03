@@ -25,7 +25,6 @@ type Props = {
   historyButtonLabel: string;
   showMoreButtonLabel: string;
   showLessButtonLabel: string;
-  eventTrackingCallbackShowMore?: () => void;
   disableDownloads?: boolean;
   isParty?: boolean;
   language?: string;
