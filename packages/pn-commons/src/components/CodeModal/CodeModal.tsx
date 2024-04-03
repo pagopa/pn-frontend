@@ -84,11 +84,11 @@ const CodeModal = memo(
         setInternalError({
           internalHasError: true,
           internalErrorTitle: getLocalizedOrDefaultLabel(
-            'commons',
+            'common',
             `errors.invalid_type_code.title`
           ),
           internalErrorMessage: getLocalizedOrDefaultLabel(
-            'commons',
+            'common',
             `errors.invalid_type_code.message`
           ),
         });
