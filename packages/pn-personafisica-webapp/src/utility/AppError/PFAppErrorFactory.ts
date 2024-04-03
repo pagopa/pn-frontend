@@ -5,15 +5,16 @@ import {
   UnknownAppError,
 } from '@pagopa-pn/pn-commons';
 
-import { ServerResponseErrorCode } from './types';
+import { DeliveryMandateNotFoundAppError } from './DeliveryMandateNotFoundAppError';
+import { GenericInvalidParameterPatternAppError } from './GenericInvalidParameterPatternAppError';
 import { MandateAlreadyExistsAppError } from './MandateAlreadyExistsAppError';
 import { MandateDelegateHimselfAppError } from './MandateDelegateHimselfAppError';
 import { MandateInvalidVerificationCodeAppError } from './MandateInvalidVerificationCodeAppError';
 import { MandateNotAcceptableAppError } from './MandateNotAcceptableAppError';
 import { MandateNotFoundAppError } from './MandateNotFoundAppError';
+import { UnprocessableEntityPaymentError } from './UnprocessableEntityPaymentError';
 import { UserAttributesInvalidVerificationCodeAppError } from './UserAttributesInvalidVerificationCodeAppError';
-import { GenericInvalidParameterPatternAppError } from './GenericInvalidParameterPatternAppError';
-import { DeliveryMandateNotFoundAppError } from './DeliveryMandateNotFoundAppError';
+import { ServerResponseErrorCode } from './types';
 
 export class PFAppErrorFactory extends AppErrorFactory {
   private translateFunction: (path: string, ns: string) => string;
@@ -47,6 +48,8 @@ export class PFAppErrorFactory extends AppErrorFactory {
         return new GenericInvalidParameterPatternAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_DELIVERY_MANDATENOTFOUND:
         return new DeliveryMandateNotFoundAppError(error, this.translateFunction);
+      case ServerResponseErrorCode.PN_UNPROCESSABLE_ENTITY:
+        return new UnprocessableEntityPaymentError(error, this.translateFunction);
       default:
         return new UnknownAppError(error);
     }
