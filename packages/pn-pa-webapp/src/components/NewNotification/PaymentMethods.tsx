@@ -4,7 +4,7 @@ import { ForwardedRef, Fragment, forwardRef, useImperativeHandle, useMemo } from
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Link, Paper, Typography } from '@mui/material';
-import { FileUpload, SectionHeading } from '@pagopa-pn/pn-commons';
+import { FileUpload, SectionHeading, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotification,
@@ -37,6 +37,7 @@ const PaymentBox: React.FC<PaymentBoxProps> = ({
   fileUploaded,
 }) => {
   const { t } = useTranslation(['notifiche']);
+  const isMobile = useIsMobile('md');
 
   return (
     <Fragment>
@@ -44,7 +45,9 @@ const PaymentBox: React.FC<PaymentBoxProps> = ({
         {title}
       </Typography>
       <FileUpload
-        uploadText={t('new-notification.drag-doc')}
+        uploadText={
+          isMobile ? t('new-notification.drag-doc-mobile') : t('new-notification.drag-doc-pc')
+        }
         accept="application/pdf"
         onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
         onRemoveFile={() => onRemoveFile(id)}

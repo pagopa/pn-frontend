@@ -16,6 +16,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import {
   Alert,
   Box,
+  Button,
   Grid,
   IconButton,
   Input,
@@ -23,7 +24,6 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../hooks';
 import { calcSha256String, parseFileSize } from '../utility/file.utility';
@@ -116,10 +116,18 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
   }
 };
 
-const OrientedBox = ({ vertical, children }: { vertical: boolean; children: ReactNode }) => (
+const OrientedBox = ({
+  vertical,
+  justifyContent,
+  children,
+}: {
+  vertical: boolean;
+  justifyContent: string;
+  children: ReactNode;
+}) => (
   <Box
     display="flex"
-    justifyContent="center"
+    justifyContent={justifyContent}
     alignItems="center"
     flexDirection={vertical ? 'column' : 'row'}
     margin="auto"
@@ -146,6 +154,7 @@ const OrientedBox = ({ vertical, children }: { vertical: boolean; children: Reac
 const FileUpload = ({
   uploadText,
   vertical = false,
+  justifyContent = 'center',
   accept,
   uploadFn,
   onFileUploaded,
@@ -278,6 +287,26 @@ const FileUpload = ({
       </IconButton>
     </CustomTooltip>
   );
+
+  const truncateFilename = (filename: string) => {
+    console.log(filename);
+    const [name, extension] = filename.split('.');
+    return (
+      <OrientedBox vertical={false} justifyContent="left">
+        <Typography
+          sx={{
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            justifyContent: 'start',
+          }}
+        >
+          {name}.
+        </Typography>
+        <Typography>{extension}</Typography>
+      </OrientedBox>
+    );
+  };
   return (
     <Box
       sx={{ ...containerStyle, padding: '24px', borderRadius: '10px', ...sx }}
@@ -288,25 +317,20 @@ const FileUpload = ({
       component="div"
     >
       {fileData.status === UploadStatus.TO_UPLOAD && (
-        <OrientedBox vertical={vertical}>
-          {!isMobile && (
-            <>
-              <CloudUploadIcon color="primary" sx={{ margin: '0 10px' }} />
-              <Typography display="inline" variant="body2">
-                {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or', 'oppure')}
-                &nbsp;
-              </Typography>
-            </>
-          )}
-          <ButtonNaked onClick={chooseFileHandler} data-testid="loadFromPc">
-            <Typography display="inline" variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
-              {getLocalizedOrDefaultLabel(
-                'common',
-                isMobile ? 'upload-file.select-from-mobile' : 'upload-file.select-from-pc',
-                'selezionalo dal tuo computer'
-              )}
-            </Typography>
-          </ButtonNaked>
+        <OrientedBox vertical={isMobile} justifyContent={justifyContent}>
+          <CloudUploadIcon color="primary" sx={{ margin: '0 10px' }} />
+          <Typography display="inline" variant="body2" textAlign="center">
+            {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or', 'oppure')}
+            &nbsp;
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={chooseFileHandler}
+            data-testid="loadFromPc"
+            sx={{ margin: isMobile ? '10px 0' : '0 10px' }}
+          >
+            {getLocalizedOrDefaultLabel('common', 'upload-file.select-file', 'carica il file')}
+          </Button>
           <Input
             id="file-input"
             type="file"
@@ -320,7 +344,7 @@ const FileUpload = ({
       )}
       {(fileData.status === UploadStatus.IN_PROGRESS ||
         fileData.status === UploadStatus.SENDING) && (
-        <OrientedBox vertical={vertical}>
+        <OrientedBox vertical={vertical} justifyContent={justifyContent}>
           <Typography display="inline" variant="body2">
             {fileData.status === UploadStatus.IN_PROGRESS
               ? getLocalizedOrDefaultLabel(
@@ -343,10 +367,17 @@ const FileUpload = ({
             alignItems="center"
             sx={{ width: '100%' }}
           >
-            <Box display={isMobile ? 'block' : 'flex'} alignItems="center">
-              <Box display="flex">
+            <Box
+              display={isMobile ? 'block' : 'flex'}
+              alignItems="center"
+              justifyContent="start"
+              width={isMobile ? 0.85 : 'auto'}
+            >
+              <Box display="flex" width={isMobile ? 0.7 : 'auto'} justifyContent="start">
                 <AttachFileIcon color="primary" />
-                <Typography color="primary">{fileData.file.name}</Typography>
+                <Typography color="primary" width={isMobile ? 1 : 'auto'} textAlign="center">
+                  {truncateFilename(fileData.file.name)}
+                </Typography>
               </Box>
               <Typography fontWeight={600} sx={{ marginLeft: { lg: '30px' } }}>
                 {parseFileSize(fileData.file.size)}
