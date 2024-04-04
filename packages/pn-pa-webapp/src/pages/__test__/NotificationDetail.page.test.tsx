@@ -31,7 +31,6 @@ import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__t
 import { apiClient } from '../../api/apiClients';
 import {
   CANCEL_NOTIFICATION,
-  NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
@@ -87,7 +86,7 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('renders NotificationDetail page - mono recipient', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(200, notificationDTO);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
@@ -147,7 +146,7 @@ describe('NotificationDetail Page', async () => {
 
   it('checks not available documents - mono recipient', async () => {
     mock
-      .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
+      .onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`)
       .reply(200, { ...notificationDTO, documentsAvailable: false });
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
@@ -166,7 +165,9 @@ describe('NotificationDetail Page', async () => {
       ...notificationDTO,
       sentAt: formatToTimezoneString(new Date(today.getTime() - 12960000000)) /* 150 days ago*/,
     };
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationAfter150Days);
+    mock
+      .onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`)
+      .reply(200, notificationAfter150Days);
 
     const otherDocument: NotificationDetailOtherDocument = {
       documentId: notificationAfter150Days.otherDocuments?.[0].documentId ?? '',
@@ -223,7 +224,9 @@ describe('NotificationDetail Page', async () => {
       ...notificationDTO,
       sentAt: formatToTimezoneString(new Date(today.getTime() - 31536000000100)) /* 10 years ago*/,
     };
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationAfter10Years);
+    mock
+      .onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`)
+      .reply(200, notificationAfter10Years);
 
     await act(async () => {
       result = render(<NotificationDetail />);
@@ -239,7 +242,7 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('executes the document download handler - mono recipient', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(200, notificationDTO);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     mock.onGet(NOTIFICATION_DETAIL_DOCUMENTS(notificationDTO.iun, '0')).reply(200, {
@@ -266,7 +269,7 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('executes the legal fact download handler - mono recipient', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(200, notificationDTO);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationDTO.iun, mockLegalIds)).reply(200, {
@@ -316,7 +319,7 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('executes the downtimws legal fact download handler - mono recipient', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(200, notificationDTO);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     mock
@@ -384,7 +387,7 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('errors on api call - mono recipient', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(500);
+    mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(500);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
@@ -403,7 +406,7 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('clicks on the cancel button and on close modal', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(200, notificationDTO);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
@@ -420,7 +423,7 @@ describe('NotificationDetail Page', async () => {
 
   it('clicks on the cancel button and on confirm button', async () => {
     let count = 0;
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(() => {
+    mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(() => {
       if (count === 0) {
         return [200, notificationDTO];
       }
@@ -451,7 +454,7 @@ describe('NotificationDetail Page', async () => {
     expect(mock.history.put[0].url).toBe(CANCEL_NOTIFICATION(notificationDTO.iun));
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
-      expect(mock.history.get[2].url).toBe(NOTIFICATION_DETAIL(notificationDTO.iun));
+      expect(mock.history.get[2].url).toBe(`/bff/v1/notifications/sent/${notificationDTO.iun}`);
     });
     // check alert cancellation in progress
     let alert = await waitFor(() => result.getByTestId('alert'));
@@ -462,7 +465,7 @@ describe('NotificationDetail Page', async () => {
 
   it('check alert on screen with change status', async () => {
     mock
-      .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
+      .onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`)
       .reply(200, { ...notificationDTO, notificationStatus: NotificationStatus.CANCELLED });
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
@@ -476,7 +479,7 @@ describe('NotificationDetail Page', async () => {
 
   it('renders NotificationDetail page - multi recipient', async () => {
     mock
-      .onGet(NOTIFICATION_DETAIL(notificationDTOMultiRecipient.iun))
+      .onGet(`/bff/v1/notifications/sent/${notificationDTOMultiRecipient.iun}`)
       .reply(200, notificationDTOMultiRecipient);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
@@ -534,7 +537,7 @@ describe('NotificationDetail Page', async () => {
       payments: [],
     }));
 
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, {
+    mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(200, {
       ...notificationDTO,
       recipients: recipientsWithoutPayments,
     });
@@ -548,7 +551,9 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('render success alert when documents have been picked up - monorecipient', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun)).reply(200, raddNotificationDTO);
+    mock
+      .onGet(`/bff/v1/notifications/sent/${raddNotificationDTO.iun}`)
+      .reply(200, raddNotificationDTO);
     await act(async () => {
       result = render(<NotificationDetail />);
     });
@@ -561,7 +566,7 @@ describe('NotificationDetail Page', async () => {
 
   it('render success alert when documents have been picked up - multirecipient', async () => {
     mock
-      .onGet(NOTIFICATION_DETAIL(raddNotificationDTOMultiRecipient.iun))
+      .onGet(`/bff/v1/notifications/sent/${raddNotificationDTOMultiRecipient.iun}`)
       .reply(200, raddNotificationDTOMultiRecipient);
     await act(async () => {
       result = render(<NotificationDetail />);

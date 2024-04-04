@@ -46,7 +46,7 @@ import {
   setPaymentCache,
   setPaymentsInCache,
 } from './paymentCaching.utility';
-import { performThunkAction } from './redux.utility';
+import { parseError, performThunkAction } from './redux.utility';
 import { AppRouteParams, compileRoute } from './routes.utility';
 import { searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';
 import { storageOpsBuilder } from './storage.utility';
@@ -124,4 +124,5 @@ export {
   rewriteLinks,
   dateIsLessThan10Years,
   EventStrategyFactory,
+  parseError,
 };

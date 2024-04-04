@@ -12,13 +12,12 @@ import {
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
-import { notificationDTO, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
   NOTIFICATIONS_LIST,
-  NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
@@ -61,17 +60,6 @@ describe('Notifications api tests', () => {
       endDate: formatToTimezoneString(today),
     });
     expect(res).toStrictEqual(notificationsToFe);
-  });
-
-  it('getReceivedNotification', async () => {
-    const iun = notificationDTO.iun;
-    mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationDTO);
-    const res = await NotificationsApi.getReceivedNotification(
-      iun,
-      notificationDTO.recipients[2].taxId,
-      []
-    );
-    expect(res).toStrictEqual(notificationToFe);
   });
 
   it('getReceivedNotificationDocument', async () => {

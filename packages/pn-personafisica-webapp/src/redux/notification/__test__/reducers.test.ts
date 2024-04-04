@@ -28,7 +28,6 @@ import {
 import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import {
-  NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
@@ -53,16 +52,12 @@ import { resetLegalFactState, resetState } from '../reducers';
 const initialState = {
   loading: false,
   notification: {
-    paProtocolNumber: '',
     subject: '',
     recipients: [],
     senderDenomination: '',
     paymentExpirationDate: '',
     documents: [],
     otherDocuments: [],
-    notificationFeePolicy: '',
-    physicalCommunicationType: '',
-    senderPaId: '',
     iun: '',
     sentAt: '',
     notificationStatus: '',
@@ -116,7 +111,7 @@ describe('Notification detail redux state tests', () => {
       (recipient) => recipient.taxId === currentRecipient?.taxId
     );
 
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     const action = await store.dispatch(
       getReceivedNotification({
         iun: notificationDTO.iun,
@@ -221,7 +216,7 @@ describe('Notification detail redux state tests', () => {
 
   it('should save only payed payments (from timeline) if the notification is canceled', async () => {
     mock
-      .onGet(NOTIFICATION_DETAIL(cancelledNotificationDTO.iun))
+      .onGet(`/bff/v1/notifications/received/${cancelledNotificationDTO.iun}`)
       .reply(200, cancelledNotificationDTO);
     const action = await store.dispatch(
       getReceivedNotification({

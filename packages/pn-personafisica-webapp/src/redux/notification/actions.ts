@@ -4,6 +4,7 @@ import {
   KnownFunctionality,
   LegalFactDocumentDetails,
   LegalFactId,
+  NotificationDetail,
   NotificationDetailOtherDocument,
   PaymentAttachment,
   PaymentAttachmentNameType,
@@ -12,6 +13,7 @@ import {
   PaymentStatus,
   checkIfPaymentsIsAlreadyInCache,
   getPaymentCache,
+  parseError,
   performThunkAction,
   populatePaymentsPagoPaF24,
   setPaymentCache,
@@ -19,11 +21,14 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { apiClient } from '../../api/apiClients';
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
+import { NotificationReceivedApiFactory } from '../../generated-client';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { PFEventsType } from '../../models/PFEventsType';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
+import { parseNotificationDetailForRecipient } from '../../utility/notification.utility';
 import { RootState, store } from '../store';
 import { DownloadFileResponse, GetReceivedNotificationParams } from './types';
 
@@ -40,14 +45,27 @@ export const getReceivedNotification = createAsyncThunk<
   GetReceivedNotificationParams
 >(
   NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
-  performThunkAction((params: GetReceivedNotificationParams) =>
-    NotificationsApi.getReceivedNotification(
-      params.iun,
-      params.currentUserTaxId,
-      params.delegatorsFromStore,
-      params.mandateId
-    )
-  )
+  async (params: GetReceivedNotificationParams, { rejectWithValue }) => {
+    try {
+      const notificationReceivedApiFactory = NotificationReceivedApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await notificationReceivedApiFactory.getReceivedNotificationV1(
+        params.iun,
+        params.mandateId
+      );
+      return parseNotificationDetailForRecipient(
+        response.data as NotificationDetail,
+        params.currentUserTaxId,
+        params.delegatorsFromStore,
+        params.mandateId
+      );
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
 export const getReceivedNotificationLegalfact = createAsyncThunk<

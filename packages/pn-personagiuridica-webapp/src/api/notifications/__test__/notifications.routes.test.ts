@@ -2,7 +2,6 @@ import { LegalFactType } from '@pagopa-pn/pn-commons';
 
 import {
   NOTIFICATIONS_LIST,
-  NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_ID_FROM_QRCODE,
@@ -37,11 +36,6 @@ describe('Notifications routes', () => {
     expect(route).toEqual(
       '/delivery/notifications/received/delegated?startDate=start-date&endDate=end-date&recipientId=RECIPIENT-ID&iunMatch=iun-match'
     );
-  });
-
-  it('should compile NOTIFICATION_DETAIL', () => {
-    const route = NOTIFICATION_DETAIL('mocked-iun');
-    expect(route).toEqual('/bff/v1/notifications/received/mocked-iun');
   });
 
   it('should compile NOTIFICATION_DETAIL_DOCUMENTS', () => {

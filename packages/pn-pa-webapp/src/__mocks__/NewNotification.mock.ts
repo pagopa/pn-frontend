@@ -1,6 +1,5 @@
 import {
   DigitalDomicileType,
-  NotificationFeePolicy,
   PhysicalCommunicationType,
   RecipientType,
 } from '@pagopa-pn/pn-commons';
@@ -10,6 +9,7 @@ import {
   NewNotificationDTO,
   NewNotificationDocument,
   NewNotificationRecipient,
+  NotificationFeePolicy,
   PaymentModel,
 } from '../models/NewNotification';
 import { GroupStatus, UserGroup } from '../models/user';

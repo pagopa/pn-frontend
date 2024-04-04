@@ -7,7 +7,7 @@ import {
 This function removes from error object all those informations that are not used by the application.
 This is needed because redux, when recives an action, does a serializability check and, if the obeject is not serializable, it launchs a warning 
 */
-function parseError(e: any) {
+export function parseError(e: any) {
   if (e.response) {
     const { data, status } = e.response;
     return {

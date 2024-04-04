@@ -1,20 +1,18 @@
 import _ from 'lodash';
 
 import {
-  AddressSource,
-  AnalogWorkflowDetails,
   INotificationDetailTimeline,
   LegalFactType,
   NotificationDetail,
   NotificationDetailPayment,
   NotificationDetailRecipient,
-  NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
   PaymentCache,
   PaymentsData,
   PhysicalCommunicationType,
   RecipientType,
+  ResponseStatus,
   TimelineCategory,
   getF24Payments,
   getPagoPaF24Payments,
@@ -273,14 +271,12 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
             province: 'MI',
             foreignState: 'ITALIA',
           },
-          sentAttemptMade: 0,
-          responseStatus: 'OK',
-          notificationDate: '2023-08-23T07:45:25Z',
+          responseStatus: ResponseStatus.OK,
           deliveryDetailCode: 'RECRN001C',
-          serviceLevel: 'AR_REGISTERED_LETTER',
+          serviceLevel: PhysicalCommunicationType.AR_REGISTERED_LETTER,
           sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
           registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
-        } as AnalogWorkflowDetails,
+        },
         index: 12,
         hidden: false,
       },
@@ -296,7 +292,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.SEND_ANALOG_PROGRESS,
         details: {
           recIndex: 2,
-          notificationDate: '2023-08-23T07:45:19Z',
           deliveryDetailCode: 'RECRN001B',
           attachments: [
             {
@@ -318,7 +313,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.SEND_ANALOG_PROGRESS,
         details: {
           recIndex: 2,
-          notificationDate: '2023-08-23T07:45:10Z',
           deliveryDetailCode: 'CON080',
           sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
           registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
@@ -341,9 +335,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
             province: 'MI',
             foreignState: 'ITALIA',
           },
-          sentAttemptMade: 0,
           productType: 'AR',
-          numberOfPages: 2,
         },
         index: 9,
         hidden: false,
@@ -365,7 +357,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
             province: 'MI',
             foreignState: 'ITALIA',
           },
-          sentAttemptMade: 0,
         },
         index: 8,
         hidden: true,
@@ -388,9 +379,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.GET_ADDRESS,
         details: {
           recIndex: 2,
-          digitalAddressSource: AddressSource.GENERAL,
-          isAvailable: false,
-          attemptDate: '2023-08-23T07:40:37.770114893Z',
         },
         index: 6,
         hidden: true,
@@ -415,8 +403,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.PUBLIC_REGISTRY_CALL,
         details: {
           recIndex: 2,
-          sentAttemptMade: 0,
-          sendDate: '2023-08-23T07:40:35.112443796Z',
         },
         index: 4,
         hidden: true,
@@ -428,9 +414,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.GET_ADDRESS,
         details: {
           recIndex: 2,
-          digitalAddressSource: AddressSource.SPECIAL,
-          isAvailable: false,
-          attemptDate: '2023-08-23T07:40:34.924030072Z',
         },
         index: 3,
         hidden: true,
@@ -442,9 +425,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.GET_ADDRESS,
         details: {
           recIndex: 2,
-          digitalAddressSource: AddressSource.PLATFORM,
-          isAvailable: false,
-          attemptDate: '2023-08-23T07:40:34.878603673Z',
         },
         index: 2,
         hidden: true,
@@ -456,8 +436,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.AAR_GENERATION,
         details: {
           recIndex: 2,
-          generatedAarUrl: 'PN_AAR-f773e631f0934287999939fefb0b0db6.pdf',
-          numberOfPages: 1,
         },
         index: 1,
         hidden: true,
@@ -522,7 +500,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
             province: 'MI',
             foreignState: 'ITALIA',
           },
-          sentAttemptMade: 0,
         },
         index: 8,
         hidden: true,
@@ -545,9 +522,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.GET_ADDRESS,
         details: {
           recIndex: 2,
-          digitalAddressSource: AddressSource.GENERAL,
-          isAvailable: false,
-          attemptDate: '2023-08-23T07:40:37.770114893Z',
         },
         index: 6,
         hidden: true,
@@ -572,8 +546,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.PUBLIC_REGISTRY_CALL,
         details: {
           recIndex: 2,
-          sentAttemptMade: 0,
-          sendDate: '2023-08-23T07:40:35.112443796Z',
         },
         index: 4,
         hidden: true,
@@ -585,9 +557,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.GET_ADDRESS,
         details: {
           recIndex: 2,
-          digitalAddressSource: AddressSource.SPECIAL,
-          isAvailable: false,
-          attemptDate: '2023-08-23T07:40:34.924030072Z',
         },
         index: 3,
         hidden: true,
@@ -599,9 +568,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.GET_ADDRESS,
         details: {
           recIndex: 2,
-          digitalAddressSource: AddressSource.PLATFORM,
-          isAvailable: false,
-          attemptDate: '2023-08-23T07:40:34.878603673Z',
         },
         index: 2,
         hidden: true,
@@ -613,8 +579,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.AAR_GENERATION,
         details: {
           recIndex: 2,
-          generatedAarUrl: 'PN_AAR-f773e631f0934287999939fefb0b0db6.pdf',
-          numberOfPages: 1,
         },
         index: 1,
         hidden: true,
@@ -659,8 +623,6 @@ export const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.AAR_GENERATION,
     details: {
       recIndex: 2,
-      generatedAarUrl: 'PN_AAR-f773e631f0934287999939fefb0b0db6.pdf',
-      numberOfPages: 1,
     },
     index: 1,
     hidden: true,
@@ -672,9 +634,6 @@ export const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.GET_ADDRESS,
     details: {
       recIndex: 2,
-      digitalAddressSource: AddressSource.PLATFORM,
-      isAvailable: false,
-      attemptDate: '2023-08-23T07:40:34.878603673Z',
     },
     index: 2,
     hidden: true,
@@ -686,9 +645,6 @@ export const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.GET_ADDRESS,
     details: {
       recIndex: 2,
-      digitalAddressSource: AddressSource.SPECIAL,
-      isAvailable: false,
-      attemptDate: '2023-08-23T07:40:34.924030072Z',
     },
     index: 3,
     hidden: true,
@@ -701,8 +657,6 @@ export const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.PUBLIC_REGISTRY_CALL,
     details: {
       recIndex: 2,
-      sentAttemptMade: 0,
-      sendDate: '2023-08-23T07:40:35.112443796Z',
     },
     index: 4,
     hidden: true,
@@ -726,9 +680,6 @@ export const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.GET_ADDRESS,
     details: {
       recIndex: 2,
-      digitalAddressSource: AddressSource.GENERAL,
-      isAvailable: false,
-      attemptDate: '2023-08-23T07:40:37.770114893Z',
     },
     index: 6,
     hidden: true,
@@ -761,7 +712,6 @@ export const timeline: Array<INotificationDetailTimeline> = [
         province: 'MI',
         foreignState: 'ITALIA',
       },
-      sentAttemptMade: 0,
     },
     index: 8,
     hidden: true,
@@ -781,9 +731,7 @@ export const timeline: Array<INotificationDetailTimeline> = [
         province: 'MI',
         foreignState: 'ITALIA',
       },
-      sentAttemptMade: 0,
       productType: 'AR',
-      numberOfPages: 2,
     },
     index: 9,
     hidden: false,
@@ -795,7 +743,6 @@ export const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.SEND_ANALOG_PROGRESS,
     details: {
       recIndex: 2,
-      notificationDate: '2023-08-23T07:45:10Z',
       deliveryDetailCode: 'CON080',
       sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
       registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
@@ -815,7 +762,6 @@ export const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.SEND_ANALOG_PROGRESS,
     details: {
       recIndex: 2,
-      notificationDate: '2023-08-23T07:45:19Z',
       deliveryDetailCode: 'RECRN001B',
       attachments: [
         {
@@ -847,14 +793,12 @@ export const timeline: Array<INotificationDetailTimeline> = [
         province: 'MI',
         foreignState: 'ITALIA',
       },
-      sentAttemptMade: 0,
-      responseStatus: 'OK',
-      notificationDate: '2023-08-23T07:45:25Z',
+      responseStatus: ResponseStatus.OK,
       deliveryDetailCode: 'RECRN001C',
-      serviceLevel: 'AR_REGISTERED_LETTER',
+      serviceLevel: PhysicalCommunicationType.AR_REGISTERED_LETTER,
       sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
       registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
-    } as AnalogWorkflowDetails,
+    },
     index: 12,
     hidden: false,
   },
@@ -962,7 +906,6 @@ export const recipients: Array<NotificationDetailRecipient> = [
 
 export const notificationDTO: NotificationDetail = {
   abstract: 'PAGAMENTO RATA IMU',
-  paProtocolNumber: 'TA-FFSMRC-20230823-2',
   subject: 'Pagamento rata IMU',
   recipients,
   documents: [
@@ -979,12 +922,8 @@ export const notificationDTO: NotificationDetail = {
       docIdx: '0',
     },
   ],
-  notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
-  physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
   senderDenomination: 'Comune di Palermo',
-  senderTaxId: '80016350821',
   group: '6467344676f10c7617353c90',
-  senderPaId: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce',
   iun: 'DAPQ-LWQV-DKQH-202308-A-1',
   sentAt: '2023-08-23T07:38:49.601270863Z',
   documentsAvailable: true,
@@ -1045,8 +984,6 @@ export const raddNotificationDTO: NotificationDetail = {
       details: {
         recIndex: 1,
         eventTimestamp: '2022-06-21T11:44:28Z',
-        raddType: 'ALT',
-        raddTransactionId: '6',
       },
     },
   ],
@@ -1058,8 +995,6 @@ export const raddNotificationDTO: NotificationDetail = {
     details: {
       recIndex: 1,
       eventTimestamp: '2022-06-21T11:44:28Z',
-      raddType: 'ALT',
-      raddTransactionId: '6',
     },
   },
 };

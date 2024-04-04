@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
 import {
-  AddressSource,
   DigitalDomicileType,
   INotificationDetailTimeline,
   LegalFactType,
@@ -9,11 +8,10 @@ import {
   NotificationDetail,
   NotificationDetailPayment,
   NotificationDetailRecipient,
-  NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
-  PhysicalCommunicationType,
   RecipientType,
+  ResponseStatus,
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
 
@@ -21,12 +19,12 @@ function getOneRecipientNotification(): NotificationDetail {
   const oneRecipientNotification = _.cloneDeep(notificationDTOMultiRecipient);
   oneRecipientNotification.recipients = [oneRecipientNotification.recipients[0]];
   oneRecipientNotification.timeline = oneRecipientNotification.timeline.filter(
-    (t) => !t.details.recIndex
+    (t) => 'recIndex' in t.details && !t.details.recIndex
   );
   oneRecipientNotification.notificationStatusHistory =
     oneRecipientNotification.notificationStatusHistory.map((status) => ({
       ...status,
-      steps: status.steps?.filter((step) => !step.details.recIndex),
+      steps: status.steps?.filter((step) => 'recIndex' in step.details && !step.details.recIndex),
       relatedTimelineElements: status.relatedTimelineElements.filter(
         (elem) => elem.indexOf('RECINDEX_0') > -1
       ),
@@ -50,8 +48,6 @@ const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.AAR_GENERATION,
     details: {
       recIndex: 1,
-      generatedAarUrl: 'PN_AAR-7e3c456307f743669b42105aa9357dae.pdf',
-      numberOfPages: 1,
     },
     legalFactsIds: [],
     index: 1,
@@ -63,8 +59,6 @@ const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.AAR_GENERATION,
     details: {
       recIndex: 0,
-      generatedAarUrl: 'PN_AAR-6dc9aa2aceec4a18b4b073df09a1ed12.pdf',
-      numberOfPages: 1,
     },
     legalFactsIds: [],
     index: 2,
@@ -81,7 +75,6 @@ const timeline: Array<INotificationDetailTimeline> = [
         type: DigitalDomicileType.SMS,
         address: '+393889533897',
       },
-      sendDate: '2023-08-25T09:35:28.673626121Z',
     },
     legalFactsIds: [],
     index: 3,
@@ -93,9 +86,6 @@ const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.GET_ADDRESS,
     details: {
       recIndex: 0,
-      digitalAddressSource: AddressSource.PLATFORM,
-      isAvailable: false,
-      attemptDate: '2023-08-25T09:35:37.430013304Z',
     },
     legalFactsIds: [],
     index: 4,
@@ -107,9 +97,6 @@ const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.GET_ADDRESS,
     details: {
       recIndex: 1,
-      digitalAddressSource: AddressSource.PLATFORM,
-      isAvailable: false,
-      attemptDate: '2023-08-25T09:35:37.438172821Z',
     },
     legalFactsIds: [],
     index: 5,
@@ -121,9 +108,6 @@ const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.GET_ADDRESS,
     details: {
       recIndex: 0,
-      digitalAddressSource: AddressSource.SPECIAL,
-      isAvailable: true,
-      attemptDate: '2023-08-25T09:35:37.459259637Z',
     },
     legalFactsIds: [],
     index: 6,
@@ -135,9 +119,6 @@ const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.GET_ADDRESS,
     details: {
       recIndex: 1,
-      digitalAddressSource: AddressSource.SPECIAL,
-      isAvailable: true,
-      attemptDate: '2023-08-25T09:35:37.467144969Z',
     },
     legalFactsIds: [],
     index: 7,
@@ -154,8 +135,6 @@ const timeline: Array<INotificationDetailTimeline> = [
         type: DigitalDomicileType.PEC,
         address: 'notifichedigitali-uat@pec.pagopa.it',
       },
-      digitalAddressSource: AddressSource.SPECIAL,
-      retryNumber: 0,
     },
     index: 8,
     hidden: false,
@@ -171,8 +150,6 @@ const timeline: Array<INotificationDetailTimeline> = [
         type: DigitalDomicileType.PEC,
         address: 'testpagopa3@pec.pagopa.it',
       },
-      digitalAddressSource: AddressSource.SPECIAL,
-      retryNumber: 0,
     },
     index: 9,
     hidden: false,
@@ -194,9 +171,6 @@ const timeline: Array<INotificationDetailTimeline> = [
         type: DigitalDomicileType.PEC,
         address: 'notifichedigitali-uat@pec.pagopa.it',
       },
-      digitalAddressSource: AddressSource.SPECIAL,
-      retryNumber: 0,
-      notificationDate: '2023-08-25T09:35:49.409272045Z',
       deliveryDetailCode: 'C001',
     },
     index: 10,
@@ -219,9 +193,6 @@ const timeline: Array<INotificationDetailTimeline> = [
         type: DigitalDomicileType.PEC,
         address: 'testpagopa3@pec.pagopa.it',
       },
-      digitalAddressSource: AddressSource.SPECIAL,
-      retryNumber: 0,
-      notificationDate: '2023-08-25T09:35:52.20063392Z',
       deliveryDetailCode: 'C001',
     },
     index: 11,
@@ -244,9 +215,7 @@ const timeline: Array<INotificationDetailTimeline> = [
         type: DigitalDomicileType.PEC,
         address: 'notifichedigitali-uat@pec.pagopa.it',
       },
-      digitalAddressSource: AddressSource.SPECIAL,
-      responseStatus: 'OK',
-      notificationDate: '2023-08-25T09:35:58.40995459Z',
+      responseStatus: ResponseStatus.OK,
       deliveryDetailCode: 'C003',
     },
     index: 12,
@@ -279,9 +248,7 @@ const timeline: Array<INotificationDetailTimeline> = [
         type: DigitalDomicileType.PEC,
         address: 'testpagopa3@pec.pagopa.it',
       },
-      digitalAddressSource: AddressSource.SPECIAL,
-      responseStatus: 'OK',
-      notificationDate: '2023-08-25T09:36:01.184038269Z',
+      responseStatus: ResponseStatus.OK,
       deliveryDetailCode: 'C003',
     },
     index: 14,
@@ -550,9 +517,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
             type: DigitalDomicileType.PEC,
             address: 'testpagopa3@pec.pagopa.it',
           },
-          digitalAddressSource: AddressSource.SPECIAL,
-          responseStatus: 'OK',
-          notificationDate: '2023-08-25T09:36:01.184038269Z',
+          responseStatus: ResponseStatus.OK,
           deliveryDetailCode: 'C003',
         },
         index: 14,
@@ -578,16 +543,14 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
             category: LegalFactType.PEC_RECEIPT,
           },
         ],
-        category: TimelineCategory.SEND_DIGITAL_FEEDBACK,
+        category: TimelineCategory.SEND_DIGITAL_DOMICILE,
         details: {
           recIndex: 0,
           digitalAddress: {
             type: DigitalDomicileType.PEC,
             address: 'notifichedigitali-uat@pec.pagopa.it',
           },
-          digitalAddressSource: AddressSource.SPECIAL,
-          responseStatus: 'OK',
-          notificationDate: '2023-08-25T09:35:58.40995459Z',
+          responseStatus: ResponseStatus.OK,
           deliveryDetailCode: 'C003',
         },
         index: 12,
@@ -610,9 +573,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
             type: DigitalDomicileType.PEC,
             address: 'testpagopa3@pec.pagopa.it',
           },
-          digitalAddressSource: AddressSource.SPECIAL,
-          retryNumber: 0,
-          notificationDate: '2023-08-25T09:35:52.20063392Z',
           deliveryDetailCode: 'C001',
         },
         index: 11,
@@ -635,9 +595,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
             type: DigitalDomicileType.PEC,
             address: 'notifichedigitali-uat@pec.pagopa.it',
           },
-          digitalAddressSource: AddressSource.SPECIAL,
-          retryNumber: 0,
-          notificationDate: '2023-08-25T09:35:49.409272045Z',
           deliveryDetailCode: 'C001',
         },
         index: 10,
@@ -654,8 +611,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
             type: DigitalDomicileType.PEC,
             address: 'testpagopa3@pec.pagopa.it',
           },
-          digitalAddressSource: AddressSource.SPECIAL,
-          retryNumber: 0,
         },
         index: 9,
         hidden: false,
@@ -671,8 +626,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
             type: DigitalDomicileType.PEC,
             address: 'notifichedigitali-uat@pec.pagopa.it',
           },
-          digitalAddressSource: AddressSource.SPECIAL,
-          retryNumber: 0,
         },
         index: 8,
         hidden: false,
@@ -683,9 +636,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.GET_ADDRESS,
         details: {
           recIndex: 1,
-          digitalAddressSource: AddressSource.SPECIAL,
-          isAvailable: true,
-          attemptDate: '2023-08-25T09:35:37.467144969Z',
         },
         legalFactsIds: [],
         index: 7,
@@ -697,9 +647,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.GET_ADDRESS,
         details: {
           recIndex: 0,
-          digitalAddressSource: AddressSource.SPECIAL,
-          isAvailable: true,
-          attemptDate: '2023-08-25T09:35:37.459259637Z',
         },
         legalFactsIds: [],
         index: 6,
@@ -711,9 +658,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.GET_ADDRESS,
         details: {
           recIndex: 1,
-          digitalAddressSource: AddressSource.PLATFORM,
-          isAvailable: false,
-          attemptDate: '2023-08-25T09:35:37.438172821Z',
         },
         legalFactsIds: [],
         index: 5,
@@ -725,9 +669,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.GET_ADDRESS,
         details: {
           recIndex: 0,
-          digitalAddressSource: AddressSource.PLATFORM,
-          isAvailable: false,
-          attemptDate: '2023-08-25T09:35:37.430013304Z',
         },
         legalFactsIds: [],
         index: 4,
@@ -744,7 +685,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
             type: DigitalDomicileType.SMS,
             address: '+393889533897',
           },
-          sendDate: '2023-08-25T09:35:28.673626121Z',
         },
         legalFactsIds: [],
         index: 3,
@@ -756,8 +696,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.AAR_GENERATION,
         details: {
           recIndex: 0,
-          generatedAarUrl: 'PN_AAR-6dc9aa2aceec4a18b4b073df09a1ed12.pdf',
-          numberOfPages: 1,
         },
         legalFactsIds: [],
         index: 2,
@@ -769,8 +707,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.AAR_GENERATION,
         details: {
           recIndex: 1,
-          generatedAarUrl: 'PN_AAR-7e3c456307f743669b42105aa9357dae.pdf',
-          numberOfPages: 1,
         },
         legalFactsIds: [],
         index: 1,
@@ -810,9 +746,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.GET_ADDRESS,
         details: {
           recIndex: 1,
-          digitalAddressSource: AddressSource.SPECIAL,
-          isAvailable: true,
-          attemptDate: '2023-08-25T09:35:37.467144969Z',
         },
         legalFactsIds: [],
         index: 7,
@@ -824,9 +757,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.GET_ADDRESS,
         details: {
           recIndex: 0,
-          digitalAddressSource: AddressSource.SPECIAL,
-          isAvailable: true,
-          attemptDate: '2023-08-25T09:35:37.459259637Z',
         },
         legalFactsIds: [],
         index: 6,
@@ -838,9 +768,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.GET_ADDRESS,
         details: {
           recIndex: 1,
-          digitalAddressSource: AddressSource.PLATFORM,
-          isAvailable: false,
-          attemptDate: '2023-08-25T09:35:37.438172821Z',
         },
         legalFactsIds: [],
         index: 5,
@@ -852,9 +779,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.GET_ADDRESS,
         details: {
           recIndex: 0,
-          digitalAddressSource: AddressSource.PLATFORM,
-          isAvailable: false,
-          attemptDate: '2023-08-25T09:35:37.430013304Z',
         },
         legalFactsIds: [],
         index: 4,
@@ -871,7 +795,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
             type: DigitalDomicileType.SMS,
             address: '+393889533897',
           },
-          sendDate: '2023-08-25T09:35:28.673626121Z',
         },
         legalFactsIds: [],
         index: 3,
@@ -883,8 +806,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.AAR_GENERATION,
         details: {
           recIndex: 0,
-          generatedAarUrl: 'PN_AAR-6dc9aa2aceec4a18b4b073df09a1ed12.pdf',
-          numberOfPages: 1,
         },
         legalFactsIds: [],
         index: 2,
@@ -896,8 +817,6 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
         category: TimelineCategory.AAR_GENERATION,
         details: {
           recIndex: 1,
-          generatedAarUrl: 'PN_AAR-7e3c456307f743669b42105aa9357dae.pdf',
-          numberOfPages: 1,
         },
         legalFactsIds: [],
         index: 1,
@@ -1139,7 +1058,6 @@ export const recipients: Array<NotificationDetailRecipient> = [
 
 export const notificationDTOMultiRecipient: NotificationDetail = {
   abstract: 'Abstract della notifica',
-  paProtocolNumber: '302011692956029071',
   subject: 'notifica analogica con cucumber',
   recipients,
   documents: [
@@ -1155,12 +1073,8 @@ export const notificationDTOMultiRecipient: NotificationDetail = {
       docIdx: '0',
     },
   ],
-  notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
-  physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
   senderDenomination: 'Comune di palermo',
-  senderTaxId: '80016350821',
   group: '000',
-  senderPaId: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce',
   iun: 'RTRD-UDGU-QTQY-202308-P-1',
   sentAt: '2023-08-25T09:33:58.709695008Z',
   documentsAvailable: true,
@@ -1211,8 +1125,6 @@ export const raddNotificationDTOMultiRecipient: NotificationDetail = {
       details: {
         recIndex: 1,
         eventTimestamp: '2022-06-21T11:44:28Z',
-        raddType: 'ALT',
-        raddTransactionId: '6',
       },
     },
   ],
@@ -1224,8 +1136,6 @@ export const raddNotificationDTOMultiRecipient: NotificationDetail = {
     details: {
       recIndex: 1,
       eventTimestamp: '2022-06-21T11:44:28Z',
-      raddType: 'ALT',
-      raddTransactionId: '6',
     },
   },
 };
@@ -1244,8 +1154,6 @@ export const raddNotificationDTO: NotificationDetail = {
       details: {
         recIndex: 1,
         eventTimestamp: '2022-06-21T11:44:28Z',
-        raddType: 'ALT',
-        raddTransactionId: '6',
       },
     },
   ],
@@ -1257,8 +1165,6 @@ export const raddNotificationDTO: NotificationDetail = {
     details: {
       recIndex: 1,
       eventTimestamp: '2022-06-21T11:44:28Z',
-      raddType: 'ALT',
-      raddTransactionId: '6',
     },
   },
 };
