@@ -130,7 +130,6 @@ const OrientedBox = ({ vertical, children }: { vertical: boolean; children: Reac
 
 const FilenameBox = ({ filename }: { filename: string }) => {
   const isMobile = useIsMobile();
-  console.log(filename);
   const [name, extension] = filename.split('.');
   return (
     <Typography display="flex" color="primary" width={isMobile ? 1 : 'auto'} textAlign="center">
