@@ -116,25 +116,38 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
   }
 };
 
-const OrientedBox = ({
-  vertical,
-  justifyContent,
-  children,
-}: {
-  vertical: boolean;
-  justifyContent: string;
-  children: ReactNode;
-}) => (
+const OrientedBox = ({ vertical, children }: { vertical: boolean; children: ReactNode }) => (
   <Box
     display="flex"
-    justifyContent={justifyContent}
     alignItems="center"
+    justifyContent="center"
     flexDirection={vertical ? 'column' : 'row'}
     margin="auto"
   >
     {children}
   </Box>
 );
+
+const FilenameBox = ({ filename }: { filename: string }) => {
+  const isMobile = useIsMobile();
+  console.log(filename);
+  const [name, extension] = filename.split('.');
+  return (
+    <Typography display="flex" color="primary" width={isMobile ? 1 : 'auto'} textAlign="center">
+      <Typography
+        sx={{
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          justifyContent: 'start',
+        }}
+      >
+        {name}.
+      </Typography>
+      <Typography>{extension}</Typography>
+    </Typography>
+  );
+};
 
 /**
  * This component allows file upload
@@ -154,7 +167,6 @@ const OrientedBox = ({
 const FileUpload = ({
   uploadText,
   vertical = false,
-  justifyContent = 'center',
   accept,
   uploadFn,
   onFileUploaded,
@@ -288,25 +300,6 @@ const FileUpload = ({
     </CustomTooltip>
   );
 
-  const truncateFilename = (filename: string) => {
-    console.log(filename);
-    const [name, extension] = filename.split('.');
-    return (
-      <OrientedBox vertical={false} justifyContent="left">
-        <Typography
-          sx={{
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            justifyContent: 'start',
-          }}
-        >
-          {name}.
-        </Typography>
-        <Typography>{extension}</Typography>
-      </OrientedBox>
-    );
-  };
   return (
     <Box
       sx={{ ...containerStyle, padding: '24px', borderRadius: '10px', ...sx }}
@@ -317,7 +310,7 @@ const FileUpload = ({
       component="div"
     >
       {fileData.status === UploadStatus.TO_UPLOAD && (
-        <OrientedBox vertical={isMobile} justifyContent={justifyContent}>
+        <OrientedBox vertical={isMobile}>
           <CloudUploadIcon color="primary" sx={{ margin: '0 10px' }} />
           <Typography display="inline" variant="body2" textAlign="center">
             {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or', 'oppure')}
@@ -344,7 +337,7 @@ const FileUpload = ({
       )}
       {(fileData.status === UploadStatus.IN_PROGRESS ||
         fileData.status === UploadStatus.SENDING) && (
-        <OrientedBox vertical={vertical} justifyContent={justifyContent}>
+        <OrientedBox vertical={vertical}>
           <Typography display="inline" variant="body2">
             {fileData.status === UploadStatus.IN_PROGRESS
               ? getLocalizedOrDefaultLabel(
@@ -375,9 +368,7 @@ const FileUpload = ({
             >
               <Box display="flex" width={isMobile ? 0.7 : 'auto'} justifyContent="start">
                 <AttachFileIcon color="primary" />
-                <Typography color="primary" width={isMobile ? 1 : 'auto'} textAlign="center">
-                  {truncateFilename(fileData.file.name)}
-                </Typography>
+                <FilenameBox filename={fileData.file.name} />
               </Box>
               <Typography fontWeight={600} sx={{ marginLeft: { lg: '30px' } }}>
                 {parseFileSize(fileData.file.size)}
