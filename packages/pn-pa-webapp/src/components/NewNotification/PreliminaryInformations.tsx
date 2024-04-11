@@ -53,6 +53,13 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const hasGroups = useAppSelector(
     (state: RootState) => state.userState.user.organization.hasGroups
   );
+  const senderDenomination = useAppSelector((state: RootState) =>
+    state.userState.user.organization.parentDescription
+      ? state.userState.user.organization.parentDescription +
+        ' - ' +
+        state.userState.user.organization.name
+      : state.userState.user.organization.name
+  );
 
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.preliminary-informations',
@@ -64,6 +71,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     () => ({
       paProtocolNumber: notification.paProtocolNumber || '',
       subject: notification.subject || '',
+      senderDenomination,
       abstract: notification.abstract ?? '',
       group: notification.group ?? '',
       taxonomyCode: notification.taxonomyCode || '',
@@ -76,6 +84,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const validationSchema = yup.object({
     paProtocolNumber: requiredStringFieldValidation(tc, 256),
     subject: requiredStringFieldValidation(tc, 134, 10),
+    senderDenomination: requiredStringFieldValidation(tc, 80),
     abstract: yup
       .string()
       .max(1024, tc('too-long-field-error', { maxLength: 1024 }))
@@ -154,6 +163,19 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             value={formik.values.subject}
             onChange={handleChangeTouched}
             error={formik.touched.subject && Boolean(formik.errors.subject)}
+            helperText={formik.touched.subject && formik.errors.subject}
+            size="small"
+            margin="normal"
+          />
+          <TextField
+            id="senderDenomination"
+            label="Ente Emittente"
+            fullWidth
+            name="senderDenomination"
+            value={senderDenomination}
+            onChange={handleChangeTouched}
+            error={senderDenomination.length > 80}
+            disabled={senderDenomination.length < 80}
             helperText={formik.touched.subject && formik.errors.subject}
             size="small"
             margin="normal"
