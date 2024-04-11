@@ -321,7 +321,7 @@ const FileUpload = ({
               textAlign="center"
               color={fileData.error ? 'error' : ''}
             >
-              {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or', 'oppure')}
+              {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or')}
               &nbsp;
             </Typography>
             <Button
@@ -330,7 +330,7 @@ const FileUpload = ({
               data-testid="loadFromPc"
               sx={{ margin: isMobile ? '10px 0' : '0 10px' }}
             >
-              {getLocalizedOrDefaultLabel('common', 'upload-file.select-file', 'carica il file')}
+              {getLocalizedOrDefaultLabel('common', 'upload-file.select-file')}
             </Button>
             <Input
               id="file-input"
