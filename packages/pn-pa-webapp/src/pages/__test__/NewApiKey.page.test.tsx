@@ -9,8 +9,7 @@ import {
   testInput,
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { mockGroups } from '../../__mocks__/ApiKeys.mock';
-import { newApiKeyDTO, newApiKeyResponse } from '../../__mocks__/NewApiKey.mock';
+import { mockGroups, newApiKeyDTO, newApiKeyResponse } from '../../__mocks__/ApiKeys.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { CREATE_APIKEY } from '../../api/apiKeys/apiKeys.routes';

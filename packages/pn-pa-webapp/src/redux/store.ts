@@ -4,7 +4,6 @@ import { appStateReducer } from '@pagopa-pn/pn-commons';
 import { Middleware, MiddlewareArray, configureStore } from '@reduxjs/toolkit';
 
 import { getConfiguration } from '../services/configuration.service';
-import newApiKeySlice from './NewApiKey/reducers';
 import apiKeysSlice from './apiKeys/reducers';
 import appStatusSlice from './appStatus/reducers';
 import userSlice from './auth/reducers';
@@ -21,7 +20,6 @@ export const appReducers = {
   notificationState: notificationSlice.reducer,
   newNotificationState: newNotificationSlice.reducer,
   apiKeysState: apiKeysSlice.reducer,
-  newApiKeyState: newApiKeySlice.reducer,
   statisticsState: statisticsSlice.reducer,
 };
 

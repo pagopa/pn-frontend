@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
-import { mockApiKeysDTO, mockApiKeysForFE, mockGroups } from '../../__mocks__/ApiKeys.mock';
+import { mockApiKeysDTO } from '../../__mocks__/ApiKeys.mock';
 import {
   RenderResult,
   act,
@@ -14,8 +14,7 @@ import {
   within,
 } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { APIKEY_LIST, DELETE_APIKEY, STATUS_APIKEY } from '../../api/apiKeys/apiKeys.routes';
-import { GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
+import { DELETE_APIKEY, STATUS_APIKEY } from '../../api/apiKeys/apiKeys.routes';
 import { ApiKeySetStatus, ApiKeyStatus } from '../../models/ApiKeys';
 import * as routes from '../../navigation/routes.const';
 import ApiKeys from '../ApiKeys.page';
@@ -57,7 +56,7 @@ async function testApiKeyChangeStatus(
   buttonTestId: string
 ) {
   mock
-    .onPut(STATUS_APIKEY(mockApiKeysForFE.items[apiKeyIndex].id), { status: statusRequested })
+    .onPut(STATUS_APIKEY(mockApiKeysDTO.items[apiKeyIndex].id), { status: statusRequested })
     .reply(200);
   const contextMenuButton = result.getAllByTestId('contextMenuButton')[apiKeyIndex];
   fireEvent.click(contextMenuButton);
@@ -68,7 +67,7 @@ async function testApiKeyChangeStatus(
   fireEvent.click(confirmButton);
   await waitFor(() => {
     expect(mock.history.put).toHaveLength(1);
-    expect(mock.history.put[0].url).toBe(STATUS_APIKEY(mockApiKeysForFE.items[apiKeyIndex].id));
+    expect(mock.history.put[0].url).toBe(STATUS_APIKEY(mockApiKeysDTO.items[apiKeyIndex].id));
     expect(JSON.parse(mock.history.put[0].data)).toStrictEqual({ status: statusSetted });
     expect(mock.history.get).toHaveLength(2);
   });
@@ -95,8 +94,7 @@ describe('ApiKeys Page', async () => {
   });
 
   it('renders the page', async () => {
-    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, mockApiKeysDTO);
-    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    mock.onGet('/bff/v1/api-keys?limit=10&showVirtualKey=true').reply(200, mockApiKeysDTO);
     await act(async () => {
       result = render(<ApiKeys />, { preloadedState: reduxInitialState });
     });
@@ -105,12 +103,11 @@ describe('ApiKeys Page', async () => {
     const newApiKeyButton = result.getByTestId('generateApiKey');
     expect(newApiKeyButton).toBeInTheDocument();
     expect(result.getByTestId('tableApiKeys')).toBeInTheDocument();
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(1);
   });
 
   it('click Generate New Api Key button', async () => {
-    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, mockApiKeysDTO);
-    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    mock.onGet('/bff/v1/api-keys?limit=10&showVirtualKey=true').reply(200, mockApiKeysDTO);
     await act(async () => {
       result = render(<ApiKeys />, { preloadedState: reduxInitialState });
     });
@@ -124,19 +121,16 @@ describe('ApiKeys Page', async () => {
 
   it('change pagination and size', async () => {
     mock
-      .onGet(APIKEY_LIST({ limit: 10 }))
+      .onGet('/bff/v1/api-keys?limit=10&showVirtualKey=true')
       .reply(200, { ...mockApiKeysDTO, items: mockApiKeysDTO.items.slice(0, 2) });
     mock
       .onGet(
-        APIKEY_LIST({
-          limit: 10,
-          lastKey: mockApiKeysDTO.lastKey,
-          lastUpdate: mockApiKeysDTO.lastUpdate,
-        })
+        `/bff/v1/api-keys?limit=10&lastKey=${
+          mockApiKeysDTO.lastKey
+        }&lastUpdate=${encodeURIComponent(mockApiKeysDTO.lastUpdate!)}&showVirtualKey=true`
       )
       .reply(200, { ...mockApiKeysDTO, items: mockApiKeysDTO.items.slice(2) });
-    mock.onGet(APIKEY_LIST({ limit: 20 })).reply(200, mockApiKeysDTO);
-    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    mock.onGet('/bff/v1/api-keys?limit=20&showVirtualKey=true').reply(200, mockApiKeysDTO);
     await act(async () => {
       result = render(<ApiKeys />, {
         preloadedState: reduxInitialState,
@@ -145,21 +139,21 @@ describe('ApiKeys Page', async () => {
     let rows = result.getAllByTestId('tableApiKeys.body.row');
     expect(rows).toHaveLength(2);
     rows.forEach((row, index) => {
-      expect(row).toHaveTextContent(`${mockApiKeysForFE.items[index].value.substring(0, 10)}...`);
+      expect(row).toHaveTextContent(`${mockApiKeysDTO.items[index].value.substring(0, 10)}...`);
     });
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(1);
     // change page
     const pageSelector = result.getByTestId('pageSelector');
     const pageButtons = pageSelector?.querySelectorAll('button');
     // the buttons are < 1 2 >
     fireEvent.click(pageButtons[2]);
     await waitFor(() => {
-      expect(mock.history.get).toHaveLength(4);
+      expect(mock.history.get).toHaveLength(2);
     });
     await waitFor(() => {
       rows = result.getAllByTestId('tableApiKeys.body.row');
       expect(rows).toHaveLength(1);
-      expect(rows[0]).toHaveTextContent(`${mockApiKeysForFE.items[2].value.substring(0, 10)}...`);
+      expect(rows[0]).toHaveTextContent(`${mockApiKeysDTO.items[2].value.substring(0, 10)}...`);
     });
     // change size
     const itemsPerPageSelector = result.getByTestId('itemsPerPageSelector');
@@ -168,20 +162,19 @@ describe('ApiKeys Page', async () => {
     const itemsPerPageList = screen.getAllByRole('menuitem');
     fireEvent.click(itemsPerPageList[1]!);
     await waitFor(() => {
-      expect(mock.history.get).toHaveLength(6);
+      expect(mock.history.get).toHaveLength(3);
     });
     await waitFor(() => {
       rows = result.getAllByTestId('tableApiKeys.body.row');
       expect(rows).toHaveLength(3);
       rows.forEach((row, index) => {
-        expect(row).toHaveTextContent(`${mockApiKeysForFE.items[index].value.substring(0, 10)}...`);
+        expect(row).toHaveTextContent(`${mockApiKeysDTO.items[index].value.substring(0, 10)}...`);
       });
     });
   });
 
   it('block apiKey', async () => {
-    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, mockApiKeysDTO);
-    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    mock.onGet('/bff/v1/api-keys?limit=10&showVirtualKey=true').reply(200, mockApiKeysDTO);
     await act(async () => {
       result = render(<ApiKeys />);
     });
@@ -196,8 +189,7 @@ describe('ApiKeys Page', async () => {
   });
 
   it('enable apiKey', async () => {
-    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, mockApiKeysDTO);
-    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    mock.onGet('/bff/v1/api-keys?limit=10&showVirtualKey=true').reply(200, mockApiKeysDTO);
     await act(async () => {
       result = render(<ApiKeys />);
     });
@@ -212,8 +204,7 @@ describe('ApiKeys Page', async () => {
   });
 
   it('rotate apiKey', async () => {
-    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, mockApiKeysDTO);
-    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    mock.onGet('/bff/v1/api-keys?limit=10&showVirtualKey=true').reply(200, mockApiKeysDTO);
     await act(async () => {
       result = render(<ApiKeys />);
     });
@@ -228,12 +219,11 @@ describe('ApiKeys Page', async () => {
   });
 
   it('delete apiKey', async () => {
-    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, mockApiKeysDTO);
-    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    mock.onGet('/bff/v1/api-keys?limit=10&showVirtualKey=true').reply(200, mockApiKeysDTO);
     await act(async () => {
       result = render(<ApiKeys />);
     });
-    mock.onDelete(DELETE_APIKEY(mockApiKeysForFE.items[1].id)).reply(200);
+    mock.onDelete(DELETE_APIKEY(mockApiKeysDTO.items[1].id)).reply(200);
     const contextMenuButton = result.getAllByTestId('contextMenuButton')[1];
     fireEvent.click(contextMenuButton);
     const actionButton = await waitFor(() => screen.getByTestId('buttonDelete'));
@@ -243,7 +233,7 @@ describe('ApiKeys Page', async () => {
     fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.delete).toHaveLength(1);
-      expect(mock.history.delete[0].url).toBe(DELETE_APIKEY(mockApiKeysForFE.items[1].id));
+      expect(mock.history.delete[0].url).toBe(DELETE_APIKEY(mockApiKeysDTO.items[1].id));
       expect(mock.history.get).toHaveLength(2);
     });
     await waitFor(() => {
@@ -252,8 +242,7 @@ describe('ApiKeys Page', async () => {
   });
 
   it('api return error', async () => {
-    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(500);
-    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    mock.onGet('/bff/v1/api-keys?limit=10&showVirtualKey=true').reply(500);
     await act(async () => {
       result = render(
         <>

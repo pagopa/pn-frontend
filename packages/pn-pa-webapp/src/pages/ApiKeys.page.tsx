@@ -17,7 +17,6 @@ import { CopyToClipboardButton } from '@pagopa/mui-italia';
 import ApiKeyModal from '../components/ApiKeys/ApiKeyModal';
 import DesktopApiKeys from '../components/ApiKeys/DesktopApiKeys';
 import { ApiKey, ApiKeySetStatus, ModalApiKeyView } from '../models/ApiKeys';
-import { UserGroup } from '../models/user';
 import * as routes from '../navigation/routes.const';
 import {
   API_KEYS_ACTIONS,
@@ -35,7 +34,7 @@ const LinkApiB2b: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return <Link href={API_B2B_LINK}>{children}</Link>;
 };
 
-const TableGroupsId = ({ groups }: { groups?: Array<UserGroup> }) => {
+const TableGroupsId = ({ groups }: { groups?: Array<{ id: string; name: string }> }) => {
   const { t } = useTranslation(['apikeys']);
   return (
     <Box>
@@ -103,7 +102,7 @@ const ApiKeys = () => {
 
   type modalType = {
     view: ModalApiKeyView;
-    apiKey?: ApiKey<UserGroup>;
+    apiKey?: ApiKey;
   };
 
   const [modal, setModal] = useState<modalType>({ view: ModalApiKeyView.NONE });

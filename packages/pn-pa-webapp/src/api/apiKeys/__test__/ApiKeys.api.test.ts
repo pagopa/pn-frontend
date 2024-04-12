@@ -1,12 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { mockApiKeysDTO } from '../../../__mocks__/ApiKeys.mock';
+import { newApiKeyDTO, newApiKeyResponse } from '../../../__mocks__/ApiKeys.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import { newApiKeyDTO, newApiKeyResponse } from '../../../__mocks__/NewApiKey.mock';
 import { ApiKeySetStatus } from '../../../models/ApiKeys';
 import { apiClient } from '../../apiClients';
 import { ApiKeysApi } from '../ApiKeys.api';
-import { APIKEY_LIST, CREATE_APIKEY, DELETE_APIKEY, STATUS_APIKEY } from '../apiKeys.routes';
+import { CREATE_APIKEY, DELETE_APIKEY, STATUS_APIKEY } from '../apiKeys.routes';
 
 describe('Api keys api tests', () => {
   // eslint-disable-next-line functional/no-let
@@ -24,12 +23,6 @@ describe('Api keys api tests', () => {
 
   afterAll(() => {
     mock.restore();
-  });
-
-  it('getApiKeys', async () => {
-    mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysDTO);
-    const res = await ApiKeysApi.getApiKeys();
-    expect(res).toStrictEqual(mockApiKeysDTO);
   });
 
   it('createNewApiKey', async () => {

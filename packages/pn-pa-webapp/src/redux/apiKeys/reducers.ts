@@ -2,14 +2,14 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { ApiKeys } from '../../models/ApiKeys';
 import { UserGroup } from '../../models/user';
-import { getApiKeys } from './actions';
+import { getApiKeyUserGroups, getApiKeys, newApiKey } from './actions';
 
 const initialState = {
   loading: false,
   apiKeys: {
     items: [],
     total: 0,
-  } as ApiKeys<UserGroup>,
+  } as ApiKeys,
   pagination: {
     nextPagesKey: [] as Array<{
       lastKey: string;
@@ -18,6 +18,8 @@ const initialState = {
     size: 10,
     page: 0,
   },
+  apiKey: '',
+  groups: [] as Array<UserGroup>,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -51,6 +53,12 @@ const apiKeysSlice = createSlice({
           state.pagination.nextPagesKey.push(pageKey);
         }
       }
+    });
+    builder.addCase(newApiKey.fulfilled, (state, action) => {
+      state.apiKey = action.payload;
+    });
+    builder.addCase(getApiKeyUserGroups.fulfilled, (state, action) => {
+      state.groups = action.payload;
     });
   },
 });

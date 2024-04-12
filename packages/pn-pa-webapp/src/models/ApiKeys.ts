@@ -1,15 +1,15 @@
-export interface ApiKey<T> {
+export interface ApiKey {
   id: string;
   name: string;
   value: string;
   lastUpdate: string;
-  groups: Array<T>;
+  groups: Array<{ id: string; name: string }>;
   status: ApiKeyStatus;
   statusHistory: Array<ApiKeyStatusHistory>;
 }
 
-export interface ApiKeys<T> {
-  items: Array<ApiKey<T>>;
+export interface ApiKeys {
+  items: Array<ApiKey>;
   total: number;
   lastKey?: string;
   lastUpdate?: string;
@@ -49,7 +49,7 @@ export interface GetNewApiKeyResponse {
   apiKey: string;
 }
 
-export interface NewApiKeyBE {
+export interface NewApiKeyRequest {
   name: string;
   groups: Array<string>;
 }
