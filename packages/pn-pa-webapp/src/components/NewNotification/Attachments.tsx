@@ -245,7 +245,10 @@ const Attachments: React.FC<Props> = ({
         key: '',
         versionToken: '',
       },
+      name: '',
     });
+
+    await formik.setFieldTouched(`${id}.name`, false, false);
   };
 
   const addDocumentHandler = async () => {
