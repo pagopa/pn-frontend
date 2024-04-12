@@ -6,7 +6,7 @@ import * as yup from 'yup';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, SxProps, TextField, Typography } from '@mui/material';
-import { FileUpload } from '@pagopa-pn/pn-commons';
+import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { NewNotificationDocument } from '../../models/NewNotification';
@@ -55,7 +55,7 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
   fileUploaded,
 }) => {
   const { t } = useTranslation(['notifiche']);
-
+  const isMobile = useIsMobile('md');
   return (
     <Box data-testid="attachmentBox">
       <Box display="flex" justifyContent="space-between" alignItems="center" sx={sx}>
@@ -72,7 +72,9 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
       </Box>
       <FileUpload
         key={`${new Date()}`}
-        uploadText={t('new-notification.drag-doc')}
+        uploadText={
+          isMobile ? t('new-notification.drag-doc-mobile') : t('new-notification.drag-doc-pc')
+        }
         accept="application/pdf"
         onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
         onRemoveFile={() => onRemoveFile(id)}
