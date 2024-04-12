@@ -30,9 +30,6 @@ To run test for one file
 `cd <package name>`
 `yarn test <filename>`
 
-To run test for one file skipping compiling test
-`yarn test:fast <filename>`
-
 To build all the monorepo
 `yarn build`
 
