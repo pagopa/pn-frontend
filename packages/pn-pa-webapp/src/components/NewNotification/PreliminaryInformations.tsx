@@ -169,14 +169,20 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           />
           <TextField
             id="senderDenomination"
-            label="Ente Emittente"
+            label={`${t('sender-denomination')}`}
             fullWidth
             name="senderDenomination"
-            value={senderDenomination}
+            value={formik.values.senderDenomination}
             onChange={handleChangeTouched}
-            error={senderDenomination.length > 80}
-            disabled={senderDenomination.length < 80}
-            helperText={formik.touched.subject && formik.errors.subject}
+            error={
+              formik.values.senderDenomination.length > 80 &&
+              Boolean(formik.errors.senderDenomination)
+            }
+            disabled={formik.values.senderDenomination.length < 80}
+            helperText={
+              (formik.touched.senderDenomination && formik.errors.senderDenomination) ||
+              (formik.values.senderDenomination.length > 80 && formik.errors.senderDenomination)
+            }
             size="small"
             margin="normal"
           />
