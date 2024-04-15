@@ -1,3 +1,4 @@
+import { configureAxe, toHaveNoViolations } from 'jest-axe';
 import { ReactElement, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -36,6 +37,12 @@ const customRender = (
   });
 };
 
+const axe = configureAxe({
+  rules: {
+    region: { enabled: false },
+  },
+});
+
 const createMockedStore = (preloadedState: any) =>
   configureStore({
     reducer: appReducers,
@@ -46,5 +53,8 @@ const createMockedStore = (preloadedState: any) =>
       }),
   });
 
+expect.extend(toHaveNoViolations);
+
 export * from '@testing-library/react';
 export { customRender as render, createMockedStore, testStore };
+export { axe };
