@@ -28,7 +28,6 @@
     "build": "tsc -p tsconfig.prod.json",
     "test": "tsc --noEmit && vitest --run",
     "test:fast": "vitest --run",
-    "test:a11y": "vitest --run --config ./vite.config.a11y.ts",
     "test:all": "vitest --run --config ./vite.config.all.ts",
     "test:coverage": "tsc --noEmit && vitest run --coverage",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
