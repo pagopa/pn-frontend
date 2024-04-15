@@ -1,4 +1,3 @@
-import { configureAxe, toHaveNoViolations } from 'jest-axe';
 import { ReactElement, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -37,12 +36,6 @@ const customRender = (
   });
 };
 
-const axe = configureAxe({
-  rules: {
-    region: { enabled: false },
-  },
-});
-
 // utility functions
 /**
  * Generate a random string with specified length
@@ -57,10 +50,7 @@ function randomString(length: number) {
   return result;
 }
 
-expect.extend(toHaveNoViolations);
-
 export * from '@testing-library/react';
 export { customRender as render, testStore };
-export { axe };
 // utility functions
 export { randomString };

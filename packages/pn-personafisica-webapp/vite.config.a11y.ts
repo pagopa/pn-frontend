@@ -13,6 +13,6 @@ export default defineConfig(() => {
       environment: 'jsdom',
       include: ['**/*.a11y.test.ts', '**/*.a11y.test.tsx'],
       reporters: ['default'],
-    }
+    },
   };
 });
