@@ -49,8 +49,6 @@ import { resetNewDelegation } from '../redux/newDelegation/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { generateVCode } from '../utility/delegation.utility';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
 
 const renderOption = (props: any, option: Party) => (
   <MenuItem {...props} value={option.id} key={option.id}>
@@ -77,7 +75,6 @@ const NuovaDelega = () => {
 
   const handleSubmit = (values: NewDelegationFormProps) => {
     void dispatch(createDelegation(values));
-    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
   };
 
   const handleDelegationsClick = () => {
@@ -276,7 +273,7 @@ const NuovaDelega = () => {
                             alignItems="center"
                             direction={isMobile ? 'column' : 'row'}
                             spacing={1}
-                            flex="1 0 100px"
+                            flex="1 0"
                           >
                             {values.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF && (
                               <TextField
@@ -330,7 +327,7 @@ const NuovaDelega = () => {
                         </Stack>
                       </FormControl>
                       <TextField
-                        sx={{ marginTop: '2rem' }}
+                        sx={{ marginTop: isMobile ? 1 : 4 }}
                         id="codiceFiscale"
                         value={values.codiceFiscale.toString()}
                         onChange={(event) => {

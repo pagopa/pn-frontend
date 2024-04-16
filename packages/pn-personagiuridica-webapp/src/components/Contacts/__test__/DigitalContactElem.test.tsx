@@ -12,8 +12,6 @@ import {
 } from '../../../__test__/test-utils';
 import * as api from '../../../api/contacts/Contacts.api';
 import { DigitalAddress, LegalChannelType } from '../../../models/contacts';
-import { TrackEventType } from '../../../utility/events';
-import * as trackingFunctions from '../../../utility/mixpanel';
 import DigitalContactElem from '../DigitalContactElem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
@@ -55,9 +53,6 @@ const fields = [
 const mockResetModifyValue = vi.fn();
 const mockDeleteCbk = vi.fn();
 const mockOnConfirm = vi.fn();
-// mock tracking
-const createTrackEventSpy = vi.spyOn(trackingFunctions, 'trackEventByType');
-const mockTrackEventFn = vi.fn();
 
 /*
 In questo test viene testato solo il rendering dei componenti e non il flusso.
@@ -68,10 +63,6 @@ Andrea Cimini - 11/09/2023
 */
 describe('DigitalContactElem Component', () => {
   let result: RenderResult | undefined;
-
-  beforeEach(() => {
-    createTrackEventSpy.mockImplementation(mockTrackEventFn);
-  });
 
   afterEach(() => {
     result = undefined;
@@ -203,10 +194,6 @@ describe('DigitalContactElem Component', () => {
     dialog = await waitFor(() => screen.getByRole('dialog'));
     dialogButtons = dialog?.querySelectorAll('button');
     fireEvent.click(dialogButtons![1]);
-    expect(mockTrackEventFn).toBeCalledTimes(1);
-    expect(mockTrackEventFn).toBeCalledWith(TrackEventType.CONTACT_LEGAL_CONTACT, {
-      action: 'delete',
-    });
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
     });

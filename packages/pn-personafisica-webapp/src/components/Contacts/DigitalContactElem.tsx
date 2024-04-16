@@ -18,6 +18,8 @@ import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
 import { DeleteDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch } from '../../redux/hooks';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
+import { getEventByContactType } from '../../utility/contacts.utility';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
@@ -166,14 +168,19 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
       } else {
         actionToDispatch = deleteCourtesyAddress;
       }
-      void dispatch(actionToDispatch({ recipientId, senderId, channelType: contactType }))
+      dispatch(actionToDispatch({ recipientId, senderId, channelType: contactType }))
         .unwrap()
         .then(() => {
           if (onDeleteCbk) {
             onDeleteCbk();
           }
+          PFEventStrategyFactory.triggerEvent(getEventByContactType(contactType), {
+            senderId,
+          });
         })
-        .catch();
+        .catch((error) => {
+          console.error('Error occurred:', error);
+        });
     };
 
     const editHandler = () => {

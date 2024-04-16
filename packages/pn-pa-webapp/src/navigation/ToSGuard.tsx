@@ -5,8 +5,7 @@ import { LoadingPage } from '@pagopa-pn/pn-commons';
 
 import ToSAcceptancePage from '../pages/ToSAcceptance.page';
 import { getPrivacyApproval, getToSApproval } from '../redux/auth/actions';
-import { useAppDispatch } from '../redux/hooks';
-import { useAppSelector } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
 const ToSGuard = () => {

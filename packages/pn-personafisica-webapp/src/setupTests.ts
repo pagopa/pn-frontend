@@ -1,21 +1,12 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
-import { expect } from 'vitest';
-
 import { Configuration } from '@pagopa-pn/pn-commons';
-import matchers from '@testing-library/jest-dom/matchers';
+import '@testing-library/jest-dom';
 
 import { initAxiosClients } from './api/apiClients';
 import { initStore } from './redux/store';
 
-// inject jest-dom matchers into vitest,
-// cfr. https://markus.oberlehner.net/blog/using-testing-library-jest-dom-with-vitest/
-expect.extend(matchers);
-
 // This is a workaround related to this issue https://github.com/nickcolley/jest-axe/issues/147
 const { getComputedStyle } = window;
+// eslint-disable-next-line functional/immutable-data
 window.getComputedStyle = (elt) => getComputedStyle(elt);
 
 beforeAll(() => {
@@ -30,7 +21,6 @@ beforeAll(() => {
     PAGOPA_HELP_EMAIL: 'assistenza@pn.it',
     IS_DEVELOP: false,
     MIXPANEL_TOKEN: 'DUMMY',
-    MOCK_USER: false,
     LOG_REDUX_ACTIONS: false,
     APP_VERSION: 'mock-version',
     SELFCARE_URL_FE_LOGIN: 'mock-selfcare-login',
@@ -38,6 +28,7 @@ beforeAll(() => {
     IS_PAYMENT_ENABLED: false,
     DELEGATIONS_TO_PG_ENABLED: true,
     LANDING_SITE_URL: 'https://www.dev.notifichedigitali.it',
+    PAGOPA_HELP_PP: 'https://www.fake-page.it',
   });
   initStore(false);
   initAxiosClients();

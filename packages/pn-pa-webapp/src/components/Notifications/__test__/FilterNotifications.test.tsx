@@ -20,6 +20,7 @@ import {
   fireEvent,
   render,
   screen,
+  testStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
@@ -83,10 +84,6 @@ describe('Filter Notifications Table Component', async () => {
   let form: HTMLFormElement | undefined;
 
   const original = window.matchMedia;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const testUtils = await import('../../../__test__/test-utils');
 
   afterAll(() => {
     window.matchMedia = original;
@@ -199,7 +196,7 @@ describe('Filter Notifications Table Component', async () => {
     fireEvent.click(submitButton!);
 
     await waitFor(() => {
-      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual({
+      expect(testStore.getState().dashboardState.filters).toStrictEqual({
         startDate: tenYearsAgo,
         endDate: oneYearAgo,
         recipientId: 'RSSMRA80A01H501U',
@@ -212,7 +209,7 @@ describe('Filter Notifications Table Component', async () => {
     expect(cancelButton).toBeEnabled();
     fireEvent.click(cancelButton);
     await waitFor(() => {
-      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -238,7 +235,7 @@ describe('Filter Notifications Table Component', async () => {
     const submitButton = form.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
     expect(form).toHaveTextContent('filters.errors.fiscal-code');
   });
@@ -265,7 +262,7 @@ describe('Filter Notifications Table Component', async () => {
     const submitButton = form.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
     expect(form).toHaveTextContent('filters.errors.iun');
   });
@@ -293,7 +290,7 @@ describe('Filter Notifications Table Component', async () => {
     const submitButton = form.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -319,7 +316,7 @@ describe('Filter Notifications Table Component', async () => {
     const submitButton = form.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -362,7 +359,7 @@ describe('Filter Notifications Table Component', async () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual({
+      expect(testStore.getState().dashboardState.filters).toStrictEqual({
         startDate: nineYearsAgo,
         endDate: oneYearAgo,
         recipientId: 'RSSMRA80A01H501U',
@@ -383,6 +380,6 @@ describe('Filter Notifications Table Component', async () => {
     await waitFor(() => {
       expect(dialogForm).not.toBeInTheDocument();
     });
-    expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+    expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
   });
 });

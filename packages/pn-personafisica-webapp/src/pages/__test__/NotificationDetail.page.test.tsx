@@ -2,6 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import {
+  AppMessage,
   AppResponseMessage,
   DOWNTIME_HISTORY,
   DOWNTIME_LEGAL_FACT_DETAILS,
@@ -38,6 +39,7 @@ import {
   waitFor,
   within,
 } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
@@ -93,13 +95,9 @@ describe('NotificationDetail Page', async () => {
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 2);
   const original = window.location;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: { href: '', assign: mockAssignFn },
@@ -304,11 +302,17 @@ describe('NotificationDetail Page', async () => {
       retryAfter: 1,
     });
     await act(async () => {
-      result = render(<NotificationDetail />, {
-        preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-        },
-      });
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationDetail />
+        </>,
+        {
+          preloadedState: {
+            userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          },
+        }
+      );
     });
     expect(mock.history.get).toHaveLength(2);
     const legalFactButton = result.getAllByTestId('download-legalfact');
@@ -319,8 +323,7 @@ describe('NotificationDetail Page', async () => {
         `/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
     });
-    window.location.href = '';
-    const docNotAvailableAlert = await waitFor(() => result.getByTestId('docNotAvailableAlert'));
+    const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationToFe.iun, mockLegalIds)).reply(200, {
       filename: 'mocked-filename',
@@ -329,10 +332,6 @@ describe('NotificationDetail Page', async () => {
       url: 'https://mocked-url-com',
     });
     // simulate that legal fact is now available
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 1000));
-    });
-    expect(docNotAvailableAlert).not.toBeInTheDocument();
     fireEvent.click(legalFactButton[0]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
@@ -360,12 +359,19 @@ describe('NotificationDetail Page', async () => {
         retryAfter: 1,
       });
     await act(async () => {
-      result = render(<NotificationDetail />, {
-        preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-        },
-      });
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationDetail />
+        </>,
+        {
+          preloadedState: {
+            userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          },
+        }
+      );
     });
+
     expect(mock.history.get).toHaveLength(2);
     const AARBox = result.getByTestId('aarBox');
     const AARButton = within(AARBox).getByTestId('documentButton');
@@ -377,8 +383,7 @@ describe('NotificationDetail Page', async () => {
         `/delivery-push/${notificationToFe.iun}/document/AAR`
       );
     });
-
-    const docNotAvailableAlert = await waitFor(() => result.getByTestId('docNotAvailableAlert'));
+    const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock
       .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationToFe.iun, otherDocument))
@@ -388,11 +393,8 @@ describe('NotificationDetail Page', async () => {
         retryAfter: null,
         url: 'https://mocked-aar-com',
       });
-    //simulate that legal fact is now available
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 1000));
-    });
-    expect(docNotAvailableAlert).not.toBeInTheDocument();
+
+    //simulate that aar is now available
     fireEvent.click(AARButton);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
@@ -400,6 +402,7 @@ describe('NotificationDetail Page', async () => {
         `/delivery-push/${notificationToFe.iun}/document/AAR`
       );
     });
+
     await waitFor(() => {
       expect(window.location.href).toBe('https://mocked-aar-com');
     });
@@ -586,8 +589,7 @@ describe('NotificationDetail Page', async () => {
     );
   });
 
-  // TO-FIX: il test fallisce perchè fakeTimers non funziona bene con waitFor
-  it.skip('should dispatch getNotificationPaymentUrl on pay button click', async () => {
+  it('should dispatch getNotificationPaymentUrl on pay button click', async () => {
     vi.useFakeTimers();
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
@@ -642,7 +644,7 @@ describe('NotificationDetail Page', async () => {
     expect(mock.history.post).toHaveLength(2);
     expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
     expect(mock.history.post[1].url).toBe(NOTIFICATION_PAYMENT_URL());
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(mockAssignFn).toBeCalledTimes(1);
       expect(mockAssignFn).toBeCalledWith('https://mocked-url.com');
     });

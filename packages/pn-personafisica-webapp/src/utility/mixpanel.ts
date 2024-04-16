@@ -1,23 +1,11 @@
-import { interceptDispatch, trackEvent } from '@pagopa-pn/pn-commons';
+import { interceptDispatch } from '@pagopa-pn/pn-commons';
 import { AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
 
-import { TrackEventType, events, eventsActionsMap } from './events';
+import { PFEventsType, eventsActionsMap } from '../models/PFEventsType';
+import PFEventStrategyFactory from './MixpanelUtils/PFEventStrategyFactory';
 
 /**
  * Redux middleware to track events
  */
 export const trackingMiddleware: Middleware = () => (next: Dispatch<AnyAction>) =>
-  interceptDispatch(next, events, eventsActionsMap, process.env.NODE_ENV);
-
-/**
- * Function to track events outside redux
- * @param trackEventType event name
- * @param attributes event attributes
- */
-export const trackEventByType = (trackEventType: TrackEventType, attributes?: object) => {
-  const eventParameters = attributes
-    ? { ...events[trackEventType], ...attributes }
-    : events[trackEventType];
-
-  trackEvent(trackEventType, process.env.NODE_ENV, eventParameters);
-};
+  interceptDispatch<PFEventsType>(next, PFEventStrategyFactory, eventsActionsMap);

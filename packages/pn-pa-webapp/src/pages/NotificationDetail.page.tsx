@@ -16,7 +16,6 @@ import {
   NotificationDetail as NotificationDetailType,
   NotificationRelatedDowntimes,
   PnBreadcrumb,
-  TimedMessage,
   TitleBox,
   appStateActions,
   dateIsLessThan10Years,
@@ -47,8 +46,6 @@ import {
 } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
 
 type Props = {
   notification: NotificationDetailType;
@@ -95,12 +92,6 @@ const NotificationDetail: React.FC = () => {
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
-  const legalFactDownloadRetryAfter = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
-  );
-  const legalFactDownloadAARRetryAfter = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadAARRetryAfter
-  );
 
   const { recipients } = notification;
   /*
@@ -123,7 +114,20 @@ const NotificationDetail: React.FC = () => {
     if (_.isObject(document)) {
       void dispatch(
         getSentNotificationOtherDocument({ iun: notification.iun, otherDocument: document })
-      );
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.retryAfter) {
+            dispatch(
+              appStateActions.addInfo({
+                title: '',
+                message: t(`detail.document-not-available`, {
+                  ns: 'notifiche',
+                }),
+              })
+            );
+          }
+        });
     } else {
       const documentIndex = document as string;
       void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
@@ -145,7 +149,20 @@ const NotificationDetail: React.FC = () => {
             category: legalFactAsLegalFact.category,
           },
         })
-      );
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.retryAfter) {
+            dispatch(
+              appStateActions.addInfo({
+                title: '',
+                message: t(`detail.document-not-available`, {
+                  ns: 'notifiche',
+                }),
+              })
+            );
+          }
+        });
     } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
       const otherDocument = legalFact as NotificationDetailOtherDocument;
       void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }));
@@ -239,14 +256,9 @@ const NotificationDetail: React.FC = () => {
     []
   );
 
-  const viewMoreTimeline = () => trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE);
-
   useDownloadDocument({ url: legalFactDownloadUrl });
   useDownloadDocument({ url: documentDownloadUrl });
   useDownloadDocument({ url: otherDocumentDownloadUrl });
-
-  const timeoutMessage = legalFactDownloadRetryAfter * 1000;
-  const timeoutAARMessage = legalFactDownloadAARRetryAfter * 1000;
 
   const properBreadcrumb = (
     <PnBreadcrumb
@@ -328,11 +340,6 @@ const NotificationDetail: React.FC = () => {
                   )}
                 </Paper>
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarDownload">
-                  <TimedMessage timeout={timeoutAARMessage}>
-                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="aarNotAvailableAlert">
-                      {t('detail.document-not-available', { ns: 'notifiche' })}
-                    </Alert>
-                  </TimedMessage>
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
@@ -355,11 +362,6 @@ const NotificationDetail: React.FC = () => {
             </Grid>
             <Grid item lg={5} xs={12}>
               <Box sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}>
-                <TimedMessage timeout={timeoutMessage}>
-                  <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
-                    {t('detail.document-not-available', { ns: 'notifiche' })}
-                  </Alert>
-                </TimedMessage>
                 <NotificationDetailTimeline
                   language={i18n.language}
                   recipients={recipients}
@@ -369,7 +371,6 @@ const NotificationDetail: React.FC = () => {
                   historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
                   showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
                   showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
-                  eventTrackingCallbackShowMore={viewMoreTimeline}
                 />
               </Box>
             </Grid>

@@ -34,13 +34,13 @@ type HeaderProps = {
   userActions?: Array<UserAction>;
   /** Actions linked to user dropdown */
   onAssistanceClick?: () => void;
-  /** Track product switch action */
-  eventTrackingCallbackProductSwitch?: (target: string) => void;
   /** Whether there is a logged user */
   isLogged?: boolean;
+  /** Enable assistance button */
+  enableAssistanceButton?: boolean;
 };
 
-const Header = ({
+const Header: React.FC<HeaderProps> = ({
   onExitAction = () => window.location.assign(''),
   productsList,
   showHeaderProduct = true,
@@ -51,9 +51,9 @@ const Header = ({
   enableDropdown,
   userActions,
   onAssistanceClick,
-  eventTrackingCallbackProductSwitch,
   isLogged,
-}: HeaderProps) => {
+  enableAssistanceButton,
+}) => {
   const pagoPAHeaderLink: RootLinkType = {
     ...pagoPALink(),
     label: 'PagoPA S.p.A.',
@@ -61,13 +61,11 @@ const Header = ({
   };
 
   const handleProductSelection = (product: ProductEntity) => {
-    if (eventTrackingCallbackProductSwitch) {
-      eventTrackingCallbackProductSwitch(product.productUrl);
-    }
     if (product.productUrl) {
       /* eslint-disable-next-line functional/immutable-data */
       window.location.assign(product.productUrl);
-      /** Here is necessary to clear sessionStorage otherwise when navigating through Area Riservata
+      /**
+       * Here is necessary to clear sessionStorage otherwise when navigating through Area Riservata
        * we enter in a state where the user was previously logged in but Area Riservata and PN require
        * another token-exchange. Since the user "seems" to be logged in due to the presence of the old token
        * in session storage, the token-exchange doesn't happen and the application enters in a blank state.
@@ -107,6 +105,7 @@ const Header = ({
         onLogout={onExitAction}
         enableDropdown={enableDropdown}
         userActions={userActions}
+        enableAssistanceButton={enableAssistanceButton}
       />
       {enableHeaderProduct && (
         <HeaderProduct

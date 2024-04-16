@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { createBrowserHistory } from 'history';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -13,6 +14,7 @@ import {
 import { createDelegationPayload } from '../../__mocks__/CreateDelegation.mock';
 import { parties } from '../../__mocks__/ExternalRegistry.mock';
 import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import { CREATE_DELEGATION } from '../../api/delegations/delegations.routes';
 import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
 import * as routes from '../../navigation/routes.const';
@@ -62,10 +64,6 @@ yesterday.setHours(0, 0, 0, 0);
 
 describe('NuovaDelega page', async () => {
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeEach(() => {
     mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
@@ -73,7 +71,7 @@ describe('NuovaDelega page', async () => {
   });
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
@@ -136,15 +134,16 @@ describe('NuovaDelega page', async () => {
     let result: RenderResult | undefined;
 
     // simulate the current URL
-    window.history.pushState({}, '', '/nuova-delega');
+    const history = createBrowserHistory();
+    history.push(routes.NUOVA_DELEGA);
 
     // render with an ad-hoc router, will render initially NuovaDelega
     // since it corresponds to the top of the mocked history stack
     await act(async () => {
       result = render(
         <Routes>
-          <Route path={'/deleghe'} element={<div data-testid="mocked-page">hello</div>} />
-          <Route path={'/nuova-delega'} element={<NuovaDelega />} />
+          <Route path={routes.DELEGHE} element={<div data-testid="mocked-page">hello</div>} />
+          <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
         </Routes>
       );
     });

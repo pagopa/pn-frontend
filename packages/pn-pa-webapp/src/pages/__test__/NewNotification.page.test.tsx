@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { createBrowserHistory } from 'history';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -11,14 +12,8 @@ import {
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { newNotification, newNotificationGroups } from '../../__mocks__/NewNotification.mock';
-import {
-  RenderResult,
-  act,
-  fireEvent,
-  render,
-  waitFor,
-  within,
-} from '../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import { CREATE_NOTIFICATION, GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
@@ -46,13 +41,9 @@ vi.mock('../../services/configuration.service', async () => {
 describe('NewNotification Page without payment', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   beforeEach(() => {
@@ -96,7 +87,8 @@ describe('NewNotification Page without payment', async () => {
   it('clicks on the breadcrumb button', async () => {
     // insert one entry into the history, so the initial render will refer
     // to the path /new-notification
-    window.history.pushState({}, '', '/new-notification');
+    const history = createBrowserHistory();
+    history.push(routes.NUOVA_NOTIFICA);
 
     // render with an ad-hoc router, will render initially NewNotification
     // since it corresponds to the top of the mocked history stack
@@ -107,7 +99,7 @@ describe('NewNotification Page without payment', async () => {
             path={routes.DASHBOARD}
             element={<div data-testid="mocked-dashboard">hello</div>}
           />
-          <Route path="/new-notification" element={<NewNotification />} />
+          <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
         </Routes>,
         { preloadedState: { userState: { user: userResponse } } }
       );
@@ -139,7 +131,8 @@ describe('NewNotification Page without payment', async () => {
   it('clicks on api keys button', async () => {
     // insert one entry into the history, so the initial render will refer
     // to the path /new-notification
-    window.history.pushState({}, '', '/new-notification');
+    const history = createBrowserHistory();
+    history.push(routes.NUOVA_NOTIFICA);
 
     // render with an ad-hoc router, will render initially NewNotification
     // since it corresponds to the top of the mocked history stack
@@ -150,7 +143,7 @@ describe('NewNotification Page without payment', async () => {
             path={routes.API_KEYS}
             element={<div data-testid="mocked-api-keys-page">hello</div>}
           />
-          <Route path="/new-notification" element={<NewNotification />} />
+          <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
         </Routes>,
         { preloadedState: { userState: { user: userResponse } } }
       );

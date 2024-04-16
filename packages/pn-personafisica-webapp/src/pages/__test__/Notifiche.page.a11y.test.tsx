@@ -11,6 +11,7 @@ import {
 
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
 import Notifiche from '../Notifiche.page';
 
@@ -25,13 +26,9 @@ vi.mock('react-i18next', () => ({
 describe('Notifiche Page - accessibility tests', async () => {
   let mock: MockAdapter;
   let result: RenderResult | undefined;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {

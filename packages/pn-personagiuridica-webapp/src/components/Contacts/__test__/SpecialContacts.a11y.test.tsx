@@ -6,6 +6,7 @@ import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commo
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 import { GET_ALL_ACTIVATED_PARTIES } from '../../../api/external-registries/external-registries-routes';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
@@ -21,13 +22,9 @@ vi.mock('react-i18next', () => ({
 describe('SpecialContacts Component - accessibility tests', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {

@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { act, render, screen, waitFor } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import { NOTIFICATION_ID_FROM_QRCODE } from '../../api/notifications/notifications.routes';
 import AARGuard from '../AARGuard';
 import {
@@ -36,13 +37,9 @@ const Guard = () => (
 describe('Notification from QR code', async () => {
   const original = window.location;
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { search: '' },

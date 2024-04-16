@@ -14,9 +14,6 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
-
 type Props = {
   formikInstance: {
     values: FormikValues;
@@ -81,7 +78,6 @@ const FilterNotificationsFormBody = ({
     } else {
       await formikInstance.setFieldValue(e.target.id, (e.target as HTMLInputElement).value, false);
     }
-    trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, { target: e.target.id });
   };
 
   const handleChangeNotificationStatus = async (e: ChangeEvent) => {
@@ -90,7 +86,6 @@ const FilterNotificationsFormBody = ({
       (e.target as HTMLSelectElement).value,
       false
     );
-    trackEventByType(TrackEventType.NOTIFICATION_FILTER_NOTIFICATION_STATE);
   };
 
   return (
@@ -139,7 +134,6 @@ const FilterNotificationsFormBody = ({
         onChange={(value: DatePickerTypes) => {
           void formikInstance.setFieldValue('startDate', value || tenYearsAgo).then(() => {
             setStartDate(value);
-            trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, { source: 'from date' });
           });
         }}
         slotProps={{
@@ -169,7 +163,6 @@ const FilterNotificationsFormBody = ({
         value={endDate}
         onChange={(value: DatePickerTypes) => {
           void formikInstance.setFieldValue('endDate', value || today).then(() => {
-            trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, { source: 'to date' });
             setEndDate(value);
           });
         }}

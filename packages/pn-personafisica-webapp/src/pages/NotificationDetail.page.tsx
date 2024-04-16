@@ -7,13 +7,8 @@ import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/mat
 import {
   ApiError,
   ApiErrorWrapper,
-  Downtime,
-  EventDowntimeType,
-  EventNotificationDetailType,
   EventPaymentRecipientType,
-  F24PaymentDetails,
   GetNotificationDowntimeEventsParams,
-  INotificationDetailTimeline,
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -23,13 +18,11 @@ import {
   NotificationDetailTimeline,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
-  NotificationStatus,
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
-  TimedMessage,
-  TimelineCategory,
   TitleBox,
+  appStateActions,
   dateIsLessThan10Years,
   formatDate,
   useDownloadDocument,
@@ -40,6 +33,7 @@ import {
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import { PFEventsType } from '../models/PFEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
@@ -61,46 +55,7 @@ import {
 } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
-
-const getNotificationDetailData = (
-  downtimeEvents: Array<Downtime>,
-  mandateId: string | undefined,
-  notificationStatus: NotificationStatus,
-  checkIfUserHasPayments: boolean,
-  userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> },
-  fromQrCode: boolean,
-  timeline: Array<INotificationDetailTimeline>
-): EventNotificationDetailType => {
-  // eslint-disable-next-line functional/no-let
-  let typeDowntime: EventDowntimeType;
-  if (downtimeEvents.length === 0) {
-    typeDowntime = EventDowntimeType.NOT_DISSERVICE;
-  } else {
-    typeDowntime =
-      downtimeEvents.filter((downtime) => !!downtime.endDate).length === downtimeEvents.length
-        ? EventDowntimeType.COMPLETED
-        : EventDowntimeType.IN_PROGRESS;
-  }
-  const hasF24 =
-    userPayments.f24Only.length > 0 ||
-    userPayments.pagoPaF24.filter((payment) => payment.f24).length > 0;
-
-  return {
-    notification_owner: !mandateId,
-    notification_status: notificationStatus,
-    contains_payment: checkIfUserHasPayments,
-    disservice_status: typeDowntime,
-    contains_multipayment:
-      userPayments.f24Only.length + userPayments.pagoPaF24.length > 1 ? 'yes' : 'no',
-    count_payment: userPayments.pagoPaF24.filter((payment) => payment.pagoPa).length,
-    contains_f24: hasF24 ? 'yes' : 'no',
-    first_time_opening:
-      timeline.findIndex((el) => el.category === TimelineCategory.NOTIFICATION_VIEWED) === -1,
-    source: fromQrCode ? 'QRcode' : 'LISTA_NOTIFICHE',
-  };
-};
+import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -151,12 +106,6 @@ const NotificationDetail = () => {
   );
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
-  );
-  const legalFactDownloadRetryAfter = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
-  );
-  const legalFactDownloadAARRetryAfter = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadAARRetryAfter
   );
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
@@ -223,14 +172,27 @@ const NotificationDetail = () => {
           otherDocument: document,
           mandateId,
         })
-      );
-      trackEventByType(TrackEventType.SEND_DOWNLOAD_RECEIPT_NOTICE);
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.retryAfter) {
+            dispatch(
+              appStateActions.addInfo({
+                title: '',
+                message: t(`detail.document-not-available`, {
+                  ns: 'notifiche',
+                }),
+              })
+            );
+          }
+        });
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_RECEIPT_NOTICE);
     } else {
       const documentIndex = document as string;
       void dispatch(
         getReceivedNotificationDocument({ iun: notification.iun, documentIndex, mandateId })
       );
-      trackEventByType(TrackEventType.SEND_DOWNLOAD_ATTACHMENT);
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT);
     }
   };
 
@@ -249,10 +211,26 @@ const NotificationDetail = () => {
           legalFact: legalFact as LegalFactId,
           mandateId,
         })
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.retryAfter) {
+            dispatch(
+              appStateActions.addInfo({
+                title: '',
+                message: t(`detail.document-not-available`, {
+                  ns: 'notifiche',
+                }),
+              })
+            );
+          }
+        });
+      PFEventStrategyFactory.triggerEvent(
+        PFEventsType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES,
+        {
+          source: 'dettaglio_notifica',
+        }
       );
-      trackEventByType(TrackEventType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES, {
-        source: 'dettaglio_notifica',
-      });
     } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
       const otherDocument = legalFact as NotificationDetailOtherDocument;
       void dispatch(
@@ -273,7 +251,7 @@ const NotificationDetail = () => {
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
-      trackEventByType(TrackEventType.SEND_START_PAYMENT);
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT);
       dispatch(
         getNotificationPaymentUrl({
           paymentNotice: {
@@ -353,9 +331,7 @@ const NotificationDetail = () => {
           taxId: currentRecipient.taxId,
           paymentInfoRequest,
         })
-      )
-        .unwrap()
-        .catch(() => trackEventByType(TrackEventType.SEND_PAYMENT_DETAIL_ERROR));
+      );
     },
     [currentRecipient.payments]
   );
@@ -389,9 +365,6 @@ const NotificationDetail = () => {
   useDownloadDocument({ url: documentDownloadUrl });
   useDownloadDocument({ url: legalFactDownloadUrl });
   useDownloadDocument({ url: otherDocumentDownloadUrl });
-
-  const timeoutMessage = legalFactDownloadRetryAfter * 1000;
-  const timeoutAARMessage = legalFactDownloadAARRetryAfter * 1000;
 
   const fromQrCode = useMemo(
     () => !!(location.state && (location.state as LocationState).fromQrCode),
@@ -427,38 +400,41 @@ const NotificationDetail = () => {
   );
 
   const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
-    // eslint-disable-next-line functional/no-let
-    trackEventByType(
-      event as unknown as TrackEventType,
-      event === EventPaymentRecipientType.SEND_PAYMENT_STATUS ? param : undefined
+    PFEventStrategyFactory.triggerEvent(
+      PFEventsType[event],
+      event === EventPaymentRecipientType.SEND_PAYMENT_STATUS ||
+        event === EventPaymentRecipientType.SEND_PAYMENT_DETAIL_ERROR
+        ? param
+        : undefined
     );
   };
 
   const reloadPaymentsInfo = (data: Array<NotificationDetailPayment>) => {
     fetchPaymentsInfo(data);
-    trackEventByType(TrackEventType.SEND_PAYMENT_DETAIL_REFRESH);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENT_DETAIL_REFRESH);
   };
 
   const trackShowMoreLess = (collapsed: boolean) => {
-    trackEventByType(TrackEventType.SEND_NOTIFICATION_STATUS_DETAIL, {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_STATUS_DETAIL, {
       accordion: collapsed ? 'collapsed' : 'expanded',
     });
   };
 
   useEffect(() => {
     if (downtimesReady && pageReady) {
-      trackEventByType(
-        TrackEventType.SEND_NOTIFICATION_DETAIL,
-        getNotificationDetailData(
-          downtimeEvents,
-          mandateId,
-          notification.notificationStatus,
-          checkIfUserHasPayments,
-          userPayments,
-          fromQrCode,
-          notification.timeline
-        )
-      );
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_DETAIL, {
+        downtimeEvents,
+        mandateId,
+        notificationStatus: notification.notificationStatus,
+        checkIfUserHasPayments,
+        userPayments,
+        fromQrCode,
+        timeline: notification.timeline,
+      });
+
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATIONS_COUNT, {
+        timeline: notification.timeline,
+      });
     }
   }, [downtimesReady, pageReady]);
 
@@ -543,11 +519,6 @@ const NotificationDetail = () => {
                 )}
 
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarBox">
-                  <TimedMessage timeout={timeoutAARMessage}>
-                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
-                      {t('detail.document-not-available', { ns: 'notifiche' })}
-                    </Alert>
-                  </TimedMessage>
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
@@ -578,11 +549,6 @@ const NotificationDetail = () => {
                 component="section"
                 sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
               >
-                <TimedMessage timeout={timeoutMessage}>
-                  <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
-                    {t('detail.document-not-available', { ns: 'notifiche' })}
-                  </Alert>
-                </TimedMessage>
                 <NotificationDetailTimeline
                   language={i18n.language}
                   recipients={notification.recipients}

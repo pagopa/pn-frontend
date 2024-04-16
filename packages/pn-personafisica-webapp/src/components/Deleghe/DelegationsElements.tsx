@@ -7,10 +7,10 @@ import { Variant } from '@mui/material/styles/createTypography';
 import { CustomTagGroup } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 
+import { PFEventsType } from '../../models/PFEventsType';
 import { openAcceptModal, openRevocationModal } from '../../redux/delegation/reducers';
 import { useAppDispatch } from '../../redux/hooks';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 
 export const Menu = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -24,7 +24,7 @@ export const Menu = (props: any) => {
   };
 
   const handleOpenVerificationCodeModal = () => {
-    trackEventByType(TrackEventType.SEND_SHOW_MANDATE_CODE);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_SHOW_MANDATE_CODE);
     props.setCodeModal({ open: true, name: props.name, code: props.verificationCode });
     setAnchorEl(null);
   };

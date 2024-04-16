@@ -1,6 +1,5 @@
 import { NotificationStatus } from './NotificationStatus';
 
-
 export type EventsType = {
   [key: string]: {
     // property event_category should be of type EventCategory however we should finish all the new implementations in PA and PG first.
@@ -12,8 +11,23 @@ export type EventsType = {
     // Nicola Giornetta - 30-11-2023
     event_category: string;
     event_type?: EventAction | string;
-    getAttributes?: (payload:any) => Record<string, string>;
+    getAttributes?: (payload: any) => Record<string, string>;
   };
+};
+
+type BaseTrackedEvent = {
+  event_category?: string;
+  event_type?: EventAction | string;
+};
+
+export type TrackedEvent<T extends object | undefined = undefined> = T extends undefined
+  ? Partial<Record<EventPropertyType, BaseTrackedEvent | string | boolean>>
+  : Partial<Record<EventPropertyType, (BaseTrackedEvent & T) | string | boolean>>;
+
+export type ActionMeta = {
+  requestId: string;
+  requestStatus: string;
+  arg: any;
 };
 
 export enum EventAction {
@@ -32,6 +46,13 @@ export enum EventDowntimeType {
   NOT_DISSERVICE = 'not_disservice',
   COMPLETED = 'completed',
   IN_PROGRESS = 'in_progress',
+}
+
+export enum EventPropertyType {
+  TRACK = 'track',
+  PROFILE = 'profile',
+  INCREMENTAL = 'incremental',
+  SUPER_PROPERTY = 'superProperty',
 }
 
 export type EventPaymentStatusType = {
@@ -92,6 +113,7 @@ export type EventCreatedDelegationType = {
   mandate_type: string;
 };
 
+// TODO: review that enum when implementing PG events
 export enum EventPaymentRecipientType {
   SEND_PAYMENT_DETAIL_REFRESH = 'SEND_PAYMENT_DETAIL_REFRESH',
   SEND_CANCELLED_NOTIFICATION_REFOUND_INFO = 'SEND_CANCELLED_NOTIFICATION_REFOUND_INFO',

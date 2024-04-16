@@ -19,26 +19,22 @@ interface PfConfigurationFromFile {
   DELEGATIONS_TO_PG_ENABLED: boolean;
   WORK_IN_PROGRESS?: boolean;
   F24_DOWNLOAD_WAIT_TIME: number;
+  PAGOPA_HELP_PP: string;
 }
 
 interface PfConfiguration extends PfConfigurationFromFile {
   DISABLE_INACTIVITY_HANDLER: boolean;
   IS_DEVELOP: boolean;
   LOG_REDUX_ACTIONS: boolean;
-  MOCK_USER: boolean;
   ONE_TRUST_DRAFT_MODE: boolean;
   ONE_TRUST_PARTICIPATING_ENTITIES: string;
   ONE_TRUST_PP: string;
   ONE_TRUST_TOS: string;
   OT_DOMAIN_ID: string;
-  PAGOPA_HELP_EMAIL: string;
   PAYMENT_DISCLAIMER_URL: string;
   VERSION: string;
   URL_FE_LOGOUT: string;
-  LANDING_SITE_URL: string;
-  DELEGATIONS_TO_PG_ENABLED: boolean;
   WORK_IN_PROGRESS: boolean;
-  F24_DOWNLOAD_WAIT_TIME: number;
 }
 
 class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
@@ -58,6 +54,7 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
     this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();
     this.ruleFor('WORK_IN_PROGRESS').isBoolean();
     this.ruleFor('F24_DOWNLOAD_WAIT_TIME').isNumber();
+    this.ruleFor('PAGOPA_HELP_PP').isString();
   }
 
   makeRequired(rule: StringRuleValidator<PfConfigurationFromFile, string>): void {
@@ -80,9 +77,8 @@ export function getConfiguration(): PfConfiguration {
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID || '',
     PAYMENT_DISCLAIMER_URL: configurationFromFile.PAYMENT_DISCLAIMER_URL || '',
     IS_DEVELOP,
-    MOCK_USER: IS_DEVELOP,
     LOG_REDUX_ACTIONS: IS_DEVELOP,
-    URL_FE_LOGOUT: "/auth/logout",
+    URL_FE_LOGOUT: '/auth/logout',
     VERSION,
     LANDING_SITE_URL: configurationFromFile.LANDING_SITE_URL || '',
     DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED),

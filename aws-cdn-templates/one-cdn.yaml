@@ -486,7 +486,7 @@ Resources:
           ContentSecurityPolicy:
             ContentSecurityPolicy:
               "default-src 'self' https://pnpg.uat.selfcare.pagopa.it/ https://pnpg.selfcare.pagopa.it/ ; \
-              connect-src 'self' https://api-eu.mixpanel.com/track/ \
+              connect-src 'self' https://api-eu.mixpanel.com/ \
               https://uat.selfcare.pagopa.it/assets/ \
               https://selfcare.pagopa.it/assets/ \
               https://pnpg.uat.selfcare.pagopa.it/assets/ \
@@ -534,7 +534,7 @@ Resources:
               Fn::Join:
                 - " "
                 - - "default-src 'self'; object-src 'none';"
-                  - !Sub " connect-src 'self' https://api-eu.mixpanel.com/track/  \
+                  - !Sub " connect-src 'self' https://api-eu.mixpanel.com/  \
                     https://selfcare.pagopa.it/assets/ \
                     https://privacyportalde-cdn.onetrust.com/ \
                     ${WebApiUrl}; \

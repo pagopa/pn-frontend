@@ -5,6 +5,7 @@ import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { arrayOfDelegates, arrayOfDelegators } from '../../__mocks__/Delegations.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
@@ -27,13 +28,9 @@ describe('Deleghe page', async () => {
   const original = window.matchMedia;
   let result: RenderResult;
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
@@ -246,7 +243,7 @@ describe('Deleghe page', async () => {
       fireEvent.change(codeInput, { target: { value: codes[index] } });
     });
     const dialogButtons = within(dialog).getByRole('button', { name: 'deleghe.accept' });
-    // confirm rejection
+    // confirm accept
     fireEvent.click(dialogButtons);
     await waitFor(() => {
       expect(mock.history.patch).toHaveLength(1);
@@ -255,7 +252,9 @@ describe('Deleghe page', async () => {
         verificationCode: arrayOfDelegators[0].verificationCode,
       });
     });
-    // check that nothing is changed
+    const error = await waitFor(() => within(dialog).getByTestId('errorAlert'));
+    expect(error).toBeInTheDocument();
+    // check that accept button is still active in deleghe page
     delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     expect(delegatorsRows).toHaveLength(arrayOfDelegators.length);
     delegatorsRows.forEach((row, index) => {
@@ -263,7 +262,5 @@ describe('Deleghe page', async () => {
     });
     acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
     expect(acceptButton).toBeInTheDocument();
-    const error = await waitFor(() => within(dialog).queryByTestId('errorAlert'));
-    expect(error).toBeInTheDocument();
   });
 });

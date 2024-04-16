@@ -11,6 +11,7 @@ import {
 
 import { notificationToFeMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 import { NOTIFICATION_PAYMENT_ATTACHMENT } from '../../../api/notifications/notifications.routes';
 import NotificationPaymentPagoPa from '../NotificationPaymentPagoPa';
 
@@ -31,13 +32,9 @@ vi.mock('@pagopa-pn/pn-commons', async () => {
 
 describe('NotificationPaymentPagoPa Component', async () => {
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
@@ -79,7 +76,7 @@ describe('NotificationPaymentPagoPa Component', async () => {
     expect(paymentChip).toBeInTheDocument();
   });
 
-  it('dowload payment attachment', async () => {
+  it('download payment attachment', async () => {
     const iun = notificationToFeMultiRecipient.iun;
     const attachmentName = PaymentAttachmentSName.PAGOPA;
     const paymentHistory = populatePaymentsPagoPaF24(
@@ -120,7 +117,7 @@ describe('NotificationPaymentPagoPa Component', async () => {
     });
   });
 
-  it('dowload payment attachment - no recIndex', async () => {
+  it('download payment attachment - no recIndex', async () => {
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFeMultiRecipient.timeline,
       notificationToFeMultiRecipient.recipients[1].payments ?? [],
@@ -138,5 +135,21 @@ describe('NotificationPaymentPagoPa Component', async () => {
       expect(mock.history.get).toHaveLength(0);
       expect(downloadDocument).toBeCalledTimes(0);
     });
+  });
+
+  it('payment attachment not available', async () => {
+    const paymentHistory = populatePaymentsPagoPaF24(
+      notificationToFeMultiRecipient.timeline,
+      notificationToFeMultiRecipient.recipients[1].payments ?? [],
+      []
+    );
+    const indexItem = paymentHistory.findIndex((item) => !item.pagoPa?.attachment);
+    const { container } = render(
+      <NotificationPaymentPagoPa
+        iun={notificationToFeMultiRecipient.iun}
+        payment={paymentHistory[indexItem].pagoPa!}
+      />
+    );
+    expect(container).not.toHaveTextContent('payment.pagopa-notice');
   });
 });
