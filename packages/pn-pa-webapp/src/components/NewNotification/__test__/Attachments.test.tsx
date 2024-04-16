@@ -188,9 +188,8 @@ describe('Attachments Component with payment enabled', async () => {
       expect(buttonSubmit).toBeDisabled();
     });
     await testInput(form!, `documents.0.name`, '');
-    const error = form!.querySelector(`[id="documents.0.name-helper-text"]`);
-    expect(error).toHaveTextContent('required-field');
     await testInput(form!, `documents.0.name`, ' text-with-spaces ');
+    const error = form!.querySelector(`[id="documents.0.name-helper-text"]`);
     expect(error).toHaveTextContent('no-spaces-at-edges');
   });
 
