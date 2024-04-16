@@ -71,4 +71,9 @@ body {
 .otnotice-content .otnotice-sections::after {
   font-size: 6rem !important;
 }
+
+#onetrust-banner-sdk:focus {
+  outline: none !important;
+  outline-offset: 0 !important;
+}
 /* END: ONETRUST STYLES */
