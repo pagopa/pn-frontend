@@ -84,11 +84,11 @@ const CodeModal = memo(
         setInternalError({
           internalHasError: true,
           internalErrorTitle: getLocalizedOrDefaultLabel(
-            'recapiti',
+            'common',
             `errors.invalid_type_code.title`
           ),
           internalErrorMessage: getLocalizedOrDefaultLabel(
-            'recapiti',
+            'common',
             `errors.invalid_type_code.message`
           ),
         });
