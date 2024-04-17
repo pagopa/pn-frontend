@@ -14,6 +14,7 @@ import {
   testSelect,
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
+import { userResponse } from '../../../__mocks__/Auth.mock';
 import {
   newNotification,
   newNotificationEmpty,
@@ -59,7 +60,7 @@ const populateForm = async (form: HTMLFormElement, hasPayment: boolean) => {
   await testInput(form, 'paProtocolNumber', newNotification.paProtocolNumber);
   await testInput(form, 'subject', newNotification.subject);
   await testInput(form, 'taxonomyCode', newNotification.taxonomyCode);
-  await testInput(form, 'senderDenomination', newNotification.senderDenomination);
+  await testInput(form, 'senderDenomination', userResponse.organization.name);
   await testSelect(
     form,
     'group',
@@ -120,6 +121,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     testFormElements(form, 'abstract', 'abstract');
     testFormElements(form, 'group', 'group');
     testFormElements(form, 'taxonomyCode', 'taxonomy-id*');
+    testFormElements(form, 'senderDenomination', 'sender-denomination*');
     testRadio(form, 'comunicationTypeRadio', ['registered-letter-890', 'simple-registered-letter']);
     testRadio(form, 'paymentMethodRadio', [
       'pagopa-notice',
@@ -170,6 +172,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
               user: {
                 organization: {
                   hasGroup: true,
+                  name: 'Comune di Milano',
                 },
               },
             },
@@ -257,6 +260,16 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     expect(taxonomyCodeError).toHaveTextContent('taxonomy-id required');
     await testInput(form, 'taxonomyCode', randomString(4));
     expect(taxonomyCodeError).toHaveTextContent('taxonomy-id invalid');
+    // senderDenomination
+    await testInput(form, 'senderDenomination', '');
+    const senderDenominationError = form.querySelector('#senderDenomination-helper-text');
+    expect(senderDenominationError).toHaveTextContent('sender-denomination required');
+    await testInput(
+      form,
+      'senderDenomination',
+      'Comune di Palermo - Commissario Straordinario del Governo ZES Sicilia Occidentale'
+    );
+    expect(senderDenominationError).toHaveTextContent('too-long-field-error');
     // check submit button state
     const button = within(form).getByTestId('step-submit');
     expect(button).toBeDisabled();
@@ -273,6 +286,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
               user: {
                 organization: {
                   hasGroup: true,
+                  name: 'Comune di Palermo',
                 },
               },
             },
@@ -291,6 +305,12 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     testFormElements(form, 'abstract', 'abstract', newNotification.abstract);
     testFormElements(form, 'group', 'group', newNotification.group);
     testFormElements(form, 'taxonomyCode', 'taxonomy-id*', newNotification.taxonomyCode);
+    testFormElements(
+      form,
+      'senderDenomination',
+      'sender-denomination*',
+      userResponse.organization.name
+    );
     const physicalCommunicationType = form.querySelector(
       `input[name="physicalCommunicationType"][value="${newNotification.physicalCommunicationType}"]`
     );
@@ -426,5 +446,33 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
       });
     });
     expect(confirmHandlerMk).toBeCalledTimes(1);
+  });
+
+  it('set senderDenomination longer than 80 characters', async () => {
+    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    await act(async () => {
+      result = render(
+        <PreliminaryInformations
+          notification={newNotificationEmpty}
+          onConfirm={confirmHandlerMk}
+        />,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                organization: {
+                  hasGroup: true,
+                  name: 'Comune di Palermo - Commissario Straordinario del Governo ZES Sicilia Occidentale',
+                },
+              },
+            },
+          },
+        }
+      );
+    });
+    const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    const button = within(form).getByTestId('step-submit');
+    await populateForm(form, true);
+    expect(button).toBeDisabled();
   });
 });

@@ -85,7 +85,11 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const validationSchema = yup.object({
     paProtocolNumber: requiredStringFieldValidation(tc, 256),
     subject: requiredStringFieldValidation(tc, 134, 10),
-    senderDenomination: requiredStringFieldValidation(tc, 80),
+    // senderDenomination: requiredStringFieldValidation(tc, 80),
+    senderDenomination: yup
+      .string()
+      .required(`${t('sender-denomination')} ${tc('required')}`)
+      .max(80, tc('too-long-field-error', { maxLength: 80 })),
     abstract: yup
       .string()
       .max(1024, tc('too-long-field-error', { maxLength: 1024 }))
@@ -135,7 +139,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     fetchGroups();
   }, [fetchGroups]);
 
-  const isLessThan80Chars = (field: string) => field && field.length < 80;
+  const isLessThan80Chars = (field: string): boolean => (field ? field.length < 80 : false);
   return (
     <ApiErrorWrapper
       apiId={NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS}
