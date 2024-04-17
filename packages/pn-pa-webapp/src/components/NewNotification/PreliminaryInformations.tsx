@@ -53,6 +53,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const hasGroups = useAppSelector(
     (state: RootState) => state.userState.user.organization.hasGroups
   );
+
   const senderDenomination = useAppSelector((state: RootState) =>
     state.userState.user.organization.parentDescription
       ? state.userState.user.organization.parentDescription +
@@ -134,6 +135,13 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     fetchGroups();
   }, [fetchGroups]);
 
+  const checkIsLessThan80Chars = (field: string | undefined) => {
+    if (field) {
+      return field.length < 80;
+    } else {
+      return false;
+    }
+  };
   return (
     <ApiErrorWrapper
       apiId={NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS}
@@ -175,13 +183,14 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             value={formik.values.senderDenomination}
             onChange={handleChangeTouched}
             error={
-              formik.values.senderDenomination.length > 80 &&
+              checkIsLessThan80Chars(formik.values.senderDenomination) &&
               Boolean(formik.errors.senderDenomination)
             }
-            disabled={formik.values.senderDenomination.length < 80}
+            disabled={checkIsLessThan80Chars(formik.values.senderDenomination)}
             helperText={
-              (formik.touched.senderDenomination && formik.errors.senderDenomination) ||
-              (formik.values.senderDenomination.length > 80 && formik.errors.senderDenomination)
+              (!checkIsLessThan80Chars(formik.values.senderDenomination) &&
+                formik.errors.senderDenomination) ||
+              (formik.touched.senderDenomination && formik.errors.senderDenomination)
             }
             size="small"
             margin="normal"

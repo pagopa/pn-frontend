@@ -106,6 +106,8 @@ const userSlice = createSlice({
         userDataMatcher.validateSync(user, { stripUnknown: false });
         sessionStorage.setItem('user', JSON.stringify(user));
         state.user = action.payload;
+        state.user.organization.parentDescription =
+          'Commissario Straordinario del Governo ZES Sicilia Occidentale';
       } catch (e) {
         state.isUnauthorizedUser = true;
         state.messageUnauthorizedUser = emptyUnauthorizedMessage;
