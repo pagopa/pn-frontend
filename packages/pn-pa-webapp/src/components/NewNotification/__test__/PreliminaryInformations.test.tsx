@@ -59,6 +59,7 @@ const populateForm = async (form: HTMLFormElement, hasPayment: boolean) => {
   await testInput(form, 'paProtocolNumber', newNotification.paProtocolNumber);
   await testInput(form, 'subject', newNotification.subject);
   await testInput(form, 'taxonomyCode', newNotification.taxonomyCode);
+  await testInput(form, 'senderDenomination', newNotification.senderDenomination);
   await testSelect(
     form,
     'group',
@@ -196,6 +197,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
         recipients: [],
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
         paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE,
+        senderDenomination: newNotification.senderDenomination,
       });
     });
     expect(confirmHandlerMk).toBeCalledTimes(1);
@@ -420,6 +422,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
         recipients: [],
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
         paymentMode: PaymentModel.NOTHING,
+        senderDenomination: newNotification.senderDenomination,
       });
     });
     expect(confirmHandlerMk).toBeCalledTimes(1);

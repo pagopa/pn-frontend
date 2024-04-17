@@ -204,6 +204,7 @@ export const newNotificationEmpty: NewNotification = {
   group: '',
   taxonomyCode: '',
   notificationFeePolicy: '' as NotificationFeePolicy,
+  senderDenomination: '',
 };
 
 export const newNotificationDTO: NewNotificationDTO = newNotificationMapper(newNotification);
