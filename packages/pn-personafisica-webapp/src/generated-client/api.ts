@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * PN BFF BE Microservice - Destinatari
+ * PN BFF BE Microservice - Notifiche Destinatari
  * Documentation APIs v1.0
  *
  * The version of the OpenAPI document: 1.0.0
@@ -352,34 +352,34 @@ export interface BffFullNotificationV1 {
     'version'?: string;
     /**
      * 
-     * @type {Array<NotificationStatusHistory>}
+     * @type {Array<BffNotificationStatusHistory>}
      * @memberof BffFullNotificationV1
      */
-    'notificationStatusHistory': Array<NotificationStatusHistory>;
+    'notificationStatusHistory': Array<BffNotificationStatusHistory>;
     /**
      * 
-     * @type {NotificationStatus}
+     * @type {BffNotificationStatus}
      * @memberof BffFullNotificationV1
      */
-    'notificationStatus': NotificationStatus;
+    'notificationStatus': BffNotificationStatus;
     /**
      * 
-     * @type {Array<NotificationDetailTimeline>}
+     * @type {Array<BffNotificationDetailTimeline>}
      * @memberof BffFullNotificationV1
      */
-    'timeline': Array<NotificationDetailTimeline>;
+    'timeline': Array<BffNotificationDetailTimeline>;
     /**
      * 
-     * @type {NotificationDetailTimeline}
+     * @type {BffNotificationDetailTimeline}
      * @memberof BffFullNotificationV1
      */
-    'radd'?: NotificationDetailTimeline;
+    'radd'?: BffNotificationDetailTimeline;
     /**
      * 
-     * @type {Array<NotificationDetailDocument>}
+     * @type {Array<BffNotificationDetailDocument>}
      * @memberof BffFullNotificationV1
      */
-    'otherDocuments'?: Array<NotificationDetailDocument>;
+    'otherDocuments'?: Array<BffNotificationDetailDocument>;
 }
 
 export const BffFullNotificationV1PhysicalCommunicationTypeEnum = {
@@ -395,6 +395,301 @@ export const BffFullNotificationV1PagoPaIntModeEnum = {
 } as const;
 
 export type BffFullNotificationV1PagoPaIntModeEnum = typeof BffFullNotificationV1PagoPaIntModeEnum[keyof typeof BffFullNotificationV1PagoPaIntModeEnum];
+
+/**
+ * 
+ * @export
+ * @interface BffLegalFactId
+ */
+export interface BffLegalFactId {
+    /**
+     * 
+     * @type {string}
+     * @memberof BffLegalFactId
+     */
+    'key': string;
+    /**
+     * 
+     * @type {BffLegalFactType}
+     * @memberof BffLegalFactId
+     */
+    'category': BffLegalFactType;
+}
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const BffLegalFactType = {
+    Aar: 'AAR',
+    SenderAck: 'SENDER_ACK',
+    DigitalDelivery: 'DIGITAL_DELIVERY',
+    AnalogDelivery: 'ANALOG_DELIVERY',
+    RecipientAccess: 'RECIPIENT_ACCESS',
+    PecReceipt: 'PEC_RECEIPT',
+    AnalogFailureDelivery: 'ANALOG_FAILURE_DELIVERY'
+} as const;
+
+export type BffLegalFactType = typeof BffLegalFactType[keyof typeof BffLegalFactType];
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const BffNotificationDeliveryMode = {
+    Analog: 'analog',
+    Digital: 'digital'
+} as const;
+
+export type BffNotificationDeliveryMode = typeof BffNotificationDeliveryMode[keyof typeof BffNotificationDeliveryMode];
+
+
+/**
+ * Documento della notifica.
+ * @export
+ * @interface BffNotificationDetailDocument
+ */
+export interface BffNotificationDetailDocument {
+    /**
+     * 
+     * @type {NotificationAttachmentDigests}
+     * @memberof BffNotificationDetailDocument
+     */
+    'digests': NotificationAttachmentDigests;
+    /**
+     * tipo di contenuto dell\'allegato, supportato application/json
+     * @type {string}
+     * @memberof BffNotificationDetailDocument
+     */
+    'contentType': string;
+    /**
+     * 
+     * @type {NotificationAttachmentBodyRef}
+     * @memberof BffNotificationDetailDocument
+     */
+    'ref': NotificationAttachmentBodyRef;
+    /**
+     * 
+     * @type {string}
+     * @memberof BffNotificationDetailDocument
+     */
+    'title'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BffNotificationDetailDocument
+     */
+    'requiresAck'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BffNotificationDetailDocument
+     */
+    'docIdx'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BffNotificationDetailDocument
+     */
+    'documentId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BffNotificationDetailDocument
+     */
+    'documentType'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof BffNotificationDetailDocument
+     */
+    'recIndex'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface BffNotificationDetailTimeline
+ */
+export interface BffNotificationDetailTimeline {
+    /**
+     * 
+     * @type {string}
+     * @memberof BffNotificationDetailTimeline
+     */
+    'elementId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BffNotificationDetailTimeline
+     */
+    'timestamp': string;
+    /**
+     * 
+     * @type {Array<BffLegalFactId>}
+     * @memberof BffNotificationDetailTimeline
+     */
+    'legalFactsIds'?: Array<BffLegalFactId>;
+    /**
+     * 
+     * @type {BffTimelineCategory}
+     * @memberof BffNotificationDetailTimeline
+     */
+    'category': BffTimelineCategory;
+    /**
+     * 
+     * @type {BffNotificationDetailTimelineDetails}
+     * @memberof BffNotificationDetailTimeline
+     */
+    'details': BffNotificationDetailTimelineDetails;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BffNotificationDetailTimeline
+     */
+    'hidden'?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof BffNotificationDetailTimeline
+     */
+    'index'?: number;
+}
+
+
+/**
+ * @type BffNotificationDetailTimelineDetails
+ * The raw event payload that will be different based on the event.
+ * @export
+ */
+export type BffNotificationDetailTimelineDetails = AarCreationRequestDetails | AarGenerationDetails | AnalogFailureWorkflowDetails | AnalogSuccessWorkflowDetails | BaseAnalogDetails | BaseRegisteredLetterDetails | CompletelyUnreachableCreationRequestDetails | CompletelyUnreachableDetails | DigitalDeliveryCreationRequestDetails | DigitalFailureWorkflowDetails | DigitalSuccessWorkflowDetails | GetAddressInfoDetails | NormalizedAddressDetails | NotHandledDetails | NotificationCancellationRequestDetails | NotificationCancelledDetails | NotificationPaidDetailsV23 | NotificationRADDRetrievedDetails | NotificationRequestAcceptedDetails | NotificationViewedCreationRequestDetailsV23 | NotificationViewedDetailsV23 | PrepareAnalogDomicileFailureDetails | PrepareDigitalDetails | ProbableDateAnalogWorkflowDetails | PublicRegistryCallDetails | PublicRegistryResponseDetails | RefinementDetailsV23 | RequestRefusedDetailsV23 | ScheduleAnalogWorkflowDetailsV23 | ScheduleDigitalWorkflowDetailsV23 | ScheduleRefinementDetails | SendAnalogDetails | SendAnalogFeedbackDetails | SendAnalogProgressDetailsV23 | SendCourtesyMessageDetails | SendDigitalDetails | SendDigitalFeedbackDetails | SendDigitalProgressDetailsV23 | SenderAckCreationRequestDetails | SimpleRegisteredLetterDetails | SimpleRegisteredLetterProgressDetails;
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const BffNotificationStatus = {
+    InValidation: 'IN_VALIDATION',
+    Accepted: 'ACCEPTED',
+    Delivering: 'DELIVERING',
+    Delivered: 'DELIVERED',
+    Viewed: 'VIEWED',
+    EffectiveDate: 'EFFECTIVE_DATE',
+    Paid: 'PAID',
+    Unreachable: 'UNREACHABLE',
+    Cancelled: 'CANCELLED',
+    Refused: 'REFUSED',
+    CancellationInProgress: 'CANCELLATION_IN_PROGRESS'
+} as const;
+
+export type BffNotificationStatus = typeof BffNotificationStatus[keyof typeof BffNotificationStatus];
+
+
+/**
+ * 
+ * @export
+ * @interface BffNotificationStatusHistory
+ */
+export interface BffNotificationStatusHistory {
+    /**
+     * 
+     * @type {BffNotificationStatus}
+     * @memberof BffNotificationStatusHistory
+     */
+    'status': BffNotificationStatus;
+    /**
+     * 
+     * @type {string}
+     * @memberof BffNotificationStatusHistory
+     */
+    'activeFrom': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof BffNotificationStatusHistory
+     */
+    'relatedTimelineElements': Array<string>;
+    /**
+     * 
+     * @type {Array<BffNotificationDetailTimeline>}
+     * @memberof BffNotificationStatusHistory
+     */
+    'steps'?: Array<BffNotificationDetailTimeline>;
+    /**
+     * 
+     * @type {string}
+     * @memberof BffNotificationStatusHistory
+     */
+    'recipient'?: string;
+    /**
+     * 
+     * @type {BffNotificationDeliveryMode}
+     * @memberof BffNotificationStatusHistory
+     */
+    'deliveryMode'?: BffNotificationDeliveryMode;
+}
+
+
+/**
+ * stato di avanzamento del processo di notifica:`   * `SENDER_ACK_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa in carico per il mittente a safe storage   * `VALIDATE_NORMALIZE_ADDRESSES_REQUEST` - Invio della richiesta di validazione e normalizzazione indirizzi fisici presenti nella richiesta di notifica   * `NORMALIZED_ADDRESS` - Salvataggio indirizzi normalizzati   * `REQUEST_ACCEPTED` - Richiesta di notifica accettata a seguito dei controlli di validazione   * `REQUEST_REFUSED` - Richiesta di notifica rifiutata per fallimento di validazione   * `SEND_COURTESY_MESSAGE` - Invio di un messaggio di cortesia   * `GET_ADDRESS` - Disponibilità dell’indirizzo specifico (domicilio digitale di piattaforma, domicilio digitale speciale, domicilio digitale generale, indirizzo fisico sulla notifica o sui registri nazionali)   * `PUBLIC_REGISTRY_CALL` - Richiesta ai registri pubblici per ottenere domicilio digitale generale o per ottenere indirizzo fisico da ANPR, da registro della imprese, da anagrafe tributaria.   * `PUBLIC_REGISTRY_RESPONSE` - Ricevuta la risposta dei registri pubblici   * `SCHEDULE_ANALOG_WORKFLOW` - Pianificazione del workflow per invio cartaceo   * `SCHEDULE_DIGITAL_WORKFLOW` -Pianificazione del workflow per invio digitale (PEC) del secondo tentativo in caso di fallimento del primo.   * `PREPARE_DIGITAL_DOMICILE` - Preparazione per l’invio dell’avviso digitale.Va a valutare la timeline per capire quale sarà il prossimo indirizzo da usare.   * `SEND_DIGITAL_DOMICILE` - Invio digitale dell’avviso di notifica   * `SEND_DIGITAL_PROGRESS` - Tentativo di Invio PEC ad un determinato indirizzo.   * `SEND_DIGITAL_FEEDBACK` - Ottenuto esito ad un invio digitale   * `SCHEDULE_REFINEMENT` - Pianificato il perfezionamento per decorrenza termini   * `REFINEMENT` - Perfezionamento per decorrenza termini   * `DIGITAL_DELIVERY_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di chiusura del workflow digitale a safe storage   * `DIGITAL_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio digitale   * `DIGITAL_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio digitale: tutti i tentativi di invio ai domicili digitali sono falliti.   * `ANALOG_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio cartaceo   * `ANALOG_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio cartaceo NOTA: se per tutti i destinatari si conclude il workflow con fallimento verrà scatenato l’evento COMPLETELY_UNREACHABLE   * `PREPARE_SIMPLE_REGISTERED_LETTER` - Invio richiesta di prepare (preparazione ad invio) raccomandata semplice a paperChannel   * `SEND_SIMPLE_REGISTERED_LETTER` - Invio di raccomandata semplice   * `SEND_SIMPLE_REGISTERED_LETTER_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea semplice   * `NOTIFICATION_VIEWED_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa visione a safe storage   * `NOTIFICATION_VIEWED` - Visualizzazione della notifica (perfeziona la notifica se non già perfezionata per decorrenza termini o da altro destinatario)   * `PREPARE_ANALOG_DOMICILE` - Invio richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `SEND_ANALOG_DOMICILE` - Invio cartaceo dell’avviso di notifica   * `SEND_ANALOG_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea   * `SEND_ANALOG_FEEDBACK` - Ricezione esito dell\'invio cartaceo   * `COMPLETELY_UNREACHABLE_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto (simile a opponibile a terzi) di completamento con fallimento del workflow di invio cartaceo   * `COMPLETELY_UNREACHABLE` - Tutti i destinatari risultano irraggiungibili   * `AAR_CREATION_REQUEST` - Invio della richiesta di creazione dell\'AAR (Avviso di Avvenuta Ricezione) a safe storage   * `AAR_GENERATION` - Generazione dell’AAR (Avviso di Avvenuta Ricezione)   * `PAYMENT` - Ricezione pagamento della notifica   * `NOT_HANDLED` - Per la sperimentazione l\'invio analogico non è previsto, viene inserito tale elemento di timeline   * `PROBABLE_SCHEDULING_ANALOG_DATE` - Data probabile di inizio del flusso analogico   * `NOTIFICATION_CANCELLATION_REQUEST` - Richiesta di annullamento di una notifica   * `NOTIFICATION_CANCELLED` - Notifica annullata   * `PREPARE_ANALOG_DOMICILE_FAILURE` - Fallimento della richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `NOTIFICATION_RADD_RETRIEVED` - Accesso alla notifica tramite la rete RADD. Non perfeziona la notifica. 
+ * @export
+ * @enum {string}
+ */
+
+export const BffTimelineCategory = {
+    SenderAckCreationRequest: 'SENDER_ACK_CREATION_REQUEST',
+    ValidateNormalizeAddressesRequest: 'VALIDATE_NORMALIZE_ADDRESSES_REQUEST',
+    NormalizedAddress: 'NORMALIZED_ADDRESS',
+    RequestAccepted: 'REQUEST_ACCEPTED',
+    SendCourtesyMessage: 'SEND_COURTESY_MESSAGE',
+    GetAddress: 'GET_ADDRESS',
+    PublicRegistryCall: 'PUBLIC_REGISTRY_CALL',
+    PublicRegistryResponse: 'PUBLIC_REGISTRY_RESPONSE',
+    ScheduleAnalogWorkflow: 'SCHEDULE_ANALOG_WORKFLOW',
+    ScheduleDigitalWorkflow: 'SCHEDULE_DIGITAL_WORKFLOW',
+    PrepareDigitalDomicile: 'PREPARE_DIGITAL_DOMICILE',
+    SendDigitalDomicile: 'SEND_DIGITAL_DOMICILE',
+    SendDigitalProgress: 'SEND_DIGITAL_PROGRESS',
+    SendDigitalFeedback: 'SEND_DIGITAL_FEEDBACK',
+    Refinement: 'REFINEMENT',
+    ScheduleRefinement: 'SCHEDULE_REFINEMENT',
+    DigitalDeliveryCreationRequest: 'DIGITAL_DELIVERY_CREATION_REQUEST',
+    DigitalSuccessWorkflow: 'DIGITAL_SUCCESS_WORKFLOW',
+    DigitalFailureWorkflow: 'DIGITAL_FAILURE_WORKFLOW',
+    AnalogSuccessWorkflow: 'ANALOG_SUCCESS_WORKFLOW',
+    AnalogFailureWorkflow: 'ANALOG_FAILURE_WORKFLOW',
+    PrepareSimpleRegisteredLetter: 'PREPARE_SIMPLE_REGISTERED_LETTER',
+    SendSimpleRegisteredLetter: 'SEND_SIMPLE_REGISTERED_LETTER',
+    SendSimpleRegisteredLetterProgress: 'SEND_SIMPLE_REGISTERED_LETTER_PROGRESS',
+    NotificationViewedCreationRequest: 'NOTIFICATION_VIEWED_CREATION_REQUEST',
+    NotificationViewed: 'NOTIFICATION_VIEWED',
+    PrepareAnalogDomicile: 'PREPARE_ANALOG_DOMICILE',
+    SendAnalogDomicile: 'SEND_ANALOG_DOMICILE',
+    SendAnalogProgress: 'SEND_ANALOG_PROGRESS',
+    SendAnalogFeedback: 'SEND_ANALOG_FEEDBACK',
+    Payment: 'PAYMENT',
+    CompletelyUnreachable: 'COMPLETELY_UNREACHABLE',
+    CompletelyUnreachableCreationRequest: 'COMPLETELY_UNREACHABLE_CREATION_REQUEST',
+    RequestRefused: 'REQUEST_REFUSED',
+    AarCreationRequest: 'AAR_CREATION_REQUEST',
+    AarGeneration: 'AAR_GENERATION',
+    NotHandled: 'NOT_HANDLED',
+    ProbableSchedulingAnalogDate: 'PROBABLE_SCHEDULING_ANALOG_DATE',
+    NotificationCancellationRequest: 'NOTIFICATION_CANCELLATION_REQUEST',
+    NotificationCancelled: 'NOTIFICATION_CANCELLED',
+    PrepareAnalogDomicileFailure: 'PREPARE_ANALOG_DOMICILE_FAILURE',
+    NotificationRaddRetrieved: 'NOTIFICATION_RADD_RETRIEVED'
+} as const;
+
+export type BffTimelineCategory = typeof BffTimelineCategory[keyof typeof BffTimelineCategory];
+
 
 /**
  * 
@@ -714,46 +1009,6 @@ export type IoSendMessageResult = typeof IoSendMessageResult[keyof typeof IoSend
 
 
 /**
- * 
- * @export
- * @interface LegalFactId
- */
-export interface LegalFactId {
-    /**
-     * 
-     * @type {string}
-     * @memberof LegalFactId
-     */
-    'key': string;
-    /**
-     * 
-     * @type {LegalFactType}
-     * @memberof LegalFactId
-     */
-    'category': LegalFactType;
-}
-
-
-/**
- * 
- * @export
- * @enum {string}
- */
-
-export const LegalFactType = {
-    Aar: 'AAR',
-    SenderAck: 'SENDER_ACK',
-    DigitalDelivery: 'DIGITAL_DELIVERY',
-    AnalogDelivery: 'ANALOG_DELIVERY',
-    RecipientAccess: 'RECIPIENT_ACCESS',
-    PecReceipt: 'PEC_RECEIPT',
-    AnalogFailureDelivery: 'ANALOG_FAILURE_DELIVERY'
-} as const;
-
-export type LegalFactType = typeof LegalFactType[keyof typeof LegalFactType];
-
-
-/**
  * I campi utilizzati per la creazione di una nuova Notifica.
  * @export
  * @interface NewNotificationRequestV23
@@ -1022,139 +1277,6 @@ export interface NotificationCancelledDetails {
      */
     'notRefinedRecipientIndexes': Array<number>;
 }
-/**
- * 
- * @export
- * @enum {string}
- */
-
-export const NotificationDeliveryMode = {
-    Analog: 'analog',
-    Digital: 'digital'
-} as const;
-
-export type NotificationDeliveryMode = typeof NotificationDeliveryMode[keyof typeof NotificationDeliveryMode];
-
-
-/**
- * Documento della notifica.
- * @export
- * @interface NotificationDetailDocument
- */
-export interface NotificationDetailDocument {
-    /**
-     * 
-     * @type {NotificationAttachmentDigests}
-     * @memberof NotificationDetailDocument
-     */
-    'digests': NotificationAttachmentDigests;
-    /**
-     * tipo di contenuto dell\'allegato, supportato application/pdf
-     * @type {string}
-     * @memberof NotificationDetailDocument
-     */
-    'contentType': string;
-    /**
-     * 
-     * @type {NotificationAttachmentBodyRef}
-     * @memberof NotificationDetailDocument
-     */
-    'ref': NotificationAttachmentBodyRef;
-    /**
-     * 
-     * @type {string}
-     * @memberof NotificationDetailDocument
-     */
-    'title'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof NotificationDetailDocument
-     */
-    'requiresAck'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof NotificationDetailDocument
-     */
-    'docIdx'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof NotificationDetailDocument
-     */
-    'documentId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof NotificationDetailDocument
-     */
-    'documentType'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof NotificationDetailDocument
-     */
-    'recIndex'?: number;
-}
-/**
- * 
- * @export
- * @interface NotificationDetailTimeline
- */
-export interface NotificationDetailTimeline {
-    /**
-     * 
-     * @type {string}
-     * @memberof NotificationDetailTimeline
-     */
-    'elementId': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof NotificationDetailTimeline
-     */
-    'timestamp': string;
-    /**
-     * 
-     * @type {Array<LegalFactId>}
-     * @memberof NotificationDetailTimeline
-     */
-    'legalFactsIds'?: Array<LegalFactId>;
-    /**
-     * 
-     * @type {TimelineCategory}
-     * @memberof NotificationDetailTimeline
-     */
-    'category': TimelineCategory;
-    /**
-     * 
-     * @type {NotificationDetailTimelineDetails}
-     * @memberof NotificationDetailTimeline
-     */
-    'details': NotificationDetailTimelineDetails;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof NotificationDetailTimeline
-     */
-    'hidden'?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof NotificationDetailTimeline
-     */
-    'index'?: number;
-}
-
-
-/**
- * @type NotificationDetailTimelineDetails
- * The raw event payload that will be different based on the event.
- * @export
- */
-export type NotificationDetailTimelineDetails = AarCreationRequestDetails | AarGenerationDetails | AnalogFailureWorkflowDetails | AnalogSuccessWorkflowDetails | BaseAnalogDetails | BaseRegisteredLetterDetails | CompletelyUnreachableCreationRequestDetails | CompletelyUnreachableDetails | DigitalDeliveryCreationRequestDetails | DigitalFailureWorkflowDetails | DigitalSuccessWorkflowDetails | GetAddressInfoDetails | NormalizedAddressDetails | NotHandledDetails | NotificationCancellationRequestDetails | NotificationCancelledDetails | NotificationPaidDetailsV23 | NotificationRADDRetrievedDetails | NotificationRequestAcceptedDetails | NotificationViewedCreationRequestDetailsV23 | NotificationViewedDetailsV23 | PrepareAnalogDomicileFailureDetails | PrepareDigitalDetails | ProbableDateAnalogWorkflowDetails | PublicRegistryCallDetails | PublicRegistryResponseDetails | RefinementDetailsV23 | RequestRefusedDetailsV23 | ScheduleAnalogWorkflowDetailsV23 | ScheduleDigitalWorkflowDetailsV23 | ScheduleRefinementDetails | SendAnalogDetails | SendAnalogFeedbackDetails | SendAnalogProgressDetailsV23 | SendCourtesyMessageDetails | SendDigitalDetails | SendDigitalFeedbackDetails | SendDigitalProgressDetailsV23 | SenderAckCreationRequestDetails | SimpleRegisteredLetterDetails | SimpleRegisteredLetterProgressDetails;
-
 /**
  * Indirizzo di invio della notifica
  * @export
@@ -1540,74 +1662,6 @@ export interface NotificationRequestAcceptedDetails {
      */
     'recIndex'?: number;
 }
-/**
- * 
- * @export
- * @enum {string}
- */
-
-export const NotificationStatus = {
-    InValidation: 'IN_VALIDATION',
-    Accepted: 'ACCEPTED',
-    Delivering: 'DELIVERING',
-    Delivered: 'DELIVERED',
-    Viewed: 'VIEWED',
-    EffectiveDate: 'EFFECTIVE_DATE',
-    Paid: 'PAID',
-    Unreachable: 'UNREACHABLE',
-    Cancelled: 'CANCELLED',
-    Refused: 'REFUSED',
-    CancellationInProgress: 'CANCELLATION_IN_PROGRESS'
-} as const;
-
-export type NotificationStatus = typeof NotificationStatus[keyof typeof NotificationStatus];
-
-
-/**
- * 
- * @export
- * @interface NotificationStatusHistory
- */
-export interface NotificationStatusHistory {
-    /**
-     * 
-     * @type {NotificationStatus}
-     * @memberof NotificationStatusHistory
-     */
-    'status': NotificationStatus;
-    /**
-     * 
-     * @type {string}
-     * @memberof NotificationStatusHistory
-     */
-    'activeFrom': string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof NotificationStatusHistory
-     */
-    'relatedTimelineElements': Array<string>;
-    /**
-     * 
-     * @type {Array<NotificationDetailTimeline>}
-     * @memberof NotificationStatusHistory
-     */
-    'steps'?: Array<NotificationDetailTimeline>;
-    /**
-     * 
-     * @type {string}
-     * @memberof NotificationStatusHistory
-     */
-    'recipient'?: string;
-    /**
-     * 
-     * @type {NotificationDeliveryMode}
-     * @memberof NotificationStatusHistory
-     */
-    'deliveryMode'?: NotificationDeliveryMode;
-}
-
-
 /**
  * 
  * @export
@@ -2878,73 +2932,6 @@ export interface SimpleRegisteredLetterProgressDetails {
     'registeredLetterCode'?: string;
 }
 /**
- * 
- * @export
- * @interface StatusSchema
- */
-export interface StatusSchema {
-    /**
-     * Stato dell\'applicazione.
-     * @type {string}
-     * @memberof StatusSchema
-     */
-    'status': string;
-}
-/**
- * stato di avanzamento del processo di notifica:`   * `SENDER_ACK_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa in carico per il mittente a safe storage   * `VALIDATE_NORMALIZE_ADDRESSES_REQUEST` - Invio della richiesta di validazione e normalizzazione indirizzi fisici presenti nella richiesta di notifica   * `NORMALIZED_ADDRESS` - Salvataggio indirizzi normalizzati   * `REQUEST_ACCEPTED` - Richiesta di notifica accettata a seguito dei controlli di validazione   * `REQUEST_REFUSED` - Richiesta di notifica rifiutata per fallimento di validazione   * `SEND_COURTESY_MESSAGE` - Invio di un messaggio di cortesia   * `GET_ADDRESS` - Disponibilità dell’indirizzo specifico (domicilio digitale di piattaforma, domicilio digitale speciale, domicilio digitale generale, indirizzo fisico sulla notifica o sui registri nazionali)   * `PUBLIC_REGISTRY_CALL` - Richiesta ai registri pubblici per ottenere domicilio digitale generale o per ottenere indirizzo fisico da ANPR, da registro della imprese, da anagrafe tributaria.   * `PUBLIC_REGISTRY_RESPONSE` - Ricevuta la risposta dei registri pubblici   * `SCHEDULE_ANALOG_WORKFLOW` - Pianificazione del workflow per invio cartaceo   * `SCHEDULE_DIGITAL_WORKFLOW` -Pianificazione del workflow per invio digitale (PEC) del secondo tentativo in caso di fallimento del primo.   * `PREPARE_DIGITAL_DOMICILE` - Preparazione per l’invio dell’avviso digitale.Va a valutare la timeline per capire quale sarà il prossimo indirizzo da usare.   * `SEND_DIGITAL_DOMICILE` - Invio digitale dell’avviso di notifica   * `SEND_DIGITAL_PROGRESS` - Tentativo di Invio PEC ad un determinato indirizzo.   * `SEND_DIGITAL_FEEDBACK` - Ottenuto esito ad un invio digitale   * `SCHEDULE_REFINEMENT` - Pianificato il perfezionamento per decorrenza termini   * `REFINEMENT` - Perfezionamento per decorrenza termini   * `DIGITAL_DELIVERY_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di chiusura del workflow digitale a safe storage   * `DIGITAL_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio digitale   * `DIGITAL_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio digitale: tutti i tentativi di invio ai domicili digitali sono falliti.   * `ANALOG_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio cartaceo   * `ANALOG_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio cartaceo NOTA: se per tutti i destinatari si conclude il workflow con fallimento verrà scatenato l’evento COMPLETELY_UNREACHABLE   * `PREPARE_SIMPLE_REGISTERED_LETTER` - Invio richiesta di prepare (preparazione ad invio) raccomandata semplice a paperChannel   * `SEND_SIMPLE_REGISTERED_LETTER` - Invio di raccomandata semplice   * `SEND_SIMPLE_REGISTERED_LETTER_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea semplice   * `NOTIFICATION_VIEWED_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa visione a safe storage   * `NOTIFICATION_VIEWED` - Visualizzazione della notifica (perfeziona la notifica se non già perfezionata per decorrenza termini o da altro destinatario)   * `PREPARE_ANALOG_DOMICILE` - Invio richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `SEND_ANALOG_DOMICILE` - Invio cartaceo dell’avviso di notifica   * `SEND_ANALOG_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea   * `SEND_ANALOG_FEEDBACK` - Ricezione esito dell\'invio cartaceo   * `COMPLETELY_UNREACHABLE_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto (simile a opponibile a terzi) di completamento con fallimento del workflow di invio cartaceo   * `COMPLETELY_UNREACHABLE` - Tutti i destinatari risultano irraggiungibili   * `AAR_CREATION_REQUEST` - Invio della richiesta di creazione dell\'AAR (Avviso di Avvenuta Ricezione) a safe storage   * `AAR_GENERATION` - Generazione dell’AAR (Avviso di Avvenuta Ricezione)   * `PAYMENT` - Ricezione pagamento della notifica   * `NOT_HANDLED` - Per la sperimentazione l\'invio analogico non è previsto, viene inserito tale elemento di timeline   * `PROBABLE_SCHEDULING_ANALOG_DATE` - Data probabile di inizio del flusso analogico   * `NOTIFICATION_CANCELLATION_REQUEST` - Richiesta di annullamento di una notifica   * `NOTIFICATION_CANCELLED` - Notifica annullata   * `PREPARE_ANALOG_DOMICILE_FAILURE` - Fallimento della richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `NOTIFICATION_RADD_RETRIEVED` - Accesso alla notifica tramite la rete RADD. Non perfeziona la notifica. 
- * @export
- * @enum {string}
- */
-
-export const TimelineCategory = {
-    SenderAckCreationRequest: 'SENDER_ACK_CREATION_REQUEST',
-    ValidateNormalizeAddressesRequest: 'VALIDATE_NORMALIZE_ADDRESSES_REQUEST',
-    NormalizedAddress: 'NORMALIZED_ADDRESS',
-    RequestAccepted: 'REQUEST_ACCEPTED',
-    SendCourtesyMessage: 'SEND_COURTESY_MESSAGE',
-    GetAddress: 'GET_ADDRESS',
-    PublicRegistryCall: 'PUBLIC_REGISTRY_CALL',
-    PublicRegistryResponse: 'PUBLIC_REGISTRY_RESPONSE',
-    ScheduleAnalogWorkflow: 'SCHEDULE_ANALOG_WORKFLOW',
-    ScheduleDigitalWorkflow: 'SCHEDULE_DIGITAL_WORKFLOW',
-    PrepareDigitalDomicile: 'PREPARE_DIGITAL_DOMICILE',
-    SendDigitalDomicile: 'SEND_DIGITAL_DOMICILE',
-    SendDigitalProgress: 'SEND_DIGITAL_PROGRESS',
-    SendDigitalFeedback: 'SEND_DIGITAL_FEEDBACK',
-    Refinement: 'REFINEMENT',
-    ScheduleRefinement: 'SCHEDULE_REFINEMENT',
-    DigitalDeliveryCreationRequest: 'DIGITAL_DELIVERY_CREATION_REQUEST',
-    DigitalSuccessWorkflow: 'DIGITAL_SUCCESS_WORKFLOW',
-    DigitalFailureWorkflow: 'DIGITAL_FAILURE_WORKFLOW',
-    AnalogSuccessWorkflow: 'ANALOG_SUCCESS_WORKFLOW',
-    AnalogFailureWorkflow: 'ANALOG_FAILURE_WORKFLOW',
-    PrepareSimpleRegisteredLetter: 'PREPARE_SIMPLE_REGISTERED_LETTER',
-    SendSimpleRegisteredLetter: 'SEND_SIMPLE_REGISTERED_LETTER',
-    SendSimpleRegisteredLetterProgress: 'SEND_SIMPLE_REGISTERED_LETTER_PROGRESS',
-    NotificationViewedCreationRequest: 'NOTIFICATION_VIEWED_CREATION_REQUEST',
-    NotificationViewed: 'NOTIFICATION_VIEWED',
-    PrepareAnalogDomicile: 'PREPARE_ANALOG_DOMICILE',
-    SendAnalogDomicile: 'SEND_ANALOG_DOMICILE',
-    SendAnalogProgress: 'SEND_ANALOG_PROGRESS',
-    SendAnalogFeedback: 'SEND_ANALOG_FEEDBACK',
-    Payment: 'PAYMENT',
-    CompletelyUnreachable: 'COMPLETELY_UNREACHABLE',
-    CompletelyUnreachableCreationRequest: 'COMPLETELY_UNREACHABLE_CREATION_REQUEST',
-    RequestRefused: 'REQUEST_REFUSED',
-    AarCreationRequest: 'AAR_CREATION_REQUEST',
-    AarGeneration: 'AAR_GENERATION',
-    NotHandled: 'NOT_HANDLED',
-    ProbableSchedulingAnalogDate: 'PROBABLE_SCHEDULING_ANALOG_DATE',
-    NotificationCancellationRequest: 'NOTIFICATION_CANCELLATION_REQUEST',
-    NotificationCancelled: 'NOTIFICATION_CANCELLED',
-    PrepareAnalogDomicileFailure: 'PREPARE_ANALOG_DOMICILE_FAILURE',
-    NotificationRaddRetrieved: 'NOTIFICATION_RADD_RETRIEVED'
-} as const;
-
-export type TimelineCategory = typeof TimelineCategory[keyof typeof TimelineCategory];
-
-
-/**
  * stato di avanzamento del processo di notifica:`   * `SENDER_ACK_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa in carico per il mittente a safe storage   * `VALIDATE_NORMALIZE_ADDRESSES_REQUEST` - Invio della richiesta di validazione e normalizzazione indirizzi fisici presenti nella richiesta di notifica   * `NORMALIZED_ADDRESS` - Salvataggio indirizzi normalizzati   * `REQUEST_ACCEPTED` - Richiesta di notifica accettata a seguito dei controlli di validazione   * `REQUEST_REFUSED` - Richiesta di notifica rifiutata per fallimento di validazione   * `SEND_COURTESY_MESSAGE` - Invio di un messaggio di cortesia   * `GET_ADDRESS` - Disponibilità dell’indirizzo specifico (domicilio digitale di piattaforma, domicilio digitale speciale, domicilio digitale generale, indirizzo fisico sulla notifica o sui registri nazionali)   * `PUBLIC_REGISTRY_CALL` - Richiesta ai registri pubblici per ottenere domicilio digitale generale o per ottenere indirizzo fisico da ANPR, da registro della imprese, da anagrafe tributaria.   * `PUBLIC_REGISTRY_RESPONSE` - Ricevuta la risposta dei registri pubblici   * `SCHEDULE_ANALOG_WORKFLOW` - Pianificazione del workflow per invio cartaceo   * `SCHEDULE_DIGITAL_WORKFLOW` -Pianificazione del workflow per invio digitale (PEC) del secondo tentativo in caso di fallimento del primo.   * `PREPARE_DIGITAL_DOMICILE` - Preparazione per l’invio dell’avviso digitale.Va a valutare la timeline per capire quale sarà il prossimo indirizzo da usare.   * `SEND_DIGITAL_DOMICILE` - Invio digitale dell’avviso di notifica   * `SEND_DIGITAL_PROGRESS` - Tentativo di Invio PEC ad un determinato indirizzo.   * `SEND_DIGITAL_FEEDBACK` - Ottenuto esito ad un invio digitale   * `SCHEDULE_REFINEMENT` - Pianificato il perfezionamento per decorrenza termini   * `REFINEMENT` - Perfezionamento per decorrenza termini   * `DIGITAL_DELIVERY_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di chiusura del workflow digitale a safe storage   * `DIGITAL_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio digitale   * `DIGITAL_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio digitale: tutti i tentativi di invio ai domicili digitali sono falliti.   * `ANALOG_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio cartaceo   * `ANALOG_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio cartaceo NOTA: se per tutti i destinatari si conclude il workflow con fallimento verrà scatenato l’evento COMPLETELY_UNREACHABLE   * `PREPARE_SIMPLE_REGISTERED_LETTER` - Invio richiesta di prepare (preparazione ad invio) raccomandata semplice a paperChannel   * `SEND_SIMPLE_REGISTERED_LETTER` - Invio di raccomandata semplice   * `SEND_SIMPLE_REGISTERED_LETTER_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea semplice   * `NOTIFICATION_VIEWED_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa visione a safe storage   * `NOTIFICATION_VIEWED` - Visualizzazione della notifica (perfeziona la notifica se non già perfezionata per decorrenza termini o da altro destinatario)   * `PREPARE_ANALOG_DOMICILE` - Invio richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `SEND_ANALOG_DOMICILE` - Invio cartaceo dell’avviso di notifica   * `SEND_ANALOG_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea   * `SEND_ANALOG_FEEDBACK` - Ricezione esito dell\'invio cartaceo   * `COMPLETELY_UNREACHABLE_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto (simile a opponibile a terzi) di completamento con fallimento del workflow di invio cartaceo   * `COMPLETELY_UNREACHABLE` - Tutti i destinatari risultano irraggiungibili   * `AAR_CREATION_REQUEST` - Invio della richiesta di creazione dell\'AAR (Avviso di Avvenuta Ricezione) a safe storage   * `AAR_GENERATION` - Generazione dell’AAR (Avviso di Avvenuta Ricezione)   * `PAYMENT` - Ricezione pagamento della notifica   * `NOT_HANDLED` - Per la sperimentazione l\'invio analogico non è previsto, viene inserito tale elemento di timeline   * `PROBABLE_SCHEDULING_ANALOG_DATE` - Data probabile di inizio del flusso analogico   * `NOTIFICATION_CANCELLATION_REQUEST` - Richiesta di annullamento di una notifica   * `NOTIFICATION_CANCELLED` - Notifica annullata   * `PREPARE_ANALOG_DOMICILE_FAILURE` - Fallimento della richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `NOTIFICATION_RADD_RETRIEVED` - Accesso alla notifica tramite la rete RADD. Non perfeziona la notifica. 
  * @export
  * @enum {string}
@@ -3004,107 +2991,6 @@ export type TimelineElementCategoryV23 = typeof TimelineElementCategoryV23[keyof
  * @export
  */
 export type TimelineElementDetailsV23 = AarCreationRequestDetails | AarGenerationDetails | AnalogFailureWorkflowDetails | AnalogSuccessWorkflowDetails | BaseAnalogDetails | BaseRegisteredLetterDetails | CompletelyUnreachableCreationRequestDetails | CompletelyUnreachableDetails | DigitalDeliveryCreationRequestDetails | DigitalFailureWorkflowDetails | DigitalSuccessWorkflowDetails | GetAddressInfoDetails | NormalizedAddressDetails | NotHandledDetails | NotificationCancellationRequestDetails | NotificationCancelledDetails | NotificationPaidDetailsV23 | NotificationRADDRetrievedDetails | NotificationRequestAcceptedDetails | NotificationViewedCreationRequestDetailsV23 | NotificationViewedDetailsV23 | PrepareAnalogDomicileFailureDetails | PrepareDigitalDetails | ProbableDateAnalogWorkflowDetails | PublicRegistryCallDetails | PublicRegistryResponseDetails | RefinementDetailsV23 | RequestRefusedDetailsV23 | ScheduleAnalogWorkflowDetailsV23 | ScheduleDigitalWorkflowDetailsV23 | ScheduleRefinementDetails | SendAnalogDetails | SendAnalogFeedbackDetails | SendAnalogProgressDetailsV23 | SendCourtesyMessageDetails | SendDigitalDetails | SendDigitalFeedbackDetails | SendDigitalProgressDetailsV23 | SenderAckCreationRequestDetails | SimpleRegisteredLetterDetails | SimpleRegisteredLetterProgressDetails;
-
-
-/**
- * HealthCheckApi - axios parameter creator
- * @export
- */
-export const HealthCheckApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @summary Get Status of application
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        status: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/status`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * HealthCheckApi - functional programming interface
- * @export
- */
-export const HealthCheckApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = HealthCheckApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @summary Get Status of application
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async status(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StatusSchema>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.status(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['HealthCheckApi.status']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * HealthCheckApi - factory interface
- * @export
- */
-export const HealthCheckApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = HealthCheckApiFp(configuration)
-    return {
-        /**
-         * 
-         * @summary Get Status of application
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        status(options?: any): AxiosPromise<StatusSchema> {
-            return localVarFp.status(options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * HealthCheckApi - object-oriented interface
- * @export
- * @class HealthCheckApi
- * @extends {BaseAPI}
- */
-export class HealthCheckApi extends BaseAPI {
-    /**
-     * 
-     * @summary Get Status of application
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof HealthCheckApi
-     */
-    public status(options?: RawAxiosRequestConfig) {
-        return HealthCheckApiFp(this.configuration).status(options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
 
 
 /**

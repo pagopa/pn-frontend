@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 import { LoadingPage } from '@pagopa-pn/pn-commons';
 
 import ToSAcceptancePage from '../pages/ToSAcceptance.page';
-import { getPrivacyApproval, getToSApproval } from '../redux/auth/actions';
+import { getTosPrivacyApproval } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
@@ -19,8 +19,9 @@ const ToSGuard = () => {
 
   useEffect(() => {
     if (sessionToken !== '') {
-      void dispatch(getToSApproval());
-      void dispatch(getPrivacyApproval());
+      // void dispatch(getToSApproval());
+      // void dispatch(getPrivacyApproval());
+      void dispatch(getTosPrivacyApproval());
     }
   }, [sessionToken]);
 

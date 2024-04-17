@@ -20,3 +20,8 @@ export interface Consent {
   isFirstAccept: boolean;
   consentVersion: string;
 }
+
+export interface TosPrivacyConsent {
+  tos: Consent;
+  privacy: Consent;
+}

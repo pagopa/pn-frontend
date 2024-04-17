@@ -14,6 +14,17 @@
           "modelPackage": "models",
           "cleanupOutput": true
         }
+      },
+      "bff-tos-privacy": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/develop/docs/openapi/api-external-pn-bff-tos-privacy.yaml",
+        "output": "./src/generated-client/tos-privacy",
+        "additionalProperties": {
+          "supportsES6": true,
+          "apiPackage": "apis",
+          "modelPackage": "models",
+          "cleanupOutput": true
+        }
       }
     }
   }
