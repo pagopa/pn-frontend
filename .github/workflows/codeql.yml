@@ -15,11 +15,11 @@ on:
   push:
     branches: [ "develop", "[dm][ea][vi]*" ]
     paths-ignore:
-      - 'packages/**/public/onetrust/**'
+      - 'packages/**/public/onetrust/**/**'
   pull_request:
     branches: [ "develop", "[dm][ea][vi]*" ]
     paths-ignore:
-      - 'packages/**/public/onetrust/**'
+      - 'packages/**/public/onetrust/**/**'
   schedule:
     - cron: '32 7 * * 5'
 
