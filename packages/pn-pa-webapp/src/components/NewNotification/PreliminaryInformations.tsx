@@ -135,13 +135,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     fetchGroups();
   }, [fetchGroups]);
 
-  const isLessThan80Chars = (field: string | undefined) => {
-    if (field) {
-      return field.length < 80;
-    } else {
-      return false;
-    }
-  };
+  const isLessThan80Chars = (field: string) => field && field.length < 80;
   return (
     <ApiErrorWrapper
       apiId={NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS}
