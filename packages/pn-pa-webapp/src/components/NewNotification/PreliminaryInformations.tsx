@@ -135,7 +135,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     fetchGroups();
   }, [fetchGroups]);
 
-  const checkIsLessThan80Chars = (field: string | undefined) => {
+  const isLessThan80Chars = (field: string | undefined) => {
     if (field) {
       return field.length < 80;
     } else {
@@ -177,18 +177,18 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           />
           <TextField
             id="senderDenomination"
-            label={`${t('sender-denomination')}`}
+            label={`${t('sender-denomination')}*`}
             fullWidth
             name="senderDenomination"
             value={formik.values.senderDenomination}
             onChange={handleChangeTouched}
             error={
-              checkIsLessThan80Chars(formik.values.senderDenomination) &&
+              !isLessThan80Chars(formik.values.senderDenomination) &&
               Boolean(formik.errors.senderDenomination)
             }
-            disabled={checkIsLessThan80Chars(formik.values.senderDenomination)}
+            disabled={isLessThan80Chars(notification.senderDenomination)}
             helperText={
-              (!checkIsLessThan80Chars(formik.values.senderDenomination) &&
+              (!isLessThan80Chars(formik.values.senderDenomination) &&
                 formik.errors.senderDenomination) ||
               (formik.touched.senderDenomination && formik.errors.senderDenomination)
             }
