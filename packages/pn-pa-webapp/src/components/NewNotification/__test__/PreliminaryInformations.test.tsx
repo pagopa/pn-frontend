@@ -14,7 +14,7 @@ import {
   testSelect,
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { userResponse } from '../../../__mocks__/Auth.mock';
+import { longOrganizationNameUserResponse, userResponse } from '../../../__mocks__/Auth.mock';
 import {
   newNotification,
   newNotificationEmpty,
@@ -56,11 +56,15 @@ vi.mock('../../../services/configuration.service', async () => {
   };
 });
 
-const populateForm = async (form: HTMLFormElement, hasPayment: boolean) => {
+const populateForm = async (
+  form: HTMLFormElement,
+  hasPayment: boolean,
+  organizationName: string = userResponse.organization.name
+) => {
   await testInput(form, 'paProtocolNumber', newNotification.paProtocolNumber);
   await testInput(form, 'subject', newNotification.subject);
   await testInput(form, 'taxonomyCode', newNotification.taxonomyCode);
-  await testInput(form, 'senderDenomination', userResponse.organization.name);
+  await testInput(form, 'senderDenomination', organizationName);
   await testSelect(
     form,
     'group',
@@ -172,7 +176,6 @@ describe('PreliminaryInformations component with payment enabled', async () => {
               user: {
                 organization: {
                   hasGroup: true,
-                  name: 'Comune di Milano',
                 },
               },
             },
@@ -232,12 +235,12 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     // set invalid values
     // paProtocolNumber
     await testInput(form, 'paProtocolNumber', '');
-    const potrocolNumberError = form.querySelector('#paProtocolNumber-helper-text');
-    expect(potrocolNumberError).toHaveTextContent('required-field');
+    const protocolNumberError = form.querySelector('#paProtocolNumber-helper-text');
+    expect(protocolNumberError).toHaveTextContent('required-field');
     await testInput(form, 'paProtocolNumber', ' text-with-spaces ');
-    expect(potrocolNumberError).toHaveTextContent('no-spaces-at-edges');
+    expect(protocolNumberError).toHaveTextContent('no-spaces-at-edges');
     await testInput(form, 'paProtocolNumber', randomString(257));
-    expect(potrocolNumberError).toHaveTextContent('too-long-field-error');
+    expect(protocolNumberError).toHaveTextContent('too-long-field-error');
     // subject
     await testInput(form, 'subject', '');
     const subjectError = form.querySelector('#subject-helper-text');
@@ -452,27 +455,15 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
     mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
-        <PreliminaryInformations
-          notification={newNotificationEmpty}
-          onConfirm={confirmHandlerMk}
-        />,
-        {
-          preloadedState: {
-            userState: {
-              user: {
-                organization: {
-                  hasGroup: true,
-                  name: 'Comune di Palermo - Commissario Straordinario del Governo ZES Sicilia Occidentale',
-                },
-              },
-            },
-          },
-        }
+        <PreliminaryInformations notification={newNotificationEmpty} onConfirm={confirmHandlerMk} />
       );
     });
     const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    await testInput(form, 'senderDenomination', longOrganizationNameUserResponse.organization.name);
+    const senderDenominationError = form.querySelector('#senderDenomination-helper-text');
+    expect(senderDenominationError).toHaveTextContent('too-long-field-error');
     const button = within(form).getByTestId('step-submit');
-    await populateForm(form, true);
+    // check submit button state
     expect(button).toBeDisabled();
   });
 });
