@@ -20,9 +20,9 @@ import { ApiKey, ApiKeySetStatus, ModalApiKeyView } from '../models/ApiKeys';
 import * as routes from '../navigation/routes.const';
 import {
   API_KEYS_ACTIONS,
+  changeApiKeyStatus,
   deleteApiKey,
   getApiKeys,
-  setApiKeyStatus,
 } from '../redux/apiKeys/actions';
 import { setPagination } from '../redux/apiKeys/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -121,21 +121,21 @@ const ApiKeys = () => {
 
   const apiKeyBlocked = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.BLOCK })).then(
+    void dispatch(changeApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.BLOCK })).then(
       fetchApiKeys
     );
   };
 
   const apiKeyEnabled = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ENABLE })).then(
+    void dispatch(changeApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ENABLE })).then(
       fetchApiKeys
     );
   };
 
   const apiKeyRotated = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ROTATE })).then(
+    void dispatch(changeApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ROTATE })).then(
       fetchApiKeys
     );
   };

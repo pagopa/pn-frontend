@@ -14,7 +14,7 @@ import {
   within,
 } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { DELETE_APIKEY, STATUS_APIKEY } from '../../api/apiKeys/apiKeys.routes';
+import { DELETE_APIKEY } from '../../api/apiKeys/apiKeys.routes';
 import { ApiKeySetStatus, ApiKeyStatus } from '../../models/ApiKeys';
 import * as routes from '../../navigation/routes.const';
 import ApiKeys from '../ApiKeys.page';
@@ -56,7 +56,9 @@ async function testApiKeyChangeStatus(
   buttonTestId: string
 ) {
   mock
-    .onPut(STATUS_APIKEY(mockApiKeysDTO.items[apiKeyIndex].id), { status: statusRequested })
+    .onPut(`/bff/v1/api-keys/${mockApiKeysDTO.items[apiKeyIndex].id}/status`, {
+      status: statusRequested,
+    })
     .reply(200);
   const contextMenuButton = result.getAllByTestId('contextMenuButton')[apiKeyIndex];
   fireEvent.click(contextMenuButton);
@@ -67,7 +69,9 @@ async function testApiKeyChangeStatus(
   fireEvent.click(confirmButton);
   await waitFor(() => {
     expect(mock.history.put).toHaveLength(1);
-    expect(mock.history.put[0].url).toBe(STATUS_APIKEY(mockApiKeysDTO.items[apiKeyIndex].id));
+    expect(mock.history.put[0].url).toBe(
+      `/bff/v1/api-keys/${mockApiKeysDTO.items[apiKeyIndex].id}/status`
+    );
     expect(JSON.parse(mock.history.put[0].data)).toStrictEqual({ status: statusSetted });
     expect(mock.history.get).toHaveLength(2);
   });

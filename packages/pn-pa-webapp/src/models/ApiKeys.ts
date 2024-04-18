@@ -54,12 +54,12 @@ export interface NewApiKeyRequest {
   groups: Array<string>;
 }
 
-export interface ApiKeyStatusBE {
+export interface ChangeApiKeyStatusRequest {
   apiKey: string;
   status: ApiKeySetStatus;
 }
 
-export interface ApiKeyParam {
+export interface GetApiKeysRequest {
   limit?: number;
   lastKey?: string;
   lastUpdate?: string;
