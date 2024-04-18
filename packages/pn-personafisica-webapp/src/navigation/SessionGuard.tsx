@@ -63,7 +63,7 @@ const SessionGuardRender = () => {
   const { hasApiErrors } = useErrors();
 
   const isAnonymousUser = !isUnauthorizedUser && !sessionToken;
-  const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
+  const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_PRIVACY_APPROVAL);
 
   const { DISABLE_INACTIVITY_HANDLER } = getConfiguration();
 
@@ -121,7 +121,7 @@ const SessionGuard = () => {
   // vedi il commentone in useProcess
   const { isFinished, performStep } = useProcess(INITIALIZATION_SEQUENCE);
 
-  const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
+  const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_PRIVACY_APPROVAL);
   const hasAnyForbiddenError = hasSpecificStatusError(403);
 
   const getTokenParam = useCallback(() => {

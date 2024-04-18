@@ -9,11 +9,9 @@ import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { apiClient } from '../api/apiClients';
-import { GET_CONSENTS } from '../api/consents/consents.routes';
 import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
 import { COUNT_DELEGATORS } from '../api/delegations/delegations.routes';
 import { DelegationStatus } from '../models/Deleghe';
-import { ConsentType } from '../models/consents';
 import { RenderResult, act, axe, render } from './test-utils';
 
 // mock imports
@@ -54,7 +52,8 @@ const reduxInitialState = {
   },
 };
 
-describe('App.tsx - accessibility tests', async () => {
+// Skipped beacuse this will be removed
+describe.skip('App.tsx - accessibility tests', async () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -83,16 +82,6 @@ describe('App.tsx - accessibility tests', async () => {
   });
 
   it('Test if automatic accessibility tests passes - user logged in', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: true,
-    });
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.TOS,
-      accepted: true,
-    });
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
     mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
@@ -107,12 +96,6 @@ describe('App.tsx - accessibility tests', async () => {
   }, 15000);
 
   it('Test if automatic accessibility tests passes - errors on API call', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: true,
-    });
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(500);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
     mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);

@@ -1,9 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import { mockLogin, mockLogout, userResponse } from '../../../__mocks__/Auth.mock';
-import { acceptTosPrivacyConsentBodyMock } from '../../../__mocks__/Consents.mock';
+import {
+  acceptTosPrivacyConsentBodyMock,
+  tosPrivacyConsentMock,
+} from '../../../__mocks__/Consents.mock';
 import { apiClient } from '../../../api/apiClients';
-import { ConsentType } from '../../../models/consents';
 import { store } from '../../store';
 import { acceptTosPrivacy, getTosPrivacyApproval } from '../actions';
 
@@ -89,33 +91,15 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should fetch ToS and Privacy approved', async () => {
-    const tosMock = {
-      recipientId: 'mocked-recipientId',
-      consentType: ConsentType.TOS,
-      accepted: true,
-      isFirstAccept: true,
-      consentVersion: 'mocked-version',
-    };
-
-    const privacyMock = {
-      recipientId: 'mocked-recipientId',
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: true,
-      isFirstAccept: true,
-      consentVersion: 'mocked-version',
-    };
-
-    const tosPrivacyMock = {
-      tos: tosMock,
-      privacy: privacyMock,
-    };
-
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyMock);
+    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
 
     const action = await store.dispatch(getTosPrivacyApproval());
     expect(action.type).toBe('getTosPrivacyApproval/fulfilled');
-    expect(action.payload).toEqual(tosPrivacyMock);
-    expect(store.getState().userState.tosConsent).toEqual(tosMock);
+    expect(action.payload).toEqual(tosPrivacyConsentMock(true, true));
+    expect(store.getState().userState.tosConsent).toEqual(tosPrivacyConsentMock(true, true).tos);
+    expect(store.getState().userState.privacyConsent).toEqual(
+      tosPrivacyConsentMock(true, true).privacy
+    );
   });
 
   it('Should NOT be able to fetch ToS and Privacy approved', async () => {
