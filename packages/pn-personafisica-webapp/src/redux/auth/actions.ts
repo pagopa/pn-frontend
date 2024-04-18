@@ -72,7 +72,7 @@ export const acceptTosPrivacy = createAsyncThunk<void, BffTosPrivacyBody>(
   async (body: BffTosPrivacyBody, { rejectWithValue }) => {
     try {
       const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
-      const response = await tosPrivacyFactory.acceptTosPrivacy(body);
+      const response = await tosPrivacyFactory.acceptTosPrivacyV1(body);
 
       return response.data;
     } catch (e: any) {
@@ -80,23 +80,3 @@ export const acceptTosPrivacy = createAsyncThunk<void, BffTosPrivacyBody>(
     }
   }
 );
-
-// export const acceptToS = createAsyncThunk<string, string>(
-//   'acceptToS',
-//   performThunkAction((consentVersion: string) => {
-//     const body = {
-//       action: ConsentActionType.ACCEPT,
-//     };
-//     return ConsentsApi.setConsentByType(ConsentType.TOS, consentVersion, body);
-//   })
-// );
-
-// export const acceptPrivacy = createAsyncThunk<string, string>(
-//   'acceptPrivacy',
-//   performThunkAction((consentVersion: string) => {
-//     const body = {
-//       action: ConsentActionType.ACCEPT,
-//     };
-//     return ConsentsApi.setConsentByType(ConsentType.DATAPRIVACY, consentVersion, body);
-//   })
-// );
