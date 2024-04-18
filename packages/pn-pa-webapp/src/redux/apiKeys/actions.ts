@@ -2,7 +2,6 @@ import { parseError, performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
-import { ApiKeysApi } from '../../api/apiKeys/ApiKeys.api';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { ApiKeysApiFactory } from '../../generated-client/api-keys';
 import {
@@ -73,7 +72,15 @@ export const changeApiKeyStatus = createAsyncThunk<void, ChangeApiKeyStatusReque
   }
 );
 
-export const deleteApiKey = createAsyncThunk<string, string>(
+export const deleteApiKey = createAsyncThunk<void, string>(
   API_KEYS_ACTIONS.DELETE_API_KEY,
-  performThunkAction((apiKey: string) => ApiKeysApi.deleteApiKey(apiKey))
+  async (params: string, { rejectWithValue }) => {
+    try {
+      const apiKeysApiFactory = ApiKeysApiFactory(undefined, undefined, apiClient);
+      const response = await apiKeysApiFactory.deleteApiKeyV1(params);
+      return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );

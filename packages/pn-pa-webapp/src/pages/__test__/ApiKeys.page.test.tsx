@@ -14,7 +14,6 @@ import {
   within,
 } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { DELETE_APIKEY } from '../../api/apiKeys/apiKeys.routes';
 import { ApiKeySetStatus, ApiKeyStatus } from '../../models/ApiKeys';
 import * as routes from '../../navigation/routes.const';
 import ApiKeys from '../ApiKeys.page';
@@ -227,7 +226,7 @@ describe('ApiKeys Page', async () => {
     await act(async () => {
       result = render(<ApiKeys />);
     });
-    mock.onDelete(DELETE_APIKEY(mockApiKeysDTO.items[1].id)).reply(200);
+    mock.onDelete(`/bff/v1/api-keys/${mockApiKeysDTO.items[1].id}`).reply(200);
     const contextMenuButton = result.getAllByTestId('contextMenuButton')[1];
     fireEvent.click(contextMenuButton);
     const actionButton = await waitFor(() => screen.getByTestId('buttonDelete'));
@@ -237,7 +236,7 @@ describe('ApiKeys Page', async () => {
     fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.delete).toHaveLength(1);
-      expect(mock.history.delete[0].url).toBe(DELETE_APIKEY(mockApiKeysDTO.items[1].id));
+      expect(mock.history.delete[0].url).toBe(`/bff/v1/api-keys/${mockApiKeysDTO.items[1].id}`);
       expect(mock.history.get).toHaveLength(2);
     });
     await waitFor(() => {
