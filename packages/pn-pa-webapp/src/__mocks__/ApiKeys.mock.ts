@@ -1,4 +1,4 @@
-import { ApiKeyStatus, ApiKeys, GetNewApiKeyResponse, NewApiKeyRequest } from '../models/ApiKeys';
+import { ApiKeyStatus, ApiKeys, NewApiKeyRequest, NewApiKeyResponse } from '../models/ApiKeys';
 
 export const mockGroups: Array<{ id: string; name: string }> = [
   {
@@ -107,7 +107,7 @@ export const newApiKeyDTO: NewApiKeyRequest = {
   groups: ['mock-id-1'],
 };
 
-export const newApiKeyResponse: GetNewApiKeyResponse = {
+export const newApiKeyResponse: NewApiKeyResponse = {
   id: 'mocked-api-key-id',
   apiKey: 'mocked-api-key',
 };

@@ -1,11 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { newApiKeyDTO, newApiKeyResponse } from '../../../__mocks__/ApiKeys.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { ApiKeySetStatus } from '../../../models/ApiKeys';
 import { apiClient } from '../../apiClients';
 import { ApiKeysApi } from '../ApiKeys.api';
-import { CREATE_APIKEY, DELETE_APIKEY, STATUS_APIKEY } from '../apiKeys.routes';
+import { DELETE_APIKEY, STATUS_APIKEY } from '../apiKeys.routes';
 
 describe('Api keys api tests', () => {
   // eslint-disable-next-line functional/no-let
@@ -23,12 +22,6 @@ describe('Api keys api tests', () => {
 
   afterAll(() => {
     mock.restore();
-  });
-
-  it('createNewApiKey', async () => {
-    mock.onPost(CREATE_APIKEY(), newApiKeyDTO).reply(200, newApiKeyResponse);
-    const res = await ApiKeysApi.createNewApiKey(newApiKeyDTO);
-    expect(res).toStrictEqual(newApiKeyResponse.apiKey);
   });
 
   it('deleteApiKey', async () => {

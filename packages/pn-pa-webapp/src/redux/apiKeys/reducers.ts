@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { ApiKeys } from '../../models/ApiKeys';
+import { ApiKeys, NewApiKeyResponse } from '../../models/ApiKeys';
 import { UserGroup } from '../../models/user';
 import { getApiKeyUserGroups, getApiKeys, newApiKey } from './actions';
 
@@ -18,7 +18,7 @@ const initialState = {
     size: 10,
     page: 0,
   },
-  apiKey: '',
+  apiKey: {} as NewApiKeyResponse,
   groups: [] as Array<UserGroup>,
 };
 

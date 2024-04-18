@@ -44,7 +44,7 @@ export enum ModalApiKeyView {
   VIEW_GROUPS_ID = 'VIEW_GROUPS_ID',
 }
 
-export interface GetNewApiKeyResponse {
+export interface NewApiKeyResponse {
   id: string;
   apiKey: string;
 }

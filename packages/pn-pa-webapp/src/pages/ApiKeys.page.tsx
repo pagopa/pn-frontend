@@ -38,39 +38,35 @@ const TableGroupsId = ({ groups }: { groups?: Array<{ id: string; name: string }
   const { t } = useTranslation(['apikeys']);
   return (
     <Box>
-      {groups &&
-        groups.map((group, index) => (
-          <Box
-            key={group.name}
+      {groups?.map((group, index) => (
+        <Box
+          key={group.name}
+          sx={{
+            display: 'flex',
+            alignContent: 'center',
+            justifyContent: 'center',
+            flexDirection: 'column',
+          }}
+        >
+          <Typography variant="body2" sx={{ mb: 2 }}>
+            <strong>{group.name}</strong>
+          </Typography>
+          <TextField
+            label={t('group-id')}
+            defaultValue={group.id}
+            fullWidth
             sx={{
-              display: 'flex',
-              alignContent: 'center',
-              justifyContent: 'center',
-              flexDirection: 'column',
+              mb: index < groups.length - 1 ? 2 : 0,
             }}
-          >
-            <Typography variant="body2" sx={{ mb: 2 }}>
-              <strong>{group.name}</strong>
-            </Typography>
-            <TextField
-              label={t('group-id')}
-              defaultValue={group.id}
-              fullWidth
-              sx={{
-                mb: index < groups.length - 1 ? 2 : 0,
-              }}
-              InputProps={{
-                readOnly: true,
-                endAdornment: (
-                  <CopyToClipboardButton
-                    value={() => group.id}
-                    tooltipTitle={t('group-id-copied')}
-                  />
-                ),
-              }}
-            />
-          </Box>
-        ))}
+            InputProps={{
+              readOnly: true,
+              endAdornment: (
+                <CopyToClipboardButton value={() => group.id} tooltipTitle={t('group-id-copied')} />
+              ),
+            }}
+          />
+        </Box>
+      ))}
     </Box>
   );
 };

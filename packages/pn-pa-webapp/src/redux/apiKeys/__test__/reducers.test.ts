@@ -3,9 +3,8 @@ import MockAdapter from 'axios-mock-adapter';
 import { mockApiKeysDTO, newApiKeyDTO, newApiKeyResponse } from '../../../__mocks__/ApiKeys.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { apiClient } from '../../../api/apiClients';
-import { CREATE_APIKEY } from '../../../api/apiKeys/apiKeys.routes';
 import { GET_USER_GROUPS } from '../../../api/notifications/notifications.routes';
-import { ApiKeys } from '../../../models/ApiKeys';
+import { ApiKeys, NewApiKeyResponse } from '../../../models/ApiKeys';
 import { GroupStatus, UserGroup } from '../../../models/user';
 import { getUserGroups } from '../../newNotification/actions';
 import { store } from '../../store';
@@ -26,7 +25,7 @@ const initialState = {
     size: 10,
     page: 0,
   },
-  apiKey: '',
+  apiKey: {} as NewApiKeyResponse,
   groups: [] as Array<UserGroup>,
 };
 
@@ -89,11 +88,11 @@ describe('api keys page redux state test', () => {
   });
 
   it('Should be able to create new API Key', async () => {
-    mock.onPost(CREATE_APIKEY(), newApiKeyDTO).reply(200, newApiKeyResponse);
+    mock.onPost('/bff/v1/api-keys', newApiKeyDTO).reply(200, newApiKeyResponse);
     const action = await store.dispatch(newApiKey(newApiKeyDTO));
     const payload = action.payload;
     expect(action.type).toBe('newApiKey/fulfilled');
-    expect(payload).toEqual(newApiKeyResponse.apiKey);
+    expect(payload).toEqual(newApiKeyResponse);
   });
 
   it('Should be able to reset state', () => {

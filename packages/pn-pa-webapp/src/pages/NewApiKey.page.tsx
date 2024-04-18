@@ -143,9 +143,7 @@ const NewApiKey = () => {
                           renderOption={(props, option) => (
                             <MenuItem {...props}>
                               <ListItemIcon>
-                                <Checkbox
-                                  checked={formik.values.groups.indexOf(option as UserGroup) > -1}
-                                />
+                                <Checkbox checked={formik.values.groups.indexOf(option) > -1} />
                               </ListItemIcon>
                               <ListItemText primary={option.name} />
                             </MenuItem>
@@ -176,7 +174,7 @@ const NewApiKey = () => {
         </Prompt>
       )}
 
-      {apiKeySent && apiKey !== '' && <SyncFeedbackApiKey newApiKeyId={apiKey} />}
+      {apiKeySent && apiKey.id !== '' && <SyncFeedbackApiKey newApiKeyId={apiKey.id} />}
     </>
   );
 };
