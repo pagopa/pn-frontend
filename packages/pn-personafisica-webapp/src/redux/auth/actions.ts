@@ -8,8 +8,6 @@ import { TosPrivacyConsent } from '../../models/consents';
 import { User } from './types';
 
 export enum AUTH_ACTIONS {
-  GET_TOS_APPROVAL = 'getToSApproval',
-  GET_PRIVACY_APPROVAL = 'getPrivacyApproval',
   GET_TOS_PRIVACY_APPROVAL = 'getTosPrivacyApproval',
   ACCEPT_TOS_PRIVACY = 'acceptTosPrivacy',
 }

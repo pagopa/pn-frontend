@@ -19,8 +19,6 @@ const ToSGuard = () => {
 
   useEffect(() => {
     if (sessionToken !== '') {
-      // void dispatch(getToSApproval());
-      // void dispatch(getPrivacyApproval());
       void dispatch(getTosPrivacyApproval());
     }
   }, [sessionToken]);
