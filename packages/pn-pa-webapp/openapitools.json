@@ -4,10 +4,21 @@
   "generator-cli": {
     "version": "7.4.0",
     "generators": {
-      "bff-pa": {
+      "bff-notification": {
         "generatorName": "typescript-axios",
         "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/develop/docs/openapi/api-external-pn-bff-pa.yaml",
-        "output": "./src/generated-client",
+        "output": "./src/generated-client/notification",
+        "additionalProperties": {
+          "supportsES6": true,
+          "apiPackage": "apis",
+          "modelPackage": "models",
+          "cleanupOutput": true
+        }
+      },
+      "bff-api-keys": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/develop/docs/openapi/api-external-pn-bff-pa-apikeys.yaml",
+        "output": "./src/generated-client/api-keys",
         "additionalProperties": {
           "supportsES6": true,
           "apiPackage": "apis",

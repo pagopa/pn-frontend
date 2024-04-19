@@ -1,14 +1,14 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { mockApiKeysDTO, mockApiKeysForFE, mockGroups } from '../../../__mocks__/ApiKeys.mock';
+import { mockApiKeysDTO, newApiKeyDTO, newApiKeyResponse } from '../../../__mocks__/ApiKeys.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { apiClient } from '../../../api/apiClients';
-import { APIKEY_LIST } from '../../../api/apiKeys/apiKeys.routes';
 import { GET_USER_GROUPS } from '../../../api/notifications/notifications.routes';
-import { ApiKeys } from '../../../models/ApiKeys';
-import { UserGroup } from '../../../models/user';
+import { ApiKeys, NewApiKeyResponse } from '../../../models/ApiKeys';
+import { GroupStatus, UserGroup } from '../../../models/user';
+import { getUserGroups } from '../../newNotification/actions';
 import { store } from '../../store';
-import { getApiKeys } from '../actions';
+import { getApiKeys, newApiKey } from '../actions';
 import { resetState, setPagination } from '../reducers';
 
 const initialState = {
@@ -16,7 +16,7 @@ const initialState = {
   apiKeys: {
     items: [],
     total: 0,
-  } as ApiKeys<UserGroup>,
+  } as ApiKeys,
   pagination: {
     nextPagesKey: [] as Array<{
       lastKey: string;
@@ -25,6 +25,8 @@ const initialState = {
     size: 10,
     page: 0,
   },
+  apiKey: {} as NewApiKeyResponse,
+  groups: [] as Array<UserGroup>,
 };
 
 describe('api keys page redux state test', () => {
@@ -51,19 +53,16 @@ describe('api keys page redux state test', () => {
   });
 
   it('Should be able to fetch the api keys list', async () => {
-    mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysDTO);
-    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    mock.onGet('/bff/v1/api-keys?showVirtualKey=true').reply(200, mockApiKeysDTO);
     const action = await store.dispatch(getApiKeys());
     const payload = action.payload;
     expect(action.type).toBe('getApiKeys/fulfilled');
-    expect(payload).toEqual(mockApiKeysForFE);
-    expect(store.getState().apiKeysState.apiKeys).toStrictEqual(mockApiKeysForFE);
+    expect(payload).toEqual(mockApiKeysDTO);
+    expect(store.getState().apiKeysState.apiKeys).toStrictEqual(mockApiKeysDTO);
     expect(store.getState().apiKeysState.pagination).toEqual({
       page: 0,
       size: 10,
-      nextPagesKey: [
-        { lastKey: mockApiKeysForFE.lastKey, lastUpdate: mockApiKeysForFE.lastUpdate },
-      ],
+      nextPagesKey: [{ lastKey: mockApiKeysDTO.lastKey, lastUpdate: mockApiKeysDTO.lastUpdate }],
     });
   });
 
@@ -74,6 +73,26 @@ describe('api keys page redux state test', () => {
     expect(payload).toEqual({ page: 2, size: 20 });
     const state = store.getState().apiKeysState;
     expect(state.pagination).toEqual({ page: 2, size: 20, nextPagesKey: [] });
+  });
+
+  it('Should be able to get user groups', async () => {
+    const mockResponse = [
+      { id: 'mocked-id', name: 'mocked-name', description: '', status: GroupStatus.ACTIVE },
+    ];
+    mock.onGet(GET_USER_GROUPS()).reply(200, mockResponse);
+    const action = await store.dispatch(getUserGroups());
+    const payload = action.payload;
+    expect(action.type).toBe('getUserGroups/fulfilled');
+    expect(payload).toEqual(mockResponse);
+    expect(store.getState().newNotificationState.groups).toStrictEqual(mockResponse);
+  });
+
+  it('Should be able to create new API Key', async () => {
+    mock.onPost('/bff/v1/api-keys', newApiKeyDTO).reply(200, newApiKeyResponse);
+    const action = await store.dispatch(newApiKey(newApiKeyDTO));
+    const payload = action.payload;
+    expect(action.type).toBe('newApiKey/fulfilled');
+    expect(payload).toEqual(newApiKeyResponse);
   });
 
   it('Should be able to reset state', () => {

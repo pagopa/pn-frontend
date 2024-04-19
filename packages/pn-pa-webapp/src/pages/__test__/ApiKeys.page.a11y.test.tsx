@@ -3,11 +3,9 @@ import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
-import { mockApiKeysDTO, mockGroups } from '../../__mocks__/ApiKeys.mock';
+import { mockApiKeysDTO } from '../../__mocks__/ApiKeys.mock';
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { APIKEY_LIST } from '../../api/apiKeys/apiKeys.routes';
-import { GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import ApiKeys from '../ApiKeys.page';
 
 vi.mock('react-i18next', () => ({
@@ -47,8 +45,7 @@ describe('ApiKeys Page - accessibility tests', () => {
   });
 
   it('empty list', async () => {
-    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, []);
-    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    mock.onGet('/bff/v1/api-keys?limit=10&showVirtualKey=true').reply(200, []);
     await act(async () => {
       result = render(<ApiKeys />, { preloadedState: reduxInitialState });
     });
@@ -57,8 +54,7 @@ describe('ApiKeys Page - accessibility tests', () => {
   }, 15000);
 
   it('no empty list', async () => {
-    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, mockApiKeysDTO);
-    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    mock.onGet('/bff/v1/api-keys?limit=10&showVirtualKey=true').reply(200, mockApiKeysDTO);
     await act(async () => {
       result = render(<ApiKeys />, { preloadedState: reduxInitialState });
     });
@@ -67,8 +63,7 @@ describe('ApiKeys Page - accessibility tests', () => {
   }, 15000);
 
   it('api return error', async () => {
-    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(500);
-    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    mock.onGet('/bff/v1/api-keys?limit=10&showVirtualKey=true').reply(500);
     await act(async () => {
       result = render(
         <>

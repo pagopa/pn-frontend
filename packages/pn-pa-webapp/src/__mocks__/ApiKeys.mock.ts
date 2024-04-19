@@ -1,42 +1,32 @@
-import { ApiKeyStatus, ApiKeys } from '../models/ApiKeys';
-import { GroupStatus, UserGroup } from '../models/user';
-import { apikeysMapper } from '../utility/apikeys.utility';
+import { ApiKeyStatus, ApiKeys, NewApiKeyRequest, NewApiKeyResponse } from '../models/ApiKeys';
 
-export const mockGroups: Array<UserGroup> = [
+export const mockGroups: Array<{ id: string; name: string }> = [
   {
     id: 'mock-id-1',
     name: 'mock-group-1',
-    description: 'mock-description-1',
-    status: GroupStatus.ACTIVE,
   },
   {
     id: 'mock-id-2',
     name: 'mock-group-2',
-    description: 'mock-description-2',
-    status: GroupStatus.ACTIVE,
   },
   {
     id: 'mock-id-3',
     name: 'mock-group-3',
-    description: 'mock-description-3',
-    status: GroupStatus.ACTIVE,
   },
   {
     id: 'mock-id-4',
     name: 'mock-group-4',
-    description: 'mock-description-4',
-    status: GroupStatus.ACTIVE,
   },
 ];
 
-export const mockApiKeysDTO: ApiKeys<string> = {
+export const mockApiKeysDTO: ApiKeys = {
   items: [
     {
       id: '9e522ef5-a024-4dbd-8a59-3e090c637659',
       value: '9e522ef5-a024-4dbd-8a59-3e090c637650',
       name: 'Rimborso e multe',
       lastUpdate: '21/09/2022',
-      groups: ['mock-group-1', 'mock-group-2', 'mock-group-3', 'mock-group-4', 'mock-group-5'],
+      groups: mockGroups,
       status: ApiKeyStatus.ENABLED,
       statusHistory: [
         {
@@ -61,7 +51,7 @@ export const mockApiKeysDTO: ApiKeys<string> = {
       value: '9e522ef5-a024-4dbd-8a59-3e090c637652',
       name: 'Cartelle esattoriali',
       lastUpdate: '22/09/2022',
-      groups: ['mock-group-2'],
+      groups: [mockGroups[1]],
       status: ApiKeyStatus.BLOCKED,
       statusHistory: [
         {
@@ -86,7 +76,7 @@ export const mockApiKeysDTO: ApiKeys<string> = {
       value: '9e522ef5-a024-4dbd-8a59-3e090c637654',
       name: 'Rimborsi',
       lastUpdate: '22/09/2022',
-      groups: ['mock-group-3'],
+      groups: [mockGroups[2]],
       status: ApiKeyStatus.ROTATED,
       statusHistory: [
         {
@@ -112,7 +102,12 @@ export const mockApiKeysDTO: ApiKeys<string> = {
   lastUpdate: '22/09/2022',
 };
 
-export const mockApiKeysForFE: ApiKeys<UserGroup> = {
-  ...mockApiKeysDTO,
-  items: apikeysMapper([...mockApiKeysDTO.items], mockGroups),
+export const newApiKeyDTO: NewApiKeyRequest = {
+  name: 'mock-name',
+  groups: ['mock-id-1'],
+};
+
+export const newApiKeyResponse: NewApiKeyResponse = {
+  id: 'mocked-api-key-id',
+  apiKey: 'mocked-api-key',
 };
