@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Button, InputAdornment, TextField, Typography } from '@mui/material';
-import { CopyToClipboard } from '@pagopa-pn/pn-commons';
+import { CopyToClipboard, useIsMobile } from '@pagopa-pn/pn-commons';
 import { IllusCompleted } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
@@ -10,10 +10,25 @@ import * as routes from '../../navigation/routes.const';
 const SyncFeedbackApiKey = ({ newApiKeyId = '' }) => {
   const navigate = useNavigate();
   const { t } = useTranslation(['apikeys']);
-
+  const isMobile = useIsMobile('xl');
   return (
-    <Box sx={{ minHeight: '350px', height: '100%', display: 'flex' }}>
-      <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
+    <Box
+      sx={{
+        minHeight: '350px',
+        height: '100%',
+        display: 'flex',
+        marginTop: isMobile ? '30px' : 'auto',
+        marginBottom: isMobile ? '30px' : 'auto',
+      }}
+    >
+      <Box
+        sx={{
+          margin: 'auto',
+          textAlign: 'center',
+          width: '80vw',
+          marginTop: isMobile ? '0' : 'auto',
+        }}
+      >
         <IllusCompleted />
         <Typography
           id="api-key-succesfully-generated"
@@ -32,7 +47,8 @@ const SyncFeedbackApiKey = ({ newApiKeyId = '' }) => {
             value={newApiKeyId}
             name="apiKeyId"
             sx={{
-              width: '450px',
+              width: isMobile ? '100%' : '450px',
+              maxWidth: '450px',
               input: {
                 textAlign: 'center',
                 color: '#0073E6',
@@ -58,7 +74,7 @@ const SyncFeedbackApiKey = ({ newApiKeyId = '' }) => {
         <Button
           id="go-to-api-keys"
           variant="contained"
-          sx={{ marginTop: '30px' }}
+          sx={{ marginBottom: '30px' }}
           onClick={() => navigate(routes.API_KEYS)}
         >
           {t('go-to-api-keys')}
