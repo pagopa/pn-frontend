@@ -161,10 +161,10 @@ const userSlice = createSlice({
     });
     builder.addCase(getInstitutions.fulfilled, (state, action) => {
       state.institutions = action.payload;
-      const currentInstitutionParentName = state.institutions.find(
-        (e) => e.id === state.user.organization.id
-      )?.parentName;
-      state.user.organization.parentDescription = currentInstitutionParentName;
+      // const currentInstitutionParentName = state.institutions.find(
+      //   (e) => e.id === state.user.organization.id
+      // )?.parentName;
+      // state.user.organization.parentDescription = currentInstitutionParentName;
     });
     builder.addCase(getProductsOfInstitution.fulfilled, (state, action) => {
       state.productsOfInstitution = action.payload;

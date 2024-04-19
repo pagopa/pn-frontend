@@ -55,8 +55,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   );
 
   const senderDenomination = useAppSelector((state: RootState) =>
-    state.userState.user.organization.parentDescription
-      ? state.userState.user.organization.parentDescription +
+    state.userState.user.organization.rootParent?.description
+      ? state.userState.user.organization.rootParent?.description +
         ' - ' +
         state.userState.user.organization.name
       : state.userState.user.organization.name
@@ -85,7 +85,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const validationSchema = yup.object({
     paProtocolNumber: requiredStringFieldValidation(tc, 256),
     subject: requiredStringFieldValidation(tc, 134, 10),
-    // senderDenomination: requiredStringFieldValidation(tc, 80),
     senderDenomination: yup
       .string()
       .required(`${t('sender-denomination')} ${tc('required')}`)
@@ -184,7 +183,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
               !isLessThan80Chars(formik.values.senderDenomination) &&
               Boolean(formik.errors.senderDenomination)
             }
-            disabled={isLessThan80Chars(notification.senderDenomination)}
+            disabled={isLessThan80Chars(senderDenomination)}
             helperText={
               (!isLessThan80Chars(formik.values.senderDenomination) &&
                 formik.errors.senderDenomination) ||
