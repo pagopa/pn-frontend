@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * PN BFF BE Microservice - Notifiche Mittenti
+ * PN BFF BE Microservice - TOS e Privacy
  * Documentation APIs v1.0
  *
  * The version of the OpenAPI document: 1.0.0

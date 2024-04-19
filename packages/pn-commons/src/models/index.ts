@@ -17,6 +17,7 @@ import {
   LegalFactDocumentDetails,
   isKnownFunctionality,
 } from './AppStatus';
+import { TosPrivacyConsent } from './Consents';
 import { KnownSentiment } from './EmptyState';
 import EventStrategy from './EventStrategy';
 import { EventType } from './EventType';
@@ -189,4 +190,5 @@ export type {
   EventStrategy,
   EventType,
   ActionMeta,
+  TosPrivacyConsent,
 };

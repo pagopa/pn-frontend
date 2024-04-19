@@ -12,13 +12,11 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { PNRole, PartyRole, Role } from '../../models/user';
 import {
-  acceptPrivacy,
-  acceptToS,
+  acceptTosPrivacy,
   exchangeToken,
   getInstitutions,
-  getPrivacyApproval,
   getProductsOfInstitution,
-  getToSApproval,
+  getTosPrivacyApproval,
   logout,
 } from './actions';
 import { Organization, User } from './types';
@@ -129,34 +127,26 @@ const userSlice = createSlice({
       state.user = action.payload;
       state.isClosedSession = true;
     });
-    builder.addCase(getToSApproval.fulfilled, (state, action) => {
-      state.tosConsent = action.payload;
+    builder.addCase(getTosPrivacyApproval.fulfilled, (state, action) => {
+      state.tosConsent = action.payload.tos;
+      state.privacyConsent = action.payload.privacy;
       state.fetchedTos = true;
+      state.fetchedPrivacy = true;
     });
-    builder.addCase(getToSApproval.rejected, (state) => {
+    builder.addCase(getTosPrivacyApproval.rejected, (state) => {
       state.tosConsent.accepted = false;
       state.tosConsent.isFirstAccept = true;
-      state.fetchedTos = true;
-    });
-    builder.addCase(getPrivacyApproval.fulfilled, (state, action) => {
-      state.privacyConsent = action.payload;
-      state.fetchedPrivacy = true;
-    });
-    builder.addCase(getPrivacyApproval.rejected, (state) => {
       state.privacyConsent.accepted = false;
       state.privacyConsent.isFirstAccept = true;
+      state.fetchedTos = true;
       state.fetchedPrivacy = true;
     });
-    builder.addCase(acceptToS.fulfilled, (state) => {
+    builder.addCase(acceptTosPrivacy.fulfilled, (state) => {
       state.tosConsent.accepted = true;
-    });
-    builder.addCase(acceptToS.rejected, (state) => {
-      state.tosConsent.accepted = false;
-    });
-    builder.addCase(acceptPrivacy.fulfilled, (state) => {
       state.privacyConsent.accepted = true;
     });
-    builder.addCase(acceptPrivacy.rejected, (state) => {
+    builder.addCase(acceptTosPrivacy.rejected, (state) => {
+      state.tosConsent.accepted = false;
       state.privacyConsent.accepted = false;
     });
     builder.addCase(getInstitutions.fulfilled, (state, action) => {

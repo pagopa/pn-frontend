@@ -59,27 +59,24 @@ const SessionGuardRender = () => {
   const { hasApiErrors } = useErrors();
 
   const isAnonymousUser = !isUnauthorizedUser && !sessionToken;
-  const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
+  const hasTosPrivacyApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_PRIVACY_APPROVAL);
 
   const hasErrorMessage = {
-    title: hasTosApiErrors
+    title: hasTosPrivacyApiErrors
       ? t('error-when-fetching-tos-status.title')
-      : t('leaving-app.title'), message: hasTosApiErrors
-        ? t('error-when-fetching-tos-status.message')
-        : t('leaving-app.message')
+      : t('leaving-app.title'),
+    message: hasTosPrivacyApiErrors
+      ? t('error-when-fetching-tos-status.message')
+      : t('leaving-app.message'),
   };
 
   const goodbyeMessage = {
-    title: isUnauthorizedUser
-      ? messageUnauthorizedUser.title
-      : hasErrorMessage.title,
-    message: isUnauthorizedUser
-      ? messageUnauthorizedUser.message
-      : hasErrorMessage.message,
+    title: isUnauthorizedUser ? messageUnauthorizedUser.title : hasErrorMessage.title,
+    message: isUnauthorizedUser ? messageUnauthorizedUser.message : hasErrorMessage.message,
   };
 
   const renderIfInitialized = () =>
-    isUnauthorizedUser || hasTosApiErrors || isClosedSession ? (
+    isUnauthorizedUser || hasTosPrivacyApiErrors || isClosedSession ? (
       <SessionModal
         open
         title={goodbyeMessage.title}
@@ -118,7 +115,7 @@ const SessionGuard = () => {
 
   const { isFinished, performStep } = useProcess(INITIALIZATION_SEQUENCE);
 
-  const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
+  const hasTosPrivacyApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_PRIVACY_APPROVAL);
   const hasAnyForbiddenError = hasSpecificStatusError(403);
 
   const getTokenParam = useCallback(() => {
@@ -174,7 +171,7 @@ const SessionGuard = () => {
    */
   useEffect(() => {
     void performStep(INITIALIZATION_STEPS.SESSION_CHECK, () => {
-      if (sessionToken && !isClosedSession && !hasTosApiErrors && !isForbiddenUser) {
+      if (sessionToken && !isClosedSession && !hasTosPrivacyApiErrors && !isForbiddenUser) {
         sessionCheck(expDate);
       }
     });

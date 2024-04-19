@@ -1,19 +1,19 @@
-import { performThunkAction } from '@pagopa-pn/pn-commons';
+import { TosPrivacyConsent, parseError, performThunkAction } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { apiClient } from '../../api/apiClients';
 import { AuthApi } from '../../api/auth/Auth.api';
-import { ConsentsApi } from '../../api/consents/Consents.api';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
-import { Consent, ConsentActionType, ConsentType } from '../../models/consents';
+import { BffTosPrivacyBody, UserConsentsApiFactory } from '../../generated-client/tos-privacy';
 import { Party } from '../../models/party';
 import { PNRole, PartyRole } from '../../models/user';
 import { User } from './types';
 
 export enum AUTH_ACTIONS {
   GET_ORGANIZATION_PARTY = 'getOrganizationParty',
-  GET_TOS_APPROVAL = 'getToSApproval',
-  GET_PRIVACY_APPROVAL = 'getPrivacyApproval',
+  GET_TOS_PRIVACY_APPROVAL = 'getTosPrivacyApproval',
+  ACCEPT_TOS_PRIVACY = 'acceptTosPrivacy',
 }
 
 /**
@@ -86,32 +86,33 @@ export const logout = createAsyncThunk<User>('logout', async () => {
 /**
  * Retrieves if the terms of service are already approved
  */
-export const getToSApproval = createAsyncThunk<Consent>(
-  AUTH_ACTIONS.GET_TOS_APPROVAL,
-  performThunkAction(() => ConsentsApi.getConsentByType(ConsentType.TOS))
+export const getTosPrivacyApproval = createAsyncThunk(
+  AUTH_ACTIONS.GET_TOS_PRIVACY_APPROVAL,
+  async (_, { rejectWithValue }) => {
+    try {
+      const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
+      const response = await tosPrivacyFactory.getTosPrivacyV1();
+
+      return response.data as TosPrivacyConsent;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
-export const getPrivacyApproval = createAsyncThunk<Consent>(
-  AUTH_ACTIONS.GET_PRIVACY_APPROVAL,
-  performThunkAction(() => ConsentsApi.getConsentByType(ConsentType.DATAPRIVACY))
-);
+/**
+ * Accepts the terms of service
+ */
+export const acceptTosPrivacy = createAsyncThunk<void, BffTosPrivacyBody>(
+  AUTH_ACTIONS.ACCEPT_TOS_PRIVACY,
+  async (body: BffTosPrivacyBody, { rejectWithValue }) => {
+    try {
+      const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
+      const response = await tosPrivacyFactory.acceptTosPrivacyV1(body);
 
-export const acceptToS = createAsyncThunk<string, string>(
-  'acceptToS',
-  performThunkAction((consentVersion: string) => {
-    const body = {
-      action: ConsentActionType.ACCEPT,
-    };
-    return ConsentsApi.setConsentByType(ConsentType.TOS, consentVersion, body);
-  })
-);
-
-export const acceptPrivacy = createAsyncThunk<string, string>(
-  'acceptPrivacy',
-  performThunkAction((consentVersion: string) => {
-    const body = {
-      action: ConsentActionType.ACCEPT,
-    };
-    return ConsentsApi.setConsentByType(ConsentType.DATAPRIVACY, consentVersion, body);
-  })
+      return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
