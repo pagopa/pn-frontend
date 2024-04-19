@@ -1,5 +1,6 @@
+import { ConsentType } from '@pagopa-pn/pn-commons';
+
 import { BffTosPrivacyActionBodyActionEnum } from '../generated-client/tos-privacy';
-import { ConsentType } from '../models/consents';
 
 export const tosConsentMock = (accepted: boolean) => ({
   recipientId: 'mocked-recipientId',

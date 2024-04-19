@@ -1,10 +1,9 @@
-import { parseError, performThunkAction } from '@pagopa-pn/pn-commons';
+import { TosPrivacyConsent, parseError, performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
 import { AuthApi } from '../../api/auth/Auth.api';
 import { BffTosPrivacyBody, UserConsentsApiFactory } from '../../generated-client/tos-privacy';
-import { TosPrivacyConsent } from '../../models/consents';
 import { User } from './types';
 
 export enum AUTH_ACTIONS {
