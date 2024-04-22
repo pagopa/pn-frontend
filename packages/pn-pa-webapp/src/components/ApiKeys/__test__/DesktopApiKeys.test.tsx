@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
-import { mockApiKeysForFE } from '../../../__mocks__/ApiKeys.mock';
+import { mockApiKeysDTO } from '../../../__mocks__/ApiKeys.mock';
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { ModalApiKeyView } from '../../../models/ApiKeys';
 import * as routes from '../../../navigation/routes.const';
@@ -30,7 +30,7 @@ const mockHandleModalClick = vi.fn();
 
 const defaultProps = {
   handleModalClick: mockHandleModalClick,
-  apiKeys: mockApiKeysForFE.items,
+  apiKeys: mockApiKeysDTO.items,
 };
 
 describe('DesktopApiKeys component', () => {
@@ -53,7 +53,7 @@ describe('DesktopApiKeys component', () => {
     const table = getByTestId('tableApiKeys');
     expect(table).toBeInTheDocument();
     const rows = within(table).getAllByTestId('tableApiKeys.body.row');
-    expect(rows).toHaveLength(mockApiKeysForFE.items.length);
+    expect(rows).toHaveLength(mockApiKeysDTO.items.length);
   });
 
   it('Check context menu', async () => {

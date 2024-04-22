@@ -4,10 +4,10 @@
   "generator-cli": {
     "version": "7.4.0",
     "generators": {
-      "bff-pg": {
+      "bff-notification": {
         "generatorName": "typescript-axios",
         "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/develop/docs/openapi/api-external-pn-bff-recipient.yaml",
-        "output": "./src/generated-client",
+        "output": "./src/generated-client/notification",
         "additionalProperties": {
           "supportsES6": true,
           "apiPackage": "apis",
