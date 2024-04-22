@@ -7,13 +7,12 @@ import { theme } from '@pagopa/mui-italia';
 import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
+import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { apiClient } from '../api/apiClients';
-import { GET_CONSENTS } from '../api/consents/consents.routes';
 import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
 import { COUNT_DELEGATORS } from '../api/delegations/delegations.routes';
 import { DelegationStatus } from '../models/Deleghe';
-import { ConsentType } from '../models/consents';
 import { PNRole, PartyRole } from '../redux/auth/types';
 import { RenderResult, act, render } from './test-utils';
 
@@ -94,16 +93,7 @@ describe('App', async () => {
   });
 
   it('render component - user logged in', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: true,
-    });
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.TOS,
-      accepted: true,
-    });
+    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
     mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
@@ -118,16 +108,11 @@ describe('App', async () => {
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).toBeInTheDocument();
     expect(result!.container).toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(5);
+    expect(mock.history.get).toHaveLength(4);
   });
 
-  it('sidemenu not included if error in API call to fetch TOS', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: true,
-    });
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(500);
+  it('sidemenu not included if error in API call to fetch TOS and privacy', async () => {
+    mock.onGet('/bff/v1/tos-privacy').reply(500);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
     mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
@@ -138,40 +123,11 @@ describe('App', async () => {
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
     expect(result!.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(5);
-  });
-
-  it('sidemenu not included if error in API call to fetch PRIVACY', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(500);
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.TOS,
-      accepted: true,
-    });
-    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
-    let result: RenderResult;
-    await act(async () => {
-      result = render(<Component />, { preloadedState: reduxInitialState });
-    });
-    const sideMenu = result!.queryByTestId('side-menu');
-    expect(sideMenu).not.toBeInTheDocument();
-    expect(result!.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(5);
+    expect(mock.history.get).toHaveLength(4);
   });
 
   it('sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: false,
-    });
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.TOS,
-      accepted: false,
-    });
+    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(false, false));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
     mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
@@ -184,20 +140,11 @@ describe('App', async () => {
     const tosPage = result!.queryByTestId('tos-acceptance-page');
     expect(tosPage).toBeInTheDocument();
     expect(result!.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(5);
+    expect(mock.history.get).toHaveLength(4);
   });
 
   it('sidemenu items if user is admin', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: true,
-    });
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.TOS,
-      accepted: true,
-    });
+    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
     mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
@@ -215,16 +162,7 @@ describe('App', async () => {
   });
 
   it('sidemenu items if user is a group admin', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: true,
-    });
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.TOS,
-      accepted: true,
-    });
+    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
     let result: RenderResult;
@@ -241,7 +179,7 @@ describe('App', async () => {
         },
       });
     });
-    expect(mock.history.get).toHaveLength(4);
+    expect(mock.history.get).toHaveLength(3);
     const sideMenu = result!.getByTestId('side-menu');
     const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
     // link to delegated notifications + link to app status + link to delegations +
@@ -252,16 +190,7 @@ describe('App', async () => {
   });
 
   it('sidemenu items if user is an operator', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: true,
-    });
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.TOS,
-      accepted: true,
-    });
+    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     let result: RenderResult;
     await act(async () => {
@@ -285,7 +214,7 @@ describe('App', async () => {
         },
       });
     });
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(2);
     const sideMenu = result!.getByTestId('side-menu');
     const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
     // link to notifications + link to delegated notifications + link to app status +
@@ -296,16 +225,7 @@ describe('App', async () => {
   });
 
   it('sidemenu items if user is a group operator', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: true,
-    });
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-      recipientId: userResponse.uid,
-      consentType: ConsentType.TOS,
-      accepted: true,
-    });
+    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     let result: RenderResult;
     await act(async () => {
@@ -330,7 +250,7 @@ describe('App', async () => {
         },
       });
     });
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(2);
     const sideMenu = result!.getByTestId('side-menu');
     const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
     // link to delegated notifications + link to app status +

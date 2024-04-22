@@ -3,20 +3,20 @@ export enum ConsentType {
   DATAPRIVACY = 'DATAPRIVACY',
 }
 
-export enum ConsentPath {
-  tos = 'tos',
-  dataprivacy = 'dataprivacy',
-}
-
 export enum ConsentActionType {
   ACCEPT = 'ACCEPT',
-  REFUSE = 'REFUSE',
+  DECLINE = 'DECLINE',
 }
 
-export interface Consent {
+interface Consent {
   recipientId: string;
   consentType: ConsentType;
   accepted: boolean;
   isFirstAccept: boolean;
   consentVersion: string;
+}
+
+export interface TosPrivacyConsent {
+  tos: Consent;
+  privacy: Consent;
 }
