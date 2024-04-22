@@ -6,6 +6,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Email from '@mui/icons-material/Email';
 import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
+import StatisticsIcon from '@mui/icons-material/ShowChart';
 import VpnKey from '@mui/icons-material/VpnKey';
 import { Box } from '@mui/material';
 import {
@@ -120,6 +121,7 @@ const ActualApp = () => {
   const menuItems = useMemo(() => {
     const basicMenuItems: Array<SideMenuItem> = [
       { label: 'menu.notifications', icon: Email, route: routes.DASHBOARD },
+      { label: 'Statistiche', icon: StatisticsIcon, route: routes.STATISTICHE },
       /**
        * Refers to PN-1741
        * Commented out because beyond MVP scope

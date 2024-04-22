@@ -11,6 +11,7 @@ import NewApiKey from '../pages/NewApiKey.page';
 import NewNotification from '../pages/NewNotification.page';
 import NotificationDetail from '../pages/NotificationDetail.page';
 import PrivacyPolicyPage from '../pages/PrivacyPolicy.page';
+import Statistics from '../pages/Statistics.page';
 import TermsOfServicePage from '../pages/TermsOfService.page';
 import { getConfiguration } from '../services/configuration.service';
 import RouteGuard from './RouteGuard';
@@ -31,10 +32,11 @@ function Router() {
         <Route path="/" element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
           <Route path="/" element={<ToSGuard />}>
             <Route path={routes.DASHBOARD} element={<Dashboard />} />
+            <Route path={routes.STATISTICHE} element={<Statistics />} />
             <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
-            {getConfiguration().IS_MANUAL_SEND_ENABLED &&
+            {getConfiguration().IS_MANUAL_SEND_ENABLED && (
               <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
-            }
+            )}
             <Route path={routes.APP_STATUS} element={<AppStatus />} />
             {/**
              * Refers to PN-1741

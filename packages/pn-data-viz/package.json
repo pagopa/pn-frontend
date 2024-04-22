@@ -11,6 +11,7 @@
   "homepage": "https://github.com/pagopa/pn-frontend/pn-data-viz#readme",
   "main": "src/pn-data-viz.js",
   "dependencies": {
+    "@types/echarts": "^4.9.22",
     "echarts": "^5.5.0",
     "typescript": "^5.2.2"
   },

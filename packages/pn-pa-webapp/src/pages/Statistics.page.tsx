@@ -1,8 +1,10 @@
-import { Box, Button, Grid, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { TitleBox } from '@pagopa-pn/pn-commons';
-import { Download } from '@mui/icons-material';
 
+import { Download } from '@mui/icons-material';
+import { Box, Button, Grid, Typography } from '@mui/material';
+import { TitleBox } from '@pagopa-pn/pn-commons';
+
+import FiledNotificationsStatistics from '../components/Statistics/FiledNotificationsStatistics';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
@@ -24,6 +26,11 @@ const Statistics = () => {
   return (
     <Box p={3}>
       <TitleBox title={t('title')} variantTitle="h4" subTitle={Subtitle} variantSubTitle="body1" />
+      <FiledNotificationsStatistics />
+      {/* <NotificationsEndStateStatistics />
+      <NotificationsBySendTypeStatistics />
+      <MeanTimeBySendTypeStatistics />
+      <DigitalNotificationsTrendStatistics /> */}
     </Box>
   );
 };
