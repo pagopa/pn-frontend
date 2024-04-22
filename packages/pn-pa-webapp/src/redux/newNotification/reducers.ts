@@ -31,6 +31,7 @@ const initialState = {
     taxonomyCode: '',
     paymentMode: '' as PaymentModel,
     notificationFeePolicy: '' as NotificationFeePolicy,
+    senderDenomination: '',
   } as NewNotification,
   groups: [] as Array<UserGroup>,
   isCompleted: false,

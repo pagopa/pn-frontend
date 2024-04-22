@@ -35,7 +35,6 @@ const organizationMatcher: yup.SchemaOf<Organization> = yup.object({
   groups: yup.array().of(yup.string()).notRequired(),
   name: yup.string().required(),
   hasGroups: yup.boolean(),
-  parentDescription: yup.string().notRequired(),
   aooParent: yup.string().notRequired(),
   subUnitCode: yup.string().notRequired(),
   subUnitType: yup.string().notRequired(),
@@ -45,6 +44,7 @@ const organizationMatcher: yup.SchemaOf<Organization> = yup.object({
       description: yup.string().notRequired(),
     })
     .notRequired(),
+  ipaCode: yup.string().notRequired()
 });
 
 const userDataMatcher = yup

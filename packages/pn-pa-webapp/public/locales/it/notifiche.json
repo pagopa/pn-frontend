@@ -395,6 +395,7 @@
         "title": "Informazioni preliminari",
         "protocol-number": "Numero di protocollo",
         "subject": "Oggetto della notifica",
+        "sender-denomination": "Ente mittente",
         "abstract": "Descrizione",
         "group": "Gruppo",
         "no-groups": "Non ci sono gruppi per questo prodotto",
