@@ -1,10 +1,10 @@
 import {
   DigitalDomicileType,
+  NotificationDetailDocument,
   NotificationDetailRecipient,
   NotificationFeePolicy,
   PhysicalCommunicationType,
   RecipientType,
-  NotificationDetailDocument,
 } from '@pagopa-pn/pn-commons';
 
 export enum PaymentModel {
@@ -22,7 +22,7 @@ interface BaseNewNotification {
   abstract?: string;
   cancelledIun?: string;
   physicalCommunicationType: PhysicalCommunicationType;
-  senderDenomination?: string;
+  senderDenomination: string;
   senderTaxId?: string;
   group?: string;
   taxonomyCode: string;

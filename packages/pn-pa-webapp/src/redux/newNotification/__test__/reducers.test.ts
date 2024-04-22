@@ -44,6 +44,7 @@ const initialState = {
     group: '',
     taxonomyCode: '',
     notificationFeePolicy: '',
+    senderDenomination: '',
   },
   groups: [],
   isCompleted: false,

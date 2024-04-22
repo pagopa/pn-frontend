@@ -91,8 +91,8 @@ const NewNotification = () => {
   useEffect(() => {
     dispatch(
       setSenderInfos({
-        senderDenomination: organization.parentDescription
-          ? organization.parentDescription + ' - ' + organization.name
+        senderDenomination: organization.rootParent?.description
+          ? organization.rootParent?.description + ' - ' + organization.name
           : organization.name,
         senderTaxId: organization.fiscal_code,
       })
