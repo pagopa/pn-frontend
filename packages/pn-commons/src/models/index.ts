@@ -17,7 +17,7 @@ import {
   LegalFactDocumentDetails,
   isKnownFunctionality,
 } from './AppStatus';
-import { ConsentType, TosPrivacyConsent } from './Consents';
+import { ConsentActionType, ConsentType, TosPrivacyConsent } from './Consents';
 import { KnownSentiment } from './EmptyState';
 import EventStrategy from './EventStrategy';
 import { EventType } from './EventType';
@@ -118,6 +118,7 @@ export {
   PrivateRoute,
   EventPropertyType,
   ConsentType,
+  ConsentActionType,
 };
 export type {
   AnalogWorkflowDetails,

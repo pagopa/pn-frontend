@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Link, Switch, Typography } from '@mui/material';
 import {
+  ConsentActionType,
   ConsentUser,
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
@@ -11,7 +12,6 @@ import {
 import { TOSAgreement } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
-import { BffTosPrivacyActionBodyActionEnum } from '../generated-client/tos-privacy';
 import * as routes from '../navigation/routes.const';
 import { acceptTosPrivacy } from '../redux/auth/actions';
 import { useAppDispatch } from '../redux/hooks';
@@ -69,7 +69,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
     if (!tosConsent.accepted) {
       tosPrivacyBody = {
         tos: {
-          action: BffTosPrivacyActionBodyActionEnum.Accept,
+          action: ConsentActionType.ACCEPT,
           version: tosConsent.consentVersion,
         },
       };
@@ -79,7 +79,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
       tosPrivacyBody = {
         ...tosPrivacyBody,
         privacy: {
-          action: BffTosPrivacyActionBodyActionEnum.Accept,
+          action: ConsentActionType.ACCEPT,
           version: privacyConsent.consentVersion,
         },
       };

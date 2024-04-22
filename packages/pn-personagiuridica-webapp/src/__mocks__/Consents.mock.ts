@@ -1,6 +1,4 @@
-import { ConsentType } from '@pagopa-pn/pn-commons';
-
-import { BffTosPrivacyActionBodyActionEnum } from '../generated-client/tos-privacy';
+import { ConsentActionType, ConsentType } from '@pagopa-pn/pn-commons';
 
 export const tosConsentMock = (accepted: boolean) => ({
   recipientId: 'mocked-recipientId',
@@ -25,11 +23,11 @@ export const tosPrivacyConsentMock = (tosAccepted: boolean, privacyAccepted: boo
 
 export const acceptTosPrivacyConsentBodyMock = {
   tos: {
-    action: BffTosPrivacyActionBodyActionEnum.Accept,
+    action: ConsentActionType.ACCEPT,
     version: 'mock-version-1',
   },
   privacy: {
-    action: BffTosPrivacyActionBodyActionEnum.Accept,
+    action: ConsentActionType.ACCEPT,
     version: 'mock-version-1',
   },
 };

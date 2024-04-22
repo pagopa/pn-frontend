@@ -3,6 +3,11 @@ export enum ConsentType {
   DATAPRIVACY = 'DATAPRIVACY',
 }
 
+export enum ConsentActionType {
+  ACCEPT = 'ACCEPT',
+  DECLINE = 'DECLINE',
+}
+
 interface Consent {
   recipientId: string;
   consentType: ConsentType;
