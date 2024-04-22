@@ -6,14 +6,17 @@ import { Box, Button, Dialog, Typography } from '@mui/material';
 import { getLocalizedOrDefaultLabel } from '@pagopa-pn/pn-commons/src/utility/localization.utility';
 import { IllusError } from '@pagopa/mui-italia';
 
+import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
+import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 
 const handleError = (queryParams: string, errorMessage: string) => {
   if (process.env.NODE_ENV !== 'test') {
     const IDP = sessionStorage.getItem('IDP');
-    trackEventByType(TrackEventType.SEND_LOGIN_FAILURE, { reason: errorMessage, IDP });
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_FAILURE, {
+      reason: errorMessage,
+      IDP,
+    });
     sessionStorage.removeItem('IDP');
     console.error(`login unsuccessfull! query params obtained from idp: ${queryParams}`);
   }

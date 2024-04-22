@@ -19,8 +19,6 @@ import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { PNRole } from '../../models/user';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
 import ConfirmCancellationDialog from './ConfirmCancellationDialog';
 import NotificationRecipientsDetail from './NotificationRecipientsDetail';
 
@@ -42,7 +40,6 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
   const openModal = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_CANCEL_NOTIFICATION);
     setShowModal(true);
   };
 

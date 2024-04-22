@@ -15,8 +15,6 @@ import { createNewNotification } from '../redux/newNotification/actions';
 import { resetState, setSenderInfos } from '../redux/newNotification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
 
 const SubTitle = () => {
   const { t } = useTranslation(['common', 'notifiche']);
@@ -47,40 +45,12 @@ const NewNotification = () => {
 
   const childRef = useRef<{ confirm: () => void }>();
 
-  const eventStep = [
-    TrackEventType.NOTIFICATION_SEND_PRELIMINARY_INFO,
-    TrackEventType.NOTIFICATION_SEND_RECIPIENT_INFO,
-    TrackEventType.NOTIFICATION_SEND_ATTACHMENTS,
-  ];
-
   if (IS_PAYMENT_ENABLED) {
-    // eslint-disable-next-line functional/immutable-data
-    eventStep.push(TrackEventType.NOTIFICATION_SEND_PAYMENT_MODES);
     // eslint-disable-next-line functional/immutable-data
     steps.push(t('new-notification.steps.payment-methods.title', { ns: 'notifiche' }));
   }
 
-  const stepType = ['preliminary info', 'recipient', 'attachments', 'payment modes'];
-
-  const handleEventTrackingCallbackPromptOpened = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_SEND_EXIT_WARNING, {
-      source: stepType[activeStep],
-    });
-  };
-
-  const handleEventTrackingCallbackCancel = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_SEND_EXIT_CANCEL, {
-      source: stepType[activeStep],
-    });
-  };
-
-  const handleEventTrackingCallbackConfirm = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_SEND_EXIT_FLOW, { source: stepType[activeStep] });
-  };
-
   const goToNextStep = () => {
-    trackEventByType(eventStep[activeStep]);
-
     setActiveStep((previousStep) => previousStep + 1);
   };
 
@@ -139,9 +109,6 @@ const NewNotification = () => {
     <Prompt
       title={t('new-notification.prompt.title', { ns: 'notifiche' })}
       message={t('new-notification.prompt.message', { ns: 'notifiche' })}
-      eventTrackingCallbackPromptOpened={handleEventTrackingCallbackPromptOpened}
-      eventTrackingCallbackCancel={handleEventTrackingCallbackCancel}
-      eventTrackingCallbackConfirm={handleEventTrackingCallbackConfirm}
     >
       <Box p={3}>
         <Grid container sx={{ padding: isMobile ? '0 20px' : 0 }}>

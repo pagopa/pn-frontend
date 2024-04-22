@@ -229,12 +229,7 @@ const ApiKeyDataSwitch: React.FC<{
           justifyContent: 'center',
         }}
       >
-        <StatusTooltip
-          label={t(label)}
-          tooltip={tooltip}
-          color={color}
-          eventTrackingCallback={() => {}}
-        />
+        <StatusTooltip label={t(label)} tooltip={tooltip} color={color} />
       </Box>
     );
   }

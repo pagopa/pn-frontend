@@ -16,11 +16,11 @@ Starting applications
 - `yarn start:pg` to start app for legal entities in local
 - `yarn start:login` to start the login section for citizens in local (url: localhost:3000)
 
-You can also run `yarn start` in the relative package folder:
+You can also run `yarn dev` in the relative package folder:
 
 ```
 cd packages/<package-folder>
-yarn start
+yarn dev
 ```
 
 To run test for all packages

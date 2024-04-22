@@ -26,12 +26,11 @@ export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
   ): boolean => {
     if (isObject(value) && isObject(valueToCompare)) {
       if (Object.keys(value).length === Object.keys(valueToCompare).length) {
-        return Object.keys(value).every((key) => {
-          return (
-            (valueToCompare as Object).hasOwnProperty(key) &&
+        return Object.keys(value).every(
+          (key) =>
+            Object.prototype.hasOwnProperty.call(valueToCompare, key) &&
             this.compare(value[key as TPropertyName], valueToCompare[key as TPropertyName])
-          );
-        });
+        );
       }
       return false;
     }
@@ -41,9 +40,7 @@ export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
   private compareArray = <TArg>(value: TArg, valueToCompare: TArg): boolean => {
     if (isArray(value) && isArray(valueToCompare)) {
       if (value.length === valueToCompare.length) {
-        return value.every((elem, index) => {
-          return this.compare(elem, valueToCompare[index]);
-        });
+        return value.every((elem, index) => this.compare(elem, valueToCompare[index]));
       }
       return false;
     }
@@ -77,7 +74,7 @@ export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
 
   public valueValidator = (value: TValue) => {
     if (this.compare(value, this.valueToCompare)) {
-      return !this.not ? null : `Value mustn\'t be equal to ${this.printValue()}`;
+      return !this.not ? null : `Value mustn't be equal to ${this.printValue()}`;
     }
     return !this.not ? `Value must be equal to ${this.printValue()}` : null;
   };

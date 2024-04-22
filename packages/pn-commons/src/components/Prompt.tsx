@@ -11,9 +11,9 @@ import PnDialogContent from './PnDialog/PnDialogContent';
 type Props = {
   title: string;
   message: string;
-  eventTrackingCallbackPromptOpened: () => void;
-  eventTrackingCallbackCancel: () => void;
-  eventTrackingCallbackConfirm: () => void;
+  eventTrackingCallbackPromptOpened?: () => void;
+  eventTrackingCallbackCancel?: () => void;
+  eventTrackingCallbackConfirm?: () => void;
   children?: React.ReactNode;
 };
 
@@ -33,7 +33,7 @@ const Prompt: React.FC<Props> = ({
 
   useEffect(() => {
     if (showPrompt) {
-      eventTrackingCallbackPromptOpened();
+      eventTrackingCallbackPromptOpened?.();
     }
   });
 

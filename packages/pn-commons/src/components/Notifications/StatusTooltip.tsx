@@ -9,26 +9,19 @@ const StatusTooltip = ({
   tooltip,
   label,
   color,
-  eventTrackingCallback,
   tooltipProps,
   chipProps,
 }: {
   tooltip: string | ReactNode;
   label: string;
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
-  eventTrackingCallback?: () => void;
   tooltipProps?: Partial<TooltipProps>;
   chipProps?: SxProps;
 }) => {
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
 
   return (
-    <CustomTooltip
-      openOnClick={false}
-      tooltipContent={tooltipContent}
-      onOpen={eventTrackingCallback}
-      tooltipProps={tooltipProps}
-    >
+    <CustomTooltip openOnClick={false} tooltipContent={tooltipContent} tooltipProps={tooltipProps}>
       <Chip
         id={`status-chip-${label}`}
         label={label}

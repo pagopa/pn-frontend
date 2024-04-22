@@ -1,25 +1,66 @@
 // leave default import for mixpanel, using named once it won't work
+import _ from 'lodash';
 import mixpanel from 'mixpanel-browser';
 
 import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 
-import { EventsType, ProfileMapAttributes, ProfilePropertyType } from '../models/MixpanelEvents';
+import { ActionMeta, EventPropertyType } from '../models/MixpanelEvents';
+import { EventStrategyFactory } from '../utility';
+
+/**
+ * Function that calls the mixpanel tracking method based on the property type
+ * @param propertyType the type of property
+ * @param event_name the event name to track
+ * @param properties the event data
+ */
+function callMixpanelTrackingMethod(
+  propertyType: EventPropertyType,
+  event_name: string,
+  properties?: any
+) {
+  switch (propertyType) {
+    case EventPropertyType.TRACK:
+      mixpanel.track(event_name, properties);
+      break;
+    case EventPropertyType.PROFILE:
+      mixpanel.people.set(properties);
+      break;
+    case EventPropertyType.INCREMENTAL: {
+      const hasProperties =
+        !_.isNil(properties) && (typeof properties === 'object' || typeof properties === 'string')
+          ? !_.isEmpty(properties)
+          : true;
+      mixpanel.people.increment(hasProperties ? { event_name: properties } : event_name);
+      break;
+    }
+    case EventPropertyType.SUPER_PROPERTY:
+      mixpanel.register(properties);
+      break;
+    default:
+      mixpanel.track(event_name, properties);
+  }
+}
 
 /**
  * Function that tracks event
- * @param event_name event name
+ * @param propertyType event property type
  * @param nodeEnv current environment
  * @param properties event data
  */
-export function trackEvent(event_name: string, nodeEnv: string, properties?: any): void {
+export function trackEvent(
+  propertyType: EventPropertyType,
+  event_name: string,
+  nodeEnv: string,
+  properties?: any
+): void {
   if (nodeEnv === 'test') {
     return;
   } else if (!nodeEnv || nodeEnv === 'development') {
     // eslint-disable-next-line no-console
-    console.log(event_name, properties);
+    console.log(event_name, properties, propertyType);
   } else {
     try {
-      mixpanel.track(event_name, properties);
+      callMixpanelTrackingMethod(propertyType, event_name, properties);
     } catch (_) {
       // eslint-disable-next-line no-console
       console.log(event_name, properties);
@@ -27,91 +68,19 @@ export function trackEvent(event_name: string, nodeEnv: string, properties?: any
   }
 }
 
-/**
- * Set mixpanel user properties
- */
-export function setSuperOrProfileProperty(
-  propertyType: ProfilePropertyType,
-  property: any,
-  nodeEnv: string
-): void {
-  if (!nodeEnv || nodeEnv === 'development') {
-    // eslint-disable-next-line no-console
-    console.log(
-      'Mixpanel events mock on console log - profile properties',
-      { propertyType },
-      property
-    );
-  } else if (nodeEnv === 'test') {
-    return;
-  } else {
-    try {
-      switch (propertyType) {
-        case 'profile':
-          mixpanel.people.set(property);
-          break;
-        case 'incremental':
-          mixpanel.people.increment(property);
-          break;
-        case 'superProperty':
-          mixpanel.register(property);
-          break;
-        default:
-          mixpanel.people.set(property);
-      }
-    } catch (_) {
-      // eslint-disable-next-line no-console
-      console.log(property);
-    }
-  }
-}
-
 export const interceptDispatch =
-  (
+  <T extends string>(
     next: Dispatch<AnyAction>,
-    events: EventsType,
-    eventsActionsMap: Record<string, string>,
-    nodeEnv: string
+    eventStrategyFactory: EventStrategyFactory<T>,
+    eventsActionsMap: Record<string, T>
   ) =>
-  (action: PayloadAction<any, string>): any => {
-    if (eventsActionsMap[action.type]) {
-      // const idx = Object.values(trackEventType).indexOf(action.type as string);
-      const eventKey = eventsActionsMap[action.type];
-      // TODO check payload
-      const attributes = events[eventKey].getAttributes?.(action.payload);
-      const eventParameters = attributes
-        ? {
-            event_category: events[eventKey].event_category,
-            event_type: events[eventKey].event_type,
-            ...attributes,
-          }
-        : events[eventKey];
-      trackEvent(eventKey, nodeEnv, eventParameters);
-    }
-
-    return next(action);
-  };
-
-export const interceptDispatchSuperOrProfileProperty =
   (
-    next: Dispatch<AnyAction>,
-    eventsActionsMap: Record<string, ProfileMapAttributes>,
-    nodeEnv: string
-  ) =>
-  (action: PayloadAction<any, string, any>): any => {
+    action: PayloadAction<any, string, ActionMeta>
+  ): void | PayloadAction<any, string, ActionMeta> => {
     if (eventsActionsMap[action.type]) {
-      const eventKey = eventsActionsMap[action.type];
-      const profilePropertyType = eventKey?.profilePropertyType;
-      const attributes = eventKey?.getAttributes?.(action?.payload, action?.meta);
-
-      if (eventKey?.shouldBlock && eventKey?.shouldBlock(action?.payload, action?.meta)) {
-        return next(action);
-      }
-
-      profilePropertyType.forEach((type) => {
-        setSuperOrProfileProperty(type, attributes, nodeEnv);
-      });
+      const eventName = eventsActionsMap[action.type];
+      const data = { payload: action.payload, params: action.meta?.arg };
+      eventStrategyFactory.triggerEvent(eventName, data);
     }
-
     return next(action);
   };

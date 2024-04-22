@@ -15,6 +15,7 @@
     "close": "Chiudi",
     "enable": "Attiva",
     "disable": "Disattiva",
+    "continue": "Avanti",
     "go-to-home": "Vai alla homepage",
     "go-to-login": "Accedi"
   },
@@ -170,6 +171,10 @@
     "unknown": {
       "title": "Errore",
       "message": "Errore non previsto"
+    },
+    "invalid_type_code": {
+      "title": "Questo campo accetta solo valori numerici",
+      "message": "Controlla il codice di verifica e inseriscilo di nuovo"
     }
   }
 }

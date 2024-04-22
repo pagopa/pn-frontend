@@ -243,7 +243,7 @@ describe('Deleghe page', async () => {
       fireEvent.change(codeInput, { target: { value: codes[index] } });
     });
     const dialogButtons = within(dialog).getByRole('button', { name: 'deleghe.accept' });
-    // confirm rejection
+    // confirm accept
     fireEvent.click(dialogButtons);
     await waitFor(() => {
       expect(mock.history.patch).toHaveLength(1);
@@ -252,7 +252,9 @@ describe('Deleghe page', async () => {
         verificationCode: arrayOfDelegators[0].verificationCode,
       });
     });
-    // check that nothing is changed
+    const error = await waitFor(() => within(dialog).getByTestId('errorAlert'));
+    expect(error).toBeInTheDocument();
+    // check that accept button is still active in deleghe page
     delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     expect(delegatorsRows).toHaveLength(arrayOfDelegators.length);
     delegatorsRows.forEach((row, index) => {
@@ -260,7 +262,5 @@ describe('Deleghe page', async () => {
     });
     acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
     expect(acceptButton).toBeInTheDocument();
-    const error = await waitFor(() => within(dialog).queryByTestId('errorAlert'));
-    expect(error).toBeInTheDocument();
   });
 });

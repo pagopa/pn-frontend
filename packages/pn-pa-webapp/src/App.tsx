@@ -1,4 +1,4 @@
-import { ErrorInfo, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
@@ -22,7 +22,6 @@ import {
   initLocalization,
   useMultiEvent,
   useTracking,
-  useUnload,
 } from '@pagopa-pn/pn-commons';
 import { LinkType, ProductEntity } from '@pagopa/mui-italia';
 
@@ -34,8 +33,6 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PAAppErrorFactory } from './utility/AppError/PAAppErrorFactory';
-import { TrackEventType } from './utility/events';
-import { trackEventByType } from './utility/mixpanel';
 import './utility/onetrust';
 import { getMenuItems } from './utility/role.utility';
 
@@ -62,10 +59,6 @@ const App = () => {
 };
 
 const ActualApp = () => {
-  useUnload(() => {
-    trackEventByType(TrackEventType.APP_UNLOAD);
-  });
-
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const loggedUserOrganizationParty = loggedUser.organization;
   // TODO check if it can exist more than one role on user
@@ -191,31 +184,16 @@ const ActualApp = () => {
 
   const { pathname } = useLocation();
   const path = pathname.split('/');
-  const source = path[path.length - 1];
   const isPrivacyPage = path[1] === 'privacy-tos';
-
-  const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
-    trackEventByType(TrackEventType.APP_CRASH, {
-      route: source,
-      stacktrace: { error: e, errorInfo: eInfo },
-    });
-  };
-
-  const handleEventTrackingCallbackProductSwitch = (target: string) => {
-    trackEventByType(TrackEventType.USER_PRODUCT_SWITCH, { target });
-  };
 
   const handleLogout = () => {
     void dispatch(logout());
   };
 
   const handleAssistanceClick = () => {
-    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, {
-      source: sessionToken ? 'postlogin' : 'prelogin',
-    });
     /* eslint-disable-next-line functional/immutable-data */
     window.location.href = sessionToken
-      ? `${SELFCARE_BASE_URL}/assistenza`
+      ? `${SELFCARE_BASE_URL}/assistenza?productId=${productId}`
       : `mailto:${configuration.PAGOPA_HELP_EMAIL}`;
   };
 
@@ -240,20 +218,10 @@ const ActualApp = () => {
         showHeader={!isPrivacyPage}
         showFooter={!isPrivacyPage}
         onExitAction={handleLogout}
-        eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
-        eventTrackingCallbackProductSwitch={(target: string) =>
-          handleEventTrackingCallbackProductSwitch(target)
-        }
         sideMenu={
           role &&
           menuItems && (
-            <SideMenu
-              menuItems={menuItems.menuItems}
-              selfCareItems={menuItems.selfCareItems}
-              eventTrackingCallback={(target: string) =>
-                trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
-              }
-            />
+            <SideMenu menuItems={menuItems.menuItems} selfCareItems={menuItems.selfCareItems} />
           )
         }
         showSideMenu={

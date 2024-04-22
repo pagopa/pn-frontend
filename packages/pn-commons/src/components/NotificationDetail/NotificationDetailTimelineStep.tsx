@@ -106,7 +106,6 @@ const TimelineStepCmp: React.FC<StepProps> = ({
  * @param historyButtonClickHandler function called when user clicks on the history button
  * @param showMoreButtonLabel label of show more button
  * @param showLessButtonLabel label of show less button
- * @param eventTrackingCallbackShowMore event tracking callback
  * @param completeStatusHistory the whole history, sometimes some information from a different status must be retrieved
  * @param disableDownloads if notification is disabled
  * @param isParty if is party chip rendered with opacity for status cancellation in progress

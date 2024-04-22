@@ -603,6 +603,10 @@ const AnalogFlowAllowedCodes = [
   'RECAG008B',
   'RECRI003B',
   'RECRI004B',
+  'RECAG010',
+  'RECRS010',
+  'RECRN010',
+  'RECAG012',
 ];
 
 /*
