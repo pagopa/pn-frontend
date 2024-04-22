@@ -17,6 +17,7 @@ export interface Organization {
   subUnitCode?: string;
   subUnitType?: string;
   aooParent?: string;
+  ipaCode?: string;
   rootParent?: {
     id?: string;
     description?: string;
