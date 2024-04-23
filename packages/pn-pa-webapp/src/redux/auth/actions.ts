@@ -1,10 +1,16 @@
-import { TosPrivacyConsent, parseError, performThunkAction } from '@pagopa-pn/pn-commons';
-import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
+import {
+  PartyEntityWithUrl,
+  TosPrivacyConsent,
+  parseError,
+  performThunkAction,
+} from '@pagopa-pn/pn-commons';
+import { ProductEntity } from '@pagopa/mui-italia';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
 import { AuthApi } from '../../api/auth/Auth.api';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
+import { InstitutionAndProductApiFactory } from '../../generated-client/institution-and-product';
 import { BffTosPrivacyBody, UserConsentsApiFactory } from '../../generated-client/tos-privacy';
 import { Party } from '../../models/party';
 import { PNRole, PartyRole } from '../../models/user';
@@ -45,16 +51,44 @@ export const getOrganizationParty = createAsyncThunk<Party, string>(
   })
 );
 
-export const getInstitutions = createAsyncThunk<Array<PartyEntity>>(
+/**
+ * Get the list of institutions
+ */
+export const getInstitutions = createAsyncThunk(
   'getInstitutions',
-  performThunkAction(() => ExternalRegistriesAPI.getInstitutions())
+  async (_, { rejectWithValue }) => {
+    try {
+      const institutionAndProductFactory = InstitutionAndProductApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await institutionAndProductFactory.getInstitutionsV1();
+      return response.data as Array<PartyEntityWithUrl>;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
-export const getProductsOfInstitution = createAsyncThunk<Array<ProductEntity>, string>(
+/**
+ * Get the list of products of the institution
+ */
+export const getProductsOfInstitution = createAsyncThunk(
   'getProductsOfInstitution',
-  performThunkAction((institutionId: string) =>
-    ExternalRegistriesAPI.getInstitutionProducts(institutionId)
-  )
+  async (_, { rejectWithValue }) => {
+    try {
+      const institutionAndProductFactory = InstitutionAndProductApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await institutionAndProductFactory.getInstitutionProductsV1();
+      return response.data as Array<ProductEntity>;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
 /**

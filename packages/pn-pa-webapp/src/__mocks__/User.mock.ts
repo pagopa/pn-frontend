@@ -1,49 +1,29 @@
-import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
-
-import { userResponse } from './Auth.mock';
-
 export const productsDTO = [
   {
     id: '0',
     title: `Product 1`,
-    urlBO: '',
+    productUrl: 'https://www.product.com',
   },
   {
     id: '1',
     title: `Product 2`,
-    urlBO: 'https://www.product.com',
+    productUrl: 'https://www.product.com',
   },
 ];
-
-export const productsList: Array<ProductEntity> = productsDTO.map((product) => ({
-  id: product.id,
-  title: product.title,
-  productUrl: `mock-selfcare.base/token-exchange?institutionId=${userResponse.organization.id}&productId=${product.id}`,
-  linkType: 'external',
-}));
 
 export const institutionsDTO = [
   {
     id: '0',
-    description: `Party 1`,
-    userProductRoles: ['Role 1'],
+    name: 'Institution 1',
+    productRole: 'Role 1',
+    entityUrl: 'mock-selfcare.base/token-exchange?institutionId=0&productId=mock-prod-id'
   },
   {
     id: '1',
-    description: `Party 2`,
-    userProductRoles: ['Role 2'],
-    rootParent: {
-      id: '2',
-      description: 'Root Party 2',
-    },
+    name: 'Institution 2',
+    productRole: 'Role 2',
+    entityUrl: 'mock-selfcare.base/token-exchange?institutionId=1&productId=mock-prod-id',
+    parentName: 'Parent 1'
   },
 ];
 
-export const institutionsList: Array<PartyEntity> = institutionsDTO.map((institution) => ({
-  id: institution.id,
-  name: institution.description,
-  productRole: institution.userProductRoles[0],
-  logoUrl: undefined,
-  parentName: institution.rootParent?.description,
-  entityUrl: `mock-selfcare.base/token-exchange?institutionId=${institution.id}&productId=mock-prod-id`,
-}));
