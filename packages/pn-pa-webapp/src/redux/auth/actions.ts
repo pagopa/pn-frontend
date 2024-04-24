@@ -61,7 +61,7 @@ export const getProductsOfInstitution = createAsyncThunk(
         apiClient
       );
       const response = await institutionAndProductFactory.getInstitutionProductsV1();
-      return response.data as Array<ProductEntity>;
+      return response.data.map((d) => ({ ...d, linkType: 'external' })) as Array<ProductEntity>;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }

@@ -1,15 +1,17 @@
-import { PartyEntityWithUrl } from "@pagopa-pn/pn-commons";
-import { ProductEntity } from "@pagopa/mui-italia";
+import { PartyEntityWithUrl } from '@pagopa-pn/pn-commons';
+import { ProductEntity } from '@pagopa/mui-italia';
+
+import { userResponse } from './Auth.mock';
 
 export const productsDTO: Array<ProductEntity> = [
   {
-    id: '0',
+    id: 'prod-pn-test',
     title: 'Product 1',
     productUrl: 'https://www.product.com',
     linkType: 'external',
   },
   {
-    id: '1',
+    id: 'prod-pn-test-2',
     title: 'Product 2',
     productUrl: 'https://www.product.com',
     linkType: 'external',
@@ -18,17 +20,17 @@ export const productsDTO: Array<ProductEntity> = [
 
 export const institutionsDTO: Array<PartyEntityWithUrl> = [
   {
-    id: '0',
+    id: userResponse.organization.id,
     name: 'Institution 1',
     productRole: 'Role 1',
-    entityUrl: 'mock-selfcare.base/token-exchange?institutionId=0&productId=mock-prod-id',
+    entityUrl: `https://test.selfcare.pagopa.it/token-exchange?institutionId=${userResponse.organization.id}&productId=prod-pn-test`,
   },
   {
-    id: '1',
+    id: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1cd',
     name: 'Institution 2',
     productRole: 'Role 2',
-    entityUrl: 'mock-selfcare.base/token-exchange?institutionId=1&productId=mock-prod-id',
-    parentName: 'Parent 1'
+    entityUrl:
+      'https://test.selfcare.pagopa.it/token-exchange?institutionId=5b994d4a-0fa8-47ac-9c7b-354f1d44a1cd&productId=prod-pn-test',
+    parentName: 'Parent 1',
   },
 ];
-
