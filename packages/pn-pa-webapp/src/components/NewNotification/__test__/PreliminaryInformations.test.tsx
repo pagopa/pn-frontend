@@ -13,6 +13,7 @@ import {
   testSelect,
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
+import { longOrganizationNameUserResponse, userResponse } from '../../../__mocks__/Auth.mock';
 import {
   newNotification,
   newNotificationEmpty,
@@ -54,10 +55,15 @@ vi.mock('../../../services/configuration.service', async () => {
   };
 });
 
-const populateForm = async (form: HTMLFormElement, hasPayment: boolean) => {
+const populateForm = async (
+  form: HTMLFormElement,
+  hasPayment: boolean,
+  organizationName: string = userResponse.organization.name
+) => {
   await testInput(form, 'paProtocolNumber', newNotification.paProtocolNumber);
   await testInput(form, 'subject', newNotification.subject);
   await testInput(form, 'taxonomyCode', newNotification.taxonomyCode);
+  await testInput(form, 'senderDenomination', organizationName);
   await testSelect(
     form,
     'group',
@@ -118,6 +124,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     testFormElements(form, 'abstract', 'abstract');
     testFormElements(form, 'group', 'group');
     testFormElements(form, 'taxonomyCode', 'taxonomy-id*');
+    testFormElements(form, 'senderDenomination', 'sender-denomination*');
     testRadio(form, 'comunicationTypeRadio', ['registered-letter-890', 'simple-registered-letter']);
     testRadio(form, 'paymentMethodRadio', [
       'pagopa-notice',
@@ -195,6 +202,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
         recipients: [],
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
         paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE,
+        senderDenomination: newNotification.senderDenomination,
       });
     });
     expect(confirmHandlerMk).toBeCalledTimes(1);
@@ -226,12 +234,12 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     // set invalid values
     // paProtocolNumber
     await testInput(form, 'paProtocolNumber', '');
-    const potrocolNumberError = form.querySelector('#paProtocolNumber-helper-text');
-    expect(potrocolNumberError).toHaveTextContent('required-field');
+    const protocolNumberError = form.querySelector('#paProtocolNumber-helper-text');
+    expect(protocolNumberError).toHaveTextContent('required-field');
     await testInput(form, 'paProtocolNumber', ' text-with-spaces ');
-    expect(potrocolNumberError).toHaveTextContent('no-spaces-at-edges');
+    expect(protocolNumberError).toHaveTextContent('no-spaces-at-edges');
     await testInput(form, 'paProtocolNumber', randomString(257));
-    expect(potrocolNumberError).toHaveTextContent('too-long-field-error');
+    expect(protocolNumberError).toHaveTextContent('too-long-field-error');
     // subject
     await testInput(form, 'subject', '');
     const subjectError = form.querySelector('#subject-helper-text');
@@ -254,6 +262,16 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     expect(taxonomyCodeError).toHaveTextContent('taxonomy-id required');
     await testInput(form, 'taxonomyCode', randomString(4));
     expect(taxonomyCodeError).toHaveTextContent('taxonomy-id invalid');
+    // senderDenomination
+    await testInput(form, 'senderDenomination', '');
+    const senderDenominationError = form.querySelector('#senderDenomination-helper-text');
+    expect(senderDenominationError).toHaveTextContent('sender-denomination required');
+    await testInput(
+      form,
+      'senderDenomination',
+      'Comune di Palermo - Commissario Straordinario del Governo ZES Sicilia Occidentale'
+    );
+    expect(senderDenominationError).toHaveTextContent('too-long-field-error');
     // check submit button state
     const button = within(form).getByTestId('step-submit');
     expect(button).toBeDisabled();
@@ -270,6 +288,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
               user: {
                 organization: {
                   hasGroup: true,
+                  name: 'Comune di Palermo',
                 },
               },
             },
@@ -288,6 +307,12 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     testFormElements(form, 'abstract', 'abstract', newNotification.abstract);
     testFormElements(form, 'group', 'group', newNotification.group);
     testFormElements(form, 'taxonomyCode', 'taxonomy-id*', newNotification.taxonomyCode);
+    testFormElements(
+      form,
+      'senderDenomination',
+      'sender-denomination*',
+      userResponse.organization.name
+    );
     const physicalCommunicationType = form.querySelector(
       `input[name="physicalCommunicationType"][value="${newNotification.physicalCommunicationType}"]`
     );
@@ -419,8 +444,25 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
         recipients: [],
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
         paymentMode: PaymentModel.NOTHING,
+        senderDenomination: newNotification.senderDenomination,
       });
     });
     expect(confirmHandlerMk).toBeCalledTimes(1);
+  });
+
+  it('set senderDenomination longer than 80 characters', async () => {
+    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    await act(async () => {
+      result = render(
+        <PreliminaryInformations notification={newNotificationEmpty} onConfirm={confirmHandlerMk} />
+      );
+    });
+    const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    await testInput(form, 'senderDenomination', longOrganizationNameUserResponse.organization.name);
+    const senderDenominationError = form.querySelector('#senderDenomination-helper-text');
+    expect(senderDenominationError).toHaveTextContent('too-long-field-error');
+    const button = within(form).getByTestId('step-submit');
+    // check submit button state
+    expect(button).toBeDisabled();
   });
 });
