@@ -23,7 +23,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { apiClient } from '../../api/apiClients';
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
-import { NotificationReceivedApiFactory } from '../../generated-client/notification';
+import { NotificationReceivedApiFactory } from '../../generated-client/notifications';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { parseNotificationDetailForRecipient } from '../../utility/notification.utility';
 import { RootState, store } from '../store';
