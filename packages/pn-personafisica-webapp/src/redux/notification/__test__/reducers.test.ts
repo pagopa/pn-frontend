@@ -1,9 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import {
-  DOWNTIME_HISTORY,
-  DOWNTIME_LEGAL_FACT_DETAILS,
-  KnownFunctionality,
   LegalFactType,
   PAYMENT_CACHE_KEY,
   PaidDetails,
@@ -14,7 +11,7 @@ import {
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
-import { downtimesDTO, simpleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
+import { downtimesDTO } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import {
@@ -37,7 +34,7 @@ import {
 } from '../../../api/notifications/notifications.routes';
 import { store } from '../../store';
 import {
-  getDowntimeEvents,
+  getDowntimeHistory,
   getDowntimeLegalFactDocumentDetails,
   getNotificationPaymentInfo,
   getNotificationPaymentUrl,
@@ -77,7 +74,6 @@ const initialState = {
     pagoPaF24: [],
     f24Only: [],
   },
-  downtimeLegalFactUrl: '',
   downtimeEvents: [],
 };
 
@@ -439,31 +435,23 @@ describe('Notification detail redux state tests', () => {
       startDate: '2022-10-23T15:50:04Z',
     };
     mock
-      .onGet(
-        DOWNTIME_HISTORY({
-          ...mockRequest,
-          functionality: [
-            KnownFunctionality.NotificationCreate,
-            KnownFunctionality.NotificationVisualization,
-            KnownFunctionality.NotificationWorkflow,
-          ],
-        })
-      )
+      .onGet(`/bff/v1/downtime/history?fromTime=${encodeURIComponent(mockRequest.startDate)}`)
       .reply(200, downtimesDTO);
-    const action = await store.dispatch(getDowntimeEvents(mockRequest));
-    expect(action.type).toBe('getDowntimeEvents/fulfilled');
-    expect(action.payload).toEqual(simpleDowntimeLogPage);
+    const action = await store.dispatch(getDowntimeHistory(mockRequest));
+    expect(action.type).toBe('getNotificationDowntimeHistory/fulfilled');
+    expect(action.payload).toEqual(downtimesDTO);
   });
 
   it('Should be able to fetch the downtimes legal fact details', async () => {
-    const response = {
+    const mockRequest = 'mocked-legalfact-id';
+    const mockResponse = {
       filename: 'mocked-filename',
       contentLength: 0,
       url: 'mocked-url',
     };
-    mock.onGet(DOWNTIME_LEGAL_FACT_DETAILS('mocked-id')).reply(200, response);
-    const action = await store.dispatch(getDowntimeLegalFactDocumentDetails('mocked-id'));
+    mock.onGet(`/bff/v1/downtime/legal-facts/${mockRequest}`).reply(200, mockResponse);
+    const action = await store.dispatch(getDowntimeLegalFactDocumentDetails(mockRequest));
     expect(action.type).toBe('getNotificationDowntimeLegalFactDocumentDetails/fulfilled');
-    expect(action.payload).toEqual(response);
+    expect(action.payload).toEqual(mockResponse);
   });
 });

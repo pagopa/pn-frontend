@@ -8,7 +8,7 @@ import {
   ApiError,
   AppResponse,
   AppResponsePublisher,
-  GetNotificationDowntimeEventsParams,
+  GetDowntimeHistoryParams,
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -19,6 +19,7 @@ import {
   TitleBox,
   appStateActions,
   dateIsLessThan10Years,
+  downloadDocument,
   useDownloadDocument,
   useErrors,
   useIsCancelled,
@@ -32,18 +33,14 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
   cancelNotification,
-  getDowntimeEvents,
+  getDowntimeHistory,
   getDowntimeLegalFactDocumentDetails,
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
   getSentNotificationOtherDocument,
 } from '../redux/notification/actions';
-import {
-  clearDowntimeLegalFactData,
-  resetLegalFactState,
-  resetState,
-} from '../redux/notification/reducers';
+import { resetLegalFactState, resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
 
@@ -79,9 +76,6 @@ const NotificationDetail: React.FC = () => {
 
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
-  );
-  const downtimeLegalFactUrl = useAppSelector(
-    (state: RootState) => state.notificationState.downtimeLegalFactUrl
   );
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
@@ -238,17 +232,23 @@ const NotificationDetail: React.FC = () => {
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
-    const fetchParams: GetNotificationDowntimeEventsParams = {
+    const fetchParams: GetDowntimeHistoryParams = {
       startDate: fromDate,
       endDate: toDate,
     };
-    void dispatch(getDowntimeEvents(fetchParams));
+    void dispatch(getDowntimeHistory(fetchParams));
   }, []);
 
-  const fetchDowntimeLegalFactDocumentDetails = useCallback(
-    (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)),
-    []
-  );
+  const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
+    dispatch(getDowntimeLegalFactDocumentDetails(legalFactId))
+      .unwrap()
+      .then((res) => {
+        if (res.url) {
+          downloadDocument(res.url);
+        }
+      })
+      .catch((e) => console.log(e));
+  }, []);
 
   useDownloadDocument({ url: legalFactDownloadUrl });
   useDownloadDocument({ url: documentDownloadUrl });
@@ -347,10 +347,8 @@ const NotificationDetail: React.FC = () => {
                   downtimeEvents={downtimeEvents}
                   fetchDowntimeEvents={fetchDowntimeEvents}
                   notificationStatusHistory={notification.notificationStatusHistory}
-                  downtimeLegalFactUrl={downtimeLegalFactUrl}
                   fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
-                  clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData())}
-                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
+                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
                 />
               </Stack>
             </Grid>

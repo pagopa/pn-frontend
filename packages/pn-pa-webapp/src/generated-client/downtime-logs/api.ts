@@ -364,12 +364,14 @@ export const DowntimeApiAxiosParamCreator = function (configuration?: Configurat
         /**
          * Elenco dei disservizi di Piattafoma Notifiche riscontrate nel lasso di tempo specificato  dai parametri _fromTime_ e _toTime_. <br/> Il parametro _functionality_ è opzionale e ripetibile; permette di filtrare i disservizi  estratti limitandoli a quelli impattanti le funzionalità elencate.
          * @summary Ricerca storico disservizi
+         * @param {string} [fromTime] data/ora di inizio dell\&#39;intervallo entro cui eseguire la ricerca
+         * @param {string} [toTime] data/ora di fine dell\&#39;intervallo entro cui eseguire la ricerca
          * @param {string} [page] Pagina di risultati a cui il client è interessato
          * @param {string} [size] Size della pagina di risultati a cui il client è interessato
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStatusHistoryV1: async (page?: string, size?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getStatusHistoryV1: async (fromTime?: string, toTime?: string, page?: string, size?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/bff/v1/downtime/history`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -381,6 +383,18 @@ export const DowntimeApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (fromTime !== undefined) {
+                localVarQueryParameter['fromTime'] = (fromTime as any instanceof Date) ?
+                    (fromTime as any).toISOString() :
+                    fromTime;
+            }
+
+            if (toTime !== undefined) {
+                localVarQueryParameter['toTime'] = (toTime as any instanceof Date) ?
+                    (toTime as any).toISOString() :
+                    toTime;
+            }
 
             if (page !== undefined) {
                 localVarQueryParameter['page'] = page;
@@ -439,13 +453,15 @@ export const DowntimeApiFp = function(configuration?: Configuration) {
         /**
          * Elenco dei disservizi di Piattafoma Notifiche riscontrate nel lasso di tempo specificato  dai parametri _fromTime_ e _toTime_. <br/> Il parametro _functionality_ è opzionale e ripetibile; permette di filtrare i disservizi  estratti limitandoli a quelli impattanti le funzionalità elencate.
          * @summary Ricerca storico disservizi
+         * @param {string} [fromTime] data/ora di inizio dell\&#39;intervallo entro cui eseguire la ricerca
+         * @param {string} [toTime] data/ora di fine dell\&#39;intervallo entro cui eseguire la ricerca
          * @param {string} [page] Pagina di risultati a cui il client è interessato
          * @param {string} [size] Size della pagina di risultati a cui il client è interessato
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStatusHistoryV1(page?: string, size?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BffPnDowntimeHistoryResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getStatusHistoryV1(page, size, options);
+        async getStatusHistoryV1(fromTime?: string, toTime?: string, page?: string, size?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BffPnDowntimeHistoryResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStatusHistoryV1(fromTime, toTime, page, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DowntimeApi.getStatusHistoryV1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -482,13 +498,15 @@ export const DowntimeApiFactory = function (configuration?: Configuration, baseP
         /**
          * Elenco dei disservizi di Piattafoma Notifiche riscontrate nel lasso di tempo specificato  dai parametri _fromTime_ e _toTime_. <br/> Il parametro _functionality_ è opzionale e ripetibile; permette di filtrare i disservizi  estratti limitandoli a quelli impattanti le funzionalità elencate.
          * @summary Ricerca storico disservizi
+         * @param {string} [fromTime] data/ora di inizio dell\&#39;intervallo entro cui eseguire la ricerca
+         * @param {string} [toTime] data/ora di fine dell\&#39;intervallo entro cui eseguire la ricerca
          * @param {string} [page] Pagina di risultati a cui il client è interessato
          * @param {string} [size] Size della pagina di risultati a cui il client è interessato
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStatusHistoryV1(page?: string, size?: string, options?: any): AxiosPromise<BffPnDowntimeHistoryResponse> {
-            return localVarFp.getStatusHistoryV1(page, size, options).then((request) => request(axios, basePath));
+        getStatusHistoryV1(fromTime?: string, toTime?: string, page?: string, size?: string, options?: any): AxiosPromise<BffPnDowntimeHistoryResponse> {
+            return localVarFp.getStatusHistoryV1(fromTime, toTime, page, size, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -526,14 +544,16 @@ export class DowntimeApi extends BaseAPI {
     /**
      * Elenco dei disservizi di Piattafoma Notifiche riscontrate nel lasso di tempo specificato  dai parametri _fromTime_ e _toTime_. <br/> Il parametro _functionality_ è opzionale e ripetibile; permette di filtrare i disservizi  estratti limitandoli a quelli impattanti le funzionalità elencate.
      * @summary Ricerca storico disservizi
+     * @param {string} [fromTime] data/ora di inizio dell\&#39;intervallo entro cui eseguire la ricerca
+     * @param {string} [toTime] data/ora di fine dell\&#39;intervallo entro cui eseguire la ricerca
      * @param {string} [page] Pagina di risultati a cui il client è interessato
      * @param {string} [size] Size della pagina di risultati a cui il client è interessato
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DowntimeApi
      */
-    public getStatusHistoryV1(page?: string, size?: string, options?: RawAxiosRequestConfig) {
-        return DowntimeApiFp(this.configuration).getStatusHistoryV1(page, size, options).then((request) => request(this.axios, this.basePath));
+    public getStatusHistoryV1(fromTime?: string, toTime?: string, page?: string, size?: string, options?: RawAxiosRequestConfig) {
+        return DowntimeApiFp(this.configuration).getStatusHistoryV1(fromTime, toTime, page, size, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

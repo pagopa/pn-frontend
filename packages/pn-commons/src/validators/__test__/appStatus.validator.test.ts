@@ -1,15 +1,21 @@
-import { AppStatusDTO, DowntimeDTO, DowntimeLogPageDTO } from '../../models/AppStatus';
+import {
+  AppCurrentStatus,
+  Downtime,
+  DowntimeLogHistory,
+  DowntimeStatus,
+  KnownFunctionality,
+} from '../../models';
 import {
   AppStatusDTOValidator,
   BEDowntimeValidator,
-  DowntimeLogPageDTOValidator,
+  DowntimeLogHistoryDTOValidator,
 } from '../appStatus.validator';
 
 describe('App Status model test', () => {
   it('downtime validator - minimal valid downtime', () => {
-    const downtime: DowntimeDTO = {
-      functionality: 'NOTIFICATION_CREATE',
-      status: 'OK',
+    const downtime: Downtime = {
+      functionality: KnownFunctionality.NotificationCreate,
+      status: DowntimeStatus.OK,
       startDate: '2022-10-21T06:07:08Z',
     };
 
@@ -17,9 +23,9 @@ describe('App Status model test', () => {
   });
 
   it('downtime validator - valid downtime with full data', () => {
-    const downtime: DowntimeDTO = {
-      functionality: 'NOTIFICATION_CREATE',
-      status: 'KO',
+    const downtime: Downtime = {
+      functionality: KnownFunctionality.NotificationCreate,
+      status: DowntimeStatus.OK,
       startDate: '2022-10-21T06:07:08Z',
       endDate: '2022-10-21T06:07:05Z',
       legalFactId: 'some-id',
@@ -30,9 +36,9 @@ describe('App Status model test', () => {
   });
 
   it('downtime validator - bad status', () => {
-    const downtime: DowntimeDTO = {
-      functionality: 'NOTIFICATION_CREATE',
-      status: 'INVALID_STATUS',
+    const downtime: Downtime = {
+      functionality: KnownFunctionality.NotificationCreate,
+      status: 'INVALID_STATUS' as DowntimeStatus,
       startDate: '2022-10-21T06:07:08Z',
     };
 
@@ -44,10 +50,10 @@ describe('App Status model test', () => {
   });
 
   it('downtime validator - missing functionality', () => {
-    const downtime: any = {
+    const downtime: Downtime = {
       status: 'OK',
       startDate: '2022-10-21T06:07:08Z',
-    };
+    } as Downtime;
 
     const validationResult = new BEDowntimeValidator().validate(downtime);
     expect(validationResult).not.toBeNull();
@@ -94,9 +100,9 @@ describe('App Status model test', () => {
   });
 
   it('downtime validator - ill-formed start date', () => {
-    const downtime: DowntimeDTO = {
-      functionality: 'NOTIFICATION_WORKFLOW',
-      status: 'KO',
+    const downtime: Downtime = {
+      functionality: KnownFunctionality.NotificationWorkflow,
+      status: DowntimeStatus.KO,
       startDate: 'not-a-date',
       endDate: '2022-10-21T06:07:05Z',
       fileAvailable: true,
@@ -112,9 +118,9 @@ describe('App Status model test', () => {
   });
 
   it('downtime validator - ill-formed end date', () => {
-    const downtime: DowntimeDTO = {
-      functionality: 'NOTIFICATION_WORKFLOW',
-      status: 'KO',
+    const downtime: Downtime = {
+      functionality: KnownFunctionality.NotificationWorkflow,
+      status: DowntimeStatus.KO,
       startDate: '2022-10-21T06:07:05Z',
       endDate: '2022-99-21T06:07:05Z',
       fileAvailable: true,
@@ -127,142 +133,85 @@ describe('App Status model test', () => {
   });
 
   it('status validator - valid data with no open incidents', () => {
-    const status: AppStatusDTO = {
-      functionalities: [
-        'NOTIFICATION_CREATE',
-        'NOTIFICATION_VISUALIZATION',
-        'NOTIFICATION_WORKFLOW',
-      ],
-      openIncidents: [],
+    const status: AppCurrentStatus = {
+      appIsFullyOperative: true,
+      lastCheckTimestamp: new Date().toISOString(),
     };
     expect(new AppStatusDTOValidator().validate(status)).toBeNull();
   });
 
-  it('status validator - valid data with two open incidents', () => {
-    const status: AppStatusDTO = {
-      functionalities: [
-        'NOTIFICATION_CREATE',
-        'NOTIFICATION_VISUALIZATION',
-        'NOTIFICATION_WORKFLOW',
-      ],
-      openIncidents: [
-        {
-          functionality: 'NOTIFICATION_CREATE',
-          status: 'OK',
-          startDate: '2022-10-21T06:07:08Z',
-          endDate: '2022-10-21T06:07:05Z',
-          legalFactId: 'some-id',
-          fileAvailable: true,
-        },
-        {
-          functionality: 'NEW_FUNCTIONALITY',
-          status: 'KO',
-          startDate: '2022-10-21T06:07:08Z',
-          fileAvailable: false,
-        },
-      ],
+  it('status validator - valid data with open incidents', () => {
+    const status: AppCurrentStatus = {
+      appIsFullyOperative: false,
+      lastCheckTimestamp: new Date().toISOString(),
     };
     expect(new AppStatusDTOValidator().validate(status)).toBeNull();
   });
 
-  it('status validator - empty list of functionalities', () => {
-    const status: AppStatusDTO = {
-      functionalities: [],
-      openIncidents: [
-        {
-          functionality: 'NOTIFICATION_CREATE',
-          status: 'OK',
-          startDate: '2022-10-21T06:07:08Z',
-          endDate: '2022-10-21T06:07:05Z',
-          legalFactId: 'some-id',
-          fileAvailable: true,
-        },
-        {
-          functionality: 'NEW_FUNCTIONALITY',
-          status: 'KO',
-          startDate: '2022-10-21T06:07:08Z',
-          fileAvailable: false,
-        },
-      ],
+  it('status validator - wrong appIsFullyOperative type', () => {
+    const status: any = {
+      appIsFullyOperative: 'ciao',
+      lastCheckTimestamp: new Date().toISOString(),
     };
     const validationResult = new AppStatusDTOValidator().validate(status);
     expect(validationResult).not.toBeNull();
-    expect(validationResult?.functionalities).not.toBeUndefined();
-    expect(validationResult?.openIncidents).toBeUndefined();
+    expect(validationResult?.appIsFullyOperative).not.toBeUndefined();
+    expect(validationResult?.lastCheckTimestamp).toBeUndefined();
   });
 
-  it('status validator - bad-typed start date in one open incident', () => {
-    const status: AppStatusDTO = {
-      functionalities: [
-        'NOTIFICATION_CREATE',
-        'NOTIFICATION_VISUALIZATION',
-        'NOTIFICATION_WORKFLOW',
-      ],
-      openIncidents: [
-        {
-          functionality: 'NOTIFICATION_CREATE',
-          status: 'OK',
-          startDate: '2022-10-99T06:07:08Z',
-          endDate: '2022-10-21T06:07:05Z',
-          legalFactId: 'some-id',
-          fileAvailable: true,
-        },
-        {
-          functionality: 'NEW_FUNCTIONALITY',
-          status: 'KO',
-          startDate: '2022-10-21T06:07:08Z',
-          fileAvailable: false,
-        },
-      ],
+  it('status validator - bad-typed last check date', () => {
+    const status: AppCurrentStatus = {
+      appIsFullyOperative: true,
+      lastCheckTimestamp: '2022-10-99T06:07:08Z',
     };
     const validationResult = new AppStatusDTOValidator().validate(status);
     expect(validationResult).not.toBeNull();
-    expect(validationResult?.functionalities).toBeUndefined();
-    expect(validationResult?.openIncidents).not.toBeUndefined();
+    expect(validationResult?.appIsFullyOperative).toBeUndefined();
+    expect(validationResult?.lastCheckTimestamp).not.toBeUndefined();
   });
 
   it('downtime page validator - valid page with no downtime events', () => {
-    const downtimeLogPage: DowntimeLogPageDTO = {
+    const downtimeLogPage: DowntimeLogHistory = {
       result: [],
     };
-    expect(new DowntimeLogPageDTOValidator().validate(downtimeLogPage)).toBeNull();
+    expect(new DowntimeLogHistoryDTOValidator().validate(downtimeLogPage)).toBeNull();
   });
 
   it('downtime page validator - valid page with three downtime events', () => {
-    const downtimeLogPage: DowntimeLogPageDTO = {
+    const downtimeLogPage: DowntimeLogHistory = {
       result: [
         {
-          functionality: 'NOTIFICATION_CREATE',
-          status: 'OK',
+          functionality: KnownFunctionality.NotificationCreate,
+          status: DowntimeStatus.OK,
           startDate: '2022-10-21T06:07:08Z',
           endDate: '2022-10-21T06:07:12Z',
           legalFactId: 'some-legal-fact-id',
           fileAvailable: true,
         },
         {
-          functionality: 'NOTIFICATION_CREATE',
-          status: 'OK',
+          functionality: KnownFunctionality.NotificationCreate,
+          status: DowntimeStatus.OK,
           startDate: '2022-10-21T06:07:15Z',
           endDate: '2022-10-21T06:07:17Z',
           fileAvailable: false,
         },
         {
-          functionality: 'NOTIFICATION_WORKFLOW',
-          status: 'KO',
+          functionality: KnownFunctionality.NotificationWorkflow,
+          status: DowntimeStatus.KO,
           startDate: '2022-10-21T08:15:25Z',
         },
       ],
       nextPage: 'some-next-page',
     };
-    expect(new DowntimeLogPageDTOValidator().validate(downtimeLogPage)).toBeNull();
+    expect(new DowntimeLogHistoryDTOValidator().validate(downtimeLogPage)).toBeNull();
   });
 
   it('downtime page validator - invalid page - ill-formed downtime', () => {
     const downtimeLogPage: any = {
       result: [
         {
-          functionality: 'NOTIFICATION_CREATE',
-          status: 'OK',
+          functionality: KnownFunctionality.NotificationCreate,
+          status: DowntimeStatus.OK,
           startDate: '2022-10-21T06:07:08Z',
           endDate: '2022-10-21T06:07:12Z',
           legalFactId: 'some-legal-fact-id',
@@ -270,20 +219,20 @@ describe('App Status model test', () => {
         },
         {
           functionality: 45,
-          status: 'OK',
+          status: DowntimeStatus.OK,
           startDate: '2022-10-21T06:07:15Z',
           endDate: '2022-10-21T06:07:17Z',
           fileAvailable: false,
         },
         {
-          functionality: 'NOTIFICATION_WORKFLOW',
-          status: 'KO',
+          functionality: KnownFunctionality.NotificationWorkflow,
+          status: DowntimeStatus.KO,
           startDate: '2022-10-21T08:15:25Z',
         },
       ],
       nextPage: 'some-next-page',
     };
-    const validationResult = new DowntimeLogPageDTOValidator().validate(downtimeLogPage);
+    const validationResult = new DowntimeLogHistoryDTOValidator().validate(downtimeLogPage);
     expect(validationResult).not.toBeNull();
     expect(validationResult?.result).not.toBeUndefined();
     expect(validationResult?.nextPage).toBeUndefined();
@@ -293,22 +242,22 @@ describe('App Status model test', () => {
     const downtimeLogPage: any = {
       result: [
         {
-          functionality: 'NOTIFICATION_CREATE',
-          status: 'OK',
+          functionality: KnownFunctionality.NotificationCreate,
+          status: DowntimeStatus.OK,
           startDate: '2022-10-21T06:07:08Z',
           endDate: '2022-10-21T06:07:12Z',
           legalFactId: 'some-legal-fact-id',
           fileAvailable: true,
         },
         {
-          functionality: 'NOTIFICATION_WORKFLOW',
-          status: 'KO',
+          functionality: KnownFunctionality.NotificationWorkflow,
+          status: DowntimeStatus.KO,
           startDate: '2022-10-21T08:15:25Z',
         },
       ],
       nextPage: { a: 4, b: 28 },
     };
-    const validationResult = new DowntimeLogPageDTOValidator().validate(downtimeLogPage);
+    const validationResult = new DowntimeLogHistoryDTOValidator().validate(downtimeLogPage);
     expect(validationResult).not.toBeNull();
     expect(validationResult?.result).toBeUndefined();
     expect(validationResult?.nextPage).not.toBeUndefined();

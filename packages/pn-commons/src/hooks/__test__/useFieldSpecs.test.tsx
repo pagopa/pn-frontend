@@ -1,4 +1,4 @@
-import { exampleDowntimeLogPage } from '../../__mocks__/AppStatus.mock';
+import { beDowntimeHistoryThreeIncidents } from '../../__mocks__/AppStatus.mock';
 import { initLocalizationForTest, renderHook } from '../../test-utils';
 import { useFieldSpecs } from '../useFieldSpecs';
 
@@ -9,9 +9,9 @@ describe('useFieldSpecs', () => {
 
   it('add id field to data', () => {
     const { result } = renderHook(() => useFieldSpecs());
-    const data = result.current.getRows(exampleDowntimeLogPage);
+    const data = result.current.getRows(beDowntimeHistoryThreeIncidents);
     expect(data).toStrictEqual(
-      exampleDowntimeLogPage.downtimes.map((downtime, i) => ({
+      beDowntimeHistoryThreeIncidents.result.map((downtime, i) => ({
         ...downtime,
         id: downtime.startDate + i.toString(),
       }))
@@ -36,11 +36,11 @@ describe('useFieldSpecs', () => {
     });
   });
 
-  it('get field knownFunctionality', () => {
+  it('get field functionality', () => {
     const { result } = renderHook(() => useFieldSpecs());
-    const data = result.current.getField('knownFunctionality');
+    const data = result.current.getField('functionality');
     expect(data).toStrictEqual({
-      id: 'knownFunctionality',
+      id: 'functionality',
       label: `appStatus - downtimeList.columnHeader.functionality`,
     });
   });

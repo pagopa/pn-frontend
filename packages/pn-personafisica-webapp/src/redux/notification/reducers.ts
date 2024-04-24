@@ -20,8 +20,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import {
-  getDowntimeEvents,
-  getDowntimeLegalFactDocumentDetails,
+  getDowntimeHistory,
   getNotificationPaymentInfo,
   getNotificationPaymentUrl,
   getReceivedNotification,
@@ -54,7 +53,6 @@ const initialState = {
   documentDownloadUrl: '',
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
-  downtimeLegalFactUrl: '', // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
   // analogous for other URLs
   paymentsData: {
     pagoPaF24: [] as Array<PaymentDetails>,
@@ -71,9 +69,6 @@ const notificationSlice = createSlice({
     resetState: () => initialState,
     resetLegalFactState: (state) => {
       state.legalFactDownloadUrl = '';
-    },
-    clearDowntimeLegalFactData: (state) => {
-      state.downtimeLegalFactUrl = '';
     },
   },
   extraReducers: (builder) => {
@@ -191,21 +186,12 @@ const notificationSlice = createSlice({
         ];
       }
     });
-    builder.addCase(getDowntimeEvents.fulfilled, (state, action) => {
-      state.downtimeEvents = action.payload.downtimes;
-    });
-    builder.addCase(getDowntimeLegalFactDocumentDetails.fulfilled, (state, action) => {
-      // by the moment we preserve only the URL.
-      // if the need of showing the file size arises in the future,
-      // we'll probably need to change this in order to keep the whole response from the API call
-      // -----------------------
-      // Carlos Lombardi, 2023.02.02
-      state.downtimeLegalFactUrl = action.payload.url;
+    builder.addCase(getDowntimeHistory.fulfilled, (state, action) => {
+      state.downtimeEvents = action.payload.result;
     });
   },
 });
 
-export const { resetState, resetLegalFactState, clearDowntimeLegalFactData } =
-  notificationSlice.actions;
+export const { resetState, resetLegalFactState } = notificationSlice.actions;
 
 export default notificationSlice;
