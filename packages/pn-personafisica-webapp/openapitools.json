@@ -25,17 +25,6 @@
           "modelPackage": "models",
           "cleanupOutput": true
         }
-      },
-      "bff-institution-and-product": {
-        "generatorName": "typescript-axios",
-        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/develop/docs/openapi/api-external-pn-bff-pa-institution-and-product.yaml",
-        "output": "./src/generated-client/institution-and-product",
-        "additionalProperties": {
-          "supportsES6": true,
-          "apiPackage": "apis",
-          "modelPackage": "models",
-          "cleanupOutput": true
-        }
       }
     }
   }
