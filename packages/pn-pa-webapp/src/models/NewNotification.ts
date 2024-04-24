@@ -26,7 +26,7 @@ interface BaseNewNotification {
   abstract?: string;
   cancelledIun?: string;
   physicalCommunicationType: PhysicalCommunicationType;
-  senderDenomination?: string;
+  senderDenomination: string;
   senderTaxId?: string;
   group?: string;
   taxonomyCode: string;
