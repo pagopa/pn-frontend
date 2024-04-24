@@ -15,7 +15,6 @@ import { PNRole, PartyRole } from '../../models/user';
 import { User } from './types';
 
 export enum AUTH_ACTIONS {
-  GET_ORGANIZATION_PARTY = 'getOrganizationParty',
   GET_TOS_PRIVACY_APPROVAL = 'getTosPrivacyApproval',
   ACCEPT_TOS_PRIVACY = 'acceptTosPrivacy',
 }
