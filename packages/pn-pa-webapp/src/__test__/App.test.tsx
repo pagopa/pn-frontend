@@ -7,12 +7,8 @@ import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
-import { institutionsList, productsList } from '../__mocks__/User.mock';
+import { institutionsDTO, productsDTO } from '../__mocks__/User.mock';
 import { apiClient } from '../api/apiClients';
-import {
-  GET_INSTITUTIONS,
-  GET_INSTITUTION_PRODUCTS,
-} from '../api/external-registries/external-registries-routes';
 import { RenderResult, act, render } from './test-utils';
 
 // mock imports
@@ -96,8 +92,8 @@ describe('App', async () => {
 
   it('render component - user logged in', async () => {
     mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
-    mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsList);
-    mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsList);
+    mock.onGet('/bff/v1/institutions').reply(200, institutionsDTO);
+    mock.onGet('/bff/v1/institutions/products').reply(200, productsDTO);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
@@ -115,8 +111,8 @@ describe('App', async () => {
   it('Sidemenu not included if error in API call to fetch TOS and Privacy', async () => {
     mock.onGet('/bff/v1/tos-privacy').reply(500);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsList);
-    mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsList);
+    mock.onGet('/bff/v1/institutions').reply(200, institutionsDTO);
+    mock.onGet('/bff/v1/institutions/products').reply(200, productsDTO);
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -129,8 +125,8 @@ describe('App', async () => {
   it('Sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
     mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(false, false));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsList);
-    mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsList);
+    mock.onGet('/bff/v1/institutions').reply(200, institutionsDTO);
+    mock.onGet('/bff/v1/institutions/products').reply(200, productsDTO);
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });

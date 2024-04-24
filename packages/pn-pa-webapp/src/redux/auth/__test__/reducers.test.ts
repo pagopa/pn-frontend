@@ -5,17 +5,8 @@ import {
   acceptTosPrivacyConsentBodyMock,
   tosPrivacyConsentMock,
 } from '../../../__mocks__/Consents.mock';
-import {
-  institutionsDTO,
-  institutionsList,
-  productsDTO,
-  productsList,
-} from '../../../__mocks__/User.mock';
+import { institutionsDTO, productsDTO } from '../../../__mocks__/User.mock';
 import { apiClient } from '../../../api/apiClients';
-import {
-  GET_INSTITUTIONS,
-  GET_INSTITUTION_PRODUCTS,
-} from '../../../api/external-registries/external-registries-routes';
 import { PNRole, PartyRole } from '../../../models/user';
 import { store } from '../../store';
 import {
@@ -48,24 +39,24 @@ describe('Auth redux state tests', () => {
       user: sessionStorage.getItem('user')
         ? JSON.parse(sessionStorage.getItem('user') || '')
         : {
-            email: '',
-            name: '',
-            uid: '',
-            sessionToken: '',
-            family_name: '',
-            fiscal_number: '',
-            organization: {
-              id: '',
-              roles: [
-                {
-                  role: PNRole.ADMIN,
-                  partyRole: PartyRole.MANAGER,
-                },
-              ],
-              fiscal_code: '',
-            },
-            desired_exp: 0,
+          email: '',
+          name: '',
+          uid: '',
+          sessionToken: '',
+          family_name: '',
+          fiscal_number: '',
+          organization: {
+            id: '',
+            roles: [
+              {
+                role: PNRole.ADMIN,
+                partyRole: PartyRole.MANAGER,
+              },
+            ],
+            fiscal_code: '',
           },
+          desired_exp: 0,
+        },
       isUnauthorizedUser: false,
       fetchedTos: false,
       fetchedPrivacy: false,
@@ -193,24 +184,18 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should be able to fetch institutions', async () => {
-    mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsDTO);
+    mock.onGet('bff/v1/institutions').reply(200, institutionsDTO);
     const action = await store.dispatch(getInstitutions());
     expect(action.type).toBe('getInstitutions/fulfilled');
-    expect(action.payload).toEqual(institutionsList);
-    expect(store.getState().userState.institutions).toStrictEqual(institutionsList);
+    expect(action.payload).toEqual(institutionsDTO);
+    expect(store.getState().userState.institutions).toStrictEqual(institutionsDTO);
   });
 
   it('Should be able to fetch productsInstitution', async () => {
-    const institutionId = '1';
-    const products = productsList.map((product) => ({
-      ...product,
-      productUrl: `mock-selfcare.base/token-exchange?institutionId=${institutionId}&productId=${product.id}`,
-    }));
-
-    mock.onGet(GET_INSTITUTION_PRODUCTS(institutionId)).reply(200, productsDTO);
-    const action = await store.dispatch(getProductsOfInstitution('1'));
+    mock.onGet('bff/v1/institutions/products').reply(200, productsDTO);
+    const action = await store.dispatch(getProductsOfInstitution());
     expect(action.type).toBe('getProductsOfInstitution/fulfilled');
-    expect(action.payload).toEqual(products);
-    expect(store.getState().userState.productsOfInstitution).toStrictEqual(products);
+    expect(action.payload).toEqual(productsDTO);
+    expect(store.getState().userState.productsOfInstitution).toStrictEqual(productsDTO);
   });
 });
