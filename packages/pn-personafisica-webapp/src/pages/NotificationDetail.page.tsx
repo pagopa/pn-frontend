@@ -8,7 +8,7 @@ import {
   ApiError,
   ApiErrorWrapper,
   EventPaymentRecipientType,
-  GetNotificationDowntimeEventsParams,
+  GetDowntimeHistoryParams,
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -24,6 +24,7 @@ import {
   TitleBox,
   appStateActions,
   dateIsLessThan10Years,
+  downloadDocument,
   formatDate,
   useDownloadDocument,
   useErrors,
@@ -35,11 +36,11 @@ import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
 import * as routes from '../navigation/routes.const';
+import { getDowntimeLegalFact } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
-  getDowntimeEvents,
-  getDowntimeLegalFactDocumentDetails,
+  getDowntimeHistory,
   getNotificationPaymentInfo,
   getNotificationPaymentUrl,
   getPaymentAttachment,
@@ -48,11 +49,7 @@ import {
   getReceivedNotificationLegalfact,
   getReceivedNotificationOtherDocument,
 } from '../redux/notification/actions';
-import {
-  clearDowntimeLegalFactData,
-  resetLegalFactState,
-  resetState,
-} from '../redux/notification/reducers';
+import { resetLegalFactState, resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -63,7 +60,7 @@ type LocationState = {
   fromQrCode?: boolean; // indicates whether the user arrived to the notification detail page from the QR code
 };
 
-const NotificationDetail = () => {
+const NotificationDetail: React.FC = () => {
   const { id, mandateId } = useParams();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -90,9 +87,6 @@ const NotificationDetail = () => {
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
-  );
-  const downtimeLegalFactUrl = useAppSelector(
-    (state: RootState) => state.notificationState.downtimeLegalFactUrl
   );
 
   const isCancelled = useIsCancelled({ notification });
@@ -343,16 +337,23 @@ const NotificationDetail = () => {
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
-    const fetchParams: GetNotificationDowntimeEventsParams = {
+    const fetchParams: GetDowntimeHistoryParams = {
       startDate: fromDate,
       endDate: toDate,
     };
-    void dispatch(getDowntimeEvents(fetchParams));
+    void dispatch(getDowntimeHistory(fetchParams));
   }, []);
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
-      void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId));
+      dispatch(getDowntimeLegalFact(legalFactId))
+        .unwrap()
+        .then((res) => {
+          if (res.url) {
+            downloadDocument(res.url);
+          }
+        })
+        .catch((e) => console.log(e));
     }
   }, []);
 
@@ -530,10 +531,8 @@ const NotificationDetail = () => {
                   componentReady={handleDowntimesReadyEvent}
                   fetchDowntimeEvents={(fromDate, toDate) => fetchDowntimeEvents(fromDate, toDate)}
                   notificationStatusHistory={notification.notificationStatusHistory}
-                  downtimeLegalFactUrl={downtimeLegalFactUrl}
                   fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
-                  clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData())}
-                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
+                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
                   disableDownloads={isCancelled.cancellationInTimeline}
                 />
               </Stack>

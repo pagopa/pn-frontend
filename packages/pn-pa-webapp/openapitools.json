@@ -4,10 +4,10 @@
   "generator-cli": {
     "version": "7.4.0",
     "generators": {
-      "bff-notification": {
+      "bff-notifications": {
         "generatorName": "typescript-axios",
-        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/develop/docs/openapi/api-external-pn-bff-pa.yaml",
-        "output": "./src/generated-client/notification",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/develop/docs/openapi/api-external-pn-bff-pa-notifications.yaml",
+        "output": "./src/generated-client/notifications",
         "additionalProperties": {
           "supportsES6": true,
           "apiPackage": "apis",
@@ -41,6 +41,17 @@
         "generatorName": "typescript-axios",
         "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/develop/docs/openapi/api-external-pn-bff-pa-institution-and-product.yaml",
         "output": "./src/generated-client/institution-and-product",
+        "additionalProperties": {
+          "supportsES6": true,
+          "apiPackage": "apis",
+          "modelPackage": "models",
+          "cleanupOutput": true
+        }
+      },
+      "bff-downtime-logs": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/develop/docs/openapi/api-external-pn-bff-downtime-logs.yaml",
+        "output": "./src/generated-client/downtime-logs",
         "additionalProperties": {
           "supportsES6": true,
           "apiPackage": "apis",

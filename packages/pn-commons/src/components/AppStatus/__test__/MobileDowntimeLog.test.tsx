@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
+import { beDowntimeHistoryWithIncidents } from '../../../__mocks__/AppStatus.mock';
 import { DowntimeStatus, KnownFunctionality } from '../../../models';
 import {
   RenderResult,
@@ -31,15 +31,11 @@ const checkDateField = (date: string | undefined, cardElem: HTMLElement) => {
   expect(cardElem).toHaveTextContent(text);
 };
 
-const checkFunctionalityField = (
-  functionality: KnownFunctionality | undefined,
-  rawFunctionality: string,
-  cardElem: HTMLElement
-) => {
+const checkFunctionalityField = (functionality: KnownFunctionality, cardElem: HTMLElement) => {
   const text = functionality
     ? `appStatus - legends.knownFunctionality.${functionality}`
     : `appStatus - legends.unknownFunctionality - ${JSON.stringify({
-        functionality: rawFunctionality,
+        functionality,
       })}`;
   expect(cardElem).toHaveTextContent(text);
 };
@@ -70,15 +66,15 @@ describe('MobileDowntimeLog component', () => {
     await act(async () => {
       result = render(
         <MobileDowntimeLog
-          downtimeLog={exampleDowntimeLogPage}
+          downtimeLog={beDowntimeHistoryWithIncidents}
           getDowntimeLegalFactDocumentDetails={getLegalFactDetailsMock}
         />
       );
     });
     const itemCards = result.getAllByTestId('mobileTableDowntimeLog.cards');
-    expect(itemCards).toHaveLength(exampleDowntimeLogPage.downtimes.length);
+    expect(itemCards).toHaveLength(beDowntimeHistoryWithIncidents.result.length);
     itemCards.forEach((card, index) => {
-      const currentLog = exampleDowntimeLogPage.downtimes[index];
+      const currentLog = beDowntimeHistoryWithIncidents.result[index];
       // check header
       const cardHeaderLeft = within(card).getByTestId('cardHeaderLeft');
       checkStatusField(currentLog.status, cardHeaderLeft);
@@ -94,11 +90,7 @@ describe('MobileDowntimeLog component', () => {
           );
         }
         if (data[jindex] === 'functionality') {
-          checkFunctionalityField(
-            currentLog.knownFunctionality,
-            currentLog.rawFunctionality,
-            cardBodyValue[jindex]
-          );
+          checkFunctionalityField(currentLog.functionality, cardBodyValue[jindex]);
         }
         if (data[jindex] === 'legalFactId') {
           checkLegalFactField(currentLog.fileAvailable, currentLog.status, cardBodyValue[jindex]);
@@ -112,19 +104,19 @@ describe('MobileDowntimeLog component', () => {
     await act(async () => {
       result = render(
         <MobileDowntimeLog
-          downtimeLog={exampleDowntimeLogPage}
+          downtimeLog={beDowntimeHistoryWithIncidents}
           getDowntimeLegalFactDocumentDetails={getLegalFactDetailsMock}
         />
       );
     });
     expect(getLegalFactDetailsMock).toHaveBeenCalledTimes(0);
     const itemCards = result.getAllByTestId('mobileTableDowntimeLog.cards');
-    const logWithFile = exampleDowntimeLogPage.downtimes.findIndex((log) => log.fileAvailable);
+    const logWithFile = beDowntimeHistoryWithIncidents.result.findIndex((log) => log.fileAvailable);
     const button = within(itemCards[logWithFile]).getByRole('button');
     fireEvent.click(button);
     expect(getLegalFactDetailsMock).toHaveBeenCalledTimes(1);
     expect(getLegalFactDetailsMock).toHaveBeenCalledWith(
-      exampleDowntimeLogPage.downtimes[logWithFile].legalFactId
+      beDowntimeHistoryWithIncidents.result[logWithFile].legalFactId
     );
   });
 });

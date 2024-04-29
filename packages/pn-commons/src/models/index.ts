@@ -4,14 +4,10 @@ import { IAppMessage } from './AppMessage';
 import { AppResponse, AppResponseError, ErrorMessage, ServerResponseError } from './AppResponse';
 import {
   AppCurrentStatus,
-  AppStatusDTO,
   AppStatusData,
   Downtime,
-  DowntimeDTO,
-  DowntimeLogPage,
-  DowntimeLogPageDTO,
+  DowntimeLogHistory,
   DowntimeStatus,
-  FunctionalityStatus,
   GetDowntimeHistoryParams,
   KnownFunctionality,
   LegalFactDocumentDetails,
@@ -21,7 +17,6 @@ import { ConsentActionType, ConsentType, TosPrivacyConsent } from './Consents';
 import { KnownSentiment } from './EmptyState';
 import EventStrategy from './EventStrategy';
 import { EventType } from './EventType';
-import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
 import { Institution, PartyEntityWithUrl } from './Institutions';
 import {
   ActionMeta,
@@ -152,7 +147,6 @@ export type {
   NotificationDetailPayment,
   NotificationDetailTableRow,
   NotificationStatusHistory,
-  GetNotificationDowntimeEventsParams,
   PaginationData,
   PaidDetails,
   PaymentAttachmentNameType,
@@ -169,14 +163,10 @@ export type {
   ErrorMessage,
   SmartTableData,
   PhysicalAddress,
-  DowntimeDTO,
-  AppStatusDTO,
-  DowntimeLogPageDTO,
+  DowntimeLogHistory,
   GetDowntimeHistoryParams,
   AppCurrentStatus,
-  FunctionalityStatus,
   Downtime,
-  DowntimeLogPage,
   LegalFactDocumentDetails,
   F24PaymentDetails,
   PagoPAPaymentFullDetails,
