@@ -1,4 +1,5 @@
-import { init, getInstanceByDom } from "echarts";
+import senderDashboard from "./theme/senderDashboard";
+import { init, getInstanceByDom, registerTheme } from "echarts";
 import type { EChartOption, ECharts, SetOptionOpts } from "echarts";
 import React, { useRef, useEffect } from "react";
 import type { CSSProperties } from "react";
@@ -8,7 +9,7 @@ export interface PnEChartsProps {
 	style?: CSSProperties;
 	settings?: SetOptionOpts;
 	loading?: boolean;
-	theme?: "light" | "dark";
+	theme?: "light" | "dark" | object;
 }
 
 export function PnECharts({
@@ -24,7 +25,14 @@ export function PnECharts({
 		// Initialize chart
 		let chart: ECharts | undefined;
 		if (chartRef.current !== null) {
-			chart = init(chartRef.current, theme);
+			let selectedTheme = "defaultTheme";
+
+			registerTheme("defaultTheme", senderDashboard);
+			if (typeof theme === "object") {
+				registerTheme("customTheme", theme);
+				selectedTheme = "customTheme";
+			}
+			chart = init(chartRef.current, selectedTheme);
 		}
 
 		// Add chart resize listener

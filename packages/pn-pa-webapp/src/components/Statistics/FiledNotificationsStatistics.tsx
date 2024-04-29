@@ -5,6 +5,8 @@ import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { PnECharts, PnEChartsProps } from '../../../../pn-data-viz/src/PnEcharts';
 
+// import theme from './senderDashboard';
+
 const FiledNotificationsStatistics: React.FC = () => {
   const title = 'Notifiche depositate';
   const description =
@@ -41,6 +43,7 @@ const FiledNotificationsStatistics: React.FC = () => {
         ],
       },
     ],
+    color: ['#0073e6', '#cccccc'], // customize color to override autoselection from theme palette
   };
 
   const direction = isMobile ? 'column' : 'row';
