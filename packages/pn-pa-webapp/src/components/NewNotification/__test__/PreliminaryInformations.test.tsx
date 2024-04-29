@@ -13,7 +13,7 @@ import {
   testSelect,
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { longOrganizationNameUserResponse, userResponse } from '../../../__mocks__/Auth.mock';
+import { userResponse } from '../../../__mocks__/Auth.mock';
 import {
   newNotification,
   newNotificationEmpty,
@@ -114,7 +114,21 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
-        <PreliminaryInformations notification={newNotificationEmpty} onConfirm={confirmHandlerMk} />
+        <PreliminaryInformations
+          notification={newNotificationEmpty}
+          onConfirm={confirmHandlerMk}
+        />,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                organization: {
+                  name: 'Comune di Palermo',
+                },
+              },
+            },
+          },
+        }
       );
     });
     expect(result.container).toHaveTextContent(/title/i);
@@ -149,6 +163,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
             userState: {
               user: {
                 organization: {
+                  name: 'Comune di Palermo',
                   hasGroup: true,
                 },
               },
@@ -173,9 +188,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
           preloadedState: {
             userState: {
               user: {
-                organization: {
-                  hasGroup: true,
-                },
+                organization: { name: 'Comune di Palermo', hasGroup: true },
               },
             },
           },
@@ -220,9 +233,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
           preloadedState: {
             userState: {
               user: {
-                organization: {
-                  hasGroup: true,
-                },
+                organization: { name: 'Comune di Palermo', hasGroup: true },
               },
             },
           },
@@ -286,10 +297,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
           preloadedState: {
             userState: {
               user: {
-                organization: {
-                  hasGroup: true,
-                  name: 'Comune di Palermo',
-                },
+                organization: { name: 'Comune di Palermo', hasGroup: true },
               },
             },
           },
@@ -336,9 +344,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
           preloadedState: {
             userState: {
               user: {
-                organization: {
-                  hasGroup: true,
-                },
+                organization: { name: 'Comune di Palermo', hasGroup: true },
               },
             },
           },
@@ -386,9 +392,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
           preloadedState: {
             userState: {
               user: {
-                organization: {
-                  hasGroup: true,
-                },
+                organization: { name: 'Comune di Palermo', hasGroup: true },
               },
             },
           },
@@ -415,9 +419,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
           preloadedState: {
             userState: {
               user: {
-                organization: {
-                  hasGroup: true,
-                },
+                organization: { name: 'Comune di Palermo', hasGroup: true },
               },
             },
           },
@@ -454,12 +456,31 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
     mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
-        <PreliminaryInformations notification={newNotificationEmpty} onConfirm={confirmHandlerMk} />
+        <PreliminaryInformations
+          notification={{
+            ...newNotificationEmpty,
+            senderDenomination:
+              'Comune di Palermo - Commissario Straordinario del Governo ZES Sicilia Occidentale',
+          }}
+          onConfirm={confirmHandlerMk}
+        />,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                organization: {
+                  name: 'Comune di Palermo - Commissario Straordinario del Governo ZES Sicilia Occidentale',
+                },
+              },
+            },
+          },
+        }
       );
     });
     const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
-    await testInput(form, 'senderDenomination', longOrganizationNameUserResponse.organization.name);
-    const senderDenominationError = form.querySelector('#senderDenomination-helper-text');
+    const senderDenominationError = await waitFor(() =>
+      form.querySelector('#senderDenomination-helper-text')
+    );
     expect(senderDenominationError).toHaveTextContent('too-long-field-error');
     const button = within(form).getByTestId('step-submit');
     // check submit button state

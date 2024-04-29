@@ -54,6 +54,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     (state: RootState) => state.userState.user.organization.hasGroups
   );
 
+  // this is the initial value of the sender denomination. it used to show the error
   const senderDenomination = useAppSelector((state: RootState) =>
     state.userState.user.organization.rootParent?.description
       ? state.userState.user.organization.rootParent?.description +
@@ -72,7 +73,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     () => ({
       paProtocolNumber: notification.paProtocolNumber || '',
       subject: notification.subject || '',
-      senderDenomination,
+      senderDenomination: notification.senderDenomination ?? '',
       abstract: notification.abstract ?? '',
       group: notification.group ?? '',
       taxonomyCode: notification.taxonomyCode || '',
@@ -108,6 +109,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     initialValues: initialValues(),
     validateOnMount: true,
     validationSchema,
+    enableReinitialize: true,
     /** onSubmit validate */
     onSubmit: (values) => {
       if (formik.isValid) {
@@ -138,7 +140,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     fetchGroups();
   }, [fetchGroups]);
 
-  const isLessThan80Chars = (field: string): boolean => (field ? field.length < 80 : false);
   return (
     <ApiErrorWrapper
       apiId={NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS}
@@ -179,16 +180,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             name="senderDenomination"
             value={formik.values.senderDenomination}
             onChange={handleChangeTouched}
-            error={
-              !isLessThan80Chars(formik.values.senderDenomination) &&
-              Boolean(formik.errors.senderDenomination)
-            }
-            disabled={isLessThan80Chars(senderDenomination)}
-            helperText={
-              (!isLessThan80Chars(formik.values.senderDenomination) &&
-                formik.errors.senderDenomination) ||
-              (formik.touched.senderDenomination && formik.errors.senderDenomination)
-            }
+            error={Boolean(formik.errors.senderDenomination)}
+            disabled={senderDenomination.length < 80}
+            helperText={formik.errors.senderDenomination}
             size="small"
             margin="normal"
           />

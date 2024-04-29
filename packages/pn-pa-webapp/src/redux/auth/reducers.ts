@@ -42,7 +42,7 @@ const organizationMatcher: yup.SchemaOf<Organization> = yup.object({
       description: yup.string().notRequired(),
     })
     .notRequired(),
-  ipaCode: yup.string().notRequired()
+  ipaCode: yup.string().notRequired(),
 });
 
 const userDataMatcher = yup
