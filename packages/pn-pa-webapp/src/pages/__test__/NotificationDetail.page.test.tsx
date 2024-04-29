@@ -25,6 +25,7 @@ import {
   notificationDTOMultiRecipient,
   notificationToFe,
   raddNotificationDTO,
+  raddNotificationMultiRecipientDTO,
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
@@ -564,9 +565,7 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('render success alert when documents have been picked up - monorecipient', async () => {
-    mock
-      .onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun))
-      .reply(200, { ...raddNotificationDTO, radd: true });
+    mock.onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun)).reply(200, raddNotificationDTO);
     await act(async () => {
       result = render(<NotificationDetail />);
     });
@@ -578,11 +577,9 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('render success alert when documents have been picked up - multirecipient', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun)).reply(200, {
-      ...raddNotificationDTO,
-      radd: true,
-      recipients: ['CLMCST42R12D969Z', '20517490320'],
-    });
+    mock
+      .onGet(NOTIFICATION_DETAIL(raddNotificationMultiRecipientDTO.iun))
+      .reply(200, raddNotificationMultiRecipientDTO);
     await act(async () => {
       result = render(<NotificationDetail />);
     });
