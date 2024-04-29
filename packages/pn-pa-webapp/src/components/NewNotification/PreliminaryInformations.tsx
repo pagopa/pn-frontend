@@ -54,6 +54,14 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     (state: RootState) => state.userState.user.organization.hasGroups
   );
 
+  const senderDenomination = useAppSelector((state: RootState) =>
+    state.userState.user.organization.rootParent?.description
+      ? state.userState.user.organization.rootParent?.description +
+        ' - ' +
+        state.userState.user.organization.name
+      : state.userState.user.organization.name
+  );
+
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.preliminary-informations',
   });
@@ -64,6 +72,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     () => ({
       paProtocolNumber: notification.paProtocolNumber || '',
       subject: notification.subject || '',
+      senderDenomination,
       abstract: notification.abstract ?? '',
       group: notification.group ?? '',
       taxonomyCode: notification.taxonomyCode || '',
@@ -76,6 +85,10 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const validationSchema = yup.object({
     paProtocolNumber: requiredStringFieldValidation(tc, 256),
     subject: requiredStringFieldValidation(tc, 134, 10),
+    senderDenomination: yup
+      .string()
+      .required(`${t('sender-denomination')} ${tc('required')}`)
+      .max(80, tc('too-long-field-error', { maxLength: 80 })),
     abstract: yup
       .string()
       .max(1024, tc('too-long-field-error', { maxLength: 1024 }))
@@ -125,6 +138,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     fetchGroups();
   }, [fetchGroups]);
 
+  const isLessThan80Chars = (field: string): boolean => (field ? field.length < 80 : false);
   return (
     <ApiErrorWrapper
       apiId={NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS}
@@ -155,6 +169,26 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             onChange={handleChangeTouched}
             error={formik.touched.subject && Boolean(formik.errors.subject)}
             helperText={formik.touched.subject && formik.errors.subject}
+            size="small"
+            margin="normal"
+          />
+          <TextField
+            id="senderDenomination"
+            label={`${t('sender-denomination')}*`}
+            fullWidth
+            name="senderDenomination"
+            value={formik.values.senderDenomination}
+            onChange={handleChangeTouched}
+            error={
+              !isLessThan80Chars(formik.values.senderDenomination) &&
+              Boolean(formik.errors.senderDenomination)
+            }
+            disabled={isLessThan80Chars(senderDenomination)}
+            helperText={
+              (!isLessThan80Chars(formik.values.senderDenomination) &&
+                formik.errors.senderDenomination) ||
+              (formik.touched.senderDenomination && formik.errors.senderDenomination)
+            }
             size="small"
             margin="normal"
           />
