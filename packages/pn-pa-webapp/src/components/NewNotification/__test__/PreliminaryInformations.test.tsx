@@ -464,7 +464,18 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
               'Comune di Palermo - Commissario Straordinario del Governo ZES Sicilia Occidentale',
           }}
           onConfirm={confirmHandlerMk}
-        />
+        />,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                organization: {
+                  name: 'Comune di Palermo - Commissario Straordinario del Governo ZES Sicilia Occidentale',
+                },
+              },
+            },
+          },
+        }
       );
     });
     const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
