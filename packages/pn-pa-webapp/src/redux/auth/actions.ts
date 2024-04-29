@@ -1,17 +1,20 @@
-import { TosPrivacyConsent, parseError, performThunkAction } from '@pagopa-pn/pn-commons';
-import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
+import {
+  PartyEntityWithUrl,
+  TosPrivacyConsent,
+  parseError,
+  performThunkAction,
+} from '@pagopa-pn/pn-commons';
+import { ProductEntity } from '@pagopa/mui-italia';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
 import { AuthApi } from '../../api/auth/Auth.api';
-import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
+import { InstitutionAndProductApiFactory } from '../../generated-client/institution-and-product';
 import { BffTosPrivacyBody, UserConsentsApiFactory } from '../../generated-client/tos-privacy';
-import { Party } from '../../models/party';
 import { PNRole, PartyRole } from '../../models/user';
 import { User } from './types';
 
 export enum AUTH_ACTIONS {
-  GET_ORGANIZATION_PARTY = 'getOrganizationParty',
   GET_TOS_PRIVACY_APPROVAL = 'getTosPrivacyApproval',
   ACCEPT_TOS_PRIVACY = 'acceptTosPrivacy',
 }
@@ -26,35 +29,43 @@ export const exchangeToken = createAsyncThunk<User, string>(
 );
 
 /**
- * Obtain the organization party for the given organization id.
- * NB: in fact, when the corresponding reducer is to be called, the value of the organization id
- *     is already in the state of this slice. But given the way the reducer/action pair is defined,
- *     I could not find to have the state accesible to the code of the thunk.
- *     Hence the organizationId is expected as a parameter, whose value will be taken from this very slice.
- *     ------------------------------
- *     Carlos Lombardi, 2022.07.27
+ * Get the list of institutions
  */
-/**
- @deprecated since PN-5881
- */
-export const getOrganizationParty = createAsyncThunk<Party, string>(
-  AUTH_ACTIONS.GET_ORGANIZATION_PARTY,
-  performThunkAction(async (organizationId: string) => {
-    const partyFromApi = await ExternalRegistriesAPI.getOrganizationParty(organizationId);
-    return partyFromApi || { id: '', name: 'Ente sconosciuto' };
-  })
-);
-
-export const getInstitutions = createAsyncThunk<Array<PartyEntity>>(
+export const getInstitutions = createAsyncThunk(
   'getInstitutions',
-  performThunkAction(() => ExternalRegistriesAPI.getInstitutions())
+  async (_, { rejectWithValue }) => {
+    try {
+      const institutionAndProductFactory = InstitutionAndProductApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await institutionAndProductFactory.getInstitutionsV1();
+      return response.data as Array<PartyEntityWithUrl>;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
-export const getProductsOfInstitution = createAsyncThunk<Array<ProductEntity>, string>(
+/**
+ * Get the list of products of the institution
+ */
+export const getProductsOfInstitution = createAsyncThunk(
   'getProductsOfInstitution',
-  performThunkAction((institutionId: string) =>
-    ExternalRegistriesAPI.getInstitutionProducts(institutionId)
-  )
+  async (_, { rejectWithValue }) => {
+    try {
+      const institutionAndProductFactory = InstitutionAndProductApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await institutionAndProductFactory.getInstitutionProductsV1();
+      return response.data.map((d) => ({ ...d, linkType: 'external' })) as Array<ProductEntity>;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
 /**

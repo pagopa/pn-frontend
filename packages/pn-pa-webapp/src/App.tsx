@@ -176,7 +176,7 @@ const ActualApp = () => {
       void dispatch(getInstitutions());
     }
     if (idOrganization) {
-      void dispatch(getProductsOfInstitution(idOrganization));
+      void dispatch(getProductsOfInstitution());
     }
   }, [sessionToken, getCurrentAppStatus, idOrganization]);
 
