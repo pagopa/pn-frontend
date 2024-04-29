@@ -16,7 +16,7 @@ import { DowntimeApiFactory } from '../../generated-client/downtime-logs';
 export enum APP_STATUS_ACTIONS {
   GET_CURRENT_STATUS = 'getCurrentAppStatus',
   GET_DOWNTIME_HISTORY = 'getDowntimeHistory',
-  GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS = 'getDowntimeLegalFactDocumentDetails',
+  GET_DOWNTIME_LEGAL_FACT = 'getDowntimeLegalFact',
 }
 
 export const getCurrentAppStatus = createAsyncThunk<AppCurrentStatus>(
@@ -52,11 +52,8 @@ export const getDowntimeHistory = createAsyncThunk<DowntimeLogHistory, GetDownti
   }
 );
 
-export const getDowntimeLegalFactDocumentDetails = createAsyncThunk<
-  LegalFactDocumentDetails,
-  string
->(
-  APP_STATUS_ACTIONS.GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS,
+export const getDowntimeLegalFact = createAsyncThunk<LegalFactDocumentDetails, string>(
+  APP_STATUS_ACTIONS.GET_DOWNTIME_LEGAL_FACT,
   async (params: string, { rejectWithValue }) => {
     try {
       const downtimeApiFactory = DowntimeApiFactory(undefined, undefined, apiClient);

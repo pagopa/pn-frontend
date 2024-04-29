@@ -36,11 +36,11 @@ import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
 import * as routes from '../navigation/routes.const';
+import { getDowntimeLegalFact } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
   getDowntimeHistory,
-  getDowntimeLegalFactDocumentDetails,
   getNotificationPaymentInfo,
   getNotificationPaymentUrl,
   getPaymentAttachment,
@@ -345,14 +345,16 @@ const NotificationDetail: React.FC = () => {
   }, []);
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
-    dispatch(getDowntimeLegalFactDocumentDetails(legalFactId))
-      .unwrap()
-      .then((res) => {
-        if (res.url) {
-          downloadDocument(res.url);
-        }
-      })
-      .catch((e) => console.log(e));
+    if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
+      dispatch(getDowntimeLegalFact(legalFactId))
+        .unwrap()
+        .then((res) => {
+          if (res.url) {
+            downloadDocument(res.url);
+          }
+        })
+        .catch((e) => console.log(e));
+    }
   }, []);
 
   useDownloadDocument({ url: documentDownloadUrl });

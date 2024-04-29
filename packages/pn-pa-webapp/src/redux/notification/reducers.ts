@@ -34,7 +34,6 @@ const initialState = {
   documentDownloadUrl: '',
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
-  // analogous for other URLs
   downtimeEvents: [] as Array<Downtime>,
 };
 

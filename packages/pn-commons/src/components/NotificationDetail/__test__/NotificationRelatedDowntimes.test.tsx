@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { vi } from 'vitest';
 
-import { beDowntimeHistoryThreeIncidents } from '../../../__mocks__/AppStatus.mock';
+import { beDowntimeHistoryWithIncidents } from '../../../__mocks__/AppStatus.mock';
 import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import {
   Downtime,
@@ -127,7 +127,7 @@ describe('NotificationRelatedDowntimes component', () => {
 
   it('normal history - one complete downtime, one not finished, one finished but yet without link', () => {
     const { getByTestId, getAllByTestId, queryByTestId } = renderComponent(
-      beDowntimeHistoryThreeIncidents.result,
+      beDowntimeHistoryWithIncidents.result,
       notificationDTO.notificationStatusHistory
     );
     const accepted = notificationDTO.notificationStatusHistory.find(
@@ -144,9 +144,9 @@ describe('NotificationRelatedDowntimes component', () => {
     const mainComponent = getByTestId('notification-related-downtimes-main');
     const detailComponents = getAllByTestId('notification-related-downtime-detail');
     expect(mainComponent).toBeInTheDocument();
-    expect(detailComponents).toHaveLength(beDowntimeHistoryThreeIncidents.result.length);
+    expect(detailComponents).toHaveLength(beDowntimeHistoryWithIncidents.result.length);
     detailComponents.forEach((detail, index) => {
-      const currentLog = beDowntimeHistoryThreeIncidents.result[index];
+      const currentLog = beDowntimeHistoryWithIncidents.result[index];
       testLogRendering(currentLog, detail);
     });
     const apiErrorComponent = queryByTestId('api-error-mock-api-id');
@@ -177,7 +177,7 @@ describe('NotificationRelatedDowntimes component', () => {
         : { ...el, status: NotificationStatus.VIEWED }
     );
     const { getByTestId, getAllByTestId } = renderComponent(
-      beDowntimeHistoryThreeIncidents.result,
+      beDowntimeHistoryWithIncidents.result,
       newMockHistory
     );
     const accepted = newMockHistory.find((s) => s.status === NotificationStatus.ACCEPTED);
@@ -187,7 +187,7 @@ describe('NotificationRelatedDowntimes component', () => {
     const mainComponent = getByTestId('notification-related-downtimes-main');
     expect(mainComponent).toBeInTheDocument();
     const detailComponents = getAllByTestId('notification-related-downtime-detail');
-    expect(detailComponents).toHaveLength(beDowntimeHistoryThreeIncidents.result.length);
+    expect(detailComponents).toHaveLength(beDowntimeHistoryWithIncidents.result.length);
   });
 
   it('history with VIEWED and EFFECTIVE_DATE statuses - EFFECTIVE_DATE earlier than VIEWED', () => {
@@ -209,7 +209,7 @@ describe('NotificationRelatedDowntimes component', () => {
       },
     ];
     const { getByTestId, getAllByTestId } = renderComponent(
-      beDowntimeHistoryThreeIncidents.result,
+      beDowntimeHistoryWithIncidents.result,
       newMockHistory
     );
     expect(fetchDowntimeEventsMock).toHaveBeenCalledTimes(1);
@@ -220,7 +220,7 @@ describe('NotificationRelatedDowntimes component', () => {
     const mainComponent = getByTestId('notification-related-downtimes-main');
     expect(mainComponent).toBeInTheDocument();
     const detailComponents = getAllByTestId('notification-related-downtime-detail');
-    expect(detailComponents).toHaveLength(beDowntimeHistoryThreeIncidents.result.length);
+    expect(detailComponents).toHaveLength(beDowntimeHistoryWithIncidents.result.length);
   });
 
   it('history with VIEWED and EFFECTIVE_DATE statuses - EFFECTIVE_DATE later than VIEWED', () => {
@@ -243,7 +243,7 @@ describe('NotificationRelatedDowntimes component', () => {
     ];
     const viewed = newMockHistory.find((s) => s.status === NotificationStatus.VIEWED);
     const { getByTestId, getAllByTestId } = renderComponent(
-      beDowntimeHistoryThreeIncidents.result,
+      beDowntimeHistoryWithIncidents.result,
       newMockHistory
     );
     expect(fetchDowntimeEventsMock).toHaveBeenCalledTimes(1);
@@ -251,7 +251,7 @@ describe('NotificationRelatedDowntimes component', () => {
     const mainComponent = getByTestId('notification-related-downtimes-main');
     expect(mainComponent).toBeInTheDocument();
     const detailComponents = getAllByTestId('notification-related-downtime-detail');
-    expect(detailComponents).toHaveLength(beDowntimeHistoryThreeIncidents.result.length);
+    expect(detailComponents).toHaveLength(beDowntimeHistoryWithIncidents.result.length);
   });
 
   it('history with UNREACHABLE status and without EFFECTIVE_DATE and VIEWED', async () => {
@@ -263,7 +263,7 @@ describe('NotificationRelatedDowntimes component', () => {
           : { ...el, status: NotificationStatus.UNREACHABLE }
       );
     const { getByTestId, getAllByTestId } = renderComponent(
-      beDowntimeHistoryThreeIncidents.result,
+      beDowntimeHistoryWithIncidents.result,
       newMockHistory
     );
     const accepted = newMockHistory.find((s) => s.status === NotificationStatus.ACCEPTED);
@@ -276,7 +276,7 @@ describe('NotificationRelatedDowntimes component', () => {
     const mainComponent = getByTestId('notification-related-downtimes-main');
     expect(mainComponent).toBeInTheDocument();
     const detailComponents = getAllByTestId('notification-related-downtime-detail');
-    expect(detailComponents).toHaveLength(beDowntimeHistoryThreeIncidents.result.length);
+    expect(detailComponents).toHaveLength(beDowntimeHistoryWithIncidents.result.length);
   });
 
   it('history with UNREACHABLE and EFFECTIVE_DATE statuses - EFFECTIVE_DATE earlier than UNREACHABLE', () => {
@@ -298,7 +298,7 @@ describe('NotificationRelatedDowntimes component', () => {
       },
     ];
     const { getByTestId, getAllByTestId } = renderComponent(
-      beDowntimeHistoryThreeIncidents.result,
+      beDowntimeHistoryWithIncidents.result,
       newMockHistory
     );
     expect(fetchDowntimeEventsMock).toHaveBeenCalledTimes(1);
@@ -309,7 +309,7 @@ describe('NotificationRelatedDowntimes component', () => {
     const mainComponent = getByTestId('notification-related-downtimes-main');
     expect(mainComponent).toBeInTheDocument();
     const detailComponents = getAllByTestId('notification-related-downtime-detail');
-    expect(detailComponents).toHaveLength(beDowntimeHistoryThreeIncidents.result.length);
+    expect(detailComponents).toHaveLength(beDowntimeHistoryWithIncidents.result.length);
   });
 
   it('history with UNREACHABLE and EFFECTIVE_DATE statuses - EFFECTIVE_DATE later than UNREACHABLE', () => {
@@ -332,7 +332,7 @@ describe('NotificationRelatedDowntimes component', () => {
     ];
     const unreachable = newMockHistory.find((s) => s.status === NotificationStatus.UNREACHABLE);
     const { getByTestId, getAllByTestId } = renderComponent(
-      beDowntimeHistoryThreeIncidents.result,
+      beDowntimeHistoryWithIncidents.result,
       newMockHistory
     );
     expect(fetchDowntimeEventsMock).toHaveBeenCalledTimes(1);
@@ -343,7 +343,7 @@ describe('NotificationRelatedDowntimes component', () => {
     const mainComponent = getByTestId('notification-related-downtimes-main');
     expect(mainComponent).toBeInTheDocument();
     const detailComponents = getAllByTestId('notification-related-downtime-detail');
-    expect(detailComponents).toHaveLength(beDowntimeHistoryThreeIncidents.result.length);
+    expect(detailComponents).toHaveLength(beDowntimeHistoryWithIncidents.result.length);
   });
 
   it('history does not include ACCEPTED status', () => {
@@ -351,7 +351,7 @@ describe('NotificationRelatedDowntimes component', () => {
       (el) => el.status !== NotificationStatus.ACCEPTED
     );
     const { queryByTestId } = renderComponent(
-      beDowntimeHistoryThreeIncidents.result,
+      beDowntimeHistoryWithIncidents.result,
       newMockHistory
     );
     expect(fetchDowntimeEventsMock).toHaveBeenCalledTimes(0);
@@ -363,7 +363,7 @@ describe('NotificationRelatedDowntimes component', () => {
     const newMockHistory = _.cloneDeep(notificationDTO.notificationStatusHistory);
     newMockHistory[0].status = NotificationStatus.CANCELLED;
     const { queryByTestId } = renderComponent(
-      beDowntimeHistoryThreeIncidents.result,
+      beDowntimeHistoryWithIncidents.result,
       newMockHistory
     );
     expect(fetchDowntimeEventsMock).toHaveBeenCalledTimes(0);
@@ -384,7 +384,7 @@ describe('NotificationRelatedDowntimes component', () => {
         : { ...el, activeFrom: acceptedDate.toISOString() }
     );
     const { queryByTestId } = renderComponent(
-      beDowntimeHistoryThreeIncidents.result,
+      beDowntimeHistoryWithIncidents.result,
       newMockHistory
     );
     expect(fetchDowntimeEventsMock).toHaveBeenCalledTimes(0);

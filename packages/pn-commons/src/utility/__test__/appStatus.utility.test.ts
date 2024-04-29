@@ -1,7 +1,7 @@
 import {
   beAppStatusKO,
   beAppStatusOK,
-  beDowntimeHistoryThreeIncidents,
+  beDowntimeHistoryWithIncidents,
 } from '../../__mocks__/AppStatus.mock';
 import {
   BadApiDataException,
@@ -28,14 +28,14 @@ describe('test appStatus utility', () => {
   });
 
   it('validate history', async () => {
-    const res = validateHistory(beDowntimeHistoryThreeIncidents);
+    const res = validateHistory(beDowntimeHistoryWithIncidents);
     expect(res).toBeUndefined();
   });
 
   it('validate history - invalid data', async () => {
     expect(() =>
       validateHistory({
-        result: [{ ...beDowntimeHistoryThreeIncidents.result[0], startDate: 'fake-string' }],
+        result: [{ ...beDowntimeHistoryWithIncidents.result[0], startDate: 'fake-string' }],
       })
     ).toThrow(BadApiDataException);
   });
@@ -43,7 +43,7 @@ describe('test appStatus utility', () => {
   it('validate history - downtime with fileAvailable but without legalFactId', async () => {
     expect(() =>
       validateHistory({
-        result: [{ ...beDowntimeHistoryThreeIncidents.result[0], legalFactId: undefined }],
+        result: [{ ...beDowntimeHistoryWithIncidents.result[0], legalFactId: undefined }],
       })
     ).toThrow(BadApiDataException);
   });

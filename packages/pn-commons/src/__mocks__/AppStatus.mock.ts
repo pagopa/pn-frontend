@@ -40,7 +40,7 @@ export const beDowntimeHistoryNoIncidents: DowntimeLogHistory = {
   result: [],
 };
 
-export const beDowntimeHistoryThreeIncidents: DowntimeLogHistory = {
+export const beDowntimeHistoryWithIncidents: DowntimeLogHistory = {
   result: [
     {
       functionality: KnownFunctionality.NotificationCreate,

@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { beDowntimeHistoryThreeIncidents } from '../../../__mocks__/AppStatus.mock';
+import { beDowntimeHistoryWithIncidents } from '../../../__mocks__/AppStatus.mock';
 import { DowntimeStatus, KnownFunctionality } from '../../../models';
 import {
   RenderResult,
@@ -66,15 +66,15 @@ describe('MobileDowntimeLog component', () => {
     await act(async () => {
       result = render(
         <MobileDowntimeLog
-          downtimeLog={beDowntimeHistoryThreeIncidents}
+          downtimeLog={beDowntimeHistoryWithIncidents}
           getDowntimeLegalFactDocumentDetails={getLegalFactDetailsMock}
         />
       );
     });
     const itemCards = result.getAllByTestId('mobileTableDowntimeLog.cards');
-    expect(itemCards).toHaveLength(beDowntimeHistoryThreeIncidents.result.length);
+    expect(itemCards).toHaveLength(beDowntimeHistoryWithIncidents.result.length);
     itemCards.forEach((card, index) => {
-      const currentLog = beDowntimeHistoryThreeIncidents.result[index];
+      const currentLog = beDowntimeHistoryWithIncidents.result[index];
       // check header
       const cardHeaderLeft = within(card).getByTestId('cardHeaderLeft');
       checkStatusField(currentLog.status, cardHeaderLeft);
@@ -104,21 +104,19 @@ describe('MobileDowntimeLog component', () => {
     await act(async () => {
       result = render(
         <MobileDowntimeLog
-          downtimeLog={beDowntimeHistoryThreeIncidents}
+          downtimeLog={beDowntimeHistoryWithIncidents}
           getDowntimeLegalFactDocumentDetails={getLegalFactDetailsMock}
         />
       );
     });
     expect(getLegalFactDetailsMock).toHaveBeenCalledTimes(0);
     const itemCards = result.getAllByTestId('mobileTableDowntimeLog.cards');
-    const logWithFile = beDowntimeHistoryThreeIncidents.result.findIndex(
-      (log) => log.fileAvailable
-    );
+    const logWithFile = beDowntimeHistoryWithIncidents.result.findIndex((log) => log.fileAvailable);
     const button = within(itemCards[logWithFile]).getByRole('button');
     fireEvent.click(button);
     expect(getLegalFactDetailsMock).toHaveBeenCalledTimes(1);
     expect(getLegalFactDetailsMock).toHaveBeenCalledWith(
-      beDowntimeHistoryThreeIncidents.result[logWithFile].legalFactId
+      beDowntimeHistoryWithIncidents.result[logWithFile].legalFactId
     );
   });
 });

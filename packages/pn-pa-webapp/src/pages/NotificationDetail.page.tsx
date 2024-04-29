@@ -29,12 +29,12 @@ import {
 import NotificationDetailTableSender from '../components/Notifications/NotificationDetailTableSender';
 import NotificationPaymentSender from '../components/Notifications/NotificationPaymentSender';
 import * as routes from '../navigation/routes.const';
+import { getDowntimeLegalFact } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
   cancelNotification,
   getDowntimeHistory,
-  getDowntimeLegalFactDocumentDetails,
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
@@ -240,7 +240,7 @@ const NotificationDetail: React.FC = () => {
   }, []);
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
-    dispatch(getDowntimeLegalFactDocumentDetails(legalFactId))
+    dispatch(getDowntimeLegalFact(legalFactId))
       .unwrap()
       .then((res) => {
         if (res.url) {

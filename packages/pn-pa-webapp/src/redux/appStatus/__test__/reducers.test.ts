@@ -4,11 +4,7 @@ import { currentStatusDTO, downtimesDTO } from '../../../__mocks__/AppStatus.moc
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { apiClient } from '../../../api/apiClients';
 import { store } from '../../store';
-import {
-  getCurrentAppStatus,
-  getDowntimeHistory,
-  getDowntimeLegalFactDocumentDetails,
-} from '../actions';
+import { getCurrentAppStatus, getDowntimeHistory, getDowntimeLegalFact } from '../actions';
 
 describe('App Status redux state tests', () => {
   // eslint-disable-next-line functional/no-let
@@ -62,9 +58,9 @@ describe('App Status redux state tests', () => {
       url: 'mocked-url',
     };
     mock.onGet(`/bff/v1/downtime/legal-facts/${mockRequest}`).reply(200, mockResponse);
-    const action = await store.dispatch(getDowntimeLegalFactDocumentDetails(mockRequest));
+    const action = await store.dispatch(getDowntimeLegalFact(mockRequest));
     const payload = action.payload;
-    expect(action.type).toBe('getDowntimeLegalFactDocumentDetails/fulfilled');
+    expect(action.type).toBe('getDowntimeLegalFact/fulfilled');
     expect(payload).toEqual(mockResponse);
   });
 });

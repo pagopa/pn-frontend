@@ -13,11 +13,11 @@ import {
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PAYMENT_ATTACHMENT,
 } from '../../../api/notifications/notifications.routes';
+import { getDowntimeLegalFact } from '../../appStatus/actions';
 import { store } from '../../store';
 import {
   cancelNotification,
   getDowntimeHistory,
-  getDowntimeLegalFactDocumentDetails,
   getPaymentAttachment,
   getSentNotification,
   getSentNotificationDocument,
@@ -162,9 +162,9 @@ describe('Notification detail redux state tests', () => {
       url: 'mocked-url',
     };
     mock.onGet(`/bff/v1/downtime/legal-facts/${mockRequest}`).reply(200, mockResponse);
-    const action = await store.dispatch(getDowntimeLegalFactDocumentDetails(mockRequest));
+    const action = await store.dispatch(getDowntimeLegalFact(mockRequest));
     const payload = action.payload;
-    expect(action.type).toBe('getNotificationDowntimeLegalFactDocumentDetails/fulfilled');
+    expect(action.type).toBe('getDowntimeLegalFact/fulfilled');
     expect(payload).toEqual(mockResponse);
   });
 

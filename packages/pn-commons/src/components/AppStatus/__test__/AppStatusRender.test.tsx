@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { beDowntimeHistoryThreeIncidents } from '../../../__mocks__/AppStatus.mock';
+import { beDowntimeHistoryWithIncidents } from '../../../__mocks__/AppStatus.mock';
 import { AppStatusData } from '../../../models';
 import {
   RenderResult,
@@ -110,7 +110,7 @@ describe('AppStatusRender component', () => {
           actionIds={mockActionIds}
           appStatus={{
             ...mockAppStatus,
-            downtimeLogPage: { result: beDowntimeHistoryThreeIncidents.result },
+            downtimeLogPage: { result: beDowntimeHistoryWithIncidents.result },
           }}
           clearPagination={clearPagination}
           fetchCurrentStatus={fetchCurrentStatus}
@@ -139,7 +139,7 @@ describe('AppStatusRender component', () => {
           actionIds={mockActionIds}
           appStatus={{
             ...mockAppStatus,
-            downtimeLogPage: { result: beDowntimeHistoryThreeIncidents.result },
+            downtimeLogPage: { result: beDowntimeHistoryWithIncidents.result },
           }}
           clearPagination={clearPagination}
           fetchCurrentStatus={fetchCurrentStatus}
@@ -167,7 +167,7 @@ describe('AppStatusRender component', () => {
           actionIds={mockActionIds}
           appStatus={{
             ...mockAppStatus,
-            downtimeLogPage: { result: [beDowntimeHistoryThreeIncidents.result[0]] },
+            downtimeLogPage: { result: [beDowntimeHistoryWithIncidents.result[0]] },
           }}
           clearPagination={clearPagination}
           fetchCurrentStatus={fetchCurrentStatus}
@@ -196,7 +196,7 @@ describe('AppStatusRender component', () => {
         appStatus={{
           ...mockAppStatus,
           pagination: { page: 0, size: 20, resultPages: ['0', '1', '3'] },
-          downtimeLogPage: { result: [beDowntimeHistoryThreeIncidents.result[0]] },
+          downtimeLogPage: { result: [beDowntimeHistoryWithIncidents.result[0]] },
         }}
         clearPagination={clearPagination}
         fetchCurrentStatus={fetchCurrentStatus}
@@ -218,7 +218,7 @@ describe('AppStatusRender component', () => {
         appStatus={{
           ...mockAppStatus,
           pagination: { page: 0, size: 20, resultPages: ['0', '1'] },
-          downtimeLogPage: { result: beDowntimeHistoryThreeIncidents.result.slice(1) },
+          downtimeLogPage: { result: beDowntimeHistoryWithIncidents.result.slice(1) },
         }}
         clearPagination={clearPagination}
         fetchCurrentStatus={fetchCurrentStatus}
@@ -228,7 +228,7 @@ describe('AppStatusRender component', () => {
       />
     );
     rows = result.getAllByTestId('tableDowntimeLog.row');
-    expect(rows).toHaveLength(beDowntimeHistoryThreeIncidents.result.length - 1);
+    expect(rows).toHaveLength(beDowntimeHistoryWithIncidents.result.length - 1);
     // check that no extra calls are done
     expect(fetchCurrentStatus).toBeCalledTimes(2);
     expect(fetchDowntimeLogPage).toBeCalledTimes(2);
@@ -242,7 +242,7 @@ describe('AppStatusRender component', () => {
           actionIds={mockActionIds}
           appStatus={{
             ...mockAppStatus,
-            downtimeLogPage: { result: [beDowntimeHistoryThreeIncidents.result[0]] },
+            downtimeLogPage: { result: [beDowntimeHistoryWithIncidents.result[0]] },
           }}
           clearPagination={clearPagination}
           fetchCurrentStatus={fetchCurrentStatus}
@@ -270,7 +270,7 @@ describe('AppStatusRender component', () => {
         appStatus={{
           ...mockAppStatus,
           pagination: { page: 1, size: 10, resultPages: ['0', '1', '3'] },
-          downtimeLogPage: { result: [beDowntimeHistoryThreeIncidents.result[0]] },
+          downtimeLogPage: { result: [beDowntimeHistoryWithIncidents.result[0]] },
         }}
         clearPagination={clearPagination}
         fetchCurrentStatus={fetchCurrentStatus}
@@ -292,7 +292,7 @@ describe('AppStatusRender component', () => {
         appStatus={{
           ...mockAppStatus,
           pagination: { page: 1, size: 10, resultPages: ['0', '1', '3'] },
-          downtimeLogPage: { result: beDowntimeHistoryThreeIncidents.result.slice(1) },
+          downtimeLogPage: { result: beDowntimeHistoryWithIncidents.result.slice(1) },
         }}
         clearPagination={clearPagination}
         fetchCurrentStatus={fetchCurrentStatus}
@@ -302,7 +302,7 @@ describe('AppStatusRender component', () => {
       />
     );
     rows = result.getAllByTestId('tableDowntimeLog.row');
-    expect(rows).toHaveLength(beDowntimeHistoryThreeIncidents.result.length - 1);
+    expect(rows).toHaveLength(beDowntimeHistoryWithIncidents.result.length - 1);
     // check that no extra calls are done
     expect(fetchCurrentStatus).toBeCalledTimes(2);
     expect(fetchDowntimeLogPage).toBeCalledTimes(2);
@@ -316,7 +316,7 @@ describe('AppStatusRender component', () => {
           actionIds={mockActionIds}
           appStatus={{
             ...mockAppStatus,
-            downtimeLogPage: { result: [beDowntimeHistoryThreeIncidents.result[0]] },
+            downtimeLogPage: { result: [beDowntimeHistoryWithIncidents.result[0]] },
           }}
           clearPagination={clearPagination}
           fetchCurrentStatus={fetchCurrentStatus}
@@ -365,7 +365,7 @@ describe('AppStatusRender component', () => {
           actionIds={mockActionIds}
           appStatus={{
             ...mockAppStatus,
-            downtimeLogPage: { result: [beDowntimeHistoryThreeIncidents.result[0]] },
+            downtimeLogPage: { result: [beDowntimeHistoryWithIncidents.result[0]] },
           }}
           clearPagination={clearPagination}
           fetchCurrentStatus={fetchCurrentStatus}

@@ -7,7 +7,7 @@ import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/mat
 import {
   ApiError,
   ApiErrorWrapper,
-  GetNotificationDowntimeEventsParams,
+  GetDowntimeHistoryParams,
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -23,6 +23,7 @@ import {
   TitleBox,
   appStateActions,
   dateIsLessThan10Years,
+  downloadDocument,
   formatDate,
   useDownloadDocument,
   useErrors,
@@ -34,12 +35,12 @@ import {
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import * as routes from '../navigation/routes.const';
+import { getDowntimeLegalFact } from '../redux/appStatus/actions';
 import { PNRole } from '../redux/auth/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
-  getDowntimeEvents,
-  getDowntimeLegalFactDocumentDetails,
+  getDowntimeHistory,
   getNotificationPaymentInfo,
   getNotificationPaymentUrl,
   getPaymentAttachment,
@@ -48,11 +49,7 @@ import {
   getReceivedNotificationLegalfact,
   getReceivedNotificationOtherDocument,
 } from '../redux/notification/actions';
-import {
-  clearDowntimeLegalFactData,
-  resetLegalFactState,
-  resetState,
-} from '../redux/notification/reducers';
+import { resetLegalFactState, resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 
@@ -88,9 +85,6 @@ const NotificationDetail = () => {
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
-  );
-  const downtimeLegalFactUrl = useAppSelector(
-    (state: RootState) => state.notificationState.downtimeLegalFactUrl
   );
 
   const currentRecipient = notification?.currentRecipient;
@@ -144,6 +138,7 @@ const NotificationDetail = () => {
       value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
     },
   ];
+
   const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
     .filter((row) => row.rawValue)
     .map((row, index) => ({
@@ -325,16 +320,23 @@ const NotificationDetail = () => {
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
-    const fetchParams: GetNotificationDowntimeEventsParams = {
+    const fetchParams: GetDowntimeHistoryParams = {
       startDate: fromDate,
       endDate: toDate,
     };
-    void dispatch(getDowntimeEvents(fetchParams));
+    void dispatch(getDowntimeHistory(fetchParams));
   }, []);
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
-      void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId));
+      dispatch(getDowntimeLegalFact(legalFactId))
+        .unwrap()
+        .then((res) => {
+          if (res.url) {
+            downloadDocument(res.url);
+          }
+        })
+        .catch((e) => console.log(e));
     }
   }, []);
 
@@ -470,10 +472,8 @@ const NotificationDetail = () => {
                   downtimeEvents={downtimeEvents}
                   fetchDowntimeEvents={fetchDowntimeEvents}
                   notificationStatusHistory={notification.notificationStatusHistory}
-                  downtimeLegalFactUrl={downtimeLegalFactUrl}
                   fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
-                  clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData())}
-                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
+                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
                   disableDownloads={isCancelled.cancellationInTimeline}
                 />
               </Stack>

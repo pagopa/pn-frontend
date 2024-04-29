@@ -1,4 +1,4 @@
-import { beDowntimeHistoryThreeIncidents } from '../../__mocks__/AppStatus.mock';
+import { beDowntimeHistoryWithIncidents } from '../../__mocks__/AppStatus.mock';
 import { initLocalizationForTest, renderHook } from '../../test-utils';
 import { useFieldSpecs } from '../useFieldSpecs';
 
@@ -9,9 +9,9 @@ describe('useFieldSpecs', () => {
 
   it('add id field to data', () => {
     const { result } = renderHook(() => useFieldSpecs());
-    const data = result.current.getRows(beDowntimeHistoryThreeIncidents);
+    const data = result.current.getRows(beDowntimeHistoryWithIncidents);
     expect(data).toStrictEqual(
-      beDowntimeHistoryThreeIncidents.result.map((downtime, i) => ({
+      beDowntimeHistoryWithIncidents.result.map((downtime, i) => ({
         ...downtime,
         id: downtime.startDate + i.toString(),
       }))

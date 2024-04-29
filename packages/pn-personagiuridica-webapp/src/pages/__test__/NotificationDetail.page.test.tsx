@@ -4,8 +4,6 @@ import { vi } from 'vitest';
 import {
   AppMessage,
   AppResponseMessage,
-  DOWNTIME_HISTORY,
-  DOWNTIME_LEGAL_FACT_DETAILS,
   LegalFactId,
   NotificationDetail as NotificationDetailModel,
   NotificationDetailOtherDocument,
@@ -20,7 +18,7 @@ import {
   setPaymentCache,
 } from '@pagopa-pn/pn-commons';
 
-import { downtimesDTO, simpleDowntimeLogPage } from '../../__mocks__/AppStatus.mock';
+import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { arrayOfDelegators } from '../../__mocks__/Delegations.mock';
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
@@ -131,7 +129,7 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
-    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
@@ -143,8 +141,8 @@ describe('NotificationDetail Page', async () => {
     });
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.post).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/received');
-    expect(mock.history.get[1].url).toContain('/downtime/v1/history');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
+    expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
     expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
     expect(result?.getByTestId('breadcrumb-link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container).toHaveTextContent(notificationToFe.abstract!);
@@ -199,7 +197,7 @@ describe('NotificationDetail Page', async () => {
       ],
     });
     // we use regexp to not set the query parameters
-    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
@@ -210,8 +208,8 @@ describe('NotificationDetail Page', async () => {
       });
     });
     expect(mock.history.get).toHaveLength(2);
-    expect(mock.history.get[0].url).toContain('/notifications/received');
-    expect(mock.history.get[1].url).toContain('/downtime/v1/history');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
+    expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
     // check documents box
     const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
     for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage!) {
@@ -229,14 +227,14 @@ describe('NotificationDetail Page', async () => {
     });
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
-    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       result = render(<NotificationDetail />);
     });
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.post).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/received');
-    expect(mock.history.get[1].url).toContain('/downtime/v1/history');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
+    expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
     expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
     // check documents box
     const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
@@ -255,7 +253,7 @@ describe('NotificationDetail Page', async () => {
       ],
     });
     // we use regexp to not set the query parameters
-    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       result = render(<NotificationDetail />);
     });
@@ -268,7 +266,7 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
-    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     mock.onGet(NOTIFICATION_DETAIL_DOCUMENTS(notificationToFe.iun, '0')).reply(200, {
       filename: notificationToFe.documents[0].ref.key,
       contentType: notificationToFe.documents[0].contentType,
@@ -304,7 +302,7 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
-    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     mock
       .onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationToFe.iun, mockLegalIds as LegalFactId))
       .reply(200, {
@@ -365,7 +363,7 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
-    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     mock
       .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationToFe.iun, otherDocument))
       .reply(200, {
@@ -423,14 +421,12 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
-    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
-    mock
-      .onGet(DOWNTIME_LEGAL_FACT_DETAILS(simpleDowntimeLogPage.downtimes[0].legalFactId!))
-      .reply(200, {
-        filename: 'mocked-filename',
-        contentLength: 1000,
-        url: 'https://mocked-url-com',
-      });
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+    mock.onGet(`/bff/v1/downtime/legal-facts/${downtimesDTO.result[0].legalFactId}`).reply(200, {
+      filename: 'mocked-filename',
+      contentLength: 1000,
+      url: 'https://mocked-url-com',
+    });
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
@@ -448,7 +444,7 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[2].url).toContain(
-        `/downtime/v1/legal-facts/${simpleDowntimeLogPage.downtimes[0].legalFactId}`
+        `/bff/v1/downtime/legal-facts/${downtimesDTO.result[0].legalFactId}`
       );
     });
     await waitFor(() => {
@@ -460,7 +456,7 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
-    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
@@ -482,7 +478,7 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
-    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
@@ -530,7 +526,7 @@ describe('NotificationDetail Page', async () => {
       .reply(200, notificationDTO);
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
-    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
@@ -540,8 +536,8 @@ describe('NotificationDetail Page', async () => {
     });
     // when a delegator sees a notification, we expect that he sees the same things that sees the recipient except the disclaimer
     expect(mock.history.get).toHaveLength(2);
-    expect(mock.history.get[0].url).toContain('/notifications/received');
-    expect(mock.history.get[1].url).toContain('/downtime/v1/history');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
+    expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
     expect(result?.getByTestId('breadcrumb-link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container).toHaveTextContent(notificationToFe.abstract!);
     // check summary table
@@ -588,7 +584,7 @@ describe('NotificationDetail Page', async () => {
       .reply(200, notificationDTO);
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
-    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
@@ -611,7 +607,7 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
-    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
@@ -627,8 +623,8 @@ describe('NotificationDetail Page', async () => {
     // when a delegator sees a notification, we expect that he sees the same things that sees the recipient except the disclaimer
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.post).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/received');
-    expect(mock.history.get[1].url).toContain('/downtime/v1/history');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
+    expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
     expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
     expect(result?.getByTestId('breadcrumb-link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container).toHaveTextContent(notificationToFe.abstract!);

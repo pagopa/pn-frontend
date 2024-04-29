@@ -13,7 +13,7 @@ import {
   APP_STATUS_ACTIONS,
   getCurrentAppStatus,
   getDowntimeHistory,
-  getDowntimeLegalFactDocumentDetails,
+  getDowntimeLegalFact,
 } from '../redux/appStatus/actions';
 import { clearPagination, setPagination } from '../redux/appStatus/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -41,7 +41,7 @@ const AppStatus = () => {
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback(
     (legalFactId: string) => {
-      dispatch(getDowntimeLegalFactDocumentDetails(legalFactId))
+      dispatch(getDowntimeLegalFact(legalFactId))
         .unwrap()
         .then((response) => {
           if (response.url) {
@@ -50,7 +50,7 @@ const AppStatus = () => {
         })
         .catch((e) => console.log(e));
     },
-    [dispatch, getDowntimeLegalFactDocumentDetails]
+    [dispatch, getDowntimeLegalFact]
   );
 
   const handleTrackDownloadCertificateOpposable3dparties = () => {

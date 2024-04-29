@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { beDowntimeHistoryThreeIncidents } from '../../../__mocks__/AppStatus.mock';
+import { beDowntimeHistoryWithIncidents } from '../../../__mocks__/AppStatus.mock';
 import { KnownFunctionality } from '../../../models';
 import { fireEvent, render } from '../../../test-utils';
 import { formatDate, formatDateTime, initLocalization } from '../../../utility';
@@ -32,7 +32,7 @@ describe('DowntimeLogDataSwitch Component', () => {
   it('renders component - startDate', () => {
     const data = {
       id: '0',
-      ...beDowntimeHistoryThreeIncidents.result[0],
+      ...beDowntimeHistoryWithIncidents.result[0],
     };
     const { container } = render(
       <DowntimeLogDataSwitch
@@ -49,7 +49,7 @@ describe('DowntimeLogDataSwitch Component', () => {
   it('renders component - startDate - two lines', () => {
     const data = {
       id: '0',
-      ...beDowntimeHistoryThreeIncidents.result[0],
+      ...beDowntimeHistoryWithIncidents.result[0],
     };
     const { container } = render(
       <DowntimeLogDataSwitch
@@ -69,7 +69,7 @@ describe('DowntimeLogDataSwitch Component', () => {
   it('renders component - endDate', () => {
     const data = {
       id: '0',
-      ...beDowntimeHistoryThreeIncidents.result.find((d) => d.endDate)!,
+      ...beDowntimeHistoryWithIncidents.result.find((d) => d.endDate)!,
     };
     const { container } = render(
       <DowntimeLogDataSwitch
@@ -86,7 +86,7 @@ describe('DowntimeLogDataSwitch Component', () => {
   it('renders component - known functionality', () => {
     const data = {
       id: '0',
-      ...beDowntimeHistoryThreeIncidents.result.find((d) => d.functionality)!,
+      ...beDowntimeHistoryWithIncidents.result.find((d) => d.functionality)!,
     };
     const { container } = render(
       <DowntimeLogDataSwitch
@@ -106,7 +106,7 @@ describe('DowntimeLogDataSwitch Component', () => {
   it('renders component - unknown functionality', () => {
     const data = {
       id: '0',
-      ...beDowntimeHistoryThreeIncidents.result.find(
+      ...beDowntimeHistoryWithIncidents.result.find(
         (d) => !Object.values(KnownFunctionality).includes(d.functionality)
       )!,
     };
@@ -130,7 +130,7 @@ describe('DowntimeLogDataSwitch Component', () => {
   it('renders component - legalFactId', () => {
     const data = {
       id: '0',
-      ...beDowntimeHistoryThreeIncidents.result.find((d) => d.fileAvailable)!,
+      ...beDowntimeHistoryWithIncidents.result.find((d) => d.fileAvailable)!,
     };
     const getDowntimeLegalFactDocumentDetailsMock = vi.fn();
     const { container, getByTestId } = render(
@@ -151,7 +151,7 @@ describe('DowntimeLogDataSwitch Component', () => {
   it('renders component - legalFactId - no file available', () => {
     const data = {
       id: '0',
-      ...beDowntimeHistoryThreeIncidents.result.find((d) => !d.fileAvailable)!,
+      ...beDowntimeHistoryWithIncidents.result.find((d) => !d.fileAvailable)!,
     };
     const { container, queryByTestId } = render(
       <DowntimeLogDataSwitch
@@ -170,7 +170,7 @@ describe('DowntimeLogDataSwitch Component', () => {
   it('renders component - status', () => {
     const data = {
       id: '0',
-      ...beDowntimeHistoryThreeIncidents.result[0],
+      ...beDowntimeHistoryWithIncidents.result[0],
     };
     const { container } = render(
       <DowntimeLogDataSwitch

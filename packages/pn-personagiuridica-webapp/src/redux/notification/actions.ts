@@ -1,8 +1,6 @@
 import {
-  DowntimeLogPage,
-  GetNotificationDowntimeEventsParams,
-  KnownFunctionality,
-  LegalFactDocumentDetails,
+  DowntimeLogHistory,
+  GetDowntimeHistoryParams,
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
@@ -17,12 +15,13 @@ import {
   populatePaymentsPagoPaF24,
   setPaymentCache,
   setPaymentsInCache,
+  validateHistory,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
-import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
+import { DowntimeApiFactory } from '../../generated-client/downtime-logs';
 import { NotificationReceivedApiFactory } from '../../generated-client/notifications';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { parseNotificationDetailForRecipient } from '../../utility/notification.utility';
@@ -33,8 +32,7 @@ export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION = 'getReceivedNotification',
   GET_NOTIFICATION_PAYMENT_INFO = 'getNotificationPaymentInfo',
   GET_NOTIFICATION_PAYMENT_URL = 'getNotificationPaymentUrl',
-  GET_DOWNTIME_EVENTS = 'getDowntimeEvents',
-  GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS = 'getNotificationDowntimeLegalFactDocumentDetails',
+  GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
 }
 
 export const getReceivedNotification = createAsyncThunk<
@@ -229,31 +227,21 @@ export const getReceivedNotificationOtherDocument = createAsyncThunk<
   }
 );
 
-export const getDowntimeEvents = createAsyncThunk<
-  DowntimeLogPage,
-  GetNotificationDowntimeEventsParams
->(
-  NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS,
-  performThunkAction((params: GetNotificationDowntimeEventsParams) => {
-    const completeParams = {
-      ...params,
-      functionality: [
-        KnownFunctionality.NotificationCreate,
-        KnownFunctionality.NotificationVisualization,
-        KnownFunctionality.NotificationWorkflow,
-      ],
-      // size and page parameters are not needed since we are interested in all downtimes
-      // within the given time range
-    };
-    return AppStatusApi.getDowntimeLogPage(completeParams);
-  })
-);
-
-// copy of the action having same name in the appStatus slice!!
-export const getDowntimeLegalFactDocumentDetails = createAsyncThunk<
-  LegalFactDocumentDetails,
-  string
->(
-  NOTIFICATION_ACTIONS.GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS,
-  performThunkAction((legalFactId: string) => AppStatusApi.getLegalFactDetails(legalFactId))
+export const getDowntimeHistory = createAsyncThunk<DowntimeLogHistory, GetDowntimeHistoryParams>(
+  NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY,
+  async (params: GetDowntimeHistoryParams, { rejectWithValue }) => {
+    try {
+      const downtimeApiFactory = DowntimeApiFactory(undefined, undefined, apiClient);
+      const response = await downtimeApiFactory.getStatusHistoryV1(
+        params.startDate,
+        params.endDate,
+        params.page,
+        params.size
+      );
+      validateHistory(response.data as DowntimeLogHistory);
+      return response.data as DowntimeLogHistory;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );

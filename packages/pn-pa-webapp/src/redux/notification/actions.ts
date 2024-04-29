@@ -1,7 +1,6 @@
 import {
   DowntimeLogHistory,
   GetDowntimeHistoryParams,
-  LegalFactDocumentDetails,
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
@@ -9,6 +8,7 @@ import {
   PaymentAttachmentNameType,
   parseError,
   performThunkAction,
+  validateHistory,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -20,7 +20,6 @@ import { NotificationSentApiFactory } from '../../generated-client/notifications
 export enum NOTIFICATION_ACTIONS {
   GET_SENT_NOTIFICATION = 'getSentNotification',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
-  GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS = 'getNotificationDowntimeLegalFactDocumentDetails',
   CANCEL_NOTIFICATION = 'cancelNotification',
 }
 
@@ -106,24 +105,8 @@ export const getDowntimeHistory = createAsyncThunk<DowntimeLogHistory, GetDownti
         params.page,
         params.size
       );
+      validateHistory(response.data as DowntimeLogHistory);
       return response.data as DowntimeLogHistory;
-    } catch (e: any) {
-      return rejectWithValue(parseError(e));
-    }
-  }
-);
-
-// copy of the action having same name in the appStatus slice!!
-export const getDowntimeLegalFactDocumentDetails = createAsyncThunk<
-  LegalFactDocumentDetails,
-  string
->(
-  NOTIFICATION_ACTIONS.GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS,
-  async (params: string, { rejectWithValue }) => {
-    try {
-      const downtimeApiFactory = DowntimeApiFactory(undefined, undefined, apiClient);
-      const response = await downtimeApiFactory.getLegalFactV1(params);
-      return response.data as LegalFactDocumentDetails;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }

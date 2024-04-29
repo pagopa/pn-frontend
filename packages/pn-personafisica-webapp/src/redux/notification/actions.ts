@@ -1,7 +1,6 @@
 import {
   DowntimeLogHistory,
   GetDowntimeHistoryParams,
-  LegalFactDocumentDetails,
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
@@ -17,6 +16,7 @@ import {
   populatePaymentsPagoPaF24,
   setPaymentCache,
   setPaymentsInCache,
+  validateHistory,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -36,7 +36,6 @@ export enum NOTIFICATION_ACTIONS {
   GET_NOTIFICATION_PAYMENT_INFO = 'getNotificationPaymentInfo',
   GET_NOTIFICATION_PAYMENT_URL = 'getNotificationPaymentUrl',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
-  GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS = 'getNotificationDowntimeLegalFactDocumentDetails',
 }
 
 export const getReceivedNotification = createAsyncThunk<
@@ -249,24 +248,8 @@ export const getDowntimeHistory = createAsyncThunk<DowntimeLogHistory, GetDownti
         params.page,
         params.size
       );
+      validateHistory(response.data as DowntimeLogHistory);
       return response.data as DowntimeLogHistory;
-    } catch (e: any) {
-      return rejectWithValue(parseError(e));
-    }
-  }
-);
-
-// copy of the action having same name in the appStatus slice!!
-export const getDowntimeLegalFactDocumentDetails = createAsyncThunk<
-  LegalFactDocumentDetails,
-  string
->(
-  NOTIFICATION_ACTIONS.GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS,
-  async (params: string, { rejectWithValue }) => {
-    try {
-      const downtimeApiFactory = DowntimeApiFactory(undefined, undefined, apiClient);
-      const response = await downtimeApiFactory.getLegalFactV1(params);
-      return response.data as LegalFactDocumentDetails;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
