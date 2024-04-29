@@ -663,7 +663,26 @@ export const raddNotificationDTO: NotificationDetail = {
       legalFactsIds: [],
       category: TimelineCategory.NOTIFICATION_RADD_RETRIEVED,
       details: {
-        recIndex: 1,
+        recIndex: 0,
+        eventTimestamp: '2022-06-21T11:44:28Z',
+        raddType: 'ALT',
+        raddTransactionId: '6',
+      },
+    },
+  ],
+};
+
+export const raddNotificationMultiRecipientDTO: NotificationDetail = {
+  ...notificationDTOMultiRecipient,
+  timeline: [
+    ...notificationDTOMultiRecipient.timeline,
+    {
+      elementId: 'NOTIFICATION_RADD_RETRIEVED_mock',
+      timestamp: '2022-06-21T11:44:28Z',
+      legalFactsIds: [],
+      category: TimelineCategory.NOTIFICATION_RADD_RETRIEVED,
+      details: {
+        recIndex: 0,
         eventTimestamp: '2022-06-21T11:44:28Z',
         raddType: 'ALT',
         raddTransactionId: '6',
