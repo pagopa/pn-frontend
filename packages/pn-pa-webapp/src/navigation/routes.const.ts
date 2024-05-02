@@ -2,6 +2,7 @@ import {
   PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
   TOS_LINK_RELATIVE_PATH as TERMS_OF_SERVICE,
 } from '@pagopa-pn/pn-commons';
+
 import { getConfiguration } from '../services/configuration.service';
 
 export const DASHBOARD = '/dashboard';
