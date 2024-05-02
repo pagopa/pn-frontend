@@ -68,24 +68,3 @@ export const userResponse: User = {
   },
   desired_exp: calcExpirationDate(),
 };
-export const longOrganizationNameUserResponse: User = {
-  sessionToken: 'mocked-session-token',
-  name: 'giuseppe',
-  family_name: 'rossini',
-  fiscal_number: 'RSSGPP80B02G273H',
-  email: 'giuseppe.rossini@gmail.com',
-  uid: '00000000-0000-0000-0000-000000000000',
-  organization: {
-    id: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce',
-    name: 'Comune di Palermo - Commissario Straordinario del Governo ZES Sicilia Occidentale',
-    roles: [
-      {
-        partyRole: PartyRole.MANAGER,
-        role: PNRole.ADMIN,
-      },
-    ],
-    fiscal_code: '80016350821',
-    hasGroups: false,
-  },
-  desired_exp: calcExpirationDate(),
-};
