@@ -60,7 +60,6 @@ const FiledNotificationsStatistics: React.FC = () => {
             <Typography sx={{ mt: 0.5 }} variant="body2" color="text.primary">
               {description}
             </Typography>
-            notificationsFiledPercent
             <Typography sx={{ fontSize: 50, fontWeight: 'bold' }} color="royalblue">
               {notificationsAmount}
             </Typography>
