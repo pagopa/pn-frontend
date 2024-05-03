@@ -4,7 +4,6 @@ import {
   CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
-  NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
@@ -13,18 +12,6 @@ import {
 } from '../notifications.routes';
 
 describe('Notifications routes', () => {
-  it('should compile NOTIFICATIONS_LIST', () => {
-    const route = NOTIFICATIONS_LIST({
-      startDate: 'start-date',
-      endDate: 'end-date',
-      recipientId: 'recipient-id',
-      iunMatch: 'iun-match',
-      status: '',
-    });
-    expect(route).toEqual(
-      '/delivery/notifications/sent?startDate=start-date&endDate=end-date&recipientId=RECIPIENT-ID&iunMatch=iun-match'
-    );
-  });
 
   it('should compile NOTIFICATION_DETAIL_DOCUMENTS', () => {
     const route = NOTIFICATION_DETAIL_DOCUMENTS('mocked-iun', '0');

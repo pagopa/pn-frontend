@@ -2,19 +2,12 @@ import MockAdapter from 'axios-mock-adapter';
 import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
-import {
-  AppResponseMessage,
-  ResponseEventDispatcher,
-  formatToTimezoneString,
-  tenYearsAgo,
-  today,
-} from '@pagopa-pn/pn-commons';
+import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
 import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import Dashboard from '../Dashboard.page';
 
@@ -59,15 +52,7 @@ describe('Dashboard Page', async () => {
   });
 
   it('Dashboard without notifications, clicks on new notification inside empty state', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, emptyNotificationsFromBe);
+    mock.onGet('bff/v1/notifications/sent').reply(200, emptyNotificationsFromBe);
     await act(async () => {
       result = render(<Dashboard />);
     });
@@ -82,15 +67,7 @@ describe('Dashboard Page', async () => {
   });
 
   it('Dashboard without notifications, clicks on new notification button', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, emptyNotificationsFromBe);
+    mock.onGet('bff/v1/notifications/sent').reply(200, emptyNotificationsFromBe);
     await act(async () => {
       result = render(<Dashboard />);
     });
@@ -106,15 +83,7 @@ describe('Dashboard Page', async () => {
   });
 
   it('Dashboard without notifications, clicks on API KEYS page inside empty state', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, emptyNotificationsFromBe);
+    mock.onGet('bff/v1/notifications/sent').reply(200, emptyNotificationsFromBe);
     await act(async () => {
       result = render(<Dashboard />);
     });
@@ -129,15 +98,7 @@ describe('Dashboard Page', async () => {
   });
 
   it('renders page', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, notificationsDTO);
+    mock.onGet('bff/v1/notifications/sent').reply(200, notificationsDTO);
 
     await act(async () => {
       result = render(<Dashboard />);
@@ -157,23 +118,9 @@ describe('Dashboard Page', async () => {
 
   it('change pagination', async () => {
     mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
+      .onGet('bff/v1/notifications/sent')
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 20,
-        })
-      )
-      .reply(200, notificationsDTO);
+    mock.onGet('bff/v1/notifications/sent').reply(200, notificationsDTO);
     await act(async () => {
       result = render(<Dashboard />);
     });
@@ -197,23 +144,10 @@ describe('Dashboard Page', async () => {
 
   it('changes page', async () => {
     mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
+      .onGet('bff/v1/notifications/sent')
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
     mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-          nextPagesKey: notificationsDTO.nextPagesKey[0],
-        })
-      )
+      .onGet('bff/v1/notifications/sent')
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
     await act(async () => {
       result = render(<Dashboard />);
@@ -238,24 +172,9 @@ describe('Dashboard Page', async () => {
   });
 
   it('filter', async () => {
+    mock.onGet('bff/v1/notifications/sent').reply(200, notificationsDTO);
     mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, notificationsDTO);
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-          recipientId: notificationsDTO.resultsPage[1].recipients[0],
-        })
-      )
+      .onGet('bff/v1/notifications/sent')
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
     await act(async () => {
       result = render(<Dashboard />);
@@ -283,15 +202,7 @@ describe('Dashboard Page', async () => {
   });
 
   it('errors on api', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(500);
+    mock.onGet('bff/v1/notifications/sent').reply(500);
     await act(async () => {
       result = render(
         <>
@@ -309,15 +220,7 @@ describe('Dashboard Page', async () => {
 
   it('renders page - mobile', async () => {
     window.matchMedia = createMatchMedia(800);
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, notificationsDTO);
+    mock.onGet('bff/v1/notifications/sent').reply(200, notificationsDTO);
 
     await act(async () => {
       result = render(<Dashboard />);

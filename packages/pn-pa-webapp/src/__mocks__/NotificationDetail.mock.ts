@@ -1154,8 +1154,6 @@ export const raddNotificationDTO: NotificationDetail = {
       details: {
         recIndex: 0,
         eventTimestamp: '2022-06-21T11:44:28Z',
-        raddType: 'ALT',
-        raddTransactionId: '6',
       },
     },
   ],
