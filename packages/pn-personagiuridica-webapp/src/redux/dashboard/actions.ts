@@ -4,27 +4,53 @@ import {
   formatToTimezoneString,
   getEndOfDay,
   getStartOfDay,
-  performThunkAction,
+  parseError,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { NotificationsApi } from '../../api/notifications/Notifications.api';
+import { NotificationReceivedApiFactory, NotificationStatus } from '../../generated-client/notifications';
 
 export enum DASHBOARD_ACTIONS {
   GET_RECEIVED_NOTIFICATIONS = 'getReceivedNotifications',
 }
 
-export const getReceivedNotifications = createAsyncThunk<
-  GetNotificationsResponse,
-  GetNotificationsParams<Date> & { isDelegatedPage: boolean }
->(
+export const getReceivedNotifications = createAsyncThunk(
   DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS,
-  performThunkAction((params: GetNotificationsParams<Date> & { isDelegatedPage: boolean }) => {
-    const apiParams = {
-      ...params,
-      startDate: formatToTimezoneString(getStartOfDay(params.startDate)),
-      endDate: formatToTimezoneString(getEndOfDay(params.endDate)),
-    };
-    return NotificationsApi.getReceivedNotifications(apiParams);
-  })
+  async (params: GetNotificationsParams<Date> & { isDelegatedPage: boolean }, { rejectWithValue }) => {
+    try {
+      const receivedNotificationsFactory = NotificationReceivedApiFactory();
+      const apiParams = {
+        ...params,
+        startDate: formatToTimezoneString(getStartOfDay(params.startDate)),
+        endDate: formatToTimezoneString(getEndOfDay(params.endDate)),
+        status: params.status as NotificationStatus | undefined
+      };
+      const response = params.isDelegatedPage ?
+        await receivedNotificationsFactory.searchReceivedNotificationsV1(
+          apiParams.startDate,
+          apiParams.endDate,
+          apiParams.mandateId,
+          apiParams.recipientId,
+          apiParams.status,
+          apiParams.subjectRegExp,
+          apiParams.iunMatch,
+          apiParams.size,
+          apiParams.nextPagesKey
+        ) :
+        await receivedNotificationsFactory.searchReceivedDelegatedNotificationsV1(
+          apiParams.startDate,
+          apiParams.endDate,
+          apiParams.mandateId,
+          apiParams.recipientId,
+          apiParams.group,
+          apiParams.status,
+          apiParams.iunMatch,
+          apiParams.size,
+          apiParams.nextPagesKey
+        );
+      return response.data as GetNotificationsResponse;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
