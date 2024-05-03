@@ -66,7 +66,7 @@ describe('Dashboard redux state tests', () => {
       iunMatch: '',
       size: 10,
     };
-    mock.onGet('/bff/v1/notifications/sent').reply(200, notificationsDTO);
+    mock.onGet('/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10').reply(200, notificationsDTO);
     const action = await store.dispatch(getSentNotifications(mockRequest));
     const payload = action.payload as GetNotificationsResponse;
     expect(action.type).toBe('getSentNotifications/fulfilled');

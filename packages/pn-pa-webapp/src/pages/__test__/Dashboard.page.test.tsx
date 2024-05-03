@@ -52,7 +52,11 @@ describe('Dashboard Page', async () => {
   });
 
   it('Dashboard without notifications, clicks on new notification inside empty state', async () => {
-    mock.onGet('bff/v1/notifications/sent').reply(200, emptyNotificationsFromBe);
+    mock
+      .onGet(
+        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
+      )
+      .reply(200, emptyNotificationsFromBe);
     await act(async () => {
       result = render(<Dashboard />);
     });
@@ -67,7 +71,11 @@ describe('Dashboard Page', async () => {
   });
 
   it('Dashboard without notifications, clicks on new notification button', async () => {
-    mock.onGet('bff/v1/notifications/sent').reply(200, emptyNotificationsFromBe);
+    mock
+      .onGet(
+        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
+      )
+      .reply(200, emptyNotificationsFromBe);
     await act(async () => {
       result = render(<Dashboard />);
     });
@@ -83,7 +91,11 @@ describe('Dashboard Page', async () => {
   });
 
   it('Dashboard without notifications, clicks on API KEYS page inside empty state', async () => {
-    mock.onGet('bff/v1/notifications/sent').reply(200, emptyNotificationsFromBe);
+    mock
+      .onGet(
+        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
+      )
+      .reply(200, emptyNotificationsFromBe);
     await act(async () => {
       result = render(<Dashboard />);
     });
@@ -98,7 +110,11 @@ describe('Dashboard Page', async () => {
   });
 
   it('renders page', async () => {
-    mock.onGet('bff/v1/notifications/sent').reply(200, notificationsDTO);
+    mock
+      .onGet(
+        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
+      )
+      .reply(200, notificationsDTO);
 
     await act(async () => {
       result = render(<Dashboard />);
@@ -118,9 +134,15 @@ describe('Dashboard Page', async () => {
 
   it('change pagination', async () => {
     mock
-      .onGet('bff/v1/notifications/sent')
+      .onGet(
+        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
+      )
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
-    mock.onGet('bff/v1/notifications/sent').reply(200, notificationsDTO);
+    mock
+      .onGet(
+        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=20'
+      )
+      .reply(200, notificationsDTO);
     await act(async () => {
       result = render(<Dashboard />);
     });
@@ -144,10 +166,15 @@ describe('Dashboard Page', async () => {
 
   it('changes page', async () => {
     mock
-      .onGet('bff/v1/notifications/sent')
+      .onGet(
+        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
+      )
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
     mock
-      .onGet('bff/v1/notifications/sent')
+      .onGet(
+        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10&nextPagesKey=' +
+          notificationsDTO.nextPagesKey[0]
+      )
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
     await act(async () => {
       result = render(<Dashboard />);
@@ -172,9 +199,15 @@ describe('Dashboard Page', async () => {
   });
 
   it('filter', async () => {
-    mock.onGet('bff/v1/notifications/sent').reply(200, notificationsDTO);
     mock
-      .onGet('bff/v1/notifications/sent')
+      .onGet(
+        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
+      )
+      .reply(200, notificationsDTO);
+    mock
+      .onGet(
+        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=CLMCST42R12D969Z&status=&iunMatch=&size=10'
+      )
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
     await act(async () => {
       result = render(<Dashboard />);
@@ -202,7 +235,11 @@ describe('Dashboard Page', async () => {
   });
 
   it('errors on api', async () => {
-    mock.onGet('bff/v1/notifications/sent').reply(500);
+    mock
+      .onGet(
+        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
+      )
+      .reply(500);
     await act(async () => {
       result = render(
         <>
@@ -220,7 +257,11 @@ describe('Dashboard Page', async () => {
 
   it('renders page - mobile', async () => {
     window.matchMedia = createMatchMedia(800);
-    mock.onGet('bff/v1/notifications/sent').reply(200, notificationsDTO);
+    mock
+      .onGet(
+        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
+      )
+      .reply(200, notificationsDTO);
 
     await act(async () => {
       result = render(<Dashboard />);

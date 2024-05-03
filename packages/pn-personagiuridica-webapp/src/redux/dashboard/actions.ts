@@ -14,6 +14,9 @@ export enum DASHBOARD_ACTIONS {
   GET_RECEIVED_NOTIFICATIONS = 'getReceivedNotifications',
 }
 
+/**
+ * Get received notifications
+ */
 export const getReceivedNotifications = createAsyncThunk(
   DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS,
   async (params: GetNotificationsParams<Date> & { isDelegatedPage: boolean }, { rejectWithValue }) => {
