@@ -1,4 +1,5 @@
 import {
+  GetNotificationsParams,
   GetNotificationsResponse,
   NotificationStatus,
   formatToTimezoneString,
@@ -19,18 +20,7 @@ export enum DASHBOARD_ACTIONS {
  */
 export const getSentNotifications = createAsyncThunk(
   'getSentNotifications',
-  async (params: {
-    startDate: Date;
-    endDate: Date;
-    mandateId?: string;
-    recipientId?: string;
-    status?: NotificationStatus | string;
-    subjectRegExp?: string;
-    size?: number;
-    nextPagesKey?: string;
-    iunMatch?: string;
-    group?: string;
-  }, { rejectWithValue }) => {
+  async (params: GetNotificationsParams<Date>, { rejectWithValue }) => {
     try {
       const sentNotificationsFactory = NotificationSentApiFactory(undefined, undefined, apiClient);
       const apiParams = {

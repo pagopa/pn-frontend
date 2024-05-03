@@ -4,7 +4,6 @@ import {
   NotificationColumnData,
   NotificationStatus,
   Sort,
-  formatToTimezoneString,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -12,7 +11,6 @@ import {
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient } from '../../../api/apiClients';
-import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
 import { store } from '../../store';
 import { getReceivedNotifications } from '../actions';
 import { setMandateId, setNotificationFilters, setPagination, setSorting } from '../reducers';
@@ -58,12 +56,7 @@ describe('Dashbaord redux state tests', () => {
 
   it('Should be able to fetch the notifications list', async () => {
     mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-        })
-      )
+      .onGet('/bff/v1/notifications/received')
       .reply(200, notificationsDTO);
     const action = await store.dispatch(
       getReceivedNotifications({

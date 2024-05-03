@@ -2,8 +2,6 @@ import { AxiosResponse } from 'axios';
 
 import {
   ExtRegistriesPaymentDetails,
-  GetNotificationsParams,
-  GetNotificationsResponse,
   LegalFactId,
   NotificationDetailOtherDocument,
   PaymentAttachment,
@@ -15,7 +13,6 @@ import { NotificationId } from '../../models/Notifications';
 import { DocType, DownloadFileResponse } from '../../redux/notification/types';
 import { apiClient } from '../apiClients';
 import {
-  NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
@@ -33,26 +30,6 @@ const getDownloadUrl = (response: AxiosResponse, docType?: DocType): DownloadFil
 };
 
 export const NotificationsApi = {
-  /**
-   * Gets current user notifications
-   * @param  {string} startDate
-   * @param  {string} endDate
-   * @returns Promise
-   */
-  getReceivedNotifications: (
-    params: GetNotificationsParams<string>
-  ): Promise<GetNotificationsResponse> =>
-    apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
-      if (response.data && response.data.resultsPage) {
-        return response.data;
-      }
-      return {
-        resultsPage: [],
-        moreResult: false,
-        nextPagesKey: [],
-      };
-    }),
-
   /**
    * Get notification iun and mandate id from aar link
    * @param {string} qrCode
