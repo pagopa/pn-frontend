@@ -1,10 +1,6 @@
-import { AxiosResponse } from 'axios';
-
 import {
   GetNotificationsParams,
   GetNotificationsResponse,
-  LegalFactId,
-  NotificationDetailOtherDocument,
   PaymentAttachment,
   PaymentAttachmentNameType,
 } from '@pagopa-pn/pn-commons';
@@ -17,19 +13,9 @@ import {
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
   NOTIFICATIONS_LIST,
-  NOTIFICATION_DETAIL_DOCUMENTS,
-  NOTIFICATION_DETAIL_LEGALFACT,
-  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from './notifications.routes';
-
-const getDownloadUrl = (response: AxiosResponse): { url: string } => {
-  if (response.data) {
-    return response.data as { url: string };
-  }
-  return { url: '' };
-};
 
 export const NotificationsApi = {
   /**
@@ -51,44 +37,6 @@ export const NotificationsApi = {
         nextPagesKey: [],
       };
     }),
-
-  /**
-   * Gets current user notification document
-   * @param  {string} iun
-   * @param  {number} documentIndex
-   * @returns Promise
-   */
-  getSentNotificationDocument: (iun: string, documentIndex: string): Promise<{ url: string }> =>
-    apiClient
-      .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
-      .then((response) => getDownloadUrl(response)),
-
-  /**
-   *
-   * @param  {string} iun
-   * @param  {NotificationDetailOtherDocument} otherDocument
-   * @returns Promise
-   */
-  getSentNotificationOtherDocument: (
-    iun: string,
-    otherDocument: NotificationDetailOtherDocument
-  ): Promise<{ url: string }> =>
-    apiClient
-      .get<{ url: string }>(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {
-        params: { documentId: otherDocument.documentId },
-      })
-      .then((response) => getDownloadUrl(response)),
-
-  /**
-   * Gets current user notification legalfact
-   * @param  {string} iun
-   * @param  {LegalFactId} legalFact
-   * @returns Promise
-   */
-  getSentNotificationLegalfact: (iun: string, legalFact: LegalFactId): Promise<{ url: string }> =>
-    apiClient
-      .get<{ url: string }>(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact))
-      .then((response) => getDownloadUrl(response)),
 
   /**
    * Get user groups

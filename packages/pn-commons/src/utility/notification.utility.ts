@@ -6,6 +6,7 @@
 import _ from 'lodash';
 
 import {
+  AnalogWorkflowDetails,
   ExtRegistriesPaymentDetails,
   F24PaymentDetails,
   INotificationDetailTimeline,
@@ -387,7 +388,7 @@ export function getLegalFactLabel(
     );
   } else if (
     timelineStep.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW &&
-    legalFactType === LegalFactType.AAR
+    (timelineStep.details as AnalogWorkflowDetails).getGeneratedAarUrl
   ) {
     return getLocalizedOrDefaultLabel(
       'notifications',

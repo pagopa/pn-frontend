@@ -1,9 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import {
-  LegalFactId,
-  LegalFactType,
-  NotificationDetailOtherDocument,
   PaymentAttachmentNameType,
   PaymentAttachmentSName,
   formatToTimezoneString,
@@ -22,9 +19,6 @@ import {
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
   NOTIFICATIONS_LIST,
-  NOTIFICATION_DETAIL_DOCUMENTS,
-  NOTIFICATION_DETAIL_LEGALFACT,
-  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
@@ -66,44 +60,6 @@ describe('Notifications api tests', () => {
       status: '',
     });
     expect(res).toStrictEqual(notificationsToFe);
-  });
-
-  it('getSentNotificationDocument', async () => {
-    const iun = notificationDTOMultiRecipient.iun;
-    const documentIndex = '0';
-    mock
-      .onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
-      .reply(200, { url: 'http://mocked-url.com' });
-    const res = await NotificationsApi.getSentNotificationDocument(iun, documentIndex);
-    expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
-  });
-
-  it('getSentNotificationOtherDocument', async () => {
-    const iun = notificationDTOMultiRecipient.iun;
-    const otherDocument: NotificationDetailOtherDocument = {
-      documentId: 'mocked-id',
-      documentType: 'mocked-type',
-    };
-    mock
-      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {
-        documentId: otherDocument.documentId,
-      })
-      .reply(200, { url: 'http://mocked-url.com' });
-    const res = await NotificationsApi.getSentNotificationOtherDocument(iun, otherDocument);
-    expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
-  });
-
-  it('getSentNotificationLegalfact', async () => {
-    const iun = notificationDTOMultiRecipient.iun;
-    const legalFact: LegalFactId = {
-      key: 'mocked-key',
-      category: LegalFactType.ANALOG_DELIVERY,
-    };
-    mock
-      .onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact))
-      .reply(200, { url: 'http://mocked-url.com' });
-    const res = await NotificationsApi.getSentNotificationLegalfact(iun, legalFact);
-    expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
   });
 
   it('getUserGroups', async () => {

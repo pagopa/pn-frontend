@@ -112,6 +112,7 @@ interface BaseDetails {
 
 export interface AnalogWorkflowDetails extends BaseDetails {
   physicalAddress?: PhysicalAddress;
+  getGeneratedAarUrl?: string;
 }
 
 export interface SendCourtesyMessageDetails extends BaseDetails {
@@ -298,7 +299,6 @@ export enum RecipientType {
 }
 
 export enum LegalFactType {
-  AAR = 'AAR',
   SENDER_ACK = 'SENDER_ACK',
   DIGITAL_DELIVERY = 'DIGITAL_DELIVERY',
   ANALOG_DELIVERY = 'ANALOG_DELIVERY',
@@ -362,4 +362,25 @@ export interface ExtRegistriesPaymentDetails {
   detail_v2?: string;
   errorCode?: string;
   url?: string;
+}
+
+/** Api models  */
+export enum NotificationDocumentType {
+  AAR = 'AAR',
+  ATTACHMENT = 'ATTACHMENT',
+  LEGAL_FACT = 'LEGAL_FACT',
+}
+
+export interface NotificationDocumentRequest {
+  iun: string;
+  documentType: NotificationDocumentType;
+  documentIdx?: number;
+  documentId?: string;
+  documentCategory?: LegalFactType;
+  mandateId?: string;
+}
+
+export interface NotificationDocumentResponse {
+  url: string;
+  retryAfter?: number;
 }

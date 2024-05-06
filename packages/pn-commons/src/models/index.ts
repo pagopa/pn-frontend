@@ -52,6 +52,9 @@ import {
   NotificationDetailRecipient,
   NotificationDetailTableRow,
   NotificationDetailTimelineDetails,
+  NotificationDocumentRequest,
+  NotificationDocumentResponse,
+  NotificationDocumentType,
   NotificationStatusHistory,
   PagoPAPaymentFullDetails,
   PaidDetails,
@@ -114,6 +117,7 @@ export {
   EventPropertyType,
   ConsentType,
   ConsentActionType,
+  NotificationDocumentType,
 };
 export type {
   AnalogWorkflowDetails,
@@ -183,4 +187,6 @@ export type {
   EventType,
   ActionMeta,
   TosPrivacyConsent,
+  NotificationDocumentRequest,
+  NotificationDocumentResponse,
 };
