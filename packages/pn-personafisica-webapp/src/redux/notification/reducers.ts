@@ -24,9 +24,6 @@ import {
   getNotificationPaymentInfo,
   getNotificationPaymentUrl,
   getReceivedNotification,
-  getReceivedNotificationDocument,
-  getReceivedNotificationLegalfact,
-  getReceivedNotificationOtherDocument,
 } from './actions';
 
 const initialState = {
@@ -50,9 +47,6 @@ const initialState = {
     },
     currentRecipientIndex: 0,
   } as NotificationDetailForRecipient,
-  documentDownloadUrl: '',
-  otherDocumentDownloadUrl: '',
-  legalFactDownloadUrl: '',
   paymentsData: {
     pagoPaF24: [] as Array<PaymentDetails>,
     f24Only: [] as Array<F24PaymentDetails>,
@@ -66,9 +60,6 @@ const notificationSlice = createSlice({
   initialState,
   reducers: {
     resetState: () => initialState,
-    resetLegalFactState: (state) => {
-      state.legalFactDownloadUrl = '';
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
@@ -116,23 +107,6 @@ const notificationSlice = createSlice({
         }
       }
       state.notification = action.payload;
-    });
-    // ATTO
-    builder.addCase(getReceivedNotificationDocument.fulfilled, (state, action) => {
-      if (action.payload.url) {
-        state.documentDownloadUrl = action.payload.url;
-      }
-    });
-    // AAR
-    builder.addCase(getReceivedNotificationOtherDocument.fulfilled, (state, action) => {
-      if (action.payload.url) {
-        state.otherDocumentDownloadUrl = action.payload.url;
-      }
-    });
-    builder.addCase(getReceivedNotificationLegalfact.fulfilled, (state, action) => {
-      if (action.payload.url) {
-        state.legalFactDownloadUrl = action.payload.url;
-      }
     });
     builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {
       if (action.payload) {
@@ -191,6 +165,6 @@ const notificationSlice = createSlice({
   },
 });
 
-export const { resetState, resetLegalFactState } = notificationSlice.actions;
+export const { resetState } = notificationSlice.actions;
 
 export default notificationSlice;

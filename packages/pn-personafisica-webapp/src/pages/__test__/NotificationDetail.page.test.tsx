@@ -39,9 +39,6 @@ import {
 } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import {
-  NOTIFICATION_DETAIL_DOCUMENTS,
-  NOTIFICATION_DETAIL_LEGALFACT,
-  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_PAYMENT_URL,
 } from '../../api/notifications/notifications.routes';
@@ -261,13 +258,17 @@ describe('NotificationDetail Page', async () => {
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
-    mock.onGet(NOTIFICATION_DETAIL_DOCUMENTS(notificationToFe.iun, '0')).reply(200, {
-      filename: notificationToFe.documents[0].ref.key,
-      contentType: notificationToFe.documents[0].contentType,
-      contentLength: 3028,
-      sha256: notificationToFe.documents[0].digests.sha256,
-      url: 'https://mocked-url.com',
-    });
+    mock
+      .onGet(
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=ATTACHMENT&documentIdx=0`
+      )
+      .reply(200, {
+        filename: notificationToFe.documents[0].ref.key,
+        contentType: notificationToFe.documents[0].contentType,
+        contentLength: 3028,
+        sha256: notificationToFe.documents[0].digests.sha256,
+        url: 'https://mocked-url.com',
+      });
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
@@ -282,7 +283,7 @@ describe('NotificationDetail Page', async () => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.post).toHaveLength(1);
       expect(mock.history.get[2].url).toContain(
-        `/delivery/notifications/received/${notificationToFe.iun}/attachments/documents/0`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=ATTACHMENT&documentIdx=0`
       );
     });
     await waitFor(() => {
@@ -295,9 +296,13 @@ describe('NotificationDetail Page', async () => {
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
-    mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationToFe.iun, mockLegalIds)).reply(200, {
-      retryAfter: 1,
-    });
+    mock
+      .onGet(
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=LEGAL_FACT&documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+      )
+      .reply(200, {
+        retryAfter: 1,
+      });
     await act(async () => {
       result = render(
         <>
@@ -317,23 +322,27 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[2].url).toContain(
-        `/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=LEGAL_FACT&documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
       );
     });
     const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
-    mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationToFe.iun, mockLegalIds)).reply(200, {
-      filename: 'mocked-filename',
-      contentLength: 1000,
-      retryAfter: null,
-      url: 'https://mocked-url-com',
-    });
+    mock
+      .onGet(
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=LEGAL_FACT&documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+      )
+      .reply(200, {
+        filename: 'mocked-filename',
+        contentLength: 1000,
+        retryAfter: null,
+        url: 'https://mocked-url-com',
+      });
     // simulate that legal fact is now available
     fireEvent.click(legalFactButton[0]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
-        `/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=LEGAL_FACT&documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
       );
     });
     await waitFor(() => {
@@ -351,7 +360,9 @@ describe('NotificationDetail Page', async () => {
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     mock
-      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationToFe.iun, otherDocument))
+      .onGet(
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=AAR&documentId=${otherDocument.documentId}`
+      )
       .reply(200, {
         retryAfter: 1,
       });
@@ -377,13 +388,15 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[2].url).toContain(
-        `/delivery-push/${notificationToFe.iun}/document/AAR`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=AAR&documentId=${otherDocument.documentId}`
       );
     });
     const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock
-      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationToFe.iun, otherDocument))
+      .onGet(
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=AAR&documentId=${otherDocument.documentId}`
+      )
       .reply(200, {
         filename: 'mocked-filename',
         contentLength: 1000,
@@ -396,7 +409,7 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
-        `/delivery-push/${notificationToFe.iun}/document/AAR`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=AAR&documentId=${otherDocument.documentId}`
       );
     });
 

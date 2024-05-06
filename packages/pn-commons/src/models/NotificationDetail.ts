@@ -381,6 +381,8 @@ export interface NotificationDocumentRequest {
 }
 
 export interface NotificationDocumentResponse {
+  filename: string;
+  contentLength: number;
   url: string;
   retryAfter?: number;
 }

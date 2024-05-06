@@ -2,6 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 import {
   LegalFactType,
+  NotificationDocumentType,
   PAYMENT_CACHE_KEY,
   PaidDetails,
   PaymentAttachmentSName,
@@ -25,9 +26,6 @@ import {
 import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import {
-  NOTIFICATION_DETAIL_DOCUMENTS,
-  NOTIFICATION_DETAIL_LEGALFACT,
-  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_PAYMENT_URL,
@@ -41,10 +39,8 @@ import {
   getPaymentAttachment,
   getReceivedNotification,
   getReceivedNotificationDocument,
-  getReceivedNotificationLegalfact,
-  getReceivedNotificationOtherDocument,
 } from '../actions';
-import { resetLegalFactState, resetState } from '../reducers';
+import { resetState } from '../reducers';
 
 const initialState = {
   loading: false,
@@ -67,9 +63,6 @@ const initialState = {
     },
     currentRecipientIndex: 0,
   },
-  documentDownloadUrl: '',
-  otherDocumentDownloadUrl: '',
-  legalFactDownloadUrl: '',
   paymentsData: {
     pagoPaF24: [],
     f24Only: [],
@@ -82,7 +75,6 @@ const currentRecipient = notificationDTO.recipients.find((rec) => rec.taxId);
 describe('Notification detail redux state tests', () => {
   let mock: MockAdapter;
 
-  const mockedUrl = 'http://mocked-url.com';
   mockAuthentication();
 
   beforeAll(() => {
@@ -134,42 +126,55 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch the notification document', async () => {
-    const iun = notificationDTO.iun;
-    const documentIndex = '0';
-    mock.onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex)).reply(200, { url: mockedUrl });
-    const action = await store.dispatch(getReceivedNotificationDocument({ iun, documentIndex }));
+    const mockRequest = {
+      iun: notificationDTO.iun,
+      documentType: NotificationDocumentType.ATTACHMENT,
+      documentIdx: 0,
+    };
+    const mockResponse = { url: 'http://mocked-url.com' };
+    mock
+      .onGet(
+        `/bff/v1/notifications/received/${mockRequest.iun}/documents?documentType=${mockRequest.documentType}&documentIdx=${mockRequest.documentIdx}`
+      )
+      .reply(200, mockResponse);
+    const action = await store.dispatch(getReceivedNotificationDocument(mockRequest));
     expect(action.type).toBe('getReceivedNotificationDocument/fulfilled');
-    expect(action.payload).toEqual({ url: mockedUrl });
+    expect(action.payload).toEqual(mockResponse);
   });
 
-  it('Should be able to fetch the notification other document', async () => {
-    const iun = notificationDTO.iun;
-    const otherDocument = {
-      documentId: 'mocked-id',
-      documentType: 'mocked-type',
+  it('Should be able to fetch the notification AAR document', async () => {
+    const mockRequest = {
+      iun: notificationDTO.iun,
+      documentType: NotificationDocumentType.AAR,
+      documentId: 'mocked-document-id',
     };
+    const mockResponse = { url: 'http://mocked-url.com' };
     mock
-      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument))
-      .reply(200, { url: mockedUrl });
-    const action = await store.dispatch(
-      getReceivedNotificationOtherDocument({ iun, otherDocument })
-    );
-    expect(action.type).toBe('getReceivedNotificationOtherDocument/fulfilled');
-    expect(action.payload).toEqual({ url: mockedUrl, docType: 'AAR' });
+      .onGet(
+        `/bff/v1/notifications/received/${mockRequest.iun}/documents?documentType=${mockRequest.documentType}&documentId=${mockRequest.documentId}`
+      )
+      .reply(200, mockResponse);
+    const action = await store.dispatch(getReceivedNotificationDocument(mockRequest));
+    expect(action.type).toBe('getReceivedNotificationDocument/fulfilled');
+    expect(action.payload).toEqual(mockResponse);
   });
 
   it('Should be able to fetch the notification legalfact', async () => {
-    const iun = notificationDTO.iun;
-    const legalFact = {
-      key: 'mocked-key',
-      category: LegalFactType.ANALOG_DELIVERY,
+    const mockRequest = {
+      iun: notificationDTO.iun,
+      documentType: NotificationDocumentType.LEGAL_FACT,
+      documentId: 'mocked-key',
+      documentCategory: LegalFactType.ANALOG_DELIVERY,
     };
+    const mockResponse = { url: 'http://mocked-url.com' };
     mock
-      .onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact))
-      .reply(200, { url: mockedUrl, retryAfter: 1000 });
-    const action = await store.dispatch(getReceivedNotificationLegalfact({ iun, legalFact }));
-    expect(action.type).toBe('getReceivedNotificationLegalfact/fulfilled');
-    expect(action.payload).toEqual({ url: mockedUrl, retryAfter: 1000, docType: 'AO3' });
+      .onGet(
+        `/bff/v1/notifications/received/${mockRequest.iun}/documents?documentType=${mockRequest.documentType}&documentId=${mockRequest.documentId}&documentCategory=${mockRequest.documentCategory}`
+      )
+      .reply(200, mockResponse);
+    const action = await store.dispatch(getReceivedNotificationDocument(mockRequest));
+    expect(action.type).toBe('getReceivedNotificationDocument/fulfilled');
+    expect(action.payload).toEqual(mockResponse);
   });
 
   it('Should be able to reset state', () => {
@@ -178,14 +183,6 @@ describe('Notification detail redux state tests', () => {
     expect(action.payload).toEqual(undefined);
     const state = store.getState().notificationState;
     expect(state).toEqual(initialState);
-  });
-
-  it('Should be able to reset legalfact state', () => {
-    const action = store.dispatch(resetLegalFactState());
-    expect(action.type).toBe('notificationSlice/resetLegalFactState');
-    expect(action.payload).toEqual(undefined);
-    const state = store.getState().notificationState;
-    expect(state.legalFactDownloadUrl).toEqual('');
   });
 
   it('Should be able to fetch the pagopa document', async () => {
