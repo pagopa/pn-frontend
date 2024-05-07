@@ -26,7 +26,6 @@ import { NotificationReceivedApiFactory } from '../../generated-client/notificat
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { parseNotificationDetailForRecipient } from '../../utility/notification.utility';
 import { RootState, store } from '../store';
-import { GetReceivedNotificationParams } from './types';
 
 export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION = 'getReceivedNotification',
@@ -38,10 +37,10 @@ export enum NOTIFICATION_ACTIONS {
 
 export const getReceivedNotification = createAsyncThunk<
   NotificationDetailForRecipient,
-  GetReceivedNotificationParams
+  { iun: string; mandateId?: string }
 >(
   NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
-  async (params: GetReceivedNotificationParams, { rejectWithValue }) => {
+  async (params: { iun: string; mandateId?: string }, { rejectWithValue }) => {
     try {
       const notificationReceivedApiFactory = NotificationReceivedApiFactory(
         undefined,
