@@ -77,38 +77,6 @@ export const getSentNotificationDocument = createAsyncThunk<
   }
 );
 
-/*
-export const getSentNotificationDocument = createAsyncThunk<
-  { url: string },
-  { iun: string; documentIndex: string }
->(
-  'getSentNotificationDocument',
-  async (params: { iun: string; documentIndex: string }, { rejectWithValue }) => {
-    try {
-      return await NotificationsApi.getSentNotificationDocument(params.iun, params.documentIndex);
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
-);
-
-export const getSentNotificationOtherDocument = createAsyncThunk<
-  { url: string; retryAfter?: number },
-  { iun: string; otherDocument: NotificationDetailOtherDocument }
->(
-  'getSentNotificationOtherDocument',
-  performThunkAction(
-    (params: {
-      iun: string;
-      otherDocument: {
-        documentId: string;
-        documentType: string;
-      };
-    }) => NotificationsApi.getSentNotificationOtherDocument(params.iun, params.otherDocument)
-  )
-);
-*/
-
 export const getDowntimeHistory = createAsyncThunk<DowntimeLogHistory, GetDowntimeHistoryParams>(
   NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY,
   async (params: GetDowntimeHistoryParams, { rejectWithValue }) => {

@@ -137,34 +137,27 @@ const NotificationDetail: React.FC = () => {
     }
   };
 
-  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument
-  // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
-  // Cfr. comment in the definition of INotificationDetailTimeline in pn-commons/src/types/NotificationDetail.ts.
-  const legalFactDownloadHandler = (legalFact: LegalFactId | NotificationDetailOtherDocument) => {
-    if ((legalFact as LegalFactId).key) {
+  const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    if (legalFact.category !== 'AAR') {
       // Legal fact case
-      const legalFactAsLegalFact = legalFact as LegalFactId;
       dispatch(
         getSentNotificationDocument({
           iun: notification.iun,
           documentType: NotificationDocumentType.LEGAL_FACT,
-          documentId: legalFactAsLegalFact.key.substring(
-            legalFactAsLegalFact.key.lastIndexOf('/') + 1
-          ),
-          documentCategory: legalFactAsLegalFact.category,
+          documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
+          documentCategory: legalFact.category,
         })
       )
         .unwrap()
         .then(showInfoMessageIfRetryAfterOrDownload)
         .catch(() => {});
-    } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
+    } else {
       // AAR in timeline case
-      const aar = legalFact as NotificationDetailOtherDocument;
       dispatch(
         getSentNotificationDocument({
           iun: notification.iun,
           documentType: NotificationDocumentType.AAR,
-          documentId: aar.documentId,
+          documentId: legalFact.key,
         })
       )
         .unwrap()

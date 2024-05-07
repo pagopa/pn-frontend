@@ -57,15 +57,12 @@ export interface INotificationDetailTimeline {
   // The link to the AAR (i.e. details.generatedAarUrl) included to ANALOG_FAILURE_WORKFLOW timeline elements
   // must be handled analogously to legal facts,
   // i.e. a link must be shown inside the graphic timeline.
-  // To achieve this, we add the NotificationDetailOtherDocument object corresponding to such links
+  // To achieve this, we add the LegalFactId object corresponding to such links
   // to the legalFactsIds array for the ANALOG_FAILURE_WORKFLOW timeline elements.
-  // Consequently, each element of legalFactsIds can be either
-  // - a LegalFactId object coming from legalFactsIds in the API response, or
-  // - a NotificationDetailOtherDocument coming from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements
   // ------------------------------------------------
   // Carlos Lombardi, 2023.05.02
   // ------------------------------------------------
-  legalFactsIds?: Array<LegalFactId | NotificationDetailOtherDocument>;
+  legalFactsIds?: Array<LegalFactId>;
   category: TimelineCategory;
   details: NotificationDetailTimelineDetails;
   hidden?: boolean;
@@ -309,7 +306,7 @@ export enum LegalFactType {
 
 export interface LegalFactId {
   key: string;
-  category: LegalFactType;
+  category: LegalFactType | 'AAR';
 }
 
 export interface NotificationDetailOtherDocument {

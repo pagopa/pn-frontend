@@ -306,7 +306,7 @@ function legalFactTypeForAnalogEvent(
  */
 export function getLegalFactLabel(
   timelineStep: INotificationDetailTimeline,
-  legalFactType?: LegalFactType,
+  legalFactType?: LegalFactType | 'AAR',
   legalFactKey?: string
 ): string {
   const legalFactLabel = getLocalizedOrDefaultLabel(

@@ -1,12 +1,7 @@
 import { vi } from 'vitest';
 
 import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
-import {
-  INotificationDetailTimeline,
-  LegalFactId,
-  NotificationDetailOtherDocument,
-  NotificationStatus,
-} from '../../../models';
+import { INotificationDetailTimeline, LegalFactId, NotificationStatus } from '../../../models';
 import { fireEvent, render, theme } from '../../../test-utils';
 import {
   formatDay,
@@ -31,7 +26,7 @@ const getLegalFacts = (collapsed: boolean = true) =>
       return arr.concat(s.legalFactsIds.map((lf) => ({ file: lf, step: s })));
     }
     return arr;
-  }, [] as Array<{ file: LegalFactId | NotificationDetailOtherDocument; step: INotificationDetailTimeline }>);
+  }, [] as Array<{ file: LegalFactId; step: INotificationDetailTimeline }>);
 
 const checkDateItem = (index: number, dateItem: HTMLElement, date: string) => {
   if (index === 0) {
@@ -74,9 +69,8 @@ describe('NotificationDetailTimelineStep', () => {
       expect(el).toHaveTextContent(
         getLegalFactLabel(
           mockLegalFacts[index].step,
-          (mockLegalFacts[index].file as LegalFactId).category ||
-            (mockLegalFacts[index].file as NotificationDetailOtherDocument).documentType,
-          (mockLegalFacts[index].file as LegalFactId).key || ''
+          mockLegalFacts[index].file.category,
+          mockLegalFacts[index].file.key || ''
         )
       );
       expect(el).toBeEnabled();
@@ -132,11 +126,7 @@ describe('NotificationDetailTimelineStep', () => {
       if (step.legalFactsIds && step.legalFactsIds.length > 0) {
         for (const lf of step.legalFactsIds) {
           expect(microLegalFacts[counter]).toHaveTextContent(
-            getLegalFactLabel(
-              step,
-              (lf as LegalFactId).category || (lf as NotificationDetailOtherDocument).documentType,
-              (lf as LegalFactId).key || ''
-            )
+            getLegalFactLabel(step, lf.category, lf.key || '')
           );
           expect(microLegalFacts[counter]).toHaveStyle({
             color: theme.palette.primary.main,
