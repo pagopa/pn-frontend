@@ -41,8 +41,8 @@ describe('Notifiche Page', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const original = window.matchMedia;
-  const notificationPath =
-    '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10';
+  const notificationsPath =
+    '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z';
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -58,7 +58,7 @@ describe('Notifiche Page', async () => {
   });
 
   it('renders page', async () => {
-    mock.onGet(notificationPath).reply(200, notificationsDTO);
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
 
     await act(async () => {
       result = render(<Notifiche />);
@@ -77,10 +77,10 @@ describe('Notifiche Page', async () => {
   });
 
   it('render page without notifications after filtering and remove filters', async () => {
-    mock.onGet(notificationPath).reply(200, notificationsDTO);
-    const notificationPathFiltered =
-      '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2014-05-08T23%3A59%3A59.999Z&iunMatch=&size=10';
-    mock.onGet(notificationPathFiltered).reply(200, emptyNotificationsFromBe);
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
+    const notificationsPathFiltered =
+      '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2014-05-08T23%3A59%3A59.999Z';
+    mock.onGet(notificationsPathFiltered).reply(200, emptyNotificationsFromBe);
     await act(async () => {
       result = render(<Notifiche />);
     });
@@ -110,13 +110,10 @@ describe('Notifiche Page', async () => {
 
   it('change pagination', async () => {
     mock
-      .onGet(notificationPath)
+      .onGet(notificationsPath)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
-    mock
-      .onGet(
-        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=20'
-      )
-      .reply(200, notificationsDTO);
+    const notificationPathWithSize = notificationsPath + '&size=20';
+    mock.onGet(notificationPathWithSize).reply(200, notificationsDTO);
     await act(async () => {
       result = render(<Notifiche />);
     });
@@ -140,10 +137,10 @@ describe('Notifiche Page', async () => {
 
   it('changes page', async () => {
     mock
-      .onGet(notificationPath)
+      .onGet(notificationsPath)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
     const notificationPathSecondPage =
-      notificationPath + '&nextPagesKey=' + notificationsDTO.nextPagesKey[0];
+      notificationsPath + '&nextPagesKey=' + notificationsDTO.nextPagesKey[0];
     mock
       .onGet(notificationPathSecondPage)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
@@ -170,9 +167,8 @@ describe('Notifiche Page', async () => {
   });
 
   it('filter', async () => {
-    mock.onGet(notificationPath).reply(200, notificationsDTO);
-    const notificationPathFiltered =
-      '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=ABCD-EFGH-ILMN-123456-A-1&size=10';
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
+    const notificationPathFiltered = notificationsPath + '&iunMatch=ABCD-EFGH-ILMN-123456-A-1';
     mock
       .onGet(notificationPathFiltered)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
@@ -202,7 +198,7 @@ describe('Notifiche Page', async () => {
   });
 
   it('errors on api', async () => {
-    mock.onGet(notificationPath).reply(500);
+    mock.onGet(notificationsPath).reply(500);
     await act(async () => {
       result = render(
         <>
@@ -220,7 +216,7 @@ describe('Notifiche Page', async () => {
 
   it('renders page - mobile', async () => {
     window.matchMedia = createMatchMedia(800);
-    mock.onGet(notificationPath).reply(200, notificationsDTO);
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
 
     await act(async () => {
       result = render(<Notifiche />);

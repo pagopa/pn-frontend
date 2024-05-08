@@ -63,8 +63,6 @@ describe('Dashbaord redux state tests', () => {
       getReceivedNotifications({
         startDate: tenYearsAgo,
         endDate: today,
-        iunMatch: '',
-        size: 10,
         isDelegatedPage: false,
       })
     );
@@ -80,8 +78,6 @@ describe('Dashbaord redux state tests', () => {
       getReceivedNotifications({
         startDate: tenYearsAgo,
         endDate: today,
-        iunMatch: '',
-        size: 10,
         isDelegatedPage: true,
       })
     );

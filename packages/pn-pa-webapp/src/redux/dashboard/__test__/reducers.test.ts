@@ -17,6 +17,8 @@ import { setNotificationFilters, setPagination, setSorting } from '../reducers';
 describe('Dashboard redux state tests', () => {
   // eslint-disable-next-line functional/no-let
   let mock: MockAdapter;
+  const notificationsPath =
+    '/bff/v1/notifications/sent?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z';
 
   mockAuthentication();
 
@@ -61,12 +63,8 @@ describe('Dashboard redux state tests', () => {
     const mockRequest = {
       startDate: tenYearsAgo,
       endDate: today,
-      status: '',
-      recipientId: '',
-      iunMatch: '',
-      size: 10,
     };
-    mock.onGet('/bff/v1/notifications/sent?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10').reply(200, notificationsDTO);
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
     const action = await store.dispatch(getSentNotifications(mockRequest));
     const payload = action.payload as GetNotificationsResponse;
     expect(action.type).toBe('getSentNotifications/fulfilled');

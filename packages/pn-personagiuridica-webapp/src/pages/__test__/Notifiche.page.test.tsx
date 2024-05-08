@@ -51,6 +51,10 @@ describe('Notifiche Page ', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const original = window.matchMedia;
+  const notificationsPath =
+    '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z';
+  const notificationsDelegatedPath =
+    '/bff/v1/notifications/received/delegated?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z';
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -66,11 +70,7 @@ describe('Notifiche Page ', async () => {
   });
 
   it('renders page', async () => {
-    mock
-      .onGet(
-        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
-      )
-      .reply(200, notificationsDTO);
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
 
     await act(async () => {
       result = render(<Notifiche />, { preloadedState: { userState: { user: userResponse } } });
@@ -93,11 +93,7 @@ describe('Notifiche Page ', async () => {
   });
 
   it('render page without notifications after filtering and remove filters', async () => {
-    mock
-      .onGet(
-        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
-      )
-      .reply(200, notificationsDTO);
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
     mock
       .onGet(
         '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2014-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
@@ -132,15 +128,10 @@ describe('Notifiche Page ', async () => {
 
   it('change pagination', async () => {
     mock
-      .onGet(
-        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
-      )
+      .onGet(notificationsPath)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
-    mock
-      .onGet(
-        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=20'
-      )
-      .reply(200, notificationsDTO);
+    const notificationsPathWithSize = notificationsPath + '&size=20';
+    mock.onGet(notificationsPathWithSize).reply(200, notificationsDTO);
     await act(async () => {
       result = render(<Notifiche />);
     });
@@ -164,15 +155,12 @@ describe('Notifiche Page ', async () => {
 
   it('changes page', async () => {
     mock
-      .onGet(
-        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
-      )
+      .onGet(notificationsPath)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
+    const notificationsPathPageTwo =
+      notificationsPath + '&nextPagesKey=' + notificationsDTO.nextPagesKey[0];
     mock
-      .onGet(
-        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10&nextPagesKey=' +
-          notificationsDTO.nextPagesKey[0]
-      )
+      .onGet(notificationsPathPageTwo)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
     await act(async () => {
       result = render(<Notifiche />);
@@ -197,15 +185,10 @@ describe('Notifiche Page ', async () => {
   });
 
   it('filter', async () => {
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
+    const notificationsPathFiltered = notificationsPath + '&iunMatch=ABCD-EFGH-ILMN-123456-A-1';
     mock
-      .onGet(
-        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
-      )
-      .reply(200, notificationsDTO);
-    mock
-      .onGet(
-        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=ABCD-EFGH-ILMN-123456-A-1&size=10'
-      )
+      .onGet(notificationsPathFiltered)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
     await act(async () => {
       result = render(<Notifiche />);
@@ -233,11 +216,7 @@ describe('Notifiche Page ', async () => {
   });
 
   it('errors on api', async () => {
-    mock
-      .onGet(
-        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
-      )
-      .reply(500);
+    mock.onGet(notificationsPath).reply(500);
     await act(async () => {
       result = render(
         <>
@@ -254,11 +233,7 @@ describe('Notifiche Page ', async () => {
   });
 
   it('renders page - delegated', async () => {
-    mock
-      .onGet(
-        '/bff/v1/notifications/received/delegated?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
-      )
-      .reply(200, notificationsDTO);
+    mock.onGet(notificationsDelegatedPath).reply(200, notificationsDTO);
 
     await act(async () => {
       result = render(<Notifiche isDelegatedPage />, {
@@ -289,22 +264,16 @@ describe('Notifiche Page ', async () => {
   it('renders page - delegated with groups', async () => {
     const notificationGroup1 = notificationsDTO.resultsPage.filter((n) => n.group === 'group-1');
     const notificationGroup3 = notificationsDTO.resultsPage.filter((n) => n.group === 'group-3');
-    mock
-      .onGet(
-        '/bff/v1/notifications/received/delegated?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&group=group-1&iunMatch=&size=10'
-      )
-      .reply(200, {
-        ...notificationsDTO,
-        resultsPage: notificationGroup1,
-      });
-    mock
-      .onGet(
-        '/bff/v1/notifications/received/delegated?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&group=group-3&iunMatch=&size=10'
-      )
-      .reply(200, {
-        ...notificationsDTO,
-        resultsPage: notificationGroup3,
-      });
+    const notificationsDelegatedPathGroupOne = notificationsDelegatedPath + '&group=group-1';
+    mock.onGet(notificationsDelegatedPathGroupOne).reply(200, {
+      ...notificationsDTO,
+      resultsPage: notificationGroup1,
+    });
+    const notificationsDelegatedPathGroupThree = notificationsDelegatedPath + '&group=group-3';
+    mock.onGet(notificationsDelegatedPathGroupThree).reply(200, {
+      ...notificationsDTO,
+      resultsPage: notificationGroup3,
+    });
     mock.onGet(GET_GROUPS()).reply(200, [
       { id: 'group-1', name: 'Group 1' },
       { id: 'group-2', name: 'Group 2' },
@@ -355,11 +324,7 @@ describe('Notifiche Page ', async () => {
 
   it('renders page - mobile', async () => {
     window.matchMedia = createMatchMedia(800);
-    mock
-      .onGet(
-        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
-      )
-      .reply(200, notificationsDTO);
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
 
     await act(async () => {
       result = render(<Notifiche />);
