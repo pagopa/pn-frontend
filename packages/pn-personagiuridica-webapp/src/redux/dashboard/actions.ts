@@ -34,17 +34,6 @@ export const getReceivedNotifications = createAsyncThunk(
         status: params.status as NotificationStatus | undefined
       };
       const response = params.isDelegatedPage ?
-        await receivedNotificationsFactory.searchReceivedNotificationsV1(
-          apiParams.startDate,
-          apiParams.endDate,
-          apiParams.mandateId,
-          apiParams.recipientId,
-          apiParams.status,
-          apiParams.subjectRegExp,
-          apiParams.iunMatch,
-          apiParams.size,
-          apiParams.nextPagesKey
-        ) :
         await receivedNotificationsFactory.searchReceivedDelegatedNotificationsV1(
           apiParams.startDate,
           apiParams.endDate,
@@ -52,6 +41,18 @@ export const getReceivedNotifications = createAsyncThunk(
           apiParams.recipientId,
           apiParams.group,
           apiParams.status,
+          apiParams.iunMatch,
+          apiParams.size,
+          apiParams.nextPagesKey
+        )
+        :
+        await receivedNotificationsFactory.searchReceivedNotificationsV1(
+          apiParams.startDate,
+          apiParams.endDate,
+          apiParams.mandateId,
+          apiParams.recipientId,
+          apiParams.status,
+          apiParams.subjectRegExp,
           apiParams.iunMatch,
           apiParams.size,
           apiParams.nextPagesKey

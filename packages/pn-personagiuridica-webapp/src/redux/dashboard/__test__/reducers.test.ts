@@ -57,12 +57,14 @@ describe('Dashbaord redux state tests', () => {
 
   it('Should be able to fetch the notifications list', async () => {
     mock
-      .onGet('/bff/v1/notifications/received')
+      .onGet('/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10')
       .reply(200, notificationsDTO);
     const action = await store.dispatch(
       getReceivedNotifications({
         startDate: tenYearsAgo,
         endDate: today,
+        iunMatch: '',
+        size: 10,
         isDelegatedPage: false,
       })
     );
@@ -72,12 +74,14 @@ describe('Dashbaord redux state tests', () => {
 
   it('Should be able to fetch the notifications list from delegated page', async () => {
     mock
-      .onGet('/bff/v1/notifications/received/delegated')
+      .onGet('/bff/v1/notifications/received/delegated?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10')
       .reply(200, notificationsDTO);
     const action = await store.dispatch(
       getReceivedNotifications({
         startDate: tenYearsAgo,
         endDate: today,
+        iunMatch: '',
+        size: 10,
         isDelegatedPage: true,
       })
     );

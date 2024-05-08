@@ -6,10 +6,7 @@ import {
   AppResponseMessage,
   ResponseEventDispatcher,
   formatDate,
-  formatToTimezoneString,
-  getEndOfDay,
   tenYearsAgo,
-  today,
 } from '@pagopa-pn/pn-commons';
 import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
@@ -26,7 +23,6 @@ import {
 } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { GET_GROUPS } from '../../api/external-registries/external-registries-routes';
-import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import Notifiche from '../Notifiche.page';
 
@@ -72,11 +68,7 @@ describe('Notifiche Page ', async () => {
   it('renders page', async () => {
     mock
       .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
+        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
       )
       .reply(200, notificationsDTO);
 
@@ -103,20 +95,12 @@ describe('Notifiche Page ', async () => {
   it('render page without notifications after filtering and remove filters', async () => {
     mock
       .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
+        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
       )
       .reply(200, notificationsDTO);
     mock
       .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getEndOfDay(tenYearsAgo)),
-          size: 10,
-        })
+        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2014-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
       )
       .reply(200, emptyNotificationsFromBe);
     await act(async () => {
@@ -149,20 +133,12 @@ describe('Notifiche Page ', async () => {
   it('change pagination', async () => {
     mock
       .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
+        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
       )
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
     mock
       .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 20,
-        })
+        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=20'
       )
       .reply(200, notificationsDTO);
     await act(async () => {
@@ -189,21 +165,13 @@ describe('Notifiche Page ', async () => {
   it('changes page', async () => {
     mock
       .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
+        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
       )
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
     mock
       .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-          nextPagesKey: notificationsDTO.nextPagesKey[0],
-        })
+        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10&nextPagesKey=' +
+          notificationsDTO.nextPagesKey[0]
       )
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
     await act(async () => {
@@ -231,21 +199,12 @@ describe('Notifiche Page ', async () => {
   it('filter', async () => {
     mock
       .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
+        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
       )
       .reply(200, notificationsDTO);
     mock
       .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-          iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
-        })
+        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=ABCD-EFGH-ILMN-123456-A-1&size=10'
       )
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
     await act(async () => {
@@ -276,11 +235,7 @@ describe('Notifiche Page ', async () => {
   it('errors on api', async () => {
     mock
       .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
+        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
       )
       .reply(500);
     await act(async () => {
@@ -301,14 +256,7 @@ describe('Notifiche Page ', async () => {
   it('renders page - delegated', async () => {
     mock
       .onGet(
-        NOTIFICATIONS_LIST(
-          {
-            startDate: formatToTimezoneString(tenYearsAgo),
-            endDate: formatToTimezoneString(today),
-            size: 10,
-          },
-          true
-        )
+        '/bff/v1/notifications/received/delegated?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
       )
       .reply(200, notificationsDTO);
 
@@ -343,15 +291,7 @@ describe('Notifiche Page ', async () => {
     const notificationGroup3 = notificationsDTO.resultsPage.filter((n) => n.group === 'group-3');
     mock
       .onGet(
-        NOTIFICATIONS_LIST(
-          {
-            startDate: formatToTimezoneString(tenYearsAgo),
-            endDate: formatToTimezoneString(today),
-            size: 10,
-            group: 'group-1',
-          },
-          true
-        )
+        '/bff/v1/notifications/received/delegated?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&group=group-1&iunMatch=&size=10'
       )
       .reply(200, {
         ...notificationsDTO,
@@ -359,15 +299,7 @@ describe('Notifiche Page ', async () => {
       });
     mock
       .onGet(
-        NOTIFICATIONS_LIST(
-          {
-            startDate: formatToTimezoneString(tenYearsAgo),
-            endDate: formatToTimezoneString(today),
-            size: 10,
-            group: 'group-3',
-          },
-          true
-        )
+        '/bff/v1/notifications/received/delegated?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&group=group-3&iunMatch=&size=10'
       )
       .reply(200, {
         ...notificationsDTO,
@@ -425,11 +357,7 @@ describe('Notifiche Page ', async () => {
     window.matchMedia = createMatchMedia(800);
     mock
       .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
+        '/bff/v1/notifications/received?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&iunMatch=&size=10'
       )
       .reply(200, notificationsDTO);
 
