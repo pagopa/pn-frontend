@@ -9,6 +9,7 @@ import {
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NotificationReceivedApiFactory, NotificationStatus } from '../../generated-client/notifications';
+import { apiClient } from '../../api/apiClients';
 
 export enum DASHBOARD_ACTIONS {
   GET_RECEIVED_NOTIFICATIONS = 'getReceivedNotifications',
@@ -21,7 +22,11 @@ export const getReceivedNotifications = createAsyncThunk(
   DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS,
   async (params: GetNotificationsParams<Date> & { isDelegatedPage: boolean }, { rejectWithValue }) => {
     try {
-      const receivedNotificationsFactory = NotificationReceivedApiFactory();
+      const receivedNotificationsFactory = NotificationReceivedApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
       const apiParams = {
         ...params,
         startDate: formatToTimezoneString(getStartOfDay(params.startDate)),
