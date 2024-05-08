@@ -112,7 +112,7 @@ describe('Dashboard Page', async () => {
   it('renders page', async () => {
     mock
       .onGet(
-        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
+        '/bff/v1/notifications/sent?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
       )
       .reply(200, notificationsDTO);
 
@@ -135,12 +135,12 @@ describe('Dashboard Page', async () => {
   it('change pagination', async () => {
     mock
       .onGet(
-        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
+        '/bff/v1/notifications/sent?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
       )
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
     mock
       .onGet(
-        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=20'
+        '/bff/v1/notifications/sent?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=20'
       )
       .reply(200, notificationsDTO);
     await act(async () => {
@@ -167,12 +167,12 @@ describe('Dashboard Page', async () => {
   it('changes page', async () => {
     mock
       .onGet(
-        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
+        '/bff/v1/notifications/sent?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
       )
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
     mock
       .onGet(
-        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10&nextPagesKey=' +
+        '/bff/v1/notifications/sent?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10&nextPagesKey=' +
           notificationsDTO.nextPagesKey[0]
       )
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
@@ -201,12 +201,12 @@ describe('Dashboard Page', async () => {
   it('filter', async () => {
     mock
       .onGet(
-        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
+        '/bff/v1/notifications/sent?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
       )
       .reply(200, notificationsDTO);
     mock
       .onGet(
-        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=CLMCST42R12D969Z&status=&iunMatch=&size=10'
+        '/bff/v1/notifications/sent?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&recipientId=CLMCST42R12D969Z&status=&iunMatch=&size=10'
       )
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
     await act(async () => {
@@ -259,7 +259,7 @@ describe('Dashboard Page', async () => {
     window.matchMedia = createMatchMedia(800);
     mock
       .onGet(
-        '/bff/v1/notifications/sent?startDate=2014-05-03T00%3A00%3A00.000Z&endDate=2024-05-03T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
+        '/bff/v1/notifications/sent?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z&recipientId=&status=&iunMatch=&size=10'
       )
       .reply(200, notificationsDTO);
 
