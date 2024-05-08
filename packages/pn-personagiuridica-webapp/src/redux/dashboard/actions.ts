@@ -1,6 +1,7 @@
 import {
   GetNotificationsParams,
   GetNotificationsResponse,
+  formatFiscalCode,
   formatToTimezoneString,
   getEndOfDay,
   getStartOfDay,
@@ -31,6 +32,7 @@ export const getReceivedNotifications = createAsyncThunk(
         ...params,
         startDate: formatToTimezoneString(getStartOfDay(params.startDate)),
         endDate: formatToTimezoneString(getEndOfDay(params.endDate)),
+        recipientId: params.recipientId ? formatFiscalCode(params.recipientId) : undefined,
         status: params.status as NotificationStatus | undefined
       };
       const response = params.isDelegatedPage ?
