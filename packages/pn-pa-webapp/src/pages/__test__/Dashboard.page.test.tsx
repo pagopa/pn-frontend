@@ -60,7 +60,7 @@ describe('Dashboard Page', async () => {
     });
     expect(result.container).toHaveTextContent(/empty-state/);
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const newNotificationBtn = result.queryByTestId('link-create-notification');
     fireEvent.click(newNotificationBtn!);
     await waitFor(() => {
@@ -75,7 +75,7 @@ describe('Dashboard Page', async () => {
     });
     expect(result.container).toHaveTextContent(/empty-state/);
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const newNotificationBtn = result.queryByTestId('newNotificationBtn');
     expect(newNotificationBtn).toHaveTextContent('new-notification-button');
     fireEvent.click(newNotificationBtn!);
@@ -91,7 +91,7 @@ describe('Dashboard Page', async () => {
     });
     expect(result.container).toHaveTextContent(/empty-state/);
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const apiKeysBtn = result.queryByTestId('link-api-keys');
     fireEvent.click(apiKeysBtn!);
     await waitFor(() => {
@@ -107,7 +107,7 @@ describe('Dashboard Page', async () => {
     });
     expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const filterForm = result.getByTestId('filter-form');
     expect(filterForm).toBeInTheDocument();
     const notificationsTable = result.container.querySelector('table');
@@ -128,7 +128,7 @@ describe('Dashboard Page', async () => {
       result = render(<Dashboard />);
     });
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     // change size
@@ -139,7 +139,7 @@ describe('Dashboard Page', async () => {
     fireEvent.click(itemsPerPageList[1]!);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
-      expect(mock.history.get[1].url).toContain('/notifications/sent');
+      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/sent');
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(4);
@@ -158,7 +158,7 @@ describe('Dashboard Page', async () => {
       result = render(<Dashboard />);
     });
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[0].iun);
@@ -169,7 +169,7 @@ describe('Dashboard Page', async () => {
     fireEvent.click(pageButtons[2]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
-      expect(mock.history.get[1].url).toContain('/notifications/sent');
+      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/sent');
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
@@ -186,7 +186,7 @@ describe('Dashboard Page', async () => {
       result = render(<Dashboard />);
     });
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(4);
     rows?.forEach((row, index) => {
@@ -200,7 +200,7 @@ describe('Dashboard Page', async () => {
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
-      expect(mock.history.get[1].url).toContain('/notifications/sent');
+      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/sent');
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
@@ -233,7 +233,7 @@ describe('Dashboard Page', async () => {
     });
     expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const filterForm = result.getByTestId('dialogToggle');
     expect(filterForm).toBeInTheDocument();
     const notificationsCards = result.getAllByTestId('mobileCards');
