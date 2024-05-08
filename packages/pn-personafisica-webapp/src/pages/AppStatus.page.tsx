@@ -53,9 +53,10 @@ const AppStatus = () => {
   };
 
   useEffect(() => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_SERVICE_STATUS, {
-      service_status_OK: appStatus.currentStatus?.appIsFullyOperative,
-    });
+    PFEventStrategyFactory.triggerEvent(
+      PFEventsType.SEND_SERVICE_STATUS,
+      appStatus.currentStatus?.appIsFullyOperative
+    );
   }, [getCurrentAppStatus]);
 
   return (

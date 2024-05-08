@@ -25,6 +25,9 @@ describe('Mixpanel - Add Legal Address Strategy', () => {
       [EventPropertyType.PROFILE]: {
         SEND_HAS_PEC: 'yes',
       },
+      [EventPropertyType.SUPER_PROPERTY]: {
+        SEND_HAS_PEC: 'yes',
+      },
     });
   });
 });

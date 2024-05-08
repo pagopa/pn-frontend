@@ -17,6 +17,12 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'yes',
         SEND_HAS_SMS: 'yes',
       },
+      [EventPropertyType.SUPER_PROPERTY]: {
+        SEND_APPIO_STATUS: 'deactivated',
+        SEND_HAS_EMAIL: 'yes',
+        SEND_HAS_PEC: 'yes',
+        SEND_HAS_SMS: 'yes',
+      },
     });
   });
 
@@ -31,6 +37,12 @@ describe('Mixpanel - Has Addresses Strategy', () => {
 
     expect(hasPecEvent).toEqual({
       [EventPropertyType.PROFILE]: {
+        SEND_APPIO_STATUS: 'deactivated',
+        SEND_HAS_EMAIL: 'yes',
+        SEND_HAS_PEC: 'no',
+        SEND_HAS_SMS: 'yes',
+      },
+      [EventPropertyType.SUPER_PROPERTY]: {
         SEND_APPIO_STATUS: 'deactivated',
         SEND_HAS_EMAIL: 'yes',
         SEND_HAS_PEC: 'no',
@@ -57,6 +69,12 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'yes',
         SEND_HAS_SMS: 'yes',
       },
+      [EventPropertyType.SUPER_PROPERTY]: {
+        SEND_APPIO_STATUS: 'deactivated',
+        SEND_HAS_EMAIL: 'no',
+        SEND_HAS_PEC: 'yes',
+        SEND_HAS_SMS: 'yes',
+      },
     });
   });
 
@@ -78,6 +96,12 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'yes',
         SEND_HAS_SMS: 'no',
       },
+      [EventPropertyType.SUPER_PROPERTY]: {
+        SEND_APPIO_STATUS: 'deactivated',
+        SEND_HAS_EMAIL: 'yes',
+        SEND_HAS_PEC: 'yes',
+        SEND_HAS_SMS: 'no',
+      },
     });
   });
 
@@ -94,6 +118,12 @@ describe('Mixpanel - Has Addresses Strategy', () => {
 
     expect(hasPecEvent).toEqual({
       [EventPropertyType.PROFILE]: {
+        SEND_APPIO_STATUS: 'nd',
+        SEND_HAS_EMAIL: 'yes',
+        SEND_HAS_PEC: 'yes',
+        SEND_HAS_SMS: 'yes',
+      },
+      [EventPropertyType.SUPER_PROPERTY]: {
         SEND_APPIO_STATUS: 'nd',
         SEND_HAS_EMAIL: 'yes',
         SEND_HAS_PEC: 'yes',
@@ -121,6 +151,12 @@ describe('Mixpanel - Has Addresses Strategy', () => {
 
     expect(hasPecEvent).toEqual({
       [EventPropertyType.PROFILE]: {
+        SEND_APPIO_STATUS: 'activated',
+        SEND_HAS_EMAIL: 'yes',
+        SEND_HAS_PEC: 'yes',
+        SEND_HAS_SMS: 'yes',
+      },
+      [EventPropertyType.SUPER_PROPERTY]: {
         SEND_APPIO_STATUS: 'activated',
         SEND_HAS_EMAIL: 'yes',
         SEND_HAS_PEC: 'yes',
