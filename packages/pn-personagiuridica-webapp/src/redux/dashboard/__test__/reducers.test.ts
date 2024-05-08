@@ -69,6 +69,7 @@ describe('Dashbaord redux state tests', () => {
         startDate: tenYearsAgo,
         endDate: today,
         isDelegatedPage: false,
+        size: 10,
       })
     );
     expect(action.type).toBe('getReceivedNotifications/fulfilled');
@@ -88,6 +89,7 @@ describe('Dashbaord redux state tests', () => {
         startDate: tenYearsAgo,
         endDate: today,
         isDelegatedPage: true,
+        size: 10,
       })
     );
     expect(action.type).toBe('getReceivedNotifications/fulfilled');
