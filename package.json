@@ -1,6 +1,7 @@
 {
-  "name": "send-monorepo",
+  "name": "pn-frontend",
   "private": true,
+  "license": "SEE LICENS IN LICENSE",
   "devDependencies": {
     "lerna": "^6.4.1"
   },
