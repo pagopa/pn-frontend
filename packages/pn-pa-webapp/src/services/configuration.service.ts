@@ -18,6 +18,7 @@ interface PaConfigurationFromFile {
   SELFCARE_SEND_PROD_ID: string;
   API_B2B_LINK: string;
   IS_MANUAL_SEND_ENABLED: boolean;
+  IS_STATISTICS_ENABLED: boolean;
 }
 
 export interface PaConfiguration extends PaConfigurationFromFile {
@@ -36,6 +37,7 @@ export interface PaConfiguration extends PaConfigurationFromFile {
   SELFCARE_SEND_PROD_ID: string;
   API_B2B_LINK: string;
   IS_MANUAL_SEND_ENABLED: boolean;
+  IS_STATISTICS_ENABLED: boolean;
 }
 
 class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
@@ -59,6 +61,7 @@ class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
     this.ruleFor('SELFCARE_SEND_PROD_ID').isString();
     this.ruleFor('API_B2B_LINK').isString();
     this.ruleFor('IS_MANUAL_SEND_ENABLED').isBoolean();
+    this.ruleFor('IS_STATISTICS_ENABLED').isBoolean();
   }
 
   makeRequired(rule: any): void {
@@ -86,7 +89,8 @@ export function getConfiguration(): PaConfiguration {
     WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
     SELFCARE_SEND_PROD_ID: configurationFromFile.SELFCARE_SEND_PROD_ID,
     API_B2B_LINK: configurationFromFile.API_B2B_LINK || '',
-    IS_MANUAL_SEND_ENABLED: Boolean(configurationFromFile.IS_MANUAL_SEND_ENABLED)
+    IS_MANUAL_SEND_ENABLED: Boolean(configurationFromFile.IS_MANUAL_SEND_ENABLED),
+    IS_STATISTICS_ENABLED: Boolean(configurationFromFile.IS_STATISTICS_ENABLED)
   };
 }
 
