@@ -134,7 +134,7 @@ describe('Notification detail redux state tests', () => {
     const mockResponse = { url: 'http://mocked-url.com' };
     mock
       .onGet(
-        `/bff/v1/notifications/received/${mockRequest.iun}/documents?documentType=${mockRequest.documentType}&documentIdx=${mockRequest.documentIdx}`
+        `/bff/v1/notifications/received/${mockRequest.iun}/documents/${mockRequest.documentType}?documentIdx=${mockRequest.documentIdx}`
       )
       .reply(200, mockResponse);
     const action = await store.dispatch(getReceivedNotificationDocument(mockRequest));
@@ -151,7 +151,7 @@ describe('Notification detail redux state tests', () => {
     const mockResponse = { url: 'http://mocked-url.com' };
     mock
       .onGet(
-        `/bff/v1/notifications/received/${mockRequest.iun}/documents?documentType=${mockRequest.documentType}&documentId=${mockRequest.documentId}`
+        `/bff/v1/notifications/received/${mockRequest.iun}/documents/${mockRequest.documentType}?documentId=${mockRequest.documentId}`
       )
       .reply(200, mockResponse);
     const action = await store.dispatch(getReceivedNotificationDocument(mockRequest));
@@ -169,7 +169,7 @@ describe('Notification detail redux state tests', () => {
     const mockResponse = { url: 'http://mocked-url.com' };
     mock
       .onGet(
-        `/bff/v1/notifications/received/${mockRequest.iun}/documents?documentType=${mockRequest.documentType}&documentId=${mockRequest.documentId}&documentCategory=${mockRequest.documentCategory}`
+        `/bff/v1/notifications/received/${mockRequest.iun}/documents/${mockRequest.documentType}?documentId=${mockRequest.documentId}&documentCategory=${mockRequest.documentCategory}`
       )
       .reply(200, mockResponse);
     const action = await store.dispatch(getReceivedNotificationDocument(mockRequest));

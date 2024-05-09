@@ -3220,8 +3220,9 @@ export const NotificationSentApiAxiosParamCreator = function (configuration?: Co
             assertParamExists('getSentNotificationDocumentV1', 'iun', iun)
             // verify required parameter 'documentType' is not null or undefined
             assertParamExists('getSentNotificationDocumentV1', 'documentType', documentType)
-            const localVarPath = `/bff/v1/notifications/sent/{iun}/documents`
-                .replace(`{${"iun"}}`, encodeURIComponent(String(iun)));
+            const localVarPath = `/bff/v1/notifications/sent/{iun}/documents/{documentType}`
+                .replace(`{${"iun"}}`, encodeURIComponent(String(iun)))
+                .replace(`{${"documentType"}}`, encodeURIComponent(String(documentType)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3233,10 +3234,6 @@ export const NotificationSentApiAxiosParamCreator = function (configuration?: Co
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (documentType !== undefined) {
-                localVarQueryParameter['documentType'] = documentType;
-            }
-
             if (documentIdx !== undefined) {
                 localVarQueryParameter['documentIdx'] = documentIdx;
             }
@@ -3247,6 +3244,53 @@ export const NotificationSentApiAxiosParamCreator = function (configuration?: Co
 
             if (documentCategory !== undefined) {
                 localVarQueryParameter['documentCategory'] = documentCategory;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Download allegato per pagamento
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {number} recipientIdx indice del destinatario nella lista partendo da 0.
+         * @param {string} attachmentName Tipologia del pagamento allegato alla notifica. Valori possibili PAGOPA|F24
+         * @param {number} [attachmentIdx] indice del documento di pagamento partendo da 0
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSentNotificationPaymentV1: async (iun: string, recipientIdx: number, attachmentName: string, attachmentIdx?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'iun' is not null or undefined
+            assertParamExists('getSentNotificationPaymentV1', 'iun', iun)
+            // verify required parameter 'recipientIdx' is not null or undefined
+            assertParamExists('getSentNotificationPaymentV1', 'recipientIdx', recipientIdx)
+            // verify required parameter 'attachmentName' is not null or undefined
+            assertParamExists('getSentNotificationPaymentV1', 'attachmentName', attachmentName)
+            const localVarPath = `/bff/v1/notifications/sent/{iun}/payments/{recipientIdx}/{attachmentName}`
+                .replace(`{${"iun"}}`, encodeURIComponent(String(iun)))
+                .replace(`{${"recipientIdx"}}`, encodeURIComponent(String(recipientIdx)))
+                .replace(`{${"attachmentName"}}`, encodeURIComponent(String(attachmentName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (attachmentIdx !== undefined) {
+                localVarQueryParameter['attachmentIdx'] = attachmentIdx;
             }
 
 
@@ -3400,6 +3444,22 @@ export const NotificationSentApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 
+         * @summary Download allegato per pagamento
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {number} recipientIdx indice del destinatario nella lista partendo da 0.
+         * @param {string} attachmentName Tipologia del pagamento allegato alla notifica. Valori possibili PAGOPA|F24
+         * @param {number} [attachmentIdx] indice del documento di pagamento partendo da 0
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSentNotificationPaymentV1(iun: string, recipientIdx: number, attachmentName: string, attachmentIdx?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BffDocumentDownloadMetadataResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSentNotificationPaymentV1(iun, recipientIdx, attachmentName, attachmentIdx, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationSentApi.getSentNotificationPaymentV1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Questa operazione permette di leggere tutti i dettagli di una notifica accettata.
          * @summary Mittente: lettura dettagli notifica
          * @param {string} iun Identificativo Univoco Notifica
@@ -3457,6 +3517,19 @@ export const NotificationSentApiFactory = function (configuration?: Configuratio
             return localVarFp.getSentNotificationDocumentV1(iun, documentType, documentIdx, documentId, documentCategory, options).then((request) => request(axios, basePath));
         },
         /**
+         * 
+         * @summary Download allegato per pagamento
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {number} recipientIdx indice del destinatario nella lista partendo da 0.
+         * @param {string} attachmentName Tipologia del pagamento allegato alla notifica. Valori possibili PAGOPA|F24
+         * @param {number} [attachmentIdx] indice del documento di pagamento partendo da 0
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSentNotificationPaymentV1(iun: string, recipientIdx: number, attachmentName: string, attachmentIdx?: number, options?: any): AxiosPromise<BffDocumentDownloadMetadataResponse> {
+            return localVarFp.getSentNotificationPaymentV1(iun, recipientIdx, attachmentName, attachmentIdx, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Questa operazione permette di leggere tutti i dettagli di una notifica accettata.
          * @summary Mittente: lettura dettagli notifica
          * @param {string} iun Identificativo Univoco Notifica
@@ -3507,6 +3580,21 @@ export class NotificationSentApi extends BaseAPI {
      */
     public getSentNotificationDocumentV1(iun: string, documentType: BffDocumentType, documentIdx?: number, documentId?: string, documentCategory?: LegalFactCategory, options?: RawAxiosRequestConfig) {
         return NotificationSentApiFp(this.configuration).getSentNotificationDocumentV1(iun, documentType, documentIdx, documentId, documentCategory, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Download allegato per pagamento
+     * @param {string} iun Identificativo Univoco Notifica
+     * @param {number} recipientIdx indice del destinatario nella lista partendo da 0.
+     * @param {string} attachmentName Tipologia del pagamento allegato alla notifica. Valori possibili PAGOPA|F24
+     * @param {number} [attachmentIdx] indice del documento di pagamento partendo da 0
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationSentApi
+     */
+    public getSentNotificationPaymentV1(iun: string, recipientIdx: number, attachmentName: string, attachmentIdx?: number, options?: RawAxiosRequestConfig) {
+        return NotificationSentApiFp(this.configuration).getSentNotificationPaymentV1(iun, recipientIdx, attachmentName, attachmentIdx, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

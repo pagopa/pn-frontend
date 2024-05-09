@@ -36,7 +36,7 @@ vi.mock('react-i18next', () => ({
   }),
   Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
     <>
-      {props.i18nKey} {props.components && props.components.map((c) => c)}
+      {props.i18nKey} {props.components?.map((c) => c)}
     </>
   ),
 }));
@@ -124,7 +124,7 @@ describe('Notifiche Page', async () => {
     expect(result.container).toHaveTextContent(/empty-state.filtered/);
     // remove filters
     const routeContactsBtn = result.getByTestId('link-remove-filters');
-    fireEvent.click(routeContactsBtn!);
+    fireEvent.click(routeContactsBtn);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[1].url).toContain('/notifications/received');
@@ -163,7 +163,7 @@ describe('Notifiche Page', async () => {
     const itemsPerPageSelectorBtn = itemsPerPageSelector?.querySelector('button');
     fireEvent.click(itemsPerPageSelectorBtn!);
     const itemsPerPageList = screen.getAllByRole('menuitem');
-    fireEvent.click(itemsPerPageList[1]!);
+    fireEvent.click(itemsPerPageList[1]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/received');
@@ -199,7 +199,7 @@ describe('Notifiche Page', async () => {
     expect(mock.history.get[0].url).toContain('/notifications/received');
     let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
-    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[0].iun);
+    expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[0].iun);
     // change page
     const pageSelector = result.getByTestId('pageSelector');
     const pageButtons = pageSelector?.querySelectorAll('button');
@@ -211,7 +211,7 @@ describe('Notifiche Page', async () => {
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
-    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
+    expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
 
   it('filter', async () => {
@@ -256,7 +256,7 @@ describe('Notifiche Page', async () => {
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
-    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
+    expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
 
   it('errors on api', async () => {

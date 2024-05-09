@@ -169,7 +169,7 @@ describe('NotificationDetail Page', async () => {
 
     mock
       .onGet(
-        `/bff/v1/notifications/sent/${notificationAfter150Days.iun}/documents?documentType=AAR&documentId=${otherDocument.documentId}`
+        `/bff/v1/notifications/sent/${notificationAfter150Days.iun}/documents/AAR?documentId=${otherDocument.documentId}`
       )
       .reply(200, {
         retryAfter: 1,
@@ -198,7 +198,7 @@ describe('NotificationDetail Page', async () => {
     // simulate that aar is now available
     mock
       .onGet(
-        `/bff/v1/notifications/sent/${notificationAfter150Days.iun}/documents?documentType=AAR&documentId=${otherDocument.documentId}`
+        `/bff/v1/notifications/sent/${notificationAfter150Days.iun}/documents/AAR?documentId=${otherDocument.documentId}`
       )
       .reply(200, {
         filename: 'mocked-filename',
@@ -210,7 +210,7 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
-        `/bff/v1/notifications/sent/${notificationAfter150Days.iun}/documents?documentType=AAR&documentId=${otherDocument.documentId}`
+        `/bff/v1/notifications/sent/${notificationAfter150Days.iun}/documents/AAR?documentId=${otherDocument.documentId}`
       );
     });
     await waitFor(() => {
@@ -245,9 +245,7 @@ describe('NotificationDetail Page', async () => {
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     mock
-      .onGet(
-        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents?documentType=ATTACHMENT&documentIdx=0`
-      )
+      .onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}/documents/ATTACHMENT?documentIdx=0`)
       .reply(200, {
         filename: notificationDTO.documents[0].ref.key,
         contentType: notificationDTO.documents[0].contentType,
@@ -266,7 +264,7 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[2].url).toContain(
-        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents?documentType=ATTACHMENT&documentIdx=0`
+        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents/ATTACHMENT?documentIdx=0`
       );
     });
   });
@@ -277,7 +275,7 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     mock
       .onGet(
-        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents?documentType=LEGAL_FACT&documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
       )
       .reply(200, {
         retryAfter: 1,
@@ -299,7 +297,7 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[2].url).toContain(
-        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents?documentType=LEGAL_FACT&documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
       );
     });
     const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
@@ -307,7 +305,7 @@ describe('NotificationDetail Page', async () => {
 
     mock
       .onGet(
-        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents?documentType=LEGAL_FACT&documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
       )
       .reply(200, {
         filename: 'mocked-filename',
@@ -321,7 +319,7 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
-        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents?documentType=LEGAL_FACT&documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
       );
     });
     await waitFor(() => {

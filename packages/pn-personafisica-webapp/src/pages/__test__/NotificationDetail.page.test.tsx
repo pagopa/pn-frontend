@@ -260,7 +260,7 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     mock
       .onGet(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=ATTACHMENT&documentIdx=0`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/ATTACHMENT?documentIdx=0`
       )
       .reply(200, {
         filename: notificationToFe.documents[0].ref.key,
@@ -283,7 +283,7 @@ describe('NotificationDetail Page', async () => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.post).toHaveLength(1);
       expect(mock.history.get[2].url).toContain(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=ATTACHMENT&documentIdx=0`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/ATTACHMENT?documentIdx=0`
       );
     });
     await waitFor(() => {
@@ -298,7 +298,7 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     mock
       .onGet(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=LEGAL_FACT&documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
       )
       .reply(200, {
         retryAfter: 1,
@@ -322,14 +322,14 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[2].url).toContain(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=LEGAL_FACT&documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
       );
     });
     const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock
       .onGet(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=LEGAL_FACT&documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
       )
       .reply(200, {
         filename: 'mocked-filename',
@@ -342,7 +342,7 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=LEGAL_FACT&documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
       );
     });
     await waitFor(() => {
@@ -361,7 +361,7 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     mock
       .onGet(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=AAR&documentId=${otherDocument.documentId}`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/AAR?documentId=${otherDocument.documentId}`
       )
       .reply(200, {
         retryAfter: 1,
@@ -388,14 +388,14 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[2].url).toContain(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=AAR&documentId=${otherDocument.documentId}`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/AAR?documentId=${otherDocument.documentId}`
       );
     });
     const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock
       .onGet(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=AAR&documentId=${otherDocument.documentId}`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/AAR?documentId=${otherDocument.documentId}`
       )
       .reply(200, {
         filename: 'mocked-filename',
@@ -409,7 +409,7 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents?documentType=AAR&documentId=${otherDocument.documentId}`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/AAR?documentId=${otherDocument.documentId}`
       );
     });
 
