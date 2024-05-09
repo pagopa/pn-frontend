@@ -33,6 +33,7 @@ export const getReceivedNotifications = createAsyncThunk(
         endDate: formatToTimezoneString(getEndOfDay(params.endDate)),
         recipientId: params.recipientId ? formatFiscalCode(params.recipientId) : undefined,
         status: params.status as NotificationStatus | undefined,
+        iunMatch: params.iunMatch || undefined,
       };
       const response = await receivedNotificationsFactory.searchReceivedNotificationsV1(
         apiParams.startDate,
