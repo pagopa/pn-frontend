@@ -6,6 +6,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Email from '@mui/icons-material/Email';
 import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
+import StatisticsIcon from '@mui/icons-material/ShowChart';
 import VpnKey from '@mui/icons-material/VpnKey';
 import { Box } from '@mui/material';
 import {
@@ -65,7 +66,7 @@ const ActualApp = () => {
   const idOrganization = loggedUserOrganizationParty?.id;
   const { tosConsent, privacyConsent } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
-  const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID } = getConfiguration();
+  const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID, IS_STATISTICS_ENABLED } = getConfiguration();
   const products = useAppSelector((state: RootState) => state.userState.productsOfInstitution);
   const institutions = useAppSelector((state: RootState) => state.userState.institutions);
   const dispatch = useAppDispatch();
@@ -148,6 +149,16 @@ const ActualApp = () => {
     // -------------------------------
     // Carlos Lombardi, 2022.11.08
     // -------------------------------
+
+    // TODO fix positioning for this item PN-10851
+    if (IS_STATISTICS_ENABLED) {
+      // eslint-disable-next-line functional/immutable-data
+      basicMenuItems.splice(1, 0, {
+        label: 'Statistiche',
+        icon: StatisticsIcon,
+        route: routes.STATISTICHE,
+      });
+    }
     const items = { ...getMenuItems(basicMenuItems, idOrganization, role?.role) };
     // localize menu items
     /* eslint-disable-next-line functional/immutable-data */
