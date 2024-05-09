@@ -3,6 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import {
   GetNotificationsResponse,
   NotificationStatus,
+  formatToTimezoneString,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -17,8 +18,9 @@ import { setNotificationFilters, setPagination, setSorting } from '../reducers';
 describe('Dashboard redux state tests', () => {
   // eslint-disable-next-line functional/no-let
   let mock: MockAdapter;
-  const notificationsPath =
-    '/bff/v1/notifications/sent?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z';
+  const notificationsPath = `/bff/v1/notifications/sent?startDate=${encodeURIComponent(
+    formatToTimezoneString(tenYearsAgo)
+  )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`;
 
   mockAuthentication();
 
@@ -63,6 +65,7 @@ describe('Dashboard redux state tests', () => {
     const mockRequest = {
       startDate: tenYearsAgo,
       endDate: today,
+      size: 10
     };
     mock.onGet(notificationsPath).reply(200, notificationsDTO);
     const action = await store.dispatch(getSentNotifications(mockRequest));

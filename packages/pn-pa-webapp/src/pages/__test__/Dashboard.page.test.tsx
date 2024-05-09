@@ -2,7 +2,13 @@ import MockAdapter from 'axios-mock-adapter';
 import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
-import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+import {
+  AppResponseMessage,
+  ResponseEventDispatcher,
+  formatToTimezoneString,
+  tenYearsAgo,
+  today,
+} from '@pagopa-pn/pn-commons';
 import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
@@ -36,8 +42,9 @@ describe('Dashboard Page', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const original = window.matchMedia;
-  const notificationsPath =
-    '/bff/v1/notifications/sent?startDate=2014-05-08T00%3A00%3A00.000Z&endDate=2024-05-08T23%3A59%3A59.999Z';
+  const notificationsPath = `/bff/v1/notifications/sent?startDate=${encodeURIComponent(
+    formatToTimezoneString(tenYearsAgo)
+  )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -122,7 +129,9 @@ describe('Dashboard Page', async () => {
     mock
       .onGet(notificationsPath)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
-    const notificationsPathWithSize = notificationsPath + '&size=20';
+    const notificationsPathWithSize = `/bff/v1/notifications/sent?startDate=${encodeURIComponent(
+      formatToTimezoneString(tenYearsAgo)
+    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=20`;
     mock.onGet(notificationsPathWithSize).reply(200, notificationsDTO);
     await act(async () => {
       result = render(<Dashboard />);
@@ -149,8 +158,11 @@ describe('Dashboard Page', async () => {
     mock
       .onGet(notificationsPath)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
-    const notificationsPathSecondPage =
-      notificationsPath + '&nextPagesKey=' + notificationsDTO.nextPagesKey[0];
+    const notificationsPathSecondPage = `/bff/v1/notifications/sent?startDate=${encodeURIComponent(
+      formatToTimezoneString(tenYearsAgo)
+    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10&nextPagesKey=${
+      notificationsDTO.nextPagesKey[0]
+    }`;
     mock
       .onGet(notificationsPathSecondPage)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
@@ -178,7 +190,11 @@ describe('Dashboard Page', async () => {
 
   it('filter', async () => {
     mock.onGet(notificationsPath).reply(200, notificationsDTO);
-    const notificationsPathFiltered = notificationsPath + '&recipientId=CLMCST42R12D969Z';
+    const notificationsPathFiltered = `/bff/v1/notifications/sent?startDate=${encodeURIComponent(
+      formatToTimezoneString(tenYearsAgo)
+    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&recipientId=${
+      notificationsDTO.resultsPage[0].recipients[0]
+    }&size=10`;
     mock
       .onGet(notificationsPathFiltered)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
