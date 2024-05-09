@@ -11,7 +11,6 @@ import { NewNotificationDTO, NewNotificationResponse } from '../../models/NewNot
 import { GroupStatus, UserGroup } from '../../models/user';
 import { apiClient, externalClient } from '../apiClients';
 import {
-  CANCEL_NOTIFICATION, // CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
   NOTIFICATION_DETAIL_DOCUMENTS,
@@ -149,13 +148,5 @@ export const NotificationsApi = {
       .get<PaymentAttachment>(
         NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string, recIndex, attachmentIdx)
       )
-      .then((response) => response.data),
-
-  /**
-   * Cancel notification
-   * @param  {string} iun
-   * @returns Promise
-   */
-  cancelNotification: (iun: string): Promise<string> =>
-    apiClient.put<string>(CANCEL_NOTIFICATION(iun)).then((response) => response.data),
+      .then((response) => response.data)
 };

@@ -6,7 +6,7 @@
     "generators": {
       "bff-notifications": {
         "generatorName": "typescript-axios",
-        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/develop/docs/openapi/api-external-pn-bff-pa-notifications.yaml",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/PN-10942-be-annullamento-notifica-pa/docs/openapi/api-external-pn-bff-pa-notifications.yaml",
         "output": "./src/generated-client/notifications",
         "additionalProperties": {
           "supportsES6": true,

@@ -33,7 +33,7 @@ export const getSentNotifications = createAsyncThunk(
         apiParams.startDate,
         apiParams.endDate,
         apiParams.recipientId,
-        apiParams.status,
+        apiParams.status === NotificationStatus.CANCELLATION_IN_PROGRESS ? undefined : apiParams.status,
         apiParams.subjectRegExp,
         apiParams.iunMatch,
         apiParams.size,
