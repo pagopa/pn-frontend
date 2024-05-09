@@ -47,6 +47,7 @@ export interface StatisticsResponse {
 }
 
 export interface StatisticsParams<TDate extends string | Date> {
+  cxType: string;
   cxId: string;
   startDate: TDate;
   endDate: TDate;

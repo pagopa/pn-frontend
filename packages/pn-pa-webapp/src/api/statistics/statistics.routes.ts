@@ -11,10 +11,11 @@ const API_SENDER_DASHBOARD_DATA_REQUEST = 'dashboard-data-request';
 // Parameters
 const API_STATISTICS_START_DATE_PARAMETER = 'startDate';
 const API_STATISTICS_END_DATE_PARAMETER = 'endDate';
+const API_STATISTICS_CXTYPE_PARAMETER = 'cxType';
 const API_STATISTICS_CXID_PARAMETER = 'cxId';
 
 // Paths
-const API_STATISTICS_PATH = `${API_SENDER_DASHBOARD_DATA_REQUEST}/:${API_STATISTICS_CXID_PARAMETER}`;
+const API_STATISTICS_PATH = `${API_SENDER_DASHBOARD_DATA_REQUEST}/:${API_STATISTICS_CXTYPE_PARAMETER}/:${API_STATISTICS_CXID_PARAMETER}`;
 
 export function STATISTICS(params: StatisticsParams<string>) {
   return compileRoute({
@@ -25,6 +26,7 @@ export function STATISTICS(params: StatisticsParams<string>) {
       [API_STATISTICS_END_DATE_PARAMETER]: params.endDate,
     },
     params: {
+      [API_STATISTICS_CXTYPE_PARAMETER]: params.cxType,
       [API_STATISTICS_CXID_PARAMETER]: params.cxId,
     },
   });
