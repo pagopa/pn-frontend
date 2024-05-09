@@ -7,7 +7,7 @@ import {
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { StatisticsApi } from '../../api/statistics/Statistics.api';
-import { StatisticsParams, StatisticsResponse } from './types';
+import { StatisticsParams, StatisticsResponse } from '../../models/Statistics';
 
 export enum STATISTICS_ACTIONS {
   GET_STATISTICS = 'getStatistics',

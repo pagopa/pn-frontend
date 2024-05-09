@@ -1,6 +1,6 @@
 import { compileRoute } from '@pagopa-pn/pn-commons';
 
-import { StatisticsParams } from '../../redux/statistics/types';
+import { StatisticsParams } from '../../models/Statistics';
 
 // Prefixes
 const API_SENDER_DASHBOARD_PREFIX = 'sender-dashboard';

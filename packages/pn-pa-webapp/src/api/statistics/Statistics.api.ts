@@ -1,7 +1,9 @@
-import { StatisticsParams, StatisticsResponse } from '../../redux/statistics/types';
-import { apiClient } from '../apiClients';
+import { StatisticsParams, StatisticsResponse } from '../../models/Statistics';
+import statisticsDataFactoryManager from '../../utility/StatisticsData/StatisticsDataFactoryManager';
+// import { apiClient } from '../apiClients';
 import { statisticsMockResponse } from './statistics.mock';
-import { STATISTICS } from './statistics.routes';
+
+// import { STATISTICS } from './statistics.routes';
 
 export const StatisticsApi = {
   /**
@@ -15,6 +17,10 @@ export const StatisticsApi = {
   //   apiClient.get<StatisticsResponse>(STATISTICS(params)).then((response) => response.data),
   getStatistics: (params: StatisticsParams<string>): Promise<StatisticsResponse> =>
     new Promise((resolve) => {
+      const factory = statisticsDataFactoryManager.factory;
+      const data = factory.createAll(statisticsMockResponse);
+      console.log('================== STATISTICS RESPONSE ==================');
+      console.log(data);
       resolve(statisticsMockResponse);
     }),
 };

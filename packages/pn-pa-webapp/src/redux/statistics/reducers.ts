@@ -1,8 +1,8 @@
 /* eslint-disable functional/immutable-data */
 import { createSlice } from '@reduxjs/toolkit';
 
+import { StatisticsResponse } from '../../models/Statistics';
 import { getStatistics } from './actions';
-import { StatisticsResponse } from './types';
 
 const initialState = {
   loading: false,
