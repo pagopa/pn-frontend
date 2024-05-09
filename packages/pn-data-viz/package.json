@@ -9,13 +9,14 @@
     "send"
   ],
   "homepage": "https://github.com/pagopa/pn-frontend/pn-data-viz#readme",
-  "main": "src/pn-data-viz.js",
+  "main": "./src/index.ts",
   "dependencies": {
     "@types/echarts": "^4.9.22",
     "echarts": "^5.5.0",
     "typescript": "^5.2.2"
   },
   "scripts": {
+    "build": "tsc",
     "test": "node ./__tests__/pn-data-viz.test.js"
   },
   "peerDependencies": {
