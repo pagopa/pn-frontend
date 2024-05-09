@@ -174,9 +174,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
           if (onDeleteCbk) {
             onDeleteCbk();
           }
-          PFEventStrategyFactory.triggerEvent(getEventByContactType(contactType), {
-            senderId,
-          });
+          PFEventStrategyFactory.triggerEvent(getEventByContactType(contactType), senderId);
         })
         .catch((error) => {
           console.error('Error occurred:', error);
