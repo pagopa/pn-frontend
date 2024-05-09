@@ -1,7 +1,7 @@
 import senderDashboard from "./theme/senderDashboard";
 import { init, getInstanceByDom, registerTheme } from "echarts";
 import type { EChartOption, ECharts, SetOptionOpts } from "echarts";
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import type { CSSProperties } from "react";
 
 export interface PnEChartsProps {

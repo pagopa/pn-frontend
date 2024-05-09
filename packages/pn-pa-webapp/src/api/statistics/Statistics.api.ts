@@ -20,6 +20,7 @@ export const StatisticsApi = {
       const factory = statisticsDataFactoryManager.factory;
       const data = factory.createAll(statisticsMockResponse);
       console.log('================== STATISTICS RESPONSE ==================');
+      console.info(params);
       console.log(data);
       resolve(statisticsMockResponse);
     }),

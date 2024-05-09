@@ -25,6 +25,7 @@ const handleAssistanceClick = () => {
 };
 
 function Router() {
+  const { IS_STATISTICS_ENABLED } = getConfiguration();
   return (
     <Routes>
       <Route path="/" element={<SessionGuard />}>
@@ -32,7 +33,7 @@ function Router() {
         <Route path="/" element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
           <Route path="/" element={<ToSGuard />}>
             <Route path={routes.DASHBOARD} element={<Dashboard />} />
-            <Route path={routes.STATISTICHE} element={<Statistics />} />
+            {IS_STATISTICS_ENABLED && <Route path={routes.STATISTICHE} element={<Statistics />} />}
             <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
             {getConfiguration().IS_MANUAL_SEND_ENABLED && (
               <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
@@ -50,7 +51,6 @@ function Router() {
              * */}
             <Route path={routes.API_KEYS} element={<ApiKeys />} />
             <Route path={routes.NUOVA_API_KEY} element={<NewApiKey />} />
-            {/* <Route path={routes.STATISTICHE} element={<Statistics />} /> */}
             <Route path="/" element={<Navigate to={routes.DASHBOARD} />} />
           </Route>
           {/* not found - non-logged users will see the common AccessDenied component */}

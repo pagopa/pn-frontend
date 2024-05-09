@@ -19,6 +19,7 @@ const Statistics = () => {
 
   const startDate = new Date('2024-01-01T00:00:00');
   const endDate = new Date('2024-04-01T00:00:00');
+  const cxType = 'PA';
   const cxId = '1c93d069-82c3-4903-a1ae-670353d9ad4d'; // loggedUserOrganizationParty.id;
 
   const Subtitle = (
@@ -34,6 +35,7 @@ const Statistics = () => {
     const params = {
       startDate,
       endDate,
+      cxType,
       cxId,
     };
 

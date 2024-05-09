@@ -66,7 +66,7 @@ const ActualApp = () => {
   const idOrganization = loggedUserOrganizationParty?.id;
   const { tosConsent, privacyConsent } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
-  const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID } = getConfiguration();
+  const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID, IS_STATISTICS_ENABLED } = getConfiguration();
   const products = useAppSelector((state: RootState) => state.userState.productsOfInstitution);
   const institutions = useAppSelector((state: RootState) => state.userState.institutions);
   const dispatch = useAppDispatch();
@@ -114,7 +114,6 @@ const ActualApp = () => {
   const menuItems = useMemo(() => {
     const basicMenuItems: Array<SideMenuItem> = [
       { label: 'menu.notifications', icon: Email, route: routes.DASHBOARD },
-      { label: 'Statistiche', icon: StatisticsIcon, route: routes.STATISTICHE },
       /**
        * Refers to PN-1741
        * Commented out because beyond MVP scope
@@ -150,6 +149,16 @@ const ActualApp = () => {
     // -------------------------------
     // Carlos Lombardi, 2022.11.08
     // -------------------------------
+
+    // TODO fix positioning for this item PN-10851
+    if (IS_STATISTICS_ENABLED) {
+      // eslint-disable-next-line functional/immutable-data
+      basicMenuItems.splice(1, 0, {
+        label: 'menu.statistics',
+        icon: StatisticsIcon,
+        route: routes.STATISTICHE,
+      });
+    }
     const items = { ...getMenuItems(basicMenuItems, idOrganization, role?.role) };
     // localize menu items
     /* eslint-disable-next-line functional/immutable-data */
