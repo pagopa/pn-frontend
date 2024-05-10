@@ -37,7 +37,7 @@
           "cleanupOutput": true
         }
       },
-      "bff-downtime-payments": {
+      "bff-payments": {
         "generatorName": "typescript-axios",
         "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/develop/docs/openapi/api-external-pn-bff-payments.yaml",
         "output": "./src/generated-client/payments",
