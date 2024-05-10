@@ -2,6 +2,7 @@ import {
   GetNotificationsParams,
   GetNotificationsResponse,
   NotificationStatus,
+  formatFiscalCode,
   formatToTimezoneString,
   getEndOfDay,
   getStartOfDay,
@@ -27,7 +28,10 @@ export const getSentNotifications = createAsyncThunk(
         ...params,
         startDate: formatToTimezoneString(getStartOfDay(params.startDate)),
         endDate: formatToTimezoneString(getEndOfDay(params.endDate)),
-        status: params.status as NotificationStatus | undefined,
+        recipientId: params.recipientId ? formatFiscalCode(params.recipientId) : undefined,
+        status: params.status as NotificationStatus || undefined,
+        subjectRegExp: params.subjectRegExp || undefined,
+        iunMatch: params.iunMatch || undefined
       };
       const response = await sentNotificationsFactory.searchSentNotificationsV1(
         apiParams.startDate,
