@@ -32,11 +32,17 @@ export class SendAddCourtesyAddressStrategy implements EventStrategy {
         [EventPropertyType.PROFILE]: {
           SEND_HAS_EMAIL: 'yes',
         },
+        [EventPropertyType.SUPER_PROPERTY]: {
+          SEND_HAS_EMAIL: 'yes',
+        },
       };
     }
 
     return {
       [EventPropertyType.PROFILE]: {
+        SEND_HAS_SMS: 'yes',
+      },
+      [EventPropertyType.SUPER_PROPERTY]: {
         SEND_HAS_SMS: 'yes',
       },
     };

@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 import { DigitalAddress } from '../../models/contacts';
 import { acceptDelegation, rejectDelegation } from '../delegation/actions';
 import { Delegator } from '../delegation/types';

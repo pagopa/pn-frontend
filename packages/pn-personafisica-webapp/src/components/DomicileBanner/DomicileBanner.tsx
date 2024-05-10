@@ -34,26 +34,21 @@ const DomicileBanner = forwardRef(({ source = 'home_notifiche' }: Props, ref) =>
     navigate(routes.RECAPITI);
   }, []);
 
-  const lackingAddressTypes = useMemo(
-    () =>
-      [LegalChannelType.PEC, CourtesyChannelType.EMAIL, CourtesyChannelType.IOMSG].filter(
-        (type) => !defaultAddresses.some((address) => address.channelType === type)
-      ),
-    [defaultAddresses]
-  );
-
-  const messageIndex = Math.floor(Math.random() * lackingAddressTypes.length);
-  const messageType = lackingAddressTypes[messageIndex] as string;
-
-  /* if (returnDomicileBannerType) {
-    returnDomicileBannerType(messageType);
-  } */
+  const messageType = useMemo(() => {
+    const lackingAddressTypes = [
+      LegalChannelType.PEC,
+      CourtesyChannelType.EMAIL,
+      CourtesyChannelType.IOMSG,
+    ].filter((type) => !defaultAddresses.some((address) => address.channelType === type));
+    const messageIndex = Math.floor(Math.random() * lackingAddressTypes.length);
+    return lackingAddressTypes.length > 0 ? (lackingAddressTypes[messageIndex] as string) : null;
+  }, [defaultAddresses]);
 
   useEffect(() => {
-    if (lackingAddressTypes.length === 0) {
+    if (!messageType) {
       dispatch(closeDomicileBanner());
     }
-  }, [lackingAddressTypes]);
+  }, [messageType]);
 
   useImperativeHandle(ref, () => messageType);
 
