@@ -16,12 +16,15 @@ describe('Mixpanel - Remove Courtesy Address Strategy', () => {
       params: {
         channelType: address!.channelType,
         recipientId: address!.recipientId,
-        senderId: address!.senderId,
+        senderId: 'default',
       },
     });
 
     expect(event).toEqual({
       [EventPropertyType.PROFILE]: {
+        SEND_HAS_EMAIL: 'no',
+      },
+      [EventPropertyType.SUPER_PROPERTY]: {
         SEND_HAS_EMAIL: 'no',
       },
     });
@@ -38,7 +41,7 @@ describe('Mixpanel - Remove Courtesy Address Strategy', () => {
       params: {
         channelType: address!.channelType,
         recipientId: address!.recipientId,
-        senderId: address!.senderId,
+        senderId: 'default',
       },
     });
 
@@ -46,6 +49,27 @@ describe('Mixpanel - Remove Courtesy Address Strategy', () => {
       [EventPropertyType.PROFILE]: {
         SEND_HAS_SMS: 'no',
       },
+      [EventPropertyType.SUPER_PROPERTY]: {
+        SEND_HAS_SMS: 'no',
+      },
     });
+  });
+
+  it('should return empty object if senderId is not default', () => {
+    const strategy = new SendRemoveCourtesyAddressStrategy();
+    const address = digitalAddresses.courtesy.find(
+      (a) => a.channelType === CourtesyChannelType.SMS
+    );
+
+    const event = strategy.performComputations({
+      payload: 'not-default',
+      params: {
+        channelType: address!.channelType,
+        recipientId: address!.recipientId,
+        senderId: 'not-default',
+      },
+    });
+
+    expect(event).toEqual({});
   });
 });

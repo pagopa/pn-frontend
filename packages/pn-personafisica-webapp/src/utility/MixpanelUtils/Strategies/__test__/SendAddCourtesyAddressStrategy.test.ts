@@ -40,6 +40,9 @@ describe('Mixpanel - Add Courtesy Address Strategy', () => {
       [EventPropertyType.PROFILE]: {
         SEND_HAS_EMAIL: 'yes',
       },
+      [EventPropertyType.SUPER_PROPERTY]: {
+        SEND_HAS_EMAIL: 'yes',
+      },
     });
   });
 
@@ -61,6 +64,9 @@ describe('Mixpanel - Add Courtesy Address Strategy', () => {
 
     expect(event).toEqual({
       [EventPropertyType.PROFILE]: {
+        SEND_HAS_SMS: 'yes',
+      },
+      [EventPropertyType.SUPER_PROPERTY]: {
         SEND_HAS_SMS: 'yes',
       },
     });
