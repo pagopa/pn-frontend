@@ -9,7 +9,11 @@ const ZendeskForm: React.FC<{ data: ZendeskAuthorizationDTO }> = ({ data }) => {
     if (url && jwt && returnTo) {
       const form = document.getElementById('jwtForm') as HTMLFormElement;
       if (form) {
-        form.submit();
+        try {
+          form.submit();
+        } catch (e) {
+          console.log(e);
+        }
       }
     }
   }, [url, jwt, returnTo]);
