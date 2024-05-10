@@ -41,13 +41,13 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
   getDowntimeHistory,
-  getNotificationPaymentInfo,
-  getNotificationPaymentUrl,
-  getPaymentAttachment,
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
   getReceivedNotificationOtherDocument,
+  getReceivedNotificationPayment,
+  getReceivedNotificationPaymentInfo,
+  getReceivedNotificationPaymentUrl,
 } from '../redux/notification/actions';
 import { resetLegalFactState, resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
@@ -218,7 +218,7 @@ const NotificationDetail = () => {
 
   const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
     dispatch(
-      getPaymentAttachment({
+      getReceivedNotificationPayment({
         iun: notification.iun,
         attachmentName: name,
         mandateId,
@@ -229,7 +229,7 @@ const NotificationDetail = () => {
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
       dispatch(
-        getNotificationPaymentUrl({
+        getReceivedNotificationPaymentUrl({
           paymentNotice: {
             noticeNumber: noticeCode,
             fiscalCode: creditorTaxId,
@@ -298,7 +298,7 @@ const NotificationDetail = () => {
         return;
       }
       void dispatch(
-        getNotificationPaymentInfo({
+        getReceivedNotificationPaymentInfo({
           taxId: currentRecipient.taxId,
           paymentInfoRequest,
         })
@@ -435,7 +435,7 @@ const NotificationDetail = () => {
                 {checkIfUserHasPayments && (
                   <Paper sx={{ p: 3 }} elevation={0}>
                     <ApiErrorWrapper
-                      apiId={NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO}
+                      apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_INFO}
                       reloadAction={() => fetchPaymentsInfo(currentRecipient.payments ?? [])}
                       mainText={t('detail.payment.message-error-fetch-payment', {
                         ns: 'notifiche',

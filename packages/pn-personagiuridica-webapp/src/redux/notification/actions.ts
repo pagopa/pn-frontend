@@ -1,11 +1,12 @@
 import {
   DowntimeLogHistory,
+  ExtRegistriesPaymentDetails,
   GetDowntimeHistoryParams,
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
   PaymentAttachment,
-  PaymentAttachmentNameType,
+  PaymentAttachmentSName,
   PaymentDetails,
   PaymentNotice,
   checkIfPaymentsIsAlreadyInCache,
@@ -23,6 +24,7 @@ import { apiClient } from '../../api/apiClients';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { DowntimeApiFactory } from '../../generated-client/downtime-logs';
 import { NotificationReceivedApiFactory } from '../../generated-client/notifications';
+import { PaymentsApiFactory } from '../../generated-client/payments';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { parseNotificationDetailForRecipient } from '../../utility/notification.utility';
 import { RootState, store } from '../store';
@@ -30,8 +32,9 @@ import { GetReceivedNotificationParams } from './types';
 
 export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION = 'getReceivedNotification',
-  GET_NOTIFICATION_PAYMENT_INFO = 'getNotificationPaymentInfo',
-  GET_NOTIFICATION_PAYMENT_URL = 'getNotificationPaymentUrl',
+  GET_RECEIVED_NOTIFICATION_PAYMENT = 'getReceivedNotificationPayment',
+  GET_RECEIVED_NOTIFICATION_PAYMENT_INFO = 'getReceivedNotificationPaymentInfo',
+  GET_RECEIVED_NOTIFICATION_PAYMENT_URL = 'getReceivedNotificationPaymentUrl',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
 }
 
@@ -86,41 +89,53 @@ export const getReceivedNotificationDocument = createAsyncThunk<
   )
 );
 
-export const getPaymentAttachment = createAsyncThunk<
+export const getReceivedNotificationPayment = createAsyncThunk<
   PaymentAttachment,
   {
     iun: string;
-    attachmentName: PaymentAttachmentNameType;
+    attachmentName: PaymentAttachmentSName;
     mandateId?: string;
     attachmentIdx?: number;
   }
 >(
-  'getPaymentAttachment',
-  performThunkAction(
-    (params: {
+  NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT,
+  async (
+    params: {
       iun: string;
-      attachmentName: PaymentAttachmentNameType;
+      attachmentName: PaymentAttachmentSName;
       mandateId?: string;
       attachmentIdx?: number;
-    }) =>
-      NotificationsApi.getPaymentAttachment(
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const notificationReceivedApiFactory = NotificationReceivedApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await notificationReceivedApiFactory.getReceivedNotificationPaymentV1(
         params.iun,
         params.attachmentName,
         params.mandateId,
         params.attachmentIdx
-      )
-  ),
+      );
+      return response.data as PaymentAttachment;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  },
   {
     getPendingMeta: () => ({ blockLoading: true }),
   }
 );
 
-export const getNotificationPaymentInfo = createAsyncThunk<
+export const getReceivedNotificationPaymentInfo = createAsyncThunk<
   Array<PaymentDetails>,
   { taxId: string; paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }> },
   { state: RootState }
 >(
-  NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO,
+  NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_INFO,
   async (
     params: {
       taxId: string;
@@ -132,13 +147,16 @@ export const getNotificationPaymentInfo = createAsyncThunk<
       const { notificationState } = getState();
       const iun = notificationState.notification.iun;
       const paymentCache = getPaymentCache(iun);
+      const paymentsApiFactory = PaymentsApiFactory(undefined, undefined, apiClient);
 
       if (paymentCache?.payments) {
         // If i have the current payment in cache means that i'm coming from the payment page and i need to update the payment
         if (paymentCache?.currentPayment) {
-          const updatedPayment = await NotificationsApi.getNotificationPaymentInfo([
+          const updatedPaymentResponse = await paymentsApiFactory.getPaymentsInfoV1([
             paymentCache.currentPayment,
           ]);
+
+          const updatedPayment = updatedPaymentResponse.data as Array<ExtRegistriesPaymentDetails>;
 
           const payments = populatePaymentsPagoPaF24(
             notificationState.notification.timeline,
@@ -156,9 +174,11 @@ export const getNotificationPaymentInfo = createAsyncThunk<
       }
 
       // If i don't have the payments in cache i need to request all the payments to ext-registries
-      const paymentInfo = await NotificationsApi.getNotificationPaymentInfo(
+      const paymentInfoResponse = await paymentsApiFactory.getPaymentsInfoV1(
         params.paymentInfoRequest
       );
+
+      const paymentInfo = paymentInfoResponse.data as Array<ExtRegistriesPaymentDetails>;
 
       const payments = populatePaymentsPagoPaF24(
         notificationState.notification.timeline,
@@ -178,25 +198,31 @@ export const getNotificationPaymentInfo = createAsyncThunk<
   }
 );
 
-export const getNotificationPaymentUrl = createAsyncThunk<
+export const getReceivedNotificationPaymentUrl = createAsyncThunk<
   { checkoutUrl: string },
   { paymentNotice: PaymentNotice; returnUrl: string },
   { state: RootState }
 >(
-  NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_URL,
-  performThunkAction((params: { paymentNotice: PaymentNotice; returnUrl: string }) => {
-    const iun = store.getState().notificationState.notification.iun;
-    setPaymentCache(
-      {
-        currentPayment: {
-          noticeCode: params.paymentNotice.noticeNumber,
-          creditorTaxId: params.paymentNotice.fiscalCode,
+  NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_URL,
+  async (params: { paymentNotice: PaymentNotice; returnUrl: string }, { rejectWithValue }) => {
+    try {
+      const paymentsApiFactory = PaymentsApiFactory(undefined, undefined, apiClient);
+      const iun = store.getState().notificationState.notification.iun;
+      setPaymentCache(
+        {
+          currentPayment: {
+            noticeCode: params.paymentNotice.noticeNumber,
+            creditorTaxId: params.paymentNotice.fiscalCode,
+          },
         },
-      },
-      iun
-    );
-    return NotificationsApi.getNotificationPaymentUrl(params.paymentNotice, params.returnUrl);
-  })
+        iun
+      );
+      const response = await paymentsApiFactory.paymentsCartV1(params);
+      return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
 export const getReceivedNotificationOtherDocument = createAsyncThunk<
