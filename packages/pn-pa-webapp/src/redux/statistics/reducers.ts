@@ -1,12 +1,12 @@
 /* eslint-disable functional/immutable-data */
 import { createSlice } from '@reduxjs/toolkit';
 
-import { StatisticsResponse } from '../../models/Statistics';
+import { StatisticsParsedResponse } from '../../models/Statistics';
 import { getStatistics } from './actions';
 
 const initialState = {
   loading: false,
-  statistics: {} as StatisticsResponse,
+  statistics: {} as StatisticsParsedResponse,
 };
 
 const statisticsSlice = createSlice({

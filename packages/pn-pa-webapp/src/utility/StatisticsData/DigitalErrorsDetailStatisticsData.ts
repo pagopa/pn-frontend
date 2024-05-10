@@ -4,11 +4,19 @@ import {
   DigitalNotificationFocus,
   IDigitalErrorsDetailStatistics,
   NotificationOverview,
+  StatisticsDataTypes,
   StatisticsResponse,
 } from '../../models/Statistics';
 import StatisticsData from './StatisticsData';
-import { StatisticsDataTypes } from './StatisticsDataFactory';
 
+/**
+ * Extends StatisticsData type, go there for any documentation purpose
+ *
+ * @export
+ * @class DigitalErrorsDetailStatisticsData
+ * @typedef {DigitalErrorsDetailStatisticsData}
+ * @extends {StatisticsData}
+ */
 export class DigitalErrorsDetailStatisticsData extends StatisticsData {
   data: IDigitalErrorsDetailStatistics = {
     [DigitaErrorTypes.INVALID_PEC]: {
@@ -43,7 +51,7 @@ export class DigitalErrorsDetailStatisticsData extends StatisticsData {
   }
 
   parseChunk(chunk: NotificationOverview | DigitalNotificationFocus): void {
-    // parse only if chunck has DigitalNotificationFocus type
+    // parse only if chunk is a DigitalNotificationFocus
     if ('error_type' in chunk) {
       const type = chunk.error_type;
 

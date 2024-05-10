@@ -1,13 +1,22 @@
 /* eslint-disable functional/immutable-data */
 import {
+  DeliveryMode,
   DigitalNotificationFocus,
   IDigitalMeanTimeStatistics,
   NotificationOverview,
+  StatisticsDataTypes,
   StatisticsResponse,
 } from '../../models/Statistics';
 import StatisticsData from './StatisticsData';
-import { StatisticsDataTypes } from './StatisticsDataFactory';
 
+/**
+ * Extends StatisticsData type, go there for any documentation purpose
+ *
+ * @export
+ * @class DigitalMeanTimeStatisticsData
+ * @typedef {DigitalMeanTimeStatisticsData}
+ * @extends {StatisticsData}
+ */
 export class DigitalMeanTimeStatisticsData extends StatisticsData {
   data: IDigitalMeanTimeStatistics = {
     delivered: { count: 0, time: 0 },
@@ -22,15 +31,19 @@ export class DigitalMeanTimeStatisticsData extends StatisticsData {
   parse(rawData: StatisticsResponse): this {
     const notifications_overview = rawData.notifications_overview;
 
-    notifications_overview.forEach((element) => {
+    const digital_notifications = notifications_overview.filter(
+      (item) => item.notification_type === DeliveryMode.DIGITAL
+    );
+
+    digital_notifications.forEach((element) => {
       this.parseChunk(element);
     });
     return this;
   }
 
   parseChunk(chunk: NotificationOverview | DigitalNotificationFocus) {
-    // parse only if chunck has NotificationOverview type
-    if ('notification_status' in chunk) {
+    // parse only if chunk is a NotificationOverview
+    if ('notification_status' in chunk && chunk.notification_type === DeliveryMode.DIGITAL) {
       const count = +chunk.notifications_count;
       if (chunk.notification_delivered === 'SI') {
         this.data.delivered.count += count;

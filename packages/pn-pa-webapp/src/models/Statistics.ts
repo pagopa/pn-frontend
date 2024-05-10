@@ -29,6 +29,16 @@ export enum DigitaErrorTypes {
   UNKNOWN = '-',
 }
 
+export enum StatisticsDataTypes {
+  FiledStatistics = 'FiledStatistics',
+  LastStateStatistics = 'LastStateStatistics',
+  DeliveryModeStatistics = 'DeliveryModeStatistics',
+  DigitalStateStatistics = 'DigitalStateStatistics',
+  DigitalMeanTimeStatistics = 'DigitalMeanTimeStatistics',
+  DigitalErrorsDetailStatistics = 'DigitalErrorsDetailStatistics',
+  DigitalAttemptsStatistics = 'DigitalAttemptsStatistics',
+}
+
 export interface NotificationOverview {
   notification_send_date: string;
   notification_request_status: NotificationStatus.ACCEPTED | NotificationStatus.REFUSED;
@@ -132,18 +142,21 @@ export interface IDigitalErrorsDetailStatistics {
   [DigitaErrorTypes.UNKNOWN]: IAttemptsCount;
 }
 
-export interface NormalizedStatisticsResponse {
+export interface StatisticsParsedData {
+  [StatisticsDataTypes.FiledStatistics]?: object;
+  [StatisticsDataTypes.LastStateStatistics]?: object;
+  [StatisticsDataTypes.DeliveryModeStatistics]?: object;
+  [StatisticsDataTypes.DigitalStateStatistics]?: object;
+  [StatisticsDataTypes.DigitalMeanTimeStatistics]?: object;
+  [StatisticsDataTypes.DigitalErrorsDetailStatistics]?: object;
+  [StatisticsDataTypes.DigitalAttemptsStatistics]?: object;
+}
+
+export interface StatisticsParsedResponse {
   sender_id: string;
   genTimestamp: string;
   lastDate: string;
   startDate: string;
   endDate: string;
-  by_request_status: IFiledStatistics;
-  by_status: ILastStateStatistics;
-  by_delivery_mode: IDeliveryModeStatistics;
-  by_digital_delivery_status: IDigitalStateStatistics;
-  time_by_digital_status: IDigitalMeanTimeStatistics;
-  digital_errors_detail: IDigitalErrorsDetailStatistics;
-  digital_errors_distribution: Array<IAttemptsCount>;
-  notifications_count: number;
+  data: StatisticsParsedData;
 }

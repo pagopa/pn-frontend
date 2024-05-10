@@ -4,11 +4,19 @@ import {
   DigitalNotificationFocus,
   IDeliveryModeStatistics,
   NotificationOverview,
+  StatisticsDataTypes,
   StatisticsResponse,
 } from '../../models/Statistics';
 import StatisticsData from './StatisticsData';
-import { StatisticsDataTypes } from './StatisticsDataFactory';
 
+/**
+ * Extends StatisticsData type, go there for any documentation purpose
+ *
+ * @export
+ * @class DeliveryModeStatisticsData
+ * @typedef {DeliveryModeStatisticsData}
+ * @extends {StatisticsData}
+ */
 export class DeliveryModeStatisticsData extends StatisticsData {
   data: IDeliveryModeStatistics = {
     [DeliveryMode.ANALOG]: {
@@ -40,7 +48,7 @@ export class DeliveryModeStatisticsData extends StatisticsData {
   }
 
   parseChunk(chunk: NotificationOverview | DigitalNotificationFocus): void {
-    // parse only if chunck has NotificationOverview type
+    // parse only if chunk is a NotificationOverview
     if ('notification_status' in chunk) {
       const send_date = chunk.notification_send_date;
       const type = chunk.notification_type;

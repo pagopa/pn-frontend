@@ -6,11 +6,19 @@ import {
   IFiledStatistics,
   NotificationOverview,
   NotificationStatus,
+  StatisticsDataTypes,
   StatisticsResponse,
 } from '../../models/Statistics';
 import StatisticsData from './StatisticsData';
-import { StatisticsDataTypes } from './StatisticsDataFactory';
 
+/**
+ * Extends StatisticsData type, go there for any documentation purpose
+ *
+ * @export
+ * @class FiledStatisticsData
+ * @typedef {FiledStatisticsData}
+ * @extends {StatisticsData}
+ */
 export class FiledStatisticsData extends StatisticsData {
   data: IFiledStatistics = {
     [NotificationStatus.ACCEPTED]: {
@@ -37,7 +45,7 @@ export class FiledStatisticsData extends StatisticsData {
   }
 
   parseChunk(chunk: NotificationOverview | DigitalNotificationFocus) {
-    // parse only if chunck has NotificationOverview type
+    // parse only if chunk is a NotificationOverview
     if ('notification_status' in chunk) {
       const status = chunk.notification_request_status;
       const send_date = chunk.notification_send_date;

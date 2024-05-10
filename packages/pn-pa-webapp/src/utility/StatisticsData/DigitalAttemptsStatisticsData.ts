@@ -4,11 +4,19 @@ import {
   DigitalNotificationFocus,
   IAttemptsCount,
   NotificationOverview,
+  StatisticsDataTypes,
   StatisticsResponse,
 } from '../../models/Statistics';
 import StatisticsData from './StatisticsData';
-import { StatisticsDataTypes } from './StatisticsDataFactory';
 
+/**
+ * Extends StatisticsData type, go there for any documentation purpose
+ *
+ * @export
+ * @class DigitalAttemptsStatisticsData
+ * @typedef {DigitalAttemptsStatisticsData}
+ * @extends {StatisticsData}
+ */
 export class DigitalAttemptsStatisticsData extends StatisticsData {
   data: Array<IAttemptsCount> = [];
 
@@ -31,7 +39,7 @@ export class DigitalAttemptsStatisticsData extends StatisticsData {
   }
 
   parseChunk(chunk: NotificationOverview | DigitalNotificationFocus): void {
-    // parse only if chunck has NotificationOverview type
+    // parse only if chunk is a NotificationOverview
     if ('notification_status' in chunk) {
       const notifications_count = +chunk.notifications_count;
       const attempt = +chunk.attempt_count_per_digital_notification;

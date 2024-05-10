@@ -1,5 +1,11 @@
 import StatisticsDataFactory from './StatisticsDataFactory';
 
+/**
+ * This class is responsible for creating and managing a single StatisticsDataFactory instance
+ *
+ * @class StatisticsDataFactoryManager
+ * @typedef {StatisticsDataFactoryManager}
+ */
 class StatisticsDataFactoryManager {
   private innerFactory: StatisticsDataFactory = new StatisticsDataFactory();
 

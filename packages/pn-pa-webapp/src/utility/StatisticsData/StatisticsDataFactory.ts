@@ -1,5 +1,9 @@
 /* eslint-disable functional/immutable-data */
-import { StatisticsResponse } from '../../models/Statistics';
+import {
+  StatisticsDataTypes,
+  StatisticsParsedData,
+  StatisticsResponse,
+} from '../../models/Statistics';
 import { DeliveryModeStatisticsData } from './DeliveryModeStatisticsData';
 import { DigitalAttemptsStatisticsData } from './DigitalAttemptsStatisticsData';
 import { DigitalErrorsDetailStatisticsData } from './DigitalErrorsDetailStatisticsData';
@@ -9,32 +13,20 @@ import { FiledStatisticsData } from './FiledStatisticsData';
 import { LastStateStatisticsData } from './LastStateStatisticsData';
 import StatisticsData from './StatisticsData';
 
-export enum StatisticsDataTypes {
-  FiledStatistics = 'FiledStatistics',
-  LastStateStatistics = 'LastStateStatistics',
-  DeliveryModeStatistics = 'DeliveryModeStatistics',
-  DigitalStateStatistics = 'DigitalStateStatistics',
-  DigitalMeanTimeStatistics = 'DigitalMeanTimeStatistics',
-  DigitalErrorsDetailStatistics = 'DigitalErrorsDetailStatistics',
-  DigitalAttemptsStatistics = 'DigitalAttemptsStatistics',
-}
-
-// interface ParsedStatisticDataObj {
-//   name: StatisticsDataTypes;
-//   data: object;
-// }
-
-interface ParsedStatisticDataObj {
-  [StatisticsDataTypes.FiledStatistics]?: object;
-  [StatisticsDataTypes.LastStateStatistics]?: object;
-  [StatisticsDataTypes.DeliveryModeStatistics]?: object;
-  [StatisticsDataTypes.DigitalStateStatistics]?: object;
-  [StatisticsDataTypes.DigitalMeanTimeStatistics]?: object;
-  [StatisticsDataTypes.DigitalErrorsDetailStatistics]?: object;
-  [StatisticsDataTypes.DigitalAttemptsStatistics]?: object;
-}
-
+/**
+ * Factory Class for creating instances which extends StatisticsData type
+ *
+ * @class StatisticsDataFactory
+ * @typedef {StatisticsDataFactory}
+ */
 class StatisticsDataFactory {
+  /**
+   * Creates and return an instance of a specific StatisticsData subtype
+   *
+   * @public
+   * @param {string} type
+   * @returns {(StatisticsData | null)}
+   */
   public create(type: string): StatisticsData | null {
     switch (type) {
       case StatisticsDataTypes.FiledStatistics:
@@ -63,11 +55,17 @@ class StatisticsDataFactory {
     }
   }
 
-  // public createAll(rawData: StatisticsResponse): Array<object> {
-  public createAll(rawData: StatisticsResponse): ParsedStatisticDataObj {
+  /**
+   * Cycles through every StatisticsData subtype and generates the corresponding
+   * transformed data starting from the raw data passed as argument
+   *
+   * @public
+   * @param {StatisticsResponse} rawData
+   * @returns {StatisticsParsedData}
+   */
+  public createAll(rawData: StatisticsResponse): StatisticsParsedData {
     const statisticsObjects: Array<StatisticsData> = [];
-    // const retData: Array<ParsedStatisticDataObj> = [];
-    const retData: ParsedStatisticDataObj = {};
+    const retData: StatisticsParsedData = {};
     Object.keys(StatisticsDataTypes)
       .filter((key) => isNaN(Number(key)))
       .forEach((element) => {
@@ -80,19 +78,18 @@ class StatisticsDataFactory {
     const notifications_overview = rawData.notifications_overview;
     const notification_focus = rawData.digital_notification_focus;
 
-    // pass every notifications_overview item to every StatisticsData object to parse it
+    // pass every notifications_overview item to every StatisticsData subtype object to parse it
     notifications_overview.forEach((item) =>
       statisticsObjects.forEach((obj) => obj.parseChunk(item))
     );
 
-    // pass every digital_notification_focus item to every StatisticsData object to parse it
+    // pass every digital_notification_focus item to every StatisticsData subtype object to parse it
     notification_focus.forEach((item) => statisticsObjects.forEach((obj) => obj.parseChunk(item)));
 
     statisticsObjects.forEach((item) => {
       const name = item.getName();
       const data = item.getData();
 
-      // retData.push({ name: StatisticsDataTypes[name], data });
       retData[name] = data;
     });
 
