@@ -3411,7 +3411,7 @@ export const NotificationSentApiAxiosParamCreator = function (configuration?: Co
         notificationCancellationV1: async (iun: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'iun' is not null or undefined
             assertParamExists('notificationCancellationV1', 'iun', iun)
-            const localVarPath = `/bff/v1/notifications/{iun}/cancel`
+            const localVarPath = `/bff/v1/notifications/sent/{iun}/cancel`
                 .replace(`{${"iun"}}`, encodeURIComponent(String(iun)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);

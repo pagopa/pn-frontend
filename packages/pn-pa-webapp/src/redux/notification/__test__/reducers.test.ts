@@ -186,7 +186,7 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to cancel notification', async () => {
-    mock.onPut('/bff/v1/notifications/mocked-iun/cancel').reply(200);
+    mock.onPut('/bff/v1/notifications/sent/mocked-iun/cancel').reply(200);
     const action = await store.dispatch(cancelNotification('mocked-iun'));
     expect(action.type).toBe('cancelNotification/fulfilled');
     expect(action.payload).toEqual(undefined);

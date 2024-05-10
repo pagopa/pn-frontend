@@ -426,7 +426,7 @@ describe('NotificationDetail Page', async () => {
     });
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
-    mock.onPut(`/bff/v1/notifications/${notificationDTO.iun}/cancel`).reply(200);
+    mock.onPut(`/bff/v1/notifications/sent/${notificationDTO.iun}/cancel`).reply(200);
     await act(async () => {
       result = render(<NotificationDetail />);
     });
@@ -446,7 +446,9 @@ describe('NotificationDetail Page', async () => {
       expect(modal).not.toBeInTheDocument();
     });
     expect(mock.history.put).toHaveLength(1);
-    expect(mock.history.put[0].url).toBe(`/bff/v1/notifications/${notificationDTO.iun}/cancel`);
+    expect(mock.history.put[0].url).toBe(
+      `/bff/v1/notifications/sent/${notificationDTO.iun}/cancel`
+    );
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[2].url).toBe(`/bff/v1/notifications/sent/${notificationDTO.iun}`);
