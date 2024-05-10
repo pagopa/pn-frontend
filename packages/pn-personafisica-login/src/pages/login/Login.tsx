@@ -50,6 +50,10 @@ const Login = () => {
       SPID_IDP_NAME: 'CIE',
       SPID_IDP_ID: SPID_CIE_ENTITY_ID,
     });
+
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_METHOD, {
+      entityID: 'cie',
+    });
   };
 
   if (showIDPS) {

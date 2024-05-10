@@ -45,6 +45,12 @@ export class SendHasAddressesStrategy implements EventStrategy {
         SEND_HAS_SMS: hasCourtesySmsAddresses ? 'yes' : 'no',
         SEND_APPIO_STATUS: ioStatus,
       },
+      [EventPropertyType.SUPER_PROPERTY]: {
+        SEND_HAS_PEC: hasLegalAddresses ? 'yes' : 'no',
+        SEND_HAS_EMAIL: hasCourtesyEmailAddresses ? 'yes' : 'no',
+        SEND_HAS_SMS: hasCourtesySmsAddresses ? 'yes' : 'no',
+        SEND_APPIO_STATUS: ioStatus,
+      },
     };
   }
 }
