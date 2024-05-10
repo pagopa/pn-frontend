@@ -5,8 +5,6 @@ import {
   GetNotificationsResponse,
   LegalFactId,
   NotificationDetailOtherDocument,
-  PaymentAttachment,
-  PaymentAttachmentNameType,
 } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationDTO, NewNotificationResponse } from '../../models/NewNotification';
@@ -20,7 +18,6 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
-  NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from './notifications.routes';
 
@@ -152,26 +149,6 @@ export const NotificationsApi = {
   createNewNotification: (notification: NewNotificationDTO): Promise<NewNotificationResponse> =>
     apiClient
       .post<NewNotificationResponse>(CREATE_NOTIFICATION(), notification)
-      .then((response) => response.data),
-
-  /**
-   * Gets current user specified Payment Attachment
-   * @param  {string} iun
-   * @param  {PaymentAttachmentNameType} attachmentName
-   * @param  {number} recIndex
-   * @param  {number} attachmentIdx
-   * @returns Promise
-   */
-  getPaymentAttachment: (
-    iun: string,
-    attachmentName: PaymentAttachmentNameType,
-    recIndex: number,
-    attachmentIdx?: number
-  ): Promise<PaymentAttachment> =>
-    apiClient
-      .get<PaymentAttachment>(
-        NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string, recIndex, attachmentIdx)
-      )
       .then((response) => response.data),
 
   /**

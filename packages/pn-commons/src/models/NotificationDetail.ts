@@ -361,5 +361,4 @@ export interface ExtRegistriesPaymentDetails {
   detail?: PaymentInfoDetail;
   detail_v2?: string;
   errorCode?: string;
-  url?: string;
 }

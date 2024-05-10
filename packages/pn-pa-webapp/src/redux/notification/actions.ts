@@ -5,7 +5,7 @@ import {
   NotificationDetail,
   NotificationDetailOtherDocument,
   PaymentAttachment,
-  PaymentAttachmentNameType,
+  PaymentAttachmentSName,
   parseError,
   performThunkAction,
   validateHistory,
@@ -19,6 +19,7 @@ import { NotificationSentApiFactory } from '../../generated-client/notifications
 
 export enum NOTIFICATION_ACTIONS {
   GET_SENT_NOTIFICATION = 'getSentNotification',
+  GET_SENT_NOTIFICATION_PAYMENT = 'getSentNotificationPayment',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
   CANCEL_NOTIFICATION = 'cancelNotification',
 }
@@ -32,7 +33,7 @@ export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
         undefined,
         apiClient
       );
-      const response = await notificationSentApiFactory.retrieveSentNotificationV1(params);
+      const response = await notificationSentApiFactory.getSentNotificationV1(params);
       return response.data as NotificationDetail;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
@@ -113,28 +114,40 @@ export const getDowntimeHistory = createAsyncThunk<DowntimeLogHistory, GetDownti
   }
 );
 
-export const getPaymentAttachment = createAsyncThunk<
+export const getSentNotificationPayment = createAsyncThunk<
   PaymentAttachment,
   {
     iun: string;
-    attachmentName: PaymentAttachmentNameType;
+    attachmentName: PaymentAttachmentSName;
     recIndex: number;
     attachmentIdx?: number;
   }
 >(
-  'getPaymentAttachment',
-  performThunkAction(
-    (params: {
+  NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION_PAYMENT,
+  async (
+    params: {
       iun: string;
-      attachmentName: PaymentAttachmentNameType;
+      attachmentName: PaymentAttachmentSName;
       recIndex: number;
       attachmentIdx?: number;
-    }) =>
-      NotificationsApi.getPaymentAttachment(
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const notificationSentApiFactory = NotificationSentApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await notificationSentApiFactory.getSentNotificationPaymentV1(
         params.iun,
-        params.attachmentName,
         params.recIndex,
+        params.attachmentName,
         params.attachmentIdx
-      )
-  )
+      );
+      return response.data as PaymentAttachment;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
