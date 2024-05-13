@@ -16,6 +16,7 @@ import {
   NotificationDetailTable,
   NotificationDetailTableRow,
   NotificationDetailTimeline,
+  NotificationDocumentType,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
   PaymentAttachmentSName,
@@ -26,7 +27,6 @@ import {
   dateIsLessThan10Years,
   downloadDocument,
   formatDate,
-  useDownloadDocument,
   useErrors,
   useIsCancelled,
   useIsMobile,
@@ -43,13 +43,11 @@ import {
   getDowntimeHistory,
   getReceivedNotification,
   getReceivedNotificationDocument,
-  getReceivedNotificationLegalfact,
-  getReceivedNotificationOtherDocument,
   getReceivedNotificationPayment,
   getReceivedNotificationPaymentInfo,
   getReceivedNotificationPaymentUrl,
 } from '../redux/notification/actions';
-import { resetLegalFactState, resetState } from '../redux/notification/reducers';
+import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -91,16 +89,6 @@ const NotificationDetail: React.FC = () => {
 
   const isCancelled = useIsCancelled({ notification });
   const currentRecipient = notification?.currentRecipient;
-
-  const documentDownloadUrl = useAppSelector(
-    (state: RootState) => state.notificationState.documentDownloadUrl
-  );
-  const otherDocumentDownloadUrl = useAppSelector(
-    (state: RootState) => state.notificationState.otherDocumentDownloadUrl
-  );
-  const legalFactDownloadUrl = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadUrl
-  );
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
 
@@ -152,7 +140,7 @@ const NotificationDetail: React.FC = () => {
   const checkIfUserHasPayments: boolean =
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
 
-  const showInfoMessageIfRetryAfter = (response: {
+  const showInfoMessageIfRetryAfterOrDownload = (response: {
     url: string;
     retryAfter?: number | undefined;
   }) => {
@@ -165,6 +153,8 @@ const NotificationDetail: React.FC = () => {
           }),
         })
       );
+    } else if (response.url) {
+      downloadDocument(response.url);
     }
   };
 
@@ -176,54 +166,73 @@ const NotificationDetail: React.FC = () => {
     }
 
     if (_.isObject(document)) {
-      void dispatch(
-        getReceivedNotificationOtherDocument({
+      // AAR case
+      dispatch(
+        getReceivedNotificationDocument({
           iun: notification.iun,
-          otherDocument: document,
+          documentType: NotificationDocumentType.AAR,
+          documentId: document.documentId,
           mandateId,
         })
       )
         .unwrap()
-        .then(showInfoMessageIfRetryAfter);
+        .then(showInfoMessageIfRetryAfterOrDownload)
+        .catch(() => {});
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_RECEIPT_NOTICE);
     } else {
-      const documentIndex = document as string;
-      void dispatch(
-        getReceivedNotificationDocument({ iun: notification.iun, documentIndex, mandateId })
-      );
+      // Attachment case
+      dispatch(
+        getReceivedNotificationDocument({
+          iun: notification.iun,
+          documentType: NotificationDocumentType.ATTACHMENT,
+          documentIdx: Number(document as string),
+          mandateId,
+        })
+      )
+        .unwrap()
+        .then(showInfoMessageIfRetryAfterOrDownload)
+        .catch(() => {});
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT);
     }
   };
 
-  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument
-  // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
-  // Cfr. comment in the definition of INotificationDetailTimeline in pn-commons/src/types/NotificationDetail.ts.
-  const legalFactDownloadHandler = (legalFact: LegalFactId | NotificationDetailOtherDocument) => {
+  const legalFactDownloadHandler = (legalFact: LegalFactId) => {
     if (isCancelled.cancelled || isCancelled.cancellationInProgress) {
       return;
     }
-    if ((legalFact as LegalFactId).key) {
-      dispatch(resetLegalFactState());
-      void dispatch(
-        getReceivedNotificationLegalfact({
+    if (legalFact.category !== 'AAR') {
+      // Legal fact case
+      dispatch(
+        getReceivedNotificationDocument({
           iun: notification.iun,
-          legalFact: legalFact as LegalFactId,
+          documentType: NotificationDocumentType.LEGAL_FACT,
+          documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
+          documentCategory: legalFact.category,
           mandateId,
         })
       )
         .unwrap()
-        .then(showInfoMessageIfRetryAfter);
+        .then(showInfoMessageIfRetryAfterOrDownload)
+        .catch(() => {});
       PFEventStrategyFactory.triggerEvent(
         PFEventsType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES,
         {
           source: 'dettaglio_notifica',
         }
       );
-    } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
-      const otherDocument = legalFact as NotificationDetailOtherDocument;
-      void dispatch(
-        getReceivedNotificationOtherDocument({ iun: notification.iun, otherDocument, mandateId })
-      );
+    } else {
+      // AAR in timeline case
+      dispatch(
+        getReceivedNotificationDocument({
+          iun: notification.iun,
+          documentType: NotificationDocumentType.AAR,
+          documentId: legalFact.key,
+          mandateId,
+        })
+      )
+        .unwrap()
+        .then(showInfoMessageIfRetryAfterOrDownload)
+        .catch(() => {});
     }
   };
 
@@ -356,10 +365,6 @@ const NotificationDetail: React.FC = () => {
         .catch((e) => console.log(e));
     }
   }, []);
-
-  useDownloadDocument({ url: documentDownloadUrl });
-  useDownloadDocument({ url: legalFactDownloadUrl });
-  useDownloadDocument({ url: otherDocumentDownloadUrl });
 
   const fromQrCode = useMemo(
     () => !!(location.state && (location.state as LocationState).fromQrCode),

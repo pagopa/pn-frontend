@@ -10,13 +10,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
-import {
-  getDowntimeHistory,
-  getSentNotification,
-  getSentNotificationDocument,
-  getSentNotificationLegalfact,
-  getSentNotificationOtherDocument,
-} from './actions';
+import { getDowntimeHistory, getSentNotification } from './actions';
 
 const initialState = {
   loading: false,
@@ -31,9 +25,6 @@ const initialState = {
     notificationStatusHistory: [] as Array<NotificationStatusHistory>,
     timeline: [] as Array<INotificationDetailTimeline>,
   } as NotificationDetail,
-  documentDownloadUrl: '',
-  otherDocumentDownloadUrl: '',
-  legalFactDownloadUrl: '',
   downtimeEvents: [] as Array<Downtime>,
 };
 
@@ -43,30 +34,10 @@ const notificationSlice = createSlice({
   initialState,
   reducers: {
     resetState: () => initialState,
-    resetLegalFactState: (state) => {
-      state.legalFactDownloadUrl = '';
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(getSentNotification.fulfilled, (state, action) => {
       state.notification = action.payload;
-    });
-    // ATTO
-    builder.addCase(getSentNotificationDocument.fulfilled, (state, action) => {
-      if (action.payload.url) {
-        state.documentDownloadUrl = action.payload.url;
-      }
-    });
-    // AAR
-    builder.addCase(getSentNotificationOtherDocument.fulfilled, (state, action) => {
-      if (action.payload.url) {
-        state.otherDocumentDownloadUrl = action.payload.url;
-      }
-    });
-    builder.addCase(getSentNotificationLegalfact.fulfilled, (state, action) => {
-      if (action.payload.url) {
-        state.legalFactDownloadUrl = action.payload.url;
-      }
     });
     builder.addCase(getDowntimeHistory.fulfilled, (state, action) => {
       state.downtimeEvents = action.payload.result;
@@ -74,6 +45,6 @@ const notificationSlice = createSlice({
   },
 });
 
-export const { resetState, resetLegalFactState } = notificationSlice.actions;
+export const { resetState } = notificationSlice.actions;
 
 export default notificationSlice;

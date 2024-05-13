@@ -14,13 +14,14 @@ import {
   NotificationDetailOtherDocument,
   NotificationDetailTimeline,
   NotificationDetail as NotificationDetailType,
+  NotificationDocumentResponse,
+  NotificationDocumentType,
   NotificationRelatedDowntimes,
   PnBreadcrumb,
   TitleBox,
   appStateActions,
   dateIsLessThan10Years,
   downloadDocument,
-  useDownloadDocument,
   useErrors,
   useIsCancelled,
   useIsMobile,
@@ -37,10 +38,8 @@ import {
   getDowntimeHistory,
   getSentNotification,
   getSentNotificationDocument,
-  getSentNotificationLegalfact,
-  getSentNotificationOtherDocument,
 } from '../redux/notification/actions';
-import { resetLegalFactState, resetState } from '../redux/notification/reducers';
+import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
 
@@ -77,15 +76,6 @@ const NotificationDetail: React.FC = () => {
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
   );
-  const documentDownloadUrl = useAppSelector(
-    (state: RootState) => state.notificationState.documentDownloadUrl
-  );
-  const otherDocumentDownloadUrl = useAppSelector(
-    (state: RootState) => state.notificationState.otherDocumentDownloadUrl
-  );
-  const legalFactDownloadUrl = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadUrl
-  );
 
   const { recipients } = notification;
   /*
@@ -102,10 +92,7 @@ const NotificationDetail: React.FC = () => {
     (recipient) => recipient.payments && recipient.payments.length > 0
   );
 
-  const showInfoMessageIfRetryAfter = (response: {
-    url: string;
-    retryAfter?: number | undefined;
-  }) => {
+  const showInfoMessageIfRetryAfterOrDownload = (response: NotificationDocumentResponse) => {
     if (response.retryAfter) {
       dispatch(
         appStateActions.addInfo({
@@ -115,6 +102,8 @@ const NotificationDetail: React.FC = () => {
           }),
         })
       );
+    } else if (response.url) {
+      downloadDocument(response.url);
     }
   };
 
@@ -122,38 +111,58 @@ const NotificationDetail: React.FC = () => {
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
     if (_.isObject(document)) {
-      void dispatch(
-        getSentNotificationOtherDocument({ iun: notification.iun, otherDocument: document })
-      )
-        .unwrap()
-        .then(showInfoMessageIfRetryAfter);
-    } else {
-      const documentIndex = document as string;
-      void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
-    }
-  };
-
-  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument
-  // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
-  // Cfr. comment in the definition of INotificationDetailTimeline in pn-commons/src/types/NotificationDetail.ts.
-  const legalFactDownloadHandler = (legalFact: LegalFactId | NotificationDetailOtherDocument) => {
-    if ((legalFact as LegalFactId).key) {
-      const legalFactAsLegalFact = legalFact as LegalFactId;
-      dispatch(resetLegalFactState());
-      void dispatch(
-        getSentNotificationLegalfact({
+      // AAR case
+      dispatch(
+        getSentNotificationDocument({
           iun: notification.iun,
-          legalFact: {
-            key: legalFactAsLegalFact.key.substring(legalFactAsLegalFact.key.lastIndexOf('/') + 1),
-            category: legalFactAsLegalFact.category,
-          },
+          documentType: NotificationDocumentType.AAR,
+          documentId: document.documentId,
         })
       )
         .unwrap()
-        .then(showInfoMessageIfRetryAfter);
-    } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
-      const otherDocument = legalFact as NotificationDetailOtherDocument;
-      void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }));
+        .then(showInfoMessageIfRetryAfterOrDownload)
+        .catch(() => {});
+    } else {
+      // Attachment case
+      dispatch(
+        getSentNotificationDocument({
+          iun: notification.iun,
+          documentType: NotificationDocumentType.ATTACHMENT,
+          documentIdx: Number(document as string),
+        })
+      )
+        .unwrap()
+        .then(showInfoMessageIfRetryAfterOrDownload)
+        .catch(() => {});
+    }
+  };
+
+  const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    if (legalFact.category !== 'AAR') {
+      // Legal fact case
+      dispatch(
+        getSentNotificationDocument({
+          iun: notification.iun,
+          documentType: NotificationDocumentType.LEGAL_FACT,
+          documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
+          documentCategory: legalFact.category,
+        })
+      )
+        .unwrap()
+        .then(showInfoMessageIfRetryAfterOrDownload)
+        .catch(() => {});
+    } else {
+      // AAR in timeline case
+      dispatch(
+        getSentNotificationDocument({
+          iun: notification.iun,
+          documentType: NotificationDocumentType.AAR,
+          documentId: legalFact.key,
+        })
+      )
+        .unwrap()
+        .then(showInfoMessageIfRetryAfterOrDownload)
+        .catch(() => {});
     }
   };
 
@@ -249,10 +258,6 @@ const NotificationDetail: React.FC = () => {
       })
       .catch((e) => console.log(e));
   }, []);
-
-  useDownloadDocument({ url: legalFactDownloadUrl });
-  useDownloadDocument({ url: documentDownloadUrl });
-  useDownloadDocument({ url: otherDocumentDownloadUrl });
 
   const properBreadcrumb = (
     <PnBreadcrumb

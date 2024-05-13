@@ -2,9 +2,9 @@ import {
   DowntimeLogHistory,
   ExtRegistriesPaymentDetails,
   GetDowntimeHistoryParams,
-  LegalFactId,
   NotificationDetail,
-  NotificationDetailOtherDocument,
+  NotificationDocumentRequest,
+  NotificationDocumentResponse,
   PaymentAttachment,
   PaymentAttachmentSName,
   PaymentDetails,
@@ -12,7 +12,6 @@ import {
   checkIfPaymentsIsAlreadyInCache,
   getPaymentCache,
   parseError,
-  performThunkAction,
   populatePaymentsPagoPaF24,
   setPaymentCache,
   setPaymentsInCache,
@@ -21,17 +20,16 @@ import {
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
-import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { DowntimeApiFactory } from '../../generated-client/downtime-logs';
 import { NotificationReceivedApiFactory } from '../../generated-client/notifications';
 import { PaymentsApiFactory } from '../../generated-client/payments';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { parseNotificationDetailForRecipient } from '../../utility/notification.utility';
 import { RootState, store } from '../store';
-import { GetReceivedNotificationParams } from './types';
 
 export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION = 'getReceivedNotification',
+  GET_RECEIVED_NOTIFICATION_DOCUMENT = 'getReceivedNotificationDocument',
   GET_RECEIVED_NOTIFICATION_PAYMENT = 'getReceivedNotificationPayment',
   GET_RECEIVED_NOTIFICATION_PAYMENT_INFO = 'getReceivedNotificationPaymentInfo',
   GET_RECEIVED_NOTIFICATION_PAYMENT_URL = 'getReceivedNotificationPaymentUrl',
@@ -40,10 +38,10 @@ export enum NOTIFICATION_ACTIONS {
 
 export const getReceivedNotification = createAsyncThunk<
   NotificationDetailForRecipient,
-  GetReceivedNotificationParams
+  { iun: string; mandateId?: string }
 >(
   NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
-  async (params: GetReceivedNotificationParams, { rejectWithValue }) => {
+  async (params: { iun: string; mandateId?: string }, { rejectWithValue }) => {
     try {
       const notificationReceivedApiFactory = NotificationReceivedApiFactory(
         undefined,
@@ -61,32 +59,31 @@ export const getReceivedNotification = createAsyncThunk<
   }
 );
 
-export const getReceivedNotificationLegalfact = createAsyncThunk<
-  { url: string; retryAfter?: number },
-  { iun: string; legalFact: LegalFactId; mandateId?: string }
->(
-  'getReceivedNotificationLegalfact',
-  performThunkAction((params: { iun: string; legalFact: LegalFactId; mandateId?: string }) =>
-    NotificationsApi.getReceivedNotificationLegalfact(
-      params.iun,
-      params.legalFact,
-      params.mandateId
-    )
-  )
-);
-
 export const getReceivedNotificationDocument = createAsyncThunk<
-  { url: string },
-  { iun: string; documentIndex: string; mandateId?: string }
+  NotificationDocumentResponse,
+  NotificationDocumentRequest
 >(
-  'getReceivedNotificationDocument',
-  performThunkAction((params: { iun: string; documentIndex: string; mandateId?: string }) =>
-    NotificationsApi.getReceivedNotificationDocument(
-      params.iun,
-      params.documentIndex,
-      params.mandateId
-    )
-  )
+  NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT,
+  async (params: NotificationDocumentRequest, { rejectWithValue }) => {
+    try {
+      const notificationSentApiFactory = NotificationReceivedApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await notificationSentApiFactory.getReceivedNotificationDocumentV1(
+        params.iun,
+        params.documentType,
+        params.mandateId,
+        params.documentIdx,
+        params.documentId,
+        params.documentCategory
+      );
+      return response.data as NotificationDocumentResponse;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
 export const getReceivedNotificationPayment = createAsyncThunk<
@@ -221,34 +218,6 @@ export const getReceivedNotificationPaymentUrl = createAsyncThunk<
       return response.data;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
-    }
-  }
-);
-
-export const getReceivedNotificationOtherDocument = createAsyncThunk<
-  { url: string; retryAfter?: number },
-  { iun: string; otherDocument: NotificationDetailOtherDocument; mandateId?: string }
->(
-  'getReceivedNotificationOtherDocument',
-  async (
-    params: {
-      iun: string;
-      mandateId?: string;
-      otherDocument: {
-        documentId: string;
-        documentType: string;
-      };
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      return await NotificationsApi.getReceivedNotificationOtherDocument(
-        params.iun,
-        params.otherDocument,
-        params.mandateId
-      );
-    } catch (e) {
-      return rejectWithValue(e);
     }
   }
 );

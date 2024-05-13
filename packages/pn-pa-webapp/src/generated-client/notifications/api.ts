@@ -709,6 +709,25 @@ export interface BffNotificationsResponse {
     'nextPagesKey'?: Array<string>;
 }
 /**
+ * Response to cancellation async call
+ * @export
+ * @interface BffRequestStatus
+ */
+export interface BffRequestStatus {
+    /**
+     * Cancellation request status:   - OK 
+     * @type {string}
+     * @memberof BffRequestStatus
+     */
+    'status': string;
+    /**
+     * 
+     * @type {Array<StatusDetail>}
+     * @memberof BffRequestStatus
+     */
+    'details'?: Array<StatusDetail>;
+}
+/**
  * stato di avanzamento del processo di notifica:`   * `SENDER_ACK_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa in carico per il mittente a safe storage   * `VALIDATE_NORMALIZE_ADDRESSES_REQUEST` - Invio della richiesta di validazione e normalizzazione indirizzi fisici presenti nella richiesta di notifica   * `NORMALIZED_ADDRESS` - Salvataggio indirizzi normalizzati   * `REQUEST_ACCEPTED` - Richiesta di notifica accettata a seguito dei controlli di validazione   * `REQUEST_REFUSED` - Richiesta di notifica rifiutata per fallimento di validazione   * `SEND_COURTESY_MESSAGE` - Invio di un messaggio di cortesia   * `GET_ADDRESS` - Disponibilità dell’indirizzo specifico (domicilio digitale di piattaforma, domicilio digitale speciale, domicilio digitale generale, indirizzo fisico sulla notifica o sui registri nazionali)   * `PUBLIC_REGISTRY_CALL` - Richiesta ai registri pubblici per ottenere domicilio digitale generale o per ottenere indirizzo fisico da ANPR, da registro della imprese, da anagrafe tributaria.   * `PUBLIC_REGISTRY_RESPONSE` - Ricevuta la risposta dei registri pubblici   * `SCHEDULE_ANALOG_WORKFLOW` - Pianificazione del workflow per invio cartaceo   * `SCHEDULE_DIGITAL_WORKFLOW` -Pianificazione del workflow per invio digitale (PEC) del secondo tentativo in caso di fallimento del primo.   * `PREPARE_DIGITAL_DOMICILE` - Preparazione per l’invio dell’avviso digitale.Va a valutare la timeline per capire quale sarà il prossimo indirizzo da usare.   * `SEND_DIGITAL_DOMICILE` - Invio digitale dell’avviso di notifica   * `SEND_DIGITAL_PROGRESS` - Tentativo di Invio PEC ad un determinato indirizzo.   * `SEND_DIGITAL_FEEDBACK` - Ottenuto esito ad un invio digitale   * `SCHEDULE_REFINEMENT` - Pianificato il perfezionamento per decorrenza termini   * `REFINEMENT` - Perfezionamento per decorrenza termini   * `DIGITAL_DELIVERY_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di chiusura del workflow digitale a safe storage   * `DIGITAL_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio digitale   * `DIGITAL_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio digitale: tutti i tentativi di invio ai domicili digitali sono falliti.   * `ANALOG_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio cartaceo   * `ANALOG_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio cartaceo NOTA: se per tutti i destinatari si conclude il workflow con fallimento verrà scatenato l’evento COMPLETELY_UNREACHABLE   * `PREPARE_SIMPLE_REGISTERED_LETTER` - Invio richiesta di prepare (preparazione ad invio) raccomandata semplice a paperChannel   * `SEND_SIMPLE_REGISTERED_LETTER` - Invio di raccomandata semplice   * `SEND_SIMPLE_REGISTERED_LETTER_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea semplice   * `NOTIFICATION_VIEWED_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa visione a safe storage   * `NOTIFICATION_VIEWED` - Visualizzazione della notifica (perfeziona la notifica se non già perfezionata per decorrenza termini o da altro destinatario)   * `PREPARE_ANALOG_DOMICILE` - Invio richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `SEND_ANALOG_DOMICILE` - Invio cartaceo dell’avviso di notifica   * `SEND_ANALOG_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea   * `SEND_ANALOG_FEEDBACK` - Ricezione esito dell\'invio cartaceo   * `COMPLETELY_UNREACHABLE_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto (simile a opponibile a terzi) di completamento con fallimento del workflow di invio cartaceo   * `COMPLETELY_UNREACHABLE` - Tutti i destinatari risultano irraggiungibili   * `AAR_CREATION_REQUEST` - Invio della richiesta di creazione dell\'AAR (Avviso di Avvenuta Ricezione) a safe storage   * `AAR_GENERATION` - Generazione dell’AAR (Avviso di Avvenuta Ricezione)   * `PAYMENT` - Ricezione pagamento della notifica   * `NOT_HANDLED` - Per la sperimentazione l\'invio analogico non è previsto, viene inserito tale elemento di timeline   * `PROBABLE_SCHEDULING_ANALOG_DATE` - Data probabile di inizio del flusso analogico   * `NOTIFICATION_CANCELLATION_REQUEST` - Richiesta di annullamento di una notifica   * `NOTIFICATION_CANCELLED` - Notifica annullata   * `PREPARE_ANALOG_DOMICILE_FAILURE` - Fallimento della richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `NOTIFICATION_RADD_RETRIEVED` - Accesso alla notifica tramite la rete RADD. Non perfeziona la notifica. 
  * @export
  * @enum {string}
@@ -2337,6 +2356,25 @@ export interface RequestRefusedDetailsV23 {
     'refusalReasons'?: Array<NotificationRefusedErrorV23>;
 }
 /**
+ * Response to cancellation async call
+ * @export
+ * @interface RequestStatus
+ */
+export interface RequestStatus {
+    /**
+     * Cancellation request status:   - OK 
+     * @type {string}
+     * @memberof RequestStatus
+     */
+    'status': string;
+    /**
+     * 
+     * @type {Array<StatusDetail>}
+     * @memberof RequestStatus
+     */
+    'details'?: Array<StatusDetail>;
+}
+/**
  * stato risposta ricevuta da externalChannel
  * @export
  * @enum {string}
@@ -3137,6 +3175,31 @@ export interface SimpleRegisteredLetterProgressDetails {
     'registeredLetterCode'?: string;
 }
 /**
+ * Detail of response to cancellation async call
+ * @export
+ * @interface StatusDetail
+ */
+export interface StatusDetail {
+    /**
+     * Internal code of the error or warning, in human-readable format
+     * @type {string}
+     * @memberof StatusDetail
+     */
+    'code': string;
+    /**
+     * informational level of status detail: INFO,WARN, ERR ERR (error) by default 
+     * @type {string}
+     * @memberof StatusDetail
+     */
+    'level'?: string;
+    /**
+     * A human readable explanation specific to this occurrence of the problem.
+     * @type {string}
+     * @memberof StatusDetail
+     */
+    'detail'?: string;
+}
+/**
  * stato di avanzamento del processo di notifica:`   * `SENDER_ACK_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa in carico per il mittente a safe storage   * `VALIDATE_NORMALIZE_ADDRESSES_REQUEST` - Invio della richiesta di validazione e normalizzazione indirizzi fisici presenti nella richiesta di notifica   * `NORMALIZED_ADDRESS` - Salvataggio indirizzi normalizzati   * `REQUEST_ACCEPTED` - Richiesta di notifica accettata a seguito dei controlli di validazione   * `REQUEST_REFUSED` - Richiesta di notifica rifiutata per fallimento di validazione   * `SEND_COURTESY_MESSAGE` - Invio di un messaggio di cortesia   * `GET_ADDRESS` - Disponibilità dell’indirizzo specifico (domicilio digitale di piattaforma, domicilio digitale speciale, domicilio digitale generale, indirizzo fisico sulla notifica o sui registri nazionali)   * `PUBLIC_REGISTRY_CALL` - Richiesta ai registri pubblici per ottenere domicilio digitale generale o per ottenere indirizzo fisico da ANPR, da registro della imprese, da anagrafe tributaria.   * `PUBLIC_REGISTRY_RESPONSE` - Ricevuta la risposta dei registri pubblici   * `SCHEDULE_ANALOG_WORKFLOW` - Pianificazione del workflow per invio cartaceo   * `SCHEDULE_DIGITAL_WORKFLOW` -Pianificazione del workflow per invio digitale (PEC) del secondo tentativo in caso di fallimento del primo.   * `PREPARE_DIGITAL_DOMICILE` - Preparazione per l’invio dell’avviso digitale.Va a valutare la timeline per capire quale sarà il prossimo indirizzo da usare.   * `SEND_DIGITAL_DOMICILE` - Invio digitale dell’avviso di notifica   * `SEND_DIGITAL_PROGRESS` - Tentativo di Invio PEC ad un determinato indirizzo.   * `SEND_DIGITAL_FEEDBACK` - Ottenuto esito ad un invio digitale   * `SCHEDULE_REFINEMENT` - Pianificato il perfezionamento per decorrenza termini   * `REFINEMENT` - Perfezionamento per decorrenza termini   * `DIGITAL_DELIVERY_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di chiusura del workflow digitale a safe storage   * `DIGITAL_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio digitale   * `DIGITAL_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio digitale: tutti i tentativi di invio ai domicili digitali sono falliti.   * `ANALOG_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio cartaceo   * `ANALOG_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio cartaceo NOTA: se per tutti i destinatari si conclude il workflow con fallimento verrà scatenato l’evento COMPLETELY_UNREACHABLE   * `PREPARE_SIMPLE_REGISTERED_LETTER` - Invio richiesta di prepare (preparazione ad invio) raccomandata semplice a paperChannel   * `SEND_SIMPLE_REGISTERED_LETTER` - Invio di raccomandata semplice   * `SEND_SIMPLE_REGISTERED_LETTER_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea semplice   * `NOTIFICATION_VIEWED_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa visione a safe storage   * `NOTIFICATION_VIEWED` - Visualizzazione della notifica (perfeziona la notifica se non già perfezionata per decorrenza termini o da altro destinatario)   * `PREPARE_ANALOG_DOMICILE` - Invio richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `SEND_ANALOG_DOMICILE` - Invio cartaceo dell’avviso di notifica   * `SEND_ANALOG_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea   * `SEND_ANALOG_FEEDBACK` - Ricezione esito dell\'invio cartaceo   * `COMPLETELY_UNREACHABLE_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto (simile a opponibile a terzi) di completamento con fallimento del workflow di invio cartaceo   * `COMPLETELY_UNREACHABLE` - Tutti i destinatari risultano irraggiungibili   * `AAR_CREATION_REQUEST` - Invio della richiesta di creazione dell\'AAR (Avviso di Avvenuta Ricezione) a safe storage   * `AAR_GENERATION` - Generazione dell’AAR (Avviso di Avvenuta Ricezione)   * `PAYMENT` - Ricezione pagamento della notifica   * `NOT_HANDLED` - Per la sperimentazione l\'invio analogico non è previsto, viene inserito tale elemento di timeline   * `PROBABLE_SCHEDULING_ANALOG_DATE` - Data probabile di inizio del flusso analogico   * `NOTIFICATION_CANCELLATION_REQUEST` - Richiesta di annullamento di una notifica   * `NOTIFICATION_CANCELLED` - Notifica annullata   * `PREPARE_ANALOG_DOMICILE_FAILURE` - Fallimento della richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `NOTIFICATION_RADD_RETRIEVED` - Accesso alla notifica tramite la rete RADD. Non perfeziona la notifica. 
  * @export
  * @enum {string}
@@ -3339,6 +3402,40 @@ export const NotificationSentApiAxiosParamCreator = function (configuration?: Co
             };
         },
         /**
+         * Questa operazione permette di annullare una notifica inviata.
+         * @summary Mittente: annullamento notifica
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        notificationCancellationV1: async (iun: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'iun' is not null or undefined
+            assertParamExists('notificationCancellationV1', 'iun', iun)
+            const localVarPath = `/bff/v1/notifications/sent/{iun}/cancel`
+                .replace(`{${"iun"}}`, encodeURIComponent(String(iun)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Questa operazione permette di ricercare le notifiche inviate.
          * @summary Mittente: ricerca notifiche inviate
          * @param {string} startDate data/ora di inizio dell\&#39;intervallo entro cui eseguire la ricerca
@@ -3473,6 +3570,19 @@ export const NotificationSentApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Questa operazione permette di annullare una notifica inviata.
+         * @summary Mittente: annullamento notifica
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async notificationCancellationV1(iun: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BffRequestStatus>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.notificationCancellationV1(iun, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationSentApi.notificationCancellationV1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Questa operazione permette di ricercare le notifiche inviate.
          * @summary Mittente: ricerca notifiche inviate
          * @param {string} startDate data/ora di inizio dell\&#39;intervallo entro cui eseguire la ricerca
@@ -3538,6 +3648,16 @@ export const NotificationSentApiFactory = function (configuration?: Configuratio
          */
         getSentNotificationV1(iun: string, options?: any): AxiosPromise<BffFullNotificationV1> {
             return localVarFp.getSentNotificationV1(iun, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Questa operazione permette di annullare una notifica inviata.
+         * @summary Mittente: annullamento notifica
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        notificationCancellationV1(iun: string, options?: any): AxiosPromise<BffRequestStatus> {
+            return localVarFp.notificationCancellationV1(iun, options).then((request) => request(axios, basePath));
         },
         /**
          * Questa operazione permette di ricercare le notifiche inviate.
@@ -3607,6 +3727,18 @@ export class NotificationSentApi extends BaseAPI {
      */
     public getSentNotificationV1(iun: string, options?: RawAxiosRequestConfig) {
         return NotificationSentApiFp(this.configuration).getSentNotificationV1(iun, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Questa operazione permette di annullare una notifica inviata.
+     * @summary Mittente: annullamento notifica
+     * @param {string} iun Identificativo Univoco Notifica
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationSentApi
+     */
+    public notificationCancellationV1(iun: string, options?: RawAxiosRequestConfig) {
+        return NotificationSentApiFp(this.configuration).notificationCancellationV1(iun, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

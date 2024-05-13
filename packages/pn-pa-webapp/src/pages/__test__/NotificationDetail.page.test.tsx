@@ -27,12 +27,6 @@ import {
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import {
-  CANCEL_NOTIFICATION,
-  NOTIFICATION_DETAIL_DOCUMENTS,
-  NOTIFICATION_DETAIL_LEGALFACT,
-  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
-} from '../../api/notifications/notifications.routes';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
 
@@ -173,7 +167,9 @@ describe('NotificationDetail Page', async () => {
     };
 
     mock
-      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationAfter150Days.iun, otherDocument))
+      .onGet(
+        `/bff/v1/notifications/sent/${notificationAfter150Days.iun}/documents/AAR?documentId=${otherDocument.documentId}`
+      )
       .reply(200, {
         retryAfter: 1,
       });
@@ -199,17 +195,21 @@ describe('NotificationDetail Page', async () => {
       expect(alertMessage).toBeInTheDocument();
     });
     // simulate that aar is now available
-    mock.onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationDTO.iun, otherDocument)).reply(200, {
-      filename: 'mocked-filename',
-      contentLength: 1000,
-      retryAfter: null,
-      url: 'https://mocked-aar-com',
-    });
+    mock
+      .onGet(
+        `/bff/v1/notifications/sent/${notificationAfter150Days.iun}/documents/AAR?documentId=${otherDocument.documentId}`
+      )
+      .reply(200, {
+        filename: 'mocked-filename',
+        contentLength: 1000,
+        retryAfter: null,
+        url: 'https://mocked-aar-com',
+      });
     fireEvent.click(documentButton[1]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
-        `/delivery-push/${notificationDTO.iun}/document/AAR`
+        `/bff/v1/notifications/sent/${notificationAfter150Days.iun}/documents/AAR?documentId=${otherDocument.documentId}`
       );
     });
     await waitFor(() => {
@@ -243,13 +243,15 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(200, notificationDTO);
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
-    mock.onGet(NOTIFICATION_DETAIL_DOCUMENTS(notificationDTO.iun, '0')).reply(200, {
-      filename: notificationDTO.documents[0].ref.key,
-      contentType: notificationDTO.documents[0].contentType,
-      contentLength: 3028,
-      sha256: notificationDTO.documents[0].digests.sha256,
-      url: 'https://mocked-url.com',
-    });
+    mock
+      .onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}/documents/ATTACHMENT?documentIdx=0`)
+      .reply(200, {
+        filename: notificationDTO.documents[0].ref.key,
+        contentType: notificationDTO.documents[0].contentType,
+        contentLength: 3028,
+        sha256: notificationDTO.documents[0].digests.sha256,
+        url: 'https://mocked-url.com',
+      });
     await act(async () => {
       result = render(<NotificationDetail />);
     });
@@ -261,7 +263,7 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[2].url).toContain(
-        `/delivery/notifications/sent/${notificationDTO.iun}/attachments/documents/0`
+        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents/ATTACHMENT?documentIdx=0`
       );
     });
   });
@@ -270,9 +272,13 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(200, notificationDTO);
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
-    mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationDTO.iun, mockLegalIds)).reply(200, {
-      retryAfter: 1,
-    });
+    mock
+      .onGet(
+        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+      )
+      .reply(200, {
+        retryAfter: 1,
+      });
     await act(async () => {
       result = render(
         <>
@@ -290,25 +296,29 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[2].url).toContain(
-        `/delivery-push/${notificationDTO.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
+        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
       );
     });
     const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
 
-    mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationDTO.iun, mockLegalIds)).reply(200, {
-      filename: 'mocked-filename',
-      contentLength: 1000,
-      retryAfter: null,
-      url: 'https://mocked-url-com',
-    });
+    mock
+      .onGet(
+        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+      )
+      .reply(200, {
+        filename: 'mocked-filename',
+        contentLength: 1000,
+        retryAfter: null,
+        url: 'https://mocked-url-com',
+      });
     // simulate that legal fact is now available
     fireEvent.click(legalFactButton[0]);
 
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
-        `/delivery-push/${notificationDTO.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
+        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
       );
     });
     await waitFor(() => {
@@ -427,7 +437,7 @@ describe('NotificationDetail Page', async () => {
     });
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
-    mock.onPut(CANCEL_NOTIFICATION(notificationDTO.iun)).reply(200);
+    mock.onPut(`/bff/v1/notifications/sent/${notificationDTO.iun}/cancel`).reply(200);
     await act(async () => {
       result = render(<NotificationDetail />);
     });
@@ -447,7 +457,9 @@ describe('NotificationDetail Page', async () => {
       expect(modal).not.toBeInTheDocument();
     });
     expect(mock.history.put).toHaveLength(1);
-    expect(mock.history.put[0].url).toBe(CANCEL_NOTIFICATION(notificationDTO.iun));
+    expect(mock.history.put[0].url).toBe(
+      `/bff/v1/notifications/sent/${notificationDTO.iun}/cancel`
+    );
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[2].url).toBe(`/bff/v1/notifications/sent/${notificationDTO.iun}`);

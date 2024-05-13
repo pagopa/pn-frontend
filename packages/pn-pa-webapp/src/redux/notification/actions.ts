@@ -1,24 +1,23 @@
 import {
   DowntimeLogHistory,
   GetDowntimeHistoryParams,
-  LegalFactId,
   NotificationDetail,
-  NotificationDetailOtherDocument,
+  NotificationDocumentRequest,
+  NotificationDocumentResponse,
   PaymentAttachment,
   PaymentAttachmentSName,
   parseError,
-  performThunkAction,
   validateHistory,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
-import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { DowntimeApiFactory } from '../../generated-client/downtime-logs';
 import { NotificationSentApiFactory } from '../../generated-client/notifications';
 
 export enum NOTIFICATION_ACTIONS {
   GET_SENT_NOTIFICATION = 'getSentNotification',
+  GET_SENT_NOTIFICATION_DOCUMENT = 'getSentNotificationDocument',
   GET_SENT_NOTIFICATION_PAYMENT = 'getSentNotificationPayment',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
   CANCEL_NOTIFICATION = 'cancelNotification',
@@ -41,58 +40,50 @@ export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
   }
 );
 
-// da cambiare il ritorno nel caso venga restituito qualcosa
-export const cancelNotification = createAsyncThunk<
-  string,
-  string,
-  { dispatch: <AnyAction>(action: AnyAction) => AnyAction }
->(
+/**
+ * Cancels a notification
+ */
+export const cancelNotification = createAsyncThunk(
   NOTIFICATION_ACTIONS.CANCEL_NOTIFICATION,
-  performThunkAction((params: string) => NotificationsApi.cancelNotification(params))
-);
-
-export const getSentNotificationLegalfact = createAsyncThunk<
-  { url: string; retryAfter?: number },
-  { iun: string; legalFact: LegalFactId }
->(
-  'getSentNotificationLegalfact',
-  async (params: { iun: string; legalFact: LegalFactId }, { rejectWithValue }) => {
+  async (params: string, { rejectWithValue }) => {
     try {
-      return await NotificationsApi.getSentNotificationLegalfact(params.iun, params.legalFact);
+      const notificationSentApiFactory = NotificationSentApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await notificationSentApiFactory.notificationCancellationV1(params);
+      return response.data;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(parseError(e));
     }
   }
 );
 
 export const getSentNotificationDocument = createAsyncThunk<
-  { url: string },
-  { iun: string; documentIndex: string }
+  NotificationDocumentResponse,
+  NotificationDocumentRequest
 >(
-  'getSentNotificationDocument',
-  async (params: { iun: string; documentIndex: string }, { rejectWithValue }) => {
+  NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION_DOCUMENT,
+  async (params: NotificationDocumentRequest, { rejectWithValue }) => {
     try {
-      return await NotificationsApi.getSentNotificationDocument(params.iun, params.documentIndex);
+      const notificationSentApiFactory = NotificationSentApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await notificationSentApiFactory.getSentNotificationDocumentV1(
+        params.iun,
+        params.documentType,
+        params.documentIdx,
+        params.documentId,
+        params.documentCategory
+      );
+      return response.data as NotificationDocumentResponse;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(parseError(e));
     }
   }
-);
-
-export const getSentNotificationOtherDocument = createAsyncThunk<
-  { url: string; retryAfter?: number },
-  { iun: string; otherDocument: NotificationDetailOtherDocument }
->(
-  'getSentNotificationOtherDocument',
-  performThunkAction(
-    (params: {
-      iun: string;
-      otherDocument: {
-        documentId: string;
-        documentType: string;
-      };
-    }) => NotificationsApi.getSentNotificationOtherDocument(params.iun, params.otherDocument)
-  )
 );
 
 export const getDowntimeHistory = createAsyncThunk<DowntimeLogHistory, GetDowntimeHistoryParams>(

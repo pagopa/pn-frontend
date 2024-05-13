@@ -1,28 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import {
-  LegalFactId,
-  LegalFactType,
-  NotificationDetailOtherDocument,
-  formatToTimezoneString,
-  tenYearsAgo,
-  today,
-} from '@pagopa-pn/pn-commons';
-
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { newNotificationDTO } from '../../../__mocks__/NewNotification.mock';
-import { notificationDTOMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
-import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
-  CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
-  NOTIFICATIONS_LIST,
-  NOTIFICATION_DETAIL_DOCUMENTS,
-  NOTIFICATION_DETAIL_LEGALFACT,
-  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
 
@@ -41,66 +25,6 @@ describe('Notifications api tests', () => {
 
   afterAll(() => {
     mock.restore();
-  });
-
-  it('getSentNotifications', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          iunMatch: '',
-          recipientId: '',
-          status: '',
-        })
-      )
-      .reply(200, notificationsDTO);
-    const res = await NotificationsApi.getSentNotifications({
-      startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(today),
-      iunMatch: '',
-      recipientId: '',
-      status: '',
-    });
-    expect(res).toStrictEqual(notificationsToFe);
-  });
-
-  it('getSentNotificationDocument', async () => {
-    const iun = notificationDTOMultiRecipient.iun;
-    const documentIndex = '0';
-    mock
-      .onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
-      .reply(200, { url: 'http://mocked-url.com' });
-    const res = await NotificationsApi.getSentNotificationDocument(iun, documentIndex);
-    expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
-  });
-
-  it('getSentNotificationOtherDocument', async () => {
-    const iun = notificationDTOMultiRecipient.iun;
-    const otherDocument: NotificationDetailOtherDocument = {
-      documentId: 'mocked-id',
-      documentType: 'mocked-type',
-    };
-    mock
-      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {
-        documentId: otherDocument.documentId,
-      })
-      .reply(200, { url: 'http://mocked-url.com' });
-    const res = await NotificationsApi.getSentNotificationOtherDocument(iun, otherDocument);
-    expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
-  });
-
-  it('getSentNotificationLegalfact', async () => {
-    const iun = notificationDTOMultiRecipient.iun;
-    const legalFact: LegalFactId = {
-      key: 'mocked-key',
-      category: LegalFactType.ANALOG_DELIVERY,
-    };
-    mock
-      .onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact))
-      .reply(200, { url: 'http://mocked-url.com' });
-    const res = await NotificationsApi.getSentNotificationLegalfact(iun, legalFact);
-    expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
   });
 
   it('getUserGroups', async () => {
@@ -155,11 +79,5 @@ describe('Notifications api tests', () => {
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     });
-  });
-
-  it('cancelNotification', async () => {
-    mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
-    const res = await NotificationsApi.cancelNotification('mocked-iun');
-    expect(res).toEqual(undefined);
   });
 });

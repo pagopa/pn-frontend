@@ -1,17 +1,16 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { LegalFactType, NotificationDetail, PaymentAttachmentSName } from '@pagopa-pn/pn-commons';
+import {
+  LegalFactType,
+  NotificationDetail,
+  NotificationDocumentType,
+  PaymentAttachmentSName,
+} from '@pagopa-pn/pn-commons';
 
 import { downtimesDTO } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { notificationDTOMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
 import { apiClient } from '../../../api/apiClients';
-import {
-  CANCEL_NOTIFICATION,
-  NOTIFICATION_DETAIL_DOCUMENTS,
-  NOTIFICATION_DETAIL_LEGALFACT,
-  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
-} from '../../../api/notifications/notifications.routes';
 import { getDowntimeLegalFact } from '../../appStatus/actions';
 import { store } from '../../store';
 import {
@@ -19,11 +18,9 @@ import {
   getDowntimeHistory,
   getSentNotification,
   getSentNotificationDocument,
-  getSentNotificationLegalfact,
-  getSentNotificationOtherDocument,
   getSentNotificationPayment,
 } from '../actions';
-import { resetLegalFactState, resetState } from '../reducers';
+import { resetState } from '../reducers';
 
 const initialState = {
   loading: false,
@@ -38,9 +35,6 @@ const initialState = {
     notificationStatusHistory: [],
     timeline: [],
   },
-  documentDownloadUrl: '',
-  otherDocumentDownloadUrl: '',
-  legalFactDownloadUrl: '',
   downtimeEvents: [],
 };
 
@@ -82,11 +76,14 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch the notification document', async () => {
     const mockRequest = {
       iun: notificationDTOMultiRecipient.iun,
-      documentIndex: '0',
+      documentType: NotificationDocumentType.ATTACHMENT,
+      documentIdx: 0,
     };
     const mockResponse = { url: 'http://mocked-url.com' };
     mock
-      .onGet(NOTIFICATION_DETAIL_DOCUMENTS(mockRequest.iun, mockRequest.documentIndex))
+      .onGet(
+        `/bff/v1/notifications/sent/${mockRequest.iun}/documents/${mockRequest.documentType}?documentIdx=${mockRequest.documentIdx}`
+      )
       .reply(200, mockResponse);
     const action = await store.dispatch(getSentNotificationDocument(mockRequest));
     const payload = action.payload;
@@ -97,33 +94,37 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch the notification legalfact', async () => {
     const mockRequest = {
       iun: notificationDTOMultiRecipient.iun,
-      legalFact: { key: 'mocked-key', category: LegalFactType.ANALOG_DELIVERY },
+      documentType: NotificationDocumentType.LEGAL_FACT,
+      documentId: 'mocked-key',
+      documentCategory: LegalFactType.ANALOG_DELIVERY,
     };
     const mockResponse = { url: 'http://mocked-url.com' };
     mock
-      .onGet(NOTIFICATION_DETAIL_LEGALFACT(mockRequest.iun, mockRequest.legalFact))
+      .onGet(
+        `/bff/v1/notifications/sent/${mockRequest.iun}/documents/${mockRequest.documentType}?documentId=${mockRequest.documentId}&documentCategory=${mockRequest.documentCategory}`
+      )
       .reply(200, mockResponse);
-    const action = await store.dispatch(getSentNotificationLegalfact(mockRequest));
+    const action = await store.dispatch(getSentNotificationDocument(mockRequest));
     const payload = action.payload;
-    expect(action.type).toBe('getSentNotificationLegalfact/fulfilled');
+    expect(action.type).toBe('getSentNotificationDocument/fulfilled');
     expect(payload).toEqual(mockResponse);
   });
 
   it('Should be able to fetch the notification AAR document', async () => {
     const mockRequest = {
       iun: notificationDTOMultiRecipient.iun,
-      otherDocument: {
-        documentId: 'mocked-document-id',
-        documentType: 'mocked-document-type',
-      },
+      documentType: NotificationDocumentType.AAR,
+      documentId: 'mocked-document-id',
     };
     const mockResponse = { url: 'http://mocked-url.com' };
     mock
-      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(mockRequest.iun, mockRequest.otherDocument))
+      .onGet(
+        `/bff/v1/notifications/sent/${mockRequest.iun}/documents/${mockRequest.documentType}?documentId=${mockRequest.documentId}`
+      )
       .reply(200, mockResponse);
-    const action = await store.dispatch(getSentNotificationOtherDocument(mockRequest));
+    const action = await store.dispatch(getSentNotificationDocument(mockRequest));
     const payload = action.payload;
-    expect(action.type).toBe('getSentNotificationOtherDocument/fulfilled');
+    expect(action.type).toBe('getSentNotificationDocument/fulfilled');
     expect(payload).toEqual(mockResponse);
   });
 
@@ -180,17 +181,8 @@ describe('Notification detail redux state tests', () => {
     expect(state).toEqual(initialState);
   });
 
-  it('Should be able to reset legalfact state', () => {
-    const action = store.dispatch(resetLegalFactState());
-    const payload = action.payload;
-    expect(action.type).toBe('notificationSlice/resetLegalFactState');
-    expect(payload).toEqual(undefined);
-    const state = store.getState().notificationState;
-    expect(state.legalFactDownloadUrl).toEqual('');
-  });
-
   it('Should be able to cancel notification', async () => {
-    mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
+    mock.onPut('/bff/v1/notifications/sent/mocked-iun/cancel').reply(200);
     const action = await store.dispatch(cancelNotification('mocked-iun'));
     expect(action.type).toBe('cancelNotification/fulfilled');
     expect(action.payload).toEqual(undefined);

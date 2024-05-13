@@ -356,11 +356,11 @@ describe('timeline legal fact link text', () => {
       legalFactsIds: [
         {
           key: 'legal-fact-1',
-          category: LegalFactType.AAR,
+          category: LegalFactType.PEC_RECEIPT,
         },
       ],
     };
-    const label = getLegalFactLabel(timelineElem, LegalFactType.AAR, 'legal-fact-1');
+    const label = getLegalFactLabel(timelineElem, LegalFactType.PEC_RECEIPT, 'legal-fact-1');
     expect(label).toBe('notifiche - detail.timeline.analog-workflow-attachment-kind.Plico');
   });
 
@@ -376,14 +376,18 @@ describe('timeline legal fact link text', () => {
       legalFactsIds: [
         {
           key: 'legal-fact-1',
-          category: LegalFactType.AAR,
+          category: LegalFactType.DIGITAL_DELIVERY,
         },
       ],
     };
-    let label = getLegalFactLabel(timelineElem, LegalFactType.AAR, 'legal-fact-1');
+    let label = getLegalFactLabel(timelineElem, LegalFactType.DIGITAL_DELIVERY, 'legal-fact-1');
     expect(label).toBe('notifiche - detail.timeline.analog-workflow-attachment-kind.23L');
     // no attachments
-    label = getLegalFactLabel({ ...timelineElem, details: {} }, LegalFactType.AAR, 'legal-fact-1');
+    label = getLegalFactLabel(
+      { ...timelineElem, details: {} },
+      LegalFactType.DIGITAL_DELIVERY,
+      'legal-fact-1'
+    );
     expect(label).toBe('notifiche - detail.timeline.analog-workflow-attachment-kind.generic');
   });
 
@@ -405,9 +409,11 @@ describe('timeline legal fact link text', () => {
         'ANALOG_FAILURE_WORKFLOW.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_1.SOURCE_SPECIAL.ATTEMPT_0',
       timestamp: '2023-08-25T09:35:37.467148235Z',
       category: TimelineCategory.ANALOG_FAILURE_WORKFLOW,
-      details: {},
+      details: {
+        getGeneratedAarUrl: 'https://aar-fake-url.com',
+      },
     };
-    const label = getLegalFactLabel(timelineElem, LegalFactType.AAR);
+    const label = getLegalFactLabel(timelineElem);
     expect(label).toBe('notifiche - detail.timeline.aar-document');
   });
 

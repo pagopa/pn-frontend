@@ -1,92 +1,13 @@
-import { AxiosResponse } from 'axios';
-
-import {
-  GetNotificationsParams,
-  GetNotificationsResponse,
-  LegalFactId,
-  NotificationDetailOtherDocument,
-} from '@pagopa-pn/pn-commons';
-
 import { NewNotificationDTO, NewNotificationResponse } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
 import { apiClient, externalClient } from '../apiClients';
 import {
-  CANCEL_NOTIFICATION, // CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
-  NOTIFICATIONS_LIST,
-  NOTIFICATION_DETAIL_DOCUMENTS,
-  NOTIFICATION_DETAIL_LEGALFACT,
-  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from './notifications.routes';
 
-const getDownloadUrl = (response: AxiosResponse): { url: string } => {
-  if (response.data) {
-    return response.data as { url: string };
-  }
-  return { url: '' };
-};
-
 export const NotificationsApi = {
-  /**
-   * Gets current user notifications
-   * @param  {string} startDate
-   * @param  {string} endDate
-   * @returns Promise
-   */
-  getSentNotifications: (
-    params: GetNotificationsParams<string>
-  ): Promise<GetNotificationsResponse> =>
-    apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
-      if (response.data?.resultsPage) {
-        return response.data;
-      }
-      return {
-        resultsPage: [],
-        moreResult: false,
-        nextPagesKey: [],
-      };
-    }),
-
-  /**
-   * Gets current user notification document
-   * @param  {string} iun
-   * @param  {number} documentIndex
-   * @returns Promise
-   */
-  getSentNotificationDocument: (iun: string, documentIndex: string): Promise<{ url: string }> =>
-    apiClient
-      .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
-      .then((response) => getDownloadUrl(response)),
-
-  /**
-   *
-   * @param  {string} iun
-   * @param  {NotificationDetailOtherDocument} otherDocument
-   * @returns Promise
-   */
-  getSentNotificationOtherDocument: (
-    iun: string,
-    otherDocument: NotificationDetailOtherDocument
-  ): Promise<{ url: string }> =>
-    apiClient
-      .get<{ url: string }>(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {
-        params: { documentId: otherDocument.documentId },
-      })
-      .then((response) => getDownloadUrl(response)),
-
-  /**
-   * Gets current user notification legalfact
-   * @param  {string} iun
-   * @param  {LegalFactId} legalFact
-   * @returns Promise
-   */
-  getSentNotificationLegalfact: (iun: string, legalFact: LegalFactId): Promise<{ url: string }> =>
-    apiClient
-      .get<{ url: string }>(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact))
-      .then((response) => getDownloadUrl(response)),
-
   /**
    * Get user groups
    * @param  {GroupStatus} status
@@ -150,12 +71,4 @@ export const NotificationsApi = {
     apiClient
       .post<NewNotificationResponse>(CREATE_NOTIFICATION(), notification)
       .then((response) => response.data),
-
-  /**
-   * Cancel notification
-   * @param  {string} iun
-   * @returns Promise
-   */
-  cancelNotification: (iun: string): Promise<string> =>
-    apiClient.put<string>(CANCEL_NOTIFICATION(iun)).then((response) => response.data),
 };
