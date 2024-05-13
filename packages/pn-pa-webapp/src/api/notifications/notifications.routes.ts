@@ -1,10 +1,6 @@
 import _ from 'lodash';
 
-import {
-  LegalFactId,
-  NotificationDetailOtherDocument,
-  compileRoute,
-} from '@pagopa-pn/pn-commons';
+import { LegalFactId, NotificationDetailOtherDocument, compileRoute } from '@pagopa-pn/pn-commons';
 
 import { GroupStatus } from './../../models/user';
 
