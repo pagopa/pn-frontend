@@ -638,6 +638,31 @@ export interface BffNotificationStatusHistory {
 
 
 /**
+ * Dto contenente i risultati di una ricerca di notifiche. Ogni risposta conterrà solo  una pagina di risultati relativi a una ricerca e le indicazioni per raggiungere alcune pagine successive.
+ * @export
+ * @interface BffNotificationsResponse
+ */
+export interface BffNotificationsResponse {
+    /**
+     * Una pagina di risultati della query
+     * @type {Array<NotificationSearchRow>}
+     * @memberof BffNotificationsResponse
+     */
+    'resultsPage'?: Array<NotificationSearchRow>;
+    /**
+     * Indica se sono presenti ulteriori pagine di risultati
+     * @type {boolean}
+     * @memberof BffNotificationsResponse
+     */
+    'moreResult'?: boolean;
+    /**
+     * Elenco, non esaustivo, delle chiavi da usare per richiedere le  pagine di risultati successive a quella corrente. <br/> Valorizzato solo se il campo __moreResult__ ha valore __true__.
+     * @type {Array<string>}
+     * @memberof BffNotificationsResponse
+     */
+    'nextPagesKey'?: Array<string>;
+}
+/**
  * stato di avanzamento del processo di notifica:`   * `SENDER_ACK_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa in carico per il mittente a safe storage   * `VALIDATE_NORMALIZE_ADDRESSES_REQUEST` - Invio della richiesta di validazione e normalizzazione indirizzi fisici presenti nella richiesta di notifica   * `NORMALIZED_ADDRESS` - Salvataggio indirizzi normalizzati   * `REQUEST_ACCEPTED` - Richiesta di notifica accettata a seguito dei controlli di validazione   * `REQUEST_REFUSED` - Richiesta di notifica rifiutata per fallimento di validazione   * `SEND_COURTESY_MESSAGE` - Invio di un messaggio di cortesia   * `GET_ADDRESS` - Disponibilità dell’indirizzo specifico (domicilio digitale di piattaforma, domicilio digitale speciale, domicilio digitale generale, indirizzo fisico sulla notifica o sui registri nazionali)   * `PUBLIC_REGISTRY_CALL` - Richiesta ai registri pubblici per ottenere domicilio digitale generale o per ottenere indirizzo fisico da ANPR, da registro della imprese, da anagrafe tributaria.   * `PUBLIC_REGISTRY_RESPONSE` - Ricevuta la risposta dei registri pubblici   * `SCHEDULE_ANALOG_WORKFLOW` - Pianificazione del workflow per invio cartaceo   * `SCHEDULE_DIGITAL_WORKFLOW` -Pianificazione del workflow per invio digitale (PEC) del secondo tentativo in caso di fallimento del primo.   * `PREPARE_DIGITAL_DOMICILE` - Preparazione per l’invio dell’avviso digitale.Va a valutare la timeline per capire quale sarà il prossimo indirizzo da usare.   * `SEND_DIGITAL_DOMICILE` - Invio digitale dell’avviso di notifica   * `SEND_DIGITAL_PROGRESS` - Tentativo di Invio PEC ad un determinato indirizzo.   * `SEND_DIGITAL_FEEDBACK` - Ottenuto esito ad un invio digitale   * `SCHEDULE_REFINEMENT` - Pianificato il perfezionamento per decorrenza termini   * `REFINEMENT` - Perfezionamento per decorrenza termini   * `DIGITAL_DELIVERY_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di chiusura del workflow digitale a safe storage   * `DIGITAL_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio digitale   * `DIGITAL_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio digitale: tutti i tentativi di invio ai domicili digitali sono falliti.   * `ANALOG_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio cartaceo   * `ANALOG_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio cartaceo NOTA: se per tutti i destinatari si conclude il workflow con fallimento verrà scatenato l’evento COMPLETELY_UNREACHABLE   * `PREPARE_SIMPLE_REGISTERED_LETTER` - Invio richiesta di prepare (preparazione ad invio) raccomandata semplice a paperChannel   * `SEND_SIMPLE_REGISTERED_LETTER` - Invio di raccomandata semplice   * `SEND_SIMPLE_REGISTERED_LETTER_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea semplice   * `NOTIFICATION_VIEWED_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa visione a safe storage   * `NOTIFICATION_VIEWED` - Visualizzazione della notifica (perfeziona la notifica se non già perfezionata per decorrenza termini o da altro destinatario)   * `PREPARE_ANALOG_DOMICILE` - Invio richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `SEND_ANALOG_DOMICILE` - Invio cartaceo dell’avviso di notifica   * `SEND_ANALOG_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea   * `SEND_ANALOG_FEEDBACK` - Ricezione esito dell\'invio cartaceo   * `COMPLETELY_UNREACHABLE_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto (simile a opponibile a terzi) di completamento con fallimento del workflow di invio cartaceo   * `COMPLETELY_UNREACHABLE` - Tutti i destinatari risultano irraggiungibili   * `AAR_CREATION_REQUEST` - Invio della richiesta di creazione dell\'AAR (Avviso di Avvenuta Ricezione) a safe storage   * `AAR_GENERATION` - Generazione dell’AAR (Avviso di Avvenuta Ricezione)   * `PAYMENT` - Ricezione pagamento della notifica   * `NOT_HANDLED` - Per la sperimentazione l\'invio analogico non è previsto, viene inserito tale elemento di timeline   * `PROBABLE_SCHEDULING_ANALOG_DATE` - Data probabile di inizio del flusso analogico   * `NOTIFICATION_CANCELLATION_REQUEST` - Richiesta di annullamento di una notifica   * `NOTIFICATION_CANCELLED` - Notifica annullata   * `PREPARE_ANALOG_DOMICILE_FAILURE` - Fallimento della richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `NOTIFICATION_RADD_RETRIEVED` - Accesso alla notifica tramite la rete RADD. Non perfeziona la notifica. 
  * @export
  * @enum {string}
@@ -1662,6 +1687,122 @@ export interface NotificationRequestAcceptedDetails {
      */
     'recIndex'?: number;
 }
+/**
+ * Dto contenente i risultati di una ricerca di notifiche. Ogni risposta conterrà solo  una pagina di risultati relativi a una ricerca e le indicazioni per raggiungere alcune pagine successive.
+ * @export
+ * @interface NotificationSearchResponse
+ */
+export interface NotificationSearchResponse {
+    /**
+     * Una pagina di risultati della query
+     * @type {Array<NotificationSearchRow>}
+     * @memberof NotificationSearchResponse
+     */
+    'resultsPage'?: Array<NotificationSearchRow>;
+    /**
+     * Indica se sono presenti ulteriori pagine di risultati
+     * @type {boolean}
+     * @memberof NotificationSearchResponse
+     */
+    'moreResult'?: boolean;
+    /**
+     * Elenco, non esaustivo, delle chiavi da usare per richiedere le  pagine di risultati successive a quella corrente. <br/> Valorizzato solo se il campo __moreResult__ ha valore __true__.
+     * @type {Array<string>}
+     * @memberof NotificationSearchResponse
+     */
+    'nextPagesKey'?: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface NotificationSearchRow
+ */
+export interface NotificationSearchRow {
+    /**
+     * Identificativo Univoco Notifica
+     * @type {string}
+     * @memberof NotificationSearchRow
+     */
+    'iun'?: string;
+    /**
+     * Numero protocollo associato alla notifica da parte della PA
+     * @type {string}
+     * @memberof NotificationSearchRow
+     */
+    'paProtocolNumber'?: string;
+    /**
+     * Denominazione della PA che ha inviato l\'atto.
+     * @type {string}
+     * @memberof NotificationSearchRow
+     */
+    'sender'?: string;
+    /**
+     * Data spedizione notifica
+     * @type {string}
+     * @memberof NotificationSearchRow
+     */
+    'sentAt'?: string;
+    /**
+     * Oggetto della notifica
+     * @type {string}
+     * @memberof NotificationSearchRow
+     */
+    'subject'?: string;
+    /**
+     * 
+     * @type {NotificationStatus}
+     * @memberof NotificationSearchRow
+     */
+    'notificationStatus'?: NotificationStatus;
+    /**
+     * Elenco delle denominazioni dei destinatari della notifica. <br/> __N.B:__ campo da utilizzare solo per visualizzazione.
+     * @type {Array<string>}
+     * @memberof NotificationSearchRow
+     */
+    'recipients'?: Array<string>;
+    /**
+     * Data accettazione notifica
+     * @type {string}
+     * @memberof NotificationSearchRow
+     */
+    'requestAcceptedAt'?: string;
+    /**
+     * Gruppo di utenti dell\'ente mittente che può visualizzare la notifica
+     * @type {string}
+     * @memberof NotificationSearchRow
+     */
+    'group'?: string;
+    /**
+     * Id delega (per notifiche delegate)
+     * @type {string}
+     * @memberof NotificationSearchRow
+     */
+    'mandateId'?: string;
+}
+
+
+/**
+ * stato di avanzamento del processo di notifica:   * `IN_VALIDATION` - notifica depositata in attesa di validazione   * `ACCEPTED` - L\'ente ha depositato la notifica con successo   * `REFUSED` - Notifica rifiutata a seguito della validazione   * `DELIVERING` - L\'invio della notifica è in corso   * `DELIVERED` - La notifica è stata consegnata a tutti i destinatari   * `VIEWED` - Il destinatario ha letto la notifica entro il termine stabilito   * `EFFECTIVE_DATE` - Il destinatario non ha letto la notifica entro il termine stabilito   * `PAID` - Uno dei destinatari ha pagato la notifica   * `UNREACHABLE` - Il destinatario non è reperibile   * `CANCELLED` - L\'ente ha annullato l\'invio della notifica 
+ * @export
+ * @enum {string}
+ */
+
+export const NotificationStatus = {
+    InValidation: 'IN_VALIDATION',
+    Accepted: 'ACCEPTED',
+    Refused: 'REFUSED',
+    Delivering: 'DELIVERING',
+    Delivered: 'DELIVERED',
+    Viewed: 'VIEWED',
+    EffectiveDate: 'EFFECTIVE_DATE',
+    Paid: 'PAID',
+    Unreachable: 'UNREACHABLE',
+    Cancelled: 'CANCELLED'
+} as const;
+
+export type NotificationStatus = typeof NotificationStatus[keyof typeof NotificationStatus];
+
+
 /**
  * 
  * @export
@@ -3038,6 +3179,172 @@ export const NotificationReceivedApiAxiosParamCreator = function (configuration?
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Questa operazione permette di ricercare le notifiche delegate ricevute.
+         * @summary Destinatario: ricerca notifiche delegate ricevute
+         * @param {string} startDate data/ora di inizio dell\&#39;intervallo entro cui eseguire la ricerca
+         * @param {string} endDate data/ora di fine dell\&#39;intervallo entro cui eseguire la ricerca
+         * @param {string} [senderId] identificativo del mittente
+         * @param {string} [recipientId] identificativo del destinatario
+         * @param {string} [group] Gruppo da utilizzare nella query come filtro
+         * @param {NotificationStatus} [status] stato della notifica
+         * @param {string} [iunMatch] Se presente indica che lo IUN dei risultati deve essere uguale al valore di questo parametro.
+         * @param {number} [size] dimensione della pagina di risultati
+         * @param {string} [nextPagesKey] Chiave indicante la pagina di risultati, da specificare solo se si vuole una pagina  diversa dalla prima.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchReceivedDelegatedNotificationsV1: async (startDate: string, endDate: string, senderId?: string, recipientId?: string, group?: string, status?: NotificationStatus, iunMatch?: string, size?: number, nextPagesKey?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'startDate' is not null or undefined
+            assertParamExists('searchReceivedDelegatedNotificationsV1', 'startDate', startDate)
+            // verify required parameter 'endDate' is not null or undefined
+            assertParamExists('searchReceivedDelegatedNotificationsV1', 'endDate', endDate)
+            const localVarPath = `/bff/v1/notifications/received/delegated`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (startDate !== undefined) {
+                localVarQueryParameter['startDate'] = (startDate as any instanceof Date) ?
+                    (startDate as any).toISOString() :
+                    startDate;
+            }
+
+            if (endDate !== undefined) {
+                localVarQueryParameter['endDate'] = (endDate as any instanceof Date) ?
+                    (endDate as any).toISOString() :
+                    endDate;
+            }
+
+            if (senderId !== undefined) {
+                localVarQueryParameter['senderId'] = senderId;
+            }
+
+            if (recipientId !== undefined) {
+                localVarQueryParameter['recipientId'] = recipientId;
+            }
+
+            if (group !== undefined) {
+                localVarQueryParameter['group'] = group;
+            }
+
+            if (status !== undefined) {
+                localVarQueryParameter['status'] = status;
+            }
+
+            if (iunMatch !== undefined) {
+                localVarQueryParameter['iunMatch'] = iunMatch;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
+
+            if (nextPagesKey !== undefined) {
+                localVarQueryParameter['nextPagesKey'] = nextPagesKey;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Questa operazione permette di ricercare le notifiche ricevute.
+         * @summary Destinatario: ricerca notifiche ricevute
+         * @param {string} startDate data/ora di inizio dell\&#39;intervallo entro cui eseguire la ricerca
+         * @param {string} endDate data/ora di fine dell\&#39;intervallo entro cui eseguire la ricerca
+         * @param {string} [mandateId] identificativo della delega
+         * @param {string} [senderId] identificativo del mittente
+         * @param {NotificationStatus} [status] stato della notifica
+         * @param {string} [subjectRegExp] Regular expression usata, se presente, per filtrare i risultati in base al subject  delle notifiche.
+         * @param {string} [iunMatch] Se presente indica che lo IUN dei risultati deve essere uguale al valore di questo parametro.
+         * @param {number} [size] dimensione della pagina di risultati
+         * @param {string} [nextPagesKey] Chiave indicante la pagina di risultati, da specificare solo se si vuole una pagina  diversa dalla prima.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchReceivedNotificationsV1: async (startDate: string, endDate: string, mandateId?: string, senderId?: string, status?: NotificationStatus, subjectRegExp?: string, iunMatch?: string, size?: number, nextPagesKey?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'startDate' is not null or undefined
+            assertParamExists('searchReceivedNotificationsV1', 'startDate', startDate)
+            // verify required parameter 'endDate' is not null or undefined
+            assertParamExists('searchReceivedNotificationsV1', 'endDate', endDate)
+            const localVarPath = `/bff/v1/notifications/received`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (startDate !== undefined) {
+                localVarQueryParameter['startDate'] = (startDate as any instanceof Date) ?
+                    (startDate as any).toISOString() :
+                    startDate;
+            }
+
+            if (endDate !== undefined) {
+                localVarQueryParameter['endDate'] = (endDate as any instanceof Date) ?
+                    (endDate as any).toISOString() :
+                    endDate;
+            }
+
+            if (mandateId !== undefined) {
+                localVarQueryParameter['mandateId'] = mandateId;
+            }
+
+            if (senderId !== undefined) {
+                localVarQueryParameter['senderId'] = senderId;
+            }
+
+            if (status !== undefined) {
+                localVarQueryParameter['status'] = status;
+            }
+
+            if (subjectRegExp !== undefined) {
+                localVarQueryParameter['subjectRegExp'] = subjectRegExp;
+            }
+
+            if (iunMatch !== undefined) {
+                localVarQueryParameter['iunMatch'] = iunMatch;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
+
+            if (nextPagesKey !== undefined) {
+                localVarQueryParameter['nextPagesKey'] = nextPagesKey;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -3062,6 +3369,48 @@ export const NotificationReceivedApiFp = function(configuration?: Configuration)
             const localVarOperationServerBasePath = operationServerMap['NotificationReceivedApi.getReceivedNotificationV1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * Questa operazione permette di ricercare le notifiche delegate ricevute.
+         * @summary Destinatario: ricerca notifiche delegate ricevute
+         * @param {string} startDate data/ora di inizio dell\&#39;intervallo entro cui eseguire la ricerca
+         * @param {string} endDate data/ora di fine dell\&#39;intervallo entro cui eseguire la ricerca
+         * @param {string} [senderId] identificativo del mittente
+         * @param {string} [recipientId] identificativo del destinatario
+         * @param {string} [group] Gruppo da utilizzare nella query come filtro
+         * @param {NotificationStatus} [status] stato della notifica
+         * @param {string} [iunMatch] Se presente indica che lo IUN dei risultati deve essere uguale al valore di questo parametro.
+         * @param {number} [size] dimensione della pagina di risultati
+         * @param {string} [nextPagesKey] Chiave indicante la pagina di risultati, da specificare solo se si vuole una pagina  diversa dalla prima.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async searchReceivedDelegatedNotificationsV1(startDate: string, endDate: string, senderId?: string, recipientId?: string, group?: string, status?: NotificationStatus, iunMatch?: string, size?: number, nextPagesKey?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BffNotificationsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchReceivedDelegatedNotificationsV1(startDate, endDate, senderId, recipientId, group, status, iunMatch, size, nextPagesKey, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationReceivedApi.searchReceivedDelegatedNotificationsV1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Questa operazione permette di ricercare le notifiche ricevute.
+         * @summary Destinatario: ricerca notifiche ricevute
+         * @param {string} startDate data/ora di inizio dell\&#39;intervallo entro cui eseguire la ricerca
+         * @param {string} endDate data/ora di fine dell\&#39;intervallo entro cui eseguire la ricerca
+         * @param {string} [mandateId] identificativo della delega
+         * @param {string} [senderId] identificativo del mittente
+         * @param {NotificationStatus} [status] stato della notifica
+         * @param {string} [subjectRegExp] Regular expression usata, se presente, per filtrare i risultati in base al subject  delle notifiche.
+         * @param {string} [iunMatch] Se presente indica che lo IUN dei risultati deve essere uguale al valore di questo parametro.
+         * @param {number} [size] dimensione della pagina di risultati
+         * @param {string} [nextPagesKey] Chiave indicante la pagina di risultati, da specificare solo se si vuole una pagina  diversa dalla prima.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async searchReceivedNotificationsV1(startDate: string, endDate: string, mandateId?: string, senderId?: string, status?: NotificationStatus, subjectRegExp?: string, iunMatch?: string, size?: number, nextPagesKey?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BffNotificationsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchReceivedNotificationsV1(startDate, endDate, mandateId, senderId, status, subjectRegExp, iunMatch, size, nextPagesKey, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationReceivedApi.searchReceivedNotificationsV1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -3082,6 +3431,42 @@ export const NotificationReceivedApiFactory = function (configuration?: Configur
          */
         getReceivedNotificationV1(iun: string, mandateId?: string, options?: any): AxiosPromise<BffFullNotificationV1> {
             return localVarFp.getReceivedNotificationV1(iun, mandateId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Questa operazione permette di ricercare le notifiche delegate ricevute.
+         * @summary Destinatario: ricerca notifiche delegate ricevute
+         * @param {string} startDate data/ora di inizio dell\&#39;intervallo entro cui eseguire la ricerca
+         * @param {string} endDate data/ora di fine dell\&#39;intervallo entro cui eseguire la ricerca
+         * @param {string} [senderId] identificativo del mittente
+         * @param {string} [recipientId] identificativo del destinatario
+         * @param {string} [group] Gruppo da utilizzare nella query come filtro
+         * @param {NotificationStatus} [status] stato della notifica
+         * @param {string} [iunMatch] Se presente indica che lo IUN dei risultati deve essere uguale al valore di questo parametro.
+         * @param {number} [size] dimensione della pagina di risultati
+         * @param {string} [nextPagesKey] Chiave indicante la pagina di risultati, da specificare solo se si vuole una pagina  diversa dalla prima.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchReceivedDelegatedNotificationsV1(startDate: string, endDate: string, senderId?: string, recipientId?: string, group?: string, status?: NotificationStatus, iunMatch?: string, size?: number, nextPagesKey?: string, options?: any): AxiosPromise<BffNotificationsResponse> {
+            return localVarFp.searchReceivedDelegatedNotificationsV1(startDate, endDate, senderId, recipientId, group, status, iunMatch, size, nextPagesKey, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Questa operazione permette di ricercare le notifiche ricevute.
+         * @summary Destinatario: ricerca notifiche ricevute
+         * @param {string} startDate data/ora di inizio dell\&#39;intervallo entro cui eseguire la ricerca
+         * @param {string} endDate data/ora di fine dell\&#39;intervallo entro cui eseguire la ricerca
+         * @param {string} [mandateId] identificativo della delega
+         * @param {string} [senderId] identificativo del mittente
+         * @param {NotificationStatus} [status] stato della notifica
+         * @param {string} [subjectRegExp] Regular expression usata, se presente, per filtrare i risultati in base al subject  delle notifiche.
+         * @param {string} [iunMatch] Se presente indica che lo IUN dei risultati deve essere uguale al valore di questo parametro.
+         * @param {number} [size] dimensione della pagina di risultati
+         * @param {string} [nextPagesKey] Chiave indicante la pagina di risultati, da specificare solo se si vuole una pagina  diversa dalla prima.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchReceivedNotificationsV1(startDate: string, endDate: string, mandateId?: string, senderId?: string, status?: NotificationStatus, subjectRegExp?: string, iunMatch?: string, size?: number, nextPagesKey?: string, options?: any): AxiosPromise<BffNotificationsResponse> {
+            return localVarFp.searchReceivedNotificationsV1(startDate, endDate, mandateId, senderId, status, subjectRegExp, iunMatch, size, nextPagesKey, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3104,6 +3489,46 @@ export class NotificationReceivedApi extends BaseAPI {
      */
     public getReceivedNotificationV1(iun: string, mandateId?: string, options?: RawAxiosRequestConfig) {
         return NotificationReceivedApiFp(this.configuration).getReceivedNotificationV1(iun, mandateId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Questa operazione permette di ricercare le notifiche delegate ricevute.
+     * @summary Destinatario: ricerca notifiche delegate ricevute
+     * @param {string} startDate data/ora di inizio dell\&#39;intervallo entro cui eseguire la ricerca
+     * @param {string} endDate data/ora di fine dell\&#39;intervallo entro cui eseguire la ricerca
+     * @param {string} [senderId] identificativo del mittente
+     * @param {string} [recipientId] identificativo del destinatario
+     * @param {string} [group] Gruppo da utilizzare nella query come filtro
+     * @param {NotificationStatus} [status] stato della notifica
+     * @param {string} [iunMatch] Se presente indica che lo IUN dei risultati deve essere uguale al valore di questo parametro.
+     * @param {number} [size] dimensione della pagina di risultati
+     * @param {string} [nextPagesKey] Chiave indicante la pagina di risultati, da specificare solo se si vuole una pagina  diversa dalla prima.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationReceivedApi
+     */
+    public searchReceivedDelegatedNotificationsV1(startDate: string, endDate: string, senderId?: string, recipientId?: string, group?: string, status?: NotificationStatus, iunMatch?: string, size?: number, nextPagesKey?: string, options?: RawAxiosRequestConfig) {
+        return NotificationReceivedApiFp(this.configuration).searchReceivedDelegatedNotificationsV1(startDate, endDate, senderId, recipientId, group, status, iunMatch, size, nextPagesKey, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Questa operazione permette di ricercare le notifiche ricevute.
+     * @summary Destinatario: ricerca notifiche ricevute
+     * @param {string} startDate data/ora di inizio dell\&#39;intervallo entro cui eseguire la ricerca
+     * @param {string} endDate data/ora di fine dell\&#39;intervallo entro cui eseguire la ricerca
+     * @param {string} [mandateId] identificativo della delega
+     * @param {string} [senderId] identificativo del mittente
+     * @param {NotificationStatus} [status] stato della notifica
+     * @param {string} [subjectRegExp] Regular expression usata, se presente, per filtrare i risultati in base al subject  delle notifiche.
+     * @param {string} [iunMatch] Se presente indica che lo IUN dei risultati deve essere uguale al valore di questo parametro.
+     * @param {number} [size] dimensione della pagina di risultati
+     * @param {string} [nextPagesKey] Chiave indicante la pagina di risultati, da specificare solo se si vuole una pagina  diversa dalla prima.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationReceivedApi
+     */
+    public searchReceivedNotificationsV1(startDate: string, endDate: string, mandateId?: string, senderId?: string, status?: NotificationStatus, subjectRegExp?: string, iunMatch?: string, size?: number, nextPagesKey?: string, options?: RawAxiosRequestConfig) {
+        return NotificationReceivedApiFp(this.configuration).searchReceivedNotificationsV1(startDate, endDate, mandateId, senderId, status, subjectRegExp, iunMatch, size, nextPagesKey, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

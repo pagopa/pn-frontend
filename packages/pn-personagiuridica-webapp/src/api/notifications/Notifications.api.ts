@@ -2,8 +2,6 @@ import { AxiosResponse } from 'axios';
 
 import {
   ExtRegistriesPaymentDetails,
-  GetNotificationsParams,
-  GetNotificationsResponse,
   LegalFactId,
   NotificationDetailOtherDocument,
   PaymentAttachment,
@@ -14,7 +12,6 @@ import {
 import { NotificationId } from '../../models/Notifications';
 import { apiClient } from '../apiClients';
 import {
-  NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
@@ -32,30 +29,6 @@ const getDownloadUrl = (response: AxiosResponse): { url: string } => {
 };
 
 export const NotificationsApi = {
-  /**
-   * Gets current user notifications
-   * @param {GetNotificationsParams & { isDelegatedPage: boolean }} params
-   *
-   * @returns Promise
-   */
-  getReceivedNotifications: (
-    params: GetNotificationsParams<string> & { isDelegatedPage: boolean }
-  ): Promise<GetNotificationsResponse> => {
-    const { isDelegatedPage, ...payload } = params;
-    return apiClient
-      .get<GetNotificationsResponse>(NOTIFICATIONS_LIST(payload, isDelegatedPage))
-      .then((response) => {
-        if (response.data && response.data.resultsPage) {
-          return response.data;
-        }
-        return {
-          resultsPage: [],
-          moreResult: false,
-          nextPagesKey: [],
-        };
-      });
-  },
-
   /**
    * Get notification iun and mandate id from aar link
    * @param {string} qrCode

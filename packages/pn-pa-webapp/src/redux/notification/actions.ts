@@ -32,7 +32,7 @@ export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
         undefined,
         apiClient
       );
-      const response = await notificationSentApiFactory.retrieveSentNotificationV1(params);
+      const response = await notificationSentApiFactory.getSentNotificationV1(params);
       return response.data as NotificationDetail;
     } catch (e: any) {
       return rejectWithValue(parseError(e));

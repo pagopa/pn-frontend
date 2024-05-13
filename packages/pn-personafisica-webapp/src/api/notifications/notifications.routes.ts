@@ -1,11 +1,9 @@
 import _ from 'lodash';
 
 import {
-  GetNotificationsParams,
   LegalFactId,
   NotificationDetailOtherDocument,
   compileRoute,
-  formatFiscalCode,
 } from '@pagopa-pn/pn-commons';
 
 // Prefixes
@@ -29,14 +27,6 @@ const API_NOTIFICATIONS_FROM_QRCODE = 'check-aar-qr-code';
 const API_NOTIFICATIONS_CHECKOUTCART = 'checkout-cart';
 
 // Parameters
-const API_NOTIFICATIONS_START_DATE_PARAMETER = 'startDate';
-const API_NOTIFICATIONS_END_DATE_PARAMETER = 'endDate';
-const API_NOTIFICATIONS_RECIPIENT_ID_PARAMETER = 'recipientId';
-const API_NOTIFICATIONS_STATUS_PARAMETER = 'status';
-const API_NOTIFICATIONS_SUBJECT_PARAMETER = 'subjectRegExp';
-const API_NOTIFICATIONS_SIZE_PARAMETER = 'size';
-const API_NOTIFICATIONS_NEXT_PAGES_KEY_PARAMETER = 'nextPagesKey';
-const API_NOTIFICATIONS_IUN_MATCH_PARAMETER = 'iunMatch';
 const API_NOTIFICATIONS_MANDATE_ID_PARAMETER = 'mandateId';
 const API_NOTIFICATIONS_ATTACHMENT_IDX_PARAMETER = 'attachmentIdx';
 const API_NOTIFICATIONS_IUN_PARAMETER = 'iun';
@@ -57,26 +47,6 @@ const API_NOTIFICATION_PAYMENT_INFO_PATH = `${API_NOTIFICATIONS_PAGOPA}/${API_VE
 const API_NOTIFICATION_PAYMENT_URL_PATH = `${API_NOTIFICATIONS_PAGOPA}/${API_VERSION_SEGMENT}/${API_NOTIFICATIONS_CHECKOUTCART}`;
 
 // APIs
-export function NOTIFICATIONS_LIST(params: GetNotificationsParams<string>) {
-  return compileRoute({
-    prefix: API_DELIVERY_PREFIX,
-    path: API_NOTIFICATIONS_RECEIVED_PATH,
-    query: {
-      [API_NOTIFICATIONS_START_DATE_PARAMETER]: params.startDate,
-      [API_NOTIFICATIONS_END_DATE_PARAMETER]: params.endDate,
-      [API_NOTIFICATIONS_RECIPIENT_ID_PARAMETER]: params.recipientId
-        ? formatFiscalCode(params.recipientId)
-        : '',
-      [API_NOTIFICATIONS_STATUS_PARAMETER]: params.status || '',
-      [API_NOTIFICATIONS_SUBJECT_PARAMETER]: params.subjectRegExp || '',
-      [API_NOTIFICATIONS_SIZE_PARAMETER]: params.size ? params.size.toString() : '',
-      [API_NOTIFICATIONS_NEXT_PAGES_KEY_PARAMETER]: params.nextPagesKey || '',
-      [API_NOTIFICATIONS_IUN_MATCH_PARAMETER]: params.iunMatch || '',
-      [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: params.mandateId || '',
-    },
-  });
-}
-
 export function NOTIFICATION_ID_FROM_QRCODE() {
   return compileRoute({
     prefix: API_DELIVERY_PREFIX,

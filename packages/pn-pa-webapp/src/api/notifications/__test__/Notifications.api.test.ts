@@ -6,22 +6,17 @@ import {
   NotificationDetailOtherDocument,
   PaymentAttachmentNameType,
   PaymentAttachmentSName,
-  formatToTimezoneString,
-  tenYearsAgo,
-  today,
 } from '@pagopa-pn/pn-commons';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { newNotificationDTO } from '../../../__mocks__/NewNotification.mock';
 import { notificationDTOMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
-import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
   CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
-  NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
@@ -44,28 +39,6 @@ describe('Notifications api tests', () => {
 
   afterAll(() => {
     mock.restore();
-  });
-
-  it('getSentNotifications', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          iunMatch: '',
-          recipientId: '',
-          status: '',
-        })
-      )
-      .reply(200, notificationsDTO);
-    const res = await NotificationsApi.getSentNotifications({
-      startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(today),
-      iunMatch: '',
-      recipientId: '',
-      status: '',
-    });
-    expect(res).toStrictEqual(notificationsToFe);
   });
 
   it('getSentNotificationDocument', async () => {

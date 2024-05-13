@@ -15,7 +15,7 @@ window.getComputedStyle = (elt) => getComputedStyle(elt);
 
 beforeAll(async () => {
   Configuration.setForTest<any>({
-    API_BASE_URL: 'https://mock-api-base-url',
+    API_BASE_URL: 'https://webapi.test.notifichedigitali.it/',
     DISABLE_INACTIVITY_HANDLER: true,
     ONE_TRUST_DRAFT_MODE: false,
     ONE_TRUST_PARTICIPATING_ENTITIES: 'mocked-id',
@@ -28,8 +28,8 @@ beforeAll(async () => {
     MOCK_USER: false,
     LOG_REDUX_ACTIONS: false,
     APP_VERSION: 'mock-version',
-    SELFCARE_URL_FE_LOGIN: 'mock-selfcare-login',
-    SELFCARE_BASE_URL: 'mock-selfcare.base',
+    SELFCARE_URL_FE_LOGIN: 'https://test.selfcare.pagopa.it/auth/login',
+    SELFCARE_BASE_URL: 'https://test.selfcare.pagopa.it',
     IS_PAYMENT_ENABLED: false,
     DELEGATIONS_TO_PG_ENABLED: true,
     LANDING_SITE_URL: 'https://www.dev.notifichedigitali.it',
