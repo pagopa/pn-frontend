@@ -1,11 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import {
-  LegalFactId,
-  LegalFactType,
-  PaymentAttachmentNameType,
-  PaymentAttachmentSName,
-} from '@pagopa-pn/pn-commons';
+import { PaymentAttachmentNameType, PaymentAttachmentSName } from '@pagopa-pn/pn-commons';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
@@ -13,8 +8,6 @@ import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { apiClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
-  NOTIFICATION_DETAIL_DOCUMENTS,
-  NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_ID_FROM_QRCODE,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
@@ -36,27 +29,6 @@ describe('Notifications api tests', () => {
 
   afterAll(() => {
     mock.restore();
-  });
-
-  it('getReceivedNotificationDocument', async () => {
-    const iun = notificationDTO.iun;
-    const documentIndex = '0';
-    mock.onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex)).reply(200, {
-      url: 'http://mocked-url.com',
-    });
-    const res = await NotificationsApi.getReceivedNotificationDocument(iun, documentIndex);
-    expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
-  });
-
-  it('getReceivedNotificationLegalfact', async () => {
-    const iun = notificationDTO.iun;
-    const legalFact: LegalFactId = {
-      key: 'mocked-key',
-      category: LegalFactType.ANALOG_DELIVERY,
-    };
-    mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact)).reply(200);
-    const res = await NotificationsApi.getReceivedNotificationLegalfact(iun, legalFact);
-    expect(res).toStrictEqual({ url: '' });
   });
 
   it('getPaymentAttachment', async () => {

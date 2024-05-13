@@ -201,6 +201,52 @@ export interface BaseRegisteredLetterDetails {
     'physicalAddress': PhysicalAddress;
 }
 /**
+ * 
+ * @export
+ * @interface BffDocumentDownloadMetadataResponse
+ */
+export interface BffDocumentDownloadMetadataResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof BffDocumentDownloadMetadataResponse
+     */
+    'filename': string;
+    /**
+     * dimensione, in byte, del contenuto.
+     * @type {number}
+     * @memberof BffDocumentDownloadMetadataResponse
+     */
+    'contentLength': number;
+    /**
+     * URL pre-autorizzato a cui effettuare una richiesta GET per ottenere il  contenuto del documento. Presente solo se il documento è pronto per il download.
+     * @type {string}
+     * @memberof BffDocumentDownloadMetadataResponse
+     */
+    'url'?: string;
+    /**
+     * Stima del numero di secondi da aspettare prima che il contenuto del  documento sia scaricabile.
+     * @type {number}
+     * @memberof BffDocumentDownloadMetadataResponse
+     */
+    'retryAfter'?: number;
+}
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const BffDocumentType = {
+    Attachment: 'ATTACHMENT',
+    LegalFact: 'LEGAL_FACT',
+    Aar: 'AAR'
+} as const;
+
+export type BffDocumentType = typeof BffDocumentType[keyof typeof BffDocumentType];
+
+
+/**
  * Dettaglio notifica con elementi per il Frontend
  * @export
  * @interface BffFullNotificationV1
@@ -1031,6 +1077,24 @@ export const IoSendMessageResult = {
 } as const;
 
 export type IoSendMessageResult = typeof IoSendMessageResult[keyof typeof IoSendMessageResult];
+
+
+/**
+ * Tipi di atti opponibili a terzi che Piattaforma Notifiche mette a disposizione dei suoi utenti.   - _SENDER_ACK_: atto di \"presa in carico\" di una notifica   - _DIGITAL_DELIVERY_: ...
+ * @export
+ * @enum {string}
+ */
+
+export const LegalFactCategory = {
+    SenderAck: 'SENDER_ACK',
+    DigitalDelivery: 'DIGITAL_DELIVERY',
+    AnalogDelivery: 'ANALOG_DELIVERY',
+    RecipientAccess: 'RECIPIENT_ACCESS',
+    PecReceipt: 'PEC_RECEIPT',
+    AnalogFailureDelivery: 'ANALOG_FAILURE_DELIVERY'
+} as const;
+
+export type LegalFactCategory = typeof LegalFactCategory[keyof typeof LegalFactCategory];
 
 
 /**
@@ -3141,6 +3205,112 @@ export type TimelineElementDetailsV23 = AarCreationRequestDetails | AarGeneratio
 export const NotificationReceivedApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * 
+         * @summary Questa operazione permette di scaricare qualsiasi documento legato alla notifica.
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {BffDocumentType} documentType Tipo documento
+         * @param {string} [mandateId] 
+         * @param {number} [documentIdx] Indice del documento
+         * @param {string} [documentId] Identificativo del documento
+         * @param {LegalFactCategory} [documentCategory] Tipi di atti opponibili a terzi che Piattaforma Notifiche mette a disposizione dei suoi utenti.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReceivedNotificationDocumentV1: async (iun: string, documentType: BffDocumentType, mandateId?: string, documentIdx?: number, documentId?: string, documentCategory?: LegalFactCategory, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'iun' is not null or undefined
+            assertParamExists('getReceivedNotificationDocumentV1', 'iun', iun)
+            // verify required parameter 'documentType' is not null or undefined
+            assertParamExists('getReceivedNotificationDocumentV1', 'documentType', documentType)
+            const localVarPath = `/bff/v1/notifications/received/{iun}/documents/{documentType}`
+                .replace(`{${"iun"}}`, encodeURIComponent(String(iun)))
+                .replace(`{${"documentType"}}`, encodeURIComponent(String(documentType)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (mandateId !== undefined) {
+                localVarQueryParameter['mandateId'] = mandateId;
+            }
+
+            if (documentIdx !== undefined) {
+                localVarQueryParameter['documentIdx'] = documentIdx;
+            }
+
+            if (documentId !== undefined) {
+                localVarQueryParameter['documentId'] = documentId;
+            }
+
+            if (documentCategory !== undefined) {
+                localVarQueryParameter['documentCategory'] = documentCategory;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Download allegato per pagamento
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {string} attachmentName Tipologia del pagamento allegato alla notifica. Valori possibili PAGOPA|F24
+         * @param {string} [mandateId] 
+         * @param {number} [attachmentIdx] indice del documento di pagamento partendo da 0
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReceivedNotificationPaymentV1: async (iun: string, attachmentName: string, mandateId?: string, attachmentIdx?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'iun' is not null or undefined
+            assertParamExists('getReceivedNotificationPaymentV1', 'iun', iun)
+            // verify required parameter 'attachmentName' is not null or undefined
+            assertParamExists('getReceivedNotificationPaymentV1', 'attachmentName', attachmentName)
+            const localVarPath = `/bff/v1/notifications/received/{iun}/payments/{attachmentName}`
+                .replace(`{${"iun"}}`, encodeURIComponent(String(iun)))
+                .replace(`{${"attachmentName"}}`, encodeURIComponent(String(attachmentName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (mandateId !== undefined) {
+                localVarQueryParameter['mandateId'] = mandateId;
+            }
+
+            if (attachmentIdx !== undefined) {
+                localVarQueryParameter['attachmentIdx'] = attachmentIdx;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Utilizzato da Persone Fisiche e Persone Giuridiche per accedere ai dettagli delle  notifiche ricevute.
          * @summary Accesso notifiche ricevute
          * @param {string} iun Identificativo Univoco Notifica
@@ -3356,6 +3526,40 @@ export const NotificationReceivedApiFp = function(configuration?: Configuration)
     const localVarAxiosParamCreator = NotificationReceivedApiAxiosParamCreator(configuration)
     return {
         /**
+         * 
+         * @summary Questa operazione permette di scaricare qualsiasi documento legato alla notifica.
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {BffDocumentType} documentType Tipo documento
+         * @param {string} [mandateId] 
+         * @param {number} [documentIdx] Indice del documento
+         * @param {string} [documentId] Identificativo del documento
+         * @param {LegalFactCategory} [documentCategory] Tipi di atti opponibili a terzi che Piattaforma Notifiche mette a disposizione dei suoi utenti.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getReceivedNotificationDocumentV1(iun: string, documentType: BffDocumentType, mandateId?: string, documentIdx?: number, documentId?: string, documentCategory?: LegalFactCategory, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BffDocumentDownloadMetadataResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getReceivedNotificationDocumentV1(iun, documentType, mandateId, documentIdx, documentId, documentCategory, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationReceivedApi.getReceivedNotificationDocumentV1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Download allegato per pagamento
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {string} attachmentName Tipologia del pagamento allegato alla notifica. Valori possibili PAGOPA|F24
+         * @param {string} [mandateId] 
+         * @param {number} [attachmentIdx] indice del documento di pagamento partendo da 0
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getReceivedNotificationPaymentV1(iun: string, attachmentName: string, mandateId?: string, attachmentIdx?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BffDocumentDownloadMetadataResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getReceivedNotificationPaymentV1(iun, attachmentName, mandateId, attachmentIdx, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationReceivedApi.getReceivedNotificationPaymentV1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Utilizzato da Persone Fisiche e Persone Giuridiche per accedere ai dettagli delle  notifiche ricevute.
          * @summary Accesso notifiche ricevute
          * @param {string} iun Identificativo Univoco Notifica
@@ -3422,6 +3626,34 @@ export const NotificationReceivedApiFactory = function (configuration?: Configur
     const localVarFp = NotificationReceivedApiFp(configuration)
     return {
         /**
+         * 
+         * @summary Questa operazione permette di scaricare qualsiasi documento legato alla notifica.
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {BffDocumentType} documentType Tipo documento
+         * @param {string} [mandateId] 
+         * @param {number} [documentIdx] Indice del documento
+         * @param {string} [documentId] Identificativo del documento
+         * @param {LegalFactCategory} [documentCategory] Tipi di atti opponibili a terzi che Piattaforma Notifiche mette a disposizione dei suoi utenti.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReceivedNotificationDocumentV1(iun: string, documentType: BffDocumentType, mandateId?: string, documentIdx?: number, documentId?: string, documentCategory?: LegalFactCategory, options?: any): AxiosPromise<BffDocumentDownloadMetadataResponse> {
+            return localVarFp.getReceivedNotificationDocumentV1(iun, documentType, mandateId, documentIdx, documentId, documentCategory, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Download allegato per pagamento
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {string} attachmentName Tipologia del pagamento allegato alla notifica. Valori possibili PAGOPA|F24
+         * @param {string} [mandateId] 
+         * @param {number} [attachmentIdx] indice del documento di pagamento partendo da 0
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReceivedNotificationPaymentV1(iun: string, attachmentName: string, mandateId?: string, attachmentIdx?: number, options?: any): AxiosPromise<BffDocumentDownloadMetadataResponse> {
+            return localVarFp.getReceivedNotificationPaymentV1(iun, attachmentName, mandateId, attachmentIdx, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Utilizzato da Persone Fisiche e Persone Giuridiche per accedere ai dettagli delle  notifiche ricevute.
          * @summary Accesso notifiche ricevute
          * @param {string} iun Identificativo Univoco Notifica
@@ -3478,6 +3710,38 @@ export const NotificationReceivedApiFactory = function (configuration?: Configur
  * @extends {BaseAPI}
  */
 export class NotificationReceivedApi extends BaseAPI {
+    /**
+     * 
+     * @summary Questa operazione permette di scaricare qualsiasi documento legato alla notifica.
+     * @param {string} iun Identificativo Univoco Notifica
+     * @param {BffDocumentType} documentType Tipo documento
+     * @param {string} [mandateId] 
+     * @param {number} [documentIdx] Indice del documento
+     * @param {string} [documentId] Identificativo del documento
+     * @param {LegalFactCategory} [documentCategory] Tipi di atti opponibili a terzi che Piattaforma Notifiche mette a disposizione dei suoi utenti.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationReceivedApi
+     */
+    public getReceivedNotificationDocumentV1(iun: string, documentType: BffDocumentType, mandateId?: string, documentIdx?: number, documentId?: string, documentCategory?: LegalFactCategory, options?: RawAxiosRequestConfig) {
+        return NotificationReceivedApiFp(this.configuration).getReceivedNotificationDocumentV1(iun, documentType, mandateId, documentIdx, documentId, documentCategory, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Download allegato per pagamento
+     * @param {string} iun Identificativo Univoco Notifica
+     * @param {string} attachmentName Tipologia del pagamento allegato alla notifica. Valori possibili PAGOPA|F24
+     * @param {string} [mandateId] 
+     * @param {number} [attachmentIdx] indice del documento di pagamento partendo da 0
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationReceivedApi
+     */
+    public getReceivedNotificationPaymentV1(iun: string, attachmentName: string, mandateId?: string, attachmentIdx?: number, options?: RawAxiosRequestConfig) {
+        return NotificationReceivedApiFp(this.configuration).getReceivedNotificationPaymentV1(iun, attachmentName, mandateId, attachmentIdx, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Utilizzato da Persone Fisiche e Persone Giuridiche per accedere ai dettagli delle  notifiche ricevute.
      * @summary Accesso notifiche ricevute

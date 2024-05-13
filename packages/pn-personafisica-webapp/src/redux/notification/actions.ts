@@ -1,9 +1,9 @@
 import {
   DowntimeLogHistory,
   GetDowntimeHistoryParams,
-  LegalFactId,
   NotificationDetail,
-  NotificationDetailOtherDocument,
+  NotificationDocumentRequest,
+  NotificationDocumentResponse,
   PaymentAttachment,
   PaymentAttachmentNameType,
   PaymentDetails,
@@ -29,10 +29,11 @@ import { PFEventsType } from '../../models/PFEventsType';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { parseNotificationDetailForRecipient } from '../../utility/notification.utility';
 import { RootState, store } from '../store';
-import { DownloadFileResponse, GetReceivedNotificationParams } from './types';
+import { GetReceivedNotificationParams } from './types';
 
 export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION = 'getReceivedNotification',
+  GET_RECEIVED_NOTIFICATION_DOCUMENT = 'getReceivedNotificationDocument',
   GET_NOTIFICATION_PAYMENT_INFO = 'getNotificationPaymentInfo',
   GET_NOTIFICATION_PAYMENT_URL = 'getNotificationPaymentUrl',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
@@ -66,32 +67,31 @@ export const getReceivedNotification = createAsyncThunk<
   }
 );
 
-export const getReceivedNotificationLegalfact = createAsyncThunk<
-  DownloadFileResponse,
-  { iun: string; legalFact: LegalFactId; mandateId?: string }
->(
-  'getReceivedNotificationLegalfact',
-  performThunkAction((params: { iun: string; legalFact: LegalFactId; mandateId?: string }) =>
-    NotificationsApi.getReceivedNotificationLegalfact(
-      params.iun,
-      params.legalFact,
-      params.mandateId
-    )
-  )
-);
-
 export const getReceivedNotificationDocument = createAsyncThunk<
-  DownloadFileResponse,
-  { iun: string; documentIndex: string; mandateId?: string }
+  NotificationDocumentResponse,
+  NotificationDocumentRequest
 >(
-  'getReceivedNotificationDocument',
-  performThunkAction((params: { iun: string; documentIndex: string; mandateId?: string }) =>
-    NotificationsApi.getReceivedNotificationDocument(
-      params.iun,
-      params.documentIndex,
-      params.mandateId
-    )
-  )
+  NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT,
+  async (params: NotificationDocumentRequest, { rejectWithValue }) => {
+    try {
+      const notificationSentApiFactory = NotificationReceivedApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await notificationSentApiFactory.getReceivedNotificationDocumentV1(
+        params.iun,
+        params.documentType,
+        params.mandateId,
+        params.documentIdx,
+        params.documentId,
+        params.documentCategory
+      );
+      return response.data as NotificationDocumentResponse;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
 export const getPaymentAttachment = createAsyncThunk<
@@ -213,28 +213,6 @@ export const getNotificationPaymentUrl = createAsyncThunk<
     );
     return NotificationsApi.getNotificationPaymentUrl(params.paymentNotice, params.returnUrl);
   })
-);
-
-export const getReceivedNotificationOtherDocument = createAsyncThunk<
-  DownloadFileResponse,
-  { iun: string; otherDocument: NotificationDetailOtherDocument; mandateId?: string }
->(
-  'getReceivedNotificationOtherDocument',
-  performThunkAction(
-    (params: {
-      iun: string;
-      mandateId?: string;
-      otherDocument: {
-        documentId: string;
-        documentType: string;
-      };
-    }) =>
-      NotificationsApi.getReceivedNotificationOtherDocument(
-        params.iun,
-        params.otherDocument,
-        params.mandateId
-      )
-  )
 );
 
 export const getDowntimeHistory = createAsyncThunk<DowntimeLogHistory, GetDowntimeHistoryParams>(
