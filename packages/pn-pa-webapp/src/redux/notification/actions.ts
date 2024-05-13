@@ -40,14 +40,21 @@ export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
   }
 );
 
-// da cambiare il ritorno nel caso venga restituito qualcosa
-export const cancelNotification = createAsyncThunk<
-  string,
-  string,
-  { dispatch: <AnyAction>(action: AnyAction) => AnyAction }
->(
+/**
+ * Cancels a notification
+ */
+export const cancelNotification = createAsyncThunk(
   NOTIFICATION_ACTIONS.CANCEL_NOTIFICATION,
-  performThunkAction((params: string) => NotificationsApi.cancelNotification(params))
+  async (params: string, { rejectWithValue }) => {
+    try {
+      const notificationSentApiFactory = NotificationSentApiFactory(undefined, undefined, apiClient);
+      const response = await notificationSentApiFactory.notificationCancellationV1(params);
+      return response.data;
+    }
+    catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
 export const getSentNotificationLegalfact = createAsyncThunk<

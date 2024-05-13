@@ -28,7 +28,6 @@ import {
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import {
-  CANCEL_NOTIFICATION,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
@@ -427,7 +426,7 @@ describe('NotificationDetail Page', async () => {
     });
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
-    mock.onPut(CANCEL_NOTIFICATION(notificationDTO.iun)).reply(200);
+    mock.onPut(`/bff/v1/notifications/sent/${notificationDTO.iun}/cancel`).reply(200);
     await act(async () => {
       result = render(<NotificationDetail />);
     });
@@ -447,7 +446,9 @@ describe('NotificationDetail Page', async () => {
       expect(modal).not.toBeInTheDocument();
     });
     expect(mock.history.put).toHaveLength(1);
-    expect(mock.history.put[0].url).toBe(CANCEL_NOTIFICATION(notificationDTO.iun));
+    expect(mock.history.put[0].url).toBe(
+      `/bff/v1/notifications/sent/${notificationDTO.iun}/cancel`
+    );
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[2].url).toBe(`/bff/v1/notifications/sent/${notificationDTO.iun}`);

@@ -201,6 +201,52 @@ export interface BaseRegisteredLetterDetails {
     'physicalAddress': PhysicalAddress;
 }
 /**
+ * 
+ * @export
+ * @interface BffDocumentDownloadMetadataResponse
+ */
+export interface BffDocumentDownloadMetadataResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof BffDocumentDownloadMetadataResponse
+     */
+    'filename': string;
+    /**
+     * dimensione, in byte, del contenuto.
+     * @type {number}
+     * @memberof BffDocumentDownloadMetadataResponse
+     */
+    'contentLength': number;
+    /**
+     * URL pre-autorizzato a cui effettuare una richiesta GET per ottenere il  contenuto del documento. Presente solo se il documento è pronto per il download.
+     * @type {string}
+     * @memberof BffDocumentDownloadMetadataResponse
+     */
+    'url'?: string;
+    /**
+     * Stima del numero di secondi da aspettare prima che il contenuto del  documento sia scaricabile.
+     * @type {number}
+     * @memberof BffDocumentDownloadMetadataResponse
+     */
+    'retryAfter'?: number;
+}
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const BffDocumentType = {
+    Attachment: 'ATTACHMENT',
+    LegalFact: 'LEGAL_FACT',
+    Aar: 'AAR'
+} as const;
+
+export type BffDocumentType = typeof BffDocumentType[keyof typeof BffDocumentType];
+
+
+/**
  * Dettaglio notifica con elementi per il Frontend
  * @export
  * @interface BffFullNotificationV1
@@ -663,6 +709,25 @@ export interface BffNotificationsResponse {
     'nextPagesKey'?: Array<string>;
 }
 /**
+ * Response to cancellation async call
+ * @export
+ * @interface BffRequestStatus
+ */
+export interface BffRequestStatus {
+    /**
+     * Cancellation request status:   - OK 
+     * @type {string}
+     * @memberof BffRequestStatus
+     */
+    'status': string;
+    /**
+     * 
+     * @type {Array<StatusDetail>}
+     * @memberof BffRequestStatus
+     */
+    'details'?: Array<StatusDetail>;
+}
+/**
  * stato di avanzamento del processo di notifica:`   * `SENDER_ACK_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa in carico per il mittente a safe storage   * `VALIDATE_NORMALIZE_ADDRESSES_REQUEST` - Invio della richiesta di validazione e normalizzazione indirizzi fisici presenti nella richiesta di notifica   * `NORMALIZED_ADDRESS` - Salvataggio indirizzi normalizzati   * `REQUEST_ACCEPTED` - Richiesta di notifica accettata a seguito dei controlli di validazione   * `REQUEST_REFUSED` - Richiesta di notifica rifiutata per fallimento di validazione   * `SEND_COURTESY_MESSAGE` - Invio di un messaggio di cortesia   * `GET_ADDRESS` - Disponibilità dell’indirizzo specifico (domicilio digitale di piattaforma, domicilio digitale speciale, domicilio digitale generale, indirizzo fisico sulla notifica o sui registri nazionali)   * `PUBLIC_REGISTRY_CALL` - Richiesta ai registri pubblici per ottenere domicilio digitale generale o per ottenere indirizzo fisico da ANPR, da registro della imprese, da anagrafe tributaria.   * `PUBLIC_REGISTRY_RESPONSE` - Ricevuta la risposta dei registri pubblici   * `SCHEDULE_ANALOG_WORKFLOW` - Pianificazione del workflow per invio cartaceo   * `SCHEDULE_DIGITAL_WORKFLOW` -Pianificazione del workflow per invio digitale (PEC) del secondo tentativo in caso di fallimento del primo.   * `PREPARE_DIGITAL_DOMICILE` - Preparazione per l’invio dell’avviso digitale.Va a valutare la timeline per capire quale sarà il prossimo indirizzo da usare.   * `SEND_DIGITAL_DOMICILE` - Invio digitale dell’avviso di notifica   * `SEND_DIGITAL_PROGRESS` - Tentativo di Invio PEC ad un determinato indirizzo.   * `SEND_DIGITAL_FEEDBACK` - Ottenuto esito ad un invio digitale   * `SCHEDULE_REFINEMENT` - Pianificato il perfezionamento per decorrenza termini   * `REFINEMENT` - Perfezionamento per decorrenza termini   * `DIGITAL_DELIVERY_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di chiusura del workflow digitale a safe storage   * `DIGITAL_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio digitale   * `DIGITAL_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio digitale: tutti i tentativi di invio ai domicili digitali sono falliti.   * `ANALOG_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio cartaceo   * `ANALOG_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio cartaceo NOTA: se per tutti i destinatari si conclude il workflow con fallimento verrà scatenato l’evento COMPLETELY_UNREACHABLE   * `PREPARE_SIMPLE_REGISTERED_LETTER` - Invio richiesta di prepare (preparazione ad invio) raccomandata semplice a paperChannel   * `SEND_SIMPLE_REGISTERED_LETTER` - Invio di raccomandata semplice   * `SEND_SIMPLE_REGISTERED_LETTER_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea semplice   * `NOTIFICATION_VIEWED_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa visione a safe storage   * `NOTIFICATION_VIEWED` - Visualizzazione della notifica (perfeziona la notifica se non già perfezionata per decorrenza termini o da altro destinatario)   * `PREPARE_ANALOG_DOMICILE` - Invio richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `SEND_ANALOG_DOMICILE` - Invio cartaceo dell’avviso di notifica   * `SEND_ANALOG_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea   * `SEND_ANALOG_FEEDBACK` - Ricezione esito dell\'invio cartaceo   * `COMPLETELY_UNREACHABLE_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto (simile a opponibile a terzi) di completamento con fallimento del workflow di invio cartaceo   * `COMPLETELY_UNREACHABLE` - Tutti i destinatari risultano irraggiungibili   * `AAR_CREATION_REQUEST` - Invio della richiesta di creazione dell\'AAR (Avviso di Avvenuta Ricezione) a safe storage   * `AAR_GENERATION` - Generazione dell’AAR (Avviso di Avvenuta Ricezione)   * `PAYMENT` - Ricezione pagamento della notifica   * `NOT_HANDLED` - Per la sperimentazione l\'invio analogico non è previsto, viene inserito tale elemento di timeline   * `PROBABLE_SCHEDULING_ANALOG_DATE` - Data probabile di inizio del flusso analogico   * `NOTIFICATION_CANCELLATION_REQUEST` - Richiesta di annullamento di una notifica   * `NOTIFICATION_CANCELLED` - Notifica annullata   * `PREPARE_ANALOG_DOMICILE_FAILURE` - Fallimento della richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `NOTIFICATION_RADD_RETRIEVED` - Accesso alla notifica tramite la rete RADD. Non perfeziona la notifica. 
  * @export
  * @enum {string}
@@ -1031,6 +1096,24 @@ export const IoSendMessageResult = {
 } as const;
 
 export type IoSendMessageResult = typeof IoSendMessageResult[keyof typeof IoSendMessageResult];
+
+
+/**
+ * Tipi di atti opponibili a terzi che Piattaforma Notifiche mette a disposizione dei suoi utenti.   - _SENDER_ACK_: atto di \"presa in carico\" di una notifica   - _DIGITAL_DELIVERY_: ...
+ * @export
+ * @enum {string}
+ */
+
+export const LegalFactCategory = {
+    SenderAck: 'SENDER_ACK',
+    DigitalDelivery: 'DIGITAL_DELIVERY',
+    AnalogDelivery: 'ANALOG_DELIVERY',
+    RecipientAccess: 'RECIPIENT_ACCESS',
+    PecReceipt: 'PEC_RECEIPT',
+    AnalogFailureDelivery: 'ANALOG_FAILURE_DELIVERY'
+} as const;
+
+export type LegalFactCategory = typeof LegalFactCategory[keyof typeof LegalFactCategory];
 
 
 /**
@@ -1797,8 +1880,7 @@ export const NotificationStatus = {
     EffectiveDate: 'EFFECTIVE_DATE',
     Paid: 'PAID',
     Unreachable: 'UNREACHABLE',
-    Cancelled: 'CANCELLED',
-    CancellationInProgress: 'CANCELLATION_IN_PROGRESS'
+    Cancelled: 'CANCELLED'
 } as const;
 
 export type NotificationStatus = typeof NotificationStatus[keyof typeof NotificationStatus];
@@ -2272,6 +2354,25 @@ export interface RequestRefusedDetailsV23 {
      * @memberof RequestRefusedDetailsV23
      */
     'refusalReasons'?: Array<NotificationRefusedErrorV23>;
+}
+/**
+ * Response to cancellation async call
+ * @export
+ * @interface RequestStatus
+ */
+export interface RequestStatus {
+    /**
+     * Cancellation request status:   - OK 
+     * @type {string}
+     * @memberof RequestStatus
+     */
+    'status': string;
+    /**
+     * 
+     * @type {Array<StatusDetail>}
+     * @memberof RequestStatus
+     */
+    'details'?: Array<StatusDetail>;
 }
 /**
  * stato risposta ricevuta da externalChannel
@@ -3074,6 +3175,31 @@ export interface SimpleRegisteredLetterProgressDetails {
     'registeredLetterCode'?: string;
 }
 /**
+ * Detail of response to cancellation async call
+ * @export
+ * @interface StatusDetail
+ */
+export interface StatusDetail {
+    /**
+     * Internal code of the error or warning, in human-readable format
+     * @type {string}
+     * @memberof StatusDetail
+     */
+    'code': string;
+    /**
+     * informational level of status detail: INFO,WARN, ERR ERR (error) by default 
+     * @type {string}
+     * @memberof StatusDetail
+     */
+    'level'?: string;
+    /**
+     * A human readable explanation specific to this occurrence of the problem.
+     * @type {string}
+     * @memberof StatusDetail
+     */
+    'detail'?: string;
+}
+/**
  * stato di avanzamento del processo di notifica:`   * `SENDER_ACK_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa in carico per il mittente a safe storage   * `VALIDATE_NORMALIZE_ADDRESSES_REQUEST` - Invio della richiesta di validazione e normalizzazione indirizzi fisici presenti nella richiesta di notifica   * `NORMALIZED_ADDRESS` - Salvataggio indirizzi normalizzati   * `REQUEST_ACCEPTED` - Richiesta di notifica accettata a seguito dei controlli di validazione   * `REQUEST_REFUSED` - Richiesta di notifica rifiutata per fallimento di validazione   * `SEND_COURTESY_MESSAGE` - Invio di un messaggio di cortesia   * `GET_ADDRESS` - Disponibilità dell’indirizzo specifico (domicilio digitale di piattaforma, domicilio digitale speciale, domicilio digitale generale, indirizzo fisico sulla notifica o sui registri nazionali)   * `PUBLIC_REGISTRY_CALL` - Richiesta ai registri pubblici per ottenere domicilio digitale generale o per ottenere indirizzo fisico da ANPR, da registro della imprese, da anagrafe tributaria.   * `PUBLIC_REGISTRY_RESPONSE` - Ricevuta la risposta dei registri pubblici   * `SCHEDULE_ANALOG_WORKFLOW` - Pianificazione del workflow per invio cartaceo   * `SCHEDULE_DIGITAL_WORKFLOW` -Pianificazione del workflow per invio digitale (PEC) del secondo tentativo in caso di fallimento del primo.   * `PREPARE_DIGITAL_DOMICILE` - Preparazione per l’invio dell’avviso digitale.Va a valutare la timeline per capire quale sarà il prossimo indirizzo da usare.   * `SEND_DIGITAL_DOMICILE` - Invio digitale dell’avviso di notifica   * `SEND_DIGITAL_PROGRESS` - Tentativo di Invio PEC ad un determinato indirizzo.   * `SEND_DIGITAL_FEEDBACK` - Ottenuto esito ad un invio digitale   * `SCHEDULE_REFINEMENT` - Pianificato il perfezionamento per decorrenza termini   * `REFINEMENT` - Perfezionamento per decorrenza termini   * `DIGITAL_DELIVERY_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di chiusura del workflow digitale a safe storage   * `DIGITAL_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio digitale   * `DIGITAL_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio digitale: tutti i tentativi di invio ai domicili digitali sono falliti.   * `ANALOG_SUCCESS_WORKFLOW` - Completato con successo il workflow di invio cartaceo   * `ANALOG_FAILURE_WORKFLOW` - Completato con fallimento il workflow di invio cartaceo NOTA: se per tutti i destinatari si conclude il workflow con fallimento verrà scatenato l’evento COMPLETELY_UNREACHABLE   * `PREPARE_SIMPLE_REGISTERED_LETTER` - Invio richiesta di prepare (preparazione ad invio) raccomandata semplice a paperChannel   * `SEND_SIMPLE_REGISTERED_LETTER` - Invio di raccomandata semplice   * `SEND_SIMPLE_REGISTERED_LETTER_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea semplice   * `NOTIFICATION_VIEWED_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto opponibile a terzi di presa visione a safe storage   * `NOTIFICATION_VIEWED` - Visualizzazione della notifica (perfeziona la notifica se non già perfezionata per decorrenza termini o da altro destinatario)   * `PREPARE_ANALOG_DOMICILE` - Invio richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `SEND_ANALOG_DOMICILE` - Invio cartaceo dell’avviso di notifica   * `SEND_ANALOG_PROGRESS` - Ricezione informazioni intermedia relative ad una notificazione cartacea   * `SEND_ANALOG_FEEDBACK` - Ricezione esito dell\'invio cartaceo   * `COMPLETELY_UNREACHABLE_CREATION_REQUEST` - Invio della richiesta di creazione dell\'atto (simile a opponibile a terzi) di completamento con fallimento del workflow di invio cartaceo   * `COMPLETELY_UNREACHABLE` - Tutti i destinatari risultano irraggiungibili   * `AAR_CREATION_REQUEST` - Invio della richiesta di creazione dell\'AAR (Avviso di Avvenuta Ricezione) a safe storage   * `AAR_GENERATION` - Generazione dell’AAR (Avviso di Avvenuta Ricezione)   * `PAYMENT` - Ricezione pagamento della notifica   * `NOT_HANDLED` - Per la sperimentazione l\'invio analogico non è previsto, viene inserito tale elemento di timeline   * `PROBABLE_SCHEDULING_ANALOG_DATE` - Data probabile di inizio del flusso analogico   * `NOTIFICATION_CANCELLATION_REQUEST` - Richiesta di annullamento di una notifica   * `NOTIFICATION_CANCELLED` - Notifica annullata   * `PREPARE_ANALOG_DOMICILE_FAILURE` - Fallimento della richiesta di prepare (preparazione ad invio) cartaceo a paperChannel   * `NOTIFICATION_RADD_RETRIEVED` - Accesso alla notifica tramite la rete RADD. Non perfeziona la notifica. 
  * @export
  * @enum {string}
@@ -3142,6 +3268,106 @@ export type TimelineElementDetailsV23 = AarCreationRequestDetails | AarGeneratio
 export const NotificationSentApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * 
+         * @summary Questa operazione permette di scaricare qualsiasi documento legato alla notifica.
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {BffDocumentType} documentType Tipo documento
+         * @param {number} [documentIdx] Indice del documento
+         * @param {string} [documentId] Identificativo del documento
+         * @param {LegalFactCategory} [documentCategory] Tipi di atti opponibili a terzi che Piattaforma Notifiche mette a disposizione dei suoi utenti.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSentNotificationDocumentV1: async (iun: string, documentType: BffDocumentType, documentIdx?: number, documentId?: string, documentCategory?: LegalFactCategory, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'iun' is not null or undefined
+            assertParamExists('getSentNotificationDocumentV1', 'iun', iun)
+            // verify required parameter 'documentType' is not null or undefined
+            assertParamExists('getSentNotificationDocumentV1', 'documentType', documentType)
+            const localVarPath = `/bff/v1/notifications/sent/{iun}/documents/{documentType}`
+                .replace(`{${"iun"}}`, encodeURIComponent(String(iun)))
+                .replace(`{${"documentType"}}`, encodeURIComponent(String(documentType)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (documentIdx !== undefined) {
+                localVarQueryParameter['documentIdx'] = documentIdx;
+            }
+
+            if (documentId !== undefined) {
+                localVarQueryParameter['documentId'] = documentId;
+            }
+
+            if (documentCategory !== undefined) {
+                localVarQueryParameter['documentCategory'] = documentCategory;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Download allegato per pagamento
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {number} recipientIdx indice del destinatario nella lista partendo da 0.
+         * @param {string} attachmentName Tipologia del pagamento allegato alla notifica. Valori possibili PAGOPA|F24
+         * @param {number} [attachmentIdx] indice del documento di pagamento partendo da 0
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSentNotificationPaymentV1: async (iun: string, recipientIdx: number, attachmentName: string, attachmentIdx?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'iun' is not null or undefined
+            assertParamExists('getSentNotificationPaymentV1', 'iun', iun)
+            // verify required parameter 'recipientIdx' is not null or undefined
+            assertParamExists('getSentNotificationPaymentV1', 'recipientIdx', recipientIdx)
+            // verify required parameter 'attachmentName' is not null or undefined
+            assertParamExists('getSentNotificationPaymentV1', 'attachmentName', attachmentName)
+            const localVarPath = `/bff/v1/notifications/sent/{iun}/payments/{recipientIdx}/{attachmentName}`
+                .replace(`{${"iun"}}`, encodeURIComponent(String(iun)))
+                .replace(`{${"recipientIdx"}}`, encodeURIComponent(String(recipientIdx)))
+                .replace(`{${"attachmentName"}}`, encodeURIComponent(String(attachmentName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (attachmentIdx !== undefined) {
+                localVarQueryParameter['attachmentIdx'] = attachmentIdx;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Questa operazione permette di leggere tutti i dettagli di una notifica accettata.
          * @summary Mittente: lettura dettagli notifica
          * @param {string} iun Identificativo Univoco Notifica
@@ -3160,15 +3386,49 @@ export const NotificationSentApiAxiosParamCreator = function (configuration?: Co
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
 
-
+    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Questa operazione permette di annullare una notifica inviata.
+         * @summary Mittente: annullamento notifica
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        notificationCancellationV1: async (iun: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'iun' is not null or undefined
+            assertParamExists('notificationCancellationV1', 'iun', iun)
+            const localVarPath = `/bff/v1/notifications/sent/{iun}/cancel`
+                .replace(`{${"iun"}}`, encodeURIComponent(String(iun)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3202,7 +3462,7 @@ export const NotificationSentApiAxiosParamCreator = function (configuration?: Co
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -3243,10 +3503,10 @@ export const NotificationSentApiAxiosParamCreator = function (configuration?: Co
             }
 
 
-
+    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3260,9 +3520,42 @@ export const NotificationSentApiAxiosParamCreator = function (configuration?: Co
  * NotificationSentApi - functional programming interface
  * @export
  */
-export const NotificationSentApiFp = function (configuration?: Configuration) {
+export const NotificationSentApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = NotificationSentApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @summary Questa operazione permette di scaricare qualsiasi documento legato alla notifica.
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {BffDocumentType} documentType Tipo documento
+         * @param {number} [documentIdx] Indice del documento
+         * @param {string} [documentId] Identificativo del documento
+         * @param {LegalFactCategory} [documentCategory] Tipi di atti opponibili a terzi che Piattaforma Notifiche mette a disposizione dei suoi utenti.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSentNotificationDocumentV1(iun: string, documentType: BffDocumentType, documentIdx?: number, documentId?: string, documentCategory?: LegalFactCategory, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BffDocumentDownloadMetadataResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSentNotificationDocumentV1(iun, documentType, documentIdx, documentId, documentCategory, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationSentApi.getSentNotificationDocumentV1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Download allegato per pagamento
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {number} recipientIdx indice del destinatario nella lista partendo da 0.
+         * @param {string} attachmentName Tipologia del pagamento allegato alla notifica. Valori possibili PAGOPA|F24
+         * @param {number} [attachmentIdx] indice del documento di pagamento partendo da 0
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSentNotificationPaymentV1(iun: string, recipientIdx: number, attachmentName: string, attachmentIdx?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BffDocumentDownloadMetadataResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSentNotificationPaymentV1(iun, recipientIdx, attachmentName, attachmentIdx, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationSentApi.getSentNotificationPaymentV1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
         /**
          * Questa operazione permette di leggere tutti i dettagli di una notifica accettata.
          * @summary Mittente: lettura dettagli notifica
@@ -3274,6 +3567,19 @@ export const NotificationSentApiFp = function (configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSentNotificationV1(iun, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['NotificationSentApi.getSentNotificationV1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Questa operazione permette di annullare una notifica inviata.
+         * @summary Mittente: annullamento notifica
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async notificationCancellationV1(iun: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BffRequestStatus>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.notificationCancellationV1(iun, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationSentApi.notificationCancellationV1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3307,6 +3613,33 @@ export const NotificationSentApiFactory = function (configuration?: Configuratio
     const localVarFp = NotificationSentApiFp(configuration)
     return {
         /**
+         * 
+         * @summary Questa operazione permette di scaricare qualsiasi documento legato alla notifica.
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {BffDocumentType} documentType Tipo documento
+         * @param {number} [documentIdx] Indice del documento
+         * @param {string} [documentId] Identificativo del documento
+         * @param {LegalFactCategory} [documentCategory] Tipi di atti opponibili a terzi che Piattaforma Notifiche mette a disposizione dei suoi utenti.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSentNotificationDocumentV1(iun: string, documentType: BffDocumentType, documentIdx?: number, documentId?: string, documentCategory?: LegalFactCategory, options?: any): AxiosPromise<BffDocumentDownloadMetadataResponse> {
+            return localVarFp.getSentNotificationDocumentV1(iun, documentType, documentIdx, documentId, documentCategory, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Download allegato per pagamento
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {number} recipientIdx indice del destinatario nella lista partendo da 0.
+         * @param {string} attachmentName Tipologia del pagamento allegato alla notifica. Valori possibili PAGOPA|F24
+         * @param {number} [attachmentIdx] indice del documento di pagamento partendo da 0
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSentNotificationPaymentV1(iun: string, recipientIdx: number, attachmentName: string, attachmentIdx?: number, options?: any): AxiosPromise<BffDocumentDownloadMetadataResponse> {
+            return localVarFp.getSentNotificationPaymentV1(iun, recipientIdx, attachmentName, attachmentIdx, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Questa operazione permette di leggere tutti i dettagli di una notifica accettata.
          * @summary Mittente: lettura dettagli notifica
          * @param {string} iun Identificativo Univoco Notifica
@@ -3315,6 +3648,16 @@ export const NotificationSentApiFactory = function (configuration?: Configuratio
          */
         getSentNotificationV1(iun: string, options?: any): AxiosPromise<BffFullNotificationV1> {
             return localVarFp.getSentNotificationV1(iun, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Questa operazione permette di annullare una notifica inviata.
+         * @summary Mittente: annullamento notifica
+         * @param {string} iun Identificativo Univoco Notifica
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        notificationCancellationV1(iun: string, options?: any): AxiosPromise<BffRequestStatus> {
+            return localVarFp.notificationCancellationV1(iun, options).then((request) => request(axios, basePath));
         },
         /**
          * Questa operazione permette di ricercare le notifiche inviate.
@@ -3344,6 +3687,37 @@ export const NotificationSentApiFactory = function (configuration?: Configuratio
  */
 export class NotificationSentApi extends BaseAPI {
     /**
+     * 
+     * @summary Questa operazione permette di scaricare qualsiasi documento legato alla notifica.
+     * @param {string} iun Identificativo Univoco Notifica
+     * @param {BffDocumentType} documentType Tipo documento
+     * @param {number} [documentIdx] Indice del documento
+     * @param {string} [documentId] Identificativo del documento
+     * @param {LegalFactCategory} [documentCategory] Tipi di atti opponibili a terzi che Piattaforma Notifiche mette a disposizione dei suoi utenti.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationSentApi
+     */
+    public getSentNotificationDocumentV1(iun: string, documentType: BffDocumentType, documentIdx?: number, documentId?: string, documentCategory?: LegalFactCategory, options?: RawAxiosRequestConfig) {
+        return NotificationSentApiFp(this.configuration).getSentNotificationDocumentV1(iun, documentType, documentIdx, documentId, documentCategory, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Download allegato per pagamento
+     * @param {string} iun Identificativo Univoco Notifica
+     * @param {number} recipientIdx indice del destinatario nella lista partendo da 0.
+     * @param {string} attachmentName Tipologia del pagamento allegato alla notifica. Valori possibili PAGOPA|F24
+     * @param {number} [attachmentIdx] indice del documento di pagamento partendo da 0
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationSentApi
+     */
+    public getSentNotificationPaymentV1(iun: string, recipientIdx: number, attachmentName: string, attachmentIdx?: number, options?: RawAxiosRequestConfig) {
+        return NotificationSentApiFp(this.configuration).getSentNotificationPaymentV1(iun, recipientIdx, attachmentName, attachmentIdx, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Questa operazione permette di leggere tutti i dettagli di una notifica accettata.
      * @summary Mittente: lettura dettagli notifica
      * @param {string} iun Identificativo Univoco Notifica
@@ -3353,6 +3727,18 @@ export class NotificationSentApi extends BaseAPI {
      */
     public getSentNotificationV1(iun: string, options?: RawAxiosRequestConfig) {
         return NotificationSentApiFp(this.configuration).getSentNotificationV1(iun, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Questa operazione permette di annullare una notifica inviata.
+     * @summary Mittente: annullamento notifica
+     * @param {string} iun Identificativo Univoco Notifica
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationSentApi
+     */
+    public notificationCancellationV1(iun: string, options?: RawAxiosRequestConfig) {
+        return NotificationSentApiFp(this.configuration).notificationCancellationV1(iun, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

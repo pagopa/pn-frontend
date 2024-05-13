@@ -14,7 +14,6 @@ import { notificationDTOMultiRecipient } from '../../../__mocks__/NotificationDe
 import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
-  CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
   NOTIFICATION_DETAIL_DOCUMENTS,
@@ -131,12 +130,6 @@ describe('Notifications api tests', () => {
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     });
-  });
-
-  it('cancelNotification', async () => {
-    mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
-    const res = await NotificationsApi.cancelNotification('mocked-iun');
-    expect(res).toEqual(undefined);
   });
 
   it('getPaymentAttachment', async () => {
