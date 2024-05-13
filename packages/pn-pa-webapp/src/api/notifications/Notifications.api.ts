@@ -1,43 +1,16 @@
-import {
-  GetNotificationsParams,
-  GetNotificationsResponse,
-  PaymentAttachment,
-  PaymentAttachmentNameType,
-} from '@pagopa-pn/pn-commons';
+import { PaymentAttachment, PaymentAttachmentNameType } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationDTO, NewNotificationResponse } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
 import { apiClient, externalClient } from '../apiClients';
 import {
-  CANCEL_NOTIFICATION, // CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
-  NOTIFICATIONS_LIST,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from './notifications.routes';
 
 export const NotificationsApi = {
-  /**
-   * Gets current user notifications
-   * @param  {string} startDate
-   * @param  {string} endDate
-   * @returns Promise
-   */
-  getSentNotifications: (
-    params: GetNotificationsParams<string>
-  ): Promise<GetNotificationsResponse> =>
-    apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
-      if (response.data?.resultsPage) {
-        return response.data;
-      }
-      return {
-        resultsPage: [],
-        moreResult: false,
-        nextPagesKey: [],
-      };
-    }),
-
   /**
    * Get user groups
    * @param  {GroupStatus} status
@@ -121,12 +94,4 @@ export const NotificationsApi = {
         NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string, recIndex, attachmentIdx)
       )
       .then((response) => response.data),
-
-  /**
-   * Cancel notification
-   * @param  {string} iun
-   * @returns Promise
-   */
-  cancelNotification: (iun: string): Promise<string> =>
-    apiClient.put<string>(CANCEL_NOTIFICATION(iun)).then((response) => response.data),
 };

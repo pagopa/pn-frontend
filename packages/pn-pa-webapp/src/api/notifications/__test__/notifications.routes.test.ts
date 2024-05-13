@@ -1,26 +1,11 @@
 import {
-  CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
-  NOTIFICATIONS_LIST,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
 
 describe('Notifications routes', () => {
-  it('should compile NOTIFICATIONS_LIST', () => {
-    const route = NOTIFICATIONS_LIST({
-      startDate: 'start-date',
-      endDate: 'end-date',
-      recipientId: 'recipient-id',
-      iunMatch: 'iun-match',
-      status: '',
-    });
-    expect(route).toEqual(
-      '/delivery/notifications/sent?startDate=start-date&endDate=end-date&recipientId=RECIPIENT-ID&iunMatch=iun-match'
-    );
-  });
-
   it('should compile GET_USER_GROUPS', () => {
     const route = GET_USER_GROUPS();
     expect(route).toEqual('/ext-registry/pa/v1/groups');
@@ -41,10 +26,5 @@ describe('Notifications routes', () => {
     expect(route).toEqual(
       '/delivery/notifications/sent/mocked-iun/attachments/payment/0/mocked-attachmentName'
     );
-  });
-
-  it('should compile CANCEL_NOTIFICATION', () => {
-    const route = CANCEL_NOTIFICATION('mocked-iun');
-    expect(route).toEqual('/delivery-push/v2.0/notifications/cancel/mocked-iun');
   });
 });

@@ -1,21 +1,13 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import {
-  PaymentAttachmentNameType,
-  PaymentAttachmentSName,
-  formatToTimezoneString,
-  tenYearsAgo,
-  today,
-} from '@pagopa-pn/pn-commons';
+import { PaymentAttachmentNameType, PaymentAttachmentSName } from '@pagopa-pn/pn-commons';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
-import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
-  NOTIFICATIONS_LIST,
   NOTIFICATION_ID_FROM_QRCODE,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
@@ -39,22 +31,6 @@ describe('Notifications api tests', () => {
 
   afterAll(() => {
     mock.restore();
-  });
-
-  it('getReceivedNotifications', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-        })
-      )
-      .reply(200, notificationsDTO);
-    const res = await NotificationsApi.getReceivedNotifications({
-      startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(today),
-    });
-    expect(res).toStrictEqual(notificationsToFe);
   });
 
   it('getPaymentAttachment', async () => {

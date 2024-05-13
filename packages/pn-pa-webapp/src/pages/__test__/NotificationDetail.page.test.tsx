@@ -27,7 +27,6 @@ import {
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { CANCEL_NOTIFICATION } from '../../api/notifications/notifications.routes';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
 
@@ -438,7 +437,7 @@ describe('NotificationDetail Page', async () => {
     });
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
-    mock.onPut(CANCEL_NOTIFICATION(notificationDTO.iun)).reply(200);
+    mock.onPut(`/bff/v1/notifications/sent/${notificationDTO.iun}/cancel`).reply(200);
     await act(async () => {
       result = render(<NotificationDetail />);
     });
@@ -458,7 +457,9 @@ describe('NotificationDetail Page', async () => {
       expect(modal).not.toBeInTheDocument();
     });
     expect(mock.history.put).toHaveLength(1);
-    expect(mock.history.put[0].url).toBe(CANCEL_NOTIFICATION(notificationDTO.iun));
+    expect(mock.history.put[0].url).toBe(
+      `/bff/v1/notifications/sent/${notificationDTO.iun}/cancel`
+    );
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[2].url).toBe(`/bff/v1/notifications/sent/${notificationDTO.iun}`);
