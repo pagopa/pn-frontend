@@ -177,8 +177,8 @@ export const getReceivedNotificationPaymentInfo = createAsyncThunk<
             notificationState.paymentsData.pagoPaF24,
             updatedPayment
           );
-          setPaymentsInCache(payments, iun);
-          return payments;
+          const updatedCache = setPaymentsInCache(payments, iun);
+          return updatedCache.payments;
         }
 
         // If all the payments are already in cache i can return them
@@ -204,7 +204,7 @@ export const getReceivedNotificationPaymentInfo = createAsyncThunk<
 
       return payments;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(parseError(e));
     }
   },
   {

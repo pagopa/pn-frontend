@@ -145,7 +145,7 @@ const notificationSlice = createSlice({
           payment.pagoPa?.noticeCode === noticeCode
       );
 
-      if (paymentInfo && paymentInfo.pagoPa) {
+      if (paymentInfo?.pagoPa) {
         state.paymentsData.pagoPaF24 = [
           ...state.paymentsData.pagoPaF24,
           {
