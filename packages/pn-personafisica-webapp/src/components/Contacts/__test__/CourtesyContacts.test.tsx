@@ -12,8 +12,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { COURTESY_CONTACT } from '../../../api/contacts/contacts.routes';
-import { CourtesyChannelType } from '../../../models/contacts';
+import { AddressType, CourtesyChannelType } from '../../../models/contacts';
 import CourtesyContactItem, { CourtesyFieldType } from '../CourtesyContactItem';
 import CourtesyContacts from '../CourtesyContacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
@@ -40,12 +39,18 @@ const fillCodeDialog = async (result: RenderResult) => {
   return dialog;
 };
 
-const defaultEmailAddress = digitalAddresses.courtesy.find(
-  (addr) => addr.senderId === 'default' && addr.channelType === CourtesyChannelType.EMAIL
+const defaultEmailAddress = digitalAddresses.find(
+  (addr) =>
+    addr.senderId === 'default' &&
+    addr.channelType === CourtesyChannelType.EMAIL &&
+    addr.addressType === AddressType.COURTESY
 );
 
-const defaultPhoneAddress = digitalAddresses.courtesy.find(
-  (addr) => addr.senderId === 'default' && addr.channelType === CourtesyChannelType.SMS
+const defaultPhoneAddress = digitalAddresses.find(
+  (addr) =>
+    addr.senderId === 'default' &&
+    addr.channelType === CourtesyChannelType.SMS &&
+    addr.addressType === AddressType.COURTESY
 );
 
 describe('CourtesyContacts Component', async () => {
@@ -92,12 +97,12 @@ describe('CourtesyContacts Component', async () => {
   it('add new phone number', async () => {
     const phoneValue = '3333333333';
     mock
-      .onPost(COURTESY_CONTACT('default', CourtesyChannelType.SMS), {
+      .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
         value: '+39' + phoneValue,
       })
       .reply(200);
     mock
-      .onPost(COURTESY_CONTACT('default', CourtesyChannelType.SMS), {
+      .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
         value: '+39' + phoneValue,
         verificationCode: '01234',
       })
@@ -139,7 +144,11 @@ describe('CourtesyContacts Component', async () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(
+      testStore
+        .getState()
+        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
+    ).toStrictEqual([
       {
         ...defaultPhoneAddress,
         senderName: undefined,
@@ -165,12 +174,12 @@ describe('CourtesyContacts Component', async () => {
   it('override an existing phone number with a new one', async () => {
     const phoneValue = '+393333333334';
     mock
-      .onPost(COURTESY_CONTACT('default', CourtesyChannelType.SMS), {
+      .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
         value: phoneValue,
       })
       .reply(200);
     mock
-      .onPost(COURTESY_CONTACT('default', CourtesyChannelType.SMS), {
+      .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
         value: phoneValue,
         verificationCode: '01234',
       })
@@ -185,7 +194,7 @@ describe('CourtesyContacts Component', async () => {
       </DigitalContactsCodeVerificationProvider>,
       {
         preloadedState: {
-          contactsState: { digitalAddresses: { courtesy: [defaultPhoneAddress], legal: [] } },
+          contactsState: { digitalAddresses: [defaultPhoneAddress] },
         },
       }
     );
@@ -218,7 +227,11 @@ describe('CourtesyContacts Component', async () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(
+      testStore
+        .getState()
+        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
+    ).toStrictEqual([
       {
         ...defaultPhoneAddress,
         senderName: undefined,
@@ -242,7 +255,7 @@ describe('CourtesyContacts Component', async () => {
   });
 
   it('delete phone number', async () => {
-    mock.onDelete(COURTESY_CONTACT('default', CourtesyChannelType.SMS)).reply(204);
+    mock.onDelete('/bff/v1/addresses/COURTESY/default/SMS').reply(204);
     const phoneValue = defaultPhoneAddress!.value;
     const result = render(
       <DigitalContactsCodeVerificationProvider>
@@ -254,7 +267,7 @@ describe('CourtesyContacts Component', async () => {
       </DigitalContactsCodeVerificationProvider>,
       {
         preloadedState: {
-          contactsState: { digitalAddresses: { courtesy: [defaultPhoneAddress], legal: [] } },
+          contactsState: { digitalAddresses: [defaultPhoneAddress] },
         },
       }
     );
@@ -278,7 +291,11 @@ describe('CourtesyContacts Component', async () => {
       expect(dialogBox).not.toBeVisible();
       expect(mock.history.delete).toHaveLength(1);
     });
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([]);
+    expect(
+      testStore
+        .getState()
+        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
+    ).toStrictEqual([]);
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
@@ -298,11 +315,9 @@ describe('CourtesyContacts Component', async () => {
 
   it('add new email', async () => {
     const mailValue = 'nome.cognome@mail.it';
+    mock.onPost('/bff/v1/addresses/COURTESY/default/EMAIL', { value: mailValue }).reply(200);
     mock
-      .onPost(COURTESY_CONTACT('default', CourtesyChannelType.EMAIL), { value: mailValue })
-      .reply(200);
-    mock
-      .onPost(COURTESY_CONTACT('default', CourtesyChannelType.EMAIL), {
+      .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', {
         value: mailValue,
         verificationCode: '01234',
       })
@@ -344,7 +359,11 @@ describe('CourtesyContacts Component', async () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(
+      testStore
+        .getState()
+        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
+    ).toStrictEqual([
       {
         ...defaultEmailAddress,
         senderName: undefined,
@@ -370,12 +389,12 @@ describe('CourtesyContacts Component', async () => {
   it('override an existing email with a new one', async () => {
     const emailValue = 'nome.cognome-modified@mail.com';
     mock
-      .onPost(COURTESY_CONTACT('default', CourtesyChannelType.EMAIL), {
+      .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', {
         value: emailValue,
       })
       .reply(200);
     mock
-      .onPost(COURTESY_CONTACT('default', CourtesyChannelType.EMAIL), {
+      .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', {
         value: emailValue,
         verificationCode: '01234',
       })
@@ -390,7 +409,7 @@ describe('CourtesyContacts Component', async () => {
       </DigitalContactsCodeVerificationProvider>,
       {
         preloadedState: {
-          contactsState: { digitalAddresses: { courtesy: [defaultEmailAddress], legal: [] } },
+          contactsState: { digitalAddresses: [defaultEmailAddress] },
         },
       }
     );
@@ -421,7 +440,11 @@ describe('CourtesyContacts Component', async () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(
+      testStore
+        .getState()
+        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
+    ).toStrictEqual([
       {
         ...defaultEmailAddress,
         senderName: undefined,
@@ -445,7 +468,7 @@ describe('CourtesyContacts Component', async () => {
   });
 
   it('delete email', async () => {
-    mock.onDelete(COURTESY_CONTACT('default', CourtesyChannelType.EMAIL)).reply(204);
+    mock.onDelete('/bff/v1/addresses/COURTESY/default/EMAIL').reply(204);
     const emailValue = defaultEmailAddress!.value;
     const result = render(
       <DigitalContactsCodeVerificationProvider>
@@ -457,7 +480,7 @@ describe('CourtesyContacts Component', async () => {
       </DigitalContactsCodeVerificationProvider>,
       {
         preloadedState: {
-          contactsState: { digitalAddresses: { courtesy: [defaultEmailAddress], legal: [] } },
+          contactsState: { digitalAddresses: [defaultEmailAddress] },
         },
       }
     );
@@ -481,7 +504,11 @@ describe('CourtesyContacts Component', async () => {
       expect(dialogBox).not.toBeVisible();
       expect(mock.history.delete).toHaveLength(1);
     });
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([]);
+    expect(
+      testStore
+        .getState()
+        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
+    ).toStrictEqual([]);
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>

@@ -1,7 +1,7 @@
 import { EventPropertyType } from '@pagopa-pn/pn-commons';
 
-import { digitalAddresses } from '../../../../__mocks__/Contacts.mock';
-import { CourtesyChannelType } from '../../../../models/contacts';
+import { digitalCourtesyAddresses } from '../../../../__mocks__/Contacts.mock';
+import { AddressType, CourtesyChannelType } from '../../../../models/contacts';
 import { SendAddCourtesyAddressStrategy } from '../SendAddCourtesyAddressStrategy';
 
 describe('Mixpanel - Add Courtesy Address Strategy', () => {
@@ -10,6 +10,7 @@ describe('Mixpanel - Add Courtesy Address Strategy', () => {
     const event = strategy.performComputations({
       payload: undefined,
       params: {
+        addressType: AddressType.COURTESY,
         channelType: CourtesyChannelType.EMAIL,
         recipientId: '123',
         senderId: 'default',
@@ -22,13 +23,14 @@ describe('Mixpanel - Add Courtesy Address Strategy', () => {
 
   it('should return has email when adding an email', () => {
     const strategy = new SendAddCourtesyAddressStrategy();
-    const address = digitalAddresses.courtesy.find(
+    const address = digitalCourtesyAddresses.find(
       (a) => a.channelType === CourtesyChannelType.EMAIL
     );
 
     const event = strategy.performComputations({
       payload: address,
       params: {
+        addressType: address!.addressType,
         channelType: address!.channelType,
         recipientId: address!.recipientId,
         senderId: address!.senderId,
@@ -48,13 +50,12 @@ describe('Mixpanel - Add Courtesy Address Strategy', () => {
 
   it('should return has sms when adding an sms', () => {
     const strategy = new SendAddCourtesyAddressStrategy();
-    const address = digitalAddresses.courtesy.find(
-      (a) => a.channelType === CourtesyChannelType.SMS
-    );
+    const address = digitalCourtesyAddresses.find((a) => a.channelType === CourtesyChannelType.SMS);
 
     const event = strategy.performComputations({
       payload: address,
       params: {
+        addressType: address!.addressType,
         channelType: address!.channelType,
         recipientId: address!.recipientId,
         senderId: address!.senderId,

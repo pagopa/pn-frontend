@@ -17,11 +17,8 @@ import {
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
-import {
-  createOrUpdateCourtesyAddress,
-  createOrUpdateLegalAddress,
-} from '../../redux/contact/actions';
+import { AddressType, CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { SaveDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -56,12 +53,8 @@ const DigitalContactsCodeVerificationContext = createContext<
 
 const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({ children }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const digitalAddresses = useAppSelector(
-    (state: RootState) => state.contactsState.digitalAddresses
-  );
-  const addresses = digitalAddresses
-    ? digitalAddresses.legal.concat(digitalAddresses.courtesy)
-    : [];
+  const digitalAddresses =
+    useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
   const [isConfirmationModalVisible, setIsConfirmationModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
 
@@ -100,7 +93,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   };
 
   const contactAlreadyExists = (): boolean =>
-    !!addresses.find(
+    !!digitalAddresses.find(
       (elem) =>
         elem.value !== '' &&
         elem.value === modalProps.value &&
@@ -124,13 +117,6 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
     );
   };
   const handleCodeVerification = (verificationCode?: string, noCallback: boolean = false) => {
-    /* eslint-disable functional/no-let */
-    let actionToBeDispatched;
-    if (modalProps.digitalDomicileType === LegalChannelType.PEC) {
-      actionToBeDispatched = createOrUpdateLegalAddress;
-    } else {
-      actionToBeDispatched = createOrUpdateCourtesyAddress;
-    }
     if (verificationCode) {
       if (modalProps.digitalDomicileType === LegalChannelType.PEC) {
         PFEventStrategyFactory.triggerEvent(
@@ -149,10 +135,12 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
         );
       }
     }
-    if (!actionToBeDispatched) {
-      return;
-    }
+
     const digitalAddressParams: SaveDigitalAddressParams = {
+      addressType:
+        modalProps.digitalDomicileType === LegalChannelType.PEC
+          ? AddressType.LEGAL
+          : AddressType.COURTESY,
       recipientId: modalProps.recipientId,
       senderId: modalProps.senderId,
       senderName: modalProps.senderName,
@@ -161,7 +149,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
       code: verificationCode,
     };
 
-    void dispatch(actionToBeDispatched(digitalAddressParams))
+    void dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
       .then((res) => {
         if (noCallback) {
@@ -287,18 +275,10 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   );
 
   useEffect(() => {
-    AppResponsePublisher.error.subscribe('createOrUpdateLegalAddress', handleAddressUpdateError);
-    AppResponsePublisher.error.subscribe('createOrUpdateCourtesyAddress', handleAddressUpdateError);
+    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
 
     return () => {
-      AppResponsePublisher.error.unsubscribe(
-        'createOrUpdateLegalAddress',
-        handleAddressUpdateError
-      );
-      AppResponsePublisher.error.unsubscribe(
-        'createOrUpdateCourtesyAddress',
-        handleAddressUpdateError
-      );
+      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
     };
   }, [handleAddressUpdateError]);
 

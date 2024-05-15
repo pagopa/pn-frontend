@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
+import { digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import {
   RenderResult,
   act,
@@ -12,8 +12,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { LEGAL_CONTACT } from '../../../api/contacts/contacts.routes';
-import { DigitalAddress, LegalChannelType } from '../../../models/contacts';
+import { AddressType, DigitalAddress } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import InsertLegalContact from '../InsertLegalContact';
 import LegalContactsList from '../LegalContactsList';
@@ -27,7 +26,7 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-const defaultAddress = digitalAddresses.legal.find(
+const defaultAddress = digitalLegalAddresses.find(
   (addr) => addr.senderId === 'default' && addr.pecValid
 );
 
@@ -85,7 +84,7 @@ describe('LegalContactsList Component', async () => {
         <DigitalContactsCodeVerificationProvider>
           <LegalContactsList
             recipientId={defaultAddress!.recipientId}
-            legalAddresses={digitalAddresses.legal}
+            legalAddresses={digitalLegalAddresses}
           />
         </DigitalContactsCodeVerificationProvider>
       );
@@ -107,12 +106,12 @@ describe('LegalContactsList Component', async () => {
   it('adds pec, checks validation and removes it', async () => {
     const pecValue = defaultAddress!.value;
     mock
-      .onPost(LEGAL_CONTACT('default', LegalChannelType.PEC), {
+      .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
         value: pecValue,
       })
       .reply(200);
     mock
-      .onPost(LEGAL_CONTACT('default', LegalChannelType.PEC), {
+      .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
         value: pecValue,
         verificationCode: '01234',
       })
@@ -154,9 +153,11 @@ describe('LegalContactsList Component', async () => {
     await waitFor(() => {
       expect(validationDialog).not.toBeInTheDocument();
     });
-    expect(testStore.getState().contactsState.digitalAddresses.legal).toStrictEqual([
-      { ...defaultAddress, pecValid: false, value: '', senderName: undefined },
-    ]);
+    expect(
+      testStore
+        .getState()
+        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
+    ).toStrictEqual([{ ...defaultAddress, pecValid: false, value: '', senderName: undefined }]);
     // simulate rerendering due to redux changes
     result.rerender(
       <IntegrationComponent digitalAddresses={[{ ...defaultAddress!, pecValid: false }]} />
@@ -177,7 +178,11 @@ describe('LegalContactsList Component', async () => {
     const buttons = within(cancelVerificationModal).getAllByRole('button');
     fireEvent.click(buttons[1]);
     await waitFor(() => {
-      expect(testStore.getState().contactsState.digitalAddresses.legal).toStrictEqual([]);
+      expect(
+        testStore
+          .getState()
+          .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
+      ).toStrictEqual([]);
     });
     // simulate rerendering due to redux changes
     result.rerender(<IntegrationComponent digitalAddresses={[]} />);
@@ -191,12 +196,12 @@ describe('LegalContactsList Component', async () => {
   it('edits pec', async () => {
     const pecValue = 'nome.utente-modificata@pec.it';
     mock
-      .onPost(LEGAL_CONTACT('default', LegalChannelType.PEC), {
+      .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
         value: pecValue,
       })
       .reply(200);
     mock
-      .onPost(LEGAL_CONTACT('default', LegalChannelType.PEC), {
+      .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
         value: pecValue,
         verificationCode: '01234',
       })
@@ -204,7 +209,7 @@ describe('LegalContactsList Component', async () => {
     await act(async () => {
       result = render(<IntegrationComponent digitalAddresses={[defaultAddress!]} />, {
         preloadedState: {
-          contactsState: { digitalAddresses: { legal: [defaultAddress], courtesy: [] } },
+          contactsState: { digitalAddresses: [defaultAddress] },
         },
       });
     });
@@ -232,7 +237,11 @@ describe('LegalContactsList Component', async () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    expect(testStore.getState().contactsState.digitalAddresses.legal).toStrictEqual([
+    expect(
+      testStore
+        .getState()
+        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
+    ).toStrictEqual([
       {
         ...defaultAddress,
         value: pecValue,
@@ -250,10 +259,10 @@ describe('LegalContactsList Component', async () => {
   });
 
   it('delete pec', async () => {
-    mock.onDelete(LEGAL_CONTACT('default', LegalChannelType.PEC)).reply(204);
+    mock.onDelete('/bff/v1/addresses/LEGAL/default/PEC').reply(204);
     const result = render(<IntegrationComponent digitalAddresses={[defaultAddress!]} />, {
       preloadedState: {
-        contactsState: { digitalAddresses: { legal: [defaultAddress], courtesy: [] } },
+        contactsState: { digitalAddresses: [defaultAddress] },
       },
     });
     const legalContacts = result.getByTestId('legalContacts');
@@ -277,7 +286,11 @@ describe('LegalContactsList Component', async () => {
       expect(dialogBox).not.toBeVisible();
       expect(mock.history.delete).toHaveLength(1);
     });
-    expect(testStore.getState().contactsState.digitalAddresses.legal).toStrictEqual([]);
+    expect(
+      testStore
+        .getState()
+        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
+    ).toStrictEqual([]);
     // simulate rerendering due to redux changes
     result.rerender(<IntegrationComponent digitalAddresses={[]} />);
     await waitFor(() => {
@@ -294,7 +307,7 @@ describe('LegalContactsList Component', async () => {
         <DigitalContactsCodeVerificationProvider>
           <LegalContactsList
             recipientId="mocked-recipientId"
-            legalAddresses={digitalAddresses.legal}
+            legalAddresses={digitalLegalAddresses}
           />
         </DigitalContactsCodeVerificationProvider>
       );

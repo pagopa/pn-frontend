@@ -1,115 +1,157 @@
-import { performThunkAction } from '@pagopa-pn/pn-commons';
+import { parseError } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { ContactsApi } from '../../api/contacts/Contacts.api';
+import { apiClient } from '../../api/apiClients';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import {
-  CourtesyChannelType,
-  DigitalAddress,
-  DigitalAddresses,
-  LegalChannelType,
-} from '../../models/contacts';
+  AddressesApiFactory,
+  BffAddressType,
+  BffAddressVerificationResponse,
+} from '../../generated-client/digital-addresses';
+import { AddressType, CourtesyChannelType, DigitalAddress } from '../../models/contacts';
 import { FilterPartiesParams, Party } from '../../models/party';
 import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from './types';
 
 export enum CONTACT_ACTIONS {
   GET_DIGITAL_ADDRESSES = 'getDigitalAddresses',
   GET_ALL_ACTIVATED_PARTIES = 'getAllActivatedParties',
+  CREATE_OR_UPDATE_ADDRESS = 'createOrUpdateAddress',
+  DELETE_ADDRESS = 'deleteAddress',
+  ENABLE_IO_ADDRESS = 'enableIOAddress',
+  DISABLE_IO_ADDRESS = 'disableIOAddress',
 }
 
-export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
+export const getDigitalAddresses = createAsyncThunk<Array<DigitalAddress>, undefined>(
   CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES,
-  performThunkAction(() => ContactsApi.getDigitalAddresses())
-);
-
-export const createOrUpdateLegalAddress = createAsyncThunk<
-  DigitalAddress | void,
-  SaveDigitalAddressParams
->('createOrUpdateLegalAddress', async (params: SaveDigitalAddressParams, { rejectWithValue }) => {
-  try {
-    return await ContactsApi.createOrUpdateLegalAddress(
-      params.recipientId,
-      params.senderId,
-      params.channelType as LegalChannelType,
-      { value: params.value, verificationCode: params.code },
-      params.senderName
-    );
-  } catch (e: any) {
-    return rejectWithValue(e);
-  }
-});
-
-export const deleteLegalAddress = createAsyncThunk<string, DeleteDigitalAddressParams>(
-  'deleteLegalAddress',
-  async (params: DeleteDigitalAddressParams, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      return await ContactsApi.deleteLegalAddress(
-        params.senderId,
-        params.channelType as LegalChannelType
-      );
-    } catch (e) {
-      return rejectWithValue(e);
+      const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
+      const response = await digitalAddressesFactory.getAddressesV1();
+
+      return response.data as Array<DigitalAddress>;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
     }
   }
 );
 
-export const createOrUpdateCourtesyAddress = createAsyncThunk<
-  DigitalAddress | void,
+export const createOrUpdateAddress = createAsyncThunk<
+  DigitalAddress | undefined,
   SaveDigitalAddressParams
 >(
-  'createOrUpdateCourtesyAddress',
+  CONTACT_ACTIONS.CREATE_OR_UPDATE_ADDRESS,
   async (params: SaveDigitalAddressParams, { rejectWithValue }) => {
     try {
-      return await ContactsApi.createOrUpdateCourtesyAddress(
-        params.recipientId,
+      const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
+      const response = await digitalAddressesFactory.createOrUpdateAddressV1(
+        params.addressType as unknown as BffAddressType,
         params.senderId,
-        params.channelType as CourtesyChannelType,
-        { value: params.value, verificationCode: params.code },
-        params.senderName
+        params.channelType,
+        { value: params.value, verificationCode: params.code }
       );
+
+      if (params.addressType === 'LEGAL') {
+        // PEC already verified
+        if (response.status === 204) {
+          return {
+            addressType: params.addressType,
+            recipientId: params.recipientId,
+            senderId: params.senderId,
+            senderName: params.senderName,
+            channelType: params.channelType,
+            value: params.value,
+            pecValid: true,
+          };
+        }
+
+        // PEC_VALIDATION_REQUIRED is received when the code has been inserted and is valid, but the pec validation is
+        // still in progress
+        if (response.data?.result === 'PEC_VALIDATION_REQUIRED') {
+          return {
+            addressType: params.addressType,
+            recipientId: params.recipientId,
+            senderId: params.senderId,
+            senderName: params.senderName,
+            channelType: params.channelType,
+            value: '',
+            pecValid: false,
+          };
+        } else {
+          return;
+        }
+      } else {
+        // user must verify contact
+        if (response.status !== 204) {
+          return;
+        }
+
+        // contact already verified
+        return {
+          addressType: params.addressType,
+          recipientId: params.recipientId,
+          senderId: params.senderId,
+          senderName: params.senderName,
+          channelType: params.channelType,
+          value: params.value,
+        };
+      }
     } catch (e: any) {
-      return rejectWithValue(e);
+      return rejectWithValue(parseError(e));
     }
   }
 );
 
-export const deleteCourtesyAddress = createAsyncThunk<string, DeleteDigitalAddressParams>(
-  'deleteCourtesyAddress',
+export const deleteAddress = createAsyncThunk<void, DeleteDigitalAddressParams>(
+  CONTACT_ACTIONS.DELETE_ADDRESS,
   async (params: DeleteDigitalAddressParams, { rejectWithValue }) => {
     try {
-      return await ContactsApi.deleteCourtesyAddress(
+      const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
+      const response = await digitalAddressesFactory.deleteAddressV1(
+        params.addressType as unknown as BffAddressType,
         params.senderId,
-        params.channelType as CourtesyChannelType
+        params.channelType
       );
-    } catch (e) {
-      return rejectWithValue(e);
+
+      return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
     }
   }
 );
 
-export const enableIOAddress = createAsyncThunk<DigitalAddress | void, string>(
-  'enableIOAddress',
-  async (recipientId: string, { rejectWithValue }) => {
+export const enableIOAddress = createAsyncThunk<BffAddressVerificationResponse, undefined>(
+  CONTACT_ACTIONS.ENABLE_IO_ADDRESS,
+  async (_, { rejectWithValue }) => {
     try {
-      return await ContactsApi.createOrUpdateCourtesyAddress(
-        recipientId,
+      const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
+      const response = await digitalAddressesFactory.createOrUpdateAddressV1(
+        AddressType.COURTESY as unknown as BffAddressType,
         'default',
         CourtesyChannelType.IOMSG,
         { value: 'APPIO', verificationCode: '00000' }
       );
+
+      return response.data;
     } catch (e: any) {
-      return rejectWithValue(e);
+      return rejectWithValue(parseError(e));
     }
   }
 );
 
-export const disableIOAddress = createAsyncThunk<string, string>(
-  'disableIOAddress',
-  async (_params: string, { rejectWithValue }) => {
+export const disableIOAddress = createAsyncThunk<void, undefined>(
+  CONTACT_ACTIONS.DISABLE_IO_ADDRESS,
+  async (_, { rejectWithValue }) => {
     try {
-      return await ContactsApi.deleteCourtesyAddress('default', CourtesyChannelType.IOMSG);
-    } catch (e) {
-      return rejectWithValue(e);
+      const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
+      const response = await digitalAddressesFactory.deleteAddressV1(
+        AddressType.COURTESY as unknown as BffAddressType,
+        'default',
+        CourtesyChannelType.IOMSG
+      );
+
+      return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
     }
   }
 );

@@ -1,8 +1,9 @@
 import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { ContactsApi } from '../../api/contacts/Contacts.api';
+import { apiClient } from '../../api/apiClients';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
+import { AddressesApiFactory } from '../../generated-client/digital-addresses';
 import { CourtesyChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { Delegator } from '../delegation/types';
 
@@ -32,11 +33,11 @@ export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
       (address.channelType !== CourtesyChannelType.IOMSG && address.senderId === 'default') ||
       (address.channelType === CourtesyChannelType.IOMSG &&
         address.value !== IOAllowedValues.DISABLED);
-    const allAddresses = await ContactsApi.getDigitalAddresses();
 
-    return [
-      ...allAddresses.legal.filter(isDefaultAddress),
-      ...allAddresses.courtesy.filter(isDefaultAddress),
-    ];
+    const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
+    const response = await digitalAddressesFactory.getAddressesV1();
+    const allAddresses = response.data as Array<DigitalAddress>;
+
+    return [...allAddresses.filter(isDefaultAddress)];
   })
 );

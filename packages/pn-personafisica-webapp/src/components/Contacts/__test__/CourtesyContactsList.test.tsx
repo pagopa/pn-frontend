@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import { RenderResult, act, render } from '../../../__test__/test-utils';
-import { CourtesyChannelType } from '../../../models/contacts';
+import { AddressType, CourtesyChannelType } from '../../../models/contacts';
 import { CourtesyFieldType } from '../CourtesyContactItem';
 import CourtesyContactsList from '../CourtesyContactsList';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
@@ -50,16 +50,22 @@ describe('CourtesyContactsList Component', () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactsList recipientId="mock-recipient" contacts={digitalAddresses.courtesy} />
+          <CourtesyContactsList recipientId="mock-recipient" contacts={digitalAddresses} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
 
-    const defaultPhone = digitalAddresses.courtesy.find(
-      (addr) => addr.channelType === CourtesyChannelType.SMS && addr.senderId === 'default'
+    const defaultPhone = digitalAddresses.find(
+      (addr) =>
+        addr.channelType === CourtesyChannelType.SMS &&
+        addr.senderId === 'default' &&
+        addr.addressType === AddressType.COURTESY
     );
-    const defaultEmail = digitalAddresses.courtesy.find(
-      (addr) => addr.channelType === CourtesyChannelType.EMAIL && addr.senderId === 'default'
+    const defaultEmail = digitalAddresses.find(
+      (addr) =>
+        addr.channelType === CourtesyChannelType.EMAIL &&
+        addr.senderId === 'default' &&
+        addr.addressType === AddressType.COURTESY
     );
 
     const phoneInput = result?.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);

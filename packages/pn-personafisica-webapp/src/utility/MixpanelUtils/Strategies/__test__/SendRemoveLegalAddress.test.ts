@@ -1,6 +1,6 @@
 import { EventPropertyType } from '@pagopa-pn/pn-commons';
 
-import { LegalChannelType } from '../../../../models/contacts';
+import { AddressType, LegalChannelType } from '../../../../models/contacts';
 import { DeleteDigitalAddressParams } from '../../../../redux/contact/types';
 import { SendRemoveLegalAddressStrategy } from '../SendRemoveLegalAddress';
 
@@ -11,8 +11,8 @@ describe('Mixpanel - Remove Legal Address Strategy', () => {
     const params: { payload: string; params: DeleteDigitalAddressParams } = {
       payload: 'OK',
       params: {
+        addressType: AddressType.LEGAL,
         senderId: 'default',
-        recipientId: 'default',
         channelType: LegalChannelType.PEC,
       },
     };
@@ -35,8 +35,8 @@ describe('Mixpanel - Remove Legal Address Strategy', () => {
     const params: { payload: string; params: DeleteDigitalAddressParams } = {
       payload: 'OK',
       params: {
+        addressType: AddressType.LEGAL,
         senderId: 'not-default',
-        recipientId: 'default',
         channelType: LegalChannelType.PEC,
       },
     };

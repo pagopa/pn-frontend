@@ -13,7 +13,7 @@ import LegalContactsList from '../components/Contacts/LegalContactsList';
 import SpecialContacts from '../components/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
-import { CourtesyChannelType, DigitalAddress } from '../models/contacts';
+import { AddressType, CourtesyChannelType, DigitalAddress } from '../models/contacts';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
 import { PROFILO } from '../navigation/routes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
@@ -31,15 +31,22 @@ const Contacts = () => {
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.contactsState.digitalAddresses
   );
+  const legalAddresses = digitalAddresses.filter(
+    (address) => address.addressType === AddressType.LEGAL
+  );
+  const courtesyAddresses = digitalAddresses.filter(
+    (address) => address.addressType === AddressType.COURTESY
+  );
+
   const [pageReady, setPageReady] = useState(false);
   const { LANDING_SITE_URL } = getConfiguration();
 
-  const contactIO = digitalAddresses.courtesy
-    ? digitalAddresses.courtesy.find((address) => address.channelType === CourtesyChannelType.IOMSG)
+  const contactIO = digitalAddresses
+    ? digitalAddresses.find((address) => address.channelType === CourtesyChannelType.IOMSG)
     : null;
 
   const fetchAddresses = useCallback(() => {
-    void dispatch(getDigitalAddresses(recipientId)).then(() => {
+    void dispatch(getDigitalAddresses()).then(() => {
       setPageReady(true);
     });
   }, []);
@@ -120,7 +127,7 @@ const Contacts = () => {
   const courtesyContactsNotEmpty = () => {
     const isIrrilevant = (address: DigitalAddress) =>
       address.channelType === CourtesyChannelType.IOMSG;
-    return digitalAddresses.courtesy.some((addr) => !isIrrilevant(addr));
+    return courtesyAddresses.some((addr) => !isIrrilevant(addr));
   };
 
   return (
@@ -143,30 +150,30 @@ const Contacts = () => {
               <Stack spacing={3}>
                 <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
                   <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                    {digitalAddresses.legal.length === 0 ? (
+                    {legalAddresses.length === 0 ? (
                       <InsertLegalContact recipientId={recipientId} />
                     ) : (
                       <LegalContactsList
                         recipientId={recipientId}
-                        legalAddresses={digitalAddresses.legal}
+                        legalAddresses={legalAddresses}
                       />
                     )}
                   </Box>
                   <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                    <IOContact recipientId={recipientId} contact={contactIO} />
+                    <IOContact contact={contactIO} />
                   </Box>
                 </Stack>
-                <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
+                <CourtesyContacts recipientId={recipientId} contacts={courtesyAddresses} />
               </Stack>
-              {(digitalAddresses.legal.length > 0 || courtesyContactsNotEmpty()) && (
+              {(legalAddresses.length > 0 || courtesyContactsNotEmpty()) && (
                 <Stack spacing={2}>
                   <Typography id="specialContact" variant="h5" fontWeight={600} fontSize={28}>
                     {t('special-contacts-title')}
                   </Typography>
                   <SpecialContacts
                     recipientId={recipientId}
-                    legalAddresses={digitalAddresses.legal}
-                    courtesyAddresses={digitalAddresses.courtesy}
+                    legalAddresses={legalAddresses}
+                    courtesyAddresses={courtesyAddresses}
                   />
                 </Stack>
               )}
