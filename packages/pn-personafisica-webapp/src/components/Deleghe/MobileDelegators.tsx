@@ -16,7 +16,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { DelegationColumnData, DelegationData } from '../../models/Deleghe';
-import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
+import { DELEGATION_ACTIONS, getMandatesByDelegate } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utility/delegation.utility';
@@ -58,8 +58,8 @@ const MobileDelegators = () => {
         {t('deleghe.delegatorsTitle')}
       </Typography>
       <ApiErrorWrapper
-        apiId={DELEGATION_ACTIONS.GET_DELEGATORS}
-        reloadAction={() => dispatch(getDelegators())}
+        apiId={DELEGATION_ACTIONS.GET_MANDATES_BY_DELEGATE}
+        reloadAction={() => dispatch(getMandatesByDelegate())}
       >
         {delegators.length > 0 ? (
           <PnCardsList>

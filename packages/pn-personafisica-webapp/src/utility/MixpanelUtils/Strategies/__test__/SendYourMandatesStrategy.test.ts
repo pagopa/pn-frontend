@@ -1,6 +1,6 @@
 import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
-import { arrayOfDelegates, arrayOfDelegators } from '../../../../__mocks__/Delegations.mock';
+import { mandatesByDelegate, mandatesByDelegator } from '../../../../__mocks__/Delegations.mock';
 import { DelegationStatus } from '../../../status.utility';
 import { SendYourMandatesStrategy } from '../SendYourMandatesStrategy';
 
@@ -8,8 +8,8 @@ describe('Mixpanel - Send Your Mandates Strategy', () => {
   it('should return your mandates event', () => {
     const strategy = new SendYourMandatesStrategy();
 
-    const delegates = arrayOfDelegates;
-    const delegators = arrayOfDelegators;
+    const delegates = mandatesByDelegator;
+    const delegators = mandatesByDelegate;
 
     const yourMandatesEvents = strategy.performComputations({ delegates, delegators });
     expect(yourMandatesEvents).toEqual({

@@ -18,11 +18,11 @@ import MobileDelegators from '../components/Deleghe/MobileDelegators';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
 import {
-  acceptDelegation,
-  getDelegates,
-  getDelegators,
-  rejectDelegation,
-  revokeDelegation,
+  acceptMandate,
+  getMandatesByDelegate,
+  getMandatesByDelegator,
+  rejectMandate,
+  revokeMandate,
 } from '../redux/delegation/actions';
 import { closeAcceptModal, closeRevocationModal, resetState } from '../redux/delegation/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -58,14 +58,14 @@ const Deleghe = () => {
   const handleConfirmClick = () => {
     if (type === 'delegates') {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_REVOKED);
-      void dispatch(revokeDelegation(id))
+      void dispatch(revokeMandate(id))
         .unwrap()
         .then(() =>
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_GIVEN, { delegators })
         );
     } else {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_REJECTED);
-      void dispatch(rejectDelegation(id))
+      void dispatch(rejectMandate(id))
         .unwrap()
         .then(() =>
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_HAS_MANDATE, { delegates })
@@ -79,7 +79,7 @@ const Deleghe = () => {
 
   const handleAccept = (code: Array<string>) => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_ACCEPTED);
-    dispatch(acceptDelegation({ id: acceptId, code: code.join('') }))
+    dispatch(acceptMandate({ id: acceptId, code: code.join('') }))
       .unwrap()
       .then(() => {
         void dispatch(getSidemenuInformation());
@@ -96,8 +96,8 @@ const Deleghe = () => {
   );
 
   const retrieveData = async () => {
-    await dispatch(getDelegates());
-    await dispatch(getDelegators());
+    await dispatch(getMandatesByDelegator());
+    await dispatch(getMandatesByDelegate());
     setPageReady(true);
   };
 
@@ -124,10 +124,10 @@ const Deleghe = () => {
   }, []);
 
   useEffect(() => {
-    AppResponsePublisher.error.subscribe('acceptDelegation', handleAcceptDelegationError);
+    AppResponsePublisher.error.subscribe('acceptMandate', handleAcceptDelegationError);
 
     return () => {
-      AppResponsePublisher.error.unsubscribe('acceptDelegation', handleAcceptDelegationError);
+      AppResponsePublisher.error.unsubscribe('acceptMandate', handleAcceptDelegationError);
     };
   }, []);
 

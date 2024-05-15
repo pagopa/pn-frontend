@@ -1,8 +1,9 @@
-import { performThunkAction } from '@pagopa-pn/pn-commons';
+import { parseError, performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { apiClient } from '../../api/apiClients';
 import { ContactsApi } from '../../api/contacts/Contacts.api';
-import { DelegationsApi } from '../../api/delegations/Delegations.api';
+import { MandateApiFactory } from '../../generated-client/mandate';
 import { CourtesyChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { Delegator } from '../delegation/types';
 
@@ -12,12 +13,13 @@ export enum SIDEMENU_ACTIONS {
 
 export const getSidemenuInformation = createAsyncThunk<Array<Delegator>>(
   SIDEMENU_ACTIONS.GET_SIDEMENU_INFORMATION,
-  // performThunkAction(() => DelegationsApi.getDelegators())
-  async () => {
+  async (_params, { rejectWithValue }) => {
     try {
-      return await DelegationsApi.getDelegators();
+      const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+      const response = await mandateApiFactory.getMandatesByDelegateV1();
+      return response.data as Array<Delegator>;
     } catch (e) {
-      return [];
+      return rejectWithValue(parseError(e));
     }
   }
 );

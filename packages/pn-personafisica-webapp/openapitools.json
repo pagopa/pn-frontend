@@ -36,6 +36,17 @@
           "modelPackage": "models",
           "cleanupOutput": true
         }
+      },
+      "bff-mandate": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/develop/docs/openapi/api-external-pn-bff-recipient-mandate.yaml",
+        "output": "./src/generated-client/mandate",
+        "additionalProperties": {
+          "supportsES6": true,
+          "apiPackage": "apis",
+          "modelPackage": "models",
+          "cleanupOutput": true
+        }
       }
     }
   }

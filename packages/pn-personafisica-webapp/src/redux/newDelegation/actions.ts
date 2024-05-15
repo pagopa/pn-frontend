@@ -1,18 +1,14 @@
-import { RecipientType, formatToSlicedISOString } from '@pagopa-pn/pn-commons';
+import { RecipientType, formatToSlicedISOString, parseError } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { DelegationsApi } from '../../api/delegations/Delegations.api';
+import { apiClient } from '../../api/apiClients';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
+import { MandateApiFactory } from '../../generated-client/mandate';
 import { DelegationParty } from '../../models/Deleghe';
 import { FilterPartiesParams, Party } from '../../models/party';
-import {
-  CreateDelegationProps,
-  CreateDelegationResponse,
-  NewDelegationFormProps,
-  Person,
-} from '../delegation/types';
+import { NewDelegationFormProps, NewMandateRequest, Person } from '../delegation/types';
 
-export function createDelegationMapper(formData: NewDelegationFormProps): CreateDelegationProps {
+export function createDelegationMapper(formData: NewDelegationFormProps): NewMandateRequest {
   const delegate = {
     fiscalCode: formData.codiceFiscale,
   } as Person;
@@ -46,14 +42,16 @@ export function createDelegationMapper(formData: NewDelegationFormProps): Create
   };
 }
 
-export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDelegationFormProps>(
+export const createDelegation = createAsyncThunk<void, NewDelegationFormProps>(
   'createDelegation',
   async (data, { rejectWithValue }) => {
     try {
       const payload = createDelegationMapper(data);
-      return await DelegationsApi.createDelegation(payload);
+      const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+      const response = await mandateApiFactory.createMandateV1(payload);
+      return response.data;
     } catch (e: any) {
-      return rejectWithValue(e);
+      return rejectWithValue(parseError(e));
     }
   }
 );

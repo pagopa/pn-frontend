@@ -1,4 +1,5 @@
 import { RecipientType } from '@pagopa-pn/pn-commons';
+
 import { DelegationParty } from '../../models/Deleghe';
 import { Party } from '../../models/party';
 import { User } from '../auth/types';
@@ -6,8 +7,8 @@ import { User } from '../auth/types';
 export type UserAndDelegations = User & DelegationsList;
 
 export interface DelegationsList {
-  delegators: Array<Delegation>;
-  delegations: Array<Delegation>;
+  delegators: Array<Delegator>;
+  delegations: Array<Delegate>;
   isCompany: boolean;
 }
 
@@ -27,8 +28,6 @@ export interface Delegator extends IDelegation {
 export interface Delegate extends IDelegation {
   delegate: Person | null;
 }
-
-export type Delegation = Delegator | Delegate;
 
 export interface RevocationModalProps {
   open: boolean;
@@ -56,24 +55,10 @@ export interface NewDelegationFormProps {
   enti: Array<Party>;
   verificationCode: string;
 }
-export interface AcceptDelegationResponse {
-  id: string;
-}
 
-export interface CreateDelegationProps {
+export interface NewMandateRequest {
   delegate: Person;
   visibilityIds: Array<DelegationParty>;
   verificationCode: string;
   dateto: string;
-}
-
-export interface CreateDelegationResponse {
-  datefrom: string;
-  dateto: string;
-  delegate: Person;
-  delegator: Person | null;
-  mandateId: string;
-  status: string;
-  verificationCode: string;
-  visibilityIds: Array<DelegationParty>;
 }

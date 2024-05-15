@@ -1,6 +1,6 @@
-import { CreateDelegationProps, Delegate, Delegator } from '../redux/delegation/types';
+import { Delegate, Delegator, NewMandateRequest } from '../redux/delegation/types';
 
-export const mockCreateDelegation: CreateDelegationProps = {
+export const mockCreateDelegation: NewMandateRequest = {
   delegate: {
     firstName: 'Davide',
     lastName: 'Legato',
@@ -19,7 +19,7 @@ export const mockCreateDelegation: CreateDelegationProps = {
   dateto: '2022-04-16',
 };
 
-export const arrayOfDelegates: Array<Delegate> = [
+export const mandatesByDelegator: Array<Delegate> = [
   {
     mandateId: '1',
     delegate: {
@@ -64,7 +64,7 @@ export const arrayOfDelegates: Array<Delegate> = [
   },
 ];
 
-export const arrayOfDelegators: Array<Delegator> = [
+export const mandatesByDelegate: Array<Delegator> = [
   {
     mandateId: '3',
     delegator: {

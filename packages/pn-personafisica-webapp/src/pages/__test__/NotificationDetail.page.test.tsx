@@ -19,7 +19,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
-import { arrayOfDelegators } from '../../__mocks__/Delegations.mock';
+import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
   cachedPayments,
@@ -77,7 +77,7 @@ const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number
   return timelineElementDigitalSuccessWorkflow.legalFactsIds![0] as LegalFactId;
 };
 
-const delegator = arrayOfDelegators.find(
+const delegator = mandatesByDelegate.find(
   (delegator) => delegator.delegator?.fiscalCode === notificationDTO.recipients[2].taxId
 );
 
@@ -524,7 +524,7 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: { fiscal_number: 'CGNNMO80A03H501U' } },
           generalInfoState: {
-            delegators: arrayOfDelegators,
+            delegators: mandatesByDelegate,
           },
         },
       });
@@ -586,7 +586,7 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: { fiscal_number: 'CGNNMO80A03H501U' } },
           generalInfoState: {
-            delegators: arrayOfDelegators,
+            delegators: mandatesByDelegate,
             defaultAddresses: [],
           },
         },
