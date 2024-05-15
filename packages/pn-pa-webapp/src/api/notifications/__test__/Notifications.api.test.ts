@@ -9,7 +9,6 @@ import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
   CREATE_NOTIFICATION,
-  GET_USER_GROUPS,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
@@ -29,16 +28,6 @@ describe('Notifications api tests', () => {
 
   afterAll(() => {
     mock.restore();
-  });
-
-  it('getUserGroups', async () => {
-    mock
-      .onGet(GET_USER_GROUPS())
-      .reply(200, [{ id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' }]);
-    const res = await NotificationsApi.getUserGroups();
-    expect(res).toStrictEqual([
-      { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' },
-    ]);
   });
 
   it('preloadNotificationDocument', async () => {

@@ -92,6 +92,25 @@ export interface BffInstitutionProduct {
     'productUrl': string;
 }
 /**
+ * Contains the name list of groups defined in SelfCare
+ * @export
+ * @interface BffPaGroup
+ */
+export interface BffPaGroup {
+    /**
+     * 
+     * @type {string}
+     * @memberof BffPaGroup
+     */
+    'id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BffPaGroup
+     */
+    'name'?: string;
+}
+/**
  * 
  * @export
  * @interface Problem
@@ -167,11 +186,41 @@ export interface ProblemError {
 }
 
 /**
- * InstitutionAndProductApi - axios parameter creator
+ * InfoPaApi - axios parameter creator
  * @export
  */
-export const InstitutionAndProductApiAxiosParamCreator = function (configuration?: Configuration) {
+export const InfoPaApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * This operation retrieves the groups from Self Care.
+         * @summary Get groups
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getGroupsV1: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/bff/v1/groups`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * This operation retrieves all active products associated with the specified institution and user.
          * @summary Get Products list of an Institution
@@ -236,12 +285,24 @@ export const InstitutionAndProductApiAxiosParamCreator = function (configuration
 };
 
 /**
- * InstitutionAndProductApi - functional programming interface
+ * InfoPaApi - functional programming interface
  * @export
  */
-export const InstitutionAndProductApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = InstitutionAndProductApiAxiosParamCreator(configuration)
+export const InfoPaApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = InfoPaApiAxiosParamCreator(configuration)
     return {
+        /**
+         * This operation retrieves the groups from Self Care.
+         * @summary Get groups
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getGroupsV1(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BffPaGroup>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getGroupsV1(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['InfoPaApi.getGroupsV1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
         /**
          * This operation retrieves all active products associated with the specified institution and user.
          * @summary Get Products list of an Institution
@@ -251,7 +312,7 @@ export const InstitutionAndProductApiFp = function(configuration?: Configuration
         async getInstitutionProductsV1(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BffInstitutionProduct>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getInstitutionProductsV1(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['InstitutionAndProductApi.getInstitutionProductsV1']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['InfoPaApi.getInstitutionProductsV1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -263,19 +324,28 @@ export const InstitutionAndProductApiFp = function(configuration?: Configuration
         async getInstitutionsV1(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BffInstitution>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getInstitutionsV1(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['InstitutionAndProductApi.getInstitutionsV1']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['InfoPaApi.getInstitutionsV1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
- * InstitutionAndProductApi - factory interface
+ * InfoPaApi - factory interface
  * @export
  */
-export const InstitutionAndProductApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = InstitutionAndProductApiFp(configuration)
+export const InfoPaApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = InfoPaApiFp(configuration)
     return {
+        /**
+         * This operation retrieves the groups from Self Care.
+         * @summary Get groups
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getGroupsV1(options?: any): AxiosPromise<Array<BffPaGroup>> {
+            return localVarFp.getGroupsV1(options).then((request) => request(axios, basePath));
+        },
         /**
          * This operation retrieves all active products associated with the specified institution and user.
          * @summary Get Products list of an Institution
@@ -298,21 +368,32 @@ export const InstitutionAndProductApiFactory = function (configuration?: Configu
 };
 
 /**
- * InstitutionAndProductApi - object-oriented interface
+ * InfoPaApi - object-oriented interface
  * @export
- * @class InstitutionAndProductApi
+ * @class InfoPaApi
  * @extends {BaseAPI}
  */
-export class InstitutionAndProductApi extends BaseAPI {
+export class InfoPaApi extends BaseAPI {
+    /**
+     * This operation retrieves the groups from Self Care.
+     * @summary Get groups
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InfoPaApi
+     */
+    public getGroupsV1(options?: RawAxiosRequestConfig) {
+        return InfoPaApiFp(this.configuration).getGroupsV1(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * This operation retrieves all active products associated with the specified institution and user.
      * @summary Get Products list of an Institution
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof InstitutionAndProductApi
+     * @memberof InfoPaApi
      */
     public getInstitutionProductsV1(options?: RawAxiosRequestConfig) {
-        return InstitutionAndProductApiFp(this.configuration).getInstitutionProductsV1(options).then((request) => request(this.axios, this.basePath));
+        return InfoPaApiFp(this.configuration).getInstitutionProductsV1(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -320,10 +401,10 @@ export class InstitutionAndProductApi extends BaseAPI {
      * @summary Get Institutions list
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof InstitutionAndProductApi
+     * @memberof InfoPaApi
      */
     public getInstitutionsV1(options?: RawAxiosRequestConfig) {
-        return InstitutionAndProductApiFp(this.configuration).getInstitutionsV1(options).then((request) => request(this.axios, this.basePath));
+        return InfoPaApiFp(this.configuration).getInstitutionsV1(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -1,16 +1,10 @@
 import {
   CREATE_NOTIFICATION,
-  GET_USER_GROUPS,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
 
 describe('Notifications routes', () => {
-  it('should compile GET_USER_GROUPS', () => {
-    const route = GET_USER_GROUPS();
-    expect(route).toEqual('/ext-registry/pa/v1/groups');
-  });
-
   it('should compile NOTIFICATION_PRELOAD_DOCUMENT', () => {
     const route = NOTIFICATION_PRELOAD_DOCUMENT();
     expect(route).toEqual('/delivery/attachments/preload');

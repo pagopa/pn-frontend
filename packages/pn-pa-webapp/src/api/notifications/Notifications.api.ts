@@ -1,24 +1,14 @@
 import { PaymentAttachment, PaymentAttachmentNameType } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationDTO, NewNotificationResponse } from '../../models/NewNotification';
-import { GroupStatus, UserGroup } from '../../models/user';
 import { apiClient, externalClient } from '../apiClients';
 import {
   CREATE_NOTIFICATION,
-  GET_USER_GROUPS,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from './notifications.routes';
 
 export const NotificationsApi = {
-  /**
-   * Get user groups
-   * @param  {GroupStatus} status
-   * @returns Promise
-   */
-  getUserGroups: (status?: GroupStatus): Promise<Array<UserGroup>> =>
-    apiClient.get<Array<UserGroup>>(GET_USER_GROUPS(status)).then((response) => response.data),
-
   /**
    * Preload notification document
    * @param  {string} key

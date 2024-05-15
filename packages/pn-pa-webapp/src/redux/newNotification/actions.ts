@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { calcUnit8Array, performThunkAction } from '@pagopa-pn/pn-commons';
+import { calcUnit8Array, parseError, performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
@@ -12,14 +12,27 @@ import {
 } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
 import { newNotificationMapper } from '../../utility/notification.utility';
+import { InfoPaApiFactory } from '../../generated-client/info-pa';
+import { apiClient } from '../../api/apiClients';
 import { UploadDocumentParams, UploadDocumentsResponse } from './types';
 
 export enum NEW_NOTIFICATION_ACTIONS {
   GET_USER_GROUPS = 'getUserGroups',
 }
-export const getUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | undefined>(
+/**
+ * Get user groups
+ */
+export const getUserGroups = createAsyncThunk(
   NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS,
-  performThunkAction((status: GroupStatus | undefined) => NotificationsApi.getUserGroups(status))
+  async (params: { status: GroupStatus } | undefined, { rejectWithValue }) => {
+    try {
+      const infoPaFactory = InfoPaApiFactory(undefined, undefined, apiClient);
+      const response = await infoPaFactory.getGroupsV1(params?.status);
+      return response.data as Array<UserGroup>;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
 const createPayloadToUpload = async (
