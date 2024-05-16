@@ -1,35 +1,27 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import { arrayOfDelegates, arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
+import { mandatesByDelegate, mandatesByDelegator } from '../../../__mocks__/Delegations.mock';
 import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import {
-  ACCEPT_DELEGATION,
-  DELEGATIONS_BY_DELEGATE,
-  DELEGATIONS_BY_DELEGATOR,
-  REJECT_DELEGATION,
-  REVOKE_DELEGATION,
-  UPDATE_DELEGATION,
-} from '../../../api/delegations/delegations.routes';
 import { GET_GROUPS } from '../../../api/external-registries/external-registries-routes';
 import { DelegationStatus } from '../../../models/Deleghe';
 import { GroupStatus } from '../../../models/groups';
 import { store } from '../../store';
 import {
-  acceptDelegation,
-  getDelegatesByCompany,
-  getDelegators,
+  acceptMandate,
   getGroups,
-  rejectDelegation,
-  revokeDelegation,
-  updateDelegation,
+  getMandatesByDelegator,
+  rejectMandate,
+  revokeMandate,
+  searchMandatesByDelegate,
+  updateMandate,
 } from '../actions';
 import { resetState, setFilters } from '../reducers';
 
-const pendingDelegator = arrayOfDelegators.find((d) => d.status === 'pending');
-const activeDelegator = arrayOfDelegators.find((d) => d.status === 'active');
-const pendingDelegates = arrayOfDelegates.find((d) => d.status === 'pending');
+const pendingDelegator = mandatesByDelegate.find((d) => d.status === 'pending');
+const activeDelegator = mandatesByDelegate.find((d) => d.status === 'active');
+const pendingDelegates = mandatesByDelegator.find((d) => d.status === 'pending');
 const initialState = {
   delegations: {
     delegators: [],
@@ -69,29 +61,29 @@ describe('delegation redux state tests', () => {
   });
 
   it('should be able to fetch the delegates', async () => {
-    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
-    const action = await store.dispatch(getDelegatesByCompany());
-    expect(action.type).toBe('getDelegatesByCompany/fulfilled');
-    expect(action.payload).toEqual(arrayOfDelegates);
+    mock.onGet('/bff/v1/mandate/delegator').reply(200, mandatesByDelegator);
+    const action = await store.dispatch(getMandatesByDelegator());
+    expect(action.type).toBe('getMandatesByDelegator/fulfilled');
+    expect(action.payload).toEqual(mandatesByDelegator);
   });
 
   it('should be able to fetch the delegates', async () => {
-    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
-    const action = await store.dispatch(getDelegatesByCompany());
-    expect(action.type).toBe('getDelegatesByCompany/fulfilled');
-    expect(action.payload).toEqual(arrayOfDelegates);
+    mock.onGet('/bff/v1/mandate/delegator').reply(200, mandatesByDelegator);
+    const action = await store.dispatch(getMandatesByDelegator());
+    expect(action.type).toBe('getMandatesByDelegator/fulfilled');
+    expect(action.payload).toEqual(mandatesByDelegator);
   });
 
   it('should be able to fetch the delegators', async () => {
-    mock.onPost(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, {
-      resultsPage: arrayOfDelegators,
+    mock.onPost(`/bff/v1/mandate/delegate?size=10`).reply(200, {
+      resultsPage: mandatesByDelegate,
       nextPagesKey: [],
       moreResult: false,
     });
-    const action = await store.dispatch(getDelegators({ size: 10 }));
-    expect(action.type).toBe('getDelegators/fulfilled');
+    const action = await store.dispatch(searchMandatesByDelegate({ size: 10 }));
+    expect(action.type).toBe('searchMandatesByDelegate/fulfilled');
     expect(action.payload).toEqual({
-      resultsPage: arrayOfDelegators,
+      resultsPage: mandatesByDelegate,
       nextPagesKey: [],
       moreResult: false,
     });
@@ -103,25 +95,20 @@ describe('delegation redux state tests', () => {
       delegationsState: {
         ...initialState,
         delegations: {
-          delegators: arrayOfDelegators,
+          delegators: mandatesByDelegate,
         },
       },
     });
-    mock
-      .onPatch(ACCEPT_DELEGATION(pendingDelegator!.mandateId))
-      .reply(204, { id: pendingDelegator!.mandateId });
+    mock.onPatch(`/bff/v1/mandate/${pendingDelegator!.mandateId}/accept`).reply(204);
     const action = await testStore.dispatch(
-      acceptDelegation({
+      acceptMandate({
         id: pendingDelegator!.mandateId,
         code: '12345',
         groups: [{ id: 'group-1', name: 'Group 1' }],
       })
     );
-    expect(action.type).toBe('acceptDelegation/fulfilled');
-    expect(action.payload).toEqual({
-      id: pendingDelegator!.mandateId,
-      groups: [{ id: 'group-1', name: 'Group 1' }],
-    });
+    expect(action.type).toBe('acceptMandate/fulfilled');
+    expect(action.payload).toEqual(void 0);
     const state = testStore.getState().delegationsState;
     expect(state.delegations.delegators[0].status).toBe('active');
     expect(state.delegations.delegators[0].groups).toStrictEqual([
@@ -130,9 +117,9 @@ describe('delegation redux state tests', () => {
   });
 
   it('should throw an error trying to accept a delegation', async () => {
-    mock.onPatch(ACCEPT_DELEGATION('1')).reply(500, 'error');
-    const action = await store.dispatch(acceptDelegation({ id: '1', code: '12345', groups: [] }));
-    expect(action.type).toBe('acceptDelegation/rejected');
+    mock.onPatch(`/bff/v1/mandate/1/accept`).reply(500, 'error');
+    const action = await store.dispatch(acceptMandate({ id: '1', code: '12345', groups: [] }));
+    expect(action.type).toBe('acceptMandate/rejected');
     expect(action.payload).toStrictEqual({ response: { status: 500, data: 'error' } });
   });
 
@@ -142,17 +129,15 @@ describe('delegation redux state tests', () => {
       delegationsState: {
         ...initialState,
         delegations: {
-          delegators: arrayOfDelegators,
+          delegators: mandatesByDelegate,
           delegates: [],
         },
       },
     });
-    mock
-      .onPatch(REJECT_DELEGATION(pendingDelegator!.mandateId))
-      .reply(204, { id: pendingDelegator!.mandateId });
-    const action = await testStore.dispatch(rejectDelegation(pendingDelegator!.mandateId));
-    expect(action.type).toBe('rejectDelegation/fulfilled');
-    expect(action.payload).toEqual({ id: pendingDelegator!.mandateId });
+    mock.onPatch(`/bff/v1/mandate/${pendingDelegator!.mandateId}/reject`).reply(204);
+    const action = await testStore.dispatch(rejectMandate(pendingDelegator!.mandateId));
+    expect(action.type).toBe('rejectMandate/fulfilled');
+    expect(action.payload).toEqual(void 0);
     const state = testStore.getState().delegationsState;
     expect(
       state.delegations.delegators.find((d) => d.mandateId === pendingDelegator!.mandateId)
@@ -160,9 +145,9 @@ describe('delegation redux state tests', () => {
   });
 
   it('should throw an error trying to reject a delegation', async () => {
-    mock.onPatch(REJECT_DELEGATION('2')).reply(500, 'error');
-    const action = await store.dispatch(rejectDelegation('2'));
-    expect(action.type).toBe('rejectDelegation/rejected');
+    mock.onPatch(`/bff/v1/mandate/2/reject`).reply(500, 'error');
+    const action = await store.dispatch(rejectMandate('2'));
+    expect(action.type).toBe('rejectMandate/rejected');
     expect(action.payload).toEqual({ response: { status: 500, data: 'error' } });
   });
 
@@ -172,16 +157,14 @@ describe('delegation redux state tests', () => {
       delegationsState: {
         ...initialState,
         delegations: {
-          delegates: arrayOfDelegates,
+          delegates: mandatesByDelegator,
         },
       },
     });
-    mock
-      .onPatch(REVOKE_DELEGATION(pendingDelegates!.mandateId))
-      .reply(204, { id: pendingDelegates!.mandateId });
-    const action = await testStore.dispatch(revokeDelegation(pendingDelegates!.mandateId));
-    expect(action.type).toBe('revokeDelegation/fulfilled');
-    expect(action.payload).toEqual({ id: pendingDelegates!.mandateId });
+    mock.onPatch(`/bff/v1/mandate/${pendingDelegates!.mandateId}/revoke`).reply(204);
+    const action = await testStore.dispatch(revokeMandate(pendingDelegates!.mandateId));
+    expect(action.type).toBe('revokeMandate/fulfilled');
+    expect(action.payload).toEqual(void 0);
     const state = testStore.getState().delegationsState;
     expect(
       state.delegations.delegates.find((d) => d.mandateId === pendingDelegates!.mandateId)
@@ -189,9 +172,9 @@ describe('delegation redux state tests', () => {
   });
 
   it('should throw an error trying to revoke a delegation', async () => {
-    mock.onPatch(REVOKE_DELEGATION('2')).reply(500, 'error');
-    const action = await store.dispatch(revokeDelegation('2'));
-    expect(action.type).toBe('revokeDelegation/rejected');
+    mock.onPatch(`/bff/v1/mandate/2/revoke`).reply(500, 'error');
+    const action = await store.dispatch(revokeMandate('2'));
+    expect(action.type).toBe('revokeMandate/rejected');
     expect(action.payload).toEqual({ response: { status: 500, data: 'error' } });
   });
 
@@ -216,24 +199,19 @@ describe('delegation redux state tests', () => {
       delegationsState: {
         ...initialState,
         delegations: {
-          delegators: arrayOfDelegators,
+          delegators: mandatesByDelegate,
         },
       },
     });
-    mock
-      .onPatch(UPDATE_DELEGATION(activeDelegator!.mandateId))
-      .reply(204, { id: activeDelegator!.mandateId });
+    mock.onPatch(`/bff/v1/mandate/${activeDelegator!.mandateId}/update`).reply(204);
     const action = await testStore.dispatch(
-      updateDelegation({
+      updateMandate({
         id: activeDelegator!.mandateId,
         groups: [{ id: 'group-1', name: 'Group 1' }],
       })
     );
-    expect(action.type).toBe('updateDelegation/fulfilled');
-    expect(action.payload).toEqual({
-      id: activeDelegator!.mandateId,
-      groups: [{ id: 'group-1', name: 'Group 1' }],
-    });
+    expect(action.type).toBe('updateMandate/fulfilled');
+    expect(action.payload).toEqual(void 0);
     const state = testStore.getState().delegationsState;
     const delegator = state.delegations.delegators.find(
       (d) => d.mandateId === activeDelegator!.mandateId
@@ -242,9 +220,9 @@ describe('delegation redux state tests', () => {
   });
 
   it('should throw an error trying to update a delegation', async () => {
-    mock.onPatch(UPDATE_DELEGATION('1')).reply(500, 'error');
-    const action = await store.dispatch(updateDelegation({ id: '1', groups: [] }));
-    expect(action.type).toBe('updateDelegation/rejected');
+    mock.onPatch(`/bff/v1/mandate/1/update`).reply(500, 'error');
+    const action = await store.dispatch(updateMandate({ id: '1', groups: [] }));
+    expect(action.type).toBe('updateMandate/rejected');
     expect(action.payload).toEqual({ response: { status: 500, data: 'error' } });
   });
 

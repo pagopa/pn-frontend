@@ -111,12 +111,12 @@ const AcceptDelegationModal: React.FC<Props> = ({
   useEffect(() => {
     // code validation is done only during acceptance and not during update
     if (!isEditMode) {
-      AppResponsePublisher.error.subscribe('acceptDelegation', handleAcceptanceError);
+      AppResponsePublisher.error.subscribe('acceptMandate', handleAcceptanceError);
     }
 
     return () => {
       if (!isEditMode) {
-        AppResponsePublisher.error.unsubscribe('acceptDelegation', handleAcceptanceError);
+        AppResponsePublisher.error.unsubscribe('acceptMandate', handleAcceptanceError);
       }
     };
   }, [handleAcceptanceError]);
