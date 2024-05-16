@@ -1,8 +1,7 @@
-import { parseError, performThunkAction } from '@pagopa-pn/pn-commons';
+import { parseError } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
-import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { ApiKeysApiFactory } from '../../generated-client/api-keys';
 import {
   ApiKeys,
@@ -12,6 +11,7 @@ import {
   NewApiKeyResponse,
 } from '../../models/ApiKeys';
 import { GroupStatus, UserGroup } from '../../models/user';
+import { InfoPaApiFactory } from '../../generated-client/info-pa';
 
 export enum API_KEYS_ACTIONS {
   GET_API_KEYS = 'getApiKeys',
@@ -54,7 +54,15 @@ export const newApiKey = createAsyncThunk<NewApiKeyResponse, NewApiKeyRequest>(
 
 export const getApiKeyUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | undefined>(
   API_KEYS_ACTIONS.GET_API_KEY_USER_GROUPS,
-  performThunkAction((status: GroupStatus | undefined) => NotificationsApi.getUserGroups(status))
+  async (params: GroupStatus | undefined, { rejectWithValue }) => {
+    try {
+      const infoPaFactory = InfoPaApiFactory(undefined, undefined, apiClient);
+      const response = await infoPaFactory.getGroupsV1(params);
+      return response.data as Array<UserGroup>;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
 export const changeApiKeyStatus = createAsyncThunk<void, ChangeApiKeyStatusRequest>(
