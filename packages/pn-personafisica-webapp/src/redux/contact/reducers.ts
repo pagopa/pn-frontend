@@ -41,7 +41,7 @@ const contactsSlice = createSlice({
       state.digitalAddresses = action.payload;
     });
     builder.addCase(createOrUpdateAddress.fulfilled, (state, action) => {
-      if (action.payload && action.payload.senderId) {
+      if (action.payload) {
         const addressIndex = state.digitalAddresses.findIndex(
           (l) =>
             l.senderId === action.meta.arg.senderId &&

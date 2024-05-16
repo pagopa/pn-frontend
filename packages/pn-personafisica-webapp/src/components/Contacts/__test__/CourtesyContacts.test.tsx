@@ -94,7 +94,9 @@ describe('CourtesyContacts Component', async () => {
       .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
         value: '+39' + phoneValue,
       })
-      .reply(200);
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
     mock
       .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
         value: '+39' + phoneValue,
@@ -163,7 +165,9 @@ describe('CourtesyContacts Component', async () => {
       .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
         value: phoneValue,
       })
-      .reply(200);
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
     mock
       .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
         value: phoneValue,
@@ -285,7 +289,9 @@ describe('CourtesyContacts Component', async () => {
 
   it('add new email', async () => {
     const mailValue = 'nome.cognome@mail.it';
-    mock.onPost('/bff/v1/addresses/COURTESY/default/EMAIL', { value: mailValue }).reply(200);
+    mock.onPost('/bff/v1/addresses/COURTESY/default/EMAIL', { value: mailValue }).reply(200, {
+      result: 'CODE_VERIFICATION_REQUIRED',
+    });
     mock
       .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', {
         value: mailValue,
@@ -354,7 +360,9 @@ describe('CourtesyContacts Component', async () => {
       .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', {
         value: emailValue,
       })
-      .reply(200);
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
     mock
       .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', {
         value: emailValue,

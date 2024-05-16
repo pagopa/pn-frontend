@@ -49,74 +49,34 @@ export const createOrUpdateAddress = createAsyncThunk<
         { value: params.value, verificationCode: params.code }
       );
 
-      if (params.addressType === 'LEGAL') {
-        // PEC already verified
-        if (response.status === 204) {
-          return {
-            addressType: params.addressType,
-            senderId: params.senderId,
-            senderName: params.senderName,
-            channelType: params.channelType,
-            value: params.value,
-            pecValid: true,
-          };
-        }
-
-        // PEC_VALIDATION_REQUIRED is received when the code has been inserted and is valid, but the pec validation is
-        // still in progress
-        if (response.data?.result === 'PEC_VALIDATION_REQUIRED') {
-          return {
-            addressType: params.addressType,
-            senderId: params.senderId,
-            senderName: params.senderName,
-            channelType: params.channelType,
-            value: '',
-            pecValid: false,
-          };
-        } else {
-          return;
-        }
-      } else {
-        // user must verify contact
-        if (response.status !== 204) {
-          return;
-        }
-
-        // contact already verified
-        return {
-          addressType: params.addressType,
-          senderId: params.senderId,
-          senderName: params.senderName,
-          channelType: params.channelType,
-          value: params.value,
-        };
+      // user must verify contact
+      if (response.data?.result === 'CODE_VERIFICATION_REQUIRED') {
+        return;
       }
 
-      // // user must verify contact
-      // if (response.data.result === 'CODE_VERIFICATION_REQUIRED') {
-      //   return;
-      // }
+      const address: DigitalAddress = {
+        addressType: params.addressType,
+        senderId: params.senderId,
+        senderName: params.senderName,
+        channelType: params.channelType,
+        value: params.value,
+      };
 
-      // const address = {
-      //   addressType: params.addressType,
-      //   senderId: params.senderId,
-      //   senderName: params.senderName,
-      //   channelType: params.channelType,
-      //   value: params.value
-      // };
+      // waiting for pec validation
+      if (response.data?.result === 'PEC_VALIDATION_REQUIRED') {
+        // eslint-disable-next-line functional/immutable-data
+        address.value = '';
+        // eslint-disable-next-line functional/immutable-data
+        address.pecValid = false;
+        return address;
+      }
 
-      // // waiting for pec validation
-      // if (response.data.result === 'PEC_VALIDATION_REQUIRED') {
-      //   address.value = '';
-      //   address.pecValid = false;
-      //   return address;
-      // }
-
-      // // address validated
-      // if (address.addressType === AddressType.LEGAL) {
-      //   address.pecValid = true;
-      // }
-      // return address;
+      // address validated
+      if (address.addressType === AddressType.LEGAL) {
+        // eslint-disable-next-line functional/immutable-data
+        address.pecValid = true;
+      }
+      return address;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }

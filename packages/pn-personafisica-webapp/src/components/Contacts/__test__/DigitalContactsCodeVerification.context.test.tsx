@@ -30,13 +30,6 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-/*
-In questo test viene testato solo il rendering dei componenti e non il flusso.
-Il flusso completo viene testato nei singoli componenti, dove si potrà testare anche il cambio di stato di redux e le api.
-Per questo motivo non è necessario mockare le api, ma va bene anche usare lo spyOn.
-
-Andrea Cimini - 6/09/2023
-*/
 describe('DigitalContactsCodeVerification Context', () => {
   let result: RenderResult;
   let mock: MockAdapter;
@@ -88,7 +81,7 @@ describe('DigitalContactsCodeVerification Context', () => {
     });
   });
 
-  it.skip('validation modal - pec to verify', async () => {
+  it('validation modal - pec to verify', async () => {
     mock
       .onPost(`/bff/v1/addresses/LEGAL/${senderId}/PEC`, {
         value: pecValueToVerify,
@@ -102,7 +95,7 @@ describe('DigitalContactsCodeVerification Context', () => {
         verificationCode: '01234',
       })
       .reply(200, {
-        result: 'PEC_VERIFICATION_REQUIRED',
+        result: 'PEC_VALIDATION_REQUIRED',
       });
     // render component
     result = render(

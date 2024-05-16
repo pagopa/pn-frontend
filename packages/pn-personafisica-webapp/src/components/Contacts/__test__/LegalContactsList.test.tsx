@@ -103,7 +103,9 @@ describe('LegalContactsList Component', async () => {
       .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
         value: pecValue,
       })
-      .reply(200);
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
     mock
       .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
         value: pecValue,
@@ -193,7 +195,9 @@ describe('LegalContactsList Component', async () => {
       .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
         value: pecValue,
       })
-      .reply(200);
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
     mock
       .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
         value: pecValue,

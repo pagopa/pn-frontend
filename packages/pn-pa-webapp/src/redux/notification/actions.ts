@@ -5,21 +5,20 @@ import {
   NotificationDocumentRequest,
   NotificationDocumentResponse,
   PaymentAttachment,
-  PaymentAttachmentNameType,
+  PaymentAttachmentSName,
   parseError,
-  performThunkAction,
   validateHistory,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
-import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { DowntimeApiFactory } from '../../generated-client/downtime-logs';
 import { NotificationSentApiFactory } from '../../generated-client/notifications';
 
 export enum NOTIFICATION_ACTIONS {
   GET_SENT_NOTIFICATION = 'getSentNotification',
   GET_SENT_NOTIFICATION_DOCUMENT = 'getSentNotificationDocument',
+  GET_SENT_NOTIFICATION_PAYMENT = 'getSentNotificationPayment',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
   CANCEL_NOTIFICATION = 'cancelNotification',
 }
@@ -48,11 +47,14 @@ export const cancelNotification = createAsyncThunk(
   NOTIFICATION_ACTIONS.CANCEL_NOTIFICATION,
   async (params: string, { rejectWithValue }) => {
     try {
-      const notificationSentApiFactory = NotificationSentApiFactory(undefined, undefined, apiClient);
+      const notificationSentApiFactory = NotificationSentApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
       const response = await notificationSentApiFactory.notificationCancellationV1(params);
       return response.data;
-    }
-    catch (e) {
+    } catch (e) {
       return rejectWithValue(parseError(e));
     }
   }
@@ -103,28 +105,40 @@ export const getDowntimeHistory = createAsyncThunk<DowntimeLogHistory, GetDownti
   }
 );
 
-export const getPaymentAttachment = createAsyncThunk<
+export const getSentNotificationPayment = createAsyncThunk<
   PaymentAttachment,
   {
     iun: string;
-    attachmentName: PaymentAttachmentNameType;
+    attachmentName: PaymentAttachmentSName;
     recIndex: number;
     attachmentIdx?: number;
   }
 >(
-  'getPaymentAttachment',
-  performThunkAction(
-    (params: {
+  NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION_PAYMENT,
+  async (
+    params: {
       iun: string;
-      attachmentName: PaymentAttachmentNameType;
+      attachmentName: PaymentAttachmentSName;
       recIndex: number;
       attachmentIdx?: number;
-    }) =>
-      NotificationsApi.getPaymentAttachment(
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const notificationSentApiFactory = NotificationSentApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await notificationSentApiFactory.getSentNotificationPaymentV1(
         params.iun,
-        params.attachmentName,
         params.recIndex,
+        params.attachmentName,
         params.attachmentIdx
-      )
-  )
+      );
+      return response.data as PaymentAttachment;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );

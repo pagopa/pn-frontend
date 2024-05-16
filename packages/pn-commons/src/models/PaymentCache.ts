@@ -80,7 +80,6 @@ const pagoPaSchema: yup.SchemaOf<PagoPAPaymentFullDetails> = yup
     detail: yup.mixed().oneOf(Object.values(PaymentInfoDetail)).optional(),
     detail_v2: yup.string().optional(),
     errorCode: yup.string().optional(),
-    url: yup.string().optional(),
     recIndex: yup.number().optional(),
     uncertainPaymentDate: yup.boolean().optional(),
     eventTimestamp: yup.string().optional(),

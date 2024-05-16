@@ -58,7 +58,9 @@ describe('Contacts redux state tests', () => {
       .onPost(`/bff/v1/addresses/LEGAL/${updatedDigitalAddress.senderId}/PEC`, {
         value: updatedDigitalAddress.value,
       })
-      .reply(200);
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
     const action = await store.dispatch(
       createOrUpdateAddress({
         addressType: AddressType.LEGAL,
@@ -136,8 +138,12 @@ describe('Contacts redux state tests', () => {
     );
     const updatedDigitalAddress = { ...emailContact!, value: 'mario.rossi@mail.it' };
     mock
-      .onPost(`/bff/v1/addresses/COURTESY/${updatedDigitalAddress.senderId}/EMAIL`)
-      .reply(200, { value: updatedDigitalAddress.value });
+      .onPost(`/bff/v1/addresses/COURTESY/${updatedDigitalAddress.senderId}/EMAIL`, {
+        value: updatedDigitalAddress.value,
+      })
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
     const action = await store.dispatch(
       createOrUpdateAddress({
         addressType: AddressType.COURTESY,

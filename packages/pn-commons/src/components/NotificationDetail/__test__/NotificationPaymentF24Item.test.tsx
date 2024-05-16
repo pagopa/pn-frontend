@@ -10,7 +10,7 @@ import NotificationPaymentF24Item from '../NotificationPaymentF24Item';
 let counter = 0;
 const downloadUrl = 'https://www.mocked-url.com';
 const retryAfterDelay = 2000;
-const getPaymentAttachment = createAsyncThunk<
+const getSentNotificationPayment = createAsyncThunk<
   PaymentAttachment,
   {
     name: PaymentAttachmentSName;
@@ -74,7 +74,7 @@ describe('NotificationPaymentF24Item Component', () => {
     downloadStatus: 'immediatly' | 'ready' | 'not-ready' | 'error',
     name: PaymentAttachmentSName,
     attachmentIdx?: number | undefined
-  ) => store.dispatch(getPaymentAttachment({ name, attachmentIdx, downloadStatus }));
+  ) => store.dispatch(getSentNotificationPayment({ name, attachmentIdx, downloadStatus }));
 
   it('renders component - should show title of f24Item', () => {
     const item = { ...f24Item, applyCost: true };

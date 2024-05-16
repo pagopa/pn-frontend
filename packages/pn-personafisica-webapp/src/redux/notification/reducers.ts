@@ -21,9 +21,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import {
   getDowntimeHistory,
-  getNotificationPaymentInfo,
-  getNotificationPaymentUrl,
   getReceivedNotification,
+  getReceivedNotificationPaymentInfo,
+  getReceivedNotificationPaymentUrl,
 } from './actions';
 
 const initialState = {
@@ -108,7 +108,7 @@ const notificationSlice = createSlice({
       }
       state.notification = action.payload;
     });
-    builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {
+    builder.addCase(getReceivedNotificationPaymentInfo.fulfilled, (state, action) => {
       if (action.payload) {
         const paymentInfo = action.payload;
         for (const payment of paymentInfo) {
@@ -123,7 +123,7 @@ const notificationSlice = createSlice({
         }
       }
     });
-    builder.addCase(getNotificationPaymentInfo.pending, (state, action) => {
+    builder.addCase(getReceivedNotificationPaymentInfo.pending, (state, action) => {
       const paymentInfo = action.meta.arg;
       for (const payment of paymentInfo.paymentInfoRequest) {
         const paymentInfoIndex = state.paymentsData.pagoPaF24.findIndex(
@@ -136,7 +136,7 @@ const notificationSlice = createSlice({
         }
       }
     });
-    builder.addCase(getNotificationPaymentUrl.rejected, (state, action) => {
+    builder.addCase(getReceivedNotificationPaymentUrl.rejected, (state, action) => {
       const noticeCode = action.meta.arg.paymentNotice.noticeNumber;
       const creditorTaxId = action.meta.arg.paymentNotice.fiscalCode;
       const paymentInfo = state.paymentsData.pagoPaF24.find(

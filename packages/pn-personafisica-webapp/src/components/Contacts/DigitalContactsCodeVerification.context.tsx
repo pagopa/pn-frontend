@@ -178,7 +178,8 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
         // open validation modal
         handleClose('validated');
         setPecValidationOpen(true);
-      });
+      })
+      .catch(() => {});
   };
 
   const initValidation = (
