@@ -3,7 +3,6 @@ import MockAdapter from 'axios-mock-adapter';
 import { mockApiKeysDTO, newApiKeyDTO, newApiKeyResponse } from '../../../__mocks__/ApiKeys.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { apiClient } from '../../../api/apiClients';
-import { GET_USER_GROUPS } from '../../../api/notifications/notifications.routes';
 import { ApiKeys, NewApiKeyResponse } from '../../../models/ApiKeys';
 import { GroupStatus, UserGroup } from '../../../models/user';
 import { getUserGroups } from '../../newNotification/actions';
@@ -79,7 +78,7 @@ describe('api keys page redux state test', () => {
     const mockResponse = [
       { id: 'mocked-id', name: 'mocked-name', description: '', status: GroupStatus.ACTIVE },
     ];
-    mock.onGet(GET_USER_GROUPS()).reply(200, mockResponse);
+    mock.onGet('/bff/v1/groups').reply(200, mockResponse);
     const action = await store.dispatch(getUserGroups());
     const payload = action.payload;
     expect(action.type).toBe('getUserGroups/fulfilled');

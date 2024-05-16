@@ -7,7 +7,6 @@ import { newNotification } from '../../../__mocks__/NewNotification.mock';
 import { apiClient, externalClient } from '../../../api/apiClients';
 import {
   CREATE_NOTIFICATION,
-  GET_USER_GROUPS,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../../../api/notifications/notifications.routes';
 import { PaymentModel, PaymentObject } from '../../../models/NewNotification';
@@ -94,7 +93,7 @@ describe('New notification redux state tests', () => {
     const mockResponse = [
       { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' as GroupStatus },
     ];
-    mock.onGet(GET_USER_GROUPS()).reply(200, mockResponse);
+    mock.onGet('/bff/v1/groups').reply(200, mockResponse);
     const action = await store.dispatch(getUserGroups());
     expect(action.type).toBe('getUserGroups/fulfilled');
     expect(action.payload).toEqual(mockResponse);
