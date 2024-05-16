@@ -9,9 +9,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
 import { AuthApi } from '../../api/auth/Auth.api';
-import { InstitutionAndProductApiFactory } from '../../generated-client/institution-and-product';
 import { BffTosPrivacyBody, UserConsentsApiFactory } from '../../generated-client/tos-privacy';
 import { PNRole, PartyRole } from '../../models/user';
+import { InfoPaApiFactory } from '../../generated-client/info-pa';
 import { User } from './types';
 
 export enum AUTH_ACTIONS {
@@ -35,7 +35,7 @@ export const getInstitutions = createAsyncThunk(
   'getInstitutions',
   async (_, { rejectWithValue }) => {
     try {
-      const institutionAndProductFactory = InstitutionAndProductApiFactory(
+      const institutionAndProductFactory = InfoPaApiFactory(
         undefined,
         undefined,
         apiClient
@@ -55,7 +55,7 @@ export const getProductsOfInstitution = createAsyncThunk(
   'getProductsOfInstitution',
   async (_, { rejectWithValue }) => {
     try {
-      const institutionAndProductFactory = InstitutionAndProductApiFactory(
+      const institutionAndProductFactory = InfoPaApiFactory(
         undefined,
         undefined,
         apiClient

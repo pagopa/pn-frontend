@@ -210,8 +210,6 @@ export enum PaymentAttachmentSName {
   F24 = 'F24',
 }
 
-export type PaymentAttachmentNameType = number | PaymentAttachmentSName;
-
 export enum NotificationDeliveryMode {
   ANALOG = 'analog',
   DIGITAL = 'digital',
@@ -358,7 +356,6 @@ export interface ExtRegistriesPaymentDetails {
   detail?: PaymentInfoDetail;
   detail_v2?: string;
   errorCode?: string;
-  url?: string;
 }
 
 /** Api models  */
