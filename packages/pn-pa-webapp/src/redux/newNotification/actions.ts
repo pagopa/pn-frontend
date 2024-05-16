@@ -24,10 +24,10 @@ export enum NEW_NOTIFICATION_ACTIONS {
  */
 export const getUserGroups = createAsyncThunk(
   NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS,
-  async (params: { status: GroupStatus } | undefined, { rejectWithValue }) => {
+  async (params: GroupStatus | undefined, { rejectWithValue }) => {
     try {
       const infoPaFactory = InfoPaApiFactory(undefined, undefined, apiClient);
-      const response = await infoPaFactory.getGroupsV1(params?.status);
+      const response = await infoPaFactory.getGroupsV1(params);
       return response.data as Array<UserGroup>;
     } catch (e) {
       return rejectWithValue(parseError(e));

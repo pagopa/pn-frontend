@@ -109,7 +109,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
   });
 
   it('renders - no required groups', async () => {
-    mock.onGet('/bff/v1/groups').reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
         <PreliminaryInformations
@@ -149,7 +149,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
   });
 
   it('renders - required groups', async () => {
-    mock.onGet('/bff/v1/groups').reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
         <PreliminaryInformations
@@ -175,7 +175,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
   });
 
   it('changes form values and clicks on confirm', async () => {
-    mock.onGet('/bff/v1/groups').reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
         <PreliminaryInformations
@@ -220,7 +220,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
   });
 
   it('fills form with invalid values', async () => {
-    mock.onGet('/bff/v1/groups').reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
         <PreliminaryInformations
@@ -287,7 +287,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
   });
 
   it('form initially filled', async () => {
-    mock.onGet('/bff/v1/groups').reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
         <PreliminaryInformations notification={newNotification} onConfirm={confirmHandlerMk} />,
@@ -330,7 +330,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
   });
 
   it('errors on api call', async () => {
-    mock.onGet('/bff/v1/groups').reply(500);
+    mock.onGet('/bff/v1/groups?status=ACTIVE').reply(500);
     await act(async () => {
       result = render(
         <>
@@ -379,7 +379,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
   });
 
   it('renders component', async () => {
-    mock.onGet('/bff/v1/groups').reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
         <PreliminaryInformations
@@ -406,7 +406,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
   });
 
   it('changes form values and clicks on confirm', async () => {
-    mock.onGet('/bff/v1/groups').reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
         <PreliminaryInformations
@@ -451,7 +451,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
   });
 
   it('set senderDenomination longer than 80 characters', async () => {
-    mock.onGet('/bff/v1/groups').reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
         <PreliminaryInformations
