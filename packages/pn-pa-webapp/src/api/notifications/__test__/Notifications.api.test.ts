@@ -1,17 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { PaymentAttachmentNameType, PaymentAttachmentSName } from '@pagopa-pn/pn-commons';
-
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { newNotificationDTO } from '../../../__mocks__/NewNotification.mock';
-import { notificationDTOMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
 import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
-import {
-  CREATE_NOTIFICATION,
-  NOTIFICATION_PAYMENT_ATTACHMENT,
-  NOTIFICATION_PRELOAD_DOCUMENT,
-} from '../notifications.routes';
+import { CREATE_NOTIFICATION, NOTIFICATION_PRELOAD_DOCUMENT } from '../notifications.routes';
 
 describe('Notifications api tests', () => {
   let mock: MockAdapter;
@@ -72,21 +65,5 @@ describe('Notifications api tests', () => {
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     });
-  });
-
-  it('getPaymentAttachment', async () => {
-    const iun = notificationDTOMultiRecipient.iun;
-    const attachmentName = PaymentAttachmentSName.PAGOPA;
-    const recIndex = 1;
-    mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName, recIndex)).reply(200, {
-      url: 'http://mocked-url.com',
-    });
-
-    const res = await NotificationsApi.getPaymentAttachment(
-      iun,
-      attachmentName as PaymentAttachmentNameType,
-      recIndex
-    );
-    expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
   });
 });

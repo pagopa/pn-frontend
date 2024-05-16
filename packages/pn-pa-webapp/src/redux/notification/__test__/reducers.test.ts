@@ -11,15 +11,14 @@ import { downtimesDTO } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { notificationDTOMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
 import { apiClient } from '../../../api/apiClients';
-import { NOTIFICATION_PAYMENT_ATTACHMENT } from '../../../api/notifications/notifications.routes';
 import { getDowntimeLegalFact } from '../../appStatus/actions';
 import { store } from '../../store';
 import {
   cancelNotification,
   getDowntimeHistory,
-  getPaymentAttachment,
   getSentNotification,
   getSentNotificationDocument,
+  getSentNotificationPayment,
 } from '../actions';
 import { resetState } from '../reducers';
 
@@ -134,10 +133,14 @@ describe('Notification detail redux state tests', () => {
     const attachmentName = PaymentAttachmentSName.PAGOPA;
     const recIndex = 1;
     const url = 'http://mocked-url.com';
-    mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName, recIndex)).reply(200, { url });
-    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName, recIndex }));
+    mock
+      .onGet(`/bff/v1/notifications/sent/${iun}/payments/${recIndex}/${attachmentName}`)
+      .reply(200, { url });
+    const action = await store.dispatch(
+      getSentNotificationPayment({ iun, attachmentName, recIndex })
+    );
     const payload = action.payload;
-    expect(action.type).toBe('getPaymentAttachment/fulfilled');
+    expect(action.type).toBe('getSentNotificationPayment/fulfilled');
     expect(payload).toEqual({ url });
   });
 

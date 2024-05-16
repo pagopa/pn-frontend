@@ -12,7 +12,6 @@ import {
 import { notificationDTOMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { NOTIFICATION_PAYMENT_ATTACHMENT } from '../../../api/notifications/notifications.routes';
 import NotificationPaymentPagoPa from '../NotificationPaymentPagoPa';
 
 vi.mock('react-i18next', () => ({
@@ -86,12 +85,7 @@ describe('NotificationPaymentPagoPa Component', async () => {
     );
     mock
       .onGet(
-        NOTIFICATION_PAYMENT_ATTACHMENT(
-          iun,
-          attachmentName,
-          paymentHistory[0].pagoPa?.recIndex!,
-          paymentHistory[0].pagoPa?.attachmentIdx
-        )
+        `/bff/v1/notifications/sent/${iun}/payments/${paymentHistory[0].pagoPa?.recIndex}/${attachmentName}?attachmentIdx=${paymentHistory[0].pagoPa?.attachmentIdx}`
       )
       .reply(200, { url: 'http://mocked-url.com' });
     const { getByRole } = render(
@@ -101,16 +95,11 @@ describe('NotificationPaymentPagoPa Component', async () => {
       />
     );
     const dowloadButton = getByRole('button');
-    fireEvent.click(dowloadButton!);
+    fireEvent.click(dowloadButton);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(1);
       expect(mock.history.get[0].url).toBe(
-        NOTIFICATION_PAYMENT_ATTACHMENT(
-          iun,
-          attachmentName,
-          paymentHistory[0].pagoPa?.recIndex!,
-          paymentHistory[0].pagoPa?.attachmentIdx
-        )
+        `/bff/v1/notifications/sent/${iun}/payments/${paymentHistory[0].pagoPa?.recIndex}/${attachmentName}?attachmentIdx=${paymentHistory[0].pagoPa?.attachmentIdx}`
       );
       expect(downloadDocument).toBeCalledTimes(1);
       expect(downloadDocument).toBeCalledWith('http://mocked-url.com');

@@ -44,7 +44,7 @@ const validateCache = (cache: string, iun: string) => {
   }
 };
 
-export const setPaymentCache = (updatedObj: Partial<PaymentCache>, iun: string): void => {
+export const setPaymentCache = (updatedObj: Partial<PaymentCache>, iun: string): PaymentCache => {
   const paymentCache = getPaymentCache(iun);
 
   const newPaymentCache = {
@@ -53,13 +53,14 @@ export const setPaymentCache = (updatedObj: Partial<PaymentCache>, iun: string):
   } as PaymentCache;
 
   sessionStorage.setItem(PAYMENT_CACHE_KEY, JSON.stringify(newPaymentCache));
+  return newPaymentCache;
 };
 
-export const setPaymentsInCache = (payments: Array<PaymentDetails>, iun: string): void => {
+export const setPaymentsInCache = (payments: Array<PaymentDetails>, iun: string): PaymentCache => {
   const paymentCache = getPaymentCache(iun);
 
   if (!paymentCache) {
-    setPaymentCache({ iun, timestamp: new Date().toISOString(), payments }, iun);
+    return setPaymentCache({ iun, timestamp: new Date().toISOString(), payments }, iun);
   }
 
   if (paymentCache?.payments) {
@@ -74,8 +75,9 @@ export const setPaymentsInCache = (payments: Array<PaymentDetails>, iun: string)
       deletePropertiesInPaymentCache(['currentPayment'], paymentCache);
     }
 
-    setPaymentCache({ payments: newPaymentCache }, iun);
+    return setPaymentCache({ payments: newPaymentCache }, iun);
   }
+  return paymentCache;
 };
 
 const deletePropertiesInPaymentCache = (
