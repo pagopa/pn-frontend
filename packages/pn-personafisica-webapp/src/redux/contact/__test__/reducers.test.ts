@@ -62,7 +62,6 @@ describe('Contacts redux state tests', () => {
     const action = await store.dispatch(
       createOrUpdateAddress({
         addressType: AddressType.LEGAL,
-        recipientId: updatedDigitalAddress.recipientId,
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,
@@ -82,7 +81,6 @@ describe('Contacts redux state tests', () => {
     const action = await store.dispatch(
       createOrUpdateAddress({
         addressType: AddressType.LEGAL,
-        recipientId: updatedDigitalAddress.recipientId,
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,
@@ -106,7 +104,6 @@ describe('Contacts redux state tests', () => {
     const action = await store.dispatch(
       createOrUpdateAddress({
         addressType: AddressType.LEGAL,
-        recipientId: updatedDigitalAddress.recipientId,
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,
@@ -144,7 +141,6 @@ describe('Contacts redux state tests', () => {
     const action = await store.dispatch(
       createOrUpdateAddress({
         addressType: AddressType.COURTESY,
-        recipientId: updatedDigitalAddress.recipientId,
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,
@@ -167,7 +163,6 @@ describe('Contacts redux state tests', () => {
     const action = await store.dispatch(
       createOrUpdateAddress({
         addressType: AddressType.COURTESY,
-        recipientId: updatedDigitalAddress.recipientId,
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,
@@ -241,7 +236,6 @@ describe('Contacts redux state tests', () => {
     await store.dispatch(
       createOrUpdateAddress({
         addressType: AddressType.LEGAL,
-        recipientId: updatedDigitalAddress.recipientId,
         senderId: 'default',
         channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,

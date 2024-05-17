@@ -100,7 +100,6 @@ describe('SpecialContacts Component', async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalLegalAddresses[0].recipientId}
             legalAddresses={digitalLegalAddresses}
             courtesyAddresses={digitalCourtesyAddresses}
           />
@@ -127,7 +126,6 @@ describe('SpecialContacts Component', async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalLegalAddresses[0].recipientId}
             legalAddresses={digitalLegalAddresses}
             courtesyAddresses={digitalCourtesyAddresses}
           />
@@ -153,7 +151,6 @@ describe('SpecialContacts Component', async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalLegalAddresses[0].recipientId}
             legalAddresses={digitalLegalAddresses}
             courtesyAddresses={digitalCourtesyAddresses}
           />
@@ -180,7 +177,6 @@ describe('SpecialContacts Component', async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalLegalAddresses[0].recipientId}
             legalAddresses={digitalLegalAddresses}
             courtesyAddresses={digitalCourtesyAddresses}
           />
@@ -218,7 +214,6 @@ describe('SpecialContacts Component', async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalLegalAddresses[0].recipientId}
             legalAddresses={digitalLegalAddresses}
             courtesyAddresses={digitalCourtesyAddresses}
           />
@@ -255,7 +250,6 @@ describe('SpecialContacts Component', async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalLegalAddresses[0].recipientId}
             legalAddresses={digitalLegalAddresses}
             courtesyAddresses={digitalCourtesyAddresses}
           />
@@ -293,7 +287,6 @@ describe('SpecialContacts Component', async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalLegalAddresses[0].recipientId}
             legalAddresses={digitalLegalAddresses}
             courtesyAddresses={digitalCourtesyAddresses}
           />
@@ -323,7 +316,7 @@ describe('SpecialContacts Component', async () => {
     expect(alreadyExistsAlert).toHaveTextContent('special-contacts.phone-already-exists');
   });
 
-  it.only('add special contact', async () => {
+  it('add special contact', async () => {
     const pecValue = 'pec-carino@valida.com';
     mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
     mock
@@ -344,7 +337,6 @@ describe('SpecialContacts Component', async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalLegalAddresses[0].recipientId}
             legalAddresses={digitalLegalAddresses}
             courtesyAddresses={digitalCourtesyAddresses}
           />
@@ -391,7 +383,6 @@ describe('SpecialContacts Component', async () => {
         senderName: parties[2].name,
         value: pecValue,
         pecValid: true,
-        recipientId: digitalLegalAddresses[0].recipientId,
         senderId: parties[2].id,
         addressType: AddressType.LEGAL,
         channelType: LegalChannelType.PEC,
@@ -403,7 +394,6 @@ describe('SpecialContacts Component', async () => {
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
         <SpecialContacts
-          recipientId={digitalLegalAddresses[0].recipientId}
           legalAddresses={addresses.filter((addr) => addr.addressType === AddressType.LEGAL)}
           courtesyAddresses={addresses.filter((addr) => addr.addressType === AddressType.COURTESY)}
         />
@@ -437,7 +427,6 @@ describe('SpecialContacts Component', async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalLegalAddresses[0].recipientId}
             legalAddresses={digitalLegalAddresses}
             courtesyAddresses={digitalCourtesyAddresses}
           />
@@ -488,7 +477,6 @@ describe('SpecialContacts Component', async () => {
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
         <SpecialContacts
-          recipientId={digitalLegalAddresses[0].recipientId}
           legalAddresses={addresses.filter((addr) => addr.addressType === AddressType.LEGAL)}
           courtesyAddresses={addresses.filter((addr) => addr.addressType === AddressType.COURTESY)}
         />
@@ -509,7 +497,6 @@ describe('SpecialContacts Component', async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalLegalAddresses[0].recipientId}
             legalAddresses={digitalLegalAddresses}
             courtesyAddresses={digitalCourtesyAddresses}
           />
@@ -538,7 +525,6 @@ describe('SpecialContacts Component', async () => {
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
         <SpecialContacts
-          recipientId={digitalLegalAddresses[0].recipientId}
           legalAddresses={addresses.filter((addr) => addr.addressType === AddressType.LEGAL)}
           courtesyAddresses={addresses.filter((addr) => addr.addressType === AddressType.COURTESY)}
         />
@@ -560,7 +546,6 @@ describe('SpecialContacts Component', async () => {
           <AppResponseMessage />
           <DigitalContactsCodeVerificationProvider>
             <SpecialContacts
-              recipientId={digitalLegalAddresses[0].recipientId}
               legalAddresses={digitalLegalAddresses}
               courtesyAddresses={digitalCourtesyAddresses}
             />

@@ -28,7 +28,6 @@ type Props = {
     size: 'auto' | 'variable';
     key: string;
   }>;
-  recipientId: string;
   senderId: string;
   senderName?: string;
   contactType: CourtesyChannelType | LegalChannelType;
@@ -100,7 +99,6 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
       saveDisabled = false,
       removeModalTitle,
       removeModalBody,
-      recipientId,
       senderId,
       senderName,
       contactType,
@@ -183,7 +181,6 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
       initValidation(
         contactType,
         value,
-        recipientId,
         senderId,
         senderName,
         (status: 'validated' | 'cancelled') => {

@@ -51,12 +51,9 @@ const IntegrationComponent = ({
 }) => (
   <DigitalContactsCodeVerificationProvider>
     {digitalAddresses.length === 0 ? (
-      <InsertLegalContact recipientId={defaultAddress!.recipientId} />
+      <InsertLegalContact />
     ) : (
-      <LegalContactsList
-        recipientId={defaultAddress!.recipientId}
-        legalAddresses={digitalAddresses}
-      />
+      <LegalContactsList legalAddresses={digitalAddresses} />
     )}
   </DigitalContactsCodeVerificationProvider>
 );
@@ -82,10 +79,7 @@ describe('LegalContactsList Component', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <LegalContactsList
-            recipientId={defaultAddress!.recipientId}
-            legalAddresses={digitalLegalAddresses}
-          />
+          <LegalContactsList legalAddresses={digitalLegalAddresses} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
@@ -305,10 +299,7 @@ describe('LegalContactsList Component', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <LegalContactsList
-            recipientId="mocked-recipientId"
-            legalAddresses={digitalLegalAddresses}
-          />
+          <LegalContactsList legalAddresses={digitalLegalAddresses} />
         </DigitalContactsCodeVerificationProvider>
       );
     });

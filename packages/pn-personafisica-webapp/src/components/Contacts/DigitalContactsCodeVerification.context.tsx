@@ -27,7 +27,6 @@ import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyF
 type ModalProps = {
   labelRoot: string;
   labelType: string;
-  recipientId: string;
   senderId: string;
   senderName?: string;
   digitalDomicileType: LegalChannelType | CourtesyChannelType;
@@ -39,7 +38,6 @@ interface IDigitalContactsCodeVerificationContext {
   initValidation: (
     digitalDomicileType: LegalChannelType | CourtesyChannelType,
     value: string,
-    recipientId: string,
     senderId: string,
     senderName?: string,
     callbackOnValidation?: (status: 'validated' | 'cancelled') => void,
@@ -61,7 +59,6 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   const initialProps = {
     labelRoot: '',
     labelType: '',
-    recipientId: '',
     senderId: '',
     digitalDomicileType: LegalChannelType.PEC,
     value: '',
@@ -141,7 +138,6 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
         modalProps.digitalDomicileType === LegalChannelType.PEC
           ? AddressType.LEGAL
           : AddressType.COURTESY,
-      recipientId: modalProps.recipientId,
       senderId: modalProps.senderId,
       senderName: modalProps.senderName,
       channelType: modalProps.digitalDomicileType,
@@ -188,7 +184,6 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   const initValidation = (
     digitalDomicileType: LegalChannelType | CourtesyChannelType,
     value: string,
-    recipientId: string,
     senderId: string,
     senderName?: string,
     callbackOnValidation?: (status: 'validated' | 'cancelled') => void
@@ -214,7 +209,6 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
     setModalProps({
       labelRoot,
       labelType,
-      recipientId,
       senderId,
       senderName,
       digitalDomicileType,

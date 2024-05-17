@@ -20,7 +20,6 @@ export enum AddressType {
 
 export interface DigitalAddress {
   addressType: AddressType;
-  recipientId: string;
   senderId: string;
   senderName?: string;
   channelType: LegalChannelType | CourtesyChannelType;

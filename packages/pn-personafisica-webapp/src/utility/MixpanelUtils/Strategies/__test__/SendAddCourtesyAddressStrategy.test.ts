@@ -12,7 +12,6 @@ describe('Mixpanel - Add Courtesy Address Strategy', () => {
       params: {
         addressType: AddressType.COURTESY,
         channelType: CourtesyChannelType.EMAIL,
-        recipientId: '123',
         senderId: 'default',
         value: '',
       },
@@ -32,7 +31,6 @@ describe('Mixpanel - Add Courtesy Address Strategy', () => {
       params: {
         addressType: address!.addressType,
         channelType: address!.channelType,
-        recipientId: address!.recipientId,
         senderId: address!.senderId,
         value: address!.value,
       },
@@ -57,7 +55,6 @@ describe('Mixpanel - Add Courtesy Address Strategy', () => {
       params: {
         addressType: address!.addressType,
         channelType: address!.channelType,
-        recipientId: address!.recipientId,
         senderId: address!.senderId,
         value: address!.value,
       },

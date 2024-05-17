@@ -27,7 +27,6 @@ const Contacts = () => {
   const navigate = useNavigate();
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
-  const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.contactsState.digitalAddresses
   );
@@ -151,19 +150,16 @@ const Contacts = () => {
                 <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
                   <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
                     {legalAddresses.length === 0 ? (
-                      <InsertLegalContact recipientId={recipientId} />
+                      <InsertLegalContact />
                     ) : (
-                      <LegalContactsList
-                        recipientId={recipientId}
-                        legalAddresses={legalAddresses}
-                      />
+                      <LegalContactsList legalAddresses={legalAddresses} />
                     )}
                   </Box>
                   <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
                     <IOContact contact={contactIO} />
                   </Box>
                 </Stack>
-                <CourtesyContacts recipientId={recipientId} contacts={courtesyAddresses} />
+                <CourtesyContacts contacts={courtesyAddresses} />
               </Stack>
               {(legalAddresses.length > 0 || courtesyContactsNotEmpty()) && (
                 <Stack spacing={2}>
@@ -171,7 +167,6 @@ const Contacts = () => {
                     {t('special-contacts-title')}
                   </Typography>
                   <SpecialContacts
-                    recipientId={recipientId}
                     legalAddresses={legalAddresses}
                     courtesyAddresses={courtesyAddresses}
                   />

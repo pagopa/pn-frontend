@@ -28,7 +28,7 @@ describe('CourtesyContactsList Component', () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactsList recipientId="mock-recipient" contacts={[]} />
+          <CourtesyContactsList contacts={[]} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
@@ -50,7 +50,7 @@ describe('CourtesyContactsList Component', () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactsList recipientId="mock-recipient" contacts={digitalCourtesyAddresses} />
+          <CourtesyContactsList contacts={digitalCourtesyAddresses} />
         </DigitalContactsCodeVerificationProvider>
       );
     });

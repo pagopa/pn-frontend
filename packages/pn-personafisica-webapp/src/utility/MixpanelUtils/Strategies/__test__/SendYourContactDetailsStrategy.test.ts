@@ -39,7 +39,6 @@ describe('Mixpanel - Your Contact Details Strategy', () => {
 
     const contactIO: DigitalAddress | null = {
       addressType: AddressType.COURTESY,
-      recipientId: 'recipientId',
       senderId: 'senderId',
       channelType: CourtesyChannelType.IOMSG,
       value: IOAllowedValues.ENABLED,

@@ -54,7 +54,6 @@ export const createOrUpdateAddress = createAsyncThunk<
         if (response.status === 204) {
           return {
             addressType: params.addressType,
-            recipientId: params.recipientId,
             senderId: params.senderId,
             senderName: params.senderName,
             channelType: params.channelType,
@@ -68,7 +67,6 @@ export const createOrUpdateAddress = createAsyncThunk<
         if (response.data?.result === 'PEC_VALIDATION_REQUIRED') {
           return {
             addressType: params.addressType,
-            recipientId: params.recipientId,
             senderId: params.senderId,
             senderName: params.senderName,
             channelType: params.channelType,
@@ -87,7 +85,6 @@ export const createOrUpdateAddress = createAsyncThunk<
         // contact already verified
         return {
           addressType: params.addressType,
-          recipientId: params.recipientId,
           senderId: params.senderId,
           senderName: params.senderName,
           channelType: params.channelType,
@@ -102,12 +99,11 @@ export const createOrUpdateAddress = createAsyncThunk<
 
       // const address = {
       //   addressType: params.addressType,
-      //   recipientId: params.recipientId,
       //   senderId: params.senderId,
       //   senderName: params.senderName,
       //   channelType: params.channelType,
       //   value: params.value
-      // }
+      // };
 
       // // waiting for pec validation
       // if (response.data.result === 'PEC_VALIDATION_REQUIRED') {
@@ -118,9 +114,9 @@ export const createOrUpdateAddress = createAsyncThunk<
 
       // // address validated
       // if (address.addressType === AddressType.LEGAL) {
-      //  address.pecValid = true;
+      //   address.pecValid = true;
       // }
-      // return address
+      // return address;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
