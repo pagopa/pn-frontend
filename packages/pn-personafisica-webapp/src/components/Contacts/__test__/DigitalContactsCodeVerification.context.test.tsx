@@ -220,7 +220,5 @@ describe('DigitalContactsCodeVerification Context', () => {
     await waitFor(() => {
       expect(duplicateDialog).not.toBeInTheDocument();
     });
-    // const dialog = await waitFor(() => screen.queryByTestId('codeDialog'));
-    // expect(dialog).toBeInTheDocument();
   });
 });

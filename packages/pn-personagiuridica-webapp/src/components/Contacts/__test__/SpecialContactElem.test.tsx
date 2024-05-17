@@ -36,7 +36,6 @@ describe('SpecialContactElem Component', () => {
                 mail: 'mocked@mail.it',
                 pec: 'mocked@pec.it',
               }}
-              recipientId="mocked-recipientId"
             />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
@@ -71,7 +70,6 @@ describe('SpecialContactElem Component', () => {
                 senderName: 'Mocked Sender',
                 pec: 'mocked@pec.it',
               }}
-              recipientId="mocked-recipientId"
             />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
@@ -108,7 +106,6 @@ describe('SpecialContactElem Component', () => {
                 senderName: 'Mocked Sender',
                 pec: 'mocked@pec.it',
               }}
-              recipientId="mocked-recipientId"
             />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
@@ -150,7 +147,6 @@ describe('SpecialContactElem Component', () => {
                 senderName: 'Mocked Sender',
                 mail: 'mocked@mail.it',
               }}
-              recipientId="mocked-recipientId"
             />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
@@ -187,7 +183,6 @@ describe('SpecialContactElem Component', () => {
                 senderName: 'Mocked Sender',
                 mail: 'mocked@mail.it',
               }}
-              recipientId="mocked-recipientId"
             />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
@@ -229,7 +224,6 @@ describe('SpecialContactElem Component', () => {
                 senderName: 'Mocked Sender',
                 phone: '+39333333333',
               }}
-              recipientId="mocked-recipientId"
             />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
@@ -266,7 +260,6 @@ describe('SpecialContactElem Component', () => {
                 senderName: 'Mocked Sender',
                 phone: '+39333333333',
               }}
-              recipientId="mocked-recipientId"
             />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
@@ -309,7 +302,6 @@ describe('SpecialContactElem Component', () => {
                 pec: 'mocked@pec.it',
                 phone: '+39333333333',
               }}
-              recipientId="mocked-recipientId"
             />
             <SpecialContactElem
               address={{
@@ -318,7 +310,6 @@ describe('SpecialContactElem Component', () => {
                 mail: 'mocked@mail.it',
                 phone: '+39333333334',
               }}
-              recipientId="mocked-recipientId"
             />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
