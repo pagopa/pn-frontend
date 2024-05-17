@@ -246,11 +246,12 @@ const App = () => {
     error: AppResponseError,
     response: AppResponse
   ) => {
+    console.log(pathname);
     const { traceId, status, action } = response;
 
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_TOAST_ERROR, {
       reason: error.code,
-      traceid: traceId,
+      traceId,
       page_name: getCurrentEventTypePage(pathname),
       message: error.message,
       httpStatusCode: status,
