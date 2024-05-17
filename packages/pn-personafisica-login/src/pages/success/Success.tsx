@@ -9,7 +9,6 @@ import { storageAarOps } from '../../utility/storage';
 
 const SuccessPage = () => {
   const { PF_URL } = getConfiguration();
-  const IDP = sessionStorage.getItem('IDP');
 
   const aar = useMemo(() => storageAarOps.read(), []);
   const token = useMemo(() => window.location.hash, []);
@@ -29,16 +28,18 @@ const SuccessPage = () => {
     if (redirectUrl && [PF_URL].findIndex((url) => url && redirectUrl.startsWith(url)) > -1) {
       window.location.replace(`${redirectUrl}${sanitizeString(token)}`);
     }
+  }, [aar, token]);
+
+  useEffect(() => {
+    calcRedirectUrl();
+
+    const IDP = sessionStorage.getItem('IDP');
 
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_METHOD, {
       entityID: IDP,
     });
 
     sessionStorage.removeItem('IDP');
-  }, [aar, token]);
-
-  useEffect(() => {
-    calcRedirectUrl();
   }, []);
 
   return null;
