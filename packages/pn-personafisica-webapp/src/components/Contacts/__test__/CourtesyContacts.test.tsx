@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
+import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
 import {
   RenderResult,
   act,
@@ -39,18 +39,12 @@ const fillCodeDialog = async (result: RenderResult) => {
   return dialog;
 };
 
-const defaultEmailAddress = digitalAddresses.find(
-  (addr) =>
-    addr.senderId === 'default' &&
-    addr.channelType === CourtesyChannelType.EMAIL &&
-    addr.addressType === AddressType.COURTESY
+const defaultEmailAddress = digitalCourtesyAddresses.find(
+  (addr) => addr.channelType === CourtesyChannelType.EMAIL && addr.senderId === 'default'
 );
 
-const defaultPhoneAddress = digitalAddresses.find(
-  (addr) =>
-    addr.senderId === 'default' &&
-    addr.channelType === CourtesyChannelType.SMS &&
-    addr.addressType === AddressType.COURTESY
+const defaultPhoneAddress = digitalCourtesyAddresses.find(
+  (addr) => addr.channelType === CourtesyChannelType.SMS && addr.senderId === 'default'
 );
 
 describe('CourtesyContacts Component', async () => {

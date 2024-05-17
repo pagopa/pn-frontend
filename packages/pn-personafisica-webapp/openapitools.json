@@ -39,7 +39,7 @@
       },
       "bff-digital-addresses": {
         "generatorName": "typescript-axios",
-        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/develop/docs/openapi/api-external-pn-bff-digital-addresses.yaml",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/develop/docs/openapi/api-external-pn-bff-recipient-digital-addresses.yaml",
         "output": "./src/generated-client/digital-addresses",
         "additionalProperties": {
           "supportsES6": true,

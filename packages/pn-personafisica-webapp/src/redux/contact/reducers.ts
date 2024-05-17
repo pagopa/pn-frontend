@@ -44,9 +44,9 @@ const contactsSlice = createSlice({
       if (action.payload && action.payload.senderId) {
         const addressIndex = state.digitalAddresses.findIndex(
           (l) =>
-            l.senderId === (action.payload as DigitalAddress).senderId &&
-            l.addressType === (action.payload as DigitalAddress).addressType &&
-            l.channelType === (action.payload as DigitalAddress).channelType
+            l.senderId === action.meta.arg.senderId &&
+            l.addressType === action.meta.arg.addressType &&
+            l.channelType === action.meta.arg.channelType
         );
         if (addressIndex > -1) {
           state.digitalAddresses[addressIndex] = action.payload;

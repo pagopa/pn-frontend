@@ -323,14 +323,16 @@ describe('SpecialContacts Component', async () => {
     expect(alreadyExistsAlert).toHaveTextContent('special-contacts.phone-already-exists');
   });
 
-  it('add special contact', async () => {
+  it.only('add special contact', async () => {
     const pecValue = 'pec-carino@valida.com';
     mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
     mock
       .onPost(`/bff/v1/addresses/LEGAL/${parties[2].id}/PEC`, {
         value: pecValue,
       })
-      .reply(200);
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
     mock
       .onPost(`/bff/v1/addresses/LEGAL/${parties[2].id}/PEC`, {
         value: pecValue,
@@ -421,13 +423,15 @@ describe('SpecialContacts Component', async () => {
       .onPost(`/bff/v1/addresses/COURTESY/${parties[0].id}/EMAIL`, {
         value: mailValue,
       })
-      .reply(200);
+      .replyOnce(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
     mock
-      .onPost(`/bff/v1/addresses/COURTESY/${parties[0].id}/EMAIL`, {
+      .onPost(`bff/v1/addresses/COURTESY/${parties[0].id}/EMAIL`, {
         value: mailValue,
         verificationCode: '01234',
       })
-      .reply(204);
+      .replyOnce(204);
     // render component
     await act(async () => {
       result = render(

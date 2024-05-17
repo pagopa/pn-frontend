@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
+import { digitalAddresses, digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
 import {
   RenderResult,
   fireEvent,
@@ -11,7 +11,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { AddressType, CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
+import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import {
   Component,
@@ -56,7 +56,6 @@ describe('DigitalContactsCodeVerification Context', () => {
   });
 
   it('code modal', async () => {
-    // vi.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress').mockResolvedValueOnce(void 0);
     mock.onPost(`/bff/v1/addresses/LEGAL/${senderId}/PEC`, { value: pecValue }).reply(200, {
       result: 'CODE_VERIFICATION_REQUIRED',
     });
@@ -205,8 +204,7 @@ describe('DigitalContactsCodeVerification Context', () => {
   });
 
   it('already existing contact modal', async () => {
-    const value =
-      digitalAddresses.find((addr) => addr.addressType === AddressType.COURTESY)?.value || '';
+    const value = digitalCourtesyAddresses[0].value;
     mock
       .onPost('/bff/v1/addresses/COURTESY/another-sender-id/EMAIL', {
         value,

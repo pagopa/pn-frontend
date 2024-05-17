@@ -76,8 +76,8 @@ export type AddressVerificationResponseResultEnum = typeof AddressVerificationRe
  */
 
 export const BffAddressType = {
-    Legal: 'legal',
-    Courtesy: 'courtesy'
+    Legal: 'LEGAL',
+    Courtesy: 'COURTESY'
 } as const;
 
 export type BffAddressType = typeof BffAddressType[keyof typeof BffAddressType];
@@ -158,12 +158,6 @@ export interface BffUserAddress {
      */
     'addressType': string;
     /**
-     * 
-     * @type {string}
-     * @memberof BffUserAddress
-     */
-    'recipientId': string;
-    /**
      * senderId or \'default\'
      * @type {string}
      * @memberof BffUserAddress
@@ -193,12 +187,6 @@ export interface BffUserAddress {
      * @memberof BffUserAddress
      */
     'pecValid'?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BffUserAddress
-     */
-    'codeValid'?: boolean;
 }
 
 

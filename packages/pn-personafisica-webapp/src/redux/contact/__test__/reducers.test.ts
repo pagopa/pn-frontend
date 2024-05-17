@@ -7,12 +7,7 @@ import {
   digitalLegalAddresses,
 } from '../../../__mocks__/Contacts.mock';
 import { apiClient } from '../../../api/apiClients';
-import {
-  AddressType,
-  CourtesyChannelType,
-  IOAllowedValues,
-  LegalChannelType,
-} from '../../../models/contacts';
+import { AddressType, CourtesyChannelType, IOAllowedValues } from '../../../models/contacts';
 import { store } from '../../store';
 import {
   createOrUpdateAddress,
@@ -69,12 +64,12 @@ describe('Contacts redux state tests', () => {
         addressType: AddressType.LEGAL,
         recipientId: updatedDigitalAddress.recipientId,
         senderId: updatedDigitalAddress.senderId,
-        channelType: updatedDigitalAddress.channelType as LegalChannelType,
+        channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,
       })
     );
     expect(action.type).toBe('createOrUpdateAddress/fulfilled');
-    expect(action.payload).toEqual(undefined);
+    expect(action.payload).toEqual(void 0);
   });
 
   it('Should be able to update the digital address with legal value (pec to validate)', async () => {
@@ -89,7 +84,7 @@ describe('Contacts redux state tests', () => {
         addressType: AddressType.LEGAL,
         recipientId: updatedDigitalAddress.recipientId,
         senderId: updatedDigitalAddress.senderId,
-        channelType: updatedDigitalAddress.channelType as LegalChannelType,
+        channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,
       })
     );
@@ -113,7 +108,7 @@ describe('Contacts redux state tests', () => {
         addressType: AddressType.LEGAL,
         recipientId: updatedDigitalAddress.recipientId,
         senderId: updatedDigitalAddress.senderId,
-        channelType: updatedDigitalAddress.channelType as LegalChannelType,
+        channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,
       })
     );
@@ -135,7 +130,7 @@ describe('Contacts redux state tests', () => {
       })
     );
     expect(action.type).toBe('deleteAddress/fulfilled');
-    expect(action.payload).toEqual(undefined);
+    expect(action.payload).toEqual(void 0);
   });
 
   it('Should be able to update the digital address with courtesy value (email to verify)', async () => {
@@ -156,7 +151,7 @@ describe('Contacts redux state tests', () => {
       })
     );
     expect(action.type).toBe('createOrUpdateAddress/fulfilled');
-    expect(action.payload).toEqual(undefined);
+    expect(action.payload).toEqual(void 0);
   });
 
   it('Should be able to update the digital address with courtesy value (email verified)', async () => {
@@ -195,7 +190,7 @@ describe('Contacts redux state tests', () => {
       })
     );
     expect(action.type).toBe('deleteAddress/fulfilled');
-    expect(action.payload).toEqual(undefined);
+    expect(action.payload).toEqual(void 0);
   });
 
   it('Should be able to enable App IO', async () => {
@@ -221,13 +216,13 @@ describe('Contacts redux state tests', () => {
     mock.onDelete(`/bff/v1/addresses/COURTESY/${ioContact!.senderId}/APPIO`).reply(204);
     const action = await store.dispatch(disableIOAddress());
     expect(action.type).toBe('disableIOAddress/fulfilled');
-    expect(action.payload).toEqual(undefined);
+    expect(action.payload).toEqual(void 0);
   });
 
   it('Should be able to reset state', () => {
     const action = store.dispatch(resetState());
     expect(action.type).toBe('contactsSlice/resetState');
-    expect(action.payload).toEqual(undefined);
+    expect(action.payload).toEqual(void 0);
     const state = store.getState().contactsState;
     expect(state).toEqual(initialState);
   });
@@ -248,13 +243,13 @@ describe('Contacts redux state tests', () => {
         addressType: AddressType.LEGAL,
         recipientId: updatedDigitalAddress.recipientId,
         senderId: 'default',
-        channelType: updatedDigitalAddress.channelType as LegalChannelType,
+        channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,
       })
     );
     const action = store.dispatch(resetPecValidation());
     expect(action.type).toBe('contactsSlice/resetPecValidation');
-    expect(action.payload).toEqual(undefined);
+    expect(action.payload).toEqual(void 0);
     const state = store
       .getState()
       .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL);

@@ -68,18 +68,6 @@ export const digitalAddresses: Array<DigitalAddress> = [
   },
 ];
 
-export const digitalAddressesInvalid = [
-  ...digitalAddresses,
-  {
-    addressType: 'legal',
-    recipientId: '123e4567-e89b-12d3-a456-426614174000',
-    senderId: 'cmp',
-    channelType: LegalChannelType.PEC,
-    value: 'nome.utente@server.it',
-    codeValid: false,
-  },
-];
-
 export const digitalCourtesyAddresses = digitalAddresses.filter(
   (addr) => addr.addressType === AddressType.COURTESY
 );
