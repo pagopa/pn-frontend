@@ -40,9 +40,9 @@ const AARGuard = () => {
       const fetchNotificationFromQrCode = () =>
         dispatch(exchangeNotificationQrCode({ aarQrCodeValue: aar }))
           .unwrap()
-          .then((aar) => {
-            if (aar) {
-              setNotificationId(aar);
+          .then((notification) => {
+            if (notification) {
+              setNotificationId(notification);
             }
           })
           .catch(() => {
