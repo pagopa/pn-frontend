@@ -22,7 +22,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
 import { DowntimeApiFactory } from '../../generated-client/downtime-logs';
-import { NotificationReceivedApiFactory } from '../../generated-client/notifications';
+import { BffCheckAarRequest, BffCheckAarResponse, NotificationReceivedApiFactory } from '../../generated-client/notifications';
 import { PaymentsApiFactory } from '../../generated-client/payments';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { PFEventsType } from '../../models/PFEventsType';
@@ -252,6 +252,23 @@ export const getDowntimeHistory = createAsyncThunk<DowntimeLogHistory, GetDownti
       );
       validateHistory(response.data as DowntimeLogHistory);
       return response.data as DowntimeLogHistory;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, BffCheckAarRequest>(
+  'exchangeNotificationQrCode',
+  async (params: BffCheckAarRequest, { rejectWithValue }) => {
+    try {
+      const notificationReceivedApiFactory = NotificationReceivedApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await notificationReceivedApiFactory.checkAarQrCodeV1(params);
+      return response.data as BffCheckAarResponse;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
