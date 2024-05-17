@@ -1,9 +1,11 @@
-import { performThunkAction } from '@pagopa-pn/pn-commons';
+import { parseError, performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
+import { apiClient } from '../../api/apiClients';
 import { ContactsApi } from '../../api/contacts/Contacts.api';
-import { DelegationsApi } from '../../api/delegations/Delegations.api';
-import { DigitalAddress } from '../../models/contacts';
+import { MandateApiFactory } from '../../generated-client/mandate';
 import { DelegationStatus } from '../../models/Deleghe';
+import { DigitalAddress } from '../../models/contacts';
 
 export enum SIDEMENU_ACTIONS {
   GET_SIDEMENU_INFORMATION = 'getSidemenuInformation',
@@ -11,12 +13,13 @@ export enum SIDEMENU_ACTIONS {
 
 export const getSidemenuInformation = createAsyncThunk<number>(
   SIDEMENU_ACTIONS.GET_SIDEMENU_INFORMATION,
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await DelegationsApi.countDelegators(DelegationStatus.PENDING);
-      return response.value;
-    } catch (e) {
-      return 0;
+      const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+      const response = await mandateApiFactory.countMandatesByDelegateV1(DelegationStatus.PENDING);
+      return response.data.value ?? 0;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
     }
   }
 );
@@ -26,6 +29,9 @@ export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
   performThunkAction(async () => {
     const isDefaultAddress = (address: DigitalAddress) => address.senderId === 'default';
     const allAddresses = await ContactsApi.getDigitalAddresses();
-    return [...allAddresses.legal.filter(isDefaultAddress), ...allAddresses.courtesy.filter(isDefaultAddress)];
-  }
-));
+    return [
+      ...allAddresses.legal.filter(isDefaultAddress),
+      ...allAddresses.courtesy.filter(isDefaultAddress),
+    ];
+  })
+);

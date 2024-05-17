@@ -14,8 +14,6 @@ export type DelegationData = {
 
 export type DelegationColumnData = DelegationData & { menu: string };
 
-export type DelegationParty = { name: string | null; uniqueIdentifier: string };
-
 export interface NewDelegationFormProps {
   selectPersonaFisicaOrPersonaGiuridica: RecipientType;
   codiceFiscale: string;
@@ -37,25 +35,13 @@ export interface Person {
   person: boolean;
 }
 
-export interface CreateDelegationProps {
+type DelegationParty = { name: string; uniqueIdentifier: string };
+
+export interface NewMandateRequest {
   delegate: Person;
   visibilityIds: Array<DelegationParty>;
   verificationCode: string;
   dateto: string;
-}
-
-export interface CreateDelegationResponse {
-  datefrom: string;
-  dateto: string;
-  delegate: Person;
-  delegator: Person | null;
-  mandateId: string;
-  status: string;
-  verificationCode: string;
-  visibilityIds: Array<{
-    name: string;
-    uniqueIdentifier: string;
-  }>;
 }
 
 export enum DelegationStatus {

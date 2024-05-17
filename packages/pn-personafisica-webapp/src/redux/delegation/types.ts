@@ -2,17 +2,8 @@ import { RecipientType } from '@pagopa-pn/pn-commons';
 
 import { DelegationParty } from '../../models/Deleghe';
 import { Party } from '../../models/party';
-import { User } from '../auth/types';
 
-export type UserAndDelegations = User & DelegationsList;
-
-export interface DelegationsList {
-  delegators: Array<Delegator>;
-  delegations: Array<Delegate>;
-  isCompany: boolean;
-}
-
-export interface IDelegation {
+interface IDelegation {
   mandateId: string;
   status: 'active' | 'pending';
   visibilityIds: Array<DelegationParty>;
@@ -27,12 +18,6 @@ export interface Delegator extends IDelegation {
 
 export interface Delegate extends IDelegation {
   delegate: Person | null;
-}
-
-export interface RevocationModalProps {
-  open: boolean;
-  id: string;
-  type: string;
 }
 
 export interface Person {

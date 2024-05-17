@@ -2,7 +2,6 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { apiClient } from '../../../api/apiClients';
-import { COUNT_DELEGATORS } from '../../../api/delegations/delegations.routes';
 import { DelegationStatus } from '../../../models/Deleghe';
 import { acceptMandate, rejectMandate } from '../../delegation/actions';
 import { store } from '../../store';
@@ -44,7 +43,9 @@ describe('Sidemenu redux state tests', () => {
   });
 
   it('Should load delegators count', async () => {
-    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, { value: 2 });
+    mock
+      .onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`)
+      .reply(200, { value: 2 });
     const action = await store.dispatch(getSidemenuInformation());
     const state = store.getState().generalInfoState;
     expect(action.type).toBe('getSidemenuInformation/fulfilled');
@@ -53,7 +54,9 @@ describe('Sidemenu redux state tests', () => {
 
   it('Should update state after accepting a delegation', async () => {
     mock.onPatch('/bff/v1/mandate/1dc53e54-1368-4c2d-8583-2f1d672350d8/accept').reply(204);
-    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, { value: 2 });
+    mock
+      .onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`)
+      .reply(200, { value: 2 });
     await store.dispatch(getSidemenuInformation());
     const action = await store.dispatch(
       acceptMandate({ id: '1dc53e54-1368-4c2d-8583-2f1d672350d8', code: '12345', groups: [] })
@@ -65,7 +68,9 @@ describe('Sidemenu redux state tests', () => {
 
   it('Should update state after rejecting a pending delegation', async () => {
     mock.onPatch('/bff/v1/mandate/1dc53e54-1368-4c2d-8583-2f1d672350d8/reject').reply(204);
-    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, { value: 2 });
+    mock
+      .onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`)
+      .reply(200, { value: 2 });
     await store.dispatch(getSidemenuInformation());
     const action = await store.dispatch(rejectMandate('1dc53e54-1368-4c2d-8583-2f1d672350d8'));
     const state = store.getState().generalInfoState;

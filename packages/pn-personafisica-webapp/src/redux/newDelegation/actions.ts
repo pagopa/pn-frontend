@@ -4,7 +4,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { apiClient } from '../../api/apiClients';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import { MandateApiFactory } from '../../generated-client/mandate';
-import { DelegationParty } from '../../models/Deleghe';
 import { FilterPartiesParams, Party } from '../../models/party';
 import { NewDelegationFormProps, NewMandateRequest, Person } from '../delegation/types';
 
@@ -35,7 +34,7 @@ export function createDelegationMapper(formData: NewDelegationFormProps): NewMan
             return {
               uniqueIdentifier: ente.id,
               name: ente.name,
-            } as DelegationParty;
+            };
           }),
     verificationCode: formData.verificationCode,
     dateto: formatToSlicedISOString(formData.expirationDate),
