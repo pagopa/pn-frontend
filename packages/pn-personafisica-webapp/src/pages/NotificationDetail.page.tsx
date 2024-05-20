@@ -353,7 +353,11 @@ const NotificationDetail = () => {
       startDate: fromDate,
       endDate: toDate,
     };
-    void dispatch(getDowntimeEvents(fetchParams));
+    void dispatch(getDowntimeEvents(fetchParams))
+      .unwrap()
+      .then(() => {
+        setDowntimesReady(true);
+      });
   }, []);
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
@@ -437,10 +441,6 @@ const NotificationDetail = () => {
       });
     }
   }, [downtimesReady, pageReady]);
-
-  const handleDowntimesReadyEvent = () => {
-    setDowntimesReady(true);
-  };
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
@@ -533,7 +533,6 @@ const NotificationDetail = () => {
                 </Paper>
                 <NotificationRelatedDowntimes
                   downtimeEvents={downtimeEvents}
-                  componentReady={handleDowntimesReadyEvent}
                   fetchDowntimeEvents={(fromDate, toDate) => fetchDowntimeEvents(fromDate, toDate)}
                   notificationStatusHistory={notification.notificationStatusHistory}
                   downtimeLegalFactUrl={downtimeLegalFactUrl}
