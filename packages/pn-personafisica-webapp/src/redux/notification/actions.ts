@@ -22,7 +22,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
 import { DowntimeApiFactory } from '../../generated-client/downtime-logs';
-import { BffCheckAarRequest, BffCheckAarResponse, NotificationReceivedApiFactory } from '../../generated-client/notifications';
+import {
+  BffCheckAarRequest,
+  BffCheckAarResponse,
+  NotificationReceivedApiFactory,
+} from '../../generated-client/notifications';
 import { PaymentsApiFactory } from '../../generated-client/payments';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { PFEventsType } from '../../models/PFEventsType';
@@ -38,6 +42,7 @@ export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION_PAYMENT_INFO = 'getReceivedNotificationPaymentInfo',
   GET_RECEIVED_NOTIFICATION_PAYMENT_URL = 'getReceivedNotificationPaymentUrl',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
+  EXCHANGE_NOTIFICATION_QR_CODE = 'exchangeNotificationQrCode',
 }
 
 export const getReceivedNotification = createAsyncThunk<
@@ -259,7 +264,7 @@ export const getDowntimeHistory = createAsyncThunk<DowntimeLogHistory, GetDownti
 );
 
 export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, BffCheckAarRequest>(
-  'exchangeNotificationQrCode',
+  NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
   async (params: BffCheckAarRequest, { rejectWithValue }) => {
     try {
       const notificationReceivedApiFactory = NotificationReceivedApiFactory(
@@ -268,7 +273,7 @@ export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, 
         apiClient
       );
       const response = await notificationReceivedApiFactory.checkAarQrCodeV1(params);
-      return response.data as BffCheckAarResponse;
+      return response.data;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }

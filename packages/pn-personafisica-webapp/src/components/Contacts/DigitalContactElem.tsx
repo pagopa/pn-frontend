@@ -12,11 +12,9 @@ import { useTranslation } from 'react-i18next';
 import { Button, DialogContentText, DialogTitle, Grid, Typography } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { AsyncThunk } from '@reduxjs/toolkit';
 
-import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
-import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
-import { DeleteDigitalAddressParams } from '../../redux/contact/types';
+import { AddressType, CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { getEventByContactType } from '../../utility/contacts.utility';
@@ -30,7 +28,6 @@ type Props = {
     size: 'auto' | 'variable';
     key: string;
   }>;
-  recipientId: string;
   senderId: string;
   senderName?: string;
   contactType: CourtesyChannelType | LegalChannelType;
@@ -102,7 +99,6 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
       saveDisabled = false,
       removeModalTitle,
       removeModalBody,
-      recipientId,
       senderId,
       senderName,
       contactType,
@@ -161,14 +157,14 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
 
     const confirmHandler = () => {
       handleModalClose();
-      /* eslint-disable-next-line functional/no-let */
-      let actionToDispatch: AsyncThunk<string, DeleteDigitalAddressParams, any>;
-      if (contactType === LegalChannelType.PEC) {
-        actionToDispatch = deleteLegalAddress;
-      } else {
-        actionToDispatch = deleteCourtesyAddress;
-      }
-      dispatch(actionToDispatch({ recipientId, senderId, channelType: contactType }))
+      dispatch(
+        deleteAddress({
+          addressType:
+            contactType === LegalChannelType.PEC ? AddressType.LEGAL : AddressType.COURTESY,
+          senderId,
+          channelType: contactType,
+        })
+      )
         .unwrap()
         .then(() => {
           if (onDeleteCbk) {
@@ -185,7 +181,6 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
       initValidation(
         contactType,
         value,
-        recipientId,
         senderId,
         senderName,
         (status: 'validated' | 'cancelled') => {

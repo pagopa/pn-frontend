@@ -11,11 +11,7 @@ import { LegalChannelType } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
-type Props = {
-  recipientId: string;
-};
-
-const InsertLegalContact = ({ recipientId }: Props) => {
+const InsertLegalContact: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { initValidation } = useDigitalContactsCodeVerificationContext();
 
@@ -40,7 +36,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
     validationSchema,
     /** onSubmit validate */
     onSubmit: () => {
-      initValidation(formik.values.digitalDomicileType, formik.values.pec, recipientId, 'default');
+      initValidation(formik.values.digitalDomicileType, formik.values.pec, 'default');
     },
   });
 

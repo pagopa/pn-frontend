@@ -10,7 +10,6 @@ import { userResponse } from '../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { apiClient } from '../api/apiClients';
-import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
 import { COUNT_DELEGATORS } from '../api/delegations/delegations.routes';
 import { DelegationStatus } from '../models/Deleghe';
 import { PNRole, PartyRole } from '../redux/auth/types';
@@ -95,7 +94,7 @@ describe('App', async () => {
   it('render component - user logged in', async () => {
     mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
     let result: RenderResult;
     await act(async () => {
@@ -114,7 +113,7 @@ describe('App', async () => {
   it('sidemenu not included if error in API call to fetch TOS and privacy', async () => {
     mock.onGet('/bff/v1/tos-privacy').reply(500);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
     let result: RenderResult;
     await act(async () => {
@@ -129,7 +128,7 @@ describe('App', async () => {
   it('sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
     mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(false, false));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
     let result: RenderResult;
     await act(async () => {
@@ -146,7 +145,7 @@ describe('App', async () => {
   it('sidemenu items if user is admin', async () => {
     mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
     let result: RenderResult;
     await act(async () => {

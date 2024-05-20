@@ -1,11 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
+import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
 import { RenderResult, fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { COURTESY_CONTACT } from '../../../api/contacts/contacts.routes';
-import { CourtesyChannelType, IOAllowedValues } from '../../../models/contacts';
+import { AddressType, CourtesyChannelType, IOAllowedValues } from '../../../models/contacts';
 import IOContact from '../IOContact';
 
 vi.mock('react-i18next', () => ({
@@ -16,7 +15,7 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-const IOAddress = digitalAddresses.courtesy.find(
+const IOAddress = digitalCourtesyAddresses.find(
   (addr) => addr.channelType === CourtesyChannelType.IOMSG
 );
 
@@ -37,7 +36,7 @@ describe('IOContact component', async () => {
   });
 
   it('renders component - no contacts', () => {
-    result = render(<IOContact recipientId={IOAddress!.recipientId} contact={null} />);
+    result = render(<IOContact contact={null} />);
     const cardAvatar = result.container.querySelector('svg>title');
     expect(cardAvatar).toBeInTheDocument();
     const title = result.getByRole('heading', { name: 'io-contact.subtitle' });
@@ -51,7 +50,7 @@ describe('IOContact component', async () => {
   });
 
   it('IO unavailable', () => {
-    result = render(<IOContact recipientId={IOAddress!.recipientId} contact={undefined} />);
+    result = render(<IOContact contact={undefined} />);
     const ioCheckbox = result.queryByRole('checkbox', { name: 'io-contact.switch-label' });
     expect(ioCheckbox).not.toBeInTheDocument();
     const alert = result.getByTestId('appIO-contact-disclaimer');
@@ -65,13 +64,13 @@ describe('IOContact component', async () => {
 
   it('IO available and disabled', async () => {
     mock
-      .onPost(COURTESY_CONTACT('default', CourtesyChannelType.IOMSG), {
+      .onPost('/bff/v1/addresses/COURTESY/default/APPIO', {
         value: 'APPIO',
         verificationCode: '00000',
       })
       .reply(204);
-    result = render(<IOContact recipientId={IOAddress!.recipientId} contact={IOAddress} />, {
-      preloadedState: { contactsState: { digitalAddresses: { courtesy: [IOAddress] } } },
+    result = render(<IOContact contact={IOAddress} />, {
+      preloadedState: { contactsState: { digitalAddresses: [IOAddress] } },
     });
     result.getByTestId('CloseIcon');
     result.getByText('io-contact.disabled');
@@ -104,26 +103,22 @@ describe('IOContact component', async () => {
         verificationCode: '00000',
       });
     });
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
-      { ...IOAddress, value: IOAllowedValues.ENABLED },
-    ]);
+    expect(
+      testStore
+        .getState()
+        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
+    ).toStrictEqual([{ ...IOAddress, value: IOAllowedValues.ENABLED }]);
   });
 
   it('IO available and enabled', async () => {
-    mock.onDelete(COURTESY_CONTACT('default', CourtesyChannelType.IOMSG)).reply(200);
-    result = render(
-      <IOContact
-        recipientId={IOAddress!.recipientId}
-        contact={{ ...IOAddress!, value: IOAllowedValues.ENABLED }}
-      />,
-      {
-        preloadedState: {
-          contactsState: {
-            digitalAddresses: { courtesy: [{ ...IOAddress!, value: IOAllowedValues.ENABLED }] },
-          },
+    mock.onDelete('/bff/v1/addresses/COURTESY/default/APPIO').reply(200);
+    result = render(<IOContact contact={{ ...IOAddress!, value: IOAllowedValues.ENABLED }} />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [{ ...IOAddress!, value: IOAllowedValues.ENABLED }],
         },
-      }
-    );
+      },
+    });
     result.getByTestId('CheckIcon');
     result.getByText('io-contact.enabled');
     const disableBtn = result.getByRole('button', { name: 'button.disable' });
@@ -151,8 +146,10 @@ describe('IOContact component', async () => {
     await waitFor(() => {
       expect(mock.history.delete).toHaveLength(1);
     });
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
-      { ...IOAddress, value: IOAllowedValues.DISABLED },
-    ]);
+    expect(
+      testStore
+        .getState()
+        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
+    ).toStrictEqual([{ ...IOAddress, value: IOAllowedValues.DISABLED }]);
   });
 });
