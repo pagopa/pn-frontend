@@ -1,5 +1,35 @@
 {
   "title": "Statistiche",
-  "subtitle": "Esplora le statistiche di utilizzo di SEND da parte di {{organization}}. I dati della panoramica si riferiscono all'intero periodo di utilizzo della piattaforma.",
-  "export_all": "Esporta tutti"
+  "subtitle": "Esplora le statistiche di utilizzo di SEND - Servizio Notifiche Digitali da parte di {{organization}}.",
+  "export_all": "Esporta tutti",
+  "last_update": "Ultimo aggiornamento {{dateTime}}",
+  "aggregate-graph": "Aggregato",
+  "trend-graph": "Andamentale",
+  "filed": {
+    "title": "Notifiche depositate",
+    "description": "Numero di notifiche che sono state accettate dalla piattaforma SEND sul totale delle notifiche caricate",
+    "description2": "{{percent}}% del totale delle notifiche caricate su SEND",
+    "accepted": "Depositate",
+    "refused": "Non depositate"
+  },
+  "delivery_mode": {
+    "title": "Notifiche per modalità di invio",
+    "description": "Numero di notifiche depositate che hanno intrapreso l'invio digitale e l'invio analogico",
+    "digital": "Invii digitali",
+    "analog": "Invii analogici"
+  },
+  "trend": {
+    "days": "Giorni",
+    "weeks": "Settimane"
+  },
+  "last_state": {
+    "title": "Ultimo stato raggiunto dalle notifiche depositate",
+    "description": "Numero di notifiche che hanno raggiunto i diversi stati durante il proceso di invio",
+    "delivering": "Invio in corso",
+    "delivered": "Consengata",
+    "viewed": "Avvenuto accesso",
+    "effective_date": "Perfezionata per \ndecorrenza termini",
+    "canceled": "Annullata",
+    "unreachable": "Destinatari irreperibili"
+  }
 }

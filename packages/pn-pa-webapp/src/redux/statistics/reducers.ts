@@ -6,7 +6,7 @@ import { getStatistics } from './actions';
 
 const initialState = {
   loading: false,
-  statistics: {} as StatisticsParsedResponse,
+  statistics: null as StatisticsParsedResponse | null,
 };
 
 const statisticsSlice = createSlice({

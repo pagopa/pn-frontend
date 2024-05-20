@@ -9,6 +9,7 @@ import {
   dateIsDefined,
   dateIsLessThan10Years,
   formatDate,
+  formatDateSMonth,
   formatDateTime,
   formatDay,
   formatMonthString,
@@ -19,6 +20,7 @@ import {
   getStartOfDay,
   isToday,
   minutesBeforeNow,
+  oneYearAgo,
   tenYearsAgo,
   today,
 } from './date.utility';
@@ -91,6 +93,7 @@ export {
   compileRoute,
   AppRouteParams,
   today,
+  oneYearAgo,
   tenYearsAgo,
   DATE_FORMAT,
   getLegalFactLabel,
@@ -128,4 +131,5 @@ export {
   dateIsLessThan10Years,
   checkRaddInTimeline,
   EventStrategyFactory,
+  formatDateSMonth,
 };
