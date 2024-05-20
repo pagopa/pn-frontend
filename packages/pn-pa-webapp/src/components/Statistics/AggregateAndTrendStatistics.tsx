@@ -57,7 +57,7 @@ const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data
   const isMobile = useIsMobile();
 
   const handleChangeGraphType = (e: ChangeEvent) => {
-    if ((e.target as HTMLSelectElement).value === t('aggregate-graph')) {
+    if ((e.target as HTMLSelectElement).value === t('aggregate_graph')) {
       setGraphType(GraphTypes.AGGREGATE);
     } else {
       setGraphType(GraphTypes.TREND);
@@ -80,10 +80,10 @@ const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data
               </InputAdornment>
             ),
           }}
-          label="Grafico"
+          label={t('graph_type_label')}
           select
           onChange={handleChangeGraphType}
-          value={graphType === GraphTypes.AGGREGATE ? t('aggregate-graph') : t('trend-graph')}
+          value={graphType === GraphTypes.AGGREGATE ? t('aggregate_graph') : t('trend_graph')}
           size="small"
           fullWidth={isMobile}
           sx={{
@@ -94,11 +94,11 @@ const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data
             },
           }}
         >
-          <MenuItem key={GraphTypes.AGGREGATE} value={t('aggregate-graph')} selected>
-            <ListItemText>{t('aggregate-graph')}</ListItemText>
+          <MenuItem key={GraphTypes.AGGREGATE} value={t('aggregate_graph')} selected>
+            <ListItemText>{t('aggregate_graph')}</ListItemText>
           </MenuItem>
-          <MenuItem key={GraphTypes.TREND} value={t('trend-graph')}>
-            <ListItemText>{t('trend-graph')}</ListItemText>
+          <MenuItem key={GraphTypes.TREND} value={t('trend_graph')}>
+            <ListItemText>{t('trend_graph')}</ListItemText>
           </MenuItem>
         </TextField>
         {graphType === GraphTypes.TREND && (

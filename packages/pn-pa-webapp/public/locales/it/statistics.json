@@ -3,8 +3,9 @@
   "subtitle": "Esplora le statistiche di utilizzo di SEND - Servizio Notifiche Digitali da parte di {{organization}}.",
   "export_all": "Esporta tutti",
   "last_update": "Ultimo aggiornamento {{dateTime}}",
-  "aggregate-graph": "Aggregato",
-  "trend-graph": "Andamentale",
+  "aggregate_graph": "Aggregato",
+  "trend_graph": "Andamentale",
+  "graph_type_label": "Grafico",
   "filed": {
     "title": "Notifiche depositate",
     "description": "Numero di notifiche che sono state accettate dalla piattaforma SEND sul totale delle notifiche caricate",
