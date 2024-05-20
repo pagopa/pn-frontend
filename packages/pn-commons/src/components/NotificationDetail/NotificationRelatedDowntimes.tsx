@@ -4,7 +4,6 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { Box, Grid, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { useDownloadDocument } from '../../hooks';
 import { Downtime, NotificationStatus, NotificationStatusHistory } from '../../models';
 import { formatDate, isToday } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -19,10 +18,6 @@ type Props = {
   downtimeEvents: Array<Downtime>;
   // action to obtain and set the legal fact document url ...
   fetchDowntimeLegalFactDocumentDetails: (legalFactId: string) => void;
-  // ... so that it is passed throught this prop ...
-  downtimeLegalFactUrl: string;
-  // ... and afterwards can be cleaned using this prop
-  clearDowntimeLegalFactData: () => void;
   // api id for ApiErrorWrapper
   apiId: string;
   // for disabled downloads
@@ -71,13 +66,12 @@ const NotificationRelatedDowntimes = (props: Props) => {
   const theme = useTheme();
 
   const title = getLocalizedOrDefaultLabel('notifications', 'detail.downtimes.title', 'DISSERVIZI');
+  const unknownFunctinalityLabel = (event: Downtime) =>
+    getLocalizedOrDefaultLabel('appStatus', `legends.unknownFunctionality`, undefined, {
+      functionality: event.functionality,
+    });
 
   const [shouldFetchEvents, setShouldFetchEvents] = useState<boolean>(false);
-
-  useDownloadDocument({
-    url: props.downtimeLegalFactUrl,
-    clearDownloadAction: props.clearDowntimeLegalFactData,
-  });
 
   const componentReadyFn = () => {
     if (props.componentReady) {
@@ -205,18 +199,11 @@ const NotificationRelatedDowntimes = (props: Props) => {
                   <ul>
                     <li style={{ marginTop: '-12px' }}>
                       <Typography variant="body2">
-                        {event.knownFunctionality
-                          ? getLocalizedOrDefaultLabel(
-                              'appStatus',
-                              `legends.knownFunctionality.${event.knownFunctionality}`,
-                              event.knownFunctionality
-                            )
-                          : getLocalizedOrDefaultLabel(
-                              'appStatus',
-                              'legends.unknownFunctionality',
-                              'Un servizio sconosciuto',
-                              { functionality: event.rawFunctionality }
-                            )}
+                        {getLocalizedOrDefaultLabel(
+                          'appStatus',
+                          `legends.knownFunctionality.${event.functionality}`,
+                          unknownFunctinalityLabel(event)
+                        )}
                       </Typography>
                     </li>
                   </ul>

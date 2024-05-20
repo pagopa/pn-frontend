@@ -27,15 +27,15 @@ import {
 import SyncFeedbackApiKey from '../components/NewApiKey/SyncFeedbackApiKey';
 import { GroupStatus, UserGroup } from '../models/user';
 import * as routes from '../navigation/routes.const';
-import { getApiKeyUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
+import { getApiKeyUserGroups, newApiKey } from '../redux/apiKeys/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
 const NewApiKey = () => {
   const dispatch = useAppDispatch();
-  const newApiKey = useAppSelector((state: RootState) => state.newApiKeyState.apiKey);
+  const apiKey = useAppSelector((state: RootState) => state.apiKeysState.apiKey);
   const isMobile = useIsMobile();
-  const groups = useAppSelector((state: RootState) => state.newApiKeyState.groups);
+  const groups = useAppSelector((state: RootState) => state.apiKeysState.groups);
   const { t } = useTranslation(['apikeys', 'common']);
   const tkp = (key: string) => t(`new-api-key.${key}`);
   const [apiKeySent, setApiKeySent] = useState<boolean>(false);
@@ -71,7 +71,7 @@ const NewApiKey = () => {
         groups: values.groups.map((e) => e.id),
       };
       if (formik.isValid) {
-        void dispatch(saveNewApiKey({ ...newApiKeyValues }));
+        void dispatch(newApiKey({ ...newApiKeyValues }));
         setApiKeySent(true);
       }
     },
@@ -143,9 +143,7 @@ const NewApiKey = () => {
                           renderOption={(props, option) => (
                             <MenuItem {...props}>
                               <ListItemIcon>
-                                <Checkbox
-                                  checked={formik.values.groups.indexOf(option as UserGroup) > -1}
-                                />
+                                <Checkbox checked={formik.values.groups.indexOf(option) > -1} />
                               </ListItemIcon>
                               <ListItemText primary={option.name} />
                             </MenuItem>
@@ -176,7 +174,7 @@ const NewApiKey = () => {
         </Prompt>
       )}
 
-      {apiKeySent && newApiKey !== '' && <SyncFeedbackApiKey newApiKeyId={newApiKey} />}
+      {apiKeySent && apiKey.id !== '' && <SyncFeedbackApiKey newApiKeyId={apiKey.id} />}
     </>
   );
 };

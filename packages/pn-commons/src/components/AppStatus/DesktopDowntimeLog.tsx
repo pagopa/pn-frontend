@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { useFieldSpecs } from '../../hooks/useFieldSpecs';
-import { Column, Downtime, DowntimeLogPage } from '../../models';
+import { Column, Downtime, DowntimeLogHistory } from '../../models';
 import PnTable from '../Data/PnTable';
 import PnTableBody from '../Data/PnTable/PnTableBody';
 import PnTableBodyCell from '../Data/PnTable/PnTableBodyCell';
@@ -11,7 +11,7 @@ import PnTableHeaderCell from '../Data/PnTable/PnTableHeaderCell';
 import DowntimeLogDataSwitch from './DowntimeLogDataSwitch';
 
 type Props = {
-  downtimeLog: DowntimeLogPage;
+  downtimeLog: DowntimeLogHistory;
   getDowntimeLegalFactDocumentDetails: (legalFactId: string) => any;
   handleTrackDownloadCertificateOpposable3dparties?: () => void;
 };
@@ -35,7 +35,7 @@ const DesktopDowntimeLog = ({
         cellProps: { width: '15%' },
       },
       {
-        ...getField('knownFunctionality'),
+        ...getField('functionality'),
         cellProps: { width: '30%' },
       },
       {

@@ -1,6 +1,5 @@
 import { RecipientType } from '@pagopa-pn/pn-commons';
 
-import { User } from '../redux/auth/types';
 import { Party } from './party';
 
 export type DelegationData = {
@@ -14,8 +13,6 @@ export type DelegationData = {
 };
 
 export type DelegationColumnData = DelegationData & { menu: string };
-
-export type DelegationParty = { name: string | null; uniqueIdentifier: string };
 
 export interface NewDelegationFormProps {
   selectPersonaFisicaOrPersonaGiuridica: RecipientType;
@@ -38,32 +35,13 @@ export interface Person {
   person: boolean;
 }
 
-export interface CreateDelegationProps {
+type DelegationParty = { name: string; uniqueIdentifier: string };
+
+export interface NewMandateRequest {
   delegate: Person;
   visibilityIds: Array<DelegationParty>;
   verificationCode: string;
   dateto: string;
-}
-
-export interface CreateDelegationResponse {
-  datefrom: string;
-  dateto: string;
-  delegate: Person;
-  delegator: Person | null;
-  mandateId: string;
-  status: string;
-  verificationCode: string;
-  visibilityIds: Array<{
-    name: string;
-    uniqueIdentifier: string;
-  }>;
-}
-
-export type UserAndDelegations = User & DelegationsList;
-
-export interface DelegationsList {
-  delegators: Array<Delegation>;
-  delegations: Array<Delegation>;
 }
 
 export enum DelegationStatus {
@@ -72,7 +50,7 @@ export enum DelegationStatus {
   REJECTED = 'rejected',
 }
 
-export interface IDelegation {
+interface IDelegation {
   mandateId: string;
   status: DelegationStatus;
   visibilityIds: Array<{
@@ -93,25 +71,12 @@ export interface Delegate extends IDelegation {
   delegate: Person | null;
 }
 
-export type Delegation = Delegator | Delegate;
-
-export interface RevocationModalProps {
-  open: boolean;
-  id: string;
-  type: string;
-}
-
-export interface AcceptDelegationResponse {
-  id: string;
-  groups: Array<{ id: string; name: string }>;
-}
-
-export interface GetDelegatorsParams {
+interface GetDelegatorsParams {
   size: number;
   nextPageKey?: string;
 }
 
-export interface GetDelegatorsRequest {
+interface GetDelegatorsRequest {
   taxId?: string;
   groups?: Array<string>;
   status?: Array<DelegationStatus>;
@@ -126,12 +91,3 @@ export interface GetDelegatorsResponse {
 export type GetDelegatorsFilters = GetDelegatorsParams & GetDelegatorsRequest;
 
 export type DelegatorsFormFilters = Omit<GetDelegatorsFilters, 'nextPageKey'> & { page: number };
-
-/**
- * @deprecated since pn-5795
- */
-export interface DelegatorsNames {
-  id: string;
-  name: string;
-  mandateIds: Array<string>;
-}

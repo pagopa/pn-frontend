@@ -14,8 +14,7 @@ import { userResponse } from '../../__mocks__/Auth.mock';
 import { newNotification, newNotificationGroups } from '../../__mocks__/NewNotification.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { CREATE_NOTIFICATION, GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
-import { GroupStatus } from '../../models/user';
+import { CREATE_NOTIFICATION } from '../../api/notifications/notifications.routes';
 import * as routes from '../../navigation/routes.const';
 import { PAAppErrorFactory } from '../../utility/AppError/PAAppErrorFactory';
 import { newNotificationMapper } from '../../utility/notification.utility';
@@ -48,7 +47,7 @@ describe('NewNotification Page without payment', async () => {
 
   beforeEach(() => {
     mockIsPaymentEnabledGetter.mockReturnValue(false);
-    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/groups?status=ACTIVE').reply(200, newNotificationGroups);
   });
 
   afterEach(() => {

@@ -13,25 +13,24 @@ import {
 import { CopyToClipboardButton, Tag } from '@pagopa/mui-italia';
 
 import { ApiKey, ApiKeyStatus, ModalApiKeyView } from '../../models/ApiKeys';
-import { UserGroup } from '../../models/user';
 import { getApiKeyStatusInfos } from '../../utility/apikeys.utility';
 
 /**
  * Checks if status history of a api key contains a status set as ROTATED
  * @returns true if the api key history contains status ROTATED, otherwise false
  */
-const isApiKeyRotated = (data: Row<ApiKey<UserGroup>>): boolean =>
+const isApiKeyRotated = (data: Row<ApiKey>): boolean =>
   data.statusHistory &&
   !!data.statusHistory.find((status) => status.status === ApiKeyStatus.ROTATED);
 
-const setRowColorByStatus = (data: Row<ApiKey<UserGroup>>): string | undefined =>
+const setRowColorByStatus = (data: Row<ApiKey>): string | undefined =>
   isApiKeyRotated(data) ? '#aaa' : undefined;
 
 const ApiKeyContextMenu = ({
   data,
   handleModalClick,
 }: {
-  data: Row<ApiKey<UserGroup>>;
+  data: Row<ApiKey>;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
 }) => {
   const apiKeyId = Number(data.id);
@@ -138,8 +137,8 @@ const ApiKeyContextMenu = ({
 };
 
 const ApiKeyDataSwitch: React.FC<{
-  data: Row<ApiKey<UserGroup>>;
-  type: keyof (ApiKey<UserGroup> & { contextMenu: string });
+  data: Row<ApiKey>;
+  type: keyof (ApiKey & { contextMenu: string });
   handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
 }> = ({ data, type, handleModalClick }) => {
   const { t } = useTranslation(['apikeys']);

@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
+import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { render } from '../../../__test__/test-utils';
 import delegationToItem from '../../../utility/delegation.utility';
 import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../../utility/status.utility';
@@ -14,7 +14,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 const data = {
-  ...delegationToItem(arrayOfDelegators)[0],
+  ...delegationToItem(mandatesByDelegate)[0],
 };
 
 describe('DowntimeLogDataSwitch Component', () => {

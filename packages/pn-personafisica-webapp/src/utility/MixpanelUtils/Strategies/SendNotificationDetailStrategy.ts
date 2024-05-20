@@ -1,15 +1,18 @@
 import {
   Downtime,
+  EventAction,
+  EventCategory,
   EventDowntimeType,
   EventNotificationDetailType,
   EventPropertyType,
+  EventStrategy,
   F24PaymentDetails,
   INotificationDetailTimeline,
   NotificationStatus,
   PaymentDetails,
   TimelineCategory,
+  TrackedEvent,
 } from '@pagopa-pn/pn-commons';
-import { EventAction, EventCategory, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-commons';
 
 type NotificationData = {
   downtimeEvents: Array<Downtime>;

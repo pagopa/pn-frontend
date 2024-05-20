@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Validator } from '@pagopa-pn/pn-validator';
 
-import { AppStatusDTO, DowntimeDTO, DowntimeLogPageDTO, DowntimeStatus } from '../models';
+import { AppCurrentStatus, Downtime, DowntimeLogHistory, DowntimeStatus } from '../models';
 import { dataRegex } from '../utility';
 
 /* ------------------------------------------------------------------------
@@ -30,16 +30,11 @@ function validateBoolean(value: boolean | undefined | null): string | null {
       validation - BE response validators
       ------------------------------------------------------------------------ */
 
-export class BEDowntimeValidator extends Validator<DowntimeDTO> {
+export class BEDowntimeValidator extends Validator<Downtime> {
   constructor() {
     super();
     this.ruleFor('functionality').isString().customValidator(validateString).not().isUndefined();
-    // this.ruleFor('functionality').isUndefined(true);
-    this.ruleFor('status')
-      .isString()
-      .isOneOf(Object.values(DowntimeStatus) as Array<string>)
-      .not()
-      .isUndefined();
+    this.ruleFor('status').isString().isOneOf(Object.values(DowntimeStatus)).not().isUndefined();
     this.ruleFor('startDate').isString().customValidator(validateIsoDate(true));
     this.ruleFor('endDate').isString().customValidator(validateIsoDate(false));
     this.ruleFor('legalFactId').isString().customValidator(validateString);
@@ -47,21 +42,15 @@ export class BEDowntimeValidator extends Validator<DowntimeDTO> {
   }
 }
 
-export class AppStatusDTOValidator extends Validator<AppStatusDTO> {
+export class AppStatusDTOValidator extends Validator<AppCurrentStatus> {
   constructor() {
     super();
-    this.ruleFor('functionalities')
-      .isArray()
-      .not()
-      .isEmpty()
-      .forEachElement((rules) => rules.isString().customValidator(validateString));
-    this.ruleFor('openIncidents')
-      .isArray()
-      .forEachElement((rules) => rules.isObject().setValidator(new BEDowntimeValidator()));
+    this.ruleFor('appIsFullyOperative').isBoolean();
+    this.ruleFor('lastCheckTimestamp').isString().customValidator(validateIsoDate(true));
   }
 }
 
-export class DowntimeLogPageDTOValidator extends Validator<DowntimeLogPageDTO> {
+export class DowntimeLogHistoryDTOValidator extends Validator<DowntimeLogHistory> {
   constructor() {
     super();
     this.ruleFor('result')

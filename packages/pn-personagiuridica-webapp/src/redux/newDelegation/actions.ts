@@ -1,18 +1,13 @@
-import { RecipientType, formatToSlicedISOString } from '@pagopa-pn/pn-commons';
+import { RecipientType, formatToSlicedISOString, parseError } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { DelegationsApi } from '../../api/delegations/Delegations.api';
+import { apiClient } from '../../api/apiClients';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
-import {
-  CreateDelegationProps,
-  CreateDelegationResponse,
-  DelegationParty,
-  NewDelegationFormProps,
-  Person,
-} from '../../models/Deleghe';
+import { MandateApiFactory } from '../../generated-client/mandate';
+import { NewDelegationFormProps, NewMandateRequest, Person } from '../../models/Deleghe';
 import { FilterPartiesParams, Party } from '../../models/party';
 
-export function createDelegationMapper(formData: NewDelegationFormProps): CreateDelegationProps {
+export function createDelegationMapper(formData: NewDelegationFormProps): NewMandateRequest {
   const delegate = {
     fiscalCode: formData.codiceFiscale,
   } as Person;
@@ -39,21 +34,23 @@ export function createDelegationMapper(formData: NewDelegationFormProps): Create
             return {
               uniqueIdentifier: ente.id,
               name: ente.name,
-            } as DelegationParty;
+            };
           }),
     verificationCode: formData.verificationCode,
     dateto: formatToSlicedISOString(formData.expirationDate),
   };
 }
 
-export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDelegationFormProps>(
+export const createDelegation = createAsyncThunk<void, NewDelegationFormProps>(
   'createDelegation',
   async (data, { rejectWithValue }) => {
-    const payload = createDelegationMapper(data);
     try {
-      return await DelegationsApi.createDelegation(payload);
+      const payload = createDelegationMapper(data);
+      const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+      const response = await mandateApiFactory.createMandateV1(payload);
+      return response.data;
     } catch (e: any) {
-      return rejectWithValue(e);
+      return rejectWithValue(parseError(e));
     }
   }
 );
