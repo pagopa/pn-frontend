@@ -7,6 +7,4 @@ const mocks = [mock1, mock2, mock3, mock4];
 
 const random = Math.floor(Math.random() * 4);
 
-console.log(`=====RANDOM MOCK SELECTION... #${random + 1}`);
-
-export const statisticsMockResponse = mocks[2];
+export const statisticsMockResponse = mocks[random];

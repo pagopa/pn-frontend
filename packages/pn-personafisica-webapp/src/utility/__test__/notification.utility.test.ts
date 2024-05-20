@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { arrayOfDelegators } from '../../__mocks__/Delegations.mock';
+import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
 import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';
 import { parseNotificationDetailForRecipient } from '../notification.utility';
 
@@ -12,7 +12,7 @@ describe('Tests notification utility', () => {
     const notification = parseNotificationDetailForRecipient(
       _.cloneDeep(notificationDTO),
       notificationDTO.recipients[recipientIndex].taxId,
-      arrayOfDelegators
+      mandatesByDelegate
     );
     expect(notification.currentRecipientIndex).toEqual(recipientIndex);
     expect(notification.currentRecipient.taxId).toEqual(
@@ -24,7 +24,7 @@ describe('Tests notification utility', () => {
     const notification = parseNotificationDetailForRecipient(
       _.cloneDeep(notificationDTO),
       notificationDTO.recipients[filterOutRecipientIndex].taxId,
-      arrayOfDelegators
+      mandatesByDelegate
     );
     expect(notification.currentRecipientIndex).toEqual(0);
     expect(notification.currentRecipient.taxId).toBeUndefined();
@@ -34,8 +34,8 @@ describe('Tests notification utility', () => {
     const notification = parseNotificationDetailForRecipient(
       _.cloneDeep(notificationDTO),
       'CGNNMO80A03H501U',
-      arrayOfDelegators,
-      arrayOfDelegators[2].mandateId
+      mandatesByDelegate,
+      mandatesByDelegate[2].mandateId
     );
     expect(notification.currentRecipientIndex).toEqual(recipientIndex);
     expect(notification.currentRecipient.taxId).toEqual(
@@ -47,8 +47,8 @@ describe('Tests notification utility', () => {
     const notification = parseNotificationDetailForRecipient(
       _.cloneDeep(notificationDTO),
       'CGNNMO80A03H501U',
-      arrayOfDelegators,
-      arrayOfDelegators[0].mandateId
+      mandatesByDelegate,
+      mandatesByDelegate[0].mandateId
     );
     expect(notification.currentRecipientIndex).toEqual(0);
     expect(notification.currentRecipient.taxId).toBeUndefined();

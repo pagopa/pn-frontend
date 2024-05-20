@@ -1,19 +1,20 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AppStatusRender, GetDowntimeHistoryParams, PaginationData } from '@pagopa-pn/pn-commons';
+import {
+  AppStatusRender,
+  GetDowntimeHistoryParams,
+  PaginationData,
+  downloadDocument,
+} from '@pagopa-pn/pn-commons';
 
 import {
   getCurrentAppStatus,
-  getDowntimeLegalFactDocumentDetails,
-  getDowntimeLogPage,
+  getDowntimeHistory,
+  getDowntimeLegalFact,
 } from '../redux/appStatus/actions';
 import { APP_STATUS_ACTIONS } from '../redux/appStatus/actions';
-import {
-  clearLegalFactDocumentData,
-  clearPagination,
-  setPagination,
-} from '../redux/appStatus/reducers';
+import { clearPagination, setPagination } from '../redux/appStatus/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
@@ -31,14 +32,23 @@ const AppStatus = () => {
 
   const fetchDowntimeLogPage = useCallback(
     (fetchParams: GetDowntimeHistoryParams) => {
-      void dispatch(getDowntimeLogPage(fetchParams));
+      void dispatch(getDowntimeHistory(fetchParams));
     },
-    [dispatch, getDowntimeLogPage]
+    [dispatch, getDowntimeHistory]
   );
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback(
-    (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)),
-    [dispatch, getDowntimeLegalFactDocumentDetails]
+    (legalFactId: string) => {
+      dispatch(getDowntimeLegalFact(legalFactId))
+        .unwrap()
+        .then((response) => {
+          if (response.url) {
+            downloadDocument(response.url);
+          }
+        })
+        .catch((e) => console.log(e));
+    },
+    [dispatch, getDowntimeLegalFact]
   );
 
   return (
@@ -47,7 +57,6 @@ const AppStatus = () => {
       fetchCurrentStatus={fetchCurrentStatus}
       fetchDowntimeLogPage={fetchDowntimeLogPage}
       fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
-      clearLegalFactDocument={() => dispatch(clearLegalFactDocumentData())}
       setPagination={(paginationData: PaginationData) =>
         dispatch(setPagination({ size: paginationData.size, page: paginationData.page }))
       }

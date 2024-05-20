@@ -7,7 +7,7 @@ import {
 This function removes from error object all those informations that are not used by the application.
 This is needed because redux, when recives an action, does a serializability check and, if the obeject is not serializable, it launchs a warning 
 */
-function parseError(e: any) {
+export function parseError(e: any) {
   if (e.response) {
     const { data, status } = e.response;
     return {
@@ -53,15 +53,15 @@ function parseError(e: any) {
  * D'altro canto, la funzione che si passa verso performThunkAction può avere parametri, e può realizzare azione più complesse
  * che chiamare un'API senza parametri, o con i parametri che vengono passati. Un esempio
 
-  export const acceptDelegation = createAsyncThunk<
+  export const acceptMandate = createAsyncThunk<
     AcceptDelegationResponse,
     { id: string; code: string }
-  >('acceptDelegation', 
+  >('acceptMandate', 
     performThunkAction(async ({id, code}: { id: string; code: string }) => {
       const data = {
         verificationCode: code,
       };
-      return await DelegationsApi.acceptDelegation(id, data);
+      return await DelegationsApi.acceptMandate(id, data);
     })
   );
 

@@ -2,13 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { Box, Stack, Typography } from '@mui/material';
 
-import { useDownloadDocument, useIsMobile } from '../../hooks';
-import {
-  AppStatusData,
-  GetDowntimeHistoryParams,
-  KnownFunctionality,
-  KnownSentiment,
-} from '../../models';
+import { useIsMobile } from '../../hooks';
+import { AppStatusData, GetDowntimeHistoryParams, KnownSentiment } from '../../models';
 import { PaginationData } from '../../models/Pagination';
 import { formatDateTime } from '../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -22,13 +17,12 @@ import MobileDowntimeLog from './MobileDowntimeLog';
 
 type Props = {
   appStatus: AppStatusData;
-  clearLegalFactDocument: () => void;
   fetchCurrentStatus: () => void;
   fetchDowntimeLogPage: (params: GetDowntimeHistoryParams) => void;
-  fetchDowntimeLegalFactDocumentDetails: (legalFactId: string) => undefined;
+  fetchDowntimeLegalFactDocumentDetails: (legalFactId: string) => void;
   clearPagination: () => void;
   setPagination: (data: PaginationData) => void;
-  actionIds: { GET_CURRENT_STATUS: string; GET_DOWNTIME_LOG_PAGE: string };
+  actionIds: { GET_CURRENT_STATUS: string; GET_DOWNTIME_HISTORY: string };
   handleTrackDownloadCertificateOpposable3dparties?: () => void;
 };
 
@@ -36,7 +30,6 @@ export const AppStatusRender = (props: Props) => {
   const {
     appStatus,
     actionIds,
-    clearLegalFactDocument,
     fetchCurrentStatus,
     fetchDowntimeLogPage,
     clearPagination,
@@ -44,28 +37,12 @@ export const AppStatusRender = (props: Props) => {
     fetchDowntimeLegalFactDocumentDetails,
     handleTrackDownloadCertificateOpposable3dparties,
   } = props;
-  const {
-    currentStatus,
-    downtimeLogPage,
-    pagination: paginationData,
-    legalFactDocumentData,
-  } = appStatus;
+  const { currentStatus, downtimeLogPage, pagination: paginationData } = appStatus;
   const [isInitialized, setIsInitialized] = useState(false);
   const isMobile = useIsMobile();
-  useDownloadDocument({
-    url: legalFactDocumentData?.url,
-    clearDownloadAction: clearLegalFactDocument,
-  });
 
   const fetchDowntimeLog = useCallback(() => {
     const fetchParams: GetDowntimeHistoryParams = {
-      startDate: '1900-01-01T00:00:00Z',
-      endDate: new Date().toISOString(),
-      functionality: [
-        KnownFunctionality.NotificationCreate,
-        KnownFunctionality.NotificationVisualization,
-        KnownFunctionality.NotificationWorkflow,
-      ],
       size: String(paginationData.size),
       page: paginationData.resultPages[paginationData.page],
     };
@@ -185,11 +162,11 @@ export const AppStatusRender = (props: Props) => {
 
         {/* Dati relativi al elenco di downtime */}
         <ApiErrorWrapper
-          apiId={actionIds.GET_DOWNTIME_LOG_PAGE}
+          apiId={actionIds.GET_DOWNTIME_HISTORY}
           reloadAction={() => fetchDowntimeLog()}
           mt={2}
         >
-          {downtimeLogPage && downtimeLogPage.downtimes.length > 0 ? (
+          {downtimeLogPage && downtimeLogPage.result.length > 0 ? (
             isMobile ? (
               <Box sx={{ mt: 2 }}>
                 <MobileDowntimeLog
@@ -211,7 +188,7 @@ export const AppStatusRender = (props: Props) => {
               {downtimeListEmptyMessage}
             </EmptyState>
           )}
-          {downtimeLogPage && downtimeLogPage.downtimes.length > 0 && (
+          {downtimeLogPage && downtimeLogPage.result.length > 0 && (
             <CustomPagination
               paginationData={{
                 size: paginationData.size,

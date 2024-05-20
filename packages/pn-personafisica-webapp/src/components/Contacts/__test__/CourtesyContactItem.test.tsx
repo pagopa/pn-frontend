@@ -26,11 +26,7 @@ describe('CourtesyContactItem component', () => {
     it('type in an invalid number', async () => {
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem
-            recipientId="mocked-recipient"
-            type={CourtesyFieldType.PHONE}
-            value=""
-          />
+          <CourtesyContactItem type={CourtesyFieldType.PHONE} value="" />
         </DigitalContactsCodeVerificationProvider>
       );
       const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
@@ -52,11 +48,7 @@ describe('CourtesyContactItem component', () => {
     it('type in an invalid number while in "edit mode"', async () => {
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem
-            recipientId="mocked-recipient"
-            type={CourtesyFieldType.PHONE}
-            value={INPUT_VALID_PHONE}
-          />
+          <CourtesyContactItem type={CourtesyFieldType.PHONE} value={INPUT_VALID_PHONE} />
         </DigitalContactsCodeVerificationProvider>
       );
       result.getByText(INPUT_VALID_PHONE);
@@ -83,11 +75,7 @@ describe('CourtesyContactItem component', () => {
     it('type in an invalid email', async () => {
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem
-            recipientId="mocked-recipient"
-            type={CourtesyFieldType.EMAIL}
-            value=""
-          />
+          <CourtesyContactItem type={CourtesyFieldType.EMAIL} value="" />
         </DigitalContactsCodeVerificationProvider>
       );
       const input = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
@@ -107,11 +95,7 @@ describe('CourtesyContactItem component', () => {
     it('type in an invalid email while in "edit mode"', async () => {
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem
-            recipientId="mocked-recipient"
-            type={CourtesyFieldType.EMAIL}
-            value={VALID_EMAIL}
-          />
+          <CourtesyContactItem type={CourtesyFieldType.EMAIL} value={VALID_EMAIL} />
         </DigitalContactsCodeVerificationProvider>
       );
       result.getByText(VALID_EMAIL);

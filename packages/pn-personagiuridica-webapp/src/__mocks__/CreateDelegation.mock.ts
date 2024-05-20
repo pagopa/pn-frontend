@@ -1,6 +1,6 @@
 import { RecipientType } from '@pagopa-pn/pn-commons';
 
-import { CreateDelegationResponse, NewDelegationFormProps } from '../models/Deleghe';
+import { NewDelegationFormProps } from '../models/Deleghe';
 
 export const createDelegationPayload: NewDelegationFormProps = {
   selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
@@ -18,24 +18,6 @@ export const createDelegationSelectedPayload: NewDelegationFormProps = {
   ...createDelegationPayload,
   selectTuttiEntiOrSelezionati: 'entiSelezionati',
   enti: [{ name: 'test', id: 'test' }],
-};
-
-export const createDelegationResponse: CreateDelegationResponse = {
-  datefrom: '2022-01-01',
-  dateto: '2022-01-02',
-  delegate: {
-    firstName: 'nome',
-    lastName: 'cognome',
-    displayName: 'nome cognome',
-    fiscalCode: 'fiscalCode',
-    companyName: 'companyName',
-    person: true,
-  },
-  delegator: null,
-  mandateId: '1',
-  status: 'pending',
-  verificationCode: '00000',
-  visibilityIds: [],
 };
 
 export const createDelegationGenericErrorResponse = {

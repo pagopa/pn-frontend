@@ -2,7 +2,6 @@ import {
   DigitalDomicileType,
   NotificationDetailDocument,
   NotificationDetailRecipient,
-  NotificationFeePolicy,
   PhysicalCommunicationType,
   RecipientType,
 } from '@pagopa-pn/pn-commons';
@@ -12,6 +11,11 @@ export enum PaymentModel {
   PAGO_PA_NOTICE_F24_FLATRATE = 'PAGO_PA_NOTICE_F24_FLATRATE',
   PAGO_PA_NOTICE_F24 = 'PAGO_PA_NOTICE_F24',
   NOTHING = 'NOTHING',
+}
+
+export enum NotificationFeePolicy {
+  FLAT_RATE = 'FLAT_RATE',
+  DELIVERY_MODE = 'DELIVERY_MODE',
 }
 
 interface BaseNewNotification {

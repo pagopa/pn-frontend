@@ -11,7 +11,6 @@ import {
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient } from '../../../api/apiClients';
-import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
 import { store } from '../../store';
 import { getSentNotifications } from '../actions';
 import { setNotificationFilters, setPagination, setSorting } from '../reducers';
@@ -19,6 +18,9 @@ import { setNotificationFilters, setPagination, setSorting } from '../reducers';
 describe('Dashboard redux state tests', () => {
   // eslint-disable-next-line functional/no-let
   let mock: MockAdapter;
+  const notificationsPath = `/bff/v1/notifications/sent?startDate=${encodeURIComponent(
+    formatToTimezoneString(tenYearsAgo)
+  )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`;
 
   mockAuthentication();
 
@@ -63,16 +65,9 @@ describe('Dashboard redux state tests', () => {
     const mockRequest = {
       startDate: tenYearsAgo,
       endDate: today,
-      status: '',
-      recipientId: '',
-      iunMatch: '',
+      size: 10
     };
-    const mockRequestString = {
-      ...mockRequest,
-      startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(today),
-    };
-    mock.onGet(NOTIFICATIONS_LIST(mockRequestString)).reply(200, notificationsDTO);
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
     const action = await store.dispatch(getSentNotifications(mockRequest));
     const payload = action.payload as GetNotificationsResponse;
     expect(action.type).toBe('getSentNotifications/fulfilled');

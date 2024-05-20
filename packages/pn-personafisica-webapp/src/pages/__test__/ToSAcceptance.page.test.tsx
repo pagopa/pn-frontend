@@ -8,10 +8,9 @@ import {
   TOS_LINK_RELATIVE_PATH,
 } from '@pagopa-pn/pn-commons';
 
+import { acceptTosPrivacyConsentBodyMock } from '../../__mocks__/Consents.mock';
 import { fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { SET_CONSENTS } from '../../api/consents/consents.routes';
-import { ConsentActionType, ConsentType } from '../../models/consents';
 import * as routes from '../../navigation/routes.const';
 import ToSAcceptance from '../ToSAcceptance.page';
 
@@ -96,16 +95,7 @@ describe('test Terms of Service page', async () => {
   });
 
   it('accept ToS and Privacy', async () => {
-    mock
-      .onPut(SET_CONSENTS(ConsentType.TOS, tosConsent.consentVersion), {
-        action: ConsentActionType.ACCEPT,
-      })
-      .reply(200);
-    mock
-      .onPut(SET_CONSENTS(ConsentType.DATAPRIVACY, privacyConsent.consentVersion), {
-        action: ConsentActionType.ACCEPT,
-      })
-      .reply(200);
+    mock.onPut('/bff/v1/tos-privacy', acceptTosPrivacyConsentBodyMock).reply(200);
     const { getByRole } = render(
       <ToSAcceptance tosConsent={tosConsent} privacyConsent={privacyConsent} />
     );
@@ -116,13 +106,8 @@ describe('test Terms of Service page', async () => {
     await waitFor(() => expect(acceptButton).toBeEnabled());
     fireEvent.click(acceptButton);
     await waitFor(() => {
-      expect(mock.history.put).toHaveLength(2);
-      expect(mock.history.put[0].url).toBe(
-        SET_CONSENTS(ConsentType.TOS, tosConsent.consentVersion)
-      );
-      expect(mock.history.put[1].url).toBe(
-        SET_CONSENTS(ConsentType.DATAPRIVACY, privacyConsent.consentVersion)
-      );
+      expect(mock.history.put).toHaveLength(1);
+      expect(mock.history.put[0].url).toBe('/bff/v1/tos-privacy');
     });
   });
 

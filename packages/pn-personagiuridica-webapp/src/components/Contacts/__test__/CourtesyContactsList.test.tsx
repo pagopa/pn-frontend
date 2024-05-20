@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
+import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
 import { RenderResult, act, render } from '../../../__test__/test-utils';
 import { CourtesyChannelType } from '../../../models/contacts';
 import { CourtesyFieldType } from '../CourtesyContactItem';
@@ -27,7 +27,7 @@ describe('CourtesyContactsList Component', () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactsList recipientId="mock-recipient" contacts={[]} />
+          <CourtesyContactsList contacts={[]} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
@@ -48,15 +48,15 @@ describe('CourtesyContactsList Component', () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactsList recipientId="mock-recipient" contacts={digitalAddresses.courtesy} />
+          <CourtesyContactsList contacts={digitalCourtesyAddresses} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
 
-    const defaultPhone = digitalAddresses.courtesy.find(
+    const defaultPhone = digitalCourtesyAddresses.find(
       (addr) => addr.channelType === CourtesyChannelType.SMS && addr.senderId === 'default'
     );
-    const defaultEmail = digitalAddresses.courtesy.find(
+    const defaultEmail = digitalCourtesyAddresses.find(
       (addr) => addr.channelType === CourtesyChannelType.EMAIL && addr.senderId === 'default'
     );
 

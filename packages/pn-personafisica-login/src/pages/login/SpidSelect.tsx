@@ -29,10 +29,6 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
       SPID_IDP_ID: IDP.entityId,
     });
 
-    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_METHOD, {
-      entityID: IDP.entityId,
-    });
-
     window.location.assign(
       `${URL_API_LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2&RelayState=send`
     );

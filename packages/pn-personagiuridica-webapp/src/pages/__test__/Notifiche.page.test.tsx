@@ -26,7 +26,6 @@ import {
 } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { GET_GROUPS } from '../../api/external-registries/external-registries-routes';
-import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import Notifiche from '../Notifiche.page';
 
@@ -55,6 +54,12 @@ describe('Notifiche Page ', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const original = window.matchMedia;
+  const notificationsPath = `/bff/v1/notifications/received?startDate=${encodeURIComponent(
+    formatToTimezoneString(tenYearsAgo)
+  )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`;
+  const notificationsDelegatedPath = `/bff/v1/notifications/received/delegated?startDate=${encodeURIComponent(
+    formatToTimezoneString(tenYearsAgo)
+  )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -70,22 +75,14 @@ describe('Notifiche Page ', async () => {
   });
 
   it('renders page', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, notificationsDTO);
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
 
     await act(async () => {
       result = render(<Notifiche />, { preloadedState: { userState: { user: userResponse } } });
     });
     expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/received');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     const filterForm = result.getByTestId('filter-form');
     expect(filterForm).toBeInTheDocument();
     const notificationsTable = result.container.querySelector('table');
@@ -101,29 +98,19 @@ describe('Notifiche Page ', async () => {
   });
 
   it('render page without notifications after filtering and remove filters', async () => {
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
     mock
       .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, notificationsDTO);
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getEndOfDay(tenYearsAgo)),
-          size: 10,
-        })
+        `/bff/v1/notifications/received?startDate=${encodeURIComponent(
+          formatToTimezoneString(tenYearsAgo)
+        )}&endDate=${encodeURIComponent(formatToTimezoneString(getEndOfDay(tenYearsAgo)))}&size=10`
       )
       .reply(200, emptyNotificationsFromBe);
     await act(async () => {
       result = render(<Notifiche />);
     });
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/received');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     // filter
     const form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'startDate', formatDate(tenYearsAgo.toISOString()));
@@ -133,7 +120,7 @@ describe('Notifiche Page ', async () => {
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
-      expect(mock.history.get[1].url).toContain('/notifications/received');
+      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/received');
     });
     expect(result.container).toHaveTextContent(/empty-state.filtered/);
     // remove filters
@@ -141,35 +128,24 @@ describe('Notifiche Page ', async () => {
     fireEvent.click(routeContactsBtn!);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
-      expect(mock.history.get[1].url).toContain('/notifications/received');
+      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/received');
     });
     expect(result.container).not.toHaveTextContent(/empty-state.filtered/);
   });
 
   it('change pagination', async () => {
     mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
+      .onGet(notificationsPath)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 20,
-        })
-      )
-      .reply(200, notificationsDTO);
+    const notificationsPathWithSize = `/bff/v1/notifications/received?startDate=${encodeURIComponent(
+      formatToTimezoneString(tenYearsAgo)
+    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=20`;
+    mock.onGet(notificationsPathWithSize).reply(200, notificationsDTO);
     await act(async () => {
       result = render(<Notifiche />);
     });
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/received');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     // change size
@@ -180,7 +156,7 @@ describe('Notifiche Page ', async () => {
     fireEvent.click(itemsPerPageList[1]!);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
-      expect(mock.history.get[1].url).toContain('/notifications/received');
+      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/received');
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(3);
@@ -188,29 +164,18 @@ describe('Notifiche Page ', async () => {
 
   it('changes page', async () => {
     mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
+      .onGet(notificationsPath)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
+    const notificationsPathPageTwo =
+      notificationsPath + '&nextPagesKey=' + notificationsDTO.nextPagesKey[0];
     mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-          nextPagesKey: notificationsDTO.nextPagesKey[0],
-        })
-      )
+      .onGet(notificationsPathPageTwo)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
     await act(async () => {
       result = render(<Notifiche />);
     });
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/received');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[0].iun);
@@ -221,7 +186,7 @@ describe('Notifiche Page ', async () => {
     fireEvent.click(pageButtons[2]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
-      expect(mock.history.get[1].url).toContain('/notifications/received');
+      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/received');
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
@@ -229,30 +194,20 @@ describe('Notifiche Page ', async () => {
   });
 
   it('filter', async () => {
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
+    const notificationsPathFiltered = `/bff/v1/notifications/received?startDate=${encodeURIComponent(
+      formatToTimezoneString(tenYearsAgo)
+    )}&endDate=${encodeURIComponent(
+      formatToTimezoneString(today)
+    )}&iunMatch=ABCD-EFGH-ILMN-123456-A-1&size=10`;
     mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, notificationsDTO);
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-          iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
-        })
-      )
+      .onGet(notificationsPathFiltered)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
     await act(async () => {
       result = render(<Notifiche />);
     });
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/received');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(3);
     rows?.forEach((row, index) => {
@@ -266,7 +221,7 @@ describe('Notifiche Page ', async () => {
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
-      expect(mock.history.get[1].url).toContain('/notifications/received');
+      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/received');
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
@@ -274,15 +229,7 @@ describe('Notifiche Page ', async () => {
   });
 
   it('errors on api', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(500);
+    mock.onGet(notificationsPath).reply(500);
     await act(async () => {
       result = render(
         <>
@@ -299,18 +246,7 @@ describe('Notifiche Page ', async () => {
   });
 
   it('renders page - delegated', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST(
-          {
-            startDate: formatToTimezoneString(tenYearsAgo),
-            endDate: formatToTimezoneString(today),
-            size: 10,
-          },
-          true
-        )
-      )
-      .reply(200, notificationsDTO);
+    mock.onGet(notificationsDelegatedPath).reply(200, notificationsDTO);
 
     await act(async () => {
       result = render(<Notifiche isDelegatedPage />, {
@@ -323,7 +259,7 @@ describe('Notifiche Page ', async () => {
     });
     expect(screen.getByRole('heading')).toHaveTextContent(/title-delegated-notifications/i);
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/received/delegated');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received/delegated');
     const filterForm = result.getByTestId('filter-form');
     expect(filterForm).toBeInTheDocument();
     const notificationsTable = result.container.querySelector('table');
@@ -341,38 +277,20 @@ describe('Notifiche Page ', async () => {
   it('renders page - delegated with groups', async () => {
     const notificationGroup1 = notificationsDTO.resultsPage.filter((n) => n.group === 'group-1');
     const notificationGroup3 = notificationsDTO.resultsPage.filter((n) => n.group === 'group-3');
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST(
-          {
-            startDate: formatToTimezoneString(tenYearsAgo),
-            endDate: formatToTimezoneString(today),
-            size: 10,
-            group: 'group-1',
-          },
-          true
-        )
-      )
-      .reply(200, {
-        ...notificationsDTO,
-        resultsPage: notificationGroup1,
-      });
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST(
-          {
-            startDate: formatToTimezoneString(tenYearsAgo),
-            endDate: formatToTimezoneString(today),
-            size: 10,
-            group: 'group-3',
-          },
-          true
-        )
-      )
-      .reply(200, {
-        ...notificationsDTO,
-        resultsPage: notificationGroup3,
-      });
+    const notificationsDelegatedPathGroupOne = `/bff/v1/notifications/received/delegated?startDate=${encodeURIComponent(
+      formatToTimezoneString(tenYearsAgo)
+    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&group=group-1&size=10`;
+    mock.onGet(notificationsDelegatedPathGroupOne).reply(200, {
+      ...notificationsDTO,
+      resultsPage: notificationGroup1,
+    });
+    const notificationsDelegatedPathGroupThree = `/bff/v1/notifications/received/delegated?startDate=${encodeURIComponent(
+      formatToTimezoneString(tenYearsAgo)
+    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&group=group-3&size=10`;
+    mock.onGet(notificationsDelegatedPathGroupThree).reply(200, {
+      ...notificationsDTO,
+      resultsPage: notificationGroup3,
+    });
     mock.onGet(GET_GROUPS()).reply(200, [
       { id: 'group-1', name: 'Group 1' },
       { id: 'group-2', name: 'Group 2' },
@@ -395,7 +313,7 @@ describe('Notifiche Page ', async () => {
     });
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain(GET_GROUPS());
-    expect(mock.history.get[1].url).toContain('/notifications/received/delegated');
+    expect(mock.history.get[1].url).toContain('/bff/v1/notifications/received/delegated');
     const groupSelector = result.getByTestId('groupSelector');
     expect(groupSelector).toBeInTheDocument();
     let notificationsTableRows = result.getAllByTestId('notificationsTable.body.row');
@@ -415,7 +333,7 @@ describe('Notifiche Page ', async () => {
     await waitFor(() => {
       expect(menuButton).toHaveTextContent('Group 3');
       expect(mock.history.get).toHaveLength(3);
-      expect(mock.history.get[2].url).toContain('/notifications/received/delegated');
+      expect(mock.history.get[2].url).toContain('/bff/v1/notifications/received/delegated');
     });
     notificationsTableRows = result.getAllByTestId('notificationsTable.body.row');
     expect(notificationsTableRows).toHaveLength(notificationGroup3.length);
@@ -423,22 +341,14 @@ describe('Notifiche Page ', async () => {
 
   it('renders page - mobile', async () => {
     window.matchMedia = createMatchMedia(800);
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, notificationsDTO);
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
 
     await act(async () => {
       result = render(<Notifiche />);
     });
     expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/received');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     const filterForm = result.getByTestId('dialogToggle');
     expect(filterForm).toBeInTheDocument();
     const notificationsCards = result.getAllByTestId('mobileNotificationsCards');

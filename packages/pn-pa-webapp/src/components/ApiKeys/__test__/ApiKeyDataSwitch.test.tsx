@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { formatDate } from '@pagopa-pn/pn-commons';
 
-import { mockApiKeysForFE } from '../../../__mocks__/ApiKeys.mock';
+import { mockApiKeysDTO } from '../../../__mocks__/ApiKeys.mock';
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { getApiKeyStatusInfos } from '../../../utility/apikeys.utility';
 import ApiKeyDataSwitch from '../ApiKeyDataSwitch';
@@ -14,7 +14,7 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-const data = mockApiKeysForFE.items[0];
+const data = mockApiKeysDTO.items[0];
 
 describe('ApiKeyDataSwitch Component', () => {
   const mockClick = vi.fn();

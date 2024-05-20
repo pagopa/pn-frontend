@@ -17,10 +17,11 @@ const StatisticsApi = {
 
   getStatistics: (params: StatisticsParams<string>): Promise<StatisticsParsedResponse> =>
     new Promise((resolve) => {
-      console.info(params); // added to remove warning about unused params
+      console.info(params);
       const factory = statisticsDataFactoryManager.factory;
       const parsedData = factory.createAll(statisticsMockResponse);
       const rawData = statisticsMockResponse;
+
       resolve({
         sender_id: rawData.sender_id,
         genTimestamp: rawData.genTimestamp,
