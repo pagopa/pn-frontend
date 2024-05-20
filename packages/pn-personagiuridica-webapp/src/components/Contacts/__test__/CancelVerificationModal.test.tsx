@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
+import { digitalAddresses, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, screen, testStore, within } from '../../../__test__/test-utils';
 import CancelVerificationModal from '../CancelVerificationModal';
 
@@ -38,8 +38,8 @@ describe('CancelVerificationModal component', async () => {
     const dialog = screen.getByTestId('cancelVerificationModal');
     const buttons = within(dialog).getAllByRole('button');
     fireEvent.click(buttons[1]);
-    expect(testStore.getState().contactsState.digitalAddresses.legal).toStrictEqual(
-      digitalAddresses.legal.filter((addr) => addr.senderId !== 'default')
+    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(
+      digitalLegalAddresses.filter((addr) => addr.senderId !== 'default')
     );
   });
 });

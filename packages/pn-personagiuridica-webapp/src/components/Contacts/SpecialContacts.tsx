@@ -41,7 +41,6 @@ import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCode
 import SpecialContactElem from './SpecialContactElem';
 
 type Props = {
-  recipientId: string;
   legalAddresses: Array<DigitalAddress>;
   courtesyAddresses: Array<DigitalAddress>;
 };
@@ -60,7 +59,7 @@ type AddressType = {
   show: boolean;
 };
 
-const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Props) => {
+const SpecialContacts = ({ legalAddresses, courtesyAddresses }: Props) => {
   const { t, i18n } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const [addresses, setAddresses] = useState([] as Array<Address>);
@@ -179,7 +178,6 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         initValidation(
           values.addressType,
           values.s_pec || values.s_mail || internationalPhonePrefix + values.s_phone,
-          recipientId,
           values.sender.id,
           values.sender.name,
           async (status: 'validated' | 'cancelled') => {
@@ -469,7 +467,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                   </TableHead>
                   <TableBody>
                     {addresses.map((a) => (
-                      <SpecialContactElem key={a.senderId} address={a} recipientId={recipientId} />
+                      <SpecialContactElem key={a.senderId} address={a} />
                     ))}
                   </TableBody>
                 </Table>
@@ -486,7 +484,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                     }}
                   >
                     <CardContent>
-                      <SpecialContactElem address={a} recipientId={recipientId} />
+                      <SpecialContactElem address={a} />
                     </CardContent>
                   </Card>
                 ))}

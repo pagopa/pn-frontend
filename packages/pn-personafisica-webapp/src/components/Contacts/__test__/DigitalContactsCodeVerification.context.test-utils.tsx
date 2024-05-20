@@ -6,7 +6,6 @@ import { useDigitalContactsCodeVerificationContext } from '../DigitalContactsCod
 const pecValue = 'mocked@pec.it';
 const pecValueToVerify = 'mocked@pec-to-verify.it';
 const emailValue = 'mocked@mail.it';
-const recipientId = 'mocked-recipientId';
 const senderId = 'mocked-senderId';
 
 const Component = ({
@@ -21,7 +20,7 @@ const Component = ({
   const { initValidation } = useDigitalContactsCodeVerificationContext();
 
   const handleButtonClick = () => {
-    initValidation(type, value, recipientId, senderId);
+    initValidation(type, value, senderId);
   };
 
   return (

@@ -13,19 +13,16 @@ export enum IOAllowedValues {
   DISABLED = 'DISABLED',
 }
 
+export enum AddressType {
+  LEGAL = 'LEGAL',
+  COURTESY = 'COURTESY',
+}
+
 export interface DigitalAddress {
-  addressType: string;
-  recipientId: string;
+  addressType: AddressType;
   senderId: string;
   senderName?: string;
   channelType: LegalChannelType | CourtesyChannelType;
   value: string;
-  requestId?: string;
   pecValid?: boolean;
-  codeValid?: boolean;
-}
-
-export interface DigitalAddresses {
-  legal: Array<DigitalAddress>;
-  courtesy: Array<DigitalAddress>;
 }

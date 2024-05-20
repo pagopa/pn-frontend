@@ -17,13 +17,12 @@ export enum CourtesyFieldType {
 }
 
 interface Props {
-  recipientId: string;
   type: CourtesyFieldType;
   value: string;
   blockDelete?: boolean;
 }
 
-const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) => {
+const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { initValidation } = useDigitalContactsCodeVerificationContext();
   const [phoneRegex, setPhoneRegex] = useState(dataRegex.phoneNumber);
@@ -72,7 +71,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
         type === CourtesyFieldType.EMAIL
           ? formik.values[type]
           : internationalPhonePrefix + formik.values[type];
-      initValidation(digitalDomicileType, contactValue, recipientId, 'default');
+      initValidation(digitalDomicileType, contactValue, 'default');
     },
   });
 
@@ -134,7 +133,6 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
           {t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}
         </Typography>
         <DigitalContactElem
-          recipientId={recipientId}
           senderId="default"
           contactType={digitalDomicileType}
           removeModalTitle={
