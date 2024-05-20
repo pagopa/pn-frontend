@@ -2,7 +2,9 @@ import { useCallback, useEffect, useMemo } from 'react';
 
 import { AppRouteParams, sanitizeString } from '@pagopa-pn/pn-commons';
 
+import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
+import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 import { storageAarOps } from '../../utility/storage';
 
 const SuccessPage = () => {
@@ -26,12 +28,18 @@ const SuccessPage = () => {
     if (redirectUrl && [PF_URL].findIndex((url) => url && redirectUrl.startsWith(url)) > -1) {
       window.location.replace(`${redirectUrl}${sanitizeString(token)}`);
     }
-
-    sessionStorage.removeItem('IDP');
   }, [aar, token]);
 
   useEffect(() => {
     calcRedirectUrl();
+
+    const IDP = sessionStorage.getItem('IDP');
+
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_METHOD, {
+      entityID: IDP,
+    });
+
+    sessionStorage.removeItem('IDP');
   }, []);
 
   return null;

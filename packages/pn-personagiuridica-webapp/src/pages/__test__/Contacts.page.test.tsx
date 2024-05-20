@@ -3,10 +3,13 @@ import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
-import { digitalAddresses } from '../../__mocks__/Contacts.mock';
+import {
+  digitalAddresses,
+  digitalCourtesyAddresses,
+  digitalLegalAddresses,
+} from '../../__mocks__/Contacts.mock';
 import { RenderResult, act, fireEvent, render, screen } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
 import { PROFILE } from '../../navigation/routes.const';
 import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
@@ -47,7 +50,7 @@ describe('Contacts page', async () => {
   });
 
   it('renders Contacts (no contacts)', async () => {
-    mock.onGet(CONTACTS_LIST()).reply(200, []);
+    mock.onGet('/bff/v1/addresses').reply(200, []);
     await act(async () => {
       result = await render(<Contacts />);
     });
@@ -62,11 +65,11 @@ describe('Contacts page', async () => {
     const specialContact = result?.queryByTestId('specialContact');
     expect(specialContact).not.toBeInTheDocument();
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain(CONTACTS_LIST());
+    expect(mock.history.get[0].url).toContain('/bff/v1/addresses');
   });
 
   it('renders Contacts (legal contacts)', async () => {
-    mock.onGet(CONTACTS_LIST()).reply(200, { legal: digitalAddresses.legal });
+    mock.onGet('/bff/v1/addresses').reply(200, digitalLegalAddresses);
     await act(async () => {
       result = await render(<Contacts />);
     });
@@ -81,7 +84,7 @@ describe('Contacts page', async () => {
   });
 
   it('renders Contacts (courtesy contacts)', async () => {
-    mock.onGet(CONTACTS_LIST()).reply(200, { courtesy: digitalAddresses.courtesy });
+    mock.onGet('/bff/v1/addresses').reply(200, digitalCourtesyAddresses);
     await act(async () => {
       result = await render(<Contacts />);
     });
@@ -96,7 +99,7 @@ describe('Contacts page', async () => {
   });
 
   it('renders Contacts (courtesy and legal contacts filled)', async () => {
-    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     await act(async () => {
       result = await render(<Contacts />);
     });
@@ -111,7 +114,7 @@ describe('Contacts page', async () => {
   });
 
   it('subtitle link properly redirects to profile page', async () => {
-    mock.onGet(CONTACTS_LIST()).reply(200, []);
+    mock.onGet('/bff/v1/addresses').reply(200, []);
     await act(async () => {
       result = await render(<Contacts />, {
         preloadedState: {
@@ -133,7 +136,7 @@ describe('Contacts page', async () => {
   });
 
   it('API error', async () => {
-    mock.onGet(CONTACTS_LIST()).reply(500);
+    mock.onGet('/bff/v1/addresses').reply(500);
     await act(async () => {
       render(
         <>

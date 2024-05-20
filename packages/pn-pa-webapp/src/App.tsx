@@ -154,7 +154,7 @@ const ActualApp = () => {
     if (IS_STATISTICS_ENABLED) {
       // eslint-disable-next-line functional/immutable-data
       basicMenuItems.splice(1, 0, {
-        label: 'Statistiche',
+        label: 'menu.statistics',
         icon: StatisticsIcon,
         route: routes.STATISTICHE,
       });

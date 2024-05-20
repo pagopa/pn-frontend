@@ -249,7 +249,7 @@ const App = () => {
 
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_TOAST_ERROR, {
       reason: error.code,
-      traceid: traceId,
+      traceId,
       page_name: getCurrentEventTypePage(pathname),
       message: error.message,
       httpStatusCode: status,

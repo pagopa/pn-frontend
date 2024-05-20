@@ -1,9 +1,9 @@
-import { digitalAddresses } from '../../__mocks__/Contacts.mock';
+import { digitalAddresses, digitalCourtesyAddresses } from '../../__mocks__/Contacts.mock';
 import { CourtesyChannelType } from '../../models/contacts';
 import { countContactsByType } from '../contacts.utility';
 
 const calcExpetcedCount = (courtesyChannelType: CourtesyChannelType) =>
-  digitalAddresses.courtesy.reduce((count, elem) => {
+  digitalAddresses.reduce((count, elem) => {
     if (elem.channelType === courtesyChannelType) {
       count++;
     }
@@ -12,10 +12,10 @@ const calcExpetcedCount = (courtesyChannelType: CourtesyChannelType) =>
 
 describe('Contacts utility test', () => {
   it('tests countContactsByType', () => {
-    let result = countContactsByType(digitalAddresses.courtesy, CourtesyChannelType.EMAIL);
+    let result = countContactsByType(digitalCourtesyAddresses, CourtesyChannelType.EMAIL);
     let expected = calcExpetcedCount(CourtesyChannelType.EMAIL);
     expect(result).toBe(expected);
-    result = countContactsByType(digitalAddresses.courtesy, CourtesyChannelType.SMS);
+    result = countContactsByType(digitalCourtesyAddresses, CourtesyChannelType.SMS);
     expected = calcExpetcedCount(CourtesyChannelType.SMS);
     expect(result).toBe(expected);
   });

@@ -201,6 +201,38 @@ export interface BaseRegisteredLetterDetails {
     'physicalAddress': PhysicalAddress;
 }
 /**
+ * Le informazioni fornite per verificare l\'AAR-QR-CodeValue
+ * @export
+ * @interface BffCheckAarRequest
+ */
+export interface BffCheckAarRequest {
+    /**
+     * valore del token QR-Code presente sull\'avviso di avvenuta ricezione
+     * @type {string}
+     * @memberof BffCheckAarRequest
+     */
+    'aarQrCodeValue': string;
+}
+/**
+ * Le informazioni fornite in risposta alla verifica del AAR-QR-CodeValue con possibile identificativo della delega attiva
+ * @export
+ * @interface BffCheckAarResponse
+ */
+export interface BffCheckAarResponse {
+    /**
+     * Identificativo Univoco Notifica
+     * @type {string}
+     * @memberof BffCheckAarResponse
+     */
+    'iun': string;
+    /**
+     * identificativo della delega
+     * @type {string}
+     * @memberof BffCheckAarResponse
+     */
+    'mandateId'?: string;
+}
+/**
  * 
  * @export
  * @interface BffDocumentDownloadMetadataResponse
@@ -2324,6 +2356,19 @@ export interface RefinementDetailsV23 {
     'eventTimestamp'?: string;
 }
 /**
+ * Le informazioni fornite per verificare l\'AAR-QR-CodeValue
+ * @export
+ * @interface RequestCheckAarMandateDto
+ */
+export interface RequestCheckAarMandateDto {
+    /**
+     * valore del token QR-Code presente sull\'avviso di avvenuta ricezione
+     * @type {string}
+     * @memberof RequestCheckAarMandateDto
+     */
+    'aarQrCodeValue': string;
+}
+/**
  * 
  * @export
  * @interface RequestRefusedDetailsV23
@@ -2335,6 +2380,25 @@ export interface RequestRefusedDetailsV23 {
      * @memberof RequestRefusedDetailsV23
      */
     'refusalReasons'?: Array<NotificationRefusedErrorV23>;
+}
+/**
+ * Le informazioni fornite in risposta alla verifica del AAR-QR-CodeValue con possibile identificativo della delega attiva
+ * @export
+ * @interface ResponseCheckAarMandateDto
+ */
+export interface ResponseCheckAarMandateDto {
+    /**
+     * Identificativo Univoco Notifica
+     * @type {string}
+     * @memberof ResponseCheckAarMandateDto
+     */
+    'iun': string;
+    /**
+     * identificativo della delega
+     * @type {string}
+     * @memberof ResponseCheckAarMandateDto
+     */
+    'mandateId'?: string;
 }
 /**
  * stato risposta ricevuta da externalChannel
@@ -3206,6 +3270,42 @@ export const NotificationReceivedApiAxiosParamCreator = function (configuration?
     return {
         /**
          * 
+         * @summary Servizio per la verifica del aar-qr-code
+         * @param {BffCheckAarRequest} bffCheckAarRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        checkAarQrCodeV1: async (bffCheckAarRequest: BffCheckAarRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'bffCheckAarRequest' is not null or undefined
+            assertParamExists('checkAarQrCodeV1', 'bffCheckAarRequest', bffCheckAarRequest)
+            const localVarPath = `/bff/v1/notifications/received/check-aar-qr-code`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(bffCheckAarRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Questa operazione permette di scaricare qualsiasi documento legato alla notifica.
          * @param {string} iun Identificativo Univoco Notifica
          * @param {BffDocumentType} documentType Tipo documento
@@ -3527,6 +3627,19 @@ export const NotificationReceivedApiFp = function(configuration?: Configuration)
     return {
         /**
          * 
+         * @summary Servizio per la verifica del aar-qr-code
+         * @param {BffCheckAarRequest} bffCheckAarRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async checkAarQrCodeV1(bffCheckAarRequest: BffCheckAarRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BffCheckAarResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.checkAarQrCodeV1(bffCheckAarRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationReceivedApi.checkAarQrCodeV1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Questa operazione permette di scaricare qualsiasi documento legato alla notifica.
          * @param {string} iun Identificativo Univoco Notifica
          * @param {BffDocumentType} documentType Tipo documento
@@ -3627,6 +3740,16 @@ export const NotificationReceivedApiFactory = function (configuration?: Configur
     return {
         /**
          * 
+         * @summary Servizio per la verifica del aar-qr-code
+         * @param {BffCheckAarRequest} bffCheckAarRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        checkAarQrCodeV1(bffCheckAarRequest: BffCheckAarRequest, options?: any): AxiosPromise<BffCheckAarResponse> {
+            return localVarFp.checkAarQrCodeV1(bffCheckAarRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Questa operazione permette di scaricare qualsiasi documento legato alla notifica.
          * @param {string} iun Identificativo Univoco Notifica
          * @param {BffDocumentType} documentType Tipo documento
@@ -3710,6 +3833,18 @@ export const NotificationReceivedApiFactory = function (configuration?: Configur
  * @extends {BaseAPI}
  */
 export class NotificationReceivedApi extends BaseAPI {
+    /**
+     * 
+     * @summary Servizio per la verifica del aar-qr-code
+     * @param {BffCheckAarRequest} bffCheckAarRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationReceivedApi
+     */
+    public checkAarQrCodeV1(bffCheckAarRequest: BffCheckAarRequest, options?: RawAxiosRequestConfig) {
+        return NotificationReceivedApiFp(this.configuration).checkAarQrCodeV1(bffCheckAarRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Questa operazione permette di scaricare qualsiasi documento legato alla notifica.
