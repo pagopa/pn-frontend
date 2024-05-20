@@ -87,10 +87,10 @@ export const eventsActionsMap: Record<string, PFEventsType> = {
   // --- PROFILE_PROPERTY
   'getDomicileInfo/fulfilled': PFEventsType.SEND_HAS_ADDRESSES,
   'getSidemenuInformation/fulfilled': PFEventsType.SEND_HAS_MANDATE_LOGIN,
-  'getDelegates/fulfilled': PFEventsType.SEND_MANDATE_GIVEN,
+  'getMandatesByDelegator/fulfilled': PFEventsType.SEND_MANDATE_GIVEN,
   'enableIOAddress/fulfilled': PFEventsType.SEND_ENABLE_IO,
   'disableIOAddress/fulfilled': PFEventsType.SEND_DISABLE_IO,
-  'acceptDelegation/fulfilled': PFEventsType.SEND_ACCEPT_DELEGATION,
+  'acceptMandate/fulfilled': PFEventsType.SEND_ACCEPT_DELEGATION,
   'createOrUpdateLegalAddress/fulfilled': PFEventsType.SEND_ADD_LEGAL_ADDRESS,
   'deleteLegalAddress/fulfilled': PFEventsType.SEND_REMOVE_LEGAL_ADDRESS,
   'deleteCourtesyAddress/fulfilled': PFEventsType.SEND_REMOVE_COURTESY_ADDRESS,

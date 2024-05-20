@@ -20,7 +20,7 @@ import {
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import { userResponse } from '../../__mocks__/Auth.mock';
-import { arrayOfDelegators } from '../../__mocks__/Delegations.mock';
+import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
   cachedPayments,
@@ -78,7 +78,7 @@ const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number
   return timelineElementDigitalSuccessWorkflow.legalFactsIds![0] as LegalFactId;
 };
 
-const delegator = arrayOfDelegators.find(
+const delegator = mandatesByDelegate.find(
   (delegator) => delegator.delegator?.fiscalCode === notificationDTO.recipients[1].taxId
 );
 

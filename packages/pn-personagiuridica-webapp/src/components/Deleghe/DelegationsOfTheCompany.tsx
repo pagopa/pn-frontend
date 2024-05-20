@@ -45,7 +45,7 @@ import {
   GetDelegatorsFilters,
 } from '../../models/Deleghe';
 import { GroupStatus } from '../../models/groups';
-import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
+import { DELEGATION_ACTIONS, searchMandatesByDelegate } from '../../redux/delegation/actions';
 import { setFilters } from '../../redux/delegation/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -309,7 +309,7 @@ const DelegationsOfTheCompany = () => {
       groups: filters.groups,
       status: filters.status,
     } as GetDelegatorsFilters;
-    void dispatch(getDelegators(delegatorsFilters));
+    void dispatch(searchMandatesByDelegate(delegatorsFilters));
   };
 
   useEffect(() => {
@@ -327,8 +327,8 @@ const DelegationsOfTheCompany = () => {
         {t('deleghe.delegatorsTitle')}
       </Typography>
       <ApiErrorWrapper
-        apiId={DELEGATION_ACTIONS.GET_DELEGATORS}
-        reloadAction={() => dispatch(getDelegators(filters))}
+        apiId={DELEGATION_ACTIONS.SEARCH_MANDATES_BY_DELEGATE}
+        reloadAction={() => dispatch(searchMandatesByDelegate(filters))}
         mainText={t('deleghe.delegatorsApiErrorMessage')}
       >
         {rows.length > 0 || !_.isEqual({ size: 10, page: 0 }, filters) ? (

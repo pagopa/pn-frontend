@@ -21,7 +21,7 @@ import {
 import { DelegationColumnData, DelegationData } from '../../models/Deleghe';
 import { PFEventsType } from '../../models/PFEventsType';
 import * as routes from '../../navigation/routes.const';
-import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions';
+import { DELEGATION_ACTIONS, getMandatesByDelegator } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -120,8 +120,8 @@ const MobileDelegates = () => {
           </Button>
         </Box>
         <ApiErrorWrapper
-          apiId={DELEGATION_ACTIONS.GET_DELEGATES}
-          reloadAction={() => dispatch(getDelegates())}
+          apiId={DELEGATION_ACTIONS.GET_MANDATES_BY_DELEGATOR}
+          reloadAction={() => dispatch(getMandatesByDelegator())}
         >
           {cardData.length ? (
             <PnCardsList>

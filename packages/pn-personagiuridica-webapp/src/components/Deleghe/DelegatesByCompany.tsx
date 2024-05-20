@@ -22,7 +22,7 @@ import {
 
 import { DelegationColumnData } from '../../models/Deleghe';
 import * as routes from '../../navigation/routes.const';
-import { DELEGATION_ACTIONS, getDelegatesByCompany } from '../../redux/delegation/actions';
+import { DELEGATION_ACTIONS, getMandatesByDelegator } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utility/delegation.utility';
@@ -165,8 +165,8 @@ const DelegatesByCompany = () => {
         </Button>
       </Stack>
       <ApiErrorWrapper
-        apiId={DELEGATION_ACTIONS.GET_DELEGATES_BY_COMPANY}
-        reloadAction={() => dispatch(getDelegatesByCompany())}
+        apiId={DELEGATION_ACTIONS.GET_MANDATES_BY_DELEGATOR}
+        reloadAction={() => dispatch(getMandatesByDelegator())}
       >
         {delegatesByCompany.length > 0 ? (
           <SmartTable

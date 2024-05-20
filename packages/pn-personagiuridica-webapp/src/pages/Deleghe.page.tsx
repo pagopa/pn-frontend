@@ -7,7 +7,11 @@ import { TabPanel, TitleBox } from '@pagopa-pn/pn-commons';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import * as routes from '../navigation/routes.const';
-import { getDelegatesByCompany, getDelegators, getGroups } from '../redux/delegation/actions';
+import {
+  getGroups,
+  getMandatesByDelegator,
+  searchMandatesByDelegate,
+} from '../redux/delegation/actions';
 import { resetState } from '../redux/delegation/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -36,10 +40,10 @@ const Deleghe = () => {
   const retrieveData = useCallback(() => {
     // groups administrator cannot see the delegates by the company
     if (!hasGroup) {
-      void dispatch(getDelegatesByCompany());
+      void dispatch(getMandatesByDelegator());
     }
     if (DELEGATIONS_TO_PG_ENABLED) {
-      void dispatch(getDelegators({ size: 10 }));
+      void dispatch(searchMandatesByDelegate({ size: 10 }));
       void dispatch(getGroups());
     }
     setPageReady(true);

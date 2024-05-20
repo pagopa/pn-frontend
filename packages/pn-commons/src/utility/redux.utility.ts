@@ -53,15 +53,15 @@ export function parseError(e: any) {
  * D'altro canto, la funzione che si passa verso performThunkAction può avere parametri, e può realizzare azione più complesse
  * che chiamare un'API senza parametri, o con i parametri che vengono passati. Un esempio
 
-  export const acceptDelegation = createAsyncThunk<
+  export const acceptMandate = createAsyncThunk<
     AcceptDelegationResponse,
     { id: string; code: string }
-  >('acceptDelegation', 
+  >('acceptMandate', 
     performThunkAction(async ({id, code}: { id: string; code: string }) => {
       const data = {
         verificationCode: code,
       };
-      return await DelegationsApi.acceptDelegation(id, data);
+      return await DelegationsApi.acceptMandate(id, data);
     })
   );
 

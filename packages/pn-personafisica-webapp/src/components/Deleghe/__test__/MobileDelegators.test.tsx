@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
+import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { render } from '../../../__test__/test-utils';
 import MobileDelegators from '../MobileDelegators';
 
@@ -23,12 +23,12 @@ describe('MobileDelegators Component', () => {
 
   it('renders the delegators', () => {
     const { getAllByTestId } = render(<MobileDelegators />, {
-      preloadedState: { delegationsState: { delegations: { delegators: arrayOfDelegators } } },
+      preloadedState: { delegationsState: { delegations: { delegators: mandatesByDelegate } } },
     });
     const itemCards = getAllByTestId('mobileDelegatorsCards');
-    expect(itemCards).toHaveLength(arrayOfDelegators.length);
+    expect(itemCards).toHaveLength(mandatesByDelegate.length);
     itemCards.forEach((card, index) => {
-      expect(card).toHaveTextContent(arrayOfDelegators[index].delegator?.displayName!);
+      expect(card).toHaveTextContent(mandatesByDelegate[index].delegator?.displayName!);
     });
   });
 
