@@ -1,21 +1,34 @@
-import { StatisticsParams, StatisticsResponse } from '../../redux/statistics/types';
+import { StatisticsParams, StatisticsParsedResponse } from '../../models/Statistics';
+import statisticsDataFactoryManager from '../../utility/StatisticsData/StatisticsDataFactoryManager';
 // import { apiClient } from '../apiClients';
 import { statisticsMockResponse } from './statistics.mock';
+
 // import { STATISTICS } from './statistics.routes';
 
-export const StatisticsApi = {
-  /**
-   * Gets current user notifications
-   * @param  {string} startDate
-   * @param  {string} endDate
-   * @returns Promise
-   */
+export /**
+ * Retrieve statistics data from the backend
+ *
+ * @type {{ getStatistics: (params: StatisticsParams<string>) => Promise<StatisticsParsedResponse>; }}
+ */
+const StatisticsApi = {
+  // getStatistics: (params: StatisticsParams<string>): Promise<StatisticsParsedResponse> =>
+  //   apiClient.get<StatisticsResponse>(STATISTICS(params)).then((response) => {
+  //    const rawData = response.data;
 
-  // getStatistics: (params: StatisticsParams<string>): Promise<StatisticsResponse> =>
-  //   apiClient.get<StatisticsResponse>(STATISTICS(params)).then((response) => response.data),
-  getStatistics: (params: StatisticsParams<string>): Promise<StatisticsResponse> =>
+  getStatistics: (params: StatisticsParams<string>): Promise<StatisticsParsedResponse> =>
     new Promise((resolve) => {
       console.info(params);
-      resolve(statisticsMockResponse);
+      const factory = statisticsDataFactoryManager.factory;
+      const parsedData = factory.createAll(statisticsMockResponse);
+      const rawData = statisticsMockResponse;
+
+      resolve({
+        sender_id: rawData.sender_id,
+        genTimestamp: rawData.genTimestamp,
+        lastDate: rawData.lastDate,
+        startDate: rawData.startDate,
+        endDate: rawData.endDate,
+        data: parsedData,
+      });
     }),
 };

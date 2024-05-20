@@ -4,7 +4,6 @@ import { Grid, Paper, Stack, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-
 // import theme from './senderDashboard';
 
 const FiledNotificationsStatistics: React.FC = () => {
