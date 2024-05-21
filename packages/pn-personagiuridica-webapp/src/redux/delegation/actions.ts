@@ -9,6 +9,7 @@ import { InfoRecipientApiFactory } from '../../generated-client/recipient-info';
 
 export enum DELEGATION_ACTIONS {
   GET_MANDATES_BY_DELEGATOR = 'getMandatesByDelegator',
+  GET_GROUPS = 'getGroups',
   SEARCH_MANDATES_BY_DELEGATE = 'searchMandatesByDelegate',
   REVOKE_MANDATE = 'revokeMandate',
   REJECT_MANDATE = 'rejectMandate',
@@ -92,7 +93,7 @@ export const acceptMandate = createAsyncThunk<
  * Get groups of pg
  */
 export const getGroups = createAsyncThunk(
-  'getGroups', async (params: GroupStatus | undefined, { rejectWithValue }) => {
+  DELEGATION_ACTIONS.GET_GROUPS, async (params: GroupStatus | undefined, { rejectWithValue }) => {
     try {
       const infoRecipientFactory = InfoRecipientApiFactory(undefined, undefined, apiClient);
       const response = await infoRecipientFactory.getPGGroupsV1(params);
