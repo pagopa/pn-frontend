@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
-import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
+import { mandatesByDelegator } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import MobileDelegates from '../MobileDelegates';
@@ -57,12 +57,12 @@ describe('MobileDelegates Component', () => {
 
   it('renders the delegates', () => {
     const { getAllByTestId } = render(<MobileDelegates />, {
-      preloadedState: { delegationsState: { delegations: { delegates: arrayOfDelegates } } },
+      preloadedState: { delegationsState: { delegations: { delegates: mandatesByDelegator } } },
     });
     const itemCards = getAllByTestId('mobileDelegatesCards');
-    expect(itemCards).toHaveLength(arrayOfDelegates.length);
+    expect(itemCards).toHaveLength(mandatesByDelegator.length);
     itemCards.forEach((card, index) => {
-      expect(card).toHaveTextContent(arrayOfDelegates[index].delegate?.displayName!);
+      expect(card).toHaveTextContent(mandatesByDelegator[index].delegate?.displayName!);
     });
   });
 
@@ -76,7 +76,7 @@ describe('MobileDelegates Component', () => {
     const { getByTestId, getAllByTestId } = render(<MobileDelegates />, {
       preloadedState: {
         delegationsState: {
-          delegations: { delegates: arrayOfDelegates },
+          delegations: { delegates: mandatesByDelegator },
         },
       },
     });
@@ -95,7 +95,7 @@ describe('MobileDelegates Component', () => {
     expect(dialog).toHaveTextContent('deleghe.close');
     expect(dialog).toHaveTextContent('deleghe.verification_code');
     const codeInputs = dialog?.querySelectorAll('input');
-    const codes = arrayOfDelegates[0].verificationCode.split('');
+    const codes = mandatesByDelegator[0].verificationCode.split('');
     codeInputs?.forEach((input, index) => {
       expect(input).toHaveValue(codes[index]);
     });

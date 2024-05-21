@@ -1,3 +1,4 @@
+import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { TextField } from '@mui/material';
@@ -10,8 +11,8 @@ import {
   screen,
   waitFor,
 } from '../../../__test__/test-utils';
-import * as api from '../../../api/contacts/Contacts.api';
-import { DigitalAddress, LegalChannelType } from '../../../models/contacts';
+import { apiClient } from '../../../api/apiClients';
+import { LegalChannelType } from '../../../models/contacts';
 import DigitalContactElem from '../DigitalContactElem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
@@ -63,14 +64,21 @@ Andrea Cimini - 6/09/2023
 */
 describe('DigitalContactElem Component', () => {
   let result: RenderResult | undefined;
+  let mock: MockAdapter;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
 
   afterEach(() => {
     result = undefined;
     vi.clearAllMocks();
+    mock.reset();
   });
 
   afterAll(() => {
     vi.restoreAllMocks();
+    mock.restore();
   });
 
   it('renders component', async () => {
@@ -82,7 +90,6 @@ describe('DigitalContactElem Component', () => {
             fields={fields}
             removeModalTitle="mocked-title"
             removeModalBody="mocked-body"
-            recipientId="mocked-recipientId"
             senderId="mocked-senderId"
             value="mocked@pec.it"
             contactType={LegalChannelType.PEC}
@@ -103,9 +110,13 @@ describe('DigitalContactElem Component', () => {
   });
 
   it('edits contact', async () => {
-    vi.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress').mockResolvedValueOnce({
-      pecValid: true,
-    } as DigitalAddress);
+    mock
+      .onPost('/bff/v1/addresses/LEGAL/mocked-senderId/PEC', {
+        value: 'mocked@pec.it',
+      })
+      .reply(200, {
+        result: 'PEC_VALIDATION_REQUIRED',
+      });
     // render component
     await act(async () => {
       result = render(
@@ -114,7 +125,6 @@ describe('DigitalContactElem Component', () => {
             fields={fields}
             removeModalTitle="mocked-title"
             removeModalBody="mocked-body"
-            recipientId="mocked-recipientId"
             senderId="mocked-senderId"
             value="mocked@pec.it"
             contactType={LegalChannelType.PEC}
@@ -154,7 +164,7 @@ describe('DigitalContactElem Component', () => {
   });
 
   it('remove contact', async () => {
-    vi.spyOn(api.ContactsApi, 'deleteLegalAddress').mockResolvedValueOnce('mocked-senderId');
+    mock.onDelete('/bff/v1/addresses/LEGAL/mocked-senderId/PEC').reply(204);
     // render component
     await act(async () => {
       result = render(
@@ -163,7 +173,6 @@ describe('DigitalContactElem Component', () => {
             fields={fields}
             removeModalTitle="mocked-title"
             removeModalBody="mocked-body"
-            recipientId="mocked-recipientId"
             senderId="mocked-senderId"
             value="mocked@pec.it"
             contactType={LegalChannelType.PEC}
@@ -211,7 +220,6 @@ describe('DigitalContactElem Component', () => {
             fields={fields}
             removeModalTitle="mocked-title"
             removeModalBody="mocked-body"
-            recipientId="mocked-recipientId"
             senderId="mocked-senderId"
             value="mocked@pec.it"
             contactType={LegalChannelType.PEC}
@@ -239,7 +247,6 @@ describe('DigitalContactElem Component', () => {
             fields={fields}
             removeModalTitle="mocked-title"
             removeModalBody="mocked-body"
-            recipientId="mocked-recipientId"
             senderId="mocked-senderId"
             value="mocked@pec.it"
             contactType={LegalChannelType.PEC}
@@ -268,7 +275,6 @@ describe('DigitalContactElem Component', () => {
             fields={fields}
             removeModalTitle="mocked-title"
             removeModalBody="mocked-body"
-            recipientId="mocked-recipientId"
             senderId="mocked-senderId"
             value="mocked@pec.it"
             contactType={LegalChannelType.PEC}

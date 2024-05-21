@@ -1,17 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Party } from '../../models/party';
 
 import {
-  DigitalAddresses,
-  DigitalAddress,
+  AddressType,
   CourtesyChannelType,
+  DigitalAddress,
   IOAllowedValues,
 } from '../../models/contacts';
+import { Party } from '../../models/party';
 import {
-  createOrUpdateCourtesyAddress,
-  createOrUpdateLegalAddress,
-  deleteCourtesyAddress,
-  deleteLegalAddress,
+  createOrUpdateAddress,
+  deleteAddress,
   disableIOAddress,
   enableIOAddress,
   getAllActivatedParties,
@@ -20,10 +18,7 @@ import {
 
 const initialState = {
   loading: false,
-  digitalAddresses: {
-    legal: [],
-    courtesy: [],
-  } as DigitalAddresses,
+  digitalAddresses: [] as Array<DigitalAddress>,
   parties: [] as Array<Party>,
 };
 
@@ -36,76 +31,56 @@ const contactsSlice = createSlice({
     // we remove the default legal address only interface side, with the goal of letting the user know that needs to add
     // a new email to modify the verifying pec address
     resetPecValidation: (state) => {
-      state.digitalAddresses.legal = state
-        .digitalAddresses.legal.filter((address) => address.senderId !== 'default');
+      state.digitalAddresses = state.digitalAddresses.filter(
+        (address) => address.senderId !== 'default' && address.addressType === AddressType.LEGAL
+      );
     },
   },
   extraReducers: (builder) => {
     builder.addCase(getDigitalAddresses.fulfilled, (state, action) => {
       state.digitalAddresses = action.payload;
     });
-    builder.addCase(createOrUpdateLegalAddress.fulfilled, (state, action) => {
-      // update or add digital address
-      if (action.payload && action.payload.senderId) {
-        const addressIndex = state.digitalAddresses.legal.findIndex(
-          (l) => l.senderId === (action.payload as DigitalAddress).senderId
+    builder.addCase(createOrUpdateAddress.fulfilled, (state, action) => {
+      if (action.payload) {
+        const addressIndex = state.digitalAddresses.findIndex(
+          (l) =>
+            l.senderId === action.meta.arg.senderId &&
+            l.addressType === action.meta.arg.addressType &&
+            l.channelType === action.meta.arg.channelType
         );
         if (addressIndex > -1) {
-          // update if found
-          state.digitalAddresses.legal[addressIndex] = action.payload;
+          state.digitalAddresses[addressIndex] = action.payload;
         } else {
-          state.digitalAddresses.legal.push(action.payload);
+          state.digitalAddresses.push(action.payload);
         }
       }
     });
-    builder.addCase(createOrUpdateCourtesyAddress.fulfilled, (state, action) => {
-      // update or add courtesy address
-      if (action.payload && action.payload.senderId) {
-        const addressIndex = state.digitalAddresses.courtesy.findIndex(
-          (address) =>
-            address.senderId === (action.payload as DigitalAddress).senderId &&
-            address.channelType === (action.payload as DigitalAddress).channelType
-        );
-        if (addressIndex > -1) {
-          // update if found
-          state.digitalAddresses.courtesy[addressIndex] = action.payload;
-        } else {
-          state.digitalAddresses.courtesy.push(action.payload);
-        }
-      }
-    });
-    builder.addCase(deleteLegalAddress.fulfilled, (state, action) => {
-      // remove digital address
-      if (action.payload) {
-        state.digitalAddresses.legal = state.digitalAddresses.legal.filter(
-          (l) => l.senderId !== action.payload
-        );
-      }
-    });
-    builder.addCase(deleteCourtesyAddress.fulfilled, (state, action) => {
-      // remove digital address
-      if (action.payload) {
-        state.digitalAddresses.courtesy = state.digitalAddresses.courtesy.filter(
-          (address) =>
-            address.senderId !== action.payload ||
-            address.channelType !== action.meta.arg.channelType
-        );
-      }
+    builder.addCase(deleteAddress.fulfilled, (state, action) => {
+      state.digitalAddresses = state.digitalAddresses.filter(
+        (address) =>
+          address.senderId !== action.meta.arg.senderId ||
+          address.addressType !== action.meta.arg.addressType ||
+          address.channelType !== action.meta.arg.channelType
+      );
     });
     builder.addCase(enableIOAddress.fulfilled, (state) => {
-      const addressIndex = state.digitalAddresses.courtesy.findIndex(
-        (address) => address.channelType === CourtesyChannelType.IOMSG
+      const addressIndex = state.digitalAddresses.findIndex(
+        (address) =>
+          address.channelType === CourtesyChannelType.IOMSG &&
+          address.addressType === AddressType.COURTESY
       );
       if (addressIndex > -1) {
-        state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.ENABLED;
+        state.digitalAddresses[addressIndex].value = IOAllowedValues.ENABLED;
       }
     });
     builder.addCase(disableIOAddress.fulfilled, (state) => {
-      const addressIndex = state.digitalAddresses.courtesy.findIndex(
-        (address) => address.channelType === CourtesyChannelType.IOMSG
+      const addressIndex = state.digitalAddresses.findIndex(
+        (address) =>
+          address.channelType === CourtesyChannelType.IOMSG &&
+          address.addressType === AddressType.COURTESY
       );
       if (addressIndex > -1) {
-        state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.DISABLED;
+        state.digitalAddresses[addressIndex].value = IOAllowedValues.DISABLED;
       }
     });
     builder.addCase(getAllActivatedParties.fulfilled, (state, action) => {

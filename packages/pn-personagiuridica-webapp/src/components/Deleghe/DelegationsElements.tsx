@@ -18,10 +18,10 @@ import { AnyAction } from '@reduxjs/toolkit';
 import { DelegationColumnData, DelegationStatus } from '../../models/Deleghe';
 import { User } from '../../redux/auth/types';
 import {
-  acceptDelegation,
-  rejectDelegation,
-  revokeDelegation,
-  updateDelegation,
+  acceptMandate,
+  rejectMandate,
+  revokeMandate,
+  updateMandate,
 } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -116,7 +116,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
   };
 
   const handleConfirmClick = () => {
-    const actionToDispatch = menuType === 'delegates' ? revokeDelegation : rejectDelegation;
+    const actionToDispatch = menuType === 'delegates' ? revokeMandate : rejectMandate;
     const message =
       menuType === 'delegates'
         ? t('deleghe.revoke-successfully')
@@ -151,7 +151,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
   }, []);
 
   const handleUpdate = (_code: Array<string>, groups: Array<{ id: string; name: string }>) => {
-    void dispatch(updateDelegation({ id, groups }))
+    void dispatch(updateMandate({ id, groups }))
       .unwrap()
       .then(() => {
         dispatch(
@@ -168,16 +168,16 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
   };
 
   useEffect(() => {
-    const action = menuType === 'delegates' ? 'revokeDelegation' : 'rejectDelegation';
+    const action = menuType === 'delegates' ? 'revokeMandate' : 'rejectMandate';
     AppResponsePublisher.error.subscribe(action, handleConfirmationError);
     if (menuType === 'delegators' && groups.length) {
-      AppResponsePublisher.error.subscribe('updateDelegation', handleUpdateError);
+      AppResponsePublisher.error.subscribe('updateMandate', handleUpdateError);
     }
 
     return () => {
       AppResponsePublisher.error.unsubscribe(action, handleConfirmationError);
       if (menuType === 'delegators' && groups.length) {
-        AppResponsePublisher.error.unsubscribe('updateDelegation', handleUpdateError);
+        AppResponsePublisher.error.unsubscribe('updateMandate', handleUpdateError);
       }
     };
   }, [handleConfirmationError]);
@@ -331,7 +331,7 @@ export const AcceptButton: React.FC<AcceptButtonProps> = ({ id, name, onAccept }
   };
 
   const handleConfirm = (code: Array<string>, groups: Array<{ id: string; name: string }>) => {
-    void dispatch(acceptDelegation({ id, code: code.join(''), groups }))
+    void dispatch(acceptMandate({ id, code: code.join(''), groups }))
       .unwrap()
       .then(async () => {
         dispatch(
@@ -351,10 +351,10 @@ export const AcceptButton: React.FC<AcceptButtonProps> = ({ id, name, onAccept }
   );
 
   useEffect(() => {
-    AppResponsePublisher.error.subscribe('acceptDelegation', handleAcceptanceError);
+    AppResponsePublisher.error.subscribe('acceptMandate', handleAcceptanceError);
 
     return () => {
-      AppResponsePublisher.error.unsubscribe('acceptDelegation', handleAcceptanceError);
+      AppResponsePublisher.error.unsubscribe('acceptMandate', handleAcceptanceError);
     };
   }, [handleAcceptanceError]);
 

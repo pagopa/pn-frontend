@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { DigitalAddress } from '../../models/contacts';
-import { acceptDelegation, rejectDelegation } from '../delegation/actions';
+import { acceptMandate, rejectMandate } from '../delegation/actions';
 import { Delegator } from '../delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './actions';
 
@@ -29,12 +29,12 @@ const generalInfoSlice = createSlice({
     builder.addCase(getDomicileInfo.fulfilled, (state, action) => {
       state.defaultAddresses = action.payload;
     });
-    builder.addCase(acceptDelegation.fulfilled, (state) => {
+    builder.addCase(acceptMandate.fulfilled, (state) => {
       if (state.pendingDelegators > 0) {
         state.pendingDelegators--;
       }
     });
-    builder.addCase(rejectDelegation.fulfilled, (state, action) => {
+    builder.addCase(rejectMandate.fulfilled, (state, action) => {
       const startingDelegatorsNum = state.delegators.length;
       state.delegators = state.delegators.filter(
         (delegator) => delegator.mandateId !== action.meta.arg

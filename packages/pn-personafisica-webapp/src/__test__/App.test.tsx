@@ -10,10 +10,8 @@ import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
-import { arrayOfDelegators } from '../__mocks__/Delegations.mock';
+import { mandatesByDelegate } from '../__mocks__/Delegations.mock';
 import { apiClient } from '../api/apiClients';
-import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
-import { DELEGATIONS_BY_DELEGATE } from '../api/delegations/delegations.routes';
 import {
   RenderResult,
   act,
@@ -109,8 +107,8 @@ describe('App', async () => {
   it('render component - user logged in', async () => {
     mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
+    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -127,8 +125,8 @@ describe('App', async () => {
   it('check header actions - user logged in', async () => {
     mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
+    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -161,8 +159,8 @@ describe('App', async () => {
   it('sidemenu not included if error in API call to fetch TOS and Privacy', async () => {
     mock.onGet('/bff/v1/tos-privacy').reply(500);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
+    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -175,8 +173,8 @@ describe('App', async () => {
   it('sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
     mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(false, false));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
+    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -191,8 +189,8 @@ describe('App', async () => {
   it('check header actions - user has not accepted the TOS and PRIVACY', async () => {
     mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(false, false));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
+    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
     await act(async () => {
       render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -208,8 +206,8 @@ describe('App', async () => {
   it('sidemenu items if there are delegators', async () => {
     mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
+    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -223,8 +221,8 @@ describe('App', async () => {
   it('sidemenu items if there are no delegators', async () => {
     mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
+    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/mandate/delegate').reply(200, []);
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });

@@ -4,7 +4,6 @@ import { vi } from 'vitest';
 
 import { act, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { NOTIFICATION_ID_FROM_QRCODE } from '../../api/notifications/notifications.routes';
 import AARGuard from '../AARGuard';
 import {
   DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM,
@@ -59,19 +58,21 @@ describe('Notification from QR code', async () => {
   it('QR code requested by a recipient', async () => {
     const mockQrCode = 'qr-code';
     window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
-    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: mockQrCode }).reply(
-      () =>
-        new Promise((resolve) => {
-          setTimeout(() => {
-            resolve([200, { iun: 'mock-iun' }]);
-          }, 200);
-        })
-    );
+    mock
+      .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
+      .reply(
+        () =>
+          new Promise((resolve) => {
+            setTimeout(() => {
+              resolve([200, { iun: 'mock-iun' }]);
+            }, 200);
+          })
+      );
     await act(async () => {
       render(<Guard />);
     });
     expect(mock.history.post).toHaveLength(1);
-    expect(mock.history.post[0].url).toBe(NOTIFICATION_ID_FROM_QRCODE());
+    expect(mock.history.post[0].url).toBe('/bff/v1/notifications/received/check-aar-qr-code');
     expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
       aarQrCodeValue: mockQrCode,
     });
@@ -92,13 +93,13 @@ describe('Notification from QR code', async () => {
     const mockQrCode = 'qr-code-delegate';
     window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
     mock
-      .onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: mockQrCode })
+      .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
       .reply(200, { iun: 'mock-iun', mandateId: 'mock-mandateId' });
     await act(async () => {
       render(<Guard />);
     });
     expect(mock.history.post).toHaveLength(1);
-    expect(mock.history.post[0].url).toBe(NOTIFICATION_ID_FROM_QRCODE());
+    expect(mock.history.post[0].url).toBe('/bff/v1/notifications/received/check-aar-qr-code');
     expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
       aarQrCodeValue: mockQrCode,
     });
@@ -116,12 +117,14 @@ describe('Notification from QR code', async () => {
   it('invalid QR code', async () => {
     const mockQrCode = 'bad-qr-code';
     window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
-    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: mockQrCode }).reply(500);
+    mock
+      .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
+      .reply(500);
     await act(async () => {
       render(<Guard />);
     });
     expect(mock.history.post).toHaveLength(1);
-    expect(mock.history.post[0].url).toBe(NOTIFICATION_ID_FROM_QRCODE());
+    expect(mock.history.post[0].url).toBe('/bff/v1/notifications/received/check-aar-qr-code');
     expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
       aarQrCodeValue: mockQrCode,
     });
@@ -136,7 +139,9 @@ describe('Notification from QR code', async () => {
   it('invalid recipient accesses to QR code', async () => {
     const mockQrCode = 'bad-qr-code';
     window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
-    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: mockQrCode }).reply(404);
+    mock
+      .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
+      .reply(404);
     await act(async () => {
       render(<Guard />);
     });
