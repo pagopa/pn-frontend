@@ -32,11 +32,12 @@ export function PnECharts({
 				registerTheme("customTheme", theme);
 				selectedTheme = "customTheme";
 			}
-			chart = init(chartRef.current, selectedTheme);
+			chart = init(chartRef.current, selectedTheme, { renderer: "canvas" });
 		}
 
 		// Add chart resize listener
 		// ResizeObserver is leading to a bit janky UX
+		// Should we implement a debounce?
 		function resizeChart() {
 			chart?.resize();
 		}
@@ -67,6 +68,16 @@ export function PnECharts({
 	}, [loading, theme]);
 
 	return (
-		<div ref={chartRef} style={{ width: "100%", height: "100%", ...style }} />
+		<div
+			ref={chartRef}
+			style={{
+				width: "100%",
+				height: "100%",
+				minHeight: "400px",
+				maxHeight: "600px",
+				flexGrow: 1,
+				...style,
+			}}
+		/>
 	);
 }
