@@ -3,6 +3,7 @@
 /* eslint-disable functional/immutable-data */
 import { add, compareAsc } from 'date-fns';
 import type { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { formatDateSMonth, formatToSlicedISOString } from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
@@ -26,7 +27,7 @@ type Props = {
 };
 
 /**
- * Renders a series of trendlines
+ * Renders a series of stacked lines
  *
  * @param {*} startDate: the beginning of the period to represent
  * @param {*} endDate: the beginning of the period to represent
@@ -45,6 +46,8 @@ const TrendStackedStatistics: React.FC<Props> = ({
   options,
   sx,
 }) => {
+  const { t } = useTranslation(['statistics']);
+
   /**
    * Returns all calendar days between startDate and endDate (included)
    *
@@ -178,17 +181,17 @@ const TrendStackedStatistics: React.FC<Props> = ({
       bottom: '8%',
       containLabel: true,
     },
-    // toolbox: {
-    //   feature: {
-    //     saveAsImage: {
-    //       show: true, // Enable export to image functionality
-    //       title: 'Save as Image', // Customize the tooltip title
-    //       name: 'chart',
-    //       backgroundColor: 'transparent',
-    //       pixelRatio: 2,
-    //     },
-    //   },
-    // },
+    toolbox: {
+      feature: {
+        saveAsImage: {
+          show: true,
+          title: t('save_as_image'),
+          name: 'chart',
+          backgroundColor: 'white',
+          pixelRatio: 2,
+        },
+      },
+    },
     xAxis: {
       // axisLabel: {
       //   show: true,

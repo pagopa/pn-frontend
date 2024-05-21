@@ -1,4 +1,5 @@
 import { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
@@ -14,6 +15,7 @@ type Props = {
 };
 
 const AggregateStatistics: React.FC<Props> = ({ values, options, sx }) => {
+  const { t } = useTranslation(['statistics']);
   const data: Array<{ value: number; name: string }> = values.map((item) => ({
     value: item.value,
     name: item.title,
@@ -22,6 +24,17 @@ const AggregateStatistics: React.FC<Props> = ({ values, options, sx }) => {
   const option: PnEChartsProps['option'] = {
     tooltip: {
       trigger: 'item',
+    },
+    toolbox: {
+      feature: {
+        saveAsImage: {
+          show: true,
+          title: t('save_as_image'),
+          name: 'chart',
+          backgroundColor: 'white',
+          pixelRatio: 2,
+        },
+      },
     },
     legend: {
       bottom: '0%',

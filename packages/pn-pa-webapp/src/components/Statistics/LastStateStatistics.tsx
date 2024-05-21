@@ -18,6 +18,17 @@ const LastStateStatistics: React.FC<Props> = (props) => {
     tooltip: {
       trigger: 'axis',
     },
+    toolbox: {
+      feature: {
+        saveAsImage: {
+          show: true,
+          title: t('save_as_image'),
+          name: 'chart',
+          backgroundColor: 'white',
+          pixelRatio: 2,
+        },
+      },
+    },
     grid: {
       left: '3%',
       right: '4%',

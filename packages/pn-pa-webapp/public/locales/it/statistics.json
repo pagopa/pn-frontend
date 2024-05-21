@@ -6,6 +6,7 @@
   "aggregate_graph": "Aggregato",
   "trend_graph": "Andamentale",
   "graph_type_label": "Grafico",
+  "save_as_image": "Salva come immagine",
   "filed": {
     "title": "Notifiche depositate",
     "description": "Numero di notifiche che sono state accettate dalla piattaforma SEND sul totale delle notifiche caricate",
