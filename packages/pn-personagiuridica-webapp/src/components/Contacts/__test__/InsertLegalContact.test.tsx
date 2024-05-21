@@ -22,7 +22,7 @@ describe('InsertLegalContact component', () => {
   it('renders InsertLegalContact', async () => {
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <InsertLegalContact recipientId={'mocked-recipientId'} />
+        <InsertLegalContact />
       </DigitalContactsCodeVerificationProvider>
     );
     const cardBody = result.getByTestId('DigitalContactsCardBody');
@@ -40,7 +40,7 @@ describe('InsertLegalContact component', () => {
   it('checks invalid pec', async () => {
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <InsertLegalContact recipientId={'mocked-recipientId'} />
+        <InsertLegalContact />
       </DigitalContactsCodeVerificationProvider>
     );
     const cardBody = result.getByTestId('DigitalContactsCardBody');
@@ -62,7 +62,7 @@ describe('InsertLegalContact component', () => {
   it('checks valid pec', async () => {
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <InsertLegalContact recipientId={'mocked-recipientId'} />
+        <InsertLegalContact />
       </DigitalContactsCodeVerificationProvider>
     );
     const cardBody = result.getByTestId('DigitalContactsCardBody');

@@ -1,15 +1,15 @@
-export interface ApiKey<T> {
+export interface ApiKey {
   id: string;
   name: string;
   value: string;
   lastUpdate: string;
-  groups: Array<T>;
+  groups: Array<{ id: string; name: string }>;
   status: ApiKeyStatus;
   statusHistory: Array<ApiKeyStatusHistory>;
 }
 
-export interface ApiKeys<T> {
-  items: Array<ApiKey<T>>;
+export interface ApiKeys {
+  items: Array<ApiKey>;
   total: number;
   lastKey?: string;
   lastUpdate?: string;
@@ -44,22 +44,22 @@ export enum ModalApiKeyView {
   VIEW_GROUPS_ID = 'VIEW_GROUPS_ID',
 }
 
-export interface GetNewApiKeyResponse {
+export interface NewApiKeyResponse {
   id: string;
   apiKey: string;
 }
 
-export interface NewApiKeyBE {
+export interface NewApiKeyRequest {
   name: string;
   groups: Array<string>;
 }
 
-export interface ApiKeyStatusBE {
+export interface ChangeApiKeyStatusRequest {
   apiKey: string;
   status: ApiKeySetStatus;
 }
 
-export interface ApiKeyParam {
+export interface GetApiKeysRequest {
   limit?: number;
   lastKey?: string;
   lastUpdate?: string;

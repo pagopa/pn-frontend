@@ -1,30 +1,20 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
+import {
+  digitalAddresses,
+  digitalCourtesyAddresses,
+  digitalLegalAddresses,
+} from '../../../__mocks__/Contacts.mock';
 import { apiClient } from '../../../api/apiClients';
-import {
-  CONTACTS_LIST,
-  COURTESY_CONTACT,
-  LEGAL_CONTACT,
-} from '../../../api/contacts/contacts.routes';
-import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
+import { AddressType, CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
 import { store } from '../../store';
-import {
-  createOrUpdateCourtesyAddress,
-  createOrUpdateLegalAddress,
-  deleteCourtesyAddress,
-  deleteLegalAddress,
-  getDigitalAddresses,
-} from '../actions';
+import { createOrUpdateAddress, deleteAddress, getDigitalAddresses } from '../actions';
 import { resetPecValidation, resetState } from '../reducers';
 
 const initialState = {
   loading: false,
-  digitalAddresses: {
-    legal: [],
-    courtesy: [],
-  },
+  digitalAddresses: [],
   parties: [],
 };
 
@@ -51,69 +41,73 @@ describe('Contacts redux state tests', () => {
   });
 
   it('Should be able to fetch the digital addresses list', async () => {
-    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    const action = await store.dispatch(getDigitalAddresses('mocked-recipientId'));
+    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    const action = await store.dispatch(getDigitalAddresses());
     expect(action.type).toBe('getDigitalAddresses/fulfilled');
     expect(action.payload).toEqual(digitalAddresses);
   });
 
   it('Should be able to update the digital address with legal value (pec to verify)', async () => {
-    const updatedDigitalAddress = { ...digitalAddresses.legal[0], value: 'mario.rossi@mail.it' };
-    mock.onPost(LEGAL_CONTACT(updatedDigitalAddress.senderId, LegalChannelType.PEC)).reply(200, {
-      value: updatedDigitalAddress.value,
-    });
+    const updatedDigitalAddress = { ...digitalLegalAddresses[0], value: 'mario.rossi@mail.it' };
+    mock
+      .onPost(`/bff/v1/addresses/LEGAL/${updatedDigitalAddress.senderId}/PEC`, {
+        value: updatedDigitalAddress.value,
+      })
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
     const action = await store.dispatch(
-      createOrUpdateLegalAddress({
-        recipientId: updatedDigitalAddress.recipientId,
+      createOrUpdateAddress({
+        addressType: AddressType.LEGAL,
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType as LegalChannelType,
         value: updatedDigitalAddress.value,
       })
     );
-    expect(action.type).toBe('createOrUpdateLegalAddress/fulfilled');
+    expect(action.type).toBe('createOrUpdateAddress/fulfilled');
     expect(action.payload).toEqual(undefined);
   });
 
   it('Should be able to update the digital address with legal value (pec to validate)', async () => {
-    const updatedDigitalAddress = { ...digitalAddresses.legal[0], value: 'mario.rossi@mail.it' };
+    const updatedDigitalAddress = { ...digitalLegalAddresses[0], value: 'mario.rossi@mail.it' };
     mock
-      .onPost(LEGAL_CONTACT(updatedDigitalAddress.senderId, LegalChannelType.PEC), {
+      .onPost(`/bff/v1/addresses/LEGAL/${updatedDigitalAddress.senderId}/PEC`, {
         value: updatedDigitalAddress.value,
       })
       .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
 
     const action = await store.dispatch(
-      createOrUpdateLegalAddress({
-        recipientId: updatedDigitalAddress.recipientId,
+      createOrUpdateAddress({
+        addressType: AddressType.LEGAL,
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType as LegalChannelType,
         value: updatedDigitalAddress.value,
       })
     );
-    expect(action.type).toBe('createOrUpdateLegalAddress/fulfilled');
+    expect(action.type).toBe('createOrUpdateAddress/fulfilled');
     expect(action.payload).toEqual({
-      ...digitalAddresses.legal[0],
+      ...digitalLegalAddresses[0],
       value: '',
       pecValid: false,
     });
   });
 
   it('Should be able to update the digital address with legal value (pec verified)', async () => {
-    const updatedDigitalAddress = { ...digitalAddresses.legal[0], value: 'mario.rossi@mail.it' };
+    const updatedDigitalAddress = { ...digitalLegalAddresses[0], value: 'mario.rossi@mail.it' };
     mock
-      .onPost(LEGAL_CONTACT(updatedDigitalAddress.senderId, LegalChannelType.PEC), {
+      .onPost(`/bff/v1/addresses/LEGAL/${updatedDigitalAddress.senderId}/PEC`, {
         value: updatedDigitalAddress.value,
       })
       .reply(204);
     const action = await store.dispatch(
-      createOrUpdateLegalAddress({
-        recipientId: updatedDigitalAddress.recipientId,
+      createOrUpdateAddress({
+        addressType: AddressType.LEGAL,
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType as LegalChannelType,
         value: updatedDigitalAddress.value,
       })
     );
-    expect(action.type).toBe('createOrUpdateLegalAddress/fulfilled');
+    expect(action.type).toBe('createOrUpdateAddress/fulfilled');
     expect(action.payload).toEqual({
       ...updatedDigitalAddress,
       pecValid: true,
@@ -122,77 +116,78 @@ describe('Contacts redux state tests', () => {
   });
 
   it('Should be able to remove the digital address with legal value', async () => {
-    mock
-      .onDelete(LEGAL_CONTACT(digitalAddresses.legal[0].senderId, LegalChannelType.PEC))
-      .reply(204);
+    mock.onDelete(`/bff/v1/addresses/LEGAL/${digitalLegalAddresses[0].senderId}/PEC`).reply(204);
     const action = await store.dispatch(
-      deleteLegalAddress({
-        recipientId: digitalAddresses.legal[0].recipientId,
-        senderId: digitalAddresses.legal[0].senderId,
-        channelType: digitalAddresses.legal[0].channelType as LegalChannelType,
+      deleteAddress({
+        addressType: AddressType.LEGAL,
+        senderId: digitalLegalAddresses[0].senderId,
+        channelType: digitalLegalAddresses[0].channelType,
       })
     );
-    expect(action.type).toBe('deleteLegalAddress/fulfilled');
-    expect(action.payload).toEqual(digitalAddresses.legal[0].senderId);
+    expect(action.type).toBe('deleteAddress/fulfilled');
+    expect(action.payload).toEqual(void 0);
   });
 
   it('Should be able to update the digital address with courtesy value (email to verify)', async () => {
-    const emailContact = digitalAddresses.courtesy.find(
+    const emailContact = digitalCourtesyAddresses.find(
       (el) => el.channelType === CourtesyChannelType.EMAIL
     );
     const updatedDigitalAddress = { ...emailContact!, value: 'mario.rossi@mail.it' };
     mock
-      .onPost(COURTESY_CONTACT(updatedDigitalAddress.senderId, CourtesyChannelType.EMAIL))
-      .reply(200, { value: updatedDigitalAddress.value });
-
+      .onPost(`/bff/v1/addresses/COURTESY/${updatedDigitalAddress.senderId}/EMAIL`, {
+        value: updatedDigitalAddress.value,
+      })
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
     const action = await store.dispatch(
-      createOrUpdateCourtesyAddress({
-        recipientId: updatedDigitalAddress.recipientId,
+      createOrUpdateAddress({
+        addressType: AddressType.COURTESY,
         senderId: updatedDigitalAddress.senderId,
-        channelType: updatedDigitalAddress.channelType as CourtesyChannelType,
+        channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,
       })
     );
-    expect(action.type).toBe('createOrUpdateCourtesyAddress/fulfilled');
-    expect(action.payload).toEqual(undefined);
+    expect(action.type).toBe('createOrUpdateAddress/fulfilled');
+    expect(action.payload).toEqual(void 0);
   });
 
   it('Should be able to update the digital address with courtesy value (email verified)', async () => {
-    const emailContact = digitalAddresses.courtesy.find(
+    const emailContact = digitalCourtesyAddresses.find(
       (el) => el.channelType === CourtesyChannelType.EMAIL
     );
     const updatedDigitalAddress = { ...emailContact!, value: 'mario.rossi@mail.it' };
     mock
-      .onPost(COURTESY_CONTACT(updatedDigitalAddress.senderId, CourtesyChannelType.EMAIL), {
+      .onPost(`/bff/v1/addresses/COURTESY/${updatedDigitalAddress.senderId}/EMAIL`, {
         value: updatedDigitalAddress.value,
       })
       .reply(204);
     const action = await store.dispatch(
-      createOrUpdateCourtesyAddress({
-        recipientId: updatedDigitalAddress.recipientId,
+      createOrUpdateAddress({
+        addressType: AddressType.COURTESY,
         senderId: updatedDigitalAddress.senderId,
-        channelType: updatedDigitalAddress.channelType as CourtesyChannelType,
+        channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,
       })
     );
-    expect(action.type).toBe('createOrUpdateCourtesyAddress/fulfilled');
+    expect(action.type).toBe('createOrUpdateAddress/fulfilled');
     expect(action.payload).toEqual(updatedDigitalAddress);
   });
 
   it('Should be able to remove the digital address with courtesy value', async () => {
-    const emailContact = digitalAddresses.courtesy.find(
+    const emailContact = digitalCourtesyAddresses.find(
       (el) => el.channelType === CourtesyChannelType.EMAIL
     );
-    mock.onDelete(COURTESY_CONTACT(emailContact!.senderId, CourtesyChannelType.EMAIL)).reply(204);
+    mock.onDelete(`/bff/v1/addresses/COURTESY/${emailContact!.senderId}/EMAIL`).reply(204);
     const action = await store.dispatch(
-      deleteCourtesyAddress({
-        recipientId: emailContact!.recipientId,
+      deleteAddress({
+        addressType: AddressType.COURTESY,
         senderId: emailContact!.senderId,
         channelType: emailContact!.channelType,
       })
     );
-    expect(action.type).toBe('deleteCourtesyAddress/fulfilled');
-    expect(action.payload).toEqual(emailContact!.senderId);
+    expect(action.type).toBe('deleteAddress/fulfilled');
+    expect(action.payload).toEqual(void 0);
   });
 
   it('Should be able to reset state', () => {
@@ -205,27 +200,29 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to reset pec validation', async () => {
     const updatedDigitalAddress = {
-      ...digitalAddresses.legal[0],
+      ...digitalLegalAddresses[0],
       value: 'mario.rossi@mail.it',
       senderId: 'default',
     };
     mock
-      .onPost(LEGAL_CONTACT(updatedDigitalAddress.senderId, LegalChannelType.PEC), {
+      .onPost(`/bff/v1/addresses/COURTESY/${updatedDigitalAddress.senderId}/PEC`, {
         value: updatedDigitalAddress.value,
       })
       .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
     await store.dispatch(
-      createOrUpdateLegalAddress({
-        recipientId: updatedDigitalAddress.recipientId,
+      createOrUpdateAddress({
+        addressType: AddressType.LEGAL,
         senderId: 'default',
-        channelType: updatedDigitalAddress.channelType as LegalChannelType,
+        channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,
       })
     );
     const action = store.dispatch(resetPecValidation());
     expect(action.type).toBe('contactsSlice/resetPecValidation');
-    expect(action.payload).toEqual(undefined);
-    const state = store.getState().contactsState.digitalAddresses.legal;
+    expect(action.payload).toEqual(void 0);
+    const state = store
+      .getState()
+      .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL);
     expect(state).toEqual([]);
   });
 });

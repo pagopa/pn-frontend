@@ -9,13 +9,9 @@ import {
   testInput,
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { mockGroups } from '../../__mocks__/ApiKeys.mock';
-import { newApiKeyDTO, newApiKeyResponse } from '../../__mocks__/NewApiKey.mock';
+import { mockGroups, newApiKeyDTO, newApiKeyResponse } from '../../__mocks__/ApiKeys.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { CREATE_APIKEY } from '../../api/apiKeys/apiKeys.routes';
-import { GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
-import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import NewApiKey from '../NewApiKey.page';
 
@@ -45,8 +41,7 @@ describe('NewApiKey component', async () => {
   });
 
   it('render NewApiKey', async () => {
-    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, mockGroups);
-
+    mock.onGet('/bff/v1/groups?status=ACTIVE').reply(200, mockGroups);
     await act(async () => {
       result = render(<NewApiKey />);
     });
@@ -57,11 +52,11 @@ describe('NewApiKey component', async () => {
     const submitButton = within(form).getByTestId('submit-new-api-key');
     expect(submitButton).toBeDisabled();
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/ext-registry/pa/v1/groups?statusFilter=ACTIVE');
+    expect(mock.history.get[0].url).toContain('/bff/v1/groups?status=ACTIVE');
   });
 
   it('empty and invalid form', async () => {
-    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, mockGroups);
+    mock.onGet('/bff/v1/groups?status=ACTIVE').reply(200, mockGroups);
     await act(async () => {
       result = render(<NewApiKey />);
     });
@@ -84,8 +79,8 @@ describe('NewApiKey component', async () => {
   });
 
   it('changes form values and clicks on confirm', async () => {
-    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, mockGroups);
-    mock.onPost(CREATE_APIKEY(), newApiKeyDTO).reply(200, newApiKeyResponse);
+    mock.onGet('/bff/v1/groups?status=ACTIVE').reply(200, mockGroups);
+    mock.onPost('/bff/v1/api-keys', newApiKeyDTO).reply(200, newApiKeyResponse);
 
     await act(async () => {
       result = render(<NewApiKey />);
@@ -106,9 +101,9 @@ describe('NewApiKey component', async () => {
       expect(result.container).toHaveTextContent(/api-key-succesfully-generated/);
     });
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/ext-registry/pa/v1/groups?statusFilter=ACTIVE');
+    expect(mock.history.get[0].url).toContain('/bff/v1/groups?status=ACTIVE');
     expect(mock.history.post).toHaveLength(1);
-    expect(mock.history.post[0].url).toContain(CREATE_APIKEY());
+    expect(mock.history.post[0].url).toContain('/bff/v1/api-keys');
     expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(newApiKeyDTO);
   });
 

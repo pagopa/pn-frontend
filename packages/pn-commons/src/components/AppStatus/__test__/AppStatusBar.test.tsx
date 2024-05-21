@@ -25,7 +25,6 @@ vi.mock('@mui/material', async () => {
 
 const baseStatus: Omit<AppCurrentStatus, 'appIsFullyOperative'> = {
   lastCheckTimestamp: '2022-11-21T06:07:08Z',
-  statusByFunctionality: [],
 };
 const okStatus: AppCurrentStatus = { ...baseStatus, appIsFullyOperative: true };
 const notOkStatus: AppCurrentStatus = { ...baseStatus, appIsFullyOperative: false };

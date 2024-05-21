@@ -43,20 +43,19 @@ const DowntimeLogDataSwitch: React.FC<{
   if (type === 'endDate') {
     return <FormattedDateAndTime date={data.endDate ?? ''} inTwoLines={inTwoLines} />;
   }
-  if (type === 'knownFunctionality') {
-    return data.knownFunctionality ? (
-      <>
-        {getLocalizedOrDefaultLabel(
-          'appStatus',
-          `legends.knownFunctionality.${data.knownFunctionality}`
-        )}
-      </>
-    ) : (
-      <>
-        {getLocalizedOrDefaultLabel('appStatus', 'legends.unknownFunctionality', undefined, {
-          functionality: data.rawFunctionality,
-        })}
-      </>
+  if (type === 'functionality') {
+    const unknownFunctinalityLabel = getLocalizedOrDefaultLabel(
+      'appStatus',
+      `legends.unknownFunctionality`,
+      undefined,
+      {
+        functionality: data.functionality,
+      }
+    );
+    return getLocalizedOrDefaultLabel(
+      'appStatus',
+      `legends.knownFunctionality.${data.functionality}`,
+      unknownFunctinalityLabel
     );
   }
   if (type === 'legalFactId') {

@@ -1,13 +1,13 @@
 import { EventPropertyType } from '@pagopa-pn/pn-commons';
 
-import { arrayOfDelegators } from '../../../../__mocks__/Delegations.mock';
+import { mandatesByDelegate } from '../../../../__mocks__/Delegations.mock';
 import { SendHasMandateLoginStrategy } from '../SendHasMandateLoginStrategy';
 
 describe('Mixpanel - Has Mandate Login Strategy', () => {
   it('should return has mandate login event', () => {
     const strategy = new SendHasMandateLoginStrategy();
 
-    const mandateGiven = strategy.performComputations({ payload: arrayOfDelegators });
+    const mandateGiven = strategy.performComputations({ payload: mandatesByDelegate });
     expect(mandateGiven).toEqual({
       [EventPropertyType.PROFILE]: {
         SEND_HAS_MANDATE: 'yes',

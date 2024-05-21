@@ -19,8 +19,6 @@ export enum GroupStatus {
 export interface UserGroup {
   id: string;
   name: string;
-  description: string;
-  status: GroupStatus;
 }
 
 export enum PNRole {

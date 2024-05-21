@@ -2,17 +2,10 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { ThemeProvider } from '@mui/material';
-import {
-  AppResponseMessage,
-  DOWNTIME_HISTORY,
-  DOWNTIME_LEGAL_FACT_DETAILS,
-  DOWNTIME_STATUS,
-  ResponseEventDispatcher,
-  formatDate,
-} from '@pagopa-pn/pn-commons';
+import { AppResponseMessage, ResponseEventDispatcher, formatDate } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
 
-import { currentStatusDTO, downtimesDTO, openIncidents } from '../../__mocks__/AppStatus.mock';
+import { currentStatusDTO, downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import { act, fireEvent, render, screen, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { APP_STATUS_ACTIONS } from '../../redux/appStatus/actions';
@@ -62,19 +55,8 @@ describe('AppStatus page', async () => {
    * (2) the downtime log list includes a datum from the mocked API response.
    */
   it('Desktop - OK', async () => {
-    mock.onGet(DOWNTIME_STATUS()).reply(200, currentStatusDTO);
-    mock
-      .onGet(
-        new RegExp(
-          `${DOWNTIME_HISTORY({
-            startDate: '',
-            functionality: [],
-            size: '',
-            page: '',
-          })}.*`
-        )
-      )
-      .reply(200, downtimesDTO);
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       render(<AppStatusWithErrorHandling />);
     });
@@ -92,19 +74,10 @@ describe('AppStatus page', async () => {
    * In the "not OK" test, we just check that the "red" variant of the status bar is rendered.
    */
   it('Desktop - not OK', async () => {
-    mock.onGet(DOWNTIME_STATUS()).reply(200, { ...currentStatusDTO, openIncidents });
     mock
-      .onGet(
-        new RegExp(
-          `${DOWNTIME_HISTORY({
-            startDate: '',
-            functionality: [],
-            size: '',
-            page: '',
-          })}.*`
-        )
-      )
-      .reply(200, downtimesDTO);
+      .onGet('/bff/v1/downtime/status')
+      .reply(200, { ...currentStatusDTO, appIsFullyOperative: false });
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       render(<AppStatusWithErrorHandling />);
     });
@@ -119,19 +92,8 @@ describe('AppStatus page', async () => {
   });
 
   it('Desktop - error in app status API', async () => {
-    mock.onGet(DOWNTIME_STATUS()).reply(500);
-    mock
-      .onGet(
-        new RegExp(
-          `${DOWNTIME_HISTORY({
-            startDate: '',
-            functionality: [],
-            size: '',
-            page: '',
-          })}.*`
-        )
-      )
-      .reply(200, downtimesDTO);
+    mock.onGet('/bff/v1/downtime/status').reply(500);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       render(<AppStatusWithErrorHandling />);
     });
@@ -140,26 +102,15 @@ describe('AppStatus page', async () => {
       `api-error-${APP_STATUS_ACTIONS.GET_CURRENT_STATUS}`
     );
     const downtimeApiErrorComponent = screen.queryByTestId(
-      `api-error-${APP_STATUS_ACTIONS.GET_DOWNTIME_LOG_PAGE}`
+      `api-error-${APP_STATUS_ACTIONS.GET_DOWNTIME_HISTORY}`
     );
     expect(statusApiErrorComponent).toBeInTheDocument();
     expect(downtimeApiErrorComponent).not.toBeInTheDocument();
   });
 
   it('Desktop - error in downtime log API', async () => {
-    mock.onGet(DOWNTIME_STATUS()).reply(200, currentStatusDTO);
-    mock
-      .onGet(
-        new RegExp(
-          `${DOWNTIME_HISTORY({
-            startDate: '',
-            functionality: [],
-            size: '',
-            page: '',
-          })}.*`
-        )
-      )
-      .reply(500);
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(500);
     await act(async () => {
       render(<AppStatusWithErrorHandling />);
     });
@@ -168,27 +119,16 @@ describe('AppStatus page', async () => {
       `api-error-${APP_STATUS_ACTIONS.GET_CURRENT_STATUS}`
     );
     const downtimeApiErrorComponent = screen.queryByTestId(
-      `api-error-${APP_STATUS_ACTIONS.GET_DOWNTIME_LOG_PAGE}`
+      `api-error-${APP_STATUS_ACTIONS.GET_DOWNTIME_HISTORY}`
     );
     expect(statusApiErrorComponent).not.toBeInTheDocument();
     expect(downtimeApiErrorComponent).toBeInTheDocument();
   });
 
   it('Desktop dowload legal fact', async () => {
-    mock.onGet(DOWNTIME_STATUS()).reply(200, currentStatusDTO);
-    mock
-      .onGet(
-        new RegExp(
-          `${DOWNTIME_HISTORY({
-            startDate: '',
-            functionality: [],
-            size: '',
-            page: '',
-          })}.*`
-        )
-      )
-      .reply(200, downtimesDTO);
-    mock.onGet(DOWNTIME_LEGAL_FACT_DETAILS(downtimesDTO.result[0].legalFactId)).reply(200, {
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+    mock.onGet(`/bff/v1/downtime/legal-facts/${downtimesDTO.result[0].legalFactId}`).reply(200, {
       filename: 'mocked-file',
       contentLength: 999,
       url: 'https://www.mocked-url.com',
@@ -208,26 +148,15 @@ describe('AppStatus page', async () => {
   });
 
   it('Desktop - change pagination and size', async () => {
-    mock.onGet(DOWNTIME_STATUS()).reply(200, currentStatusDTO);
-    mock
-      .onGet(
-        new RegExp(
-          `${DOWNTIME_HISTORY({
-            startDate: '',
-            functionality: [],
-            size: '',
-            page: '',
-          })}.*`
-        )
-      )
-      .reply(function (config) {
-        if (config.url?.includes('size=10') && config.url?.includes('page=1')) {
-          return [200, { ...downtimesDTO, result: downtimesDTO.result.slice(1) }];
-        } else if (config.url?.includes('size=20')) {
-          return [200, downtimesDTO];
-        }
-        return [200, { ...downtimesDTO, result: downtimesDTO.result.slice(0, 1) }];
-      });
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(function (config) {
+      if (config.url?.includes('size=10') && config.url?.includes('page=1')) {
+        return [200, { ...downtimesDTO, result: downtimesDTO.result.slice(1) }];
+      } else if (config.url?.includes('size=20')) {
+        return [200, downtimesDTO];
+      }
+      return [200, { ...downtimesDTO, result: downtimesDTO.result.slice(0, 1) }];
+    });
     await act(async () => {
       render(<AppStatusWithErrorHandling />);
     });

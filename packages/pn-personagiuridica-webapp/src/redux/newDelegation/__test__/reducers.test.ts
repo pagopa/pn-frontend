@@ -5,12 +5,10 @@ import {
   createDelegationDuplicatedErrorResponse,
   createDelegationGenericErrorResponse,
   createDelegationPayload,
-  createDelegationResponse,
   createDelegationSelectedPayload,
 } from '../../../__mocks__/CreateDelegation.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { apiClient } from '../../../api/apiClients';
-import { CREATE_DELEGATION } from '../../../api/delegations/delegations.routes';
 import { GET_ALL_ACTIVATED_PARTIES } from '../../../api/external-registries/external-registries-routes';
 import { store } from '../../store';
 import { createDelegation, createDelegationMapper, getAllEntities } from '../actions';
@@ -44,26 +42,24 @@ describe('delegation redux state tests', () => {
   });
 
   it('creates a new delegation with all organizations', async () => {
-    mock
-      .onPost(CREATE_DELEGATION(), createDelegationMapper(createDelegationPayload))
-      .reply(200, createDelegationResponse);
+    mock.onPost('/bff/v1/mandate', createDelegationMapper(createDelegationPayload)).reply(200);
     const action = await store.dispatch(createDelegation(createDelegationPayload));
     expect(action.type).toBe('createDelegation/fulfilled');
-    expect(action.payload).toEqual(createDelegationResponse);
+    expect(action.payload).toEqual(void 0);
   });
 
   it('creates a new delegation with a single organization', async () => {
     mock
-      .onPost(CREATE_DELEGATION(), createDelegationMapper(createDelegationSelectedPayload))
-      .reply(200, createDelegationResponse);
+      .onPost('/bff/v1/mandate', createDelegationMapper(createDelegationSelectedPayload))
+      .reply(200);
     const action = await store.dispatch(createDelegation(createDelegationSelectedPayload));
     expect(action.type).toBe('createDelegation/fulfilled');
-    expect(action.payload).toEqual(createDelegationResponse);
+    expect(action.payload).toEqual(void 0);
   });
 
   it("can't create a new delegation", async () => {
     mock
-      .onPost(CREATE_DELEGATION(), createDelegationMapper(createDelegationPayload))
+      .onPost('/bff/v1/mandate', createDelegationMapper(createDelegationPayload))
       .reply(401, createDelegationGenericErrorResponse);
     const action = await store.dispatch(createDelegation(createDelegationPayload));
     expect(action.type).toBe('createDelegation/rejected');
@@ -72,7 +68,7 @@ describe('delegation redux state tests', () => {
 
   it("can't create a new delegation (duplicated)", async () => {
     mock
-      .onPost(CREATE_DELEGATION(), createDelegationMapper(createDelegationPayload))
+      .onPost('/bff/v1/mandate', createDelegationMapper(createDelegationPayload))
       .reply(400, createDelegationDuplicatedErrorResponse);
     const action = await store.dispatch(createDelegation(createDelegationPayload));
     expect(action.type).toBe('createDelegation/rejected');

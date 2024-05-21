@@ -1,19 +1,11 @@
-import _ from 'lodash';
-
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
   getTimelineElem,
   notificationDTO,
   notificationDTOMultiRecipient,
-  notificationToFe,
-  notificationToFeMultiRecipient,
-  notificationToFeRadd,
   payments,
 } from '../../__mocks__/NotificationDetail.mock';
 import {
-  AarDetails,
-  AppIoCourtesyMessageEventType,
-  DigitalDomicileType,
   F24PaymentDetails,
   INotificationDetailTimeline,
   LegalFactType,
@@ -26,13 +18,10 @@ import {
   PaymentDetails,
   PaymentStatus,
   PaymentsData,
-  RecipientType,
   SendDigitalDetails,
   TimelineCategory,
-  ViewedDetails,
 } from '../../models';
 import { initLocalizationForTest } from '../../test-utils';
-import { initLocalization } from '../../utility';
 import { TimelineStepFactory } from '../TimelineUtils/TimelineStepFactory';
 import {
   getF24Payments,
@@ -40,7 +29,6 @@ import {
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
   getPagoPaF24Payments,
-  parseNotificationDetail,
   populatePaymentsPagoPaF24,
 } from '../notification.utility';
 
@@ -87,7 +75,7 @@ describe('notification status texts', () => {
         deliveryMode: NotificationDeliveryMode.ANALOG,
       },
       {
-        recipients: notificationToFe.recipients,
+        recipients: notificationDTO.recipients,
       }
     );
   });
@@ -107,7 +95,7 @@ describe('notification status texts', () => {
         deliveryMode: NotificationDeliveryMode.DIGITAL,
       },
       {
-        recipients: notificationToFe.recipients,
+        recipients: notificationDTO.recipients,
       }
     );
   });
@@ -127,7 +115,7 @@ describe('notification status texts', () => {
         deliveryMode: NotificationDeliveryMode.DIGITAL,
       },
       {
-        recipients: notificationToFe.recipients,
+        recipients: notificationDTO.recipients,
       }
     );
   });
@@ -145,7 +133,7 @@ describe('notification status texts', () => {
         deliveryMode: NotificationDeliveryMode.ANALOG,
       },
       {
-        recipients: notificationToFeMultiRecipient.recipients,
+        recipients: notificationDTOMultiRecipient.recipients,
       }
     );
   });
@@ -163,7 +151,7 @@ describe('notification status texts', () => {
         deliveryMode: NotificationDeliveryMode.DIGITAL,
       },
       {
-        recipients: notificationToFeMultiRecipient.recipients,
+        recipients: notificationDTOMultiRecipient.recipients,
       }
     );
   });
@@ -200,7 +188,7 @@ describe('notification status texts', () => {
       `notifiche - status.unreachable-tooltip`,
       `notifiche - status.unreachable-description`,
       NotificationStatus.UNREACHABLE,
-      { recipients: notificationToFe.recipients }
+      { recipients: notificationDTO.recipients }
     );
   });
 
@@ -211,7 +199,7 @@ describe('notification status texts', () => {
       `notifiche - status.unreachable-tooltip-multirecipient`,
       `notifiche - status.unreachable-description-multirecipient`,
       NotificationStatus.UNREACHABLE,
-      { recipients: notificationToFeMultiRecipient.recipients }
+      { recipients: notificationDTOMultiRecipient.recipients }
     );
   });
 
@@ -242,7 +230,7 @@ describe('notification status texts', () => {
       `notifiche - status.effective-date-tooltip`,
       `notifiche - status.effective-date-description`,
       NotificationStatus.EFFECTIVE_DATE,
-      { recipients: notificationToFe.recipients }
+      { recipients: notificationDTO.recipients }
     );
   });
 
@@ -253,7 +241,7 @@ describe('notification status texts', () => {
       `notifiche - status.effective-date-tooltip-multirecipient`,
       `notifiche - status.effective-date-description-multirecipient`,
       NotificationStatus.EFFECTIVE_DATE,
-      { recipients: notificationToFeMultiRecipient.recipients }
+      { recipients: notificationDTOMultiRecipient.recipients }
     );
   });
 
@@ -272,7 +260,7 @@ describe('notification status texts', () => {
         activeFrom: '2023-01-26T13:57:16.42843144Z',
         relatedTimelineElements: [],
       },
-      { recipients: notificationToFe.recipients }
+      { recipients: notificationDTO.recipients }
     );
   });
 
@@ -282,21 +270,21 @@ describe('notification status texts', () => {
       `notifiche - status.viewed`,
       `notifiche - status.viewed-tooltip - ${JSON.stringify({
         subject: `notifiche - status.delegate - ${JSON.stringify({
-          name: notificationToFe.recipients[0].denomination,
+          name: notificationDTO.recipients[0].denomination,
         })}`,
       })}`,
       `notifiche - status.viewed-description - ${JSON.stringify({
         subject: `notifiche - status.delegate - ${JSON.stringify({
-          name: notificationToFe.recipients[0].denomination,
+          name: notificationDTO.recipients[0].denomination,
         })}`,
       })}`,
       {
         status: NotificationStatus.VIEWED,
         activeFrom: '2023-01-26T13:57:16.42843144Z',
         relatedTimelineElements: [],
-        recipient: notificationToFe.recipients[0].denomination,
+        recipient: notificationDTO.recipients[0].denomination,
       },
-      { recipients: notificationToFe.recipients }
+      { recipients: notificationDTO.recipients }
     );
   });
 
@@ -315,7 +303,7 @@ describe('notification status texts', () => {
         activeFrom: '2023-01-26T13:57:16.42843144Z',
         relatedTimelineElements: [],
       },
-      { recipients: notificationToFeMultiRecipient.recipients }
+      { recipients: notificationDTOMultiRecipient.recipients }
     );
   });
 
@@ -368,11 +356,11 @@ describe('timeline legal fact link text', () => {
       legalFactsIds: [
         {
           key: 'legal-fact-1',
-          category: LegalFactType.AAR,
+          category: LegalFactType.PEC_RECEIPT,
         },
       ],
     };
-    const label = getLegalFactLabel(timelineElem, LegalFactType.AAR, 'legal-fact-1');
+    const label = getLegalFactLabel(timelineElem, LegalFactType.PEC_RECEIPT, 'legal-fact-1');
     expect(label).toBe('notifiche - detail.timeline.analog-workflow-attachment-kind.Plico');
   });
 
@@ -388,14 +376,18 @@ describe('timeline legal fact link text', () => {
       legalFactsIds: [
         {
           key: 'legal-fact-1',
-          category: LegalFactType.AAR,
+          category: LegalFactType.DIGITAL_DELIVERY,
         },
       ],
     };
-    let label = getLegalFactLabel(timelineElem, LegalFactType.AAR, 'legal-fact-1');
+    let label = getLegalFactLabel(timelineElem, LegalFactType.DIGITAL_DELIVERY, 'legal-fact-1');
     expect(label).toBe('notifiche - detail.timeline.analog-workflow-attachment-kind.23L');
     // no attachments
-    label = getLegalFactLabel({ ...timelineElem, details: {} }, LegalFactType.AAR, 'legal-fact-1');
+    label = getLegalFactLabel(
+      { ...timelineElem, details: {} },
+      LegalFactType.DIGITAL_DELIVERY,
+      'legal-fact-1'
+    );
     expect(label).toBe('notifiche - detail.timeline.analog-workflow-attachment-kind.generic');
   });
 
@@ -417,9 +409,11 @@ describe('timeline legal fact link text', () => {
         'ANALOG_FAILURE_WORKFLOW.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_1.SOURCE_SPECIAL.ATTEMPT_0',
       timestamp: '2023-08-25T09:35:37.467148235Z',
       category: TimelineCategory.ANALOG_FAILURE_WORKFLOW,
-      details: {},
+      details: {
+        getGeneratedAarUrl: 'https://aar-fake-url.com',
+      },
     };
-    const label = getLegalFactLabel(timelineElem, LegalFactType.AAR);
+    const label = getLegalFactLabel(timelineElem);
     expect(label).toBe('notifiche - detail.timeline.aar-document');
   });
 
@@ -600,464 +594,38 @@ describe('timeline event description', () => {
   it('factory is called correctly', () => {
     let timelineElem = getTimelineElem(TimelineCategory.NOT_HANDLED, { recIndex: 0 });
     // mono recipient
-    let result = getNotificationTimelineStatusInfos(timelineElem, notificationToFe.recipients);
+    let result = getNotificationTimelineStatusInfos(timelineElem, notificationDTO.recipients);
     expect(result).toStrictEqual(
       TimelineStepFactory.createTimelineStep(timelineElem).getTimelineStepInfo({
         step: timelineElem,
-        recipient: notificationToFe.recipients[0],
+        recipient: notificationDTO.recipients[0],
         isMultiRecipient: false,
       })
     );
     // multi recipient
     result = getNotificationTimelineStatusInfos(
       timelineElem,
-      notificationToFeMultiRecipient.recipients
+      notificationDTOMultiRecipient.recipients
     );
     expect(result).toStrictEqual(
       TimelineStepFactory.createTimelineStep(timelineElem).getTimelineStepInfo({
         step: timelineElem,
-        recipient: notificationToFeMultiRecipient.recipients[0],
+        recipient: notificationDTOMultiRecipient.recipients[0],
         isMultiRecipient: true,
       })
     );
     timelineElem = getTimelineElem(TimelineCategory.NOT_HANDLED, { recIndex: 1 });
     result = getNotificationTimelineStatusInfos(
       timelineElem,
-      notificationToFeMultiRecipient.recipients
+      notificationDTOMultiRecipient.recipients
     );
     expect(result).toStrictEqual(
       TimelineStepFactory.createTimelineStep(timelineElem).getTimelineStepInfo({
         step: timelineElem,
-        recipient: notificationToFeMultiRecipient.recipients[1],
+        recipient: notificationDTOMultiRecipient.recipients[1],
         isMultiRecipient: true,
       })
     );
-  });
-});
-
-describe('parse notification & filters', () => {
-  // override the default translate function setted in setupTests.ts
-  beforeEach(() => {
-    initLocalization(() => '');
-  });
-
-  it('return parsed notification detail response', () => {
-    const calculatedParsedNotification = parseNotificationDetail(
-      _.cloneDeep(notificationDTOMultiRecipient)
-    );
-    expect(calculatedParsedNotification).toStrictEqual(notificationToFeMultiRecipient);
-    // check the order
-    let previousStepTimestamp: string | null = null;
-    for (const status of calculatedParsedNotification.notificationStatusHistory) {
-      if (previousStepTimestamp) {
-        expect(new Date(status.activeFrom).getTime()).toBeLessThan(
-          new Date(previousStepTimestamp).getTime()
-        );
-      }
-      previousStepTimestamp = status.activeFrom;
-    }
-    // check the timeline extra data
-    calculatedParsedNotification.timeline.forEach((tm, index) => {
-      expect(tm.index).toBe(index);
-      expect(tm.hidden).toBeDefined();
-    });
-  });
-
-  it('check filling of the otherDocuments', () => {
-    // no AAR -> empty otherDocuments
-    const noAARNotification = {
-      ..._.cloneDeep(notificationDTOMultiRecipient),
-      timeline: notificationDTOMultiRecipient.timeline.filter(
-        (tm) => tm.category !== TimelineCategory.AAR_GENERATION
-      ),
-    };
-    let calculatedParsedNotification = parseNotificationDetail(noAARNotification);
-    expect(calculatedParsedNotification.otherDocuments).toHaveLength(0);
-    // AAR -> filled otherDocuments
-    // mono recipient
-    let AARTimelineElems = notificationDTO.timeline.filter(
-      (tm) => tm.category === TimelineCategory.AAR_GENERATION
-    );
-    calculatedParsedNotification = parseNotificationDetail(_.cloneDeep(notificationDTO));
-    expect(calculatedParsedNotification.otherDocuments).toHaveLength(1);
-    expect(calculatedParsedNotification.otherDocuments![0]).toStrictEqual({
-      recIndex: 0,
-      documentId: (AARTimelineElems[0].details as AarDetails).generatedAarUrl,
-      documentType: LegalFactType.AAR,
-      title: 'Avviso di avvenuta ricezione',
-      digests: {
-        sha256: '',
-      },
-      ref: {
-        key: '',
-        versionToken: '',
-      },
-      contentType: '',
-    });
-    // multi recipients
-    AARTimelineElems = notificationDTOMultiRecipient.timeline.filter(
-      (tm) => tm.category === TimelineCategory.AAR_GENERATION
-    );
-    calculatedParsedNotification = parseNotificationDetail(
-      _.cloneDeep(notificationDTOMultiRecipient)
-    );
-    expect(calculatedParsedNotification.otherDocuments).toHaveLength(AARTimelineElems.length);
-    AARTimelineElems.forEach((aar, index) => {
-      expect(calculatedParsedNotification.otherDocuments![index]).toStrictEqual({
-        recIndex: aar.details.recIndex,
-        documentId: (aar.details as AarDetails).generatedAarUrl,
-        documentType: LegalFactType.AAR,
-        title: `Avviso di avvenuta ricezione - ${
-          notificationDTOMultiRecipient.recipients[aar.details.recIndex!].denomination
-        } (${notificationDTOMultiRecipient.recipients[aar.details.recIndex!].taxId})`,
-        digests: {
-          sha256: '',
-        },
-        ref: {
-          key: '',
-          versionToken: '',
-        },
-        contentType: '',
-      });
-    });
-  });
-
-  it('insert cancellation status', () => {
-    const cancellationInProgressNotification = {
-      ..._.cloneDeep(notificationDTO),
-      timeline: [
-        ...notificationDTO.timeline,
-        getTimelineElem(TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST, {}),
-      ],
-    };
-    const calculatedParsedNotification = parseNotificationDetail(
-      cancellationInProgressNotification
-    );
-    const cancellationInProgressStatusHistory =
-      calculatedParsedNotification.notificationStatusHistory.find(
-        (sh) => sh.status === NotificationStatus.CANCELLATION_IN_PROGRESS
-      );
-    expect(cancellationInProgressStatusHistory).not.toBeUndefined();
-    expect(calculatedParsedNotification.notificationStatus).toBe(
-      NotificationStatus.CANCELLATION_IN_PROGRESS
-    );
-  });
-
-  it('hide analog timeline steps', () => {
-    const sendAnalogProgress = getTimelineElem(TimelineCategory.SEND_ANALOG_PROGRESS, {
-      recIndex: 0,
-    });
-    const sendAnalogFeedback = getTimelineElem(TimelineCategory.SEND_ANALOG_FEEDBACK, {
-      recIndex: 0,
-      deliveryDetailCode: 'RECAG003C',
-    });
-    const sendAnalogRegisteredLetter = getTimelineElem(
-      TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS,
-      { recIndex: 0, deliveryDetailCode: 'NTINCLCD' }
-    );
-    const analogNotification = {
-      ..._.cloneDeep(notificationDTO),
-      timeline: [
-        ...notificationDTO.timeline,
-        sendAnalogProgress,
-        sendAnalogFeedback,
-        sendAnalogRegisteredLetter,
-      ],
-    };
-    const calculatedParsedNotification = parseNotificationDetail(analogNotification);
-    const sendAnalogProgressElem = calculatedParsedNotification.timeline.find(
-      (tm) => tm.category === TimelineCategory.SEND_ANALOG_PROGRESS
-    );
-    expect(sendAnalogProgressElem?.hidden).toBeTruthy();
-    const sendAnalogFeedbackElem = calculatedParsedNotification.timeline.find(
-      (tm) => tm.category === TimelineCategory.SEND_ANALOG_FEEDBACK
-    );
-    expect(sendAnalogFeedbackElem?.hidden).toBeFalsy();
-    const sendAnalogRegisteredLetterElem = calculatedParsedNotification.timeline.find(
-      (tm) => tm.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS
-    );
-    expect(sendAnalogRegisteredLetterElem?.hidden).toBeTruthy();
-  });
-
-  it('check filling of macro steps', () => {
-    const calculatedParsedNotification = parseNotificationDetail(_.cloneDeep(notificationDTO));
-    // do the checks
-    let previousStateisAccepted = false;
-    let acceptedItems: Array<string> = [];
-    for (const status of calculatedParsedNotification.notificationStatusHistory.reverse()) {
-      // in the transformation, the relatedTimelineElements of the accepted status are mooved to the next state
-      if (status.status === NotificationStatus.ACCEPTED) {
-        previousStateisAccepted = true;
-        acceptedItems = notificationDTO.notificationStatusHistory.find(
-          (sh) => sh.status === NotificationStatus.ACCEPTED
-        )!.relatedTimelineElements;
-        // all items are hidden and legalfacts emptied
-        for (const step of status.steps!) {
-          expect(step.hidden).toBeTruthy();
-          expect(step.legalFactsIds).toHaveLength(0);
-        }
-        continue;
-      }
-      if (previousStateisAccepted) {
-        const currentItems = notificationDTO.notificationStatusHistory.find(
-          (sh) => sh.status === status.status
-        )!.relatedTimelineElements;
-        previousStateisAccepted = false;
-        expect(status.relatedTimelineElements).toStrictEqual([...acceptedItems, ...currentItems]);
-      }
-      // default case
-      let previousStepTimestamp: string | null = null;
-      for (const step of status.steps!) {
-        const timelineStep = calculatedParsedNotification.timeline.find(
-          (tm) => tm.elementId === step.elementId
-        );
-        expect(step).toStrictEqual(timelineStep);
-        // check the order
-        if (previousStepTimestamp) {
-          expect(new Date(step.timestamp).getTime()).toBeLessThan(
-            new Date(previousStepTimestamp).getTime()
-          );
-        }
-        previousStepTimestamp = step.timestamp;
-      }
-    }
-  });
-
-  it('hide app IO event', () => {
-    const sendCourtesy = getTimelineElem(TimelineCategory.SEND_COURTESY_MESSAGE, {
-      recIndex: 0,
-      digitalAddress: {
-        type: DigitalDomicileType.APPIO,
-        address: '',
-      },
-      ioSendMessageResult: AppIoCourtesyMessageEventType.SENT_OPTIN,
-    });
-    const ioNotification = {
-      ..._.cloneDeep(notificationDTO),
-      timeline: [...notificationDTO.timeline, sendCourtesy],
-    };
-    const acceptedStatus = ioNotification.notificationStatusHistory.find(
-      (sh) => sh.status === NotificationStatus.ACCEPTED
-    );
-    acceptedStatus?.relatedTimelineElements.push(sendCourtesy.elementId);
-    const calculatedParsedNotification = parseNotificationDetail(ioNotification);
-    let ioStep;
-    for (const status of calculatedParsedNotification.notificationStatusHistory) {
-      ioStep = status.steps?.find((st) => st.elementId === sendCourtesy.elementId);
-      if (ioStep) {
-        expect(ioStep.hidden).toBeTruthy();
-        break;
-      }
-    }
-    if (!ioStep) {
-      fail('No io event found in the parsed notification');
-    }
-  });
-
-  it('populate the lagalFacts of the ANALOG_FAILURE_WORKFLOW step', () => {
-    const analogFailure = getTimelineElem(TimelineCategory.ANALOG_FAILURE_WORKFLOW, {
-      recIndex: 0,
-      generatedAarUrl: 'https://www.aar.com',
-    });
-    const analogNotification = {
-      ..._.cloneDeep(notificationDTO),
-      timeline: [...notificationDTO.timeline, analogFailure],
-    };
-    let deliveredStatus = analogNotification.notificationStatusHistory.find(
-      (sh) => sh.status === NotificationStatus.DELIVERED
-    );
-    deliveredStatus?.relatedTimelineElements.push(analogFailure.elementId);
-    const calculatedParsedNotification = parseNotificationDetail(analogNotification);
-    deliveredStatus = calculatedParsedNotification.notificationStatusHistory.find(
-      (sh) => sh.status === NotificationStatus.DELIVERED
-    );
-    const analogFailureStep = deliveredStatus?.steps!.find(
-      (s) => s.elementId === analogFailure.elementId
-    );
-    expect(analogFailureStep?.legalFactsIds).toStrictEqual([
-      {
-        documentId: 'https://www.aar.com',
-        documentType: LegalFactType.AAR,
-      },
-    ]);
-  });
-
-  it('deliveryMode DIGITAL', () => {
-    const calculatedParsedNotification = parseNotificationDetail(_.cloneDeep(notificationDTO));
-    const deliveredStep = calculatedParsedNotification.notificationStatusHistory.find(
-      (st) => st.status === NotificationStatus.DELIVERED
-    );
-    expect(deliveredStep?.deliveryMode).toBe(NotificationDeliveryMode.DIGITAL);
-  });
-
-  it('deliveryMode ANALOG', () => {
-    // change the category of the DIGITAL_SUCCESS_WORKFLOW timeline event to SEND_SIMPLE_REGISTERED_LETTER
-    const clonedNotification = _.cloneDeep(notificationDTO);
-    const digitalSuccess = clonedNotification.timeline.find(
-      (tm) => tm.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
-    );
-    digitalSuccess!.category = TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER;
-    const calculatedParsedNotification = parseNotificationDetail(clonedNotification);
-    const deliveredStep = calculatedParsedNotification.notificationStatusHistory.find(
-      (st) => st.status === NotificationStatus.DELIVERED
-    );
-    expect(deliveredStep?.deliveryMode).toBe(NotificationDeliveryMode.ANALOG);
-  });
-
-  it('deliveryMode not assigned', () => {
-    // remove the DIGITAL_SUCCESS_WORKFLOW timeline event
-    const clonedNotification = _.cloneDeep(notificationDTO);
-    clonedNotification.timeline = clonedNotification.timeline.filter(
-      (tm) => tm.category !== TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
-    );
-    const calculatedParsedNotification = parseNotificationDetail(clonedNotification);
-    const deliveredStep = calculatedParsedNotification.notificationStatusHistory.find(
-      (st) => st.status === NotificationStatus.DELIVERED
-    );
-    expect(deliveredStep?.deliveryMode).toBeFalsy();
-  });
-
-  it('shift steps from DELIVERED to DELIVERING', () => {
-    // change the category of the DIGITAL_SUCCESS_WORKFLOW timeline event to DIGITAL_FAILURE_WORKFLOW
-    const digitalFailure = getTimelineElem(TimelineCategory.DIGITAL_FAILURE_WORKFLOW, {
-      recIndex: 0,
-    });
-    const clonedNotification = _.cloneDeep(notificationDTO);
-    const digitalSuccessIndex = clonedNotification.timeline.findIndex(
-      (tm) => tm.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
-    );
-    // add PREPARE_SIMPLE_REGISTERED_LETTER / SEND_SIMPLE_REGISTERED_LETTER
-    const prepareLetter = getTimelineElem(TimelineCategory.PREPARE_SIMPLE_REGISTERED_LETTER, {
-      recIndex: 0,
-      productType: 'RN_RS',
-      physicalAddress: { address: 'Via Rosas 1829', zip: '98036', municipality: 'Graniti' },
-    });
-    const sendLetter = getTimelineElem(TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER, {
-      recIndex: 0,
-      productType: 'RN_RS',
-      physicalAddress: { address: 'Via Rosas 1829', zip: '98036', municipality: 'Graniti' },
-    });
-    // change the status history accordingly
-    const prevDeliveredStatus = clonedNotification.notificationStatusHistory.find(
-      (sh) => sh.status === NotificationStatus.DELIVERED
-    );
-    const digitalSuccessElIndex = prevDeliveredStatus!.relatedTimelineElements.findIndex(
-      (el) => el === clonedNotification.timeline[digitalSuccessIndex].elementId
-    );
-    prevDeliveredStatus!.relatedTimelineElements[digitalSuccessElIndex] = digitalFailure.elementId;
-    prevDeliveredStatus!.relatedTimelineElements.splice(
-      digitalSuccessElIndex + 1,
-      0,
-      prepareLetter.elementId,
-      sendLetter.elementId
-    );
-    const deliveredCount = prevDeliveredStatus!.relatedTimelineElements.length;
-    // change timeline
-    clonedNotification.timeline[digitalSuccessIndex] = digitalFailure;
-    clonedNotification.timeline.splice(digitalSuccessIndex + 1, 0, prepareLetter, sendLetter);
-    // now the test
-    const calculatedParsedNotification = parseNotificationDetail(clonedNotification);
-    const deliveredStatus = calculatedParsedNotification.notificationStatusHistory.find(
-      (st) => st.status === NotificationStatus.DELIVERED
-    );
-    const deliveringStatus = calculatedParsedNotification.notificationStatusHistory.find(
-      (st) => st.status === NotificationStatus.DELIVERING
-    );
-    // delivered status is emptied
-    // we remove all the steps from the start to the last element that match the condition
-    // step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW || step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER || step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS
-    // we now that the last element index is the DIGITAL_SUCCESS_WORKFLOW + num of elements that we add + 1 because the index is 0 based
-    expect(deliveredStatus?.steps).toHaveLength(deliveredCount - digitalSuccessElIndex - 3);
-    // delivering status is filled with delivered elements
-    const prepareLetterEl = deliveringStatus!.steps!.find(
-      (s) => s.elementId === prepareLetter.elementId
-    );
-    const sendLetterEl = deliveringStatus!.steps!.find((s) => s.elementId === sendLetter.elementId);
-    const digitalFailureEl = deliveringStatus!.steps!.find(
-      (s) => s.elementId === digitalFailure.elementId
-    );
-    expect(prepareLetterEl).toBeDefined();
-    expect(sendLetterEl).toBeDefined();
-    expect(digitalFailureEl).toBeDefined();
-  });
-
-  it('recipient in VIEWED status - no delegate', () => {
-    // add a VIEWED status with one NOTIFICATION_VIEWED element - no delegate
-    const clonedNotification = _.cloneDeep(notificationDTO);
-    const viewedElement = getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
-      recIndex: 0,
-    });
-    // add element to timeline
-    clonedNotification.timeline.push(viewedElement);
-    // asd element to status history
-    const viewedStatus: NotificationStatusHistory = {
-      status: NotificationStatus.VIEWED,
-      activeFrom: viewedElement.timestamp,
-      relatedTimelineElements: [viewedElement.elementId],
-    };
-    clonedNotification.notificationStatusHistory.push(viewedStatus);
-    // parse
-    const calculatedParsedNotification = parseNotificationDetail(clonedNotification);
-    // ----------- checks
-    const viewwedStep = calculatedParsedNotification.notificationStatusHistory.find(
-      (st) => st.status === NotificationStatus.VIEWED
-    );
-    expect(viewwedStep?.steps).toHaveLength(1);
-    expect(viewwedStep?.recipient).toBeUndefined();
-  });
-
-  it('recipient in VIEWED status - with delegate', () => {
-    // add a VIEWED status with one NOTIFICATION_VIEWED element - no delegate
-    const clonedNotification = _.cloneDeep(notificationDTO);
-    const viewedElement = getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
-      recIndex: 0,
-      delegateInfo: {
-        internalId: 'mocked-delegate-internal-id',
-        taxId: 'GLLGLL64B15G702I',
-        operatorUuid: 'mocked-delegate-uuid',
-        mandateId: '7c69e30a-23cd-4ef2-9b95-98c5a9f4e636',
-        denomination: 'galileo galilei',
-        delegateType: RecipientType.PF,
-      },
-    });
-    // add element to timeline
-    clonedNotification.timeline.push(viewedElement);
-    // asd element to status history
-    const viewedStatus: NotificationStatusHistory = {
-      status: NotificationStatus.VIEWED,
-      activeFrom: viewedElement.timestamp,
-      relatedTimelineElements: [viewedElement.elementId],
-    };
-    clonedNotification.notificationStatusHistory.push(viewedStatus);
-    // parse
-    const calculatedParsedNotification = parseNotificationDetail(clonedNotification);
-    // ----------- checks
-    const viewwedStep = calculatedParsedNotification.notificationStatusHistory.find(
-      (st) => st.status === NotificationStatus.VIEWED
-    );
-    expect(viewwedStep?.steps).toHaveLength(1);
-    expect(viewwedStep?.recipient).toBe(
-      `${(viewedElement.details as ViewedDetails).delegateInfo!.denomination} (${
-        (viewedElement.details as ViewedDetails).delegateInfo!.taxId
-      })`
-    );
-  });
-
-  it('return radd timeline element when radd is present in timeline', () => {
-    const raddElement = {
-      elementId: 'NOTIFICATION_RADD_RETRIEVED_mock',
-      timestamp: '2022-06-21T11:44:28Z',
-      legalFactsIds: [],
-      category: TimelineCategory.NOTIFICATION_RADD_RETRIEVED,
-      details: {
-        recIndex: 1,
-        eventTimestamp: '2022-06-21T11:44:28Z',
-        raddType: 'ALT',
-        raddTransactionId: '6',
-      },
-    };
-    const raddFromTimeline = notificationToFeRadd.radd;
-    expect(raddElement).toStrictEqual(raddFromTimeline);
   });
 });
 
@@ -1068,7 +636,7 @@ describe('Populate pagoPA and F24 payments', () => {
   };
 
   it('return empty array if user payments is an empty array', () => {
-    const mappedPayments = populatePaymentsPagoPaF24(notificationToFe.timeline, [], paymentInfo);
+    const mappedPayments = populatePaymentsPagoPaF24(notificationDTO.timeline, [], paymentInfo);
     expect(mappedPayments).toStrictEqual([]);
   });
 
@@ -1096,7 +664,7 @@ describe('Populate pagoPA and F24 payments', () => {
         const checkoutSucceded =
           paymentInfo[index].status === PaymentStatus.SUCCEEDED ? paymentInfo[index] : undefined;
 
-        const timelineEvent = notificationToFe.timeline.find(
+        const timelineEvent = notificationDTO.timeline.find(
           (event) =>
             event.category === TimelineCategory.PAYMENT &&
             (event.details as PaidDetails).creditorTaxId === checkoutSucceded?.creditorTaxId &&
@@ -1123,7 +691,7 @@ describe('Populate pagoPA and F24 payments', () => {
     });
 
     const mappedPayments = populatePaymentsPagoPaF24(
-      notificationToFe.timeline,
+      notificationDTO.timeline,
       paymentsData.pagoPaF24,
       [singlePaymentInfo]
     );
@@ -1134,7 +702,7 @@ describe('Populate pagoPA and F24 payments', () => {
 
   it('With empty external registry it should return the mapped array with only timeline info', () => {
     const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item) => {
-      const timelineEvent = notificationToFe.timeline.find(
+      const timelineEvent = notificationDTO.timeline.find(
         (event) =>
           event.category === TimelineCategory.PAYMENT &&
           (event.details as PaidDetails).creditorTaxId === item.pagoPa?.creditorTaxId &&
@@ -1155,7 +723,7 @@ describe('Populate pagoPA and F24 payments', () => {
     });
 
     const mappedPayments = populatePaymentsPagoPaF24(
-      notificationToFe.timeline,
+      notificationDTO.timeline,
       paymentsData.pagoPaF24,
       []
     );
@@ -1170,7 +738,7 @@ describe('Populate pagoPA and F24 payments', () => {
           ? paymentInfo[index]
           : undefined;
 
-      const timelineEvent = notificationToFe.timeline.find(
+      const timelineEvent = notificationDTO.timeline.find(
         (event) =>
           event.category === TimelineCategory.PAYMENT &&
           (event.details as PaidDetails).creditorTaxId === checkoutSucceded?.creditorTaxId &&
@@ -1186,7 +754,7 @@ describe('Populate pagoPA and F24 payments', () => {
     });
 
     const mappedPayments = populatePaymentsPagoPaF24(
-      notificationToFe.timeline,
+      notificationDTO.timeline,
       paymentsData.pagoPaF24,
       paymentInfo
     );
@@ -1195,7 +763,7 @@ describe('Populate pagoPA and F24 payments', () => {
   });
 
   it('If timeline has some undefined keys it should return the mapped array with the ext registry values of the undefined timeline keys', () => {
-    const timeline: INotificationDetailTimeline[] = notificationToFe.timeline.map((item) => ({
+    const timeline: INotificationDetailTimeline[] = notificationDTO.timeline.map((item) => ({
       ...item,
       amount: undefined,
     }));
@@ -1206,7 +774,7 @@ describe('Populate pagoPA and F24 payments', () => {
           ? paymentInfo[index]
           : undefined;
 
-      const timelineEvent = notificationToFe.timeline.find(
+      const timelineEvent = notificationDTO.timeline.find(
         (item) =>
           item.category === TimelineCategory.PAYMENT &&
           (item.details as PaidDetails).creditorTaxId === checkoutSucceded?.creditorTaxId &&

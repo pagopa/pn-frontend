@@ -4,6 +4,7 @@ import {
   EventCategory,
   EventDowntimeType,
   EventPropertyType,
+  KnownFunctionality,
   NotificationStatus,
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
@@ -18,7 +19,7 @@ describe('Mixpanel - Notification detail Strategy', () => {
     const notificationData = {
       downtimeEvents: [
         {
-          rawFunctionality: 'rawFunctionality',
+          functionality: KnownFunctionality.NotificationCreate,
           status: DowntimeStatus.KO,
           startDate: 'startDate',
           endDate: 'endDate',

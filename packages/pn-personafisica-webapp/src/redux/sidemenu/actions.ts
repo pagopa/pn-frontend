@@ -1,23 +1,26 @@
-import { performThunkAction } from '@pagopa-pn/pn-commons';
+import { parseError } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { ContactsApi } from '../../api/contacts/Contacts.api';
-import { DelegationsApi } from '../../api/delegations/Delegations.api';
+import { apiClient } from '../../api/apiClients';
+import { AddressesApiFactory } from '../../generated-client/digital-addresses';
+import { MandateApiFactory } from '../../generated-client/mandate';
 import { CourtesyChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { Delegator } from '../delegation/types';
 
 export enum SIDEMENU_ACTIONS {
   GET_SIDEMENU_INFORMATION = 'getSidemenuInformation',
+  GET_DOMICILE_INFO = 'getDomicileInfo',
 }
 
 export const getSidemenuInformation = createAsyncThunk<Array<Delegator>>(
   SIDEMENU_ACTIONS.GET_SIDEMENU_INFORMATION,
-  // performThunkAction(() => DelegationsApi.getDelegators())
-  async () => {
+  async (_params, { rejectWithValue }) => {
     try {
-      return await DelegationsApi.getDelegators();
+      const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+      const response = await mandateApiFactory.getMandatesByDelegateV1();
+      return response.data as Array<Delegator>;
     } catch (e) {
-      return [];
+      return rejectWithValue(parseError(e));
     }
   }
 );
@@ -26,17 +29,21 @@ export const getSidemenuInformation = createAsyncThunk<Array<Delegator>>(
 // si devono prendere gli indirizzi default, tranne per AppIO che si prendono tutti (senza verificare default)
 // il cui valore non sia DISABLED (cfr. description e commenti della issue JIRA)
 export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
-  'getDomicileInfo',
-  performThunkAction(async () => {
-    const isDefaultAddress = (address: DigitalAddress) =>
-      (address.channelType !== CourtesyChannelType.IOMSG && address.senderId === 'default') ||
-      (address.channelType === CourtesyChannelType.IOMSG &&
-        address.value !== IOAllowedValues.DISABLED);
-    const allAddresses = await ContactsApi.getDigitalAddresses();
+  SIDEMENU_ACTIONS.GET_DOMICILE_INFO,
+  async (_params, { rejectWithValue }) => {
+    try {
+      const isDefaultAddress = (address: DigitalAddress) =>
+        (address.channelType !== CourtesyChannelType.IOMSG && address.senderId === 'default') ||
+        (address.channelType === CourtesyChannelType.IOMSG &&
+          address.value !== IOAllowedValues.DISABLED);
 
-    return [
-      ...allAddresses.legal.filter(isDefaultAddress),
-      ...allAddresses.courtesy.filter(isDefaultAddress),
-    ];
-  })
+      const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
+      const response = await digitalAddressesFactory.getAddressesV1();
+      const allAddresses = response.data as Array<DigitalAddress>;
+
+      return [...allAddresses.filter(isDefaultAddress)];
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );

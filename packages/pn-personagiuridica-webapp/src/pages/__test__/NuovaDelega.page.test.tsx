@@ -15,7 +15,6 @@ import { createDelegationPayload } from '../../__mocks__/CreateDelegation.mock';
 import { parties } from '../../__mocks__/ExternalRegistry.mock';
 import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { CREATE_DELEGATION } from '../../api/delegations/delegations.routes';
 import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
 import * as routes from '../../navigation/routes.const';
 import { createDelegationMapper } from '../../redux/newDelegation/actions';
@@ -148,7 +147,7 @@ describe('NuovaDelega page', async () => {
 
     // simulate click of "back" button
     const backButton = result.getByTestId('breadcrumb-indietro-button');
-    fireEvent.click(backButton!);
+    fireEvent.click(backButton);
 
     // after clicking "back" button - mocked page present
     await waitFor(() => {
@@ -163,7 +162,7 @@ describe('NuovaDelega page', async () => {
       expirationDate: new Date('01/01/2122'),
       verificationCode: '34153',
     };
-    mock.onPost(CREATE_DELEGATION()).reply(200, createDelegationMapper(creationPayload));
+    mock.onPost('/bff/v1/mandate', createDelegationMapper(creationPayload)).reply(200);
     const { container, getByTestId, getByText } = render(<NuovaDelega />);
     const form = container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'nome', createDelegationPayload.nome);
@@ -171,10 +170,10 @@ describe('NuovaDelega page', async () => {
     await testInput(form, 'codiceFiscale', createDelegationPayload.codiceFiscale);
     await testInput(form, 'expirationDate', '01/01/2122');
     const button = getByTestId('createButton');
-    fireEvent.click(button!);
+    fireEvent.click(button);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
-      expect(mock.history.post[0].url).toBe(CREATE_DELEGATION());
+      expect(mock.history.post[0].url).toBe('/bff/v1/mandate');
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(
         createDelegationMapper(creationPayload)
       );
@@ -194,7 +193,7 @@ describe('NuovaDelega page', async () => {
     // the form is validate on submit
     await testInput(container, 'expirationDate', '');
     const button = getByTestId('createButton');
-    fireEvent.click(button!);
+    fireEvent.click(button);
     // check errors on required field
     const nameError = container.querySelector('#nome-helper-text');
     expect(nameError).toHaveTextContent('nuovaDelega.validation.name.required');
@@ -236,7 +235,7 @@ describe('NuovaDelega page', async () => {
     const businessName = container.querySelector('input[name="ragioneSociale"]');
     expect(businessName).toBeInTheDocument();
     // rerun form submission
-    fireEvent.click(button!);
+    fireEvent.click(button);
     const businessNameError = await waitFor(() =>
       container.querySelector('#ragioneSociale-helper-text')
     );
@@ -252,7 +251,7 @@ describe('NuovaDelega page', async () => {
       enti: [parties[1]],
       selectTuttiEntiOrSelezionati: 'entiSelezionati',
     };
-    mock.onPost(CREATE_DELEGATION()).reply(200, createDelegationMapper(creationPayload));
+    mock.onPost('/bff/v1/mandate', createDelegationMapper(creationPayload)).reply(200);
     const { container, getByTestId } = render(<NuovaDelega />);
     // switch to persona giuridica
     await testRadio(
@@ -279,10 +278,10 @@ describe('NuovaDelega page', async () => {
     await testAutocomplete(container, 'enti', parties, true, 1);
     // create delegation
     const button = getByTestId('createButton');
-    fireEvent.click(button!);
+    fireEvent.click(button);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
-      expect(mock.history.post[0].url).toBe(CREATE_DELEGATION());
+      expect(mock.history.post[0].url).toBe('/bff/v1/mandate');
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(
         createDelegationMapper(creationPayload)
       );

@@ -6,22 +6,14 @@ import { styled } from '@mui/material/styles';
 import { TimelineNotification } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
-import {
-  LegalFactId,
-  NotificationDetailOtherDocument,
-  NotificationDetailRecipient,
-  NotificationStatusHistory,
-} from '../../models';
+import { LegalFactId, NotificationDetailRecipient, NotificationStatusHistory } from '../../models';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
 
 type Props = {
   recipients: Array<NotificationDetailRecipient>;
   statusHistory: Array<NotificationStatusHistory>;
   title: string;
-  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument
-  // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
-  // Cfr. comment in the definition of INotificationDetailTimeline in src/models/NotificationDetail.ts.
-  clickHandler: (legalFactId: LegalFactId | NotificationDetailOtherDocument) => void;
+  clickHandler: (legalFactId: LegalFactId) => void;
   historyButtonLabel: string;
   showMoreButtonLabel: string;
   showLessButtonLabel: string;
@@ -101,7 +93,7 @@ const NotificationDetailTimeline = ({
       recipients={recipients}
       position={getPosition(i)}
       clickHandler={clickHandler}
-      key={`timeline_sep_${i}`}
+      key={`timeline_sep_${t.status}`}
       showMoreButtonLabel={showMoreButtonLabel}
       showLessButtonLabel={showLessButtonLabel}
       handleTrackShowMoreLess={handleTrackShowMoreLess}
