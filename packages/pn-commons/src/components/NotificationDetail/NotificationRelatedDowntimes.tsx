@@ -22,14 +22,11 @@ type Props = {
   apiId: string;
   // for disabled downloads
   disableDownloads?: boolean;
-  // callback function when component is ready
-  componentReady?: () => void;
 };
 
 /*
  * Some auxiliary functions
  */
-
 function completeFormatDate(dateAsString: string) {
   const datePrefix = getLocalizedOrDefaultLabel(
     'notifications',
@@ -59,10 +56,14 @@ function mainTextForDowntime(downtime: Downtime) {
       );
 }
 
-/*
- * The component!
- * ****************************************************************** */
-const NotificationRelatedDowntimes = (props: Props) => {
+const NotificationRelatedDowntimes: React.FC<Props> = ({
+  notificationStatusHistory,
+  fetchDowntimeEvents,
+  downtimeEvents,
+  fetchDowntimeLegalFactDocumentDetails,
+  apiId,
+  disableDownloads,
+}) => {
   const theme = useTheme();
 
   const title = getLocalizedOrDefaultLabel('notifications', 'detail.downtimes.title', 'DISSERVIZI');
@@ -72,12 +73,6 @@ const NotificationRelatedDowntimes = (props: Props) => {
     });
 
   const [shouldFetchEvents, setShouldFetchEvents] = useState<boolean>(false);
-
-  const componentReadyFn = () => {
-    if (props.componentReady) {
-      props.componentReady();
-    }
-  };
 
   /*
    * Decide whether the events are to be obtained, in such case it determines the time range
@@ -95,19 +90,19 @@ const NotificationRelatedDowntimes = (props: Props) => {
    *   and the earlier between the EFFECTIVE_DATE, VIEWED or UNREACHABLE events must be shown.
    */
   const doFetchEvents = useCallback(() => {
-    const acceptedRecord = props.notificationStatusHistory.find(
+    const acceptedRecord = notificationStatusHistory.find(
       (record) => record.status === NotificationStatus.ACCEPTED
     );
-    const effectiveDateRecord = props.notificationStatusHistory.find(
+    const effectiveDateRecord = notificationStatusHistory.find(
       (record) => record.status === NotificationStatus.EFFECTIVE_DATE
     );
-    const viewedRecord = props.notificationStatusHistory.find(
+    const viewedRecord = notificationStatusHistory.find(
       (record) => record.status === NotificationStatus.VIEWED
     );
-    const unreachableRecord = props.notificationStatusHistory.find(
+    const unreachableRecord = notificationStatusHistory.find(
       (record) => record.status === NotificationStatus.UNREACHABLE
     );
-    const cancelledRecord = props.notificationStatusHistory.find(
+    const cancelledRecord = notificationStatusHistory.find(
       (record) => record.status === NotificationStatus.CANCELLED
     );
 
@@ -132,21 +127,22 @@ const NotificationRelatedDowntimes = (props: Props) => {
 
     if (invalidStatusHistory || !acceptedRecord) {
       setShouldFetchEvents(false);
-    } else {
-      setShouldFetchEvents(true);
-      props.fetchDowntimeEvents(
-        acceptedRecord.activeFrom,
-        completedRecord?.activeFrom || new Date().toISOString()
-      );
+      return;
     }
-    componentReadyFn();
-  }, [props.notificationStatusHistory]);
+
+    setShouldFetchEvents(true);
+
+    fetchDowntimeEvents(
+      acceptedRecord.activeFrom,
+      completedRecord?.activeFrom || new Date().toISOString()
+    );
+  }, [notificationStatusHistory]);
 
   useEffect(() => doFetchEvents(), [doFetchEvents]);
 
   return (
     <ApiErrorWrapper
-      apiId={props.apiId}
+      apiId={apiId}
       reloadAction={doFetchEvents}
       mainText={getLocalizedOrDefaultLabel(
         'notifications',
@@ -154,7 +150,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
         'Errore API'
       )}
     >
-      {shouldFetchEvents && props.downtimeEvents.length > 0 ? (
+      {shouldFetchEvents && downtimeEvents.length > 0 ? (
         <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="downtimesBox">
           <Grid
             key={'downtimes-section'}
@@ -179,7 +175,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
           <Grid key={'detail-documents-message'} item>
             <Stack direction="column">
               {/* Render each downtime event */}
-              {props.downtimeEvents.map((event, ix) => (
+              {downtimeEvents.map((event, ix) => (
                 <Stack
                   key={ix}
                   direction="column"
@@ -217,11 +213,9 @@ const NotificationRelatedDowntimes = (props: Props) => {
                         color="primary"
                         startIcon={<AttachFileIcon />}
                         onClick={() => {
-                          void props.fetchDowntimeLegalFactDocumentDetails(
-                            event.legalFactId as string
-                          );
+                          void fetchDowntimeLegalFactDocumentDetails(event.legalFactId as string);
                         }}
-                        disabled={props.disableDownloads}
+                        disabled={disableDownloads}
                       >
                         {getLocalizedOrDefaultLabel(
                           'notifications',
