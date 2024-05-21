@@ -3,7 +3,6 @@ import { vi } from 'vitest';
 
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { GET_GROUPS } from '../../../api/external-registries/external-registries-routes';
 import GroupSelector from '../GroupSelector';
 
 vi.mock('react-i18next', () => ({
@@ -32,7 +31,7 @@ describe('GroupSelector component', async () => {
   });
 
   it('checks that it opens and renders the children correctly', async () => {
-    mock.onGet(GET_GROUPS()).reply(200, [
+    mock.onGet('/bff/v1/recipient/groups').reply(200, [
       { id: 'group-1', name: 'Group 1' },
       { id: 'group-2', name: 'Group 2' },
     ]);

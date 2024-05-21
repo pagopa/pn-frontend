@@ -2,8 +2,7 @@ import { AxiosResponse } from 'axios';
 import { apiClient } from '../apiClients';
 import { FilterPartiesParams, Party } from '../../models/party';
 
-import { Groups } from '../../models/groups';
-import { GET_ALL_ACTIVATED_PARTIES, GET_GROUPS } from './external-registries-routes';
+import { GET_ALL_ACTIVATED_PARTIES } from './external-registries-routes';
 
 export const ExternalRegistriesAPI = {
   getAllActivatedParties: (payload?: FilterPartiesParams): Promise<Array<Party>> =>
@@ -14,14 +13,4 @@ export const ExternalRegistriesAPI = {
         )
       )
       .then((response: AxiosResponse<Array<Party>>) => response.data),
-
-  /**
-   * Get PG groups
-   * @param payload
-   * @returns
-   */
-  getGroups: (): Promise<Array<Groups>> =>
-    apiClient
-      .get<Array<Groups>>(GET_GROUPS())
-      .then((response: AxiosResponse<Array<Groups>>) => response.data),
 };

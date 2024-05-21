@@ -25,7 +25,6 @@ import {
   within,
 } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { GET_GROUPS } from '../../api/external-registries/external-registries-routes';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import Notifiche from '../Notifiche.page';
 
@@ -291,7 +290,7 @@ describe('Notifiche Page ', async () => {
       ...notificationsDTO,
       resultsPage: notificationGroup3,
     });
-    mock.onGet(GET_GROUPS()).reply(200, [
+    mock.onGet('/bff/v1/recipient/groups').reply(200, [
       { id: 'group-1', name: 'Group 1' },
       { id: 'group-2', name: 'Group 2' },
       { id: 'group-3', name: 'Group 3' },
@@ -312,7 +311,7 @@ describe('Notifiche Page ', async () => {
       });
     });
     expect(mock.history.get).toHaveLength(2);
-    expect(mock.history.get[0].url).toContain(GET_GROUPS());
+    expect(mock.history.get[0].url).toContain('/bff/v1/recipient/groups');
     expect(mock.history.get[1].url).toContain('/bff/v1/notifications/received/delegated');
     const groupSelector = result.getByTestId('groupSelector');
     expect(groupSelector).toBeInTheDocument();
