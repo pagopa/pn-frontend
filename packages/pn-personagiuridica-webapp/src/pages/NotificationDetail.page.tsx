@@ -341,7 +341,16 @@ const NotificationDetail = () => {
       dispatch(getDowntimeLegalFact(legalFactId))
         .unwrap()
         .then((res) => {
-          if (res.url) {
+          if (res.retryAfter) {
+            dispatch(
+              appStateActions.addInfo({
+                title: '',
+                message: t(`detail.document-not-available`, {
+                  ns: 'notifiche',
+                }),
+              })
+            );
+          } else if (res.url) {
             downloadDocument(res.url);
           }
         })
