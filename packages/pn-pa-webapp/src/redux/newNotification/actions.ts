@@ -27,7 +27,7 @@ export const getUserGroups = createAsyncThunk(
   async (params: GroupStatus | undefined, { rejectWithValue }) => {
     try {
       const infoPaFactory = InfoPaApiFactory(undefined, undefined, apiClient);
-      const response = await infoPaFactory.getGroupsV1(params);
+      const response = await infoPaFactory.getPAGroupsV1(params);
       return response.data as Array<UserGroup>;
     } catch (e) {
       return rejectWithValue(parseError(e));
