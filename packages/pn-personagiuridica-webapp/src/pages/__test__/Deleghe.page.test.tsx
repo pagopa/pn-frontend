@@ -41,7 +41,7 @@ describe('Deleghe page', async () => {
       nextPagesKey: [],
       moreResult: false,
     });
-    mock.onGet('/bff/v1/recipient/groups').reply(200, []);
+    mock.onGet('/bff/v1/pg/groups').reply(200, []);
     const { container, queryByTestId, getByTestId } = render(
       <MemoryRouter initialEntries={[routes.DELEGHEACARICO]}>
         <Routes>
@@ -74,7 +74,7 @@ describe('Deleghe page', async () => {
       nextPagesKey: [],
       moreResult: false,
     });
-    mock.onGet('/bff/v1/recipient/groups').reply(200, []);
+    mock.onGet('/bff/v1/pg/groups').reply(200, []);
     const { queryByTestId, getByTestId } = render(
       <MemoryRouter initialEntries={[routes.DELEGHEACARICO]}>
         <Routes>
