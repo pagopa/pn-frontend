@@ -214,7 +214,7 @@ describe('NuovaDelega page', async () => {
     const entiError = container.querySelector('#enti-helper-text');
     expect(entiError).toHaveTextContent('nuovaDelega.validation.entiSelected.required');
     // inser wrong data
-    await testInput(container, 'codiceFiscale', 'wrong-fiscal-code');
+    await testInput(container, 'codiceFiscale', 'WRONG-FISCAL-CODE');
     expect(fiscalCodeError).toHaveTextContent('nuovaDelega.validation.fiscalCode.wrong');
     await testInput(container, 'expirationDate', formatDate(yesterday.toISOString()));
     expect(expirationDateError).toHaveTextContent('nuovaDelega.validation.expirationDate.wrong');
