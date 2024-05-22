@@ -93,7 +93,7 @@ describe('New notification redux state tests', () => {
     const mockResponse = [
       { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' as GroupStatus },
     ];
-    mock.onGet('/bff/v1/groups').reply(200, mockResponse);
+    mock.onGet('/bff/v1/pa/groups').reply(200, mockResponse);
     const action = await store.dispatch(getUserGroups());
     expect(action.type).toBe('getUserGroups/fulfilled');
     expect(action.payload).toEqual(mockResponse);

@@ -78,7 +78,7 @@ describe('api keys page redux state test', () => {
     const mockResponse = [
       { id: 'mocked-id', name: 'mocked-name', description: '', status: GroupStatus.ACTIVE },
     ];
-    mock.onGet('/bff/v1/groups').reply(200, mockResponse);
+    mock.onGet('/bff/v1/pa/groups').reply(200, mockResponse);
     const action = await store.dispatch(getUserGroups());
     const payload = action.payload;
     expect(action.type).toBe('getUserGroups/fulfilled');

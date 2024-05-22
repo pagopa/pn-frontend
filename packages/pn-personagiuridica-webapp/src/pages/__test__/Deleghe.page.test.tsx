@@ -6,7 +6,6 @@ import { userResponse } from '../../__mocks__/Auth.mock';
 import { mandatesByDelegate, mandatesByDelegator } from '../../__mocks__/Delegations.mock';
 import { fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { GET_GROUPS } from '../../api/external-registries/external-registries-routes';
 import DelegatesByCompany from '../../components/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../../components/Deleghe/DelegationsOfTheCompany';
 import * as routes from '../../navigation/routes.const';
@@ -42,7 +41,7 @@ describe('Deleghe page', async () => {
       nextPagesKey: [],
       moreResult: false,
     });
-    mock.onGet(GET_GROUPS()).reply(200, []);
+    mock.onGet('/bff/v1/pg/groups').reply(200, []);
     const { container, queryByTestId, getByTestId } = render(
       <MemoryRouter initialEntries={[routes.DELEGHEACARICO]}>
         <Routes>
@@ -75,7 +74,7 @@ describe('Deleghe page', async () => {
       nextPagesKey: [],
       moreResult: false,
     });
-    mock.onGet(GET_GROUPS()).reply(200, []);
+    mock.onGet('/bff/v1/pg/groups').reply(200, []);
     const { queryByTestId, getByTestId } = render(
       <MemoryRouter initialEntries={[routes.DELEGHEACARICO]}>
         <Routes>

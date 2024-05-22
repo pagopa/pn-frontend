@@ -222,41 +222,6 @@ export interface ProblemError {
 export const InfoPaApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * This operation retrieves the groups from Self Care.
-         * @summary Get groups
-         * @param {BffPaGroupStatus} [status] Se valorizzato indica di tornare solo i gruppi nello stato passato
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getGroupsV1: async (status?: BffPaGroupStatus, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/bff/v1/groups`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (status !== undefined) {
-                localVarQueryParameter['status'] = status;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * This operation retrieves all active products associated with the specified institution and user.
          * @summary Get Products list of an Institution
          * @param {*} [options] Override http request option.
@@ -316,6 +281,41 @@ export const InfoPaApiAxiosParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * This operation retrieves the groups from Self Care.
+         * @summary Get PA Groups list
+         * @param {BffPaGroupStatus} [status] Se valorizzato indica di tornare solo i gruppi nello stato passato
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPAGroupsV1: async (status?: BffPaGroupStatus, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/bff/v1/pa/groups`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (status !== undefined) {
+                localVarQueryParameter['status'] = status;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -326,19 +326,6 @@ export const InfoPaApiAxiosParamCreator = function (configuration?: Configuratio
 export const InfoPaApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = InfoPaApiAxiosParamCreator(configuration)
     return {
-        /**
-         * This operation retrieves the groups from Self Care.
-         * @summary Get groups
-         * @param {BffPaGroupStatus} [status] Se valorizzato indica di tornare solo i gruppi nello stato passato
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getGroupsV1(status?: BffPaGroupStatus, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BffPaGroup>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getGroupsV1(status, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['InfoPaApi.getGroupsV1']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
         /**
          * This operation retrieves all active products associated with the specified institution and user.
          * @summary Get Products list of an Institution
@@ -363,6 +350,19 @@ export const InfoPaApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['InfoPaApi.getInstitutionsV1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * This operation retrieves the groups from Self Care.
+         * @summary Get PA Groups list
+         * @param {BffPaGroupStatus} [status] Se valorizzato indica di tornare solo i gruppi nello stato passato
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPAGroupsV1(status?: BffPaGroupStatus, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BffPaGroup>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPAGroupsV1(status, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['InfoPaApi.getPAGroupsV1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -373,16 +373,6 @@ export const InfoPaApiFp = function(configuration?: Configuration) {
 export const InfoPaApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = InfoPaApiFp(configuration)
     return {
-        /**
-         * This operation retrieves the groups from Self Care.
-         * @summary Get groups
-         * @param {BffPaGroupStatus} [status] Se valorizzato indica di tornare solo i gruppi nello stato passato
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getGroupsV1(status?: BffPaGroupStatus, options?: any): AxiosPromise<Array<BffPaGroup>> {
-            return localVarFp.getGroupsV1(status, options).then((request) => request(axios, basePath));
-        },
         /**
          * This operation retrieves all active products associated with the specified institution and user.
          * @summary Get Products list of an Institution
@@ -401,6 +391,16 @@ export const InfoPaApiFactory = function (configuration?: Configuration, basePat
         getInstitutionsV1(options?: any): AxiosPromise<Array<BffInstitution>> {
             return localVarFp.getInstitutionsV1(options).then((request) => request(axios, basePath));
         },
+        /**
+         * This operation retrieves the groups from Self Care.
+         * @summary Get PA Groups list
+         * @param {BffPaGroupStatus} [status] Se valorizzato indica di tornare solo i gruppi nello stato passato
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPAGroupsV1(status?: BffPaGroupStatus, options?: any): AxiosPromise<Array<BffPaGroup>> {
+            return localVarFp.getPAGroupsV1(status, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -411,18 +411,6 @@ export const InfoPaApiFactory = function (configuration?: Configuration, basePat
  * @extends {BaseAPI}
  */
 export class InfoPaApi extends BaseAPI {
-    /**
-     * This operation retrieves the groups from Self Care.
-     * @summary Get groups
-     * @param {BffPaGroupStatus} [status] Se valorizzato indica di tornare solo i gruppi nello stato passato
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof InfoPaApi
-     */
-    public getGroupsV1(status?: BffPaGroupStatus, options?: RawAxiosRequestConfig) {
-        return InfoPaApiFp(this.configuration).getGroupsV1(status, options).then((request) => request(this.axios, this.basePath));
-    }
-
     /**
      * This operation retrieves all active products associated with the specified institution and user.
      * @summary Get Products list of an Institution
@@ -443,6 +431,18 @@ export class InfoPaApi extends BaseAPI {
      */
     public getInstitutionsV1(options?: RawAxiosRequestConfig) {
         return InfoPaApiFp(this.configuration).getInstitutionsV1(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * This operation retrieves the groups from Self Care.
+     * @summary Get PA Groups list
+     * @param {BffPaGroupStatus} [status] Se valorizzato indica di tornare solo i gruppi nello stato passato
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InfoPaApi
+     */
+    public getPAGroupsV1(status?: BffPaGroupStatus, options?: RawAxiosRequestConfig) {
+        return InfoPaApiFp(this.configuration).getPAGroupsV1(status, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
