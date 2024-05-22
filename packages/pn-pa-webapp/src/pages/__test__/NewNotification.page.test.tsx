@@ -47,7 +47,7 @@ describe('NewNotification Page without payment', async () => {
 
   beforeEach(() => {
     mockIsPaymentEnabledGetter.mockReturnValue(false);
-    mock.onGet('/bff/v1/groups?status=ACTIVE').reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(200, newNotificationGroups);
   });
 
   afterEach(() => {
