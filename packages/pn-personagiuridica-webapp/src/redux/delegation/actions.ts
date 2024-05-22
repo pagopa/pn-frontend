@@ -1,14 +1,15 @@
-import { parseError, performThunkAction } from '@pagopa-pn/pn-commons';
+import { parseError } from '@pagopa-pn/pn-commons';
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
-import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import { MandateApiFactory } from '../../generated-client/mandate';
 import { Delegate, GetDelegatorsFilters, GetDelegatorsResponse } from '../../models/Deleghe';
-import { Groups } from '../../models/groups';
+import { GroupStatus, Groups } from '../../models/groups';
+import { InfoRecipientApiFactory } from '../../generated-client/recipient-info';
 
 export enum DELEGATION_ACTIONS {
   GET_MANDATES_BY_DELEGATOR = 'getMandatesByDelegator',
+  GET_GROUPS = 'getGroups',
   SEARCH_MANDATES_BY_DELEGATE = 'searchMandatesByDelegate',
   REVOKE_MANDATE = 'revokeMandate',
   REJECT_MANDATE = 'rejectMandate',
@@ -88,9 +89,19 @@ export const acceptMandate = createAsyncThunk<
   }
 });
 
-export const getGroups = createAsyncThunk<Array<Groups>>(
-  'getGroups',
-  performThunkAction(() => ExternalRegistriesAPI.getGroups())
+/**
+ * Get groups of pg
+ */
+export const getGroups = createAsyncThunk(
+  DELEGATION_ACTIONS.GET_GROUPS, async (params: GroupStatus | undefined, { rejectWithValue }) => {
+    try {
+      const infoRecipientFactory = InfoRecipientApiFactory(undefined, undefined, apiClient);
+      const response = await infoRecipientFactory.getPGGroupsV1(params);
+      return response.data as Array<Groups>;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
 export const updateMandate = createAsyncThunk<
