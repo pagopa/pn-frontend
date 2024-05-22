@@ -541,6 +541,9 @@ const Recipient: React.FC<Props> = ({
                             `recipients[${index}].showDigitalDomicile`,
                             !values.recipients[index].showDigitalDomicile
                           );
+                          if (!values.recipients[index].showDigitalDomicile) {
+                            setFieldValue(`recipients[${index}].digitalDomicile`, '');
+                          }
                           e.preventDefault(); // avoids issue with non clickable checkbox label in FormControlLabel
                         }}
                       >
