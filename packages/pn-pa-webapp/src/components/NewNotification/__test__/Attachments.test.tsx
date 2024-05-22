@@ -14,7 +14,6 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient, externalClient } from '../../../api/apiClients';
-import { NOTIFICATION_PRELOAD_DOCUMENT } from '../../../api/notifications/notifications.routes';
 import { NewNotificationDocument } from '../../../models/NewNotification';
 import Attachments from '../Attachments';
 
@@ -103,7 +102,7 @@ describe('Attachments Component with payment enabled', async () => {
 
   it('changes form values and clicks on confirm - one document', async () => {
     mock
-      .onPost(NOTIFICATION_PRELOAD_DOCUMENT(), [
+      .onPost('/bff/v1/notifications/sent/documents/preload', [
         {
           key: newNotification.documents[0].name,
           contentType: newNotification.documents[0].contentType,
@@ -237,7 +236,7 @@ describe('Attachments Component with payment enabled', async () => {
 
   it('changes form values and clicks on confirm - two documents', async () => {
     mock
-      .onPost(NOTIFICATION_PRELOAD_DOCUMENT(), [
+      .onPost('/bff/v1/notifications/sent/documents/preload', [
         {
           key: newNotification.documents[0].name,
           contentType: newNotification.documents[0].contentType,

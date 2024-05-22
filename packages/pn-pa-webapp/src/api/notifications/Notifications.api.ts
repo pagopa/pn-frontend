@@ -1,29 +1,6 @@
-import { NewNotificationDTO, NewNotificationResponse } from '../../models/NewNotification';
-import { apiClient, externalClient } from '../apiClients';
-import { CREATE_NOTIFICATION, NOTIFICATION_PRELOAD_DOCUMENT } from './notifications.routes';
+import { externalClient } from '../apiClients';
 
 export const NotificationsApi = {
-  /**
-   * Preload notification document
-   * @param  {string} key
-   * @param  {string} contentType
-   * @returns Promise
-   */
-  preloadNotificationDocument: (
-    items: Array<{ key: string; contentType: string; sha256: string }>
-  ): Promise<Array<{ url: string; secret: string; httpMethod: string; key: string }>> =>
-    apiClient
-      .post<Array<{ url: string; secret: string; httpMethod: string; key: string }>>(
-        NOTIFICATION_PRELOAD_DOCUMENT(),
-        items
-      )
-      .then((response) => {
-        if (response.data) {
-          return response.data;
-        }
-        return [];
-      }),
-
   /**
    * Upload notification document
    * @param  {string} url
@@ -32,7 +9,7 @@ export const NotificationsApi = {
    * @param  {string} fileBase64
    * @returns Promise
    */
-  uploadNotificationAttachment: (
+  uploadNotificationDocument: (
     url: string,
     sha256: string,
     secret: string,
@@ -48,14 +25,4 @@ export const NotificationsApi = {
       },
     }).then((res) => res.headers['x-amz-version-id']);
   },
-
-  /**
-   * Create new notification
-   * @param  {NewNotificationDTO} notification
-   * @returns Promise
-   */
-  createNewNotification: (notification: NewNotificationDTO): Promise<NewNotificationResponse> =>
-    apiClient
-      .post<NewNotificationResponse>(CREATE_NOTIFICATION(), notification)
-      .then((response) => response.data),
 };
