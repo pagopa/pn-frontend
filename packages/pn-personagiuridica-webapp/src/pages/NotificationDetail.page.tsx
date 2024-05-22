@@ -340,20 +340,7 @@ const NotificationDetail = () => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
       dispatch(getDowntimeLegalFact(legalFactId))
         .unwrap()
-        .then((res) => {
-          if (res.retryAfter) {
-            dispatch(
-              appStateActions.addInfo({
-                title: '',
-                message: t(`detail.document-not-available`, {
-                  ns: 'notifiche',
-                }),
-              })
-            );
-          } else if (res.url) {
-            downloadDocument(res.url);
-          }
-        })
+        .then(showInfoMessageIfRetryAfterOrDownload)
         .catch((e) => console.log(e));
     }
   }, []);
