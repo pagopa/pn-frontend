@@ -12,6 +12,8 @@ export const tenYearsAgo = dateFns.startOfDay(
   new Date(new Date().setMonth(today.getMonth() - 120))
 );
 
+export const oneYearAgo = dateFns.startOfDay(new Date(new Date().setMonth(today.getMonth() - 12)));
+
 export function dateIsLessThan10Years(sentAt: string): boolean {
   return Date.parse(formatToTimezoneString(today)) - Date.parse(sentAt) < 315569520000;
 }
@@ -107,4 +109,14 @@ export function formatFromString(date: string): Date | null {
     return dateParsed;
   }
   return null;
+}
+
+export function formatDateSMonth(date: Date | string, year: boolean = false): string {
+  const the_date = typeof date === 'string' ? new Date(date) : date;
+  const shortMonth = getLocalizedOrDefaultLabel(
+    'common',
+    `date-time.s-month.${the_date.getMonth()}`
+  );
+  const yearTxt = year ? ` ${the_date.getFullYear()}` : '';
+  return `${the_date.getDate()} ${shortMonth}${yearTxt}`;
 }

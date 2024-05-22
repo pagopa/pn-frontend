@@ -80,7 +80,7 @@ export interface StatisticsParams<TDate extends string | Date> {
   endDate: TDate;
 }
 
-interface IStatisticsDailySummary {
+export interface IStatisticsDailySummary {
   send_date: string;
   count: number;
 }
@@ -143,13 +143,13 @@ export interface IDigitalErrorsDetailStatistics {
 }
 
 export interface StatisticsParsedData {
-  [StatisticsDataTypes.FiledStatistics]?: object;
-  [StatisticsDataTypes.LastStateStatistics]?: object;
-  [StatisticsDataTypes.DeliveryModeStatistics]?: object;
-  [StatisticsDataTypes.DigitalStateStatistics]?: object;
-  [StatisticsDataTypes.DigitalMeanTimeStatistics]?: object;
-  [StatisticsDataTypes.DigitalErrorsDetailStatistics]?: object;
-  [StatisticsDataTypes.DigitalAttemptsStatistics]?: object;
+  [StatisticsDataTypes.FiledStatistics]?: IFiledStatistics;
+  [StatisticsDataTypes.LastStateStatistics]?: ILastStateStatistics;
+  [StatisticsDataTypes.DeliveryModeStatistics]?: IDeliveryModeStatistics;
+  [StatisticsDataTypes.DigitalStateStatistics]?: IDigitalStateStatistics;
+  [StatisticsDataTypes.DigitalMeanTimeStatistics]?: IDigitalMeanTimeStatistics;
+  [StatisticsDataTypes.DigitalErrorsDetailStatistics]?: IDigitalErrorsDetailStatistics;
+  [StatisticsDataTypes.DigitalAttemptsStatistics]?: Array<IAttemptsCount>;
 }
 
 export interface StatisticsParsedResponse {
@@ -159,4 +159,19 @@ export interface StatisticsParsedResponse {
   startDate: string;
   endDate: string;
   data: StatisticsParsedData;
+}
+
+export enum Timeframe {
+  daily = 'daily',
+  weekly = 'weekly',
+}
+
+export enum WEEK_DAYS {
+  SUNDAY,
+  MONDAY,
+  TUESDAY,
+  WEDNESDAY,
+  THURSDAY,
+  FRIDAY,
+  SATURDAY,
 }

@@ -5,6 +5,7 @@ import {
   AppStatusRender,
   GetDowntimeHistoryParams,
   PaginationData,
+  appStateActions,
   downloadDocument,
 } from '@pagopa-pn/pn-commons';
 
@@ -21,10 +22,7 @@ import { RootState } from '../redux/store';
 const AppStatus = () => {
   const dispatch = useAppDispatch();
   const appStatus = useAppSelector((state: RootState) => state.appStatus);
-  // The useTranslation *must* be activated, even when it is not directly used in this component' code,
-  // to avoid problems in the components defined in pn-commons,
-  // when these components need to access to localized messages.
-  useTranslation(['appStatus']);
+  const { t } = useTranslation(['appStatus']);
 
   const fetchCurrentStatus = useCallback(() => {
     void dispatch(getCurrentAppStatus());
@@ -42,7 +40,16 @@ const AppStatus = () => {
       dispatch(getDowntimeLegalFact(legalFactId))
         .unwrap()
         .then((response) => {
-          if (response.url) {
+          if (response.retryAfter) {
+            dispatch(
+              appStateActions.addInfo({
+                title: '',
+                message: t(`detail.document-not-available`, {
+                  ns: 'notifiche',
+                }),
+              })
+            );
+          } else if (response.url) {
             downloadDocument(response.url);
           }
         })
