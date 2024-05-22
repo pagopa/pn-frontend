@@ -10,7 +10,7 @@ export const mock3: StatisticsResponse = {
   sender_id: '8bdd616c-6130-4f8b-b450-1035714433b5',
   genTimestamp: '2024-04-24T11:11:50.835846+00:00Z',
   startDate: '2023-07-17',
-  endDate: '2023-04-17',
+  endDate: '2024-04-17',
   lastDate: '2024-04-21',
   notifications_overview: [
     {

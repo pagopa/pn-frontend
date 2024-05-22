@@ -186,7 +186,7 @@ describe('delegation redux state tests', () => {
         status: GroupStatus.ACTIVE,
       },
     ];
-    mock.onGet('/bff/v1/recipient/groups').reply(200, response);
+    mock.onGet('/bff/v1/pg/groups').reply(200, response);
     const action = await store.dispatch(getGroups());
     expect(action.type).toBe('getGroups/fulfilled');
     expect(action.payload).toEqual(response);

@@ -161,7 +161,7 @@ export const InfoRecipientApiAxiosParamCreator = function (configuration?: Confi
          * @throws {RequiredError}
          */
         getPGGroupsV1: async (status?: BffPgGroupStatus, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/bff/v1/recipient/groups`;
+            const localVarPath = `/bff/v1/pg/groups`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;

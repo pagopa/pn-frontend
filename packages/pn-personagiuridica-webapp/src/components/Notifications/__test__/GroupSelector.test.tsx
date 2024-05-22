@@ -31,7 +31,7 @@ describe('GroupSelector component', async () => {
   });
 
   it('checks that it opens and renders the children correctly', async () => {
-    mock.onGet('/bff/v1/recipient/groups').reply(200, [
+    mock.onGet('/bff/v1/pg/groups').reply(200, [
       { id: 'group-1', name: 'Group 1' },
       { id: 'group-2', name: 'Group 2' },
     ]);

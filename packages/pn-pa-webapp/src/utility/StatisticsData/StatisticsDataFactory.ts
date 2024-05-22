@@ -65,7 +65,7 @@ class StatisticsDataFactory {
    */
   public createAll(rawData: StatisticsResponse): StatisticsParsedData {
     const statisticsObjects: Array<StatisticsData> = [];
-    const retData: StatisticsParsedData = {};
+    const retData: any = {};
     Object.keys(StatisticsDataTypes)
       .filter((key) => isNaN(Number(key)))
       .forEach((element) => {
