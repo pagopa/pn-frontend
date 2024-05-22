@@ -362,11 +362,7 @@ const NotificationDetail: React.FC = () => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
       dispatch(getDowntimeLegalFact(legalFactId))
         .unwrap()
-        .then((res) => {
-          if (res.url) {
-            downloadDocument(res.url);
-          }
-        })
+        .then(showInfoMessageIfRetryAfterOrDownload)
         .catch((e) => console.log(e));
     }
   }, []);
