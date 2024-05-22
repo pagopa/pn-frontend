@@ -329,9 +329,9 @@ const NuovaDelega = () => {
                       <TextField
                         sx={{ marginTop: isMobile ? 1 : 4 }}
                         id="codiceFiscale"
-                        value={values.codiceFiscale.toString()}
+                        value={values.codiceFiscale.toString().toUpperCase()}
                         onChange={(event) => {
-                          setFieldValue('codiceFiscale', event.currentTarget.value);
+                          setFieldValue('codiceFiscale', event.currentTarget.value.toUpperCase());
                         }}
                         label={t('nuovaDelega.form.fiscalCode')}
                         name="codiceFiscale"
