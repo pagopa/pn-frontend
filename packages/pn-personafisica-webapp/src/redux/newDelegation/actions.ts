@@ -9,7 +9,7 @@ import { NewDelegationFormProps, NewMandateRequest, Person } from '../delegation
 
 export function createDelegationMapper(formData: NewDelegationFormProps): NewMandateRequest {
   const delegate = {
-    fiscalCode: formData.codiceFiscale,
+    fiscalCode: formData.codiceFiscale.toUpperCase(),
   } as Person;
 
   /* eslint-disable functional/immutable-data */
@@ -48,6 +48,7 @@ export const createDelegation = createAsyncThunk<void, NewDelegationFormProps>(
       const payload = createDelegationMapper(data);
       const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
       const response = await mandateApiFactory.createMandateV1(payload);
+      console.log(response.data);
       return response.data;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
