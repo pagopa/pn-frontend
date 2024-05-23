@@ -2,8 +2,8 @@ import { RecipientType, formatToSlicedISOString, parseError } from '@pagopa-pn/p
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
-import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import { MandateApiFactory } from '../../generated-client/mandate';
+import { InfoRecipientApiFactory } from '../../generated-client/recipient-info';
 import { NewDelegationFormProps, NewMandateRequest, Person } from '../../models/Deleghe';
 import { FilterPartiesParams, Party } from '../../models/party';
 
@@ -59,9 +59,14 @@ export const getAllEntities = createAsyncThunk<Array<Party>, FilterPartiesParams
   'getAllEntities',
   async (payload, { rejectWithValue }) => {
     try {
-      return await ExternalRegistriesAPI.getAllActivatedParties(payload ? payload : {});
+      const infoRecipientFactory = InfoRecipientApiFactory(undefined, undefined, apiClient);
+      const response = await infoRecipientFactory.getPAListV1(
+        payload?.paNameFilter ? payload.paNameFilter : undefined
+      );
+
+      return response.data as Array<Party>;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(parseError(e));
     }
   },
   {
