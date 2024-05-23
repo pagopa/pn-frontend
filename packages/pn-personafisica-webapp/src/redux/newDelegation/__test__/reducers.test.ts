@@ -8,7 +8,6 @@ import {
 } from '../../../__mocks__/CreateDelegation.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { apiClient } from '../../../api/apiClients';
-import { GET_ALL_ACTIVATED_PARTIES } from '../../../api/external-registries/external-registries-routes';
 import { store } from '../../store';
 import { createDelegation, createDelegationMapper, getAllEntities } from '../actions';
 import { resetNewDelegation } from '../reducers';
@@ -74,7 +73,7 @@ describe('delegation redux state tests', () => {
   });
 
   it('fecth parties list', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     const action = await store.dispatch(getAllEntities(null));
     expect(action.type).toBe('getAllEntities/fulfilled');
     expect(action.payload).toEqual(parties);

@@ -34,7 +34,7 @@ export function validateHistory(response: DowntimeLogHistory) {
 
 export function validateLegaFact(response: LegalFactDocumentDetails) {
   // validation: the response must include an actual value for url
-  if (!response.url) {
-    throw new BadApiDataException('The response must include a URL', {});
+  if (!response.url && !response.retryAfter) {
+    throw new BadApiDataException('The response must include a URL or a retryAfter', {});
   }
 }
