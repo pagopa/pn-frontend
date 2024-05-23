@@ -14,7 +14,7 @@ import { getConfiguration } from '../../services/configuration.service';
 import {
   createNewNotification,
   getUserGroups,
-  uploadNotificationAttachment,
+  uploadNotificationDocument,
   uploadNotificationPaymentDocument,
 } from './actions';
 import { PreliminaryInformationsPayload } from './types';
@@ -102,7 +102,7 @@ const newNotificationSlice = createSlice({
     builder.addCase(getUserGroups.fulfilled, (state, action) => {
       state.groups = action.payload;
     });
-    builder.addCase(uploadNotificationAttachment.fulfilled, (state, action) => {
+    builder.addCase(uploadNotificationDocument.fulfilled, (state, action) => {
       state.notification.documents = action.payload;
       state.isCompleted = !getConfiguration().IS_PAYMENT_ENABLED;
     });

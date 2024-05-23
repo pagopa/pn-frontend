@@ -11,7 +11,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { NewNotificationDocument } from '../../models/NewNotification';
 import { useAppDispatch } from '../../redux/hooks';
-import { uploadNotificationAttachment } from '../../redux/newNotification/actions';
+import { uploadNotificationDocument } from '../../redux/newNotification/actions';
 import { setAttachments } from '../../redux/newNotification/reducers';
 import { getConfiguration } from '../../services/configuration.service';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';
@@ -195,7 +195,7 @@ const Attachments: React.FC<Props> = ({
         } else {
           storeAttachments(values.documents);
           // upload attachments
-          dispatch(uploadNotificationAttachment(values.documents))
+          dispatch(uploadNotificationDocument(values.documents))
             .unwrap()
             .then((docs) => {
               // update formik
