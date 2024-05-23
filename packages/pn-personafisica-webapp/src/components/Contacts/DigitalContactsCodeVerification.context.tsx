@@ -270,10 +270,18 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   );
 
   useEffect(() => {
-    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
+    AppResponsePublisher.error.subscribe('createOrUpdateLegalAddress', handleAddressUpdateError);
+    AppResponsePublisher.error.subscribe('createOrUpdateCourtesyAddress', handleAddressUpdateError);
 
     return () => {
-      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
+      AppResponsePublisher.error.unsubscribe(
+        'createOrUpdateLegalAddress',
+        handleAddressUpdateError
+      );
+      AppResponsePublisher.error.unsubscribe(
+        'createOrUpdateCourtesyAddress',
+        handleAddressUpdateError
+      );
     };
   }, [handleAddressUpdateError]);
 
