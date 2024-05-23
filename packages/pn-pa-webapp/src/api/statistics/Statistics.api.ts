@@ -15,20 +15,23 @@ const StatisticsApi = {
   //   apiClient.get<StatisticsResponse>(STATISTICS(params)).then((response) => {
   //    const rawData = response.data;
 
-  getStatistics: (params: StatisticsParams<string>): Promise<StatisticsParsedResponse> =>
+  getStatistics: (params: StatisticsParams<string>): Promise<StatisticsParsedResponse | null> =>
     new Promise((resolve) => {
       console.info(params);
-      const factory = statisticsDataFactoryManager.factory;
-      const parsedData = factory.createAll(statisticsMockResponse);
-      const rawData = statisticsMockResponse;
+      if (statisticsMockResponse) {
+        const factory = statisticsDataFactoryManager.factory;
+        const parsedData = factory.createAll(statisticsMockResponse);
+        const rawData = statisticsMockResponse;
 
-      resolve({
-        sender_id: rawData.sender_id,
-        genTimestamp: rawData.genTimestamp,
-        lastDate: rawData.lastDate,
-        startDate: rawData.startDate,
-        endDate: rawData.endDate,
-        data: parsedData,
-      });
+        resolve({
+          sender_id: rawData.sender_id,
+          genTimestamp: rawData.genTimestamp,
+          lastDate: rawData.lastDate,
+          startDate: rawData.startDate,
+          endDate: rawData.endDate,
+          data: parsedData,
+        });
+      }
+      resolve(null);
     }),
 };

@@ -143,13 +143,13 @@ export interface IDigitalErrorsDetailStatistics {
 }
 
 export interface StatisticsParsedData {
-  [StatisticsDataTypes.FiledStatistics]?: IFiledStatistics;
-  [StatisticsDataTypes.LastStateStatistics]?: ILastStateStatistics;
-  [StatisticsDataTypes.DeliveryModeStatistics]?: IDeliveryModeStatistics;
-  [StatisticsDataTypes.DigitalStateStatistics]?: IDigitalStateStatistics;
-  [StatisticsDataTypes.DigitalMeanTimeStatistics]?: IDigitalMeanTimeStatistics;
-  [StatisticsDataTypes.DigitalErrorsDetailStatistics]?: IDigitalErrorsDetailStatistics;
-  [StatisticsDataTypes.DigitalAttemptsStatistics]?: Array<IAttemptsCount>;
+  [StatisticsDataTypes.FiledStatistics]: IFiledStatistics;
+  [StatisticsDataTypes.LastStateStatistics]: ILastStateStatistics;
+  [StatisticsDataTypes.DeliveryModeStatistics]: IDeliveryModeStatistics;
+  [StatisticsDataTypes.DigitalStateStatistics]: IDigitalStateStatistics;
+  [StatisticsDataTypes.DigitalMeanTimeStatistics]: IDigitalMeanTimeStatistics;
+  [StatisticsDataTypes.DigitalErrorsDetailStatistics]: IDigitalErrorsDetailStatistics;
+  [StatisticsDataTypes.DigitalAttemptsStatistics]: Array<IAttemptsCount>;
 }
 
 export interface StatisticsParsedResponse {

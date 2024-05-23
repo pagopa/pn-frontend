@@ -12,7 +12,7 @@ import AggregateAndTrendStatistics, { AggregateAndTrendData } from './AggregateA
 type Props = {
   startDate: string;
   endDate: string;
-  data?: IFiledStatistics;
+  data: IFiledStatistics;
 };
 
 const FiledNotificationsStatistics: React.FC<Props> = ({
@@ -22,14 +22,14 @@ const FiledNotificationsStatistics: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation(['statistics']);
 
-  const accepted = statisticsData?.[NotificationStatus.ACCEPTED];
-  const refused = statisticsData?.[NotificationStatus.REFUSED];
+  const accepted = statisticsData[NotificationStatus.ACCEPTED];
+  const refused = statisticsData[NotificationStatus.REFUSED];
 
   const acceptedText = t('filed.accepted');
   const refusedText = t('filed.refused');
 
-  const acceptedSum = statisticsData ? statisticsData[NotificationStatus.ACCEPTED].count : 0;
-  const refusedSum = statisticsData ? statisticsData[NotificationStatus.REFUSED].count : 0;
+  const acceptedSum = statisticsData[NotificationStatus.ACCEPTED].count;
+  const refusedSum = statisticsData[NotificationStatus.REFUSED].count;
 
   const data: Array<AggregateAndTrendData> = [
     {
@@ -53,7 +53,7 @@ const FiledNotificationsStatistics: React.FC<Props> = ({
   const spacing = isMobile ? 3 : 0;
 
   const options: PnEChartsProps['option'] = {
-    color: ['#0073E6', '#E0E0E0'],
+    color: ['#0055AA', '#FFCB46'],
   };
 
   return (
@@ -64,14 +64,14 @@ const FiledNotificationsStatistics: React.FC<Props> = ({
             <Typography variant="h6" component="h3">
               {t('filed.title')}
             </Typography>
-            <Typography sx={{ my: 3 }} variant="body2" color="text.primary">
+            <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
               {t('filed.description')}
             </Typography>
-            <Typography sx={{ fontSize: 50, fontWeight: 'bold' }} color="royalblue">
+            <Typography sx={{ fontSize: 50, fontWeight: 'bold' }} color="#0055AA">
               {notificationsAmount.toLocaleString()}
             </Typography>
-            <Typography color="royalblue">
-              {t('filed.description2', { percent: notificationsPercent })}
+            <Typography color="#0055AA">
+              <b>{notificationsPercent}%</b> {t('filed.description2')}
             </Typography>
           </Grid>
           <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 }, minHeight: '500px' }}>

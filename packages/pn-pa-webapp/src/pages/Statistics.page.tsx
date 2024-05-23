@@ -12,6 +12,10 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import DeliveryModeStatistics from '../components/Statistics/DeliveryModeStatistics';
+import DigitalErrorsDetailStatistics from '../components/Statistics/DigitalErrorsDetailStatistics';
+import DigitalMeanTimeStatistics from '../components/Statistics/DigitalMeanTimeStatistics';
+import DigitalStateStatistics from '../components/Statistics/DigitalStateStatistics';
+import EmptyStatistics from '../components/Statistics/EmptyStatistics';
 import FiledNotificationsStatistics from '../components/Statistics/FiledNotificationsStatistics';
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
 import { StatisticsDataTypes } from '../models/Statistics';
@@ -68,38 +72,71 @@ const Statistics = () => {
 
   return (
     <Box p={3}>
-      <TitleBox title={t('title')} variantTitle="h4" subTitle={Subtitle} variantSubTitle="body1" />
-      <Typography variant="caption">{lastUpdateTxt}</Typography>
-      <Typography variant="h6" component="h5" mt={8}>
-        Panoramica
-      </Typography>
-      <Stack direction={'row'} display="flex" justifyContent="space-between" alignItems="center">
-        <Box></Box>
-        <Box>Componente per il filtraggio</Box>
-        <Box></Box>
-      </Stack>
-      {statisticsData && (
-        <Stack direction={'column'} spacing={4} mt={4}>
-          <FiledNotificationsStatistics
-            startDate={statisticsData?.startDate || formatToSlicedISOString(oneYearAgo)}
-            endDate={statisticsData?.endDate || formatToSlicedISOString(today)}
-            data={statisticsData?.data[StatisticsDataTypes.FiledStatistics]}
+      {statisticsData ? (
+        <>
+          <TitleBox
+            title={t('title')}
+            variantTitle="h4"
+            subTitle={Subtitle}
+            variantSubTitle="subtitle1"
           />
-          <Stack direction={{ lg: 'row', xs: 'column' }} spacing={4} mt={4}>
-            <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-              <LastStateStatistics
-                data={statisticsData?.data[StatisticsDataTypes.LastStateStatistics]}
-              />
+          <Typography variant="caption" sx={{ color: '#5C6F82' }}>
+            {lastUpdateTxt}
+          </Typography>
+          <Typography variant="h6" component="h5" mt={9}>
+            {t('section_1')}
+          </Typography>
+          <Box sx={{ textAlign: 'center' }} mt={5}>
+            Componente per il filtraggio
+          </Box>
+          <Stack direction={'column'} spacing={3} mt={4}>
+            <FiledNotificationsStatistics
+              startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
+              endDate={statisticsData.endDate ?? formatToSlicedISOString(today)}
+              data={statisticsData.data[StatisticsDataTypes.FiledStatistics]}
+            />
+            <Stack direction={{ lg: 'row', xs: 'column' }} spacing={3} mt={4}>
+              <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                <LastStateStatistics
+                  data={statisticsData.data[StatisticsDataTypes.LastStateStatistics]}
+                />
+              </Box>
+              <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                <DeliveryModeStatistics
+                  startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
+                  endDate={statisticsData.endDate ?? formatToSlicedISOString(today)}
+                  data={statisticsData.data[StatisticsDataTypes.DeliveryModeStatistics]}
+                />
+              </Box>
+            </Stack>
+            <Box>
+              <Typography variant="h6" component="h5" mt={6}>
+                {t('section_2')}
+              </Typography>
+              <Box sx={{ textAlign: 'center', mb: 1 }}>Componente per il filtraggio</Box>
             </Box>
-            <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-              <DeliveryModeStatistics
-                startDate={statisticsData?.startDate || formatToSlicedISOString(oneYearAgo)}
-                endDate={statisticsData?.endDate || formatToSlicedISOString(today)}
-                data={statisticsData?.data[StatisticsDataTypes.DeliveryModeStatistics]}
-              />
-            </Box>
+            <Stack direction={{ lg: 'row', xs: 'column' }} spacing={3} mt={4}>
+              <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                <DigitalStateStatistics
+                  data={statisticsData.data[StatisticsDataTypes.DigitalStateStatistics]}
+                />
+              </Box>
+              <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                <DigitalMeanTimeStatistics
+                  data={statisticsData.data[StatisticsDataTypes.DigitalMeanTimeStatistics]}
+                />
+              </Box>
+            </Stack>
+            <DigitalErrorsDetailStatistics
+              data={statisticsData.data[StatisticsDataTypes.DigitalErrorsDetailStatistics]}
+            />
           </Stack>
-        </Stack>
+        </>
+      ) : (
+        <>
+          <TitleBox title={t('title')} variantTitle="h4" subTitle={''} variantSubTitle="body1" />
+          <EmptyStatistics sx={{ mt: 5 }} />
+        </>
       )}
     </Box>
   );
