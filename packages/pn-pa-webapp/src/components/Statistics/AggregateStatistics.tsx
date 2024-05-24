@@ -11,11 +11,11 @@ export type AggregateDataItem = {
 
 type Props = {
   values: Array<AggregateDataItem>;
-  startAngle: number;
-  endAngle: number;
-  radius: [string, string];
-  center: [string, string];
-  legend: boolean;
+  startAngle?: number;
+  endAngle?: number;
+  radius?: [string, string];
+  center?: [string, string];
+  legend?: boolean;
   options?: PnEChartsProps['option'];
   sx?: CSSProperties;
 };
@@ -55,6 +55,9 @@ const AggregateStatistics: React.FC<Props> = ({
           name: 'chart',
           backgroundColor: 'white',
           pixelRatio: 2,
+          iconStyle: {
+            borderColor: '#0055AA',
+          },
         },
       },
     },

@@ -52,6 +52,9 @@ const DigitalMeanTimeStatistics: React.FC<Props> = ({ data }) => {
           name: 'chart',
           backgroundColor: 'white',
           pixelRatio: 2,
+          iconStyle: {
+            borderColor: '#0055AA',
+          },
         },
       },
     },

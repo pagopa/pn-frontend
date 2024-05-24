@@ -7,6 +7,4 @@ const mocks = [mock1, mock2, mock3, mock4, null];
 
 const random = Math.floor(Math.random() * 5);
 
-console.log(`STATISTICS MOCK: ${random}`);
-
 export const statisticsMockResponse = mocks[random];
