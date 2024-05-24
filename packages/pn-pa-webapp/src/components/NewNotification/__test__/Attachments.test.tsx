@@ -104,7 +104,6 @@ describe('Attachments Component with payment enabled', async () => {
     mock
       .onPost('/bff/v1/notifications/sent/documents/preload', [
         {
-          key: newNotification.documents[0].name,
           contentType: newNotification.documents[0].contentType,
           sha256: 'mocked-hashBase64',
         },
@@ -238,12 +237,10 @@ describe('Attachments Component with payment enabled', async () => {
     mock
       .onPost('/bff/v1/notifications/sent/documents/preload', [
         {
-          key: newNotification.documents[0].name,
           contentType: newNotification.documents[0].contentType,
           sha256: 'mocked-hashBase64',
         },
         {
-          key: newNotification.documents[1].name,
           contentType: newNotification.documents[1].contentType,
           sha256: 'mocked-hashBase64',
         },
