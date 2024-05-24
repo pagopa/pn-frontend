@@ -128,7 +128,6 @@ describe('New notification redux state tests', () => {
       .onPost(
         '/bff/v1/notifications/sent/documents/preload',
         newNotification.documents.map((document) => ({
-          key: document.name,
           contentType: document.file.data?.type,
           sha256: document.file.sha256.hashBase64,
         }))
@@ -187,21 +186,18 @@ describe('New notification redux state tests', () => {
         Object.values(newNotification.payment!).reduce((arr, elem) => {
           if (elem.pagoPaForm) {
             arr.push({
-              key: elem.pagoPaForm.name,
               contentType: elem.pagoPaForm.contentType,
               sha256: elem.pagoPaForm.file.sha256.hashBase64,
             });
           }
           if (elem.f24flatRate) {
             arr.push({
-              key: elem.f24flatRate.name,
               contentType: elem.f24flatRate.contentType,
               sha256: elem.f24flatRate.file.sha256.hashBase64,
             });
           }
           if (elem.f24standard) {
             arr.push({
-              key: elem.f24standard.name,
               contentType: elem.f24standard.contentType,
               sha256: elem.f24standard.file.sha256.hashBase64,
             });
