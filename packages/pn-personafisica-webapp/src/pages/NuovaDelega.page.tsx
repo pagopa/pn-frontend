@@ -364,7 +364,7 @@ const NuovaDelega = () => {
                         id="codiceFiscale"
                         value={values.codiceFiscale.toString()}
                         onChange={(event) => {
-                          setFieldValue('codiceFiscale', event.currentTarget.value);
+                          setFieldValue('codiceFiscale', event.currentTarget.value.toUpperCase());
                         }}
                         label={t('nuovaDelega.form.fiscalCode')}
                         name="codiceFiscale"
