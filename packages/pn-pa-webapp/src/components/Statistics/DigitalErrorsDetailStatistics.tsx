@@ -45,6 +45,12 @@ const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
       title: delivery_title,
       description: delivery_description,
       value: delivery_errors,
+      color: '#FE6666',
+    },
+    {
+      title: pec_title,
+      description: pec_description,
+      value: pec_errors,
       color: '#761F1F',
     },
     {
@@ -53,13 +59,9 @@ const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
       value: rejected_errors,
       color: '#FFE0E0',
     },
-    {
-      title: pec_title,
-      description: pec_description,
-      value: pec_errors,
-      color: '#FE6666',
-    },
   ];
+
+  const aggregateData = [data[0], data[2], data[1]];
 
   const color = ['#FE6666', '#FFE0E0', '#761F1F'];
 
@@ -103,7 +105,7 @@ const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
         {/* </Box> */}
         <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
           <AggregateStatistics
-            values={data}
+            values={aggregateData}
             options={options}
             startAngle={180}
             endAngle={-180}

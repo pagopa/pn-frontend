@@ -4,6 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Paper, Stack, Typography } from '@mui/material';
+import { convertHoursToIntDays } from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
 import { IDigitalMeanTimeStatistics } from '../../models/Statistics';
@@ -11,9 +12,6 @@ import { IDigitalMeanTimeStatistics } from '../../models/Statistics';
 type Props = {
   data: IDigitalMeanTimeStatistics;
 };
-
-const fromHoursToDays = (hours: number): number =>
-  Math.floor((hours && hours > 0 ? hours / 24 : 0) * 100) / 100;
 
 const DigitalMeanTimeStatistics: React.FC<Props> = ({ data }) => {
   const { t } = useTranslation(['statistics']);
@@ -87,19 +85,19 @@ const DigitalMeanTimeStatistics: React.FC<Props> = ({ data }) => {
       {
         data: [
           {
-            value: fromHoursToDays(data.delivered.time / data.delivered.count),
+            value: convertHoursToIntDays(data.delivered.time / data.delivered.count),
             itemStyle: {
               color: '#6BCFFB',
             },
           },
           {
-            value: fromHoursToDays(data.viewed.time / data.viewed.count),
+            value: convertHoursToIntDays(data.viewed.time / data.viewed.count),
             itemStyle: {
               color: '#6CC66A',
             },
           },
           {
-            value: fromHoursToDays(data.refined.time / data.refined.count),
+            value: convertHoursToIntDays(data.refined.time / data.refined.count),
             itemStyle: {
               color: '#5CA85A',
             },
