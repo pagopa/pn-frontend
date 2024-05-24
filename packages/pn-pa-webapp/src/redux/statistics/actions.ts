@@ -1,26 +1,49 @@
 import {
-  formatToTimezoneString,
+  formatToSlicedISOString,
   getEndOfDay,
   getStartOfDay,
-  performThunkAction,
+  parseError,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { StatisticsApi } from '../../api/statistics/Statistics.api';
+import { apiClient } from '../../api/apiClients';
+import { SenderDashboardApiFactory } from '../../generated-client/sender-dashboard';
 import { StatisticsParams, StatisticsParsedResponse } from '../../models/Statistics';
+import statisticsDataFactoryManager from '../../utility/StatisticsData/StatisticsDataFactoryManager';
+import { StatisticsResponse } from './types';
 
 export enum STATISTICS_ACTIONS {
   GET_STATISTICS = 'getStatistics',
 }
 
-export const getStatistics = createAsyncThunk<StatisticsParsedResponse, StatisticsParams<Date>>(
+export const getStatistics = createAsyncThunk(
   STATISTICS_ACTIONS.GET_STATISTICS,
-  performThunkAction((params: StatisticsParams<Date>) => {
-    const apiParams = {
-      ...params,
-      startDate: formatToTimezoneString(getStartOfDay(params.startDate)),
-      endDate: formatToTimezoneString(getEndOfDay(params.endDate)),
-    };
-    return StatisticsApi.getStatistics(apiParams);
-  })
+  async (params: StatisticsParams<Date>, { rejectWithValue }) => {
+    try {
+      const senderDashboardFactory = SenderDashboardApiFactory(undefined, undefined, apiClient);
+      const apiParams = {
+        ...params,
+        startDate: formatToSlicedISOString(getStartOfDay(params.startDate)),
+        endDate: formatToSlicedISOString(getEndOfDay(params.endDate)),
+      };
+      const response = await senderDashboardFactory.getDashboardDataV1(
+        apiParams.cxType,
+        apiParams.cxId,
+        apiParams.startDate,
+        apiParams.endDate
+      );
+      const factory = statisticsDataFactoryManager.factory;
+      const parsedData = factory.createAll(response.data as StatisticsResponse);
+      return {
+        sender_id: response.data.senderId,
+        genTimestamp: response.data.genTimestamp,
+        lastDate: response.data.lastDate,
+        startDate: response.data.startDate,
+        endDate: response.data.endDate,
+        data: parsedData,
+      } as StatisticsParsedResponse;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );

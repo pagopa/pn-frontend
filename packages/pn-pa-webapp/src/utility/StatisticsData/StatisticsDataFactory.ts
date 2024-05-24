@@ -75,16 +75,16 @@ class StatisticsDataFactory {
         }
       });
 
-    const notifications_overview = rawData.notifications_overview;
-    const notification_focus = rawData.digital_notification_focus;
+    const notifications_overview = rawData.notificationsOverview;
+    const notification_focus = rawData.digitalNotificationFocus;
 
     // pass every notifications_overview item to every StatisticsData subtype object to parse it
-    notifications_overview.forEach((item) =>
+    notifications_overview?.forEach((item) =>
       statisticsObjects.forEach((obj) => obj.parseChunk(item))
     );
 
     // pass every digital_notification_focus item to every StatisticsData subtype object to parse it
-    notification_focus.forEach((item) => statisticsObjects.forEach((obj) => obj.parseChunk(item)));
+    notification_focus?.forEach((item) => statisticsObjects.forEach((obj) => obj.parseChunk(item)));
 
     statisticsObjects.forEach((item) => {
       const name = item.getName();

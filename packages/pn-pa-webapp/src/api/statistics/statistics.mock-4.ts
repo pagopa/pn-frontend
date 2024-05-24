@@ -12,7 +12,7 @@ export const mock4: StatisticsResponse = {
   lastDate: '2024-04-21',
   startDate: '2023-12-06',
   endDate: '2024-04-24',
-  notifications_overview: [
+  notificationsOverview: [
     {
       notification_send_date: '2023-11-10',
       notification_request_status: NotificationStatus.ACCEPTED,
@@ -8542,7 +8542,7 @@ export const mock4: StatisticsResponse = {
       validation_time: 0.06,
     },
   ],
-  digital_notification_focus: [
+  digitalNotificationFocus: [
     {
       notification_send_date: '2023-11-10',
       error_type: DigitaErrorTypes.DELIVERY_ERROR,

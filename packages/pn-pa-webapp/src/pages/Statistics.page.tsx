@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Download } from '@mui/icons-material';
@@ -7,6 +7,7 @@ import {
   TitleBox,
   formatDateTime,
   formatToSlicedISOString,
+  oneMonthAgo,
   oneYearAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -18,23 +19,24 @@ import DigitalStateStatistics from '../components/Statistics/DigitalStateStatist
 import EmptyStatistics from '../components/Statistics/EmptyStatistics';
 import FiledNotificationsStatistics from '../components/Statistics/FiledNotificationsStatistics';
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
-import { StatisticsDataTypes } from '../models/Statistics';
+import { CxType, StatisticsDataTypes } from '../models/Statistics';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getStatistics } from '../redux/statistics/actions';
 import { RootState } from '../redux/store';
 
-const startDate = new Date('2024-01-01T00:00:00');
-const endDate = new Date('2024-04-01T00:00:00');
-const cxType = 'PA';
-const cxId = '1c93d069-82c3-4903-a1ae-670353d9ad4d'; // loggedUserOrganizationParty.id;
+const cxType = CxType.PA;
 
 const Statistics = () => {
+  const [startDate] = useState<Date>(oneMonthAgo);
+  const [endDate] = useState<Date>(today);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['statistics']);
   const statisticsData = useAppSelector((state: RootState) => state.statisticsState.statistics);
   const loggedUserOrganizationParty = useAppSelector(
     (state: RootState) => state.userState.user?.organization
   );
+
+  const cxId = loggedUserOrganizationParty.id;
 
   const getLastUpdateText = (): string => {
     if (statisticsData) {

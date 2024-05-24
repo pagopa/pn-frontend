@@ -12,7 +12,7 @@ export const mock2: StatisticsResponse = {
   startDate: '2023-11-28',
   endDate: '2024-04-17',
   lastDate: '2024-04-21',
-  notifications_overview: [
+  notificationsOverview: [
     {
       notification_send_date: '2023-11-28',
       notification_request_status: NotificationStatus.ACCEPTED,
@@ -20142,7 +20142,7 @@ export const mock2: StatisticsResponse = {
       validation_time: 0.12,
     },
   ],
-  digital_notification_focus: [
+  digitalNotificationFocus: [
     {
       notification_send_date: '2023-11-28',
       error_type: DigitaErrorTypes.INVALID_PEC,

@@ -42,7 +42,7 @@ export class DigitalErrorsDetailStatisticsData extends StatisticsData {
   }
 
   parse(rawData: StatisticsResponse): this {
-    const digital_notification_focus = rawData.digital_notification_focus;
+    const digital_notification_focus = rawData.digitalNotificationFocus;
 
     digital_notification_focus.forEach((element) => {
       this.parseChunk(element);
@@ -55,8 +55,9 @@ export class DigitalErrorsDetailStatisticsData extends StatisticsData {
     if ('error_type' in chunk) {
       const type = chunk.error_type;
 
-      this.data[type].attempts += +chunk.failed_attempts_count;
-      this.data[type].count += +chunk.notifications_count;
+      this.data[type as keyof IDigitalErrorsDetailStatistics].attempts +=
+        +chunk.failed_attempts_count;
+      this.data[type as keyof IDigitalErrorsDetailStatistics].count += +chunk.notifications_count;
     }
   }
 
