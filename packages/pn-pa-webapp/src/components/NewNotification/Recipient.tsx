@@ -537,10 +537,12 @@ const Recipient: React.FC<Props> = ({
                         xs={setValueByDevice(12, 6)}
                         data-testid={`recipients[${index}].digitalDomicileCheckbox`}
                         onClick={(e) => {
-                          setFieldValue(
-                            `recipients[${index}].showDigitalDomicile`,
-                            !values.recipients[index].showDigitalDomicile
-                          );
+                          setFieldTouched(`recipients[${index}].digitalDomicile`, false, false);
+                          setFieldValue(`recipients[${index}]`, {
+                            ...values.recipients[index],
+                            showDigitalDomicile: !values.recipients[index].showDigitalDomicile,
+                            digitalDomicile: '',
+                          });
                           e.preventDefault(); // avoids issue with non clickable checkbox label in FormControlLabel
                         }}
                       >
