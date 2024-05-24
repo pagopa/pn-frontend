@@ -362,7 +362,7 @@ const NuovaDelega = () => {
                       <TextField
                         sx={{ marginTop: isMobile ? 1 : 4 }}
                         id="codiceFiscale"
-                        value={values.codiceFiscale.toString().toUpperCase()}
+                        value={values.codiceFiscale.toString()}
                         onChange={(event) => {
                           setFieldValue('codiceFiscale', event.currentTarget.value.toUpperCase());
                         }}
