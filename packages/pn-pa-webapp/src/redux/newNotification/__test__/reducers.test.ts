@@ -5,10 +5,6 @@ import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { newNotification } from '../../../__mocks__/NewNotification.mock';
 import { apiClient, externalClient } from '../../../api/apiClients';
-import {
-  CREATE_NOTIFICATION,
-  NOTIFICATION_PRELOAD_DOCUMENT,
-} from '../../../api/notifications/notifications.routes';
 import { PaymentModel, PaymentObject } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
 import { newNotificationMapper } from '../../../utility/notification.utility';
@@ -16,7 +12,7 @@ import { store } from '../../store';
 import {
   createNewNotification,
   getUserGroups,
-  uploadNotificationAttachment,
+  uploadNotificationDocument,
   uploadNotificationPaymentDocument,
 } from '../actions';
 import {
@@ -130,7 +126,7 @@ describe('New notification redux state tests', () => {
   it('Should be able to upload attachment', async () => {
     mock
       .onPost(
-        NOTIFICATION_PRELOAD_DOCUMENT(),
+        '/bff/v1/notifications/sent/documents/preload',
         newNotification.documents.map((document) => ({
           key: document.name,
           contentType: document.file.data?.type,
@@ -153,7 +149,7 @@ describe('New notification redux state tests', () => {
       });
     }
     const action = await store.dispatch(
-      uploadNotificationAttachment(
+      uploadNotificationDocument(
         newNotification.documents.map((doc) => ({
           ...doc,
           ref: {
@@ -163,7 +159,7 @@ describe('New notification redux state tests', () => {
         }))
       )
     );
-    expect(action.type).toBe('uploadNotificationAttachment/fulfilled');
+    expect(action.type).toBe('uploadNotificationDocument/fulfilled');
     expect(action.payload).toEqual(
       newNotification.documents.map((document) => ({
         ...document,
@@ -187,7 +183,7 @@ describe('New notification redux state tests', () => {
   it('Should be able to upload payment document', async () => {
     mock
       .onPost(
-        NOTIFICATION_PRELOAD_DOCUMENT(),
+        '/bff/v1/notifications/sent/documents/preload',
         Object.values(newNotification.payment!).reduce((arr, elem) => {
           if (elem.pagoPaForm) {
             arr.push({
@@ -303,7 +299,7 @@ describe('New notification redux state tests', () => {
       idempotenceToken: 'mocked-idempotenceToken',
     };
     const mappedNotification = newNotificationMapper(newNotification);
-    mock.onPost(CREATE_NOTIFICATION(), mappedNotification).reply(200, mockResponse);
+    mock.onPost('/bff/v1/notifications/sent', mappedNotification).reply(200, mockResponse);
     const action = await store.dispatch(createNewNotification(newNotification));
     expect(action.type).toBe('createNewNotification/fulfilled');
     expect(action.payload).toEqual(mockResponse);
