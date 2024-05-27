@@ -29,6 +29,7 @@ const RouteGuard = () => {
     if (aar) {
       // save to localstorage
       localStorage.setItem(AppRouteParams.AAR, sanitizeString(aar));
+      goToLoginPortal();
     }
     return (
       <AccessDenied
