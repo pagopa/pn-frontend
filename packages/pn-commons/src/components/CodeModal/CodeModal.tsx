@@ -1,4 +1,12 @@
-import { ReactNode, memo, useCallback, useEffect, useState } from 'react';
+import {
+  ReactNode,
+  forwardRef,
+  memo,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react';
 
 import {
   Alert,
@@ -12,6 +20,7 @@ import {
 } from '@mui/material';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
+import { ErrorMessage } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnDialog from '../PnDialog/PnDialog';
 import PnDialogActions from '../PnDialog/PnDialogActions';
@@ -35,6 +44,10 @@ type Props = {
   errorMessage?: string;
 };
 
+type ModalHandle = {
+  updateError: (error: ErrorMessage, codeNotValid: boolean) => void;
+};
+
 /**
  * This modal allows the user to input a verification code.
  * @param title title to show
@@ -50,23 +63,26 @@ type Props = {
  * @param errorTitle title to show when there is an error
  * @param errorMessage message to show when there is an error
  */
-const CodeModal = memo(
-  ({
-    title,
-    subtitle,
-    open,
-    initialValues,
-    codeSectionTitle,
-    codeSectionAdditional,
-    confirmLabel,
-    cancelLabel,
-    cancelCallback,
-    confirmCallback,
-    isReadOnly = false,
-    hasError = false,
-    errorTitle,
-    errorMessage,
-  }: Props) => {
+const CodeModal = forwardRef<ModalHandle, Props>(
+  (
+    {
+      title,
+      subtitle,
+      open,
+      initialValues,
+      codeSectionTitle,
+      codeSectionAdditional,
+      confirmLabel,
+      cancelLabel,
+      cancelCallback,
+      confirmCallback,
+      isReadOnly = false,
+      hasError = false,
+      errorTitle,
+      errorMessage,
+    }: Props,
+    ref
+  ) => {
     const [code, setCode] = useState(initialValues);
     const [internalError, setInternalError] = useState({
       internalHasError: hasError,
@@ -107,6 +123,16 @@ const CodeModal = memo(
       }
       confirmCallback(code);
     };
+
+    const updateError = useCallback((error: ErrorMessage, codeNotValid: boolean) => {
+      setInternalError({
+        internalHasError: codeNotValid,
+        internalErrorTitle: error.title,
+        internalErrorMessage: error.content,
+      });
+    }, []);
+
+    useImperativeHandle(ref, () => ({ updateError }));
 
     useEffect(() => {
       setInternalError({
@@ -190,4 +216,4 @@ const CodeModal = memo(
   }
 );
 
-export default CodeModal;
+export default memo(CodeModal);
