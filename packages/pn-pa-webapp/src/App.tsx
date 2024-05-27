@@ -153,7 +153,7 @@ const ActualApp = () => {
     // TODO fix positioning for this item PN-10851
     if (IS_STATISTICS_ENABLED) {
       // eslint-disable-next-line functional/immutable-data
-      basicMenuItems.splice(1, 0, {
+      basicMenuItems.splice(2, 0, {
         label: 'menu.statistics',
         icon: StatisticsIcon,
         route: routes.STATISTICHE,

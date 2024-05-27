@@ -189,6 +189,9 @@ const TrendStackedStatistics: React.FC<Props> = ({
           name: 'chart',
           backgroundColor: 'white',
           pixelRatio: 2,
+          iconStyle: {
+            borderColor: '#0055AA',
+          },
         },
       },
     },
