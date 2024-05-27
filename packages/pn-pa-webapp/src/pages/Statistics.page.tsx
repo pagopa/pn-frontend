@@ -40,7 +40,7 @@ const Statistics = () => {
 
   const getLastUpdateText = (): string => {
     if (statisticsData) {
-      const dateTime = formatDateTime(statisticsData?.genTimestamp.substring(0, 25) + 'Z');
+      const dateTime = formatDateTime(statisticsData?.genTimestamp.substring(0, 19) + 'Z');
       return t('last_update', { dateTime });
     }
     return '';

@@ -33,15 +33,17 @@ export const getStatistics = createAsyncThunk(
         apiParams.endDate
       );
       const factory = statisticsDataFactoryManager.factory;
-      const parsedData = factory.createAll(response.data as StatisticsResponse);
-      return {
-        sender_id: response.data.senderId,
-        genTimestamp: response.data.genTimestamp,
-        lastDate: response.data.lastDate,
-        startDate: response.data.startDate,
-        endDate: response.data.endDate,
-        data: parsedData,
-      } as StatisticsParsedResponse;
+
+      return response.data
+        ? ({
+            sender_id: response.data.senderId,
+            genTimestamp: response.data.genTimestamp,
+            lastDate: response.data.lastDate,
+            startDate: response.data.startDate,
+            endDate: response.data.endDate,
+            data: factory.createAll(response.data as StatisticsResponse),
+          } as StatisticsParsedResponse)
+        : null;
     } catch (e) {
       return rejectWithValue(parseError(e));
     }
