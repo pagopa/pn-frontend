@@ -1,12 +1,4 @@
-import {
-  ReactNode,
-  forwardRef,
-  memo,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from 'react';
+import { ReactNode, forwardRef, memo, useCallback, useImperativeHandle, useState } from 'react';
 
 import {
   Alert,
@@ -39,9 +31,6 @@ type Props = {
   cancelCallback?: () => void;
   confirmCallback?: (values: Array<string>) => void;
   isReadOnly?: boolean;
-  hasError?: boolean;
-  errorTitle?: string;
-  errorMessage?: string;
 };
 
 type ModalHandle = {
@@ -59,9 +48,6 @@ type ModalHandle = {
  * @param confirmLabel label of the confirm button
  * @param cancelLabel label of the cancel button
  * @param isReadOnly set if code is in readonly mode
- * @param hasError set if there is an error
- * @param errorTitle title to show when there is an error
- * @param errorMessage message to show when there is an error
  */
 const CodeModal = forwardRef<ModalHandle, Props>(
   (
@@ -77,17 +63,14 @@ const CodeModal = forwardRef<ModalHandle, Props>(
       cancelCallback,
       confirmCallback,
       isReadOnly = false,
-      hasError = false,
-      errorTitle,
-      errorMessage,
     }: Props,
     ref
   ) => {
     const [code, setCode] = useState(initialValues);
     const [internalError, setInternalError] = useState({
-      internalHasError: hasError,
-      internalErrorTitle: errorTitle,
-      internalErrorMessage: errorMessage,
+      internalHasError: false,
+      internalErrorTitle: '',
+      internalErrorMessage: '',
     });
 
     const { internalHasError, internalErrorTitle, internalErrorMessage } = internalError;
@@ -133,14 +116,6 @@ const CodeModal = forwardRef<ModalHandle, Props>(
     }, []);
 
     useImperativeHandle(ref, () => ({ updateError }));
-
-    useEffect(() => {
-      setInternalError({
-        internalHasError: hasError,
-        internalErrorTitle: errorTitle,
-        internalErrorMessage: errorMessage,
-      });
-    }, [hasError, errorTitle, errorMessage]);
 
     return (
       <PnDialog

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -16,6 +16,7 @@ import {
   AppResponse,
   AppResponsePublisher,
   CodeModal,
+  ErrorMessage,
   PnAutocomplete,
   PnDialog,
   PnDialogActions,
@@ -56,7 +57,8 @@ const AcceptDelegationModal: React.FC<Props> = ({
   });
   const [groupInputValue, setGroupInputValue] = useState('');
   const [code, setCode] = useState<Array<string>>([]);
-  const [error, setError] = useState<{ title: string; content: string }>();
+  const codeModalRef =
+    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
   const { t } = useTranslation(['deleghe']);
   const groups = useAppSelector((state: RootState) => state.delegationsState.groups);
 
@@ -71,7 +73,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
       setCode(code);
       return;
     }
-    setError(undefined);
+    codeModalRef.current?.updateError({ title: '', content: '' }, false);
     handleConfirm(code, []);
   };
 
@@ -103,7 +105,13 @@ const AcceptDelegationModal: React.FC<Props> = ({
     // if code is invalid, pass the error to the AcceptModal and after to the CodeModal
     const error = responseError.errors ? responseError.errors[0] : null;
     if (error?.code === ServerResponseErrorCode.PN_MANDATE_INVALIDVERIFICATIONCODE) {
-      setError(error?.message);
+      codeModalRef.current?.updateError(
+        {
+          title: error.message.title,
+          content: error.message.content,
+        },
+        true
+      );
     }
     return true;
   }, []);
@@ -133,9 +141,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
         confirmCallback={handleFirstStepConfirm}
         confirmLabel={t('deleghe.accept-delegation')}
         codeSectionTitle={t('deleghe.verification_code')}
-        errorTitle={error?.title}
-        errorMessage={error?.content}
-        hasError={Boolean(error)}
+        ref={codeModalRef}
       />
     );
   }
