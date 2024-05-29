@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, Drawer, Grid, Typography } from '@mui/material';
+import { Box, Button, Drawer, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { TimelineNotification } from '@pagopa/mui-italia';
 
@@ -175,15 +175,16 @@ const NotificationDetailTimeline = ({
             </Typography>
           </Grid>
           <Grid item>
-            <CloseIcon
-              data-testid="notification-drawer-close"
-              onClick={toggleHistoryDrawer}
-              sx={{
-                color: 'action.active',
-                width: '32px',
-                height: '32px',
-              }}
-            />
+            <Button aria-label="Chiudi" onClick={toggleHistoryDrawer}>
+              <CloseIcon
+                data-testid="notification-drawer-close"
+                sx={{
+                  color: 'action.active',
+                  width: '2rem',
+                  height: '2rem',
+                }}
+              />
+            </Button>
           </Grid>
         </Grid>
         <Box sx={{ px: 3, height: 'calc(100vh - 87px)', overflowY: 'scroll' }}>
