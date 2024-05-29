@@ -81,6 +81,10 @@ const SessionGuardRender = () => {
   };
 
   const renderIfInitialized = () =>
+    // 1. isUnauthorizedUser (errore exchange o validazione utente) || hasTosPrivacyApiErrors || isClosedSession => modale con errore e redirect a logout
+    // 2. isAnonymousUser (utente non loggato) o inactivity_handler disabilitato => redirect alla login
+    // 3. se è loggato => outlet
+    // 4. inactivity_handler abilitato/disabilitato =>
     isUnauthorizedUser || hasTosPrivacyApiErrors || isClosedSession ? (
       <SessionModal
         open
@@ -89,11 +93,9 @@ const SessionGuardRender = () => {
         handleClose={() => goToLoginPortal()}
         initTimeout
       />
-    ) : isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? (
-      <Outlet />
     ) : (
       <InactivityHandler
-        inactivityTimer={inactivityTimer}
+        inactivityTimer={isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? 0 : inactivityTimer}
         onTimerExpired={() => dispatch(logout())}
       >
         <Outlet />
@@ -223,6 +225,8 @@ const SessionGuard = () => {
         // Andrea Cimini, 2023.02.24
         // ----------------------
         navigate({ pathname: routes.NOT_ACCESSIBLE }, { replace: true });
+      } else if (!sessionToken) {
+        goToLoginPortal();
       }
     };
     void performStep(INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, doInitalPageDetermination);

@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 
 type Props = {
-  /** Inactivity timer (in milliseconds) */
+  /** Inactivity timer (in milliseconds), if 0 the inactivity timer is disabled */
   inactivityTimer: number;
   /** Callback called when timer expires */
   onTimerExpired: () => void;
@@ -27,19 +27,21 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, children, onTimer
 
   // init timer
   useEffect(() => {
-    // init listeners
-    initListeners();
-    // init timer
-    const timer = setTimeout(() => {
-      cleanUpListeners();
-      onTimerExpired();
-    }, inactivityTimer);
-
-    // cleanup function
-    return () => {
-      clearTimeout(timer);
-      cleanUpListeners();
-    };
+    if (inactivityTimer) {
+      // init listeners
+      initListeners();
+      // init timer
+      const timer = setTimeout(() => {
+        cleanUpListeners();
+        onTimerExpired();
+      }, inactivityTimer);
+      // cleanup function
+      return () => {
+        clearTimeout(timer);
+        cleanUpListeners();
+      };
+    }
+    return () => {};
   }, [initTimeout]);
 
   return <Fragment>{children}</Fragment>;
