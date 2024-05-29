@@ -74,7 +74,6 @@ export function PnECharts({
 				width: "100%",
 				height: "100%",
 				minHeight: "400px",
-				maxHeight: "600px",
 				flexGrow: 1,
 				...style,
 			}}

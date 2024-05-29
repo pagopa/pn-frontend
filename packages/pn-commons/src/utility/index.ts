@@ -7,6 +7,7 @@ import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
 import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
 import {
   DATE_FORMAT,
+  convertHoursToIntDays,
   dateIsDefined,
   dateIsLessThan10Years,
   formatDate,
@@ -133,4 +134,5 @@ export {
   validateHistory,
   validateCurrentStatus,
   validateLegaFact,
+  convertHoursToIntDays,
 };

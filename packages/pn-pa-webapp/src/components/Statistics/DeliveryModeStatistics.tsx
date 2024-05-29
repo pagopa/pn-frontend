@@ -11,20 +11,20 @@ import AggregateAndTrendStatistics, { AggregateAndTrendData } from './AggregateA
 type Props = {
   startDate: string;
   endDate: string;
-  data?: IDeliveryModeStatistics;
+  data: IDeliveryModeStatistics;
 };
 
 const DeliveryModeStatistics: React.FC<Props> = ({ startDate, endDate, data: statisticsData }) => {
-  const digital = statisticsData?.[DeliveryMode.DIGITAL];
-  const analog = statisticsData?.[DeliveryMode.ANALOG];
+  const digital = statisticsData[DeliveryMode.DIGITAL];
+  const analog = statisticsData[DeliveryMode.ANALOG];
 
   const { t } = useTranslation(['statistics']);
 
   const digitalText = t('delivery_mode.digital');
   const analogText = t('delivery_mode.analog');
 
-  const digitalSum = statisticsData ? statisticsData[DeliveryMode.DIGITAL].count : 0;
-  const analogSum = statisticsData ? statisticsData[DeliveryMode.ANALOG].count : 0;
+  const digitalSum = statisticsData[DeliveryMode.DIGITAL].count;
+  const analogSum = statisticsData[DeliveryMode.ANALOG].count;
 
   const data: Array<AggregateAndTrendData> = [
     {
@@ -40,7 +40,7 @@ const DeliveryModeStatistics: React.FC<Props> = ({ startDate, endDate, data: sta
   ];
 
   const options: PnEChartsProps['option'] = {
-    color: ['#00C5CA', '#C2F3F4'],
+    color: ['#0055AA', '#21CDD1'],
   };
 
   return (
