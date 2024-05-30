@@ -26,7 +26,6 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { GET_ALL_ACTIVATED_PARTIES } from '../../../api/external-registries/external-registries-routes';
 import { AddressType, CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
 import { CONTACT_ACTIONS } from '../../../redux/contact/actions';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
@@ -94,7 +93,7 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('renders component', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     await act(async () => {
       result = render(
@@ -120,7 +119,7 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('check valid pec', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     await act(async () => {
       result = render(
@@ -145,7 +144,7 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('check invalid pec', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     await act(async () => {
       result = render(
@@ -171,7 +170,7 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('checks invalid mail', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     await act(async () => {
       result = render(
@@ -208,7 +207,7 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('checks valid mail', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     await act(async () => {
       result = render(
@@ -244,7 +243,7 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('checks invalid phone', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     await act(async () => {
       result = render(
@@ -281,7 +280,7 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('checks valid phone', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     await act(async () => {
       result = render(
@@ -318,7 +317,7 @@ describe('SpecialContacts Component', async () => {
 
   it('add special contact', async () => {
     const pecValue = 'pec-carino@valida.com';
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     mock
       .onPost(`/bff/v1/addresses/LEGAL/${parties[2].id}/PEC`, {
         value: pecValue,
@@ -408,7 +407,7 @@ describe('SpecialContacts Component', async () => {
 
   it('edit special contact', async () => {
     const mailValue = 'pec-carino@valida.com';
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     mock
       .onPost(`/bff/v1/addresses/COURTESY/${parties[0].id}/EMAIL`, {
         value: mailValue,
@@ -490,7 +489,7 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('delete special contact', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     mock.onDelete(`/bff/v1/addresses/COURTESY/${parties[0].id}/EMAIL`).reply(200);
     // render component
     await act(async () => {
@@ -538,7 +537,7 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('API error', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(500);
+    mock.onGet('/bff/v1/pa-list').reply(500);
     await act(async () => {
       render(
         <>

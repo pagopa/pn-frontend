@@ -483,6 +483,118 @@ export type BffLegalFactType = typeof BffLegalFactType[keyof typeof BffLegalFact
 
 
 /**
+ * I campi utilizzati per la creazione di una nuova Notifica.
+ * @export
+ * @interface BffNewNotificationRequest
+ */
+export interface BffNewNotificationRequest {
+    /**
+     * Numero di protocollo che la PA mittente assegna alla notifica stessa
+     * @type {string}
+     * @memberof BffNewNotificationRequest
+     */
+    'paProtocolNumber': string;
+    /**
+     * titolo della notifica
+     * @type {string}
+     * @memberof BffNewNotificationRequest
+     */
+    'subject': string;
+    /**
+     * descrizione sintetica della notifica
+     * @type {string}
+     * @memberof BffNewNotificationRequest
+     */
+    'abstract'?: string;
+    /**
+     * Informazioni sui destinatari
+     * @type {Array<NotificationRecipientV23>}
+     * @memberof BffNewNotificationRequest
+     */
+    'recipients': Array<NotificationRecipientV23>;
+    /**
+     * Documenti notificati
+     * @type {Array<NotificationDocument>}
+     * @memberof BffNewNotificationRequest
+     */
+    'documents': Array<NotificationDocument>;
+    /**
+     * 
+     * @type {NotificationFeePolicy}
+     * @memberof BffNewNotificationRequest
+     */
+    'notificationFeePolicy': NotificationFeePolicy;
+    /**
+     * Identificativo Univoco Notifica
+     * @type {string}
+     * @memberof BffNewNotificationRequest
+     */
+    'cancelledIun'?: string;
+    /**
+     * Tipologia comunicazione fisica
+     * @type {string}
+     * @memberof BffNewNotificationRequest
+     */
+    'physicalCommunicationType': BffNewNotificationRequestPhysicalCommunicationTypeEnum;
+    /**
+     * Denominazione ente o persona fisica / ragione sociale
+     * @type {string}
+     * @memberof BffNewNotificationRequest
+     */
+    'senderDenomination': string;
+    /**
+     * Payment PA fiscal code
+     * @type {string}
+     * @memberof BffNewNotificationRequest
+     */
+    'senderTaxId': string;
+    /**
+     * Gruppo di utenti dell\'ente mittente che può visualizzare la notifica
+     * @type {string}
+     * @memberof BffNewNotificationRequest
+     */
+    'group'?: string;
+    /**
+     * Codice tassonomico della notifica basato sulla definizione presente nell\'allegato 2 capitolo C del bando [__AVVISO PUBBLICO MISURA 1.4.5 PIATTAFORMA NOTIFICHE DIGITALI__](https://pnrrcomuni.fondazioneifel.it/bandi_public/Bando/325)
+     * @type {string}
+     * @memberof BffNewNotificationRequest
+     */
+    'taxonomyCode': string;
+}
+
+export const BffNewNotificationRequestPhysicalCommunicationTypeEnum = {
+    ArRegisteredLetter: 'AR_REGISTERED_LETTER',
+    RegisteredLetter890: 'REGISTERED_LETTER_890'
+} as const;
+
+export type BffNewNotificationRequestPhysicalCommunicationTypeEnum = typeof BffNewNotificationRequestPhysicalCommunicationTypeEnum[keyof typeof BffNewNotificationRequestPhysicalCommunicationTypeEnum];
+
+/**
+ * Contiene le informazioni per identificare una richiesta di invio notifica che non è ancora stata accettata da Piattaforma notifiche.
+ * @export
+ * @interface BffNewNotificationResponse
+ */
+export interface BffNewNotificationResponse {
+    /**
+     * identificativo univoco di una richiesta di invio notifica, non è lo IUN
+     * @type {string}
+     * @memberof BffNewNotificationResponse
+     */
+    'notificationRequestId': string;
+    /**
+     * Identificativo inviato dalla pubblica amministrazione
+     * @type {string}
+     * @memberof BffNewNotificationResponse
+     */
+    'paProtocolNumber': string;
+    /**
+     * Ripetizione del token usato per disambiguare \"richieste di notificazione\"  effettuate con lo stesso numero di protocollo (campo _paProtocolNumber_).
+     * @type {string}
+     * @memberof BffNewNotificationResponse
+     */
+    'idempotenceToken'?: string;
+}
+/**
  * 
  * @export
  * @enum {string}
@@ -708,6 +820,76 @@ export interface BffNotificationsResponse {
      */
     'nextPagesKey'?: Array<string>;
 }
+/**
+ * 
+ * @export
+ * @interface BffPreLoadRequest
+ */
+export interface BffPreLoadRequest {
+    /**
+     * Identificativo univoco all\'interno della request HTTP, serve per correlare la risposta. Stringa alfanumerica con caratteri utilizzabili in un nome file.
+     * @type {string}
+     * @memberof BffPreLoadRequest
+     */
+    'preloadIdx'?: string;
+    /**
+     * Il MIME type dell\'allegato che dovrà essere caricato. Attualmente sono supportati   - application/pdf   - application/json
+     * @type {string}
+     * @memberof BffPreLoadRequest
+     */
+    'contentType'?: string;
+    /**
+     * checksum sha256, codificato in base 64, del contenuto binario del file che verrà caricato
+     * @type {string}
+     * @memberof BffPreLoadRequest
+     */
+    'sha256': string;
+}
+/**
+ * Per ogni richiesta che è stata fatta viene fornito un presigned URL e le  informazioni per usarlo.
+ * @export
+ * @interface BffPreLoadResponse
+ */
+export interface BffPreLoadResponse {
+    /**
+     * per correlazione con la richiesta. Stringa alfanumerica con caratteri utilizzabili in un file.
+     * @type {string}
+     * @memberof BffPreLoadResponse
+     */
+    'preloadIdx'?: string;
+    /**
+     * Token aggiuntivo per far si che sia necessario intercettare anche gli  header e non solo l\'URL di upload del contenuto del documento.
+     * @type {string}
+     * @memberof BffPreLoadResponse
+     */
+    'secret'?: string;
+    /**
+     * Indica se per l\'upload del contenuto file bisogna utilizzare il metodo PUT o POST
+     * @type {string}
+     * @memberof BffPreLoadResponse
+     */
+    'httpMethod'?: BffPreLoadResponseHttpMethodEnum;
+    /**
+     * URL a cui effettuare l\'upload del contenuto del documento.
+     * @type {string}
+     * @memberof BffPreLoadResponse
+     */
+    'url'?: string;
+    /**
+     * la chiave restituita sarà globalmente unica e andrà utilizzata nella richiesta  di notifica.
+     * @type {string}
+     * @memberof BffPreLoadResponse
+     */
+    'key'?: string;
+}
+
+export const BffPreLoadResponseHttpMethodEnum = {
+    Post: 'POST',
+    Put: 'PUT'
+} as const;
+
+export type BffPreLoadResponseHttpMethodEnum = typeof BffPreLoadResponseHttpMethodEnum[keyof typeof BffPreLoadResponseHttpMethodEnum];
+
 /**
  * Response to cancellation async call
  * @export
@@ -1246,6 +1428,31 @@ export const NewNotificationRequestV23PagoPaIntModeEnum = {
 
 export type NewNotificationRequestV23PagoPaIntModeEnum = typeof NewNotificationRequestV23PagoPaIntModeEnum[keyof typeof NewNotificationRequestV23PagoPaIntModeEnum];
 
+/**
+ * Contiene le informazioni per identificare una richiesta di invio notifica che non è ancora stata accettata da Piattaforma notifiche.
+ * @export
+ * @interface NewNotificationResponse
+ */
+export interface NewNotificationResponse {
+    /**
+     * identificativo univoco di una richiesta di invio notifica, non è lo IUN
+     * @type {string}
+     * @memberof NewNotificationResponse
+     */
+    'notificationRequestId': string;
+    /**
+     * Identificativo inviato dalla pubblica amministrazione
+     * @type {string}
+     * @memberof NewNotificationResponse
+     */
+    'paProtocolNumber': string;
+    /**
+     * Ripetizione del token usato per disambiguare \"richieste di notificazione\"  effettuate con lo stesso numero di protocollo (campo _paProtocolNumber_).
+     * @type {string}
+     * @memberof NewNotificationResponse
+     */
+    'idempotenceToken'?: string;
+}
 /**
  * 
  * @export
@@ -2058,6 +2265,76 @@ export interface PhysicalAddress {
      */
     'foreignState'?: string;
 }
+/**
+ * 
+ * @export
+ * @interface PreLoadRequest
+ */
+export interface PreLoadRequest {
+    /**
+     * Identificativo univoco all\'interno della request HTTP, serve per correlare la risposta. Stringa alfanumerica con caratteri utilizzabili in un nome file.
+     * @type {string}
+     * @memberof PreLoadRequest
+     */
+    'preloadIdx'?: string;
+    /**
+     * Il MIME type dell\'allegato che dovrà essere caricato. Attualmente sono supportati   - application/pdf   - application/json
+     * @type {string}
+     * @memberof PreLoadRequest
+     */
+    'contentType'?: string;
+    /**
+     * checksum sha256, codificato in base 64, del contenuto binario del file che verrà caricato
+     * @type {string}
+     * @memberof PreLoadRequest
+     */
+    'sha256': string;
+}
+/**
+ * Per ogni richiesta che è stata fatta viene fornito un presigned URL e le  informazioni per usarlo.
+ * @export
+ * @interface PreLoadResponse
+ */
+export interface PreLoadResponse {
+    /**
+     * per correlazione con la richiesta. Stringa alfanumerica con caratteri utilizzabili in un file.
+     * @type {string}
+     * @memberof PreLoadResponse
+     */
+    'preloadIdx'?: string;
+    /**
+     * Token aggiuntivo per far si che sia necessario intercettare anche gli  header e non solo l\'URL di upload del contenuto del documento.
+     * @type {string}
+     * @memberof PreLoadResponse
+     */
+    'secret'?: string;
+    /**
+     * Indica se per l\'upload del contenuto file bisogna utilizzare il metodo PUT o POST
+     * @type {string}
+     * @memberof PreLoadResponse
+     */
+    'httpMethod'?: PreLoadResponseHttpMethodEnum;
+    /**
+     * URL a cui effettuare l\'upload del contenuto del documento.
+     * @type {string}
+     * @memberof PreLoadResponse
+     */
+    'url'?: string;
+    /**
+     * la chiave restituita sarà globalmente unica e andrà utilizzata nella richiesta  di notifica.
+     * @type {string}
+     * @memberof PreLoadResponse
+     */
+    'key'?: string;
+}
+
+export const PreLoadResponseHttpMethodEnum = {
+    Post: 'POST',
+    Put: 'PUT'
+} as const;
+
+export type PreLoadResponseHttpMethodEnum = typeof PreLoadResponseHttpMethodEnum[keyof typeof PreLoadResponseHttpMethodEnum];
+
 /**
  * 
  * @export
@@ -3402,6 +3679,42 @@ export const NotificationSentApiAxiosParamCreator = function (configuration?: Co
             };
         },
         /**
+         * Operazione utilizzata dalla Pubblica Amministrazione per richiedere l\'invio di una notifica.  La restituzione di uno stato HTTP 202 significa solo che la richiesta è sintatticamente valida, non che la richiesta sia stata validata ed accettata.
+         * @summary Richiesta invio notifica
+         * @param {BffNewNotificationRequest} bffNewNotificationRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        newSentNotificationV1: async (bffNewNotificationRequest: BffNewNotificationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'bffNewNotificationRequest' is not null or undefined
+            assertParamExists('newSentNotificationV1', 'bffNewNotificationRequest', bffNewNotificationRequest)
+            const localVarPath = `/bff/v1/notifications/sent`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(bffNewNotificationRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Questa operazione permette di annullare una notifica inviata.
          * @summary Mittente: annullamento notifica
          * @param {string} iun Identificativo Univoco Notifica
@@ -3429,6 +3742,42 @@ export const NotificationSentApiAxiosParamCreator = function (configuration?: Co
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Operazione che richiede a Piattaforma Notifica le informazioni e le autorizzazioni necessarie  a pre-caricare uno o più file da allegare a una notifica.
+         * @summary Richiesta di pre-caricamento dei documenti della notifica
+         * @param {Array<BffPreLoadRequest>} bffPreLoadRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        preSignedUploadV1: async (bffPreLoadRequest: Array<BffPreLoadRequest>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'bffPreLoadRequest' is not null or undefined
+            assertParamExists('preSignedUploadV1', 'bffPreLoadRequest', bffPreLoadRequest)
+            const localVarPath = `/bff/v1/notifications/sent/documents/preload`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(bffPreLoadRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3570,6 +3919,19 @@ export const NotificationSentApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Operazione utilizzata dalla Pubblica Amministrazione per richiedere l\'invio di una notifica.  La restituzione di uno stato HTTP 202 significa solo che la richiesta è sintatticamente valida, non che la richiesta sia stata validata ed accettata.
+         * @summary Richiesta invio notifica
+         * @param {BffNewNotificationRequest} bffNewNotificationRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async newSentNotificationV1(bffNewNotificationRequest: BffNewNotificationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BffNewNotificationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.newSentNotificationV1(bffNewNotificationRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationSentApi.newSentNotificationV1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Questa operazione permette di annullare una notifica inviata.
          * @summary Mittente: annullamento notifica
          * @param {string} iun Identificativo Univoco Notifica
@@ -3580,6 +3942,19 @@ export const NotificationSentApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.notificationCancellationV1(iun, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['NotificationSentApi.notificationCancellationV1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Operazione che richiede a Piattaforma Notifica le informazioni e le autorizzazioni necessarie  a pre-caricare uno o più file da allegare a una notifica.
+         * @summary Richiesta di pre-caricamento dei documenti della notifica
+         * @param {Array<BffPreLoadRequest>} bffPreLoadRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async preSignedUploadV1(bffPreLoadRequest: Array<BffPreLoadRequest>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BffPreLoadResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.preSignedUploadV1(bffPreLoadRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NotificationSentApi.preSignedUploadV1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3650,6 +4025,16 @@ export const NotificationSentApiFactory = function (configuration?: Configuratio
             return localVarFp.getSentNotificationV1(iun, options).then((request) => request(axios, basePath));
         },
         /**
+         * Operazione utilizzata dalla Pubblica Amministrazione per richiedere l\'invio di una notifica.  La restituzione di uno stato HTTP 202 significa solo che la richiesta è sintatticamente valida, non che la richiesta sia stata validata ed accettata.
+         * @summary Richiesta invio notifica
+         * @param {BffNewNotificationRequest} bffNewNotificationRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        newSentNotificationV1(bffNewNotificationRequest: BffNewNotificationRequest, options?: any): AxiosPromise<BffNewNotificationResponse> {
+            return localVarFp.newSentNotificationV1(bffNewNotificationRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Questa operazione permette di annullare una notifica inviata.
          * @summary Mittente: annullamento notifica
          * @param {string} iun Identificativo Univoco Notifica
@@ -3658,6 +4043,16 @@ export const NotificationSentApiFactory = function (configuration?: Configuratio
          */
         notificationCancellationV1(iun: string, options?: any): AxiosPromise<BffRequestStatus> {
             return localVarFp.notificationCancellationV1(iun, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Operazione che richiede a Piattaforma Notifica le informazioni e le autorizzazioni necessarie  a pre-caricare uno o più file da allegare a una notifica.
+         * @summary Richiesta di pre-caricamento dei documenti della notifica
+         * @param {Array<BffPreLoadRequest>} bffPreLoadRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        preSignedUploadV1(bffPreLoadRequest: Array<BffPreLoadRequest>, options?: any): AxiosPromise<Array<BffPreLoadResponse>> {
+            return localVarFp.preSignedUploadV1(bffPreLoadRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Questa operazione permette di ricercare le notifiche inviate.
@@ -3730,6 +4125,18 @@ export class NotificationSentApi extends BaseAPI {
     }
 
     /**
+     * Operazione utilizzata dalla Pubblica Amministrazione per richiedere l\'invio di una notifica.  La restituzione di uno stato HTTP 202 significa solo che la richiesta è sintatticamente valida, non che la richiesta sia stata validata ed accettata.
+     * @summary Richiesta invio notifica
+     * @param {BffNewNotificationRequest} bffNewNotificationRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationSentApi
+     */
+    public newSentNotificationV1(bffNewNotificationRequest: BffNewNotificationRequest, options?: RawAxiosRequestConfig) {
+        return NotificationSentApiFp(this.configuration).newSentNotificationV1(bffNewNotificationRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Questa operazione permette di annullare una notifica inviata.
      * @summary Mittente: annullamento notifica
      * @param {string} iun Identificativo Univoco Notifica
@@ -3739,6 +4146,18 @@ export class NotificationSentApi extends BaseAPI {
      */
     public notificationCancellationV1(iun: string, options?: RawAxiosRequestConfig) {
         return NotificationSentApiFp(this.configuration).notificationCancellationV1(iun, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Operazione che richiede a Piattaforma Notifica le informazioni e le autorizzazioni necessarie  a pre-caricare uno o più file da allegare a una notifica.
+     * @summary Richiesta di pre-caricamento dei documenti della notifica
+     * @param {Array<BffPreLoadRequest>} bffPreLoadRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationSentApi
+     */
+    public preSignedUploadV1(bffPreLoadRequest: Array<BffPreLoadRequest>, options?: RawAxiosRequestConfig) {
+        return NotificationSentApiFp(this.configuration).preSignedUploadV1(bffPreLoadRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

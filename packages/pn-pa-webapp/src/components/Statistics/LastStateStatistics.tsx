@@ -1,4 +1,5 @@
 /* eslint-disable functional/immutable-data */
+import { isArray } from 'lodash';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -8,15 +9,22 @@ import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 import { ILastStateStatistics, NotificationStatus } from '../../models/Statistics';
 
 type Props = {
-  data: ILastStateStatistics | undefined;
+  data: ILastStateStatistics;
 };
 
-const LastStateStatistics: React.FC<Props> = (props) => {
+const LastStateStatistics: React.FC<Props> = ({ data }) => {
   const { t } = useTranslation(['statistics']);
 
   const option: PnEChartsProps['option'] = {
     tooltip: {
       trigger: 'axis',
+      formatter: (params) => {
+        const elem = isArray(params) ? params[0] : params;
+        return `<div style="word-break: break-word;white-space: pre-wrap;">${elem.marker}${
+          elem.name
+        } <b>${elem.data.value.toLocaleString()}</b>
+        </div>`;
+      },
     },
     toolbox: {
       feature: {
@@ -26,6 +34,9 @@ const LastStateStatistics: React.FC<Props> = (props) => {
           name: 'chart',
           backgroundColor: 'white',
           pixelRatio: 2,
+          iconStyle: {
+            borderColor: '#0055AA',
+          },
         },
       },
     },
@@ -40,6 +51,8 @@ const LastStateStatistics: React.FC<Props> = (props) => {
         show: true,
         interval: 0,
         rotate: 45,
+        lineHeight: 20,
+        margin: 40,
       },
       type: 'category',
       data: [
@@ -58,37 +71,37 @@ const LastStateStatistics: React.FC<Props> = (props) => {
       {
         data: [
           {
-            value: props.data?.[NotificationStatus.DELIVERING],
+            value: data[NotificationStatus.DELIVERING],
             itemStyle: {
-              color: '#E3E7EB',
+              color: '#E0E0E0',
             },
           },
           {
-            value: props.data?.[NotificationStatus.DELIVERED],
+            value: data[NotificationStatus.DELIVERED],
             itemStyle: {
               color: '#6BCFFB',
             },
           },
           {
-            value: props.data?.[NotificationStatus.VIEWED],
+            value: data[NotificationStatus.VIEWED],
             itemStyle: {
               color: '#6CC66A',
             },
           },
           {
-            value: props.data?.[NotificationStatus.EFFECTIVE_DATE],
+            value: data[NotificationStatus.EFFECTIVE_DATE],
             itemStyle: {
               color: '#5CA85A',
             },
           },
           {
-            value: props.data?.[NotificationStatus.CANCELLED],
+            value: data[NotificationStatus.CANCELLED],
             itemStyle: {
               color: '#FFCB46',
             },
           },
           {
-            value: props.data?.[NotificationStatus.UNREACHABLE],
+            value: data[NotificationStatus.UNREACHABLE],
             itemStyle: {
               color: '#FE6666',
             },

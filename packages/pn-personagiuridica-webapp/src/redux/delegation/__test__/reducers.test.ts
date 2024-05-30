@@ -4,7 +4,6 @@ import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { mandatesByDelegate, mandatesByDelegator } from '../../../__mocks__/Delegations.mock';
 import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { GET_GROUPS } from '../../../api/external-registries/external-registries-routes';
 import { DelegationStatus } from '../../../models/Deleghe';
 import { GroupStatus } from '../../../models/groups';
 import { store } from '../../store';
@@ -187,7 +186,7 @@ describe('delegation redux state tests', () => {
         status: GroupStatus.ACTIVE,
       },
     ];
-    mock.onGet(GET_GROUPS()).reply(200, response);
+    mock.onGet('/bff/v1/pg/groups').reply(200, response);
     const action = await store.dispatch(getGroups());
     expect(action.type).toBe('getGroups/fulfilled');
     expect(action.payload).toEqual(response);

@@ -127,3 +127,6 @@ export function formatDateSMonth(date: Date | string, year: boolean = false): st
   const yearTxt = year ? ` ${the_date.getFullYear()}` : '';
   return `${the_date.getDate()} ${shortMonth}${yearTxt}`;
 }
+
+export const convertHoursToIntDays = (hours: number): number =>
+  Math.round(hours && hours > 0 ? hours / 24 : 0);

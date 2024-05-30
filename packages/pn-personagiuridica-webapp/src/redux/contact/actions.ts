@@ -2,8 +2,8 @@ import { parseError } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
-import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import { AddressesApiFactory } from '../../generated-client/digital-addresses';
+import { InfoRecipientApiFactory } from '../../generated-client/recipient-info';
 import { AddressType, DigitalAddress } from '../../models/contacts';
 import { FilterPartiesParams, Party } from '../../models/party';
 import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from './types';
@@ -100,9 +100,14 @@ export const getAllActivatedParties = createAsyncThunk<Array<Party>, FilterParti
   CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES,
   async (payload, { rejectWithValue }) => {
     try {
-      return await ExternalRegistriesAPI.getAllActivatedParties(payload ? payload : {});
+      const infoRecipientFactory = InfoRecipientApiFactory(undefined, undefined, apiClient);
+      const response = await infoRecipientFactory.getPAListV1(
+        payload?.paNameFilter ? payload.paNameFilter : undefined
+      );
+
+      return response.data as Array<Party>;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(parseError(e));
     }
   },
   {

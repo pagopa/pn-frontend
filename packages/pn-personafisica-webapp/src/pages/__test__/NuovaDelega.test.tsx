@@ -15,7 +15,6 @@ import { createDelegationPayload } from '../../__mocks__/CreateDelegation.mock';
 import { parties } from '../../__mocks__/ExternalRegistry.mock';
 import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
 import * as routes from '../../navigation/routes.const';
 import { createDelegationMapper } from '../../redux/newDelegation/actions';
 import NuovaDelega from '../NuovaDelega.page';
@@ -65,7 +64,7 @@ describe('NuovaDelega page', async () => {
   let mock: MockAdapter;
 
   beforeEach(() => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     mustMockNavigate = true;
   });
 
@@ -220,7 +219,7 @@ describe('NuovaDelega page', async () => {
     const entiError = container.querySelector('#enti-helper-text');
     expect(entiError).toHaveTextContent('nuovaDelega.validation.entiSelected.required');
     // inser wrong data
-    await testInput(container, 'codiceFiscale', 'wrong-fiscal-code');
+    await testInput(container, 'codiceFiscale', 'WRONG-FISCAL-CODE');
     expect(fiscalCodeError).toHaveTextContent('nuovaDelega.validation.fiscalCode.wrong');
     await testInput(container, 'expirationDate', formatDate(yesterday.toISOString()));
     expect(expirationDateError).toHaveTextContent('nuovaDelega.validation.expirationDate.wrong');
@@ -280,7 +279,7 @@ describe('NuovaDelega page', async () => {
       true
     );
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toBe(GET_ALL_ACTIVATED_PARTIES());
+    expect(mock.history.get[0].url).toBe('/bff/v1/pa-list');
     await testAutocomplete(container, 'enti', parties, true, 1);
     // create delegation
     const button = getByTestId('createButton');
