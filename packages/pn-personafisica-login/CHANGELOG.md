@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.4.2...v2.5.0-RC.0) (2024-05-30)
+
+
+### Bug Fixes
+
+* **PN-10821:** Fix some Mixpanel regressions and track super profile properties ([#1200](https://github.com/pagopa/pn-frontend/issues/1200)) ([8dd9c41](https://github.com/pagopa/pn-frontend/commit/8dd9c419d42cc2eb0fd1e6adeab03b9b93c0b296))
+
+
+
+
+
 ## [2.4.2](https://github.com/pagopa/pn-frontend/compare/v2.4.2-RC.3...v2.4.2) (2024-05-02)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
