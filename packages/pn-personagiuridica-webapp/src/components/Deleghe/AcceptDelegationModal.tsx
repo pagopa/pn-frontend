@@ -61,6 +61,14 @@ const AcceptDelegationModal: React.FC<Props> = ({
     useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
   const { t } = useTranslation(['deleghe']);
   const groups = useAppSelector((state: RootState) => state.delegationsState.groups);
+  // when there are groups, the codeModal component is unmounted at confirm button click
+  // so the updateError call in the handleAcceptanceError has no effect
+  // we use the useRef hook to store the value of the error without force re-rendering
+  const errorRef = useRef<{ title: string; message: string; hasError: boolean }>({
+    title: '',
+    message: '',
+    hasError: false,
+  });
 
   const getOptionLabel = (option: { name: string; id: string }) => option.name || '';
   const renderOption = (props: any, option: { name: string; id: string }) => (
@@ -105,13 +113,22 @@ const AcceptDelegationModal: React.FC<Props> = ({
     // if code is invalid, pass the error to the AcceptModal and after to the CodeModal
     const error = responseError.errors ? responseError.errors[0] : null;
     if (error?.code === ServerResponseErrorCode.PN_MANDATE_INVALIDVERIFICATIONCODE) {
-      codeModalRef.current?.updateError(
-        {
-          title: error.message.title,
-          content: error.message.content,
-        },
-        true
-      );
+      if (groups.length) {
+        // eslint-disable-next-line functional/immutable-data
+        errorRef.current.title = error.message.title;
+        // eslint-disable-next-line functional/immutable-data
+        errorRef.current.message = error.message.content;
+        // eslint-disable-next-line functional/immutable-data
+        errorRef.current.hasError = true;
+      } else {
+        codeModalRef.current?.updateError(
+          {
+            title: error.message.title,
+            content: error.message.content,
+          },
+          true
+        );
+      }
     }
     return true;
   }, []);
@@ -142,6 +159,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
         confirmLabel={t('deleghe.accept-delegation')}
         codeSectionTitle={t('deleghe.verification_code')}
         ref={codeModalRef}
+        error={errorRef.current}
       />
     );
   }

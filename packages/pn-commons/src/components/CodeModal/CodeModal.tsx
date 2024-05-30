@@ -31,6 +31,7 @@ type Props = {
   cancelCallback?: () => void;
   confirmCallback?: (values: Array<string>) => void;
   isReadOnly?: boolean;
+  error?: { title: string; message: string; hasError: boolean };
 };
 
 type ModalHandle = {
@@ -63,6 +64,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
       cancelCallback,
       confirmCallback,
       isReadOnly = false,
+      error,
     }: Props,
     ref
   ) => {
@@ -93,9 +95,9 @@ const CodeModal = forwardRef<ModalHandle, Props>(
         });
       } else {
         setInternalError({
-          internalHasError: false,
-          internalErrorTitle: '',
-          internalErrorMessage: '',
+          internalHasError: error?.hasError ?? false,
+          internalErrorTitle: error?.title ?? '',
+          internalErrorMessage: error?.message ?? '',
         });
       }
     }, []);
