@@ -1,6 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
+import { ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { mandatesByDelegate, mandatesByDelegator } from '../../__mocks__/Delegations.mock';
@@ -222,7 +223,12 @@ describe('Deleghe page', async () => {
       })
       .reply(500);
     await act(async () => {
-      result = render(<Deleghe />);
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <Deleghe />
+        </>
+      );
     });
     // get first delegator row
     let delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');

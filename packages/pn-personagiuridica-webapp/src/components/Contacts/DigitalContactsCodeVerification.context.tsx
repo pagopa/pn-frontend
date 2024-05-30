@@ -1,5 +1,14 @@
 import _ from 'lodash';
-import { FC, ReactNode, createContext, useCallback, useContext, useEffect, useState } from 'react';
+import {
+  FC,
+  ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Box, Button, DialogContentText, DialogTitle, Typography } from '@mui/material';
@@ -51,7 +60,6 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   const digitalAddresses =
     useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
   const [isConfirmationModalVisible, setIsConfirmationModalVisible] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
 
   const initialProps = {
     labelRoot: '',
@@ -65,12 +73,13 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   const [open, setOpen] = useState(false);
   const [disclaimerOpen, setDisclaimerOpen] = useState(false);
   const [pecValidationOpen, setPecValidationOpen] = useState(false);
-  const [codeNotValid, setCodeNotValid] = useState(false);
   const dispatch = useAppDispatch();
   const [modalProps, setModalProps] = useState(initialProps);
+  const codeModalRef =
+    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
 
   const handleClose = (status: 'validated' | 'cancelled' = 'cancelled') => {
-    setCodeNotValid(false);
+    codeModalRef.current?.updateError({ title: '', content: '' }, false);
     setOpen(false);
     setModalProps(initialProps);
     if (modalProps.callbackOnValidation) {
@@ -204,11 +213,13 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
       }
       if (Array.isArray(responseError.errors)) {
         const error = responseError.errors[0];
-        setErrorMessage({
-          title: error.message.title,
-          content: error.message.content,
-        });
-        setCodeNotValid(true);
+        codeModalRef.current?.updateError(
+          {
+            title: error.message.title,
+            content: error.message.content,
+          },
+          true
+        );
       }
       return false;
     },
@@ -216,18 +227,10 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   );
 
   useEffect(() => {
-    AppResponsePublisher.error.subscribe('createOrUpdateLegalAddress', handleAddressUpdateError);
-    AppResponsePublisher.error.subscribe('createOrUpdateCourtesyAddress', handleAddressUpdateError);
+    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
 
     return () => {
-      AppResponsePublisher.error.unsubscribe(
-        'createOrUpdateLegalAddress',
-        handleAddressUpdateError
-      );
-      AppResponsePublisher.error.unsubscribe(
-        'createOrUpdateCourtesyAddress',
-        handleAddressUpdateError
-      );
+      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
     };
   }, [handleAddressUpdateError]);
 
@@ -288,9 +291,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
           confirmLabel={t('button.conferma')}
           cancelCallback={() => handleClose('cancelled')}
           confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
-          hasError={codeNotValid}
-          errorTitle={errorMessage?.title}
-          errorMessage={errorMessage?.content}
+          ref={codeModalRef}
         />
       )}
       <PnDialog
