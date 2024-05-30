@@ -1,12 +1,13 @@
 /* eslint-disable functional/immutable-data */
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { StatisticsParsedResponse } from '../../models/Statistics';
+import { StatisticsFilter, StatisticsParsedResponse } from '../../models/Statistics';
 import { getStatistics } from './actions';
 
 const initialState = {
   loading: false,
   statistics: null as StatisticsParsedResponse | null,
+  filter: null as StatisticsFilter | null,
 };
 
 const statisticsSlice = createSlice({
@@ -17,6 +18,11 @@ const statisticsSlice = createSlice({
   // },
   reducers: {
     resetState: () => initialState,
+    setStatisticsFilter: (state, action: PayloadAction<StatisticsFilter>) => {
+      if (state.filter !== action.payload) {
+        state.filter = action.payload;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getStatistics.fulfilled, (state, action) => {
@@ -25,6 +31,6 @@ const statisticsSlice = createSlice({
   },
 });
 
-export const { resetState } = statisticsSlice.actions;
+export const { resetState, setStatisticsFilter } = statisticsSlice.actions;
 
 export default statisticsSlice;

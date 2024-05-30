@@ -13,24 +13,32 @@ import {
 
 import DeliveryModeStatistics from '../components/Statistics/DeliveryModeStatistics';
 import FiledNotificationsStatistics from '../components/Statistics/FiledNotificationsStatistics';
+import FilterStatistics from '../components/Statistics/FilterStatistics';
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
-import { StatisticsDataTypes } from '../models/Statistics';
+import { StatisticsDataTypes, StatisticsFilter } from '../models/Statistics';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getStatistics } from '../redux/statistics/actions';
 import { RootState } from '../redux/store';
 
-const startDate = new Date('2024-01-01T00:00:00');
-const endDate = new Date('2024-04-01T00:00:00');
 const cxType = 'PA';
-const cxId = '1c93d069-82c3-4903-a1ae-670353d9ad4d'; // loggedUserOrganizationParty.id;
+
+const getFilterDates = (filter: StatisticsFilter | null) =>
+  filter
+    ? [filter.startDate, filter.endDate]
+    : [formatToSlicedISOString(oneYearAgo), formatToSlicedISOString(today)];
 
 const Statistics = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['statistics']);
   const statisticsData = useAppSelector((state: RootState) => state.statisticsState.statistics);
+  const statisticsFilter = useAppSelector((state: RootState) => state.statisticsState.filter);
   const loggedUserOrganizationParty = useAppSelector(
     (state: RootState) => state.userState.user?.organization
   );
+
+  const [startDate, endDate] = getFilterDates(statisticsFilter);
+
+  const cxId = loggedUserOrganizationParty.id;
 
   const getLastUpdateText = (): string => {
     if (statisticsData) {
@@ -53,8 +61,8 @@ const Statistics = () => {
 
   const fetchStatistics = useCallback(() => {
     const params = {
-      startDate,
-      endDate,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
       cxType,
       cxId,
     };
@@ -75,7 +83,9 @@ const Statistics = () => {
       </Typography>
       <Stack direction={'row'} display="flex" justifyContent="space-between" alignItems="center">
         <Box></Box>
-        <Box>Componente per il filtraggio</Box>
+        <Box>
+          <FilterStatistics filter={statisticsFilter} />
+        </Box>
         <Box></Box>
       </Stack>
       {statisticsData && (
