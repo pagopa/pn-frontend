@@ -58,6 +58,17 @@
           "modelPackage": "models",
           "cleanupOutput": true
         }
+      },
+      "bff-sender-dashboard": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/af412f72d4e0b20b5fd485ff8b981ebf00aa00b1/docs/openapi/api-external-pn-bff-sender-dashboard.yaml",
+        "output": "./src/generated-client/sender-dashboard",
+        "additionalProperties": {
+          "supportsES6": true,
+          "apiPackage": "apis",
+          "modelPackage": "models",
+          "cleanupOutput": true
+        }
       }
     }
   }

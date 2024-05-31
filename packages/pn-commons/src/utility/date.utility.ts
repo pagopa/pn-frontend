@@ -8,6 +8,7 @@ export const DATE_FORMAT = 'dd/MM/yyyy';
 const DATE_FORMAT_TIMEZONE = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
 export const today = dateFns.endOfDay(new Date());
+export const oneMonthAgo = dateFns.addDays(new Date(), -30);
 export const tenYearsAgo = dateFns.startOfDay(
   new Date(new Date().setMonth(today.getMonth() - 120))
 );
