@@ -2,7 +2,7 @@ import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
 export enum DeliveryMode { // export from pn-commons/../NotificationDetail.ts???
   DIGITAL = 'DIGITAL',
-  ANALOG = 'ANALOGIC ',
+  ANALOG = 'ANALOGIC',
   UNKNOWN = '-',
 }
 
@@ -39,11 +39,12 @@ interface DigitalNotificationFocus {
 
 export interface StatisticsResponse {
   sender_id: string;
-  last_update_timestamp: string;
-  start_date: string;
-  end_date: string;
-  notifications_overview: Array<NotificationOverview>;
-  digital_notification_focus: Array<DigitalNotificationFocus>;
+  lastDate: string;
+  startDate: string;
+  endDate: string;
+  genTimestamp: string;
+  notificationsOverview: Array<NotificationOverview>;
+  digitalNotificationFocus: Array<DigitalNotificationFocus>;
 }
 
 export interface StatisticsParams<TDate extends string | Date> {

@@ -1,19 +1,30 @@
+import React from 'react';
 import { vi } from 'vitest';
 
 import userEvent from '@testing-library/user-event';
 
+import { ErrorMessage } from '../../../models';
 import { act, fireEvent, render, screen, waitFor, within } from '../../../test-utils';
 import CodeModal from '../CodeModal';
 
 const cancelButtonMock = vi.fn();
 const confirmButtonMock = vi.fn();
 
+type ModalHandle = {
+  updateError: (error: ErrorMessage, codeNotValid: boolean) => void;
+};
+
 const CodeModalWrapper: React.FC<{
   open: boolean;
-  hasError?: boolean;
   readonly?: boolean;
   initialValues?: string[];
-}> = ({ open, hasError = false, readonly = false, initialValues = new Array(5).fill('') }) => (
+  refError?: React.RefObject<ModalHandle>;
+}> = ({
+  open,
+  readonly = false,
+  initialValues = new Array(5).fill(''),
+  refError = React.createRef<ModalHandle>(),
+}) => (
   <CodeModal
     title="mocked-title"
     subtitle="mocked-subtitle"
@@ -24,9 +35,8 @@ const CodeModalWrapper: React.FC<{
     cancelCallback={cancelButtonMock}
     confirmLabel="mocked-confirm"
     confirmCallback={confirmButtonMock}
-    hasError={hasError}
-    errorMessage="mocked-errorMessage"
     isReadOnly={readonly}
+    ref={refError}
   />
 );
 
@@ -135,7 +145,11 @@ describe('CodeModal Component', () => {
     let errorAlert = within(dialog).queryByTestId('errorAlert');
     expect(errorAlert).not.toBeInTheDocument();
     // simulate error from external
-    rerender(<CodeModalWrapper open hasError initialValues={['0', '1', '2', '3', '4']} />);
+    const ref = React.createRef<ModalHandle>();
+    rerender(<CodeModalWrapper refError={ref} open initialValues={['0', '1', '2', '3', '4']} />);
+    act(() =>
+      ref.current?.updateError({ title: 'mocked-errorTitle', content: 'mocked-errorMessage' }, true)
+    );
     errorAlert = within(dialog).getByTestId('errorAlert');
     expect(errorAlert).toBeInTheDocument();
     expect(errorAlert).toHaveTextContent('mocked-errorMessage');

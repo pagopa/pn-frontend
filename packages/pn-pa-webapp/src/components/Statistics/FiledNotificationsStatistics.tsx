@@ -45,7 +45,8 @@ const FiledNotificationsStatistics: React.FC<Props> = ({
   ];
 
   const notificationsAmount = acceptedSum;
-  const notificationsPercent = Math.floor((acceptedSum / (acceptedSum + refusedSum)) * 1000) / 10;
+  const notificationsPercent =
+    acceptedSum > 0 ? Math.floor((acceptedSum / (acceptedSum + refusedSum)) * 1000) / 10 : 0;
 
   const isMobile = useIsMobile();
 

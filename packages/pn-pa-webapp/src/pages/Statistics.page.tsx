@@ -21,12 +21,12 @@ import FilterStatistics, {
   defaultValues as filterDefaultValues,
 } from '../components/Statistics/FilterStatistics';
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
-import { StatisticsDataTypes, StatisticsFilter } from '../models/Statistics';
+import { CxType, StatisticsDataTypes, StatisticsFilter } from '../models/Statistics';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getStatistics } from '../redux/statistics/actions';
 import { RootState } from '../redux/store';
 
-const cxType = 'PA';
+const cxType = CxType.PA;
 
 const getFilterDates = (filter: StatisticsFilter | null) =>
   filter
@@ -48,7 +48,7 @@ const Statistics = () => {
 
   const getLastUpdateText = (): string => {
     if (statisticsData) {
-      const dateTime = formatDateTime(statisticsData?.genTimestamp.substring(0, 25) + 'Z');
+      const dateTime = formatDateTime(statisticsData?.genTimestamp.substring(0, 19) + 'Z');
       return t('last_update', { dateTime });
     }
     return '';
