@@ -344,9 +344,13 @@ const SpecialContacts = ({ legalAddresses, courtesyAddresses }: Props) => {
                 }}
                 filterOptions={(e) => e}
                 renderOption={renderOption}
-                renderInput={(params) => (
+                renderInput={({ inputProps, ...params }) => (
                   <TextField
                     {...params}
+                    inputProps={{
+                      ...inputProps,
+                      onBlur: undefined,
+                    }}
                     name="sender"
                     label={entitySearchLabel}
                     error={senderInputValue.length > 80}

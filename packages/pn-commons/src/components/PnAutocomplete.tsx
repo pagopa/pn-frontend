@@ -9,9 +9,11 @@ const PnAutocomplete = <
   props: AutocompleteProps<T, Multiple, DisableClearable, FreeSolo>
 ) => (
   <Autocomplete
+    aria-autocomplete="list"
     {...props}
-    openText={props.openText || ""}
-    closeText={props.closeText || ""}
+    disableCloseOnSelect
+    openText={props.openText || ''}
+    closeText={props.closeText || ''}
     PaperComponent={({ children }) => <Paper elevation={8}>{children}</Paper>}
   />
 );
