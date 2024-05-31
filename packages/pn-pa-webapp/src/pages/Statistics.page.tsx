@@ -59,9 +59,6 @@ const Statistics = () => {
   const Subtitle = (
     <Stack direction={'row'} display="flex" justifyContent="space-between" alignItems="center">
       <Typography>{t('subtitle', { organization: loggedUserOrganizationParty?.name })}</Typography>
-      <Button variant="outlined" endIcon={<Download />} sx={{ whiteSpace: 'nowrap' }}>
-        {t('export_all')}
-      </Button>
     </Stack>
   );
 
