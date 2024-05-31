@@ -18,10 +18,8 @@ const statisticsSlice = createSlice({
   // },
   reducers: {
     resetState: () => initialState,
-    setStatisticsFilter: (state, action: PayloadAction<StatisticsFilter>) => {
-      if (state.filter !== action.payload) {
-        state.filter = action.payload;
-      }
+    setStatisticsFilter: (state, action: PayloadAction<StatisticsFilter | null>) => {
+      state.filter = action.payload;
     },
   },
   extraReducers: (builder) => {

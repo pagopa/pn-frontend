@@ -17,7 +17,9 @@ import DigitalMeanTimeStatistics from '../components/Statistics/DigitalMeanTimeS
 import DigitalStateStatistics from '../components/Statistics/DigitalStateStatistics';
 import EmptyStatistics from '../components/Statistics/EmptyStatistics';
 import FiledNotificationsStatistics from '../components/Statistics/FiledNotificationsStatistics';
-import FilterStatistics from '../components/Statistics/FilterStatistics';
+import FilterStatistics, {
+  defaultValues as filterDefaultValues,
+} from '../components/Statistics/FilterStatistics';
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
 import { StatisticsDataTypes, StatisticsFilter } from '../models/Statistics';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -29,7 +31,7 @@ const cxType = 'PA';
 const getFilterDates = (filter: StatisticsFilter | null) =>
   filter
     ? [filter.startDate, filter.endDate]
-    : [formatToSlicedISOString(oneYearAgo), formatToSlicedISOString(today)];
+    : [filterDefaultValues.startDate, filterDefaultValues.endDate];
 
 const Statistics = () => {
   const dispatch = useAppDispatch();
@@ -91,11 +93,11 @@ const Statistics = () => {
           <Typography variant="caption" sx={{ color: '#5C6F82' }}>
             {lastUpdateTxt}
           </Typography>
-          <Typography variant="h6" component="h5" mt={9}>
+          <Typography variant="h6" component="h5" mt={7}>
             {t('section_1')}
           </Typography>
           <FilterStatistics filter={statisticsFilter} />
-          <Stack direction={'column'} spacing={3} mt={4}>
+          <Stack direction={'column'} spacing={3} pt={2}>
             <FiledNotificationsStatistics
               startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
               endDate={statisticsData.endDate ?? formatToSlicedISOString(today)}

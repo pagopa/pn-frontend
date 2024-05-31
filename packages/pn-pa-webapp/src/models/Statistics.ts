@@ -189,6 +189,6 @@ export type SelectedStatisticsFilterKeys =
 
 export type StatisticsFilter = {
   selected: SelectedStatisticsFilterKeys | null;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
 };

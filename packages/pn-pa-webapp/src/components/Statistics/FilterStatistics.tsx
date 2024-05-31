@@ -1,19 +1,17 @@
 import { FormikValues, useFormik } from 'formik';
 import _ from 'lodash';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { Button, Chip } from '@mui/material';
+import { Box, Stack } from '@mui/system';
 import {
   CustomDatePicker,
   DATE_FORMAT,
   DatePickerTypes,
   dateIsDefined,
-  filtersApplied,
-  formatToSlicedISOString,
   oneMonthAgo,
-  oneYearAgo,
   sixMonthsAgo,
   tenYearsAgo,
   threeMonthsAgo,
@@ -30,23 +28,12 @@ import {
 import { useAppDispatch } from '../../redux/hooks';
 import { setStatisticsFilter } from '../../redux/statistics/reducers';
 
-const emptyValues = {
-  startDate: tenYearsAgo,
+const quickFilters = Object.values(SelectedStatisticsFilter).filter((value) => value !== 'custom');
+
+export const defaultValues = {
+  startDate: oneMonthAgo,
   endDate: today,
-  selected: null,
-};
-
-const initialEmptyValues = { ...emptyValues, selected: SelectedStatisticsFilter.lastMonth };
-
-const initialValues = (filter: StatisticsFilter | null): FormikValues => {
-  if (!filter || _.isEqual(filter, emptyValues)) {
-    return initialEmptyValues;
-  }
-  return {
-    startDate: new Date(filter.startDate),
-    endDate: new Date(filter.endDate),
-    selected: filter.selected,
-  };
+  selected: SelectedStatisticsFilter.lastMonth,
 };
 
 type Props = {
@@ -54,13 +41,24 @@ type Props = {
 };
 
 const FilterStatistics: React.FC<Props> = ({ filter }) => {
-  console.log('=============== FilterStatistics Render!');
   const { t, i18n } = useTranslation(['statistics']);
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
-  const [prevFilter, setPrevFilter] = useState(filter || emptyValues);
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [startDate, setStartDate] = useState<Date | null>(
+    filter?.startDate ?? defaultValues.startDate
+  );
+  const [endDate, setEndDate] = useState<Date | null>(filter?.endDate ?? defaultValues.endDate);
+
+  const initialValues = (filter: StatisticsFilter | null): FormikValues => {
+    if (!filter || _.isEqual(filter, defaultValues)) {
+      return defaultValues;
+    }
+    return {
+      startDate: filter.startDate,
+      endDate: filter.endDate,
+      selected: filter.selected,
+    };
+  };
 
   const validationSchema = yup.object({
     // the formik validations for dates (which control the enable status of the "filtra" button)
@@ -81,223 +79,190 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
     /** onSubmit populates filter */
     onSubmit: (values: FormikValues) => {
       const currentFilter = {
-        startDate: formatToSlicedISOString(values.startDate),
-        endDate: formatToSlicedISOString(values.endDate),
+        startDate: values.startDate,
+        endDate: values.endDate,
         selected: values.selected,
       };
-      if (_.isEqual(prevFilter, currentFilter)) {
+      if (_.isEqual(filter, currentFilter)) {
         return;
       }
       dispatch(setStatisticsFilter(currentFilter));
-      setPrevFilter(currentFilter);
     },
   });
 
-  const setFilter = (type: SelectedStatisticsFilterKeys): void => {
-    const vals = {
-      endDate: today,
-      selected: type,
-    };
-    switch (type) {
+  const getRangeDates = (range: SelectedStatisticsFilterKeys, loading: boolean): [Date, Date] => {
+    switch (range) {
       case SelectedStatisticsFilter.lastMonth:
-        formik
-          .setValues({
-            ...vals,
-            startDate: oneMonthAgo,
-          })
-          .catch((error) => {
-            console.log(`Error: ${error}`);
-          });
-        break;
+        return [oneMonthAgo, today];
       case SelectedStatisticsFilter.last3Months:
-        formik
-          .setValues({
-            ...vals,
-            startDate: threeMonthsAgo,
-          })
-          .catch((error) => {
-            console.log(`Error: ${error}`);
-          });
-        break;
+        return [threeMonthsAgo, today];
       case SelectedStatisticsFilter.last6Months:
-        formik
-          .setValues({
-            ...vals,
-            startDate: sixMonthsAgo,
-          })
-          .catch((error) => {
-            console.log(`Error: ${error}`);
-          });
-        break;
+        return [sixMonthsAgo, today];
       case SelectedStatisticsFilter.last12Months:
-        formik
-          .setValues({
-            ...vals,
-            startDate: twelveMonthsAgo,
-          })
-          .catch((error) => {
-            console.log(`Error: ${error}`);
-          });
-        break;
+        return [twelveMonthsAgo, today];
+      case SelectedStatisticsFilter.custom:
+        return loading
+          ? [filter?.startDate ?? defaultValues.startDate, filter?.endDate ?? defaultValues.endDate]
+          : [startDate ?? formik.values.startDate, endDate ?? formik.values.endDate];
       default:
-        formik
-          .setValues({
-            selected: null,
-            startDate: oneYearAgo,
-            endDate: today,
-          })
-          .catch((error) => {
-            console.log(`Error: ${error}`);
-          });
+        return [defaultValues.startDate, defaultValues.endDate];
     }
   };
 
-  const handleSelectFilter = async (type: SelectedStatisticsFilterKeys) => {
+  const setFilter = (type: SelectedStatisticsFilterKeys, loading = false): void => {
+    const [startDate, endDate] = getRangeDates(type, loading);
+    formik
+      .setValues({
+        startDate,
+        endDate,
+        selected: type,
+      })
+      .catch((error) => console.log(`${error}`));
+    setStartDate(startDate);
+    setEndDate(endDate);
+  };
+
+  const handleSelectFilter = (type: SelectedStatisticsFilterKeys) => {
     setFilter(type);
-    console.log('========== handleSelecteFilter');
-    formik.submitForm().catch((error) => console.log(`Error submitting form: ${error}`));
+    formik.submitForm().catch((error) => console.log(`${error}`));
   };
 
   const cleanFilter = () => {
-    console.log('=============== FilterStatistics - cleanFilter()');
-    dispatch(setStatisticsFilter(emptyValues));
+    dispatch(setStatisticsFilter(null));
   };
 
-  const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
+  const filterChanged =
+    !_.isEqual(filter?.startDate, startDate) || !_.isEqual(filter?.endDate, endDate);
 
+  const isInitialSearch = _.isEqual(formik.values, defaultValues);
+
+  const quickFiltersJsx = (): Array<JSX.Element> =>
+    quickFilters.map((elem) => (
+      <Chip
+        key={elem}
+        label={t(`filter.${elem}`)}
+        sx={{ mr: 1 }}
+        variant="outlined"
+        component="button"
+        color={elem === formik.values.selected ? 'primary' : 'default'}
+        onClick={() => handleSelectFilter(elem)}
+      />
+    ));
+
+  useEffect(() => {
+    setFilter(filter?.selected ?? defaultValues.selected, true);
+  }, [filter]);
   return (
-    <>
-      <Chip
-        key="lastMonth"
-        label={t('filter.lastMonth')}
-        sx={{ mr: 1 }}
-        variant="outlined"
-        component="button"
-        color={
-          formik.values.selected === SelectedStatisticsFilter.lastMonth ? 'primary' : 'default'
-        }
-        onClick={() => handleSelectFilter(SelectedStatisticsFilter.lastMonth)}
-      />
-      <Chip
-        key="last3Months"
-        label={t('filter.last3Months')}
-        sx={{ mr: 1 }}
-        variant="outlined"
-        component="button"
-        color={
-          formik.values.selected === SelectedStatisticsFilter.last3Months ? 'primary' : 'default'
-        }
-        onClick={() => handleSelectFilter(SelectedStatisticsFilter.last3Months)}
-      />
-      <Chip
-        key="last6Months"
-        label={t('filter.last6Months')}
-        sx={{ mr: 1 }}
-        variant="outlined"
-        component="button"
-        color={
-          formik.values.selected === SelectedStatisticsFilter.last6Months ? 'primary' : 'default'
-        }
-        onClick={() => handleSelectFilter(SelectedStatisticsFilter.last6Months)}
-      />
-      <Chip
-        key="last12Months"
-        label={t('filter.last12Months')}
-        sx={{ mr: 1 }}
-        variant="outlined"
-        component="button"
-        color={
-          formik.values.selected === SelectedStatisticsFilter.last12Months ? 'primary' : 'default'
-        }
-        onClick={() => handleSelectFilter(SelectedStatisticsFilter.last12Months)}
-      />
-      <CustomDatePicker
-        language={i18n.language}
-        label={t('filter.from_date')}
-        format={DATE_FORMAT}
-        value={startDate}
-        onChange={(value: DatePickerTypes) => {
-          void formik.setFieldValue('startDate', value || oneMonthAgo).then(() => {
-            setStartDate(value);
-          });
-        }}
-        slotProps={{
-          textField: {
-            id: 'startDate',
-            name: 'startDate',
-            size: 'small',
-            'aria-label': t('filter.from_date-aria-label'), // aria-label for (TextField + Button) Group
-            inputProps: {
-              inputMode: 'text',
-              placeholder: 'gg/mm/aaaa',
-              type: 'text',
-              'aria-label': t('filter.from_date-input-aria-label'),
+    <Stack
+      direction={{ lg: 'row', xs: 'column' }}
+      mt={4}
+      mb={1}
+      display="flex"
+      justifyContent="space-between"
+      alignItems="center"
+    >
+      <Box>{quickFiltersJsx()}</Box>
+      <Box>
+        <CustomDatePicker
+          language={i18n.language}
+          label={t('filter.from_date')}
+          format={DATE_FORMAT}
+          value={startDate}
+          onChange={(value: DatePickerTypes) => {
+            void formik
+              .setValues((values) => ({
+                ...values,
+                startDate: value ?? defaultValues.startDate,
+              }))
+              .then(() => {
+                setStartDate(value);
+              });
+          }}
+          slotProps={{
+            textField: {
+              id: 'startDate',
+              name: 'startDate',
+              size: 'small',
+              'aria-label': t('filter.from_date-aria-label'),
+              inputProps: {
+                inputMode: 'text',
+                placeholder: 'gg/mm/aaaa',
+                type: 'text',
+                'aria-label': t('filter.from_date-input-aria-label'),
+              },
+              fullWidth: isMobile,
+              sx: { mb: isMobile ? '20px' : '0', mr: 1 },
             },
-            fullWidth: isMobile,
-            sx: { marginBottom: isMobile ? '20px' : '0' },
-          },
-        }}
-        disableFuture={true}
-        minDate={tenYearsAgo}
-        maxDate={endDate ?? undefined}
-      />
-      <CustomDatePicker
-        language={i18n.language}
-        label={t('filter.to_date')}
-        format={DATE_FORMAT}
-        value={endDate}
-        onChange={(value: DatePickerTypes) => {
-          void formik.setFieldValue('endDate', value || today).then(() => {
-            setEndDate(value);
-          });
-        }}
-        slotProps={{
-          textField: {
-            id: 'endDate',
-            name: 'endDate',
-            size: 'small',
-            'aria-label': t('filter.to_date-aria-label'),
-            inputProps: {
-              inputMode: 'text',
-              placeholder: 'gg/mm/aaaa',
-              type: 'text',
-              'aria-label': t('filter.to_date-input-aria-label'),
+          }}
+          disableFuture={true}
+          minDate={tenYearsAgo}
+          maxDate={endDate ?? undefined}
+        />
+        <CustomDatePicker
+          language={i18n.language}
+          label={t('filter.to_date')}
+          format={DATE_FORMAT}
+          value={endDate}
+          onChange={(value: DatePickerTypes) => {
+            void formik
+              .setValues((values) => ({
+                ...values,
+                endDate: value ?? defaultValues.endDate,
+              }))
+              .then(() => {
+                setEndDate(value);
+              });
+          }}
+          slotProps={{
+            textField: {
+              id: 'endDate',
+              name: 'endDate',
+              size: 'small',
+              'aria-label': t('filter.to_date-aria-label'),
+              inputProps: {
+                inputMode: 'text',
+                placeholder: 'gg/mm/aaaa',
+                type: 'text',
+                'aria-label': t('filter.to_date-input-aria-label'),
+              },
+              fullWidth: isMobile,
+              sx: { mb: isMobile ? '20px' : '0', mr: 1 },
             },
-            fullWidth: isMobile,
-            sx: { marginBottom: isMobile ? '20px' : '0' },
-          },
-        }}
-        disableFuture={true}
-        minDate={startDate ?? tenYearsAgo}
-      />
-      <Button
-        id="filter-button"
-        data-testid="filterButton"
-        variant="outlined"
-        type="submit"
-        size="small"
-        sx={{
-          height: '43px !important',
-          marginRight: '8px !important',
-        }}
-        disabled={isInitialSearch && !filtersApplied}
-      >
-        {t('filter.buttons.filter')}
-      </Button>
-      <Button
-        data-testid="cancelButton"
-        sx={{
-          height: '43px !important',
-          padding: '0 16px !important',
-          minWidth: '130px !important',
-        }}
-        size="small"
-        onClick={cleanFilter}
-        disabled={!filtersApplied}
-      >
-        {t('filter.buttons.clear_filter')}
-      </Button>
-    </>
+          }}
+          disableFuture={true}
+          minDate={startDate ?? tenYearsAgo}
+        />
+        <Button
+          id="filter-button"
+          data-testid="filterButton"
+          variant="outlined"
+          type="button"
+          onClick={() => handleSelectFilter(SelectedStatisticsFilter.custom)}
+          size="small"
+          sx={{
+            height: '43px !important',
+            mr: 1,
+            // marginRight: '8px !important',
+          }}
+          disabled={isInitialSearch || !filterChanged || !formik.isValid}
+        >
+          {t('filter.buttons.filter')}
+        </Button>
+        <Button
+          data-testid="cancelButton"
+          sx={{
+            height: '43px !important',
+            padding: '0 16px !important',
+            minWidth: '130px !important',
+          }}
+          size="small"
+          onClick={cleanFilter}
+          disabled={isInitialSearch}
+        >
+          {t('filter.buttons.clear_filter')}
+        </Button>
+      </Box>
+    </Stack>
   );
 };
 export default FilterStatistics;
