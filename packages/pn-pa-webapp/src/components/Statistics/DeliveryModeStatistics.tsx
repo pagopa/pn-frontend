@@ -49,7 +49,7 @@ const DeliveryModeStatistics: React.FC<Props> = ({ startDate, endDate, data: sta
         <Typography variant="h6" component="h3">
           {t('delivery_mode.title')}
         </Typography>
-        <Typography sx={{ my: 3 }} variant="body2" color="text.primary">
+        <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
           {t('delivery_mode.description')}
         </Typography>
         <AggregateAndTrendStatistics

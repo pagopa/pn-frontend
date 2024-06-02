@@ -113,7 +113,7 @@ const DigitalStateStatistics: React.FC<Props> = ({ data }) => {
         <Typography variant="h6" component="h3">
           {t('digital_state.title')}
         </Typography>
-        <Typography sx={{ my: 3 }} variant="body2" color="text.primary">
+        <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
           {t('digital_state.description')}
         </Typography>
         <PnECharts option={option} />

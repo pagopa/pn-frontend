@@ -1,13 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Download } from '@mui/icons-material';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import {
   TitleBox,
   formatDateTime,
   formatToSlicedISOString,
-  oneMonthAgo,
   oneYearAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -18,23 +16,32 @@ import DigitalMeanTimeStatistics from '../components/Statistics/DigitalMeanTimeS
 import DigitalStateStatistics from '../components/Statistics/DigitalStateStatistics';
 import EmptyStatistics from '../components/Statistics/EmptyStatistics';
 import FiledNotificationsStatistics from '../components/Statistics/FiledNotificationsStatistics';
+import FilterStatistics, {
+  defaultValues as filterDefaultValues,
+} from '../components/Statistics/FilterStatistics';
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
-import { CxType, StatisticsDataTypes } from '../models/Statistics';
+import { CxType, StatisticsDataTypes, StatisticsFilter } from '../models/Statistics';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getStatistics } from '../redux/statistics/actions';
 import { RootState } from '../redux/store';
 
 const cxType = CxType.PA;
 
+const getFilterDates = (filter: StatisticsFilter | null) =>
+  filter
+    ? [filter.startDate, filter.endDate]
+    : [filterDefaultValues.startDate, filterDefaultValues.endDate];
+
 const Statistics = () => {
-  const [startDate] = useState<Date>(oneMonthAgo);
-  const [endDate] = useState<Date>(today);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['statistics']);
   const statisticsData = useAppSelector((state: RootState) => state.statisticsState.statistics);
+  const statisticsFilter = useAppSelector((state: RootState) => state.statisticsState.filter);
   const loggedUserOrganizationParty = useAppSelector(
     (state: RootState) => state.userState.user?.organization
   );
+
+  const [startDate, endDate] = getFilterDates(statisticsFilter);
 
   const cxId = loggedUserOrganizationParty.id;
 
@@ -51,16 +58,13 @@ const Statistics = () => {
   const Subtitle = (
     <Stack direction={'row'} display="flex" justifyContent="space-between" alignItems="center">
       <Typography>{t('subtitle', { organization: loggedUserOrganizationParty?.name })}</Typography>
-      <Button variant="outlined" endIcon={<Download />} sx={{ whiteSpace: 'nowrap' }}>
-        {t('export_all')}
-      </Button>
     </Stack>
   );
 
   const fetchStatistics = useCallback(() => {
     const params = {
-      startDate,
-      endDate,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
       cxType,
       cxId,
     };
@@ -85,13 +89,11 @@ const Statistics = () => {
           <Typography variant="caption" sx={{ color: '#5C6F82' }}>
             {lastUpdateTxt}
           </Typography>
-          <Typography variant="h6" component="h5" mt={9}>
+          <Typography variant="h6" component="h5" mt={7}>
             {t('section_1')}
           </Typography>
-          <Box sx={{ textAlign: 'center' }} mt={5}>
-            Componente per il filtraggio
-          </Box>
-          <Stack direction={'column'} spacing={3} mt={4}>
+          <FilterStatistics filter={statisticsFilter} />
+          <Stack direction={'column'} spacing={3} pt={2}>
             <FiledNotificationsStatistics
               startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
               endDate={statisticsData.endDate ?? formatToSlicedISOString(today)}
@@ -115,7 +117,7 @@ const Statistics = () => {
               <Typography variant="h6" component="h5" mt={6}>
                 {t('section_2')}
               </Typography>
-              <Box sx={{ textAlign: 'center', mb: 1 }}>Componente per il filtraggio</Box>
+              <FilterStatistics filter={statisticsFilter} />
             </Box>
             <Stack direction={{ lg: 'row', xs: 'column' }} spacing={3} mt={4}>
               <Box sx={{ width: { xs: '100%', lg: '50%' } }}>

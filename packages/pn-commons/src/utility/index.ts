@@ -24,8 +24,11 @@ import {
   minutesBeforeNow,
   oneMonthAgo,
   oneYearAgo,
+  sixMonthsAgo,
   tenYearsAgo,
+  threeMonthsAgo,
   today,
+  twelveMonthsAgo,
 } from './date.utility';
 import { waitForElement } from './dom.utility';
 import { calcUnit8Array } from './file.utility';
@@ -94,6 +97,9 @@ export {
   AppRouteParams,
   today,
   oneMonthAgo,
+  threeMonthsAgo,
+  sixMonthsAgo,
+  twelveMonthsAgo,
   oneYearAgo,
   tenYearsAgo,
   DATE_FORMAT,

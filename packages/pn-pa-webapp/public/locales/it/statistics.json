@@ -2,7 +2,7 @@
   "title": "Statistiche",
   "subtitle": "Esplora le statistiche relative alle notifiche del tuo ente su SEND - Servizio Notifiche Digitali",
   "section_1": "Panoramica delle notifiche",
-  "section_2": "Dettaglio invii digitali",
+  "section_2": "Dettaglio delle notifiche inviate digitalmente",
   "export_all": "Esporta JPEG",
   "last_update": "Ultimo aggiornamento {{dateTime}}",
   "aggregate_graph": "Aggregato",
@@ -12,6 +12,22 @@
   "trend": {
     "days": "Giorni",
     "weeks": "Settimane"
+  },
+  "filter": {
+    "from_date": "Da",
+    "from_date-aria-label": "Data inizio ricerca",
+    "from_date-input-aria-label": "Inserisci la data iniziale della ricerca",
+    "to_date": "A",
+    "to_date-aria-label": "Data fine ricerca",
+    "to_date-input-aria-label": "Inserisci la data finale della ricerca",
+    "lastMonth": "Ultimi 30 giorni",
+    "last3Months": "Ultimi 3 mesi",
+    "last6Months": "Ultimi 6 mesi",
+    "last12Months": "Ultimi 12 mesi",
+    "buttons": {
+      "filter": "Filtra",
+      "clear_filter": "Annulla filtri"
+    }
   },
   "filed": {
     "title": "Notifiche dell'ente su SEND",

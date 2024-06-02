@@ -184,3 +184,20 @@ export enum WEEK_DAYS {
   FRIDAY,
   SATURDAY,
 }
+
+export const SelectedStatisticsFilter = {
+  lastMonth: 'lastMonth',
+  last3Months: 'last3Months',
+  last6Months: 'last6Months',
+  last12Months: 'last12Months',
+  custom: 'custom',
+} as const;
+
+export type SelectedStatisticsFilterKeys =
+  typeof SelectedStatisticsFilter[keyof typeof SelectedStatisticsFilter];
+
+export type StatisticsFilter = {
+  selected: SelectedStatisticsFilterKeys | null;
+  startDate: Date;
+  endDate: Date;
+};
