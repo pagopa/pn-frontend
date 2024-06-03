@@ -43,16 +43,16 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
     >
       <Grid container direction="row" justifyContent="space-around" mt={3}>
         <Grid item xs={1}>
-          <img src={SpidBig} />
+          <img src={SpidBig} tabIndex={0} alt="Selezione Spid" />
         </Grid>
         <Grid item xs={1} sx={{ textAlign: 'right' }}>
-          <IconButton color="primary" onClick={onBack} id="backIcon">
+          <IconButton color="primary" onClick={onBack} id="backIcon" aria-label="Chiudi">
             <ClearOutlinedIcon />
           </IconButton>
         </Grid>
       </Grid>
       <Grid container direction="column" justifyContent="center" alignItems="center" spacing="10">
-        <Grid item>
+        <Grid item tabIndex={0}>
           <Typography
             id="spid-select"
             py={5}
@@ -62,7 +62,8 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
             sx={{
               textAlign: 'center',
             }}
-            component="div"
+            aria-label={t('spidSelect.title')}
+            aria-selected="true"
           >
             {t('spidSelect.title')}
           </Typography>
