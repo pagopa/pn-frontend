@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Box, Stack, Typography } from '@mui/material';
 import {
+  ApiErrorWrapper,
   TitleBox,
   formatDateTime,
   formatToSlicedISOString,
@@ -22,7 +23,7 @@ import FilterStatistics, {
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
 import { CxType, StatisticsDataTypes, StatisticsFilter } from '../models/Statistics';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getStatistics } from '../redux/statistics/actions';
+import { STATISTICS_ACTIONS, getStatistics } from '../redux/statistics/actions';
 import { RootState } from '../redux/store';
 
 const cxType = CxType.PA;
@@ -78,70 +79,77 @@ const Statistics = () => {
 
   return (
     <Box p={3}>
-      {statisticsData ? (
-        <>
-          <TitleBox
-            title={t('title')}
-            variantTitle="h4"
-            subTitle={Subtitle}
-            variantSubTitle="subtitle1"
-          />
-          <Typography variant="caption" sx={{ color: '#5C6F82' }}>
-            {lastUpdateTxt}
-          </Typography>
-          <Typography variant="h6" component="h5" mt={7}>
-            {t('section_1')}
-          </Typography>
-          <FilterStatistics filter={statisticsFilter} />
-          <Stack direction={'column'} spacing={3} pt={2}>
-            <FiledNotificationsStatistics
-              startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
-              endDate={statisticsData.endDate ?? formatToSlicedISOString(today)}
-              data={statisticsData.data[StatisticsDataTypes.FiledStatistics]}
+      <ApiErrorWrapper
+        apiId={STATISTICS_ACTIONS.GET_STATISTICS}
+        reloadAction={() => fetchStatistics()}
+        mainText={t('error-fetch')}
+        mt={3}
+      >
+        {statisticsData ? (
+          <>
+            <TitleBox
+              title={t('title')}
+              variantTitle="h4"
+              subTitle={Subtitle}
+              variantSubTitle="subtitle1"
             />
-            <Stack direction={{ lg: 'row', xs: 'column' }} spacing={3} mt={4}>
-              <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                <LastStateStatistics
-                  data={statisticsData.data[StatisticsDataTypes.LastStateStatistics]}
-                />
+            <Typography variant="caption" sx={{ color: '#5C6F82' }}>
+              {lastUpdateTxt}
+            </Typography>
+            <Typography variant="h6" component="h5" mt={7}>
+              {t('section_1')}
+            </Typography>
+            <FilterStatistics filter={statisticsFilter} />
+            <Stack direction={'column'} spacing={3} pt={2}>
+              <FiledNotificationsStatistics
+                startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
+                endDate={statisticsData.endDate ?? formatToSlicedISOString(today)}
+                data={statisticsData.data[StatisticsDataTypes.FiledStatistics]}
+              />
+              <Stack direction={{ lg: 'row', xs: 'column' }} spacing={3} mt={4}>
+                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                  <LastStateStatistics
+                    data={statisticsData.data[StatisticsDataTypes.LastStateStatistics]}
+                  />
+                </Box>
+                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                  <DeliveryModeStatistics
+                    startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
+                    endDate={statisticsData.endDate ?? formatToSlicedISOString(today)}
+                    data={statisticsData.data[StatisticsDataTypes.DeliveryModeStatistics]}
+                  />
+                </Box>
+              </Stack>
+              <Box>
+                <Typography variant="h6" component="h5" mt={6}>
+                  {t('section_2')}
+                </Typography>
+                <FilterStatistics filter={statisticsFilter} />
               </Box>
-              <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                <DeliveryModeStatistics
-                  startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
-                  endDate={statisticsData.endDate ?? formatToSlicedISOString(today)}
-                  data={statisticsData.data[StatisticsDataTypes.DeliveryModeStatistics]}
-                />
-              </Box>
+              <Stack direction={{ lg: 'row', xs: 'column' }} spacing={3} mt={4}>
+                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                  <DigitalStateStatistics
+                    data={statisticsData.data[StatisticsDataTypes.DigitalStateStatistics]}
+                  />
+                </Box>
+                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                  <DigitalMeanTimeStatistics
+                    data={statisticsData.data[StatisticsDataTypes.DigitalMeanTimeStatistics]}
+                  />
+                </Box>
+              </Stack>
+              <DigitalErrorsDetailStatistics
+                data={statisticsData.data[StatisticsDataTypes.DigitalErrorsDetailStatistics]}
+              />
             </Stack>
-            <Box>
-              <Typography variant="h6" component="h5" mt={6}>
-                {t('section_2')}
-              </Typography>
-              <FilterStatistics filter={statisticsFilter} />
-            </Box>
-            <Stack direction={{ lg: 'row', xs: 'column' }} spacing={3} mt={4}>
-              <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                <DigitalStateStatistics
-                  data={statisticsData.data[StatisticsDataTypes.DigitalStateStatistics]}
-                />
-              </Box>
-              <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                <DigitalMeanTimeStatistics
-                  data={statisticsData.data[StatisticsDataTypes.DigitalMeanTimeStatistics]}
-                />
-              </Box>
-            </Stack>
-            <DigitalErrorsDetailStatistics
-              data={statisticsData.data[StatisticsDataTypes.DigitalErrorsDetailStatistics]}
-            />
-          </Stack>
-        </>
-      ) : (
-        <>
-          <TitleBox title={t('title')} variantTitle="h4" subTitle={''} variantSubTitle="body1" />
-          <EmptyStatistics sx={{ mt: 5 }} />
-        </>
-      )}
+          </>
+        ) : (
+          <>
+            <TitleBox title={t('title')} variantTitle="h4" subTitle={''} variantSubTitle="body1" />
+            <EmptyStatistics sx={{ mt: 5 }} />
+          </>
+        )}
+      </ApiErrorWrapper>
     </Box>
   );
 };

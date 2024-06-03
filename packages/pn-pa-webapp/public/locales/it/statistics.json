@@ -3,6 +3,7 @@
   "subtitle": "Esplora le statistiche relative alle notifiche del tuo ente su SEND - Servizio Notifiche Digitali",
   "section_1": "Panoramica delle notifiche",
   "section_2": "Dettaglio delle notifiche inviate digitalmente",
+  "error-fetch": "Non è stato possibile recuperare i dati relativi alle statistiche di invio delle notifiche dell'ente",
   "export_all": "Esporta JPEG",
   "last_update": "Ultimo aggiornamento {{dateTime}}",
   "aggregate_graph": "Aggregato",
