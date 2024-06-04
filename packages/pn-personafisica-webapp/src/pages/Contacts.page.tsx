@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Link, Stack, Typography } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import { DigitalContactsCodeVerificationProvider } from '../components/Contacts/DigitalContactsCodeVerification.context';
@@ -112,13 +113,15 @@ const Contacts = () => {
         t('subtitle-link-2', { ns: 'recapiti' })
       )}
       {t('subtitle-text-3', { ns: 'recapiti' })}
-      <Link
+      <ButtonNaked
+        sx={{ verticalAlign: 'inherit' }}
         onClick={handleRedirectToProfilePage}
-        tabIndex={0}
         aria-label={t('subtitle-link-3', { ns: 'recapiti' })}
       >
-        {t('subtitle-link-3', { ns: 'recapiti' })}
-      </Link>
+        <Typography color="primary" sx={{ cursor: 'pointer', textDecoration: 'underline' }}>
+          {t('subtitle-link-3', { ns: 'recapiti' })}
+        </Typography>
+      </ButtonNaked>
       {t('subtitle-text-4', { ns: 'recapiti' })}
     </>
   );
