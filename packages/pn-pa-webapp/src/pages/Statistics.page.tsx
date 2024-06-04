@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   TitleBox,
@@ -146,7 +146,9 @@ const Statistics = () => {
         ) : (
           <>
             <TitleBox title={t('title')} variantTitle="h4" subTitle={''} variantSubTitle="body1" />
-            <EmptyStatistics sx={{ mt: 5 }} />
+            <Paper sx={{ p: 3, mb: 3, height: '100%', mt: 5 }} elevation={0}>
+              <EmptyStatistics />
+            </Paper>
           </>
         )}
       </ApiErrorWrapper>
