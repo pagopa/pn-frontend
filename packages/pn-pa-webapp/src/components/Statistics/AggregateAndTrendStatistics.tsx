@@ -10,6 +10,7 @@ import { PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
 import { IStatisticsDailySummary, Timeframe } from '../../models/Statistics';
 import AggregateStatistics, { AggregateDataItem } from './AggregateStatistics';
+import EmptyStatistics from './EmptyStatistics';
 import TrendStackedStatistics, { TrendDataItem } from './TrendStackedStatistics';
 
 enum GraphTypes {
@@ -63,6 +64,12 @@ const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data
       setGraphType(GraphTypes.TREND);
     }
   };
+
+  const isEmpty = !data || (data[0].total === 0 && data[1].total === 0);
+
+  if (isEmpty) {
+    return <EmptyStatistics description="empty.component_description" />;
+  }
 
   return (
     <Stack direction="column" height="100%" sx={{ display: 'flex' }}>
