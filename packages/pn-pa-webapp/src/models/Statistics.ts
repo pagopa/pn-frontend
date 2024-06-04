@@ -7,11 +7,20 @@ export enum NotificationStatus {
   UNREACHABLE = 'UNREACHABLE',
   CANCELLED = 'CANCELLED',
   REFUSED = 'REFUSED',
+  IN_VALIDATION = 'IN_VALIDATION',
+  PAID = 'PAID',
+  CANCELLATION_IN_PROGRESS = 'CANCELLATION_IN_PROGRESS',
+}
+
+export enum CxType {
+  PA = 'PA',
+  PF = 'PF',
+  PG = 'PG',
 }
 
 export enum DeliveryMode { // export from pn-commons/../NotificationDetail.ts???
   DIGITAL = 'DIGITAL',
-  ANALOG = 'ANALOGIC ',
+  ANALOG = 'ANALOGIC',
   UNKNOWN = '-',
 }
 
@@ -41,7 +50,7 @@ export enum StatisticsDataTypes {
 
 export interface NotificationOverview {
   notification_send_date: string;
-  notification_request_status: NotificationStatus.ACCEPTED | NotificationStatus.REFUSED;
+  notification_request_status: 'ACCEPTED' | 'REFUSED';
   notification_status: NotificationStatus; // openapi definition does not include the following: IN_VALIDATION, PAID
   notification_type: DeliveryMode;
   status_digital_delivery: ResponseStatus;
@@ -58,7 +67,7 @@ export interface NotificationOverview {
 
 export interface DigitalNotificationFocus {
   notification_send_date: string;
-  error_type: DigitaErrorTypes;
+  error_type: string;
   failed_attempts_count: string | number;
   notifications_count: string | number;
 }
@@ -69,12 +78,12 @@ export interface StatisticsResponse {
   lastDate: string;
   startDate: string;
   endDate: string;
-  notifications_overview: Array<NotificationOverview>;
-  digital_notification_focus: Array<DigitalNotificationFocus>;
+  notificationsOverview: Array<NotificationOverview>;
+  digitalNotificationFocus: Array<DigitalNotificationFocus>;
 }
 
 export interface StatisticsParams<TDate extends string | Date> {
-  cxType: string;
+  cxType: CxType;
   cxId: string;
   startDate: TDate;
   endDate: TDate;
@@ -143,13 +152,13 @@ export interface IDigitalErrorsDetailStatistics {
 }
 
 export interface StatisticsParsedData {
-  [StatisticsDataTypes.FiledStatistics]?: IFiledStatistics;
-  [StatisticsDataTypes.LastStateStatistics]?: ILastStateStatistics;
-  [StatisticsDataTypes.DeliveryModeStatistics]?: IDeliveryModeStatistics;
-  [StatisticsDataTypes.DigitalStateStatistics]?: IDigitalStateStatistics;
-  [StatisticsDataTypes.DigitalMeanTimeStatistics]?: IDigitalMeanTimeStatistics;
-  [StatisticsDataTypes.DigitalErrorsDetailStatistics]?: IDigitalErrorsDetailStatistics;
-  [StatisticsDataTypes.DigitalAttemptsStatistics]?: Array<IAttemptsCount>;
+  [StatisticsDataTypes.FiledStatistics]: IFiledStatistics;
+  [StatisticsDataTypes.LastStateStatistics]: ILastStateStatistics;
+  [StatisticsDataTypes.DeliveryModeStatistics]: IDeliveryModeStatistics;
+  [StatisticsDataTypes.DigitalStateStatistics]: IDigitalStateStatistics;
+  [StatisticsDataTypes.DigitalMeanTimeStatistics]: IDigitalMeanTimeStatistics;
+  [StatisticsDataTypes.DigitalErrorsDetailStatistics]: IDigitalErrorsDetailStatistics;
+  [StatisticsDataTypes.DigitalAttemptsStatistics]: Array<IAttemptsCount>;
 }
 
 export interface StatisticsParsedResponse {
@@ -175,3 +184,20 @@ export enum WEEK_DAYS {
   FRIDAY,
   SATURDAY,
 }
+
+export const SelectedStatisticsFilter = {
+  lastMonth: 'lastMonth',
+  last3Months: 'last3Months',
+  last6Months: 'last6Months',
+  last12Months: 'last12Months',
+  custom: 'custom',
+} as const;
+
+export type SelectedStatisticsFilterKeys =
+  typeof SelectedStatisticsFilter[keyof typeof SelectedStatisticsFilter];
+
+export type StatisticsFilter = {
+  selected: SelectedStatisticsFilterKeys | null;
+  startDate: Date;
+  endDate: Date;
+};

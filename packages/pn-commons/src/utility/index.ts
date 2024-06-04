@@ -7,6 +7,7 @@ import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
 import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
 import {
   DATE_FORMAT,
+  convertHoursToIntDays,
   dateIsDefined,
   dateIsLessThan10Years,
   formatDate,
@@ -21,9 +22,13 @@ import {
   getStartOfDay,
   isToday,
   minutesBeforeNow,
+  oneMonthAgo,
   oneYearAgo,
+  sixMonthsAgo,
   tenYearsAgo,
+  threeMonthsAgo,
   today,
+  twelveMonthsAgo,
 } from './date.utility';
 import { waitForElement } from './dom.utility';
 import { calcUnit8Array } from './file.utility';
@@ -91,6 +96,10 @@ export {
   compileRoute,
   AppRouteParams,
   today,
+  oneMonthAgo,
+  threeMonthsAgo,
+  sixMonthsAgo,
+  twelveMonthsAgo,
   oneYearAgo,
   tenYearsAgo,
   DATE_FORMAT,
@@ -133,4 +142,5 @@ export {
   validateHistory,
   validateCurrentStatus,
   validateLegaFact,
+  convertHoursToIntDays,
 };

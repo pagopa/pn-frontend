@@ -43,6 +43,7 @@ import FileUpload from './FileUpload';
 import Footer from './Footer/Footer';
 import Header from './Header/Header';
 import { IllusQuestion } from './Illustrations/IllusQuestion';
+import { IllusStatistics } from './Illustrations/IllusStatistics';
 import InactivityHandler from './InactivityHandler';
 import Layout from './Layout/Layout';
 import { LoadingOverlay } from './Loading/LoadingOverlay';
@@ -145,4 +146,5 @@ export {
   PnCard,
   PnCardHeaderItem,
   IllusQuestion,
+  IllusStatistics,
 };

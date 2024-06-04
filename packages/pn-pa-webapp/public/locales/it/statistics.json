@@ -1,37 +1,91 @@
 {
   "title": "Statistiche",
-  "subtitle": "Esplora le statistiche di utilizzo di SEND - Servizio Notifiche Digitali da parte di {{organization}}.",
-  "export_all": "Esporta tutti",
+  "subtitle": "Esplora le statistiche relative alle notifiche del tuo ente su SEND - Servizio Notifiche Digitali",
+  "section_1": "Panoramica delle notifiche",
+  "section_2": "Dettaglio delle notifiche inviate digitalmente",
+  "export_all": "Esporta JPEG",
   "last_update": "Ultimo aggiornamento {{dateTime}}",
   "aggregate_graph": "Aggregato",
   "trend_graph": "Andamentale",
   "graph_type_label": "Grafico",
   "save_as_image": "Salva come immagine",
-  "filed": {
-    "title": "Notifiche depositate",
-    "description": "Numero di notifiche che sono state accettate dalla piattaforma SEND sul totale delle notifiche caricate",
-    "description2": "{{percent}}% del totale delle notifiche caricate su SEND",
-    "accepted": "Depositate",
-    "refused": "Non depositate"
-  },
-  "delivery_mode": {
-    "title": "Notifiche per modalità di invio",
-    "description": "Numero di notifiche depositate che hanno intrapreso l'invio digitale e l'invio analogico",
-    "digital": "Invii digitali",
-    "analog": "Invii analogici"
-  },
   "trend": {
     "days": "Giorni",
     "weeks": "Settimane"
   },
+  "filter": {
+    "from_date": "Da",
+    "from_date-aria-label": "Data inizio ricerca",
+    "from_date-input-aria-label": "Inserisci la data iniziale della ricerca",
+    "to_date": "A",
+    "to_date-aria-label": "Data fine ricerca",
+    "to_date-input-aria-label": "Inserisci la data finale della ricerca",
+    "lastMonth": "Ultimi 30 giorni",
+    "last3Months": "Ultimi 3 mesi",
+    "last6Months": "Ultimi 6 mesi",
+    "last12Months": "Ultimi 12 mesi",
+    "buttons": {
+      "filter": "Filtra",
+      "clear_filter": "Annulla filtri"
+    }
+  },
+  "filed": {
+    "title": "Notifiche dell'ente su SEND",
+    "description": "Numero di notifiche accettate dalla piattaforma SEND sul totale delle notifiche caricate dall'ente",
+    "description2": " del totale delle notifiche caricate su SEND",
+    "accepted": "Accettate",
+    "refused": "Scartate"
+  },
   "last_state": {
-    "title": "Ultimo stato raggiunto dalle notifiche depositate",
-    "description": "Numero di notifiche che hanno raggiunto i diversi stati durante il proceso di invio",
+    "title": "Notifiche inviate per stato",
+    "description": "Numero di notifiche accettate per ultimo stato raggiunto durante il processo di invio tramite SEND",
     "delivering": "Invio in corso",
-    "delivered": "Consengata",
+    "delivered": "Consegnata",
     "viewed": "Avvenuto accesso",
-    "effective_date": "Perfezionata per \ndecorrenza termini",
+    "effective_date": "Perfezionata per\ndecorrenza termini",
     "canceled": "Annullata",
-    "unreachable": "Destinatari irreperibili"
+    "unreachable": "Destinatario\nirreperibile"
+  },
+  "delivery_mode": {
+    "title": "Notifiche consegnate per modalità di invio",
+    "description": "Numero di notifiche consegnate per modalità di invio (digitale o analogica)",
+    "digital": "Invii digitali",
+    "analog": "Invii analogici"
+  },
+  "digital_state": {
+    "title": "Invii digitali per esito",
+    "description": "Numero di notifiche inviate in digitale per esito",
+    "ok": "Consegnate tramite\ncanali digitali",
+    "ko": "Consegnate tramite\nraccomandata\nsemplice",
+    "progress": "invii in corso",
+    "ok_title": "Consegnate tramite canali digitali",
+    "ok_description": "Notifiche consegnate via PEC o perfezionate su SEND",
+    "ko_title": "Consegnate tramite raccomandata semplice",
+    "ko_description": "Notifiche consegnate via raccomandata semplice perché rifiutate dalla PEC del destinatario",
+    "progress_title": "Invii in corso",
+    "progress_description": "Notifiche il cui processo di invio è ancora in corso"
+  },
+  "digital_mean_time": {
+    "title": "Tempo medio degli invii digitali",
+    "description": "Tempo medio (in giorni) di consegna, avvenuto accesso e perfezionamento delle notifiche inviate in digitale",
+    "delivered": "Consegnata",
+    "viewed": "Avvenuto accesso",
+    "refined": "Perfezionata per\ndecorrenza termini",
+    "delivered_description": "Giorni per consegna",
+    "viewed_description": "Giorni per avvenuto accesso",
+    "refined_description": "Giorni per perfezionamento per decorrenza termini"
+  },
+  "digital_errors_detail": {
+    "title": "Errori tecnici per tipologia",
+    "description": "Percentuale di errori tecnici per tipologia di errore sul totale degli errori tecnici in fase di invio",
+    "delivery_title": "Errore di consegna",
+    "delivery_description": "La notifica non è stata recapitata per problemi tecnici di ricezione",
+    "pec_title": "Errore di dominio PEC",
+    "pec_description": "La notifica non è stata recapitata per dominio PEC non valido",
+    "rejected_title": "Errore d'invio",
+    "rejected_description": "La notifica non è stata accettata per problemi tecnici d'invio"
+  },
+  "empty": {
+    "description": "Il numero di notifiche caricate dall'ente su SEND al momento non è sufficiente per elaborare e mostrare le statistiche di invio."
   }
 }

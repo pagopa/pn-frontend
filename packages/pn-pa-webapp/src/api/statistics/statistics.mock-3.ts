@@ -12,7 +12,7 @@ export const mock3: StatisticsResponse = {
   startDate: '2023-07-17',
   endDate: '2024-04-17',
   lastDate: '2024-04-21',
-  notifications_overview: [
+  notificationsOverview: [
     {
       notification_send_date: '2023-07-17',
       notification_request_status: NotificationStatus.ACCEPTED,
@@ -29406,7 +29406,7 @@ export const mock3: StatisticsResponse = {
       validation_time: 0.09,
     },
   ],
-  digital_notification_focus: [
+  digitalNotificationFocus: [
     {
       notification_send_date: '2023-07-17',
       error_type: DigitaErrorTypes.UNKNOWN,

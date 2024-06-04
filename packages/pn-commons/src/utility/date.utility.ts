@@ -1,3 +1,5 @@
+import { add } from 'date-fns';
+
 import DateFnsAdapter from '@date-io/date-fns';
 
 import { DatePickerTypes } from '../models';
@@ -11,6 +13,11 @@ export const today = dateFns.endOfDay(new Date());
 export const tenYearsAgo = dateFns.startOfDay(
   new Date(new Date().setMonth(today.getMonth() - 120))
 );
+
+export const oneMonthAgo = add(today, { months: -1, days: 1 });
+export const threeMonthsAgo = add(today, { months: -3, days: 1 });
+export const sixMonthsAgo = add(today, { months: -6, days: 1 });
+export const twelveMonthsAgo = add(today, { months: -12, days: 1 });
 
 export const oneYearAgo = dateFns.startOfDay(new Date(new Date().setMonth(today.getMonth() - 12)));
 
@@ -120,3 +127,6 @@ export function formatDateSMonth(date: Date | string, year: boolean = false): st
   const yearTxt = year ? ` ${the_date.getFullYear()}` : '';
   return `${the_date.getDate()} ${shortMonth}${yearTxt}`;
 }
+
+export const convertHoursToIntDays = (hours: number): number =>
+  Math.round(hours && hours > 0 ? hours / 24 : 0);

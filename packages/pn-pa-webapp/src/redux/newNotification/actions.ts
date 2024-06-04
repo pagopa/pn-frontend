@@ -61,7 +61,7 @@ const uploadNotificationDocumentCbk = async (
   try {
     const notificationSentApiFactory = NotificationSentApiFactory(undefined, undefined, apiClient);
     const presignedUrlsResponse = await notificationSentApiFactory.preSignedUploadV1(
-      items.map((item) => ({ contentType: item.contentType, key: item.key, sha256: item.sha256 }))
+      items.map((item) => ({ contentType: item.contentType, sha256: item.sha256 }))
     );
     const presignedUrls = presignedUrlsResponse.data;
     if (presignedUrls.length) {
