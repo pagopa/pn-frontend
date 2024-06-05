@@ -41,12 +41,19 @@ const AccessDenied: React.FC<Props> = ({
       {icon && <Box mt={11}>{icon}</Box>}
 
       <Box mt={2}>
-        <Typography align="center" color="text.primary" variant="h4" id="login-page-title">
+        <Typography
+          align="center"
+          color="text.primary"
+          variant="h4"
+          component="h1"
+          id="login-page-title"
+          aria-label={finalMessage}
+        >
           {finalMessage}
         </Typography>
       </Box>
       <Box my={2} maxWidth={700}>
-        <Typography align="center" color="text.primary" variant="body1">
+        <Typography align="center" color="text.primary" variant="body1" aria-label={finalSubTitle}>
           {finalSubTitle}
         </Typography>
       </Box>
