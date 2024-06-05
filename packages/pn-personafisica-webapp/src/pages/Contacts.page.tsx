@@ -114,8 +114,9 @@ const Contacts = () => {
       {t('subtitle-text-3', { ns: 'recapiti' })}
       <Link
         onClick={handleRedirectToProfilePage}
-        tabIndex={0}
         aria-label={t('subtitle-link-3', { ns: 'recapiti' })}
+        component="button"
+        sx={{ verticalAlign: 'inherit' }}
       >
         {t('subtitle-link-3', { ns: 'recapiti' })}
       </Link>
