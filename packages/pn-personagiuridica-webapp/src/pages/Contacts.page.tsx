@@ -57,8 +57,9 @@ const Contacts = () => {
         color="primary"
         fontWeight={'bold'}
         onClick={handleRedirectToProfilePage}
-        sx={{ cursor: 'pointer' }}
+        sx={{ verticalAlign: 'inherit' }}
         aria-label={t('subtitle-link', { ns: 'recapiti' })}
+        component="button"
       >
         {t('subtitle-link', { ns: 'recapiti' })}
       </Link>
