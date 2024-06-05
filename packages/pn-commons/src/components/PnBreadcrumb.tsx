@@ -2,7 +2,7 @@ import { ReactNode, RefAttributes } from 'react';
 import { Link, LinkProps, useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Breadcrumbs, Stack, Typography, styled } from '@mui/material';
+import { Breadcrumbs, Link as MuiLink, Stack, styled } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
@@ -59,15 +59,15 @@ const PnBreadcrumb = ({
         <BreadcrumbLink to={linkRoute} data-testid="breadcrumb-link" {...linkProps}>
           {linkLabel}
         </BreadcrumbLink>
-        <Typography
+        <MuiLink
           id="title-of-page"
           color="text.primary"
-          fontWeight={600}
-          sx={{ display: 'flex', alignItems: 'center' }}
+          sx={{ display: 'flex', alignItems: 'center', fontWeight: 600 }}
           aria-current="page"
+          underline="none"
         >
           {currentLocationLabel}
-        </Typography>
+        </MuiLink>
       </Breadcrumbs>
     </Stack>
   );
