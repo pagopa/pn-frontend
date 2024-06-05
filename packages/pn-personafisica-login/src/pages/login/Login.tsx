@@ -85,7 +85,7 @@ const Login = () => {
     >
       <Grid container direction="column" my={isMobile ? 4 : 16} id="loginPage">
         <Grid container item justifyContent="center">
-          <Grid item tabIndex={0}>
+          <Grid item>
             <Typography
               id="login-mode-page-title"
               variant="h3"
@@ -103,7 +103,7 @@ const Login = () => {
           </Grid>
         </Grid>
         <Grid container item justifyContent="center">
-          <Grid item tabIndex={0}>
+          <Grid item>
             <Typography
               variant="body1"
               component="h2"
