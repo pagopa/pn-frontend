@@ -7,7 +7,7 @@ import { Paper, Stack, Typography } from '@mui/material';
 import { convertHoursToIntDays } from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { IDigitalMeanTimeStatistics } from '../../models/Statistics';
+import { GraphColors, IDigitalMeanTimeStatistics } from '../../models/Statistics';
 import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
@@ -33,17 +33,17 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
     {
       time: props.data.delivered.time,
       count: props.data.delivered.count,
-      color: '#6BCFFB',
+      color: GraphColors.lightBlue,
     },
     {
       time: props.data.viewed.time,
       count: props.data.viewed.count,
-      color: '#6CC66A',
+      color: GraphColors.lightGreen,
     },
     {
       time: props.data.refined.time,
       count: props.data.refined.count,
-      color: '#5CA85A',
+      color: GraphColors.darkGreen,
     },
   ];
 
@@ -79,7 +79,7 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
           backgroundColor: 'white',
           pixelRatio: 2,
           iconStyle: {
-            borderColor: '#0055AA',
+            borderColor: GraphColors.navy,
           },
         },
       },

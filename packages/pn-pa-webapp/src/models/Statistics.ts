@@ -12,6 +12,23 @@ export enum NotificationStatus {
   CANCELLATION_IN_PROGRESS = 'CANCELLATION_IN_PROGRESS',
 }
 
+export enum GraphColors {
+  navy = '#0073E6',
+  greyBlue = '#5C6F82',
+  lightBlue2 = 'rgba(196, 220, 245, 0.61)', // '#C4DCF5',
+  blue = '#0055AA',
+  gold = '#FFCB46',
+  lightGrey = '#E0E0E0',
+  lightBlue = '#6BCFFB',
+  lightGreen = '#6CC66A',
+  darkGreen = '#5CA85A',
+  lightRed = '#FE6666',
+  turquoise = '#21CDD1',
+  azure = '#00C5CA',
+  pink = '#FFE0E0',
+  darkRed = '#761F1F',
+}
+
 export enum CxType {
   PA = 'PA',
   PF = 'PF',
