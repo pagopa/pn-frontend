@@ -158,7 +158,7 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
   }, [filter]);
   return (
     <Stack
-      direction={{ lg: 'row', xs: 'column' }}
+      direction={{ xl: 'row', lg: 'column' }}
       mt={4}
       mb={1}
       display="flex"
