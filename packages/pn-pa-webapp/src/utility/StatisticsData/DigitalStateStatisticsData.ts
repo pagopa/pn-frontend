@@ -31,7 +31,7 @@ export class DigitalStateStatisticsData extends StatisticsData {
   }
 
   parse(rawData: StatisticsResponse): this {
-    const notifications_overview = rawData.notifications_overview;
+    const notifications_overview = rawData.notificationsOverview;
 
     const digital_notifications = notifications_overview.filter(
       (item) => item.notification_type === DeliveryMode.DIGITAL

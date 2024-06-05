@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box, Stack } from '@mui/material';
@@ -6,6 +6,7 @@ import {
   AppResponse,
   AppResponsePublisher,
   CodeModal,
+  ErrorMessage,
   TitleBox,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
@@ -40,14 +41,10 @@ const Deleghe = () => {
     id: acceptId,
     open: acceptOpen,
     name: acceptName,
-    error: acceptError,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
   const [pageReady, setPageReady] = useState(false);
-
-  const [errorMessage, setErrorMessage] = useState<{
-    title: string;
-    content: string;
-  }>();
+  const codeModalRef =
+    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
 
   const dispatch = useAppDispatch();
 
@@ -119,7 +116,10 @@ const Deleghe = () => {
 
   const handleAcceptDelegationError = useCallback((errorResponse: AppResponse) => {
     const error = errorResponse.errors ? errorResponse.errors[0] : null;
-    setErrorMessage(error?.message);
+    codeModalRef.current?.updateError(
+      { title: error?.message.title || '', content: error?.message.content || '' },
+      true
+    );
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_ACCEPT_CODE_ERROR);
   }, []);
 
@@ -144,9 +144,7 @@ const Deleghe = () => {
           confirmCallback={handleAccept}
           confirmLabel={t('deleghe.accept')}
           codeSectionTitle={t('deleghe.verification_code')}
-          hasError={acceptError}
-          errorTitle={errorMessage?.title}
-          errorMessage={errorMessage?.content}
+          ref={codeModalRef}
         />
         <ConfirmationModal
           open={open}

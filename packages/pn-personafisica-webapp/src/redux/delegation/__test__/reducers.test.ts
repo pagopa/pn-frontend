@@ -38,7 +38,6 @@ const initialState = {
     open: false,
     id: '',
     name: '',
-    error: false,
   },
   sortDelegators: {
     orderBy: '',
@@ -93,6 +92,11 @@ describe('delegation redux state tests', () => {
         delegations: {
           delegators: mandatesByDelegate,
         },
+        acceptModalState: {
+          open: true,
+          id: 'test',
+          name: 'test',
+        },
       },
     });
     mock.onPatch(`/bff/v1/mandate/${pendingDelegator!.mandateId}/accept`).reply(204);
@@ -103,17 +107,31 @@ describe('delegation redux state tests', () => {
     expect(action.payload).toEqual(void 0);
     const state = testStore.getState().delegationsState;
     expect(state.acceptModalState.open).toBeFalsy();
-    expect(state.acceptModalState.error).toBeFalsy();
     expect(state.delegations.delegators[0].status).toBe('active');
   });
 
-  it('should set the accept modal state to error', async () => {
+  it('error on delegation acceptance', async () => {
+    // init store
+    const testStore = createMockedStore({
+      delegationsState: {
+        ...initialState,
+        delegations: {
+          delegators: mandatesByDelegate,
+        },
+        acceptModalState: {
+          open: true,
+          id: 'test',
+          name: 'test',
+        },
+      },
+    });
     mock.onPatch(`/bff/v1/mandate/1/accept`).reply(500, 'error');
-    const action = await store.dispatch(acceptMandate({ id: '1', code: '12345' }));
+    const action = await testStore.dispatch(acceptMandate({ id: '1', code: '12345' }));
     expect(action.type).toBe('acceptMandate/rejected');
     expect(action.payload).toStrictEqual({ response: { status: 500, data: 'error' } });
-    const state = store.getState().delegationsState;
-    expect(state.acceptModalState.error).toBeTruthy();
+    const state = testStore.getState().delegationsState;
+    expect(state.acceptModalState.open).toBeTruthy();
+    expect(state.delegations.delegators[0].status).toBe('pending');
   });
 
   it('should reject a delegation from a delegator', async () => {
@@ -191,11 +209,11 @@ describe('delegation redux state tests', () => {
     const action = store.dispatch(openAcceptModal({ id: '123', name: 'test name' }));
     expect(action.type).toBe('delegationsSlice/openAcceptModal');
     const confirmModalState = store.getState().delegationsState.acceptModalState;
-    expect(confirmModalState).toEqual({ id: '123', open: true, name: 'test name', error: false });
+    expect(confirmModalState).toEqual({ id: '123', open: true, name: 'test name' });
     const closeAction = store.dispatch(closeAcceptModal());
     expect(closeAction.type).toBe('delegationsSlice/closeAcceptModal');
     const closeModalState = store.getState().delegationsState.acceptModalState;
-    expect(closeModalState).toEqual({ id: '', open: false, name: 'test name', error: false });
+    expect(closeModalState).toEqual({ id: '', open: false, name: 'test name' });
   });
 
   it('sets the delegates sorting by test in ascendant order', () => {

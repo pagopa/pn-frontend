@@ -8,12 +8,13 @@ import { convertHoursToIntDays } from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
 import { IDigitalMeanTimeStatistics } from '../../models/Statistics';
+import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
   data: IDigitalMeanTimeStatistics;
 };
 
-const DigitalMeanTimeStatistics: React.FC<Props> = ({ data }) => {
+const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
   const { t } = useTranslation(['statistics']);
 
   const labels = [
@@ -27,6 +28,33 @@ const DigitalMeanTimeStatistics: React.FC<Props> = ({ data }) => {
       description: t('digital_mean_time.refined_description'),
     },
   ];
+
+  const statuses = [
+    {
+      time: props.data.delivered.time,
+      count: props.data.delivered.count,
+      color: '#6BCFFB',
+    },
+    {
+      time: props.data.viewed.time,
+      count: props.data.viewed.count,
+      color: '#6CC66A',
+    },
+    {
+      time: props.data.refined.time,
+      count: props.data.refined.count,
+      color: '#5CA85A',
+    },
+  ];
+
+  const data = statuses.map((item) => ({
+    value: convertHoursToIntDays(item.time / item.count),
+    itemStyle: {
+      color: item.color,
+    },
+  }));
+
+  const isEmpty = !statuses.find((item) => item.count > 0);
 
   const option: PnEChartsProps['option'] = {
     tooltip: {
@@ -83,26 +111,7 @@ const DigitalMeanTimeStatistics: React.FC<Props> = ({ data }) => {
     },
     series: [
       {
-        data: [
-          {
-            value: convertHoursToIntDays(data.delivered.time / data.delivered.count),
-            itemStyle: {
-              color: '#6BCFFB',
-            },
-          },
-          {
-            value: convertHoursToIntDays(data.viewed.time / data.viewed.count),
-            itemStyle: {
-              color: '#6CC66A',
-            },
-          },
-          {
-            value: convertHoursToIntDays(data.refined.time / data.refined.count),
-            itemStyle: {
-              color: '#5CA85A',
-            },
-          },
-        ],
+        data,
         type: 'bar',
       },
     ],
@@ -114,10 +123,14 @@ const DigitalMeanTimeStatistics: React.FC<Props> = ({ data }) => {
         <Typography variant="h6" component="h3">
           {t('digital_mean_time.title')}
         </Typography>
-        <Typography sx={{ my: 3 }} variant="body2" color="text.primary">
+        <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
           {t('digital_mean_time.description')}
         </Typography>
-        <PnECharts option={option} />
+        {isEmpty ? (
+          <EmptyStatistics description="empty.component_description" />
+        ) : (
+          <PnECharts option={option} />
+        )}
       </Stack>
     </Paper>
   );

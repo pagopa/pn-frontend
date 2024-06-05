@@ -36,7 +36,7 @@ export class FiledStatisticsData extends StatisticsData {
   }
 
   parse(rawData: StatisticsResponse): this {
-    const notifications_overview = rawData.notifications_overview;
+    const notifications_overview = rawData.notificationsOverview;
 
     notifications_overview.forEach((element) => {
       this.parseChunk(element);

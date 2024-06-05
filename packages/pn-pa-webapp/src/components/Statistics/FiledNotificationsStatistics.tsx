@@ -45,7 +45,8 @@ const FiledNotificationsStatistics: React.FC<Props> = ({
   ];
 
   const notificationsAmount = acceptedSum;
-  const notificationsPercent = Math.floor((acceptedSum / (acceptedSum + refusedSum)) * 1000) / 10;
+  const notificationsPercent =
+    acceptedSum > 0 ? Math.floor((acceptedSum / (acceptedSum + refusedSum)) * 1000) / 10 : 0;
 
   const isMobile = useIsMobile();
 
@@ -71,10 +72,10 @@ const FiledNotificationsStatistics: React.FC<Props> = ({
               {notificationsAmount.toLocaleString()}
             </Typography>
             <Typography color="#0055AA">
-              <b>{notificationsPercent}%</b> {t('filed.description2')}
+              <b>{notificationsPercent.toLocaleString()}%</b> {t('filed.description2')}
             </Typography>
           </Grid>
-          <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 }, minHeight: '500px' }}>
+          <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
             <AggregateAndTrendStatistics
               startDate={startDate}
               endDate={endDate}
