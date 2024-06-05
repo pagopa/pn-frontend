@@ -52,7 +52,7 @@ export const AppStatusBar = ({ status }: { status: AppCurrentStatus }) => {
           color: mainColor,
         }}
       />
-      <Typography tabIndex={0} aria-label={statusText} variant="body2">
+      <Typography aria-label={statusText} variant="body2">
         {statusText}
       </Typography>
     </Stack>

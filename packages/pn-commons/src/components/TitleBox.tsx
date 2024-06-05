@@ -43,14 +43,7 @@ const TitleBox: React.FC<Props> = ({
   ariaLabel,
   children,
 }) => (
-  <Grid
-    id="page-header-container"
-    aria-orientation="horizontal"
-    tabIndex={0}
-    container
-    mt={mtGrid}
-    sx={sx}
-  >
+  <Grid id="page-header-container" aria-orientation="horizontal" container mt={mtGrid} sx={sx}>
     {title && (
       <Grid id="item" item xs={12} mb={mbTitle}>
         <Typography
@@ -58,7 +51,6 @@ const TitleBox: React.FC<Props> = ({
           data-testid="titleBox"
           role="heading"
           aria-label={ariaLabel}
-          aria-selected="true"
           variant={variantTitle}
           display="inline-block"
           sx={{ verticalAlign: 'middle' }}

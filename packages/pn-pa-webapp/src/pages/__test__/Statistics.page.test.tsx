@@ -3,6 +3,7 @@ import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
+import { userResponse } from '../../__mocks__/Auth.mock';
 import { RenderResult, act, render } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import Statistics from '../Statistics.page';
@@ -31,15 +32,16 @@ describe('Statistics Page tests', () => {
   afterAll(() => {
     mock.restore();
   });
-  it.skip('renders Statistics Page', () => {
+
+  it('renders Statistics Page - empty statistics', () => {
     const result = render(<Statistics />, {
       preloadedState: {
-        userState: { organizationParty: { name: 'mocked-sender' } },
+        userState: { user: userResponse },
       },
     });
 
     expect(result.container).toHaveTextContent('title');
-    expect(result.container).toHaveTextContent('subtitle');
+    expect(result.container).toHaveTextContent('empty.descriptionStatistics');
   });
 
   it('api return error', async () => {

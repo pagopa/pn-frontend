@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Paper, Stack, Typography } from '@mui/material';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { IDigitalStateStatistics, ResponseStatus } from '../../models/Statistics';
+import { GraphColors, IDigitalStateStatistics, ResponseStatus } from '../../models/Statistics';
 import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
@@ -34,15 +34,15 @@ const DigitalStateStatistics: React.FC<Props> = (props) => {
   const statuses = [
     {
       value: props.data[ResponseStatus.OK],
-      color: '#0055AA',
+      color: GraphColors.blue,
     },
     {
       value: props.data[ResponseStatus.KO],
-      color: '#00C5CA',
+      color: GraphColors.azure,
     },
     {
       value: props.data[ResponseStatus.PROGRESS],
-      color: '#E0E0E0',
+      color: GraphColors.lightGrey,
     },
   ];
 
@@ -79,7 +79,7 @@ const DigitalStateStatistics: React.FC<Props> = (props) => {
           backgroundColor: 'white',
           pixelRatio: 2,
           iconStyle: {
-            borderColor: '#0055AA',
+            borderColor: GraphColors.navy,
           },
         },
       },
