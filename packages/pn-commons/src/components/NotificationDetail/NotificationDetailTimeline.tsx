@@ -7,6 +7,7 @@ import { TimelineNotification } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
 import { LegalFactId, NotificationDetailRecipient, NotificationStatusHistory } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
 
 type Props = {
@@ -175,7 +176,10 @@ const NotificationDetailTimeline = ({
             </Typography>
           </Grid>
           <Grid item>
-            <Button aria-label="Chiudi" onClick={toggleHistoryDrawer}>
+            <Button
+              aria-label={getLocalizedOrDefaultLabel('common', 'button.close')}
+              onClick={toggleHistoryDrawer}
+            >
               <CloseIcon
                 data-testid="notification-drawer-close"
                 sx={{
