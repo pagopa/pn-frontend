@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Paper, Stack, Typography } from '@mui/material';
 import { PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { DeliveryMode, IDeliveryModeStatistics } from '../../models/Statistics';
+import { DeliveryMode, GraphColors, IDeliveryModeStatistics } from '../../models/Statistics';
 import AggregateAndTrendStatistics, { AggregateAndTrendData } from './AggregateAndTrendStatistics';
 
 type Props = {
@@ -40,7 +40,7 @@ const DeliveryModeStatistics: React.FC<Props> = ({ startDate, endDate, data: sta
   ];
 
   const options: PnEChartsProps['option'] = {
-    color: ['#0055AA', '#21CDD1'],
+    color: [GraphColors.blue, GraphColors.turquoise],
   };
 
   return (
