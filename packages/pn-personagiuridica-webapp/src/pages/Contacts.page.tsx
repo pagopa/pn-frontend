@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box, Link, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import { DigitalContactsCodeVerificationProvider } from '../components/Contacts/DigitalContactsCodeVerification.context';
@@ -53,15 +54,15 @@ const Contacts = () => {
   const subtitle = (
     <>
       {t('subtitle-1', { ns: 'recapiti', recipient: organization.name })}
-      <Link
-        color="primary"
-        fontWeight={'bold'}
+      <ButtonNaked
+        sx={{ verticalAlign: 'inherit' }}
         onClick={handleRedirectToProfilePage}
-        sx={{ cursor: 'pointer' }}
         aria-label={t('subtitle-link', { ns: 'recapiti' })}
       >
-        {t('subtitle-link', { ns: 'recapiti' })}
-      </Link>
+        <Typography color="primary" sx={{ cursor: 'pointer', textDecoration: 'underline' }}>
+          {t('subtitle-link', { ns: 'recapiti' })}
+        </Typography>
+      </ButtonNaked>
       {t('subtitle-2', { ns: 'recapiti' })}
     </>
   );
