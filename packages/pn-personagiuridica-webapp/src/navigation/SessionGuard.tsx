@@ -1,13 +1,15 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import {
   AppResponsePublisher,
+  AppRouteParams,
   InactivityHandler,
   LoadingPage,
   SessionModal,
   appStateActions,
+  sanitizeString,
   useErrors,
   useProcess,
   useSessionCheck,
@@ -53,6 +55,8 @@ const manageUnforbiddenError = (e: any) => {
  * SessionGuardRender: logica di renderizzazione
  */
 const SessionGuardRender = () => {
+  const [params] = useSearchParams();
+
   const { DISABLE_INACTIVITY_HANDLER } = getConfiguration();
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
@@ -80,20 +84,30 @@ const SessionGuardRender = () => {
     message: isUnauthorizedUser ? messageUnauthorizedUser.message : hasErrorMessage.message,
   };
 
-  const renderIfInitialized = () =>
+  const renderIfInitialized = () => {
     // 1. isUnauthorizedUser (errore exchange o validazione utente) || hasTosPrivacyApiErrors || isClosedSession => modale con errore e redirect a logout
-    // 2. isAnonymousUser (utente non loggato) o inactivity_handler disabilitato => redirect alla login
+    // 2. isAnonymousUser (utente non loggato) => redirect alla login
     // 3. se è loggato => outlet
-    // 4. inactivity_handler abilitato/disabilitato =>
-    isUnauthorizedUser || hasTosPrivacyApiErrors || isClosedSession ? (
-      <SessionModal
-        open
-        title={goodbyeMessage.title}
-        message={goodbyeMessage.message}
-        handleClose={() => goToLoginPortal()}
-        initTimeout
-      />
-    ) : (
+    if (isUnauthorizedUser || hasTosPrivacyApiErrors || isClosedSession) {
+      return (
+        <SessionModal
+          open
+          title={goodbyeMessage.title}
+          message={goodbyeMessage.message}
+          handleClose={() => goToLoginPortal()}
+          initTimeout
+        />
+      );
+    } else if (isAnonymousUser) {
+      const aar = params.get(AppRouteParams.AAR);
+      if (aar) {
+        // save to localstorage
+        localStorage.setItem(AppRouteParams.AAR, sanitizeString(aar));
+      }
+      goToLoginPortal();
+      return <></>;
+    }
+    return (
       <InactivityHandler
         inactivityTimer={isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? 0 : inactivityTimer}
         onTimerExpired={() => dispatch(logout())}
@@ -101,6 +115,7 @@ const SessionGuardRender = () => {
         <Outlet />
       </InactivityHandler>
     );
+  };
 
   return isInitialized ? renderIfInitialized() : <LoadingPage renderType="whole" />;
 };
@@ -225,8 +240,6 @@ const SessionGuard = () => {
         // Andrea Cimini, 2023.02.24
         // ----------------------
         navigate({ pathname: routes.NOT_ACCESSIBLE }, { replace: true });
-      } else if (!sessionToken) {
-        goToLoginPortal();
       }
     };
     void performStep(INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, doInitalPageDetermination);
