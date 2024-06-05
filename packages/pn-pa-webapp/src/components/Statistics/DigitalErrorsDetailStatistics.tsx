@@ -16,6 +16,7 @@ import { PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
 import { DigitaErrorTypes, IDigitalErrorsDetailStatistics } from '../../models/Statistics';
 import AggregateStatistics, { AggregateDataItem } from './AggregateStatistics';
+import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
   data: IDigitalErrorsDetailStatistics;
@@ -61,6 +62,8 @@ const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
     },
   ];
 
+  const isEmpty = !data.find((item) => item.value > 0);
+
   const aggregateData = [data[0], data[2], data[1]];
 
   const color = ['#FE6666', '#FFE0E0', '#761F1F'];
@@ -71,8 +74,6 @@ const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
 
   return (
     <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
-      {/* <Stack sx={{ display: 'flex' }} spacing={3} direction={{ lg: 'row', xs: 'column' }}>
-        <Box> */}
       <Grid container direction={{ lg: 'row', xs: 'column' }} spacing={3}>
         <Grid item lg={5} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
           <Typography variant="h6" component="h3">
@@ -102,18 +103,20 @@ const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
             })}
           </List>
         </Grid>
-        {/* </Box> */}
         <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
-          <AggregateStatistics
-            values={aggregateData}
-            options={options}
-            startAngle={180}
-            endAngle={-180}
-            radius={['30%', '90%']}
-            center={['50%', '50%']}
-            legend={false}
-          />
-          {/* </Stack> */}
+          {isEmpty ? (
+            <EmptyStatistics description="empty.component_description" />
+          ) : (
+            <AggregateStatistics
+              values={aggregateData}
+              options={options}
+              startAngle={180}
+              endAngle={-180}
+              radius={['30%', '90%']}
+              center={['50%', '50%']}
+              legend={false}
+            />
+          )}
         </Grid>
       </Grid>
     </Paper>

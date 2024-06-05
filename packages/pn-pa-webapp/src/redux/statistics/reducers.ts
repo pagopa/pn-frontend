@@ -13,9 +13,6 @@ const initialState = {
 const statisticsSlice = createSlice({
   name: 'statisticsSlice',
   initialState,
-  // initialState: {
-  //   errors: []
-  // },
   reducers: {
     resetState: () => initialState,
     setStatisticsFilter: (state, action: PayloadAction<StatisticsFilter | null>) => {
