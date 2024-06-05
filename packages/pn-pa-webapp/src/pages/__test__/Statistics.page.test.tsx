@@ -3,10 +3,9 @@ import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
-import { RenderResult, act, render, screen } from '../../__test__/test-utils';
+import { RenderResult, act, render } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import Statistics from '../Statistics.page';
-import { statisticsMockResponse } from './statistics.mock';
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -44,7 +43,7 @@ describe('Statistics Page tests', () => {
   });
 
   it('api return error', async () => {
-    mock.onGet('/bff/v1/sender-dashboard/dashboard-data-request').reply(500);
+    mock.onGet(/\/bff\/v1\/sender-dashboard\/dashboard-data-request*/).reply(500);
     await act(async () => {
       result = render(
         <>
@@ -55,6 +54,5 @@ describe('Statistics Page tests', () => {
       );
     });
     expect(result.container).toHaveTextContent('error-fetch');
-    screen.debug();
   });
 });
