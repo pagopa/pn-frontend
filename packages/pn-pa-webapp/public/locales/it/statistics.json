@@ -3,6 +3,7 @@
   "subtitle": "Esplora le statistiche relative alle notifiche del tuo ente su SEND - Servizio Notifiche Digitali",
   "section_1": "Panoramica delle notifiche",
   "section_2": "Dettaglio delle notifiche inviate digitalmente",
+  "error-fetch": "In questo momento c’è un problema tecnico nel caricamento dei dati. Per favore riprova più tardi",
   "export_all": "Esporta JPEG",
   "last_update": "Ultimo aggiornamento {{dateTime}}",
   "aggregate_graph": "Aggregato",
@@ -86,6 +87,7 @@
     "rejected_description": "La notifica non è stata accettata per problemi tecnici d'invio"
   },
   "empty": {
-    "description": "Il numero di notifiche caricate dall'ente su SEND al momento non è sufficiente per elaborare e mostrare le statistiche di invio."
+    "description": "Il numero di notifiche caricate dall'ente su SEND al momento non è sufficiente per elaborare e mostrare le statistiche di invio.",
+    "component_description": "Nel periodo selezionato il numero di notifiche caricate dall'ente su SEND non è sufficiente per elaborare e mostrare le statistiche di invio."
   }
 }

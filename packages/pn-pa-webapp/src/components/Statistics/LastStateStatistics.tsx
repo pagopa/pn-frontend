@@ -6,14 +6,51 @@ import { useTranslation } from 'react-i18next';
 import { Paper, Stack, Typography } from '@mui/material';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { ILastStateStatistics, NotificationStatus } from '../../models/Statistics';
+import { GraphColors, ILastStateStatistics, NotificationStatus } from '../../models/Statistics';
+import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
   data: ILastStateStatistics;
 };
 
-const LastStateStatistics: React.FC<Props> = ({ data }) => {
+const LastStateStatistics: React.FC<Props> = (props) => {
   const { t } = useTranslation(['statistics']);
+
+  const statuses = [
+    {
+      value: props.data[NotificationStatus.DELIVERING],
+      color: GraphColors.lightGrey,
+    },
+    {
+      value: props.data[NotificationStatus.DELIVERED],
+      color: GraphColors.lightBlue,
+    },
+    {
+      value: props.data[NotificationStatus.VIEWED],
+      color: GraphColors.lightGreen,
+    },
+    {
+      value: props.data[NotificationStatus.EFFECTIVE_DATE],
+      color: GraphColors.darkGreen,
+    },
+    {
+      value: props.data[NotificationStatus.CANCELLED],
+      color: GraphColors.gold,
+    },
+    {
+      value: props.data[NotificationStatus.UNREACHABLE],
+      color: GraphColors.lightRed,
+    },
+  ];
+
+  const data = statuses.map((item) => ({
+    value: item.value,
+    itemStyle: {
+      color: item.color,
+    },
+  }));
+
+  const isEmpty = !data.find((item) => item.value > 0);
 
   const option: PnEChartsProps['option'] = {
     tooltip: {
@@ -35,7 +72,7 @@ const LastStateStatistics: React.FC<Props> = ({ data }) => {
           backgroundColor: 'white',
           pixelRatio: 2,
           iconStyle: {
-            borderColor: '#0055AA',
+            borderColor: GraphColors.navy,
           },
         },
       },
@@ -69,44 +106,7 @@ const LastStateStatistics: React.FC<Props> = ({ data }) => {
     },
     series: [
       {
-        data: [
-          {
-            value: data[NotificationStatus.DELIVERING],
-            itemStyle: {
-              color: '#E0E0E0',
-            },
-          },
-          {
-            value: data[NotificationStatus.DELIVERED],
-            itemStyle: {
-              color: '#6BCFFB',
-            },
-          },
-          {
-            value: data[NotificationStatus.VIEWED],
-            itemStyle: {
-              color: '#6CC66A',
-            },
-          },
-          {
-            value: data[NotificationStatus.EFFECTIVE_DATE],
-            itemStyle: {
-              color: '#5CA85A',
-            },
-          },
-          {
-            value: data[NotificationStatus.CANCELLED],
-            itemStyle: {
-              color: '#FFCB46',
-            },
-          },
-          {
-            value: data[NotificationStatus.UNREACHABLE],
-            itemStyle: {
-              color: '#FE6666',
-            },
-          },
-        ],
+        data,
         type: 'bar',
       },
     ],
@@ -121,7 +121,11 @@ const LastStateStatistics: React.FC<Props> = ({ data }) => {
         <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
           {t('last_state.description')}
         </Typography>
-        <PnECharts option={option} />
+        {isEmpty ? (
+          <EmptyStatistics description="empty.component_description" />
+        ) : (
+          <PnECharts option={option} />
+        )}
       </Stack>
     </Paper>
   );

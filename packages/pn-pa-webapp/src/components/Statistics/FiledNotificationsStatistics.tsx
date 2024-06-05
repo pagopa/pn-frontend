@@ -6,7 +6,7 @@ import { Grid, Paper, Stack, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { IFiledStatistics, NotificationStatus } from '../../models/Statistics';
+import { GraphColors, IFiledStatistics, NotificationStatus } from '../../models/Statistics';
 import AggregateAndTrendStatistics, { AggregateAndTrendData } from './AggregateAndTrendStatistics';
 
 type Props = {
@@ -54,7 +54,7 @@ const FiledNotificationsStatistics: React.FC<Props> = ({
   const spacing = isMobile ? 3 : 0;
 
   const options: PnEChartsProps['option'] = {
-    color: ['#0055AA', '#FFCB46'],
+    color: [GraphColors.blue, GraphColors.gold],
   };
 
   return (
@@ -68,14 +68,14 @@ const FiledNotificationsStatistics: React.FC<Props> = ({
             <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
               {t('filed.description')}
             </Typography>
-            <Typography sx={{ fontSize: 50, fontWeight: 'bold' }} color="#0055AA">
+            <Typography sx={{ fontSize: 50, fontWeight: 'bold' }} color={GraphColors.blue}>
               {notificationsAmount.toLocaleString()}
             </Typography>
-            <Typography color="#0055AA">
-              <b>{notificationsPercent}%</b> {t('filed.description2')}
+            <Typography color={GraphColors.blue}>
+              <b>{notificationsPercent.toLocaleString()}%</b> {t('filed.description2')}
             </Typography>
           </Grid>
-          <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 }, minHeight: '500px' }}>
+          <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
             <AggregateAndTrendStatistics
               startDate={startDate}
               endDate={endDate}

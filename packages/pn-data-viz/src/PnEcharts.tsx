@@ -53,8 +53,14 @@ export function PnECharts({
 	useEffect(() => {
 		// Update chart
 		if (chartRef.current !== null) {
+			const options = {
+				aria: {
+					show: true,
+				},
+				...option,
+			};
 			const chart = getInstanceByDom(chartRef.current);
-			chart?.setOption(option, settings);
+			chart?.setOption(options, settings);
 		}
 	}, [option, settings, theme]); // Whenever theme changes we need to add option and setting due to it being deleted in cleanup function
 

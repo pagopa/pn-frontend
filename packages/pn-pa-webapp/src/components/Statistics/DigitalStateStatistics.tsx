@@ -6,13 +6,14 @@ import { useTranslation } from 'react-i18next';
 import { Paper, Stack, Typography } from '@mui/material';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { IDigitalStateStatistics, ResponseStatus } from '../../models/Statistics';
+import { GraphColors, IDigitalStateStatistics, ResponseStatus } from '../../models/Statistics';
+import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
   data: IDigitalStateStatistics;
 };
 
-const DigitalStateStatistics: React.FC<Props> = ({ data }) => {
+const DigitalStateStatistics: React.FC<Props> = (props) => {
   const { t } = useTranslation(['statistics']);
 
   const labels = [
@@ -29,6 +30,30 @@ const DigitalStateStatistics: React.FC<Props> = ({ data }) => {
       description: t('digital_state.progress_description'),
     },
   ];
+
+  const statuses = [
+    {
+      value: props.data[ResponseStatus.OK],
+      color: GraphColors.blue,
+    },
+    {
+      value: props.data[ResponseStatus.KO],
+      color: GraphColors.azure,
+    },
+    {
+      value: props.data[ResponseStatus.PROGRESS],
+      color: GraphColors.lightGrey,
+    },
+  ];
+
+  const data = statuses.map((item) => ({
+    value: item.value,
+    itemStyle: {
+      color: item.color,
+    },
+  }));
+
+  const isEmpty = !data.find((item) => item.value > 0);
 
   const option: PnEChartsProps['option'] = {
     tooltip: {
@@ -54,7 +79,7 @@ const DigitalStateStatistics: React.FC<Props> = ({ data }) => {
           backgroundColor: 'white',
           pixelRatio: 2,
           iconStyle: {
-            borderColor: '#0055AA',
+            borderColor: GraphColors.navy,
           },
         },
       },
@@ -82,26 +107,7 @@ const DigitalStateStatistics: React.FC<Props> = ({ data }) => {
     },
     series: [
       {
-        data: [
-          {
-            value: data[ResponseStatus.OK],
-            itemStyle: {
-              color: '#0055AA',
-            },
-          },
-          {
-            value: data[ResponseStatus.KO],
-            itemStyle: {
-              color: '#00C5CA',
-            },
-          },
-          {
-            value: data[ResponseStatus.PROGRESS],
-            itemStyle: {
-              color: '#E0E0E0',
-            },
-          },
-        ],
+        data,
         type: 'bar',
       },
     ],
@@ -116,7 +122,11 @@ const DigitalStateStatistics: React.FC<Props> = ({ data }) => {
         <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
           {t('digital_state.description')}
         </Typography>
-        <PnECharts option={option} />
+        {isEmpty ? (
+          <EmptyStatistics description="empty.component_description" />
+        ) : (
+          <PnECharts option={option} />
+        )}
       </Stack>
     </Paper>
   );
