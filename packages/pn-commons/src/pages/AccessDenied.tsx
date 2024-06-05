@@ -47,13 +47,12 @@ const AccessDenied: React.FC<Props> = ({
           variant="h4"
           component="h1"
           id="login-page-title"
-          aria-label={finalMessage}
         >
           {finalMessage}
         </Typography>
       </Box>
       <Box my={2} maxWidth={700}>
-        <Typography align="center" color="text.primary" variant="body1" aria-label={finalSubTitle}>
+        <Typography align="center" color="text.primary" variant="body1">
           {finalSubTitle}
         </Typography>
       </Box>
