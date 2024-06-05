@@ -21,7 +21,7 @@ import FilterStatistics, {
   defaultValues as filterDefaultValues,
 } from '../components/Statistics/FilterStatistics';
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
-import { CxType, StatisticsDataTypes, StatisticsFilter } from '../models/Statistics';
+import { CxType, GraphColors, StatisticsDataTypes, StatisticsFilter } from '../models/Statistics';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { STATISTICS_ACTIONS, getStatistics } from '../redux/statistics/actions';
 import { RootState } from '../redux/store';
@@ -93,7 +93,7 @@ const Statistics = () => {
               subTitle={Subtitle}
               variantSubTitle="subtitle1"
             />
-            <Typography variant="caption" sx={{ color: '#5C6F82' }}>
+            <Typography variant="caption" sx={{ color: GraphColors.greyBlue }}>
               {lastUpdateTxt}
             </Typography>
             <Typography variant="h6" component="h5" mt={7}>

@@ -170,7 +170,6 @@ const LegalContactsList = ({ legalAddresses }: Props) => {
           </Box>
         )}
         <Alert
-          tabIndex={0}
           role="banner"
           aria-label={t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}
           sx={{ mt: 4 }}

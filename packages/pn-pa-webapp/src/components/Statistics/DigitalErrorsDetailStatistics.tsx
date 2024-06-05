@@ -14,7 +14,11 @@ import {
 } from '@mui/material';
 import { PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { DigitaErrorTypes, IDigitalErrorsDetailStatistics } from '../../models/Statistics';
+import {
+  DigitaErrorTypes,
+  GraphColors,
+  IDigitalErrorsDetailStatistics,
+} from '../../models/Statistics';
 import AggregateStatistics, { AggregateDataItem } from './AggregateStatistics';
 import EmptyStatistics from './EmptyStatistics';
 
@@ -46,19 +50,19 @@ const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
       title: delivery_title,
       description: delivery_description,
       value: delivery_errors,
-      color: '#FE6666',
+      color: GraphColors.lightRed,
     },
     {
       title: pec_title,
       description: pec_description,
       value: pec_errors,
-      color: '#761F1F',
+      color: GraphColors.darkRed,
     },
     {
       title: rejected_title,
       description: rejected_description,
       value: rejected_errors,
-      color: '#FFE0E0',
+      color: GraphColors.pink,
     },
   ];
 
@@ -66,7 +70,7 @@ const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
 
   const aggregateData = [data[0], data[2], data[1]];
 
-  const color = ['#FE6666', '#FFE0E0', '#761F1F'];
+  const color = [GraphColors.lightRed, GraphColors.pink, GraphColors.darkRed];
 
   const options: PnEChartsProps['option'] = {
     color,
