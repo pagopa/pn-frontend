@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0-RC.0...v2.5.0-RC.1) (2024-06-05)
+
+
+### Bug Fixes
+
+* **pn-11331:** improve readability of titles in PF login page ([#1230](https://github.com/pagopa/pn-frontend/issues/1230)) ([8a043aa](https://github.com/pagopa/pn-frontend/commit/8a043aadebee917f450305add54ecf6ed6a27fd9))
+* **pn-11331:** Removed TabIndex and aria-selected from headings ([#1236](https://github.com/pagopa/pn-frontend/issues/1236)) ([8d55aa9](https://github.com/pagopa/pn-frontend/commit/8d55aa9db2888523b79b1e6b5e12a0842965c962))
+
+
+
+
+
 # [2.5.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.4.2...v2.5.0-RC.0) (2024-05-30)
 
 

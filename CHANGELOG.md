@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0-RC.0...v2.5.0-RC.1) (2024-06-05)
+
+
+### Bug Fixes
+
+* add charts aria configuration for sender dashboard ([#1240](https://github.com/pagopa/pn-frontend/issues/1240)) ([88a44e8](https://github.com/pagopa/pn-frontend/commit/88a44e81e03d63ffc43dd2ef8628522e1390ad88))
+* change sender dashboard download button ([#1243](https://github.com/pagopa/pn-frontend/issues/1243)) ([5fabc3a](https://github.com/pagopa/pn-frontend/commit/5fabc3abae8ba3f860c6e9797db50eb3c5e2043d))
+* **pn-11331:** improve readability of titles in PF login page ([#1230](https://github.com/pagopa/pn-frontend/issues/1230)) ([8a043aa](https://github.com/pagopa/pn-frontend/commit/8a043aadebee917f450305add54ecf6ed6a27fd9))
+* **pn-11331:** Removed TabIndex and aria-selected from headings ([#1236](https://github.com/pagopa/pn-frontend/issues/1236)) ([8d55aa9](https://github.com/pagopa/pn-frontend/commit/8d55aa9db2888523b79b1e6b5e12a0842965c962))
+* **PN-11334:** make closeIcon as button in drawer ([#1225](https://github.com/pagopa/pn-frontend/issues/1225)) ([3a2dded](https://github.com/pagopa/pn-frontend/commit/3a2dded902c69997bc5ce1aa310979cd1f757ffd))
+
+
+### Features
+
+* **PN-10910:** Integrate and test Sender Dashboard api ([#1223](https://github.com/pagopa/pn-frontend/issues/1223)) ([0b6f8b8](https://github.com/pagopa/pn-frontend/commit/0b6f8b8315acd5bb513207e33d0ccbe5fe5e9e4e))
+* **pn-11273:** updated bff dependencies ([#1242](https://github.com/pagopa/pn-frontend/issues/1242)) ([0939949](https://github.com/pagopa/pn-frontend/commit/093994978a517c62aa21ce69089651e5fc2cb970))
+
+
+
+
+
 # [2.5.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.4.2...v2.5.0-RC.0) (2024-05-30)
 
 

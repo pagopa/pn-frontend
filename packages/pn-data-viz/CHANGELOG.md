@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0-RC.0...v2.5.0-RC.1) (2024-06-05)
+
+
+### Bug Fixes
+
+* add charts aria configuration for sender dashboard ([#1240](https://github.com/pagopa/pn-frontend/issues/1240)) ([88a44e8](https://github.com/pagopa/pn-frontend/commit/88a44e81e03d63ffc43dd2ef8628522e1390ad88))
+
+
+
+
+
 # [2.5.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.4.2...v2.5.0-RC.0) (2024-05-30)
 
 

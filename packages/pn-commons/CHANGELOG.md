@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0-RC.0...v2.5.0-RC.1) (2024-06-05)
+
+
+### Bug Fixes
+
+* **PN-11334:** make closeIcon as button in drawer ([#1225](https://github.com/pagopa/pn-frontend/issues/1225)) ([3a2dded](https://github.com/pagopa/pn-frontend/commit/3a2dded902c69997bc5ce1aa310979cd1f757ffd))
+
+
+### Features
+
+* **PN-10910:** Integrate and test Sender Dashboard api ([#1223](https://github.com/pagopa/pn-frontend/issues/1223)) ([0b6f8b8](https://github.com/pagopa/pn-frontend/commit/0b6f8b8315acd5bb513207e33d0ccbe5fe5e9e4e))
+
+
+
+
+
 # [2.5.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.4.2...v2.5.0-RC.0) (2024-05-30)
 
 
