@@ -40,6 +40,9 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
       direction="column"
       sx={{ backgroundColor: '#FFF', minHeight: '100vh' }}
       id="spidSelect"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="spid-select"
     >
       <Grid container direction="row" justifyContent="space-around" mt={3}>
         <Grid item xs={1}>
@@ -64,11 +67,8 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
             px={0}
             color="textPrimary"
             variant="h3"
-            sx={{
-              textAlign: 'center',
-            }}
-            aria-label={t('spidSelect.title')}
-            aria-selected="true"
+            component="h1"
+            sx={{ textAlign: 'center' }}
           >
             {t('spidSelect.title')}
           </Typography>
