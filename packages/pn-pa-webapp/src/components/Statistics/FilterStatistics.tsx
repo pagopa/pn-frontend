@@ -21,6 +21,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import {
+  GraphColors,
   SelectedStatisticsFilter,
   SelectedStatisticsFilterKeys,
   StatisticsFilter,
@@ -141,7 +142,10 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
       <Chip
         key={elem}
         label={t(`filter.${elem}`)}
-        sx={{ mr: 1, mb: { xl: 0, xs: 1 } }}
+        sx={{
+          mr: 1,
+          background: elem === formik.values.selected ? GraphColors.lightBlue2 : 'none',
+        }}
         variant="outlined"
         component="button"
         color={elem === formik.values.selected ? 'primary' : 'default'}

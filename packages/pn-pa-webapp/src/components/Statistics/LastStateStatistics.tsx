@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Paper, Stack, Typography } from '@mui/material';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { ILastStateStatistics, NotificationStatus } from '../../models/Statistics';
+import { GraphColors, ILastStateStatistics, NotificationStatus } from '../../models/Statistics';
 import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
@@ -19,27 +19,27 @@ const LastStateStatistics: React.FC<Props> = (props) => {
   const statuses = [
     {
       value: props.data[NotificationStatus.DELIVERING],
-      color: '#E0E0E0',
+      color: GraphColors.lightGrey,
     },
     {
       value: props.data[NotificationStatus.DELIVERED],
-      color: '#6BCFFB',
+      color: GraphColors.lightBlue,
     },
     {
       value: props.data[NotificationStatus.VIEWED],
-      color: '#6CC66A',
+      color: GraphColors.lightGreen,
     },
     {
       value: props.data[NotificationStatus.EFFECTIVE_DATE],
-      color: '#5CA85A',
+      color: GraphColors.darkGreen,
     },
     {
       value: props.data[NotificationStatus.CANCELLED],
-      color: '#FFCB46',
+      color: GraphColors.gold,
     },
     {
       value: props.data[NotificationStatus.UNREACHABLE],
-      color: '#FE6666',
+      color: GraphColors.lightRed,
     },
   ];
 
@@ -72,7 +72,7 @@ const LastStateStatistics: React.FC<Props> = (props) => {
           backgroundColor: 'white',
           pixelRatio: 2,
           iconStyle: {
-            borderColor: '#0055AA',
+            borderColor: GraphColors.navy,
           },
         },
       },
