@@ -8,7 +8,12 @@ import { useTranslation } from 'react-i18next';
 import { formatDateSMonth, formatToSlicedISOString } from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { IStatisticsDailySummary, Timeframe, WEEK_DAYS } from '../../models/Statistics';
+import {
+  GraphColors,
+  IStatisticsDailySummary,
+  Timeframe,
+  WEEK_DAYS,
+} from '../../models/Statistics';
 
 const LAST_DAY_OF_THE_WEEK = WEEK_DAYS.SUNDAY;
 
@@ -190,7 +195,7 @@ const TrendStackedStatistics: React.FC<Props> = ({
           backgroundColor: 'white',
           pixelRatio: 2,
           iconStyle: {
-            borderColor: '#0055AA',
+            borderColor: GraphColors.navy,
           },
         },
       },
