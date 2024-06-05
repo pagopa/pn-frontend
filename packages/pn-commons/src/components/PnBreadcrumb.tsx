@@ -64,6 +64,7 @@ const PnBreadcrumb = ({
           color="text.primary"
           fontWeight={600}
           sx={{ display: 'flex', alignItems: 'center' }}
+          aria-current="page"
         >
           {currentLocationLabel}
         </Typography>
