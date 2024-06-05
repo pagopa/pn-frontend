@@ -8,9 +8,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
 import { SenderDashboardApiFactory } from '../../generated-client/sender-dashboard';
-import { StatisticsParams, StatisticsParsedResponse } from '../../models/Statistics';
+import {
+  StatisticsParams,
+  StatisticsParsedResponse,
+  StatisticsResponse,
+} from '../../models/Statistics';
 import statisticsDataFactoryManager from '../../utility/StatisticsData/StatisticsDataFactoryManager';
-import { StatisticsResponse } from './types';
 
 export enum STATISTICS_ACTIONS {
   GET_STATISTICS = 'getStatistics',

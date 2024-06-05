@@ -5,7 +5,6 @@ import {
   StatisticsResponse,
 } from '../../models/Statistics';
 import { DeliveryModeStatisticsData } from './DeliveryModeStatisticsData';
-import { DigitalAttemptsStatisticsData } from './DigitalAttemptsStatisticsData';
 import { DigitalErrorsDetailStatisticsData } from './DigitalErrorsDetailStatisticsData';
 import { DigitalMeanTimeStatisticsData } from './DigitalMeanTimeStatisticsData';
 import { DigitalStateStatisticsData } from './DigitalStateStatisticsData';
@@ -46,9 +45,6 @@ class StatisticsDataFactory {
 
       case StatisticsDataTypes.DigitalErrorsDetailStatistics:
         return new DigitalErrorsDetailStatisticsData();
-
-      case StatisticsDataTypes.DigitalAttemptsStatistics:
-        return new DigitalAttemptsStatisticsData();
 
       default:
         return null;
