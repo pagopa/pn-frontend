@@ -43,10 +43,15 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
     >
       <Grid container direction="row" justifyContent="space-around" mt={3}>
         <Grid item xs={1}>
-          <img src={SpidBig} alt="Selezione Spid" aria-label="" />
+          <img src={SpidBig} aria-hidden />
         </Grid>
         <Grid item xs={1} sx={{ textAlign: 'right' }}>
-          <IconButton color="primary" onClick={onBack} id="backIcon" aria-label="Chiudi">
+          <IconButton
+            color="primary"
+            onClick={onBack}
+            id="backIcon"
+            aria-label={t('button.close', { ns: 'common' })}
+          >
             <ClearOutlinedIcon />
           </IconButton>
         </Grid>
