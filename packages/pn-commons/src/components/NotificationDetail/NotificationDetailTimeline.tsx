@@ -1,12 +1,13 @@
 import { Fragment, useState } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, Drawer, Grid, Typography } from '@mui/material';
+import { Box, Button, Drawer, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { TimelineNotification } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
 import { LegalFactId, NotificationDetailRecipient, NotificationStatusHistory } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
 
 type Props = {
@@ -175,15 +176,19 @@ const NotificationDetailTimeline = ({
             </Typography>
           </Grid>
           <Grid item>
-            <CloseIcon
-              data-testid="notification-drawer-close"
+            <Button
+              aria-label={getLocalizedOrDefaultLabel('common', 'button.close')}
               onClick={toggleHistoryDrawer}
-              sx={{
-                color: 'action.active',
-                width: '32px',
-                height: '32px',
-              }}
-            />
+            >
+              <CloseIcon
+                data-testid="notification-drawer-close"
+                sx={{
+                  color: 'action.active',
+                  width: '2rem',
+                  height: '2rem',
+                }}
+              />
+            </Button>
           </Grid>
         </Grid>
         <Box sx={{ px: 3, height: 'calc(100vh - 87px)', overflowY: 'scroll' }}>

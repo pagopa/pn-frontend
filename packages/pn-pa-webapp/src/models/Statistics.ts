@@ -45,7 +45,6 @@ export enum StatisticsDataTypes {
   DigitalStateStatistics = 'DigitalStateStatistics',
   DigitalMeanTimeStatistics = 'DigitalMeanTimeStatistics',
   DigitalErrorsDetailStatistics = 'DigitalErrorsDetailStatistics',
-  DigitalAttemptsStatistics = 'DigitalAttemptsStatistics',
 }
 
 export interface NotificationOverview {
@@ -158,7 +157,6 @@ export interface StatisticsParsedData {
   [StatisticsDataTypes.DigitalStateStatistics]: IDigitalStateStatistics;
   [StatisticsDataTypes.DigitalMeanTimeStatistics]: IDigitalMeanTimeStatistics;
   [StatisticsDataTypes.DigitalErrorsDetailStatistics]: IDigitalErrorsDetailStatistics;
-  [StatisticsDataTypes.DigitalAttemptsStatistics]: Array<IAttemptsCount>;
 }
 
 export interface StatisticsParsedResponse {

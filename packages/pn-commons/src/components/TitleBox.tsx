@@ -51,7 +51,6 @@ const TitleBox: React.FC<Props> = ({
           data-testid="titleBox"
           role="heading"
           aria-label={ariaLabel}
-          aria-selected="true"
           variant={variantTitle}
           display="inline-block"
           sx={{ verticalAlign: 'middle' }}
