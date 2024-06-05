@@ -34,7 +34,7 @@ export class LastStateStatisticsData extends StatisticsData {
   }
 
   parse(rawData: StatisticsResponse): this {
-    const notifications_overview = rawData.notifications_overview;
+    const notifications_overview = rawData.notificationsOverview;
 
     notifications_overview.forEach((element) => {
       this.parseChunk(element);
@@ -47,7 +47,7 @@ export class LastStateStatisticsData extends StatisticsData {
     if ('notification_status' in chunk) {
       const status = chunk.notification_status;
 
-      this.data[status] += +chunk.notifications_count;
+      this.data[status as keyof ILastStateStatistics] += +chunk.notifications_count;
     }
   }
 
