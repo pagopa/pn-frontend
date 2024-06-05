@@ -88,13 +88,14 @@ const Login = () => {
           <Grid item>
             <Typography
               id="login-mode-page-title"
-              component="h2"
               variant="h3"
+              component="h1"
               px={0}
               color="textPrimary"
               sx={{
                 textAlign: 'center',
               }}
+              aria-label={t('loginPage.title')}
             >
               {t('loginPage.title')}
             </Typography>
@@ -104,11 +105,13 @@ const Login = () => {
           <Grid item>
             <Typography
               variant="body1"
+              component="h2"
               mb={isMobile ? 4 : 7}
               color="textPrimary"
               sx={{
                 textAlign: 'center',
               }}
+              aria-label={t('loginPage.description')}
             >
               {t('loginPage.description')}
             </Typography>
