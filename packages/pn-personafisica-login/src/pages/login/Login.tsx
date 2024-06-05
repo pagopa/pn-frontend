@@ -85,7 +85,7 @@ const Login = () => {
     >
       <Grid container direction="column" my={isMobile ? 4 : 16} id="loginPage">
         <Grid container item justifyContent="center">
-          <Grid item tabIndex={0}>
+          <Grid item>
             <Typography
               id="login-mode-page-title"
               variant="h3"
@@ -96,14 +96,13 @@ const Login = () => {
                 textAlign: 'center',
               }}
               aria-label={t('loginPage.title')}
-              aria-selected="true"
             >
               {t('loginPage.title')}
             </Typography>
           </Grid>
         </Grid>
         <Grid container item justifyContent="center">
-          <Grid item tabIndex={0}>
+          <Grid item>
             <Typography
               variant="body1"
               component="h2"
@@ -113,7 +112,6 @@ const Login = () => {
                 textAlign: 'center',
               }}
               aria-label={t('loginPage.description')}
-              aria-selected="true"
             >
               {t('loginPage.description')}
             </Typography>
