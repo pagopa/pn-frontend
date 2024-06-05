@@ -95,7 +95,6 @@ const Login = () => {
               sx={{
                 textAlign: 'center',
               }}
-              aria-label={t('loginPage.title')}
             >
               {t('loginPage.title')}
             </Typography>
@@ -111,7 +110,6 @@ const Login = () => {
               sx={{
                 textAlign: 'center',
               }}
-              aria-label={t('loginPage.description')}
             >
               {t('loginPage.description')}
             </Typography>
