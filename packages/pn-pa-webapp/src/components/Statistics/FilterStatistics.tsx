@@ -144,6 +144,7 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
         label={t(`filter.${elem}`)}
         sx={{
           mr: 1,
+          my: { xl: 0, xs: 1 },
           background: elem === formik.values.selected ? GraphColors.lightBlue2 : 'none',
         }}
         variant="outlined"
@@ -158,9 +159,9 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
   }, [filter]);
   return (
     <Stack
-      direction={{ xl: 'row', lg: 'column' }}
+      direction={{ xl: 'row', xs: 'column' }}
       mt={4}
-      mb={1}
+      spacing={1}
       display="flex"
       justifyContent="space-between"
       alignItems="center"
@@ -194,8 +195,7 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
                 type: 'text',
                 'aria-label': t('filter.from_date-input-aria-label'),
               },
-              fullWidth: isMobile,
-              sx: { mb: isMobile ? '20px' : '0', mr: 1 },
+              sx: { mb: isMobile ? 1 : 0, mr: 1, width: { lg: '180px', xs: '100%' } },
             },
           }}
           disableFuture={true}
@@ -229,8 +229,7 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
                 type: 'text',
                 'aria-label': t('filter.to_date-input-aria-label'),
               },
-              fullWidth: isMobile,
-              sx: { mb: isMobile ? '20px' : '0', mr: 1 },
+              sx: { mb: isMobile ? 1 : 0, mr: 1, width: { lg: '180px', xs: '100%' } },
             },
           }}
           disableFuture={true}
