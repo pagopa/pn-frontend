@@ -78,20 +78,10 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
     initialValues: initialValues(filter),
     validationSchema,
     /** onSubmit populates filter */
-    onSubmit: (values: FormikValues) => {
-      const currentFilter = {
-        startDate: values.startDate,
-        endDate: values.endDate,
-        selected: values.selected,
-      };
-      if (_.isEqual(filter, currentFilter)) {
-        return;
-      }
-      dispatch(setStatisticsFilter(currentFilter));
-    },
+    onSubmit: () => {},
   });
 
-  const getRangeDates = (range: SelectedStatisticsFilterKeys, loading: boolean): [Date, Date] => {
+  const getRangeDates = (range: SelectedStatisticsFilterKeys, loading: boolean = false): [Date, Date] => {
     switch (range) {
       case SelectedStatisticsFilter.lastMonth:
         return [oneMonthAgo, today];
@@ -124,12 +114,16 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
   };
 
   const handleSelectFilter = (type: SelectedStatisticsFilterKeys) => {
-    setFilter(type);
-    formik.submitForm().catch((error) => console.log(`${error}`));
+    const [startDate, endDate] = getRangeDates(type);
+    dispatch(setStatisticsFilter({
+      startDate,
+      endDate,
+      selected: type
+    }));
   };
 
   const cleanFilter = () => {
-    dispatch(setStatisticsFilter(null));
+    handleSelectFilter(defaultValues.selected);
   };
 
   const filterChanged =
