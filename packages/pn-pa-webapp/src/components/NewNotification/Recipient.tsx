@@ -153,7 +153,7 @@ const Recipient: React.FC<Props> = ({
       showPhysicalAddress: yup.boolean().isTrue(),
       address: yup.string().when('showPhysicalAddress', {
         is: true,
-        then: requiredStringFieldValidation(tc, 1024),
+        then: requiredStringFieldValidation(tc, 44),
       }),
       houseNumber: yup.string().when('showPhysicalAddress', {
         is: true,
