@@ -80,6 +80,7 @@
     "form-label-name": "Poimenujte svoj ključ API",
     "form-placeholder-name": "Vnesite ime",
     "form-error-name": "Določite ime ključa API",
+    "form-error-minimum": "Ime mora vsebovati vsaj 3 znake",
     "form-label-groups": "Izberite skupine, ki jim želite dodeliti ključ API",
     "form-placeholder-groups": "Iskanje skupine",
     "form-error-groups": "Izberite vsaj eno skupino",

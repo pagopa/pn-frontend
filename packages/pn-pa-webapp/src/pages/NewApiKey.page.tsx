@@ -46,7 +46,7 @@ const NewApiKey = () => {
   });
 
   const validationSchema = yup.object({
-    name: yup.string().min(3).required(tkp('form-error-name')),
+    name: yup.string().min(3, tkp('form-error-minimum')).required(tkp('form-error-name')),
     groups: yup.array().of(
       yup.object({
         id: yup.string(),

@@ -80,6 +80,7 @@
     "form-label-name": "Gib deinem API-Schlüssel einen Namen",
     "form-placeholder-name": "Bitte einen Namen eingeben",
     "form-error-name": "Definiere einen Namen für den API-Schlüssel",
+    "form-error-minimum": "Der Name muss mindestens 3 Zeichen lang sein",
     "form-label-groups": "Wähle die Gruppen aus, denen der API-Schlüssel zugewiesen werden soll",
     "form-placeholder-groups": "Gruppe suchen",
     "form-error-groups": "Mindestens eine Gruppe auswählen",

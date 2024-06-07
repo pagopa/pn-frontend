@@ -80,6 +80,7 @@
     "form-label-name": "Dai un nome alla tua API Key",
     "form-placeholder-name": "Inserisci un nome",
     "form-error-name": "Definire un nome per l'API Key",
+    "form-error-minimum": "Il nome deve contenere almeno 3 caratteri",
     "form-label-groups": "Scegli i gruppi a cui assegnare l’API Key",
     "form-placeholder-groups": "Cerca un gruppo",
     "form-error-groups": "Selezionare almeno un gruppo",

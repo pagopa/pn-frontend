@@ -72,6 +72,11 @@ describe('NewApiKey component', async () => {
     expect(submitButton).toBeEnabled();
     expect(result.container).not.toHaveTextContent(/form-error-name/);
 
+    // fill api key name with less than 3 characters: invalid form, submit is disabled, error message shown
+    await testInput(form, 'name', 'ab');
+    expect(submitButton).toBeDisabled();
+    expect(result.container).toHaveTextContent(/form-error-minimum/);
+
     // set back api key name to empty text field, submit is disabled, error message shown
     await testInput(form, 'name', '');
     expect(submitButton).toBeDisabled();
