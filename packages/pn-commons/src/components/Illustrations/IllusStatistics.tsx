@@ -10,7 +10,7 @@ export const IllusStatistics = ({
   gridColor = '#E0E0E0',
   barColor = '#E8EBF1',
 }: IllusStatisticsProps) => (
-  <Illustration name={title} viewBox="0 0 342 130" sx={{ width: 342, height: 130 }}>
+  <Illustration name={title} viewBox="0 0 342 130" sx={{ width: 342, height: 130, maxWidth: '100%', maxHeight: '100%' }}>
     <path
       fillRule="evenodd"
       clipRule="evenodd"
