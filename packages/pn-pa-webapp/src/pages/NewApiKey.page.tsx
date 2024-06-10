@@ -21,6 +21,7 @@ import {
   Prompt,
   SectionHeading,
   TitleBox,
+  dataRegex,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -46,7 +47,10 @@ const NewApiKey = () => {
   });
 
   const validationSchema = yup.object({
-    name: yup.string().min(3, tkp('form-error-minimum')).required(tkp('form-error-name')),
+    name: yup
+      .string()
+      .matches(dataRegex.noSpaceAtEdges, t('no-spaces-at-edges', { ns: 'common' }))
+      .required(tkp('form-error-name')),
     groups: yup.array().of(
       yup.object({
         id: yup.string(),
