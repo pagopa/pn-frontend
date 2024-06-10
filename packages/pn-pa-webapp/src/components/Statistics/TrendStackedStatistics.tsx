@@ -4,15 +4,15 @@
 import { add, compareAsc } from 'date-fns';
 import type { CSSProperties } from 'react';
 
+
+
 import { formatDateSMonth, formatToSlicedISOString } from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import {
-  GraphColors,
-  IStatisticsDailySummary,
-  Timeframe,
-  WEEK_DAYS,
-} from '../../models/Statistics';
+
+
+import { GraphColors, IStatisticsDailySummary, Timeframe, WEEK_DAYS } from '../../models/Statistics';
+
 
 const LAST_DAY_OF_THE_WEEK = WEEK_DAYS.SUNDAY;
 
@@ -173,6 +173,7 @@ const TrendStackedStatistics: React.FC<Props> = ({
       trigger: 'axis',
     },
     legend: {
+      show: false,
       bottom: '0%',
       left: 'center',
       data: legend,
@@ -216,6 +217,9 @@ const TrendStackedStatistics: React.FC<Props> = ({
     ...options,
   };
 
+  if(legend) {
+    return <PnECharts option={option} style={sx} legend={legend.map(item => item)} />;
+  }
   return <PnECharts option={option} style={sx} />;
 };
 

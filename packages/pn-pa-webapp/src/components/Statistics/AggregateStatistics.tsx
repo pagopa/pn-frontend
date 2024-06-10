@@ -85,9 +85,15 @@ const AggregateStatistics: React.FC<Props> = ({
   if (legend) {
     // eslint-disable-next-line functional/immutable-data
     option.legend = {
+      show: false,
       bottom: '0%',
       left: 'center',
+      icon: 'circle'
     };
+  }
+
+  if (legend) {
+    return <PnECharts key="Aggregate" option={option} style={sx} legend={data.map(item => item.name)} />;
   }
   return <PnECharts key="Aggregate" option={option} style={sx} />;
 };
