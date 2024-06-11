@@ -162,7 +162,7 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
     >
       
       <Box flexGrow={0} flexShrink={0} >{quickFiltersJsx()}</Box>
-      <Box sx={{ display: isMobile ? 'flex-direction' : 'flex' }} >
+      <Box sx={{ display: isMobile ? 'block' : 'flex' }} >
         <CustomDatePicker
           language={i18n.language}
           label={t('filter.from_date')}
