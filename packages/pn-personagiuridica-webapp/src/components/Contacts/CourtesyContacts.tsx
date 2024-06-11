@@ -28,7 +28,6 @@ const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
         <CourtesyContactsList contacts={contacts} />
       </Box>
       <Alert
-        tabIndex={0}
         role="banner"
         aria-label={t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })}
         sx={{ mt: 4 }}

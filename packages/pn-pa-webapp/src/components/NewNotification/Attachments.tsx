@@ -64,7 +64,7 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
           <ButtonNaked
             onClick={onDelete}
             data-testid="deletebutton"
-            aria-label={t('new-notification.steps.remove-document')}
+            aria-label={t('new-notification.steps.attachments.remove-document')}
           >
             <DeleteIcon color="action" sx={{ cursor: 'pointer' }} />
           </ButtonNaked>

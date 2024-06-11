@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Paper, Stack, Typography } from '@mui/material';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { ILastStateStatistics, NotificationStatus } from '../../models/Statistics';
+import { GraphColors, ILastStateStatistics, NotificationStatus } from '../../models/Statistics';
 import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
@@ -19,27 +19,27 @@ const LastStateStatistics: React.FC<Props> = (props) => {
   const statuses = [
     {
       value: props.data[NotificationStatus.DELIVERING],
-      color: '#E0E0E0',
+      color: GraphColors.lightGrey,
     },
     {
       value: props.data[NotificationStatus.DELIVERED],
-      color: '#6BCFFB',
+      color: GraphColors.lightBlue,
     },
     {
       value: props.data[NotificationStatus.VIEWED],
-      color: '#6CC66A',
+      color: GraphColors.lightGreen,
     },
     {
       value: props.data[NotificationStatus.EFFECTIVE_DATE],
-      color: '#5CA85A',
+      color: GraphColors.darkGreen,
     },
     {
       value: props.data[NotificationStatus.CANCELLED],
-      color: '#FFCB46',
+      color: GraphColors.gold,
     },
     {
       value: props.data[NotificationStatus.UNREACHABLE],
-      color: '#FE6666',
+      color: GraphColors.lightRed,
     },
   ];
 
@@ -66,14 +66,16 @@ const LastStateStatistics: React.FC<Props> = (props) => {
     toolbox: {
       feature: {
         saveAsImage: {
+          type: 'jpg',
           show: true,
-          title: t('save_as_image'),
+          title: '',
           name: 'chart',
           backgroundColor: 'white',
           pixelRatio: 2,
           iconStyle: {
-            borderColor: '#0055AA',
+            color: GraphColors.navy,
           },
+          icon: 'path://M4.16669 16.6667H15.8334V15H4.16669V16.6667ZM15.8334 7.5H12.5V2.5H7.50002V7.5H4.16669L10 13.3333L15.8334 7.5Z',
         },
       },
     },

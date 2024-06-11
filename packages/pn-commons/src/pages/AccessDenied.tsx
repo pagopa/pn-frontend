@@ -45,9 +45,8 @@ const AccessDenied: React.FC<Props> = ({
           align="center"
           color="text.primary"
           variant="h4"
-          component="h1"
           id="login-page-title"
-          aria-label={finalMessage}
+          component="h1"
         >
           {finalMessage}
         </Typography>

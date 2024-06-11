@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Paper, Stack, Typography } from '@mui/material';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { IDigitalStateStatistics, ResponseStatus } from '../../models/Statistics';
+import { GraphColors, IDigitalStateStatistics, ResponseStatus } from '../../models/Statistics';
 import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
@@ -34,15 +34,15 @@ const DigitalStateStatistics: React.FC<Props> = (props) => {
   const statuses = [
     {
       value: props.data[ResponseStatus.OK],
-      color: '#0055AA',
+      color: GraphColors.blue,
     },
     {
       value: props.data[ResponseStatus.KO],
-      color: '#00C5CA',
+      color: GraphColors.azure,
     },
     {
       value: props.data[ResponseStatus.PROGRESS],
-      color: '#E0E0E0',
+      color: GraphColors.lightGrey,
     },
   ];
 
@@ -73,14 +73,16 @@ const DigitalStateStatistics: React.FC<Props> = (props) => {
     toolbox: {
       feature: {
         saveAsImage: {
+          type: 'jpg',
           show: true,
-          title: t('save_as_image'),
+          title: '',
           name: 'chart',
           backgroundColor: 'white',
           pixelRatio: 2,
           iconStyle: {
-            borderColor: '#0055AA',
+            color: GraphColors.navy,
           },
+          icon: 'path://M4.16669 16.6667H15.8334V15H4.16669V16.6667ZM15.8334 7.5H12.5V2.5H7.50002V7.5H4.16669L10 13.3333L15.8334 7.5Z',
         },
       },
     },

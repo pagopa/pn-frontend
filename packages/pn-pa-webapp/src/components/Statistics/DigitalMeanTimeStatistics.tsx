@@ -7,7 +7,7 @@ import { Paper, Stack, Typography } from '@mui/material';
 import { convertHoursToIntDays } from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { IDigitalMeanTimeStatistics } from '../../models/Statistics';
+import { GraphColors, IDigitalMeanTimeStatistics } from '../../models/Statistics';
 import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
@@ -33,17 +33,17 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
     {
       time: props.data.delivered.time,
       count: props.data.delivered.count,
-      color: '#6BCFFB',
+      color: GraphColors.lightBlue,
     },
     {
       time: props.data.viewed.time,
       count: props.data.viewed.count,
-      color: '#6CC66A',
+      color: GraphColors.lightGreen,
     },
     {
       time: props.data.refined.time,
       count: props.data.refined.count,
-      color: '#5CA85A',
+      color: GraphColors.darkGreen,
     },
   ];
 
@@ -73,14 +73,16 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
     toolbox: {
       feature: {
         saveAsImage: {
+          type: 'jpg',
           show: true,
-          title: t('save_as_image'),
+          title: '',
           name: 'chart',
           backgroundColor: 'white',
           pixelRatio: 2,
           iconStyle: {
-            borderColor: '#0055AA',
+            color: GraphColors.navy,
           },
+          icon: 'path://M4.16669 16.6667H15.8334V15H4.16669V16.6667ZM15.8334 7.5H12.5V2.5H7.50002V7.5H4.16669L10 13.3333L15.8334 7.5Z',
         },
       },
     },

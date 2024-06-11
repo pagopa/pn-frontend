@@ -107,7 +107,6 @@ const IOContact: React.FC<Props> = ({ contact }) => {
     } else {
       return (
         <Alert
-          tabIndex={0}
           role="banner"
           sx={{ mt: 4 }}
           aria-label={
