@@ -160,8 +160,8 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
       justifyContent="space-between"
       alignItems="center"
     >
-      <Box>{quickFiltersJsx()}</Box>
-      <Box>
+      <Box flexGrow={0} flexShrink={0} >{quickFiltersJsx()}</Box>
+      <Box display="flex" >
         <CustomDatePicker
           language={i18n.language}
           label={t('filter.from_date')}
@@ -189,7 +189,7 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
                 type: 'text',
                 'aria-label': t('filter.from_date-input-aria-label'),
               },
-              sx: { mb: isMobile ? 1 : 0, mr: 1, width: { lg: '180px', xs: '100%' } },
+              sx: { mb: isMobile ? 1 : 0, mr: 1 }
             },
           }}
           disableFuture={true}
@@ -223,7 +223,7 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
                 type: 'text',
                 'aria-label': t('filter.to_date-input-aria-label'),
               },
-              sx: { mb: isMobile ? 1 : 0, mr: 1, width: { lg: '180px', xs: '100%' } },
+              sx: { mb: isMobile ? 1 : 0, mr: 1 },
             },
           }}
           disableFuture={true}
