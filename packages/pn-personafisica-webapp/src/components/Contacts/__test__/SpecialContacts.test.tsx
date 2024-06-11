@@ -385,6 +385,7 @@ describe('SpecialContacts Component', async () => {
         senderId: parties[2].id,
         addressType: AddressType.LEGAL,
         channelType: LegalChannelType.PEC,
+        codeValid: true,
       },
     ];
 
