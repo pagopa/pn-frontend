@@ -1,10 +1,7 @@
 import senderDashboard from "./theme/senderDashboard";
 import {
   Avatar,
-  Button,
   Checkbox,
-  FormControlLabel,
-  FormGroup,
   ListItem,
   ListItemAvatar,
   ListItemText,
@@ -12,7 +9,7 @@ import {
 } from "@mui/material";
 import { init, getInstanceByDom, registerTheme } from "echarts";
 import type { EChartOption, ECharts, SetOptionOpts } from "echarts";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import type { CSSProperties } from "react";
 
 export interface PnEChartsProps {
@@ -35,17 +32,6 @@ export function PnECharts({
   const chartRef = useRef<HTMLDivElement>(null);
   // Initialize chart
   let chart: ECharts | undefined;
-
-  // const seriesNum = option.series.?[0].data?.length ?? 0;
-  // const series: Array<{name: string; color: string}>;
-
-  // for(let index = 0; index < seriesNum; index++) {
-
-  // 	series.push({
-  // 		name: "option.series?.[index].name",
-  // 		color:" option.color?.[index]"
-  // 	});
-  // )
 
   const toggleSerie = (name: string) => {
     chart?.dispatchAction({
@@ -104,7 +90,7 @@ export function PnECharts({
     }
   }, [loading, theme]);
 
-  const legendContent = legend?.map((item, index) => {
+  const legendContent = useMemo(() => legend?.map((item, index) => {
     const color = option.color?.[index] ?? "";
     const avatarSx = {
       bgcolor: color,
@@ -112,21 +98,24 @@ export function PnECharts({
       height: 10,
     };
     return (
-      <>
+      <ListItem key={item} sx={{ width: "auto" }}>
         <Checkbox
           onChange={() => toggleSerie(item)}
           defaultChecked
-          sx={{ color }}
+          sx={{
+            color,
+            "&.Mui-checked": {
+              color,
+            },
+          }}
         />
-        <ListItem key={item} sx={{width: 'auto'}}>
-          <ListItemAvatar sx={{ minWidth: 18 }}>
-            <Avatar sx={avatarSx}>&nbsp;</Avatar>
-          </ListItemAvatar>
-          <ListItemText secondary={item} />
-        </ListItem>
-      </>
+        <ListItemAvatar sx={{ minWidth: 18 }}>
+          <Avatar sx={avatarSx}>&nbsp;</Avatar>
+        </ListItemAvatar>
+        <ListItemText secondary={item} />
+      </ListItem>
     );
-  });
+  }), [theme]);
 
   return (
     <>
@@ -144,7 +133,7 @@ export function PnECharts({
         <Stack
           direction={"row"}
           alignContent={"center"}
-		  justifyContent={"center"}
+          justifyContent={"center"}
           display={"flex"}
         >
           {legendContent}
