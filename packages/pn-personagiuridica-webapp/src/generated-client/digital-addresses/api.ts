@@ -186,6 +186,12 @@ export interface BffUserAddress {
      * @type {boolean}
      * @memberof BffUserAddress
      */
+    'codeValid'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BffUserAddress
+     */
     'pecValid'?: boolean;
 }
 

@@ -27,7 +27,7 @@ export const getDigitalAddresses = createAsyncThunk<Array<DigitalAddress>>(
       const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
       const response = await digitalAddressesFactory.getAddressesV1();
 
-      return response.data as Array<DigitalAddress>;
+      return response.data.filter((addr) => addr.codeValid) as Array<DigitalAddress>;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
