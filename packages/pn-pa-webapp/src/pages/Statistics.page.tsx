@@ -100,7 +100,7 @@ const Statistics = () => {
               {t('section_1')}
             </Typography>
             <FilterStatistics filter={statisticsFilter} />
-            {statisticsData.empty ?
+            {statisticsData.isEmpty ?
               <Paper sx={{ p: 3, mb: 3, height: '100%', mt: 5 }} elevation={0}>
                 <EmptyStatistics />
               </Paper>

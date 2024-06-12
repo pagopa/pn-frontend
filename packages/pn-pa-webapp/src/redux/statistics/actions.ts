@@ -47,7 +47,7 @@ export const getStatistics = createAsyncThunk(
             lastDate: response.data.lastDate,
             startDate: response.data.startDate,
             endDate: response.data.endDate,
-            empty: isResponseEmpty(response.data as StatisticsResponse),
+            isEmpty: isResponseEmpty(response.data as StatisticsResponse),
             data: factory.createAll(response.data as StatisticsResponse),
           } as StatisticsParsedResponse)
         : null;
