@@ -68,7 +68,7 @@ const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data
   const isEmpty = !data || (data[0].total === 0 && data[1].total === 0);
 
   if (isEmpty) {
-    return <EmptyStatistics description="empty.component_description" />;
+    return <EmptyStatistics />;
   }
 
   return (
