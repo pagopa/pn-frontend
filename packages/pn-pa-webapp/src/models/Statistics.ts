@@ -201,10 +201,10 @@ export enum WEEK_DAYS {
 }
 
 export const SelectedStatisticsFilter = {
-  lastMonth: 'lastMonth',
-  last3Months: 'last3Months',
-  last6Months: 'last6Months',
   last12Months: 'last12Months',
+  last6Months: 'last6Months',
+  last3Months: 'last3Months',
+  lastMonth: 'lastMonth',
   custom: 'custom',
 } as const;
 
