@@ -1,7 +1,9 @@
 import { vi } from 'vitest';
+
 import { Validator } from '../../Validator';
-import { IsEmpty } from '../../rules/IsEmpty';
 import { InnerValidator } from '../../rules/InnerValidator';
+import { IsEmpty } from '../../rules/IsEmpty';
+import { Required } from '../../rules/Required';
 import { ObjectRuleValidator } from '../ObjectRuleValidator';
 
 class DummyValidator extends Validator<any> {}
@@ -21,6 +23,12 @@ vi.mock('../../rules/InnerValidator', () => {
   };
 });
 
+vi.mock('../../rules/Required', () => {
+  return {
+    Required: vi.fn(),
+  };
+});
+
 describe('Test ObjectRuleValidator', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -30,6 +38,7 @@ describe('Test ObjectRuleValidator', () => {
   it('check if methods exist', () => {
     expect(dummyRuleValidator.isEmpty).toBeDefined();
     expect(dummyRuleValidator.setValidator).toBeDefined();
+    expect(dummyRuleValidator.required).toBeDefined();
   });
 
   it('check if isEmpty rule is instantiated', () => {
@@ -43,6 +52,13 @@ describe('Test ObjectRuleValidator', () => {
     const result = dummyRuleValidator.setValidator(new DummyValidator());
     expect(pushRuleMk).toBeCalledTimes(1);
     expect(pushRuleMk).toBeCalledWith(new InnerValidator(new DummyValidator()));
+    expect(result).toBeInstanceOf(ObjectRuleValidator);
+  });
+
+  it('check if required rule is instantiated', () => {
+    const result = dummyRuleValidator.required();
+    expect(pushRuleMk).toBeCalledTimes(1);
+    expect(pushRuleMk).toBeCalledWith(new Required());
     expect(result).toBeInstanceOf(ObjectRuleValidator);
   });
 });

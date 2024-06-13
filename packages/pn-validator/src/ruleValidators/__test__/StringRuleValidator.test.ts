@@ -1,7 +1,9 @@
 import { vi } from 'vitest';
+
 import { IsEmpty } from '../../rules/IsEmpty';
 import { Length } from '../../rules/Length';
 import { Matches } from '../../rules/Matches';
+import { Required } from '../../rules/Required';
 import { StringRuleValidator } from '../StringRuleValidator';
 
 const pushRuleMk = vi.fn();
@@ -25,6 +27,12 @@ vi.mock('../../rules/Matches', () => {
   };
 });
 
+vi.mock('../../rules/Required', () => {
+  return {
+    Required: vi.fn(),
+  };
+});
+
 describe('Test StringRuleValidator', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -35,6 +43,7 @@ describe('Test StringRuleValidator', () => {
     expect(dummyRuleValidator.isEmpty).toBeDefined();
     expect(dummyRuleValidator.length).toBeDefined();
     expect(dummyRuleValidator.matches).toBeDefined();
+    expect(dummyRuleValidator.required).toBeDefined();
   });
 
   it('check if isEmpty rule is instantiated', () => {
@@ -56,6 +65,13 @@ describe('Test StringRuleValidator', () => {
     const result = dummyRuleValidator.matches(regexp);
     expect(pushRuleMk).toBeCalledTimes(1);
     expect(pushRuleMk).toBeCalledWith(new Matches(regexp));
+    expect(result).toBeInstanceOf(StringRuleValidator);
+  });
+
+  it('check if required rule is instantiated', () => {
+    const result = dummyRuleValidator.required();
+    expect(pushRuleMk).toBeCalledTimes(1);
+    expect(pushRuleMk).toBeCalledWith(new Required());
     expect(result).toBeInstanceOf(StringRuleValidator);
   });
 });
