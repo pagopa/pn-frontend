@@ -85,9 +85,8 @@ describe('App', async () => {
     expect(footer).toBeInTheDocument();
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-    expect(result!.container).toHaveTextContent(
-      'Non hai le autorizzazioni necessarie per accedere a questa pagina'
-    );
+    const loginFePage = result!.queryByTestId('access-denied');
+    expect(loginFePage).not.toBeInTheDocument();
   });
 
   it('render component - user logged in', async () => {
