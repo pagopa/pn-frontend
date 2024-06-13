@@ -173,6 +173,7 @@ const TrendStackedStatistics: React.FC<Props> = ({
       trigger: 'axis',
     },
     legend: {
+      show: false,
       bottom: '0%',
       left: 'center',
       data: legend,
@@ -216,6 +217,9 @@ const TrendStackedStatistics: React.FC<Props> = ({
     ...options,
   };
 
+  if (legend) {
+    return <PnECharts option={option} style={sx} legend={legend} />;
+  }
   return <PnECharts option={option} style={sx} />;
 };
 
