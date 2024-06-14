@@ -96,11 +96,7 @@ const SessionGuardRender = () => {
       );
     } else if (isAnonymousUser) {
       const aar = params.get(AppRouteParams.AAR);
-      if (aar) {
-        // save to localstorage
-        localStorage.setItem(AppRouteParams.AAR, sanitizeString(aar));
-      }
-      goToLoginPortal();
+      goToLoginPortal(aar);
       return <></>;
     }
     return (
