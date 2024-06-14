@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/pagopa/pn-frontend/compare/v2.5.0-RC.2...v2.5.0) (2024-06-14)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
 # [2.5.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0-RC.0...v2.5.0-RC.1) (2024-06-05)
 
 
