@@ -91,7 +91,7 @@ export abstract class CommonRuleValidator<TModel, TValue> {
    * Required
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-  public readonly required = (customErrorMessage?: string) =>
+  public readonly isRequired = (customErrorMessage?: string) =>
     this.addRequiredRule(customErrorMessage);
 
   /**
@@ -106,5 +106,6 @@ export abstract class CommonRuleValidator<TModel, TValue> {
         this.addIsEqualRule(value, true, customErrorMessage),
       isOneOf: (possibleValues: Array<TValue>, customErrorMessage?: string) =>
         this.addIsOneOfRule(possibleValues, true, customErrorMessage),
+      isRequired: (customErrorMessage?: string) => this.addRequiredRule(customErrorMessage),
     } as unknown as NotRuleValidator<TModel, TValue>);
 }

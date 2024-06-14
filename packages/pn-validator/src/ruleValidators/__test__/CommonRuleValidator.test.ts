@@ -60,6 +60,7 @@ describe('Test CommonRuleValidator', () => {
     expect(dummyRuleValidator.isUndefined).toBeDefined();
     expect(dummyRuleValidator.isEqual).toBeDefined();
     expect(dummyRuleValidator.customValidator).toBeDefined();
+    expect(dummyRuleValidator.isRequired).toBeDefined();
   });
 
   it('check if isNull rule is instantiated', () => {
@@ -99,7 +100,7 @@ describe('Test CommonRuleValidator', () => {
   });
 
   it('check if required rule is instantiated', () => {
-    const result = dummyRuleValidator.required();
+    const result = dummyRuleValidator.isRequired();
     expect(pushRuleMk).toBeCalledTimes(1);
     expect(pushRuleMk).toBeCalledWith(new Required());
     expect(result).toBeInstanceOf(DummyRuleValidator);

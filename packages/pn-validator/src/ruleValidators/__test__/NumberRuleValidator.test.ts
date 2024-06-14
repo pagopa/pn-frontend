@@ -3,7 +3,6 @@ import { vi } from 'vitest';
 import { Between } from '../../rules/Between';
 import { GreaterThan } from '../../rules/GreaterThan';
 import { LessThan } from '../../rules/LessThan';
-import { Required } from '../../rules/Required';
 import { NumberRuleValidator } from '../NumberRuleValidator';
 
 const pushRuleMk = vi.fn();
@@ -27,12 +26,6 @@ vi.mock('../../rules/Between', () => {
   };
 });
 
-vi.mock('../../rules/Required', () => {
-  return {
-    Required: vi.fn(),
-  };
-});
-
 describe('Test NumberRuleValidator', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -43,7 +36,6 @@ describe('Test NumberRuleValidator', () => {
     expect(dummyRuleValidator.lessThan).toBeDefined();
     expect(dummyRuleValidator.greaterThan).toBeDefined();
     expect(dummyRuleValidator.between).toBeDefined();
-    expect(dummyRuleValidator.required).toBeDefined();
   });
 
   it('check if lessThan rule is instantiated', () => {
@@ -64,13 +56,6 @@ describe('Test NumberRuleValidator', () => {
     const result = dummyRuleValidator.between(1, 2);
     expect(pushRuleMk).toBeCalledTimes(1);
     expect(pushRuleMk).toBeCalledWith(new Between(1, 2));
-    expect(result).toBeInstanceOf(NumberRuleValidator);
-  });
-
-  it('check if required rule is instantiated', () => {
-    const result = dummyRuleValidator.required();
-    expect(pushRuleMk).toBeCalledTimes(1);
-    expect(pushRuleMk).toBeCalledWith(new Required());
     expect(result).toBeInstanceOf(NumberRuleValidator);
   });
 });

@@ -7,10 +7,12 @@ const checkCommonRules = (rules: any) => {
   expect(rules.isOneOf).toBeDefined();
   expect(rules.customValidator).toBeDefined();
   expect(rules.not).toBeDefined();
+  expect(rules.isRequired).toBeDefined();
   expect(rules.not().isNull).toBeDefined();
   expect(rules.not().isUndefined).toBeDefined();
   expect(rules.not().isEqual).toBeDefined();
   expect(rules.not().isOneOf).toBeDefined();
+  expect(rules.not().isRequired).toBeDefined();
 };
 
 describe('Test ValidatorBuilder', () => {
@@ -100,5 +102,29 @@ describe('Test ValidatorBuilder', () => {
     rules.isString().isEqual('prova', 'Custom error message');
     const results = dummyValidatorBuilder.validate('no match', {});
     expect(results).toBe('Custom error message');
+  });
+
+  it('isRequired - check if validate works (value not required)', () => {
+    const dummyValidatorBuilder = new ValidatorBuilder<any, any>();
+    const rules = dummyValidatorBuilder.getTypeRules();
+    rules.isString().isRequired();
+    const results = dummyValidatorBuilder.validate('Value', {});
+    expect(results).toBeNull();
+  });
+
+  it('isRequired - check if validate works (value required)', () => {
+    const dummyValidatorBuilder = new ValidatorBuilder<any, any>();
+    const rules = dummyValidatorBuilder.getTypeRules();
+    rules.isString().isRequired();
+    const results = dummyValidatorBuilder.validate(undefined, {});
+    expect(results).toBe('Value is required');
+  });
+
+  it('isRequired - check if validate works (value required and custom error message)', () => {
+    const dummyValidatorBuilder = new ValidatorBuilder<any, any>();
+    const rules = dummyValidatorBuilder.getTypeRules();
+    rules.isString().isRequired('Mandatory field');
+    const results = dummyValidatorBuilder.validate(undefined, {});
+    expect(results).toBe('Mandatory field');
   });
 });
