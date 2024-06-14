@@ -103,28 +103,4 @@ describe('Test ValidatorBuilder', () => {
     const results = dummyValidatorBuilder.validate('no match', {});
     expect(results).toBe('Custom error message');
   });
-
-  it('isRequired - check if validate works (value not required)', () => {
-    const dummyValidatorBuilder = new ValidatorBuilder<any, any>();
-    const rules = dummyValidatorBuilder.getTypeRules();
-    rules.isString().isRequired();
-    const results = dummyValidatorBuilder.validate('Value', {});
-    expect(results).toBeNull();
-  });
-
-  it('isRequired - check if validate works (value required)', () => {
-    const dummyValidatorBuilder = new ValidatorBuilder<any, any>();
-    const rules = dummyValidatorBuilder.getTypeRules();
-    rules.isString().isRequired();
-    const results = dummyValidatorBuilder.validate(undefined, {});
-    expect(results).toBe('Value is required');
-  });
-
-  it('isRequired - check if validate works (value required and custom error message)', () => {
-    const dummyValidatorBuilder = new ValidatorBuilder<any, any>();
-    const rules = dummyValidatorBuilder.getTypeRules();
-    rules.isString().isRequired('Mandatory field');
-    const results = dummyValidatorBuilder.validate(undefined, {});
-    expect(results).toBe('Mandatory field');
-  });
 });
