@@ -33,6 +33,8 @@ const INITIALIZATION_SEQUENCE = [
   INITIALIZATION_STEPS.SESSION_CHECK,
 ];
 
+const { DISABLE_INACTIVITY_HANDLER } = getConfiguration();
+
 const inactivityTimer = 5 * 60 * 1000;
 
 const manageUnforbiddenError = (e: any) => {
@@ -93,7 +95,7 @@ const SessionGuardRender = () => {
           initTimeout
         />
       );
-    } else if (isAnonymousUser) {
+    } else if (isAnonymousUser || DISABLE_INACTIVITY_HANDLER) {
       const aar = params.get(AppRouteParams.AAR);
       goToLoginPortal(aar);
       return <></>;
