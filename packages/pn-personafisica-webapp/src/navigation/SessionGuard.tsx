@@ -9,7 +9,6 @@ import {
   LoadingPage,
   SessionModal,
   appStateActions,
-  sanitizeString,
   useErrors,
   useProcess,
   useSessionCheck,
