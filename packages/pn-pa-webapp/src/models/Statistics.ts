@@ -182,7 +182,6 @@ export interface StatisticsParsedResponse {
   lastDate: string;
   startDate: string;
   endDate: string;
-  isEmpty: boolean;
   data: StatisticsParsedData;
 }
 

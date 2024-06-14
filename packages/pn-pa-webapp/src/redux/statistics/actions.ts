@@ -5,7 +5,6 @@ import {
   parseError,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { isEmpty } from 'lodash';
 
 import { apiClient } from '../../api/apiClients';
 import { SenderDashboardApiFactory } from '../../generated-client/sender-dashboard';
@@ -19,8 +18,6 @@ import statisticsDataFactoryManager from '../../utility/StatisticsData/Statistic
 export enum STATISTICS_ACTIONS {
   GET_STATISTICS = 'getStatistics',
 }
-
-const isResponseEmpty = (data: StatisticsResponse) => isEmpty(data.digitalNotificationFocus) && isEmpty(data.notificationsOverview);
 
 export const getStatistics = createAsyncThunk(
   STATISTICS_ACTIONS.GET_STATISTICS,
@@ -47,7 +44,6 @@ export const getStatistics = createAsyncThunk(
             lastDate: response.data.lastDate,
             startDate: response.data.startDate,
             endDate: response.data.endDate,
-            isEmpty: isResponseEmpty(response.data as StatisticsResponse),
             data: factory.createAll(response.data as StatisticsResponse),
           } as StatisticsParsedResponse)
         : null;

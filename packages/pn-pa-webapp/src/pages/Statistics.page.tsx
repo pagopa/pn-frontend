@@ -24,6 +24,7 @@ import LastStateStatistics from '../components/Statistics/LastStateStatistics';
 import { CxType, GraphColors, StatisticsDataTypes, StatisticsFilter } from '../models/Statistics';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { STATISTICS_ACTIONS, getStatistics } from '../redux/statistics/actions';
+import { hasData } from '../redux/statistics/reducers';
 import { RootState } from '../redux/store';
 
 const cxType = CxType.PA;
@@ -38,6 +39,7 @@ const Statistics = () => {
   const { t } = useTranslation(['statistics']);
   const statisticsData = useAppSelector((state: RootState) => state.statisticsState.statistics);
   const statisticsFilter = useAppSelector((state: RootState) => state.statisticsState.filter);
+  const hasStatisticsData = useAppSelector(hasData);
   const loggedUserOrganizationParty = useAppSelector(
     (state: RootState) => state.userState.user?.organization
   );
@@ -100,11 +102,11 @@ const Statistics = () => {
               {t('section_1')}
             </Typography>
             <FilterStatistics filter={statisticsFilter} />
-            {statisticsData.isEmpty ?
+            {!hasStatisticsData ? (
               <Paper sx={{ p: 3, mb: 3, height: '100%', mt: 5 }} elevation={0}>
                 <EmptyStatistics />
               </Paper>
-              :
+            ) : (
               <Stack direction={'column'} spacing={3} pt={2}>
                 <FiledNotificationsStatistics
                   startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
@@ -147,13 +149,13 @@ const Statistics = () => {
                   data={statisticsData.data[StatisticsDataTypes.DigitalErrorsDetailStatistics]}
                 />
               </Stack>
-            }
+            )}
           </>
         ) : (
           <>
             <TitleBox title={t('title')} variantTitle="h4" subTitle={''} variantSubTitle="body1" />
             <Paper sx={{ p: 3, mb: 3, height: '100%', mt: 5 }} elevation={0}>
-              <EmptyStatistics description='empty.not_enough_data' />
+              <EmptyStatistics description="empty.not_enough_data" />
             </Paper>
           </>
         )}
