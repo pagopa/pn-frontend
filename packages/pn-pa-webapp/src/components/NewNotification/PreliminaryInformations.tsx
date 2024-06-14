@@ -41,7 +41,7 @@ type Props = {
 
 const InfoTooltip = ({ tooltip }: { tooltip: string | ReactNode }) => (
   <InputAdornment position="end">
-    <Tooltip arrow={true} title={tooltip}>
+    <Tooltip arrow={true} title={tooltip} tabIndex={0}>
       <InfoOutlined />
     </Tooltip>
   </InputAdornment>
