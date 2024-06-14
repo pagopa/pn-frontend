@@ -1,6 +1,7 @@
 import {
   Dispatch,
-  ReactChild,
+  Fragment,
+  ReactNode,
   SetStateAction,
   forwardRef,
   memo,
@@ -9,7 +10,7 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button, DialogContentText, DialogTitle, Grid, Typography } from '@mui/material';
+import { Button, DialogContentText, DialogTitle, Typography } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -22,7 +23,7 @@ import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCode
 
 type Props = {
   fields: Array<{
-    component: ReactChild;
+    component: ReactNode;
     id: string;
     isEditable?: boolean;
     size: 'auto' | 'variable';
@@ -119,7 +120,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
     const { initValidation } = useDigitalContactsCodeVerificationContext();
 
     const mappedChildren = fields.map((f) => (
-      <Grid key={f.key} item lg={f.size === 'auto' ? true : 'auto'} xs={12}>
+      <Fragment key={f.key}>
         {!f.isEditable && f.component}
         {f.isEditable && editMode && f.component}
         {f.isEditable && !editMode && (
@@ -132,7 +133,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
             {(f.component as any).props.value}
           </Typography>
         )}
-      </Grid>
+      </Fragment>
     ));
 
     const toggleEdit = () => {
@@ -196,48 +197,44 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
 
     return (
       <>
-        <Grid container spacing="4" direction="row" alignItems="center">
-          {mappedChildren}
-          <Grid item lg={12} xs={12} textAlign={'left'}>
-            {!editMode ? (
-              <>
-                <ButtonNaked
-                  color="primary"
-                  onClick={toggleEdit}
-                  sx={{ mr: 2 }}
-                  disabled={editDisabled}
-                  id={`modifyContact-${senderId}`}
-                >
-                  {t('button.modifica')}
-                </ButtonNaked>
-                <ButtonNaked
-                  id={`cancelContact-${senderId}`}
-                  color="primary"
-                  onClick={removeHandler}
-                  disabled={editDisabled}
-                >
-                  {t('button.elimina')}
-                </ButtonNaked>
-              </>
-            ) : (
-              <>
-                <ButtonNaked
-                  color="primary"
-                  disabled={saveDisabled}
-                  type="button"
-                  onClick={editHandler}
-                  sx={{ mr: 2 }}
-                  id={`saveModifyButton-${senderId}`}
-                >
-                  {t('button.salva')}
-                </ButtonNaked>
-                <ButtonNaked color="primary" onClick={onCancel}>
-                  {t('button.annulla')}
-                </ButtonNaked>
-              </>
-            )}
-          </Grid>
-        </Grid>
+        {mappedChildren}
+        {!editMode ? (
+          <>
+            <ButtonNaked
+              color="primary"
+              onClick={toggleEdit}
+              sx={{ mr: 2 }}
+              disabled={editDisabled}
+              id={`modifyContact-${senderId}`}
+            >
+              {t('button.modifica')}
+            </ButtonNaked>
+            <ButtonNaked
+              id={`cancelContact-${senderId}`}
+              color="primary"
+              onClick={removeHandler}
+              disabled={editDisabled}
+            >
+              {t('button.elimina')}
+            </ButtonNaked>
+          </>
+        ) : (
+          <>
+            <ButtonNaked
+              color="primary"
+              disabled={saveDisabled}
+              type="button"
+              onClick={editHandler}
+              sx={{ mr: 2 }}
+              id={`saveModifyButton-${senderId}`}
+            >
+              {t('button.salva')}
+            </ButtonNaked>
+            <ButtonNaked color="primary" onClick={onCancel}>
+              {t('button.annulla')}
+            </ButtonNaked>
+          </>
+        )}
         <DeleteDialog
           showModal={showModal}
           handleModalClose={handleModalClose}
