@@ -92,10 +92,7 @@ describe('App', async () => {
     expect(footer).toBeInTheDocument();
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-
     expect(window.open).toHaveBeenCalledTimes(1);
-
-    console.log('--------prova', window.open);
   });
 
   it('render component - user logged in', async () => {
