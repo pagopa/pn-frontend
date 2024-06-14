@@ -22,7 +22,6 @@ vi.mock('react-i18next', () => ({
     i18n: { language: 'it' },
   }),
 }));
-
 vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
 
 const unmockedFetch = global.fetch;
@@ -53,6 +52,8 @@ const reduxInitialState = {
 
 describe('App', async () => {
   let mock: MockAdapter;
+  const mockOpenFn = vi.fn();
+  const originalOpen = window.open;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -62,6 +63,11 @@ describe('App', async () => {
       Promise.resolve({
         json: () => Promise.resolve([]),
       }) as Promise<Response>;
+
+    Object.defineProperty(window, 'open', {
+      configurable: true,
+      value: mockOpenFn,
+    });
   });
 
   afterEach(() => {
@@ -72,6 +78,7 @@ describe('App', async () => {
   afterAll(() => {
     mock.restore();
     global.fetch = unmockedFetch;
+    Object.defineProperty(window, 'open', { configurable: true, value: originalOpen });
   });
 
   it('render component - user not logged in', async () => {
@@ -85,8 +92,10 @@ describe('App', async () => {
     expect(footer).toBeInTheDocument();
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-    const loginFePage = result!.queryByTestId('access-denied');
-    expect(loginFePage).not.toBeInTheDocument();
+
+    expect(window.open).toHaveBeenCalledTimes(1);
+
+    console.log('--------prova', window.open);
   });
 
   it('render component - user logged in', async () => {
