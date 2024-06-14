@@ -31,7 +31,7 @@ import { getConfiguration } from '../services/configuration.service';
 
 const LinkApiB2b: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { API_B2B_LINK } = getConfiguration();
-  return <Link href={API_B2B_LINK}>{children}</Link>;
+  return <Link href={API_B2B_LINK} target="_blank">{children}</Link>;
 };
 
 const TableGroupsId = ({ groups }: { groups?: Array<{ id: string; name: string }> }) => {

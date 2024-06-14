@@ -1,8 +1,9 @@
 import { isArray } from 'lodash';
 import { CSSProperties } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
+
+import { GraphColors } from '../../models/Statistics';
 
 export type AggregateDataItem = {
   title: string;
@@ -30,7 +31,6 @@ const AggregateStatistics: React.FC<Props> = ({
   options,
   sx,
 }) => {
-  const { t } = useTranslation(['statistics']);
   const data: Array<{ value: number; name: string }> = values.map((item) => ({
     value: item.value,
     name: item.title,
@@ -50,14 +50,16 @@ const AggregateStatistics: React.FC<Props> = ({
     toolbox: {
       feature: {
         saveAsImage: {
+          type: 'jpg',
           show: true,
-          title: t('save_as_image'),
+          title: '',
           name: 'chart',
           backgroundColor: 'white',
           pixelRatio: 2,
           iconStyle: {
-            borderColor: '#0055AA',
+            color: GraphColors.navy,
           },
+          icon: 'path://M4.16669 16.6667H15.8334V15H4.16669V16.6667ZM15.8334 7.5H12.5V2.5H7.50002V7.5H4.16669L10 13.3333L15.8334 7.5Z',
         },
       },
     },
@@ -79,13 +81,20 @@ const AggregateStatistics: React.FC<Props> = ({
     ],
     ...options,
   };
-
+  
   if (legend) {
     // eslint-disable-next-line functional/immutable-data
     option.legend = {
-      bottom: '0%',
-      left: 'center',
+      show: false
     };
+    return (
+      <PnECharts
+        key="Aggregate"
+        option={option}
+        style={sx}
+        legend={data.map((item) => item.name)}
+      />
+    );
   }
   return <PnECharts key="Aggregate" option={option} style={sx} />;
 };

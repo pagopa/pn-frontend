@@ -27,7 +27,9 @@ export const getDigitalAddresses = createAsyncThunk<Array<DigitalAddress>>(
       const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
       const response = await digitalAddressesFactory.getAddressesV1();
 
-      return response.data as Array<DigitalAddress>;
+      return response.data.filter(
+        (addr) => addr.addressType === AddressType.COURTESY || addr.codeValid
+      ) as Array<DigitalAddress>;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
@@ -68,6 +70,8 @@ export const createOrUpdateAddress = createAsyncThunk<
         address.value = '';
         // eslint-disable-next-line functional/immutable-data
         address.pecValid = false;
+        // eslint-disable-next-line functional/immutable-data
+        address.codeValid = true;
         return address;
       }
 
@@ -75,6 +79,8 @@ export const createOrUpdateAddress = createAsyncThunk<
       if (address.addressType === AddressType.LEGAL) {
         // eslint-disable-next-line functional/immutable-data
         address.pecValid = true;
+        // eslint-disable-next-line functional/immutable-data
+        address.codeValid = true;
       }
       return address;
     } catch (e: any) {

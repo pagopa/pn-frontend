@@ -406,7 +406,7 @@ const Recipient: React.FC<Props> = ({
                   {values.recipients.length > 1 && (
                     <ButtonNaked
                       data-testid="DeleteRecipientIcon"
-                      aria-label={t('new-notification.steps.remove-recipient')}
+                      aria-label={t('remove-recipient')}
                       onClick={() =>
                         deleteRecipientHandler(
                           errors,

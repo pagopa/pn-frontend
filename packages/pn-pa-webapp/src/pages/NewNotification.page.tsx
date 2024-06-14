@@ -131,7 +131,6 @@ const NewNotification = () => {
             </Typography>
             {!IS_PAYMENT_ENABLED && (
               <Alert
-                tabIndex={0}
                 aria-label={t('new-notification.warning-payment-disabled', { ns: 'notifiche' })}
                 data-testid="alert"
                 sx={{ mt: 4 }}

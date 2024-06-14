@@ -19,4 +19,5 @@ export interface DigitalAddress {
   channelType: LegalChannelType | CourtesyChannelType;
   value: string;
   pecValid?: boolean;
+  codeValid?: boolean;
 }
