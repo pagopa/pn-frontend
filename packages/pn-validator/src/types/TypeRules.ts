@@ -19,6 +19,6 @@ export type TypeRules<TModel, TValue> = [TValue] extends [String | undefined | n
   ? { isBoolean: () => BooleanRuleValidator<TModel, TValue> }
   : [TValue] extends [Array<infer _TEachValue> | undefined | null]
   ? { isArray: () => ArrayRuleValidator<TModel, TValue> }
-  : TValue extends object
+  : [TValue] extends [object | undefined | null]
   ? { isObject: () => ObjectRuleValidator<TModel, TValue> }
-  : {};
+  : never;
