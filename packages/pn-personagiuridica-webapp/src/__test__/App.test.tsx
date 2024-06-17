@@ -12,6 +12,7 @@ import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { apiClient } from '../api/apiClients';
 import { DelegationStatus } from '../models/Deleghe';
 import { PNRole, PartyRole } from '../redux/auth/types';
+import { getConfiguration } from '../services/configuration.service';
 import { RenderResult, act, render } from './test-utils';
 
 vi.mock('react-i18next', () => ({
@@ -92,7 +93,8 @@ describe('App', async () => {
     expect(footer).toBeInTheDocument();
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-    expect(window.open).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(`${getConfiguration().URL_FE_LOGOUT}`, '_self');
   });
 
   it('render component - user logged in', async () => {

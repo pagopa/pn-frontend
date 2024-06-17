@@ -33,8 +33,6 @@ const INITIALIZATION_SEQUENCE = [
   INITIALIZATION_STEPS.SESSION_CHECK,
 ];
 
-const { DISABLE_INACTIVITY_HANDLER } = getConfiguration();
-
 const inactivityTimer = 5 * 60 * 1000;
 
 const manageUnforbiddenError = (e: any) => {
@@ -57,6 +55,7 @@ const manageUnforbiddenError = (e: any) => {
  */
 const SessionGuardRender = () => {
   const [params] = useSearchParams();
+  const { DISABLE_INACTIVITY_HANDLER } = getConfiguration();
 
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
@@ -95,14 +94,14 @@ const SessionGuardRender = () => {
           initTimeout
         />
       );
-    } else if (isAnonymousUser || DISABLE_INACTIVITY_HANDLER) {
+    } else if (isAnonymousUser) {
       const aar = params.get(AppRouteParams.AAR);
       goToLoginPortal(aar);
       return <></>;
     }
     return (
       <InactivityHandler
-        inactivityTimer={inactivityTimer}
+        inactivityTimer={isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? 0 : inactivityTimer}
         onTimerExpired={() => dispatch(logout())}
       >
         <Outlet />
