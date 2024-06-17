@@ -2,6 +2,7 @@ import { Configuration } from '../services/configuration.service';
 import EventStrategyFactory from '../utility/MixpanelUtils/EventStrategyFactory';
 import { AppError, AppErrorFactory, UnknownAppError, errorFactoryManager } from './AppError';
 import { AppResponsePublisher, ResponseEventDispatcher } from './AppResponse';
+import * as screenshot from './Screenshot';
 import { validateCurrentStatus, validateHistory, validateLegaFact } from './appStatus.utility';
 import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
 import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
@@ -143,4 +144,5 @@ export {
   validateCurrentStatus,
   validateLegaFact,
   convertHoursToIntDays,
+  screenshot,
 };
