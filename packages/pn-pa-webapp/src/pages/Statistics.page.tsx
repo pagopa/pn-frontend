@@ -1,13 +1,17 @@
-import { useCallback, useEffect } from 'react';
+/* eslint-disable functional/immutable-data */
+import { useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box, Paper, Stack, Typography } from '@mui/material';
+import DownloadIcon from '@mui/icons-material/Download';
+import { Box, Button, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   TitleBox,
+  formatDate,
   formatDateTime,
   formatToSlicedISOString,
   oneYearAgo,
+  screenshot,
   today,
 } from '@pagopa-pn/pn-commons';
 
@@ -28,12 +32,29 @@ import { RootState } from '../redux/store';
 
 const cxType = CxType.PA;
 
+const filter = (node: HTMLElement) => {
+  const exclusionClasses = ['filter'];
+  return !exclusionClasses.some((classname) => node.classList?.contains(classname));
+};
+
+const handleDownloadJpeg = (elem: HTMLDivElement) =>
+  screenshot
+    .toJpeg(elem, { quality: 0.95, backgroundColor: GraphColors.lightGrey, filter })
+    .then(function (dataUrl) {
+      // eslint-disable-next-line functional/no-let
+      const link = document.createElement('a');
+      link.download = `statistiche-${formatDate(formatToSlicedISOString(today), false, '-')}.jpeg`;
+      link.href = dataUrl;
+      link.click();
+    });
+
 const getFilterDates = (filter: StatisticsFilter | null) =>
   filter
     ? [filter.startDate, filter.endDate]
     : [filterDefaultValues.startDate, filterDefaultValues.endDate];
 
 const Statistics = () => {
+  const exportJpgNode = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['statistics']);
   const statisticsData = useAppSelector((state: RootState) => state.statisticsState.statistics);
@@ -59,6 +80,14 @@ const Statistics = () => {
   const Subtitle = (
     <Stack direction={'row'} display="flex" justifyContent="space-between" alignItems="center">
       <Typography>{t('subtitle', { organization: loggedUserOrganizationParty?.name })}</Typography>
+      <Button
+        onClick={() => handleDownloadJpeg(exportJpgNode.current as HTMLDivElement)}
+        variant="outlined"
+        endIcon={<DownloadIcon />}
+        sx={{ whiteSpace: 'nowrap' }}
+      >
+        {t('export_all')}
+      </Button>
     </Stack>
   );
 
@@ -100,7 +129,7 @@ const Statistics = () => {
               {t('section_1')}
             </Typography>
             <FilterStatistics filter={statisticsFilter} />
-            <Stack direction={'column'} spacing={3} pt={2}>
+            <Stack ref={exportJpgNode} direction={'column'} spacing={3} pt={2}>
               <FiledNotificationsStatistics
                 startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
                 endDate={statisticsData.endDate ?? formatToSlicedISOString(today)}
@@ -120,7 +149,7 @@ const Statistics = () => {
                   />
                 </Box>
               </Stack>
-              <Box>
+              <Box className="filter">
                 <Typography variant="h6" component="h5" mt={6}>
                   {t('section_2')}
                 </Typography>
