@@ -60,24 +60,6 @@ export async function toCanvas<T extends HTMLElement>(
   return canvas;
 }
 
-// export async function toPixelData<T extends HTMLElement>(
-//   node: T,
-//   options: Options = {}
-// ): Promise<Uint8ClampedArray> {
-//   const { width, height } = getImageSize(node, options);
-//   const canvas = await toCanvas(node, options);
-//   const ctx = canvas.getContext('2d')!;
-//   return ctx.getImageData(0, 0, width, height).data;
-// }
-
-// export async function toPng<T extends HTMLElement>(
-//   node: T,
-//   options: Options = {}
-// ): Promise<string> {
-//   const canvas = await toCanvas(node, options);
-//   return canvas.toDataURL();
-// }
-
 export async function toJpeg<T extends HTMLElement>(
   node: T,
   options: Options = {}
@@ -85,18 +67,3 @@ export async function toJpeg<T extends HTMLElement>(
   const canvas = await toCanvas(node, options);
   return canvas.toDataURL('image/jpeg', options.quality ?? 1);
 }
-
-// export async function toBlob<T extends HTMLElement>(
-//   node: T,
-//   options: Options = {}
-// ): Promise<Blob | null> {
-//   const canvas = await toCanvas(node, options);
-//   return await canvasToBlob(canvas);
-// }
-
-// export async function getFontEmbedCSS<T extends HTMLElement>(
-//   node: T,
-//   options: Options = {}
-// ): Promise<string> {
-//   return getWebFontCSS(node, options);
-// }
