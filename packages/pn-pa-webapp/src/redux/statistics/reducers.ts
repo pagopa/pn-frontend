@@ -43,7 +43,7 @@ export const hasData = (state: RootState) => {
     state.statisticsState.statistics?.data?.[StatisticsDataTypes.FiledStatistics][
       NotificationStatus.REFUSED
     ];
-  return accepted && refused && accepted.count > 0 && refused.count > 0;
+  return accepted && refused && (accepted.count > 0 || refused.count > 0);
 };
 
 export default statisticsSlice;
