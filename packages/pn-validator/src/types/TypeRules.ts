@@ -10,15 +10,15 @@ import { StringRuleValidator } from '../ruleValidators/StringRuleValidator';
 // check https://www.typescriptlang.org/docs/handbook/2/conditional-types.html#distributive-conditional-types to get more information
 // the undefined | null union type is to allow validation on optional key
 export type TypeRules<TModel, TValue> = [TValue] extends [String | undefined | null]
-  ? { isString: () => StringRuleValidator<TModel, TValue> }
+  ? { isString: () => StringRuleValidator<TModel, NonNullable<TValue>> }
   : [TValue] extends [Number | undefined | null]
-  ? { isNumber: () => NumberRuleValidator<TModel, TValue> }
+  ? { isNumber: () => NumberRuleValidator<TModel, NonNullable<TValue>> }
   : [TValue] extends [Date | undefined | null]
-  ? { isDate: () => DateRuleValidator<TModel, TValue> }
+  ? { isDate: () => DateRuleValidator<TModel, NonNullable<TValue>> }
   : [TValue] extends [Boolean | undefined | null]
-  ? { isBoolean: () => BooleanRuleValidator<TModel, TValue> }
+  ? { isBoolean: () => BooleanRuleValidator<TModel, NonNullable<TValue>> }
   : [TValue] extends [Array<infer _TEachValue> | undefined | null]
-  ? { isArray: () => ArrayRuleValidator<TModel, TValue> }
+  ? { isArray: () => ArrayRuleValidator<TModel, NonNullable<TValue>> }
   : [TValue] extends [object | undefined | null]
-  ? { isObject: () => ObjectRuleValidator<TModel, TValue> }
+  ? { isObject: () => ObjectRuleValidator<TModel, NonNullable<TValue>> }
   : never;
