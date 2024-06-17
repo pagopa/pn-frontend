@@ -75,8 +75,9 @@ const NewApiKey = () => {
         groups: values.groups.map((e) => e.id),
       };
       if (formik.isValid) {
-        void dispatch(newApiKey({ ...newApiKeyValues }));
-        setApiKeySent(true);
+        void dispatch(newApiKey({ ...newApiKeyValues }))
+          .unwrap()
+          .then(() => setApiKeySent(true));
       }
     },
   });
