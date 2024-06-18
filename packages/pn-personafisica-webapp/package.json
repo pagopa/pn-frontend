@@ -36,7 +36,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "yarn generate && vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "tsc && vitest --run",

@@ -29,3 +29,6 @@ yarn-error.log*
 
 # config
 public/conf/config.json
+
+# auto generated clients
+/src/generated-client
