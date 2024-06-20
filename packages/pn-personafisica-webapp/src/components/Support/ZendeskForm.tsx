@@ -1,9 +1,15 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { appStateActions } from '@pagopa-pn/pn-commons';
 
 import { ZendeskAuthorizationDTO } from '../../models/Support';
+import { useAppDispatch } from '../../redux/hooks';
 
 const ZendeskForm: React.FC<{ data: ZendeskAuthorizationDTO }> = ({ data }) => {
   const { action_url: url, jwt, return_to: returnTo } = data;
+  const dispatch = useAppDispatch();
+  const { t } = useTranslation(['common']);
 
   useEffect(() => {
     if (url && jwt && returnTo) {
@@ -12,7 +18,12 @@ const ZendeskForm: React.FC<{ data: ZendeskAuthorizationDTO }> = ({ data }) => {
         try {
           form.submit();
         } catch (e) {
-          console.log(e);
+          dispatch(
+            appStateActions.addError({
+              title: t('messages.generic-title'),
+              message: t('messages.generic-message'),
+            })
+          );
         }
       }
     }
