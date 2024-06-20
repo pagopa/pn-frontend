@@ -4,9 +4,10 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { AccessDenied, IllusQuestion, LoadingPage } from '@pagopa-pn/pn-commons';
 
-import { NotificationsApi } from '../api/notifications/Notifications.api';
 import { NotificationId } from '../models/Notifications';
 import { PFEventsType } from '../models/PFEventsType';
+import { useAppDispatch } from '../redux/hooks';
+import { exchangeNotificationQrCode } from '../redux/notification/actions';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 import {
   DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM,
@@ -23,6 +24,7 @@ function notificationDetailPath(notificationId: NotificationId): string {
 
 const AARGuard = () => {
   const location = useLocation();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche']);
   const [fetchError, setFetchError] = useState(false);
@@ -34,17 +36,20 @@ const AARGuard = () => {
   }, [location]);
 
   useEffect(() => {
-    const fetchNotificationFromQrCode = async () => {
-      if (aar) {
-        try {
-          const fetchedData = await NotificationsApi.exchangeNotificationQrCode(aar);
-          setNotificationId(fetchedData);
-        } catch {
-          setFetchError(true);
-        }
-      }
-    };
-    void fetchNotificationFromQrCode();
+    if (aar) {
+      const fetchNotificationFromQrCode = () =>
+        dispatch(exchangeNotificationQrCode({ aarQrCodeValue: aar }))
+          .unwrap()
+          .then((notification) => {
+            if (notification) {
+              setNotificationId(notification);
+            }
+          })
+          .catch(() => {
+            setFetchError(true);
+          });
+      void fetchNotificationFromQrCode();
+    }
   }, [aar]);
 
   useEffect(() => {

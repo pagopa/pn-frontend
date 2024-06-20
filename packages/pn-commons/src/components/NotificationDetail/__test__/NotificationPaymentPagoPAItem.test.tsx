@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
-import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import {
   PagoPAPaymentFullDetails,
   PaymentDetails,
@@ -14,8 +14,8 @@ import NotificationPaymentPagoPAItem from '../NotificationPaymentPagoPAItem';
 
 describe('NotificationPaymentPagoPAItem Component', () => {
   const pagoPAItems: PaymentDetails[] = populatePaymentsPagoPaF24(
-    notificationToFe.timeline,
-    notificationToFe.recipients[0].payments as PaymentDetails[],
+    notificationDTO.timeline,
+    notificationDTO.recipients[0].payments as PaymentDetails[],
     paymentInfo
   );
 

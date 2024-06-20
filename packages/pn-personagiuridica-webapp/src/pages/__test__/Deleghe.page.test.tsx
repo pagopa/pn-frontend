@@ -3,14 +3,9 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
-import { arrayOfDelegates, arrayOfDelegators } from '../../__mocks__/Delegations.mock';
+import { mandatesByDelegate, mandatesByDelegator } from '../../__mocks__/Delegations.mock';
 import { fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import {
-  DELEGATIONS_BY_DELEGATE,
-  DELEGATIONS_BY_DELEGATOR,
-} from '../../api/delegations/delegations.routes';
-import { GET_GROUPS } from '../../api/external-registries/external-registries-routes';
 import DelegatesByCompany from '../../components/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../../components/Deleghe/DelegationsOfTheCompany';
 import * as routes from '../../navigation/routes.const';
@@ -40,13 +35,13 @@ describe('Deleghe page', async () => {
   });
 
   it('renders deleghe page', async () => {
-    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
-    mock.onPost(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, {
-      resultsPage: arrayOfDelegators,
+    mock.onGet('/bff/v1/mandate/delegator').reply(200, mandatesByDelegator);
+    mock.onPost(`/bff/v1/mandate/delegate/?size=10`).reply(200, {
+      resultsPage: mandatesByDelegate,
       nextPagesKey: [],
       moreResult: false,
     });
-    mock.onGet(GET_GROUPS()).reply(200, []);
+    mock.onGet('/bff/v1/pg/groups').reply(200, []);
     const { container, queryByTestId, getByTestId } = render(
       <MemoryRouter initialEntries={[routes.DELEGHEACARICO]}>
         <Routes>
@@ -73,13 +68,13 @@ describe('Deleghe page', async () => {
   });
 
   it('test changing tab', async () => {
-    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
-    mock.onPost(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, {
-      resultsPage: arrayOfDelegators,
+    mock.onGet('/bff/v1/mandate/delegator').reply(200, mandatesByDelegator);
+    mock.onPost(`/bff/v1/mandate/delegate/?size=10`).reply(200, {
+      resultsPage: mandatesByDelegate,
       nextPagesKey: [],
       moreResult: false,
     });
-    mock.onGet(GET_GROUPS()).reply(200, []);
+    mock.onGet('/bff/v1/pg/groups').reply(200, []);
     const { queryByTestId, getByTestId } = render(
       <MemoryRouter initialEntries={[routes.DELEGHEACARICO]}>
         <Routes>
@@ -102,7 +97,7 @@ describe('Deleghe page', async () => {
   });
 
   it('user with groups', async () => {
-    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
+    mock.onGet('/bff/v1/mandate/delegator').reply(200, mandatesByDelegator);
     const { container, queryByTestId, getByTestId } = render(
       <MemoryRouter initialEntries={[routes.DELEGHEACARICO]}>
         <Routes>

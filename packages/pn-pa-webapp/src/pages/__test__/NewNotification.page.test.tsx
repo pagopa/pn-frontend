@@ -14,8 +14,6 @@ import { userResponse } from '../../__mocks__/Auth.mock';
 import { newNotification, newNotificationGroups } from '../../__mocks__/NewNotification.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { CREATE_NOTIFICATION, GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
-import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import { PAAppErrorFactory } from '../../utility/AppError/PAAppErrorFactory';
 import { newNotificationMapper } from '../../utility/notification.utility';
@@ -48,7 +46,7 @@ describe('NewNotification Page without payment', async () => {
 
   beforeEach(() => {
     mockIsPaymentEnabledGetter.mockReturnValue(false);
-    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(200, newNotificationGroups);
   });
 
   afterEach(() => {
@@ -229,7 +227,7 @@ describe('NewNotification Page without payment', async () => {
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     };
-    mock.onPost(CREATE_NOTIFICATION(), mappedNotification).reply(200, mockResponse);
+    mock.onPost('/bff/v1/notifications/sent', mappedNotification).reply(200, mockResponse);
     // render component
     // because all the step are already deeply tested, we can set the new notification already populated
     await act(async () => {
@@ -282,7 +280,7 @@ describe('NewNotification Page without payment', async () => {
         },
       ],
     };
-    mock.onPost(CREATE_NOTIFICATION(), mappedNotification).reply(409, mockResponse);
+    mock.onPost('/bff/v1/notifications/sent', mappedNotification).reply(409, mockResponse);
 
     await act(async () => {
       const Component = () => {

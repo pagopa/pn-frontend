@@ -33,9 +33,7 @@ function Router() {
         <Route path="/" element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
           <Route path="/" element={<ToSGuard />}>
             <Route path={routes.DASHBOARD} element={<Dashboard />} />
-            {IS_STATISTICS_ENABLED &&
-              <Route path={routes.STATISTICHE} element={<Statistics />} />
-            }
+            {IS_STATISTICS_ENABLED && <Route path={routes.STATISTICHE} element={<Statistics />} />}
             <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
             {getConfiguration().IS_MANUAL_SEND_ENABLED && (
               <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />

@@ -1,7 +1,7 @@
 import {
   AppStatusDTOValidator,
   BEDowntimeValidator,
-  DowntimeLogPageDTOValidator,
+  DowntimeLogHistoryDTOValidator,
 } from './appStatus.validator';
 
-export { DowntimeLogPageDTOValidator, AppStatusDTOValidator, BEDowntimeValidator };
+export { DowntimeLogHistoryDTOValidator, AppStatusDTOValidator, BEDowntimeValidator };

@@ -1,8 +1,8 @@
 import { vi } from 'vitest';
 
-import { mockApiKeysDTO, mockApiKeysForFE, mockGroups } from '../../__mocks__/ApiKeys.mock';
+import { mockApiKeysDTO } from '../../__mocks__/ApiKeys.mock';
 import { ApiKeyStatus } from '../../models/ApiKeys';
-import { TooltipApiKey, apikeysMapper, getApiKeyStatusInfos } from '../apikeys.utility';
+import { TooltipApiKey, getApiKeyStatusInfos } from '../apikeys.utility';
 
 // mock imports
 vi.mock('react-i18next', () => ({
@@ -16,18 +16,13 @@ describe('test apikeys utilities', () => {
   it('getApiKeyStatusInfos', () => {
     const statusInfo = getApiKeyStatusInfos(
       ApiKeyStatus.ENABLED,
-      mockApiKeysForFE.items[0].statusHistory
+      mockApiKeysDTO.items[0].statusHistory
     );
     expect(statusInfo).toStrictEqual({
       color: 'success',
       label: 'status.enabled',
       description: 'status.enabled-description',
-      tooltip: <TooltipApiKey history={mockApiKeysForFE.items[0].statusHistory} />,
+      tooltip: <TooltipApiKey history={mockApiKeysDTO.items[0].statusHistory} />,
     });
-  });
-
-  it('apikeysMapper', () => {
-    const mappedApikeys = apikeysMapper(mockApiKeysDTO.items, mockGroups);
-    expect(mappedApikeys).toStrictEqual(mockApiKeysForFE.items);
   });
 });

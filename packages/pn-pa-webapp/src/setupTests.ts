@@ -10,7 +10,7 @@ import { initStore } from './redux/store';
 
 beforeAll(() => {
   Configuration.setForTest<any>({
-    API_BASE_URL: 'mock-api-base-url',
+    API_BASE_URL: 'https://mock-api-base-url',
     DISABLE_INACTIVITY_HANDLER: true,
     ONE_TRUST_DRAFT_MODE: true,
     ONE_TRUST_PP: '365c84c5-9329-4ec5-89f5-e53572eda132',
@@ -21,9 +21,9 @@ beforeAll(() => {
     MOCK_USER: false,
     LOG_REDUX_ACTIONS: false,
     APP_VERSION: 'mock-version',
-    SELFCARE_URL_FE_LOGIN: 'mock-selfcare-login',
-    SELFCARE_BASE_URL: 'mock-selfcare.base',
-    SELFCARE_SEND_PROD_ID: 'mock-prod-id',
+    SELFCARE_URL_FE_LOGIN: 'https://test.selfcare.pagopa.it/auth/login',
+    SELFCARE_BASE_URL: 'https://test.selfcare.pagopa.it',
+    SELFCARE_SEND_PROD_ID: 'prod-pn-test',
     IS_PAYMENT_ENABLED: false,
     MIXPANEL_TOKEN: 'DUMMY',
     IS_MANUAL_SEND_ENABLED: true,

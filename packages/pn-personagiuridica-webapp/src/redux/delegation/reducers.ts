@@ -1,21 +1,21 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { Delegation, DelegationStatus, DelegatorsFormFilters } from '../../models/Deleghe';
+import { Delegate, DelegationStatus, Delegator, DelegatorsFormFilters } from '../../models/Deleghe';
 import { Groups } from '../../models/groups';
 import {
-  acceptDelegation,
-  getDelegatesByCompany,
-  getDelegators,
+  acceptMandate,
   getGroups,
-  rejectDelegation,
-  revokeDelegation,
-  updateDelegation,
+  getMandatesByDelegator,
+  rejectMandate,
+  revokeMandate,
+  searchMandatesByDelegate,
+  updateMandate,
 } from './actions';
 
 const initialState = {
   delegations: {
-    delegators: [] as Array<Delegation>,
-    delegates: [] as Array<Delegation>,
+    delegators: [] as Array<Delegator>,
+    delegates: [] as Array<Delegate>,
   },
   pagination: {
     nextPagesKey: [] as Array<string>,
@@ -54,10 +54,10 @@ const delegationsSlice = createSlice({
     resetState: () => initialState,
   },
   extraReducers: (builder) => {
-    builder.addCase(getDelegatesByCompany.fulfilled, (state, action) => {
+    builder.addCase(getMandatesByDelegator.fulfilled, (state, action) => {
       state.delegations.delegates = action.payload;
     });
-    builder.addCase(getDelegators.fulfilled, (state, action) => {
+    builder.addCase(searchMandatesByDelegate.fulfilled, (state, action) => {
       state.delegations.delegators = action.payload.resultsPage;
       state.pagination.moreResult = action.payload.moreResult;
       // because we can jump from a page to another and nextPagesKey returns only the next three pages, we have to check if that pages already exists
@@ -69,34 +69,34 @@ const delegationsSlice = createSlice({
         }
       }
     });
-    builder.addCase(acceptDelegation.fulfilled, (state, action) => {
-      state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>
-        delegator.mandateId === action.payload.id
-          ? { ...delegator, status: DelegationStatus.ACTIVE, groups: action.payload.groups }
+    builder.addCase(acceptMandate.fulfilled, (state, action) => {
+      state.delegations.delegators = state.delegations.delegators.map((delegator) =>
+        delegator.mandateId === action.meta.arg.id
+          ? { ...delegator, status: DelegationStatus.ACTIVE, groups: action.meta.arg.groups }
           : delegator
       );
     });
-    builder.addCase(revokeDelegation.fulfilled, (state, action) => {
+    builder.addCase(revokeMandate.fulfilled, (state, action) => {
       state.delegations.delegates = state.delegations.delegates.filter(
-        (delegate: Delegation) => delegate.mandateId !== action.payload.id
+        (delegate) => delegate.mandateId !== action.meta.arg
       );
     });
-    builder.addCase(rejectDelegation.fulfilled, (state, action) => {
+    builder.addCase(rejectMandate.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.filter(
-        (delegator: Delegation) => delegator.mandateId !== action.meta.arg
+        (delegator) => delegator.mandateId !== action.meta.arg
       );
       // because a PG can delegate itself, we must check if the rejected delegation is in delegates object and remove it
       state.delegations.delegates = state.delegations.delegates.filter(
-        (delegate) => delegate.mandateId !== action.payload.id
+        (delegate) => delegate.mandateId !== action.meta.arg
       );
     });
     builder.addCase(getGroups.fulfilled, (state, action) => {
       state.groups = action.payload;
     });
-    builder.addCase(updateDelegation.fulfilled, (state, action) => {
-      state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>
-        delegator.mandateId === action.payload.id
-          ? { ...delegator, groups: action.payload.groups }
+    builder.addCase(updateMandate.fulfilled, (state, action) => {
+      state.delegations.delegators = state.delegations.delegators.map((delegator) =>
+        delegator.mandateId === action.meta.arg.id
+          ? { ...delegator, groups: action.meta.arg.groups }
           : delegator
       );
     });

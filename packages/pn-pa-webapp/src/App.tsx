@@ -153,8 +153,8 @@ const ActualApp = () => {
     // TODO fix positioning for this item PN-10851
     if (IS_STATISTICS_ENABLED) {
       // eslint-disable-next-line functional/immutable-data
-      basicMenuItems.splice(1, 0, {
-        label: 'Statistiche',
+      basicMenuItems.splice(2, 0, {
+        label: 'menu.statistics',
         icon: StatisticsIcon,
         route: routes.STATISTICHE,
       });
@@ -187,7 +187,7 @@ const ActualApp = () => {
       void dispatch(getInstitutions());
     }
     if (idOrganization) {
-      void dispatch(getProductsOfInstitution(idOrganization));
+      void dispatch(getProductsOfInstitution());
     }
   }, [sessionToken, getCurrentAppStatus, idOrganization]);
 

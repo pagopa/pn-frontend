@@ -1,77 +1,91 @@
+/* eslint-disable functional/immutable-data */
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Grid, Paper, Stack, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
+import { PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
+import { GraphColors, IFiledStatistics, NotificationStatus } from '../../models/Statistics';
+import AggregateAndTrendStatistics, { AggregateAndTrendData } from './AggregateAndTrendStatistics';
 
-// import theme from './senderDashboard';
+type Props = {
+  startDate: string;
+  endDate: string;
+  data: IFiledStatistics;
+};
 
-const FiledNotificationsStatistics: React.FC = () => {
-  const title = 'Notifiche depositate';
-  const description =
-    'Numero di nofifiche che sono state accettate dalla piattaforma SEND sul totale delle notifiche caricate';
-  const notificationsAmount = '11.560';
-  const notificationsPercent = '69,5%';
-  const textPercent = notificationsPercent + ' del totale delle notifihe caricate su SEND';
+const FiledNotificationsStatistics: React.FC<Props> = ({
+  startDate,
+  endDate,
+  data: statisticsData,
+}) => {
+  const { t } = useTranslation(['statistics']);
+
+  const accepted = statisticsData[NotificationStatus.ACCEPTED];
+  const refused = statisticsData[NotificationStatus.REFUSED];
+
+  const acceptedText = t('filed.accepted');
+  const refusedText = t('filed.refused');
+
+  const acceptedSum = statisticsData[NotificationStatus.ACCEPTED].count;
+  const refusedSum = statisticsData[NotificationStatus.REFUSED].count;
+
+  const data: Array<AggregateAndTrendData> = [
+    {
+      title: acceptedText,
+      total: acceptedSum,
+      details: accepted?.details,
+    },
+    {
+      title: refusedText,
+      total: refusedSum,
+      details: refused?.details,
+    },
+  ];
+
+  const notificationsAmount = acceptedSum;
+  const notificationsPercent =
+    acceptedSum > 0 ? Math.floor((acceptedSum / (acceptedSum + refusedSum)) * 1000) / 10 : 0;
 
   const isMobile = useIsMobile();
 
-  const option: PnEChartsProps['option'] = {
-    tooltip: {
-      trigger: 'item',
-    },
-    /* legend: {
-      top: '5%',
-      left: 'center',
-    }, */
-    series: [
-      {
-        // name: 'Access From',
-        type: 'pie',
-        radius: ['60%', '100%'],
-        center: ['50%', '90%'],
-        // adjust the start and end angle
-        startAngle: 180,
-        endAngle: 360,
-        data: [
-          { value: 11560, name: 'Notifiche Depositate' },
-          { value: 9073, name: 'Notifiche non Depositate' },
-          /*  { value: 580, name: 'Email' },
-          { value: 484, name: 'Union Ads' },
-          { value: 300, name: 'Video Ads' }, */
-        ],
-      },
-    ],
-    color: ['#0073e6', '#cccccc'], // customize color to override autoselection from theme palette
-  };
-
   const direction = isMobile ? 'column' : 'row';
   const spacing = isMobile ? 3 : 0;
+
+  const options: PnEChartsProps['option'] = {
+    color: [GraphColors.blue, GraphColors.gold],
+  };
+
   return (
-    // <Grid container direction={direction} spacing={spacing}>
     <Stack spacing={3}>
       <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
         <Grid container direction={direction} spacing={spacing}>
           <Grid item lg={5} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
             <Typography variant="h6" component="h3">
-              {title}
+              {t('filed.title')}
             </Typography>
-            <Typography sx={{ mt: 0.5 }} variant="body2" color="text.primary">
-              {description}
+            <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
+              {t('filed.description')}
             </Typography>
-            <Typography sx={{ fontSize: 50, fontWeight: 'bold' }} color="royalblue">
-              {notificationsAmount}
+            <Typography sx={{ fontSize: 50, fontWeight: 'bold' }} color={GraphColors.blue}>
+              {notificationsAmount.toLocaleString()}
             </Typography>
-            <Typography color="royalblue">{textPercent}</Typography>
+            <Typography color={GraphColors.blue}>
+              <b>{notificationsPercent.toLocaleString()}%</b> {t('filed.description2')}
+            </Typography>
           </Grid>
-          <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 }, minHeight: '400px' }}>
-            <PnECharts option={option} />
+          <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
+            <AggregateAndTrendStatistics
+              startDate={startDate}
+              endDate={endDate}
+              data={data}
+              options={options}
+            />
           </Grid>
         </Grid>
       </Paper>
     </Stack>
-    // </Grid>
   );
 };
 

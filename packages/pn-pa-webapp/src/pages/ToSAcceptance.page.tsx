@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Link, Typography } from '@mui/material';
 import {
+  ConsentActionType,
   ConsentUser,
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
@@ -11,7 +12,7 @@ import {
 import { TOSAgreement } from '@pagopa/mui-italia';
 
 import * as routes from '../navigation/routes.const';
-import { acceptPrivacy, acceptToS } from '../redux/auth/actions';
+import { acceptTosPrivacy } from '../redux/auth/actions';
 import { useAppDispatch } from '../redux/hooks';
 
 type TermsOfServiceProps = {
@@ -60,16 +61,29 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
   );
 
   const handleAccept = async () => {
-    try {
-      if (!tosConsent.accepted) {
-        await dispatch(acceptToS(tosConsent.consentVersion)).unwrap();
-      }
-      if (!privacyConsent.accepted) {
-        await dispatch(acceptPrivacy(privacyConsent.consentVersion)).unwrap();
-      }
-    } catch (e) {
-      console.log(e);
+    // eslint-disable-next-line functional/no-let
+    let tosPrivacyBody = {};
+
+    if (!tosConsent.accepted) {
+      tosPrivacyBody = {
+        tos: {
+          action: ConsentActionType.ACCEPT,
+          version: tosConsent.consentVersion,
+        },
+      };
     }
+
+    if (!privacyConsent.accepted) {
+      tosPrivacyBody = {
+        ...tosPrivacyBody,
+        privacy: {
+          action: ConsentActionType.ACCEPT,
+          version: privacyConsent.consentVersion,
+        },
+      };
+    }
+
+    await dispatch(acceptTosPrivacy(tosPrivacyBody));
   };
 
   useEffect(() => {

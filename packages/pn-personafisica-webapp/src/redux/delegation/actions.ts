@@ -1,46 +1,84 @@
-import { Sort, performThunkAction } from '@pagopa-pn/pn-commons';
+import { Sort, parseError } from '@pagopa-pn/pn-commons';
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
-import { DelegationsApi } from '../../api/delegations/Delegations.api';
+import { apiClient } from '../../api/apiClients';
+import { MandateApiFactory } from '../../generated-client/mandate';
 import { DelegationData } from '../../models/Deleghe';
-import { AcceptDelegationResponse, Delegation } from './types';
+import { Delegate, Delegator } from './types';
 
 export enum DELEGATION_ACTIONS {
-  GET_DELEGATES = 'getDelegates',
-  GET_DELEGATORS = 'getDelegators',
+  GET_MANDATES_BY_DELEGATOR = 'getMandatesByDelegator',
+  GET_MANDATES_BY_DELEGATE = 'getMandatesByDelegate',
+  REVOKE_MANDATE = 'revokeMandate',
+  REJECT_MANDATE = 'rejectMandate',
+  ACCEPT_MANDATE = 'acceptMandate',
 }
 
-export const getDelegates = createAsyncThunk<Array<Delegation>>(
-  DELEGATION_ACTIONS.GET_DELEGATES,
-  performThunkAction(() => DelegationsApi.getDelegates())
+export const getMandatesByDelegator = createAsyncThunk<Array<Delegate>>(
+  DELEGATION_ACTIONS.GET_MANDATES_BY_DELEGATOR,
+  async (_params, { rejectWithValue }) => {
+    try {
+      const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+      const response = await mandateApiFactory.getMandatesByDelegatorV1();
+      return response.data as Array<Delegate>;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
-export const getDelegators = createAsyncThunk<Array<Delegation>>(
-  DELEGATION_ACTIONS.GET_DELEGATORS,
-  performThunkAction(() => DelegationsApi.getDelegators())
+export const getMandatesByDelegate = createAsyncThunk<Array<Delegator>>(
+  DELEGATION_ACTIONS.GET_MANDATES_BY_DELEGATE,
+  async (_params, { rejectWithValue }) => {
+    try {
+      const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+      const response = await mandateApiFactory.getMandatesByDelegateV1();
+      return response.data as Array<Delegator>;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
-export const revokeDelegation = createAsyncThunk<{ id: string }, string>(
-  'revokeDelegation',
-  performThunkAction((id) => DelegationsApi.revokeDelegation(id))
+export const revokeMandate = createAsyncThunk<void, string>(
+  DELEGATION_ACTIONS.REVOKE_MANDATE,
+  async (params, { rejectWithValue }) => {
+    try {
+      const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+      const response = await mandateApiFactory.revokeMandateV1(params);
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
-export const rejectDelegation = createAsyncThunk<{ id: string }, string>(
-  'rejectDelegation',
-  performThunkAction((id) => DelegationsApi.rejectDelegation(id))
+export const rejectMandate = createAsyncThunk<void, string>(
+  DELEGATION_ACTIONS.REJECT_MANDATE,
+  async (params, { rejectWithValue }) => {
+    try {
+      const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+      const response = await mandateApiFactory.rejectMandateV1(params);
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
-export const acceptDelegation = createAsyncThunk<
-  AcceptDelegationResponse,
-  { id: string; code: string }
->(
-  'acceptDelegation',
-  performThunkAction(async ({ id, code }: { id: string; code: string }) => {
-    const data = {
-      verificationCode: code,
-    };
-    return await DelegationsApi.acceptDelegation(id, data);
-  })
+export const acceptMandate = createAsyncThunk<void, { id: string; code: string }>(
+  DELEGATION_ACTIONS.ACCEPT_MANDATE,
+  async (params, { rejectWithValue }) => {
+    try {
+      const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+      const response = await mandateApiFactory.acceptMandateV1(params.id, {
+        verificationCode: params.code,
+      });
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
 export const openRevocationModal =

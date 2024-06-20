@@ -14,11 +14,10 @@ import DigitalContactElem from './DigitalContactElem';
 import DigitalContactsCard from './DigitalContactsCard';
 
 type Props = {
-  recipientId: string;
   legalAddresses: Array<DigitalAddress>;
 };
 
-const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
+const LegalContactsList = ({ legalAddresses }: Props) => {
   const { t, i18n } = useTranslation(['common', 'recapiti']);
   const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
@@ -101,7 +100,6 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
                 {t('legal-contacts.pec-added', { ns: 'recapiti' })}
               </Typography>
               <DigitalContactElem
-                recipientId={recipientId}
                 senderId="default"
                 contactType={LegalChannelType.PEC}
                 fields={[
@@ -173,7 +171,6 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
         )}
         <Alert
           role="banner"
-          tabIndex={0}
           aria-label={t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}
           sx={{ mt: 4 }}
           severity="info"

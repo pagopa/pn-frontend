@@ -7,12 +7,12 @@ import {
   TrackedEvent,
 } from '@pagopa-pn/pn-commons';
 
-import { Delegation } from '../../../redux/delegation/types';
+import { Delegate, Delegator } from '../../../redux/delegation/types';
 import { DelegationStatus } from '../../status.utility';
 
 type SendYourMandate = {
-  delegates: Array<Delegation>;
-  delegators: Array<Delegation>;
+  delegates: Array<Delegate>;
+  delegators: Array<Delegator>;
 };
 
 export class SendYourMandatesStrategy implements EventStrategy {

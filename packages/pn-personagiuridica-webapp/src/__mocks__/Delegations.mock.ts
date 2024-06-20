@@ -19,7 +19,7 @@ export const mockCreateDelegation = {
   dateto: '2022-04-16',
 };
 
-export const arrayOfDelegates: Array<Delegate> = [
+export const mandatesByDelegator: Array<Delegate> = [
   {
     mandateId: '1',
     delegate: {
@@ -64,7 +64,7 @@ export const arrayOfDelegates: Array<Delegate> = [
   },
 ];
 
-export const arrayOfDelegators: Array<Delegator> = [
+export const mandatesByDelegate: Array<Delegator> = [
   {
     mandateId: '3',
     delegator: {

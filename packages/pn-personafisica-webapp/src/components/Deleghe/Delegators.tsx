@@ -17,7 +17,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { DelegationColumnData, DelegationData } from '../../models/Deleghe';
-import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
+import { DELEGATION_ACTIONS, getMandatesByDelegate } from '../../redux/delegation/actions';
 import { setDelegatorsSorting } from '../../redux/delegation/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -81,8 +81,8 @@ const Delegators = () => {
         <Typography variant="h5">{t('deleghe.delegatorsTitle')}</Typography>
       </Stack>
       <ApiErrorWrapper
-        apiId={DELEGATION_ACTIONS.GET_DELEGATORS}
-        reloadAction={() => dispatch(getDelegators())}
+        apiId={DELEGATION_ACTIONS.GET_MANDATES_BY_DELEGATE}
+        reloadAction={() => dispatch(getMandatesByDelegate())}
         mainText={t('deleghe.delegatorsApiErrorMessage')}
       >
         {rows.length > 0 ? (

@@ -1,65 +1,122 @@
-import { performThunkAction } from '@pagopa-pn/pn-commons';
-import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
-import { DelegationsApi } from '../../api/delegations/Delegations.api';
-import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
-import {
-  AcceptDelegationResponse,
-  Delegation,
-  GetDelegatorsFilters,
-  GetDelegatorsResponse,
-} from '../../models/Deleghe';
-import { Groups } from '../../models/groups';
+import { parseError } from '@pagopa-pn/pn-commons';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+
+import { apiClient } from '../../api/apiClients';
+import { MandateApiFactory } from '../../generated-client/mandate';
+import { Delegate, GetDelegatorsFilters, GetDelegatorsResponse } from '../../models/Deleghe';
+import { GroupStatus, Groups } from '../../models/groups';
+import { InfoRecipientApiFactory } from '../../generated-client/recipient-info';
 
 export enum DELEGATION_ACTIONS {
-  GET_DELEGATES_BY_COMPANY = 'getDelegatesByCompany',
-  GET_DELEGATORS = 'getDelegators',
+  GET_MANDATES_BY_DELEGATOR = 'getMandatesByDelegator',
+  GET_GROUPS = 'getGroups',
+  SEARCH_MANDATES_BY_DELEGATE = 'searchMandatesByDelegate',
+  REVOKE_MANDATE = 'revokeMandate',
+  REJECT_MANDATE = 'rejectMandate',
+  ACCEPT_MANDATE = 'acceptMandate',
+  UPDATE_MANDATE = 'updateMandate',
 }
 
-export const getDelegatesByCompany = createAsyncThunk<Array<Delegation>>(
-  DELEGATION_ACTIONS.GET_DELEGATES_BY_COMPANY,
-  performThunkAction(() => DelegationsApi.getDelegatesByCompany())
+export const getMandatesByDelegator = createAsyncThunk<Array<Delegate>>(
+  DELEGATION_ACTIONS.GET_MANDATES_BY_DELEGATOR,
+  async (_params, { rejectWithValue }) => {
+    try {
+      const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+      const response = await mandateApiFactory.getMandatesByDelegatorV1();
+      return response.data as Array<Delegate>;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
-export const getDelegators = createAsyncThunk<GetDelegatorsResponse, GetDelegatorsFilters>(
-  DELEGATION_ACTIONS.GET_DELEGATORS,
-  performThunkAction((params: GetDelegatorsFilters) => DelegationsApi.getDelegators(params))
+export const searchMandatesByDelegate = createAsyncThunk<
+  GetDelegatorsResponse,
+  GetDelegatorsFilters
+>(DELEGATION_ACTIONS.SEARCH_MANDATES_BY_DELEGATE, async (params, { rejectWithValue }) => {
+  try {
+    const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+    const response = await mandateApiFactory.searchMandatesByDelegateV1(
+      params.size,
+      { taxId: params.taxId, groups: params.groups, status: params.status },
+      params.nextPageKey
+    );
+    return response.data as GetDelegatorsResponse;
+  } catch (e) {
+    return rejectWithValue(parseError(e));
+  }
+});
+
+export const revokeMandate = createAsyncThunk<void, string>(
+  DELEGATION_ACTIONS.REVOKE_MANDATE,
+  async (params, { rejectWithValue }) => {
+    try {
+      const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+      const response = await mandateApiFactory.revokeMandateV1(params);
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
-export const revokeDelegation = createAsyncThunk<{ id: string }, string>(
-  'revokeDelegation',
-  performThunkAction((id) => DelegationsApi.revokeDelegation(id))
+export const rejectMandate = createAsyncThunk<void, string>(
+  DELEGATION_ACTIONS.REJECT_MANDATE,
+  async (params, { rejectWithValue }) => {
+    try {
+      const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+      const response = await mandateApiFactory.rejectMandateV1(params);
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
-export const rejectDelegation = createAsyncThunk<{ id: string }, string>(
-  'rejectDelegation',
-  performThunkAction((id) => DelegationsApi.rejectDelegation(id))
-);
-
-export const acceptDelegation = createAsyncThunk<
-  AcceptDelegationResponse,
+export const acceptMandate = createAsyncThunk<
+  void,
   { id: string; code: string; groups: Array<{ id: string; name: string }> }
->(
-  'acceptDelegation',
-  performThunkAction(({ id, code, groups }) => {
-    const data = {
-      verificationCode: code,
-      groups,
-    };
-    return DelegationsApi.acceptDelegation(id, data);
-  })
+>(DELEGATION_ACTIONS.ACCEPT_MANDATE, async (params, { rejectWithValue }) => {
+  try {
+    const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+    const response = await mandateApiFactory.acceptMandateV1(params.id, {
+      verificationCode: params.code,
+      groups: params.groups.map((g) => g.id),
+    });
+    return response.data;
+  } catch (e) {
+    return rejectWithValue(parseError(e));
+  }
+});
+
+/**
+ * Get groups of pg
+ */
+export const getGroups = createAsyncThunk(
+  DELEGATION_ACTIONS.GET_GROUPS, async (params: GroupStatus | undefined, { rejectWithValue }) => {
+    try {
+      const infoRecipientFactory = InfoRecipientApiFactory(undefined, undefined, apiClient);
+      const response = await infoRecipientFactory.getPGGroupsV1(params);
+      return response.data as Array<Groups>;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
-export const getGroups = createAsyncThunk<Array<Groups>>(
-  'getGroups',
-  performThunkAction(() => ExternalRegistriesAPI.getGroups())
-);
-
-export const updateDelegation = createAsyncThunk<
-  AcceptDelegationResponse,
+export const updateMandate = createAsyncThunk<
+  void,
   { id: string; groups: Array<{ id: string; name: string }> }
->(
-  'updateDelegation',
-  performThunkAction(({ id, groups }) => DelegationsApi.updateDelegation(id, groups))
-);
+>(DELEGATION_ACTIONS.UPDATE_MANDATE, async (params, { rejectWithValue }) => {
+  try {
+    const mandateApiFactory = MandateApiFactory(undefined, undefined, apiClient);
+    const response = await mandateApiFactory.updateMandateV1(params.id, {
+      groups: params.groups.map((g) => g.id),
+    });
+    return response.data;
+  } catch (e) {
+    return rejectWithValue(parseError(e));
+  }
+});
 
 export const resetDelegationsState = createAction<void>('resetDelegationsState');

@@ -1,0 +1,75 @@
+{
+  "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.4.0",
+    "generators": {
+      "bff-notifications": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/31eb1dbebfb8aa94d218f1f5026e86c978dc189a/docs/openapi/api-external-pn-bff-pa-notifications.yaml",
+        "output": "./src/generated-client/notifications",
+        "additionalProperties": {
+          "supportsES6": true,
+          "apiPackage": "apis",
+          "modelPackage": "models",
+          "cleanupOutput": true
+        }
+      },
+      "bff-api-keys": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/31eb1dbebfb8aa94d218f1f5026e86c978dc189a/docs/openapi/api-external-pn-bff-pa-apikeys.yaml",
+        "output": "./src/generated-client/api-keys",
+        "additionalProperties": {
+          "supportsES6": true,
+          "apiPackage": "apis",
+          "modelPackage": "models",
+          "cleanupOutput": true
+        }
+      },
+      "bff-tos-privacy": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/31eb1dbebfb8aa94d218f1f5026e86c978dc189a/docs/openapi/api-external-pn-bff-tos-privacy.yaml",
+        "output": "./src/generated-client/tos-privacy",
+        "additionalProperties": {
+          "supportsES6": true,
+          "apiPackage": "apis",
+          "modelPackage": "models",
+          "cleanupOutput": true
+        }
+      },
+      "bff-pa-info": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/31eb1dbebfb8aa94d218f1f5026e86c978dc189a/docs/openapi/api-external-pn-bff-pa-info.yaml",
+        "output": "./src/generated-client/info-pa",
+        "additionalProperties": {
+          "supportsES6": true,
+          "apiPackage": "apis",
+          "modelPackage": "models",
+          "cleanupOutput": true
+        }
+      },
+      "bff-downtime-logs": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/31eb1dbebfb8aa94d218f1f5026e86c978dc189a/docs/openapi/api-external-pn-bff-downtime-logs.yaml",
+        "output": "./src/generated-client/downtime-logs",
+        "additionalProperties": {
+          "supportsES6": true,
+          "apiPackage": "apis",
+          "modelPackage": "models",
+          "cleanupOutput": true
+        }
+      },
+      "bff-sender-dashboard": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/af412f72d4e0b20b5fd485ff8b981ebf00aa00b1/docs/openapi/api-external-pn-bff-sender-dashboard.yaml",
+        "output": "./src/generated-client/sender-dashboard",
+        "additionalProperties": {
+          "supportsES6": true,
+          "apiPackage": "apis",
+          "modelPackage": "models",
+          "cleanupOutput": true
+        }
+      }
+    }
+  }
+}

@@ -11,7 +11,7 @@ import {
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useAppDispatch } from '../../redux/hooks';
-import { getPaymentAttachment } from '../../redux/notification/actions';
+import { getSentNotificationPayment } from '../../redux/notification/actions';
 
 type Props = {
   iun: string;
@@ -25,7 +25,7 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
   const dowloadHandler = () => {
     if (!_.isNil(payment.recIndex) && payment.attachment) {
       dispatch(
-        getPaymentAttachment({
+        getSentNotificationPayment({
           iun,
           attachmentName: PaymentAttachmentSName.PAGOPA,
           recIndex: payment.recIndex,

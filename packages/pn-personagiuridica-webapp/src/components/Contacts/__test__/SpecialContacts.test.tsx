@@ -9,7 +9,11 @@ import {
   testSelect,
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
+import {
+  digitalAddresses,
+  digitalCourtesyAddresses,
+  digitalLegalAddresses,
+} from '../../../__mocks__/Contacts.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import {
   RenderResult,
@@ -22,9 +26,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { COURTESY_CONTACT, LEGAL_CONTACT } from '../../../api/contacts/contacts.routes';
-import { GET_ALL_ACTIVATED_PARTIES } from '../../../api/external-registries/external-registries-routes';
-import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
+import { AddressType, CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
 import { CONTACT_ACTIONS } from '../../../redux/contact/actions';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
@@ -38,14 +40,12 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-const specialAddressesCount = digitalAddresses.legal
-  .concat(digitalAddresses.courtesy)
-  .reduce((count, elem) => {
-    if (elem.senderId !== 'default') {
-      count++;
-    }
-    return count;
-  }, 0);
+const specialAddressesCount = digitalAddresses.reduce((count, elem) => {
+  if (elem.senderId !== 'default') {
+    count++;
+  }
+  return count;
+}, 0);
 
 function testValidFiled(form: HTMLFormElement, elementName: string) {
   const errorMessage = form.querySelector(`#${elementName}-helper-text`);
@@ -93,15 +93,14 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('renders component', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalAddresses.legal[0].recipientId}
-            legalAddresses={digitalAddresses.legal}
-            courtesyAddresses={digitalAddresses.courtesy}
+            legalAddresses={digitalLegalAddresses}
+            courtesyAddresses={digitalCourtesyAddresses}
           />
         </DigitalContactsCodeVerificationProvider>
       );
@@ -120,15 +119,14 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('check valid pec', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalAddresses.legal[0].recipientId}
-            legalAddresses={digitalAddresses.legal}
-            courtesyAddresses={digitalAddresses.courtesy}
+            legalAddresses={digitalLegalAddresses}
+            courtesyAddresses={digitalCourtesyAddresses}
           />
         </DigitalContactsCodeVerificationProvider>
       );
@@ -146,15 +144,14 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('check invalid pec', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalAddresses.legal[0].recipientId}
-            legalAddresses={digitalAddresses.legal}
-            courtesyAddresses={digitalAddresses.courtesy}
+            legalAddresses={digitalLegalAddresses}
+            courtesyAddresses={digitalCourtesyAddresses}
           />
         </DigitalContactsCodeVerificationProvider>
       );
@@ -173,15 +170,14 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('checks invalid mail', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalAddresses.legal[0].recipientId}
-            legalAddresses={digitalAddresses.legal}
-            courtesyAddresses={digitalAddresses.courtesy}
+            legalAddresses={digitalLegalAddresses}
+            courtesyAddresses={digitalCourtesyAddresses}
           />
         </DigitalContactsCodeVerificationProvider>
       );
@@ -211,15 +207,14 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('checks valid mail', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalAddresses.legal[0].recipientId}
-            legalAddresses={digitalAddresses.legal}
-            courtesyAddresses={digitalAddresses.courtesy}
+            legalAddresses={digitalLegalAddresses}
+            courtesyAddresses={digitalCourtesyAddresses}
           />
         </DigitalContactsCodeVerificationProvider>
       );
@@ -248,15 +243,14 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('checks invalid phone', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalAddresses.legal[0].recipientId}
-            legalAddresses={digitalAddresses.legal}
-            courtesyAddresses={digitalAddresses.courtesy}
+            legalAddresses={digitalLegalAddresses}
+            courtesyAddresses={digitalCourtesyAddresses}
           />
         </DigitalContactsCodeVerificationProvider>
       );
@@ -286,15 +280,14 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('checks valid phone', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalAddresses.legal[0].recipientId}
-            legalAddresses={digitalAddresses.legal}
-            courtesyAddresses={digitalAddresses.courtesy}
+            legalAddresses={digitalLegalAddresses}
+            courtesyAddresses={digitalCourtesyAddresses}
           />
         </DigitalContactsCodeVerificationProvider>
       );
@@ -324,14 +317,16 @@ describe('SpecialContacts Component', async () => {
 
   it('add special contact', async () => {
     const pecValue = 'pec-carino@valida.com';
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     mock
-      .onPost(LEGAL_CONTACT(parties[2].id, LegalChannelType.PEC), {
+      .onPost(`/bff/v1/addresses/LEGAL/${parties[2].id}/PEC`, {
         value: pecValue,
       })
-      .reply(200);
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
     mock
-      .onPost(LEGAL_CONTACT(parties[2].id, LegalChannelType.PEC), {
+      .onPost(`/bff/v1/addresses/LEGAL/${parties[2].id}/PEC`, {
         value: pecValue,
         verificationCode: '01234',
       })
@@ -341,9 +336,8 @@ describe('SpecialContacts Component', async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalAddresses.legal[0].recipientId}
-            legalAddresses={digitalAddresses.legal}
-            courtesyAddresses={digitalAddresses.courtesy}
+            legalAddresses={digitalLegalAddresses}
+            courtesyAddresses={digitalCourtesyAddresses}
           />
         </DigitalContactsCodeVerificationProvider>,
         { preloadedState: { contactsState: { digitalAddresses } } }
@@ -382,29 +376,26 @@ describe('SpecialContacts Component', async () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    const addresses = {
-      legal: [
-        ...digitalAddresses.legal,
-        {
-          senderName: parties[2].name,
-          value: pecValue,
-          pecValid: true,
-          recipientId: digitalAddresses.legal[0].recipientId,
-          senderId: parties[2].id,
-          addressType: 'legal',
-          channelType: LegalChannelType.PEC,
-        },
-      ],
-      courtesy: digitalAddresses.courtesy,
-    };
+    const addresses = [
+      ...digitalAddresses,
+      {
+        senderName: parties[2].name,
+        value: pecValue,
+        pecValid: true,
+        senderId: parties[2].id,
+        addressType: AddressType.LEGAL,
+        channelType: LegalChannelType.PEC,
+        codeValid: true,
+      },
+    ];
+
     expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
         <SpecialContacts
-          recipientId={digitalAddresses.legal[0].recipientId}
-          legalAddresses={addresses.legal}
-          courtesyAddresses={addresses.courtesy}
+          legalAddresses={addresses.filter((addr) => addr.addressType === AddressType.LEGAL)}
+          courtesyAddresses={addresses.filter((addr) => addr.addressType === AddressType.COURTESY)}
         />
       </DigitalContactsCodeVerificationProvider>
     );
@@ -417,26 +408,27 @@ describe('SpecialContacts Component', async () => {
 
   it('edit special contact', async () => {
     const mailValue = 'pec-carino@valida.com';
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     mock
-      .onPost(COURTESY_CONTACT(parties[0].id, CourtesyChannelType.EMAIL), {
+      .onPost(`/bff/v1/addresses/COURTESY/${parties[0].id}/EMAIL`, {
         value: mailValue,
       })
-      .reply(200);
+      .replyOnce(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
     mock
-      .onPost(COURTESY_CONTACT(parties[0].id, CourtesyChannelType.EMAIL), {
+      .onPost(`bff/v1/addresses/COURTESY/${parties[0].id}/EMAIL`, {
         value: mailValue,
         verificationCode: '01234',
       })
-      .reply(204);
+      .replyOnce(204);
     // render component
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalAddresses.legal[0].recipientId}
-            legalAddresses={digitalAddresses.legal}
-            courtesyAddresses={digitalAddresses.courtesy}
+            legalAddresses={digitalLegalAddresses}
+            courtesyAddresses={digitalCourtesyAddresses}
           />
         </DigitalContactsCodeVerificationProvider>,
         { preloadedState: { contactsState: { digitalAddresses } } }
@@ -470,22 +462,24 @@ describe('SpecialContacts Component', async () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    const addresses = {
-      legal: digitalAddresses.legal,
-      courtesy: [
-        { ...digitalAddresses.courtesy[0], value: mailValue, senderName: parties[0].id },
-        ...digitalAddresses.courtesy.slice(1),
-      ],
-    };
+    const addresses = [
+      ...digitalLegalAddresses,
+      {
+        ...digitalCourtesyAddresses[0],
+        senderName: parties[0].id,
+        value: mailValue,
+      },
+      ...digitalCourtesyAddresses.slice(1),
+    ];
+
     expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     expect(input).not.toBeInTheDocument();
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
         <SpecialContacts
-          recipientId={digitalAddresses.legal[0].recipientId}
-          legalAddresses={addresses.legal}
-          courtesyAddresses={addresses.courtesy}
+          legalAddresses={addresses.filter((addr) => addr.addressType === AddressType.LEGAL)}
+          courtesyAddresses={addresses.filter((addr) => addr.addressType === AddressType.COURTESY)}
         />
       </DigitalContactsCodeVerificationProvider>
     );
@@ -497,16 +491,15 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('delete special contact', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
-    mock.onDelete(COURTESY_CONTACT(parties[0].id, CourtesyChannelType.EMAIL)).reply(200);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    mock.onDelete(`/bff/v1/addresses/COURTESY/${parties[0].id}/EMAIL`).reply(200);
     // render component
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
-            recipientId={digitalAddresses.legal[0].recipientId}
-            legalAddresses={digitalAddresses.legal}
-            courtesyAddresses={digitalAddresses.courtesy}
+            legalAddresses={digitalLegalAddresses}
+            courtesyAddresses={digitalCourtesyAddresses}
           />
         </DigitalContactsCodeVerificationProvider>,
         { preloadedState: { contactsState: { digitalAddresses } } }
@@ -527,18 +520,14 @@ describe('SpecialContacts Component', async () => {
       expect(dialogBox).not.toBeVisible();
       expect(mock.history.delete).toHaveLength(1);
     });
-    const addresses = {
-      legal: digitalAddresses.legal,
-      courtesy: [...digitalAddresses.courtesy.slice(1)],
-    };
+    const addresses = [...digitalLegalAddresses, ...digitalCourtesyAddresses.slice(1)];
     expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
         <SpecialContacts
-          recipientId={digitalAddresses.legal[0].recipientId}
-          legalAddresses={addresses.legal}
-          courtesyAddresses={addresses.courtesy}
+          legalAddresses={addresses.filter((addr) => addr.addressType === AddressType.LEGAL)}
+          courtesyAddresses={addresses.filter((addr) => addr.addressType === AddressType.COURTESY)}
         />
       </DigitalContactsCodeVerificationProvider>
     );
@@ -550,7 +539,7 @@ describe('SpecialContacts Component', async () => {
   });
 
   it('API error', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(500);
+    mock.onGet('/bff/v1/pa-list').reply(500);
     await act(async () => {
       render(
         <>
@@ -558,9 +547,8 @@ describe('SpecialContacts Component', async () => {
           <AppResponseMessage />
           <DigitalContactsCodeVerificationProvider>
             <SpecialContacts
-              recipientId={digitalAddresses.legal[0].recipientId}
-              legalAddresses={digitalAddresses.legal}
-              courtesyAddresses={digitalAddresses.courtesy}
+              legalAddresses={digitalLegalAddresses}
+              courtesyAddresses={digitalCourtesyAddresses}
             />
           </DigitalContactsCodeVerificationProvider>
         </>

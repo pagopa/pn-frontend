@@ -15,7 +15,6 @@ import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyF
 import DigitalContactsCard from './DigitalContactsCard';
 
 interface Props {
-  recipientId: string;
   contact: DigitalAddress | null | undefined;
 }
 
@@ -26,7 +25,7 @@ enum IOContactStatus {
   DISABLED = 'disabled',
 }
 
-const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
+const IOContact: React.FC<Props> = ({ contact }) => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
@@ -47,7 +46,7 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
 
   const enableIO = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
-    void dispatch(enableIOAddress(recipientId)).then(() => {
+    void dispatch(enableIOAddress()).then(() => {
       setIsConfirmModalOpen(false);
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS);
     });
@@ -55,7 +54,7 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
 
   const disableIO = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION);
-    void dispatch(disableIOAddress(recipientId)).then(() => {
+    void dispatch(disableIOAddress()).then(() => {
       setIsConfirmModalOpen(false);
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS);
     });
@@ -108,7 +107,6 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
     } else {
       return (
         <Alert
-          tabIndex={0}
           role="banner"
           sx={{ mt: 4 }}
           aria-label={

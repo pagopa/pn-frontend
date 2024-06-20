@@ -211,7 +211,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
   const getErrorMessage = () => {
     switch (pagoPAItem.detail) {
       case PaymentInfoDetail.GENERIC_ERROR:
-      case PaymentInfoDetail.PAYMENT_DUPLICATED:
+      case PaymentInfoDetail.PAYMENT_DUPLICATED: {
         const isGenericError = pagoPAItem.detail === PaymentInfoDetail.GENERIC_ERROR;
         return (
           <Box display="flex" alignItems="center" gap={0.5}>
@@ -234,6 +234,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
             </Typography>
           </Box>
         );
+      }
       case PaymentInfoDetail.PAYMENT_UNAVAILABLE:
       case PaymentInfoDetail.PAYMENT_UNKNOWN:
       case PaymentInfoDetail.DOMAIN_UNKNOWN:
@@ -251,7 +252,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
                   {pagoPAItem.detail_v2}
                 </Typography>
                 <CopyToClipboardButton
-                  value={() => pagoPAItem.detail_v2 || ''}
+                  value={() => pagoPAItem.detail_v2 ?? ''}
                   size="small"
                   sx={{
                     '& .MuiSvgIcon-root': {

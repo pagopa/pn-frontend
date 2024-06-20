@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { Column, Downtime, DowntimeLogPage, Row } from '../models';
+import { Column, Downtime, DowntimeLogHistory, Row } from '../models';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 export function useFieldSpecs() {
@@ -11,9 +11,9 @@ export function useFieldSpecs() {
         label: getLocalizedOrDefaultLabel('appStatus', `downtimeList.columnHeader.${fieldId}`),
       };
     }
-    if (fieldId === 'knownFunctionality') {
+    if (fieldId === 'functionality') {
       return {
-        id: 'knownFunctionality',
+        id: 'functionality',
         label: getLocalizedOrDefaultLabel('appStatus', 'downtimeList.columnHeader.functionality'),
       };
     }
@@ -30,8 +30,8 @@ export function useFieldSpecs() {
   }, []);
 
   const getRows = useCallback(
-    (downtimeLog: DowntimeLogPage): Array<Row<Downtime>> =>
-      downtimeLog.downtimes.map((n, i) => ({
+    (downtimeLog: DowntimeLogHistory): Array<Row<Downtime>> =>
+      downtimeLog.result.map((n, i) => ({
         ...n,
         id: n.startDate + i.toString(),
       })),
