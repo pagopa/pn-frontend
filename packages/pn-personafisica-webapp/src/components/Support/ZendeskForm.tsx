@@ -19,7 +19,7 @@ const ZendeskForm: React.FC<{ data: ZendeskAuthorizationDTO }> = ({ data }) => {
   }, [url, jwt, returnTo]);
 
   return (
-    <form id="jwtForm" method="POST" target="_blank" action={url}>
+    <form id="jwtForm" method="POST" action={url}>
       <input id="jwtString" type="hidden" name="jwt" value={jwt} />
       <input id="returnTo" type="hidden" name="return_to" value={returnTo} />
     </form>
