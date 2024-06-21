@@ -1,4 +1,4 @@
-import { parsedDataMock, rawDataMock } from '../../../__mocks__/Statistics.mock';
+import { parsedResponseMock, rawResponseMock } from '../../../__mocks__/Statistics.mock';
 import { StatisticsDataTypes } from '../../../models/Statistics';
 import { DeliveryModeStatisticsData } from '../DeliveryModeStatisticsData';
 import { DigitalErrorsDetailStatisticsData } from '../DigitalErrorsDetailStatisticsData';
@@ -45,8 +45,13 @@ describe('StatisticsDataFactory', () => {
     expect(currentClass).toBeInstanceOf(LastStateStatisticsData);
   });
 
+  it('returns null if passed a wrong type', () => {
+    const currentClass = statisticsDataFactory.create('WrongStatisticsDataSubtype');
+    expect(currentClass).toBeNull();
+  });
+
   it('creates every StatisticsData concrete subtype', () => {
-    const parsedData = statisticsDataFactory.createAll(rawDataMock);
-    expect(parsedData).toStrictEqual(parsedDataMock);
+    const parsedData = statisticsDataFactory.createAll(rawResponseMock);
+    expect(parsedData).toStrictEqual(parsedResponseMock.data);
   });
 });

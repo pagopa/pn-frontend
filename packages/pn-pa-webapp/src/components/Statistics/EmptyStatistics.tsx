@@ -24,7 +24,7 @@ const EmptyStatistics: React.FC<Props> = ({ description = 'empty.description', s
           {t(description)}
         </Typography>
       </Box>
-      <Box textAlign={'center'}>
+      <Box data-testid="empty-image" textAlign={'center'}>
         <IllusStatistics size={342} />
       </Box>
     </Stack>

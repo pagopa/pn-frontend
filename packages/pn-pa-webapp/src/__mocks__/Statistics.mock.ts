@@ -1,15 +1,19 @@
+import { oneMonthAgo, threeMonthsAgo, today } from '@pagopa-pn/pn-commons';
+
 import {
   DeliveryMode,
   DigitaErrorTypes,
   NotificationStatus,
   ResponseStatus,
+  SelectedStatisticsFilter,
   StatisticsDataTypes,
-  StatisticsParsedData,
+  StatisticsFilter,
+  StatisticsParsedResponse,
   StatisticsResponse,
 } from '../models/Statistics';
 
-export const rawDataMock: StatisticsResponse = {
-  sender_id: 'sender-id',
+export const rawResponseMock: StatisticsResponse = {
+  senderId: 'sender-id',
   genTimestamp: '2024-04-24T11:09:36.432251Z',
   lastDate: '2024-04-21',
   startDate: '2023-12-06',
@@ -94,6 +98,22 @@ export const rawDataMock: StatisticsResponse = {
       view_time: 0.0,
       refinement_time: 83487.85,
       validation_time: 7.63,
+    },
+    {
+      notification_send_date: '2024-03-15',
+      notification_request_status: NotificationStatus.ACCEPTED,
+      notification_status: NotificationStatus.VIEWED,
+      notification_type: DeliveryMode.DIGITAL,
+      status_digital_delivery: ResponseStatus.OK,
+      notification_delivered: 'SI',
+      notification_viewed: 'SI',
+      notification_refined: 'SI',
+      attempt_count_per_digital_notification: 0,
+      notifications_count: 132,
+      delivery_time: 28.9,
+      view_time: 14949.64,
+      refinement_time: 8904.52,
+      validation_time: 7.23,
     },
     {
       notification_send_date: '2024-03-18',
@@ -203,60 +223,155 @@ export const rawDataMock: StatisticsResponse = {
     },
   ],
 };
+export const rawEmptyResponseMock: StatisticsResponse = {
+  senderId: 'sender-id',
+  genTimestamp: '2024-04-24T11:09:36.432251Z',
+  lastDate: '2024-04-21',
+  startDate: '2023-12-06',
+  endDate: '2024-04-24',
+  notificationsOverview: [],
+  digitalNotificationFocus: [],
+};
 
-export const parsedDataMock: StatisticsParsedData = {
-  [StatisticsDataTypes.FiledStatistics]: {
-    [NotificationStatus.ACCEPTED]: {
-      count: 1670,
-      details: [
-        { send_date: '2024-03-15', count: 788 },
-        { send_date: '2024-03-18', count: 882 },
-      ],
+export const parsedResponseMock: StatisticsParsedResponse = {
+  senderId: rawResponseMock.senderId,
+  genTimestamp: rawResponseMock.genTimestamp,
+  lastDate: rawResponseMock.lastDate,
+  startDate: rawResponseMock.startDate,
+  endDate: rawResponseMock.endDate,
+  data: {
+    [StatisticsDataTypes.FiledStatistics]: {
+      [NotificationStatus.ACCEPTED]: {
+        count: 1802,
+        details: [
+          { send_date: '2024-03-15', count: 920 },
+          { send_date: '2024-03-18', count: 882 },
+        ],
+      },
+      [NotificationStatus.REFUSED]: { count: 0, details: [] },
     },
-    [NotificationStatus.REFUSED]: { count: 0, details: [] },
-  },
-  [StatisticsDataTypes.LastStateStatistics]: {
-    [NotificationStatus.ACCEPTED]: 0,
-    [NotificationStatus.REFUSED]: 0,
-    [NotificationStatus.DELIVERING]: 79,
-    [NotificationStatus.DELIVERED]: 107,
-    [NotificationStatus.VIEWED]: 0,
-    [NotificationStatus.EFFECTIVE_DATE]: 1484,
-    [NotificationStatus.CANCELLED]: 0,
-    [NotificationStatus.UNREACHABLE]: 0,
-  },
-  [StatisticsDataTypes.DeliveryModeStatistics]: {
-    [DeliveryMode.ANALOG]: {
-      count: 1591,
-      details: [
-        { send_date: '2024-03-15', count: 788 },
-        { send_date: '2024-03-18', count: 803 },
-      ],
+    [StatisticsDataTypes.LastStateStatistics]: {
+      [NotificationStatus.ACCEPTED]: 0,
+      [NotificationStatus.REFUSED]: 0,
+      [NotificationStatus.DELIVERING]: 79,
+      [NotificationStatus.DELIVERED]: 107,
+      [NotificationStatus.VIEWED]: 132,
+      [NotificationStatus.EFFECTIVE_DATE]: 1484,
+      [NotificationStatus.CANCELLED]: 0,
+      [NotificationStatus.UNREACHABLE]: 0,
     },
-    [DeliveryMode.DIGITAL]: {
-      count: 79,
-      details: [{ send_date: '2024-03-18', count: 79 }],
+    [StatisticsDataTypes.DeliveryModeStatistics]: {
+      [DeliveryMode.ANALOG]: {
+        count: 1591,
+        details: [
+          { send_date: '2024-03-15', count: 788 },
+          { send_date: '2024-03-18', count: 803 },
+        ],
+      },
+      [DeliveryMode.DIGITAL]: {
+        count: 211,
+        details: [
+          { send_date: '2024-03-15', count: 132 },
+          { send_date: '2024-03-18', count: 79 },
+        ],
+      },
+      [DeliveryMode.UNKNOWN]: {
+        count: 0,
+        details: [],
+      },
     },
-    [DeliveryMode.UNKNOWN]: {
-      count: 0,
-      details: [],
+    [StatisticsDataTypes.DigitalStateStatistics]: {
+      [ResponseStatus.OK]: 211,
+      [ResponseStatus.KO]: 0,
+      [ResponseStatus.PROGRESS]: 0,
+      [ResponseStatus.UNKNOWN]: 0,
     },
-  },
-  [StatisticsDataTypes.DigitalStateStatistics]: {
-    [ResponseStatus.OK]: 79,
-    [ResponseStatus.KO]: 0,
-    [ResponseStatus.PROGRESS]: 0,
-    [ResponseStatus.UNKNOWN]: 0,
-  },
-  [StatisticsDataTypes.DigitalMeanTimeStatistics]: {
-    delivered: { count: 79, time: 16.77 },
-    viewed: { count: 0, time: 0 },
-    refined: { count: 79, time: 13292.18 },
-  },
-  [StatisticsDataTypes.DigitalErrorsDetailStatistics]: {
-    [DigitaErrorTypes.INVALID_PEC]: { count: 4, attempts: 7 },
-    [DigitaErrorTypes.DELIVERY_ERROR]: { count: 4, attempts: 11 },
-    [DigitaErrorTypes.REJECTED]: { count: 0, attempts: 0 },
-    [DigitaErrorTypes.UNKNOWN]: { count: 461, attempts: 0 },
+    [StatisticsDataTypes.DigitalMeanTimeStatistics]: {
+      delivered: { count: 211, time: 45.67 },
+      viewed: { count: 132, time: 14949.64 },
+      refined: { count: 211, time: 22196.7 },
+    },
+    [StatisticsDataTypes.DigitalErrorsDetailStatistics]: {
+      [DigitaErrorTypes.INVALID_PEC]: { count: 4, attempts: 7 },
+      [DigitaErrorTypes.DELIVERY_ERROR]: { count: 4, attempts: 11 },
+      [DigitaErrorTypes.REJECTED]: { count: 0, attempts: 0 },
+      [DigitaErrorTypes.UNKNOWN]: { count: 461, attempts: 0 },
+    },
   },
 };
+
+export const parsedEmptyResponseMock: StatisticsParsedResponse = {
+  senderId: rawResponseMock.senderId,
+  genTimestamp: rawResponseMock.genTimestamp,
+  lastDate: rawResponseMock.lastDate,
+  startDate: rawResponseMock.startDate,
+  endDate: rawResponseMock.endDate,
+  data: {
+    [StatisticsDataTypes.FiledStatistics]: {
+      [NotificationStatus.ACCEPTED]: {
+        count: 0,
+        details: [],
+      },
+      [NotificationStatus.REFUSED]: { count: 0, details: [] },
+    },
+    [StatisticsDataTypes.LastStateStatistics]: {
+      [NotificationStatus.ACCEPTED]: 0,
+      [NotificationStatus.REFUSED]: 0,
+      [NotificationStatus.DELIVERING]: 0,
+      [NotificationStatus.DELIVERED]: 0,
+      [NotificationStatus.VIEWED]: 0,
+      [NotificationStatus.EFFECTIVE_DATE]: 0,
+      [NotificationStatus.CANCELLED]: 0,
+      [NotificationStatus.UNREACHABLE]: 0,
+    },
+    [StatisticsDataTypes.DeliveryModeStatistics]: {
+      [DeliveryMode.ANALOG]: {
+        count: 0,
+        details: [],
+      },
+      [DeliveryMode.DIGITAL]: {
+        count: 0,
+        details: [],
+      },
+      [DeliveryMode.UNKNOWN]: {
+        count: 0,
+        details: [],
+      },
+    },
+    [StatisticsDataTypes.DigitalStateStatistics]: {
+      [ResponseStatus.OK]: 0,
+      [ResponseStatus.KO]: 0,
+      [ResponseStatus.PROGRESS]: 0,
+      [ResponseStatus.UNKNOWN]: 0,
+    },
+    [StatisticsDataTypes.DigitalMeanTimeStatistics]: {
+      delivered: { count: 0, time: 0 },
+      viewed: { count: 0, time: 0 },
+      refined: { count: 0, time: 0 },
+    },
+    [StatisticsDataTypes.DigitalErrorsDetailStatistics]: {
+      [DigitaErrorTypes.INVALID_PEC]: { count: 0, attempts: 0 },
+      [DigitaErrorTypes.DELIVERY_ERROR]: { count: 0, attempts: 0 },
+      [DigitaErrorTypes.REJECTED]: { count: 0, attempts: 0 },
+      [DigitaErrorTypes.UNKNOWN]: { count: 0, attempts: 0 },
+    },
+  },
+};
+
+export const filters: Array<StatisticsFilter> = [
+  {
+    selected: SelectedStatisticsFilter.lastMonth,
+    startDate: oneMonthAgo,
+    endDate: today,
+  },
+  {
+    selected: SelectedStatisticsFilter.last3Months,
+    startDate: threeMonthsAgo,
+    endDate: today,
+  },
+  {
+    selected: SelectedStatisticsFilter.custom,
+    startDate: new Date('2023-08-26'),
+    endDate: new Date('2024-06-22'),
+  },
+];
