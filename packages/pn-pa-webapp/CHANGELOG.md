@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0...v2.5.1) (2024-06-26)
+
+
+### Bug Fixes
+
+* **pn-11775:** resolve an error on DigitalErrorTypes model causing the pa-webapp to crash ([#1263](https://github.com/pagopa/pn-frontend/issues/1263)) ([b5c84ff](https://github.com/pagopa/pn-frontend/commit/b5c84ffff7979369b715e2b1659ecdbe33be2d33))
+
+
+
+
+
 # [2.5.0](https://github.com/pagopa/pn-frontend/compare/v2.5.0-RC.2...v2.5.0) (2024-06-14)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
