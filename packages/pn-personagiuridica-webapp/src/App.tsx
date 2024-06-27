@@ -24,7 +24,7 @@ import {
   useMultiEvent,
   useTracking,
 } from '@pagopa-pn/pn-commons';
-import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
+import { LangCode, PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
@@ -74,6 +74,7 @@ const ActualApp = () => {
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { pathname } = useLocation();
   const path = pathname.split('/');
+  const currentLanguage = i18n.language as LangCode;
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -97,7 +98,7 @@ const ActualApp = () => {
       {
         id: '1',
         title: t('header.product.organization-dashboard'),
-        productUrl: routes.PROFILE(organization?.id),
+        productUrl: routes.PROFILE(organization?.id, currentLanguage),
         linkType: 'external',
       },
       {
@@ -192,8 +193,16 @@ const ActualApp = () => {
   }
 
   const selfcareMenuItems: Array<SideMenuItem> = [
-    { label: t('menu.users'), icon: People, route: routes.USERS(organization?.id) },
-    { label: t('menu.groups'), icon: SupervisedUserCircle, route: routes.GROUPS(organization?.id) },
+    {
+      label: t('menu.users'),
+      icon: People,
+      route: routes.USERS(organization?.id, currentLanguage),
+    },
+    {
+      label: t('menu.groups'),
+      icon: SupervisedUserCircle,
+      route: routes.GROUPS(organization?.id, currentLanguage),
+    },
   ];
 
   const partyList: Array<PartyEntity> = useMemo(
