@@ -1,23 +1,19 @@
-import senderDashboard from "./theme/senderDashboard";
-import {
-  Avatar,
-  Checkbox,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Stack,
-} from "@mui/material";
-import { init, getInstanceByDom, registerTheme } from "echarts";
-import type { EChartOption, ECharts, SetOptionOpts } from "echarts";
-import { useRef, useEffect, useMemo } from "react";
-import type { CSSProperties } from "react";
+/* eslint-disable functional/no-let */
+import { getInstanceByDom, init, registerTheme } from 'echarts';
+import type { EChartOption, ECharts, SetOptionOpts } from 'echarts';
+import { useEffect, useMemo, useRef } from 'react';
+import type { CSSProperties } from 'react';
+
+import { Avatar, Checkbox, ListItem, ListItemAvatar, ListItemText, Stack } from '@mui/material';
+
+import senderDashboard from './theme/senderDashboard';
 
 export interface PnEChartsProps {
   option: EChartOption;
   style?: CSSProperties;
   settings?: SetOptionOpts;
   loading?: boolean;
-  theme?: "light" | "dark" | object;
+  theme?: 'light' | 'dark' | object;
   legend?: Array<string>;
 }
 
@@ -28,28 +24,28 @@ export function PnECharts({
   loading,
   theme,
   legend,
-}: PnEChartsProps): JSX.Element {
+}: Readonly<PnEChartsProps>): JSX.Element {
   const chartRef = useRef<HTMLDivElement>(null);
   // Initialize chart
   let chart: ECharts | undefined;
 
   const toggleSerie = (name: string) => {
     chart?.dispatchAction({
-      type: "legendToggleSelect",
+      type: 'legendToggleSelect',
       name,
     });
   };
 
   useEffect(() => {
     if (chartRef.current !== null) {
-      let selectedTheme = "defaultTheme";
+      let selectedTheme = 'defaultTheme';
 
-      registerTheme("defaultTheme", senderDashboard);
-      if (typeof theme === "object") {
-        registerTheme("customTheme", theme);
-        selectedTheme = "customTheme";
+      registerTheme('defaultTheme', senderDashboard);
+      if (typeof theme === 'object') {
+        registerTheme('customTheme', theme);
+        selectedTheme = 'customTheme';
       }
-      chart = init(chartRef.current, selectedTheme, { renderer: "canvas" });
+      chart = init(chartRef.current, selectedTheme, { renderer: 'canvas' });
     }
 
     // Add chart resize listener
@@ -58,12 +54,12 @@ export function PnECharts({
     function resizeChart() {
       chart?.resize();
     }
-    window.addEventListener("resize", resizeChart);
+    window.addEventListener('resize', resizeChart);
 
     // Return cleanup function
     return () => {
       chart?.dispose();
-      window.removeEventListener("resize", resizeChart);
+      window.removeEventListener('resize', resizeChart);
     };
   }, [theme]);
 
@@ -90,52 +86,51 @@ export function PnECharts({
     }
   }, [loading, theme]);
 
-  const legendContent = useMemo(() => legend?.map((item, index) => {
-    const color = option.color?.[index] ?? "";
-    const avatarSx = {
-      bgcolor: color,
-      width: 10,
-      height: 10,
-    };
-    return (
-      <ListItem key={item} sx={{ width: "auto" }}>
-        <Checkbox
-          onChange={() => toggleSerie(item)}
-          defaultChecked
-          sx={{
-            color,
-            "&.Mui-checked": {
-              color,
-            },
-          }}
-        />
-        <ListItemAvatar sx={{ minWidth: 18 }}>
-          <Avatar sx={avatarSx}>&nbsp;</Avatar>
-        </ListItemAvatar>
-        <ListItemText secondary={item} />
-      </ListItem>
-    );
-  }), [theme]);
+  const legendContent = useMemo(
+    () =>
+      legend?.map((item, index) => {
+        const color = option.color?.[index] ?? '';
+        const avatarSx = {
+          bgcolor: color,
+          width: 10,
+          height: 10,
+        };
+        return (
+          <ListItem key={item} sx={{ width: 'auto' }}>
+            <Checkbox
+              onChange={() => toggleSerie(item)}
+              defaultChecked
+              sx={{
+                color,
+                '&.Mui-checked': {
+                  color,
+                },
+              }}
+            />
+            <ListItemAvatar sx={{ minWidth: 18 }}>
+              <Avatar sx={avatarSx}>&nbsp;</Avatar>
+            </ListItemAvatar>
+            <ListItemText secondary={item} />
+          </ListItem>
+        );
+      }),
+    [theme]
+  );
 
   return (
     <>
       <div
         ref={chartRef}
         style={{
-          width: "100%",
-          height: "100%",
-          minHeight: "400px",
+          width: '100%',
+          height: '100%',
+          minHeight: '400px',
           flexGrow: 1,
           ...style,
         }}
       />
       {legend && (
-        <Stack
-          direction={"row"}
-          alignContent={"center"}
-          justifyContent={"center"}
-          display={"flex"}
-        >
+        <Stack direction={'row'} alignContent={'center'} justifyContent={'center'} display={'flex'}>
           {legendContent}
         </Stack>
       )}
