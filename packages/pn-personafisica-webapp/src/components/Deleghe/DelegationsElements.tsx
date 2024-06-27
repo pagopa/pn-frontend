@@ -107,7 +107,7 @@ export const OrganizationsList = (props: {
           {t('deleghe.table.allNotifications')}
         </Typography>
       ) : (
-        <Box>
+        <Box sx={{ minWidth: isMobile ? '' : '35rem', maxWidth: '60rem' }}>
           <Typography variant={props.textVariant || 'inherit'} mb={2}>
             {t('deleghe.table.notificationsFrom')}
           </Typography>
@@ -121,7 +121,7 @@ export const OrganizationsList = (props: {
                 }}
                 key={organization}
               >
-                <Tag value={organization} sx={{ whiteSpace: isMobile ? 'normal' : 'nowrap' }} />
+                <Tag value={organization} sx={{ whiteSpace: 'normal' }} />
               </Box>
             ))}
           </CustomTagGroup>
