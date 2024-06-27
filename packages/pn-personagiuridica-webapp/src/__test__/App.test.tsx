@@ -21,7 +21,6 @@ vi.mock('react-i18next', () => ({
     t: (str: string) => str,
     i18n: {
       language: 'it',
-      // changeLanguage: (lang: string) => new Promise(() => lang),
       changeLanguage: vi.fn(),
     },
   }),
