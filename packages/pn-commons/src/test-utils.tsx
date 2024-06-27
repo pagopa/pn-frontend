@@ -126,7 +126,9 @@ async function testSelect(
   optToSelect: number
 ) {
   const selectInput = container.querySelector(`input[name="${elementName}"]`);
-  const selectButton = container.querySelector(`div[id="${elementName}"]`);
+  const selectButton = container.querySelector(
+    `div[id="${elementName}"], div[data-testid="${elementName}"] [role="combobox"]`
+  );
   fireEvent.mouseDown(selectButton!);
   const selectOptionsContainer = screen.getByRole('presentation');
   expect(selectOptionsContainer).toBeInTheDocument();

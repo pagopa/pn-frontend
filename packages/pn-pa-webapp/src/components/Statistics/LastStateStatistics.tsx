@@ -114,6 +114,8 @@ const LastStateStatistics: React.FC<Props> = (props) => {
     ],
   };
 
+  console.log('OPZIONI:');
+  console.log(option);
   return (
     <Paper sx={{ p: 3, mb: 3, height: '100%' }} elevation={0}>
       <Stack direction="column" height="100%" sx={{ display: 'flex' }}>

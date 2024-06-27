@@ -89,6 +89,8 @@ const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data
           }}
           label={t('graph_type_label')}
           select
+          name="graph-type-select"
+          data-testid="graph-type-select"
           onChange={handleChangeGraphType}
           value={graphType === GraphTypes.AGGREGATE ? t('aggregate_graph') : t('trend_graph')}
           size="small"
@@ -111,19 +113,24 @@ const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data
         {graphType === GraphTypes.TREND && (
           <Box>
             <Chip
-              sx={{ mr: 2 }}
+              sx={{ mr: 2, opacity: '1!important' }}
               label={t('trend.days')}
+              data-testid="daily-view"
               variant="outlined"
               component="button"
               color={timeframe === Timeframe.daily ? 'primary' : 'default'}
               onClick={() => setTimeframe(Timeframe.daily)}
+              disabled={timeframe === Timeframe.daily}
             />
             <Chip
+              sx={{ opacity: '1!important' }}
               label={t('trend.weeks')}
+              data-testid="weekly-view"
               variant="outlined"
               component="button"
               color={timeframe === Timeframe.weekly ? 'primary' : 'default'}
               onClick={() => setTimeframe(Timeframe.weekly)}
+              disabled={timeframe === Timeframe.weekly}
             />
           </Box>
         )}

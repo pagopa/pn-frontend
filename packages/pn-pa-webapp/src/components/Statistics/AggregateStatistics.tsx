@@ -81,11 +81,11 @@ const AggregateStatistics: React.FC<Props> = ({
     ],
     ...options,
   };
-  
+
   if (legend) {
     // eslint-disable-next-line functional/immutable-data
     option.legend = {
-      show: false
+      show: false,
     };
     return (
       <PnECharts
