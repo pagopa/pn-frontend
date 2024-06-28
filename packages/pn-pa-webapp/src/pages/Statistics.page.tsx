@@ -125,52 +125,54 @@ const Statistics = () => {
             <Typography variant="caption" sx={{ color: GraphColors.greyBlue }}>
               {lastUpdateTxt}
             </Typography>
-            <Typography variant="h6" component="h5" mt={7}>
-              {t('section_1')}
-            </Typography>
-            <FilterStatistics filter={statisticsFilter} />
-            <Stack ref={exportJpgNode} direction={'column'} spacing={3} pt={2}>
-              <FiledNotificationsStatistics
-                startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
-                endDate={statisticsData.endDate ?? formatToSlicedISOString(today)}
-                data={statisticsData.data[StatisticsDataTypes.FiledStatistics]}
-              />
-              <Stack direction={{ lg: 'row', xs: 'column' }} spacing={3} mt={4}>
-                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                  <LastStateStatistics
-                    data={statisticsData.data[StatisticsDataTypes.LastStateStatistics]}
-                  />
-                </Box>
-                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                  <DeliveryModeStatistics
-                    startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
-                    endDate={statisticsData.endDate ?? formatToSlicedISOString(today)}
-                    data={statisticsData.data[StatisticsDataTypes.DeliveryModeStatistics]}
-                  />
-                </Box>
-              </Stack>
-              <Box className="filter">
+            <Box ref={exportJpgNode}>
+              <Typography variant="h6" component="h5" mt={7}>
+                {t('section_1')}
+              </Typography>
+              <FilterStatistics filter={statisticsFilter} />
+              <Stack direction={'column'} spacing={3} pt={2}>
+                <FiledNotificationsStatistics
+                  startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
+                  endDate={statisticsData.endDate ?? formatToSlicedISOString(today)}
+                  data={statisticsData.data[StatisticsDataTypes.FiledStatistics]}
+                />
+                <Stack direction={{ lg: 'row', xs: 'column' }} spacing={3} mt={4}>
+                  <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                    <LastStateStatistics
+                      data={statisticsData.data[StatisticsDataTypes.LastStateStatistics]}
+                    />
+                  </Box>
+                  <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                    <DeliveryModeStatistics
+                      startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
+                      endDate={statisticsData.endDate ?? formatToSlicedISOString(today)}
+                      data={statisticsData.data[StatisticsDataTypes.DeliveryModeStatistics]}
+                    />
+                  </Box>
+                </Stack>
                 <Typography variant="h6" component="h5" mt={6}>
                   {t('section_2')}
                 </Typography>
-                <FilterStatistics filter={statisticsFilter} />
-              </Box>
-              <Stack direction={{ lg: 'row', xs: 'column' }} spacing={3} mt={4}>
-                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                  <DigitalStateStatistics
-                    data={statisticsData.data[StatisticsDataTypes.DigitalStateStatistics]}
-                  />
+                <Box className="filter">
+                  <FilterStatistics filter={statisticsFilter} />
                 </Box>
-                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                  <DigitalMeanTimeStatistics
-                    data={statisticsData.data[StatisticsDataTypes.DigitalMeanTimeStatistics]}
-                  />
-                </Box>
+                <Stack direction={{ lg: 'row', xs: 'column' }} spacing={3} mt={4}>
+                  <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                    <DigitalStateStatistics
+                      data={statisticsData.data[StatisticsDataTypes.DigitalStateStatistics]}
+                    />
+                  </Box>
+                  <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                    <DigitalMeanTimeStatistics
+                      data={statisticsData.data[StatisticsDataTypes.DigitalMeanTimeStatistics]}
+                    />
+                  </Box>
+                </Stack>
+                <DigitalErrorsDetailStatistics
+                  data={statisticsData.data[StatisticsDataTypes.DigitalErrorsDetailStatistics]}
+                />
               </Stack>
-              <DigitalErrorsDetailStatistics
-                data={statisticsData.data[StatisticsDataTypes.DigitalErrorsDetailStatistics]}
-              />
-            </Stack>
+            </Box>
           </>
         ) : (
           <>

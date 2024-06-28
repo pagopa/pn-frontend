@@ -99,16 +99,6 @@ function cloneCSSStyle<T extends HTMLElement>(nativeNode: T, clonedNode: T) {
   }
 }
 
-function cloneInputValue<T extends HTMLElement>(nativeNode: T, clonedNode: T) {
-  if (isInstanceOfElement(nativeNode, HTMLTextAreaElement)) {
-    clonedNode.innerHTML = nativeNode.value;
-  }
-
-  if (isInstanceOfElement(nativeNode, HTMLInputElement)) {
-    clonedNode.setAttribute('value', nativeNode.value);
-  }
-}
-
 function cloneSelectValue<T extends HTMLElement>(nativeNode: T, clonedNode: T) {
   if (isInstanceOfElement(nativeNode, HTMLSelectElement)) {
     const clonedSelect = clonedNode as any as HTMLSelectElement;
@@ -126,7 +116,6 @@ function decorate<T extends HTMLElement>(nativeNode: T, clonedNode: T): T {
   if (isInstanceOfElement(clonedNode, Element)) {
     cloneCSSStyle(nativeNode, clonedNode);
     clonePseudoElements(nativeNode, clonedNode);
-    cloneInputValue(nativeNode, clonedNode);
     cloneSelectValue(nativeNode, clonedNode);
   }
 
