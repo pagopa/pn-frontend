@@ -1,4 +1,4 @@
-import { downloadDocument, useDownloadDocument } from './useDownloadDocument';
+import { downloadDocument } from './useDownloadDocument';
 import { useErrors } from './useErrors';
 import { useHasPermissions } from './useHasPermissions';
 import { useIsCancelled } from './useIsCancelled';
@@ -16,7 +16,6 @@ export {
   useSessionCheck,
   useErrors,
   useTracking,
-  useDownloadDocument,
   useProcess,
   useHasPermissions,
   downloadDocument,

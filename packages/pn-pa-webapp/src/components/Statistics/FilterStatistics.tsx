@@ -39,9 +39,10 @@ export const defaultValues = {
 
 type Props = {
   filter: StatisticsFilter | null;
+  className?: string;
 };
 
-const FilterStatistics: React.FC<Props> = ({ filter }) => {
+const FilterStatistics: React.FC<Props> = ({ filter, className }) => {
   const { t, i18n } = useTranslation(['statistics']);
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
@@ -81,7 +82,10 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
     onSubmit: () => {},
   });
 
-  const getRangeDates = (range: SelectedStatisticsFilterKeys, loading: boolean = false): [Date, Date] => {
+  const getRangeDates = (
+    range: SelectedStatisticsFilterKeys,
+    loading: boolean = false
+  ): [Date, Date] => {
     switch (range) {
       case SelectedStatisticsFilter.lastMonth:
         return [oneMonthAgo, today];
@@ -115,11 +119,13 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
 
   const handleSelectFilter = (type: SelectedStatisticsFilterKeys) => {
     const [startDate, endDate] = getRangeDates(type);
-    dispatch(setStatisticsFilter({
-      startDate,
-      endDate,
-      selected: type
-    }));
+    dispatch(
+      setStatisticsFilter({
+        startDate,
+        endDate,
+        selected: type,
+      })
+    );
   };
 
   const cleanFilter = () => {
@@ -159,10 +165,12 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
       display="flex"
       justifyContent="space-between"
       alignItems="center"
+      className={className}
     >
-      
-      <Box flexGrow={0} flexShrink={0} >{quickFiltersJsx()}</Box>
-      <Box sx={{ display: isMobile ? 'block' : 'flex' }} >
+      <Box flexGrow={0} flexShrink={0}>
+        {quickFiltersJsx()}
+      </Box>
+      <Box sx={{ display: isMobile ? 'block' : 'flex' }}>
         <CustomDatePicker
           language={i18n.language}
           label={t('filter.from_date')}
@@ -191,7 +199,7 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
                 'aria-label': t('filter.from_date-input-aria-label'),
               },
               sx: { mb: isMobile ? 1 : 0, mr: 1 },
-              fullWidth: isMobile
+              fullWidth: isMobile,
             },
           }}
           disableFuture={true}
@@ -226,7 +234,7 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
                 'aria-label': t('filter.to_date-input-aria-label'),
               },
               sx: { mb: isMobile ? 1 : 0, mr: 1 },
-              fullWidth: isMobile
+              fullWidth: isMobile,
             },
           }}
           disableFuture={true}

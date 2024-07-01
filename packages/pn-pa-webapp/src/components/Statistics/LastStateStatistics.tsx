@@ -63,22 +63,6 @@ const LastStateStatistics: React.FC<Props> = (props) => {
         </div>`;
       },
     },
-    toolbox: {
-      feature: {
-        saveAsImage: {
-          type: 'jpg',
-          show: true,
-          title: '',
-          name: 'chart',
-          backgroundColor: 'white',
-          pixelRatio: 2,
-          iconStyle: {
-            color: GraphColors.navy,
-          },
-          icon: 'path://M4.16669 16.6667H15.8334V15H4.16669V16.6667ZM15.8334 7.5H12.5V2.5H7.50002V7.5H4.16669L10 13.3333L15.8334 7.5Z',
-        },
-      },
-    },
     grid: {
       left: '3%',
       right: '4%',
