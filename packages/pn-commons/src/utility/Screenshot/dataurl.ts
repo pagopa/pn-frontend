@@ -17,10 +17,9 @@ export function makeDataUrl(content: string, mimeType: string) {
 
 export async function fetchAsDataURL<T>(
   url: string,
-  init: RequestInit | undefined,
   process: (data: { result: string; res: Response }) => T
 ): Promise<T> {
-  const res = await fetch(url, init);
+  const res = await fetch(url);
   if (res.status === 404) {
     throw new Error(`Resource "${res.url}" not found`);
   }
@@ -42,16 +41,8 @@ export async function fetchAsDataURL<T>(
 
 const cache: { [url: string]: string } = {};
 
-function getCacheKey(
-  url: string,
-  contentType: string | undefined,
-  includeQueryParams: boolean | undefined
-) {
+function getCacheKey(url: string, contentType: string | undefined) {
   let key = url.replace(/\?.*/, '');
-
-  if (includeQueryParams) {
-    key = url;
-  }
 
   // font resource
   if (/ttf|otf|eot|woff2?/i.test(key)) {
@@ -66,16 +57,10 @@ export async function resourceToDataURL(
   contentType: string | undefined,
   options: Options
 ) {
-  const cacheKey = getCacheKey(resourceUrl, contentType, options.includeQueryParams);
+  const cacheKey = getCacheKey(resourceUrl, contentType);
 
   if (cache[cacheKey] != null) {
     return cache[cacheKey];
-  }
-
-  // ref: https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest#Bypassing_the_cache
-  if (options.cacheBust) {
-    // eslint-disable-next-line no-param-reassign
-    resourceUrl += (/\?/.test(resourceUrl) ? '&' : '?') + new Date().getTime();
   }
 
   return getDataUrl(resourceUrl, contentType, options, cacheKey);
@@ -89,17 +74,13 @@ async function getDataUrl(
 ): Promise<string> {
   let dataURL: string;
   try {
-    const content = await fetchAsDataURL(
-      resourceUrl,
-      options.fetchRequestInit,
-      ({ res, result }) => {
-        if (!contentType) {
-          // eslint-disable-next-line no-param-reassign
-          contentType = res.headers.get('Content-Type') ?? '';
-        }
-        return getContentFromDataUrl(result);
+    const content = await fetchAsDataURL(resourceUrl, ({ res, result }) => {
+      if (!contentType) {
+        // eslint-disable-next-line no-param-reassign
+        contentType = res.headers.get('Content-Type') ?? '';
       }
-    );
+      return getContentFromDataUrl(result);
+    });
     dataURL = makeDataUrl(content, contentType!);
   } catch (error: any) {
     dataURL = options.imagePlaceholder ?? '';

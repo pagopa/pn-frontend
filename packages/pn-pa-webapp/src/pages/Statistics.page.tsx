@@ -1,4 +1,3 @@
-/* eslint-disable functional/immutable-data */
 import { useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -37,16 +36,26 @@ const filter = (node: HTMLElement) => {
   return !exclusionClasses.some((classname) => node.classList?.contains(classname));
 };
 
-const handleDownloadJpeg = (elem: HTMLDivElement) =>
+const handleDownloadJpeg = (elem: HTMLDivElement | null) => {
+  if (!elem) {
+    return;
+  }
   screenshot
-    .toJpeg(elem, { quality: 0.95, backgroundColor: GraphColors.lightGrey, filter })
-    .then(function (dataUrl) {
-      // eslint-disable-next-line functional/no-let
+    .toJpeg(elem, {
+      quality: 0.95,
+      backgroundColor: GraphColors.lightGrey,
+      filter,
+    })
+    .then((dataUrl) => {
       const link = document.createElement('a');
+      // eslint-disable-next-line functional/immutable-data
       link.download = `statistiche-${formatDate(formatToSlicedISOString(today), false, '-')}.jpeg`;
+      // eslint-disable-next-line functional/immutable-data
       link.href = dataUrl;
       link.click();
-    });
+    })
+    .catch(() => {});
+};
 
 const getFilterDates = (filter: StatisticsFilter | null) =>
   filter
@@ -81,7 +90,7 @@ const Statistics = () => {
     <Stack direction={'row'} display="flex" justifyContent="space-between" alignItems="center">
       <Typography>{t('subtitle', { organization: loggedUserOrganizationParty?.name })}</Typography>
       <Button
-        onClick={() => handleDownloadJpeg(exportJpgNode.current as HTMLDivElement)}
+        onClick={() => handleDownloadJpeg(exportJpgNode.current)}
         variant="outlined"
         endIcon={<DownloadIcon />}
         sx={{ whiteSpace: 'nowrap' }}
@@ -153,9 +162,7 @@ const Statistics = () => {
                 <Typography variant="h6" component="h5" mt={6}>
                   {t('section_2')}
                 </Typography>
-                <Box className="filter">
-                  <FilterStatistics filter={statisticsFilter} />
-                </Box>
+                <FilterStatistics className="filter" filter={statisticsFilter} />
                 <Stack direction={{ lg: 'row', xs: 'column' }} spacing={3} mt={4}>
                   <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
                     <DigitalStateStatistics

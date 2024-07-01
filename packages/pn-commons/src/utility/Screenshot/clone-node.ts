@@ -24,28 +24,14 @@ async function cloneSingleNode<T extends HTMLElement>(
   return node.cloneNode(false) as T;
 }
 
-const isSlotElement = (node: HTMLElement): node is HTMLSlotElement =>
-  node.tagName != null && node.tagName.toUpperCase() === 'SLOT';
-
 async function cloneChildren<T extends HTMLElement>(
   nativeNode: T,
   clonedNode: T,
   options: Options
 ): Promise<T> {
-  let children: Array<T> = [];
+  const children: Array<T> = toArray<T>((nativeNode.shadowRoot ?? nativeNode).childNodes);
 
-  if (isSlotElement(nativeNode) && nativeNode.assignedNodes) {
-    children = toArray<T>(nativeNode.assignedNodes());
-  } else if (
-    isInstanceOfElement(nativeNode, HTMLIFrameElement) &&
-    nativeNode.contentDocument?.body
-  ) {
-    children = toArray<T>(nativeNode.contentDocument.body.childNodes);
-  } else {
-    children = toArray<T>((nativeNode.shadowRoot ?? nativeNode).childNodes);
-  }
-
-  if (children.length === 0 || isInstanceOfElement(nativeNode, HTMLVideoElement)) {
+  if (children.length === 0) {
     return clonedNode;
   }
 
@@ -78,16 +64,9 @@ function cloneCSSStyle<T extends HTMLElement>(nativeNode: T, clonedNode: T) {
     toArray<string>(sourceStyle).forEach((name) => {
       let value = sourceStyle.getPropertyValue(name);
       if (name === 'font-size' && value.endsWith('px')) {
-        const reducedFont = Math.floor(parseFloat(value.substring(0, value.length - 2))) - 0.1;
+        // CUSTOM: we remove from font parameter 2.5 instead of 0.1
+        const reducedFont = Math.floor(parseFloat(value.substring(0, value.length - 2))) - 2.5;
         value = `${reducedFont}px`;
-      }
-
-      if (
-        isInstanceOfElement(nativeNode, HTMLIFrameElement) &&
-        name === 'display' &&
-        value === 'inline'
-      ) {
-        value = 'block';
       }
 
       if (name === 'd' && clonedNode.getAttribute('d')) {
@@ -164,6 +143,14 @@ async function ensureSVGSymbols<T extends HTMLElement>(clone: T, options: Option
   return clone;
 }
 
+// CUSTOM: we remove classes from the cloned element
+function removeClasses<T extends HTMLElement>(clone: T) {
+  if (clone.removeAttribute) {
+    clone.removeAttribute('class');
+  }
+  return clone;
+}
+
 export async function cloneNode<T extends HTMLElement>(
   node: T,
   options: Options,
@@ -177,5 +164,6 @@ export async function cloneNode<T extends HTMLElement>(
     .then((clonedNode) => cloneSingleNode(clonedNode) as Promise<T>)
     .then((clonedNode) => cloneChildren(node, clonedNode, options))
     .then((clonedNode) => decorate(node, clonedNode))
-    .then((clonedNode) => ensureSVGSymbols(clonedNode, options));
+    .then((clonedNode) => ensureSVGSymbols(clonedNode, options))
+    .then((clonedNode) => removeClasses(clonedNode));
 }

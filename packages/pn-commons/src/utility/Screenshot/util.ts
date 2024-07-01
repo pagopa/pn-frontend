@@ -50,13 +50,6 @@ export const uuid = (() => {
   };
 })();
 
-export function delay<T>(ms: number) {
-  return (args: T) =>
-    new Promise<T>((resolve) => {
-      setTimeout(() => resolve(args), ms);
-    });
-}
-
 export function toArray<T>(arrayLike: any): Array<T> {
   const arr: Array<T> = [];
 
@@ -86,9 +79,9 @@ function getNodeHeight(node: HTMLElement) {
   return node.clientHeight + topBorder + bottomBorder;
 }
 
-export function getImageSize(targetNode: HTMLElement, options: Options = {}) {
-  const width = options.width || getNodeWidth(targetNode);
-  const height = options.height || getNodeHeight(targetNode);
+export function getImageSize(targetNode: HTMLElement) {
+  const width = getNodeWidth(targetNode);
+  const height = getNodeHeight(targetNode);
 
   return { width, height };
 }
@@ -189,7 +182,7 @@ export function createImage(url: string): Promise<HTMLImageElement> {
   });
 }
 
-export async function svgToDataURL(svg: SVGElement): Promise<string> {
+async function svgToDataURL(svg: SVGElement): Promise<string> {
   return Promise.resolve()
     .then(() => new XMLSerializer().serializeToString(svg))
     .then(encodeURIComponent)

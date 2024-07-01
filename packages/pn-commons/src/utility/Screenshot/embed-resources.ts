@@ -5,8 +5,6 @@ import { Options } from './types';
 import { resolveUrl } from './util';
 
 const URL_REGEX = /url\((['"]?)([^'"]+?)\1\)/g;
-const URL_WITH_FORMAT_REGEX = /url\([^)]+\)\s*format\((["']?)([^"']+)\1\)/g;
-const FONT_SRC_REGEX = /src:\s*(?:url\([^)]+\)\s*format\([^)]+\)[,;]\s*)+/g;
 
 function toRegex(url: string): RegExp {
   // eslint-disable-next-line no-useless-escape
@@ -50,22 +48,8 @@ export async function embed(
   return cssText;
 }
 
-function filterPreferredFontFormat(str: string, { preferredFontFormat }: Options): string {
-  return !preferredFontFormat
-    ? str
-    : str.replace(FONT_SRC_REGEX, (match: string) => {
-        // eslint-disable-next-line no-constant-condition
-        while (true) {
-          const [src, , format] = URL_WITH_FORMAT_REGEX.exec(match) || [];
-          if (!format) {
-            return '';
-          }
-
-          if (format === preferredFontFormat) {
-            return `src: ${src};`;
-          }
-        }
-      });
+function filterPreferredFontFormat(str: string): string {
+  return str;
 }
 
 export function shouldEmbed(url: string): boolean {
@@ -81,7 +65,7 @@ export async function embedResources(
     return cssText;
   }
 
-  const filteredCSSText = filterPreferredFontFormat(cssText, options);
+  const filteredCSSText = filterPreferredFontFormat(cssText);
   const urls = parseURLs(filteredCSSText);
   return urls.reduce(
     (deferred, url) => deferred.then((css) => embed(css, url, baseUrl, options)),

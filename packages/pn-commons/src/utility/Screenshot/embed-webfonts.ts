@@ -28,7 +28,7 @@ async function fetchCSS(url: string) {
   return cache;
 }
 
-async function embedFonts(data: Metadata, options: Options): Promise<string> {
+async function embedFonts(data: Metadata): Promise<string> {
   let cssText = data.cssText;
   const regexUrl = /url\(["']?([^"')]+)["']?\)/g;
   const fontLocs = cssText.match(/url\([^)]+\)/g) || [];
@@ -38,7 +38,7 @@ async function embedFonts(data: Metadata, options: Options): Promise<string> {
       url = new URL(url, data.url).href;
     }
 
-    return fetchAsDataURL<[string, string]>(url, options.fetchRequestInit, ({ result }) => {
+    return fetchAsDataURL<[string, string]>(url, ({ result }) => {
       cssText = cssText.replace(loc, `url(${result})`);
       return [loc, result];
     });
@@ -97,14 +97,12 @@ function parseCSS(source: string) {
   return result;
 }
 
-async function getCSSRules(
-  styleSheets: Array<CSSStyleSheet>,
-  options: Options
-): Promise<Array<CSSStyleRule>> {
+async function getCSSRules(styleSheets: Array<CSSStyleSheet>): Promise<Array<CSSStyleRule>> {
   const ret: Array<CSSStyleRule> = [];
   const deferreds: Array<Promise<number | void>> = [];
 
   // First loop inlines imports
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   styleSheets.forEach((sheet) => {
     if ('cssRules' in sheet) {
       try {
@@ -113,7 +111,7 @@ async function getCSSRules(
             let importIndex = index + 1;
             const url = (item as CSSImportRule).href;
             const deferred = fetchCSS(url)
-              .then((metadata) => embedFonts(metadata, options))
+              .then((metadata) => embedFonts(metadata))
               .then((cssText) =>
                 parseCSS(cssText).forEach((rule) => {
                   try {
@@ -141,7 +139,7 @@ async function getCSSRules(
         if (sheet.href != null) {
           deferreds.push(
             fetchCSS(sheet.href)
-              .then((metadata) => embedFonts(metadata, options))
+              .then((metadata) => embedFonts(metadata))
               .then((cssText) =>
                 parseCSS(cssText).forEach((rule) => {
                   inline.insertRule(rule, sheet.cssRules.length);
@@ -181,13 +179,13 @@ function getWebFontRules(cssRules: Array<CSSStyleRule>): Array<CSSStyleRule> {
     .filter((rule) => shouldEmbed(rule.style.getPropertyValue('src')));
 }
 
-async function parseWebFontRules<T extends HTMLElement>(node: T, options: Options) {
+async function parseWebFontRules<T extends HTMLElement>(node: T) {
   if (node.ownerDocument == null) {
     throw new Error('Provided element is not within a Document');
   }
 
   const styleSheets = toArray<CSSStyleSheet>(node.ownerDocument.styleSheets);
-  const cssRules = await getCSSRules(styleSheets, options);
+  const cssRules = await getCSSRules(styleSheets);
 
   return getWebFontRules(cssRules);
 }
@@ -196,7 +194,7 @@ export async function getWebFontCSS<T extends HTMLElement>(
   node: T,
   options: Options
 ): Promise<string> {
-  const rules = await parseWebFontRules(node, options);
+  const rules = await parseWebFontRules(node);
   const cssTexts = await Promise.all(
     rules.map((rule) => {
       const baseUrl = rule.parentStyleSheet ? rule.parentStyleSheet.href : null;
@@ -208,8 +206,7 @@ export async function getWebFontCSS<T extends HTMLElement>(
 }
 
 export async function embedWebFonts<T extends HTMLElement>(clonedNode: T, options: Options) {
-  const cssText =
-    options.fontEmbedCSS ?? options.skipFonts ? null : await getWebFontCSS(clonedNode, options);
+  const cssText = await getWebFontCSS(clonedNode, options);
 
   if (cssText) {
     const styleNode = document.createElement('style');
