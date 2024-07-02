@@ -87,7 +87,7 @@
     "rejected_description": "La notifica non è stata accettata per problemi tecnici d'invio"
   },
   "empty": {
-    "description": "Il numero di notifiche caricate dall'ente su SEND al momento non è sufficiente per elaborare e mostrare le statistiche di invio.",
-    "component_description": "Nel periodo selezionato il numero di notifiche caricate dall'ente su SEND non è sufficiente per elaborare e mostrare le statistiche di invio."
+    "no_data_found": "Non ci sono dati a disposizione per l'intervallo di tempo selezionato",
+    "not_enough_data": "Il numero di notifiche caricate dall'ente su SEND al momento non è sufficiente per elaborare e mostrare le statistiche di invio."
   }
 }

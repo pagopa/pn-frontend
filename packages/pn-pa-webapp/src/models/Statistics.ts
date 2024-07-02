@@ -49,7 +49,7 @@ export enum ResponseStatus { // EXPORT FROM pn-commons/../NotificationDetail.ts?
 }
 
 export enum DigitaErrorTypes {
-  INVALID_PEC = 'ERRORE DOMICILIO PEC NON VALIDO',
+  INVALID_PEC = 'ERRORE DOMINIO PEC NON VALIDO',
   DELIVERY_ERROR = 'ERRORE CONSEGNA',
   REJECTED = 'NON ACCETTAZIONE',
   UNKNOWN = '-',

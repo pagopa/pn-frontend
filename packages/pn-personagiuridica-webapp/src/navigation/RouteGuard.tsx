@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { AccessDenied, AppRouteParams, sanitizeString } from '@pagopa-pn/pn-commons';
+import { AccessDenied, AppRouteParams } from '@pagopa-pn/pn-commons';
 
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -10,7 +10,6 @@ import * as routes from './routes.const';
 
 const RouteGuard = () => {
   const navigate = useNavigate();
-  const [params] = useSearchParams();
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
   const location = useLocation();
 
@@ -25,11 +24,6 @@ const RouteGuard = () => {
   }, [location.pathname]);
 
   if (!sessionToken) {
-    const aar = params.get(AppRouteParams.AAR);
-    if (aar) {
-      // save to localstorage
-      localStorage.setItem(AppRouteParams.AAR, sanitizeString(aar));
-    }
     return (
       <AccessDenied
         isLogged={false}
