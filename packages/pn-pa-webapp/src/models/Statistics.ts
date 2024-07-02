@@ -49,7 +49,7 @@ export enum ResponseStatus { // EXPORT FROM pn-commons/../NotificationDetail.ts?
 }
 
 export enum DigitaErrorTypes {
-  INVALID_PEC = 'ERRORE DOMICILIO PEC NON VALIDO',
+  INVALID_PEC = 'ERRORE DOMINIO PEC NON VALIDO',
   DELIVERY_ERROR = 'ERRORE CONSEGNA',
   REJECTED = 'NON ACCETTAZIONE',
   UNKNOWN = '-',
@@ -201,10 +201,10 @@ export enum WEEK_DAYS {
 }
 
 export const SelectedStatisticsFilter = {
-  lastMonth: 'lastMonth',
-  last3Months: 'last3Months',
-  last6Months: 'last6Months',
   last12Months: 'last12Months',
+  last6Months: 'last6Months',
+  last3Months: 'last3Months',
+  lastMonth: 'lastMonth',
   custom: 'custom',
 } as const;
 

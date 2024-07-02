@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+
 import { Between } from '../../rules/Between';
 import { GreaterThan } from '../../rules/GreaterThan';
 import { LessThan } from '../../rules/LessThan';
@@ -8,21 +9,21 @@ const pushRuleMk = vi.fn();
 const dummyRuleValidator = new NumberRuleValidator(pushRuleMk);
 
 vi.mock('../../rules/LessThan', () => {
-    return {
-        LessThan: vi.fn()
-    }
+  return {
+    LessThan: vi.fn(),
+  };
 });
 
 vi.mock('../../rules/GreaterThan', () => {
-    return {
-        GreaterThan: vi.fn()
-    }
+  return {
+    GreaterThan: vi.fn(),
+  };
 });
 
 vi.mock('../../rules/Between', () => {
-    return {
-        Between: vi.fn()
-    }
+  return {
+    Between: vi.fn(),
+  };
 });
 
 describe('Test NumberRuleValidator', () => {
@@ -50,7 +51,7 @@ describe('Test NumberRuleValidator', () => {
     expect(pushRuleMk).toBeCalledWith(new GreaterThan(1));
     expect(result).toBeInstanceOf(NumberRuleValidator);
   });
-  
+
   it('check if between rule is instantiated', () => {
     const result = dummyRuleValidator.between(1, 2);
     expect(pushRuleMk).toBeCalledTimes(1);

@@ -1,9 +1,10 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import {
   AppResponsePublisher,
+  AppRouteParams,
   InactivityHandler,
   LoadingPage,
   SessionModal,
@@ -53,6 +54,9 @@ const manageUnforbiddenError = (e: any) => {
  * SessionGuardRender: logica di renderizzazione
  */
 const SessionGuardRender = () => {
+  const [params] = useSearchParams();
+  const { DISABLE_INACTIVITY_HANDLER } = getConfiguration();
+
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
   const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession } = useAppSelector(
@@ -64,8 +68,6 @@ const SessionGuardRender = () => {
 
   const isAnonymousUser = !isUnauthorizedUser && !sessionToken;
   const hasTosPrivacyApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_PRIVACY_APPROVAL);
-
-  const { DISABLE_INACTIVITY_HANDLER } = getConfiguration();
 
   const hasErrorMessage = {
     title: hasTosPrivacyApiErrors
@@ -81,25 +83,31 @@ const SessionGuardRender = () => {
     message: isUnauthorizedUser ? messageUnauthorizedUser.message : hasErrorMessage.message,
   };
 
-  const renderIfInitialized = () =>
-    isUnauthorizedUser || hasTosPrivacyApiErrors || isClosedSession ? (
-      <SessionModal
-        open
-        title={goodbyeMessage.title}
-        message={goodbyeMessage.message}
-        handleClose={() => goToLoginPortal()}
-        initTimeout
-      />
-    ) : isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? (
-      <Outlet />
-    ) : (
+  const renderIfInitialized = () => {
+    if (isUnauthorizedUser || hasTosPrivacyApiErrors || isClosedSession) {
+      return (
+        <SessionModal
+          open
+          title={goodbyeMessage.title}
+          message={goodbyeMessage.message}
+          handleClose={() => goToLoginPortal()}
+          initTimeout
+        />
+      );
+    } else if (isAnonymousUser) {
+      const aar = params.get(AppRouteParams.AAR);
+      goToLoginPortal(aar);
+      return <></>;
+    }
+    return (
       <InactivityHandler
-        inactivityTimer={inactivityTimer}
+        inactivityTimer={isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? 0 : inactivityTimer}
         onTimerExpired={() => dispatch(logout())}
       >
         <Outlet />
       </InactivityHandler>
     );
+  };
 
   return isInitialized ? renderIfInitialized() : <LoadingPage renderType="whole" />;
 };

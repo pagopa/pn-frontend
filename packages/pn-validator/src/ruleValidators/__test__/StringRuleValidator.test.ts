@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+
 import { IsEmpty } from '../../rules/IsEmpty';
 import { Length } from '../../rules/Length';
 import { Matches } from '../../rules/Matches';
