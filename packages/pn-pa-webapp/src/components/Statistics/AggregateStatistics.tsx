@@ -91,12 +91,12 @@ const AggregateStatistics: React.FC<Props> = ({
       <PnECharts
         key="Aggregate"
         option={option}
-        style={sx}
+        style={{ ...sx, height: '400px' }}
         legend={data.map((item) => item.name)}
       />
     );
   }
-  return <PnECharts key="Aggregate" option={option} style={sx} />;
+  return <PnECharts key="Aggregate" option={option} style={{ ...sx, height: '400px' }} />;
 };
 
 export default AggregateStatistics;

@@ -131,7 +131,7 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
         {isEmpty ? (
           <EmptyStatistics description="empty.component_description" />
         ) : (
-          <PnECharts option={option} />
+          <PnECharts option={option} style={{ height: '400px' }} />
         )}
       </Stack>
     </Paper>

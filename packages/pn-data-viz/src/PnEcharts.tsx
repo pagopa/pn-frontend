@@ -1,10 +1,18 @@
 /* eslint-disable functional/no-let */
 import { getInstanceByDom, init, registerTheme } from 'echarts';
-import type { EChartOption, ECharts, SetOptionOpts } from 'echarts';
+import type { EChartOption, SetOptionOpts } from 'echarts';
 import { useEffect, useMemo, useRef } from 'react';
 import type { CSSProperties } from 'react';
 
-import { Avatar, Checkbox, ListItem, ListItemAvatar, ListItemText, Stack } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Checkbox,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Stack,
+} from '@mui/material';
 
 import senderDashboard from './theme/senderDashboard';
 
@@ -26,64 +34,70 @@ export function PnECharts({
   legend,
 }: Readonly<PnEChartsProps>): JSX.Element {
   const chartRef = useRef<HTMLDivElement>(null);
-  // Initialize chart
-  let chart: ECharts | undefined;
 
   const toggleSerie = (name: string) => {
-    chart?.dispatchAction({
+    if (!chartRef.current) {
+      return;
+    }
+    const chart = getInstanceByDom(chartRef.current);
+    chart.dispatchAction({
       type: 'legendToggleSelect',
       name,
     });
   };
 
   useEffect(() => {
-    if (chartRef.current !== null) {
-      let selectedTheme = 'defaultTheme';
-
-      registerTheme('defaultTheme', senderDashboard);
-      if (typeof theme === 'object') {
-        registerTheme('customTheme', theme);
-        selectedTheme = 'customTheme';
-      }
-      chart = init(chartRef.current, selectedTheme, { renderer: 'canvas' });
+    if (!chartRef.current) {
+      return;
     }
+    let selectedTheme = 'defaultTheme';
+
+    registerTheme('defaultTheme', senderDashboard);
+    if (typeof theme === 'object') {
+      registerTheme('customTheme', theme);
+      selectedTheme = 'customTheme';
+    }
+    const chart = init(chartRef.current, selectedTheme, { renderer: 'canvas' });
 
     // Add chart resize listener
     // ResizeObserver is leading to a bit janky UX
     // Should we implement a debounce?
     function resizeChart() {
-      chart?.resize();
+      chart.resize();
     }
     window.addEventListener('resize', resizeChart);
 
     // Return cleanup function
     return () => {
-      chart?.dispose();
+      chart.dispose();
       window.removeEventListener('resize', resizeChart);
     };
   }, [theme]);
 
   useEffect(() => {
     // Update chart
-    if (chartRef.current !== null) {
-      const options = {
-        aria: {
-          show: true,
-        },
-        ...option,
-      };
-      const chart = getInstanceByDom(chartRef.current);
-      chart?.setOption(options, settings);
+    if (!chartRef.current) {
+      return;
     }
+
+    const options = {
+      aria: {
+        show: true,
+      },
+      ...option,
+    };
+    const chart = getInstanceByDom(chartRef.current);
+    chart?.setOption(options, settings);
   }, [option, settings, theme]); // Whenever theme changes we need to add option and setting due to it being deleted in cleanup function
 
   useEffect(() => {
-    // Update chart
-    if (chartRef.current !== null) {
-      const chart = getInstanceByDom(chartRef.current);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      loading === true ? chart?.showLoading() : chart?.hideLoading();
+    // Show/hide loading
+    if (!chartRef.current) {
+      return;
     }
+    const chart = getInstanceByDom(chartRef.current);
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    loading === true ? chart?.showLoading() : chart?.hideLoading();
   }, [loading, theme]);
 
   const legendContent = useMemo(
@@ -119,16 +133,7 @@ export function PnECharts({
 
   return (
     <>
-      <div
-        ref={chartRef}
-        style={{
-          width: '100%',
-          height: '100%',
-          minHeight: '400px',
-          flexGrow: 1,
-          ...style,
-        }}
-      />
+      <Box ref={chartRef} style={style} />
       {legend && (
         <Stack direction={'row'} alignContent={'center'} justifyContent={'center'} display={'flex'}>
           {legendContent}
