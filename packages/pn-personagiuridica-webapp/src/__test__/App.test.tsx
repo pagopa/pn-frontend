@@ -20,7 +20,10 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
     t: (str: string) => str,
-    i18n: { language: 'it' },
+    i18n: {
+      language: 'it',
+      changeLanguage: () => new Promise(() => {}),
+    },
   }),
 }));
 vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
