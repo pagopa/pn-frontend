@@ -46,18 +46,24 @@ const IOContact: React.FC<Props> = ({ contact }) => {
 
   const enableIO = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
-    void dispatch(enableIOAddress()).then(() => {
-      setIsConfirmModalOpen(false);
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS);
-    });
+    dispatch(enableIOAddress())
+      .unwrap()
+      .then(() => {
+        setIsConfirmModalOpen(false);
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS);
+      })
+      .catch((e) => console.log(e));
   };
 
   const disableIO = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION);
-    void dispatch(disableIOAddress()).then(() => {
-      setIsConfirmModalOpen(false);
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS);
-    });
+    dispatch(disableIOAddress())
+      .unwrap()
+      .then(() => {
+        setIsConfirmModalOpen(false);
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS);
+      })
+      .catch((e) => console.log(e));
   };
 
   const handleConfirmationModal = () => {

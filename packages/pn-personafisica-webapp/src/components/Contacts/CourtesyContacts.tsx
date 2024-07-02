@@ -1,15 +1,56 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Alert, Box, Typography } from '@mui/material';
+import { Alert, Box, Stack, Typography } from '@mui/material';
 import { IllusEmail } from '@pagopa/mui-italia';
 
-import { DigitalAddress } from '../../models/contacts';
-import CourtesyContactsList from './CourtesyContactsList';
+import { CourtesyChannelType, DigitalAddress } from '../../models/contacts';
+import { countContactsByType } from '../../utility/contacts.utility';
+import CourtesyContactItem, { CourtesyFieldType } from './CourtesyContactItem';
 import DigitalContactsCard from './DigitalContactsCard';
 
 interface Props {
   contacts: Array<DigitalAddress>;
 }
+interface ListProps {
+  contacts: Array<DigitalAddress>;
+}
+
+const CourtesyContactsList: React.FC<ListProps> = ({ contacts }) => {
+  const getPhoneContact = (): DigitalAddress | undefined =>
+    contacts.find(
+      (contact) => contact.channelType === CourtesyChannelType.SMS && contact.senderId === 'default'
+    );
+
+  const getEmailContact = (): DigitalAddress | undefined =>
+    contacts.find(
+      (contact) =>
+        contact.channelType === CourtesyChannelType.EMAIL && contact.senderId === 'default'
+    );
+
+  const phoneContact = getPhoneContact();
+  const emailContact = getEmailContact();
+  const phoneContactsQuantity = (): number =>
+    countContactsByType(contacts, CourtesyChannelType.SMS);
+
+  const emailContactsQuantity = (): number =>
+    countContactsByType(contacts, CourtesyChannelType.EMAIL);
+
+  return (
+    <Stack spacing={3} mt={3}>
+      <CourtesyContactItem
+        type={CourtesyFieldType.EMAIL}
+        value={emailContact?.value ? emailContact.value : ''}
+        blockDelete={emailContactsQuantity() > 1}
+      />
+      <CourtesyContactItem
+        type={CourtesyFieldType.PHONE}
+        value={phoneContact?.value ? phoneContact.value : ''}
+        blockDelete={phoneContactsQuantity() > 1}
+      />
+    </Stack>
+  );
+};
 
 const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
   const { t } = useTranslation(['common', 'recapiti']);
