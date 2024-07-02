@@ -44,10 +44,12 @@ const SmartFilter = <FormValues extends object>({
   const currentFilters = useRef<FormValues>(formValues);
   const isPreviousSearch = _.isEqual(formValues, currentFilters.current);
   const filtersCount = filtersApplied(currentFilters.current, initialValues);
+  const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
   const submitHandler = (e?: FormEvent<HTMLFormElement> | undefined) => {
     // eslint-disable-next-line functional/immutable-data
     currentFilters.current = formValues;
+    dialogRef.current?.toggleOpen();
     onSubmit(e);
   };
 
@@ -92,7 +94,7 @@ const SmartFilter = <FormValues extends object>({
         >
           {filterLabel}
         </CustomMobileDialogToggle>
-        <CustomMobileDialogContent title={filterLabel}>
+        <CustomMobileDialogContent title={filterLabel} ref={dialogRef}>
           <form onSubmit={submitHandler}>
             <DialogContent>{children}</DialogContent>
             <DialogActions>
