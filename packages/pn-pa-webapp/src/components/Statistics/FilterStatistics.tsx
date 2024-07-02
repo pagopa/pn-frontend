@@ -32,9 +32,9 @@ import { setStatisticsFilter } from '../../redux/statistics/reducers';
 const quickFilters = Object.values(SelectedStatisticsFilter).filter((value) => value !== 'custom');
 
 export const defaultValues = {
-  startDate: oneMonthAgo,
+  startDate: twelveMonthsAgo,
   endDate: today,
-  selected: SelectedStatisticsFilter.lastMonth,
+  selected: SelectedStatisticsFilter.last12Months,
 };
 
 type Props = {
