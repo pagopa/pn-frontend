@@ -10,7 +10,7 @@ type Props = {
   sx?: SxProps<Theme>;
 };
 
-const EmptyStatistics: React.FC<Props> = ({ description = 'empty.description', sx }) => {
+const EmptyStatistics: React.FC<Props> = ({ description = 'empty.no_data_found', sx }) => {
   const { t } = useTranslation(['statistics']);
 
   return (

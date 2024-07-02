@@ -1,7 +1,13 @@
 /* eslint-disable functional/immutable-data */
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { StatisticsFilter, StatisticsParsedResponse } from '../../models/Statistics';
+import {
+  NotificationStatus,
+  StatisticsDataTypes,
+  StatisticsFilter,
+  StatisticsParsedResponse,
+} from '../../models/Statistics';
+import { RootState } from '../store';
 import { getStatistics } from './actions';
 
 const initialState = {
@@ -27,5 +33,17 @@ const statisticsSlice = createSlice({
 });
 
 export const { resetState, setStatisticsFilter } = statisticsSlice.actions;
+
+export const hasData = (state: RootState) => {
+  const accepted =
+    state.statisticsState.statistics?.data?.[StatisticsDataTypes.FiledStatistics][
+      NotificationStatus.ACCEPTED
+    ];
+  const refused =
+    state.statisticsState.statistics?.data?.[StatisticsDataTypes.FiledStatistics][
+      NotificationStatus.REFUSED
+    ];
+  return accepted && refused && (accepted.count > 0 || refused.count > 0);
+};
 
 export default statisticsSlice;
