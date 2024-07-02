@@ -1,12 +1,17 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
+
+
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+
+
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { RenderResult, act, render } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import Statistics from '../Statistics.page';
+
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -41,7 +46,7 @@ describe('Statistics Page tests', () => {
     });
 
     expect(result.container).toHaveTextContent('title');
-    expect(result.container).toHaveTextContent('empty.descriptionStatistics');
+    expect(result.container).toHaveTextContent('empty.not_enough_data');
   });
 
   it('api return error', async () => {
