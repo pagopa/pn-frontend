@@ -218,9 +218,9 @@ const TrendStackedStatistics: React.FC<Props> = ({
   };
 
   if (legend) {
-    return <PnECharts option={option} style={sx} legend={legend} />;
+    return <PnECharts option={option} style={{ ...sx, height: '400px' }} legend={legend} />;
   }
-  return <PnECharts option={option} style={sx} />;
+  return <PnECharts option={option} style={{ ...sx, height: '400px' }} />;
 };
 
 export default TrendStackedStatistics;

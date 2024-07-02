@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box, Paper, Stack, Typography } from '@mui/material';
+import { Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   TitleBox,
@@ -101,54 +101,56 @@ const Statistics = () => {
             <Typography variant="h6" component="h5" mt={7}>
               {t('section_1')}
             </Typography>
-            <FilterStatistics filter={statisticsFilter} />
+            <FilterStatistics filter={statisticsFilter} sx={{ mb: 2 }} />
             {!hasStatisticsData ? (
-              <Paper sx={{ p: 3, mb: 3, height: '100%', mt: 5 }} elevation={0}>
+              <Paper sx={{ p: 3, mb: 3, height: '100%', mt: 3 }} elevation={0}>
                 <EmptyStatistics />
               </Paper>
             ) : (
-              <Stack direction={'column'} spacing={3} pt={2}>
+              <>
                 <FiledNotificationsStatistics
                   startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
                   endDate={statisticsData.endDate ?? formatToSlicedISOString(today)}
                   data={statisticsData.data[StatisticsDataTypes.FiledStatistics]}
                 />
-                <Stack direction={{ lg: 'row', xs: 'column' }} spacing={3} mt={4}>
-                  <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                <Grid container mt={3}>
+                  <Grid item sm={12} lg={6} pr={{ sm: 0, lg: 1.5 }} pb={{ xs: 1.5, lg: 0 }}>
                     <LastStateStatistics
                       data={statisticsData.data[StatisticsDataTypes.LastStateStatistics]}
+                      sx={{ height: '100%' }}
                     />
-                  </Box>
-                  <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                  </Grid>
+                  <Grid item sm={12} lg={6} pl={{ sm: 0, lg: 1.5 }} pt={{ xs: 1.5, lg: 0 }}>
                     <DeliveryModeStatistics
                       startDate={statisticsData.startDate ?? formatToSlicedISOString(oneYearAgo)}
                       endDate={statisticsData.endDate ?? formatToSlicedISOString(today)}
                       data={statisticsData.data[StatisticsDataTypes.DeliveryModeStatistics]}
+                      sx={{ height: '100%' }}
                     />
-                  </Box>
-                </Stack>
-                <Box>
-                  <Typography variant="h6" component="h5" mt={6}>
-                    {t('section_2')}
-                  </Typography>
-                  <FilterStatistics filter={statisticsFilter} />
-                </Box>
-                <Stack direction={{ lg: 'row', xs: 'column' }} spacing={3} mt={4}>
-                  <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                  </Grid>
+                </Grid>
+                <Typography variant="h6" component="h5" mt={9}>
+                  {t('section_2')}
+                </Typography>
+                <FilterStatistics filter={statisticsFilter} />
+                <Grid container my={3}>
+                  <Grid item sm={12} lg={6} pr={{ xs: 0, lg: 1.5 }} pb={{ xs: 1.5, lg: 0 }}>
                     <DigitalStateStatistics
                       data={statisticsData.data[StatisticsDataTypes.DigitalStateStatistics]}
+                      sx={{ height: '100%' }}
                     />
-                  </Box>
-                  <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                  </Grid>
+                  <Grid item sm={12} lg={6} pl={{ xs: 0, lg: 1.5 }} pt={{ xs: 1.5, lg: 0 }}>
                     <DigitalMeanTimeStatistics
                       data={statisticsData.data[StatisticsDataTypes.DigitalMeanTimeStatistics]}
+                      sx={{ height: '100%' }}
                     />
-                  </Box>
-                </Stack>
+                  </Grid>
+                </Grid>
                 <DigitalErrorsDetailStatistics
                   data={statisticsData.data[StatisticsDataTypes.DigitalErrorsDetailStatistics]}
                 />
-              </Stack>
+              </>
             )}
           </>
         ) : (

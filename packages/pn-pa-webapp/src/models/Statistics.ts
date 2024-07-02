@@ -89,7 +89,7 @@ export interface DigitalNotificationFocus {
 }
 
 export interface StatisticsResponse {
-  sender_id: string;
+  senderId: string;
   genTimestamp: string;
   lastDate: string;
   startDate: string;
@@ -177,7 +177,7 @@ export interface StatisticsParsedData {
 }
 
 export interface StatisticsParsedResponse {
-  sender_id: string;
+  senderId: string;
   genTimestamp: string;
   lastDate: string;
   startDate: string;

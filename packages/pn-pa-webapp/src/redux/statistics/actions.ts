@@ -39,7 +39,7 @@ export const getStatistics = createAsyncThunk(
 
       return response.data
         ? ({
-            sender_id: response.data.senderId,
+            senderId: response.data.senderId,
             genTimestamp: response.data.genTimestamp,
             lastDate: response.data.lastDate,
             startDate: response.data.startDate,
