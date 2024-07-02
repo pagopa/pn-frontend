@@ -7,8 +7,10 @@ import { act, render, screen, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
 import { store } from '../../redux/store';
+import { getConfiguration } from '../../services/configuration.service';
 import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
+import { DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM } from '../routes.const';
 
 const mockNavigateFn = vi.fn();
 
@@ -34,8 +36,10 @@ const Guard = () => (
 );
 
 describe('SessionGuard Component', async () => {
-  const original = window.location;
+  const originalLocation = window.location;
+  const originalOpen = window.open;
   let mock: MockAdapter;
+  const mockOpenFn = vi.fn();
 
   beforeAll(() => {
     mock = new MockAdapter(authClient);
@@ -43,16 +47,25 @@ describe('SessionGuard Component', async () => {
       writable: true,
       value: { hash: '', pathname: '/' },
     });
+    Object.defineProperty(window, 'open', {
+      configurable: true,
+      value: mockOpenFn,
+    });
   });
 
   afterEach(() => {
     mock.reset();
     vi.clearAllMocks();
+    Object.defineProperty(window, 'location', {
+      writable: true,
+      value: { hash: '', pathname: '/' },
+    });
   });
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'location', { writable: true, value: original });
+    Object.defineProperty(window, 'location', { writable: true, value: originalLocation });
+    Object.defineProperty(window, 'open', { configurable: true, value: originalOpen });
   });
 
   // expected behavior: enters the app, does a navigate, launches sessionCheck, the user is deleted from redux
@@ -81,8 +94,8 @@ describe('SessionGuard Component', async () => {
     await act(async () => {
       render(<Guard />);
     });
-    const pageComponent = screen.queryByText('Generic Page');
-    expect(pageComponent).toBeTruthy();
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(`${getConfiguration().URL_FE_LOGOUT}`, '_self');
   });
 
   // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken
@@ -202,6 +215,15 @@ describe('SessionGuard Component', async () => {
       { pathname: location.pathname, search: '', hash: 'greet=hola' },
       { replace: true }
     );
+  });
+
+  it('store aar in localStorage', async () => {
+    const mockQrCode = 'qr-code';
+    window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
+    await act(async () => {
+      render(<Guard />);
+    });
+    expect(localStorage.getItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM)).toBe(mockQrCode);
   });
 
   // expected behavior: does not enter the app, does no navigate, message about logout
