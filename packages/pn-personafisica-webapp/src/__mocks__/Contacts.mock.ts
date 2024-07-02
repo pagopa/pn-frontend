@@ -13,6 +13,7 @@ export const digitalAddresses: Array<DigitalAddress> = [
     channelType: LegalChannelType.PEC,
     value: 'nome.utente@pec.it',
     pecValid: true,
+    codeValid: true,
   },
   {
     addressType: AddressType.LEGAL,
@@ -20,6 +21,7 @@ export const digitalAddresses: Array<DigitalAddress> = [
     channelType: LegalChannelType.PEC,
     value: 'nome.utente@pec-comune-milano.it',
     pecValid: true,
+    codeValid: true,
   },
   {
     addressType: AddressType.LEGAL,
@@ -27,6 +29,7 @@ export const digitalAddresses: Array<DigitalAddress> = [
     channelType: LegalChannelType.PEC,
     value: 'nome.utente@pec-tribunale-milano.it',
     pecValid: true,
+    codeValid: true,
   },
   {
     addressType: AddressType.COURTESY,
