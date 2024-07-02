@@ -2,7 +2,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { Grid, Paper, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
@@ -58,34 +58,32 @@ const FiledNotificationsStatistics: React.FC<Props> = ({
   };
 
   return (
-    <Stack spacing={3}>
-      <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
-        <Grid container direction={direction} spacing={spacing}>
-          <Grid item lg={5} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
-            <Typography variant="h6" component="h3">
-              {t('filed.title')}
-            </Typography>
-            <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
-              {t('filed.description')}
-            </Typography>
-            <Typography sx={{ fontSize: 50, fontWeight: 'bold' }} color={GraphColors.blue}>
-              {notificationsAmount.toLocaleString()}
-            </Typography>
-            <Typography color={GraphColors.blue}>
-              <b>{notificationsPercent.toLocaleString()}%</b> {t('filed.description2')}
-            </Typography>
-          </Grid>
-          <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
-            <AggregateAndTrendStatistics
-              startDate={startDate}
-              endDate={endDate}
-              data={data}
-              options={options}
-            />
-          </Grid>
+    <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
+      <Grid container direction={direction} spacing={spacing}>
+        <Grid item lg={5} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
+          <Typography variant="h6" component="h3">
+            {t('filed.title')}
+          </Typography>
+          <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
+            {t('filed.description')}
+          </Typography>
+          <Typography sx={{ fontSize: 50, fontWeight: 'bold' }} color={GraphColors.blue}>
+            {notificationsAmount.toLocaleString()}
+          </Typography>
+          <Typography color={GraphColors.blue}>
+            <b>{notificationsPercent.toLocaleString()}%</b> {t('filed.description2')}
+          </Typography>
         </Grid>
-      </Paper>
-    </Stack>
+        <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
+          <AggregateAndTrendStatistics
+            startDate={startDate}
+            endDate={endDate}
+            data={data}
+            options={options}
+          />
+        </Grid>
+      </Grid>
+    </Paper>
   );
 };
 

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Button, Chip } from '@mui/material';
+import { Button, Chip, SxProps } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import {
   CustomDatePicker,
@@ -39,9 +39,10 @@ export const defaultValues = {
 
 type Props = {
   filter: StatisticsFilter | null;
+  sx?: SxProps;
 };
 
-const FilterStatistics: React.FC<Props> = ({ filter }) => {
+const FilterStatistics: React.FC<Props> = ({ filter, sx }) => {
   const { t, i18n } = useTranslation(['statistics']);
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
@@ -169,6 +170,7 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
       justifyContent="space-between"
       alignItems="center"
       data-testid="statistics-filter"
+      sx={sx}
     >
       <Box flexGrow={0} flexShrink={0}>
         {quickFiltersJsx()}

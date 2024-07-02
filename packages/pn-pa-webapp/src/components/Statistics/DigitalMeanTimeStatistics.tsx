@@ -3,7 +3,7 @@ import { isArray } from 'lodash';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Paper, Stack, Typography } from '@mui/material';
+import { Paper, SxProps, Typography } from '@mui/material';
 import { convertHoursToIntDays } from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
@@ -12,6 +12,7 @@ import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
   data: IDigitalMeanTimeStatistics;
+  sx?: SxProps;
 };
 
 const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
@@ -120,20 +121,14 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
   };
 
   return (
-    <Paper sx={{ p: 3, mb: 3, height: '100%' }} elevation={0}>
-      <Stack direction="column" height="100%" sx={{ display: 'flex' }}>
-        <Typography variant="h6" component="h3">
-          {t('digital_mean_time.title')}
-        </Typography>
-        <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
-          {t('digital_mean_time.description')}
-        </Typography>
-        {isEmpty ? (
-          <EmptyStatistics />
-        ) : (
-          <PnECharts option={option} style={{ height: '400px' }} />
-        )}
-      </Stack>
+    <Paper sx={{ ...props.sx, p: 3, mb: 3 }} elevation={0}>
+      <Typography variant="h6" component="h3">
+        {t('digital_mean_time.title')}
+      </Typography>
+      <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
+        {t('digital_mean_time.description')}
+      </Typography>
+      {isEmpty ? <EmptyStatistics /> : <PnECharts option={option} style={{ height: '400px' }} />}
     </Paper>
   );
 };

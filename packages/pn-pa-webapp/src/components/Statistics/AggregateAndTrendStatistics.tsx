@@ -72,10 +72,9 @@ const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data
   }
 
   return (
-    <Stack direction="column" height="100%" sx={{ display: 'flex' }}>
+    <>
       <Stack
         direction={{ lg: 'row', xs: 'column' }}
-        display="flex"
         justifyContent="space-between"
         alignItems="center"
       >
@@ -146,7 +145,7 @@ const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data
           options={options}
         />
       )}
-    </Stack>
+    </>
   );
 };
 
