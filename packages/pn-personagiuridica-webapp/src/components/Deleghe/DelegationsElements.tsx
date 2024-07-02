@@ -11,6 +11,7 @@ import {
   CustomTagGroup,
   Row,
   appStateActions,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 import { AnyAction } from '@reduxjs/toolkit';
@@ -293,6 +294,8 @@ export const OrganizationsList: React.FC<OrganizationsListProps> = ({
   visibleItems,
 }) => {
   const { t } = useTranslation(['deleghe']);
+  const isMobile = useIsMobile();
+
   return (
     <>
       {organizations.length === 0 ? (
@@ -300,14 +303,19 @@ export const OrganizationsList: React.FC<OrganizationsListProps> = ({
           {t('deleghe.table.allNotifications')}
         </Typography>
       ) : (
-        <Box>
+        <Box sx={{ minWidth: isMobile ? '' : '35rem', maxWidth: '60rem' }}>
           <Typography variant={textVariant || 'inherit'} mb={2}>
             {t('deleghe.table.notificationsFrom')}
           </Typography>
           <CustomTagGroup visibleItems={visibleItems}>
             {organizations.map((organization) => (
               <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={organization}>
-                <Tag value={organization} />
+                <Tag
+                  value={organization}
+                  sx={{
+                    whiteSpace: 'normal',
+                  }}
+                />
               </Box>
             ))}
           </CustomTagGroup>

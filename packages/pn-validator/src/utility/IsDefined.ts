@@ -1,3 +1,1 @@
-export const isDefined = (value: unknown): boolean => {
-  return value !== null && value !== undefined;
-};
+export const isDefined = (value: unknown): boolean => value !== null && value !== undefined;

@@ -124,7 +124,7 @@ const LastStateStatistics: React.FC<Props> = (props) => {
           {t('last_state.description')}
         </Typography>
         {isEmpty ? (
-          <EmptyStatistics description="empty.component_description" />
+          <EmptyStatistics />
         ) : (
           <PnECharts option={option} style={{ height: '400px' }} />
         )}
