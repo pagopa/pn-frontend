@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+
 import { GreaterThan } from '../../rules/GreaterThan';
 import { LessThan } from '../../rules/LessThan';
 import { DateRuleValidator } from '../DateRuleValidator';
@@ -7,15 +8,15 @@ const pushRuleMk = vi.fn();
 const dummyRuleValidator = new DateRuleValidator(pushRuleMk);
 
 vi.mock('../../rules/LessThan', () => {
-    return {
-        LessThan: vi.fn()
-    }
+  return {
+    LessThan: vi.fn(),
+  };
 });
 
 vi.mock('../../rules/GreaterThan', () => {
-    return {
-        GreaterThan: vi.fn()
-    }
+  return {
+    GreaterThan: vi.fn(),
+  };
 });
 
 describe('Test DateRuleValidator', () => {

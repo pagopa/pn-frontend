@@ -109,7 +109,7 @@ const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
         </Grid>
         <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
           {isEmpty ? (
-            <EmptyStatistics description="empty.component_description" />
+            <EmptyStatistics />
           ) : (
             <AggregateStatistics
               values={aggregateData}

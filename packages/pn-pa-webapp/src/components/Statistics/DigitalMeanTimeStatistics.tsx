@@ -129,7 +129,7 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
           {t('digital_mean_time.description')}
         </Typography>
         {isEmpty ? (
-          <EmptyStatistics description="empty.component_description" />
+          <EmptyStatistics />
         ) : (
           <PnECharts option={option} />
         )}
