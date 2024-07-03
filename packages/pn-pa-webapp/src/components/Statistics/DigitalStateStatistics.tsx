@@ -109,7 +109,7 @@ const DigitalStateStatistics: React.FC<Props> = (props) => {
           {t('digital_state.description')}
         </Typography>
         {isEmpty ? (
-          <EmptyStatistics description="empty.component_description" />
+          <EmptyStatistics />
         ) : (
           <PnECharts option={option} />
         )}
