@@ -1,6 +1,3 @@
-/* eslint-disable functional/no-let */
-
-/* eslint-disable functional/immutable-data */
 import { add, compareAsc } from 'date-fns';
 import type { CSSProperties } from 'react';
 
@@ -58,7 +55,9 @@ const TrendStackedStatistics: React.FC<Props> = ({
    * @returns {Array<string>}
    */
   const getAllDays = (startDate: string, endDate: string): Array<string> => {
+    // eslint-disable-next-line functional/no-let
     let start = new Date(startDate);
+    // eslint-disable-next-line functional/no-let
     let end = new Date(endDate);
 
     /**
@@ -72,7 +71,9 @@ const TrendStackedStatistics: React.FC<Props> = ({
     end = add(end, { hours: 15 });
 
     const days: Array<string> = [];
+    // eslint-disable-next-line functional/no-let
     for (let d = start; compareAsc(d, end) < 1; d = add(d, { days: 1 })) {
+      // eslint-disable-next-line functional/immutable-data
       days.push(formatToSlicedISOString(d));
     }
     return days;
@@ -84,19 +85,24 @@ const TrendStackedStatistics: React.FC<Props> = ({
    */
   const getAllWeeks = (days: Array<string>): Array<{ start: string; end: string }> => {
     const weeksInterval: Array<{ start: string; end: string }> = [];
+    // eslint-disable-next-line functional/no-let
     let start = new Date(days[0]);
+    // eslint-disable-next-line functional/no-let
     let end = new Date(days[days.length - 1]);
 
     start = add(start, { hours: 15 });
     end = add(end, { hours: 15 });
 
+    // eslint-disable-next-line functional/no-let
     let first = new Date(days[0]);
     first = add(first, { hours: 15 });
+    // eslint-disable-next-line functional/no-let
     for (let d = start; compareAsc(d, end) < 1; d = add(d, { days: 1 })) {
       if (
         d.getDay() === LAST_DAY_OF_THE_WEEK ||
         formatToSlicedISOString(d) === formatToSlicedISOString(end)
       ) {
+        // eslint-disable-next-line functional/immutable-data
         weeksInterval.push({
           start: formatToSlicedISOString(first),
           end: formatToSlicedISOString(d),
@@ -218,9 +224,16 @@ const TrendStackedStatistics: React.FC<Props> = ({
   };
 
   if (legend) {
-    return <PnECharts option={option} style={{ ...sx, height: '400px' }} legend={legend} />;
+    return (
+      <PnECharts
+        option={option}
+        style={{ ...sx, height: '400px' }}
+        legend={legend}
+        dataTestId="Trend"
+      />
+    );
   }
-  return <PnECharts option={option} style={{ ...sx, height: '400px' }} />;
+  return <PnECharts option={option} style={{ ...sx, height: '400px' }} dataTestId="Trend" />;
 };
 
 export default TrendStackedStatistics;

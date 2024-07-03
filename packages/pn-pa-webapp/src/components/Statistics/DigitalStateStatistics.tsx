@@ -124,7 +124,11 @@ const DigitalStateStatistics: React.FC<Props> = (props) => {
       <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
         {t('digital_state.description')}
       </Typography>
-      {isEmpty ? <EmptyStatistics /> : <PnECharts option={option} style={{ height: '400px' }} />}
+      {isEmpty ? (
+        <EmptyStatistics />
+      ) : (
+        <PnECharts option={option} style={{ height: '400px' }} dataTestId="digitalState" />
+      )}
     </Paper>
   );
 };

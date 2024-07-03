@@ -118,7 +118,6 @@ const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
               endAngle={-180}
               radius={['30%', '90%']}
               center={['50%', '50%']}
-              legend={false}
             />
           )}
         </Grid>

@@ -83,7 +83,7 @@ describe('Statistics Page tests', () => {
     expect(result.container).toHaveTextContent('filter.last6Months');
     expect(result.container).toHaveTextContent('filter.last12Months');
 
-    const emptyComponentsText = result.getAllByText('empty.component_description');
+    const emptyComponentsText = result.getAllByText('empty.no_data_found');
     const emptyComponentsImage = await result.findAllByTestId('empty-image');
 
     /**

@@ -3,20 +3,20 @@ import EmptyStatistics from '../EmptyStatistics';
 
 describe('EmptyStatistics component tests', () => {
   it('renders the component', () => {
-    const result = render(<EmptyStatistics />);
+    const { container, getByTestId } = render(<EmptyStatistics />);
 
-    expect(result.container).toHaveTextContent('empty.description');
+    expect(container).toHaveTextContent('empty.description');
 
-    const emptyImg = result.getByTestId('empty-image');
+    const emptyImg = getByTestId('empty-image');
     expect(emptyImg).toBeInTheDocument();
   });
 
   it('renders the component with custom description', () => {
-    const result = render(<EmptyStatistics description="custom-description" />);
+    const { container, getByTestId } = render(<EmptyStatistics description="custom-description" />);
 
-    expect(result.container).toHaveTextContent('custom-description');
+    expect(container).toHaveTextContent('custom-description');
 
-    const emptyImg = result.getByTestId('empty-image');
+    const emptyImg = getByTestId('empty-image');
     expect(emptyImg).toBeInTheDocument();
   });
 });

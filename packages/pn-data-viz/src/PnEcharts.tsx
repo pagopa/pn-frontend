@@ -23,6 +23,7 @@ export interface PnEChartsProps {
   loading?: boolean;
   theme?: 'light' | 'dark' | object;
   legend?: Array<string>;
+  dataTestId?: string;
 }
 
 export function PnECharts({
@@ -32,6 +33,7 @@ export function PnECharts({
   loading,
   theme,
   legend,
+  dataTestId,
 }: Readonly<PnEChartsProps>): JSX.Element {
   const chartRef = useRef<HTMLDivElement>(null);
 
@@ -133,7 +135,7 @@ export function PnECharts({
 
   return (
     <>
-      <Box ref={chartRef} sx={style} />
+      <Box ref={chartRef} sx={style} data-testid={dataTestId} />
       {legend && (
         <Stack
           direction={'row'}

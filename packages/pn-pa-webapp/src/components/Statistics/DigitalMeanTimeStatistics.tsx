@@ -128,7 +128,11 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
       <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
         {t('digital_mean_time.description')}
       </Typography>
-      {isEmpty ? <EmptyStatistics /> : <PnECharts option={option} style={{ height: '400px' }} />}
+      {isEmpty ? (
+        <EmptyStatistics />
+      ) : (
+        <PnECharts option={option} style={{ height: '400px' }} dataTestId="digitalMeanTime" />
+      )}
     </Paper>
   );
 };
