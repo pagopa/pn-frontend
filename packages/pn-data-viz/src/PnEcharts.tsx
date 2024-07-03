@@ -87,7 +87,7 @@ export function PnECharts({
       ...option,
     };
     const chart = getInstanceByDom(chartRef.current);
-    chart?.setOption(options, settings);
+    chart.setOption(options, settings);
   }, [option, settings, theme]); // Whenever theme changes we need to add option and setting due to it being deleted in cleanup function
 
   useEffect(() => {
@@ -110,7 +110,7 @@ export function PnECharts({
           height: 10,
         };
         return (
-          <ListItem key={item} sx={{ width: 'auto' }}>
+          <ListItem key={item} sx={{ width: 'auto' }} data-testid="legendItem">
             <Checkbox
               onChange={() => toggleSerie(item)}
               defaultChecked
@@ -133,9 +133,15 @@ export function PnECharts({
 
   return (
     <>
-      <Box ref={chartRef} style={style} />
+      <Box ref={chartRef} sx={style} />
       {legend && (
-        <Stack direction={'row'} alignContent={'center'} justifyContent={'center'} display={'flex'}>
+        <Stack
+          direction={'row'}
+          alignContent={'center'}
+          justifyContent={'center'}
+          display={'flex'}
+          data-testid="legendContainer"
+        >
           {legendContent}
         </Stack>
       )}

@@ -1,6 +1,6 @@
-import { PnEChartsProps } from '../PnEcharts';
+import { EChartOption } from 'echarts';
 
-export const option: PnEChartsProps['option'] = {
+export const option: EChartOption = {
   tooltip: {
     trigger: 'axis',
     // formatter: (params) => {
