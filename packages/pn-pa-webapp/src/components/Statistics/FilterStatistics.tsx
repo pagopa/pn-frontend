@@ -39,10 +39,11 @@ export const defaultValues = {
 
 type Props = {
   filter: StatisticsFilter | null;
+  className?: string;
   sx?: SxProps;
 };
 
-const FilterStatistics: React.FC<Props> = ({ filter, sx }) => {
+const FilterStatistics: React.FC<Props> = ({ filter, className, sx }) => {
   const { t, i18n } = useTranslation(['statistics']);
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
@@ -170,6 +171,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, sx }) => {
       justifyContent="space-between"
       alignItems="center"
       data-testid="statistics-filter"
+      className={className}
       sx={sx}
     >
       <Box flexGrow={0} flexShrink={0}>
