@@ -58,7 +58,7 @@ const FiledNotificationsStatistics: React.FC<Props> = ({
   };
 
   return (
-    <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
+    <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="filedNotifications">
       <Grid container direction={direction} spacing={spacing}>
         <Grid item lg={5} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
           <Typography variant="h6" component="h3">

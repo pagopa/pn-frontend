@@ -18,6 +18,7 @@ const EmptyStatistics: React.FC<Props> = ({ description = 'empty.no_data_found',
       direction="column"
       height="100%"
       sx={{ display: 'flex', justifyContent: 'space-evenly', textAlign: 'center', ...sx }}
+      data-testid="emptyStatistics"
     >
       <Box sx={{ textAlign: 'center' }}>
         <Typography sx={{ mt: 3, mb: 5 }} variant="body1" color="text.primary">

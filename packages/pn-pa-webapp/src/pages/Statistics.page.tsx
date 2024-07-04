@@ -86,8 +86,6 @@ const Statistics = () => {
     return '';
   };
 
-  const lastUpdateTxt = getLastUpdateText();
-
   const Subtitle = (
     <Stack direction={'row'} display="flex" justifyContent="space-between" alignItems="center">
       <Typography>{t('subtitle', { organization: loggedUserOrganizationParty?.name })}</Typography>
@@ -96,6 +94,7 @@ const Statistics = () => {
         variant="outlined"
         endIcon={<DownloadIcon />}
         sx={{ whiteSpace: 'nowrap' }}
+        data-testid="exportJpgButton"
       >
         {t('export_all')}
       </Button>
@@ -134,7 +133,7 @@ const Statistics = () => {
               variantSubTitle="subtitle1"
             />
             <Typography variant="caption" sx={{ color: GraphColors.greyBlue }}>
-              {lastUpdateTxt}
+              {getLastUpdateText()}
             </Typography>
             <Box ref={exportJpgNode}>
               <Typography variant="h6" component="h5" mt={7}>

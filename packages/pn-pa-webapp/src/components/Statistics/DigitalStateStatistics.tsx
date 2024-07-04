@@ -101,7 +101,7 @@ const DigitalStateStatistics: React.FC<Props> = (props) => {
   };
 
   return (
-    <Paper sx={{ ...props.sx, p: 3, mb: 3 }} elevation={0}>
+    <Paper sx={{ ...props.sx, p: 3, mb: 3 }} elevation={0} data-testid="digitalStateContainer">
       <Typography variant="h6" component="h3">
         {t('digital_state.title')}
       </Typography>

@@ -4,7 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Paper, SxProps, Typography } from '@mui/material';
-import { convertHoursToIntDays } from '@pagopa-pn/pn-commons';
+import { convertHoursToDays } from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
 import { GraphColors, IDigitalMeanTimeStatistics } from '../../models/Statistics';
@@ -49,7 +49,7 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
   ];
 
   const data = statuses.map((item) => ({
-    value: convertHoursToIntDays(item.time / item.count),
+    value: convertHoursToDays(item.time / item.count),
     itemStyle: {
       color: item.color,
     },
@@ -105,7 +105,7 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
   };
 
   return (
-    <Paper sx={{ ...props.sx, p: 3, mb: 3 }} elevation={0}>
+    <Paper sx={{ ...props.sx, p: 3, mb: 3 }} elevation={0} data-testid="digitalMeanTimeContainer">
       <Typography variant="h6" component="h3">
         {t('digital_mean_time.title')}
       </Typography>

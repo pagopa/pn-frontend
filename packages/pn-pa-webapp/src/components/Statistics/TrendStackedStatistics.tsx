@@ -1,7 +1,10 @@
-import { add, compareAsc } from 'date-fns';
 import type { CSSProperties } from 'react';
 
-import { formatDateSMonth, formatToSlicedISOString } from '@pagopa-pn/pn-commons';
+import {
+  formatShortDate,
+  getDaysFromDateRange,
+  getWeeksFromDateRange,
+} from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
 import { IStatisticsDailySummary, Timeframe, WEEK_DAYS } from '../../models/Statistics';
@@ -43,83 +46,16 @@ const TrendStackedStatistics: React.FC<Props> = ({
   sx,
 }) => {
   /**
-   * Returns all calendar days between startDate and endDate (included)
-   *
-   * @param {string} startDate
-   * @param {string} endDate
-   * @returns {Array<string>}
-   */
-  const getAllDays = (startDate: string, endDate: string): Array<string> => {
-    // eslint-disable-next-line functional/no-let
-    let start = new Date(startDate);
-    // eslint-disable-next-line functional/no-let
-    let end = new Date(endDate);
-
-    /**
-     * workaround: sets the time to 15:00 to fix an issue with daylight saving
-     * descr: if the time is set to midnight (as by default) adding a day to the
-     * last day of the non-DST period will have as a result to only move the clock
-     * forward to 23:00 but keep the same date, causing a bug in the algorithm used
-     * to generate every date between two specific dates
-     */
-    start = add(start, { hours: 15 });
-    end = add(end, { hours: 15 });
-
-    const days: Array<string> = [];
-    // eslint-disable-next-line functional/no-let
-    for (let d = start; compareAsc(d, end) < 1; d = add(d, { days: 1 })) {
-      // eslint-disable-next-line functional/immutable-data
-      days.push(formatToSlicedISOString(d));
-    }
-    return days;
-  };
-
-  /**
-   * Returns every week in a specified range of days
-   * a single week is described by an object storing the first and the last dates as string
-   */
-  const getAllWeeks = (days: Array<string>): Array<{ start: string; end: string }> => {
-    const weeksInterval: Array<{ start: string; end: string }> = [];
-    // eslint-disable-next-line functional/no-let
-    let start = new Date(days[0]);
-    // eslint-disable-next-line functional/no-let
-    let end = new Date(days[days.length - 1]);
-
-    start = add(start, { hours: 15 });
-    end = add(end, { hours: 15 });
-
-    // eslint-disable-next-line functional/no-let
-    let first = new Date(days[0]);
-    first = add(first, { hours: 15 });
-    // eslint-disable-next-line functional/no-let
-    for (let d = start; compareAsc(d, end) < 1; d = add(d, { days: 1 })) {
-      if (
-        d.getDay() === LAST_DAY_OF_THE_WEEK ||
-        formatToSlicedISOString(d) === formatToSlicedISOString(end)
-      ) {
-        // eslint-disable-next-line functional/immutable-data
-        weeksInterval.push({
-          start: formatToSlicedISOString(first),
-          end: formatToSlicedISOString(d),
-        });
-        first = add(d, { days: 1 });
-      }
-    }
-
-    return weeksInterval;
-  };
-
-  /**
    * Creates a formatted version of the days array to be used as x label for daily timeframe
    */
   const getDailyLabels = (days: Array<string>): Array<string> =>
-    days.map((day) => formatDateSMonth(day));
+    days.map((day) => formatShortDate(day));
 
   /**
    * Creates a formatted version of the days array to be used as x label for weekly timeframe
    */
   const getWeeklyLables = (weeks: Array<{ start: string; end: string }>): Array<string> =>
-    weeks.map((item) => formatDateSMonth(item.start) + ' - ' + formatDateSMonth(item.end));
+    weeks.map((item) => formatShortDate(item.start) + ' - ' + formatShortDate(item.end));
 
   /**
    * Returns the array containing only the values for each day ready to be used inside the
@@ -158,9 +94,11 @@ const TrendStackedStatistics: React.FC<Props> = ({
       ),
     }));
 
-  const days = getAllDays(startDate, endDate);
-
-  const weeks = getAllWeeks(days);
+  const days = timeframe === Timeframe.daily ? getDaysFromDateRange(startDate, endDate) : [];
+  const weeks =
+    timeframe === Timeframe.weekly
+      ? getWeeksFromDateRange(startDate, endDate, LAST_DAY_OF_THE_WEEK)
+      : [];
 
   const [data, series] =
     timeframe === Timeframe.daily

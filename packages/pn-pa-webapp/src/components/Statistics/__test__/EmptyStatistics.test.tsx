@@ -5,7 +5,7 @@ describe('EmptyStatistics component tests', () => {
   it('renders the component', () => {
     const { container, getByTestId } = render(<EmptyStatistics />);
 
-    expect(container).toHaveTextContent('empty.description');
+    expect(container).toHaveTextContent('empty.no_data_found');
 
     const emptyImg = getByTestId('empty-image');
     expect(emptyImg).toBeInTheDocument();

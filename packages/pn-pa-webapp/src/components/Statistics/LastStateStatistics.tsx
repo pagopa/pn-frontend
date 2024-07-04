@@ -100,7 +100,7 @@ const LastStateStatistics: React.FC<Props> = (props) => {
   };
 
   return (
-    <Paper sx={{ ...props.sx, p: 3, mb: 3 }} elevation={0}>
+    <Paper sx={{ ...props.sx, p: 3, mb: 3 }} elevation={0} data-testid="lastStateContainer">
       <Typography variant="h6" component="h3">
         {t('last_state.title')}
       </Typography>

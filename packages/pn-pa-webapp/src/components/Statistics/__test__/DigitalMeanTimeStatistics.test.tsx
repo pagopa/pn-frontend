@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { convertHoursToIntDays } from '@pagopa-pn/pn-commons';
+import { convertHoursToDays } from '@pagopa-pn/pn-commons';
 
 import {
   digitalMeanTimeDataMock,
@@ -76,19 +76,19 @@ describe('DigitalMeanTimeStatistics component tests', () => {
 
     expect(mockInput).toHaveBeenCalledWith([
       {
-        value: convertHoursToIntDays(
+        value: convertHoursToDays(
           digitalMeanTimeDataMock.data.delivered.time / digitalMeanTimeDataMock.data.delivered.count
         ),
         itemStyle: { color: GraphColors.lightBlue },
       },
       {
-        value: convertHoursToIntDays(
+        value: convertHoursToDays(
           digitalMeanTimeDataMock.data.viewed.time / digitalMeanTimeDataMock.data.viewed.count
         ),
         itemStyle: { color: GraphColors.lightGreen },
       },
       {
-        value: convertHoursToIntDays(
+        value: convertHoursToDays(
           digitalMeanTimeDataMock.data.refined.time / digitalMeanTimeDataMock.data.refined.count
         ),
         itemStyle: { color: GraphColors.darkGreen },

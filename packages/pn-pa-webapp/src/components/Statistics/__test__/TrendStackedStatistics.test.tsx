@@ -1,10 +1,8 @@
 import { vi } from 'vitest';
 
-import {
-  dailyTrendForwardedSeriesMock,
-  trendDataMocked,
-  weeklyTrendForwardedSeriesMock,
-} from '../../../__mocks__/Statistics.mock';
+import { getDaysFromDateRange, getWeeksFromDateRange } from '@pagopa-pn/pn-commons';
+
+import { trendDataMocked } from '../../../__mocks__/Statistics.mock';
 import { render } from '../../../__test__/test-utils';
 import { Timeframe } from '../../../models/Statistics';
 import TrendStackedStatistics from '../TrendStackedStatistics';
@@ -65,11 +63,35 @@ describe('TrendStackedStatistics component tests', () => {
 
   it('renders the component using daily timeframe - no legend', () => {
     render(<TrendStackedStatistics {...trendDataMocked} timeframe={Timeframe.daily} />);
-    expect(mockInput).toHaveBeenCalledWith(dailyTrendForwardedSeriesMock);
+    expect(mockInput).toHaveBeenCalledWith(
+      trendDataMocked.lines.map((line) => ({
+        name: line.title,
+        type: 'line',
+        data: getDaysFromDateRange(trendDataMocked.startDate, trendDataMocked.endDate).map(
+          (day) => {
+            const elem = line.values?.find((item) => item.send_date === day);
+            return elem ? elem.count : 0;
+          }
+        ),
+      }))
+    );
   });
 
   it('renders the component using weekly timeframe - no legend', () => {
     render(<TrendStackedStatistics {...trendDataMocked} timeframe={Timeframe.weekly} />);
-    expect(mockInput).toHaveBeenCalledWith(weeklyTrendForwardedSeriesMock);
+    expect(mockInput).toHaveBeenCalledWith(
+      trendDataMocked.lines.map((line) => ({
+        name: line.title,
+        type: 'line',
+        data: getWeeksFromDateRange(trendDataMocked.startDate, trendDataMocked.endDate, 0).map(
+          (week) =>
+            line.values
+              ?.map((item) =>
+                item.send_date >= week.start && item.send_date <= week.end ? item.count : 0
+              )
+              .reduce((total, current) => total + current, 0)
+        ),
+      }))
+    );
   });
 });

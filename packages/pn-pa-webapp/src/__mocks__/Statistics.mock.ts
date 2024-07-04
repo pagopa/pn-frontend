@@ -405,15 +405,6 @@ export const aggregateDataMock = {
   })),
 };
 
-export const trendDataMocked = {
-  startDate: aggregateAndTrendDataMocked.startDate,
-  endDate: aggregateAndTrendDataMocked.endDate,
-  lines: aggregateAndTrendDataMocked.data.map((data) => ({
-    title: data.title,
-    values: data.details,
-  })),
-};
-
 export const deliveryModeDataMock = {
   startDate: parsedResponseMock.startDate,
   endDate: parsedResponseMock.endDate,
@@ -498,20 +489,11 @@ export const lastStateEmptyDataMock = {
   [NotificationStatus.UNREACHABLE]: 0,
 };
 
-export const dailyTrendForwardedSeriesMock = [
-  {
-    name: 'line 1',
-    type: 'line',
-    data: [0, 75, 60, 0, 121, 0, 0, 41, 89, 0, 18],
-  },
-  {
-    name: 'line 2',
-    type: 'line',
-    data: [0, 0, 0, 72, 39, 0, 0, 168, 83, 0, 11],
-  },
-];
-
-export const weeklyTrendForwardedSeriesMock = [
-  { name: 'line 1', type: 'line', data: [256, 148] },
-  { name: 'line 2', type: 'line', data: [111, 262] },
-];
+export const trendDataMocked = {
+  startDate: aggregateAndTrendDataMocked.startDate,
+  endDate: aggregateAndTrendDataMocked.endDate,
+  lines: aggregateAndTrendDataMocked.data.map((data) => ({
+    title: data.title,
+    values: data.details,
+  })),
+};
