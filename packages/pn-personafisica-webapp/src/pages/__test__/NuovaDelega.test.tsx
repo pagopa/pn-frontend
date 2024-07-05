@@ -15,8 +15,6 @@ import { createDelegationPayload } from '../../__mocks__/CreateDelegation.mock';
 import { parties } from '../../__mocks__/ExternalRegistry.mock';
 import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { CREATE_DELEGATION } from '../../api/delegations/delegations.routes';
-import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
 import * as routes from '../../navigation/routes.const';
 import { createDelegationMapper } from '../../redux/newDelegation/actions';
 import NuovaDelega from '../NuovaDelega.page';
@@ -66,7 +64,7 @@ describe('NuovaDelega page', async () => {
   let mock: MockAdapter;
 
   beforeEach(() => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
     mustMockNavigate = true;
   });
 
@@ -169,7 +167,7 @@ describe('NuovaDelega page', async () => {
       expirationDate: new Date('01/01/2122'),
       verificationCode: '34153',
     };
-    mock.onPost(CREATE_DELEGATION()).reply(200, createDelegationMapper(creationPayload));
+    mock.onPost('/bff/v1/mandate', createDelegationMapper(creationPayload)).reply(200);
     const { container, getByTestId, getByText } = render(<NuovaDelega />);
     const form = container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'nome', createDelegationPayload.nome);
@@ -180,7 +178,7 @@ describe('NuovaDelega page', async () => {
     fireEvent.click(button);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
-      expect(mock.history.post[0].url).toBe(CREATE_DELEGATION());
+      expect(mock.history.post[0].url).toBe('/bff/v1/mandate');
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(
         createDelegationMapper(creationPayload)
       );
@@ -221,7 +219,7 @@ describe('NuovaDelega page', async () => {
     const entiError = container.querySelector('#enti-helper-text');
     expect(entiError).toHaveTextContent('nuovaDelega.validation.entiSelected.required');
     // inser wrong data
-    await testInput(container, 'codiceFiscale', 'wrong-fiscal-code');
+    await testInput(container, 'codiceFiscale', 'WRONG-FISCAL-CODE');
     expect(fiscalCodeError).toHaveTextContent('nuovaDelega.validation.fiscalCode.wrong');
     await testInput(container, 'expirationDate', formatDate(yesterday.toISOString()));
     expect(expirationDateError).toHaveTextContent('nuovaDelega.validation.expirationDate.wrong');
@@ -258,7 +256,7 @@ describe('NuovaDelega page', async () => {
       enti: [parties[1]],
       selectTuttiEntiOrSelezionati: 'entiSelezionati',
     };
-    mock.onPost(CREATE_DELEGATION()).reply(200, createDelegationMapper(creationPayload));
+    mock.onPost('/bff/v1/mandate', createDelegationMapper(creationPayload)).reply(200);
     const { container, getByTestId } = render(<NuovaDelega />);
     // switch to persona giuridica
     await testRadio(
@@ -281,14 +279,14 @@ describe('NuovaDelega page', async () => {
       true
     );
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toBe(GET_ALL_ACTIVATED_PARTIES());
+    expect(mock.history.get[0].url).toBe('/bff/v1/pa-list');
     await testAutocomplete(container, 'enti', parties, true, 1);
     // create delegation
     const button = getByTestId('createButton');
     fireEvent.click(button);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
-      expect(mock.history.post[0].url).toBe(CREATE_DELEGATION());
+      expect(mock.history.post[0].url).toBe('/bff/v1/mandate');
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(
         createDelegationMapper(creationPayload)
       );

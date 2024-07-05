@@ -2,10 +2,9 @@ import MockAdapter from 'axios-mock-adapter';
 import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
-import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
+import { mandatesByDelegator } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { REVOKE_DELEGATION } from '../../../api/delegations/delegations.routes';
 import * as routes from '../../../navigation/routes.const';
 import DelegatesByCompany from '../DelegatesByCompany';
 
@@ -72,7 +71,7 @@ describe('Delegates Component - assuming delegates API works properly', async ()
       preloadedState: {
         delegationsState: {
           delegations: {
-            delegates: arrayOfDelegates,
+            delegates: mandatesByDelegator,
           },
         },
       },
@@ -81,9 +80,9 @@ describe('Delegates Component - assuming delegates API works properly', async ()
     const table = getByTestId('delegatesTableDesktop');
     expect(table).toBeInTheDocument();
     const rows = getAllByTestId('delegatesBodyRowDesktop');
-    expect(rows).toHaveLength(arrayOfDelegates.length);
+    expect(rows).toHaveLength(mandatesByDelegator.length);
     rows.forEach((row, index) => {
-      expect(row).toHaveTextContent(arrayOfDelegates[index].delegate?.displayName!);
+      expect(row).toHaveTextContent(mandatesByDelegator[index].delegate?.displayName!);
     });
   });
 
@@ -100,7 +99,7 @@ describe('Delegates Component - assuming delegates API works properly', async ()
       preloadedState: {
         delegationsState: {
           delegations: {
-            delegates: arrayOfDelegates,
+            delegates: mandatesByDelegator,
           },
         },
       },
@@ -114,7 +113,7 @@ describe('Delegates Component - assuming delegates API works properly', async ()
     fireEvent.click(menuItems[0]);
     await waitFor(() => {
       const dialog = getByTestId('codeDialog');
-      const arrayOfVerificationCode = arrayOfDelegates[0].verificationCode.split('');
+      const arrayOfVerificationCode = mandatesByDelegator[0].verificationCode.split('');
       const codeInputs = dialog?.querySelectorAll('input');
       codeInputs?.forEach((input, index) => {
         expect(input).toHaveValue(arrayOfVerificationCode[index]);
@@ -123,12 +122,12 @@ describe('Delegates Component - assuming delegates API works properly', async ()
   });
 
   it('revoke mandate', async () => {
-    mock.onPatch(REVOKE_DELEGATION(arrayOfDelegates[0].mandateId)).reply(204);
+    mock.onPatch(`/bff/v1/mandate/${mandatesByDelegator[0].mandateId}/revoke`).reply(204);
     const { getAllByTestId, getByTestId } = render(<DelegatesByCompany />, {
       preloadedState: {
         delegationsState: {
           delegations: {
-            delegates: arrayOfDelegates,
+            delegates: mandatesByDelegator,
             delegators: [],
           },
         },
@@ -149,17 +148,17 @@ describe('Delegates Component - assuming delegates API works properly', async ()
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain(
-        `mandate/api/v1/mandate/${arrayOfDelegates[0].mandateId}/revoke`
+        `/bff/v1/mandate/${mandatesByDelegator[0].mandateId}/revoke`
       );
       expect(dialog).not.toBeInTheDocument();
     });
     const table = getByTestId('delegatesTableDesktop');
     expect(table).toBeInTheDocument();
     const rows = getAllByTestId('delegatesBodyRowDesktop');
-    expect(rows).toHaveLength(arrayOfDelegates.length - 1);
+    expect(rows).toHaveLength(mandatesByDelegator.length - 1);
     // the index + 1 is because wie revoke the first delegation
     rows.forEach((row, index) => {
-      expect(row).toHaveTextContent(arrayOfDelegates[index + 1].delegate?.displayName!);
+      expect(row).toHaveTextContent(mandatesByDelegator[index + 1].delegate?.displayName!);
     });
   });
 });

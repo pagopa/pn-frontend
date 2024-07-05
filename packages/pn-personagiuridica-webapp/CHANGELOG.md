@@ -3,6 +3,76 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0...v2.5.1) (2024-06-26)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.5.0](https://github.com/pagopa/pn-frontend/compare/v2.5.0-RC.2...v2.5.0) (2024-06-14)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.5.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0-RC.0...v2.5.0-RC.1) (2024-06-05)
+
+
+### Features
+
+* **pn-11273:** updated bff dependencies ([#1242](https://github.com/pagopa/pn-frontend/issues/1242)) ([0939949](https://github.com/pagopa/pn-frontend/commit/093994978a517c62aa21ce69089651e5fc2cb970))
+
+
+
+
+
+# [2.5.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.4.2...v2.5.0-RC.0) (2024-05-30)
+
+
+### Bug Fixes
+
+* **pn-10637:** new mandate -> made case insensitive fiscalCode field ([#1217](https://github.com/pagopa/pn-frontend/issues/1217)) ([d9a91a4](https://github.com/pagopa/pn-frontend/commit/d9a91a4540ae8d4f2be78f14e7a812ae5268410e))
+* **pn-10641:** contacts - show error message when user insert a wrong code twice ([#1219](https://github.com/pagopa/pn-frontend/issues/1219)) ([2338969](https://github.com/pagopa/pn-frontend/commit/2338969d0d8a751032b1d44a323149eb5e606381))
+
+
+### Features
+
+* **pn-10287:** Models autogeneration ([#1163](https://github.com/pagopa/pn-frontend/issues/1163)) ([b8f951e](https://github.com/pagopa/pn-frontend/commit/b8f951e1b6c838ef760c0ff21112fae72ac37b20))
+* **pn-10579:** migrate tos and privacy api to bff ones ([#1192](https://github.com/pagopa/pn-frontend/issues/1192)) ([6ca28cc](https://github.com/pagopa/pn-frontend/commit/6ca28cc1c06cd222307ce056dde3e1a57085c00d))
+* **pn-10591:** migrated api key api to bff ones ([#1184](https://github.com/pagopa/pn-frontend/issues/1184)) ([3e3717d](https://github.com/pagopa/pn-frontend/commit/3e3717d248a2bc843dd47f87b6341f2fdb78217d))
+* **pn-10738:** Downtime logs api bff integration ([#1196](https://github.com/pagopa/pn-frontend/issues/1196)) ([1602529](https://github.com/pagopa/pn-frontend/commit/16025293ac107a8df9948b606f7429ad89a7b5c5))
+* **pN-10843:** notifications list api ([#1198](https://github.com/pagopa/pn-frontend/issues/1198)) ([b4e0fb6](https://github.com/pagopa/pn-frontend/commit/b4e0fb63a479be0242bef22a76fa4fc73ea81481))
+* **pn-10889:** Download notification documents bff api ([#1199](https://github.com/pagopa/pn-frontend/issues/1199)) ([0586a3b](https://github.com/pagopa/pn-frontend/commit/0586a3b04be1401b9d1a3ed11051a1e3258c489c))
+* **pn-10936:** payments api migration ([#1204](https://github.com/pagopa/pn-frontend/issues/1204)) ([0d27d4f](https://github.com/pagopa/pn-frontend/commit/0d27d4fcabe5f7b499ba1fa7ace647c009edf28a))
+* **pn-10951:** exchange qr code api migration ([#1210](https://github.com/pagopa/pn-frontend/issues/1210)) ([479bf47](https://github.com/pagopa/pn-frontend/commit/479bf477bdc6c94f6cabcc9ba5250335499bbda4))
+* **pn-10953:** Mandate api migration ([#1209](https://github.com/pagopa/pn-frontend/issues/1209)) ([c85c72f](https://github.com/pagopa/pn-frontend/commit/c85c72f05e54ccf8bbdf6adf94f12dc9bc3cdebf))
+* **pn-10957:** PG groups list api migration ([#1212](https://github.com/pagopa/pn-frontend/issues/1212)) ([3b96005](https://github.com/pagopa/pn-frontend/commit/3b960057d6f48fbeacb406d97bda87347c6ebcde))
+* **pn-9831:** migration to bff api for notification detail ([#1153](https://github.com/pagopa/pn-frontend/issues/1153)) ([b3936dc](https://github.com/pagopa/pn-frontend/commit/b3936dcaccdb3cb9b134d21303559d0dd13be166))
+
+
+
+
+
+## [2.4.2](https://github.com/pagopa/pn-frontend/compare/v2.4.2-RC.3...v2.4.2) (2024-05-02)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+## [2.4.2-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.4.2-RC.2...v2.4.2-RC.3) (2024-04-29)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
 ## [2.4.1](https://github.com/pagopa/pn-frontend/compare/v2.4.1-RC.1...v2.4.1) (2024-04-09)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp

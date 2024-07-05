@@ -41,7 +41,7 @@ type Props = {
 
 const InfoTooltip = ({ tooltip }: { tooltip: string | ReactNode }) => (
   <InputAdornment position="end">
-    <Tooltip arrow={true} title={tooltip}>
+    <Tooltip arrow={true} title={tooltip} tabIndex={0}>
       <InfoOutlined />
     </Tooltip>
   </InputAdornment>
@@ -54,6 +54,15 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     (state: RootState) => state.userState.user.organization.hasGroups
   );
 
+  // this is the initial value of the sender denomination. it used to show the error
+  const senderDenomination = useAppSelector((state: RootState) =>
+    state.userState.user.organization.rootParent?.description
+      ? state.userState.user.organization.rootParent?.description +
+        ' - ' +
+        state.userState.user.organization.name
+      : state.userState.user.organization.name
+  );
+
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.preliminary-informations',
   });
@@ -64,6 +73,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     () => ({
       paProtocolNumber: notification.paProtocolNumber || '',
       subject: notification.subject || '',
+      senderDenomination: notification.senderDenomination ?? '',
       abstract: notification.abstract ?? '',
       group: notification.group ?? '',
       taxonomyCode: notification.taxonomyCode || '',
@@ -76,6 +86,10 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const validationSchema = yup.object({
     paProtocolNumber: requiredStringFieldValidation(tc, 256),
     subject: requiredStringFieldValidation(tc, 134, 10),
+    senderDenomination: yup
+      .string()
+      .required(`${t('sender-denomination')} ${tc('required')}`)
+      .max(80, tc('too-long-field-error', { maxLength: 80 })),
     abstract: yup
       .string()
       .max(1024, tc('too-long-field-error', { maxLength: 1024 }))
@@ -95,6 +109,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     initialValues: initialValues(),
     validateOnMount: true,
     validationSchema,
+    enableReinitialize: true,
     /** onSubmit validate */
     onSubmit: (values) => {
       if (formik.isValid) {
@@ -155,6 +170,19 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             onChange={handleChangeTouched}
             error={formik.touched.subject && Boolean(formik.errors.subject)}
             helperText={formik.touched.subject && formik.errors.subject}
+            size="small"
+            margin="normal"
+          />
+          <TextField
+            id="senderDenomination"
+            label={`${t('sender-denomination')}*`}
+            fullWidth
+            name="senderDenomination"
+            value={formik.values.senderDenomination}
+            onChange={handleChangeTouched}
+            error={Boolean(formik.errors.senderDenomination)}
+            disabled={senderDenomination.length < 80}
+            helperText={formik.errors.senderDenomination}
             size="small"
             margin="normal"
           />

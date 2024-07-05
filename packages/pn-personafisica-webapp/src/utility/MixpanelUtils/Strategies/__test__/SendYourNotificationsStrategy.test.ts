@@ -6,7 +6,7 @@ import {
   isNewNotification,
 } from '@pagopa-pn/pn-commons';
 
-import { arrayOfDelegators } from '../../../../__mocks__/Delegations.mock';
+import { mandatesByDelegate } from '../../../../__mocks__/Delegations.mock';
 import { SendYourNotificationsStrategy } from '../SendYourNotificationsStrategy';
 
 describe('Mixpanel - Send Your Notification Strategy', () => {
@@ -27,7 +27,7 @@ describe('Mixpanel - Send Your Notification Strategy', () => {
           group: '',
         },
       ],
-      delegators: arrayOfDelegators,
+      delegators: mandatesByDelegate,
       pagination: {
         nextPagesKey: [],
         size: 1,

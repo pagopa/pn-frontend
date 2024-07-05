@@ -7,6 +7,5 @@ export enum GroupStatus {
 export interface Groups {
   id: string;
   name: string;
-  description: string;
   status: GroupStatus;
 }

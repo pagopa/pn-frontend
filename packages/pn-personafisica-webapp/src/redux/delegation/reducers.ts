@@ -4,18 +4,18 @@ import { PayloadAction, createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { DelegationColumnData } from '../../models/Deleghe';
 import { sortDelegations } from '../../utility/delegation.utility';
 import {
-  acceptDelegation,
-  getDelegates,
-  getDelegators,
-  rejectDelegation,
-  revokeDelegation,
+  acceptMandate,
+  getMandatesByDelegate,
+  getMandatesByDelegator,
+  rejectMandate,
+  revokeMandate,
 } from './actions';
-import { Delegation } from './types';
+import { Delegate, Delegator } from './types';
 
 const initialState = {
   delegations: {
-    delegators: [] as Array<Delegation>,
-    delegates: [] as Array<Delegation>,
+    delegators: [] as Array<Delegator>,
+    delegates: [] as Array<Delegate>,
     isCompany: false,
   },
   modalState: {
@@ -27,7 +27,6 @@ const initialState = {
     open: false,
     id: '',
     name: '',
-    error: false,
   },
   sortDelegators: {
     orderBy: '',
@@ -57,7 +56,6 @@ const delegationsSlice = createSlice({
       state.acceptModalState.id = action.payload.id;
       state.acceptModalState.name = action.payload.name;
       state.acceptModalState.open = true;
-      state.acceptModalState.error = false;
     },
     closeAcceptModal: (state) => {
       state.acceptModalState.open = false;
@@ -82,35 +80,31 @@ const delegationsSlice = createSlice({
     resetState: () => initialState,
   },
   extraReducers: (builder) => {
-    builder.addCase(getDelegates.fulfilled, (state, action) => {
+    builder.addCase(getMandatesByDelegator.fulfilled, (state, action) => {
       state.delegations.delegates = action.payload;
     });
-    builder.addCase(getDelegators.fulfilled, (state, action) => {
+    builder.addCase(getMandatesByDelegate.fulfilled, (state, action) => {
       state.delegations.delegators = action.payload;
     });
-    builder.addCase(acceptDelegation.fulfilled, (state, action) => {
-      state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>
-        delegator.mandateId === action.payload.id ? { ...delegator, status: 'active' } : delegator
+    builder.addCase(acceptMandate.fulfilled, (state, action) => {
+      state.delegations.delegators = state.delegations.delegators.map((delegator) =>
+        delegator.mandateId === action.meta.arg.id ? { ...delegator, status: 'active' } : delegator
       );
       state.acceptModalState.open = false;
-      state.acceptModalState.error = false;
     });
-    builder.addCase(acceptDelegation.rejected, (state) => {
-      state.acceptModalState.error = true;
-    });
-    builder.addCase(revokeDelegation.fulfilled, (state, action) => {
+    builder.addCase(revokeMandate.fulfilled, (state, action) => {
       state.modalState.open = false;
       state.delegations.delegates = state.delegations.delegates.filter(
-        (delegate: Delegation) => delegate.mandateId !== action.payload.id
+        (delegate) => delegate.mandateId !== action.meta.arg
       );
     });
-    builder.addCase(rejectDelegation.fulfilled, (state, action) => {
+    builder.addCase(rejectMandate.fulfilled, (state, action) => {
       state.modalState.open = false;
       state.delegations.delegators = state.delegations.delegators.filter(
-        (delegator: Delegation) => delegator.mandateId !== action.meta.arg
+        (delegator) => delegator.mandateId !== action.meta.arg
       );
     });
-    builder.addMatcher(isAnyOf(rejectDelegation.rejected, revokeDelegation.rejected), (state) => {
+    builder.addMatcher(isAnyOf(rejectMandate.rejected, revokeMandate.rejected), (state) => {
       state.modalState.open = false;
     });
   },

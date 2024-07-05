@@ -121,7 +121,6 @@ describe('DelegationElements', async () => {
         id: '111',
         open: true,
         name: 'test',
-        error: false,
       });
     });
   });

@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0...v2.5.1) (2024-06-26)
+
+**Note:** Version bump only for package @pagopa-pn/pn-validator
+
+
+
+
+
+# [2.5.0](https://github.com/pagopa/pn-frontend/compare/v2.5.0-RC.2...v2.5.0) (2024-06-14)
+
+**Note:** Version bump only for package @pagopa-pn/pn-validator
+
+
+
+
+
+# [2.5.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0-RC.0...v2.5.0-RC.1) (2024-06-05)
+
+**Note:** Version bump only for package @pagopa-pn/pn-validator
+
+
+
+
+
+# [2.5.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.4.2...v2.5.0-RC.0) (2024-05-30)
+
+**Note:** Version bump only for package @pagopa-pn/pn-validator
+
+
+
+
+
+## [2.4.2](https://github.com/pagopa/pn-frontend/compare/v2.4.2-RC.3...v2.4.2) (2024-05-02)
+
+**Note:** Version bump only for package @pagopa-pn/pn-validator
+
+
+
+
+
+## [2.4.2-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.4.2-RC.2...v2.4.2-RC.3) (2024-04-29)
+
+**Note:** Version bump only for package @pagopa-pn/pn-validator
+
+
+
+
+
 ## [2.4.1](https://github.com/pagopa/pn-frontend/compare/v2.4.1-RC.1...v2.4.1) (2024-04-09)
 
 **Note:** Version bump only for package @pagopa-pn/pn-validator

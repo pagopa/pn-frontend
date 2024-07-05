@@ -1,6 +1,11 @@
+import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { render } from '../../__test__/test-utils';
+import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+
+import { userResponse } from '../../__mocks__/Auth.mock';
+import { RenderResult, act, render } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import Statistics from '../Statistics.page';
 
 vi.mock('react-i18next', () => ({
@@ -10,15 +15,46 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
+// TODO enable this test after completing the feature PN-10851
 describe('Statistics Page tests', () => {
-  it('renders Statistics Page', () => {
+  let result: RenderResult;
+  let mock: MockAdapter;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+    vi.clearAllMocks();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
+  it('renders Statistics Page - empty statistics', () => {
     const result = render(<Statistics />, {
       preloadedState: {
-        userState: { organizationParty: { name: 'mocked-sender' } },
+        userState: { user: userResponse },
       },
     });
 
     expect(result.container).toHaveTextContent('title');
-    expect(result.container).toHaveTextContent('subtitle');
+    expect(result.container).toHaveTextContent('empty.descriptionStatistics');
+  });
+
+  it('api return error', async () => {
+    mock.onGet(/\/bff\/v1\/sender-dashboard\/dashboard-data-request*/).reply(500);
+    await act(async () => {
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <Statistics />
+        </>
+      );
+    });
+    expect(result.container).toHaveTextContent('error-fetch');
   });
 });

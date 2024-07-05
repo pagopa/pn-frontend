@@ -1,7 +1,7 @@
 import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 
 import { DigitalAddress } from '../../models/contacts';
-import { acceptDelegation, rejectDelegation } from '../delegation/actions';
+import { acceptMandate, rejectMandate } from '../delegation/actions';
 import { getDomicileInfo, getSidemenuInformation } from './actions';
 
 /* eslint-disable functional/immutable-data */
@@ -24,7 +24,7 @@ const generalInfoSlice = createSlice({
     builder.addCase(getDomicileInfo.fulfilled, (state, action) => {
       state.defaultAddresses = action.payload;
     });
-    builder.addMatcher(isAnyOf(acceptDelegation.fulfilled, rejectDelegation.fulfilled), (state) => {
+    builder.addMatcher(isAnyOf(acceptMandate.fulfilled, rejectMandate.fulfilled), (state) => {
       if (state.pendingDelegators > 0) {
         state.pendingDelegators--;
       }

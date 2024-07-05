@@ -14,5 +14,6 @@
   "WORK_IN_PROGRESS": false,
   "SELFCARE_SEND_PROD_ID": "prod-pn-hotfix",
   "IS_MANUAL_SEND_ENABLED": true,
-  "API_B2B_LINK": "https://developer.pagopa.it/send/api#/"
+  "API_B2B_LINK": "https://developer.pagopa.it/send/api#/",
+  "IS_STATISTICS_ENABLED": true
 }

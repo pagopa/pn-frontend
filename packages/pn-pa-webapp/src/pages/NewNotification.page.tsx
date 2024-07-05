@@ -91,8 +91,8 @@ const NewNotification = () => {
   useEffect(() => {
     dispatch(
       setSenderInfos({
-        senderDenomination: organization.parentDescription
-          ? organization.parentDescription + ' - ' + organization.name
+        senderDenomination: organization.rootParent?.description
+          ? organization.rootParent?.description + ' - ' + organization.name
           : organization.name,
         senderTaxId: organization.fiscal_code,
       })
@@ -131,7 +131,6 @@ const NewNotification = () => {
             </Typography>
             {!IS_PAYMENT_ENABLED && (
               <Alert
-                tabIndex={0}
                 aria-label={t('new-notification.warning-payment-disabled', { ns: 'notifiche' })}
                 data-testid="alert"
                 sx={{ mt: 4 }}

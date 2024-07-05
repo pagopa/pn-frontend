@@ -6,16 +6,12 @@
 import _ from 'lodash';
 
 import {
-  AarDetails,
-  AppIoCourtesyMessageEventType,
-  DigitalDomicileType,
+  AnalogWorkflowDetails,
   ExtRegistriesPaymentDetails,
   F24PaymentDetails,
   INotificationDetailTimeline,
   LegalFactType,
   NotificationDeliveryMode,
-  NotificationDetail,
-  NotificationDetailDocument,
   NotificationDetailPayment,
   NotificationDetailRecipient,
   NotificationDetailTimelineDetails,
@@ -25,11 +21,10 @@ import {
   PaidDetails,
   PaymentDetails,
   PaymentStatus,
-  SendCourtesyMessageDetails,
+  ResponseStatus,
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
-  ViewedDetails,
 } from '../models';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
@@ -121,7 +116,7 @@ export function getNotificationStatusInfos(
   // Carlos Lombardi, 2023.02.23
 
   switch (actualStatus) {
-    case NotificationStatus.DELIVERED:
+    case NotificationStatus.DELIVERED: {
       const statusInfos = localizeStatus(
         'delivered',
         'Consegnata',
@@ -149,6 +144,7 @@ export function getNotificationStatusInfos(
       }
       // set the color at the end to avoid a type error since the color is defined as an union among some well-known strings
       return { color: 'default', ...statusInfos };
+    }
     case NotificationStatus.DELIVERING:
       return {
         color: 'default',
@@ -298,8 +294,7 @@ function legalFactTypeForAnalogEvent(
   legalFactKey?: string
 ) {
   const attachments = (timelineStep.details as SendPaperDetails).attachments;
-  const matchingAttachment =
-    legalFactKey && attachments && attachments.find((att) => att.url === legalFactKey);
+  const matchingAttachment = legalFactKey && attachments?.find((att) => att.url === legalFactKey);
   return matchingAttachment ? matchingAttachment.documentType : undefined;
 }
 
@@ -311,7 +306,7 @@ function legalFactTypeForAnalogEvent(
  */
 export function getLegalFactLabel(
   timelineStep: INotificationDetailTimeline,
-  legalFactType?: LegalFactType,
+  legalFactType?: LegalFactType | 'AAR',
   legalFactKey?: string
 ): string {
   const legalFactLabel = getLocalizedOrDefaultLabel(
@@ -393,7 +388,7 @@ export function getLegalFactLabel(
     );
   } else if (
     timelineStep.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW &&
-    legalFactType === LegalFactType.AAR
+    (timelineStep.details as AnalogWorkflowDetails).getGeneratedAarUrl
   ) {
     return getLocalizedOrDefaultLabel(
       'notifications',
@@ -428,13 +423,13 @@ export function getLegalFactLabel(
     timelineStep.category === TimelineCategory.SEND_DIGITAL_FEEDBACK &&
     legalFactType === LegalFactType.PEC_RECEIPT
   ) {
-    if ((timelineStep.details as SendDigitalDetails).responseStatus === 'OK') {
+    if ((timelineStep.details as SendDigitalDetails).responseStatus === ResponseStatus.OK) {
       return `${receiptLabel} ${getLocalizedOrDefaultLabel(
         'notifications',
         'detail.timeline.legalfact.pec-receipt-delivered',
         'di consegna PEC'
       )}`;
-    } else if ((timelineStep.details as SendDigitalDetails).responseStatus === 'KO') {
+    } else if ((timelineStep.details as SendDigitalDetails).responseStatus === ResponseStatus.KO) {
       return `${receiptLabel} ${getLocalizedOrDefaultLabel(
         'notifications',
         'detail.timeline.legalfact.pec-receipt-not-delivered',
@@ -523,353 +518,6 @@ export function getNotificationTimelineStatusInfos(
     allStepsForThisStatus,
   });
 }
-
-const TimelineAllowedStatus = [
-  TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW,
-  // PN-6902
-  TimelineCategory.ANALOG_FAILURE_WORKFLOW,
-  TimelineCategory.SEND_DIGITAL_DOMICILE,
-  TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
-  TimelineCategory.SEND_ANALOG_DOMICILE,
-  TimelineCategory.SEND_DIGITAL_FEEDBACK,
-  TimelineCategory.SEND_DIGITAL_PROGRESS,
-  // PN-2068
-  TimelineCategory.SEND_COURTESY_MESSAGE,
-  // PN-1647
-  TimelineCategory.NOT_HANDLED,
-  TimelineCategory.SEND_ANALOG_PROGRESS,
-  TimelineCategory.SEND_ANALOG_FEEDBACK,
-  TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS,
-  // PN-7743
-  TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE,
-];
-
-const AnalogFlowAllowedCodes = [
-  'CON080',
-  'RECRN001C',
-  'RECRN002C',
-  'RECRN002F',
-  'RECRN003C',
-  'RECRN004C',
-  'RECRN005C',
-  'RECRN006',
-  'RECAG001C',
-  'RECAG002C',
-  'RECAG003C',
-  'RECAG003F',
-  'RECAG004',
-  'PNAG012',
-  'RECAG005C',
-  'RECAG006C',
-  'RECAG007C',
-  'RECAG008C',
-  'RECRI003C',
-  'RECRI004C',
-  'RECRI005',
-  // new batch - PN-6079 / PN-6080 / PN-6081
-  'RECRN011',
-  'PNRN012',
-  'RECRN013',
-  'RECRN015',
-  'RECAG011A',
-  'RECAG013',
-  'RECAG015',
-  // new entries for international registered letter - PN-6636
-  'RECRI001',
-  'RECRI002',
-  // PN-6792
-  'PNALL001',
-  // PN-7010
-  'CON993',
-  'CON995',
-  'CON996',
-  'CON997',
-  'CON998',
-  // only to include the legal fact reference at the right point in the timeline
-  'RECRN001B',
-  'RECRN002B',
-  'RECRN002E',
-  'RECRN003B',
-  'RECRN004B',
-  'RECRN005B',
-  'RECAG001B',
-  'RECAG002B',
-  'RECAG003B',
-  'RECAG003E',
-  'RECAG011B',
-  'RECAG005B',
-  'RECAG006B',
-  'RECAG007B',
-  'RECAG008B',
-  'RECRI003B',
-  'RECRI004B',
-];
-
-/*
- * PN-4484 - courtesy message through app IO only seen
- * if details.ioSendMessageResult = SENT_COURTESY
- * (cfr. definition of AppIoCourtesyMessageEventType)
- * so any other kind of message is deemed as internal.
- *
- * To preserve backward compatibility, if the attribute has no value,
- * the message is not considered internal (and thus shown).
- */
-function isInternalAppIoEvent(step: INotificationDetailTimeline): boolean {
-  if (step.category === TimelineCategory.SEND_COURTESY_MESSAGE) {
-    const details = step.details as SendCourtesyMessageDetails;
-    return (
-      details.digitalAddress.type === DigitalDomicileType.APPIO &&
-      !!details.ioSendMessageResult &&
-      details.ioSendMessageResult !== AppIoCourtesyMessageEventType.SENT_COURTESY
-    );
-  } else {
-    return false;
-  }
-}
-
-/**
- * Populate timeline macro steps
- * @param  {NotificationDetail} parsedNotification
- * @param  {string} timelineElement
- * @param  {NotificationStatusHistory} status
- * @param  {Array<string>} acceptedStatusItems
- * @returns the found step, which is sometimes useful in populatedMacroSteps (i.e. the function calling this one)
- */
-function populateMacroStep(
-  parsedNotification: NotificationDetail,
-  timelineElement: string,
-  status: NotificationStatusHistory,
-  acceptedStatusItems: Array<string>
-): INotificationDetailTimeline | undefined {
-  const step = parsedNotification.timeline.find((t) => t.elementId === timelineElement);
-  if (step) {
-    // hide accepted status micro steps
-    if (status.status === NotificationStatus.ACCEPTED) {
-      status.steps!.push({ ...step, hidden: true });
-      // PN-4484 - hide the internal events related to the courtesy messages sent through app IO
-    } else if (isInternalAppIoEvent(step)) {
-      status.steps!.push({ ...step, hidden: true });
-      // add legal facts for ANALOG_FAILURE_WORKFLOW steps with linked generatedAarUrl
-      // since the AAR for such steps must be shown in timeline exactly the same way as legalFacts.
-      // Cfr. comment in the definition of INotificationDetailTimeline in src/models/NotificationDetail.ts.
-    } else if (
-      step.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW &&
-      (step.details as AarDetails).generatedAarUrl
-    ) {
-      status.steps!.push({
-        ...step,
-        legalFactsIds: [
-          {
-            documentId: (step.details as AarDetails).generatedAarUrl as string,
-            documentType: LegalFactType.AAR,
-          },
-        ],
-      });
-      // remove legal facts for those microsteps that are releated to accepted status
-    } else if (acceptedStatusItems.length && acceptedStatusItems.indexOf(step.elementId) > -1) {
-      status.steps!.push({ ...step, legalFactsIds: [] });
-      // default case
-    } else {
-      status.steps!.push(step);
-    }
-  }
-  return step;
-}
-
-function fromLatestToEarliest(a: INotificationDetailTimeline, b: INotificationDetailTimeline) {
-  const differenceInTimeline = new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
-  const differenceInIndex = b.index && a.index ? b.index - a.index : 0;
-
-  if (differenceInTimeline > 0) {
-    return 1;
-  } else if (differenceInTimeline < 0) {
-    return -1;
-  } else {
-    return differenceInIndex > 0 ? 1 : differenceInIndex < 0 ? -1 : 0;
-  }
-}
-
-function populateMacroSteps(parsedNotification: NotificationDetail) {
-  /* eslint-disable functional/no-let */
-  let acceptedStatusItems: Array<string> = [];
-  let deliveryMode: NotificationDeliveryMode | undefined;
-  let deliveringStatus: NotificationStatusHistory | undefined;
-  /* eslint-enable functional/no-let */
-
-  /* eslint-disable functional/no-let */
-  let lastDeliveredIndexToShift = -1;
-  let lastDeliveredIndexToShiftIsFixed = false;
-  let preventShiftFromDeliveredToDelivering = false;
-  /* eslint-enable functional/no-let */
-
-  for (const status of parsedNotification.notificationStatusHistory) {
-    // keep pointer to delivering status for eventual later use
-    if (status.status === NotificationStatus.DELIVERING) {
-      deliveringStatus = status;
-    }
-    // if status accepted has items, move them to the next state, but preserve legalfacts
-    if (status.status === NotificationStatus.ACCEPTED && status.relatedTimelineElements.length) {
-      acceptedStatusItems = status.relatedTimelineElements;
-    } else if (acceptedStatusItems.length) {
-      status.relatedTimelineElements.unshift(...acceptedStatusItems);
-    }
-    status.steps = [];
-
-    // find timeline steps that are linked with current status
-    status.relatedTimelineElements.forEach((timelineElement, ix) => {
-      const step = populateMacroStep(
-        parsedNotification,
-        timelineElement,
-        status,
-        acceptedStatusItems
-      );
-      if (step) {
-        // delivery mode: according to the first arrived
-        // between DIGITAL_SUCCESS_WORKFLOW, SEND_SIMPLE_REGISTERED_LETTER and ANALOG_SUCCESS_WORKFLOW
-        if (!deliveryMode && step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW) {
-          deliveryMode = NotificationDeliveryMode.DIGITAL;
-        } else if (
-          !deliveryMode &&
-          (step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER ||
-            step.category === TimelineCategory.ANALOG_SUCCESS_WORKFLOW)
-        ) {
-          deliveryMode = NotificationDeliveryMode.ANALOG;
-        }
-
-        // if a DIGITAL_SUCCESS_WORKFLOW event is found in the DELIVERING status
-        // (since as of 2023.02.13 the jump from DELIVERING to DELIVERED could not be related to the *first* digital shipment resolution)
-        // then no shift is performed from DELIVERED to DELIVERING
-        // ... I prefer to still shift events up to the first DIGITAL_SUCCESS_WORKFLOW found in DELIVERED status ...
-        // keep the code just in case
-        // if (status.status === NotificationStatus.DELIVERING && step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW) {
-        //   preventShiftFromDeliveredToDelivering = true;
-        // }
-
-        // record the last timeline event from DELIVERED that must be shifted to DELIVERING
-        // the rules:
-        // - up to the last DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER or SEND_SIMPLE_REGISTERED_LETTER_PROGRESS element,
-        // - or the first DIGITAL_SUCCESS_WORKFLOW afterwards a DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER or SEND_SIMPLE_REGISTERED_LETTER_PROGRESS
-        //   (in this case, excluding it)
-        // if a DIGITAL_SUCCESS_WORKFLOW is found before a DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER
-        // then no shift has to be done
-        if (
-          status.status === NotificationStatus.DELIVERED &&
-          !preventShiftFromDeliveredToDelivering
-        ) {
-          if (
-            (step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW ||
-              step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER ||
-              step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS) &&
-            !lastDeliveredIndexToShiftIsFixed
-          ) {
-            lastDeliveredIndexToShift = ix;
-          } else if (step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW) {
-            if (lastDeliveredIndexToShift > -1) {
-              lastDeliveredIndexToShift = ix - 1;
-              lastDeliveredIndexToShiftIsFixed = true;
-            } else {
-              preventShiftFromDeliveredToDelivering = true;
-            }
-          }
-        }
-      }
-    });
-
-    // shift steps from DELIVERED to DELIVERING
-    // this is the reason why the pointer to the DELIVERING status is kept, recall that
-    if (
-      status.status === NotificationStatus.DELIVERED &&
-      deliveringStatus &&
-      deliveringStatus.steps &&
-      !preventShiftFromDeliveredToDelivering &&
-      lastDeliveredIndexToShift > -1
-    ) {
-      const stepsToShift = status.steps.slice(0, lastDeliveredIndexToShift + 1);
-      stepsToShift.sort(fromLatestToEarliest);
-      deliveringStatus.steps.unshift(...stepsToShift);
-      status.steps = status.steps.slice(lastDeliveredIndexToShift + 1);
-
-      status.activeFrom = deliveringStatus.steps[0].timestamp;
-    }
-
-    // order step by time, latest first
-    status.steps.sort(fromLatestToEarliest);
-    if (status.status !== NotificationStatus.ACCEPTED && acceptedStatusItems.length) {
-      acceptedStatusItems = [];
-    }
-    // sets the delivery mode for DELIVERED status
-    if (status.status === NotificationStatus.DELIVERED && deliveryMode) {
-      status.deliveryMode = deliveryMode;
-    }
-    // check if there are information about the user that chahnged the status and populate recipient object
-    if (status.status === NotificationStatus.VIEWED) {
-      const viewedSteps = status.steps.filter(
-        (s) => s.category === TimelineCategory.NOTIFICATION_VIEWED
-      );
-      if (viewedSteps.length) {
-        // get last step, that is the first chronologically
-        const mostOldViewedStep = viewedSteps[viewedSteps.length - 1];
-        if (
-          mostOldViewedStep.details &&
-          (mostOldViewedStep.details as ViewedDetails).delegateInfo
-        ) {
-          const { denomination, taxId } = (mostOldViewedStep.details as ViewedDetails)
-            .delegateInfo!;
-          status.recipient = `${denomination} (${taxId})`;
-        }
-      }
-    }
-  }
-}
-
-/**
- * Populate other documents array before send notification to fe.
- * @param  {NotificationDetail} notificationDetail
- * @returns Array<NotificationDetailDocument>
- */
-const populateOtherDocuments = (
-  notificationDetail: NotificationDetail
-): Array<NotificationDetailDocument> => {
-  const timelineFiltered = notificationDetail.timeline.filter(
-    (t) => t.category === TimelineCategory.AAR_GENERATION
-  );
-  if (timelineFiltered.length > 0) {
-    const isMultiRecipient = timelineFiltered.length > 1;
-    return timelineFiltered.map((t) => {
-      const recIndex = t.details.recIndex;
-      const recipients = notificationDetail.recipients;
-      const recipientData =
-        isMultiRecipient && recIndex != null
-          ? ` - ${recipients[recIndex].denomination} (${recipients[recIndex].taxId})`
-          : '';
-      const title = `${getLocalizedOrDefaultLabel(
-        'notifications',
-        'detail.timeline.aar-document',
-        'Avviso di avvenuta ricezione'
-      )}${recipientData}`;
-      return {
-        recIndex: t.details.recIndex,
-        documentId: (t.details as AarDetails).generatedAarUrl as string,
-        documentType: LegalFactType.AAR,
-        title,
-        digests: {
-          sha256: '',
-        },
-        ref: {
-          key: '',
-          versionToken: '',
-        },
-        contentType: '',
-      };
-    });
-  }
-  return [];
-};
-
-export const checkRaddInTimeline = (notificationDetail: NotificationDetail) =>
-  notificationDetail.timeline.find(
-    (element) => element.category === TimelineCategory.NOTIFICATION_RADD_RETRIEVED
-  );
 
 export const getF24Payments = (
   payments: Array<NotificationDetailPayment>,
@@ -988,72 +636,3 @@ export const populatePaymentsPagoPaF24 = (
 
   return paymentDetails;
 };
-
-function timelineElementMustBeShown(t: INotificationDetailTimeline): boolean {
-  if (
-    t.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
-    t.category === TimelineCategory.SEND_ANALOG_FEEDBACK ||
-    t.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS
-  ) {
-    const deliveryDetailCode = (t.details as SendPaperDetails).deliveryDetailCode;
-    return !!deliveryDetailCode && AnalogFlowAllowedCodes.includes(deliveryDetailCode);
-  }
-  return TimelineAllowedStatus.includes(t.category);
-}
-
-/**
- * Insert cancelled status n timeline.
- * @param  {NotificationDetail} notificationDetail
- */
-const insertCancelledStatusInTimeline = (notificationDetail: NotificationDetail) => {
-  const timelineCancelledElement = notificationDetail.timeline.find(
-    (el) => el.category === TimelineCategory.NOTIFICATION_CANCELLED
-  );
-  if (!timelineCancelledElement) {
-    const timelineCancellationRequestElement = notificationDetail.timeline.find(
-      (el) => el.category === TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST
-    );
-
-    if (timelineCancellationRequestElement) {
-      const notificationStatusHistoryElement = {
-        status: NotificationStatus.CANCELLATION_IN_PROGRESS,
-        activeFrom: timelineCancellationRequestElement.timestamp,
-        relatedTimelineElements: [],
-      };
-      // eslint-disable-next-line functional/immutable-data
-      notificationDetail.notificationStatusHistory.push(notificationStatusHistoryElement);
-      notificationDetail.notificationStatus = NotificationStatus.CANCELLATION_IN_PROGRESS;
-    }
-  }
-};
-export function parseNotificationDetail(
-  notificationDetail: NotificationDetail
-): NotificationDetail {
-  const parsedNotification = {
-    ...notificationDetail,
-    otherDocuments: populateOtherDocuments(notificationDetail),
-    radd: checkRaddInTimeline(notificationDetail),
-  };
-
-  insertCancelledStatusInTimeline(parsedNotification);
-  /* eslint-disable functional/immutable-data */
-  /* eslint-disable functional/no-let */
-  // set which elements are visible
-  parsedNotification.timeline = parsedNotification.timeline.map((t, index) => ({
-    ...t,
-    index,
-    hidden: !timelineElementMustBeShown(t),
-  }));
-  // populate notification macro steps with corresponding timeline micro steps
-  populateMacroSteps(parsedNotification);
-  // order elements by date
-  parsedNotification.notificationStatusHistory.sort((a, b) => {
-    if (new Date(b.activeFrom).getTime() - new Date(a.activeFrom).getTime() >= 0) {
-      return 1;
-    }
-    return -1;
-  });
-  /* eslint-enable functional/immutable-data */
-  /* eslint-enable functional/no-let */
-  return parsedNotification;
-}

@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { formatDate, isToday } from '@pagopa-pn/pn-commons';
 
-import { ApiKey, ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
-import { GroupStatus, UserGroup } from '../models/user';
+import { ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
 
 function localizeStatus(
   status: string,
@@ -96,36 +95,3 @@ export function getApiKeyStatusInfos(
       };
   }
 }
-
-export const apikeysMapper = (
-  apikeys: Array<ApiKey<string>>,
-  groups: Array<UserGroup>
-): Array<ApiKey<UserGroup>> => {
-  const getGroup = (group: string): UserGroup =>
-    groups.filter((g: UserGroup) => g.name === group)[0];
-
-  const apikeysMapped: Array<ApiKey<UserGroup>> = [];
-
-  apikeys.forEach((apikey) => {
-    const mappedGroups = apikey.groups.map(
-      (g): UserGroup => ({
-        ...(getGroup(g)
-          ? getGroup(g)
-          : {
-              id: 'no-id',
-              name: g,
-              description: g,
-              status: GroupStatus.SUSPENDED,
-            }),
-      })
-    );
-
-    const mappedApikey: ApiKey<UserGroup> = {
-      ...apikey,
-      groups: mappedGroups,
-    };
-    // eslint-disable-next-line functional/immutable-data
-    apikeysMapped.push(mappedApikey);
-  });
-  return apikeysMapped;
-};

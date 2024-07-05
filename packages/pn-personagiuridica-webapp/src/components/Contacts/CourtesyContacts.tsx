@@ -8,11 +8,10 @@ import CourtesyContactsList from './CourtesyContactsList';
 import DigitalContactsCard from './DigitalContactsCard';
 
 interface Props {
-  recipientId: string;
   contacts: Array<DigitalAddress>;
 }
 
-const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {
+const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
   const { t } = useTranslation(['common', 'recapiti']);
 
   return (
@@ -26,10 +25,9 @@ const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {
       avatar={<IllusEmail size={60} />}
     >
       <Box sx={{ width: { xs: '100%', lg: '50%' } }} data-testid="courtesyContacts">
-        <CourtesyContactsList recipientId={recipientId} contacts={contacts} />
+        <CourtesyContactsList contacts={contacts} />
       </Box>
       <Alert
-        tabIndex={0}
         role="banner"
         aria-label={t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })}
         sx={{ mt: 4 }}

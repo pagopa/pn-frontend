@@ -4,14 +4,12 @@ import {
   INotificationDetailTimeline,
   NotificationDetailDocument,
   NotificationDetailRecipient,
-  NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
   PaidDetails,
   PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
-  PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
   getF24Payments,
@@ -22,29 +20,21 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import {
-  getDowntimeEvents,
-  getDowntimeLegalFactDocumentDetails,
-  getNotificationPaymentInfo,
-  getNotificationPaymentUrl,
+  getDowntimeHistory,
   getReceivedNotification,
-  getReceivedNotificationDocument,
-  getReceivedNotificationLegalfact,
-  getReceivedNotificationOtherDocument,
+  getReceivedNotificationPaymentInfo,
+  getReceivedNotificationPaymentUrl,
 } from './actions';
 
 const initialState = {
   loading: false,
   notification: {
-    paProtocolNumber: '',
     subject: '',
     recipients: [] as Array<NotificationDetailRecipient>,
     senderDenomination: '',
     paymentExpirationDate: '',
     documents: [] as Array<NotificationDetailDocument>,
     otherDocuments: [] as Array<NotificationDetailDocument>,
-    notificationFeePolicy: '' as NotificationFeePolicy,
-    physicalCommunicationType: '' as PhysicalCommunicationType,
-    senderPaId: '',
     iun: '',
     sentAt: '',
     notificationStatus: '' as NotificationStatus,
@@ -57,11 +47,6 @@ const initialState = {
     },
     currentRecipientIndex: 0,
   } as NotificationDetailForRecipient,
-  documentDownloadUrl: '',
-  otherDocumentDownloadUrl: '',
-  legalFactDownloadUrl: '',
-  downtimeLegalFactUrl: '', // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
-  // analogous for other URLs
   paymentsData: {
     pagoPaF24: [] as Array<PaymentDetails>,
     f24Only: [] as Array<F24PaymentDetails>,
@@ -75,12 +60,6 @@ const notificationSlice = createSlice({
   initialState,
   reducers: {
     resetState: () => initialState,
-    resetLegalFactState: (state) => {
-      state.legalFactDownloadUrl = '';
-    },
-    clearDowntimeLegalFactData: (state) => {
-      state.downtimeLegalFactUrl = '';
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
@@ -129,24 +108,7 @@ const notificationSlice = createSlice({
       }
       state.notification = action.payload;
     });
-    // ATTO
-    builder.addCase(getReceivedNotificationDocument.fulfilled, (state, action) => {
-      if (action.payload.url) {
-        state.documentDownloadUrl = action.payload.url;
-      }
-    });
-    // AAR
-    builder.addCase(getReceivedNotificationOtherDocument.fulfilled, (state, action) => {
-      if (action.payload.url) {
-        state.otherDocumentDownloadUrl = action.payload.url;
-      }
-    });
-    builder.addCase(getReceivedNotificationLegalfact.fulfilled, (state, action) => {
-      if (action.payload.url) {
-        state.legalFactDownloadUrl = action.payload.url;
-      }
-    });
-    builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {
+    builder.addCase(getReceivedNotificationPaymentInfo.fulfilled, (state, action) => {
       if (action.payload) {
         const paymentInfo = action.payload;
         for (const payment of paymentInfo) {
@@ -161,7 +123,7 @@ const notificationSlice = createSlice({
         }
       }
     });
-    builder.addCase(getNotificationPaymentInfo.pending, (state, action) => {
+    builder.addCase(getReceivedNotificationPaymentInfo.pending, (state, action) => {
       const paymentInfo = action.meta.arg;
       for (const payment of paymentInfo.paymentInfoRequest) {
         const paymentInfoIndex = state.paymentsData.pagoPaF24.findIndex(
@@ -174,7 +136,7 @@ const notificationSlice = createSlice({
         }
       }
     });
-    builder.addCase(getNotificationPaymentUrl.rejected, (state, action) => {
+    builder.addCase(getReceivedNotificationPaymentUrl.rejected, (state, action) => {
       const noticeCode = action.meta.arg.paymentNotice.noticeNumber;
       const creditorTaxId = action.meta.arg.paymentNotice.fiscalCode;
       const paymentInfo = state.paymentsData.pagoPaF24.find(
@@ -197,21 +159,12 @@ const notificationSlice = createSlice({
         ];
       }
     });
-    builder.addCase(getDowntimeEvents.fulfilled, (state, action) => {
-      state.downtimeEvents = action.payload.downtimes;
-    });
-    builder.addCase(getDowntimeLegalFactDocumentDetails.fulfilled, (state, action) => {
-      // by the moment we preserve only the URL.
-      // if the need of showing the file size arises in the future,
-      // we'll probably need to change this in order to keep the whole response from the API call
-      // -----------------------
-      // Carlos Lombardi, 2023.02.02
-      state.downtimeLegalFactUrl = action.payload.url;
+    builder.addCase(getDowntimeHistory.fulfilled, (state, action) => {
+      state.downtimeEvents = action.payload.result;
     });
   },
 });
 
-export const { resetState, resetLegalFactState, clearDowntimeLegalFactData } =
-  notificationSlice.actions;
+export const { resetState } = notificationSlice.actions;
 
 export default notificationSlice;

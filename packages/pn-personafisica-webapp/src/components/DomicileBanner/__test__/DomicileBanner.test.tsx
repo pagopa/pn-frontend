@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
+import { digitalCourtesyAddresses, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render } from '../../../__test__/test-utils';
 import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
 import * as routes from '../../../navigation/routes.const';
@@ -20,11 +20,11 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-const pecDefault = digitalAddresses.legal.find((addr) => addr.senderId === 'default');
-const emailDefault = digitalAddresses.courtesy.find(
+const pecDefault = digitalLegalAddresses.find((addr) => addr.senderId === 'default');
+const emailDefault = digitalCourtesyAddresses.find(
   (addr) => addr.senderId === 'default' && addr.channelType === CourtesyChannelType.EMAIL
 );
-const IODefault = digitalAddresses.courtesy.find(
+const IODefault = digitalCourtesyAddresses.find(
   (addr) => addr.senderId === 'default' && addr.channelType === CourtesyChannelType.IOMSG
 );
 

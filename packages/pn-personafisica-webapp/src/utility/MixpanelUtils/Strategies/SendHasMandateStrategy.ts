@@ -1,10 +1,10 @@
 import { EventPropertyType, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-commons';
 
-import { Delegation } from '../../../redux/delegation/types';
+import { Delegate } from '../../../redux/delegation/types';
 import { DelegationStatus } from '../../status.utility';
 
 type SendHasMandate = {
-  delegates: Array<Delegation>;
+  delegates: Array<Delegate>;
 };
 
 export class SendHasMandateStrategy implements EventStrategy {

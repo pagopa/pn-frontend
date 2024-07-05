@@ -7,16 +7,14 @@ import { SendRemoveCourtesyAddressStrategy } from '../SendRemoveCourtesyAddress'
 describe('Mixpanel - Remove Courtesy Address Strategy', () => {
   it('should return has email when removing an email', () => {
     const strategy = new SendRemoveCourtesyAddressStrategy();
-    const address = digitalAddresses.courtesy.find(
-      (a) => a.channelType === CourtesyChannelType.EMAIL
-    );
+    const address = digitalAddresses.find((a) => a.channelType === CourtesyChannelType.EMAIL);
 
     const event = strategy.performComputations({
       payload: 'default',
       params: {
+        addressType: address!.addressType,
         channelType: address!.channelType,
-        recipientId: address!.recipientId,
-        senderId: address!.senderId,
+        senderId: 'default',
       },
     });
 
@@ -24,21 +22,22 @@ describe('Mixpanel - Remove Courtesy Address Strategy', () => {
       [EventPropertyType.PROFILE]: {
         SEND_HAS_EMAIL: 'no',
       },
+      [EventPropertyType.SUPER_PROPERTY]: {
+        SEND_HAS_EMAIL: 'no',
+      },
     });
   });
 
   it('should return has sms when removing an sms', () => {
     const strategy = new SendRemoveCourtesyAddressStrategy();
-    const address = digitalAddresses.courtesy.find(
-      (a) => a.channelType === CourtesyChannelType.SMS
-    );
+    const address = digitalAddresses.find((a) => a.channelType === CourtesyChannelType.SMS);
 
     const event = strategy.performComputations({
       payload: 'default',
       params: {
+        addressType: address!.addressType,
         channelType: address!.channelType,
-        recipientId: address!.recipientId,
-        senderId: address!.senderId,
+        senderId: 'default',
       },
     });
 
@@ -46,6 +45,25 @@ describe('Mixpanel - Remove Courtesy Address Strategy', () => {
       [EventPropertyType.PROFILE]: {
         SEND_HAS_SMS: 'no',
       },
+      [EventPropertyType.SUPER_PROPERTY]: {
+        SEND_HAS_SMS: 'no',
+      },
     });
+  });
+
+  it('should return empty object if senderId is not default', () => {
+    const strategy = new SendRemoveCourtesyAddressStrategy();
+    const address = digitalAddresses.find((a) => a.channelType === CourtesyChannelType.SMS);
+
+    const event = strategy.performComputations({
+      payload: 'not-default',
+      params: {
+        addressType: address!.addressType,
+        channelType: address!.channelType,
+        senderId: 'not-default',
+      },
+    });
+
+    expect(event).toEqual({});
   });
 });

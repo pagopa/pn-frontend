@@ -1,49 +1,36 @@
-import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
+import { PartyEntityWithUrl } from '@pagopa-pn/pn-commons';
+import { ProductEntity } from '@pagopa/mui-italia';
 
 import { userResponse } from './Auth.mock';
 
-export const productsDTO = [
+export const productsDTO: Array<ProductEntity> = [
   {
-    id: '0',
-    title: `Product 1`,
-    urlBO: '',
+    id: 'prod-pn-test',
+    title: 'Product 1',
+    productUrl: 'https://www.product.com',
+    linkType: 'external',
   },
   {
-    id: '1',
-    title: `Product 2`,
-    urlBO: 'https://www.product.com',
-  },
-];
-
-export const productsList: Array<ProductEntity> = productsDTO.map((product) => ({
-  id: product.id,
-  title: product.title,
-  productUrl: `mock-selfcare.base/token-exchange?institutionId=${userResponse.organization.id}&productId=${product.id}`,
-  linkType: 'external',
-}));
-
-export const institutionsDTO = [
-  {
-    id: '0',
-    description: `Party 1`,
-    userProductRoles: ['Role 1'],
-  },
-  {
-    id: '1',
-    description: `Party 2`,
-    userProductRoles: ['Role 2'],
-    rootParent: {
-      id: '2',
-      description: 'Root Party 2',
-    },
+    id: 'prod-pn-test-2',
+    title: 'Product 2',
+    productUrl: 'https://www.product.com',
+    linkType: 'external',
   },
 ];
 
-export const institutionsList: Array<PartyEntity> = institutionsDTO.map((institution) => ({
-  id: institution.id,
-  name: institution.description,
-  productRole: institution.userProductRoles[0],
-  logoUrl: undefined,
-  parentName: institution.rootParent?.description,
-  entityUrl: `mock-selfcare.base/token-exchange?institutionId=${institution.id}&productId=mock-prod-id`,
-}));
+export const institutionsDTO: Array<PartyEntityWithUrl> = [
+  {
+    id: userResponse.organization.id,
+    name: 'Institution 1',
+    productRole: 'Role 1',
+    entityUrl: `https://test.selfcare.pagopa.it/token-exchange?institutionId=${userResponse.organization.id}&productId=prod-pn-test`,
+  },
+  {
+    id: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1cd',
+    name: 'Institution 2',
+    productRole: 'Role 2',
+    entityUrl:
+      'https://test.selfcare.pagopa.it/token-exchange?institutionId=5b994d4a-0fa8-47ac-9c7b-354f1d44a1cd&productId=prod-pn-test',
+    parentName: 'Parent 1',
+  },
+];

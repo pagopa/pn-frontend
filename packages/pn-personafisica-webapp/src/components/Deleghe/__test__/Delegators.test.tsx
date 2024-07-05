@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
+import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
 import { Delegator } from '../../../redux/delegation/types';
 import { sortDelegations } from '../../../utility/delegation.utility';
@@ -25,14 +25,14 @@ describe('Delegators Component', async () => {
 
   it('renders the delegators', () => {
     const { getByTestId, getAllByTestId } = render(<Delegators />, {
-      preloadedState: { delegationsState: { delegations: { delegators: arrayOfDelegators } } },
+      preloadedState: { delegationsState: { delegations: { delegators: mandatesByDelegate } } },
     });
     const delegatorsTable = getByTestId('delegatorsTable');
     expect(delegatorsTable).toBeInTheDocument();
     const delegatorsRows = getAllByTestId('delegatorsTable.body.row');
-    expect(delegatorsRows).toHaveLength(arrayOfDelegators.length);
+    expect(delegatorsRows).toHaveLength(mandatesByDelegate.length);
     delegatorsRows.forEach((row, index) => {
-      expect(row).toHaveTextContent(arrayOfDelegators[index].delegator?.displayName!);
+      expect(row).toHaveTextContent(mandatesByDelegate[index].delegator?.displayName!);
     });
   });
 
@@ -40,7 +40,7 @@ describe('Delegators Component', async () => {
     const { getByTestId, getAllByTestId } = render(<Delegators />, {
       preloadedState: {
         delegationsState: {
-          delegations: { delegators: arrayOfDelegators },
+          delegations: { delegators: mandatesByDelegate },
           sortDelegators: {
             orderBy: '',
             order: 'asc',
@@ -61,7 +61,7 @@ describe('Delegators Component', async () => {
       });
     });
     let delegatorsRows = getAllByTestId('delegatorsTable.body.row');
-    let sortedDelegators = sortDelegations('asc', 'name', arrayOfDelegators) as Array<Delegator>;
+    let sortedDelegators = sortDelegations('asc', 'name', mandatesByDelegate) as Array<Delegator>;
     delegatorsRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegators[index].delegator?.displayName!);
     });
@@ -77,7 +77,7 @@ describe('Delegators Component', async () => {
       });
     });
     delegatorsRows = getAllByTestId('delegatorsTable.body.row');
-    sortedDelegators = sortDelegations('desc', 'name', arrayOfDelegators) as Array<Delegator>;
+    sortedDelegators = sortDelegations('desc', 'name', mandatesByDelegate) as Array<Delegator>;
     delegatorsRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegators[index].delegator?.displayName!);
     });
@@ -95,7 +95,7 @@ describe('Delegators Component', async () => {
       });
     });
     delegatorsRows = getAllByTestId('delegatorsTable.body.row');
-    sortedDelegators = sortDelegations('asc', 'endDate', arrayOfDelegators) as Array<Delegator>;
+    sortedDelegators = sortDelegations('asc', 'endDate', mandatesByDelegate) as Array<Delegator>;
     delegatorsRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegators[index].delegator?.displayName!);
     });

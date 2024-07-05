@@ -68,4 +68,8 @@ body {
   line-height: 2.25rem;
 }
 
+#onetrust-banner-sdk:focus {
+  outline: none !important;
+  outline-offset: 0 !important;
+}
 /* END: ONETRUST STYLES */

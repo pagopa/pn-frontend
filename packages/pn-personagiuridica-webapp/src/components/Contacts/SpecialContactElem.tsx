@@ -17,7 +17,6 @@ type Props = {
     mail?: string;
     pec?: string;
   };
-  recipientId: string;
 };
 
 type Field = {
@@ -34,7 +33,7 @@ const addressTypeToLabel = {
   phone: 'phone',
 };
 
-const SpecialContactElem = memo(({ address, recipientId }: Props) => {
+const SpecialContactElem = memo(({ address }: Props) => {
   const { t } = useTranslation(['recapiti']);
   const isMobile = useIsMobile();
   const { contextEditMode, setContextEditMode } = useSpecialContactsContext();
@@ -136,7 +135,6 @@ const SpecialContactElem = memo(({ address, recipientId }: Props) => {
           }}
         >
           <DigitalContactElem
-            recipientId={recipientId}
             senderId={address.senderId}
             senderName={address.senderName}
             contactType={f.contactType}

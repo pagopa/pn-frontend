@@ -50,6 +50,10 @@ const Login = () => {
       SPID_IDP_NAME: 'CIE',
       SPID_IDP_ID: SPID_CIE_ENTITY_ID,
     });
+
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_METHOD, {
+      entityID: 'cie',
+    });
   };
 
   if (showIDPS) {
@@ -84,8 +88,8 @@ const Login = () => {
           <Grid item>
             <Typography
               id="login-mode-page-title"
-              component="h2"
               variant="h3"
+              component="h1"
               px={0}
               color="textPrimary"
               sx={{
@@ -100,6 +104,7 @@ const Login = () => {
           <Grid item>
             <Typography
               variant="body1"
+              component="h2"
               mb={isMobile ? 4 : 7}
               color="textPrimary"
               sx={{

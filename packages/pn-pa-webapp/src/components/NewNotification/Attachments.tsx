@@ -6,12 +6,12 @@ import * as yup from 'yup';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, SxProps, TextField, Typography } from '@mui/material';
-import { FileUpload } from '@pagopa-pn/pn-commons';
+import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { NewNotificationDocument } from '../../models/NewNotification';
 import { useAppDispatch } from '../../redux/hooks';
-import { uploadNotificationAttachment } from '../../redux/newNotification/actions';
+import { uploadNotificationDocument } from '../../redux/newNotification/actions';
 import { setAttachments } from '../../redux/newNotification/reducers';
 import { getConfiguration } from '../../services/configuration.service';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';
@@ -55,7 +55,7 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
   fileUploaded,
 }) => {
   const { t } = useTranslation(['notifiche']);
-
+  const isMobile = useIsMobile('md');
   return (
     <Box data-testid="attachmentBox">
       <Box display="flex" justifyContent="space-between" alignItems="center" sx={sx}>
@@ -64,7 +64,7 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
           <ButtonNaked
             onClick={onDelete}
             data-testid="deletebutton"
-            aria-label={t('new-notification.steps.remove-document')}
+            aria-label={t('new-notification.steps.attachments.remove-document')}
           >
             <DeleteIcon color="action" sx={{ cursor: 'pointer' }} />
           </ButtonNaked>
@@ -72,7 +72,9 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
       </Box>
       <FileUpload
         key={`${new Date()}`}
-        uploadText={t('new-notification.drag-doc')}
+        uploadText={
+          isMobile ? t('new-notification.drag-doc-mobile') : t('new-notification.drag-doc-pc')
+        }
         accept="application/pdf"
         onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
         onRemoveFile={() => onRemoveFile(id)}
@@ -193,7 +195,7 @@ const Attachments: React.FC<Props> = ({
         } else {
           storeAttachments(values.documents);
           // upload attachments
-          dispatch(uploadNotificationAttachment(values.documents))
+          dispatch(uploadNotificationDocument(values.documents))
             .unwrap()
             .then((docs) => {
               // update formik
@@ -243,7 +245,10 @@ const Attachments: React.FC<Props> = ({
         key: '',
         versionToken: '',
       },
+      name: '',
     });
+
+    await formik.setFieldTouched(`${id}.name`, false, false);
   };
 
   const addDocumentHandler = async () => {

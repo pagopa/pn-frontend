@@ -3,7 +3,6 @@ import { vi } from 'vitest';
 
 import {
   AppResponseMessage,
-  NotificationFeePolicy,
   PhysicalCommunicationType,
   ResponseEventDispatcher,
 } from '@pagopa-pn/pn-commons';
@@ -14,6 +13,7 @@ import {
   testSelect,
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
+import { userResponse } from '../../../__mocks__/Auth.mock';
 import {
   newNotification,
   newNotificationEmpty,
@@ -30,9 +30,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { GET_USER_GROUPS } from '../../../api/notifications/notifications.routes';
-import { PaymentModel } from '../../../models/NewNotification';
-import { GroupStatus } from '../../../models/user';
+import { NotificationFeePolicy, PaymentModel } from '../../../models/NewNotification';
 import { NEW_NOTIFICATION_ACTIONS } from '../../../redux/newNotification/actions';
 import PreliminaryInformations from '../PreliminaryInformations';
 
@@ -55,10 +53,15 @@ vi.mock('../../../services/configuration.service', async () => {
   };
 });
 
-const populateForm = async (form: HTMLFormElement, hasPayment: boolean) => {
+const populateForm = async (
+  form: HTMLFormElement,
+  hasPayment: boolean,
+  organizationName: string = userResponse.organization.name
+) => {
   await testInput(form, 'paProtocolNumber', newNotification.paProtocolNumber);
   await testInput(form, 'subject', newNotification.subject);
   await testInput(form, 'taxonomyCode', newNotification.taxonomyCode);
+  await testInput(form, 'senderDenomination', organizationName);
   await testSelect(
     form,
     'group',
@@ -106,10 +109,24 @@ describe('PreliminaryInformations component with payment enabled', async () => {
   });
 
   it('renders - no required groups', async () => {
-    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
-        <PreliminaryInformations notification={newNotificationEmpty} onConfirm={confirmHandlerMk} />
+        <PreliminaryInformations
+          notification={newNotificationEmpty}
+          onConfirm={confirmHandlerMk}
+        />,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                organization: {
+                  name: 'Comune di Palermo',
+                },
+              },
+            },
+          },
+        }
       );
     });
     expect(result.container).toHaveTextContent(/title/i);
@@ -119,6 +136,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     testFormElements(form, 'abstract', 'abstract');
     testFormElements(form, 'group', 'group');
     testFormElements(form, 'taxonomyCode', 'taxonomy-id*');
+    testFormElements(form, 'senderDenomination', 'sender-denomination*');
     testRadio(form, 'comunicationTypeRadio', ['registered-letter-890', 'simple-registered-letter']);
     testRadio(form, 'paymentMethodRadio', [
       'pagopa-notice',
@@ -131,7 +149,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
   });
 
   it('renders - required groups', async () => {
-    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
         <PreliminaryInformations
@@ -143,6 +161,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
             userState: {
               user: {
                 organization: {
+                  name: 'Comune di Palermo',
                   hasGroup: true,
                 },
               },
@@ -156,7 +175,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
   });
 
   it('changes form values and clicks on confirm', async () => {
-    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
         <PreliminaryInformations
@@ -167,9 +186,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
           preloadedState: {
             userState: {
               user: {
-                organization: {
-                  hasGroup: true,
-                },
+                organization: { name: 'Comune di Palermo', hasGroup: true },
               },
             },
           },
@@ -196,13 +213,14 @@ describe('PreliminaryInformations component with payment enabled', async () => {
         recipients: [],
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
         paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE,
+        senderDenomination: newNotification.senderDenomination,
       });
     });
     expect(confirmHandlerMk).toBeCalledTimes(1);
   });
 
   it('fills form with invalid values', async () => {
-    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
         <PreliminaryInformations
@@ -213,9 +231,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
           preloadedState: {
             userState: {
               user: {
-                organization: {
-                  hasGroup: true,
-                },
+                organization: { name: 'Comune di Palermo', hasGroup: true },
               },
             },
           },
@@ -227,12 +243,12 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     // set invalid values
     // paProtocolNumber
     await testInput(form, 'paProtocolNumber', '');
-    const potrocolNumberError = form.querySelector('#paProtocolNumber-helper-text');
-    expect(potrocolNumberError).toHaveTextContent('required-field');
+    const protocolNumberError = form.querySelector('#paProtocolNumber-helper-text');
+    expect(protocolNumberError).toHaveTextContent('required-field');
     await testInput(form, 'paProtocolNumber', ' text-with-spaces ');
-    expect(potrocolNumberError).toHaveTextContent('no-spaces-at-edges');
+    expect(protocolNumberError).toHaveTextContent('no-spaces-at-edges');
     await testInput(form, 'paProtocolNumber', randomString(257));
-    expect(potrocolNumberError).toHaveTextContent('too-long-field-error');
+    expect(protocolNumberError).toHaveTextContent('too-long-field-error');
     // subject
     await testInput(form, 'subject', '');
     const subjectError = form.querySelector('#subject-helper-text');
@@ -255,13 +271,23 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     expect(taxonomyCodeError).toHaveTextContent('taxonomy-id required');
     await testInput(form, 'taxonomyCode', randomString(4));
     expect(taxonomyCodeError).toHaveTextContent('taxonomy-id invalid');
+    // senderDenomination
+    await testInput(form, 'senderDenomination', '');
+    const senderDenominationError = form.querySelector('#senderDenomination-helper-text');
+    expect(senderDenominationError).toHaveTextContent('sender-denomination required');
+    await testInput(
+      form,
+      'senderDenomination',
+      'Comune di Palermo - Commissario Straordinario del Governo ZES Sicilia Occidentale'
+    );
+    expect(senderDenominationError).toHaveTextContent('too-long-field-error');
     // check submit button state
     const button = within(form).getByTestId('step-submit');
     expect(button).toBeDisabled();
   });
 
   it('form initially filled', async () => {
-    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
         <PreliminaryInformations notification={newNotification} onConfirm={confirmHandlerMk} />,
@@ -269,9 +295,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
           preloadedState: {
             userState: {
               user: {
-                organization: {
-                  hasGroup: true,
-                },
+                organization: { name: 'Comune di Palermo', hasGroup: true },
               },
             },
           },
@@ -289,6 +313,12 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     testFormElements(form, 'abstract', 'abstract', newNotification.abstract);
     testFormElements(form, 'group', 'group', newNotification.group);
     testFormElements(form, 'taxonomyCode', 'taxonomy-id*', newNotification.taxonomyCode);
+    testFormElements(
+      form,
+      'senderDenomination',
+      'sender-denomination*',
+      userResponse.organization.name
+    );
     const physicalCommunicationType = form.querySelector(
       `input[name="physicalCommunicationType"][value="${newNotification.physicalCommunicationType}"]`
     );
@@ -300,7 +330,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
   });
 
   it('errors on api call', async () => {
-    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(500);
+    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(500);
     await act(async () => {
       result = render(
         <>
@@ -312,9 +342,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
           preloadedState: {
             userState: {
               user: {
-                organization: {
-                  hasGroup: true,
-                },
+                organization: { name: 'Comune di Palermo', hasGroup: true },
               },
             },
           },
@@ -351,7 +379,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
   });
 
   it('renders component', async () => {
-    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
         <PreliminaryInformations
@@ -362,9 +390,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
           preloadedState: {
             userState: {
               user: {
-                organization: {
-                  hasGroup: true,
-                },
+                organization: { name: 'Comune di Palermo', hasGroup: true },
               },
             },
           },
@@ -380,7 +406,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
   });
 
   it('changes form values and clicks on confirm', async () => {
-    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
         <PreliminaryInformations
@@ -391,9 +417,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
           preloadedState: {
             userState: {
               user: {
-                organization: {
-                  hasGroup: true,
-                },
+                organization: { name: 'Comune di Palermo', hasGroup: true },
               },
             },
           },
@@ -420,8 +444,44 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
         recipients: [],
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
         paymentMode: PaymentModel.NOTHING,
+        senderDenomination: newNotification.senderDenomination,
       });
     });
     expect(confirmHandlerMk).toBeCalledTimes(1);
+  });
+
+  it('set senderDenomination longer than 80 characters', async () => {
+    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(200, newNotificationGroups);
+    await act(async () => {
+      result = render(
+        <PreliminaryInformations
+          notification={{
+            ...newNotificationEmpty,
+            senderDenomination:
+              'Comune di Palermo - Commissario Straordinario del Governo ZES Sicilia Occidentale',
+          }}
+          onConfirm={confirmHandlerMk}
+        />,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                organization: {
+                  name: 'Comune di Palermo - Commissario Straordinario del Governo ZES Sicilia Occidentale',
+                },
+              },
+            },
+          },
+        }
+      );
+    });
+    const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    const senderDenominationError = await waitFor(() =>
+      form.querySelector('#senderDenomination-helper-text')
+    );
+    expect(senderDenominationError).toHaveTextContent('too-long-field-error');
+    const button = within(form).getByTestId('step-submit');
+    // check submit button state
+    expect(button).toBeDisabled();
   });
 });

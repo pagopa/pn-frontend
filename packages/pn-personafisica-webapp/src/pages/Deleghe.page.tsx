@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box, Stack } from '@mui/material';
@@ -6,6 +6,7 @@ import {
   AppResponse,
   AppResponsePublisher,
   CodeModal,
+  ErrorMessage,
   TitleBox,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
@@ -18,11 +19,11 @@ import MobileDelegators from '../components/Deleghe/MobileDelegators';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
 import {
-  acceptDelegation,
-  getDelegates,
-  getDelegators,
-  rejectDelegation,
-  revokeDelegation,
+  acceptMandate,
+  getMandatesByDelegate,
+  getMandatesByDelegator,
+  rejectMandate,
+  revokeMandate,
 } from '../redux/delegation/actions';
 import { closeAcceptModal, closeRevocationModal, resetState } from '../redux/delegation/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -40,14 +41,10 @@ const Deleghe = () => {
     id: acceptId,
     open: acceptOpen,
     name: acceptName,
-    error: acceptError,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
   const [pageReady, setPageReady] = useState(false);
-
-  const [errorMessage, setErrorMessage] = useState<{
-    title: string;
-    content: string;
-  }>();
+  const codeModalRef =
+    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
 
   const dispatch = useAppDispatch();
 
@@ -58,14 +55,14 @@ const Deleghe = () => {
   const handleConfirmClick = () => {
     if (type === 'delegates') {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_REVOKED);
-      void dispatch(revokeDelegation(id))
+      void dispatch(revokeMandate(id))
         .unwrap()
         .then(() =>
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_GIVEN, { delegators })
         );
     } else {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_REJECTED);
-      void dispatch(rejectDelegation(id))
+      void dispatch(rejectMandate(id))
         .unwrap()
         .then(() =>
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_HAS_MANDATE, { delegates })
@@ -79,7 +76,7 @@ const Deleghe = () => {
 
   const handleAccept = (code: Array<string>) => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_ACCEPTED);
-    dispatch(acceptDelegation({ id: acceptId, code: code.join('') }))
+    dispatch(acceptMandate({ id: acceptId, code: code.join('') }))
       .unwrap()
       .then(() => {
         void dispatch(getSidemenuInformation());
@@ -96,8 +93,8 @@ const Deleghe = () => {
   );
 
   const retrieveData = async () => {
-    await dispatch(getDelegates());
-    await dispatch(getDelegators());
+    await dispatch(getMandatesByDelegator());
+    await dispatch(getMandatesByDelegate());
     setPageReady(true);
   };
 
@@ -119,15 +116,18 @@ const Deleghe = () => {
 
   const handleAcceptDelegationError = useCallback((errorResponse: AppResponse) => {
     const error = errorResponse.errors ? errorResponse.errors[0] : null;
-    setErrorMessage(error?.message);
+    codeModalRef.current?.updateError(
+      { title: error?.message.title || '', content: error?.message.content || '' },
+      true
+    );
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_ACCEPT_CODE_ERROR);
   }, []);
 
   useEffect(() => {
-    AppResponsePublisher.error.subscribe('acceptDelegation', handleAcceptDelegationError);
+    AppResponsePublisher.error.subscribe('acceptMandate', handleAcceptDelegationError);
 
     return () => {
-      AppResponsePublisher.error.unsubscribe('acceptDelegation', handleAcceptDelegationError);
+      AppResponsePublisher.error.unsubscribe('acceptMandate', handleAcceptDelegationError);
     };
   }, []);
 
@@ -144,9 +144,7 @@ const Deleghe = () => {
           confirmCallback={handleAccept}
           confirmLabel={t('deleghe.accept')}
           codeSectionTitle={t('deleghe.verification_code')}
-          hasError={acceptError}
-          errorTitle={errorMessage?.title}
-          errorMessage={errorMessage?.content}
+          ref={codeModalRef}
         />
         <ConfirmationModal
           open={open}

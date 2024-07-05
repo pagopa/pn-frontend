@@ -7,11 +7,10 @@ import { countContactsByType } from '../../utility/contacts.utility';
 import CourtesyContactItem, { CourtesyFieldType } from './CourtesyContactItem';
 
 interface Props {
-  recipientId: string;
   contacts: Array<DigitalAddress>;
 }
 
-const CourtesyContactsList: React.FC<Props> = ({ recipientId, contacts }) => {
+const CourtesyContactsList: React.FC<Props> = ({ contacts }) => {
   const phoneContact = useMemo(
     () =>
       contacts.find(
@@ -43,13 +42,11 @@ const CourtesyContactsList: React.FC<Props> = ({ recipientId, contacts }) => {
   return (
     <Stack spacing={3} mt={3}>
       <CourtesyContactItem
-        recipientId={recipientId}
         type={CourtesyFieldType.EMAIL}
         value={emailContact?.value ? emailContact.value : ''}
         blockDelete={emailContactsQuantity > 1}
       />
       <CourtesyContactItem
-        recipientId={recipientId}
         type={CourtesyFieldType.PHONE}
         value={phoneContact?.value ? phoneContact.value : ''}
         blockDelete={phoneContactsQuantity > 1}
