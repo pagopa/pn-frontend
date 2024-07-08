@@ -12,11 +12,9 @@ import DigitalContactsCard from './DigitalContactsCard';
 interface Props {
   contacts: Array<DigitalAddress>;
 }
-interface ListProps {
-  contacts: Array<DigitalAddress>;
-}
 
-const CourtesyContactsList: React.FC<ListProps> = ({ contacts }) => {
+const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
+  const { t } = useTranslation(['common', 'recapiti']);
   const getPhoneContact = (): DigitalAddress | undefined =>
     contacts.find(
       (contact) => contact.channelType === CourtesyChannelType.SMS && contact.senderId === 'default'
@@ -37,25 +35,6 @@ const CourtesyContactsList: React.FC<ListProps> = ({ contacts }) => {
     countContactsByType(contacts, CourtesyChannelType.EMAIL);
 
   return (
-    <Stack spacing={3} mt={3}>
-      <CourtesyContactItem
-        type={CourtesyFieldType.EMAIL}
-        value={emailContact?.value ? emailContact.value : ''}
-        blockDelete={emailContactsQuantity() > 1}
-      />
-      <CourtesyContactItem
-        type={CourtesyFieldType.PHONE}
-        value={phoneContact?.value ? phoneContact.value : ''}
-        blockDelete={phoneContactsQuantity() > 1}
-      />
-    </Stack>
-  );
-};
-
-const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
-  const { t } = useTranslation(['common', 'recapiti']);
-
-  return (
     <DigitalContactsCard
       sectionTitle={t('courtesy-contacts.title', { ns: 'recapiti' })}
       title={t('courtesy-contacts.subtitle', { ns: 'recapiti' })}
@@ -66,7 +45,18 @@ const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
       avatar={<IllusEmail size={60} />}
     >
       <Box sx={{ width: { xs: '100%', lg: '50%' } }} data-testid="courtesyContacts">
-        <CourtesyContactsList contacts={contacts} />
+        <Stack spacing={3} mt={3}>
+          <CourtesyContactItem
+            type={CourtesyFieldType.EMAIL}
+            value={emailContact?.value ? emailContact.value : ''}
+            blockDelete={emailContactsQuantity() > 1}
+          />
+          <CourtesyContactItem
+            type={CourtesyFieldType.PHONE}
+            value={phoneContact?.value ? phoneContact.value : ''}
+            blockDelete={phoneContactsQuantity() > 1}
+          />
+        </Stack>
       </Box>
       <Alert
         role="banner"
