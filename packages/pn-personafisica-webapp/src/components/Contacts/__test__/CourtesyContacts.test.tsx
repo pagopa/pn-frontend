@@ -92,8 +92,8 @@ describe('CourtesyContacts Component', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={CourtesyFieldType.PHONE} value="" />
-          <CourtesyContactItem type={CourtesyFieldType.EMAIL} value="" />
+          <CourtesyContactItem type={CourtesyFieldType.EMAIL} value={defaultEmailAddress!.value} />
+          <CourtesyContactItem type={CourtesyFieldType.PHONE} value={defaultPhoneAddress!.value} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
