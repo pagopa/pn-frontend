@@ -9,7 +9,7 @@ import { useAppDispatch } from '../../redux/hooks';
 const ZendeskForm: React.FC<{ data: ZendeskAuthorizationDTO }> = ({ data }) => {
   const { action_url: url, jwt, return_to: returnTo } = data;
   const dispatch = useAppDispatch();
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['support']);
 
   useEffect(() => {
     if (url && jwt && returnTo) {
