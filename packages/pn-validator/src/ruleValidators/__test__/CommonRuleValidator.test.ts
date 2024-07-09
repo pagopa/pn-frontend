@@ -1,10 +1,12 @@
 import { vi } from 'vitest';
-import { IsEqual } from './../../rules/IsEqual';
-import { IsNull } from '../../rules/IsNull';
-import { IsUndefined } from '../../rules/IsUndefined';
-import { IsOneOf } from '../../rules/IsOneOf';
+
 import { CustomValidator } from '../../rules/CustomValidator';
+import { IsNull } from '../../rules/IsNull';
+import { IsOneOf } from '../../rules/IsOneOf';
+import { IsUndefined } from '../../rules/IsUndefined';
+import { Required } from '../../rules/Required';
 import { CommonRuleValidator } from '../CommonRuleValidator';
+import { IsEqual } from './../../rules/IsEqual';
 
 class DummyRuleValidator<TModel, TValue> extends CommonRuleValidator<TModel, TValue> {}
 
@@ -12,33 +14,39 @@ const pushRuleMk = vi.fn();
 const dummyRuleValidator = new DummyRuleValidator(pushRuleMk);
 
 vi.mock('../../rules/IsNull', () => {
-    return {
-        IsNull: vi.fn()
-    }
+  return {
+    IsNull: vi.fn(),
+  };
 });
 
 vi.mock('../../rules/IsUndefined', () => {
-    return {
-        IsUndefined: vi.fn()
-    }
+  return {
+    IsUndefined: vi.fn(),
+  };
 });
 
 vi.mock('../../rules/IsEqual', () => {
-    return {
-        IsEqual: vi.fn()
-    }
+  return {
+    IsEqual: vi.fn(),
+  };
 });
 
 vi.mock('../../rules/CustomValidator', () => {
-    return {
-        CustomValidator: vi.fn()
-    }
+  return {
+    CustomValidator: vi.fn(),
+  };
 });
 
 vi.mock('../../rules/IsOneOf', () => {
   return {
-      IsOneOf: vi.fn()
-  }
+    IsOneOf: vi.fn(),
+  };
+});
+
+vi.mock('../../rules/Required', () => {
+  return {
+    Required: vi.fn(),
+  };
 });
 
 describe('Test CommonRuleValidator', () => {
@@ -52,6 +60,7 @@ describe('Test CommonRuleValidator', () => {
     expect(dummyRuleValidator.isUndefined).toBeDefined();
     expect(dummyRuleValidator.isEqual).toBeDefined();
     expect(dummyRuleValidator.customValidator).toBeDefined();
+    expect(dummyRuleValidator.isRequired).toBeDefined();
   });
 
   it('check if isNull rule is instantiated', () => {
@@ -87,6 +96,13 @@ describe('Test CommonRuleValidator', () => {
     const result = dummyRuleValidator.customValidator(() => null);
     expect(pushRuleMk).toBeCalledTimes(1);
     expect(pushRuleMk).toBeCalledWith(new CustomValidator(() => null));
+    expect(result).toBeInstanceOf(DummyRuleValidator);
+  });
+
+  it('check if required rule is instantiated', () => {
+    const result = dummyRuleValidator.isRequired();
+    expect(pushRuleMk).toBeCalledTimes(1);
+    expect(pushRuleMk).toBeCalledWith(new Required());
     expect(result).toBeInstanceOf(DummyRuleValidator);
   });
 });

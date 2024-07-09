@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Box, Button, IconButton, Menu as MUIMenu, MenuItem, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
-import { CustomTagGroup } from '@pagopa-pn/pn-commons';
+import { CustomTagGroup, useIsMobile } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -99,6 +99,7 @@ export const OrganizationsList = (props: {
   visibleItems?: number;
 }) => {
   const { t } = useTranslation(['deleghe']);
+  const isMobile = useIsMobile();
   return (
     <>
       {props.organizations.length === 0 ? (
@@ -106,14 +107,21 @@ export const OrganizationsList = (props: {
           {t('deleghe.table.allNotifications')}
         </Typography>
       ) : (
-        <Box>
+        <Box sx={{ minWidth: isMobile ? '' : '35rem', maxWidth: '60rem' }}>
           <Typography variant={props.textVariant || 'inherit'} mb={2}>
             {t('deleghe.table.notificationsFrom')}
           </Typography>
           <CustomTagGroup visibleItems={props.visibleItems}>
             {props.organizations.map((organization) => (
-              <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={organization}>
-                <Tag value={organization} />
+              <Box
+                sx={{
+                  mb: 1,
+                  mr: 1,
+                  display: 'inline-block',
+                }}
+                key={organization}
+              >
+                <Tag value={organization} sx={{ whiteSpace: 'normal' }} />
               </Box>
             ))}
           </CustomTagGroup>

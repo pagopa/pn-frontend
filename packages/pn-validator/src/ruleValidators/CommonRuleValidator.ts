@@ -1,13 +1,14 @@
-import { NotRuleValidator } from '../types/CommonRules';
-import { IsEqual } from '../rules/IsEqual';
-import { IsNull } from '../rules/IsNull';
-import { IsUndefined } from '../rules/IsUndefined';
+import { Rule } from '../Rule';
 // import { IsEmpty } from '../rules/IsEmpty';
 import { CustomValidator } from '../rules/CustomValidator';
-import { ValidationResult } from '../types/ValidationResult';
-import { Rule } from '../Rule';
+import { IsEqual } from '../rules/IsEqual';
+import { IsNull } from '../rules/IsNull';
 // import { Matches } from '../rules/Matches';
 import { IsOneOf } from '../rules/IsOneOf';
+import { IsUndefined } from '../rules/IsUndefined';
+import { Required } from '../rules/Required';
+import { NotRuleValidator } from '../types/CommonRules';
+import { ValidationResult } from '../types/ValidationResult';
 
 export abstract class CommonRuleValidator<TModel, TValue> {
   protected pushRule: (rule: Rule<TModel, TValue>) => void;
@@ -28,6 +29,11 @@ export abstract class CommonRuleValidator<TModel, TValue> {
 
   private addIsEqualRule = (value: TValue, not: boolean, customErrorMessage?: string) => {
     this.pushRule(new IsEqual<TModel, TValue>(value, not, customErrorMessage));
+    return this;
+  };
+
+  private addRequiredRule = (customErrorMessage?: string) => {
+    this.pushRule(new Required<TModel, TValue>(customErrorMessage));
     return this;
   };
 
@@ -82,6 +88,13 @@ export abstract class CommonRuleValidator<TModel, TValue> {
   };
 
   /**
+   * Required
+   * @param {string} [customErrorMessage] custom message to show when validation fails
+   */
+  public readonly isRequired = (customErrorMessage?: string) =>
+    this.addRequiredRule(customErrorMessage);
+
+  /**
    * Negate next rule
    */
   protected readonly commonNot = (): NotRuleValidator<TModel, TValue> =>
@@ -93,5 +106,6 @@ export abstract class CommonRuleValidator<TModel, TValue> {
         this.addIsEqualRule(value, true, customErrorMessage),
       isOneOf: (possibleValues: Array<TValue>, customErrorMessage?: string) =>
         this.addIsOneOfRule(possibleValues, true, customErrorMessage),
+      isRequired: (customErrorMessage?: string) => this.addRequiredRule(customErrorMessage),
     } as unknown as NotRuleValidator<TModel, TValue>);
 }
