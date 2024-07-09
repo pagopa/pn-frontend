@@ -8,10 +8,13 @@ import {
   LoadingPage,
   SessionModal,
   appStateActions,
+  getSessionLanguage,
+  setSessionLanguage,
   useErrors,
   useProcess,
   useSessionCheck,
 } from '@pagopa-pn/pn-commons';
+import { LangCode } from '@pagopa/mui-italia';
 
 import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -137,8 +140,8 @@ const SessionGuard = () => {
 
   const handleSetUserLanguage = useCallback(() => {
     const langParam = new URLSearchParams(location.hash).get('lang');
-    const language = langParam || sessionStorage.getItem('lang') || 'it';
-    sessionStorage.setItem('lang', language);
+    const language = (langParam || getSessionLanguage() || 'it') as LangCode;
+    setSessionLanguage(language);
     void i18n.changeLanguage(language);
   }, [location]);
 
