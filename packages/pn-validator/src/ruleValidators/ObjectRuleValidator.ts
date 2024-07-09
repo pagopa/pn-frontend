@@ -1,8 +1,8 @@
-import { NotObjectRuleValidator, ObjectRules } from '../types/ObjectRules';
-import { IsEmpty } from '../rules/IsEmpty';
-import { InnerValidator } from '../rules/InnerValidator';
 import { Rule } from '../Rule';
 import { Validator } from '../Validator';
+import { InnerValidator } from '../rules/InnerValidator';
+import { IsEmpty } from '../rules/IsEmpty';
+import { NotObjectRuleValidator, ObjectRules } from '../types/ObjectRules';
 import { CommonRuleValidator } from './CommonRuleValidator';
 
 export class ObjectRuleValidator<TModel, TValue>
@@ -13,10 +13,7 @@ export class ObjectRuleValidator<TModel, TValue>
     super(pushRule);
   }
 
-  private addIsEmptyRule = (
-    not: boolean,
-    customErrorMessage?: string
-  ): ObjectRuleValidator<TModel, TValue> => {
+  private addIsEmptyRule = (not: boolean, customErrorMessage?: string): this => {
     this.pushRule(new IsEmpty<TModel, TValue>(not, customErrorMessage));
     return this;
   };
@@ -25,16 +22,14 @@ export class ObjectRuleValidator<TModel, TValue>
    * Check if value is empty
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-  public readonly isEmpty = (customErrorMessage?: string): ObjectRuleValidator<TModel, TValue> =>
+  public readonly isEmpty = (customErrorMessage?: string): this =>
     this.addIsEmptyRule(false, customErrorMessage);
 
   /**
    * Set validator to validate properties of type object
    * @param {Validator} [validator] validator
    */
-  public readonly setValidator = (
-    validator: Validator<TValue>
-  ): ObjectRuleValidator<TModel, TValue> => {
+  public readonly setValidator = (validator: Validator<TValue>): this => {
     this.pushRule(new InnerValidator<TModel, TValue>(validator));
     return this;
   };

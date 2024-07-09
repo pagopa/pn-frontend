@@ -72,6 +72,11 @@ describe('NewApiKey component', async () => {
     expect(submitButton).toBeEnabled();
     expect(result.container).not.toHaveTextContent(/form-error-name/);
 
+    // fill api key name with only spaces: invalid form, submit is disabled, error message shown
+    await testInput(form, 'name', '   ');
+    expect(submitButton).toBeDisabled();
+    expect(result.container).toHaveTextContent(/no-spaces-at-edges/);
+
     // set back api key name to empty text field, submit is disabled, error message shown
     await testInput(form, 'name', '');
     expect(submitButton).toBeDisabled();

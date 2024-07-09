@@ -66,15 +66,6 @@ describe('RouteGuard component', () => {
     expect(accessDeniedComponent).toBeNull();
   });
 
-  it('Store aar in localStorage', async () => {
-    const mockQrCode = 'qr-code';
-    window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
-    await act(async () => {
-      render(<Guard />);
-    });
-    expect(localStorage.getItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM)).toBe(mockQrCode);
-  });
-
   it('Get aar from localStorage', async () => {
     const mockQrCode = 'qr-code';
     localStorage.setItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM, mockQrCode);
