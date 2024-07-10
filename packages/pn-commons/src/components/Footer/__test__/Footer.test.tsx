@@ -1,3 +1,4 @@
+import { act } from 'react-dom/test-utils';
 import { vi } from 'vitest';
 
 import { Languages } from '@pagopa/mui-italia';
@@ -51,7 +52,7 @@ describe('Footer Component', () => {
   });
 
   it('shows languages dropdown', async () => {
-    const { getByRole } = render(<Footer loggedUser={true} />);
+    const { getByRole, rerender } = render(<Footer loggedUser={true} />);
     const dropdownLanguageButton = getByRole('button');
     const languageKeys = Object.keys(LANGUAGES) as Array<keyof Languages>;
     // This array represents how the options labels should sequentially change when you click the option.
@@ -63,6 +64,8 @@ describe('Footer Component', () => {
     }
     languageKeys.forEach((currentDropdownLanguage, index) => {
       fireEvent.click(dropdownLanguageButton);
+      sessionStorage.setItem('lang', currentDropdownLanguage);
+
       const languageSelector = screen.getByRole('presentation');
       expect(languageSelector).toBeInTheDocument();
       const languageOptions = languageSelector?.querySelectorAll('ul li');
@@ -70,6 +73,10 @@ describe('Footer Component', () => {
       const languageOptionsArray = Array.from(languageOptions);
       expect(languageOptionsArray[index]).toHaveTextContent(expectedLanguagesLabels[index]);
       fireEvent.click(languageOptionsArray[index]);
+
+      act(() => {
+        rerender(<Footer loggedUser={true} />);
+      });
     });
   });
 });
