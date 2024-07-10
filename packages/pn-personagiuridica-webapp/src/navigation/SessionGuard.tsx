@@ -9,14 +9,11 @@ import {
   LoadingPage,
   SessionModal,
   appStateActions,
-  getSessionLanguage,
   sanitizeString,
-  setSessionLanguage,
   useErrors,
   useProcess,
   useSessionCheck,
 } from '@pagopa-pn/pn-commons';
-import { LangCode } from '@pagopa/mui-italia';
 
 import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -142,7 +139,6 @@ const SessionGuard = () => {
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
   const { hasApiErrors, hasSpecificStatusError } = useErrors();
   const { WORK_IN_PROGRESS } = getConfiguration();
-  const { i18n } = useTranslation();
 
   // vedi il commentone in useProcess
   const { isFinished, performStep } = useProcess(INITIALIZATION_SEQUENCE);
@@ -153,13 +149,6 @@ const SessionGuard = () => {
   const getTokenParam = useCallback(() => {
     const params = new URLSearchParams(location.hash);
     return params.get('#selfCareToken');
-  }, [location]);
-
-  const handleSetUserLanguage = useCallback(() => {
-    const langParam = new URLSearchParams(location.hash).get('lang');
-    const language = (langParam || getSessionLanguage() || 'it') as LangCode;
-    setSessionLanguage(language);
-    void i18n.changeLanguage(language);
   }, [location]);
 
   /**
@@ -184,7 +173,6 @@ const SessionGuard = () => {
         AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
         await dispatch(exchangeToken(spidToken));
       }
-      handleSetUserLanguage();
     };
     void performStep(INITIALIZATION_STEPS.USER_DETERMINATION, doUserDetermination);
   }, [performStep]);

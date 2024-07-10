@@ -3,7 +3,6 @@ import {
   PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
   TOS_LINK_RELATIVE_PATH as TERMS_OF_SERVICE,
 } from '@pagopa-pn/pn-commons';
-import { LangCode } from '@pagopa/mui-italia';
 
 import { getConfiguration } from '../services/configuration.service';
 
@@ -34,7 +33,7 @@ const GROUPS_SEGMENT = '/groups';
 /** USERS navigation link to SelfCare "Referenti" section for SEND
  * @param idOrganization
  */
-export const USERS = (idOrganization: string, lang: LangCode) =>
+export const USERS = (idOrganization: string, lang: string) =>
   `${
     getConfiguration().SELFCARE_BASE_URL
   }${DASHBOARD}/${idOrganization}${USERS_SEGMENT}?lang=${lang}`;
@@ -42,7 +41,7 @@ export const USERS = (idOrganization: string, lang: LangCode) =>
 /** GROUPS navigation link to SelfCare "Gruppi" section for SEND
  * @param idOrganization
  */
-export const GROUPS = (idOrganization: string, lang: LangCode) =>
+export const GROUPS = (idOrganization: string, lang: string) =>
   `${
     getConfiguration().SELFCARE_BASE_URL
   }${DASHBOARD}/${idOrganization}${GROUPS_SEGMENT}?lang=${lang}`;
@@ -50,5 +49,5 @@ export const GROUPS = (idOrganization: string, lang: LangCode) =>
 /** PROFILE navigation link to PNPG "Profilo" section for SEND
  * @param idOrganization
  */
-export const PROFILE = (idOrganization: string, lang: LangCode) =>
+export const PROFILE = (idOrganization: string, lang: string) =>
   `${getConfiguration().SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}?lang=${lang}`;

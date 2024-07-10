@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
@@ -19,12 +19,14 @@ import {
   SideMenuItem,
   appStateActions,
   errorFactoryManager,
+  getSessionLanguage,
   initLocalization,
+  setSessionLanguage,
   useHasPermissions,
   useMultiEvent,
   useTracking,
 } from '@pagopa-pn/pn-commons';
-import { LangCode, PartyEntity, ProductEntity } from '@pagopa/mui-italia';
+import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
@@ -72,9 +74,8 @@ const ActualApp = () => {
     (state: RootState) => state.generalInfoState.pendingDelegators
   );
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   const path = pathname.split('/');
-  const currentLanguage = i18n.language as LangCode;
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -92,13 +93,19 @@ const ActualApp = () => {
   const role = loggedUser.organization?.roles ? loggedUser.organization?.roles[0] : null;
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
 
+  const handleSetUserLanguage = useCallback(() => {
+    const langParam = new URLSearchParams(hash).get('lang');
+    const language = langParam || getSessionLanguage() || 'it';
+    void changeLanguageHandler(language);
+  }, [location]);
+
   // TODO: get products list from be (?)
   const productsList: Array<ProductEntity> = useMemo(
     () => [
       {
         id: '1',
         title: t('header.product.organization-dashboard'),
-        productUrl: routes.PROFILE(organization?.id, currentLanguage),
+        productUrl: routes.PROFILE(organization?.id, i18n.language),
         linkType: 'external',
       },
       {
@@ -123,6 +130,7 @@ const ActualApp = () => {
       }
 
       void dispatch(getCurrentAppStatus());
+      handleSetUserLanguage();
     }
   }, [sessionToken]);
 
@@ -196,12 +204,12 @@ const ActualApp = () => {
     {
       label: t('menu.users'),
       icon: People,
-      route: routes.USERS(organization?.id, currentLanguage),
+      route: routes.USERS(organization?.id, i18n.language),
     },
     {
       label: t('menu.groups'),
       icon: SupervisedUserCircle,
-      route: routes.GROUPS(organization?.id, currentLanguage),
+      route: routes.GROUPS(organization?.id, i18n.language),
     },
   ];
 
@@ -224,6 +232,7 @@ const ActualApp = () => {
   );
 
   const changeLanguageHandler = async (langCode: string) => {
+    setSessionLanguage(langCode);
     await i18n.changeLanguage(langCode);
   };
 

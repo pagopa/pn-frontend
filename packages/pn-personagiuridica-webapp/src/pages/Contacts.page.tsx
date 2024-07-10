@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 
 import { Box, Link, Stack, Typography } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
-import { LangCode } from '@pagopa/mui-italia';
 
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import { DigitalContactsCodeVerificationProvider } from '../components/Contacts/DigitalContactsCodeVerification.context';
@@ -21,9 +20,8 @@ import { RootState } from '../redux/store';
 const Contacts = () => {
   const { t, i18n } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
-  const currentLanguage = i18n.language as LangCode;
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
-  const profileUrl = PROFILE(organization?.id, currentLanguage);
+  const profileUrl = PROFILE(organization?.id, i18n.language);
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.contactsState.digitalAddresses
   );
