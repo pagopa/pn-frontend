@@ -1,7 +1,7 @@
 {
   "name": "@pagopa-pn/pn-pa-webapp",
   "description": "Backoffice di SEND per la Pubblica Amministrazione",
-  "version": "2.4.2",
+  "version": "2.5.1",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -36,7 +36,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "yarn generate && vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "tsc && vitest --run",
