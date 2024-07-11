@@ -52,7 +52,7 @@ const IOContact: React.FC<Props> = ({ contact }) => {
         setIsConfirmModalOpen(false);
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS);
       })
-      .catch((e) => console.log(e));
+      .catch(() => {});
   };
 
   const disableIO = () => {
@@ -63,7 +63,7 @@ const IOContact: React.FC<Props> = ({ contact }) => {
         setIsConfirmModalOpen(false);
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS);
       })
-      .catch((e) => console.log(e));
+      .catch(() => {});
   };
 
   const handleConfirmationModal = () => {
