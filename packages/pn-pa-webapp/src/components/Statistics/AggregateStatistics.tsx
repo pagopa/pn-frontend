@@ -25,7 +25,7 @@ const AggregateStatistics: React.FC<Props> = ({
   endAngle = 360,
   radius = ['60%', '100%'],
   center = ['50%', '90%'],
-  legend = true,
+  legend,
   options,
   sx,
 }) => {
@@ -73,12 +73,20 @@ const AggregateStatistics: React.FC<Props> = ({
       <PnECharts
         key="Aggregate"
         option={option}
-        style={sx}
+        style={{ ...sx, height: '400px' }}
         legend={data.map((item) => item.name)}
+        dataTestId="Aggregate"
       />
     );
   }
-  return <PnECharts key="Aggregate" option={option} style={sx} />;
+  return (
+    <PnECharts
+      key="Aggregate"
+      option={option}
+      style={{ ...sx, height: '400px' }}
+      dataTestId="Aggregate"
+    />
+  );
 };
 
 export default AggregateStatistics;
