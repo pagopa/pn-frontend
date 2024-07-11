@@ -18,6 +18,8 @@ phases:
       - yarn install --frozen-lockfile
   build:
     commands:
+      - echo Generate clients...
+      - yarn generate
       - echo Running tests with coverage...
       - yarn test:coverage
       - BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///'); export BRANCH_NAME=${BRANCH_NAME:=$GIT_DEFAULT_BRANCH}
