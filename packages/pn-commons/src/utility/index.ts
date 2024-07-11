@@ -2,6 +2,7 @@ import { Configuration } from '../services/configuration.service';
 import EventStrategyFactory from '../utility/MixpanelUtils/EventStrategyFactory';
 import { AppError, AppErrorFactory, UnknownAppError, errorFactoryManager } from './AppError';
 import { AppResponsePublisher, ResponseEventDispatcher } from './AppResponse';
+import * as screenshot from './Screenshot';
 import { validateCurrentStatus, validateHistory, validateLegaFact } from './appStatus.utility';
 import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
 import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
@@ -36,6 +37,7 @@ import { filtersApplied, getValidValue, sortArray } from './genericFunctions.uti
 import { IUN_regex, formatIun } from './iun.utility';
 import { lazyRetry } from './lazyRetry.utility';
 import { initLocalization } from './localization.utility';
+import { getSessionLanguage, setSessionLanguage } from './multilanguage.utility';
 import {
   getF24Payments,
   getLegalFactLabel,
@@ -143,4 +145,7 @@ export {
   validateCurrentStatus,
   validateLegaFact,
   convertHoursToIntDays,
+  getSessionLanguage,
+  setSessionLanguage,
+  screenshot,
 };

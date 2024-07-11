@@ -33,17 +33,21 @@ const GROUPS_SEGMENT = '/groups';
 /** USERS navigation link to SelfCare "Referenti" section for SEND
  * @param idOrganization
  */
-export const USERS = (idOrganization: string) =>
-  `${getConfiguration().SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${USERS_SEGMENT}`;
+export const USERS = (idOrganization: string, lang: string) =>
+  `${
+    getConfiguration().SELFCARE_BASE_URL
+  }${DASHBOARD}/${idOrganization}${USERS_SEGMENT}?lang=${lang}`;
 
 /** GROUPS navigation link to SelfCare "Gruppi" section for SEND
  * @param idOrganization
  */
-export const GROUPS = (idOrganization: string) =>
-  `${getConfiguration().SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${GROUPS_SEGMENT}`;
+export const GROUPS = (idOrganization: string, lang: string) =>
+  `${
+    getConfiguration().SELFCARE_BASE_URL
+  }${DASHBOARD}/${idOrganization}${GROUPS_SEGMENT}?lang=${lang}`;
 
 /** PROFILE navigation link to PNPG "Profilo" section for SEND
  * @param idOrganization
  */
-export const PROFILE = (idOrganization: string) =>
-  `${getConfiguration().SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}`;
+export const PROFILE = (idOrganization: string, lang: string) =>
+  `${getConfiguration().SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}?lang=${lang}`;

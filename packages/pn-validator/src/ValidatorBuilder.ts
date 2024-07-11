@@ -1,19 +1,19 @@
-import { IsArray } from './rules/IsArray';
-import { IsObject } from './rules/IsObject';
-import { IsDate } from './rules/IsDate';
-import { IsString } from './rules/IsString';
-import { IsNumber } from './rules/IsNumber';
-import { ValidationResult } from './types/ValidationResult';
-import { TypeRules } from './types/TypeRules';
-import { BooleanRuleValidator } from './ruleValidators/BooleanRuleValidator';
-import { StringRuleValidator } from './ruleValidators/StringRuleValidator';
-import { NumberRuleValidator } from './ruleValidators/NumberRuleValidator';
-import { DateRuleValidator } from './ruleValidators/DateRuleValidator';
-import { ObjectRuleValidator } from './ruleValidators/ObjectRuleValidator';
-import { ArrayRuleValidator } from './ruleValidators/ArrayRuleValidator';
 import { hasError } from './HasError';
 import { Rule } from './Rule';
+import { ArrayRuleValidator } from './ruleValidators/ArrayRuleValidator';
+import { BooleanRuleValidator } from './ruleValidators/BooleanRuleValidator';
+import { DateRuleValidator } from './ruleValidators/DateRuleValidator';
+import { NumberRuleValidator } from './ruleValidators/NumberRuleValidator';
+import { ObjectRuleValidator } from './ruleValidators/ObjectRuleValidator';
+import { StringRuleValidator } from './ruleValidators/StringRuleValidator';
+import { IsArray } from './rules/IsArray';
 import { IsBoolean } from './rules/IsBoolean';
+import { IsDate } from './rules/IsDate';
+import { IsNumber } from './rules/IsNumber';
+import { IsObject } from './rules/IsObject';
+import { IsString } from './rules/IsString';
+import { TypeRules } from './types/TypeRules';
+import { ValidationResult } from './types/ValidationResult';
 
 export class ValidatorBuilder<TModel, TValue> {
   private rules: Array<{ isAsync: boolean; rule: Rule<TModel, TValue> }> = [];

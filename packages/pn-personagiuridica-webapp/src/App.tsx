@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
@@ -19,7 +19,9 @@ import {
   SideMenuItem,
   appStateActions,
   errorFactoryManager,
+  getSessionLanguage,
   initLocalization,
+  setSessionLanguage,
   useHasPermissions,
   useMultiEvent,
   useTracking,
@@ -72,7 +74,7 @@ const ActualApp = () => {
     (state: RootState) => state.generalInfoState.pendingDelegators
   );
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   const path = pathname.split('/');
 
   const sessionToken = loggedUser.sessionToken;
@@ -91,13 +93,19 @@ const ActualApp = () => {
   const role = loggedUser.organization?.roles ? loggedUser.organization?.roles[0] : null;
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
 
+  const handleSetUserLanguage = useCallback(() => {
+    const langParam = new URLSearchParams(hash).get('lang');
+    const language = langParam || getSessionLanguage() || 'it';
+    void changeLanguageHandler(language);
+  }, [location]);
+
   // TODO: get products list from be (?)
   const productsList: Array<ProductEntity> = useMemo(
     () => [
       {
         id: '1',
         title: t('header.product.organization-dashboard'),
-        productUrl: routes.PROFILE(organization?.id),
+        productUrl: routes.PROFILE(organization?.id, i18n.language),
         linkType: 'external',
       },
       {
@@ -122,6 +130,7 @@ const ActualApp = () => {
       }
 
       void dispatch(getCurrentAppStatus());
+      handleSetUserLanguage();
     }
   }, [sessionToken]);
 
@@ -192,8 +201,16 @@ const ActualApp = () => {
   }
 
   const selfcareMenuItems: Array<SideMenuItem> = [
-    { label: t('menu.users'), icon: People, route: routes.USERS(organization?.id) },
-    { label: t('menu.groups'), icon: SupervisedUserCircle, route: routes.GROUPS(organization?.id) },
+    {
+      label: t('menu.users'),
+      icon: People,
+      route: routes.USERS(organization?.id, i18n.language),
+    },
+    {
+      label: t('menu.groups'),
+      icon: SupervisedUserCircle,
+      route: routes.GROUPS(organization?.id, i18n.language),
+    },
   ];
 
   const partyList: Array<PartyEntity> = useMemo(
@@ -215,6 +232,7 @@ const ActualApp = () => {
   );
 
   const changeLanguageHandler = async (langCode: string) => {
+    setSessionLanguage(langCode);
     await i18n.changeLanguage(langCode);
   };
 

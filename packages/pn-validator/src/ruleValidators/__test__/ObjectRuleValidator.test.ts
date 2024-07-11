@@ -1,7 +1,8 @@
 import { vi } from 'vitest';
+
 import { Validator } from '../../Validator';
-import { IsEmpty } from '../../rules/IsEmpty';
 import { InnerValidator } from '../../rules/InnerValidator';
+import { IsEmpty } from '../../rules/IsEmpty';
 import { ObjectRuleValidator } from '../ObjectRuleValidator';
 
 class DummyValidator extends Validator<any> {}

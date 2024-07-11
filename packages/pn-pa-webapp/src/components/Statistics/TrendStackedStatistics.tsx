@@ -7,12 +7,7 @@ import type { CSSProperties } from 'react';
 import { formatDateSMonth, formatToSlicedISOString } from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import {
-  GraphColors,
-  IStatisticsDailySummary,
-  Timeframe,
-  WEEK_DAYS,
-} from '../../models/Statistics';
+import { IStatisticsDailySummary, Timeframe, WEEK_DAYS } from '../../models/Statistics';
 
 const LAST_DAY_OF_THE_WEEK = WEEK_DAYS.SUNDAY;
 
@@ -183,22 +178,6 @@ const TrendStackedStatistics: React.FC<Props> = ({
       right: '4%',
       bottom: '8%',
       containLabel: true,
-    },
-    toolbox: {
-      feature: {
-        saveAsImage: {
-          type: 'jpg',
-          show: true,
-          title: '',
-          name: 'chart',
-          backgroundColor: 'white',
-          pixelRatio: 2,
-          iconStyle: {
-            color: GraphColors.navy,
-          },
-          icon: 'path://M4.16669 16.6667H15.8334V15H4.16669V16.6667ZM15.8334 7.5H12.5V2.5H7.50002V7.5H4.16669L10 13.3333L15.8334 7.5Z',
-        },
-      },
     },
     xAxis: {
       // axisLabel: {
