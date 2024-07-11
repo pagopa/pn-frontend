@@ -65,6 +65,7 @@ const productsList: Array<ProductEntity> = [
 // Carlos Lombardi, 2023.05.26
 // ----------------------------------------
 const App = () => {
+  console.log('app loaded one times');
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const [isInitialized, setIsInitialized] = useState(false);
