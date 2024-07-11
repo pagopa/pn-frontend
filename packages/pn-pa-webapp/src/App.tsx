@@ -45,7 +45,7 @@ const App = () => {
   const { t } = useTranslation(['common', 'notifiche']);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  console.log('app loaded three times');
+  console.log('app loaded four times');
 
   useEffect(() => {
     if (!isInitialized) {
