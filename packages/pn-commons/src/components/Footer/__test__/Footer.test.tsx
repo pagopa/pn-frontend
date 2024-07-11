@@ -1,4 +1,3 @@
-import { act } from 'react-dom/test-utils';
 import { vi } from 'vitest';
 
 import { Languages } from '@pagopa/mui-italia';
@@ -74,9 +73,7 @@ describe('Footer Component', () => {
       expect(languageOptionsArray[index]).toHaveTextContent(expectedLanguagesLabels[index]);
       fireEvent.click(languageOptionsArray[index]);
 
-      act(() => {
-        rerender(<Footer loggedUser={true} />);
-      });
+      rerender(<Footer loggedUser={true} />);
     });
   });
 });
