@@ -1,4 +1,6 @@
 version: 0.2
+env:
+  shell: bash
 phases:
   install:
     runtime-versions:
@@ -13,7 +15,7 @@ phases:
       - echo launching yarn install in $SUB_PRJ_NAME...
       - cd $SUB_PRJ_NAME
       - yarn install
-      - echo Generate clients... && yarn generate
+      - if [[ "$SUB_PRJ_NAME" == 'packages/pn-pa-webapp' || "$SUB_PRJ_NAME" == 'packages/pn-personafisica-webapp' || "$SUB_PRJ_NAME" == 'packages/pn-personagiuridica-webapp' ]] ; then echo Generate clients... && yarn generate ;fi
       - echo Running tests.. && yarn test
   build:
     on-failure: ABORT
