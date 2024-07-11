@@ -45,6 +45,8 @@ const App = () => {
   const { t } = useTranslation(['common', 'notifiche']);
   const [isInitialized, setIsInitialized] = useState(false);
 
+  console.log('app loaded');
+
   useEffect(() => {
     if (!isInitialized) {
       setIsInitialized(true);
