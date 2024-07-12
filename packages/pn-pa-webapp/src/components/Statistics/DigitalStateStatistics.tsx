@@ -3,7 +3,7 @@ import { isArray } from 'lodash';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Paper, Stack, Typography } from '@mui/material';
+import { Paper, SxProps, Typography } from '@mui/material';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
 import { GraphColors, IDigitalStateStatistics, ResponseStatus } from '../../models/Statistics';
@@ -11,6 +11,7 @@ import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
   data: IDigitalStateStatistics;
+  sx?: SxProps;
 };
 
 const DigitalStateStatistics: React.FC<Props> = (props) => {
@@ -100,20 +101,18 @@ const DigitalStateStatistics: React.FC<Props> = (props) => {
   };
 
   return (
-    <Paper sx={{ p: 3, mb: 3, height: '100%' }} elevation={0}>
-      <Stack direction="column" height="100%" sx={{ display: 'flex' }}>
-        <Typography variant="h6" component="h3">
-          {t('digital_state.title')}
-        </Typography>
-        <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
-          {t('digital_state.description')}
-        </Typography>
-        {isEmpty ? (
-          <EmptyStatistics />
-        ) : (
-          <PnECharts option={option} />
-        )}
-      </Stack>
+    <Paper sx={{ ...props.sx, p: 3, mb: 3 }} elevation={0} data-testid="digitalStateContainer">
+      <Typography variant="h6" component="h3">
+        {t('digital_state.title')}
+      </Typography>
+      <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
+        {t('digital_state.description')}
+      </Typography>
+      {isEmpty ? (
+        <EmptyStatistics />
+      ) : (
+        <PnECharts option={option} style={{ height: '400px' }} dataTestId="digitalState" />
+      )}
     </Paper>
   );
 };
