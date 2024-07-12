@@ -43,18 +43,22 @@ export const getInstitutions = createAsyncThunk<
     const institutions = response.data;
     const { userState } = getState();
     const currentOrganization = userState.user.organization;
-    return institutions.length > 0 &&
-      institutions.some((institution) => institution.id === currentOrganization.id)
-      ? institutions
-      : ([
-          ...institutions,
-          {
-            id: currentOrganization.id,
-            name: currentOrganization.name,
-            productRole: currentOrganization.roles[0].role,
-            parentName: currentOrganization.rootParent?.description,
-          },
-        ] as Array<PartyEntityWithUrl>);
+    const currentInstitution = {
+      id: currentOrganization.id,
+      name: currentOrganization.name,
+      productRole: currentOrganization?.roles[0].role,
+      parentName: currentOrganization?.rootParent?.description,
+    };
+
+    if (institutions.length === 0) {
+      return [currentInstitution];
+    }
+    if (
+      !institutions.some((institution: { id: string }) => institution.id === currentInstitution.id)
+    ) {
+      return [...institutions, currentInstitution];
+    }
+    return institutions;
   } catch (e: any) {
     return rejectWithValue(parseError(e));
   }

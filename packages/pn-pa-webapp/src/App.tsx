@@ -96,7 +96,7 @@ const ActualApp = () => {
   const productId = products.length > 0 ? SELFCARE_SEND_PROD_ID : '0';
   const institutionsList = institutions.map((institution) => ({
     ...institution,
-    productRole: t(`roles.${role.role}`),
+    productRole: t(`roles.${institution.productRole}`),
   }));
 
   const sessionToken = loggedUser.sessionToken;
