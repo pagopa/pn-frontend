@@ -19,7 +19,9 @@ import {
   SideMenuItem,
   appStateActions,
   errorFactoryManager,
+  getSessionLanguage,
   initLocalization,
+  setSessionLanguage,
   useMultiEvent,
   useTracking,
 } from '@pagopa-pn/pn-commons';
@@ -185,6 +187,7 @@ const ActualApp = () => {
     if (sessionToken) {
       void dispatch(getCurrentAppStatus());
       void dispatch(getInstitutions());
+      handleSetUserLanguage();
     }
     if (idOrganization) {
       void dispatch(getProductsOfInstitution());
@@ -206,7 +209,13 @@ const ActualApp = () => {
       : `mailto:${configuration.PAGOPA_HELP_EMAIL}`;
   };
 
+  const handleSetUserLanguage = () => {
+    const language = getSessionLanguage() || 'it';
+    void changeLanguageHandler(language);
+  };
+
   const changeLanguageHandler = async (langCode: string) => {
+    setSessionLanguage(langCode);
     await i18n.changeLanguage(langCode);
   };
 
