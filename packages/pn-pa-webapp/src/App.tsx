@@ -186,6 +186,9 @@ const ActualApp = () => {
     if (sessionToken) {
       void dispatch(getCurrentAppStatus());
       void dispatch(getInstitutions());
+      // Temporary fix for multi-language support
+      // Remove lang from sessionStorage in order to makes Footer works properly
+      sessionStorage.removeItem('lang');
     }
     if (idOrganization) {
       void dispatch(getProductsOfInstitution());
