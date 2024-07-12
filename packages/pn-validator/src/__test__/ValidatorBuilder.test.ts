@@ -7,10 +7,12 @@ const checkCommonRules = (rules: any) => {
   expect(rules.isOneOf).toBeDefined();
   expect(rules.customValidator).toBeDefined();
   expect(rules.not).toBeDefined();
+  expect(rules.isRequired).toBeDefined();
   expect(rules.not().isNull).toBeDefined();
   expect(rules.not().isUndefined).toBeDefined();
   expect(rules.not().isEqual).toBeDefined();
   expect(rules.not().isOneOf).toBeDefined();
+  expect(rules.not().isRequired).toBeDefined();
 };
 
 describe('Test ValidatorBuilder', () => {

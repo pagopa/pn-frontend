@@ -18,10 +18,10 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
 const Contacts = () => {
-  const { t } = useTranslation(['recapiti']);
+  const { t, i18n } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
-  const profileUrl = PROFILE(organization?.id);
+  const profileUrl = PROFILE(organization?.id, i18n.language);
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.contactsState.digitalAddresses
   );

@@ -132,7 +132,7 @@ describe('Contacts page', async () => {
     expect(subtitleLink).toBeInTheDocument();
     fireEvent.click(subtitleLink!);
     expect(mockOpenFn).toBeCalledTimes(1);
-    expect(mockOpenFn).toBeCalledWith(PROFILE('mocked-id'));
+    expect(mockOpenFn).toBeCalledWith(PROFILE('mocked-id', 'it'));
   });
 
   it('API error', async () => {

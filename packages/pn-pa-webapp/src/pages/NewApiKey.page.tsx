@@ -21,6 +21,7 @@ import {
   Prompt,
   SectionHeading,
   TitleBox,
+  dataRegex,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -46,7 +47,10 @@ const NewApiKey = () => {
   });
 
   const validationSchema = yup.object({
-    name: yup.string().required(tkp('form-error-name')),
+    name: yup
+      .string()
+      .matches(dataRegex.noSpaceAtEdges, t('no-spaces-at-edges', { ns: 'common' }))
+      .required(tkp('form-error-name')),
     groups: yup.array().of(
       yup.object({
         id: yup.string(),
@@ -71,8 +75,9 @@ const NewApiKey = () => {
         groups: values.groups.map((e) => e.id),
       };
       if (formik.isValid) {
-        void dispatch(newApiKey({ ...newApiKeyValues }));
-        setApiKeySent(true);
+        void dispatch(newApiKey({ ...newApiKeyValues }))
+          .unwrap()
+          .then(() => setApiKeySent(true));
       }
     },
   });

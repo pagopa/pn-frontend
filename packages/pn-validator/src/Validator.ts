@@ -1,8 +1,8 @@
+import { hasError } from './HasError';
+import { ValidatorBuilder } from './ValidatorBuilder';
+import { TypeRules } from './types/TypeRules';
 import { ValidationError } from './types/ValidationError';
 import { ValidatorBuilders } from './types/ValidatorBuilders';
-import { ValidatorBuilder } from './ValidatorBuilder';
-import { hasError } from './HasError';
-import { TypeRules } from './types/TypeRules';
 import { ValidatorOptions } from './types/ValidatorOptions';
 import { isMissingRules } from './utility/isMissingRules';
 
@@ -26,6 +26,7 @@ export class Validator<TModel> {
           if (!errors) {
             errors = {};
           }
+          // eslint-disable-next-line functional/immutable-data
           errors[key] = 'Rule is missing'; // Build the validation error object
         });
         return errors;

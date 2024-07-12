@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Button, Chip } from '@mui/material';
+import { Button, Chip, SxProps } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import {
   CustomDatePicker,
@@ -32,16 +32,18 @@ import { setStatisticsFilter } from '../../redux/statistics/reducers';
 const quickFilters = Object.values(SelectedStatisticsFilter).filter((value) => value !== 'custom');
 
 export const defaultValues = {
-  startDate: oneMonthAgo,
+  startDate: twelveMonthsAgo,
   endDate: today,
-  selected: SelectedStatisticsFilter.lastMonth,
+  selected: SelectedStatisticsFilter.last12Months,
 };
 
 type Props = {
   filter: StatisticsFilter | null;
+  className?: string;
+  sx?: SxProps;
 };
 
-const FilterStatistics: React.FC<Props> = ({ filter }) => {
+const FilterStatistics: React.FC<Props> = ({ filter, className, sx }) => {
   const { t, i18n } = useTranslation(['statistics']);
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
@@ -81,7 +83,10 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
     onSubmit: () => {},
   });
 
-  const getRangeDates = (range: SelectedStatisticsFilterKeys, loading: boolean = false): [Date, Date] => {
+  const getRangeDates = (
+    range: SelectedStatisticsFilterKeys,
+    loading: boolean = false
+  ): [Date, Date] => {
     switch (range) {
       case SelectedStatisticsFilter.lastMonth:
         return [oneMonthAgo, today];
@@ -115,11 +120,13 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
 
   const handleSelectFilter = (type: SelectedStatisticsFilterKeys) => {
     const [startDate, endDate] = getRangeDates(type);
-    dispatch(setStatisticsFilter({
-      startDate,
-      endDate,
-      selected: type
-    }));
+    dispatch(
+      setStatisticsFilter({
+        startDate,
+        endDate,
+        selected: type,
+      })
+    );
   };
 
   const cleanFilter = () => {
@@ -135,12 +142,16 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
     quickFilters.map((elem) => (
       <Chip
         key={elem}
+        data-testid={`filter.${elem}`}
         label={t(`filter.${elem}`)}
         sx={{
           mr: 1,
           my: { xl: 0, xs: 1 },
           background: elem === formik.values.selected ? GraphColors.lightBlue2 : 'none',
+          color: 'primary',
+          opacity: '1 !important',
         }}
+        disabled={elem === formik.values.selected}
         variant="outlined"
         component="button"
         color={elem === formik.values.selected ? 'primary' : 'default'}
@@ -159,10 +170,14 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
       display="flex"
       justifyContent="space-between"
       alignItems="center"
+      data-testid="statistics-filter"
+      className={className}
+      sx={sx}
     >
-      
-      <Box flexGrow={0} flexShrink={0} >{quickFiltersJsx()}</Box>
-      <Box sx={{ display: isMobile ? 'block' : 'flex' }} >
+      <Box flexGrow={0} flexShrink={0}>
+        {quickFiltersJsx()}
+      </Box>
+      <Box sx={{ display: isMobile ? 'block' : 'flex' }}>
         <CustomDatePicker
           language={i18n.language}
           label={t('filter.from_date')}
@@ -191,7 +206,7 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
                 'aria-label': t('filter.from_date-input-aria-label'),
               },
               sx: { mb: isMobile ? 1 : 0, mr: 1 },
-              fullWidth: isMobile
+              fullWidth: isMobile,
             },
           }}
           disableFuture={true}
@@ -226,7 +241,7 @@ const FilterStatistics: React.FC<Props> = ({ filter }) => {
                 'aria-label': t('filter.to_date-input-aria-label'),
               },
               sx: { mb: isMobile ? 1 : 0, mr: 1 },
-              fullWidth: isMobile
+              fullWidth: isMobile,
             },
           }}
           disableFuture={true}
