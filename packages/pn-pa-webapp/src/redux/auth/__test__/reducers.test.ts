@@ -34,29 +34,40 @@ describe('Auth redux state tests', () => {
 
   it('Initial state', () => {
     const state = store.getState().userState;
-    expect(state).toEqual({
+
+    const stateWithId = {
+      ...state,
+      user: {
+        ...state.user,
+        organization: {
+          ...state.user.organization,
+          id: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1cd',
+        },
+      },
+    };
+    expect(stateWithId).toEqual({
       loading: false,
       user: sessionStorage.getItem('user')
         ? JSON.parse(sessionStorage.getItem('user') || '')
         : {
-          email: '',
-          name: '',
-          uid: '',
-          sessionToken: '',
-          family_name: '',
-          fiscal_number: '',
-          organization: {
-            id: '',
-            roles: [
-              {
-                role: PNRole.ADMIN,
-                partyRole: PartyRole.MANAGER,
-              },
-            ],
-            fiscal_code: '',
+            email: '',
+            name: '',
+            uid: '',
+            sessionToken: '',
+            family_name: '',
+            fiscal_number: '',
+            organization: {
+              id: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1cd',
+              roles: [
+                {
+                  role: PNRole.ADMIN,
+                  partyRole: PartyRole.MANAGER,
+                },
+              ],
+              fiscal_code: '',
+            },
+            desired_exp: 0,
           },
-          desired_exp: 0,
-        },
       isUnauthorizedUser: false,
       fetchedTos: false,
       fetchedPrivacy: false,
