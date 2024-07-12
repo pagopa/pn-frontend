@@ -9,9 +9,10 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
 import { AuthApi } from '../../api/auth/Auth.api';
+import { InfoPaApiFactory } from '../../generated-client/info-pa';
 import { BffTosPrivacyBody, UserConsentsApiFactory } from '../../generated-client/tos-privacy';
 import { PNRole, PartyRole } from '../../models/user';
-import { InfoPaApiFactory } from '../../generated-client/info-pa';
+import { RootState } from '../store';
 import { User } from './types';
 
 export enum AUTH_ACTIONS {
@@ -31,22 +32,33 @@ export const exchangeToken = createAsyncThunk<User, string>(
 /**
  * Get the list of institutions
  */
-export const getInstitutions = createAsyncThunk(
-  'getInstitutions',
-  async (_, { rejectWithValue }) => {
-    try {
-      const institutionAndProductFactory = InfoPaApiFactory(
-        undefined,
-        undefined,
-        apiClient
-      );
-      const response = await institutionAndProductFactory.getInstitutionsV1();
-      return response.data as Array<PartyEntityWithUrl>;
-    } catch (e: any) {
-      return rejectWithValue(parseError(e));
-    }
+export const getInstitutions = createAsyncThunk<
+  Array<PartyEntityWithUrl>,
+  void,
+  { state: RootState }
+>('getInstitutions', async (_, { rejectWithValue, getState }) => {
+  try {
+    const institutionAndProductFactory = InfoPaApiFactory(undefined, undefined, apiClient);
+    const response = await institutionAndProductFactory.getInstitutionsV1();
+    const institutions = response.data;
+    const { userState } = getState();
+    const currentOrganization = userState.user.organization;
+    return institutions.length > 0 &&
+      institutions.some((institution) => institution.id === currentOrganization.id)
+      ? institutions
+      : ([
+          ...institutions,
+          {
+            id: currentOrganization.id,
+            name: currentOrganization.name,
+            productRole: currentOrganization.roles[0].role,
+            parentName: currentOrganization.rootParent?.description,
+          },
+        ] as Array<PartyEntityWithUrl>);
+  } catch (e: any) {
+    return rejectWithValue(parseError(e));
   }
-);
+});
 
 /**
  * Get the list of products of the institution
@@ -55,11 +67,7 @@ export const getProductsOfInstitution = createAsyncThunk(
   'getProductsOfInstitution',
   async (_, { rejectWithValue }) => {
     try {
-      const institutionAndProductFactory = InfoPaApiFactory(
-        undefined,
-        undefined,
-        apiClient
-      );
+      const institutionAndProductFactory = InfoPaApiFactory(undefined, undefined, apiClient);
       const response = await institutionAndProductFactory.getInstitutionProductsV1();
       return response.data.map((d) => ({ ...d, linkType: 'external' })) as Array<ProductEntity>;
     } catch (e: any) {
