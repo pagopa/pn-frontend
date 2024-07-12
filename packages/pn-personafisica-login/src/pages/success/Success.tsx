@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react';
 
-import { AppRouteParams, sanitizeString } from '@pagopa-pn/pn-commons';
+import { AppRouteParams, getSessionLanguage, sanitizeString } from '@pagopa-pn/pn-commons';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
@@ -26,7 +26,9 @@ const SuccessPage = () => {
 
     // the findIndex check is needed to prevent xss attacks
     if (redirectUrl && [PF_URL].findIndex((url) => url && redirectUrl.startsWith(url)) > -1) {
-      window.location.replace(`${redirectUrl}${sanitizeString(token)}`);
+      window.location.replace(
+        `${redirectUrl}${sanitizeString(token)}&lang=${getSessionLanguage()}`
+      );
     }
   }, [aar, token]);
 
