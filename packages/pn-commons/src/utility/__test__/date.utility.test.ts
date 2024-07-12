@@ -1,5 +1,6 @@
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import {
+  convertHoursToDays,
   dateIsDefined,
   dateIsLessThan10Years,
   formatDate,
@@ -7,12 +8,15 @@ import {
   formatDay,
   formatFromString,
   formatMonthString,
+  formatShortDate,
   formatTime,
   formatTimeWithLegend,
   formatToSlicedISOString,
   formatToTimezoneString,
+  getDaysFromDateRange,
   getEndOfDay,
   getStartOfDay,
+  getWeeksFromDateRange,
   isToday,
   minutesBeforeNow,
 } from '../date.utility';
@@ -173,5 +177,58 @@ describe('Date utility', () => {
   it('return a boolean value if the sentAt is less than 10 years far from today', () => {
     const isLessThan10Years = dateIsLessThan10Years(sentAt);
     expect(isLessThan10Years).toBe(false);
+  });
+
+  it('return date short string - without year', () => {
+    const shortDate = formatShortDate(dateString);
+    expect(shortDate).toBe('22 date-time.s-month.1');
+  });
+
+  it('return date short string - with year', () => {
+    const shortDate = formatShortDate(dateString, true);
+    expect(shortDate).toBe('22 date-time.s-month.1 2022');
+  });
+
+  it('return days from hours - less than 24 hours', () => {
+    const days = convertHoursToDays(22);
+    expect(days).toBe(1);
+  });
+
+  it('return days from hours - greater than 24 hours', () => {
+    const days = convertHoursToDays(72);
+    expect(days).toBe(3);
+  });
+
+  it('return days from date range', () => {
+    const startDate = '2024-07-01';
+    const endDate = '2024-07-04';
+    const days = getDaysFromDateRange(startDate, endDate);
+    expect(days).toStrictEqual(['2024-07-01', '2024-07-02', '2024-07-03', '2024-07-04']);
+  });
+
+  it('return weeks from date range - Sunday as last week day', () => {
+    const startDate = '2024-06-01';
+    const endDate = '2024-06-28';
+    const weeks = getWeeksFromDateRange(startDate, endDate, 0);
+    expect(weeks).toStrictEqual([
+      { start: '2024-06-01', end: '2024-06-02' },
+      { start: '2024-06-03', end: '2024-06-09' },
+      { start: '2024-06-10', end: '2024-06-16' },
+      { start: '2024-06-17', end: '2024-06-23' },
+      { start: '2024-06-24', end: '2024-06-28' },
+    ]);
+  });
+
+  it('return weeks from date range - Wednesday as last week day', () => {
+    const startDate = '2024-06-01';
+    const endDate = '2024-06-28';
+    const weeks = getWeeksFromDateRange(startDate, endDate, 3);
+    expect(weeks).toStrictEqual([
+      { start: '2024-06-01', end: '2024-06-05' },
+      { start: '2024-06-06', end: '2024-06-12' },
+      { start: '2024-06-13', end: '2024-06-19' },
+      { start: '2024-06-20', end: '2024-06-26' },
+      { start: '2024-06-27', end: '2024-06-28' },
+    ]);
   });
 });

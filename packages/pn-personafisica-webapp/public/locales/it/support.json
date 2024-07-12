@@ -12,5 +12,9 @@
   },
   "disclaimer": "Proseguendo dichiari di aver letto la <0>Privacy Policy Assistenza</0>",
   "exit-title": "Vuoi davvero uscire?",
-  "exit-message": "Se esci, la richiesta di assistenza andrà persa."
+  "exit-message": "Se esci, la richiesta di assistenza andrà persa.",
+  "messages": {
+    "generic-title": "Si è verificato un errore inatteso",
+    "generic-message": "Ti suggeriamo di riprovare più tardi"
+  }
 }
