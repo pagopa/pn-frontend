@@ -1,4 +1,4 @@
-import { add } from 'date-fns';
+import { add, addDays, compareAsc } from 'date-fns';
 
 import DateFnsAdapter from '@date-io/date-fns';
 
@@ -124,8 +124,8 @@ export function formatFromString(date: string): Date | null {
   return null;
 }
 
-export function formatDateSMonth(date: Date | string, year: boolean = false): string {
-  const the_date = typeof date === 'string' ? new Date(date) : date;
+export function formatShortDate(date: string, year: boolean = false): string {
+  const the_date = new Date(date);
   const shortMonth = getLocalizedOrDefaultLabel(
     'common',
     `date-time.s-month.${the_date.getMonth()}`
@@ -134,5 +134,68 @@ export function formatDateSMonth(date: Date | string, year: boolean = false): st
   return `${the_date.getDate()} ${shortMonth}${yearTxt}`;
 }
 
-export const convertHoursToIntDays = (hours: number): number =>
+export const convertHoursToDays = (hours: number): number =>
   Math.round(hours && hours > 0 ? hours / 24 : 0);
+
+/**
+ * Returns all calendar days between startDate and endDate (included)
+ *
+ * @param {string} startDate start date in format YYYY-MM-DD
+ * @param {string} endDate end date in format YYYY-MM-DD
+ * @returns {Array<string>}
+ */
+export const getDaysFromDateRange = (startDate: string, endDate: string): Array<string> => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  // set time to zero to avoid issues whit timezone
+  start.setHours(0, 0, 0, 0);
+  end.setHours(0, 0, 0, 0);
+
+  const days: Array<string> = [];
+  // eslint-disable-next-line functional/no-let
+  for (let d = start; compareAsc(d, end) < 1; d = addDays(d, 1)) {
+    // eslint-disable-next-line functional/immutable-data
+    days.push(formatToSlicedISOString(d));
+  }
+  return days;
+};
+
+/**
+ * Returns every week in a specified range of days
+ * a single week is described by an object storing the first and the last dates as string
+ *
+ * @param {string} startDate start date in format YYYY-MM-DD
+ * @param {string} endDate end date in format YYYY-MM-DD
+ * @param {number} lastDayOfTheWeek last day of the week from 0 (Sunday) to 6 (Saturday)
+ * @returns {Array<string>}
+ */
+export const getWeeksFromDateRange = (
+  startDate: string,
+  endDate: string,
+  lastDayOfTheWeek: number
+): Array<{ start: string; end: string }> => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  // set time to zero to avoid issues whit timezone
+  start.setHours(0, 0, 0, 0);
+  end.setHours(0, 0, 0, 0);
+
+  const weeksInterval: Array<{ start: string; end: string }> = [];
+  // eslint-disable-next-line functional/no-let
+  let first = start;
+  // eslint-disable-next-line functional/no-let
+  for (let d = start; compareAsc(d, end) < 1; d = addDays(d, 1)) {
+    if (
+      d.getDay() === lastDayOfTheWeek ||
+      formatToSlicedISOString(d) === formatToSlicedISOString(end)
+    ) {
+      // eslint-disable-next-line functional/immutable-data
+      weeksInterval.push({
+        start: formatToSlicedISOString(first),
+        end: formatToSlicedISOString(d),
+      });
+      first = addDays(d, 1);
+    }
+  }
+  return weeksInterval;
+};

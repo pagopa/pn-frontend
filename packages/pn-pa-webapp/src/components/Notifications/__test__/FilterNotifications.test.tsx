@@ -9,6 +9,7 @@ import {
 import {
   createEvent,
   createMatchMedia,
+  testCalendar,
   testFormElements,
   testInput,
   testSelect,
@@ -43,26 +44,6 @@ const initialState = {
   status: '',
   iunMatch: '',
 };
-
-async function testCalendar(form: HTMLFormElement, elementName: string) {
-  const input = form.querySelector(`input[name="${elementName}"]`);
-  const button = input?.parentElement!.querySelector(`button`);
-  fireEvent.click(button!);
-  const dialog = screen.getByRole('dialog');
-  expect(dialog).toBeInTheDocument();
-  const dateButton = document.evaluate(
-    `//button[text()="1"]`,
-    document,
-    null,
-    XPathResult.ANY_TYPE,
-    null
-  );
-  fireEvent.click(dateButton.iterateNext()!);
-  await waitFor(() => {
-    expect(input).toHaveValue('01/02/2022');
-    expect(dialog).not.toBeInTheDocument();
-  });
-}
 
 async function setFormValues(
   form: HTMLFormElement,

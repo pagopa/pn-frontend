@@ -22,7 +22,9 @@ import {
   SideMenuItem,
   appStateActions,
   errorFactoryManager,
+  getSessionLanguage,
   initLocalization,
+  setSessionLanguage,
   useMultiEvent,
   useTracking,
 } from '@pagopa-pn/pn-commons';
@@ -77,7 +79,7 @@ const App = () => {
   );
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   const path = pathname.split('/');
   const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } = getConfiguration();
 
@@ -199,7 +201,14 @@ const App = () => {
     },
   ];
 
+  const handleSetUserLanguage = () => {
+    const langParam = new URLSearchParams(hash).get('lang');
+    const language = langParam || getSessionLanguage() || 'it';
+    void changeLanguageHandler(language);
+  };
+
   const changeLanguageHandler = async (langCode: string) => {
+    setSessionLanguage(langCode);
     await i18n.changeLanguage(langCode);
   };
 
@@ -262,6 +271,7 @@ const App = () => {
       void dispatch(getDomicileInfo());
       void dispatch(getSidemenuInformation());
       void dispatch(getCurrentAppStatus());
+      handleSetUserLanguage();
     }
   }, [sessionToken]);
 

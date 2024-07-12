@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Button, Chip } from '@mui/material';
+import { Button, Chip, SxProps } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import {
   CustomDatePicker,
@@ -40,9 +40,10 @@ export const defaultValues = {
 type Props = {
   filter: StatisticsFilter | null;
   className?: string;
+  sx?: SxProps;
 };
 
-const FilterStatistics: React.FC<Props> = ({ filter, className }) => {
+const FilterStatistics: React.FC<Props> = ({ filter, className, sx }) => {
   const { t, i18n } = useTranslation(['statistics']);
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
@@ -141,12 +142,16 @@ const FilterStatistics: React.FC<Props> = ({ filter, className }) => {
     quickFilters.map((elem) => (
       <Chip
         key={elem}
+        data-testid={`filter.${elem}`}
         label={t(`filter.${elem}`)}
         sx={{
           mr: 1,
           my: { xl: 0, xs: 1 },
           background: elem === formik.values.selected ? GraphColors.lightBlue2 : 'none',
+          color: 'primary',
+          opacity: '1 !important',
         }}
+        disabled={elem === formik.values.selected}
         variant="outlined"
         component="button"
         color={elem === formik.values.selected ? 'primary' : 'default'}
@@ -165,7 +170,9 @@ const FilterStatistics: React.FC<Props> = ({ filter, className }) => {
       display="flex"
       justifyContent="space-between"
       alignItems="center"
+      data-testid="statistics-filter"
       className={className}
+      sx={sx}
     >
       <Box flexGrow={0} flexShrink={0}>
         {quickFiltersJsx()}
