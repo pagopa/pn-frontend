@@ -1,4 +1,4 @@
-import { ErrorInfo, useCallback, useEffect, useMemo, useState } from 'react';
+import { ErrorInfo, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -201,11 +201,11 @@ const App = () => {
     },
   ];
 
-  const handleSetUserLanguage = useCallback(() => {
+  const handleSetUserLanguage = () => {
     const langParam = new URLSearchParams(hash).get('lang');
     const language = langParam || getSessionLanguage() || 'it';
     void changeLanguageHandler(language);
-  }, [location]);
+  };
 
   const changeLanguageHandler = async (langCode: string) => {
     setSessionLanguage(langCode);

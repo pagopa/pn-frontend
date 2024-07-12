@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 
@@ -43,10 +43,10 @@ const Login = () => {
     storageAarOps.write(aar);
   }
 
-  const handleSetUserLanguage = useCallback(() => {
+  const handleSetUserLanguage = () => {
     const language = getSessionLanguage() || 'it';
     void changeLanguageHandler(language);
-  }, [location]);
+  };
 
   useEffect(() => {
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN);
