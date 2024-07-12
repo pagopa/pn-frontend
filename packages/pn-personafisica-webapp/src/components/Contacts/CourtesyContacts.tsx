@@ -15,19 +15,14 @@ interface Props {
 
 const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const getPhoneContact = (): DigitalAddress | undefined =>
-    contacts.find(
-      (contact) => contact.channelType === CourtesyChannelType.SMS && contact.senderId === 'default'
-    );
 
-  const getEmailContact = (): DigitalAddress | undefined =>
-    contacts.find(
-      (contact) =>
-        contact.channelType === CourtesyChannelType.EMAIL && contact.senderId === 'default'
-    );
+  const phoneContact = contacts.find(
+    (contact) => contact.channelType === CourtesyChannelType.SMS && contact.senderId === 'default'
+  );
+  const emailContact = contacts.find(
+    (contact) => contact.channelType === CourtesyChannelType.EMAIL && contact.senderId === 'default'
+  );
 
-  const phoneContact = getPhoneContact();
-  const emailContact = getEmailContact();
   const phoneContactsQuantity = (): number =>
     countContactsByType(contacts, CourtesyChannelType.SMS);
 
@@ -58,14 +53,8 @@ const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
           />
         </Stack>
       </Box>
-      <Alert
-        role="banner"
-        aria-label={t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })}
-        sx={{ mt: 4 }}
-        severity="info"
-        data-testid="contacts disclaimer"
-      >
-        <Typography role="banner" component="span" variant="body1">
+      <Alert sx={{ mt: 4 }} severity="info" data-testid="contacts disclaimer">
+        <Typography component="span" variant="body1">
           {t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })}
         </Typography>
         {/** 
