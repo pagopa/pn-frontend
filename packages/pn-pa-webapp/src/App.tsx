@@ -20,6 +20,7 @@ import {
   appStateActions,
   errorFactoryManager,
   initLocalization,
+  setSessionLanguage,
   useMultiEvent,
   useTracking,
 } from '@pagopa-pn/pn-commons';
@@ -207,6 +208,7 @@ const ActualApp = () => {
   };
 
   const changeLanguageHandler = async (langCode: string) => {
+    setSessionLanguage(langCode);
     await i18n.changeLanguage(langCode);
   };
 
