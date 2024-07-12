@@ -12,6 +12,7 @@ const SuccessPage = () => {
 
   const aar = useMemo(() => storageAarOps.read(), []);
   const token = useMemo(() => window.location.hash, []);
+  const lang = useMemo(() => getSessionLanguage(), []);
 
   const calcRedirectUrl = useCallback(() => {
     // eslint-disable-next-line functional/no-let
@@ -27,10 +28,10 @@ const SuccessPage = () => {
     // the findIndex check is needed to prevent xss attacks
     if (redirectUrl && [PF_URL].findIndex((url) => url && redirectUrl.startsWith(url)) > -1) {
       window.location.replace(
-        `${redirectUrl}${sanitizeString(token)}&lang=${sanitizeString(getSessionLanguage())}`
+        `${redirectUrl}${sanitizeString(token)}&lang=${sanitizeString(lang)}`
       );
     }
-  }, [aar, token]);
+  }, [aar, token, lang]);
 
   useEffect(() => {
     calcRedirectUrl();
