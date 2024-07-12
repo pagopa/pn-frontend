@@ -48,7 +48,7 @@ export const getInstitutions = createAsyncThunk<
       name: currentOrganization.name,
       productRole: currentOrganization?.roles[0].role,
       parentName: currentOrganization?.rootParent?.description,
-    };
+    } as PartyEntityWithUrl;
 
     if (institutions.length === 0) {
       return [currentInstitution];
@@ -56,9 +56,9 @@ export const getInstitutions = createAsyncThunk<
     if (
       !institutions.some((institution: { id: string }) => institution.id === currentInstitution.id)
     ) {
-      return [...institutions, currentInstitution];
+      return [...institutions, currentInstitution] as Array<PartyEntityWithUrl>;
     }
-    return institutions;
+    return institutions as Array<PartyEntityWithUrl>;
   } catch (e: any) {
     return rejectWithValue(parseError(e));
   }
