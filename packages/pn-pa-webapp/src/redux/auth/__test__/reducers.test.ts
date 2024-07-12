@@ -6,6 +6,7 @@ import {
   tosPrivacyConsentMock,
 } from '../../../__mocks__/Consents.mock';
 import { institutionsDTO, productsDTO } from '../../../__mocks__/User.mock';
+import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { PNRole, PartyRole } from '../../../models/user';
 import { store } from '../../store';
@@ -57,7 +58,7 @@ describe('Auth redux state tests', () => {
             family_name: '',
             fiscal_number: '',
             organization: {
-              id: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1cd',
+              id: '',
               roles: [
                 {
                   role: PNRole.ADMIN,
@@ -195,11 +196,16 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should be able to fetch institutions', async () => {
+    // preset store
+    const mockedStore = createMockedStore({
+      userState: userResponse,
+    });
+
     mock.onGet('bff/v1/institutions').reply(200, institutionsDTO);
-    const action = await store.dispatch(getInstitutions());
+    const action = await mockedStore.dispatch(getInstitutions());
     expect(action.type).toBe('getInstitutions/fulfilled');
     expect(action.payload).toEqual(institutionsDTO);
-    expect(store.getState().userState.institutions).toStrictEqual(institutionsDTO);
+    expect(mockedStore.getState().userState.institutions).toStrictEqual(institutionsDTO);
   });
 
   it('Should be able to fetch productsInstitution', async () => {
