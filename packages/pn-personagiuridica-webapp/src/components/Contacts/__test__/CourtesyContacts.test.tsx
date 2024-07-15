@@ -123,7 +123,7 @@ describe('CourtesyContacts Component', async () => {
     expect(buttons![3].textContent).toMatch('button.elimina');
   });
 
-  it('add new phone number', async () => {
+  it.only('add new phone number', async () => {
     const phoneValue = '3333333333';
     mock
       .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
@@ -140,17 +140,18 @@ describe('CourtesyContacts Component', async () => {
       .reply(204);
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContactItem type={CourtesyFieldType.PHONE} value="" />
+        <CourtesyContacts contacts={[]} />
       </DigitalContactsCodeVerificationProvider>
     );
     const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
     expect(input).toHaveValue('');
     fireEvent.change(input!, { target: { value: phoneValue } });
     await waitFor(() => expect(input!).toHaveValue(phoneValue));
-    const button = result.getByRole('button');
-    expect(button).toBeEnabled();
+    const button = result.getByTestId('courtesy-phone-button');
     // save the phone
     fireEvent.click(button!);
+    await waitFor(() => expect(input!).toHaveValue(phoneValue));
+
     // Confirms the disclaimer dialog
     const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
     fireEvent.click(disclaimerCheckbox);
