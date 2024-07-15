@@ -233,7 +233,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
             disabled={!formik.isValid}
             fullWidth
             type="submit"
-            data-testid={`add ${type}`}
+            data-testid={`courtesy-${type}-button`}
           >
             {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
           </Button>

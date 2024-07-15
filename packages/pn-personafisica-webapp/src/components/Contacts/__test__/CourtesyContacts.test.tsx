@@ -124,7 +124,7 @@ describe('CourtesyContacts Component', async () => {
     expect(buttons![3].textContent).toMatch('button.elimina');
   });
 
-  it.only('add new phone number', async () => {
+  it('add new phone number', async () => {
     const phoneValue = '3333333333';
     mock
       .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
@@ -146,8 +146,9 @@ describe('CourtesyContacts Component', async () => {
     );
     const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
     expect(input).toHaveValue('');
-    const button = result.container.querySelector(`[type="button"]`);
-    expect(button).toBeEnabled();
+    fireEvent.change(input!, { target: { value: phoneValue } });
+    await waitFor(() => expect(input!).toHaveValue(phoneValue));
+    const button = result.getByTestId('courtesy-phone-button');
     // save the phone
     fireEvent.click(button!);
     await waitFor(() => expect(input!).toHaveValue(phoneValue));
