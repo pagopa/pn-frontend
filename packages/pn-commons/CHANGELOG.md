@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.5.1...v2.6.0-RC.0) (2024-07-15)
+
+
+### Bug Fixes
+
+* **pn-10628:** SmartFilter component - close modal on submit button ([#1250](https://github.com/pagopa/pn-frontend/issues/1250)) ([e768063](https://github.com/pagopa/pn-frontend/commit/e768063211175d4844a6f4bc7a506e9ab2b458d0))
+* **PN-11250:** fixed aar link for PG users ([#1224](https://github.com/pagopa/pn-frontend/issues/1224)) ([ba3d75a](https://github.com/pagopa/pn-frontend/commit/ba3d75a379bf2254cd10dd8edc87e4ee7c72d1d3))
+* **pn-11331:** reworked login and access denied page to simplify html structure ([#1252](https://github.com/pagopa/pn-frontend/issues/1252)) ([ec27b89](https://github.com/pagopa/pn-frontend/commit/ec27b899e33ff1a43235e16b890952bd00be5196))
+* **pn-11618:** Added min and max width to DelegationsElements for pf and pg ([#1264](https://github.com/pagopa/pn-frontend/issues/1264)) ([3461f8e](https://github.com/pagopa/pn-frontend/commit/3461f8eb3b1539988de02c3e5c672e9e196350bc))
+
+
+### Features
+
+* **pn-11563:** Add 'download jpeg' button to sender dashboard ([#1259](https://github.com/pagopa/pn-frontend/issues/1259)) ([89b0508](https://github.com/pagopa/pn-frontend/commit/89b05080935f9019c3c476e0ab40a1d8aa882b24))
+* **pn-11747:** Handle multi language on PF ([#1274](https://github.com/pagopa/pn-frontend/issues/1274)) ([3ae5b39](https://github.com/pagopa/pn-frontend/commit/3ae5b39f6202091225cda8ddf742ea097cf83a13))
+
+
+
+
+
 ## [2.5.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0...v2.5.1) (2024-06-26)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons

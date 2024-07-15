@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.5.1...v2.6.0-RC.0) (2024-07-15)
+
+
+### Bug Fixes
+
+* **pn-10628:** SmartFilter component - close modal on submit button ([#1250](https://github.com/pagopa/pn-frontend/issues/1250)) ([e768063](https://github.com/pagopa/pn-frontend/commit/e768063211175d4844a6f4bc7a506e9ab2b458d0))
+* **pn-10724:** Error when trying to open zendesk ticket with popup blocked ([#1262](https://github.com/pagopa/pn-frontend/issues/1262)) ([958660c](https://github.com/pagopa/pn-frontend/commit/958660c510614ea16b74585b4fe26e7278fb115c))
+* **PN-11250:** fixed aar link for PG users ([#1224](https://github.com/pagopa/pn-frontend/issues/1224)) ([ba3d75a](https://github.com/pagopa/pn-frontend/commit/ba3d75a379bf2254cd10dd8edc87e4ee7c72d1d3))
+* **pn-11331:** reworked login and access denied page to simplify html structure ([#1252](https://github.com/pagopa/pn-frontend/issues/1252)) ([ec27b89](https://github.com/pagopa/pn-frontend/commit/ec27b899e33ff1a43235e16b890952bd00be5196))
+* **pn-11527:** block api key creation when edge spaces are used in the name ([#1248](https://github.com/pagopa/pn-frontend/issues/1248)) ([55a37bd](https://github.com/pagopa/pn-frontend/commit/55a37bd384973c8b7b86c87db9c77b8fb0fe54ba))
+* **pn-11562:** set default value for statistics filter to 12 months ([#1255](https://github.com/pagopa/pn-frontend/issues/1255)) ([63c5091](https://github.com/pagopa/pn-frontend/commit/63c50912b5eb25ad364e57b73bf4b409db557b33))
+* **pn-11618:** Added min and max width to DelegationsElements for pf and pg ([#1264](https://github.com/pagopa/pn-frontend/issues/1264)) ([3461f8e](https://github.com/pagopa/pn-frontend/commit/3461f8eb3b1539988de02c3e5c672e9e196350bc))
+* **pn-11950:** add current organization in institutions when not present ([#1276](https://github.com/pagopa/pn-frontend/issues/1276)) ([3234549](https://github.com/pagopa/pn-frontend/commit/32345497089c0e6843ee1ac3e012de574b3230da))
+
+
+### Features
+
+* **pn-10800:** add sitemap.xml to PF/PG/PA ([#1265](https://github.com/pagopa/pn-frontend/issues/1265)) ([d8eb2c2](https://github.com/pagopa/pn-frontend/commit/d8eb2c21a60d03a435ecb99c3e122560af3a7173))
+* **pn-11372:** Added env/shell: bash in the build script to avoid errors when running the generate script ([#1273](https://github.com/pagopa/pn-frontend/issues/1273)) ([880199d](https://github.com/pagopa/pn-frontend/commit/880199df9b17c5b85183b83a3a6780bcdab825da))
+* **pn-11372:** Fixed scripts for sonarcolud and build pipeline ([#1271](https://github.com/pagopa/pn-frontend/issues/1271)) ([f656cd4](https://github.com/pagopa/pn-frontend/commit/f656cd479eceb9c092d4630aa4668d6f59955c70))
+* **pn-11372:** Move client generation to the start, test and buil phases ([#1260](https://github.com/pagopa/pn-frontend/issues/1260)) ([da50caa](https://github.com/pagopa/pn-frontend/commit/da50caa9b690889aee218d3e466b57b49fee3e15))
+* **pn-11563:** Add 'download jpeg' button to sender dashboard ([#1259](https://github.com/pagopa/pn-frontend/issues/1259)) ([89b0508](https://github.com/pagopa/pn-frontend/commit/89b05080935f9019c3c476e0ab40a1d8aa882b24))
+* **pn-11564:** Sender dashboard - whole page component to manage the empty state ([#1254](https://github.com/pagopa/pn-frontend/issues/1254)) ([aab302e](https://github.com/pagopa/pn-frontend/commit/aab302e0e1ddb6f37629b5d7dce7e7d184e54d40))
+* **pn-11747:** fixed PA tests ([#1275](https://github.com/pagopa/pn-frontend/issues/1275)) ([fc2a015](https://github.com/pagopa/pn-frontend/commit/fc2a015d9a046eb08e76cece622744e6778f1581))
+* **pn-11747:** Handle multi language on PF ([#1274](https://github.com/pagopa/pn-frontend/issues/1274)) ([3ae5b39](https://github.com/pagopa/pn-frontend/commit/3ae5b39f6202091225cda8ddf742ea097cf83a13))
+* **pn-7276:** Add required rule on pn-validator ([#1256](https://github.com/pagopa/pn-frontend/issues/1256)) ([6ddecf4](https://github.com/pagopa/pn-frontend/commit/6ddecf4b41c4c400e067003ec2384d84443bf22b))
+* **pn-8849:** Validation on optional object ([#1257](https://github.com/pagopa/pn-frontend/issues/1257)) ([54d6e25](https://github.com/pagopa/pn-frontend/commit/54d6e25237fcee56653dcbeacd7b8247ef9b5efc))
+
+
+
+
+
 ## [2.5.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0...v2.5.1) (2024-06-26)
 
 

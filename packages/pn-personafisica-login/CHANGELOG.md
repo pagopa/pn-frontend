@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.5.1...v2.6.0-RC.0) (2024-07-15)
+
+
+### Bug Fixes
+
+* **pn-11331:** reworked login and access denied page to simplify html structure ([#1252](https://github.com/pagopa/pn-frontend/issues/1252)) ([ec27b89](https://github.com/pagopa/pn-frontend/commit/ec27b899e33ff1a43235e16b890952bd00be5196))
+* **pn-11618:** Added min and max width to DelegationsElements for pf and pg ([#1264](https://github.com/pagopa/pn-frontend/issues/1264)) ([3461f8e](https://github.com/pagopa/pn-frontend/commit/3461f8eb3b1539988de02c3e5c672e9e196350bc))
+
+
+### Features
+
+* **pn-11747:** Handle multi language on PF ([#1274](https://github.com/pagopa/pn-frontend/issues/1274)) ([3ae5b39](https://github.com/pagopa/pn-frontend/commit/3ae5b39f6202091225cda8ddf742ea097cf83a13))
+
+
+
+
+
 ## [2.5.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0...v2.5.1) (2024-06-26)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
