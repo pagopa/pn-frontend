@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+    <url>
+        <loc>https://imprese.notifichedigitali.it/</loc>
+        <lastmod>2024-07-12T17:25:57+00:00</lastmod>
+        <priority>1.00</priority>
+    </url>
+    <url>
+        <loc>https://imprese.notifichedigitali.it/notifiche</loc>
+        <lastmod>2024-07-12T17:25:57+00:00</lastmod>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://imprese.notifichedigitali.it/auth/login</loc>
+        <lastmod>2024-07-12T17:25:57+00:00</lastmod>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://imprese.notifichedigitali.it/notifiche-delegato</loc>
+        <lastmod>2024-07-12T17:25:57+00:00</lastmod>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://imprese.notifichedigitali.it/recapiti</loc>
+        <lastmod>2024-07-12T17:25:57+00:00</lastmod>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://imprese.notifichedigitali.it/deleghe/a-carico</loc>
+        <lastmod>2024-07-12T17:25:57+00:00</lastmod>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://imprese.notifichedigitali.it/deleghe/delegati</loc>
+        <lastmod>2024-07-12T17:25:57+00:00</lastmod>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://imprese.notifichedigitali.it/app-status</loc>
+        <lastmod>2024-07-12T17:25:57+00:00</lastmod>
+        <priority>0.50</priority>
+    </url>
+    <url>
+        <loc>https://imprese.notifichedigitali.it/assistenza</loc>
+        <lastmod>2024-07-12T17:25:57+00:00</lastmod>
+        <priority>0.50</priority>
+    </url>
+</urlset>
