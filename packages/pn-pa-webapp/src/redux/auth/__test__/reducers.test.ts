@@ -35,18 +35,7 @@ describe('Auth redux state tests', () => {
 
   it('Initial state', () => {
     const state = store.getState().userState;
-
-    const stateWithId = {
-      ...state,
-      user: {
-        ...state.user,
-        organization: {
-          ...state.user.organization,
-          id: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1cd',
-        },
-      },
-    };
-    expect(stateWithId).toEqual({
+    expect(state).toEqual({
       loading: false,
       user: sessionStorage.getItem('user')
         ? JSON.parse(sessionStorage.getItem('user') || '')
@@ -198,7 +187,7 @@ describe('Auth redux state tests', () => {
   it('Should be able to fetch institutions', async () => {
     // preset store
     const mockedStore = createMockedStore({
-      userState: userResponse,
+      userState: { user: userResponse },
     });
 
     mock.onGet('bff/v1/institutions').reply(200, institutionsDTO);
@@ -206,6 +195,79 @@ describe('Auth redux state tests', () => {
     expect(action.type).toBe('getInstitutions/fulfilled');
     expect(action.payload).toEqual(institutionsDTO);
     expect(mockedStore.getState().userState.institutions).toStrictEqual(institutionsDTO);
+  });
+
+  it('Should be able to add current institution if not in list', async () => {
+    const userOrganization = {
+      id: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1c5',
+      name: 'Comune di Test',
+      roles: [
+        {
+          partyRole: PartyRole.OPERATOR,
+          role: PNRole.OPERATOR,
+        },
+      ],
+    };
+    // preset store
+    const mockedStore = createMockedStore({
+      userState: {
+        user: {
+          ...userResponse,
+          organization: userOrganization,
+        },
+      },
+    });
+
+    mock.onGet('bff/v1/institutions').reply(200, institutionsDTO);
+    const action = await mockedStore.dispatch(getInstitutions());
+    expect(action.type).toBe('getInstitutions/fulfilled');
+    const institutions = [
+      ...institutionsDTO,
+      {
+        id: userOrganization.id,
+        name: userOrganization.name,
+        productRole: userOrganization?.roles[0].role,
+        parentName: undefined,
+      },
+    ];
+    expect(action.payload).toEqual(institutions);
+    expect(mockedStore.getState().userState.institutions).toStrictEqual(institutions);
+  });
+
+  it('Should be able to return current institution if empty list', async () => {
+    const userOrganization = {
+      id: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1c5',
+      name: 'Comune di Test',
+      roles: [
+        {
+          partyRole: PartyRole.OPERATOR,
+          role: PNRole.OPERATOR,
+        },
+      ],
+    };
+    // preset store
+    const mockedStore = createMockedStore({
+      userState: {
+        user: {
+          ...userResponse,
+          organization: userOrganization,
+        },
+      },
+    });
+
+    mock.onGet('bff/v1/institutions').reply(200, []);
+    const action = await mockedStore.dispatch(getInstitutions());
+    expect(action.type).toBe('getInstitutions/fulfilled');
+    const institutions = [
+      {
+        id: userOrganization.id,
+        name: userOrganization.name,
+        productRole: userOrganization?.roles[0].role,
+        parentName: undefined,
+      },
+    ];
+    expect(action.payload).toEqual(institutions);
+    expect(mockedStore.getState().userState.institutions).toStrictEqual(institutions);
   });
 
   it('Should be able to fetch productsInstitution', async () => {

@@ -50,9 +50,6 @@ export const getInstitutions = createAsyncThunk<
       parentName: currentOrganization?.rootParent?.description,
     } as PartyEntityWithUrl;
 
-    if (institutions.length === 0) {
-      return [currentInstitution];
-    }
     if (
       !institutions.some((institution: { id: string }) => institution.id === currentInstitution.id)
     ) {
