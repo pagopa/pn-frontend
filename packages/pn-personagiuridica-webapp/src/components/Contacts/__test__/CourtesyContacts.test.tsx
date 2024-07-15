@@ -88,6 +88,41 @@ describe('CourtesyContacts Component', async () => {
     expect(emailInput).toBeInTheDocument();
   });
 
+  it('renders components - contacts', async () => {
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <CourtesyContacts contacts={digitalCourtesyAddresses} />
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+
+    const defaultPhone = digitalCourtesyAddresses.find(
+      (addr) => addr.channelType === CourtesyChannelType.SMS && addr.senderId === 'default'
+    );
+    const defaultEmail = digitalCourtesyAddresses.find(
+      (addr) => addr.channelType === CourtesyChannelType.EMAIL && addr.senderId === 'default'
+    );
+
+    const phoneInput = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
+    const emailInput = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+    expect(phoneInput).not.toBeInTheDocument();
+    expect(emailInput).not.toBeInTheDocument();
+    const phoneNumber = result.getByText(defaultPhone!.value);
+    expect(phoneNumber).toBeInTheDocument();
+    const email = result.getByText(defaultEmail!.value);
+    expect(email).toBeInTheDocument();
+    const buttons = result.getAllByRole('button');
+    expect(buttons![0]).toBeEnabled();
+    expect(buttons![1]).toBeEnabled();
+    expect(buttons![0].textContent).toMatch('button.modifica');
+    expect(buttons![1].textContent).toMatch('button.elimina');
+    expect(buttons![2]).toBeEnabled();
+    expect(buttons![3]).toBeEnabled();
+    expect(buttons![2].textContent).toMatch('button.modifica');
+    expect(buttons![3].textContent).toMatch('button.elimina');
+  });
+
   it('add new phone number', async () => {
     const phoneValue = '3333333333';
     mock
