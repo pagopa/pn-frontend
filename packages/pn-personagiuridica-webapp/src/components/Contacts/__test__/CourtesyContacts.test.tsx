@@ -123,7 +123,7 @@ describe('CourtesyContacts Component', async () => {
     expect(buttons![3].textContent).toMatch('button.elimina');
   });
 
-  it.only('add new phone number', async () => {
+  it('add new phone number', async () => {
     const phoneValue = '3333333333';
     mock
       .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
