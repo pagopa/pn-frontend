@@ -94,20 +94,10 @@ const ActualApp = () => {
           },
         ];
   const productId = products.length > 0 ? SELFCARE_SEND_PROD_ID : '0';
-  const institutionsList =
-    institutions.length > 0
-      ? institutions.map((institution) => ({
-          ...institution,
-          productRole: t(`roles.${role.role}`),
-        }))
-      : [
-          {
-            id: idOrganization,
-            name: loggedUserOrganizationParty.name,
-            productRole: t(`roles.${role.role}`),
-            parentName: loggedUserOrganizationParty?.rootParent?.description,
-          },
-        ];
+  const institutionsList = institutions.map((institution) => ({
+    ...institution,
+    productRole: t(`roles.${institution.productRole}`),
+  }));
 
   const sessionToken = loggedUser.sessionToken;
 

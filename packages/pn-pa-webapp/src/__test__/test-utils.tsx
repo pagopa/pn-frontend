@@ -36,6 +36,16 @@ const customRender = (
   });
 };
 
+const createMockedStore = (preloadedState: any) =>
+  configureStore({
+    reducer: appReducers,
+    preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
+  });
+
 // utility functions
 /**
  * Generate a random string with specified length
@@ -51,6 +61,6 @@ function randomString(length: number) {
 }
 
 export * from '@testing-library/react';
-export { customRender as render, testStore };
+export { customRender as render, testStore, createMockedStore };
 // utility functions
 export { randomString };
