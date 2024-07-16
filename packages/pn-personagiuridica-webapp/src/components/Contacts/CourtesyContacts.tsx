@@ -39,7 +39,7 @@ const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
       avatar={<IllusEmail size={60} />}
     >
       <Box sx={{ width: { xs: '100%', lg: '50%' } }} data-testid="courtesyContacts">
-        <Stack spacing={3} mt={3}>
+        <Stack spacing={3} mt={3} data-testid="courtesyContacts-items">
           <CourtesyContactItem
             type={CourtesyFieldType.EMAIL}
             value={emailContact?.value ? emailContact.value : ''}

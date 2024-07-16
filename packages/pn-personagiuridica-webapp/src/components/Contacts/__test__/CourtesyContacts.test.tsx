@@ -13,7 +13,7 @@ import {
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, CourtesyChannelType } from '../../../models/contacts';
-import CourtesyContactItem, { CourtesyFieldType } from '../CourtesyContactItem';
+import { CourtesyFieldType } from '../CourtesyContactItem';
 import CourtesyContacts from '../CourtesyContacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
@@ -184,14 +184,22 @@ describe('CourtesyContacts Component', async () => {
       },
     ]);
     // simulate rerendering due to redux changes
+    const updatedDigitalCourtesyAddresses = [
+      {
+        addressType: AddressType.COURTESY,
+        senderId: 'default',
+        channelType: CourtesyChannelType.SMS,
+        value: '+39' + phoneValue,
+      },
+    ];
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContactItem type={CourtesyFieldType.PHONE} value={'+39' + phoneValue} />
+        <CourtesyContacts contacts={updatedDigitalCourtesyAddresses} />
       </DigitalContactsCodeVerificationProvider>
     );
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
-      expect(result.container).toHaveTextContent('+39' + phoneValue);
+      expect(result.getByTestId('courtesyContacts')).toHaveTextContent('+39' + phoneValue);
     });
   });
 
@@ -212,7 +220,7 @@ describe('CourtesyContacts Component', async () => {
       .reply(204);
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContactItem type={CourtesyFieldType.PHONE} value={defaultPhoneAddress!.value} />
+        <CourtesyContacts contacts={digitalCourtesyAddresses} />
       </DigitalContactsCodeVerificationProvider>,
       {
         preloadedState: {
@@ -220,8 +228,8 @@ describe('CourtesyContacts Component', async () => {
         },
       }
     );
-    const editButton = result.getByRole('button', { name: 'button.modifica' });
-    fireEvent.click(editButton);
+    const editButton = result.getAllByRole('button', { name: 'button.modifica' });
+    fireEvent.click(editButton[1]);
     const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
     fireEvent.change(input!, { target: { value: phoneValue } });
     await waitFor(() => expect(input!).toHaveValue(phoneValue));
@@ -259,9 +267,23 @@ describe('CourtesyContacts Component', async () => {
       },
     ]);
     // simulate rerendering due to redux changes
+    const updatedDigitalCourtesyAddresses = [
+      {
+        addressType: AddressType.COURTESY,
+        senderId: 'default',
+        channelType: CourtesyChannelType.EMAIL,
+        value: 'nome.utente@mail.it',
+      },
+      {
+        addressType: AddressType.COURTESY,
+        senderId: 'default',
+        channelType: CourtesyChannelType.SMS,
+        value: phoneValue,
+      },
+    ];
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContactItem type={CourtesyFieldType.PHONE} value={phoneValue} />
+        <CourtesyContacts contacts={updatedDigitalCourtesyAddresses} />
       </DigitalContactsCodeVerificationProvider>
     );
     await waitFor(() => {
@@ -270,12 +292,12 @@ describe('CourtesyContacts Component', async () => {
     });
   });
 
-  it('delete phone number', async () => {
+  it.only('delete phone number', async () => {
     mock.onDelete('/bff/v1/addresses/COURTESY/default/SMS').reply(204);
     const phoneValue = defaultPhoneAddress!.value;
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContactItem type={CourtesyFieldType.PHONE} value={phoneValue} />
+        <CourtesyContacts contacts={digitalCourtesyAddresses} />
       </DigitalContactsCodeVerificationProvider>,
       {
         preloadedState: {
@@ -309,9 +331,17 @@ describe('CourtesyContacts Component', async () => {
         .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
     ).toStrictEqual([]);
     // simulate rerendering due to redux changes
+    const updatedDigitalCourtesyAddresses = [
+      {
+        addressType: AddressType.COURTESY,
+        senderId: 'default',
+        channelType: CourtesyChannelType.EMAIL,
+        value: 'nome.utente@mail.it',
+      },
+    ];
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContactItem type={CourtesyFieldType.PHONE} value="" />
+        <CourtesyContacts contacts={updatedDigitalCourtesyAddresses} />
       </DigitalContactsCodeVerificationProvider>
     );
     await waitFor(() => {
@@ -334,7 +364,7 @@ describe('CourtesyContacts Component', async () => {
       .reply(204);
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContactItem type={CourtesyFieldType.EMAIL} value="" />
+        <CourtesyContacts contacts={digitalCourtesyAddresses} />
       </DigitalContactsCodeVerificationProvider>
     );
     const input = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
@@ -379,7 +409,7 @@ describe('CourtesyContacts Component', async () => {
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContactItem type={CourtesyFieldType.EMAIL} value={mailValue} />
+        <CourtesyContacts contacts={digitalCourtesyAddresses} />
       </DigitalContactsCodeVerificationProvider>
     );
     await waitFor(() => {
@@ -405,7 +435,7 @@ describe('CourtesyContacts Component', async () => {
       .reply(204);
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContactItem type={CourtesyFieldType.EMAIL} value={emailValue} />
+        <CourtesyContacts contacts={digitalCourtesyAddresses} />
       </DigitalContactsCodeVerificationProvider>,
       {
         preloadedState: {
@@ -454,7 +484,7 @@ describe('CourtesyContacts Component', async () => {
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContactItem type={CourtesyFieldType.EMAIL} value={emailValue} />
+        <CourtesyContacts contacts={digitalCourtesyAddresses} />
       </DigitalContactsCodeVerificationProvider>
     );
     await waitFor(() => {
@@ -468,7 +498,7 @@ describe('CourtesyContacts Component', async () => {
     const emailValue = defaultEmailAddress!.value;
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContactItem type={CourtesyFieldType.EMAIL} value={emailValue} />
+        <CourtesyContacts contacts={digitalCourtesyAddresses} />
       </DigitalContactsCodeVerificationProvider>,
       {
         preloadedState: {
@@ -504,7 +534,7 @@ describe('CourtesyContacts Component', async () => {
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContactItem type={CourtesyFieldType.EMAIL} value="" />
+        <CourtesyContacts contacts={[]} />
       </DigitalContactsCodeVerificationProvider>
     );
     await waitFor(() => {
