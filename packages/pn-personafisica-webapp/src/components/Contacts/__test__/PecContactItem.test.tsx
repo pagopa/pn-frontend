@@ -1,7 +1,7 @@
 import { digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
-import LegalContacts from '../LegalContacts';
+import PecContactItem from '../PecContactItem';
 
 describe('PecContactItem component', () => {
   let result: RenderResult;
@@ -11,7 +11,7 @@ describe('PecContactItem component', () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <LegalContacts legalAddresses={[]} />
+          <PecContactItem value="" verifyingAddress={false} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
@@ -43,7 +43,7 @@ describe('PecContactItem component', () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <LegalContacts legalAddresses={[defaultAddress!]} />
+          <PecContactItem value={defaultAddress!.value} verifyingAddress={false} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
