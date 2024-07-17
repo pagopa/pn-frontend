@@ -149,9 +149,9 @@ describe('CourtesyContacts Component', async () => {
     fireEvent.change(input!, { target: { value: phoneValue } });
     await waitFor(() => expect(input!).toHaveValue(phoneValue));
     const button = result.getByTestId('courtesy-phone-button');
+    expect(button).toBeEnabled();
     // save the phone
-    fireEvent.click(button!);
-    await waitFor(() => expect(input!).toHaveValue(phoneValue));
+    fireEvent.click(button);
 
     // Confirms the disclaimer dialog
     const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
@@ -351,7 +351,7 @@ describe('CourtesyContacts Component', async () => {
       .reply(204);
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContacts contacts={digitalCourtesyAddresses} />
+        <CourtesyContacts contacts={[]} />
       </DigitalContactsCodeVerificationProvider>
     );
     const input = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
@@ -430,7 +430,8 @@ describe('CourtesyContacts Component', async () => {
         },
       }
     );
-    const editButton = result.getByRole('button', { name: 'button.modifica' });
+    const emailForm = result.getByTestId(`courtesyContacts-${CourtesyFieldType.EMAIL}`);
+    const editButton = within(emailForm).getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
     fireEvent.change(input!, { target: { value: emailValue } });
@@ -493,9 +494,10 @@ describe('CourtesyContacts Component', async () => {
         },
       }
     );
-    const phoneText = result.getByText(emailValue);
-    expect(phoneText).toBeInTheDocument();
-    const deleteButton = result.getByRole('button', { name: 'button.elimina' });
+    const emailText = result.getByText(emailValue);
+    expect(emailText).toBeInTheDocument();
+    const emailForm = result.getByTestId(`courtesyContacts-${CourtesyFieldType.EMAIL}`);
+    const deleteButton = within(emailForm).getByRole('button', { name: 'button.elimina' });
     fireEvent.click(deleteButton);
     // find confirmation dialog and its buttons
     const dialogBox = result.getByRole('dialog', { name: /courtesy-contacts.remove\b/ });
