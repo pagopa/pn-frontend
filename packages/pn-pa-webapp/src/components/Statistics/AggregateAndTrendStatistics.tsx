@@ -1,4 +1,3 @@
-/* eslint-disable functional/immutable-data */
 import React, { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -12,11 +11,6 @@ import { IStatisticsDailySummary, Timeframe } from '../../models/Statistics';
 import AggregateStatistics, { AggregateDataItem } from './AggregateStatistics';
 import EmptyStatistics from './EmptyStatistics';
 import TrendStackedStatistics, { TrendDataItem } from './TrendStackedStatistics';
-
-enum GraphTypes {
-  AGGREGATE = 'Aggregate',
-  TREND = 'Trend',
-}
 
 export type AggregateAndTrendData = {
   title: string;
@@ -42,7 +36,7 @@ type Props = {
  * @returns {*}
  */
 const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data, options }) => {
-  const [graphType, setGraphType] = useState<GraphTypes>(GraphTypes.AGGREGATE);
+  const [graphType, setGraphType] = useState<'aggregate_graph' | 'trend_graph'>('aggregate_graph');
   const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe.weekly);
 
   const { t } = useTranslation(['statistics']);
@@ -51,18 +45,16 @@ const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data
   const trendData: Array<TrendDataItem> = [];
 
   data?.forEach((item) => {
+    // eslint-disable-next-line functional/immutable-data
     aggregateData.push({ title: item.title, value: item.total });
+    // eslint-disable-next-line functional/immutable-data
     trendData.push({ title: item.title, values: item.details });
   });
 
   const isMobile = useIsMobile();
 
   const handleChangeGraphType = (e: ChangeEvent) => {
-    if ((e.target as HTMLSelectElement).value === t('aggregate_graph')) {
-      setGraphType(GraphTypes.AGGREGATE);
-    } else {
-      setGraphType(GraphTypes.TREND);
-    }
+    setGraphType((e.target as HTMLSelectElement).value as 'aggregate_graph' | 'trend_graph');
   };
 
   const isEmpty = !data || (data[0].total === 0 && data[1].total === 0);
@@ -72,10 +64,9 @@ const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data
   }
 
   return (
-    <Stack direction="column" height="100%" sx={{ display: 'flex' }}>
+    <>
       <Stack
         direction={{ lg: 'row', xs: 'column' }}
-        display="flex"
         justifyContent="space-between"
         alignItems="center"
       >
@@ -83,14 +74,16 @@ const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                {graphType === GraphTypes.AGGREGATE ? <PieIcon /> : <StackedIcon />}
+                {graphType === 'aggregate_graph' ? <PieIcon /> : <StackedIcon />}
               </InputAdornment>
             ),
           }}
           label={t('graph_type_label')}
           select
+          name="graph-type-select"
+          data-testid="graph-type-select"
           onChange={handleChangeGraphType}
-          value={graphType === GraphTypes.AGGREGATE ? t('aggregate_graph') : t('trend_graph')}
+          value={graphType}
           size="small"
           fullWidth={isMobile}
           sx={{
@@ -101,35 +94,40 @@ const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data
             },
           }}
         >
-          <MenuItem key={GraphTypes.AGGREGATE} value={t('aggregate_graph')} selected>
+          <MenuItem key={'aggregate_graph'} value="aggregate_graph">
             <ListItemText>{t('aggregate_graph')}</ListItemText>
           </MenuItem>
-          <MenuItem key={GraphTypes.TREND} value={t('trend_graph')}>
+          <MenuItem key={'trend_graph'} value="trend_graph">
             <ListItemText>{t('trend_graph')}</ListItemText>
           </MenuItem>
         </TextField>
-        {graphType === GraphTypes.TREND && (
+        {graphType === 'trend_graph' && (
           <Box>
             <Chip
-              sx={{ mr: 2 }}
+              sx={{ mr: 2, opacity: '1!important' }}
               label={t('trend.days')}
+              data-testid="daily-view"
               variant="outlined"
               component="button"
               color={timeframe === Timeframe.daily ? 'primary' : 'default'}
               onClick={() => setTimeframe(Timeframe.daily)}
+              disabled={timeframe === Timeframe.daily}
             />
             <Chip
+              sx={{ opacity: '1!important' }}
               label={t('trend.weeks')}
+              data-testid="weekly-view"
               variant="outlined"
               component="button"
               color={timeframe === Timeframe.weekly ? 'primary' : 'default'}
               onClick={() => setTimeframe(Timeframe.weekly)}
+              disabled={timeframe === Timeframe.weekly}
             />
           </Box>
         )}
       </Stack>
-      {graphType === GraphTypes.AGGREGATE ? (
-        <AggregateStatistics values={aggregateData} options={options} />
+      {graphType === 'aggregate_graph' ? (
+        <AggregateStatistics values={aggregateData} options={options} legend />
       ) : (
         <TrendStackedStatistics
           startDate={startDate}
@@ -139,7 +137,7 @@ const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data
           options={options}
         />
       )}
-    </Stack>
+    </>
   );
 };
 

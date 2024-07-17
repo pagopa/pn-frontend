@@ -126,7 +126,9 @@ async function testSelect(
   optToSelect: number
 ) {
   const selectInput = container.querySelector(`input[name="${elementName}"]`);
-  const selectButton = container.querySelector(`div[id="${elementName}"]`);
+  const selectButton = container.querySelector(
+    `div[id="${elementName}"], div[data-testid="${elementName}"] [role="combobox"]`
+  );
   fireEvent.mouseDown(selectButton!);
   const selectOptionsContainer = screen.getByRole('presentation');
   expect(selectOptionsContainer).toBeInTheDocument();
@@ -263,6 +265,26 @@ async function testRadio(
   }
 }
 
+async function testCalendar(form: HTMLFormElement | HTMLDivElement, elementName: string) {
+  const input = form.querySelector(`input[name="${elementName}"]`);
+  const button = input?.parentElement!.querySelector(`button`);
+  fireEvent.click(button!);
+  const dialog = screen.getByRole('dialog');
+  expect(dialog).toBeInTheDocument();
+  const dateButton = document.evaluate(
+    `//button[text()="1"]`,
+    document,
+    null,
+    XPathResult.ANY_TYPE,
+    null
+  );
+  fireEvent.click(dateButton.iterateNext()!);
+  await waitFor(() => {
+    expect(input).toHaveValue('01/02/2022');
+    expect(dialog).not.toBeInTheDocument();
+  });
+}
+
 /**
  * Init localization and set the translate function to a default value
  */
@@ -316,6 +338,7 @@ export {
   testFormElements,
   testInput,
   testRadio,
+  testCalendar,
   initLocalizationForTest,
   getById,
   queryById,

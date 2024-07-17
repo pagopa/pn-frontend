@@ -1,24 +1,29 @@
-import senderDashboard from "./theme/senderDashboard";
+/* eslint-disable functional/no-let */
+import { getInstanceByDom, init, registerTheme } from 'echarts';
+import type { EChartOption, SetOptionOpts } from 'echarts';
+import { useEffect, useMemo, useRef } from 'react';
+import type { CSSProperties } from 'react';
+
 import {
   Avatar,
+  Box,
   Checkbox,
   ListItem,
   ListItemAvatar,
   ListItemText,
   Stack,
-} from "@mui/material";
-import { init, getInstanceByDom, registerTheme } from "echarts";
-import type { EChartOption, ECharts, SetOptionOpts } from "echarts";
-import { useRef, useEffect, useMemo } from "react";
-import type { CSSProperties } from "react";
+} from '@mui/material';
+
+import senderDashboard from './theme/senderDashboard';
 
 export interface PnEChartsProps {
   option: EChartOption;
   style?: CSSProperties;
   settings?: SetOptionOpts;
   loading?: boolean;
-  theme?: "light" | "dark" | object;
+  theme?: 'light' | 'dark' | object;
   legend?: Array<string>;
+  dataTestId?: string;
 }
 
 export function PnECharts({
@@ -28,113 +33,116 @@ export function PnECharts({
   loading,
   theme,
   legend,
-}: PnEChartsProps): JSX.Element {
+  dataTestId,
+}: Readonly<PnEChartsProps>): JSX.Element {
   const chartRef = useRef<HTMLDivElement>(null);
-  // Initialize chart
-  let chart: ECharts | undefined;
 
   const toggleSerie = (name: string) => {
-    chart?.dispatchAction({
-      type: "legendToggleSelect",
+    if (!chartRef.current) {
+      return;
+    }
+    const chart = getInstanceByDom(chartRef.current);
+    chart.dispatchAction({
+      type: 'legendToggleSelect',
       name,
     });
   };
 
   useEffect(() => {
-    if (chartRef.current !== null) {
-      let selectedTheme = "defaultTheme";
-
-      registerTheme("defaultTheme", senderDashboard);
-      if (typeof theme === "object") {
-        registerTheme("customTheme", theme);
-        selectedTheme = "customTheme";
-      }
-      chart = init(chartRef.current, selectedTheme, { renderer: "canvas" });
+    if (!chartRef.current) {
+      return;
     }
+    let selectedTheme = 'defaultTheme';
+
+    registerTheme('defaultTheme', senderDashboard);
+    if (typeof theme === 'object') {
+      registerTheme('customTheme', theme);
+      selectedTheme = 'customTheme';
+    }
+    const chart = init(chartRef.current, selectedTheme, { renderer: 'canvas' });
 
     // Add chart resize listener
     // ResizeObserver is leading to a bit janky UX
     // Should we implement a debounce?
     function resizeChart() {
-      chart?.resize();
+      chart.resize();
     }
-    window.addEventListener("resize", resizeChart);
+    window.addEventListener('resize', resizeChart);
 
     // Return cleanup function
     return () => {
-      chart?.dispose();
-      window.removeEventListener("resize", resizeChart);
+      chart.dispose();
+      window.removeEventListener('resize', resizeChart);
     };
   }, [theme]);
 
   useEffect(() => {
     // Update chart
-    if (chartRef.current !== null) {
-      const options = {
-        aria: {
-          show: true,
-        },
-        ...option,
-      };
-      const chart = getInstanceByDom(chartRef.current);
-      chart?.setOption(options, settings);
+    if (!chartRef.current) {
+      return;
     }
+
+    const options = {
+      aria: {
+        show: true,
+      },
+      ...option,
+    };
+    const chart = getInstanceByDom(chartRef.current);
+    chart.setOption(options, settings);
   }, [option, settings, theme]); // Whenever theme changes we need to add option and setting due to it being deleted in cleanup function
 
   useEffect(() => {
-    // Update chart
-    if (chartRef.current !== null) {
-      const chart = getInstanceByDom(chartRef.current);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      loading === true ? chart?.showLoading() : chart?.hideLoading();
+    // Show/hide loading
+    if (!chartRef.current) {
+      return;
     }
+    const chart = getInstanceByDom(chartRef.current);
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    loading === true ? chart?.showLoading() : chart?.hideLoading();
   }, [loading, theme]);
 
-  const legendContent = useMemo(() => legend?.map((item, index) => {
-    const color = option.color?.[index] ?? "";
-    const avatarSx = {
-      bgcolor: color,
-      width: 10,
-      height: 10,
-    };
-    return (
-      <ListItem key={item} sx={{ width: "auto" }}>
-        <Checkbox
-          onChange={() => toggleSerie(item)}
-          defaultChecked
-          sx={{
-            color,
-            "&.Mui-checked": {
-              color,
-            },
-          }}
-        />
-        <ListItemAvatar sx={{ minWidth: 18 }}>
-          <Avatar sx={avatarSx}>&nbsp;</Avatar>
-        </ListItemAvatar>
-        <ListItemText secondary={item} />
-      </ListItem>
-    );
-  }), [theme]);
+  const legendContent = useMemo(
+    () =>
+      legend?.map((item, index) => {
+        const color = option.color?.[index] ?? '';
+        const avatarSx = {
+          bgcolor: color,
+          width: 10,
+          height: 10,
+        };
+        return (
+          <ListItem key={item} sx={{ width: 'auto' }} data-testid="legendItem">
+            <Checkbox
+              onChange={() => toggleSerie(item)}
+              defaultChecked
+              sx={{
+                color,
+                '&.Mui-checked': {
+                  color,
+                },
+              }}
+            />
+            <ListItemAvatar sx={{ minWidth: 18 }}>
+              <Avatar sx={avatarSx}>&nbsp;</Avatar>
+            </ListItemAvatar>
+            <ListItemText secondary={item} />
+          </ListItem>
+        );
+      }),
+    [theme]
+  );
 
   return (
     <>
-      <div
-        ref={chartRef}
-        style={{
-          width: "100%",
-          height: "100%",
-          minHeight: "400px",
-          flexGrow: 1,
-          ...style,
-        }}
-      />
+      <Box ref={chartRef} sx={style} data-testid={dataTestId} />
       {legend && (
         <Stack
-          direction={"row"}
-          alignContent={"center"}
-          justifyContent={"center"}
-          display={"flex"}
+          direction={'row'}
+          alignContent={'center'}
+          justifyContent={'center'}
+          display={'flex'}
+          data-testid="legendContainer"
         >
           {legendContent}
         </Stack>

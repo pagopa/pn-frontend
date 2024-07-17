@@ -2,7 +2,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Paper, Stack, Typography } from '@mui/material';
+import { Paper, SxProps, Typography } from '@mui/material';
 import { PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
 import { DeliveryMode, GraphColors, IDeliveryModeStatistics } from '../../models/Statistics';
@@ -12,9 +12,15 @@ type Props = {
   startDate: string;
   endDate: string;
   data: IDeliveryModeStatistics;
+  sx?: SxProps;
 };
 
-const DeliveryModeStatistics: React.FC<Props> = ({ startDate, endDate, data: statisticsData }) => {
+const DeliveryModeStatistics: React.FC<Props> = ({
+  startDate,
+  endDate,
+  data: statisticsData,
+  sx,
+}) => {
   const digital = statisticsData[DeliveryMode.DIGITAL];
   const analog = statisticsData[DeliveryMode.ANALOG];
 
@@ -44,21 +50,19 @@ const DeliveryModeStatistics: React.FC<Props> = ({ startDate, endDate, data: sta
   };
 
   return (
-    <Paper sx={{ p: 3, mb: 3, height: '100%' }} elevation={0}>
-      <Stack direction="column" height="100%" sx={{ display: 'flex' }}>
-        <Typography variant="h6" component="h3">
-          {t('delivery_mode.title')}
-        </Typography>
-        <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
-          {t('delivery_mode.description')}
-        </Typography>
-        <AggregateAndTrendStatistics
-          startDate={startDate}
-          endDate={endDate}
-          data={data}
-          options={options}
-        />
-      </Stack>
+    <Paper sx={{ ...sx, p: 3, mb: 3 }} elevation={0} data-testid="deliveryMode">
+      <Typography variant="h6" component="h3">
+        {t('delivery_mode.title')}
+      </Typography>
+      <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
+        {t('delivery_mode.description')}
+      </Typography>
+      <AggregateAndTrendStatistics
+        startDate={startDate}
+        endDate={endDate}
+        data={data}
+        options={options}
+      />
     </Paper>
   );
 };

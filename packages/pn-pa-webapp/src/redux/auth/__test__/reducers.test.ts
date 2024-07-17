@@ -6,6 +6,7 @@ import {
   tosPrivacyConsentMock,
 } from '../../../__mocks__/Consents.mock';
 import { institutionsDTO, productsDTO } from '../../../__mocks__/User.mock';
+import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { PNRole, PartyRole } from '../../../models/user';
 import { store } from '../../store';
@@ -39,24 +40,24 @@ describe('Auth redux state tests', () => {
       user: sessionStorage.getItem('user')
         ? JSON.parse(sessionStorage.getItem('user') || '')
         : {
-          email: '',
-          name: '',
-          uid: '',
-          sessionToken: '',
-          family_name: '',
-          fiscal_number: '',
-          organization: {
-            id: '',
-            roles: [
-              {
-                role: PNRole.ADMIN,
-                partyRole: PartyRole.MANAGER,
-              },
-            ],
-            fiscal_code: '',
+            email: '',
+            name: '',
+            uid: '',
+            sessionToken: '',
+            family_name: '',
+            fiscal_number: '',
+            organization: {
+              id: '',
+              roles: [
+                {
+                  role: PNRole.ADMIN,
+                  partyRole: PartyRole.MANAGER,
+                },
+              ],
+              fiscal_code: '',
+            },
+            desired_exp: 0,
           },
-          desired_exp: 0,
-        },
       isUnauthorizedUser: false,
       fetchedTos: false,
       fetchedPrivacy: false,
@@ -184,11 +185,89 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should be able to fetch institutions', async () => {
+    // preset store
+    const mockedStore = createMockedStore({
+      userState: { user: userResponse },
+    });
+
     mock.onGet('bff/v1/institutions').reply(200, institutionsDTO);
-    const action = await store.dispatch(getInstitutions());
+    const action = await mockedStore.dispatch(getInstitutions());
     expect(action.type).toBe('getInstitutions/fulfilled');
     expect(action.payload).toEqual(institutionsDTO);
-    expect(store.getState().userState.institutions).toStrictEqual(institutionsDTO);
+    expect(mockedStore.getState().userState.institutions).toStrictEqual(institutionsDTO);
+  });
+
+  it('Should be able to add current institution if not in list', async () => {
+    const userOrganization = {
+      id: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1c5',
+      name: 'Comune di Test',
+      roles: [
+        {
+          partyRole: PartyRole.OPERATOR,
+          role: PNRole.OPERATOR,
+        },
+      ],
+    };
+    // preset store
+    const mockedStore = createMockedStore({
+      userState: {
+        user: {
+          ...userResponse,
+          organization: userOrganization,
+        },
+      },
+    });
+
+    mock.onGet('bff/v1/institutions').reply(200, institutionsDTO);
+    const action = await mockedStore.dispatch(getInstitutions());
+    expect(action.type).toBe('getInstitutions/fulfilled');
+    const institutions = [
+      ...institutionsDTO,
+      {
+        id: userOrganization.id,
+        name: userOrganization.name,
+        productRole: userOrganization?.roles[0].role,
+        parentName: undefined,
+      },
+    ];
+    expect(action.payload).toEqual(institutions);
+    expect(mockedStore.getState().userState.institutions).toStrictEqual(institutions);
+  });
+
+  it('Should be able to return current institution if empty list', async () => {
+    const userOrganization = {
+      id: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1c5',
+      name: 'Comune di Test',
+      roles: [
+        {
+          partyRole: PartyRole.OPERATOR,
+          role: PNRole.OPERATOR,
+        },
+      ],
+    };
+    // preset store
+    const mockedStore = createMockedStore({
+      userState: {
+        user: {
+          ...userResponse,
+          organization: userOrganization,
+        },
+      },
+    });
+
+    mock.onGet('bff/v1/institutions').reply(200, []);
+    const action = await mockedStore.dispatch(getInstitutions());
+    expect(action.type).toBe('getInstitutions/fulfilled');
+    const institutions = [
+      {
+        id: userOrganization.id,
+        name: userOrganization.name,
+        productRole: userOrganization?.roles[0].role,
+        parentName: undefined,
+      },
+    ];
+    expect(action.payload).toEqual(institutions);
+    expect(mockedStore.getState().userState.institutions).toStrictEqual(institutions);
   });
 
   it('Should be able to fetch productsInstitution', async () => {

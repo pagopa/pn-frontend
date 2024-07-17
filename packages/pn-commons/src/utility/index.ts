@@ -8,19 +8,21 @@ import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
 import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
 import {
   DATE_FORMAT,
-  convertHoursToIntDays,
+  convertHoursToDays,
   dateIsDefined,
   dateIsLessThan10Years,
   formatDate,
-  formatDateSMonth,
   formatDateTime,
   formatDay,
   formatMonthString,
+  formatShortDate,
   formatTime,
   formatToSlicedISOString,
   formatToTimezoneString,
+  getDaysFromDateRange,
   getEndOfDay,
   getStartOfDay,
+  getWeeksFromDateRange,
   isToday,
   minutesBeforeNow,
   oneMonthAgo,
@@ -37,6 +39,7 @@ import { filtersApplied, getValidValue, sortArray } from './genericFunctions.uti
 import { IUN_regex, formatIun } from './iun.utility';
 import { lazyRetry } from './lazyRetry.utility';
 import { initLocalization } from './localization.utility';
+import { getSessionLanguage, setSessionLanguage } from './multilanguage.utility';
 import {
   getF24Payments,
   getLegalFactLabel,
@@ -138,11 +141,15 @@ export {
   rewriteLinks,
   dateIsLessThan10Years,
   EventStrategyFactory,
-  formatDateSMonth,
+  formatShortDate,
   parseError,
   validateHistory,
   validateCurrentStatus,
   validateLegaFact,
-  convertHoursToIntDays,
+  convertHoursToDays,
+  getSessionLanguage,
+  setSessionLanguage,
   screenshot,
+  getDaysFromDateRange,
+  getWeeksFromDateRange,
 };

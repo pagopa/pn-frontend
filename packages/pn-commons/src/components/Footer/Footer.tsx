@@ -1,7 +1,6 @@
-import { useState } from 'react';
-
 import { LangCode, Footer as MuiFooter } from '@pagopa/mui-italia';
 
+import { getSessionLanguage } from '../../utility';
 import {
   LANGUAGES,
   companyLegalInfo,
@@ -28,10 +27,8 @@ const Footer: React.FC<Props> = ({
   privacyPolicyHref,
   termsOfServiceHref,
 }) => {
-  const [currentLangCode, setCurrentLangCode] = useState<LangCode>('it');
   const localizedPagoPALink = pagoPALink();
   const changeLanguageHandler = (langCode: LangCode) => {
-    setCurrentLangCode(langCode);
     onLanguageChanged(langCode);
   };
 
@@ -47,7 +44,7 @@ const Footer: React.FC<Props> = ({
       preLoginLinks={preLoginLinks(hasTermsOfService, privacyPolicyHref, termsOfServiceHref)}
       languages={LANGUAGES}
       onLanguageChanged={changeLanguageHandler}
-      currentLangCode={currentLangCode}
+      currentLangCode={getSessionLanguage() as LangCode}
     />
   );
 };
