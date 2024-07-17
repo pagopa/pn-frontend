@@ -17,6 +17,7 @@ const SuccessPage = () => {
   const calcRedirectUrl = useCallback(() => {
     // eslint-disable-next-line functional/no-let
     let redirectUrl = PF_URL ?? '';
+    const langParam = `&lang=${lang}`;
 
     // the includes check is needed to prevent xss attacks
     if (redirectUrl && [PF_URL].includes(redirectUrl) && aar) {
@@ -29,9 +30,7 @@ const SuccessPage = () => {
 
     // the findIndex check is needed to prevent xss attacks
     if (redirectUrl && [PF_URL].findIndex((url) => url && redirectUrl.startsWith(url)) > -1) {
-      window.location.replace(
-        `${redirectUrl}${sanitizeString(token)}${sanitizeString(`&lang=${lang}`)}`
-      );
+      window.location.replace(`${redirectUrl}${sanitizeString(token)}${sanitizeString(langParam)}`);
     }
   }, [aar, token, lang]);
 
