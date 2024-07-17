@@ -292,23 +292,22 @@ describe('CourtesyContacts Component', async () => {
     });
   });
 
-  it.only('delete phone number', async () => {
+  it('delete phone number', async () => {
     mock.onDelete('/bff/v1/addresses/COURTESY/default/SMS').reply(204);
     const phoneValue = defaultPhoneAddress!.value;
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContacts contacts={digitalCourtesyAddresses} />
-      </DigitalContactsCodeVerificationProvider>,
-      {
-        preloadedState: {
-          contactsState: { digitalAddresses: [defaultPhoneAddress] },
-        },
-      }
+        <CourtesyContacts
+          contacts={digitalCourtesyAddresses.filter((add) => {
+            return add.addressType === AddressType.COURTESY && add.senderId === 'default';
+          })}
+        />
+      </DigitalContactsCodeVerificationProvider>
     );
     const phoneText = result.getByText(phoneValue);
     expect(phoneText).toBeInTheDocument();
-    const deleteButton = result.getByRole('button', { name: 'button.elimina' });
-    fireEvent.click(deleteButton);
+    const deleteButton = result.getAllByRole('button', { name: 'button.elimina' });
+    fireEvent.click(deleteButton[1]);
     // find confirmation dialog and its buttons
     const dialogBox = result.getByRole('dialog', { name: /courtesy-contacts.remove\b/ });
     expect(dialogBox).toBeVisible();
@@ -318,7 +317,7 @@ describe('CourtesyContacts Component', async () => {
     fireEvent.click(cancelButton);
     expect(dialogBox).not.toBeVisible();
     // delete the number
-    fireEvent.click(deleteButton);
+    fireEvent.click(deleteButton[1]);
     expect(dialogBox).toBeVisible();
     fireEvent.click(confirmButton);
     await waitFor(() => {
@@ -351,8 +350,8 @@ describe('CourtesyContacts Component', async () => {
     });
   });
 
-  it('add new email', async () => {
-    const mailValue = 'nome.cognome@mail.it';
+  it.only('add new email', async () => {
+    const mailValue = 'nome.utente@mail.it';
     mock.onPost('/bff/v1/addresses/COURTESY/default/EMAIL', { value: mailValue }).reply(200, {
       result: 'CODE_VERIFICATION_REQUIRED',
     });
@@ -364,14 +363,15 @@ describe('CourtesyContacts Component', async () => {
       .reply(204);
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContacts contacts={digitalCourtesyAddresses} />
+        <CourtesyContacts contacts={[]} />
       </DigitalContactsCodeVerificationProvider>
     );
     const input = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+    console.log('---------', input!.innerHTML);
     expect(input).toHaveValue('');
     fireEvent.change(input!, { target: { value: mailValue } });
     await waitFor(() => expect(input!).toHaveValue(mailValue));
-    const button = result.getByRole('button');
+    const button = result.getByTestId('add email');
     expect(button).toBeEnabled();
     // save the email
     fireEvent.click(button!);
@@ -443,8 +443,8 @@ describe('CourtesyContacts Component', async () => {
         },
       }
     );
-    const editButton = result.getByRole('button', { name: 'button.modifica' });
-    fireEvent.click(editButton);
+    const editButton = result.getAllByRole('button', { name: 'button.modifica' });
+    fireEvent.click(editButton[0]);
     const input = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
     fireEvent.change(input!, { target: { value: emailValue } });
     await waitFor(() => expect(input!).toHaveValue(emailValue));
@@ -482,9 +482,17 @@ describe('CourtesyContacts Component', async () => {
       },
     ]);
     // simulate rerendering due to redux changes
+    const updatedDigitalCourtesyAddresses = [
+      {
+        addressType: AddressType.COURTESY,
+        senderId: 'default',
+        channelType: CourtesyChannelType.EMAIL,
+        value: emailValue,
+      },
+    ];
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContacts contacts={digitalCourtesyAddresses} />
+        <CourtesyContacts contacts={updatedDigitalCourtesyAddresses} />
       </DigitalContactsCodeVerificationProvider>
     );
     await waitFor(() => {
@@ -498,18 +506,17 @@ describe('CourtesyContacts Component', async () => {
     const emailValue = defaultEmailAddress!.value;
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContacts contacts={digitalCourtesyAddresses} />
-      </DigitalContactsCodeVerificationProvider>,
-      {
-        preloadedState: {
-          contactsState: { digitalAddresses: [defaultEmailAddress] },
-        },
-      }
+        <CourtesyContacts
+          contacts={digitalCourtesyAddresses.filter((add) => {
+            return add.addressType === AddressType.COURTESY && add.senderId === 'default';
+          })}
+        />
+      </DigitalContactsCodeVerificationProvider>
     );
     const phoneText = result.getByText(emailValue);
     expect(phoneText).toBeInTheDocument();
-    const deleteButton = result.getByRole('button', { name: 'button.elimina' });
-    fireEvent.click(deleteButton);
+    const deleteButton = result.getAllByRole('button', { name: 'button.elimina' });
+    fireEvent.click(deleteButton[0]);
     // find confirmation dialog and its buttons
     const dialogBox = result.getByRole('dialog', { name: /courtesy-contacts.remove\b/ });
     expect(dialogBox).toBeVisible();
@@ -519,7 +526,7 @@ describe('CourtesyContacts Component', async () => {
     fireEvent.click(cancelButton);
     expect(dialogBox).not.toBeVisible();
     // delete the number
-    fireEvent.click(deleteButton);
+    fireEvent.click(deleteButton[0]);
     expect(dialogBox).toBeVisible();
     fireEvent.click(confirmButton);
     await waitFor(() => {
