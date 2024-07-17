@@ -14,10 +14,14 @@ const SuccessPage = () => {
   const token = useMemo(() => window.location.hash, []);
   const lang = useMemo(() => getSessionLanguage(), []);
 
+  const encodeURIComponentSafe = (str: string) =>
+    encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
+      return '%' + c.charCodeAt(0).toString(16);
+    });
+
   const calcRedirectUrl = useCallback(() => {
     // eslint-disable-next-line functional/no-let
     let redirectUrl = PF_URL ?? '';
-    const langParam = `&lang=${lang}`;
 
     // the includes check is needed to prevent xss attacks
     if (redirectUrl && [PF_URL].includes(redirectUrl) && aar) {
@@ -28,9 +32,17 @@ const SuccessPage = () => {
 
     console.log('redirectUrl', redirectUrl);
 
+    const sanitizedRedirectUrl = sanitizeString(redirectUrl);
+    const sanitizedToken = sanitizeString(token);
+    const sanitizedLang = sanitizeString(lang);
+
+    const safeRedirectUrl = encodeURIComponentSafe(sanitizedRedirectUrl);
+    const safeToken = encodeURIComponentSafe(sanitizedToken);
+    const safeLang = encodeURIComponentSafe(sanitizedLang);
+
     // the findIndex check is needed to prevent xss attacks
     if (redirectUrl && [PF_URL].findIndex((url) => url && redirectUrl.startsWith(url)) > -1) {
-      window.location.replace(`${redirectUrl}${sanitizeString(token)}${sanitizeString(langParam)}`);
+      window.location.replace(`${safeRedirectUrl}${safeToken}&lang=${safeLang}`);
     }
   }, [aar, token, lang]);
 
