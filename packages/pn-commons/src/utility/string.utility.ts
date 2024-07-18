@@ -155,5 +155,5 @@ export function sanitizeString(srt: string): string {
   // i18next by default converts string like the previous one in "&lt;p&gt;Hello&lt&#x2F;p&gt", so is not possible to have a result string with html tags
   // for this reason, this solution doesn't bring a loss of functionality, but instead it can increase the security against malicious code
   // Andrea Cimini, 2023.07.12
-  return html.body.textContent || '';
+  return html.body.textContent ?? '';
 }
