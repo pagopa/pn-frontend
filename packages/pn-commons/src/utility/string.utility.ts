@@ -142,17 +142,17 @@ function clean(html: Document | Element) {
  * @param htmlStr
  * @returns escaped string
  */
-// function escapeMetaCharacters(htmlStr: string | null) {
-//   if (!htmlStr) {
-//     return null;
-//   }
-//   return htmlStr
-//     .replace(/&/g, '&amp;')
-//     .replace(/</g, '&lt;')
-//     .replace(/>/g, '&gt;')
-//     .replace(/"/g, '&quot;')
-//     .replace(/'/g, '&#39;');
-// }
+function escapeMetaCharacters(htmlStr: string | null) {
+  if (!htmlStr) {
+    return null;
+  }
+  return htmlStr
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 /**
  * Remove dangerous code from a string.
@@ -172,5 +172,5 @@ export function sanitizeString(srt: string): string {
   // i18next by default converts string like the previous one in "&lt;p&gt;Hello&lt&#x2F;p&gt", so is not possible to have a result string with html tags
   // for this reason, this solution doesn't bring a loss of functionality, but instead it can increase the security against malicious code
   // Andrea Cimini, 2023.07.12
-  return html.body.textContent ?? '';
+  return escapeMetaCharacters(html.body.textContent) ?? '';
 }
