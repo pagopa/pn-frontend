@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.6.0-RC.0...v2.6.0-RC.1) (2024-07-18)
+
+
+### Bug Fixes
+
+* **pn-12118:** Removed meta characters escaping ([#1279](https://github.com/pagopa/pn-frontend/issues/1279)) ([994a8cf](https://github.com/pagopa/pn-frontend/commit/994a8cfa866e0b399d6b11e79bef2e58e80347b2))
+
+
+
+
+
 # [2.6.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.5.1...v2.6.0-RC.0) (2024-07-15)
 
 
