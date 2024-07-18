@@ -507,9 +507,9 @@ describe('CourtesyContacts Component', async () => {
     const result = render(
       <DigitalContactsCodeVerificationProvider>
         <CourtesyContacts
-          contacts={digitalCourtesyAddresses.filter((add) => {
-            return add.addressType === AddressType.COURTESY && add.senderId === 'default';
-          })}
+          contacts={digitalCourtesyAddresses.filter(
+            (add) => add.addressType === AddressType.COURTESY && add.senderId === 'default'
+          )}
         />
       </DigitalContactsCodeVerificationProvider>
     );
