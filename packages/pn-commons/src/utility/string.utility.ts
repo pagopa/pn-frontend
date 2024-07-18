@@ -159,7 +159,7 @@ function escapeMetaCharacters(htmlStr: string | null) {
  * @param  {string} srt
  * @returns string
  */
-export function sanitizeString(srt: string): string {
+export function sanitizeString(srt: string, isUrl = false): string {
   // convert string to html without rendering it
   const parser = new DOMParser();
   const html = parser.parseFromString(srt, 'text/html');
@@ -172,5 +172,5 @@ export function sanitizeString(srt: string): string {
   // i18next by default converts string like the previous one in "&lt;p&gt;Hello&lt&#x2F;p&gt", so is not possible to have a result string with html tags
   // for this reason, this solution doesn't bring a loss of functionality, but instead it can increase the security against malicious code
   // Andrea Cimini, 2023.07.12
-  return escapeMetaCharacters(html.body.textContent) ?? '';
+  return (isUrl ? escapeMetaCharacters(html.body.textContent) : html.body.textContent) || '';
 }
