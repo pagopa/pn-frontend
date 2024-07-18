@@ -138,20 +138,6 @@ function clean(html: Document | Element) {
 }
 
 /**
- * Escape html meta-characters
- * @param htmlStr
- * @returns escaped string
- */
-function escapeMetaCharacters(htmlStr: string) {
-  return htmlStr
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-/**
  * Remove dangerous code from a string.
  * @param  {string} srt
  * @returns string
@@ -159,7 +145,7 @@ function escapeMetaCharacters(htmlStr: string) {
 export function sanitizeString(srt: string): string {
   // convert string to html without rendering it
   const parser = new DOMParser();
-  const html = parser.parseFromString(escapeMetaCharacters(srt), 'text/html');
+  const html = parser.parseFromString(srt, 'text/html');
   // remove script
   removeScripts(html);
   // remove malicious attributes
