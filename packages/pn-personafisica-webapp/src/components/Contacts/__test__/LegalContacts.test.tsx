@@ -93,16 +93,18 @@ describe('LegalContactsList Component', async () => {
   });
 
   it('renders component - no contacts', async () => {
-    const result = render(
-      <DigitalContactsCodeVerificationProvider>
-        <LegalContacts legalAddresses={[]} />
-      </DigitalContactsCodeVerificationProvider>
-    );
-    const cardBody = result.getByTestId('DigitalContactsCardBody');
-    expect(cardBody).toHaveTextContent('legal-contacts.title');
-    expect(cardBody).toHaveTextContent('legal-contacts.subtitle');
-    expect(cardBody).toHaveTextContent('legal-contacts.description');
-    const pecInput = cardBody?.querySelector('input[id="pec"]');
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <LegalContacts legalAddresses={[]} />
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+    expect(result.container).toHaveTextContent('legal-contacts.title');
+    expect(result.container).toHaveTextContent('legal-contacts.subtitle');
+    expect(result.container).toHaveTextContent('legal-contacts.description');
+    const form = result.container.querySelector('form');
+    const pecInput = form?.querySelector('input[id="pec"]');
     expect(pecInput!).toHaveValue('');
     const button = await waitFor(() => result.getByRole('button', { name: 'button.conferma' }));
     expect(button).toBeDisabled();
