@@ -142,10 +142,7 @@ function clean(html: Document | Element) {
  * @param htmlStr
  * @returns escaped string
  */
-function escapeMetaCharacters(htmlStr: string | null) {
-  if (!htmlStr) {
-    return null;
-  }
+function escapeMetaCharacters(htmlStr: string) {
   return htmlStr
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -159,10 +156,10 @@ function escapeMetaCharacters(htmlStr: string | null) {
  * @param  {string} srt
  * @returns string
  */
-export function sanitizeString(srt: string, isUrl = false): string {
+export function sanitizeString(srt: string): string {
   // convert string to html without rendering it
   const parser = new DOMParser();
-  const html = parser.parseFromString(srt, 'text/html');
+  const html = parser.parseFromString(escapeMetaCharacters(srt), 'text/html');
   // remove script
   removeScripts(html);
   // remove malicious attributes
@@ -172,5 +169,5 @@ export function sanitizeString(srt: string, isUrl = false): string {
   // i18next by default converts string like the previous one in "&lt;p&gt;Hello&lt&#x2F;p&gt", so is not possible to have a result string with html tags
   // for this reason, this solution doesn't bring a loss of functionality, but instead it can increase the security against malicious code
   // Andrea Cimini, 2023.07.12
-  return (isUrl ? escapeMetaCharacters(html.body.textContent) : html.body.textContent) || '';
+  return html.body.textContent || '';
 }

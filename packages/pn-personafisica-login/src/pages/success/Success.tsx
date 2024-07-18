@@ -30,7 +30,7 @@ const SuccessPage = () => {
     // the findIndex check is needed to prevent xss attacks
     if (redirectUrl && [PF_URL].findIndex((url) => url && redirectUrl.startsWith(url)) > -1) {
       window.location.replace(
-        `${redirectUrl}${sanitizeString(token, true)}&lang=${sanitizeString(lang, true)}`
+        `${redirectUrl}${sanitizeString(token)}&lang=${sanitizeString(lang)}`
       );
     }
   }, [aar, token, lang]);
