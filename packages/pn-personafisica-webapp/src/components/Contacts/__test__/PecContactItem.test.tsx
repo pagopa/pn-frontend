@@ -34,6 +34,27 @@ describe('PecContactItem component', () => {
     expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
   });
 
+  it('type in a valid pec', async () => {
+    const VALID_PEC = 'mail@valida.com';
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <PecContactItem value={VALID_PEC} verifyingAddress={false} />
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+    const form = result.container.querySelector('form');
+    const buttons = form?.querySelectorAll('button');
+    fireEvent.click(buttons![0]);
+    const input = form?.querySelector('input[name="pec"]');
+    fireEvent.change(input!, { target: { value: VALID_PEC } });
+    await waitFor(() => expect(input!).toHaveValue(VALID_PEC));
+    const errorMessage = form?.querySelector('#pec-helper-text');
+    expect(errorMessage).not.toBeInTheDocument();
+    const button = result.getByRole('button', { name: 'button.salva' });
+    expect(button).toBeEnabled();
+  });
+
   it('type in an invalid pec while in "edit mode"', async () => {
     const defaultAddress = digitalLegalAddresses.find(
       (addr) => addr.senderId === 'default' && addr.pecValid

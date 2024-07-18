@@ -34,7 +34,6 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
   });
 
   const initialValues = {
-    digitalDomicileType: LegalChannelType.PEC,
     pec: value,
   };
 
@@ -43,7 +42,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
     validationSchema,
     /** onSubmit validate */
     onSubmit: () => {
-      initValidation(formik.values.digitalDomicileType, formik.values.pec, 'default');
+      initValidation(LegalChannelType.PEC, formik.values.pec, 'default');
     },
   });
 
@@ -176,7 +175,6 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
             onChange={handleChangeTouched}
             error={formik.touched.pec && Boolean(formik.errors.pec)}
             helperText={formik.touched.pec && formik.errors.pec}
-            disabled={formik.values.digitalDomicileType !== LegalChannelType.PEC}
             inputProps={{ sx: { height: '14px' } }}
           />
         </Grid>

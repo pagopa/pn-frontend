@@ -92,6 +92,24 @@ describe('LegalContactsList Component', async () => {
     expect(disclaimer).toBeInTheDocument();
   });
 
+  it('renders component - no contacts', async () => {
+    const result = render(
+      <DigitalContactsCodeVerificationProvider>
+        <LegalContacts legalAddresses={[]} />
+      </DigitalContactsCodeVerificationProvider>
+    );
+    const cardBody = result.getByTestId('DigitalContactsCardBody');
+    expect(cardBody).toHaveTextContent('legal-contacts.title');
+    expect(cardBody).toHaveTextContent('legal-contacts.subtitle');
+    expect(cardBody).toHaveTextContent('legal-contacts.description');
+    const pecInput = cardBody?.querySelector('input[id="pec"]');
+    expect(pecInput!).toHaveValue('');
+    const button = await waitFor(() => result.getByRole('button', { name: 'button.conferma' }));
+    expect(button).toBeDisabled();
+    const disclaimer = result.getByTestId('legal-contact-disclaimer');
+    expect(disclaimer).toBeInTheDocument();
+  });
+
   it('adds pec, checks validation and removes it', async () => {
     const pecValue = defaultAddress!.value;
     mock

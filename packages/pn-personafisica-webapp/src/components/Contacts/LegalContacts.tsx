@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, Grid, Typography } from '@mui/material';
 import { IllusEmailValidation } from '@pagopa/mui-italia';
 
-import { DigitalAddress } from '../../models/contacts';
+import { DigitalAddress, LegalChannelType } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
 import PecContactItem from './PecContactItem';
 
@@ -22,7 +22,9 @@ const LegalContacts = ({ legalAddresses }: Props) => {
     </Grid>
   );
 
-  const defaultAddress = legalAddresses.find((a) => a.senderId === 'default');
+  const pecAddress = legalAddresses.find(
+    (a) => a.senderId === 'default' && a.channelType === LegalChannelType.PEC
+  );
 
   return (
     <DigitalContactsCard
@@ -34,7 +36,7 @@ const LegalContacts = ({ legalAddresses }: Props) => {
       <PecContactItem
         value={legalAddresses.find((a) => a.senderId === 'default')?.value ?? ''}
         blockDelete={legalAddresses.length > 1}
-        verifyingAddress={defaultAddress ? !defaultAddress.pecValid : false}
+        verifyingAddress={pecAddress ? !pecAddress.pecValid : false}
       />
       <Alert
         role="banner"
