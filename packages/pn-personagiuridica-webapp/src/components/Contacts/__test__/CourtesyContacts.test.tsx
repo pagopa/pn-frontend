@@ -350,7 +350,7 @@ describe('CourtesyContacts Component', async () => {
     });
   });
 
-  it.only('add new email', async () => {
+  it('add new email', async () => {
     const mailValue = 'nome.utente@mail.it';
     mock.onPost('/bff/v1/addresses/COURTESY/default/EMAIL', { value: mailValue }).reply(200, {
       result: 'CODE_VERIFICATION_REQUIRED',
@@ -366,12 +366,12 @@ describe('CourtesyContacts Component', async () => {
         <CourtesyContacts contacts={[]} />
       </DigitalContactsCodeVerificationProvider>
     );
+
     const input = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
-    console.log('---------', input!.innerHTML);
     expect(input).toHaveValue('');
     fireEvent.change(input!, { target: { value: mailValue } });
     await waitFor(() => expect(input!).toHaveValue(mailValue));
-    const button = result.getByTestId('add email');
+    const button = result.getByTestId('courtesy-email-button');
     expect(button).toBeEnabled();
     // save the email
     fireEvent.click(button!);
