@@ -54,10 +54,8 @@ export class SendRemoveAddressStrategy implements EventStrategy {
           },
         };
       }
-
-      return {};
-    } else {
-      return {};
     }
+
+    return {};
   }
 }
