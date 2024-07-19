@@ -148,6 +148,7 @@ describe('CourtesyContacts Component', async () => {
     fireEvent.change(input!, { target: { value: phoneValue } });
     await waitFor(() => expect(input!).toHaveValue(phoneValue));
     const button = result.getByTestId('courtesy-phone-button');
+    expect(button).toBeEnabled();
     // save the phone
     fireEvent.click(button!);
     await waitFor(() => expect(input!).toHaveValue(phoneValue));
