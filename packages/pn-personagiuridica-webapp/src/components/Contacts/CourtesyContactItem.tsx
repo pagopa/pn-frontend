@@ -128,6 +128,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
           e.preventDefault();
           digitalElemRef.current.editContact();
         }}
+        data-testid={`courtesyContacts-${type}`}
       >
         <Typography variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
           {t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}
