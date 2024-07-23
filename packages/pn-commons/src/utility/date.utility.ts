@@ -199,3 +199,7 @@ export const getWeeksFromDateRange = (
   }
   return weeksInterval;
 };
+
+export function getDateFromString(date: string, format: string): Date {
+  return dateFns.parse(date, format);
+}

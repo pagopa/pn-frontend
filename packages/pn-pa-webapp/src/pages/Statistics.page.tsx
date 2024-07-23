@@ -2,16 +2,19 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DownloadIcon from '@mui/icons-material/Download';
-import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { Box, Button, Grid, IconButton, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
+  CustomTooltip,
   TitleBox,
   formatDate,
-  formatDateTime,
   formatToSlicedISOString,
+  getDateFromString,
   oneYearAgo,
   screenshot,
   today,
+  twelveMonthsAgo,
 } from '@pagopa-pn/pn-commons';
 
 import DeliveryModeStatistics from '../components/Statistics/DeliveryModeStatistics';
@@ -20,9 +23,7 @@ import DigitalMeanTimeStatistics from '../components/Statistics/DigitalMeanTimeS
 import DigitalStateStatistics from '../components/Statistics/DigitalStateStatistics';
 import EmptyStatistics from '../components/Statistics/EmptyStatistics';
 import FiledNotificationsStatistics from '../components/Statistics/FiledNotificationsStatistics';
-import FilterStatistics, {
-  defaultValues as filterDefaultValues,
-} from '../components/Statistics/FilterStatistics';
+import FilterStatistics from '../components/Statistics/FilterStatistics';
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
 import { CxType, GraphColors, StatisticsDataTypes, StatisticsFilter } from '../models/Statistics';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -58,11 +59,6 @@ const handleDownloadJpeg = (elem: HTMLDivElement | null) => {
     .catch(() => {});
 };
 
-const getFilterDates = (filter: StatisticsFilter | null) =>
-  filter
-    ? [filter.startDate, filter.endDate]
-    : [filterDefaultValues.startDate, filterDefaultValues.endDate];
-
 const Statistics = () => {
   const exportJpgNode = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
@@ -74,13 +70,18 @@ const Statistics = () => {
     (state: RootState) => state.userState.user?.organization
   );
 
+  const getFilterDates = (filter: StatisticsFilter | null) =>
+    filter
+      ? [filter.startDate, filter.endDate]
+      : [twelveMonthsAgo, statisticsData?.lastDate ?? today];
+
   const [startDate, endDate] = getFilterDates(statisticsFilter);
 
   const cxId = loggedUserOrganizationParty.id;
 
   const getLastUpdateText = (): string => {
     if (statisticsData) {
-      const dateTime = formatDateTime(statisticsData?.genTimestamp.substring(0, 19) + 'Z');
+      const dateTime = formatDate(statisticsData?.lastDate ?? '', false);
       return t('last_update', { dateTime });
     }
     return '';
@@ -116,6 +117,10 @@ const Statistics = () => {
     fetchStatistics();
   }, [fetchStatistics]);
 
+  if (!statisticsData?.lastDate) {
+    return null;
+  }
+
   return (
     <Box p={3}>
       <ApiErrorWrapper
@@ -139,7 +144,25 @@ const Statistics = () => {
               <Typography variant="h6" component="h5" mt={7}>
                 {t('section_1')}
               </Typography>
-              <FilterStatistics filter={statisticsFilter} sx={{ mb: 2 }} />
+
+              <Box display="flex" alignItems="center">
+                <Typography>{t('subtitle_section_1')}</Typography>
+                <CustomTooltip
+                  openOnClick
+                  tooltipContent={t('tooltip_section_1')}
+                  sx={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '10px' }}
+                >
+                  <IconButton>
+                    <InfoOutlinedIcon color="action" fontSize="small" />
+                  </IconButton>
+                </CustomTooltip>
+              </Box>
+
+              <FilterStatistics
+                filter={statisticsFilter}
+                sx={{ mb: 2 }}
+                lastDate={getDateFromString(statisticsData.lastDate, 'yyyy-MM-dd')}
+              />
               {!hasStatisticsData ? (
                 <Paper sx={{ p: 3, mb: 3, height: '100%', mt: 3 }} elevation={0}>
                   <EmptyStatistics />
@@ -170,7 +193,11 @@ const Statistics = () => {
                   <Typography variant="h6" component="h5" mt={9}>
                     {t('section_2')}
                   </Typography>
-                  <FilterStatistics className="filter" filter={statisticsFilter} />
+                  <FilterStatistics
+                    className="filter"
+                    filter={statisticsFilter}
+                    lastDate={getDateFromString(statisticsData.lastDate, 'yyyy-MM-dd')}
+                  />
                   <Grid container my={3}>
                     <Grid item sm={12} lg={6} pr={{ xs: 0, lg: 1.5 }} pb={{ xs: 1.5, lg: 0 }}>
                       <DigitalStateStatistics
