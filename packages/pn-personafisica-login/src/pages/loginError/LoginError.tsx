@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Box, Button, Dialog, Typography } from '@mui/material';
-import { getLocalizedOrDefaultLabel } from '@pagopa-pn/pn-commons/src/utility/localization.utility';
 import { IllusError } from '@pagopa/mui-italia';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
@@ -94,7 +93,7 @@ const LoginError = () => {
           {getErrorMessage()}
         </Typography>
         <Button id="login-button" variant="contained" onClick={goToLogin}>
-          {getLocalizedOrDefaultLabel('common', 'button.go-to-login', 'Accedi')}
+          {t('loginPage.loginBox.title')}
         </Button>
       </Box>
     </Dialog>
