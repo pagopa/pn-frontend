@@ -15,6 +15,7 @@ import {
   sixMonthsAgo,
   tenYearsAgo,
   threeMonthsAgo,
+  today,
   twelveMonthsAgo,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
@@ -30,6 +31,12 @@ import { setStatisticsFilter } from '../../redux/statistics/reducers';
 
 const quickFilters = Object.values(SelectedStatisticsFilter).filter((value) => value !== 'custom');
 
+export const defaultValues = {
+  startDate: twelveMonthsAgo,
+  endDate: today,
+  selected: SelectedStatisticsFilter.last12Months,
+};
+
 type Props = {
   filter: StatisticsFilter | null;
   lastDate: Date;
@@ -41,14 +48,6 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
   const { t, i18n } = useTranslation(['statistics']);
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
-
-  console.log('FilterStatistics', lastDate);
-
-  const defaultValues = {
-    startDate: twelveMonthsAgo,
-    endDate: lastDate,
-    selected: SelectedStatisticsFilter.last12Months,
-  };
 
   const [startDate, setStartDate] = useState<Date | null>(
     filter?.startDate ?? defaultValues.startDate
@@ -66,14 +65,26 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
     };
   };
 
+  const recalcDateRightEdge = () => {
+    if (
+      lastDate &&
+      endDate?.getTime() === today.getTime() &&
+      lastDate?.getTime() !== today.getTime()
+    ) {
+      setEndDate(lastDate);
+      // eslint-disable-next-line functional/immutable-data
+      defaultValues.endDate = lastDate;
+    }
+  };
+
   const validationSchema = yup.object({
     // the formik validations for dates (which control the enable status of the "filtra" button)
     // must coincide with the input field validations (which control the color of the frame around each field)
-    startDate: yup.date().min(tenYearsAgo).max(lastDate),
+    startDate: yup.date().min(tenYearsAgo).max(today),
     endDate: yup
       .date()
       .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
-      .max(lastDate),
+      .max(today),
     selected: yup
       .mixed<SelectedStatisticsFilterKeys>()
       .oneOf(Object.values(SelectedStatisticsFilter)),
@@ -92,13 +103,13 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
   ): [Date, Date] => {
     switch (range) {
       case SelectedStatisticsFilter.lastMonth:
-        return [oneMonthAgo, lastDate];
+        return [oneMonthAgo, lastDate ?? today];
       case SelectedStatisticsFilter.last3Months:
-        return [threeMonthsAgo, lastDate];
+        return [threeMonthsAgo, lastDate ?? today];
       case SelectedStatisticsFilter.last6Months:
-        return [sixMonthsAgo, lastDate];
+        return [sixMonthsAgo, lastDate ?? today];
       case SelectedStatisticsFilter.last12Months:
-        return [twelveMonthsAgo, lastDate];
+        return [twelveMonthsAgo, lastDate ?? today];
       case SelectedStatisticsFilter.custom:
         return loading
           ? [filter?.startDate ?? defaultValues.startDate, filter?.endDate ?? defaultValues.endDate]
@@ -165,6 +176,8 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
   useEffect(() => {
     setFilter(filter?.selected ?? defaultValues.selected, true);
   }, [filter]);
+
+  recalcDateRightEdge();
 
   return (
     <Stack
@@ -249,7 +262,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
             },
           }}
           minDate={startDate ?? tenYearsAgo}
-          maxDate={lastDate}
+          maxDate={endDate}
         />
         <Button
           id="filter-button"

@@ -13,8 +13,7 @@ import {
   getDateFromString,
   oneYearAgo,
   screenshot,
-  today,
-  twelveMonthsAgo,
+  today
 } from '@pagopa-pn/pn-commons';
 
 import DeliveryModeStatistics from '../components/Statistics/DeliveryModeStatistics';
@@ -23,7 +22,7 @@ import DigitalMeanTimeStatistics from '../components/Statistics/DigitalMeanTimeS
 import DigitalStateStatistics from '../components/Statistics/DigitalStateStatistics';
 import EmptyStatistics from '../components/Statistics/EmptyStatistics';
 import FiledNotificationsStatistics from '../components/Statistics/FiledNotificationsStatistics';
-import FilterStatistics from '../components/Statistics/FilterStatistics';
+import FilterStatistics, {defaultValues} from '../components/Statistics/FilterStatistics';
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
 import { CxType, GraphColors, StatisticsDataTypes, StatisticsFilter } from '../models/Statistics';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -59,6 +58,11 @@ const handleDownloadJpeg = (elem: HTMLDivElement | null) => {
     .catch(() => {});
 };
 
+const getFilterDates = (filter: StatisticsFilter | null) =>
+  filter
+    ? [filter.startDate, filter.endDate]
+    : [defaultValues.startDate, defaultValues.endDate];
+
 const Statistics = () => {
   const exportJpgNode = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
@@ -69,11 +73,6 @@ const Statistics = () => {
   const loggedUserOrganizationParty = useAppSelector(
     (state: RootState) => state.userState.user?.organization
   );
-
-  const getFilterDates = (filter: StatisticsFilter | null) =>
-    filter
-      ? [filter.startDate, filter.endDate]
-      : [twelveMonthsAgo, statisticsData?.lastDate ?? today];
 
   const [startDate, endDate] = getFilterDates(statisticsFilter);
 
@@ -116,10 +115,6 @@ const Statistics = () => {
   useEffect(() => {
     fetchStatistics();
   }, [fetchStatistics]);
-
-  if (!statisticsData?.lastDate) {
-    return null;
-  }
 
   return (
     <Box p={3}>
