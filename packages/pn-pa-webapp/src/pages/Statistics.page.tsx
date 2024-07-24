@@ -13,7 +13,7 @@ import {
   getDateFromString,
   oneYearAgo,
   screenshot,
-  today
+  today,
 } from '@pagopa-pn/pn-commons';
 
 import DeliveryModeStatistics from '../components/Statistics/DeliveryModeStatistics';
@@ -22,7 +22,7 @@ import DigitalMeanTimeStatistics from '../components/Statistics/DigitalMeanTimeS
 import DigitalStateStatistics from '../components/Statistics/DigitalStateStatistics';
 import EmptyStatistics from '../components/Statistics/EmptyStatistics';
 import FiledNotificationsStatistics from '../components/Statistics/FiledNotificationsStatistics';
-import FilterStatistics, {defaultValues} from '../components/Statistics/FilterStatistics';
+import FilterStatistics, { defaultValues } from '../components/Statistics/FilterStatistics';
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
 import { CxType, GraphColors, StatisticsDataTypes, StatisticsFilter } from '../models/Statistics';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -59,9 +59,7 @@ const handleDownloadJpeg = (elem: HTMLDivElement | null) => {
 };
 
 const getFilterDates = (filter: StatisticsFilter | null) =>
-  filter
-    ? [filter.startDate, filter.endDate]
-    : [defaultValues.startDate, defaultValues.endDate];
+  filter ? [filter.startDate, filter.endDate] : [defaultValues.startDate, defaultValues.endDate];
 
 const Statistics = () => {
   const exportJpgNode = useRef<HTMLDivElement>(null);
@@ -145,9 +143,10 @@ const Statistics = () => {
                 <CustomTooltip
                   openOnClick
                   tooltipContent={t('tooltip_section_1')}
+                  tooltipProps={{ role: 'tooltip', id: 'tooltip-section-1' }}
                   sx={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '10px' }}
                 >
-                  <IconButton>
+                  <IconButton aria-describedby="tooltip-section-1">
                     <InfoOutlinedIcon color="action" fontSize="small" />
                   </IconButton>
                 </CustomTooltip>

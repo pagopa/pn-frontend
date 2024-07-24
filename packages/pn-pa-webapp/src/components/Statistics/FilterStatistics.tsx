@@ -262,7 +262,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
             },
           }}
           minDate={startDate ?? tenYearsAgo}
-          maxDate={endDate}
+          maxDate={lastDate ?? today}
         />
         <Button
           id="filter-button"

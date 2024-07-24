@@ -6,14 +6,12 @@ import {
   formatToSlicedISOString,
   oneMonthAgo,
   sixMonthsAgo,
-  today,
-  twelveMonthsAgo,
 } from '@pagopa-pn/pn-commons';
 import { testCalendar, testFormElements, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
 import { SelectedStatisticsFilter, StatisticsFilter } from '../../../models/Statistics';
-import FilterStatistics from '../FilterStatistics';
+import FilterStatistics, { defaultValues } from '../FilterStatistics';
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -23,17 +21,11 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-const lastUpdateDate = new Date();
+const lastDate = new Date('2024-03-14T00:00:00.000Z');
 
 const last6MonthsFilterValue: StatisticsFilter = {
   startDate: sixMonthsAgo,
-  endDate: lastUpdateDate,
-  selected: SelectedStatisticsFilter.last6Months,
-};
-
-const defaultValues: StatisticsFilter = {
-  startDate: twelveMonthsAgo,
-  endDate: lastUpdateDate,
+  endDate: lastDate,
   selected: SelectedStatisticsFilter.last6Months,
 };
 
@@ -42,9 +34,7 @@ const quickFilters = Object.values(SelectedStatisticsFilter).filter((value) => v
 describe('FilterStatistics component', async () => {
   it('renders default filter', async () => {
     // render component
-    const { getByTestId } = render(
-      <FilterStatistics filter={defaultValues} lastDate={lastUpdateDate} />
-    );
+    const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={lastDate} />);
 
     const filterContainer = getByTestId('statistics-filter');
     expect(filterContainer).toBeInTheDocument();
@@ -67,7 +57,7 @@ describe('FilterStatistics component', async () => {
       filterContainer,
       'endDate',
       'filter.to_date',
-      formatDate(formatToSlicedISOString(defaultValues.endDate), false)
+      formatDate(formatToSlicedISOString(lastDate), false)
     );
     const submitButton = within(filterContainer).getByTestId('filterButton');
     expect(submitButton).toBeInTheDocument();
@@ -81,9 +71,7 @@ describe('FilterStatistics component', async () => {
 
   it('test startDate input', async () => {
     // render component
-    const { getByTestId } = render(
-      <FilterStatistics filter={defaultValues} lastDate={lastUpdateDate} />
-    );
+    const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={lastDate} />);
     const filterContainer = getByTestId('statistics-filter') as HTMLDivElement;
     await testInput(filterContainer, 'startDate', '22/02/2022');
     await testCalendar(filterContainer, 'startDate');
@@ -91,9 +79,7 @@ describe('FilterStatistics component', async () => {
 
   it('test endDate input', async () => {
     // render component
-    const { getByTestId } = render(
-      <FilterStatistics filter={defaultValues} lastDate={lastUpdateDate} />
-    );
+    const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={lastDate} />);
     const filterContainer = getByTestId('statistics-filter') as HTMLDivElement;
     await testInput(filterContainer, 'startDate', '14/03/2012');
     await testInput(filterContainer, 'endDate', '22/02/2022');
@@ -102,9 +88,7 @@ describe('FilterStatistics component', async () => {
 
   it('changes filtered dates using quick filters', async () => {
     // render component
-    const { getByTestId } = render(
-      <FilterStatistics filter={defaultValues} lastDate={lastUpdateDate} />
-    );
+    const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={lastDate} />);
     const filterContainer = getByTestId('statistics-filter') as HTMLDivElement;
 
     const defaultFilter = within(filterContainer).getByTestId(`filter.${defaultValues.selected}`);
@@ -127,9 +111,7 @@ describe('FilterStatistics component', async () => {
 
   it('changes filtered dates using date pickers - reset', async () => {
     // render component
-    const { getByTestId } = render(
-      <FilterStatistics filter={defaultValues} lastDate={lastUpdateDate} />
-    );
+    const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={lastDate} />);
     const filterContainer = getByTestId('statistics-filter') as HTMLDivElement;
 
     const defaultFilter = within(filterContainer).getByTestId(`filter.${defaultValues.selected}`);
@@ -144,7 +126,7 @@ describe('FilterStatistics component', async () => {
     await testInput(
       filterContainer,
       'endDate',
-      formatDate(formatToSlicedISOString(add(today, { days: -1 })))
+      formatDate(formatToSlicedISOString(add(lastDate, { days: -1 })))
     );
     expect(submitButton).toBeEnabled();
     expect(cancelButton).toBeEnabled();
@@ -156,7 +138,7 @@ describe('FilterStatistics component', async () => {
     await waitFor(() => {
       expect(testStore.getState().statisticsState.filter).toStrictEqual({
         startDate: oneMonthAgo,
-        endDate: add(today, { days: -1 }),
+        endDate: add(lastDate, { days: -1 }),
         selected: SelectedStatisticsFilter.custom,
       });
     });
