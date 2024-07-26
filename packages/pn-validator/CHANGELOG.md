@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/pagopa/pn-frontend/compare/v2.6.0-RC.1...v2.6.0) (2024-07-22)
+
+**Note:** Version bump only for package @pagopa-pn/pn-validator
+
+
+
+
+
+# [2.6.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.6.0-RC.1...v2.6.0-RC.2) (2024-07-18)
+
+**Note:** Version bump only for package @pagopa-pn/pn-validator
+
+
+
+
+
+# [2.6.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.5.1...v2.6.0-RC.0) (2024-07-15)
+
+
+### Features
+
+* **pn-7276:** Add required rule on pn-validator ([#1256](https://github.com/pagopa/pn-frontend/issues/1256)) ([6ddecf4](https://github.com/pagopa/pn-frontend/commit/6ddecf4b41c4c400e067003ec2384d84443bf22b))
+* **pn-8849:** Validation on optional object ([#1257](https://github.com/pagopa/pn-frontend/issues/1257)) ([54d6e25](https://github.com/pagopa/pn-frontend/commit/54d6e25237fcee56653dcbeacd7b8247ef9b5efc))
+
+
+
+
+
 ## [2.5.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0...v2.5.1) (2024-06-26)
 
 **Note:** Version bump only for package @pagopa-pn/pn-validator
