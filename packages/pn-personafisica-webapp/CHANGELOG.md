@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/pagopa/pn-frontend/compare/v2.6.0-RC.1...v2.6.0) (2024-07-22)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+# [2.6.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.6.0-RC.1...v2.6.0-RC.2) (2024-07-18)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+# [2.6.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.5.1...v2.6.0-RC.0) (2024-07-15)
+
+
+### Bug Fixes
+
+* **pn-10724:** Error when trying to open zendesk ticket with popup blocked ([#1262](https://github.com/pagopa/pn-frontend/issues/1262)) ([958660c](https://github.com/pagopa/pn-frontend/commit/958660c510614ea16b74585b4fe26e7278fb115c))
+* **PN-11250:** fixed aar link for PG users ([#1224](https://github.com/pagopa/pn-frontend/issues/1224)) ([ba3d75a](https://github.com/pagopa/pn-frontend/commit/ba3d75a379bf2254cd10dd8edc87e4ee7c72d1d3))
+* **pn-11618:** Added min and max width to DelegationsElements for pf and pg ([#1264](https://github.com/pagopa/pn-frontend/issues/1264)) ([3461f8e](https://github.com/pagopa/pn-frontend/commit/3461f8eb3b1539988de02c3e5c672e9e196350bc))
+
+
+### Features
+
+* **pn-10800:** add sitemap.xml to PF/PG/PA ([#1265](https://github.com/pagopa/pn-frontend/issues/1265)) ([d8eb2c2](https://github.com/pagopa/pn-frontend/commit/d8eb2c21a60d03a435ecb99c3e122560af3a7173))
+* **pn-11372:** Move client generation to the start, test and buil phases ([#1260](https://github.com/pagopa/pn-frontend/issues/1260)) ([da50caa](https://github.com/pagopa/pn-frontend/commit/da50caa9b690889aee218d3e466b57b49fee3e15))
+* **pn-11747:** Handle multi language on PF ([#1274](https://github.com/pagopa/pn-frontend/issues/1274)) ([3ae5b39](https://github.com/pagopa/pn-frontend/commit/3ae5b39f6202091225cda8ddf742ea097cf83a13))
+* **pn-8849:** Validation on optional object ([#1257](https://github.com/pagopa/pn-frontend/issues/1257)) ([54d6e25](https://github.com/pagopa/pn-frontend/commit/54d6e25237fcee56653dcbeacd7b8247ef9b5efc))
+
+
+
+
+
 ## [2.5.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0...v2.5.1) (2024-06-26)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
