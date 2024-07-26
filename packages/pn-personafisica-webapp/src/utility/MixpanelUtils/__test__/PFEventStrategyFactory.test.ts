@@ -1,10 +1,9 @@
 import { PFEventsType } from '../../../models/PFEventsType';
 import PFEventStrategyFactory from '../PFEventStrategyFactory';
 import { SendAcceptDelegationStrategy } from '../Strategies/SendAcceptDelegationStrategy';
+import { SendAddAddressStrategy } from '../Strategies/SendAddAddressStrategy';
 import { SendAddContactActionStrategy } from '../Strategies/SendAddContactActionStrategy';
 import { SendAddContactScreenViewStrategy } from '../Strategies/SendAddContactScreenViewStrategy';
-import { SendAddCourtesyAddressStrategy } from '../Strategies/SendAddCourtesyAddressStrategy';
-import { SendAddLegalAddressStrategy } from '../Strategies/SendAddLegalAddressStrategy';
 import { SendAddMandateUXConversionStrategy } from '../Strategies/SendAddMandateUXConversionStrategy';
 import { SendAddMandateUXSuccessStrategy } from '../Strategies/SendAddMandateUXSuccessStrategy';
 import { SendDisableIOStrategy } from '../Strategies/SendDisableIOStrategy';
@@ -23,9 +22,8 @@ import { SendPaymentOutcomeStrategy } from '../Strategies/SendPaymentOutcomeStra
 import { SendPaymentStatusStrategy } from '../Strategies/SendPaymentStatusStrategy';
 import { SendPaymentsCountStrategy } from '../Strategies/SendPaymentsCountStrategy';
 import { SendRefreshPageStrategy } from '../Strategies/SendRefreshPageStrategy';
+import { SendRemoveAddressStrategy } from '../Strategies/SendRemoveAddressStrategy';
 import { SendRemoveContactSuccessStrategy } from '../Strategies/SendRemoveContactSuccess';
-import { SendRemoveCourtesyAddressStrategy } from '../Strategies/SendRemoveCourtesyAddress';
-import { SendRemoveLegalAddressStrategy } from '../Strategies/SendRemoveLegalAddress';
 import { SendServiceStatusStrategy } from '../Strategies/SendServiceStatusStrategy';
 import { SendToastErrorStrategy } from '../Strategies/SendToastErrorStrategy';
 import { SendViewContactDetailsStrategy } from '../Strategies/SendViewContactDetailsStrategy';
@@ -292,15 +290,15 @@ describe('Event Strategy Factory', () => {
     );
   });
 
-  it('should return SendRemoveLegalAddressStrategy for SEND_REMOVE_LEGAL_ADDRESS event', () => {
-    expect(factory.getStrategy(PFEventsType.SEND_REMOVE_LEGAL_ADDRESS)).toBeInstanceOf(
-      SendRemoveLegalAddressStrategy
+  it('should return SendRemoveLegalAddressStrategy for SEND_DELETE_ADDRESS event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_DELETE_ADDRESS)).toBeInstanceOf(
+      SendRemoveAddressStrategy
     );
   });
 
   it('should return SendAddLegalAddressStrategy for SEND_ADD_LEGAL_ADDRESS event', () => {
-    expect(factory.getStrategy(PFEventsType.SEND_ADD_LEGAL_ADDRESS)).toBeInstanceOf(
-      SendAddLegalAddressStrategy
+    expect(factory.getStrategy(PFEventsType.SEND_ADD_ADDRESS)).toBeInstanceOf(
+      SendAddAddressStrategy
     );
   });
 
@@ -313,18 +311,6 @@ describe('Event Strategy Factory', () => {
   it('should return SendPaymentsCountStrategy for SEND_PAYMENTS_COUNT event', () => {
     expect(factory.getStrategy(PFEventsType.SEND_PAYMENTS_COUNT)).toBeInstanceOf(
       SendPaymentsCountStrategy
-    );
-  });
-
-  it('should return SendRemoveCourtesyAddressStrategy for SEND_REMOVE_COURTESY_ADDRESS event', () => {
-    expect(factory.getStrategy(PFEventsType.SEND_REMOVE_COURTESY_ADDRESS)).toBeInstanceOf(
-      SendRemoveCourtesyAddressStrategy
-    );
-  });
-
-  it('should return SendAddCourtesyAddressStrategy for SEND_ADD_COURTESY_ADDRESS event', () => {
-    expect(factory.getStrategy(PFEventsType.SEND_ADD_COURTESY_ADDRESS)).toBeInstanceOf(
-      SendAddCourtesyAddressStrategy
     );
   });
 
