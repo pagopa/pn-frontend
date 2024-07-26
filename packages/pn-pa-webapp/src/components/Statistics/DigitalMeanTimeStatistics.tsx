@@ -3,8 +3,8 @@ import { isArray } from 'lodash';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Paper, Stack, Typography } from '@mui/material';
-import { convertHoursToIntDays } from '@pagopa-pn/pn-commons';
+import { Paper, SxProps, Typography } from '@mui/material';
+import { convertHoursToDays } from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
 import { GraphColors, IDigitalMeanTimeStatistics } from '../../models/Statistics';
@@ -12,6 +12,7 @@ import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
   data: IDigitalMeanTimeStatistics;
+  sx?: SxProps;
 };
 
 const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
@@ -48,7 +49,7 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
   ];
 
   const data = statuses.map((item) => ({
-    value: convertHoursToIntDays(item.time / item.count),
+    value: convertHoursToDays(item.time / item.count),
     itemStyle: {
       color: item.color,
     },
@@ -68,22 +69,6 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
         return `<div style="word-break: break-word;white-space: pre-wrap;">${
           elem.marker
         } ${description} <b>${elem.data.value.toLocaleString()}</b></div>`;
-      },
-    },
-    toolbox: {
-      feature: {
-        saveAsImage: {
-          type: 'jpg',
-          show: true,
-          title: '',
-          name: 'chart',
-          backgroundColor: 'white',
-          pixelRatio: 2,
-          iconStyle: {
-            color: GraphColors.navy,
-          },
-          icon: 'path://M4.16669 16.6667H15.8334V15H4.16669V16.6667ZM15.8334 7.5H12.5V2.5H7.50002V7.5H4.16669L10 13.3333L15.8334 7.5Z',
-        },
       },
     },
     grid: {
@@ -120,20 +105,18 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
   };
 
   return (
-    <Paper sx={{ p: 3, mb: 3, height: '100%' }} elevation={0}>
-      <Stack direction="column" height="100%" sx={{ display: 'flex' }}>
-        <Typography variant="h6" component="h3">
-          {t('digital_mean_time.title')}
-        </Typography>
-        <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
-          {t('digital_mean_time.description')}
-        </Typography>
-        {isEmpty ? (
-          <EmptyStatistics description="empty.component_description" />
-        ) : (
-          <PnECharts option={option} />
-        )}
-      </Stack>
+    <Paper sx={{ ...props.sx, p: 3, mb: 3 }} elevation={0} data-testid="digitalMeanTimeContainer">
+      <Typography variant="h6" component="h3">
+        {t('digital_mean_time.title')}
+      </Typography>
+      <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
+        {t('digital_mean_time.description')}
+      </Typography>
+      {isEmpty ? (
+        <EmptyStatistics />
+      ) : (
+        <PnECharts option={option} style={{ height: '400px' }} dataTestId="digitalMeanTime" />
+      )}
     </Paper>
   );
 };

@@ -12,6 +12,7 @@ import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { mandatesByDelegate } from '../__mocks__/Delegations.mock';
 import { apiClient } from '../api/apiClients';
+import { getConfiguration } from '../services/configuration.service';
 import {
   RenderResult,
   act,
@@ -29,7 +30,10 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
     t: (str: string) => str,
-    i18n: { language: 'it' },
+    i18n: {
+      language: 'it',
+      changeLanguage: () => new Promise(() => {}),
+    },
   }),
 }));
 
@@ -68,6 +72,8 @@ describe('App', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
   const original = window.location;
+  const mockOpenFn = vi.fn();
+  const originalOpen = window.open;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -77,6 +83,10 @@ describe('App', async () => {
       Promise.resolve({
         json: () => Promise.resolve([]),
       }) as Promise<Response>;
+    Object.defineProperty(window, 'open', {
+      configurable: true,
+      value: mockOpenFn,
+    });
   });
 
   afterEach(() => {
@@ -87,6 +97,7 @@ describe('App', async () => {
   afterAll(() => {
     mock.restore();
     global.fetch = unmockedFetch;
+    Object.defineProperty(window, 'open', { configurable: true, value: originalOpen });
   });
 
   it('render component - user not logged in', async () => {
@@ -99,9 +110,8 @@ describe('App', async () => {
     expect(footer).toBeInTheDocument();
     const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-    expect(result.container).toHaveTextContent(
-      'Non hai le autorizzazioni necessarie per accedere a questa pagina'
-    );
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(`${getConfiguration().URL_FE_LOGOUT}`, '_self');
   });
 
   it('render component - user logged in', async () => {

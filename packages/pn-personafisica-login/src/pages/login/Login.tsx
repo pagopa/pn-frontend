@@ -7,7 +7,13 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { AppRouteParams, Layout, useIsMobile } from '@pagopa-pn/pn-commons';
+import {
+  AppRouteParams,
+  Layout,
+  getSessionLanguage,
+  setSessionLanguage,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
@@ -37,8 +43,14 @@ const Login = () => {
     storageAarOps.write(aar);
   }
 
+  const handleSetUserLanguage = () => {
+    const language = getSessionLanguage() || 'it';
+    void changeLanguageHandler(language);
+  };
+
   useEffect(() => {
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN);
+    handleSetUserLanguage();
   }, []);
 
   const goCIE = () => {
@@ -61,6 +73,7 @@ const Login = () => {
   }
 
   const changeLanguageHandler = async (langCode: string) => {
+    setSessionLanguage(langCode);
     await i18n.changeLanguage(langCode);
   };
 
@@ -83,85 +96,84 @@ const Login = () => {
       }}
       privacyPolicyHref={ROUTE_PRIVACY_POLICY}
     >
-      <Grid container direction="column" my={isMobile ? 4 : 16} id="loginPage">
-        <Grid container item justifyContent="center">
-          <Grid item>
-            <Typography
-              id="login-mode-page-title"
-              variant="h3"
-              component="h1"
-              px={0}
-              color="textPrimary"
-              sx={{
-                textAlign: 'center',
-              }}
-            >
-              {t('loginPage.title')}
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid container item justifyContent="center">
-          <Grid item>
-            <Typography
-              variant="body1"
-              component="h2"
-              mb={isMobile ? 4 : 7}
-              color="textPrimary"
-              sx={{
-                textAlign: 'center',
-              }}
-            >
-              {t('loginPage.description')}
-            </Typography>
-          </Grid>
+      <Grid container direction="column" my={isMobile ? 4 : 16} alignItems="center" id="loginPage">
+        <Grid item>
+          <Typography
+            id="login-mode-page-title"
+            variant="h3"
+            component="h1"
+            px={0}
+            color="textPrimary"
+            sx={{
+              textAlign: 'center',
+            }}
+          >
+            {t('loginPage.title')}
+          </Typography>
+          <Typography
+            variant="body1"
+            component="h2"
+            mb={isMobile ? 4 : 7}
+            color="textPrimary"
+            sx={{
+              textAlign: 'center',
+            }}
+          >
+            {t('loginPage.description')}
+          </Typography>
         </Grid>
 
-        <Grid container item justifyContent="center">
-          <Grid item xs={10} sm={6} md={4} lg={4} xl={3}>
-            <Box
+        <Grid
+          item
+          sx={{
+            width: {
+              xs: `${(100 / 12) * 10}%`,
+              sm: `${(100 / 12) * 6}%`,
+              md: `${(100 / 12) * 4}%`,
+              lg: `${(100 / 12) * 4}%`,
+              xl: `${(100 / 12) * 3}%`,
+            },
+          }}
+        >
+          <Box
+            sx={{
+              boxShadow: (theme) => theme.shadows[8],
+              borderRadius: '16px',
+              px: 1,
+              py: 3,
+              backgroundColor: 'white',
+              textAlign: 'center',
+            }}
+          >
+            <LoginButton
+              id="spidButton"
               sx={{
-                boxShadow: (theme) => theme.shadows[8],
-                borderRadius: '16px',
-                px: 1,
-                py: 3,
-                backgroundColor: 'white',
+                borderRadius: '4px',
+                width: '90%',
+                height: '50px',
+                marginBottom: 1,
               }}
+              onClick={() => setShowIDPS(true)}
+              variant="contained"
+              startIcon={<SpidIcon />}
             >
-              <Box display="flex" justifyContent="center" alignItems="center">
-                <LoginButton
-                  id="spidButton"
-                  sx={{
-                    borderRadius: '4px',
-                    width: '90%',
-                    height: '50px',
-                    marginBottom: 1,
-                  }}
-                  onClick={() => setShowIDPS(true)}
-                  variant="contained"
-                  startIcon={<SpidIcon />}
-                >
-                  {t('loginPage.loginBox.spidLogin')}
-                </LoginButton>
-              </Box>
-
-              <Box display="flex" justifyContent="center" alignItems="center">
-                <LoginButton
-                  id="cieButton"
-                  sx={{
-                    borderRadius: '4px',
-                    width: '90%',
-                    height: '50px',
-                    marginTop: 1,
-                  }}
-                  variant="contained"
-                  startIcon={<CieIcon />}
-                  onClick={() => goCIE()}
-                >
-                  {t('loginPage.loginBox.cieLogin')}
-                </LoginButton>
-              </Box>
-            </Box>
-          </Grid>
+              {t('loginPage.loginBox.spidLogin')}
+            </LoginButton>
+            <LoginButton
+              id="cieButton"
+              sx={{
+                borderRadius: '4px',
+                width: '90%',
+                height: '50px',
+                marginTop: 1,
+              }}
+              variant="contained"
+              startIcon={<CieIcon />}
+              onClick={() => goCIE()}
+            >
+              {t('loginPage.loginBox.cieLogin')}
+            </LoginButton>
+          </Box>
         </Grid>
       </Grid>
     </Layout>

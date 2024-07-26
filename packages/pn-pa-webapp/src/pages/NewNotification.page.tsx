@@ -71,8 +71,7 @@ const NewNotification = () => {
       void dispatch(createNewNotification(notification))
         .unwrap()
         .then(() => setActiveStep((previousStep) => previousStep + 1))
-        .catch((e) => {
-          console.debug(e);
+        .catch(() => {
           /** Without this catch vitest return errors of unhandle errors.
            * The error is handled in other parts of the application with
            * the appearance of a toast with the related error, but it's
