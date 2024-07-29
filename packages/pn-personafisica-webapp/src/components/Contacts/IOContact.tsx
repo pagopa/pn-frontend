@@ -109,15 +109,10 @@ const IOContact: React.FC<Props> = ({ contact }) => {
         <Alert
           role="banner"
           sx={{ mt: 4 }}
-          aria-label={
-            status === IOContactStatus.UNAVAILABLE
-              ? t('io-contact.disclaimer-message-unavailable', { ns: 'recapiti' })
-              : t('io-contact.disclaimer-message', { ns: 'recapiti' })
-          }
           severity={status !== IOContactStatus.UNAVAILABLE ? 'info' : 'warning'}
           data-testid="appIO-contact-disclaimer"
         >
-          <Typography component="span" variant="body1" role="banner">
+          <Typography component="span" variant="body1">
             {status === IOContactStatus.UNAVAILABLE
               ? t('io-contact.disclaimer-message-unavailable', { ns: 'recapiti' })
               : t('io-contact.disclaimer-message', { ns: 'recapiti' })}{' '}

@@ -82,19 +82,8 @@ const InsertLegalContact: React.FC = () => {
             </Button>
           </Grid>
         </Grid>
-        <Alert
-          tabIndex={0}
-          role="banner"
-          aria-label={t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}
-          sx={{ mt: 4 }}
-          severity="info"
-        >
-          <Typography
-            role="banner"
-            component="span"
-            variant="body1"
-            data-testid="legal-contact-disclaimer"
-          >
+        <Alert tabIndex={0} role="banner" sx={{ mt: 4 }} severity="info">
+          <Typography component="span" variant="body1" data-testid="legal-contact-disclaimer">
             {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
           </Typography>
           {/** 

@@ -84,7 +84,6 @@ const InsertLegalContact: React.FC = () => {
         </Grid>
         <Alert
           role="banner"
-          tabIndex={0}
           aria-label={t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}
           sx={{ mt: 4 }}
           severity="info"

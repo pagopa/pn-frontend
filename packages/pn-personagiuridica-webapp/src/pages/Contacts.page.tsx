@@ -58,7 +58,6 @@ const Contacts = () => {
         fontWeight={'bold'}
         onClick={handleRedirectToProfilePage}
         sx={{ verticalAlign: 'inherit' }}
-        aria-label={t('subtitle-link', { ns: 'recapiti' })}
         component="button"
       >
         {t('subtitle-link', { ns: 'recapiti' })}
@@ -76,7 +75,6 @@ const Contacts = () => {
             title={t('title')}
             subTitle={subtitle}
             variantSubTitle={'body1'}
-            ariaLabel={t('title')}
           />
           <ApiErrorWrapper
             apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}

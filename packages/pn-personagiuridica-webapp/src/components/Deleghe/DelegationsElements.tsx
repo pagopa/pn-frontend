@@ -271,7 +271,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
         id={`delegation-menu-icon-${id}`}
         onClick={handleClick}
         data-testid="delegationMenuIcon"
-        aria-label="menu-aria-label"
+        aria-label={t('deleghe.table.menu-aria-label')}
       >
         <MoreVertIcon fontSize={'small'} />
       </IconButton>

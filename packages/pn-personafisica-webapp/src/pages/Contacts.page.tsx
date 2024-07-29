@@ -89,11 +89,7 @@ const Contacts = () => {
     <>
       {t('subtitle-text-1', { ns: 'recapiti' })}
       {faqWhatIsAarCompleteLink ? (
-        <Link
-          href={faqWhatIsAarCompleteLink}
-          target="_blank"
-          aria-label={t('subtitle-link-1', { ns: 'recapiti' })}
-        >
+        <Link href={faqWhatIsAarCompleteLink} target="_blank">
           {t('subtitle-link-1', { ns: 'recapiti' })}
         </Link>
       ) : (
@@ -101,11 +97,7 @@ const Contacts = () => {
       )}
       {t('subtitle-text-2', { ns: 'recapiti' })}
       {faqWhatIsCourtesyMessageCompleteLink ? (
-        <Link
-          href={faqWhatIsCourtesyMessageCompleteLink}
-          target="_blank"
-          aria-label={t('subtitle-link-2', { ns: 'recapiti' })}
-        >
+        <Link href={faqWhatIsCourtesyMessageCompleteLink} target="_blank">
           {t('subtitle-link-2', { ns: 'recapiti' })}
         </Link>
       ) : (
@@ -114,7 +106,6 @@ const Contacts = () => {
       {t('subtitle-text-3', { ns: 'recapiti' })}
       <Link
         onClick={handleRedirectToProfilePage}
-        aria-label={t('subtitle-link-3', { ns: 'recapiti' })}
         component="button"
         sx={{ verticalAlign: 'inherit' }}
       >
@@ -139,7 +130,6 @@ const Contacts = () => {
             title={t('title')}
             subTitle={subtitle}
             variantSubTitle={'body1'}
-            ariaLabel={t('title')}
           />
           <ApiErrorWrapper
             apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
