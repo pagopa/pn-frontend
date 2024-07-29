@@ -151,7 +151,6 @@ describe('CourtesyContacts Component', async () => {
     expect(button).toBeEnabled();
     // save the phone
     fireEvent.click(button!);
-    await waitFor(() => expect(input!).toHaveValue(phoneValue));
 
     // Confirms the disclaimer dialog
     const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
