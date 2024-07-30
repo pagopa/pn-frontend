@@ -486,11 +486,7 @@ describe('CourtesyContacts Component', async () => {
     const emailValue = defaultEmailAddress!.value;
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContacts
-          contacts={digitalCourtesyAddresses.filter(
-            (add) => add.addressType === AddressType.COURTESY && add.senderId === 'default'
-          )}
-        />
+        <CourtesyContacts contacts={[defaultEmailAddress!]} />
       </DigitalContactsCodeVerificationProvider>,
       {
         preloadedState: {

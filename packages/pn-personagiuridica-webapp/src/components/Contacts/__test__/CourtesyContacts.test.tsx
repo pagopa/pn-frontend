@@ -187,7 +187,7 @@ describe('CourtesyContacts Component', async () => {
 
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContacts contacts={digitalCourtesyAddresses} />
+        <CourtesyContacts contacts={[defaultPhoneAddress!]} />
       </DigitalContactsCodeVerificationProvider>
     );
     await waitFor(() => {
@@ -213,7 +213,7 @@ describe('CourtesyContacts Component', async () => {
       .reply(204);
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContacts contacts={digitalCourtesyAddresses} />
+        <CourtesyContacts contacts={[defaultPhoneAddress!]} />
       </DigitalContactsCodeVerificationProvider>,
       {
         preloadedState: {
@@ -385,7 +385,7 @@ describe('CourtesyContacts Component', async () => {
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContacts contacts={digitalCourtesyAddresses} />
+        <CourtesyContacts contacts={[defaultEmailAddress!]} />
       </DigitalContactsCodeVerificationProvider>
     );
     await waitFor(() => {
@@ -411,7 +411,7 @@ describe('CourtesyContacts Component', async () => {
       .reply(204);
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContacts contacts={digitalCourtesyAddresses} />
+        <CourtesyContacts contacts={[defaultEmailAddress!]} />
       </DigitalContactsCodeVerificationProvider>,
       {
         preloadedState: {
