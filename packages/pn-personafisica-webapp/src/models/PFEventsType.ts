@@ -73,10 +73,8 @@ export enum PFEventsType {
   SEND_ENABLE_IO = 'SEND_ENABLE_IO',
   SEND_DISABLE_IO = 'SEND_DISABLE_IO',
   SEND_ACCEPT_DELEGATION = 'SEND_ACCEPT_DELEGATION',
-  SEND_ADD_LEGAL_ADDRESS = 'SEND_ADD_LEGAL_ADDRESS',
-  SEND_REMOVE_LEGAL_ADDRESS = 'SEND_REMOVE_LEGAL_ADDRESS',
-  SEND_REMOVE_COURTESY_ADDRESS = 'SEND_REMOVE_COURTESY_ADDRESS',
-  SEND_ADD_COURTESY_ADDRESS = 'SEND_ADD_COURTESY_ADDRESS',
+  SEND_ADD_ADDRESS = 'SEND_ADD_ADDRESS',
+  SEND_DELETE_ADDRESS = 'SEND_DELETE_ADDRESS',
 }
 
 export const eventsActionsMap: Record<string, PFEventsType> = {
@@ -91,8 +89,6 @@ export const eventsActionsMap: Record<string, PFEventsType> = {
   'enableIOAddress/fulfilled': PFEventsType.SEND_ENABLE_IO,
   'disableIOAddress/fulfilled': PFEventsType.SEND_DISABLE_IO,
   'acceptMandate/fulfilled': PFEventsType.SEND_ACCEPT_DELEGATION,
-  'createOrUpdateLegalAddress/fulfilled': PFEventsType.SEND_ADD_LEGAL_ADDRESS,
-  'deleteLegalAddress/fulfilled': PFEventsType.SEND_REMOVE_LEGAL_ADDRESS,
-  'deleteCourtesyAddress/fulfilled': PFEventsType.SEND_REMOVE_COURTESY_ADDRESS,
-  'createOrUpdateCourtesyAddress/fulfilled': PFEventsType.SEND_ADD_COURTESY_ADDRESS,
+  'createOrUpdateAddress/fulfilled': PFEventsType.SEND_ADD_ADDRESS,
+  'deleteAddress/fulfilled': PFEventsType.SEND_DELETE_ADDRESS,
 };

@@ -2,10 +2,9 @@ import { EventStrategy, EventStrategyFactory } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { SendAcceptDelegationStrategy } from './Strategies/SendAcceptDelegationStrategy';
+import { SendAddAddressStrategy } from './Strategies/SendAddAddressStrategy';
 import { SendAddContactActionStrategy } from './Strategies/SendAddContactActionStrategy';
 import { SendAddContactScreenViewStrategy } from './Strategies/SendAddContactScreenViewStrategy';
-import { SendAddCourtesyAddressStrategy } from './Strategies/SendAddCourtesyAddressStrategy';
-import { SendAddLegalAddressStrategy } from './Strategies/SendAddLegalAddressStrategy';
 import { SendAddMandateUXConversionStrategy } from './Strategies/SendAddMandateUXConversionStrategy';
 import { SendAddMandateUXSuccessStrategy } from './Strategies/SendAddMandateUXSuccessStrategy';
 import { SendDisableIOStrategy } from './Strategies/SendDisableIOStrategy';
@@ -25,9 +24,8 @@ import { SendPaymentOutcomeStrategy } from './Strategies/SendPaymentOutcomeStrat
 import { SendPaymentStatusStrategy } from './Strategies/SendPaymentStatusStrategy';
 import { SendPaymentsCountStrategy } from './Strategies/SendPaymentsCountStrategy';
 import { SendRefreshPageStrategy } from './Strategies/SendRefreshPageStrategy';
+import { SendRemoveAddressStrategy } from './Strategies/SendRemoveAddressStrategy';
 import { SendRemoveContactSuccessStrategy } from './Strategies/SendRemoveContactSuccess';
-import { SendRemoveCourtesyAddressStrategy } from './Strategies/SendRemoveCourtesyAddress';
-import { SendRemoveLegalAddressStrategy } from './Strategies/SendRemoveLegalAddress';
 import { SendServiceStatusStrategy } from './Strategies/SendServiceStatusStrategy';
 import { SendToastErrorStrategy } from './Strategies/SendToastErrorStrategy';
 import { SendViewContactDetailsStrategy } from './Strategies/SendViewContactDetailsStrategy';
@@ -150,12 +148,10 @@ const eventStrategy: Record<
   [PFEventsType.SEND_DISABLE_IO]: new SendDisableIOStrategy(),
   [PFEventsType.SEND_ENABLE_IO]: new SendEnableIOStrategy(),
   [PFEventsType.SEND_ACCEPT_DELEGATION]: new SendAcceptDelegationStrategy(),
-  [PFEventsType.SEND_REMOVE_LEGAL_ADDRESS]: new SendRemoveLegalAddressStrategy(),
-  [PFEventsType.SEND_ADD_LEGAL_ADDRESS]: new SendAddLegalAddressStrategy(),
   [PFEventsType.SEND_NOTIFICATIONS_COUNT]: new SendNotificationCountStrategy(),
   [PFEventsType.SEND_PAYMENTS_COUNT]: new SendPaymentsCountStrategy(),
-  [PFEventsType.SEND_REMOVE_COURTESY_ADDRESS]: new SendRemoveCourtesyAddressStrategy(),
-  [PFEventsType.SEND_ADD_COURTESY_ADDRESS]: new SendAddCourtesyAddressStrategy(),
+  [PFEventsType.SEND_ADD_ADDRESS]: new SendAddAddressStrategy(),
+  [PFEventsType.SEND_DELETE_ADDRESS]: new SendRemoveAddressStrategy(),
 };
 
 const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventStrategy => {
