@@ -213,7 +213,7 @@ describe('CourtesyContacts Component', async () => {
       .reply(204);
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContacts contacts={digitalCourtesyAddresses} />
+        <CourtesyContacts contacts={[defaultPhoneAddress!]} />
       </DigitalContactsCodeVerificationProvider>,
       {
         preloadedState: {
@@ -416,7 +416,7 @@ describe('CourtesyContacts Component', async () => {
       .reply(204);
     const result = render(
       <DigitalContactsCodeVerificationProvider>
-        <CourtesyContacts contacts={digitalCourtesyAddresses} />
+        <CourtesyContacts contacts={[defaultEmailAddress!]} />
       </DigitalContactsCodeVerificationProvider>,
       {
         preloadedState: {
