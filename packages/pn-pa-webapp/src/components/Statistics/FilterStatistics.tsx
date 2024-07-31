@@ -111,7 +111,6 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
 
   const handleSelectFilter = (type: SelectedStatisticsFilterKeys) => {
     const [startDate, endDate] = getRangeDates(type);
-    console.log(type, startDate, endDate);
     dispatch(
       setStatisticsFilter({
         startDate,
