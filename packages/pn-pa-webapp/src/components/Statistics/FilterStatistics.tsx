@@ -1,4 +1,4 @@
-import { FormikValues, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -52,17 +52,6 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
   const [startDate, setStartDate] = useState<Date | null>(filter.startDate);
   const [endDate, setEndDate] = useState<Date | null>(filter.endDate);
 
-  const initialValues = (filter: StatisticsFilter): FormikValues => {
-    if (!filter || _.isEqual(filter, defaultValues)) {
-      return defaultValues;
-    }
-    return {
-      startDate: filter.startDate,
-      endDate: filter.endDate,
-      selected: filter.selected,
-    };
-  };
-
   const recalcDateRightEdge = () => {
     if (!lastDate && endDate?.getTime() !== today.getTime()) {
       setEndDate(today);
@@ -92,7 +81,11 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
   });
 
   const formik = useFormik({
-    initialValues: initialValues(filter),
+    initialValues: {
+      startDate: filter.startDate,
+      endDate: filter.endDate,
+      selected: filter.selected,
+    },
     validationSchema,
     enableReinitialize: true,
     /** onSubmit populates filter */
@@ -118,6 +111,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
 
   const handleSelectFilter = (type: SelectedStatisticsFilterKeys) => {
     const [startDate, endDate] = getRangeDates(type);
+    console.log(type, startDate, endDate);
     dispatch(
       setStatisticsFilter({
         startDate,
@@ -134,9 +128,11 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
   };
 
   const filterChanged =
-    !_.isEqual(filter?.startDate, startDate) || !_.isEqual(filter?.endDate, endDate);
+    !_.isEqual(filter.startDate, startDate) || !_.isEqual(filter.endDate, endDate);
 
-  const isInitialSearch = _.isEqual(formik.values, defaultValues);
+  const isInitialSearch = lastDate
+    ? _.isEqual(formik.values, { ...defaultValues, endDate: lastDate })
+    : _.isEqual(formik.values, defaultValues);
 
   const quickFiltersJsx = (): Array<JSX.Element> =>
     quickFilters.map((elem) => (
