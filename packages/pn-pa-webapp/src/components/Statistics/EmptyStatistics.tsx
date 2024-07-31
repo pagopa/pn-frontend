@@ -1,10 +1,10 @@
-/* eslint-disable functional/immutable-data */
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Link, Stack, SxProps, Theme, Typography } from '@mui/material';
+import { Box, Stack, SxProps, Theme, Typography } from '@mui/material';
 import { IllusStatistics } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 
@@ -18,22 +18,16 @@ type LinkDashboardProps = {
 };
 
 const LinkDashboard: React.FC<LinkDashboardProps> = ({ children }) => {
-  const { t } = useTranslation(['statistics']);
   const navigate = useNavigate();
 
   return (
-    <Link
-      component="button"
-      variant="body1"
-      id="link-dashboard"
-      key="link-dashboard"
-      data-testid="link-dashboard"
-      aria-label={t('empty.notification_section_aria_label')}
+    <ButtonNaked
       onClick={() => navigate(routes.DASHBOARD)}
+      color="primary"
       sx={{ display: 'inline', verticalAlign: 'unset', fontSize: 'inherit' }}
     >
       {children}
-    </Link>
+    </ButtonNaked>
   );
 };
 
