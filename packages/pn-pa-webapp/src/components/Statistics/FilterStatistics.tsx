@@ -38,8 +38,8 @@ export const defaultValues = {
 };
 
 type Props = {
-  filter: StatisticsFilter | null;
-  lastDate: Date;
+  filter: StatisticsFilter;
+  lastDate: Date | null;
   className?: string;
   sx?: SxProps;
 };
@@ -49,12 +49,10 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
 
-  const [startDate, setStartDate] = useState<Date | null>(
-    filter?.startDate ?? defaultValues.startDate
-  );
-  const [endDate, setEndDate] = useState<Date | null>(filter?.endDate ?? defaultValues.endDate);
+  const [startDate, setStartDate] = useState<Date | null>(filter.startDate);
+  const [endDate, setEndDate] = useState<Date | null>(filter.endDate);
 
-  const initialValues = (filter: StatisticsFilter | null): FormikValues => {
+  const initialValues = (filter: StatisticsFilter): FormikValues => {
     if (!filter || _.isEqual(filter, defaultValues)) {
       return defaultValues;
     }
@@ -66,14 +64,17 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
   };
 
   const recalcDateRightEdge = () => {
+    if (!lastDate && endDate?.getTime() !== today.getTime()) {
+      setEndDate(today);
+      return;
+    }
+
     if (
       lastDate &&
       endDate?.getTime() === today.getTime() &&
       lastDate?.getTime() !== today.getTime()
     ) {
       setEndDate(lastDate);
-      // eslint-disable-next-line functional/immutable-data
-      defaultValues.endDate = lastDate;
     }
   };
 
@@ -93,14 +94,12 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
   const formik = useFormik({
     initialValues: initialValues(filter),
     validationSchema,
+    enableReinitialize: true,
     /** onSubmit populates filter */
     onSubmit: () => {},
   });
 
-  const getRangeDates = (
-    range: SelectedStatisticsFilterKeys,
-    loading: boolean = false
-  ): [Date, Date] => {
+  const getRangeDates = (range: SelectedStatisticsFilterKeys): [Date, Date] => {
     switch (range) {
       case SelectedStatisticsFilter.lastMonth:
         return [oneMonthAgo, lastDate ?? today];
@@ -111,25 +110,10 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
       case SelectedStatisticsFilter.last12Months:
         return [twelveMonthsAgo, lastDate ?? today];
       case SelectedStatisticsFilter.custom:
-        return loading
-          ? [filter?.startDate ?? defaultValues.startDate, filter?.endDate ?? defaultValues.endDate]
-          : [startDate ?? formik.values.startDate, endDate ?? formik.values.endDate];
+        return [startDate ?? formik.values.startDate, endDate ?? formik.values.endDate];
       default:
         return [defaultValues.startDate, defaultValues.endDate];
     }
-  };
-
-  const setFilter = (type: SelectedStatisticsFilterKeys, loading = false): void => {
-    const [startDate, endDate] = getRangeDates(type, loading);
-    formik
-      .setValues({
-        startDate,
-        endDate,
-        selected: type,
-      })
-      .catch((error) => console.log(`${error}`));
-    setStartDate(startDate);
-    setEndDate(endDate);
   };
 
   const handleSelectFilter = (type: SelectedStatisticsFilterKeys) => {
@@ -141,6 +125,8 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
         selected: type,
       })
     );
+    setStartDate(startDate);
+    setEndDate(endDate);
   };
 
   const cleanFilter = () => {
@@ -174,7 +160,8 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
     ));
 
   useEffect(() => {
-    setFilter(filter?.selected ?? defaultValues.selected, true);
+    setStartDate(filter.startDate);
+    setEndDate(filter.endDate);
   }, [filter]);
 
   recalcDateRightEdge();

@@ -1,4 +1,5 @@
 /* eslint-disable functional/immutable-data */
+import { today, twelveMonthsAgo } from '@pagopa-pn/pn-commons';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import {
@@ -7,13 +8,19 @@ import {
   StatisticsFilter,
   StatisticsParsedResponse,
 } from '../../models/Statistics';
+import { SelectedStatisticsFilter } from '../../models/Statistics';
 import { RootState } from '../store';
 import { getStatistics } from './actions';
 
 const initialState = {
   loading: false,
   statistics: null as StatisticsParsedResponse | null,
-  filter: null as StatisticsFilter | null,
+  // filter: null as StatisticsFilter | null,
+  filter: {
+    startDate: twelveMonthsAgo,
+    endDate: today,
+    selected: SelectedStatisticsFilter.last12Months,
+  } as StatisticsFilter,
 };
 
 const statisticsSlice = createSlice({
@@ -21,7 +28,7 @@ const statisticsSlice = createSlice({
   initialState,
   reducers: {
     resetState: () => initialState,
-    setStatisticsFilter: (state, action: PayloadAction<StatisticsFilter | null>) => {
+    setStatisticsFilter: (state, action: PayloadAction<StatisticsFilter>) => {
       state.filter = action.payload;
     },
   },

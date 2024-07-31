@@ -6,6 +6,7 @@ import {
   ResponseEventDispatcher,
   formatToSlicedISOString,
   sixMonthsAgo,
+  today,
   twelveMonthsAgo,
 } from '@pagopa-pn/pn-commons';
 import { initLocalizationForTest, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -197,7 +198,9 @@ describe('Statistics Page tests', () => {
       expect(mock.history.get[0].url).toBe(
         `/bff/v1/sender-dashboard/dashboard-data-request/PA/${
           userResponse.organization.id
-        }?startDate=${formatToSlicedISOString(twelveMonthsAgo)}&endDate=${rawResponseMock.lastDate}`
+        }?startDate=${formatToSlicedISOString(twelveMonthsAgo)}&endDate=${formatToSlicedISOString(
+          today
+        )}`
       );
     });
 

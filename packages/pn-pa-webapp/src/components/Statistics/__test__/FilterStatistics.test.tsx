@@ -6,6 +6,7 @@ import {
   formatToSlicedISOString,
   oneMonthAgo,
   sixMonthsAgo,
+  today,
 } from '@pagopa-pn/pn-commons';
 import { testCalendar, testFormElements, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
@@ -25,13 +26,17 @@ const lastDate = new Date('2024-03-14T00:00:00.000Z');
 
 const last6MonthsFilterValue: StatisticsFilter = {
   startDate: sixMonthsAgo,
-  endDate: lastDate,
+  endDate: today,
   selected: SelectedStatisticsFilter.last6Months,
 };
 
 const quickFilters = Object.values(SelectedStatisticsFilter).filter((value) => value !== 'custom');
 
 describe('FilterStatistics component', async () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders default filter', async () => {
     // render component
     const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={lastDate} />);
@@ -88,7 +93,7 @@ describe('FilterStatistics component', async () => {
 
   it('changes filtered dates using quick filters', async () => {
     // render component
-    const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={lastDate} />);
+    const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={null} />);
     const filterContainer = getByTestId('statistics-filter') as HTMLDivElement;
 
     const defaultFilter = within(filterContainer).getByTestId(`filter.${defaultValues.selected}`);
@@ -106,6 +111,32 @@ describe('FilterStatistics component', async () => {
 
     await waitFor(() => {
       expect(testStore.getState().statisticsState.filter).toStrictEqual(last6MonthsFilterValue);
+    });
+  });
+
+  it('changes filtered dates using quick filters and with lastDate valued', async () => {
+    // render component
+    const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={lastDate} />);
+    const filterContainer = getByTestId('statistics-filter') as HTMLDivElement;
+
+    const defaultFilter = within(filterContainer).getByTestId(`filter.${defaultValues.selected}`);
+
+    const newFilter = filterContainer.querySelector(`button[data-testid="filter.last6Months"`);
+    const submitButton = within(filterContainer).getByTestId('filterButton');
+    const cancelButton = within(filterContainer).getByTestId('cancelButton');
+
+    expect(defaultFilter).toBeDisabled();
+    expect(newFilter).toBeEnabled();
+    expect(submitButton).toBeDisabled();
+    expect(cancelButton).toBeDisabled();
+
+    fireEvent.click(newFilter!);
+
+    await waitFor(() => {
+      expect(testStore.getState().statisticsState.filter).toStrictEqual({
+        ...last6MonthsFilterValue,
+        endDate: lastDate,
+      });
     });
   });
 
@@ -146,7 +177,10 @@ describe('FilterStatistics component', async () => {
     fireEvent.click(cancelButton);
 
     await waitFor(() => {
-      expect(testStore.getState().statisticsState.filter).toStrictEqual(defaultValues);
+      expect(testStore.getState().statisticsState.filter).toStrictEqual({
+        ...defaultValues,
+        endDate: lastDate,
+      });
     });
   });
 });

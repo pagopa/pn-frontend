@@ -22,9 +22,9 @@ import DigitalMeanTimeStatistics from '../components/Statistics/DigitalMeanTimeS
 import DigitalStateStatistics from '../components/Statistics/DigitalStateStatistics';
 import EmptyStatistics from '../components/Statistics/EmptyStatistics';
 import FiledNotificationsStatistics from '../components/Statistics/FiledNotificationsStatistics';
-import FilterStatistics, { defaultValues } from '../components/Statistics/FilterStatistics';
+import FilterStatistics from '../components/Statistics/FilterStatistics';
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
-import { CxType, GraphColors, StatisticsDataTypes, StatisticsFilter } from '../models/Statistics';
+import { CxType, GraphColors, StatisticsDataTypes } from '../models/Statistics';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { STATISTICS_ACTIONS, getStatistics } from '../redux/statistics/actions';
 import { hasData } from '../redux/statistics/reducers';
@@ -58,9 +58,6 @@ const handleDownloadJpeg = (elem: HTMLDivElement | null) => {
     .catch(() => {});
 };
 
-const getFilterDates = (filter: StatisticsFilter | null) =>
-  filter ? [filter.startDate, filter.endDate] : [defaultValues.startDate, defaultValues.endDate];
-
 const Statistics = () => {
   const exportJpgNode = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
@@ -71,8 +68,6 @@ const Statistics = () => {
   const loggedUserOrganizationParty = useAppSelector(
     (state: RootState) => state.userState.user?.organization
   );
-
-  const [startDate, endDate] = getFilterDates(statisticsFilter);
 
   const cxId = loggedUserOrganizationParty.id;
 
@@ -101,14 +96,14 @@ const Statistics = () => {
 
   const fetchStatistics = useCallback(() => {
     const params = {
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
+      startDate: new Date(statisticsFilter.startDate),
+      endDate: new Date(statisticsFilter.endDate),
       cxType,
       cxId,
     };
 
     void dispatch(getStatistics(params));
-  }, [startDate, endDate, cxId]);
+  }, [statisticsFilter.startDate, statisticsFilter.endDate, cxId]);
 
   useEffect(() => {
     fetchStatistics();
@@ -190,7 +185,11 @@ const Statistics = () => {
                   <FilterStatistics
                     className="filter"
                     filter={statisticsFilter}
-                    lastDate={getDateFromString(statisticsData.lastDate, 'yyyy-MM-dd')}
+                    lastDate={
+                      statisticsData.lastDate
+                        ? getDateFromString(statisticsData.lastDate, 'yyyy-MM-dd')
+                        : null
+                    }
                   />
                   <Grid container my={3}>
                     <Grid item sm={12} lg={6} pr={{ xs: 0, lg: 1.5 }} pb={{ xs: 1.5, lg: 0 }}>

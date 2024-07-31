@@ -200,6 +200,10 @@ export const getWeeksFromDateRange = (
   return weeksInterval;
 };
 
-export function getDateFromString(date: string, format: string): Date {
-  return dateFns.parse(date, format);
+export function getDateFromString(date: string, format: string): Date | null {
+  const stringParsed = dateFns.parse(date, format);
+  if (dateFns.isValid(stringParsed)) {
+    return stringParsed;
+  }
+  return null;
 }
