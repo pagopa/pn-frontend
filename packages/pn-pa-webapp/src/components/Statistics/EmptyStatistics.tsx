@@ -24,6 +24,7 @@ const LinkDashboard: React.FC<LinkDashboardProps> = ({ children }) => {
     <ButtonNaked
       onClick={() => navigate(routes.DASHBOARD)}
       color="primary"
+      data-testid="link-to-dashboard"
       sx={{ display: 'inline', verticalAlign: 'unset', fontSize: 'inherit' }}
     >
       {children}

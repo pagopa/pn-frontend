@@ -51,7 +51,7 @@ describe('EmptyStatistics component tests', () => {
 
     expect(container).toHaveTextContent('empty.not_enough_data');
 
-    const link = getByTestId('link-dashboard');
+    const link = getByTestId('link-to-dashboard');
     expect(link).toBeInTheDocument();
 
     fireEvent.click(link);
