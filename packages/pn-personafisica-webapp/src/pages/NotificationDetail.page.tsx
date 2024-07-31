@@ -383,7 +383,7 @@ const NotificationDetail: React.FC = () => {
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [fromQrCode]);
+  }, [fromQrCode, i18n.language]);
 
   const breadcrumb = (
     <Fragment>

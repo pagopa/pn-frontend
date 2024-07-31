@@ -22,7 +22,7 @@ const checkStatusField = (status: DowntimeStatus, cardElem: HTMLElement) => {
   const statusChip = within(cardElem).getByTestId('downtime-status');
   expect(statusChip).toHaveStyle({
     'background-color':
-      status === DowntimeStatus.KO ? theme.palette.error.light : theme.palette.success.light,
+      status === DowntimeStatus.KO ? theme.palette.error.main : theme.palette.success.main,
   });
 };
 
