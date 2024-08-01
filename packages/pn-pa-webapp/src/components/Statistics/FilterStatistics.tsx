@@ -89,8 +89,8 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
 
   const handleSelectFilter = (type: SelectedStatisticsFilterKeys) => {
     const [startDate, endDate] = getRangeDates(type);
+    void formik.setValues({ startDate, endDate, selected: type });
     dispatch(setStatisticsFilter({ startDate, endDate, selected: type }));
-    void formik.setValues({ ...formik.values, startDate, endDate, selected: type });
   };
 
   const cleanFilter = () => {

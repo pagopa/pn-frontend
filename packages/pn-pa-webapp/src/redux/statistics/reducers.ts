@@ -15,7 +15,6 @@ import { getStatistics } from './actions';
 const initialState = {
   loading: false,
   statistics: null as StatisticsParsedResponse | null,
-  // filter: null as StatisticsFilter | null,
   filter: {
     startDate: twelveMonthsAgo,
     endDate: today,
