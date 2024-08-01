@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -10,7 +10,6 @@ import {
   CustomDatePicker,
   DATE_FORMAT,
   DatePickerTypes,
-  dateIsDefined,
   oneMonthAgo,
   sixMonthsAgo,
   tenYearsAgo,
@@ -43,38 +42,17 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
 
-  const [startDate, setStartDate] = useState<Date | null>(filter.startDate);
-  const [endDate, setEndDate] = useState<Date | null>(filter.endDate);
-
   const defaultValues = {
     startDate: twelveMonthsAgo,
     endDate: lastDate ?? today,
     selected: SelectedStatisticsFilter.last12Months,
   };
 
-  const recalcDateRightEdge = () => {
-    if (!lastDate && endDate?.getTime() !== today.getTime()) {
-      setEndDate(today);
-      return;
-    }
-
-    if (
-      lastDate &&
-      endDate?.getTime() === today.getTime() &&
-      lastDate?.getTime() !== today.getTime()
-    ) {
-      setEndDate(lastDate);
-    }
-  };
-
   const validationSchema = yup.object({
     // the formik validations for dates (which control the enable status of the "filtra" button)
     // must coincide with the input field validations (which control the color of the frame around each field)
     startDate: yup.date().min(tenYearsAgo).max(today),
-    endDate: yup
-      .date()
-      .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
-      .max(today),
+    endDate: yup.date().min(yup.ref('startDate')).max(today),
     selected: yup
       .mixed<SelectedStatisticsFilterKeys>()
       .oneOf(Object.values(SelectedStatisticsFilter)),
@@ -103,7 +81,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
       case SelectedStatisticsFilter.last12Months:
         return [twelveMonthsAgo, lastDate ?? today];
       case SelectedStatisticsFilter.custom:
-        return [startDate ?? formik.values.startDate, endDate ?? formik.values.endDate];
+        return [formik.values.startDate, formik.values.endDate];
       default:
         return [defaultValues.startDate, defaultValues.endDate];
     }
@@ -111,23 +89,13 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
 
   const handleSelectFilter = (type: SelectedStatisticsFilterKeys) => {
     const [startDate, endDate] = getRangeDates(type);
-    dispatch(
-      setStatisticsFilter({
-        startDate,
-        endDate,
-        selected: type,
-      })
-    );
-    setStartDate(startDate);
-    setEndDate(endDate);
+    dispatch(setStatisticsFilter({ startDate, endDate, selected: type }));
+    void formik.setValues({ ...formik.values, startDate, endDate, selected: type });
   };
 
   const cleanFilter = () => {
     handleSelectFilter(defaultValues.selected);
   };
-
-  const filterChanged =
-    !_.isEqual(filter.startDate, startDate) || !_.isEqual(filter.endDate, endDate);
 
   const isInitialSearch = _.isEqual(formik.values, defaultValues);
 
@@ -153,11 +121,12 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
     ));
 
   useEffect(() => {
-    setStartDate(filter.startDate);
-    setEndDate(filter.endDate);
-  }, [filter]);
-
-  recalcDateRightEdge();
+    void formik.setValues({
+      startDate: filter.startDate,
+      endDate: lastDate && filter.endDate.getTime() === today.getTime() ? lastDate : filter.endDate,
+      selected: filter.selected,
+    });
+  }, [filter, lastDate]);
 
   return (
     <Stack
@@ -179,16 +148,9 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           language={i18n.language}
           label={t('filter.from_date')}
           format={DATE_FORMAT}
-          value={startDate}
+          value={formik.values.startDate}
           onChange={(value: DatePickerTypes) => {
-            void formik
-              .setValues((values) => ({
-                ...values,
-                startDate: value ?? defaultValues.startDate,
-              }))
-              .then(() => {
-                setStartDate(value);
-              });
+            void formik.setFieldValue('startDate', value ?? defaultValues.startDate);
           }}
           slotProps={{
             textField: {
@@ -208,22 +170,15 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           }}
           disableFuture={true}
           minDate={tenYearsAgo}
-          maxDate={endDate ?? undefined}
+          maxDate={formik.values.endDate ?? undefined}
         />
         <CustomDatePicker
           language={i18n.language}
           label={t('filter.to_date')}
           format={DATE_FORMAT}
-          value={endDate}
+          value={formik.values.endDate}
           onChange={(value: DatePickerTypes) => {
-            void formik
-              .setValues((values) => ({
-                ...values,
-                endDate: value ?? defaultValues.endDate,
-              }))
-              .then(() => {
-                setEndDate(value);
-              });
+            void formik.setFieldValue('endDate', value ?? defaultValues.endDate);
           }}
           slotProps={{
             textField: {
@@ -241,7 +196,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
               fullWidth: isMobile,
             },
           }}
-          minDate={startDate ?? tenYearsAgo}
+          minDate={formik.values.startDate ?? tenYearsAgo}
           maxDate={lastDate ?? today}
         />
         <Button
@@ -254,9 +209,8 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           sx={{
             height: '43px !important',
             mr: 1,
-            // marginRight: '8px !important',
           }}
-          disabled={isInitialSearch || !filterChanged || !formik.isValid}
+          disabled={isInitialSearch || !formik.dirty || !formik.isValid}
         >
           {t('filter.buttons.filter')}
         </Button>

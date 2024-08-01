@@ -172,7 +172,7 @@ describe('FilterStatistics component', async () => {
     });
   });
 
-  it.only('changes filtered dates using date pickers - reset', async () => {
+  it('changes filtered dates using date pickers - reset', async () => {
     // render component
     const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={null} />);
     const filterContainer = getByTestId('statistics-filter');
