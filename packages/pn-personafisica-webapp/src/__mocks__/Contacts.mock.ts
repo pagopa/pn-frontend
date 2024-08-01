@@ -47,13 +47,13 @@ export const digitalAddresses: Array<DigitalAddress> = [
     addressType: AddressType.COURTESY,
     senderId: 'default',
     channelType: CourtesyChannelType.SMS,
-    value: '3333333333',
+    value: '+393333333333',
   },
   {
     addressType: AddressType.COURTESY,
     senderId: 'tribunale-milano',
     channelType: CourtesyChannelType.SMS,
-    value: '3333333334',
+    value: '+393333333334',
   },
   {
     addressType: AddressType.COURTESY,

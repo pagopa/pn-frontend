@@ -14,8 +14,7 @@ import {
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, DigitalAddress } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
-import InsertLegalContact from '../InsertLegalContact';
-import LegalContactsList from '../LegalContactsList';
+import LegalContacts from '../LegalContacts';
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -50,11 +49,7 @@ const IntegrationComponent = ({
   digitalAddresses: Array<DigitalAddress>;
 }) => (
   <DigitalContactsCodeVerificationProvider>
-    {digitalAddresses.length === 0 ? (
-      <InsertLegalContact />
-    ) : (
-      <LegalContactsList legalAddresses={digitalAddresses} />
-    )}
+    <LegalContacts legalAddresses={digitalAddresses} />
   </DigitalContactsCodeVerificationProvider>
 );
 
@@ -79,7 +74,7 @@ describe('LegalContactsList Component', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <LegalContactsList legalAddresses={digitalLegalAddresses} />
+          <LegalContacts legalAddresses={digitalLegalAddresses} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
@@ -93,6 +88,26 @@ describe('LegalContactsList Component', async () => {
     expect(buttons!).toHaveLength(2);
     expect(buttons![0]).toHaveTextContent('button.modifica');
     expect(buttons![1]).toHaveTextContent('button.elimina');
+    const disclaimer = result.getByTestId('legal-contact-disclaimer');
+    expect(disclaimer).toBeInTheDocument();
+  });
+
+  it('renders component - no contacts', async () => {
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <LegalContacts legalAddresses={[]} />
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+    expect(result.container).toHaveTextContent('legal-contacts.title');
+    expect(result.container).toHaveTextContent('legal-contacts.subtitle');
+    expect(result.container).toHaveTextContent('legal-contacts.description');
+    const form = result.container.querySelector('form');
+    const pecInput = form?.querySelector('input[id="pec"]');
+    expect(pecInput!).toHaveValue('');
+    const button = await waitFor(() => result.getByRole('button', { name: 'button.conferma' }));
+    expect(button).toBeDisabled();
     const disclaimer = result.getByTestId('legal-contact-disclaimer');
     expect(disclaimer).toBeInTheDocument();
   });
@@ -296,33 +311,5 @@ describe('LegalContactsList Component', async () => {
       expect(insertLegalContact).toBeInTheDocument();
       expect(result.container).not.toHaveTextContent(defaultAddress!.value);
     });
-  });
-
-  it('checks invalid pec', async () => {
-    // render component
-    await act(async () => {
-      result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <LegalContactsList legalAddresses={digitalLegalAddresses} />
-        </DigitalContactsCodeVerificationProvider>
-      );
-    });
-    const form = result.container.querySelector('form');
-    const buttons = form?.querySelectorAll('button');
-    fireEvent.click(buttons![0]);
-    const input = form?.querySelector('input[name="pec"]');
-    // add invalid values
-    fireEvent.change(input!, { target: { value: 'mail-errata' } });
-    await waitFor(() => expect(input!).toHaveValue('mail-errata'));
-    let errorMessage = form?.querySelector('#pec-helper-text');
-    expect(errorMessage).toBeInTheDocument();
-    expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
-    const newButtons = form?.querySelectorAll('button');
-    expect(newButtons![0]).toBeDisabled();
-    fireEvent.change(input!, { target: { value: '' } });
-    await waitFor(() => expect(input!).toHaveValue(''));
-    errorMessage = form?.querySelector('#pec-helper-text');
-    expect(errorMessage).toBeInTheDocument();
-    expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
   });
 });

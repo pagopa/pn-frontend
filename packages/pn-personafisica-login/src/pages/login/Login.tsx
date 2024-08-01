@@ -42,6 +42,8 @@ const Login = () => {
   }, []);
 
   const goCIE = () => {
+    sessionStorage.setItem('IDP', 'CIE');
+
     window.location.assign(
       `${URL_API_LOGIN}/login?entityID=${SPID_CIE_ENTITY_ID}&authLevel=SpidL2&RelayState=send`
     );
@@ -49,10 +51,6 @@ const Login = () => {
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_IDP_SELECTED, {
       SPID_IDP_NAME: 'CIE',
       SPID_IDP_ID: SPID_CIE_ENTITY_ID,
-    });
-
-    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_METHOD, {
-      entityID: 'cie',
     });
   };
 
