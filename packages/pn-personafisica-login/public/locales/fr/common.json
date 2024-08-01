@@ -23,5 +23,9 @@
     "follow": "Suis-nous sur",
     "legal-part-1": "société anonyme à associé unique – capital social de 1 000 000 d’euros entièrement libéré – siège social à Rome, Piazza Colonna 370",
     "legal-part-2": "Code postal 00187 – N° d’inscription au Registre du Commerce de Rome, code fiscal et n° de TVA 15376371009"
+  },
+  "button": {
+    "close": "Schließen",
+    "go-to-login": "Se connecter"
   }
 }
