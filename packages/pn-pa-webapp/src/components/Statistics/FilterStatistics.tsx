@@ -31,12 +31,6 @@ import { setStatisticsFilter } from '../../redux/statistics/reducers';
 
 const quickFilters = Object.values(SelectedStatisticsFilter).filter((value) => value !== 'custom');
 
-export const defaultValues = {
-  startDate: twelveMonthsAgo,
-  endDate: today,
-  selected: SelectedStatisticsFilter.last12Months,
-};
-
 type Props = {
   filter: StatisticsFilter;
   lastDate: Date | null;
@@ -51,6 +45,12 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
 
   const [startDate, setStartDate] = useState<Date | null>(filter.startDate);
   const [endDate, setEndDate] = useState<Date | null>(filter.endDate);
+
+  const defaultValues = {
+    startDate: twelveMonthsAgo,
+    endDate: lastDate ?? today,
+    selected: SelectedStatisticsFilter.last12Months,
+  };
 
   const recalcDateRightEdge = () => {
     if (!lastDate && endDate?.getTime() !== today.getTime()) {
@@ -83,7 +83,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
   const formik = useFormik({
     initialValues: {
       startDate: filter.startDate,
-      endDate: filter.endDate,
+      endDate: lastDate && filter.endDate.getTime() === today.getTime() ? lastDate : filter.endDate,
       selected: filter.selected,
     },
     validationSchema,
@@ -129,9 +129,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
   const filterChanged =
     !_.isEqual(filter.startDate, startDate) || !_.isEqual(filter.endDate, endDate);
 
-  const isInitialSearch = lastDate
-    ? _.isEqual(formik.values, { ...defaultValues, endDate: lastDate })
-    : _.isEqual(formik.values, defaultValues);
+  const isInitialSearch = _.isEqual(formik.values, defaultValues);
 
   const quickFiltersJsx = (): Array<JSX.Element> =>
     quickFilters.map((elem) => (

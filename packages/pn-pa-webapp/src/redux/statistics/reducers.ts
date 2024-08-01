@@ -4,11 +4,11 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import {
   NotificationStatus,
+  SelectedStatisticsFilter,
   StatisticsDataTypes,
   StatisticsFilter,
   StatisticsParsedResponse,
 } from '../../models/Statistics';
-import { SelectedStatisticsFilter } from '../../models/Statistics';
 import { RootState } from '../store';
 import { getStatistics } from './actions';
 

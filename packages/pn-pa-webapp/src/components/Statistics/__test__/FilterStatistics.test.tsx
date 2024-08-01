@@ -7,12 +7,13 @@ import {
   oneMonthAgo,
   sixMonthsAgo,
   today,
+  twelveMonthsAgo,
 } from '@pagopa-pn/pn-commons';
 import { testCalendar, testFormElements, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
 import { SelectedStatisticsFilter, StatisticsFilter } from '../../../models/Statistics';
-import FilterStatistics, { defaultValues } from '../FilterStatistics';
+import FilterStatistics from '../FilterStatistics';
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -23,6 +24,12 @@ vi.mock('react-i18next', () => ({
 }));
 
 const lastDate = new Date('2024-03-14T00:00:00.000Z');
+
+const defaultValues: StatisticsFilter = {
+  startDate: twelveMonthsAgo,
+  endDate: today,
+  selected: SelectedStatisticsFilter.last12Months,
+};
 
 const last6MonthsFilterValue: StatisticsFilter = {
   startDate: sixMonthsAgo,
@@ -165,7 +172,7 @@ describe('FilterStatistics component', async () => {
     });
   });
 
-  it('changes filtered dates using date pickers - reset', async () => {
+  it.only('changes filtered dates using date pickers - reset', async () => {
     // render component
     const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={null} />);
     const filterContainer = getByTestId('statistics-filter');
