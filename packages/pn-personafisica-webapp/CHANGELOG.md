@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.1](https://github.com/pagopa/pn-frontend/compare/v2.6.0...v2.6.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* **pn-12026:** Mixpanel regressions on login and super properties ([#1269](https://github.com/pagopa/pn-frontend/issues/1269)) ([c80070b](https://github.com/pagopa/pn-frontend/commit/c80070bc027dfa6aaf3dc5875d164399b6b12bbe))
+
+
+
+
+
 # [2.6.0](https://github.com/pagopa/pn-frontend/compare/v2.6.0-RC.1...v2.6.0) (2024-07-22)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
