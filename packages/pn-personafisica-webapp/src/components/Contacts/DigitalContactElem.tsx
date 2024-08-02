@@ -17,7 +17,6 @@ import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { getEventByContactType } from '../../utility/contacts.utility';
-import DeleteDialog from './DeleteDialogModal';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
@@ -48,14 +47,11 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
     {
       fields,
       saveDisabled = false,
-      removeModalTitle,
-      removeModalBody,
       senderId,
       senderName,
       contactType,
       value,
       onConfirmClick,
-      blockDelete,
       resetModifyValue,
       editDisabled,
       setContextEditMode,
@@ -65,7 +61,6 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
   ) => {
     const { t } = useTranslation(['common']);
     const [editMode, setEditMode] = useState(false);
-    const [showModal, setShowModal] = useState(false);
     const dispatch = useAppDispatch();
     const { initValidation } = useDigitalContactsCodeVerificationContext();
 
@@ -146,58 +141,48 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
     }));
 
     return (
-      <>
-        <Grid container spacing="4" direction="row" alignItems="center">
-          {mappedChildren}
-          <Grid item lg={12} xs={12} textAlign={'left'}>
-            {!editMode ? (
-              <>
-                <ButtonNaked
-                  color="primary"
-                  onClick={toggleEdit}
-                  sx={{ mr: 2 }}
-                  disabled={editDisabled}
-                  id={`modifyContact-${senderId}`}
-                >
-                  {t('button.modifica')}
-                </ButtonNaked>
-                <ButtonNaked
-                  id={`cancelContact-${senderId}`}
-                  color="primary"
-                  onClick={removeHandler}
-                  disabled={editDisabled}
-                >
-                  {t('button.elimina')}
-                </ButtonNaked>
-              </>
-            ) : (
-              <>
-                <ButtonNaked
-                  color="primary"
-                  disabled={saveDisabled}
-                  type="button"
-                  onClick={editHandler}
-                  sx={{ mr: 2 }}
-                  id={`saveModifyButton-${senderId}`}
-                >
-                  {t('button.salva')}
-                </ButtonNaked>
-                <ButtonNaked color="primary" onClick={onCancel}>
-                  {t('button.annulla')}
-                </ButtonNaked>
-              </>
-            )}
-          </Grid>
+      <Grid container spacing="4" direction="row" alignItems="center">
+        {mappedChildren}
+        <Grid item lg={12} xs={12} textAlign={'left'}>
+          {!editMode ? (
+            <>
+              <ButtonNaked
+                color="primary"
+                onClick={toggleEdit}
+                sx={{ mr: 2 }}
+                disabled={editDisabled}
+                id={`modifyContact-${senderId}`}
+              >
+                {t('button.modifica')}
+              </ButtonNaked>
+              <ButtonNaked
+                id={`cancelContact-${senderId}`}
+                color="primary"
+                onClick={removeHandler}
+                disabled={editDisabled}
+              >
+                {t('button.elimina')}
+              </ButtonNaked>
+            </>
+          ) : (
+            <>
+              <ButtonNaked
+                color="primary"
+                disabled={saveDisabled}
+                type="button"
+                onClick={editHandler}
+                sx={{ mr: 2 }}
+                id={`saveModifyButton-${senderId}`}
+              >
+                {t('button.salva')}
+              </ButtonNaked>
+              <ButtonNaked color="primary" onClick={onCancel}>
+                {t('button.annulla')}
+              </ButtonNaked>
+            </>
+          )}
         </Grid>
-        <DeleteDialog
-          showModal={showModal}
-          handleModalClose={handleModalClose}
-          removeModalTitle={removeModalTitle}
-          removeModalBody={removeModalBody}
-          blockDelete={blockDelete}
-          confirmHandler={confirmHandler}
-        />
-      </>
+      </Grid>
     );
   }
 );
