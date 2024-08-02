@@ -84,9 +84,7 @@ const DowntimeLogDataSwitch: React.FC<{
       <Chip
         data-testid="downtime-status"
         label={getLocalizedOrDefaultLabel('appStatus', `legends.status.${data.status}`)}
-        sx={{
-          backgroundColor: data.status === DowntimeStatus.OK ? 'success.light' : 'error.light',
-        }}
+        color={data.status === DowntimeStatus.OK ? 'success' : 'error'}
       />
     );
   }

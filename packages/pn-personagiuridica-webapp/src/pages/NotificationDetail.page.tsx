@@ -361,7 +361,7 @@ const NotificationDetail = () => {
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [fromQrCode]);
+  }, [fromQrCode, i18n.language]);
 
   const breadcrumb = (
     <Fragment>

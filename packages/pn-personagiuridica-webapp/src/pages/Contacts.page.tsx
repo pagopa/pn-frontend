@@ -6,8 +6,7 @@ import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import { DigitalContactsCodeVerificationProvider } from '../components/Contacts/DigitalContactsCodeVerification.context';
-import InsertLegalContact from '../components/Contacts/InsertLegalContact';
-import LegalContactsList from '../components/Contacts/LegalContactsList';
+import LegalContactsList from '../components/Contacts/LegalContacts';
 import SpecialContacts from '../components/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { AddressType } from '../models/contacts';
@@ -85,11 +84,7 @@ const Contacts = () => {
               <Stack spacing={3}>
                 <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
                   <Box sx={{ width: '100%' }}>
-                    {legalAddresses.length === 0 ? (
-                      <InsertLegalContact />
-                    ) : (
-                      <LegalContactsList legalAddresses={legalAddresses} />
-                    )}
+                    <LegalContactsList legalAddresses={legalAddresses} />
                   </Box>
                 </Stack>
                 <CourtesyContacts contacts={courtesyAddresses} />

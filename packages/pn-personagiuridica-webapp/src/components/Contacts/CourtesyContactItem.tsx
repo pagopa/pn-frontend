@@ -128,6 +128,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
           e.preventDefault();
           digitalElemRef.current.editContact();
         }}
+        data-testid={`courtesyContacts-${type}`}
       >
         <Typography variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
           {t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}
@@ -237,7 +238,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
             disabled={!formik.isValid}
             fullWidth
             type="submit"
-            data-testid={`add ${type}`}
+            data-testid={`courtesy-${type}-button`}
           >
             {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
           </Button>
