@@ -12,10 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { Grid, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { AddressType, CourtesyChannelType, LegalChannelType } from '../../models/contacts';
-import { deleteAddress } from '../../redux/contact/actions';
-import { useAppDispatch } from '../../redux/hooks';
-import DeleteDialog from './DeleteDialog';
+import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
@@ -30,13 +27,10 @@ type Props = {
   senderName?: string;
   contactType: CourtesyChannelType | LegalChannelType;
   saveDisabled?: boolean;
-  removeModalTitle: string;
-  removeModalBody: string;
   value: string;
   onConfirmClick: (status: 'validated' | 'cancelled') => void;
-  blockDelete?: boolean;
   resetModifyValue: () => void;
-  onDeleteCbk?: () => void;
+  onDelete: () => void;
   editDisabled?: boolean;
   setContextEditMode?: Dispatch<SetStateAction<boolean>>;
 };
@@ -46,25 +40,20 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
     {
       fields,
       saveDisabled = false,
-      removeModalTitle,
-      removeModalBody,
       senderId,
       senderName,
       contactType,
       value,
       onConfirmClick,
-      blockDelete,
       resetModifyValue,
       editDisabled,
       setContextEditMode,
-      onDeleteCbk,
+      onDelete,
     },
     ref
   ) => {
     const { t } = useTranslation(['common']);
     const [editMode, setEditMode] = useState(false);
-    const [showModal, setShowModal] = useState(false);
-    const dispatch = useAppDispatch();
     const { initValidation } = useDigitalContactsCodeVerificationContext();
 
     const mappedChildren = fields.map((f) => (
@@ -91,36 +80,9 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
       }
     };
 
-    const handleModalClose = () => {
-      setShowModal(false);
-    };
-
-    const removeHandler = () => {
-      setShowModal(true);
-    };
-
     const onCancel = () => {
       resetModifyValue();
       toggleEdit();
-    };
-
-    const confirmHandler = () => {
-      handleModalClose();
-      void dispatch(
-        deleteAddress({
-          addressType:
-            contactType === LegalChannelType.PEC ? AddressType.LEGAL : AddressType.COURTESY,
-          senderId,
-          channelType: contactType,
-        })
-      )
-        .unwrap()
-        .then(() => {
-          if (onDeleteCbk) {
-            onDeleteCbk();
-          }
-        })
-        .catch();
     };
 
     const editHandler = () => {
@@ -159,7 +121,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
                 <ButtonNaked
                   id={`cancelContact-${senderId}`}
                   color="primary"
-                  onClick={removeHandler}
+                  onClick={onDelete}
                   disabled={editDisabled}
                 >
                   {t('button.elimina')}
@@ -184,14 +146,6 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
             )}
           </Grid>
         </Grid>
-        <DeleteDialog
-          showModal={showModal}
-          handleModalClose={handleModalClose}
-          removeModalTitle={removeModalTitle}
-          removeModalBody={removeModalBody}
-          blockDelete={blockDelete}
-          confirmHandler={confirmHandler}
-        />
       </>
     );
   }
