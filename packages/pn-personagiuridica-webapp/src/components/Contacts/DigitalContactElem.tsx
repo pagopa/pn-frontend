@@ -9,13 +9,13 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button, DialogContentText, DialogTitle, Grid, Typography } from '@mui/material';
-import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
+import { Grid, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { AddressType, CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
+import DeleteDialog from './DeleteDialog';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
@@ -39,55 +39,6 @@ type Props = {
   onDeleteCbk?: () => void;
   editDisabled?: boolean;
   setContextEditMode?: Dispatch<SetStateAction<boolean>>;
-};
-
-type DialogProps = {
-  showModal: boolean;
-  handleModalClose: () => void;
-  removeModalTitle: string;
-  removeModalBody: string;
-  blockDelete?: boolean;
-  confirmHandler: () => void;
-};
-
-const DeleteDialog: React.FC<DialogProps> = ({
-  showModal,
-  handleModalClose,
-  removeModalTitle,
-  removeModalBody,
-  blockDelete,
-  confirmHandler,
-}) => {
-  const { t } = useTranslation(['common']);
-
-  const deleteModalActions = blockDelete ? (
-    <Button onClick={handleModalClose} variant="outlined">
-      {t('button.close')}
-    </Button>
-  ) : (
-    [
-      <Button id="buttonAnnulla" key="cancel" onClick={handleModalClose} variant="outlined">
-        {t('button.annulla')}
-      </Button>,
-      <Button id="buttonConferma" key="confirm" onClick={confirmHandler} variant="contained">
-        {t('button.conferma')}
-      </Button>,
-    ]
-  );
-  return (
-    <PnDialog
-      open={showModal}
-      onClose={handleModalClose}
-      aria-labelledby="dialog-title"
-      aria-describedby="dialog-description"
-    >
-      <DialogTitle id="dialog-title">{removeModalTitle}</DialogTitle>
-      <PnDialogContent>
-        <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
-      </PnDialogContent>
-      <PnDialogActions>{deleteModalActions}</PnDialogActions>
-    </PnDialog>
-  );
 };
 
 const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
