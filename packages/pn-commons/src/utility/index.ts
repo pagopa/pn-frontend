@@ -19,6 +19,7 @@ import {
   formatTime,
   formatToSlicedISOString,
   formatToTimezoneString,
+  getDateFromString,
   getDaysFromDateRange,
   getEndOfDay,
   getStartOfDay,
@@ -152,4 +153,5 @@ export {
   screenshot,
   getDaysFromDateRange,
   getWeeksFromDateRange,
+  getDateFromString,
 };

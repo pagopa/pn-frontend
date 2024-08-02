@@ -1,11 +1,16 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { oneMonthAgo, today } from '@pagopa-pn/pn-commons';
+import { oneMonthAgo, today, twelveMonthsAgo } from '@pagopa-pn/pn-commons';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { filters, parsedResponseMock, rawResponseMock } from '../../../__mocks__/Statistics.mock';
 import { apiClient } from '../../../api/apiClients';
-import { CxType, StatisticsParams, StatisticsParsedResponse } from '../../../models/Statistics';
+import {
+  CxType,
+  SelectedStatisticsFilter,
+  StatisticsParams,
+  StatisticsParsedResponse,
+} from '../../../models/Statistics';
 import { store } from '../../store';
 import { getStatistics } from '../actions';
 import { resetState, setStatisticsFilter } from '../reducers';
@@ -13,7 +18,11 @@ import { resetState, setStatisticsFilter } from '../reducers';
 const initialState = {
   loading: false,
   statistics: null,
-  filter: null,
+  filter: {
+    startDate: twelveMonthsAgo,
+    endDate: today,
+    selected: SelectedStatisticsFilter.last12Months,
+  },
 };
 
 const requestParams: StatisticsParams<Date> = {
@@ -98,9 +107,5 @@ describe('Statistics redux state tests', () => {
     store.dispatch(setStatisticsFilter(filters[2]));
     filter = store.getState().statisticsState.filter;
     expect(filter).toEqual(filters[2]);
-
-    store.dispatch(setStatisticsFilter(null));
-    filter = store.getState().statisticsState.filter;
-    expect(filter).toBeNull();
   });
 });
