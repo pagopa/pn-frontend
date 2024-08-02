@@ -1,10 +1,37 @@
+import MockAdapter from 'axios-mock-adapter';
+
 import { digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
-import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import PecContactItem from '../PecContactItem';
 
 describe('PecContactItem component', () => {
   let result: RenderResult;
+  let mock: MockAdapter;
+  const defaultAddress = digitalLegalAddresses.find(
+    (addr) => addr.senderId === 'default' && addr.pecValid
+  );
+  const VALID_PEC = 'mail@valida.com';
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
 
   it('type in an invalid pec', async () => {
     // render component
@@ -35,7 +62,6 @@ describe('PecContactItem component', () => {
   });
 
   it('type in a valid pec', async () => {
-    const VALID_PEC = 'mail@valida.com';
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
@@ -56,10 +82,6 @@ describe('PecContactItem component', () => {
   });
 
   it('type in an invalid pec while in "edit mode"', async () => {
-    const defaultAddress = digitalLegalAddresses.find(
-      (addr) => addr.senderId === 'default' && addr.pecValid
-    );
-
     // render component
     await act(async () => {
       result = render(
@@ -82,5 +104,39 @@ describe('PecContactItem component', () => {
     expect(saveButton).toBeDisabled();
     const inputError = result.container.querySelector('#pec-helper-text');
     expect(inputError).toHaveTextContent('legal-contacts.valid-pec');
+  });
+
+  it('remove contact', async () => {
+    mock.onDelete('/bff/v1/addresses/LEGAL/default/PEC').reply(204);
+    // render component
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <PecContactItem value={defaultAddress!.value} verifyingAddress={false} />
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+    const buttons = result?.container.querySelectorAll('button');
+    // click on cancel
+    fireEvent.click(buttons![1]);
+    let dialog = await waitFor(() => screen.getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+    let dialogButtons = dialog?.querySelectorAll('button');
+    // cancel remove operation
+    fireEvent.click(dialogButtons![0]);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+    // click on confirm
+    fireEvent.click(buttons![1]);
+    dialog = await waitFor(() => screen.getByRole('dialog'));
+    dialogButtons = dialog?.querySelectorAll('button');
+    fireEvent.click(dialogButtons![1]);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(1);
+    });
   });
 });
