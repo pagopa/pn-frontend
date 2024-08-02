@@ -172,6 +172,16 @@ describe('FilterStatistics component', async () => {
     });
   });
 
+  it('should show chip disabled when startDate is greater than endDate', async () => {
+    // set lastDate to a date before last month, so that the lastMonth chip is disabled because the endDate is before the startDate
+    const endDate = add(lastDate, { months: -1, days: -1 });
+    const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={endDate} />);
+
+    const filterContainer = getByTestId('statistics-filter');
+    const lastMonthChip = filterContainer.querySelector(`button[data-testid="filter.lastMonth"`);
+    expect(lastMonthChip).toBeDisabled();
+  });
+
   it('changes filtered dates using date pickers - reset', async () => {
     // render component
     const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={null} />);

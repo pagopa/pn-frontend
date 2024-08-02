@@ -98,6 +98,11 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
 
   const isInitialSearch = _.isEqual(formik.values, defaultValues);
 
+  const checkChipDisabled = (elem: SelectedStatisticsFilterKeys): boolean => {
+    const [startDate, endDate] = getRangeDates(elem);
+    return startDate.getTime() > endDate.getTime();
+  };
+
   const quickFiltersJsx = (): Array<JSX.Element> =>
     quickFilters.map((elem) => (
       <Chip
@@ -109,9 +114,9 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           my: { xl: 0, xs: 1 },
           background: elem === formik.values.selected ? GraphColors.lightBlue2 : 'none',
           color: 'primary',
-          opacity: '1 !important',
+          opacity: `${checkChipDisabled(elem) ? 0.5 : 1} !important`,
         }}
-        disabled={elem === formik.values.selected}
+        disabled={elem === formik.values.selected || checkChipDisabled(elem)}
         variant="outlined"
         component="button"
         color={elem === formik.values.selected ? 'primary' : 'default'}
