@@ -120,14 +120,6 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
       />
     ));
 
-  useEffect(() => {
-    void formik.setValues({
-      startDate: filter.startDate,
-      endDate: lastDate && filter.endDate.getTime() === today.getTime() ? lastDate : filter.endDate,
-      selected: filter.selected,
-    });
-  }, [filter, lastDate]);
-
   return (
     <Stack
       direction={{ xl: 'row', xs: 'column' }}
