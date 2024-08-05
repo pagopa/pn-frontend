@@ -17,32 +17,22 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-const fields = [
-  {
-    id: 'label',
-    component: 'PEC',
-    size: 'variable' as 'variable' | 'auto',
-    key: 'key-label',
-  },
-  {
-    id: 'value',
-    key: 'key-value',
-    component: (
-      <TextField
-        id="pec"
-        fullWidth
-        name="pec"
-        label="PEC"
-        variant="outlined"
-        size="small"
-        value="mocked@pec.it"
-        data-testid="field"
-      />
-    ),
-    size: 'auto' as 'variable' | 'auto',
-    isEditable: true,
-  },
-];
+const field = {
+  id: 'value',
+  key: 'key-value',
+  component: (
+    <TextField
+      id="pec"
+      fullWidth
+      name="pec"
+      label="PEC"
+      variant="outlined"
+      size="small"
+      value="mocked@pec.it"
+      data-testid="field"
+    />
+  ),
+};
 
 const mockResetModifyValue = vi.fn();
 const mockDeleteCbk = vi.fn();
@@ -80,11 +70,15 @@ describe('DigitalContactElem Component', () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <DigitalContactElem
-            fields={fields}
+            inputProps={{
+              id: 'pec',
+              name: 'pec',
+              label: 'PEC',
+              value: 'mocked@pec.it',
+            }}
             senderId="mocked-senderId"
-            value="mocked@pec.it"
             contactType={LegalChannelType.PEC}
-            onConfirmClick={mockOnConfirm}
+            onConfirm={mockOnConfirm}
             resetModifyValue={mockResetModifyValue}
             onDelete={mockDeleteCbk}
           />
@@ -114,11 +108,15 @@ describe('DigitalContactElem Component', () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <DigitalContactElem
-            fields={fields}
+            inputProps={{
+              id: 'pec',
+              name: 'pec',
+              label: 'PEC',
+              value: 'mocked@pec.it',
+            }}
             senderId="mocked-senderId"
-            value="mocked@pec.it"
             contactType={LegalChannelType.PEC}
-            onConfirmClick={mockOnConfirm}
+            onConfirm={mockOnConfirm}
             resetModifyValue={mockResetModifyValue}
             onDelete={mockDeleteCbk}
           />
@@ -161,11 +159,15 @@ describe('DigitalContactElem Component', () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <DigitalContactElem
-            fields={fields}
+            inputProps={{
+              id: 'pec',
+              name: 'pec',
+              label: 'PEC',
+              value: 'mocked@pec.it',
+            }}
             senderId="mocked-senderId"
-            value="mocked@pec.it"
             contactType={LegalChannelType.PEC}
-            onConfirmClick={mockOnConfirm}
+            onConfirm={mockOnConfirm}
             resetModifyValue={mockResetModifyValue}
             onDelete={mockDeleteCbk}
           />
@@ -183,11 +185,15 @@ describe('DigitalContactElem Component', () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <DigitalContactElem
-            fields={fields}
+            inputProps={{
+              id: 'pec',
+              name: 'pec',
+              label: 'PEC',
+              value: 'mocked@pec.it',
+            }}
             senderId="mocked-senderId"
-            value="mocked@pec.it"
             contactType={LegalChannelType.PEC}
-            onConfirmClick={mockOnConfirm}
+            onConfirm={mockOnConfirm}
             resetModifyValue={mockResetModifyValue}
             saveDisabled
             onDelete={mockDeleteCbk}
@@ -210,11 +216,15 @@ describe('DigitalContactElem Component', () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <DigitalContactElem
-            fields={fields}
+            inputProps={{
+              id: 'pec',
+              name: 'pec',
+              label: 'PEC',
+              value: 'mocked@pec.it',
+            }}
             senderId="mocked-senderId"
-            value="mocked@pec.it"
             contactType={LegalChannelType.PEC}
-            onConfirmClick={mockOnConfirm}
+            onConfirm={mockOnConfirm}
             resetModifyValue={mockResetModifyValue}
             editDisabled
             onDelete={mockDeleteCbk}
