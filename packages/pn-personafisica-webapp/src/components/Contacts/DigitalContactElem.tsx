@@ -1,13 +1,4 @@
-import {
-  Dispatch,
-  Fragment,
-  ReactNode,
-  SetStateAction,
-  forwardRef,
-  memo,
-  useImperativeHandle,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, forwardRef, memo, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { TextField, TextFieldProps, Typography } from '@mui/material';
@@ -88,6 +79,16 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
             data-testid={inputProps.id}
             {...inputProps}
           />
+        )}
+        {!editMode && (
+          <Typography
+            sx={{
+              wordBreak: 'break-word',
+            }}
+            id={`${inputProps.id}-typography`}
+          >
+            {inputProps.value as string}
+          </Typography>
         )}
         {!editMode ? (
           <>
