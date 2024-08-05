@@ -23,7 +23,7 @@ const DeleteDialog: React.FC<DialogProps> = ({
   const { t } = useTranslation(['common']);
 
   const deleteModalActions = blockDelete ? (
-    <Button id="closeModalButton" onClick={handleModalClose} variant="outlined">
+    <Button id="buttonClose" onClick={handleModalClose} variant="outlined">
       {t('button.close')}
     </Button>
   ) : (
