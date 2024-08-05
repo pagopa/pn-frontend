@@ -1,33 +1,20 @@
-import {
-  Dispatch,
-  Fragment,
-  ReactNode,
-  SetStateAction,
-  forwardRef,
-  memo,
-  useImperativeHandle,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, forwardRef, memo, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Typography } from '@mui/material';
+import { TextField, TextFieldProps, Typography } from '@mui/material';
+import { WithRequired } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
-  field: {
-    component: ReactNode;
-    id: string;
-    key: string;
-  };
+  inputProps: WithRequired<TextFieldProps, 'id'>;
   senderId: string;
   senderName?: string;
   contactType: CourtesyChannelType | LegalChannelType;
   saveDisabled?: boolean;
-  value: string;
-  onConfirmClick: (status: 'validated' | 'cancelled') => void;
+  onConfirm: (status: 'validated' | 'cancelled') => void;
   resetModifyValue: () => void;
   onDelete: () => void;
   editDisabled?: boolean;
@@ -37,13 +24,12 @@ type Props = {
 const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
   (
     {
-      field,
+      inputProps,
       saveDisabled = false,
       senderId,
       senderName,
       contactType,
-      value,
-      onConfirmClick,
+      onConfirm,
       resetModifyValue,
       editDisabled,
       setContextEditMode,
@@ -70,11 +56,11 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
     const editHandler = () => {
       initValidation(
         contactType,
-        value,
+        inputProps.value as string,
         senderId,
         senderName,
         (status: 'validated' | 'cancelled') => {
-          onConfirmClick(status);
+          onConfirm(status);
           toggleEdit();
         }
       );
@@ -86,21 +72,25 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
 
     return (
       <>
-        {
-          <Fragment key={field.key}>
-            {editMode && field.component}
-            {!editMode && (
-              <Typography
-                sx={{
-                  wordBreak: 'break-word',
-                }}
-                id={field.id}
-              >
-                {(field.component as any).props.value}
-              </Typography>
-            )}
-          </Fragment>
-        }
+        {editMode && (
+          <TextField
+            fullWidth
+            variant="outlined"
+            size="small"
+            data-testid={inputProps.id}
+            {...inputProps}
+          />
+        )}
+        {!editMode && (
+          <Typography
+            sx={{
+              wordBreak: 'break-word',
+            }}
+            id={`${inputProps.id}-typography`}
+          >
+            {inputProps.value as string}
+          </Typography>
+        )}
         {!editMode ? (
           <>
             <ButtonNaked

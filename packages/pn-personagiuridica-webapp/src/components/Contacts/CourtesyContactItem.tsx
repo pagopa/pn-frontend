@@ -175,35 +175,23 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
           <DigitalContactElem
             senderId="default"
             contactType={digitalDomicileType}
-            value={formik.values[type]}
             ref={digitalElemRef}
-            field={{
-              id: `courtesyContacts-${type}`,
-              key: `courtesyContactsValue-${type}`,
-              component: (
-                <TextField
-                  id={type}
-                  fullWidth
-                  name={type}
-                  label={t(`courtesy-contacts.link-${type}-placeholder`, {
-                    ns: 'recapiti',
-                  })}
-                  variant="outlined"
-                  size="small"
-                  value={formik.values[type]}
-                  onChange={handleChangeTouched}
-                  error={
-                    (formik.touched[type] || formik.values[type].length > 0) &&
-                    Boolean(formik.errors[type])
-                  }
-                  helperText={
-                    (formik.touched[type] || formik.values[type].length > 0) && formik.errors[type]
-                  }
-                />
-              ),
+            inputProps={{
+              id: type,
+              name: type,
+              label: t(`courtesy-contacts.link-${type}-placeholder`, {
+                ns: 'recapiti',
+              }),
+              value: formik.values[type],
+              onChange: (e) => void handleChangeTouched(e),
+              error:
+                (formik.touched[type] || formik.values[type].length > 0) &&
+                Boolean(formik.errors[type]),
+              helperText:
+                (formik.touched[type] || formik.values[type].length > 0) && formik.errors[type],
             }}
             saveDisabled={!formik.isValid}
-            onConfirmClick={handleEditConfirm}
+            onConfirm={handleEditConfirm}
             resetModifyValue={() => handleEditConfirm('cancelled')}
             onDelete={() => setShowDeleteModal(true)}
           />
