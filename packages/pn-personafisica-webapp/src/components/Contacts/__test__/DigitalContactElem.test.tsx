@@ -66,9 +66,8 @@ describe('DigitalContactElem Component', () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
-    expect(result?.container).toHaveTextContent('PEC');
     expect(result?.container).toHaveTextContent('mocked@pec.it');
-    const input = result?.queryByTestId('field');
+    const input = result?.queryByTestId('pec');
     expect(input).not.toBeInTheDocument();
     const buttons = result?.container.querySelectorAll('button');
     expect(buttons).toHaveLength(2);
