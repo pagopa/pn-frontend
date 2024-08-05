@@ -2,6 +2,8 @@
   "title": "Statistiche",
   "subtitle": "Esplora le statistiche relative alle notifiche del tuo ente su SEND - Servizio Notifiche Digitali",
   "section_1": "Panoramica delle notifiche",
+  "subtitle_section_1": "Scegli l'intervallo di rilevazione",
+  "tooltip_section_1": "Il giorno più recente di rilevazione corrisponde alla data di ultimo aggiornamento dei dati",
   "section_2": "Dettaglio delle notifiche inviate digitalmente",
   "error-fetch": "In questo momento c’è un problema tecnico nel caricamento dei dati. Per favore riprova più tardi",
   "export_all": "Esporta JPEG",
@@ -88,6 +90,7 @@
   },
   "empty": {
     "no_data_found": "Non ci sono dati a disposizione per l'intervallo di tempo selezionato",
-    "not_enough_data": "Il numero di notifiche caricate dall'ente su SEND al momento non è sufficiente per elaborare e mostrare le statistiche di invio."
+    "not_enough_data": "Il numero di notifiche caricate dall’ente su SEND al momento non è sufficiente per elaborare e mostrare le statistiche di invio. Esplora la <0>sezione Notifiche</0> per consultare quelle caricate finora.",
+    "notification_section_aria_label": "Sezione notifiche"
   }
 }
