@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, forwardRef, memo, useImperativeHandle, useState } from 'react';
+import { Dispatch, SetStateAction, forwardRef, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { TextField, TextFieldProps, Typography } from '@mui/material';
@@ -133,4 +133,4 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
   }
 );
 
-export default memo(DigitalContactElem);
+export default DigitalContactElem;
