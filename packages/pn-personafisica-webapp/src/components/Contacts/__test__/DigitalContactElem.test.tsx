@@ -1,8 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { TextField } from '@mui/material';
-
 import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { LegalChannelType } from '../../../models/contacts';
@@ -16,23 +14,6 @@ vi.mock('react-i18next', () => ({
   }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
-
-const field = {
-  id: 'value',
-  key: 'key-value',
-  component: (
-    <TextField
-      id="pec"
-      fullWidth
-      name="pec"
-      label="PEC"
-      variant="outlined"
-      size="small"
-      value="mocked@pec.it"
-      data-testid="field"
-    />
-  ),
-};
 
 const mockResetModifyValue = vi.fn();
 const mockDeleteCbk = vi.fn();

@@ -3,7 +3,7 @@ import { ChangeEvent, Fragment, memo, useEffect, useMemo, useRef, useState } fro
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { TableCell, TableRow, TextField, Typography } from '@mui/material';
+import { TableCell, TableRow, Typography } from '@mui/material';
 import { dataRegex, useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn-commons';
 
 import { AddressType, CourtesyChannelType, LegalChannelType } from '../../models/contacts';
