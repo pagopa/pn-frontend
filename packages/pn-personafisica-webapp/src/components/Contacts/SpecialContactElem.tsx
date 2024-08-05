@@ -1,12 +1,15 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, Fragment, memo, useEffect, useMemo, useRef } from 'react';
+import { ChangeEvent, Fragment, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { TableCell, TableRow, TextField, Typography } from '@mui/material';
+import { TableCell, TableRow, Typography } from '@mui/material';
 import { dataRegex, useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn-commons';
 
-import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { AddressType, CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { deleteAddress } from '../../redux/contact/actions';
+import { useAppDispatch } from '../../redux/hooks';
+import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
 
 type Props = {
@@ -33,10 +36,19 @@ const addressTypeToLabel = {
   phone: 'phone',
 };
 
+// TODO: disable complexity for now.
+// we will fix it when we will complete the rework
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const SpecialContactElem = memo(({ address }: Props) => {
   const { t } = useTranslation(['recapiti']);
   const isMobile = useIsMobile();
   const { contextEditMode, setContextEditMode } = useSpecialContactsContext();
+  const [showDeleteModal, setShowDeleteModal] = useState({
+    [`${address.senderId}_pec`]: false,
+    [`${address.senderId}_phone`]: false,
+    [`${address.senderId}_mail`]: false,
+  });
+  const dispatch = useAppDispatch();
   const digitalElemRef = useRef<{
     [key: string]: { editContact: () => void };
   }>({
@@ -44,6 +56,21 @@ const SpecialContactElem = memo(({ address }: Props) => {
     [`${address.senderId}_phone`]: { editContact: () => {} },
     [`${address.senderId}_mail`]: { editContact: () => {} },
   });
+
+  const toggleDeleteModal = (key: string) => {
+    setShowDeleteModal((oldValue) => ({ ...oldValue, [key]: !oldValue[key] }));
+  };
+
+  const deleteConfirmHandler = (f: Field) => {
+    toggleDeleteModal(f.id);
+    void dispatch(
+      deleteAddress({
+        addressType: f.addressId === 'pec' ? AddressType.LEGAL : AddressType.COURTESY,
+        senderId: address.senderId,
+        channelType: f.contactType,
+      })
+    );
+  };
 
   const initialValues = {
     [`${address.senderId}_pec`]: address.pec ?? '',
@@ -127,46 +154,9 @@ const SpecialContactElem = memo(({ address }: Props) => {
   const jsxField = (f: Field) => (
     <>
       {address[f.addressId] ? (
-        <form
-          data-testid="specialContactForm"
-          onSubmit={(e) => {
-            e.preventDefault();
-            digitalElemRef.current[f.id].editContact();
-          }}
-        >
-          <DigitalContactElem
-            senderId={address.senderId}
-            senderName={address.senderName}
-            contactType={f.contactType}
-            fields={[
-              {
-                id: `specialContacts-${f.id}`,
-                key: `specialContactsValue-${f.id}`,
-                component: (
-                  <TextField
-                    id={f.id}
-                    fullWidth
-                    name={f.id}
-                    label={f.label}
-                    variant="outlined"
-                    size="small"
-                    value={formik.values[f.id]}
-                    onChange={handleChangeTouched}
-                    error={
-                      (formik.touched[f.id] || formik.values[f.id].length > 0) &&
-                      Boolean(formik.errors[f.id])
-                    }
-                    helperText={
-                      (formik.touched[f.id] || formik.values[f.id].length > 0) &&
-                      formik.errors[f.id]
-                    }
-                  />
-                ),
-                isEditable: true,
-                size: 'variable',
-              },
-            ]}
-            saveDisabled={!!formik.errors[f.id]}
+        <>
+          <DeleteDialog
+            showModal={showDeleteModal[f.id]}
             removeModalTitle={t(`${f.labelRoot}.remove-${addressTypeToLabel[f.addressId]}-title`, {
               ns: 'recapiti',
             })}
@@ -174,15 +164,43 @@ const SpecialContactElem = memo(({ address }: Props) => {
               value: formik.values[f.id],
               ns: 'recapiti',
             })}
-            value={formik.values[f.id]}
-            onConfirmClick={(status) => updateContact(status, f.id)}
-            resetModifyValue={() => updateContact('cancelled', f.id)}
-            // eslint-disable-next-line functional/immutable-data
-            ref={(node: { editContact: () => void }) => (digitalElemRef.current[f.id] = node)}
-            editDisabled={contextEditMode}
-            setContextEditMode={setContextEditMode}
+            handleModalClose={() => toggleDeleteModal(f.id)}
+            confirmHandler={() => deleteConfirmHandler(f)}
           />
-        </form>
+          <form
+            data-testid="specialContactForm"
+            onSubmit={(e) => {
+              e.preventDefault();
+              digitalElemRef.current[f.id].editContact();
+            }}
+          >
+            <DigitalContactElem
+              senderId={address.senderId}
+              senderName={address.senderName}
+              contactType={f.contactType}
+              inputProps={{
+                id: f.id,
+                name: f.id,
+                label: f.label,
+                value: formik.values[f.id],
+                onChange: handleChangeTouched,
+                error:
+                  (formik.touched[f.id] || formik.values[f.id].length > 0) &&
+                  Boolean(formik.errors[f.id]),
+                helperText:
+                  (formik.touched[f.id] || formik.values[f.id].length > 0) && formik.errors[f.id],
+              }}
+              saveDisabled={!!formik.errors[f.id]}
+              onConfirm={(status) => updateContact(status, f.id)}
+              resetModifyValue={() => updateContact('cancelled', f.id)}
+              // eslint-disable-next-line functional/immutable-data
+              ref={(node: { editContact: () => void }) => (digitalElemRef.current[f.id] = node)}
+              editDisabled={contextEditMode}
+              setContextEditMode={setContextEditMode}
+              onDelete={() => toggleDeleteModal(f.id)}
+            />
+          </form>
+        </>
       ) : (
         '-'
       )}

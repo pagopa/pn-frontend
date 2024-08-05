@@ -6,8 +6,11 @@ import * as yup from 'yup';
 import { Button, Grid, InputAdornment, TextField, Typography } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 
-import { CourtesyChannelType } from '../../models/contacts';
+import { AddressType, CourtesyChannelType } from '../../models/contacts';
+import { deleteAddress } from '../../redux/contact/actions';
+import { useAppDispatch } from '../../redux/hooks';
 import { internationalPhonePrefix } from '../../utility/contacts.utility';
+import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
@@ -27,6 +30,8 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
   const { initValidation } = useDigitalContactsCodeVerificationContext();
   const [phoneRegex, setPhoneRegex] = useState(dataRegex.phoneNumber);
   const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const dispatch = useAppDispatch();
 
   const digitalDomicileType = useMemo(
     () => (type === CourtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS),
@@ -92,6 +97,22 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
     }
   };
 
+  const deleteConfirmHandler = () => {
+    setShowDeleteModal(false);
+    dispatch(
+      deleteAddress({
+        addressType: AddressType.COURTESY,
+        senderId: 'default',
+        channelType: digitalDomicileType,
+      })
+    )
+      .unwrap()
+      .then(() => {
+        void handleTouched(type, false);
+      })
+      .catch(() => {});
+  };
+
   // the regex for the phone number should
   // - not include Italy intl. prefix +39 when the SMS courtesy address is *inserted*
   // - include Italy intl. prefix +39 when the SMS courtesy address is *modified*
@@ -122,71 +143,60 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
    */
   if (value) {
     return (
-      <form
-        style={{ width: '100%' }}
-        onSubmit={(e) => {
-          e.preventDefault();
-          digitalElemRef.current.editContact();
-        }}
-        data-testid={`courtesyContacts-${type}`}
-      >
-        <Typography variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
-          {t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}
-        </Typography>
-        <DigitalContactElem
-          senderId="default"
-          contactType={digitalDomicileType}
-          removeModalTitle={
-            blockDelete
-              ? t(`courtesy-contacts.block-remove-${type}-title`, { ns: 'recapiti' })
-              : t(`courtesy-contacts.remove-${type}-title`, { ns: 'recapiti' })
-          }
-          removeModalBody={
-            blockDelete
-              ? t(`courtesy-contacts.block-remove-${type}-message`, { ns: 'recapiti' })
-              : t(`courtesy-contacts.remove-${type}-message`, {
-                  value: formik.values[type],
-                  ns: 'recapiti',
-                })
-          }
-          value={formik.values[type]}
-          ref={digitalElemRef}
-          fields={[
+      <>
+        <DeleteDialog
+          showModal={showDeleteModal}
+          removeModalTitle={t(
+            `courtesy-contacts.${blockDelete ? 'block-' : ''}remove-${type}-title`,
+            { ns: 'recapiti' }
+          )}
+          removeModalBody={t(
+            `courtesy-contacts.${blockDelete ? 'block-' : ''}remove-${type}-message`,
             {
-              id: `courtesyContacts-${type}`,
-              key: `courtesyContactsValue-${type}`,
-              component: (
-                <TextField
-                  id={type}
-                  fullWidth
-                  name={type}
-                  label={t(`courtesy-contacts.link-${type}-placeholder`, {
-                    ns: 'recapiti',
-                  })}
-                  variant="outlined"
-                  size="small"
-                  value={formik.values[type]}
-                  onChange={handleChangeTouched}
-                  error={
-                    (formik.touched[type] || formik.values[type].length > 0) &&
-                    Boolean(formik.errors[type])
-                  }
-                  helperText={
-                    (formik.touched[type] || formik.values[type].length > 0) && formik.errors[type]
-                  }
-                />
-              ),
-              isEditable: true,
-              size: 'auto',
-            },
-          ]}
-          saveDisabled={!formik.isValid}
-          onConfirmClick={handleEditConfirm}
+              value: formik.values[type],
+              ns: 'recapiti',
+            }
+          )}
+          handleModalClose={() => setShowDeleteModal(false)}
+          confirmHandler={deleteConfirmHandler}
           blockDelete={blockDelete}
-          resetModifyValue={() => handleEditConfirm('cancelled')}
-          onDeleteCbk={() => void handleTouched(type, false)}
         />
-      </form>
+        <form
+          style={{ width: '100%' }}
+          onSubmit={(e) => {
+            e.preventDefault();
+            digitalElemRef.current.editContact();
+          }}
+          data-testid={`courtesyContacts-${type}`}
+        >
+          <Typography variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
+            {t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}
+          </Typography>
+          <DigitalContactElem
+            senderId="default"
+            contactType={digitalDomicileType}
+            ref={digitalElemRef}
+            inputProps={{
+              id: type,
+              name: type,
+              label: t(`courtesy-contacts.link-${type}-placeholder`, {
+                ns: 'recapiti',
+              }),
+              value: formik.values[type],
+              onChange: (e) => void handleChangeTouched(e),
+              error:
+                (formik.touched[type] || formik.values[type].length > 0) &&
+                Boolean(formik.errors[type]),
+              helperText:
+                (formik.touched[type] || formik.values[type].length > 0) && formik.errors[type],
+            }}
+            saveDisabled={!formik.isValid}
+            onConfirm={handleEditConfirm}
+            resetModifyValue={() => handleEditConfirm('cancelled')}
+            onDelete={() => setShowDeleteModal(true)}
+          />
+        </form>
+      </>
     );
   }
 
