@@ -1,6 +1,7 @@
 import {
   Dispatch,
-  ReactChild,
+  Fragment,
+  ReactNode,
   SetStateAction,
   forwardRef,
   memo,
@@ -9,20 +10,18 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
-  fields: Array<{
-    component: ReactChild;
+  field: {
+    component: ReactNode;
     id: string;
-    isEditable?: boolean;
-    size: 'auto' | 'variable';
     key: string;
-  }>;
+  };
   senderId: string;
   senderName?: string;
   contactType: CourtesyChannelType | LegalChannelType;
@@ -38,7 +37,7 @@ type Props = {
 const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
   (
     {
-      fields,
+      field,
       saveDisabled = false,
       senderId,
       senderName,
@@ -55,23 +54,6 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
     const { t } = useTranslation(['common']);
     const [editMode, setEditMode] = useState(false);
     const { initValidation } = useDigitalContactsCodeVerificationContext();
-
-    const mappedChildren = fields.map((f) => (
-      <Grid key={f.key} item lg={f.size === 'auto' ? true : 'auto'} xs={12}>
-        {!f.isEditable && f.component}
-        {f.isEditable && editMode && f.component}
-        {f.isEditable && !editMode && (
-          <Typography
-            sx={{
-              wordBreak: 'break-word',
-            }}
-            id={f.id}
-          >
-            {(f.component as any).props.value}
-          </Typography>
-        )}
-      </Grid>
-    ));
 
     const toggleEdit = () => {
       setEditMode(!editMode);
@@ -104,48 +86,58 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
 
     return (
       <>
-        <Grid container spacing="4" direction="row" alignItems="center">
-          {mappedChildren}
-          <Grid item lg={12} xs={12} textAlign={'left'}>
-            {!editMode ? (
-              <>
-                <ButtonNaked
-                  color="primary"
-                  onClick={toggleEdit}
-                  sx={{ marginRight: '10px' }}
-                  disabled={editDisabled}
-                  id={`modifyContact-${senderId}`}
-                >
-                  {t('button.modifica')}
-                </ButtonNaked>
-                <ButtonNaked
-                  id={`cancelContact-${senderId}`}
-                  color="primary"
-                  onClick={onDelete}
-                  disabled={editDisabled}
-                >
-                  {t('button.elimina')}
-                </ButtonNaked>
-              </>
-            ) : (
-              <>
-                <ButtonNaked
-                  color="primary"
-                  disabled={saveDisabled}
-                  type="button"
-                  onClick={editHandler}
-                  sx={{ marginRight: '10px' }}
-                  id={`saveModifyButton-${senderId}`}
-                >
-                  {t('button.salva')}
-                </ButtonNaked>
-                <ButtonNaked color="primary" onClick={onCancel}>
-                  {t('button.annulla')}
-                </ButtonNaked>
-              </>
+        {
+          <Fragment key={field.key}>
+            {editMode && field.component}
+            {!editMode && (
+              <Typography
+                sx={{
+                  wordBreak: 'break-word',
+                }}
+                id={field.id}
+              >
+                {(field.component as any).props.value}
+              </Typography>
             )}
-          </Grid>
-        </Grid>
+          </Fragment>
+        }
+        {!editMode ? (
+          <>
+            <ButtonNaked
+              color="primary"
+              onClick={toggleEdit}
+              sx={{ marginRight: '10px' }}
+              disabled={editDisabled}
+              id={`modifyContact-${senderId}`}
+            >
+              {t('button.modifica')}
+            </ButtonNaked>
+            <ButtonNaked
+              id={`cancelContact-${senderId}`}
+              color="primary"
+              onClick={onDelete}
+              disabled={editDisabled}
+            >
+              {t('button.elimina')}
+            </ButtonNaked>
+          </>
+        ) : (
+          <>
+            <ButtonNaked
+              color="primary"
+              disabled={saveDisabled}
+              type="button"
+              onClick={editHandler}
+              sx={{ marginRight: '10px' }}
+              id={`saveModifyButton-${senderId}`}
+            >
+              {t('button.salva')}
+            </ButtonNaked>
+            <ButtonNaked color="primary" onClick={onCancel}>
+              {t('button.annulla')}
+            </ButtonNaked>
+          </>
+        )}
       </>
     );
   }

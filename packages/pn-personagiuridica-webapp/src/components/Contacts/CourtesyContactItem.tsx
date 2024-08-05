@@ -177,36 +177,31 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
             contactType={digitalDomicileType}
             value={formik.values[type]}
             ref={digitalElemRef}
-            fields={[
-              {
-                id: `courtesyContacts-${type}`,
-                key: `courtesyContactsValue-${type}`,
-                component: (
-                  <TextField
-                    id={type}
-                    fullWidth
-                    name={type}
-                    label={t(`courtesy-contacts.link-${type}-placeholder`, {
-                      ns: 'recapiti',
-                    })}
-                    variant="outlined"
-                    size="small"
-                    value={formik.values[type]}
-                    onChange={handleChangeTouched}
-                    error={
-                      (formik.touched[type] || formik.values[type].length > 0) &&
-                      Boolean(formik.errors[type])
-                    }
-                    helperText={
-                      (formik.touched[type] || formik.values[type].length > 0) &&
-                      formik.errors[type]
-                    }
-                  />
-                ),
-                isEditable: true,
-                size: 'auto',
-              },
-            ]}
+            field={{
+              id: `courtesyContacts-${type}`,
+              key: `courtesyContactsValue-${type}`,
+              component: (
+                <TextField
+                  id={type}
+                  fullWidth
+                  name={type}
+                  label={t(`courtesy-contacts.link-${type}-placeholder`, {
+                    ns: 'recapiti',
+                  })}
+                  variant="outlined"
+                  size="small"
+                  value={formik.values[type]}
+                  onChange={handleChangeTouched}
+                  error={
+                    (formik.touched[type] || formik.values[type].length > 0) &&
+                    Boolean(formik.errors[type])
+                  }
+                  helperText={
+                    (formik.touched[type] || formik.values[type].length > 0) && formik.errors[type]
+                  }
+                />
+              ),
+            }}
             saveDisabled={!formik.isValid}
             onConfirmClick={handleEditConfirm}
             resetModifyValue={() => handleEditConfirm('cancelled')}

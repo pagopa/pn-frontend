@@ -178,34 +178,30 @@ const SpecialContactElem = memo(({ address }: Props) => {
               senderId={address.senderId}
               senderName={address.senderName}
               contactType={f.contactType}
-              fields={[
-                {
-                  id: `specialContacts-${f.id}`,
-                  key: `specialContactValue-${f.id}`,
-                  component: (
-                    <TextField
-                      id={f.id}
-                      fullWidth
-                      name={f.id}
-                      label={f.label}
-                      variant="outlined"
-                      size="small"
-                      value={formik.values[f.id]}
-                      onChange={handleChangeTouched}
-                      error={
-                        (formik.touched[f.id] || formik.values[f.id].length > 0) &&
-                        Boolean(formik.errors[f.id])
-                      }
-                      helperText={
-                        (formik.touched[f.id] || formik.values[f.id].length > 0) &&
-                        formik.errors[f.id]
-                      }
-                    />
-                  ),
-                  isEditable: true,
-                  size: 'variable',
-                },
-              ]}
+              field={{
+                id: `specialContacts-${f.id}`,
+                key: `specialContactValue-${f.id}`,
+                component: (
+                  <TextField
+                    id={f.id}
+                    fullWidth
+                    name={f.id}
+                    label={f.label}
+                    variant="outlined"
+                    size="small"
+                    value={formik.values[f.id]}
+                    onChange={handleChangeTouched}
+                    error={
+                      (formik.touched[f.id] || formik.values[f.id].length > 0) &&
+                      Boolean(formik.errors[f.id])
+                    }
+                    helperText={
+                      (formik.touched[f.id] || formik.values[f.id].length > 0) &&
+                      formik.errors[f.id]
+                    }
+                  />
+                ),
+              }}
               saveDisabled={!!formik.errors[f.id]}
               value={formik.values[f.id]}
               onConfirmClick={(status) => updateContact(status, f.id)}
