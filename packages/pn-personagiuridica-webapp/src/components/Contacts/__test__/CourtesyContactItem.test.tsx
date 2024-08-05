@@ -3,7 +3,8 @@ import { vi } from 'vitest';
 
 import { fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import CourtesyContactItem, { CourtesyFieldType } from '../CourtesyContactItem';
+import { CourtesyChannelType } from '../../../models/contacts';
+import CourtesyContactItem from '../CourtesyContactItem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
 vi.mock('react-i18next', () => ({
@@ -41,40 +42,43 @@ describe('CourtesyContactItem component', () => {
     it('type in an invalid number', async () => {
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={CourtesyFieldType.PHONE} value="" />
+          <CourtesyContactItem type={CourtesyChannelType.SMS} value="" />
         </DigitalContactsCodeVerificationProvider>
       );
-      const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
+      const input = result.container.querySelector(`[name="${CourtesyChannelType.SMS}"]`);
       // set invalid values
       fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
       await waitFor(() => expect(input!).toHaveValue(INPUT_INVALID_PHONE));
-      const inputError = result.container.querySelector(`#${CourtesyFieldType.PHONE}-helper-text`);
+      console.log(result.container.innerHTML);
+      const inputError = result.container.querySelector(
+        `#${CourtesyChannelType.SMS.toLowerCase()}-helper-text`
+      );
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
       fireEvent.change(input!, { target: { value: '' } });
       await waitFor(() => expect(input!).toHaveValue(''));
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
       const button = result.getByRole('button');
-      expect(button).toHaveTextContent('courtesy-contacts.phone-add');
+      expect(button).toHaveTextContent('courtesy-contacts.sms-add');
       expect(button).toBeDisabled();
     });
 
     it('type in an invalid number while in "edit mode"', async () => {
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={CourtesyFieldType.PHONE} value={INPUT_VALID_PHONE} />
+          <CourtesyContactItem type={CourtesyChannelType.SMS} value={INPUT_VALID_PHONE} />
         </DigitalContactsCodeVerificationProvider>
       );
       result.getByText(INPUT_VALID_PHONE);
       const editButton = result.getByRole('button', { name: 'button.modifica' });
       fireEvent.click(editButton);
-      const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
+      const input = result.container.querySelector(`[name="${CourtesyChannelType.SMS}"]`);
       const saveButton = result.getByRole('button', { name: 'button.salva' });
       expect(input).toHaveValue(INPUT_VALID_PHONE);
       expect(saveButton).toBeEnabled();
       fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
       await waitFor(() => expect(input).toHaveValue(INPUT_INVALID_PHONE));
       expect(saveButton).toBeDisabled();
-      const inputError = result.container.querySelector(`#${CourtesyFieldType.PHONE}-helper-text`);
+      const inputError = result.container.querySelector(`#${CourtesyChannelType.SMS}-helper-text`);
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
     });
 
@@ -83,7 +87,7 @@ describe('CourtesyContactItem component', () => {
       // render component
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={CourtesyFieldType.PHONE} value={INPUT_VALID_PHONE} />
+          <CourtesyContactItem type={CourtesyChannelType.SMS} value={INPUT_VALID_PHONE} />
         </DigitalContactsCodeVerificationProvider>
       );
       const buttons = result.container.querySelectorAll('button');
@@ -131,14 +135,16 @@ describe('CourtesyContactItem component', () => {
     it('type in an invalid email', async () => {
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={CourtesyFieldType.EMAIL} value="" />
+          <CourtesyContactItem type={CourtesyChannelType.EMAIL} value="" />
         </DigitalContactsCodeVerificationProvider>
       );
-      const input = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+      const input = result.container.querySelector(`[name="${CourtesyChannelType.EMAIL}"]`);
       // set invalid values
       fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
       await waitFor(() => expect(input!).toHaveValue(INVALID_EMAIL));
-      const inputError = result.container.querySelector(`#${CourtesyFieldType.EMAIL}-helper-text`);
+      const inputError = result.container.querySelector(
+        `#${CourtesyChannelType.EMAIL.toLowerCase()}-helper-text`
+      );
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
       fireEvent.change(input!, { target: { value: '' } });
       await waitFor(() => expect(input!).toHaveValue(''));
@@ -151,21 +157,23 @@ describe('CourtesyContactItem component', () => {
     it('type in an invalid email while in "edit mode"', async () => {
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={CourtesyFieldType.EMAIL} value={VALID_EMAIL} />
+          <CourtesyContactItem type={CourtesyChannelType.EMAIL} value={VALID_EMAIL} />
         </DigitalContactsCodeVerificationProvider>
       );
       result.getByText(VALID_EMAIL);
       result.getByRole('button', { name: 'button.elimina' });
       const editButton = result.getByRole('button', { name: 'button.modifica' });
       fireEvent.click(editButton);
-      const input = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+      const input = result.container.querySelector(`[name="${CourtesyChannelType.EMAIL}"]`);
       const saveButton = result.getByRole('button', { name: 'button.salva' });
       expect(input).toHaveValue(VALID_EMAIL);
       expect(saveButton).toBeEnabled();
       fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
       await waitFor(() => expect(input).toHaveValue(INVALID_EMAIL));
       expect(saveButton).toBeDisabled();
-      const inputError = result.container.querySelector(`#${CourtesyFieldType.EMAIL}-helper-text`);
+      const inputError = result.container.querySelector(
+        `#${CourtesyChannelType.EMAIL}-helper-text`
+      );
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
     });
 
@@ -174,7 +182,7 @@ describe('CourtesyContactItem component', () => {
       // render component
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={CourtesyFieldType.EMAIL} value={VALID_EMAIL} />
+          <CourtesyContactItem type={CourtesyChannelType.EMAIL} value={VALID_EMAIL} />
         </DigitalContactsCodeVerificationProvider>
       );
       const buttons = result.container.querySelectorAll('button');
