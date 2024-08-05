@@ -1,8 +1,17 @@
+import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';
 
-import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContactElem from '../SpecialContactElem';
 
@@ -22,6 +31,19 @@ Andrea Cimini - 6/09/2023
 */
 describe('SpecialContactElem Component', () => {
   let result: RenderResult;
+  let mock: MockAdapter;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
 
   it('renders SpecialContactElem', async () => {
     // render component
@@ -349,5 +371,46 @@ describe('SpecialContactElem Component', () => {
     for (const button of fourthFormButtons) {
       expect(button).toBeEnabled();
     }
+  });
+  it('remove contact', async () => {
+    mock.onDelete('/bff/v1/addresses/LEGAL/mocked-senderId/PEC').reply(204);
+    // render component
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <SpecialContactsProvider>
+            <SpecialContactElem
+              address={{
+                senderId: 'mocked-senderId',
+                senderName: 'Mocked Sender',
+                pec: 'mocked@pec.it',
+              }}
+            />
+          </SpecialContactsProvider>
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+    const buttons = result?.container.querySelectorAll('button');
+    // click on cancel
+    fireEvent.click(buttons![1]);
+    let dialog = await waitFor(() => screen.getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+    let dialogButtons = dialog?.querySelectorAll('button');
+    // cancel remove operation
+    fireEvent.click(dialogButtons![0]);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+    // click on confirm
+    fireEvent.click(buttons![1]);
+    dialog = await waitFor(() => screen.getByRole('dialog'));
+    dialogButtons = dialog?.querySelectorAll('button');
+    fireEvent.click(dialogButtons![1]);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(1);
+    });
   });
 });
