@@ -75,7 +75,7 @@ const NotificationPaymentF24: React.FC<Props> = ({ iun, payments }) => {
                 data-testid="show-all-attachments"
                 onClick={() => setOpen(true)}
               >
-                <Typography color="primary" variant="body2" tabIndex={0} fontWeight={'bold'}>
+                <Typography color="primary" variant="body2" fontWeight={'bold'}>
                   {t('detail.show-all')}
                 </Typography>
               </ButtonNaked>

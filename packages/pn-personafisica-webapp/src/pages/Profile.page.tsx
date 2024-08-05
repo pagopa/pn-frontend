@@ -93,7 +93,8 @@ const Profile = () => {
 
         <Grid item lg={8} xs={12}>
           <Alert
-            aria-label="contacts-redirect"
+            severity="info"
+            data-testid="contacts-redirect"
             action={
               <Button
                 component={Link}

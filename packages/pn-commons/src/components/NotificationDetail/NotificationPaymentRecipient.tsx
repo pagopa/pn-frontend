@@ -162,7 +162,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       </Typography>
 
       {isCancelled ? (
-        <Alert tabIndex={0} data-testid="cancelledAlertPayment" severity="info">
+        <Alert data-testid="cancelledAlertPayment" severity="info">
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.cancelled-message')}
           &nbsp;
           <Link
