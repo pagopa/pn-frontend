@@ -10,7 +10,7 @@ import { AddressType, CourtesyChannelType } from '../../models/contacts';
 import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
 import { internationalPhonePrefix } from '../../utility/contacts.utility';
-import DeleteDialog from './DeleteDialogModal';
+import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
@@ -223,57 +223,55 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
    * to perform the addition.
    */
   return (
-    <>
-      <form
-        onSubmit={formik.handleSubmit}
-        style={{ width: '100%' }}
-        data-testid={`courtesyContacts-${type}`}
-      >
-        <Typography id={`${type}-label`} variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
-          {t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}
-        </Typography>
-        <Grid container spacing={2} direction="row">
-          <Grid item lg={8} sm={8} xs={12}>
-            <TextField
-              id={type}
-              name={type}
-              aria-labelledby={`${type}-label`}
-              value={formik.values[type]}
-              onChange={handleChangeTouched}
-              error={formik.touched[type] && Boolean(formik.errors[type])}
-              helperText={formik.touched[type] && formik.errors[type]}
-              inputProps={{ sx: { height: '14px' } }}
-              placeholder={t(`courtesy-contacts.link-${type}-placeholder`, {
-                ns: 'recapiti',
-              })}
-              fullWidth
-              type={type === CourtesyFieldType.EMAIL ? 'mail' : 'tel'}
-              InputProps={
-                type === CourtesyFieldType.PHONE
-                  ? {
-                      startAdornment: (
-                        <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
-                      ),
-                    }
-                  : {}
-              }
-            />
-          </Grid>
-          <Grid item lg={4} sm={4} xs={12} alignItems="right">
-            <Button
-              id={`courtesy-${type}-button`}
-              variant="outlined"
-              disabled={!formik.isValid}
-              fullWidth
-              type="submit"
-              data-testid={`courtesy-${type}-button`}
-            >
-              {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
-            </Button>
-          </Grid>
+    <form
+      onSubmit={formik.handleSubmit}
+      style={{ width: '100%' }}
+      data-testid={`courtesyContacts-${type}`}
+    >
+      <Typography id={`${type}-label`} variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
+        {t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}
+      </Typography>
+      <Grid container spacing={2} direction="row">
+        <Grid item lg={8} sm={8} xs={12}>
+          <TextField
+            id={type}
+            name={type}
+            aria-labelledby={`${type}-label`}
+            value={formik.values[type]}
+            onChange={handleChangeTouched}
+            error={formik.touched[type] && Boolean(formik.errors[type])}
+            helperText={formik.touched[type] && formik.errors[type]}
+            inputProps={{ sx: { height: '14px' } }}
+            placeholder={t(`courtesy-contacts.link-${type}-placeholder`, {
+              ns: 'recapiti',
+            })}
+            fullWidth
+            type={type === CourtesyFieldType.EMAIL ? 'mail' : 'tel'}
+            InputProps={
+              type === CourtesyFieldType.PHONE
+                ? {
+                    startAdornment: (
+                      <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
+                    ),
+                  }
+                : {}
+            }
+          />
         </Grid>
-      </form>
-    </>
+        <Grid item lg={4} sm={4} xs={12} alignItems="right">
+          <Button
+            id={`courtesy-${type}-button`}
+            variant="outlined"
+            disabled={!formik.isValid}
+            fullWidth
+            type="submit"
+            data-testid={`courtesy-${type}-button`}
+          >
+            {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
+          </Button>
+        </Grid>
+      </Grid>
+    </form>
   );
 };
 

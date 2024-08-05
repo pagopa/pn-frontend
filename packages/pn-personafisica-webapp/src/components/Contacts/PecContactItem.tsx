@@ -8,8 +8,11 @@ import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { LegalChannelType } from '../../models/contacts';
+import { AddressType, LegalChannelType } from '../../models/contacts';
+import { deleteAddress } from '../../redux/contact/actions';
+import { useAppDispatch } from '../../redux/hooks';
 import CancelVerificationModal from './CancelVerificationModal';
+import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
@@ -24,6 +27,8 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
   const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const { initValidation } = useDigitalContactsCodeVerificationContext();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const dispatch = useAppDispatch();
 
   const validationSchema = yup.object({
     pec: yup
@@ -61,6 +66,17 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
     setCancelDialogOpen(true);
   };
 
+  const deleteConfirmHandler = () => {
+    setShowDeleteModal(false);
+    void dispatch(
+      deleteAddress({
+        addressType: AddressType.LEGAL,
+        senderId: 'default',
+        channelType: LegalChannelType.PEC,
+      })
+    );
+  };
+
   useEffect(() => {
     const changeValue = async () => {
       await formik.setFieldValue('pec', value, true);
@@ -74,6 +90,20 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
         <CancelVerificationModal
           open={cancelDialogOpen}
           handleClose={() => setCancelDialogOpen(false)}
+        />
+
+        <DeleteDialog
+          showModal={showDeleteModal}
+          removeModalTitle={t(`legal-contacts.${blockDelete ? 'block-' : ''}remove-pec-title`, {
+            ns: 'recapiti',
+          })}
+          removeModalBody={t(`legal-contacts.${blockDelete ? 'block-' : ''}remove-pec-message`, {
+            value: formik.values.pec,
+            ns: 'recapiti',
+          })}
+          handleModalClose={() => setShowDeleteModal(false)}
+          confirmHandler={deleteConfirmHandler}
+          blockDelete={blockDelete}
         />
 
         <Box mt="20px" data-testid="legalContacts">
@@ -113,24 +143,11 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
                   },
                 ]}
                 saveDisabled={!formik.isValid}
-                removeModalTitle={
-                  blockDelete
-                    ? t('legal-contacts.block-remove-pec-title', { ns: 'recapiti' })
-                    : t('legal-contacts.remove-pec-title', { ns: 'recapiti' })
-                }
-                removeModalBody={
-                  blockDelete
-                    ? t('legal-contacts.block-remove-pec-message', { ns: 'recapiti' })
-                    : t('legal-contacts.remove-pec-message', {
-                        value: formik.values.pec,
-                        ns: 'recapiti',
-                      })
-                }
                 value={formik.values.pec}
                 onConfirmClick={handleEditConfirm}
-                blockDelete={blockDelete}
                 resetModifyValue={() => handleEditConfirm('cancelled')}
                 ref={digitalElemRef}
+                onDelete={() => setShowDeleteModal(true)}
               />
             </form>
           )}

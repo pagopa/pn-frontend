@@ -29,7 +29,6 @@ type Props = {
   saveDisabled?: boolean;
   value: string;
   onConfirmClick: (status: 'validated' | 'cancelled') => void;
-  blockDelete?: boolean;
   resetModifyValue: () => void;
   onDelete: () => void;
   editDisabled?: boolean;
