@@ -3,7 +3,7 @@ import { ChangeEvent, Fragment, memo, useEffect, useMemo, useRef, useState } fro
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { TableCell, TableRow, TextField, Typography } from '@mui/material';
+import { TableCell, TableRow, Typography } from '@mui/material';
 import { dataRegex, useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn-commons';
 
 import { AddressType, CourtesyChannelType, LegalChannelType } from '../../models/contacts';
@@ -178,37 +178,20 @@ const SpecialContactElem = memo(({ address }: Props) => {
               senderId={address.senderId}
               senderName={address.senderName}
               contactType={f.contactType}
-              fields={[
-                {
-                  id: `specialContacts-${f.id}`,
-                  key: `specialContactValue-${f.id}`,
-                  component: (
-                    <TextField
-                      id={f.id}
-                      fullWidth
-                      name={f.id}
-                      label={f.label}
-                      variant="outlined"
-                      size="small"
-                      value={formik.values[f.id]}
-                      onChange={handleChangeTouched}
-                      error={
-                        (formik.touched[f.id] || formik.values[f.id].length > 0) &&
-                        Boolean(formik.errors[f.id])
-                      }
-                      helperText={
-                        (formik.touched[f.id] || formik.values[f.id].length > 0) &&
-                        formik.errors[f.id]
-                      }
-                    />
-                  ),
-                  isEditable: true,
-                  size: 'variable',
-                },
-              ]}
+              inputProps={{
+                id: f.id,
+                name: f.id,
+                label: f.label,
+                value: formik.values[f.id],
+                onChange: handleChangeTouched,
+                error:
+                  (formik.touched[f.id] || formik.values[f.id].length > 0) &&
+                  Boolean(formik.errors[f.id]),
+                helperText:
+                  (formik.touched[f.id] || formik.values[f.id].length > 0) && formik.errors[f.id],
+              }}
               saveDisabled={!!formik.errors[f.id]}
-              value={formik.values[f.id]}
-              onConfirmClick={(status) => updateContact(status, f.id)}
+              onConfirm={(status) => updateContact(status, f.id)}
               resetModifyValue={() => updateContact('cancelled', f.id)}
               // eslint-disable-next-line functional/immutable-data
               ref={(node: { editContact: () => void }) => (digitalElemRef.current[f.id] = node)}

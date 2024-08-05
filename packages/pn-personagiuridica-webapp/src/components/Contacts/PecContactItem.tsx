@@ -118,31 +118,17 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
               <DigitalContactElem
                 senderId="default"
                 contactType={LegalChannelType.PEC}
-                fields={[
-                  {
-                    id: `legalContacts`,
-                    key: 'legalContactValue',
-                    component: (
-                      <TextField
-                        id="pec"
-                        fullWidth
-                        name="pec"
-                        label="PEC"
-                        variant="outlined"
-                        size="small"
-                        value={formik.values.pec}
-                        onChange={handleChangeTouched}
-                        error={formik.touched.pec && Boolean(formik.errors.pec)}
-                        helperText={formik.touched.pec && formik.errors.pec}
-                      />
-                    ),
-                    isEditable: true,
-                    size: 'auto',
-                  },
-                ]}
+                inputProps={{
+                  id: 'pec',
+                  name: 'pec',
+                  label: 'PEC',
+                  value: formik.values.pec,
+                  onChange: (e) => void handleChangeTouched(e),
+                  error: formik.touched.pec && Boolean(formik.errors.pec),
+                  helperText: formik.touched.pec && formik.errors.pec,
+                }}
                 saveDisabled={!formik.isValid}
-                value={formik.values.pec}
-                onConfirmClick={handleEditConfirm}
+                onConfirm={handleEditConfirm}
                 resetModifyValue={() => handleEditConfirm('cancelled')}
                 ref={digitalElemRef}
                 onDelete={() => setShowDeleteModal(true)}
@@ -203,7 +189,6 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
             data-testid="addContact"
           >
             {t('button.conferma')}
-            {/* {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })} */}
           </Button>
         </Grid>
       </Grid>
