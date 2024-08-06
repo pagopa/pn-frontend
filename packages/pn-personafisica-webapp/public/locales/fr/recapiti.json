@@ -107,10 +107,10 @@
     "sender": "Organisme",
     "address-type": "Coordonnées",
     "pec": "Adresse PEC",
-    "phone": "Portable",
-    "mail": "Adresse e-mail",
+    "sms": "Portable",
+    "email": "Adresse e-mail",
     "pec-already-exists": "Cet organisme est déjà associé à une adresse PEC. Si vous appuyez sur « Continuer », il sera remplacé par celle que vous venez d’indiquer.",
-    "phone-already-exists": "Cet organisme est déjà associé à un numéro de téléphone portable. Si vous appuyez sur « Continuer », il sera remplacé par celui que vous venez d’indiquer.",
+    "sms-already-exists": "Cet organisme est déjà associé à un numéro de téléphone portable. Si vous appuyez sur « Continuer », il sera remplacé par celui que vous venez d’indiquer.",
     "email-already-exists": "Cet organisme est déjà associé à une adresse e-mail. Si vous appuyez sur « Continuer », il sera remplacé par celle que vous venez d’indiquer.",
     "fetch-party-error": "Nous n’avons pas pu récupérer les données dont nous avions besoin pour créer une nouvelle adresse."
   },

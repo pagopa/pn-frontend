@@ -162,10 +162,7 @@ const Contacts = () => {
                   <Typography id="specialContact" variant="h5" fontWeight={600} fontSize={28}>
                     {t('special-contacts-title')}
                   </Typography>
-                  <SpecialContacts
-                    legalAddresses={legalAddresses}
-                    courtesyAddresses={courtesyAddresses}
-                  />
+                  <SpecialContacts digitalAddresses={digitalAddresses} />
                 </Stack>
               )}
             </Stack>

@@ -107,10 +107,10 @@
     "sender": "Ente",
     "address-type": "Recapito",
     "pec": "Indirizzo PEC",
-    "phone": "Cellulare",
-    "mail": "Indirizzo e-mail",
+    "sms": "Cellulare",
+    "email": "Indirizzo e-mail",
     "pec-already-exists": "Questo ente è già associato a un indirizzo PEC. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
-    "phone-already-exists": "Questo ente è già associato a un numero di cellulare. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
+    "sms-already-exists": "Questo ente è già associato a un numero di cellulare. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "email-already-exists": "Questo ente è già associato a un indirizzo e-mail. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito."
   },

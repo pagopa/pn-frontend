@@ -92,10 +92,10 @@
     "sender": "Körperschaft",
     "address-type": "Zustellart",
     "pec": "PEC-Adresse",
-    "phone": "Handy",
-    "mail": "E-Mail-Adresse",
+    "sms": "Handy",
+    "email": "E-Mail-Adresse",
     "pec-already-exists": "Diese Körperschaft wurde bereits einer PEC-Adresse zugeordnet. Wenn du „Weiter“ drückst, wird sie durch die gerade eingegebene ersetzt.",
-    "phone-already-exists": "Diese Einrichtung ist bereits einer Handynummer zugeordnet. Wenn du „Weiter“ drückst, wird sie durch die gerade eingegebene ersetzt.",
+    "sms-already-exists": "Diese Einrichtung ist bereits einer Handynummer zugeordnet. Wenn du „Weiter“ drückst, wird sie durch die gerade eingegebene ersetzt.",
     "email-already-exists": "Diese Körperschaft ist bereits einer E-Mail-Adresse zugeordnet. Wenn du „Weiter“ drückst, wird sie durch die gerade eingegebene ersetzt.",
     "fetch-party-error": "Wir konnten die Daten, die benötigt werden, um eine neue Anschrift zu erstellen, nicht wiederherstellen."
   },

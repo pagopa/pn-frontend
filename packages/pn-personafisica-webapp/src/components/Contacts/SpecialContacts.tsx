@@ -1,15 +1,16 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import {
   Alert,
+  Box,
   Card,
   CardContent,
-  Grid,
   InputAdornment,
   MenuItem,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -23,7 +24,6 @@ import {
   CustomDropdown,
   PnAutocomplete,
   SpecialContactsProvider,
-  dataRegex,
   searchStringLimitReachedText,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
@@ -34,150 +34,111 @@ import { Party } from '../../models/party';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { internationalPhonePrefix } from '../../utility/contacts.utility';
+import {
+  allowedAddressTypes,
+  emailValidationSchema,
+  internationalPhonePrefix,
+  pecValidationSchema,
+  phoneValidationSchema,
+} from '../../utility/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import DigitalContactsCard from './DigitalContactsCard';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 import SpecialContactElem from './SpecialContactElem';
 
 type Props = {
-  legalAddresses: Array<DigitalAddress>;
-  courtesyAddresses: Array<DigitalAddress>;
+  digitalAddresses: Array<DigitalAddress>;
 };
 
-type Address = {
-  senderId: string;
-  senderName: string;
-  phone?: string;
-  mail?: string;
-  pec?: string;
+type Addresses = {
+  [senderId: string]: Array<DigitalAddress>;
 };
 
 type AddressType = {
   id: LegalChannelType | CourtesyChannelType;
   value: string;
-  show: boolean;
 };
 
-const SpecialContacts = ({ legalAddresses, courtesyAddresses }: Props) => {
-  const { t, i18n } = useTranslation(['common', 'recapiti']);
+const SpecialContacts = ({ digitalAddresses }: Props) => {
+  const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
-  const [addresses, setAddresses] = useState([] as Array<Address>);
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const { initValidation } = useDigitalContactsCodeVerificationContext();
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const isMobile = useIsMobile();
   const [senderInputValue, setSenderInputValue] = useState('');
 
-  const addressTypes = useMemo(
-    (): Array<AddressType> => [
-      {
-        id: LegalChannelType.PEC,
-        value: t('special-contacts.pec', { ns: 'recapiti' }),
-        show: legalAddresses.some(
-          (a) => a.senderId === 'default' && a.channelType === LegalChannelType.PEC
-        ),
-      },
-      {
-        id: CourtesyChannelType.EMAIL,
-        value: t('special-contacts.mail', { ns: 'recapiti' }),
-        show: courtesyAddresses.some(
-          (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.EMAIL
-        ),
-      },
-      {
-        id: CourtesyChannelType.SMS,
-        value: t('special-contacts.phone', { ns: 'recapiti' }),
-        show: courtesyAddresses.some(
-          (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.SMS
-        ),
-      },
-    ],
-    [legalAddresses, courtesyAddresses, i18n.language]
-  );
+  const addressTypes: Array<AddressType> = digitalAddresses
+    .filter((a) => a.senderId === 'default' && allowedAddressTypes.includes(a.channelType))
+    .map((a) => ({
+      id: a.channelType,
+      value: t(`special-contacts.${a.channelType.toLowerCase()}`, { ns: 'recapiti' }),
+    }));
 
-  const listHeaders = useMemo(
-    () => [
-      {
-        id: 'sender',
-        label: t('special-contacts.sender', { ns: 'recapiti' }),
-      },
-      {
-        id: 'pec',
-        label: t('special-contacts.pec', { ns: 'recapiti' }),
-      },
-      {
-        id: 'phone',
-        label: t('special-contacts.phone', { ns: 'recapiti' }),
-      },
-      {
-        id: 'mail',
-        label: t('special-contacts.mail', { ns: 'recapiti' }),
-      },
-    ],
-    [i18n.language]
-  );
+  const listHeaders = [
+    {
+      id: 'sender',
+      label: t('special-contacts.sender', { ns: 'recapiti' }),
+    },
+    ...allowedAddressTypes.map((type) => ({
+      id: type.toLowerCase(),
+      label: t(`special-contacts.${type.toLowerCase()}`, { ns: 'recapiti' }),
+    })),
+  ];
+
+  const addresses: Addresses = digitalAddresses
+    .filter((a) => a.senderId !== 'default')
+    .reduce((obj, a) => {
+      if (!obj[a.senderId]) {
+        // eslint-disable-next-line functional/immutable-data
+        obj[a.senderId] = [];
+      }
+      // eslint-disable-next-line functional/immutable-data
+      obj[a.senderId].push(a);
+      return obj;
+    }, {} as Addresses);
 
   const fetchAllActivatedParties = useCallback(() => {
     void dispatch(getAllActivatedParties({}));
   }, []);
 
-  useEffect(() => {
-    if (senderInputValue.length >= 4) {
-      void dispatch(getAllActivatedParties({ paNameFilter: senderInputValue, blockLoading: true }));
-    } else if (senderInputValue.length === 0) {
-      void dispatch(getAllActivatedParties({ blockLoading: true }));
-    }
-  }, [senderInputValue]);
-
   const validationSchema = yup.object({
     sender: yup.object({ id: yup.string(), name: yup.string() }).required(),
     addressType: yup.string().required(),
-    s_pec: yup.string().when('addressType', {
-      is: LegalChannelType.PEC,
-      then: yup
-        .string()
-        .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
-        .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
-        .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
-    }),
-    s_mail: yup.string().when('addressType', {
-      is: CourtesyChannelType.EMAIL,
-      then: yup
-        .string()
-        .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
-        .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
-        .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
-    }),
-    s_phone: yup.string().when('addressType', {
-      is: CourtesyChannelType.SMS,
-      then: yup
-        .string()
-        .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-        .matches(dataRegex.phoneNumber, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
-    }),
+    s_value: yup
+      .string()
+      .when('addressType', {
+        is: LegalChannelType.PEC,
+        then: pecValidationSchema(t),
+      })
+      .when('addressType', {
+        is: CourtesyChannelType.EMAIL,
+        then: emailValidationSchema(t),
+      })
+      .when('addressType', {
+        is: CourtesyChannelType.SMS,
+        then: phoneValidationSchema(t),
+      }),
   });
 
-  const initialValues = useMemo(
-    () => ({
-      sender: { id: '', name: '' },
-      addressType: addressTypes.find((a: AddressType) => a.show)?.id,
-      s_pec: '',
-      s_mail: '',
-      s_phone: '',
-    }),
-    [addressTypes]
-  );
+  const initialValues = {
+    sender: { id: '', name: '' },
+    addressType: addressTypes[0]?.id,
+    s_value: '',
+  };
 
   const formik = useFormik({
     initialValues,
     validateOnMount: true,
     validationSchema,
+    enableReinitialize: true,
     onSubmit: (values) => {
       if (values.addressType) {
         initValidation(
           values.addressType,
-          values.s_pec || values.s_mail || internationalPhonePrefix + values.s_phone,
+          values.addressType === CourtesyChannelType.SMS
+            ? internationalPhonePrefix + values.s_value
+            : values.s_value,
           values.sender.id,
           values.sender.name,
           async (status: 'validated' | 'cancelled') => {
@@ -195,7 +156,7 @@ const SpecialContacts = ({ legalAddresses, courtesyAddresses }: Props) => {
   });
 
   const renderOption = (props: any, option: Party) => (
-    <MenuItem {...props} value={option.id} key={option.id} role="option">
+    <MenuItem {...props} value={option.id} key={option.id}>
       <DropDownPartyMenuItem name={option.name} />
     </MenuItem>
   );
@@ -216,94 +177,48 @@ const SpecialContacts = ({ legalAddresses, courtesyAddresses }: Props) => {
     await formik.setFieldTouched('sender', true, false);
     await formik.setFieldValue('sender', newValue);
     setSenderInputValue(newValue?.name ?? '');
-    if (formik.values.addressType === LegalChannelType.PEC) {
-      const alreadyExists = addresses.findIndex((a) => a.senderId === newValue?.id && a.pec) > -1;
+    if (newValue && addresses[newValue.id]) {
+      const alreadyExists =
+        addresses[newValue.id].findIndex((a) => a.channelType === formik.values.addressType) > -1;
       setAlreadyExistsMessage(
-        alreadyExists ? t('special-contacts.pec-already-exists', { ns: 'recapiti' }) : ''
+        alreadyExists
+          ? t(`special-contacts.${formik.values.addressType.toLowerCase()}-already-exists`, {
+              ns: 'recapiti',
+            })
+          : ''
       );
-    } else if (formik.values.addressType === CourtesyChannelType.EMAIL) {
-      const alreadyExists = addresses.findIndex((a) => a.senderId === newValue?.id && a.mail) > -1;
-      setAlreadyExistsMessage(
-        alreadyExists ? t('special-contacts.email-already-exists', { ns: 'recapiti' }) : ''
-      );
-    } else {
-      const alreadyExists = addresses.findIndex((a) => a.senderId === newValue?.id && a.phone) > -1;
-      setAlreadyExistsMessage(
-        alreadyExists ? t('special-contacts.phone-already-exists', { ns: 'recapiti' }) : ''
-      );
+      return;
     }
+    setAlreadyExistsMessage('');
   };
 
   const addressTypeChangeHandler = async (e: ChangeEvent) => {
-    if ((e.target as any).value === LegalChannelType.PEC) {
-      await formik.setFieldValue('s_mail', '');
-      await formik.setFieldValue('s_phone', '');
-      const alreadyExists =
-        addresses.findIndex((a) => a.senderId === formik.values.sender.id && a.pec) > -1;
-      setAlreadyExistsMessage(
-        alreadyExists ? t('special-contacts.pec-already-exists', { ns: 'recapiti' }) : ''
-      );
-    } else if ((e.target as any).value === CourtesyChannelType.EMAIL) {
-      await formik.setFieldValue('s_pec', '');
-      await formik.setFieldValue('s_phone', '');
-      const alreadyExists =
-        addresses.findIndex((a) => a.senderId === formik.values.sender.id && a.mail) > -1;
-      setAlreadyExistsMessage(
-        alreadyExists ? t('special-contacts.email-already-exists', { ns: 'recapiti' }) : ''
-      );
-    } else {
-      await formik.setFieldValue('s_pec', '');
-      await formik.setFieldValue('s_mail', '');
-      const alreadyExists =
-        addresses.findIndex((a) => a.senderId === formik.values.sender.id && a.phone) > -1;
-      setAlreadyExistsMessage(
-        alreadyExists ? t('special-contacts.phone-already-exists', { ns: 'recapiti' }) : ''
-      );
-    }
+    await formik.setFieldValue('s_value', '');
     formik.handleChange(e);
+    if (addresses[formik.values.sender.id]) {
+      const alreadyExists =
+        addresses[formik.values.sender.id].findIndex(
+          (a) => a.channelType === (e.target as any).value
+        ) > -1;
+      setAlreadyExistsMessage(
+        alreadyExists
+          ? t(`special-contacts.${(e.target as any).value.toLowerCase()}-already-exists`, {
+              ns: 'recapiti',
+            })
+          : ''
+      );
+      return;
+    }
+    setAlreadyExistsMessage('');
   };
 
   useEffect(() => {
-    const addressesList: Array<Address> = legalAddresses
-      .filter((a) => a.senderId !== 'default')
-      .map((a) => ({
-        senderId: a.senderId,
-        senderName: a.senderName || a.senderId,
-        channelType: a.channelType,
-        pec: a.value,
-      }));
-
-    /* eslint-disable functional/immutable-data */
-    const getAddress = (address: DigitalAddress) => ({
-      senderId: address.senderId,
-      senderName: address.senderName || address.senderId,
-      phone: address.channelType === CourtesyChannelType.SMS ? address.value : undefined,
-      mail: address.channelType === CourtesyChannelType.EMAIL ? address.value : undefined,
-    });
-
-    for (const address of courtesyAddresses.filter((a) => a.senderId !== 'default')) {
-      // check if sender already exists in the list
-      const addressIndex = addressesList.findIndex((a) => a.senderId === address.senderId);
-      const newAddress = getAddress(address);
-      if (addressIndex === -1) {
-        addressesList.push(newAddress);
-      } else if (address.channelType === CourtesyChannelType.SMS) {
-        addressesList[addressIndex].phone = newAddress.phone;
-      } else {
-        addressesList[addressIndex].mail = newAddress.mail;
-      }
+    if (senderInputValue.length >= 4) {
+      void dispatch(getAllActivatedParties({ paNameFilter: senderInputValue, blockLoading: true }));
+    } else if (senderInputValue.length === 0) {
+      void dispatch(getAllActivatedParties({ blockLoading: true }));
     }
-    /* eslint-enable functional/immutable-data */
-    setAddresses(addressesList);
-  }, [legalAddresses, courtesyAddresses]);
-
-  useEffect(() => {
-    // set form value
-    if (!addressTypes.find((a) => a.show && a.id === formik.values.addressType)) {
-      const type = addressTypes.find((a) => a.show)?.id as LegalChannelType | CourtesyChannelType;
-      void formik.setFieldValue('addressType', type);
-    }
-  }, [addressTypes]);
+  }, [senderInputValue]);
 
   return (
     <ApiErrorWrapper
@@ -323,112 +238,79 @@ const SpecialContacts = ({ legalAddresses, courtesyAddresses }: Props) => {
           onSubmit={formik.handleSubmit}
           data-testid="specialContact"
         >
-          <Grid container direction="row" spacing={2} alignItems="flex">
-            <Grid item lg xs={12}>
-              <PnAutocomplete
-                id="sender"
-                data-testid="sender"
-                size="small"
-                options={parties ?? []}
-                fullWidth
-                autoComplete
-                getOptionLabel={getOptionLabel}
-                noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
-                isOptionEqualToValue={(option, value) => option.id === value.id}
-                onChange={senderChangeHandler}
-                inputValue={senderInputValue}
-                onInputChange={(_event, newInputValue, reason) => {
-                  if (reason === 'input') {
-                    setSenderInputValue(newInputValue);
+          <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
+            <PnAutocomplete
+              id="sender"
+              data-testid="sender"
+              size="small"
+              options={parties ?? []}
+              autoComplete
+              getOptionLabel={getOptionLabel}
+              noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              onChange={senderChangeHandler}
+              inputValue={senderInputValue}
+              onInputChange={(_event, newInputValue, reason) => {
+                if (reason === 'input') {
+                  setSenderInputValue(newInputValue);
+                }
+              }}
+              filterOptions={(e) => e}
+              renderOption={renderOption}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  name="sender"
+                  label={entitySearchLabel}
+                  error={senderInputValue.length > 80}
+                  helperText={
+                    senderInputValue.length > 80 && t('too-long-field-error', { maxLength: 80 })
                   }
-                }}
-                filterOptions={(e) => e}
-                renderOption={renderOption}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    name="sender"
-                    label={entitySearchLabel}
-                    error={senderInputValue.length > 80}
-                    helperText={
-                      senderInputValue.length > 80 && t('too-long-field-error', { maxLength: 80 })
+                />
+              )}
+              sx={{ flexGrow: 1, flexBasis: 0 }}
+            />
+            <CustomDropdown
+              id="addressType"
+              label={`${t('special-contacts.address-type', { ns: 'recapiti' })}*`}
+              name="addressType"
+              value={formik.values.addressType}
+              onChange={addressTypeChangeHandler}
+              size="small"
+              sx={{ flexGrow: 1, flexBasis: 0 }}
+            >
+              {addressTypes.map((a) => (
+                <MenuItem id={`dropdown-${a.id}`} key={a.id} value={a.id}>
+                  {a.value}
+                </MenuItem>
+              ))}
+            </CustomDropdown>
+            <TextField
+              id="s_value"
+              label={
+                t(`special-contacts.${formik.values.addressType.toLowerCase()}`, {
+                  ns: 'recapiti',
+                }) + '*'
+              }
+              name="s_value"
+              value={formik.values.s_value}
+              onChange={handleChangeTouched}
+              variant="outlined"
+              size="small"
+              error={formik.touched.s_value && Boolean(formik.errors.s_value)}
+              helperText={formik.touched.s_value && formik.errors.s_value}
+              InputProps={
+                formik.values.addressType === CourtesyChannelType.SMS
+                  ? {
+                      startAdornment: (
+                        <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
+                      ),
                     }
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item lg xs={12}>
-              <CustomDropdown
-                id="addressType"
-                label={`${t('special-contacts.address-type', { ns: 'recapiti' })}*`}
-                name="addressType"
-                value={formik.values.addressType}
-                onChange={addressTypeChangeHandler}
-                fullWidth
-                size="small"
-              >
-                {addressTypes
-                  .filter((a) => a.show)
-                  .map((a) => (
-                    <MenuItem id={`dropdown-${a.id}`} key={a.id} value={a.id}>
-                      {a.value}
-                    </MenuItem>
-                  ))}
-              </CustomDropdown>
-            </Grid>
-            <Grid item lg xs={12}>
-              {formik.values.addressType === LegalChannelType.PEC && (
-                <TextField
-                  id="s_pec"
-                  label={`${t('special-contacts.pec', { ns: 'recapiti' })}*`}
-                  name="s_pec"
-                  value={formik.values.s_pec}
-                  onChange={handleChangeTouched}
-                  fullWidth
-                  variant="outlined"
-                  type="mail"
-                  size="small"
-                  error={formik.touched.s_pec && Boolean(formik.errors.s_pec)}
-                  helperText={formik.touched.s_pec && formik.errors.s_pec}
-                />
-              )}
-              {formik.values.addressType === CourtesyChannelType.SMS && (
-                <TextField
-                  id="s_phone"
-                  label={`${t('special-contacts.phone', { ns: 'recapiti' })}*`}
-                  name="s_phone"
-                  value={formik.values.s_phone}
-                  onChange={handleChangeTouched}
-                  fullWidth
-                  variant="outlined"
-                  type="tel"
-                  size="small"
-                  error={formik.touched.s_phone && Boolean(formik.errors.s_phone)}
-                  helperText={formik.touched.s_phone && formik.errors.s_phone}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
-                    ),
-                  }}
-                />
-              )}
-              {formik.values.addressType === CourtesyChannelType.EMAIL && (
-                <TextField
-                  id="s_mail"
-                  label={`${t('special-contacts.mail', { ns: 'recapiti' })}*`}
-                  name="s_mail"
-                  value={formik.values.s_mail}
-                  onChange={handleChangeTouched}
-                  fullWidth
-                  variant="outlined"
-                  type="mail"
-                  size="small"
-                  error={formik.touched.s_mail && Boolean(formik.errors.s_mail)}
-                  helperText={formik.touched.s_mail && formik.errors.s_mail}
-                />
-              )}
-            </Grid>
-            <Grid item lg="auto" xs={12} textAlign="right">
+                  : {}
+              }
+              sx={{ flexGrow: 1, flexBasis: 0 }}
+            />
+            <Box sx={{ textAlign: 'right' }}>
               <ButtonNaked
                 sx={{ marginLeft: 'auto', height: '40px' }}
                 type="submit"
@@ -441,8 +323,8 @@ const SpecialContacts = ({ legalAddresses, courtesyAddresses }: Props) => {
               >
                 {t('button.associa')}
               </ButtonNaked>
-            </Grid>
-          </Grid>
+            </Box>
+          </Stack>
         </form>
         {alreadyExistsMessage && (
           <Alert severity="warning" sx={{ marginBottom: '20px' }} data-testid="alreadyExistsAlert">
@@ -450,7 +332,7 @@ const SpecialContacts = ({ legalAddresses, courtesyAddresses }: Props) => {
           </Alert>
         )}
         <SpecialContactsProvider>
-          {addresses.length > 0 && (
+          {Object.keys(addresses).length > 0 && (
             <>
               <Typography fontWeight={600} sx={{ marginTop: '80px' }}>
                 {t('special-contacts.associated', { ns: 'recapiti' })}
@@ -467,16 +349,16 @@ const SpecialContacts = ({ legalAddresses, courtesyAddresses }: Props) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {addresses.map((a) => (
-                      <SpecialContactElem key={a.senderId} address={a} />
+                    {Object.entries(addresses).map(([senderId, addr]) => (
+                      <SpecialContactElem key={senderId} senderId={senderId} addresses={addr} />
                     ))}
                   </TableBody>
                 </Table>
               )}
               {isMobile &&
-                addresses.map((a) => (
+                Object.entries(addresses).map(([senderId, addr]) => (
                   <Card
-                    key={a.senderId}
+                    key={senderId}
                     sx={{
                       border: '1px solid',
                       borderRadius: '8px',
@@ -485,7 +367,7 @@ const SpecialContacts = ({ legalAddresses, courtesyAddresses }: Props) => {
                     }}
                   >
                     <CardContent>
-                      <SpecialContactElem address={a} />
+                      <SpecialContactElem key={senderId} senderId={senderId} addresses={addr} />
                     </CardContent>
                   </Card>
                 ))}

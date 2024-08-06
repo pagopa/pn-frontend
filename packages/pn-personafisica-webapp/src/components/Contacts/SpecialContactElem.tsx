@@ -1,128 +1,88 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, Fragment, memo, useEffect, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, Fragment, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { TableCell, TableRow, Typography } from '@mui/material';
-import { dataRegex, useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn-commons';
+import { useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn-commons';
 
-import { AddressType, CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { DigitalAddress, LegalChannelType } from '../../models/contacts';
 import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
+import {
+  allowedAddressTypes,
+  emailValidationSchema,
+  pecValidationSchema,
+  phoneValidationSchema,
+} from '../../utility/contacts.utility';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
 
 type Props = {
-  address: {
-    senderId: string;
-    senderName: string;
-    phone?: string;
-    mail?: string;
-    pec?: string;
-  };
+  senderId: string;
+  addresses: Array<DigitalAddress>;
 };
 
 type Field = {
-  addressId: 'pec' | 'mail' | 'phone';
   id: string;
-  contactType: LegalChannelType | CourtesyChannelType;
   label: string;
   labelRoot: string;
+  address?: DigitalAddress;
 };
 
-const addressTypeToLabel = {
-  mail: 'email',
-  pec: 'pec',
-  phone: 'phone',
-};
+const reduceAddresses = <TValue,>(senderId: string, value: (type: string) => TValue) =>
+  allowedAddressTypes.reduce((obj, type) => {
+    // eslint-disable-next-line functional/immutable-data
+    obj[`${senderId}_${type.toLowerCase()}`] = value(type);
+    return obj;
+  }, {} as { [key: string]: TValue });
 
-// TODO: disable complexity for now.
-// we will fix it when we will complete the rework
-// eslint-disable-next-line sonarjs/cognitive-complexity
-const SpecialContactElem = memo(({ address }: Props) => {
+const SpecialContactElem: React.FC<Props> = ({ addresses, senderId }) => {
   const { t } = useTranslation(['recapiti']);
   const isMobile = useIsMobile();
   const { contextEditMode, setContextEditMode } = useSpecialContactsContext();
-  const [showDeleteModal, setShowDeleteModal] = useState({
-    [`${address.senderId}_pec`]: false,
-    [`${address.senderId}_phone`]: false,
-    [`${address.senderId}_mail`]: false,
-  });
   const dispatch = useAppDispatch();
+
   const digitalElemRef = useRef<{
     [key: string]: { editContact: () => void };
-  }>({
-    [`${address.senderId}_pec`]: { editContact: () => {} },
-    [`${address.senderId}_phone`]: { editContact: () => {} },
-    [`${address.senderId}_mail`]: { editContact: () => {} },
-  });
+  }>(reduceAddresses(senderId, () => ({ editContact: () => {} })));
+
+  const [showDeleteModal, setShowDeleteModal] = useState(reduceAddresses(senderId, () => false));
+
+  const initialValues = reduceAddresses(
+    senderId,
+    (type) => addresses.find((a) => a.channelType === type)?.value ?? ''
+  );
+
+  const fields: Array<Field> = allowedAddressTypes.map((type) => ({
+    id: `${senderId}_${type.toLowerCase()}`,
+    label: t(`special-contacts.${type.toLowerCase()}`, { ns: 'recapiti' }),
+    labelRoot: type === LegalChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts',
+    address: addresses.find((a) => a.channelType === type),
+  }));
 
   const toggleDeleteModal = (key: string) => {
     setShowDeleteModal((oldValue) => ({ ...oldValue, [key]: !oldValue[key] }));
   };
 
   const deleteConfirmHandler = (f: Field) => {
+    if (!f.address) {
+      return;
+    }
     toggleDeleteModal(f.id);
     void dispatch(
       deleteAddress({
-        addressType: f.addressId === 'pec' ? AddressType.LEGAL : AddressType.COURTESY,
-        senderId: address.senderId,
-        channelType: f.contactType,
+        addressType: f.address.addressType,
+        senderId,
+        channelType: f.address.channelType,
       })
     );
   };
 
-  const initialValues = {
-    [`${address.senderId}_pec`]: address.pec ?? '',
-    [`${address.senderId}_phone`]: address.phone ?? '',
-    [`${address.senderId}_mail`]: address.mail ?? '',
-  };
-
-  const fields: Array<Field> = useMemo(
-    () => [
-      {
-        addressId: 'pec',
-        id: `${address.senderId}_pec`,
-        contactType: LegalChannelType.PEC,
-        label: t('special-contacts.pec', { ns: 'recapiti' }),
-        labelRoot: 'legal-contacts',
-      },
-      {
-        addressId: 'phone',
-        id: `${address.senderId}_phone`,
-        contactType: CourtesyChannelType.SMS,
-        label: t('special-contacts.phone', { ns: 'recapiti' }),
-        labelRoot: 'courtesy-contacts',
-      },
-      {
-        addressId: 'mail',
-        id: `${address.senderId}_mail`,
-        contactType: CourtesyChannelType.EMAIL,
-        label: t('special-contacts.mail', { ns: 'recapiti' }),
-        labelRoot: 'courtesy-contacts',
-      },
-    ],
-    []
-  );
-
   const validationSchema = yup.object({
-    [`${address.senderId}_pec`]: yup
-      .string()
-      .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
-      .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
-      .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
-    [`${address.senderId}_phone`]: yup
-      .string()
-      .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-      .matches(
-        dataRegex.phoneNumberWithItalyPrefix,
-        t('courtesy-contacts.valid-phone', { ns: 'recapiti' })
-      ),
-    [`${address.senderId}_mail`]: yup
-      .string()
-      .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
-      .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
-      .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
+    [`${senderId}_pec`]: pecValidationSchema(t),
+    [`${senderId}_sms`]: phoneValidationSchema(t, true),
+    [`${senderId}_email`]: emailValidationSchema(t),
   });
 
   const updateContact = async (status: 'validated' | 'cancelled', id: string) => {
@@ -134,6 +94,7 @@ const SpecialContactElem = memo(({ address }: Props) => {
   const formik = useFormik({
     initialValues,
     validationSchema,
+    enableReinitialize: true,
     /** onSubmit validate */
     onSubmit: () => {},
   });
@@ -143,27 +104,25 @@ const SpecialContactElem = memo(({ address }: Props) => {
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  useEffect(() => {
-    void formik.setValues({
-      [`${address.senderId}_pec`]: address.pec ?? '',
-      [`${address.senderId}_phone`]: address.phone ?? '',
-      [`${address.senderId}_mail`]: address.mail ?? '',
-    });
-  }, [address]);
-
   const jsxField = (f: Field) => (
     <>
-      {address[f.addressId] ? (
+      {f.address ? (
         <>
           <DeleteDialog
             showModal={showDeleteModal[f.id]}
-            removeModalTitle={t(`${f.labelRoot}.remove-${addressTypeToLabel[f.addressId]}-title`, {
-              ns: 'recapiti',
-            })}
-            removeModalBody={t(`${f.labelRoot}.remove-${addressTypeToLabel[f.addressId]}-message`, {
-              value: formik.values[f.id],
-              ns: 'recapiti',
-            })}
+            removeModalTitle={t(
+              `${f.labelRoot}.remove-${f.address.channelType.toLowerCase()}-title`,
+              {
+                ns: 'recapiti',
+              }
+            )}
+            removeModalBody={t(
+              `${f.labelRoot}.remove-${f.address.channelType.toLowerCase()}-message`,
+              {
+                value: formik.values[f.id],
+                ns: 'recapiti',
+              }
+            )}
             handleModalClose={() => toggleDeleteModal(f.id)}
             confirmHandler={() => deleteConfirmHandler(f)}
           />
@@ -175,15 +134,15 @@ const SpecialContactElem = memo(({ address }: Props) => {
             }}
           >
             <DigitalContactElem
-              senderId={address.senderId}
-              senderName={address.senderName}
-              contactType={f.contactType}
+              senderId={senderId}
+              senderName={f.address.senderName}
+              contactType={f.address.channelType}
               inputProps={{
                 id: f.id,
                 name: f.id,
                 label: f.label,
                 value: formik.values[f.id],
-                onChange: handleChangeTouched,
+                onChange: (e) => void handleChangeTouched(e),
                 error:
                   (formik.touched[f.id] || formik.values[f.id].length > 0) &&
                   Boolean(formik.errors[f.id]),
@@ -212,7 +171,7 @@ const SpecialContactElem = memo(({ address }: Props) => {
       <>
         <Typography fontWeight={600}>{t('special-contacts.sender', { ns: 'recapiti' })}</Typography>
         <Typography fontWeight={700} fontSize={16}>
-          {address.senderName}
+          {addresses[0].senderName}
         </Typography>
         {fields.map((f) => (
           <Fragment key={f.id}>
@@ -228,16 +187,20 @@ const SpecialContactElem = memo(({ address }: Props) => {
 
   return (
     <TableRow>
-      <TableCell width="25%" sx={{ borderBottomColor: 'divider' }}>
-        <Typography fontWeight={700}>{address.senderName}</Typography>
+      <TableCell width={100 / (fields.length + 1)} sx={{ borderBottomColor: 'divider' }}>
+        <Typography fontWeight={700}>{addresses[0].senderName}</Typography>
       </TableCell>
       {fields.map((f) => (
-        <TableCell width="25%" key={f.id} sx={{ borderBottomColor: 'divider' }}>
+        <TableCell
+          width={100 / (fields.length + 1)}
+          key={f.id}
+          sx={{ borderBottomColor: 'divider' }}
+        >
           {jsxField(f)}
         </TableCell>
       ))}
     </TableRow>
   );
-});
+};
 
 export default SpecialContactElem;

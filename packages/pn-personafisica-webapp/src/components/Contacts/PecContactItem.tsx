@@ -5,12 +5,12 @@ import * as yup from 'yup';
 
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
-import { dataRegex } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { AddressType, LegalChannelType } from '../../models/contacts';
 import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
+import { pecValidationSchema } from '../../utility/contacts.utility';
 import CancelVerificationModal from './CancelVerificationModal';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
@@ -31,11 +31,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
   const dispatch = useAppDispatch();
 
   const validationSchema = yup.object({
-    pec: yup
-      .string()
-      .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
-      .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
-      .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
+    pec: pecValidationSchema(t),
   });
 
   const initialValues = {
@@ -191,7 +187,6 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
             data-testid="addContact"
           >
             {t('button.conferma')}
-            {/* {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })} */}
           </Button>
         </Grid>
       </Grid>

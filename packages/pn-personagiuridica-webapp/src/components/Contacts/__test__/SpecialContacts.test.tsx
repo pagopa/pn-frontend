@@ -312,7 +312,7 @@ describe('SpecialContacts Component', async () => {
     testValidFiled(form!, 's_phone');
     // check already exists alert
     const alreadyExistsAlert = result.getByTestId('alreadyExistsAlert');
-    expect(alreadyExistsAlert).toHaveTextContent('special-contacts.phone-already-exists');
+    expect(alreadyExistsAlert).toHaveTextContent('special-contacts.sms-already-exists');
   });
 
   it('add special contact', async () => {
