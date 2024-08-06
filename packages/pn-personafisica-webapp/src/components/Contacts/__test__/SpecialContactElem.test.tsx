@@ -34,18 +34,6 @@ describe('SpecialContactElem Component', () => {
   let result: RenderResult;
   let mock: MockAdapter;
 
-  beforeAll(() => {
-    mock = new MockAdapter(apiClient);
-  });
-
-  afterEach(() => {
-    mock.reset();
-  });
-
-  afterAll(() => {
-    mock.restore();
-  });
-
   const pecAddress = {
     addressType: AddressType.LEGAL,
     senderId: 'mocked-senderId',
@@ -69,6 +57,18 @@ describe('SpecialContactElem Component', () => {
     channelType: ChannelType.SMS,
     value: '+39333333333',
   };
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
 
   it('renders SpecialContactElem', async () => {
     // render component

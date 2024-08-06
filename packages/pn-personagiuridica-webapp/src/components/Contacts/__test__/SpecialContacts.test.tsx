@@ -26,7 +26,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { AddressType, CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
+import { AddressType, ChannelType } from '../../../models/contacts';
 import { CONTACT_ACTIONS } from '../../../redux/contact/actions';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
@@ -98,10 +98,7 @@ describe('SpecialContacts Component', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <SpecialContacts
-            legalAddresses={digitalLegalAddresses}
-            courtesyAddresses={digitalCourtesyAddresses}
-          />
+          <SpecialContacts digitalAddresses={digitalAddresses} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
@@ -109,7 +106,7 @@ describe('SpecialContacts Component', async () => {
     const form = result.container.querySelector('form');
     testFormElements(form!, 'sender', 'special-contacts.sender');
     testFormElements(form!, 'addressType', 'special-contacts.address-type');
-    testFormElements(form!, 's_pec', 'special-contacts.pec');
+    testFormElements(form!, 's_value', 'special-contacts.pec');
     const button = within(form!).getByTestId('addSpecialButton');
     expect(button).toHaveTextContent('button.associa');
     expect(button).toBeDisabled();
@@ -124,10 +121,7 @@ describe('SpecialContacts Component', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <SpecialContacts
-            legalAddresses={digitalLegalAddresses}
-            courtesyAddresses={digitalCourtesyAddresses}
-          />
+          <SpecialContacts digitalAddresses={digitalAddresses} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
@@ -135,9 +129,9 @@ describe('SpecialContacts Component', async () => {
     // change sender
     await testAutocomplete(form!, 'sender', parties, true, 1, true);
     // change pec
-    await testInput(form!, 's_pec', 'pec-carino@valida.com');
+    await testInput(form!, 's_value', 'pec-carino@valida.com');
     // check if valid
-    testValidFiled(form!, 's_pec');
+    testValidFiled(form!, 's_value');
     // check already exists alert
     const alreadyExistsAlert = result.getByTestId('alreadyExistsAlert');
     expect(alreadyExistsAlert).toHaveTextContent('special-contacts.pec-already-exists');
@@ -149,10 +143,7 @@ describe('SpecialContacts Component', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <SpecialContacts
-            legalAddresses={digitalLegalAddresses}
-            courtesyAddresses={digitalCourtesyAddresses}
-          />
+          <SpecialContacts digitalAddresses={digitalAddresses} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
@@ -160,13 +151,13 @@ describe('SpecialContacts Component', async () => {
     // change sender
     await testAutocomplete(form!, 'sender', parties, true, 1, true);
     // change pec
-    await testInput(form!, 's_pec', 'pec-errata');
+    await testInput(form!, 's_value', 'pec-errata');
     // check if invalid
-    testInvalidField(form!, 's_pec', 'legal-contacts.valid-pec');
+    testInvalidField(form!, 's_value', 'legal-contacts.valid-pec');
     // change pec
-    await testInput(form!, 's_pec', '');
+    await testInput(form!, 's_value', '');
     // check if invalid
-    testInvalidField(form!, 's_pec', 'legal-contacts.valid-pec');
+    testInvalidField(form!, 's_value', 'legal-contacts.valid-pec');
   });
 
   it('checks invalid mail', async () => {
@@ -175,10 +166,7 @@ describe('SpecialContacts Component', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <SpecialContacts
-            legalAddresses={digitalLegalAddresses}
-            courtesyAddresses={digitalCourtesyAddresses}
-          />
+          <SpecialContacts digitalAddresses={digitalAddresses} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
@@ -190,20 +178,20 @@ describe('SpecialContacts Component', async () => {
       form!,
       'addressType',
       [
-        { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
+        { label: 'special-contacts.pec', value: ChannelType.PEC },
+        { label: 'special-contacts.email', value: ChannelType.EMAIL },
+        { label: 'special-contacts.sms', value: ChannelType.SMS },
       ],
       1
     );
     // change email
-    await testInput(form!, 's_mail', 'email.non.[valida]@pagopa.it');
+    await testInput(form!, 's_value', 'email.non.[valida]@pagopa.it');
     // check if invalid
-    testInvalidField(form!, 's_mail', 'courtesy-contacts.valid-email');
+    testInvalidField(form!, 's_value', 'courtesy-contacts.valid-email');
     // change email
-    await testInput(form!, 's_mail', '');
+    await testInput(form!, 's_value', '');
     // check if invalid
-    testInvalidField(form!, 's_mail', 'courtesy-contacts.valid-email');
+    testInvalidField(form!, 's_value', 'courtesy-contacts.valid-email');
   });
 
   it('checks valid mail', async () => {
@@ -212,10 +200,7 @@ describe('SpecialContacts Component', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <SpecialContacts
-            legalAddresses={digitalLegalAddresses}
-            courtesyAddresses={digitalCourtesyAddresses}
-          />
+          <SpecialContacts digitalAddresses={digitalAddresses} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
@@ -227,16 +212,16 @@ describe('SpecialContacts Component', async () => {
       form!,
       'addressType',
       [
-        { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
+        { label: 'special-contacts.pec', value: ChannelType.PEC },
+        { label: 'special-contacts.email', value: ChannelType.EMAIL },
+        { label: 'special-contacts.sms', value: ChannelType.SMS },
       ],
       1
     );
     // change email
-    await testInput(form!, 's_mail', 'mail@valida.ar');
+    await testInput(form!, 's_value', 'mail@valida.ar');
     // check if valid
-    testValidFiled(form!, 's_mail');
+    testValidFiled(form!, 's_value');
     // check already exists alert
     const alreadyExistsAlert = result.getByTestId('alreadyExistsAlert');
     expect(alreadyExistsAlert).toHaveTextContent('special-contacts.email-already-exists');
@@ -248,10 +233,7 @@ describe('SpecialContacts Component', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <SpecialContacts
-            legalAddresses={digitalLegalAddresses}
-            courtesyAddresses={digitalCourtesyAddresses}
-          />
+          <SpecialContacts digitalAddresses={digitalAddresses} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
@@ -263,20 +245,20 @@ describe('SpecialContacts Component', async () => {
       form!,
       'addressType',
       [
-        { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
+        { label: 'special-contacts.pec', value: ChannelType.PEC },
+        { label: 'special-contacts.email', value: ChannelType.EMAIL },
+        { label: 'special-contacts.sms', value: ChannelType.SMS },
       ],
       2
     );
     // change phone
-    await testInput(form!, 's_phone', '123456789');
+    await testInput(form!, 's_value', '123456789');
     // check if invalid
-    testInvalidField(form!, 's_phone', 'courtesy-contacts.valid-phone');
+    testInvalidField(form!, 's_value', 'courtesy-contacts.valid-phone');
     // change phone
-    await testInput(form!, 's_phone', '');
+    await testInput(form!, 's_value', '');
     // check if invalid
-    testInvalidField(form!, 's_phone', 'courtesy-contacts.valid-phone');
+    testInvalidField(form!, 's_value', 'courtesy-contacts.valid-phone');
   });
 
   it('checks valid phone', async () => {
@@ -285,10 +267,7 @@ describe('SpecialContacts Component', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <SpecialContacts
-            legalAddresses={digitalLegalAddresses}
-            courtesyAddresses={digitalCourtesyAddresses}
-          />
+          <SpecialContacts digitalAddresses={digitalAddresses} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
@@ -300,16 +279,16 @@ describe('SpecialContacts Component', async () => {
       form!,
       'addressType',
       [
-        { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
+        { label: 'special-contacts.pec', value: ChannelType.PEC },
+        { label: 'special-contacts.email', value: ChannelType.EMAIL },
+        { label: 'special-contacts.sms', value: ChannelType.SMS },
       ],
       2
     );
     // change phone
-    await testInput(form!, 's_phone', '3494568016');
+    await testInput(form!, 's_value', '3494568016');
     // check if valid
-    testValidFiled(form!, 's_phone');
+    testValidFiled(form!, 's_value');
     // check already exists alert
     const alreadyExistsAlert = result.getByTestId('alreadyExistsAlert');
     expect(alreadyExistsAlert).toHaveTextContent('special-contacts.sms-already-exists');
@@ -335,10 +314,7 @@ describe('SpecialContacts Component', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <SpecialContacts
-            legalAddresses={digitalLegalAddresses}
-            courtesyAddresses={digitalCourtesyAddresses}
-          />
+          <SpecialContacts digitalAddresses={digitalAddresses} />
         </DigitalContactsCodeVerificationProvider>,
         { preloadedState: { contactsState: { digitalAddresses } } }
       );
@@ -351,14 +327,14 @@ describe('SpecialContacts Component', async () => {
       form!,
       'addressType',
       [
-        { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
+        { label: 'special-contacts.pec', value: ChannelType.PEC },
+        { label: 'special-contacts.email', value: ChannelType.EMAIL },
+        { label: 'special-contacts.sms', value: ChannelType.SMS },
       ],
       0
     );
     // change pec
-    await testInput(form!, 's_pec', pecValue);
+    await testInput(form!, 's_value', pecValue);
     const button = within(form!).getByTestId('addSpecialButton');
     fireEvent.click(button);
     await waitFor(() => {
@@ -384,7 +360,7 @@ describe('SpecialContacts Component', async () => {
         pecValid: true,
         senderId: parties[2].id,
         addressType: AddressType.LEGAL,
-        channelType: LegalChannelType.PEC,
+        channelType: ChannelType.PEC,
         codeValid: true,
       },
     ];
@@ -393,10 +369,7 @@ describe('SpecialContacts Component', async () => {
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts
-          legalAddresses={addresses.filter((addr) => addr.addressType === AddressType.LEGAL)}
-          courtesyAddresses={addresses.filter((addr) => addr.addressType === AddressType.COURTESY)}
-        />
+        <SpecialContacts digitalAddresses={addresses} />
       </DigitalContactsCodeVerificationProvider>
     );
     await waitFor(() => {
@@ -426,10 +399,7 @@ describe('SpecialContacts Component', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <SpecialContacts
-            legalAddresses={digitalLegalAddresses}
-            courtesyAddresses={digitalCourtesyAddresses}
-          />
+          <SpecialContacts digitalAddresses={digitalAddresses} />
         </DigitalContactsCodeVerificationProvider>,
         { preloadedState: { contactsState: { digitalAddresses } } }
       );
@@ -466,7 +436,7 @@ describe('SpecialContacts Component', async () => {
       ...digitalLegalAddresses,
       {
         ...digitalCourtesyAddresses[0],
-        senderName: parties[0].id,
+        senderName: undefined,
         value: mailValue,
       },
       ...digitalCourtesyAddresses.slice(1),
@@ -477,10 +447,7 @@ describe('SpecialContacts Component', async () => {
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts
-          legalAddresses={addresses.filter((addr) => addr.addressType === AddressType.LEGAL)}
-          courtesyAddresses={addresses.filter((addr) => addr.addressType === AddressType.COURTESY)}
-        />
+        <SpecialContacts digitalAddresses={addresses} />
       </DigitalContactsCodeVerificationProvider>
     );
     await waitFor(() => {
@@ -497,10 +464,7 @@ describe('SpecialContacts Component', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <SpecialContacts
-            legalAddresses={digitalLegalAddresses}
-            courtesyAddresses={digitalCourtesyAddresses}
-          />
+          <SpecialContacts digitalAddresses={digitalAddresses} />
         </DigitalContactsCodeVerificationProvider>,
         { preloadedState: { contactsState: { digitalAddresses } } }
       );
@@ -525,10 +489,7 @@ describe('SpecialContacts Component', async () => {
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts
-          legalAddresses={addresses.filter((addr) => addr.addressType === AddressType.LEGAL)}
-          courtesyAddresses={addresses.filter((addr) => addr.addressType === AddressType.COURTESY)}
-        />
+        <SpecialContacts digitalAddresses={addresses} />
       </DigitalContactsCodeVerificationProvider>
     );
     await waitFor(() => {
@@ -546,10 +507,7 @@ describe('SpecialContacts Component', async () => {
           <ResponseEventDispatcher />
           <AppResponseMessage />
           <DigitalContactsCodeVerificationProvider>
-            <SpecialContacts
-              legalAddresses={digitalLegalAddresses}
-              courtesyAddresses={digitalCourtesyAddresses}
-            />
+            <SpecialContacts digitalAddresses={digitalAddresses} />
           </DigitalContactsCodeVerificationProvider>
         </>
       );

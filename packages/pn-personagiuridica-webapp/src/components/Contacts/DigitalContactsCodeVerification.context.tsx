@@ -25,7 +25,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { AddressType, CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { AddressType, ChannelType } from '../../models/contacts';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { SaveDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -36,14 +36,14 @@ type ModalProps = {
   labelType: string;
   senderId: string;
   senderName?: string;
-  digitalDomicileType: LegalChannelType | CourtesyChannelType;
+  digitalDomicileType: ChannelType;
   value: string;
   callbackOnValidation?: (status: 'validated' | 'cancelled') => void;
 };
 
 interface IDigitalContactsCodeVerificationContext {
   initValidation: (
-    digitalDomicileType: LegalChannelType | CourtesyChannelType,
+    digitalDomicileType: ChannelType,
     value: string,
     senderId: string,
     senderName?: string,
@@ -66,7 +66,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
     labelType: '',
     recipientId: '',
     senderId: '',
-    digitalDomicileType: LegalChannelType.PEC,
+    digitalDomicileType: ChannelType.PEC,
     value: '',
   } as ModalProps;
 
@@ -108,7 +108,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   const handleCodeVerification = (verificationCode?: string, noCallback: boolean = false) => {
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType:
-        modalProps.digitalDomicileType === LegalChannelType.PEC
+        modalProps.digitalDomicileType === ChannelType.PEC
           ? AddressType.LEGAL
           : AddressType.COURTESY,
       senderId: modalProps.senderId,
@@ -131,7 +131,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
           return;
         }
         // contact has already been verified
-        if (res.pecValid || modalProps.digitalDomicileType !== LegalChannelType.PEC) {
+        if (res.pecValid || modalProps.digitalDomicileType !== ChannelType.PEC) {
           // show success message
           dispatch(
             appStateActions.addSuccess({
@@ -152,7 +152,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   };
 
   const initValidation = (
-    digitalDomicileType: LegalChannelType | CourtesyChannelType,
+    digitalDomicileType: ChannelType,
     value: string,
     senderId: string,
     senderName?: string,
@@ -162,12 +162,12 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
     let labelRoot = '';
     let labelType = '';
     /* eslint-enable functional/no-let */
-    if (digitalDomicileType === LegalChannelType.PEC) {
+    if (digitalDomicileType === ChannelType.PEC) {
       labelRoot = 'legal-contacts';
       labelType = 'pec';
     } else {
       labelRoot = 'courtesy-contacts';
-      labelType = digitalDomicileType === CourtesyChannelType.SMS ? 'phone' : 'email';
+      labelType = digitalDomicileType === ChannelType.SMS ? 'phone' : 'email';
     }
     setModalProps({
       labelRoot,
@@ -190,13 +190,10 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
 
   const handleDisclaimerVisibilityFirst = () => {
     // if senderId !== 'default' they are a special contact => don't show disclaimer
-    // if modalProps.digitalDomicileType === LegalChannelType.PEC it's a legal contact => don't show disclaimer
-    // if modalProps.digitalDomicileType !== LegalChannelType.PEC and senderId === 'default' it's a
+    // if modalProps.digitalDomicileType === ChannelType.PEC it's a legal contact => don't show disclaimer
+    // if modalProps.digitalDomicileType !== ChannelType.PEC and senderId === 'default' it's a
     // courtesy contact => show disclaimer
-    if (
-      modalProps.digitalDomicileType === LegalChannelType.PEC ||
-      modalProps.senderId !== 'default'
-    ) {
+    if (modalProps.digitalDomicileType === ChannelType.PEC || modalProps.senderId !== 'default') {
       // open verification code dialog
       handleCodeVerification();
     } else {
