@@ -23,21 +23,16 @@ interface Props {
 const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { initValidation } = useDigitalContactsCodeVerificationContext();
+  const contactType = type.toLowerCase();
   const phoneRegex = value ? dataRegex.phoneNumberWithItalyPrefix : dataRegex.phoneNumber;
   const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const dispatch = useAppDispatch();
 
-  const digitalDomicileType = useMemo(
-    () =>
-      type === CourtesyChannelType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS,
-    []
-  );
-
   const emailValidationSchema = useMemo(
     () =>
       yup.object().shape({
-        EMAIL: yup
+        email: yup
           .string()
           .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
           .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
@@ -52,7 +47,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
   const phoneValidationSchema = useMemo(
     () =>
       yup.object().shape({
-        SMS: yup
+        sms: yup
           .string()
           .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
           .matches(phoneRegex, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
@@ -62,7 +57,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
 
   const formik = useFormik({
     initialValues: {
-      [type]: value ?? '',
+      [contactType]: value ?? '',
     },
     enableReinitialize: true,
     validateOnMount: true,
@@ -71,12 +66,12 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
     onSubmit: () => {
       const contactValue =
         type === CourtesyChannelType.EMAIL
-          ? formik.values[type]
-          : internationalPhonePrefix + formik.values[type];
+          ? formik.values[contactType]
+          : internationalPhonePrefix + formik.values[contactType];
       if (value) {
         digitalElemRef.current.editContact();
       } else {
-        initValidation(digitalDomicileType, contactValue, 'default');
+        initValidation(type, contactValue, 'default');
       }
     },
   });
@@ -85,7 +80,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     formik.handleChange(event);
-    await handleTouched(event.target.id.toUpperCase(), true);
+    await handleTouched(event.target.id, true);
   };
 
   const handleTouched = async (id: string, touched: boolean) => {
@@ -94,7 +89,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
 
   const handleEditConfirm = async (status: 'validated' | 'cancelled') => {
     if (status === 'cancelled') {
-      await formik.setFieldValue(type, value, true);
+      await formik.setFieldValue(contactType, value, true);
     }
   };
 
@@ -104,12 +99,12 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
       deleteAddress({
         addressType: AddressType.COURTESY,
         senderId: 'default',
-        channelType: digitalDomicileType,
+        channelType: type,
       })
     )
       .unwrap()
       .then(() => {
-        void handleTouched(type, false);
+        void handleTouched(contactType, false);
       })
       .catch(() => {});
   };
@@ -127,34 +122,30 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
       <form
         onSubmit={formik.handleSubmit}
         style={{ width: '100%' }}
-        data-testid={`courtesyContacts-${type.toLowerCase()}`}
+        data-testid={`courtesyContacts-${contactType}`}
       >
-        <Typography
-          id={`${type.toLowerCase()}-label`}
-          variant="body2"
-          mb={1}
-          sx={{ fontWeight: 'bold' }}
-        >
-          {t(`courtesy-contacts.${type.toLowerCase()}-added`, { ns: 'recapiti' })}
+        <Typography id={`${contactType}-label`} variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
+          {t(`courtesy-contacts.${contactType}-added`, { ns: 'recapiti' })}
         </Typography>
         {value ? (
           <DigitalContactElem
             senderId="default"
-            contactType={digitalDomicileType}
+            contactType={type}
             ref={digitalElemRef}
             inputProps={{
-              id: type,
-              name: type,
-              label: t(`courtesy-contacts.link-${type.toLowerCase()}-placeholder`, {
+              id: contactType,
+              name: contactType,
+              label: t(`courtesy-contacts.link-${contactType}-placeholder`, {
                 ns: 'recapiti',
               }),
-              value: formik.values[type],
+              value: formik.values[contactType],
               onChange: (e) => void handleChangeTouched(e),
               error:
-                (formik.touched[type] || formik.values[type].length > 0) &&
-                Boolean(formik.errors[type]),
+                (formik.touched[contactType] || formik.values[contactType].length > 0) &&
+                Boolean(formik.errors[contactType]),
               helperText:
-                (formik.touched[type] || formik.values[type].length > 0) && formik.errors[type],
+                (formik.touched[contactType] || formik.values[contactType].length > 0) &&
+                formik.errors[contactType],
             }}
             saveDisabled={!formik.isValid}
             onConfirm={handleEditConfirm}
@@ -164,26 +155,25 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
         ) : (
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
-              id={type.toLowerCase()}
-              name={type}
-              aria-labelledby={`${type}-label`}
-              value={formik.values[type]}
+              id={contactType}
+              name={contactType}
+              aria-labelledby={`${contactType}-label`}
+              value={formik.values[contactType]}
               onChange={handleChangeTouched}
-              error={formik.touched[type] && Boolean(formik.errors[type])}
-              helperText={formik.touched[type] && formik.errors[type]}
+              error={formik.touched[contactType] && Boolean(formik.errors[contactType])}
+              helperText={formik.touched[contactType] && formik.errors[contactType]}
               inputProps={{
                 sx: { height: '14px' },
-                'data-testid': `courtesy-contact-${type.toLowerCase()}`,
+                'data-testid': `courtesy-contact-${contactType}`,
               }}
               placeholder={
                 type !== CourtesyChannelType.SMS
-                  ? t(`courtesy-contacts.link-${type.toLowerCase()}-placeholder`, {
+                  ? t(`courtesy-contacts.link-${contactType}-placeholder`, {
                       ns: 'recapiti',
                     })
                   : ''
               }
               fullWidth
-              type={type === CourtesyChannelType.EMAIL ? 'mail' : 'tel'}
               InputProps={
                 type === CourtesyChannelType.SMS
                   ? {
@@ -197,15 +187,15 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
             />
 
             <Button
-              id={`courtesy-${type.toLowerCase()}-button`}
+              id={`courtesy-${contactType}-button`}
               variant="outlined"
               disabled={!formik.isValid}
               fullWidth
               type="submit"
-              data-testid={`courtesy-${type.toLowerCase()}-button`}
+              data-testid={`courtesy-${contactType}-button`}
               sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
             >
-              {t(`courtesy-contacts.${type.toLowerCase()}-add`, { ns: 'recapiti' })}
+              {t(`courtesy-contacts.${contactType}-add`, { ns: 'recapiti' })}
             </Button>
           </Stack>
         )}
@@ -214,11 +204,11 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
       <DeleteDialog
         showModal={showDeleteModal}
         removeModalTitle={t(
-          `courtesy-contacts.${blockDelete ? 'block-' : ''}remove-${type.toLowerCase()}-title`,
+          `courtesy-contacts.${blockDelete ? 'block-' : ''}remove-${contactType}-title`,
           { ns: 'recapiti' }
         )}
         removeModalBody={t(
-          `courtesy-contacts.${blockDelete ? 'block-' : ''}remove-${type.toLowerCase()}-message`,
+          `courtesy-contacts.${blockDelete ? 'block-' : ''}remove-${contactType}-message`,
           {
             value: formik.values[type],
             ns: 'recapiti',
