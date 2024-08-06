@@ -10,7 +10,7 @@ import './utility/onetrust';
 
 const App = () => {
   const configuration = useMemo(() => getConfiguration(), []);
-  
+
   useTracking(configuration.MIXPANEL_TOKEN, process.env.NODE_ENV);
 
   const [clickVersion] = useMultiEvent({
