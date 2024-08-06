@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
-import { Box, Button, Grid, TextField, Typography } from '@mui/material';
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -84,6 +84,16 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
     void changeValue();
   }, [value]);
 
+  /*
+   * if *some* value has been attached to the contact type,
+   * then we show the value giving the user the possibility of changing it
+   * (the DigitalContactElem component includes the "update" button)
+   */
+  /*
+   * if *no* value has been attached to the contact type,
+   * then we show the input field allowing the user to enter it along with the button
+   * to perform the addition.
+   */
   if (value || verifyingAddress) {
     return (
       <>
@@ -108,12 +118,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
 
         <Box mt="20px" data-testid="legalContacts">
           {!verifyingAddress && (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                digitalElemRef.current.editContact();
-              }}
-            >
+            <form onSubmit={formik.handleSubmit}>
               <Typography mb={1} sx={{ fontWeight: 'bold' }} id="associatedPEC">
                 {t('legal-contacts.pec-added', { ns: 'recapiti' })}
               </Typography>
@@ -167,34 +172,32 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
 
   return (
     <form onSubmit={formik.handleSubmit} data-testid="insertLegalContact">
-      <Grid container spacing={2} direction="row" mt={3}>
-        <Grid item lg={8} sm={8} xs={12}>
-          <TextField
-            id="pec"
-            placeholder={t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' })}
-            fullWidth
-            name="pec"
-            value={formik.values.pec}
-            onChange={handleChangeTouched}
-            error={formik.touched.pec && Boolean(formik.errors.pec)}
-            helperText={formik.touched.pec && formik.errors.pec}
-            inputProps={{ sx: { height: '14px' } }}
-          />
-        </Grid>
-        <Grid item lg={4} sm={4} xs={12} alignItems="right">
-          <Button
-            id="add-contact"
-            variant="outlined"
-            disabled={!formik.isValid}
-            fullWidth
-            type="submit"
-            data-testid="addContact"
-          >
-            {t('button.conferma')}
-            {/* {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })} */}
-          </Button>
-        </Grid>
-      </Grid>
+      <Stack spacing={2} direction={{ sm: 'row', xs: 'column' }} mt={5}>
+        <TextField
+          id="pec"
+          placeholder={t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' })}
+          fullWidth
+          name="pec"
+          value={formik.values.pec}
+          onChange={handleChangeTouched}
+          error={formik.touched.pec && Boolean(formik.errors.pec)}
+          helperText={formik.touched.pec && formik.errors.pec}
+          inputProps={{ sx: { height: '14px' } }}
+          sx={{ flexBasis: { xs: 'unset', lg: '66.66%' } }}
+        />
+        <Button
+          id="add-contact"
+          variant="outlined"
+          disabled={!formik.isValid}
+          fullWidth
+          type="submit"
+          data-testid="addContact"
+          sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
+        >
+          {t('button.conferma')}
+          {/* {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })} */}
+        </Button>
+      </Stack>
     </form>
   );
 };
