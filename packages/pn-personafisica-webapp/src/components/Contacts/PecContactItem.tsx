@@ -120,33 +120,19 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
               <DigitalContactElem
                 senderId="default"
                 contactType={LegalChannelType.PEC}
-                fields={[
-                  {
-                    id: `legalContacts`,
-                    key: 'legalContactValue',
-                    component: (
-                      <TextField
-                        id="pec"
-                        fullWidth
-                        name="pec"
-                        label="PEC"
-                        variant="outlined"
-                        size="small"
-                        value={formik.values.pec}
-                        onChange={handleChangeTouched}
-                        error={formik.touched.pec && Boolean(formik.errors.pec)}
-                        helperText={formik.touched.pec && formik.errors.pec}
-                      />
-                    ),
-                    isEditable: true,
-                    size: 'auto',
-                  },
-                ]}
-                saveDisabled={!formik.isValid}
-                value={formik.values.pec}
-                onConfirmClick={handleEditConfirm}
-                resetModifyValue={() => handleEditConfirm('cancelled')}
                 ref={digitalElemRef}
+                inputProps={{
+                  id: 'pec',
+                  name: 'pec',
+                  label: 'PEC',
+                  value: formik.values.pec,
+                  onChange: (e) => void handleChangeTouched(e),
+                  error: formik.touched.pec && Boolean(formik.errors.pec),
+                  helperText: formik.touched.pec && formik.errors.pec,
+                }}
+                saveDisabled={!formik.isValid}
+                onConfirm={handleEditConfirm}
+                resetModifyValue={() => handleEditConfirm('cancelled')}
                 onDelete={() => setShowDeleteModal(true)}
               />
             </form>

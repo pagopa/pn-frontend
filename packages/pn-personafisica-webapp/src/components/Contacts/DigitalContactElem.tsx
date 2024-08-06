@@ -1,34 +1,20 @@
-import {
-  Dispatch,
-  ReactChild,
-  SetStateAction,
-  forwardRef,
-  memo,
-  useImperativeHandle,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, forwardRef, memo, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Grid, Typography } from '@mui/material';
+import { TextField, TextFieldProps, Typography } from '@mui/material';
+import { WithRequired } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
-  fields: Array<{
-    component: ReactChild;
-    id: string;
-    isEditable?: boolean;
-    size: 'auto' | 'variable';
-    key: string;
-  }>;
+  inputProps: WithRequired<TextFieldProps, 'id'>;
   senderId: string;
   senderName?: string;
   contactType: CourtesyChannelType | LegalChannelType;
   saveDisabled?: boolean;
-  value: string;
-  onConfirmClick: (status: 'validated' | 'cancelled') => void;
+  onConfirm: (status: 'validated' | 'cancelled') => void;
   resetModifyValue: () => void;
   onDelete: () => void;
   editDisabled?: boolean;
@@ -38,13 +24,12 @@ type Props = {
 const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
   (
     {
-      fields,
+      inputProps,
       saveDisabled = false,
       senderId,
       senderName,
       contactType,
-      value,
-      onConfirmClick,
+      onConfirm,
       resetModifyValue,
       editDisabled,
       setContextEditMode,
@@ -55,24 +40,6 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
     const { t } = useTranslation(['common']);
     const [editMode, setEditMode] = useState(false);
     const { initValidation } = useDigitalContactsCodeVerificationContext();
-
-    const mappedChildren = fields.map((f) => (
-      <Grid key={f.key} item lg={f.size === 'auto' ? true : 'auto'} xs={12}>
-        {!f.isEditable && f.component}
-        {f.isEditable && editMode && f.component}
-        {f.isEditable && !editMode && (
-          <Typography
-            sx={{
-              wordBreak: 'break-word',
-            }}
-            id={f.id}
-          >
-            {(f.component as any).props.value}
-          </Typography>
-        )}
-      </Grid>
-    ));
-
     const toggleEdit = () => {
       setEditMode(!editMode);
       if (setContextEditMode) {
@@ -88,11 +55,11 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
     const editHandler = () => {
       initValidation(
         contactType,
-        value,
+        inputProps.value as string,
         senderId,
         senderName,
         (status: 'validated' | 'cancelled') => {
-          onConfirmClick(status);
+          onConfirm(status);
           toggleEdit();
         }
       );
@@ -103,48 +70,64 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
     }));
 
     return (
-      <Grid container spacing="4" direction="row" alignItems="center">
-        {mappedChildren}
-        <Grid item lg={12} xs={12} textAlign={'left'}>
-          {!editMode ? (
-            <>
-              <ButtonNaked
-                color="primary"
-                onClick={toggleEdit}
-                sx={{ mr: 2 }}
-                disabled={editDisabled}
-                id={`modifyContact-${senderId}`}
-              >
-                {t('button.modifica')}
-              </ButtonNaked>
-              <ButtonNaked
-                id={`cancelContact-${senderId}`}
-                color="primary"
-                onClick={onDelete}
-                disabled={editDisabled}
-              >
-                {t('button.elimina')}
-              </ButtonNaked>
-            </>
-          ) : (
-            <>
-              <ButtonNaked
-                color="primary"
-                disabled={saveDisabled}
-                type="button"
-                onClick={editHandler}
-                sx={{ mr: 2 }}
-                id={`saveModifyButton-${senderId}`}
-              >
-                {t('button.salva')}
-              </ButtonNaked>
-              <ButtonNaked color="primary" onClick={onCancel}>
-                {t('button.annulla')}
-              </ButtonNaked>
-            </>
-          )}
-        </Grid>
-      </Grid>
+      <>
+        {editMode && (
+          <TextField
+            fullWidth
+            variant="outlined"
+            size="small"
+            data-testid={inputProps.id}
+            {...inputProps}
+          />
+        )}
+        {!editMode && (
+          <Typography
+            sx={{
+              wordBreak: 'break-word',
+            }}
+            id={`${inputProps.id}-typography`}
+          >
+            {inputProps.value as string}
+          </Typography>
+        )}
+        {!editMode ? (
+          <>
+            <ButtonNaked
+              color="primary"
+              onClick={toggleEdit}
+              sx={{ mr: 2 }}
+              disabled={editDisabled}
+              id={`modifyContact-${senderId}`}
+            >
+              {t('button.modifica')}
+            </ButtonNaked>
+            <ButtonNaked
+              id={`cancelContact-${senderId}`}
+              color="primary"
+              onClick={onDelete}
+              disabled={editDisabled}
+            >
+              {t('button.elimina')}
+            </ButtonNaked>
+          </>
+        ) : (
+          <>
+            <ButtonNaked
+              color="primary"
+              disabled={saveDisabled}
+              type="button"
+              onClick={editHandler}
+              sx={{ mr: 2 }}
+              id={`saveModifyButton-${senderId}`}
+            >
+              {t('button.salva')}
+            </ButtonNaked>
+            <ButtonNaked color="primary" onClick={onCancel}>
+              {t('button.annulla')}
+            </ButtonNaked>
+          </>
+        )}
+      </>
     );
   }
 );

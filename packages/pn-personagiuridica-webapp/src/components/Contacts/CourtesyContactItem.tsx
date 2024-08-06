@@ -139,7 +139,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
               inputProps={{
                 id: type,
                 name: type,
-                label: t(`courtesy-contacts.link-${type.toLowerCase()}-placeholder`, {
+                label: t(`courtesy-contacts.link-${type}-placeholder`, {
                   ns: 'recapiti',
                 }),
                 value: formik.values[type],
