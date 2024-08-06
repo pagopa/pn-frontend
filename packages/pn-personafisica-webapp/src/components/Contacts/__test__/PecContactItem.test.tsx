@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { vi } from 'vitest';
 
 import { digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import {
@@ -12,6 +13,14 @@ import {
 import { apiClient } from '../../../api/apiClients';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import PecContactItem from '../PecContactItem';
+
+vi.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
+}));
 
 describe('PecContactItem component', () => {
   let result: RenderResult;

@@ -53,7 +53,9 @@ describe('CourtesyContactItem component', () => {
       const inputError = result.container.querySelector(`#${CourtesyFieldType.PHONE}-helper-text`);
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
       fireEvent.change(input!, { target: { value: '' } });
-      expect(input!).toHaveValue('');
+      await waitFor(() => {
+        expect(input!).toHaveValue('');
+      });
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
       const button = result.getByRole('button');
       expect(button).toHaveTextContent('courtesy-contacts.phone-add');
