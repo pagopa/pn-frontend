@@ -94,31 +94,58 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
    * then we show the input field allowing the user to enter it along with the button
    * to perform the addition.
    */
-  if (value || verifyingAddress) {
-    return (
-      <>
-        <CancelVerificationModal
-          open={cancelDialogOpen}
-          handleClose={() => setCancelDialogOpen(false)}
-        />
+  return (
+    <>
+      {(value || verifyingAddress) && (
+        <>
+          <CancelVerificationModal
+            open={cancelDialogOpen}
+            handleClose={() => setCancelDialogOpen(false)}
+          />
 
-        <DeleteDialog
-          showModal={showDeleteModal}
-          removeModalTitle={t(`legal-contacts.${blockDelete ? 'block-' : ''}remove-pec-title`, {
-            ns: 'recapiti',
-          })}
-          removeModalBody={t(`legal-contacts.${blockDelete ? 'block-' : ''}remove-pec-message`, {
-            value: formik.values.pec,
-            ns: 'recapiti',
-          })}
-          handleModalClose={() => setShowDeleteModal(false)}
-          confirmHandler={deleteConfirmHandler}
-          blockDelete={blockDelete}
-        />
+          <DeleteDialog
+            showModal={showDeleteModal}
+            removeModalTitle={t(`legal-contacts.${blockDelete ? 'block-' : ''}remove-pec-title`, {
+              ns: 'recapiti',
+            })}
+            removeModalBody={t(`legal-contacts.${blockDelete ? 'block-' : ''}remove-pec-message`, {
+              value: formik.values.pec,
+              ns: 'recapiti',
+            })}
+            handleModalClose={() => setShowDeleteModal(false)}
+            confirmHandler={deleteConfirmHandler}
+            blockDelete={blockDelete}
+          />
+        </>
+      )}
 
+      {verifyingAddress && (
         <Box mt="20px" data-testid="legalContacts">
-          {!verifyingAddress && (
-            <form onSubmit={formik.handleSubmit}>
+          <Typography mb={1} sx={{ fontWeight: 'bold' }}>
+            {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
+          </Typography>
+          <Box display="flex" flexDirection="row" mt={2.5}>
+            <Box display="flex" flexDirection="row" mr={1}>
+              <WatchLaterIcon fontSize="small" />
+              <Typography id="validationPecProgress" fontWeight="bold" variant="body2" ml={1}>
+                {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
+              </Typography>
+            </Box>
+            <ButtonNaked
+              color="primary"
+              onClick={handlePecValidationCancel}
+              data-testid="cancelValidation"
+            >
+              {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
+            </ButtonNaked>
+          </Box>
+        </Box>
+      )}
+
+      <Box mt="20px" data-testid="legalContacts">
+        <form onSubmit={formik.handleSubmit} data-testid="insertLegalContact">
+          {value && (
+            <>
               <Typography mb={1} sx={{ fontWeight: 'bold' }} id="associatedPEC">
                 {t('legal-contacts.pec-added', { ns: 'recapiti' })}
               </Typography>
@@ -140,65 +167,37 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
                 resetModifyValue={() => handleEditConfirm('cancelled')}
                 onDelete={() => setShowDeleteModal(true)}
               />
-            </form>
-          )}
-
-          {verifyingAddress && (
-            <>
-              <Typography mb={1} sx={{ fontWeight: 'bold' }}>
-                {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
-              </Typography>
-              <Box display="flex" flexDirection="row" mt={2.5}>
-                <Box display="flex" flexDirection="row" mr={1}>
-                  <WatchLaterIcon fontSize="small" />
-                  <Typography id="validationPecProgress" fontWeight="bold" variant="body2" ml={1}>
-                    {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
-                  </Typography>
-                </Box>
-                <ButtonNaked
-                  color="primary"
-                  onClick={handlePecValidationCancel}
-                  data-testid="cancelValidation"
-                >
-                  {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
-                </ButtonNaked>
-              </Box>
             </>
           )}
-        </Box>
-      </>
-    );
-  }
-
-  return (
-    <form onSubmit={formik.handleSubmit} data-testid="insertLegalContact">
-      <Stack spacing={2} direction={{ sm: 'row', xs: 'column' }} mt={5}>
-        <TextField
-          id="pec"
-          placeholder={t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' })}
-          fullWidth
-          name="pec"
-          value={formik.values.pec}
-          onChange={handleChangeTouched}
-          error={formik.touched.pec && Boolean(formik.errors.pec)}
-          helperText={formik.touched.pec && formik.errors.pec}
-          inputProps={{ sx: { height: '14px' } }}
-          sx={{ flexBasis: { xs: 'unset', lg: '66.66%' } }}
-        />
-        <Button
-          id="add-contact"
-          variant="outlined"
-          disabled={!formik.isValid}
-          fullWidth
-          type="submit"
-          data-testid="addContact"
-          sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
-        >
-          {t('button.conferma')}
-          {/* {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })} */}
-        </Button>
-      </Stack>
-    </form>
+          <Stack spacing={2} direction={{ sm: 'row', xs: 'column' }} mt={5}>
+            <TextField
+              id="pec"
+              placeholder={t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' })}
+              fullWidth
+              name="pec"
+              value={formik.values.pec}
+              onChange={handleChangeTouched}
+              error={formik.touched.pec && Boolean(formik.errors.pec)}
+              helperText={formik.touched.pec && formik.errors.pec}
+              inputProps={{ sx: { height: '14px' } }}
+              sx={{ flexBasis: { xs: 'unset', lg: '66.66%' } }}
+            />
+            <Button
+              id="add-contact"
+              variant="outlined"
+              disabled={!formik.isValid}
+              fullWidth
+              type="submit"
+              data-testid="addContact"
+              sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
+            >
+              {t('button.conferma')}
+              {/* {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })} */}
+            </Button>
+          </Stack>
+        </form>
+      </Box>
+    </>
   );
 };
 
