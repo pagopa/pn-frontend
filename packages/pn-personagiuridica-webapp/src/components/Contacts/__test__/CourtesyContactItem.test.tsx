@@ -49,7 +49,6 @@ describe('CourtesyContactItem component', () => {
       // set invalid values
       fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
       await waitFor(() => expect(input!).toHaveValue(INPUT_INVALID_PHONE));
-      console.log(result.container.innerHTML);
       const inputError = result.container.querySelector(
         `#${CourtesyChannelType.SMS.toLowerCase()}-helper-text`
       );

@@ -3,7 +3,7 @@ import { ChangeEvent, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Box, Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
+import { Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 
 import { AddressType, CourtesyChannelType } from '../../models/contacts';
@@ -118,44 +118,49 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
    * if *some* value (phone number, email address) has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
    * (the DigitalContactElem component includes the "update" button)
-   */
-  /*
    * if *no* value (phone number, email address) has been attached to the contact type,
    * then we show the input field allowing the user to enter it along with the button
    * to perform the addition.
    */
   return (
     <>
-      <form onSubmit={formik.handleSubmit} style={{ width: '100%' }}>
-        <Typography id={`${type}-label`} variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
+      <form
+        onSubmit={formik.handleSubmit}
+        style={{ width: '100%' }}
+        data-testid={`courtesyContacts-${type.toLowerCase()}`}
+      >
+        <Typography
+          id={`${type.toLowerCase()}-label`}
+          variant="body2"
+          mb={1}
+          sx={{ fontWeight: 'bold' }}
+        >
           {t(`courtesy-contacts.${type.toLowerCase()}-added`, { ns: 'recapiti' })}
         </Typography>
         {value ? (
-          <Box data-testid={`courtesyContacts-${type.toLowerCase()}`}>
-            <DigitalContactElem
-              senderId="default"
-              contactType={digitalDomicileType}
-              ref={digitalElemRef}
-              inputProps={{
-                id: type,
-                name: type,
-                label: t(`courtesy-contacts.link-${type}-placeholder`, {
-                  ns: 'recapiti',
-                }),
-                value: formik.values[type],
-                onChange: (e) => void handleChangeTouched(e),
-                error:
-                  (formik.touched[type] || formik.values[type].length > 0) &&
-                  Boolean(formik.errors[type]),
-                helperText:
-                  (formik.touched[type] || formik.values[type].length > 0) && formik.errors[type],
-              }}
-              saveDisabled={!formik.isValid}
-              onConfirm={handleEditConfirm}
-              resetModifyValue={() => handleEditConfirm('cancelled')}
-              onDelete={() => setShowDeleteModal(true)}
-            />
-          </Box>
+          <DigitalContactElem
+            senderId="default"
+            contactType={digitalDomicileType}
+            ref={digitalElemRef}
+            inputProps={{
+              id: type,
+              name: type,
+              label: t(`courtesy-contacts.link-${type.toLowerCase()}-placeholder`, {
+                ns: 'recapiti',
+              }),
+              value: formik.values[type],
+              onChange: (e) => void handleChangeTouched(e),
+              error:
+                (formik.touched[type] || formik.values[type].length > 0) &&
+                Boolean(formik.errors[type]),
+              helperText:
+                (formik.touched[type] || formik.values[type].length > 0) && formik.errors[type],
+            }}
+            saveDisabled={!formik.isValid}
+            onConfirm={handleEditConfirm}
+            resetModifyValue={() => handleEditConfirm('cancelled')}
+            onDelete={() => setShowDeleteModal(true)}
+          />
         ) : (
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
