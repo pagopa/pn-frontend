@@ -1,8 +1,8 @@
 import { digitalAddresses, digitalCourtesyAddresses } from '../../__mocks__/Contacts.mock';
-import { CourtesyChannelType } from '../../models/contacts';
+import { ChannelType } from '../../models/contacts';
 import { countContactsByType } from '../contacts.utility';
 
-const calcExpetcedCount = (courtesyChannelType: CourtesyChannelType) =>
+const calcExpetcedCount = (courtesyChannelType: ChannelType) =>
   digitalAddresses.reduce((count, elem) => {
     if (elem.channelType === courtesyChannelType) {
       count++;
@@ -12,14 +12,14 @@ const calcExpetcedCount = (courtesyChannelType: CourtesyChannelType) =>
 
 describe('Contacts utility test', () => {
   it('tests countContactsByType', () => {
-    let result = countContactsByType(digitalCourtesyAddresses, CourtesyChannelType.EMAIL);
-    let expected = calcExpetcedCount(CourtesyChannelType.EMAIL);
+    let result = countContactsByType(digitalCourtesyAddresses, ChannelType.EMAIL);
+    let expected = calcExpetcedCount(ChannelType.EMAIL);
     expect(result).toBe(expected);
-    result = countContactsByType(digitalCourtesyAddresses, CourtesyChannelType.SMS);
-    expected = calcExpetcedCount(CourtesyChannelType.SMS);
+    result = countContactsByType(digitalCourtesyAddresses, ChannelType.SMS);
+    expected = calcExpetcedCount(ChannelType.SMS);
     expect(result).toBe(expected);
-    result = countContactsByType(digitalCourtesyAddresses, CourtesyChannelType.IOMSG);
-    expected = calcExpetcedCount(CourtesyChannelType.IOMSG);
+    result = countContactsByType(digitalCourtesyAddresses, ChannelType.IOMSG);
+    expected = calcExpetcedCount(ChannelType.IOMSG);
     expect(result).toBe(expected);
   });
 });

@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { digitalCourtesyAddresses, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render } from '../../../__test__/test-utils';
-import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
+import { ChannelType } from '../../../models/contacts';
 import * as routes from '../../../navigation/routes.const';
 import DomicileBanner from '../DomicileBanner';
 
@@ -22,10 +22,10 @@ vi.mock('react-router-dom', async () => ({
 
 const pecDefault = digitalLegalAddresses.find((addr) => addr.senderId === 'default');
 const emailDefault = digitalCourtesyAddresses.find(
-  (addr) => addr.senderId === 'default' && addr.channelType === CourtesyChannelType.EMAIL
+  (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.EMAIL
 );
 const IODefault = digitalCourtesyAddresses.find(
-  (addr) => addr.senderId === 'default' && addr.channelType === CourtesyChannelType.IOMSG
+  (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.IOMSG
 );
 
 describe('DomicileBanner component', () => {
@@ -34,7 +34,7 @@ describe('DomicileBanner component', () => {
     const dialog = getByTestId('addDomicileBanner');
     expect(dialog).toBeInTheDocument();
     const regexp = new RegExp(
-      `detail.domicile_${LegalChannelType.PEC}|detail.domicile_${CourtesyChannelType.EMAIL}|detail.domicile_${CourtesyChannelType.IOMSG}`
+      `detail.domicile_${ChannelType.PEC}|detail.domicile_${ChannelType.EMAIL}|detail.domicile_${ChannelType.IOMSG}`
     );
     expect(container).toHaveTextContent(regexp);
   });
@@ -48,7 +48,7 @@ describe('DomicileBanner component', () => {
     const dialog = getByTestId('addDomicileBanner');
     expect(dialog).toBeInTheDocument();
     const regexp = new RegExp(
-      `detail.domicile_${CourtesyChannelType.EMAIL}|detail.domicile_${CourtesyChannelType.IOMSG}`
+      `detail.domicile_${ChannelType.EMAIL}|detail.domicile_${ChannelType.IOMSG}`
     );
     expect(container).toHaveTextContent(regexp);
   });
@@ -64,7 +64,7 @@ describe('DomicileBanner component', () => {
     });
     const dialog = getByTestId('addDomicileBanner');
     expect(dialog).toBeInTheDocument();
-    const regexp = new RegExp(`detail.domicile_${CourtesyChannelType.IOMSG}`);
+    const regexp = new RegExp(`detail.domicile_${ChannelType.IOMSG}`);
     expect(container).toHaveTextContent(regexp);
   });
 
@@ -79,7 +79,7 @@ describe('DomicileBanner component', () => {
     });
     const dialog = getByTestId('addDomicileBanner');
     expect(dialog).toBeInTheDocument();
-    const regexp = new RegExp(`detail.domicile_${LegalChannelType.PEC}`);
+    const regexp = new RegExp(`detail.domicile_${ChannelType.PEC}`);
     expect(container).toHaveTextContent(regexp);
   });
 

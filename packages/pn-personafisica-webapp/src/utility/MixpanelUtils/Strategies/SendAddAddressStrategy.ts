@@ -1,6 +1,6 @@
 import { EventPropertyType, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-commons';
 
-import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../../models/contacts';
+import { ChannelType, DigitalAddress } from '../../../models/contacts';
 import { SaveDigitalAddressParams } from '../../../redux/contact/types';
 
 type SendAddAddressReturn =
@@ -28,11 +28,11 @@ export class SendAddAddressStrategy implements EventStrategy {
       return {};
     }
 
-    if (channelType === LegalChannelType.PEC && !(payload && payload.pecValid)) {
+    if (channelType === ChannelType.PEC && !(payload && payload.pecValid)) {
       return {};
     }
 
-    if (channelType === CourtesyChannelType.EMAIL) {
+    if (channelType === ChannelType.EMAIL) {
       return {
         [EventPropertyType.PROFILE]: {
           SEND_HAS_EMAIL: 'yes',
@@ -43,7 +43,7 @@ export class SendAddAddressStrategy implements EventStrategy {
       };
     }
 
-    if (channelType === CourtesyChannelType.SMS) {
+    if (channelType === ChannelType.SMS) {
       return {
         [EventPropertyType.PROFILE]: {
           SEND_HAS_SMS: 'yes',
@@ -54,7 +54,7 @@ export class SendAddAddressStrategy implements EventStrategy {
       };
     }
 
-    if (channelType === LegalChannelType.PEC) {
+    if (channelType === ChannelType.PEC) {
       return {
         [EventPropertyType.PROFILE]: {
           SEND_HAS_PEC: 'yes',

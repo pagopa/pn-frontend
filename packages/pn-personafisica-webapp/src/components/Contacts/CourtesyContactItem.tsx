@@ -6,7 +6,7 @@ import * as yup from 'yup';
 import { Button, Grid, InputAdornment, TextField, Typography } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 
-import { AddressType, CourtesyChannelType } from '../../models/contacts';
+import { AddressType, ChannelType } from '../../models/contacts';
 import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
 import { internationalPhonePrefix } from '../../utility/contacts.utility';
@@ -34,7 +34,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
   const dispatch = useAppDispatch();
 
   const digitalDomicileType = useMemo(
-    () => (type === CourtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS),
+    () => (type === CourtesyFieldType.EMAIL ? ChannelType.EMAIL : ChannelType.SMS),
     []
   );
 

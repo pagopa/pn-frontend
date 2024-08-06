@@ -6,7 +6,7 @@ import * as yup from 'yup';
 import { TableCell, TableRow, Typography } from '@mui/material';
 import { useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn-commons';
 
-import { DigitalAddress, LegalChannelType } from '../../models/contacts';
+import { ChannelType, DigitalAddress } from '../../models/contacts';
 import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
 import {
@@ -19,7 +19,6 @@ import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
 
 type Props = {
-  senderId: string;
   addresses: Array<DigitalAddress>;
 };
 
@@ -37,7 +36,7 @@ const reduceAddresses = <TValue,>(senderId: string, value: (type: string) => TVa
     return obj;
   }, {} as { [key: string]: TValue });
 
-const SpecialContactElem: React.FC<Props> = ({ addresses, senderId }) => {
+const SpecialContactElem: React.FC<Props> = ({ addresses }) => {
   const { t } = useTranslation(['recapiti']);
   const isMobile = useIsMobile();
   const { contextEditMode, setContextEditMode } = useSpecialContactsContext();
@@ -45,19 +44,21 @@ const SpecialContactElem: React.FC<Props> = ({ addresses, senderId }) => {
 
   const digitalElemRef = useRef<{
     [key: string]: { editContact: () => void };
-  }>(reduceAddresses(senderId, () => ({ editContact: () => {} })));
+  }>(reduceAddresses(addresses[0].senderId, () => ({ editContact: () => {} })));
 
-  const [showDeleteModal, setShowDeleteModal] = useState(reduceAddresses(senderId, () => false));
+  const [showDeleteModal, setShowDeleteModal] = useState(
+    reduceAddresses(addresses[0].senderId, () => false)
+  );
 
   const initialValues = reduceAddresses(
-    senderId,
+    addresses[0].senderId,
     (type) => addresses.find((a) => a.channelType === type)?.value ?? ''
   );
 
   const fields: Array<Field> = allowedAddressTypes.map((type) => ({
-    id: `${senderId}_${type.toLowerCase()}`,
+    id: `${addresses[0].senderId}_${type.toLowerCase()}`,
     label: t(`special-contacts.${type.toLowerCase()}`, { ns: 'recapiti' }),
-    labelRoot: type === LegalChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts',
+    labelRoot: type === ChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts',
     address: addresses.find((a) => a.channelType === type),
   }));
 
@@ -73,16 +74,16 @@ const SpecialContactElem: React.FC<Props> = ({ addresses, senderId }) => {
     void dispatch(
       deleteAddress({
         addressType: f.address.addressType,
-        senderId,
+        senderId: addresses[0].senderId,
         channelType: f.address.channelType,
       })
     );
   };
 
   const validationSchema = yup.object({
-    [`${senderId}_pec`]: pecValidationSchema(t),
-    [`${senderId}_sms`]: phoneValidationSchema(t, true),
-    [`${senderId}_email`]: emailValidationSchema(t),
+    [`${addresses[0].senderId}_pec`]: pecValidationSchema(t),
+    [`${addresses[0].senderId}_sms`]: phoneValidationSchema(t, true),
+    [`${addresses[0].senderId}_email`]: emailValidationSchema(t),
   });
 
   const updateContact = async (status: 'validated' | 'cancelled', id: string) => {
@@ -134,7 +135,7 @@ const SpecialContactElem: React.FC<Props> = ({ addresses, senderId }) => {
             }}
           >
             <DigitalContactElem
-              senderId={senderId}
+              senderId={addresses[0].senderId}
               senderName={f.address.senderName}
               contactType={f.address.channelType}
               inputProps={{

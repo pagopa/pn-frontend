@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, Grid, Typography } from '@mui/material';
 import { IllusEmailValidation } from '@pagopa/mui-italia';
 
-import { DigitalAddress, LegalChannelType } from '../../models/contacts';
+import { ChannelType, DigitalAddress } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
 import PecContactItem from './PecContactItem';
 
@@ -23,7 +23,7 @@ const LegalContacts = ({ legalAddresses }: Props) => {
   );
 
   const pecAddress = legalAddresses.find(
-    (a) => a.senderId === 'default' && a.channelType === LegalChannelType.PEC
+    (a) => a.senderId === 'default' && a.channelType === ChannelType.PEC
   );
 
   return (

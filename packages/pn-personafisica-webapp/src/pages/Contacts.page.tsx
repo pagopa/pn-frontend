@@ -12,7 +12,7 @@ import LegalContacts from '../components/Contacts/LegalContacts';
 import SpecialContacts from '../components/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
-import { AddressType, CourtesyChannelType, DigitalAddress } from '../models/contacts';
+import { AddressType, ChannelType, DigitalAddress } from '../models/contacts';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
 import { PROFILO } from '../navigation/routes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
@@ -40,7 +40,7 @@ const Contacts = () => {
   const { LANDING_SITE_URL } = getConfiguration();
 
   const contactIO = digitalAddresses
-    ? digitalAddresses.find((address) => address.channelType === CourtesyChannelType.IOMSG)
+    ? digitalAddresses.find((address) => address.channelType === ChannelType.IOMSG)
     : null;
 
   const fetchAddresses = useCallback(() => {
@@ -124,8 +124,7 @@ const Contacts = () => {
   );
 
   const courtesyContactsNotEmpty = () => {
-    const isIrrilevant = (address: DigitalAddress) =>
-      address.channelType === CourtesyChannelType.IOMSG;
+    const isIrrilevant = (address: DigitalAddress) => address.channelType === ChannelType.IOMSG;
     return courtesyAddresses.some((addr) => !isIrrilevant(addr));
   };
 

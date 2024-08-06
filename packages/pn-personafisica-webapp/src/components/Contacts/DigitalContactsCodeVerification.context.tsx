@@ -26,7 +26,7 @@ import {
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { AddressType, CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { AddressType, ChannelType } from '../../models/contacts';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { SaveDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -38,14 +38,14 @@ type ModalProps = {
   labelType: string;
   senderId: string;
   senderName?: string;
-  digitalDomicileType: LegalChannelType | CourtesyChannelType;
+  digitalDomicileType: ChannelType;
   value: string;
   callbackOnValidation?: (status: 'validated' | 'cancelled') => void;
 };
 
 interface IDigitalContactsCodeVerificationContext {
   initValidation: (
-    digitalDomicileType: LegalChannelType | CourtesyChannelType,
+    digitalDomicileType: ChannelType,
     value: string,
     senderId: string,
     senderName?: string,
@@ -68,7 +68,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
     labelRoot: '',
     labelType: '',
     senderId: '',
-    digitalDomicileType: LegalChannelType.PEC,
+    digitalDomicileType: ChannelType.PEC,
     value: '',
   } as ModalProps;
 
@@ -107,8 +107,8 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
           elem.channelType !== modalProps.digitalDomicileType)
     );
 
-  const sendSuccessEvent = (type: LegalChannelType | CourtesyChannelType) => {
-    if (type === LegalChannelType.PEC) {
+  const sendSuccessEvent = (type: ChannelType) => {
+    if (type === ChannelType.PEC) {
       PFEventStrategyFactory.triggerEvent(
         PFEventsType.SEND_ADD_PEC_UX_SUCCESS,
         modalProps.senderId
@@ -116,7 +116,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
       return;
     }
     PFEventStrategyFactory.triggerEvent(
-      type === CourtesyChannelType.SMS
+      type === ChannelType.SMS
         ? PFEventsType.SEND_ADD_SMS_UX_SUCCESS
         : PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS,
       modalProps.senderId
@@ -124,17 +124,17 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   };
   const handleCodeVerification = (verificationCode?: string, noCallback: boolean = false) => {
     if (verificationCode) {
-      if (modalProps.digitalDomicileType === LegalChannelType.PEC) {
+      if (modalProps.digitalDomicileType === ChannelType.PEC) {
         PFEventStrategyFactory.triggerEvent(
           PFEventsType.SEND_ADD_PEC_UX_CONVERSION,
           modalProps.senderId
         );
-      } else if (modalProps.digitalDomicileType === CourtesyChannelType.SMS) {
+      } else if (modalProps.digitalDomicileType === ChannelType.SMS) {
         PFEventStrategyFactory.triggerEvent(
           PFEventsType.SEND_ADD_SMS_UX_CONVERSION,
           modalProps.senderId
         );
-      } else if (modalProps.digitalDomicileType === CourtesyChannelType.EMAIL) {
+      } else if (modalProps.digitalDomicileType === ChannelType.EMAIL) {
         PFEventStrategyFactory.triggerEvent(
           PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION,
           modalProps.senderId
@@ -144,7 +144,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
 
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType:
-        modalProps.digitalDomicileType === LegalChannelType.PEC
+        modalProps.digitalDomicileType === ChannelType.PEC
           ? AddressType.LEGAL
           : AddressType.COURTESY,
       senderId: modalProps.senderId,
@@ -170,7 +170,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
         sendSuccessEvent(modalProps.digitalDomicileType);
 
         // contact has already been verified
-        if (res.pecValid || modalProps.digitalDomicileType !== LegalChannelType.PEC) {
+        if (res.pecValid || modalProps.digitalDomicileType !== ChannelType.PEC) {
           // show success message
           dispatch(
             appStateActions.addSuccess({
@@ -192,7 +192,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   };
 
   const initValidation = (
-    digitalDomicileType: LegalChannelType | CourtesyChannelType,
+    digitalDomicileType: ChannelType | ChannelType,
     value: string,
     senderId: string,
     senderName?: string,
@@ -202,15 +202,15 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
     let labelRoot = '';
     let labelType = '';
     /* eslint-enable functional/no-let */
-    if (digitalDomicileType === LegalChannelType.PEC) {
+    if (digitalDomicileType === ChannelType.PEC) {
       labelRoot = 'legal-contacts';
       labelType = 'pec';
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, senderId);
     } else {
       labelRoot = 'courtesy-contacts';
-      labelType = digitalDomicileType === CourtesyChannelType.SMS ? 'phone' : 'email';
+      labelType = digitalDomicileType === ChannelType.SMS ? 'phone' : 'email';
       PFEventStrategyFactory.triggerEvent(
-        digitalDomicileType === CourtesyChannelType.SMS
+        digitalDomicileType === ChannelType.SMS
           ? PFEventsType.SEND_ADD_SMS_START
           : PFEventsType.SEND_ADD_EMAIL_START,
         senderId
@@ -237,13 +237,10 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
 
   const handleDisclaimerVisibilityFirst = () => {
     // if senderId !== 'default' they are a special contact => don't show disclaimer
-    // if modalProps.digitalDomicileType === LegalChannelType.PEC it's a legal contact => don't show disclaimer
-    // if modalProps.digitalDomicileType !== LegalChannelType.PEC and senderId === 'default' it's a
+    // if modalProps.digitalDomicileType === ChannelType.PEC it's a legal contact => don't show disclaimer
+    // if modalProps.digitalDomicileType !== ChannelType.PEC and senderId === 'default' it's a
     // courtesy contact => show disclaimer
-    if (
-      modalProps.digitalDomicileType === LegalChannelType.PEC ||
-      modalProps.senderId !== 'default'
-    ) {
+    if (modalProps.digitalDomicileType === ChannelType.PEC || modalProps.senderId !== 'default') {
       // open verification code dialog
       handleCodeVerification();
     } else {
@@ -267,11 +264,11 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
           },
           true
         );
-        if (modalProps.digitalDomicileType === LegalChannelType.PEC) {
+        if (modalProps.digitalDomicileType === ChannelType.PEC) {
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR);
-        } else if (modalProps.digitalDomicileType === CourtesyChannelType.SMS) {
+        } else if (modalProps.digitalDomicileType === ChannelType.SMS) {
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_CODE_ERROR);
-        } else if (modalProps.digitalDomicileType === CourtesyChannelType.EMAIL) {
+        } else if (modalProps.digitalDomicileType === ChannelType.EMAIL) {
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_CODE_ERROR);
         }
       }

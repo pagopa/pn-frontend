@@ -29,7 +29,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../models/contacts';
+import { ChannelType, DigitalAddress } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -55,7 +55,7 @@ type Addresses = {
 };
 
 type AddressType = {
-  id: LegalChannelType | CourtesyChannelType;
+  id: ChannelType;
   value: string;
 };
 
@@ -108,15 +108,15 @@ const SpecialContacts = ({ digitalAddresses }: Props) => {
     s_value: yup
       .string()
       .when('addressType', {
-        is: LegalChannelType.PEC,
+        is: ChannelType.PEC,
         then: pecValidationSchema(t),
       })
       .when('addressType', {
-        is: CourtesyChannelType.EMAIL,
+        is: ChannelType.EMAIL,
         then: emailValidationSchema(t),
       })
       .when('addressType', {
-        is: CourtesyChannelType.SMS,
+        is: ChannelType.SMS,
         then: phoneValidationSchema(t),
       }),
   });
@@ -136,7 +136,7 @@ const SpecialContacts = ({ digitalAddresses }: Props) => {
       if (values.addressType) {
         initValidation(
           values.addressType,
-          values.addressType === CourtesyChannelType.SMS
+          values.addressType === ChannelType.SMS
             ? internationalPhonePrefix + values.s_value
             : values.s_value,
           values.sender.id,
@@ -300,7 +300,7 @@ const SpecialContacts = ({ digitalAddresses }: Props) => {
               error={formik.touched.s_value && Boolean(formik.errors.s_value)}
               helperText={formik.touched.s_value && formik.errors.s_value}
               InputProps={
-                formik.values.addressType === CourtesyChannelType.SMS
+                formik.values.addressType === ChannelType.SMS
                   ? {
                       startAdornment: (
                         <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
@@ -350,7 +350,7 @@ const SpecialContacts = ({ digitalAddresses }: Props) => {
                   </TableHead>
                   <TableBody>
                     {Object.entries(addresses).map(([senderId, addr]) => (
-                      <SpecialContactElem key={senderId} senderId={senderId} addresses={addr} />
+                      <SpecialContactElem key={senderId} addresses={addr} />
                     ))}
                   </TableBody>
                 </Table>
@@ -367,7 +367,7 @@ const SpecialContacts = ({ digitalAddresses }: Props) => {
                     }}
                   >
                     <CardContent>
-                      <SpecialContactElem key={senderId} senderId={senderId} addresses={addr} />
+                      <SpecialContactElem key={senderId} addresses={addr} />
                     </CardContent>
                   </Card>
                 ))}

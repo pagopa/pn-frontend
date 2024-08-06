@@ -1,6 +1,6 @@
 import { EventPropertyType, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-commons';
 
-import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
+import { ChannelType } from '../../../models/contacts';
 import { DeleteDigitalAddressParams } from '../../../redux/contact/types';
 
 type SendRemoveAddressReturn =
@@ -22,7 +22,7 @@ export class SendRemoveAddressStrategy implements EventStrategy {
   performComputations({ params }: SendRemoveAddressData): TrackedEvent<SendRemoveAddressReturn> {
     // If i'm removing a special contact (senderId !== 'default') I don't want to update the profile property
     if (params.senderId === 'default') {
-      if (params.channelType === CourtesyChannelType.EMAIL) {
+      if (params.channelType === ChannelType.EMAIL) {
         return {
           [EventPropertyType.PROFILE]: {
             SEND_HAS_EMAIL: 'no',
@@ -33,7 +33,7 @@ export class SendRemoveAddressStrategy implements EventStrategy {
         };
       }
 
-      if (params.channelType === CourtesyChannelType.SMS) {
+      if (params.channelType === ChannelType.SMS) {
         return {
           [EventPropertyType.PROFILE]: {
             SEND_HAS_SMS: 'no',
@@ -44,7 +44,7 @@ export class SendRemoveAddressStrategy implements EventStrategy {
         };
       }
 
-      if (params.channelType === LegalChannelType.PEC) {
+      if (params.channelType === ChannelType.PEC) {
         return {
           [EventPropertyType.PROFILE]: {
             SEND_HAS_PEC: 'no',

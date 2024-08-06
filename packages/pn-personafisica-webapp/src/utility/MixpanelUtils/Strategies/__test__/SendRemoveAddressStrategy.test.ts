@@ -1,7 +1,7 @@
 import { EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { digitalAddresses } from '../../../../__mocks__/Contacts.mock';
-import { AddressType, CourtesyChannelType, LegalChannelType } from '../../../../models/contacts';
+import { AddressType, ChannelType } from '../../../../models/contacts';
 import { DeleteDigitalAddressParams } from '../../../../redux/contact/types';
 import { SendRemoveAddressStrategy } from '../SendRemoveAddressStrategy';
 
@@ -9,7 +9,7 @@ describe('Mixpanel - Remove Address Strategy', () => {
   describe('Send Remove Courtesy Address', () => {
     it('should return has email when removing an email', () => {
       const strategy = new SendRemoveAddressStrategy();
-      const address = digitalAddresses.find((a) => a.channelType === CourtesyChannelType.EMAIL);
+      const address = digitalAddresses.find((a) => a.channelType === ChannelType.EMAIL);
 
       const event = strategy.performComputations({
         params: {
@@ -31,7 +31,7 @@ describe('Mixpanel - Remove Address Strategy', () => {
 
     it('should return has sms when removing an sms', () => {
       const strategy = new SendRemoveAddressStrategy();
-      const address = digitalAddresses.find((a) => a.channelType === CourtesyChannelType.SMS);
+      const address = digitalAddresses.find((a) => a.channelType === ChannelType.SMS);
 
       const event = strategy.performComputations({
         params: {
@@ -53,7 +53,7 @@ describe('Mixpanel - Remove Address Strategy', () => {
 
     it('should return empty object if senderId is not default', () => {
       const strategy = new SendRemoveAddressStrategy();
-      const address = digitalAddresses.find((a) => a.channelType === CourtesyChannelType.SMS);
+      const address = digitalAddresses.find((a) => a.channelType === ChannelType.SMS);
 
       const event = strategy.performComputations({
         params: {
@@ -76,7 +76,7 @@ describe('Mixpanel - Remove Address Strategy', () => {
         params: {
           addressType: AddressType.LEGAL,
           senderId: 'default',
-          channelType: LegalChannelType.PEC,
+          channelType: ChannelType.PEC,
         },
       };
 
@@ -100,7 +100,7 @@ describe('Mixpanel - Remove Address Strategy', () => {
         params: {
           addressType: AddressType.LEGAL,
           senderId: 'not-default',
-          channelType: LegalChannelType.PEC,
+          channelType: ChannelType.PEC,
         },
       };
 
