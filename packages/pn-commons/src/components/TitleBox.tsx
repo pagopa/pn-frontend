@@ -21,8 +21,6 @@ type Props = {
   variantSubTitle?: Variant;
   /** style to apply */
   sx?: SxProps<Theme>;
-  /** a11y for component */
-  ariaLabel?: string;
   /** paragraph component */
   children?: React.ReactNode;
 };
@@ -40,7 +38,6 @@ const TitleBox: React.FC<Props> = ({
   variantTitle = 'h1',
   variantSubTitle = 'h5',
   sx,
-  ariaLabel,
   children,
 }) => (
   <Grid id="page-header-container" aria-orientation="horizontal" container mt={mtGrid} sx={sx}>
@@ -50,7 +47,6 @@ const TitleBox: React.FC<Props> = ({
           id={`${title}-page`}
           data-testid="titleBox"
           role="heading"
-          aria-label={ariaLabel}
           variant={variantTitle}
           display="inline-block"
           sx={{ verticalAlign: 'middle' }}

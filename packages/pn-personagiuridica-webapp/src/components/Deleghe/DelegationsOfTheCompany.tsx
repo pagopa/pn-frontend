@@ -67,22 +67,18 @@ type Props = {
   children?: React.ReactNode;
 };
 
-const LinkRemoveFilters: React.FC<Props> = ({ children, clearFiltersHandler }) => {
-  const { t } = useTranslation(['deleghe']);
-  return (
-    <Link
-      component={'button'}
-      variant="body1"
-      id="call-to-action-first"
-      aria-label={t('empty-state.aria-label-remove-filters')}
-      key="remove-filters"
-      data-testid="link-remove-filters"
-      onClick={clearFiltersHandler}
-    >
-      {children}
-    </Link>
-  );
-};
+const LinkRemoveFilters: React.FC<Props> = ({ children, clearFiltersHandler }) => (
+  <Link
+    component={'button'}
+    variant="body1"
+    id="call-to-action-first"
+    key="remove-filters"
+    data-testid="link-remove-filters"
+    onClick={clearFiltersHandler}
+  >
+    {children}
+  </Link>
+);
 
 const DelegationsOfTheCompany = () => {
   const { t } = useTranslation(['deleghe', 'common']);

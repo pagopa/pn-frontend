@@ -58,25 +58,20 @@ type LinkRemoveFiltersProps = {
  */
 const IS_SORT_ENABLED = false;
 
-const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => {
-  const { t } = useTranslation('notifiche');
-  return (
-    <Link
-      component={'button'}
-      variant="body1"
-      id="call-to-action-first"
-      aria-label={t('empty-state.aria-label-remove-filters')}
-      key="remove-filters"
-      data-testid="link-remove-filters"
-      onClick={cleanFilters}
-    >
-      {children}
-    </Link>
-  );
-};
+const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => (
+  <Link
+    component={'button'}
+    variant="body1"
+    id="call-to-action-first"
+    key="remove-filters"
+    data-testid="link-remove-filters"
+    onClick={cleanFilters}
+  >
+    {children}
+  </Link>
+);
 
 const LinkRouteContacts: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
-  const { t } = useTranslation('notifiche');
   const navigate = useNavigate();
   const goToContactsPage = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, {
@@ -89,7 +84,6 @@ const LinkRouteContacts: React.FC<{ children?: React.ReactNode }> = ({ children 
       component={'button'}
       variant="body1"
       id="call-to-action-first"
-      aria-label={t('empty-state.aria-label-route-contacts')}
       key="route-contacts"
       data-testid="link-route-contacts"
       onClick={goToContactsPage}

@@ -405,7 +405,7 @@ const NotificationDetail = () => {
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
                 {(isCancelled.cancelled || isCancelled.cancellationInProgress) && (
-                  <Alert tabIndex={0} data-testid="cancelledAlertText" severity="warning">
+                  <Alert data-testid="cancelledAlertText" severity="warning">
                     {t('detail.cancelled-alert-text', { ns: 'notifiche' })}
                   </Alert>
                 )}

@@ -138,11 +138,7 @@ export const AppStatusRender = (props: Props) => {
               data-testid="appStatus-lastCheck"
               id="appStatusLastCheck"
             >
-              <Typography
-                variant="caption"
-                sx={{ mt: 2, color: 'text.secondary' }}
-                aria-label={lastCheckLegend}
-              >
+              <Typography variant="caption" sx={{ mt: 2, color: 'text.secondary' }}>
                 {lastCheckLegend}
               </Typography>
             </Stack>
@@ -150,7 +146,7 @@ export const AppStatusRender = (props: Props) => {
         </ApiErrorWrapper>
 
         {/* Titolo elenco di downtime */}
-        <Typography variant="h6" sx={{ mt: '36px', mb: 2 }} aria-label={downtimeListTitle}>
+        <Typography variant="h6" sx={{ mt: '36px', mb: 2 }}>
           {downtimeListTitle}
         </Typography>
 

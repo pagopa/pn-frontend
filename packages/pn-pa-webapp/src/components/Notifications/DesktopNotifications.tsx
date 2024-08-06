@@ -49,59 +49,47 @@ type LinkCreateNotificationProps = {
   children?: React.ReactNode;
 };
 
-const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => {
-  const { t } = useTranslation(['notifiche']);
-  return (
-    <Link
-      component={'button'}
-      variant="body1"
-      id="call-to-action-first"
-      aria-label={t('empty-state.aria-label-remove-filters')}
-      key="remove-filters"
-      data-testid="link-remove-filters"
-      onClick={cleanFilters}
-    >
-      {children}
-    </Link>
-  );
-};
+const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => (
+  <Link
+    component={'button'}
+    variant="body1"
+    id="call-to-action-first"
+    key="remove-filters"
+    data-testid="link-remove-filters"
+    onClick={cleanFilters}
+  >
+    {children}
+  </Link>
+);
 
-const LinkApiKey: React.FC<LinkApiKeyProps> = ({ children, onApiKeys }) => {
-  const { t } = useTranslation(['notifiche']);
-  return (
-    <Link
-      component={'button'}
-      variant="body1"
-      id="call-to-action-first"
-      aria-label={t('empty-state.aria-label-api-keys')}
-      key="api-keys"
-      data-testid="link-api-keys"
-      onClick={onApiKeys}
-    >
-      {children}
-    </Link>
-  );
-};
+const LinkApiKey: React.FC<LinkApiKeyProps> = ({ children, onApiKeys }) => (
+  <Link
+    component={'button'}
+    variant="body1"
+    id="call-to-action-first"
+    key="api-keys"
+    data-testid="link-api-keys"
+    onClick={onApiKeys}
+  >
+    {children}
+  </Link>
+);
 
 const LinkCreateNotification: React.FC<LinkCreateNotificationProps> = ({
   children,
   onManualSend,
-}) => {
-  const { t } = useTranslation(['notifiche']);
-  return (
-    <Link
-      component={'button'}
-      variant="body1"
-      id="call-to-action-second"
-      aria-label={t('empty-state.aria-label-create-notification')}
-      key="create-notification"
-      data-testid="link-create-notification"
-      onClick={onManualSend}
-    >
-      {children}
-    </Link>
-  );
-};
+}) => (
+  <Link
+    component={'button'}
+    variant="body1"
+    id="call-to-action-second"
+    key="create-notification"
+    data-testid="link-create-notification"
+    onClick={onManualSend}
+  >
+    {children}
+  </Link>
+);
 
 const DesktopNotifications = ({
   notifications,

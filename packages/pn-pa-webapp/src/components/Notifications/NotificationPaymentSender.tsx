@@ -143,7 +143,6 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
           fullWidth
           onChange={recipientSelectionHandler}
           label={`${t('detail.recipient')}*`}
-          aria-label={`${t('detail.recipient')}*`}
           sx={{ mb: 1 }}
           select
           SelectProps={{

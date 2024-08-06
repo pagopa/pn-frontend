@@ -21,7 +21,7 @@ vi.mock('react-i18next', () => ({
 
 describe('testing profile page', () => {
   it('profile page renders properly', () => {
-    const { getByRole, getByText } = render(<Profile />, {
+    const { getByRole, getByTestId, getByText } = render(<Profile />, {
       preloadedState: { userState: { user: userResponse } },
     });
     const title = getByRole('heading', { name: 'title' });
@@ -40,7 +40,7 @@ describe('testing profile page', () => {
     expect(familyName).toBeInTheDocument();
     const fiscalNumber = getByText(userResponse.fiscal_number);
     expect(fiscalNumber).toBeInTheDocument();
-    const alert = getByRole('alert', { name: 'contacts-redirect' });
+    const alert = getByTestId('contacts-redirect');
     expect(alert).toBeInTheDocument();
     const alertTitle = getByText('alert-redirect-to-contacts.title');
     expect(alertTitle).toBeInTheDocument();

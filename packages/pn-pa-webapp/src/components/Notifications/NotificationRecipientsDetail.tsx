@@ -82,13 +82,7 @@ const NotificationRecipientsDetail: React.FC<Props> = ({ recipients, iun }) => {
                 onClick={() => setOpen(true)}
                 data-testid="show-all-recipients"
               >
-                <Typography
-                  color="primary"
-                  variant="body2"
-                  tabIndex={0}
-                  aria-label={t('detail.show-all')}
-                  fontWeight={'bold'}
-                >
+                <Typography color="primary" variant="body2" fontWeight={'bold'}>
                   {t('detail.show-all')}
                 </Typography>
               </ButtonNaked>

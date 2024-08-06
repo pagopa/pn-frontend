@@ -31,7 +31,11 @@ import { getConfiguration } from '../services/configuration.service';
 
 const LinkApiB2b: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { API_B2B_LINK } = getConfiguration();
-  return <Link href={API_B2B_LINK} target="_blank">{children}</Link>;
+  return (
+    <Link href={API_B2B_LINK} target="_blank">
+      {children}
+    </Link>
+  );
 };
 
 const TableGroupsId = ({ groups }: { groups?: Array<{ id: string; name: string }> }) => {
@@ -172,12 +176,7 @@ const ApiKeys = () => {
           marginTop: isMobile ? 3 : 10,
         }}
       >
-        <Typography
-          tabIndex={0}
-          aria-label={t('generated-api-keys')}
-          variant="h5"
-          sx={{ marginBottom: isMobile ? 3 : undefined }}
-        >
+        <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
           {t('generated-api-keys')}
         </Typography>
         <Button

@@ -33,22 +33,18 @@ type Props = {
   children?: React.ReactNode;
 };
 
-const LinkAddDelegate: React.FC<Props> = ({ children, handleAddDelegationClick }) => {
-  const { t } = useTranslation(['deleghe']);
-  return (
-    <Link
-      component={'button'}
-      variant="body1"
-      id="call-to-action-first"
-      aria-label={t('deleghe.add')}
-      key="add-delegate"
-      data-testid="link-add-delegate"
-      onClick={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
-    >
-      {children}
-    </Link>
-  );
-};
+const LinkAddDelegate: React.FC<Props> = ({ children, handleAddDelegationClick }) => (
+  <Link
+    component={'button'}
+    variant="body1"
+    id="call-to-action-first"
+    key="add-delegate"
+    data-testid="link-add-delegate"
+    onClick={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
+  >
+    {children}
+  </Link>
+);
 
 const MobileDelegates = () => {
   const { t } = useTranslation(['deleghe']);

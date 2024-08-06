@@ -44,7 +44,6 @@ const CustomDatePicker = (
             return getLocalizedOrDefaultLabel('common', 'date-picker.select-date');
           },
         }}
-        // OpenPickerButtonProps={{ 'aria-label': 'Scegli data'}} // props for calendar button
       />
     </LocalizationProvider>
   );

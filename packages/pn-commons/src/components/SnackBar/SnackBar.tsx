@@ -63,11 +63,9 @@ const SnackBar: React.FC<Props> = ({
   ]);
 
   const action = (
-    <>
-      <IconButton size="small" aria-label="close" color="inherit" onClick={closeSnackBar}>
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </>
+    <IconButton size="small" aria-label="close" color="inherit" onClick={closeSnackBar}>
+      <CloseIcon fontSize="small" />
+    </IconButton>
   );
 
   return (

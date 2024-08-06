@@ -55,7 +55,7 @@ const PnBreadcrumb = ({
           {finalBackLabel}
         </ButtonNaked>
       )}
-      <Breadcrumbs aria-label="breadcrumb">
+      <Breadcrumbs>
         <BreadcrumbLink to={linkRoute} data-testid="breadcrumb-link" {...linkProps}>
           {linkLabel}
         </BreadcrumbLink>

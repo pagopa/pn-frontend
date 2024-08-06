@@ -53,7 +53,7 @@ const AlertNotificationCancel: React.FC<Props> = (notification) => {
 
   if (cancelled || cancellationInProgress) {
     return (
-      <Alert tabIndex={0} data-testid="alert" sx={{ mt: 1 }} severity={'warning'}>
+      <Alert data-testid="alert" sx={{ mt: 1 }} severity="warning">
         <Typography component="span" variant="body1">
           {cancellationInProgress
             ? t('detail.alert-cancellation-in-progress')

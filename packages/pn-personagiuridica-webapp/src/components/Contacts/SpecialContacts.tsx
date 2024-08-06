@@ -455,7 +455,7 @@ const SpecialContacts = ({ legalAddresses, courtesyAddresses }: Props) => {
                 {t('special-contacts.associated', { ns: 'recapiti' })}
               </Typography>
               {!isMobile && (
-                <Table aria-label={t('special-contacts.associated', { ns: 'recapiti' })}>
+                <Table>
                   <TableHead>
                     <TableRow>
                       {listHeaders.map((h) => (
