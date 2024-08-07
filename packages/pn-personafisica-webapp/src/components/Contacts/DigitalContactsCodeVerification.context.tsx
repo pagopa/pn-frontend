@@ -192,7 +192,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   };
 
   const initValidation = (
-    digitalDomicileType: ChannelType | ChannelType,
+    digitalDomicileType: ChannelType,
     value: string,
     senderId: string,
     senderName?: string,
