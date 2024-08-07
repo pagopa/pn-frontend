@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
-import { Box, Button, Grid, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, Stack, TextField, Typography } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -47,7 +47,11 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
     validationSchema,
     /** onSubmit validate */
     onSubmit: () => {
-      initValidation(ChannelType.PEC, formik.values.pec, 'default');
+      if (value) {
+        digitalElemRef.current.editContact();
+      } else {
+        initValidation(ChannelType.PEC, formik.values.pec, 'default');
+      }
     },
   });
 
@@ -84,89 +88,60 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
     void changeValue();
   }, [value]);
 
-  if (value || verifyingAddress) {
-    return (
-      <>
-        <CancelVerificationModal
-          open={cancelDialogOpen}
-          handleClose={() => setCancelDialogOpen(false)}
-        />
-        <DeleteDialog
-          showModal={showDeleteModal}
-          removeModalTitle={t(`legal-contacts.${blockDelete ? 'block-' : ''}remove-pec-title`, {
-            ns: 'recapiti',
-          })}
-          removeModalBody={t(`legal-contacts.${blockDelete ? 'block-' : ''}remove-pec-message`, {
-            value: formik.values.pec,
-            ns: 'recapiti',
-          })}
-          handleModalClose={() => setShowDeleteModal(false)}
-          confirmHandler={deleteConfirmHandler}
-          blockDelete={blockDelete}
-        />
-        <Box mt="20px" data-testid="legalContacts">
-          {!verifyingAddress && (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                digitalElemRef.current.editContact();
-              }}
-            >
-              <Typography mb={1} sx={{ fontWeight: 'bold' }} id="associatedPEC">
-                {t('legal-contacts.pec-added', { ns: 'recapiti' })}
-              </Typography>
-              <DigitalContactElem
-                senderId="default"
-                contactType={ChannelType.PEC}
-                inputProps={{
-                  id: 'pec',
-                  name: 'pec',
-                  label: 'PEC',
-                  value: formik.values.pec,
-                  onChange: (e) => void handleChangeTouched(e),
-                  error: formik.touched.pec && Boolean(formik.errors.pec),
-                  helperText: formik.touched.pec && formik.errors.pec,
-                }}
-                saveDisabled={!formik.isValid}
-                onConfirm={handleEditConfirm}
-                resetModifyValue={() => handleEditConfirm('cancelled')}
-                ref={digitalElemRef}
-                onDelete={() => setShowDeleteModal(true)}
-              />
-            </form>
-          )}
-
-          {verifyingAddress && (
-            <>
-              <Typography mb={1} sx={{ fontWeight: 'bold' }}>
-                {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
-              </Typography>
-              <Box display="flex" flexDirection="row" mt={2.5}>
-                <Box display="flex" flexDirection="row" mr={1}>
-                  <WatchLaterIcon fontSize="small" />
-                  <Typography id="validationPecProgress" fontWeight="bold" variant="body2" ml={1}>
-                    {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
-                  </Typography>
-                </Box>
-                <ButtonNaked
-                  color="primary"
-                  onClick={handlePecValidationCancel}
-                  data-testid="cancelValidation"
-                >
-                  {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
-                </ButtonNaked>
-              </Box>
-            </>
-          )}
-        </Box>
-      </>
-    );
-  }
-
   return (
-    <form onSubmit={formik.handleSubmit} data-testid="insertLegalContact">
-      <Grid container spacing={2} direction="row" mt={3}>
-        <Grid item lg={8} sm={8} xs={12}>
+    <form onSubmit={formik.handleSubmit} data-testid="pecContact">
+      {value && (
+        <>
+          <Typography mb={1} sx={{ fontWeight: 'bold' }} id="associatedPEC" mt={3}>
+            {t('legal-contacts.pec-added', { ns: 'recapiti' })}
+          </Typography>
+          <DigitalContactElem
+            senderId="default"
+            contactType={ChannelType.PEC}
+            ref={digitalElemRef}
+            inputProps={{
+              id: 'pec',
+              name: 'pec',
+              label: 'PEC',
+              value: formik.values.pec,
+              onChange: (e) => void handleChangeTouched(e),
+              error: formik.touched.pec && Boolean(formik.errors.pec),
+              helperText: formik.touched.pec && formik.errors.pec,
+            }}
+            saveDisabled={!formik.isValid}
+            onConfirm={handleEditConfirm}
+            resetModifyValue={() => handleEditConfirm('cancelled')}
+            onDelete={() => setShowDeleteModal(true)}
+          />
+        </>
+      )}
+      {verifyingAddress && (
+        <>
+          <Typography mb={1} sx={{ fontWeight: 'bold' }} mt={3}>
+            {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
+          </Typography>
+          <Stack direction="row" spacing={1}>
+            <WatchLaterIcon fontSize="small" />
+            <Typography id="validationPecProgress" fontWeight="bold" variant="body2">
+              {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
+            </Typography>
+            <ButtonNaked
+              color="primary"
+              onClick={handlePecValidationCancel}
+              data-testid="cancelValidation"
+            >
+              {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
+            </ButtonNaked>
+          </Stack>
+        </>
+      )}
+      {!value && !verifyingAddress && (
+        <Stack
+          spacing={2}
+          direction={{ sm: 'row', xs: 'column' }}
+          mt={5}
+          sx={{ width: { xs: '100%', lg: '50%' } }}
+        >
           <TextField
             id="pec"
             placeholder={t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' })}
@@ -177,9 +152,8 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
             error={formik.touched.pec && Boolean(formik.errors.pec)}
             helperText={formik.touched.pec && formik.errors.pec}
             inputProps={{ sx: { height: '14px' } }}
+            sx={{ flexBasis: { xs: 'unset', lg: '66.66%' } }}
           />
-        </Grid>
-        <Grid item lg={4} sm={4} xs={12} alignItems="right">
           <Button
             id="add-contact"
             variant="outlined"
@@ -187,11 +161,12 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
             fullWidth
             type="submit"
             data-testid="addContact"
+            sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
           >
             {t('button.conferma')}
           </Button>
-        </Grid>
-      </Grid>
+        </Stack>
+      )}
     </form>
   );
 };

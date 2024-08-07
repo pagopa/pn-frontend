@@ -103,7 +103,11 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
    */
   return (
     <>
-      <form onSubmit={formik.handleSubmit} data-testid="pecContact">
+      <form
+        onSubmit={formik.handleSubmit}
+        data-testid="pecContact"
+        sx={{ width: { xs: '100%', lg: '50%' } }}
+      >
         {value && (
           <>
             <Typography mb={1} sx={{ fontWeight: 'bold' }} id="associatedPEC" mt={3}>
