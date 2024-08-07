@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import { Button, Stack, TextField, Typography } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -49,7 +49,11 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
     validationSchema,
     /** onSubmit validate */
     onSubmit: () => {
-      initValidation(LegalChannelType.PEC, formik.values.pec, 'default');
+      if (value) {
+        digitalElemRef.current.editContact();
+      } else {
+        initValidation(LegalChannelType.PEC, formik.values.pec, 'default');
+      }
     },
   });
 
@@ -134,13 +138,11 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
             <Typography mb={1} sx={{ fontWeight: 'bold' }} mt={3}>
               {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
             </Typography>
-            <Box display="flex" flexDirection="row" mt={2.5}>
-              <Box display="flex" flexDirection="row" mr={1}>
-                <WatchLaterIcon fontSize="small" />
-                <Typography id="validationPecProgress" fontWeight="bold" variant="body2" ml={1}>
-                  {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
-                </Typography>
-              </Box>
+            <Stack direction="row" spacing={1}>
+              <WatchLaterIcon fontSize="small" />
+              <Typography id="validationPecProgress" fontWeight="bold" variant="body2">
+                {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
+              </Typography>
               <ButtonNaked
                 color="primary"
                 onClick={handlePecValidationCancel}
@@ -148,7 +150,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
               >
                 {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
               </ButtonNaked>
-            </Box>
+            </Stack>
           </>
         )}
         {!value && !verifyingAddress && (
@@ -175,7 +177,6 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
               sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
             >
               {t('button.conferma')}
-              {/* {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })} */}
             </Button>
           </Stack>
         )}
@@ -184,7 +185,6 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
         open={cancelDialogOpen}
         handleClose={() => setCancelDialogOpen(false)}
       />
-
       <DeleteDialog
         showModal={showDeleteModal}
         removeModalTitle={t(`legal-contacts.${blockDelete ? 'block-' : ''}remove-pec-title`, {
