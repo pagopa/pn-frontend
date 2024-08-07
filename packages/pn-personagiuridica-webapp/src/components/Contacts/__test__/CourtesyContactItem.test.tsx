@@ -51,10 +51,10 @@ describe('CourtesyContactItem component', () => {
       fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
       await waitFor(() => expect(input!).toHaveValue(INPUT_INVALID_PHONE));
       const inputError = result.container.querySelector(`#${smsInputName}-helper-text`);
-      expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
+      expect(inputError).toHaveTextContent('courtesy-contacts.valid-sms');
       fireEvent.change(input!, { target: { value: '' } });
       await waitFor(() => expect(input!).toHaveValue(''));
-      expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
+      expect(inputError).toHaveTextContent('courtesy-contacts.valid-sms');
       const button = result.getByRole('button');
       expect(button).toHaveTextContent('courtesy-contacts.sms-add');
       expect(button).toBeDisabled();
@@ -77,7 +77,7 @@ describe('CourtesyContactItem component', () => {
       await waitFor(() => expect(input).toHaveValue(INPUT_INVALID_PHONE));
       expect(saveButton).toBeDisabled();
       const inputError = result.container.querySelector(`#${smsInputName}-helper-text`);
-      expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
+      expect(inputError).toHaveTextContent('courtesy-contacts.valid-sms');
     });
 
     it('remove contact', async () => {

@@ -49,8 +49,8 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
       yup.object().shape({
         sms: yup
           .string()
-          .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-          .matches(phoneRegex, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
+          .required(t('courtesy-contacts.valid-sms', { ns: 'recapiti' }))
+          .matches(phoneRegex, t('courtesy-contacts.valid-sms', { ns: 'recapiti' })),
       }),
     [phoneRegex]
   );

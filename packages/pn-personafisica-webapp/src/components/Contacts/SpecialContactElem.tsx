@@ -33,7 +33,7 @@ type Field = {
 const addressTypeToLabel = {
   mail: 'email',
   pec: 'pec',
-  phone: 'phone',
+  phone: 'sms',
 };
 
 // TODO: disable complexity for now.
@@ -113,10 +113,10 @@ const SpecialContactElem = memo(({ address }: Props) => {
       .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
     [`${address.senderId}_phone`]: yup
       .string()
-      .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
+      .required(t('courtesy-contacts.valid-sms', { ns: 'recapiti' }))
       .matches(
         dataRegex.phoneNumberWithItalyPrefix,
-        t('courtesy-contacts.valid-phone', { ns: 'recapiti' })
+        t('courtesy-contacts.valid-sms', { ns: 'recapiti' })
       ),
     [`${address.senderId}_mail`]: yup
       .string()

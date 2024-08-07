@@ -208,7 +208,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, senderId);
     } else {
       labelRoot = 'courtesy-contacts';
-      labelType = digitalDomicileType === CourtesyChannelType.SMS ? 'phone' : 'email';
+      labelType = digitalDomicileType === CourtesyChannelType.SMS ? 'sms' : 'email';
       PFEventStrategyFactory.triggerEvent(
         digitalDomicileType === CourtesyChannelType.SMS
           ? PFEventsType.SEND_ADD_SMS_START
