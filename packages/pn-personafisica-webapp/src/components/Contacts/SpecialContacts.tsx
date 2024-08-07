@@ -153,8 +153,8 @@ const SpecialContacts = ({ legalAddresses, courtesyAddresses }: Props) => {
       is: CourtesyChannelType.SMS,
       then: yup
         .string()
-        .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-        .matches(dataRegex.phoneNumber, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
+        .required(t('courtesy-contacts.valid-sms', { ns: 'recapiti' }))
+        .matches(dataRegex.phoneNumber, t('courtesy-contacts.valid-sms', { ns: 'recapiti' })),
     }),
   });
 

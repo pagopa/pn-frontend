@@ -272,11 +272,11 @@ describe('SpecialContacts Component', async () => {
     // change phone
     await testInput(form!, 's_phone', '123456789');
     // check if invalid
-    testInvalidField(form!, 's_phone', 'courtesy-contacts.valid-phone');
+    testInvalidField(form!, 's_phone', 'courtesy-contacts.valid-sms');
     // change phone
     await testInput(form!, 's_phone', '');
     // check if invalid
-    testInvalidField(form!, 's_phone', 'courtesy-contacts.valid-phone');
+    testInvalidField(form!, 's_phone', 'courtesy-contacts.valid-sms');
   });
 
   it('checks valid phone', async () => {

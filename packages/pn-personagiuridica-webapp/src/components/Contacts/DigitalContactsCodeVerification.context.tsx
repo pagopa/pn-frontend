@@ -167,7 +167,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
       labelType = 'pec';
     } else {
       labelRoot = 'courtesy-contacts';
-      labelType = digitalDomicileType === CourtesyChannelType.SMS ? 'phone' : 'email';
+      labelType = digitalDomicileType === CourtesyChannelType.SMS ? 'sms' : 'email';
     }
     setModalProps({
       labelRoot,

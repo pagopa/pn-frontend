@@ -8,9 +8,11 @@ import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, LegalChannelType } from '../../models/contacts';
 import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import CancelVerificationModal from './CancelVerificationModal';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
@@ -68,13 +70,18 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
 
   const deleteConfirmHandler = () => {
     setShowDeleteModal(false);
-    void dispatch(
+    dispatch(
       deleteAddress({
         addressType: AddressType.LEGAL,
         senderId: 'default',
         channelType: LegalChannelType.PEC,
       })
-    );
+    )
+      .unwrap()
+      .then(() => {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_PEC_SUCCESS, 'default');
+      })
+      .catch(() => {});
   };
 
   useEffect(() => {
