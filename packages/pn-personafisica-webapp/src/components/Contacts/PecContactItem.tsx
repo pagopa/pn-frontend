@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import { Button, Stack, TextField, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -103,7 +103,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
    */
   return (
     <>
-      <form onSubmit={formik.handleSubmit} data-testid="insertLegalContact">
+      <form onSubmit={formik.handleSubmit} data-testid="pecContact">
         {value && (
           <>
             <Typography mb={1} sx={{ fontWeight: 'bold' }} id="associatedPEC" mt={3}>
