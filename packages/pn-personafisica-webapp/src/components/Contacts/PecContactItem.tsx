@@ -7,9 +7,11 @@ import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, ChannelType } from '../../models/contacts';
 import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { pecValidationSchema } from '../../utility/contacts.utility';
 import CancelVerificationModal from './CancelVerificationModal';
 import DeleteDialog from './DeleteDialog';
@@ -64,13 +66,18 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
 
   const deleteConfirmHandler = () => {
     setShowDeleteModal(false);
-    void dispatch(
+    dispatch(
       deleteAddress({
         addressType: AddressType.LEGAL,
         senderId: 'default',
         channelType: ChannelType.PEC,
       })
-    );
+    )
+      .unwrap()
+      .then(() => {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_PEC_SUCCESS, 'default');
+      })
+      .catch(() => {});
   };
 
   useEffect(() => {

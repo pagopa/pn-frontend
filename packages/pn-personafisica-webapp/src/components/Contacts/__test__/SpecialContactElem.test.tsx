@@ -286,11 +286,11 @@ describe('SpecialContactElem Component', () => {
     expect(newButtons![0]).toBeDisabled();
     let inputError = result.container.querySelector(`#mocked-senderId_sms-helper-text`);
     expect(inputError).toBeInTheDocument();
-    expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
+    expect(inputError).toHaveTextContent('courtesy-contacts.valid-sms');
     fireEvent.change(input!, { target: { value: '' } });
     await waitFor(() => expect(input!).toHaveValue(''));
     inputError = result.container.querySelector(`#mocked-senderId_sms-helper-text`);
-    expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
+    expect(inputError).toHaveTextContent('courtesy-contacts.valid-sms');
   });
 
   it('Edits one contacts and checks that others are disabled', async () => {

@@ -9,9 +9,11 @@ import { useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn-commons';
 import { ChannelType, DigitalAddress } from '../../models/contacts';
 import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import {
   allowedAddressTypes,
   emailValidationSchema,
+  getEventByContactType,
   pecValidationSchema,
   phoneValidationSchema,
 } from '../../utility/contacts.utility';
@@ -71,13 +73,24 @@ const SpecialContactElem: React.FC<Props> = ({ addresses }) => {
       return;
     }
     toggleDeleteModal(f.id);
-    void dispatch(
+    dispatch(
       deleteAddress({
         addressType: f.address.addressType,
         senderId: addresses[0].senderId,
         channelType: f.address.channelType,
       })
-    );
+    )
+      .unwrap()
+      .then(() => {
+        if (!f.address) {
+          return;
+        }
+        PFEventStrategyFactory.triggerEvent(
+          getEventByContactType(f.address.channelType),
+          f.address.senderId
+        );
+      })
+      .catch(() => {});
   };
 
   const validationSchema = yup.object({

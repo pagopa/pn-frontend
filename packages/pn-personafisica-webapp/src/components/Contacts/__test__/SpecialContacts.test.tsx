@@ -254,11 +254,11 @@ describe('SpecialContacts Component', async () => {
     // change phone
     await testInput(form!, 's_value', '123456789');
     // check if invalid
-    testInvalidField(form!, 's_value', 'courtesy-contacts.valid-phone');
+    testInvalidField(form!, 's_value', 'courtesy-contacts.valid-sms');
     // change phone
     await testInput(form!, 's_value', '');
     // check if invalid
-    testInvalidField(form!, 's_value', 'courtesy-contacts.valid-phone');
+    testInvalidField(form!, 's_value', 'courtesy-contacts.valid-sms');
   });
 
   it('checks valid phone', async () => {
