@@ -1,11 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import {
-  AddressType,
-  CourtesyChannelType,
-  DigitalAddress,
-  IOAllowedValues,
-} from '../../models/contacts';
+import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { Party } from '../../models/party';
 import {
   createOrUpdateAddress,
@@ -66,8 +61,7 @@ const contactsSlice = createSlice({
     builder.addCase(enableIOAddress.fulfilled, (state) => {
       const addressIndex = state.digitalAddresses.findIndex(
         (address) =>
-          address.channelType === CourtesyChannelType.IOMSG &&
-          address.addressType === AddressType.COURTESY
+          address.channelType === ChannelType.IOMSG && address.addressType === AddressType.COURTESY
       );
       if (addressIndex > -1) {
         state.digitalAddresses[addressIndex].value = IOAllowedValues.ENABLED;
@@ -76,8 +70,7 @@ const contactsSlice = createSlice({
     builder.addCase(disableIOAddress.fulfilled, (state) => {
       const addressIndex = state.digitalAddresses.findIndex(
         (address) =>
-          address.channelType === CourtesyChannelType.IOMSG &&
-          address.addressType === AddressType.COURTESY
+          address.channelType === ChannelType.IOMSG && address.addressType === AddressType.COURTESY
       );
       if (addressIndex > -1) {
         state.digitalAddresses[addressIndex].value = IOAllowedValues.DISABLED;

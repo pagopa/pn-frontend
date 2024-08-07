@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 
 import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { LegalChannelType } from '../../../models/contacts';
+import { ChannelType } from '../../../models/contacts';
 import DigitalContactElem from '../DigitalContactElem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
@@ -58,7 +58,7 @@ describe('DigitalContactElem Component', () => {
               value: 'mocked@pec.it',
             }}
             senderId="mocked-senderId"
-            contactType={LegalChannelType.PEC}
+            contactType={ChannelType.PEC}
             onConfirm={mockOnConfirm}
             resetModifyValue={mockResetModifyValue}
             onDelete={mockDeleteCbk}
@@ -95,7 +95,7 @@ describe('DigitalContactElem Component', () => {
               value: 'mocked@pec.it',
             }}
             senderId="mocked-senderId"
-            contactType={LegalChannelType.PEC}
+            contactType={ChannelType.PEC}
             onConfirm={mockOnConfirm}
             resetModifyValue={mockResetModifyValue}
             onDelete={mockDeleteCbk}
@@ -145,7 +145,7 @@ describe('DigitalContactElem Component', () => {
               value: 'mocked@pec.it',
             }}
             senderId="mocked-senderId"
-            contactType={LegalChannelType.PEC}
+            contactType={ChannelType.PEC}
             onConfirm={mockOnConfirm}
             resetModifyValue={mockResetModifyValue}
             onDelete={mockDeleteCbk}
@@ -171,7 +171,7 @@ describe('DigitalContactElem Component', () => {
               value: 'mocked@pec.it',
             }}
             senderId="mocked-senderId"
-            contactType={LegalChannelType.PEC}
+            contactType={ChannelType.PEC}
             onConfirm={mockOnConfirm}
             resetModifyValue={mockResetModifyValue}
             saveDisabled
@@ -202,7 +202,7 @@ describe('DigitalContactElem Component', () => {
               value: 'mocked@pec.it',
             }}
             senderId="mocked-senderId"
-            contactType={LegalChannelType.PEC}
+            contactType={ChannelType.PEC}
             onConfirm={mockOnConfirm}
             resetModifyValue={mockResetModifyValue}
             editDisabled

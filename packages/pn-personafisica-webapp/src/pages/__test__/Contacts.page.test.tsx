@@ -10,7 +10,7 @@ import {
 } from '../../__mocks__/Contacts.mock';
 import { RenderResult, act, fireEvent, render, screen } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { CourtesyChannelType } from '../../models/contacts';
+import { ChannelType } from '../../models/contacts';
 import { PROFILO } from '../../navigation/routes.const';
 import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
@@ -70,9 +70,7 @@ describe('Contacts page', async () => {
   });
 
   it('renders Contacts (AppIO)', async () => {
-    const appIO = digitalCourtesyAddresses.find(
-      (addr) => addr.channelType === CourtesyChannelType.IOMSG
-    );
+    const appIO = digitalCourtesyAddresses.find((addr) => addr.channelType === ChannelType.IOMSG);
     mock.onGet('/bff/v1/addresses').reply(200, [appIO]);
     await act(async () => {
       result = render(<Contacts />);

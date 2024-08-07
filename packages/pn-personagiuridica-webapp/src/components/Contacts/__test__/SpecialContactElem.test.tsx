@@ -12,6 +12,7 @@ import {
   waitFor,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
+import { AddressType, ChannelType } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContactElem from '../SpecialContactElem';
 
@@ -33,6 +34,30 @@ describe('SpecialContactElem Component', () => {
   let result: RenderResult | undefined;
   let mock: MockAdapter;
 
+  const pecAddress = {
+    addressType: AddressType.LEGAL,
+    senderId: 'mocked-senderId',
+    senderName: 'Mocked Sender',
+    channelType: ChannelType.PEC,
+    value: 'mocked@pec.it',
+  };
+
+  const emailAddress = {
+    addressType: AddressType.COURTESY,
+    senderId: 'mocked-senderId',
+    senderName: 'Mocked Sender',
+    channelType: ChannelType.EMAIL,
+    value: 'mocked@mail.it',
+  };
+
+  const phoneAddress = {
+    addressType: AddressType.COURTESY,
+    senderId: 'mocked-senderId',
+    senderName: 'Mocked Sender',
+    channelType: ChannelType.SMS,
+    value: '+39333333333',
+  };
+
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
   });
@@ -51,14 +76,7 @@ describe('SpecialContactElem Component', () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContactsProvider>
-            <SpecialContactElem
-              address={{
-                senderId: 'mocked-senderId',
-                senderName: 'Mocked Sender',
-                mail: 'mocked@mail.it',
-                pec: 'mocked@pec.it',
-              }}
-            />
+            <SpecialContactElem addresses={[pecAddress, emailAddress]} />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
       );
@@ -86,13 +104,7 @@ describe('SpecialContactElem Component', () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContactsProvider>
-            <SpecialContactElem
-              address={{
-                senderId: 'mocked-senderId',
-                senderName: 'Mocked Sender',
-                pec: 'mocked@pec.it',
-              }}
-            />
+            <SpecialContactElem addresses={[pecAddress]} />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
       );
@@ -122,13 +134,7 @@ describe('SpecialContactElem Component', () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContactsProvider>
-            <SpecialContactElem
-              address={{
-                senderId: 'mocked-senderId',
-                senderName: 'Mocked Sender',
-                pec: 'mocked@pec.it',
-              }}
-            />
+            <SpecialContactElem addresses={[pecAddress]} />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
       );
@@ -163,13 +169,7 @@ describe('SpecialContactElem Component', () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContactsProvider>
-            <SpecialContactElem
-              address={{
-                senderId: 'mocked-senderId',
-                senderName: 'Mocked Sender',
-                mail: 'mocked@mail.it',
-              }}
-            />
+            <SpecialContactElem addresses={[emailAddress]} />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
       );
@@ -199,13 +199,7 @@ describe('SpecialContactElem Component', () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContactsProvider>
-            <SpecialContactElem
-              address={{
-                senderId: 'mocked-senderId',
-                senderName: 'Mocked Sender',
-                mail: 'mocked@mail.it',
-              }}
-            />
+            <SpecialContactElem addresses={[emailAddress]} />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
       );
@@ -225,12 +219,12 @@ describe('SpecialContactElem Component', () => {
     fireEvent.change(input!, { target: { value: 'new.bad.-mail-[123@456.it' } });
     await waitFor(() => expect(input!).toHaveValue('new.bad.-mail-[123@456.it'));
     expect(newButtons![0]).toBeDisabled();
-    let inputError = result?.container.querySelector(`#mocked-senderId_mail-helper-text`);
+    let inputError = result?.container.querySelector(`#mocked-senderId_email-helper-text`);
     expect(inputError).toBeInTheDocument();
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
     fireEvent.change(input!, { target: { value: '' } });
     await waitFor(() => expect(input!).toHaveValue(''));
-    inputError = result?.container.querySelector(`#mocked-senderId_mail-helper-text`);
+    inputError = result?.container.querySelector(`#mocked-senderId_email-helper-text`);
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
   });
 
@@ -240,13 +234,7 @@ describe('SpecialContactElem Component', () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContactsProvider>
-            <SpecialContactElem
-              address={{
-                senderId: 'mocked-senderId',
-                senderName: 'Mocked Sender',
-                phone: '+39333333333',
-              }}
-            />
+            <SpecialContactElem addresses={[phoneAddress]} />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
       );
@@ -266,7 +254,7 @@ describe('SpecialContactElem Component', () => {
     fireEvent.change(input!, { target: { value: '+39333333334' } });
     await waitFor(() => expect(input!).toHaveValue('+39333333334'));
     expect(newButtons![0]).toBeEnabled();
-    const inputError = result?.container.querySelector(`#mocked-senderId_phone-helper-text`);
+    const inputError = result?.container.querySelector(`#mocked-senderId_sms-helper-text`);
     expect(inputError).not.toBeInTheDocument();
   });
 
@@ -276,13 +264,7 @@ describe('SpecialContactElem Component', () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContactsProvider>
-            <SpecialContactElem
-              address={{
-                senderId: 'mocked-senderId',
-                senderName: 'Mocked Sender',
-                phone: '+39333333333',
-              }}
-            />
+            <SpecialContactElem addresses={[phoneAddress]} />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
       );
@@ -302,12 +284,12 @@ describe('SpecialContactElem Component', () => {
     fireEvent.change(input!, { target: { value: '123456789' } });
     await waitFor(() => expect(input!).toHaveValue('123456789'));
     expect(newButtons![0]).toBeDisabled();
-    let inputError = result?.container.querySelector(`#mocked-senderId_phone-helper-text`);
+    let inputError = result?.container.querySelector(`#mocked-senderId_sms-helper-text`);
     expect(inputError).toBeInTheDocument();
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-sms');
     fireEvent.change(input!, { target: { value: '' } });
     await waitFor(() => expect(input!).toHaveValue(''));
-    inputError = result?.container.querySelector(`#mocked-senderId_phone-helper-text`);
+    inputError = result?.container.querySelector(`#mocked-senderId_sms-helper-text`);
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-sms');
   });
 
@@ -317,21 +299,24 @@ describe('SpecialContactElem Component', () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContactsProvider>
+            <SpecialContactElem addresses={[pecAddress, phoneAddress]} />
             <SpecialContactElem
-              address={{
-                senderId: 'mocked-senderId',
-                senderName: 'Mocked Sender',
-                pec: 'mocked@pec.it',
-                phone: '+39333333333',
-              }}
-            />
-            <SpecialContactElem
-              address={{
-                senderId: 'another-mocked-senderId',
-                senderName: 'Another mocked Sender',
-                mail: 'mocked@mail.it',
-                phone: '+39333333334',
-              }}
+              addresses={[
+                {
+                  addressType: AddressType.COURTESY,
+                  senderId: 'another-mocked-senderId',
+                  senderName: 'Another mocked Sender',
+                  channelType: ChannelType.EMAIL,
+                  value: 'mocked@mail.it',
+                },
+                {
+                  addressType: AddressType.COURTESY,
+                  senderId: 'another-mocked-senderId',
+                  senderName: 'Another mocked Sender',
+                  channelType: ChannelType.SMS,
+                  value: '+39333333334',
+                },
+              ]}
             />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
@@ -380,13 +365,7 @@ describe('SpecialContactElem Component', () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContactsProvider>
-            <SpecialContactElem
-              address={{
-                senderId: 'mocked-senderId',
-                senderName: 'Mocked Sender',
-                pec: 'mocked@pec.it',
-              }}
-            />
+            <SpecialContactElem addresses={[pecAddress]} />
           </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
       );

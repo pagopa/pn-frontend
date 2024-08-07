@@ -5,14 +5,14 @@ import { TextField, TextFieldProps, Typography } from '@mui/material';
 import { WithRequired } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { ChannelType } from '../../models/contacts';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
   inputProps: WithRequired<TextFieldProps, 'id'>;
   senderId: string;
   senderName?: string;
-  contactType: CourtesyChannelType | LegalChannelType;
+  contactType: ChannelType;
   saveDisabled?: boolean;
   onConfirm: (status: 'validated' | 'cancelled') => void;
   resetModifyValue: () => void;

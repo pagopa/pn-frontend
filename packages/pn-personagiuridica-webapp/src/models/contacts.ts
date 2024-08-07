@@ -1,8 +1,5 @@
-export enum LegalChannelType {
+export enum ChannelType {
   PEC = 'PEC',
-}
-
-export enum CourtesyChannelType {
   EMAIL = 'EMAIL',
   SMS = 'SMS',
 }
@@ -16,7 +13,7 @@ export interface DigitalAddress {
   addressType: AddressType;
   senderId: string;
   senderName?: string;
-  channelType: LegalChannelType | CourtesyChannelType;
+  channelType: ChannelType;
   value: string;
   pecValid?: boolean;
   codeValid?: boolean;

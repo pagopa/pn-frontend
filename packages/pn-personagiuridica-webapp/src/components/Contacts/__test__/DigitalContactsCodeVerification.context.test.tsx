@@ -11,7 +11,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
+import { ChannelType } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import {
   Component,
@@ -62,7 +62,7 @@ describe('DigitalContactsCodeVerification Context', () => {
     // render component
     result = render(
       <DigitalContactsCodeVerificationProvider>
-        <Component type={LegalChannelType.PEC} value={pecValue} senderId={senderId} />
+        <Component type={ChannelType.PEC} value={pecValue} senderId={senderId} />
       </DigitalContactsCodeVerificationProvider>
     );
     const dialog = await showDialog(result);
@@ -106,7 +106,7 @@ describe('DigitalContactsCodeVerification Context', () => {
     // render component
     result = render(
       <DigitalContactsCodeVerificationProvider>
-        <Component type={LegalChannelType.PEC} value={pecValueToVerify} senderId={senderId} />
+        <Component type={ChannelType.PEC} value={pecValueToVerify} senderId={senderId} />
       </DigitalContactsCodeVerificationProvider>
     );
     const dialog = await showDialog(result);
@@ -149,7 +149,7 @@ describe('DigitalContactsCodeVerification Context', () => {
     // render component
     result = render(
       <DigitalContactsCodeVerificationProvider>
-        <Component type={LegalChannelType.PEC} value={pecValue} senderId={senderId} />
+        <Component type={ChannelType.PEC} value={pecValue} senderId={senderId} />
       </DigitalContactsCodeVerificationProvider>
     );
     const dialog = await showDialog(result);
@@ -174,7 +174,7 @@ describe('DigitalContactsCodeVerification Context', () => {
     // render component
     result = render(
       <DigitalContactsCodeVerificationProvider>
-        <Component type={CourtesyChannelType.EMAIL} value={emailValue} />
+        <Component type={ChannelType.EMAIL} value={emailValue} />
       </DigitalContactsCodeVerificationProvider>
     );
     const button = result.container.querySelector('button');
@@ -209,7 +209,7 @@ describe('DigitalContactsCodeVerification Context', () => {
     // render component
     result = render(
       <DigitalContactsCodeVerificationProvider>
-        <Component type={CourtesyChannelType.EMAIL} value={value} senderId="another-sender-id" />
+        <Component type={ChannelType.EMAIL} value={value} senderId="another-sender-id" />
       </DigitalContactsCodeVerificationProvider>,
       { preloadedState: { contactsState: { digitalAddresses } } }
     );
