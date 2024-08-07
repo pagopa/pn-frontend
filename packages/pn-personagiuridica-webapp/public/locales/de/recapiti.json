@@ -56,7 +56,7 @@
     "title": "",
     "subtitle": "E-Mail-Adresse oder Handynummer",
     "description": "Wenn ein Bescheid für das Unternehmen vorliegt, wird eine Nachricht an diese Kontakte gesendet. Zum Lesen des Bescheids und zur Entrichtung eventueller Gebühren musst du dich auf der Plattform anmelden.",
-    "link-sms-placeholder": "",
+    "link-sms-placeholder": "Handynummer",
     "link-email-placeholder": "E-Mail-Adresse",
     "sms-add": "Benachrichtige mich per SMS",
     "email-add": "Benachrichtige mich per E-Mail",

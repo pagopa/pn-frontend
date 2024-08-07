@@ -195,7 +195,7 @@ const SpecialContacts = ({ digitalAddresses }: Props) => {
   const addressTypeChangeHandler = async (e: ChangeEvent) => {
     await formik.setFieldValue('s_value', '');
     formik.handleChange(e);
-    if (addresses[formik.values.sender.id]) {
+    if (formik.values.sender && addresses[formik.values.sender.id]) {
       const alreadyExists =
         addresses[formik.values.sender.id].findIndex(
           (a) => a.channelType === (e.target as any).value
