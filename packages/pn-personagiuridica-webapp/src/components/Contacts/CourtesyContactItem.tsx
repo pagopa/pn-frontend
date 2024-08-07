@@ -1,15 +1,18 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
-import { dataRegex } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType } from '../../models/contacts';
 import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
-import { internationalPhonePrefix } from '../../utility/contacts.utility';
+import {
+  emailValidationSchema,
+  internationalPhonePrefix,
+  phoneValidationSchema,
+} from '../../utility/contacts.utility';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
@@ -24,36 +27,20 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { initValidation } = useDigitalContactsCodeVerificationContext();
   const contactType = type.toLowerCase();
-  const phoneRegex = value ? dataRegex.phoneNumberWithItalyPrefix : dataRegex.phoneNumber;
   const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const dispatch = useAppDispatch();
 
-  const emailValidationSchema = useMemo(
-    () =>
-      yup.object().shape({
-        email: yup
-          .string()
-          .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
-          .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
-          .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
-      }),
-    []
-  );
+  const emailValidationSch = yup.object().shape({
+    email: emailValidationSchema(t),
+  });
 
   // note that phoneValidationSchema depends on the phoneRegex which is different
   // for the insertion and modification cases, check the comment
   // about the useEffect which calls setPhoneRegex below
-  const phoneValidationSchema = useMemo(
-    () =>
-      yup.object().shape({
-        sms: yup
-          .string()
-          .required(t('courtesy-contacts.valid-sms', { ns: 'recapiti' }))
-          .matches(phoneRegex, t('courtesy-contacts.valid-sms', { ns: 'recapiti' })),
-      }),
-    [phoneRegex]
-  );
+  const phoneValidationSch = yup.object().shape({
+    sms: phoneValidationSchema(t, !!value),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -61,7 +48,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
     },
     enableReinitialize: true,
     validateOnMount: true,
-    validationSchema: type === ChannelType.EMAIL ? emailValidationSchema : phoneValidationSchema,
+    validationSchema: type === ChannelType.EMAIL ? emailValidationSch : phoneValidationSch,
     onSubmit: () => {
       const contactValue =
         type === ChannelType.EMAIL
@@ -161,17 +148,10 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
               onChange={handleChangeTouched}
               error={formik.touched[contactType] && Boolean(formik.errors[contactType])}
               helperText={formik.touched[contactType] && formik.errors[contactType]}
-              inputProps={{
-                sx: { height: '14px' },
-                'data-testid': `courtesy-contact-${contactType}`,
-              }}
-              placeholder={
-                type !== ChannelType.SMS
-                  ? t(`courtesy-contacts.link-${contactType}-placeholder`, {
-                      ns: 'recapiti',
-                    })
-                  : ''
-              }
+              inputProps={{ sx: { height: '14px' } }}
+              placeholder={t(`courtesy-contacts.link-${contactType}-placeholder`, {
+                ns: 'recapiti',
+              })}
               fullWidth
               InputProps={
                 type === ChannelType.SMS

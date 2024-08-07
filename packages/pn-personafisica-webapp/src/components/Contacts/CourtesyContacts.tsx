@@ -40,12 +40,12 @@ const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
       <Box sx={{ width: { xs: '100%', lg: '50%' } }} data-testid="courtesyContacts">
         <Stack spacing={3} mt={3}>
           <CourtesyContactItem
-            type={CourtesyChannelType.EMAIL}
+            type={ChannelType.EMAIL}
             value={emailContact?.value ? emailContact.value : ''}
             blockDelete={emailContactsQuantity() > 1}
           />
           <CourtesyContactItem
-            type={CourtesyChannelType.SMS}
+            type={ChannelType.SMS}
             value={phoneContact?.value ? phoneContact.value : ''}
             blockDelete={phoneContactsQuantity() > 1}
           />

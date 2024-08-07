@@ -30,8 +30,8 @@ export const emailValidationSchema = (t: TFunction) =>
 export const phoneValidationSchema = (t: TFunction, withPrefix = false) =>
   yup
     .string()
-    .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
+    .required(t('courtesy-contacts.valid-sms', { ns: 'recapiti' }))
     .matches(
       withPrefix ? dataRegex.phoneNumberWithItalyPrefix : dataRegex.phoneNumber,
-      t('courtesy-contacts.valid-phone', { ns: 'recapiti' })
+      t('courtesy-contacts.valid-sms', { ns: 'recapiti' })
     );
