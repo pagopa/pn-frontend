@@ -13,7 +13,6 @@ import {
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, CourtesyChannelType } from '../../../models/contacts';
-import { CourtesyFieldType } from '../CourtesyContactItem';
 import CourtesyContacts from '../CourtesyContacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
@@ -46,6 +45,9 @@ const defaultEmailAddress = digitalCourtesyAddresses.find(
 const defaultPhoneAddress = digitalCourtesyAddresses.find(
   (addr) => addr.channelType === CourtesyChannelType.SMS && addr.senderId === 'default'
 );
+
+const smsInputName = CourtesyChannelType.SMS.toLowerCase();
+const emailInputName = CourtesyChannelType.EMAIL.toLowerCase();
 
 describe('CourtesyContacts Component', async () => {
   let mock: MockAdapter;
@@ -82,8 +84,8 @@ describe('CourtesyContacts Component', async () => {
     const disclaimer = result.getByTestId('contacts disclaimer');
     expect(disclaimer).toBeInTheDocument();
     // check inputs
-    const phoneInput = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
-    const emailInput = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+    const phoneInput = result.container.querySelector(`[name="${smsInputName}"]`);
+    const emailInput = result.container.querySelector(`[name="${emailInputName}"]`);
     expect(phoneInput).toBeInTheDocument();
     expect(emailInput).toBeInTheDocument();
   });
@@ -105,8 +107,8 @@ describe('CourtesyContacts Component', async () => {
       (addr) => addr.channelType === CourtesyChannelType.EMAIL && addr.senderId === 'default'
     );
 
-    const phoneInput = result?.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
-    const emailInput = result?.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+    const phoneInput = result?.container.querySelector(`[name="${smsInputName}"]`);
+    const emailInput = result?.container.querySelector(`[name="${emailInputName}"]`);
     expect(phoneInput).not.toBeInTheDocument();
     expect(emailInput).not.toBeInTheDocument();
     const phoneNumber = result?.getByText(defaultPhone!.value);
@@ -144,11 +146,11 @@ describe('CourtesyContacts Component', async () => {
         <CourtesyContacts contacts={[]} />
       </DigitalContactsCodeVerificationProvider>
     );
-    const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
+    const input = result.container.querySelector(`[name="${smsInputName}"]`);
     expect(input).toHaveValue('');
     fireEvent.change(input!, { target: { value: phoneValue } });
     await waitFor(() => expect(input!).toHaveValue(phoneValue));
-    const button = result.getByTestId('courtesy-phone-button');
+    const button = result.getByTestId('courtesy-sms-button');
     expect(button).toBeEnabled();
     // save the phone
     fireEvent.click(button);
@@ -221,10 +223,10 @@ describe('CourtesyContacts Component', async () => {
         },
       }
     );
-    const phoneForm = result.getByTestId(`courtesyContacts-${CourtesyFieldType.PHONE}`);
+    const phoneForm = result.getByTestId(`courtesyContacts-${smsInputName}`);
     const editButton = within(phoneForm).getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
-    const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
+    const input = result.container.querySelector(`[name="${smsInputName}"]`);
     fireEvent.change(input!, { target: { value: phoneValue } });
     await waitFor(() => {
       expect(input!).toHaveValue(phoneValue);
@@ -295,7 +297,7 @@ describe('CourtesyContacts Component', async () => {
     );
     const phoneText = result.getByText(phoneValue);
     expect(phoneText).toBeInTheDocument();
-    const phoneForm = result.getByTestId(`courtesyContacts-${CourtesyFieldType.PHONE}`);
+    const phoneForm = result.getByTestId(`courtesyContacts-${smsInputName}`);
     const deleteButton = within(phoneForm).getByRole('button', { name: 'button.elimina' });
     fireEvent.click(deleteButton);
     // find confirmation dialog and its buttons
@@ -326,7 +328,7 @@ describe('CourtesyContacts Component', async () => {
       </DigitalContactsCodeVerificationProvider>
     );
     await waitFor(() => {
-      const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
+      const input = result.container.querySelector(`[name="${smsInputName}"]`);
       expect(input).toBeInTheDocument();
       expect(result.container).not.toHaveTextContent(phoneValue);
     });
@@ -348,7 +350,7 @@ describe('CourtesyContacts Component', async () => {
         <CourtesyContacts contacts={[]} />
       </DigitalContactsCodeVerificationProvider>
     );
-    const input = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+    const input = result.container.querySelector(`[name="${emailInputName}"]`);
     expect(input).toHaveValue('');
     fireEvent.change(input!, { target: { value: mailValue } });
     await waitFor(() => expect(input!).toHaveValue(mailValue));
@@ -424,10 +426,10 @@ describe('CourtesyContacts Component', async () => {
         },
       }
     );
-    const emailForm = result.getByTestId(`courtesyContacts-${CourtesyFieldType.EMAIL}`);
+    const emailForm = result.getByTestId(`courtesyContacts-${emailInputName}`);
     const editButton = within(emailForm).getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
-    const input = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+    const input = result.container.querySelector(`[name="${emailInputName}"]`);
     fireEvent.change(input!, { target: { value: emailValue } });
     await waitFor(() => expect(input!).toHaveValue(emailValue));
     const saveButton = result.getByRole('button', { name: 'button.salva' });
@@ -496,7 +498,7 @@ describe('CourtesyContacts Component', async () => {
     );
     const emailText = result.getByText(emailValue);
     expect(emailText).toBeInTheDocument();
-    const emailForm = result.getByTestId(`courtesyContacts-${CourtesyFieldType.EMAIL}`);
+    const emailForm = result.getByTestId(`courtesyContacts-${emailInputName}`);
     const deleteButton = within(emailForm).getByRole('button', { name: 'button.elimina' });
     fireEvent.click(deleteButton);
     // find confirmation dialog and its buttons
@@ -527,7 +529,7 @@ describe('CourtesyContacts Component', async () => {
       </DigitalContactsCodeVerificationProvider>
     );
     await waitFor(() => {
-      const input = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+      const input = result.container.querySelector(`[name="${emailInputName}"]`);
       expect(input).toBeInTheDocument();
       expect(result.container).not.toHaveTextContent(emailValue);
     });

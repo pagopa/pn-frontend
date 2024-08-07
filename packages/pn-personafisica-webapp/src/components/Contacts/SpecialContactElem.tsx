@@ -9,6 +9,8 @@ import { dataRegex, useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn
 import { AddressType, CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
+import { getEventByContactType } from '../../utility/contacts.utility';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
 
@@ -33,7 +35,7 @@ type Field = {
 const addressTypeToLabel = {
   mail: 'email',
   pec: 'pec',
-  phone: 'phone',
+  phone: 'sms',
 };
 
 // TODO: disable complexity for now.
@@ -63,13 +65,18 @@ const SpecialContactElem = memo(({ address }: Props) => {
 
   const deleteConfirmHandler = (f: Field) => {
     toggleDeleteModal(f.id);
-    void dispatch(
+    dispatch(
       deleteAddress({
         addressType: f.addressId === 'pec' ? AddressType.LEGAL : AddressType.COURTESY,
         senderId: address.senderId,
         channelType: f.contactType,
       })
-    );
+    )
+      .unwrap()
+      .then(() => {
+        PFEventStrategyFactory.triggerEvent(getEventByContactType(f.contactType), address.senderId);
+      })
+      .catch(() => {});
   };
 
   const initialValues = {
@@ -113,10 +120,10 @@ const SpecialContactElem = memo(({ address }: Props) => {
       .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
     [`${address.senderId}_phone`]: yup
       .string()
-      .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
+      .required(t('courtesy-contacts.valid-sms', { ns: 'recapiti' }))
       .matches(
         dataRegex.phoneNumberWithItalyPrefix,
-        t('courtesy-contacts.valid-phone', { ns: 'recapiti' })
+        t('courtesy-contacts.valid-sms', { ns: 'recapiti' })
       ),
     [`${address.senderId}_mail`]: yup
       .string()
