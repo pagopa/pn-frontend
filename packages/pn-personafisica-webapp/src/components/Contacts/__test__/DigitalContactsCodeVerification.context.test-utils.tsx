@@ -1,6 +1,6 @@
 import { RenderResult, fireEvent, waitFor } from '@testing-library/react';
 
-import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
+import { ChannelType } from '../../../models/contacts';
 import { useDigitalContactsCodeVerificationContext } from '../DigitalContactsCodeVerification.context';
 
 const pecValue = 'mocked@pec.it';
@@ -13,7 +13,7 @@ const Component = ({
   value,
   senderId = 'default',
 }: {
-  type: LegalChannelType | CourtesyChannelType;
+  type: ChannelType;
   value: string;
   senderId?: string;
 }) => {

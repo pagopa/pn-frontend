@@ -4,7 +4,7 @@ import {
   digitalCourtesyAddresses,
   digitalLegalAddresses,
 } from '../../../../__mocks__/Contacts.mock';
-import { AddressType, CourtesyChannelType, LegalChannelType } from '../../../../models/contacts';
+import { AddressType, ChannelType } from '../../../../models/contacts';
 import { SendAddAddressStrategy } from '../SendAddAddressStrategy';
 
 describe('Mixpanel - Add Address Strategy', () => {
@@ -15,7 +15,7 @@ describe('Mixpanel - Add Address Strategy', () => {
         payload: undefined,
         params: {
           addressType: AddressType.COURTESY,
-          channelType: CourtesyChannelType.EMAIL,
+          channelType: ChannelType.EMAIL,
           senderId: 'default',
           value: '',
         },
@@ -26,9 +26,7 @@ describe('Mixpanel - Add Address Strategy', () => {
 
     it('should return empty object if senderId is not default', () => {
       const strategy = new SendAddAddressStrategy();
-      const address = digitalCourtesyAddresses.find(
-        (a) => a.channelType === CourtesyChannelType.EMAIL
-      );
+      const address = digitalCourtesyAddresses.find((a) => a.channelType === ChannelType.EMAIL);
 
       const event = strategy.performComputations({
         payload: address,
@@ -45,9 +43,7 @@ describe('Mixpanel - Add Address Strategy', () => {
 
     it('should return has email when adding an email', () => {
       const strategy = new SendAddAddressStrategy();
-      const address = digitalCourtesyAddresses.find(
-        (a) => a.channelType === CourtesyChannelType.EMAIL
-      );
+      const address = digitalCourtesyAddresses.find((a) => a.channelType === ChannelType.EMAIL);
 
       const event = strategy.performComputations({
         payload: address,
@@ -71,9 +67,7 @@ describe('Mixpanel - Add Address Strategy', () => {
 
     it('should return has sms when adding an sms', () => {
       const strategy = new SendAddAddressStrategy();
-      const address = digitalCourtesyAddresses.find(
-        (a) => a.channelType === CourtesyChannelType.SMS
-      );
+      const address = digitalCourtesyAddresses.find((a) => a.channelType === ChannelType.SMS);
 
       const event = strategy.performComputations({
         payload: address,
@@ -103,7 +97,7 @@ describe('Mixpanel - Add Address Strategy', () => {
         payload: undefined,
         params: {
           addressType: AddressType.LEGAL,
-          channelType: LegalChannelType.PEC,
+          channelType: ChannelType.PEC,
           senderId: 'default',
           value: '',
         },

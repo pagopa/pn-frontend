@@ -7,7 +7,7 @@ import {
   digitalLegalAddresses,
 } from '../../../__mocks__/Contacts.mock';
 import { apiClient } from '../../../api/apiClients';
-import { AddressType, CourtesyChannelType, IOAllowedValues } from '../../../models/contacts';
+import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
 import { store } from '../../store';
 import {
   createOrUpdateAddress,
@@ -134,7 +134,7 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to update the digital address with courtesy value (email to verify)', async () => {
     const emailContact = digitalCourtesyAddresses.find(
-      (el) => el.channelType === CourtesyChannelType.EMAIL
+      (el) => el.channelType === ChannelType.EMAIL
     );
     const updatedDigitalAddress = { ...emailContact!, value: 'mario.rossi@mail.it' };
     mock
@@ -158,7 +158,7 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to update the digital address with courtesy value (email verified)', async () => {
     const emailContact = digitalCourtesyAddresses.find(
-      (el) => el.channelType === CourtesyChannelType.EMAIL
+      (el) => el.channelType === ChannelType.EMAIL
     );
     const updatedDigitalAddress = { ...emailContact!, value: 'mario.rossi@mail.it' };
     mock
@@ -180,7 +180,7 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to remove the digital address with courtesy value', async () => {
     const emailContact = digitalCourtesyAddresses.find(
-      (el) => el.channelType === CourtesyChannelType.EMAIL
+      (el) => el.channelType === ChannelType.EMAIL
     );
     mock.onDelete(`/bff/v1/addresses/COURTESY/${emailContact!.senderId}/EMAIL`).reply(204);
     const action = await store.dispatch(
@@ -195,9 +195,7 @@ describe('Contacts redux state tests', () => {
   });
 
   it('Should be able to enable App IO', async () => {
-    const ioContact = digitalCourtesyAddresses.find(
-      (el) => el.channelType === CourtesyChannelType.IOMSG
-    );
+    const ioContact = digitalCourtesyAddresses.find((el) => el.channelType === ChannelType.IOMSG);
     const ioAddress = { ...ioContact!, value: IOAllowedValues.ENABLED };
     mock
       .onPost(`/bff/v1/addresses/COURTESY/${ioAddress.senderId}/APPIO`, {
@@ -211,9 +209,7 @@ describe('Contacts redux state tests', () => {
   });
 
   it('Should be able to disable App IO', async () => {
-    const ioContact = digitalCourtesyAddresses.find(
-      (el) => el.channelType === CourtesyChannelType.IOMSG
-    );
+    const ioContact = digitalCourtesyAddresses.find((el) => el.channelType === ChannelType.IOMSG);
     mock.onDelete(`/bff/v1/addresses/COURTESY/${ioContact!.senderId}/APPIO`).reply(204);
     const action = await store.dispatch(disableIOAddress());
     expect(action.type).toBe('disableIOAddress/fulfilled');

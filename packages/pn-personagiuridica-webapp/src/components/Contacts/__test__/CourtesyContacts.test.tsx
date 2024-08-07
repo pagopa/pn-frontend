@@ -12,7 +12,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { AddressType, CourtesyChannelType } from '../../../models/contacts';
+import { AddressType, ChannelType } from '../../../models/contacts';
 import CourtesyContacts from '../CourtesyContacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
@@ -39,18 +39,18 @@ const fillCodeDialog = async (result: RenderResult) => {
 };
 
 const defaultEmailAddress = digitalCourtesyAddresses.find(
-  (addr) => addr.channelType === CourtesyChannelType.EMAIL && addr.senderId === 'default'
+  (addr) => addr.channelType === ChannelType.EMAIL && addr.senderId === 'default'
 );
 
 const defaultPhoneAddress = digitalCourtesyAddresses.find(
-  (addr) => addr.channelType === CourtesyChannelType.SMS && addr.senderId === 'default'
+  (addr) => addr.channelType === ChannelType.SMS && addr.senderId === 'default'
 );
 
 describe('CourtesyContacts Component', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
-  const smsInputName = CourtesyChannelType.SMS.toLowerCase();
-  const emailInputName = CourtesyChannelType.EMAIL.toLowerCase();
+  const smsInputName = ChannelType.SMS.toLowerCase();
+  const emailInputName = ChannelType.EMAIL.toLowerCase();
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -99,10 +99,10 @@ describe('CourtesyContacts Component', async () => {
     });
 
     const defaultPhone = digitalCourtesyAddresses.find(
-      (addr) => addr.channelType === CourtesyChannelType.SMS && addr.senderId === 'default'
+      (addr) => addr.channelType === ChannelType.SMS && addr.senderId === 'default'
     );
     const defaultEmail = digitalCourtesyAddresses.find(
-      (addr) => addr.channelType === CourtesyChannelType.EMAIL && addr.senderId === 'default'
+      (addr) => addr.channelType === ChannelType.EMAIL && addr.senderId === 'default'
     );
 
     const phoneInput = result.container.querySelector(`[name="${smsInputName}"]`);

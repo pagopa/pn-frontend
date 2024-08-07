@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
 import { RenderResult, fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { AddressType, CourtesyChannelType, IOAllowedValues } from '../../../models/contacts';
+import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
 import IOContact from '../IOContact';
 
 vi.mock('react-i18next', () => ({
@@ -15,9 +15,7 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-const IOAddress = digitalCourtesyAddresses.find(
-  (addr) => addr.channelType === CourtesyChannelType.IOMSG
-);
+const IOAddress = digitalCourtesyAddresses.find((addr) => addr.channelType === ChannelType.IOMSG);
 
 describe('IOContact component', async () => {
   let mock: MockAdapter;

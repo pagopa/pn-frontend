@@ -1,7 +1,7 @@
 import { EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { digitalAddresses, digitalCourtesyAddresses } from '../../../../__mocks__/Contacts.mock';
-import { CourtesyChannelType, IOAllowedValues } from '../../../../models/contacts';
+import { ChannelType, IOAllowedValues } from '../../../../models/contacts';
 import { SendHasAddressesStrategy } from '../SendHasAddressesStrategy';
 
 describe('Mixpanel - Has Addresses Strategy', () => {
@@ -55,7 +55,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
     const strategy = new SendHasAddressesStrategy();
 
     const addressesWithoutEmail = digitalAddresses.filter(
-      (address) => address.channelType !== CourtesyChannelType.EMAIL
+      (address) => address.channelType !== ChannelType.EMAIL
     );
 
     const hasPecEvent = strategy.performComputations({
@@ -82,7 +82,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
     const strategy = new SendHasAddressesStrategy();
 
     const addressesWithoutSMS = digitalAddresses.filter(
-      (address) => address.channelType !== CourtesyChannelType.SMS
+      (address) => address.channelType !== ChannelType.SMS
     );
 
     const hasPecEvent = strategy.performComputations({
@@ -109,7 +109,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
     const strategy = new SendHasAddressesStrategy();
 
     const addressesWithoutSMS = digitalAddresses.filter(
-      (address) => address.channelType !== CourtesyChannelType.IOMSG
+      (address) => address.channelType !== ChannelType.IOMSG
     );
 
     const hasPecEvent = strategy.performComputations({
@@ -136,7 +136,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
     const strategy = new SendHasAddressesStrategy();
 
     const addressesWithActivatedIO = digitalAddresses.map((address) => {
-      if (address.channelType === CourtesyChannelType.IOMSG) {
+      if (address.channelType === ChannelType.IOMSG) {
         return {
           ...address,
           value: IOAllowedValues.ENABLED,

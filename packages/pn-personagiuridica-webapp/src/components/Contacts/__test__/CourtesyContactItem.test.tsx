@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 
 import { fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { CourtesyChannelType } from '../../../models/contacts';
+import { ChannelType } from '../../../models/contacts';
 import CourtesyContactItem from '../CourtesyContactItem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
@@ -26,7 +26,7 @@ describe('CourtesyContactItem component', () => {
     let mock: MockAdapter;
     const INPUT_VALID_PHONE = '3331234567';
     const INPUT_INVALID_PHONE = '33312345';
-    const smsInputName = CourtesyChannelType.SMS.toLowerCase();
+    const smsInputName = ChannelType.SMS.toLowerCase();
 
     beforeAll(() => {
       mock = new MockAdapter(apiClient);
@@ -43,7 +43,7 @@ describe('CourtesyContactItem component', () => {
     it('type in an invalid number', async () => {
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={CourtesyChannelType.SMS} value="" />
+          <CourtesyContactItem type={ChannelType.SMS} value="" />
         </DigitalContactsCodeVerificationProvider>
       );
       const input = result.container.querySelector(`[name="${smsInputName}"]`);
@@ -63,7 +63,7 @@ describe('CourtesyContactItem component', () => {
     it('type in an invalid number while in "edit mode"', async () => {
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={CourtesyChannelType.SMS} value={INPUT_VALID_PHONE} />
+          <CourtesyContactItem type={ChannelType.SMS} value={INPUT_VALID_PHONE} />
         </DigitalContactsCodeVerificationProvider>
       );
       result.getByText(INPUT_VALID_PHONE);
@@ -85,7 +85,7 @@ describe('CourtesyContactItem component', () => {
       // render component
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={CourtesyChannelType.SMS} value={INPUT_VALID_PHONE} />
+          <CourtesyContactItem type={ChannelType.SMS} value={INPUT_VALID_PHONE} />
         </DigitalContactsCodeVerificationProvider>
       );
       const buttons = result.container.querySelectorAll('button');
@@ -117,7 +117,7 @@ describe('CourtesyContactItem component', () => {
     let mock: MockAdapter;
     const VALID_EMAIL = 'prova@pagopa.it';
     const INVALID_EMAIL = 'testpagopa.it';
-    const emailInputName = CourtesyChannelType.EMAIL.toLowerCase();
+    const emailInputName = ChannelType.EMAIL.toLowerCase();
 
     beforeAll(() => {
       mock = new MockAdapter(apiClient);
@@ -134,7 +134,7 @@ describe('CourtesyContactItem component', () => {
     it('type in an invalid email', async () => {
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={CourtesyChannelType.EMAIL} value="" />
+          <CourtesyContactItem type={ChannelType.EMAIL} value="" />
         </DigitalContactsCodeVerificationProvider>
       );
       const input = result.container.querySelector(`[name="${emailInputName}"]`);
@@ -154,7 +154,7 @@ describe('CourtesyContactItem component', () => {
     it('type in an invalid email while in "edit mode"', async () => {
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={CourtesyChannelType.EMAIL} value={VALID_EMAIL} />
+          <CourtesyContactItem type={ChannelType.EMAIL} value={VALID_EMAIL} />
         </DigitalContactsCodeVerificationProvider>
       );
       result.getByText(VALID_EMAIL);
@@ -177,7 +177,7 @@ describe('CourtesyContactItem component', () => {
       // render component
       const result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={CourtesyChannelType.EMAIL} value={VALID_EMAIL} />
+          <CourtesyContactItem type={ChannelType.EMAIL} value={VALID_EMAIL} />
         </DigitalContactsCodeVerificationProvider>
       );
       const buttons = result.container.querySelectorAll('button');

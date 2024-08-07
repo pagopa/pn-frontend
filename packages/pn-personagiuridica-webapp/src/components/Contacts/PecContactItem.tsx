@@ -8,7 +8,7 @@ import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { AddressType, LegalChannelType } from '../../models/contacts';
+import { AddressType, ChannelType } from '../../models/contacts';
 import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
 import CancelVerificationModal from './CancelVerificationModal';
@@ -47,7 +47,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
     validationSchema,
     /** onSubmit validate */
     onSubmit: () => {
-      initValidation(LegalChannelType.PEC, formik.values.pec, 'default');
+      initValidation(ChannelType.PEC, formik.values.pec, 'default');
     },
   });
 
@@ -72,7 +72,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
       deleteAddress({
         addressType: AddressType.LEGAL,
         senderId: 'default',
-        channelType: LegalChannelType.PEC,
+        channelType: ChannelType.PEC,
       })
     );
   };
@@ -117,7 +117,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
               </Typography>
               <DigitalContactElem
                 senderId="default"
-                contactType={LegalChannelType.PEC}
+                contactType={ChannelType.PEC}
                 inputProps={{
                   id: 'pec',
                   name: 'pec',
