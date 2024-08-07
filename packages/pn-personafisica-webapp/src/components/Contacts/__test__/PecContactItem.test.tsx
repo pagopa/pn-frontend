@@ -45,11 +45,7 @@ describe('PecContactItem component', () => {
   it('type in an invalid pec', async () => {
     // render component
     await act(async () => {
-      result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <PecContactItem value="" verifyingAddress={false} />
-        </DigitalContactsCodeVerificationProvider>
-      );
+      result = render(<PecContactItem value="" verifyingAddress={false} />);
     });
     const form = result.container.querySelector('form');
     const buttons = form?.querySelectorAll('button');

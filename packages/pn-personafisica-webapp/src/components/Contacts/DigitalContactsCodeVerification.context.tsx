@@ -345,15 +345,15 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
       )}
 
       <ExistingContactDialog
-        isConfirmationModalVisible={isConfirmationModalVisible}
+        open={isConfirmationModalVisible}
         value={modalProps.value}
         handleDiscard={handleDiscard}
         handleConfirm={handleConfirm}
       />
 
       <PecVerificationDialog
-        pecValidationOpen={pecValidationOpen}
-        setPecValidationOpen={setPecValidationOpen}
+        open={pecValidationOpen}
+        handleConfirm={() => setPecValidationOpen(true)}
       />
     </DigitalContactsCodeVerificationContext.Provider>
   );
