@@ -9,6 +9,8 @@ import { dataRegex, useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn
 import { AddressType, CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
+import { getEventByContactType } from '../../utility/contacts.utility';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
 
@@ -63,13 +65,18 @@ const SpecialContactElem = memo(({ address }: Props) => {
 
   const deleteConfirmHandler = (f: Field) => {
     toggleDeleteModal(f.id);
-    void dispatch(
+    dispatch(
       deleteAddress({
         addressType: f.addressId === 'pec' ? AddressType.LEGAL : AddressType.COURTESY,
         senderId: address.senderId,
         channelType: f.contactType,
       })
-    );
+    )
+      .unwrap()
+      .then(() => {
+        PFEventStrategyFactory.triggerEvent(getEventByContactType(f.contactType), address.senderId);
+      })
+      .catch(() => {});
   };
 
   const initialValues = {

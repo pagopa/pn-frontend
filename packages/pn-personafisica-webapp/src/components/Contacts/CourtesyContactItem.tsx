@@ -6,9 +6,11 @@ import * as yup from 'yup';
 import { Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 
+import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, CourtesyChannelType } from '../../models/contacts';
 import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { internationalPhonePrefix } from '../../utility/contacts.utility';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
@@ -105,6 +107,12 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
       .unwrap()
       .then(() => {
         void handleTouched(contactType, false);
+        PFEventStrategyFactory.triggerEvent(
+          type === CourtesyChannelType.EMAIL
+            ? PFEventsType.SEND_REMOVE_EMAIL_SUCCESS
+            : PFEventsType.SEND_REMOVE_SMS_SUCCESS,
+          'default'
+        );
       })
       .catch(() => {});
   };
