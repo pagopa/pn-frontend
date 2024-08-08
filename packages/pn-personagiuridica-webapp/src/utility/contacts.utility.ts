@@ -13,6 +13,19 @@ export function countContactsByType(contacts: Array<DigitalAddress>, type: Chann
   return contacts.reduce((total, contact) => (contact.channelType === type ? total + 1 : total), 0);
 }
 
+export const contactAlreadyExists = (
+  digitalAddresses: Array<DigitalAddress>,
+  value: string,
+  senderId: string,
+  channelType: ChannelType
+): boolean =>
+  !!digitalAddresses.find(
+    (elem) =>
+      elem.value !== '' &&
+      elem.value === value &&
+      (elem.senderId !== senderId || elem.channelType !== channelType)
+  );
+
 export const pecValidationSchema = (t: TFunction) =>
   yup
     .string()

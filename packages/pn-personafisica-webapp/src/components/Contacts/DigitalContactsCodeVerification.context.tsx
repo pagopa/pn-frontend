@@ -49,8 +49,7 @@ interface IDigitalContactsCodeVerificationContext {
     value: string,
     senderId: string,
     senderName?: string,
-    callbackOnValidation?: (status: 'validated' | 'cancelled') => void,
-    isSpecialContact?: boolean
+    callbackOnValidation?: (status: 'validated' | 'cancelled') => void
   ) => void;
 }
 
