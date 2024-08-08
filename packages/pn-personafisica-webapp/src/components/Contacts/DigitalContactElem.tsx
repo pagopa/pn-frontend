@@ -24,7 +24,7 @@ type Props = {
   editManagedFromOutside?: boolean;
 };
 
-const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
+const DigitalContactElem = forwardRef<{ editContact: () => void; toggleEdit: () => void }, Props>(
   (
     {
       inputProps,

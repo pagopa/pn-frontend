@@ -40,7 +40,10 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const digitalAddresses =
     useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
-  const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
+  const digitalElemRef = useRef<{ editContact: () => void; toggleEdit: () => void }>({
+    editContact: () => {},
+    toggleEdit: () => {},
+  });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
   const codeModalRef =
