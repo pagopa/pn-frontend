@@ -353,7 +353,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
 
       <PecVerificationDialog
         open={pecValidationOpen}
-        handleConfirm={() => setPecValidationOpen(true)}
+        handleConfirm={() => setPecValidationOpen(false)}
       />
     </DigitalContactsCodeVerificationContext.Provider>
   );

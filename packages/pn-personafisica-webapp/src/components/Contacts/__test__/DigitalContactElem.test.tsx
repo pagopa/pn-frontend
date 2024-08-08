@@ -1,8 +1,7 @@
-import MockAdapter from 'axios-mock-adapter';
+import { useRef } from 'react';
 import { vi } from 'vitest';
 
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
 import { ChannelType } from '../../../models/contacts';
 import DigitalContactElem from '../DigitalContactElem';
 
@@ -18,28 +17,13 @@ const mockEditCancelCbk = vi.fn();
 const mockEditConfirmCbk = vi.fn();
 const mockDeleteCbk = vi.fn();
 
-/*
-In questo test viene testato solo il rendering dei componenti e non il flusso.
-Il flusso completo viene testato nei singoli componenti, dove si potrà testare anche il cambio di stato di redux e le api.
-Per questo motivo non è necessario mockare le api, ma va bene anche usare lo spyOn.
-
-Andrea Cimini - 6/09/2023
-*/
 describe('DigitalContactElem Component', () => {
-  let mock: MockAdapter;
-
-  beforeAll(() => {
-    mock = new MockAdapter(apiClient);
-  });
-
   afterEach(() => {
     vi.clearAllMocks();
-    mock.reset();
   });
 
   afterAll(() => {
     vi.restoreAllMocks();
-    mock.restore();
   });
 
   it('renders component', () => {
@@ -69,35 +53,49 @@ describe('DigitalContactElem Component', () => {
   });
 
   it('edits contact', async () => {
-    // render component
-    const { container } = render(
-      <form onSubmit={mockEditConfirmCbk}>
-        <DigitalContactElem
-          inputProps={{
-            id: 'pec',
-            name: 'pec',
-            label: 'PEC',
-            value: 'mocked@pec.it',
+    const Component = () => {
+      const digitalElemRef = useRef<{ editContact: () => void; toggleEdit: () => void }>({
+        editContact: () => {},
+        toggleEdit: () => {},
+      });
+      return (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            mockEditConfirmCbk();
+            digitalElemRef.current.toggleEdit();
           }}
-          senderId="mocked-senderId"
-          contactType={ChannelType.PEC}
-          onEditCancel={mockEditCancelCbk}
-          onDelete={mockDeleteCbk}
-          editManagedFromOutside
-        />
-      </form>
-    );
-    const buttons = container.querySelectorAll('button');
+        >
+          <DigitalContactElem
+            inputProps={{
+              id: 'pec',
+              name: 'pec',
+              label: 'PEC',
+              value: 'mocked@pec.it',
+            }}
+            senderId="mocked-senderId"
+            contactType={ChannelType.PEC}
+            onEditCancel={mockEditCancelCbk}
+            onDelete={mockDeleteCbk}
+            editManagedFromOutside
+            ref={digitalElemRef}
+          />
+        </form>
+      );
+    };
+    // render component
+    const { container } = render(<Component />);
+    let buttons = container.querySelectorAll('button');
     fireEvent.click(buttons[0]);
     let input = await waitFor(() => container.querySelector('[name="pec"]'));
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue('mocked@pec.it');
-    const newButtons = container.querySelectorAll('button');
+    let newButtons = container.querySelectorAll('button');
     expect(newButtons).toHaveLength(2);
     expect(newButtons[0]).toHaveTextContent('button.salva');
     expect(newButtons[1]).toHaveTextContent('button.annulla');
     // cancel edit
-    fireEvent.click(newButtons![1]);
+    fireEvent.click(newButtons[1]);
     await waitFor(() => {
       expect(mockEditCancelCbk).toHaveBeenCalledTimes(1);
     });
@@ -105,13 +103,16 @@ describe('DigitalContactElem Component', () => {
       expect(input).not.toBeInTheDocument();
     });
     // confirm edit
-    fireEvent.click(buttons![0]);
+    buttons = container.querySelectorAll('button');
+    fireEvent.click(buttons[0]);
     input = await waitFor(() => container.querySelector('[name="pec"]'));
-    fireEvent.click(newButtons![0]);
+    expect(input).toBeInTheDocument();
+    newButtons = container.querySelectorAll('button');
+    fireEvent.click(newButtons[0]);
+    expect(mockEditConfirmCbk).toHaveBeenCalledTimes(1);
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
-    expect(mockEditConfirmCbk).toHaveBeenCalledTimes(1);
   });
 
   it('remove contact', () => {

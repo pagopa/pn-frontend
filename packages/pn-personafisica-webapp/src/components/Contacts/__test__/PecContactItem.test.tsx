@@ -6,7 +6,6 @@ import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 import { digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import {
   RenderResult,
-  act,
   fireEvent,
   render,
   screen,
@@ -41,7 +40,6 @@ const fillCodeDialog = async (result: RenderResult) => {
 };
 
 describe('PecContactItem component', () => {
-  let result: RenderResult;
   let mock: MockAdapter;
   const defaultAddress = digitalLegalAddresses.find(
     (addr) => addr.senderId === 'default' && addr.pecValid
@@ -62,10 +60,8 @@ describe('PecContactItem component', () => {
 
   it('type in an invalid pec', async () => {
     // render component
-    await act(async () => {
-      result = render(<PecContactItem value="" verifyingAddress={false} />);
-    });
-    const form = result.container.querySelector('form');
+    const { container } = render(<PecContactItem value="" verifyingAddress={false} />);
+    const form = container.querySelector('form');
     const buttons = form?.querySelectorAll('button');
     fireEvent.click(buttons![0]);
     const input = form?.querySelector('input[name="pec"]');
@@ -98,9 +94,7 @@ describe('PecContactItem component', () => {
         verificationCode: '01234',
       })
       .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
-    await act(async () => {
-      result = render(<PecContactItem value="" verifyingAddress={false} />);
-    });
+    const result = render(<PecContactItem value="" verifyingAddress={false} />);
     // insert new pec
     const form = result.container.querySelector('form');
     let input = form!.querySelector('input[name="pec"]');
@@ -187,9 +181,7 @@ describe('PecContactItem component', () => {
         verificationCode: '01234',
       })
       .reply(204);
-    await act(async () => {
-      result = render(<PecContactItem value="" verifyingAddress={false} />);
-    });
+    const result = render(<PecContactItem value="" verifyingAddress={false} />);
     // insert new pec
     const form = result.container.querySelector('form');
     let input = form!.querySelector('input[name="pec"]');
@@ -240,16 +232,16 @@ describe('PecContactItem component', () => {
 
   it('type in an invalid pec while in "edit mode"', async () => {
     // render component
-    await act(async () => {
-      result = render(<PecContactItem value={defaultAddress!.value} verifyingAddress={false} />);
-    });
-    const form = result.container.querySelector('form');
+    const { container, getByRole } = render(
+      <PecContactItem value={defaultAddress!.value} verifyingAddress={false} />
+    );
+    const form = container.querySelector('form');
     const pecValue = getById(form!, 'pec-typography');
     expect(pecValue).toHaveTextContent(defaultAddress!.value);
-    const editButton = result.getByRole('button', { name: 'button.modifica' });
+    const editButton = getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
-    const input = result.container.querySelector('[name="pec"]');
-    const saveButton = result.getByRole('button', { name: 'button.salva' });
+    const input = container.querySelector('[name="pec"]');
+    const saveButton = getByRole('button', { name: 'button.salva' });
     expect(input).toHaveValue(defaultAddress!.value);
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: 'invalid-pec' } });
@@ -257,7 +249,7 @@ describe('PecContactItem component', () => {
       expect(input).toHaveValue('invalid-pec');
     });
     expect(saveButton).toBeDisabled();
-    const inputError = result.container.querySelector('#pec-helper-text');
+    const inputError = container.querySelector('#pec-helper-text');
     expect(inputError).toHaveTextContent('legal-contacts.valid-pec');
   });
 
@@ -276,9 +268,9 @@ describe('PecContactItem component', () => {
       })
       .reply(204);
     // render component
-    await act(async () => {
-      result = render(<PecContactItem value={defaultAddress!.value} verifyingAddress={false} />);
-    });
+    const result = render(
+      <PecContactItem value={defaultAddress!.value} verifyingAddress={false} />
+    );
     // edit value
     const form = result.container.querySelector('form');
     let pecValue = getById(form!, 'pec-typography');
@@ -336,9 +328,9 @@ describe('PecContactItem component', () => {
   it('remove contact', async () => {
     mock.onDelete('/bff/v1/addresses/LEGAL/default/PEC').reply(204);
     // render component
-    await act(async () => {
-      result = render(<PecContactItem value={defaultAddress!.value} verifyingAddress={false} />);
-    });
+    const result = render(
+      <PecContactItem value={defaultAddress!.value} verifyingAddress={false} />
+    );
     const buttons = result?.container.querySelectorAll('button');
     // click on cancel
     fireEvent.click(buttons![1]);
