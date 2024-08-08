@@ -1,10 +1,17 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { Box, Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
-import { CodeModal, DisclaimerModal, ErrorMessage, appStateActions } from '@pagopa-pn/pn-commons';
+import {
+  AppResponse,
+  AppResponsePublisher,
+  CodeModal,
+  DisclaimerModal,
+  ErrorMessage,
+  appStateActions,
+} from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -34,40 +41,39 @@ enum ModalType {
   EXISTING = 'existing',
   DISCLAIMER = 'disclaimer',
   CODE = 'code',
+  DELETE = 'delete',
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const contactType = type.toLowerCase();
+  const dispatch = useAppDispatch();
+  const digitalAddresses =
+    useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
   const digitalElemRef = useRef<{ editContact: () => void; toggleEdit: () => void }>({
     editContact: () => {},
     toggleEdit: () => {},
   });
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const dispatch = useAppDispatch();
-  const labelType = type === ChannelType.EMAIL ? 'email' : 'sms';
   const codeModalRef =
     useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
-
-  const digitalAddresses =
-    useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
+  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  const contactType = type.toLowerCase();
+  const labelType = type === ChannelType.EMAIL ? 'email' : 'sms';
 
   const emailValidationSch = yup.object().shape({
     email: emailValidationSchema(t),
   });
 
-  // note that phoneValidationSchema depends on the phoneRegex which is different
-  // for the insertion and modification cases, check the comment
-  // about the useEffect which calls setPhoneRegex below
   const phoneValidationSch = yup.object().shape({
     sms: phoneValidationSchema(t, !!value),
   });
 
+  const initialValues = {
+    [contactType]: value ?? '',
+  };
+
   const formik = useFormik({
-    initialValues: {
-      [contactType]: value ?? '',
-    },
+    initialValues,
     enableReinitialize: true,
     validateOnMount: true,
     validationSchema: type === ChannelType.EMAIL ? emailValidationSch : phoneValidationSch,
@@ -105,19 +111,15 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
     await formik.setFieldTouched(id, touched, false);
   };
 
-  const handleEditConfirm = async (status: 'validated' | 'cancelled') => {
-    if (status === 'cancelled') {
-      await formik.setFieldValue(contactType, value, true);
-    }
-  };
-
-  const handleCodeModalClose = () => {
+  const handleCloseCodeModal = () => {
     codeModalRef.current?.updateError({ title: '', content: '' }, false);
+    digitalElemRef.current.toggleEdit();
+    formik.resetForm({ values: initialValues });
     setModalOpen(null);
   };
 
   const deleteConfirmHandler = () => {
-    setShowDeleteModal(false);
+    setModalOpen(null);
     dispatch(
       deleteAddress({
         addressType: AddressType.COURTESY,
@@ -151,7 +153,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
       senderId: 'default',
-      senderName: 'default',
+      // senderName: 'default', TODO not sure if this is needed
       channelType: type,
       value: getContactValue(type),
       code: verificationCode,
@@ -191,10 +193,46 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
         // chiudere la code modal
         setModalOpen(null);
         // nel caso siamo in modifica (property value defined), bisogna passare alla modalità noEdit del componente DigitalContactElem
-        // return;
+        if (value) {
+          digitalElemRef.current.toggleEdit();
+        }
       })
       .catch(() => {});
   };
+
+  const handleAddressUpdateError = useCallback(
+    (responseError: AppResponse) => {
+      if (modalOpen === null) {
+        // notify the publisher we are not handling the error
+        return true;
+      }
+      if (Array.isArray(responseError.errors)) {
+        const error = responseError.errors[0];
+        codeModalRef.current?.updateError(
+          {
+            title: error.message.title,
+            content: error.message.content,
+          },
+          true
+        );
+        PFEventStrategyFactory.triggerEvent(
+          type === ChannelType.SMS
+            ? PFEventsType.SEND_ADD_SMS_CODE_ERROR
+            : PFEventsType.SEND_ADD_EMAIL_CODE_ERROR
+        );
+      }
+      return false;
+    },
+    [modalOpen]
+  );
+
+  useEffect(() => {
+    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
+    };
+  }, [handleAddressUpdateError]);
 
   /*
    * if *some* value (phone number, email address) has been attached to the contact type,
@@ -235,9 +273,10 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
                 formik.errors[contactType],
             }}
             saveDisabled={!formik.isValid}
-            onConfirm={handleEditConfirm}
-            onEditCancel={() => handleEditConfirm('cancelled')}
-            onDelete={() => setShowDeleteModal(true)}
+            // onConfirm={handleEditConfirm}
+            onDelete={() => setModalOpen(ModalType.DELETE)}
+            onEditCancel={() => formik.resetForm({ values: initialValues })}
+            editManagedFromOutside={true}
           />
         ) : (
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -281,26 +320,8 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
         )}
       </form>
 
-      <DeleteDialog
-        showModal={showDeleteModal}
-        removeModalTitle={t(
-          `courtesy-contacts.${blockDelete ? 'block-' : ''}remove-${contactType}-title`,
-          { ns: 'recapiti' }
-        )}
-        removeModalBody={t(
-          `courtesy-contacts.${blockDelete ? 'block-' : ''}remove-${contactType}-message`,
-          {
-            value: formik.values[contactType],
-            ns: 'recapiti',
-          }
-        )}
-        handleModalClose={() => setShowDeleteModal(false)}
-        confirmHandler={deleteConfirmHandler}
-        blockDelete={blockDelete}
-      />
-
       <ExistingContactDialog
-        isConfirmationModalVisible={modalOpen === ModalType.EXISTING}
+        open={modalOpen === ModalType.EXISTING}
         value={formik.values[contactType]}
         handleDiscard={() => setModalOpen(null)}
         handleConfirm={() => handleCodeVerification()}
@@ -352,9 +373,27 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
         }
         cancelLabel={t('button.annulla')}
         confirmLabel={t('button.conferma')}
-        cancelCallback={handleCodeModalClose}
+        cancelCallback={handleCloseCodeModal}
         confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
         ref={codeModalRef}
+      />
+
+      <DeleteDialog
+        showModal={modalOpen === ModalType.DELETE}
+        removeModalTitle={t(
+          `courtesy-contacts.${blockDelete ? 'block-' : ''}remove-${contactType}-title`,
+          { ns: 'recapiti' }
+        )}
+        removeModalBody={t(
+          `courtesy-contacts.${blockDelete ? 'block-' : ''}remove-${contactType}-message`,
+          {
+            value: formik.values[contactType],
+            ns: 'recapiti',
+          }
+        )}
+        handleModalClose={() => setModalOpen(null)}
+        confirmHandler={deleteConfirmHandler}
+        blockDelete={blockDelete}
       />
     </>
   );
