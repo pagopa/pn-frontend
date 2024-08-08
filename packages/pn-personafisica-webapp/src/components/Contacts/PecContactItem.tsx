@@ -120,7 +120,9 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
             })
           );
           setModalOpen(null);
-          digitalElemRef.current.toggleEdit();
+          if (value) {
+            digitalElemRef.current.toggleEdit();
+          }
           return;
         }
         // contact must be validated
@@ -128,6 +130,15 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
         setModalOpen(ModalType.VALIDATION);
       })
       .catch(() => {});
+  };
+
+  const handleCancelCode = async () => {
+    setModalOpen(null);
+    if (value) {
+      digitalElemRef.current.toggleEdit();
+    }
+    await formik.setFieldTouched('pec', false, false);
+    await formik.setFieldValue('pec', initialValues.pec, true);
   };
 
   const deleteConfirmHandler = () => {
@@ -298,11 +309,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
         }
         cancelLabel={t('button.annulla')}
         confirmLabel={t('button.conferma')}
-        cancelCallback={() => {
-          setModalOpen(null);
-          digitalElemRef.current.toggleEdit();
-          formik.resetForm({ values: initialValues });
-        }}
+        cancelCallback={handleCancelCode}
         confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
         ref={codeModalRef}
       />
