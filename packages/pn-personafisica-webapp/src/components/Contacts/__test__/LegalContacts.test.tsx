@@ -53,7 +53,7 @@ const IntegrationComponent = ({
   </DigitalContactsCodeVerificationProvider>
 );
 
-describe('LegalContactsList Component', async () => {
+describe('LegalContacts Component', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
 
@@ -131,10 +131,9 @@ describe('LegalContactsList Component', async () => {
       result = render(<IntegrationComponent digitalAddresses={[]} />);
     });
     // insert new pec
-    let insertLegalContact = result.getByTestId('insertLegalContact');
-    const input = insertLegalContact?.querySelector('input[name="pec"]');
+    let input = result.container.querySelector('input[name="pec"]');
     fireEvent.change(input!, { target: { value: pecValue } });
-    const button = within(insertLegalContact).getByTestId('addContact');
+    const button = result.getByTestId('addContact');
     await waitFor(() => {
       expect(button).toBeEnabled();
     });
@@ -174,14 +173,12 @@ describe('LegalContactsList Component', async () => {
       <IntegrationComponent digitalAddresses={[{ ...defaultAddress!, pecValid: false }]} />
     );
     await waitFor(() => {
-      expect(insertLegalContact).not.toBeInTheDocument();
+      expect(input).not.toBeInTheDocument();
     });
-    const legalContacts = result.getByTestId('legalContacts');
-    expect(legalContacts).toBeInTheDocument();
-    expect(legalContacts).toHaveTextContent('legal-contacts.pec-validating');
-    expect(legalContacts).toHaveTextContent('legal-contacts.validation-in-progress');
+    expect(result.container).toHaveTextContent('legal-contacts.pec-validating');
+    expect(result.container).toHaveTextContent('legal-contacts.validation-in-progress');
     // cancel validation
-    const cancelValidationBtn = within(legalContacts).getByRole('button');
+    const cancelValidationBtn = result.getByTestId('cancelValidation');
     fireEvent.click(cancelValidationBtn);
     const cancelVerificationModal = await waitFor(() =>
       result.getByTestId('cancelVerificationModal')
@@ -198,9 +195,10 @@ describe('LegalContactsList Component', async () => {
     // simulate rerendering due to redux changes
     result.rerender(<IntegrationComponent digitalAddresses={[]} />);
     await waitFor(() => {
-      expect(legalContacts).not.toBeInTheDocument();
-      insertLegalContact = result.getByTestId('insertLegalContact');
-      expect(insertLegalContact).toBeInTheDocument();
+      expect(result.container).not.toHaveTextContent('legal-contacts.pec-validating');
+      expect(result.container).not.toHaveTextContent('legal-contacts.validation-in-progress');
+      input = result.container.querySelector('input[name="pec"]');
+      expect(input).toBeInTheDocument();
     });
   });
 
@@ -226,14 +224,14 @@ describe('LegalContactsList Component', async () => {
         },
       });
     });
-    const legalContacts = result.getByTestId('legalContacts');
-    const editButton = within(legalContacts).getByRole('button', { name: 'button.modifica' });
+    const pecContact = result.getByTestId('pecContact');
+    const editButton = within(pecContact).getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     // edit pec
-    const input = legalContacts?.querySelector('input[name="pec"]');
+    const input = pecContact?.querySelector('input[name="pec"]');
     fireEvent.change(input!, { target: { value: pecValue } });
     await waitFor(() => expect(input!).toHaveValue(pecValue));
-    const saveButton = within(legalContacts).getByRole('button', { name: 'button.salva' });
+    const saveButton = within(pecContact).getByRole('button', { name: 'button.salva' });
     fireEvent.click(saveButton);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
@@ -278,10 +276,10 @@ describe('LegalContactsList Component', async () => {
         contactsState: { digitalAddresses: [defaultAddress] },
       },
     });
-    const legalContacts = result.getByTestId('legalContacts');
-    const phoneText = within(legalContacts).getByText(defaultAddress!.value);
-    expect(phoneText).toBeInTheDocument();
-    const deleteButton = within(legalContacts).getByRole('button', { name: 'button.elimina' });
+    const pecContact = result.getByTestId('pecContact');
+    const pecText = within(pecContact).getByText(defaultAddress!.value);
+    expect(pecText).toBeInTheDocument();
+    const deleteButton = within(pecContact).getByRole('button', { name: 'button.elimina' });
     fireEvent.click(deleteButton);
     // find confirmation dialog and its buttons
     const dialogBox = result.getByRole('dialog', { name: /legal-contacts.remove\b/ });
@@ -307,8 +305,8 @@ describe('LegalContactsList Component', async () => {
     // simulate rerendering due to redux changes
     result.rerender(<IntegrationComponent digitalAddresses={[]} />);
     await waitFor(() => {
-      const insertLegalContact = result.getByTestId('insertLegalContact');
-      expect(insertLegalContact).toBeInTheDocument();
+      const input = result.container.querySelector('input[name="pec"]');
+      expect(input).toBeInTheDocument();
       expect(result.container).not.toHaveTextContent(defaultAddress!.value);
     });
   });
