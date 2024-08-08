@@ -60,7 +60,7 @@ describe('DigitalContactElem Component', () => {
             senderId="mocked-senderId"
             contactType={ChannelType.PEC}
             onConfirm={mockOnConfirm}
-            resetModifyValue={mockResetModifyValue}
+            onEditCancel={mockResetModifyValue}
             onDelete={mockDeleteCbk}
           />
         </DigitalContactsCodeVerificationProvider>
@@ -97,7 +97,7 @@ describe('DigitalContactElem Component', () => {
             senderId="mocked-senderId"
             contactType={ChannelType.PEC}
             onConfirm={mockOnConfirm}
-            resetModifyValue={mockResetModifyValue}
+            onEditCancel={mockResetModifyValue}
             onDelete={mockDeleteCbk}
           />
         </DigitalContactsCodeVerificationProvider>
@@ -148,7 +148,7 @@ describe('DigitalContactElem Component', () => {
             senderId="mocked-senderId"
             contactType={ChannelType.PEC}
             onConfirm={mockOnConfirm}
-            resetModifyValue={mockResetModifyValue}
+            onEditCancel={mockResetModifyValue}
             onDelete={mockDeleteCbk}
           />
         </DigitalContactsCodeVerificationProvider>
@@ -174,7 +174,7 @@ describe('DigitalContactElem Component', () => {
             senderId="mocked-senderId"
             contactType={ChannelType.PEC}
             onConfirm={mockOnConfirm}
-            resetModifyValue={mockResetModifyValue}
+            onEditCancel={mockResetModifyValue}
             saveDisabled
             onDelete={mockDeleteCbk}
           />
@@ -205,7 +205,7 @@ describe('DigitalContactElem Component', () => {
             senderId="mocked-senderId"
             contactType={ChannelType.PEC}
             onConfirm={mockOnConfirm}
-            resetModifyValue={mockResetModifyValue}
+            onEditCancel={mockResetModifyValue}
             editDisabled
             onDelete={mockDeleteCbk}
           />

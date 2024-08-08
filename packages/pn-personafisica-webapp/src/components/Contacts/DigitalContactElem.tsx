@@ -14,11 +14,14 @@ type Props = {
   senderName?: string;
   contactType: ChannelType;
   saveDisabled?: boolean;
-  onConfirm: (status: 'validated' | 'cancelled') => void;
-  resetModifyValue: () => void;
+  onConfirm?: (status: 'validated' | 'cancelled') => void;
+  onEditCancel: () => void;
+  onEditConfirm?: () => void;
   onDelete: () => void;
   editDisabled?: boolean;
   setContextEditMode?: Dispatch<SetStateAction<boolean>>;
+  // this is a temporary property. it is needed until we remove the context
+  editManagedFromOutside?: boolean;
 };
 
 const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
@@ -30,10 +33,11 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
       senderName,
       contactType,
       onConfirm,
-      resetModifyValue,
+      onEditCancel,
       editDisabled,
       setContextEditMode,
       onDelete,
+      editManagedFromOutside = false,
     },
     ref
   ) => {
@@ -48,18 +52,23 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
     };
 
     const onCancel = () => {
-      resetModifyValue();
+      onEditCancel();
       toggleEdit();
     };
 
     const editHandler = () => {
+      if (editManagedFromOutside) {
+        return;
+      }
       initValidation(
         contactType,
         inputProps.value as string,
         senderId,
         senderName,
         (status: 'validated' | 'cancelled') => {
-          onConfirm(status);
+          if (onConfirm) {
+            onConfirm(status);
+          }
           toggleEdit();
         }
       );
@@ -67,6 +76,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
 
     useImperativeHandle(ref, () => ({
       editContact: editHandler,
+      toggleEdit,
     }));
 
     return (
@@ -93,6 +103,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
         {!editMode ? (
           <>
             <ButtonNaked
+              key="editButton"
               color="primary"
               onClick={toggleEdit}
               sx={{ mr: 2 }}
@@ -113,9 +124,10 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
         ) : (
           <>
             <ButtonNaked
+              key="ssaveButton"
               color="primary"
               disabled={saveDisabled}
-              type="button"
+              type="submit"
               onClick={editHandler}
               sx={{ mr: 2 }}
               id={`saveModifyButton-${senderId}`}

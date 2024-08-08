@@ -40,7 +40,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const digitalAddresses =
     useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
-  const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
+  const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
   const codeModalRef =
@@ -64,23 +64,13 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
         setModalOpen(ModalType.EXISTING);
         return;
       }
-      if (value) {
-        digitalElemRef.current.editContact();
-      } else {
-        handleCodeVerification();
-      }
+      handleCodeVerification();
     },
   });
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
-  };
-
-  const handleEditConfirm = (status: 'validated' | 'cancelled') => {
-    if (status === 'cancelled') {
-      formik.resetForm({ values: initialValues });
-    }
   };
 
   const handlePecValidationCancel = () => {
@@ -124,6 +114,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
             })
           );
           handleCodeModalClose();
+          digitalElemRef.current.toggleEdit();
           return;
         }
         // contact must be validated
@@ -194,9 +185,9 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
                 helperText: formik.touched.pec && formik.errors.pec,
               }}
               saveDisabled={!formik.isValid}
-              onConfirm={handleEditConfirm}
-              resetModifyValue={() => handleEditConfirm('cancelled')}
               onDelete={() => setModalOpen(ModalType.DELETE)}
+              onEditCancel={() => formik.resetForm({ values: initialValues })}
+              editManagedFromOutside={true}
             />
           </>
         )}
@@ -250,7 +241,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
       </form>
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
-        value={value}
+        value={formik.values.pec}
         handleDiscard={() => setModalOpen(null)}
         handleConfirm={() => handleCodeVerification()}
       />
