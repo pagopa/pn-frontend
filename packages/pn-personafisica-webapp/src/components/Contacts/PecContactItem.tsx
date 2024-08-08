@@ -66,6 +66,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
   const formik = useFormik({
     initialValues,
     validationSchema,
+    enableReinitialize: true,
     /** onSubmit validate */
     onSubmit: () => {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, 'default');
@@ -81,10 +82,6 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
-  };
-
-  const handlePecValidationCancel = () => {
-    setModalOpen(ModalType.CANCEL_VALIDATION);
   };
 
   const handleCodeVerification = (verificationCode?: string) => {
@@ -118,9 +115,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
           dispatch(
             appStateActions.addSuccess({
               title: '',
-              message: t(`legal-contacts.pec-added-successfully`, {
-                ns: 'recapiti',
-              }),
+              message: t(`legal-contacts.pec-added-successfully`, { ns: 'recapiti' }),
             })
           );
           setModalOpen(null);
@@ -180,13 +175,6 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
     };
   }, [handleAddressUpdateError]);
 
-  useEffect(() => {
-    const changeValue = async () => {
-      await formik.setFieldValue('pec', value, true);
-    };
-    void changeValue();
-  }, [value]);
-
   /*
    * if *some* value has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
@@ -221,7 +209,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
               saveDisabled={!formik.isValid}
               onDelete={() => setModalOpen(ModalType.DELETE)}
               onEditCancel={() => formik.resetForm({ values: initialValues })}
-              editManagedFromOutside={true}
+              editManagedFromOutside
             />
           </>
         )}
@@ -237,7 +225,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
               </Typography>
               <ButtonNaked
                 color="primary"
-                onClick={handlePecValidationCancel}
+                onClick={() => setModalOpen(ModalType.CANCEL_VALIDATION)}
                 data-testid="cancelValidation"
               >
                 {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
@@ -309,7 +297,10 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
         }
         cancelLabel={t('button.annulla')}
         confirmLabel={t('button.conferma')}
-        cancelCallback={() => setModalOpen(null)}
+        cancelCallback={() => {
+          setModalOpen(null);
+          digitalElemRef.current.toggleEdit();
+        }}
         confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
         ref={codeModalRef}
       />

@@ -27,6 +27,7 @@ import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { SaveDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { contactAlreadyExists } from '../../utility/contacts.utility';
 import ExistingContactDialog from './ExistingContactDialog';
 import PecVerificationDialog from './PecVerificationDialog';
 
@@ -95,14 +96,12 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
     setIsConfirmationModalVisible(false);
   };
 
-  const contactAlreadyExists = (): boolean =>
-    !!digitalAddresses.find(
-      (elem) =>
-        elem.value !== '' &&
-        elem.value === modalProps.value &&
-        (elem.senderId !== modalProps.senderId ||
-          elem.channelType !== modalProps.digitalDomicileType)
-    );
+  const contactExists = contactAlreadyExists(
+    digitalAddresses,
+    modalProps.value,
+    modalProps.senderId,
+    modalProps.digitalDomicileType
+  );
 
   const handleCodeVerification = (verificationCode?: string, noCallback: boolean = false) => {
     const digitalAddressParams: SaveDigitalAddressParams = {
@@ -180,9 +179,9 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   };
 
   useEffect(() => {
-    if (!_.isEqual(modalProps, initialProps) && !contactAlreadyExists()) {
+    if (!_.isEqual(modalProps, initialProps) && !contactExists) {
       handleDisclaimerVisibilityFirst();
-    } else if (contactAlreadyExists()) {
+    } else if (contactExists) {
       setIsConfirmationModalVisible(true);
     }
   }, [modalProps]);
