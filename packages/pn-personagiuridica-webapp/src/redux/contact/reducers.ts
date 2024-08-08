@@ -25,7 +25,9 @@ const contactsSlice = createSlice({
     // a new email to modify the verifying pec address
     resetPecValidation: (state) => {
       state.digitalAddresses = state.digitalAddresses.filter(
-        (address) => address.senderId !== 'default' && address.addressType === AddressType.LEGAL
+        (address) =>
+          (address.senderId !== 'default' && address.addressType === AddressType.LEGAL) ||
+          address.addressType === AddressType.COURTESY
       );
     },
   },

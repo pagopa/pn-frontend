@@ -1,22 +1,32 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
-import { Button, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import {
+  AppResponse,
+  AppResponsePublisher,
+  CodeModal,
+  ErrorMessage,
+  appStateActions,
+} from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, ChannelType } from '../../models/contacts';
-import { deleteAddress } from '../../redux/contact/actions';
-import { useAppDispatch } from '../../redux/hooks';
+import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
+import { SaveDigitalAddressParams } from '../../redux/contact/types';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
-import { pecValidationSchema } from '../../utility/contacts.utility';
+import { contactAlreadyExists, pecValidationSchema } from '../../utility/contacts.utility';
 import CancelVerificationModal from './CancelVerificationModal';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
-import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
+import ExistingContactDialog from './ExistingContactDialog';
+import PecVerificationDialog from './PecVerificationDialog';
 
 type Props = {
   value: string;
@@ -24,13 +34,26 @@ type Props = {
   blockDelete?: boolean;
 };
 
+enum ModalType {
+  EXISTING = 'existing',
+  VALIDATION = 'validation',
+  CANCEL_VALIDATION = 'cancel_validation',
+  DELETE = 'delete',
+  CODE = 'code',
+}
+
 const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
-  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
-  const { initValidation } = useDigitalContactsCodeVerificationContext();
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const digitalAddresses =
+    useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
+  const digitalElemRef = useRef<{ editContact: () => void; toggleEdit: () => void }>({
+    editContact: () => {},
+    toggleEdit: () => {},
+  });
+  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
+  const codeModalRef =
+    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
 
   const validationSchema = yup.object({
     pec: pecValidationSchema(t),
@@ -43,13 +66,17 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
   const formik = useFormik({
     initialValues,
     validationSchema,
+    validateOnMount: true,
+    enableReinitialize: true,
     /** onSubmit validate */
     onSubmit: () => {
-      if (value) {
-        digitalElemRef.current.editContact();
-      } else {
-        initValidation(ChannelType.PEC, formik.values.pec, 'default');
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, 'default');
+      // first check if contact already exists
+      if (contactAlreadyExists(digitalAddresses, formik.values.pec, 'default', ChannelType.PEC)) {
+        setModalOpen(ModalType.EXISTING);
+        return;
       }
+      handleCodeVerification();
     },
   });
 
@@ -58,18 +85,64 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const handleEditConfirm = (status: 'validated' | 'cancelled') => {
-    if (status === 'cancelled') {
-      formik.resetForm({ values: initialValues });
+  const handleCodeVerification = (verificationCode?: string) => {
+    if (verificationCode) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_CONVERSION, 'default');
     }
+
+    const digitalAddressParams: SaveDigitalAddressParams = {
+      addressType: AddressType.LEGAL,
+      senderId: 'default',
+      channelType: ChannelType.PEC,
+      value: formik.values.pec,
+      code: verificationCode,
+    };
+
+    void dispatch(createOrUpdateAddress(digitalAddressParams))
+      .unwrap()
+      .then((res) => {
+        // contact to verify
+        // open code modal
+        if (!res) {
+          setModalOpen(ModalType.CODE);
+          return;
+        }
+
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_SUCCESS, 'default');
+
+        // contact has already been verified
+        if (res.pecValid) {
+          // show success message
+          dispatch(
+            appStateActions.addSuccess({
+              title: '',
+              message: t(`legal-contacts.pec-added-successfully`, { ns: 'recapiti' }),
+            })
+          );
+          setModalOpen(null);
+          if (value) {
+            digitalElemRef.current.toggleEdit();
+          }
+          return;
+        }
+        // contact must be validated
+        // open validation modal
+        setModalOpen(ModalType.VALIDATION);
+      })
+      .catch(() => {});
   };
 
-  const handlePecValidationCancel = () => {
-    setCancelDialogOpen(true);
+  const handleCancelCode = async () => {
+    setModalOpen(null);
+    if (value) {
+      digitalElemRef.current.toggleEdit();
+    }
+    await formik.setFieldTouched('pec', false, false);
+    await formik.setFieldValue('pec', initialValues.pec, true);
   };
 
   const deleteConfirmHandler = () => {
-    setShowDeleteModal(false);
+    setModalOpen(null);
     dispatch(
       deleteAddress({
         addressType: AddressType.LEGAL,
@@ -84,12 +157,35 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
       .catch(() => {});
   };
 
+  const handleAddressUpdateError = useCallback(
+    (responseError: AppResponse) => {
+      if (modalOpen === null) {
+        // notify the publisher we are not handling the error
+        return true;
+      }
+      if (Array.isArray(responseError.errors)) {
+        const error = responseError.errors[0];
+        codeModalRef.current?.updateError(
+          {
+            title: error.message.title,
+            content: error.message.content,
+          },
+          true
+        );
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR);
+      }
+      return false;
+    },
+    [modalOpen]
+  );
+
   useEffect(() => {
-    const changeValue = async () => {
-      await formik.setFieldValue('pec', value, true);
+    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
     };
-    void changeValue();
-  }, [value]);
+  }, [handleAddressUpdateError]);
 
   /*
    * if *some* value has been attached to the contact type,
@@ -123,9 +219,9 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
                 helperText: formik.touched.pec && formik.errors.pec,
               }}
               saveDisabled={!formik.isValid}
-              onConfirm={handleEditConfirm}
-              resetModifyValue={() => handleEditConfirm('cancelled')}
-              onDelete={() => setShowDeleteModal(true)}
+              onDelete={() => setModalOpen(ModalType.DELETE)}
+              onEditCancel={() => formik.resetForm({ values: initialValues })}
+              editManagedFromOutside
             />
           </>
         )}
@@ -141,7 +237,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
               </Typography>
               <ButtonNaked
                 color="primary"
-                onClick={handlePecValidationCancel}
+                onClick={() => setModalOpen(ModalType.CANCEL_VALIDATION)}
                 data-testid="cancelValidation"
               >
                 {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
@@ -177,12 +273,56 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
           </Stack>
         )}
       </form>
+      <ExistingContactDialog
+        open={modalOpen === ModalType.EXISTING}
+        value={formik.values.pec}
+        handleDiscard={() => setModalOpen(null)}
+        handleConfirm={() => handleCodeVerification()}
+      />
+      <CodeModal
+        title={t(`legal-contacts.pec-verify`, { ns: 'recapiti' }) + ` ${formik.values.pec}`}
+        subtitle={<Trans i18nKey={`legal-contacts.pec-verify-descr`} ns="recapiti" />}
+        open={modalOpen === ModalType.CODE}
+        initialValues={new Array(5).fill('')}
+        codeSectionTitle={t(`legal-contacts.insert-code`, { ns: 'recapiti' })}
+        codeSectionAdditional={
+          <>
+            <Typography variant="body2" display="inline">
+              {t(`legal-contacts.pec-new-code`, { ns: 'recapiti' })}
+              &nbsp;
+            </Typography>
+            <ButtonNaked
+              component={Box}
+              onClick={() => handleCodeVerification()}
+              sx={{ verticalAlign: 'unset', display: 'inline' }}
+            >
+              <Typography
+                display="inline"
+                color="primary"
+                variant="body2"
+                sx={{ textDecoration: 'underline' }}
+              >
+                {t(`legal-contacts.new-code-link`, { ns: 'recapiti' })}.
+              </Typography>
+            </ButtonNaked>
+          </>
+        }
+        cancelLabel={t('button.annulla')}
+        confirmLabel={t('button.conferma')}
+        cancelCallback={handleCancelCode}
+        confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
+        ref={codeModalRef}
+      />
+      <PecVerificationDialog
+        open={modalOpen === ModalType.VALIDATION}
+        handleConfirm={() => setModalOpen(null)}
+      />
       <CancelVerificationModal
-        open={cancelDialogOpen}
-        handleClose={() => setCancelDialogOpen(false)}
+        open={modalOpen === ModalType.CANCEL_VALIDATION}
+        handleClose={() => setModalOpen(null)}
       />
       <DeleteDialog
-        showModal={showDeleteModal}
+        showModal={modalOpen === ModalType.DELETE}
         removeModalTitle={t(`legal-contacts.${blockDelete ? 'block-' : ''}remove-pec-title`, {
           ns: 'recapiti',
         })}
@@ -190,7 +330,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
           value: formik.values.pec,
           ns: 'recapiti',
         })}
-        handleModalClose={() => setShowDeleteModal(false)}
+        handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />

@@ -148,8 +148,7 @@ const SpecialContacts = ({ digitalAddresses }: Props) => {
               await formik.validateForm();
               setSenderInputValue('');
             }
-          },
-          true
+          }
         );
       }
     },

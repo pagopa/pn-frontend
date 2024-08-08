@@ -139,7 +139,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
             }}
             saveDisabled={!formik.isValid}
             onConfirm={handleEditConfirm}
-            resetModifyValue={() => handleEditConfirm('cancelled')}
+            onEditCancel={() => handleEditConfirm('cancelled')}
             onDelete={() => setShowDeleteModal(true)}
           />
         ) : (

@@ -33,7 +33,7 @@ const LegalContacts = ({ legalAddresses }: Props) => {
       subtitle={t('legal-contacts.description', { ns: 'recapiti' })}
       avatar={<IllusEmailValidation />}
     >
-      <Box sx={{ width: { xs: '100%', lg: '50%' } }} data-testid="legalContacts">
+      <Box sx={{ width: '100%' }} data-testid="legalContacts">
         <PecContactItem
           value={legalAddresses.find((a) => a.senderId === 'default')?.value ?? ''}
           blockDelete={legalAddresses.length > 1}
