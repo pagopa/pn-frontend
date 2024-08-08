@@ -5,18 +5,14 @@ import { Button, DialogContentText, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 type Props = {
-  pecValidationOpen: boolean;
-  setPecValidationOpen: (value: boolean) => void;
+  open: boolean;
+  handleConfirm: () => void;
 };
 
-const PecVerificationDialog: React.FC<Props> = ({ pecValidationOpen, setPecValidationOpen }) => {
+const PecVerificationDialog: React.FC<Props> = ({ open = false, handleConfirm }) => {
   const { t } = useTranslation();
   return (
-    <PnDialog
-      open={pecValidationOpen}
-      data-testid="validationDialog"
-      aria-labelledby="dialog-title"
-    >
+    <PnDialog open={open} data-testid="validationDialog" aria-labelledby="dialog-title">
       <DialogTitle id="dialog-title">
         {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
       </DialogTitle>
@@ -26,7 +22,7 @@ const PecVerificationDialog: React.FC<Props> = ({ pecValidationOpen, setPecValid
         </DialogContentText>
       </PnDialogContent>
       <PnDialogActions>
-        <Button id="confirmDialog" onClick={() => setPecValidationOpen(false)} variant="contained">
+        <Button id="confirmDialog" onClick={handleConfirm} variant="contained">
           {t('button.conferma')}
         </Button>
       </PnDialogActions>

@@ -21,7 +21,7 @@ describe('PecVerificationDialog Component', () => {
 
   it('renders component - confirmation modal visible', () => {
     // render component
-    render(<PecVerificationDialog pecValidationOpen setPecValidationOpen={closeHandler} />);
+    render(<PecVerificationDialog open handleConfirm={closeHandler} />);
     const dialog = screen.getByTestId('validationDialog');
     const titleEl = getById(dialog, 'dialog-title');
     expect(titleEl).toBeInTheDocument();
@@ -35,7 +35,7 @@ describe('PecVerificationDialog Component', () => {
 
   it('click on confirm button', () => {
     // render component
-    render(<PecVerificationDialog pecValidationOpen setPecValidationOpen={closeHandler} />);
+    render(<PecVerificationDialog open handleConfirm={closeHandler} />);
     const confirmButton = screen.getByText('button.conferma');
     fireEvent.click(confirmButton);
     expect(closeHandler).toHaveBeenCalled();

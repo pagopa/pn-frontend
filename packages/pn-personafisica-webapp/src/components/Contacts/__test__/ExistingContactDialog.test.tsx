@@ -24,7 +24,7 @@ describe('ExistingContactDialog Component', () => {
     // render component
     render(
       <ExistingContactDialog
-        isConfirmationModalVisible
+        open
         value="value"
         handleDiscard={closeHandler}
         handleConfirm={confirmHandler}
@@ -47,7 +47,7 @@ describe('ExistingContactDialog Component', () => {
     // render component
     render(
       <ExistingContactDialog
-        isConfirmationModalVisible
+        open
         value="value"
         handleDiscard={closeHandler}
         handleConfirm={confirmHandler}
@@ -62,7 +62,7 @@ describe('ExistingContactDialog Component', () => {
     // render component
     render(
       <ExistingContactDialog
-        isConfirmationModalVisible
+        open
         value="value"
         handleDiscard={closeHandler}
         handleConfirm={confirmHandler}

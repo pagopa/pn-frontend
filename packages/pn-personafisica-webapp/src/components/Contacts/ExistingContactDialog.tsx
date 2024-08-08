@@ -5,14 +5,14 @@ import { Button, DialogContentText, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 type Props = {
-  isConfirmationModalVisible: boolean;
+  open: boolean;
   value: string;
   handleDiscard: () => void;
   handleConfirm: () => void;
 };
 
 const ExistingContactDialog: React.FC<Props> = ({
-  isConfirmationModalVisible,
+  open = false,
   value,
   handleDiscard,
   handleConfirm,
@@ -20,7 +20,7 @@ const ExistingContactDialog: React.FC<Props> = ({
   const { t } = useTranslation();
   return (
     <PnDialog
-      open={isConfirmationModalVisible}
+      open={open}
       onClose={handleDiscard}
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"

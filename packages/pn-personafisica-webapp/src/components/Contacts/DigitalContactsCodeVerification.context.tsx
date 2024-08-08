@@ -345,22 +345,25 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
       )}
 
       <ExistingContactDialog
-        isConfirmationModalVisible={isConfirmationModalVisible}
+        open={isConfirmationModalVisible}
         value={modalProps.value}
         handleDiscard={handleDiscard}
         handleConfirm={handleConfirm}
       />
 
       <PecVerificationDialog
-        pecValidationOpen={pecValidationOpen}
-        setPecValidationOpen={setPecValidationOpen}
+        open={pecValidationOpen}
+        handleConfirm={() => setPecValidationOpen(false)}
       />
     </DigitalContactsCodeVerificationContext.Provider>
   );
 };
 
-const useDigitalContactsCodeVerificationContext = () => {
+const useDigitalContactsCodeVerificationContext = (deactiveContext?: boolean) => {
   const context = useContext(DigitalContactsCodeVerificationContext);
+  if (deactiveContext) {
+    return { initValidation: () => {} };
+  }
   if (context === undefined) {
     throw new Error(
       'useDigitalContactsCodeVerificationContext must be used within a DigitalContactsCodeVerificationProvider'
