@@ -277,8 +277,8 @@ describe('LegalContacts Component', async () => {
         contactsState: { digitalAddresses: [defaultAddress] },
       },
     });
-    const phoneText = result.getByText(defaultAddress!.value);
-    expect(phoneText).toBeInTheDocument();
+    const pecText = result.getByText(defaultAddress!.value);
+    expect(pecText).toBeInTheDocument();
     const deleteButton = result.getByRole('button', { name: 'button.elimina' });
     fireEvent.click(deleteButton);
     // find confirmation dialog and its buttons
