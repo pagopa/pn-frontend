@@ -6,28 +6,39 @@ import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-common
 
 type Props = {
   open: boolean;
+  value: string;
+  handleDiscard: () => void;
   handleConfirm: () => void;
 };
 
-const PecVerificationDialog: React.FC<Props> = ({ open = false, handleConfirm }) => {
+const ExistingContactDialog: React.FC<Props> = ({
+  open = false,
+  value,
+  handleDiscard,
+  handleConfirm,
+}) => {
   const { t } = useTranslation();
   return (
     <PnDialog
       open={open}
-      data-testid="validationDialog"
+      onClose={handleDiscard}
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
+      data-testid="duplicateDialog"
     >
       <DialogTitle id="dialog-title">
-        {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
+        {t(`common.duplicate-contact-title`, { value, ns: 'recapiti' })}
       </DialogTitle>
       <PnDialogContent>
         <DialogContentText id="dialog-description">
-          {t('legal-contacts.validation-progress-content', { ns: 'recapiti' })}
+          {t(`common.duplicate-contact-descr`, { value, ns: 'recapiti' })}
         </DialogContentText>
       </PnDialogContent>
       <PnDialogActions>
-        <Button id="confirmDialog" onClick={handleConfirm} variant="contained">
+        <Button onClick={handleDiscard} variant="outlined">
+          {t('button.annulla')}
+        </Button>
+        <Button onClick={handleConfirm} variant="contained">
           {t('button.conferma')}
         </Button>
       </PnDialogActions>
@@ -35,4 +46,4 @@ const PecVerificationDialog: React.FC<Props> = ({ open = false, handleConfirm })
   );
 };
 
-export default PecVerificationDialog;
+export default ExistingContactDialog;

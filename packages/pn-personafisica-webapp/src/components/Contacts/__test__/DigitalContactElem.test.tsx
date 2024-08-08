@@ -156,12 +156,12 @@ describe('DigitalContactElem Component', () => {
       />
     );
     const buttons = container.querySelectorAll('button');
-    fireEvent.click(buttons![0]);
+    fireEvent.click(buttons[0]);
     const newButtons = await waitFor(() => container.querySelectorAll('button'));
     expect(newButtons).toHaveLength(2);
-    expect(newButtons![0]).toHaveTextContent('button.salva');
-    expect(newButtons![0]).toBeDisabled();
-    expect(newButtons![1]).toHaveTextContent('button.annulla');
+    expect(newButtons[0]).toHaveTextContent('button.salva');
+    expect(newButtons[0]).toBeDisabled();
+    expect(newButtons[1]).toHaveTextContent('button.annulla');
   });
 
   it('edit disabled', () => {
@@ -184,8 +184,8 @@ describe('DigitalContactElem Component', () => {
     );
     const buttons = container.querySelectorAll('button');
     expect(buttons).toHaveLength(2);
-    expect(buttons![0]).toHaveTextContent('button.modifica');
-    expect(buttons![0]).toBeDisabled();
-    expect(buttons![1]).toHaveTextContent('button.elimina');
+    expect(buttons[0]).toHaveTextContent('button.modifica');
+    expect(buttons[0]).toBeDisabled();
+    expect(buttons[1]).toHaveTextContent('button.elimina');
   });
 });

@@ -11,16 +11,13 @@ import {
 } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Box, Button, DialogContentText, DialogTitle, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import {
   AppResponse,
   AppResponsePublisher,
   CodeModal,
   DisclaimerModal,
   ErrorMessage,
-  PnDialog,
-  PnDialogActions,
-  PnDialogContent,
   appStateActions,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -30,6 +27,8 @@ import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { SaveDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import ExistingContactDialog from './ExistingContactDialog';
+import PecVerificationDialog from './PecVerificationDialog';
 
 type ModalProps = {
   labelRoot: string;
@@ -291,51 +290,27 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
           ref={codeModalRef}
         />
       )}
-      <PnDialog
+
+      <ExistingContactDialog
         open={isConfirmationModalVisible}
-        onClose={handleDiscard}
-        aria-labelledby="dialog-title"
-        aria-describedby="dialog-description"
-        data-testid="duplicateDialog"
-      >
-        <DialogTitle id="dialog-title">
-          {t(`common.duplicate-contact-title`, { value: modalProps.value, ns: 'recapiti' })}
-        </DialogTitle>
-        <PnDialogContent>
-          <DialogContentText id="dialog-description">
-            {t(`common.duplicate-contact-descr`, { value: modalProps.value, ns: 'recapiti' })}
-          </DialogContentText>
-        </PnDialogContent>
-        <PnDialogActions>
-          <Button onClick={handleDiscard} variant="outlined">
-            {t('button.annulla')}
-          </Button>
-          <Button onClick={handleConfirm} variant="contained">
-            {t('button.conferma')}
-          </Button>
-        </PnDialogActions>
-      </PnDialog>
-      <PnDialog open={pecValidationOpen} data-testid="validationDialog">
-        <DialogTitle id="dialog-title">
-          {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
-        </DialogTitle>
-        <PnDialogContent>
-          <DialogContentText>
-            {t('legal-contacts.validation-progress-content', { ns: 'recapiti' })}
-          </DialogContentText>
-        </PnDialogContent>
-        <PnDialogActions>
-          <Button onClick={() => setPecValidationOpen(false)} variant="contained">
-            {t('button.conferma')}
-          </Button>
-        </PnDialogActions>
-      </PnDialog>
+        value={modalProps.value}
+        handleDiscard={handleDiscard}
+        handleConfirm={handleConfirm}
+      />
+
+      <PecVerificationDialog
+        open={pecValidationOpen}
+        handleConfirm={() => setPecValidationOpen(false)}
+      />
     </DigitalContactsCodeVerificationContext.Provider>
   );
 };
 
-const useDigitalContactsCodeVerificationContext = () => {
+const useDigitalContactsCodeVerificationContext = (deactiveContext?: boolean) => {
   const context = useContext(DigitalContactsCodeVerificationContext);
+  if (deactiveContext) {
+    return { initValidation: () => {} };
+  }
   if (context === undefined) {
     throw new Error(
       'useDigitalContactsCodeVerificationContext must be used within a DigitalContactsCodeVerificationProvider'

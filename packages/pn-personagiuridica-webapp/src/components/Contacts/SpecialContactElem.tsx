@@ -152,7 +152,7 @@ const SpecialContactElem: React.FC<Props> = ({ addresses }) => {
               }}
               saveDisabled={!!formik.errors[f.id]}
               onConfirm={(status) => updateContact(status, f.id)}
-              resetModifyValue={() => updateContact('cancelled', f.id)}
+              onEditCancel={() => updateContact('cancelled', f.id)}
               // eslint-disable-next-line functional/immutable-data
               ref={(node: { editContact: () => void }) => (digitalElemRef.current[f.id] = node)}
               editDisabled={contextEditMode}
