@@ -64,6 +64,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
   const formik = useFormik({
     initialValues,
     validationSchema,
+    validateOnMount: true,
     enableReinitialize: true,
     /** onSubmit validate */
     onSubmit: () => {
@@ -274,6 +275,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
         cancelCallback={() => {
           setModalOpen(null);
           digitalElemRef.current.toggleEdit();
+          formik.resetForm({ values: initialValues });
         }}
         confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
         ref={codeModalRef}

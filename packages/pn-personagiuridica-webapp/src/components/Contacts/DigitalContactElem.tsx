@@ -124,7 +124,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void; toggleEdit?: ()
               key="saveButton"
               color="primary"
               disabled={saveDisabled}
-              type="button"
+              type="submit"
               onClick={editHandler}
               sx={{ mr: 2 }}
               id={`saveModifyButton-${senderId}`}
