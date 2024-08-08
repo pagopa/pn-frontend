@@ -5,12 +5,12 @@ import * as yup from 'yup';
 
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import { dataRegex } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType } from '../../models/contacts';
 import { deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
+import { pecValidationSchema } from '../../utility/contacts.utility';
 import CancelVerificationModal from './CancelVerificationModal';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
@@ -31,11 +31,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
   const dispatch = useAppDispatch();
 
   const validationSchema = yup.object({
-    pec: yup
-      .string()
-      .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
-      .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
-      .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
+    pec: pecValidationSchema(t),
   });
 
   const initialValues = {
@@ -137,12 +133,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
           </>
         )}
         {!value && !verifyingAddress && (
-          <Stack
-            spacing={2}
-            direction={{ sm: 'row', xs: 'column' }}
-            mt={5}
-            sx={{ width: { xs: '100%', lg: '50%' } }}
-          >
+          <Stack spacing={2} direction={{ sm: 'row', xs: 'column' }} mt={3}>
             <TextField
               id="pec"
               placeholder={t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' })}

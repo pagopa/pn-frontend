@@ -131,6 +131,7 @@ const SpecialContacts = ({ digitalAddresses }: Props) => {
     initialValues,
     validateOnMount: true,
     validationSchema,
+    enableReinitialize: true,
     onSubmit: (values) => {
       if (values.addressType) {
         initValidation(
