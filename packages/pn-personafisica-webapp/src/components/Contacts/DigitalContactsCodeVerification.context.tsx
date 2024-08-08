@@ -359,8 +359,11 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   );
 };
 
-const useDigitalContactsCodeVerificationContext = () => {
+const useDigitalContactsCodeVerificationContext = (deactiveContext?: boolean) => {
   const context = useContext(DigitalContactsCodeVerificationContext);
+  if (deactiveContext) {
+    return { initValidation: () => {} };
+  }
   if (context === undefined) {
     throw new Error(
       'useDigitalContactsCodeVerificationContext must be used within a DigitalContactsCodeVerificationProvider'

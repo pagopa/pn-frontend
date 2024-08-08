@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, forwardRef, memo, useImperativeHandle, useState } from 'react';
+import { Dispatch, SetStateAction, forwardRef, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { TextField, TextFieldProps, Typography } from '@mui/material';
@@ -24,7 +24,7 @@ type Props = {
   editManagedFromOutside?: boolean;
 };
 
-const DigitalContactElem = forwardRef<{ editContact: () => void; toggleEdit: () => void }, Props>(
+const DigitalContactElem = forwardRef<{ editContact: () => void; toggleEdit?: () => void }, Props>(
   (
     {
       inputProps,
@@ -43,7 +43,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void; toggleEdit: () 
   ) => {
     const { t } = useTranslation(['common']);
     const [editMode, setEditMode] = useState(false);
-    const { initValidation } = useDigitalContactsCodeVerificationContext();
+    const { initValidation } = useDigitalContactsCodeVerificationContext(editManagedFromOutside);
     const toggleEdit = () => {
       setEditMode(!editMode);
       if (setContextEditMode) {
@@ -124,7 +124,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void; toggleEdit: () 
         ) : (
           <>
             <ButtonNaked
-              key="ssaveButton"
+              key="saveButton"
               color="primary"
               disabled={saveDisabled}
               type="submit"
@@ -144,4 +144,4 @@ const DigitalContactElem = forwardRef<{ editContact: () => void; toggleEdit: () 
   }
 );
 
-export default memo(DigitalContactElem);
+export default DigitalContactElem;

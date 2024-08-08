@@ -1,11 +1,17 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import { Box, Button, Stack, TextField, Typography } from '@mui/material';
-import { CodeModal, ErrorMessage, appStateActions } from '@pagopa-pn/pn-commons';
+import {
+  AppResponse,
+  AppResponsePublisher,
+  CodeModal,
+  ErrorMessage,
+  appStateActions,
+} from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -62,6 +68,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
     validationSchema,
     /** onSubmit validate */
     onSubmit: () => {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, 'default');
       // first check if contact already exists
       if (contactAlreadyExists(digitalAddresses, formik.values.pec, 'default', ChannelType.PEC)) {
         setModalOpen(ModalType.EXISTING);
@@ -116,21 +123,15 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
               }),
             })
           );
-          handleCodeModalClose();
+          setModalOpen(null);
           digitalElemRef.current.toggleEdit();
           return;
         }
         // contact must be validated
         // open validation modal
-        handleCodeModalClose();
         setModalOpen(ModalType.VALIDATION);
       })
       .catch(() => {});
-  };
-
-  const handleCodeModalClose = () => {
-    codeModalRef.current?.updateError({ title: '', content: '' }, false);
-    setModalOpen(null);
   };
 
   const deleteConfirmHandler = () => {
@@ -148,6 +149,36 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
       })
       .catch(() => {});
   };
+
+  const handleAddressUpdateError = useCallback(
+    (responseError: AppResponse) => {
+      if (modalOpen === null) {
+        // notify the publisher we are not handling the error
+        return true;
+      }
+      if (Array.isArray(responseError.errors)) {
+        const error = responseError.errors[0];
+        codeModalRef.current?.updateError(
+          {
+            title: error.message.title,
+            content: error.message.content,
+          },
+          true
+        );
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR);
+      }
+      return false;
+    },
+    [modalOpen]
+  );
+
+  useEffect(() => {
+    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
+    };
+  }, [handleAddressUpdateError]);
 
   useEffect(() => {
     const changeValue = async () => {
@@ -278,7 +309,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
         }
         cancelLabel={t('button.annulla')}
         confirmLabel={t('button.conferma')}
-        cancelCallback={handleCodeModalClose}
+        cancelCallback={() => setModalOpen(null)}
         confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
         ref={codeModalRef}
       />
