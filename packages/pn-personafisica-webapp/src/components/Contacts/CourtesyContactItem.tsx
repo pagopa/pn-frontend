@@ -113,11 +113,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
    */
   return (
     <>
-      <form
-        onSubmit={formik.handleSubmit}
-        style={{ width: '100%' }}
-        data-testid={`courtesyContacts-${contactType}`}
-      >
+      <form onSubmit={formik.handleSubmit} data-testid={`courtesyContacts-${contactType}`}>
         <Typography id={`${contactType}-label`} variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
           {t(`courtesy-contacts.${contactType}-added`, { ns: 'recapiti' })}
         </Typography>
