@@ -8,6 +8,7 @@ import PnDialogActions from './PnDialog/PnDialogActions';
 import PnDialogContent from './PnDialog/PnDialogContent';
 
 type Props = {
+  open: boolean;
   onConfirm: () => void;
   onCancel: () => void;
   confirmLabel: string;
@@ -17,6 +18,7 @@ type Props = {
 };
 
 const DisclaimerModal: React.FC<Props> = ({
+  open = false,
   onConfirm,
   onCancel,
   confirmLabel,
@@ -31,8 +33,18 @@ const DisclaimerModal: React.FC<Props> = ({
     setChecked(!checked);
   };
 
+  const handleCancel = () => {
+    setChecked(false);
+    onCancel();
+  };
+
+  const handleConfirm = () => {
+    setChecked(false);
+    onConfirm();
+  };
+
   return (
-    <PnDialog open={true} data-testid="disclaimerDialog">
+    <PnDialog open={open} data-testid="disclaimerDialog">
       {title && <DialogTitle>{title}</DialogTitle>}
       <PnDialogContent>
         {content && <Box>{content}</Box>}
@@ -56,7 +68,7 @@ const DisclaimerModal: React.FC<Props> = ({
         <Button
           id="cancelButton"
           variant="outlined"
-          onClick={onCancel}
+          onClick={handleCancel}
           data-testid="disclaimer-cancel-button"
         >
           {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
@@ -64,7 +76,7 @@ const DisclaimerModal: React.FC<Props> = ({
         <Button
           id="confirmButton"
           variant="contained"
-          onClick={onConfirm}
+          onClick={handleConfirm}
           disabled={disabledConfirm}
           data-testid="disclaimer-confirm-button"
         >

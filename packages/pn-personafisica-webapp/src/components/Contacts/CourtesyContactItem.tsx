@@ -1,23 +1,35 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
+import {
+  AppResponse,
+  AppResponsePublisher,
+  CodeModal,
+  DisclaimerModal,
+  ErrorMessage,
+  appStateActions,
+} from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, ChannelType } from '../../models/contacts';
-import { deleteAddress } from '../../redux/contact/actions';
-import { useAppDispatch } from '../../redux/hooks';
+import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
+import { SaveDigitalAddressParams } from '../../redux/contact/types';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import {
+  contactAlreadyExists,
   emailValidationSchema,
   internationalPhonePrefix,
   phoneValidationSchema,
 } from '../../utility/contacts.utility';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
-import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
+import ExistingContactDialog from './ExistingContactDialog';
 
 interface Props {
   type: ChannelType.EMAIL | ChannelType.SMS;
@@ -25,64 +37,141 @@ interface Props {
   blockDelete?: boolean;
 }
 
+enum ModalType {
+  EXISTING = 'existing',
+  DISCLAIMER = 'disclaimer',
+  CODE = 'code',
+  DELETE = 'delete',
+}
+
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { initValidation } = useDigitalContactsCodeVerificationContext();
-  const contactType = type.toLowerCase();
-  const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const digitalAddresses =
+    useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
+  const digitalElemRef = useRef<{ editContact: () => void; toggleEdit: () => void }>({
+    editContact: () => {},
+    toggleEdit: () => {},
+  });
+  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
+  const codeModalRef =
+    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
+
+  const contactType = type.toLowerCase();
 
   const emailValidationSch = yup.object().shape({
     email: emailValidationSchema(t),
   });
 
-  // note that phoneValidationSchema depends on the phoneRegex which is different
-  // for the insertion and modification cases, check the comment
-  // about the useEffect which calls setPhoneRegex below
   const phoneValidationSch = yup.object().shape({
     sms: phoneValidationSchema(t, !!value),
   });
 
+  const initialValues = {
+    [contactType]: value ?? '',
+  };
+
   const formik = useFormik({
-    initialValues: {
-      [contactType]: value ?? '',
-    },
-    enableReinitialize: true,
-    validateOnMount: true,
+    initialValues,
     validationSchema: type === ChannelType.EMAIL ? emailValidationSch : phoneValidationSch,
+    validateOnMount: true,
+    enableReinitialize: true,
     onSubmit: () => {
-      const contactValue =
-        type === ChannelType.EMAIL
-          ? formik.values[contactType]
-          : internationalPhonePrefix + formik.values[contactType];
-      if (value) {
-        digitalElemRef.current.editContact();
-      } else {
-        initValidation(type, contactValue, 'default');
+      const contactValue = getContactValue(type);
+      PFEventStrategyFactory.triggerEvent(
+        type === ChannelType.SMS
+          ? PFEventsType.SEND_ADD_SMS_START
+          : PFEventsType.SEND_ADD_EMAIL_START,
+        'default'
+      );
+      // first check if contact already exists
+      if (contactAlreadyExists(digitalAddresses, contactValue, 'default', type)) {
+        setModalOpen(ModalType.EXISTING);
+        return;
       }
+      setModalOpen(ModalType.DISCLAIMER);
     },
   });
 
-  const handleChangeTouched = async (
-    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    formik.handleChange(event);
-    await handleTouched(event.target.id, true);
-  };
-
-  const handleTouched = async (id: string, touched: boolean) => {
-    await formik.setFieldTouched(id, touched, false);
-  };
-
-  const handleEditConfirm = async (status: 'validated' | 'cancelled') => {
-    if (status === 'cancelled') {
-      await formik.setFieldValue(contactType, value, true);
+  const getContactValue = (type: ChannelType) => {
+    if (type === ChannelType.EMAIL) {
+      return formik.values.email;
     }
+    return type === ChannelType.SMS && value
+      ? formik.values.sms
+      : internationalPhonePrefix + formik.values.sms;
+  };
+
+  const handleChangeTouched = async (event: ChangeEvent) => {
+    formik.handleChange(event);
+    await formik.setFieldTouched(event.target.id, true, false);
+  };
+
+  const handleCodeVerification = (verificationCode?: string) => {
+    if (verificationCode) {
+      PFEventStrategyFactory.triggerEvent(
+        type === ChannelType.SMS
+          ? PFEventsType.SEND_ADD_SMS_UX_CONVERSION
+          : PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION,
+        'default'
+      );
+    }
+
+    const digitalAddressParams: SaveDigitalAddressParams = {
+      addressType: AddressType.COURTESY,
+      senderId: 'default',
+      channelType: type,
+      value: getContactValue(type),
+      code: verificationCode,
+    };
+
+    dispatch(createOrUpdateAddress(digitalAddressParams))
+      .unwrap()
+      .then((res) => {
+        // contact to verify
+        // open code modal
+        if (!res) {
+          setModalOpen(ModalType.CODE);
+          return;
+        }
+
+        PFEventStrategyFactory.triggerEvent(
+          type === ChannelType.SMS
+            ? PFEventsType.SEND_ADD_SMS_UX_SUCCESS
+            : PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS,
+          'default'
+        );
+
+        // contact has already been verified
+        // show success message
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t(`courtesy-contacts.${contactType}-added-successfully`, {
+              ns: 'recapiti',
+            }),
+          })
+        );
+        setModalOpen(null);
+        if (value) {
+          digitalElemRef.current.toggleEdit();
+        }
+      })
+      .catch(() => {});
+  };
+
+  const handleCancelCode = async () => {
+    setModalOpen(null);
+    if (value) {
+      digitalElemRef.current.toggleEdit();
+    }
+    await formik.setFieldTouched(contactType, false, false);
+    await formik.setFieldValue(contactType, initialValues[contactType], true);
   };
 
   const deleteConfirmHandler = () => {
-    setShowDeleteModal(false);
+    setModalOpen(null);
     dispatch(
       deleteAddress({
         addressType: AddressType.COURTESY,
@@ -92,7 +181,6 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
     )
       .unwrap()
       .then(() => {
-        void handleTouched(contactType, false);
         PFEventStrategyFactory.triggerEvent(
           type === ChannelType.EMAIL
             ? PFEventsType.SEND_REMOVE_EMAIL_SUCCESS
@@ -102,6 +190,40 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
       })
       .catch(() => {});
   };
+
+  const handleAddressUpdateError = useCallback(
+    (responseError: AppResponse) => {
+      if (modalOpen === null) {
+        // notify the publisher we are not handling the error
+        return true;
+      }
+      if (Array.isArray(responseError.errors)) {
+        const error = responseError.errors[0];
+        codeModalRef.current?.updateError(
+          {
+            title: error.message.title,
+            content: error.message.content,
+          },
+          true
+        );
+        PFEventStrategyFactory.triggerEvent(
+          type === ChannelType.SMS
+            ? PFEventsType.SEND_ADD_SMS_CODE_ERROR
+            : PFEventsType.SEND_ADD_EMAIL_CODE_ERROR
+        );
+      }
+      return false;
+    },
+    [modalOpen]
+  );
+
+  useEffect(() => {
+    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
+    };
+  }, [handleAddressUpdateError]);
 
   /*
    * if *some* value (phone number, email address) has been attached to the contact type,
@@ -129,7 +251,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
                 ns: 'recapiti',
               }),
               value: formik.values[contactType],
-              onChange: handleChangeTouched,
+              onChange: (e) => void handleChangeTouched(e),
               error:
                 (formik.touched[contactType] || formik.values[contactType].length > 0) &&
                 Boolean(formik.errors[contactType]),
@@ -138,9 +260,9 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
                 formik.errors[contactType],
             }}
             saveDisabled={!formik.isValid}
-            onConfirm={handleEditConfirm}
-            onEditCancel={() => handleEditConfirm('cancelled')}
-            onDelete={() => setShowDeleteModal(true)}
+            onDelete={() => setModalOpen(ModalType.DELETE)}
+            onEditCancel={() => formik.resetForm({ values: initialValues })}
+            editManagedFromOutside
           />
         ) : (
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -183,9 +305,62 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
           </Stack>
         )}
       </form>
-
+      <ExistingContactDialog
+        open={modalOpen === ModalType.EXISTING}
+        value={formik.values[contactType]}
+        handleDiscard={() => setModalOpen(null)}
+        handleConfirm={() => handleCodeVerification()}
+      />
+      <DisclaimerModal
+        open={modalOpen === ModalType.DISCLAIMER}
+        onConfirm={() => {
+          setModalOpen(null);
+          handleCodeVerification();
+        }}
+        onCancel={() => setModalOpen(null)}
+        confirmLabel={t('button.conferma')}
+        checkboxLabel={t('button.capito')}
+        content={t(`alert-dialog-${type}`, { ns: 'recapiti' })}
+      />
+      <CodeModal
+        title={
+          t(`courtesy-contacts.${contactType}-verify`, { ns: 'recapiti' }) +
+          ` ${formik.values[contactType]}`
+        }
+        subtitle={<Trans i18nKey={`courtesy-contacts.${contactType}-verify-descr`} ns="recapiti" />}
+        open={modalOpen === ModalType.CODE}
+        initialValues={new Array(5).fill('')}
+        codeSectionTitle={t(`courtesy-contacts.insert-code`, { ns: 'recapiti' })}
+        codeSectionAdditional={
+          <>
+            <Typography variant="body2" display="inline">
+              {t(`courtesy-contacts.${contactType}-new-code`, { ns: 'recapiti' })}
+              &nbsp;
+            </Typography>
+            <ButtonNaked
+              component={Box}
+              onClick={() => handleCodeVerification()}
+              sx={{ verticalAlign: 'unset', display: 'inline' }}
+            >
+              <Typography
+                display="inline"
+                color="primary"
+                variant="body2"
+                sx={{ textDecoration: 'underline' }}
+              >
+                {t(`courtesy-contacts.new-code-link`, { ns: 'recapiti' })}.
+              </Typography>
+            </ButtonNaked>
+          </>
+        }
+        cancelLabel={t('button.annulla')}
+        confirmLabel={t('button.conferma')}
+        cancelCallback={handleCancelCode}
+        confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
+        ref={codeModalRef}
+      />
       <DeleteDialog
-        showModal={showDeleteModal}
+        showModal={modalOpen === ModalType.DELETE}
         removeModalTitle={t(
           `courtesy-contacts.${blockDelete ? 'block-' : ''}remove-${contactType}-title`,
           { ns: 'recapiti' }
@@ -197,7 +372,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
             ns: 'recapiti',
           }
         )}
-        handleModalClose={() => setShowDeleteModal(false)}
+        handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />

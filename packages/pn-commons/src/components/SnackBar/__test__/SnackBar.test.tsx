@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 import { AppResponseOutcome } from '../../../models/AppResponse';
-import { fireEvent, render, waitFor, within } from '../../../test-utils';
+import { act, fireEvent, render, waitFor, within } from '../../../test-utils';
 import SnackBar from '../SnackBar';
 
 const renderSnackBar = (open: boolean, type: AppResponseOutcome, closingDelay?: number) =>
@@ -33,10 +33,10 @@ describe('SnackBar Component', () => {
     const snackBarContainer = getByTestId('snackBarContainer');
     expect(snackBarContainer).toBeInTheDocument();
     const closeButton = within(snackBarContainer!).getByRole('button');
+    fireEvent.click(closeButton);
     await waitFor(() => {
-      fireEvent.click(closeButton!);
+      expect(snackBarContainer).not.toBeInTheDocument();
     });
-    expect(snackBarContainer).not.toBeInTheDocument();
   });
 
   it('closes snack bar after delay', async () => {
@@ -45,10 +45,10 @@ describe('SnackBar Component', () => {
     const snackBarContainer = getByTestId('snackBarContainer');
     expect(snackBarContainer).toBeInTheDocument();
     // wait...
-    vi.advanceTimersByTime(500);
-    await vi.waitFor(() => {
-      expect(snackBarContainer).not.toBeInTheDocument();
+    await act(async () => {
+      vi.advanceTimersByTime(500);
     });
+    expect(snackBarContainer).not.toBeInTheDocument();
     vi.useRealTimers();
   });
 });

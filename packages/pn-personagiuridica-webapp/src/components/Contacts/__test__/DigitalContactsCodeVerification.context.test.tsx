@@ -182,7 +182,7 @@ describe('DigitalContactsCodeVerification Context', () => {
     // show disclaimer modal
     const disclaimerDialog = await waitFor(() => result.getByTestId('disclaimerDialog'));
     expect(disclaimerDialog).toBeInTheDocument();
-    const confirmButton = within(disclaimerDialog!).getByTestId('disclaimer-confirm-button');
+    const confirmButton = within(disclaimerDialog).getByTestId('disclaimer-confirm-button');
     expect(confirmButton).toBeDisabled();
     const checkbox = result.getByRole('checkbox');
     fireEvent.click(checkbox);
