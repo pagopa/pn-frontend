@@ -15,6 +15,7 @@ describe('DisclaimerModal tests', () => {
         confirmLabel={'Conferma'}
         checkboxLabel={'Ho capito'}
         content={'test content'}
+        open
       />
     );
     expect(baseElement).toHaveTextContent('test content');
@@ -28,6 +29,7 @@ describe('DisclaimerModal tests', () => {
         onCancel={mockCancel}
         confirmLabel={'Conferma'}
         checkboxLabel={'Ho capito'}
+        open
       />
     );
     const cancelButton = getByRole('button', { name: 'Annulla' });
