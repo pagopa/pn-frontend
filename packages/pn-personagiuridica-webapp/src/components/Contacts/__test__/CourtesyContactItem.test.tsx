@@ -11,13 +11,10 @@ import {
   screen,
   testStore,
   waitFor,
-  within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import CourtesyContactItem from '../CourtesyContactItem';
-import CourtesyContacts from '../CourtesyContacts';
-import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
