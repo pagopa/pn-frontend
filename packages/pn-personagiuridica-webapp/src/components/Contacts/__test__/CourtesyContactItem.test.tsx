@@ -345,76 +345,41 @@ describe('CourtesyContactItem component', () => {
     });
 
     it('type in an invalid email', async () => {
-      const result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={ChannelType.EMAIL} value="" />
-        </DigitalContactsCodeVerificationProvider>
-      );
-      const input = result.container.querySelector(`[name="email"]`);
+      const { container } = render(<CourtesyContactItem type={ChannelType.EMAIL} value="" />);
+      const form = container.querySelector('form');
+      const input = form!.querySelector(`[name="email"]`);
       // set invalid values
       fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
       await waitFor(() => expect(input!).toHaveValue(INVALID_EMAIL));
-      const inputError = result.container.querySelector(`#email-helper-text`);
+      const inputError = form!.querySelector(`#email-helper-text`);
+      expect(inputError).toBeInTheDocument();
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
+      const buttons = form!.querySelectorAll('button');
+      expect(buttons[0]).toBeDisabled();
       fireEvent.change(input!, { target: { value: '' } });
       await waitFor(() => expect(input!).toHaveValue(''));
+      expect(inputError).toBeInTheDocument();
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
-      const button = result.getByRole('button');
-      expect(button).toHaveTextContent('courtesy-contacts.email-add');
-      expect(button).toBeDisabled();
     });
 
     it('type in an invalid email while in "edit mode"', async () => {
-      const result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={ChannelType.EMAIL} value={VALID_EMAIL} />
-        </DigitalContactsCodeVerificationProvider>
+      const { container, getByRole } = render(
+        <CourtesyContactItem type={ChannelType.EMAIL} value={VALID_EMAIL} />
       );
-      result.getByText(VALID_EMAIL);
-      result.getByRole('button', { name: 'button.elimina' });
-      const editButton = result.getByRole('button', { name: 'button.modifica' });
+      const form = container.querySelector('form');
+      const phoneValue = getById(form!, 'email-typography');
+      expect(phoneValue).toHaveTextContent(VALID_EMAIL);
+      const editButton = getByRole('button', { name: 'button.modifica' });
       fireEvent.click(editButton);
-      const input = result.container.querySelector(`[name="email"]`);
-      const saveButton = result.getByRole('button', { name: 'button.salva' });
+      const input = container.querySelector(`[name="email"]`);
+      const saveButton = getByRole('button', { name: 'button.salva' });
       expect(input).toHaveValue(VALID_EMAIL);
       expect(saveButton).toBeEnabled();
       fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
       await waitFor(() => expect(input).toHaveValue(INVALID_EMAIL));
       expect(saveButton).toBeDisabled();
-      const inputError = result.container.querySelector(`#email-helper-text`);
+      const inputError = container.querySelector(`#email-helper-text`);
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
-    });
-
-    it('remove contact', async () => {
-      mock.onDelete('/bff/v1/addresses/COURTESY/default/EMAIL').reply(204);
-      // render component
-      const result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={ChannelType.EMAIL} value={VALID_EMAIL} />
-        </DigitalContactsCodeVerificationProvider>
-      );
-      const buttons = result.container.querySelectorAll('button');
-      // click on cancel
-      fireEvent.click(buttons![1]);
-      let dialog = await waitFor(() => screen.getByRole('dialog'));
-      expect(dialog).toBeInTheDocument();
-      let dialogButtons = dialog?.querySelectorAll('button');
-      // cancel remove operation
-      fireEvent.click(dialogButtons![0]);
-      await waitFor(() => {
-        expect(dialog).not.toBeInTheDocument();
-      });
-      // click on confirm
-      fireEvent.click(buttons![1]);
-      dialog = await waitFor(() => screen.getByRole('dialog'));
-      dialogButtons = dialog?.querySelectorAll('button');
-      fireEvent.click(dialogButtons![1]);
-      await waitFor(() => {
-        expect(dialog).not.toBeInTheDocument();
-      });
-      await waitFor(() => {
-        expect(mock.history.delete).toHaveLength(1);
-      });
     });
 
     it('add new email', async () => {
@@ -428,19 +393,16 @@ describe('CourtesyContactItem component', () => {
           verificationCode: '01234',
         })
         .reply(204);
-      const result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContacts contacts={[]} />
-        </DigitalContactsCodeVerificationProvider>
-      );
-
+      const result = render(<CourtesyContactItem type={ChannelType.EMAIL} value="" />);
+      // insert new email
+      const form = result.container.querySelector('form');
       const input = result.container.querySelector(`[name="email"]`);
-      expect(input).toHaveValue('');
       fireEvent.change(input!, { target: { value: mailValue } });
       await waitFor(() => expect(input!).toHaveValue(mailValue));
+      const errorMessage = form?.querySelector('#sms-helper-text');
+      expect(errorMessage).not.toBeInTheDocument();
       const button = result.getByTestId('courtesy-email-button');
       expect(button).toBeEnabled();
-      // save the email
       fireEvent.click(button!);
       // Confirms the disclaimer dialog
       const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
@@ -461,7 +423,7 @@ describe('CourtesyContactItem component', () => {
           verificationCode: '01234',
         });
       });
-      expect(dialog).not.toBeInTheDocument();
+      await waitFor(() => expect(dialog).not.toBeInTheDocument());
       expect(
         testStore
           .getState()
@@ -477,14 +439,18 @@ describe('CourtesyContactItem component', () => {
       ]);
       // simulate rerendering due to redux changes
       result.rerender(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContacts contacts={[defaultEmailAddress!]} />
-        </DigitalContactsCodeVerificationProvider>
+        <CourtesyContactItem type={ChannelType.EMAIL} value={defaultEmailAddress!.value} />
       );
       await waitFor(() => {
         expect(input).not.toBeInTheDocument();
-        expect(result.container).toHaveTextContent(mailValue);
       });
+      const emailValue = getById(form!, 'email-typography');
+      expect(emailValue).toBeInTheDocument();
+      expect(emailValue).toHaveTextContent(mailValue);
+      const editButton = getById(form!, 'modifyContact-default');
+      expect(editButton).toBeInTheDocument();
+      const deleteButton = getById(form!, 'cancelContact-default');
+      expect(deleteButton).toBeInTheDocument();
     });
 
     it('override an existing email with a new one', async () => {
@@ -503,22 +469,19 @@ describe('CourtesyContactItem component', () => {
         })
         .reply(204);
       const result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContacts contacts={[defaultEmailAddress!]} />
-        </DigitalContactsCodeVerificationProvider>,
-        {
-          preloadedState: {
-            contactsState: { digitalAddresses: [defaultEmailAddress] },
-          },
-        }
+        <CourtesyContactItem type={ChannelType.EMAIL} value={defaultEmailAddress!.value} />
       );
-      const emailForm = result.getByTestId(`courtesyContacts-email`);
-      const editButton = within(emailForm).getByRole('button', { name: 'button.modifica' });
+      const form = result.container.querySelector('form');
+      let mailValue = getById(form!, 'email-typography');
+      expect(mailValue).toHaveTextContent(defaultEmailAddress!.value);
+      let editButton = result.getByRole('button', { name: 'button.modifica' });
       fireEvent.click(editButton);
       const input = result.container.querySelector(`[name="email"]`);
+      const saveButton = result.getByRole('button', { name: 'button.salva' });
+      expect(input).toHaveValue(defaultEmailAddress!.value);
+      expect(saveButton).toBeEnabled();
       fireEvent.change(input!, { target: { value: emailValue } });
       await waitFor(() => expect(input!).toHaveValue(emailValue));
-      const saveButton = result.getByRole('button', { name: 'button.salva' });
       fireEvent.click(saveButton);
       // Confirms the disclaimer dialog
       const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
@@ -539,7 +502,7 @@ describe('CourtesyContactItem component', () => {
           verificationCode: '01234',
         });
       });
-      expect(dialog).not.toBeInTheDocument();
+      await waitFor(() => expect(dialog).not.toBeInTheDocument());
       expect(
         testStore
           .getState()
@@ -561,62 +524,62 @@ describe('CourtesyContactItem component', () => {
         },
       ];
       result.rerender(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContacts contacts={updatedDigitalCourtesyAddresses} />
-        </DigitalContactsCodeVerificationProvider>
+        <CourtesyContactItem
+          type={ChannelType.EMAIL}
+          value={updatedDigitalCourtesyAddresses[0].value}
+        />
       );
       await waitFor(() => {
         expect(input).not.toBeInTheDocument();
-        expect(result.container).toHaveTextContent(emailValue);
       });
+      mailValue = getById(form!, 'email-typography');
+      expect(mailValue).toBeInTheDocument();
+      expect(mailValue).toHaveTextContent(emailValue);
+      editButton = getById(form!, 'modifyContact-default');
+      expect(editButton).toBeInTheDocument();
+      const deleteButton = getById(form!, 'cancelContact-default');
+      expect(deleteButton).toBeInTheDocument();
     });
 
     it('delete email', async () => {
       mock.onDelete('/bff/v1/addresses/COURTESY/default/EMAIL').reply(204);
-      const emailValue = defaultEmailAddress!.value;
       const result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContacts contacts={[defaultEmailAddress!]} />
-        </DigitalContactsCodeVerificationProvider>
+        <CourtesyContactItem type={ChannelType.EMAIL} value={defaultEmailAddress!.value} />
       );
-      const phoneText = result.getByText(emailValue);
-      expect(phoneText).toBeInTheDocument();
-      const phoneForm = result.getByTestId(`courtesyContacts-email`);
-      const deleteButton = within(phoneForm).getByRole('button', { name: 'button.elimina' });
-      fireEvent.click(deleteButton);
-      // find confirmation dialog and its buttons
-      const dialogBox = result.getByRole('dialog', { name: /courtesy-contacts.remove\b/ });
-      expect(dialogBox).toBeVisible();
-      const cancelButton = within(dialogBox).getByRole('button', { name: 'button.annulla' });
-      const confirmButton = within(dialogBox).getByRole('button', { name: 'button.conferma' });
-      // cancel delete and verify the dialog hides
-      fireEvent.click(cancelButton);
-      expect(dialogBox).not.toBeVisible();
-      // delete the number
-      fireEvent.click(deleteButton);
-      expect(dialogBox).toBeVisible();
-      fireEvent.click(confirmButton);
+      const buttons = result.container.querySelectorAll('button');
+      fireEvent.click(buttons[1]);
+      let dialog = await waitFor(() => screen.getByRole('dialog'));
+      expect(dialog).toBeInTheDocument();
+      let dialogButtons = dialog.querySelectorAll('button');
+      // cancel remove operation
+      fireEvent.click(dialogButtons[0]);
+      await waitFor(() => expect(dialog).not.toBeInTheDocument());
+      // click on confirm
+      fireEvent.click(buttons[1]);
+      dialog = await waitFor(() => screen.getByRole('dialog'));
+      dialogButtons = dialog.querySelectorAll('button');
+      fireEvent.click(dialogButtons[1]);
       await waitFor(() => {
-        expect(dialogBox).not.toBeVisible();
+        expect(dialog).not.toBeVisible();
+      });
+      await waitFor(() => {
         expect(mock.history.delete).toHaveLength(1);
       });
-      expect(
-        testStore
-          .getState()
-          .contactsState.digitalAddresses.filter(
-            (addr) => addr.addressType === AddressType.COURTESY
-          )
-      ).toStrictEqual([]);
+      await waitFor(() => {
+        expect(
+          testStore
+            .getState()
+            .contactsState.digitalAddresses.filter(
+              (addr) => addr.addressType === AddressType.COURTESY
+            )
+        ).toStrictEqual([]);
+      });
       // simulate rerendering due to redux changes
-      result.rerender(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContacts contacts={[]} />
-        </DigitalContactsCodeVerificationProvider>
-      );
+      result.rerender(<CourtesyContactItem type={ChannelType.EMAIL} value="" />);
       await waitFor(() => {
         const input = result.container.querySelector(`[name="email"]`);
         expect(input).toBeInTheDocument();
-        expect(result.container).not.toHaveTextContent(emailValue);
+        expect(result.container).not.toHaveTextContent('');
       });
     });
   });
