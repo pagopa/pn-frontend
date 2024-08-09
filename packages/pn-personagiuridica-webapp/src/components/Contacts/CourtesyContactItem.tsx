@@ -71,7 +71,6 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
     validateOnMount: true,
     onSubmit: () => {
       const contactValue = getContactValue(type);
-      // first check if contact already exists
       if (contactAlreadyExists(digitalAddresses, contactValue, 'default', type)) {
         setModalOpen(ModalType.EXISTING);
         return;
@@ -101,15 +100,11 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
     dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
       .then((res) => {
-        // contact to verify
-        // open code modal
         if (!res) {
           setModalOpen(ModalType.CODE);
           return;
         }
 
-        // contact has already been verified
-        // show success message
         dispatch(
           appStateActions.addSuccess({
             title: '',
@@ -118,9 +113,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
             }),
           })
         );
-        // chiudere la code modal
         setModalOpen(null);
-        // nel caso siamo in modifica (property value defined), bisogna passare alla modalità noEdit del componente DigitalContactElem
         if (value) {
           digitalElemRef.current.toggleEdit();
         }
