@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
-import { RenderResult, act, render } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { ChannelType } from '../../../models/contacts';
 import CourtesyContacts from '../CourtesyContacts';
@@ -17,10 +17,6 @@ vi.mock('react-i18next', () => ({
 
 describe('CourtesyContacts Component', async () => {
   let mock: MockAdapter;
-  let result: RenderResult;
-  const smsInputName = ChannelType.SMS.toLowerCase();
-  const emailInputName = ChannelType.EMAIL.toLowerCase();
-
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
   });
@@ -34,22 +30,22 @@ describe('CourtesyContacts Component', async () => {
   });
 
   it('renders component - no contacts', async () => {
-    await act(async () => {
-      result = render(<CourtesyContacts contacts={[]} />);
-    });
-    const avatar = result.getByText('Email');
+    const { container, getByText, getByRole, getByTestId } = render(
+      <CourtesyContacts contacts={[]} />
+    );
+    const avatar = getByText('Email');
     expect(avatar).toBeInTheDocument();
-    const title = result.getByRole('heading');
+    const title = getByRole('heading');
     expect(title).toBeInTheDocument();
     expect(title).toHaveTextContent('courtesy-contacts.subtitle');
-    const body = result.getByTestId('DigitalContactsCardBody');
+    const body = getByTestId('DigitalContactsCardBody');
     expect(body).toHaveTextContent('courtesy-contacts.title');
     expect(body).toHaveTextContent('courtesy-contacts.description');
-    const disclaimer = result.getByTestId('contacts disclaimer');
+    const disclaimer = getByTestId('contacts disclaimer');
     expect(disclaimer).toBeInTheDocument();
     // check inputs
-    const phoneInput = result.container.querySelector(`[name="${smsInputName}"]`);
-    const emailInput = result.container.querySelector(`[name="${emailInputName}"]`);
+    const phoneInput = container.querySelector(`[name="sms"]`);
+    const emailInput = container.querySelector(`[name="email"]`);
     expect(phoneInput).toBeInTheDocument();
     expect(emailInput).toBeInTheDocument();
   });
@@ -58,16 +54,14 @@ describe('CourtesyContacts Component', async () => {
     const { container, getByText, getAllByRole } = render(
       <CourtesyContacts contacts={digitalCourtesyAddresses} />
     );
-
     const defaultPhone = digitalCourtesyAddresses.find(
       (addr) => addr.channelType === ChannelType.SMS && addr.senderId === 'default'
     );
     const defaultEmail = digitalCourtesyAddresses.find(
       (addr) => addr.channelType === ChannelType.EMAIL && addr.senderId === 'default'
     );
-
-    const phoneInput = container.querySelector(`[name="${smsInputName}"]`);
-    const emailInput = container.querySelector(`[name="${emailInputName}"]`);
+    const phoneInput = container.querySelector(`[name="sms"]`);
+    const emailInput = container.querySelector(`[name="email"]`);
     expect(phoneInput).not.toBeInTheDocument();
     expect(emailInput).not.toBeInTheDocument();
     const phoneNumber = getByText(defaultPhone!.value);

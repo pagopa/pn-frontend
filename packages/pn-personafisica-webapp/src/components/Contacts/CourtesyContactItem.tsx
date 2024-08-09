@@ -85,6 +85,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
           : PFEventsType.SEND_ADD_EMAIL_START,
         'default'
       );
+      // first check if contact already exists
       if (contactAlreadyExists(digitalAddresses, contactValue, 'default', type)) {
         setModalOpen(ModalType.EXISTING);
         return;
@@ -128,6 +129,8 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
     dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
       .then((res) => {
+        // contact to verify
+        // open code modal
         if (!res) {
           setModalOpen(ModalType.CODE);
           return;
@@ -140,6 +143,8 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
           'default'
         );
 
+        // contact has already been verified
+        // show success message
         dispatch(
           appStateActions.addSuccess({
             title: '',
