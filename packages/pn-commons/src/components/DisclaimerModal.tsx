@@ -8,6 +8,7 @@ import PnDialogActions from './PnDialog/PnDialogActions';
 import PnDialogContent from './PnDialog/PnDialogContent';
 
 type Props = {
+  open: boolean;
   onConfirm: () => void;
   onCancel: () => void;
   confirmLabel: string;
@@ -17,6 +18,7 @@ type Props = {
 };
 
 const DisclaimerModal: React.FC<Props> = ({
+  open = false,
   onConfirm,
   onCancel,
   confirmLabel,
@@ -32,7 +34,7 @@ const DisclaimerModal: React.FC<Props> = ({
   };
 
   return (
-    <PnDialog open={true} data-testid="disclaimerDialog">
+    <PnDialog open={open} data-testid="disclaimerDialog">
       {title && <DialogTitle>{title}</DialogTitle>}
       <PnDialogContent>
         {content && <Box>{content}</Box>}

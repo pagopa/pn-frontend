@@ -9,8 +9,8 @@
   "subtitle-text-4": ".",
   "general-contacts-title": "Splošni kontaktni podatki",
   "special-contacts-title": "Drugi kontaktni podatki",
-  "alert-dialog-EMAIL": "Če nimate PEC in dostopate do obvestila o pošiljanju v roku 5 dni (120 ur) od pošiljanja e-poštnega sporočila, potrdila o prejemu ne boste prejeli po priporočeni pošti.",
-  "alert-dialog-SMS": "Če nimate PEC in dostopate do obvestila na SEND v roku 5 dni (120 ur) od pošiljanja SMS-a, potrdila o prejemu ne boste prejeli po priporočeni pošti.",
+  "alert-dialog-email": "Če nimate PEC in dostopate do obvestila o pošiljanju v roku 5 dni (120 ur) od pošiljanja e-poštnega sporočila, potrdila o prejemu ne boste prejeli po priporočeni pošti.",
+  "alert-dialog-sms": "Če nimate PEC in dostopate do obvestila na SEND v roku 5 dni (120 ur) od pošiljanja SMS-a, potrdila o prejemu ne boste prejeli po priporočeni pošti.",
   "legal-contacts": {
     "title": "",
     "subtitle": "Pravni naslov",

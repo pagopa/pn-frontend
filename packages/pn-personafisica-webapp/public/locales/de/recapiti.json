@@ -9,8 +9,8 @@
   "subtitle-text-4": ".",
   "general-contacts-title": "Allgemeine Anschriften",
   "special-contacts-title": "Weitere Anschriften",
-  "alert-dialog-EMAIL": "Solltest du keine PEC-Adresse haben und den Bescheid innerhalb 5 Tagen (120 Stunden) nach Versand der E-Mails über SEND aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben.",
-  "alert-dialog-SMS": "Solltest du keine PEC-Adresse haben und den Bescheid innerhalb 5 Tagen (120 Stunden) nach Versand der SMS über SEND aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben.",
+  "alert-dialog-email": "Solltest du keine PEC-Adresse haben und den Bescheid innerhalb 5 Tagen (120 Stunden) nach Versand der E-Mails über SEND aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben.",
+  "alert-dialog-sms": "Solltest du keine PEC-Adresse haben und den Bescheid innerhalb 5 Tagen (120 Stunden) nach Versand der SMS über SEND aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben.",
   "legal-contacts": {
     "title": "",
     "subtitle": "Ladungsfähige Anschrift",
