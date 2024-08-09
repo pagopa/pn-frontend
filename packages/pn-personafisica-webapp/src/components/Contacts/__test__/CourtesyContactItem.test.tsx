@@ -11,7 +11,6 @@ import {
   screen,
   testStore,
   waitFor,
-  within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
@@ -134,7 +133,7 @@ describe('CourtesyContactItem component', () => {
       const result = render(<CourtesyContactItem type={ChannelType.SMS} value="" />);
       // insert new phone
       const form = result.container.querySelector('form');
-      const input = form!.querySelector(`[name="sms}"]`);
+      const input = form!.querySelector(`[name="sms"]`);
       fireEvent.change(input!, { target: { value: phoneValue } });
       await waitFor(() => expect(input!).toHaveValue(phoneValue));
       const errorMessage = form?.querySelector('#phone-helper-text');
@@ -163,7 +162,7 @@ describe('CourtesyContactItem component', () => {
         });
       });
       // check that contact has been added
-      expect(dialog).not.toBeInTheDocument();
+      await waitFor(() => expect(dialog).not.toBeInTheDocument());
       expect(
         testStore
           .getState()
@@ -249,7 +248,7 @@ describe('CourtesyContactItem component', () => {
         });
       });
       // check that contact has been added
-      expect(dialog).not.toBeInTheDocument();
+      await waitFor(() => expect(dialog).not.toBeInTheDocument());
       expect(
         testStore
           .getState()
@@ -302,9 +301,7 @@ describe('CourtesyContactItem component', () => {
       let dialogButtons = dialog.querySelectorAll('button');
       // cancel remove operation
       fireEvent.click(dialogButtons[0]);
-      await waitFor(() => {
-        expect(dialog).not.toBeInTheDocument();
-      });
+      await waitFor(() => expect(dialog).not.toBeInTheDocument());
       // click on confirm
       fireEvent.click(buttons[1]);
       dialog = await waitFor(() => screen.getByRole('dialog'));
@@ -407,7 +404,7 @@ describe('CourtesyContactItem component', () => {
       const result = render(<CourtesyContactItem type={ChannelType.EMAIL} value="" />);
       // insert new email
       const form = result.container.querySelector('form');
-      const input = form!.querySelector(`[name="email}"]`);
+      const input = form!.querySelector(`[name="email"]`);
       fireEvent.change(input!, { target: { value: mailValue } });
       await waitFor(() => expect(input!).toHaveValue(mailValue));
       const errorMessage = form?.querySelector('#sms-helper-text');
@@ -436,7 +433,7 @@ describe('CourtesyContactItem component', () => {
         });
       });
       // check that contact has been added
-      expect(dialog).not.toBeInTheDocument();
+      await waitFor(() => expect(dialog).not.toBeInTheDocument());
       expect(
         testStore
           .getState()
@@ -520,7 +517,7 @@ describe('CourtesyContactItem component', () => {
         });
       });
       // check that contact has been added
-      expect(dialog).not.toBeInTheDocument();
+      await waitFor(() => expect(dialog).not.toBeInTheDocument());
       expect(
         testStore
           .getState()
@@ -572,9 +569,7 @@ describe('CourtesyContactItem component', () => {
       let dialogButtons = dialog.querySelectorAll('button');
       // cancel remove operation
       fireEvent.click(dialogButtons[0]);
-      await waitFor(() => {
-        expect(dialog).not.toBeInTheDocument();
-      });
+      await waitFor(() => expect(dialog).not.toBeInTheDocument());
       // click on confirm
       fireEvent.click(buttons[1]);
       dialog = await waitFor(() => screen.getByRole('dialog'));
