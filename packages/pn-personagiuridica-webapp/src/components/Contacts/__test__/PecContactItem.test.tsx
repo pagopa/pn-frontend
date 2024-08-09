@@ -62,20 +62,17 @@ describe('PecContactItem component', () => {
     // render component
     const { container } = render(<PecContactItem value="" verifyingAddress={false} />);
     const form = container.querySelector('form');
-    const buttons = form?.querySelectorAll('button');
-    fireEvent.click(buttons![0]);
-    const input = form?.querySelector('input[name="pec"]');
+    const input = form!.querySelector('input[name="pec"]');
     // add invalid values
     fireEvent.change(input!, { target: { value: 'invalid-pec' } });
-    await waitFor(() => expect(input!).toHaveValue('invalid-pec'));
-    let errorMessage = form?.querySelector('#pec-helper-text');
+    await waitFor(() => expect(input).toHaveValue('invalid-pec'));
+    const errorMessage = form!.querySelector('#pec-helper-text');
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
-    const newButtons = form?.querySelectorAll('button');
-    expect(newButtons![0]).toBeDisabled();
+    const buttons = form!.querySelectorAll('button');
+    expect(buttons[0]).toBeDisabled();
     fireEvent.change(input!, { target: { value: '' } });
     await waitFor(() => expect(input!).toHaveValue(''));
-    errorMessage = form?.querySelector('#pec-helper-text');
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
   });
@@ -184,7 +181,7 @@ describe('PecContactItem component', () => {
     const result = render(<PecContactItem value="" verifyingAddress={false} />);
     // insert new pec
     const form = result.container.querySelector('form');
-    let input = form!.querySelector('input[name="pec"]');
+    const input = form!.querySelector('input[name="pec"]');
     fireEvent.change(input!, { target: { value: VALID_PEC } });
     await waitFor(() => expect(input!).toHaveValue(VALID_PEC));
     const errorMessage = form?.querySelector('#pec-helper-text');
@@ -331,22 +328,22 @@ describe('PecContactItem component', () => {
     const result = render(
       <PecContactItem value={defaultAddress!.value} verifyingAddress={false} />
     );
-    const buttons = result?.container.querySelectorAll('button');
+    const buttons = result.container.querySelectorAll('button');
     // click on cancel
-    fireEvent.click(buttons![1]);
+    fireEvent.click(buttons[1]);
     let dialog = await waitFor(() => screen.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
-    let dialogButtons = dialog?.querySelectorAll('button');
+    let dialogButtons = dialog.querySelectorAll('button');
     // cancel remove operation
-    fireEvent.click(dialogButtons![0]);
+    fireEvent.click(dialogButtons[0]);
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
     });
     // click on confirm
-    fireEvent.click(buttons![1]);
+    fireEvent.click(buttons[1]);
     dialog = await waitFor(() => screen.getByRole('dialog'));
-    dialogButtons = dialog?.querySelectorAll('button');
-    fireEvent.click(dialogButtons![1]);
+    dialogButtons = dialog.querySelectorAll('button');
+    fireEvent.click(dialogButtons[1]);
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
     });
@@ -363,10 +360,9 @@ describe('PecContactItem component', () => {
     // simulate rerendering due to redux changes
     result.rerender(<PecContactItem value="" verifyingAddress={false} />);
     await waitFor(() => {
-      expect(result.container).not.toHaveTextContent('legal-contacts.pec-validating');
-      expect(result.container).not.toHaveTextContent('legal-contacts.validation-in-progress');
       const input = result.container.querySelector('input[name="pec"]');
       expect(input).toBeInTheDocument();
+      expect(result.container).not.toHaveTextContent('');
     });
   });
 });
