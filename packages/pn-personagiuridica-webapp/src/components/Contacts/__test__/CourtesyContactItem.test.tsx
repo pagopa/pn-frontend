@@ -74,42 +74,44 @@ describe('CourtesyContactItem component', () => {
     });
 
     it('type in an invalid number', async () => {
-      const result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={ChannelType.SMS} value="" />
-        </DigitalContactsCodeVerificationProvider>
-      );
-      const input = result.container.querySelector(`[name="sms"]`);
+      const { container } = render(<CourtesyContactItem type={ChannelType.SMS} value="" />);
+      const form = container.querySelector('form');
+      const input = container.querySelector(`[name="sms"]`);
       // set invalid values
       fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
       await waitFor(() => expect(input!).toHaveValue(INPUT_INVALID_PHONE));
-      const inputError = result.container.querySelector(`#sms-helper-text`);
+      const inputError = form!.querySelector(`#sms-helper-text`);
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-sms');
       fireEvent.change(input!, { target: { value: '' } });
       await waitFor(() => expect(input!).toHaveValue(''));
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-sms');
-      const button = result.getByRole('button');
-      expect(button).toHaveTextContent('courtesy-contacts.sms-add');
-      expect(button).toBeDisabled();
+      const buttons = form!.querySelectorAll('button');
+      expect(buttons[0]).toBeDisabled();
+      fireEvent.change(input!, { target: { value: '' } });
+      await waitFor(() => {
+        expect(input!).toHaveValue('');
+      });
+      expect(inputError).toBeInTheDocument();
+      expect(inputError).toHaveTextContent('courtesy-contacts.valid-sms');
     });
 
     it('type in an invalid number while in "edit mode"', async () => {
-      const result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={ChannelType.SMS} value={INPUT_VALID_PHONE} />
-        </DigitalContactsCodeVerificationProvider>
+      const { container, getByRole } = render(
+        <CourtesyContactItem type={ChannelType.SMS} value={INPUT_VALID_PHONE} />
       );
-      result.getByText(INPUT_VALID_PHONE);
-      const editButton = result.getByRole('button', { name: 'button.modifica' });
+      const form = container.querySelector('form');
+      const phoneValue = getById(form!, 'sms-typography');
+      expect(phoneValue).toHaveTextContent(INPUT_VALID_PHONE);
+      const editButton = getByRole('button', { name: 'button.modifica' });
       fireEvent.click(editButton);
-      const input = result.container.querySelector(`[name="sms"]`);
-      const saveButton = result.getByRole('button', { name: 'button.salva' });
+      const input = container.querySelector(`[name="sms"]`);
+      const saveButton = getByRole('button', { name: 'button.salva' });
       expect(input).toHaveValue(INPUT_VALID_PHONE);
       expect(saveButton).toBeEnabled();
       fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
       await waitFor(() => expect(input).toHaveValue(INPUT_INVALID_PHONE));
       expect(saveButton).toBeDisabled();
-      const inputError = result.container.querySelector(`#sms-helper-text`);
+      const inputError = container.querySelector(`#sms-helper-text`);
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-sms');
     });
 
@@ -131,12 +133,12 @@ describe('CourtesyContactItem component', () => {
       const result = render(<CourtesyContactItem type={ChannelType.SMS} value="" />);
       const form = result.container.querySelector('form');
       const input = result.container.querySelector(`[name="sms"]`);
-      expect(input).toHaveValue('');
       fireEvent.change(input!, { target: { value: phoneValue } });
       await waitFor(() => expect(input!).toHaveValue(phoneValue));
+      const errorMessage = form?.querySelector('#phone-helper-text');
+      expect(errorMessage).not.toBeInTheDocument();
       const button = result.getByTestId('courtesy-sms-button');
       expect(button).toBeEnabled();
-      // save the phone
       fireEvent.click(button!);
 
       // Confirms the disclaimer dialog
@@ -173,10 +175,11 @@ describe('CourtesyContactItem component', () => {
         },
       ]);
       // simulate rerendering due to redux changes
-      result.rerender(<CourtesyContacts contacts={[defaultPhoneAddress!]} />);
+      result.rerender(
+        <CourtesyContactItem type={ChannelType.SMS} value={defaultPhoneAddress!.value} />
+      );
       await waitFor(() => {
         expect(input).not.toBeInTheDocument();
-        expect(result.getByTestId('courtesyContacts')).toHaveTextContent('+39' + phoneValue);
       });
       const smsValue = getById(form!, 'sms-typography');
       expect(smsValue).toBeInTheDocument();
@@ -205,13 +208,19 @@ describe('CourtesyContactItem component', () => {
       const result = render(
         <CourtesyContactItem type={ChannelType.SMS} value={defaultPhoneAddress!.value} />
       );
-      const phoneForm = result.getByTestId(`courtesyContacts-sms`);
-      const editButton = within(phoneForm).getByRole('button', { name: 'button.modifica' });
+      const form = result.container.querySelector('form');
+      let smsValue = getById(form!, 'sms-typography');
+      expect(smsValue).toHaveTextContent(defaultPhoneAddress!.value);
+      let editButton = result.getByRole('button', { name: 'button.modifica' });
       fireEvent.click(editButton);
       const input = result.container.querySelector(`[name="sms"]`);
-      fireEvent.change(input!, { target: { value: phoneValue } });
-      await waitFor(() => expect(input!).toHaveValue(phoneValue));
       const saveButton = result.getByRole('button', { name: 'button.salva' });
+      expect(input).toHaveValue(defaultPhoneAddress!.value);
+      expect(saveButton).toBeEnabled();
+      fireEvent.change(input!, { target: { value: phoneValue } });
+      await waitFor(() => {
+        expect(input!).toHaveValue(phoneValue);
+      });
       fireEvent.click(saveButton);
       // Confirms the disclaimer dialog
       const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
@@ -232,7 +241,7 @@ describe('CourtesyContactItem component', () => {
           verificationCode: '01234',
         });
       });
-      expect(dialog).not.toBeInTheDocument();
+      await waitFor(() => expect(dialog).not.toBeInTheDocument());
       expect(
         testStore
           .getState()
@@ -254,45 +263,66 @@ describe('CourtesyContactItem component', () => {
         },
       ];
       result.rerender(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContacts contacts={updatedDigitalCourtesyAddresses} />
-        </DigitalContactsCodeVerificationProvider>
+        <CourtesyContactItem
+          type={ChannelType.SMS}
+          value={updatedDigitalCourtesyAddresses[0].value}
+        />
       );
       await waitFor(() => {
         expect(input).not.toBeInTheDocument();
-        expect(result.container).toHaveTextContent(phoneValue);
       });
+      smsValue = getById(form!, 'sms-typography');
+      expect(smsValue).toBeInTheDocument();
+      expect(smsValue).toHaveTextContent(phoneValue);
+      editButton = getById(form!, 'modifyContact-default');
+      expect(editButton).toBeInTheDocument();
+      const deleteButton = getById(form!, 'cancelContact-default');
+      expect(deleteButton).toBeInTheDocument();
     });
 
     it('delete phone number', async () => {
       mock.onDelete('/bff/v1/addresses/COURTESY/default/SMS').reply(204);
       // render component
       const result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem type={ChannelType.SMS} value={INPUT_VALID_PHONE} />
-        </DigitalContactsCodeVerificationProvider>
+        <CourtesyContactItem type={ChannelType.SMS} value={defaultPhoneAddress!.value} />
       );
       const buttons = result.container.querySelectorAll('button');
       // click on cancel
       fireEvent.click(buttons![1]);
       let dialog = await waitFor(() => screen.getByRole('dialog'));
       expect(dialog).toBeInTheDocument();
-      let dialogButtons = dialog?.querySelectorAll('button');
+      let dialogButtons = dialog.querySelectorAll('button');
       // cancel remove operation
-      fireEvent.click(dialogButtons![0]);
+      fireEvent.click(dialogButtons[0]);
       await waitFor(() => {
         expect(dialog).not.toBeInTheDocument();
       });
       // click on confirm
       fireEvent.click(buttons![1]);
       dialog = await waitFor(() => screen.getByRole('dialog'));
-      dialogButtons = dialog?.querySelectorAll('button');
-      fireEvent.click(dialogButtons![1]);
+      dialogButtons = dialog.querySelectorAll('button');
+      fireEvent.click(dialogButtons[1]);
       await waitFor(() => {
-        expect(dialog).not.toBeInTheDocument();
+        expect(dialog).not.toBeVisible();
       });
       await waitFor(() => {
         expect(mock.history.delete).toHaveLength(1);
+      });
+      await waitFor(() => {
+        expect(
+          testStore
+            .getState()
+            .contactsState.digitalAddresses.filter(
+              (addr) => addr.addressType === AddressType.COURTESY
+            )
+        ).toStrictEqual([]);
+      });
+      // simulate rerendering due to redux changes
+      result.rerender(<CourtesyContactItem type={ChannelType.SMS} value="" />);
+      await waitFor(() => {
+        const input = result.container.querySelector(`[name="sms"]`);
+        expect(input).toBeInTheDocument();
+        expect(result.container).not.toHaveTextContent('');
       });
     });
   });

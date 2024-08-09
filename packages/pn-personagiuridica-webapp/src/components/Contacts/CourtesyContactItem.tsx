@@ -201,6 +201,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
             onConfirm={handleEditConfirm}
             onEditCancel={() => handleEditConfirm('cancelled')}
             onDelete={() => setModalOpen(ModalType.DELETE)}
+            editManagedFromOutside
           />
         ) : (
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
