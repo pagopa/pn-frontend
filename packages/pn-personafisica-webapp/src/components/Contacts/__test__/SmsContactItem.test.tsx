@@ -14,6 +14,7 @@ import {
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
+import { internationalPhonePrefix } from '../../../utility/contacts.utility';
 import SmsContactItem from '../SmsContactItem';
 
 vi.mock('react-i18next', () => ({
@@ -176,17 +177,17 @@ describe('test SmsContactItem', () => {
   });
 
   it('override an existing phone number with a new one', async () => {
-    const phoneValue = '+393333333334';
+    const phoneValue = '3333333334';
     mock
       .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
-        value: phoneValue,
+        value: '+39' + phoneValue,
       })
       .reply(200, {
         result: 'CODE_VERIFICATION_REQUIRED',
       });
     mock
       .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
-        value: phoneValue,
+        value: '+39' + phoneValue,
         verificationCode: '01234',
       })
       .reply(204);
@@ -200,7 +201,7 @@ describe('test SmsContactItem', () => {
     fireEvent.click(editButton);
     const input = result.container.querySelector(`[name="sms"]`);
     const saveButton = result.getByRole('button', { name: 'button.salva' });
-    expect(input).toHaveValue(defaultPhoneAddress!.value);
+    expect(input).toHaveValue(defaultPhoneAddress!.value.replace(internationalPhonePrefix, ''));
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: phoneValue } });
     await waitFor(() => {
@@ -216,7 +217,7 @@ describe('test SmsContactItem', () => {
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
-        value: phoneValue,
+        value: '+39' + phoneValue,
       });
     });
     // inser otp and confirm
@@ -224,7 +225,7 @@ describe('test SmsContactItem', () => {
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(2);
       expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
-        value: phoneValue,
+        value: '+39' + phoneValue,
         verificationCode: '01234',
       });
     });
@@ -238,14 +239,14 @@ describe('test SmsContactItem', () => {
       {
         ...defaultPhoneAddress,
         senderName: undefined,
-        value: phoneValue,
+        value: '+39' + phoneValue,
       },
     ]);
     // simulate rerendering due to redux changes
     const updatedDigitalCourtesyAddresses = [
       {
         ...defaultPhoneAddress!,
-        value: phoneValue,
+        value: '+39' + phoneValue,
       },
     ];
     result.rerender(<SmsContactItem value={updatedDigitalCourtesyAddresses[0].value} />);
@@ -254,7 +255,7 @@ describe('test SmsContactItem', () => {
     });
     smsValue = getById(form!, 'sms-typography');
     expect(smsValue).toBeInTheDocument();
-    expect(smsValue).toHaveTextContent(phoneValue);
+    expect(smsValue).toHaveTextContent('+39' + phoneValue);
     editButton = getById(form!, 'modifyContact-default');
     expect(editButton).toBeInTheDocument();
     const deleteButton = getById(form!, 'cancelContact-default');
