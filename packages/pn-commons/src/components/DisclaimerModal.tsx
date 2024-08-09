@@ -33,6 +33,16 @@ const DisclaimerModal: React.FC<Props> = ({
     setChecked(!checked);
   };
 
+  const handleCancel = () => {
+    setChecked(false);
+    onCancel();
+  };
+
+  const handleConfirm = () => {
+    setChecked(false);
+    onConfirm();
+  };
+
   return (
     <PnDialog open={open} data-testid="disclaimerDialog">
       {title && <DialogTitle>{title}</DialogTitle>}
@@ -58,7 +68,7 @@ const DisclaimerModal: React.FC<Props> = ({
         <Button
           id="cancelButton"
           variant="outlined"
-          onClick={onCancel}
+          onClick={handleCancel}
           data-testid="disclaimer-cancel-button"
         >
           {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
@@ -66,7 +76,7 @@ const DisclaimerModal: React.FC<Props> = ({
         <Button
           id="confirmButton"
           variant="contained"
-          onClick={onConfirm}
+          onClick={handleConfirm}
           disabled={disabledConfirm}
           data-testid="disclaimer-confirm-button"
         >
