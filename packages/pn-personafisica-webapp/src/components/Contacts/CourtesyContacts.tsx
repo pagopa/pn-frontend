@@ -6,8 +6,9 @@ import { IllusEmail } from '@pagopa/mui-italia';
 
 import { ChannelType, DigitalAddress } from '../../models/contacts';
 import { countContactsByType } from '../../utility/contacts.utility';
-import CourtesyContactItem from './CourtesyContactItem';
 import DigitalContactsCard from './DigitalContactsCard';
+import EmailContactItem from './EmailContactItem';
+import SmsContactItem from './SmsContactItem';
 
 interface Props {
   contacts: Array<DigitalAddress>;
@@ -39,14 +40,12 @@ const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
     >
       <Box sx={{ width: { xs: '100%', lg: '50%' } }} data-testid="courtesyContacts">
         <Stack spacing={3} mt={3}>
-          <CourtesyContactItem
-            type={ChannelType.EMAIL}
-            value={emailContact?.value ? emailContact.value : ''}
+          <EmailContactItem
+            value={emailContact?.value ?? ''}
             blockDelete={emailContactsQuantity() > 1}
           />
-          <CourtesyContactItem
-            type={ChannelType.SMS}
-            value={phoneContact?.value ? phoneContact.value : ''}
+          <SmsContactItem
+            value={phoneContact?.value ?? ''}
             blockDelete={phoneContactsQuantity() > 1}
           />
         </Stack>
