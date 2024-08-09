@@ -55,12 +55,15 @@ const SmsContactItem = ({ value, blockDelete }: Props) => {
   const codeModalRef =
     useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
 
+  // value contains the prefix
+  const contactValue = value.replace(internationalPhonePrefix, '');
+
   const validationSchema = yup.object().shape({
-    sms: phoneValidationSchema(t, !!value),
+    sms: phoneValidationSchema(t),
   });
 
   const initialValues = {
-    sms: value ?? '',
+    sms: contactValue ?? '',
   };
 
   const formik = useFormik({
@@ -71,16 +74,13 @@ const SmsContactItem = ({ value, blockDelete }: Props) => {
     onSubmit: () => {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_START, 'default');
       // first check if contact already exists
-      if (contactAlreadyExists(digitalAddresses, getContactValue(), 'default', ChannelType.SMS)) {
+      if (contactAlreadyExists(digitalAddresses, formik.values.sms, 'default', ChannelType.SMS)) {
         setModalOpen(ModalType.EXISTING);
         return;
       }
       setModalOpen(ModalType.DISCLAIMER);
     },
   });
-
-  const getContactValue = () =>
-    value ? formik.values.sms : internationalPhonePrefix + formik.values.sms;
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
@@ -96,7 +96,7 @@ const SmsContactItem = ({ value, blockDelete }: Props) => {
       addressType: AddressType.COURTESY,
       senderId: 'default',
       channelType: ChannelType.SMS,
-      value: getContactValue(),
+      value: internationalPhonePrefix + formik.values.sms,
       code: verificationCode,
     };
 
@@ -217,6 +217,7 @@ const SmsContactItem = ({ value, blockDelete }: Props) => {
               onChange: (e) => void handleChangeTouched(e),
               error: formik.touched.sms && Boolean(formik.errors.sms),
               helperText: formik.touched.sms && formik.errors.sms,
+              prefix: internationalPhonePrefix,
             }}
             saveDisabled={!formik.isValid}
             onDelete={() => setModalOpen(ModalType.DELETE)}
