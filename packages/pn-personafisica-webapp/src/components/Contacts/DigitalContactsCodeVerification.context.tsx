@@ -285,19 +285,18 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
   return (
     <DigitalContactsCodeVerificationContext.Provider value={{ initValidation }}>
       {children}
-      {disclaimerOpen && (
-        <DisclaimerModal
-          onConfirm={() => {
-            setDisclaimerOpen(false);
-            handleCodeVerification();
-            setOpen(true);
-          }}
-          onCancel={() => setDisclaimerOpen(false)}
-          confirmLabel={t('button.conferma')}
-          checkboxLabel={t('button.capito')}
-          content={t(`alert-dialog-${modalProps.digitalDomicileType}`, { ns: 'recapiti' })}
-        />
-      )}
+      <DisclaimerModal
+        open={disclaimerOpen}
+        onConfirm={() => {
+          setDisclaimerOpen(false);
+          handleCodeVerification();
+          setOpen(true);
+        }}
+        onCancel={() => setDisclaimerOpen(false)}
+        confirmLabel={t('button.conferma')}
+        checkboxLabel={t('button.capito')}
+        content={t(`alert-dialog-${modalProps.digitalDomicileType}`, { ns: 'recapiti' })}
+      />
       {!_.isEqual(modalProps, initialProps) && (
         <CodeModal
           title={

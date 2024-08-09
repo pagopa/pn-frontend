@@ -47,18 +47,18 @@ enum ModalType {
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const dispatch = useAppDispatch();
   const digitalAddresses =
     useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
   const digitalElemRef = useRef<{ editContact: () => void; toggleEdit: () => void }>({
     editContact: () => {},
     toggleEdit: () => {},
   });
+  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  const dispatch = useAppDispatch();
   const codeModalRef =
     useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
-  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+
   const contactType = type.toLowerCase();
-  const labelType = type === ChannelType.EMAIL ? 'email' : 'sms';
 
   const emailValidationSch = yup.object().shape({
     email: emailValidationSchema(t),
@@ -74,9 +74,9 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
 
   const formik = useFormik({
     initialValues,
-    enableReinitialize: true,
-    validateOnMount: true,
     validationSchema: type === ChannelType.EMAIL ? emailValidationSch : phoneValidationSch,
+    validateOnMount: true,
+    enableReinitialize: true,
     onSubmit: () => {
       const contactValue = getContactValue(type);
       PFEventStrategyFactory.triggerEvent(
@@ -85,59 +85,27 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
           : PFEventsType.SEND_ADD_EMAIL_START,
         'default'
       );
-
+      // first check if contact already exists
       if (contactAlreadyExists(digitalAddresses, contactValue, 'default', type)) {
         setModalOpen(ModalType.EXISTING);
         return;
       }
-
       setModalOpen(ModalType.DISCLAIMER);
     },
   });
 
-  const getContactValue = (type: ChannelType) =>
-    type === ChannelType.EMAIL
-      ? formik.values[contactType]
-      : internationalPhonePrefix + formik.values[contactType];
+  const getContactValue = (type: ChannelType) => {
+    if (type === ChannelType.EMAIL) {
+      return formik.values.email;
+    }
+    return type === ChannelType.SMS && value
+      ? formik.values.sms
+      : internationalPhonePrefix + formik.values.sms;
+  };
 
-  const handleChangeTouched = async (
-    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
+  const handleChangeTouched = async (event: ChangeEvent) => {
     formik.handleChange(event);
-    await handleTouched(event.target.id, true);
-  };
-
-  const handleTouched = async (id: string, touched: boolean) => {
-    await formik.setFieldTouched(id, touched, false);
-  };
-
-  const handleCloseCodeModal = () => {
-    codeModalRef.current?.updateError({ title: '', content: '' }, false);
-    digitalElemRef.current.toggleEdit();
-    formik.resetForm({ values: initialValues });
-    setModalOpen(null);
-  };
-
-  const deleteConfirmHandler = () => {
-    setModalOpen(null);
-    dispatch(
-      deleteAddress({
-        addressType: AddressType.COURTESY,
-        senderId: 'default',
-        channelType: type,
-      })
-    )
-      .unwrap()
-      .then(() => {
-        void handleTouched(contactType, false);
-        PFEventStrategyFactory.triggerEvent(
-          type === ChannelType.EMAIL
-            ? PFEventsType.SEND_REMOVE_EMAIL_SUCCESS
-            : PFEventsType.SEND_REMOVE_SMS_SUCCESS,
-          'default'
-        );
-      })
-      .catch(() => {});
+    await formik.setFieldTouched(event.target.id, true, false);
   };
 
   const handleCodeVerification = (verificationCode?: string) => {
@@ -153,7 +121,6 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
       senderId: 'default',
-      // senderName: 'default', TODO not sure if this is needed
       channelType: type,
       value: getContactValue(type),
       code: verificationCode,
@@ -182,12 +149,9 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t(
-              `courtesy-contacts.${type === ChannelType.SMS ? 'sms' : 'email'}-added-successfully`,
-              {
-                ns: 'recapiti',
-              }
-            ),
+            message: t(`courtesy-contacts.${contactType}-added-successfully`, {
+              ns: 'recapiti',
+            }),
           })
         );
         // chiudere la code modal
@@ -196,6 +160,36 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
         if (value) {
           digitalElemRef.current.toggleEdit();
         }
+      })
+      .catch(() => {});
+  };
+
+  const handleCancelCode = async () => {
+    setModalOpen(null);
+    if (value) {
+      digitalElemRef.current.toggleEdit();
+    }
+    await formik.setFieldTouched(contactType, false, false);
+    await formik.setFieldValue(contactType, initialValues[contactType], true);
+  };
+
+  const deleteConfirmHandler = () => {
+    setModalOpen(null);
+    dispatch(
+      deleteAddress({
+        addressType: AddressType.COURTESY,
+        senderId: 'default',
+        channelType: type,
+      })
+    )
+      .unwrap()
+      .then(() => {
+        PFEventStrategyFactory.triggerEvent(
+          type === ChannelType.EMAIL
+            ? PFEventsType.SEND_REMOVE_EMAIL_SUCCESS
+            : PFEventsType.SEND_REMOVE_SMS_SUCCESS,
+          'default'
+        );
       })
       .catch(() => {});
   };
@@ -260,7 +254,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
                 ns: 'recapiti',
               }),
               value: formik.values[contactType],
-              onChange: handleChangeTouched,
+              onChange: (e) => void handleChangeTouched(e),
               error:
                 (formik.touched[contactType] || formik.values[contactType].length > 0) &&
                 Boolean(formik.errors[contactType]),
@@ -271,7 +265,7 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
             saveDisabled={!formik.isValid}
             onDelete={() => setModalOpen(ModalType.DELETE)}
             onEditCancel={() => formik.resetForm({ values: initialValues })}
-            editManagedFromOutside={true}
+            editManagedFromOutside
           />
         ) : (
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -314,45 +308,41 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
           </Stack>
         )}
       </form>
-
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
         value={formik.values[contactType]}
         handleDiscard={() => setModalOpen(null)}
         handleConfirm={() => handleCodeVerification()}
       />
-
-      {modalOpen === ModalType.DISCLAIMER && (
-        <DisclaimerModal
-          onConfirm={() => {
-            setModalOpen(null);
-            handleCodeVerification();
-          }}
-          onCancel={() => setModalOpen(null)}
-          confirmLabel={t('button.conferma')}
-          checkboxLabel={t('button.capito')}
-          content={t(`alert-dialog-${type}`, { ns: 'recapiti' })}
-        />
-      )}
-
+      <DisclaimerModal
+        open={modalOpen === ModalType.DISCLAIMER}
+        onConfirm={() => {
+          setModalOpen(null);
+          handleCodeVerification();
+        }}
+        onCancel={() => setModalOpen(null)}
+        confirmLabel={t('button.conferma')}
+        checkboxLabel={t('button.capito')}
+        content={t(`alert-dialog-${type}`, { ns: 'recapiti' })}
+      />
       <CodeModal
         title={
-          t(`courtesy-contacts.${labelType}-verify`, { ns: 'recapiti' }) +
+          t(`courtesy-contacts.${contactType}-verify`, { ns: 'recapiti' }) +
           ` ${formik.values[contactType]}`
         }
-        subtitle={<Trans i18nKey={`courtesy-contacts.${labelType}-verify-descr`} ns="recapiti" />}
+        subtitle={<Trans i18nKey={`courtesy-contacts.${contactType}-verify-descr`} ns="recapiti" />}
         open={modalOpen === ModalType.CODE}
         initialValues={new Array(5).fill('')}
         codeSectionTitle={t(`courtesy-contacts.insert-code`, { ns: 'recapiti' })}
         codeSectionAdditional={
           <>
             <Typography variant="body2" display="inline">
-              {t(`courtesy-contacts.${labelType}-new-code`, { ns: 'recapiti' })}
+              {t(`courtesy-contacts.${contactType}-new-code`, { ns: 'recapiti' })}
               &nbsp;
             </Typography>
             <ButtonNaked
               component={Box}
-              onClick={() => handleCodeVerification(undefined)}
+              onClick={() => handleCodeVerification()}
               sx={{ verticalAlign: 'unset', display: 'inline' }}
             >
               <Typography
@@ -368,11 +358,10 @@ const CourtesyContactItem = ({ type, value, blockDelete }: Props) => {
         }
         cancelLabel={t('button.annulla')}
         confirmLabel={t('button.conferma')}
-        cancelCallback={handleCloseCodeModal}
+        cancelCallback={handleCancelCode}
         confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
         ref={codeModalRef}
       />
-
       <DeleteDialog
         showModal={modalOpen === ModalType.DELETE}
         removeModalTitle={t(
