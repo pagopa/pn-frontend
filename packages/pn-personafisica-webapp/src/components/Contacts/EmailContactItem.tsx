@@ -28,7 +28,11 @@ import ExistingContactDialog from './ExistingContactDialog';
 
 interface Props {
   value: string;
+  senderId?: string;
+  senderName?: string;
   blockDelete?: boolean;
+  blockEdit?: boolean;
+  onEdit?: (editFlag: boolean) => void;
 }
 
 enum ModalType {
@@ -38,7 +42,14 @@ enum ModalType {
   DELETE = 'delete',
 }
 
-const EmailContactItem = ({ value, blockDelete }: Props) => {
+const EmailContactItem: React.FC<Props> = ({
+  value,
+  senderId = 'default',
+  senderName,
+  blockDelete,
+  blockEdit,
+  onEdit,
+}) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const digitalAddresses =
     useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
@@ -52,11 +63,11 @@ const EmailContactItem = ({ value, blockDelete }: Props) => {
     useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
 
   const validationSchema = yup.object().shape({
-    email: emailValidationSchema(t),
+    [`${senderId}_email`]: emailValidationSchema(t),
   });
 
   const initialValues = {
-    email: value ?? '',
+    [`${senderId}_email`]: value ?? '',
   };
 
   const formik = useFormik({
@@ -65,15 +76,25 @@ const EmailContactItem = ({ value, blockDelete }: Props) => {
     validateOnMount: true,
     enableReinitialize: true,
     onSubmit: () => {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_START, 'default');
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_START, senderId);
       // first check if contact already exists
       if (
-        contactAlreadyExists(digitalAddresses, formik.values.email, 'default', ChannelType.EMAIL)
+        contactAlreadyExists(
+          digitalAddresses,
+          formik.values[`${senderId}_email`],
+          senderId,
+          ChannelType.EMAIL
+        )
       ) {
         setModalOpen(ModalType.EXISTING);
         return;
       }
-      setModalOpen(ModalType.DISCLAIMER);
+      // disclaimer modal must be opened only when we are adding a default address
+      if (senderId === 'default') {
+        setModalOpen(ModalType.DISCLAIMER);
+        return;
+      }
+      handleCodeVerification();
     },
   });
 
@@ -84,14 +105,15 @@ const EmailContactItem = ({ value, blockDelete }: Props) => {
 
   const handleCodeVerification = (verificationCode?: string) => {
     if (verificationCode) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION, 'default');
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION, senderId);
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
-      senderId: 'default',
+      senderId,
+      senderName,
       channelType: ChannelType.EMAIL,
-      value: formik.values.email,
+      value: formik.values[`${senderId}_email`],
       code: verificationCode,
     };
 
@@ -106,7 +128,7 @@ const EmailContactItem = ({ value, blockDelete }: Props) => {
           return;
         }
 
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS, 'default');
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS, senderId);
 
         // contact has already been verified
         // show success message
@@ -131,8 +153,8 @@ const EmailContactItem = ({ value, blockDelete }: Props) => {
     if (value) {
       digitalElemRef.current.toggleEdit();
     }
-    await formik.setFieldTouched('email', false, false);
-    await formik.setFieldValue('email', initialValues.email, true);
+    await formik.setFieldTouched(`${senderId}_email`, false, false);
+    await formik.setFieldValue(`${senderId}_email`, initialValues[`${senderId}_email`], true);
   };
 
   const deleteConfirmHandler = () => {
@@ -140,13 +162,13 @@ const EmailContactItem = ({ value, blockDelete }: Props) => {
     dispatch(
       deleteAddress({
         addressType: AddressType.COURTESY,
-        senderId: 'default',
+        senderId,
         channelType: ChannelType.EMAIL,
       })
     )
       .unwrap()
       .then(() => {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_EMAIL_SUCCESS, 'default');
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_EMAIL_SUCCESS, senderId);
       })
       .catch(() => {});
   };
@@ -191,40 +213,47 @@ const EmailContactItem = ({ value, blockDelete }: Props) => {
    */
   return (
     <>
-      <form onSubmit={formik.handleSubmit} data-testid="courtesyContacts-email">
-        <Typography id="email-label" variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
-          {t(`courtesy-contacts.email-added`, { ns: 'recapiti' })}
-        </Typography>
+      <form onSubmit={formik.handleSubmit} data-testid={`${senderId}_emailContact`}>
+        {senderId === 'default' && (
+          <Typography id="email-label" variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
+            {t(`courtesy-contacts.email-added`, { ns: 'recapiti' })}
+          </Typography>
+        )}
         {value ? (
           <DigitalContactElem
-            senderId="default"
+            senderId={senderId}
             contactType={ChannelType.EMAIL}
             ref={digitalElemRef}
             inputProps={{
-              id: 'email',
-              name: 'email',
+              id: `${senderId}_email`,
+              name: `${senderId}_email`,
               label: t(`courtesy-contacts.link-email-placeholder`, {
                 ns: 'recapiti',
               }),
-              value: formik.values.email,
+              value: formik.values[`${senderId}_email`],
               onChange: (e) => void handleChangeTouched(e),
-              error: formik.touched.email && Boolean(formik.errors.email),
-              helperText: formik.touched.email && formik.errors.email,
+              error:
+                formik.touched[`${senderId}_email`] && Boolean(formik.errors[`${senderId}_email`]),
+              helperText: formik.touched[`${senderId}_email`] && formik.errors[`${senderId}_email`],
             }}
             saveDisabled={!formik.isValid}
+            editDisabled={blockEdit}
             onDelete={() => setModalOpen(ModalType.DELETE)}
             onEditCancel={() => formik.resetForm({ values: initialValues })}
+            onEdit={onEdit}
             editManagedFromOutside
           />
         ) : (
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
-              id="email"
-              name="email"
-              value={formik.values.email}
+              id={`${senderId}_email`}
+              name={`${senderId}_email`}
+              value={formik.values[`${senderId}_email`]}
               onChange={handleChangeTouched}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
+              error={
+                formik.touched[`${senderId}_email`] && Boolean(formik.errors[`${senderId}_email`])
+              }
+              helperText={formik.touched[`${senderId}_email`] && formik.errors[`${senderId}_email`]}
               inputProps={{ sx: { height: '14px' } }}
               placeholder={t(`courtesy-contacts.link-email-placeholder`, { ns: 'recapiti' })}
               fullWidth
@@ -247,7 +276,7 @@ const EmailContactItem = ({ value, blockDelete }: Props) => {
       </form>
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
-        value={formik.values.email}
+        value={formik.values[`${senderId}_email`]}
         handleDiscard={() => setModalOpen(null)}
         handleConfirm={() => handleCodeVerification()}
       />
@@ -263,7 +292,10 @@ const EmailContactItem = ({ value, blockDelete }: Props) => {
         content={t(`alert-dialog-email`, { ns: 'recapiti' })}
       />
       <CodeModal
-        title={t(`courtesy-contacts.email-verify`, { ns: 'recapiti' }) + ` ${formik.values.email}`}
+        title={
+          t(`courtesy-contacts.email-verify`, { ns: 'recapiti' }) +
+          ` ${formik.values[senderId + '_email']}`
+        }
         subtitle={<Trans i18nKey="courtesy-contacts.email-verify-descr" ns="recapiti" />}
         open={modalOpen === ModalType.CODE}
         initialValues={new Array(5).fill('')}
@@ -302,7 +334,7 @@ const EmailContactItem = ({ value, blockDelete }: Props) => {
           ns: 'recapiti',
         })}
         removeModalBody={t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-email-message`, {
-          value: formik.values.email,
+          value: formik.values[`${senderId}_email`],
           ns: 'recapiti',
         })}
         handleModalClose={() => setModalOpen(null)}

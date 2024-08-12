@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, forwardRef, useImperativeHandle, useState } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { InputAdornment, TextField, TextFieldProps, Typography } from '@mui/material';
@@ -15,11 +15,10 @@ type Props = {
   contactType: ChannelType;
   saveDisabled?: boolean;
   onConfirm?: (status: 'validated' | 'cancelled') => void;
+  onEdit?: (editFlag: boolean) => void;
   onEditCancel: () => void;
-  onEditConfirm?: () => void;
   onDelete: () => void;
   editDisabled?: boolean;
-  setContextEditMode?: Dispatch<SetStateAction<boolean>>;
   // this is a temporary property. it is needed until we remove the context
   editManagedFromOutside?: boolean;
 };
@@ -33,9 +32,9 @@ const DigitalContactElem = forwardRef<{ editContact: () => void; toggleEdit?: ()
       senderName,
       contactType,
       onConfirm,
+      onEdit,
       onEditCancel,
-      editDisabled,
-      setContextEditMode,
+      editDisabled = false,
       onDelete,
       editManagedFromOutside = false,
     },
@@ -44,10 +43,11 @@ const DigitalContactElem = forwardRef<{ editContact: () => void; toggleEdit?: ()
     const { t } = useTranslation(['common']);
     const [editMode, setEditMode] = useState(false);
     const { initValidation } = useDigitalContactsCodeVerificationContext(editManagedFromOutside);
+
     const toggleEdit = () => {
       setEditMode(!editMode);
-      if (setContextEditMode) {
-        setContextEditMode(!editMode);
+      if (onEdit) {
+        onEdit(!editMode);
       }
     };
 

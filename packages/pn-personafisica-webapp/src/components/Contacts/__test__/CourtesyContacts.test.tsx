@@ -44,8 +44,8 @@ describe('CourtesyContacts Component', async () => {
     const disclaimer = getByTestId('contacts disclaimer');
     expect(disclaimer).toBeInTheDocument();
     // check inputs
-    const phoneInput = container.querySelector(`[name="sms"]`);
-    const emailInput = container.querySelector(`[name="email"]`);
+    const phoneInput = container.querySelector(`[name="default_sms"]`);
+    const emailInput = container.querySelector(`[name="default_email"]`);
     expect(phoneInput).toBeInTheDocument();
     expect(emailInput).toBeInTheDocument();
   });
@@ -60,8 +60,8 @@ describe('CourtesyContacts Component', async () => {
     const defaultEmail = digitalCourtesyAddresses.find(
       (addr) => addr.channelType === ChannelType.EMAIL && addr.senderId === 'default'
     );
-    const phoneInput = container.querySelector(`[name="sms"]`);
-    const emailInput = container.querySelector(`[name="email"]`);
+    const phoneInput = container.querySelector(`[name="default_sms"]`);
+    const emailInput = container.querySelector(`[name="default_email"]`);
     expect(phoneInput).not.toBeInTheDocument();
     expect(emailInput).not.toBeInTheDocument();
     const phoneNumber = getByText(defaultPhone!.value);

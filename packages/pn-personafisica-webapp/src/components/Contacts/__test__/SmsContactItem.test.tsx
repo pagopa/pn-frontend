@@ -64,13 +64,13 @@ describe('test SmsContactItem', () => {
     // render component
     const { container } = render(<SmsContactItem value="" />);
     const form = container.querySelector('form');
-    const input = form!.querySelector(`[name="sms"]`);
+    const input = form!.querySelector(`[name="default_sms"]`);
     // add invalid values
     fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
     await waitFor(() => {
       expect(input!).toHaveValue(INPUT_INVALID_PHONE);
     });
-    const errorMessage = form!.querySelector(`#sms-helper-text`);
+    const errorMessage = form!.querySelector(`#default_sms-helper-text`);
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('courtesy-contacts.valid-sms');
     const buttons = form!.querySelectorAll('button');
@@ -86,11 +86,11 @@ describe('test SmsContactItem', () => {
   it('type in an invalid number while in "edit mode"', async () => {
     const { container, getByRole } = render(<SmsContactItem value={INPUT_VALID_PHONE} />);
     const form = container.querySelector('form');
-    const phoneValue = getById(form!, 'sms-typography');
+    const phoneValue = getById(form!, 'default_sms-typography');
     expect(phoneValue).toHaveTextContent(INPUT_VALID_PHONE);
     const editButton = getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
-    const input = container.querySelector(`[name="sms"]`);
+    const input = container.querySelector(`[name="default_sms"]`);
     const saveButton = getByRole('button', { name: 'button.salva' });
     expect(input).toHaveValue(INPUT_VALID_PHONE);
     expect(saveButton).toBeEnabled();
@@ -99,7 +99,7 @@ describe('test SmsContactItem', () => {
       expect(input).toHaveValue(INPUT_INVALID_PHONE);
     });
     expect(saveButton).toBeDisabled();
-    const inputError = container.querySelector(`#sms-helper-text`);
+    const inputError = container.querySelector(`#default_sms-helper-text`);
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-sms');
   });
 
@@ -121,10 +121,10 @@ describe('test SmsContactItem', () => {
     const result = render(<SmsContactItem value="" />);
     // insert new phone
     const form = result.container.querySelector('form');
-    const input = form!.querySelector(`[name="sms"]`);
+    const input = form!.querySelector(`[name="default_sms"]`);
     fireEvent.change(input!, { target: { value: phoneValue } });
     await waitFor(() => expect(input!).toHaveValue(phoneValue));
-    const errorMessage = form?.querySelector('#phone-helper-text');
+    const errorMessage = form?.querySelector('#default_sms-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
     const button = result.getByTestId('courtesy-sms-button');
     expect(button).toBeEnabled();
@@ -167,7 +167,7 @@ describe('test SmsContactItem', () => {
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
-    const smsValue = getById(form!, 'sms-typography');
+    const smsValue = getById(form!, 'default_sms-typography');
     expect(smsValue).toBeInTheDocument();
     expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
     const editButton = getById(form!, 'modifyContact-default');
@@ -195,11 +195,11 @@ describe('test SmsContactItem', () => {
     const result = render(<SmsContactItem value={defaultPhoneAddress!.value} />);
     // edit value
     const form = result.container.querySelector('form');
-    let smsValue = getById(form!, 'sms-typography');
+    let smsValue = getById(form!, 'default_sms-typography');
     expect(smsValue).toHaveTextContent(defaultPhoneAddress!.value);
     let editButton = result.getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
-    const input = result.container.querySelector(`[name="sms"]`);
+    const input = result.container.querySelector(`[name="default_sms"]`);
     const saveButton = result.getByRole('button', { name: 'button.salva' });
     expect(input).toHaveValue(defaultPhoneAddress!.value.replace(internationalPhonePrefix, ''));
     expect(saveButton).toBeEnabled();
@@ -253,7 +253,7 @@ describe('test SmsContactItem', () => {
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
-    smsValue = getById(form!, 'sms-typography');
+    smsValue = getById(form!, 'default_sms-typography');
     expect(smsValue).toBeInTheDocument();
     expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
     editButton = getById(form!, 'modifyContact-default');
@@ -298,7 +298,7 @@ describe('test SmsContactItem', () => {
     // simulate rerendering due to redux changes
     result.rerender(<SmsContactItem value="" />);
     await waitFor(() => {
-      const input = result.container.querySelector(`[name="sms"]`);
+      const input = result.container.querySelector(`[name="default_sms"]`);
       expect(input).toBeInTheDocument();
       expect(result.container).not.toHaveTextContent('');
     });

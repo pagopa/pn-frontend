@@ -3,7 +3,6 @@ import * as yup from 'yup';
 
 import { dataRegex } from '@pagopa-pn/pn-commons';
 
-import { PFEventsType } from '../models/PFEventsType';
 import { ChannelType, DigitalAddress } from '../models/contacts';
 
 export const internationalPhonePrefix = '+39';
@@ -13,15 +12,6 @@ export const allowedAddressTypes = [ChannelType.PEC, ChannelType.EMAIL, ChannelT
 export function countContactsByType(contacts: Array<DigitalAddress>, type: ChannelType) {
   return contacts.reduce((total, contact) => (contact.channelType === type ? total + 1 : total), 0);
 }
-
-export const getEventByContactType = (contactType: ChannelType): PFEventsType => {
-  if (contactType === ChannelType.PEC) {
-    return PFEventsType.SEND_REMOVE_PEC_SUCCESS;
-  } else if (contactType === ChannelType.EMAIL) {
-    return PFEventsType.SEND_REMOVE_EMAIL_SUCCESS;
-  }
-  return PFEventsType.SEND_REMOVE_SMS_SUCCESS;
-};
 
 export const contactAlreadyExists = (
   digitalAddresses: Array<DigitalAddress>,

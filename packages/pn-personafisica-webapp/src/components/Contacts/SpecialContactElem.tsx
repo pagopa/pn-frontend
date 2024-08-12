@@ -1,24 +1,14 @@
-import { useFormik } from 'formik';
-import { ChangeEvent, Fragment, useRef, useState } from 'react';
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as yup from 'yup';
 
 import { TableCell, TableRow, Typography } from '@mui/material';
 import { useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn-commons';
 
 import { ChannelType, DigitalAddress } from '../../models/contacts';
-import { deleteAddress } from '../../redux/contact/actions';
-import { useAppDispatch } from '../../redux/hooks';
-import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
-import {
-  allowedAddressTypes,
-  emailValidationSchema,
-  getEventByContactType,
-  pecValidationSchema,
-  phoneValidationSchema,
-} from '../../utility/contacts.utility';
-import DeleteDialog from './DeleteDialog';
-import DigitalContactElem from './DigitalContactElem';
+import { allowedAddressTypes } from '../../utility/contacts.utility';
+import EmailContactItem from './EmailContactItem';
+import PecContactItem from './PecContactItem';
+import SmsContactItem from './SmsContactItem';
 
 type Props = {
   addresses: Array<DigitalAddress>;
@@ -31,31 +21,10 @@ type Field = {
   address?: DigitalAddress;
 };
 
-const reduceAddresses = <TValue,>(senderId: string, value: (type: string) => TValue) =>
-  allowedAddressTypes.reduce((obj, type) => {
-    // eslint-disable-next-line functional/immutable-data
-    obj[`${senderId}_${type.toLowerCase()}`] = value(type);
-    return obj;
-  }, {} as { [key: string]: TValue });
-
 const SpecialContactElem: React.FC<Props> = ({ addresses }) => {
   const { t } = useTranslation(['recapiti']);
   const isMobile = useIsMobile();
   const { contextEditMode, setContextEditMode } = useSpecialContactsContext();
-  const dispatch = useAppDispatch();
-
-  const digitalElemRef = useRef<{
-    [key: string]: { editContact: () => void };
-  }>(reduceAddresses(addresses[0].senderId, () => ({ editContact: () => {} })));
-
-  const [showDeleteModal, setShowDeleteModal] = useState(
-    reduceAddresses(addresses[0].senderId, () => false)
-  );
-
-  const initialValues = reduceAddresses(
-    addresses[0].senderId,
-    (type) => addresses.find((a) => a.channelType === type)?.value ?? ''
-  );
 
   const fields: Array<Field> = allowedAddressTypes.map((type) => ({
     id: `${addresses[0].senderId}_${type.toLowerCase()}`,
@@ -64,115 +33,38 @@ const SpecialContactElem: React.FC<Props> = ({ addresses }) => {
     address: addresses.find((a) => a.channelType === type),
   }));
 
-  const toggleDeleteModal = (key: string) => {
-    setShowDeleteModal((oldValue) => ({ ...oldValue, [key]: !oldValue[key] }));
-  };
-
-  const deleteConfirmHandler = (f: Field) => {
-    if (!f.address) {
-      return;
-    }
-    toggleDeleteModal(f.id);
-    dispatch(
-      deleteAddress({
-        addressType: f.address.addressType,
-        senderId: addresses[0].senderId,
-        channelType: f.address.channelType,
-      })
-    )
-      .unwrap()
-      .then(() => {
-        if (!f.address) {
-          return;
-        }
-        PFEventStrategyFactory.triggerEvent(
-          getEventByContactType(f.address.channelType),
-          f.address.senderId
-        );
-      })
-      .catch(() => {});
-  };
-
-  const validationSchema = yup.object({
-    [`${addresses[0].senderId}_pec`]: pecValidationSchema(t),
-    [`${addresses[0].senderId}_sms`]: phoneValidationSchema(t, true),
-    [`${addresses[0].senderId}_email`]: emailValidationSchema(t),
-  });
-
-  const updateContact = async (status: 'validated' | 'cancelled', id: string) => {
-    if (status === 'cancelled') {
-      await formik.setFieldValue(id, initialValues[id], true);
-    }
-  };
-
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    enableReinitialize: true,
-    /** onSubmit validate */
-    onSubmit: () => {},
-  });
-
-  const handleChangeTouched = async (e: ChangeEvent) => {
-    formik.handleChange(e);
-    await formik.setFieldTouched(e.target.id, true, false);
-  };
-
   const jsxField = (f: Field) => (
     <>
       {f.address ? (
         <>
-          <DeleteDialog
-            showModal={showDeleteModal[f.id]}
-            removeModalTitle={t(
-              `${f.labelRoot}.remove-${f.address.channelType.toLowerCase()}-title`,
-              {
-                ns: 'recapiti',
-              }
-            )}
-            removeModalBody={t(
-              `${f.labelRoot}.remove-${f.address.channelType.toLowerCase()}-message`,
-              {
-                value: formik.values[f.id],
-                ns: 'recapiti',
-              }
-            )}
-            handleModalClose={() => toggleDeleteModal(f.id)}
-            confirmHandler={() => deleteConfirmHandler(f)}
-          />
-          <form
-            data-testid="specialContactForm"
-            onSubmit={(e) => {
-              e.preventDefault();
-              digitalElemRef.current[f.id].editContact();
-            }}
-          >
-            <DigitalContactElem
-              senderId={addresses[0].senderId}
+          {f.address?.channelType === ChannelType.PEC && (
+            <PecContactItem
+              value={f.address.value}
+              verifyingAddress={!f.address.pecValid}
+              senderId={f.address.senderId}
               senderName={f.address.senderName}
-              contactType={f.address.channelType}
-              inputProps={{
-                id: f.id,
-                name: f.id,
-                label: f.label,
-                value: formik.values[f.id],
-                onChange: (e) => void handleChangeTouched(e),
-                error:
-                  (formik.touched[f.id] || formik.values[f.id].length > 0) &&
-                  Boolean(formik.errors[f.id]),
-                helperText:
-                  (formik.touched[f.id] || formik.values[f.id].length > 0) && formik.errors[f.id],
-              }}
-              saveDisabled={!!formik.errors[f.id]}
-              onConfirm={(status) => updateContact(status, f.id)}
-              onEditCancel={() => updateContact('cancelled', f.id)}
-              // eslint-disable-next-line functional/immutable-data
-              ref={(node: { editContact: () => void }) => (digitalElemRef.current[f.id] = node)}
-              editDisabled={contextEditMode}
-              setContextEditMode={setContextEditMode}
-              onDelete={() => toggleDeleteModal(f.id)}
+              blockEdit={contextEditMode}
+              onEdit={(editFlag) => setContextEditMode(editFlag)}
             />
-          </form>
+          )}
+          {f.address?.channelType === ChannelType.EMAIL && (
+            <EmailContactItem
+              value={f.address.value}
+              senderId={f.address.senderId}
+              senderName={f.address.senderName}
+              blockEdit={contextEditMode}
+              onEdit={(editFlag) => setContextEditMode(editFlag)}
+            />
+          )}
+          {f.address?.channelType === ChannelType.SMS && (
+            <SmsContactItem
+              value={f.address.value}
+              senderId={f.address.senderId}
+              senderName={f.address.senderName}
+              blockEdit={contextEditMode}
+              onEdit={(editFlag) => setContextEditMode(editFlag)}
+            />
+          )}
         </>
       ) : (
         '-'

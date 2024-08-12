@@ -63,11 +63,11 @@ describe('testing EmailContactItem', () => {
     // render component
     const { container } = render(<EmailContactItem value="" />);
     const form = container.querySelector('form');
-    const input = form!.querySelector(`[name="email"]`);
+    const input = form!.querySelector(`[name="default_email"]`);
     // set invalid values
     fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
     await waitFor(() => expect(input).toHaveValue(INVALID_EMAIL));
-    const errorMessage = form!.querySelector(`#email-helper-text`);
+    const errorMessage = form!.querySelector(`#default_email-helper-text`);
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('courtesy-contacts.valid-email');
     const buttons = form!.querySelectorAll('button');
@@ -81,11 +81,11 @@ describe('testing EmailContactItem', () => {
   it('type in an invalid email while in "edit mode"', async () => {
     const { container, getByRole } = render(<EmailContactItem value={VALID_EMAIL} />);
     const form = container.querySelector('form');
-    const phoneValue = getById(form!, 'email-typography');
+    const phoneValue = getById(form!, 'default_email-typography');
     expect(phoneValue).toHaveTextContent(VALID_EMAIL);
     const editButton = getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
-    const input = container.querySelector(`[name="email"]`);
+    const input = container.querySelector(`[name="default_email"]`);
     const saveButton = getByRole('button', { name: 'button.salva' });
     expect(input).toHaveValue(VALID_EMAIL);
     expect(saveButton).toBeEnabled();
@@ -94,7 +94,7 @@ describe('testing EmailContactItem', () => {
       expect(input).toHaveValue(INVALID_EMAIL);
     });
     expect(saveButton).toBeDisabled();
-    const inputError = container.querySelector(`#email-helper-text`);
+    const inputError = container.querySelector(`#default_email-helper-text`);
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
   });
 
@@ -112,10 +112,10 @@ describe('testing EmailContactItem', () => {
     const result = render(<EmailContactItem value="" />);
     // insert new email
     const form = result.container.querySelector('form');
-    const input = form!.querySelector(`[name="email"]`);
+    const input = form!.querySelector(`[name="default_email"]`);
     fireEvent.change(input!, { target: { value: mailValue } });
     await waitFor(() => expect(input!).toHaveValue(mailValue));
-    const errorMessage = form?.querySelector('#sms-helper-text');
+    const errorMessage = form?.querySelector('#default_email-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
     const button = result.getByTestId('courtesy-email-button');
     expect(button).toBeEnabled();
@@ -160,7 +160,7 @@ describe('testing EmailContactItem', () => {
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
-    const emailValue = getById(form!, 'email-typography');
+    const emailValue = getById(form!, 'default_email-typography');
     expect(emailValue).toBeInTheDocument();
     expect(emailValue).toHaveTextContent(mailValue);
     const editButton = getById(form!, 'modifyContact-default');
@@ -188,11 +188,11 @@ describe('testing EmailContactItem', () => {
     const result = render(<EmailContactItem value={defaultEmailAddress!.value} />);
     // edit value
     const form = result.container.querySelector('form');
-    let mailValue = getById(form!, 'email-typography');
+    let mailValue = getById(form!, 'default_email-typography');
     expect(mailValue).toHaveTextContent(defaultEmailAddress!.value);
     let editButton = result.getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
-    const input = result.container.querySelector(`[name="email"]`);
+    const input = result.container.querySelector(`[name="default_email"]`);
     const saveButton = result.getByRole('button', { name: 'button.salva' });
     expect(input).toHaveValue(defaultEmailAddress!.value);
     expect(saveButton).toBeEnabled();
@@ -244,7 +244,7 @@ describe('testing EmailContactItem', () => {
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
-    mailValue = getById(form!, 'email-typography');
+    mailValue = getById(form!, 'default_email-typography');
     expect(mailValue).toBeInTheDocument();
     expect(mailValue).toHaveTextContent(emailValue);
     editButton = getById(form!, 'modifyContact-default');
@@ -288,7 +288,7 @@ describe('testing EmailContactItem', () => {
     // simulate rerendering due to redux changes
     result.rerender(<EmailContactItem value="" />);
     await waitFor(() => {
-      const input = result.container.querySelector(`[name="email"]`);
+      const input = result.container.querySelector(`[name="default_email"]`);
       expect(input).toBeInTheDocument();
       expect(result.container).not.toHaveTextContent('');
     });
