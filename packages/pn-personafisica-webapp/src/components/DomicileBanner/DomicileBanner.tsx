@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Alert, Box, Link, Typography } from '@mui/material';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { ChannelType } from '../../models/contacts';
 import * as routes from '../../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { closeDomicileBanner } from '../../redux/sidemenu/reducers';
@@ -35,11 +35,9 @@ const DomicileBanner = forwardRef(({ source = 'home_notifiche' }: Props, ref) =>
   }, []);
 
   const messageType = useMemo(() => {
-    const lackingAddressTypes = [
-      LegalChannelType.PEC,
-      CourtesyChannelType.EMAIL,
-      CourtesyChannelType.IOMSG,
-    ].filter((type) => !defaultAddresses.some((address) => address.channelType === type));
+    const lackingAddressTypes = [ChannelType.PEC, ChannelType.EMAIL, ChannelType.IOMSG].filter(
+      (type) => !defaultAddresses.some((address) => address.channelType === type)
+    );
     const messageIndex = Math.floor(Math.random() * lackingAddressTypes.length);
     return lackingAddressTypes.length > 0 ? (lackingAddressTypes[messageIndex] as string) : null;
   }, [defaultAddresses]);

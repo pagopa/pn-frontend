@@ -5,7 +5,6 @@ import { Box, Link, Stack, Typography } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
-import { DigitalContactsCodeVerificationProvider } from '../components/Contacts/DigitalContactsCodeVerification.context';
 import LegalContactsList from '../components/Contacts/LegalContacts';
 import SpecialContacts from '../components/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -67,43 +66,38 @@ const Contacts = () => {
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
-      <DigitalContactsCodeVerificationProvider>
-        <Box p={3}>
-          <TitleBox
-            variantTitle="h4"
-            title={t('title')}
-            subTitle={subtitle}
-            variantSubTitle={'body1'}
-          />
-          <ApiErrorWrapper
-            apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
-            reloadAction={fetchAddresses}
-            mt={2}
-          >
-            <Stack direction="column" spacing={8} mt={8}>
-              <Stack spacing={3}>
-                <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
-                  <Box sx={{ width: '100%' }}>
-                    <LegalContactsList legalAddresses={legalAddresses} />
-                  </Box>
-                </Stack>
-                <CourtesyContacts contacts={courtesyAddresses} />
+      <Box p={3}>
+        <TitleBox
+          variantTitle="h4"
+          title={t('title')}
+          subTitle={subtitle}
+          variantSubTitle={'body1'}
+        />
+        <ApiErrorWrapper
+          apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
+          reloadAction={fetchAddresses}
+          mt={2}
+        >
+          <Stack direction="column" spacing={8} mt={8}>
+            <Stack spacing={3}>
+              <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
+                <Box sx={{ width: '100%' }}>
+                  <LegalContactsList legalAddresses={legalAddresses} />
+                </Box>
               </Stack>
-              {(legalAddresses.length > 0 || courtesyAddresses.length > 0) && (
-                <Stack spacing={2}>
-                  <Typography id="specialContactTitle" variant="h5" fontWeight={600} fontSize={28}>
-                    {t('special-contacts-title')}
-                  </Typography>
-                  <SpecialContacts
-                    legalAddresses={legalAddresses}
-                    courtesyAddresses={courtesyAddresses}
-                  />
-                </Stack>
-              )}
+              <CourtesyContacts contacts={courtesyAddresses} />
             </Stack>
-          </ApiErrorWrapper>
-        </Box>
-      </DigitalContactsCodeVerificationProvider>
+            {(legalAddresses.length > 0 || courtesyAddresses.length > 0) && (
+              <Stack spacing={2}>
+                <Typography id="specialContactTitle" variant="h5" fontWeight={600} fontSize={28}>
+                  {t('special-contacts-title')}
+                </Typography>
+                <SpecialContacts digitalAddresses={digitalAddresses} />
+              </Stack>
+            )}
+          </Stack>
+        </ApiErrorWrapper>
+      </Box>
     </LoadingPageWrapper>
   );
 };

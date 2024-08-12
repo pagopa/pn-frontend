@@ -8,17 +8,18 @@ import { useAppDispatch } from '../../redux/hooks';
 
 type Props = {
   open: boolean;
+  senderId?: string;
   handleClose: () => void;
 };
 
-const CancelVerificationModal = ({ open, handleClose }: Props) => {
+const CancelVerificationModal: React.FC<Props> = ({ open, senderId = 'default', handleClose }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
 
   const handleConfirm = () => {
     // we remove the default legal address only interface side, with the goal of letting the user know that needs to add
     // a new email to modify the verifying pec address
-    dispatch(resetPecValidation());
+    dispatch(resetPecValidation(senderId));
     handleClose();
   };
 

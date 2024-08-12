@@ -1,16 +1,16 @@
-import { AddressType, CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { AddressType, ChannelType } from '../../models/contacts';
 
 export interface DeleteDigitalAddressParams {
   addressType: AddressType;
   senderId: string;
-  channelType: LegalChannelType | CourtesyChannelType;
+  channelType: ChannelType;
 }
 
 export interface SaveDigitalAddressParams {
   addressType: AddressType;
   senderId: string;
   senderName?: string;
-  channelType: LegalChannelType | CourtesyChannelType;
+  channelType: ChannelType;
   value: string;
   code?: string;
 }

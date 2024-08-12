@@ -8,7 +8,7 @@ import {
 
 import {
   AddressType,
-  CourtesyChannelType,
+  ChannelType,
   DigitalAddress,
   IOAllowedValues,
 } from '../../../models/contacts';
@@ -43,9 +43,9 @@ export class SendYourContactDetailsStrategy implements EventStrategy {
         event_type: EventAction.SCREEN_VIEW,
         PEC_exists: legalAddresses.length > 0,
         email_exists:
-          courtesyAddresses.filter((c) => c.channelType === CourtesyChannelType.EMAIL).length > 0,
+          courtesyAddresses.filter((c) => c.channelType === ChannelType.EMAIL).length > 0,
         telephone_exists:
-          courtesyAddresses.filter((c) => c.channelType === CourtesyChannelType.SMS).length > 0,
+          courtesyAddresses.filter((c) => c.channelType === ChannelType.SMS).length > 0,
         appIO_status: contactIO
           ? contactIO.value === IOAllowedValues.ENABLED
             ? 'activated'

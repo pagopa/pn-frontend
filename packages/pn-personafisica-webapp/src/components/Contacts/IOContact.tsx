@@ -145,8 +145,9 @@ const IOContact: React.FC<Props> = ({ contact }) => {
     >
       {getContent()}
       {getDisclaimer()}
-      {status === IOContactStatus.DISABLED && isConfirmModalOpen && (
+      {status === IOContactStatus.DISABLED && (
         <DisclaimerModal
+          open={isConfirmModalOpen}
           onConfirm={enableIO}
           title={t('io-contact.enable-modal.title', { ns: 'recapiti' })}
           content={t('io-contact.enable-modal.content', { ns: 'recapiti' })}
@@ -155,8 +156,9 @@ const IOContact: React.FC<Props> = ({ contact }) => {
           onCancel={() => setIsConfirmModalOpen(false)}
         />
       )}
-      {status === IOContactStatus.ENABLED && isConfirmModalOpen && (
+      {status === IOContactStatus.ENABLED && (
         <DisclaimerModal
+          open={isConfirmModalOpen}
           onConfirm={disableIO}
           title={t('io-contact.disable-modal.title', { ns: 'recapiti' })}
           content={t('io-contact.disable-modal.content', { ns: 'recapiti' })}
