@@ -118,9 +118,7 @@ const EmailContactItem = ({ value, blockDelete }: Props) => {
             }),
           })
         );
-        // chiudere la code modal
         setModalOpen(null);
-        // nel caso siamo in modifica (property value defined), bisogna passare alla modalità noEdit del componente DigitalContactElem
         if (value) {
           digitalElemRef.current.toggleEdit();
         }
