@@ -57,8 +57,8 @@ describe('Contacts page', async () => {
     });
     expect(result.container).toHaveTextContent(/title/i);
     expect(result.container).toHaveTextContent(/subtitle/i);
-    const pecContact = result.getByTestId('pecContact');
-    expect(pecContact).toBeInTheDocument();
+    const legalContacts = result.getByTestId('legalContacts');
+    expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
     const specialContact = result.queryByTestId('specialContact');
@@ -73,8 +73,8 @@ describe('Contacts page', async () => {
     await act(async () => {
       result = render(<Contacts />);
     });
-    const pecContact = result.getByTestId('pecContact');
-    expect(pecContact).toBeInTheDocument();
+    const legalContacts = result.getByTestId('legalContacts');
+    expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
     const specialContact = result.queryByTestId('specialContact');
@@ -86,8 +86,8 @@ describe('Contacts page', async () => {
     await act(async () => {
       result = render(<Contacts />);
     });
-    const pecContact = result.queryByTestId('pecContact');
-    expect(pecContact).toBeInTheDocument();
+    const legalContacts = result.queryByTestId('legalContacts');
+    expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
     const specialContact = result.getByTestId('specialContact');
@@ -99,8 +99,8 @@ describe('Contacts page', async () => {
     await act(async () => {
       result = render(<Contacts />);
     });
-    const pecContact = result.getByTestId('pecContact');
-    expect(pecContact).toBeInTheDocument();
+    const legalContacts = result.getByTestId('legalContacts');
+    expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
     const specialContact = result.getByTestId('specialContact');
@@ -112,8 +112,8 @@ describe('Contacts page', async () => {
     await act(async () => {
       result = render(<Contacts />);
     });
-    const pecContact = result.queryByTestId('pecContact');
-    expect(pecContact).toBeInTheDocument();
+    const legalContacts = result.queryByTestId('legalContacts');
+    expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
     const specialContact = result.getByTestId('specialContact');

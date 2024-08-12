@@ -59,7 +59,7 @@ describe('LegalContacts Component', async () => {
     expect(container).toHaveTextContent('legal-contacts.subtitle');
     expect(container).toHaveTextContent('legal-contacts.description');
     const form = container.querySelector('form');
-    const pecInput = form?.querySelector('input[id="pec"]');
+    const pecInput = form?.querySelector('input[id="default_pec"]');
     expect(pecInput!).toHaveValue('');
     const button = await waitFor(() => getByRole('button', { name: 'button.conferma' }));
     expect(button).toBeDisabled();
