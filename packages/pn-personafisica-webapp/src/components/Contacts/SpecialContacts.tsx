@@ -161,15 +161,10 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
           : values.addressType === ChannelType.SMS
           ? PFEventsType.SEND_ADD_SMS_START
           : PFEventsType.SEND_ADD_EMAIL_START;
-      PFEventStrategyFactory.triggerEvent(event, formik.values.sender.id);
+      PFEventStrategyFactory.triggerEvent(event, values.sender.id);
       // first check if contact already exists
       if (
-        contactAlreadyExists(
-          digitalAddresses,
-          formik.values.s_value,
-          formik.values.sender.id,
-          formik.values.addressType
-        )
+        contactAlreadyExists(digitalAddresses, values.s_value, values.sender.id, values.addressType)
       ) {
         setModalOpen(ModalType.EXISTING);
         return;
@@ -504,54 +499,53 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
             </>
           )}
         </SpecialContactsProvider>
-        <ExistingContactDialog
-          open={modalOpen === ModalType.EXISTING}
-          value={formik.values.s_value}
-          handleDiscard={() => setModalOpen(null)}
-          handleConfirm={() => handleCodeVerification()}
-        />
-        <CodeModal
-          title={
-            t(`${labelRoot}.${contactType}-verify`, { ns: 'recapiti' }) +
-            ` ${formik.values.s_value}`
-          }
-          subtitle={<Trans i18nKey={`${labelRoot}.${contactType}-verify-descr`} ns="recapiti" />}
-          open={modalOpen === ModalType.CODE}
-          initialValues={new Array(5).fill('')}
-          codeSectionTitle={t(`${labelRoot}.insert-code`, { ns: 'recapiti' })}
-          codeSectionAdditional={
-            <>
-              <Typography variant="body2" display="inline">
-                {t(`${labelRoot}.${contactType}-new-code`, { ns: 'recapiti' })}
-                &nbsp;
-              </Typography>
-              <ButtonNaked
-                component={Box}
-                onClick={() => handleCodeVerification()}
-                sx={{ verticalAlign: 'unset', display: 'inline' }}
-              >
-                <Typography
-                  display="inline"
-                  color="primary"
-                  variant="body2"
-                  sx={{ textDecoration: 'underline' }}
-                >
-                  {t(`${labelRoot}.new-code-link`, { ns: 'recapiti' })}.
-                </Typography>
-              </ButtonNaked>
-            </>
-          }
-          cancelLabel={t('button.annulla')}
-          confirmLabel={t('button.conferma')}
-          cancelCallback={() => setModalOpen(null)}
-          confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
-          ref={codeModalRef}
-        />
-        <PecVerificationDialog
-          open={modalOpen === ModalType.VALIDATION}
-          handleConfirm={() => setModalOpen(null)}
-        />
       </DigitalContactsCard>
+      <ExistingContactDialog
+        open={modalOpen === ModalType.EXISTING}
+        value={formik.values.s_value}
+        handleDiscard={() => setModalOpen(null)}
+        handleConfirm={() => handleCodeVerification()}
+      />
+      <CodeModal
+        title={
+          t(`${labelRoot}.${contactType}-verify`, { ns: 'recapiti' }) + ` ${formik.values.s_value}`
+        }
+        subtitle={<Trans i18nKey={`${labelRoot}.${contactType}-verify-descr`} ns="recapiti" />}
+        open={modalOpen === ModalType.CODE}
+        initialValues={new Array(5).fill('')}
+        codeSectionTitle={t(`${labelRoot}.insert-code`, { ns: 'recapiti' })}
+        codeSectionAdditional={
+          <>
+            <Typography variant="body2" display="inline">
+              {t(`${labelRoot}.${contactType}-new-code`, { ns: 'recapiti' })}
+              &nbsp;
+            </Typography>
+            <ButtonNaked
+              component={Box}
+              onClick={() => handleCodeVerification()}
+              sx={{ verticalAlign: 'unset', display: 'inline' }}
+            >
+              <Typography
+                display="inline"
+                color="primary"
+                variant="body2"
+                sx={{ textDecoration: 'underline' }}
+              >
+                {t(`${labelRoot}.new-code-link`, { ns: 'recapiti' })}.
+              </Typography>
+            </ButtonNaked>
+          </>
+        }
+        cancelLabel={t('button.annulla')}
+        confirmLabel={t('button.conferma')}
+        cancelCallback={() => setModalOpen(null)}
+        confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
+        ref={codeModalRef}
+      />
+      <PecVerificationDialog
+        open={modalOpen === ModalType.VALIDATION}
+        handleConfirm={() => setModalOpen(null)}
+      />
     </ApiErrorWrapper>
   );
 };

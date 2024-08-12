@@ -217,12 +217,16 @@ describe('Contacts redux state tests', () => {
         value: updatedDigitalAddress.value,
       })
     );
-    const action = store.dispatch(resetPecValidation());
+    const action = store.dispatch(resetPecValidation('default'));
     expect(action.type).toBe('contactsSlice/resetPecValidation');
-    expect(action.payload).toEqual(void 0);
+    expect(action.payload).toEqual('default');
     const state = store
       .getState()
-      .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL);
+      .contactsState.digitalAddresses.filter(
+        (address) =>
+          (address.senderId !== action.payload && address.addressType === AddressType.LEGAL) ||
+          address.addressType === AddressType.COURTESY
+      );
     expect(state).toEqual([]);
   });
 });

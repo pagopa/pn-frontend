@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, Fragment, useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { ChangeEvent, Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import {
@@ -21,21 +21,32 @@ import {
 } from '@mui/material';
 import {
   ApiErrorWrapper,
+  AppResponse,
+  AppResponsePublisher,
+  CodeModal,
   CustomDropdown,
+  ErrorMessage,
   PnAutocomplete,
   SpecialContactsProvider,
+  appStateActions,
   searchStringLimitReachedText,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { ChannelType, DigitalAddress } from '../../models/contacts';
+import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
 import { Party } from '../../models/party';
-import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
+import {
+  CONTACT_ACTIONS,
+  createOrUpdateAddress,
+  getAllActivatedParties,
+} from '../../redux/contact/actions';
+import { SaveDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import {
   allowedAddressTypes,
+  contactAlreadyExists,
   emailValidationSchema,
   internationalPhonePrefix,
   pecValidationSchema,
@@ -43,7 +54,8 @@ import {
 } from '../../utility/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import DigitalContactsCard from './DigitalContactsCard';
-import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
+import ExistingContactDialog from './ExistingContactDialog';
+import PecVerificationDialog from './PecVerificationDialog';
 import SpecialContactElem from './SpecialContactElem';
 
 type Props = {
@@ -54,21 +66,29 @@ type Addresses = {
   [senderId: string]: Array<DigitalAddress>;
 };
 
-type AddressType = {
+type AddressTypeItem = {
   id: ChannelType;
   value: string;
 };
 
-const SpecialContacts = ({ digitalAddresses }: Props) => {
+enum ModalType {
+  EXISTING = 'existing',
+  VALIDATION = 'validation',
+  CODE = 'code',
+}
+
+const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
-  const { initValidation } = useDigitalContactsCodeVerificationContext();
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const isMobile = useIsMobile();
   const [senderInputValue, setSenderInputValue] = useState('');
+  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  const codeModalRef =
+    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
 
-  const addressTypes: Array<AddressType> = digitalAddresses
+  const addressTypes: Array<AddressTypeItem> = digitalAddresses
     .filter((a) => a.senderId === 'default' && allowedAddressTypes.includes(a.channelType))
     .map((a) => ({
       id: a.channelType,
@@ -133,26 +153,20 @@ const SpecialContacts = ({ digitalAddresses }: Props) => {
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      if (values.addressType) {
-        initValidation(
-          values.addressType,
-          values.addressType === ChannelType.SMS
-            ? internationalPhonePrefix + values.s_value
-            : values.s_value,
-          values.sender.id,
-          values.sender.name,
-          async (status: 'validated' | 'cancelled') => {
-            if (status === 'validated') {
-              // reset form
-              formik.resetForm();
-              await formik.validateForm();
-              setSenderInputValue('');
-            }
-          }
-        );
+      // first check if contact already exists
+      if (
+        contactAlreadyExists(digitalAddresses, values.s_value, values.sender.id, values.addressType)
+      ) {
+        setModalOpen(ModalType.EXISTING);
+        return;
       }
+      handleCodeVerification();
     },
   });
+
+  const labelRoot =
+    formik.values.addressType === ChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts';
+  const contactType = formik.values.addressType.toLowerCase();
 
   const renderOption = (props: any, option: Party) => (
     <MenuItem {...props} value={option.id} key={option.id}>
@@ -181,7 +195,7 @@ const SpecialContacts = ({ digitalAddresses }: Props) => {
         addresses[newValue.id].findIndex((a) => a.channelType === formik.values.addressType) > -1;
       setAlreadyExistsMessage(
         alreadyExists
-          ? t(`special-contacts.${formik.values.addressType.toLowerCase()}-already-exists`, {
+          ? t(`special-contacts.${contactType}-already-exists`, {
               ns: 'recapiti',
             })
           : ''
@@ -191,17 +205,15 @@ const SpecialContacts = ({ digitalAddresses }: Props) => {
     setAlreadyExistsMessage('');
   };
 
-  const addressTypeChangeHandler = async (e: ChangeEvent) => {
+  const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     await formik.setFieldValue('s_value', '');
     formik.handleChange(e);
     if (formik.values.sender && addresses[formik.values.sender.id]) {
       const alreadyExists =
-        addresses[formik.values.sender.id].findIndex(
-          (a) => a.channelType === (e.target as any).value
-        ) > -1;
+        addresses[formik.values.sender.id].findIndex((a) => a.channelType === e.target.value) > -1;
       setAlreadyExistsMessage(
         alreadyExists
-          ? t(`special-contacts.${(e.target as any).value.toLowerCase()}-already-exists`, {
+          ? t(`special-contacts.${e.target.value.toLowerCase()}-already-exists`, {
               ns: 'recapiti',
             })
           : ''
@@ -210,6 +222,85 @@ const SpecialContacts = ({ digitalAddresses }: Props) => {
     }
     setAlreadyExistsMessage('');
   };
+
+  const handleCodeVerification = (verificationCode?: string) => {
+    const addressType =
+      formik.values.addressType === ChannelType.PEC ? AddressType.LEGAL : AddressType.COURTESY;
+    const value =
+      formik.values.addressType === ChannelType.SMS
+        ? internationalPhonePrefix + formik.values.s_value
+        : formik.values.s_value;
+    const digitalAddressParams: SaveDigitalAddressParams = {
+      addressType,
+      senderId: formik.values.sender.id,
+      senderName: formik.values.sender.name,
+      channelType: formik.values.addressType,
+      value,
+      code: verificationCode,
+    };
+
+    dispatch(createOrUpdateAddress(digitalAddressParams))
+      .unwrap()
+      .then(async (res) => {
+        // contact to verify
+        // open code modal
+        if (!res) {
+          setModalOpen(ModalType.CODE);
+          return;
+        }
+        // contact has already been verified
+        if (res.pecValid || formik.values.addressType !== ChannelType.PEC) {
+          // show success message
+          dispatch(
+            appStateActions.addSuccess({
+              title: '',
+              message: t(`${labelRoot}.${contactType}-added-successfully`, {
+                ns: 'recapiti',
+              }),
+            })
+          );
+          setModalOpen(null);
+          // reset form
+          formik.resetForm();
+          await formik.validateForm();
+          setSenderInputValue('');
+          return;
+        }
+        // contact must be validated
+        // open validation modal
+        setModalOpen(ModalType.VALIDATION);
+      })
+      .catch(() => {});
+  };
+
+  const handleAddressUpdateError = useCallback(
+    (responseError: AppResponse) => {
+      if (!open) {
+        // notify the publisher we are not handling the error
+        return true;
+      }
+      if (Array.isArray(responseError.errors)) {
+        const error = responseError.errors[0];
+        codeModalRef.current?.updateError(
+          {
+            title: error.message.title,
+            content: error.message.content,
+          },
+          true
+        );
+      }
+      return false;
+    },
+    [open]
+  );
+
+  useEffect(() => {
+    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
+    };
+  }, [handleAddressUpdateError]);
 
   useEffect(() => {
     if (senderInputValue.length >= 4) {
@@ -378,6 +469,52 @@ const SpecialContacts = ({ digitalAddresses }: Props) => {
           )}
         </SpecialContactsProvider>
       </DigitalContactsCard>
+      <ExistingContactDialog
+        open={modalOpen === ModalType.EXISTING}
+        value={formik.values.s_value}
+        handleDiscard={() => setModalOpen(null)}
+        handleConfirm={() => handleCodeVerification()}
+      />
+      <CodeModal
+        title={
+          t(`${labelRoot}.${contactType}-verify`, { ns: 'recapiti' }) + ` ${formik.values.s_value}`
+        }
+        subtitle={<Trans i18nKey={`${labelRoot}.${contactType}-verify-descr`} ns="recapiti" />}
+        open={modalOpen === ModalType.CODE}
+        initialValues={new Array(5).fill('')}
+        codeSectionTitle={t(`${labelRoot}.insert-code`, { ns: 'recapiti' })}
+        codeSectionAdditional={
+          <>
+            <Typography variant="body2" display="inline">
+              {t(`${labelRoot}.${contactType}-new-code`, { ns: 'recapiti' })}
+              &nbsp;
+            </Typography>
+            <ButtonNaked
+              component={Box}
+              onClick={() => handleCodeVerification()}
+              sx={{ verticalAlign: 'unset', display: 'inline' }}
+            >
+              <Typography
+                display="inline"
+                color="primary"
+                variant="body2"
+                sx={{ textDecoration: 'underline' }}
+              >
+                {t(`${labelRoot}.new-code-link`, { ns: 'recapiti' })}.
+              </Typography>
+            </ButtonNaked>
+          </>
+        }
+        cancelLabel={t('button.annulla')}
+        confirmLabel={t('button.conferma')}
+        cancelCallback={() => setModalOpen(null)}
+        confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
+        ref={codeModalRef}
+      />
+      <PecVerificationDialog
+        open={modalOpen === ModalType.VALIDATION}
+        handleConfirm={() => setModalOpen(null)}
+      />
     </ApiErrorWrapper>
   );
 };
