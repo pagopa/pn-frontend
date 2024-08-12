@@ -91,7 +91,7 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
       code: verificationCode,
     };
 
-    void dispatch(createOrUpdateAddress(digitalAddressParams))
+    dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
       .then((res) => {
         // contact to verify
@@ -119,7 +119,8 @@ const PecContactItem = ({ value, verifyingAddress, blockDelete }: Props) => {
         // contact must be validated
         // open validation modal
         setModalOpen(ModalType.VALIDATION);
-      });
+      })
+      .catch(() => {});
   };
 
   const handleCancelCode = async () => {
