@@ -53,10 +53,7 @@ const EmailContactItem: React.FC<Props> = ({
   const { t } = useTranslation(['common', 'recapiti']);
   const digitalAddresses =
     useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
-  const digitalElemRef = useRef<{ editContact: () => void; toggleEdit: () => void }>({
-    editContact: () => {},
-    toggleEdit: () => {},
-  });
+  const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
   const codeModalRef =
@@ -222,7 +219,6 @@ const EmailContactItem: React.FC<Props> = ({
         {value ? (
           <DigitalContactElem
             senderId={senderId}
-            contactType={ChannelType.EMAIL}
             ref={digitalElemRef}
             inputProps={{
               id: `${senderId}_email`,
@@ -241,7 +237,6 @@ const EmailContactItem: React.FC<Props> = ({
             onDelete={() => setModalOpen(ModalType.DELETE)}
             onEditCancel={() => formik.resetForm({ values: initialValues })}
             onEdit={onEdit}
-            editManagedFromOutside
           />
         ) : (
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>

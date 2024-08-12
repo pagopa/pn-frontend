@@ -2,7 +2,6 @@ import { useRef } from 'react';
 import { vi } from 'vitest';
 
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
-import { ChannelType } from '../../../models/contacts';
 import DigitalContactElem from '../DigitalContactElem';
 
 vi.mock('react-i18next', () => ({
@@ -37,10 +36,8 @@ describe('DigitalContactElem Component', () => {
           value: 'mocked@pec.it',
         }}
         senderId="mocked-senderId"
-        contactType={ChannelType.PEC}
         onEditCancel={mockEditCancelCbk}
         onDelete={mockDeleteCbk}
-        editManagedFromOutside
       />
     );
     expect(container).toHaveTextContent('mocked@pec.it');
@@ -54,10 +51,7 @@ describe('DigitalContactElem Component', () => {
 
   it('edits contact', async () => {
     const Component = () => {
-      const digitalElemRef = useRef<{ editContact: () => void; toggleEdit: () => void }>({
-        editContact: () => {},
-        toggleEdit: () => {},
-      });
+      const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
       return (
         <form
           onSubmit={(e) => {
@@ -74,10 +68,8 @@ describe('DigitalContactElem Component', () => {
               value: 'mocked@pec.it',
             }}
             senderId="mocked-senderId"
-            contactType={ChannelType.PEC}
             onEditCancel={mockEditCancelCbk}
             onDelete={mockDeleteCbk}
-            editManagedFromOutside
             ref={digitalElemRef}
           />
         </form>
@@ -126,10 +118,8 @@ describe('DigitalContactElem Component', () => {
           value: 'mocked@pec.it',
         }}
         senderId="mocked-senderId"
-        contactType={ChannelType.PEC}
         onEditCancel={mockEditCancelCbk}
         onDelete={mockDeleteCbk}
-        editManagedFromOutside
       />
     );
     const buttons = container.querySelectorAll('button');
@@ -148,11 +138,9 @@ describe('DigitalContactElem Component', () => {
           value: 'mocked@pec.it',
         }}
         senderId="mocked-senderId"
-        contactType={ChannelType.PEC}
         onEditCancel={mockEditCancelCbk}
         saveDisabled
         onDelete={mockDeleteCbk}
-        editManagedFromOutside
       />
     );
     const buttons = container.querySelectorAll('button');
@@ -175,11 +163,9 @@ describe('DigitalContactElem Component', () => {
           value: 'mocked@pec.it',
         }}
         senderId="mocked-senderId"
-        contactType={ChannelType.PEC}
         onEditCancel={mockEditCancelCbk}
         editDisabled
         onDelete={mockDeleteCbk}
-        editManagedFromOutside
       />
     );
     const buttons = container.querySelectorAll('button');

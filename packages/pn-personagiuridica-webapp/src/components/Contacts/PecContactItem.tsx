@@ -56,10 +56,7 @@ const PecContactItem: React.FC<Props> = ({
   const { t } = useTranslation(['common', 'recapiti']);
   const digitalAddresses =
     useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
-  const digitalElemRef = useRef<{ editContact: () => void; toggleEdit: () => void }>({
-    editContact: () => {},
-    toggleEdit: () => {},
-  });
+  const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
   const codeModalRef =
@@ -204,7 +201,6 @@ const PecContactItem: React.FC<Props> = ({
             )}
             <DigitalContactElem
               senderId={senderId}
-              contactType={ChannelType.PEC}
               ref={digitalElemRef}
               inputProps={{
                 id: `${senderId}_pec`,
@@ -221,7 +217,6 @@ const PecContactItem: React.FC<Props> = ({
               onDelete={() => setModalOpen(ModalType.DELETE)}
               onEditCancel={() => formik.resetForm({ values: initialValues })}
               onEdit={onEdit}
-              editManagedFromOutside
             />
           </>
         )}
@@ -324,6 +319,7 @@ const PecContactItem: React.FC<Props> = ({
       />
       <CancelVerificationModal
         open={modalOpen === ModalType.CANCEL_VALIDATION}
+        senderId={senderId}
         handleClose={() => setModalOpen(null)}
       />
       <DeleteDialog

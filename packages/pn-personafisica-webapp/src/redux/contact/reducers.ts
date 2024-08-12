@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { Party } from '../../models/party';
@@ -25,10 +25,10 @@ const contactsSlice = createSlice({
     resetState: () => initialState,
     // we remove the default legal address only interface side, with the goal of letting the user know that needs to add
     // a new email to modify the verifying pec address
-    resetPecValidation: (state) => {
+    resetPecValidation: (state, action: PayloadAction<string>) => {
       state.digitalAddresses = state.digitalAddresses.filter(
         (address) =>
-          (address.senderId !== 'default' && address.addressType === AddressType.LEGAL) ||
+          (address.senderId !== action.payload && address.addressType === AddressType.LEGAL) ||
           address.addressType === AddressType.COURTESY
       );
     },

@@ -28,7 +28,6 @@ import {
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import { CONTACT_ACTIONS } from '../../../redux/contact/actions';
-import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
 
 vi.mock('react-i18next', () => ({
@@ -95,9 +94,7 @@ describe('SpecialContacts Component', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     const { container, getAllByTestId } = render(
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts digitalAddresses={digitalAddresses} />
-      </DigitalContactsCodeVerificationProvider>
+      <SpecialContacts digitalAddresses={digitalAddresses} />
     );
     expect(container).toHaveTextContent('special-contacts.subtitle');
     const form = container.querySelector('form');
@@ -118,9 +115,7 @@ describe('SpecialContacts Component', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     const { container, getByTestId } = render(
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts digitalAddresses={digitalAddresses} />
-      </DigitalContactsCodeVerificationProvider>
+      <SpecialContacts digitalAddresses={digitalAddresses} />
     );
     const form = container.querySelector('form');
     // change sender
@@ -137,11 +132,7 @@ describe('SpecialContacts Component', async () => {
   it('check invalid pec', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
-    const { container } = render(
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts digitalAddresses={digitalAddresses} />
-      </DigitalContactsCodeVerificationProvider>
-    );
+    const { container } = render(<SpecialContacts digitalAddresses={digitalAddresses} />);
     const form = container.querySelector('form');
     // change sender
     await testAutocomplete(form!, 'sender', parties, true, 1, true);
@@ -158,11 +149,7 @@ describe('SpecialContacts Component', async () => {
   it('checks invalid mail', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
-    const { container } = render(
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts digitalAddresses={digitalAddresses} />
-      </DigitalContactsCodeVerificationProvider>
-    );
+    const { container } = render(<SpecialContacts digitalAddresses={digitalAddresses} />);
     const form = container.querySelector('form');
     // change sender
     await testAutocomplete(form!, 'sender', parties, true, 1, true);
@@ -191,9 +178,7 @@ describe('SpecialContacts Component', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     const { container, getByTestId } = render(
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts digitalAddresses={digitalAddresses} />
-      </DigitalContactsCodeVerificationProvider>
+      <SpecialContacts digitalAddresses={digitalAddresses} />
     );
     const form = container.querySelector('form');
     // change sender
@@ -221,11 +206,7 @@ describe('SpecialContacts Component', async () => {
   it('checks invalid phone', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
-    const { container } = render(
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts digitalAddresses={digitalAddresses} />
-      </DigitalContactsCodeVerificationProvider>
-    );
+    const { container } = render(<SpecialContacts digitalAddresses={digitalAddresses} />);
     const form = container.querySelector('form');
     // change sender
     await testAutocomplete(form!, 'sender', parties, true, 1, true);
@@ -254,9 +235,7 @@ describe('SpecialContacts Component', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     const { container, getByTestId } = render(
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts digitalAddresses={digitalAddresses} />
-      </DigitalContactsCodeVerificationProvider>
+      <SpecialContacts digitalAddresses={digitalAddresses} />
     );
     const form = container.querySelector('form');
     // change sender
@@ -298,12 +277,9 @@ describe('SpecialContacts Component', async () => {
       })
       .reply(204);
     // render component
-    const result = render(
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts digitalAddresses={digitalAddresses} />
-      </DigitalContactsCodeVerificationProvider>,
-      { preloadedState: { contactsState: { digitalAddresses } } }
-    );
+    const result = render(<SpecialContacts digitalAddresses={digitalAddresses} />, {
+      preloadedState: { contactsState: { digitalAddresses } },
+    });
     const form = result.container.querySelector('form');
     // change sender
     await testAutocomplete(form!, 'sender', parties, true, 2, true);
@@ -336,7 +312,9 @@ describe('SpecialContacts Component', async () => {
         verificationCode: '01234',
       });
     });
-    expect(dialog).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
     const addresses = [
       ...digitalAddresses,
       {
@@ -352,11 +330,7 @@ describe('SpecialContacts Component', async () => {
 
     expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     // simulate rerendering due to redux changes
-    result.rerender(
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts digitalAddresses={addresses} />
-      </DigitalContactsCodeVerificationProvider>
-    );
+    result.rerender(<SpecialContacts digitalAddresses={addresses} />);
     await waitFor(() => {
       // contacts list
       const specialContactForms = result.getAllByTestId(
@@ -383,12 +357,9 @@ describe('SpecialContacts Component', async () => {
       })
       .replyOnce(204);
     // render component
-    const result = render(
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts digitalAddresses={digitalAddresses} />
-      </DigitalContactsCodeVerificationProvider>,
-      { preloadedState: { contactsState: { digitalAddresses } } }
-    );
+    const result = render(<SpecialContacts digitalAddresses={digitalAddresses} />, {
+      preloadedState: { contactsState: { digitalAddresses } },
+    });
     // ATTENTION: the order in the mock is very important
     // change mail
     const specialContactForms = result.getAllByTestId(
@@ -433,11 +404,7 @@ describe('SpecialContacts Component', async () => {
     expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     expect(input).not.toBeInTheDocument();
     // simulate rerendering due to redux changes
-    result.rerender(
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts digitalAddresses={addresses} />
-      </DigitalContactsCodeVerificationProvider>
-    );
+    result.rerender(<SpecialContacts digitalAddresses={addresses} />);
     await waitFor(() => {
       // contacts list
       const specialContactForms = result.getAllByTestId(
@@ -452,9 +419,7 @@ describe('SpecialContacts Component', async () => {
     mock.onDelete(`/bff/v1/addresses/COURTESY/${parties[0].id}/EMAIL`).reply(200);
     // render component
     const { rerender, getAllByTestId, getByRole } = render(
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts digitalAddresses={digitalAddresses} />
-      </DigitalContactsCodeVerificationProvider>,
+      <SpecialContacts digitalAddresses={digitalAddresses} />,
       { preloadedState: { contactsState: { digitalAddresses } } }
     );
     // ATTENTION: the order in the mock is very important
@@ -477,11 +442,7 @@ describe('SpecialContacts Component', async () => {
     const addresses = [...digitalLegalAddresses, ...digitalCourtesyAddresses.slice(1)];
     expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     // simulate rerendering due to redux changes
-    rerender(
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts digitalAddresses={addresses} />
-      </DigitalContactsCodeVerificationProvider>
-    );
+    rerender(<SpecialContacts digitalAddresses={addresses} />);
     await waitFor(() => {
       // contacts list
       const specialContactForms = getAllByTestId(
@@ -498,9 +459,7 @@ describe('SpecialContacts Component', async () => {
         <>
           <ResponseEventDispatcher />
           <AppResponseMessage />
-          <DigitalContactsCodeVerificationProvider>
-            <SpecialContacts digitalAddresses={digitalAddresses} />
-          </DigitalContactsCodeVerificationProvider>
+          <SpecialContacts digitalAddresses={digitalAddresses} />
         </>
       );
     });
