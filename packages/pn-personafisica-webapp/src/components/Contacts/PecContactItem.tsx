@@ -46,7 +46,7 @@ enum ModalType {
   CODE = 'code',
 }
 
-const PecContactItem = ({
+const PecContactItem: React.FC<Props> = ({
   value,
   verifyingAddress,
   blockDelete,
@@ -54,7 +54,7 @@ const PecContactItem = ({
   senderName,
   blockEdit,
   onEdit,
-}: Props) => {
+}) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const digitalAddresses =
     useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];

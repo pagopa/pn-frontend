@@ -34,7 +34,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void; toggleEdit?: ()
       onConfirm,
       onEdit,
       onEditCancel,
-      editDisabled,
+      editDisabled = false,
       onDelete,
       editManagedFromOutside = false,
     },

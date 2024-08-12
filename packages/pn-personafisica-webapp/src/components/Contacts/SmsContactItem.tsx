@@ -46,14 +46,14 @@ enum ModalType {
   DELETE = 'delete',
 }
 
-const SmsContactItem = ({
+const SmsContactItem: React.FC<Props> = ({
   value,
   senderId = 'default',
   senderName,
   blockDelete,
   blockEdit,
   onEdit,
-}: Props) => {
+}) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const digitalAddresses =
     useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
