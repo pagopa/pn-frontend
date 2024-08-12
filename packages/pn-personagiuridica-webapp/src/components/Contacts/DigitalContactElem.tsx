@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, forwardRef, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { TextField, TextFieldProps, Typography } from '@mui/material';
+import { InputAdornment, TextField, TextFieldProps, Typography } from '@mui/material';
 import { WithRequired } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -9,7 +9,7 @@ import { ChannelType } from '../../models/contacts';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
-  inputProps: WithRequired<TextFieldProps, 'id'>;
+  inputProps: WithRequired<TextFieldProps & { prefix?: string }, 'id'>;
   senderId: string;
   senderName?: string;
   contactType: ChannelType;
@@ -84,6 +84,11 @@ const DigitalContactElem = forwardRef<{ editContact: () => void; toggleEdit?: ()
             variant="outlined"
             size="small"
             data-testid={inputProps.id}
+            InputProps={{
+              startAdornment: inputProps.prefix ? (
+                <InputAdornment position="start">{inputProps.prefix}</InputAdornment>
+              ) : null,
+            }}
             {...inputProps}
           />
         )}
@@ -94,7 +99,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void; toggleEdit?: ()
             }}
             id={`${inputProps.id}-typography`}
           >
-            {inputProps.value as string}
+            {inputProps.prefix ? `${inputProps.prefix}${inputProps.value}` : `${inputProps.value}`}
           </Typography>
         )}
         {!editMode ? (

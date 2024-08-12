@@ -14,8 +14,7 @@ import {
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
-import { internationalPhonePrefix } from '../../../utility/contacts.utility';
-import SmsContactItem from '../SmsContactItem';
+import EmailContactItem from '../EmailContactItem';
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -39,14 +38,14 @@ const fillCodeDialog = async (result: RenderResult) => {
   return dialog;
 };
 
-const defaultPhoneAddress = digitalCourtesyAddresses.find(
-  (addr) => addr.channelType === ChannelType.SMS && addr.senderId === 'default'
+const defaultEmailAddress = digitalCourtesyAddresses.find(
+  (addr) => addr.channelType === ChannelType.EMAIL && addr.senderId === 'default'
 );
 
-describe('test SmsContactItem', () => {
+describe('testing EmailContactItem', () => {
   let mock: MockAdapter;
-  const INPUT_VALID_PHONE = '3331234567';
-  const INPUT_INVALID_PHONE = '33312345';
+  const VALID_EMAIL = 'prova@pagopa.it';
+  const INVALID_EMAIL = 'testpagopa.it';
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -60,73 +59,65 @@ describe('test SmsContactItem', () => {
     mock.restore();
   });
 
-  it('type in an invalid number', async () => {
+  it('type in an invalid email', async () => {
     // render component
-    const { container } = render(<SmsContactItem value="" />);
+    const { container } = render(<EmailContactItem value="" />);
     const form = container.querySelector('form');
-    const input = form!.querySelector(`[name="sms"]`);
-    // add invalid values
-    fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
-    await waitFor(() => {
-      expect(input!).toHaveValue(INPUT_INVALID_PHONE);
-    });
-    const errorMessage = form!.querySelector(`#sms-helper-text`);
+    const input = form!.querySelector(`[name="email"]`);
+    // set invalid values
+    fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
+    await waitFor(() => expect(input).toHaveValue(INVALID_EMAIL));
+    const errorMessage = form!.querySelector(`#email-helper-text`);
     expect(errorMessage).toBeInTheDocument();
-    expect(errorMessage).toHaveTextContent('courtesy-contacts.valid-sms');
+    expect(errorMessage).toHaveTextContent('courtesy-contacts.valid-email');
     const buttons = form!.querySelectorAll('button');
     expect(buttons[0]).toBeDisabled();
     fireEvent.change(input!, { target: { value: '' } });
-    await waitFor(() => {
-      expect(input!).toHaveValue('');
-    });
+    await waitFor(() => expect(input!).toHaveValue(''));
     expect(errorMessage).toBeInTheDocument();
-    expect(errorMessage).toHaveTextContent('courtesy-contacts.valid-sms');
+    expect(errorMessage).toHaveTextContent('courtesy-contacts.valid-email');
   });
 
-  it('type in an invalid number while in "edit mode"', async () => {
-    const { container, getByRole } = render(<SmsContactItem value={INPUT_VALID_PHONE} />);
+  it('type in an invalid email while in "edit mode"', async () => {
+    const { container, getByRole } = render(<EmailContactItem value={VALID_EMAIL} />);
     const form = container.querySelector('form');
-    const phoneValue = getById(form!, 'sms-typography');
-    expect(phoneValue).toHaveTextContent(INPUT_VALID_PHONE);
+    const phoneValue = getById(form!, 'email-typography');
+    expect(phoneValue).toHaveTextContent(VALID_EMAIL);
     const editButton = getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
-    const input = container.querySelector(`[name="sms"]`);
+    const input = container.querySelector(`[name="email"]`);
     const saveButton = getByRole('button', { name: 'button.salva' });
-    expect(input).toHaveValue(INPUT_VALID_PHONE);
+    expect(input).toHaveValue(VALID_EMAIL);
     expect(saveButton).toBeEnabled();
-    fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
+    fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
     await waitFor(() => {
-      expect(input).toHaveValue(INPUT_INVALID_PHONE);
+      expect(input).toHaveValue(INVALID_EMAIL);
     });
     expect(saveButton).toBeDisabled();
-    const inputError = container.querySelector(`#sms-helper-text`);
-    expect(inputError).toHaveTextContent('courtesy-contacts.valid-sms');
+    const inputError = container.querySelector(`#email-helper-text`);
+    expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
   });
 
-  it('add new phone number', async () => {
-    const phoneValue = '3333333333';
+  it('add new email', async () => {
+    const mailValue = 'nome.utente@mail.it';
+    mock.onPost('/bff/v1/addresses/COURTESY/default/EMAIL', { value: mailValue }).reply(200, {
+      result: 'CODE_VERIFICATION_REQUIRED',
+    });
     mock
-      .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
-        value: internationalPhonePrefix + phoneValue,
-      })
-      .reply(200, {
-        result: 'CODE_VERIFICATION_REQUIRED',
-      });
-    mock
-      .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
-        value: internationalPhonePrefix + phoneValue,
+      .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', {
+        value: mailValue,
         verificationCode: '01234',
       })
       .reply(204);
-    const result = render(<SmsContactItem value="" />);
-    // insert new phone
+    const result = render(<EmailContactItem value="" />);
+    // insert new email
     const form = result.container.querySelector('form');
-    const input = form!.querySelector(`[name="sms"]`);
-    fireEvent.change(input!, { target: { value: phoneValue } });
-    await waitFor(() => expect(input!).toHaveValue(phoneValue));
-    const errorMessage = form?.querySelector('#phone-helper-text');
+    const input = form!.querySelector(`[name="email"]`);
+    fireEvent.change(input!, { target: { value: mailValue } });
+    await waitFor(() => expect(input!).toHaveValue(mailValue));
+    const errorMessage = form?.querySelector('#sms-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
-    const button = result.getByTestId('courtesy-sms-button');
+    const button = result.getByTestId('courtesy-email-button');
     expect(button).toBeEnabled();
     fireEvent.click(button);
     // Confirms the disclaimer dialog
@@ -137,7 +128,7 @@ describe('test SmsContactItem', () => {
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
-        value: internationalPhonePrefix + phoneValue,
+        value: mailValue,
       });
     });
     // inser otp and confirm
@@ -145,7 +136,7 @@ describe('test SmsContactItem', () => {
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(2);
       expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
-        value: internationalPhonePrefix + phoneValue,
+        value: mailValue,
         verificationCode: '01234',
       });
     });
@@ -154,59 +145,59 @@ describe('test SmsContactItem', () => {
     expect(
       testStore
         .getState()
-        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
+        .contactsState.digitalAddresses.filter(
+          (addr) => addr.addressType === AddressType.COURTESY && addr.senderId === 'default'
+        )
     ).toStrictEqual([
       {
-        ...defaultPhoneAddress,
+        ...defaultEmailAddress,
         senderName: undefined,
-        value: internationalPhonePrefix + phoneValue,
+        value: mailValue,
       },
     ]);
     // simulate rerendering due to redux changes
-    result.rerender(<SmsContactItem value={defaultPhoneAddress!.value} />);
+    result.rerender(<EmailContactItem value={defaultEmailAddress!.value} />);
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
-    const smsValue = getById(form!, 'sms-typography');
-    expect(smsValue).toBeInTheDocument();
-    expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
+    const emailValue = getById(form!, 'email-typography');
+    expect(emailValue).toBeInTheDocument();
+    expect(emailValue).toHaveTextContent(mailValue);
     const editButton = getById(form!, 'modifyContact-default');
     expect(editButton).toBeInTheDocument();
     const deleteButton = getById(form!, 'cancelContact-default');
     expect(deleteButton).toBeInTheDocument();
   });
 
-  it('override an existing phone number with a new one', async () => {
-    const phoneValue = '3333333334';
+  it('override an existing email with a new one', async () => {
+    const emailValue = 'nome.cognome-modified@mail.com';
     mock
-      .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
-        value: internationalPhonePrefix + phoneValue,
+      .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', {
+        value: emailValue,
       })
       .reply(200, {
         result: 'CODE_VERIFICATION_REQUIRED',
       });
     mock
-      .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
-        value: internationalPhonePrefix + phoneValue,
+      .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', {
+        value: emailValue,
         verificationCode: '01234',
       })
       .reply(204);
     // render component
-    const result = render(<SmsContactItem value={defaultPhoneAddress!.value} />);
+    const result = render(<EmailContactItem value={defaultEmailAddress!.value} />);
     // edit value
     const form = result.container.querySelector('form');
-    let smsValue = getById(form!, 'sms-typography');
-    expect(smsValue).toHaveTextContent(defaultPhoneAddress!.value);
+    let mailValue = getById(form!, 'email-typography');
+    expect(mailValue).toHaveTextContent(defaultEmailAddress!.value);
     let editButton = result.getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
-    const input = result.container.querySelector(`[name="sms"]`);
+    const input = result.container.querySelector(`[name="email"]`);
     const saveButton = result.getByRole('button', { name: 'button.salva' });
-    expect(input).toHaveValue(defaultPhoneAddress!.value.replace(internationalPhonePrefix, ''));
+    expect(input).toHaveValue(defaultEmailAddress!.value);
     expect(saveButton).toBeEnabled();
-    fireEvent.change(input!, { target: { value: phoneValue } });
-    await waitFor(() => {
-      expect(input!).toHaveValue(phoneValue);
-    });
+    fireEvent.change(input!, { target: { value: emailValue } });
+    await waitFor(() => expect(input!).toHaveValue(emailValue));
     // confirm new value
     fireEvent.click(saveButton);
     // Confirms the disclaimer dialog
@@ -217,7 +208,7 @@ describe('test SmsContactItem', () => {
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
-        value: internationalPhonePrefix + phoneValue,
+        value: emailValue,
       });
     });
     // inser otp and confirm
@@ -225,7 +216,7 @@ describe('test SmsContactItem', () => {
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(2);
       expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
-        value: internationalPhonePrefix + phoneValue,
+        value: emailValue,
         verificationCode: '01234',
       });
     });
@@ -237,35 +228,34 @@ describe('test SmsContactItem', () => {
         .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
     ).toStrictEqual([
       {
-        ...defaultPhoneAddress,
+        ...defaultEmailAddress,
         senderName: undefined,
-        value: internationalPhonePrefix + phoneValue,
+        value: emailValue,
       },
     ]);
     // simulate rerendering due to redux changes
     const updatedDigitalCourtesyAddresses = [
       {
-        ...defaultPhoneAddress!,
-        value: internationalPhonePrefix + phoneValue,
+        ...defaultEmailAddress!,
+        value: emailValue,
       },
     ];
-    result.rerender(<SmsContactItem value={updatedDigitalCourtesyAddresses[0].value} />);
+    result.rerender(<EmailContactItem value={updatedDigitalCourtesyAddresses[0].value} />);
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
-    smsValue = getById(form!, 'sms-typography');
-    expect(smsValue).toBeInTheDocument();
-    expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
+    mailValue = getById(form!, 'email-typography');
+    expect(mailValue).toBeInTheDocument();
+    expect(mailValue).toHaveTextContent(emailValue);
     editButton = getById(form!, 'modifyContact-default');
     expect(editButton).toBeInTheDocument();
     const deleteButton = getById(form!, 'cancelContact-default');
     expect(deleteButton).toBeInTheDocument();
   });
 
-  it('delete phone number', async () => {
-    mock.onDelete('/bff/v1/addresses/COURTESY/default/SMS').reply(204);
-    // render component
-    const result = render(<SmsContactItem value={defaultPhoneAddress!.value} />);
+  it('delete email', async () => {
+    mock.onDelete('/bff/v1/addresses/COURTESY/default/EMAIL').reply(204);
+    const result = render(<EmailContactItem value={defaultEmailAddress!.value} />);
     const buttons = result.container.querySelectorAll('button');
     // click on cancel
     fireEvent.click(buttons[1]);
@@ -296,9 +286,9 @@ describe('test SmsContactItem', () => {
       ).toStrictEqual([]);
     });
     // simulate rerendering due to redux changes
-    result.rerender(<SmsContactItem value="" />);
+    result.rerender(<EmailContactItem value="" />);
     await waitFor(() => {
-      const input = result.container.querySelector(`[name="sms"]`);
+      const input = result.container.querySelector(`[name="email"]`);
       expect(input).toBeInTheDocument();
       expect(result.container).not.toHaveTextContent('');
     });
