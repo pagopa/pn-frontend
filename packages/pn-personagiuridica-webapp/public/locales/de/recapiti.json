@@ -5,8 +5,8 @@
   "subtitle-link": "findest du sie hier: ",
   "general-contacts-title": "Allgemeine Anschriften",
   "special-contacts-title": "Weitere Anschriften",
-  "alert-dialog-EMAIL": "Wenn das Unternehmen keine PEC hat und ein Benutzer innerhalb von 5 Tagen (120 Stunden) nach Versand der E-Mail auf die Benachrichtigung auf SEND zugreift, wird die Empfangsbestätigung nicht per Einschreiben gesendet.",
-  "alert-dialog-SMS": "Wenn das Unternehmen keine PEC hat und ein Benutzer innerhalb von 5 Tagen (120 Stunden) nach Versand der SMS auf die Benachrichtigung auf SEND zugreift, wird keine Empfangsbestätigung per Einschreiben gesendet.",
+  "alert-dialog-email": "Wenn das Unternehmen keine PEC hat und ein Benutzer innerhalb von 5 Tagen (120 Stunden) nach Versand der E-Mail auf die Benachrichtigung auf SEND zugreift, wird die Empfangsbestätigung nicht per Einschreiben gesendet.",
+  "alert-dialog-sms": "Wenn das Unternehmen keine PEC hat und ein Benutzer innerhalb von 5 Tagen (120 Stunden) nach Versand der SMS auf die Benachrichtigung auf SEND zugreift, wird keine Empfangsbestätigung per Einschreiben gesendet.",
   "legal-contacts": {
     "title": "",
     "subtitle": "Gesetzliche Anschrift",

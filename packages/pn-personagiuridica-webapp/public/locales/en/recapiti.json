@@ -5,8 +5,8 @@
   "subtitle-link": "you can find it here",
   "general-contacts-title": "General contact details",
   "special-contacts-title": "Other contact details",
-  "alert-dialog-EMAIL": "If the company does not have PEC (PEC) and a user accesses the notification on SEND within 5 days (120 hours) of sending the email, the acknowledgement of receipt will not be sent by registered mail.",
-  "alert-dialog-SMS": "If the company does not have a PEC and a user accesses the notification on SEND within 5 days (120 hours) of the text being sent, the acknowledgement of receipt will not be sent by registered mail.",
+  "alert-dialog-email": "If the company does not have PEC (PEC) and a user accesses the notification on SEND within 5 days (120 hours) of sending the email, the acknowledgement of receipt will not be sent by registered mail.",
+  "alert-dialog-sms": "If the company does not have a PEC and a user accesses the notification on SEND within 5 days (120 hours) of the text being sent, the acknowledgement of receipt will not be sent by registered mail.",
   "legal-contacts": {
     "title": "",
     "subtitle": "Legal address",

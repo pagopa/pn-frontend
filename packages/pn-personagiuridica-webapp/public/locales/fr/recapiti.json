@@ -5,8 +5,8 @@
   "subtitle-link": "vous les trouverez ici",
   "general-contacts-title": "Coordonnées générales",
   "special-contacts-title": "Autres coordonnées",
-  "alert-dialog-EMAIL": "Si la société ne dispose pas d'une adresse PEC et qu’un de ses utilisateurs accède à la notification sur SEND dans les 5 jours (120 heures) suivant l’envoi de l’e-mail, l’accusé de réception ne sera pas envoyé par courrier recommandé.",
-  "alert-dialog-SMS": "Si la société ne dispose pas d'une adresse PEC et qu’un de ses utilisateurs accède à la notification sur SEND dans les 5 jours (120 heures) suivant l’envoi du SMS, l’accusé de réception ne sera pas envoyé par courrier recommandé.",
+  "alert-dialog-email": "Si la société ne dispose pas d'une adresse PEC et qu’un de ses utilisateurs accède à la notification sur SEND dans les 5 jours (120 heures) suivant l’envoi de l’e-mail, l’accusé de réception ne sera pas envoyé par courrier recommandé.",
+  "alert-dialog-sms": "Si la société ne dispose pas d'une adresse PEC et qu’un de ses utilisateurs accède à la notification sur SEND dans les 5 jours (120 heures) suivant l’envoi du SMS, l’accusé de réception ne sera pas envoyé par courrier recommandé.",
   "legal-contacts": {
     "title": "",
     "subtitle": "Coordonnées légales",
