@@ -1,7 +1,6 @@
 import { EventPropertyType, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-commons';
 
-import { ChannelType } from '../../../models/contacts';
-import { DeleteDigitalAddressParams } from '../../../redux/contact/types';
+import { ChannelType, DeleteDigitalAddressParams } from '../../../models/contacts';
 
 type SendRemoveAddressReturn =
   | {

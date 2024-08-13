@@ -1,8 +1,7 @@
 import { EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { digitalAddresses } from '../../../../__mocks__/Contacts.mock';
-import { AddressType, ChannelType } from '../../../../models/contacts';
-import { DeleteDigitalAddressParams } from '../../../../redux/contact/types';
+import { AddressType, ChannelType, DeleteDigitalAddressParams } from '../../../../models/contacts';
 import { SendRemoveAddressStrategy } from '../SendRemoveAddressStrategy';
 
 describe('Mixpanel - Remove Address Strategy', () => {
