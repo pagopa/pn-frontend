@@ -5,11 +5,17 @@ import { apiClient } from '../../api/apiClients';
 import {
   AddressesApiFactory,
   BffAddressVerificationResponse,
+  BffChannelType,
 } from '../../generated-client/digital-addresses';
 import { InfoRecipientApiFactory } from '../../generated-client/recipient-info';
-import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  DeleteDigitalAddressParams,
+  DigitalAddress,
+  SaveDigitalAddressParams,
+} from '../../models/contacts';
 import { FilterPartiesParams, Party } from '../../models/party';
-import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from './types';
 
 export enum CONTACT_ACTIONS {
   GET_DIGITAL_ADDRESSES = 'getDigitalAddresses',
@@ -47,7 +53,8 @@ export const createOrUpdateAddress = createAsyncThunk<
       const response = await digitalAddressesFactory.createOrUpdateAddressV1(
         params.addressType,
         params.senderId,
-        params.channelType,
+        // TODO: rimuovere l'as appena si ha il bff integrato
+        params.channelType as BffChannelType,
         { value: params.value, verificationCode: params.code }
       );
 
@@ -97,7 +104,8 @@ export const deleteAddress = createAsyncThunk<void, DeleteDigitalAddressParams>(
       const response = await digitalAddressesFactory.deleteAddressV1(
         params.addressType,
         params.senderId,
-        params.channelType
+        // TODO: rimuovere l'as appena si ha il bff integrato
+        params.channelType as BffChannelType
       );
 
       return response.data;

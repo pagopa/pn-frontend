@@ -35,14 +35,18 @@ import {
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  DigitalAddress,
+  SaveDigitalAddressParams,
+} from '../../models/contacts';
 import { Party } from '../../models/party';
 import {
   CONTACT_ACTIONS,
   createOrUpdateAddress,
   getAllActivatedParties,
 } from '../../redux/contact/actions';
-import { SaveDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
