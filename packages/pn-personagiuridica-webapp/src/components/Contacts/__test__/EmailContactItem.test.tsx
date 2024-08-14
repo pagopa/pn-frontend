@@ -62,6 +62,8 @@ describe('testing EmailContactItem', () => {
   it('type in an invalid email', async () => {
     // render component
     const { container } = render(<EmailContactItem value="" />);
+    expect(container).toHaveTextContent('courtesy-contacts.email-title');
+    expect(container).toHaveTextContent('courtesy-contacts.email-description');
     const form = container.querySelector('form');
     const input = form!.querySelector(`[name="default_email"]`);
     // set invalid values
@@ -117,7 +119,7 @@ describe('testing EmailContactItem', () => {
     await waitFor(() => expect(input!).toHaveValue(mailValue));
     const errorMessage = form?.querySelector('#default_email-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
-    const button = result.getByTestId('courtesy-email-button');
+    const button = result.getByTestId('default_email-button');
     expect(button).toBeEnabled();
     fireEvent.click(button);
     // Confirms the disclaimer dialog

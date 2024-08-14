@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
-import { Box, Link, Stack, Typography } from '@mui/material';
+import { Box, Link, Stack } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
@@ -49,20 +49,23 @@ const Contacts = () => {
   };
 
   const subtitle = (
-    <>
-      {t('subtitle-1', { ns: 'recapiti', recipient: organization.name })}
-      <Link
-        color="primary"
-        fontWeight={'bold'}
-        onClick={handleRedirectToProfilePage}
-        sx={{ verticalAlign: 'inherit' }}
-        aria-label={t('subtitle-link', { ns: 'recapiti' })}
-        component="button"
-      >
-        {t('subtitle-link', { ns: 'recapiti' })}
-      </Link>
-      {t('subtitle-2', { ns: 'recapiti' })}
-    </>
+    <Trans
+      i18nKey="subtitle"
+      ns="recapiti"
+      values={{ recipient: organization.name }}
+      components={[
+        <Link
+          key="profilePageLink"
+          color="primary"
+          fontWeight="bold"
+          onClick={handleRedirectToProfilePage}
+          sx={{ verticalAlign: 'inherit' }}
+          component="button"
+        >
+          {t('subtitle-link', { ns: 'recapiti' })}
+        </Link>,
+      ]}
+    ></Trans>
   );
 
   return (
@@ -73,29 +76,16 @@ const Contacts = () => {
           title={t('title')}
           subTitle={subtitle}
           variantSubTitle={'body1'}
-          ariaLabel={t('title')}
         />
         <ApiErrorWrapper
           apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
           reloadAction={fetchAddresses}
-          mt={2}
         >
-          <Stack direction="column" spacing={8} mt={8}>
-            <Stack spacing={3}>
-              <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
-                <Box sx={{ width: '100%' }}>
-                  <LegalContactsList legalAddresses={legalAddresses} />
-                </Box>
-              </Stack>
-              <CourtesyContacts contacts={courtesyAddresses} />
-            </Stack>
+          <Stack direction="column" spacing={4} mt={4}>
+            <LegalContactsList legalAddresses={legalAddresses} />
+            <CourtesyContacts contacts={courtesyAddresses} />
             {(legalAddresses.length > 0 || courtesyAddresses.length > 0) && (
-              <Stack spacing={2}>
-                <Typography id="specialContactTitle" variant="h5" fontWeight={600} fontSize={28}>
-                  {t('special-contacts-title')}
-                </Typography>
-                <SpecialContacts digitalAddresses={digitalAddresses} />
-              </Stack>
+              <SpecialContacts digitalAddresses={digitalAddresses} />
             )}
           </Stack>
         </ApiErrorWrapper>

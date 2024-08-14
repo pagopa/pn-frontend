@@ -61,6 +61,8 @@ describe('PecContactItem component', () => {
   it('type in an invalid pec', async () => {
     // render component
     const { container } = render(<PecContactItem value="" verifyingAddress={false} />);
+    expect(container).toHaveTextContent('legal-contacts.pec-title');
+    expect(container).toHaveTextContent('legal-contacts.pec-description');
     const form = container.querySelector('form');
     const input = form!.querySelector('input[name="default_pec"]');
     // add invalid values
@@ -99,7 +101,7 @@ describe('PecContactItem component', () => {
     await waitFor(() => expect(input!).toHaveValue(VALID_PEC));
     const errorMessage = form?.querySelector('#default_pec-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
-    const button = result.getByTestId('addContact');
+    const button = result.getByTestId('default_pec-button');
     expect(button).toBeEnabled();
     fireEvent.click(button);
     await waitFor(() => {
@@ -186,7 +188,7 @@ describe('PecContactItem component', () => {
     await waitFor(() => expect(input!).toHaveValue(VALID_PEC));
     const errorMessage = form?.querySelector('#default_pec-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
-    const button = result.getByTestId('addContact');
+    const button = result.getByTestId('default_pec-button');
     expect(button).toBeEnabled();
     fireEvent.click(button);
     await waitFor(() => {

@@ -42,6 +42,7 @@ import EmptyState from './EmptyState';
 import FileUpload from './FileUpload';
 import Footer from './Footer/Footer';
 import Header from './Header/Header';
+import { IllusAppIO } from './Illustrations/IllusAppIO';
 import { IllusQuestion } from './Illustrations/IllusQuestion';
 import { IllusStatistics } from './Illustrations/IllusStatistics';
 import InactivityHandler from './InactivityHandler';
@@ -147,4 +148,5 @@ export {
   PnCardHeaderItem,
   IllusQuestion,
   IllusStatistics,
+  IllusAppIO,
 };

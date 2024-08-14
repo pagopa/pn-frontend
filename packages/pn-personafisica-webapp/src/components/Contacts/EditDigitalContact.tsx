@@ -15,7 +15,7 @@ type Props = {
   editDisabled?: boolean;
 };
 
-const DigitalContactElem = forwardRef<{ toggleEdit: () => void }, Props>(
+const EditDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
   (
     {
       inputProps,
@@ -116,4 +116,4 @@ const DigitalContactElem = forwardRef<{ toggleEdit: () => void }, Props>(
   }
 );
 
-export default DigitalContactElem;
+export default EditDigitalContact;

@@ -1,46 +1,79 @@
-import React, { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 
-import { Card, CardContent, CardHeader, Typography } from '@mui/material';
-import { TitleBox } from '@pagopa-pn/pn-commons';
+import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
+import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
+import { Box, Card, CardContent, CardHeader, Stack, SxProps, Typography } from '@mui/material';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 type Props = {
-  sectionTitle: string;
+  header?: ReactNode;
   title: ReactNode;
   subtitle: string;
-  avatar: ReactNode;
   children: ReactNode;
 };
 
-const DigitalContactsCard: React.FC<Props> = ({
-  sectionTitle,
-  title,
-  subtitle,
-  avatar,
-  children,
-}: Props) => (
-  <Card sx={{ p: 3 }}>
-    {avatar && <CardHeader avatar={avatar} sx={{ p: 0 }} />}
-    <CardContent data-testid="DigitalContactsCardBody" sx={{ p: 0 }}>
-      {sectionTitle && (
+const DigitalContactsCardTitle: React.FC<Pick<Props, 'title'>> = ({ title }) => (
+  <Typography
+    color="text.primary"
+    fontWeight={700}
+    fontSize={18}
+    variant="body1"
+    mb={2}
+    data-testid="DigitalContactsCardTitle"
+  >
+    {title}
+  </Typography>
+);
+
+const DigitalContactsCardContent: React.FC<
+  Pick<Props, 'title' | 'subtitle' | 'children'> & { sx?: SxProps }
+> = ({ title, subtitle, sx, children }) => {
+  const isMobile = useIsMobile();
+  const [showDescription, setShowDescription] = useState(false);
+  return (
+    <Box sx={sx}>
+      {isMobile && (
+        <Stack direction="row" justifyContent="space-between">
+          <DigitalContactsCardTitle title={title} />
+          {!showDescription && (
+            <KeyboardArrowDownOutlinedIcon
+              color="primary"
+              onClick={() => setShowDescription(true)}
+            />
+          )}
+          {showDescription && (
+            <KeyboardArrowUpOutlinedIcon
+              color="primary"
+              onClick={() => setShowDescription(false)}
+            />
+          )}
+        </Stack>
+      )}
+      {!isMobile && <DigitalContactsCardTitle title={title} />}
+      {(!isMobile || (isMobile && showDescription)) && (
         <Typography
-          color="text.primary"
-          fontWeight={700}
-          fontSize={14}
-          sx={{ textTransform: 'uppercase' }}
+          color="text.secondary"
+          fontWeight={400}
+          variant="body1"
+          mb={2}
+          data-testid="DigitalContactsCardDescription"
         >
-          {sectionTitle}
+          {subtitle}
         </Typography>
       )}
-      <TitleBox
-        sx={{ marginTop: '10px' }}
-        variantTitle="h6"
-        title={title}
-        subTitle={subtitle}
-        variantSubTitle={'body1'}
-      />
       {children}
+    </Box>
+  );
+};
+
+const DigitalContactsCard: React.FC<Props> = ({ header, title, subtitle, children }) => (
+  <Card sx={{ p: 3 }}>
+    {header && <CardHeader data-testid="DigitalContactsCardHeader" sx={{ p: 0 }} title={header} />}
+    <CardContent data-testid="DigitalContactsCardBody" sx={{ p: 0, paddingBottom: '0 !important' }}>
+      <DigitalContactsCardContent title={title} subtitle={subtitle}>
+        {children}
+      </DigitalContactsCardContent>
     </CardContent>
   </Card>
 );
-
 export default DigitalContactsCard;
