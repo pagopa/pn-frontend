@@ -1,7 +1,8 @@
 import { forwardRef, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { InputAdornment, TextField, TextFieldProps, Typography } from '@mui/material';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import { Box, InputAdornment, Stack, TextField, TextFieldProps, Typography } from '@mui/material';
 import { WithRequired } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -50,52 +51,19 @@ const EditDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     return (
       <>
         {editMode && (
-          <TextField
-            fullWidth
-            variant="outlined"
-            size="small"
-            data-testid={inputProps.id}
-            InputProps={{
-              startAdornment: inputProps.prefix ? (
-                <InputAdornment position="start">{inputProps.prefix}</InputAdornment>
-              ) : null,
-            }}
-            {...inputProps}
-          />
-        )}
-        {!editMode && (
-          <Typography
-            sx={{
-              wordBreak: 'break-word',
-            }}
-            id={`${inputProps.id}-typography`}
-          >
-            {inputProps.prefix ? `${inputProps.prefix}${inputProps.value}` : `${inputProps.value}`}
-          </Typography>
-        )}
-        {!editMode ? (
           <>
-            <ButtonNaked
-              key="editButton"
-              color="primary"
-              onClick={toggleEdit}
-              sx={{ mr: 2 }}
-              disabled={editDisabled}
-              id={`modifyContact-${senderId}`}
-            >
-              {t('button.modifica')}
-            </ButtonNaked>
-            <ButtonNaked
-              id={`cancelContact-${senderId}`}
-              color="primary"
-              onClick={onDelete}
-              disabled={editDisabled}
-            >
-              {t('button.elimina')}
-            </ButtonNaked>
-          </>
-        ) : (
-          <>
+            <TextField
+              fullWidth
+              variant="outlined"
+              size="small"
+              data-testid={inputProps.id}
+              InputProps={{
+                startAdornment: inputProps.prefix ? (
+                  <InputAdornment position="start">{inputProps.prefix}</InputAdornment>
+                ) : null,
+              }}
+              {...inputProps}
+            />
             <ButtonNaked
               key="saveButton"
               color="primary"
@@ -106,10 +74,49 @@ const EditDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             >
               {t('button.salva')}
             </ButtonNaked>
-            <ButtonNaked color="primary" onClick={onCancel}>
+            <ButtonNaked color="error" onClick={onCancel}>
               {t('button.annulla')}
             </ButtonNaked>
           </>
+        )}
+        {!editMode && (
+          <Stack direction="row" spacing={2}>
+            <VerifiedIcon
+              fontSize="small"
+              color="success"
+              sx={{ position: 'relative', top: '2px' }}
+            />
+            <Box>
+              <Typography
+                sx={{
+                  wordBreak: 'break-word',
+                }}
+                id={`${inputProps.id}-typography`}
+              >
+                {inputProps.prefix
+                  ? `${inputProps.prefix}${inputProps.value}`
+                  : `${inputProps.value}`}
+              </Typography>
+              <ButtonNaked
+                key="editButton"
+                color="primary"
+                onClick={toggleEdit}
+                sx={{ mr: 2 }}
+                disabled={editDisabled}
+                id={`modifyContact-${senderId}`}
+              >
+                {t('button.modifica')}
+              </ButtonNaked>
+              <ButtonNaked
+                id={`cancelContact-${senderId}`}
+                color="error"
+                onClick={onDelete}
+                disabled={editDisabled}
+              >
+                {t('button.elimina')}
+              </ButtonNaked>
+            </Box>
+          </Stack>
         )}
       </>
     );
