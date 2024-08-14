@@ -12,7 +12,7 @@
       "Se hai almeno un recapito attivo, <strong>non riceverai più i documenti cartacei</strong>."
     ],
     "pec-title": "Posta Elettronica Certificata",
-    "pec-description": "È come il tuo domicilio fisico, ma è online. Quando un ente carica una notifica per te su SEND, è disponibile subito e la puoi vedere ovunque ti trovi.",
+    "pec-description": "Quando un ente carica una notifica per te su SEND, ricevi l’avviso tramite PEC. Accedi a SEND per leggerla.",
     "link-pec-placeholder": "La tua PEC",
     "valid-pec": "Indirizzo PEC non valido",
     "pec-verify": "Abbiamo inviato un codice a",
@@ -39,8 +39,9 @@
     "description": "Leggi e gestisci le comunicazioni a valore legale direttamente su IO: quando c’è una notifica per te, la ricevi in app e puoi pagare eventuali spese.",
     "enabled": "Servizio attivo",
     "disabled": "Servizio non attivo",
-    "unavailable": "Servizio non disponibile",
+    "unavailable": "Per attivare il servizio, prima scarica l’app IO",
     "enable": "Attiva il servizio su IO",
+    "download": "Scarica l'app IO",
     "enable-modal": {
       "title": "Vuoi attivare il servizio \"Notifiche digitali\" su IO?",
       "checkbox": "Ho capito",

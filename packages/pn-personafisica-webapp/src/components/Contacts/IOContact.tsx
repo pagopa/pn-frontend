@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import DoDisturbOnOutlinedIcon from '@mui/icons-material/DoDisturbOnOutlined';
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
-import { Button, Stack, Typography } from '@mui/material';
-import { DisclaimerModal } from '@pagopa-pn/pn-commons';
+import { Alert, Button, Stack, Typography } from '@mui/material';
+import { DisclaimerModal, IllusAppIO, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -30,6 +29,7 @@ const IOContact: React.FC<Props> = ({ contact }) => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
+  const isMobile = useIsMobile();
 
   const parseContact = () => {
     if (contact === null) {
@@ -89,14 +89,34 @@ const IOContact: React.FC<Props> = ({ contact }) => {
     <DigitalContactsCard
       title={t('io-contact.title', { ns: 'recapiti' })}
       subtitle={t('io-contact.description', { ns: 'recapiti' })}
+      illustration={<IllusAppIO />}
     >
-      <Stack direction="row" spacing={1} alignItems="center" mb={2} data-testid="ioContact">
+      <Stack
+        direction={{
+          lg: 'row',
+          xs:
+            status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING
+              ? 'column'
+              : 'row',
+        }}
+        spacing={2}
+        alignItems="center"
+        mb={2}
+        data-testid="ioContact"
+      >
         {(status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING) && (
           <>
-            <CloseOutlinedIcon fontSize="small" color="disabled" />
-            <Typography data-testid="IO status" fontWeight={600}>
+            <Alert severity="info" sx={{ width: isMobile ? '100%' : 'auto' }}>
               {t('io-contact.unavailable', { ns: 'recapiti' })}
-            </Typography>
+            </Alert>
+            <Button
+              variant="contained"
+              onClick={handleModalOpen}
+              color="primary"
+              fullWidth={isMobile}
+            >
+              {t('io-contact.download', { ns: 'recapiti' })}
+            </Button>
           </>
         )}
         {status === IOContactStatus.DISABLED && (
@@ -117,16 +137,15 @@ const IOContact: React.FC<Props> = ({ contact }) => {
         )}
       </Stack>
       {status === IOContactStatus.DISABLED && (
-        <Button variant="contained" onClick={handleModalOpen} color="primary">
+        <Button variant="contained" onClick={handleModalOpen} color="primary" fullWidth={isMobile}>
           {t('io-contact.enable', { ns: 'recapiti' })}
         </Button>
       )}
       {status === IOContactStatus.ENABLED && (
-        <ButtonNaked onClick={handleModalOpen} color="error" sx={{ px: 4 }}>
+        <ButtonNaked onClick={handleModalOpen} color="error" sx={{ px: 4 }} fullWidth={isMobile}>
           {t('button.disable')}
         </ButtonNaked>
       )}
-      {/* getDisclaimer() */}
       <DisclaimerModal
         open={isConfirmModalOpen}
         onConfirm={handleConfirm}
