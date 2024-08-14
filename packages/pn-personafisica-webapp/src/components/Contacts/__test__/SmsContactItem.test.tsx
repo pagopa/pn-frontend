@@ -128,7 +128,7 @@ describe('test SmsContactItem', () => {
     await waitFor(() => expect(input!).toHaveValue(phoneValue));
     const errorMessage = form?.querySelector('#default_sms-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
-    const button = result.getByTestId('courtesy-sms-button');
+    const button = result.getByTestId('default_sms-button');
     expect(button).toBeEnabled();
     fireEvent.click(button);
     // Confirms the disclaimer dialog

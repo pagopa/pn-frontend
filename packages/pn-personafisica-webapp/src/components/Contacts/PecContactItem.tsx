@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import {
   AppResponse,
   AppResponsePublisher,
@@ -24,9 +24,10 @@ import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyF
 import { contactAlreadyExists, pecValidationSchema } from '../../utility/contacts.utility';
 import CancelVerificationModal from './CancelVerificationModal';
 import DeleteDialog from './DeleteDialog';
-import DigitalContactElem from './DigitalContactElem';
 import DigitalContactsCard from './DigitalContactsCard';
+import EditDigitalContact from './EditDigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
+import InsertDigitalContact from './InsertDigitalContact';
 import PecVerificationDialog from './PecVerificationDialog';
 
 type Props = {
@@ -209,7 +210,7 @@ const PecContactItem: React.FC<Props> = ({
   /*
    * if *some* value has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
-   * (the DigitalContactElem component includes the "update" button)
+   * (the EditDigitalContact component includes the "update" button)
    */
   /*
    * if *no* value has been attached to the contact type,
@@ -227,7 +228,7 @@ const PecContactItem: React.FC<Props> = ({
         style={{ width: isMobile ? '100%' : '50%' }}
       >
         {value && (
-          <DigitalContactElem
+          <EditDigitalContact
             senderId={senderId}
             ref={digitalElemRef}
             inputProps={{
@@ -269,38 +270,20 @@ const PecContactItem: React.FC<Props> = ({
           </>
         )}
         {!value && !verifyingAddress && (
-          <>
-            <Typography mb={1} variant="body2" sx={{ fontWeight: 'bold' }} id="associatedPEC">
-              {t('legal-contacts.pec-to-add', { ns: 'recapiti' })}
-            </Typography>
-            <Stack spacing={2} direction={{ sm: 'row', xs: 'column' }}>
-              <TextField
-                id={`${senderId}_pec`}
-                name={`${senderId}_pec`}
-                placeholder={t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' })}
-                fullWidth
-                value={formik.values[`${senderId}_pec`]}
-                onChange={handleChangeTouched}
-                error={
-                  formik.touched[`${senderId}_pec`] && Boolean(formik.errors[`${senderId}_pec`])
-                }
-                helperText={formik.touched[`${senderId}_pec`] && formik.errors[`${senderId}_pec`]}
-                inputProps={{ sx: { height: '14px' } }}
-                sx={{ flexBasis: { xs: 'unset', lg: '66.66%' } }}
-              />
-              <Button
-                id="add-contact"
-                variant="outlined"
-                disabled={!formik.isValid}
-                fullWidth
-                type="submit"
-                data-testid="addContact"
-                sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
-              >
-                {t('button.conferma')}
-              </Button>
-            </Stack>
-          </>
+          <InsertDigitalContact
+            label={t('legal-contacts.pec-to-add', { ns: 'recapiti' })}
+            inputProps={{
+              id: `${senderId}_pec`,
+              name: `${senderId}_pec`,
+              placeholder: t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' }),
+              value: formik.values[`${senderId}_pec`],
+              onChange: handleChangeTouched,
+              error: formik.touched[`${senderId}_pec`] && Boolean(formik.errors[`${senderId}_pec`]),
+              helperText: formik.touched[`${senderId}_pec`] && formik.errors[`${senderId}_pec`],
+            }}
+            insertDisabled={!formik.isValid}
+            buttonLabel={t('button.conferma')}
+          />
         )}
       </form>
       <ExistingContactDialog

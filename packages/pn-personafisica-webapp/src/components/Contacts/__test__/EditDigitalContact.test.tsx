@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { vi } from 'vitest';
 
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
-import DigitalContactElem from '../DigitalContactElem';
+import EditDigitalContact from '../EditDigitalContact';
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -16,7 +16,7 @@ const mockEditCancelCbk = vi.fn();
 const mockEditConfirmCbk = vi.fn();
 const mockDeleteCbk = vi.fn();
 
-describe('DigitalContactElem Component', () => {
+describe('EditDigitalContact Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -28,7 +28,7 @@ describe('DigitalContactElem Component', () => {
   it('renders component', () => {
     // render component
     const { container, queryByTestId } = render(
-      <DigitalContactElem
+      <EditDigitalContact
         inputProps={{
           id: 'pec',
           name: 'pec',
@@ -60,7 +60,7 @@ describe('DigitalContactElem Component', () => {
             digitalElemRef.current.toggleEdit();
           }}
         >
-          <DigitalContactElem
+          <EditDigitalContact
             inputProps={{
               id: 'pec',
               name: 'pec',
@@ -110,7 +110,7 @@ describe('DigitalContactElem Component', () => {
   it('remove contact', () => {
     // render component
     const { container } = render(
-      <DigitalContactElem
+      <EditDigitalContact
         inputProps={{
           id: 'pec',
           name: 'pec',
@@ -130,7 +130,7 @@ describe('DigitalContactElem Component', () => {
   it('save disabled', async () => {
     // render component
     const { container } = render(
-      <DigitalContactElem
+      <EditDigitalContact
         inputProps={{
           id: 'pec',
           name: 'pec',
@@ -155,7 +155,7 @@ describe('DigitalContactElem Component', () => {
   it('edit disabled', () => {
     // render component
     const { container } = render(
-      <DigitalContactElem
+      <EditDigitalContact
         inputProps={{
           id: 'pec',
           name: 'pec',

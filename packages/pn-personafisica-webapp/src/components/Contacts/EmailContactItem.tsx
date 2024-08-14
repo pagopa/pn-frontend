@@ -3,7 +3,7 @@ import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import {
   AppResponse,
   AppResponsePublisher,
@@ -23,9 +23,10 @@ import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, emailValidationSchema } from '../../utility/contacts.utility';
 import DeleteDialog from './DeleteDialog';
-import DigitalContactElem from './DigitalContactElem';
 import DigitalContactsCard from './DigitalContactsCard';
+import EditDigitalContact from './EditDigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
+import InsertDigitalContact from './InsertDigitalContact';
 
 interface Props {
   value: string;
@@ -205,7 +206,7 @@ const EmailContactItem: React.FC<Props> = ({
   /*
    * if *some* value (phone number, email address) has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
-   * (the DigitalContactElem component includes the "update" button)
+   * (the EditDigitalContact component includes the "update" button)
    * if *no* value (phone number, email address) has been attached to the contact type,
    * then we show the input field allowing the user to enter it along with the button
    * to perform the addition.
@@ -220,8 +221,8 @@ const EmailContactItem: React.FC<Props> = ({
         data-testid={`${senderId}_emailContact`}
         style={{ width: isMobile ? '100%' : '50%' }}
       >
-        {value ? (
-          <DigitalContactElem
+        {value && (
+          <EditDigitalContact
             senderId={senderId}
             ref={digitalElemRef}
             inputProps={{
@@ -242,42 +243,23 @@ const EmailContactItem: React.FC<Props> = ({
             onEditCancel={() => formik.resetForm({ values: initialValues })}
             onEdit={onEdit}
           />
-        ) : (
-          <>
-            <Typography id="email-label" variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
-              {t(`courtesy-contacts.email-to-add`, { ns: 'recapiti' })}
-            </Typography>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-              <TextField
-                id={`${senderId}_email`}
-                name={`${senderId}_email`}
-                value={formik.values[`${senderId}_email`]}
-                onChange={handleChangeTouched}
-                error={
-                  formik.touched[`${senderId}_email`] && Boolean(formik.errors[`${senderId}_email`])
-                }
-                helperText={
-                  formik.touched[`${senderId}_email`] && formik.errors[`${senderId}_email`]
-                }
-                inputProps={{ sx: { height: '14px' } }}
-                placeholder={t(`courtesy-contacts.link-email-placeholder`, { ns: 'recapiti' })}
-                fullWidth
-                sx={{ flexBasis: { xs: 'unset', lg: '66.66%' } }}
-              />
-
-              <Button
-                id="courtesy-email-button"
-                variant="outlined"
-                disabled={!formik.isValid}
-                fullWidth
-                type="submit"
-                data-testid="courtesy-email-button"
-                sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
-              >
-                {t(`courtesy-contacts.email-add`, { ns: 'recapiti' })}
-              </Button>
-            </Stack>
-          </>
+        )}
+        {!value && (
+          <InsertDigitalContact
+            label={t(`courtesy-contacts.email-to-add`, { ns: 'recapiti' })}
+            inputProps={{
+              id: `${senderId}_email`,
+              name: `${senderId}_email`,
+              placeholder: t(`courtesy-contacts.link-email-placeholder`, { ns: 'recapiti' }),
+              value: formik.values[`${senderId}_email`],
+              onChange: handleChangeTouched,
+              error:
+                formik.touched[`${senderId}_email`] && Boolean(formik.errors[`${senderId}_email`]),
+              helperText: formik.touched[`${senderId}_email`] && formik.errors[`${senderId}_email`],
+            }}
+            insertDisabled={!formik.isValid}
+            buttonLabel={t(`courtesy-contacts.email-add`, { ns: 'recapiti' })}
+          />
         )}
       </form>
       <ExistingContactDialog

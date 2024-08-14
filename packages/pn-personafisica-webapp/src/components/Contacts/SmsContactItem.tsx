@@ -3,7 +3,7 @@ import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Box, Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
+import { Box, InputAdornment, Typography } from '@mui/material';
 import {
   AppResponse,
   AppResponsePublisher,
@@ -27,9 +27,10 @@ import {
   phoneValidationSchema,
 } from '../../utility/contacts.utility';
 import DeleteDialog from './DeleteDialog';
-import DigitalContactElem from './DigitalContactElem';
 import DigitalContactsCard from './DigitalContactsCard';
+import EditDigitalContact from './EditDigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
+import InsertDigitalContact from './InsertDigitalContact';
 
 interface Props {
   value: string;
@@ -212,7 +213,7 @@ const SmsContactItem: React.FC<Props> = ({
   /*
    * if *some* value (phone number, email address) has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
-   * (the DigitalContactElem component includes the "update" button)
+   * (the EditDigitalContact component includes the "update" button)
    * if *no* value (phone number, email address) has been attached to the contact type,
    * then we show the input field allowing the user to enter it along with the button
    * to perform the addition.
@@ -227,8 +228,8 @@ const SmsContactItem: React.FC<Props> = ({
         data-testid={`${senderId}_smsContact`}
         style={{ width: isMobile ? '100%' : '50%' }}
       >
-        {value ? (
-          <DigitalContactElem
+        {value && (
+          <EditDigitalContact
             senderId={senderId}
             ref={digitalElemRef}
             inputProps={{
@@ -249,47 +250,27 @@ const SmsContactItem: React.FC<Props> = ({
             onEditCancel={() => formik.resetForm({ values: initialValues })}
             onEdit={onEdit}
           />
-        ) : (
-          <>
-            <Typography id="sms-label" variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
-              {t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
-            </Typography>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-              <TextField
-                id={`${senderId}_sms`}
-                name={`${senderId}_sms`}
-                value={formik.values[`${senderId}_sms`]}
-                onChange={handleChangeTouched}
-                error={
-                  formik.touched[`${senderId}_sms`] && Boolean(formik.errors[`${senderId}_sms`])
-                }
-                helperText={formik.touched[`${senderId}_sms`] && formik.errors[`${senderId}_sms`]}
-                inputProps={{ sx: { height: '14px' } }}
-                placeholder={t(`courtesy-contacts.link-sms-placeholder`, {
-                  ns: 'recapiti',
-                })}
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
-                  ),
-                }}
-                sx={{ flexBasis: { xs: 'unset', lg: '66.66%' } }}
-              />
-
-              <Button
-                id="courtesy-sms-button"
-                variant="outlined"
-                disabled={!formik.isValid}
-                fullWidth
-                type="submit"
-                data-testid="courtesy-sms-button"
-                sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
-              >
-                {t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
-              </Button>
-            </Stack>
-          </>
+        )}
+        {!value && (
+          <InsertDigitalContact
+            label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
+            inputProps={{
+              id: `${senderId}_sms`,
+              name: `${senderId}_sms`,
+              placeholder: t(`courtesy-contacts.link-sms-placeholder`, { ns: 'recapiti' }),
+              value: formik.values[`${senderId}_sms`],
+              onChange: handleChangeTouched,
+              error: formik.touched[`${senderId}_sms`] && Boolean(formik.errors[`${senderId}_sms`]),
+              helperText: formik.touched[`${senderId}_sms`] && formik.errors[`${senderId}_sms`],
+              InputProps: {
+                startAdornment: (
+                  <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
+                ),
+              },
+            }}
+            insertDisabled={!formik.isValid}
+            buttonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
+          />
         )}
       </form>
       <ExistingContactDialog

@@ -119,7 +119,7 @@ describe('testing EmailContactItem', () => {
     await waitFor(() => expect(input!).toHaveValue(mailValue));
     const errorMessage = form?.querySelector('#default_email-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
-    const button = result.getByTestId('courtesy-email-button');
+    const button = result.getByTestId('default_email-button');
     expect(button).toBeEnabled();
     fireEvent.click(button);
     // Confirms the disclaimer dialog

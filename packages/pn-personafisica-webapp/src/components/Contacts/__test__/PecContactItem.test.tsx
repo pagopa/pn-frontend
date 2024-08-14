@@ -101,7 +101,7 @@ describe('PecContactItem component', () => {
     await waitFor(() => expect(input!).toHaveValue(VALID_PEC));
     const errorMessage = form?.querySelector('#default_pec-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
-    const button = result.getByTestId('addContact');
+    const button = result.getByTestId('default_pec-button');
     expect(button).toBeEnabled();
     fireEvent.click(button);
     await waitFor(() => {
@@ -188,7 +188,7 @@ describe('PecContactItem component', () => {
     await waitFor(() => expect(input!).toHaveValue(VALID_PEC));
     const errorMessage = form?.querySelector('#default_pec-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
-    const button = result.getByTestId('addContact');
+    const button = result.getByTestId('default_pec-button');
     expect(button).toBeEnabled();
     fireEvent.click(button);
     await waitFor(() => {
