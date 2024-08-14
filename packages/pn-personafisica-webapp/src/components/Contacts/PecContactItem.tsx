@@ -11,6 +11,7 @@ import {
   CodeModal,
   ErrorMessage,
   appStateActions,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -24,6 +25,7 @@ import { contactAlreadyExists, pecValidationSchema } from '../../utility/contact
 import CancelVerificationModal from './CancelVerificationModal';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
+import DigitalContactsCard from './DigitalContactsCard';
 import ExistingContactDialog from './ExistingContactDialog';
 import PecVerificationDialog from './PecVerificationDialog';
 
@@ -62,6 +64,7 @@ const PecContactItem: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   const codeModalRef =
     useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
+  const isMobile = useIsMobile();
 
   const validationSchema = yup.object({
     [`${senderId}_pec`]: pecValidationSchema(t),
@@ -214,35 +217,34 @@ const PecContactItem: React.FC<Props> = ({
    * to perform the addition.
    */
   return (
-    <>
-      <form onSubmit={formik.handleSubmit} data-testid={`${senderId}_pecContact`}>
+    <DigitalContactsCard
+      title={t('legal-contacts.pec-title', { ns: 'recapiti' })}
+      subtitle={t('legal-contacts.pec-description', { ns: 'recapiti' })}
+    >
+      <form
+        onSubmit={formik.handleSubmit}
+        data-testid={`${senderId}_pecContact`}
+        style={{ width: isMobile ? '100%' : '50%' }}
+      >
         {value && (
-          <>
-            {senderId === 'default' && (
-              <Typography mb={1} sx={{ fontWeight: 'bold' }} id="associatedPEC" mt={3}>
-                {t('legal-contacts.pec-added', { ns: 'recapiti' })}
-              </Typography>
-            )}
-            <DigitalContactElem
-              senderId={senderId}
-              ref={digitalElemRef}
-              inputProps={{
-                id: `${senderId}_pec`,
-                name: `${senderId}_pec`,
-                label: 'PEC',
-                value: formik.values[`${senderId}_pec`],
-                onChange: (e) => void handleChangeTouched(e),
-                error:
-                  formik.touched[`${senderId}_pec`] && Boolean(formik.errors[`${senderId}_pec`]),
-                helperText: formik.touched[`${senderId}_pec`] && formik.errors[`${senderId}_pec`],
-              }}
-              saveDisabled={!formik.isValid}
-              editDisabled={blockEdit}
-              onDelete={() => setModalOpen(ModalType.DELETE)}
-              onEditCancel={() => formik.resetForm({ values: initialValues })}
-              onEdit={onEdit}
-            />
-          </>
+          <DigitalContactElem
+            senderId={senderId}
+            ref={digitalElemRef}
+            inputProps={{
+              id: `${senderId}_pec`,
+              name: `${senderId}_pec`,
+              label: 'PEC',
+              value: formik.values[`${senderId}_pec`],
+              onChange: (e) => void handleChangeTouched(e),
+              error: formik.touched[`${senderId}_pec`] && Boolean(formik.errors[`${senderId}_pec`]),
+              helperText: formik.touched[`${senderId}_pec`] && formik.errors[`${senderId}_pec`],
+            }}
+            saveDisabled={!formik.isValid}
+            editDisabled={blockEdit}
+            onDelete={() => setModalOpen(ModalType.DELETE)}
+            onEditCancel={() => formik.resetForm({ values: initialValues })}
+            onEdit={onEdit}
+          />
         )}
         {verifyingAddress && (
           <>
@@ -267,31 +269,38 @@ const PecContactItem: React.FC<Props> = ({
           </>
         )}
         {!value && !verifyingAddress && (
-          <Stack spacing={2} direction={{ sm: 'row', xs: 'column' }} mt={3}>
-            <TextField
-              id={`${senderId}_pec`}
-              name={`${senderId}_pec`}
-              placeholder={t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' })}
-              fullWidth
-              value={formik.values[`${senderId}_pec`]}
-              onChange={handleChangeTouched}
-              error={formik.touched[`${senderId}_pec`] && Boolean(formik.errors[`${senderId}_pec`])}
-              helperText={formik.touched[`${senderId}_pec`] && formik.errors[`${senderId}_pec`]}
-              inputProps={{ sx: { height: '14px' } }}
-              sx={{ flexBasis: { xs: 'unset', lg: '66.66%' } }}
-            />
-            <Button
-              id="add-contact"
-              variant="outlined"
-              disabled={!formik.isValid}
-              fullWidth
-              type="submit"
-              data-testid="addContact"
-              sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
-            >
-              {t('button.conferma')}
-            </Button>
-          </Stack>
+          <>
+            <Typography mb={1} variant="body2" sx={{ fontWeight: 'bold' }} id="associatedPEC">
+              {t('legal-contacts.pec-to-add', { ns: 'recapiti' })}
+            </Typography>
+            <Stack spacing={2} direction={{ sm: 'row', xs: 'column' }}>
+              <TextField
+                id={`${senderId}_pec`}
+                name={`${senderId}_pec`}
+                placeholder={t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' })}
+                fullWidth
+                value={formik.values[`${senderId}_pec`]}
+                onChange={handleChangeTouched}
+                error={
+                  formik.touched[`${senderId}_pec`] && Boolean(formik.errors[`${senderId}_pec`])
+                }
+                helperText={formik.touched[`${senderId}_pec`] && formik.errors[`${senderId}_pec`]}
+                inputProps={{ sx: { height: '14px' } }}
+                sx={{ flexBasis: { xs: 'unset', lg: '66.66%' } }}
+              />
+              <Button
+                id="add-contact"
+                variant="outlined"
+                disabled={!formik.isValid}
+                fullWidth
+                type="submit"
+                data-testid="addContact"
+                sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
+              >
+                {t('button.conferma')}
+              </Button>
+            </Stack>
+          </>
         )}
       </form>
       <ExistingContactDialog
@@ -359,7 +368,7 @@ const PecContactItem: React.FC<Props> = ({
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />
-    </>
+    </DigitalContactsCard>
   );
 };
 

@@ -1,10 +1,8 @@
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
-import { Alert, Box, Grid, Typography } from '@mui/material';
-import { IllusEmailValidation } from '@pagopa/mui-italia';
+import { Box, List, ListItem, Stack, Typography } from '@mui/material';
 
 import { ChannelType, DigitalAddress } from '../../models/contacts';
-import DigitalContactsCard from './DigitalContactsCard';
 import PecContactItem from './PecContactItem';
 
 type Props = {
@@ -14,48 +12,36 @@ type Props = {
 const LegalContacts = ({ legalAddresses }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
 
-  const title = (
-    <Grid container spacing={1} alignItems="flex-end" direction="row">
-      <Grid item xs="auto">
-        {t('legal-contacts.subtitle-2', { ns: 'recapiti' })}
-      </Grid>
-    </Grid>
-  );
-
   const pecAddress = legalAddresses.find(
     (a) => a.senderId === 'default' && a.channelType === ChannelType.PEC
   );
 
+  const legalContactList: Array<string> = t('legal-contacts.list', {
+    returnObjects: true,
+    defaultValue: [],
+    ns: 'recapiti',
+  });
+
   return (
-    <DigitalContactsCard
-      sectionTitle={t('legal-contacts.title', { ns: 'recapiti' })}
-      title={title}
-      subtitle={t('legal-contacts.description', { ns: 'recapiti' })}
-      avatar={<IllusEmailValidation />}
-    >
-      <Box sx={{ width: '100%' }} data-testid="legalContacts">
+    <Box>
+      <Typography variant="h6" fontWeight={700}>
+        {t('legal-contacts.title', { ns: 'recapiti' })}
+      </Typography>
+      <List dense sx={{ py: 0, px: 3, mt: 2, listStyleType: 'square' }}>
+        {legalContactList.map((item, index) => (
+          <ListItem key={index} sx={{ display: 'list-item', p: 0, pt: index > 0 ? 1 : 0 }}>
+            <Trans i18nKey={item} t={(s: string) => s} />
+          </ListItem>
+        ))}
+      </List>
+      <Stack spacing={3} mt={3} data-testid="legalContacts">
         <PecContactItem
           value={legalAddresses.find((a) => a.senderId === 'default')?.value ?? ''}
           blockDelete={legalAddresses.length > 1}
           verifyingAddress={pecAddress ? !pecAddress.pecValid : false}
         />
-      </Box>
-      <Alert
-        role="banner"
-        aria-label={t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}
-        sx={{ mt: 4 }}
-        severity="info"
-      >
-        <Typography
-          role="banner"
-          component="span"
-          variant="body1"
-          data-testid="legal-contact-disclaimer"
-        >
-          {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
-        </Typography>
-      </Alert>
-    </DigitalContactsCard>
+      </Stack>
+    </Box>
   );
 };
 

@@ -11,6 +11,7 @@ import {
   DisclaimerModal,
   ErrorMessage,
   appStateActions,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -27,6 +28,7 @@ import {
 } from '../../utility/contacts.utility';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactElem from './DigitalContactElem';
+import DigitalContactsCard from './DigitalContactsCard';
 import ExistingContactDialog from './ExistingContactDialog';
 
 interface Props {
@@ -61,6 +63,7 @@ const SmsContactItem: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   const codeModalRef =
     useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
+  const isMobile = useIsMobile();
 
   // value contains the prefix
   const contactValue = value.replace(internationalPhonePrefix, '');
@@ -215,13 +218,15 @@ const SmsContactItem: React.FC<Props> = ({
    * to perform the addition.
    */
   return (
-    <>
-      <form onSubmit={formik.handleSubmit} data-testid={`${senderId}_smsContact`}>
-        {senderId === 'default' && (
-          <Typography id="sms-label" variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
-            {t(`courtesy-contacts.sms-added`, { ns: 'recapiti' })}
-          </Typography>
-        )}
+    <DigitalContactsCard
+      title={t('courtesy-contacts.sms-title', { ns: 'recapiti' })}
+      subtitle={t('courtesy-contacts.sms-description', { ns: 'recapiti' })}
+    >
+      <form
+        onSubmit={formik.handleSubmit}
+        data-testid={`${senderId}_smsContact`}
+        style={{ width: isMobile ? '100%' : '50%' }}
+      >
         {value ? (
           <DigitalContactElem
             senderId={senderId}
@@ -245,39 +250,46 @@ const SmsContactItem: React.FC<Props> = ({
             onEdit={onEdit}
           />
         ) : (
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <TextField
-              id={`${senderId}_sms`}
-              name={`${senderId}_sms`}
-              value={formik.values[`${senderId}_sms`]}
-              onChange={handleChangeTouched}
-              error={formik.touched[`${senderId}_sms`] && Boolean(formik.errors[`${senderId}_sms`])}
-              helperText={formik.touched[`${senderId}_sms`] && formik.errors[`${senderId}_sms`]}
-              inputProps={{ sx: { height: '14px' } }}
-              placeholder={t(`courtesy-contacts.link-sms-placeholder`, {
-                ns: 'recapiti',
-              })}
-              fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
-                ),
-              }}
-              sx={{ flexBasis: { xs: 'unset', lg: '66.66%' } }}
-            />
+          <>
+            <Typography id="sms-label" variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
+              {t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
+            </Typography>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+              <TextField
+                id={`${senderId}_sms`}
+                name={`${senderId}_sms`}
+                value={formik.values[`${senderId}_sms`]}
+                onChange={handleChangeTouched}
+                error={
+                  formik.touched[`${senderId}_sms`] && Boolean(formik.errors[`${senderId}_sms`])
+                }
+                helperText={formik.touched[`${senderId}_sms`] && formik.errors[`${senderId}_sms`]}
+                inputProps={{ sx: { height: '14px' } }}
+                placeholder={t(`courtesy-contacts.link-sms-placeholder`, {
+                  ns: 'recapiti',
+                })}
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
+                  ),
+                }}
+                sx={{ flexBasis: { xs: 'unset', lg: '66.66%' } }}
+              />
 
-            <Button
-              id="courtesy-sms-button"
-              variant="outlined"
-              disabled={!formik.isValid}
-              fullWidth
-              type="submit"
-              data-testid="courtesy-sms-button"
-              sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
-            >
-              {t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
-            </Button>
-          </Stack>
+              <Button
+                id="courtesy-sms-button"
+                variant="outlined"
+                disabled={!formik.isValid}
+                fullWidth
+                type="submit"
+                data-testid="courtesy-sms-button"
+                sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
+              >
+                {t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
+              </Button>
+            </Stack>
+          </>
         )}
       </form>
       <ExistingContactDialog
@@ -347,7 +359,7 @@ const SmsContactItem: React.FC<Props> = ({
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />
-    </>
+    </DigitalContactsCard>
   );
 };
 

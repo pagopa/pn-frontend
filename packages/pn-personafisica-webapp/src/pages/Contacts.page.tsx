@@ -1,19 +1,16 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 
-import { Box, Link, Stack, Typography } from '@mui/material';
+import { Box, Link, Stack } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
-import IOContact from '../components/Contacts/IOContact';
 import LegalContacts from '../components/Contacts/LegalContacts';
 import SpecialContacts from '../components/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
-import { AddressType, ChannelType, DigitalAddress } from '../models/contacts';
+import { AddressType, ChannelType } from '../models/contacts';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
-import { PROFILO } from '../navigation/routes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { resetState } from '../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -22,7 +19,6 @@ import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const Contacts = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
   const digitalAddresses = useAppSelector(
@@ -62,13 +58,6 @@ const Contacts = () => {
     }
   }, [pageReady]);
 
-  const handleRedirectToProfilePage = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_PROFILE, {
-      source: 'tuoi_recapiti',
-    });
-    navigate(PROFILO);
-  };
-
   const faqWhatIsAarCompleteLink = useMemo(
     () =>
       LANDING_SITE_URL && FAQ_WHAT_IS_AAR ? `${LANDING_SITE_URL}${FAQ_WHAT_IS_AAR}` : undefined,
@@ -84,48 +73,27 @@ const Contacts = () => {
   );
 
   const subtitle = (
-    <>
-      {t('subtitle-text-1', { ns: 'recapiti' })}
-      {faqWhatIsAarCompleteLink ? (
-        <Link
-          href={faqWhatIsAarCompleteLink}
-          target="_blank"
-          aria-label={t('subtitle-link-1', { ns: 'recapiti' })}
-        >
-          {t('subtitle-link-1', { ns: 'recapiti' })}
-        </Link>
-      ) : (
-        t('subtitle-link-1', { ns: 'recapiti' })
-      )}
-      {t('subtitle-text-2', { ns: 'recapiti' })}
-      {faqWhatIsCourtesyMessageCompleteLink ? (
-        <Link
-          href={faqWhatIsCourtesyMessageCompleteLink}
-          target="_blank"
-          aria-label={t('subtitle-link-2', { ns: 'recapiti' })}
-        >
-          {t('subtitle-link-2', { ns: 'recapiti' })}
-        </Link>
-      ) : (
-        t('subtitle-link-2', { ns: 'recapiti' })
-      )}
-      {t('subtitle-text-3', { ns: 'recapiti' })}
-      <Link
-        onClick={handleRedirectToProfilePage}
-        aria-label={t('subtitle-link-3', { ns: 'recapiti' })}
-        component="button"
-        sx={{ verticalAlign: 'inherit' }}
-      >
-        {t('subtitle-link-3', { ns: 'recapiti' })}
-      </Link>
-      {t('subtitle-text-4', { ns: 'recapiti' })}
-    </>
+    <Trans
+      i18nKey="subtitle"
+      ns="recapiti"
+      components={[
+        faqWhatIsAarCompleteLink ? (
+          <Link key="whatIsAarLink" href={faqWhatIsAarCompleteLink} target="_blank" />
+        ) : (
+          <></>
+        ),
+        faqWhatIsCourtesyMessageCompleteLink ? (
+          <Link
+            key="courtesyMessageLink"
+            href={faqWhatIsCourtesyMessageCompleteLink}
+            target="_blank"
+          />
+        ) : (
+          <></>
+        ),
+      ]}
+    />
   );
-
-  const courtesyContactsNotEmpty = () => {
-    const isIrrilevant = (address: DigitalAddress) => address.channelType === ChannelType.IOMSG;
-    return courtesyAddresses.some((addr) => !isIrrilevant(addr));
-  };
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
@@ -140,28 +108,13 @@ const Contacts = () => {
         <ApiErrorWrapper
           apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
           reloadAction={fetchAddresses}
-          mt={2}
         >
-          <Stack direction="column" spacing={8} mt={8}>
-            <Stack spacing={3}>
-              <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
-                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                  <LegalContacts legalAddresses={legalAddresses} />
-                </Box>
-                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                  <IOContact contact={contactIO} />
-                </Box>
-              </Stack>
-              <CourtesyContacts contacts={courtesyAddresses} />
-            </Stack>
-            {(legalAddresses.length > 0 || courtesyContactsNotEmpty()) && (
-              <Stack spacing={2}>
-                <Typography id="specialContact" variant="h5" fontWeight={600} fontSize={28}>
-                  {t('special-contacts-title')}
-                </Typography>
-                <SpecialContacts digitalAddresses={digitalAddresses} />
-              </Stack>
-            )}
+          <Stack direction="column" spacing={4} mt={4}>
+            <LegalContacts legalAddresses={legalAddresses} />
+            <CourtesyContacts contacts={courtesyAddresses} />
+            {(legalAddresses.length > 0 ||
+              courtesyAddresses.filter((addr) => addr.channelType !== ChannelType.IOMSG).length >
+                0) && <SpecialContacts digitalAddresses={digitalAddresses} />}
           </Stack>
         </ApiErrorWrapper>
       </Box>

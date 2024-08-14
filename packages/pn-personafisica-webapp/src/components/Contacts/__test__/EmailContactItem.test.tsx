@@ -62,6 +62,8 @@ describe('testing EmailContactItem', () => {
   it('type in an invalid email', async () => {
     // render component
     const { container } = render(<EmailContactItem value="" />);
+    expect(container).toHaveTextContent('courtesy-contacts.email-title');
+    expect(container).toHaveTextContent('courtesy-contacts.email-description');
     const form = container.querySelector('form');
     const input = form!.querySelector(`[name="default_email"]`);
     // set invalid values

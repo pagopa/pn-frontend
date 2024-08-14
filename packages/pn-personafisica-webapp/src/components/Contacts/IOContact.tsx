@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
-import { Alert, Box, Stack, Typography } from '@mui/material';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import DoDisturbOnOutlinedIcon from '@mui/icons-material/DoDisturbOnOutlined';
+import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
+import { Button, Stack, Typography } from '@mui/material';
 import { DisclaimerModal } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, IllusSms } from '@pagopa/mui-italia';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { DigitalAddress, IOAllowedValues } from '../../models/contacts';
@@ -43,6 +44,7 @@ const IOContact: React.FC<Props> = ({ contact }) => {
   };
 
   const status = parseContact();
+  const disclaimerLabel = status === IOContactStatus.ENABLED ? 'disable' : 'enable';
 
   const enableIO = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
@@ -66,7 +68,15 @@ const IOContact: React.FC<Props> = ({ contact }) => {
       .catch(() => {});
   };
 
-  const handleConfirmationModal = () => {
+  const handleConfirm = () => {
+    if (status === IOContactStatus.ENABLED) {
+      disableIO();
+    } else if (status === IOContactStatus.DISABLED) {
+      enableIO();
+    }
+  };
+
+  const handleModalOpen = () => {
     PFEventStrategyFactory.triggerEvent(
       status === IOContactStatus.ENABLED
         ? PFEventsType.SEND_DEACTIVE_IO_START
@@ -75,103 +85,57 @@ const IOContact: React.FC<Props> = ({ contact }) => {
     setIsConfirmModalOpen(true);
   };
 
-  const getContent = () => {
-    if (status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING) {
-      return;
-    } else {
-      const content =
-        status === IOContactStatus.DISABLED
-          ? {
-              Icon: <CloseIcon fontSize="small" color="disabled" />,
-              text: t('io-contact.disabled', { ns: 'recapiti' }),
-              btn: t('button.enable'),
-            }
-          : {
-              Icon: <CheckIcon fontSize="small" color="success" />,
-              text: t('io-contact.enabled', { ns: 'recapiti' }),
-              btn: t('button.disable'),
-            };
-      return (
-        <Stack direction="row" alignItems="center" mt={3}>
-          {content.Icon}
-          <Typography data-testid="IO status" ml={1}>
-            {content.text}
-          </Typography>
-          <Box flexGrow={1} textAlign="right">
-            <ButtonNaked color="primary" data-testid="IO button" onClick={handleConfirmationModal}>
-              {content.btn}
-            </ButtonNaked>
-          </Box>
-        </Stack>
-      );
-    }
-  };
-
-  const getDisclaimer = () => {
-    if (status === IOContactStatus.PENDING) {
-      return;
-    } else {
-      return (
-        <Alert
-          role="banner"
-          sx={{ mt: 4 }}
-          aria-label={
-            status === IOContactStatus.UNAVAILABLE
-              ? t('io-contact.disclaimer-message-unavailable', { ns: 'recapiti' })
-              : t('io-contact.disclaimer-message', { ns: 'recapiti' })
-          }
-          severity={status !== IOContactStatus.UNAVAILABLE ? 'info' : 'warning'}
-          data-testid="appIO-contact-disclaimer"
-        >
-          <Typography component="span" variant="body1" role="banner">
-            {status === IOContactStatus.UNAVAILABLE
-              ? t('io-contact.disclaimer-message-unavailable', { ns: 'recapiti' })
-              : t('io-contact.disclaimer-message', { ns: 'recapiti' })}{' '}
-          </Typography>
-          {/** 
-           * Waiting for FAQs
-            {isAvailable &&
-              <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
-                {t('io-contact.disclaimer-link', { ns: 'recapiti' })}
-              </Link>
-            }
-          * */}
-        </Alert>
-      );
-    }
-  };
-
   return (
     <DigitalContactsCard
-      sectionTitle={t('io-contact.title', { ns: 'recapiti' })}
-      title={t('io-contact.subtitle', { ns: 'recapiti' })}
+      title={t('io-contact.title', { ns: 'recapiti' })}
       subtitle={t('io-contact.description', { ns: 'recapiti' })}
-      avatar={<IllusSms size={60} />}
     >
-      {getContent()}
-      {getDisclaimer()}
+      <Stack direction="row" spacing={1} alignItems="center" mb={2} data-testid="ioContact">
+        {(status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING) && (
+          <>
+            <CloseOutlinedIcon fontSize="small" color="disabled" />
+            <Typography data-testid="IO status" fontWeight={600}>
+              {t('io-contact.unavailable', { ns: 'recapiti' })}
+            </Typography>
+          </>
+        )}
+        {status === IOContactStatus.DISABLED && (
+          <>
+            <DoDisturbOnOutlinedIcon fontSize="small" color="disabled" />
+            <Typography data-testid="IO status" fontWeight={600}>
+              {t('io-contact.disabled', { ns: 'recapiti' })}
+            </Typography>
+          </>
+        )}
+        {status === IOContactStatus.ENABLED && (
+          <>
+            <VerifiedOutlinedIcon fontSize="small" color="primary" />
+            <Typography data-testid="IO status" fontWeight={600}>
+              {t('io-contact.enabled', { ns: 'recapiti' })}
+            </Typography>
+          </>
+        )}
+      </Stack>
       {status === IOContactStatus.DISABLED && (
-        <DisclaimerModal
-          open={isConfirmModalOpen}
-          onConfirm={enableIO}
-          title={t('io-contact.enable-modal.title', { ns: 'recapiti' })}
-          content={t('io-contact.enable-modal.content', { ns: 'recapiti' })}
-          checkboxLabel={t('io-contact.enable-modal.checkbox', { ns: 'recapiti' })}
-          confirmLabel={t('io-contact.enable-modal.confirm', { ns: 'recapiti' })}
-          onCancel={() => setIsConfirmModalOpen(false)}
-        />
+        <Button variant="contained" onClick={handleModalOpen} color="primary">
+          {t('io-contact.enable', { ns: 'recapiti' })}
+        </Button>
       )}
       {status === IOContactStatus.ENABLED && (
-        <DisclaimerModal
-          open={isConfirmModalOpen}
-          onConfirm={disableIO}
-          title={t('io-contact.disable-modal.title', { ns: 'recapiti' })}
-          content={t('io-contact.disable-modal.content', { ns: 'recapiti' })}
-          checkboxLabel={t('io-contact.disable-modal.checkbox', { ns: 'recapiti' })}
-          confirmLabel={t('io-contact.disable-modal.confirm', { ns: 'recapiti' })}
-          onCancel={() => setIsConfirmModalOpen(false)}
-        />
+        <ButtonNaked onClick={handleModalOpen} color="error" sx={{ px: 4 }}>
+          {t('button.disable')}
+        </ButtonNaked>
       )}
+      {/* getDisclaimer() */}
+      <DisclaimerModal
+        open={isConfirmModalOpen}
+        onConfirm={handleConfirm}
+        title={t(`io-contact.${disclaimerLabel}-modal.title`, { ns: 'recapiti' })}
+        content={t(`io-contact.${disclaimerLabel}-modal.content`, { ns: 'recapiti' })}
+        checkboxLabel={t(`io-contact.${disclaimerLabel}-modal.checkbox`, { ns: 'recapiti' })}
+        confirmLabel={t(`io-contact.${disclaimerLabel}-modal.confirm`, { ns: 'recapiti' })}
+        onCancel={() => setIsConfirmModalOpen(false)}
+      />
     </DigitalContactsCard>
   );
 };

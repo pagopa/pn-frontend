@@ -1,45 +1,65 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 
-import { Card, CardContent, CardHeader, Typography } from '@mui/material';
-import { TitleBox } from '@pagopa-pn/pn-commons';
+import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
+import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
+import { Card, CardContent, CardHeader, Stack, Typography } from '@mui/material';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 type Props = {
-  sectionTitle: string;
+  header?: ReactNode;
   title: ReactNode;
   subtitle: string;
-  avatar: ReactNode;
   children: ReactNode;
 };
 
-const DigitalContactsCard: React.FC<Props> = ({
-  sectionTitle,
-  title,
-  subtitle,
-  avatar,
-  children,
-}) => (
-  <Card sx={{ p: 3 }}>
-    {avatar && <CardHeader sx={{ p: 0 }} avatar={avatar} />}
-    <CardContent data-testid="DigitalContactsCardBody" sx={{ p: 0 }}>
-      {sectionTitle && (
-        <Typography
-          color="text.primary"
-          fontWeight={700}
-          fontSize={14}
-          sx={{ textTransform: 'uppercase' }}
-        >
-          {sectionTitle}
-        </Typography>
+const DigitalContactsCard: React.FC<Props> = ({ header, title, subtitle, children }) => {
+  const isMobile = useIsMobile();
+  const [showDescription, setShowDescription] = useState(false);
+
+  return (
+    <Card sx={{ p: 3 }}>
+      {header && (
+        <CardHeader data-testid="DigitalContactsCardHeader" sx={{ p: 0 }} title={header} />
       )}
-      <TitleBox
-        sx={{ marginTop: '10px' }}
-        variantTitle="h6"
-        title={title}
-        subTitle={subtitle}
-        variantSubTitle={'body1'}
-      />
-      {children}
-    </CardContent>
-  </Card>
-);
+      <CardContent data-testid="DigitalContactsCardBody" sx={{ p: 0 }}>
+        <Stack direction="row" justifyContent="space-between">
+          <Typography
+            color="text.primary"
+            fontWeight={700}
+            fontSize={18}
+            variant="body1"
+            mb={2}
+            data-testid="DigitalContactsCardTitle"
+          >
+            {title}
+          </Typography>
+          {isMobile && !showDescription && (
+            <KeyboardArrowDownOutlinedIcon
+              color="primary"
+              onClick={() => setShowDescription(true)}
+            />
+          )}
+          {isMobile && showDescription && (
+            <KeyboardArrowUpOutlinedIcon
+              color="primary"
+              onClick={() => setShowDescription(false)}
+            />
+          )}
+        </Stack>
+        {(!isMobile || (isMobile && showDescription)) && (
+          <Typography
+            color="text.secondary"
+            fontWeight={400}
+            variant="body1"
+            mb={2}
+            data-testid="DigitalContactsCardDescription"
+          >
+            {subtitle}
+          </Typography>
+        )}
+        {children}
+      </CardContent>
+    </Card>
+  );
+};
 export default DigitalContactsCard;
