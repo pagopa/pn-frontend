@@ -41,9 +41,11 @@ describe('IOContact component', async () => {
   });
 
   it('IO unavailable', () => {
-    const { getByTestId, getByText } = render(<IOContact contact={undefined} />);
-    getByTestId('CloseOutlinedIcon');
-    getByText('io-contact.unavailable');
+    const { getByText, getByRole } = render(<IOContact contact={undefined} />);
+    const text = getByText('io-contact.unavailable');
+    const button = getByRole('button', { name: 'io-contact.download' });
+    expect(text).toBeInTheDocument();
+    expect(button).toBeInTheDocument();
   });
 
   it('IO available and disabled', async () => {
