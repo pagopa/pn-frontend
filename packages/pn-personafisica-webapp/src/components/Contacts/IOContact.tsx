@@ -134,23 +134,17 @@ const IOContact: React.FC<Props> = ({ contact }) => {
     }
 
     return (
-      <>
-        <Stack direction="row" spacing={2} data-testid="ioContact">
-          <VerifiedIcon
-            fontSize="small"
-            color="success"
-            sx={{ position: 'relative', top: '2px' }}
-          />
-          <Box>
-            <Typography data-testid="IO status" fontWeight={600} mb={1}>
-              {t('io-contact.enabled', { ns: 'recapiti' })}
-            </Typography>
-            <ButtonNaked onClick={handleModalOpen} color="error">
-              {t('button.disable')}
-            </ButtonNaked>
-          </Box>
-        </Stack>
-      </>
+      <Stack direction="row" spacing={2} data-testid="ioContact">
+        <VerifiedIcon fontSize="small" color="success" sx={{ position: 'relative', top: '2px' }} />
+        <Box>
+          <Typography data-testid="IO status" fontWeight={600}>
+            {t('io-contact.enabled', { ns: 'recapiti' })}
+          </Typography>
+          <ButtonNaked onClick={handleModalOpen} color="error">
+            {t('button.disable')}
+          </ButtonNaked>
+        </Box>
+      </Stack>
     );
   };
 
