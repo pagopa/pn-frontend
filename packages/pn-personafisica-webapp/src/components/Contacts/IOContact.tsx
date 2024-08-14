@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DoDisturbOnOutlinedIcon from '@mui/icons-material/DoDisturbOnOutlined';
-import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
-import { Alert, Button, Stack, Typography } from '@mui/material';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import { Alert, Box, Button, Stack, Typography } from '@mui/material';
 import { DisclaimerModal, IllusAppIO, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -85,67 +85,82 @@ const IOContact: React.FC<Props> = ({ contact }) => {
     setIsConfirmModalOpen(true);
   };
 
+  const getContent = () => {
+    if (status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING) {
+      return (
+        <Stack
+          direction={{
+            lg: 'row',
+            xs: 'column',
+          }}
+          spacing={2}
+          alignItems="center"
+          mb={2}
+          data-testid="ioContact"
+        >
+          <Alert severity="info" sx={{ width: isMobile ? '100%' : 'auto' }}>
+            {t('io-contact.unavailable', { ns: 'recapiti' })}
+          </Alert>
+          <Button
+            variant="contained"
+            onClick={handleModalOpen}
+            color="primary"
+            fullWidth={isMobile}
+          >
+            {t('io-contact.download', { ns: 'recapiti' })}
+          </Button>
+        </Stack>
+      );
+    }
+    if (status === IOContactStatus.DISABLED) {
+      return (
+        <>
+          <Stack direction="row" spacing={2} alignItems="center" mb={2} data-testid="ioContact">
+            <DoDisturbOnOutlinedIcon fontSize="small" color="disabled" />
+            <Typography data-testid="IO status" fontWeight={600}>
+              {t('io-contact.disabled', { ns: 'recapiti' })}
+            </Typography>
+          </Stack>
+          <Button
+            variant="contained"
+            onClick={handleModalOpen}
+            color="primary"
+            fullWidth={isMobile}
+          >
+            {t('io-contact.enable', { ns: 'recapiti' })}
+          </Button>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <Stack direction="row" spacing={2} data-testid="ioContact">
+          <VerifiedIcon
+            fontSize="small"
+            color="success"
+            sx={{ position: 'relative', top: '2px' }}
+          />
+          <Box>
+            <Typography data-testid="IO status" fontWeight={600} mb={1}>
+              {t('io-contact.enabled', { ns: 'recapiti' })}
+            </Typography>
+            <ButtonNaked onClick={handleModalOpen} color="error">
+              {t('button.disable')}
+            </ButtonNaked>
+          </Box>
+        </Stack>
+      </>
+    );
+  };
+
   return (
     <DigitalContactsCard
       title={t('io-contact.title', { ns: 'recapiti' })}
       subtitle={t('io-contact.description', { ns: 'recapiti' })}
       illustration={<IllusAppIO />}
     >
-      <Stack
-        direction={{
-          lg: 'row',
-          xs:
-            status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING
-              ? 'column'
-              : 'row',
-        }}
-        spacing={2}
-        alignItems="center"
-        mb={2}
-        data-testid="ioContact"
-      >
-        {(status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING) && (
-          <>
-            <Alert severity="info" sx={{ width: isMobile ? '100%' : 'auto' }}>
-              {t('io-contact.unavailable', { ns: 'recapiti' })}
-            </Alert>
-            <Button
-              variant="contained"
-              onClick={handleModalOpen}
-              color="primary"
-              fullWidth={isMobile}
-            >
-              {t('io-contact.download', { ns: 'recapiti' })}
-            </Button>
-          </>
-        )}
-        {status === IOContactStatus.DISABLED && (
-          <>
-            <DoDisturbOnOutlinedIcon fontSize="small" color="disabled" />
-            <Typography data-testid="IO status" fontWeight={600}>
-              {t('io-contact.disabled', { ns: 'recapiti' })}
-            </Typography>
-          </>
-        )}
-        {status === IOContactStatus.ENABLED && (
-          <>
-            <VerifiedOutlinedIcon fontSize="small" color="primary" />
-            <Typography data-testid="IO status" fontWeight={600}>
-              {t('io-contact.enabled', { ns: 'recapiti' })}
-            </Typography>
-          </>
-        )}
-      </Stack>
-      {status === IOContactStatus.DISABLED && (
-        <Button variant="contained" onClick={handleModalOpen} color="primary" fullWidth={isMobile}>
-          {t('io-contact.enable', { ns: 'recapiti' })}
-        </Button>
-      )}
-      {status === IOContactStatus.ENABLED && (
-        <ButtonNaked onClick={handleModalOpen} color="error" sx={{ px: 4 }} fullWidth={isMobile}>
-          {t('button.disable')}
-        </ButtonNaked>
-      )}
+      {getContent()}
       <DisclaimerModal
         open={isConfirmModalOpen}
         onConfirm={handleConfirm}

@@ -32,7 +32,7 @@ const DigitalContactsCardContent: React.FC<
   const isMobile = useIsMobile();
   const [showDescription, setShowDescription] = useState(false);
   return (
-    <Box sx={{ textAlign: isMobile ? 'center' : 'left', ...sx }}>
+    <Box sx={sx}>
       {isMobile && (
         <Stack direction="row" justifyContent="space-between">
           <DigitalContactsCardTitle title={title} />
@@ -62,7 +62,7 @@ const DigitalContactsCardContent: React.FC<
           {subtitle}
         </Typography>
       )}
-      {isMobile && illustration}
+      {isMobile && <Box sx={{ textAlign: 'center' }}>{illustration}</Box>}
       {children}
     </Box>
   );

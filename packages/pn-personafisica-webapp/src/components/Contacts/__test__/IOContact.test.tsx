@@ -100,7 +100,7 @@ describe('IOContact component', async () => {
         },
       }
     );
-    getByTestId('VerifiedOutlinedIcon');
+    getByTestId('VerifiedIcon');
     getByText('io-contact.enabled');
     const disableBtn = getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
