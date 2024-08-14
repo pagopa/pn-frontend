@@ -320,12 +320,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
       reloadAction={fetchAllActivatedParties}
       mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
     >
-      <DigitalContactsCard
-        sectionTitle=""
-        title=""
-        subtitle={t('special-contacts.subtitle', { ns: 'recapiti' })}
-        avatar={null}
-      >
+      <DigitalContactsCard title="" subtitle={t('special-contacts.subtitle', { ns: 'recapiti' })}>
         <Typography sx={{ marginTop: '20px' }}>{t('required-fields')}</Typography>
         <form
           style={{ margin: '20px 0' }}

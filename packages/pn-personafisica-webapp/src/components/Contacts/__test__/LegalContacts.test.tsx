@@ -1,9 +1,7 @@
-import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import { render, waitFor, within } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
 import LegalContacts from '../LegalContacts';
 
 vi.mock('react-i18next', () => ({
@@ -20,20 +18,6 @@ const defaultAddress = digitalLegalAddresses.find(
 );
 
 describe('LegalContacts Component', async () => {
-  let mock: MockAdapter;
-
-  beforeAll(() => {
-    mock = new MockAdapter(apiClient);
-  });
-
-  afterEach(() => {
-    mock.reset();
-  });
-
-  afterAll(() => {
-    mock.restore();
-  });
-
   it('renders component', () => {
     // render component
     const { container, getByTestId, getByText } = render(

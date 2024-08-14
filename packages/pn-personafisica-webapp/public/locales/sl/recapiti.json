@@ -1,8 +1,6 @@
 {
   "title": "Vaši kontaktni podatki",
   "subtitle": "Tukaj lahko navedete in uredite digitalne kontaktne podatke, na katere boste prejeli <0>obvestila o prejemu</0> in <1>vljudnostna obvestila</1> o vaših obvestilih.",
-  "general-contacts-title": "Splošni kontaktni podatki",
-  "special-contacts-title": "Drugi kontaktni podatki",
   "alert-dialog-email": "Če nimate PEC in dostopate do obvestila o pošiljanju v roku 5 dni (120 ur) od pošiljanja e-poštnega sporočila, potrdila o prejemu ne boste prejeli po priporočeni pošti.",
   "alert-dialog-sms": "Če nimate PEC in dostopate do obvestila na SEND v roku 5 dni (120 ur) od pošiljanja SMS-a, potrdila o prejemu ne boste prejeli po priporočeni pošti.",
   "legal-contacts": {

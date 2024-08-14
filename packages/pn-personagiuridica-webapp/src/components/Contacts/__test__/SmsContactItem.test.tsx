@@ -63,6 +63,8 @@ describe('test SmsContactItem', () => {
   it('type in an invalid number', async () => {
     // render component
     const { container } = render(<SmsContactItem value="" />);
+    expect(container).toHaveTextContent('courtesy-contacts.sms-title');
+    expect(container).toHaveTextContent('courtesy-contacts.sms-description');
     const form = container.querySelector('form');
     const input = form!.querySelector(`[name="default_sms"]`);
     // add invalid values
@@ -126,7 +128,7 @@ describe('test SmsContactItem', () => {
     await waitFor(() => expect(input!).toHaveValue(phoneValue));
     const errorMessage = form?.querySelector('#default_sms-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
-    const button = result.getByTestId('courtesy-sms-button');
+    const button = result.getByTestId('default_sms-button');
     expect(button).toBeEnabled();
     fireEvent.click(button);
     // Confirms the disclaimer dialog

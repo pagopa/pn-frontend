@@ -1,8 +1,6 @@
 {
   "title": "Vos coordonnées",
   "subtitle": "Ici, vous pouvez indiquer et modifier les coordonnées numériques auxquelles vous recevrez les <0>avis de réception</0> et <1>de courtoisie</1> de vos notifications.",
-  "general-contacts-title": "Coordonnées générales",
-  "special-contacts-title": "Autres coordonnées",
   "alert-dialog-email": "Si vous n’avez pas de PEC et que vous accédez à la notification sur SEND dans les 5 jours (120 heures) suivant l’envoi de l’e-mail, vous ne recevrez pas d’avis de réception par lettre recommandée.",
   "alert-dialog-sms": "Si vous n’avez pas de PEC et que vous accédez à la notification sur SEND dans les 5 jours (120 heures) suivant l’envoi du SMS, vous ne recevrez pas d’avis de réception par lettre recommandée.",
   "legal-contacts": {

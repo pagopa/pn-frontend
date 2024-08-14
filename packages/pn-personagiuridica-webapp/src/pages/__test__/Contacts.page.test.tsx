@@ -8,9 +8,8 @@ import {
   digitalCourtesyAddresses,
   digitalLegalAddresses,
 } from '../../__mocks__/Contacts.mock';
-import { RenderResult, act, fireEvent, render, screen } from '../../__test__/test-utils';
+import { RenderResult, act, render, screen } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { PROFILE } from '../../navigation/routes.const';
 import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
 
@@ -19,7 +18,8 @@ const mockOpenFn = vi.fn();
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
-    t: (str: string) => str,
+    t: (str: string, options?: { returnObjects: boolean }) =>
+      options?.returnObjects ? [str] : str,
     i18n: { language: 'it' },
   }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
@@ -103,28 +103,6 @@ describe('Contacts page', async () => {
     expect(courtesyContacts).toBeInTheDocument();
     const specialContact = result?.getByTestId('specialContact');
     expect(specialContact).toBeInTheDocument();
-  });
-
-  it('subtitle link properly redirects to profile page', async () => {
-    mock.onGet('/bff/v1/addresses').reply(200, []);
-    await act(async () => {
-      result = await render(<Contacts />, {
-        preloadedState: {
-          userState: {
-            user: {
-              organization: {
-                id: 'mocked-id',
-              },
-            },
-          },
-        },
-      });
-    });
-    const subtitleLink = result?.getByText('subtitle-link');
-    expect(subtitleLink).toBeInTheDocument();
-    fireEvent.click(subtitleLink!);
-    expect(mockOpenFn).toBeCalledTimes(1);
-    expect(mockOpenFn).toBeCalledWith(PROFILE('mocked-id', 'it'));
   });
 
   it('API error', async () => {

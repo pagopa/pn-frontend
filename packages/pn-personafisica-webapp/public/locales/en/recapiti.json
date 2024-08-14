@@ -1,8 +1,6 @@
 {
   "title": "Your contact information",
   "subtitle": "Here you can indicate and edit the digital contact details to which you will receive the <0>acknowledgement of receipts</0> and <1>courtesy notices</1> of your notifications.",
-  "general-contacts-title": "General contact details",
-  "special-contacts-title": "Other contact details",
   "alert-dialog-email": "If you do not have a PEC and access the notification on SEND within 5 days (120 hours) of sending the email, you will not receive the acknowledgement of receipt by registered mail.",
   "alert-dialog-sms": "If you do not have a PEC and access the SEND notification within 5 days (120 hours) of sending the SMS, you will not receive the acknowledgement of receipt by registered mail.",
   "legal-contacts": {

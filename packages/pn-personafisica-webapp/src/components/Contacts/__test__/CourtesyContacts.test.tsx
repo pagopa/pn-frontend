@@ -1,9 +1,7 @@
-import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
 import { render, waitFor, within } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
 import { ChannelType } from '../../../models/contacts';
 import CourtesyContacts from '../CourtesyContacts';
 
@@ -17,19 +15,6 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('CourtesyContacts Component', async () => {
-  let mock: MockAdapter;
-  beforeAll(() => {
-    mock = new MockAdapter(apiClient);
-  });
-
-  afterEach(() => {
-    mock.reset();
-  });
-
-  afterAll(() => {
-    mock.restore();
-  });
-
   it('renders component - no contacts', async () => {
     const { container, getByTestId } = render(<CourtesyContacts contacts={[]} />);
     expect(container).toHaveTextContent('courtesy-contacts.title');

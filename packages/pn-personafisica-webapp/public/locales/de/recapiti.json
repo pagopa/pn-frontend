@@ -1,8 +1,6 @@
 {
   "title": "Deine Anschriften",
   "subtitle": "Hier können die digitalen Anschriften zur Versendung angeben und geändert werden für <0>Benachrichtigungen über den Empfang</0> und <1>informelle Benachrichtigungen<1/> bezüglich deiner Bescheide.",
-  "general-contacts-title": "Allgemeine Anschriften",
-  "special-contacts-title": "Weitere Anschriften",
   "alert-dialog-email": "Solltest du keine PEC-Adresse haben und den Bescheid innerhalb 5 Tagen (120 Stunden) nach Versand der E-Mails über SEND aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben.",
   "alert-dialog-sms": "Solltest du keine PEC-Adresse haben und den Bescheid innerhalb 5 Tagen (120 Stunden) nach Versand der SMS über SEND aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben.",
   "legal-contacts": {
