@@ -19,7 +19,6 @@ import {
   SideMenuItem,
   appStateActions,
   errorFactoryManager,
-  getSessionLanguage,
   initLocalization,
   setSessionLanguage,
   useMultiEvent,
@@ -177,7 +176,6 @@ const ActualApp = () => {
     if (sessionToken) {
       void dispatch(getCurrentAppStatus());
       void dispatch(getInstitutions());
-      handleSetUserLanguage();
     }
     if (idOrganization) {
       void dispatch(getProductsOfInstitution());
@@ -197,11 +195,6 @@ const ActualApp = () => {
     window.location.href = sessionToken
       ? `${SELFCARE_BASE_URL}/assistenza?productId=${productId}`
       : `mailto:${configuration.PAGOPA_HELP_EMAIL}`;
-  };
-
-  const handleSetUserLanguage = () => {
-    const language = getSessionLanguage() || 'it';
-    void changeLanguageHandler(language);
   };
 
   const changeLanguageHandler = async (langCode: string) => {
