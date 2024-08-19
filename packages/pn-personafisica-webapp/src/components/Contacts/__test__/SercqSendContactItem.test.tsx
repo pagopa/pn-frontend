@@ -1,11 +1,20 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
+import { getById, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
+
+import { internationalPhonePrefix } from '../../../../../pn-personagiuridica-webapp/src/utility/contacts.utility';
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { SERCQ_SEND_VALUE } from '../../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  IOAllowedValues,
+  SERCQ_SEND_VALUE,
+} from '../../../models/contacts';
 import SercqSendContactItem from '../SercqSendContactItem';
+import { fillCodeDialog } from './test-utils';
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -130,15 +139,29 @@ describe('test SercqSendContactItem', () => {
     expect(disableButton).toBeInTheDocument();
   });
 
-  it('enable service - courtesy contacts not added - add courtesy contact', async () => {
+  it('enable service - courtesy contacts not added - add courtesy contact (no AppIO)', async () => {
+    const phoneValue = '3333333333';
     mock
       .onPost('/bff/v1/addresses/LEGAL/default/SERCQ', {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
+    mock
+      .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
+        value: internationalPhonePrefix + phoneValue,
+      })
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
+    mock
+      .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
+        value: internationalPhonePrefix + phoneValue,
+        verificationCode: '01234',
+      })
+      .reply(204);
     // render component
-    const { getByTestId, rerender } = render(<SercqSendContactItem value="" />);
-    const activateButton = getByTestId('activateButton');
+    const result = render(<SercqSendContactItem value="" />);
+    const activateButton = result.getByTestId('activateButton');
     fireEvent.click(activateButton);
     const infoDialog = await waitFor(() => screen.getByTestId('sercqSendInfoDialog'));
     expect(infoDialog).toBeInTheDocument();
@@ -153,18 +176,113 @@ describe('test SercqSendContactItem', () => {
     });
     await waitFor(() => expect(infoDialog).not.toBeInTheDocument());
     // simulate rerendering due to redux changes
-    rerender(<SercqSendContactItem value={SERCQ_SEND_VALUE} />);
+    result.rerender(<SercqSendContactItem value={SERCQ_SEND_VALUE} />);
     const courtesyDialog = await waitFor(() => screen.getByTestId('sercqSendCourtesyDialog'));
     expect(courtesyDialog).toBeInTheDocument();
+    // select SMS
+    await testRadio(
+      courtesyDialog,
+      'courtesyAddressRadio',
+      ['courtesy-contacts.email-title', 'courtesy-contacts.sms-title'],
+      1,
+      true
+    );
+    const input = getById(courtesyDialog, 'value');
+    fireEvent.change(input, { target: { value: phoneValue } });
+    await waitFor(() => expect(input).toHaveValue(phoneValue));
     // click on confirm button
     const confirmButton = within(courtesyDialog).getByText('button.conferma');
     fireEvent.click(confirmButton);
-    /*
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
+        value: internationalPhonePrefix + phoneValue,
+      });
+    });
+    await waitFor(() => expect(courtesyDialog).not.toBeInTheDocument());
+    // inser otp and confirm
+    const codeDialog = await fillCodeDialog(result);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(3);
+      expect(JSON.parse(mock.history.post[2].data)).toStrictEqual({
+        value: internationalPhonePrefix + phoneValue,
+        verificationCode: '01234',
+      });
+    });
+    await waitFor(() => expect(codeDialog).not.toBeInTheDocument());
+    // check new layout
+    expect(result.container).toHaveTextContent('legal-contacts.sercq-send-enabled');
+    const disableButton = result.getByText('button.disable');
+    expect(disableButton).toBeInTheDocument();
+  });
+
+  it('enable service - courtesy contacts not added - add courtesy contact (AppIO)', async () => {
+    mock
+      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ', {
+        value: SERCQ_SEND_VALUE,
+      })
+      .reply(204);
+    mock
+      .onPost('/bff/v1/addresses/COURTESY/default/APPIO', {
+        value: 'APPIO',
+        verificationCode: '00000',
+      })
+      .reply(204);
+    // render component
+    const result = render(<SercqSendContactItem value="" />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            {
+              addressType: AddressType.COURTESY,
+              senderId: 'default',
+              channelType: ChannelType.IOMSG,
+              value: IOAllowedValues.DISABLED,
+            },
+          ],
+        },
+      },
+    });
+    const activateButton = result.getByTestId('activateButton');
+    fireEvent.click(activateButton);
+    const infoDialog = await waitFor(() => screen.getByTestId('sercqSendInfoDialog'));
+    expect(infoDialog).toBeInTheDocument();
+    // click on confirm and enable the service
+    const enableButton = within(infoDialog).getByText('button.enable');
+    fireEvent.click(enableButton);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        value: SERCQ_SEND_VALUE,
+      });
+    });
+    await waitFor(() => expect(infoDialog).not.toBeInTheDocument());
+    // simulate rerendering due to redux changes
+    result.rerender(<SercqSendContactItem value={SERCQ_SEND_VALUE} />);
+    const courtesyDialog = await waitFor(() => screen.getByTestId('sercqSendCourtesyDialog'));
+    expect(courtesyDialog).toBeInTheDocument();
+    // select AppIO
+    await testRadio(
+      courtesyDialog,
+      'courtesyAddressRadio',
+      ['io-contact.title', 'courtesy-contacts.email-title', 'courtesy-contacts.sms-title'],
+      0,
+      true
+    );
+    // click on confirm button
+    const confirmButton = within(courtesyDialog).getByText('button.conferma');
+    fireEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
+        value: 'APPIO',
+        verificationCode: '00000',
+      });
+    });
     await waitFor(() => expect(courtesyDialog).not.toBeInTheDocument());
     // check new layout
-    expect(container).toHaveTextContent('legal-contacts.sercq-send-enabled');
-    const disableButton = getByText('button.disable');
+    expect(result.container).toHaveTextContent('legal-contacts.sercq-send-enabled');
+    const disableButton = result.getByText('button.disable');
     expect(disableButton).toBeInTheDocument();
-    */
   });
 });

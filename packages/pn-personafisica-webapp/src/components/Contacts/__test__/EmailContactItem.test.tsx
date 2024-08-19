@@ -4,17 +4,11 @@ import { vi } from 'vitest';
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
-import {
-  RenderResult,
-  fireEvent,
-  render,
-  screen,
-  testStore,
-  waitFor,
-} from '../../../__test__/test-utils';
+import { fireEvent, render, screen, testStore, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import EmailContactItem from '../EmailContactItem';
+import { fillCodeDialog } from './test-utils';
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -23,20 +17,6 @@ vi.mock('react-i18next', () => ({
   }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
-
-const fillCodeDialog = async (result: RenderResult) => {
-  const dialog = await waitFor(() => result.getByTestId('codeDialog'));
-  expect(dialog).toBeInTheDocument();
-  const codeInputs = dialog?.querySelectorAll('input');
-  // fill inputs with values
-  codeInputs?.forEach((codeInput, index) => {
-    fireEvent.change(codeInput, { target: { value: index.toString() } });
-  });
-  // confirm the addition
-  const dialogButtons = dialog?.querySelectorAll('button');
-  fireEvent.click(dialogButtons[1]);
-  return dialog;
-};
 
 const defaultEmailAddress = digitalCourtesyAddresses.find(
   (addr) => addr.channelType === ChannelType.EMAIL && addr.senderId === 'default'

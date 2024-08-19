@@ -1,20 +1,29 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import {
+  AppResponse,
+  AppResponsePublisher,
+  CodeModal,
+  ErrorMessage,
+  appStateActions,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import {
   AddressType,
   ChannelType,
+  IOAllowedValues,
   SERCQ_SEND_VALUE,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
-import { createOrUpdateAddress } from '../../redux/contact/actions';
+import { createOrUpdateAddress, enableIOAddress } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { internationalPhonePrefix } from '../../utility/contacts.utility';
 import DigitalContactsCard from './DigitalContactsCard';
 import SercqSendCourtesyDialog from './SercqSendCourtesyDialog';
 import SercqSendInfoDialog from './SercqSendInfoDialog';
@@ -28,6 +37,7 @@ type Props = {
 enum ModalType {
   INFO = 'info',
   COURTESY = 'courtesy',
+  CODE = 'code',
   DELETE = 'delete',
 }
 
@@ -59,13 +69,22 @@ const SercqSendCardTitle: React.FC = () => {
 const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', senderName }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const isMobile = useIsMobile();
-  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
   const digitalAddresses =
     useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
+  const codeModalRef =
+    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
 
+  const hasCourtesy = digitalAddresses.some(
+    (addr) =>
+      (addr.addressType === AddressType.COURTESY && addr.channelType !== ChannelType.IOMSG) ||
+      (addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.ENABLED)
+  );
   const hasAppIO =
-    digitalAddresses.findIndex((addr) => addr.channelType === ChannelType.IOMSG) > -1;
+    digitalAddresses.findIndex(
+      (addr) => addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.DISABLED
+    ) > -1;
 
   const handleInfoConfirm = () => {
     const digitalAddressParams: SaveDigitalAddressParams = {
@@ -78,18 +97,95 @@ const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', se
     dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
       .then(() => {
-        const hasCourtesy = digitalAddresses.some(
-          (addr) => addr.addressType === AddressType.COURTESY
-        );
         if (hasCourtesy) {
           // close dialog
           setModalOpen(null);
           return;
         }
-        setModalOpen(ModalType.COURTESY);
+        setModalOpen({ type: ModalType.COURTESY });
       })
       .catch(() => {});
   };
+
+  const handleCodeVerification = (
+    value: string,
+    channelType: ChannelType,
+    verificationCode?: string
+  ) => {
+    const digitalAddressParams: SaveDigitalAddressParams = {
+      addressType: AddressType.COURTESY,
+      senderId,
+      senderName,
+      channelType,
+      value: channelType === ChannelType.SMS ? internationalPhonePrefix + value : value,
+      code: verificationCode,
+    };
+
+    dispatch(createOrUpdateAddress(digitalAddressParams))
+      .unwrap()
+      .then((res) => {
+        // contact to verify
+        // open code modal
+        if (!res) {
+          // aprire la code modal
+          setModalOpen({ type: ModalType.CODE, data: { value, channelType } });
+          return;
+        }
+
+        // contact has already been verified
+        // show success message
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t(`courtesy-contacts.${channelType.toLowerCase()}-added-successfully`, {
+              ns: 'recapiti',
+            }),
+          })
+        );
+        setModalOpen(null);
+      })
+      .catch(() => {});
+  };
+
+  const handleCourtesyConfirm = (channelType: ChannelType, value: string) => {
+    if (channelType === ChannelType.IOMSG) {
+      dispatch(enableIOAddress())
+        .unwrap()
+        .then(() => setModalOpen(null))
+        .catch(() => {});
+      return;
+    }
+    handleCodeVerification(value, channelType);
+  };
+
+  const handleAddressUpdateError = useCallback(
+    (responseError: AppResponse) => {
+      if (modalOpen === null) {
+        // notify the publisher we are not handling the error
+        return true;
+      }
+      if (Array.isArray(responseError.errors)) {
+        const error = responseError.errors[0];
+        codeModalRef.current?.updateError(
+          {
+            title: error.message.title,
+            content: error.message.content,
+          },
+          true
+        );
+      }
+      return false;
+    },
+    [modalOpen]
+  );
+
+  useEffect(() => {
+    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
+    };
+  }, [handleAddressUpdateError]);
 
   return (
     <DigitalContactsCard
@@ -106,7 +202,7 @@ const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', se
           <Button
             variant="contained"
             data-testid="activateButton"
-            onClick={() => setModalOpen(ModalType.INFO)}
+            onClick={() => setModalOpen({ type: ModalType.INFO })}
           >
             {t('legal-contacts.sercq-send-active', { ns: 'recapiti' })}
           </Button>
@@ -122,7 +218,7 @@ const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', se
               <Typography data-testid="IO status" fontWeight={600}>
                 {t('legal-contacts.sercq-send-enabled', { ns: 'recapiti' })}
               </Typography>
-              <ButtonNaked onClick={() => setModalOpen(ModalType.DELETE)} color="error">
+              <ButtonNaked onClick={() => setModalOpen({ type: ModalType.DELETE })} color="error">
                 {t('button.disable')}
               </ButtonNaked>
             </Box>
@@ -130,17 +226,59 @@ const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', se
         )}
       </Box>
       <SercqSendInfoDialog
-        open={modalOpen === ModalType.INFO}
+        open={modalOpen?.type === ModalType.INFO}
         onDiscard={() => setModalOpen(null)}
         onConfirm={handleInfoConfirm}
       />
       <SercqSendCourtesyDialog
-        open={modalOpen === ModalType.COURTESY}
+        open={modalOpen?.type === ModalType.COURTESY}
         hasAppIO={hasAppIO}
         onDiscard={() => setModalOpen(null)}
-        onConfirm={(...args) => {
-          console.log(args);
-        }}
+        onConfirm={handleCourtesyConfirm}
+      />
+      <CodeModal
+        title={
+          t(`courtesy-contacts.email-verify`, { ns: 'recapiti' }) + ` ${modalOpen?.data?.value}`
+        }
+        subtitle={<Trans i18nKey="courtesy-contacts.email-verify-descr" ns="recapiti" />}
+        open={modalOpen?.type === ModalType.CODE}
+        initialValues={new Array(5).fill('')}
+        codeSectionTitle={t(`courtesy-contacts.insert-code`, { ns: 'recapiti' })}
+        codeSectionAdditional={
+          <>
+            <Typography variant="body2" display="inline">
+              {t(`courtesy-contacts.email-new-code`, { ns: 'recapiti' })}
+              &nbsp;
+            </Typography>
+            <ButtonNaked
+              component={Box}
+              onClick={() =>
+                handleCodeVerification(modalOpen?.data?.value, modalOpen?.data?.channelType)
+              }
+              sx={{ verticalAlign: 'unset', display: 'inline' }}
+            >
+              <Typography
+                display="inline"
+                color="primary"
+                variant="body2"
+                sx={{ textDecoration: 'underline' }}
+              >
+                {t(`courtesy-contacts.new-code-link`, { ns: 'recapiti' })}.
+              </Typography>
+            </ButtonNaked>
+          </>
+        }
+        cancelLabel={t('button.annulla')}
+        confirmLabel={t('button.conferma')}
+        cancelCallback={() => setModalOpen(null)}
+        confirmCallback={(values: Array<string>) =>
+          handleCodeVerification(
+            modalOpen?.data?.value,
+            modalOpen?.data?.channelType,
+            values.join('')
+          )
+        }
+        ref={codeModalRef}
       />
     </DigitalContactsCard>
   );
