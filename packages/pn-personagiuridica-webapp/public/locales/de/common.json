@@ -27,9 +27,7 @@
     "contacts": "Anschriften",
     "app-status": "Plattformstatus",
     "users": "Benutzer",
-    "groups": "Gruppen",
-    "aria-label": "Plattform-Bescheide Hauptnavigation",
-    "aria-label-inner": "Plattform-Navigation juristische Person"
+    "groups": "Gruppen"
   },
   "header": {
     "product": {

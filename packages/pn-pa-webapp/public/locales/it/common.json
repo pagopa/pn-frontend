@@ -18,9 +18,7 @@
     "groups": "Gruppi",
     "api-key": "API Key",
     "statistics": "Statistiche",
-    "app-status": "Stato della piattaforma",
-    "aria-label": "piattaforma-notifiche navigazione principale",
-    "aria-label-inner": "piattaforma-notifiche navigazione mittente"
+    "app-status": "Stato della piattaforma"
   },
   "header": {
     "logout": "Esci",

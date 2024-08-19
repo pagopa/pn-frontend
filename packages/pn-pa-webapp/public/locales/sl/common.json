@@ -18,9 +18,7 @@
     "groups": "Skupine",
     "api-key": "Ključ API",
     "statistics": "Statistični podatki",
-    "app-status": "Stanje platforme",
-    "aria-label": "platforma-obvestila glavna navigacija",
-    "aria-label-inner": "platforma-obvestila navigacija pošiljatelja"
+    "app-status": "Stanje platforme"
   },
   "header": {
     "logout": "Izhod",

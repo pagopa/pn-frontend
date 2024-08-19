@@ -27,9 +27,7 @@
     "contacts": "Contact details",
     "app-status": "Platform status",
     "users": "Users",
-    "groups": "Groups",
-    "aria-label": "platform-notifications main navigation",
-    "aria-label-inner": "platform-notifications legal person navigation"
+    "groups": "Groups"
   },
   "header": {
     "product": {

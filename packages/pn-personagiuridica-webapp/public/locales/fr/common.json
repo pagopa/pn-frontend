@@ -27,9 +27,7 @@
     "contacts": "Coordonnées",
     "app-status": "État de la plateforme",
     "users": "Utilisateurs",
-    "groups": "Groupes",
-    "aria-label": "plateforme-notifications navigation principale",
-    "aria-label-inner": "plateforme-notifications navigation personne morale"
+    "groups": "Groupes"
   },
   "header": {
     "product": {

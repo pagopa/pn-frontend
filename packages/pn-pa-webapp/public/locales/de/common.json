@@ -18,9 +18,7 @@
     "groups": "Gruppen",
     "api-key": "API-Schlüssel",
     "statistics": "Statistiken",
-    "app-status": "Plattformstatus",
-    "aria-label": "Plattform-Bescheide Hauptnavigation",
-    "aria-label-inner": "Plattform-Bescheide Navigation Absender"
+    "app-status": "Plattformstatus"
   },
   "header": {
     "logout": "Abmelden",

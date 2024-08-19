@@ -12,7 +12,6 @@ import {
 } from '@mui/material';
 
 import { SideMenuItem } from '../../models';
-import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import SideMenuListItem from './SideMenuListItem';
 
 type Props = {
@@ -66,17 +65,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
         backgroundColor: 'background.paper',
       }}
     >
-      <List
-        role="navigation"
-        data-testid="menu-list"
-        component="nav"
-        aria-label={getLocalizedOrDefaultLabel(
-          'common',
-          'menu.aria-label',
-          'piattaforma-notifiche navigazione principale'
-        )}
-        sx={style}
-      >
+      <List role="navigation" data-testid="menu-list" component="nav" sx={style}>
         {menuItems.map((item: SideMenuItem, index: number) =>
           item.children ? (
             // accordion se ci sono children
@@ -153,15 +142,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
       </List>
       {selfCareItems && <Divider />}
       {selfCareItems && (
-        <List
-          component="nav"
-          aria-label={getLocalizedOrDefaultLabel(
-            'common',
-            'menu.aria-label-inner',
-            'piattaforma-notifiche navigazione mittente'
-          )}
-          sx={style}
-        >
+        <List component="nav" role="navigation" sx={style}>
           {selfCareItems?.map((selfcareItem: SideMenuItem) => (
             <SideMenuListItem
               key={selfcareItem.label}

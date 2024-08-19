@@ -6,7 +6,6 @@ import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@
 
 import { useIsMobile } from '../../hooks';
 import { SideMenuItem } from '../../models';
-import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import SideMenuList from './SideMenuList';
 
 type Props = {
@@ -111,11 +110,6 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
             <List
               role="navigation"
               component="nav"
-              aria-label={getLocalizedOrDefaultLabel(
-                'common',
-                'menu.aria-label',
-                'piattaforma-notifiche navigazione principale'
-              )}
               sx={{
                 boxShadow:
                   '0px 2px 4px -1px rgba(0, 43, 85, 0.1), 0px 4px 5px rgba(0, 43, 85, 0.05)',
