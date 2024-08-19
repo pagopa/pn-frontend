@@ -2,6 +2,7 @@ import { vi } from 'vitest';
 
 import { digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import { render, waitFor, within } from '../../../__test__/test-utils';
+import { ChannelType } from '../../../models/contacts';
 import LegalContacts from '../LegalContacts';
 
 vi.mock('react-i18next', () => ({
@@ -13,8 +14,8 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-const defaultAddress = digitalLegalAddresses.find(
-  (addr) => addr.senderId === 'default' && addr.pecValid
+const defaultPecAddress = digitalLegalAddresses.find(
+  (addr) => addr.senderId === 'default' && addr.pecValid && addr.channelType === ChannelType.PEC
 );
 
 describe('LegalContacts Component', async () => {
@@ -28,7 +29,7 @@ describe('LegalContacts Component', async () => {
     const pecContact = getByTestId(`default_pecContact`);
     const pecInput = pecContact.querySelector(`[name="default_pec"]`);
     expect(pecInput).not.toBeInTheDocument();
-    const pec = getByText(defaultAddress!.value);
+    const pec = getByText(defaultPecAddress!.value);
     expect(pec).toBeInTheDocument();
     const pecButtons = within(pecContact).getAllByRole('button');
     expect(pecButtons[0]).toBeEnabled();
@@ -50,5 +51,7 @@ describe('LegalContacts Component', async () => {
       within(pecContact).getByRole('button', { name: 'button.conferma' })
     );
     expect(button).toBeDisabled();
+    const sercqSendContact = getByTestId(`default_sercqSendContact`);
+    expect(sercqSendContact).toBeInTheDocument();
   });
 });

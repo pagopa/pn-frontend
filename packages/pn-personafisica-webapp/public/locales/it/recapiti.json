@@ -30,11 +30,26 @@
     "validation-cancel-content": "Se annulli la verifica, dovrai inserire una nuova PEC e ricominciare il processo.",
     "validation-in-progress": "Verifica in corso",
     "validation-progress-title": "Grazie!",
-    "validation-progress-content": "Stiamo verificando che l’indirizzo PEC sia valido. Riceverai una e-mail con l’esito entro 24 ore."
+    "validation-progress-content": "Stiamo verificando che l’indirizzo PEC sia valido. Riceverai una e-mail con l’esito entro 24 ore.",
+    "sercq-send-title": "Domicilio Digitale SEND",
+    "sercq-send-description": "È come il tuo domicilio fisico, ma è online: quando un ente carica una notifica per te su SEND, è disponibile subito e la puoi vedere ovunque ti trovi.",
+    "sercq-send-active": "Attiva Domicilio Digitale",
+    "sercq-send-info-description": "Attivando il Domicilio Digitale, SEND diventa <strong>il tuo recapito a valore legale</strong> per le comunicazioni della PA.",
+    "sercq-send-info-list": [
+      "Quando un ente carica su SEND una notifica per te, la ricevi in modo <strong>sicuro e in tempo reale</strong> ovunque ti trovi.",
+      "Le tue notifiche diventano <strong>100% digitali</strong>. Non ricevi più i documenti cartacei e non devi preoccuparti di ritirarli.",
+      "<strong>È gratis per sempre</strong> e solo tu puoi decidere quando attivarlo o disattivarlo."
+    ],
+    "sercq-send-info-pec-disclaimer": "Se hai già inserito una PEC tra i tuoi recapiti, il Domicilio Digitale la sostituisce come recapito a valore legale di SEND.",
+    "sercq-send-info-tos-privacy": "Selezionando “Attiva” dichiari di aver letto e di accettare i <0>Termini del servizio</0> e l’<1>Informativa Privacy</1>.",
+    "sercq-send-enabled": "SEND è il tuo Domicilio Digitale",
+    "sercq-send-courtesy-title": "Aggiungi un recapito di cortesia",
+    "sercq-send-courtesy-description": "Scegli un recapito per ricevere avvisi quando ci sono nuove notifiche su SEND, così <strong>non rischi di perdere comunicazioni importanti</strong>."
   },
   "io-contact": {
     "title": "App IO",
     "description": "Leggi e gestisci le comunicazioni a valore legale direttamente su IO: quando c’è una notifica per te, la ricevi in app e puoi pagare eventuali spese.",
+    "dialog-description": "Riceverai un messaggio in app per ogni nuova notifica. Potrai leggerla e pagare eventuali importi direttamente su IO.",
     "enabled": "Servizio attivo",
     "disabled": "Servizio non attivo",
     "unavailable": "Per attivare il servizio, prima scarica l’app IO",
@@ -60,8 +75,10 @@
     ],
     "email-title": "Email",
     "email-description": "Quando c’è una notifica per te, ti avvisiamo con una email all’indirizzo indicato. Accedi a SEND per leggerla e pagare eventuali spese.",
+    "email-dialog-description": "Quando c’è una notifica per te, ti avvisiamo con una email. Accedi a SEND per leggerla e pagare eventuali importi.",
     "sms-title": "SMS",
     "sms-description": "Quando c’è una notifica per te, ti avvisiamo con un SMS al numero indicato. Accedi a SEND per leggerla e pagare eventuali spese.",
+    "sms-dialog-description": "Quando c’è una notifica per te, ti avvisiamo con un SMS. Accedi a SEND per leggerla e pagare eventuali importi.",
     "link-sms-placeholder": "Il tuo cellulare",
     "link-email-placeholder": "La tua e-mail",
     "sms-add": "Avvisami via SMS",
