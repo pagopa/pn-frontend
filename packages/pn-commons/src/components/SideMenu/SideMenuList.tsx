@@ -65,7 +65,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
         backgroundColor: 'background.paper',
       }}
     >
-      <List role="navigation" data-testid="menu-list" component="nav" sx={style}>
+      <List data-testid="menu-list" sx={style}>
         {menuItems.map((item: SideMenuItem, index: number) =>
           item.children ? (
             // accordion se ci sono children
@@ -142,7 +142,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
       </List>
       {selfCareItems && <Divider />}
       {selfCareItems && (
-        <List component="nav" role="navigation" sx={style}>
+        <List sx={style}>
           {selfCareItems?.map((selfcareItem: SideMenuItem) => (
             <SideMenuListItem
               key={selfcareItem.label}

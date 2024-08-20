@@ -108,7 +108,6 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
         {isMobile ? (
           <Fragment>
             <List
-              role="navigation"
               component="nav"
               sx={{
                 boxShadow:
