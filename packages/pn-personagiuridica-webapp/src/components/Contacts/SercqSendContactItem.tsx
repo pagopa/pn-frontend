@@ -16,11 +16,10 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import {
   AddressType,
   ChannelType,
-  IOAllowedValues,
   SERCQ_SEND_VALUE,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
-import { createOrUpdateAddress, deleteAddress, enableIOAddress } from '../../redux/contact/actions';
+import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { internationalPhonePrefix } from '../../utility/contacts.utility';
@@ -77,15 +76,7 @@ const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', se
   const codeModalRef =
     useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
 
-  const hasCourtesy = digitalAddresses.some(
-    (addr) =>
-      (addr.addressType === AddressType.COURTESY && addr.channelType !== ChannelType.IOMSG) ||
-      (addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.ENABLED)
-  );
-  const hasAppIO =
-    digitalAddresses.findIndex(
-      (addr) => addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.DISABLED
-    ) > -1;
+  const hasCourtesy = digitalAddresses.some((addr) => addr.addressType === AddressType.COURTESY);
   const courtesyChannelType = modalOpen?.data?.channelType.toLowerCase() ?? 'email';
 
   const handleInfoConfirm = () => {
@@ -154,17 +145,6 @@ const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', se
         setModalOpen(null);
       })
       .catch(() => {});
-  };
-
-  const handleCourtesyConfirm = (channelType: ChannelType, value: string) => {
-    if (channelType === ChannelType.IOMSG) {
-      dispatch(enableIOAddress())
-        .unwrap()
-        .then(() => setModalOpen(null))
-        .catch(() => {});
-      return;
-    }
-    handleCodeVerification(value, channelType);
   };
 
   const deleteConfirmHandler = () => {
@@ -262,9 +242,8 @@ const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', se
       />
       <SercqSendCourtesyDialog
         open={modalOpen?.type === ModalType.COURTESY}
-        hasAppIO={hasAppIO}
         onDiscard={() => setModalOpen(null)}
-        onConfirm={handleCourtesyConfirm}
+        onConfirm={(channelType, value) => handleCodeVerification(value, channelType)}
       />
       <CodeModal
         title={

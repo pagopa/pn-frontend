@@ -1,4 +1,4 @@
-import { AddressType, ChannelType, DigitalAddress } from '../models/contacts';
+import { AddressType, ChannelType, DigitalAddress, SERCQ_SEND_VALUE } from '../models/contacts';
 
 export const digitalAddresses: Array<DigitalAddress> = [
   {
@@ -23,6 +23,13 @@ export const digitalAddresses: Array<DigitalAddress> = [
     channelType: ChannelType.PEC,
     value: 'nome.utente@pec-tribunale-milano.it',
     pecValid: true,
+    codeValid: true,
+  },
+  {
+    addressType: AddressType.LEGAL,
+    senderId: 'default',
+    channelType: ChannelType.SERCQ,
+    value: SERCQ_SEND_VALUE,
     codeValid: true,
   },
   {

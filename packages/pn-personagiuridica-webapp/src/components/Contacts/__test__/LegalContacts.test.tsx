@@ -13,7 +13,7 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-const defaultAddress = digitalLegalAddresses.find(
+const defaultPecAddress = digitalLegalAddresses.find(
   (addr) => addr.senderId === 'default' && addr.pecValid
 );
 
@@ -28,13 +28,18 @@ describe('LegalContacts Component', async () => {
     const pecContact = getByTestId(`default_pecContact`);
     const pecInput = pecContact.querySelector(`[name="default_pec"]`);
     expect(pecInput).not.toBeInTheDocument();
-    const pec = getByText(defaultAddress!.value);
+    const pec = getByText(defaultPecAddress!.value);
     expect(pec).toBeInTheDocument();
     const pecButtons = within(pecContact).getAllByRole('button');
     expect(pecButtons[0]).toBeEnabled();
     expect(pecButtons[1]).toBeEnabled();
     expect(pecButtons[0].textContent).toMatch('button.modifica');
     expect(pecButtons[1].textContent).toMatch('button.elimina');
+    const sercqSendContact = getByTestId(`default_sercqSendContact`);
+    expect(sercqSendContact).toBeInTheDocument();
+    expect(sercqSendContact).toHaveTextContent('legal-contacts.sercq-send-enabled');
+    const disableButton = within(sercqSendContact).getByRole('button', { name: 'button.disable' });
+    expect(disableButton).toBeInTheDocument();
   });
 
   it('renders component - no contacts', async () => {
@@ -50,5 +55,9 @@ describe('LegalContacts Component', async () => {
       within(pecContact).getByRole('button', { name: 'button.conferma' })
     );
     expect(button).toBeDisabled();
+    const sercqSendContact = getByTestId(`default_sercqSendContact`);
+    expect(sercqSendContact).toBeInTheDocument();
+    const activateButton = within(sercqSendContact).getByTestId('activateButton');
+    expect(activateButton).toBeInTheDocument();
   });
 });

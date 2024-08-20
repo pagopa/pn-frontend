@@ -8,6 +8,7 @@ type Props = {
   handleModalClose: () => void;
   removeModalTitle: string;
   removeModalBody: string;
+  removeButtonLabel?: string;
   blockDelete?: boolean;
   confirmHandler: () => void;
 };
@@ -17,6 +18,7 @@ const DeleteDialog: React.FC<Props> = ({
   handleModalClose,
   removeModalTitle,
   removeModalBody,
+  removeButtonLabel,
   blockDelete,
   confirmHandler,
 }) => {
@@ -32,7 +34,7 @@ const DeleteDialog: React.FC<Props> = ({
         {t('button.annulla')}
       </Button>,
       <Button id="buttonConferma" key="confirm" onClick={confirmHandler} variant="contained">
-        {t('button.conferma')}
+        {removeButtonLabel ?? t('button.conferma')}
       </Button>,
     ]
   );

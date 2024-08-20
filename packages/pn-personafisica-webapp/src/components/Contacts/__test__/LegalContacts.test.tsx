@@ -36,6 +36,11 @@ describe('LegalContacts Component', async () => {
     expect(pecButtons[1]).toBeEnabled();
     expect(pecButtons[0].textContent).toMatch('button.modifica');
     expect(pecButtons[1].textContent).toMatch('button.elimina');
+    const sercqSendContact = getByTestId(`default_sercqSendContact`);
+    expect(sercqSendContact).toBeInTheDocument();
+    expect(sercqSendContact).toHaveTextContent('legal-contacts.sercq-send-enabled');
+    const disableButton = within(sercqSendContact).getByRole('button', { name: 'button.disable' });
+    expect(disableButton).toBeInTheDocument();
   });
 
   it('renders component - no contacts', async () => {
@@ -53,5 +58,7 @@ describe('LegalContacts Component', async () => {
     expect(button).toBeDisabled();
     const sercqSendContact = getByTestId(`default_sercqSendContact`);
     expect(sercqSendContact).toBeInTheDocument();
+    const activateButton = within(sercqSendContact).getByTestId('activateButton');
+    expect(activateButton).toBeInTheDocument();
   });
 });

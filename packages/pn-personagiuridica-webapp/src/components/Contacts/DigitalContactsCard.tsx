@@ -13,16 +13,21 @@ type Props = {
 };
 
 const DigitalContactsCardTitle: React.FC<Pick<Props, 'title'>> = ({ title }) => (
-  <Typography
-    color="text.primary"
-    fontWeight={700}
-    fontSize={18}
-    variant="body1"
-    mb={2}
-    data-testid="DigitalContactsCardTitle"
-  >
-    {title}
-  </Typography>
+  <>
+    {typeof title === 'string' && (
+      <Typography
+        color="text.primary"
+        fontWeight={700}
+        fontSize={18}
+        variant="body1"
+        mb={2}
+        data-testid="DigitalContactsCardTitle"
+      >
+        {title}
+      </Typography>
+    )}
+    {typeof title !== 'string' && title}
+  </>
 );
 
 const DigitalContactsCardContent: React.FC<

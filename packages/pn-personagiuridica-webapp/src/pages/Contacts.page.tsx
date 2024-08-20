@@ -8,7 +8,7 @@ import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import LegalContactsList from '../components/Contacts/LegalContacts';
 import SpecialContacts from '../components/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
-import { AddressType } from '../models/contacts';
+import { AddressType, ChannelType } from '../models/contacts';
 import { PROFILE } from '../navigation/routes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { resetState } from '../redux/contact/reducers';
@@ -61,9 +61,7 @@ const Contacts = () => {
           onClick={handleRedirectToProfilePage}
           sx={{ verticalAlign: 'inherit' }}
           component="button"
-        >
-          {t('subtitle-link', { ns: 'recapiti' })}
-        </Link>,
+        />,
       ]}
     ></Trans>
   );
@@ -84,7 +82,8 @@ const Contacts = () => {
           <Stack direction="column" spacing={4} mt={4}>
             <LegalContactsList legalAddresses={legalAddresses} />
             <CourtesyContacts contacts={courtesyAddresses} />
-            {(legalAddresses.length > 0 || courtesyAddresses.length > 0) && (
+            {(legalAddresses.filter((addr) => addr.channelType !== ChannelType.SERCQ).length > 0 ||
+              courtesyAddresses.length > 0) && (
               <SpecialContacts digitalAddresses={digitalAddresses} />
             )}
           </Stack>

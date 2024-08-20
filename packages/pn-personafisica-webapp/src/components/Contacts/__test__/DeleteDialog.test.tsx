@@ -74,6 +74,23 @@ describe('DeleteDialog Component', () => {
     expect(closeButton).toBeInTheDocument();
   });
 
+  it('renders component - custom delete button label', () => {
+    // render component
+    render(
+      <DeleteDialog
+        showModal
+        handleModalClose={closeHandler}
+        removeModalTitle="remove-title"
+        removeModalBody="remove-modal-body"
+        removeButtonLabel="remove-button-label"
+        confirmHandler={confirmHandler}
+      />
+    );
+    const dialog = screen.getByTestId('dialog');
+    const confirmButton = getById(dialog, 'buttonConferma');
+    expect(confirmButton).toHaveTextContent('remove-button-label');
+  });
+
   it('clicks on buttons - delete not blocked', () => {
     // render component
     render(
