@@ -111,7 +111,7 @@ const Contacts = () => {
           <Stack direction="column" spacing={4} mt={4}>
             <LegalContacts legalAddresses={legalAddresses} />
             <CourtesyContacts contacts={courtesyAddresses} />
-            {(legalAddresses.length > 0 ||
+            {(legalAddresses.filter((addr) => addr.channelType !== ChannelType.SERCQ).length > 0 ||
               courtesyAddresses.filter((addr) => addr.channelType !== ChannelType.IOMSG).length >
                 0) && <SpecialContacts digitalAddresses={digitalAddresses} />}
           </Stack>

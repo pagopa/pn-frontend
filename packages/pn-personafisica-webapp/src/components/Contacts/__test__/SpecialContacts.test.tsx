@@ -16,7 +16,6 @@ import {
 } from '../../../__mocks__/Contacts.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import {
-  RenderResult,
   act,
   fireEvent,
   render,
@@ -29,6 +28,7 @@ import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import { CONTACT_ACTIONS } from '../../../redux/contact/actions';
 import SpecialContacts from '../SpecialContacts';
+import { fillCodeDialog } from './test-utils';
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -60,20 +60,6 @@ function testInvalidField(form: HTMLFormElement, elementName: string, errorMessa
   const button = within(form).getByTestId('addSpecialButton');
   expect(button).toBeDisabled();
 }
-
-const fillCodeDialog = async (result: RenderResult) => {
-  const dialog = await waitFor(() => result.getByTestId('codeDialog'));
-  expect(dialog).toBeInTheDocument();
-  const codeInputs = dialog?.querySelectorAll('input');
-  // fill inputs with values
-  codeInputs?.forEach((codeInput, index) => {
-    fireEvent.change(codeInput, { target: { value: index.toString() } });
-  });
-  // confirm the addition
-  const dialogButtons = dialog?.querySelectorAll('button');
-  fireEvent.click(dialogButtons[1]);
-  return dialog;
-};
 
 describe('SpecialContacts Component', async () => {
   let mock: MockAdapter;

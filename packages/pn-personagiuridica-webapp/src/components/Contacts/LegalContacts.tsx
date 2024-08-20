@@ -1,9 +1,10 @@
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Box, List, ListItem, Stack, Typography } from '@mui/material';
+import { Box, Divider, List, ListItem, Stack, Typography } from '@mui/material';
 
 import { ChannelType, DigitalAddress } from '../../models/contacts';
 import PecContactItem from './PecContactItem';
+import SercqSendContactItem from './SercqSendContactItem';
 
 type Props = {
   legalAddresses: Array<DigitalAddress>;
@@ -34,10 +35,26 @@ const LegalContacts = ({ legalAddresses }: Props) => {
           </ListItem>
         ))}
       </List>
-      <Stack spacing={3} mt={3} data-testid="legalContacts">
+      <Stack spacing={0} mt={3} data-testid="legalContacts">
+        <SercqSendContactItem
+          value={
+            legalAddresses.find(
+              (a) => a.senderId === 'default' && a.channelType === ChannelType.SERCQ
+            )?.value ?? ''
+          }
+        />
+        <Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }}>
+          {t('conjunctions.or')}
+        </Divider>
         <PecContactItem
-          value={legalAddresses.find((a) => a.senderId === 'default')?.value ?? ''}
-          blockDelete={legalAddresses.length > 1}
+          value={
+            legalAddresses.find(
+              (a) => a.senderId === 'default' && a.channelType === ChannelType.PEC
+            )?.value ?? ''
+          }
+          blockDelete={legalAddresses.some(
+            (addr) => addr.channelType === ChannelType.PEC && addr.senderId !== 'default'
+          )}
           verifyingAddress={pecAddress ? !pecAddress.pecValid : false}
         />
       </Stack>
