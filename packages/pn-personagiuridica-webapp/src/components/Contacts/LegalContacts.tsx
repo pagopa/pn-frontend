@@ -40,18 +40,8 @@ const LegalContacts = ({ legalAddresses }: Props) => {
           verifyingAddress={pecAddress ? !pecAddress.pecValid : false}
         />
       </Box>
-      <Alert
-        role="banner"
-        aria-label={t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}
-        sx={{ mt: 4 }}
-        severity="info"
-      >
-        <Typography
-          role="banner"
-          component="span"
-          variant="body1"
-          data-testid="legal-contact-disclaimer"
-        >
+      <Alert role="banner" sx={{ mt: 4 }} severity="info">
+        <Typography component="span" variant="body1" data-testid="legal-contact-disclaimer">
           {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
         </Typography>
       </Alert>

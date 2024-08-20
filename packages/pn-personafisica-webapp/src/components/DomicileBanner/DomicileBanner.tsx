@@ -71,9 +71,8 @@ const DomicileBanner = forwardRef(({ source = 'home_notifiche' }: Props, ref) =>
               role="button"
               component="button"
               variant="body2"
-              fontWeight={'bold'}
+              fontWeight="bold"
               onClick={handleAddDomicile}
-              tabIndex={0}
               display="inline-block"
               sx={{ cursor: 'pointer' }}
             >

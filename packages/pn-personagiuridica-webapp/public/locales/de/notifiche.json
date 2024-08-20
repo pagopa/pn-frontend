@@ -17,10 +17,8 @@
   "filters": {
     "iun": "Suche nach IUN-Code",
     "data_da": "Vom",
-    "data_da-aria-label": "Startdatum der Suche",
     "data_da-input-aria-label": "Startdatum der Suche eingeben",
     "data_a": "bis",
-    "data_a-aria-label": "Enddatum der Suche",
     "data_a-input-aria-label": "Enddatum der Suche eingeben",
     "errors": {
       "iun": "Gültigen IUN-Code eingeben"

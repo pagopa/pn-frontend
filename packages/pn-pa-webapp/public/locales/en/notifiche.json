@@ -6,10 +6,8 @@
     "fiscal-code-tax-code": "Fiscal Code",
     "iun": "IUN code",
     "data_da": "From",
-    "data_da-aria-label": "Search start date",
     "data_da-input-aria-label": "Enter the search start date",
     "data_a": "To",
-    "data_a-aria-label": "Search end date",
     "data_a-input-aria-label": "Enter search end date",
     "status": "Status",
     "errors": {
