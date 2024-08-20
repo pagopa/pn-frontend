@@ -23,9 +23,7 @@
     "deleghe": "Vollmachten",
     "profilo": "Deine Daten",
     "contacts": "Deine Anschriften",
-    "app-status": "Plattformstatus",
-    "aria-label": "Plattform-Bescheide Hauptnavigation",
-    "aria-label-inner": "Plattform-Bescheide Hauptnavigation"
+    "app-status": "Plattformstatus"
   },
   "header": {
     "logout": "Abmelden",

@@ -67,7 +67,6 @@ const DomicileBanner = () => {
               variant="body2"
               fontWeight={'bold'}
               onClick={handleAddDomicile}
-              tabIndex={0}
               display="inline-block"
               sx={{ cursor: 'pointer' }}
             >

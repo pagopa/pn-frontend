@@ -116,7 +116,7 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
             isDelegatedPage &&
             organization.groups &&
             organization.groups?.length > 0 && (
-              <GroupSelector currentGroup={group || ''} onGroupSelection={handleGroupSelction} />
+              <GroupSelector currentGroup={group ?? ''} onGroupSelection={handleGroupSelction} />
             )
           }
         />

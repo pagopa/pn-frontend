@@ -120,19 +120,17 @@ const FilterNotificationsFormBody = ({
               fullWidth: true,
               sx: { marginBottom: isMobile ? '20px' : '0' },
               size: 'small',
-              'aria-label': t('filters.data_da-aria-label'), // aria-label for (TextField + Button) Group
               inputProps: {
                 inputMode: 'text',
                 'aria-label': t('filters.data_da-input-aria-label'),
                 type: 'text',
-                placeholder: 'gg/mm/aaaa',
                 'data-testid': 'input(start date)',
               },
             },
           }}
           disableFuture={true}
           minDate={tenYearsAgo}
-          maxDate={endDate ? endDate : undefined}
+          maxDate={endDate ?? undefined}
         />
       </Grid>
       <Grid item lg={2} xs={12}>
@@ -156,18 +154,16 @@ const FilterNotificationsFormBody = ({
               fullWidth: true,
               sx: { marginBottom: isMobile ? '20px' : '0' },
               size: 'small',
-              'aria-label': t('filters.data_a-aria-label'), // aria-label for (TextField + Button) Group
               inputProps: {
                 inputMode: 'text',
                 'aria-label': t('filters.data_a-input-aria-label'),
                 type: 'text',
-                placeholder: 'gg/mm/aaaa',
                 'data-testid': 'input(end date)',
               },
             },
           }}
           disableFuture={true}
-          minDate={startDate ? startDate : tenYearsAgo}
+          minDate={startDate ?? tenYearsAgo}
         />
       </Grid>
     </Fragment>

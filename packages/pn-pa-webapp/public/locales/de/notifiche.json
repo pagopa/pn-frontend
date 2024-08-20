@@ -6,10 +6,8 @@
     "fiscal-code-tax-code": "Steuernummer",
     "iun": "IUN-Code",
     "data_da": "Vom",
-    "data_da-aria-label": "Anfangsdatum der Suche",
     "data_da-input-aria-label": "Anfangsdatum der Suche eingeben",
     "data_a": "Bis",
-    "data_a-aria-label": "Enddatum der Suche",
     "data_a-input-aria-label": "Enddatum der Suche eingeben",
     "status": "Status",
     "errors": {
