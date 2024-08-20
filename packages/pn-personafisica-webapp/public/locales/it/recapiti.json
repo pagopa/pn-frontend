@@ -44,7 +44,10 @@
     "sercq-send-info-tos-privacy": "Selezionando “Attiva” dichiari di aver letto e di accettare i <0>Termini del servizio</0> e l’<1>Informativa Privacy</1>.",
     "sercq-send-enabled": "SEND è il tuo Domicilio Digitale",
     "sercq-send-courtesy-title": "Aggiungi un recapito di cortesia",
-    "sercq-send-courtesy-description": "Scegli un recapito per ricevere avvisi quando ci sono nuove notifiche su SEND, così <strong>non rischi di perdere comunicazioni importanti</strong>."
+    "sercq-send-courtesy-description": "Scegli un recapito per ricevere avvisi quando ci sono nuove notifiche su SEND, così <strong>non rischi di perdere comunicazioni importanti</strong>.",
+    "remove-sercq-send-title": "Confermi di voler disattivare il Domicilio Digitale?",
+    "remove-sercq-send-message": "Non avrai più un recapito a valore legale per le comunicazioni inviate su SEND. Potresti tornare a ricevere le notifiche in forma cartacea.",
+    "remove-sercq-send-button": "Disattiva Domicilio Digitale"
   },
   "io-contact": {
     "title": "App IO",

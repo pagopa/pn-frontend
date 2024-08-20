@@ -5,7 +5,14 @@ import { getById, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { internationalPhonePrefix } from '../../../../../pn-personagiuridica-webapp/src/utility/contacts.utility';
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
+import {
+  fireEvent,
+  render,
+  screen,
+  testStore,
+  waitFor,
+  within,
+} from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import {
   AddressType,
@@ -284,5 +291,50 @@ describe('test SercqSendContactItem', () => {
     expect(result.container).toHaveTextContent('legal-contacts.sercq-send-enabled');
     const disableButton = result.getByText('button.disable');
     expect(disableButton).toBeInTheDocument();
+  });
+
+  it('remove contact', async () => {
+    mock.onDelete('/bff/v1/addresses/LEGAL/default/PEC').reply(204);
+    // render component
+    const { container, rerender, getByTestId } = render(
+      <SercqSendContactItem value={SERCQ_SEND_VALUE} />
+    );
+    const button = container.querySelector('button');
+    // click on cancel
+    fireEvent.click(button!);
+    let dialog = await waitFor(() => screen.getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+    let dialogButtons = dialog.querySelectorAll('button');
+    // cancel remove operation
+    fireEvent.click(dialogButtons[0]);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+    // click on confirm
+    fireEvent.click(button!);
+    dialog = await waitFor(() => screen.getByRole('dialog'));
+    dialogButtons = dialog.querySelectorAll('button');
+    fireEvent.click(dialogButtons[1]);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(1);
+    });
+    await waitFor(() => {
+      expect(
+        testStore
+          .getState()
+          .contactsState.digitalAddresses.filter((addr) => addr.channelType === ChannelType.SERCQ)
+      ).toStrictEqual([]);
+    });
+    // simulate rerendering due to redux changes
+    rerender(<SercqSendContactItem value="" />);
+    await waitFor(() => {
+      const activateButton = getByTestId('activateButton');
+      expect(activateButton).toBeInTheDocument();
+      expect(activateButton).toHaveTextContent('legal-contacts.sercq-send-active');
+      expect(activateButton).toBeEnabled();
+    });
   });
 });

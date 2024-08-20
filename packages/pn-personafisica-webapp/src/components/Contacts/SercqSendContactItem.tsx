@@ -20,10 +20,11 @@ import {
   SERCQ_SEND_VALUE,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
-import { createOrUpdateAddress, enableIOAddress } from '../../redux/contact/actions';
+import { createOrUpdateAddress, deleteAddress, enableIOAddress } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { internationalPhonePrefix } from '../../utility/contacts.utility';
+import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
 import SercqSendCourtesyDialog from './SercqSendCourtesyDialog';
 import SercqSendInfoDialog from './SercqSendInfoDialog';
@@ -158,6 +159,17 @@ const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', se
     handleCodeVerification(value, channelType);
   };
 
+  const deleteConfirmHandler = () => {
+    setModalOpen(null);
+    void dispatch(
+      deleteAddress({
+        addressType: AddressType.LEGAL,
+        senderId,
+        channelType: ChannelType.SERCQ,
+      })
+    );
+  };
+
   const handleAddressUpdateError = useCallback(
     (responseError: AppResponse) => {
       if (modalOpen === null) {
@@ -279,6 +291,14 @@ const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', se
           )
         }
         ref={codeModalRef}
+      />
+      <DeleteDialog
+        showModal={modalOpen?.type === ModalType.DELETE}
+        removeModalTitle={t(`legal-contacts.remove-sercq-send-title`, { ns: 'recapiti' })}
+        removeModalBody={t(`legal-contacts.remove-sercq-send-message`, { ns: 'recapiti' })}
+        removeButtonLabel={t(`legal-contacts.remove-sercq-send-button`, { ns: 'recapiti' })}
+        handleModalClose={() => setModalOpen(null)}
+        confirmHandler={deleteConfirmHandler}
       />
     </DigitalContactsCard>
   );
