@@ -27,7 +27,7 @@ describe('SideMenuList', () => {
   });
 
   it('renders component', async () => {
-    const { getByRole } = render(
+    const { getByTestId } = render(
       <SideMenuList
         menuItems={sideMenuItems}
         handleLinkClick={handleLinkClick}
@@ -38,12 +38,12 @@ describe('SideMenuList', () => {
         }}
       />
     );
-    const ul = getByRole('navigation');
+    const ul = getByTestId('menu-list');
     await testMenuItem(ul, sideMenuItems.length, sideMenuItems);
   });
 
   it('open and close sub menu', async () => {
-    const { getByRole } = render(
+    const { getByTestId } = render(
       <SideMenuList
         menuItems={sideMenuItems}
         handleLinkClick={handleLinkClick}
@@ -54,7 +54,7 @@ describe('SideMenuList', () => {
         }}
       />
     );
-    const ul = getByRole('navigation');
+    const ul = getByTestId('menu-list');
     const buttons = within(ul).getAllByRole('button');
     const itemWithChildrenIdx = sideMenuItems.findIndex((item) => item.children);
     // open menu
@@ -107,7 +107,7 @@ describe('SideMenuList', () => {
   });
 
   it('select child menu voice', () => {
-    const { getByRole } = render(
+    const { getByTestId } = render(
       <SideMenuList
         menuItems={sideMenuItems}
         handleLinkClick={handleLinkClick}
@@ -118,7 +118,7 @@ describe('SideMenuList', () => {
         }}
       />
     );
-    const ul = getByRole('navigation');
+    const ul = getByTestId('menu-list');
     const buttons = within(ul).getAllByRole('button');
     // open menu
     const itemWithChildrenIdx = sideMenuItems.findIndex((item) => item.children);
@@ -136,7 +136,7 @@ describe('SideMenuList', () => {
   });
 
   it('renders selfcare itmes', async () => {
-    const { getAllByRole } = render(
+    const { getAllByTestId } = render(
       <SideMenuList
         menuItems={sideMenuItems}
         handleLinkClick={handleLinkClick}
@@ -148,7 +148,7 @@ describe('SideMenuList', () => {
         selfCareItems={selfcareMenuItems}
       />
     );
-    const ul = getAllByRole('navigation');
+    const ul = getAllByTestId('menu-list');
     expect(ul).toHaveLength(2);
     await testMenuItem(ul[0], sideMenuItems.length, sideMenuItems);
     await testMenuItem(ul[1], selfcareMenuItems.length, selfcareMenuItems);

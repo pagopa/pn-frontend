@@ -142,7 +142,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
       </List>
       {selfCareItems && <Divider />}
       {selfCareItems && (
-        <List sx={style}>
+        <List data-testid="menu-list" sx={style}>
           {selfCareItems?.map((selfcareItem: SideMenuItem) => (
             <SideMenuListItem
               key={selfcareItem.label}
