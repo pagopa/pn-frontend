@@ -23,9 +23,7 @@
     "deleghe": "Delegates",
     "profilo": "Your data",
     "contacts": "Your contact information",
-    "app-status": "Platform status",
-    "aria-label": "platform-notifications main navigation",
-    "aria-label-inner": "platform-notifications recipient navigation"
+    "app-status": "Platform status"
   },
   "header": {
     "logout": "Exit",

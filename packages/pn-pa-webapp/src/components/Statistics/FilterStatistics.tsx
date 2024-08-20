@@ -153,10 +153,8 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
               id: 'startDate',
               name: 'startDate',
               size: 'small',
-              'aria-label': t('filter.from_date-aria-label'),
               inputProps: {
                 inputMode: 'text',
-                placeholder: 'gg/mm/aaaa',
                 type: 'text',
                 'aria-label': t('filter.from_date-input-aria-label'),
               },
@@ -181,10 +179,8 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
               id: 'endDate',
               name: 'endDate',
               size: 'small',
-              'aria-label': t('filter.to_date-aria-label'),
               inputProps: {
                 inputMode: 'text',
-                placeholder: 'gg/mm/aaaa',
                 type: 'text',
                 'aria-label': t('filter.to_date-input-aria-label'),
               },

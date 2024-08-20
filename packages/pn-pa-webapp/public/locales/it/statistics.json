@@ -18,10 +18,8 @@
   },
   "filter": {
     "from_date": "Da",
-    "from_date-aria-label": "Data inizio ricerca",
     "from_date-input-aria-label": "Inserisci la data iniziale della ricerca",
     "to_date": "A",
-    "to_date-aria-label": "Data fine ricerca",
     "to_date-input-aria-label": "Inserisci la data finale della ricerca",
     "lastMonth": "Ultimi 30 giorni",
     "last3Months": "Ultimi 3 mesi",

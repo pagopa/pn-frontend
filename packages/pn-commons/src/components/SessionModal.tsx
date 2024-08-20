@@ -64,9 +64,12 @@ const SessionModal: React.FC<Props> = ({
       open={open}
       onClose={handleClose}
       aria-labelledby="session-dialog-title"
+      aria-describedby="session-dialog-description"
       data-testid="session-modal"
     >
-      <DialogTitle sx={{ textAlign: 'center' }}>{title}</DialogTitle>
+      <DialogTitle id="session-dialog-title" sx={{ textAlign: 'center' }}>
+        {title}
+      </DialogTitle>
       <PnDialogContent>
         <DialogContentText id="session-dialog-description">{message}</DialogContentText>
       </PnDialogContent>

@@ -103,7 +103,6 @@ const Contacts = () => {
           title={t('title')}
           subTitle={subtitle}
           variantSubTitle={'body1'}
-          ariaLabel={t('title')}
         />
         <ApiErrorWrapper
           apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}

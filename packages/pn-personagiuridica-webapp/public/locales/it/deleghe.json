@@ -98,7 +98,6 @@
       "selectEntities": "Seleziona enti*",
       "date-duration": "Periodo di validità della delega*",
       "endDate": "Termine delega",
-      "endDate-aria-label": "Data termine delega",
       "endDate-input-aria-label": "Inserisci la data di termine della delega",
       "verificationCode": "Codice di verifica",
       "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega. Il codice è valido per 7 giorni dalla creazione della richiesta di delega.",

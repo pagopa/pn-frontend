@@ -141,10 +141,8 @@ const FilterNotificationsFormBody = ({
             id: 'startDate',
             name: 'startDate',
             size: 'small',
-            'aria-label': t('filters.data_da-aria-label'), // aria-label for (TextField + Button) Group
             inputProps: {
               inputMode: 'text',
-              placeholder: 'gg/mm/aaaa',
               type: 'text',
               'aria-label': t('filters.data_da-input-aria-label'),
             },
@@ -154,7 +152,7 @@ const FilterNotificationsFormBody = ({
         }}
         disableFuture={true}
         minDate={tenYearsAgo}
-        maxDate={endDate ? endDate : undefined}
+        maxDate={endDate ?? undefined}
       />
       <CustomDatePicker
         language={i18n.language}
@@ -171,10 +169,8 @@ const FilterNotificationsFormBody = ({
             id: 'endDate',
             name: 'endDate',
             size: 'small',
-            'aria-label': t('filters.data_a-aria-label'),
             inputProps: {
               inputMode: 'text',
-              placeholder: 'gg/mm/aaaa',
               type: 'text',
               'aria-label': t('filters.data_a-input-aria-label'),
             },
@@ -183,7 +179,7 @@ const FilterNotificationsFormBody = ({
           },
         }}
         disableFuture={true}
-        minDate={startDate ? startDate : tenYearsAgo}
+        minDate={startDate ?? tenYearsAgo}
       />
       <TextField
         id="status"

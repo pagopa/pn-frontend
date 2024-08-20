@@ -18,9 +18,7 @@
     "groups": "Groupes",
     "api-key": "API Key",
     "statistics": "Statistiques",
-    "app-status": "État de la plateforme",
-    "aria-label": "plateforme-notifications navigation principale",
-    "aria-label-inner": "plateforme-notifications navigation expéditeur"
+    "app-status": "État de la plateforme"
   },
   "header": {
     "logout": "Quitter",
