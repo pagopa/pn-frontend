@@ -265,7 +265,7 @@ const EmailContactItem: React.FC<Props> = ({
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
         value={formik.values[`${senderId}_email`]}
-        handleDiscard={() => setModalOpen(null)}
+        handleDiscard={handleCancelCode}
         handleConfirm={() => handleCodeVerification()}
       />
       <DisclaimerModal
@@ -274,7 +274,7 @@ const EmailContactItem: React.FC<Props> = ({
           setModalOpen(null);
           handleCodeVerification();
         }}
-        onCancel={() => setModalOpen(null)}
+        onCancel={handleCancelCode}
         confirmLabel={t('button.conferma')}
         checkboxLabel={t('button.capito')}
         content={t(`alert-dialog-email`, { ns: 'recapiti' })}

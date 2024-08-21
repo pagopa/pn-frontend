@@ -6,7 +6,6 @@ import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import LegalContacts from '../components/Contacts/LegalContacts';
-import SpecialContacts from '../components/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
 import { AddressType, ChannelType } from '../models/contacts';
@@ -111,9 +110,6 @@ const Contacts = () => {
           <Stack direction="column" spacing={4} mt={4}>
             <LegalContacts legalAddresses={legalAddresses} />
             <CourtesyContacts contacts={courtesyAddresses} />
-            {(legalAddresses.filter((addr) => addr.channelType !== ChannelType.SERCQ).length > 0 ||
-              courtesyAddresses.filter((addr) => addr.channelType !== ChannelType.IOMSG).length >
-                0) && <SpecialContacts digitalAddresses={digitalAddresses} />}
           </Stack>
         </ApiErrorWrapper>
       </Box>

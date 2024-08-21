@@ -260,7 +260,7 @@ const SmsContactItem: React.FC<Props> = ({
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
         value={formik.values[`${senderId}_sms`]}
-        handleDiscard={() => setModalOpen(null)}
+        handleDiscard={handleCancelCode}
         handleConfirm={() => handleCodeVerification()}
       />
       <DisclaimerModal
@@ -269,7 +269,7 @@ const SmsContactItem: React.FC<Props> = ({
           setModalOpen(null);
           handleCodeVerification();
         }}
-        onCancel={() => setModalOpen(null)}
+        onCancel={handleCancelCode}
         confirmLabel={t('button.conferma')}
         checkboxLabel={t('button.capito')}
         content={t(`alert-dialog-sms`, { ns: 'recapiti' })}

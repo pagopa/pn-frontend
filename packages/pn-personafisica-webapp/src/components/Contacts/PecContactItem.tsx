@@ -289,7 +289,7 @@ const PecContactItem: React.FC<Props> = ({
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
         value={formik.values[`${senderId}_pec`]}
-        handleDiscard={() => setModalOpen(null)}
+        handleDiscard={handleCancelCode}
         handleConfirm={() => handleCodeVerification()}
       />
       <CodeModal

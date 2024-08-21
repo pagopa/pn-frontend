@@ -190,7 +190,7 @@ const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', se
 
   const handleAddressUpdateError = useCallback(
     (responseError: AppResponse) => {
-      if (modalOpen === null) {
+      if (modalOpen === null || modalOpen.type === ModalType.INFO) {
         // notify the publisher we are not handling the error
         return true;
       }
