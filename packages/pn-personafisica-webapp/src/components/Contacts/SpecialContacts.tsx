@@ -1,20 +1,16 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Alert, Box, InputAdornment, MenuItem, Stack, TextField, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   AppResponse,
   AppResponsePublisher,
   CodeModal,
-  CustomDropdown,
   ErrorMessage,
-  PnAutocomplete,
-  SpecialContactsProvider,
   appStateActions,
-  searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -25,14 +21,12 @@ import {
   DigitalAddress,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
-import { Party } from '../../models/party';
 import {
   CONTACT_ACTIONS,
   createOrUpdateAddress,
   getAllActivatedParties,
 } from '../../redux/contact/actions';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
+import { useAppDispatch } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import {
   allowedAddressTypes,
@@ -42,9 +36,7 @@ import {
   pecValidationSchema,
   phoneValidationSchema,
 } from '../../utility/contacts.utility';
-import DropDownPartyMenuItem from '../Party/DropDownParty';
 import AddMoreDigitalContact from './AddMoreDigitalContact';
-import DigitalContactsCard from './DigitalContactsCard';
 import ExistingContactDialog from './ExistingContactDialog';
 import PecVerificationDialog from './PecVerificationDialog';
 
@@ -53,9 +45,9 @@ type Props = {
   addressType: string;
 };
 
-type Addresses = {
-  [senderId: string]: Array<DigitalAddress>;
-};
+// type Addresses = {
+//   [senderId: string]: Array<DigitalAddress>;
+// };
 
 type AddressTypeItem = {
   id: ChannelType;
@@ -71,8 +63,8 @@ enum ModalType {
 const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
-  const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
-  const parties = useAppSelector((state: RootState) => state.contactsState.parties);
+  // const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
+  // const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   // const isMobile = useIsMobile();
   const [senderInputValue, setSenderInputValue] = useState('');
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
@@ -86,17 +78,17 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
       value: t(`special-contacts.${a.channelType?.toLowerCase()}`, { ns: 'recapiti' }),
     }));
 
-  const addresses: Addresses = digitalAddresses
-    .filter((a) => a.senderId !== 'default')
-    .reduce((obj, a) => {
-      if (!obj[a.senderId]) {
-        // eslint-disable-next-line functional/immutable-data
-        obj[a.senderId] = [];
-      }
-      // eslint-disable-next-line functional/immutable-data
-      obj[a.senderId].push(a);
-      return obj;
-    }, {} as Addresses);
+  // const addresses: Addresses = digitalAddresses
+  //   .filter((a) => a.senderId !== 'default')
+  //   .reduce((obj, a) => {
+  //     if (!obj[a.senderId]) {
+  //       // eslint-disable-next-line functional/immutable-data
+  //       obj[a.senderId] = [];
+  //     }
+  //     // eslint-disable-next-line functional/immutable-data
+  //     obj[a.senderId].push(a);
+  //     return obj;
+  //   }, {} as Addresses);
 
   const fetchAllActivatedParties = useCallback(() => {
     void dispatch(getAllActivatedParties({}));
@@ -155,60 +147,60 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
     formik.values.addressType === ChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts';
   const contactType = formik.values.addressType?.toLowerCase();
 
-  const renderOption = (props: any, option: Party) => (
-    <MenuItem {...props} value={option.id} key={option.id}>
-      <DropDownPartyMenuItem name={option.name} />
-    </MenuItem>
-  );
+  // const renderOption = (props: any, option: Party) => (
+  //   <MenuItem {...props} value={option.id} key={option.id}>
+  //     <DropDownPartyMenuItem name={option.name} />
+  //   </MenuItem>
+  // );
 
-  const getOptionLabel = (option: Party) => option.name || '';
+  // const getOptionLabel = (option: Party) => option.name || '';
 
-  // handling of search string for sender
-  const entitySearchLabel: string = `${t('special-contacts.sender', {
-    ns: 'recapiti',
-  })}${searchStringLimitReachedText(senderInputValue)}`;
+  // // handling of search string for sender
+  // const entitySearchLabel: string = `${t('special-contacts.sender', {
+  //   ns: 'recapiti',
+  // })}${searchStringLimitReachedText(senderInputValue)}`;
 
-  const handleChangeTouched = async (e: ChangeEvent) => {
-    formik.handleChange(e);
-    await formik.setFieldTouched(e.target.id, true, false);
-  };
+  // const handleChangeTouched = async (e: ChangeEvent) => {
+  //   formik.handleChange(e);
+  //   await formik.setFieldTouched(e.target.id, true, false);
+  // };
 
-  const senderChangeHandler = async (_: any, newValue: Party | null) => {
-    await formik.setFieldTouched('sender', true, false);
-    await formik.setFieldValue('sender', newValue);
-    setSenderInputValue(newValue?.name ?? '');
-    if (newValue && addresses[newValue.id]) {
-      const alreadyExists =
-        addresses[newValue.id].findIndex((a) => a.channelType === formik.values.addressType) > -1;
-      setAlreadyExistsMessage(
-        alreadyExists
-          ? t(`special-contacts.${contactType}-already-exists`, {
-              ns: 'recapiti',
-            })
-          : ''
-      );
-      return;
-    }
-    setAlreadyExistsMessage('');
-  };
+  // const senderChangeHandler = async (_: any, newValue: Party | null) => {
+  //   await formik.setFieldTouched('sender', true, false);
+  //   await formik.setFieldValue('sender', newValue);
+  //   setSenderInputValue(newValue?.name ?? '');
+  //   if (newValue && addresses[newValue.id]) {
+  //     const alreadyExists =
+  //       addresses[newValue.id].findIndex((a) => a.channelType === formik.values.addressType) > -1;
+  //     setAlreadyExistsMessage(
+  //       alreadyExists
+  //         ? t(`special-contacts.${contactType}-already-exists`, {
+  //             ns: 'recapiti',
+  //           })
+  //         : ''
+  //     );
+  //     return;
+  //   }
+  //   setAlreadyExistsMessage('');
+  // };
 
-  const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
-    await formik.setFieldValue('s_value', '');
-    formik.handleChange(e);
-    if (formik.values.sender && addresses[formik.values.sender.id]) {
-      const alreadyExists =
-        addresses[formik.values.sender.id].findIndex((a) => a.channelType === e.target.value) > -1;
-      setAlreadyExistsMessage(
-        alreadyExists
-          ? t(`special-contacts.${e.target.value?.toLowerCase()}-already-exists`, {
-              ns: 'recapiti',
-            })
-          : ''
-      );
-      return;
-    }
-    setAlreadyExistsMessage('');
-  };
+  // const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
+  //   await formik.setFieldValue('s_value', '');
+  //   formik.handleChange(e);
+  //   if (formik.values.sender && addresses[formik.values.sender.id]) {
+  //     const alreadyExists =
+  //       addresses[formik.values.sender.id].findIndex((a) => a.channelType === e.target.value) > -1;
+  //     setAlreadyExistsMessage(
+  //       alreadyExists
+  //         ? t(`special-contacts.${e.target.value?.toLowerCase()}-already-exists`, {
+  //             ns: 'recapiti',
+  //           })
+  //         : ''
+  //     );
+  //     return;
+  //   }
+  //   setAlreadyExistsMessage('');
+  // };
 
   const sendSuccessEvent = (type: ChannelType) => {
     const event =
