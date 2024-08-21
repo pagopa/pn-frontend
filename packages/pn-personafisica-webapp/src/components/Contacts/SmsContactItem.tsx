@@ -1,19 +1,10 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { ChangeEvent, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Box, InputAdornment, Typography } from '@mui/material';
-import {
-  AppResponse,
-  AppResponsePublisher,
-  CodeModal,
-  DisclaimerModal,
-  ErrorMessage,
-  appStateActions,
-  useIsMobile,
-} from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { InputAdornment } from '@mui/material';
+import { DisclaimerModal, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -31,6 +22,7 @@ import {
   internationalPhonePrefix,
   phoneValidationSchema,
 } from '../../utility/contacts.utility';
+import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
 import EditDigitalContact from './EditDigitalContact';
@@ -68,8 +60,6 @@ const SmsContactItem: React.FC<Props> = ({
   const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
-  const codeModalRef =
-    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
   const isMobile = useIsMobile();
 
   // value contains the prefix
@@ -186,36 +176,6 @@ const SmsContactItem: React.FC<Props> = ({
       .catch(() => {});
   };
 
-  const handleAddressUpdateError = useCallback(
-    (responseError: AppResponse) => {
-      if (modalOpen === null) {
-        // notify the publisher we are not handling the error
-        return true;
-      }
-      if (Array.isArray(responseError.errors)) {
-        const error = responseError.errors[0];
-        codeModalRef.current?.updateError(
-          {
-            title: error.message.title,
-            content: error.message.content,
-          },
-          true
-        );
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_CODE_ERROR);
-      }
-      return false;
-    },
-    [modalOpen]
-  );
-
-  useEffect(() => {
-    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
-
-    return () => {
-      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
-    };
-  }, [handleAddressUpdateError]);
-
   /*
    * if *some* value (phone number, email address) has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
@@ -297,42 +257,14 @@ const SmsContactItem: React.FC<Props> = ({
         checkboxLabel={t('button.capito')}
         content={t(`alert-dialog-sms`, { ns: 'recapiti' })}
       />
-      <CodeModal
-        title={
-          t(`courtesy-contacts.sms-verify`, { ns: 'recapiti' }) +
-          ` ${formik.values[senderId + '_sms']}`
-        }
-        subtitle={<Trans i18nKey={`courtesy-contacts.sms-verify-descr`} ns="recapiti" />}
+      <ContactCodeDialog
+        value={formik.values[senderId + '_sms']}
+        addressType={AddressType.COURTESY}
+        channelType={ChannelType.SMS}
         open={modalOpen === ModalType.CODE}
-        initialValues={new Array(5).fill('')}
-        codeSectionTitle={t(`courtesy-contacts.insert-code`, { ns: 'recapiti' })}
-        codeSectionAdditional={
-          <>
-            <Typography variant="body2" display="inline">
-              {t(`courtesy-contacts.sms-new-code`, { ns: 'recapiti' })}
-              &nbsp;
-            </Typography>
-            <ButtonNaked
-              component={Box}
-              onClick={() => handleCodeVerification()}
-              sx={{ verticalAlign: 'unset', display: 'inline' }}
-            >
-              <Typography
-                display="inline"
-                color="primary"
-                variant="body2"
-                sx={{ textDecoration: 'underline' }}
-              >
-                {t(`courtesy-contacts.new-code-link`, { ns: 'recapiti' })}.
-              </Typography>
-            </ButtonNaked>
-          </>
-        }
-        cancelLabel={t('button.annulla')}
-        confirmLabel={t('button.conferma')}
-        cancelCallback={handleCancelCode}
-        confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
-        ref={codeModalRef}
+        onConfirm={(code) => handleCodeVerification(code)}
+        onDiscard={handleCancelCode}
+        onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_CODE_ERROR)}
       />
       <DeleteDialog
         showModal={modalOpen === ModalType.DELETE}
