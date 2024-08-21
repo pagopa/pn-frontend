@@ -109,7 +109,9 @@
     "block-remove-email-title": "Non puoi eliminare l'e-mail",
     "block-remove-email-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi e-mail che hai indicato alla voce “Altri recapiti”.",
     "block-remove-sms-title": "Non puoi eliminare il numero di telefono",
-    "block-remove-sms-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Altri recapiti”."
+    "block-remove-sms-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Altri recapiti”.",
+    "sms-add-more-button": "Aggiungi altro numero",
+    "sms-add-more-caption": "Vuoi che le notifiche inviate da alcuni enti siano indirizzate a un altro numero?"
   },
   "special-contacts": {
     "subtitle": "Se vuoi che le notifiche di alcuni enti siano indirizzate a dei recapiti diversi puoi indicarli qui, in sostituzione di quelli principali.",

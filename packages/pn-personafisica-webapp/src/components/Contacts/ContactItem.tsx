@@ -3,7 +3,7 @@ import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Box, InputAdornment, Typography } from '@mui/material';
+import { Box, Divider, InputAdornment, Typography } from '@mui/material';
 import {
   AppResponse,
   AppResponsePublisher,
@@ -34,11 +34,16 @@ import InsertDigitalContact from './InsertDigitalContact';
 
 interface Props {
   value: string;
+  addressType: string;
   senderId?: string;
   senderName?: string;
   blockDelete?: boolean;
   blockEdit?: boolean;
   onEdit?: (editFlag: boolean) => void;
+}
+
+interface AddMoreProps {
+  addressType: string;
 }
 
 enum ModalType {
@@ -48,8 +53,43 @@ enum ModalType {
   DELETE = 'delete',
 }
 
-const SmsContactItem: React.FC<Props> = ({
+const AddMoreContact: React.FC<AddMoreProps> = ({ addressType }) => {
+  const { t } = useTranslation(['common', 'recapiti']);
+  const isMobile = useIsMobile();
+  return (
+    <>
+      <Divider
+        sx={{
+          backgroundColor: 'white',
+          color: 'text.secondary',
+          marginTop: '1rem',
+          marginBottom: '1rem',
+        }}
+      />
+      <Typography variant="caption" lineHeight="1.125rem">
+        {t(`courtesy-contacts.${addressType.toLowerCase()}-add-more-caption`, { ns: 'recapiti' })}
+      </Typography>
+      <ButtonNaked
+        component={Box}
+        onClick={() => {}}
+        color="primary"
+        size="small"
+        sx={{
+          verticalAlign: 'unset',
+          display: isMobile ? 'block' : 'inline',
+          margin: isMobile ? '1rem 0 0 0' : '0 0 0 0.5rem',
+        }}
+        padding="1rem"
+      >
+        {t(`courtesy-contacts.${addressType.toLowerCase()}-add-more-button`, { ns: 'recapiti' })}
+      </ButtonNaked>
+    </>
+  );
+};
+
+const ContactItem: React.FC<Props> = ({
   value,
+  addressType,
   senderId = 'default',
   senderName,
   blockDelete,
@@ -69,6 +109,10 @@ const SmsContactItem: React.FC<Props> = ({
   // value contains the prefix
   const contactValue = value.replace(internationalPhonePrefix, '');
 
+  /**
+   * TO DO:
+   * correggere la validazione per ogni tipo di contatto SMS, PEC, EMAIL
+   */
   const validationSchema = yup.object().shape({
     [`${senderId}_sms`]: phoneValidationSchema(t),
   });
@@ -110,6 +154,10 @@ const SmsContactItem: React.FC<Props> = ({
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
+  /**
+   * TO DO:
+   * generalizzare per ogni tipo di contatto SMS, PEC, EMAIL
+   */
   const handleCodeVerification = (verificationCode?: string) => {
     if (verificationCode) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_CONVERSION, senderId);
@@ -155,6 +203,10 @@ const SmsContactItem: React.FC<Props> = ({
       .catch(() => {});
   };
 
+  /**
+   * TO DO:
+   * generalizzare per ogni tipo di contatto SMS, PEC, EMAIL
+   */
   const handleCancelCode = async () => {
     setModalOpen(null);
     if (value) {
@@ -164,6 +216,10 @@ const SmsContactItem: React.FC<Props> = ({
     await formik.setFieldValue(`${senderId}_sms`, initialValues[`${senderId}_sms`], true);
   };
 
+  /**
+   * TO DO:
+   * generalizzare per ogni tipo di contatto SMS, PEC, EMAIL
+   */
   const deleteConfirmHandler = () => {
     setModalOpen(null);
     dispatch(
@@ -180,6 +236,10 @@ const SmsContactItem: React.FC<Props> = ({
       .catch(() => {});
   };
 
+  /**
+   * TO DO:
+   * generalizzare per ogni tipo di contatto SMS, PEC, EMAIL
+   */
   const handleAddressUpdateError = useCallback(
     (responseError: AppResponse) => {
       if (modalOpen === null) {
@@ -340,8 +400,9 @@ const SmsContactItem: React.FC<Props> = ({
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />
+      <AddMoreContact addressType={addressType} />
     </DigitalContactsCard>
   );
 };
 
-export default SmsContactItem;
+export default ContactItem;

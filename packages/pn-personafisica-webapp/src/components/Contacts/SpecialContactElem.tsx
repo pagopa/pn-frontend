@@ -6,9 +6,9 @@ import { useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn-commons';
 
 import { ChannelType, DigitalAddress } from '../../models/contacts';
 import { allowedAddressTypes } from '../../utility/contacts.utility';
+import SmsContactItem from './ContactItem';
 import EmailContactItem from './EmailContactItem';
 import PecContactItem from './PecContactItem';
-import SmsContactItem from './SmsContactItem';
 
 type Props = {
   addresses: Array<DigitalAddress>;

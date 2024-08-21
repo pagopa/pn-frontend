@@ -360,7 +360,6 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
               )}
               sx={{ flexGrow: 1, flexBasis: 0 }}
             />
-
             <CustomDropdown
               id="addressType"
               label={`${t('special-contacts.address-type', { ns: 'recapiti' })}*`}
@@ -377,7 +376,6 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
                 </MenuItem>
               ))}
             </CustomDropdown>
-
             <TextField
               id="s_value"
               label={

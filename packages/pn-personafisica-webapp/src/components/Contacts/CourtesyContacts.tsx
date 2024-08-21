@@ -5,9 +5,9 @@ import { Box, List, ListItem, Stack, Typography } from '@mui/material';
 
 import { ChannelType, DigitalAddress } from '../../models/contacts';
 import { countContactsByType } from '../../utility/contacts.utility';
+import ContactItem from './ContactItem';
 import EmailContactItem from './EmailContactItem';
 import IOContact from './IOContact';
-import SmsContactItem from './SmsContactItem';
 
 interface Props {
   contacts: Array<DigitalAddress>;
@@ -52,9 +52,10 @@ const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
           value={emailContact?.value ?? ''}
           blockDelete={emailContactsQuantity() > 1}
         />
-        <SmsContactItem
+        <ContactItem
           value={phoneContact?.value ?? ''}
           blockDelete={phoneContactsQuantity() > 1}
+          addressType="sms"
         />
       </Stack>
     </Box>
