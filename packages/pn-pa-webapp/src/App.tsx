@@ -76,13 +76,19 @@ const ActualApp = () => {
   const reservedArea: ProductEntity = {
     id: 'selfcare',
     title: t('header.reserved-area'),
-    productUrl: `${SELFCARE_BASE_URL}/dashboard/${idOrganization}`,
+    productUrl: `${SELFCARE_BASE_URL}/dashboard/${idOrganization}?lang=${i18n.language}`,
     linkType: 'external',
   };
 
   const productsList =
     products.length > 0
-      ? [reservedArea, ...products]
+      ? [
+          reservedArea,
+          ...products.map((product) => ({
+            ...product,
+            productUrl: `${product.productUrl}&lang=${i18n.language}`,
+          })),
+        ]
       : [
           reservedArea,
           {
@@ -92,6 +98,7 @@ const ActualApp = () => {
             linkType: 'internal' as LinkType,
           },
         ];
+
   const productId = products.length > 0 ? SELFCARE_SEND_PROD_ID : '0';
   const institutionsList = institutions.map((institution) => ({
     ...institution,
@@ -150,7 +157,7 @@ const ActualApp = () => {
         route: routes.STATISTICHE,
       });
     }
-    const items = { ...getMenuItems(basicMenuItems, idOrganization, role?.role) };
+    const items = { ...getMenuItems(basicMenuItems, idOrganization, i18n.language, role?.role) };
     // localize menu items
     /* eslint-disable-next-line functional/immutable-data */
     items.menuItems = items.menuItems.map((item) => ({ ...item, label: t(item.label) }));

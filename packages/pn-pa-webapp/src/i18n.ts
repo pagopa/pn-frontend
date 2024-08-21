@@ -12,19 +12,17 @@ const customHashDetector: CustomDetector = {
   lookup() {
     const hash = window.location.hash;
     const lang = hash.match(/lang=([a-z]{2})/);
-    console.log('customHashDetector', lang);
     return lang ? lang[1] : undefined;
   },
 };
 
 languageDetector.addDetector(customHashDetector);
 
-void i18next
+i18next
   .use(languageDetector)
   .use(initReactI18next)
   .use(HttpApi)
   .init({
-    lng: 'it',
     fallbackLng: 'it',
     debug: process.env.NODE_ENV === 'development',
     ns: ['common'],
@@ -41,7 +39,6 @@ void i18next
     },
   })
   .then(async () => {
-    await i18next.changeLanguage();
     setSessionLanguage(i18next.language);
   })
   .catch((err: any) => {
