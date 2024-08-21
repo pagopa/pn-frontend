@@ -3,22 +3,7 @@ import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import {
-  Alert,
-  Box,
-  Card,
-  CardContent,
-  InputAdornment,
-  MenuItem,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Alert, Box, InputAdornment, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   AppResponse,
@@ -30,7 +15,6 @@ import {
   SpecialContactsProvider,
   appStateActions,
   searchStringLimitReachedText,
-  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -59,13 +43,14 @@ import {
   phoneValidationSchema,
 } from '../../utility/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
+import AddMoreDigitalContact from './AddMoreDigitalContact';
 import DigitalContactsCard from './DigitalContactsCard';
 import ExistingContactDialog from './ExistingContactDialog';
 import PecVerificationDialog from './PecVerificationDialog';
-import SpecialContactElem from './SpecialContactElem';
 
 type Props = {
   digitalAddresses: Array<DigitalAddress>;
+  addressType: string;
 };
 
 type Addresses = {
@@ -83,12 +68,12 @@ enum ModalType {
   CODE = 'code',
 }
 
-const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
+const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
-  const isMobile = useIsMobile();
+  // const isMobile = useIsMobile();
   const [senderInputValue, setSenderInputValue] = useState('');
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const codeModalRef =
@@ -98,19 +83,8 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
     .filter((a) => a.senderId === 'default' && allowedAddressTypes.includes(a.channelType))
     .map((a) => ({
       id: a.channelType,
-      value: t(`special-contacts.${a.channelType.toLowerCase()}`, { ns: 'recapiti' }),
+      value: t(`special-contacts.${a.channelType?.toLowerCase()}`, { ns: 'recapiti' }),
     }));
-
-  const listHeaders = [
-    {
-      id: 'sender',
-      label: t('special-contacts.sender', { ns: 'recapiti' }),
-    },
-    ...allowedAddressTypes.map((type) => ({
-      id: type.toLowerCase(),
-      label: t(`special-contacts.${type.toLowerCase()}`, { ns: 'recapiti' }),
-    })),
-  ];
 
   const addresses: Addresses = digitalAddresses
     .filter((a) => a.senderId !== 'default')
@@ -179,7 +153,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
 
   const labelRoot =
     formik.values.addressType === ChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts';
-  const contactType = formik.values.addressType.toLowerCase();
+  const contactType = formik.values.addressType?.toLowerCase();
 
   const renderOption = (props: any, option: Party) => (
     <MenuItem {...props} value={option.id} key={option.id}>
@@ -226,7 +200,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
         addresses[formik.values.sender.id].findIndex((a) => a.channelType === e.target.value) > -1;
       setAlreadyExistsMessage(
         alreadyExists
-          ? t(`special-contacts.${e.target.value.toLowerCase()}-already-exists`, {
+          ? t(`special-contacts.${e.target.value?.toLowerCase()}-already-exists`, {
               ns: 'recapiti',
             })
           : ''
@@ -359,146 +333,6 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
       reloadAction={fetchAllActivatedParties}
       mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
     >
-      <DigitalContactsCard title="" subtitle={t('special-contacts.subtitle', { ns: 'recapiti' })}>
-        <Typography sx={{ marginTop: '20px' }}>{t('required-fields')}</Typography>
-        <form
-          style={{ margin: '20px 0' }}
-          onSubmit={formik.handleSubmit}
-          data-testid="specialContact"
-        >
-          <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
-            <PnAutocomplete
-              id="sender"
-              data-testid="sender"
-              size="small"
-              options={parties ?? []}
-              autoComplete
-              getOptionLabel={getOptionLabel}
-              noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-              onChange={senderChangeHandler}
-              inputValue={senderInputValue}
-              onInputChange={(_event, newInputValue, reason) => {
-                if (reason === 'input') {
-                  setSenderInputValue(newInputValue);
-                }
-              }}
-              filterOptions={(e) => e}
-              renderOption={renderOption}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  name="sender"
-                  label={entitySearchLabel}
-                  error={senderInputValue.length > 80}
-                  helperText={
-                    senderInputValue.length > 80 && t('too-long-field-error', { maxLength: 80 })
-                  }
-                />
-              )}
-              sx={{ flexGrow: 1, flexBasis: 0 }}
-            />
-            <CustomDropdown
-              id="addressType"
-              label={`${t('special-contacts.address-type', { ns: 'recapiti' })}*`}
-              name="addressType"
-              value={formik.values.addressType}
-              onChange={addressTypeChangeHandler}
-              size="small"
-              sx={{ flexGrow: 1, flexBasis: 0 }}
-            >
-              {addressTypes.map((a) => (
-                <MenuItem id={`dropdown-${a.id}`} key={a.id} value={a.id}>
-                  {a.value}
-                </MenuItem>
-              ))}
-            </CustomDropdown>
-            <TextField
-              id="s_value"
-              label={t(`special-contacts.${contactType}`, { ns: 'recapiti' }) + '*'}
-              name="s_value"
-              value={formik.values.s_value}
-              onChange={handleChangeTouched}
-              variant="outlined"
-              size="small"
-              error={formik.touched.s_value && Boolean(formik.errors.s_value)}
-              helperText={formik.touched.s_value && formik.errors.s_value}
-              InputProps={
-                formik.values.addressType === ChannelType.SMS
-                  ? {
-                      startAdornment: (
-                        <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
-                      ),
-                    }
-                  : {}
-              }
-              sx={{ flexGrow: 1, flexBasis: 0 }}
-            />
-            <Box sx={{ textAlign: 'right' }}>
-              <ButtonNaked
-                sx={{ marginLeft: 'auto', height: '40px' }}
-                type="submit"
-                disabled={
-                  !formik.isValid || senderInputValue.length > 80 || senderInputValue.length === 0
-                }
-                color="primary"
-                data-testid="addSpecialButton"
-                id="addSpecialButton"
-              >
-                {t('button.associa')}
-              </ButtonNaked>
-            </Box>
-          </Stack>
-        </form>
-        {alreadyExistsMessage && (
-          <Alert severity="warning" sx={{ marginBottom: '20px' }} data-testid="alreadyExistsAlert">
-            {alreadyExistsMessage}
-          </Alert>
-        )}
-        <SpecialContactsProvider>
-          {Object.keys(addresses).length > 0 && (
-            <>
-              <Typography fontWeight={600} sx={{ marginTop: '80px' }}>
-                {t('special-contacts.associated', { ns: 'recapiti' })}
-              </Typography>
-              {!isMobile && (
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      {listHeaders.map((h) => (
-                        <TableCell width="25%" key={h.id} sx={{ borderBottomColor: 'divider' }}>
-                          {h.label}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {Object.entries(addresses).map(([senderId, addr]) => (
-                      <SpecialContactElem key={senderId} addresses={addr} />
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
-              {isMobile &&
-                Object.entries(addresses).map(([senderId, addr]) => (
-                  <Card
-                    key={senderId}
-                    sx={{
-                      border: '1px solid',
-                      borderRadius: '8px',
-                      borderColor: 'divider',
-                      marginTop: '20px',
-                    }}
-                  >
-                    <CardContent>
-                      <SpecialContactElem key={senderId} addresses={addr} />
-                    </CardContent>
-                  </Card>
-                ))}
-            </>
-          )}
-        </SpecialContactsProvider>
-      </DigitalContactsCard>
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
         value={formik.values.s_value}
@@ -545,6 +379,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
         open={modalOpen === ModalType.VALIDATION}
         handleConfirm={() => setModalOpen(null)}
       />
+      <AddMoreDigitalContact addressType={addressType} />
     </ApiErrorWrapper>
   );
 };

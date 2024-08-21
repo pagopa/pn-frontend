@@ -37,6 +37,7 @@ import EditDigitalContact from './EditDigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import InsertDigitalContact from './InsertDigitalContact';
 import SpecialContactElem from './SpecialContactElem';
+import SpecialContacts from './SpecialContacts';
 
 interface Props {
   value: string;
@@ -347,7 +348,7 @@ const SmsContactItem: React.FC<Props> = ({
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />
-      <SpecialContactElem addressType="sms" />
+      <SpecialContacts digitalAddresses={digitalAddresses} addressType="sms" />
     </DigitalContactsCard>
   );
 };
