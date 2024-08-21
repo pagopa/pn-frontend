@@ -1,18 +1,11 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { ChangeEvent, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
-import { Box, Stack, Typography } from '@mui/material';
-import {
-  AppResponse,
-  AppResponsePublisher,
-  CodeModal,
-  ErrorMessage,
-  appStateActions,
-  useIsMobile,
-} from '@pagopa-pn/pn-commons';
+import { Stack, Typography } from '@mui/material';
+import { appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -23,6 +16,7 @@ import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, pecValidationSchema } from '../../utility/contacts.utility';
 import CancelVerificationModal from './CancelVerificationModal';
+import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
 import EditDigitalContact from './EditDigitalContact';
@@ -65,8 +59,6 @@ const PecContactItem: React.FC<Props> = ({
   const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
-  const codeModalRef =
-    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
   const isMobile = useIsMobile();
 
   const validationSchema = yup.object({
@@ -179,36 +171,6 @@ const PecContactItem: React.FC<Props> = ({
       .catch(() => {});
   };
 
-  const handleAddressUpdateError = useCallback(
-    (responseError: AppResponse) => {
-      if (modalOpen === null) {
-        // notify the publisher we are not handling the error
-        return true;
-      }
-      if (Array.isArray(responseError.errors)) {
-        const error = responseError.errors[0];
-        codeModalRef.current?.updateError(
-          {
-            title: error.message.title,
-            content: error.message.content,
-          },
-          true
-        );
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR);
-      }
-      return false;
-    },
-    [modalOpen]
-  );
-
-  useEffect(() => {
-    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
-
-    return () => {
-      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
-    };
-  }, [handleAddressUpdateError]);
-
   /*
    * if *some* value has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
@@ -294,42 +256,14 @@ const PecContactItem: React.FC<Props> = ({
         handleDiscard={handleCancelCode}
         handleConfirm={() => handleCodeVerification()}
       />
-      <CodeModal
-        title={
-          t(`legal-contacts.pec-verify`, { ns: 'recapiti' }) +
-          ` ${formik.values[senderId + '_pec']}`
-        }
-        subtitle={<Trans i18nKey={`legal-contacts.pec-verify-descr`} ns="recapiti" />}
+      <ContactCodeDialog
+        value={formik.values[senderId + '_pec']}
+        addressType={AddressType.LEGAL}
+        channelType={ChannelType.PEC}
         open={modalOpen === ModalType.CODE}
-        initialValues={new Array(5).fill('')}
-        codeSectionTitle={t(`legal-contacts.insert-code`, { ns: 'recapiti' })}
-        codeSectionAdditional={
-          <>
-            <Typography variant="body2" display="inline">
-              {t(`legal-contacts.pec-new-code`, { ns: 'recapiti' })}
-              &nbsp;
-            </Typography>
-            <ButtonNaked
-              component={Box}
-              onClick={() => handleCodeVerification()}
-              sx={{ verticalAlign: 'unset', display: 'inline' }}
-            >
-              <Typography
-                display="inline"
-                color="primary"
-                variant="body2"
-                sx={{ textDecoration: 'underline' }}
-              >
-                {t(`legal-contacts.new-code-link`, { ns: 'recapiti' })}.
-              </Typography>
-            </ButtonNaked>
-          </>
-        }
-        cancelLabel={t('button.annulla')}
-        confirmLabel={t('button.conferma')}
-        cancelCallback={handleCancelCode}
-        confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
-        ref={codeModalRef}
+        onConfirm={(code) => handleCodeVerification(code)}
+        onDiscard={handleCancelCode}
+        onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR)}
       />
       <PecVerificationDialog
         open={modalOpen === ModalType.VALIDATION}

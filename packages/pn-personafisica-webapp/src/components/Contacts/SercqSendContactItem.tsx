@@ -1,16 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
-import {
-  AppResponse,
-  AppResponsePublisher,
-  CodeModal,
-  ErrorMessage,
-  appStateActions,
-  useIsMobile,
-} from '@pagopa-pn/pn-commons';
+import { appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import {
@@ -24,6 +17,7 @@ import { createOrUpdateAddress, deleteAddress, enableIOAddress } from '../../red
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { internationalPhonePrefix } from '../../utility/contacts.utility';
+import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
 import SercqSendCourtesyDialog from './SercqSendCourtesyDialog';
@@ -74,8 +68,6 @@ const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', se
   const dispatch = useAppDispatch();
   const digitalAddresses =
     useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
-  const codeModalRef =
-    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
 
   const hasCourtesy = digitalAddresses.some(
     (addr) =>
@@ -86,7 +78,6 @@ const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', se
     digitalAddresses.findIndex(
       (addr) => addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.DISABLED
     ) > -1;
-  const courtesyChannelType = modalOpen?.data?.channelType.toLowerCase() ?? 'email';
 
   const handleInfoConfirm = () => {
     const digitalAddressParams: SaveDigitalAddressParams = {
@@ -188,35 +179,6 @@ const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', se
       .catch(() => {});
   };
 
-  const handleAddressUpdateError = useCallback(
-    (responseError: AppResponse) => {
-      if (modalOpen === null || modalOpen.type === ModalType.INFO) {
-        // notify the publisher we are not handling the error
-        return true;
-      }
-      if (Array.isArray(responseError.errors)) {
-        const error = responseError.errors[0];
-        codeModalRef.current?.updateError(
-          {
-            title: error.message.title,
-            content: error.message.content,
-          },
-          true
-        );
-      }
-      return false;
-    },
-    [modalOpen]
-  );
-
-  useEffect(() => {
-    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
-
-    return () => {
-      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
-    };
-  }, [handleAddressUpdateError]);
-
   return (
     <DigitalContactsCard
       title={
@@ -266,55 +228,15 @@ const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', se
         onDiscard={() => setModalOpen(null)}
         onConfirm={handleCourtesyConfirm}
       />
-      <CodeModal
-        title={
-          t(`courtesy-contacts.${courtesyChannelType}-verify`, {
-            ns: 'recapiti',
-          }) + ` ${modalOpen?.data?.value}`
-        }
-        subtitle={
-          <Trans i18nKey={`courtesy-contacts.${courtesyChannelType}-verify-descr`} ns="recapiti" />
-        }
+      <ContactCodeDialog
+        value={modalOpen?.data?.value}
+        addressType={AddressType.COURTESY}
+        channelType={modalOpen?.data?.channelType ?? ChannelType.EMAIL}
         open={modalOpen?.type === ModalType.CODE}
-        initialValues={new Array(5).fill('')}
-        codeSectionTitle={t(`courtesy-contacts.insert-code`, { ns: 'recapiti' })}
-        codeSectionAdditional={
-          <>
-            <Typography variant="body2" display="inline">
-              {t(`courtesy-contacts.${courtesyChannelType}-new-code`, {
-                ns: 'recapiti',
-              })}
-              &nbsp;
-            </Typography>
-            <ButtonNaked
-              component={Box}
-              onClick={() =>
-                handleCodeVerification(modalOpen?.data?.value, modalOpen?.data?.channelType)
-              }
-              sx={{ verticalAlign: 'unset', display: 'inline' }}
-            >
-              <Typography
-                display="inline"
-                color="primary"
-                variant="body2"
-                sx={{ textDecoration: 'underline' }}
-              >
-                {t(`courtesy-contacts.new-code-link`, { ns: 'recapiti' })}.
-              </Typography>
-            </ButtonNaked>
-          </>
+        onConfirm={(code) =>
+          handleCodeVerification(modalOpen?.data?.value, modalOpen?.data?.channelType, code)
         }
-        cancelLabel={t('button.annulla')}
-        confirmLabel={t('button.conferma')}
-        cancelCallback={() => setModalOpen(null)}
-        confirmCallback={(values: Array<string>) =>
-          handleCodeVerification(
-            modalOpen?.data?.value,
-            modalOpen?.data?.channelType,
-            values.join('')
-          )
-        }
-        ref={codeModalRef}
+        onDiscard={() => setModalOpen(null)}
       />
       <DeleteDialog
         showModal={modalOpen?.type === ModalType.DELETE}
