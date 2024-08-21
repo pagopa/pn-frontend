@@ -109,9 +109,7 @@
     "block-remove-email-title": "Non puoi eliminare l'e-mail",
     "block-remove-email-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi e-mail che hai indicato alla voce “Altri recapiti”.",
     "block-remove-sms-title": "Non puoi eliminare il numero di telefono",
-    "block-remove-sms-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Altri recapiti”.",
-    "sms-add-more-button": "Aggiungi altro numero",
-    "sms-add-more-caption": "Vuoi che le notifiche inviate da alcuni enti siano indirizzate a un altro numero?"
+    "block-remove-sms-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Altri recapiti”."
   },
   "special-contacts": {
     "subtitle": "Se vuoi che le notifiche di alcuni enti siano indirizzate a dei recapiti diversi puoi indicarli qui, in sostituzione di quelli principali.",
@@ -125,7 +123,13 @@
     "pec-already-exists": "Questo ente è già associato a un indirizzo PEC. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "sms-already-exists": "Questo ente è già associato a un numero di cellulare. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "email-already-exists": "Questo ente è già associato a un indirizzo e-mail. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
-    "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito."
+    "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito.",
+    "sms-add-more-button": "Aggiungi altro numero",
+    "sms-add-more-caption": "Vuoi che le notifiche inviate da alcuni enti siano indirizzate a un altro numero?",
+    "email-add-more-button": "Aggiungi altra email",
+    "email-add-more-caption": "Vuoi che le notifiche inviate da alcuni enti siano indirizzate a un'altro email?",
+    "pec-add-more-button": "Aggiungi altra PEC",
+    "pec-add-more-caption": "Vuoi che le notifiche inviate da alcuni enti siano indirizzate a un'altra PEC'?"
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",

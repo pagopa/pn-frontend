@@ -27,6 +27,7 @@ import DigitalContactsCard from './DigitalContactsCard';
 import EditDigitalContact from './EditDigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import InsertDigitalContact from './InsertDigitalContact';
+import SpecialContactElem from './SpecialContactElem';
 
 interface Props {
   value: string;
@@ -329,6 +330,7 @@ const EmailContactItem: React.FC<Props> = ({
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />
+      <SpecialContactElem addressType="email" />
     </DigitalContactsCard>
   );
 };
