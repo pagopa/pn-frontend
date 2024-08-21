@@ -50,7 +50,7 @@ const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
           />
         </Stack>
       </Box>
-      <Alert sx={{ mt: 4 }} severity="info" data-testid="contacts disclaimer">
+      <Alert role="banner" sx={{ mt: 4 }} severity="info" data-testid="contacts disclaimer">
         <Typography component="span" variant="body1">
           {t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })}
         </Typography>

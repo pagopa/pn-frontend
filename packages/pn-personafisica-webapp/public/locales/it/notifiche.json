@@ -11,10 +11,8 @@
   "filters": {
     "iun": "Cerca per Codice IUN",
     "data_da": "Dal",
-    "data_da-aria-label": "Data inizio ricerca",
     "data_da-input-aria-label": "Inserisci la data iniziale della ricerca",
     "data_a": "Al",
-    "data_a-aria-label": "Data fine ricerca",
     "data_a-input-aria-label": "Inserisci la data finale della ricerca",
     "errors": {
       "iun": "Inserisci un codice IUN valido"

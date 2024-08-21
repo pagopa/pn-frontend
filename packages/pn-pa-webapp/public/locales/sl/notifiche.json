@@ -6,10 +6,8 @@
     "fiscal-code-tax-code": "Davčna številka",
     "iun": "Koda IUN",
     "data_da": "Od",
-    "data_da-aria-label": "Datum začetka iskanja",
     "data_da-input-aria-label": "Vnesite začetni datum iskanja",
     "data_a": "Do",
-    "data_a-aria-label": "Datum konca iskanja",
     "data_a-input-aria-label": "Vnesite končni datum iskanja",
     "status": "Stanje",
     "errors": {

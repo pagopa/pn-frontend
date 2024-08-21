@@ -23,9 +23,7 @@
     "deleghe": "Prenosi pooblastil",
     "profilo": "Vaši podatki",
     "contacts": "Vaši kontaktni podatki",
-    "app-status": "Stanje platforme",
-    "aria-label": "platforma-obvestila glavna navigacija",
-    "aria-label-inner": "platforma-obvestila navigacija prejemnika"
+    "app-status": "Stanje platforme"
   },
   "header": {
     "logout": "Izhod",

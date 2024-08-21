@@ -17,10 +17,8 @@
   "filters": {
     "iun": "Search by IUN Code",
     "data_da": "From",
-    "data_da-aria-label": "Search start date",
     "data_da-input-aria-label": "Enter the search start date",
     "data_a": "To",
-    "data_a-aria-label": "Search end date",
     "data_a-input-aria-label": "Enter search end date",
     "errors": {
       "iun": "Please enter a valid IUN code"

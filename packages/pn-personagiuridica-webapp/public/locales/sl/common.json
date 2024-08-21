@@ -27,9 +27,7 @@
     "contacts": "Kontaktni podatki",
     "app-status": "Stanje platforme",
     "users": "Uporabniki",
-    "groups": "Skupine",
-    "aria-label": "platforma-obvestila glavna navigacija",
-    "aria-label-inner": "platforma-obvestila navigacija pravne osebe"
+    "groups": "Skupine"
   },
   "header": {
     "product": {
