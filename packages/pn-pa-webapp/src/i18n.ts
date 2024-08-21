@@ -34,7 +34,6 @@ i18next
     },
     detection: {
       order: ['customHashDetector', 'sessionStorage'],
-      lookupQuerystring: 'lang',
       lookupSessionStorage: 'lang',
     },
   })
