@@ -377,7 +377,31 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
         open={modalOpen === ModalType.VALIDATION}
         handleConfirm={() => setModalOpen(null)}
       />
-      <AddMoreDigitalContact addressType={addressType} />
+      <Divider
+        sx={{
+          backgroundColor: 'white',
+          color: 'text.secondary',
+          my: 2,
+        }}
+      />
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        margin={{ xs: '1rem 0 0 0', sm: 0 }}
+        alignItems="baseline"
+      >
+        <Typography variant="caption" lineHeight="1.125rem">
+          {t(`special-contacts.${addressType.toLowerCase()}-add-more-caption`, { ns: 'recapiti' })}
+        </Typography>
+        <ButtonNaked
+          component={Stack}
+          onClick={() => {}}
+          color="primary"
+          size="small"
+          padding={{ xs: '0.5rem 0', sm: 1 }}
+        >
+          {t(`special-contacts.${addressType.toLowerCase()}-add-more-button`, { ns: 'recapiti' })}
+        </ButtonNaked>
+      </Stack>
     </ApiErrorWrapper>
   );
 };
