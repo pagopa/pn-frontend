@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Box, Typography } from '@mui/material';
+import { Box, Divider, Stack, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   AppResponse,
@@ -39,6 +39,7 @@ import {
 import AddMoreDigitalContact from './AddMoreDigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import PecVerificationDialog from './PecVerificationDialog';
+import SpecialContactElem from './SpecialContactElem';
 
 type Props = {
   digitalAddresses: Array<DigitalAddress>;
@@ -325,6 +326,11 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
       reloadAction={fetchAllActivatedParties}
       mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
     >
+      {digitalAddresses.map(
+        (address) =>
+          address.channelType === addressType.toUpperCase() &&
+          address.senderId !== 'default' && <SpecialContactElem address={address} />
+      )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
         value={formik.values.s_value}

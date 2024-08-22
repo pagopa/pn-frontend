@@ -23,7 +23,6 @@ import DigitalContactsCard from './DigitalContactsCard';
 import EditDigitalContact from './EditDigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import InsertDigitalContact from './InsertDigitalContact';
-import SpecialContactElem from './SpecialContactElem';
 import SpecialContacts from './SpecialContacts';
 
 interface Props {
