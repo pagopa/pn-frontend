@@ -7,13 +7,13 @@ import PecContactItem from './PecContactItem';
 import SercqSendContactItem from './SercqSendContactItem';
 
 type Props = {
-  legalAddresses: Array<DigitalAddress>;
+  contacts: Array<DigitalAddress>;
 };
 
-const LegalContacts = ({ legalAddresses }: Props) => {
+const LegalContacts = ({ contacts }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
 
-  const pecAddress = legalAddresses.find(
+  const pecAddress = contacts.find(
     (a) => a.senderId === 'default' && a.channelType === ChannelType.PEC
   );
 
@@ -38,9 +38,8 @@ const LegalContacts = ({ legalAddresses }: Props) => {
       <Stack spacing={0} mt={3} data-testid="legalContacts">
         <SercqSendContactItem
           value={
-            legalAddresses.find(
-              (a) => a.senderId === 'default' && a.channelType === ChannelType.SERCQ
-            )?.value ?? ''
+            contacts.find((a) => a.senderId === 'default' && a.channelType === ChannelType.SERCQ)
+              ?.value ?? ''
           }
         />
         <Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }}>
@@ -48,11 +47,10 @@ const LegalContacts = ({ legalAddresses }: Props) => {
         </Divider>
         <PecContactItem
           value={
-            legalAddresses.find(
-              (a) => a.senderId === 'default' && a.channelType === ChannelType.PEC
-            )?.value ?? ''
+            contacts.find((a) => a.senderId === 'default' && a.channelType === ChannelType.PEC)
+              ?.value ?? ''
           }
-          blockDelete={legalAddresses.some(
+          blockDelete={contacts.some(
             (addr) => addr.channelType === ChannelType.PEC && addr.senderId !== 'default'
           )}
           verifyingAddress={pecAddress ? !pecAddress.pecValid : false}

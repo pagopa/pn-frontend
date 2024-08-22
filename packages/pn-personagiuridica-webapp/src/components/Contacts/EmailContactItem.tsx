@@ -1,25 +1,16 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { ChangeEvent, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Box, Typography } from '@mui/material';
-import {
-  AppResponse,
-  AppResponsePublisher,
-  CodeModal,
-  DisclaimerModal,
-  ErrorMessage,
-  appStateActions,
-  useIsMobile,
-} from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { DisclaimerModal, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { contactAlreadyExists, emailValidationSchema } from '../../utility/contacts.utility';
+import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
 import EditDigitalContact from './EditDigitalContact';
@@ -56,8 +47,6 @@ const EmailContactItem: React.FC<Props> = ({
   const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
-  const codeModalRef =
-    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
   const isMobile = useIsMobile();
 
   const validationSchema = yup.object().shape({
@@ -158,35 +147,6 @@ const EmailContactItem: React.FC<Props> = ({
     );
   };
 
-  const handleAddressUpdateError = useCallback(
-    (responseError: AppResponse) => {
-      if (modalOpen === null) {
-        // notify the publisher we are not handling the error
-        return true;
-      }
-      if (Array.isArray(responseError.errors)) {
-        const error = responseError.errors[0];
-        codeModalRef.current?.updateError(
-          {
-            title: error.message.title,
-            content: error.message.content,
-          },
-          true
-        );
-      }
-      return false;
-    },
-    [modalOpen]
-  );
-
-  useEffect(() => {
-    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
-
-    return () => {
-      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
-    };
-  }, [handleAddressUpdateError]);
-
   /*
    * if *some* value (phone number, email address) has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
@@ -236,7 +196,7 @@ const EmailContactItem: React.FC<Props> = ({
               name: `${senderId}_email`,
               placeholder: t(`courtesy-contacts.link-email-placeholder`, { ns: 'recapiti' }),
               value: formik.values[`${senderId}_email`],
-              onChange: handleChangeTouched,
+              onChange: (e) => void handleChangeTouched(e),
               error:
                 formik.touched[`${senderId}_email`] && Boolean(formik.errors[`${senderId}_email`]),
               helperText: formik.touched[`${senderId}_email`] && formik.errors[`${senderId}_email`],
@@ -263,42 +223,13 @@ const EmailContactItem: React.FC<Props> = ({
         checkboxLabel={t('button.capito')}
         content={t(`alert-dialog-email`, { ns: 'recapiti' })}
       />
-      <CodeModal
-        title={
-          t(`courtesy-contacts.email-verify`, { ns: 'recapiti' }) +
-          ` ${formik.values[senderId + '_email']}`
-        }
-        subtitle={<Trans i18nKey="courtesy-contacts.email-verify-descr" ns="recapiti" />}
+      <ContactCodeDialog
+        value={formik.values[senderId + '_email']}
+        addressType={AddressType.COURTESY}
+        channelType={ChannelType.EMAIL}
         open={modalOpen === ModalType.CODE}
-        initialValues={new Array(5).fill('')}
-        codeSectionTitle={t(`courtesy-contacts.insert-code`, { ns: 'recapiti' })}
-        codeSectionAdditional={
-          <>
-            <Typography variant="body2" display="inline">
-              {t(`courtesy-contacts.email-new-code`, { ns: 'recapiti' })}
-              &nbsp;
-            </Typography>
-            <ButtonNaked
-              component={Box}
-              onClick={() => handleCodeVerification()}
-              sx={{ verticalAlign: 'unset', display: 'inline' }}
-            >
-              <Typography
-                display="inline"
-                color="primary"
-                variant="body2"
-                sx={{ textDecoration: 'underline' }}
-              >
-                {t(`courtesy-contacts.new-code-link`, { ns: 'recapiti' })}.
-              </Typography>
-            </ButtonNaked>
-          </>
-        }
-        cancelLabel={t('button.annulla')}
-        confirmLabel={t('button.conferma')}
-        cancelCallback={handleCancelCode}
-        confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
-        ref={codeModalRef}
+        onConfirm={(code) => handleCodeVerification(code)}
+        onDiscard={handleCancelCode}
       />
       <DeleteDialog
         showModal={modalOpen === ModalType.DELETE}

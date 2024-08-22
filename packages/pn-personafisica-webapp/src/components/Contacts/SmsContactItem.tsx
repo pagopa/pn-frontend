@@ -7,12 +7,7 @@ import { InputAdornment } from '@mui/material';
 import { DisclaimerModal, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import {
-  AddressType,
-  ChannelType,
-  DigitalAddress,
-  SaveDigitalAddressParams,
-} from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -227,7 +222,7 @@ const SmsContactItem: React.FC<Props> = ({
               name: `${senderId}_sms`,
               placeholder: t(`courtesy-contacts.link-sms-placeholder`, { ns: 'recapiti' }),
               value: formik.values[`${senderId}_sms`],
-              onChange: handleChangeTouched,
+              onChange: (e) => void handleChangeTouched(e),
               error: formik.touched[`${senderId}_sms`] && Boolean(formik.errors[`${senderId}_sms`]),
               helperText: formik.touched[`${senderId}_sms`] && formik.errors[`${senderId}_sms`],
               InputProps: {
