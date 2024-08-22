@@ -25,7 +25,6 @@ const defaultPhoneAddress = digitalCourtesyAddresses.find(
 
 describe('test SmsContactItem', () => {
   let mock: MockAdapter;
-  const INPUT_VALID_PHONE = '3331234567';
   const INPUT_INVALID_PHONE = '33312345';
 
   beforeAll(() => {
@@ -42,7 +41,7 @@ describe('test SmsContactItem', () => {
 
   it('type in an invalid number', async () => {
     // render component
-    const { container } = render(<SmsContactItem value="" />);
+    const { container } = render(<SmsContactItem />);
     expect(container).toHaveTextContent('courtesy-contacts.sms-title');
     expect(container).toHaveTextContent('courtesy-contacts.sms-description');
     const form = container.querySelector('form');
@@ -66,15 +65,21 @@ describe('test SmsContactItem', () => {
   });
 
   it('type in an invalid number while in "edit mode"', async () => {
-    const { container, getByRole } = render(<SmsContactItem value={INPUT_VALID_PHONE} />);
+    const { container, getByRole } = render(<SmsContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [defaultPhoneAddress],
+        },
+      },
+    });
     const form = container.querySelector('form');
     const phoneValue = getById(form!, 'default_sms-typography');
-    expect(phoneValue).toHaveTextContent(INPUT_VALID_PHONE);
+    expect(phoneValue).toHaveTextContent(defaultPhoneAddress?.value!);
     const editButton = getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = container.querySelector(`[name="default_sms"]`);
     const saveButton = getByRole('button', { name: 'button.salva' });
-    expect(input).toHaveValue(INPUT_VALID_PHONE);
+    expect(input).toHaveValue(defaultPhoneAddress?.value!.replace(internationalPhonePrefix, ''));
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
     await waitFor(() => {
@@ -100,7 +105,7 @@ describe('test SmsContactItem', () => {
         verificationCode: '01234',
       })
       .reply(204);
-    const result = render(<SmsContactItem value="" />);
+    const result = render(<SmsContactItem />);
     // insert new phone
     const form = result.container.querySelector('form');
     const input = form!.querySelector(`[name="default_sms"]`);
@@ -144,8 +149,7 @@ describe('test SmsContactItem', () => {
         value: internationalPhonePrefix + phoneValue,
       },
     ]);
-    // simulate rerendering due to redux changes
-    result.rerender(<SmsContactItem value={defaultPhoneAddress!.value} />);
+    // wait rerendering due to redux changes
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
@@ -174,7 +178,13 @@ describe('test SmsContactItem', () => {
       })
       .reply(204);
     // render component
-    const result = render(<SmsContactItem value={defaultPhoneAddress!.value} />);
+    const result = render(<SmsContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [defaultPhoneAddress],
+        },
+      },
+    });
     // edit value
     const form = result.container.querySelector('form');
     let smsValue = getById(form!, 'default_sms-typography');
@@ -224,14 +234,7 @@ describe('test SmsContactItem', () => {
         value: internationalPhonePrefix + phoneValue,
       },
     ]);
-    // simulate rerendering due to redux changes
-    const updatedDigitalCourtesyAddresses = [
-      {
-        ...defaultPhoneAddress!,
-        value: internationalPhonePrefix + phoneValue,
-      },
-    ];
-    result.rerender(<SmsContactItem value={updatedDigitalCourtesyAddresses[0].value} />);
+    // whait rerendering due to redux changes
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
@@ -247,7 +250,13 @@ describe('test SmsContactItem', () => {
   it('delete phone number', async () => {
     mock.onDelete('/bff/v1/addresses/COURTESY/default/SMS').reply(204);
     // render component
-    const result = render(<SmsContactItem value={defaultPhoneAddress!.value} />);
+    const result = render(<SmsContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [defaultPhoneAddress],
+        },
+      },
+    });
     const buttons = result.container.querySelectorAll('button');
     // click on cancel
     fireEvent.click(buttons[1]);
@@ -277,8 +286,7 @@ describe('test SmsContactItem', () => {
           )
       ).toStrictEqual([]);
     });
-    // simulate rerendering due to redux changes
-    result.rerender(<SmsContactItem value="" />);
+    // whait rerendering due to redux changes
     await waitFor(() => {
       const input = result.container.querySelector(`[name="default_sms"]`);
       expect(input).toBeInTheDocument();

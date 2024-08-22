@@ -1,7 +1,8 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 
-import { AddressType, DigitalAddress } from '../../models/contacts';
+import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
 import { Party } from '../../models/party';
+import { RootState } from '../store';
 import {
   createOrUpdateAddress,
   deleteAddress,
@@ -65,5 +66,57 @@ const contactsSlice = createSlice({
 });
 
 export const { resetState, resetPecValidation } = contactsSlice.actions;
+
+// START: SELECTORS
+const memoizedSelectAddresses = createSelector(
+  [
+    (state: RootState) => state.contactsState.digitalAddresses,
+    (_, channel: ChannelType) => channel,
+  ],
+  (digitalAddresses, channel) => ({
+    addresses: digitalAddresses,
+    defaultAddress: digitalAddresses.find(
+      (address) => address.senderId === 'default' && address.channelType === channel
+    ),
+    specialAddresses: digitalAddresses.filter(
+      (address) => address.senderId !== 'default' && address.channelType === channel
+    ),
+  })
+);
+
+const memoizedSelectAddressesByType = createSelector(
+  [(state: RootState) => state.contactsState.digitalAddresses, (_, type: AddressType) => type],
+  (digitalAddresses, type) => digitalAddresses.filter((address) => address.addressType === type)
+);
+
+const memoizedSelectDefaultAddress = createSelector(
+  [
+    (state: RootState) => state.contactsState.digitalAddresses,
+    (_, channel: ChannelType) => channel,
+  ],
+  (digitalAddresses, channel) =>
+    digitalAddresses.find(
+      (address) => address.senderId === 'default' && address.channelType === channel
+    )
+);
+
+const memoizedSelectSpecialAddresses = createSelector(
+  [
+    (state: RootState) => state.contactsState.digitalAddresses,
+    (_, channel: ChannelType) => channel,
+  ],
+  (digitalAddresses, channel) =>
+    digitalAddresses.filter(
+      (address) => address.senderId !== 'default' && address.channelType === channel
+    )
+);
+
+export const contactsSelectors = {
+  selectAddresses: memoizedSelectAddresses,
+  selectAddressesByType: memoizedSelectAddressesByType,
+  selectDefaultAddress: memoizedSelectDefaultAddress,
+  selectSpecialAddresses: memoizedSelectSpecialAddresses,
+};
+// END: SELECTORS
 
 export default contactsSlice;

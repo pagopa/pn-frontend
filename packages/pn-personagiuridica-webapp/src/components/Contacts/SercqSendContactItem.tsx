@@ -13,6 +13,7 @@ import {
   SaveDigitalAddressParams,
 } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
+import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { internationalPhonePrefix } from '../../utility/contacts.utility';
@@ -23,7 +24,6 @@ import SercqSendCourtesyDialog from './SercqSendCourtesyDialog';
 import SercqSendInfoDialog from './SercqSendInfoDialog';
 
 type Props = {
-  value: string;
   senderId?: string;
   senderName?: string;
 };
@@ -60,15 +60,20 @@ const SercqSendCardTitle: React.FC = () => {
   );
 };
 
-const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', senderName }) => {
+const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderName }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const isMobile = useIsMobile();
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
-  const digitalAddresses =
-    useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
+  const defaultAddress = useAppSelector((state: RootState) =>
+    contactsSelectors.selectDefaultAddress(state, ChannelType.SERCQ)
+  );
+  const courtesyAddresses = useAppSelector((state: RootState) =>
+    contactsSelectors.selectAddressesByType(state, AddressType.COURTESY)
+  );
 
-  const hasCourtesy = digitalAddresses.some((addr) => addr.addressType === AddressType.COURTESY);
+  const value = defaultAddress?.value ?? '';
+  const hasCourtesy = courtesyAddresses.length > 0;
 
   const handleInfoConfirm = () => {
     const digitalAddressParams: SaveDigitalAddressParams = {

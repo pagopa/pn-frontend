@@ -6,11 +6,12 @@ import {
   digitalCourtesyAddresses,
   digitalLegalAddresses,
 } from '../../../__mocks__/Contacts.mock';
+import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import { store } from '../../store';
 import { createOrUpdateAddress, deleteAddress, getDigitalAddresses } from '../actions';
-import { resetPecValidation, resetState } from '../reducers';
+import { contactsSelectors, resetPecValidation, resetState } from '../reducers';
 
 const initialState = {
   loading: false,
@@ -228,5 +229,78 @@ describe('Contacts redux state tests', () => {
           address.addressType === AddressType.COURTESY
       );
     expect(state).toEqual([]);
+  });
+
+  it('Shoud be able to retrieve addresses', () => {
+    // init store
+    const testStore = createMockedStore({
+      contactsState: {
+        digitalAddresses,
+      },
+    });
+    const { defaultAddress, specialAddresses, addresses } = contactsSelectors.selectAddresses(
+      testStore.getState(),
+      ChannelType.PEC
+    );
+    expect(addresses).toStrictEqual(digitalAddresses);
+    expect(defaultAddress).toStrictEqual(
+      digitalAddresses.find(
+        (addr) => addr.channelType === ChannelType.PEC && addr.senderId === 'default'
+      )
+    );
+    expect(specialAddresses).toStrictEqual(
+      digitalAddresses.filter(
+        (addr) => addr.channelType === ChannelType.PEC && addr.senderId !== 'default'
+      )
+    );
+  });
+
+  it('Shoud be able to retrieve addresses by type', () => {
+    // init store
+    const testStore = createMockedStore({
+      contactsState: {
+        digitalAddresses,
+      },
+    });
+    const addresses = contactsSelectors.selectAddressesByType(
+      testStore.getState(),
+      AddressType.COURTESY
+    );
+    expect(addresses).toStrictEqual(
+      digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
+    );
+  });
+
+  it('Shoud be able to retrieve default address', () => {
+    // init store
+    const testStore = createMockedStore({
+      contactsState: {
+        digitalAddresses,
+      },
+    });
+    const address = contactsSelectors.selectDefaultAddress(testStore.getState(), ChannelType.SMS);
+    expect(address).toStrictEqual(
+      digitalAddresses.find(
+        (addr) => addr.channelType === ChannelType.SMS && addr.senderId === 'default'
+      )
+    );
+  });
+
+  it('Shoud be able to retrieve special addresses', () => {
+    // init store
+    const testStore = createMockedStore({
+      contactsState: {
+        digitalAddresses,
+      },
+    });
+    const addresses = contactsSelectors.selectSpecialAddresses(
+      testStore.getState(),
+      ChannelType.EMAIL
+    );
+    expect(addresses).toStrictEqual(
+      digitalAddresses.filter(
+        (addr) => addr.channelType === ChannelType.EMAIL && addr.senderId !== 'default'
+      )
+    );
   });
 });

@@ -39,8 +39,8 @@ const SpecialContactElem: React.FC<Props> = ({ addresses }) => {
         <>
           {f.address?.channelType === ChannelType.PEC && (
             <PecContactItem
-              value={f.address.value}
-              verifyingAddress={!f.address.pecValid}
+              // value={f.address.value}
+              // verifyingAddress={!f.address.pecValid}
               senderId={f.address.senderId}
               senderName={f.address.senderName}
               blockEdit={contextEditMode}
@@ -49,7 +49,7 @@ const SpecialContactElem: React.FC<Props> = ({ addresses }) => {
           )}
           {f.address?.channelType === ChannelType.EMAIL && (
             <EmailContactItem
-              value={f.address.value}
+              // value={f.address.value}
               senderId={f.address.senderId}
               senderName={f.address.senderName}
               blockEdit={contextEditMode}
@@ -58,7 +58,7 @@ const SpecialContactElem: React.FC<Props> = ({ addresses }) => {
           )}
           {f.address?.channelType === ChannelType.SMS && (
             <SmsContactItem
-              value={f.address.value}
+              // value={f.address.value}
               senderId={f.address.senderId}
               senderName={f.address.senderName}
               blockEdit={contextEditMode}
