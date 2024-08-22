@@ -10,6 +10,9 @@ export class SendEnableIOStrategy implements EventStrategy {
       [EventPropertyType.PROFILE]: {
         SEND_APPIO_STATUS: 'activated',
       },
+      [EventPropertyType.SUPER_PROPERTY]: {
+        SEND_APPIO_STATUS: 'activated',
+      },
     };
   }
 }
