@@ -8,6 +8,7 @@ import { DisclaimerModal, appStateActions, useIsMobile } from '@pagopa-pn/pn-com
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
+import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import {
@@ -23,10 +24,8 @@ import ExistingContactDialog from './ExistingContactDialog';
 import InsertDigitalContact from './InsertDigitalContact';
 
 interface Props {
-  value: string;
   senderId?: string;
   senderName?: string;
-  blockDelete?: boolean;
   blockEdit?: boolean;
   onEdit?: (editFlag: boolean) => void;
 }
@@ -39,23 +38,24 @@ enum ModalType {
 }
 
 const SmsContactItem: React.FC<Props> = ({
-  value,
   senderId = 'default',
   senderName,
-  blockDelete,
   blockEdit,
   onEdit,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const digitalAddresses =
-    useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
+  const { defaultAddress, specialAddresses, addresses } = useAppSelector((state: RootState) =>
+    contactsSelectors.selectAddresses(state, ChannelType.SMS)
+  );
   const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
 
+  const value = defaultAddress?.value ?? '';
   // value contains the prefix
   const contactValue = value.replace(internationalPhonePrefix, '');
+  const blockDelete = specialAddresses.length > 0;
 
   const validationSchema = yup.object().shape({
     [`${senderId}_sms`]: phoneValidationSchema(t),
@@ -73,12 +73,7 @@ const SmsContactItem: React.FC<Props> = ({
     onSubmit: () => {
       // first check if contact already exists
       if (
-        contactAlreadyExists(
-          digitalAddresses,
-          formik.values[`${senderId}_sms`],
-          senderId,
-          ChannelType.SMS
-        )
+        contactAlreadyExists(addresses, formik.values[`${senderId}_sms`], senderId, ChannelType.SMS)
       ) {
         setModalOpen(ModalType.EXISTING);
         return;

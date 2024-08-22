@@ -10,6 +10,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
+import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { contactAlreadyExists, pecValidationSchema } from '../../utility/contacts.utility';
@@ -23,11 +24,8 @@ import InsertDigitalContact from './InsertDigitalContact';
 import PecVerificationDialog from './PecVerificationDialog';
 
 type Props = {
-  value: string;
-  verifyingAddress: boolean;
   senderId?: string;
   senderName?: string;
-  blockDelete?: boolean;
   blockEdit?: boolean;
   onEdit?: (editFlag: boolean) => void;
 };
@@ -41,21 +39,23 @@ enum ModalType {
 }
 
 const PecContactItem: React.FC<Props> = ({
-  value,
-  verifyingAddress,
-  blockDelete,
   senderId = 'default',
   senderName,
   blockEdit,
   onEdit,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const digitalAddresses =
-    useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
+  const { defaultAddress, specialAddresses, addresses } = useAppSelector((state: RootState) =>
+    contactsSelectors.selectAddresses(state, ChannelType.PEC)
+  );
   const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
+
+  const value = defaultAddress?.value ?? '';
+  const blockDelete = specialAddresses.length > 0;
+  const verifyingAddress = defaultAddress ? !defaultAddress.pecValid : false;
 
   const validationSchema = yup.object({
     [`${senderId}_pec`]: pecValidationSchema(t),
@@ -74,12 +74,7 @@ const PecContactItem: React.FC<Props> = ({
     onSubmit: () => {
       // first check if contact already exists
       if (
-        contactAlreadyExists(
-          digitalAddresses,
-          formik.values[`${senderId}_pec`],
-          senderId,
-          ChannelType.PEC
-        )
+        contactAlreadyExists(addresses, formik.values[`${senderId}_pec`], senderId, ChannelType.PEC)
       ) {
         setModalOpen(ModalType.EXISTING);
         return;
