@@ -23,7 +23,6 @@ import EditDigitalContact from './EditDigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import InsertDigitalContact from './InsertDigitalContact';
 import PecVerificationDialog from './PecVerificationDialog';
-import SpecialContactElem from './SpecialContactElem';
 import SpecialContacts from './SpecialContacts';
 
 type Props = {
@@ -287,7 +286,7 @@ const PecContactItem: React.FC<Props> = ({
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />
-      <SpecialContacts digitalAddresses={digitalAddresses} addressType="pec" />
+      {value && <SpecialContacts digitalAddresses={digitalAddresses} addressType="pec" />}
     </DigitalContactsCard>
   );
 };

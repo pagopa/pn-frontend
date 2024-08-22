@@ -261,7 +261,7 @@ const EmailContactItem: React.FC<Props> = ({
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />
-      <SpecialContacts digitalAddresses={digitalAddresses} addressType="email" />
+      {value && <SpecialContacts digitalAddresses={digitalAddresses} addressType="email" />}
     </DigitalContactsCard>
   );
 };

@@ -280,7 +280,7 @@ const SmsContactItem: React.FC<Props> = ({
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />
-      <SpecialContacts digitalAddresses={digitalAddresses} addressType="sms" />
+      {value && <SpecialContacts digitalAddresses={digitalAddresses} addressType="sms" />}
     </DigitalContactsCard>
   );
 };
