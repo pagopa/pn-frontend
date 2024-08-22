@@ -39,6 +39,7 @@ enum ModalType {
   DISCLAIMER = 'disclaimer',
   CODE = 'code',
   DELETE = 'delete',
+  SPECIAL = 'special',
 }
 
 const SmsContactItem: React.FC<Props> = ({
@@ -274,7 +275,14 @@ const SmsContactItem: React.FC<Props> = ({
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />
-      {value && <SpecialContacts digitalAddresses={digitalAddresses} addressType="sms" />}
+      {value && (
+        <SpecialContacts
+          handleChangeTouched={handleChangeTouched}
+          digitalAddresses={digitalAddresses}
+          addressType="sms"
+          handleConfirm={() => handleCodeVerification()}
+        />
+      )}
     </DigitalContactsCard>
   );
 };

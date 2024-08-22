@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -38,12 +38,15 @@ import {
   pecValidationSchema,
   phoneValidationSchema,
 } from '../../utility/contacts.utility';
+import AddSpecialContactDialog from './AddSpecialContactDialog';
 import ExistingContactDialog from './ExistingContactDialog';
 import PecVerificationDialog from './PecVerificationDialog';
 
 type Props = {
   digitalAddresses: Array<DigitalAddress>;
   addressType: string;
+  handleChangeTouched: any;
+  handleConfirm: any;
 };
 
 // type Addresses = {
@@ -59,9 +62,15 @@ enum ModalType {
   EXISTING = 'existing',
   VALIDATION = 'validation',
   CODE = 'code',
+  SPECIAL = 'special',
 }
 
-const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => {
+const SpecialContacts: React.FC<Props> = ({
+  digitalAddresses,
+  addressType,
+  handleChangeTouched,
+  handleConfirm,
+}) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
@@ -162,11 +171,6 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
   //   ns: 'recapiti',
   // })}${searchStringLimitReachedText(senderInputValue)}`;
 
-  // const handleChangeTouched = async (e: ChangeEvent) => {
-  //   formik.handleChange(e);
-  //   await formik.setFieldTouched(e.target.id, true, false);
-  // };
-
   // const senderChangeHandler = async (_: any, newValue: Party | null) => {
   //   await formik.setFieldTouched('sender', true, false);
   //   await formik.setFieldValue('sender', newValue);
@@ -177,24 +181,6 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
   //     setAlreadyExistsMessage(
   //       alreadyExists
   //         ? t(`special-contacts.${contactType}-already-exists`, {
-  //             ns: 'recapiti',
-  //           })
-  //         : ''
-  //     );
-  //     return;
-  //   }
-  //   setAlreadyExistsMessage('');
-  // };
-
-  // const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
-  //   await formik.setFieldValue('s_value', '');
-  //   formik.handleChange(e);
-  //   if (formik.values.sender && addresses[formik.values.sender.id]) {
-  //     const alreadyExists =
-  //       addresses[formik.values.sender.id].findIndex((a) => a.channelType === e.target.value) > -1;
-  //     setAlreadyExistsMessage(
-  //       alreadyExists
-  //         ? t(`special-contacts.${e.target.value?.toLowerCase()}-already-exists`, {
   //             ns: 'recapiti',
   //           })
   //         : ''
@@ -435,6 +421,13 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
         open={modalOpen === ModalType.VALIDATION}
         handleConfirm={() => setModalOpen(null)}
       />
+      <AddSpecialContactDialog
+        open={true}
+        handleClose={() => {}}
+        formik={formik}
+        handleChangeTouched={handleChangeTouched}
+        handleConfirm={handleConfirm}
+      />
       <Divider
         sx={{
           backgroundColor: 'white',
@@ -452,7 +445,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
         </Typography>
         <ButtonNaked
           component={Stack}
-          onClick={() => {}}
+          onClick={() => setModalOpen(ModalType.SPECIAL)}
           color="primary"
           size="small"
           padding={{ xs: '0.5rem 0', sm: 1 }}

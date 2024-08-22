@@ -117,6 +117,9 @@
     "pec": "Indirizzo PEC",
     "sms": "Cellulare",
     "email": "Indirizzo e-mail",
+    "link-email-placeholder": "La tua e-mail",
+    "senders-to-add": "Enti da associare",
+    "senders-caption": "Gli avvisi sulle notifiche degli enti associati saranno inviati a questa email, invece che a quella principale.",
     "pec-already-exists": "Questo ente è già associato a un indirizzo PEC. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "sms-already-exists": "Questo ente è già associato a un numero di cellulare. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "email-already-exists": "Questo ente è già associato a un indirizzo e-mail. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
@@ -127,7 +130,8 @@
     "email-add-more-caption": "Vuoi che le notifiche inviate da alcuni enti siano indirizzate a un'altro email?",
     "pec-add-more-button": "Aggiungi altra PEC",
     "pec-add-more-caption": "Vuoi che le notifiche inviate da alcuni enti siano indirizzate a un'altra PEC?",
-    "sender-list": "Per le notifiche inviate da:"
+    "sender-list": "Per le notifiche inviate da:",
+    "modal-title": "Inserisci l’email e gli enti da associare"
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",
