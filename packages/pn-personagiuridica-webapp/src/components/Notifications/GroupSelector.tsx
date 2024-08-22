@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Box, Button, Menu, MenuItem } from '@mui/material';
 
+import { useIsMobile } from '../../../../pn-commons';
 import { getGroups } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -19,6 +20,7 @@ const GroupSelector: React.FC<Props> = ({ currentGroup, onGroupSelection }) => {
   const open = Boolean(anchorEl);
   const dispatch = useAppDispatch();
   const groups = useAppSelector((state: RootState) => state.delegationsState.groups);
+  const isMobile = useIsMobile();
 
   const handleMenuClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -33,7 +35,11 @@ const GroupSelector: React.FC<Props> = ({ currentGroup, onGroupSelection }) => {
   }, []);
 
   return (
-    <Box data-testid="groupSelector" display="inline-block" sx={{ verticalAlign: 'middle', mx: 2 }}>
+    <Box
+      data-testid="groupSelector"
+      display="inline-block"
+      sx={{ verticalAlign: 'middle', mx: isMobile ? 0 : 2 }}
+    >
       <Box>
         <Button
           onClick={handleMenuClick}
