@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import VerifiedIcon from '@mui/icons-material/Verified';
 import { Box, Divider, Stack, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
@@ -11,6 +12,7 @@ import {
   CodeModal,
   ErrorMessage,
   appStateActions,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -36,10 +38,8 @@ import {
   pecValidationSchema,
   phoneValidationSchema,
 } from '../../utility/contacts.utility';
-import AddMoreDigitalContact from './AddMoreDigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import PecVerificationDialog from './PecVerificationDialog';
-import SpecialContactElem from './SpecialContactElem';
 
 type Props = {
   digitalAddresses: Array<DigitalAddress>;
@@ -63,6 +63,7 @@ enum ModalType {
 
 const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => {
   const { t } = useTranslation(['common', 'recapiti']);
+  const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   // const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   // const parties = useAppSelector((state: RootState) => state.contactsState.parties);
@@ -329,7 +330,64 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
       {digitalAddresses.map(
         (address) =>
           address.channelType === addressType.toUpperCase() &&
-          address.senderId !== 'default' && <SpecialContactElem address={address} />
+          address.senderId !== 'default' && (
+            <>
+              <Divider
+                sx={{
+                  backgroundColor: 'white',
+                  color: 'text.secondary',
+                  my: isMobile ? 3 : 2,
+                }}
+              />
+              <Stack direction={{ xs: 'column-reverse', sm: 'row' }} spacing={2}>
+                <Stack direction="row" spacing={2}>
+                  <VerifiedIcon
+                    fontSize="small"
+                    color="success"
+                    sx={{ position: 'relative', top: '2px' }}
+                  />
+                  <Box>
+                    <Typography
+                      sx={{
+                        wordBreak: 'break-word',
+                        fontWeight: 600,
+                      }}
+                      variant="body2"
+                      id={`${address.senderId}-typography`}
+                    >
+                      {address.value}
+                    </Typography>
+                    <ButtonNaked
+                      key="editButton"
+                      color="primary"
+                      onClick={() => {}}
+                      sx={{ mr: 2 }}
+                      disabled={false}
+                      id={`modifyContact-${address.senderId}`}
+                      size="medium"
+                    >
+                      {t('button.modifica')}
+                    </ButtonNaked>
+                    <ButtonNaked
+                      id={`cancelContact-${address.senderId}`}
+                      color="error"
+                      onClick={() => {}}
+                      disabled={false}
+                      size="medium"
+                    >
+                      {t('button.elimina')}
+                    </ButtonNaked>
+                  </Box>
+                </Stack>
+                <Stack paddingLeft={{ xs: 0, sm: 8 }}>
+                  <Typography variant="caption-semibold">
+                    {t(`special-contacts.sender-list`, { ns: 'recapiti' })}
+                  </Typography>
+                  <Typography variant="caption">{address.senderId}</Typography>
+                </Stack>
+              </Stack>
+            </>
+          )
       )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}

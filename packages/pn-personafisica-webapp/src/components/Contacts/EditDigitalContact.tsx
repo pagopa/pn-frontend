@@ -90,7 +90,9 @@ const EditDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               <Typography
                 sx={{
                   wordBreak: 'break-word',
+                  fontWeight: 600,
                 }}
+                variant="body2"
                 id={`${inputProps.id}-typography`}
               >
                 {inputProps.prefix
@@ -104,6 +106,7 @@ const EditDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 sx={{ mr: 2 }}
                 disabled={editDisabled}
                 id={`modifyContact-${senderId}`}
+                size="medium"
               >
                 {t('button.modifica')}
               </ButtonNaked>
@@ -112,6 +115,7 @@ const EditDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 color="error"
                 onClick={onDelete}
                 disabled={editDisabled}
+                size="medium"
               >
                 {t('button.elimina')}
               </ButtonNaked>
