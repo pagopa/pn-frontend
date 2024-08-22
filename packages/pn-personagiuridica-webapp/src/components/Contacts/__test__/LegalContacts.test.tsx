@@ -21,7 +21,7 @@ describe('LegalContacts Component', async () => {
   it('renders component', () => {
     // render component
     const { container, getByTestId, getByText } = render(
-      <LegalContacts legalAddresses={digitalLegalAddresses} />
+      <LegalContacts contacts={digitalLegalAddresses} />
     );
     expect(container).toHaveTextContent('legal-contacts.title');
     expect(container).toHaveTextContent('legal-contacts.list');
@@ -43,7 +43,7 @@ describe('LegalContacts Component', async () => {
   });
 
   it('renders component - no contacts', async () => {
-    const { container, getByTestId } = render(<LegalContacts legalAddresses={[]} />);
+    const { container, getByTestId } = render(<LegalContacts contacts={[]} />);
     expect(container).toHaveTextContent('legal-contacts.title');
     expect(container).toHaveTextContent('legal-contacts.list');
     // check contacts

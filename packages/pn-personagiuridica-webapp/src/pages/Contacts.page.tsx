@@ -80,7 +80,7 @@ const Contacts = () => {
           reloadAction={fetchAddresses}
         >
           <Stack direction="column" spacing={4} mt={4}>
-            <LegalContactsList legalAddresses={legalAddresses} />
+            <LegalContactsList contacts={legalAddresses} />
             <CourtesyContacts contacts={courtesyAddresses} />
             {(legalAddresses.filter((addr) => addr.channelType !== ChannelType.SERCQ).length > 0 ||
               courtesyAddresses.length > 0) && (

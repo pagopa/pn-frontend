@@ -108,7 +108,7 @@ const Contacts = () => {
           reloadAction={fetchAddresses}
         >
           <Stack direction="column" spacing={4} mt={4}>
-            <LegalContacts legalAddresses={legalAddresses} />
+            <LegalContacts contacts={legalAddresses} />
             <CourtesyContacts contacts={courtesyAddresses} />
           </Stack>
         </ApiErrorWrapper>

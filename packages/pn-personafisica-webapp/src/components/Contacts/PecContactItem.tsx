@@ -241,7 +241,7 @@ const PecContactItem: React.FC<Props> = ({
               name: `${senderId}_pec`,
               placeholder: t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' }),
               value: formik.values[`${senderId}_pec`],
-              onChange: handleChangeTouched,
+              onChange: (e) => void handleChangeTouched(e),
               error: formik.touched[`${senderId}_pec`] && Boolean(formik.errors[`${senderId}_pec`]),
               helperText: formik.touched[`${senderId}_pec`] && formik.errors[`${senderId}_pec`],
             }}
