@@ -11,8 +11,8 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
+import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, pecValidationSchema } from '../../utility/contacts.utility';
 import CancelVerificationModal from './CancelVerificationModal';
@@ -26,11 +26,8 @@ import PecVerificationDialog from './PecVerificationDialog';
 import SpecialContacts from './SpecialContacts';
 
 type Props = {
-  value: string;
-  verifyingAddress: boolean;
   senderId?: string;
   senderName?: string;
-  blockDelete?: boolean;
   blockEdit?: boolean;
   onEdit?: (editFlag: boolean) => void;
 };
@@ -44,21 +41,23 @@ enum ModalType {
 }
 
 const PecContactItem: React.FC<Props> = ({
-  value,
-  verifyingAddress,
-  blockDelete,
   senderId = 'default',
   senderName,
   blockEdit,
   onEdit,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const digitalAddresses =
-    useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
+  const { defaultPECAddress, specialPECAddresses, addresses } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
   const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
+
+  const value = defaultPECAddress?.value ?? '';
+  const blockDelete = specialPECAddresses.length > 0;
+  const verifyingAddress = defaultPECAddress ? !defaultPECAddress.pecValid : false;
 
   const validationSchema = yup.object({
     [`${senderId}_pec`]: pecValidationSchema(t),
@@ -78,12 +77,7 @@ const PecContactItem: React.FC<Props> = ({
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, senderId);
       // first check if contact already exists
       if (
-        contactAlreadyExists(
-          digitalAddresses,
-          formik.values[`${senderId}_pec`],
-          senderId,
-          ChannelType.PEC
-        )
+        contactAlreadyExists(addresses, formik.values[`${senderId}_pec`], senderId, ChannelType.PEC)
       ) {
         setModalOpen(ModalType.EXISTING);
         return;
@@ -286,7 +280,9 @@ const PecContactItem: React.FC<Props> = ({
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />
-      {value && <SpecialContacts digitalAddresses={digitalAddresses} addressType="pec" />}
+      {value && (
+        <SpecialContacts digitalAddresses={specialPECAddresses} addressType={ChannelType.PEC} />
+      )}
     </DigitalContactsCard>
   );
 };

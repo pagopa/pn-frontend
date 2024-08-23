@@ -9,8 +9,8 @@ import { DisclaimerModal, appStateActions, useIsMobile } from '@pagopa-pn/pn-com
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
+import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import {
   contactAlreadyExists,
@@ -26,10 +26,8 @@ import InsertDigitalContact from './InsertDigitalContact';
 import SpecialContacts from './SpecialContacts';
 
 interface Props {
-  value: string;
   senderId?: string;
   senderName?: string;
-  blockDelete?: boolean;
   blockEdit?: boolean;
   onEdit?: (editFlag: boolean) => void;
 }
@@ -43,23 +41,24 @@ enum ModalType {
 }
 
 const SmsContactItem: React.FC<Props> = ({
-  value,
   senderId = 'default',
   senderName,
-  blockDelete,
   blockEdit,
   onEdit,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const digitalAddresses =
-    useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
+  const { defaultSMSAddress, specialSMSAddresses, addresses } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
   const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
 
+  const value = defaultSMSAddress?.value ?? '';
   // value contains the prefix
   const contactValue = value.replace(internationalPhonePrefix, '');
+  const blockDelete = specialSMSAddresses.length > 0;
 
   const validationSchema = yup.object().shape({
     [`${senderId}_sms`]: phoneValidationSchema(t),
@@ -78,12 +77,7 @@ const SmsContactItem: React.FC<Props> = ({
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_START, senderId);
       // first check if contact already exists
       if (
-        contactAlreadyExists(
-          digitalAddresses,
-          formik.values[`${senderId}_sms`],
-          senderId,
-          ChannelType.SMS
-        )
+        contactAlreadyExists(addresses, formik.values[`${senderId}_sms`], senderId, ChannelType.SMS)
       ) {
         setModalOpen(ModalType.EXISTING);
         return;
@@ -278,8 +272,8 @@ const SmsContactItem: React.FC<Props> = ({
       {value && (
         <SpecialContacts
           handleChangeTouched={handleChangeTouched}
-          digitalAddresses={digitalAddresses}
-          addressType="sms"
+          digitalAddresses={specialSMSAddresses}
+          addressType={ChannelType.SMS}
           handleConfirm={() => handleCodeVerification()}
         />
       )}

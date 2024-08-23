@@ -238,69 +238,25 @@ describe('Contacts redux state tests', () => {
         digitalAddresses,
       },
     });
-    const { defaultAddress, specialAddresses, addresses } = contactsSelectors.selectAddresses(
-      testStore.getState(),
-      ChannelType.PEC
+    const result = contactsSelectors.selectAddresses(testStore.getState());
+    expect(result.addresses).toStrictEqual(digitalAddresses);
+    expect(result.legalAddresses).toStrictEqual(
+      digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
     );
-    expect(addresses).toStrictEqual(digitalAddresses);
-    expect(defaultAddress).toStrictEqual(
-      digitalAddresses.find(
-        (addr) => addr.channelType === ChannelType.PEC && addr.senderId === 'default'
-      )
-    );
-    expect(specialAddresses).toStrictEqual(
-      digitalAddresses.filter(
-        (addr) => addr.channelType === ChannelType.PEC && addr.senderId !== 'default'
-      )
-    );
-  });
-
-  it('Shoud be able to retrieve addresses by type', () => {
-    // init store
-    const testStore = createMockedStore({
-      contactsState: {
-        digitalAddresses,
-      },
-    });
-    const addresses = contactsSelectors.selectAddressesByType(
-      testStore.getState(),
-      AddressType.COURTESY
-    );
-    expect(addresses).toStrictEqual(
+    expect(result.courtesyAddresses).toStrictEqual(
       digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
     );
-  });
-
-  it('Shoud be able to retrieve default address', () => {
-    // init store
-    const testStore = createMockedStore({
-      contactsState: {
-        digitalAddresses,
-      },
-    });
-    const address = contactsSelectors.selectDefaultAddress(testStore.getState(), ChannelType.SMS);
-    expect(address).toStrictEqual(
-      digitalAddresses.find(
-        (addr) => addr.channelType === ChannelType.SMS && addr.senderId === 'default'
-      )
-    );
-  });
-
-  it('Shoud be able to retrieve special addresses', () => {
-    // init store
-    const testStore = createMockedStore({
-      contactsState: {
-        digitalAddresses,
-      },
-    });
-    const addresses = contactsSelectors.selectSpecialAddresses(
-      testStore.getState(),
-      ChannelType.EMAIL
-    );
-    expect(addresses).toStrictEqual(
-      digitalAddresses.filter(
-        (addr) => addr.channelType === ChannelType.EMAIL && addr.senderId !== 'default'
-      )
-    );
+    for (const channelType of Object.values(ChannelType)) {
+      expect(result[`default${channelType}Address`]).toStrictEqual(
+        digitalAddresses.find(
+          (addr) => addr.channelType === channelType && addr.senderId === 'default'
+        )
+      );
+      expect(result[`special${channelType}Addresses`]).toStrictEqual(
+        digitalAddresses.filter(
+          (addr) => addr.channelType === channelType && addr.senderId !== 'default'
+        )
+      );
+    }
   });
 });

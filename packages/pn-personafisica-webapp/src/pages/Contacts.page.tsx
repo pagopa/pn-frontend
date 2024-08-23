@@ -8,34 +8,21 @@ import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import LegalContacts from '../components/Contacts/LegalContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
-import { AddressType, ChannelType } from '../models/contacts';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
-import { resetState } from '../redux/contact/reducers';
+import { contactsSelectors, resetState } from '../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
-  const digitalAddresses = useAppSelector(
-    (state: RootState) => state.contactsState.digitalAddresses
+  const { addresses, defaultAPPIOAddress: contactIO } = useAppSelector(
+    contactsSelectors.selectAddresses
   );
-  const legalAddresses = digitalAddresses.filter(
-    (address) => address.addressType === AddressType.LEGAL
-  );
-  const courtesyAddresses = digitalAddresses.filter(
-    (address) => address.addressType === AddressType.COURTESY
-  );
-
   const [pageReady, setPageReady] = useState(false);
   const { LANDING_SITE_URL } = getConfiguration();
-
-  const contactIO = digitalAddresses
-    ? digitalAddresses.find((address) => address.channelType === ChannelType.IOMSG)
-    : null;
 
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses()).then(() => {
@@ -51,7 +38,7 @@ const Contacts = () => {
   useEffect(() => {
     if (pageReady) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_YOUR_CONTACT_DETAILS, {
-        digitalAddresses,
+        digitalAddresses: addresses,
         contactIO,
       });
     }
@@ -108,8 +95,8 @@ const Contacts = () => {
           reloadAction={fetchAddresses}
         >
           <Stack direction="column" spacing={4} mt={4}>
-            <LegalContacts contacts={legalAddresses} />
-            <CourtesyContacts contacts={courtesyAddresses} />
+            <LegalContacts />
+            <CourtesyContacts />
           </Stack>
         </ApiErrorWrapper>
       </Box>

@@ -24,7 +24,6 @@ const defaultEmailAddress = digitalCourtesyAddresses.find(
 
 describe('testing EmailContactItem', () => {
   let mock: MockAdapter;
-  const VALID_EMAIL = 'prova@pagopa.it';
   const INVALID_EMAIL = 'testpagopa.it';
 
   beforeAll(() => {
@@ -41,7 +40,7 @@ describe('testing EmailContactItem', () => {
 
   it('type in an invalid email', async () => {
     // render component
-    const { container } = render(<EmailContactItem value="" />);
+    const { container } = render(<EmailContactItem />);
     expect(container).toHaveTextContent('courtesy-contacts.email-title');
     expect(container).toHaveTextContent('courtesy-contacts.email-description');
     const form = container.querySelector('form');
@@ -61,15 +60,17 @@ describe('testing EmailContactItem', () => {
   });
 
   it('type in an invalid email while in "edit mode"', async () => {
-    const { container, getByRole } = render(<EmailContactItem value={VALID_EMAIL} />);
+    const { container, getByRole } = render(<EmailContactItem />, {
+      preloadedState: { contactsState: { digitalAddresses: [defaultEmailAddress] } },
+    });
     const form = container.querySelector('form');
     const phoneValue = getById(form!, 'default_email-typography');
-    expect(phoneValue).toHaveTextContent(VALID_EMAIL);
+    expect(phoneValue).toHaveTextContent(defaultEmailAddress?.value!);
     const editButton = getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = container.querySelector(`[name="default_email"]`);
     const saveButton = getByRole('button', { name: 'button.salva' });
-    expect(input).toHaveValue(VALID_EMAIL);
+    expect(input).toHaveValue(defaultEmailAddress?.value!);
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
     await waitFor(() => {
@@ -91,7 +92,7 @@ describe('testing EmailContactItem', () => {
         verificationCode: '01234',
       })
       .reply(204);
-    const result = render(<EmailContactItem value="" />);
+    const result = render(<EmailContactItem />);
     // insert new email
     const form = result.container.querySelector('form');
     const input = form!.querySelector(`[name="default_email"]`);
@@ -137,8 +138,7 @@ describe('testing EmailContactItem', () => {
         value: mailValue,
       },
     ]);
-    // simulate rerendering due to redux changes
-    result.rerender(<EmailContactItem value={defaultEmailAddress!.value} />);
+    // wait rerendering due to redux changes
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
@@ -167,7 +167,9 @@ describe('testing EmailContactItem', () => {
       })
       .reply(204);
     // render component
-    const result = render(<EmailContactItem value={defaultEmailAddress!.value} />);
+    const result = render(<EmailContactItem />, {
+      preloadedState: { contactsState: { digitalAddresses: [defaultEmailAddress] } },
+    });
     // edit value
     const form = result.container.querySelector('form');
     let mailValue = getById(form!, 'default_email-typography');
@@ -215,14 +217,7 @@ describe('testing EmailContactItem', () => {
         value: emailValue,
       },
     ]);
-    // simulate rerendering due to redux changes
-    const updatedDigitalCourtesyAddresses = [
-      {
-        ...defaultEmailAddress!,
-        value: emailValue,
-      },
-    ];
-    result.rerender(<EmailContactItem value={updatedDigitalCourtesyAddresses[0].value} />);
+    // wait rerendering due to redux changes
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
@@ -237,7 +232,9 @@ describe('testing EmailContactItem', () => {
 
   it('delete email', async () => {
     mock.onDelete('/bff/v1/addresses/COURTESY/default/EMAIL').reply(204);
-    const result = render(<EmailContactItem value={defaultEmailAddress!.value} />);
+    const result = render(<EmailContactItem />, {
+      preloadedState: { contactsState: { digitalAddresses: [defaultEmailAddress] } },
+    });
     const buttons = result.container.querySelectorAll('button');
     // click on cancel
     fireEvent.click(buttons[1]);
@@ -267,8 +264,7 @@ describe('testing EmailContactItem', () => {
           )
       ).toStrictEqual([]);
     });
-    // simulate rerendering due to redux changes
-    result.rerender(<EmailContactItem value="" />);
+    // wait rerendering due to redux changes
     await waitFor(() => {
       const input = result.container.querySelector(`[name="default_email"]`);
       expect(input).toBeInTheDocument();

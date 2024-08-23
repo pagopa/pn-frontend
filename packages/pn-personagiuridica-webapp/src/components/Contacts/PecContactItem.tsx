@@ -12,7 +12,6 @@ import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import { contactAlreadyExists, pecValidationSchema } from '../../utility/contacts.utility';
 import CancelVerificationModal from './CancelVerificationModal';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -45,17 +44,17 @@ const PecContactItem: React.FC<Props> = ({
   onEdit,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultAddress, specialAddresses, addresses } = useAppSelector((state: RootState) =>
-    contactsSelectors.selectAddresses(state, ChannelType.PEC)
+  const { defaultPECAddress, specialPECAddresses, addresses } = useAppSelector(
+    contactsSelectors.selectAddresses
   );
   const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
 
-  const value = defaultAddress?.value ?? '';
-  const blockDelete = specialAddresses.length > 0;
-  const verifyingAddress = defaultAddress ? !defaultAddress.pecValid : false;
+  const value = defaultPECAddress?.value ?? '';
+  const blockDelete = specialPECAddresses.length > 0;
+  const verifyingAddress = defaultPECAddress ? !defaultPECAddress.pecValid : false;
 
   const validationSchema = yup.object({
     [`${senderId}_pec`]: pecValidationSchema(t),

@@ -1,7 +1,8 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 
 import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { Party } from '../../models/party';
+import { RootState } from '../store';
 import {
   createOrUpdateAddress,
   deleteAddress,
@@ -85,5 +86,53 @@ const contactsSlice = createSlice({
 });
 
 export const { resetState, resetPecValidation } = contactsSlice.actions;
+
+// START: SELECTORS
+const contactState = (state: RootState) => state.contactsState;
+
+const digitalAddresses = createSelector(
+  [contactState],
+  (contactsState) => contactsState.digitalAddresses
+);
+
+type SelectedAddresses = {
+  addresses: Array<DigitalAddress>;
+  legalAddresses: Array<DigitalAddress>;
+  courtesyAddresses: Array<DigitalAddress>;
+} & { [key in `default${ChannelType}Address`]: DigitalAddress | undefined } & {
+  [key in `special${ChannelType}Addresses`]: Array<DigitalAddress>;
+};
+
+const memoizedSelectAddresses = createSelector([digitalAddresses], (digitalAddresses) => {
+  const initialValue = {
+    addresses: digitalAddresses,
+    legalAddresses: [] as Array<DigitalAddress>,
+    courtesyAddresses: [] as Array<DigitalAddress>,
+  } as SelectedAddresses;
+  for (const channelType of Object.values(ChannelType)) {
+    initialValue[`default${channelType}Address`] = undefined;
+    initialValue[`special${channelType}Addresses`] = [];
+  }
+  return digitalAddresses.reduce((obj, addr) => {
+    if (addr.addressType === AddressType.LEGAL) {
+      obj.legalAddresses.push(addr);
+    }
+    if (addr.addressType === AddressType.COURTESY) {
+      obj.courtesyAddresses.push(addr);
+    }
+    if (addr.senderId === 'default') {
+      obj[`default${addr.channelType}Address`] = addr;
+    }
+    if (addr.senderId !== 'default') {
+      obj[`special${addr.channelType}Addresses`].push(addr);
+    }
+    return obj;
+  }, initialValue);
+});
+
+export const contactsSelectors = {
+  selectAddresses: memoizedSelectAddresses,
+};
+// END: SELECTORS
 
 export default contactsSlice;
