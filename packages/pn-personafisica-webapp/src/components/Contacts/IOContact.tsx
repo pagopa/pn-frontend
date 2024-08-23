@@ -16,7 +16,6 @@ import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyF
 import DigitalContactsCard from './DigitalContactsCard';
 
 enum IOContactStatus {
-  PENDING = 'pending',
   UNAVAILABLE = 'unavailable',
   ENABLED = 'enabled',
   DISABLED = 'disabled',
@@ -30,9 +29,7 @@ const IOContact: React.FC = () => {
   const { defaultAPPIOAddress: contact } = useAppSelector(contactsSelectors.selectAddresses);
 
   const parseContact = () => {
-    if (contact === null) {
-      return IOContactStatus.PENDING;
-    } else if (contact === undefined) {
+    if (!contact) {
       return IOContactStatus.UNAVAILABLE;
     } else if (contact.value === IOAllowedValues.DISABLED) {
       return IOContactStatus.DISABLED;
@@ -84,7 +81,7 @@ const IOContact: React.FC = () => {
   };
 
   const getContent = () => {
-    if (status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING) {
+    if (status === IOContactStatus.UNAVAILABLE) {
       return (
         <Stack
           direction={{
