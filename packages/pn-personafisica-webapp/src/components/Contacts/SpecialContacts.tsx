@@ -130,7 +130,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, channelType }) => 
 
   const labelRoot =
     formik.values.addressType === ChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts';
-  const contactType = formik.values.addressType.toLowerCase();
+  const contactType = formik.values.addressType?.toLowerCase();
 
   const sendSuccessEvent = (type: ChannelType) => {
     const event =

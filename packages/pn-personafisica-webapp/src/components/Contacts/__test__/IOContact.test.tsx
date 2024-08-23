@@ -33,15 +33,11 @@ describe('IOContact component', async () => {
   });
 
   it('renders component - no contacts', () => {
-    const { getByTestId } = render(<IOContact contact={null} />);
+    const { getByTestId, getByText, getByRole } = render(<IOContact />);
     const title = getByTestId('DigitalContactsCardTitle');
     expect(title).toHaveTextContent('io-contact.title');
     const description = getByTestId('DigitalContactsCardDescription');
     expect(description).toHaveTextContent('io-contact.description');
-  });
-
-  it('IO unavailable', () => {
-    const { getByText, getByRole } = render(<IOContact contact={undefined} />);
     const text = getByText('io-contact.unavailable');
     const button = getByRole('button', { name: 'io-contact.download' });
     expect(text).toBeInTheDocument();
@@ -55,7 +51,7 @@ describe('IOContact component', async () => {
         verificationCode: '00000',
       })
       .reply(204);
-    const { getByTestId, getByText, getByRole } = render(<IOContact contact={IOAddress} />, {
+    const { getByTestId, getByText, getByRole } = render(<IOContact />, {
       preloadedState: { contactsState: { digitalAddresses: [IOAddress] } },
     });
     getByTestId('DoDisturbOnOutlinedIcon');
@@ -90,16 +86,13 @@ describe('IOContact component', async () => {
 
   it('IO available and enabled', async () => {
     mock.onDelete('/bff/v1/addresses/COURTESY/default/APPIO').reply(200);
-    const { getByTestId, getByText, getByRole } = render(
-      <IOContact contact={{ ...IOAddress!, value: IOAllowedValues.ENABLED }} />,
-      {
-        preloadedState: {
-          contactsState: {
-            digitalAddresses: [{ ...IOAddress!, value: IOAllowedValues.ENABLED }],
-          },
+    const { getByTestId, getByText, getByRole } = render(<IOContact />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [{ ...IOAddress!, value: IOAllowedValues.ENABLED }],
         },
-      }
-    );
+      },
+    });
     getByTestId('VerifiedIcon');
     getByText('io-contact.enabled');
     const disableBtn = getByRole('button', { name: 'button.disable' });
