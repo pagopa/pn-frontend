@@ -4,12 +4,11 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { Box, Divider, Stack, Typography } from '@mui/material';
-import { ApiErrorWrapper, CodeModal, ErrorMessage, useIsMobile } from '@pagopa-pn/pn-commons';
+import { CodeModal, ErrorMessage, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { ChannelType, DigitalAddress } from '../../models/contacts';
-import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists } from '../../utility/contacts.utility';
 import AddSpecialContactDialog from './AddSpecialContactDialog';
@@ -67,10 +66,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, channelType, handl
   const contactType = formik.values.addressType.toLowerCase();
 
   return (
-    <ApiErrorWrapper
-      apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES}
-      mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
-    >
+    <>
       {digitalAddresses &&
         digitalAddresses.map((address) => (
           <>
@@ -195,7 +191,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, channelType, handl
           {t(`special-contacts.${channelType.toLowerCase()}-add-more-button`, { ns: 'recapiti' })}
         </ButtonNaked>
       </Stack>
-    </ApiErrorWrapper>
+    </>
   );
 };
 

@@ -5,6 +5,7 @@ import * as yup from 'yup';
 
 import { Button, DialogTitle, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import {
+  ApiErrorWrapper,
   PnAutocomplete,
   PnDialog,
   PnDialogActions,
@@ -14,6 +15,7 @@ import {
 
 import { ChannelType, DigitalAddress } from '../../models/contacts';
 import { Party } from '../../models/party';
+import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import { getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
 import { useAppSelector } from '../../redux/hooks';
@@ -149,78 +151,84 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   }, [senderInputValue]);
 
   return (
-    <PnDialog open={open} onClose={handleClose} data-testid="addSpecialContactDialog">
-      <DialogTitle id="dialog-title">
-        {t(`special-contacts.modal-${contactType}-title`, { ns: 'recapiti' })}
-      </DialogTitle>
-      <PnDialogContent>
-        <Typography variant="caption-semibold">
-          {t(`special-contacts.${contactType}`, { ns: 'recapiti' })}
-        </Typography>
-        <Stack mt={1} direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <TextField
-            inputProps={{ sx: { height: '14px' } }}
-            fullWidth
-            id="s_value"
-            name="s_value"
-            placeholder={t(`special-contacts.link-${contactType}-placeholder`, {
-              ns: 'recapiti',
-            })}
-            value={formik.values.s_value}
-            onChange={handleChangeTouched}
-            error={formik.touched.s_value && Boolean(formik.errors.s_value)}
-            helperText={formik.touched.s_value && formik.errors.s_value}
-          />
-        </Stack>
-        <Stack my={2}>
-          <Typography variant="caption-semibold" mb={1}>
-            {t(`special-contacts.senders-to-add`, { ns: 'recapiti' })}
+    <ApiErrorWrapper
+      apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES}
+      mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
+    >
+      <PnDialog open={open} onClose={handleClose} data-testid="addSpecialContactDialog">
+        <DialogTitle id="dialog-title">
+          {t(`special-contacts.modal-${contactType}-title`, { ns: 'recapiti' })}
+        </DialogTitle>
+        <PnDialogContent>
+          <Typography variant="caption-semibold">
+            {t(`special-contacts.${contactType}`, { ns: 'recapiti' })}
           </Typography>
-          <Typography variant="caption" mb={2}>
-            {t(`special-contacts.senders-caption`, { ns: 'recapiti' })}
-          </Typography>
-          <PnAutocomplete
-            id="senders"
-            data-testid="senders"
-            size="small"
-            options={parties ?? []}
-            autoComplete
-            getOptionLabel={getOptionLabel}
-            noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            onChange={senderChangeHandler}
-            inputValue={senderInputValue}
-            onInputChange={(_event, newInputValue, reason) => {
-              if (reason === 'input') {
-                setSenderInputValue(newInputValue);
-              }
-            }}
-            filterOptions={(e) => e}
-            renderOption={renderOption}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                name="sender"
-                label={entitySearchLabel}
-                error={senderInputValue.length > 80}
-                helperText={
-                  senderInputValue.length > 80 && t('too-long-field-error', { maxLength: 80 })
+          <Stack mt={1} direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+            <TextField
+              inputProps={{ sx: { height: '14px' } }}
+              fullWidth
+              id="s_value"
+              name="s_value"
+              placeholder={t(`special-contacts.link-${contactType}-placeholder`, {
+                ns: 'recapiti',
+              })}
+              value={formik.values.s_value}
+              onChange={handleChangeTouched}
+              error={formik.touched.s_value && Boolean(formik.errors.s_value)}
+              helperText={formik.touched.s_value && formik.errors.s_value}
+            />
+          </Stack>
+          <Stack my={2}>
+            <Typography variant="caption-semibold" mb={1}>
+              {t(`special-contacts.senders-to-add`, { ns: 'recapiti' })}
+            </Typography>
+            <Typography variant="caption" mb={2}>
+              {t(`special-contacts.senders-caption`, { ns: 'recapiti' })}
+            </Typography>
+            <PnAutocomplete
+              id="senders"
+              data-testid="senders"
+              size="small"
+              multiple
+              options={parties ?? []}
+              autoComplete
+              getOptionLabel={getOptionLabel}
+              noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              onChange={senderChangeHandler}
+              inputValue={senderInputValue}
+              onInputChange={(_event, newInputValue, reason) => {
+                if (reason === 'input') {
+                  setSenderInputValue(newInputValue);
                 }
-              />
-            )}
-            sx={{ flexGrow: 1, flexBasis: 0 }}
-          />
-        </Stack>
-      </PnDialogContent>
-      <PnDialogActions>
-        <Button onClick={handleClose} variant="outlined">
-          {t('button.annulla')}
-        </Button>
-        <Button onClick={handleConfirm} variant="contained">
-          {t('button.conferma')}
-        </Button>
-      </PnDialogActions>
-    </PnDialog>
+              }}
+              filterOptions={(e) => e}
+              renderOption={renderOption}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  name="sender"
+                  label={entitySearchLabel}
+                  error={senderInputValue.length > 80}
+                  helperText={
+                    senderInputValue.length > 80 && t('too-long-field-error', { maxLength: 80 })
+                  }
+                />
+              )}
+              sx={{ flexGrow: 1, flexBasis: 0 }}
+            />
+          </Stack>
+        </PnDialogContent>
+        <PnDialogActions>
+          <Button onClick={handleClose} variant="outlined">
+            {t('button.annulla')}
+          </Button>
+          <Button onClick={handleConfirm} variant="contained">
+            {t('button.conferma')}
+          </Button>
+        </PnDialogActions>
+      </PnDialog>
+    </ApiErrorWrapper>
   );
 };
 
