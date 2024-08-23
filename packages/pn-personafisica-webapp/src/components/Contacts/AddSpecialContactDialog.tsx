@@ -16,9 +16,10 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
+import { ChannelType, DigitalAddress } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { getAllActivatedParties } from '../../redux/contact/actions';
+import { useAppDispatch } from '../../redux/hooks';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -58,13 +59,13 @@ enum ModalType {
 
 const AddSpecialContactDialog: React.FC<Props> = ({
   open,
-  senderId = 'default',
   handleClose,
   handleConfirm,
   digitalAddresses,
   channelType,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
+  const dispatch = useAppDispatch();
   const getOptionLabel = (option: Party) => option.name || '';
   const [senderInputValue, setSenderInputValue] = useState('');
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
@@ -171,20 +172,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
       handleConfirm();
     },
   });
-
-  const labelRoot =
-    formik.values.addressType === ChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts';
-  const contactType = formik.values.addressType?.toLowerCase();
-
-  const sendSuccessEvent = (type: ChannelType) => {
-    const event =
-      type === ChannelType.PEC
-        ? PFEventsType.SEND_ADD_PEC_UX_SUCCESS
-        : type === ChannelType.SMS
-        ? PFEventsType.SEND_ADD_SMS_UX_SUCCESS
-        : PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS;
-    PFEventStrategyFactory.triggerEvent(event, formik.values.sender.id);
-  };
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
@@ -314,6 +301,3 @@ const AddSpecialContactDialog: React.FC<Props> = ({
 };
 
 export default AddSpecialContactDialog;
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
-}
