@@ -1,13 +1,10 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { Button, DialogTitle, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import {
-  AppResponse,
-  AppResponsePublisher,
-  ErrorMessage,
   PnAutocomplete,
   PnDialog,
   PnDialogActions,
@@ -70,8 +67,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const [senderInputValue, setSenderInputValue] = useState('');
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const codeModalRef =
-    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
 
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
 
@@ -180,42 +175,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const handleAddressUpdateError = useCallback(
-    (responseError: AppResponse) => {
-      if (modalOpen === null) {
-        // notify the publisher we are not handling the error
-        return true;
-      }
-      if (Array.isArray(responseError.errors)) {
-        const error = responseError.errors[0];
-        codeModalRef.current?.updateError(
-          {
-            title: error.message.title,
-            content: error.message.content,
-          },
-          true
-        );
-        if (formik.values.addressType === ChannelType.PEC) {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR);
-        } else if (formik.values.addressType === ChannelType.SMS) {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_CODE_ERROR);
-        } else if (formik.values.addressType === ChannelType.EMAIL) {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_CODE_ERROR);
-        }
-      }
-      return false;
-    },
-    [modalOpen]
-  );
-
-  useEffect(() => {
-    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
-
-    return () => {
-      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
-    };
-  }, [handleAddressUpdateError]);
-
   useEffect(() => {
     if (senderInputValue.length >= 4) {
       void dispatch(getAllActivatedParties({ paNameFilter: senderInputValue, blockLoading: true }));
@@ -258,8 +217,8 @@ const AddSpecialContactDialog: React.FC<Props> = ({
             {t(`special-contacts.senders-caption`, { ns: 'recapiti' })}
           </Typography>
           <PnAutocomplete
-            id="sender"
-            data-testid="sender"
+            id="senders"
+            data-testid="senders"
             size="small"
             options={parties ?? []}
             autoComplete
