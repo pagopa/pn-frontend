@@ -28,8 +28,6 @@ const IOContact: React.FC = () => {
   const isMobile = useIsMobile();
   const { defaultAPPIOAddress: contact } = useAppSelector(contactsSelectors.selectAddresses);
 
-  console.log(contact);
-
   const parseContact = () => {
     if (!contact) {
       return IOContactStatus.UNAVAILABLE;
