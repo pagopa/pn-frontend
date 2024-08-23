@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Box, Button, Menu, MenuItem } from '@mui/material';
 
-import { useIsMobile } from '../../../../pn-commons';
 import { getGroups } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -20,7 +19,6 @@ const GroupSelector: React.FC<Props> = ({ currentGroup, onGroupSelection }) => {
   const open = Boolean(anchorEl);
   const dispatch = useAppDispatch();
   const groups = useAppSelector((state: RootState) => state.delegationsState.groups);
-  const isMobile = useIsMobile();
 
   const handleMenuClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -37,24 +35,23 @@ const GroupSelector: React.FC<Props> = ({ currentGroup, onGroupSelection }) => {
   return (
     <Box
       data-testid="groupSelector"
-      display="inline-block"
-      sx={{ verticalAlign: 'middle', mx: isMobile ? 0 : 2 }}
+      display={{ xs: 'block', lg: 'inline-block' }}
+      sx={{ verticalAlign: 'middle', mx: { xs: 0, lg: 2 }, mt: { xs: 1, lg: 0 } }}
     >
-      <Box>
-        <Button
-          onClick={handleMenuClick}
-          size="small"
-          variant="contained"
-          data-testid="groupSelectorButton"
-          aria-label={t('table.group-selector-title')}
-          aria-controls={open ? 'group-selector' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          endIcon={<ArrowDropDownIcon />}
-        >
-          {currentGroup && groups.find((group) => group.id === currentGroup)?.name}
-        </Button>
-      </Box>
+      <Button
+        onClick={handleMenuClick}
+        size="small"
+        variant="contained"
+        data-testid="groupSelectorButton"
+        aria-label={t('table.group-selector-title')}
+        aria-controls={open ? 'group-selector' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        endIcon={<ArrowDropDownIcon />}
+      >
+        {currentGroup && groups.find((group) => group.id === currentGroup)?.name}
+      </Button>
+
       <Menu
         open={open}
         anchorEl={anchorEl}
