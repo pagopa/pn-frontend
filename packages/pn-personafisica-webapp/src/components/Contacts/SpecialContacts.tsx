@@ -13,8 +13,6 @@ import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists } from '../../utility/contacts.utility';
 import AddSpecialContactDialog from './AddSpecialContactDialog';
-import ExistingContactDialog from './ExistingContactDialog';
-import PecVerificationDialog from './PecVerificationDialog';
 
 type Props = {
   digitalAddresses: Array<DigitalAddress>;
@@ -132,12 +130,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, channelType, handl
             </Stack>
           </>
         ))}
-      <ExistingContactDialog
-        open={modalOpen === ModalType.EXISTING}
-        value={formik.values.s_value}
-        handleDiscard={() => setModalOpen(null)}
-        handleConfirm={handleConfirm}
-      />
+
       <CodeModal
         title={
           t(`${labelRoot}.${contactType}-verify`, { ns: 'recapiti' }) + ` ${formik.values.s_value}`
@@ -173,10 +166,6 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, channelType, handl
         cancelCallback={() => setModalOpen(null)}
         confirmCallback={(values: Array<string>) => handleConfirm(values.join(''))}
         ref={codeModalRef}
-      />
-      <PecVerificationDialog
-        open={modalOpen === ModalType.VALIDATION}
-        handleConfirm={() => setModalOpen(null)}
       />
       <AddSpecialContactDialog
         open={modalOpen === ModalType.SPECIAL}
