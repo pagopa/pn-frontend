@@ -15,7 +15,6 @@ import {
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import { internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
@@ -65,14 +64,11 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
   const isMobile = useIsMobile();
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
-  const defaultAddress = useAppSelector((state: RootState) =>
-    contactsSelectors.selectDefaultAddress(state, ChannelType.SERCQ)
-  );
-  const courtesyAddresses = useAppSelector((state: RootState) =>
-    contactsSelectors.selectAddressesByType(state, AddressType.COURTESY)
+  const { defaultSERCQAddress, courtesyAddresses } = useAppSelector(
+    contactsSelectors.selectAddresses
   );
 
-  const value = defaultAddress?.value ?? '';
+  const value = defaultSERCQAddress?.value ?? '';
   const hasCourtesy = courtesyAddresses.length > 0;
 
   const handleInfoConfirm = () => {

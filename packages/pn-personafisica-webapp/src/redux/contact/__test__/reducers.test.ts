@@ -6,6 +6,7 @@ import {
   digitalCourtesyAddresses,
   digitalLegalAddresses,
 } from '../../../__mocks__/Contacts.mock';
+import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
 import { store } from '../../store';
@@ -16,7 +17,7 @@ import {
   enableIOAddress,
   getDigitalAddresses,
 } from '../actions';
-import { resetPecValidation, resetState } from '../reducers';
+import { contactsSelectors, resetPecValidation, resetState } from '../reducers';
 
 const initialState = {
   loading: false,
@@ -254,5 +255,34 @@ describe('Contacts redux state tests', () => {
           address.addressType === AddressType.COURTESY
       );
     expect(state).toEqual([]);
+  });
+
+  it('Shoud be able to retrieve addresses', () => {
+    // init store
+    const testStore = createMockedStore({
+      contactsState: {
+        digitalAddresses,
+      },
+    });
+    const result = contactsSelectors.selectAddresses(testStore.getState());
+    expect(result.addresses).toStrictEqual(digitalAddresses);
+    expect(result.legalAddresses).toStrictEqual(
+      digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
+    );
+    expect(result.courtesyAddresses).toStrictEqual(
+      digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
+    );
+    for (const channelType of Object.values(ChannelType)) {
+      expect(result[`default${channelType}Address`]).toStrictEqual(
+        digitalAddresses.find(
+          (addr) => addr.channelType === channelType && addr.senderId === 'default'
+        )
+      );
+      expect(result[`special${channelType}Addresses`]).toStrictEqual(
+        digitalAddresses.filter(
+          (addr) => addr.channelType === channelType && addr.senderId !== 'default'
+        )
+      );
+    }
   });
 });

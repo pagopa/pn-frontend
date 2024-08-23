@@ -10,7 +10,6 @@ import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import {
   contactAlreadyExists,
   internationalPhonePrefix,
@@ -44,18 +43,18 @@ const SmsContactItem: React.FC<Props> = ({
   onEdit,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultAddress, specialAddresses, addresses } = useAppSelector((state: RootState) =>
-    contactsSelectors.selectAddresses(state, ChannelType.SMS)
+  const { defaultSMSAddress, specialSMSAddresses, addresses } = useAppSelector(
+    contactsSelectors.selectAddresses
   );
   const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
 
-  const value = defaultAddress?.value ?? '';
+  const value = defaultSMSAddress?.value ?? '';
   // value contains the prefix
   const contactValue = value.replace(internationalPhonePrefix, '');
-  const blockDelete = specialAddresses.length > 0;
+  const blockDelete = specialSMSAddresses.length > 0;
 
   const validationSchema = yup.object().shape({
     [`${senderId}_sms`]: phoneValidationSchema(t),

@@ -8,8 +8,8 @@ import { DisclaimerModal, appStateActions, useIsMobile } from '@pagopa-pn/pn-com
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
+import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, emailValidationSchema } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -21,10 +21,8 @@ import InsertDigitalContact from './InsertDigitalContact';
 import SpecialContacts from './SpecialContacts';
 
 interface Props {
-  value: string;
   senderId?: string;
   senderName?: string;
-  blockDelete?: boolean;
   blockEdit?: boolean;
   onEdit?: (editFlag: boolean) => void;
 }
@@ -37,20 +35,22 @@ enum ModalType {
 }
 
 const EmailContactItem: React.FC<Props> = ({
-  value,
   senderId = 'default',
   senderName,
-  blockDelete,
   blockEdit,
   onEdit,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const digitalAddresses =
-    useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
+  const { defaultEMAILAddress, specialEMAILAddresses, addresses } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
   const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
+
+  const value = defaultEMAILAddress?.value ?? '';
+  const blockDelete = specialEMAILAddresses.length > 0;
 
   const validationSchema = yup.object().shape({
     [`${senderId}_email`]: emailValidationSchema(t),
@@ -70,7 +70,7 @@ const EmailContactItem: React.FC<Props> = ({
       // first check if contact already exists
       if (
         contactAlreadyExists(
-          digitalAddresses,
+          addresses,
           formik.values[`${senderId}_email`],
           senderId,
           ChannelType.EMAIL
@@ -212,7 +212,7 @@ const EmailContactItem: React.FC<Props> = ({
               name: `${senderId}_email`,
               placeholder: t(`courtesy-contacts.link-email-placeholder`, { ns: 'recapiti' }),
               value: formik.values[`${senderId}_email`],
-              onChange: handleChangeTouched,
+              onChange: (e) => void handleChangeTouched(e),
               error:
                 formik.touched[`${senderId}_email`] && Boolean(formik.errors[`${senderId}_email`]),
               helperText: formik.touched[`${senderId}_email`] && formik.errors[`${senderId}_email`],
@@ -261,7 +261,9 @@ const EmailContactItem: React.FC<Props> = ({
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />
-      {value && <SpecialContacts digitalAddresses={digitalAddresses} addressType="email" />}
+      {value && (
+        <SpecialContacts digitalAddresses={specialEMAILAddresses} addressType={ChannelType.EMAIL} />
+      )}
     </DigitalContactsCard>
   );
 };

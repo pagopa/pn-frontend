@@ -14,8 +14,8 @@ import {
   SaveDigitalAddressParams,
 } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress, enableIOAddress } from '../../redux/contact/actions';
+import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import { internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
@@ -24,7 +24,6 @@ import SercqSendCourtesyDialog from './SercqSendCourtesyDialog';
 import SercqSendInfoDialog from './SercqSendInfoDialog';
 
 type Props = {
-  value: string;
   senderId?: string;
   senderName?: string;
 };
@@ -61,23 +60,19 @@ const SercqSendCardTitle: React.FC = () => {
   );
 };
 
-const SercqSendContactItem: React.FC<Props> = ({ value, senderId = 'default', senderName }) => {
+const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderName }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const isMobile = useIsMobile();
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
-  const digitalAddresses =
-    useAppSelector((state: RootState) => state.contactsState.digitalAddresses) ?? [];
-
-  const hasCourtesy = digitalAddresses.some(
-    (addr) =>
-      (addr.addressType === AddressType.COURTESY && addr.channelType !== ChannelType.IOMSG) ||
-      (addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.ENABLED)
+  const { defaultSERCQAddress, defaultAPPIOAddress, courtesyAddresses } = useAppSelector(
+    contactsSelectors.selectAddresses
   );
-  const hasAppIO =
-    digitalAddresses.findIndex(
-      (addr) => addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.DISABLED
-    ) > -1;
+
+  const value = defaultSERCQAddress?.value ?? '';
+  const hasAppIO = defaultAPPIOAddress?.value === IOAllowedValues.DISABLED;
+  const hasCourtesy =
+    hasAppIO && courtesyAddresses.length === 1 ? false : courtesyAddresses.length > 0;
 
   const handleInfoConfirm = () => {
     const digitalAddressParams: SaveDigitalAddressParams = {

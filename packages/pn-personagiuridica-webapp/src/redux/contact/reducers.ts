@@ -68,54 +68,50 @@ const contactsSlice = createSlice({
 export const { resetState, resetPecValidation } = contactsSlice.actions;
 
 // START: SELECTORS
-const memoizedSelectAddresses = createSelector(
-  [
-    (state: RootState) => state.contactsState.digitalAddresses,
-    (_, channel: ChannelType) => channel,
-  ],
-  (digitalAddresses, channel) => ({
+const contactState = (state: RootState) => state.contactsState;
+
+const digitalAddresses = createSelector(
+  [contactState],
+  (contactsState) => contactsState.digitalAddresses
+);
+
+type SelectedAddresses = {
+  addresses: Array<DigitalAddress>;
+  legalAddresses: Array<DigitalAddress>;
+  courtesyAddresses: Array<DigitalAddress>;
+} & { [key in `default${ChannelType}Address`]: DigitalAddress | undefined } & {
+  [key in `special${ChannelType}Addresses`]: Array<DigitalAddress>;
+};
+
+const memoizedSelectAddresses = createSelector([digitalAddresses], (digitalAddresses) => {
+  const initialValue = {
     addresses: digitalAddresses,
-    defaultAddress: digitalAddresses.find(
-      (address) => address.senderId === 'default' && address.channelType === channel
-    ),
-    specialAddresses: digitalAddresses.filter(
-      (address) => address.senderId !== 'default' && address.channelType === channel
-    ),
-  })
-);
-
-const memoizedSelectAddressesByType = createSelector(
-  [(state: RootState) => state.contactsState.digitalAddresses, (_, type: AddressType) => type],
-  (digitalAddresses, type) => digitalAddresses.filter((address) => address.addressType === type)
-);
-
-const memoizedSelectDefaultAddress = createSelector(
-  [
-    (state: RootState) => state.contactsState.digitalAddresses,
-    (_, channel: ChannelType) => channel,
-  ],
-  (digitalAddresses, channel) =>
-    digitalAddresses.find(
-      (address) => address.senderId === 'default' && address.channelType === channel
-    )
-);
-
-const memoizedSelectSpecialAddresses = createSelector(
-  [
-    (state: RootState) => state.contactsState.digitalAddresses,
-    (_, channel: ChannelType) => channel,
-  ],
-  (digitalAddresses, channel) =>
-    digitalAddresses.filter(
-      (address) => address.senderId !== 'default' && address.channelType === channel
-    )
-);
+    legalAddresses: [] as Array<DigitalAddress>,
+    courtesyAddresses: [] as Array<DigitalAddress>,
+  } as SelectedAddresses;
+  for (const channelType of Object.values(ChannelType)) {
+    initialValue[`default${channelType}Address`] = undefined;
+    initialValue[`special${channelType}Addresses`] = [];
+  }
+  return digitalAddresses.reduce((obj, addr) => {
+    if (addr.addressType === AddressType.LEGAL) {
+      obj.legalAddresses.push(addr);
+    }
+    if (addr.addressType === AddressType.COURTESY) {
+      obj.courtesyAddresses.push(addr);
+    }
+    if (addr.senderId === 'default') {
+      obj[`default${addr.channelType}Address`] = addr;
+    }
+    if (addr.senderId !== 'default') {
+      obj[`special${addr.channelType}Addresses`].push(addr);
+    }
+    return obj;
+  }, initialValue);
+});
 
 export const contactsSelectors = {
   selectAddresses: memoizedSelectAddresses,
-  selectAddressesByType: memoizedSelectAddressesByType,
-  selectDefaultAddress: memoizedSelectDefaultAddress,
-  selectSpecialAddresses: memoizedSelectSpecialAddresses,
 };
 // END: SELECTORS
 
