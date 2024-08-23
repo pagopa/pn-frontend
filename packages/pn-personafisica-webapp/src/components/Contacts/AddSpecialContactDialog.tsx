@@ -12,17 +12,13 @@ import {
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
 
-import { PFEventsType } from '../../models/PFEventsType';
 import { ChannelType, DigitalAddress } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import {
-  allowedAddressTypes,
-  contactAlreadyExists,
   emailValidationSchema,
   pecValidationSchema,
   phoneValidationSchema,
@@ -42,18 +38,6 @@ type Addresses = {
   [senderId: string]: Array<DigitalAddress>;
 };
 
-type AddressTypeItem = {
-  id: ChannelType;
-  value: string;
-};
-
-enum ModalType {
-  EXISTING = 'existing',
-  VALIDATION = 'validation',
-  CODE = 'code',
-  SPECIAL = 'special',
-}
-
 const AddSpecialContactDialog: React.FC<Props> = ({
   open,
   handleClose,
@@ -66,7 +50,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const getOptionLabel = (option: Party) => option.name || '';
   const [senderInputValue, setSenderInputValue] = useState('');
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
-  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
 
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
 
@@ -112,35 +95,33 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     </MenuItem>
   );
 
-  const addressTypes: Array<AddressTypeItem> = digitalAddresses
-    .filter((a) => a.senderId === 'default' && allowedAddressTypes.includes(a.channelType))
-    .map((a) => ({
-      id: a.channelType,
-      value: t(`special-contacts.${a.channelType?.toLowerCase()}`, { ns: 'recapiti' }),
-    }));
-
   const validationSchema = yup.object({
     sender: yup.object({ id: yup.string(), name: yup.string() }).required(),
-    addressType: yup.string().required(),
     s_value: yup
       .string()
       .when('addressType', {
-        is: ChannelType.PEC,
+        is: () => {
+          channelType === ChannelType.PEC;
+        },
         then: pecValidationSchema(t),
       })
       .when('addressType', {
-        is: ChannelType.EMAIL,
+        is: () => {
+          channelType === ChannelType.EMAIL;
+        },
         then: emailValidationSchema(t),
       })
       .when('addressType', {
-        is: ChannelType.SMS,
+        is: () => {
+          channelType === ChannelType.SMS;
+        },
         then: phoneValidationSchema(t),
       }),
   });
 
   const initialValues = {
-    sender: { id: '', name: '' },
-    addressType: addressTypes[0]?.id,
+    sender: [],
+    addressType: channelType,
     s_value: '',
   };
 
@@ -149,26 +130,10 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     validateOnMount: true,
     validationSchema,
     enableReinitialize: true,
-    onSubmit: (values) => {
-      const event =
-        values.addressType === ChannelType.PEC
-          ? PFEventsType.SEND_ADD_PEC_START
-          : values.addressType === ChannelType.SMS
-          ? PFEventsType.SEND_ADD_SMS_START
-          : PFEventsType.SEND_ADD_EMAIL_START;
-      PFEventStrategyFactory.triggerEvent(event, values.sender.id);
-      // first check if contact already exists
-      if (
-        contactAlreadyExists(digitalAddresses, values.s_value, values.sender.id, values.addressType)
-      ) {
-        setModalOpen(ModalType.EXISTING);
-        return;
-      }
-      handleConfirm();
-    },
+    onSubmit: () => handleConfirm(),
   });
 
-  const contactType = formik.values.addressType.toLowerCase();
+  const contactType = channelType.toLowerCase();
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
@@ -184,29 +149,27 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   }, [senderInputValue]);
 
   return (
-    <PnDialog open={open} onClose={handleClose} data-testid="cancelVerificationModal">
+    <PnDialog open={open} onClose={handleClose} data-testid="addSpecialContactDialog">
       <DialogTitle id="dialog-title">
-        {t('special-contacts.modal-title', { ns: 'recapiti' })}
+        {t(`special-contacts.modal-${contactType}-title`, { ns: 'recapiti' })}
       </DialogTitle>
       <PnDialogContent>
         <Typography variant="caption-semibold">
-          {t(`special-contacts.${channelType.toLowerCase()}`, { ns: 'recapiti' })}
+          {t(`special-contacts.${contactType}`, { ns: 'recapiti' })}
         </Typography>
         <Stack mt={1} direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <TextField
             inputProps={{ sx: { height: '14px' } }}
             fullWidth
-            {...{
-              id: `s_value`,
-              name: `s_value`,
-              placeholder: t(`special-contacts.link-${channelType.toLowerCase()}-placeholder`, {
-                ns: 'recapiti',
-              }),
-              value: formik.values[`s_value`],
-              onChange: handleChangeTouched,
-              error: formik.touched[`s_value`] && Boolean(formik.errors[`s_value`]),
-              helperText: formik.touched[`s_value`] && formik.errors[`s_value`],
-            }}
+            id="s_value"
+            name="s_value"
+            placeholder={t(`special-contacts.link-${contactType}-placeholder`, {
+              ns: 'recapiti',
+            })}
+            value={formik.values.s_value}
+            onChange={handleChangeTouched}
+            error={formik.touched.s_value && Boolean(formik.errors.s_value)}
+            helperText={formik.touched.s_value && formik.errors.s_value}
           />
         </Stack>
         <Stack my={2}>

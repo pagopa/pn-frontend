@@ -9,12 +9,7 @@ import { appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import {
-  AddressType,
-  ChannelType,
-  DigitalAddress,
-  SaveDigitalAddressParams,
-} from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -287,8 +282,9 @@ const PecContactItem: React.FC<Props> = ({
       />
       {value && (
         <SpecialContacts
-          digitalAddresses={specialPECAddresses as Array<DigitalAddress>}
+          digitalAddresses={specialPECAddresses}
           channelType={ChannelType.PEC}
+          handleConfirm={(code?: string) => handleCodeVerification(code)}
         />
       )}
     </DigitalContactsCard>

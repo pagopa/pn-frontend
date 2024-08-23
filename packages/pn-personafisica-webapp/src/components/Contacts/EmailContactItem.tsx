@@ -6,12 +6,7 @@ import * as yup from 'yup';
 import { DisclaimerModal, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import {
-  AddressType,
-  ChannelType,
-  DigitalAddress,
-  SaveDigitalAddressParams,
-} from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -267,10 +262,7 @@ const EmailContactItem: React.FC<Props> = ({
         blockDelete={blockDelete}
       />
       {value && (
-        <SpecialContacts
-          digitalAddresses={specialEMAILAddresses as Array<DigitalAddress>}
-          channelType={ChannelType.EMAIL}
-        />
+        <SpecialContacts digitalAddresses={specialEMAILAddresses} channelType={ChannelType.EMAIL} />
       )}
     </DigitalContactsCard>
   );

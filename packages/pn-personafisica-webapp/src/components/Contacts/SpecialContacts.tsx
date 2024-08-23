@@ -1,43 +1,17 @@
 import { useFormik } from 'formik';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import * as yup from 'yup';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { Box, Divider, Stack, Typography } from '@mui/material';
-import {
-  ApiErrorWrapper,
-  AppResponse,
-  AppResponsePublisher,
-  CodeModal,
-  ErrorMessage,
-  appStateActions,
-  useIsMobile,
-} from '@pagopa-pn/pn-commons';
+import { ApiErrorWrapper, CodeModal, ErrorMessage, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import {
-  AddressType,
-  ChannelType,
-  DigitalAddress,
-  SaveDigitalAddressParams,
-} from '../../models/contacts';
-import {
-  CONTACT_ACTIONS,
-  createOrUpdateAddress,
-  getAllActivatedParties,
-} from '../../redux/contact/actions';
-import { useAppDispatch } from '../../redux/hooks';
+import { ChannelType, DigitalAddress } from '../../models/contacts';
+import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
-import {
-  allowedAddressTypes,
-  contactAlreadyExists,
-  emailValidationSchema,
-  internationalPhonePrefix,
-  pecValidationSchema,
-  phoneValidationSchema,
-} from '../../utility/contacts.utility';
+import { contactAlreadyExists } from '../../utility/contacts.utility';
 import AddSpecialContactDialog from './AddSpecialContactDialog';
 import ExistingContactDialog from './ExistingContactDialog';
 import PecVerificationDialog from './PecVerificationDialog';
@@ -45,11 +19,7 @@ import PecVerificationDialog from './PecVerificationDialog';
 type Props = {
   digitalAddresses: Array<DigitalAddress>;
   channelType: ChannelType;
-};
-
-type AddressTypeItem = {
-  id: ChannelType;
-  value: string;
+  handleConfirm: (code?: string) => void;
 };
 
 enum ModalType {
@@ -59,55 +29,22 @@ enum ModalType {
   SPECIAL = 'special',
 }
 
-const SpecialContacts: React.FC<Props> = ({ digitalAddresses, channelType }) => {
+const SpecialContacts: React.FC<Props> = ({ digitalAddresses, channelType, handleConfirm }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const isMobile = useIsMobile();
-  const dispatch = useAppDispatch();
-  const [senderInputValue, setSenderInputValue] = useState('');
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const codeModalRef =
     useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
 
-  const addressTypes: Array<AddressTypeItem> = digitalAddresses
-    .filter((a) => a.senderId === 'default' && allowedAddressTypes.includes(a.channelType))
-    .map((a) => ({
-      id: a.channelType,
-      value: t(`special-contacts.${a.channelType.toLowerCase()}`, { ns: 'recapiti' }),
-    }));
-
-  const fetchAllActivatedParties = useCallback(() => {
-    void dispatch(getAllActivatedParties({}));
-  }, []);
-
-  const validationSchema = yup.object({
-    sender: yup.object({ id: yup.string(), name: yup.string() }).required(),
-    addressType: yup.string().required(),
-    s_value: yup
-      .string()
-      .when('addressType', {
-        is: ChannelType.PEC,
-        then: pecValidationSchema(t),
-      })
-      .when('addressType', {
-        is: ChannelType.EMAIL,
-        then: emailValidationSchema(t),
-      })
-      .when('addressType', {
-        is: ChannelType.SMS,
-        then: phoneValidationSchema(t),
-      }),
-  });
-
   const initialValues = {
-    sender: { id: '', name: '' },
-    addressType: addressTypes[0]?.id,
+    sender: [],
+    addressType: channelType,
     s_value: '',
   };
 
   const formik = useFormik({
     initialValues,
     validateOnMount: true,
-    validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
       const event =
@@ -124,7 +61,6 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, channelType }) => 
         setModalOpen(ModalType.EXISTING);
         return;
       }
-      handleCodeVerification();
     },
   });
 
@@ -132,129 +68,9 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, channelType }) => 
     formik.values.addressType === ChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts';
   const contactType = formik.values.addressType.toLowerCase();
 
-  const sendSuccessEvent = (type: ChannelType) => {
-    const event =
-      type === ChannelType.PEC
-        ? PFEventsType.SEND_ADD_PEC_UX_SUCCESS
-        : type === ChannelType.SMS
-        ? PFEventsType.SEND_ADD_SMS_UX_SUCCESS
-        : PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS;
-    PFEventStrategyFactory.triggerEvent(event, formik.values.sender.id);
-  };
-
-  const handleCodeVerification = (verificationCode?: string) => {
-    if (verificationCode) {
-      const event =
-        formik.values.addressType === ChannelType.PEC
-          ? PFEventsType.SEND_ADD_PEC_UX_CONVERSION
-          : formik.values.addressType === ChannelType.SMS
-          ? PFEventsType.SEND_ADD_SMS_UX_CONVERSION
-          : PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION;
-      PFEventStrategyFactory.triggerEvent(event, formik.values.sender.id);
-    }
-
-    const addressType =
-      formik.values.addressType === ChannelType.PEC ? AddressType.LEGAL : AddressType.COURTESY;
-    const value =
-      formik.values.addressType === ChannelType.SMS
-        ? internationalPhonePrefix + formik.values.s_value
-        : formik.values.s_value;
-
-    const digitalAddressParams: SaveDigitalAddressParams = {
-      addressType,
-      senderId: formik.values.sender.id,
-      senderName: formik.values.sender.name,
-      channelType: formik.values.addressType,
-      value,
-      code: verificationCode,
-    };
-
-    dispatch(createOrUpdateAddress(digitalAddressParams))
-      .unwrap()
-      .then(async (res) => {
-        // contact to verify
-        // open code modal
-        if (!res) {
-          setModalOpen(ModalType.CODE);
-          return;
-        }
-
-        sendSuccessEvent(formik.values.addressType);
-
-        // contact has already been verified
-        if (res.pecValid || formik.values.addressType !== ChannelType.PEC) {
-          // show success message
-          dispatch(
-            appStateActions.addSuccess({
-              title: '',
-              message: t(`${labelRoot}.${contactType}-added-successfully`, {
-                ns: 'recapiti',
-              }),
-            })
-          );
-
-          setModalOpen(null);
-          // reset form
-          formik.resetForm();
-          await formik.validateForm();
-          setSenderInputValue('');
-          return;
-        }
-        // contact must be validated
-        // open validation modal
-        setModalOpen(ModalType.VALIDATION);
-      })
-      .catch(() => {});
-  };
-
-  const handleAddressUpdateError = useCallback(
-    (responseError: AppResponse) => {
-      if (modalOpen === null) {
-        // notify the publisher we are not handling the error
-        return true;
-      }
-      if (Array.isArray(responseError.errors)) {
-        const error = responseError.errors[0];
-        codeModalRef.current?.updateError(
-          {
-            title: error.message.title,
-            content: error.message.content,
-          },
-          true
-        );
-        if (formik.values.addressType === ChannelType.PEC) {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR);
-        } else if (formik.values.addressType === ChannelType.SMS) {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_CODE_ERROR);
-        } else if (formik.values.addressType === ChannelType.EMAIL) {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_CODE_ERROR);
-        }
-      }
-      return false;
-    },
-    [modalOpen]
-  );
-
-  useEffect(() => {
-    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
-
-    return () => {
-      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
-    };
-  }, [handleAddressUpdateError]);
-
-  useEffect(() => {
-    if (senderInputValue.length >= 4) {
-      void dispatch(getAllActivatedParties({ paNameFilter: senderInputValue, blockLoading: true }));
-    } else if (senderInputValue.length === 0) {
-      void dispatch(getAllActivatedParties({ blockLoading: true }));
-    }
-  }, [senderInputValue]);
-
   return (
     <ApiErrorWrapper
       apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES}
-      reloadAction={fetchAllActivatedParties}
       mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
     >
       {digitalAddresses &&
@@ -320,7 +136,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, channelType }) => 
         open={modalOpen === ModalType.EXISTING}
         value={formik.values.s_value}
         handleDiscard={() => setModalOpen(null)}
-        handleConfirm={() => handleCodeVerification()}
+        handleConfirm={handleConfirm}
       />
       <CodeModal
         title={
@@ -338,7 +154,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, channelType }) => 
             </Typography>
             <ButtonNaked
               component={Box}
-              onClick={() => handleCodeVerification()}
+              onClick={() => handleConfirm()}
               sx={{ verticalAlign: 'unset', display: 'inline' }}
             >
               <Typography
@@ -355,7 +171,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, channelType }) => 
         cancelLabel={t('button.annulla')}
         confirmLabel={t('button.conferma')}
         cancelCallback={() => setModalOpen(null)}
-        confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
+        confirmCallback={(values: Array<string>) => handleConfirm(values.join(''))}
         ref={codeModalRef}
       />
       <PecVerificationDialog
@@ -365,7 +181,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, channelType }) => 
       <AddSpecialContactDialog
         open={modalOpen === ModalType.SPECIAL}
         handleClose={() => setModalOpen(null)}
-        handleConfirm={() => handleCodeVerification()}
+        handleConfirm={handleConfirm}
         digitalAddresses={digitalAddresses}
         channelType={channelType}
       />
