@@ -44,7 +44,7 @@ import PecVerificationDialog from './PecVerificationDialog';
 
 type Props = {
   digitalAddresses: Array<DigitalAddress>;
-  addressType: ChannelType;
+  channelType: ChannelType;
 };
 
 type AddressTypeItem = {
@@ -59,7 +59,7 @@ enum ModalType {
   SPECIAL = 'special',
 }
 
-const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => {
+const SpecialContacts: React.FC<Props> = ({ digitalAddresses, channelType }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
@@ -72,7 +72,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
     .filter((a) => a.senderId === 'default' && allowedAddressTypes.includes(a.channelType))
     .map((a) => ({
       id: a.channelType,
-      value: t(`special-contacts.${a.channelType?.toLowerCase()}`, { ns: 'recapiti' }),
+      value: t(`special-contacts.${a.channelType.toLowerCase()}`, { ns: 'recapiti' }),
     }));
 
   const fetchAllActivatedParties = useCallback(() => {
@@ -130,7 +130,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
 
   const labelRoot =
     formik.values.addressType === ChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts';
-  const contactType = formik.values.addressType?.toLowerCase();
+  const contactType = formik.values.addressType.toLowerCase();
 
   const sendSuccessEvent = (type: ChannelType) => {
     const event =
@@ -153,7 +153,6 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
       PFEventStrategyFactory.triggerEvent(event, formik.values.sender.id);
     }
 
-    console.log('siamo qua 1');
     const addressType =
       formik.values.addressType === ChannelType.PEC ? AddressType.LEGAL : AddressType.COURTESY;
     const value =
@@ -161,7 +160,6 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
         ? internationalPhonePrefix + formik.values.s_value
         : formik.values.s_value;
 
-    console.log('value', value);
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType,
       senderId: formik.values.sender.id,
@@ -170,7 +168,6 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
       value,
       code: verificationCode,
     };
-    console.log('digitalAddressParams', digitalAddressParams);
 
     dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
@@ -262,7 +259,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
     >
       {digitalAddresses.map(
         (address) =>
-          address.channelType === addressType.toUpperCase() &&
+          address.channelType === channelType.toUpperCase() &&
           address.senderId !== 'default' && (
             <>
               <Divider
@@ -371,9 +368,9 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
       <AddSpecialContactDialog
         open={modalOpen === ModalType.SPECIAL}
         handleClose={() => setModalOpen(null)}
-        formik={formik}
         handleConfirm={() => handleCodeVerification()}
         digitalAddresses={digitalAddresses}
+        channelType={channelType}
       />
       <Divider
         sx={{
@@ -382,22 +379,18 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, addressType }) => 
           my: 2,
         }}
       />
-      <Stack
-        direction={{ xs: 'column', sm: 'row' }}
-        margin={{ xs: '1rem 0 0 0', sm: 0 }}
-        alignItems="baseline"
-      >
+      <Stack direction={{ xs: 'column', sm: 'row' }} mt={{ xs: 1, sm: 0 }} alignItems="baseline">
         <Typography variant="caption" lineHeight="1.125rem">
-          {t(`special-contacts.${addressType.toLowerCase()}-add-more-caption`, { ns: 'recapiti' })}
+          {t(`special-contacts.${channelType.toLowerCase()}-add-more-caption`, { ns: 'recapiti' })}
         </Typography>
         <ButtonNaked
           component={Stack}
           onClick={() => setModalOpen(ModalType.SPECIAL)}
           color="primary"
           size="small"
-          padding={{ xs: '0.5rem 0', sm: 1 }}
+          p={{ xs: '0.5rem 0', sm: 1 }}
         >
-          {t(`special-contacts.${addressType.toLowerCase()}-add-more-button`, { ns: 'recapiti' })}
+          {t(`special-contacts.${channelType.toLowerCase()}-add-more-button`, { ns: 'recapiti' })}
         </ButtonNaked>
       </Stack>
     </ApiErrorWrapper>

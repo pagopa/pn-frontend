@@ -262,7 +262,7 @@ const EmailContactItem: React.FC<Props> = ({
         blockDelete={blockDelete}
       />
       {value && (
-        <SpecialContacts digitalAddresses={specialEMAILAddresses} addressType={ChannelType.EMAIL} />
+        <SpecialContacts digitalAddresses={specialEMAILAddresses} channelType={ChannelType.EMAIL} />
       )}
     </DigitalContactsCard>
   );

@@ -1,8 +1,13 @@
-import { ChangeEvent, useState } from 'react';
+import { useFormik } from 'formik';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
 
 import { Button, DialogTitle, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import {
+  AppResponse,
+  AppResponsePublisher,
+  ErrorMessage,
   PnAutocomplete,
   PnDialog,
   PnDialogActions,
@@ -10,37 +15,62 @@ import {
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
 
-import { DigitalAddress } from '../../models/contacts';
+import { PFEventsType } from '../../models/PFEventsType';
+import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
 import { Party } from '../../models/party';
+import { getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
+import {
+  allowedAddressTypes,
+  contactAlreadyExists,
+  emailValidationSchema,
+  pecValidationSchema,
+  phoneValidationSchema,
+} from '../../utility/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 
 type Props = {
   open: boolean;
   senderId?: string;
   handleClose: () => void;
-  formik: any;
   handleConfirm: () => void;
   digitalAddresses: Array<DigitalAddress>;
+  channelType: ChannelType;
 };
 
 type Addresses = {
   [senderId: string]: Array<DigitalAddress>;
 };
 
+type AddressTypeItem = {
+  id: ChannelType;
+  value: string;
+};
+
+enum ModalType {
+  EXISTING = 'existing',
+  VALIDATION = 'validation',
+  CODE = 'code',
+  SPECIAL = 'special',
+}
+
 const AddSpecialContactDialog: React.FC<Props> = ({
   open,
   senderId = 'default',
   handleClose,
-  formik,
   handleConfirm,
   digitalAddresses,
+  channelType,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const getOptionLabel = (option: Party) => option.name || '';
   const [senderInputValue, setSenderInputValue] = useState('');
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
+  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  const codeModalRef =
+    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
 
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
 
@@ -55,8 +85,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
       obj[a.senderId].push(a);
       return obj;
     }, {} as Addresses);
-
-  const contactType = formik.values.addressType?.toLowerCase();
 
   const senderChangeHandler = async (_: any, newValue: Party | null) => {
     await formik.setFieldTouched('sender', true, false);
@@ -88,10 +116,124 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     </MenuItem>
   );
 
+  const addressTypes: Array<AddressTypeItem> = digitalAddresses
+    .filter((a) => a.senderId === 'default' && allowedAddressTypes.includes(a.channelType))
+    .map((a) => ({
+      id: a.channelType,
+      value: t(`special-contacts.${a.channelType?.toLowerCase()}`, { ns: 'recapiti' }),
+    }));
+
+  const validationSchema = yup.object({
+    sender: yup.object({ id: yup.string(), name: yup.string() }).required(),
+    addressType: yup.string().required(),
+    s_value: yup
+      .string()
+      .when('addressType', {
+        is: ChannelType.PEC,
+        then: pecValidationSchema(t),
+      })
+      .when('addressType', {
+        is: ChannelType.EMAIL,
+        then: emailValidationSchema(t),
+      })
+      .when('addressType', {
+        is: ChannelType.SMS,
+        then: phoneValidationSchema(t),
+      }),
+  });
+
+  const initialValues = {
+    sender: { id: '', name: '' },
+    addressType: addressTypes[0]?.id,
+    s_value: '',
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validateOnMount: true,
+    validationSchema,
+    enableReinitialize: true,
+    onSubmit: (values) => {
+      const event =
+        values.addressType === ChannelType.PEC
+          ? PFEventsType.SEND_ADD_PEC_START
+          : values.addressType === ChannelType.SMS
+          ? PFEventsType.SEND_ADD_SMS_START
+          : PFEventsType.SEND_ADD_EMAIL_START;
+      PFEventStrategyFactory.triggerEvent(event, values.sender.id);
+      // first check if contact already exists
+      if (
+        contactAlreadyExists(digitalAddresses, values.s_value, values.sender.id, values.addressType)
+      ) {
+        setModalOpen(ModalType.EXISTING);
+        return;
+      }
+      handleConfirm();
+    },
+  });
+
+  const labelRoot =
+    formik.values.addressType === ChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts';
+  const contactType = formik.values.addressType?.toLowerCase();
+
+  const sendSuccessEvent = (type: ChannelType) => {
+    const event =
+      type === ChannelType.PEC
+        ? PFEventsType.SEND_ADD_PEC_UX_SUCCESS
+        : type === ChannelType.SMS
+        ? PFEventsType.SEND_ADD_SMS_UX_SUCCESS
+        : PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS;
+    PFEventStrategyFactory.triggerEvent(event, formik.values.sender.id);
+  };
+
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
   };
+
+  const handleAddressUpdateError = useCallback(
+    (responseError: AppResponse) => {
+      if (modalOpen === null) {
+        // notify the publisher we are not handling the error
+        return true;
+      }
+      if (Array.isArray(responseError.errors)) {
+        const error = responseError.errors[0];
+        codeModalRef.current?.updateError(
+          {
+            title: error.message.title,
+            content: error.message.content,
+          },
+          true
+        );
+        if (formik.values.addressType === ChannelType.PEC) {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR);
+        } else if (formik.values.addressType === ChannelType.SMS) {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_CODE_ERROR);
+        } else if (formik.values.addressType === ChannelType.EMAIL) {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_CODE_ERROR);
+        }
+      }
+      return false;
+    },
+    [modalOpen]
+  );
+
+  useEffect(() => {
+    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
+    };
+  }, [handleAddressUpdateError]);
+
+  useEffect(() => {
+    if (senderInputValue.length >= 4) {
+      void dispatch(getAllActivatedParties({ paNameFilter: senderInputValue, blockLoading: true }));
+    } else if (senderInputValue.length === 0) {
+      void dispatch(getAllActivatedParties({ blockLoading: true }));
+    }
+  }, [senderInputValue]);
 
   return (
     <PnDialog open={open} onClose={handleClose} data-testid="cancelVerificationModal">
@@ -100,21 +242,22 @@ const AddSpecialContactDialog: React.FC<Props> = ({
       </DialogTitle>
       <PnDialogContent>
         <Typography variant="caption-semibold">
-          {t(`special-contacts.email`, { ns: 'recapiti' })}
+          {t(`special-contacts.${channelType.toLowerCase()}`, { ns: 'recapiti' })}
         </Typography>
         <Stack mt={1} direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <TextField
             inputProps={{ sx: { height: '14px' } }}
             fullWidth
             {...{
-              id: `${senderId}_email`,
-              name: `${senderId}_email`,
-              placeholder: t(`special-contacts.link-email-placeholder`, { ns: 'recapiti' }),
-              value: formik.values[`${senderId}_email`],
+              id: `s_value`,
+              name: `s_value`,
+              placeholder: t(`special-contacts.link-${channelType.toLowerCase()}-placeholder`, {
+                ns: 'recapiti',
+              }),
+              value: formik.values[`s_value`],
               onChange: handleChangeTouched,
-              error:
-                formik.touched[`${senderId}_email`] && Boolean(formik.errors[`${senderId}_email`]),
-              helperText: formik.touched[`${senderId}_email`] && formik.errors[`${senderId}_email`],
+              error: formik.touched[`s_value`] && Boolean(formik.errors[`s_value`]),
+              helperText: formik.touched[`s_value`] && formik.errors[`s_value`],
             }}
           />
         </Stack>
@@ -171,3 +314,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
 };
 
 export default AddSpecialContactDialog;
+function dispatch(arg0: any) {
+  throw new Error('Function not implemented.');
+}
