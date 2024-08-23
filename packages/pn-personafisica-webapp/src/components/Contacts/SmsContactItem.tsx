@@ -270,12 +270,7 @@ const SmsContactItem: React.FC<Props> = ({
         blockDelete={blockDelete}
       />
       {value && (
-        <SpecialContacts
-          handleChangeTouched={handleChangeTouched}
-          digitalAddresses={specialSMSAddresses}
-          addressType={ChannelType.SMS}
-          handleConfirm={() => handleCodeVerification()}
-        />
+        <SpecialContacts digitalAddresses={specialSMSAddresses} channelType={ChannelType.SMS} />
       )}
     </DigitalContactsCard>
   );

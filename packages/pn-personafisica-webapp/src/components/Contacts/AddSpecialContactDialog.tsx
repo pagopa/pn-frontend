@@ -173,6 +173,8 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     },
   });
 
+  const contactType = formik.values.addressType.toLowerCase();
+
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);

@@ -281,7 +281,7 @@ const PecContactItem: React.FC<Props> = ({
         blockDelete={blockDelete}
       />
       {value && (
-        <SpecialContacts digitalAddresses={specialPECAddresses} addressType={ChannelType.PEC} />
+        <SpecialContacts digitalAddresses={specialPECAddresses} channelType={ChannelType.EMAIL} />
       )}
     </DigitalContactsCard>
   );
