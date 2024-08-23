@@ -5,6 +5,8 @@ import { Button, DialogTitle, Stack, TextField, Typography } from '@mui/material
 import { PnAutocomplete, PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 import { Party } from '../../models/party';
+import { useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 
 type Props = {
   open: boolean;
@@ -13,6 +15,9 @@ type Props = {
   formik: any;
   handleChangeTouched: () => {};
   handleConfirm: () => void;
+  renderOption: any;
+  senderChangeHandler: any;
+  entitySearchLabel: any;
 };
 
 const AddSpecialContactDialog: React.FC<Props> = ({
@@ -22,10 +27,14 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   formik,
   handleChangeTouched,
   handleConfirm,
+  renderOption,
+  senderChangeHandler,
+  entitySearchLabel,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const getOptionLabel = (option: Party) => option.name || '';
   const [senderInputValue, setSenderInputValue] = useState('');
+  const parties = useAppSelector((state: RootState) => state.contactsState.parties);
 
   return (
     <PnDialog open={open} onClose={handleClose} data-testid="cancelVerificationModal">
@@ -60,23 +69,35 @@ const AddSpecialContactDialog: React.FC<Props> = ({
             {t(`special-contacts.senders-caption`, { ns: 'recapiti' })}
           </Typography>
           <PnAutocomplete
-            id="enti"
-            data-testid="enti"
-            multiple
-            options={[]}
-            fullWidth
+            id="sender"
+            data-testid="sender"
+            size="small"
+            options={parties ?? []}
             autoComplete
             getOptionLabel={getOptionLabel}
-            noOptionsText={t('nuovaDelega.form.party-not-found')}
-            isOptionEqualToValue={(option, value) => option.name === value.name}
-            onChange={() => {}}
+            noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            onChange={senderChangeHandler}
             inputValue={senderInputValue}
-            onInputChange={() => {}}
+            onInputChange={(_event, newInputValue, reason) => {
+              if (reason === 'input') {
+                setSenderInputValue(newInputValue);
+              }
+            }}
             filterOptions={(e) => e}
-            renderOption={() => void {}}
+            renderOption={renderOption}
             renderInput={(params) => (
-              <TextField name="enti" {...params} label={'wip'} error={false} helperText={'none'} />
+              <TextField
+                {...params}
+                name="sender"
+                label={entitySearchLabel}
+                error={senderInputValue.length > 80}
+                helperText={
+                  senderInputValue.length > 80 && t('too-long-field-error', { maxLength: 80 })
+                }
+              />
             )}
+            sx={{ flexGrow: 1, flexBasis: 0 }}
           />
         </Stack>
       </PnDialogContent>

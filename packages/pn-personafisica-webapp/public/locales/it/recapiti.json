@@ -113,6 +113,7 @@
     "required-fields": "*Campi obbligatori",
     "associated": "Già associati",
     "sender": "Ente",
+    "add-sender": "Aggiungi ente",
     "address-type": "Recapito",
     "pec": "Indirizzo PEC",
     "sms": "Cellulare",
