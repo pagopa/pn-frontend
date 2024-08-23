@@ -257,68 +257,64 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses, channelType }) => 
       reloadAction={fetchAllActivatedParties}
       mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
     >
-      {digitalAddresses.map(
-        (address) =>
-          address.channelType === channelType.toUpperCase() &&
-          address.senderId !== 'default' && (
-            <>
-              <Divider
-                sx={{
-                  backgroundColor: 'white',
-                  color: 'text.secondary',
-                  my: isMobile ? 3 : 2,
-                }}
+      {digitalAddresses.map((address) => (
+        <>
+          <Divider
+            sx={{
+              backgroundColor: 'white',
+              color: 'text.secondary',
+              my: isMobile ? 3 : 2,
+            }}
+          />
+          <Stack direction={{ xs: 'column-reverse', sm: 'row' }} spacing={2}>
+            <Stack direction="row" spacing={2}>
+              <VerifiedIcon
+                fontSize="small"
+                color="success"
+                sx={{ position: 'relative', top: '2px' }}
               />
-              <Stack direction={{ xs: 'column-reverse', sm: 'row' }} spacing={2}>
-                <Stack direction="row" spacing={2}>
-                  <VerifiedIcon
-                    fontSize="small"
-                    color="success"
-                    sx={{ position: 'relative', top: '2px' }}
-                  />
-                  <Box>
-                    <Typography
-                      sx={{
-                        wordBreak: 'break-word',
-                        fontWeight: 600,
-                      }}
-                      variant="body2"
-                      id={`${address.senderId}-typography`}
-                    >
-                      {address.value}
-                    </Typography>
-                    <ButtonNaked
-                      key="editButton"
-                      color="primary"
-                      onClick={() => {}}
-                      sx={{ mr: 2 }}
-                      disabled={false}
-                      id={`modifyContact-${address.senderId}`}
-                      size="medium"
-                    >
-                      {t('button.modifica')}
-                    </ButtonNaked>
-                    <ButtonNaked
-                      id={`cancelContact-${address.senderId}`}
-                      color="error"
-                      onClick={() => {}}
-                      disabled={false}
-                      size="medium"
-                    >
-                      {t('button.elimina')}
-                    </ButtonNaked>
-                  </Box>
-                </Stack>
-                <Stack paddingLeft={{ xs: 0, sm: 8 }}>
-                  <Typography variant="caption-semibold">
-                    {t(`special-contacts.sender-list`, { ns: 'recapiti' })}
-                  </Typography>
-                  <Typography variant="caption">{address.senderId}</Typography>
-                </Stack>
-              </Stack>
-            </>
-          )
-      )}
+              <Box>
+                <Typography
+                  sx={{
+                    wordBreak: 'break-word',
+                    fontWeight: 600,
+                  }}
+                  variant="body2"
+                  id={`${address.senderId}-typography`}
+                >
+                  {address.value}
+                </Typography>
+                <ButtonNaked
+                  key="editButton"
+                  color="primary"
+                  onClick={() => {}}
+                  sx={{ mr: 2 }}
+                  disabled={false}
+                  id={`modifyContact-${address.senderId}`}
+                  size="medium"
+                >
+                  {t('button.modifica')}
+                </ButtonNaked>
+                <ButtonNaked
+                  id={`cancelContact-${address.senderId}`}
+                  color="error"
+                  onClick={() => {}}
+                  disabled={false}
+                  size="medium"
+                >
+                  {t('button.elimina')}
+                </ButtonNaked>
+              </Box>
+            </Stack>
+            <Stack paddingLeft={{ xs: 0, sm: 8 }}>
+              <Typography variant="caption-semibold">
+                {t(`special-contacts.sender-list`, { ns: 'recapiti' })}
+              </Typography>
+              <Typography variant="caption">{address.senderId}</Typography>
+            </Stack>
+          </Stack>
+        </>
+      ))}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
         value={formik.values.s_value}
