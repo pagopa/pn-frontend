@@ -34,6 +34,7 @@ const CustomDatePicker = (
         <MobileDatePicker
           {...props}
           localeText={{
+            toolbarTitle: '',
             openPreviousView: getLocalizedOrDefaultLabel('common', 'date-picker.left-arrow'),
             openNextView: getLocalizedOrDefaultLabel('common', 'date-picker.right-arrow'),
             calendarViewSwitchingButtonAriaLabel: (view) =>
