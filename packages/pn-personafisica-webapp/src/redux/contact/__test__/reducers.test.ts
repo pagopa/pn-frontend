@@ -157,7 +157,7 @@ describe('Contacts redux state tests', () => {
     expect(action.payload).toEqual(void 0);
   });
 
-  it.only('Should be able to update the digital address with courtesy value (email verified)', async () => {
+  it('Should be able to update the digital address with courtesy value (email verified)', async () => {
     const emailContact = digitalCourtesyAddresses.find(
       (el) => el.channelType === ChannelType.EMAIL && el.senderId === 'default'
     );
