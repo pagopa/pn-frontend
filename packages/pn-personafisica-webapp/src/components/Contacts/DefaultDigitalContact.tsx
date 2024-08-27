@@ -81,7 +81,6 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     };
 
     useImperativeHandle(ref, () => ({
-      formValue: formik.values[`default_${contactType}`],
       toggleEdit,
       resetForm: async () => {
         await formik.setFieldTouched(`default_${contactType}`, false, false);

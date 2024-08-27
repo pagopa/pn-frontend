@@ -16,7 +16,6 @@ vi.mock('react-i18next', () => ({
 }));
 
 const mockSubmitCbk = vi.fn();
-const mockEditConfirmCbk = vi.fn();
 const mockDeleteCbk = vi.fn();
 
 describe('DefaultDigitalContact Component', () => {

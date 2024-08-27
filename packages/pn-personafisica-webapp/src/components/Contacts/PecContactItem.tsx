@@ -39,41 +39,46 @@ const PecContactItem: React.FC = () => {
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
   });
-  const [modalOpen, setModalOpen] = useState<{
-    type: ModalType;
-    data: { value: string; sender: Sender };
-  } | null>(null);
+  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  // currentAddress is needed to store what address we are creating/editing/removing
+  // because this variable isn't been used to render, we can use useRef
+  const currentAddress = useRef<{ value: string; sender: Sender }>({
+    value: '',
+    sender: { senderId: 'dafault' },
+  });
   const dispatch = useAppDispatch();
 
-  const value = defaultPECAddress?.value ?? '';
-  const blockDelete = specialPECAddresses.length > 0;
+  const currentValue = defaultPECAddress?.value ?? '';
+  const blockDelete =
+    specialPECAddresses.length > 0 && currentAddress.current.sender.senderId === 'default';
   const verifyingAddress = defaultPECAddress ? !defaultPECAddress.pecValid : false;
 
   const handleSubmit = (value: string, sender: Sender = { senderId: 'default' }) => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, sender.senderId);
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = { value, sender };
     // first check if contact already exists
     if (contactAlreadyExists(addresses, value, sender.senderId, ChannelType.PEC)) {
-      setModalOpen({ type: ModalType.EXISTING, data: { value, sender } });
+      setModalOpen(ModalType.EXISTING);
       return;
     }
-    handleCodeVerification(value, sender);
+    handleCodeVerification();
   };
 
-  const handleCodeVerification = (
-    value: string,
-    sender: Sender = { senderId: 'default' },
-    verificationCode?: string
-  ) => {
+  const handleCodeVerification = (verificationCode?: string) => {
     if (verificationCode) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_CONVERSION, sender.senderId);
+      PFEventStrategyFactory.triggerEvent(
+        PFEventsType.SEND_ADD_PEC_UX_CONVERSION,
+        currentAddress.current.sender.senderId
+      );
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.LEGAL,
-      senderId: sender.senderId,
-      senderName: sender.senderName,
+      senderId: currentAddress.current.sender.senderId,
+      senderName: currentAddress.current.sender.senderName,
       channelType: ChannelType.PEC,
-      value,
+      value: currentAddress.current.value,
       code: verificationCode,
     };
 
@@ -83,11 +88,14 @@ const PecContactItem: React.FC = () => {
         // contact to verify
         // open code modal
         if (!res) {
-          setModalOpen({ type: ModalType.CODE, data: { value, sender } });
+          setModalOpen(ModalType.CODE);
           return;
         }
 
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_SUCCESS, sender.senderId);
+        PFEventStrategyFactory.triggerEvent(
+          PFEventsType.SEND_ADD_PEC_UX_SUCCESS,
+          currentAddress.current.sender.senderId
+        );
 
         // contact has already been verified
         if (res.pecValid) {
@@ -99,38 +107,41 @@ const PecContactItem: React.FC = () => {
             })
           );
           setModalOpen(null);
-          if (value && sender.senderId === 'default') {
+          if (currentValue && currentAddress.current.sender.senderId === 'default') {
             digitalContactRef.current.toggleEdit();
           }
           return;
         }
         // contact must be validated
         // open validation modal
-        setModalOpen({ type: ModalType.VALIDATION, data: { value, sender } });
+        setModalOpen(ModalType.VALIDATION);
       })
       .catch(() => {});
   };
 
-  const handleCancelCode = async (sender: Sender = { senderId: 'default' }) => {
+  const handleCancelCode = async () => {
     setModalOpen(null);
-    if (value && sender.senderId === 'default') {
+    if (currentValue && currentAddress.current.sender.senderId === 'default') {
       digitalContactRef.current.toggleEdit();
     }
     await digitalContactRef.current.resetForm();
   };
 
-  const deleteConfirmHandler = (sender: Sender = { senderId: 'default' }) => {
+  const deleteConfirmHandler = () => {
     setModalOpen(null);
     dispatch(
       deleteAddress({
         addressType: AddressType.LEGAL,
-        senderId: sender.senderId,
+        senderId: currentAddress.current.sender.senderId,
         channelType: ChannelType.PEC,
       })
     )
       .unwrap()
       .then(() => {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_PEC_SUCCESS, sender.senderId);
+        PFEventStrategyFactory.triggerEvent(
+          PFEventsType.SEND_REMOVE_PEC_SUCCESS,
+          currentAddress.current.sender.senderId
+        );
       })
       .catch(() => {});
   };
@@ -153,7 +164,7 @@ const PecContactItem: React.FC = () => {
       {!verifyingAddress && (
         <DefaultDigitalContact
           label={t('legal-contacts.pec-to-add', { ns: 'recapiti' })}
-          value={value}
+          value={currentValue}
           channelType={ChannelType.PEC}
           ref={digitalContactRef}
           inputProps={{
@@ -161,12 +172,11 @@ const PecContactItem: React.FC = () => {
           }}
           insertButtonLabel={t('button.conferma')}
           onSubmit={handleSubmit}
-          onDelete={() =>
-            setModalOpen({
-              type: ModalType.DELETE,
-              data: { value, sender: { senderId: 'default' } },
-            })
-          }
+          onDelete={() => {
+            setModalOpen(ModalType.DELETE);
+            // eslint-disable-next-line functional/immutable-data
+            currentAddress.current = { value: currentValue, sender: { senderId: 'default' } };
+          }}
         />
       )}
       {verifyingAddress && (
@@ -181,12 +191,13 @@ const PecContactItem: React.FC = () => {
             </Typography>
             <ButtonNaked
               color="primary"
-              onClick={() =>
-                setModalOpen({
-                  type: ModalType.CANCEL_VALIDATION,
-                  data: { value, sender: { senderId: 'default' } },
-                })
-              }
+              onClick={() => {
+                {
+                  setModalOpen(ModalType.CANCEL_VALIDATION);
+                  // eslint-disable-next-line functional/immutable-data
+                  currentAddress.current = { value: currentValue, sender: { senderId: 'default' } };
+                }
+              }}
               data-testid="cancelValidation"
             >
               {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
@@ -194,54 +205,55 @@ const PecContactItem: React.FC = () => {
           </Stack>
         </>
       )}
+      {currentValue && (
+        <SpecialDigitalContacts
+          digitalAddresses={specialPECAddresses}
+          channelType={ChannelType.PEC}
+          onConfirm={(value: string, sender: Sender) => handleSubmit(value, sender)}
+          onDelete={(value, sender) => {
+            setModalOpen(ModalType.DELETE);
+            // eslint-disable-next-line functional/immutable-data
+            currentAddress.current = { value, sender };
+          }}
+        />
+      )}
       <ExistingContactDialog
-        open={modalOpen?.type === ModalType.EXISTING}
-        value={modalOpen?.data.value ?? ''}
-        handleDiscard={() => handleCancelCode(modalOpen?.data.sender)}
-        handleConfirm={() =>
-          handleCodeVerification(modalOpen?.data.value ?? '', modalOpen?.data.sender)
-        }
+        open={modalOpen === ModalType.EXISTING}
+        value={currentAddress.current.value}
+        handleDiscard={handleCancelCode}
+        handleConfirm={() => handleCodeVerification()}
       />
       <ContactCodeDialog
-        value={modalOpen?.data.value ?? ''}
+        value={currentAddress.current.value}
         addressType={AddressType.LEGAL}
         channelType={ChannelType.PEC}
-        open={modalOpen?.type === ModalType.CODE}
-        onConfirm={(code) =>
-          handleCodeVerification(modalOpen?.data.value ?? '', modalOpen?.data.sender, code)
-        }
-        onDiscard={() => handleCancelCode(modalOpen?.data.sender)}
+        open={modalOpen === ModalType.CODE}
+        onConfirm={(code) => handleCodeVerification(code)}
+        onDiscard={handleCancelCode}
         onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR)}
       />
       <PecVerificationDialog
-        open={modalOpen?.type === ModalType.VALIDATION}
+        open={modalOpen === ModalType.VALIDATION}
         handleConfirm={() => setModalOpen(null)}
       />
       <CancelVerificationModal
-        open={modalOpen?.type === ModalType.CANCEL_VALIDATION}
-        senderId={modalOpen?.data.sender.senderId}
+        open={modalOpen === ModalType.CANCEL_VALIDATION}
+        senderId={currentAddress.current.sender.senderId}
         handleClose={() => setModalOpen(null)}
       />
       <DeleteDialog
-        showModal={modalOpen?.type === ModalType.DELETE}
+        showModal={modalOpen === ModalType.DELETE}
         removeModalTitle={t(`legal-contacts.${blockDelete ? 'block-' : ''}remove-pec-title`, {
           ns: 'recapiti',
         })}
         removeModalBody={t(`legal-contacts.${blockDelete ? 'block-' : ''}remove-pec-message`, {
-          value: modalOpen?.data.value ?? '',
+          value: currentAddress.current.value,
           ns: 'recapiti',
         })}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />
-      {value && (
-        <SpecialDigitalContacts
-          digitalAddresses={specialPECAddresses}
-          channelType={ChannelType.PEC}
-          handleConfirm={(value: string, sender: Sender) => handleSubmit(value, sender)}
-        />
-      )}
     </DigitalContactsCard>
   );
 };

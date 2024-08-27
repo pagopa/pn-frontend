@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { DisclaimerModal, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams, Sender } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -17,11 +17,6 @@ import DigitalContactsCard from './DigitalContactsCard';
 import ExistingContactDialog from './ExistingContactDialog';
 import SpecialDigitalContacts from './SpecialDigitalContacts';
 
-interface Props {
-  senderId?: string;
-  senderName?: string;
-}
-
 enum ModalType {
   EXISTING = 'existing',
   DISCLAIMER = 'disclaimer',
@@ -29,35 +24,39 @@ enum ModalType {
   DELETE = 'delete',
 }
 
-const EmailContactItem: React.FC<Props> = ({ senderId = 'default', senderName }) => {
+const EmailContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultEMAILAddress, specialEMAILAddresses, addresses } = useAppSelector(
+  const { defaultEMAILAddress, specialEMAILAddresses, addresses, legalAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
-  const digitalContactRef = useRef<{
-    formValue: string;
-    toggleEdit: () => void;
-    resetForm: () => void;
-  }>({
-    formValue: '',
+  const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
-    resetForm: () => {},
+    resetForm: () => Promise.resolve(),
   });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  // currentAddress is needed to store what address we are creating/editing/removing
+  // because this variable isn't been used to render, we can use useRef
+  const currentAddress = useRef<{ value: string; sender: Sender }>({
+    value: '',
+    sender: { senderId: 'dafault' },
+  });
   const dispatch = useAppDispatch();
 
-  const value = defaultEMAILAddress?.value ?? '';
-  const blockDelete = specialEMAILAddresses.length > 0;
+  const currentValue = defaultEMAILAddress?.value ?? '';
+  const blockDelete =
+    specialEMAILAddresses.length > 0 && currentAddress.current.sender.senderId === 'default';
 
-  const handleSubmit = (value: string) => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_START, senderId);
+  const handleSubmit = (value: string, sender: Sender = { senderId: 'default' }) => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_START, sender.senderId);
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = { value, sender };
     // first check if contact already exists
-    if (contactAlreadyExists(addresses, value, senderId, ChannelType.EMAIL)) {
+    if (contactAlreadyExists(addresses, value, sender.senderId, ChannelType.EMAIL)) {
       setModalOpen(ModalType.EXISTING);
       return;
     }
     // disclaimer modal must be opened only when we are adding a default address
-    if (senderId === 'default') {
+    if (sender.senderId === 'default' && legalAddresses.length === 0) {
       setModalOpen(ModalType.DISCLAIMER);
       return;
     }
@@ -66,15 +65,18 @@ const EmailContactItem: React.FC<Props> = ({ senderId = 'default', senderName })
 
   const handleCodeVerification = (verificationCode?: string) => {
     if (verificationCode) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION, senderId);
+      PFEventStrategyFactory.triggerEvent(
+        PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION,
+        currentAddress.current.sender.senderId
+      );
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
-      senderId,
-      senderName,
+      senderId: currentAddress.current.sender.senderId,
+      senderName: currentAddress.current.sender.senderName,
       channelType: ChannelType.EMAIL,
-      value: digitalContactRef.current.formValue,
+      value: currentAddress.current.value,
       code: verificationCode,
     };
 
@@ -89,7 +91,10 @@ const EmailContactItem: React.FC<Props> = ({ senderId = 'default', senderName })
           return;
         }
 
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS, senderId);
+        PFEventStrategyFactory.triggerEvent(
+          PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS,
+          currentAddress.current.sender.senderId
+        );
 
         // contact has already been verified
         // show success message
@@ -102,7 +107,7 @@ const EmailContactItem: React.FC<Props> = ({ senderId = 'default', senderName })
           })
         );
         setModalOpen(null);
-        if (value) {
+        if (currentValue && currentAddress.current.sender.senderId === 'default') {
           digitalContactRef.current.toggleEdit();
         }
       })
@@ -111,10 +116,10 @@ const EmailContactItem: React.FC<Props> = ({ senderId = 'default', senderName })
 
   const handleCancelCode = async () => {
     setModalOpen(null);
-    if (value) {
+    if (currentValue && currentAddress.current.sender.senderId === 'default') {
       digitalContactRef.current.toggleEdit();
     }
-    digitalContactRef.current.resetForm();
+    await digitalContactRef.current.resetForm();
   };
 
   const deleteConfirmHandler = () => {
@@ -122,13 +127,16 @@ const EmailContactItem: React.FC<Props> = ({ senderId = 'default', senderName })
     dispatch(
       deleteAddress({
         addressType: AddressType.COURTESY,
-        senderId,
+        senderId: currentAddress.current.sender.senderId,
         channelType: ChannelType.EMAIL,
       })
     )
       .unwrap()
       .then(() => {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_EMAIL_SUCCESS, senderId);
+        PFEventStrategyFactory.triggerEvent(
+          PFEventsType.SEND_REMOVE_EMAIL_SUCCESS,
+          currentAddress.current.sender.senderId
+        );
       })
       .catch(() => {});
   };
@@ -148,7 +156,7 @@ const EmailContactItem: React.FC<Props> = ({ senderId = 'default', senderName })
     >
       <DefaultDigitalContact
         label={t(`courtesy-contacts.email-to-add`, { ns: 'recapiti' })}
-        value={value}
+        value={currentValue}
         channelType={ChannelType.EMAIL}
         ref={digitalContactRef}
         inputProps={{
@@ -158,11 +166,27 @@ const EmailContactItem: React.FC<Props> = ({ senderId = 'default', senderName })
         }}
         insertButtonLabel={t(`courtesy-contacts.email-add`, { ns: 'recapiti' })}
         onSubmit={handleSubmit}
-        onDelete={() => setModalOpen(ModalType.DELETE)}
+        onDelete={() => {
+          setModalOpen(ModalType.DELETE);
+          // eslint-disable-next-line functional/immutable-data
+          currentAddress.current = { value: currentValue, sender: { senderId: 'default' } };
+        }}
       />
+      {currentValue && (
+        <SpecialDigitalContacts
+          digitalAddresses={specialEMAILAddresses}
+          channelType={ChannelType.EMAIL}
+          onConfirm={(value: string, sender: Sender) => handleSubmit(value, sender)}
+          onDelete={(value, sender) => {
+            setModalOpen(ModalType.DELETE);
+            // eslint-disable-next-line functional/immutable-data
+            currentAddress.current = { value, sender };
+          }}
+        />
+      )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
-        value={digitalContactRef.current.formValue}
+        value={currentAddress.current.value}
         handleDiscard={handleCancelCode}
         handleConfirm={() => handleCodeVerification()}
       />
@@ -178,7 +202,7 @@ const EmailContactItem: React.FC<Props> = ({ senderId = 'default', senderName })
         content={t(`alert-dialog-email`, { ns: 'recapiti' })}
       />
       <ContactCodeDialog
-        value={digitalContactRef.current.formValue}
+        value={currentAddress.current.value}
         addressType={AddressType.COURTESY}
         channelType={ChannelType.EMAIL}
         open={modalOpen === ModalType.CODE}
@@ -192,19 +216,13 @@ const EmailContactItem: React.FC<Props> = ({ senderId = 'default', senderName })
           ns: 'recapiti',
         })}
         removeModalBody={t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-email-message`, {
-          value: digitalContactRef.current.formValue,
+          value: currentAddress.current.value,
           ns: 'recapiti',
         })}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />
-      {value && (
-        <SpecialDigitalContacts
-          digitalAddresses={specialEMAILAddresses}
-          channelType={ChannelType.EMAIL}
-        />
-      )}
     </DigitalContactsCard>
   );
 };

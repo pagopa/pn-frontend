@@ -18,6 +18,7 @@ export const digitalAddresses: Array<DigitalAddress> = [
   {
     addressType: AddressType.LEGAL,
     senderId: 'comune-milano',
+    senderName: 'Comune di Milano',
     channelType: ChannelType.PEC,
     value: 'nome.utente@pec-comune-milano.it',
     pecValid: true,
@@ -26,6 +27,7 @@ export const digitalAddresses: Array<DigitalAddress> = [
   {
     addressType: AddressType.LEGAL,
     senderId: 'tribunale-milano',
+    senderName: 'Tribunale di Milano',
     channelType: ChannelType.PEC,
     value: 'nome.utente@pec-tribunale-milano.it',
     pecValid: true,
@@ -41,6 +43,7 @@ export const digitalAddresses: Array<DigitalAddress> = [
   {
     addressType: AddressType.COURTESY,
     senderId: 'comune-milano',
+    senderName: 'Comune di Milano',
     channelType: ChannelType.EMAIL,
     value: 'nome.utente@mail-comune-milano.it',
   },
@@ -59,6 +62,7 @@ export const digitalAddresses: Array<DigitalAddress> = [
   {
     addressType: AddressType.COURTESY,
     senderId: 'tribunale-milano',
+    senderName: 'Tribunale di Milano',
     channelType: ChannelType.SMS,
     value: '+393333333334',
   },

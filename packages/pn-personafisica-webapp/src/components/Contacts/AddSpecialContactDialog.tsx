@@ -158,17 +158,29 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     checkIfSenderIsAlreadyAdded(senders);
   };
 
-  useEffect(() => {
+  const getParties = () => {
     if (senderInputValue.length >= 4) {
       void dispatch(getAllActivatedParties({ paNameFilter: senderInputValue, blockLoading: true }));
     } else if (senderInputValue.length === 0) {
       void dispatch(getAllActivatedParties({ blockLoading: true }));
     }
-  }, [senderInputValue]);
+  };
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    getParties();
+  }, [senderInputValue, open]);
 
   const handleClose = () => {
     formik.resetForm({ values: initialValues });
     onDiscard();
+  };
+
+  const handleConfirm = async () => {
+    await formik.submitForm();
+    formik.resetForm({ values: initialValues });
   };
 
   return (
@@ -211,6 +223,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
             <ApiErrorWrapper
               apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES}
               mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
+              reloadAction={getParties}
             >
               <PnAutocomplete
                 id="sender"
@@ -248,6 +261,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
         </form>
         {formik.values.senders.map((sender) => (
           <Chip
+            data-testid="sender_chip"
             key={`${sender.id}_chip`}
             label={sender.name}
             onDelete={() => handleSenderDelete(sender)}
@@ -264,7 +278,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
         <Button onClick={handleClose} variant="outlined">
           {t('button.annulla')}
         </Button>
-        <Button onClick={() => formik.submitForm()} variant="contained" disabled={!formik.isValid}>
+        <Button onClick={handleConfirm} variant="contained" disabled={!formik.isValid}>
           {t('button.conferma')}
         </Button>
       </PnDialogActions>

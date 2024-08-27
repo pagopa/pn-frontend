@@ -31,7 +31,7 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-describe.skip('Contacts page', async () => {
+describe('Contacts page', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
 
@@ -60,8 +60,6 @@ describe.skip('Contacts page', async () => {
     expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const specialContact = result.queryByTestId('specialContact');
-    expect(specialContact).not.toBeInTheDocument();
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/addresses');
   });
@@ -76,8 +74,6 @@ describe.skip('Contacts page', async () => {
     expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const specialContact = result.queryByTestId('specialContact');
-    expect(specialContact).not.toBeInTheDocument();
   });
 
   it('renders Contacts (legal contacts)', async () => {
@@ -89,8 +85,6 @@ describe.skip('Contacts page', async () => {
     expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const specialContact = result.getByTestId('specialContact');
-    expect(specialContact).toBeInTheDocument();
   });
 
   it('renders Contacts (courtesy contacts)', async () => {
@@ -102,8 +96,6 @@ describe.skip('Contacts page', async () => {
     expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const specialContact = result.getByTestId('specialContact');
-    expect(specialContact).toBeInTheDocument();
   });
 
   it('renders Contacts (courtesy and legal contacts filled)', async () => {
@@ -115,8 +107,6 @@ describe.skip('Contacts page', async () => {
     expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const specialContact = result.getByTestId('specialContact');
-    expect(specialContact).toBeInTheDocument();
   });
 
   it('API error', async () => {

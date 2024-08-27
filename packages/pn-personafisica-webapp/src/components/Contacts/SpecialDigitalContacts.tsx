@@ -18,7 +18,8 @@ type Props = {
   digitalAddresses: Array<DigitalAddress>;
   channelType: ChannelType;
   prefix?: string;
-  handleConfirm: (value: string, sender: Sender) => void;
+  onConfirm: (value: string, sender: Sender) => void;
+  onDelete: (value: string, sender: Sender) => void;
 };
 
 enum ModalType {
@@ -29,7 +30,8 @@ const SpecialDigitalContacts: React.FC<Props> = ({
   digitalAddresses,
   channelType,
   prefix,
-  handleConfirm,
+  onConfirm,
+  onDelete,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const isMobile = useIsMobile();
@@ -120,7 +122,10 @@ const SpecialDigitalContacts: React.FC<Props> = ({
                 <ButtonNaked
                   data-testid={`cancelContact-special_${contactType}`}
                   color="error"
-                  onClick={() => {}}
+                  // ATTENZIONE
+                  // al momento le api non accettano più sender alla volta
+                  // per testare il giro, si utilizza sempre il primo sender
+                  onClick={() => onDelete(address.value, address.senders[0])}
                   disabled={false}
                   size="medium"
                 >
@@ -158,6 +163,7 @@ const SpecialDigitalContacts: React.FC<Props> = ({
           color="primary"
           size="small"
           p={{ xs: '0.5rem 0', sm: 1 }}
+          data-testid="addMoreButton"
         >
           {t(`special-contacts.${contactType}-add-more-button`, { ns: 'recapiti' })}
         </ButtonNaked>
@@ -173,7 +179,7 @@ const SpecialDigitalContacts: React.FC<Props> = ({
         // per testare il giro, si utilizza sempre il primo sender
         onConfirm={(value: string, senders: Array<Party>) => {
           setModalOpen(null);
-          handleConfirm(value, { senderId: senders[0].id, senderName: senders[0].name });
+          onConfirm(value, { senderId: senders[0].id, senderName: senders[0].name });
         }}
         digitalAddresses={specialAddresses}
         channelType={channelType}
