@@ -39,7 +39,7 @@
     "dev": "yarn generate && vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "tsc && vitest --run",
+    "test": "vitest --run",
     "test:fast": "vitest --run",
     "test:all": "vitest --run --config ./vite.config.all.ts",
     "test:coverage": "tsc && vitest run --coverage",

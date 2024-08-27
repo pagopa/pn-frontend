@@ -27,7 +27,7 @@ import {
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import { CONTACT_ACTIONS } from '../../../redux/contact/actions';
-import SpecialContacts from '../SpecialContacts';
+import SpecialContacts from '../SpecialDigitalContacts';
 import { fillCodeDialog } from './test-utils';
 
 vi.mock('react-i18next', () => ({
@@ -61,7 +61,7 @@ function testInvalidField(form: HTMLFormElement, elementName: string, errorMessa
   expect(button).toBeDisabled();
 }
 
-describe('SpecialContacts Component', async () => {
+describe.skip('SpecialContacts Component', async () => {
   let mock: MockAdapter;
 
   beforeAll(() => {

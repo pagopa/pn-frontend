@@ -152,9 +152,9 @@ describe('test SmsContactItem', () => {
     const smsValue = getById(form!, 'default_sms-typography');
     expect(smsValue).toBeInTheDocument();
     expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
-    const editButton = getById(form!, 'modifyContact-default');
+    const editButton = getById(form!, 'modifyContact-default_sms');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default');
+    const deleteButton = getById(form!, 'cancelContact-default_sms');
     expect(deleteButton).toBeInTheDocument();
   });
 
@@ -233,9 +233,9 @@ describe('test SmsContactItem', () => {
     smsValue = getById(form!, 'default_sms-typography');
     expect(smsValue).toBeInTheDocument();
     expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
-    editButton = getById(form!, 'modifyContact-default');
+    editButton = getById(form!, 'modifyContact-default_sms');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default');
+    const deleteButton = getById(form!, 'cancelContact-default_sms');
     expect(deleteButton).toBeInTheDocument();
   });
 

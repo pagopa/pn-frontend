@@ -206,9 +206,9 @@ describe('PecContactItem component', () => {
     const pecValue = getById(form!, 'default_pec-typography');
     expect(pecValue).toBeInTheDocument();
     expect(pecValue).toHaveTextContent(VALID_PEC);
-    const editButton = getById(form!, 'modifyContact-default');
+    const editButton = getById(form!, 'modifyContact-default_pec');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default');
+    const deleteButton = getById(form!, 'cancelContact-default_pec');
     expect(deleteButton).toBeInTheDocument();
   });
 
@@ -308,9 +308,9 @@ describe('PecContactItem component', () => {
     pecValue = getById(form!, 'default_pec-typography');
     expect(pecValue).toBeInTheDocument();
     expect(pecValue).toHaveTextContent(VALID_PEC);
-    editButton = getById(form!, 'modifyContact-default');
+    editButton = getById(form!, 'modifyContact-default_pec');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default');
+    const deleteButton = getById(form!, 'cancelContact-default_pec');
     expect(deleteButton).toBeInTheDocument();
   });
 

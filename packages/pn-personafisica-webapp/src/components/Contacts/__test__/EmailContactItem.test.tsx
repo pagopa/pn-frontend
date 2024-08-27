@@ -145,9 +145,9 @@ describe('testing EmailContactItem', () => {
     const emailValue = getById(form!, 'default_email-typography');
     expect(emailValue).toBeInTheDocument();
     expect(emailValue).toHaveTextContent(mailValue);
-    const editButton = getById(form!, 'modifyContact-default');
+    const editButton = getById(form!, 'modifyContact-default_email');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default');
+    const deleteButton = getById(form!, 'cancelContact-default_email');
     expect(deleteButton).toBeInTheDocument();
   });
 
@@ -224,9 +224,9 @@ describe('testing EmailContactItem', () => {
     mailValue = getById(form!, 'default_email-typography');
     expect(mailValue).toBeInTheDocument();
     expect(mailValue).toHaveTextContent(emailValue);
-    editButton = getById(form!, 'modifyContact-default');
+    editButton = getById(form!, 'modifyContact-default_email');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default');
+    const deleteButton = getById(form!, 'cancelContact-default_email');
     expect(deleteButton).toBeInTheDocument();
   });
 

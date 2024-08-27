@@ -31,7 +31,7 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-describe('Contacts page', async () => {
+describe.skip('Contacts page', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
 

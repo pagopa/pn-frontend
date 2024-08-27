@@ -1,36 +1,21 @@
-import { useFormik } from 'formik';
-import { ChangeEvent, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as yup from 'yup';
 
-import { InputAdornment } from '@mui/material';
-import { DisclaimerModal, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
+import { DisclaimerModal, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams, Sender } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
-import {
-  contactAlreadyExists,
-  internationalPhonePrefix,
-  phoneValidationSchema,
-} from '../../utility/contacts.utility';
+import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
+import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
-import EditDigitalContact from './EditDigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
-import InsertDigitalContact from './InsertDigitalContact';
-import SpecialContacts from './SpecialContacts';
-
-interface Props {
-  senderId?: string;
-  senderName?: string;
-  blockEdit?: boolean;
-  onEdit?: (editFlag: boolean) => void;
-}
+import SpecialDigitalContacts from './SpecialDigitalContacts';
 
 enum ModalType {
   EXISTING = 'existing',
@@ -39,73 +24,61 @@ enum ModalType {
   DELETE = 'delete',
 }
 
-const SmsContactItem: React.FC<Props> = ({
-  senderId = 'default',
-  senderName,
-  blockEdit,
-  onEdit,
-}) => {
+const SmsContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultSMSAddress, specialSMSAddresses, addresses } = useAppSelector(
+  const { defaultSMSAddress, specialSMSAddresses, addresses, legalAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
-  const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
-  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
+    toggleEdit: () => {},
+    resetForm: () => Promise.resolve(),
+  });
+  const [modalOpen, setModalOpen] = useState<{
+    type: ModalType;
+    data: { value: string; sender: Sender };
+  } | null>(null);
   const dispatch = useAppDispatch();
-  const isMobile = useIsMobile();
 
   const value = defaultSMSAddress?.value ?? '';
-  // value contains the prefix
-  const contactValue = value.replace(internationalPhonePrefix, '');
   const blockDelete = specialSMSAddresses.length > 0;
 
-  const validationSchema = yup.object().shape({
-    [`${senderId}_sms`]: phoneValidationSchema(t),
-  });
-
-  const initialValues = {
-    [`${senderId}_sms`]: contactValue ?? '',
+  const handleSubmit = (value: string, sender: Sender = { senderId: 'default' }) => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_START, sender.senderId);
+    // first check if contact already exists
+    if (
+      contactAlreadyExists(
+        addresses,
+        internationalPhonePrefix + value,
+        sender.senderId,
+        ChannelType.SMS
+      )
+    ) {
+      setModalOpen({ type: ModalType.EXISTING, data: { value, sender } });
+      return;
+    }
+    // disclaimer modal must be opened only when we are adding a default address and no legal address has been added
+    if (sender.senderId === 'default' && legalAddresses.length === 0) {
+      setModalOpen({ type: ModalType.DISCLAIMER, data: { value, sender } });
+      return;
+    }
+    handleCodeVerification(value, sender);
   };
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    validateOnMount: true,
-    enableReinitialize: true,
-    onSubmit: () => {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_START, senderId);
-      // first check if contact already exists
-      if (
-        contactAlreadyExists(addresses, formik.values[`${senderId}_sms`], senderId, ChannelType.SMS)
-      ) {
-        setModalOpen(ModalType.EXISTING);
-        return;
-      }
-      // disclaimer modal must be opened only when we are adding a default address
-      if (senderId === 'default') {
-        setModalOpen(ModalType.DISCLAIMER);
-        return;
-      }
-      handleCodeVerification();
-    },
-  });
-
-  const handleChangeTouched = async (e: ChangeEvent) => {
-    formik.handleChange(e);
-    await formik.setFieldTouched(e.target.id, true, false);
-  };
-
-  const handleCodeVerification = (verificationCode?: string) => {
+  const handleCodeVerification = (
+    value: string,
+    sender: Sender = { senderId: 'default' },
+    verificationCode?: string
+  ) => {
     if (verificationCode) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_CONVERSION, senderId);
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_CONVERSION, sender.senderId);
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
-      senderId,
-      senderName,
+      senderId: sender.senderId,
+      senderName: sender.senderName,
       channelType: ChannelType.SMS,
-      value: internationalPhonePrefix + formik.values[`${senderId}_sms`],
+      value: internationalPhonePrefix + value,
       code: verificationCode,
     };
 
@@ -116,11 +89,11 @@ const SmsContactItem: React.FC<Props> = ({
         // open code modal
         if (!res) {
           // aprire la code modal
-          setModalOpen(ModalType.CODE);
+          setModalOpen({ type: ModalType.CODE, data: { value, sender } });
           return;
         }
 
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_SUCCESS, senderId);
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_SUCCESS, sender.senderId);
 
         // contact has already been verified
         // show success message
@@ -133,34 +106,33 @@ const SmsContactItem: React.FC<Props> = ({
           })
         );
         setModalOpen(null);
-        if (value) {
-          digitalElemRef.current.toggleEdit();
+        if (value && sender.senderId === 'default') {
+          digitalContactRef.current.toggleEdit();
         }
       })
       .catch(() => {});
   };
 
-  const handleCancelCode = async () => {
+  const handleCancelCode = async (sender: Sender = { senderId: 'default' }) => {
     setModalOpen(null);
-    if (value) {
-      digitalElemRef.current.toggleEdit();
+    if (value && sender.senderId === 'default') {
+      digitalContactRef.current.toggleEdit();
     }
-    await formik.setFieldTouched(`${senderId}_sms`, false, false);
-    await formik.setFieldValue(`${senderId}_sms`, initialValues[`${senderId}_sms`], true);
+    await digitalContactRef.current.resetForm();
   };
 
-  const deleteConfirmHandler = () => {
+  const deleteConfirmHandler = (sender: Sender = { senderId: 'default' }) => {
     setModalOpen(null);
     dispatch(
       deleteAddress({
         addressType: AddressType.COURTESY,
-        senderId,
+        senderId: sender.senderId,
         channelType: ChannelType.SMS,
       })
     )
       .unwrap()
       .then(() => {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_SUCCESS, senderId);
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_SUCCESS, sender.senderId);
       })
       .catch(() => {});
   };
@@ -168,7 +140,7 @@ const SmsContactItem: React.FC<Props> = ({
   /*
    * if *some* value (phone number, email address) has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
-   * (the EditDigitalContact component includes the "update" button)
+   * (the DefaultDigitalContact component includes the "update" button)
    * if *no* value (phone number, email address) has been attached to the contact type,
    * then we show the input field allowing the user to enter it along with the button
    * to perform the addition.
@@ -179,89 +151,63 @@ const SmsContactItem: React.FC<Props> = ({
       title={t('courtesy-contacts.sms-title', { ns: 'recapiti' })}
       subtitle={t('courtesy-contacts.sms-description', { ns: 'recapiti' })}
     >
-      <form
-        onSubmit={formik.handleSubmit}
-        data-testid={`${senderId}_smsContact`}
-        style={{ width: isMobile ? '100%' : '50%' }}
-      >
-        {value && (
-          <EditDigitalContact
-            senderId={senderId}
-            ref={digitalElemRef}
-            inputProps={{
-              id: `${senderId}_sms`,
-              name: `${senderId}_sms`,
-              label: t(`courtesy-contacts.link-sms-placeholder`, {
-                ns: 'recapiti',
-              }),
-              value: formik.values[`${senderId}_sms`],
-              onChange: (e) => void handleChangeTouched(e),
-              error: formik.touched[`${senderId}_sms`] && Boolean(formik.errors[`${senderId}_sms`]),
-              helperText: formik.touched[`${senderId}_sms`] && formik.errors[`${senderId}_sms`],
-              prefix: internationalPhonePrefix,
-            }}
-            saveDisabled={!formik.isValid}
-            editDisabled={blockEdit}
-            onDelete={() => setModalOpen(ModalType.DELETE)}
-            onEditCancel={() => formik.resetForm({ values: initialValues })}
-            onEdit={onEdit}
-          />
-        )}
-        {!value && (
-          <InsertDigitalContact
-            label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
-            inputProps={{
-              id: `${senderId}_sms`,
-              name: `${senderId}_sms`,
-              placeholder: t(`courtesy-contacts.link-sms-placeholder`, { ns: 'recapiti' }),
-              value: formik.values[`${senderId}_sms`],
-              onChange: (e) => void handleChangeTouched(e),
-              error: formik.touched[`${senderId}_sms`] && Boolean(formik.errors[`${senderId}_sms`]),
-              helperText: formik.touched[`${senderId}_sms`] && formik.errors[`${senderId}_sms`],
-              InputProps: {
-                startAdornment: (
-                  <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
-                ),
-              },
-            }}
-            insertDisabled={!formik.isValid}
-            buttonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
-          />
-        )}
-      </form>
+      <DefaultDigitalContact
+        label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
+        value={value}
+        channelType={ChannelType.SMS}
+        ref={digitalContactRef}
+        inputProps={{
+          label: t(`courtesy-contacts.link-sms-placeholder`, {
+            ns: 'recapiti',
+          }),
+          prefix: internationalPhonePrefix,
+        }}
+        insertButtonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
+        onSubmit={handleSubmit}
+        onDelete={() =>
+          setModalOpen({
+            type: ModalType.DELETE,
+            data: { value, sender: { senderId: 'default' } },
+          })
+        }
+      />
       <ExistingContactDialog
-        open={modalOpen === ModalType.EXISTING}
-        value={formik.values[`${senderId}_sms`]}
-        handleDiscard={handleCancelCode}
-        handleConfirm={() => handleCodeVerification()}
+        open={modalOpen?.type === ModalType.EXISTING}
+        value={modalOpen?.data.value ?? ''}
+        handleDiscard={() => handleCancelCode(modalOpen?.data.sender)}
+        handleConfirm={() =>
+          handleCodeVerification(modalOpen?.data.value ?? '', modalOpen?.data.sender)
+        }
       />
       <DisclaimerModal
-        open={modalOpen === ModalType.DISCLAIMER}
+        open={modalOpen?.type === ModalType.DISCLAIMER}
         onConfirm={() => {
           setModalOpen(null);
-          handleCodeVerification();
+          handleCodeVerification(modalOpen?.data.value ?? '', modalOpen?.data.sender);
         }}
-        onCancel={handleCancelCode}
+        onCancel={() => handleCancelCode(modalOpen?.data.sender)}
         confirmLabel={t('button.conferma')}
         checkboxLabel={t('button.capito')}
         content={t(`alert-dialog-sms`, { ns: 'recapiti' })}
       />
       <ContactCodeDialog
-        value={formik.values[senderId + '_sms']}
+        value={modalOpen?.data.value ?? ''}
         addressType={AddressType.COURTESY}
         channelType={ChannelType.SMS}
-        open={modalOpen === ModalType.CODE}
-        onConfirm={(code) => handleCodeVerification(code)}
-        onDiscard={handleCancelCode}
+        open={modalOpen?.type === ModalType.CODE}
+        onConfirm={(code) =>
+          handleCodeVerification(modalOpen?.data.value ?? '', modalOpen?.data.sender, code)
+        }
+        onDiscard={() => handleCancelCode(modalOpen?.data.sender)}
         onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_CODE_ERROR)}
       />
       <DeleteDialog
-        showModal={modalOpen === ModalType.DELETE}
+        showModal={modalOpen?.type === ModalType.DELETE}
         removeModalTitle={t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-sms-title`, {
           ns: 'recapiti',
         })}
         removeModalBody={t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-sms-message`, {
-          value: formik.values[`${senderId}_sms`],
+          value: modalOpen?.data.value ?? '',
           ns: 'recapiti',
         })}
         handleModalClose={() => setModalOpen(null)}
@@ -269,7 +215,12 @@ const SmsContactItem: React.FC<Props> = ({
         blockDelete={blockDelete}
       />
       {value && (
-        <SpecialContacts digitalAddresses={specialSMSAddresses} channelType={ChannelType.SMS} />
+        <SpecialDigitalContacts
+          prefix={internationalPhonePrefix}
+          digitalAddresses={specialSMSAddresses}
+          channelType={ChannelType.SMS}
+          handleConfirm={(value: string, sender: Sender) => handleSubmit(value, sender)}
+        />
       )}
     </DigitalContactsCard>
   );
