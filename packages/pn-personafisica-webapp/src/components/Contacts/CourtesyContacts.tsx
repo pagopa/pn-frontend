@@ -35,7 +35,7 @@ const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
   const emailContactsQuantity = (): number => countContactsByType(contacts, ChannelType.EMAIL);
 
   return (
-    <Box>
+    <Box id="courtesyContactsSection">
       <Typography variant="h6" fontWeight={700}>
         {t('courtesy-contacts.title', { ns: 'recapiti' })}
       </Typography>

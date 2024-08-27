@@ -24,7 +24,7 @@ const LegalContacts = ({ legalAddresses }: Props) => {
   });
 
   return (
-    <Box>
+    <Box id="legalContactsSection">
       <Typography variant="h6" fontWeight={700}>
         {t('legal-contacts.title', { ns: 'recapiti' })}
       </Typography>
