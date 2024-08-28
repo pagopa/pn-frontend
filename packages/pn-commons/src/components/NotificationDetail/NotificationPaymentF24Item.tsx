@@ -48,17 +48,6 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
 
   const [downloadingMessage, setDownloadingMessage] = useState<string | null>(null);
 
-  /* const handleTitle = (title: string) => {
-    const mid = Math.floor(title.length / 2);
-
-    // Non ci sono spazi, quindi dividiamo esattamente a metà
-    const firstPart = title.slice(0, mid);
-    const secondPart = title.slice(mid);
-
-    // Inserisce l'interruzione di riga
-    return firstPart + '\n' + secondPart;
-  }; */
-
   const getDownloadF24Status = useCallback(async (f24Item: F24PaymentDetails, attempt: number) => {
     try {
       // eslint-disable-next-line functional/immutable-data
