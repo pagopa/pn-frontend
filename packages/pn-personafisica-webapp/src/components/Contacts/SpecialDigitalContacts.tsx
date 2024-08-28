@@ -151,7 +151,12 @@ const SpecialDigitalContacts: React.FC<Props> = ({
           my: 2,
         }}
       />
-      <Stack direction={{ xs: 'column', sm: 'row' }} mt={{ xs: 1, sm: 0 }} alignItems="baseline">
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        mt={{ xs: 1, sm: 0 }}
+        alignItems="baseline"
+        data-testid={`special_${contactType}Contact`}
+      >
         <Typography variant="caption" lineHeight="1.125rem">
           {t(`special-contacts.${contactType}-add-more-caption`, { ns: 'recapiti' })}
         </Typography>

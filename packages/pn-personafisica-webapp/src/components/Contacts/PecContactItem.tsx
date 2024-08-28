@@ -192,11 +192,9 @@ const PecContactItem: React.FC = () => {
             <ButtonNaked
               color="primary"
               onClick={() => {
-                {
-                  setModalOpen(ModalType.CANCEL_VALIDATION);
-                  // eslint-disable-next-line functional/immutable-data
-                  currentAddress.current = { value: currentValue, sender: { senderId: 'default' } };
-                }
+                setModalOpen(ModalType.CANCEL_VALIDATION);
+                // eslint-disable-next-line functional/immutable-data
+                currentAddress.current = { value: currentValue, sender: { senderId: 'default' } };
               }}
               data-testid="cancelValidation"
             >
