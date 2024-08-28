@@ -1,10 +1,18 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
+import { getById, testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, screen, testStore, waitFor } from '../../../__test__/test-utils';
+import { parties } from '../../../__mocks__/ExternalRegistry.mock';
+import {
+  fireEvent,
+  render,
+  screen,
+  testStore,
+  waitFor,
+  within,
+} from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import { internationalPhonePrefix } from '../../../utility/contacts.utility';
@@ -19,14 +27,14 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-const defaultPhoneAddress = digitalCourtesyAddresses.find(
+const defaultAddress = digitalCourtesyAddresses.find(
   (addr) => addr.channelType === ChannelType.SMS && addr.senderId === 'default'
 );
 
 describe('test SmsContactItem', () => {
   let mock: MockAdapter;
-  const INPUT_VALID_PHONE = '3331234567';
   const INPUT_INVALID_PHONE = '33312345';
+  const VALID_PHONE = '3434343434';
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -42,7 +50,7 @@ describe('test SmsContactItem', () => {
 
   it('type in an invalid number', async () => {
     // render component
-    const { container } = render(<SmsContactItem value="" />);
+    const { container } = render(<SmsContactItem />);
     expect(container).toHaveTextContent('courtesy-contacts.sms-title');
     expect(container).toHaveTextContent('courtesy-contacts.sms-description');
     const form = container.querySelector('form');
@@ -66,15 +74,17 @@ describe('test SmsContactItem', () => {
   });
 
   it('type in an invalid number while in "edit mode"', async () => {
-    const { container, getByRole } = render(<SmsContactItem value={INPUT_VALID_PHONE} />);
+    const { container, getByRole } = render(<SmsContactItem />, {
+      preloadedState: { contactsState: { digitalAddresses: [defaultAddress] } },
+    });
     const form = container.querySelector('form');
     const phoneValue = getById(form!, 'default_sms-typography');
-    expect(phoneValue).toHaveTextContent(INPUT_VALID_PHONE);
+    expect(phoneValue).toHaveTextContent(defaultAddress?.value!);
     const editButton = getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = container.querySelector(`[name="default_sms"]`);
     const saveButton = getByRole('button', { name: 'button.salva' });
-    expect(input).toHaveValue(INPUT_VALID_PHONE);
+    expect(input).toHaveValue(defaultAddress?.value.replace(internationalPhonePrefix, ''));
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
     await waitFor(() => {
@@ -100,7 +110,7 @@ describe('test SmsContactItem', () => {
         verificationCode: '01234',
       })
       .reply(204);
-    const result = render(<SmsContactItem value="" />);
+    const result = render(<SmsContactItem />);
     // insert new phone
     const form = result.container.querySelector('form');
     const input = form!.querySelector(`[name="default_sms"]`);
@@ -139,22 +149,21 @@ describe('test SmsContactItem', () => {
         .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
     ).toStrictEqual([
       {
-        ...defaultPhoneAddress,
+        ...defaultAddress,
         senderName: undefined,
         value: internationalPhonePrefix + phoneValue,
       },
     ]);
-    // simulate rerendering due to redux changes
-    result.rerender(<SmsContactItem value={defaultPhoneAddress!.value} />);
+    // wait rerendering due to redux changes
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
     const smsValue = getById(form!, 'default_sms-typography');
     expect(smsValue).toBeInTheDocument();
     expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
-    const editButton = getById(form!, 'modifyContact-default');
+    const editButton = getById(form!, 'modifyContact-default_sms');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default');
+    const deleteButton = getById(form!, 'cancelContact-default_sms');
     expect(deleteButton).toBeInTheDocument();
   });
 
@@ -174,16 +183,18 @@ describe('test SmsContactItem', () => {
       })
       .reply(204);
     // render component
-    const result = render(<SmsContactItem value={defaultPhoneAddress!.value} />);
+    const result = render(<SmsContactItem />, {
+      preloadedState: { contactsState: { digitalAddresses: [defaultAddress] } },
+    });
     // edit value
     const form = result.container.querySelector('form');
     let smsValue = getById(form!, 'default_sms-typography');
-    expect(smsValue).toHaveTextContent(defaultPhoneAddress!.value);
+    expect(smsValue).toHaveTextContent(defaultAddress!.value);
     let editButton = result.getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = result.container.querySelector(`[name="default_sms"]`);
     const saveButton = result.getByRole('button', { name: 'button.salva' });
-    expect(input).toHaveValue(defaultPhoneAddress!.value.replace(internationalPhonePrefix, ''));
+    expect(input).toHaveValue(defaultAddress!.value.replace(internationalPhonePrefix, ''));
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: phoneValue } });
     await waitFor(() => {
@@ -219,35 +230,30 @@ describe('test SmsContactItem', () => {
         .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
     ).toStrictEqual([
       {
-        ...defaultPhoneAddress,
+        ...defaultAddress,
         senderName: undefined,
         value: internationalPhonePrefix + phoneValue,
       },
     ]);
-    // simulate rerendering due to redux changes
-    const updatedDigitalCourtesyAddresses = [
-      {
-        ...defaultPhoneAddress!,
-        value: internationalPhonePrefix + phoneValue,
-      },
-    ];
-    result.rerender(<SmsContactItem value={updatedDigitalCourtesyAddresses[0].value} />);
+    // wait rerendering due to redux changes
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
     smsValue = getById(form!, 'default_sms-typography');
     expect(smsValue).toBeInTheDocument();
     expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
-    editButton = getById(form!, 'modifyContact-default');
+    editButton = getById(form!, 'modifyContact-default_sms');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default');
+    const deleteButton = getById(form!, 'cancelContact-default_sms');
     expect(deleteButton).toBeInTheDocument();
   });
 
   it('delete phone number', async () => {
     mock.onDelete('/bff/v1/addresses/COURTESY/default/SMS').reply(204);
     // render component
-    const result = render(<SmsContactItem value={defaultPhoneAddress!.value} />);
+    const result = render(<SmsContactItem />, {
+      preloadedState: { contactsState: { digitalAddresses: [defaultAddress] } },
+    });
     const buttons = result.container.querySelectorAll('button');
     // click on cancel
     fireEvent.click(buttons[1]);
@@ -277,12 +283,220 @@ describe('test SmsContactItem', () => {
           )
       ).toStrictEqual([]);
     });
-    // simulate rerendering due to redux changes
-    result.rerender(<SmsContactItem value="" />);
+    // wait rerendering due to redux changes
     await waitFor(() => {
       const input = result.container.querySelector(`[name="default_sms"]`);
       expect(input).toBeInTheDocument();
       expect(result.container).not.toHaveTextContent('');
     });
+  });
+
+  it('add special contact', async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    mock
+      .onPost(`/bff/v1/addresses/COURTESY/${parties[1].id}/SMS`, {
+        value: internationalPhonePrefix + VALID_PHONE,
+      })
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
+    mock
+      .onPost(`/bff/v1/addresses/COURTESY/${parties[1].id}/SMS`, {
+        value: internationalPhonePrefix + VALID_PHONE,
+        verificationCode: '01234',
+      })
+      .reply(204);
+    // render component
+    const result = render(<SmsContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [defaultAddress],
+        },
+      },
+    });
+    const specialPecContact = result.getByTestId('special_smsContact');
+    expect(specialPecContact).toBeInTheDocument();
+    const button = within(specialPecContact).getByTestId('addMoreButton');
+    fireEvent.click(button);
+    const addSpecialContactDialog = await waitFor(() =>
+      result.getByTestId('addSpecialContactDialog')
+    );
+    expect(addSpecialContactDialog).toBeInTheDocument();
+    // fill input
+    const input = getById(addSpecialContactDialog, 's_value');
+    fireEvent.change(input, { target: { value: VALID_PHONE } });
+    await waitFor(() => {
+      expect(input).toHaveValue(VALID_PHONE);
+    });
+    // select sender
+    await testAutocomplete(addSpecialContactDialog, 'sender', parties, true, 1, true);
+    // confirm addition
+    const confirmButton = within(addSpecialContactDialog).getByText('button.conferma');
+    fireEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        value: internationalPhonePrefix + VALID_PHONE,
+      });
+    });
+    // inser otp and confirm
+    const dialog = await fillCodeDialog(result);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
+        value: internationalPhonePrefix + VALID_PHONE,
+        verificationCode: '01234',
+      });
+    });
+    // check that contact has been added
+    await waitFor(() => expect(dialog).not.toBeInTheDocument());
+    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual([
+      defaultAddress,
+      {
+        value: internationalPhonePrefix + VALID_PHONE,
+        addressType: AddressType.COURTESY,
+        channelType: ChannelType.SMS,
+        senderName: parties[1].name,
+        senderId: parties[1].id,
+      },
+    ]);
+    // wait rerendering due to redux changes
+    const specialContactForms = await waitFor(() => result.getAllByTestId(`special_sms`));
+    expect(specialContactForms).toHaveLength(1);
+    expect(specialContactForms[0]).toHaveTextContent(internationalPhonePrefix + VALID_PHONE);
+    const editButton = within(specialContactForms[0]).getByTestId(`modifyContact-special_sms`);
+    expect(editButton).toBeInTheDocument();
+    const deleteButton = within(specialContactForms[0]).getByTestId(`cancelContact-special_sms`);
+    expect(deleteButton).toBeInTheDocument();
+    expect(specialContactForms[0]).toHaveTextContent(parties[1].name);
+  });
+
+  it('edit special contact', async () => {
+    const VALID_MODIFIED_SMS = '3434343434';
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    mock
+      .onPost(`/bff/v1/addresses/COURTESY/${parties[1].id}/SMS`, {
+        value: internationalPhonePrefix + VALID_MODIFIED_SMS,
+      })
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
+    mock
+      .onPost(`/bff/v1/addresses/COURTESY/${parties[1].id}/SMS`, {
+        value: internationalPhonePrefix + VALID_MODIFIED_SMS,
+        verificationCode: '01234',
+      })
+      .reply(204);
+    // render component
+    const result = render(<SmsContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            defaultAddress,
+            {
+              value: internationalPhonePrefix + VALID_PHONE,
+              addressType: AddressType.COURTESY,
+              channelType: ChannelType.SMS,
+              senderName: parties[1].name,
+              senderId: parties[1].id,
+            },
+          ],
+        },
+      },
+    });
+    let specialContactForms = await waitFor(() => result.getAllByTestId(`special_sms`));
+    expect(specialContactForms).toHaveLength(1);
+    expect(specialContactForms[0]).toHaveTextContent(internationalPhonePrefix + VALID_PHONE);
+    const editButton = within(specialContactForms[0]).getByTestId(`modifyContact-special_sms`);
+    fireEvent.click(editButton);
+    const addSpecialContactDialog = await waitFor(() =>
+      result.getByTestId('addSpecialContactDialog')
+    );
+    expect(addSpecialContactDialog).toBeInTheDocument();
+    // fill input
+    const input = getById(addSpecialContactDialog, 's_value');
+    fireEvent.change(input, { target: { value: VALID_MODIFIED_SMS } });
+    await waitFor(() => {
+      expect(input).toHaveValue(VALID_MODIFIED_SMS);
+    });
+    // select sender
+    await testAutocomplete(addSpecialContactDialog, 'sender', parties, true, 0, true);
+    // confirm addition
+    const confirmButton = within(addSpecialContactDialog).getByText('button.conferma');
+    fireEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        value: internationalPhonePrefix + VALID_MODIFIED_SMS,
+      });
+    });
+    // inser otp and confirm
+    const dialog = await fillCodeDialog(result);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
+        value: internationalPhonePrefix + VALID_MODIFIED_SMS,
+        verificationCode: '01234',
+      });
+    });
+    // check that contact has been edited
+    await waitFor(() => expect(dialog).not.toBeInTheDocument());
+    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual([
+      defaultAddress,
+      {
+        value: internationalPhonePrefix + VALID_MODIFIED_SMS,
+        addressType: AddressType.COURTESY,
+        channelType: ChannelType.SMS,
+        senderName: parties[1].name,
+        senderId: parties[1].id,
+      },
+    ]);
+    // wait rerendering due to redux changes
+    specialContactForms = await waitFor(() => result.getAllByTestId(`special_sms`));
+    expect(specialContactForms[0]).toHaveTextContent(internationalPhonePrefix + VALID_MODIFIED_SMS);
+    expect(specialContactForms[0]).toHaveTextContent(parties[1].name);
+  });
+
+  it('remove special contact', async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    mock.onDelete(`/bff/v1/addresses/COURTESY/${parties[1].id}/SMS`).reply(204);
+    // render component
+    const result = render(<SmsContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            defaultAddress,
+            {
+              value: internationalPhonePrefix + VALID_PHONE,
+              addressType: AddressType.COURTESY,
+              channelType: ChannelType.SMS,
+              senderName: parties[1].name,
+              senderId: parties[1].id,
+            },
+          ],
+        },
+      },
+    });
+    let specialContactForms = await waitFor(() => result.getAllByTestId(`special_sms`));
+    expect(specialContactForms).toHaveLength(1);
+    expect(specialContactForms[0]).toHaveTextContent(VALID_PHONE);
+    const deleteButton = within(specialContactForms[0]).getByTestId(`cancelContact-special_sms`);
+    fireEvent.click(deleteButton);
+    const dialog = await waitFor(() => screen.getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+    const buttons = dialog.querySelectorAll('button');
+    // click on confirm
+    fireEvent.click(buttons[1]);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(1);
+    });
+    // check that contact has been removed
+    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual([defaultAddress]);
+    // wait rerendering due to redux changes
+    specialContactForms = await waitFor(() => result.queryAllByTestId(`special_sms`));
+    expect(specialContactForms).toHaveLength(0);
   });
 });

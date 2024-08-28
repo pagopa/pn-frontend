@@ -6,9 +6,7 @@ import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import LegalContactsList from '../components/Contacts/LegalContacts';
-import SpecialContacts from '../components/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
-import { AddressType, ChannelType } from '../models/contacts';
 import { PROFILE } from '../navigation/routes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { resetState } from '../redux/contact/reducers';
@@ -20,15 +18,7 @@ const Contacts = () => {
   const dispatch = useAppDispatch();
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const profileUrl = PROFILE(organization?.id, i18n.language);
-  const digitalAddresses = useAppSelector(
-    (state: RootState) => state.contactsState.digitalAddresses
-  );
-  const legalAddresses = digitalAddresses.filter(
-    (address) => address.addressType === AddressType.LEGAL
-  );
-  const courtesyAddresses = digitalAddresses.filter(
-    (address) => address.addressType === AddressType.COURTESY
-  );
+
   const [pageReady, setPageReady] = useState(false);
 
   const fetchAddresses = useCallback(() => {
@@ -80,12 +70,8 @@ const Contacts = () => {
           reloadAction={fetchAddresses}
         >
           <Stack direction="column" spacing={4} mt={4}>
-            <LegalContactsList legalAddresses={legalAddresses} />
-            <CourtesyContacts contacts={courtesyAddresses} />
-            {(legalAddresses.filter((addr) => addr.channelType !== ChannelType.SERCQ).length > 0 ||
-              courtesyAddresses.length > 0) && (
-              <SpecialContacts digitalAddresses={digitalAddresses} />
-            )}
+            <LegalContactsList />
+            <CourtesyContacts />
           </Stack>
         </ApiErrorWrapper>
       </Box>

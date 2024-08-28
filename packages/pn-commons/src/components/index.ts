@@ -69,7 +69,6 @@ import SectionHeading from './SectionHeading';
 import SessionModal from './SessionModal';
 import SideMenu from './SideMenu/SideMenu';
 import SnackBar from './SnackBar/SnackBar';
-import { SpecialContactsProvider, useSpecialContactsContext } from './SpecialContacts.context';
 import TabPanel from './TabPanel';
 import TitleBox from './TitleBox';
 
@@ -125,11 +124,9 @@ export {
   LoadingPage,
   Layout,
   SnackBar,
-  SpecialContactsProvider,
   StatusTooltip,
   TabPanel,
   TitleBox,
-  useSpecialContactsContext,
   CollapsedList,
   PnDialog,
   PnDialogContent,

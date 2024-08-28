@@ -2,20 +2,11 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Box, Divider, List, ListItem, Stack, Typography } from '@mui/material';
 
-import { ChannelType, DigitalAddress } from '../../models/contacts';
 import PecContactItem from './PecContactItem';
 import SercqSendContactItem from './SercqSendContactItem';
 
-type Props = {
-  legalAddresses: Array<DigitalAddress>;
-};
-
-const LegalContacts = ({ legalAddresses }: Props) => {
+const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-
-  const pecAddress = legalAddresses.find(
-    (a) => a.senderId === 'default' && a.channelType === ChannelType.PEC
-  );
 
   const legalContactList: Array<string> = t('legal-contacts.list', {
     returnObjects: true,
@@ -36,27 +27,11 @@ const LegalContacts = ({ legalAddresses }: Props) => {
         ))}
       </List>
       <Stack spacing={0} mt={3} data-testid="legalContacts">
-        <SercqSendContactItem
-          value={
-            legalAddresses.find(
-              (a) => a.senderId === 'default' && a.channelType === ChannelType.SERCQ
-            )?.value ?? ''
-          }
-        />
+        <SercqSendContactItem />
         <Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }}>
           {t('conjunctions.or')}
         </Divider>
-        <PecContactItem
-          value={
-            legalAddresses.find(
-              (a) => a.senderId === 'default' && a.channelType === ChannelType.PEC
-            )?.value ?? ''
-          }
-          blockDelete={legalAddresses.some(
-            (addr) => addr.channelType === ChannelType.PEC && addr.senderId !== 'default'
-          )}
-          verifyingAddress={pecAddress ? !pecAddress.pecValid : false}
-        />
+        <PecContactItem />
       </Stack>
     </Box>
   );

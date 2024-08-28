@@ -157,3 +157,15 @@ export function sanitizeString(srt: string): string {
   // Andrea Cimini, 2023.07.12
   return html.body.textContent ?? '';
 }
+
+/**
+ * Convert string in base64
+ * @param str input string
+ * @returns base64 string
+ */
+export function fromStringToBase64(str: string): string {
+  if (str.length === 0) {
+    return '';
+  }
+  return window.btoa(str);
+}
