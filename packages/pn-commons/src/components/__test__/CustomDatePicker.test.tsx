@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '../../test-utils';
+import { createMatchMedia, fireEvent, render, screen } from '../../test-utils';
 import CustomDatePicker from '../CustomDatePicker';
 
 const RenderDatePicker = ({ language = 'it' }: { language?: string }) => (
@@ -19,6 +19,16 @@ const RenderDatePicker = ({ language = 'it' }: { language?: string }) => (
 
 describe('test CustomDatePicker component', () => {
   it('renders the component', () => {
+    const { getByPlaceholderText, container } = render(<RenderDatePicker />);
+    const input = getByPlaceholderText(/datepickerinput/i);
+    expect(container).toHaveTextContent(/datepicker/i);
+    expect(input).toBeInTheDocument();
+  });
+});
+
+describe('test CustomDatePicker component in mobile', () => {
+  it('renders the component with mobile window', () => {
+    window.matchMedia = createMatchMedia(800);
     const { getByPlaceholderText, container } = render(<RenderDatePicker />);
     const input = getByPlaceholderText(/datepickerinput/i);
     expect(container).toHaveTextContent(/datepicker/i);
