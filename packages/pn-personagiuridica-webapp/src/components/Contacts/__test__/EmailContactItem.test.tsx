@@ -1,10 +1,18 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
+import { getById, testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, screen, testStore, waitFor } from '../../../__test__/test-utils';
+import { parties } from '../../../__mocks__/ExternalRegistry.mock';
+import {
+  fireEvent,
+  render,
+  screen,
+  testStore,
+  waitFor,
+  within,
+} from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import EmailContactItem from '../EmailContactItem';
@@ -18,13 +26,14 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-const defaultEmailAddress = digitalCourtesyAddresses.find(
+const defaultAddress = digitalCourtesyAddresses.find(
   (addr) => addr.channelType === ChannelType.EMAIL && addr.senderId === 'default'
 );
 
 describe('testing EmailContactItem', () => {
   let mock: MockAdapter;
   const INVALID_EMAIL = 'testpagopa.it';
+  const VALID_EMAIL = 'mail@valid.it';
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -63,18 +72,18 @@ describe('testing EmailContactItem', () => {
     const { container, getByRole } = render(<EmailContactItem />, {
       preloadedState: {
         contactsState: {
-          digitalAddresses: [defaultEmailAddress],
+          digitalAddresses: [defaultAddress],
         },
       },
     });
     const form = container.querySelector('form');
     const phoneValue = getById(form!, 'default_email-typography');
-    expect(phoneValue).toHaveTextContent(defaultEmailAddress?.value!);
+    expect(phoneValue).toHaveTextContent(defaultAddress?.value!);
     const editButton = getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = container.querySelector(`[name="default_email"]`);
     const saveButton = getByRole('button', { name: 'button.salva' });
-    expect(input).toHaveValue(defaultEmailAddress?.value!);
+    expect(input).toHaveValue(defaultAddress?.value!);
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
     await waitFor(() => {
@@ -137,7 +146,7 @@ describe('testing EmailContactItem', () => {
         )
     ).toStrictEqual([
       {
-        ...defaultEmailAddress,
+        ...defaultAddress,
         senderName: undefined,
         value: mailValue,
       },
@@ -149,9 +158,9 @@ describe('testing EmailContactItem', () => {
     const emailValue = getById(form!, 'default_email-typography');
     expect(emailValue).toBeInTheDocument();
     expect(emailValue).toHaveTextContent(mailValue);
-    const editButton = getById(form!, 'modifyContact-default');
+    const editButton = getById(form!, 'modifyContact-default_email');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default');
+    const deleteButton = getById(form!, 'cancelContact-default_email');
     expect(deleteButton).toBeInTheDocument();
   });
 
@@ -174,19 +183,19 @@ describe('testing EmailContactItem', () => {
     const result = render(<EmailContactItem />, {
       preloadedState: {
         contactsState: {
-          digitalAddresses: [defaultEmailAddress],
+          digitalAddresses: [defaultAddress],
         },
       },
     });
     // edit value
     const form = result.container.querySelector('form');
     let mailValue = getById(form!, 'default_email-typography');
-    expect(mailValue).toHaveTextContent(defaultEmailAddress!.value);
+    expect(mailValue).toHaveTextContent(defaultAddress!.value);
     let editButton = result.getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = result.container.querySelector(`[name="default_email"]`);
     const saveButton = result.getByRole('button', { name: 'button.salva' });
-    expect(input).toHaveValue(defaultEmailAddress!.value);
+    expect(input).toHaveValue(defaultAddress!.value);
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: emailValue } });
     await waitFor(() => expect(input!).toHaveValue(emailValue));
@@ -220,7 +229,7 @@ describe('testing EmailContactItem', () => {
         .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
     ).toStrictEqual([
       {
-        ...defaultEmailAddress,
+        ...defaultAddress,
         senderName: undefined,
         value: emailValue,
       },
@@ -232,9 +241,9 @@ describe('testing EmailContactItem', () => {
     mailValue = getById(form!, 'default_email-typography');
     expect(mailValue).toBeInTheDocument();
     expect(mailValue).toHaveTextContent(emailValue);
-    editButton = getById(form!, 'modifyContact-default');
+    editButton = getById(form!, 'modifyContact-default_email');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default');
+    const deleteButton = getById(form!, 'cancelContact-default_email');
     expect(deleteButton).toBeInTheDocument();
   });
 
@@ -243,7 +252,7 @@ describe('testing EmailContactItem', () => {
     const result = render(<EmailContactItem />, {
       preloadedState: {
         contactsState: {
-          digitalAddresses: [defaultEmailAddress],
+          digitalAddresses: [defaultAddress],
         },
       },
     });
@@ -282,5 +291,214 @@ describe('testing EmailContactItem', () => {
       expect(input).toBeInTheDocument();
       expect(result.container).not.toHaveTextContent('');
     });
+  });
+
+  it('add special contact', async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    mock
+      .onPost(`/bff/v1/addresses/COURTESY/${parties[1].id}/EMAIL`, {
+        value: VALID_EMAIL,
+      })
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
+    mock
+      .onPost(`/bff/v1/addresses/COURTESY/${parties[1].id}/EMAIL`, {
+        value: VALID_EMAIL,
+        verificationCode: '01234',
+      })
+      .reply(204);
+    // render component
+    const result = render(<EmailContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [defaultAddress],
+        },
+      },
+    });
+    const specialPecContact = result.getByTestId('special_emailContact');
+    expect(specialPecContact).toBeInTheDocument();
+    const button = within(specialPecContact).getByTestId('addMoreButton');
+    fireEvent.click(button);
+    const addSpecialContactDialog = await waitFor(() =>
+      result.getByTestId('addSpecialContactDialog')
+    );
+    expect(addSpecialContactDialog).toBeInTheDocument();
+    // fill input
+    const input = getById(addSpecialContactDialog, 's_value');
+    fireEvent.change(input, { target: { value: VALID_EMAIL } });
+    await waitFor(() => {
+      expect(input).toHaveValue(VALID_EMAIL);
+    });
+    // select sender
+    await testAutocomplete(addSpecialContactDialog, 'sender', parties, true, 1, true);
+    // confirm addition
+    const confirmButton = within(addSpecialContactDialog).getByText('button.conferma');
+    fireEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        value: VALID_EMAIL,
+      });
+    });
+    // inser otp and confirm
+    const dialog = await fillCodeDialog(result);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
+        value: VALID_EMAIL,
+        verificationCode: '01234',
+      });
+    });
+    // check that contact has been added
+    await waitFor(() => expect(dialog).not.toBeInTheDocument());
+    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual([
+      defaultAddress,
+      {
+        value: VALID_EMAIL,
+        addressType: AddressType.COURTESY,
+        channelType: ChannelType.EMAIL,
+        senderName: parties[1].name,
+        senderId: parties[1].id,
+      },
+    ]);
+    // wait rerendering due to redux changes
+    const specialContactForms = await waitFor(() => result.getAllByTestId(`special_email`));
+    expect(specialContactForms).toHaveLength(1);
+    expect(specialContactForms[0]).toHaveTextContent(VALID_EMAIL);
+    const editButton = within(specialContactForms[0]).getByTestId(`modifyContact-special_email`);
+    expect(editButton).toBeInTheDocument();
+    const deleteButton = within(specialContactForms[0]).getByTestId(`cancelContact-special_email`);
+    expect(deleteButton).toBeInTheDocument();
+    expect(specialContactForms[0]).toHaveTextContent(parties[1].name);
+  });
+
+  it('edit special contact', async () => {
+    const VALID_MODIFIED_EMAIL = 'mail-modified@valid.it';
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    mock
+      .onPost(`/bff/v1/addresses/COURTESY/${parties[1].id}/EMAIL`, {
+        value: VALID_MODIFIED_EMAIL,
+      })
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
+    mock
+      .onPost(`/bff/v1/addresses/COURTESY/${parties[1].id}/EMAIL`, {
+        value: VALID_MODIFIED_EMAIL,
+        verificationCode: '01234',
+      })
+      .reply(204);
+    // render component
+    const result = render(<EmailContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            defaultAddress,
+            {
+              value: VALID_EMAIL,
+              addressType: AddressType.COURTESY,
+              channelType: ChannelType.EMAIL,
+              senderName: parties[1].name,
+              senderId: parties[1].id,
+            },
+          ],
+        },
+      },
+    });
+    let specialContactForms = await waitFor(() => result.getAllByTestId(`special_email`));
+    expect(specialContactForms).toHaveLength(1);
+    expect(specialContactForms[0]).toHaveTextContent(VALID_EMAIL);
+    const editButton = within(specialContactForms[0]).getByTestId(`modifyContact-special_email`);
+    fireEvent.click(editButton);
+    const addSpecialContactDialog = await waitFor(() =>
+      result.getByTestId('addSpecialContactDialog')
+    );
+    expect(addSpecialContactDialog).toBeInTheDocument();
+    // fill input
+    const input = getById(addSpecialContactDialog, 's_value');
+    fireEvent.change(input, { target: { value: VALID_MODIFIED_EMAIL } });
+    await waitFor(() => {
+      expect(input).toHaveValue(VALID_MODIFIED_EMAIL);
+    });
+    // select sender
+    await testAutocomplete(addSpecialContactDialog, 'sender', parties, true, 0, true);
+    // confirm addition
+    const confirmButton = within(addSpecialContactDialog).getByText('button.conferma');
+    fireEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        value: VALID_MODIFIED_EMAIL,
+      });
+    });
+    // inser otp and confirm
+    const dialog = await fillCodeDialog(result);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
+        value: VALID_MODIFIED_EMAIL,
+        verificationCode: '01234',
+      });
+    });
+    // check that contact has been edited
+    await waitFor(() => expect(dialog).not.toBeInTheDocument());
+    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual([
+      defaultAddress,
+      {
+        value: VALID_MODIFIED_EMAIL,
+        addressType: AddressType.COURTESY,
+        channelType: ChannelType.EMAIL,
+        senderName: parties[1].name,
+        senderId: parties[1].id,
+      },
+    ]);
+    // wait rerendering due to redux changes
+    specialContactForms = await waitFor(() => result.getAllByTestId(`special_email`));
+    expect(specialContactForms[0]).toHaveTextContent(VALID_MODIFIED_EMAIL);
+    expect(specialContactForms[0]).toHaveTextContent(parties[1].name);
+  });
+
+  it('remove special contact', async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    mock.onDelete(`/bff/v1/addresses/COURTESY/${parties[1].id}/EMAIL`).reply(204);
+    // render component
+    const result = render(<EmailContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            defaultAddress,
+            {
+              value: VALID_EMAIL,
+              addressType: AddressType.COURTESY,
+              channelType: ChannelType.EMAIL,
+              senderName: parties[1].name,
+              senderId: parties[1].id,
+            },
+          ],
+        },
+      },
+    });
+    let specialContactForms = await waitFor(() => result.getAllByTestId(`special_email`));
+    expect(specialContactForms).toHaveLength(1);
+    expect(specialContactForms[0]).toHaveTextContent(VALID_EMAIL);
+    const deleteButton = within(specialContactForms[0]).getByTestId(`cancelContact-special_email`);
+    fireEvent.click(deleteButton);
+    const dialog = await waitFor(() => screen.getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+    const buttons = dialog.querySelectorAll('button');
+    // click on confirm
+    fireEvent.click(buttons[1]);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(1);
+    });
+    // check that contact has been removed
+    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual([defaultAddress]);
+    // wait rerendering due to redux changes
+    specialContactForms = await waitFor(() => result.queryAllByTestId(`special_email`));
+    expect(specialContactForms).toHaveLength(0);
   });
 });

@@ -59,11 +59,6 @@
     "block-remove-sms-message": "Če želite to narediti, morate najprej izbrisati vse telefonske številke, ki ste jih navedli v razdelku \"Drugi kontaktni podatki\"."
   },
   "special-contacts": {
-    "subtitle": "Če bi želeli, da so obvestila nekaterih organizacij naslovljena na različne kontaktne podatke, jih lahko tukaj označite in zamenjate glavne.",
-    "required-fields": "*Obvezna polja",
-    "associated": "Že povezani",
-    "sender": "Organizacija",
-    "address-type": "Vrsta dostave",
     "pec": "Potrjen e-poštni naslov",
     "sms": "Mobilni telefon",
     "email": "Naslov elektronske pošte",

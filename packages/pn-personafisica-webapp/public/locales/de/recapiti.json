@@ -70,11 +70,6 @@
     "block-remove-sms-message": "Dazu müssen zunächst alle Telefonnummern unter „Weitere Anschriften“ gelöscht werden."
   },
   "special-contacts": {
-    "subtitle": "Wenn der Bescheid bestimmter Körperschaften an verschiedene Anschriften gesendet werden soll, können diese anstelle der Hauptanschriften angegeben werden.",
-    "required-fields": "* Pflichtfelder",
-    "associated": "Bereits zugeordnet",
-    "sender": "Körperschaft",
-    "address-type": "Anschrift",
     "pec": "PEC-Adresse",
     "sms": "Handy",
     "email": "E-Mail-Adresse",

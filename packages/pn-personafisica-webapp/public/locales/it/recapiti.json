@@ -109,12 +109,7 @@
     "block-remove-sms-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Altri recapiti”."
   },
   "special-contacts": {
-    "subtitle": "Se vuoi che le notifiche di alcuni enti siano indirizzate a dei recapiti diversi puoi indicarli qui, in sostituzione di quelli principali.",
-    "required-fields": "*Campi obbligatori",
-    "associated": "Già associati",
-    "sender": "Ente",
     "add-sender": "Aggiungi ente",
-    "address-type": "Recapito",
     "pec": "Indirizzo PEC",
     "sms": "Numero di cellulare",
     "email": "Indirizzo email",

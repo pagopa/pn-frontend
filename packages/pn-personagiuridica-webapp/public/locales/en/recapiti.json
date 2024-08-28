@@ -59,11 +59,6 @@
     "block-remove-sms-message": "In order to do this, you must first delete all the phone numbers you have indicated under \"Other contact details\"."
   },
   "special-contacts": {
-    "subtitle": "If you want the notifications from certain organisations to be sent to different addresses, you can indicate them here, replacing the main ones.",
-    "required-fields": "*Required fields",
-    "associated": "Already linked",
-    "sender": "Organisation",
-    "address-type": "Contact detail type",
     "pec": "PEC address",
     "sms": "Mobile",
     "email": "Email address",

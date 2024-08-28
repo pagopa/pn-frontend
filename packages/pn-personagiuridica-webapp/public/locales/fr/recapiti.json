@@ -59,11 +59,6 @@
     "block-remove-sms-message": "Pour ce faire, vous devez d’abord supprimer tous les numéros de téléphone que vous avez indiqués sous « Autres coordonnées »."
   },
   "special-contacts": {
-    "subtitle": "Si vous souhaitez que les notifications de certains organismes soient adressées à différentes adresses, vous pouvez les indiquer ici, en remplacement des principales.",
-    "required-fields": "*Champs obligatoires",
-    "associated": "Déjà associés",
-    "sender": "Organisme",
-    "address-type": "Type de livraison",
     "pec": "Adresse PEC",
     "sms": "Portable",
     "email": "Adresse e-mail",

@@ -79,7 +79,7 @@ describe('testing EmailContactItem', () => {
     fireEvent.click(editButton);
     const input = container.querySelector(`[name="default_email"]`);
     const saveButton = getByRole('button', { name: 'button.salva' });
-    expect(input).toHaveValue(defaultAddress?.value!);
+    expect(input).toHaveValue(defaultAddress?.value);
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
     await waitFor(() => {

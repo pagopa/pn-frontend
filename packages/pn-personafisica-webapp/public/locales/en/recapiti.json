@@ -70,11 +70,6 @@
     "block-remove-sms-message": "In order to do this, you must first delete all the phone numbers you have indicated under \"Other contact details\"."
   },
   "special-contacts": {
-    "subtitle": "If you want the notifications of some organisations to be addressed to different addresses, you can indicate them here, replacing the main ones.",
-    "required-fields": "*Required fields",
-    "associated": "Already associated",
-    "sender": "Organisation",
-    "address-type": "Delivery",
     "pec": "PEC address",
     "sms": "Mobile",
     "email": "Email address",

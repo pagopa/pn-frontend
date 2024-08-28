@@ -1,33 +1,19 @@
-import { useFormik } from 'formik';
-import { ChangeEvent, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as yup from 'yup';
 
-import { InputAdornment } from '@mui/material';
-import { DisclaimerModal, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
+import { DisclaimerModal, appStateActions } from '@pagopa-pn/pn-commons';
 
-import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams, Sender } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import {
-  contactAlreadyExists,
-  internationalPhonePrefix,
-  phoneValidationSchema,
-} from '../../utility/contacts.utility';
+import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
+import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
-import EditDigitalContact from './EditDigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
-import InsertDigitalContact from './InsertDigitalContact';
-
-interface Props {
-  senderId?: string;
-  senderName?: string;
-  blockEdit?: boolean;
-  onEdit?: (editFlag: boolean) => void;
-}
+import SpecialDigitalContacts from './SpecialDigitalContacts';
 
 enum ModalType {
   EXISTING = 'existing',
@@ -36,68 +22,58 @@ enum ModalType {
   DELETE = 'delete',
 }
 
-const SmsContactItem: React.FC<Props> = ({
-  senderId = 'default',
-  senderName,
-  blockEdit,
-  onEdit,
-}) => {
+const SmsContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultSMSAddress, specialSMSAddresses, addresses } = useAppSelector(
+  const { defaultSMSAddress, specialSMSAddresses, addresses, legalAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
-  const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
+  const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
+    toggleEdit: () => {},
+    resetForm: () => Promise.resolve(),
+  });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  // currentAddress is needed to store what address we are creating/editing/removing
+  // because this variable isn't been used to render, we can use useRef
+  const currentAddress = useRef<{ value: string; sender: Sender }>({
+    value: '',
+    sender: { senderId: 'dafault' },
+  });
   const dispatch = useAppDispatch();
-  const isMobile = useIsMobile();
 
-  const value = defaultSMSAddress?.value ?? '';
-  // value contains the prefix
-  const contactValue = value.replace(internationalPhonePrefix, '');
-  const blockDelete = specialSMSAddresses.length > 0;
+  const currentValue = defaultSMSAddress?.value ?? '';
+  const blockDelete =
+    specialSMSAddresses.length > 0 && currentAddress.current.sender.senderId === 'default';
 
-  const validationSchema = yup.object().shape({
-    [`${senderId}_sms`]: phoneValidationSchema(t),
-  });
-
-  const initialValues = {
-    [`${senderId}_sms`]: contactValue ?? '',
-  };
-
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    enableReinitialize: true,
-    validateOnMount: true,
-    onSubmit: () => {
-      // first check if contact already exists
-      if (
-        contactAlreadyExists(addresses, formik.values[`${senderId}_sms`], senderId, ChannelType.SMS)
-      ) {
-        setModalOpen(ModalType.EXISTING);
-        return;
-      }
-      // disclaimer modal must be opened only when we are adding a default address
-      if (senderId === 'default') {
-        setModalOpen(ModalType.DISCLAIMER);
-        return;
-      }
-      handleCodeVerification();
-    },
-  });
-
-  const handleChangeTouched = async (e: ChangeEvent) => {
-    formik.handleChange(e);
-    await formik.setFieldTouched(e.target.id, true, false);
+  const handleSubmit = (value: string, sender: Sender = { senderId: 'default' }) => {
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = { value, sender };
+    // first check if contact already exists
+    if (
+      contactAlreadyExists(
+        addresses,
+        internationalPhonePrefix + value,
+        sender.senderId,
+        ChannelType.SMS
+      )
+    ) {
+      setModalOpen(ModalType.EXISTING);
+      return;
+    }
+    // disclaimer modal must be opened only when we are adding a default address and no legal address has been added
+    if (sender.senderId === 'default' && legalAddresses.length === 0) {
+      setModalOpen(ModalType.DISCLAIMER);
+      return;
+    }
+    handleCodeVerification();
   };
 
   const handleCodeVerification = (verificationCode?: string) => {
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
-      senderId,
-      senderName,
+      senderId: currentAddress.current.sender.senderId,
+      senderName: currentAddress.current.sender.senderName,
       channelType: ChannelType.SMS,
-      value: internationalPhonePrefix + formik.values[`${senderId}_sms`],
+      value: internationalPhonePrefix + currentAddress.current.value,
       code: verificationCode,
     };
 
@@ -122,8 +98,8 @@ const SmsContactItem: React.FC<Props> = ({
           })
         );
         setModalOpen(null);
-        if (value) {
-          digitalElemRef.current.toggleEdit();
+        if (currentValue && currentAddress.current.sender.senderId === 'default') {
+          digitalContactRef.current.toggleEdit();
         }
       })
       .catch(() => {});
@@ -131,11 +107,10 @@ const SmsContactItem: React.FC<Props> = ({
 
   const handleCancelCode = async () => {
     setModalOpen(null);
-    if (value) {
-      digitalElemRef.current.toggleEdit();
+    if (currentValue && currentAddress.current.sender.senderId === 'default') {
+      digitalContactRef.current.toggleEdit();
     }
-    await formik.setFieldTouched(`${senderId}_sms`, false, false);
-    await formik.setFieldValue(`${senderId}_sms`, initialValues[`${senderId}_sms`], true);
+    await digitalContactRef.current.resetForm();
   };
 
   const deleteConfirmHandler = () => {
@@ -143,7 +118,7 @@ const SmsContactItem: React.FC<Props> = ({
     void dispatch(
       deleteAddress({
         addressType: AddressType.COURTESY,
-        senderId,
+        senderId: currentAddress.current.sender.senderId,
         channelType: ChannelType.SMS,
       })
     );
@@ -162,59 +137,41 @@ const SmsContactItem: React.FC<Props> = ({
       title={t('courtesy-contacts.sms-title', { ns: 'recapiti' })}
       subtitle={t('courtesy-contacts.sms-description', { ns: 'recapiti' })}
     >
-      <form
-        onSubmit={formik.handleSubmit}
-        data-testid={`${senderId}_smsContact`}
-        style={{ width: isMobile ? '100%' : '50%' }}
-      >
-        {value && (
-          <EditDigitalContact
-            senderId={senderId}
-            ref={digitalElemRef}
-            inputProps={{
-              id: `${senderId}_sms`,
-              name: `${senderId}_sms`,
-              label: t(`courtesy-contacts.link-sms-placeholder`, {
-                ns: 'recapiti',
-              }),
-              value: formik.values[`${senderId}_sms`],
-              onChange: (e) => void handleChangeTouched(e),
-              error: formik.touched[`${senderId}_sms`] && Boolean(formik.errors[`${senderId}_sms`]),
-              helperText: formik.touched[`${senderId}_sms`] && formik.errors[`${senderId}_sms`],
-              prefix: internationalPhonePrefix,
-            }}
-            saveDisabled={!formik.isValid}
-            editDisabled={blockEdit}
-            onDelete={() => setModalOpen(ModalType.DELETE)}
-            onEditCancel={() => formik.resetForm({ values: initialValues })}
-            onEdit={onEdit}
-          />
-        )}
-        {!value && (
-          <InsertDigitalContact
-            label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
-            inputProps={{
-              id: `${senderId}_sms`,
-              name: `${senderId}_sms`,
-              placeholder: t(`courtesy-contacts.link-sms-placeholder`, { ns: 'recapiti' }),
-              value: formik.values[`${senderId}_sms`],
-              onChange: (e) => void handleChangeTouched(e),
-              error: formik.touched[`${senderId}_sms`] && Boolean(formik.errors[`${senderId}_sms`]),
-              helperText: formik.touched[`${senderId}_sms`] && formik.errors[`${senderId}_sms`],
-              InputProps: {
-                startAdornment: (
-                  <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
-                ),
-              },
-            }}
-            insertDisabled={!formik.isValid}
-            buttonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
-          />
-        )}
-      </form>
+      <DefaultDigitalContact
+        label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
+        value={currentValue}
+        channelType={ChannelType.SMS}
+        ref={digitalContactRef}
+        inputProps={{
+          label: t(`courtesy-contacts.link-sms-placeholder`, {
+            ns: 'recapiti',
+          }),
+          prefix: internationalPhonePrefix,
+        }}
+        insertButtonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
+        onSubmit={handleSubmit}
+        onDelete={() => {
+          setModalOpen(ModalType.DELETE);
+          // eslint-disable-next-line functional/immutable-data
+          currentAddress.current = { value: currentValue, sender: { senderId: 'default' } };
+        }}
+      />
+      {currentValue && (
+        <SpecialDigitalContacts
+          prefix={internationalPhonePrefix}
+          digitalAddresses={specialSMSAddresses}
+          channelType={ChannelType.SMS}
+          onConfirm={(value: string, sender: Sender) => handleSubmit(value, sender)}
+          onDelete={(value, sender) => {
+            setModalOpen(ModalType.DELETE);
+            // eslint-disable-next-line functional/immutable-data
+            currentAddress.current = { value, sender };
+          }}
+        />
+      )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
-        value={formik.values[`${senderId}_sms`]}
+        value={currentAddress.current.value}
         handleDiscard={handleCancelCode}
         handleConfirm={() => handleCodeVerification()}
       />
@@ -230,7 +187,7 @@ const SmsContactItem: React.FC<Props> = ({
         content={t(`alert-dialog-sms`, { ns: 'recapiti' })}
       />
       <ContactCodeDialog
-        value={formik.values[senderId + '_sms']}
+        value={currentAddress.current.value}
         addressType={AddressType.COURTESY}
         channelType={ChannelType.SMS}
         open={modalOpen === ModalType.CODE}
@@ -243,7 +200,7 @@ const SmsContactItem: React.FC<Props> = ({
           ns: 'recapiti',
         })}
         removeModalBody={t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-sms-message`, {
-          value: formik.values[`${senderId}_sms`],
+          value: currentAddress.current.value,
           ns: 'recapiti',
         })}
         handleModalClose={() => setModalOpen(null)}

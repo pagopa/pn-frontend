@@ -155,7 +155,7 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to update the digital address with courtesy value (email verified)', async () => {
     const emailContact = digitalCourtesyAddresses.find(
-      (el) => el.channelType === ChannelType.EMAIL
+      (el) => el.channelType === ChannelType.EMAIL && el.senderId === 'default'
     );
     const updatedDigitalAddress = { ...emailContact!, value: 'mario.rossi@mail.it' };
     mock

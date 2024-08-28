@@ -196,7 +196,7 @@ const SmsContactItem: React.FC = () => {
       )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
-        value={currentAddress.current.value ?? ''}
+        value={currentAddress.current.value}
         handleDiscard={handleCancelCode}
         handleConfirm={() => handleCodeVerification()}
       />

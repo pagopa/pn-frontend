@@ -1,33 +1,24 @@
-import { useFormik } from 'formik';
-import { ChangeEvent, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as yup from 'yup';
 
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import { Stack, Typography } from '@mui/material';
-import { appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
+import { appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams, Sender } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { contactAlreadyExists, pecValidationSchema } from '../../utility/contacts.utility';
+import { contactAlreadyExists } from '../../utility/contacts.utility';
 import CancelVerificationModal from './CancelVerificationModal';
 import ContactCodeDialog from './ContactCodeDialog';
+import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
-import EditDigitalContact from './EditDigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
-import InsertDigitalContact from './InsertDigitalContact';
 import PecVerificationDialog from './PecVerificationDialog';
-
-type Props = {
-  senderId?: string;
-  senderName?: string;
-  blockEdit?: boolean;
-  onEdit?: (editFlag: boolean) => void;
-};
+import SpecialDigitalContacts from './SpecialDigitalContacts';
 
 enum ModalType {
   EXISTING = 'existing',
@@ -37,63 +28,47 @@ enum ModalType {
   CODE = 'code',
 }
 
-const PecContactItem: React.FC<Props> = ({
-  senderId = 'default',
-  senderName,
-  blockEdit,
-  onEdit,
-}) => {
+const PecContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { defaultPECAddress, specialPECAddresses, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
-  const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
+  const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
+    toggleEdit: () => {},
+    resetForm: () => Promise.resolve(),
+  });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  // currentAddress is needed to store what address we are creating/editing/removing
+  // because this variable isn't been used to render, we can use useRef
+  const currentAddress = useRef<{ value: string; sender: Sender }>({
+    value: '',
+    sender: { senderId: 'dafault' },
+  });
   const dispatch = useAppDispatch();
-  const isMobile = useIsMobile();
 
-  const value = defaultPECAddress?.value ?? '';
-  const blockDelete = specialPECAddresses.length > 0;
+  const currentValue = defaultPECAddress?.value ?? '';
+  const blockDelete =
+    specialPECAddresses.length > 0 && currentAddress.current.sender.senderId === 'default';
   const verifyingAddress = defaultPECAddress ? !defaultPECAddress.pecValid : false;
 
-  const validationSchema = yup.object({
-    [`${senderId}_pec`]: pecValidationSchema(t),
-  });
-
-  const initialValues = {
-    [`${senderId}_pec`]: value,
-  };
-
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    validateOnMount: true,
-    enableReinitialize: true,
-    /** onSubmit validate */
-    onSubmit: () => {
-      // first check if contact already exists
-      if (
-        contactAlreadyExists(addresses, formik.values[`${senderId}_pec`], senderId, ChannelType.PEC)
-      ) {
-        setModalOpen(ModalType.EXISTING);
-        return;
-      }
-      handleCodeVerification();
-    },
-  });
-
-  const handleChangeTouched = async (e: ChangeEvent) => {
-    formik.handleChange(e);
-    await formik.setFieldTouched(e.target.id, true, false);
+  const handleSubmit = (value: string, sender: Sender = { senderId: 'default' }) => {
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = { value, sender };
+    // first check if contact already exists
+    if (contactAlreadyExists(addresses, value, sender.senderId, ChannelType.PEC)) {
+      setModalOpen(ModalType.EXISTING);
+      return;
+    }
+    handleCodeVerification();
   };
 
   const handleCodeVerification = (verificationCode?: string) => {
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.LEGAL,
-      senderId,
-      senderName,
+      senderId: currentAddress.current.sender.senderId,
+      senderName: currentAddress.current.sender.senderName,
       channelType: ChannelType.PEC,
-      value: formik.values[`${senderId}_pec`],
+      value: currentAddress.current.value,
       code: verificationCode,
     };
 
@@ -117,8 +92,8 @@ const PecContactItem: React.FC<Props> = ({
             })
           );
           setModalOpen(null);
-          if (value) {
-            digitalElemRef.current.toggleEdit();
+          if (currentValue && currentAddress.current.sender.senderId === 'default') {
+            digitalContactRef.current.toggleEdit();
           }
           return;
         }
@@ -131,11 +106,10 @@ const PecContactItem: React.FC<Props> = ({
 
   const handleCancelCode = async () => {
     setModalOpen(null);
-    if (value) {
-      digitalElemRef.current.toggleEdit();
+    if (currentValue && currentAddress.current.sender.senderId === 'default') {
+      digitalContactRef.current.toggleEdit();
     }
-    await formik.setFieldTouched(`${senderId}_pec`, false, false);
-    await formik.setFieldValue(`${senderId}_pec`, initialValues[`${senderId}_pec`], true);
+    await digitalContactRef.current.resetForm();
   };
 
   const deleteConfirmHandler = () => {
@@ -143,7 +117,7 @@ const PecContactItem: React.FC<Props> = ({
     void dispatch(
       deleteAddress({
         addressType: AddressType.LEGAL,
-        senderId,
+        senderId: currentAddress.current.sender.senderId,
         channelType: ChannelType.PEC,
       })
     );
@@ -154,78 +128,64 @@ const PecContactItem: React.FC<Props> = ({
       title={t('legal-contacts.pec-title', { ns: 'recapiti' })}
       subtitle={t('legal-contacts.pec-description', { ns: 'recapiti' })}
     >
-      <form
-        onSubmit={formik.handleSubmit}
-        data-testid={`${senderId}_pecContact`}
-        style={{ width: isMobile ? '100%' : '50%' }}
-      >
-        {value && (
-          <EditDigitalContact
-            senderId={senderId}
-            ref={digitalElemRef}
-            inputProps={{
-              id: `${senderId}_pec`,
-              name: `${senderId}_pec`,
-              label: t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' }),
-              value: formik.values[`${senderId}_pec`],
-              onChange: (e) => void handleChangeTouched(e),
-              error: formik.touched[`${senderId}_pec`] && Boolean(formik.errors[`${senderId}_pec`]),
-              helperText: formik.touched[`${senderId}_pec`] && formik.errors[`${senderId}_pec`],
-            }}
-            saveDisabled={!formik.isValid}
-            editDisabled={blockEdit}
-            onDelete={() => setModalOpen(ModalType.DELETE)}
-            onEditCancel={() => formik.resetForm({ values: initialValues })}
-            onEdit={onEdit}
-          />
-        )}
-        {verifyingAddress && (
-          <>
-            {senderId === 'default' && (
-              <Typography mb={1} sx={{ fontWeight: 'bold' }} mt={3}>
-                {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
-              </Typography>
-            )}
-            <Stack direction="row" spacing={1}>
-              <WatchLaterIcon fontSize="small" />
-              <Typography id="validationPecProgress" fontWeight="bold" variant="body2">
-                {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
-              </Typography>
-              <ButtonNaked
-                color="primary"
-                onClick={() => setModalOpen(ModalType.CANCEL_VALIDATION)}
-                data-testid="cancelValidation"
-              >
-                {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
-              </ButtonNaked>
-            </Stack>
-          </>
-        )}
-        {!value && !verifyingAddress && (
-          <InsertDigitalContact
-            label={t('legal-contacts.pec-to-add', { ns: 'recapiti' })}
-            inputProps={{
-              id: `${senderId}_pec`,
-              name: `${senderId}_pec`,
-              placeholder: t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' }),
-              value: formik.values[`${senderId}_pec`],
-              onChange: (e) => void handleChangeTouched(e),
-              error: formik.touched[`${senderId}_pec`] && Boolean(formik.errors[`${senderId}_pec`]),
-              helperText: formik.touched[`${senderId}_pec`] && formik.errors[`${senderId}_pec`],
-            }}
-            insertDisabled={!formik.isValid}
-            buttonLabel={t('button.conferma')}
-          />
-        )}
-      </form>
+      {!verifyingAddress && (
+        <DefaultDigitalContact
+          label={t('legal-contacts.pec-to-add', { ns: 'recapiti' })}
+          value={currentValue}
+          channelType={ChannelType.PEC}
+          ref={digitalContactRef}
+          inputProps={{
+            label: t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' }),
+          }}
+          insertButtonLabel={t('button.conferma')}
+          onSubmit={handleSubmit}
+          onDelete={() => {
+            setModalOpen(ModalType.DELETE);
+            // eslint-disable-next-line functional/immutable-data
+            currentAddress.current = { value: currentValue, sender: { senderId: 'default' } };
+          }}
+        />
+      )}
+      {verifyingAddress && (
+        <>
+          <Typography mb={1} sx={{ fontWeight: 'bold' }} mt={3}>
+            {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
+          </Typography>
+          <Stack direction="row" spacing={1}>
+            <WatchLaterIcon fontSize="small" />
+            <Typography id="validationPecProgress" fontWeight="bold" variant="body2">
+              {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
+            </Typography>
+            <ButtonNaked
+              color="primary"
+              onClick={() => setModalOpen(ModalType.CANCEL_VALIDATION)}
+              data-testid="cancelValidation"
+            >
+              {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
+            </ButtonNaked>
+          </Stack>
+        </>
+      )}
+      {currentValue && (
+        <SpecialDigitalContacts
+          digitalAddresses={specialPECAddresses}
+          channelType={ChannelType.PEC}
+          onConfirm={(value: string, sender: Sender) => handleSubmit(value, sender)}
+          onDelete={(value, sender) => {
+            setModalOpen(ModalType.DELETE);
+            // eslint-disable-next-line functional/immutable-data
+            currentAddress.current = { value, sender };
+          }}
+        />
+      )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
-        value={formik.values[`${senderId}_pec`]}
+        value={currentAddress.current.value}
         handleDiscard={handleCancelCode}
         handleConfirm={() => handleCodeVerification()}
       />
       <ContactCodeDialog
-        value={formik.values[senderId + '_pec']}
+        value={currentAddress.current.value}
         addressType={AddressType.LEGAL}
         channelType={ChannelType.PEC}
         open={modalOpen === ModalType.CODE}
@@ -238,7 +198,7 @@ const PecContactItem: React.FC<Props> = ({
       />
       <CancelVerificationModal
         open={modalOpen === ModalType.CANCEL_VALIDATION}
-        senderId={senderId}
+        senderId={currentAddress.current.sender.senderId}
         handleClose={() => setModalOpen(null)}
       />
       <DeleteDialog
@@ -247,7 +207,7 @@ const PecContactItem: React.FC<Props> = ({
           ns: 'recapiti',
         })}
         removeModalBody={t(`legal-contacts.${blockDelete ? 'block-' : ''}remove-pec-message`, {
-          value: formik.values[`${senderId}_pec`],
+          value: currentAddress.current.value,
           ns: 'recapiti',
         })}
         handleModalClose={() => setModalOpen(null)}
