@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
+import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import { Box, Divider, Stack, Typography } from '@mui/material';
 import { fromStringToBase64, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -20,6 +21,7 @@ type Props = {
   prefix?: string;
   onConfirm: (value: string, sender: Sender) => void;
   onDelete: (value: string, sender: Sender) => void;
+  onCancelValidation?: (value: string, sender: Sender) => void;
 };
 
 enum ModalType {
@@ -32,6 +34,7 @@ const SpecialDigitalContacts: React.FC<Props> = ({
   prefix,
   onConfirm,
   onDelete,
+  onCancelValidation,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const isMobile = useIsMobile();
@@ -75,73 +78,103 @@ const SpecialDigitalContacts: React.FC<Props> = ({
               my: isMobile ? 3 : 2,
             }}
           />
-          <Stack
-            direction={{ xs: 'column-reverse', sm: 'row' }}
-            spacing={2}
-            data-testid={`special_${contactType}`}
-          >
-            <Stack direction="row" spacing={2}>
-              <VerifiedIcon
-                fontSize="small"
-                color="success"
-                sx={{ position: 'relative', top: '2px' }}
-              />
-              <Box>
-                <Typography
-                  sx={{
-                    wordBreak: 'break-word',
-                    fontWeight: 600,
-                  }}
-                  variant="body2"
-                  data-testid={`special_${contactType}-typography`}
-                >
-                  {address.value}
+          {(address.channelType !== ChannelType.PEC || address.pecValid) && (
+            <Stack
+              direction={{ xs: 'column-reverse', sm: 'row' }}
+              spacing={2}
+              data-testid={`special_${contactType}`}
+            >
+              <Stack direction="row" spacing={2}>
+                <VerifiedIcon
+                  fontSize="small"
+                  color="success"
+                  sx={{ position: 'relative', top: '2px' }}
+                />
+                <Box>
+                  <Typography
+                    sx={{
+                      wordBreak: 'break-word',
+                      fontWeight: 600,
+                    }}
+                    variant="body2"
+                    data-testid={`special_${contactType}-typography`}
+                  >
+                    {address.value}
+                  </Typography>
+                  <ButtonNaked
+                    key="editButton"
+                    color="primary"
+                    onClick={() =>
+                      setModalOpen({
+                        type: ModalType.SPECIAL,
+                        data: {
+                          value: address.value,
+                          senders: address.senders.map((sender) => ({
+                            id: sender.senderId,
+                            name: sender.senderName ?? '',
+                          })),
+                        },
+                      })
+                    }
+                    sx={{ mr: 2 }}
+                    disabled={false}
+                    data-testid={`modifyContact-special_${contactType}`}
+                    size="medium"
+                  >
+                    {t('button.modifica')}
+                  </ButtonNaked>
+                  <ButtonNaked
+                    data-testid={`cancelContact-special_${contactType}`}
+                    color="error"
+                    // ATTENZIONE
+                    // al momento le api non accettano più sender alla volta
+                    // per testare il giro, si utilizza sempre il primo sender
+                    onClick={() => onDelete(address.value, address.senders[0])}
+                    disabled={false}
+                    size="medium"
+                  >
+                    {t('button.elimina')}
+                  </ButtonNaked>
+                </Box>
+              </Stack>
+              <Stack paddingLeft={{ xs: 0, sm: 8 }}>
+                <Typography variant="caption-semibold">
+                  {t(`special-contacts.sender-list`, { ns: 'recapiti' })}
+                </Typography>
+                <Typography variant="caption">
+                  {address.senders.map((sender) => sender.senderName).join(', ')}
+                </Typography>
+              </Stack>
+            </Stack>
+          )}
+          {address.channelType === ChannelType.PEC && !address.pecValid && (
+            <>
+              <Typography mb={1} sx={{ fontWeight: 'bold' }} mt={3}>
+                {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
+              </Typography>
+              <Stack direction="row" spacing={1}>
+                <WatchLaterIcon fontSize="small" />
+                <Typography id="validationPecProgress" fontWeight="bold" variant="body2">
+                  {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
                 </Typography>
                 <ButtonNaked
-                  key="editButton"
                   color="primary"
-                  onClick={() =>
-                    setModalOpen({
-                      type: ModalType.SPECIAL,
-                      data: {
-                        value: address.value,
-                        senders: address.senders.map((sender) => ({
-                          id: sender.senderId,
-                          name: sender.senderName ?? '',
-                        })),
-                      },
-                    })
-                  }
-                  sx={{ mr: 2 }}
-                  disabled={false}
-                  data-testid={`modifyContact-special_${contactType}`}
-                  size="medium"
-                >
-                  {t('button.modifica')}
-                </ButtonNaked>
-                <ButtonNaked
-                  data-testid={`cancelContact-special_${contactType}`}
-                  color="error"
                   // ATTENZIONE
                   // al momento le api non accettano più sender alla volta
                   // per testare il giro, si utilizza sempre il primo sender
-                  onClick={() => onDelete(address.value, address.senders[0])}
-                  disabled={false}
-                  size="medium"
+                  onClick={() =>
+                    onCancelValidation?.(address.value, {
+                      senderId: address.senders[0].senderId,
+                      senderName: address.senders[0].senderName,
+                    })
+                  }
+                  data-testid="cancelValidation"
                 >
-                  {t('button.elimina')}
+                  {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
                 </ButtonNaked>
-              </Box>
-            </Stack>
-            <Stack paddingLeft={{ xs: 0, sm: 8 }}>
-              <Typography variant="caption-semibold">
-                {t(`special-contacts.sender-list`, { ns: 'recapiti' })}
-              </Typography>
-              <Typography variant="caption">
-                {address.senders.map((sender) => sender.senderName).join(', ')}
-              </Typography>
-            </Stack>
-          </Stack>
+              </Stack>
+            </>
+          )}
         </Fragment>
       ))}
       <Divider

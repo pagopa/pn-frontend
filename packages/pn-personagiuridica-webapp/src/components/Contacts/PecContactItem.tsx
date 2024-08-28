@@ -176,6 +176,11 @@ const PecContactItem: React.FC = () => {
             // eslint-disable-next-line functional/immutable-data
             currentAddress.current = { value, sender };
           }}
+          onCancelValidation={(value, sender) => {
+            setModalOpen(ModalType.CANCEL_VALIDATION);
+            // eslint-disable-next-line functional/immutable-data
+            currentAddress.current = { value, sender };
+          }}
         />
       )}
       <ExistingContactDialog
