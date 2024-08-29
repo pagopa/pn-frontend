@@ -44,7 +44,7 @@ describe('test CustomDatePicker languages', () => {
     },
     {
       language: 'en',
-      month: 'january',
+      month: 'January',
     },
     {
       language: 'fr',
@@ -52,7 +52,7 @@ describe('test CustomDatePicker languages', () => {
     },
     {
       language: 'de',
-      month: 'januar',
+      month: 'Januar',
     },
     {
       language: 'sl',
@@ -61,11 +61,17 @@ describe('test CustomDatePicker languages', () => {
   ];
 
   it.each(languages)('check january month to be $month in $language', (language) => {
-    const { container, getByRole } = render(<RenderDatePicker language={language.language} />);
+    const { container, getByPlaceholderText } = render(
+      <RenderDatePicker language={language.language} />
+    );
     expect(container).toHaveTextContent(/datepicker/i);
-    const button = getByRole('button');
+    const button = getByPlaceholderText('datepickerinput');
     fireEvent.click(button);
-    const regExMonth = new RegExp(`${language.month}`, 'i');
-    expect(screen.getByText(regExMonth)).toBeInTheDocument();
+    const regExMonth = new RegExp(`${language.month}`);
+    if (language.month == 'January') {
+      expect(screen.getByText(regExMonth)).toBeInTheDocument();
+    } else {
+      expect(screen.getAllByText(regExMonth).length).toBe(2);
+    }
   });
 });
