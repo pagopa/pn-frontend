@@ -33,22 +33,25 @@ const GroupSelector: React.FC<Props> = ({ currentGroup, onGroupSelection }) => {
   }, []);
 
   return (
-    <Box data-testid="groupSelector" display="inline-block" sx={{ verticalAlign: 'middle', mx: 2 }}>
-      <Box>
-        <Button
-          onClick={handleMenuClick}
-          size="small"
-          variant="contained"
-          data-testid="groupSelectorButton"
-          aria-label={t('table.group-selector-title')}
-          aria-controls={open ? 'group-selector' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          endIcon={<ArrowDropDownIcon />}
-        >
-          {currentGroup && groups.find((group) => group.id === currentGroup)?.name}
-        </Button>
-      </Box>
+    <Box
+      data-testid="groupSelector"
+      display={{ xs: 'block', lg: 'inline-block' }}
+      sx={{ verticalAlign: 'middle', mx: { xs: 0, lg: 2 }, mt: { xs: 1, lg: 0 } }}
+    >
+      <Button
+        onClick={handleMenuClick}
+        size="small"
+        variant="contained"
+        data-testid="groupSelectorButton"
+        aria-label={t('table.group-selector-title')}
+        aria-controls={open ? 'group-selector' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        endIcon={<ArrowDropDownIcon />}
+      >
+        {currentGroup && groups.find((group) => group.id === currentGroup)?.name}
+      </Button>
+
       <Menu
         open={open}
         anchorEl={anchorEl}
