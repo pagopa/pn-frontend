@@ -500,7 +500,7 @@ Resources:
               https://privacyportalde-cdn.onetrust.com/ ; \
               worker-src 'none'; \
               font-src 'self'; \
-              frame-ancestors 'self' ; \
+              frame-ancestors 'none' ; \
               img-src 'self' https://assets.cdn.io.italia.it/ https://selcpweupnpgcheckoutsa.z6.web.core.windows.net/ https://selcuweupnpgcheckoutsa.z6.web.core.windows.net/ https://imprese.uat.notifichedigitali.it/ https://imprese.notifichedigitali.it/ data:"
             Override: true
           # add_header X-Content-Type-Options "nosniff";
@@ -541,7 +541,7 @@ Resources:
                     style-src 'self' 'unsafe-inline' https://privacyportalde-cdn.onetrust.com/; \
                     worker-src 'none'; \
                     font-src 'self'; \
-                    frame-ancestors 'self' ; \
+                    frame-ancestors 'none' ; \
                     img-src 'self' https://assets.cdn.io.italia.it/ data:"
             Override: true
           # add_header X-Content-Type-Options "nosniff";
