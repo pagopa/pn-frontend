@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { AddCircle, Verified, WarningOutlined } from '@mui/icons-material';
 import { Card, Stack, Typography } from '@mui/material';
 
-import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
+import { AddressType, DigitalAddress } from '../../models/contacts';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 
@@ -84,10 +84,8 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
 };
 
 const ContactsSummaryCards: React.FC = () => {
-  const { legalAddresses, courtesyAddresses } = useAppSelector(contactsSelectors.selectAddresses);
-
-  const isSercQEnabled = legalAddresses.some(
-    (address) => address.channelType === ChannelType.SERCQ
+  const { legalAddresses, courtesyAddresses, defaultSERCQAddress } = useAppSelector(
+    contactsSelectors.selectAddresses
   );
 
   return (
@@ -95,7 +93,7 @@ const ContactsSummaryCards: React.FC = () => {
       <ContactsSummaryCard contacts={legalAddresses} addressType={AddressType.LEGAL} />
       <ContactsSummaryCard
         contacts={courtesyAddresses}
-        isSercQEnabled={isSercQEnabled}
+        isSercQEnabled={!!defaultSERCQAddress}
         addressType={AddressType.COURTESY}
       />
     </Stack>
