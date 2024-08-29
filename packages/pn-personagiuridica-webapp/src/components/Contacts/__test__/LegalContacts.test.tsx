@@ -20,9 +20,9 @@ const defaultPecAddress = digitalLegalAddresses.find(
 describe('LegalContacts Component', async () => {
   it('renders component', () => {
     // render component
-    const { container, getByTestId, getByText } = render(
-      <LegalContacts legalAddresses={digitalLegalAddresses} />
-    );
+    const { container, getByTestId, getByText } = render(<LegalContacts />, {
+      preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
+    });
     expect(container).toHaveTextContent('legal-contacts.title');
     expect(container).toHaveTextContent('legal-contacts.list');
     const pecContact = getByTestId(`default_pecContact`);
@@ -43,7 +43,7 @@ describe('LegalContacts Component', async () => {
   });
 
   it('renders component - no contacts', async () => {
-    const { container, getByTestId } = render(<LegalContacts legalAddresses={[]} />);
+    const { container, getByTestId } = render(<LegalContacts />);
     expect(container).toHaveTextContent('legal-contacts.title');
     expect(container).toHaveTextContent('legal-contacts.list');
     // check contacts

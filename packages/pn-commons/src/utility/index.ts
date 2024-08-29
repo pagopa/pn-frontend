@@ -63,7 +63,7 @@ import { parseError, performThunkAction } from './redux.utility';
 import { AppRouteParams, compileRoute } from './routes.utility';
 import { searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';
 import { storageOpsBuilder } from './storage.utility';
-import { dataRegex, formatFiscalCode, sanitizeString } from './string.utility';
+import { dataRegex, formatFiscalCode, fromStringToBase64, sanitizeString } from './string.utility';
 import { buttonNakedInheritStyle } from './styles.utility';
 import {
   adaptedTokenExchangeError,
@@ -154,4 +154,5 @@ export {
   getDaysFromDateRange,
   getWeeksFromDateRange,
   getDateFromString,
+  fromStringToBase64,
 };

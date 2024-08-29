@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 import { getById, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { internationalPhonePrefix } from '../../../../../pn-personagiuridica-webapp/src/utility/contacts.utility';
-import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
+import { digitalCourtesyAddresses, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import {
   fireEvent,
   render,
@@ -34,6 +34,9 @@ vi.mock('react-i18next', () => ({
 
 describe('test SercqSendContactItem', () => {
   let mock: MockAdapter;
+  const defaultAddress = digitalLegalAddresses.find(
+    (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SERCQ
+  );
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -49,7 +52,7 @@ describe('test SercqSendContactItem', () => {
 
   it('render component - disabled', () => {
     // render component
-    const { container, getByTestId } = render(<SercqSendContactItem value="" />);
+    const { container, getByTestId } = render(<SercqSendContactItem />);
     expect(container).toHaveTextContent('legal-contacts.sercq-send-title');
     expect(container).toHaveTextContent('legal-contacts.sercq-send-description');
     const newsBadge = getByTestId('newsBadge');
@@ -67,12 +70,9 @@ describe('test SercqSendContactItem', () => {
       })
       .reply(204);
     // render component
-    const { container, getByTestId, rerender, queryByTestId, getByText } = render(
-      <SercqSendContactItem value="" />,
-      {
-        preloadedState: { contactsState: { digitalAddresses: digitalCourtesyAddresses } },
-      }
-    );
+    const { container, getByTestId, queryByTestId, getByText } = render(<SercqSendContactItem />, {
+      preloadedState: { contactsState: { digitalAddresses: digitalCourtesyAddresses } },
+    });
     const activateButton = getByTestId('activateButton');
     fireEvent.click(activateButton);
     let infoDialog = await waitFor(() => screen.getByTestId('sercqSendInfoDialog'));
@@ -94,8 +94,7 @@ describe('test SercqSendContactItem', () => {
       });
     });
     await waitFor(() => expect(infoDialog).not.toBeInTheDocument());
-    // simulate rerendering due to redux changes
-    rerender(<SercqSendContactItem value={SERCQ_SEND_VALUE} />);
+    // wait rerendering due to redux changes
     // check new layout
     expect(container).toHaveTextContent('legal-contacts.sercq-send-title');
     expect(container).toHaveTextContent('legal-contacts.sercq-send-description');
@@ -115,9 +114,7 @@ describe('test SercqSendContactItem', () => {
       })
       .reply(204);
     // render component
-    const { container, getByTestId, rerender, getByText } = render(
-      <SercqSendContactItem value="" />
-    );
+    const { container, getByTestId, getByText } = render(<SercqSendContactItem />);
     const activateButton = getByTestId('activateButton');
     fireEvent.click(activateButton);
     const infoDialog = await waitFor(() => screen.getByTestId('sercqSendInfoDialog'));
@@ -132,8 +129,7 @@ describe('test SercqSendContactItem', () => {
       });
     });
     await waitFor(() => expect(infoDialog).not.toBeInTheDocument());
-    // simulate rerendering due to redux changes
-    rerender(<SercqSendContactItem value={SERCQ_SEND_VALUE} />);
+    // wait rerendering due to redux changes
     const courtesyDialog = await waitFor(() => screen.getByTestId('sercqSendCourtesyDialog'));
     expect(courtesyDialog).toBeInTheDocument();
     // click on not now button
@@ -167,7 +163,7 @@ describe('test SercqSendContactItem', () => {
       })
       .reply(204);
     // render component
-    const result = render(<SercqSendContactItem value="" />);
+    const result = render(<SercqSendContactItem />);
     const activateButton = result.getByTestId('activateButton');
     fireEvent.click(activateButton);
     const infoDialog = await waitFor(() => screen.getByTestId('sercqSendInfoDialog'));
@@ -182,8 +178,7 @@ describe('test SercqSendContactItem', () => {
       });
     });
     await waitFor(() => expect(infoDialog).not.toBeInTheDocument());
-    // simulate rerendering due to redux changes
-    result.rerender(<SercqSendContactItem value={SERCQ_SEND_VALUE} />);
+    // wait rerendering due to redux changes
     const courtesyDialog = await waitFor(() => screen.getByTestId('sercqSendCourtesyDialog'));
     expect(courtesyDialog).toBeInTheDocument();
     // select SMS
@@ -236,7 +231,7 @@ describe('test SercqSendContactItem', () => {
       })
       .reply(204);
     // render component
-    const result = render(<SercqSendContactItem value="" />, {
+    const result = render(<SercqSendContactItem />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [
@@ -264,8 +259,7 @@ describe('test SercqSendContactItem', () => {
       });
     });
     await waitFor(() => expect(infoDialog).not.toBeInTheDocument());
-    // simulate rerendering due to redux changes
-    result.rerender(<SercqSendContactItem value={SERCQ_SEND_VALUE} />);
+    // wait rerendering due to redux changes
     const courtesyDialog = await waitFor(() => screen.getByTestId('sercqSendCourtesyDialog'));
     expect(courtesyDialog).toBeInTheDocument();
     // select AppIO
@@ -294,11 +288,15 @@ describe('test SercqSendContactItem', () => {
   });
 
   it('remove contact', async () => {
-    mock.onDelete('/bff/v1/addresses/LEGAL/default/PEC').reply(204);
+    mock.onDelete('/bff/v1/addresses/LEGAL/default/SERCQ').reply(204);
     // render component
-    const { container, rerender, getByTestId } = render(
-      <SercqSendContactItem value={SERCQ_SEND_VALUE} />
-    );
+    const { container, getByTestId } = render(<SercqSendContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [defaultAddress],
+        },
+      },
+    });
     const button = container.querySelector('button');
     // click on cancel
     fireEvent.click(button!);
@@ -328,8 +326,7 @@ describe('test SercqSendContactItem', () => {
           .contactsState.digitalAddresses.filter((addr) => addr.channelType === ChannelType.SERCQ)
       ).toStrictEqual([]);
     });
-    // simulate rerendering due to redux changes
-    rerender(<SercqSendContactItem value="" />);
+    // wait rerendering due to redux changes
     await waitFor(() => {
       const activateButton = getByTestId('activateButton');
       expect(activateButton).toBeInTheDocument();

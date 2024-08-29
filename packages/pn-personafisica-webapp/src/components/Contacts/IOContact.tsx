@@ -8,33 +8,28 @@ import { DisclaimerModal, IllusAppIO, useIsMobile } from '@pagopa-pn/pn-commons'
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { DigitalAddress, IOAllowedValues } from '../../models/contacts';
+import { IOAllowedValues } from '../../models/contacts';
 import { disableIOAddress, enableIOAddress } from '../../redux/contact/actions';
-import { useAppDispatch } from '../../redux/hooks';
+import { contactsSelectors } from '../../redux/contact/reducers';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import DigitalContactsCard from './DigitalContactsCard';
 
-interface Props {
-  contact: DigitalAddress | null | undefined;
-}
-
 enum IOContactStatus {
-  PENDING = 'pending',
   UNAVAILABLE = 'unavailable',
   ENABLED = 'enabled',
   DISABLED = 'disabled',
 }
 
-const IOContact: React.FC<Props> = ({ contact }) => {
+const IOContact: React.FC = () => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
+  const { defaultAPPIOAddress: contact } = useAppSelector(contactsSelectors.selectAddresses);
 
   const parseContact = () => {
-    if (contact === null) {
-      return IOContactStatus.PENDING;
-    } else if (contact === undefined) {
+    if (!contact) {
       return IOContactStatus.UNAVAILABLE;
     } else if (contact.value === IOAllowedValues.DISABLED) {
       return IOContactStatus.DISABLED;
@@ -86,7 +81,7 @@ const IOContact: React.FC<Props> = ({ contact }) => {
   };
 
   const getContent = () => {
-    if (status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING) {
+    if (status === IOContactStatus.UNAVAILABLE) {
       return (
         <Stack
           direction={{

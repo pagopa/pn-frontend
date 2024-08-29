@@ -3,36 +3,18 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Box, List, ListItem, Stack, Typography } from '@mui/material';
 
-import { ChannelType, DigitalAddress } from '../../models/contacts';
-import { countContactsByType } from '../../utility/contacts.utility';
 import EmailContactItem from './EmailContactItem';
 import IOContact from './IOContact';
 import SmsContactItem from './SmsContactItem';
 
-interface Props {
-  contacts: Array<DigitalAddress>;
-}
-
-const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
+const CourtesyContacts: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-
-  const phoneContact = contacts.find(
-    (contact) => contact.channelType === ChannelType.SMS && contact.senderId === 'default'
-  );
-  const emailContact = contacts.find(
-    (contact) => contact.channelType === ChannelType.EMAIL && contact.senderId === 'default'
-  );
-  const contactIO = contacts.find((address) => address.channelType === ChannelType.IOMSG);
 
   const courtesyContactList: Array<string> = t('courtesy-contacts.list', {
     returnObjects: true,
     defaultValue: [],
     ns: 'recapiti',
   });
-
-  const phoneContactsQuantity = (): number => countContactsByType(contacts, ChannelType.SMS);
-
-  const emailContactsQuantity = (): number => countContactsByType(contacts, ChannelType.EMAIL);
 
   return (
     <Box id="courtesyContactsSection">
@@ -47,15 +29,9 @@ const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
         ))}
       </List>
       <Stack spacing={3} mt={3} data-testid="courtesyContacts">
-        <IOContact contact={contactIO} />
-        <EmailContactItem
-          value={emailContact?.value ?? ''}
-          blockDelete={emailContactsQuantity() > 1}
-        />
-        <SmsContactItem
-          value={phoneContact?.value ?? ''}
-          blockDelete={phoneContactsQuantity() > 1}
-        />
+        <IOContact />
+        <EmailContactItem />
+        <SmsContactItem />
       </Stack>
     </Box>
   );

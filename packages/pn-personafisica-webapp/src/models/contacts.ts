@@ -18,10 +18,13 @@ export enum AddressType {
   COURTESY = 'COURTESY',
 }
 
-export interface DigitalAddress {
-  addressType: AddressType;
+export interface Sender {
   senderId: string;
   senderName?: string;
+}
+
+export interface DigitalAddress extends Sender {
+  addressType: AddressType;
   channelType: ChannelType;
   value: string;
   pecValid?: boolean;
@@ -34,10 +37,8 @@ export interface DeleteDigitalAddressParams {
   channelType: ChannelType;
 }
 
-export interface SaveDigitalAddressParams {
+export interface SaveDigitalAddressParams extends Sender {
   addressType: AddressType;
-  senderId: string;
-  senderName?: string;
   channelType: ChannelType;
   value: string;
   code?: string;
