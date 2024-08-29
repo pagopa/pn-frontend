@@ -5,11 +5,7 @@ import { AddCircle, Verified, WarningOutlined } from '@mui/icons-material';
 import { Card, Stack, Typography } from '@mui/material';
 
 import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
-
-type Props = {
-  legalAddresses: Array<DigitalAddress>;
-  courtesyAddresses: Array<DigitalAddress>;
-};
+import { useAppSelector } from '../../redux/hooks';
 
 type ContactsSummaryCardProps = {
   contacts: Array<DigitalAddress>;
@@ -83,7 +79,17 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
   );
 };
 
-const ContactsSummaryCards: React.FC<Props> = ({ legalAddresses, courtesyAddresses }) => {
+const ContactsSummaryCards: React.FC = () => {
+  const legalAddresses = useAppSelector((state) =>
+    state.contactsState.digitalAddresses.filter(
+      (address) => address.addressType === AddressType.LEGAL
+    )
+  );
+  const courtesyAddresses = useAppSelector((state) =>
+    state.contactsState.digitalAddresses.filter(
+      (address) => address.addressType === AddressType.COURTESY
+    )
+  );
   const isSercQEnabled = legalAddresses.some(
     (address) => address.channelType === ChannelType.SERCQ
   );
