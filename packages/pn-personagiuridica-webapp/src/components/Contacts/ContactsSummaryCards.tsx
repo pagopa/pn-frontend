@@ -5,6 +5,7 @@ import { AddCircle, Verified, WarningOutlined } from '@mui/icons-material';
 import { Card, Stack, Typography } from '@mui/material';
 
 import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
+import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 
 type ContactsSummaryCardProps = {
@@ -45,10 +46,13 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
       return t('summary-card.no-address');
     }
 
-    return contacts
-      .filter((contact) => contact.senderId === 'default')
-      .map((contact) => t(`summary-card.${contact.channelType}`))
-      .join(', ');
+    const contactsType = contacts.reduce((acc, item) => {
+      // eslint-disable-next-line functional/immutable-data
+      acc[item.channelType] = t(`summary-card.${item.channelType}`);
+      return acc;
+    }, {} as { [key: string]: string });
+
+    return Object.values(contactsType).join(', ');
   };
 
   const goToSection = () => {
@@ -80,16 +84,8 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
 };
 
 const ContactsSummaryCards: React.FC = () => {
-  const legalAddresses = useAppSelector((state) =>
-    state.contactsState.digitalAddresses.filter(
-      (address) => address.addressType === AddressType.LEGAL
-    )
-  );
-  const courtesyAddresses = useAppSelector((state) =>
-    state.contactsState.digitalAddresses.filter(
-      (address) => address.addressType === AddressType.COURTESY
-    )
-  );
+  const { legalAddresses, courtesyAddresses } = useAppSelector(contactsSelectors.selectAddresses);
+
   const isSercQEnabled = legalAddresses.some(
     (address) => address.channelType === ChannelType.SERCQ
   );
