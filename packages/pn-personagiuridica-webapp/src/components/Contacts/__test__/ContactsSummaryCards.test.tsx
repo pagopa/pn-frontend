@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { digitalCourtesyAddresses, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
+import { digitalAddresses, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, within } from '../../../__test__/test-utils';
 import ContactsSummaryCards from '../ContactsSummaryCards';
 
@@ -13,9 +13,9 @@ vi.mock('react-i18next', () => ({
 
 describe('ContactsSummaryCards component', () => {
   it('renders component - no contacts', () => {
-    const { getByTestId } = render(
-      <ContactsSummaryCards legalAddresses={[]} courtesyAddresses={[]} />
-    );
+    const { getByTestId } = render(<ContactsSummaryCards />, {
+      preloadedState: { contactsState: { digitalAddresses: [] } },
+    });
 
     const legalContacts = getByTestId('legalContactsCard');
     const courtesyContacts = getByTestId('courtesyContactsCard');
@@ -38,12 +38,9 @@ describe('ContactsSummaryCards component', () => {
   });
 
   it('renders component - with contacts', () => {
-    const { getByTestId } = render(
-      <ContactsSummaryCards
-        legalAddresses={digitalLegalAddresses}
-        courtesyAddresses={digitalCourtesyAddresses}
-      />
-    );
+    const { getByTestId } = render(<ContactsSummaryCards />, {
+      preloadedState: { contactsState: { digitalAddresses } },
+    });
 
     const legalContacts = getByTestId('legalContactsCard');
     const courtesyContacts = getByTestId('courtesyContactsCard');
@@ -55,24 +52,21 @@ describe('ContactsSummaryCards component', () => {
     const legalTitle = within(legalContacts).getByTestId('cardTitle');
     expect(legalTitle).toHaveTextContent('summary-card.legal-title');
     const legalDescription = within(legalContacts).getByTestId('cardDescription');
-    expect(legalDescription).toHaveTextContent(
-      digitalLegalAddresses.map((contact) => `summary-card.${contact.channelType}`).join(', ')
-    );
+    expect(legalDescription).toHaveTextContent('summary-card.PEC, summary-card.SERCQ');
 
     const courtesyIcon = within(courtesyContacts).getByTestId('verifiedIcon');
     expect(courtesyIcon).toBeInTheDocument();
     const courtesyTitle = within(courtesyContacts).getByTestId('cardTitle');
     expect(courtesyTitle).toHaveTextContent('summary-card.courtesy-title');
     const courtesyDescription = within(courtesyContacts).getByTestId('cardDescription');
-    expect(courtesyDescription).toHaveTextContent(
-      digitalCourtesyAddresses.map((contact) => `summary-card.${contact.channelType}`).join(', ')
-    );
+    expect(courtesyDescription).toHaveTextContent('summary-card.EMAIL, summary-card.SMS');
   });
 
-  it('should show warningIcon if there is a SERCQ contant and no courtesy contact', () => {
-    const { getByTestId } = render(
-      <ContactsSummaryCards legalAddresses={digitalLegalAddresses} courtesyAddresses={[]} />
-    );
+  it('should show warningIcon if there is a SERCQ contact and no courtesy contact', () => {
+    const { getByTestId } = render(<ContactsSummaryCards />, {
+      preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
+    });
+
     const legalContacts = getByTestId('legalContactsCard');
     const courtesyContacts = getByTestId('courtesyContactsCard');
     expect(legalContacts).toBeInTheDocument();
@@ -83,9 +77,7 @@ describe('ContactsSummaryCards component', () => {
     const legalTitle = within(legalContacts).getByTestId('cardTitle');
     expect(legalTitle).toHaveTextContent('summary-card.legal-title');
     const legalDescription = within(legalContacts).getByTestId('cardDescription');
-    expect(legalDescription).toHaveTextContent(
-      digitalLegalAddresses.map((contact) => `summary-card.${contact.channelType}`).join(', ')
-    );
+    expect(legalDescription).toHaveTextContent('summary-card.PEC, summary-card.SERCQ');
 
     const courtesyIcon = within(courtesyContacts).getByTestId('warningIcon');
     expect(courtesyIcon).toBeInTheDocument();
@@ -96,9 +88,10 @@ describe('ContactsSummaryCards component', () => {
   });
 
   it('should scroll to section', () => {
-    const { getByTestId } = render(
-      <ContactsSummaryCards legalAddresses={digitalLegalAddresses} courtesyAddresses={[]} />
-    );
+    const { getByTestId } = render(<ContactsSummaryCards />, {
+      preloadedState: { contactsState: { digitalAddresses } },
+    });
+
     const legalContacts = getByTestId('legalContactsCard');
     const courtesyContacts = getByTestId('courtesyContactsCard');
     expect(legalContacts).toBeInTheDocument();
