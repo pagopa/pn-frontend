@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AddCircle, Verified, WarningOutlined } from '@mui/icons-material';
-import { Card, Stack, Typography } from '@mui/material';
+import { Box, Card, Stack, Typography } from '@mui/material';
 
 import { AddressType, DigitalAddress } from '../../models/contacts';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -30,11 +30,9 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
         return <WarningOutlined color="warning" data-testid="warningIcon" />;
       }
       return (
-        <AddCircle
-          color="primary"
-          data-testid="addIcon"
-          aria-label="summary-card.add-icon-arialabel"
-        />
+        <Box aria-label={t('summary-card.add-icon-arialabel')}>
+          <AddCircle color="primary" data-testid="addIcon" />
+        </Box>
       );
     }
 
