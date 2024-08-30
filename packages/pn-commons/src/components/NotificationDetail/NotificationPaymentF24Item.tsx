@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Download, InfoRounded } from '@mui/icons-material';
-import { Box, CircularProgress, Stack, Typography } from '@mui/material';
+import { CircularProgress, Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { downloadDocument, useIsMobile } from '../../hooks';
@@ -172,12 +172,11 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
         borderRadius: '6px',
       }}
     >
-      <Box
-        display="flex"
+      <Stack
         justifyContent={isMobile ? 'flex-start' : 'inherit'}
         gap={0.5}
-        flexDirection="column"
-        flex="1 0 0"
+        direction="column"
+        flexGrow="1"
         mb={isMobile ? '8px' : 0}
       >
         {isPagoPaAttachment ? (
@@ -203,7 +202,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
           </>
         )}
         {maxTimeError && (
-          <Box display="flex" alignItems="center" gap={0.5} data-testid="f24-maxTime-error">
+          <Stack alignItems="center" gap={0.5} data-testid="f24-maxTime-error">
             <InfoRounded
               sx={{
                 color: 'error.dark',
@@ -213,10 +212,10 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
             <Typography fontSize="12px" lineHeight="12px" fontWeight="600" color="error.dark">
               {getLocalizedOrDefaultLabel('notifications', maxTimeError)}
             </Typography>
-          </Box>
+          </Stack>
         )}
-      </Box>
-      <Box>{getElement()}</Box>
+      </Stack>
+      {getElement()}
     </Stack>
   );
 };
