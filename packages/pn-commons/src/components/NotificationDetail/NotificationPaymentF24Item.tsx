@@ -164,7 +164,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
     <Stack
       py={isPagoPaAttachment ? 0 : 1}
       px={isPagoPaAttachment ? 0 : 2}
-      alignItems={{ sm: 'flex-start', lg: 'center' }}
+      alignItems={{ sm: 'flex-start', lg: 'center', xs: 'flex-start' }}
       direction={{ sm: 'column', lg: 'row' }}
       sx={{
         backgroundColor: isPagoPaAttachment ? 'transparent' : 'grey.50',
