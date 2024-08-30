@@ -4,7 +4,7 @@ import { Download, InfoRounded } from '@mui/icons-material';
 import { CircularProgress, Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { downloadDocument, useIsMobile } from '../../hooks';
+import { downloadDocument } from '../../hooks';
 import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
@@ -37,7 +37,6 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
   disableDownload,
   handleDownload,
 }) => {
-  const isMobile = useIsMobile('sm');
   const [maxTimeError, setMaxTimeError] = useState<string | null>(null);
   const timer = useRef<NodeJS.Timeout>();
   const interval = useRef<NodeJS.Timeout>();
@@ -165,19 +164,19 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
     <Stack
       py={isPagoPaAttachment ? 0 : 1}
       px={isPagoPaAttachment ? 0 : 2}
-      alignItems={isMobile ? 'flex-start' : 'center'}
-      direction={isMobile ? 'column' : 'row'}
+      alignItems={{ sm: 'flex-start', lg: 'center' }}
+      direction={{ sm: 'column', lg: 'row' }}
       sx={{
         backgroundColor: isPagoPaAttachment ? 'transparent' : 'grey.50',
         borderRadius: '6px',
       }}
     >
       <Stack
-        justifyContent={isMobile ? 'flex-start' : 'inherit'}
+        justifyContent={{ sm: 'flex-start', lg: 'inherit' }}
         gap={0.5}
         direction="column"
         flexGrow="1"
-        mb={isMobile ? '8px' : 0}
+        mb={{ sm: '8px', lg: 0 }}
       >
         {isPagoPaAttachment ? (
           <Typography variant="body2">
