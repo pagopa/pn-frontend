@@ -170,13 +170,13 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
         backgroundColor: isPagoPaAttachment ? 'transparent' : 'grey.50',
         borderRadius: '6px',
       }}
+      spacing={1}
     >
       <Stack
         justifyContent={{ sm: 'flex-start', lg: 'inherit' }}
         gap={0.5}
         direction="column"
         flexGrow="1"
-        mb={{ sm: '8px', lg: 0 }}
       >
         {isPagoPaAttachment ? (
           <Typography variant="body2">
