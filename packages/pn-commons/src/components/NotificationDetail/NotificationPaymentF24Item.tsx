@@ -37,7 +37,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
   disableDownload,
   handleDownload,
 }) => {
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile('sm');
   const [maxTimeError, setMaxTimeError] = useState<string | null>(null);
   const timer = useRef<NodeJS.Timeout>();
   const interval = useRef<NodeJS.Timeout>();
