@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Download, InfoRounded } from '@mui/icons-material';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { downloadDocument, useIsMobile } from '../../hooks';
@@ -152,22 +152,21 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
     }
 
     return (
-      <Box display="flex" alignItems="center" justifyContent="center" gap={0.5}>
+      <Stack alignItems="center" justifyContent="center" gap={0.5}>
         <Typography variant="caption" color="text.secondary" data-testid="f24-download-message">
           {getLocalizedOrDefaultLabel('notifications', downloadingMessage)}
         </Typography>
         <CircularProgress size="1.125rem" role="loadingSpinner" sx={{ color: 'text.secondary' }} />
-      </Box>
+      </Stack>
     );
   };
 
   return (
-    <Box
+    <Stack
       py={isPagoPaAttachment ? 0 : 1}
       px={isPagoPaAttachment ? 0 : 2}
-      display="flex"
-      alignItems="center"
-      alignSelf="stretch"
+      alignItems={isMobile ? 'flex-start' : 'center'}
+      direction={isMobile ? 'column' : 'row'}
       sx={{
         backgroundColor: isPagoPaAttachment ? 'transparent' : 'grey.50',
         borderRadius: '6px',
@@ -179,6 +178,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
         gap={0.5}
         flexDirection="column"
         flex="1 0 0"
+        mb={isMobile ? '8px' : 0}
       >
         {isPagoPaAttachment ? (
           <Typography variant="body2">
@@ -217,7 +217,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
         )}
       </Box>
       <Box>{getElement()}</Box>
-    </Box>
+    </Stack>
   );
 };
 
