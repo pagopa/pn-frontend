@@ -1,12 +1,7 @@
 /* eslint-disable sonarjs/no-identical-functions */
 import { de, enGB, fr, it, sl } from 'date-fns/locale';
 
-import {
-  DatePicker,
-  DatePickerProps,
-  DatePickerSlotsComponentsProps,
-  LocalizationProvider,
-} from '@mui/x-date-pickers';
+import { DatePicker, DatePickerProps, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
@@ -22,9 +17,7 @@ const locales: { [key: string]: Locale } = {
 export type DatePickerTypes = Date | null;
 const CustomDatePicker = (
   props: DatePickerProps<DatePickerTypes> &
-    React.RefAttributes<HTMLDivElement> & { language?: string } & {
-      slotProps?: DatePickerSlotsComponentsProps<Date | null>;
-    }
+    React.RefAttributes<HTMLDivElement> & { language?: string }
 ) => {
   const language = props.language ? props.language : 'it';
   return (
