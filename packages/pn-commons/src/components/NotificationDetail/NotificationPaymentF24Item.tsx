@@ -144,7 +144,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
           disabled={disableDownload}
           data-testid="download-f24-button"
         >
-          <Download fontSize="small" sx={{ mr: 1 }} />
+          <Download fontSize="small" sx={{ mr: 0.5, ml: -0.5 }} />
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
         </ButtonNaked>
       );
@@ -201,7 +201,12 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
           </>
         )}
         {maxTimeError && (
-          <Stack alignItems="center" gap={0.5} data-testid="f24-maxTime-error">
+          <Stack
+            direction={'row'}
+            alignItems={{ sm: 'center' }}
+            gap={0.5}
+            data-testid="f24-maxTime-error"
+          >
             <InfoRounded
               sx={{
                 color: 'error.dark',
