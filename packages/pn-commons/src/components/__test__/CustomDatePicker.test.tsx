@@ -24,9 +24,7 @@ describe('test CustomDatePicker component', () => {
     expect(container).toHaveTextContent(/datepicker/i);
     expect(input).toBeInTheDocument();
   });
-});
 
-describe('test CustomDatePicker component in mobile', () => {
   it('renders the component with mobile window', () => {
     window.matchMedia = createMatchMedia(800);
     const { getByPlaceholderText, container } = render(<RenderDatePicker />);

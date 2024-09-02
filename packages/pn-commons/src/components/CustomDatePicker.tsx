@@ -24,7 +24,6 @@ const CustomDatePicker = (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={locales[`${language}`]}>
       <DatePicker
         {...props}
-        desktopModeMediaQuery="@media (pointer: fine)"
         localeText={{
           toolbarTitle: '',
           openPreviousView: getLocalizedOrDefaultLabel('common', 'date-picker.left-arrow'),
