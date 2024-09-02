@@ -1,7 +1,12 @@
 /* eslint-disable sonarjs/no-identical-functions */
 import { de, enGB, fr, it, sl } from 'date-fns/locale';
 
-import { DatePicker, DatePickerProps, LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  DatePicker,
+  DatePickerProps,
+  DatePickerSlotsComponentsProps,
+  LocalizationProvider,
+} from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
@@ -17,15 +22,23 @@ const locales: { [key: string]: Locale } = {
 export type DatePickerTypes = Date | null;
 const CustomDatePicker = (
   props: DatePickerProps<DatePickerTypes> &
-    React.RefAttributes<HTMLDivElement> & { language?: string }
+    React.RefAttributes<HTMLDivElement> & { language?: string } & {
+      slotProps?: DatePickerSlotsComponentsProps<Date | null>;
+    }
 ) => {
   const language = props.language ? props.language : 'it';
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={locales[`${language}`]}>
       <DatePicker
         {...props}
+        slotProps={{
+          ...props.slotProps,
+          toolbar: { hidden: true },
+          textField: { size: 'small' },
+          actionBar: { actions: [] },
+        }}
+        closeOnSelect
         localeText={{
-          toolbarTitle: '',
           openPreviousView: getLocalizedOrDefaultLabel('common', 'date-picker.left-arrow'),
           openNextView: getLocalizedOrDefaultLabel('common', 'date-picker.right-arrow'),
           calendarViewSwitchingButtonAriaLabel: (view) =>
