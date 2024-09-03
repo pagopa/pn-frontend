@@ -54,7 +54,9 @@
     "all-organisations": "Tutti gli enti",
     "all-organisations-description": "La PEC sostituisce il Domicilio Digitale SEND come tuo recapito a valore legale principale. Se scegli questa opzione, il Domicilio Digitale verrà disattivato.",
     "specific-organisations": "Enti selezionati",
-    "specific-organisations-description": "La PEC sostituisce il Domicilio Digitale SEND come tuo recapito a valore legale solo per le notifiche inviate dagli enti selezionati."
+    "specific-organisations-description": "La PEC sostituisce il Domicilio Digitale SEND come tuo recapito a valore legale solo per le notifiche inviate dagli enti selezionati.",
+    "delete-sercq-send-dialog-title": "Confermi di voler disattivare il Domicilio Digitale su SEND?",
+    "delete-sercq-send-dialog-description": "L’indirizzo PEC indicato sostituirà il Domicilio Digitale SEND come tuo recapito a valore legale principale."
   },
   "io-contact": {
     "title": "App IO",
