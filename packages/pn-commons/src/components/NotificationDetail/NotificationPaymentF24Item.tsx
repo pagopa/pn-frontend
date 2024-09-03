@@ -143,15 +143,22 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
           onClick={downloadF24}
           disabled={disableDownload}
           data-testid="download-f24-button"
+          sx={{ mt: { xs: 1, sm: 0 } }}
         >
-          <Download fontSize="small" sx={{ mr: 0.5, ml: -0.5 }} />
+          <Download fontSize="small" sx={{ mr: 0.5 }} />
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
         </ButtonNaked>
       );
     }
 
     return (
-      <Stack alignItems="center" justifyContent="center" gap={0.5}>
+      <Stack
+        alignItems="center"
+        justifyContent="center"
+        gap={0.5}
+        direction="row"
+        sx={{ mt: { xs: 1, sm: 0 } }}
+      >
         <Typography variant="caption" color="text.secondary" data-testid="f24-download-message">
           {getLocalizedOrDefaultLabel('notifications', downloadingMessage)}
         </Typography>
@@ -164,8 +171,8 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
     <Stack
       py={isPagoPaAttachment ? 0 : 1}
       px={isPagoPaAttachment ? 0 : 2}
-      alignItems={{ sm: 'flex-start', lg: 'center', xs: 'flex-start' }}
-      direction={{ sm: 'column', lg: 'row' }}
+      alignItems={{ xs: 'flex-start', sm: 'center' }}
+      direction={{ xs: 'column', sm: 'row' }}
       sx={{
         backgroundColor: isPagoPaAttachment ? 'transparent' : 'grey.50',
         borderRadius: '6px',
@@ -173,7 +180,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
       spacing={1}
     >
       <Stack
-        justifyContent={{ sm: 'flex-start', lg: 'inherit' }}
+        justifyContent={{ xs: 'flex-start', sm: 'inherit' }}
         gap={0.5}
         direction="column"
         flexGrow="1"
@@ -202,8 +209,8 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
         )}
         {maxTimeError && (
           <Stack
-            direction={'row'}
-            alignItems={{ sm: 'center' }}
+            direction="row"
+            alignItems={{ xs: 'center' }}
             gap={0.5}
             data-testid="f24-maxTime-error"
           >
