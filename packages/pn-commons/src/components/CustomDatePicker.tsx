@@ -27,7 +27,6 @@ const CustomDatePicker = (
         slotProps={{
           ...props.slotProps,
           toolbar: { hidden: true },
-          textField: { size: 'small' },
           actionBar: { actions: [] },
         }}
         closeOnSelect

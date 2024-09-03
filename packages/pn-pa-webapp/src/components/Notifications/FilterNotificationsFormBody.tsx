@@ -2,7 +2,7 @@ import { FormikErrors, FormikState, FormikTouched, FormikValues } from 'formik';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ListItemText, MenuItem, Stack, TextField } from '@mui/material';
+import { ListItemText, MenuItem, TextField } from '@mui/material';
 import {
   CustomDatePicker,
   DATE_FORMAT,
@@ -124,61 +124,61 @@ const FilterNotificationsFormBody = ({
         fullWidth={isMobile}
         sx={{ mb: isMobile ? '20px' : 0 }}
       />
-      <Stack direction={{ sm: 'column', xs: 'column' }}>
-        <CustomDatePicker
-          language={i18n.language}
-          label={t('filters.data_da')}
-          format={DATE_FORMAT}
-          value={startDate}
-          onChange={(value: DatePickerTypes) => {
-            void formikInstance.setFieldValue('startDate', value || tenYearsAgo).then(() => {
-              setStartDate(value);
-            });
-          }}
-          slotProps={{
-            textField: {
-              id: 'startDate',
-              name: 'startDate',
-              inputProps: {
-                inputMode: 'text',
-                type: 'text',
-                'aria-label': t('filters.data_da-input-aria-label'),
-              },
-              fullWidth: isMobile,
+      <CustomDatePicker
+        language={i18n.language}
+        label={t('filters.data_da')}
+        format={DATE_FORMAT}
+        value={startDate}
+        onChange={(value: DatePickerTypes) => {
+          void formikInstance.setFieldValue('startDate', value || tenYearsAgo).then(() => {
+            setStartDate(value);
+          });
+        }}
+        slotProps={{
+          textField: {
+            id: 'startDate',
+            name: 'startDate',
+            inputProps: {
+              inputMode: 'text',
+              type: 'text',
+              'aria-label': t('filters.data_da-input-aria-label'),
             },
-          }}
-          sx={{ mb: isMobile ? '20px' : 0 }}
-          disableFuture={true}
-          minDate={tenYearsAgo}
-          maxDate={endDate ?? undefined}
-        />
-        <CustomDatePicker
-          language={i18n.language}
-          label={t('filters.data_a')}
-          format={DATE_FORMAT}
-          value={endDate}
-          onChange={(value: DatePickerTypes) => {
-            void formikInstance.setFieldValue('endDate', value || today).then(() => {
-              setEndDate(value);
-            });
-          }}
-          slotProps={{
-            textField: {
-              id: 'endDate',
-              name: 'endDate',
-              inputProps: {
-                inputMode: 'text',
-                type: 'text',
-                'aria-label': t('filters.data_a-input-aria-label'),
-              },
-              fullWidth: isMobile,
+            size: 'small',
+            fullWidth: isMobile,
+          },
+        }}
+        sx={{ mb: isMobile ? '20px' : 0 }}
+        disableFuture={true}
+        minDate={tenYearsAgo}
+        maxDate={endDate ?? undefined}
+      />
+      <CustomDatePicker
+        language={i18n.language}
+        label={t('filters.data_a')}
+        format={DATE_FORMAT}
+        value={endDate}
+        onChange={(value: DatePickerTypes) => {
+          void formikInstance.setFieldValue('endDate', value || today).then(() => {
+            setEndDate(value);
+          });
+        }}
+        slotProps={{
+          textField: {
+            id: 'endDate',
+            name: 'endDate',
+            inputProps: {
+              inputMode: 'text',
+              type: 'text',
+              'aria-label': t('filters.data_a-input-aria-label'),
             },
-          }}
-          sx={{ mb: isMobile ? '20px' : 0 }}
-          disableFuture={true}
-          minDate={startDate ?? tenYearsAgo}
-        />
-      </Stack>
+            size: 'small',
+            fullWidth: isMobile,
+          },
+        }}
+        sx={{ mb: isMobile ? '20px' : 0 }}
+        disableFuture={true}
+        minDate={startDate ?? tenYearsAgo}
+      />
       <TextField
         id="status"
         data-testid="notificationStatus"
