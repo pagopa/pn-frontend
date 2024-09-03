@@ -20,6 +20,7 @@ import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
 import ExistingContactDialog from './ExistingContactDialog';
 import PecVerificationDialog from './PecVerificationDialog';
+import SercqSendDisambiguationDialog from './SercqSendDisambiguationDialog';
 import SpecialDigitalContacts from './SpecialDigitalContacts';
 
 enum ModalType {
@@ -28,11 +29,12 @@ enum ModalType {
   CANCEL_VALIDATION = 'cancel_validation',
   DELETE = 'delete',
   CODE = 'code',
+  DISAMBIGUATION = 'disambiguation',
 }
 
 const PecContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultPECAddress, specialPECAddresses, addresses } = useAppSelector(
+  const { defaultPECAddress, specialPECAddresses, defaultSERCQAddress, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
@@ -60,6 +62,10 @@ const PecContactItem: React.FC = () => {
     // first check if contact already exists
     if (contactAlreadyExists(addresses, value, sender.senderId, ChannelType.PEC)) {
       setModalOpen(ModalType.EXISTING);
+      return;
+    }
+    if (defaultSERCQAddress) {
+      setModalOpen(ModalType.DISAMBIGUATION);
       return;
     }
     handleCodeVerification();
@@ -243,6 +249,12 @@ const PecContactItem: React.FC = () => {
         open={modalOpen === ModalType.CANCEL_VALIDATION}
         senderId={currentAddress.current.sender.senderId}
         handleClose={() => setModalOpen(null)}
+      />
+      <SercqSendDisambiguationDialog
+        open={modalOpen === ModalType.DISAMBIGUATION}
+        currentAddress={currentAddress}
+        onCancel={() => setModalOpen(null)}
+        onConfirm={() => handleCodeVerification()}
       />
       <DeleteDialog
         showModal={modalOpen === ModalType.DELETE}
