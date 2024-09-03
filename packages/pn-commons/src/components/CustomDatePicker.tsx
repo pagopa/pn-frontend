@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/no-identical-functions */
 import { de, enGB, fr, it, sl } from 'date-fns/locale';
 
 import { DatePicker, DatePickerProps, LocalizationProvider } from '@mui/x-date-pickers';

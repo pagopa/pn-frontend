@@ -41,9 +41,9 @@ const FilterNotificationsFormBody = ({
   setStartDate,
   setEndDate,
 }: Props) => {
+  const isMobile = useIsMobile();
   const { t, i18n } = useTranslation(['notifiche']);
   const localizedNotificationStatus = getNotificationAllowedStatus();
-  const isMobile = useIsMobile();
   const handlePaste = async (e: React.ClipboardEvent) => {
     e.preventDefault();
     const trimmedValue = e.clipboardData.getData('text').trim();
@@ -105,7 +105,6 @@ const FilterNotificationsFormBody = ({
         size="small"
         fullWidth={isMobile}
         sx={{ mb: isMobile ? '20px' : 0 }}
-        inputProps={{ maxLength: 25 }}
       />
       <TextField
         id="iunMatch"
@@ -123,6 +122,7 @@ const FilterNotificationsFormBody = ({
         size="small"
         fullWidth={isMobile}
         sx={{ mb: isMobile ? '20px' : 0 }}
+        inputProps={{ maxLength: 25 }}
       />
       <CustomDatePicker
         language={i18n.language}
@@ -138,16 +138,16 @@ const FilterNotificationsFormBody = ({
           textField: {
             id: 'startDate',
             name: 'startDate',
+            size: 'small',
             inputProps: {
               inputMode: 'text',
               type: 'text',
               'aria-label': t('filters.data_da-input-aria-label'),
             },
-            size: 'small',
             fullWidth: isMobile,
+            sx: { mb: isMobile ? '20px' : '0' },
           },
         }}
-        sx={{ mb: isMobile ? '20px' : 0 }}
         disableFuture={true}
         minDate={tenYearsAgo}
         maxDate={endDate ?? undefined}
@@ -166,16 +166,16 @@ const FilterNotificationsFormBody = ({
           textField: {
             id: 'endDate',
             name: 'endDate',
+            size: 'small',
             inputProps: {
               inputMode: 'text',
               type: 'text',
               'aria-label': t('filters.data_a-input-aria-label'),
             },
-            size: 'small',
             fullWidth: isMobile,
+            sx: { mb: isMobile ? '20px' : 0 },
           },
         }}
-        sx={{ mb: isMobile ? '20px' : 0 }}
         disableFuture={true}
         minDate={startDate ?? tenYearsAgo}
       />
