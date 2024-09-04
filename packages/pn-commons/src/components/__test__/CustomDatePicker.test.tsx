@@ -41,16 +41,15 @@ const RenderDatePicker = ({ language = 'it' }: { language?: string }) => (
 );
 
 describe('test CustomDatePicker component', () => {
-  it('renders the component', () => {
-    const { getByTestId, container } = render(<RenderDatePicker />);
-    const input = getByTestId(/calendaricon/i);
-    expect(input).toBeInTheDocument();
-    fireEvent.click(input);
-    waitFor(async () => {
-      const datePicker = await screen.findByRole('presentation');
-      expect(datePicker).toBeInTheDocument();
-    });
+  it('renders the component', async () => {
+    const { getByRole, getByTestId, container } = render(<RenderDatePicker />);
     expect(container).toHaveTextContent(/datepicker/i);
+
+    const calendarButton = getByTestId(/calendaricon/i);
+    expect(calendarButton).toBeInTheDocument();
+    fireEvent.click(calendarButton);
+    const datePicker = await waitFor(() => getByRole('dialog'));
+    expect(datePicker).toBeInTheDocument();
   });
 
   it.each(languages)('check january month to be $month in $language', (language) => {
