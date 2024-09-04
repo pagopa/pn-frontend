@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AddCircle, Verified, WarningOutlined } from '@mui/icons-material';
-import { Box, Card, Stack, Typography } from '@mui/material';
+import { Card, CardActionArea, Stack, Typography } from '@mui/material';
 
 import { AddressType, DigitalAddress } from '../../models/contacts';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -29,11 +29,7 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
       if (isCourtesyCard && isSercQEnabled) {
         return <WarningOutlined color="warning" data-testid="warningIcon" />;
       }
-      return (
-        <Box aria-label={t('summary-card.add-icon-arialabel')}>
-          <AddCircle color="primary" data-testid="addIcon" />
-        </Box>
-      );
+      return <AddCircle color="primary" data-testid="addIcon" />;
     }
 
     return <Verified color="success" data-testid="verifiedIcon" />;
@@ -57,26 +53,36 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
     const sectionId = isCourtesyCard ? 'courtesyContactsSection' : 'legalContactsSection';
 
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById(sectionId)?.focus();
   };
 
   return (
-    <Card
-      sx={{
-        p: 2,
-        width: { xs: '100%', lg: '185px' },
-        cursor: 'pointer',
-        '&:hover, &:active': { bgcolor: '#F6F7F8' },
-      }}
-      onClick={goToSection}
-      data-testid={isCourtesyCard ? 'courtesyContactsCard' : 'legalContactsCard'}
-    >
-      {getIcon()}
-      <Typography variant="body2" fontWeight={700} mt={0.5} mb={1} data-testid="cardTitle">
-        {t(title)}
-      </Typography>
-      <Typography variant="body2" data-testid="cardDescription">
-        {getDescription()}
-      </Typography>
+    <Card data-testid={isCourtesyCard ? 'courtesyContactsCard' : 'legalContactsCard'}>
+      <CardActionArea
+        onClick={goToSection}
+        sx={{
+          p: 2,
+          width: { xs: '100%', lg: '185px' },
+          cursor: 'pointer',
+          '&:hover, &:active': { bgcolor: '#F6F7F8' },
+        }}
+        aria-label={t(title)}
+        aria-description={getDescription()}
+      >
+        {getIcon()}
+        <Typography
+          variant="body2"
+          fontWeight={700}
+          data-testid="cardTitle"
+          aria-hidden
+          sx={{ mt: 0.5, mb: 1 }}
+        >
+          {t(title)}
+        </Typography>
+        <Typography variant="body2" data-testid="cardDescription" aria-hidden>
+          {getDescription()}
+        </Typography>
+      </CardActionArea>
     </Card>
   );
 };

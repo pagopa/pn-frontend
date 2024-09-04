@@ -98,16 +98,20 @@ describe('ContactsSummaryCards component', () => {
     expect(courtesyContacts).toBeInTheDocument();
 
     const scrollIntoViewMock = vi.fn();
+    const focusMock = vi.fn();
     document.getElementById = vi.fn().mockReturnValue({
       scrollIntoView: scrollIntoViewMock,
+      focus: focusMock,
     });
 
-    fireEvent.click(legalContacts);
+    fireEvent.click(within(legalContacts).getByRole('button'));
     expect(document.getElementById).toHaveBeenCalledWith('legalContactsSection');
     expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth' });
+    expect(focusMock).toHaveBeenCalled();
 
-    fireEvent.click(courtesyContacts);
+    fireEvent.click(within(courtesyContacts).getByRole('button'));
     expect(document.getElementById).toHaveBeenCalledWith('courtesyContactsSection');
     expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth' });
+    expect(focusMock).toHaveBeenCalled();
   });
 });
