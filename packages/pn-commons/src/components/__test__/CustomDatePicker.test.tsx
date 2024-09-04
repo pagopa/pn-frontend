@@ -1,4 +1,4 @@
-import { createMatchMedia, fireEvent, render, screen } from '../../test-utils';
+import { createMatchMedia, fireEvent, render, screen, waitFor } from '../../test-utils';
 import CustomDatePicker from '../CustomDatePicker';
 
 const languages = [
@@ -42,10 +42,15 @@ const RenderDatePicker = ({ language = 'it' }: { language?: string }) => (
 
 describe('test CustomDatePicker component', () => {
   it('renders the component', () => {
-    const { getByPlaceholderText, container } = render(<RenderDatePicker />);
-    const input = getByPlaceholderText(/datepickerinput/i);
-    expect(container).toHaveTextContent(/datepicker/i);
+    const { getByTestId, container } = render(<RenderDatePicker />);
+    const input = getByTestId(/calendaricon/i);
     expect(input).toBeInTheDocument();
+    fireEvent.click(input);
+    waitFor(async () => {
+      const datePicker = await screen.findByRole('presentation');
+      expect(datePicker).toBeInTheDocument();
+    });
+    expect(container).toHaveTextContent(/datepicker/i);
   });
 
   it.each(languages)('check january month to be $month in $language', (language) => {
