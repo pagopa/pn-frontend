@@ -51,13 +51,14 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
 
   const goToSection = () => {
     const sectionId = isCourtesyCard ? 'courtesyContactsSection' : 'legalContactsSection';
+    const titleId = isCourtesyCard ? 'courtesyContactsTitle' : 'legalContactsTitle';
 
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-    document.getElementById(sectionId)?.focus();
+    document.getElementById(titleId)?.focus();
   };
 
   return (
-    <Card data-testid={isCourtesyCard ? 'courtesyContactsCard' : 'legalContactsCard'}>
+    <Card elevation={4} data-testid={isCourtesyCard ? 'courtesyContactsCard' : 'legalContactsCard'}>
       <CardActionArea
         onClick={goToSection}
         sx={{

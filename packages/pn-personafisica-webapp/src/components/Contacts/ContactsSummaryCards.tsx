@@ -57,7 +57,7 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
   };
 
   return (
-    <Card data-testid={isCourtesyCard ? 'courtesyContactsCard' : 'legalContactsCard'}>
+    <Card elevation={4} data-testid={isCourtesyCard ? 'courtesyContactsCard' : 'legalContactsCard'}>
       <CardActionArea
         onClick={goToSection}
         sx={{
