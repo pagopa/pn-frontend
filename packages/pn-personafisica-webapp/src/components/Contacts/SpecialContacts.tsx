@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import AddIcon from '@mui/icons-material/Add';
-import { Card, CardContent, Divider, Stack, Table, TableBody, Typography } from '@mui/material';
+import { Card, CardContent, Divider, Grid, Stack, Typography } from '@mui/material';
 import { appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -54,12 +54,12 @@ const SpecialContacts: React.FC = () => {
   const currentAddress = useRef<{ value: string; sender: Sender; channelType: ChannelType }>({
     value: '',
     sender: { senderId: 'dafault' },
-    channelType: ChannelType.PEC,
+    channelType: ChannelType.PEC, // TODO to fix beause if PEC is disabled i don't want to use it into default values of dialog
   });
 
   const labelRoot =
     currentAddress.current.channelType === ChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts';
-  const contactType = currentAddress.current.channelType.toLowerCase();
+  const contactType = currentAddress.current.channelType?.toLowerCase();
 
   const specialAddresses: Array<SpecialAddress> = addresses.reduce((arr, addr) => {
     const addressIndex = arr.findIndex((a) => a.value === addr.value);
@@ -323,36 +323,30 @@ const SpecialContacts: React.FC = () => {
             <Typography variant="body1" fontWeight={700}>
               {t('special-contacts.card-title', { ns: 'recapiti' })}
             </Typography>
-            <>
-              {!isMobile && (
-                <Table>
-                  <TableBody>
-                    {Object.entries(groupedAddresses).map(([senderId, addr]) => (
-                      <SpecialContactElem
-                        key={senderId}
-                        addresses={addr}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
-                      />
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
-              {isMobile &&
-                Object.entries(groupedAddresses).map(([senderId, addr]) => (
-                  <>
-                    <Stack key={senderId} sx={{ mt: 2 }}>
-                      <SpecialContactElem
-                        key={senderId}
-                        addresses={addr}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
-                      />
-                      <Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }} />
-                    </Stack>
-                  </>
-                ))}
-            </>
+            {!isMobile && (
+              <Grid container sx={{ mt: 3 }}>
+                <Grid item xs={3}>
+                  <Typography variant="caption" fontWeight={600}>
+                    {t(`special-contacts.senders`, { ns: 'recapiti' })}
+                  </Typography>
+                </Grid>
+                <Grid item xs={9}>
+                  <Typography variant="caption" fontWeight={600} mb={3}>
+                    {t('special-contacts.contacts', { ns: 'recapiti' })}
+                  </Typography>
+                </Grid>
+              </Grid>
+            )}
+            <Stack divider={<Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }} />}>
+              {Object.entries(groupedAddresses).map(([senderId, addr]) => (
+                <SpecialContactElem
+                  key={senderId}
+                  addresses={addr}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </Stack>
           </CardContent>
         </Card>
       )}

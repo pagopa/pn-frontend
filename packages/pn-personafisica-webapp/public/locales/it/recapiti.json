@@ -119,8 +119,9 @@
     "link-email-placeholder": "La tua email",
     "link-pec-placeholder": "La tua PEC",
     "link-sms-placeholder": "Il tuo numero",
-    "senders-to-add": "Enti",
+    "senders": "Enti",
     "contact-to-add": "Recapito",
+    "contact-to-add-description": "Puoi associare solo i tipi di recapito per cui hai già impostato un recapito principale.",
     "pec-already-exists": "Questo ente è già associato a un indirizzo PEC. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "sms-already-exists": "Questo ente è già associato a un numero di cellulare. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "email-already-exists": "Questo ente è già associato a un indirizzo e-mail. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
@@ -134,12 +135,12 @@
     "pec-add-more-caption": "Vuoi che le notifiche inviate da alcuni enti siano indirizzate a un'altra PEC?",
     "sender-list": "Per le notifiche inviate da:",
     "modal-title": "Associa un recapito a enti specifici",
-    "modal-description": "Inserisci uno o più enti e il recapito da associare. Le notifiche inviate dagli enti selezionati saranno gestite con questo recapito invece che con quello principale.",
     "card-title": "Già associati",
     "sender": "Ente",
     "remove-special-title": "Vuoi eliminare {{contactValue}}?",
     "remove-special-description": "Gli avvisi relativi alle notifiche degli enti associati non saranno più inviati a questo recapito, ma a quello principale.",
-    "no-default-address": "Potrai associare questo recapito ad enti specifici solo dopo aver impostato un recapito generale dello stesso tipo."
+    "no-default-address": "Recapito principale non presente",
+    "contacts": "Recapiti"
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",

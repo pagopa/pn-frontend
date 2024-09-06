@@ -52,6 +52,7 @@ type Props = {
 type AddressTypeItem = {
   id: ChannelType;
   value: string;
+  disabled: boolean;
 };
 
 const AddSpecialContactDialog: React.FC<Props> = ({
@@ -74,6 +75,9 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const addressTypes: Array<AddressTypeItem> = allowedAddressTypes.map((addressType) => ({
     id: addressType,
     value: t(`special-contacts.${addressType.toLowerCase()}`, { ns: 'recapiti' }),
+    disabled: !digitalAddresses
+      .filter((a) => a.channelType === addressType)
+      .some((a) => a.senders.some((s) => s.senderId === 'default')),
   }));
 
   const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -171,7 +175,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
 
   const initialValues = {
     senders,
-    channelType: channelType ?? addressTypes[0]?.id,
+    channelType: channelType ?? addressTypes.filter((a) => !a.disabled)[0].id,
     s_value: channelType === ChannelType.SMS ? value.replace(internationalPhonePrefix, '') : value,
   };
 
@@ -212,7 +216,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   }, [senderInputValue, open]);
 
   useEffect(() => {
-    open && checkIfHasDefaultAddress(formik.values.channelType);
+    open && checkIfHasDefaultAddress(channelType ?? formik.values.channelType);
   }, [open]);
 
   const handleClose = () => {
@@ -233,13 +237,72 @@ const AddSpecialContactDialog: React.FC<Props> = ({
         {t(`special-contacts.modal-title`, { ns: 'recapiti' })}
       </DialogTitle>
       <PnDialogContent>
-        <Typography variant="body1" mb={2}>
-          {t(`special-contacts.modal-description`, { ns: 'recapiti' })}
-        </Typography>
         <form onSubmit={formik.handleSubmit}>
+          <Stack mt={1} direction="column">
+            <Typography variant="caption-semibold" mb={1}>
+              {t(`special-contacts.contact-to-add`, { ns: 'recapiti' })}
+            </Typography>
+            <Typography variant="body1" mb={2}>
+              {t(`special-contacts.contact-to-add-description`, { ns: 'recapiti' })}
+            </Typography>
+            <CustomDropdown
+              id="addressType"
+              name="addressType"
+              value={formik.values.channelType}
+              onChange={addressTypeChangeHandler}
+              size="small"
+              sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
+            >
+              {addressTypes.map((a) => (
+                <MenuItem
+                  id={`dropdown-${a.id}`}
+                  key={a.id}
+                  value={a.id}
+                  disabled={a.disabled}
+                  sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
+                >
+                  {a.value}
+                  {a.disabled && (
+                    <Typography fontSize="14px">
+                      {t('special-contacts.no-default-address', { ns: 'recapiti' })}
+                    </Typography>
+                  )}
+                </MenuItem>
+              ))}
+            </CustomDropdown>
+            <TextField
+              inputProps={{ sx: { height: '14px' } }}
+              fullWidth
+              id="s_value"
+              name="s_value"
+              label={t(
+                `special-contacts.link-${formik.values.channelType.toLowerCase()}-placeholder`,
+                {
+                  ns: 'recapiti',
+                }
+              )}
+              placeholder={t(
+                `special-contacts.link-${formik.values.channelType.toLowerCase()}-placeholder`,
+                {
+                  ns: 'recapiti',
+                }
+              )}
+              value={formik.values.s_value}
+              onChange={handleChangeTouched}
+              error={formik.touched.s_value && Boolean(formik.errors.s_value)}
+              helperText={formik.touched.s_value && formik.errors.s_value}
+              InputProps={{
+                startAdornment:
+                  formik.values.channelType === ChannelType.SMS ? (
+                    <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
+                  ) : null,
+              }}
+            />
+          </Stack>
+
           <Stack my={2}>
             <Typography variant="caption-semibold" mb={1}>
-              {t(`special-contacts.senders-to-add`, { ns: 'recapiti' })}
+              {t(`special-contacts.senders`, { ns: 'recapiti' })}
             </Typography>
             <ApiErrorWrapper
               apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES}
@@ -290,54 +353,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
               sx={{ mr: 1, mb: 1 }}
             />
           ))}
-
-          <Stack mt={1} direction="column">
-            <Typography variant="caption-semibold" mb={1}>
-              {t(`special-contacts.contact-to-add`, { ns: 'recapiti' })}
-            </Typography>
-            <CustomDropdown
-              id="addressType"
-              name="addressType"
-              value={formik.values.channelType}
-              onChange={addressTypeChangeHandler}
-              size="small"
-              sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
-            >
-              {addressTypes.map((a) => (
-                <MenuItem id={`dropdown-${a.id}`} key={a.id} value={a.id}>
-                  {a.value}
-                </MenuItem>
-              ))}
-            </CustomDropdown>
-            <TextField
-              inputProps={{ sx: { height: '14px' } }}
-              fullWidth
-              id="s_value"
-              name="s_value"
-              label={t(
-                `special-contacts.link-${formik.values.channelType.toLowerCase()}-placeholder`,
-                {
-                  ns: 'recapiti',
-                }
-              )}
-              placeholder={t(
-                `special-contacts.link-${formik.values.channelType.toLowerCase()}-placeholder`,
-                {
-                  ns: 'recapiti',
-                }
-              )}
-              value={formik.values.s_value}
-              onChange={handleChangeTouched}
-              error={formik.touched.s_value && Boolean(formik.errors.s_value)}
-              helperText={formik.touched.s_value && formik.errors.s_value}
-              InputProps={{
-                startAdornment:
-                  formik.values.channelType === ChannelType.SMS ? (
-                    <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
-                  ) : null,
-              }}
-            />
-          </Stack>
         </form>
         {alreadyExistsMessage && (
           <Alert

@@ -62,7 +62,7 @@ describe('test AddSpecialContactDialog', () => {
     const input = getById(bodyEl, 's_value');
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue('');
-    expect(bodyEl).toHaveTextContent(`special-contacts.senders-to-add`);
+    expect(bodyEl).toHaveTextContent(`special-contacts.senders`);
     expect(bodyEl).toHaveTextContent(`special-contacts.senders-caption`);
     const senderAutoComplete = within(bodyEl).getByTestId('sender');
     expect(senderAutoComplete).toBeInTheDocument();
@@ -147,7 +147,7 @@ describe('test AddSpecialContactDialog', () => {
     const input = getById(bodyEl, 's_value');
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue('mocked@pec.it');
-    expect(bodyEl).toHaveTextContent(`special-contacts.senders-to-add`);
+    expect(bodyEl).toHaveTextContent(`special-contacts.sendersd`);
     expect(bodyEl).toHaveTextContent(`special-contacts.senders-caption`);
     const senderAutoComplete = within(bodyEl).getByTestId('sender');
     expect(senderAutoComplete).toBeInTheDocument();
