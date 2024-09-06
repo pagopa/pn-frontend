@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import {
   ApiErrorWrapper,
+  CustomDropdown,
   PnAutocomplete,
   PnDialog,
   PnDialogActions,
@@ -25,35 +26,38 @@ import {
 
 import { ChannelType } from '../../models/contacts';
 import { Party } from '../../models/party';
-import { CONTACT_ACTIONS } from '../../redux/contact/actions';
-import { getAllActivatedParties } from '../../redux/contact/actions';
-import { useAppDispatch } from '../../redux/hooks';
-import { useAppSelector } from '../../redux/hooks';
+import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import {
+  allowedAddressTypes,
   emailValidationSchema,
+  internationalPhonePrefix,
   pecValidationSchema,
   phoneValidationSchema,
 } from '../../utility/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
-import { SpecialAddress } from './SpecialDigitalContacts';
+import { SpecialAddress } from './SpecialContacts';
 
 type Props = {
   open: boolean;
   value: string;
   senders: Array<Party>;
-  prefix?: string;
   onDiscard: () => void;
-  onConfirm: (value: string, senders: Array<Party>) => void;
+  onConfirm: (value: string, addressType: ChannelType, senders: Array<Party>) => void;
   digitalAddresses: Array<SpecialAddress>;
-  channelType: ChannelType;
+  channelType?: ChannelType;
+};
+
+type AddressTypeItem = {
+  id: ChannelType;
+  value: string;
 };
 
 const AddSpecialContactDialog: React.FC<Props> = ({
   open,
   value,
   senders,
-  prefix,
   onDiscard,
   onConfirm,
   digitalAddresses,
@@ -64,18 +68,34 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const getOptionLabel = (option: Party) => option.name || '';
   const [senderInputValue, setSenderInputValue] = useState('');
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
-  const contactType = channelType.toLowerCase();
+  const [errorMessages, setErrorMessages] = useState<string | null>(null);
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
 
-  const checkIfSenderIsAlreadyAdded = (senders: Array<Party>) => {
-    const alreadyExists = digitalAddresses.some(
-      (addr) =>
-        addr.value !== value &&
-        addr.senders.some((sender) => senders.some((s) => s.id === sender.senderId))
-    );
+  const addressTypes: Array<AddressTypeItem> = allowedAddressTypes.map((addressType) => ({
+    id: addressType,
+    value: t(`special-contacts.${addressType.toLowerCase()}`, { ns: 'recapiti' }),
+  }));
+
+  const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
+    await formik.setFieldValue('s_value', '');
+    formik.handleChange(e);
+    checkIfHasDefaultAddress(e.target.value as ChannelType);
+    checkIfSenderIsAlreadyAdded(formik.values.senders, e.target.value as ChannelType);
+  };
+
+  /**
+   * Used to check if the senders has already a contact with the same address type
+   * @param senders Array of senders to check
+   * @param channelType ChannelType to check
+   */
+  const checkIfSenderIsAlreadyAdded = (senders: Array<Party>, channelType: ChannelType) => {
+    const alreadyExists = digitalAddresses
+      .filter((a) => a.channelType === channelType)
+      .some((a) => a.senders.some((s) => senders.some((sender) => sender.id === s.senderId)));
+
     if (alreadyExists) {
       setAlreadyExistsMessage(
-        t(`special-contacts.${contactType}-already-exists`, {
+        t(`special-contacts.contact-already-exists`, {
           ns: 'recapiti',
         })
       );
@@ -84,15 +104,31 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     setAlreadyExistsMessage('');
   };
 
+  /**
+   * Used to check if the address type has a default address
+   * @param addressType ChannelType to check
+   */
+  const checkIfHasDefaultAddress = (channelType: ChannelType) => {
+    const hasDefaultAddress = digitalAddresses
+      .filter((a) => a.channelType === channelType)
+      .some((a) => a.senders.some((s) => s.senderId === 'default'));
+
+    if (!hasDefaultAddress) {
+      return setErrorMessages(t('special-contacts.no-default-address', { ns: 'recapiti' }));
+    }
+
+    return setErrorMessages(null);
+  };
+
   const senderChangeHandler = async (_: any, newValue: Party | null) => {
     setSenderInputValue('');
     if (newValue) {
       const senders = [...formik.values.senders, newValue];
       await formik.setFieldValue('senders', senders);
-      checkIfSenderIsAlreadyAdded(senders);
+      checkIfSenderIsAlreadyAdded(senders, formik.values.channelType);
       return;
     }
-    checkIfSenderIsAlreadyAdded(formik.values.senders);
+    checkIfSenderIsAlreadyAdded(formik.values.senders, formik.values.channelType);
   };
 
   // handling of search string for sender
@@ -116,25 +152,27 @@ const AddSpecialContactDialog: React.FC<Props> = ({
       .array()
       .of(yup.object({ id: yup.string(), name: yup.string() }).required())
       .min(1),
+    addressType: yup.string().required(),
     s_value: yup
       .string()
-      .when([], {
-        is: () => channelType === ChannelType.PEC,
+      .when('addressType', {
+        is: ChannelType.PEC,
         then: pecValidationSchema(t),
       })
-      .when([], {
-        is: () => channelType === ChannelType.EMAIL,
+      .when('addressType', {
+        is: ChannelType.EMAIL,
         then: emailValidationSchema(t),
       })
-      .when([], {
-        is: () => channelType === ChannelType.SMS,
+      .when('addressType', {
+        is: ChannelType.SMS,
         then: phoneValidationSchema(t),
       }),
   });
 
   const initialValues = {
     senders,
-    s_value: prefix ? value.replace(prefix, '') : value,
+    channelType: channelType ?? addressTypes[0]?.id,
+    s_value: channelType === ChannelType.SMS ? value.replace(internationalPhonePrefix, '') : value,
   };
 
   const formik = useFormik({
@@ -143,7 +181,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      onConfirm(values.s_value, values.senders);
+      onConfirm(values.s_value, values.channelType, values.senders);
     },
   });
 
@@ -155,7 +193,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const handleSenderDelete = async (sender: Party) => {
     const senders = formik.values.senders.filter((s) => s.id !== sender.id);
     await formik.setFieldValue('senders', senders);
-    checkIfSenderIsAlreadyAdded(senders);
+    checkIfSenderIsAlreadyAdded(senders, formik.values.channelType);
   };
 
   const getParties = () => {
@@ -173,8 +211,14 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     getParties();
   }, [senderInputValue, open]);
 
+  useEffect(() => {
+    open && checkIfHasDefaultAddress(formik.values.channelType);
+  }, [open]);
+
   const handleClose = () => {
     formik.resetForm({ values: initialValues });
+    setAlreadyExistsMessage('');
+    setErrorMessages(null);
     onDiscard();
   };
 
@@ -186,39 +230,16 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   return (
     <PnDialog open={open} onClose={handleClose} data-testid="addSpecialContactDialog">
       <DialogTitle id="dialog-title">
-        {t(`special-contacts.modal-${contactType}-title`, { ns: 'recapiti' })}
+        {t(`special-contacts.modal-title`, { ns: 'recapiti' })}
       </DialogTitle>
       <PnDialogContent>
+        <Typography variant="body1" mb={2}>
+          {t(`special-contacts.modal-description`, { ns: 'recapiti' })}
+        </Typography>
         <form onSubmit={formik.handleSubmit}>
-          <Typography variant="caption-semibold">
-            {t(`special-contacts.${contactType}`, { ns: 'recapiti' })}
-          </Typography>
-          <Stack mt={1} direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <TextField
-              inputProps={{ sx: { height: '14px' } }}
-              fullWidth
-              id="s_value"
-              name="s_value"
-              placeholder={t(`special-contacts.link-${contactType}-placeholder`, {
-                ns: 'recapiti',
-              })}
-              value={formik.values.s_value}
-              onChange={handleChangeTouched}
-              error={formik.touched.s_value && Boolean(formik.errors.s_value)}
-              helperText={formik.touched.s_value && formik.errors.s_value}
-              InputProps={{
-                startAdornment: prefix ? (
-                  <InputAdornment position="start">{prefix}</InputAdornment>
-                ) : null,
-              }}
-            />
-          </Stack>
           <Stack my={2}>
             <Typography variant="caption-semibold" mb={1}>
               {t(`special-contacts.senders-to-add`, { ns: 'recapiti' })}
-            </Typography>
-            <Typography variant="caption" mb={2}>
-              {t(`special-contacts.senders-caption`, { ns: 'recapiti' })}
             </Typography>
             <ApiErrorWrapper
               apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES}
@@ -258,19 +279,78 @@ const AddSpecialContactDialog: React.FC<Props> = ({
               />
             </ApiErrorWrapper>
           </Stack>
+
+          {formik.values.senders.map((sender) => (
+            <Chip
+              data-testid="sender_chip"
+              variant="outlined"
+              key={`${sender.id}_chip`}
+              label={sender.name}
+              onDelete={() => handleSenderDelete(sender)}
+              sx={{ mr: 1, mb: 1 }}
+            />
+          ))}
+
+          <Stack mt={1} direction="column">
+            <Typography variant="caption-semibold" mb={1}>
+              {t(`special-contacts.contact-to-add`, { ns: 'recapiti' })}
+            </Typography>
+            <CustomDropdown
+              id="addressType"
+              name="addressType"
+              value={formik.values.channelType}
+              onChange={addressTypeChangeHandler}
+              size="small"
+              sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
+            >
+              {addressTypes.map((a) => (
+                <MenuItem id={`dropdown-${a.id}`} key={a.id} value={a.id}>
+                  {a.value}
+                </MenuItem>
+              ))}
+            </CustomDropdown>
+            <TextField
+              inputProps={{ sx: { height: '14px' } }}
+              fullWidth
+              id="s_value"
+              name="s_value"
+              label={t(
+                `special-contacts.link-${formik.values.channelType.toLowerCase()}-placeholder`,
+                {
+                  ns: 'recapiti',
+                }
+              )}
+              placeholder={t(
+                `special-contacts.link-${formik.values.channelType.toLowerCase()}-placeholder`,
+                {
+                  ns: 'recapiti',
+                }
+              )}
+              value={formik.values.s_value}
+              onChange={handleChangeTouched}
+              error={formik.touched.s_value && Boolean(formik.errors.s_value)}
+              helperText={formik.touched.s_value && formik.errors.s_value}
+              InputProps={{
+                startAdornment:
+                  formik.values.channelType === ChannelType.SMS ? (
+                    <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
+                  ) : null,
+              }}
+            />
+          </Stack>
         </form>
-        {formik.values.senders.map((sender) => (
-          <Chip
-            data-testid="sender_chip"
-            key={`${sender.id}_chip`}
-            label={sender.name}
-            onDelete={() => handleSenderDelete(sender)}
-            sx={{ mr: 1, mb: 1 }}
-          />
-        ))}
         {alreadyExistsMessage && (
-          <Alert severity="warning" sx={{ marginBottom: '20px' }} data-testid="alreadyExistsAlert">
+          <Alert
+            severity="warning"
+            sx={{ marginBottom: '20px', mt: 2 }}
+            data-testid="alreadyExistsAlert"
+          >
             {alreadyExistsMessage}
+          </Alert>
+        )}
+        {errorMessages && (
+          <Alert severity="info" sx={{ marginBottom: '20px', mt: 2 }} data-testid="errorAlert">
+            {errorMessages}
           </Alert>
         )}
       </PnDialogContent>
@@ -278,7 +358,11 @@ const AddSpecialContactDialog: React.FC<Props> = ({
         <Button onClick={handleClose} variant="outlined">
           {t('button.annulla')}
         </Button>
-        <Button onClick={handleConfirm} variant="contained" disabled={!formik.isValid}>
+        <Button
+          onClick={handleConfirm}
+          variant="contained"
+          disabled={!formik.isValid || !!errorMessages}
+        >
           {t('button.conferma')}
         </Button>
       </PnDialogActions>

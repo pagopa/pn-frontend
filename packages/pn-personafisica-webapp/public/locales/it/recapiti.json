@@ -109,6 +109,9 @@
     "block-remove-sms-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Altri recapiti”."
   },
   "special-contacts": {
+    "title": "Altri recapiti",
+    "description": "Se vuoi che le notifiche di alcuni enti siano indirizzate a dei recapiti diversi puoi indicarli qui, in sostituzione di quelli principali.",
+    "add-contact": "Associa recapito",
     "add-sender": "Aggiungi ente",
     "pec": "Indirizzo PEC",
     "sms": "Numero di cellulare",
@@ -116,11 +119,12 @@
     "link-email-placeholder": "La tua email",
     "link-pec-placeholder": "La tua PEC",
     "link-sms-placeholder": "Il tuo numero",
-    "senders-to-add": "Enti da associare",
-    "senders-caption": "Gli avvisi sulle notifiche degli enti associati saranno inviati a questa email, invece che a quella principale.",
+    "senders-to-add": "Enti",
+    "contact-to-add": "Recapito",
     "pec-already-exists": "Questo ente è già associato a un indirizzo PEC. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "sms-already-exists": "Questo ente è già associato a un numero di cellulare. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "email-already-exists": "Questo ente è già associato a un indirizzo e-mail. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
+    "contact-already-exists": "Uno o più enti selezionati sono già associati a questo recapito. Se premi “Associa”, verrà sostituito da quello che hai indicato qui.",
     "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito.",
     "sms-add-more-button": "Aggiungi altro numero",
     "sms-add-more-caption": "Vuoi che le notifiche inviate da alcuni enti siano indirizzate a un altro numero?",
@@ -129,9 +133,13 @@
     "pec-add-more-button": "Aggiungi altra PEC",
     "pec-add-more-caption": "Vuoi che le notifiche inviate da alcuni enti siano indirizzate a un'altra PEC?",
     "sender-list": "Per le notifiche inviate da:",
-    "modal-email-title": "Inserisci l’email e gli enti da associare",
-    "modal-pec-title": "Inserisci la PEC e gli enti da associare",
-    "modal-sms-title": "Inserisci il numero di cellulare e gli enti da associare"
+    "modal-title": "Associa un recapito a enti specifici",
+    "modal-description": "Inserisci uno o più enti e il recapito da associare. Le notifiche inviate dagli enti selezionati saranno gestite con questo recapito invece che con quello principale.",
+    "card-title": "Già associati",
+    "sender": "Ente",
+    "remove-special-title": "Vuoi eliminare {{contactValue}}?",
+    "remove-special-description": "Gli avvisi relativi alle notifiche degli enti associati non saranno più inviati a questo recapito, ma a quello principale.",
+    "no-default-address": "Potrai associare questo recapito ad enti specifici solo dopo aver impostato un recapito generale dello stesso tipo."
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",
