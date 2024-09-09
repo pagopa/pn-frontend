@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
-import { Box, Grid, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -44,11 +44,7 @@ const SpecialContactElem: React.FC<Props> = ({ addresses, onDelete, onEdit }) =>
     <>
       {f.address ? (
         <Stack direction="row" spacing={1}>
-          <VerifiedIcon
-            fontSize="small"
-            color="success"
-            sx={{ position: 'relative', top: '2px' }}
-          />
+          <VerifiedIcon fontSize="small" color="success" />
           <Box>
             <Typography
               sx={{
@@ -122,19 +118,15 @@ const SpecialContactElem: React.FC<Props> = ({ addresses, onDelete, onEdit }) =>
   }
 
   return (
-    <Grid container sx={{ mb: '5px', mt: '43px' }}>
-      <Grid item xs={3}>
-        <Typography variant="caption" fontWeight={600} fontSize="16px">
-          {addresses[0].senderName}
-        </Typography>
-      </Grid>
+    <Stack direction="row" spacing={6} sx={{ mb: 0.5, mt: '43px' }}>
+      <Typography variant="caption" fontWeight={600} mt={1} mb={3} sx={{ width: '224px' }}>
+        {addresses[0].senderName}
+      </Typography>
 
-      <Grid item xs={9}>
-        <Stack direction="row" spacing={6}>
-          {fields.map((f) => f.address && jsxField(f))}
-        </Stack>
-      </Grid>
-    </Grid>
+      <Stack direction="row" spacing={3}>
+        {fields.map((f) => !!f.address && jsxField(f))}
+      </Stack>
+    </Stack>
   );
 };
 

@@ -10,7 +10,7 @@ import LegalContacts from '../components/Contacts/LegalContacts';
 import SpecialContacts from '../components/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
-import { ChannelType, DigitalAddress } from '../models/contacts';
+import { ChannelType } from '../models/contacts';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { contactsSelectors, resetState } from '../redux/contact/reducers';
@@ -21,19 +21,14 @@ import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFact
 const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
-  const {
-    addresses,
-    courtesyAddresses,
-    defaultPECAddress,
-    defaultAPPIOAddress: contactIO,
-  } = useAppSelector(contactsSelectors.selectAddresses);
+  const addressesData = useAppSelector(contactsSelectors.selectAddresses);
   const [pageReady, setPageReady] = useState(false);
   const { LANDING_SITE_URL } = getConfiguration();
 
-  const courtesyContactsNotEmpty = () => {
-    const isIrrilevant = (address: DigitalAddress) => address.channelType === ChannelType.IOMSG;
-    return courtesyAddresses.some((addr) => !isIrrilevant(addr));
-  };
+  const showSpecialContactsSection = () =>
+    Object.values(ChannelType)
+      .filter((a) => a !== ChannelType.IOMSG)
+      .some((address) => addressesData[`default${address}Address`]);
 
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses()).then(() => {
@@ -49,8 +44,8 @@ const Contacts = () => {
   useEffect(() => {
     if (pageReady) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_YOUR_CONTACT_DETAILS, {
-        digitalAddresses: addresses,
-        contactIO,
+        digitalAddresses: addressesData.addresses,
+        contactIO: addressesData.defaultAPPIOAddress,
       });
     }
   }, [pageReady]);
@@ -110,7 +105,7 @@ const Contacts = () => {
             <LegalContacts />
             <CourtesyContacts />
           </Stack>
-          {(defaultPECAddress || courtesyContactsNotEmpty()) && (
+          {showSpecialContactsSection() && (
             <>
               <Divider sx={{ backgroundColor: 'white', color: 'text.secondary', mt: 6, mb: 3 }} />
               <SpecialContacts />

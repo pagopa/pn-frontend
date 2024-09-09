@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import AddIcon from '@mui/icons-material/Add';
-import { Card, CardContent, Divider, Grid, Stack, Typography } from '@mui/material';
+import { Card, CardContent, Divider, Stack, Typography } from '@mui/material';
 import { appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -45,10 +45,10 @@ const SpecialContacts: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
-  const { addresses } = useAppSelector(contactsSelectors.selectAddresses);
+  const addressesData = useAppSelector(contactsSelectors.selectAddresses);
   const [modalOpen, setModalOpen] = useState<{
     type: ModalType;
-    data: { value: string; senders: Array<Party> };
+    data: { value: string; channelType?: ChannelType; senders: Array<Party> };
   } | null>(null);
 
   const currentAddress = useRef<{ value: string; sender: Sender; channelType: ChannelType }>({
@@ -60,26 +60,6 @@ const SpecialContacts: React.FC = () => {
   const labelRoot =
     currentAddress.current.channelType === ChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts';
   const contactType = currentAddress.current.channelType?.toLowerCase();
-
-  const specialAddresses: Array<SpecialAddress> = addresses.reduce((arr, addr) => {
-    const addressIndex = arr.findIndex((a) => a.value === addr.value);
-    if (addressIndex === -1) {
-      const specialAddress = {
-        addressType: addr.addressType,
-        channelType: addr.channelType,
-        value: addr.value,
-        pecValid: addr.pecValid,
-        codeValid: addr.codeValid,
-        senders: [{ senderId: addr.senderId, senderName: addr.senderName }],
-      };
-      // eslint-disable-next-line functional/immutable-data
-      arr.push(specialAddress);
-    } else {
-      // eslint-disable-next-line functional/immutable-data
-      arr[addressIndex].senders.push({ senderId: addr.senderId, senderName: addr.senderName });
-    }
-    return arr;
-  }, [] as Array<SpecialAddress>);
 
   const sendSuccessEvent = (type: ChannelType) => {
     const event =
@@ -108,7 +88,7 @@ const SpecialContacts: React.FC = () => {
     currentAddress.current = { value, sender, channelType: addressType };
 
     // first check if contact already exists
-    if (contactAlreadyExists(addresses, value, sender.senderId, addressType)) {
+    if (contactAlreadyExists(addressesData.addresses, value, sender.senderId, addressType)) {
       setModalOpen({
         type: ModalType.EXISTING,
         data: {
@@ -266,6 +246,7 @@ const SpecialContacts: React.FC = () => {
       type: ModalType.SPECIAL,
       data: {
         value,
+        channelType,
         senders: [
           {
             id: sender.senderId,
@@ -278,20 +259,17 @@ const SpecialContacts: React.FC = () => {
 
   const handleCancelCode = async () => {
     setModalOpen(null);
-    // await digitalContactRef.current.resetForm();
   };
 
-  const groupedAddresses: Addresses = addresses
-    .filter((a) => a.senderId !== 'default')
-    .reduce((obj, a) => {
-      if (!obj[a.senderId]) {
-        // eslint-disable-next-line functional/immutable-data
-        obj[a.senderId] = [];
-      }
+  const groupedAddresses: Addresses = addressesData.specialAddresses.reduce((obj, a) => {
+    if (!obj[a.senderId]) {
       // eslint-disable-next-line functional/immutable-data
-      obj[a.senderId].push(a);
-      return obj;
-    }, {} as Addresses);
+      obj[a.senderId] = [];
+    }
+    // eslint-disable-next-line functional/immutable-data
+    obj[a.senderId].push(a);
+    return obj;
+  }, {} as Addresses);
 
   return (
     <>
@@ -324,18 +302,14 @@ const SpecialContacts: React.FC = () => {
               {t('special-contacts.card-title', { ns: 'recapiti' })}
             </Typography>
             {!isMobile && (
-              <Grid container sx={{ mt: 3 }}>
-                <Grid item xs={3}>
-                  <Typography variant="caption" fontWeight={600}>
-                    {t(`special-contacts.senders`, { ns: 'recapiti' })}
-                  </Typography>
-                </Grid>
-                <Grid item xs={9}>
-                  <Typography variant="caption" fontWeight={600} mb={3}>
-                    {t('special-contacts.contacts', { ns: 'recapiti' })}
-                  </Typography>
-                </Grid>
-              </Grid>
+              <Stack direction="row" spacing={6} mt={3}>
+                <Typography variant="caption" fontWeight={600} sx={{ width: '224px' }}>
+                  {t(`special-contacts.senders`, { ns: 'recapiti' })}
+                </Typography>
+                <Typography variant="caption" fontWeight={600}>
+                  {t('special-contacts.contacts', { ns: 'recapiti' })}
+                </Typography>
+              </Stack>
             )}
             <Stack divider={<Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }} />}>
               {Object.entries(groupedAddresses).map(([senderId, addr]) => (
@@ -362,8 +336,8 @@ const SpecialContacts: React.FC = () => {
           setModalOpen(null);
           onConfirm(value, addressType, { senderId: senders[0].id, senderName: senders[0].name });
         }}
-        digitalAddresses={specialAddresses}
-        channelType={currentAddress.current.channelType}
+        addressesData={addressesData}
+        channelType={modalOpen?.data.channelType}
       />
       <ContactCodeDialog
         value={currentAddress.current.value}

@@ -211,7 +211,7 @@ const PecContactItem: React.FC = () => {
       />
       <CancelVerificationModal
         open={modalOpen === ModalType.CANCEL_VALIDATION}
-        senderId={'default'}
+        senderId="default"
         handleClose={() => setModalOpen(null)}
       />
       <DeleteDialog
