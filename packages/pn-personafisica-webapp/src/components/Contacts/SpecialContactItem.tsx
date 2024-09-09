@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -5,21 +6,13 @@ import { Box, Stack, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { ChannelType, DigitalAddress } from '../../models/contacts';
+import { ChannelType, DigitalAddress, Sender } from '../../models/contacts';
 import { allowedAddressTypes } from '../../utility/contacts.utility';
 
 type Props = {
   addresses: Array<DigitalAddress>;
-  onEdit: (
-    value: string,
-    channelType: ChannelType,
-    sender: { senderId: string; senderName: string }
-  ) => void;
-  onDelete: (
-    value: string,
-    channelType: ChannelType,
-    sender: { senderId: string; senderName: string }
-  ) => void;
+  onEdit: (value: string, channelType: ChannelType, sender: Sender) => void;
+  onDelete: (value: string, channelType: ChannelType, sender: Sender) => void;
 };
 
 type Field = {
@@ -41,7 +34,7 @@ const SpecialContactElem: React.FC<Props> = ({ addresses, onDelete, onEdit }) =>
   }));
 
   const jsxField = (f: Field) => (
-    <>
+    <Fragment key={f.id}>
       {f.address ? (
         <Stack direction="row" spacing={1}>
           <VerifiedIcon fontSize="small" color="success" />
@@ -95,7 +88,7 @@ const SpecialContactElem: React.FC<Props> = ({ addresses, onDelete, onEdit }) =>
       ) : (
         ''
       )}
-    </>
+    </Fragment>
   );
 
   if (isMobile) {

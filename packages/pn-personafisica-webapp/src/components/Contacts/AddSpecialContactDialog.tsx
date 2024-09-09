@@ -6,7 +6,6 @@ import * as yup from 'yup';
 import {
   Alert,
   Button,
-  Chip,
   DialogTitle,
   InputAdornment,
   MenuItem,
@@ -42,11 +41,11 @@ import DropDownPartyMenuItem from '../Party/DropDownParty';
 type Props = {
   open: boolean;
   value: string;
-  senders: Array<Party>;
+  sender: Party;
   onDiscard: () => void;
-  onConfirm: (value: string, addressType: ChannelType, senders: Array<Party>) => void;
+  onConfirm: (value: string, addressType: ChannelType, sender: Party) => void;
   addressesData: SelectedAddresses;
-  channelType?: ChannelType;
+  channelType: ChannelType;
 };
 
 type AddressTypeItem = {
@@ -58,7 +57,7 @@ type AddressTypeItem = {
 const AddSpecialContactDialog: React.FC<Props> = ({
   open,
   value,
-  senders,
+  sender,
   onDiscard,
   onConfirm,
   addressesData,
@@ -67,7 +66,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const getOptionLabel = (option: Party) => option.name || '';
-  const [senderInputValue, setSenderInputValue] = useState('');
+  const [senderInputValue, setSenderInputValue] = useState(sender.name);
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
 
@@ -80,7 +79,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     await formik.setFieldValue('s_value', '');
     formik.handleChange(e);
-    checkIfSenderIsAlreadyAdded(formik.values.senders, e.target.value as ChannelType);
+    checkIfSenderIsAlreadyAdded(formik.values.sender, e.target.value as ChannelType);
   };
 
   /**
@@ -88,11 +87,9 @@ const AddSpecialContactDialog: React.FC<Props> = ({
    * @param senders Array of senders to check
    * @param channelType ChannelType to check
    */
-  const checkIfSenderIsAlreadyAdded = (senders: Array<Party>, channelType: ChannelType) => {
+  const checkIfSenderIsAlreadyAdded = (sender: Party, channelType: ChannelType) => {
     const alreadyExists = addressesData.specialAddresses.some(
-      (address) =>
-        address.channelType === channelType &&
-        senders.some((sender) => sender.id === address.senderId)
+      (a) => a.senderId === sender.id && a.channelType === channelType
     );
 
     if (alreadyExists) {
@@ -107,14 +104,14 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   };
 
   const senderChangeHandler = async (_: any, newValue: Party | null) => {
-    setSenderInputValue('');
-    if (newValue) {
-      const senders = [...formik.values.senders, newValue];
-      await formik.setFieldValue('senders', senders);
-      checkIfSenderIsAlreadyAdded(senders, formik.values.addressType);
+    await formik.setFieldTouched('sender', true, false);
+    await formik.setFieldValue('sender', newValue);
+    setSenderInputValue(newValue?.name ?? '');
+    if (newValue && addressesData.addresses.some((a) => a.senderId === newValue.id)) {
+      checkIfSenderIsAlreadyAdded(sender, formik.values.addressType);
       return;
     }
-    checkIfSenderIsAlreadyAdded(formik.values.senders, formik.values.addressType);
+    setAlreadyExistsMessage('');
   };
 
   // handling of search string for sender
@@ -123,21 +120,13 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   })}${searchStringLimitReachedText(senderInputValue)}`;
 
   const renderOption = (props: any, option: Party) => (
-    <MenuItem
-      {...props}
-      value={option.id}
-      key={option.id}
-      disabled={formik.values.senders.findIndex((sender) => sender.id === option.id) > -1}
-    >
+    <MenuItem {...props} value={option.id} key={option.id}>
       <DropDownPartyMenuItem name={option.name} />
     </MenuItem>
   );
 
   const validationSchema = yup.object({
-    senders: yup
-      .array()
-      .of(yup.object({ id: yup.string(), name: yup.string() }).required())
-      .min(1),
+    sender: yup.object({ id: yup.string(), name: yup.string() }).required(),
     addressType: yup.string().required(),
     s_value: yup
       .string()
@@ -156,8 +145,8 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   });
 
   const initialValues = {
-    senders,
-    addressType: channelType ?? addressTypes.filter((a) => !a.disabled)[0].id,
+    sender,
+    addressType: value.length ? channelType : addressTypes.filter((a) => !a.disabled)[0].id,
     s_value: channelType === ChannelType.SMS ? value.replace(internationalPhonePrefix, '') : value,
   };
 
@@ -167,19 +156,13 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      onConfirm(values.s_value, values.addressType, values.senders);
+      onConfirm(values.s_value, values.addressType, values.sender);
     },
   });
 
   const handleChangeTouched = async (e: ChangeEvent<HTMLInputElement>) => {
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
-  };
-
-  const handleSenderDelete = async (sender: Party) => {
-    const senders = formik.values.senders.filter((s) => s.id !== sender.id);
-    await formik.setFieldValue('senders', senders);
-    checkIfSenderIsAlreadyAdded(senders, formik.values.addressType);
   };
 
   const getParties = () => {
@@ -288,6 +271,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 onChange={senderChangeHandler}
                 inputValue={senderInputValue}
+                disabled={!!value}
                 onInputChange={(_event, newInputValue, reason) => {
                   if (reason === 'input') {
                     setSenderInputValue(newInputValue);
@@ -310,17 +294,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
               />
             </ApiErrorWrapper>
           </Stack>
-
-          {formik.values.senders.map((sender) => (
-            <Chip
-              data-testid="sender_chip"
-              variant="outlined"
-              key={`${sender.id}_chip`}
-              label={sender.name}
-              onDelete={() => handleSenderDelete(sender)}
-              sx={{ mr: 1, mb: 1 }}
-            />
-          ))}
         </form>
         {alreadyExistsMessage && (
           <Alert
@@ -337,7 +310,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
           {t('button.annulla')}
         </Button>
         <Button onClick={handleConfirm} variant="contained" disabled={!formik.isValid}>
-          {t('button.conferma')}
+          {t('button.associa')}
         </Button>
       </PnDialogActions>
     </PnDialog>

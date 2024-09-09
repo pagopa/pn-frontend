@@ -9,7 +9,7 @@ import { AddressType, ChannelType } from '../../models/contacts';
 type Props = {
   value: string;
   addressType: AddressType;
-  channelType: ChannelType;
+  channelType?: ChannelType;
   open: boolean;
   onDiscard: () => void;
   onConfirm: (code?: string) => void;
@@ -26,7 +26,7 @@ const ContactCodeDialog: React.FC<Props> = ({
   onError,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const contactType = channelType.toLowerCase();
+  const contactType = channelType?.toLowerCase();
   const codeModalRef =
     useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
   const labelRoot = addressType === AddressType.LEGAL ? 'legal-contacts' : 'courtesy-contacts';

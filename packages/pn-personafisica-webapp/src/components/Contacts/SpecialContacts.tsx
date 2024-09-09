@@ -19,7 +19,7 @@ import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/action
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
-import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
+import { internationalPhonePrefix } from '../../utility/contacts.utility';
 import AddSpecialContactDialog from './AddSpecialContactDialog';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
@@ -33,10 +33,6 @@ enum ModalType {
   VALIDATION = 'validation',
 }
 
-export type SpecialAddress = Omit<DigitalAddress, 'senderId' | 'senderName'> & {
-  senders: Array<{ senderId: string; senderName?: string }>;
-};
-
 type Addresses = {
   [senderId: string]: Array<DigitalAddress>;
 };
@@ -46,15 +42,12 @@ const SpecialContacts: React.FC = () => {
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
-  const [modalOpen, setModalOpen] = useState<{
-    type: ModalType;
-    data: { value: string; channelType?: ChannelType; senders: Array<Party> };
-  } | null>(null);
+  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
 
   const currentAddress = useRef<{ value: string; sender: Sender; channelType: ChannelType }>({
     value: '',
     sender: { senderId: 'dafault' },
-    channelType: ChannelType.PEC, // TODO to fix beause if PEC is disabled i don't want to use it into default values of dialog
+    channelType: ChannelType.PEC,
   });
 
   const labelRoot =
@@ -82,27 +75,17 @@ const SpecialContacts: React.FC = () => {
         : addressType === ChannelType.SMS
         ? PFEventsType.SEND_ADD_SMS_START
         : PFEventsType.SEND_ADD_EMAIL_START;
-    PFEventStrategyFactory.triggerEvent(event, sender.senderId); // TODO si dovrà passare un array di sender?
+    PFEventStrategyFactory.triggerEvent(event, sender.senderId);
 
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { value, sender, channelType: addressType };
 
+    // Todo capire come va gestito
     // first check if contact already exists
-    if (contactAlreadyExists(addressesData.addresses, value, sender.senderId, addressType)) {
-      setModalOpen({
-        type: ModalType.EXISTING,
-        data: {
-          value,
-          senders: [
-            {
-              id: sender.senderId,
-              name: sender.senderName ?? '',
-            },
-          ],
-        },
-      });
-      return;
-    }
+    // if (contactAlreadyExists(addressesData.addresses, value, sender.senderId, addressType)) {
+    //   setModalOpen(ModalType.EXISTING);
+    //   return;
+    // }
     handleCodeVerification();
   };
 
@@ -124,7 +107,7 @@ const SpecialContacts: React.FC = () => {
           : AddressType.COURTESY,
       senderId: currentAddress.current.sender.senderId,
       senderName: currentAddress.current.sender.senderName,
-      channelType: currentAddress.current.channelType,
+      channelType: currentAddress.current.channelType ?? ChannelType.PEC,
       value:
         currentAddress.current.channelType === ChannelType.SMS
           ? internationalPhonePrefix + currentAddress.current.value
@@ -138,22 +121,11 @@ const SpecialContacts: React.FC = () => {
         // contact to verify
         // open code modal
         if (!res) {
-          setModalOpen({
-            type: ModalType.CODE,
-            data: {
-              value: currentAddress.current.value,
-              senders: [
-                {
-                  id: currentAddress.current.sender.senderId,
-                  name: currentAddress.current.sender.senderName ?? '',
-                },
-              ],
-            },
-          });
+          setModalOpen(ModalType.CODE);
           return;
         }
 
-        sendSuccessEvent(currentAddress.current.channelType);
+        sendSuccessEvent(currentAddress.current.channelType ?? ChannelType.PEC);
 
         // contact has already been verified
         if (res.pecValid || currentAddress.current.channelType !== ChannelType.PEC) {
@@ -171,18 +143,7 @@ const SpecialContacts: React.FC = () => {
         }
         // contact must be validated
         // open validation modal
-        setModalOpen({
-          type: ModalType.VALIDATION,
-          data: {
-            value: currentAddress.current.value,
-            senders: [
-              {
-                id: currentAddress.current.sender.senderId,
-                name: currentAddress.current.sender.senderName ?? '',
-              },
-            ],
-          },
-        });
+        setModalOpen(ModalType.VALIDATION);
       })
       .catch(() => {});
   };
@@ -196,7 +157,7 @@ const SpecialContacts: React.FC = () => {
             ? AddressType.LEGAL
             : AddressType.COURTESY,
         senderId: currentAddress.current.sender.senderId,
-        channelType: currentAddress.current.channelType,
+        channelType: currentAddress.current.channelType ?? ChannelType.PEC,
       })
     )
       .unwrap()
@@ -213,48 +174,36 @@ const SpecialContacts: React.FC = () => {
       .catch(() => {});
   };
 
-  const handleDelete = (
-    value: string,
-    channelType: ChannelType,
-    sender: { senderId: string; senderName: string }
-  ) => {
+  const handleOpenNewDialog = () => {
     // eslint-disable-next-line functional/immutable-data
-    currentAddress.current = { value, sender, channelType };
-    setModalOpen({
-      type: ModalType.DELETE,
-      data: {
-        value,
-        senders: [
-          {
-            id: sender.senderId,
-            name: sender.senderName,
-          },
-        ],
-      },
-    });
+    currentAddress.current = {
+      ...currentAddress.current,
+      value: '',
+      sender: { senderId: 'default', senderName: undefined },
+    };
+    setModalOpen(ModalType.SPECIAL);
   };
 
-  const handleEdit = (
-    value: string,
-    channelType: ChannelType,
-    sender: { senderId: string; senderName: string }
-  ) => {
+  const handleDelete = (value: string, channelType: ChannelType, sender: Sender) => {
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { value, sender, channelType };
+    setModalOpen(ModalType.DELETE);
+  };
 
-    setModalOpen({
-      type: ModalType.SPECIAL,
-      data: {
-        value,
-        channelType,
-        senders: [
-          {
-            id: sender.senderId,
-            name: sender.senderName,
-          },
-        ],
-      },
-    });
+  const handleEdit = (value: string, channelType: ChannelType, sender: Sender) => {
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = { value, sender, channelType };
+    setModalOpen(ModalType.SPECIAL);
+  };
+
+  const handleCloseModal = () => {
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = {
+      ...currentAddress.current,
+      value: '',
+      sender: { senderId: 'default', senderName: undefined },
+    };
+    setModalOpen(null);
   };
 
   const handleCancelCode = async () => {
@@ -283,9 +232,7 @@ const SpecialContacts: React.FC = () => {
         <ButtonNaked
           component={Typography}
           startIcon={<AddIcon />}
-          onClick={() =>
-            setModalOpen({ type: ModalType.SPECIAL, data: { value: '', senders: [] } })
-          }
+          onClick={() => handleOpenNewDialog()}
           color="primary"
           size="small"
           pt={1}
@@ -314,7 +261,7 @@ const SpecialContacts: React.FC = () => {
             <Stack divider={<Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }} />}>
               {Object.entries(groupedAddresses).map(([senderId, addr]) => (
                 <SpecialContactElem
-                  key={senderId}
+                  key={`sender-${senderId}`}
                   addresses={addr}
                   onEdit={handleEdit}
                   onDelete={handleDelete}
@@ -325,19 +272,22 @@ const SpecialContacts: React.FC = () => {
         </Card>
       )}
       <AddSpecialContactDialog
-        open={modalOpen?.type === ModalType.SPECIAL}
-        value={modalOpen?.data.value ?? ''}
-        senders={modalOpen?.data.senders ?? []}
-        onDiscard={() => setModalOpen(null)}
-        // ATTENZIONE
-        // al momento le api non accettano più sender alla volta
-        // per testare il giro, si utilizza sempre il primo sender
-        onConfirm={(value: string, addressType: ChannelType, senders: Array<Party>) => {
-          setModalOpen(null);
-          onConfirm(value, addressType, { senderId: senders[0].id, senderName: senders[0].name });
+        open={modalOpen === ModalType.SPECIAL}
+        value={currentAddress.current.value ?? ''}
+        sender={{
+          id: currentAddress.current.sender.senderId,
+          name: currentAddress.current.sender.senderName ?? '',
         }}
+        channelType={currentAddress.current.channelType}
         addressesData={addressesData}
-        channelType={modalOpen?.data.channelType}
+        onDiscard={handleCloseModal}
+        onConfirm={(value: string, addressType: ChannelType, sender: Party) => {
+          setModalOpen(null);
+          onConfirm(value, addressType, {
+            senderId: sender.id,
+            senderName: sender.name,
+          });
+        }}
       />
       <ContactCodeDialog
         value={currentAddress.current.value}
@@ -347,13 +297,13 @@ const SpecialContacts: React.FC = () => {
             : AddressType.COURTESY
         }
         channelType={currentAddress.current.channelType}
-        open={modalOpen?.type === ModalType.CODE}
+        open={modalOpen === ModalType.CODE}
         onConfirm={(code) => handleCodeVerification(code)}
         onDiscard={handleCancelCode}
         onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR)} // TODO fix event type
       />
       <DeleteDialog
-        showModal={modalOpen?.type === ModalType.DELETE}
+        showModal={modalOpen === ModalType.DELETE}
         removeModalTitle={t(`special-contacts.remove-special-title`, {
           ns: 'recapiti',
           contactValue: currentAddress.current.value,
