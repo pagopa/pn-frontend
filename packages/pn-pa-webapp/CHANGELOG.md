@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.7.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.6.1...v2.7.0-RC.0) (2024-09-09)
+
+
+### Bug Fixes
+
+* **pn-11701:** use mobile version of date picker on small screens ([#1308](https://github.com/pagopa/pn-frontend/issues/1308)) ([fa65f36](https://github.com/pagopa/pn-frontend/commit/fa65f368921949973c2ba470496a9bead2202b72))
+
+
+### Features
+
+* **pn-11371:** Remove useless aria-label and tabIndex attributes ([#1286](https://github.com/pagopa/pn-frontend/issues/1286)) ([22f8683](https://github.com/pagopa/pn-frontend/commit/22f868373e9b57e9512837bbac29a583ca9788b5))
+
+
+
+
+
 ## [2.6.1](https://github.com/pagopa/pn-frontend/compare/v2.6.0...v2.6.1) (2024-07-30)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
