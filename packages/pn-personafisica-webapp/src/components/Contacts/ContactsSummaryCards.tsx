@@ -54,7 +54,7 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
     const titleId = isCourtesyCard ? 'courtesyContactsTitle' : 'legalContactsTitle';
 
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-    document.getElementById(titleId)?.focus();
+    document.getElementById(titleId)?.focus({ preventScroll: true });
   };
 
   return (
