@@ -15,8 +15,8 @@ const LegalContacts = () => {
   });
 
   return (
-    <Box>
-      <Typography variant="h6" fontWeight={700}>
+    <Box id="legalContactsSection">
+      <Typography variant="h6" fontWeight={700} tabIndex={-1} id="legalContactsTitle">
         {t('legal-contacts.title', { ns: 'recapiti' })}
       </Typography>
       <List dense sx={{ py: 0, px: 3, mt: 2, listStyleType: 'square' }}>
