@@ -51,9 +51,10 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
 
   const goToSection = () => {
     const sectionId = isCourtesyCard ? 'courtesyContactsSection' : 'legalContactsSection';
+    const titleId = isCourtesyCard ? 'courtesyContactsTitle' : 'legalContactsTitle';
 
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-    document.getElementById(sectionId)?.focus();
+    document.getElementById(titleId)?.focus();
   };
 
   return (
@@ -63,8 +64,6 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
         sx={{
           p: 2,
           width: { xs: '100%', lg: '185px' },
-          cursor: 'pointer',
-          '&:hover, &:active': { bgcolor: '#F6F7F8' },
         }}
         aria-label={t(title)}
         aria-description={getDescription()}

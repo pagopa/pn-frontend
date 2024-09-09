@@ -64,8 +64,6 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
         sx={{
           p: 2,
           width: { xs: '100%', lg: '185px' },
-          cursor: 'pointer',
-          '&:hover, &:active': { bgcolor: '#F6F7F8' },
         }}
         aria-label={t(title)}
         aria-description={getDescription()}
