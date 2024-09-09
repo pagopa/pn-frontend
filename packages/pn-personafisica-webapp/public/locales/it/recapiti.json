@@ -152,5 +152,16 @@
       "title": "Il codice è scaduto",
       "message": "Generane uno nuovo e inseriscilo."
     }
+  },
+  "summary-card": {
+    "legal-title": "Valore legale",
+    "courtesy-title": "Cortesia",
+    "no-address": "Nessun recapito",
+    "PEC": "PEC",
+    "SMS": "SMS",
+    "EMAIL": "Email",
+    "IOMSG": "App IO",
+    "SERCQ": "Domicilio Digitale",
+    "add-icon-arialabel": "Aggiungi"
   }
 }
