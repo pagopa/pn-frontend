@@ -25,10 +25,9 @@ const Contacts = () => {
   const [pageReady, setPageReady] = useState(false);
   const { LANDING_SITE_URL } = getConfiguration();
 
-  const showSpecialContactsSection = () =>
-    Object.values(ChannelType)
-      .filter((a) => a !== ChannelType.IOMSG)
-      .some((address) => addressesData[`default${address}Address`]);
+  const showSpecialContactsSection = Object.values(ChannelType)
+    .filter((a) => a !== ChannelType.IOMSG)
+    .some((address) => addressesData[`default${address}Address`]);
 
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses()).then(() => {
@@ -105,7 +104,7 @@ const Contacts = () => {
             <LegalContacts />
             <CourtesyContacts />
           </Stack>
-          {showSpecialContactsSection() && (
+          {showSpecialContactsSection && (
             <>
               <Divider sx={{ backgroundColor: 'white', color: 'text.secondary', mt: 6, mb: 3 }} />
               <SpecialContacts />

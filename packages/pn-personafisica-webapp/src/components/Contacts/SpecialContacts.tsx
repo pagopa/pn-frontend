@@ -19,10 +19,12 @@ import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/action
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
-import { internationalPhonePrefix } from '../../utility/contacts.utility';
+import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import AddSpecialContactDialog from './AddSpecialContactDialog';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
+import ExistingContactDialog from './ExistingContactDialog';
+import PecVerificationDialog from './PecVerificationDialog';
 import SpecialContactElem from './SpecialContactItem';
 
 enum ModalType {
@@ -44,7 +46,7 @@ const SpecialContacts: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
-  const { specialAddresses } = useAppSelector(contactsSelectors.selectAddresses);
+  const { addresses, specialAddresses } = useAppSelector(contactsSelectors.selectAddresses);
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
 
   const currentAddress = useRef<DigitalAddress>({
@@ -61,6 +63,13 @@ const SpecialContacts: React.FC = () => {
     const eventKey = `SEND_ADD_${type}_UX_SUCCESS`;
     if (isPFEvent(eventKey)) {
       PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], currentAddress.current.senderId);
+    }
+  };
+
+  const sendCodeErrorEvent = (type: ChannelType) => {
+    const eventKey = `SEND_ADD_${type}_CODE_ERROR`;
+    if (isPFEvent(eventKey)) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey]);
     }
   };
 
@@ -84,12 +93,11 @@ const SpecialContacts: React.FC = () => {
       addressType,
     };
 
-    // Todo capire come va gestito
     // first check if contact already exists
-    // if (contactAlreadyExists(addressesData.addresses, value, sender.senderId, addressType)) {
-    //   setModalOpen(ModalType.EXISTING);
-    //   return;
-    // }
+    if (contactAlreadyExists(addresses, value, sender.senderId, channelType)) {
+      setModalOpen(ModalType.EXISTING);
+      return;
+    }
     handleCodeVerification();
   };
 
@@ -310,7 +318,7 @@ const SpecialContacts: React.FC = () => {
         open={modalOpen === ModalType.CODE}
         onConfirm={(code) => handleCodeVerification(code)}
         onDiscard={handleCancelCode}
-        onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR)} // TODO fix event type
+        onError={() => sendCodeErrorEvent(currentAddress.current.channelType)}
       />
       <DeleteDialog
         showModal={modalOpen === ModalType.DELETE}
@@ -323,6 +331,16 @@ const SpecialContacts: React.FC = () => {
         })}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
+      />
+      <PecVerificationDialog
+        open={modalOpen === ModalType.VALIDATION}
+        handleConfirm={() => setModalOpen(null)}
+      />
+      <ExistingContactDialog
+        open={modalOpen === ModalType.EXISTING}
+        value={currentAddress.current.value}
+        handleDiscard={() => setModalOpen(null)}
+        handleConfirm={() => handleCodeVerification()}
       />
     </>
   );
