@@ -37,48 +37,52 @@ type Addresses = {
   [senderId: string]: Array<DigitalAddress>;
 };
 
+const isPFEvent = (eventKey: string): eventKey is PFEventsType =>
+  Object.values(PFEventsType).includes(eventKey as PFEventsType);
+
 const SpecialContacts: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
-  const addressesData = useAppSelector(contactsSelectors.selectAddresses);
+  const { specialAddresses } = useAppSelector(contactsSelectors.selectAddresses);
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
 
-  const currentAddress = useRef<{ value: string; sender: Sender; channelType: ChannelType }>({
+  const currentAddress = useRef<DigitalAddress>({
     value: '',
-    sender: { senderId: 'dafault' },
+    senderId: 'default',
+    addressType: AddressType.LEGAL,
     channelType: ChannelType.PEC,
   });
 
-  const labelRoot =
-    currentAddress.current.channelType === ChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts';
-  const contactType = currentAddress.current.channelType?.toLowerCase();
+  const labelRoot = `${currentAddress.current.addressType.toLowerCase()}-contacts`;
+  const contactType = currentAddress.current.channelType.toLowerCase();
 
   const sendSuccessEvent = (type: ChannelType) => {
-    const event =
-      type === ChannelType.PEC
-        ? PFEventsType.SEND_ADD_PEC_UX_SUCCESS
-        : type === ChannelType.SMS
-        ? PFEventsType.SEND_ADD_SMS_UX_SUCCESS
-        : PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS;
-    PFEventStrategyFactory.triggerEvent(event, currentAddress.current.sender.senderId);
+    const eventKey = `SEND_ADD_${type}_UX_SUCCESS`;
+    if (isPFEvent(eventKey)) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], currentAddress.current.senderId);
+    }
   };
 
   const onConfirm = (
     value: string,
-    addressType: ChannelType,
+    channelType: ChannelType,
+    addressType: AddressType,
     sender: Sender = { senderId: 'default' }
   ) => {
-    const event =
-      addressType === ChannelType.PEC
-        ? PFEventsType.SEND_ADD_PEC_START
-        : addressType === ChannelType.SMS
-        ? PFEventsType.SEND_ADD_SMS_START
-        : PFEventsType.SEND_ADD_EMAIL_START;
-    PFEventStrategyFactory.triggerEvent(event, sender.senderId);
+    const eventKey = `SEND_ADD_${channelType}_UX_START`;
+    if (isPFEvent(eventKey)) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], sender.senderId);
+    }
 
     // eslint-disable-next-line functional/immutable-data
-    currentAddress.current = { value, sender, channelType: addressType };
+    currentAddress.current = {
+      value,
+      senderId: sender.senderId,
+      senderName: sender.senderName,
+      channelType,
+      addressType,
+    };
 
     // Todo capire come va gestito
     // first check if contact already exists
@@ -91,22 +95,19 @@ const SpecialContacts: React.FC = () => {
 
   const handleCodeVerification = (verificationCode?: string) => {
     if (verificationCode) {
-      const event =
-        currentAddress.current.channelType === ChannelType.PEC
-          ? PFEventsType.SEND_ADD_PEC_UX_CONVERSION
-          : currentAddress.current.channelType === ChannelType.SMS
-          ? PFEventsType.SEND_ADD_SMS_UX_CONVERSION
-          : PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION;
-      PFEventStrategyFactory.triggerEvent(event, currentAddress.current.sender.senderId);
+      const eventKey = `SEND_ADD_${currentAddress.current.channelType}_UX_CONVERSION`;
+      if (isPFEvent(eventKey)) {
+        PFEventStrategyFactory.triggerEvent(
+          PFEventsType[eventKey],
+          currentAddress.current.senderId
+        );
+      }
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
-      addressType:
-        currentAddress.current.channelType === ChannelType.PEC
-          ? AddressType.LEGAL
-          : AddressType.COURTESY,
-      senderId: currentAddress.current.sender.senderId,
-      senderName: currentAddress.current.sender.senderName,
+      addressType: currentAddress.current.addressType,
+      senderId: currentAddress.current.senderId,
+      senderName: currentAddress.current.senderName,
       channelType: currentAddress.current.channelType ?? ChannelType.PEC,
       value:
         currentAddress.current.channelType === ChannelType.SMS
@@ -125,7 +126,7 @@ const SpecialContacts: React.FC = () => {
           return;
         }
 
-        sendSuccessEvent(currentAddress.current.channelType ?? ChannelType.PEC);
+        sendSuccessEvent(currentAddress.current.channelType);
 
         // contact has already been verified
         if (res.pecValid || currentAddress.current.channelType !== ChannelType.PEC) {
@@ -152,24 +153,20 @@ const SpecialContacts: React.FC = () => {
     setModalOpen(null);
     dispatch(
       deleteAddress({
-        addressType:
-          currentAddress.current.channelType === ChannelType.PEC
-            ? AddressType.LEGAL
-            : AddressType.COURTESY,
-        senderId: currentAddress.current.sender.senderId,
+        addressType: currentAddress.current.addressType,
+        senderId: currentAddress.current.senderId,
         channelType: currentAddress.current.channelType ?? ChannelType.PEC,
       })
     )
       .unwrap()
       .then(() => {
-        PFEventStrategyFactory.triggerEvent(
-          currentAddress.current.channelType === ChannelType.PEC
-            ? PFEventsType.SEND_REMOVE_PEC_SUCCESS
-            : currentAddress.current.channelType === ChannelType.SMS
-            ? PFEventsType.SEND_REMOVE_SMS_SUCCESS
-            : PFEventsType.SEND_REMOVE_EMAIL_SUCCESS,
-          currentAddress.current.sender.senderId
-        );
+        const eventKey = `SEND_REMOVE_${currentAddress.current.channelType}_UX_SUCCESS`;
+        if (isPFEvent(eventKey)) {
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType[eventKey],
+            currentAddress.current.senderId
+          );
+        }
       })
       .catch(() => {});
   };
@@ -179,20 +176,36 @@ const SpecialContacts: React.FC = () => {
     currentAddress.current = {
       ...currentAddress.current,
       value: '',
-      sender: { senderId: 'default', senderName: undefined },
+      senderId: 'default',
     };
     setModalOpen(ModalType.SPECIAL);
   };
 
-  const handleDelete = (value: string, channelType: ChannelType, sender: Sender) => {
+  const handleDelete = (
+    value: string,
+    channelType: ChannelType,
+    addressType: AddressType,
+    sender: Sender
+  ) => {
     // eslint-disable-next-line functional/immutable-data
-    currentAddress.current = { value, sender, channelType };
+    currentAddress.current = { value, senderId: sender.senderId, channelType, addressType };
     setModalOpen(ModalType.DELETE);
   };
 
-  const handleEdit = (value: string, channelType: ChannelType, sender: Sender) => {
+  const handleEdit = (
+    value: string,
+    channelType: ChannelType,
+    addressType: AddressType,
+    sender: Sender
+  ) => {
     // eslint-disable-next-line functional/immutable-data
-    currentAddress.current = { value, sender, channelType };
+    currentAddress.current = {
+      value,
+      senderId: sender.senderId,
+      senderName: sender.senderName,
+      channelType,
+      addressType,
+    };
     setModalOpen(ModalType.SPECIAL);
   };
 
@@ -201,7 +214,7 @@ const SpecialContacts: React.FC = () => {
     currentAddress.current = {
       ...currentAddress.current,
       value: '',
-      sender: { senderId: 'default', senderName: undefined },
+      senderId: 'default',
     };
     setModalOpen(null);
   };
@@ -210,7 +223,7 @@ const SpecialContacts: React.FC = () => {
     setModalOpen(null);
   };
 
-  const groupedAddresses: Addresses = addressesData.specialAddresses.reduce((obj, a) => {
+  const groupedAddresses: Addresses = specialAddresses.reduce((obj, a) => {
     if (!obj[a.senderId]) {
       // eslint-disable-next-line functional/immutable-data
       obj[a.senderId] = [];
@@ -275,15 +288,16 @@ const SpecialContacts: React.FC = () => {
         open={modalOpen === ModalType.SPECIAL}
         value={currentAddress.current.value ?? ''}
         sender={{
-          id: currentAddress.current.sender.senderId,
-          name: currentAddress.current.sender.senderName ?? '',
+          id: currentAddress.current.senderId,
+          name: currentAddress.current.senderName ?? '',
         }}
         channelType={currentAddress.current.channelType}
-        addressesData={addressesData}
         onDiscard={handleCloseModal}
-        onConfirm={(value: string, addressType: ChannelType, sender: Party) => {
+        onConfirm={(value: string, channelType: ChannelType, sender: Party) => {
+          const addressType =
+            channelType === ChannelType.PEC ? AddressType.LEGAL : AddressType.COURTESY;
           setModalOpen(null);
-          onConfirm(value, addressType, {
+          onConfirm(value, channelType, addressType, {
             senderId: sender.id,
             senderName: sender.name,
           });
@@ -291,11 +305,7 @@ const SpecialContacts: React.FC = () => {
       />
       <ContactCodeDialog
         value={currentAddress.current.value}
-        addressType={
-          currentAddress.current.channelType === ChannelType.PEC
-            ? AddressType.LEGAL
-            : AddressType.COURTESY
-        }
+        addressType={currentAddress.current.addressType}
         channelType={currentAddress.current.channelType}
         open={modalOpen === ModalType.CODE}
         onConfirm={(code) => handleCodeVerification(code)}

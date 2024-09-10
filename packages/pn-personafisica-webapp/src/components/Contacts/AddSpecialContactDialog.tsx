@@ -26,7 +26,7 @@ import {
 import { ChannelType } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
-import { SelectedAddresses } from '../../redux/contact/reducers';
+import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import {
@@ -42,10 +42,9 @@ type Props = {
   open: boolean;
   value: string;
   sender: Party;
-  onDiscard: () => void;
-  onConfirm: (value: string, addressType: ChannelType, sender: Party) => void;
-  addressesData: SelectedAddresses;
   channelType: ChannelType;
+  onDiscard: () => void;
+  onConfirm: (value: string, channelType: ChannelType, sender: Party) => void;
 };
 
 type AddressTypeItem = {
@@ -58,17 +57,17 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   open,
   value,
   sender,
+  channelType,
   onDiscard,
   onConfirm,
-  addressesData,
-  channelType,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const getOptionLabel = (option: Party) => option.name || '';
-  const [senderInputValue, setSenderInputValue] = useState(sender.name);
+  const [senderInputValue, setSenderInputValue] = useState('');
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
+  const addressesData = useAppSelector(contactsSelectors.selectAddresses);
 
   const addressTypes: Array<AddressTypeItem> = allowedAddressTypes.map((addressType) => ({
     id: addressType,
@@ -82,11 +81,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     checkIfSenderIsAlreadyAdded(formik.values.sender, e.target.value as ChannelType);
   };
 
-  /**
-   * Used to check if the senders has already a contact with the same address type
-   * @param senders Array of senders to check
-   * @param channelType ChannelType to check
-   */
   const checkIfSenderIsAlreadyAdded = (sender: Party, channelType: ChannelType) => {
     const alreadyExists = addressesData.specialAddresses.some(
       (a) => a.senderId === sender.id && a.channelType === channelType
@@ -108,7 +102,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     await formik.setFieldValue('sender', newValue);
     setSenderInputValue(newValue?.name ?? '');
     if (newValue && addressesData.addresses.some((a) => a.senderId === newValue.id)) {
-      checkIfSenderIsAlreadyAdded(sender, formik.values.addressType);
+      checkIfSenderIsAlreadyAdded(sender, formik.values.channelType);
       return;
     }
     setAlreadyExistsMessage('');
@@ -127,26 +121,28 @@ const AddSpecialContactDialog: React.FC<Props> = ({
 
   const validationSchema = yup.object({
     sender: yup.object({ id: yup.string(), name: yup.string() }).required(),
-    addressType: yup.string().required(),
+    channelType: yup.string().required(),
     s_value: yup
       .string()
-      .when('addressType', {
+      .when('channelType', {
         is: ChannelType.PEC,
         then: pecValidationSchema(t),
       })
-      .when('addressType', {
+      .when('channelType', {
         is: ChannelType.EMAIL,
         then: emailValidationSchema(t),
       })
-      .when('addressType', {
+      .when('channelType', {
         is: ChannelType.SMS,
         then: phoneValidationSchema(t),
       }),
   });
 
   const initialValues = {
-    sender,
-    addressType: value.length ? channelType : addressTypes.filter((a) => !a.disabled)[0].id,
+    sender: sender ?? { id: '', name: '' },
+    channelType: value.length
+      ? channelType
+      : addressTypes.filter((a) => !a.disabled)[0]?.id ?? ChannelType.PEC,
     s_value: channelType === ChannelType.SMS ? value.replace(internationalPhonePrefix, '') : value,
   };
 
@@ -156,7 +152,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      onConfirm(values.s_value, values.addressType, values.sender);
+      onConfirm(values.s_value, values.channelType, values.sender);
     },
   });
 
@@ -183,8 +179,14 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const handleClose = () => {
     formik.resetForm({ values: initialValues });
     setAlreadyExistsMessage('');
+    setSenderInputValue('');
     onDiscard();
   };
+
+  // Todo workaround to set the sender value when the dialog is opened in edit mode
+  useEffect(() => {
+    value && setSenderInputValue(sender?.name ?? '');
+  }, [value]);
 
   const handleConfirm = async () => {
     await formik.submitForm();
@@ -208,7 +210,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
             <CustomDropdown
               id="addressType"
               name="addressType"
-              value={formik.values.addressType}
+              value={formik.values.channelType}
               onChange={addressTypeChangeHandler}
               size="small"
               sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
@@ -235,7 +237,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
               fullWidth
               id="s_value"
               name="s_value"
-              label={t(`special-contacts.link-${formik.values.addressType.toLowerCase()}-label`, {
+              label={t(`special-contacts.link-${formik.values.channelType.toLowerCase()}-label`, {
                 ns: 'recapiti',
               })}
               value={formik.values.s_value}
@@ -244,7 +246,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
               helperText={formik.touched.s_value && formik.errors.s_value}
               InputProps={{
                 startAdornment:
-                  formik.values.addressType === ChannelType.SMS ? (
+                  formik.values.channelType === ChannelType.SMS ? (
                     <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
                   ) : null,
               }}
@@ -309,7 +311,13 @@ const AddSpecialContactDialog: React.FC<Props> = ({
         <Button onClick={handleClose} variant="outlined">
           {t('button.annulla')}
         </Button>
-        <Button onClick={handleConfirm} variant="contained" disabled={!formik.isValid}>
+        <Button
+          onClick={handleConfirm}
+          variant="contained"
+          disabled={
+            !formik.isValid || senderInputValue.length > 80 || senderInputValue.length === 0
+          }
+        >
           {t('button.associa')}
         </Button>
       </PnDialogActions>

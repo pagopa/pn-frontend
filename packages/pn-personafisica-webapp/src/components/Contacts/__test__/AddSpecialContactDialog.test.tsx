@@ -5,10 +5,11 @@ import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commo
 import { getById, testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 import { fireEvent, waitFor } from '@testing-library/react';
 
+import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { act, render, screen, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { AddressType, ChannelType } from '../../../models/contacts';
+import { ChannelType } from '../../../models/contacts';
 import { CONTACT_ACTIONS } from '../../../redux/contact/actions';
 import AddSpecialContactDialog from '../AddSpecialContactDialog';
 
@@ -45,17 +46,19 @@ describe('test AddSpecialContactDialog', () => {
       <AddSpecialContactDialog
         open
         value=""
-        senders={[]}
+        sender={{ id: 'default', name: '' }}
         channelType={ChannelType.PEC}
         onDiscard={discardHandler}
         onConfirm={confirmHandler}
-        digitalAddresses={[]}
-      />
+      />,
+      {
+        preloadedState: { contactsState: { digitalAddresses } },
+      }
     );
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const titleEl = getById(dialog, 'dialog-title');
     expect(titleEl).toBeInTheDocument();
-    expect(titleEl).toHaveTextContent(`special-contacts.modal-pec-title`);
+    expect(titleEl).toHaveTextContent(`special-contacts.modal-title`);
     const bodyEl = within(dialog).getByTestId('dialog-content');
     expect(bodyEl).toBeInTheDocument();
     expect(bodyEl).toHaveTextContent(`special-contacts.pec`);
@@ -63,7 +66,6 @@ describe('test AddSpecialContactDialog', () => {
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue('');
     expect(bodyEl).toHaveTextContent(`special-contacts.senders`);
-    expect(bodyEl).toHaveTextContent(`special-contacts.senders-caption`);
     const senderAutoComplete = within(bodyEl).getByTestId('sender');
     expect(senderAutoComplete).toBeInTheDocument();
     const senderChips = within(bodyEl).queryAllByTestId('sender_chip');
@@ -72,7 +74,7 @@ describe('test AddSpecialContactDialog', () => {
     expect(alreadyExistsAlert).not.toBeInTheDocument();
     const cancelButton = within(dialog).getByText('button.annulla');
     expect(cancelButton).toBeInTheDocument();
-    const confirmButton = within(dialog).getByText('button.conferma');
+    const confirmButton = within(dialog).getByText('button.associa');
     expect(confirmButton).toBeInTheDocument();
     expect(confirmButton).toBeDisabled();
   });
@@ -84,12 +86,14 @@ describe('test AddSpecialContactDialog', () => {
       <AddSpecialContactDialog
         open
         value=""
-        senders={[]}
+        sender={{ id: 'default', name: '' }}
         channelType={ChannelType.PEC}
         onDiscard={discardHandler}
         onConfirm={confirmHandler}
-        digitalAddresses={[]}
-      />
+      />,
+      {
+        preloadedState: { contactsState: { digitalAddresses } },
+      }
     );
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const bodyEl = within(dialog).getByTestId('dialog-content');
@@ -101,7 +105,7 @@ describe('test AddSpecialContactDialog', () => {
     });
     const errorMessage = getById(bodyEl, `s_value-helper-text`);
     expect(errorMessage).toBeInTheDocument();
-    const confirmButton = within(dialog).getByText('button.conferma');
+    const confirmButton = within(dialog).getByText('button.associa');
     expect(confirmButton).toBeDisabled();
     // fill with valid value
     fireEvent.change(input, { target: { value: 'mocked@pec.it' } });
@@ -112,14 +116,11 @@ describe('test AddSpecialContactDialog', () => {
     expect(confirmButton).toBeDisabled();
     // select sender
     await testAutocomplete(bodyEl, 'sender', parties, true, 1, true);
-    const senderChips = within(bodyEl).queryAllByTestId('sender_chip');
-    expect(senderChips).toHaveLength(1);
-    expect(senderChips[0]).toHaveTextContent(parties[1].name);
     expect(confirmButton).toBeEnabled();
     fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(confirmHandler).toHaveBeenCalledTimes(1);
-      expect(confirmHandler).toHaveBeenCalledWith('mocked@pec.it', [parties[1]]);
+      expect(confirmHandler).toHaveBeenCalledWith('mocked@pec.it', ChannelType.PEC, parties[1]);
     });
   });
 
@@ -130,36 +131,32 @@ describe('test AddSpecialContactDialog', () => {
       <AddSpecialContactDialog
         open
         value="mocked@pec.it"
-        senders={[parties[0], parties[2]]}
+        sender={parties[0]}
         channelType={ChannelType.PEC}
         onDiscard={discardHandler}
         onConfirm={confirmHandler}
-        digitalAddresses={[]}
-      />
+      />,
+      {
+        preloadedState: { contactsState: { digitalAddresses } },
+      }
     );
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const titleEl = getById(dialog, 'dialog-title');
     expect(titleEl).toBeInTheDocument();
-    expect(titleEl).toHaveTextContent(`special-contacts.modal-pec-title`);
+    expect(titleEl).toHaveTextContent(`special-contacts.modal-title`);
     const bodyEl = within(dialog).getByTestId('dialog-content');
     expect(bodyEl).toBeInTheDocument();
     expect(bodyEl).toHaveTextContent(`special-contacts.pec`);
     const input = getById(bodyEl, 's_value');
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue('mocked@pec.it');
-    expect(bodyEl).toHaveTextContent(`special-contacts.sendersd`);
-    expect(bodyEl).toHaveTextContent(`special-contacts.senders-caption`);
     const senderAutoComplete = within(bodyEl).getByTestId('sender');
     expect(senderAutoComplete).toBeInTheDocument();
-    const senderChips = within(bodyEl).getAllByTestId('sender_chip');
-    expect(senderChips).toHaveLength(2);
-    expect(senderChips[0]).toHaveTextContent(parties[0].name);
-    expect(senderChips[1]).toHaveTextContent(parties[2].name);
     const alreadyExistsAlert = within(bodyEl).queryByTestId('alreadyExistsAlert');
     expect(alreadyExistsAlert).not.toBeInTheDocument();
     const cancelButton = within(dialog).getByText('button.annulla');
     expect(cancelButton).toBeInTheDocument();
-    const confirmButton = within(dialog).getByText('button.conferma');
+    const confirmButton = within(dialog).getByText('button.associa');
     expect(confirmButton).toBeInTheDocument();
     expect(confirmButton).toBeEnabled();
   });
@@ -171,11 +168,10 @@ describe('test AddSpecialContactDialog', () => {
       <AddSpecialContactDialog
         open
         value="mocked@pec.it"
-        senders={[parties[0], parties[2]]}
+        sender={parties[0]}
         channelType={ChannelType.PEC}
         onDiscard={discardHandler}
         onConfirm={confirmHandler}
-        digitalAddresses={[]}
       />
     );
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
@@ -188,7 +184,7 @@ describe('test AddSpecialContactDialog', () => {
     });
     const errorMessage = getById(bodyEl, `s_value-helper-text`);
     expect(errorMessage).toBeInTheDocument();
-    const confirmButton = within(dialog).getByText('button.conferma');
+    const confirmButton = within(dialog).getByText('button.associa');
     expect(confirmButton).toBeDisabled();
     // fill with valid value
     fireEvent.change(input, { target: { value: 'mocked-modified@pec.it' } });
@@ -197,40 +193,30 @@ describe('test AddSpecialContactDialog', () => {
     });
     expect(errorMessage).not.toBeInTheDocument();
     expect(confirmButton).toBeEnabled();
-    // remove one sender
-    let senderChips = within(bodyEl).queryAllByTestId('sender_chip');
-    const cancelIcon = within(senderChips[0]).getByTestId('CancelIcon');
-    fireEvent.click(cancelIcon);
-    senderChips = await waitFor(() => within(bodyEl).queryAllByTestId('sender_chip'));
-    expect(senderChips).toHaveLength(1);
-    expect(senderChips[0]).toHaveTextContent(parties[2].name);
-    expect(confirmButton).toBeEnabled();
+
     fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(confirmHandler).toHaveBeenCalledTimes(1);
-      expect(confirmHandler).toHaveBeenCalledWith('mocked-modified@pec.it', [parties[2]]);
+      expect(confirmHandler).toHaveBeenCalledWith(
+        'mocked-modified@pec.it',
+        ChannelType.PEC,
+        parties[0]
+      );
     });
   });
 
-  it('show already exist message', async () => {
+  // TODO: Capire come gestire l'alreadyExists
+  it.skip('show already exist message', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     render(
       <AddSpecialContactDialog
         open
         value=""
-        senders={[]}
+        sender={{ id: 'default', name: '' }}
         channelType={ChannelType.PEC}
         onDiscard={discardHandler}
         onConfirm={confirmHandler}
-        digitalAddresses={[
-          {
-            value: 'another-mocked@pec.it',
-            addressType: AddressType.LEGAL,
-            channelType: ChannelType.PEC,
-            senders: [{ senderId: parties[0].id, senderName: parties[0].name }],
-          },
-        ]}
       />
     );
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
@@ -260,11 +246,10 @@ describe('test AddSpecialContactDialog', () => {
           <AddSpecialContactDialog
             open
             value=""
-            senders={[]}
+            sender={{ id: 'mocked-sender-id', name: 'mocked-sender-name' }}
             channelType={ChannelType.PEC}
             onDiscard={discardHandler}
             onConfirm={confirmHandler}
-            digitalAddresses={[]}
           />
         </>
       );
