@@ -8,7 +8,6 @@ import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, DigitalAddress, Sender } from '../../models/contacts';
-import { allowedAddressTypes } from '../../utility/contacts.utility';
 
 type Props = {
   addresses: Array<DigitalAddress>;
@@ -27,13 +26,6 @@ type Props = {
   onCancelValidation: (senderId: string) => void;
 };
 
-type Field = {
-  id: string;
-  label: string;
-  labelRoot: string;
-  address?: DigitalAddress;
-};
-
 const SpecialContactItem: React.FC<Props> = ({
   addresses,
   onDelete,
@@ -43,23 +35,12 @@ const SpecialContactItem: React.FC<Props> = ({
   const { t } = useTranslation(['recapiti', 'common']);
   const isMobile = useIsMobile();
 
-  const fields: Array<Field> = allowedAddressTypes.map((type) => ({
-    id: `${addresses[0].senderId}_${type.toLowerCase()}`,
-    label: t(`special-contacts.${type.toLowerCase()}`, { ns: 'recapiti' }),
-    labelRoot: type === ChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts',
-    address: addresses.find((a) => a.channelType === type),
-  }));
-
-  const jsxField = (f: Field) => {
-    if (!f.address) {
-      return <Fragment key={f.id}></Fragment>;
-    }
-
-    const { value, channelType, addressType, senderId, senderName, pecValid } = f.address;
+  const renderAddress = (address: DigitalAddress) => {
+    const { value, channelType, addressType, senderId, senderName, pecValid } = address;
     const isVerifyingPec = channelType === ChannelType.PEC && !pecValid;
 
     return (
-      <Fragment key={f.id}>
+      <Fragment key={address.value}>
         {isVerifyingPec ? (
           <Stack
             direction="row"
@@ -174,7 +155,7 @@ const SpecialContactItem: React.FC<Props> = ({
       )}
 
       <Stack direction={isMobile ? 'column' : 'row'} spacing={3}>
-        {fields.map((f) => !!f.address && jsxField(f))}
+        {addresses.map((address) => renderAddress(address))}
       </Stack>
     </Stack>
   );
