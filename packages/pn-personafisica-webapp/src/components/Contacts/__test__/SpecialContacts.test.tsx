@@ -30,7 +30,6 @@ vi.mock('react-i18next', () => ({
 
 const specialAddresses = digitalAddresses.filter((addr) => addr.senderId !== 'default');
 
-// TODO: questi test andranno rivisti una volta che saranno disponibili le api bulk
 describe('SpecialContacts Component', async () => {
   let mock: MockAdapter;
 
@@ -56,31 +55,41 @@ describe('SpecialContacts Component', async () => {
     expect(button).toHaveTextContent(`special-contacts.add-contact`);
   });
 
-  // it.only('renders component - with contacts', () => {
-  //   mock.onGet('/bff/v1/pa-list').reply(200, parties);
+  it('renders component - with contacts', () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
 
-  //   // render component
-  //   const { container, getAllByTestId } = render(<SpecialContacts />, {
-  //     preloadedState: { contactsState: { digitalAddresses } },
-  //   });
-  //   expect(container).toHaveTextContent(`special-contacts.title`);
-  //   const button = within(container).getByTestId('addSpecialContactButton');
-  //   expect(button).toHaveTextContent(`special-contacts.add-contact`);
-  //   // contacts list
-  //   const specialContactForms = getAllByTestId(
-  //     /^[a-zA-Z0-9\-]+(?:_pecContact|_emailContact|_smsContact)$/
-  //   );
-  //   expect(specialContactForms).toHaveLength(specialAddresses.length);
-  //   specialContactForms.forEach((contactField, index) => {
-  //     expect(contactField).toHaveTextContent(specialAddresses[index].value);
+    const { container, getAllByTestId, getByTestId } = render(<SpecialContacts />, {
+      preloadedState: { contactsState: { digitalAddresses } },
+    });
+    expect(container).toHaveTextContent(`special-contacts.title`);
+    const button = within(container).getByTestId('addSpecialContactButton');
+    expect(button).toHaveTextContent(`special-contacts.add-contact`);
+    // contacts list
+    const specialContactForms = getAllByTestId(
+      /^[a-zA-Z0-9\-]+(?:_pecContact|_emailContact|_smsContact)$/
+    );
+    expect(specialContactForms).toHaveLength(specialAddresses.length);
+    specialAddresses.forEach((addr) => {
+      const addressItem = getByTestId(`${addr.senderId}_${addr.channelType.toLowerCase()}Contact`);
+      expect(addressItem).toBeInTheDocument();
 
-  //     const editButton = within(contactField).getByText('button.modifica');
-  //     expect(editButton).toBeInTheDocument();
-
-  //     const deleteButton = within(contactField).getByText('button.elimina');
-  //     expect(deleteButton).toBeInTheDocument();
-  //   });
-  // });
+      if (addr.channelType === ChannelType.PEC && !addr.pecValid) {
+        expect(addressItem).toHaveTextContent('legal-contacts.pec-validating');
+        const cancelValidationButton = within(addressItem).getByTestId('cancelValidation');
+        expect(cancelValidationButton).toBeInTheDocument();
+      } else {
+        expect(addressItem).toHaveTextContent(addr.value);
+        const editButton = within(addressItem).getByTestId(
+          `modifyContact-special_${addr.channelType}`
+        );
+        expect(editButton).toBeInTheDocument();
+        const deleteButton = within(addressItem).getByTestId(
+          `cancelContact-special_${addr.channelType}`
+        );
+        expect(deleteButton).toBeInTheDocument();
+      }
+    });
+  });
 
   it('add special contact', async () => {
     const pecValue = 'pec-carino@valida.com';
