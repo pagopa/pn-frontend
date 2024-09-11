@@ -26,7 +26,7 @@ import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import ExistingContactDialog from './ExistingContactDialog';
 import PecVerificationDialog from './PecVerificationDialog';
-import SpecialContactElem from './SpecialContactItem';
+import SpecialContactItem from './SpecialContactItem';
 
 enum ModalType {
   EXISTING = 'existing',
@@ -41,8 +41,8 @@ type Addresses = {
   [senderId: string]: Array<DigitalAddress>;
 };
 
-const isPFEvent = (eventKey: string): eventKey is PFEventsType =>
-  Object.values(PFEventsType).includes(eventKey as PFEventsType);
+const isPFEvent = (eventKey: string): eventKey is keyof typeof PFEventsType =>
+  Object.keys(PFEventsType).includes(eventKey);
 
 const SpecialContacts: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
@@ -118,7 +118,7 @@ const SpecialContacts: React.FC = () => {
       addressType: currentAddress.current.addressType,
       senderId: currentAddress.current.senderId,
       senderName: currentAddress.current.senderName,
-      channelType: currentAddress.current.channelType ?? ChannelType.PEC,
+      channelType: currentAddress.current.channelType,
       value:
         currentAddress.current.channelType === ChannelType.SMS
           ? internationalPhonePrefix + currentAddress.current.value
@@ -165,7 +165,7 @@ const SpecialContacts: React.FC = () => {
       deleteAddress({
         addressType: currentAddress.current.addressType,
         senderId: currentAddress.current.senderId,
-        channelType: currentAddress.current.channelType ?? ChannelType.PEC,
+        channelType: currentAddress.current.channelType,
       })
     )
       .unwrap()
@@ -199,7 +199,13 @@ const SpecialContacts: React.FC = () => {
     sender: Sender
   ) => {
     // eslint-disable-next-line functional/immutable-data
-    currentAddress.current = { value, senderId: sender.senderId, channelType, addressType };
+    currentAddress.current = {
+      value,
+      senderId: sender.senderId,
+      senderName: sender.senderName,
+      channelType,
+      addressType,
+    };
     setModalOpen(ModalType.DELETE);
   };
 
@@ -294,7 +300,7 @@ const SpecialContacts: React.FC = () => {
             )}
             <Stack divider={<Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }} />}>
               {Object.entries(groupedAddresses).map(([senderId, addr]) => (
-                <SpecialContactElem
+                <SpecialContactItem
                   key={`sender-${senderId}`}
                   addresses={addr}
                   onEdit={handleEdit}
@@ -315,9 +321,12 @@ const SpecialContacts: React.FC = () => {
         }}
         channelType={currentAddress.current.channelType}
         onDiscard={handleCloseModal}
-        onConfirm={(value: string, channelType: ChannelType, sender: Party) => {
-          const addressType =
-            channelType === ChannelType.PEC ? AddressType.LEGAL : AddressType.COURTESY;
+        onConfirm={(
+          value: string,
+          channelType: ChannelType,
+          addressType: AddressType,
+          sender: Party
+        ) => {
           setModalOpen(null);
           onConfirm(value, channelType, addressType, {
             senderId: sender.id,

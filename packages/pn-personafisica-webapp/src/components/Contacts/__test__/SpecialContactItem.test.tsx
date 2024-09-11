@@ -89,7 +89,7 @@ describe('SpecialContactItem Component', () => {
     expect(phoneButtons[1]).toHaveTextContent('button.elimina');
   });
 
-  it.skip('should show pec validation progress if pec is not valid', () => {
+  it('should show pec validation progress if pec is not valid', () => {
     const pecNotValid = {
       ...pecAddress,
       pecValid: false,
@@ -134,7 +134,7 @@ describe('SpecialContactItem Component', () => {
     );
     const buttons = specialContactForms[0].querySelectorAll('button');
     fireEvent.click(buttons[0]);
-    await waitFor(() => expect(editHandler).toHaveBeenCalled());
+    await waitFor(() => expect(editHandler).toHaveBeenCalledTimes(1));
   });
 
   it('calls onDelete when delete button is clicked', async () => {
@@ -153,6 +153,6 @@ describe('SpecialContactItem Component', () => {
     );
     const buttons = specialContactForms[0].querySelectorAll('button');
     fireEvent.click(buttons[1]);
-    await waitFor(() => expect(deleteHandler).toHaveBeenCalled());
+    await waitFor(() => expect(deleteHandler).toHaveBeenCalledTimes(1));
   });
 });

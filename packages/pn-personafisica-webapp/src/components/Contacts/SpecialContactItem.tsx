@@ -34,7 +34,7 @@ type Field = {
   address?: DigitalAddress;
 };
 
-const SpecialContactElem: React.FC<Props> = ({
+const SpecialContactItem: React.FC<Props> = ({
   addresses,
   onDelete,
   onEdit,
@@ -61,7 +61,11 @@ const SpecialContactElem: React.FC<Props> = ({
     return (
       <Fragment key={f.id}>
         {isVerifyingPec ? (
-          <Stack direction="row" spacing={1}>
+          <Stack
+            direction="row"
+            spacing={1}
+            data-testid={`${senderId}_${channelType.toLowerCase()}Contact`}
+          >
             <AutorenewIcon fontSize="small" sx={{ color: '#5C6F82' }} />
             <Box>
               <Typography
@@ -176,4 +180,4 @@ const SpecialContactElem: React.FC<Props> = ({
   );
 };
 
-export default SpecialContactElem;
+export default SpecialContactItem;

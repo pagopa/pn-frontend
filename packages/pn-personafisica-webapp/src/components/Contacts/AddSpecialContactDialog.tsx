@@ -23,7 +23,7 @@ import {
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
 
-import { ChannelType } from '../../models/contacts';
+import { AddressType, ChannelType } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -44,7 +44,12 @@ type Props = {
   sender: Party;
   channelType: ChannelType;
   onDiscard: () => void;
-  onConfirm: (value: string, channelType: ChannelType, sender: Party) => void;
+  onConfirm: (
+    value: string,
+    channelType: ChannelType,
+    addressType: AddressType,
+    sender: Party
+  ) => void;
 };
 
 type AddressTypeItem = {
@@ -68,6 +73,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
+  const isEditMode = value.length > 0;
 
   const addressTypes: Array<AddressTypeItem> = allowedAddressTypes.map((addressType) => ({
     id: addressType,
@@ -102,7 +108,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     await formik.setFieldValue('sender', newValue);
     setSenderInputValue(newValue?.name ?? '');
     if (newValue && addressesData.addresses.some((a) => a.senderId === newValue.id)) {
-      checkIfSenderIsAlreadyAdded(sender, formik.values.channelType);
+      checkIfSenderIsAlreadyAdded(newValue, formik.values.channelType);
       return;
     }
     setAlreadyExistsMessage('');
@@ -118,6 +124,14 @@ const AddSpecialContactDialog: React.FC<Props> = ({
       <DropDownPartyMenuItem name={option.name} />
     </MenuItem>
   );
+
+  const getAddressType = () => {
+    if (formik.values.channelType === ChannelType.PEC) {
+      return AddressType.LEGAL;
+    }
+
+    return AddressType.COURTESY;
+  };
 
   const validationSchema = yup.object({
     sender: yup.object({ id: yup.string(), name: yup.string() }).required(),
@@ -140,7 +154,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
 
   const initialValues = {
     sender: sender ?? { id: '', name: '' },
-    channelType: value.length
+    channelType: isEditMode
       ? channelType
       : addressTypes.filter((a) => !a.disabled)[0]?.id ?? ChannelType.PEC,
     s_value: channelType === ChannelType.SMS ? value.replace(internationalPhonePrefix, '') : value,
@@ -152,7 +166,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      onConfirm(values.s_value, values.channelType, values.sender);
+      onConfirm(values.s_value, values.channelType, getAddressType(), values.sender);
     },
   });
 
@@ -170,7 +184,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (!open) {
+    if (!open || isEditMode) {
       return;
     }
     getParties();
@@ -213,6 +227,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
               value={formik.values.channelType}
               onChange={addressTypeChangeHandler}
               size="small"
+              disabled={isEditMode}
               sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
             >
               {addressTypes.map((a) => (
@@ -273,7 +288,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 onChange={senderChangeHandler}
                 inputValue={senderInputValue}
-                disabled={!!value}
+                disabled={isEditMode}
                 onInputChange={(_event, newInputValue, reason) => {
                   if (reason === 'input') {
                     setSenderInputValue(newInputValue);

@@ -35,6 +35,8 @@ type Props = {
   emptyItemKey?: string;
   /** map label string for empty item (default: '------') */
   emptyItemLabel?: string;
+  /** disabled toggle */
+  disabled?: boolean;
   /** dropdown items */
   children?: React.ReactNode;
 };
@@ -57,6 +59,7 @@ const CustomDropdown: React.FC<Props> = ({
   emptyItemKey = '',
   emptyItemValue = '',
   emptyItemLabel = '------',
+  disabled = false,
 }) => {
   const [innerValue, setInnerValue] = useState(value);
 
@@ -89,6 +92,7 @@ const CustomDropdown: React.FC<Props> = ({
           margin={margin}
           error={error}
           helperText={helperText}
+          disabled={disabled}
         >
           {!required && (
             <MenuItem key={emptyItemKey} value={emptyItemValue}>

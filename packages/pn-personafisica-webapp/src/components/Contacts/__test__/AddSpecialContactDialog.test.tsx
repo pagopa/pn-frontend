@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
-import { getById, testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
+import { getById, testAutocomplete, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
 import { fireEvent, waitFor } from '@testing-library/react';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
@@ -205,10 +205,11 @@ describe('test AddSpecialContactDialog', () => {
     });
   });
 
-  // TODO: Capire come gestire l'alreadyExists
-  it.skip('show already exist message', async () => {
+  it('show already exist message', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
-    // render component
+    const specialAddresses = digitalAddresses.filter(
+      (a) => a.senderId !== 'default' && a.channelType === ChannelType.EMAIL
+    );
     render(
       <AddSpecialContactDialog
         open
@@ -217,21 +218,40 @@ describe('test AddSpecialContactDialog', () => {
         channelType={ChannelType.PEC}
         onDiscard={discardHandler}
         onConfirm={confirmHandler}
-      />
+      />,
+      {
+        preloadedState: { contactsState: { digitalAddresses: specialAddresses } },
+      }
     );
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const bodyEl = within(dialog).getByTestId('dialog-content');
+
     const input = getById(bodyEl, 's_value');
-    // fill with valid value
-    fireEvent.change(input, { target: { value: 'mocked@pec.it' } });
+    fireEvent.change(input, { target: { value: 'test@test.it' } });
     await waitFor(() => {
-      expect(input).toHaveValue('mocked@pec.it');
+      expect(input).toHaveValue('test@test.it');
     });
-    // select sender
-    await testAutocomplete(bodyEl, 'sender', parties, true, 0, true);
-    const senderChips = within(bodyEl).queryAllByTestId('sender_chip');
-    expect(senderChips).toHaveLength(1);
-    expect(senderChips[0]).toHaveTextContent(parties[0].name);
+
+    await testSelect(
+      bodyEl,
+      'channelType',
+      [
+        { value: ChannelType.PEC, label: 'special-contacts.pec' },
+        { value: ChannelType.EMAIL, label: 'special-contacts.email' },
+        { value: ChannelType.SMS, label: 'special-contacts.sms' },
+      ],
+      1
+    );
+
+    await testAutocomplete(
+      bodyEl,
+      'sender',
+      parties,
+      true,
+      parties.findIndex((p) => p.name === specialAddresses[0].senderName),
+      true
+    );
+
     const alreadyExistsAlert = within(bodyEl).getByTestId('alreadyExistsAlert');
     expect(alreadyExistsAlert).toBeInTheDocument();
   });
