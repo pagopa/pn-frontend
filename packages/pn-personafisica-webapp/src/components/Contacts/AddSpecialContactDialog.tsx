@@ -74,11 +74,22 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
   const isEditMode = value.length > 0;
 
-  const addressTypes: Array<AddressTypeItem> = allowedAddressTypes.map((addressType) => ({
-    id: addressType,
-    value: t(`special-contacts.${addressType.toLowerCase()}`, { ns: 'recapiti' }),
-    disabled: !addressesData[`default${addressType}Address`],
-  }));
+  const addressTypes: Array<AddressTypeItem> = (() => {
+    const { defaultPECAddress, defaultSERCQAddress } = addressesData;
+
+    // eslint-disable-next-line functional/no-let
+    let items: Array<AddressTypeItem> = allowedAddressTypes.map((addressType) => ({
+      id: addressType,
+      value: t(`special-contacts.${addressType.toLowerCase()}`, { ns: 'recapiti' }),
+      disabled: addressType !== ChannelType.SERCQ && !addressesData[`default${addressType}Address`],
+    }));
+
+    if (!defaultPECAddress && !defaultSERCQAddress) {
+      items = items.filter((a) => a.id !== ChannelType.PEC && a.id !== ChannelType.SERCQ);
+    }
+
+    return items;
+  })();
 
   const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     await formik.setFieldValue('s_value', '');

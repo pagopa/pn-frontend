@@ -7,7 +7,12 @@ import { ChannelType, DigitalAddress } from '../models/contacts';
 
 export const internationalPhonePrefix = '+39';
 
-export const allowedAddressTypes = [ChannelType.PEC, ChannelType.EMAIL, ChannelType.SMS];
+export const allowedAddressTypes = [
+  ChannelType.EMAIL,
+  ChannelType.SMS,
+  ChannelType.PEC,
+  ChannelType.SERCQ,
+];
 
 export function countContactsByType(contacts: Array<DigitalAddress>, type: ChannelType) {
   return contacts.reduce((total, contact) => (contact.channelType === type ? total + 1 : total), 0);
