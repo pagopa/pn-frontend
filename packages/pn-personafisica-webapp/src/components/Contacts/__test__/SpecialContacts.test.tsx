@@ -114,7 +114,7 @@ describe('SpecialContacts Component', async () => {
     // change addressType
     await testSelect(
       addSpecialContactDialog!,
-      'addressType',
+      'channelType',
       [
         { label: 'special-contacts.pec', value: ChannelType.PEC },
         { label: 'special-contacts.email', value: ChannelType.EMAIL },
@@ -310,11 +310,11 @@ describe('SpecialContacts Component', async () => {
     expect(addSpecialContactDialog).toBeInTheDocument();
 
     // change sender
-    await testAutocomplete(addSpecialContactDialog!, 'sender', parties, true, 0, true);
+    await testAutocomplete(addSpecialContactDialog!, 'sender', parties, true, 1, true);
     // change addressType
     await testSelect(
       addSpecialContactDialog!,
-      'addressType',
+      'channelType',
       [
         { label: 'special-contacts.pec', value: ChannelType.PEC },
         { label: 'special-contacts.email', value: ChannelType.EMAIL },
@@ -332,13 +332,9 @@ describe('SpecialContacts Component', async () => {
       expect(mock.history.post).toHaveLength(0);
     });
 
-    const dialog = await waitFor(() => {
-      expect(
-        within(result.container).getByText('special-contacts.error-title')
-      ).toBeInTheDocument();
-      return within(result.container).getByRole('dialog');
-    });
-    const closeButton = within(dialog).getByRole('button', { name: 'button.chiudi' });
+    const dialog = result.getByTestId('duplicateDialog');
+    expect(dialog).toBeInTheDocument();
+    const closeButton = within(dialog).getByRole('button', { name: 'button.annulla' });
     fireEvent.click(closeButton);
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();

@@ -9,7 +9,7 @@ import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { act, render, screen, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { ChannelType } from '../../../models/contacts';
+import { AddressType, ChannelType } from '../../../models/contacts';
 import { CONTACT_ACTIONS } from '../../../redux/contact/actions';
 import AddSpecialContactDialog from '../AddSpecialContactDialog';
 
@@ -120,7 +120,12 @@ describe('test AddSpecialContactDialog', () => {
     fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(confirmHandler).toHaveBeenCalledTimes(1);
-      expect(confirmHandler).toHaveBeenCalledWith('mocked@pec.it', ChannelType.PEC, parties[1]);
+      expect(confirmHandler).toHaveBeenCalledWith(
+        'mocked@pec.it',
+        ChannelType.PEC,
+        AddressType.LEGAL,
+        parties[1]
+      );
     });
   });
 
@@ -200,6 +205,7 @@ describe('test AddSpecialContactDialog', () => {
       expect(confirmHandler).toHaveBeenCalledWith(
         'mocked-modified@pec.it',
         ChannelType.PEC,
+        AddressType.LEGAL,
         parties[0]
       );
     });

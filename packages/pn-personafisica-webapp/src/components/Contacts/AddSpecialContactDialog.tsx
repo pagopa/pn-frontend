@@ -69,7 +69,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const getOptionLabel = (option: Party) => option.name || '';
-  const [senderInputValue, setSenderInputValue] = useState('');
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
@@ -106,18 +105,12 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const senderChangeHandler = async (_: any, newValue: Party | null) => {
     await formik.setFieldTouched('sender', true, false);
     await formik.setFieldValue('sender', newValue);
-    setSenderInputValue(newValue?.name ?? '');
     if (newValue && addressesData.addresses.some((a) => a.senderId === newValue.id)) {
       checkIfSenderIsAlreadyAdded(newValue, formik.values.channelType);
       return;
     }
     setAlreadyExistsMessage('');
   };
-
-  // handling of search string for sender
-  const entitySearchLabel: string = `${t('special-contacts.add-sender', {
-    ns: 'recapiti',
-  })}${searchStringLimitReachedText(senderInputValue)}`;
 
   const renderOption = (props: any, option: Party) => (
     <MenuItem {...props} value={option.id} key={option.id}>
@@ -170,15 +163,22 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     },
   });
 
+  // handling of search string for sender
+  const entitySearchLabel: string = `${t('special-contacts.add-sender', {
+    ns: 'recapiti',
+  })}${searchStringLimitReachedText(formik.values.sender.name)}`;
+
   const handleChangeTouched = async (e: ChangeEvent<HTMLInputElement>) => {
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
   const getParties = () => {
-    if (senderInputValue.length >= 4) {
-      void dispatch(getAllActivatedParties({ paNameFilter: senderInputValue, blockLoading: true }));
-    } else if (senderInputValue.length === 0) {
+    if (formik.values.sender.name.length >= 4) {
+      void dispatch(
+        getAllActivatedParties({ paNameFilter: formik.values.sender.name, blockLoading: true })
+      );
+    } else if (formik.values.sender.name.length === 0) {
       void dispatch(getAllActivatedParties({ blockLoading: true }));
     }
   };
@@ -188,19 +188,13 @@ const AddSpecialContactDialog: React.FC<Props> = ({
       return;
     }
     getParties();
-  }, [senderInputValue, open]);
+  }, [formik.values.sender.name, open]);
 
   const handleClose = () => {
     formik.resetForm({ values: initialValues });
     setAlreadyExistsMessage('');
-    setSenderInputValue('');
     onDiscard();
   };
-
-  // Todo workaround to set the sender value when the dialog is opened in edit mode
-  useEffect(() => {
-    value && setSenderInputValue(sender?.name ?? '');
-  }, [value]);
 
   const handleConfirm = async () => {
     await formik.submitForm();
@@ -287,11 +281,11 @@ const AddSpecialContactDialog: React.FC<Props> = ({
                 noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 onChange={senderChangeHandler}
-                inputValue={senderInputValue}
+                inputValue={formik.values.sender.name}
                 disabled={isEditMode}
                 onInputChange={(_event, newInputValue, reason) => {
                   if (reason === 'input') {
-                    setSenderInputValue(newInputValue);
+                    void formik.setFieldValue('sender', { id: '', name: newInputValue });
                   }
                 }}
                 filterOptions={(e) => e}
@@ -301,9 +295,10 @@ const AddSpecialContactDialog: React.FC<Props> = ({
                     {...params}
                     name="sender"
                     label={entitySearchLabel}
-                    error={senderInputValue.length > 80}
+                    error={formik.values.sender.name.length > 80}
                     helperText={
-                      senderInputValue.length > 80 && t('too-long-field-error', { maxLength: 80 })
+                      formik.values.sender.name.length > 80 &&
+                      t('too-long-field-error', { maxLength: 80 })
                     }
                   />
                 )}
@@ -330,7 +325,9 @@ const AddSpecialContactDialog: React.FC<Props> = ({
           onClick={handleConfirm}
           variant="contained"
           disabled={
-            !formik.isValid || senderInputValue.length > 80 || senderInputValue.length === 0
+            !formik.isValid ||
+            formik.values.sender.name.length > 80 ||
+            formik.values.sender.name.length === 0
           }
         >
           {t('button.associa')}
