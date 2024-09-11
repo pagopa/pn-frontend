@@ -208,8 +208,8 @@ const AddSpecialContactDialog: React.FC<Props> = ({
               {t(`special-contacts.contact-to-add-description`, { ns: 'recapiti' })}
             </Typography>
             <CustomDropdown
-              id="addressType"
-              name="addressType"
+              id="channelType"
+              name="channelType"
               value={formik.values.channelType}
               onChange={addressTypeChangeHandler}
               size="small"

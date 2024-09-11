@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import AddSpecialContactDialog from './AddSpecialContactDialog';
+import CancelVerificationModal from './CancelVerificationModal';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import ExistingContactDialog from './ExistingContactDialog';
@@ -33,6 +34,7 @@ enum ModalType {
   DELETE = 'delete',
   SPECIAL = 'special',
   VALIDATION = 'validation',
+  CANCEL_VALIDATION = 'cancel_validation',
 }
 
 type Addresses = {
@@ -185,6 +187,7 @@ const SpecialContacts: React.FC = () => {
       ...currentAddress.current,
       value: '',
       senderId: 'default',
+      senderName: undefined,
     };
     setModalOpen(ModalType.SPECIAL);
   };
@@ -223,8 +226,18 @@ const SpecialContacts: React.FC = () => {
       ...currentAddress.current,
       value: '',
       senderId: 'default',
+      senderName: undefined,
     };
     setModalOpen(null);
+  };
+
+  const handleCancelValidation = (senderId: string) => {
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = {
+      ...currentAddress.current,
+      senderId,
+    };
+    setModalOpen(ModalType.CANCEL_VALIDATION);
   };
 
   const handleCancelCode = async () => {
@@ -286,6 +299,7 @@ const SpecialContacts: React.FC = () => {
                   addresses={addr}
                   onEdit={handleEdit}
                   onDelete={handleDelete}
+                  onCancelValidation={handleCancelValidation}
                 />
               ))}
             </Stack>
@@ -341,6 +355,11 @@ const SpecialContacts: React.FC = () => {
         value={currentAddress.current.value}
         handleDiscard={() => setModalOpen(null)}
         handleConfirm={() => handleCodeVerification()}
+      />
+      <CancelVerificationModal
+        open={modalOpen === ModalType.CANCEL_VALIDATION}
+        senderId={currentAddress.current.senderId}
+        handleClose={() => setModalOpen(null)}
       />
     </>
   );

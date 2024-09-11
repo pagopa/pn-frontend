@@ -125,7 +125,6 @@ describe('PecContactItem component', () => {
       expect(input).not.toBeInTheDocument();
     });
     expect(result.container).toHaveTextContent('legal-contacts.pec-validating');
-    expect(result.container).toHaveTextContent('legal-contacts.validation-in-progress');
     // cancel validation
     const cancelValidationBtn = result.getByTestId('cancelValidation');
     fireEvent.click(cancelValidationBtn);
@@ -144,7 +143,6 @@ describe('PecContactItem component', () => {
     // wait rerendering due to redux changes
     await waitFor(() => {
       expect(result.container).not.toHaveTextContent('legal-contacts.pec-validating');
-      expect(result.container).not.toHaveTextContent('legal-contacts.validation-in-progress');
       input = result.container.querySelector('input[name="default_pec"]');
       expect(input).toBeInTheDocument();
     });

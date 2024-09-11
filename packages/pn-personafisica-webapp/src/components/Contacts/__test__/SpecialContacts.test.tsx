@@ -206,6 +206,8 @@ describe('SpecialContacts Component', async () => {
 
     const input = getById(addSpecialContactDialog, 's_value');
     fireEvent.change(input!, { target: { value: mailValue } });
+    const senderInput = getById(addSpecialContactDialog, 'sender');
+    expect(senderInput).toBeDisabled();
     const associaButton = within(addSpecialContactDialog).getByText('button.associa');
     fireEvent.click(associaButton);
 
@@ -284,6 +286,62 @@ describe('SpecialContacts Component', async () => {
         /^[a-zA-Z0-9\-]+(?:_pecContact|_emailContact|_smsContact)$/
       );
       expect(specialContactForms).toHaveLength(specialAddresses.length - 1);
+    });
+  });
+
+  it('should show existing modal when adding a new contact that already exists', async () => {
+    const mailValue = digitalCourtesyAddresses.filter(
+      (addr) => addr.channelType === ChannelType.EMAIL
+    )[0].value;
+
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    mock
+      .onPost(`/bff/v1/addresses/COURTESY/${parties[0].id}/EMAIL`, { value: mailValue })
+      .reply(409);
+    // render component
+    const result = render(<SpecialContacts />, {
+      preloadedState: { contactsState: { digitalAddresses } },
+    });
+    const addButton = within(result.container).getByTestId('addSpecialContactButton');
+    fireEvent.click(addButton);
+    const addSpecialContactDialog = await waitFor(() =>
+      result.getByTestId('addSpecialContactDialog')
+    );
+    expect(addSpecialContactDialog).toBeInTheDocument();
+
+    // change sender
+    await testAutocomplete(addSpecialContactDialog!, 'sender', parties, true, 0, true);
+    // change addressType
+    await testSelect(
+      addSpecialContactDialog!,
+      'addressType',
+      [
+        { label: 'special-contacts.pec', value: ChannelType.PEC },
+        { label: 'special-contacts.email', value: ChannelType.EMAIL },
+        { label: 'special-contacts.sms', value: ChannelType.SMS },
+      ],
+      1
+    );
+    // change mail
+    await testInput(addSpecialContactDialog!, 's_value', mailValue);
+
+    const confirmButton = within(addSpecialContactDialog).getByText('button.associa');
+    fireEvent.click(confirmButton);
+
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(0);
+    });
+
+    const dialog = await waitFor(() => {
+      expect(
+        within(result.container).getByText('special-contacts.error-title')
+      ).toBeInTheDocument();
+      return within(result.container).getByRole('dialog');
+    });
+    const closeButton = within(dialog).getByRole('button', { name: 'button.chiudi' });
+    fireEvent.click(closeButton);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
     });
   });
 });

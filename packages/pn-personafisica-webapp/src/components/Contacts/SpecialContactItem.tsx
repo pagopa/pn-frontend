@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { Box, Stack, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
@@ -23,6 +24,7 @@ type Props = {
     addressType: AddressType,
     sender: Sender
   ) => void;
+  onCancelValidation: (senderId: string) => void;
 };
 
 type Field = {
@@ -32,7 +34,12 @@ type Field = {
   address?: DigitalAddress;
 };
 
-const SpecialContactElem: React.FC<Props> = ({ addresses, onDelete, onEdit }) => {
+const SpecialContactElem: React.FC<Props> = ({
+  addresses,
+  onDelete,
+  onEdit,
+  onCancelValidation,
+}) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const isMobile = useIsMobile();
 
@@ -43,74 +50,96 @@ const SpecialContactElem: React.FC<Props> = ({ addresses, onDelete, onEdit }) =>
     address: addresses.find((a) => a.channelType === type),
   }));
 
-  const jsxField = (f: Field) => (
-    <Fragment key={f.id}>
-      {f.address ? (
-        <Stack
-          direction="row"
-          spacing={1}
-          data-testid={`${f.address.senderId}_${f.address.channelType.toLowerCase()}Contact`}
-        >
-          <VerifiedIcon fontSize="small" color="success" />
-          <Box>
-            <Typography
-              sx={{
-                wordBreak: 'break-word',
-                fontWeight: 600,
-                mb: 2,
-              }}
-              variant="body2"
-              data-testid={`special_${f.address.channelType}-typography`}
-            >
-              {f.address.value}
-            </Typography>
-            <ButtonNaked
-              key="editButton"
-              color="primary"
-              onClick={() =>
-                onEdit(
-                  f.address?.value ?? '',
-                  f.address?.channelType ?? ChannelType.PEC,
-                  f.address?.addressType ?? AddressType.LEGAL,
-                  {
-                    senderId: f.address?.senderId ?? '',
-                    senderName: f.address?.senderName ?? '',
-                  }
-                )
-              }
-              sx={{ mr: 2 }}
-              disabled={false}
-              data-testid={`modifyContact-special_${f.address.channelType}`}
-              size="medium"
-            >
-              {t('button.modifica', { ns: 'common' })}
-            </ButtonNaked>
-            <ButtonNaked
-              data-testid={`cancelContact-special_${f.address.channelType}`}
-              color="error"
-              onClick={() =>
-                onDelete(
-                  f.address?.value ?? '',
-                  f.address?.channelType ?? ChannelType.PEC,
-                  f.address?.addressType ?? AddressType.LEGAL,
-                  {
-                    senderId: f.address?.senderId ?? '',
-                    senderName: f.address?.senderName ?? '',
-                  }
-                )
-              }
-              disabled={false}
-              size="medium"
-            >
-              {t('button.elimina', { ns: 'common' })}
-            </ButtonNaked>
-          </Box>
-        </Stack>
-      ) : (
-        ''
-      )}
-    </Fragment>
-  );
+  const jsxField = (f: Field) => {
+    if (!f.address) {
+      return <Fragment key={f.id}></Fragment>;
+    }
+
+    const { value, channelType, addressType, senderId, senderName, pecValid } = f.address;
+    const isVerifyingPec = channelType === ChannelType.PEC && !pecValid;
+
+    return (
+      <Fragment key={f.id}>
+        {isVerifyingPec ? (
+          <Stack direction="row" spacing={1}>
+            <AutorenewIcon fontSize="small" sx={{ color: '#5C6F82' }} />
+            <Box>
+              <Typography
+                id="validationPecProgress"
+                variant="body2"
+                color="textSecondary"
+                sx={{
+                  fontWeight: 600,
+                  mb: 2,
+                }}
+              >
+                {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
+              </Typography>
+              <ButtonNaked
+                color="error"
+                onClick={() => onCancelValidation(senderId)}
+                data-testid="cancelValidation"
+                size="medium"
+              >
+                {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
+              </ButtonNaked>
+            </Box>
+          </Stack>
+        ) : (
+          <Stack
+            direction="row"
+            spacing={1}
+            data-testid={`${senderId}_${channelType.toLowerCase()}Contact`}
+          >
+            <VerifiedIcon fontSize="small" color="success" />
+            <Box>
+              <Typography
+                sx={{
+                  wordBreak: 'break-word',
+                  fontWeight: 600,
+                  mb: 2,
+                }}
+                variant="body2"
+                data-testid={`special_${channelType}-typography`}
+              >
+                {value}
+              </Typography>
+              <ButtonNaked
+                key="editButton"
+                color="primary"
+                onClick={() =>
+                  onEdit(value, channelType, addressType, {
+                    senderId,
+                    senderName,
+                  })
+                }
+                sx={{ mr: 2 }}
+                disabled={false}
+                data-testid={`modifyContact-special_${channelType}`}
+                size="medium"
+              >
+                {t('button.modifica', { ns: 'common' })}
+              </ButtonNaked>
+              <ButtonNaked
+                data-testid={`cancelContact-special_${channelType}`}
+                color="error"
+                onClick={() =>
+                  onDelete(value, channelType, addressType, {
+                    senderId,
+                    senderName,
+                  })
+                }
+                disabled={false}
+                size="medium"
+              >
+                {t('button.elimina', { ns: 'common' })}
+              </ButtonNaked>
+            </Box>
+          </Stack>
+        )}
+      </Fragment>
+    );
+  };
 
   return (
     <Stack

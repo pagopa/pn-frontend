@@ -21,7 +21,6 @@
     "block-remove-pec-message": "Dazu müssen zuerst alle PEC-Adressen unter „Weitere Anschriften“ gelöscht werden.",
     "validation-cancel-title": "Überprüfung abbrechen?",
     "validation-cancel-content": "Wird die Überprüfung abgebrochen, muss eine neue PEC-Adresse eingegeben und der Vorgang erneut begonnen werden.",
-    "validation-in-progress": "Wird überprüft",
     "validation-progress-title": "Danke!",
     "validation-progress-content": "Wir prüfen, ob die PEC-Adresse gültig ist. Du erhältst innerhalb von 24 Stunden eine E-Mail mit dem Ergebnis."
   },

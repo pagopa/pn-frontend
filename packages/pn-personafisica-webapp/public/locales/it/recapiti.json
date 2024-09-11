@@ -27,7 +27,6 @@
     "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”.",
     "validation-cancel-title": "Vuoi annullare la verifica?",
     "validation-cancel-content": "Se annulli la verifica, dovrai inserire una nuova PEC e ricominciare il processo.",
-    "validation-in-progress": "Verifica in corso",
     "validation-progress-title": "Grazie!",
     "validation-progress-content": "Stiamo verificando che l’indirizzo PEC sia valido. Riceverai una e-mail con l’esito entro 24 ore.",
     "sercq-send-title": "Domicilio Digitale SEND",

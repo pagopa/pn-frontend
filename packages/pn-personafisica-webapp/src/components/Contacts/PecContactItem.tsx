@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import WatchLaterIcon from '@mui/icons-material/WatchLater';
-import { Stack, Typography } from '@mui/material';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
+import { Box, Stack, Typography } from '@mui/material';
 import { appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -167,28 +167,34 @@ const PecContactItem: React.FC = () => {
         />
       )}
       {verifyingAddress && (
-        <>
-          <Typography mb={1} sx={{ fontWeight: 'bold' }} mt={3}>
-            {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
-          </Typography>
-          <Stack direction="row" spacing={1}>
-            <WatchLaterIcon fontSize="small" />
-            <Typography id="validationPecProgress" fontWeight="bold" variant="body2">
-              {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
+        <Stack direction="row" spacing={1}>
+          <AutorenewIcon fontSize="small" sx={{ color: '#5C6F82' }} />
+          <Box>
+            <Typography
+              id="validationPecProgress"
+              variant="body2"
+              color="textSecondary"
+              sx={{
+                fontWeight: 600,
+                mb: 2,
+              }}
+            >
+              {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
             </Typography>
             <ButtonNaked
-              color="primary"
+              color="error"
               onClick={() => {
                 setModalOpen(ModalType.CANCEL_VALIDATION);
                 // eslint-disable-next-line functional/immutable-data
                 currentAddress.current = { value: currentValue };
               }}
               data-testid="cancelValidation"
+              size="medium"
             >
               {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
             </ButtonNaked>
-          </Stack>
-        </>
+          </Box>
+        </Stack>
       )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}

@@ -18,6 +18,7 @@ describe('SpecialContactItem Component', () => {
   let mock: MockAdapter;
   const editHandler = vi.fn();
   const deleteHandler = vi.fn();
+  const cancelValidationHandler = vi.fn();
 
   const pecAddress = {
     addressType: AddressType.LEGAL,
@@ -63,6 +64,7 @@ describe('SpecialContactItem Component', () => {
         addresses={[pecAddress, emailAddress, phoneAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}
+        onCancelValidation={cancelValidationHandler}
       />
     );
 
@@ -87,6 +89,35 @@ describe('SpecialContactItem Component', () => {
     expect(phoneButtons[1]).toHaveTextContent('button.elimina');
   });
 
+  it.skip('should show pec validation progress if pec is not valid', () => {
+    const pecNotValid = {
+      ...pecAddress,
+      pecValid: false,
+    };
+    // render component
+    const { container, getAllByTestId } = render(
+      <SpecialContactItem
+        addresses={[pecNotValid]}
+        onDelete={deleteHandler}
+        onEdit={editHandler}
+        onCancelValidation={cancelValidationHandler}
+      />
+    );
+
+    expect(container).toHaveTextContent('Mocked Sender');
+    const specialContactForms = getAllByTestId(
+      /^[a-zA-Z0-9\-]+(?:_pecContact|_emailContact|_smsContact)$/
+    );
+    expect(specialContactForms).toHaveLength(1);
+    expect(specialContactForms[0]).toHaveTextContent('legal-contacts.pec-validating');
+    const buttons = specialContactForms[0].querySelectorAll('button');
+    expect(buttons).toHaveLength(1);
+    expect(buttons[0]).toHaveTextContent('legal-contacts.cancel-pec-validation');
+
+    fireEvent.click(buttons[0]);
+    expect(cancelValidationHandler).toHaveBeenCalled();
+  });
+
   it('calls onEdit when edit button is clicked', async () => {
     // render component
     const { getAllByTestId } = render(
@@ -94,6 +125,7 @@ describe('SpecialContactItem Component', () => {
         addresses={[pecAddress, emailAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}
+        onCancelValidation={cancelValidationHandler}
       />
     );
 
@@ -112,6 +144,7 @@ describe('SpecialContactItem Component', () => {
         addresses={[pecAddress, emailAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}
+        onCancelValidation={cancelValidationHandler}
       />
     );
 
