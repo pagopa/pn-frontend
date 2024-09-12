@@ -30,7 +30,7 @@ vi.mock('react-i18next', () => ({
 describe('test SercqSendContactItem', () => {
   let mock: MockAdapter;
   const defaultAddress = digitalLegalAddresses.find(
-    (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SERCQ
+    (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SERCQ_SEND
   );
 
   beforeAll(() => {
@@ -60,7 +60,7 @@ describe('test SercqSendContactItem', () => {
 
   it('enable service - courtesy contacts added', async () => {
     mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ', {
+      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
@@ -104,7 +104,7 @@ describe('test SercqSendContactItem', () => {
 
   it('enable service - courtesy contacts not added - click on not now button', async () => {
     mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ', {
+      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
@@ -140,7 +140,7 @@ describe('test SercqSendContactItem', () => {
   it('enable service - courtesy contacts not added - add courtesy contact', async () => {
     const phoneValue = '3333333333';
     mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ', {
+      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
@@ -214,7 +214,7 @@ describe('test SercqSendContactItem', () => {
   });
 
   it('remove contact', async () => {
-    mock.onDelete('/bff/v1/addresses/LEGAL/default/SERCQ').reply(204);
+    mock.onDelete('/bff/v1/addresses/LEGAL/default/SERCQ_SEND').reply(204);
     // render component
     const { container, getByTestId } = render(<SercqSendContactItem />, {
       preloadedState: {
@@ -249,7 +249,9 @@ describe('test SercqSendContactItem', () => {
       expect(
         testStore
           .getState()
-          .contactsState.digitalAddresses.filter((addr) => addr.channelType === ChannelType.SERCQ)
+          .contactsState.digitalAddresses.filter(
+            (addr) => addr.channelType === ChannelType.SERCQ_SEND
+          )
       ).toStrictEqual([]);
     });
     // wait rerendering due to redux changes

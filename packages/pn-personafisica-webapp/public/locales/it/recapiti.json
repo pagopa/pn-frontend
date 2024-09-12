@@ -161,7 +161,7 @@
     "SMS": "SMS",
     "EMAIL": "Email",
     "IOMSG": "App IO",
-    "SERCQ": "Domicilio Digitale",
+    "SERCQ_SEND": "Domicilio Digitale",
     "add-icon-arialabel": "Aggiungi"
   }
 }

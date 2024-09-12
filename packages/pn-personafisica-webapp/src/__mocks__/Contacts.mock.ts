@@ -36,7 +36,7 @@ export const digitalAddresses: Array<DigitalAddress> = [
   {
     addressType: AddressType.LEGAL,
     senderId: 'default',
-    channelType: ChannelType.SERCQ,
+    channelType: ChannelType.SERCQ_SEND,
     value: SERCQ_SEND_VALUE,
     codeValid: true,
   },

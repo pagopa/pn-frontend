@@ -5,7 +5,6 @@ import { apiClient } from '../../api/apiClients';
 import {
   AddressesApiFactory,
   BffAddressVerificationResponse,
-  BffChannelType,
 } from '../../generated-client/digital-addresses';
 import { InfoRecipientApiFactory } from '../../generated-client/recipient-info';
 import {
@@ -53,8 +52,7 @@ export const createOrUpdateAddress = createAsyncThunk<
       const response = await digitalAddressesFactory.createOrUpdateAddressV1(
         params.addressType,
         params.senderId,
-        // TODO: rimuovere l'as appena si ha il bff integrato
-        params.channelType as BffChannelType,
+        params.channelType,
         { value: params.value, verificationCode: params.code }
       );
 
@@ -104,8 +102,7 @@ export const deleteAddress = createAsyncThunk<void, DeleteDigitalAddressParams>(
       const response = await digitalAddressesFactory.deleteAddressV1(
         params.addressType,
         params.senderId,
-        // TODO: rimuovere l'as appena si ha il bff integrato
-        params.channelType as BffChannelType
+        params.channelType
       );
 
       return response.data;

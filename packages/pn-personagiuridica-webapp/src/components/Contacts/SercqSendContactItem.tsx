@@ -64,11 +64,11 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
   const isMobile = useIsMobile();
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
-  const { defaultSERCQAddress, courtesyAddresses } = useAppSelector(
+  const { defaultSERCQ_SENDAddress, courtesyAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
 
-  const value = defaultSERCQAddress?.value ?? '';
+  const value = defaultSERCQ_SENDAddress?.value ?? '';
   const hasCourtesy = courtesyAddresses.length > 0;
 
   const handleInfoConfirm = () => {
@@ -76,7 +76,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
       addressType: AddressType.LEGAL,
       senderId,
       senderName,
-      channelType: ChannelType.SERCQ,
+      channelType: ChannelType.SERCQ_SEND,
       value: SERCQ_SEND_VALUE,
     };
     dispatch(createOrUpdateAddress(digitalAddressParams))
@@ -145,7 +145,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
       deleteAddress({
         addressType: AddressType.LEGAL,
         senderId,
-        channelType: ChannelType.SERCQ,
+        channelType: ChannelType.SERCQ_SEND,
       })
     )
       .unwrap()

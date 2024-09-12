@@ -21,13 +21,15 @@ export const tosPrivacyConsentMock = (tosAccepted: boolean, privacyAccepted: boo
   privacy: privacyConsentMock(privacyAccepted),
 });
 
-export const acceptTosPrivacyConsentBodyMock = {
-  tos: {
+export const acceptTosPrivacyConsentBodyMock = [
+  {
     action: ConsentActionType.ACCEPT,
     version: 'mock-version-1',
+    type: ConsentType.TOS,
   },
-  privacy: {
+  {
     action: ConsentActionType.ACCEPT,
     version: 'mock-version-1',
+    type: ConsentType.DATAPRIVACY,
   },
-};
+];

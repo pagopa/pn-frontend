@@ -137,7 +137,7 @@
     "PEC": "PEC",
     "SMS": "SMS",
     "EMAIL": "Email",
-    "SERCQ": "Domicilio Digitale",
+    "SERCQ_SEND": "Domicilio Digitale",
     "add-icon-arialabel": "Aggiungi"
   }
 }
