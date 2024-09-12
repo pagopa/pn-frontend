@@ -72,7 +72,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
-  const isEditMode = value.length > 0;
 
   const addressTypes: Array<AddressTypeItem> = (() => {
     const { defaultPECAddress, defaultSERCQAddress } = addressesData;
@@ -115,7 +114,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
 
   const senderChangeHandler = async (_: any, newValue: Party | null) => {
     await formik.setFieldTouched('sender', true, false);
-    await formik.setFieldValue('sender', newValue);
+    await formik.setFieldValue('sender', { id: newValue?.id ?? '', name: newValue?.name ?? '' });
     if (newValue && addressesData.addresses.some((a) => a.senderId === newValue.id)) {
       checkIfSenderIsAlreadyAdded(newValue, formik.values.channelType);
       return;
@@ -129,16 +128,16 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     </MenuItem>
   );
 
-  const getAddressType = () => {
-    if (formik.values.channelType === ChannelType.PEC) {
-      return AddressType.LEGAL;
-    }
-
-    return AddressType.COURTESY;
-  };
-
   const validationSchema = yup.object({
-    sender: yup.object({ id: yup.string(), name: yup.string() }).required(),
+    sender: yup
+      .object({
+        id: yup.string().required(),
+        name: yup
+          .string()
+          .required(t('required-field'))
+          .max(80, t('too-long-field-error', { maxLength: 80 })),
+      })
+      .required(),
     channelType: yup.string().required(),
     s_value: yup
       .string()
@@ -158,7 +157,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
 
   const initialValues = {
     sender: sender ?? { id: '', name: '' },
-    channelType: isEditMode
+    channelType: value
       ? channelType
       : addressTypes.filter((a) => !a.disabled)[0]?.id ?? ChannelType.PEC,
     s_value: channelType === ChannelType.SMS ? value.replace(internationalPhonePrefix, '') : value,
@@ -170,6 +169,13 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
+      const getAddressType = () => {
+        if (values.channelType === ChannelType.PEC || values.channelType === ChannelType.SERCQ) {
+          return AddressType.LEGAL;
+        }
+        return AddressType.COURTESY;
+      };
+
       onConfirm(values.s_value, values.channelType, getAddressType(), values.sender);
     },
   });
@@ -195,7 +201,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (!open || isEditMode) {
+    if (!open || value) {
       return;
     }
     getParties();
@@ -232,7 +238,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
               value={formik.values.channelType}
               onChange={addressTypeChangeHandler}
               size="small"
-              disabled={isEditMode}
+              disabled={!!value}
               sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
             >
               {addressTypes.map((a) => (
@@ -293,9 +299,10 @@ const AddSpecialContactDialog: React.FC<Props> = ({
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 onChange={senderChangeHandler}
                 inputValue={formik.values.sender.name}
-                disabled={isEditMode}
+                disabled={!!value}
                 onInputChange={(_event, newInputValue, reason) => {
                   if (reason === 'input') {
+                    void formik.setFieldTouched('sender', true, false);
                     void formik.setFieldValue('sender', { id: '', name: newInputValue });
                   }
                 }}
@@ -306,11 +313,8 @@ const AddSpecialContactDialog: React.FC<Props> = ({
                     {...params}
                     name="sender"
                     label={entitySearchLabel}
-                    error={formik.values.sender.name.length > 80}
-                    helperText={
-                      formik.values.sender.name.length > 80 &&
-                      t('too-long-field-error', { maxLength: 80 })
-                    }
+                    error={formik.touched.sender && Boolean(formik.errors.sender?.name)}
+                    helperText={formik.touched.sender && formik.errors.sender?.name}
                   />
                 )}
                 sx={{ flexGrow: 1, flexBasis: 0 }}
@@ -332,15 +336,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
         <Button onClick={handleClose} variant="outlined">
           {t('button.annulla')}
         </Button>
-        <Button
-          onClick={handleConfirm}
-          variant="contained"
-          disabled={
-            !formik.isValid ||
-            formik.values.sender.name.length > 80 ||
-            formik.values.sender.name.length === 0
-          }
-        >
+        <Button onClick={handleConfirm} variant="contained" disabled={!formik.isValid}>
           {t('button.associa')}
         </Button>
       </PnDialogActions>

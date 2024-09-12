@@ -1,10 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import AutorenewIcon from '@mui/icons-material/Autorenew';
-import { Box, Stack, Typography } from '@mui/material';
 import { appStateActions } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
@@ -19,6 +16,7 @@ import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
 import ExistingContactDialog from './ExistingContactDialog';
+import PecValidationItem from './PecValidationItem';
 import PecVerificationDialog from './PecVerificationDialog';
 
 enum ModalType {
@@ -117,6 +115,13 @@ const PecContactItem: React.FC = () => {
     await digitalContactRef.current.resetForm();
   };
 
+  const handleCancelValidation = () => {
+    setModalOpen(ModalType.CANCEL_VALIDATION);
+
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = { value: currentValue };
+  };
+
   const deleteConfirmHandler = () => {
     setModalOpen(null);
     dispatch(
@@ -167,34 +172,7 @@ const PecContactItem: React.FC = () => {
         />
       )}
       {verifyingAddress && (
-        <Stack direction="row" spacing={1}>
-          <AutorenewIcon fontSize="small" sx={{ color: '#5C6F82' }} />
-          <Box>
-            <Typography
-              id="validationPecProgress"
-              variant="body2"
-              color="textSecondary"
-              sx={{
-                fontWeight: 600,
-                mb: 2,
-              }}
-            >
-              {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
-            </Typography>
-            <ButtonNaked
-              color="error"
-              onClick={() => {
-                setModalOpen(ModalType.CANCEL_VALIDATION);
-                // eslint-disable-next-line functional/immutable-data
-                currentAddress.current = { value: currentValue };
-              }}
-              data-testid="cancelValidation"
-              size="medium"
-            >
-              {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
-            </ButtonNaked>
-          </Box>
-        </Stack>
+        <PecValidationItem senderId="default" onCancelValidation={handleCancelValidation} />
       )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}

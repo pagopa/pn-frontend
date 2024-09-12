@@ -126,7 +126,7 @@
     "pec-already-exists": "Questo ente è già associato a un indirizzo PEC. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "sms-already-exists": "Questo ente è già associato a un numero di cellulare. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "email-already-exists": "Questo ente è già associato a un indirizzo e-mail. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
-    "contact-already-exists": "Uno o più enti selezionati sono già associati a questo recapito. Se premi “Associa”, verrà sostituito da quello che hai indicato qui.",
+    "contact-already-exists": "L'ente selezionato è già associato a questo recapito. Se premi “Associa”, verrà sostituito da quello che hai indicato qui.",
     "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito.",
     "modal-title": "Associa un recapito a enti specifici",
     "card-title": "Già associati",

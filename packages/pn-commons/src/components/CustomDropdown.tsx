@@ -1,45 +1,21 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import { MenuItem, SxProps, TextField } from '@mui/material';
+import { MenuItem, TextField, TextFieldProps } from '@mui/material';
 
 type Props = {
-  /** id */
-  id: string;
-  /** value */
-  value: any;
-  /** name */
-  name?: string;
-  /** label */
-  label?: string;
   /** on change event handler */
   onChange?: (e?: any) => void;
-  /** set to true to have full width dropdown */
-  fullWidth?: boolean;
-  /** style costumization */
-  sx?: SxProps;
-  /** size option */
-  size?: 'small' | 'medium';
-  /** margin option */
-  margin?: 'none' | 'dense' | 'normal';
   /** empty message when no items are available */
   emptyStateMessage?: string;
-  /** error status toggle */
-  error?: boolean;
-  /** helper text context */
-  helperText?: string | false;
-  /** required toggle (default: true) */
-  required?: boolean;
   /** map value string for empty item (default: empty string) */
   emptyItemValue?: string;
   /** map key string for empty item (default: empty string) */
   emptyItemKey?: string;
   /** map label string for empty item (default: '------') */
   emptyItemLabel?: string;
-  /** disabled toggle */
-  disabled?: boolean;
   /** dropdown items */
   children?: React.ReactNode;
-};
+} & TextFieldProps;
 
 const CustomDropdown: React.FC<Props> = ({
   children,
@@ -59,7 +35,7 @@ const CustomDropdown: React.FC<Props> = ({
   emptyItemKey = '',
   emptyItemValue = '',
   emptyItemLabel = '------',
-  disabled = false,
+  disabled,
 }) => {
   const [innerValue, setInnerValue] = useState(value);
 

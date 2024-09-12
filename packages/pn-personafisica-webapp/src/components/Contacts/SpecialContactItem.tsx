@@ -1,13 +1,12 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import AutorenewIcon from '@mui/icons-material/Autorenew';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { Box, Stack, Typography } from '@mui/material';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, DigitalAddress, Sender } from '../../models/contacts';
+import PecValidationItem from './PecValidationItem';
 
 type Props = {
   addresses: Array<DigitalAddress>;
@@ -33,7 +32,6 @@ const SpecialContactItem: React.FC<Props> = ({
   onCancelValidation,
 }) => {
   const { t } = useTranslation(['recapiti', 'common']);
-  const isMobile = useIsMobile();
 
   const renderAddress = (address: DigitalAddress) => {
     const { value, channelType, addressType, senderId, senderName, pecValid } = address;
@@ -42,34 +40,7 @@ const SpecialContactItem: React.FC<Props> = ({
     return (
       <Fragment key={address.value}>
         {isVerifyingPec ? (
-          <Stack
-            direction="row"
-            spacing={1}
-            data-testid={`${senderId}_${channelType.toLowerCase()}Contact`}
-          >
-            <AutorenewIcon fontSize="small" sx={{ color: '#5C6F82' }} />
-            <Box>
-              <Typography
-                id="validationPecProgress"
-                variant="body2"
-                color="textSecondary"
-                sx={{
-                  fontWeight: 600,
-                  mb: 2,
-                }}
-              >
-                {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
-              </Typography>
-              <ButtonNaked
-                color="error"
-                onClick={() => onCancelValidation(senderId)}
-                data-testid="cancelValidation"
-                size="medium"
-              >
-                {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
-              </ButtonNaked>
-            </Box>
-          </Stack>
+          <PecValidationItem senderId={senderId} onCancelValidation={onCancelValidation} />
         ) : (
           <Stack
             direction="row"
@@ -128,34 +99,38 @@ const SpecialContactItem: React.FC<Props> = ({
 
   return (
     <Stack
-      direction={isMobile ? 'column' : 'row'}
-      spacing={isMobile ? 0 : 6}
-      sx={{ mb: isMobile ? 2 : 0.5, mt: isMobile ? 2 : '43px' }}
+      direction={{ xs: 'column', lg: 'row' }}
+      spacing={{ xs: 3, lg: 6 }}
+      mb={{ xs: 2, lg: 0.5 }}
+      mt={{ xs: 2, lg: '43px' }}
     >
-      {isMobile && (
-        <Typography variant="caption" fontWeight={600} lineHeight="18px">
+      <Stack spacing={1} width={{ xs: 'auto', lg: '224px' }}>
+        <Typography
+          variant="caption"
+          fontWeight={600}
+          lineHeight="18px"
+          sx={{ display: { xs: 'block', lg: 'none' } }}
+        >
           {t('special-contacts.sender', { ns: 'recapiti' })}
         </Typography>
-      )}
 
-      <Typography
-        variant="caption"
-        fontWeight={600}
-        mt={isMobile ? 1 : undefined}
-        mb={isMobile ? 3 : undefined}
-        sx={{ width: isMobile ? 'auto' : '224px' }}
-      >
-        {addresses[0].senderName}
-      </Typography>
+        <Typography variant="caption" fontWeight={600}>
+          {addresses[0].senderName}
+        </Typography>
+      </Stack>
 
-      {isMobile && (
-        <Typography variant="caption" fontWeight={600} mb={1}>
+      <Stack spacing={1}>
+        <Typography
+          variant="caption"
+          fontWeight={600}
+          sx={{ display: { xs: 'block', lg: 'none' }, mb: 1 }}
+        >
           {t('special-contacts.contacts', { ns: 'recapiti' })}
         </Typography>
-      )}
 
-      <Stack direction={isMobile ? 'column' : 'row'} spacing={3}>
-        {addresses.map((address) => renderAddress(address))}
+        <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
+          {addresses.map((address) => renderAddress(address))}
+        </Stack>
       </Stack>
     </Stack>
   );

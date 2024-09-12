@@ -115,7 +115,7 @@ describe('SpecialContactItem Component', () => {
     expect(buttons[0]).toHaveTextContent('legal-contacts.cancel-pec-validation');
 
     fireEvent.click(buttons[0]);
-    expect(cancelValidationHandler).toHaveBeenCalled();
+    expect(cancelValidationHandler).toHaveBeenCalledTimes(1);
   });
 
   it('calls onEdit when edit button is clicked', async () => {
