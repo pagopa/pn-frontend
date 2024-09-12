@@ -23,7 +23,7 @@ import {
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
 
-import { AddressType, ChannelType } from '../../models/contacts';
+import { AddressType, ChannelType, Sender } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -41,14 +41,14 @@ import DropDownPartyMenuItem from '../Party/DropDownParty';
 type Props = {
   open: boolean;
   value: string;
-  sender: Party;
+  sender: Sender;
   channelType: ChannelType;
   onDiscard: () => void;
   onConfirm: (
     value: string,
     channelType: ChannelType,
     addressType: AddressType,
-    sender: Party
+    sender: Sender
   ) => void;
 };
 
@@ -156,7 +156,10 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   });
 
   const initialValues = {
-    sender: sender ?? { id: '', name: '' },
+    sender: {
+      id: sender.senderId,
+      name: sender.senderName ?? '',
+    },
     channelType: value
       ? channelType
       : addressTypes.filter((a) => !a.disabled)[0]?.id ?? ChannelType.PEC,
@@ -176,7 +179,10 @@ const AddSpecialContactDialog: React.FC<Props> = ({
         return AddressType.COURTESY;
       };
 
-      onConfirm(values.s_value, values.channelType, getAddressType(), values.sender);
+      onConfirm(values.s_value, values.channelType, getAddressType(), {
+        senderId: values.sender.id,
+        senderName: values.sender.name,
+      });
     },
   });
 

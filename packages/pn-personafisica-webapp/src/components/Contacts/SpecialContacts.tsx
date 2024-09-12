@@ -14,7 +14,6 @@ import {
   SaveDigitalAddressParams,
   Sender,
 } from '../../models/contacts';
-import { Party } from '../../models/party';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -316,8 +315,8 @@ const SpecialContacts: React.FC = () => {
         open={modalOpen === ModalType.SPECIAL}
         value={currentAddress.current.value ?? ''}
         sender={{
-          id: currentAddress.current.senderId,
-          name: currentAddress.current.senderName ?? '',
+          senderId: currentAddress.current.senderId,
+          senderName: currentAddress.current.senderName,
         }}
         channelType={currentAddress.current.channelType}
         onDiscard={handleCloseModal}
@@ -325,13 +324,10 @@ const SpecialContacts: React.FC = () => {
           value: string,
           channelType: ChannelType,
           addressType: AddressType,
-          sender: Party
+          sender: Sender
         ) => {
           setModalOpen(null);
-          onConfirm(value, channelType, addressType, {
-            senderId: sender.id,
-            senderName: sender.name,
-          });
+          onConfirm(value, channelType, addressType, sender);
         }}
       />
       <ContactCodeDialog

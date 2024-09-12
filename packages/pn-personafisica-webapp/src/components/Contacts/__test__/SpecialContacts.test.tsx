@@ -30,6 +30,13 @@ vi.mock('react-i18next', () => ({
 
 const specialAddresses = digitalAddresses.filter((addr) => addr.senderId !== 'default');
 
+const channelTypesItems = [
+  { label: 'special-contacts.email', value: ChannelType.EMAIL },
+  { label: 'special-contacts.sms', value: ChannelType.SMS },
+  { label: 'special-contacts.pec', value: ChannelType.PEC },
+  { label: 'special-contacts.sercq', value: ChannelType.SERCQ },
+];
+
 describe('SpecialContacts Component', async () => {
   let mock: MockAdapter;
 
@@ -124,12 +131,8 @@ describe('SpecialContacts Component', async () => {
     await testSelect(
       addSpecialContactDialog!,
       'channelType',
-      [
-        { label: 'special-contacts.pec', value: ChannelType.PEC },
-        { label: 'special-contacts.email', value: ChannelType.EMAIL },
-        { label: 'special-contacts.sms', value: ChannelType.SMS },
-      ],
-      0
+      channelTypesItems,
+      channelTypesItems.findIndex((item) => item.value === ChannelType.PEC)
     );
     // change pec
     await testInput(addSpecialContactDialog!, 's_value', pecValue);
@@ -324,12 +327,8 @@ describe('SpecialContacts Component', async () => {
     await testSelect(
       addSpecialContactDialog!,
       'channelType',
-      [
-        { label: 'special-contacts.pec', value: ChannelType.PEC },
-        { label: 'special-contacts.email', value: ChannelType.EMAIL },
-        { label: 'special-contacts.sms', value: ChannelType.SMS },
-      ],
-      1
+      channelTypesItems,
+      channelTypesItems.findIndex((item) => item.value === ChannelType.EMAIL)
     );
     // change mail
     await testInput(addSpecialContactDialog!, 's_value', mailValue);
