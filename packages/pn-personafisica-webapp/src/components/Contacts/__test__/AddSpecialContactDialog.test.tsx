@@ -309,7 +309,7 @@ describe('test AddSpecialContactDialog', () => {
     );
   });
 
-  it.only('should show all channelType options if PEC is default address and no default SERCQ is present', async () => {
+  it('should show all channelType options if PEC is default address and no default SERCQ is present', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     const addresses = digitalAddresses.filter(
       (a) => a.senderId === 'default' && a.channelType !== ChannelType.SERCQ
