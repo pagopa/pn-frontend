@@ -303,7 +303,6 @@ describe('test AddSpecialContactDialog', () => {
       [
         { value: ChannelType.EMAIL, label: 'special-contacts.email' },
         { value: ChannelType.SMS, label: 'special-contacts.sms' },
-        { value: ChannelType.PEC, label: 'special-contacts.pec' },
       ],
       0
     );
