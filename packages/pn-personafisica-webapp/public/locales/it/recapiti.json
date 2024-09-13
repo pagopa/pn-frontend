@@ -134,7 +134,9 @@
     "remove-special-title": "Vuoi eliminare {{contactValue}}?",
     "remove-special-description": "Gli avvisi relativi alle notifiche degli enti associati non saranno più inviati a questo recapito, ma a quello principale.",
     "no-default-address": "Recapito principale non presente",
-    "contacts": "Recapiti"
+    "contacts": "Recapiti",
+    "legal-association-title": "Conferma associazione",
+    "legal-association-description": "Confermando l’associazione, per le notifiche inviate da <strong>{{senderName}}</strong> il tuo recapito a valore legale di riferimento sarà <strong>{{newAddress}}</strong> invece che <strong>{{oldAddress}}</strong>."
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",

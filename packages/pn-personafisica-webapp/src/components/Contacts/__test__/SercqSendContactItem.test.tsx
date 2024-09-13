@@ -4,7 +4,10 @@ import { vi } from 'vitest';
 import { getById, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { internationalPhonePrefix } from '../../../../../pn-personagiuridica-webapp/src/utility/contacts.utility';
-import { digitalCourtesyAddresses, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
+import {
+  digitalCourtesyAddresses,
+  digitalLegalAddressesSercq,
+} from '../../../__mocks__/Contacts.mock';
 import {
   fireEvent,
   render,
@@ -34,7 +37,7 @@ vi.mock('react-i18next', () => ({
 
 describe('test SercqSendContactItem', () => {
   let mock: MockAdapter;
-  const defaultAddress = digitalLegalAddresses.find(
+  const defaultAddress = digitalLegalAddressesSercq.find(
     (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SERCQ
   );
 

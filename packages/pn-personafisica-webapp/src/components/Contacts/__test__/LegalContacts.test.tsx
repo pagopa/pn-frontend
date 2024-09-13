@@ -1,6 +1,9 @@
 import { vi } from 'vitest';
 
-import { digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
+import {
+  digitalLegalAddresses,
+  digitalLegalAddressesSercq,
+} from '../../../__mocks__/Contacts.mock';
 import { render, waitFor, within } from '../../../__test__/test-utils';
 import { ChannelType } from '../../../models/contacts';
 import LegalContacts from '../LegalContacts';
@@ -19,7 +22,7 @@ const defaultPecAddress = digitalLegalAddresses.find(
 );
 
 describe('LegalContacts Component', async () => {
-  it('renders component', () => {
+  it('renders component - PEC enabled', () => {
     // render component
     const { container, getByTestId, getByText } = render(<LegalContacts />, {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
@@ -36,6 +39,27 @@ describe('LegalContacts Component', async () => {
     expect(pecButtons[1]).toBeEnabled();
     expect(pecButtons[0].textContent).toMatch('button.modifica');
     expect(pecButtons[1].textContent).toMatch('button.elimina');
+    const sercqSendContact = getByTestId(`default_sercqSendContact`);
+    expect(sercqSendContact).toBeInTheDocument();
+    const activateButton = within(sercqSendContact).getByTestId('activateButton');
+    expect(activateButton).toBeInTheDocument();
+  });
+
+  it('renders component - SERCQ enabled', async () => {
+    const { container, getByTestId } = render(<LegalContacts />, {
+      preloadedState: { contactsState: { digitalAddresses: digitalLegalAddressesSercq } },
+    });
+    expect(container).toHaveTextContent('legal-contacts.title');
+    expect(container).toHaveTextContent('legal-contacts.list');
+    const pecContact = getByTestId(`default_pecContact`);
+    const pecInput = pecContact.querySelector(`[name="default_pec"]`);
+    expect(pecInput).toBeInTheDocument();
+    expect(pecInput).toHaveValue('');
+    const button = await waitFor(() =>
+      within(pecContact).getByRole('button', { name: 'button.conferma' })
+    );
+    expect(button).toBeDisabled();
+
     const sercqSendContact = getByTestId(`default_sercqSendContact`);
     expect(sercqSendContact).toBeInTheDocument();
     expect(sercqSendContact).toHaveTextContent('legal-contacts.sercq-send-enabled');

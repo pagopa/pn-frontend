@@ -5,7 +5,7 @@ import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commo
 import { getById, testAutocomplete, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
 import { fireEvent, waitFor } from '@testing-library/react';
 
-import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
+import { digitalAddresses, digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { act, render, screen, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
@@ -310,9 +310,6 @@ describe('test AddSpecialContactDialog', () => {
 
   it('should show all channelType options if PEC is default address and no default SERCQ is present', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
-    const addresses = digitalAddresses.filter(
-      (a) => a.senderId === 'default' && a.channelType !== ChannelType.SERCQ
-    );
     render(
       <AddSpecialContactDialog
         open
@@ -323,7 +320,7 @@ describe('test AddSpecialContactDialog', () => {
         onConfirm={confirmHandler}
       />,
       {
-        preloadedState: { contactsState: { digitalAddresses: addresses } },
+        preloadedState: { contactsState: { digitalAddresses } },
       }
     );
 
@@ -338,6 +335,37 @@ describe('test AddSpecialContactDialog', () => {
         { value: ChannelType.SMS, label: 'special-contacts.sms' },
         { value: ChannelType.PEC, label: 'special-contacts.pec' },
         { value: ChannelType.SERCQ, label: 'special-contacts.sercq' },
+      ],
+      0
+    );
+  });
+
+  it('should show EMAIL, SMS and PEC options if SERCQ is default address', async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    render(
+      <AddSpecialContactDialog
+        open
+        value=""
+        sender={{ senderId: 'default', senderName: '' }}
+        channelType={ChannelType.PEC}
+        onDiscard={discardHandler}
+        onConfirm={confirmHandler}
+      />,
+      {
+        preloadedState: { contactsState: { digitalAddresses: digitalAddressesSercq } },
+      }
+    );
+
+    const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
+    const bodyEl = within(dialog).getByTestId('dialog-content');
+
+    await testSelect(
+      bodyEl,
+      'channelType',
+      [
+        { value: ChannelType.EMAIL, label: 'special-contacts.email' },
+        { value: ChannelType.SMS, label: 'special-contacts.sms' },
+        { value: ChannelType.PEC, label: 'special-contacts.pec' },
       ],
       0
     );

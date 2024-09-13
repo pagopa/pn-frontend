@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import AddIcon from '@mui/icons-material/Add';
 import { Card, CardContent, Divider, Stack, Typography } from '@mui/material';
@@ -11,6 +11,7 @@ import {
   AddressType,
   ChannelType,
   DigitalAddress,
+  SERCQ_SEND_VALUE,
   SaveDigitalAddressParams,
   Sender,
 } from '../../models/contacts';
@@ -21,6 +22,7 @@ import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyF
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import AddSpecialContactDialog from './AddSpecialContactDialog';
 import CancelVerificationModal from './CancelVerificationModal';
+import ConfirmLegalAssociationDialog from './ConfirmLegalAssociationDialog';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import ExistingContactDialog from './ExistingContactDialog';
@@ -34,6 +36,7 @@ enum ModalType {
   SPECIAL = 'special',
   VALIDATION = 'validation',
   CANCEL_VALIDATION = 'cancel_validation',
+  CONFIRM_LEGAL_ASSOCIATION = 'confirm_legal_association',
 }
 
 type Addresses = {
@@ -47,7 +50,9 @@ const SpecialContacts: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
-  const { addresses, specialAddresses } = useAppSelector(contactsSelectors.selectAddresses);
+  const { addresses, specialAddresses, defaultPECAddress, defaultSERCQAddress } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
 
   const currentAddress = useRef<DigitalAddress>({
@@ -94,6 +99,14 @@ const SpecialContacts: React.FC = () => {
       addressType,
     };
 
+    if (
+      (defaultPECAddress && channelType === ChannelType.SERCQ) ||
+      (defaultSERCQAddress && channelType === ChannelType.PEC)
+    ) {
+      setModalOpen(ModalType.CONFIRM_LEGAL_ASSOCIATION);
+      return;
+    }
+
     // first check if contact already exists
     if (contactAlreadyExists(addresses, value, sender.senderId, channelType)) {
       setModalOpen(ModalType.EXISTING);
@@ -113,15 +126,21 @@ const SpecialContacts: React.FC = () => {
       }
     }
 
+    // eslint-disable-next-line functional/no-let
+    let value = currentAddress.current.value;
+    if (currentAddress.current.channelType === ChannelType.SMS) {
+      value = internationalPhonePrefix + value;
+    }
+    if (currentAddress.current.channelType === ChannelType.SERCQ) {
+      value = SERCQ_SEND_VALUE;
+    }
+
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: currentAddress.current.addressType,
       senderId: currentAddress.current.senderId,
       senderName: currentAddress.current.senderName,
       channelType: currentAddress.current.channelType,
-      value:
-        currentAddress.current.channelType === ChannelType.SMS
-          ? internationalPhonePrefix + currentAddress.current.value
-          : currentAddress.current.value,
+      value,
       code: verificationCode,
     };
 
@@ -365,6 +384,28 @@ const SpecialContacts: React.FC = () => {
         open={modalOpen === ModalType.CANCEL_VALIDATION}
         senderId={currentAddress.current.senderId}
         handleClose={() => setModalOpen(null)}
+      />
+      <ConfirmLegalAssociationDialog
+        open={modalOpen === ModalType.CONFIRM_LEGAL_ASSOCIATION}
+        dialogContentText={
+          <Trans
+            ns="recapiti"
+            i18nKey="special-contacts.legal-association-description"
+            values={{
+              senderName: currentAddress.current.senderName,
+              newAddress:
+                currentAddress.current.channelType === ChannelType.PEC
+                  ? currentAddress.current.value
+                  : t('special-contacts.sercq', { ns: 'recapiti' }),
+              oldAddress:
+                currentAddress.current.channelType === ChannelType.PEC
+                  ? t('special-contacts.sercq', { ns: 'recapiti' })
+                  : defaultPECAddress?.value,
+            }}
+          />
+        }
+        handleClose={() => setModalOpen(null)}
+        handleConfirm={() => handleCodeVerification()}
       />
     </>
   );
