@@ -1,4 +1,5 @@
 import {
+  ConsentType,
   PartyEntityWithUrl,
   TosPrivacyConsent,
   parseError,
@@ -114,9 +115,12 @@ export const getTosPrivacyApproval = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
-      const response = await tosPrivacyFactory.getTosPrivacyV1();
+      const response = await tosPrivacyFactory.getTosPrivacyV2([
+        ConsentType.TOS,
+        ConsentType.DATAPRIVACY,
+      ]);
 
-      return response.data as TosPrivacyConsent;
+      return response.data as Array<TosPrivacyConsent>;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
@@ -131,7 +135,7 @@ export const acceptTosPrivacy = createAsyncThunk<void, Array<BffTosPrivacyAction
   async (body: Array<BffTosPrivacyActionBody>, { rejectWithValue }) => {
     try {
       const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
-      const response = await tosPrivacyFactory.acceptTosPrivacyV1(body);
+      const response = await tosPrivacyFactory.acceptTosPrivacyV2(body);
 
       return response.data;
     } catch (e: any) {

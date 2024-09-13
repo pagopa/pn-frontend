@@ -1,9 +1,15 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
-import { appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
+import {
+  ConsentActionType,
+  ConsentType,
+  TosPrivacyConsent,
+  appStateActions,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import {
@@ -13,7 +19,13 @@ import {
   SERCQ_SEND_VALUE,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
-import { createOrUpdateAddress, deleteAddress, enableIOAddress } from '../../redux/contact/actions';
+import {
+  acceptSercqSendTosPrivacy,
+  createOrUpdateAddress,
+  deleteAddress,
+  enableIOAddress,
+  getSercqSendTosPrivacyApproval,
+} from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { internationalPhonePrefix } from '../../utility/contacts.utility';
@@ -68,13 +80,25 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
   const { defaultSERCQ_SENDAddress, defaultAPPIOAddress, courtesyAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
+  const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
 
   const value = defaultSERCQ_SENDAddress?.value ?? '';
   const hasAppIO = defaultAPPIOAddress?.value === IOAllowedValues.DISABLED;
   const hasCourtesy =
     hasAppIO && courtesyAddresses.length === 1 ? false : courtesyAddresses.length > 0;
 
-  const handleInfoConfirm = () => {
+  const handleActivation = () => {
+    dispatch(getSercqSendTosPrivacyApproval())
+      .unwrap()
+      .then((consent) => {
+        // eslint-disable-next-line functional/immutable-data
+        tosPrivacy.current = consent;
+        setModalOpen({ type: ModalType.INFO });
+      })
+      .catch(() => {});
+  };
+
+  const activateService = () => {
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.LEGAL,
       senderId,
@@ -98,6 +122,46 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
           return;
         }
         setModalOpen({ type: ModalType.COURTESY });
+      })
+      .catch(() => {});
+  };
+
+  const handleInfoConfirm = () => {
+    if (!tosPrivacy.current) {
+      return;
+    }
+    // first check tos and privacy status
+    const [tos, privacy] = tosPrivacy.current.filter(
+      (consent) =>
+        consent.consentType === ConsentType.TOS_SERCQ ||
+        consent.consentType === ConsentType.DATAPRIVACY_SERCQ
+    );
+    // if tos and privacy are already accepted, proceede with the activation
+    if (tos.accepted && privacy.accepted) {
+      activateService();
+    }
+    // accept tos and privacy
+    const tosPrivacyBody = [];
+    if (!tos.accepted) {
+      // eslint-disable-next-line functional/immutable-data
+      tosPrivacyBody.push({
+        action: ConsentActionType.ACCEPT,
+        version: tos.consentVersion,
+        type: ConsentType.TOS_SERCQ,
+      });
+    }
+    if (!privacy.accepted) {
+      // eslint-disable-next-line functional/immutable-data
+      tosPrivacyBody.push({
+        action: ConsentActionType.ACCEPT,
+        version: privacy.consentVersion,
+        type: ConsentType.DATAPRIVACY_SERCQ,
+      });
+    }
+    dispatch(acceptSercqSendTosPrivacy(tosPrivacyBody))
+      .unwrap()
+      .then(() => {
+        activateService();
       })
       .catch(() => {});
   };
@@ -186,11 +250,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
         style={{ width: isMobile ? '100%' : '50%' }}
       >
         {!value && (
-          <Button
-            variant="contained"
-            data-testid="activateButton"
-            onClick={() => setModalOpen({ type: ModalType.INFO })}
-          >
+          <Button variant="contained" data-testid="activateButton" onClick={handleActivation}>
             {t('legal-contacts.sercq-send-active', { ns: 'recapiti' })}
           </Button>
         )}

@@ -1,35 +1,53 @@
 import { ConsentActionType, ConsentType } from '@pagopa-pn/pn-commons';
 
-export const tosConsentMock = (accepted: boolean) => ({
+type FilterStartingWith<Set, Needle extends string> = Set extends `${Needle}${infer _X}`
+  ? Set
+  : never;
+
+export const tosConsentMock = (
+  accepted: boolean,
+  type: FilterStartingWith<ConsentType, 'TOS'> = ConsentType.TOS
+) => ({
   recipientId: 'mocked-recipientId',
-  consentType: ConsentType.TOS,
+  consentType: type,
   accepted,
   isFirstAccept: true,
-  consentVersion: 'mocked-version',
+  consentVersion: '1',
 });
 
-export const privacyConsentMock = (accepted: boolean) => ({
+export const privacyConsentMock = (
+  accepted: boolean,
+  type: FilterStartingWith<ConsentType, 'DATAPRIVACY'> = ConsentType.DATAPRIVACY
+) => ({
   recipientId: 'mocked-recipientId',
-  consentType: ConsentType.DATAPRIVACY,
+  consentType: type,
   accepted,
   isFirstAccept: true,
-  consentVersion: 'mocked-version',
+  consentVersion: '1',
 });
 
-export const tosPrivacyConsentMock = (tosAccepted: boolean, privacyAccepted: boolean) => ({
-  tos: tosConsentMock(tosAccepted),
-  privacy: privacyConsentMock(privacyAccepted),
-});
+export const tosPrivacyConsentMock = (tosAccepted: boolean, privacyAccepted: boolean) => [
+  tosConsentMock(tosAccepted),
+  privacyConsentMock(privacyAccepted),
+];
 
-export const acceptTosPrivacyConsentBodyMock = [
+export const sercqSendTosPrivacyConsentMock = (tosAccepted: boolean, privacyAccepted: boolean) => [
+  tosConsentMock(tosAccepted, ConsentType.TOS_SERCQ),
+  privacyConsentMock(privacyAccepted, ConsentType.DATAPRIVACY_SERCQ),
+];
+
+export const acceptTosPrivacyConsentBodyMock = (
+  tosType: FilterStartingWith<ConsentType, 'TOS'> = ConsentType.TOS,
+  privacyType: FilterStartingWith<ConsentType, 'DATAPRIVACY'> = ConsentType.DATAPRIVACY
+) => [
   {
     action: ConsentActionType.ACCEPT,
-    version: 'mock-version-1',
-    type: ConsentType.TOS,
+    version: '1',
+    type: tosType,
   },
   {
     action: ConsentActionType.ACCEPT,
-    version: 'mock-version-1',
-    type: ConsentType.DATAPRIVACY,
+    version: '1',
+    type: privacyType,
   },
 ];

@@ -3,6 +3,8 @@ import MockAdapter from 'axios-mock-adapter';
 import { mockLogin, mockLogout, userResponse } from '../../../__mocks__/Auth.mock';
 import {
   acceptTosPrivacyConsentBodyMock,
+  privacyConsentMock,
+  tosConsentMock,
   tosPrivacyConsentMock,
 } from '../../../__mocks__/Consents.mock';
 import { apiClient } from '../../../api/apiClients';
@@ -113,22 +115,20 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should fetch and Privacy Approved', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
+    mock.onGet('/bff/v2/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
 
     const action = await store.dispatch(getTosPrivacyApproval());
     expect(action.type).toBe('getTosPrivacyApproval/fulfilled');
     expect(action.payload).toEqual(tosPrivacyConsentMock(true, true));
-    expect(store.getState().userState.tosConsent).toEqual(tosPrivacyConsentMock(true, true).tos);
-    expect(store.getState().userState.privacyConsent).toEqual(
-      tosPrivacyConsentMock(true, true).privacy
-    );
+    expect(store.getState().userState.tosConsent).toEqual(tosConsentMock(true));
+    expect(store.getState().userState.privacyConsent).toEqual(privacyConsentMock(true));
   });
 
   it('Should NOT be able to fetch the tos approval', async () => {
     const tosPrivacyErrorResponse = {
       response: { data: 'error-tos-privacy-approval', status: 500 },
     };
-    mock.onGet('/bff/v1/tos-privacy').reply(500, 'error-tos-privacy-approval');
+    mock.onGet('/bff/v2/tos-privacy').reply(500, 'error-tos-privacy-approval');
     const action = await store.dispatch(getTosPrivacyApproval());
     expect(action.type).toBe('getTosPrivacyApproval/rejected');
     expect(action.payload).toEqual(tosPrivacyErrorResponse);
@@ -143,9 +143,9 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should be able to fetch tos and privacy acceptance', async () => {
-    mock.onPut('/bff/v1/tos-privacy').reply(200);
+    mock.onPut('/bff/v2/tos-privacy').reply(200);
 
-    const action = await store.dispatch(acceptTosPrivacy(acceptTosPrivacyConsentBodyMock));
+    const action = await store.dispatch(acceptTosPrivacy(acceptTosPrivacyConsentBodyMock()));
 
     expect(action.type).toBe('acceptTosPrivacy/fulfilled');
     expect(store.getState().userState.tosConsent.accepted).toBe(true);
@@ -153,9 +153,9 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should NOT be able to fetch tos and privacy acceptance', async () => {
-    mock.onPut('/bff/v1/tos-privacy').reply(500, 'error-accept-tos-privacy');
+    mock.onPut('/bff/v2/tos-privacy').reply(500, 'error-accept-tos-privacy');
 
-    const action = await store.dispatch(acceptTosPrivacy(acceptTosPrivacyConsentBodyMock));
+    const action = await store.dispatch(acceptTosPrivacy(acceptTosPrivacyConsentBodyMock()));
 
     expect(action.type).toBe('acceptTosPrivacy/rejected');
     expect(action.payload).toEqual({

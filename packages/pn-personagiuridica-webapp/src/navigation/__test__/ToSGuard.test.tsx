@@ -59,7 +59,7 @@ describe('Tests the ToSGuard component', async () => {
   });
 
   it('renders the loading page component if tos and privacy are not fetched', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(() => {
+    mock.onGet('/bff/v2/tos-privacy').reply(() => {
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve([200, tosPrivacyConsentMock(false, false)]);
@@ -79,7 +79,7 @@ describe('Tests the ToSGuard component', async () => {
   });
 
   it('renders the tos page component if privacy are not accepted', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, false));
+    mock.onGet('/bff/v2/tos-privacy').reply(200, tosPrivacyConsentMock(true, false));
     await act(async () => {
       render(<Guard />, { preloadedState: reduxState });
     });
@@ -93,7 +93,7 @@ describe('Tests the ToSGuard component', async () => {
   });
 
   it('renders the tos page component if tos are not accepted', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(false, true));
+    mock.onGet('/bff/v2/tos-privacy').reply(200, tosPrivacyConsentMock(false, true));
     await act(async () => {
       render(<Guard />, { preloadedState: reduxState });
     });
@@ -107,7 +107,7 @@ describe('Tests the ToSGuard component', async () => {
   });
 
   it('renders the generic page component if tos and privacy are accepted', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
+    mock.onGet('/bff/v2/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     await act(async () => {
       render(<Guard />, { preloadedState: reduxState });
     });

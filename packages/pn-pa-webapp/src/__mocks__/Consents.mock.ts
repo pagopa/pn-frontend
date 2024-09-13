@@ -16,10 +16,10 @@ export const privacyConsentMock = (accepted: boolean) => ({
   consentVersion: 'mocked-version',
 });
 
-export const tosPrivacyConsentMock = (tosAccepted: boolean, privacyAccepted: boolean) => ({
-  tos: tosConsentMock(tosAccepted),
-  privacy: privacyConsentMock(privacyAccepted),
-});
+export const tosPrivacyConsentMock = (tosAccepted: boolean, privacyAccepted: boolean) => [
+  tosConsentMock(tosAccepted),
+  privacyConsentMock(privacyAccepted),
+];
 
 export const acceptTosPrivacyConsentBodyMock = [
   {

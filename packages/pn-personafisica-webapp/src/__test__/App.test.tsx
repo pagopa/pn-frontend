@@ -115,7 +115,7 @@ describe('App', async () => {
   });
 
   it('render component - user logged in', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
+    mock.onGet('/bff/v2/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
@@ -133,7 +133,7 @@ describe('App', async () => {
   });
 
   it('check header actions - user logged in', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
+    mock.onGet('/bff/v2/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
@@ -167,7 +167,7 @@ describe('App', async () => {
   });
 
   it('sidemenu not included if error in API call to fetch TOS and Privacy', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(500);
+    mock.onGet('/bff/v2/tos-privacy').reply(500);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
@@ -181,7 +181,7 @@ describe('App', async () => {
   });
 
   it('sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(false, false));
+    mock.onGet('/bff/v2/tos-privacy').reply(200, tosPrivacyConsentMock(false, false));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
@@ -197,7 +197,7 @@ describe('App', async () => {
   });
 
   it('check header actions - user has not accepted the TOS and PRIVACY', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(false, false));
+    mock.onGet('/bff/v2/tos-privacy').reply(200, tosPrivacyConsentMock(false, false));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
@@ -214,7 +214,7 @@ describe('App', async () => {
   });
 
   it('sidemenu items if there are delegators', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
+    mock.onGet('/bff/v2/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
@@ -229,7 +229,7 @@ describe('App', async () => {
   });
 
   it('sidemenu items if there are no delegators', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
+    mock.onGet('/bff/v2/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, []);
