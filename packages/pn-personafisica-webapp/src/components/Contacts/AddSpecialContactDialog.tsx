@@ -188,14 +188,13 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      const getAddressType = () => {
-        if (values.channelType === ChannelType.PEC || values.channelType === ChannelType.SERCQ) {
-          return AddressType.LEGAL;
-        }
-        return AddressType.COURTESY;
-      };
+      // eslint-disable-next-line functional/no-let
+      let addressType = AddressType.COURTESY;
+      if (values.channelType === ChannelType.PEC || values.channelType === ChannelType.SERCQ) {
+        addressType = AddressType.LEGAL;
+      }
 
-      onConfirm(values.s_value, values.channelType, getAddressType(), {
+      onConfirm(values.s_value, values.channelType, addressType, {
         senderId: values.sender.id,
         senderName: values.sender.name,
       });

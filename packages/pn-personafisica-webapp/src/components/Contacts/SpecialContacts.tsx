@@ -22,10 +22,10 @@ import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyF
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import AddSpecialContactDialog from './AddSpecialContactDialog';
 import CancelVerificationModal from './CancelVerificationModal';
-import ConfirmLegalAssociationDialog from './ConfirmLegalAssociationDialog';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import ExistingContactDialog from './ExistingContactDialog';
+import LegalContactAssociationDialog from './LegalContactAssociationDialog';
 import PecVerificationDialog from './PecVerificationDialog';
 import SpecialContactItem from './SpecialContactItem';
 
@@ -385,7 +385,7 @@ const SpecialContacts: React.FC = () => {
         senderId={currentAddress.current.senderId}
         handleClose={() => setModalOpen(null)}
       />
-      <ConfirmLegalAssociationDialog
+      <LegalContactAssociationDialog
         open={modalOpen === ModalType.CONFIRM_LEGAL_ASSOCIATION}
         dialogContentText={
           <Trans

@@ -3,8 +3,6 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { MenuItem, TextField, TextFieldProps } from '@mui/material';
 
 type Props = {
-  /** on change event handler */
-  onChange?: (e?: any) => void;
   /** empty message when no items are available */
   emptyStateMessage?: string;
   /** map value string for empty item (default: empty string) */
@@ -39,7 +37,7 @@ const CustomDropdown: React.FC<Props> = ({
 }) => {
   const [innerValue, setInnerValue] = useState(value);
 
-  const changeHandler = (event: ChangeEvent) => {
+  const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setInnerValue((event.target as any).value);
     if (onChange) {
       onChange(event);

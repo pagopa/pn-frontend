@@ -11,7 +11,7 @@ type Props = {
   handleConfirm: () => void;
 };
 
-const ConfirmLegalAssociationDialog: React.FC<Props> = ({
+const LegalContactAssociationDialog: React.FC<Props> = ({
   open = false,
   dialogContentText,
   handleClose,
@@ -47,4 +47,4 @@ const ConfirmLegalAssociationDialog: React.FC<Props> = ({
   );
 };
 
-export default ConfirmLegalAssociationDialog;
+export default LegalContactAssociationDialog;
