@@ -65,6 +65,8 @@ describe('SpecialContactItem Component', () => {
         onDelete={deleteHandler}
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
+        handleCreateNewAssociation={vi.fn()}
+        showAddButton={vi.fn(() => true)}
       />
     );
 
@@ -101,6 +103,8 @@ describe('SpecialContactItem Component', () => {
         onDelete={deleteHandler}
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
+        handleCreateNewAssociation={vi.fn()}
+        showAddButton={vi.fn(() => true)}
       />
     );
 
@@ -126,6 +130,8 @@ describe('SpecialContactItem Component', () => {
         onDelete={deleteHandler}
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
+        handleCreateNewAssociation={vi.fn()}
+        showAddButton={vi.fn(() => true)}
       />
     );
 
@@ -145,6 +151,8 @@ describe('SpecialContactItem Component', () => {
         onDelete={deleteHandler}
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
+        handleCreateNewAssociation={vi.fn()}
+        showAddButton={vi.fn(() => true)}
       />
     );
 

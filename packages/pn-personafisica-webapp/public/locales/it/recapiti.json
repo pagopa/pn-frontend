@@ -136,7 +136,10 @@
     "no-default-address": "Recapito principale non presente",
     "contacts": "Recapiti",
     "legal-association-title": "Conferma associazione",
-    "legal-association-description": "Confermando l’associazione, per le notifiche inviate da <strong>{{senderName}}</strong> il tuo recapito a valore legale di riferimento sarà <strong>{{newAddress}}</strong> invece che <strong>{{oldAddress}}</strong>."
+    "legal-association-description": "Confermando l’associazione, per le notifiche inviate da <strong>{{senderName}}</strong> il tuo recapito a valore legale di riferimento sarà <strong>{{newAddress}}</strong> invece che <strong>{{oldAddress}}</strong>.",
+    "menu": {
+      "add-another-contact": "Associa un altro recapito"
+    }
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",

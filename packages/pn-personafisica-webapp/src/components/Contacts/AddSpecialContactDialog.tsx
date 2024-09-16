@@ -30,11 +30,11 @@ import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import {
-  allowedAddressTypes,
   emailValidationSchema,
   internationalPhonePrefix,
   pecValidationSchema,
   phoneValidationSchema,
+  specialContactsAddressTypes,
 } from '../../utility/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 
@@ -52,11 +52,6 @@ type Props = {
   ) => void;
 };
 
-type AddressTypeItem = {
-  id: ChannelType;
-  value: string;
-};
-
 const AddSpecialContactDialog: React.FC<Props> = ({
   open,
   value,
@@ -71,36 +66,8 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
-  const { defaultPECAddress, defaultSERCQAddress } = addressesData;
 
-  const isDropdownItemDisabled = (addressType: ChannelType): boolean => {
-    const hasDefaultAddress = addressesData[`default${addressType}Address`];
-    if (defaultSERCQAddress && addressType === ChannelType.PEC) {
-      return false;
-    }
-    return addressType !== ChannelType.SERCQ && !hasDefaultAddress;
-  };
-
-  const isDropdownItemShown = (addressType: ChannelType): boolean => {
-    if (defaultSERCQAddress && addressType === ChannelType.SERCQ) {
-      return false;
-    }
-
-    if (
-      !defaultPECAddress &&
-      !defaultSERCQAddress &&
-      (addressType === ChannelType.PEC || addressType === ChannelType.SERCQ)
-    ) {
-      return false;
-    }
-
-    return true;
-  };
-
-  const addressTypes: Array<AddressTypeItem> = allowedAddressTypes.map((a) => ({
-    id: a,
-    value: t(`special-contacts.${a.toLowerCase()}`, { ns: 'recapiti' }),
-  }));
+  const addressTypes = specialContactsAddressTypes(t, addressesData, sender);
 
   const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     await formik.setFieldValue('s_value', '');
@@ -178,7 +145,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     },
     channelType: value
       ? channelType
-      : addressTypes.filter((a) => !isDropdownItemDisabled(a.id))[0]?.id ?? ChannelType.PEC,
+      : addressTypes.filter((a) => !a.disabled)[0]?.id ?? ChannelType.PEC,
     s_value: channelType === ChannelType.SMS ? value.replace(internationalPhonePrefix, '') : value,
   };
 
@@ -263,17 +230,17 @@ const AddSpecialContactDialog: React.FC<Props> = ({
               sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
             >
               {addressTypes
-                .filter((a) => isDropdownItemShown(a.id))
+                .filter((a) => a.shown)
                 .map((a) => (
                   <MenuItem
                     id={`dropdown-${a.id}`}
                     key={a.id}
                     value={a.id}
-                    disabled={isDropdownItemDisabled(a.id)}
+                    disabled={a.disabled}
                     sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
                   >
                     {a.value}
-                    {isDropdownItemDisabled(a.id) && (
+                    {a.showMessage && (
                       <Typography fontSize="14px">
                         {t('special-contacts.no-default-address', { ns: 'recapiti' })}
                       </Typography>
@@ -324,7 +291,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 onChange={senderChangeHandler}
                 inputValue={formik.values.sender.name}
-                disabled={!!value}
+                disabled={!!value || sender.senderId !== 'default'}
                 onInputChange={(_event, newInputValue, reason) => {
                   if (reason === 'input') {
                     void formik.setFieldTouched('sender', true, false);

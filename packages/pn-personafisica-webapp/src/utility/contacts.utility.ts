@@ -3,7 +3,16 @@ import * as yup from 'yup';
 
 import { dataRegex } from '@pagopa-pn/pn-commons';
 
-import { ChannelType, DigitalAddress } from '../models/contacts';
+import { ChannelType, DigitalAddress, Sender } from '../models/contacts';
+import { SelectedAddresses } from '../redux/contact/reducers';
+
+type AddressTypeItem = {
+  id: ChannelType;
+  value: string;
+  shown: boolean;
+  disabled: boolean;
+  showMessage: boolean;
+};
 
 export const internationalPhonePrefix = '+39';
 
@@ -53,3 +62,68 @@ export const phoneValidationSchema = (t: TFunction, withPrefix = false) =>
       withPrefix ? dataRegex.phoneNumberWithItalyPrefix : dataRegex.phoneNumber,
       t('courtesy-contacts.valid-sms', { ns: 'recapiti' })
     );
+
+const isDropdownItemDisabled = (
+  addressType: ChannelType,
+  hasDefaultAddress: boolean,
+  defaultSERCQAddress: DigitalAddress | undefined,
+  senderHasAlreadyAddress: boolean
+): boolean => {
+  if (defaultSERCQAddress && addressType === ChannelType.PEC) {
+    return false;
+  }
+
+  return (addressType !== ChannelType.SERCQ && !hasDefaultAddress) || !senderHasAlreadyAddress;
+};
+
+const isDropdownItemShown = (
+  addressType: ChannelType,
+  defaultSERCQAddress: DigitalAddress | undefined,
+  defaultPECAddress: DigitalAddress | undefined
+): boolean => {
+  if (defaultSERCQAddress && addressType === ChannelType.SERCQ) {
+    return false;
+  }
+
+  if (
+    !defaultPECAddress &&
+    !defaultSERCQAddress &&
+    (addressType === ChannelType.PEC || addressType === ChannelType.SERCQ)
+  ) {
+    return false;
+  }
+
+  return true;
+};
+
+export const specialContactsAddressTypes = (
+  t: TFunction,
+  addressesData: SelectedAddresses,
+  sender: Sender
+): Array<AddressTypeItem> => {
+  const { defaultPECAddress, defaultSERCQAddress, specialAddresses } = addressesData;
+
+  return allowedAddressTypes.map((addressType) => {
+    const senderHasAlreadyAddress =
+      specialAddresses.findIndex(
+        (a) => a.senderId === sender.senderId && a.channelType === addressType
+      ) === -1;
+
+    const isDisabled = isDropdownItemDisabled(
+      addressType,
+      !!addressesData[`default${addressType}Address`],
+      defaultSERCQAddress,
+      senderHasAlreadyAddress
+    );
+
+    const isShown = isDropdownItemShown(addressType, defaultSERCQAddress, defaultPECAddress);
+
+    return {
+      id: addressType,
+      value: t(`special-contacts.${addressType.toLowerCase()}`, { ns: 'recapiti' }),
+      shown: isShown,
+      disabled: isDisabled,
+      showMessage: senderHasAlreadyAddress && isDisabled,
+    };
+  });
+};

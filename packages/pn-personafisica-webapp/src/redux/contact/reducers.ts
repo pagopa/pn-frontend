@@ -95,7 +95,7 @@ const digitalAddresses = createSelector(
   (contactsState) => contactsState.digitalAddresses
 );
 
-type SelectedAddresses = {
+export type SelectedAddresses = {
   addresses: Array<DigitalAddress>;
   legalAddresses: Array<DigitalAddress>;
   courtesyAddresses: Array<DigitalAddress>;

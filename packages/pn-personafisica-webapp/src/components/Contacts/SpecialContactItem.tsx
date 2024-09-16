@@ -22,16 +22,53 @@ type Props = {
     addressType: AddressType,
     sender: Sender
   ) => void;
+  handleCreateNewAssociation: (sender: Sender) => void;
   onCancelValidation: (senderId: string) => void;
+  showAddButton: (sender: Sender) => boolean;
+};
+
+interface AddMoreButtonProps {
+  onClick: () => void;
+}
+
+const AddMoreButton: React.FC<AddMoreButtonProps> = ({ onClick }) => {
+  const { t } = useTranslation();
+  return (
+    <ButtonNaked
+      data-testid="addMoreSpecialContacts"
+      color="primary"
+      size="medium"
+      onClick={onClick}
+    >
+      {t('button.add')}
+    </ButtonNaked>
+  );
 };
 
 const SpecialContactItem: React.FC<Props> = ({
   addresses,
   onDelete,
   onEdit,
+  handleCreateNewAssociation,
   onCancelValidation,
+  showAddButton,
 }) => {
   const { t } = useTranslation(['recapiti', 'common']);
+
+  const senderHasAllAddresses = addresses.length === 4;
+  const shouldShowAddButton =
+    !senderHasAllAddresses &&
+    showAddButton({
+      senderId: addresses[0].senderId,
+      senderName: addresses[0].senderName,
+    });
+
+  const handleClickAddButton = () => {
+    handleCreateNewAssociation({
+      senderId: addresses[0].senderId,
+      senderName: addresses[0].senderName,
+    });
+  };
 
   const renderAddress = (address: DigitalAddress) => {
     const { value, channelType, addressType, senderId, senderName, pecValid } = address;
@@ -104,22 +141,27 @@ const SpecialContactItem: React.FC<Props> = ({
       mb={{ xs: 2, lg: 0.5 }}
       mt={{ xs: 2, lg: '43px' }}
     >
-      <Stack spacing={1} width={{ xs: 'auto', lg: '224px' }}>
-        <Typography
-          variant="caption"
-          fontWeight={600}
-          lineHeight="18px"
-          sx={{ display: { xs: 'block', lg: 'none' } }}
-        >
-          {t('special-contacts.sender', { ns: 'recapiti' })}
-        </Typography>
+      <Stack direction="row" justifyContent="space-between" alignItems="start">
+        <Stack spacing={1} width={{ xs: 'auto', lg: '224px' }}>
+          <Typography
+            variant="caption"
+            fontWeight={600}
+            lineHeight="18px"
+            sx={{ display: { xs: 'block', lg: 'none' } }}
+          >
+            {t('special-contacts.sender', { ns: 'recapiti' })}
+          </Typography>
 
-        <Typography variant="caption" fontWeight={600}>
-          {addresses[0].senderName}
-        </Typography>
+          <Typography variant="caption" fontWeight={600}>
+            {addresses[0].senderName}
+          </Typography>
+        </Stack>
+        <Box sx={{ display: { xs: 'block', lg: 'none' } }}>
+          {shouldShowAddButton && <AddMoreButton onClick={handleClickAddButton} />}
+        </Box>
       </Stack>
 
-      <Stack spacing={1}>
+      <Stack spacing={1} width="100%">
         <Typography
           variant="caption"
           fontWeight={600}
@@ -128,8 +170,13 @@ const SpecialContactItem: React.FC<Props> = ({
           {t('special-contacts.contacts', { ns: 'recapiti' })}
         </Typography>
 
-        <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
-          {addresses.map((address) => renderAddress(address))}
+        <Stack direction="row" justifyContent="space-between">
+          <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
+            {addresses.map((address) => renderAddress(address))}
+          </Stack>
+          <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
+            {shouldShowAddButton && <AddMoreButton onClick={handleClickAddButton} />}
+          </Box>
         </Stack>
       </Stack>
     </Stack>

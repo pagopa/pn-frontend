@@ -19,7 +19,11 @@ import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/action
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
-import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
+import {
+  contactAlreadyExists,
+  internationalPhonePrefix,
+  specialContactsAddressTypes,
+} from '../../utility/contacts.utility';
 import AddSpecialContactDialog from './AddSpecialContactDialog';
 import CancelVerificationModal from './CancelVerificationModal';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -50,9 +54,8 @@ const SpecialContacts: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
-  const { addresses, specialAddresses, defaultPECAddress, defaultSERCQAddress } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const addressesData = useAppSelector(contactsSelectors.selectAddresses);
+  const { addresses, specialAddresses, defaultPECAddress, defaultSERCQAddress } = addressesData;
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
 
   const currentAddress = useRef<DigitalAddress>({
@@ -64,6 +67,11 @@ const SpecialContacts: React.FC = () => {
 
   const labelRoot = `${currentAddress.current.addressType.toLowerCase()}-contacts`;
   const contactType = currentAddress.current.channelType.toLowerCase();
+
+  const shouldShowAddMoreButton = (sender: Sender) => {
+    const addresses = specialContactsAddressTypes(t, addressesData, sender);
+    return addresses.some((a) => a.shown && !a.disabled);
+  };
 
   const sendSuccessEvent = (type: ChannelType) => {
     const eventKey = `SEND_ADD_${type}_UX_SUCCESS`;
@@ -264,6 +272,17 @@ const SpecialContacts: React.FC = () => {
     setModalOpen(ModalType.CANCEL_VALIDATION);
   };
 
+  const handleCreateNewAssociation = (sender: Sender) => {
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = {
+      ...currentAddress.current,
+      senderId: sender.senderId,
+      senderName: sender.senderName,
+    };
+
+    setModalOpen(ModalType.SPECIAL);
+  };
+
   const handleCancelCode = async () => {
     setModalOpen(null);
   };
@@ -324,6 +343,8 @@ const SpecialContacts: React.FC = () => {
                   onEdit={handleEdit}
                   onDelete={handleDelete}
                   onCancelValidation={handleCancelValidation}
+                  handleCreateNewAssociation={handleCreateNewAssociation}
+                  showAddButton={shouldShowAddMoreButton}
                 />
               ))}
             </Stack>
