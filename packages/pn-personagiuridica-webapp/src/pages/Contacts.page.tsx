@@ -71,7 +71,7 @@ const Contacts = () => {
           reloadAction={fetchAddresses}
         >
           <ContactsSummaryCards />
-          <Stack direction="column" spacing={4}>
+          <Stack direction="column" spacing={6}>
             <LegalContactsList />
             <CourtesyContacts />
           </Stack>

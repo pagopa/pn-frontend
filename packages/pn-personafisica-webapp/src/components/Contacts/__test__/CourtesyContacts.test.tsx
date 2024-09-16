@@ -18,7 +18,7 @@ describe('CourtesyContacts Component', async () => {
   it('renders component - no contacts', async () => {
     const { container, getByTestId } = render(<CourtesyContacts />);
     expect(container).toHaveTextContent('courtesy-contacts.title');
-    expect(container).toHaveTextContent('courtesy-contacts.list');
+    expect(container).toHaveTextContent('courtesy-contacts.sub-title');
     // check contacts
     const ioContact = getByTestId('ioContact');
     const phoneContact = getByTestId(`default_smsContact`);

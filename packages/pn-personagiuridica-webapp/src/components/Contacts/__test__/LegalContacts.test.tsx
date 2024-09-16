@@ -24,7 +24,7 @@ describe('LegalContacts Component', async () => {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
     });
     expect(container).toHaveTextContent('legal-contacts.title');
-    expect(container).toHaveTextContent('legal-contacts.list');
+    expect(container).toHaveTextContent('legal-contacts.sub-title');
     const pecContact = getByTestId(`default_pecContact`);
     const pecInput = pecContact.querySelector(`[name="default_pec"]`);
     expect(pecInput).not.toBeInTheDocument();
@@ -45,7 +45,7 @@ describe('LegalContacts Component', async () => {
   it('renders component - no contacts', async () => {
     const { container, getByTestId } = render(<LegalContacts />);
     expect(container).toHaveTextContent('legal-contacts.title');
-    expect(container).toHaveTextContent('legal-contacts.list');
+    expect(container).toHaveTextContent('legal-contacts.sub-title');
     // check contacts
     const pecContact = getByTestId(`default_pecContact`);
     const pecInput = pecContact.querySelector(`[name="default_pec"]`);

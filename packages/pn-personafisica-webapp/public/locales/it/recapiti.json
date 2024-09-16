@@ -5,13 +5,10 @@
   "alert-dialog-sms": "Se non hai una PEC e accedi alla notifica su SEND entro 5 giorni (120 ore) dall’invio dell'SMS, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
   "insert-code": "Inserisci codice",
   "legal-contacts": {
-    "title": "Recapiti a valore legale",
-    "list": [
-      "Le comunicazioni che ricevi qui sono <strong>ufficialmente riconosciute</strong>: hanno lo stesso valore delle raccomandate con ricevuta di ritorno.",
-      "Se hai almeno un recapito attivo, <strong>non riceverai più i documenti cartacei</strong>."
-    ],
+    "title": "Recapito a valore legale",
+    "sub-title": "È il tuo recapito ufficialmente riconosciuto per le comunicazioni della PA. Se lo attivi <strong>riceverai le notifiche solo in digitale</strong>, senza doverti più preoccupare dei documenti cartacei.",
     "pec-title": "Posta Elettronica Certificata",
-    "pec-description": "Quando un ente carica una notifica per te su SEND, ricevi l’avviso tramite PEC. Accedi a SEND per leggerla.",
+    "pec-description": "Quando un ente carica una comunicazione per te su SEND, ricevi l’avviso ufficiale sulla PEC. Accedi a SEND per leggerla.",
     "link-pec-placeholder": "La tua PEC",
     "valid-pec": "Indirizzo PEC non valido",
     "pec-verify": "Abbiamo inviato un codice a {{value}}",
@@ -31,13 +28,24 @@
     "validation-progress-title": "Grazie!",
     "validation-progress-content": "Stiamo verificando che l’indirizzo PEC sia valido. Riceverai una e-mail con l’esito entro 24 ore.",
     "sercq-send-title": "Domicilio Digitale SEND",
-    "sercq-send-description": "È come il tuo domicilio fisico, ma è online: quando un ente carica una notifica per te su SEND, è disponibile subito e la puoi vedere ovunque ti trovi.",
+    "sercq-send-description": "È come un domicilio fisico, ma online. Quando un ente carica ti invia una notifica su SEND, è disponibile in tempo reale nella tua area riservata e la puoi aprire ovunque ti trovi.",
     "sercq-send-active": "Attiva Domicilio Digitale",
+    "sercq-send-info-title": "Attiva SEND come tuo Domicilio Digitale",
     "sercq-send-info-description": "Attivando il Domicilio Digitale, SEND diventa <strong>il tuo recapito a valore legale</strong> per le comunicazioni della PA.",
+    "sercq-send-info-advantages": "Vantaggi",
     "sercq-send-info-list": [
-      "Quando un ente carica su SEND una notifica per te, la ricevi in modo <strong>sicuro e in tempo reale</strong> ovunque ti trovi.",
-      "Le tue notifiche diventano <strong>100% digitali</strong>. Non ricevi più i documenti cartacei e non devi preoccuparti di ritirarli.",
-      "<strong>È gratis per sempre</strong> e solo tu puoi decidere quando attivarlo o disattivarlo."
+      {
+        "title": "Notifiche 100% digitali",
+        "description": "Le notifiche non ti arriveranno più in forma cartacea."
+      },
+      {
+        "title": "Non paghi più le spese delle raccomandate",
+        "description": "Non dovrai preoccuparti di ritirare i documenti e pagare i costi annessi."
+      },
+      {
+        "title": "Hai tutto in un unico punto",
+        "description": "Le notifiche che gli enti ti inviano tramite SEND saranno sempre recapitate sul tuo Domicilio Digitale e disponibili nella tua area riservata."
+      }
     ],
     "sercq-send-info-pec-disclaimer": "Se hai già inserito una PEC tra i tuoi recapiti, il Domicilio Digitale la sostituisce come recapito a valore legale di SEND.",
     "sercq-send-info-tos-privacy": "Selezionando “Attiva” dichiari di aver letto e di accettare i <0>Termini del servizio</0> e l’<1>Informativa Privacy</1>.",
@@ -54,10 +62,10 @@
     "title": "App IO",
     "description": "Leggi e gestisci le comunicazioni a valore legale direttamente su IO: quando c’è una notifica per te, la ricevi in app e puoi pagare eventuali spese.",
     "dialog-description": "Riceverai un messaggio in app per ogni nuova notifica. Potrai leggerla e pagare eventuali importi direttamente su IO.",
-    "enabled": "Servizio attivo",
-    "disabled": "Servizio non attivo",
+    "enabled": "Servizio Notifiche Digitali attivo",
+    "disabled": "Servizio Notifiche Digitali non attivo",
     "unavailable": "Per attivare il servizio, prima scarica l’app IO",
-    "enable": "Attiva il servizio su IO",
+    "enable": "Attiva SEND su IO",
     "download": "Scarica l'app IO",
     "enable-modal": {
       "title": "Vuoi attivare il servizio \"Notifiche digitali\" su IO?",
@@ -73,10 +81,7 @@
   },
   "courtesy-contacts": {
     "title": "Recapiti di cortesia",
-    "list": [
-      "Le comunicazioni che ricevi qui <strong>ti avvisano</strong> sulla presenza di nuove notifiche.",
-      "Se non hai almeno un recapito legale e non apri la notifica entro 5 giorni, <strong>la riceverai in formato cartaceo</strong> a casa."
-    ],
+    "sub-title": "Ti avvisano quando ci sono nuove notifiche per te. Se non hai attivato il recapito ufficiale e non apri la notifica entro 5 giorni, la riceverai anche in formato cartaceo a casa.",
     "email-title": "Email",
     "email-description": "Quando c’è una notifica per te, ti avvisiamo con una email all’indirizzo indicato. Accedi a SEND per leggerla e pagare eventuali spese.",
     "email-dialog-description": "Quando c’è una notifica per te, ti avvisiamo con una email. Accedi a SEND per leggerla e pagare eventuali importi.",
@@ -154,8 +159,8 @@
     }
   },
   "summary-card": {
-    "legal-title": "Valore legale",
-    "courtesy-title": "Cortesia",
+    "legal-title": "A valore legale",
+    "courtesy-title": "Di cortesia",
     "no-address": "Nessun recapito",
     "PEC": "PEC",
     "SMS": "SMS",

@@ -37,26 +37,20 @@ enum ModalType {
 
 const SercqSendCardTitle: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const isMobile = useIsMobile();
 
   return (
-    <Stack
-      direction={isMobile ? 'column-reverse' : 'row'}
-      spacing={1}
-      alignItems={isMobile ? 'start' : 'center'}
-      mb={2}
-      data-testid="DigitalContactsCardTitle"
-    >
-      <Typography color="text.primary" fontWeight={700} fontSize={18} variant="body1">
+    <Box data-testid="DigitalContactsCardTitle">
+      <Chip label={t('badges.news')} color="primary" data-testid="newsBadge" sx={{ mb: 1 }} />
+      <Typography
+        color="text.primary"
+        fontWeight={700}
+        fontSize={18}
+        variant="body1"
+        sx={{ mb: '12px' }}
+      >
         {t('legal-contacts.sercq-send-title', { ns: 'recapiti' })}
       </Typography>
-      <Chip
-        label={t('badges.news')}
-        color="primary"
-        data-testid="newsBadge"
-        sx={{ borderRadius: 1 }}
-      />
-    </Stack>
+    </Box>
   );
 };
 
@@ -195,17 +189,22 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
           </Button>
         )}
         {value && (
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={1}>
             <VerifiedIcon
               fontSize="small"
-              color="success"
+              color="primary"
               sx={{ position: 'relative', top: '2px' }}
             />
             <Box>
-              <Typography data-testid="IO status" fontWeight={600}>
+              <Typography data-testid="sercq-send-status" fontWeight={600} mb={2}>
                 {t('legal-contacts.sercq-send-enabled', { ns: 'recapiti' })}
               </Typography>
-              <ButtonNaked onClick={() => setModalOpen({ type: ModalType.DELETE })} color="error">
+              <ButtonNaked
+                onClick={() => setModalOpen({ type: ModalType.DELETE })}
+                color="error"
+                sx={{ fontWeight: 700 }}
+                size="medium"
+              >
                 {t('button.disable')}
               </ButtonNaked>
             </Box>

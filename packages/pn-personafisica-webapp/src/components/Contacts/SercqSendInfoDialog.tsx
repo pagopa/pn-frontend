@@ -1,8 +1,5 @@
 import { Trans, useTranslation } from 'react-i18next';
 
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import SavingsIcon from '@mui/icons-material/Savings';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import {
   Button,
   DialogContentText,
@@ -10,7 +7,6 @@ import {
   Link,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
   Typography,
 } from '@mui/material';
@@ -28,23 +24,20 @@ type Props = {
   onConfirm: () => void;
 };
 
-const SercqSendInfoIcons = [
-  <VerifiedUserIcon key="verified" color="primary" />,
-  <InsertDriveFileIcon key="insert" color="primary" />,
-  <SavingsIcon key="savings" color="primary" />,
-];
-
 const redirectPrivacyLink = () => window.open(`${PRIVACY_LINK_RELATIVE_PATH}`, '_blank');
 const redirectToSLink = () => window.open(`${TOS_LINK_RELATIVE_PATH}`, '_blank');
 
 const SercqSendInfoDialog: React.FC<Props> = ({ open = false, onDiscard, onConfirm }) => {
   const { t } = useTranslation();
 
-  const sercqSendInfoList: Array<string> = t('legal-contacts.sercq-send-info-list', {
-    returnObjects: true,
-    defaultValue: [],
-    ns: 'recapiti',
-  });
+  const sercqSendInfoList: Array<{ title: string; description: string }> = t(
+    'legal-contacts.sercq-send-info-list',
+    {
+      returnObjects: true,
+      defaultValue: [],
+      ns: 'recapiti',
+    }
+  );
 
   return (
     <PnDialog
@@ -54,26 +47,40 @@ const SercqSendInfoDialog: React.FC<Props> = ({ open = false, onDiscard, onConfi
       aria-describedby="dialog-description"
     >
       <DialogTitle id="dialog-title">
-        {t('legal-contacts.sercq-send-active', { ns: 'recapiti' })}
+        {t('legal-contacts.sercq-send-info-title', { ns: 'recapiti' })}
       </DialogTitle>
       <PnDialogContent>
         <DialogContentText id="dialog-description" sx={{ color: 'text.primary' }}>
           <Trans i18nKey="legal-contacts.sercq-send-info-description" ns="recapiti" />
         </DialogContentText>
-        <List dense sx={{ p: 0, mt: 2 }}>
+        <Typography
+          mt={3}
+          mb={2}
+          sx={{ textTransform: 'uppercase' }}
+          fontWeight={700}
+          variant="subtitle2"
+          color="text.secondary"
+        >
+          {t('legal-contacts.sercq-send-info-advantages', { ns: 'recapiti' })}
+        </Typography>
+        <List dense sx={{ p: 0 }}>
           {sercqSendInfoList.map((item, index) => (
-            <ListItem key={index} sx={{ px: 0, py: 1 }}>
-              <ListItemIcon>{SercqSendInfoIcons[index]}</ListItemIcon>
-              <ListItemText disableTypography sx={{ fontWeight: 400, fontSize: '18px' }}>
-                <Trans i18nKey={item} t={(s: string) => s} />
+            <ListItem key={index} sx={{ px: 0, pt: 0, pb: 1 }}>
+              <ListItemText disableTypography>
+                <Typography variant="body2" fontSize="18px" fontWeight={700} mb={0.5}>
+                  {item.title}
+                </Typography>
+                <Typography variant="body2" fontSize="18px">
+                  {item.description}
+                </Typography>
               </ListItemText>
             </ListItem>
           ))}
         </List>
-        <Typography fontWeight={400} fontSize="14px" mt={3}>
+        <Typography fontWeight={400} fontSize="14px" mt={3} mb={2}>
           {t('legal-contacts.sercq-send-info-pec-disclaimer', { ns: 'recapiti' })}
         </Typography>
-        <Typography fontWeight={400} fontSize="14px" mt={2}>
+        <Typography fontWeight={400} fontSize="14px">
           <Trans
             i18nKey="legal-contacts.sercq-send-info-tos-privacy"
             ns="recapiti"

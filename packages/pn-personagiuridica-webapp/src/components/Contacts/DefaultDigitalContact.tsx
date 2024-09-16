@@ -179,18 +179,20 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               helperText={
                 formik.touched[`default_${contactType}`] && formik.errors[`default_${contactType}`]
               }
+              sx={{ mb: 2 }}
             />
             <ButtonNaked
               key="saveButton"
               color="primary"
               disabled={!formik.isValid}
               type="submit"
-              sx={{ mr: 2 }}
+              sx={{ mr: 2, fontWeight: 700 }}
               id={`saveContact-default_${contactType}`}
+              size="medium"
             >
               {t('button.salva')}
             </ButtonNaked>
-            <ButtonNaked color="error" onClick={onCancel}>
+            <ButtonNaked color="error" onClick={onCancel} sx={{ fontWeight: 700 }} size="medium">
               {t('button.annulla')}
             </ButtonNaked>
           </>
@@ -199,7 +201,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
           <Stack direction="row" spacing={2}>
             <VerifiedIcon
               fontSize="small"
-              color="success"
+              color="primary"
               sx={{ position: 'relative', top: '2px' }}
             />
             <Box>
@@ -207,6 +209,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 sx={{
                   wordBreak: 'break-word',
                   fontWeight: 600,
+                  mb: 2,
                 }}
                 variant="body2"
                 id={`default_${contactType}-typography`}
@@ -217,7 +220,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 key="editButton"
                 color="primary"
                 onClick={toggleEdit}
-                sx={{ mr: 2 }}
+                sx={{ mr: 2, fontWeight: 700 }}
                 id={`modifyContact-default_${contactType}`}
                 size="medium"
               >
@@ -227,6 +230,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 id={`cancelContact-default_${contactType}`}
                 color="error"
                 onClick={onDelete}
+                sx={{ fontWeight: 700 }}
                 size="medium"
               >
                 {t('button.elimina')}

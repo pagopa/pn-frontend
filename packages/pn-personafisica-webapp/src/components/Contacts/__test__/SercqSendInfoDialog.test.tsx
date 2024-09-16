@@ -48,11 +48,11 @@ describe('test SercqSendInfoDialog', () => {
     const dialog = screen.getByTestId('sercqSendInfoDialog');
     const titleEl = getById(dialog, 'dialog-title');
     expect(titleEl).toBeInTheDocument();
-    expect(titleEl).toHaveTextContent('legal-contacts.sercq-send-active');
+    expect(titleEl).toHaveTextContent('legal-contacts.sercq-send-info-title');
     const bodyEl = within(dialog).getByTestId('dialog-content');
     expect(bodyEl).toBeInTheDocument();
     expect(bodyEl).toHaveTextContent('legal-contacts.sercq-send-info-description');
-    expect(bodyEl).toHaveTextContent('legal-contacts.sercq-send-info-list');
+    expect(bodyEl).toHaveTextContent('legal-contacts.sercq-send-info-advantages');
     expect(bodyEl).toHaveTextContent('legal-contacts.sercq-send-info-pec-disclaimer');
     expect(bodyEl).toHaveTextContent('legal-contacts.sercq-send-info-tos-privacy');
     const cancelButton = screen.getByText('button.annulla');

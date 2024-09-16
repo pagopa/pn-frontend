@@ -2,7 +2,16 @@ import { ReactNode, useState } from 'react';
 
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
-import { Box, Card, CardContent, CardHeader, Stack, SxProps, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  Stack,
+  SxProps,
+  Typography,
+} from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 type Props = {
@@ -38,18 +47,20 @@ const DigitalContactsCardContent: React.FC<
   return (
     <Box sx={sx}>
       {isMobile && (
-        <Stack direction="row" justifyContent="space-between">
+        <Stack direction="row" justifyContent="space-between" alignItems="flex-end">
           <DigitalContactsCardTitle title={title} />
           {!showDescription && (
             <KeyboardArrowDownOutlinedIcon
               color="primary"
               onClick={() => setShowDescription(true)}
+              sx={{ mb: 2 }}
             />
           )}
           {showDescription && (
             <KeyboardArrowUpOutlinedIcon
               color="primary"
               onClick={() => setShowDescription(false)}
+              sx={{ mb: 2 }}
             />
           )}
         </Stack>
@@ -60,12 +71,13 @@ const DigitalContactsCardContent: React.FC<
           color="text.secondary"
           fontWeight={400}
           variant="body1"
-          mb={2}
+          mb={3}
           data-testid="DigitalContactsCardDescription"
         >
           {subtitle}
         </Typography>
       )}
+      {isMobile && <Divider sx={{ mb: 2 }} />}
       {children}
     </Box>
   );
