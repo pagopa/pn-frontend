@@ -113,7 +113,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               id={`default_${contactType}`}
               name={`default_${contactType}`}
               placeholder={inputProps.label}
-              inputProps={{ sx: { height: '14px' } }}
+              size="small"
               fullWidth
               sx={{ flexBasis: { xs: 'unset', lg: '66.66%' } }}
               InputProps={{
@@ -131,7 +131,6 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 formik.touched[`default_${contactType}`] && formik.errors[`default_${contactType}`]
               }
             />
-
             <Button
               id={`default_${contactType}-button`}
               variant="outlined"
@@ -139,7 +138,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               fullWidth
               type="submit"
               data-testid={`default_${contactType}-button`}
-              sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
+              sx={{ flexBasis: { xs: 'unset', lg: '33.33%' }, height: '43px' }}
             >
               {insertButtonLabel}
             </Button>
