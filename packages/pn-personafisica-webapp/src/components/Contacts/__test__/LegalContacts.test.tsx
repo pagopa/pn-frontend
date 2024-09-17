@@ -68,7 +68,9 @@ describe('LegalContacts Component', async () => {
   });
 
   it('renders component - no contacts', async () => {
-    const { container, getByTestId } = render(<LegalContacts />);
+    const { container, getByTestId } = render(<LegalContacts />, {
+      preloadedState: { contactsState: { digitalAddresses: [] } },
+    });
     expect(container).toHaveTextContent('legal-contacts.title');
     expect(container).toHaveTextContent('legal-contacts.list');
     // check contacts

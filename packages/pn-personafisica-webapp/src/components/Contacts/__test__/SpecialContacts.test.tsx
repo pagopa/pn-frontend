@@ -363,7 +363,7 @@ describe('SpecialContacts Component', async () => {
     });
   });
 
-  it.only('should show special dialog when click on add button of an existing contact', async () => {
+  it('should show special dialog when click on add button of an existing contact', async () => {
     const { container, getByTestId } = render(<SpecialContacts />, {
       preloadedState: { contactsState: { digitalAddresses } },
     });
