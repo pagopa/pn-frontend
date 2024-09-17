@@ -74,6 +74,8 @@ const SpecialContactItem: React.FC<Props> = ({
     const { value, channelType, addressType, senderId, senderName, pecValid } = address;
     const isVerifyingPec = channelType === ChannelType.PEC && !pecValid;
 
+    const isSercq = channelType === ChannelType.SERCQ;
+
     return (
       <Fragment key={address.value}>
         {isVerifyingPec ? (
@@ -95,24 +97,26 @@ const SpecialContactItem: React.FC<Props> = ({
                 variant="body2"
                 data-testid={`special_${channelType}-typography`}
               >
-                {value}
+                {isSercq ? t('special-contacts.sercq', { ns: 'recapiti' }) : value}
               </Typography>
-              <ButtonNaked
-                key="editButton"
-                color="primary"
-                onClick={() =>
-                  onEdit(value, channelType, addressType, {
-                    senderId,
-                    senderName,
-                  })
-                }
-                sx={{ mr: 2 }}
-                disabled={false}
-                data-testid={`modifyContact-special_${channelType}`}
-                size="medium"
-              >
-                {t('button.modifica', { ns: 'common' })}
-              </ButtonNaked>
+              {!isSercq && (
+                <ButtonNaked
+                  key="editButton"
+                  color="primary"
+                  onClick={() =>
+                    onEdit(value, channelType, addressType, {
+                      senderId,
+                      senderName,
+                    })
+                  }
+                  sx={{ mr: 2 }}
+                  disabled={false}
+                  data-testid={`modifyContact-special_${channelType}`}
+                  size="medium"
+                >
+                  {t('button.modifica', { ns: 'common' })}
+                </ButtonNaked>
+              )}
               <ButtonNaked
                 data-testid={`cancelContact-special_${channelType}`}
                 color="error"
@@ -125,7 +129,7 @@ const SpecialContactItem: React.FC<Props> = ({
                 disabled={false}
                 size="medium"
               >
-                {t('button.elimina', { ns: 'common' })}
+                {t(`button.${isSercq ? 'disable' : 'elimina'}`, { ns: 'common' })}
               </ButtonNaked>
             </Box>
           </Stack>

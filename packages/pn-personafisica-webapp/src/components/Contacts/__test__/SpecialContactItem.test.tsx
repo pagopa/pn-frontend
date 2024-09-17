@@ -46,6 +46,14 @@ describe('SpecialContactItem Component', () => {
     value: '+39333333333',
   };
 
+  const sercqAddress = {
+    addressType: AddressType.LEGAL,
+    senderId: 'default',
+    channelType: ChannelType.SERCQ,
+    value: 'sercq_address',
+    codeValid: true,
+  };
+
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
   });
@@ -187,5 +195,25 @@ describe('SpecialContactItem Component', () => {
     expect(addMoreSpecialContacts).toBeInTheDocument();
     fireEvent.click(addMoreSpecialContacts!);
     expect(createNewAssociationHandler).toHaveBeenCalledTimes(1);
+  });
+
+  it('should show Domicilio Digitale SEND value and no edit button', () => {
+    const { getAllByTestId } = render(
+      <SpecialContactItem
+        addresses={[sercqAddress]}
+        onDelete={deleteHandler}
+        onEdit={editHandler}
+        onCancelValidation={cancelValidationHandler}
+        handleCreateNewAssociation={createNewAssociationHandler}
+        showAddButton={vi.fn(() => false)}
+      />
+    );
+
+    const specialContactForms = getAllByTestId(/_sercqContact$/);
+    expect(specialContactForms).toHaveLength(1);
+    expect(specialContactForms[0]).toHaveTextContent('special-contacts.sercq');
+    const buttons = specialContactForms[0].querySelectorAll('button');
+    expect(buttons).toHaveLength(1);
+    expect(buttons[0]).toHaveTextContent('button.disable');
   });
 });

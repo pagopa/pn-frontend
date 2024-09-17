@@ -172,7 +172,7 @@ const SpecialContacts: React.FC = () => {
               }),
             })
           );
-          setModalOpen(null);
+          handleCloseModal();
           return;
         }
         // contact must be validated
@@ -385,23 +385,23 @@ const SpecialContacts: React.FC = () => {
         removeModalBody={t(`special-contacts.remove-special-description`, {
           ns: 'recapiti',
         })}
-        handleModalClose={() => setModalOpen(null)}
+        handleModalClose={handleCloseModal}
         confirmHandler={deleteConfirmHandler}
       />
       <PecVerificationDialog
         open={modalOpen === ModalType.VALIDATION}
-        handleConfirm={() => setModalOpen(null)}
+        handleConfirm={handleCloseModal}
       />
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
         value={currentAddress.current.value}
-        handleDiscard={() => setModalOpen(null)}
+        handleDiscard={handleCloseModal}
         handleConfirm={() => handleCodeVerification()}
       />
       <CancelVerificationModal
         open={modalOpen === ModalType.CANCEL_VALIDATION}
         senderId={currentAddress.current.senderId}
-        handleClose={() => setModalOpen(null)}
+        handleClose={handleCloseModal}
       />
       <LegalContactAssociationDialog
         open={modalOpen === ModalType.CONFIRM_LEGAL_ASSOCIATION}
@@ -421,7 +421,7 @@ const SpecialContacts: React.FC = () => {
             }}
           />
         }
-        handleClose={() => setModalOpen(null)}
+        handleClose={handleCloseModal}
         handleConfirm={() => handleCodeVerification()}
       />
     </>
