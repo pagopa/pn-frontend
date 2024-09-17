@@ -65,7 +65,7 @@ const SercqSendInfoDialog: React.FC<Props> = ({ open = false, onDiscard, onConfi
         </Typography>
         <List dense sx={{ p: 0 }}>
           {sercqSendInfoList.map((item, index) => (
-            <ListItem key={index} sx={{ px: 0, pt: 0, pb: 1 }}>
+            <ListItem key={index} sx={{ px: 0, pt: 0, pb: 2 }}>
               <ListItemText disableTypography>
                 <Typography variant="body2" fontSize="18px" fontWeight={700} mb={0.5}>
                   {item.title}
@@ -77,7 +77,7 @@ const SercqSendInfoDialog: React.FC<Props> = ({ open = false, onDiscard, onConfi
             </ListItem>
           ))}
         </List>
-        <Typography fontWeight={400} fontSize="14px" mt={3} mb={2}>
+        <Typography fontWeight={400} fontSize="14px" mt={2} mb={2}>
           {t('legal-contacts.sercq-send-info-pec-disclaimer', { ns: 'recapiti' })}
         </Typography>
         <Typography fontWeight={400} fontSize="14px">

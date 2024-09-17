@@ -236,7 +236,6 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
         showModal={modalOpen?.type === ModalType.DELETE}
         removeModalTitle={t(`legal-contacts.remove-sercq-send-title`, { ns: 'recapiti' })}
         removeModalBody={t(`legal-contacts.remove-sercq-send-message`, { ns: 'recapiti' })}
-        removeButtonLabel={t(`legal-contacts.remove-sercq-send-button`, { ns: 'recapiti' })}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
       />

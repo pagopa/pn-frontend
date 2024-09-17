@@ -7,6 +7,7 @@ import {
   Button,
   DialogContentText,
   DialogTitle,
+  Divider,
   FormControlLabel,
   InputAdornment,
   Radio,
@@ -17,8 +18,12 @@ import {
 } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
-import { emailValidationSchema, internationalPhonePrefix, phoneValidationSchema } from '../../utility/contacts.utility';
 import { ChannelType } from '../../models/contacts';
+import {
+  emailValidationSchema,
+  internationalPhonePrefix,
+  phoneValidationSchema,
+} from '../../utility/contacts.utility';
 
 type Props = {
   open: boolean;
@@ -31,10 +36,10 @@ const SercqSendCourtesyRadioLabel: React.FC<{ title: string; description: string
   description,
 }) => (
   <>
-    <Typography fontWeight={400} fontSize="18px">
+    <Typography fontWeight={600} fontSize="18px">
       {title}
     </Typography>
-    <Typography fontWeight={400} fontSize="18px" color="text.secondary">
+    <Typography fontWeight={400} fontSize="14px" color="text.secondary">
       {description}
     </Typography>
   </>
@@ -53,22 +58,26 @@ const SercqSendCourtesyInput: React.FC<{
 
   return (
     <TextField
-        id="value"
-        name="value"
-        placeholder={t(`courtesy-contacts.link-${formik.values.channelType.toLowerCase()}-placeholder`, { ns: 'recapiti' })}
-        inputProps={{ sx: { height: '14px' } }}
-        sx={sx}
-        fullWidth
-        value={formik.values.value}
-        onChange={handleChangeTouched}
-        error={formik.touched.value && Boolean(formik.errors.value)}
-        helperText={formik.touched.value && formik.errors.value}
-        InputProps={{
-          startAdornment: formik.values.channelType === ChannelType.SMS ? (
+      id="value"
+      name="value"
+      label={t(`courtesy-contacts.link-${formik.values.channelType.toLowerCase()}-placeholder`, {
+        ns: 'recapiti',
+      })}
+      size="small"
+      inputProps={{ sx: { height: '14px' } }}
+      sx={sx}
+      fullWidth
+      value={formik.values.value}
+      onChange={handleChangeTouched}
+      error={formik.touched.value && Boolean(formik.errors.value)}
+      helperText={formik.touched.value && formik.errors.value}
+      InputProps={{
+        startAdornment:
+          formik.values.channelType === ChannelType.SMS ? (
             <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
           ) : null,
-        }}
-      />
+      }}
+    />
   );
 };
 
@@ -83,15 +92,16 @@ const SercqSendCourtesyDialog: React.FC<Props> = ({ open = false, onDiscard, onC
 
   const validationSchema = yup.object({
     channelType: yup.mixed<ChannelType>().oneOf(Object.values(ChannelType)).required(),
-    value: yup.string()
-    .when('channelType', {
-      is: ChannelType.EMAIL,
-      then: emailValidationSchema(t),
-    })
-    .when('channelType', {
-      is: ChannelType.SMS,
-      then: phoneValidationSchema(t),
-    }),
+    value: yup
+      .string()
+      .when('channelType', {
+        is: ChannelType.EMAIL,
+        then: emailValidationSchema(t),
+      })
+      .when('channelType', {
+        is: ChannelType.SMS,
+        then: phoneValidationSchema(t),
+      }),
   });
 
   const formik = useFormik({
@@ -121,24 +131,23 @@ const SercqSendCourtesyDialog: React.FC<Props> = ({ open = false, onDiscard, onC
           <Trans i18nKey="legal-contacts.sercq-send-courtesy-description" ns="recapiti" />
         </DialogContentText>
         <form>
-          <RadioGroup
-            sx={{ px: 1, mt: 1 }}
-            value={formik.values.channelType}
-            onChange={handleChange}
-          >
+          <RadioGroup sx={{ mt: 2 }} value={formik.values.channelType} onChange={handleChange}>
             <FormControlLabel
               value={ChannelType.EMAIL}
               control={<Radio />}
-              sx={{ mb: 1 }}
               label={
                 <SercqSendCourtesyRadioLabel
                   title={t('courtesy-contacts.email-title', { ns: 'recapiti' })}
                   description={t('courtesy-contacts.email-dialog-description', { ns: 'recapiti' })}
                 />
               }
+              sx={{ alignItems: 'flex-start' }}
               data-testid="courtesyAddressRadio"
             />
-            {formik.values.channelType === ChannelType.EMAIL && <SercqSendCourtesyInput formik={formik} sx={{ mb: 1 }}/>}
+            {formik.values.channelType === ChannelType.EMAIL && (
+              <SercqSendCourtesyInput formik={formik} sx={{ mt: 2 }} />
+            )}
+            <Divider sx={{ my: 2 }} />
             <FormControlLabel
               value={ChannelType.SMS}
               control={<Radio />}
@@ -148,9 +157,12 @@ const SercqSendCourtesyDialog: React.FC<Props> = ({ open = false, onDiscard, onC
                   description={t('courtesy-contacts.sms-dialog-description', { ns: 'recapiti' })}
                 />
               }
+              sx={{ alignItems: 'flex-start' }}
               data-testid="courtesyAddressRadio"
             />
-            {formik.values.channelType === ChannelType.SMS && <SercqSendCourtesyInput formik={formik} sx={{ mt: 1 }}/>}
+            {formik.values.channelType === ChannelType.SMS && (
+              <SercqSendCourtesyInput formik={formik} sx={{ mt: 2 }} />
+            )}
           </RadioGroup>
         </form>
       </PnDialogContent>
@@ -158,7 +170,11 @@ const SercqSendCourtesyDialog: React.FC<Props> = ({ open = false, onDiscard, onC
         <Button onClick={onDiscard} variant="naked">
           {t('button.not-now')}
         </Button>
-        <Button onClick={() => formik.handleSubmit()} variant="contained" disabled={!formik.isValid}>
+        <Button
+          onClick={() => formik.handleSubmit()}
+          variant="contained"
+          disabled={!formik.isValid}
+        >
           {t('button.conferma')}
         </Button>
       </PnDialogActions>
