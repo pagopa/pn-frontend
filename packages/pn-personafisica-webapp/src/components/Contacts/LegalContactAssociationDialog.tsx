@@ -6,7 +6,7 @@ import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-common
 
 type Props = {
   open: boolean;
-  dialogContentText: React.ReactElement;
+  dialogContentText: React.ReactNode;
   handleClose: () => void;
   handleConfirm: () => void;
 };
@@ -22,10 +22,9 @@ const LegalContactAssociationDialog: React.FC<Props> = ({
   return (
     <PnDialog
       open={open}
-      onClose={handleClose}
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
-      data-testid="duplicateDialog"
+      data-testid="legalContactAssociationDialog"
     >
       <DialogTitle id="dialog-title">
         {t('special-contacts.legal-association-title', { ns: 'recapiti' })}

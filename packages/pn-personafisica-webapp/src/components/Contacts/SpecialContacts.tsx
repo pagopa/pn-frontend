@@ -55,7 +55,7 @@ const SpecialContacts: React.FC = () => {
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
-  const { addresses, specialAddresses, defaultPECAddress, defaultSERCQAddress } = addressesData;
+  const { addresses, specialAddresses, defaultPECAddress } = addressesData;
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
 
   const currentAddress = useRef<DigitalAddress>({
@@ -107,10 +107,7 @@ const SpecialContacts: React.FC = () => {
       addressType,
     };
 
-    if (
-      (defaultPECAddress && channelType === ChannelType.SERCQ) ||
-      (defaultSERCQAddress && channelType === ChannelType.PEC)
-    ) {
+    if (addressType === AddressType.LEGAL) {
       setModalOpen(ModalType.CONFIRM_LEGAL_ASSOCIATION);
       return;
     }
@@ -418,10 +415,9 @@ const SpecialContacts: React.FC = () => {
                 currentAddress.current.channelType === ChannelType.PEC
                   ? currentAddress.current.value
                   : t('special-contacts.sercq', { ns: 'recapiti' }),
-              oldAddress:
-                currentAddress.current.channelType === ChannelType.PEC
-                  ? t('special-contacts.sercq', { ns: 'recapiti' })
-                  : defaultPECAddress?.value,
+              oldAddress: defaultPECAddress
+                ? defaultPECAddress.value
+                : t('special-contacts.sercq', { ns: 'recapiti' }),
             }}
           />
         }

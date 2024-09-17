@@ -19,6 +19,7 @@ describe('SpecialContactItem Component', () => {
   const editHandler = vi.fn();
   const deleteHandler = vi.fn();
   const cancelValidationHandler = vi.fn();
+  const createNewAssociationHandler = vi.fn();
 
   const pecAddress = {
     addressType: AddressType.LEGAL,
@@ -65,8 +66,8 @@ describe('SpecialContactItem Component', () => {
         onDelete={deleteHandler}
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
-        handleCreateNewAssociation={vi.fn()}
-        showAddButton={vi.fn(() => true)}
+        handleCreateNewAssociation={createNewAssociationHandler}
+        showAddButton={vi.fn(() => false)}
       />
     );
 
@@ -89,6 +90,10 @@ describe('SpecialContactItem Component', () => {
     expect(phoneButtons).toHaveLength(2);
     expect(phoneButtons[0]).toHaveTextContent('button.modifica');
     expect(phoneButtons[1]).toHaveTextContent('button.elimina');
+    const addMoreSpecialContacts = container.querySelector(
+      '[data-testid="addMoreSpecialContacts"]'
+    );
+    expect(addMoreSpecialContacts).not.toBeInTheDocument();
   });
 
   it('should show pec validation progress if pec is not valid', () => {
@@ -103,8 +108,8 @@ describe('SpecialContactItem Component', () => {
         onDelete={deleteHandler}
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
-        handleCreateNewAssociation={vi.fn()}
-        showAddButton={vi.fn(() => true)}
+        handleCreateNewAssociation={createNewAssociationHandler}
+        showAddButton={vi.fn(() => false)}
       />
     );
 
@@ -130,8 +135,8 @@ describe('SpecialContactItem Component', () => {
         onDelete={deleteHandler}
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
-        handleCreateNewAssociation={vi.fn()}
-        showAddButton={vi.fn(() => true)}
+        handleCreateNewAssociation={createNewAssociationHandler}
+        showAddButton={vi.fn(() => false)}
       />
     );
 
@@ -151,8 +156,8 @@ describe('SpecialContactItem Component', () => {
         onDelete={deleteHandler}
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
-        handleCreateNewAssociation={vi.fn()}
-        showAddButton={vi.fn(() => true)}
+        handleCreateNewAssociation={createNewAssociationHandler}
+        showAddButton={vi.fn(() => false)}
       />
     );
 
@@ -162,5 +167,25 @@ describe('SpecialContactItem Component', () => {
     const buttons = specialContactForms[0].querySelectorAll('button');
     fireEvent.click(buttons[1]);
     await waitFor(() => expect(deleteHandler).toHaveBeenCalledTimes(1));
+  });
+
+  it('should render add button if showAddButton returns true and call createNewAssociationHandler when is clicked', () => {
+    const { container } = render(
+      <SpecialContactItem
+        addresses={[pecAddress, emailAddress]}
+        onDelete={deleteHandler}
+        onEdit={editHandler}
+        onCancelValidation={cancelValidationHandler}
+        handleCreateNewAssociation={createNewAssociationHandler}
+        showAddButton={vi.fn(() => true)}
+      />
+    );
+
+    const addMoreSpecialContacts = container.querySelector(
+      '[data-testid="addMoreSpecialContacts"]'
+    );
+    expect(addMoreSpecialContacts).toBeInTheDocument();
+    fireEvent.click(addMoreSpecialContacts!);
+    expect(createNewAssociationHandler).toHaveBeenCalledTimes(1);
   });
 });

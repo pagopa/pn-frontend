@@ -64,31 +64,31 @@ export const phoneValidationSchema = (t: TFunction, withPrefix = false) =>
     );
 
 const isDropdownItemDisabled = (
-  addressType: ChannelType,
+  channelType: ChannelType,
   hasDefaultAddress: boolean,
   defaultSERCQAddress: DigitalAddress | undefined,
   senderHasAlreadyAddress: boolean
 ): boolean => {
-  if (defaultSERCQAddress && addressType === ChannelType.PEC) {
+  if (defaultSERCQAddress && channelType === ChannelType.PEC) {
     return false;
   }
 
-  return (addressType !== ChannelType.SERCQ && !hasDefaultAddress) || !senderHasAlreadyAddress;
+  return (channelType !== ChannelType.SERCQ && !hasDefaultAddress) || !senderHasAlreadyAddress;
 };
 
 const isDropdownItemShown = (
-  addressType: ChannelType,
+  channelType: ChannelType,
   defaultSERCQAddress: DigitalAddress | undefined,
   defaultPECAddress: DigitalAddress | undefined
 ): boolean => {
-  if (defaultSERCQAddress && addressType === ChannelType.SERCQ) {
+  if (defaultSERCQAddress && channelType === ChannelType.SERCQ) {
     return false;
   }
 
   if (
     !defaultPECAddress &&
     !defaultSERCQAddress &&
-    (addressType === ChannelType.PEC || addressType === ChannelType.SERCQ)
+    (channelType === ChannelType.PEC || channelType === ChannelType.SERCQ)
   ) {
     return false;
   }

@@ -139,6 +139,20 @@ describe('SpecialContacts Component', async () => {
 
     const confirmButton = within(addSpecialContactDialog).getByText('button.associa');
     fireEvent.click(confirmButton);
+
+    const legalAssociationDialog = await waitFor(() =>
+      result.getByTestId('legalContactAssociationDialog')
+    );
+    expect(legalAssociationDialog).toBeInTheDocument();
+    const titleEl = getById(legalAssociationDialog, 'dialog-title');
+    expect(titleEl).toBeInTheDocument();
+    expect(titleEl).toHaveTextContent('special-contacts.legal-association-title');
+    const bodyEl = getById(legalAssociationDialog, 'dialog-description');
+    expect(bodyEl).toBeInTheDocument();
+    expect(bodyEl).toHaveTextContent('special-contacts.legal-association-description');
+    const confirmDialogButton = within(legalAssociationDialog).getByText('button.conferma');
+    fireEvent.click(confirmDialogButton);
+
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
@@ -347,5 +361,17 @@ describe('SpecialContacts Component', async () => {
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
     });
+  });
+
+  it.only('should show special dialog when click on add button of an existing contact', async () => {
+    const { container, getByTestId } = render(<SpecialContacts />, {
+      preloadedState: { contactsState: { digitalAddresses } },
+    });
+
+    const addMoreSpecialContactsButton = within(container).getAllByTestId('addMoreSpecialContacts');
+    fireEvent.click(addMoreSpecialContactsButton[0]);
+
+    const addSpecialContactDialog = await waitFor(() => getByTestId('addSpecialContactDialog'));
+    expect(addSpecialContactDialog).toBeInTheDocument();
   });
 });
