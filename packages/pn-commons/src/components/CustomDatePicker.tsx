@@ -1,10 +1,6 @@
 import { de, enGB, fr, it, sl } from 'date-fns/locale';
 
-import {
-  DesktopDatePicker,
-  DesktopDatePickerProps,
-  LocalizationProvider,
-} from '@mui/x-date-pickers';
+import { DatePicker, DatePickerProps, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
@@ -19,14 +15,20 @@ const locales: { [key: string]: Locale } = {
 
 export type DatePickerTypes = Date | null;
 const CustomDatePicker = (
-  props: DesktopDatePickerProps<DatePickerTypes> &
+  props: DatePickerProps<DatePickerTypes> &
     React.RefAttributes<HTMLDivElement> & { language?: string }
 ) => {
   const language = props.language ? props.language : 'it';
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={locales[`${language}`]}>
-      <DesktopDatePicker
+      <DatePicker
         {...props}
+        slotProps={{
+          ...props.slotProps,
+          toolbar: { hidden: true },
+          actionBar: { actions: [] },
+        }}
+        closeOnSelect
         localeText={{
           openPreviousView: getLocalizedOrDefaultLabel('common', 'date-picker.left-arrow'),
           openNextView: getLocalizedOrDefaultLabel('common', 'date-picker.right-arrow'),
