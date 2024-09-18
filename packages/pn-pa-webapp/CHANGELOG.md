@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.7.0](https://github.com/pagopa/pn-frontend/compare/v2.7.0-RC.1...v2.7.0) (2024-09-18)
+
+
+### Bug Fixes
+
+* fixed failing tests ([#1320](https://github.com/pagopa/pn-frontend/issues/1320)) ([e10c0cd](https://github.com/pagopa/pn-frontend/commit/e10c0cdd54f2962653ca8914ad63351aaaca523e))
+
+
+
+
+
 # [2.7.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.7.0-RC.0...v2.7.0-RC.1) (2024-09-10)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
