@@ -3,7 +3,6 @@ import { vi } from 'vitest';
 
 import { getById, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { internationalPhonePrefix } from '../../../../../pn-personagiuridica-webapp/src/utility/contacts.utility';
 import {
   digitalCourtesyAddresses,
   digitalLegalAddressesSercq,
@@ -23,6 +22,7 @@ import {
   IOAllowedValues,
   SERCQ_SEND_VALUE,
 } from '../../../models/contacts';
+import { internationalPhonePrefix } from '../../../utility/contacts.utility';
 import SercqSendContactItem from '../SercqSendContactItem';
 import { fillCodeDialog } from './test-utils';
 
