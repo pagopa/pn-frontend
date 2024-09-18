@@ -2,9 +2,10 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
-import { getById, testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
+import { getById, testAutocomplete, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
 import { fireEvent, waitFor } from '@testing-library/react';
 
+import { digitalAddresses, digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { act, render, screen, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
@@ -45,25 +46,26 @@ describe('test AddSpecialContactDialog', () => {
       <AddSpecialContactDialog
         open
         value=""
-        senders={[]}
-        channelType={ChannelType.PEC}
+        sender={{ senderId: 'default', senderName: '' }}
+        channelType={ChannelType.EMAIL}
         onDiscard={discardHandler}
         onConfirm={confirmHandler}
-        digitalAddresses={[]}
-      />
+      />,
+      {
+        preloadedState: { contactsState: { digitalAddresses } },
+      }
     );
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const titleEl = getById(dialog, 'dialog-title');
     expect(titleEl).toBeInTheDocument();
-    expect(titleEl).toHaveTextContent(`special-contacts.modal-pec-title`);
+    expect(titleEl).toHaveTextContent(`special-contacts.modal-title`);
     const bodyEl = within(dialog).getByTestId('dialog-content');
     expect(bodyEl).toBeInTheDocument();
-    expect(bodyEl).toHaveTextContent(`special-contacts.pec`);
+    expect(bodyEl).toHaveTextContent(`special-contacts.email`);
     const input = getById(bodyEl, 's_value');
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue('');
-    expect(bodyEl).toHaveTextContent(`special-contacts.senders-to-add`);
-    expect(bodyEl).toHaveTextContent(`special-contacts.senders-caption`);
+    expect(bodyEl).toHaveTextContent(`special-contacts.senders`);
     const senderAutoComplete = within(bodyEl).getByTestId('sender');
     expect(senderAutoComplete).toBeInTheDocument();
     const senderChips = within(bodyEl).queryAllByTestId('sender_chip');
@@ -72,7 +74,7 @@ describe('test AddSpecialContactDialog', () => {
     expect(alreadyExistsAlert).not.toBeInTheDocument();
     const cancelButton = within(dialog).getByText('button.annulla');
     expect(cancelButton).toBeInTheDocument();
-    const confirmButton = within(dialog).getByText('button.conferma');
+    const confirmButton = within(dialog).getByText('button.associa');
     expect(confirmButton).toBeInTheDocument();
     expect(confirmButton).toBeDisabled();
   });
@@ -84,12 +86,14 @@ describe('test AddSpecialContactDialog', () => {
       <AddSpecialContactDialog
         open
         value=""
-        senders={[]}
-        channelType={ChannelType.PEC}
+        sender={{ senderId: 'default', senderName: '' }}
+        channelType={ChannelType.EMAIL}
         onDiscard={discardHandler}
         onConfirm={confirmHandler}
-        digitalAddresses={[]}
-      />
+      />,
+      {
+        preloadedState: { contactsState: { digitalAddresses } },
+      }
     );
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const bodyEl = within(dialog).getByTestId('dialog-content');
@@ -101,25 +105,30 @@ describe('test AddSpecialContactDialog', () => {
     });
     const errorMessage = getById(bodyEl, `s_value-helper-text`);
     expect(errorMessage).toBeInTheDocument();
-    const confirmButton = within(dialog).getByText('button.conferma');
+    const confirmButton = within(dialog).getByText('button.associa');
     expect(confirmButton).toBeDisabled();
     // fill with valid value
-    fireEvent.change(input, { target: { value: 'mocked@pec.it' } });
+    fireEvent.change(input, { target: { value: 'mocked@email.it' } });
     await waitFor(() => {
-      expect(input).toHaveValue('mocked@pec.it');
+      expect(input).toHaveValue('mocked@email.it');
     });
     expect(errorMessage).not.toBeInTheDocument();
     expect(confirmButton).toBeDisabled();
     // select sender
     await testAutocomplete(bodyEl, 'sender', parties, true, 1, true);
-    const senderChips = within(bodyEl).queryAllByTestId('sender_chip');
-    expect(senderChips).toHaveLength(1);
-    expect(senderChips[0]).toHaveTextContent(parties[1].name);
     expect(confirmButton).toBeEnabled();
     fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(confirmHandler).toHaveBeenCalledTimes(1);
-      expect(confirmHandler).toHaveBeenCalledWith('mocked@pec.it', [parties[1]]);
+      expect(confirmHandler).toHaveBeenCalledWith(
+        'mocked@email.it',
+        ChannelType.EMAIL,
+        AddressType.COURTESY,
+        {
+          senderId: parties[1].id,
+          senderName: parties[1].name,
+        }
+      );
     });
   });
 
@@ -130,36 +139,32 @@ describe('test AddSpecialContactDialog', () => {
       <AddSpecialContactDialog
         open
         value="mocked@pec.it"
-        senders={[parties[0], parties[2]]}
+        sender={{ senderId: parties[0].id, senderName: parties[0].name }}
         channelType={ChannelType.PEC}
         onDiscard={discardHandler}
         onConfirm={confirmHandler}
-        digitalAddresses={[]}
-      />
+      />,
+      {
+        preloadedState: { contactsState: { digitalAddresses } },
+      }
     );
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const titleEl = getById(dialog, 'dialog-title');
     expect(titleEl).toBeInTheDocument();
-    expect(titleEl).toHaveTextContent(`special-contacts.modal-pec-title`);
+    expect(titleEl).toHaveTextContent(`special-contacts.modal-title`);
     const bodyEl = within(dialog).getByTestId('dialog-content');
     expect(bodyEl).toBeInTheDocument();
     expect(bodyEl).toHaveTextContent(`special-contacts.pec`);
     const input = getById(bodyEl, 's_value');
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue('mocked@pec.it');
-    expect(bodyEl).toHaveTextContent(`special-contacts.senders-to-add`);
-    expect(bodyEl).toHaveTextContent(`special-contacts.senders-caption`);
     const senderAutoComplete = within(bodyEl).getByTestId('sender');
     expect(senderAutoComplete).toBeInTheDocument();
-    const senderChips = within(bodyEl).getAllByTestId('sender_chip');
-    expect(senderChips).toHaveLength(2);
-    expect(senderChips[0]).toHaveTextContent(parties[0].name);
-    expect(senderChips[1]).toHaveTextContent(parties[2].name);
     const alreadyExistsAlert = within(bodyEl).queryByTestId('alreadyExistsAlert');
     expect(alreadyExistsAlert).not.toBeInTheDocument();
     const cancelButton = within(dialog).getByText('button.annulla');
     expect(cancelButton).toBeInTheDocument();
-    const confirmButton = within(dialog).getByText('button.conferma');
+    const confirmButton = within(dialog).getByText('button.associa');
     expect(confirmButton).toBeInTheDocument();
     expect(confirmButton).toBeEnabled();
   });
@@ -171,12 +176,14 @@ describe('test AddSpecialContactDialog', () => {
       <AddSpecialContactDialog
         open
         value="mocked@pec.it"
-        senders={[parties[0], parties[2]]}
+        sender={{ senderId: parties[0].id, senderName: parties[0].name }}
         channelType={ChannelType.PEC}
         onDiscard={discardHandler}
         onConfirm={confirmHandler}
-        digitalAddresses={[]}
-      />
+      />,
+      {
+        preloadedState: { contactsState: { digitalAddresses } },
+      }
     );
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const bodyEl = within(dialog).getByTestId('dialog-content');
@@ -188,7 +195,7 @@ describe('test AddSpecialContactDialog', () => {
     });
     const errorMessage = getById(bodyEl, `s_value-helper-text`);
     expect(errorMessage).toBeInTheDocument();
-    const confirmButton = within(dialog).getByText('button.conferma');
+    const confirmButton = within(dialog).getByText('button.associa');
     expect(confirmButton).toBeDisabled();
     // fill with valid value
     fireEvent.change(input, { target: { value: 'mocked-modified@pec.it' } });
@@ -197,57 +204,213 @@ describe('test AddSpecialContactDialog', () => {
     });
     expect(errorMessage).not.toBeInTheDocument();
     expect(confirmButton).toBeEnabled();
-    // remove one sender
-    let senderChips = within(bodyEl).queryAllByTestId('sender_chip');
-    const cancelIcon = within(senderChips[0]).getByTestId('CancelIcon');
-    fireEvent.click(cancelIcon);
-    senderChips = await waitFor(() => within(bodyEl).queryAllByTestId('sender_chip'));
-    expect(senderChips).toHaveLength(1);
-    expect(senderChips[0]).toHaveTextContent(parties[2].name);
-    expect(confirmButton).toBeEnabled();
+
     fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(confirmHandler).toHaveBeenCalledTimes(1);
-      expect(confirmHandler).toHaveBeenCalledWith('mocked-modified@pec.it', [parties[2]]);
+      expect(confirmHandler).toHaveBeenCalledWith(
+        'mocked-modified@pec.it',
+        ChannelType.PEC,
+        AddressType.LEGAL,
+        {
+          senderId: parties[0].id,
+          senderName: parties[0].name,
+        }
+      );
     });
   });
 
   it('show already exist message', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
-    // render component
+    const specialAddresses = digitalAddresses.filter(
+      (a) => a.senderId !== 'default' && a.channelType === ChannelType.EMAIL
+    );
     render(
       <AddSpecialContactDialog
         open
         value=""
-        senders={[]}
+        sender={{ senderId: 'default', senderName: '' }}
         channelType={ChannelType.PEC}
         onDiscard={discardHandler}
         onConfirm={confirmHandler}
-        digitalAddresses={[
-          {
-            value: 'another-mocked@pec.it',
-            addressType: AddressType.LEGAL,
-            channelType: ChannelType.PEC,
-            senders: [{ senderId: parties[0].id, senderName: parties[0].name }],
-          },
-        ]}
-      />
+      />,
+      {
+        preloadedState: { contactsState: { digitalAddresses } },
+      }
     );
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const bodyEl = within(dialog).getByTestId('dialog-content');
+
     const input = getById(bodyEl, 's_value');
-    // fill with valid value
-    fireEvent.change(input, { target: { value: 'mocked@pec.it' } });
+    fireEvent.change(input, { target: { value: 'test@test.it' } });
     await waitFor(() => {
-      expect(input).toHaveValue('mocked@pec.it');
+      expect(input).toHaveValue('test@test.it');
     });
-    // select sender
-    await testAutocomplete(bodyEl, 'sender', parties, true, 0, true);
-    const senderChips = within(bodyEl).queryAllByTestId('sender_chip');
-    expect(senderChips).toHaveLength(1);
-    expect(senderChips[0]).toHaveTextContent(parties[0].name);
+
+    await testSelect(
+      bodyEl,
+      'channelType',
+      [
+        { value: ChannelType.EMAIL, label: 'special-contacts.email' },
+        { value: ChannelType.SMS, label: 'special-contacts.sms' },
+        { value: ChannelType.PEC, label: 'special-contacts.pec' },
+        { value: ChannelType.SERCQ, label: 'special-contacts.sercq' },
+      ],
+      0
+    );
+
+    await testAutocomplete(
+      bodyEl,
+      'sender',
+      parties,
+      true,
+      parties.findIndex((p) => p.name === specialAddresses[0].senderName),
+      true
+    );
+
     const alreadyExistsAlert = within(bodyEl).getByTestId('alreadyExistsAlert');
     expect(alreadyExistsAlert).toBeInTheDocument();
+  });
+
+  it('should show only EMAIL and SMS on channelType dropdown if there are no default PEC and SERCQ', async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    const addresses = digitalAddresses.filter(
+      (a) =>
+        a.senderId === 'default' &&
+        a.channelType !== ChannelType.PEC &&
+        a.channelType !== ChannelType.SERCQ
+    );
+    render(
+      <AddSpecialContactDialog
+        open
+        value=""
+        sender={{ senderId: 'default', senderName: '' }}
+        channelType={ChannelType.PEC}
+        onDiscard={discardHandler}
+        onConfirm={confirmHandler}
+      />,
+      {
+        preloadedState: { contactsState: { digitalAddresses: addresses } },
+      }
+    );
+
+    const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
+    const bodyEl = within(dialog).getByTestId('dialog-content');
+
+    await testSelect(
+      bodyEl,
+      'channelType',
+      [
+        { value: ChannelType.EMAIL, label: 'special-contacts.email' },
+        { value: ChannelType.SMS, label: 'special-contacts.sms' },
+      ],
+      0
+    );
+  });
+
+  it('should show all channelType options if PEC is default address and no default SERCQ is present', async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    render(
+      <AddSpecialContactDialog
+        open
+        value=""
+        sender={{ senderId: 'default', senderName: '' }}
+        channelType={ChannelType.PEC}
+        onDiscard={discardHandler}
+        onConfirm={confirmHandler}
+      />,
+      {
+        preloadedState: { contactsState: { digitalAddresses } },
+      }
+    );
+
+    const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
+    const bodyEl = within(dialog).getByTestId('dialog-content');
+
+    await testSelect(
+      bodyEl,
+      'channelType',
+      [
+        { value: ChannelType.EMAIL, label: 'special-contacts.email' },
+        { value: ChannelType.SMS, label: 'special-contacts.sms' },
+        { value: ChannelType.PEC, label: 'special-contacts.pec' },
+        { value: ChannelType.SERCQ, label: 'special-contacts.sercq' },
+      ],
+      0
+    );
+  });
+
+  it('should show EMAIL, SMS and PEC options if SERCQ is default address', async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    render(
+      <AddSpecialContactDialog
+        open
+        value=""
+        sender={{ senderId: 'default', senderName: '' }}
+        channelType={ChannelType.PEC}
+        onDiscard={discardHandler}
+        onConfirm={confirmHandler}
+      />,
+      {
+        preloadedState: { contactsState: { digitalAddresses: digitalAddressesSercq } },
+      }
+    );
+
+    const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
+    const bodyEl = within(dialog).getByTestId('dialog-content');
+
+    await testSelect(
+      bodyEl,
+      'channelType',
+      [
+        { value: ChannelType.EMAIL, label: 'special-contacts.email' },
+        { value: ChannelType.SMS, label: 'special-contacts.sms' },
+        { value: ChannelType.PEC, label: 'special-contacts.pec' },
+      ],
+      0
+    );
+  });
+
+  it('should show item disabled if default address is not present', async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    const addresses = digitalAddresses.filter(
+      (a) => a.senderId === 'default' && a.channelType !== ChannelType.EMAIL
+    );
+    render(
+      <AddSpecialContactDialog
+        open
+        value=""
+        sender={{ senderId: 'default', senderName: '' }}
+        channelType={ChannelType.PEC}
+        onDiscard={discardHandler}
+        onConfirm={confirmHandler}
+      />,
+      {
+        preloadedState: { contactsState: { digitalAddresses: addresses } },
+      }
+    );
+
+    const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
+    const bodyEl = within(dialog).getByTestId('dialog-content');
+
+    const selectButton = bodyEl.querySelector(
+      `div[id="channelType"], div[data-testid="channelType"] [role="combobox"]`
+    );
+    fireEvent.mouseDown(selectButton!);
+    const selectOptionsContainer = screen.getByRole('presentation');
+    expect(selectOptionsContainer).toBeInTheDocument();
+    const selectOptionsList = within(selectOptionsContainer).getByRole('listbox');
+    expect(selectOptionsList).toBeInTheDocument();
+    const selectOptionsListItems = within(selectOptionsList).getAllByRole('option');
+    expect(selectOptionsListItems).toHaveLength(4);
+
+    selectOptionsListItems.forEach((opt) => {
+      if (opt.textContent === 'special-contacts.email') {
+        expect(opt).toBeDisabled();
+      } else {
+        expect(opt).not.toBeDisabled();
+      }
+    });
   });
 
   it('API error', async () => {
@@ -260,13 +423,15 @@ describe('test AddSpecialContactDialog', () => {
           <AddSpecialContactDialog
             open
             value=""
-            senders={[]}
+            sender={{ senderId: 'mocked-sender-id', senderName: 'mocked-sender-name' }}
             channelType={ChannelType.PEC}
             onDiscard={discardHandler}
             onConfirm={confirmHandler}
-            digitalAddresses={[]}
           />
-        </>
+        </>,
+        {
+          preloadedState: { contactsState: { digitalAddresses } },
+        }
       );
     });
     const statusApiErrorComponent = screen.queryByTestId(

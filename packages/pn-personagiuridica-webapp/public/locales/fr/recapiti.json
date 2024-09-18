@@ -24,7 +24,6 @@
     "block-remove-pec-message": "Pour ce faire, vous devez d’abord supprimer toutes les adresses PEC que vous avez indiquées dans la rubrique « Autres coordonnées ».",
     "validation-cancel-title": "Voulez-vous annuler la vérification ?",
     "validation-cancel-content": "Si vous annulez la vérification, vous devrez entrer une nouvelle PEC et recommencer le processus.",
-    "validation-in-progress": "Vérification en cours",
     "validation-progress-title": "Merci !",
     "validation-progress-content": "Nous vérifions que l’adresse PEC est valide. Vous recevrez un e-mail avec le résultat dans les 24 heures."
   },
@@ -62,9 +61,6 @@
     "pec": "Adresse PEC",
     "sms": "Portable",
     "email": "Adresse e-mail",
-    "pec-already-exists": "Cet organisme est déjà associé à une adresse PEC. Si vous appuyez sur « Continuer », elle sera remplacée par celle que vous venez d’indiquer.",
-    "sms-already-exists": "Cet organisme est déjà associé à un numéro de téléphone portable. Si vous appuyez sur « Continuer », il sera remplacé par celui que vous venez d’indiquer.",
-    "email-already-exists": "Cet organisme est déjà associé à une adresse e-mail. Si vous appuyez sur « Continuer », elle sera remplacée par celle que vous venez d’indiquer.",
     "fetch-party-error": "Nous n’avons pas pu récupérer les données dont nous avions besoin pour créer une nouvelle adresse."
   },
   "common": {

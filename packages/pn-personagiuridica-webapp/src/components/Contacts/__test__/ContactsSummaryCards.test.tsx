@@ -1,7 +1,8 @@
 import { vi } from 'vitest';
 
-import { digitalAddresses, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
+import { digitalAddresses, digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, within } from '../../../__test__/test-utils';
+import { AddressType } from '../../../models/contacts';
 import ContactsSummaryCards from '../ContactsSummaryCards';
 
 vi.mock('react-i18next', () => ({
@@ -52,7 +53,7 @@ describe('ContactsSummaryCards component', () => {
     const legalTitle = within(legalContacts).getByTestId('cardTitle');
     expect(legalTitle).toHaveTextContent('summary-card.legal-title');
     const legalDescription = within(legalContacts).getByTestId('cardDescription');
-    expect(legalDescription).toHaveTextContent('summary-card.PEC, summary-card.SERCQ');
+    expect(legalDescription).toHaveTextContent('summary-card.PEC');
 
     const courtesyIcon = within(courtesyContacts).getByTestId('verifiedIcon');
     expect(courtesyIcon).toBeInTheDocument();
@@ -64,7 +65,13 @@ describe('ContactsSummaryCards component', () => {
 
   it('should show warningIcon if there is a SERCQ contact and no courtesy contact', () => {
     const { getByTestId } = render(<ContactsSummaryCards />, {
-      preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: digitalAddressesSercq.filter(
+            (addr) => addr.addressType === AddressType.LEGAL
+          ),
+        },
+      },
     });
 
     const legalContacts = getByTestId('legalContactsCard');

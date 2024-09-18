@@ -1,13 +1,10 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import WatchLaterIcon from '@mui/icons-material/WatchLater';
-import { Stack, Typography } from '@mui/material';
 import { appStateActions } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { AddressType, ChannelType, SaveDigitalAddressParams, Sender } from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -19,8 +16,8 @@ import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
 import ExistingContactDialog from './ExistingContactDialog';
+import PecValidationItem from './PecValidationItem';
 import PecVerificationDialog from './PecVerificationDialog';
-import SpecialDigitalContacts from './SpecialDigitalContacts';
 
 enum ModalType {
   EXISTING = 'existing',
@@ -42,23 +39,21 @@ const PecContactItem: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   // currentAddress is needed to store what address we are creating/editing/removing
   // because this variable isn't been used to render, we can use useRef
-  const currentAddress = useRef<{ value: string; sender: Sender }>({
+  const currentAddress = useRef<{ value: string }>({
     value: '',
-    sender: { senderId: 'dafault' },
   });
   const dispatch = useAppDispatch();
 
   const currentValue = defaultPECAddress?.value ?? '';
-  const blockDelete =
-    specialPECAddresses.length > 0 && currentAddress.current.sender.senderId === 'default';
+  const blockDelete = specialPECAddresses.length > 0;
   const verifyingAddress = defaultPECAddress ? !defaultPECAddress.pecValid : false;
 
-  const handleSubmit = (value: string, sender: Sender = { senderId: 'default' }) => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, sender.senderId);
+  const handleSubmit = (value: string) => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, 'default');
     // eslint-disable-next-line functional/immutable-data
-    currentAddress.current = { value, sender };
+    currentAddress.current = { value };
     // first check if contact already exists
-    if (contactAlreadyExists(addresses, value, sender.senderId, ChannelType.PEC)) {
+    if (contactAlreadyExists(addresses, value, 'default', ChannelType.PEC)) {
       setModalOpen(ModalType.EXISTING);
       return;
     }
@@ -67,16 +62,12 @@ const PecContactItem: React.FC = () => {
 
   const handleCodeVerification = (verificationCode?: string) => {
     if (verificationCode) {
-      PFEventStrategyFactory.triggerEvent(
-        PFEventsType.SEND_ADD_PEC_UX_CONVERSION,
-        currentAddress.current.sender.senderId
-      );
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_CONVERSION, 'default');
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.LEGAL,
-      senderId: currentAddress.current.sender.senderId,
-      senderName: currentAddress.current.sender.senderName,
+      senderId: 'default',
       channelType: ChannelType.PEC,
       value: currentAddress.current.value,
       code: verificationCode,
@@ -92,10 +83,7 @@ const PecContactItem: React.FC = () => {
           return;
         }
 
-        PFEventStrategyFactory.triggerEvent(
-          PFEventsType.SEND_ADD_PEC_UX_SUCCESS,
-          currentAddress.current.sender.senderId
-        );
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_SUCCESS, 'default');
 
         // contact has already been verified
         if (res.pecValid) {
@@ -107,7 +95,7 @@ const PecContactItem: React.FC = () => {
             })
           );
           setModalOpen(null);
-          if (currentValue && currentAddress.current.sender.senderId === 'default') {
+          if (currentValue) {
             digitalContactRef.current.toggleEdit();
           }
           return;
@@ -121,10 +109,17 @@ const PecContactItem: React.FC = () => {
 
   const handleCancelCode = async () => {
     setModalOpen(null);
-    if (currentValue && currentAddress.current.sender.senderId === 'default') {
+    if (currentValue) {
       digitalContactRef.current.toggleEdit();
     }
     await digitalContactRef.current.resetForm();
+  };
+
+  const handleCancelValidation = () => {
+    setModalOpen(ModalType.CANCEL_VALIDATION);
+
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = { value: currentValue };
   };
 
   const deleteConfirmHandler = () => {
@@ -132,16 +127,13 @@ const PecContactItem: React.FC = () => {
     dispatch(
       deleteAddress({
         addressType: AddressType.LEGAL,
-        senderId: currentAddress.current.sender.senderId,
+        senderId: 'default',
         channelType: ChannelType.PEC,
       })
     )
       .unwrap()
       .then(() => {
-        PFEventStrategyFactory.triggerEvent(
-          PFEventsType.SEND_REMOVE_PEC_SUCCESS,
-          currentAddress.current.sender.senderId
-        );
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_PEC_SUCCESS, 'default');
       })
       .catch(() => {});
   };
@@ -175,50 +167,12 @@ const PecContactItem: React.FC = () => {
           onDelete={() => {
             setModalOpen(ModalType.DELETE);
             // eslint-disable-next-line functional/immutable-data
-            currentAddress.current = { value: currentValue, sender: { senderId: 'default' } };
+            currentAddress.current = { value: currentValue };
           }}
         />
       )}
       {verifyingAddress && (
-        <>
-          <Typography mb={1} sx={{ fontWeight: 'bold' }} mt={3}>
-            {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
-          </Typography>
-          <Stack direction="row" spacing={1}>
-            <WatchLaterIcon fontSize="small" />
-            <Typography id="validationPecProgress" fontWeight="bold" variant="body2">
-              {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
-            </Typography>
-            <ButtonNaked
-              color="primary"
-              onClick={() => {
-                setModalOpen(ModalType.CANCEL_VALIDATION);
-                // eslint-disable-next-line functional/immutable-data
-                currentAddress.current = { value: currentValue, sender: { senderId: 'default' } };
-              }}
-              data-testid="cancelValidation"
-            >
-              {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
-            </ButtonNaked>
-          </Stack>
-        </>
-      )}
-      {currentValue && (
-        <SpecialDigitalContacts
-          digitalAddresses={specialPECAddresses}
-          channelType={ChannelType.PEC}
-          onConfirm={(value: string, sender: Sender) => handleSubmit(value, sender)}
-          onDelete={(value, sender) => {
-            setModalOpen(ModalType.DELETE);
-            // eslint-disable-next-line functional/immutable-data
-            currentAddress.current = { value, sender };
-          }}
-          onCancelValidation={(value, sender) => {
-            setModalOpen(ModalType.CANCEL_VALIDATION);
-            // eslint-disable-next-line functional/immutable-data
-            currentAddress.current = { value, sender };
-          }}
-        />
+        <PecValidationItem senderId="default" onCancelValidation={handleCancelValidation} />
       )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
@@ -241,7 +195,7 @@ const PecContactItem: React.FC = () => {
       />
       <CancelVerificationModal
         open={modalOpen === ModalType.CANCEL_VALIDATION}
-        senderId={currentAddress.current.sender.senderId}
+        senderId="default"
         handleClose={() => setModalOpen(null)}
       />
       <DeleteDialog
