@@ -4,6 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Box, Link, Stack } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
+import ContactsSummaryCards from '../components/Contacts/ContactsSummaryCards';
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import LegalContactsList from '../components/Contacts/LegalContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -69,7 +70,8 @@ const Contacts = () => {
           apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
           reloadAction={fetchAddresses}
         >
-          <Stack direction="column" spacing={4} mt={4}>
+          <ContactsSummaryCards />
+          <Stack direction="column" spacing={4}>
             <LegalContactsList />
             <CourtesyContacts />
           </Stack>
