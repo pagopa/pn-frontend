@@ -149,6 +149,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
       : addressTypes.find((a) => !a.disabled && a.shown)?.id ?? ChannelType.PEC,
     s_value: channelType === ChannelType.SMS ? value.replace(internationalPhonePrefix, '') : value,
   };
+
   const formik = useFormik({
     initialValues,
     validateOnMount: true,

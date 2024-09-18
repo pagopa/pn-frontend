@@ -192,19 +192,16 @@ const SpecialContacts: React.FC = () => {
             currentAddress.current.senderId
           );
         }
+        // reset current address
+        // eslint-disable-next-line functional/immutable-data
+        currentAddress.current = {
+          ...currentAddress.current,
+          value: '',
+          senderId: 'default',
+          senderName: undefined,
+        };
       })
       .catch(() => {});
-  };
-
-  const handleOpenNewDialog = () => {
-    // eslint-disable-next-line functional/immutable-data
-    currentAddress.current = {
-      ...currentAddress.current,
-      value: '',
-      senderId: 'default',
-      senderName: undefined,
-    };
-    setModalOpen(ModalType.SPECIAL);
   };
 
   const handleDelete = (
@@ -298,7 +295,7 @@ const SpecialContacts: React.FC = () => {
         <ButtonNaked
           component={Typography}
           startIcon={<AddIcon />}
-          onClick={() => handleOpenNewDialog()}
+          onClick={() => setModalOpen(ModalType.SPECIAL)}
           color="primary"
           size="small"
           pt={1}
@@ -371,7 +368,12 @@ const SpecialContacts: React.FC = () => {
         showModal={modalOpen === ModalType.DELETE}
         removeModalTitle={t(`special-contacts.remove-special-title`, {
           ns: 'recapiti',
-          contactValue: currentAddress.current.value,
+          contactValue:
+            currentAddress.current.channelType === ChannelType.SERCQ
+              ? t(`legal-contacts.sercq-send-title`, {
+                  ns: 'recapiti',
+                })
+              : currentAddress.current.value,
         })}
         removeModalBody={t(`special-contacts.remove-special-description`, {
           ns: 'recapiti',

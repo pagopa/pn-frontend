@@ -1,4 +1,3 @@
-import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -83,7 +82,7 @@ const SpecialContactItem: React.FC<Props> = ({
     const isSercq = channelType === ChannelType.SERCQ;
 
     return (
-      <Fragment key={address.value}>
+      <Box key={address.value} sx={{ flexBasis: { xs: 'auto', lg: '224px' } }}>
         {isVerifyingPec ? (
           <PecValidationItem senderId={senderId} onCancelValidation={onCancelValidation} />
         ) : (
@@ -138,7 +137,7 @@ const SpecialContactItem: React.FC<Props> = ({
             </Box>
           </Stack>
         )}
-      </Fragment>
+      </Box>
     );
   };
 
@@ -159,14 +158,12 @@ const SpecialContactItem: React.FC<Props> = ({
           {addresses[0].senderName}
         </Typography>
       </Box>
-      <Box sx={{ flexBasis: { xs: 'auto', lg: '224px' } }}>
-        {isMobile && (
-          <Typography variant="caption" fontWeight={600} mb={1}>
-            {t('special-contacts.contacts', { ns: 'recapiti' })}
-          </Typography>
-        )}
-        {addresses.map((address) => renderAddress(address))}
-      </Box>
+      {isMobile && (
+        <Typography variant="caption" fontWeight={600} mb={1}>
+          {t('special-contacts.contacts', { ns: 'recapiti' })}
+        </Typography>
+      )}
+      {addresses.map((address) => renderAddress(address))}
       {shouldShowAddButton && (
         <Box sx={{ flexGrow: 1, textAlign: 'right' }}>
           <AddMoreButton onClick={handleClickAddButton} />

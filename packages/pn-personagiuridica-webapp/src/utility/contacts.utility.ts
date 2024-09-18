@@ -93,16 +93,16 @@ const isDropdownItemDisabled = (
 ): { status: boolean; reason: DISABLED_REASON } => {
   // the address is disabled if it hasn't one of the default addresses listed into disabledDependsOn property
   // or there is an address with the same sender, already added
-  if (allowedAddress.disabledDependsOn.length === 0) {
-    return { status: false, reason: DISABLED_REASON.NONE };
-  }
-
   const senderHasAlreadyAddress =
     addresses[`special${allowedAddress.channelType}Addresses`].findIndex(
       (a) => a.senderId === sender.senderId
     ) > -1;
   if (senderHasAlreadyAddress) {
     return { status: true, reason: DISABLED_REASON.ALREADY_ADDED };
+  }
+
+  if (allowedAddress.disabledDependsOn.length === 0) {
+    return { status: false, reason: DISABLED_REASON.NONE };
   }
 
   const disabled = { status: true, reason: DISABLED_REASON.NO_DEFAULT };
