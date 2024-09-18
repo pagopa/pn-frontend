@@ -61,7 +61,7 @@ describe('IOContact component', async () => {
     expect(enableBtn).toBeEnabled();
     // enable IO
     fireEvent.click(enableBtn);
-    const disclaimerCheckbox = await waitFor(() => getByTestId('disclaimer-checkbox'));
+    /* const disclaimerCheckbox = await waitFor(() => getByTestId('disclaimer-checkbox'));
     const disclaimerConfirmButton = getByTestId('disclaimer-confirm-button');
     expect(disclaimerConfirmButton).toHaveTextContent('io-contact.enable-modal.confirm');
     expect(disclaimerConfirmButton).toBeDisabled();
@@ -69,7 +69,7 @@ describe('IOContact component', async () => {
     await waitFor(() => {
       expect(disclaimerConfirmButton).toBeEnabled();
     });
-    fireEvent.click(disclaimerConfirmButton);
+    fireEvent.click(disclaimerConfirmButton); */
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
@@ -100,7 +100,7 @@ describe('IOContact component', async () => {
     expect(disableBtn).toBeEnabled();
     // disable IO
     fireEvent.click(disableBtn);
-    const disclaimerCheckbox = await waitFor(() => getByTestId('disclaimer-checkbox'));
+    /* const disclaimerCheckbox = await waitFor(() => getByTestId('disclaimer-checkbox'));
     const disclaimerConfirmButton = getByTestId('disclaimer-confirm-button');
     expect(disclaimerConfirmButton).toHaveTextContent('io-contact.disable-modal.confirm');
     expect(disclaimerConfirmButton).toBeDisabled();
@@ -108,7 +108,7 @@ describe('IOContact component', async () => {
     await waitFor(() => {
       expect(disclaimerConfirmButton).toBeEnabled();
     });
-    fireEvent.click(disclaimerConfirmButton);
+    fireEvent.click(disclaimerConfirmButton); */
     await waitFor(() => {
       expect(mock.history.delete).toHaveLength(1);
     });

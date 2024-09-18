@@ -58,12 +58,13 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
   const isMobile = useIsMobile();
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
-  const { defaultSERCQAddress, courtesyAddresses } = useAppSelector(
+  const { defaultSERCQAddress, courtesyAddresses, specialPECAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
 
   const value = defaultSERCQAddress?.value ?? '';
   const hasCourtesy = courtesyAddresses.length > 0;
+  const blockDelete = specialPECAddresses.length > 0;
 
   const handleInfoConfirm = () => {
     const digitalAddressParams: SaveDigitalAddressParams = {
@@ -220,10 +221,21 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
       />
       <DeleteDialog
         showModal={modalOpen?.type === ModalType.DELETE}
-        removeModalTitle={t(`legal-contacts.remove-sercq-send-title`, { ns: 'recapiti' })}
-        removeModalBody={t(`legal-contacts.remove-sercq-send-message`, { ns: 'recapiti' })}
+        removeModalTitle={t(
+          `legal-contacts.${blockDelete ? 'block-' : ''}remove-sercq-send-title`,
+          {
+            ns: 'recapiti',
+          }
+        )}
+        removeModalBody={t(
+          `legal-contacts.${blockDelete ? 'block-' : ''}remove-sercq-send-message`,
+          {
+            ns: 'recapiti',
+          }
+        )}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
+        blockDelete={blockDelete}
       />
     </DigitalContactsCard>
   );
