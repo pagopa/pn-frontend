@@ -79,7 +79,12 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
         >
           {t(title)}
         </Typography>
-        <Typography variant="body2" data-testid="cardDescription" aria-hidden>
+        <Typography
+          variant="body2"
+          data-testid="cardDescription"
+          aria-hidden
+          color={hasAddress ? 'primary' : 'text.secondary'}
+        >
           {getDescription()}
         </Typography>
       </CardActionArea>

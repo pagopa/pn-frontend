@@ -18,6 +18,7 @@ type Props = {
   header?: ReactNode;
   title: ReactNode;
   subtitle: string;
+  expanded?: boolean;
   children: ReactNode;
 };
 
@@ -40,10 +41,10 @@ const DigitalContactsCardTitle: React.FC<Pick<Props, 'title'>> = ({ title }) => 
 );
 
 const DigitalContactsCardContent: React.FC<
-  Pick<Props, 'title' | 'subtitle' | 'children'> & { sx?: SxProps }
-> = ({ title, subtitle, sx, children }) => {
+  Pick<Props, 'title' | 'subtitle' | 'expanded' | 'children'> & { sx?: SxProps }
+> = ({ title, subtitle, expanded, sx, children }) => {
   const isMobile = useIsMobile();
-  const [showDescription, setShowDescription] = useState(false);
+  const [showDescription, setShowDescription] = useState(expanded);
   return (
     <Box sx={sx}>
       {isMobile && (
@@ -83,11 +84,17 @@ const DigitalContactsCardContent: React.FC<
   );
 };
 
-const DigitalContactsCard: React.FC<Props> = ({ header, title, subtitle, children }) => (
+const DigitalContactsCard: React.FC<Props> = ({
+  header,
+  title,
+  subtitle,
+  expanded = false,
+  children,
+}) => (
   <Card sx={{ p: 3 }}>
     {header && <CardHeader data-testid="DigitalContactsCardHeader" sx={{ p: 0 }} title={header} />}
     <CardContent data-testid="DigitalContactsCardBody" sx={{ p: 0, paddingBottom: '0 !important' }}>
-      <DigitalContactsCardContent title={title} subtitle={subtitle}>
+      <DigitalContactsCardContent title={title} subtitle={subtitle} expanded={expanded}>
         {children}
       </DigitalContactsCardContent>
     </CardContent>

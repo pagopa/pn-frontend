@@ -64,7 +64,6 @@ const SercqSendCourtesyInput: React.FC<{
         ns: 'recapiti',
       })}
       size="small"
-      inputProps={{ sx: { height: '14px' } }}
       sx={sx}
       fullWidth
       value={formik.values.value}
