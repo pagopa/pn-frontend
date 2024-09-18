@@ -58,13 +58,14 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
   };
 
   return (
-    <Card elevation={4} data-testid={isCourtesyCard ? 'courtesyContactsCard' : 'legalContactsCard'}>
+    <Card
+      elevation={4}
+      sx={{ width: { xs: '100%', lg: '185px' } }}
+      data-testid={isCourtesyCard ? 'courtesyContactsCard' : 'legalContactsCard'}
+    >
       <CardActionArea
         onClick={goToSection}
-        sx={{
-          p: 2,
-          width: { xs: '100%', lg: '185px' },
-        }}
+        sx={{ p: 2 }}
         aria-label={t(title)}
         aria-description={getDescription()}
       >

@@ -21,7 +21,6 @@
     "block-remove-pec-message": "Če želite to narediti, morate najprej izbrisati vse PEC, ki ste jih navedli pod \"Drugi kontaktni podatki\".",
     "validation-cancel-title": "Želite preklicati preverjanje?",
     "validation-cancel-content": "Če prekličete preverjanje, boste morali vnesti nov PEC in ponovno začeti postopek.",
-    "validation-in-progress": "Preverjanje v teku",
     "validation-progress-title": "Hvala!",
     "validation-progress-content": "Preverjamo, če je PEC veljaven. V 24 urah boste prejeli e-poštno sporočilo z rezultatom."
   },
@@ -73,9 +72,6 @@
     "pec": "PEC",
     "sms": "Mobilni telefon",
     "email": "Naslov elektronske pošte",
-    "pec-already-exists": "Ta organizacija je že povezana s potrjenim e-poštnim naslovom. Če pritisnete \"Nadaljuj\", ga bo nadomestil tisti, ki ste ga pravkar navedli.",
-    "sms-already-exists": "Ta organizacija je že povezana z mobilno številko. Če pritisnete \"Nadaljuj\", ga bo nadomestila tista, ki ste jo pravkar navedli.",
-    "email-already-exists": "Ta organizacija je že povezana z e-poštnim naslovom. Če pritisnete \"Nadaljuj\", ga bo nadomestil tisti, ki ste ga pravkar navedli.",
     "fetch-party-error": "Podatkov, potrebnih za ustvarjanje novega kontaktnega podatka, ni bilo mogoče pridobiti."
   },
   "common": {

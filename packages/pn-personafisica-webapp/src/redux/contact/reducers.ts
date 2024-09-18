@@ -95,10 +95,11 @@ const digitalAddresses = createSelector(
   (contactsState) => contactsState.digitalAddresses
 );
 
-type SelectedAddresses = {
+export type SelectedAddresses = {
   addresses: Array<DigitalAddress>;
   legalAddresses: Array<DigitalAddress>;
   courtesyAddresses: Array<DigitalAddress>;
+  specialAddresses: Array<DigitalAddress>;
 } & { [key in `default${ChannelType}Address`]: DigitalAddress | undefined } & {
   [key in `special${ChannelType}Addresses`]: Array<DigitalAddress>;
 };
@@ -108,6 +109,7 @@ const memoizedSelectAddresses = createSelector([digitalAddresses], (digitalAddre
     addresses: digitalAddresses,
     legalAddresses: [] as Array<DigitalAddress>,
     courtesyAddresses: [] as Array<DigitalAddress>,
+    specialAddresses: [] as Array<DigitalAddress>,
   } as SelectedAddresses;
   for (const channelType of Object.values(ChannelType)) {
     initialValue[`default${channelType}Address`] = undefined;
@@ -125,6 +127,7 @@ const memoizedSelectAddresses = createSelector([digitalAddresses], (digitalAddre
     }
     if (addr.senderId !== 'default') {
       obj[`special${addr.channelType}Addresses`].push(addr);
+      obj.specialAddresses.push(addr);
     }
     return obj;
   }, initialValue);

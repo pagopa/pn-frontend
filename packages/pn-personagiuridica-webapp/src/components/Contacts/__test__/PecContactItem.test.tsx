@@ -1,10 +1,9 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { getById, testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
+import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
-import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import {
   fireEvent,
   render,
@@ -14,7 +13,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { AddressType, ChannelType } from '../../../models/contacts';
+import { AddressType } from '../../../models/contacts';
 import PecContactItem from '../PecContactItem';
 import { fillCodeDialog } from './test-utils';
 
@@ -126,7 +125,6 @@ describe('PecContactItem component', () => {
       expect(input).not.toBeInTheDocument();
     });
     expect(result.container).toHaveTextContent('legal-contacts.pec-validating');
-    expect(result.container).toHaveTextContent('legal-contacts.validation-in-progress');
     // cancel validation
     const cancelValidationBtn = result.getByTestId('cancelValidation');
     fireEvent.click(cancelValidationBtn);
@@ -145,7 +143,6 @@ describe('PecContactItem component', () => {
     // wait rerendering due to redux changes
     await waitFor(() => {
       expect(result.container).not.toHaveTextContent('legal-contacts.pec-validating');
-      expect(result.container).not.toHaveTextContent('legal-contacts.validation-in-progress');
       input = result.container.querySelector('input[name="default_pec"]');
       expect(input).toBeInTheDocument();
     });
@@ -360,222 +357,5 @@ describe('PecContactItem component', () => {
       expect(input).toBeInTheDocument();
       expect(result.container).not.toHaveTextContent('');
     });
-  });
-
-  it('add special contact', async () => {
-    mock.onGet('/bff/v1/pa-list').reply(200, parties);
-    mock
-      .onPost(`/bff/v1/addresses/LEGAL/${parties[1].id}/PEC`, {
-        value: VALID_PEC,
-      })
-      .reply(200, {
-        result: 'CODE_VERIFICATION_REQUIRED',
-      });
-    mock
-      .onPost(`/bff/v1/addresses/LEGAL/${parties[1].id}/PEC`, {
-        value: VALID_PEC,
-        verificationCode: '01234',
-      })
-      .reply(204);
-    // render component
-    const result = render(<PecContactItem />, {
-      preloadedState: {
-        contactsState: {
-          digitalAddresses: [defaultAddress],
-        },
-      },
-    });
-    const specialPecContact = result.getByTestId('special_pecContact');
-    expect(specialPecContact).toBeInTheDocument();
-    const button = within(specialPecContact).getByTestId('addMoreButton');
-    fireEvent.click(button);
-    const addSpecialContactDialog = await waitFor(() =>
-      result.getByTestId('addSpecialContactDialog')
-    );
-    expect(addSpecialContactDialog).toBeInTheDocument();
-    // fill input
-    const input = getById(addSpecialContactDialog, 's_value');
-    fireEvent.change(input, { target: { value: VALID_PEC } });
-    await waitFor(() => {
-      expect(input).toHaveValue(VALID_PEC);
-    });
-    // select sender
-    await testAutocomplete(addSpecialContactDialog, 'sender', parties, true, 1, true);
-    // confirm addition
-    const confirmButton = within(addSpecialContactDialog).getByText('button.conferma');
-    fireEvent.click(confirmButton);
-    await waitFor(() => {
-      expect(mock.history.post).toHaveLength(1);
-      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
-        value: VALID_PEC,
-      });
-    });
-    // inser otp and confirm
-    const dialog = await fillCodeDialog(result);
-    await waitFor(() => {
-      expect(mock.history.post).toHaveLength(2);
-      expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
-        value: VALID_PEC,
-        verificationCode: '01234',
-      });
-    });
-    // check that contact has been added
-    await waitFor(() => expect(dialog).not.toBeInTheDocument());
-    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual([
-      defaultAddress,
-      {
-        pecValid: true,
-        codeValid: true,
-        value: VALID_PEC,
-        addressType: AddressType.LEGAL,
-        channelType: ChannelType.PEC,
-        senderName: parties[1].name,
-        senderId: parties[1].id,
-      },
-    ]);
-    // wait rerendering due to redux changes
-    const specialContactForms = await waitFor(() => result.getAllByTestId(`special_pec`));
-    expect(specialContactForms).toHaveLength(1);
-    expect(specialContactForms[0]).toHaveTextContent(VALID_PEC);
-    const editButton = within(specialContactForms[0]).getByTestId(`modifyContact-special_pec`);
-    expect(editButton).toBeInTheDocument();
-    const deleteButton = within(specialContactForms[0]).getByTestId(`cancelContact-special_pec`);
-    expect(deleteButton).toBeInTheDocument();
-    expect(specialContactForms[0]).toHaveTextContent(parties[1].name);
-  });
-
-  it('edit special contact', async () => {
-    const VALID_MODIFIED_PEC = 'pec-modificata@valida.com';
-    mock.onGet('/bff/v1/pa-list').reply(200, parties);
-    mock
-      .onPost(`/bff/v1/addresses/LEGAL/${parties[1].id}/PEC`, {
-        value: VALID_MODIFIED_PEC,
-      })
-      .reply(200, {
-        result: 'CODE_VERIFICATION_REQUIRED',
-      });
-    mock
-      .onPost(`/bff/v1/addresses/LEGAL/${parties[1].id}/PEC`, {
-        value: VALID_MODIFIED_PEC,
-        verificationCode: '01234',
-      })
-      .reply(204);
-    // render component
-    const result = render(<PecContactItem />, {
-      preloadedState: {
-        contactsState: {
-          digitalAddresses: [
-            defaultAddress,
-            {
-              pecValid: true,
-              codeValid: true,
-              value: VALID_PEC,
-              addressType: AddressType.LEGAL,
-              channelType: ChannelType.PEC,
-              senderName: parties[1].name,
-              senderId: parties[1].id,
-            },
-          ],
-        },
-      },
-    });
-    let specialContactForms = await waitFor(() => result.getAllByTestId(`special_pec`));
-    expect(specialContactForms).toHaveLength(1);
-    expect(specialContactForms[0]).toHaveTextContent(VALID_PEC);
-    const editButton = within(specialContactForms[0]).getByTestId(`modifyContact-special_pec`);
-    fireEvent.click(editButton);
-    const addSpecialContactDialog = await waitFor(() =>
-      result.getByTestId('addSpecialContactDialog')
-    );
-    expect(addSpecialContactDialog).toBeInTheDocument();
-    // fill input
-    const input = getById(addSpecialContactDialog, 's_value');
-    fireEvent.change(input, { target: { value: VALID_MODIFIED_PEC } });
-    await waitFor(() => {
-      expect(input).toHaveValue(VALID_MODIFIED_PEC);
-    });
-    // select sender
-    await testAutocomplete(addSpecialContactDialog, 'sender', parties, true, 0, true);
-    // confirm addition
-    const confirmButton = within(addSpecialContactDialog).getByText('button.conferma');
-    fireEvent.click(confirmButton);
-    await waitFor(() => {
-      expect(mock.history.post).toHaveLength(1);
-      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
-        value: VALID_MODIFIED_PEC,
-      });
-    });
-    // inser otp and confirm
-    const dialog = await fillCodeDialog(result);
-    await waitFor(() => {
-      expect(mock.history.post).toHaveLength(2);
-      expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
-        value: VALID_MODIFIED_PEC,
-        verificationCode: '01234',
-      });
-    });
-    // check that contact has been edited
-    await waitFor(() => expect(dialog).not.toBeInTheDocument());
-    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual([
-      defaultAddress,
-      {
-        pecValid: true,
-        codeValid: true,
-        value: VALID_MODIFIED_PEC,
-        addressType: AddressType.LEGAL,
-        channelType: ChannelType.PEC,
-        senderName: parties[1].name,
-        senderId: parties[1].id,
-      },
-    ]);
-    // wait rerendering due to redux changes
-    specialContactForms = await waitFor(() => result.getAllByTestId(`special_pec`));
-    expect(specialContactForms[0]).toHaveTextContent(VALID_MODIFIED_PEC);
-    expect(specialContactForms[0]).toHaveTextContent(parties[1].name);
-  });
-
-  it('remove special contact', async () => {
-    mock.onGet('/bff/v1/pa-list').reply(200, parties);
-    mock.onDelete(`/bff/v1/addresses/LEGAL/${parties[1].id}/PEC`).reply(204);
-    // render component
-    const result = render(<PecContactItem />, {
-      preloadedState: {
-        contactsState: {
-          digitalAddresses: [
-            defaultAddress,
-            {
-              pecValid: true,
-              codeValid: true,
-              value: VALID_PEC,
-              addressType: AddressType.LEGAL,
-              channelType: ChannelType.PEC,
-              senderName: parties[1].name,
-              senderId: parties[1].id,
-            },
-          ],
-        },
-      },
-    });
-    let specialContactForms = await waitFor(() => result.getAllByTestId(`special_pec`));
-    expect(specialContactForms).toHaveLength(1);
-    expect(specialContactForms[0]).toHaveTextContent(VALID_PEC);
-    const deleteButton = within(specialContactForms[0]).getByTestId(`cancelContact-special_pec`);
-    fireEvent.click(deleteButton);
-    const dialog = await waitFor(() => screen.getByRole('dialog'));
-    expect(dialog).toBeInTheDocument();
-    const buttons = dialog.querySelectorAll('button');
-    // click on confirm
-    fireEvent.click(buttons[1]);
-    await waitFor(() => {
-      expect(dialog).not.toBeInTheDocument();
-    });
-    await waitFor(() => {
-      expect(mock.history.delete).toHaveLength(1);
-    });
-    // check that contact has been removed
-    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual([defaultAddress]);
-    // wait rerendering due to redux changes
-    specialContactForms = await waitFor(() => result.queryAllByTestId(`special_pec`));
-    expect(specialContactForms).toHaveLength(0);
   });
 });

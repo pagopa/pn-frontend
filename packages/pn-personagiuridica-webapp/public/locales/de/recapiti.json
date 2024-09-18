@@ -24,7 +24,6 @@
     "block-remove-pec-message": "Dazu müssen zuerst alle PEC-Adressen unter „Weitere Anschriften“ gelöscht werden.",
     "validation-cancel-title": "Überprüfung abbrechen?",
     "validation-cancel-content": "Wird die Überprüfung abgebrochen, muss eine neue PEC-Adresse eingegeben und der Vorgang erneut begonnen werden.",
-    "validation-in-progress": "Wird überprüft",
     "validation-progress-title": "Danke!",
     "validation-progress-content": "Wir prüfen, ob die PEC-Adresse gültig ist. Du erhältst innerhalb von 24 Stunden eine E-Mail mit dem Ergebnis."
   },
@@ -62,9 +61,6 @@
     "pec": "PEC-Adresse",
     "sms": "Handy",
     "email": "E-Mail-Adresse",
-    "pec-already-exists": "Diese Körperschaft wurde bereits einer PEC-Adresse zugeordnet. Wenn du „Weiter“ drückst, wird sie durch die gerade eingegebene ersetzt.",
-    "sms-already-exists": "Diese Einrichtung ist bereits einer Handynummer zugeordnet. Wenn du „Weiter“ drückst, wird sie durch die gerade eingegebene ersetzt.",
-    "email-already-exists": "Diese Körperschaft ist bereits einer E-Mail-Adresse zugeordnet. Wenn du „Weiter“ drückst, wird sie durch die gerade eingegebene ersetzt.",
     "fetch-party-error": "Wir konnten die Daten, die benötigt werden, um eine neue Anschrift zu erstellen, nicht wiederherstellen."
   },
   "common": {
