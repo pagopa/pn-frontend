@@ -116,7 +116,6 @@ const SpecialContactItem: React.FC<Props> = ({
                     })
                   }
                   sx={{ mr: 2 }}
-                  disabled={false}
                   data-testid={`modifyContact-special_${channelType}`}
                   size="medium"
                 >
@@ -132,7 +131,6 @@ const SpecialContactItem: React.FC<Props> = ({
                     senderName,
                   })
                 }
-                disabled={false}
                 size="medium"
               >
                 {t(`button.${isSercq ? 'disable' : 'elimina'}`, { ns: 'common' })}
@@ -170,7 +168,7 @@ const SpecialContactItem: React.FC<Props> = ({
         {addresses.map((address) => renderAddress(address))}
       </Box>
       {shouldShowAddButton && (
-        <Box sx={{ flexGrow: 1, textAlign: { xs: 'left', lg: 'right' } }}>
+        <Box sx={{ flexGrow: 1, textAlign: 'right' }}>
           <AddMoreButton onClick={handleClickAddButton} />
         </Box>
       )}

@@ -146,7 +146,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     },
     channelType: value
       ? channelType
-      : addressTypes.filter((a) => !a.disabled)[0]?.id ?? ChannelType.PEC,
+      : addressTypes.find((a) => !a.disabled && a.shown)?.id ?? ChannelType.PEC,
     s_value: channelType === ChannelType.SMS ? value.replace(internationalPhonePrefix, '') : value,
   };
 
