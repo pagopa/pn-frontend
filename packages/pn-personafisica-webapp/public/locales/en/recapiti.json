@@ -72,9 +72,6 @@
     "pec": "PEC address",
     "sms": "Mobile",
     "email": "Email address",
-    "pec-already-exists": "This organisation is already associated with a PEC address. If you press \"Continue\", it will be replaced by the one you just indicated.",
-    "sms-already-exists": "This organisation is already associated with a mobile number. If you press \"Continue\", it will be replaced by the one you just indicated.",
-    "email-already-exists": "This organisation is already associated with an email address. If you press \"Continue\", it will be replaced by the one you just indicated.",
     "fetch-party-error": "We were unable to retrieve the data needed to create a new contact detail."
   },
   "common": {

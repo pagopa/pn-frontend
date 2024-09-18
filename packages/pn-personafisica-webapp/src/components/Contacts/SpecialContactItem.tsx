@@ -6,6 +6,9 @@ import { Box, Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, DigitalAddress, Sender } from '../../models/contacts';
+import { specialContactsAvailableAddressTypes } from '../../utility/contacts.utility';
+import { useAppSelector } from '../../redux/hooks';
+import { contactsSelectors } from '../../redux/contact/reducers';
 import PecValidationItem from './PecValidationItem';
 
 type Props = {
@@ -24,7 +27,6 @@ type Props = {
   ) => void;
   handleCreateNewAssociation: (sender: Sender) => void;
   onCancelValidation: (senderId: string) => void;
-  showAddButton: (sender: Sender) => boolean;
 };
 
 interface AddMoreButtonProps {
@@ -51,17 +53,19 @@ const SpecialContactItem: React.FC<Props> = ({
   onEdit,
   handleCreateNewAssociation,
   onCancelValidation,
-  showAddButton,
 }) => {
   const { t } = useTranslation(['recapiti', 'common']);
+  const addressData = useAppSelector(contactsSelectors.selectAddresses);
 
-  const senderHasAllAddresses = addresses.length === 4;
-  const shouldShowAddButton =
-    !senderHasAllAddresses &&
-    showAddButton({
-      senderId: addresses[0].senderId,
-      senderName: addresses[0].senderName,
-    });
+  const showAddButton = (sender: Sender) => {
+    const filteredAddresses = specialContactsAvailableAddressTypes(addressData, sender);
+    return filteredAddresses.some((a) => a.shown && !a.disabled);
+  };
+
+  const shouldShowAddButton = showAddButton({
+    senderId: addresses[0].senderId,
+    senderName: addresses[0].senderName,
+  });
 
   const handleClickAddButton = () => {
     handleCreateNewAssociation({
@@ -160,9 +164,6 @@ const SpecialContactItem: React.FC<Props> = ({
             {addresses[0].senderName}
           </Typography>
         </Stack>
-        <Box sx={{ display: { xs: 'block', lg: 'none' } }}>
-          {shouldShowAddButton && <AddMoreButton onClick={handleClickAddButton} />}
-        </Box>
       </Stack>
 
       <Stack spacing={1} width="100%">
@@ -174,13 +175,11 @@ const SpecialContactItem: React.FC<Props> = ({
           {t('special-contacts.contacts', { ns: 'recapiti' })}
         </Typography>
 
-        <Stack direction="row" justifyContent="space-between">
+        <Stack direction={{ xs: 'column', lg: 'row' }} justifyContent="space-between">
           <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
             {addresses.map((address) => renderAddress(address))}
           </Stack>
-          <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
-            {shouldShowAddButton && <AddMoreButton onClick={handleClickAddButton} />}
-          </Box>
+          <Box>{shouldShowAddButton && <AddMoreButton onClick={handleClickAddButton} />}</Box>
         </Stack>
       </Stack>
     </Stack>

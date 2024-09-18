@@ -78,10 +78,10 @@ describe('LegalContacts Component', async () => {
     const pecInput = pecContact.querySelector(`[name="default_pec"]`);
     expect(pecInput).toBeInTheDocument();
     expect(pecInput).toHaveValue('');
-    const button = await waitFor(() =>
-      within(pecContact).getByRole('button', { name: 'button.conferma' })
-    );
-    expect(button).toBeDisabled();
+    const button = within(pecContact).getByRole('button', { name: 'button.conferma' });
+    await waitFor(() => {
+      expect(button).toBeDisabled();
+    });
     const sercqSendContact = getByTestId(`default_sercqSendContact`);
     expect(sercqSendContact).toBeInTheDocument();
     const activateButton = within(sercqSendContact).getByTestId('activateButton');

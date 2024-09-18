@@ -72,9 +72,6 @@
     "pec": "PEC-Adresse",
     "sms": "Handy",
     "email": "E-Mail-Adresse",
-    "pec-already-exists": "Dieser Körperschaft wurde bereits eine PEC-Adresse zugeordnet. Wenn du „Weiter“ drückst, wird sie durch die gerade eingegebene ersetzt.",
-    "sms-already-exists": "Dieser Körperschaft wurde bereits eine Handynummer zugeordnet. Wenn du „Weiter“ drückst, wird sie durch die gerade eingegebene ersetzt.",
-    "email-already-exists": "Dieser Körperschaft wurde bereits eine E-Mail-Adresse zugeordnet. Wenn du „Weiter“ drückst, wird sie durch die gerade eingegebene ersetzt.",
     "fetch-party-error": "Wir konnten die Daten, die benötigt werden, um eine neue Anschrift zu erstellen, nicht wiederherstellen."
   },
   "common": {

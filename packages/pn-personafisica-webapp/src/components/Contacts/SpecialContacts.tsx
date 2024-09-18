@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import AddIcon from '@mui/icons-material/Add';
 import { Card, CardContent, Divider, Stack, Typography } from '@mui/material';
@@ -19,11 +19,7 @@ import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/action
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
-import {
-  contactAlreadyExists,
-  internationalPhonePrefix,
-  specialContactsAddressTypes,
-} from '../../utility/contacts.utility';
+import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import AddSpecialContactDialog from './AddSpecialContactDialog';
 import CancelVerificationModal from './CancelVerificationModal';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -54,8 +50,9 @@ const SpecialContacts: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
-  const addressesData = useAppSelector(contactsSelectors.selectAddresses);
-  const { addresses, specialAddresses, defaultPECAddress } = addressesData;
+  const { addresses, specialAddresses, defaultPECAddress } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
 
   const currentAddress = useRef<DigitalAddress>({
@@ -67,11 +64,6 @@ const SpecialContacts: React.FC = () => {
 
   const labelRoot = `${currentAddress.current.addressType.toLowerCase()}-contacts`;
   const contactType = currentAddress.current.channelType.toLowerCase();
-
-  const shouldShowAddMoreButton = (sender: Sender) => {
-    const addresses = specialContactsAddressTypes(t, addressesData, sender);
-    return addresses.some((a) => a.shown && !a.disabled);
-  };
 
   const sendSuccessEvent = (type: ChannelType) => {
     const eventKey = `SEND_ADD_${type}_UX_SUCCESS`;
@@ -341,7 +333,6 @@ const SpecialContacts: React.FC = () => {
                   onDelete={handleDelete}
                   onCancelValidation={handleCancelValidation}
                   handleCreateNewAssociation={handleCreateNewAssociation}
-                  showAddButton={shouldShowAddMoreButton}
                 />
               ))}
             </Stack>
@@ -405,21 +396,16 @@ const SpecialContacts: React.FC = () => {
       />
       <LegalContactAssociationDialog
         open={modalOpen === ModalType.CONFIRM_LEGAL_ASSOCIATION}
-        dialogContentText={
-          <Trans
-            ns="recapiti"
-            i18nKey="special-contacts.legal-association-description"
-            values={{
-              senderName: currentAddress.current.senderName,
-              newAddress:
-                currentAddress.current.channelType === ChannelType.PEC
-                  ? currentAddress.current.value
-                  : t('special-contacts.sercq', { ns: 'recapiti' }),
-              oldAddress: defaultPECAddress
-                ? defaultPECAddress.value
-                : t('special-contacts.sercq', { ns: 'recapiti' }),
-            }}
-          />
+        senderName={currentAddress.current.senderName ?? ''}
+        newAddressValue={
+          currentAddress.current.channelType === ChannelType.PEC
+            ? currentAddress.current.value
+            : t('special-contacts.sercq', { ns: 'recapiti' })
+        }
+        oldAddressValue={
+          defaultPECAddress
+            ? defaultPECAddress.value
+            : t('special-contacts.sercq', { ns: 'recapiti' })
         }
         handleClose={handleCloseModal}
         handleConfirm={() => handleCodeVerification()}

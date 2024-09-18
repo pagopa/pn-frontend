@@ -111,6 +111,7 @@
     "title": "Altri recapiti",
     "description": "Se vuoi che le notifiche di alcuni enti siano indirizzate a dei recapiti diversi puoi indicarli qui, in sostituzione di quelli principali.",
     "add-contact": "Associa recapito",
+    "select-address": "Seleziona recapito",
     "add-sender": "Aggiungi ente",
     "pec": "Indirizzo PEC",
     "sms": "Numero di cellulare",
@@ -123,9 +124,6 @@
     "senders": "Enti",
     "contact-to-add": "Recapito",
     "contact-to-add-description": "Puoi associare solo i tipi di recapito per cui hai già impostato un recapito principale.",
-    "pec-already-exists": "Questo ente è già associato a un indirizzo PEC. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
-    "sms-already-exists": "Questo ente è già associato a un numero di cellulare. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
-    "email-already-exists": "Questo ente è già associato a un indirizzo e-mail. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "contact-already-exists": "L'ente selezionato è già associato a questo recapito. Se premi “Associa”, verrà sostituito da quello che hai indicato qui.",
     "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito.",
     "modal-title": "Associa un recapito a enti specifici",
@@ -136,10 +134,7 @@
     "no-default-address": "Recapito principale non presente",
     "contacts": "Recapiti",
     "legal-association-title": "Conferma associazione",
-    "legal-association-description": "Confermando l’associazione, per le notifiche inviate da <strong>{{senderName}}</strong> il tuo recapito a valore legale di riferimento sarà <strong>{{newAddress}}</strong> invece che <strong>{{oldAddress}}</strong>.",
-    "menu": {
-      "add-another-contact": "Associa un altro recapito"
-    }
+    "legal-association-description": "Confermando l’associazione, per le notifiche inviate da <strong>{{senderName}}</strong> il tuo recapito a valore legale di riferimento sarà <strong>{{newAddress}}</strong> invece che <strong>{{oldAddress}}</strong>."
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",

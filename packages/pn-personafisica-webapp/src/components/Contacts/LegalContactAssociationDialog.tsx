@@ -1,19 +1,23 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { Button, DialogContentText, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 type Props = {
   open: boolean;
-  dialogContentText: React.ReactNode;
+  senderName: string;
+  newAddressValue: string;
+  oldAddressValue: string;
   handleClose: () => void;
   handleConfirm: () => void;
 };
 
 const LegalContactAssociationDialog: React.FC<Props> = ({
   open = false,
-  dialogContentText,
+  senderName,
+  newAddressValue,
+  oldAddressValue,
   handleClose,
   handleConfirm,
 }) => {
@@ -31,7 +35,15 @@ const LegalContactAssociationDialog: React.FC<Props> = ({
       </DialogTitle>
       <PnDialogContent>
         <DialogContentText id="dialog-description" color="textPrimary">
-          {dialogContentText}
+          <Trans
+            ns="recapiti"
+            i18nKey="special-contacts.legal-association-description"
+            values={{
+              senderName,
+              newAddress: newAddressValue,
+              oldAddress: oldAddressValue,
+            }}
+          />
         </DialogContentText>
       </PnDialogContent>
       <PnDialogActions>

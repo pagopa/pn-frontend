@@ -75,7 +75,6 @@ describe('SpecialContactItem Component', () => {
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
         handleCreateNewAssociation={createNewAssociationHandler}
-        showAddButton={vi.fn(() => false)}
       />
     );
 
@@ -117,7 +116,6 @@ describe('SpecialContactItem Component', () => {
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
         handleCreateNewAssociation={createNewAssociationHandler}
-        showAddButton={vi.fn(() => false)}
       />
     );
 
@@ -144,7 +142,6 @@ describe('SpecialContactItem Component', () => {
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
         handleCreateNewAssociation={createNewAssociationHandler}
-        showAddButton={vi.fn(() => false)}
       />
     );
 
@@ -165,7 +162,6 @@ describe('SpecialContactItem Component', () => {
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
         handleCreateNewAssociation={createNewAssociationHandler}
-        showAddButton={vi.fn(() => false)}
       />
     );
 
@@ -177,7 +173,10 @@ describe('SpecialContactItem Component', () => {
     await waitFor(() => expect(deleteHandler).toHaveBeenCalledTimes(1));
   });
 
-  it('should render add button if showAddButton returns true and call createNewAssociationHandler when is clicked', () => {
+  it('should render add button and call createNewAssociationHandler when is clicked', () => {
+    const defaultPecAddress = { ...pecAddress, senderId: 'default' };
+    const defaultEmailAddress = { ...emailAddress, senderId: 'default' };
+    const deafultPhoneAddress = { ...phoneAddress, senderId: 'default' };
     const { container } = render(
       <SpecialContactItem
         addresses={[pecAddress, emailAddress]}
@@ -185,8 +184,14 @@ describe('SpecialContactItem Component', () => {
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
         handleCreateNewAssociation={createNewAssociationHandler}
-        showAddButton={vi.fn(() => true)}
-      />
+      />,
+      {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: [defaultPecAddress, defaultEmailAddress, deafultPhoneAddress],
+          },
+        },
+      }
     );
 
     const addMoreSpecialContacts = container.querySelector(
@@ -205,7 +210,6 @@ describe('SpecialContactItem Component', () => {
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
         handleCreateNewAssociation={createNewAssociationHandler}
-        showAddButton={vi.fn(() => false)}
       />
     );
 

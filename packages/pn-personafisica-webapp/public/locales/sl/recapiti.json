@@ -72,9 +72,6 @@
     "pec": "PEC",
     "sms": "Mobilni telefon",
     "email": "Naslov elektronske pošte",
-    "pec-already-exists": "Ta organizacija je že povezana s potrjenim e-poštnim naslovom. Če pritisnete \"Nadaljuj\", ga bo nadomestil tisti, ki ste ga pravkar navedli.",
-    "sms-already-exists": "Ta organizacija je že povezana z mobilno številko. Če pritisnete \"Nadaljuj\", ga bo nadomestila tista, ki ste jo pravkar navedli.",
-    "email-already-exists": "Ta organizacija je že povezana z e-poštnim naslovom. Če pritisnete \"Nadaljuj\", ga bo nadomestil tisti, ki ste ga pravkar navedli.",
     "fetch-party-error": "Podatkov, potrebnih za ustvarjanje novega kontaktnega podatka, ni bilo mogoče pridobiti."
   },
   "common": {

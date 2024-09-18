@@ -30,11 +30,12 @@ import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import {
+  DISABLED_REASON,
   emailValidationSchema,
   internationalPhonePrefix,
   pecValidationSchema,
   phoneValidationSchema,
-  specialContactsAddressTypes,
+  specialContactsAvailableAddressTypes,
 } from '../../utility/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 
@@ -67,7 +68,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
 
-  const addressTypes = specialContactsAddressTypes(t, addressesData, sender);
+  const addressTypes = specialContactsAvailableAddressTypes(addressesData, sender);
 
   const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     await formik.setFieldValue('s_value', '');
@@ -145,7 +146,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     },
     channelType: value
       ? channelType
-      : addressTypes.filter((a) => !a.disabled)[0]?.id ?? ChannelType.PEC,
+      : (addressTypes.filter((a) => !a.disabled)[0]?.id ?? ChannelType.PEC),
     s_value: channelType === ChannelType.SMS ? value.replace(internationalPhonePrefix, '') : value,
   };
 
@@ -228,6 +229,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
               size="small"
               disabled={!!value}
               sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
+              label={t('special-contacts.select-address', { ns: 'recapiti' })}
             >
               {addressTypes
                 .filter((a) => a.shown)
@@ -239,8 +241,8 @@ const AddSpecialContactDialog: React.FC<Props> = ({
                     disabled={a.disabled}
                     sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
                   >
-                    {a.value}
-                    {a.showMessage && (
+                    {t(`special-contacts.${a.id.toLowerCase()}`, { ns: 'recapiti' })}
+                    {a.disabledReason === DISABLED_REASON.NO_DEFAULT && (
                       <Typography fontSize="14px">
                         {t('special-contacts.no-default-address', { ns: 'recapiti' })}
                       </Typography>

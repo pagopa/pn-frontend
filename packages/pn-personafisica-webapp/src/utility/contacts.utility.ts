@@ -6,22 +6,7 @@ import { dataRegex } from '@pagopa-pn/pn-commons';
 import { ChannelType, DigitalAddress, Sender } from '../models/contacts';
 import { SelectedAddresses } from '../redux/contact/reducers';
 
-type AddressTypeItem = {
-  id: ChannelType;
-  value: string;
-  shown: boolean;
-  disabled: boolean;
-  showMessage: boolean;
-};
-
 export const internationalPhonePrefix = '+39';
-
-export const allowedAddressTypes = [
-  ChannelType.EMAIL,
-  ChannelType.SMS,
-  ChannelType.PEC,
-  ChannelType.SERCQ,
-];
 
 export function countContactsByType(contacts: Array<DigitalAddress>, type: ChannelType) {
   return contacts.reduce((total, contact) => (contact.channelType === type ? total + 1 : total), 0);
@@ -63,67 +48,118 @@ export const phoneValidationSchema = (t: TFunction, withPrefix = false) =>
       t('courtesy-contacts.valid-sms', { ns: 'recapiti' })
     );
 
+export enum DISABLED_REASON {
+  NONE = 'NONE',
+  NO_DEFAULT = 'NO_DEFAULT',
+  ALREADY_ADDED = 'ALREADY_ADDED',
+}
+
+type AddressTypeItem = {
+  id: ChannelType;
+  shown: boolean;
+  disabled: boolean;
+  disabledReason: DISABLED_REASON;
+};
+
+type AllowedAddressTypeForSpecialContact = {
+  channelType: ChannelType;
+  disabledDependsOn: Array<ChannelType>;
+  shownDependsOn: Array<ChannelType>;
+};
+
+const allowedAddressTypesForSpecialContacts: Array<AllowedAddressTypeForSpecialContact> = [
+  {
+    channelType: ChannelType.EMAIL,
+    disabledDependsOn: [ChannelType.EMAIL],
+    shownDependsOn: [],
+  },
+  {
+    channelType: ChannelType.SMS,
+    disabledDependsOn: [ChannelType.SMS],
+    shownDependsOn: [],
+  },
+  {
+    channelType: ChannelType.PEC,
+    disabledDependsOn: [],
+    shownDependsOn: [ChannelType.PEC, ChannelType.SERCQ],
+  },
+  {
+    channelType: ChannelType.SERCQ,
+    disabledDependsOn: [],
+    shownDependsOn: [ChannelType.PEC],
+  },
+];
+
 const isDropdownItemDisabled = (
-  channelType: ChannelType,
-  hasDefaultAddress: boolean,
-  defaultSERCQAddress: DigitalAddress | undefined,
-  senderHasAlreadyAddress: boolean
-): boolean => {
-  if (defaultSERCQAddress && channelType === ChannelType.PEC) {
-    return false;
+  allowedAddress: AllowedAddressTypeForSpecialContact,
+  addresses: SelectedAddresses,
+  sender: Sender
+): { status: boolean; reason: DISABLED_REASON } => {
+  // the address is disabled if it hasn't one of the default addresses listed into disabledDependsOn property
+  // or there is an address with the same sender, already added
+  if (allowedAddress.disabledDependsOn.length === 0) {
+    return { status: false, reason: DISABLED_REASON.NONE };
   }
 
-  return (channelType !== ChannelType.SERCQ && !hasDefaultAddress) || !senderHasAlreadyAddress;
+  const senderHasAlreadyAddress =
+    addresses[`special${allowedAddress.channelType}Addresses`].findIndex(
+      (a) => a.senderId === sender.senderId
+    ) > -1;
+  if (senderHasAlreadyAddress) {
+    return { status: true, reason: DISABLED_REASON.ALREADY_ADDED };
+  }
+
+  const disabled = { status: true, reason: DISABLED_REASON.NO_DEFAULT };
+
+  for (const dependency of allowedAddress.disabledDependsOn) {
+    // eslint-disable-next-line functional/immutable-data
+    disabled.status = !addresses[`default${dependency}Address`];
+    // exit from loop if at least one default address exists
+    if (!disabled.status) {
+      // eslint-disable-next-line functional/immutable-data
+      disabled.reason = DISABLED_REASON.NONE;
+      break;
+    }
+  }
+
+  return disabled;
 };
 
 const isDropdownItemShown = (
-  channelType: ChannelType,
-  defaultSERCQAddress: DigitalAddress | undefined,
-  defaultPECAddress: DigitalAddress | undefined
+  allowedAddress: AllowedAddressTypeForSpecialContact,
+  addresses: SelectedAddresses
 ): boolean => {
-  if (defaultSERCQAddress && channelType === ChannelType.SERCQ) {
-    return false;
+  // the address is shown if it has one of the default addresses listed into shownDependsOn property
+  if (allowedAddress.shownDependsOn.length === 0) {
+    return true;
+  }
+  // eslint-disable-next-line functional/no-let
+  let show = false;
+
+  for (const dependency of allowedAddress.shownDependsOn) {
+    show = !!addresses[`default${dependency}Address`];
+    // exit from loop if at least one default address exists
+    if (show) {
+      break;
+    }
   }
 
-  if (
-    !defaultPECAddress &&
-    !defaultSERCQAddress &&
-    (channelType === ChannelType.PEC || channelType === ChannelType.SERCQ)
-  ) {
-    return false;
-  }
-
-  return true;
+  return show;
 };
 
-export const specialContactsAddressTypes = (
-  t: TFunction,
+export const specialContactsAvailableAddressTypes = (
   addressesData: SelectedAddresses,
   sender: Sender
-): Array<AddressTypeItem> => {
-  const { defaultPECAddress, defaultSERCQAddress, specialAddresses } = addressesData;
+): Array<AddressTypeItem> =>
+  allowedAddressTypesForSpecialContacts.map((allowedAddressType) => {
+    const isDisabled = isDropdownItemDisabled(allowedAddressType, addressesData, sender);
 
-  return allowedAddressTypes.map((addressType) => {
-    const senderHasAlreadyAddress =
-      specialAddresses.findIndex(
-        (a) => a.senderId === sender.senderId && a.channelType === addressType
-      ) === -1;
-
-    const isDisabled = isDropdownItemDisabled(
-      addressType,
-      !!addressesData[`default${addressType}Address`],
-      defaultSERCQAddress,
-      senderHasAlreadyAddress
-    );
-
-    const isShown = isDropdownItemShown(addressType, defaultSERCQAddress, defaultPECAddress);
+    const isShown = isDropdownItemShown(allowedAddressType, addressesData);
 
     return {
-      id: addressType,
-      value: t(`special-contacts.${addressType.toLowerCase()}`, { ns: 'recapiti' }),
+      id: allowedAddressType.channelType,
       shown: isShown,
-      disabled: isDisabled,
-      showMessage: senderHasAlreadyAddress && isDisabled,
+      disabled: isDisabled.status,
+      disabledReason: isDisabled.reason,
     };
   });
-};
