@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { Box, Stack, Typography } from '@mui/material';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, DigitalAddress, Sender } from '../../models/contacts';
@@ -56,6 +57,7 @@ const SpecialContactItem: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const addressData = useAppSelector(contactsSelectors.selectAddresses);
+  const isMobile = useIsMobile();
 
   const showAddButton = (sender: Sender) => {
     const filteredAddresses = specialContactsAvailableAddressTypes(addressData, sender);
@@ -149,39 +151,29 @@ const SpecialContactItem: React.FC<Props> = ({
       mb={{ xs: 2, lg: 0.5 }}
       mt={{ xs: 2, lg: '43px' }}
     >
-      <Stack direction="row" justifyContent="space-between" alignItems="start">
-        <Stack spacing={1} width={{ xs: 'auto', lg: '224px' }}>
-          <Typography
-            variant="caption"
-            fontWeight={600}
-            lineHeight="18px"
-            sx={{ display: { xs: 'block', lg: 'none' } }}
-          >
+      <Box sx={{ flexBasis: { xs: 'auto', lg: '224px' } }}>
+        {isMobile && (
+          <Typography variant="caption" fontWeight={600} lineHeight="18px" display="block" mb={1}>
             {t('special-contacts.sender', { ns: 'recapiti' })}
           </Typography>
-
-          <Typography variant="caption" fontWeight={600}>
-            {addresses[0].senderName}
-          </Typography>
-        </Stack>
-      </Stack>
-
-      <Stack spacing={1} width="100%">
-        <Typography
-          variant="caption"
-          fontWeight={600}
-          sx={{ display: { xs: 'block', lg: 'none' }, mb: 1 }}
-        >
-          {t('special-contacts.contacts', { ns: 'recapiti' })}
+        )}
+        <Typography variant="caption" fontWeight={600}>
+          {addresses[0].senderName}
         </Typography>
-
-        <Stack direction={{ xs: 'column', lg: 'row' }} justifyContent="space-between">
-          <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
-            {addresses.map((address) => renderAddress(address))}
-          </Stack>
-          <Box>{shouldShowAddButton && <AddMoreButton onClick={handleClickAddButton} />}</Box>
-        </Stack>
-      </Stack>
+      </Box>
+      <Box sx={{ flexBasis: { xs: 'auto', lg: '224px' } }}>
+        {isMobile && (
+          <Typography variant="caption" fontWeight={600} mb={1}>
+            {t('special-contacts.contacts', { ns: 'recapiti' })}
+          </Typography>
+        )}
+        {addresses.map((address) => renderAddress(address))}
+      </Box>
+      {shouldShowAddButton && (
+        <Box sx={{ flexGrow: 1, textAlign: { xs: 'left', lg: 'right' } }}>
+          <AddMoreButton onClick={handleClickAddButton} />
+        </Box>
+      )}
     </Stack>
   );
 };
