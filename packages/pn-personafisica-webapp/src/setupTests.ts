@@ -29,6 +29,9 @@ beforeAll(() => {
     DELEGATIONS_TO_PG_ENABLED: true,
     LANDING_SITE_URL: 'https://www.dev.notifichedigitali.it',
     PAGOPA_HELP_PP: 'https://www.fake-page.it',
+    APP_IO_SITE: 'https://www.fake.appio.it',
+    APP_IO_ANDROID: 'https://www.fake.android-appio.it',
+    APP_IO_IOS: 'https://www.fake.ios-appio.it',
   });
   initStore(false);
   initAxiosClients();

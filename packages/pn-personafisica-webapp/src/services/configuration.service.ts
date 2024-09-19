@@ -20,6 +20,9 @@ interface PfConfigurationFromFile {
   WORK_IN_PROGRESS?: boolean;
   F24_DOWNLOAD_WAIT_TIME: number;
   PAGOPA_HELP_PP: string;
+  APP_IO_SITE: string;
+  APP_IO_ANDROID: string;
+  APP_IO_IOS: string;
 }
 
 interface PfConfiguration extends PfConfigurationFromFile {
@@ -55,6 +58,9 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
     this.ruleFor('WORK_IN_PROGRESS').isBoolean();
     this.ruleFor('F24_DOWNLOAD_WAIT_TIME').isNumber();
     this.ruleFor('PAGOPA_HELP_PP').isString();
+    this.ruleFor('APP_IO_SITE').isString();
+    this.ruleFor('APP_IO_ANDROID').isString();
+    this.ruleFor('APP_IO_IOS').isString();
   }
 
   makeRequired(rule: StringRuleValidator<PfConfigurationFromFile, string>): void {

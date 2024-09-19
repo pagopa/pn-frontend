@@ -11,6 +11,7 @@ import { IOAllowedValues } from '../../models/contacts';
 import { disableIOAddress, enableIOAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { getConfiguration } from '../../services/configuration.service';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import DigitalContactsCard from './DigitalContactsCard';
 
@@ -26,6 +27,7 @@ const IOContact: React.FC = () => {
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
   const { defaultAPPIOAddress: contact } = useAppSelector(contactsSelectors.selectAddresses);
+  const { APP_IO_SITE, APP_IO_ANDROID, APP_IO_IOS } = getConfiguration();
 
   const parseContact = () => {
     if (!contact) {
@@ -84,7 +86,17 @@ const IOContact: React.FC = () => {
     enableIO();
   };
 
-  const handleDownload = () => {};
+  const handleDownload = () => {
+    const androindPhone = /Android/i.test(navigator.userAgent);
+    const iosPhone = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (androindPhone && APP_IO_ANDROID) {
+      window.location.assign(APP_IO_ANDROID);
+    } else if (iosPhone && APP_IO_IOS) {
+      window.location.assign(APP_IO_IOS);
+    } else if (APP_IO_SITE) {
+      window.location.assign(APP_IO_SITE);
+    }
+  };
 
   const getContent = () => {
     if (status === IOContactStatus.UNAVAILABLE) {
