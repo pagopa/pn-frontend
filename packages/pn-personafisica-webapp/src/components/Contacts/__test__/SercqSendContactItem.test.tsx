@@ -77,7 +77,7 @@ describe('test SercqSendContactItem', () => {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
-    mock.onGet('/bff/v2/tos-privacy').reply(200, sercqSendTosPrivacyConsentMock(false, false));
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false, false));
     mock
       .onPut(
         '/bff/v2/tos-privacy',
@@ -137,7 +137,7 @@ describe('test SercqSendContactItem', () => {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
-    mock.onGet('/bff/v2/tos-privacy').reply(200, sercqSendTosPrivacyConsentMock(true, true));
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(true, true));
     // render component
     const { container, getByTestId, getByText } = render(<SercqSendContactItem />);
     const activateButton = getByTestId('activateButton');
@@ -187,7 +187,7 @@ describe('test SercqSendContactItem', () => {
         verificationCode: '01234',
       })
       .reply(204);
-    mock.onGet('/bff/v2/tos-privacy').reply(200, sercqSendTosPrivacyConsentMock(true, true));
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(true, true));
     // render component
     const result = render(<SercqSendContactItem />);
     const activateButton = result.getByTestId('activateButton');
@@ -256,7 +256,7 @@ describe('test SercqSendContactItem', () => {
         verificationCode: '00000',
       })
       .reply(204);
-    mock.onGet('/bff/v2/tos-privacy').reply(200, sercqSendTosPrivacyConsentMock(true, true));
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(true, true));
     // render component
     const result = render(<SercqSendContactItem />, {
       preloadedState: {

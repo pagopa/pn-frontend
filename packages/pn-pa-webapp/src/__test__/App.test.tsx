@@ -94,7 +94,7 @@ describe('App', async () => {
   });
 
   it('render component - user logged in', async () => {
-    mock.onGet('/bff/v2/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/v1/institutions').reply(200, institutionsDTO);
     mock.onGet('/bff/v1/institutions/products').reply(200, productsDTO);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
@@ -112,7 +112,7 @@ describe('App', async () => {
   });
 
   it('Sidemenu not included if error in API call to fetch TOS and Privacy', async () => {
-    mock.onGet('/bff/v2/tos-privacy').reply(500);
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(500);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/institutions').reply(200, institutionsDTO);
     mock.onGet('/bff/v1/institutions/products').reply(200, productsDTO);
@@ -126,7 +126,7 @@ describe('App', async () => {
   });
 
   it('Sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
-    mock.onGet('/bff/v2/tos-privacy').reply(200, tosPrivacyConsentMock(false, false));
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(false, false));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/institutions').reply(200, institutionsDTO);
     mock.onGet('/bff/v1/institutions/products').reply(200, productsDTO);
