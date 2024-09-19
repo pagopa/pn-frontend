@@ -106,7 +106,7 @@ const Contacts = () => {
           </Stack>
           {showSpecialContactsSection && (
             <>
-              <Divider sx={{ backgroundColor: 'white', color: 'text.secondary', mt: 6, mb: 4 }} />
+              <Divider sx={{ backgroundColor: 'white', color: 'text.disabled', mt: 6, mb: 4 }} />
               <SpecialContacts />
             </>
           )}

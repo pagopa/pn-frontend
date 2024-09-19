@@ -216,7 +216,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
           <Typography variant="body1" mb={2}>
             {t(`special-contacts.contact-to-add-description`, { ns: 'recapiti' })}
           </Typography>
-          <Typography variant="caption-semibold" mb={2} display="block">
+          <Typography variant="caption-semibold" mb={1} display="block">
             {t(`special-contacts.contact-to-add`, { ns: 'recapiti' })}
           </Typography>
           <CustomDropdown
@@ -271,7 +271,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
               sx={{ mb: 2 }}
             />
           )}
-          <Typography variant="caption-semibold" mb={2}>
+          <Typography variant="caption-semibold" mb={1} display="block">
             {t(`special-contacts.sender`, { ns: 'recapiti' })}
           </Typography>
           <ApiErrorWrapper
