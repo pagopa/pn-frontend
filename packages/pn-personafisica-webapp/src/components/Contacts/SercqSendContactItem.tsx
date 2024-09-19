@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
-import { Box, Button, Chip, Stack, Typography } from '@mui/material';
+import { Box, Button, Chip, Divider, Stack, Typography } from '@mui/material';
 import { appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -20,6 +20,7 @@ import { internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
+import PecDisableSercqDialog from './PecDisableSercqDialog';
 import SercqSendCourtesyDialog from './SercqSendCourtesyDialog';
 import SercqSendInfoDialog from './SercqSendInfoDialog';
 
@@ -33,6 +34,7 @@ enum ModalType {
   COURTESY = 'courtesy',
   CODE = 'code',
   DELETE = 'delete',
+  ADD_PEC = 'add_pec',
 }
 
 const SercqSendCardTitle: React.FC = () => {
@@ -62,7 +64,6 @@ const SercqSendCardTitle: React.FC = () => {
 
 const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderName }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const isMobile = useIsMobile();
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
   const { defaultSERCQAddress, defaultAPPIOAddress, courtesyAddresses } = useAppSelector(
@@ -181,10 +182,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
       }
       subtitle={t('legal-contacts.sercq-send-description', { ns: 'recapiti' })}
     >
-      <Box
-        data-testid={`${senderId}_sercqSendContact`}
-        style={{ width: isMobile ? '100%' : '50%' }}
-      >
+      <Box data-testid={`${senderId}_sercqSendContact`}>
         {!value && (
           <Button
             variant="contained"
@@ -195,21 +193,43 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
           </Button>
         )}
         {value && (
-          <Stack direction="row" spacing={2}>
-            <VerifiedIcon
-              fontSize="small"
-              color="success"
-              sx={{ position: 'relative', top: '2px' }}
-            />
-            <Box>
-              <Typography data-testid="IO status" fontWeight={600}>
-                {t('legal-contacts.sercq-send-enabled', { ns: 'recapiti' })}
+          <Box>
+            <Stack direction="row" spacing={2}>
+              <VerifiedIcon
+                fontSize="small"
+                color="success"
+                sx={{ position: 'relative', top: '2px' }}
+              />
+              <Box>
+                <Typography data-testid="IO status" fontWeight={600}>
+                  {t('legal-contacts.sercq-send-enabled', { ns: 'recapiti' })}
+                </Typography>
+                <ButtonNaked onClick={() => setModalOpen({ type: ModalType.DELETE })} color="error">
+                  {t('button.disable')}
+                </ButtonNaked>
+              </Box>
+            </Stack>
+
+            <Divider sx={{ color: 'text.secondary', mt: 4, mb: 2 }} />
+
+            <Stack alignItems="baseline" direction="row" spacing={0.5}>
+              <Typography variant="body2" color="textSecondary">
+                {t(`legal-contacts.sercq-add-pec`, { ns: 'recapiti' })}
               </Typography>
-              <ButtonNaked onClick={() => setModalOpen({ type: ModalType.DELETE })} color="error">
-                {t('button.disable')}
+              <ButtonNaked
+                onClick={() =>
+                  setModalOpen({ type: ModalType.ADD_PEC, data: { value: '', senders: [] } })
+                }
+                color="primary"
+                size="small"
+                p={{ xs: '0.5rem 0', sm: 1 }}
+                data-testid="addMoreButton"
+                sx={{ fontSize: '1rem' }}
+              >
+                {t(`legal-contacts.insert-pec`, { ns: 'recapiti' })}
               </ButtonNaked>
-            </Box>
-          </Stack>
+            </Stack>
+          </Box>
         )}
       </Box>
       <SercqSendInfoDialog
@@ -240,6 +260,10 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
         removeButtonLabel={t(`legal-contacts.remove-sercq-send-button`, { ns: 'recapiti' })}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
+      />
+      <PecDisableSercqDialog
+        open={modalOpen?.type === ModalType.ADD_PEC}
+        handleClose={() => setModalOpen(null)}
       />
     </DigitalContactsCard>
   );
