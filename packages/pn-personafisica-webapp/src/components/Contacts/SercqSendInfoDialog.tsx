@@ -10,13 +10,12 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
+import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
+
 import {
-  PRIVACY_LINK_RELATIVE_PATH,
-  PnDialog,
-  PnDialogActions,
-  PnDialogContent,
-  TOS_LINK_RELATIVE_PATH,
-} from '@pagopa-pn/pn-commons';
+  PRIVACY_POLICY_SERCQ_SEND,
+  TERMS_OF_SERVICE_SERCQ_SEND,
+} from '../../navigation/routes.const';
 
 type Props = {
   open: boolean;
@@ -24,8 +23,8 @@ type Props = {
   onConfirm: () => void;
 };
 
-const redirectPrivacyLink = () => window.open(`${PRIVACY_LINK_RELATIVE_PATH}`, '_blank');
-const redirectToSLink = () => window.open(`${TOS_LINK_RELATIVE_PATH}`, '_blank');
+const redirectPrivacyLink = () => window.open(`${PRIVACY_POLICY_SERCQ_SEND}`, '_blank');
+const redirectToSLink = () => window.open(`${TERMS_OF_SERVICE_SERCQ_SEND}`, '_blank');
 
 const SercqSendInfoDialog: React.FC<Props> = ({ open = false, onDiscard, onConfirm }) => {
   const { t } = useTranslation();

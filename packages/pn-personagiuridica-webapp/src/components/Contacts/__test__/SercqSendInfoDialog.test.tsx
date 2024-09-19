@@ -1,10 +1,13 @@
 import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
-import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from '@pagopa-pn/pn-commons';
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render, screen, within } from '../../../__test__/test-utils';
+import {
+  PRIVACY_POLICY_SERCQ_SEND,
+  TERMS_OF_SERVICE_SERCQ_SEND,
+} from '../../../navigation/routes.const';
 import SercqSendInfoDialog from '../SercqSendInfoDialog';
 
 vi.mock('react-i18next', () => ({
@@ -67,11 +70,11 @@ describe('test SercqSendInfoDialog', () => {
     const tosLink = screen.getByTestId('tos-link');
     fireEvent.click(tosLink);
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(TOS_LINK_RELATIVE_PATH, '_blank');
+    expect(mockOpenFn).toHaveBeenCalledWith(TERMS_OF_SERVICE_SERCQ_SEND, '_blank');
     const privacyLink = screen.getByTestId('privacy-link');
     fireEvent.click(privacyLink);
     expect(mockOpenFn).toHaveBeenCalledTimes(2);
-    expect(mockOpenFn).toHaveBeenCalledWith(PRIVACY_LINK_RELATIVE_PATH, '_blank');
+    expect(mockOpenFn).toHaveBeenCalledWith(PRIVACY_POLICY_SERCQ_SEND, '_blank');
   });
 
   it('click on buttons', () => {

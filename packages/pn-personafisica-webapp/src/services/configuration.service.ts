@@ -10,6 +10,9 @@ interface PfConfigurationFromFile {
   ONE_TRUST_PARTICIPATING_ENTITIES?: string;
   ONE_TRUST_PP?: string;
   ONE_TRUST_TOS?: string;
+  ONE_TRUST_SERCQ_SEND_DRAFT_MODE?: boolean;
+  ONE_TRUST_PP_SERCQ_SEND?: string;
+  ONE_TRUST_TOS_SERCQ_SEND?: string;
   OT_DOMAIN_ID?: string;
   PAGOPA_HELP_EMAIL: string;
   PAYMENT_DISCLAIMER_URL?: string;
@@ -33,6 +36,9 @@ interface PfConfiguration extends PfConfigurationFromFile {
   ONE_TRUST_PARTICIPATING_ENTITIES: string;
   ONE_TRUST_PP: string;
   ONE_TRUST_TOS: string;
+  ONE_TRUST_SERCQ_SEND_DRAFT_MODE: boolean;
+  ONE_TRUST_PP_SERCQ_SEND: string;
+  ONE_TRUST_TOS_SERCQ_SEND: string;
   OT_DOMAIN_ID: string;
   PAYMENT_DISCLAIMER_URL: string;
   VERSION: string;
@@ -52,6 +58,9 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
       .isString()
       .matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_TOS_SERCQ_SEND').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_PP_SERCQ_SEND').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_SERCQ_SEND_DRAFT_MODE').isBoolean();
     this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.makeRequired(this.ruleFor('LANDING_SITE_URL').isString());
     this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();
@@ -80,6 +89,9 @@ export function getConfiguration(): PfConfiguration {
     ONE_TRUST_PARTICIPATING_ENTITIES: configurationFromFile.ONE_TRUST_PARTICIPATING_ENTITIES || '',
     ONE_TRUST_PP: configurationFromFile.ONE_TRUST_PP || '',
     ONE_TRUST_TOS: configurationFromFile.ONE_TRUST_TOS || '',
+    ONE_TRUST_PP_SERCQ_SEND: configurationFromFile.ONE_TRUST_PP_SERCQ_SEND || '',
+    ONE_TRUST_TOS_SERCQ_SEND: configurationFromFile.ONE_TRUST_TOS_SERCQ_SEND || '',
+    ONE_TRUST_SERCQ_SEND_DRAFT_MODE: Boolean(configurationFromFile.ONE_TRUST_SERCQ_SEND_DRAFT_MODE),
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID || '',
     PAYMENT_DISCLAIMER_URL: configurationFromFile.PAYMENT_DISCLAIMER_URL || '',
     IS_DEVELOP,
