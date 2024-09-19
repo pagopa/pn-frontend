@@ -34,7 +34,7 @@ const channelTypesItems = [
   { label: 'special-contacts.email', value: ChannelType.EMAIL },
   { label: 'special-contacts.sms', value: ChannelType.SMS },
   { label: 'special-contacts.pec', value: ChannelType.PEC },
-  { label: 'special-contacts.sercq', value: ChannelType.SERCQ },
+  { label: 'special-contacts.sercq_send', value: ChannelType.SERCQ_SEND },
 ];
 
 describe('SpecialContacts Component', async () => {

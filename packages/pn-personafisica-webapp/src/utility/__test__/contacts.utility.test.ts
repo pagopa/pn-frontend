@@ -6,9 +6,9 @@ import {
 import { ChannelType, DigitalAddress } from '../../models/contacts';
 import { SelectedAddresses } from '../../redux/contact/reducers';
 import {
+  DISABLED_REASON,
   contactAlreadyExists,
   countContactsByType,
-  DISABLED_REASON,
   specialContactsAvailableAddressTypes,
 } from '../contacts.utility';
 
@@ -92,7 +92,7 @@ describe('Contacts utility test', () => {
       {
         disabled: false,
         disabledReason: DISABLED_REASON.NONE,
-        id: ChannelType.SERCQ,
+        id: ChannelType.SERCQ_SEND,
         shown: false,
       },
     ]);
@@ -139,7 +139,7 @@ describe('Contacts utility test', () => {
       {
         disabled: false,
         disabledReason: DISABLED_REASON.NONE,
-        id: ChannelType.SERCQ,
+        id: ChannelType.SERCQ_SEND,
         shown: true,
       },
     ]);
@@ -150,7 +150,7 @@ describe('Contacts utility test', () => {
       (addr) => addr.channelType === ChannelType.SMS && addr.senderId === 'default'
     )!;
     const defaultSERCQAddress = digitalAddressesSercq.find(
-      (addr) => addr.channelType === ChannelType.SERCQ && addr.senderId === 'default'
+      (addr) => addr.channelType === ChannelType.SERCQ_SEND && addr.senderId === 'default'
     )!;
     const result = specialContactsAvailableAddressTypes(
       {
@@ -186,7 +186,7 @@ describe('Contacts utility test', () => {
       {
         disabled: false,
         disabledReason: DISABLED_REASON.NONE,
-        id: ChannelType.SERCQ,
+        id: ChannelType.SERCQ_SEND,
         shown: false,
       },
     ]);
@@ -232,7 +232,7 @@ describe('Contacts utility test', () => {
       {
         disabled: false,
         disabledReason: DISABLED_REASON.NONE,
-        id: ChannelType.SERCQ,
+        id: ChannelType.SERCQ_SEND,
         shown: false,
       },
     ]);

@@ -134,7 +134,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
         then: phoneValidationSchema(t),
       })
       .when('channelType', {
-        is: ChannelType.SERCQ,
+        is: ChannelType.SERCQ_SEND,
         then: yup.string().nullable(),
       }),
   });
@@ -158,7 +158,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     onSubmit: (values) => {
       // eslint-disable-next-line functional/no-let
       let addressType = AddressType.COURTESY;
-      if (values.channelType === ChannelType.PEC || values.channelType === ChannelType.SERCQ) {
+      if (values.channelType === ChannelType.PEC || values.channelType === ChannelType.SERCQ_SEND) {
         addressType = AddressType.LEGAL;
       }
 
@@ -250,7 +250,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
                   </MenuItem>
                 ))}
             </CustomDropdown>
-            {formik.values.channelType !== ChannelType.SERCQ && (
+            {formik.values.channelType !== ChannelType.SERCQ_SEND && (
               <TextField
                 size="small"
                 fullWidth

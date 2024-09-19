@@ -93,7 +93,7 @@
     "pec": "Indirizzo PEC",
     "sms": "Cellulare",
     "email": "Indirizzo email",
-    "sercq": "Domicilio Digitale SEND",
+    "sercq_send": "Domicilio Digitale SEND",
     "link-email-label": "La tua email",
     "link-pec-label": "La tua PEC",
     "link-sms-label": "Il tuo numero",

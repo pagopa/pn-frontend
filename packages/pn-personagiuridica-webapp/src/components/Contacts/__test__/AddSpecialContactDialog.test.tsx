@@ -254,7 +254,7 @@ describe('test AddSpecialContactDialog', () => {
         { value: ChannelType.EMAIL, label: 'special-contacts.email' },
         { value: ChannelType.SMS, label: 'special-contacts.sms' },
         { value: ChannelType.PEC, label: 'special-contacts.pec' },
-        { value: ChannelType.SERCQ, label: 'special-contacts.sercq' },
+        { value: ChannelType.SERCQ_SEND, label: 'special-contacts.sercq_send' },
       ],
       0
     );
@@ -278,7 +278,7 @@ describe('test AddSpecialContactDialog', () => {
       (a) =>
         a.senderId === 'default' &&
         a.channelType !== ChannelType.PEC &&
-        a.channelType !== ChannelType.SERCQ
+        a.channelType !== ChannelType.SERCQ_SEND
     );
     render(
       <AddSpecialContactDialog
@@ -334,7 +334,7 @@ describe('test AddSpecialContactDialog', () => {
         { value: ChannelType.EMAIL, label: 'special-contacts.email' },
         { value: ChannelType.SMS, label: 'special-contacts.sms' },
         { value: ChannelType.PEC, label: 'special-contacts.pec' },
-        { value: ChannelType.SERCQ, label: 'special-contacts.sercq' },
+        { value: ChannelType.SERCQ_SEND, label: 'special-contacts.sercq_send' },
       ],
       0
     );
