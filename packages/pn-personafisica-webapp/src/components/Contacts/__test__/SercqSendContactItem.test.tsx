@@ -4,12 +4,14 @@ import { vi } from 'vitest';
 import { ConsentType } from '@pagopa-pn/pn-commons';
 import { getById, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { internationalPhonePrefix } from '../../../../../pn-personagiuridica-webapp/src/utility/contacts.utility';
 import {
   acceptTosPrivacyConsentBodyMock,
   sercqSendTosPrivacyConsentMock,
 } from '../../../__mocks__/Consents.mock';
-import { digitalCourtesyAddresses, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
+import {
+  digitalCourtesyAddresses,
+  digitalLegalAddressesSercq,
+} from '../../../__mocks__/Contacts.mock';
 import {
   fireEvent,
   render,
@@ -25,6 +27,7 @@ import {
   IOAllowedValues,
   SERCQ_SEND_VALUE,
 } from '../../../models/contacts';
+import { internationalPhonePrefix } from '../../../utility/contacts.utility';
 import SercqSendContactItem from '../SercqSendContactItem';
 import { fillCodeDialog } from './test-utils';
 
@@ -39,7 +42,7 @@ vi.mock('react-i18next', () => ({
 
 describe('test SercqSendContactItem', () => {
   let mock: MockAdapter;
-  const defaultAddress = digitalLegalAddresses.find(
+  const defaultAddress = digitalLegalAddressesSercq.find(
     (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SERCQ_SEND
   );
 

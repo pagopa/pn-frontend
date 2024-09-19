@@ -24,7 +24,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 const lastDate = new Date();
-lastDate.setDate(lastDate.getDate() - 10);
+lastDate.setDate(lastDate.getDate() - 5);
 
 const defaultValues: StatisticsFilter = {
   startDate: twelveMonthsAgo,

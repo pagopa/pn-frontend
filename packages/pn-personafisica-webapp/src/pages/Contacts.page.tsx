@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Box, Link, Stack } from '@mui/material';
+import { Box, Divider, Link, Stack } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
 import ContactsSummaryCards from '../components/Contacts/ContactsSummaryCards';
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import LegalContacts from '../components/Contacts/LegalContacts';
+import SpecialContacts from '../components/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
+import { ChannelType } from '../models/contacts';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { contactsSelectors, resetState } from '../redux/contact/reducers';
@@ -19,11 +21,13 @@ import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFact
 const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
-  const { addresses, defaultAPPIOAddress: contactIO } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const addressesData = useAppSelector(contactsSelectors.selectAddresses);
   const [pageReady, setPageReady] = useState(false);
   const { LANDING_SITE_URL } = getConfiguration();
+
+  const showSpecialContactsSection = Object.values(ChannelType)
+    .filter((a) => a !== ChannelType.IOMSG)
+    .some((address) => addressesData[`default${address}Address`]);
 
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses()).then(() => {
@@ -39,8 +43,8 @@ const Contacts = () => {
   useEffect(() => {
     if (pageReady) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_YOUR_CONTACT_DETAILS, {
-        digitalAddresses: addresses,
-        contactIO,
+        digitalAddresses: addressesData.addresses,
+        contactIO: addressesData.defaultAPPIOAddress,
       });
     }
   }, [pageReady]);
@@ -100,6 +104,12 @@ const Contacts = () => {
             <LegalContacts />
             <CourtesyContacts />
           </Stack>
+          {showSpecialContactsSection && (
+            <>
+              <Divider sx={{ backgroundColor: 'white', color: 'text.secondary', mt: 6, mb: 3 }} />
+              <SpecialContacts />
+            </>
+          )}
         </ApiErrorWrapper>
       </Box>
     </LoadingPageWrapper>

@@ -28,13 +28,6 @@ export const digitalAddresses: Array<DigitalAddress> = [
     codeValid: true,
   },
   {
-    addressType: AddressType.LEGAL,
-    senderId: 'default',
-    channelType: ChannelType.SERCQ_SEND,
-    value: SERCQ_SEND_VALUE,
-    codeValid: true,
-  },
-  {
     addressType: AddressType.COURTESY,
     senderId: 'comune-milano',
     senderName: 'Comune di Milano',
@@ -62,10 +55,27 @@ export const digitalAddresses: Array<DigitalAddress> = [
   },
 ];
 
+export const digitalAddressesSercq: Array<DigitalAddress> = [
+  ...digitalAddresses.filter(
+    (addr) => addr.channelType !== ChannelType.PEC || addr.senderId !== 'default'
+  ),
+  {
+    addressType: AddressType.LEGAL,
+    senderId: 'default',
+    channelType: ChannelType.SERCQ_SEND,
+    value: SERCQ_SEND_VALUE,
+    codeValid: true,
+  },
+];
+
 export const digitalCourtesyAddresses = digitalAddresses.filter(
   (addr) => addr.addressType === AddressType.COURTESY
 );
 
 export const digitalLegalAddresses = digitalAddresses.filter(
+  (addr) => addr.addressType === AddressType.LEGAL
+);
+
+export const digitalLegalAddressesSercq = digitalAddressesSercq.filter(
   (addr) => addr.addressType === AddressType.LEGAL
 );

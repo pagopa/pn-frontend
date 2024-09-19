@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DisclaimerModal, appStateActions } from '@pagopa-pn/pn-commons';
 
-import { AddressType, ChannelType, SaveDigitalAddressParams, Sender } from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -13,7 +13,6 @@ import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
 import ExistingContactDialog from './ExistingContactDialog';
-import SpecialDigitalContacts from './SpecialDigitalContacts';
 
 enum ModalType {
   EXISTING = 'existing',
@@ -34,26 +33,24 @@ const EmailContactItem: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   // currentAddress is needed to store what address we are creating/editing/removing
   // because this variable isn't been used to render, we can use useRef
-  const currentAddress = useRef<{ value: string; sender: Sender }>({
+  const currentAddress = useRef<{ value: string }>({
     value: '',
-    sender: { senderId: 'dafault' },
   });
   const dispatch = useAppDispatch();
 
   const currentValue = defaultEMAILAddress?.value ?? '';
-  const blockDelete =
-    specialEMAILAddresses.length > 0 && currentAddress.current.sender.senderId === 'default';
+  const blockDelete = specialEMAILAddresses.length > 0;
 
-  const handleSubmit = (value: string, sender: Sender = { senderId: 'default' }) => {
+  const handleSubmit = (value: string) => {
     // eslint-disable-next-line functional/immutable-data
-    currentAddress.current = { value, sender };
+    currentAddress.current = { value };
     // first check if contact already exists
-    if (contactAlreadyExists(addresses, value, sender.senderId, ChannelType.EMAIL)) {
+    if (contactAlreadyExists(addresses, value, 'default', ChannelType.EMAIL)) {
       setModalOpen(ModalType.EXISTING);
       return;
     }
     // disclaimer modal must be opened only when we are adding a default address
-    if (sender.senderId === 'default' && legalAddresses.length === 0) {
+    if (legalAddresses.length === 0) {
       setModalOpen(ModalType.DISCLAIMER);
       return;
     }
@@ -63,8 +60,7 @@ const EmailContactItem: React.FC = () => {
   const handleCodeVerification = (verificationCode?: string) => {
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
-      senderId: currentAddress.current.sender.senderId,
-      senderName: currentAddress.current.sender.senderName,
+      senderId: 'default',
       channelType: ChannelType.EMAIL,
       value: currentAddress.current.value,
       code: verificationCode,
@@ -91,7 +87,7 @@ const EmailContactItem: React.FC = () => {
           })
         );
         setModalOpen(null);
-        if (currentValue && currentAddress.current.sender.senderId === 'default') {
+        if (currentValue) {
           digitalContactRef.current.toggleEdit();
         }
       })
@@ -100,7 +96,7 @@ const EmailContactItem: React.FC = () => {
 
   const handleCancelCode = async () => {
     setModalOpen(null);
-    if (currentValue && currentAddress.current.sender.senderId === 'default') {
+    if (currentValue) {
       digitalContactRef.current.toggleEdit();
     }
     await digitalContactRef.current.resetForm();
@@ -111,7 +107,7 @@ const EmailContactItem: React.FC = () => {
     void dispatch(
       deleteAddress({
         addressType: AddressType.COURTESY,
-        senderId: currentAddress.current.sender.senderId,
+        senderId: 'default',
         channelType: ChannelType.EMAIL,
       })
     );
@@ -145,21 +141,9 @@ const EmailContactItem: React.FC = () => {
         onDelete={() => {
           setModalOpen(ModalType.DELETE);
           // eslint-disable-next-line functional/immutable-data
-          currentAddress.current = { value: currentValue, sender: { senderId: 'default' } };
+          currentAddress.current = { value: currentValue };
         }}
       />
-      {currentValue && (
-        <SpecialDigitalContacts
-          digitalAddresses={specialEMAILAddresses}
-          channelType={ChannelType.EMAIL}
-          onConfirm={(value: string, sender: Sender) => handleSubmit(value, sender)}
-          onDelete={(value, sender) => {
-            setModalOpen(ModalType.DELETE);
-            // eslint-disable-next-line functional/immutable-data
-            currentAddress.current = { value, sender };
-          }}
-        />
-      )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
         value={currentAddress.current.value}
