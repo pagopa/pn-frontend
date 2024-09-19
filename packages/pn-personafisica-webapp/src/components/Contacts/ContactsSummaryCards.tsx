@@ -93,7 +93,7 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
 };
 
 const ContactsSummaryCards: React.FC = () => {
-  const { legalAddresses, courtesyAddresses, defaultSERCQAddress } = useAppSelector(
+  const { legalAddresses, courtesyAddresses, defaultSERCQ_SENDAddress } = useAppSelector(
     contactsSelectors.selectAddresses
   );
 
@@ -102,7 +102,7 @@ const ContactsSummaryCards: React.FC = () => {
       <ContactsSummaryCard contacts={legalAddresses} addressType={AddressType.LEGAL} />
       <ContactsSummaryCard
         contacts={courtesyAddresses}
-        isSercQEnabled={!!defaultSERCQAddress}
+        isSercQEnabled={!!defaultSERCQ_SENDAddress}
         addressType={AddressType.COURTESY}
       />
     </Stack>

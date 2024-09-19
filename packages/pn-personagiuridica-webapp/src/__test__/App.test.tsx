@@ -101,7 +101,7 @@ describe('App', async () => {
   });
 
   it('render component - user logged in', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
@@ -120,7 +120,7 @@ describe('App', async () => {
   });
 
   it('sidemenu not included if error in API call to fetch TOS and privacy', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(500);
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(500);
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
@@ -135,7 +135,7 @@ describe('App', async () => {
   });
 
   it('sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(false, false));
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(false, false));
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
@@ -152,7 +152,7 @@ describe('App', async () => {
   });
 
   it('sidemenu items if user is admin', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
@@ -170,7 +170,7 @@ describe('App', async () => {
   });
 
   it('sidemenu items if user is a group admin', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
     let result: RenderResult;
@@ -198,7 +198,7 @@ describe('App', async () => {
   });
 
   it('sidemenu items if user is an operator', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     let result: RenderResult;
     await act(async () => {
@@ -233,7 +233,7 @@ describe('App', async () => {
   });
 
   it('sidemenu items if user is a group operator', async () => {
-    mock.onGet('/bff/v1/tos-privacy').reply(200, tosPrivacyConsentMock(true, true));
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     let result: RenderResult;
     await act(async () => {

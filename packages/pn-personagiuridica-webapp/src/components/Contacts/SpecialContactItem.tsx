@@ -81,7 +81,7 @@ const SpecialContactItem: React.FC<Props> = ({
     const { value, channelType, addressType, senderId, senderName, pecValid } = address;
     const isVerifyingPec = channelType === ChannelType.PEC && !pecValid;
 
-    const isSercq = channelType === ChannelType.SERCQ;
+    const isSercq = channelType === ChannelType.SERCQ_SEND;
 
     return (
       <Box key={address.value} sx={{ flexBasis: { xs: 'auto', lg: '224px' } }}>
@@ -104,7 +104,7 @@ const SpecialContactItem: React.FC<Props> = ({
                 variant="body2"
                 data-testid={`special_${channelType}-typography`}
               >
-                {isSercq ? t('special-contacts.sercq', { ns: 'recapiti' }) : value}
+                {isSercq ? t('special-contacts.sercq_send', { ns: 'recapiti' }) : value}
               </Typography>
               {!isSercq && (
                 <ButtonNaked

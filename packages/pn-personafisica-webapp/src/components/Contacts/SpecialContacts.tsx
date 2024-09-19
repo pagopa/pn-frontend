@@ -128,7 +128,7 @@ const SpecialContacts: React.FC = () => {
     if (currentAddress.current.channelType === ChannelType.SMS) {
       value = internationalPhonePrefix + value;
     }
-    if (currentAddress.current.channelType === ChannelType.SERCQ) {
+    if (currentAddress.current.channelType === ChannelType.SERCQ_SEND) {
       value = SERCQ_SEND_VALUE;
     }
 
@@ -368,7 +368,7 @@ const SpecialContacts: React.FC = () => {
         removeModalTitle={t(`special-contacts.remove-special-title`, {
           ns: 'recapiti',
           contactValue:
-            currentAddress.current.channelType === ChannelType.SERCQ
+            currentAddress.current.channelType === ChannelType.SERCQ_SEND
               ? t(`legal-contacts.sercq-send-title`, {
                   ns: 'recapiti',
                 })
@@ -401,12 +401,12 @@ const SpecialContacts: React.FC = () => {
         newAddressValue={
           currentAddress.current.channelType === ChannelType.PEC
             ? currentAddress.current.value
-            : t('special-contacts.sercq', { ns: 'recapiti' })
+            : t('special-contacts.sercq_send', { ns: 'recapiti' })
         }
         oldAddressValue={
           defaultPECAddress
             ? defaultPECAddress.value
-            : t('special-contacts.sercq', { ns: 'recapiti' })
+            : t('special-contacts.sercq_send', { ns: 'recapiti' })
         }
         handleClose={handleCloseModal}
         handleConfirm={() => handleCodeVerification()}

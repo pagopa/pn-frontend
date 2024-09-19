@@ -49,7 +49,7 @@ describe('SpecialContactItem Component', () => {
   const sercqAddress = {
     addressType: AddressType.LEGAL,
     senderId: 'default',
-    channelType: ChannelType.SERCQ,
+    channelType: ChannelType.SERCQ_SEND,
     value: 'sercq_address',
     codeValid: true,
   };
@@ -219,9 +219,9 @@ describe('SpecialContactItem Component', () => {
       />
     );
 
-    const specialContactForms = getAllByTestId(/_sercqContact$/);
+    const specialContactForms = getAllByTestId(/sercq_sendContact$/);
     expect(specialContactForms).toHaveLength(1);
-    expect(specialContactForms[0]).toHaveTextContent('special-contacts.sercq');
+    expect(specialContactForms[0]).toHaveTextContent('special-contacts.sercq_send');
     const buttons = specialContactForms[0].querySelectorAll('button');
     expect(buttons).toHaveLength(1);
     expect(buttons[0]).toHaveTextContent('button.disable');
