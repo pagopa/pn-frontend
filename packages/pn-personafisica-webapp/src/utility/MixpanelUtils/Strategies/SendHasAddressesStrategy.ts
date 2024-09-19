@@ -4,6 +4,7 @@ import { ChannelType, DigitalAddress, IOAllowedValues } from '../../../models/co
 
 type SendHasAddresses = {
   SEND_HAS_PEC: 'yes' | 'no';
+  SEND_HAS_SERCQ_SEND: 'yes' | 'no';
   SEND_HAS_EMAIL: 'yes' | 'no';
   SEND_HAS_SMS: 'yes' | 'no';
   SEND_APPIO_STATUS: 'nd' | 'deactivated' | 'activated';
@@ -15,8 +16,11 @@ type SendHasAddressesData = {
 
 export class SendHasAddressesStrategy implements EventStrategy {
   performComputations({ payload }: SendHasAddressesData): TrackedEvent<SendHasAddresses> {
-    const hasLegalAddresses =
+    // TODO - Per PEC e SERCQ capire se vanno filtrati per senderId = default
+    const hasPecAddresses =
       payload.filter((address) => address.channelType === ChannelType.PEC).length > 0;
+    const hasSercqSendAddress =
+      payload.filter((address) => address.channelType === ChannelType.SERCQ_SEND).length > 0;
     const hasCourtesyEmailAddresses =
       payload.filter((address) => address.channelType === ChannelType.EMAIL).length > 0;
     const hasCourtesySmsAddresses =
@@ -33,15 +37,18 @@ export class SendHasAddressesStrategy implements EventStrategy {
     } else {
       ioStatus = 'activated';
     }
+
     return {
       [EventPropertyType.PROFILE]: {
-        SEND_HAS_PEC: hasLegalAddresses ? 'yes' : 'no',
+        SEND_HAS_PEC: hasPecAddresses ? 'yes' : 'no',
+        SEND_HAS_SERCQ_SEND: hasSercqSendAddress ? 'yes' : 'no',
         SEND_HAS_EMAIL: hasCourtesyEmailAddresses ? 'yes' : 'no',
         SEND_HAS_SMS: hasCourtesySmsAddresses ? 'yes' : 'no',
         SEND_APPIO_STATUS: ioStatus,
       },
       [EventPropertyType.SUPER_PROPERTY]: {
-        SEND_HAS_PEC: hasLegalAddresses ? 'yes' : 'no',
+        SEND_HAS_PEC: hasPecAddresses ? 'yes' : 'no',
+        SEND_HAS_SERCQ_SEND: hasSercqSendAddress ? 'yes' : 'no',
         SEND_HAS_EMAIL: hasCourtesyEmailAddresses ? 'yes' : 'no',
         SEND_HAS_SMS: hasCourtesySmsAddresses ? 'yes' : 'no',
         SEND_APPIO_STATUS: ioStatus,

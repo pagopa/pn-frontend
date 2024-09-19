@@ -85,9 +85,14 @@ const SpecialContacts: React.FC = () => {
     addressType: AddressType,
     sender: Sender = { senderId: 'default' }
   ) => {
-    const eventKey = `SEND_ADD_${channelType}_UX_START`;
+    const eventKey = `SEND_ADD_${channelType}_START`;
     if (isPFEvent(eventKey)) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], sender.senderId);
+      PFEventStrategyFactory.triggerEvent(
+        PFEventsType[eventKey],
+        channelType === ChannelType.SERCQ_SEND
+          ? { senderId: sender.senderId, source: 'recapiti' }
+          : sender.senderId
+      );
     }
 
     // eslint-disable-next-line functional/immutable-data
@@ -113,7 +118,7 @@ const SpecialContacts: React.FC = () => {
   };
 
   const handleCodeVerification = (verificationCode?: string) => {
-    if (verificationCode) {
+    if (verificationCode || currentAddress.current.channelType === ChannelType.SERCQ_SEND) {
       const eventKey = `SEND_ADD_${currentAddress.current.channelType}_UX_CONVERSION`;
       if (isPFEvent(eventKey)) {
         PFEventStrategyFactory.triggerEvent(
@@ -185,7 +190,7 @@ const SpecialContacts: React.FC = () => {
     )
       .unwrap()
       .then(() => {
-        const eventKey = `SEND_REMOVE_${currentAddress.current.channelType}_UX_SUCCESS`;
+        const eventKey = `SEND_REMOVE_${currentAddress.current.channelType}_SUCCESS`;
         if (isPFEvent(eventKey)) {
           PFEventStrategyFactory.triggerEvent(
             PFEventsType[eventKey],
@@ -273,6 +278,11 @@ const SpecialContacts: React.FC = () => {
     setModalOpen(null);
   };
 
+  const handleClickAddSpecialContact = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SECONDARY_CONTACT);
+    setModalOpen(ModalType.SPECIAL);
+  };
+
   const groupedAddresses: Addresses = specialAddresses.reduce((obj, a) => {
     if (!obj[a.senderId]) {
       // eslint-disable-next-line functional/immutable-data
@@ -295,7 +305,7 @@ const SpecialContacts: React.FC = () => {
         <ButtonNaked
           component={Typography}
           startIcon={<AddIcon />}
-          onClick={() => setModalOpen(ModalType.SPECIAL)}
+          onClick={handleClickAddSpecialContact}
           color="primary"
           size="small"
           pt={1}

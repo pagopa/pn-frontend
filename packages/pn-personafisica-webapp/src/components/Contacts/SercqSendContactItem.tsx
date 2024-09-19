@@ -12,6 +12,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { PFEventsType } from '../../models/PFEventsType';
 import {
   AddressType,
   ChannelType,
@@ -28,6 +29,7 @@ import {
 } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
@@ -88,6 +90,11 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
     hasAppIO && courtesyAddresses.length === 1 ? false : courtesyAddresses.length > 0;
 
   const handleActivation = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
+      senderId,
+      source: 'recapiti',
+    });
+
     dispatch(getSercqSendTosPrivacyApproval())
       .unwrap()
       .then((consent) => {
@@ -99,6 +106,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
   };
 
   const activateService = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION, 'default');
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.LEGAL,
       senderId,
@@ -109,11 +117,12 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
     dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
       .then(() => {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS, 'default');
         // show success message
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t(`legal-contacts.sercq-send-added-successfully`, { ns: 'recapiti' }),
+            message: t(`legal-contacts.sercq_send-added-successfully`, { ns: 'recapiti' }),
           })
         );
         if (hasCourtesy) {
@@ -228,6 +237,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
     )
       .unwrap()
       .then(() => {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SERCQ_SEND_SUCCESS, 'default');
         dispatch(
           appStateActions.addSuccess({
             title: '',

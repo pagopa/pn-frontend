@@ -7,6 +7,8 @@ import { SendAddContactActionStrategy } from './Strategies/SendAddContactActionS
 import { SendAddContactScreenViewStrategy } from './Strategies/SendAddContactScreenViewStrategy';
 import { SendAddMandateUXConversionStrategy } from './Strategies/SendAddMandateUXConversionStrategy';
 import { SendAddMandateUXSuccessStrategy } from './Strategies/SendAddMandateUXSuccessStrategy';
+import { SendAddSercqSendStartActionStrategy } from './Strategies/SendAddSercqSendStartStrategy';
+import { SendAddSercqSendUxSuccessStrategy } from './Strategies/SendAddSercqSendUxSuccessStrategy';
 import { SendDisableIOStrategy } from './Strategies/SendDisableIOStrategy';
 import { SendDownloadCertificateOpposable } from './Strategies/SendDownloadCertificateOpposable';
 import { SendDownloadResponseStrategy } from './Strategies/SendDownloadResponse';
@@ -26,6 +28,7 @@ import { SendPaymentsCountStrategy } from './Strategies/SendPaymentsCountStrateg
 import { SendRefreshPageStrategy } from './Strategies/SendRefreshPageStrategy';
 import { SendRemoveAddressStrategy } from './Strategies/SendRemoveAddressStrategy';
 import { SendRemoveContactSuccessStrategy } from './Strategies/SendRemoveContactSuccess';
+import { SendRemoveSercqSendSuccessStrategy } from './Strategies/SendRemoveSercqSendSuccessStrategy';
 import { SendServiceStatusStrategy } from './Strategies/SendServiceStatusStrategy';
 import { SendToastErrorStrategy } from './Strategies/SendToastErrorStrategy';
 import { SendViewContactDetailsStrategy } from './Strategies/SendViewContactDetailsStrategy';
@@ -59,6 +62,7 @@ const uxActionStrategy = [
   PFEventsType.SEND_PAYMENT_LIST_CHANGE_PAGE,
   PFEventsType.SEND_F24_DOWNLOAD,
   PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE,
+  PFEventsType.SEND_ADD_SECONDARY_CONTACT,
 ] as const;
 
 const sendAddContactActionStrategy = [
@@ -68,6 +72,7 @@ const sendAddContactActionStrategy = [
   PFEventsType.SEND_ADD_PEC_UX_CONVERSION,
   PFEventsType.SEND_ADD_SMS_UX_CONVERSION,
   PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION,
+  PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION,
 ] as const;
 
 const sendRemoveContactSuccessStrategy = [
@@ -152,6 +157,9 @@ const eventStrategy: Record<
   [PFEventsType.SEND_PAYMENTS_COUNT]: new SendPaymentsCountStrategy(),
   [PFEventsType.SEND_ADD_ADDRESS]: new SendAddAddressStrategy(),
   [PFEventsType.SEND_DELETE_ADDRESS]: new SendRemoveAddressStrategy(),
+  [PFEventsType.SEND_ADD_SERCQ_SEND_START]: new SendAddSercqSendStartActionStrategy(),
+  [PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS]: new SendAddSercqSendUxSuccessStrategy(),
+  [PFEventsType.SEND_REMOVE_SERCQ_SEND_SUCCESS]: new SendRemoveSercqSendSuccessStrategy(),
 };
 
 const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventStrategy => {
