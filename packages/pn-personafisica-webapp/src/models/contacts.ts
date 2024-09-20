@@ -3,7 +3,7 @@ export enum ChannelType {
   EMAIL = 'EMAIL',
   SMS = 'SMS',
   IOMSG = 'APPIO',
-  SERCQ = 'SERCQ',
+  SERCQ_SEND = 'SERCQ_SEND',
 }
 
 export enum IOAllowedValues {

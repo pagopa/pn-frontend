@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 
 import {
+  ConsentType,
   adaptedTokenExchangeError,
   basicInitialUserData,
   basicNoLoggedUserData,
@@ -121,8 +122,16 @@ const userSlice = createSlice({
       state.isClosedSession = true;
     });
     builder.addCase(getTosPrivacyApproval.fulfilled, (state, action) => {
-      state.tosConsent = action.payload.tos;
-      state.privacyConsent = action.payload.privacy;
+      const [tosConsent, privacyConsent] = action.payload.filter(
+        (consent) =>
+          consent.consentType === ConsentType.TOS || consent.consentType === ConsentType.DATAPRIVACY
+      );
+      if (tosConsent) {
+        state.tosConsent = tosConsent;
+      }
+      if (privacyConsent) {
+        state.privacyConsent = privacyConsent;
+      }
       state.fetchedTos = true;
       state.fetchedPrivacy = true;
     });

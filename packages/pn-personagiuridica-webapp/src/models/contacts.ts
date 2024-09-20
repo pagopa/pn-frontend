@@ -2,7 +2,7 @@ export enum ChannelType {
   PEC = 'PEC',
   EMAIL = 'EMAIL',
   SMS = 'SMS',
-  SERCQ = 'SERCQ',
+  SERCQ_SEND = 'SERCQ_SEND',
 }
 
 export const SERCQ_SEND_VALUE = 'x-pagopa-pn-sercq:send-self:notification-already-delivered';

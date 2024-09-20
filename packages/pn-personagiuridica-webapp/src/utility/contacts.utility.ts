@@ -77,10 +77,10 @@ const allowedAddressTypesForSpecialContacts: Array<AllowedAddressTypeForSpecialC
   {
     channelType: ChannelType.PEC,
     disabledDependsOn: [],
-    shownDependsOn: [ChannelType.PEC, ChannelType.SERCQ],
+    shownDependsOn: [ChannelType.PEC, ChannelType.SERCQ_SEND],
   },
   {
-    channelType: ChannelType.SERCQ,
+    channelType: ChannelType.SERCQ_SEND,
     disabledDependsOn: [],
     shownDependsOn: [ChannelType.PEC],
   },
