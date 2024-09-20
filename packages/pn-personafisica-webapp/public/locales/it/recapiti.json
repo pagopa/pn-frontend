@@ -125,18 +125,12 @@
     "block-remove-sms-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Recapiti secondari”."
   },
   "special-contacts": {
-    "title": "Recapiti secondari",
-    "description": "Se vuoi che le notifiche di alcuni enti siano indirizzate a dei recapiti diversi puoi indicarli qui, in sostituzione di quelli principali.",
-    "add-contact": "Aggiungi recapito",
+    "description": "Se vuoi che le notifiche di alcuni enti siano indirizzate a dei recapiti diversi da quello principale, <0>associali da qui</0>",
     "select-address": "Seleziona recapito",
     "add-sender": "Ente da associare",
     "pec": "Indirizzo PEC",
-    "sms": "Numero di cellulare",
-    "email": "Indirizzo email",
     "sercq_send": "Domicilio Digitale SEND",
-    "link-email-label": "La tua email",
     "link-pec-label": "La tua PEC",
-    "link-sms-label": "Il tuo numero",
     "link-sercq-label": "Il tuo Domicilio Digitale SEND",
     "senders": "Enti",
     "contact-to-add": "Recapito",
@@ -148,7 +142,6 @@
     "sender": "Ente",
     "remove-special-title": "Vuoi eliminare {{contactValue}}?",
     "remove-special-description": "Gli avvisi relativi alle notifiche degli enti associati non saranno più inviati a questo recapito, ma a quello principale.",
-    "no-default-address": "Recapito principale non presente",
     "contacts": "Recapiti",
     "legal-association-title": "Conferma associazione",
     "legal-association-description": "Confermando l’associazione, per le notifiche inviate da <strong>{{senderName}}</strong> il tuo recapito a valore legale di riferimento sarà <strong>{{newAddress}}</strong> invece che <strong>{{oldAddress}}</strong>."
