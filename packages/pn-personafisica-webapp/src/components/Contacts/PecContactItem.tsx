@@ -33,9 +33,8 @@ enum ModalType {
 
 const PecContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultPECAddress, specialPECAddresses, addresses, defaultSERCQAddress } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const { defaultPECAddress, specialPECAddresses, addresses, defaultSERCQ_SENDAddress } =
+    useAppSelector(contactsSelectors.selectAddresses);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
@@ -158,15 +157,17 @@ const PecContactItem: React.FC = () => {
    */
   return (
     <DigitalContactsCard
-      title={defaultSERCQAddress ? '' : t('legal-contacts.pec-title', { ns: 'recapiti' })}
-      subtitle={defaultSERCQAddress ? '' : t('legal-contacts.pec-description', { ns: 'recapiti' })}
+      title={defaultSERCQ_SENDAddress ? '' : t('legal-contacts.pec-title', { ns: 'recapiti' })}
+      subtitle={
+        defaultSERCQ_SENDAddress ? '' : t('legal-contacts.pec-description', { ns: 'recapiti' })
+      }
       sx={{
-        pt: defaultSERCQAddress ? 0 : 3,
-        borderTopLeftRadius: defaultSERCQAddress ? 0 : 4,
-        borderTopRightRadius: defaultSERCQAddress ? 0 : 4,
+        pt: defaultSERCQ_SENDAddress ? 0 : 3,
+        borderTopLeftRadius: defaultSERCQ_SENDAddress ? 0 : 4,
+        borderTopRightRadius: defaultSERCQ_SENDAddress ? 0 : 4,
       }}
     >
-      {!verifyingAddress && !defaultSERCQAddress && (
+      {!verifyingAddress && !defaultSERCQ_SENDAddress && (
         <DefaultDigitalContact
           label={t('legal-contacts.pec-to-add', { ns: 'recapiti' })}
           value={currentValue}
@@ -187,7 +188,7 @@ const PecContactItem: React.FC = () => {
       {verifyingAddress && (
         <PecValidationItem senderId="default" onCancelValidation={handleCancelValidation} />
       )}
-      {defaultSERCQAddress && (
+      {defaultSERCQ_SENDAddress && (
         <>
           <Divider sx={{ color: 'text.secondary' }} />
           <Stack direction="row" spacing={0.5} mt={2}>

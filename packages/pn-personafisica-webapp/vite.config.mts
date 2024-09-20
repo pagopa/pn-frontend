@@ -34,7 +34,7 @@ export default defineConfig(({ mode }) => {
       open: true,
       proxy: {
         '^/auth/.*': {
-          target: 'https://login.test.notifichedigitali.it',
+          target: 'https://login.dev.notifichedigitali.it',
           changeOrigin: true,
         },
       },

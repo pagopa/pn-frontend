@@ -1,8 +1,13 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
+import { ConsentType } from '@pagopa-pn/pn-commons';
 import { getById, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
+import {
+  acceptTosPrivacyConsentBodyMock,
+  sercqSendTosPrivacyConsentMock,
+} from '../../../__mocks__/Consents.mock';
 import {
   digitalCourtesyAddresses,
   digitalLegalAddressesSercq,
@@ -38,7 +43,7 @@ vi.mock('react-i18next', () => ({
 describe('test SercqSendContactItem', () => {
   let mock: MockAdapter;
   const defaultAddress = digitalLegalAddressesSercq.find(
-    (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SERCQ
+    (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SERCQ_SEND
   );
 
   beforeAll(() => {
@@ -68,10 +73,17 @@ describe('test SercqSendContactItem', () => {
 
   it('enable service - courtesy contacts added', async () => {
     mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ', {
+      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false, false));
+    mock
+      .onPut(
+        '/bff/v2/tos-privacy',
+        acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
+      )
+      .reply(200);
     // render component
     const { container, getByTestId, queryByTestId, getByText } = render(<SercqSendContactItem />, {
       preloadedState: { contactsState: { digitalAddresses: digitalCourtesyAddresses } },
@@ -80,6 +92,9 @@ describe('test SercqSendContactItem', () => {
     fireEvent.click(activateButton);
     let infoDialog = await waitFor(() => screen.getByTestId('sercqSendInfoDialog'));
     expect(infoDialog).toBeInTheDocument();
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(1);
+    });
     // close info dialog
     const cancelButton = within(infoDialog).getByText('button.annulla');
     fireEvent.click(cancelButton);
@@ -87,9 +102,15 @@ describe('test SercqSendContactItem', () => {
     // reopen info dialog
     fireEvent.click(activateButton);
     infoDialog = await waitFor(() => screen.getByTestId('sercqSendInfoDialog'));
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+    });
     // click on confirm and enable the service
     const enableButton = within(infoDialog).getByText('button.enable');
     fireEvent.click(enableButton);
+    await waitFor(() => {
+      expect(mock.history.put).toHaveLength(1);
+    });
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
@@ -112,10 +133,11 @@ describe('test SercqSendContactItem', () => {
 
   it('enable service - courtesy contacts not added - click on not now button', async () => {
     mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ', {
+      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(true, true));
     // render component
     const { container, getByTestId, getByText } = render(<SercqSendContactItem />);
     const activateButton = getByTestId('activateButton');
@@ -148,7 +170,7 @@ describe('test SercqSendContactItem', () => {
   it('enable service - courtesy contacts not added - add courtesy contact (no AppIO)', async () => {
     const phoneValue = '3333333333';
     mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ', {
+      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
@@ -165,6 +187,7 @@ describe('test SercqSendContactItem', () => {
         verificationCode: '01234',
       })
       .reply(204);
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(true, true));
     // render component
     const result = render(<SercqSendContactItem />);
     const activateButton = result.getByTestId('activateButton');
@@ -223,7 +246,7 @@ describe('test SercqSendContactItem', () => {
 
   it('enable service - courtesy contacts not added - add courtesy contact (AppIO)', async () => {
     mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ', {
+      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
@@ -233,6 +256,7 @@ describe('test SercqSendContactItem', () => {
         verificationCode: '00000',
       })
       .reply(204);
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(true, true));
     // render component
     const result = render(<SercqSendContactItem />, {
       preloadedState: {
@@ -291,7 +315,7 @@ describe('test SercqSendContactItem', () => {
   });
 
   it('remove contact', async () => {
-    mock.onDelete('/bff/v1/addresses/LEGAL/default/SERCQ').reply(204);
+    mock.onDelete('/bff/v1/addresses/LEGAL/default/SERCQ_SEND').reply(204);
     // render component
     const { container, getByTestId } = render(<SercqSendContactItem />, {
       preloadedState: {
@@ -326,7 +350,9 @@ describe('test SercqSendContactItem', () => {
       expect(
         testStore
           .getState()
-          .contactsState.digitalAddresses.filter((addr) => addr.channelType === ChannelType.SERCQ)
+          .contactsState.digitalAddresses.filter(
+            (addr) => addr.channelType === ChannelType.SERCQ_SEND
+          )
       ).toStrictEqual([]);
     });
     // wait rerendering due to redux changes

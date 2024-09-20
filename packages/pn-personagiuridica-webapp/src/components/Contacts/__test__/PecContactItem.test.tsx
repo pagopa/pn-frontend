@@ -34,7 +34,7 @@ describe('PecContactItem component', () => {
     (addr) => addr.senderId === 'default' && addr.pecValid
   );
   const defaultSercqAddress = digitalLegalAddressesSercq.find(
-    (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SERCQ
+    (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SERCQ_SEND
   );
   const VALID_PEC = 'mail@valida.com';
 

@@ -79,13 +79,13 @@ export const addressesRelationships: Array<AddressRelation> = [
   },
   {
     channelType: ChannelType.PEC,
-    relationWith: [ChannelType.PEC, ChannelType.SERCQ],
+    relationWith: [ChannelType.PEC, ChannelType.SERCQ_SEND],
     disabledDependsOn: [],
-    shownDependsOn: [ChannelType.PEC, ChannelType.SERCQ],
+    shownDependsOn: [ChannelType.PEC, ChannelType.SERCQ_SEND],
   },
   {
-    channelType: ChannelType.SERCQ,
-    relationWith: [ChannelType.SERCQ, ChannelType.PEC],
+    channelType: ChannelType.SERCQ_SEND,
+    relationWith: [ChannelType.SERCQ_SEND, ChannelType.PEC],
     disabledDependsOn: [],
     shownDependsOn: [ChannelType.PEC],
   },

@@ -9,7 +9,7 @@ import SercqSendContactItem from './SercqSendContactItem';
 
 const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultSERCQAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
 
   const legalContactList: Array<string> = t('legal-contacts.list', {
     returnObjects: true,
@@ -30,11 +30,11 @@ const LegalContacts = () => {
         ))}
       </List>
       <Stack
-        spacing={!defaultSERCQAddress ? 2 : 0}
+        spacing={!defaultSERCQ_SENDAddress ? 2 : 0}
         mt={3}
         data-testid="legalContacts"
         divider={
-          !defaultSERCQAddress && (
+          !defaultSERCQ_SENDAddress && (
             <Divider sx={{ color: 'text.secondary' }}>{t('conjunctions.or')}</Divider>
           )
         }

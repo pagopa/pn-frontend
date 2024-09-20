@@ -63,7 +63,7 @@ describe('ContactsSummaryCards component', () => {
     expect(courtesyDescription).toHaveTextContent('summary-card.EMAIL, summary-card.SMS');
   });
 
-  it('should show warningIcon if there is a SERCQ contact and no courtesy contact', () => {
+  it('should show warningIcon if there is a SERCQ SEND contact and no courtesy contact', () => {
     const { getByTestId } = render(<ContactsSummaryCards />, {
       preloadedState: {
         contactsState: {
@@ -84,7 +84,7 @@ describe('ContactsSummaryCards component', () => {
     const legalTitle = within(legalContacts).getByTestId('cardTitle');
     expect(legalTitle).toHaveTextContent('summary-card.legal-title');
     const legalDescription = within(legalContacts).getByTestId('cardDescription');
-    expect(legalDescription).toHaveTextContent('summary-card.PEC, summary-card.SERCQ');
+    expect(legalDescription).toHaveTextContent('summary-card.PEC, summary-card.SERCQ_SEND');
 
     const courtesyIcon = within(courtesyContacts).getByTestId('warningIcon');
     expect(courtesyIcon).toBeInTheDocument();

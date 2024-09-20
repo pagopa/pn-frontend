@@ -1,9 +1,13 @@
-import { parseError } from '@pagopa-pn/pn-commons';
+import { ConsentType, TosPrivacyConsent, parseError } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
-import { AddressesApiFactory, BffChannelType } from '../../generated-client/digital-addresses';
+import { AddressesApiFactory } from '../../generated-client/digital-addresses';
 import { InfoRecipientApiFactory } from '../../generated-client/recipient-info';
+import {
+  BffTosPrivacyActionBody,
+  UserConsentsApiFactory,
+} from '../../generated-client/tos-privacy';
 import {
   AddressType,
   DeleteDigitalAddressParams,
@@ -17,6 +21,8 @@ export enum CONTACT_ACTIONS {
   CREATE_OR_UPDATE_ADDRESS = 'createOrUpdateAddress',
   DELETE_ADDRESS = 'deleteAddress',
   GET_ALL_ACTIVATED_PARTIES = 'getAllActivatedParties',
+  GET_SERCQ_SEND_TOS_PRIVACY_APPROVAL = 'getSercqSendTosPrivacyApproval',
+  ACCEPT_SERCQ_SEND_TOS_PRIVACY = 'acceptSercqSendTosPrivacyApproval',
 }
 
 export const getDigitalAddresses = createAsyncThunk<Array<DigitalAddress>>(
@@ -46,8 +52,7 @@ export const createOrUpdateAddress = createAsyncThunk<
       const response = await digitalAddressesFactory.createOrUpdateAddressV1(
         params.addressType,
         params.senderId,
-        // TODO: rimuovere l'as appena si ha il bff integrato
-        params.channelType as BffChannelType,
+        params.channelType,
         { value: params.value, verificationCode: params.code }
       );
 
@@ -97,8 +102,7 @@ export const deleteAddress = createAsyncThunk<void, DeleteDigitalAddressParams>(
       const response = await digitalAddressesFactory.deleteAddressV1(
         params.addressType,
         params.senderId,
-        // TODO: rimuovere l'as appena si ha il bff integrato
-        params.channelType as BffChannelType
+        params.channelType
       );
 
       return response.data;
@@ -124,5 +128,42 @@ export const getAllActivatedParties = createAsyncThunk<Array<Party>, FilterParti
   },
   {
     getPendingMeta: ({ arg }) => ({ blockLoading: arg?.blockLoading }),
+  }
+);
+
+/**
+ * Retrieves if the terms of service are already approved
+ */
+export const getSercqSendTosPrivacyApproval = createAsyncThunk(
+  CONTACT_ACTIONS.GET_SERCQ_SEND_TOS_PRIVACY_APPROVAL,
+  async (_, { rejectWithValue }) => {
+    try {
+      const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
+      const response = await tosPrivacyFactory.getTosPrivacyV2([
+        ConsentType.TOS_SERCQ,
+        ConsentType.DATAPRIVACY_SERCQ,
+      ]);
+
+      return response.data as Array<TosPrivacyConsent>;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+/**
+ * Accepts the terms of service
+ */
+export const acceptSercqSendTosPrivacy = createAsyncThunk<void, Array<BffTosPrivacyActionBody>>(
+  CONTACT_ACTIONS.ACCEPT_SERCQ_SEND_TOS_PRIVACY,
+  async (body: Array<BffTosPrivacyActionBody>, { rejectWithValue }) => {
+    try {
+      const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
+      const response = await tosPrivacyFactory.acceptTosPrivacyV2(body);
+
+      return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
   }
 );
