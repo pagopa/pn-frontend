@@ -213,7 +213,7 @@ describe('SpecialContactItem Component', () => {
       />
     );
 
-    const specialContactForms = getAllByTestId(/_sercq_sendContact$/);
+    const specialContactForms = getAllByTestId(/sercq_sendContact$/);
     expect(specialContactForms).toHaveLength(1);
     expect(specialContactForms[0]).toHaveTextContent('special-contacts.sercq_send');
     const buttons = specialContactForms[0].querySelectorAll('button');
