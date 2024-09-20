@@ -23,7 +23,6 @@ import {
   acceptSercqSendTosPrivacy,
   createOrUpdateAddress,
   deleteAddress,
-  enableIOAddress,
   getSercqSendTosPrivacyApproval,
 } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -33,6 +32,7 @@ import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
 import SercqSendCourtesyDialog from './SercqSendCourtesyDialog';
+import SercqSendIODialog from './SercqSendIODialog';
 import SercqSendInfoDialog from './SercqSendInfoDialog';
 
 type Props = {
@@ -45,6 +45,7 @@ enum ModalType {
   COURTESY = 'courtesy',
   CODE = 'code',
   DELETE = 'delete',
+  IO = 'io',
 }
 
 const SercqSendCardTitle: React.FC = () => {
@@ -110,12 +111,18 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
             message: t(`legal-contacts.sercq-send-added-successfully`, { ns: 'recapiti' }),
           })
         );
-        if (hasCourtesy) {
-          // close dialog
-          setModalOpen(null);
+        // here the user doesn't have a corutesy address
+        if (!hasCourtesy) {
+          setModalOpen({ type: ModalType.COURTESY });
           return;
         }
-        setModalOpen({ type: ModalType.COURTESY });
+        // here the user has a courtesy address but AppIO disabled
+        if (hasCourtesy && hasAppIO) {
+          setModalOpen({ type: ModalType.IO });
+          return;
+        }
+        // here the user has a courtesy address and AppIO enabled
+        setModalOpen(null);
       })
       .catch(() => {});
   };
@@ -196,20 +203,15 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
             }),
           })
         );
-        setModalOpen(null);
+        // AppIO enabled
+        if (!hasAppIO) {
+          setModalOpen(null);
+          return;
+        }
+        // AppIO disabled
+        setModalOpen({ type: ModalType.IO });
       })
       .catch(() => {});
-  };
-
-  const handleCourtesyConfirm = (channelType: ChannelType, value: string) => {
-    if (channelType === ChannelType.IOMSG) {
-      dispatch(enableIOAddress())
-        .unwrap()
-        .then(() => setModalOpen(null))
-        .catch(() => {});
-      return;
-    }
-    handleCodeVerification(value, channelType);
   };
 
   const deleteConfirmHandler = () => {
@@ -280,9 +282,8 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
       />
       <SercqSendCourtesyDialog
         open={modalOpen?.type === ModalType.COURTESY}
-        hasAppIO={hasAppIO}
         onDiscard={() => setModalOpen(null)}
-        onConfirm={handleCourtesyConfirm}
+        onConfirm={(channelType, value) => handleCodeVerification(value, channelType)}
       />
       <ContactCodeDialog
         value={modalOpen?.data?.value}
@@ -311,6 +312,10 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
+      />
+      <SercqSendIODialog
+        open={modalOpen?.type === ModalType.IO}
+        onDiscard={() => setModalOpen(null)}
       />
     </DigitalContactsCard>
   );

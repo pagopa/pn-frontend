@@ -56,7 +56,15 @@
     "remove-sercq-send-message": "Non avrai più un recapito digitale a valore legale per le comunicazioni della Pubblica Amministrazione e potresti tornare a ricevere le notifiche in forma cartacea.",
     "block-remove-sercq-send-title": "Non è possibile disattivare il Domicilio Digitale",
     "block-remove-sercq-send-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Recapiti secondari”.",
-    "sercq-send-removed-successfully": "Domicilio Digitale disattivato correttamente"
+    "sercq-send-removed-successfully": "Domicilio Digitale disattivato correttamente",
+    "sercq-send-io-title": "Collega l’app IO a SEND",
+    "sercq-send-io-description": "Attiva il servizio SEND su IO per <strong>ricevere direttamente nell'app</strong> tutte le comunicazioni inviate al tuo Domicilio Digitale SEND.",
+    "sercq-send-io-advantages": "Su IO potrai",
+    "sercq-send-io-list": [
+      "<strong>Ricevere le notifiche in tempo reale</strong>, appena l’ente le carica su SEND;",
+      "<strong>Aprire i documenti allegati</strong> direttamente in app;",
+      "<strong>Pagare gli importi dovuti</strong> se la notifica prevede un pagamento."
+    ]
   },
   "io-contact": {
     "title": "App IO",
@@ -81,7 +89,7 @@
   },
   "courtesy-contacts": {
     "title": "Recapiti di cortesia",
-    "sub-title": "Ti avvisano quando ci sono nuove notifiche per te. Se non hai attivato il recapito ufficiale e non apri la notifica entro 5 giorni, la riceverai anche in formato cartaceo a casa.",
+    "sub-title": "Ti avvisano quando ci sono nuove notifiche per te. Se non hai attivato il recapito a valore legale e non apri la notifica entro 5 giorni, la riceverai anche in formato cartaceo a casa.",
     "email-title": "Email",
     "email-description": "Quando c’è una notifica per te, ti avvisiamo con una email all’indirizzo indicato. Accedi a SEND per leggerla e pagare eventuali spese.",
     "email-dialog-description": "Quando c’è una notifica per te, ti avvisiamo con una email. Accedi a SEND per leggerla e pagare eventuali importi.",
@@ -169,7 +177,7 @@
     "PEC": "PEC",
     "SMS": "SMS",
     "EMAIL": "Email",
-    "IOMSG": "App IO",
+    "APPIO": "App IO",
     "SERCQ_SEND": "Domicilio Digitale",
     "add-icon-arialabel": "Aggiungi"
   }

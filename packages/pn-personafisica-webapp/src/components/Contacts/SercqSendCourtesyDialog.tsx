@@ -27,7 +27,6 @@ import {
 
 type Props = {
   open: boolean;
-  hasAppIO: boolean;
   onDiscard: () => void;
   onConfirm: (type: ChannelType, value: string) => void;
 };
@@ -83,7 +82,6 @@ const SercqSendCourtesyInput: React.FC<{
 
 const SercqSendCourtesyDialog: React.FC<Props> = ({
   open = false,
-  hasAppIO,
   onDiscard,
   onConfirm,
 }) => {
@@ -99,10 +97,6 @@ const SercqSendCourtesyDialog: React.FC<Props> = ({
     channelType: yup.mixed<ChannelType>().oneOf(Object.values(ChannelType)).required(),
     value: yup
       .string()
-      .when('channelType', {
-        is: ChannelType.IOMSG,
-        then: yup.string(),
-      })
       .when('channelType', {
         is: ChannelType.EMAIL,
         then: emailValidationSchema(t),
@@ -141,23 +135,6 @@ const SercqSendCourtesyDialog: React.FC<Props> = ({
         </DialogContentText>
         <form>
           <RadioGroup sx={{ mt: 2 }} value={formik.values.channelType} onChange={handleChange}>
-            {hasAppIO && (
-              <>
-                <FormControlLabel
-                  value={ChannelType.IOMSG}
-                  control={<Radio />}
-                  label={
-                    <SercqSendCourtesyRadioLabel
-                      title={t('io-contact.title', { ns: 'recapiti' })}
-                      description={t('io-contact.dialog-description', { ns: 'recapiti' })}
-                    />
-                  }
-                  sx={{ alignItems: 'flex-start' }}
-                  data-testid="courtesyAddressRadio"
-                />
-                <Divider sx={{ my: 2 }} />
-              </>
-            )}
             <FormControlLabel
               value={ChannelType.EMAIL}
               control={<Radio />}
