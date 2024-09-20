@@ -4,10 +4,16 @@ import { useTranslation } from 'react-i18next';
 import { DisclaimerModal, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  ContactSource,
+  SaveDigitalAddressParams,
+} from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -28,6 +34,7 @@ const EmailContactItem: React.FC = () => {
   const { defaultEMAILAddress, specialEMAILAddresses, addresses, legalAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
+  const externalInfo = useAppSelector((state: RootState) => state.contactsState.fromExternalInfo);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
@@ -44,7 +51,10 @@ const EmailContactItem: React.FC = () => {
   const blockDelete = specialEMAILAddresses.length > 0;
 
   const handleSubmit = (value: string) => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_START, 'default');
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_START, {
+      senderId: 'default',
+      source: externalInfo.source ?? ContactSource.RECAPITI,
+    });
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { value };
     // first check if contact already exists

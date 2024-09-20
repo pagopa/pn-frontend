@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
@@ -22,10 +23,16 @@ import {
   TOS_LINK_RELATIVE_PATH,
 } from '@pagopa-pn/pn-commons';
 
+import { PFEventsType } from '../../models/PFEventsType';
+import { resetFromExternalInfo } from '../../redux/contact/reducers';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
+
 type Props = {
   open: boolean;
   onDiscard: () => void;
   onConfirm: () => void;
+  senderId?: string;
 };
 
 const SercqSendInfoIcons = [
@@ -37,14 +44,36 @@ const SercqSendInfoIcons = [
 const redirectPrivacyLink = () => window.open(`${PRIVACY_LINK_RELATIVE_PATH}`, '_blank');
 const redirectToSLink = () => window.open(`${TOS_LINK_RELATIVE_PATH}`, '_blank');
 
-const SercqSendInfoDialog: React.FC<Props> = ({ open = false, onDiscard, onConfirm }) => {
+const SercqSendInfoDialog: React.FC<Props> = ({
+  open = false,
+  onDiscard,
+  onConfirm,
+  senderId = 'default',
+}) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const contactInfo = useAppSelector((state) => state.contactsState.fromExternalInfo);
+
+  const trackSercqSendStartEvent = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
+      senderId,
+      source: contactInfo.source,
+    });
+
+    dispatch(resetFromExternalInfo());
+  };
 
   const sercqSendInfoList: Array<string> = t('legal-contacts.sercq-send-info-list', {
     returnObjects: true,
     defaultValue: [],
     ns: 'recapiti',
   });
+
+  useEffect(() => {
+    if (open) {
+      trackSercqSendStartEvent();
+    }
+  }, [open]);
 
   return (
     <PnDialog

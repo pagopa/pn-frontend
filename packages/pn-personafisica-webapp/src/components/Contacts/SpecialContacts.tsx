@@ -10,6 +10,7 @@ import { PFEventsType } from '../../models/PFEventsType';
 import {
   AddressType,
   ChannelType,
+  ContactSource,
   DigitalAddress,
   SERCQ_SEND_VALUE,
   SaveDigitalAddressParams,
@@ -20,6 +21,7 @@ import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
+import { isPFEvent } from '../../utility/mixpanel';
 import AddSpecialContactDialog from './AddSpecialContactDialog';
 import CancelVerificationModal from './CancelVerificationModal';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -42,9 +44,6 @@ enum ModalType {
 type Addresses = {
   [senderId: string]: Array<DigitalAddress>;
 };
-
-const isPFEvent = (eventKey: string): eventKey is keyof typeof PFEventsType =>
-  Object.keys(PFEventsType).includes(eventKey);
 
 const SpecialContacts: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
@@ -87,12 +86,10 @@ const SpecialContacts: React.FC = () => {
   ) => {
     const eventKey = `SEND_ADD_${channelType}_START`;
     if (isPFEvent(eventKey)) {
-      PFEventStrategyFactory.triggerEvent(
-        PFEventsType[eventKey],
-        channelType === ChannelType.SERCQ_SEND
-          ? { senderId: sender.senderId, source: 'recapiti' }
-          : sender.senderId
-      );
+      PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], {
+        senderId: sender.senderId,
+        source: ContactSource.RECAPITI,
+      });
     }
 
     // eslint-disable-next-line functional/immutable-data

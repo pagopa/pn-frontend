@@ -26,7 +26,7 @@ async function doTheRender() {
 
     // init actions (previously static code) which make use of config
     initOneTrust();
-    initStore();
+    initStore(false);
     initAxiosClients();
     // move initialization of the Axios interceptor - PN-7557
     setUpInterceptor(store);

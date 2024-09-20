@@ -4,7 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  ContactSource,
+  SaveDigitalAddressParams,
+} from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -49,7 +54,10 @@ const PecContactItem: React.FC = () => {
   const verifyingAddress = defaultPECAddress ? !defaultPECAddress.pecValid : false;
 
   const handleSubmit = (value: string) => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, 'default');
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, {
+      senderId: 'default',
+      source: ContactSource.RECAPITI,
+    });
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { value };
     // first check if contact already exists

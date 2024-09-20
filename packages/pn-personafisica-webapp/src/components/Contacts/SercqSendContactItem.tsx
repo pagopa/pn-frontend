@@ -16,6 +16,8 @@ import { PFEventsType } from '../../models/PFEventsType';
 import {
   AddressType,
   ChannelType,
+  ContactOperation,
+  ContactSource,
   IOAllowedValues,
   SERCQ_SEND_VALUE,
   SaveDigitalAddressParams,
@@ -27,10 +29,16 @@ import {
   enableIOAddress,
   getSercqSendTosPrivacyApproval,
 } from '../../redux/contact/actions';
-import { contactsSelectors } from '../../redux/contact/reducers';
+import {
+  contactsSelectors,
+  resetFromExternalInfo,
+  setFromExternalInfo,
+} from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { internationalPhonePrefix } from '../../utility/contacts.utility';
+import { isPFEvent } from '../../utility/mixpanel';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
@@ -82,6 +90,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
   const { defaultSERCQ_SENDAddress, defaultAPPIOAddress, courtesyAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
+  const externalInfo = useAppSelector((state: RootState) => state.contactsState.fromExternalInfo);
   const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
 
   const value = defaultSERCQ_SENDAddress?.value ?? '';
@@ -90,10 +99,13 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
     hasAppIO && courtesyAddresses.length === 1 ? false : courtesyAddresses.length > 0;
 
   const handleActivation = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
-      senderId,
-      source: 'recapiti',
-    });
+    dispatch(
+      setFromExternalInfo({
+        source: ContactSource.RECAPITI,
+        destination: ChannelType.SERCQ_SEND,
+        operation: ContactOperation.ADD,
+      })
+    );
 
     dispatch(getSercqSendTosPrivacyApproval())
       .unwrap()
@@ -180,6 +192,13 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
     channelType: ChannelType,
     verificationCode?: string
   ) => {
+    if (verificationCode) {
+      const eventKey = `SEND_ADD_${channelType}_UX_CONVERSION`;
+      if (isPFEvent(eventKey)) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], 'default');
+      }
+    }
+
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
       senderId,
@@ -200,6 +219,16 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
           return;
         }
 
+        const eventKey = `SEND_ADD_${channelType}_UX_SUCCESS`;
+        if (isPFEvent(eventKey)) {
+          PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], {
+            senderId: 'default',
+            fromSercqSend: true,
+          });
+        }
+
+        dispatch(resetFromExternalInfo());
+
         // contact has already been verified
         // show success message
         dispatch(
@@ -217,11 +246,23 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
 
   const handleCourtesyConfirm = (channelType: ChannelType, value: string) => {
     if (channelType === ChannelType.IOMSG) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
       dispatch(enableIOAddress())
         .unwrap()
-        .then(() => setModalOpen(null))
+        .then(() => {
+          setModalOpen(null);
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS, true);
+        })
         .catch(() => {});
       return;
+    }
+
+    const eventKey = `SEND_ADD_${channelType}_START`;
+    if (isPFEvent(eventKey)) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], {
+        senderId: 'default',
+        source: externalInfo.source ?? ContactSource.RECAPITI,
+      });
     }
     handleCodeVerification(value, channelType);
   };

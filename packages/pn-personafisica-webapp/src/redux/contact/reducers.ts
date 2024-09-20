@@ -1,6 +1,12 @@
 import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 
-import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  DigitalAddress,
+  FromExternalInfo,
+  IOAllowedValues,
+} from '../../models/contacts';
 import { Party } from '../../models/party';
 import { RootState } from '../store';
 import {
@@ -16,6 +22,7 @@ const initialState = {
   loading: false,
   digitalAddresses: [] as Array<DigitalAddress>,
   parties: [] as Array<Party>,
+  fromExternalInfo: {} as FromExternalInfo,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -32,6 +39,12 @@ const contactsSlice = createSlice({
           (address.senderId !== action.payload && address.addressType === AddressType.LEGAL) ||
           address.addressType === AddressType.COURTESY
       );
+    },
+    setFromExternalInfo: (state, action: PayloadAction<FromExternalInfo>) => {
+      state.fromExternalInfo = action.payload;
+    },
+    resetFromExternalInfo: (state) => {
+      state.fromExternalInfo = {} as FromExternalInfo;
     },
   },
   extraReducers: (builder) => {
@@ -85,7 +98,8 @@ const contactsSlice = createSlice({
   },
 });
 
-export const { resetState, resetPecValidation } = contactsSlice.actions;
+export const { resetState, resetPecValidation, setFromExternalInfo, resetFromExternalInfo } =
+  contactsSlice.actions;
 
 // START: SELECTORS
 const contactState = (state: RootState) => state.contactsState;

@@ -8,7 +8,13 @@ import {
 } from '../../../__mocks__/Contacts.mock';
 import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  ContactOperation,
+  ContactSource,
+  IOAllowedValues,
+} from '../../../models/contacts';
 import { store } from '../../store';
 import {
   createOrUpdateAddress,
@@ -17,12 +23,19 @@ import {
   enableIOAddress,
   getDigitalAddresses,
 } from '../actions';
-import { contactsSelectors, resetPecValidation, resetState } from '../reducers';
+import {
+  contactsSelectors,
+  resetFromExternalInfo,
+  resetPecValidation,
+  resetState,
+  setFromExternalInfo,
+} from '../reducers';
 
 const initialState = {
   loading: false,
   digitalAddresses: [],
   parties: [],
+  fromExternalInfo: {},
 };
 
 describe('Contacts redux state tests', () => {
@@ -284,5 +297,27 @@ describe('Contacts redux state tests', () => {
         )
       );
     }
+  });
+
+  it('should set fromExternalInfo', () => {
+    const externalInfo = {
+      source: ContactSource.RECAPITI,
+      destination: ChannelType.SERCQ_SEND,
+      operation: ContactOperation.ADD,
+    };
+
+    const action = store.dispatch(setFromExternalInfo(externalInfo));
+    expect(action.payload).toEqual(externalInfo);
+
+    const state = store.getState().contactsState;
+    expect(state.fromExternalInfo).toEqual(externalInfo);
+  });
+
+  it('should reset fromExternalInfo', () => {
+    const action = store.dispatch(resetFromExternalInfo());
+    expect(action.payload).toEqual(undefined);
+
+    const state = store.getState().contactsState;
+    expect(state.fromExternalInfo).toEqual(initialState.fromExternalInfo);
   });
 });

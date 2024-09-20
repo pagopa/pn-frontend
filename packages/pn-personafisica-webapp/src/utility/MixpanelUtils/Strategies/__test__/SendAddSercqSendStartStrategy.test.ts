@@ -1,14 +1,15 @@
 import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
-import { SendAddSercqSendStartActionStrategy } from '../SendAddSercqSendStartStrategy';
+import { ContactSource } from '../../../../models/contacts';
+import { SendAddContactWithSourceActionStrategy } from '../SendAddContactWithSourceActionStrategy';
 
 describe('Mixpanel - Add Sercq SEND start strategy', () => {
   it('should return add sercq send start ', () => {
-    const strategy = new SendAddSercqSendStartActionStrategy();
+    const strategy = new SendAddContactWithSourceActionStrategy();
 
     const isSpecialContactEvent = strategy.performComputations({
       senderId: 'not-default',
-      source: 'recapiti',
+      source: ContactSource.RECAPITI,
     });
     expect(isSpecialContactEvent).toEqual({
       [EventPropertyType.TRACK]: {
@@ -21,7 +22,7 @@ describe('Mixpanel - Add Sercq SEND start strategy', () => {
 
     const isDefaultContactEvent = strategy.performComputations({
       senderId: 'default',
-      source: 'recapiti',
+      source: ContactSource.RECAPITI,
     });
     expect(isDefaultContactEvent).toEqual({
       [EventPropertyType.TRACK]: {

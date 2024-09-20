@@ -6,29 +6,26 @@ import {
   TrackedEvent,
 } from '@pagopa-pn/pn-commons';
 
-type Source = 'recapiti' | 'profilo' | 'home_notifiche' | 'dettaglio_notifica';
-
-type SendAddSercqSendData = {
+type SendAddCourtesyContactProps = {
   senderId: string;
-  source: Source;
+  fromSercqSend: boolean;
 };
 
-type SendAddSercqSendReturn = {
+type SendAddCourtesyContactReturn = {
   other_contact: string;
-  source: Source;
+  from_sercq_send: string;
 };
-
-export class SendAddSercqSendStartActionStrategy implements EventStrategy {
+export class SendAddCourtesyContactUXSuccessStrategy implements EventStrategy {
   performComputations({
     senderId,
-    source,
-  }: SendAddSercqSendData): TrackedEvent<SendAddSercqSendReturn> {
+    fromSercqSend,
+  }: SendAddCourtesyContactProps): TrackedEvent<SendAddCourtesyContactReturn> {
     return {
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         other_contact: senderId !== 'default' ? 'yes' : 'no',
-        source,
+        from_sercq_send: fromSercqSend ? 'yes' : 'no',
       },
     };
   }
