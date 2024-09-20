@@ -50,15 +50,15 @@ const DigitalContactsCardContent: React.FC<
     <Box sx={sx}>
       {isMobile && (
         <Stack direction="row" justifyContent="space-between" alignItems="flex-end">
-          <DigitalContactsCardTitle title={title} />
-          {!showDescription && (
+          {title && <DigitalContactsCardTitle title={title} />}
+          {subtitle && !showDescription && (
             <KeyboardArrowDownOutlinedIcon
               color="primary"
               onClick={() => setShowDescription(true)}
               sx={{ mb: 2 }}
             />
           )}
-          {showDescription && (
+          {subtitle && showDescription && (
             <KeyboardArrowUpOutlinedIcon
               color="primary"
               onClick={() => setShowDescription(false)}
@@ -79,7 +79,7 @@ const DigitalContactsCardContent: React.FC<
           {subtitle}
         </Typography>
       )}
-      {isMobile && <Divider sx={{ mb: 2 }} />}
+      {isMobile && title && <Divider sx={{ mb: 2 }} />}
       {children}
     </Box>
   );
