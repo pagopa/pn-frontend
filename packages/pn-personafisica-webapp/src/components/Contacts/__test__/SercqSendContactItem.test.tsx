@@ -268,6 +268,12 @@ describe('test SercqSendContactItem', () => {
               channelType: ChannelType.IOMSG,
               value: IOAllowedValues.DISABLED,
             },
+            {
+              addressType: AddressType.COURTESY,
+              senderId: 'default',
+              channelType: ChannelType.EMAIL,
+              value: 'mail@mocket.it',
+            },
           ],
         },
       },
@@ -287,18 +293,10 @@ describe('test SercqSendContactItem', () => {
     });
     await waitFor(() => expect(infoDialog).not.toBeInTheDocument());
     // wait rerendering due to redux changes
-    const courtesyDialog = await waitFor(() => screen.getByTestId('sercqSendCourtesyDialog'));
-    expect(courtesyDialog).toBeInTheDocument();
-    // select AppIO
-    await testRadio(
-      courtesyDialog,
-      'courtesyAddressRadio',
-      ['io-contact.title', 'courtesy-contacts.email-title', 'courtesy-contacts.sms-title'],
-      0,
-      true
-    );
+    const ioDialog = await waitFor(() => screen.getByTestId('sercqSendIODialog'));
+    expect(ioDialog).toBeInTheDocument();
     // click on confirm button
-    const confirmButton = within(courtesyDialog).getByText('button.conferma');
+    const confirmButton = within(ioDialog).getByText('button.conferma');
     fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(2);
@@ -307,7 +305,7 @@ describe('test SercqSendContactItem', () => {
         verificationCode: '00000',
       });
     });
-    await waitFor(() => expect(courtesyDialog).not.toBeInTheDocument());
+    await waitFor(() => expect(ioDialog).not.toBeInTheDocument());
     // check new layout
     expect(result.container).toHaveTextContent('legal-contacts.sercq-send-enabled');
     const disableButton = result.getByText('button.disable');

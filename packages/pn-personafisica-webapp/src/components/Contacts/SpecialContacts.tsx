@@ -285,26 +285,22 @@ const SpecialContacts: React.FC = () => {
 
   return (
     <>
-      <Stack spacing={2}>
-        <Typography id="specialContact" variant="h6" fontWeight={600} fontSize={28}>
-          {t('special-contacts.title', { ns: 'recapiti' })}
-        </Typography>
-        <Typography sx={{ mt: 2 }} variant="body1">
-          {t('special-contacts.description', { ns: 'recapiti' })}
-        </Typography>
-        <ButtonNaked
-          component={Typography}
-          startIcon={<AddIcon />}
-          onClick={() => setModalOpen(ModalType.SPECIAL)}
-          color="primary"
-          size="small"
-          pt={1}
-          sx={{ alignSelf: 'flex-start' }}
-          data-testid="addSpecialContactButton"
-        >
-          {t('special-contacts.add-contact', { ns: 'recapiti' })}
-        </ButtonNaked>
-      </Stack>
+      <Typography id="specialContact" variant="body1" fontWeight={700}>
+        {t('special-contacts.title', { ns: 'recapiti' })}
+      </Typography>
+      <Typography sx={{ mt: 2 }} variant="body1">
+        {t('special-contacts.description', { ns: 'recapiti' })}
+      </Typography>
+      <ButtonNaked
+        startIcon={<AddIcon />}
+        onClick={() => setModalOpen(ModalType.SPECIAL)}
+        color="primary"
+        size="medium"
+        sx={{ alignSelf: 'flex-start', mt: 1 }}
+        data-testid="addSpecialContactButton"
+      >
+        {t('special-contacts.add-contact', { ns: 'recapiti' })}
+      </ButtonNaked>
       {Object.keys(groupedAddresses).length > 0 && (
         <Card sx={{ mt: 3 }}>
           <CardContent>
@@ -322,8 +318,9 @@ const SpecialContacts: React.FC = () => {
               </Stack>
             )}
             <Stack divider={<Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }} />}>
-              {Object.entries(groupedAddresses).map(([senderId, addr]) => (
+              {Object.entries(groupedAddresses).map(([senderId, addr], index) => (
                 <SpecialContactItem
+                  index={index}
                   key={`sender-${senderId}`}
                   addresses={addr}
                   onEdit={handleEdit}

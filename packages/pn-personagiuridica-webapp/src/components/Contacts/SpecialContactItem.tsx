@@ -12,6 +12,7 @@ import { specialContactsAvailableAddressTypes } from '../../utility/contacts.uti
 import PecValidationItem from './PecValidationItem';
 
 type Props = {
+  index: number;
   addresses: Array<DigitalAddress>;
   onEdit: (
     value: string,
@@ -48,6 +49,7 @@ const AddMoreButton: React.FC<AddMoreButtonProps> = ({ onClick }) => {
 };
 
 const SpecialContactItem: React.FC<Props> = ({
+  index,
   addresses,
   onDelete,
   onEdit,
@@ -91,7 +93,7 @@ const SpecialContactItem: React.FC<Props> = ({
             spacing={1}
             data-testid={`${senderId}_${channelType.toLowerCase()}Contact`}
           >
-            <VerifiedIcon fontSize="small" color="success" />
+            <VerifiedIcon fontSize="small" color="primary" />
             <Box>
               <Typography
                 sx={{
@@ -146,7 +148,7 @@ const SpecialContactItem: React.FC<Props> = ({
       direction={{ xs: 'column', lg: 'row' }}
       spacing={{ xs: 3, lg: 6 }}
       mb={{ xs: 2, lg: 0.5 }}
-      mt={{ xs: 2, lg: '43px' }}
+      mt={{ xs: 2, lg: index === 0 ? 3 : 6 }}
     >
       <Box sx={{ flexBasis: { xs: 'auto', lg: '224px' } }}>
         {isMobile && (

@@ -31,8 +31,13 @@ enum ModalType {
 
 const PecContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultPECAddress, specialPECAddresses, addresses, defaultSERCQ_SENDAddress } =
-    useAppSelector(contactsSelectors.selectAddresses);
+  const {
+    defaultPECAddress,
+    specialPECAddresses,
+    specialSERCQ_SENDAddresses,
+    addresses,
+    defaultSERCQ_SENDAddress,
+  } = useAppSelector(contactsSelectors.selectAddresses);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
@@ -46,7 +51,7 @@ const PecContactItem: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const currentValue = defaultPECAddress?.value ?? '';
-  const blockDelete = specialPECAddresses.length > 0;
+  const blockDelete = specialPECAddresses.length > 0 || specialSERCQ_SENDAddresses.length > 0;
   const verifyingAddress = defaultPECAddress ? !defaultPECAddress.pecValid : false;
 
   const handleSubmit = (value: string) => {

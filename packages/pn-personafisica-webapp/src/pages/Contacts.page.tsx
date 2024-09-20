@@ -100,13 +100,13 @@ const Contacts = () => {
           reloadAction={fetchAddresses}
         >
           <ContactsSummaryCards />
-          <Stack direction="column" spacing={4}>
+          <Stack direction="column" spacing={6}>
             <LegalContacts />
             <CourtesyContacts />
           </Stack>
           {showSpecialContactsSection && (
             <>
-              <Divider sx={{ backgroundColor: 'white', color: 'text.secondary', mt: 6, mb: 3 }} />
+              <Divider sx={{ backgroundColor: 'white', color: 'text.disabled', mt: 6, mb: 4 }} />
               <SpecialContacts />
             </>
           )}
