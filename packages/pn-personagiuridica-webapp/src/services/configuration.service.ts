@@ -22,6 +22,7 @@ interface PgConfigurationFromFile {
   DELEGATIONS_TO_PG_ENABLED: boolean;
   WORK_IN_PROGRESS?: boolean;
   F24_DOWNLOAD_WAIT_TIME: number;
+  DOD_DISABLED: boolean;
 }
 
 interface PgConfiguration extends PgConfigurationFromFile {
@@ -64,6 +65,7 @@ class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
     this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();
     this.ruleFor('WORK_IN_PROGRESS').isBoolean();
     this.ruleFor('F24_DOWNLOAD_WAIT_TIME').isNumber();
+    this.ruleFor('DOD_DISABLED').isBoolean();
   }
 
   makeRequired(rule: StringRuleValidator<PgConfigurationFromFile, string>): void {

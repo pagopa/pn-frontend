@@ -26,6 +26,7 @@ interface PfConfigurationFromFile {
   APP_IO_SITE: string;
   APP_IO_ANDROID: string;
   APP_IO_IOS: string;
+  DOD_DISABLED: boolean;
 }
 
 interface PfConfiguration extends PfConfigurationFromFile {
@@ -70,6 +71,7 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
     this.ruleFor('APP_IO_SITE').isString();
     this.ruleFor('APP_IO_ANDROID').isString();
     this.ruleFor('APP_IO_IOS').isString();
+    this.ruleFor('DOD_DISABLED').isBoolean();
   }
 
   makeRequired(rule: StringRuleValidator<PfConfigurationFromFile, string>): void {

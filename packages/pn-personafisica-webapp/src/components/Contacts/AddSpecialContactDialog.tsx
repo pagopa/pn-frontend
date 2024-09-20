@@ -20,6 +20,7 @@ import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/act
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { getConfiguration } from '../../services/configuration.service';
 import {
   pecValidationSchema,
   specialContactsAvailableAddressTypes,
@@ -49,8 +50,11 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
+  const { DOD_DISABLED } = getConfiguration();
 
-  const addressTypes = specialContactsAvailableAddressTypes(addressesData, sender);
+  const addressTypes = specialContactsAvailableAddressTypes(addressesData, sender).filter((addr) =>
+    DOD_DISABLED ? addr.id !== ChannelType.SERCQ_SEND : true
+  );
 
   const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     await formik.setFieldValue('s_value', '');

@@ -4,12 +4,14 @@ import { Box, Divider, Stack, Typography } from '@mui/material';
 
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
+import { getConfiguration } from '../../services/configuration.service';
 import PecContactItem from './PecContactItem';
 import SercqSendContactItem from './SercqSendContactItem';
 
 const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const { DOD_DISABLED } = getConfiguration();
 
   return (
     <Box id="legalContactsSection">
@@ -20,8 +22,8 @@ const LegalContacts = () => {
         <Trans i18nKey="legal-contacts.sub-title" ns="recapiti" />
       </Typography>
       <Stack spacing={!defaultSERCQ_SENDAddress ? 2 : 0} mt={3} data-testid="legalContacts">
-        <SercqSendContactItem />
-        {!defaultSERCQ_SENDAddress && <Divider>{t('conjunctions.or')}</Divider>}
+        {!DOD_DISABLED && <SercqSendContactItem />}
+        {!DOD_DISABLED && !defaultSERCQ_SENDAddress && <Divider>{t('conjunctions.or')}</Divider>}
         <PecContactItem />
       </Stack>
     </Box>
