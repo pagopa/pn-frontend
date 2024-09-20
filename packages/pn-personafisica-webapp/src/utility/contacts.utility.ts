@@ -61,37 +61,42 @@ type AddressTypeItem = {
   disabledReason: DISABLED_REASON;
 };
 
-type AllowedAddressTypeForSpecialContact = {
+type AddressRelation = {
   channelType: ChannelType;
+  relationWith: Array<ChannelType>;
   disabledDependsOn: Array<ChannelType>;
   shownDependsOn: Array<ChannelType>;
 };
 
-const allowedAddressTypesForSpecialContacts: Array<AllowedAddressTypeForSpecialContact> = [
+export const addressesRelationships: Array<AddressRelation> = [
   {
     channelType: ChannelType.EMAIL,
+    relationWith: [ChannelType.EMAIL],
     disabledDependsOn: [ChannelType.EMAIL],
     shownDependsOn: [],
   },
   {
     channelType: ChannelType.SMS,
+    relationWith: [ChannelType.SMS],
     disabledDependsOn: [ChannelType.SMS],
     shownDependsOn: [],
   },
   {
     channelType: ChannelType.PEC,
+    relationWith: [ChannelType.PEC, ChannelType.SERCQ],
     disabledDependsOn: [],
     shownDependsOn: [ChannelType.PEC, ChannelType.SERCQ],
   },
   {
     channelType: ChannelType.SERCQ,
+    relationWith: [ChannelType.SERCQ, ChannelType.PEC],
     disabledDependsOn: [],
     shownDependsOn: [ChannelType.PEC],
   },
 ];
 
 const isDropdownItemDisabled = (
-  allowedAddress: AllowedAddressTypeForSpecialContact,
+  allowedAddress: AddressRelation,
   addresses: SelectedAddresses,
   sender: Sender
 ): { status: boolean; reason: DISABLED_REASON } => {
@@ -126,7 +131,7 @@ const isDropdownItemDisabled = (
 };
 
 const isDropdownItemShown = (
-  allowedAddress: AllowedAddressTypeForSpecialContact,
+  allowedAddress: AddressRelation,
   addresses: SelectedAddresses
 ): boolean => {
   // the address is shown if it has one of the default addresses listed into shownDependsOn property
@@ -151,13 +156,13 @@ export const specialContactsAvailableAddressTypes = (
   addressesData: SelectedAddresses,
   sender: Sender
 ): Array<AddressTypeItem> =>
-  allowedAddressTypesForSpecialContacts.map((allowedAddressType) => {
-    const isDisabled = isDropdownItemDisabled(allowedAddressType, addressesData, sender);
+  addressesRelationships.map((relation) => {
+    const isDisabled = isDropdownItemDisabled(relation, addressesData, sender);
 
-    const isShown = isDropdownItemShown(allowedAddressType, addressesData);
+    const isShown = isDropdownItemShown(relation, addressesData);
 
     return {
-      id: allowedAddressType.channelType,
+      id: relation.channelType,
       shown: isShown,
       disabled: isDisabled.status,
       disabledReason: isDisabled.reason,

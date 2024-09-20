@@ -241,7 +241,6 @@ const PecContactItem: React.FC = () => {
         open={modalOpen === ModalType.VALUE}
         onDiscard={() => setModalOpen(null)}
         onConfirm={(value) => {
-          setModalOpen(null);
           handleSubmit(value);
         }}
       />
