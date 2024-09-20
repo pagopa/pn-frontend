@@ -19,17 +19,11 @@ const LegalContacts = () => {
       <Typography variant="body1">
         <Trans i18nKey="legal-contacts.sub-title" ns="recapiti" />
       </Typography>
-      <Stack
-        spacing={!defaultSERCQ_SENDAddress ? 2 : 0}
-        mt={3}
-        data-testid="legalContacts"
-        divider={
-          !defaultSERCQ_SENDAddress && (
-            <Divider sx={{ color: 'text.secondary' }}>{t('conjunctions.or')}</Divider>
-          )
-        }
-      >
+      <Stack spacing={!defaultSERCQ_SENDAddress ? 2 : 0} mt={3} data-testid="legalContacts">
         <SercqSendContactItem />
+        {!defaultSERCQ_SENDAddress && (
+          <Divider sx={{ color: 'text.secondary' }}>{t('conjunctions.or')}</Divider>
+        )}
         <PecContactItem />
       </Stack>
     </Box>
