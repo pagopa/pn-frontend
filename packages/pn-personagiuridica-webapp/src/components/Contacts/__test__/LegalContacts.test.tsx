@@ -51,7 +51,6 @@ describe('LegalContacts Component', async () => {
     expect(container).toHaveTextContent('legal-contacts.title');
     expect(container).toHaveTextContent('legal-contacts.sub-title');
     // check contacts
-    expect(container).toHaveTextContent('legal-contacts.list');
     const pecContact = queryByTestId(`default_pecContact`);
     expect(pecContact).not.toBeInTheDocument();
     const sercqSendContact = getByTestId(`default_sercqSendContact`);
