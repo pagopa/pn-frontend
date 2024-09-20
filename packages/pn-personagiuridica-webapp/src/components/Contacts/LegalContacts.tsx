@@ -30,7 +30,6 @@ const LegalContacts = () => {
         }
       >
         <SercqSendContactItem />
-        <Divider sx={{ color: 'text.secondary', my: 2 }}>{t('conjunctions.or')}</Divider>
         <PecContactItem />
       </Stack>
     </Box>

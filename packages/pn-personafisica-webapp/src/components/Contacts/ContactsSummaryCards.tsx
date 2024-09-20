@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { AddCircleOutline, Verified, WarningOutlined } from '@mui/icons-material';
 import { Card, CardActionArea, Stack, Typography } from '@mui/material';
 
-import { AddressType, DigitalAddress } from '../../models/contacts';
+import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 
@@ -20,7 +20,12 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
   addressType,
 }) => {
   const { t } = useTranslation('recapiti');
-  const hasAddress = contacts.length > 0;
+  const hasAddress =
+    contacts.filter(
+      (contact) =>
+        contact.channelType !== ChannelType.IOMSG ||
+        (contact.channelType === ChannelType.IOMSG && contact.value === IOAllowedValues.ENABLED)
+    ).length > 0;
   const isCourtesyCard = addressType === AddressType.COURTESY;
   const title = isCourtesyCard ? 'summary-card.courtesy-title' : 'summary-card.legal-title';
 
