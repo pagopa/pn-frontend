@@ -53,7 +53,7 @@ const EmailContactItem: React.FC = () => {
   const handleSubmit = (value: string) => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_START, {
       senderId: 'default',
-      source: externalInfo.source ?? ContactSource.RECAPITI,
+      source: externalInfo?.source ?? ContactSource.RECAPITI,
     });
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { value };

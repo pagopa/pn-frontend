@@ -262,7 +262,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
     if (isPFEvent(eventKey)) {
       PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], {
         senderId: 'default',
-        source: externalInfo.source ?? ContactSource.RECAPITI,
+        source: externalInfo?.source ?? ContactSource.RECAPITI,
       });
     }
     handleCodeVerification(value, channelType);
