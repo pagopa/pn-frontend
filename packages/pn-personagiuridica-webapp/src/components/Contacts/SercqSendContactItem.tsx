@@ -230,6 +230,10 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
         value ? t('legal-contacts.sercq-send-title', { ns: 'recapiti' }) : <SercqSendCardTitle />
       }
       subtitle={t('legal-contacts.sercq-send-description', { ns: 'recapiti' })}
+      sx={{
+        borderBottomLeftRadius: value ? 0 : 4,
+        borderBottomRightRadius: value ? 0 : 4,
+      }}
     >
       <Box
         data-testid={`${senderId}_sercqSendContact`}

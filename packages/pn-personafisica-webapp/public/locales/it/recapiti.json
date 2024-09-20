@@ -47,7 +47,10 @@
     "remove-sercq-send-title": "Confermi di voler disattivare il Domicilio Digitale?",
     "remove-sercq-send-message": "Non avrai più un recapito a valore legale per le comunicazioni inviate su SEND. Potresti tornare a ricevere le notifiche in forma cartacea.",
     "remove-sercq-send-button": "Disattiva Domicilio Digitale",
-    "sercq-send-removed-successfully": "Domicilio Digitale disattivato correttamente"
+    "sercq-send-removed-successfully": "Domicilio Digitale disattivato correttamente",
+    "sercq-send-pec": "Preferisci usare una PEC come recapito a valore legale?",
+    "sercq-send-add-pec": "Inserisci PEC",
+    "sercq-send-add-pec-description": "La PEC sostituirà il Domicilio Digitale come tuo recapito a valore legale di SEND. Il Domicilio Digitale verrà disattivato automaticamente."
   },
   "io-contact": {
     "title": "App IO",

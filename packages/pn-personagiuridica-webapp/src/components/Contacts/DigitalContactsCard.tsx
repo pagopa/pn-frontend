@@ -9,6 +9,7 @@ type Props = {
   header?: ReactNode;
   title: ReactNode;
   subtitle: string;
+  sx?: SxProps;
   children: ReactNode;
 };
 
@@ -71,8 +72,8 @@ const DigitalContactsCardContent: React.FC<
   );
 };
 
-const DigitalContactsCard: React.FC<Props> = ({ header, title, subtitle, children }) => (
-  <Card sx={{ p: 3 }}>
+const DigitalContactsCard: React.FC<Props> = ({ header, title, subtitle, sx, children }) => (
+  <Card sx={{ p: 3, ...sx }}>
     {header && <CardHeader data-testid="DigitalContactsCardHeader" sx={{ p: 0 }} title={header} />}
     <CardContent data-testid="DigitalContactsCardBody" sx={{ p: 0, paddingBottom: '0 !important' }}>
       <DigitalContactsCardContent title={title} subtitle={subtitle}>

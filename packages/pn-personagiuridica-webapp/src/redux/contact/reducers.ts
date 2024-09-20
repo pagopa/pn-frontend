@@ -2,6 +2,7 @@ import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 
 import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
 import { Party } from '../../models/party';
+import { addressesRelationships } from '../../utility/contacts.utility';
 import { RootState } from '../store';
 import {
   createOrUpdateAddress,
@@ -38,11 +39,14 @@ const contactsSlice = createSlice({
     });
     builder.addCase(createOrUpdateAddress.fulfilled, (state, action) => {
       if (action.payload) {
+        const relation = addressesRelationships.find(
+          (rel) => rel.channelType === action.meta.arg.channelType
+        );
         const addressIndex = state.digitalAddresses.findIndex(
           (l) =>
             l.senderId === action.meta.arg.senderId &&
             l.addressType === action.meta.arg.addressType &&
-            l.channelType === action.meta.arg.channelType
+            relation?.relationWith.includes(l.channelType)
         );
         if (addressIndex > -1) {
           state.digitalAddresses[addressIndex] = action.payload;

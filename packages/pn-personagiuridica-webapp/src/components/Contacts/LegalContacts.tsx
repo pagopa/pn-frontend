@@ -2,11 +2,14 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Box, Divider, List, ListItem, Stack, Typography } from '@mui/material';
 
+import { contactsSelectors } from '../../redux/contact/reducers';
+import { useAppSelector } from '../../redux/hooks';
 import PecContactItem from './PecContactItem';
 import SercqSendContactItem from './SercqSendContactItem';
 
 const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
+  const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
 
   const legalContactList: Array<string> = t('legal-contacts.list', {
     returnObjects: true,
@@ -26,11 +29,17 @@ const LegalContacts = () => {
           </ListItem>
         ))}
       </List>
-      <Stack spacing={0} mt={3} data-testid="legalContacts">
+      <Stack
+        spacing={!defaultSERCQ_SENDAddress ? 2 : 0}
+        mt={3}
+        data-testid="legalContacts"
+        divider={
+          !defaultSERCQ_SENDAddress && (
+            <Divider sx={{ color: 'text.secondary' }}>{t('conjunctions.or')}</Divider>
+          )
+        }
+      >
         <SercqSendContactItem />
-        <Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }}>
-          {t('conjunctions.or')}
-        </Divider>
         <PecContactItem />
       </Stack>
     </Box>
