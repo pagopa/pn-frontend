@@ -56,7 +56,10 @@
     "remove-sercq-send-message": "Non avrai più un recapito digitale a valore legale per le comunicazioni della Pubblica Amministrazione e potresti tornare a ricevere le notifiche in forma cartacea.",
     "block-remove-sercq-send-title": "Non è possibile disattivare il Domicilio Digitale",
     "block-remove-sercq-send-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Recapiti secondari”.",
-    "sercq-send-removed-successfully": "Domicilio Digitale disattivato correttamente"
+    "sercq-send-removed-successfully": "Domicilio Digitale disattivato correttamente",
+    "sercq-send-pec": "Preferisci usare una PEC come recapito a valore legale?",
+    "sercq-send-add-pec": "Inserisci PEC",
+    "sercq-send-add-pec-description": "La PEC sostituirà il Domicilio Digitale come tuo recapito a valore legale di SEND. Il Domicilio Digitale verrà disattivato automaticamente."
   },
   "courtesy-contacts": {
     "title": "Recapiti di cortesia",

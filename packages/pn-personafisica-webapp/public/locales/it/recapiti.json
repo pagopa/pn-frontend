@@ -64,7 +64,10 @@
       "<strong>Ricevere le notifiche in tempo reale</strong>, appena l’ente le carica su SEND;",
       "<strong>Aprire i documenti allegati</strong> direttamente in app;",
       "<strong>Pagare gli importi dovuti</strong> se la notifica prevede un pagamento."
-    ]
+    ],
+    "sercq-send-pec": "Preferisci usare una PEC come recapito a valore legale?",
+    "sercq-send-add-pec": "Inserisci PEC",
+    "sercq-send-add-pec-description": "La PEC sostituirà il Domicilio Digitale come tuo recapito a valore legale di SEND. Il Domicilio Digitale verrà disattivato automaticamente."
   },
   "io-contact": {
     "title": "App IO",

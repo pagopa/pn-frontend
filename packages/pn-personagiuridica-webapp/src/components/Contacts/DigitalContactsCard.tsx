@@ -19,6 +19,7 @@ type Props = {
   title: ReactNode;
   subtitle: string;
   expanded?: boolean;
+  sx?: SxProps;
   children: ReactNode;
 };
 
@@ -89,9 +90,10 @@ const DigitalContactsCard: React.FC<Props> = ({
   title,
   subtitle,
   expanded = false,
+  sx,
   children,
 }) => (
-  <Card sx={{ p: 3 }}>
+  <Card sx={{ p: 3, ...sx }}>
     {header && <CardHeader data-testid="DigitalContactsCardHeader" sx={{ p: 0 }} title={header} />}
     <CardContent data-testid="DigitalContactsCardBody" sx={{ p: 0, paddingBottom: '0 !important' }}>
       <DigitalContactsCardContent title={title} subtitle={subtitle} expanded={expanded}>

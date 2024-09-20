@@ -1,9 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
+import { getById, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
+import {
+  digitalLegalAddresses,
+  digitalLegalAddressesSercq,
+} from '../../../__mocks__/Contacts.mock';
 import {
   fireEvent,
   render,
@@ -13,7 +16,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { AddressType } from '../../../models/contacts';
+import { AddressType, ChannelType } from '../../../models/contacts';
 import PecContactItem from '../PecContactItem';
 import { fillCodeDialog } from './test-utils';
 
@@ -29,6 +32,9 @@ describe('PecContactItem component', () => {
   let mock: MockAdapter;
   const defaultAddress = digitalLegalAddresses.find(
     (addr) => addr.senderId === 'default' && addr.pecValid
+  );
+  const defaultSercqAddress = digitalLegalAddressesSercq.find(
+    (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SERCQ_SEND
   );
   const VALID_PEC = 'pec@valida.com';
 
@@ -357,5 +363,81 @@ describe('PecContactItem component', () => {
       expect(input).toBeInTheDocument();
       expect(result.container).not.toHaveTextContent('');
     });
+  });
+
+  it('render component when sercq send is enabled, open dialog and add pec', async () => {
+    mock
+      .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
+        value: VALID_PEC,
+      })
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
+    mock
+      .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
+        value: VALID_PEC,
+        verificationCode: '01234',
+      })
+      .reply(204);
+    // render component
+    const result = render(<PecContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [defaultSercqAddress],
+        },
+      },
+    });
+    expect(result.container).toHaveTextContent('legal-contacts.sercq-send-pec');
+    const addPecButton = result.getByText('legal-contacts.sercq-send-add-pec');
+    expect(addPecButton).toBeInTheDocument();
+    fireEvent.click(addPecButton);
+    // open modal, fill pec and click on confirm
+    const dialog = await waitFor(() => result.getByTestId('pecValueDialog'));
+    expect(dialog).toBeInTheDocument();
+    await testInput(dialog, `default_modal_pec`, VALID_PEC);
+    const confirmButton = screen.getByText('button.conferma');
+    expect(confirmButton).toBeEnabled();
+    fireEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        value: VALID_PEC,
+      });
+    });
+    // inser otp and confirm
+    const codeDialog = await fillCodeDialog(result);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
+        value: VALID_PEC,
+        verificationCode: '01234',
+      });
+    });
+    // check that contact has been added
+    await waitFor(() => expect(codeDialog).not.toBeInTheDocument());
+    expect(
+      testStore
+        .getState()
+        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
+    ).toStrictEqual([
+      {
+        ...defaultSercqAddress,
+        pecValid: true,
+        value: VALID_PEC,
+        senderName: undefined,
+        channelType: ChannelType.PEC,
+      },
+    ]);
+    // wait rerendering due to redux changes
+    await waitFor(() => {
+      expect(result.container).not.toHaveTextContent('legal-contacts.sercq-send-pec');
+    });
+    const pecValue = getById(result.container, 'default_pec-typography');
+    expect(pecValue).toBeInTheDocument();
+    expect(pecValue).toHaveTextContent(VALID_PEC);
+    const editButton = getById(result.container, 'modifyContact-default_pec');
+    expect(editButton).toBeInTheDocument();
+    const deleteButton = getById(result.container, 'cancelContact-default_pec');
+    expect(deleteButton).toBeInTheDocument();
   });
 });

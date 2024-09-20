@@ -20,6 +20,7 @@ type Props = {
   subtitle: string;
   illustration?: ReactNode;
   expanded?: boolean;
+  sx?: SxProps;
   children: ReactNode;
 };
 
@@ -92,12 +93,13 @@ const DigitalContactsCard: React.FC<Props> = ({
   subtitle,
   illustration,
   expanded = false,
+  sx,
   children,
 }) => {
   const isMobile = useIsMobile();
 
   return (
-    <Card sx={{ p: !isMobile && illustration ? 0 : 3 }}>
+    <Card sx={{ p: !isMobile && illustration ? 0 : 3, ...sx }}>
       {header && (
         <CardHeader data-testid="DigitalContactsCardHeader" sx={{ p: 0 }} title={header} />
       )}

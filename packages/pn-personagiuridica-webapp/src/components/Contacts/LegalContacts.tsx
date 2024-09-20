@@ -2,11 +2,14 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Box, Divider, Stack, Typography } from '@mui/material';
 
+import { contactsSelectors } from '../../redux/contact/reducers';
+import { useAppSelector } from '../../redux/hooks';
 import PecContactItem from './PecContactItem';
 import SercqSendContactItem from './SercqSendContactItem';
 
 const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
+  const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
 
   return (
     <Box id="legalContactsSection">
@@ -16,7 +19,16 @@ const LegalContacts = () => {
       <Typography variant="body1">
         <Trans i18nKey="legal-contacts.sub-title" ns="recapiti" />
       </Typography>
-      <Stack spacing={0} mt={4} data-testid="legalContacts">
+      <Stack
+        spacing={!defaultSERCQ_SENDAddress ? 2 : 0}
+        mt={3}
+        data-testid="legalContacts"
+        divider={
+          !defaultSERCQ_SENDAddress && (
+            <Divider sx={{ color: 'text.secondary' }}>{t('conjunctions.or')}</Divider>
+          )
+        }
+      >
         <SercqSendContactItem />
         <Divider sx={{ color: 'text.secondary', my: 2 }}>{t('conjunctions.or')}</Divider>
         <PecContactItem />

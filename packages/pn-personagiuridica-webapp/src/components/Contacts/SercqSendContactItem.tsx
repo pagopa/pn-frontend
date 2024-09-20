@@ -226,6 +226,10 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
       }
       subtitle={t('legal-contacts.sercq-send-description', { ns: 'recapiti' })}
       expanded
+      sx={{
+        borderBottomLeftRadius: value ? 0 : 4,
+        borderBottomRightRadius: value ? 0 : 4,
+      }}
     >
       <Box
         data-testid={`${senderId}_sercqSendContact`}
