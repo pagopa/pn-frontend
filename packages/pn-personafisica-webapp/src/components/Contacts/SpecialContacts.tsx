@@ -292,13 +292,11 @@ const SpecialContacts: React.FC = () => {
         {t('special-contacts.description', { ns: 'recapiti' })}
       </Typography>
       <ButtonNaked
-        component={Typography}
         startIcon={<AddIcon />}
         onClick={() => setModalOpen(ModalType.SPECIAL)}
         color="primary"
         size="medium"
-        mt={1}
-        sx={{ alignSelf: 'flex-start' }}
+        sx={{ alignSelf: 'flex-start', mt: 1 }}
         data-testid="addSpecialContactButton"
       >
         {t('special-contacts.add-contact', { ns: 'recapiti' })}

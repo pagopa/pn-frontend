@@ -21,9 +21,7 @@ const LegalContacts = () => {
       </Typography>
       <Stack spacing={!defaultSERCQ_SENDAddress ? 2 : 0} mt={3} data-testid="legalContacts">
         <SercqSendContactItem />
-        {!defaultSERCQ_SENDAddress && (
-          <Divider sx={{ color: 'text.secondary' }}>{t('conjunctions.or')}</Divider>
-        )}
+        {!defaultSERCQ_SENDAddress && <Divider>{t('conjunctions.or')}</Divider>}
         <PecContactItem />
       </Stack>
     </Box>
