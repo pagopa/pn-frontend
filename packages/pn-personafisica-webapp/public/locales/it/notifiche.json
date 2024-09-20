@@ -62,9 +62,12 @@
     "add_domicile_PEC": "Aggiungi PEC",
     "add_domicile_EMAIL": "Aggiungi e-mail",
     "add_domicile_APPIO": "Attiva il servizio",
+    "add_domicile_SERCQ": "Completa la configurazione",
     "domicile_PEC": "Hai un indirizzo PEC? Aggiungilo e non riceverai più le raccomandate cartacee.",
     "domicile_EMAIL": "Aggiungi il tuo indirizzo e-mail: ti invieremo un messaggio ogni volta che ricevi una notifica.",
     "domicile_APPIO": "Hai l’app IO? Attiva il servizio \"Notifiche digitali\" per visualizzare e pagare le notifiche direttamente in app.",
+    "domicile_SERCQ_title": "Vuoi ricevere le prossime notifiche in digitale?",
+    "domicile_SERCQ": "Attiva SEND come Domicilio Digitale e non preoccuparti più delle raccomandate cartacee.",
     "cancelled-alert-text": "Questa notifica è stata annullata dall’ente mittente. Puoi ignorarne il contenuto.",
     "disclaimer-link": "Scopri di più",
     "payment": {

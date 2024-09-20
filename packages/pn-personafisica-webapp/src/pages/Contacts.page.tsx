@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Box, Divider, Link, Stack } from '@mui/material';
@@ -8,6 +8,7 @@ import ContactsSummaryCards from '../components/Contacts/ContactsSummaryCards';
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import LegalContacts from '../components/Contacts/LegalContacts';
 import SpecialContacts from '../components/Contacts/SpecialContacts';
+import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
 import { ChannelType } from '../models/contacts';
@@ -24,6 +25,7 @@ const Contacts = () => {
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
   const [pageReady, setPageReady] = useState(false);
   const { LANDING_SITE_URL } = getConfiguration();
+  const domicileBannerTypeRef = useRef('');
 
   const showSpecialContactsSection = Object.values(ChannelType)
     .filter((a) => a !== ChannelType.IOMSG)
@@ -89,6 +91,8 @@ const Contacts = () => {
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
+        <DomicileBanner ref={domicileBannerTypeRef} />
+
         <TitleBox
           variantTitle="h4"
           title={t('title')}

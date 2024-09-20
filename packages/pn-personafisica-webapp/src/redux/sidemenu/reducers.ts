@@ -12,13 +12,8 @@ const generalInfoSlice = createSlice({
     pendingDelegators: 0,
     delegators: [] as Array<Delegator>,
     defaultAddresses: [] as Array<DigitalAddress>,
-    domicileBannerOpened: true,
   },
-  reducers: {
-    closeDomicileBanner: (state) => {
-      state.domicileBannerOpened = false;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getSidemenuInformation.fulfilled, (state, action) => {
       state.pendingDelegators = action.payload.filter(
