@@ -192,16 +192,48 @@ describe('Mixpanel - Has Addresses Strategy', () => {
       [EventPropertyType.PROFILE]: {
         SEND_APPIO_STATUS: 'deactivated',
         SEND_HAS_EMAIL: 'yes',
-        SEND_HAS_PEC: 'yes',
+        SEND_HAS_PEC: 'no',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'yes',
       },
       [EventPropertyType.SUPER_PROPERTY]: {
         SEND_APPIO_STATUS: 'deactivated',
         SEND_HAS_EMAIL: 'yes',
-        SEND_HAS_PEC: 'yes',
+        SEND_HAS_PEC: 'no',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'yes',
+      },
+    });
+  });
+
+  it('should return HAS_SERCQ_SEND as no when is secondary contacts and PEC is default contact', () => {
+    const strategy = new SendHasAddressesStrategy();
+    const addresses = [
+      ...digitalAddresses,
+      {
+        ...digitalAddressesSercq[0],
+        senderId: 'not-default',
+      },
+    ];
+
+    const hasAddressesEvent = strategy.performComputations({
+      payload: addresses,
+    });
+
+    expect(hasAddressesEvent).toEqual({
+      [EventPropertyType.PROFILE]: {
+        SEND_APPIO_STATUS: 'deactivated',
+        SEND_HAS_EMAIL: 'yes',
+        SEND_HAS_PEC: 'yes',
+        SEND_HAS_SMS: 'yes',
+        SEND_HAS_SERCQ_SEND: 'no',
+      },
+      [EventPropertyType.SUPER_PROPERTY]: {
+        SEND_APPIO_STATUS: 'deactivated',
+        SEND_HAS_EMAIL: 'yes',
+        SEND_HAS_PEC: 'yes',
+        SEND_HAS_SMS: 'yes',
+        SEND_HAS_SERCQ_SEND: 'no',
       },
     });
   });

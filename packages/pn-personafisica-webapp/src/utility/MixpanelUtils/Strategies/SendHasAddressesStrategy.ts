@@ -16,11 +16,15 @@ type SendHasAddressesData = {
 
 export class SendHasAddressesStrategy implements EventStrategy {
   performComputations({ payload }: SendHasAddressesData): TrackedEvent<SendHasAddresses> {
-    // TODO - Per PEC e SERCQ capire se vanno filtrati per senderId = default
     const hasPecAddresses =
-      payload.filter((address) => address.channelType === ChannelType.PEC).length > 0;
+      payload.filter(
+        (address) => address.channelType === ChannelType.PEC && address.senderId === 'default'
+      ).length > 0;
     const hasSercqSendAddress =
-      payload.filter((address) => address.channelType === ChannelType.SERCQ_SEND).length > 0;
+      payload.filter(
+        (address) =>
+          address.channelType === ChannelType.SERCQ_SEND && address.senderId === 'default'
+      ).length > 0;
     const hasCourtesyEmailAddresses =
       payload.filter((address) => address.channelType === ChannelType.EMAIL).length > 0;
     const hasCourtesySmsAddresses =
