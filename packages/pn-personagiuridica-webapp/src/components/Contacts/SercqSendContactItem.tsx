@@ -135,6 +135,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
     // if tos and privacy are already accepted, proceede with the activation
     if (tos.accepted && privacy.accepted) {
       activateService();
+      return;
     }
     // accept tos and privacy
     const tosPrivacyBody = [];
