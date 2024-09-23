@@ -2,7 +2,16 @@ import { ReactNode, useState } from 'react';
 
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
-import { Box, Card, CardContent, CardHeader, Stack, SxProps, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  Stack,
+  SxProps,
+  Typography,
+} from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 type Props = {
@@ -10,6 +19,8 @@ type Props = {
   title: ReactNode;
   subtitle: string;
   illustration?: ReactNode;
+  expanded?: boolean;
+  sx?: SxProps;
   children: ReactNode;
 };
 
@@ -32,25 +43,27 @@ const DigitalContactsCardTitle: React.FC<Pick<Props, 'title'>> = ({ title }) => 
 );
 
 const DigitalContactsCardContent: React.FC<
-  Pick<Props, 'title' | 'subtitle' | 'illustration' | 'children'> & { sx?: SxProps }
-> = ({ title, subtitle, illustration, sx, children }) => {
+  Pick<Props, 'title' | 'subtitle' | 'children' | 'expanded'> & { sx?: SxProps }
+> = ({ title, subtitle, expanded, sx, children }) => {
   const isMobile = useIsMobile();
-  const [showDescription, setShowDescription] = useState(false);
+  const [showDescription, setShowDescription] = useState(expanded);
   return (
     <Box sx={sx}>
       {isMobile && (
-        <Stack direction="row" justifyContent="space-between">
-          <DigitalContactsCardTitle title={title} />
-          {!showDescription && (
+        <Stack direction="row" justifyContent="space-between" alignItems="flex-end">
+          {title && <DigitalContactsCardTitle title={title} />}
+          {subtitle && !showDescription && (
             <KeyboardArrowDownOutlinedIcon
               color="primary"
               onClick={() => setShowDescription(true)}
+              sx={{ mb: 2 }}
             />
           )}
-          {showDescription && (
+          {subtitle && showDescription && (
             <KeyboardArrowUpOutlinedIcon
               color="primary"
               onClick={() => setShowDescription(false)}
+              sx={{ mb: 2 }}
             />
           )}
         </Stack>
@@ -61,13 +74,14 @@ const DigitalContactsCardContent: React.FC<
           color="text.secondary"
           fontWeight={400}
           variant="body1"
-          mb={2}
+          mb={3}
           data-testid="DigitalContactsCardDescription"
         >
           {subtitle}
         </Typography>
       )}
-      {isMobile && <Box sx={{ textAlign: 'center' }}>{illustration}</Box>}
+      {isMobile && title && <Divider sx={{ mb: 2 }} />}
+      {/* isMobile && <Box sx={{ textAlign: 'center' }}>{illustration}</Box> */}
       {children}
     </Box>
   );
@@ -78,12 +92,14 @@ const DigitalContactsCard: React.FC<Props> = ({
   title,
   subtitle,
   illustration,
+  expanded = false,
+  sx,
   children,
 }) => {
   const isMobile = useIsMobile();
 
   return (
-    <Card sx={{ p: !isMobile && illustration ? 0 : 3 }}>
+    <Card sx={{ p: !isMobile && illustration ? 0 : 3, ...sx }}>
       {header && (
         <CardHeader data-testid="DigitalContactsCardHeader" sx={{ p: 0 }} title={header} />
       )}
@@ -93,14 +109,19 @@ const DigitalContactsCard: React.FC<Props> = ({
       >
         {!isMobile && illustration && (
           <Stack direction="row" spacing={4}>
-            <DigitalContactsCardContent title={title} subtitle={subtitle} sx={{ p: 3 }}>
+            <DigitalContactsCardContent
+              title={title}
+              subtitle={subtitle}
+              sx={{ p: 3 }}
+              expanded={expanded}
+            >
               {children}
             </DigitalContactsCardContent>
             <Box sx={{ flex: '0 0 449px', position: 'relative', top: '8px' }}>{illustration}</Box>
           </Stack>
         )}
         {(!illustration || isMobile) && (
-          <DigitalContactsCardContent title={title} subtitle={subtitle} illustration={illustration}>
+          <DigitalContactsCardContent title={title} subtitle={subtitle} expanded={expanded}>
             {children}
           </DigitalContactsCardContent>
         )}

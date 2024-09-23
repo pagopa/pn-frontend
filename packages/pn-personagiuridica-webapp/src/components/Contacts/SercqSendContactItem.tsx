@@ -47,26 +47,20 @@ enum ModalType {
 
 const SercqSendCardTitle: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const isMobile = useIsMobile();
 
   return (
-    <Stack
-      direction={isMobile ? 'column-reverse' : 'row'}
-      spacing={1}
-      alignItems={isMobile ? 'start' : 'center'}
-      mb={2}
-      data-testid="DigitalContactsCardTitle"
-    >
-      <Typography color="text.primary" fontWeight={700} fontSize={18} variant="body1">
+    <Box mb={2} data-testid="DigitalContactsCardTitle">
+      <Chip label={t('badges.news')} color="primary" data-testid="newsBadge" sx={{ mb: 1 }} />
+      <Typography
+        color="text.primary"
+        fontWeight={700}
+        fontSize={18}
+        variant="body1"
+        sx={{ mb: '12px' }}
+      >
         {t('legal-contacts.sercq-send-title', { ns: 'recapiti' })}
       </Typography>
-      <Chip
-        label={t('badges.news')}
-        color="primary"
-        data-testid="newsBadge"
-        sx={{ borderRadius: 1 }}
-      />
-    </Stack>
+    </Box>
   );
 };
 
@@ -75,13 +69,14 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
   const isMobile = useIsMobile();
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
-  const { defaultSERCQ_SENDAddress, courtesyAddresses } = useAppSelector(
+  const { defaultSERCQ_SENDAddress, courtesyAddresses, specialPECAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
   const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
 
   const value = defaultSERCQ_SENDAddress?.value ?? '';
   const hasCourtesy = courtesyAddresses.length > 0;
+  const blockDelete = specialPECAddresses.length > 0;
 
   const handleActivation = () => {
     dispatch(getSercqSendTosPrivacyApproval())
@@ -230,6 +225,11 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
         value ? t('legal-contacts.sercq-send-title', { ns: 'recapiti' }) : <SercqSendCardTitle />
       }
       subtitle={t('legal-contacts.sercq-send-description', { ns: 'recapiti' })}
+      expanded
+      sx={{
+        borderBottomLeftRadius: value ? 0 : 4,
+        borderBottomRightRadius: value ? 0 : 4,
+      }}
     >
       <Box
         data-testid={`${senderId}_sercqSendContact`}
@@ -241,17 +241,22 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
           </Button>
         )}
         {value && (
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={1}>
             <VerifiedIcon
               fontSize="small"
-              color="success"
+              color="primary"
               sx={{ position: 'relative', top: '2px' }}
             />
             <Box>
-              <Typography data-testid="IO status" fontWeight={600}>
+              <Typography data-testid="srcq-send-status" fontWeight={600} mb={2}>
                 {t('legal-contacts.sercq-send-enabled', { ns: 'recapiti' })}
               </Typography>
-              <ButtonNaked onClick={() => setModalOpen({ type: ModalType.DELETE })} color="error">
+              <ButtonNaked
+                onClick={() => setModalOpen({ type: ModalType.DELETE })}
+                color="error"
+                sx={{ fontWeight: 700 }}
+                size="medium"
+              >
                 {t('button.disable')}
               </ButtonNaked>
             </Box>
@@ -280,11 +285,21 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
       />
       <DeleteDialog
         showModal={modalOpen?.type === ModalType.DELETE}
-        removeModalTitle={t(`legal-contacts.remove-sercq-send-title`, { ns: 'recapiti' })}
-        removeModalBody={t(`legal-contacts.remove-sercq-send-message`, { ns: 'recapiti' })}
-        removeButtonLabel={t(`legal-contacts.remove-sercq-send-button`, { ns: 'recapiti' })}
+        removeModalTitle={t(
+          `legal-contacts.${blockDelete ? 'block-' : ''}remove-sercq-send-title`,
+          {
+            ns: 'recapiti',
+          }
+        )}
+        removeModalBody={t(
+          `legal-contacts.${blockDelete ? 'block-' : ''}remove-sercq-send-message`,
+          {
+            ns: 'recapiti',
+          }
+        )}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
+        blockDelete={blockDelete}
       />
     </DigitalContactsCard>
   );

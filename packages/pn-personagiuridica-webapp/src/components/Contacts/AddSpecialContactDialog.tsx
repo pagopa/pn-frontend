@@ -3,16 +3,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import {
-  Alert,
-  Button,
-  DialogTitle,
-  InputAdornment,
-  MenuItem,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Alert, Button, DialogTitle, MenuItem, TextField, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomDropdown,
@@ -23,18 +14,15 @@ import {
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
 
-import { AddressType, ChannelType, Sender } from '../../models/contacts';
+import { ChannelType, Sender } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { getConfiguration } from '../../services/configuration.service';
 import {
-  DISABLED_REASON,
-  emailValidationSchema,
-  internationalPhonePrefix,
   pecValidationSchema,
-  phoneValidationSchema,
   specialContactsAvailableAddressTypes,
 } from '../../utility/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
@@ -45,12 +33,7 @@ type Props = {
   sender: Sender;
   channelType: ChannelType;
   onDiscard: () => void;
-  onConfirm: (
-    value: string,
-    channelType: ChannelType,
-    addressType: AddressType,
-    sender: Sender
-  ) => void;
+  onConfirm: (value: string, channelType: ChannelType, sender: Sender) => void;
 };
 
 const AddSpecialContactDialog: React.FC<Props> = ({
@@ -67,8 +50,11 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
+  const { DOD_DISABLED } = getConfiguration();
 
-  const addressTypes = specialContactsAvailableAddressTypes(addressesData, sender);
+  const addressTypes = specialContactsAvailableAddressTypes(addressesData, sender).filter((addr) =>
+    DOD_DISABLED ? addr.id !== ChannelType.SERCQ_SEND : true
+  );
 
   const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     await formik.setFieldValue('s_value', '');
@@ -126,14 +112,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
         then: pecValidationSchema(t),
       })
       .when('channelType', {
-        is: ChannelType.EMAIL,
-        then: emailValidationSchema(t),
-      })
-      .when('channelType', {
-        is: ChannelType.SMS,
-        then: phoneValidationSchema(t),
-      })
-      .when('channelType', {
         is: ChannelType.SERCQ_SEND,
         then: yup.string().nullable(),
       }),
@@ -147,7 +125,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     channelType: value
       ? channelType
       : addressTypes.find((a) => !a.disabled && a.shown)?.id ?? ChannelType.PEC,
-    s_value: channelType === ChannelType.SMS ? value.replace(internationalPhonePrefix, '') : value,
+    s_value: value,
   };
 
   const formik = useFormik({
@@ -156,13 +134,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      // eslint-disable-next-line functional/no-let
-      let addressType = AddressType.COURTESY;
-      if (values.channelType === ChannelType.PEC || values.channelType === ChannelType.SERCQ_SEND) {
-        addressType = AddressType.LEGAL;
-      }
-
-      onConfirm(values.s_value, values.channelType, addressType, {
+      onConfirm(values.s_value, values.channelType, {
         senderId: values.sender.id,
         senderName: values.sender.name,
       });
@@ -214,107 +186,93 @@ const AddSpecialContactDialog: React.FC<Props> = ({
       </DialogTitle>
       <PnDialogContent>
         <form onSubmit={formik.handleSubmit}>
-          <Stack mt={1} direction="column">
-            <Typography variant="caption-semibold" mb={1}>
-              {t(`special-contacts.contact-to-add`, { ns: 'recapiti' })}
-            </Typography>
-            <Typography variant="body1" mb={2}>
-              {t(`special-contacts.contact-to-add-description`, { ns: 'recapiti' })}
-            </Typography>
-            <CustomDropdown
-              id="channelType"
-              name="channelType"
-              value={formik.values.channelType}
-              onChange={addressTypeChangeHandler}
+          <Typography variant="body1" mb={2}>
+            {t(`special-contacts.contact-to-add-description`, { ns: 'recapiti' })}
+          </Typography>
+          <Typography variant="caption-semibold" mb={1} display="block">
+            {t(`special-contacts.contact-to-add`, { ns: 'recapiti' })}
+          </Typography>
+          <CustomDropdown
+            id="channelType"
+            name="channelType"
+            value={formik.values.channelType}
+            onChange={addressTypeChangeHandler}
+            size="small"
+            disabled={!!value}
+            sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
+            label={t('special-contacts.select-address', { ns: 'recapiti' })}
+            fullWidth
+          >
+            {addressTypes
+              .filter((a) => a.shown)
+              .map((a) => (
+                <MenuItem
+                  id={`dropdown-${a.id}`}
+                  key={a.id}
+                  value={a.id}
+                  disabled={a.disabled}
+                  sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
+                >
+                  {t(`special-contacts.${a.id.toLowerCase()}`, { ns: 'recapiti' })}
+                </MenuItem>
+              ))}
+          </CustomDropdown>
+          {formik.values.channelType !== ChannelType.SERCQ_SEND && (
+            <TextField
               size="small"
-              disabled={!!value}
-              sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
-              label={t('special-contacts.select-address', { ns: 'recapiti' })}
-            >
-              {addressTypes
-                .filter((a) => a.shown)
-                .map((a) => (
-                  <MenuItem
-                    id={`dropdown-${a.id}`}
-                    key={a.id}
-                    value={a.id}
-                    disabled={a.disabled}
-                    sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
-                  >
-                    {t(`special-contacts.${a.id.toLowerCase()}`, { ns: 'recapiti' })}
-                    {a.disabledReason === DISABLED_REASON.NO_DEFAULT && (
-                      <Typography fontSize="14px">
-                        {t('special-contacts.no-default-address', { ns: 'recapiti' })}
-                      </Typography>
-                    )}
-                  </MenuItem>
-                ))}
-            </CustomDropdown>
-            {formik.values.channelType !== ChannelType.SERCQ_SEND && (
-              <TextField
-                size="small"
-                fullWidth
-                id="s_value"
-                name="s_value"
-                label={t(`special-contacts.link-${formik.values.channelType.toLowerCase()}-label`, {
-                  ns: 'recapiti',
-                })}
-                value={formik.values.s_value}
-                onChange={handleChangeTouched}
-                error={formik.touched.s_value && Boolean(formik.errors.s_value)}
-                helperText={formik.touched.s_value && formik.errors.s_value}
-                InputProps={{
-                  startAdornment:
-                    formik.values.channelType === ChannelType.SMS ? (
-                      <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
-                    ) : null,
-                }}
-              />
-            )}
-          </Stack>
-
-          <Stack my={2}>
-            <Typography variant="caption-semibold" mb={1}>
-              {t(`special-contacts.sender`, { ns: 'recapiti' })}
-            </Typography>
-            <ApiErrorWrapper
-              apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES}
-              mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
-              reloadAction={getParties}
-            >
-              <PnAutocomplete
-                id="sender"
-                data-testid="sender"
-                size="small"
-                options={parties ?? []}
-                autoComplete
-                getOptionLabel={getOptionLabel}
-                noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
-                isOptionEqualToValue={(option, value) => option.id === value.id}
-                onChange={senderChangeHandler}
-                inputValue={formik.values.sender.name}
-                disabled={!!value || sender.senderId !== 'default'}
-                onInputChange={(_event, newInputValue, reason) => {
-                  if (reason === 'input') {
-                    void formik.setFieldTouched('sender', true, false);
-                    void formik.setFieldValue('sender', { id: '', name: newInputValue });
-                  }
-                }}
-                filterOptions={(e) => e}
-                renderOption={renderOption}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    name="sender"
-                    label={entitySearchLabel}
-                    error={formik.touched.sender && Boolean(formik.errors.sender?.name)}
-                    helperText={formik.touched.sender && formik.errors.sender?.name}
-                  />
-                )}
-                sx={{ flexGrow: 1, flexBasis: 0 }}
-              />
-            </ApiErrorWrapper>
-          </Stack>
+              fullWidth
+              id="s_value"
+              name="s_value"
+              label={t(`special-contacts.link-${formik.values.channelType.toLowerCase()}-label`, {
+                ns: 'recapiti',
+              })}
+              value={formik.values.s_value}
+              onChange={handleChangeTouched}
+              error={formik.touched.s_value && Boolean(formik.errors.s_value)}
+              helperText={formik.touched.s_value && formik.errors.s_value}
+              sx={{ mb: 2 }}
+            />
+          )}
+          <Typography variant="caption-semibold" mb={1} display="block">
+            {t(`special-contacts.sender`, { ns: 'recapiti' })}
+          </Typography>
+          <ApiErrorWrapper
+            apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES}
+            mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
+            reloadAction={getParties}
+          >
+            <PnAutocomplete
+              id="sender"
+              data-testid="sender"
+              size="small"
+              options={parties ?? []}
+              autoComplete
+              getOptionLabel={getOptionLabel}
+              noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              onChange={senderChangeHandler}
+              inputValue={formik.values.sender.name}
+              disabled={!!value || sender.senderId !== 'default'}
+              onInputChange={(_event, newInputValue, reason) => {
+                if (reason === 'input') {
+                  void formik.setFieldTouched('sender', true, false);
+                  void formik.setFieldValue('sender', { id: '', name: newInputValue });
+                }
+              }}
+              filterOptions={(e) => e}
+              renderOption={renderOption}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  name="sender"
+                  label={entitySearchLabel}
+                  error={formik.touched.sender && Boolean(formik.errors.sender?.name)}
+                  helperText={formik.touched.sender && formik.errors.sender?.name}
+                />
+              )}
+              sx={{ flexGrow: 1, flexBasis: 0 }}
+            />
+          </ApiErrorWrapper>
         </form>
         {alreadyExistsMessage && (
           <Alert severity="warning" sx={{ mt: 2 }} data-testid="alreadyExistsAlert">

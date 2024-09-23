@@ -5,26 +5,17 @@ import { Box, Stack, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { AddressType, ChannelType, DigitalAddress, Sender } from '../../models/contacts';
+import { ChannelType, DigitalAddress, Sender } from '../../models/contacts';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import { specialContactsAvailableAddressTypes } from '../../utility/contacts.utility';
 import PecValidationItem from './PecValidationItem';
 
 type Props = {
+  index: number;
   addresses: Array<DigitalAddress>;
-  onEdit: (
-    value: string,
-    channelType: ChannelType,
-    addressType: AddressType,
-    sender: Sender
-  ) => void;
-  onDelete: (
-    value: string,
-    channelType: ChannelType,
-    addressType: AddressType,
-    sender: Sender
-  ) => void;
+  onEdit: (value: string, channelType: ChannelType, sender: Sender) => void;
+  onDelete: (value: string, channelType: ChannelType, sender: Sender) => void;
   handleCreateNewAssociation: (sender: Sender) => void;
   onCancelValidation: (senderId: string) => void;
 };
@@ -48,6 +39,7 @@ const AddMoreButton: React.FC<AddMoreButtonProps> = ({ onClick }) => {
 };
 
 const SpecialContactItem: React.FC<Props> = ({
+  index,
   addresses,
   onDelete,
   onEdit,
@@ -76,7 +68,7 @@ const SpecialContactItem: React.FC<Props> = ({
   };
 
   const renderAddress = (address: DigitalAddress) => {
-    const { value, channelType, addressType, senderId, senderName, pecValid } = address;
+    const { value, channelType, senderId, senderName, pecValid } = address;
     const isVerifyingPec = channelType === ChannelType.PEC && !pecValid;
 
     const isSercq = channelType === ChannelType.SERCQ_SEND;
@@ -91,7 +83,7 @@ const SpecialContactItem: React.FC<Props> = ({
             spacing={1}
             data-testid={`${senderId}_${channelType.toLowerCase()}Contact`}
           >
-            <VerifiedIcon fontSize="small" color="success" />
+            <VerifiedIcon fontSize="small" color="primary" />
             <Box>
               <Typography
                 sx={{
@@ -109,7 +101,7 @@ const SpecialContactItem: React.FC<Props> = ({
                   key="editButton"
                   color="primary"
                   onClick={() =>
-                    onEdit(value, channelType, addressType, {
+                    onEdit(value, channelType, {
                       senderId,
                       senderName,
                     })
@@ -125,7 +117,7 @@ const SpecialContactItem: React.FC<Props> = ({
                 data-testid={`cancelContact-special_${channelType}`}
                 color="error"
                 onClick={() =>
-                  onDelete(value, channelType, addressType, {
+                  onDelete(value, channelType, {
                     senderId,
                     senderName,
                   })
@@ -146,7 +138,7 @@ const SpecialContactItem: React.FC<Props> = ({
       direction={{ xs: 'column', lg: 'row' }}
       spacing={{ xs: 3, lg: 6 }}
       mb={{ xs: 2, lg: 0.5 }}
-      mt={{ xs: 2, lg: '43px' }}
+      mt={{ xs: 2, lg: index === 0 ? 3 : 6 }}
     >
       <Box sx={{ flexBasis: { xs: 'auto', lg: '224px' } }}>
         {isMobile && (

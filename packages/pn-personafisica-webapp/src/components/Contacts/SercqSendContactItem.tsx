@@ -26,7 +26,6 @@ import {
   acceptSercqSendTosPrivacy,
   createOrUpdateAddress,
   deleteAddress,
-  enableIOAddress,
   getSercqSendTosPrivacyApproval,
 } from '../../redux/contact/actions';
 import {
@@ -43,6 +42,7 @@ import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
 import SercqSendCourtesyDialog from './SercqSendCourtesyDialog';
+import SercqSendIODialog from './SercqSendIODialog';
 import SercqSendInfoDialog from './SercqSendInfoDialog';
 
 type Props = {
@@ -55,30 +55,25 @@ enum ModalType {
   COURTESY = 'courtesy',
   CODE = 'code',
   DELETE = 'delete',
+  IO = 'io',
 }
 
 const SercqSendCardTitle: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const isMobile = useIsMobile();
 
   return (
-    <Stack
-      direction={isMobile ? 'column-reverse' : 'row'}
-      spacing={1}
-      alignItems={isMobile ? 'start' : 'center'}
-      mb={2}
-      data-testid="DigitalContactsCardTitle"
-    >
-      <Typography color="text.primary" fontWeight={700} fontSize={18} variant="body1">
+    <Box data-testid="DigitalContactsCardTitle">
+      <Chip label={t('badges.news')} color="primary" data-testid="newsBadge" sx={{ mb: 1 }} />
+      <Typography
+        color="text.primary"
+        fontWeight={700}
+        fontSize={18}
+        variant="body1"
+        sx={{ mb: '12px' }}
+      >
         {t('legal-contacts.sercq-send-title', { ns: 'recapiti' })}
       </Typography>
-      <Chip
-        label={t('badges.news')}
-        color="primary"
-        data-testid="newsBadge"
-        sx={{ borderRadius: 1 }}
-      />
-    </Stack>
+    </Box>
   );
 };
 
@@ -87,16 +82,16 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
   const isMobile = useIsMobile();
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
-  const { defaultSERCQ_SENDAddress, defaultAPPIOAddress, courtesyAddresses } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const { defaultSERCQ_SENDAddress, defaultAPPIOAddress, courtesyAddresses, specialPECAddresses } =
+    useAppSelector(contactsSelectors.selectAddresses);
   const externalInfo = useAppSelector((state: RootState) => state.contactsState.fromExternalInfo);
-  const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
 
+  const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
   const value = defaultSERCQ_SENDAddress?.value ?? '';
   const hasAppIO = defaultAPPIOAddress?.value === IOAllowedValues.DISABLED;
   const hasCourtesy =
     hasAppIO && courtesyAddresses.length === 1 ? false : courtesyAddresses.length > 0;
+  const blockDelete = specialPECAddresses.length > 0;
 
   const handleActivation = () => {
     dispatch(
@@ -137,12 +132,18 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
             message: t(`legal-contacts.sercq_send-added-successfully`, { ns: 'recapiti' }),
           })
         );
-        if (hasCourtesy) {
-          // close dialog
-          setModalOpen(null);
+        // here the user doesn't have a corutesy address
+        if (!hasCourtesy) {
+          setModalOpen({ type: ModalType.COURTESY });
           return;
         }
-        setModalOpen({ type: ModalType.COURTESY });
+        // here the user has a courtesy address but AppIO disabled
+        if (hasCourtesy && hasAppIO) {
+          setModalOpen({ type: ModalType.IO });
+          return;
+        }
+        // here the user has a courtesy address and AppIO enabled
+        setModalOpen(null);
       })
       .catch(() => {});
   };
@@ -240,24 +241,18 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
             }),
           })
         );
-        setModalOpen(null);
+        // AppIO enabled
+        if (!hasAppIO) {
+          setModalOpen(null);
+          return;
+        }
+        // AppIO disabled
+        setModalOpen({ type: ModalType.IO });
       })
       .catch(() => {});
   };
 
   const handleCourtesyConfirm = (channelType: ChannelType, value: string) => {
-    if (channelType === ChannelType.IOMSG) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
-      dispatch(enableIOAddress())
-        .unwrap()
-        .then(() => {
-          setModalOpen(null);
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS, true);
-        })
-        .catch(() => {});
-      return;
-    }
-
     const eventKey = `SEND_ADD_${channelType}_START`;
     if (isPFEvent(eventKey)) {
       PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], {
@@ -296,6 +291,11 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
         value ? t('legal-contacts.sercq-send-title', { ns: 'recapiti' }) : <SercqSendCardTitle />
       }
       subtitle={t('legal-contacts.sercq-send-description', { ns: 'recapiti' })}
+      expanded
+      sx={{
+        borderBottomLeftRadius: value ? 0 : 4,
+        borderBottomRightRadius: value ? 0 : 4,
+      }}
     >
       <Box
         data-testid={`${senderId}_sercqSendContact`}
@@ -307,17 +307,22 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
           </Button>
         )}
         {value && (
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={1}>
             <VerifiedIcon
               fontSize="small"
-              color="success"
+              color="primary"
               sx={{ position: 'relative', top: '2px' }}
             />
             <Box>
-              <Typography data-testid="IO status" fontWeight={600}>
+              <Typography data-testid="sercq-send-status" fontWeight={600} mb={2}>
                 {t('legal-contacts.sercq-send-enabled', { ns: 'recapiti' })}
               </Typography>
-              <ButtonNaked onClick={() => setModalOpen({ type: ModalType.DELETE })} color="error">
+              <ButtonNaked
+                onClick={() => setModalOpen({ type: ModalType.DELETE })}
+                color="error"
+                sx={{ fontWeight: 700 }}
+                size="medium"
+              >
                 {t('button.disable')}
               </ButtonNaked>
             </Box>
@@ -331,7 +336,6 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
       />
       <SercqSendCourtesyDialog
         open={modalOpen?.type === ModalType.COURTESY}
-        hasAppIO={hasAppIO}
         onDiscard={() => setModalOpen(null)}
         onConfirm={handleCourtesyConfirm}
       />
@@ -347,11 +351,25 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
       />
       <DeleteDialog
         showModal={modalOpen?.type === ModalType.DELETE}
-        removeModalTitle={t(`legal-contacts.remove-sercq-send-title`, { ns: 'recapiti' })}
-        removeModalBody={t(`legal-contacts.remove-sercq-send-message`, { ns: 'recapiti' })}
-        removeButtonLabel={t(`legal-contacts.remove-sercq-send-button`, { ns: 'recapiti' })}
+        removeModalTitle={t(
+          `legal-contacts.${blockDelete ? 'block-' : ''}remove-sercq-send-title`,
+          {
+            ns: 'recapiti',
+          }
+        )}
+        removeModalBody={t(
+          `legal-contacts.${blockDelete ? 'block-' : ''}remove-sercq-send-message`,
+          {
+            ns: 'recapiti',
+          }
+        )}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
+        blockDelete={blockDelete}
+      />
+      <SercqSendIODialog
+        open={modalOpen?.type === ModalType.IO}
+        onDiscard={() => setModalOpen(null)}
       />
     </DigitalContactsCard>
   );

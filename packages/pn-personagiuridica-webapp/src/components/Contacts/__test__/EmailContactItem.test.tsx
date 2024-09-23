@@ -108,10 +108,10 @@ describe('testing EmailContactItem', () => {
     expect(button).toBeEnabled();
     fireEvent.click(button);
     // Confirms the disclaimer dialog
-    const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
+    /* const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
     fireEvent.click(disclaimerCheckbox);
     const disclaimerConfirmButton = result.getByTestId('disclaimer-confirm-button');
-    fireEvent.click(disclaimerConfirmButton);
+    fireEvent.click(disclaimerConfirmButton); */
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
@@ -193,10 +193,10 @@ describe('testing EmailContactItem', () => {
     // confirm new value
     fireEvent.click(saveButton);
     // Confirms the disclaimer dialog
-    const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
+    /* const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
     fireEvent.click(disclaimerCheckbox);
     const disclaimerConfirmButton = result.getByTestId('disclaimer-confirm-button');
-    fireEvent.click(disclaimerConfirmButton);
+    fireEvent.click(disclaimerConfirmButton); */
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({

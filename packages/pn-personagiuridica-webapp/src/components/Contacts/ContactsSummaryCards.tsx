@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AddCircle, Verified, WarningOutlined } from '@mui/icons-material';
+import { AddCircleOutline, Verified, WarningOutlined } from '@mui/icons-material';
 import { Card, CardActionArea, Stack, Typography } from '@mui/material';
 
 import { AddressType, DigitalAddress } from '../../models/contacts';
@@ -29,10 +29,10 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
       if (isCourtesyCard && isSercQEnabled) {
         return <WarningOutlined color="warning" data-testid="warningIcon" />;
       }
-      return <AddCircle color="primary" data-testid="addIcon" />;
+      return <AddCircleOutline color="primary" data-testid="addIcon" />;
     }
 
-    return <Verified color="success" data-testid="verifiedIcon" />;
+    return <Verified color="primary" data-testid="verifiedIcon" />;
   };
 
   const getDescription = () => {
@@ -72,14 +72,19 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
         {getIcon()}
         <Typography
           variant="body2"
-          fontWeight={700}
+          fontWeight={600}
           data-testid="cardTitle"
           aria-hidden
           sx={{ mt: 0.5, mb: 1 }}
         >
           {t(title)}
         </Typography>
-        <Typography variant="body2" data-testid="cardDescription" aria-hidden>
+        <Typography
+          variant="body2"
+          data-testid="cardDescription"
+          aria-hidden
+          color={hasAddress ? 'primary' : 'text.secondary'}
+        >
           {getDescription()}
         </Typography>
       </CardActionArea>

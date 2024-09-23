@@ -5,13 +5,10 @@
   "alert-dialog-sms": "Se non hai una PEC e accedi alla notifica su SEND entro 5 giorni (120 ore) dall’invio dell'SMS, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
   "insert-code": "Inserisci codice",
   "legal-contacts": {
-    "title": "Recapiti a valore legale",
-    "list": [
-      "Le comunicazioni che ricevi qui sono <strong>ufficialmente riconosciute</strong>: hanno lo stesso valore delle raccomandate con ricevuta di ritorno.",
-      "Se hai almeno un recapito attivo, <strong>non riceverai più i documenti cartacei</strong>."
-    ],
+    "title": "Recapito a valore legale",
+    "sub-title": "È il tuo recapito ufficialmente riconosciuto per le comunicazioni della PA. Se lo attivi <strong>riceverai le notifiche solo in digitale</strong>, senza doverti più preoccupare dei documenti cartacei.",
     "pec-title": "Posta Elettronica Certificata",
-    "pec-description": "Quando un ente carica una notifica per te su SEND, ricevi l’avviso tramite PEC. Accedi a SEND per leggerla.",
+    "pec-description": "Quando un ente carica una comunicazione per te su SEND, ricevi l’avviso ufficiale sulla PEC. Accedi a SEND per leggerla.",
     "link-pec-placeholder": "La tua PEC",
     "valid-pec": "Indirizzo PEC non valido",
     "pec-verify": "Abbiamo inviato un codice a {{value}}",
@@ -24,39 +21,62 @@
     "remove-pec-title": "Rimuovi PEC",
     "remove-pec-message": "Confermi di voler rimuovere l'indirizzo PEC {{value}}?",
     "block-remove-pec-title": "Non puoi eliminare la PEC",
-    "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”.",
+    "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC e i Domicili Digitali SEND che hai indicato alla voce “Recapiti secondari”.",
     "validation-cancel-title": "Vuoi annullare la verifica?",
     "validation-cancel-content": "Se annulli la verifica, dovrai inserire una nuova PEC e ricominciare il processo.",
     "validation-progress-title": "Grazie!",
     "validation-progress-content": "Stiamo verificando che l’indirizzo PEC sia valido. Riceverai una e-mail con l’esito entro 24 ore.",
     "sercq-send-title": "Domicilio Digitale SEND",
-    "sercq-send-description": "È come il tuo domicilio fisico, ma è online: quando un ente carica una notifica per te su SEND, è disponibile subito e la puoi vedere ovunque ti trovi.",
+    "sercq-send-description": "È come un domicilio fisico, ma online. Quando un ente carica ti invia una notifica su SEND, è disponibile in tempo reale nella tua area riservata e la puoi aprire ovunque ti trovi.",
     "sercq-send-active": "Attiva Domicilio Digitale",
+    "sercq-send-info-title": "Attiva SEND come tuo Domicilio Digitale",
     "sercq-send-info-description": "Attivando il Domicilio Digitale, SEND diventa <strong>il tuo recapito a valore legale</strong> per le comunicazioni della PA.",
+    "sercq-send-info-advantages": "Vantaggi",
     "sercq-send-info-list": [
-      "Quando un ente carica su SEND una notifica per te, la ricevi in modo <strong>sicuro e in tempo reale</strong> ovunque ti trovi.",
-      "Le tue notifiche diventano <strong>100% digitali</strong>. Non ricevi più i documenti cartacei e non devi preoccuparti di ritirarli.",
-      "<strong>È gratis per sempre</strong> e solo tu puoi decidere quando attivarlo o disattivarlo."
+      {
+        "title": "Notifiche 100% digitali",
+        "description": "Le notifiche non ti arriveranno più in forma cartacea."
+      },
+      {
+        "title": "Non paghi più le spese delle raccomandate",
+        "description": "Non dovrai preoccuparti di ritirare i documenti e pagare i costi annessi."
+      },
+      {
+        "title": "Hai tutto in un unico punto",
+        "description": "Le notifiche che gli enti ti inviano tramite SEND saranno sempre recapitate sul tuo Domicilio Digitale e disponibili nella tua area riservata."
+      }
     ],
     "sercq-send-info-pec-disclaimer": "Se hai già inserito una PEC tra i tuoi recapiti, il Domicilio Digitale la sostituisce come recapito a valore legale di SEND.",
     "sercq-send-info-tos-privacy": "Selezionando “Attiva” dichiari di aver letto e di accettare i <0>Termini del servizio</0> e l’<1>Informativa Privacy</1>.",
     "sercq_send-added-successfully": "Domicilio Digitale attivato correttamente",
     "sercq-send-enabled": "SEND è il tuo Domicilio Digitale",
-    "sercq-send-courtesy-title": "Aggiungi un recapito di cortesia",
-    "sercq-send-courtesy-description": "Scegli un recapito per ricevere avvisi quando ci sono nuove notifiche su SEND, così <strong>non rischi di perdere comunicazioni importanti</strong>.",
-    "remove-sercq-send-title": "Confermi di voler disattivare il Domicilio Digitale?",
-    "remove-sercq-send-message": "Non avrai più un recapito a valore legale per le comunicazioni inviate su SEND. Potresti tornare a ricevere le notifiche in forma cartacea.",
-    "remove-sercq-send-button": "Disattiva Domicilio Digitale",
-    "sercq-send-removed-successfully": "Domicilio Digitale disattivato correttamente"
+    "sercq-send-courtesy-title": "Scegli un recapito di cortesia",
+    "sercq-send-courtesy-description": "Scegli il recapito che preferisci per ricevere un avviso quando ci sono nuove notifiche sul tuo Domicilio Digitale, così non <strong>rischi di perdere comunicazioni importanti</strong>.",
+    "remove-sercq-send-title": "Confermi di voler disattivare il Domicilio Digitale su SEND?",
+    "remove-sercq-send-message": "Non avrai più un recapito digitale a valore legale per le comunicazioni della Pubblica Amministrazione e potresti tornare a ricevere le notifiche in forma cartacea.",
+    "block-remove-sercq-send-title": "Non è possibile disattivare il Domicilio Digitale",
+    "block-remove-sercq-send-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Recapiti secondari”.",
+    "sercq-send-removed-successfully": "Domicilio Digitale disattivato correttamente",
+    "sercq-send-io-title": "Collega l’app IO a SEND",
+    "sercq-send-io-description": "Attiva il servizio SEND su IO per <strong>ricevere direttamente nell'app</strong> tutte le comunicazioni inviate al tuo Domicilio Digitale SEND.",
+    "sercq-send-io-advantages": "Su IO potrai",
+    "sercq-send-io-list": [
+      "<strong>Ricevere le notifiche in tempo reale</strong>, appena l’ente le carica su SEND;",
+      "<strong>Aprire i documenti allegati</strong> direttamente in app;",
+      "<strong>Pagare gli importi dovuti</strong> se la notifica prevede un pagamento."
+    ],
+    "sercq-send-pec": "Preferisci usare una PEC come recapito a valore legale?",
+    "sercq-send-add-pec": "Inserisci PEC",
+    "sercq-send-add-pec-description": "La PEC sostituirà il Domicilio Digitale come tuo recapito a valore legale di SEND. Il Domicilio Digitale verrà disattivato automaticamente."
   },
   "io-contact": {
     "title": "App IO",
     "description": "Leggi e gestisci le comunicazioni a valore legale direttamente su IO: quando c’è una notifica per te, la ricevi in app e puoi pagare eventuali spese.",
     "dialog-description": "Riceverai un messaggio in app per ogni nuova notifica. Potrai leggerla e pagare eventuali importi direttamente su IO.",
-    "enabled": "Servizio attivo",
-    "disabled": "Servizio non attivo",
+    "enabled": "Servizio Notifiche Digitali attivo",
+    "disabled": "Servizio Notifiche Digitali non attivo",
     "unavailable": "Per attivare il servizio, prima scarica l’app IO",
-    "enable": "Attiva il servizio su IO",
+    "enable": "Attiva SEND su IO",
     "download": "Scarica l'app IO",
     "enable-modal": {
       "title": "Vuoi attivare il servizio \"Notifiche digitali\" su IO?",
@@ -72,10 +92,7 @@
   },
   "courtesy-contacts": {
     "title": "Recapiti di cortesia",
-    "list": [
-      "Le comunicazioni che ricevi qui <strong>ti avvisano</strong> sulla presenza di nuove notifiche.",
-      "Se non hai almeno un recapito legale e non apri la notifica entro 5 giorni, <strong>la riceverai in formato cartaceo</strong> a casa."
-    ],
+    "sub-title": "Ti avvisano quando ci sono nuove notifiche per te. Se non hai attivato il recapito a valore legale e non apri la notifica entro 5 giorni, la riceverai anche in formato cartaceo a casa.",
     "email-title": "Email",
     "email-description": "Quando c’è una notifica per te, ti avvisiamo con una email all’indirizzo indicato. Accedi a SEND per leggerla e pagare eventuali spese.",
     "email-dialog-description": "Quando c’è una notifica per te, ti avvisiamo con una email. Accedi a SEND per leggerla e pagare eventuali importi.",
@@ -103,35 +120,28 @@
     "remove-sms-title": "Rimuovi cellulare",
     "remove-sms-message": "Confermi di voler rimuovere il numero di cellulare {{value}}?",
     "block-remove-email-title": "Non puoi eliminare l'e-mail",
-    "block-remove-email-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi e-mail che hai indicato alla voce “Altri recapiti”.",
+    "block-remove-email-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi e-mail che hai indicato alla voce “Recapiti secondari”.",
     "block-remove-sms-title": "Non puoi eliminare il numero di telefono",
-    "block-remove-sms-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Altri recapiti”."
+    "block-remove-sms-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Recapiti secondari”."
   },
   "special-contacts": {
-    "title": "Altri recapiti",
-    "description": "Se vuoi che le notifiche di alcuni enti siano indirizzate a dei recapiti diversi puoi indicarli qui, in sostituzione di quelli principali.",
-    "add-contact": "Associa recapito",
+    "description": "Se vuoi che le notifiche di alcuni enti siano indirizzate a dei recapiti diversi da quello principale, <0>associali da qui</0>",
     "select-address": "Seleziona recapito",
-    "add-sender": "Aggiungi ente",
+    "add-sender": "Ente da associare",
     "pec": "Indirizzo PEC",
-    "sms": "Numero di cellulare",
-    "email": "Indirizzo email",
     "sercq_send": "Domicilio Digitale SEND",
-    "link-email-label": "La tua email",
     "link-pec-label": "La tua PEC",
-    "link-sms-label": "Il tuo numero",
     "link-sercq-label": "Il tuo Domicilio Digitale SEND",
     "senders": "Enti",
     "contact-to-add": "Recapito",
-    "contact-to-add-description": "Puoi associare solo i tipi di recapito per cui hai già impostato un recapito principale.",
+    "contact-to-add-description": "Puoi associare un recapito a un ente solo se hai già impostato un recapito principale dello stesso tipo.",
     "contact-already-exists": "L'ente selezionato è già associato a questo recapito. Se premi “Associa”, verrà sostituito da quello che hai indicato qui.",
     "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito.",
-    "modal-title": "Associa un recapito a enti specifici",
+    "modal-title": "Aggiungi un recapito associato a un ente",
     "card-title": "Già associati",
     "sender": "Ente",
     "remove-special-title": "Vuoi eliminare {{contactValue}}?",
     "remove-special-description": "Gli avvisi relativi alle notifiche degli enti associati non saranno più inviati a questo recapito, ma a quello principale.",
-    "no-default-address": "Recapito principale non presente",
     "contacts": "Recapiti",
     "legal-association-title": "Conferma associazione",
     "legal-association-description": "Confermando l’associazione, per le notifiche inviate da <strong>{{senderName}}</strong> il tuo recapito a valore legale di riferimento sarà <strong>{{newAddress}}</strong> invece che <strong>{{oldAddress}}</strong>."
@@ -157,13 +167,13 @@
     }
   },
   "summary-card": {
-    "legal-title": "Valore legale",
-    "courtesy-title": "Cortesia",
+    "legal-title": "A valore legale",
+    "courtesy-title": "Di cortesia",
     "no-address": "Nessun recapito",
     "PEC": "PEC",
     "SMS": "SMS",
     "EMAIL": "Email",
-    "IOMSG": "App IO",
+    "APPIO": "App IO",
     "SERCQ_SEND": "Domicilio Digitale",
     "add-icon-arialabel": "Aggiungi"
   }

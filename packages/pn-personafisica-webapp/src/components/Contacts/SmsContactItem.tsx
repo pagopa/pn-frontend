@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { DisclaimerModal, appStateActions } from '@pagopa-pn/pn-commons';
+import { appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -31,7 +31,7 @@ enum ModalType {
 
 const SmsContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultSMSAddress, specialSMSAddresses, addresses, legalAddresses } = useAppSelector(
+  const { defaultSMSAddress, specialSMSAddresses, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
   const externalInfo = useAppSelector((state: RootState) => state.contactsState.fromExternalInfo);
@@ -65,10 +65,10 @@ const SmsContactItem: React.FC = () => {
       return;
     }
     // disclaimer modal must be opened only when we are adding a default address and no legal address has been added
-    if (legalAddresses.length === 0) {
+    /* if (legalAddresses.length === 0) {
       setModalOpen(ModalType.DISCLAIMER);
       return;
-    }
+    } */
     handleCodeVerification();
   };
 
@@ -179,7 +179,7 @@ const SmsContactItem: React.FC = () => {
         handleDiscard={handleCancelCode}
         handleConfirm={() => handleCodeVerification()}
       />
-      <DisclaimerModal
+      {/* <DisclaimerModal
         open={modalOpen === ModalType.DISCLAIMER}
         onConfirm={() => {
           setModalOpen(null);
@@ -189,7 +189,7 @@ const SmsContactItem: React.FC = () => {
         confirmLabel={t('button.conferma')}
         checkboxLabel={t('button.capito')}
         content={t(`alert-dialog-sms`, { ns: 'recapiti' })}
-      />
+      /> */}
       <ContactCodeDialog
         value={currentAddress.current.value}
         addressType={AddressType.COURTESY}

@@ -44,91 +44,62 @@ export const phoneValidationSchema = (t: TFunction, withPrefix = false) =>
       t('courtesy-contacts.valid-sms', { ns: 'recapiti' })
     );
 
-export enum DISABLED_REASON {
-  NONE = 'NONE',
-  NO_DEFAULT = 'NO_DEFAULT',
-  ALREADY_ADDED = 'ALREADY_ADDED',
-}
-
 type AddressTypeItem = {
   id: ChannelType;
   shown: boolean;
   disabled: boolean;
-  disabledReason: DISABLED_REASON;
 };
 
-type AllowedAddressTypeForSpecialContact = {
+type AddressRelation = {
   channelType: ChannelType;
-  disabledDependsOn: Array<ChannelType>;
+  relationWith: Array<ChannelType>;
   shownDependsOn: Array<ChannelType>;
 };
 
-const allowedAddressTypesForSpecialContacts: Array<AllowedAddressTypeForSpecialContact> = [
+export const addressesRelationships: Array<AddressRelation> = [
   {
     channelType: ChannelType.EMAIL,
-    disabledDependsOn: [ChannelType.EMAIL],
+    relationWith: [ChannelType.EMAIL],
     shownDependsOn: [],
   },
   {
     channelType: ChannelType.SMS,
-    disabledDependsOn: [ChannelType.SMS],
+    relationWith: [ChannelType.SMS],
     shownDependsOn: [],
   },
   {
     channelType: ChannelType.PEC,
-    disabledDependsOn: [],
+    relationWith: [ChannelType.PEC, ChannelType.SERCQ_SEND],
     shownDependsOn: [ChannelType.PEC, ChannelType.SERCQ_SEND],
   },
   {
     channelType: ChannelType.SERCQ_SEND,
-    disabledDependsOn: [],
+    relationWith: [ChannelType.SERCQ_SEND, ChannelType.PEC],
     shownDependsOn: [ChannelType.PEC],
   },
 ];
 
 const isDropdownItemDisabled = (
-  allowedAddress: AllowedAddressTypeForSpecialContact,
+  allowedAddress: AddressRelation,
   addresses: SelectedAddresses,
   sender: Sender
-): { status: boolean; reason: DISABLED_REASON } => {
-  // the address is disabled if it hasn't one of the default addresses listed into disabledDependsOn property
-  // or there is an address with the same sender, already added
+): boolean => {
+  // the address is disabled if there is an address with the same sender, already added
   const senderHasAlreadyAddress =
     addresses[`special${allowedAddress.channelType}Addresses`].findIndex(
       (a) => a.senderId === sender.senderId
     ) > -1;
   if (senderHasAlreadyAddress) {
-    return { status: true, reason: DISABLED_REASON.ALREADY_ADDED };
+    return true;
   }
-
-  if (allowedAddress.disabledDependsOn.length === 0) {
-    return { status: false, reason: DISABLED_REASON.NONE };
-  }
-
-  const disabled = { status: true, reason: DISABLED_REASON.NO_DEFAULT };
-
-  for (const dependency of allowedAddress.disabledDependsOn) {
-    // eslint-disable-next-line functional/immutable-data
-    disabled.status = !addresses[`default${dependency}Address`];
-    // exit from loop if at least one default address exists
-    if (!disabled.status) {
-      // eslint-disable-next-line functional/immutable-data
-      disabled.reason = DISABLED_REASON.NONE;
-      break;
-    }
-  }
-
-  return disabled;
+  return false;
 };
 
 const isDropdownItemShown = (
-  allowedAddress: AllowedAddressTypeForSpecialContact,
+  allowedAddress: AddressRelation,
   addresses: SelectedAddresses
 ): boolean => {
   // the address is shown if it has one of the default addresses listed into shownDependsOn property
-  if (allowedAddress.shownDependsOn.length === 0) {
-    return true;
-  }
   // eslint-disable-next-line functional/no-let
   let show = false;
 
@@ -147,15 +118,14 @@ export const specialContactsAvailableAddressTypes = (
   addressesData: SelectedAddresses,
   sender: Sender
 ): Array<AddressTypeItem> =>
-  allowedAddressTypesForSpecialContacts.map((allowedAddressType) => {
-    const isDisabled = isDropdownItemDisabled(allowedAddressType, addressesData, sender);
+  addressesRelationships.map((relation) => {
+    const isDisabled = isDropdownItemDisabled(relation, addressesData, sender);
 
-    const isShown = isDropdownItemShown(allowedAddressType, addressesData);
+    const isShown = isDropdownItemShown(relation, addressesData);
 
     return {
-      id: allowedAddressType.channelType,
+      id: relation.channelType,
       shown: isShown,
-      disabled: isDisabled.status,
-      disabledReason: isDisabled.reason,
+      disabled: isDisabled,
     };
   });

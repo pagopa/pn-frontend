@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { DisclaimerModal, appStateActions } from '@pagopa-pn/pn-commons';
+import { appStateActions } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
@@ -23,7 +23,7 @@ enum ModalType {
 
 const EmailContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultEMAILAddress, specialEMAILAddresses, addresses, legalAddresses } = useAppSelector(
+  const { defaultEMAILAddress, specialEMAILAddresses, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
@@ -50,10 +50,10 @@ const EmailContactItem: React.FC = () => {
       return;
     }
     // disclaimer modal must be opened only when we are adding a default address
-    if (legalAddresses.length === 0) {
+    /* if (legalAddresses.length === 0) {
       setModalOpen(ModalType.DISCLAIMER);
       return;
-    }
+    } */
     handleCodeVerification();
   };
 
@@ -150,7 +150,7 @@ const EmailContactItem: React.FC = () => {
         handleDiscard={handleCancelCode}
         handleConfirm={() => handleCodeVerification()}
       />
-      <DisclaimerModal
+      {/* <DisclaimerModal
         open={modalOpen === ModalType.DISCLAIMER}
         onConfirm={() => {
           setModalOpen(null);
@@ -160,7 +160,7 @@ const EmailContactItem: React.FC = () => {
         confirmLabel={t('button.conferma')}
         checkboxLabel={t('button.capito')}
         content={t(`alert-dialog-email`, { ns: 'recapiti' })}
-      />
+      /> */}
       <ContactCodeDialog
         value={currentAddress.current.value}
         addressType={AddressType.COURTESY}
