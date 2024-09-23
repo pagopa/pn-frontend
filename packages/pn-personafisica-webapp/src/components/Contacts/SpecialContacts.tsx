@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
-import AddIcon from '@mui/icons-material/Add';
 import { Card, CardContent, Divider, Stack, Typography } from '@mui/material';
 import { appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -55,14 +54,15 @@ const SpecialContacts: React.FC = () => {
   );
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
 
-  const currentAddress = useRef<DigitalAddress>({
+  const currentAddress = useRef<
+    Pick<DigitalAddress, 'value' | 'senderId' | 'senderName' | 'channelType'>
+  >({
     value: '',
     senderId: 'default',
-    addressType: AddressType.LEGAL,
     channelType: ChannelType.PEC,
   });
 
-  const labelRoot = `${currentAddress.current.addressType.toLowerCase()}-contacts`;
+  const labelRoot = `legal-contacts`;
   const contactType = currentAddress.current.channelType.toLowerCase();
 
   const sendSuccessEvent = (type: ChannelType) => {
@@ -82,7 +82,6 @@ const SpecialContacts: React.FC = () => {
   const onConfirm = (
     value: string,
     channelType: ChannelType,
-    addressType: AddressType,
     sender: Sender = { senderId: 'default' }
   ) => {
     const eventKey = `SEND_ADD_${channelType}_UX_START`;
@@ -96,20 +95,14 @@ const SpecialContacts: React.FC = () => {
       senderId: sender.senderId,
       senderName: sender.senderName,
       channelType,
-      addressType,
     };
-
-    if (addressType === AddressType.LEGAL) {
-      setModalOpen(ModalType.CONFIRM_LEGAL_ASSOCIATION);
-      return;
-    }
 
     // first check if contact already exists
     if (contactAlreadyExists(addresses, value, sender.senderId, channelType)) {
       setModalOpen(ModalType.EXISTING);
       return;
     }
-    handleCodeVerification();
+    setModalOpen(ModalType.CONFIRM_LEGAL_ASSOCIATION);
   };
 
   const handleCodeVerification = (verificationCode?: string) => {
@@ -133,7 +126,7 @@ const SpecialContacts: React.FC = () => {
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
-      addressType: currentAddress.current.addressType,
+      addressType: AddressType.LEGAL,
       senderId: currentAddress.current.senderId,
       senderName: currentAddress.current.senderName,
       channelType: currentAddress.current.channelType,
@@ -178,7 +171,7 @@ const SpecialContacts: React.FC = () => {
     setModalOpen(null);
     dispatch(
       deleteAddress({
-        addressType: currentAddress.current.addressType,
+        addressType: AddressType.LEGAL,
         senderId: currentAddress.current.senderId,
         channelType: currentAddress.current.channelType,
       })
@@ -204,36 +197,24 @@ const SpecialContacts: React.FC = () => {
       .catch(() => {});
   };
 
-  const handleDelete = (
-    value: string,
-    channelType: ChannelType,
-    addressType: AddressType,
-    sender: Sender
-  ) => {
+  const handleDelete = (value: string, channelType: ChannelType, sender: Sender) => {
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = {
       value,
       senderId: sender.senderId,
       senderName: sender.senderName,
       channelType,
-      addressType,
     };
     setModalOpen(ModalType.DELETE);
   };
 
-  const handleEdit = (
-    value: string,
-    channelType: ChannelType,
-    addressType: AddressType,
-    sender: Sender
-  ) => {
+  const handleEdit = (value: string, channelType: ChannelType, sender: Sender) => {
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = {
       value,
       senderId: sender.senderId,
       senderName: sender.senderName,
       channelType,
-      addressType,
     };
     setModalOpen(ModalType.SPECIAL);
   };
@@ -285,22 +266,21 @@ const SpecialContacts: React.FC = () => {
 
   return (
     <>
-      <Typography id="specialContact" variant="body1" fontWeight={700}>
-        {t('special-contacts.title', { ns: 'recapiti' })}
+      <Typography sx={{ mt: 3 }} variant="body2" fontSize="14px" color="text.secondary">
+        <Trans
+          i18nKey="special-contacts.description"
+          ns="recapiti"
+          components={[
+            <ButtonNaked
+              key="addSpecialContactButton"
+              onClick={() => setModalOpen(ModalType.SPECIAL)}
+              color="primary"
+              data-testid="addSpecialContactButton"
+              sx={{ top: '-2px' }}
+            />,
+          ]}
+        />
       </Typography>
-      <Typography sx={{ mt: 2 }} variant="body1">
-        {t('special-contacts.description', { ns: 'recapiti' })}
-      </Typography>
-      <ButtonNaked
-        startIcon={<AddIcon />}
-        onClick={() => setModalOpen(ModalType.SPECIAL)}
-        color="primary"
-        size="medium"
-        sx={{ alignSelf: 'flex-start', mt: 1 }}
-        data-testid="addSpecialContactButton"
-      >
-        {t('special-contacts.add-contact', { ns: 'recapiti' })}
-      </ButtonNaked>
       {Object.keys(groupedAddresses).length > 0 && (
         <Card sx={{ mt: 3 }}>
           <CardContent>
@@ -342,19 +322,14 @@ const SpecialContacts: React.FC = () => {
         }}
         channelType={currentAddress.current.channelType}
         onDiscard={handleCloseModal}
-        onConfirm={(
-          value: string,
-          channelType: ChannelType,
-          addressType: AddressType,
-          sender: Sender
-        ) => {
+        onConfirm={(value: string, channelType: ChannelType, sender: Sender) => {
           setModalOpen(null);
-          onConfirm(value, channelType, addressType, sender);
+          onConfirm(value, channelType, sender);
         }}
       />
       <ContactCodeDialog
         value={currentAddress.current.value}
-        addressType={currentAddress.current.addressType}
+        addressType={AddressType.LEGAL}
         channelType={currentAddress.current.channelType}
         open={modalOpen === ModalType.CODE}
         onConfirm={(code) => handleCodeVerification(code)}

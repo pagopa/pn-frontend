@@ -3,15 +3,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import {
-  Alert,
-  Button,
-  DialogTitle,
-  InputAdornment,
-  MenuItem,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Alert, Button, DialogTitle, MenuItem, TextField, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomDropdown,
@@ -22,18 +14,14 @@ import {
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
 
-import { AddressType, ChannelType, Sender } from '../../models/contacts';
+import { ChannelType, Sender } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import {
-  DISABLED_REASON,
-  emailValidationSchema,
-  internationalPhonePrefix,
   pecValidationSchema,
-  phoneValidationSchema,
   specialContactsAvailableAddressTypes,
 } from '../../utility/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
@@ -44,12 +32,7 @@ type Props = {
   sender: Sender;
   channelType: ChannelType;
   onDiscard: () => void;
-  onConfirm: (
-    value: string,
-    channelType: ChannelType,
-    addressType: AddressType,
-    sender: Sender
-  ) => void;
+  onConfirm: (value: string, channelType: ChannelType, sender: Sender) => void;
 };
 
 const AddSpecialContactDialog: React.FC<Props> = ({
@@ -125,14 +108,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
         then: pecValidationSchema(t),
       })
       .when('channelType', {
-        is: ChannelType.EMAIL,
-        then: emailValidationSchema(t),
-      })
-      .when('channelType', {
-        is: ChannelType.SMS,
-        then: phoneValidationSchema(t),
-      })
-      .when('channelType', {
         is: ChannelType.SERCQ_SEND,
         then: yup.string().nullable(),
       }),
@@ -146,7 +121,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     channelType: value
       ? channelType
       : addressTypes.find((a) => !a.disabled && a.shown)?.id ?? ChannelType.PEC,
-    s_value: channelType === ChannelType.SMS ? value.replace(internationalPhonePrefix, '') : value,
+    s_value: value,
   };
 
   const formik = useFormik({
@@ -155,13 +130,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      // eslint-disable-next-line functional/no-let
-      let addressType = AddressType.COURTESY;
-      if (values.channelType === ChannelType.PEC || values.channelType === ChannelType.SERCQ_SEND) {
-        addressType = AddressType.LEGAL;
-      }
-
-      onConfirm(values.s_value, values.channelType, addressType, {
+      onConfirm(values.s_value, values.channelType, {
         senderId: values.sender.id,
         senderName: values.sender.name,
       });
@@ -241,11 +210,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
                   sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
                 >
                   {t(`special-contacts.${a.id.toLowerCase()}`, { ns: 'recapiti' })}
-                  {a.disabledReason === DISABLED_REASON.NO_DEFAULT && (
-                    <Typography fontSize="14px">
-                      {t('special-contacts.no-default-address', { ns: 'recapiti' })}
-                    </Typography>
-                  )}
                 </MenuItem>
               ))}
           </CustomDropdown>
@@ -262,12 +226,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
               onChange={handleChangeTouched}
               error={formik.touched.s_value && Boolean(formik.errors.s_value)}
               helperText={formik.touched.s_value && formik.errors.s_value}
-              InputProps={{
-                startAdornment:
-                  formik.values.channelType === ChannelType.SMS ? (
-                    <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
-                  ) : null,
-              }}
               sx={{ mb: 2 }}
             />
           )}
