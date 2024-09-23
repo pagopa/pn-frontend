@@ -1,6 +1,5 @@
 import { Configuration, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
-import { StringRuleValidator } from '@pagopa-pn/pn-validator/src/ruleValidators/StringRuleValidator';
 
 interface PfConfigurationFromFile {
   API_BASE_URL: string;
@@ -50,8 +49,8 @@ interface PfConfiguration extends PfConfigurationFromFile {
 class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
   constructor() {
     super();
-    this.makeRequired(this.ruleFor('API_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
-    this.makeRequired(this.ruleFor('PAGOPA_HELP_EMAIL').isString().matches(dataRegex.email));
+    this.ruleFor('API_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('PAGOPA_HELP_EMAIL').isString().isRequired().matches(dataRegex.email);
     this.ruleFor('MIXPANEL_TOKEN').isString();
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
     this.ruleFor('ONE_TRUST_PP').isString().matches(dataRegex.lettersNumbersAndDashs);
@@ -63,7 +62,7 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
     this.ruleFor('ONE_TRUST_PP_SERCQ_SEND').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_SERCQ_SEND_DRAFT_MODE').isBoolean();
     this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.lettersNumbersAndDashs);
-    this.makeRequired(this.ruleFor('LANDING_SITE_URL').isString());
+    this.ruleFor('LANDING_SITE_URL').isString().isRequired();
     this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();
     this.ruleFor('WORK_IN_PROGRESS').isBoolean();
     this.ruleFor('F24_DOWNLOAD_WAIT_TIME').isNumber();
@@ -72,10 +71,6 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
     this.ruleFor('APP_IO_ANDROID').isString();
     this.ruleFor('APP_IO_IOS').isString();
     this.ruleFor('DOD_DISABLED').isBoolean();
-  }
-
-  makeRequired(rule: StringRuleValidator<PfConfigurationFromFile, string>): void {
-    rule.not().isEmpty().not().isUndefined().not().isNull();
   }
 }
 

@@ -48,11 +48,7 @@ const TermsOfServicePage: React.FC<{ type?: ConsentType }> = ({ type }) => {
 
   return (
     <>
-      <div
-        role="article"
-        id="otnotice-112fd95d-6e88-461b-b8fc-534ee4277e96"
-        className="otnotice"
-      ></div>
+      <div role="article" id={`otnotice-${tos}`} className="otnotice"></div>
     </>
   );
 };

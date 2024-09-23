@@ -48,11 +48,7 @@ const PrivacyPolicyPage: React.FC<{ type?: ConsentType }> = ({ type }) => {
 
   return (
     <>
-      <div
-        role="article"
-        id="otnotice-9d7b7236-956b-4669-8943-5284fba6a815"
-        className="otnotice"
-      ></div>
+      <div role="article" id={`otnotice-${pp}`} className="otnotice"></div>
     </>
   );
 };
