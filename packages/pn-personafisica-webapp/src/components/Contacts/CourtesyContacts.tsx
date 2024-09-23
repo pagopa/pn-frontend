@@ -1,65 +1,29 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
-import { Alert, Box, Stack, Typography } from '@mui/material';
-import { IllusEmail } from '@pagopa/mui-italia';
+import { Box, Stack, Typography } from '@mui/material';
 
-import { ChannelType, DigitalAddress } from '../../models/contacts';
-import { countContactsByType } from '../../utility/contacts.utility';
-import DigitalContactsCard from './DigitalContactsCard';
 import EmailContactItem from './EmailContactItem';
+import IOContact from './IOContact';
 import SmsContactItem from './SmsContactItem';
 
-interface Props {
-  contacts: Array<DigitalAddress>;
-}
-
-const CourtesyContacts: React.FC<Props> = ({ contacts }) => {
+const CourtesyContacts: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
 
-  const phoneContact = contacts.find(
-    (contact) => contact.channelType === ChannelType.SMS && contact.senderId === 'default'
-  );
-  const emailContact = contacts.find(
-    (contact) => contact.channelType === ChannelType.EMAIL && contact.senderId === 'default'
-  );
-
-  const phoneContactsQuantity = (): number => countContactsByType(contacts, ChannelType.SMS);
-
-  const emailContactsQuantity = (): number => countContactsByType(contacts, ChannelType.EMAIL);
-
   return (
-    <DigitalContactsCard
-      sectionTitle={t('courtesy-contacts.title', { ns: 'recapiti' })}
-      title={t('courtesy-contacts.subtitle', { ns: 'recapiti' })}
-      subtitle={t('courtesy-contacts.description', { ns: 'recapiti' })}
-      /**
-       * Waiting for Mail icon to be available in mui-italia (<IllusSms /> as placeholder)
-       * */
-      avatar={<IllusEmail size={60} />}
-    >
-      <Box sx={{ width: { xs: '100%', lg: '50%' } }} data-testid="courtesyContacts">
-        <Stack spacing={3} mt={3}>
-          <EmailContactItem
-            value={emailContact?.value ?? ''}
-            blockDelete={emailContactsQuantity() > 1}
-          />
-          <SmsContactItem
-            value={phoneContact?.value ?? ''}
-            blockDelete={phoneContactsQuantity() > 1}
-          />
-        </Stack>
-      </Box>
-      <Alert role="banner" sx={{ mt: 4 }} severity="info" data-testid="contacts disclaimer">
-        <Typography component="span" variant="body1">
-          {t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })}
-        </Typography>
-        {/** 
-           * Waiting for FAQs
-          <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant='body1'>{t('courtesy-contacts.disclaimer-link', { ns: 'recapiti' })}</Link>
-           * */}
-      </Alert>
-    </DigitalContactsCard>
+    <Box id="courtesyContactsSection">
+      <Typography variant="h6" fontWeight={700} tabIndex={-1} id="courtesyContactsTitle" mb={2}>
+        {t('courtesy-contacts.title', { ns: 'recapiti' })}
+      </Typography>
+      <Typography variant="body1">
+        <Trans i18nKey="courtesy-contacts.sub-title" ns="recapiti" />
+      </Typography>
+      <Stack spacing={3} mt={4} data-testid="courtesyContacts">
+        <IOContact />
+        <EmailContactItem />
+        <SmsContactItem />
+      </Stack>
+    </Box>
   );
 };
 

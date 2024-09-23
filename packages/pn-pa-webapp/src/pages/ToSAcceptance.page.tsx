@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Grid, Link, Typography } from '@mui/material';
 import {
   ConsentActionType,
+  ConsentType,
   ConsentUser,
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
@@ -61,26 +62,24 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
   );
 
   const handleAccept = async () => {
-    // eslint-disable-next-line functional/no-let
-    let tosPrivacyBody = {};
+    const tosPrivacyBody = [];
 
     if (!tosConsent.accepted) {
-      tosPrivacyBody = {
-        tos: {
-          action: ConsentActionType.ACCEPT,
-          version: tosConsent.consentVersion,
-        },
-      };
+      // eslint-disable-next-line functional/immutable-data
+      tosPrivacyBody.push({
+        action: ConsentActionType.ACCEPT,
+        version: tosConsent.consentVersion,
+        type: ConsentType.TOS,
+      });
     }
 
     if (!privacyConsent.accepted) {
-      tosPrivacyBody = {
-        ...tosPrivacyBody,
-        privacy: {
-          action: ConsentActionType.ACCEPT,
-          version: privacyConsent.consentVersion,
-        },
-      };
+      // eslint-disable-next-line functional/immutable-data
+      tosPrivacyBody.push({
+        action: ConsentActionType.ACCEPT,
+        version: privacyConsent.consentVersion,
+        type: ConsentType.DATAPRIVACY,
+      });
     }
 
     await dispatch(acceptTosPrivacy(tosPrivacyBody));

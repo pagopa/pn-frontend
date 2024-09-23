@@ -1,276 +1,142 @@
-import { useFormik } from 'formik';
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import * as yup from 'yup';
 
-import {
-  Alert,
-  Box,
-  Card,
-  CardContent,
-  InputAdornment,
-  MenuItem,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from '@mui/material';
-import {
-  ApiErrorWrapper,
-  AppResponse,
-  AppResponsePublisher,
-  CodeModal,
-  CustomDropdown,
-  ErrorMessage,
-  PnAutocomplete,
-  SpecialContactsProvider,
-  appStateActions,
-  searchStringLimitReachedText,
-  useIsMobile,
-} from '@pagopa-pn/pn-commons';
+import { Card, CardContent, Divider, Stack, Typography } from '@mui/material';
+import { appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
-import { Party } from '../../models/party';
 import {
-  CONTACT_ACTIONS,
-  createOrUpdateAddress,
-  getAllActivatedParties,
-} from '../../redux/contact/actions';
-import { SaveDigitalAddressParams } from '../../redux/contact/types';
+  AddressType,
+  ChannelType,
+  DigitalAddress,
+  SERCQ_SEND_VALUE,
+  SaveDigitalAddressParams,
+  Sender,
+} from '../../models/contacts';
+import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
+import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
-import {
-  allowedAddressTypes,
-  contactAlreadyExists,
-  emailValidationSchema,
-  internationalPhonePrefix,
-  pecValidationSchema,
-  phoneValidationSchema,
-} from '../../utility/contacts.utility';
-import DropDownPartyMenuItem from '../Party/DropDownParty';
-import DigitalContactsCard from './DigitalContactsCard';
+import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
+import AddSpecialContactDialog from './AddSpecialContactDialog';
+import CancelVerificationModal from './CancelVerificationModal';
+import ContactCodeDialog from './ContactCodeDialog';
+import DeleteDialog from './DeleteDialog';
 import ExistingContactDialog from './ExistingContactDialog';
+import LegalContactAssociationDialog from './LegalContactAssociationDialog';
 import PecVerificationDialog from './PecVerificationDialog';
-import SpecialContactElem from './SpecialContactElem';
+import SpecialContactItem from './SpecialContactItem';
 
-type Props = {
-  digitalAddresses: Array<DigitalAddress>;
-};
+enum ModalType {
+  EXISTING = 'existing',
+  CODE = 'code',
+  DELETE = 'delete',
+  SPECIAL = 'special',
+  VALIDATION = 'validation',
+  CANCEL_VALIDATION = 'cancel_validation',
+  CONFIRM_LEGAL_ASSOCIATION = 'confirm_legal_association',
+}
 
 type Addresses = {
   [senderId: string]: Array<DigitalAddress>;
 };
 
-type AddressTypeItem = {
-  id: ChannelType;
-  value: string;
-};
+const isPFEvent = (eventKey: string): eventKey is keyof typeof PFEventsType =>
+  Object.keys(PFEventsType).includes(eventKey);
 
-enum ModalType {
-  EXISTING = 'existing',
-  VALIDATION = 'validation',
-  CODE = 'code',
-}
-
-const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
+const SpecialContacts: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
-  const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
-  const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const isMobile = useIsMobile();
-  const [senderInputValue, setSenderInputValue] = useState('');
-  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const codeModalRef =
-    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
-
-  const addressTypes: Array<AddressTypeItem> = digitalAddresses
-    .filter((a) => a.senderId === 'default' && allowedAddressTypes.includes(a.channelType))
-    .map((a) => ({
-      id: a.channelType,
-      value: t(`special-contacts.${a.channelType.toLowerCase()}`, { ns: 'recapiti' }),
-    }));
-
-  const listHeaders = [
-    {
-      id: 'sender',
-      label: t('special-contacts.sender', { ns: 'recapiti' }),
-    },
-    ...allowedAddressTypes.map((type) => ({
-      id: type.toLowerCase(),
-      label: t(`special-contacts.${type.toLowerCase()}`, { ns: 'recapiti' }),
-    })),
-  ];
-
-  const addresses: Addresses = digitalAddresses
-    .filter((a) => a.senderId !== 'default')
-    .reduce((obj, a) => {
-      if (!obj[a.senderId]) {
-        // eslint-disable-next-line functional/immutable-data
-        obj[a.senderId] = [];
-      }
-      // eslint-disable-next-line functional/immutable-data
-      obj[a.senderId].push(a);
-      return obj;
-    }, {} as Addresses);
-
-  const fetchAllActivatedParties = useCallback(() => {
-    void dispatch(getAllActivatedParties({}));
-  }, []);
-
-  const validationSchema = yup.object({
-    sender: yup.object({ id: yup.string(), name: yup.string() }).required(),
-    addressType: yup.string().required(),
-    s_value: yup
-      .string()
-      .when('addressType', {
-        is: ChannelType.PEC,
-        then: pecValidationSchema(t),
-      })
-      .when('addressType', {
-        is: ChannelType.EMAIL,
-        then: emailValidationSchema(t),
-      })
-      .when('addressType', {
-        is: ChannelType.SMS,
-        then: phoneValidationSchema(t),
-      }),
-  });
-
-  const initialValues = {
-    sender: { id: '', name: '' },
-    addressType: addressTypes[0]?.id,
-    s_value: '',
-  };
-
-  const formik = useFormik({
-    initialValues,
-    validateOnMount: true,
-    validationSchema,
-    enableReinitialize: true,
-    onSubmit: (values) => {
-      const event =
-        values.addressType === ChannelType.PEC
-          ? PFEventsType.SEND_ADD_PEC_START
-          : values.addressType === ChannelType.SMS
-          ? PFEventsType.SEND_ADD_SMS_START
-          : PFEventsType.SEND_ADD_EMAIL_START;
-      PFEventStrategyFactory.triggerEvent(event, values.sender.id);
-      // first check if contact already exists
-      if (
-        contactAlreadyExists(digitalAddresses, values.s_value, values.sender.id, values.addressType)
-      ) {
-        setModalOpen(ModalType.EXISTING);
-        return;
-      }
-      handleCodeVerification();
-    },
-  });
-
-  const labelRoot =
-    formik.values.addressType === ChannelType.PEC ? 'legal-contacts' : 'courtesy-contacts';
-  const contactType = formik.values.addressType.toLowerCase();
-
-  const renderOption = (props: any, option: Party) => (
-    <MenuItem {...props} value={option.id} key={option.id}>
-      <DropDownPartyMenuItem name={option.name} />
-    </MenuItem>
+  const { addresses, specialAddresses, defaultPECAddress } = useAppSelector(
+    contactsSelectors.selectAddresses
   );
+  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
 
-  const getOptionLabel = (option: Party) => option.name || '';
+  const currentAddress = useRef<
+    Pick<DigitalAddress, 'value' | 'senderId' | 'senderName' | 'channelType'>
+  >({
+    value: '',
+    senderId: 'default',
+    channelType: ChannelType.PEC,
+  });
 
-  // handling of search string for sender
-  const entitySearchLabel: string = `${t('special-contacts.sender', {
-    ns: 'recapiti',
-  })}${searchStringLimitReachedText(senderInputValue)}`;
-
-  const handleChangeTouched = async (e: ChangeEvent) => {
-    formik.handleChange(e);
-    await formik.setFieldTouched(e.target.id, true, false);
-  };
-
-  const senderChangeHandler = async (_: any, newValue: Party | null) => {
-    await formik.setFieldTouched('sender', true, false);
-    await formik.setFieldValue('sender', newValue);
-    setSenderInputValue(newValue?.name ?? '');
-    if (newValue && addresses[newValue.id]) {
-      const alreadyExists =
-        addresses[newValue.id].findIndex((a) => a.channelType === formik.values.addressType) > -1;
-      setAlreadyExistsMessage(
-        alreadyExists
-          ? t(`special-contacts.${contactType}-already-exists`, {
-              ns: 'recapiti',
-            })
-          : ''
-      );
-      return;
-    }
-    setAlreadyExistsMessage('');
-  };
-
-  const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
-    await formik.setFieldValue('s_value', '');
-    formik.handleChange(e);
-    if (formik.values.sender && addresses[formik.values.sender.id]) {
-      const alreadyExists =
-        addresses[formik.values.sender.id].findIndex((a) => a.channelType === e.target.value) > -1;
-      setAlreadyExistsMessage(
-        alreadyExists
-          ? t(`special-contacts.${e.target.value.toLowerCase()}-already-exists`, {
-              ns: 'recapiti',
-            })
-          : ''
-      );
-      return;
-    }
-    setAlreadyExistsMessage('');
-  };
+  const labelRoot = `legal-contacts`;
+  const contactType = currentAddress.current.channelType.toLowerCase();
 
   const sendSuccessEvent = (type: ChannelType) => {
-    const event =
-      type === ChannelType.PEC
-        ? PFEventsType.SEND_ADD_PEC_UX_SUCCESS
-        : type === ChannelType.SMS
-        ? PFEventsType.SEND_ADD_SMS_UX_SUCCESS
-        : PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS;
-    PFEventStrategyFactory.triggerEvent(event, formik.values.sender.id);
+    const eventKey = `SEND_ADD_${type}_UX_SUCCESS`;
+    if (isPFEvent(eventKey)) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], currentAddress.current.senderId);
+    }
+  };
+
+  const sendCodeErrorEvent = (type: ChannelType) => {
+    const eventKey = `SEND_ADD_${type}_CODE_ERROR`;
+    if (isPFEvent(eventKey)) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey]);
+    }
+  };
+
+  const onConfirm = (
+    value: string,
+    channelType: ChannelType,
+    sender: Sender = { senderId: 'default' }
+  ) => {
+    const eventKey = `SEND_ADD_${channelType}_UX_START`;
+    if (isPFEvent(eventKey)) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], sender.senderId);
+    }
+
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = {
+      value,
+      senderId: sender.senderId,
+      senderName: sender.senderName,
+      channelType,
+    };
+
+    // first check if contact already exists
+    if (contactAlreadyExists(addresses, value, sender.senderId, channelType)) {
+      setModalOpen(ModalType.EXISTING);
+      return;
+    }
+    setModalOpen(ModalType.CONFIRM_LEGAL_ASSOCIATION);
   };
 
   const handleCodeVerification = (verificationCode?: string) => {
     if (verificationCode) {
-      const event =
-        formik.values.addressType === ChannelType.PEC
-          ? PFEventsType.SEND_ADD_PEC_UX_CONVERSION
-          : formik.values.addressType === ChannelType.SMS
-          ? PFEventsType.SEND_ADD_SMS_UX_CONVERSION
-          : PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION;
-      PFEventStrategyFactory.triggerEvent(event, formik.values.sender.id);
+      const eventKey = `SEND_ADD_${currentAddress.current.channelType}_UX_CONVERSION`;
+      if (isPFEvent(eventKey)) {
+        PFEventStrategyFactory.triggerEvent(
+          PFEventsType[eventKey],
+          currentAddress.current.senderId
+        );
+      }
     }
 
-    const addressType =
-      formik.values.addressType === ChannelType.PEC ? AddressType.LEGAL : AddressType.COURTESY;
-    const value =
-      formik.values.addressType === ChannelType.SMS
-        ? internationalPhonePrefix + formik.values.s_value
-        : formik.values.s_value;
+    // eslint-disable-next-line functional/no-let
+    let value = currentAddress.current.value;
+    if (currentAddress.current.channelType === ChannelType.SMS) {
+      value = internationalPhonePrefix + value;
+    }
+    if (currentAddress.current.channelType === ChannelType.SERCQ_SEND) {
+      value = SERCQ_SEND_VALUE;
+    }
+
     const digitalAddressParams: SaveDigitalAddressParams = {
-      addressType,
-      senderId: formik.values.sender.id,
-      senderName: formik.values.sender.name,
-      channelType: formik.values.addressType,
+      addressType: AddressType.LEGAL,
+      senderId: currentAddress.current.senderId,
+      senderName: currentAddress.current.senderName,
+      channelType: currentAddress.current.channelType,
       value,
       code: verificationCode,
     };
 
     dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
-      .then(async (res) => {
+      .then((res) => {
         // contact to verify
         // open code modal
         if (!res) {
@@ -278,10 +144,10 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
           return;
         }
 
-        sendSuccessEvent(formik.values.addressType);
+        sendSuccessEvent(currentAddress.current.channelType);
 
         // contact has already been verified
-        if (res.pecValid || formik.values.addressType !== ChannelType.PEC) {
+        if (res.pecValid || currentAddress.current.channelType !== ChannelType.PEC) {
           // show success message
           dispatch(
             appStateActions.addSuccess({
@@ -291,11 +157,7 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
               }),
             })
           );
-          setModalOpen(null);
-          // reset form
-          formik.resetForm();
-          await formik.validateForm();
-          setSenderInputValue('');
+          handleCloseModal();
           return;
         }
         // contact must be validated
@@ -305,248 +167,224 @@ const SpecialContacts: React.FC<Props> = ({ digitalAddresses }) => {
       .catch(() => {});
   };
 
-  const handleAddressUpdateError = useCallback(
-    (responseError: AppResponse) => {
-      if (modalOpen === null) {
-        // notify the publisher we are not handling the error
-        return true;
-      }
-      if (Array.isArray(responseError.errors)) {
-        const error = responseError.errors[0];
-        codeModalRef.current?.updateError(
-          {
-            title: error.message.title,
-            content: error.message.content,
-          },
-          true
-        );
-        if (formik.values.addressType === ChannelType.PEC) {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR);
-        } else if (formik.values.addressType === ChannelType.SMS) {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_CODE_ERROR);
-        } else if (formik.values.addressType === ChannelType.EMAIL) {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_CODE_ERROR);
+  const deleteConfirmHandler = () => {
+    setModalOpen(null);
+    dispatch(
+      deleteAddress({
+        addressType: AddressType.LEGAL,
+        senderId: currentAddress.current.senderId,
+        channelType: currentAddress.current.channelType,
+      })
+    )
+      .unwrap()
+      .then(() => {
+        const eventKey = `SEND_REMOVE_${currentAddress.current.channelType}_UX_SUCCESS`;
+        if (isPFEvent(eventKey)) {
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType[eventKey],
+            currentAddress.current.senderId
+          );
         }
-      }
-      return false;
-    },
-    [modalOpen]
-  );
+        // reset current address
+        // eslint-disable-next-line functional/immutable-data
+        currentAddress.current = {
+          ...currentAddress.current,
+          value: '',
+          senderId: 'default',
+          senderName: undefined,
+        };
+      })
+      .catch(() => {});
+  };
 
-  useEffect(() => {
-    AppResponsePublisher.error.subscribe('createOrUpdateAddress', handleAddressUpdateError);
-
-    return () => {
-      AppResponsePublisher.error.unsubscribe('createOrUpdateAddress', handleAddressUpdateError);
+  const handleDelete = (value: string, channelType: ChannelType, sender: Sender) => {
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = {
+      value,
+      senderId: sender.senderId,
+      senderName: sender.senderName,
+      channelType,
     };
-  }, [handleAddressUpdateError]);
+    setModalOpen(ModalType.DELETE);
+  };
 
-  useEffect(() => {
-    if (senderInputValue.length >= 4) {
-      void dispatch(getAllActivatedParties({ paNameFilter: senderInputValue, blockLoading: true }));
-    } else if (senderInputValue.length === 0) {
-      void dispatch(getAllActivatedParties({ blockLoading: true }));
+  const handleEdit = (value: string, channelType: ChannelType, sender: Sender) => {
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = {
+      value,
+      senderId: sender.senderId,
+      senderName: sender.senderName,
+      channelType,
+    };
+    setModalOpen(ModalType.SPECIAL);
+  };
+
+  const handleCloseModal = () => {
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = {
+      ...currentAddress.current,
+      value: '',
+      senderId: 'default',
+      senderName: undefined,
+    };
+    setModalOpen(null);
+  };
+
+  const handleCancelValidation = (senderId: string) => {
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = {
+      ...currentAddress.current,
+      senderId,
+    };
+    setModalOpen(ModalType.CANCEL_VALIDATION);
+  };
+
+  const handleCreateNewAssociation = (sender: Sender) => {
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = {
+      ...currentAddress.current,
+      senderId: sender.senderId,
+      senderName: sender.senderName,
+    };
+
+    setModalOpen(ModalType.SPECIAL);
+  };
+
+  const handleCancelCode = async () => {
+    setModalOpen(null);
+  };
+
+  const groupedAddresses: Addresses = specialAddresses.reduce((obj, a) => {
+    if (!obj[a.senderId]) {
+      // eslint-disable-next-line functional/immutable-data
+      obj[a.senderId] = [];
     }
-  }, [senderInputValue]);
+    // eslint-disable-next-line functional/immutable-data
+    obj[a.senderId].push(a);
+    return obj;
+  }, {} as Addresses);
 
   return (
-    <ApiErrorWrapper
-      apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES}
-      reloadAction={fetchAllActivatedParties}
-      mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
-    >
-      <DigitalContactsCard
-        sectionTitle=""
-        title=""
-        subtitle={t('special-contacts.subtitle', { ns: 'recapiti' })}
-        avatar={null}
-      >
-        <Typography sx={{ marginTop: '20px' }}>{t('required-fields')}</Typography>
-        <form
-          style={{ margin: '20px 0' }}
-          onSubmit={formik.handleSubmit}
-          data-testid="specialContact"
-        >
-          <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
-            <PnAutocomplete
-              id="sender"
-              data-testid="sender"
-              size="small"
-              options={parties ?? []}
-              autoComplete
-              getOptionLabel={getOptionLabel}
-              noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-              onChange={senderChangeHandler}
-              inputValue={senderInputValue}
-              onInputChange={(_event, newInputValue, reason) => {
-                if (reason === 'input') {
-                  setSenderInputValue(newInputValue);
-                }
-              }}
-              filterOptions={(e) => e}
-              renderOption={renderOption}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  name="sender"
-                  label={entitySearchLabel}
-                  error={senderInputValue.length > 80}
-                  helperText={
-                    senderInputValue.length > 80 && t('too-long-field-error', { maxLength: 80 })
-                  }
-                />
-              )}
-              sx={{ flexGrow: 1, flexBasis: 0 }}
-            />
-            <CustomDropdown
-              id="addressType"
-              label={`${t('special-contacts.address-type', { ns: 'recapiti' })}*`}
-              name="addressType"
-              value={formik.values.addressType}
-              onChange={addressTypeChangeHandler}
-              size="small"
-              sx={{ flexGrow: 1, flexBasis: 0 }}
-            >
-              {addressTypes.map((a) => (
-                <MenuItem id={`dropdown-${a.id}`} key={a.id} value={a.id}>
-                  {a.value}
-                </MenuItem>
-              ))}
-            </CustomDropdown>
-            <TextField
-              id="s_value"
-              label={t(`special-contacts.${contactType}`, { ns: 'recapiti' }) + '*'}
-              name="s_value"
-              value={formik.values.s_value}
-              onChange={handleChangeTouched}
-              variant="outlined"
-              size="small"
-              error={formik.touched.s_value && Boolean(formik.errors.s_value)}
-              helperText={formik.touched.s_value && formik.errors.s_value}
-              InputProps={
-                formik.values.addressType === ChannelType.SMS
-                  ? {
-                      startAdornment: (
-                        <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
-                      ),
-                    }
-                  : {}
-              }
-              sx={{ flexGrow: 1, flexBasis: 0 }}
-            />
-            <Box sx={{ textAlign: 'right' }}>
-              <ButtonNaked
-                sx={{ marginLeft: 'auto', height: '40px' }}
-                type="submit"
-                disabled={
-                  !formik.isValid || senderInputValue.length > 80 || senderInputValue.length === 0
-                }
-                color="primary"
-                data-testid="addSpecialButton"
-                id="addSpecialButton"
-              >
-                {t('button.associa')}
-              </ButtonNaked>
-            </Box>
-          </Stack>
-        </form>
-        {alreadyExistsMessage && (
-          <Alert severity="warning" sx={{ marginBottom: '20px' }} data-testid="alreadyExistsAlert">
-            {alreadyExistsMessage}
-          </Alert>
-        )}
-        <SpecialContactsProvider>
-          {Object.keys(addresses).length > 0 && (
-            <>
-              <Typography fontWeight={600} sx={{ marginTop: '80px' }}>
-                {t('special-contacts.associated', { ns: 'recapiti' })}
-              </Typography>
-              {!isMobile && (
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      {listHeaders.map((h) => (
-                        <TableCell width="25%" key={h.id} sx={{ borderBottomColor: 'divider' }}>
-                          {h.label}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {Object.entries(addresses).map(([senderId, addr]) => (
-                      <SpecialContactElem key={senderId} addresses={addr} />
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
-              {isMobile &&
-                Object.entries(addresses).map(([senderId, addr]) => (
-                  <Card
-                    key={senderId}
-                    sx={{
-                      border: '1px solid',
-                      borderRadius: '8px',
-                      borderColor: 'divider',
-                      marginTop: '20px',
-                    }}
-                  >
-                    <CardContent>
-                      <SpecialContactElem key={senderId} addresses={addr} />
-                    </CardContent>
-                  </Card>
-                ))}
-            </>
-          )}
-        </SpecialContactsProvider>
-      </DigitalContactsCard>
-      <ExistingContactDialog
-        open={modalOpen === ModalType.EXISTING}
-        value={formik.values.s_value}
-        handleDiscard={() => setModalOpen(null)}
-        handleConfirm={() => handleCodeVerification()}
-      />
-      <CodeModal
-        title={
-          t(`${labelRoot}.${contactType}-verify`, { ns: 'recapiti' }) + ` ${formik.values.s_value}`
-        }
-        subtitle={<Trans i18nKey={`${labelRoot}.${contactType}-verify-descr`} ns="recapiti" />}
-        open={modalOpen === ModalType.CODE}
-        initialValues={new Array(5).fill('')}
-        codeSectionTitle={t(`${labelRoot}.insert-code`, { ns: 'recapiti' })}
-        codeSectionAdditional={
-          <>
-            <Typography variant="body2" display="inline">
-              {t(`${labelRoot}.${contactType}-new-code`, { ns: 'recapiti' })}
-              &nbsp;
-            </Typography>
+    <>
+      <Typography sx={{ mt: 3 }} variant="body2" fontSize="14px" color="text.secondary">
+        <Trans
+          i18nKey="special-contacts.description"
+          ns="recapiti"
+          components={[
             <ButtonNaked
-              component={Box}
-              onClick={() => handleCodeVerification()}
-              sx={{ verticalAlign: 'unset', display: 'inline' }}
-            >
-              <Typography
-                display="inline"
-                color="primary"
-                variant="body2"
-                sx={{ textDecoration: 'underline' }}
-              >
-                {t(`${labelRoot}.new-code-link`, { ns: 'recapiti' })}.
-              </Typography>
-            </ButtonNaked>
-          </>
-        }
-        cancelLabel={t('button.annulla')}
-        confirmLabel={t('button.conferma')}
-        cancelCallback={() => setModalOpen(null)}
-        confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
-        ref={codeModalRef}
+              key="addSpecialContactButton"
+              onClick={() => setModalOpen(ModalType.SPECIAL)}
+              color="primary"
+              data-testid="addSpecialContactButton"
+              sx={{ top: '-2px' }}
+            />,
+          ]}
+        />
+      </Typography>
+      {Object.keys(groupedAddresses).length > 0 && (
+        <Card sx={{ mt: 3 }}>
+          <CardContent>
+            <Typography variant="body1" fontWeight={700}>
+              {t('special-contacts.card-title', { ns: 'recapiti' })}
+            </Typography>
+            {!isMobile && (
+              <Stack direction="row" spacing={6} mt={3}>
+                <Typography variant="caption" fontWeight={600} sx={{ width: '224px' }}>
+                  {t(`special-contacts.senders`, { ns: 'recapiti' })}
+                </Typography>
+                <Typography variant="caption" fontWeight={600}>
+                  {t('special-contacts.contacts', { ns: 'recapiti' })}
+                </Typography>
+              </Stack>
+            )}
+            <Stack divider={<Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }} />}>
+              {Object.entries(groupedAddresses).map(([senderId, addr], index) => (
+                <SpecialContactItem
+                  index={index}
+                  key={`sender-${senderId}`}
+                  addresses={addr}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                  onCancelValidation={handleCancelValidation}
+                  handleCreateNewAssociation={handleCreateNewAssociation}
+                />
+              ))}
+            </Stack>
+          </CardContent>
+        </Card>
+      )}
+      <AddSpecialContactDialog
+        open={modalOpen === ModalType.SPECIAL}
+        value={currentAddress.current.value ?? ''}
+        sender={{
+          senderId: currentAddress.current.senderId,
+          senderName: currentAddress.current.senderName,
+        }}
+        channelType={currentAddress.current.channelType}
+        onDiscard={handleCloseModal}
+        onConfirm={(value: string, channelType: ChannelType, sender: Sender) => {
+          setModalOpen(null);
+          onConfirm(value, channelType, sender);
+        }}
+      />
+      <ContactCodeDialog
+        value={currentAddress.current.value}
+        addressType={AddressType.LEGAL}
+        channelType={currentAddress.current.channelType}
+        open={modalOpen === ModalType.CODE}
+        onConfirm={(code) => handleCodeVerification(code)}
+        onDiscard={handleCancelCode}
+        onError={() => sendCodeErrorEvent(currentAddress.current.channelType)}
+      />
+      <DeleteDialog
+        showModal={modalOpen === ModalType.DELETE}
+        removeModalTitle={t(`special-contacts.remove-special-title`, {
+          ns: 'recapiti',
+          contactValue:
+            currentAddress.current.channelType === ChannelType.SERCQ_SEND
+              ? t(`legal-contacts.sercq-send-title`, {
+                  ns: 'recapiti',
+                })
+              : currentAddress.current.value,
+        })}
+        removeModalBody={t(`special-contacts.remove-special-description`, {
+          ns: 'recapiti',
+        })}
+        handleModalClose={handleCloseModal}
+        confirmHandler={deleteConfirmHandler}
       />
       <PecVerificationDialog
         open={modalOpen === ModalType.VALIDATION}
-        handleConfirm={() => setModalOpen(null)}
+        handleConfirm={handleCloseModal}
       />
-    </ApiErrorWrapper>
+      <ExistingContactDialog
+        open={modalOpen === ModalType.EXISTING}
+        value={currentAddress.current.value}
+        handleDiscard={handleCloseModal}
+        handleConfirm={() => handleCodeVerification()}
+      />
+      <CancelVerificationModal
+        open={modalOpen === ModalType.CANCEL_VALIDATION}
+        senderId={currentAddress.current.senderId}
+        handleClose={handleCloseModal}
+      />
+      <LegalContactAssociationDialog
+        open={modalOpen === ModalType.CONFIRM_LEGAL_ASSOCIATION}
+        senderName={currentAddress.current.senderName ?? ''}
+        newAddressValue={
+          currentAddress.current.channelType === ChannelType.PEC
+            ? currentAddress.current.value
+            : t('special-contacts.sercq_send', { ns: 'recapiti' })
+        }
+        oldAddressValue={
+          defaultPECAddress
+            ? defaultPECAddress.value
+            : t('special-contacts.sercq_send', { ns: 'recapiti' })
+        }
+        handleClose={handleCloseModal}
+        handleConfirm={() => handleCodeVerification()}
+      />
+    </>
   );
 };
 

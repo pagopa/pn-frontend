@@ -2,9 +2,10 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
-import { RenderResult, fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
+import { getConfiguration } from '../../../services/configuration.service';
 import IOContact from '../IOContact';
 
 vi.mock('react-i18next', () => ({
@@ -16,48 +17,42 @@ vi.mock('react-i18next', () => ({
 }));
 
 const IOAddress = digitalCourtesyAddresses.find((addr) => addr.channelType === ChannelType.IOMSG);
+const assignFn = vi.fn();
 
 describe('IOContact component', async () => {
   let mock: MockAdapter;
-  let result: RenderResult;
+  const originalLocation = window.location;
+  const originalNavigator = window.navigator;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { assign: assignFn },
+    });
   });
 
   afterEach(() => {
     mock.reset();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
     mock.restore();
+    Object.defineProperty(window, 'location', { configurable: true, value: originalLocation });
+    Object.defineProperty(window, 'navigator', { value: originalNavigator });
   });
 
   it('renders component - no contacts', () => {
-    result = render(<IOContact contact={null} />);
-    const cardAvatar = result.container.querySelector('svg>title');
-    expect(cardAvatar).toBeInTheDocument();
-    const title = result.getByRole('heading', { name: 'io-contact.subtitle' });
-    expect(title).toBeInTheDocument();
-    const ioCheckbox = result.queryByRole('checkbox', { name: 'io-contact.switch-label' });
-    expect(ioCheckbox).not.toBeInTheDocument();
-    const alert = result.queryByTestId('appIO-contact-disclaimer');
-    expect(alert).not.toBeInTheDocument();
-    const link = result.container.querySelector('a');
-    expect(link).not.toBeInTheDocument();
-  });
-
-  it('IO unavailable', () => {
-    result = render(<IOContact contact={undefined} />);
-    const ioCheckbox = result.queryByRole('checkbox', { name: 'io-contact.switch-label' });
-    expect(ioCheckbox).not.toBeInTheDocument();
-    const alert = result.getByTestId('appIO-contact-disclaimer');
-    expect(alert).toBeInTheDocument();
-    expect(alert).toHaveTextContent('io-contact.disclaimer-message-unavailable');
-    /** Waiting for FAQs */
-    // expect(alert).not.toHaveTextContent('io-contact.disclaimer-link');
-    const link = result.container.querySelector('a');
-    expect(link).not.toBeInTheDocument();
+    const { getByTestId, getByText, getByRole } = render(<IOContact />);
+    const title = getByTestId('DigitalContactsCardTitle');
+    expect(title).toHaveTextContent('io-contact.title');
+    const description = getByTestId('DigitalContactsCardDescription');
+    expect(description).toHaveTextContent('io-contact.description');
+    const text = getByText('io-contact.unavailable');
+    const button = getByRole('button', { name: 'io-contact.download' });
+    expect(text).toBeInTheDocument();
+    expect(button).toBeInTheDocument();
   });
 
   it('IO available and disabled', async () => {
@@ -67,33 +62,25 @@ describe('IOContact component', async () => {
         verificationCode: '00000',
       })
       .reply(204);
-    result = render(<IOContact contact={IOAddress} />, {
+    const { getByTestId, getByText, getByRole } = render(<IOContact />, {
       preloadedState: { contactsState: { digitalAddresses: [IOAddress] } },
     });
-    result.getByTestId('CloseIcon');
-    result.getByText('io-contact.disabled');
-    const enableBtn = result.getByRole('button', { name: 'button.enable' });
+    getByTestId('DoDisturbOnOutlinedIcon');
+    getByText('io-contact.disabled');
+    const enableBtn = getByRole('button', { name: 'io-contact.enable' });
     expect(enableBtn).toBeInTheDocument();
     expect(enableBtn).toBeEnabled();
-    const alert = result.getByTestId('appIO-contact-disclaimer');
-    expect(alert).toBeInTheDocument();
-    expect(alert).toHaveTextContent('io-contact.disclaimer-message');
-    /** Waiting for FAQs */
-    // expect(alert).toHaveTextContent('io-contact.disclaimer-link');
-    // const link = result.container.querySelector('a');
-    // expect(link).toBeInTheDocument();
-    // expect(link).toHaveTextContent('io-contact.disclaimer-link');
     // enable IO
     fireEvent.click(enableBtn);
-    const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
-    const disclaimerConfirmButton = result.getByTestId('disclaimer-confirm-button');
+    /* const disclaimerCheckbox = await waitFor(() => getByTestId('disclaimer-checkbox'));
+    const disclaimerConfirmButton = getByTestId('disclaimer-confirm-button');
     expect(disclaimerConfirmButton).toHaveTextContent('io-contact.enable-modal.confirm');
     expect(disclaimerConfirmButton).toBeDisabled();
     fireEvent.click(disclaimerCheckbox);
     await waitFor(() => {
       expect(disclaimerConfirmButton).toBeEnabled();
     });
-    fireEvent.click(disclaimerConfirmButton);
+    fireEvent.click(disclaimerConfirmButton); */
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
@@ -110,37 +97,29 @@ describe('IOContact component', async () => {
 
   it('IO available and enabled', async () => {
     mock.onDelete('/bff/v1/addresses/COURTESY/default/APPIO').reply(200);
-    result = render(<IOContact contact={{ ...IOAddress!, value: IOAllowedValues.ENABLED }} />, {
+    const { getByTestId, getByText, getByRole } = render(<IOContact />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [{ ...IOAddress!, value: IOAllowedValues.ENABLED }],
         },
       },
     });
-    result.getByTestId('CheckIcon');
-    result.getByText('io-contact.enabled');
-    const disableBtn = result.getByRole('button', { name: 'button.disable' });
+    getByTestId('VerifiedIcon');
+    getByText('io-contact.enabled');
+    const disableBtn = getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
     expect(disableBtn).toBeEnabled();
-    const alert = result.getByTestId('appIO-contact-disclaimer');
-    expect(alert).toBeInTheDocument();
-    expect(alert).toHaveTextContent('io-contact.disclaimer-message');
-    /** Waiting for FAQs */
-    // expect(alert).toHaveTextContent('io-contact.disclaimer-link');
-    // const link = result.container.querySelector('a');
-    // expect(link).toBeInTheDocument();
-    // expect(link).toHaveTextContent('io-contact.disclaimer-link');
     // disable IO
     fireEvent.click(disableBtn);
-    const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
-    const disclaimerConfirmButton = result.getByTestId('disclaimer-confirm-button');
+    /* const disclaimerCheckbox = await waitFor(() => getByTestId('disclaimer-checkbox'));
+    const disclaimerConfirmButton = getByTestId('disclaimer-confirm-button');
     expect(disclaimerConfirmButton).toHaveTextContent('io-contact.disable-modal.confirm');
     expect(disclaimerConfirmButton).toBeDisabled();
     fireEvent.click(disclaimerCheckbox);
     await waitFor(() => {
       expect(disclaimerConfirmButton).toBeEnabled();
     });
-    fireEvent.click(disclaimerConfirmButton);
+    fireEvent.click(disclaimerConfirmButton); */
     await waitFor(() => {
       expect(mock.history.delete).toHaveLength(1);
     });
@@ -149,5 +128,35 @@ describe('IOContact component', async () => {
         .getState()
         .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
     ).toStrictEqual([{ ...IOAddress, value: IOAllowedValues.DISABLED }]);
+  });
+
+  it('Click on download AppIO button - desktop', () => {
+    const { getByRole } = render(<IOContact />);
+    const button = getByRole('button', { name: 'io-contact.download' });
+    fireEvent.click(button);
+    expect(assignFn).toHaveBeenCalledTimes(1);
+    expect(assignFn).toHaveBeenCalledWith(getConfiguration().APP_IO_SITE);
+  });
+
+  it('Click on download AppIO button - IOS', () => {
+    Object.defineProperty(window, 'navigator', {
+      value: { userAgent: 'iPhone' },
+    });
+    const { getByRole } = render(<IOContact />);
+    const button = getByRole('button', { name: 'io-contact.download' });
+    fireEvent.click(button);
+    expect(assignFn).toHaveBeenCalledTimes(1);
+    expect(assignFn).toHaveBeenCalledWith(getConfiguration().APP_IO_IOS);
+  });
+
+  it('Click on download AppIO button - Android', () => {
+    Object.defineProperty(window, 'navigator', {
+      value: { userAgent: 'Android' },
+    });
+    const { getByRole } = render(<IOContact />);
+    const button = getByRole('button', { name: 'io-contact.download' });
+    fireEvent.click(button);
+    expect(assignFn).toHaveBeenCalledTimes(1);
+    expect(assignFn).toHaveBeenCalledWith(getConfiguration().APP_IO_ANDROID);
   });
 });

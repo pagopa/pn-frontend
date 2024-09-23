@@ -16,7 +16,9 @@
     "enable": "Attiva",
     "disable": "Disattiva",
     "go-to-home": "Vai alla homepage",
-    "go-to-login": "Accedi"
+    "go-to-login": "Accedi",
+    "not-now": "Non ora",
+    "add": "Aggiungi"
   },
   "menu": {
     "notifiche": "Notifiche",
@@ -185,5 +187,11 @@
     "pg-operator": "Referente operativo",
     "pg-admin": "Amministratore"
   },
-  "required-field": "Campo obbligatorio"
+  "required-field": "Campo obbligatorio",
+  "badges": {
+    "news": "Novità"
+  },
+  "conjunctions": {
+    "or": "oppure"
+  }
 }

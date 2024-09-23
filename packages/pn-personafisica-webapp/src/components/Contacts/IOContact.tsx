@@ -1,39 +1,36 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
-import { Alert, Box, Stack, Typography } from '@mui/material';
-import { DisclaimerModal } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, IllusSms } from '@pagopa/mui-italia';
+import DoDisturbOnOutlinedIcon from '@mui/icons-material/DoDisturbOnOutlined';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import { Alert, Box, Button, Stack, Typography } from '@mui/material';
+import { IllusAppIO, useIsMobile } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { DigitalAddress, IOAllowedValues } from '../../models/contacts';
+import { IOAllowedValues } from '../../models/contacts';
 import { disableIOAddress, enableIOAddress } from '../../redux/contact/actions';
-import { useAppDispatch } from '../../redux/hooks';
+import { contactsSelectors } from '../../redux/contact/reducers';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { getConfiguration } from '../../services/configuration.service';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import DigitalContactsCard from './DigitalContactsCard';
 
-interface Props {
-  contact: DigitalAddress | null | undefined;
-}
-
 enum IOContactStatus {
-  PENDING = 'pending',
   UNAVAILABLE = 'unavailable',
   ENABLED = 'enabled',
   DISABLED = 'disabled',
 }
 
-const IOContact: React.FC<Props> = ({ contact }) => {
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+const IOContact: React.FC = () => {
+  // const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
+  const isMobile = useIsMobile();
+  const { defaultAPPIOAddress: contact } = useAppSelector(contactsSelectors.selectAddresses);
+  const { APP_IO_SITE, APP_IO_ANDROID, APP_IO_IOS } = getConfiguration();
 
   const parseContact = () => {
-    if (contact === null) {
-      return IOContactStatus.PENDING;
-    } else if (contact === undefined) {
+    if (!contact) {
       return IOContactStatus.UNAVAILABLE;
     } else if (contact.value === IOAllowedValues.DISABLED) {
       return IOContactStatus.DISABLED;
@@ -43,13 +40,14 @@ const IOContact: React.FC<Props> = ({ contact }) => {
   };
 
   const status = parseContact();
+  // const disclaimerLabel = status === IOContactStatus.ENABLED ? 'disable' : 'enable';
 
   const enableIO = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
     dispatch(enableIOAddress())
       .unwrap()
       .then(() => {
-        setIsConfirmModalOpen(false);
+        // setIsConfirmModalOpen(false);
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS);
       })
       .catch(() => {});
@@ -60,113 +58,115 @@ const IOContact: React.FC<Props> = ({ contact }) => {
     dispatch(disableIOAddress())
       .unwrap()
       .then(() => {
-        setIsConfirmModalOpen(false);
+        // etIsConfirmModalOpen(false);
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS);
       })
       .catch(() => {});
   };
 
-  const handleConfirmationModal = () => {
+  /* const handleConfirm = () => {
+    if (status === IOContactStatus.ENABLED) {
+      disableIO();
+    } else if (status === IOContactStatus.DISABLED) {
+      enableIO();
+    }
+  }; */
+
+  const handleConfirm = () => {
     PFEventStrategyFactory.triggerEvent(
       status === IOContactStatus.ENABLED
         ? PFEventsType.SEND_DEACTIVE_IO_START
         : PFEventsType.SEND_ACTIVE_IO_START
     );
-    setIsConfirmModalOpen(true);
+    // setIsConfirmModalOpen(true);
+    if (status === IOContactStatus.ENABLED) {
+      disableIO();
+      return;
+    }
+    enableIO();
+  };
+
+  const handleDownload = () => {
+    const androindPhone = /Android/i.test(navigator.userAgent);
+    const iosPhone = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (androindPhone && APP_IO_ANDROID) {
+      window.location.assign(APP_IO_ANDROID);
+    } else if (iosPhone && APP_IO_IOS) {
+      window.location.assign(APP_IO_IOS);
+    } else if (APP_IO_SITE) {
+      window.location.assign(APP_IO_SITE);
+    }
   };
 
   const getContent = () => {
-    if (status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING) {
-      return;
-    } else {
-      const content =
-        status === IOContactStatus.DISABLED
-          ? {
-              Icon: <CloseIcon fontSize="small" color="disabled" />,
-              text: t('io-contact.disabled', { ns: 'recapiti' }),
-              btn: t('button.enable'),
-            }
-          : {
-              Icon: <CheckIcon fontSize="small" color="success" />,
-              text: t('io-contact.enabled', { ns: 'recapiti' }),
-              btn: t('button.disable'),
-            };
+    if (status === IOContactStatus.UNAVAILABLE) {
       return (
-        <Stack direction="row" alignItems="center" mt={3}>
-          {content.Icon}
-          <Typography data-testid="IO status" ml={1}>
-            {content.text}
-          </Typography>
-          <Box flexGrow={1} textAlign="right">
-            <ButtonNaked color="primary" data-testid="IO button" onClick={handleConfirmationModal}>
-              {content.btn}
-            </ButtonNaked>
-          </Box>
+        <Stack
+          direction={{
+            lg: 'row',
+            xs: 'column',
+          }}
+          spacing={2}
+          alignItems="center"
+          mb={2}
+          data-testid="ioContact"
+        >
+          <Alert severity="info" sx={{ width: isMobile ? '100%' : 'auto' }}>
+            {t('io-contact.unavailable', { ns: 'recapiti' })}
+          </Alert>
+          <Button variant="contained" onClick={handleDownload} color="primary" fullWidth={isMobile}>
+            {t('io-contact.download', { ns: 'recapiti' })}
+          </Button>
         </Stack>
       );
     }
-  };
-
-  const getDisclaimer = () => {
-    if (status === IOContactStatus.PENDING) {
-      return;
-    } else {
+    if (status === IOContactStatus.DISABLED) {
       return (
-        <Alert
-          role="banner"
-          sx={{ mt: 4 }}
-          severity={status !== IOContactStatus.UNAVAILABLE ? 'info' : 'warning'}
-          data-testid="appIO-contact-disclaimer"
-        >
-          <Typography component="span" variant="body1">
-            {status === IOContactStatus.UNAVAILABLE
-              ? t('io-contact.disclaimer-message-unavailable', { ns: 'recapiti' })
-              : t('io-contact.disclaimer-message', { ns: 'recapiti' })}{' '}
-          </Typography>
-          {/** 
-           * Waiting for FAQs
-            {isAvailable &&
-              <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
-                {t('io-contact.disclaimer-link', { ns: 'recapiti' })}
-              </Link>
-            }
-          * */}
-        </Alert>
+        <>
+          <Stack direction="row" spacing={2} alignItems="center" mb={2} data-testid="ioContact">
+            <DoDisturbOnOutlinedIcon fontSize="small" color="disabled" />
+            <Typography data-testid="IO status" fontWeight={600}>
+              {t('io-contact.disabled', { ns: 'recapiti' })}
+            </Typography>
+          </Stack>
+          <Button variant="contained" onClick={handleConfirm} color="primary" fullWidth={isMobile}>
+            {t('io-contact.enable', { ns: 'recapiti' })}
+          </Button>
+        </>
       );
     }
+
+    return (
+      <Stack direction="row" spacing={1} data-testid="ioContact">
+        <VerifiedIcon fontSize="small" color="primary" sx={{ position: 'relative', top: '2px' }} />
+        <Box>
+          <Typography data-testid="IO status" fontWeight={600} mb={2}>
+            {t('io-contact.enabled', { ns: 'recapiti' })}
+          </Typography>
+          <ButtonNaked onClick={handleConfirm} color="error" sx={{ fontWeight: 700 }} size="medium">
+            {t('button.disable')}
+          </ButtonNaked>
+        </Box>
+      </Stack>
+    );
   };
 
   return (
     <DigitalContactsCard
-      sectionTitle={t('io-contact.title', { ns: 'recapiti' })}
-      title={t('io-contact.subtitle', { ns: 'recapiti' })}
+      title={t('io-contact.title', { ns: 'recapiti' })}
       subtitle={t('io-contact.description', { ns: 'recapiti' })}
-      avatar={<IllusSms size={60} />}
+      illustration={<IllusAppIO />}
     >
       {getContent()}
-      {getDisclaimer()}
-      {status === IOContactStatus.DISABLED && (
-        <DisclaimerModal
-          open={isConfirmModalOpen}
-          onConfirm={enableIO}
-          title={t('io-contact.enable-modal.title', { ns: 'recapiti' })}
-          content={t('io-contact.enable-modal.content', { ns: 'recapiti' })}
-          checkboxLabel={t('io-contact.enable-modal.checkbox', { ns: 'recapiti' })}
-          confirmLabel={t('io-contact.enable-modal.confirm', { ns: 'recapiti' })}
-          onCancel={() => setIsConfirmModalOpen(false)}
-        />
-      )}
-      {status === IOContactStatus.ENABLED && (
-        <DisclaimerModal
-          open={isConfirmModalOpen}
-          onConfirm={disableIO}
-          title={t('io-contact.disable-modal.title', { ns: 'recapiti' })}
-          content={t('io-contact.disable-modal.content', { ns: 'recapiti' })}
-          checkboxLabel={t('io-contact.disable-modal.checkbox', { ns: 'recapiti' })}
-          confirmLabel={t('io-contact.disable-modal.confirm', { ns: 'recapiti' })}
-          onCancel={() => setIsConfirmModalOpen(false)}
-        />
-      )}
+      {/* <DisclaimerModal
+        open={isConfirmModalOpen}
+        onConfirm={handleConfirm}
+        title={t(`io-contact.${disclaimerLabel}-modal.title`, { ns: 'recapiti' })}
+        content={t(`io-contact.${disclaimerLabel}-modal.content`, { ns: 'recapiti' })}
+        checkboxLabel={t(`io-contact.${disclaimerLabel}-modal.checkbox`, { ns: 'recapiti' })}
+        confirmLabel={t(`io-contact.${disclaimerLabel}-modal.confirm`, { ns: 'recapiti' })}
+        onCancel={() => setIsConfirmModalOpen(false)}
+      /> */}
     </DigitalContactsCard>
   );
 };

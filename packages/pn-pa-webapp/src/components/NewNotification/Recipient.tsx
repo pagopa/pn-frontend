@@ -426,7 +426,6 @@ const Recipient: React.FC<Props> = ({
                     <Typography fontWeight="bold">{t('legal-entity')}*</Typography>
                     <FormControl sx={{ width: '100%' }}>
                       <RadioGroup
-                        aria-labelledby="radio-buttons-group-pf-pg"
                         defaultValue={RecipientType.PF}
                         name={`recipients[${index}].recipientType`}
                         value={values.recipients[index].recipientType}

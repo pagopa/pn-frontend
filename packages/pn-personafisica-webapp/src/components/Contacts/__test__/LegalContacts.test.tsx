@@ -1,69 +1,84 @@
-import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
-import { render, waitFor } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
+import {
+  digitalLegalAddresses,
+  digitalLegalAddressesSercq,
+} from '../../../__mocks__/Contacts.mock';
+import { render, waitFor, within } from '../../../__test__/test-utils';
+import { ChannelType } from '../../../models/contacts';
 import LegalContacts from '../LegalContacts';
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
+    t: (str: string, options?: { returnObjects: boolean }) =>
+      options?.returnObjects ? [str] : str,
   }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-const defaultAddress = digitalLegalAddresses.find(
-  (addr) => addr.senderId === 'default' && addr.pecValid
+const defaultPecAddress = digitalLegalAddresses.find(
+  (addr) => addr.senderId === 'default' && addr.pecValid && addr.channelType === ChannelType.PEC
 );
 
 describe('LegalContacts Component', async () => {
-  let mock: MockAdapter;
-
-  beforeAll(() => {
-    mock = new MockAdapter(apiClient);
-  });
-
-  afterEach(() => {
-    mock.reset();
-  });
-
-  afterAll(() => {
-    mock.restore();
-  });
-
-  it('renders component', () => {
+  it('renders component - PEC enabled', () => {
     // render component
-    const { container, getByTestId } = render(
-      <LegalContacts legalAddresses={digitalLegalAddresses} />
-    );
+    const { container, getByTestId, getByText } = render(<LegalContacts />, {
+      preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
+    });
     expect(container).toHaveTextContent('legal-contacts.title');
-    expect(container).toHaveTextContent('legal-contacts.subtitle-2');
-    const form = container.querySelector('form');
-    expect(form!).toBeInTheDocument();
-    expect(form!).toHaveTextContent('legal-contacts.pec-added');
-    expect(form!).toHaveTextContent(defaultAddress!.value);
-    const buttons = form?.querySelectorAll('button');
-    expect(buttons!).toHaveLength(2);
-    expect(buttons![0]).toHaveTextContent('button.modifica');
-    expect(buttons![1]).toHaveTextContent('button.elimina');
-    const disclaimer = getByTestId('legal-contact-disclaimer');
-    expect(disclaimer).toBeInTheDocument();
+    expect(container).toHaveTextContent('legal-contacts.sub-title');
+    const pecContact = getByTestId(`default_pecContact`);
+    const pecInput = pecContact.querySelector(`[name="default_pec"]`);
+    expect(pecInput).not.toBeInTheDocument();
+    const pec = getByText(defaultPecAddress!.value);
+    expect(pec).toBeInTheDocument();
+    const pecButtons = within(pecContact).getAllByRole('button');
+    expect(pecButtons[0]).toBeEnabled();
+    expect(pecButtons[1]).toBeEnabled();
+    expect(pecButtons[0].textContent).toMatch('button.modifica');
+    expect(pecButtons[1].textContent).toMatch('button.elimina');
+    const sercqSendContact = getByTestId(`default_sercqSendContact`);
+    expect(sercqSendContact).toBeInTheDocument();
+    const activateButton = within(sercqSendContact).getByTestId('activateButton');
+    expect(activateButton).toBeInTheDocument();
+  });
+
+  it('renders component - SERCQ enabled', async () => {
+    const { container, getByTestId, queryByTestId } = render(<LegalContacts />, {
+      preloadedState: { contactsState: { digitalAddresses: digitalLegalAddressesSercq } },
+    });
+    expect(container).toHaveTextContent('legal-contacts.title');
+    expect(container).toHaveTextContent('legal-contacts.sub-title');
+    // check contacts
+    const pecContact = queryByTestId(`default_pecContact`);
+    expect(pecContact).not.toBeInTheDocument();
+    const sercqSendContact = getByTestId(`default_sercqSendContact`);
+    expect(sercqSendContact).toBeInTheDocument();
+    expect(sercqSendContact).toHaveTextContent('legal-contacts.sercq-send-enabled');
+    const disableButton = within(sercqSendContact).getByRole('button', { name: 'button.disable' });
+    expect(disableButton).toBeInTheDocument();
   });
 
   it('renders component - no contacts', async () => {
-    const { container, getByRole, getByTestId } = render(<LegalContacts legalAddresses={[]} />);
+    const { container, getByTestId } = render(<LegalContacts />, {
+      preloadedState: { contactsState: { digitalAddresses: [] } },
+    });
     expect(container).toHaveTextContent('legal-contacts.title');
-    expect(container).toHaveTextContent('legal-contacts.subtitle');
-    expect(container).toHaveTextContent('legal-contacts.description');
-    const form = container.querySelector('form');
-    const pecInput = form?.querySelector('input[id="default_pec"]');
-    expect(pecInput!).toHaveValue('');
-    const button = await waitFor(() => getByRole('button', { name: 'button.conferma' }));
-    expect(button).toBeDisabled();
-    const disclaimer = getByTestId('legal-contact-disclaimer');
-    expect(disclaimer).toBeInTheDocument();
+    expect(container).toHaveTextContent('legal-contacts.sub-title');
+    // check contacts
+    const pecContact = getByTestId(`default_pecContact`);
+    const pecInput = pecContact.querySelector(`[name="default_pec"]`);
+    expect(pecInput).toBeInTheDocument();
+    expect(pecInput).toHaveValue('');
+    const button = within(pecContact).getByRole('button', { name: 'button.conferma' });
+    await waitFor(() => {
+      expect(button).toBeDisabled();
+    });
+    const sercqSendContact = getByTestId(`default_sercqSendContact`);
+    expect(sercqSendContact).toBeInTheDocument();
+    const activateButton = within(sercqSendContact).getByTestId('activateButton');
+    expect(activateButton).toBeInTheDocument();
   });
 });

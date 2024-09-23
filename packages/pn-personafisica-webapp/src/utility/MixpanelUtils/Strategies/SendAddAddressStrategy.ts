@@ -1,7 +1,6 @@
 import { EventPropertyType, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-commons';
 
-import { ChannelType, DigitalAddress } from '../../../models/contacts';
-import { SaveDigitalAddressParams } from '../../../redux/contact/types';
+import { ChannelType, DigitalAddress, SaveDigitalAddressParams } from '../../../models/contacts';
 
 type SendAddAddressReturn =
   | {
