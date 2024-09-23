@@ -13,7 +13,6 @@ import {
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -34,7 +33,6 @@ const SmsContactItem: React.FC = () => {
   const { defaultSMSAddress, specialSMSAddresses, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
-  const externalInfo = useAppSelector((state: RootState) => state.contactsState.fromExternalInfo);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
@@ -53,7 +51,7 @@ const SmsContactItem: React.FC = () => {
   const handleSubmit = (value: string) => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_START, {
       senderId: 'default',
-      source: externalInfo?.source ?? ContactSource.RECAPITI,
+      source: ContactSource.RECAPITI,
     });
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { value };

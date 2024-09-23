@@ -25,17 +25,17 @@ import {
 } from '../actions';
 import {
   contactsSelectors,
-  resetFromExternalInfo,
+  resetExternalEvent,
   resetPecValidation,
   resetState,
-  setFromExternalInfo,
+  setExternalEvent,
 } from '../reducers';
 
 const initialState = {
   loading: false,
   digitalAddresses: [],
   parties: [],
-  fromExternalInfo: {},
+  event: null,
 };
 
 describe('Contacts redux state tests', () => {
@@ -299,25 +299,25 @@ describe('Contacts redux state tests', () => {
     }
   });
 
-  it('should set fromExternalInfo', () => {
-    const externalInfo = {
+  it('should set event', () => {
+    const externalEvent = {
       source: ContactSource.RECAPITI,
       destination: ChannelType.SERCQ_SEND,
       operation: ContactOperation.ADD,
     };
 
-    const action = store.dispatch(setFromExternalInfo(externalInfo));
-    expect(action.payload).toEqual(externalInfo);
+    const action = store.dispatch(setExternalEvent(externalEvent));
+    expect(action.payload).toEqual(externalEvent);
 
     const state = store.getState().contactsState;
-    expect(state.fromExternalInfo).toEqual(externalInfo);
+    expect(state.event).toEqual(externalEvent);
   });
 
-  it('should reset fromExternalInfo', () => {
-    const action = store.dispatch(resetFromExternalInfo());
+  it('should reset event', () => {
+    const action = store.dispatch(resetExternalEvent());
     expect(action.payload).toEqual(undefined);
 
     const state = store.getState().contactsState;
-    expect(state.fromExternalInfo).toEqual(initialState.fromExternalInfo);
+    expect(state.event).toEqual(initialState.event);
   });
 });

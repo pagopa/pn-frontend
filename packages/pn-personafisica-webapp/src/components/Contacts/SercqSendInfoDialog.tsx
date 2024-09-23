@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import {
@@ -18,11 +17,6 @@ import {
   TERMS_OF_SERVICE_SERCQ_SEND,
 } from '../../navigation/routes.const';
 
-import { PFEventsType } from '../../models/PFEventsType';
-import { resetFromExternalInfo } from '../../redux/contact/reducers';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
-
 type Props = {
   open: boolean;
   onDiscard: () => void;
@@ -33,24 +27,8 @@ type Props = {
 const redirectPrivacyLink = () => window.open(`${PRIVACY_POLICY_SERCQ_SEND}`, '_blank');
 const redirectToSLink = () => window.open(`${TERMS_OF_SERVICE_SERCQ_SEND}`, '_blank');
 
-const SercqSendInfoDialog: React.FC<Props> = ({
-  open = false,
-  onDiscard,
-  onConfirm,
-  senderId = 'default',
-}) => {
+const SercqSendInfoDialog: React.FC<Props> = ({ open = false, onDiscard, onConfirm }) => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-  const contactInfo = useAppSelector((state) => state.contactsState.fromExternalInfo);
-
-  const trackSercqSendStartEvent = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
-      senderId,
-      source: contactInfo.source,
-    });
-
-    dispatch(resetFromExternalInfo());
-  };
 
   const sercqSendInfoList: Array<{ title: string; description: string }> = t(
     'legal-contacts.sercq-send-info-list',
@@ -60,12 +38,6 @@ const SercqSendInfoDialog: React.FC<Props> = ({
       ns: 'recapiti',
     }
   );
-
-  useEffect(() => {
-    if (open) {
-      trackSercqSendStartEvent();
-    }
-  }, [open]);
 
   return (
     <PnDialog

@@ -16,7 +16,6 @@ import { PFEventsType } from '../../models/PFEventsType';
 import {
   AddressType,
   ChannelType,
-  ContactOperation,
   ContactSource,
   IOAllowedValues,
   SERCQ_SEND_VALUE,
@@ -28,11 +27,7 @@ import {
   deleteAddress,
   getSercqSendTosPrivacyApproval,
 } from '../../redux/contact/actions';
-import {
-  contactsSelectors,
-  resetFromExternalInfo,
-  setFromExternalInfo,
-} from '../../redux/contact/reducers';
+import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -44,11 +39,6 @@ import DigitalContactsCard from './DigitalContactsCard';
 import SercqSendCourtesyDialog from './SercqSendCourtesyDialog';
 import SercqSendIODialog from './SercqSendIODialog';
 import SercqSendInfoDialog from './SercqSendInfoDialog';
-
-type Props = {
-  senderId?: string;
-  senderName?: string;
-};
 
 enum ModalType {
   INFO = 'info',
@@ -77,14 +67,14 @@ const SercqSendCardTitle: React.FC = () => {
   );
 };
 
-const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderName }) => {
+const SercqSendContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const isMobile = useIsMobile();
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
   const { defaultSERCQ_SENDAddress, defaultAPPIOAddress, courtesyAddresses, specialPECAddresses } =
     useAppSelector(contactsSelectors.selectAddresses);
-  const externalInfo = useAppSelector((state: RootState) => state.contactsState.fromExternalInfo);
+  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
 
   const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
   const value = defaultSERCQ_SENDAddress?.value ?? '';
@@ -94,19 +84,19 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
   const blockDelete = specialPECAddresses.length > 0;
 
   const handleActivation = () => {
-    dispatch(
-      setFromExternalInfo({
-        source: ContactSource.RECAPITI,
-        destination: ChannelType.SERCQ_SEND,
-        operation: ContactOperation.ADD,
-      })
-    );
-
     dispatch(getSercqSendTosPrivacyApproval())
       .unwrap()
       .then((consent) => {
         // eslint-disable-next-line functional/immutable-data
         tosPrivacy.current = consent;
+        const source =
+          externalEvent?.destination === ChannelType.SERCQ_SEND
+            ? externalEvent?.source ?? ContactSource.RECAPITI
+            : ContactSource.RECAPITI;
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
+          senderId: 'default',
+          source,
+        });
         setModalOpen({ type: ModalType.INFO });
       })
       .catch(() => {});
@@ -116,8 +106,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION, 'default');
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.LEGAL,
-      senderId,
-      senderName,
+      senderId: 'default',
       channelType: ChannelType.SERCQ_SEND,
       value: SERCQ_SEND_VALUE,
     };
@@ -203,8 +192,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
 
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
-      senderId,
-      senderName,
+      senderId: 'default',
       channelType,
       value: channelType === ChannelType.SMS ? internationalPhonePrefix + value : value,
       code: verificationCode,
@@ -228,8 +216,6 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
             fromSercqSend: true,
           });
         }
-
-        dispatch(resetFromExternalInfo());
 
         // contact has already been verified
         // show success message
@@ -255,9 +241,13 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
   const handleCourtesyConfirm = (channelType: ChannelType, value: string) => {
     const eventKey = `SEND_ADD_${channelType}_START`;
     if (isPFEvent(eventKey)) {
+      const source =
+        externalEvent?.destination === ChannelType.SERCQ_SEND
+          ? externalEvent?.source ?? ContactSource.RECAPITI
+          : ContactSource.RECAPITI;
       PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], {
         senderId: 'default',
-        source: externalInfo?.source ?? ContactSource.RECAPITI,
+        source,
       });
     }
     handleCodeVerification(value, channelType);
@@ -268,7 +258,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
     dispatch(
       deleteAddress({
         addressType: AddressType.LEGAL,
-        senderId,
+        senderId: 'default',
         channelType: ChannelType.SERCQ_SEND,
       })
     )
@@ -297,10 +287,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
         borderBottomRightRadius: value ? 0 : 4,
       }}
     >
-      <Box
-        data-testid={`${senderId}_sercqSendContact`}
-        style={{ width: isMobile ? '100%' : '50%' }}
-      >
+      <Box data-testid={`default_sercqSendContact`} style={{ width: isMobile ? '100%' : '50%' }}>
         {!value && (
           <Button variant="contained" data-testid="activateButton" onClick={handleActivation}>
             {t('legal-contacts.sercq-send-active', { ns: 'recapiti' })}

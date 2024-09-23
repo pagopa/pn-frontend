@@ -4,7 +4,7 @@ import {
   AddressType,
   ChannelType,
   DigitalAddress,
-  FromExternalInfo,
+  ExternalEvent,
   IOAllowedValues,
 } from '../../models/contacts';
 import { Party } from '../../models/party';
@@ -19,11 +19,16 @@ import {
   getDigitalAddresses,
 } from './actions';
 
-const initialState = {
+const initialState: {
+  loading: boolean;
+  digitalAddresses: Array<DigitalAddress>;
+  parties: Array<Party>;
+  event: ExternalEvent | null;
+} = {
   loading: false,
-  digitalAddresses: [] as Array<DigitalAddress>,
-  parties: [] as Array<Party>,
-  fromExternalInfo: {} as FromExternalInfo,
+  digitalAddresses: [],
+  parties: [],
+  event: null,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -41,11 +46,11 @@ const contactsSlice = createSlice({
           address.addressType === AddressType.COURTESY
       );
     },
-    setFromExternalInfo: (state, action: PayloadAction<FromExternalInfo>) => {
-      state.fromExternalInfo = action.payload;
+    setExternalEvent: (state, action: PayloadAction<ExternalEvent>) => {
+      state.event = action.payload;
     },
-    resetFromExternalInfo: (state) => {
-      state.fromExternalInfo = {} as FromExternalInfo;
+    resetExternalEvent: (state) => {
+      state.event = null;
     },
   },
   extraReducers: (builder) => {
@@ -102,7 +107,7 @@ const contactsSlice = createSlice({
   },
 });
 
-export const { resetState, resetPecValidation, setFromExternalInfo, resetFromExternalInfo } =
+export const { resetState, resetPecValidation, setExternalEvent, resetExternalEvent } =
   contactsSlice.actions;
 
 // START: SELECTORS

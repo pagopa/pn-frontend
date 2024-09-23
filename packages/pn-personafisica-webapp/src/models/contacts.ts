@@ -56,7 +56,7 @@ export interface SaveDigitalAddressParams extends Sender {
   code?: string;
 }
 
-export interface FromExternalInfo {
+export interface ExternalEvent {
   source: ContactSource;
   destination: ChannelType;
   operation: ContactOperation;

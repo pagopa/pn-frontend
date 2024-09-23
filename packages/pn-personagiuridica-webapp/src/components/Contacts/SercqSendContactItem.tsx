@@ -33,11 +33,6 @@ import DigitalContactsCard from './DigitalContactsCard';
 import SercqSendCourtesyDialog from './SercqSendCourtesyDialog';
 import SercqSendInfoDialog from './SercqSendInfoDialog';
 
-type Props = {
-  senderId?: string;
-  senderName?: string;
-};
-
 enum ModalType {
   INFO = 'info',
   COURTESY = 'courtesy',
@@ -64,7 +59,7 @@ const SercqSendCardTitle: React.FC = () => {
   );
 };
 
-const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderName }) => {
+const SercqSendContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const isMobile = useIsMobile();
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
@@ -92,8 +87,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
   const activateService = () => {
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.LEGAL,
-      senderId,
-      senderName,
+      senderId: 'default',
       channelType: ChannelType.SERCQ_SEND,
       value: SERCQ_SEND_VALUE,
     };
@@ -165,8 +159,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
   ) => {
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
-      senderId,
-      senderName,
+      senderId: 'default',
       channelType,
       value: channelType === ChannelType.SMS ? internationalPhonePrefix + value : value,
       code: verificationCode,
@@ -203,7 +196,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
     dispatch(
       deleteAddress({
         addressType: AddressType.LEGAL,
-        senderId,
+        senderId: 'default',
         channelType: ChannelType.SERCQ_SEND,
       })
     )
@@ -231,10 +224,7 @@ const SercqSendContactItem: React.FC<Props> = ({ senderId = 'default', senderNam
         borderBottomRightRadius: value ? 0 : 4,
       }}
     >
-      <Box
-        data-testid={`${senderId}_sercqSendContact`}
-        style={{ width: isMobile ? '100%' : '50%' }}
-      >
+      <Box data-testid={`default_sercqSendContact`} style={{ width: isMobile ? '100%' : '50%' }}>
         {!value && (
           <Button variant="contained" data-testid="activateButton" onClick={handleActivation}>
             {t('legal-contacts.sercq-send-active', { ns: 'recapiti' })}
