@@ -20,7 +20,7 @@ describe('NotificationDetailTable Component', () => {
     const table = getByTestId('notificationDetailTable');
     expect(table).toBeInTheDocument();
     expect(table).toHaveAttribute('aria-label', 'Dettaglio notifica');
-    const rows = within(table!).getAllByTestId('notificationDetailTableRow');
+    const rows = within(table).getAllByTestId('notificationDetailTableRow');
     expect(rows).toHaveLength(detailRows.length);
     rows.forEach((row, index) => {
       const columns = within(row).getAllByRole('cell');

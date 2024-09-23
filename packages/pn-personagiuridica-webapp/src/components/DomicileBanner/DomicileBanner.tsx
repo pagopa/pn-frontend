@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Alert, Box, Link, Typography } from '@mui/material';
 
-import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { ChannelType } from '../../models/contacts';
 import * as routes from '../../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { closeDomicileBanner } from '../../redux/sidemenu/reducers';
@@ -29,7 +29,7 @@ const DomicileBanner = () => {
 
   const lackingAddressTypes = useMemo(
     () =>
-      [LegalChannelType.PEC, CourtesyChannelType.EMAIL].filter(
+      [ChannelType.PEC, ChannelType.EMAIL].filter(
         (type) => !defaultAddresses.some((address) => address.channelType === type)
       ),
     [defaultAddresses]
@@ -67,7 +67,6 @@ const DomicileBanner = () => {
               variant="body2"
               fontWeight={'bold'}
               onClick={handleAddDomicile}
-              tabIndex={0}
               display="inline-block"
               sx={{ cursor: 'pointer' }}
             >

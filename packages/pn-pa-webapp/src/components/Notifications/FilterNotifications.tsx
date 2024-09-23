@@ -4,7 +4,7 @@ import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 're
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Box, DialogActions, DialogContent } from '@mui/material';
+import { DialogActions, DialogContent, Stack } from '@mui/material';
 import {
   CustomMobileDialog,
   CustomMobileDialogContent,
@@ -189,8 +189,8 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     </CustomMobileDialog>
   ) : (
     <form onSubmit={formik.handleSubmit} data-testid="filter-form">
-      <Box
-        display={'flex'}
+      <Stack
+        direction={'row'}
         sx={{
           marginTop: 5,
           marginBottom: 5,
@@ -210,7 +210,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
           filtersApplied={isFilterapplied(filtersCount)}
           isInitialSearch={isInitialSearch}
         />
-      </Box>
+      </Stack>
     </form>
   );
 });

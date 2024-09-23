@@ -10,7 +10,7 @@ import {
 } from '../../__mocks__/Contacts.mock';
 import { RenderResult, act, fireEvent, render, screen } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { CourtesyChannelType } from '../../models/contacts';
+import { ChannelType } from '../../models/contacts';
 import { PROFILO } from '../../navigation/routes.const';
 import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
@@ -57,12 +57,10 @@ describe('Contacts page', async () => {
     });
     expect(result.container).toHaveTextContent(/title/i);
     expect(result.container).toHaveTextContent(/subtitle/i);
-    const insertLegalContact = result.getByTestId('insertLegalContact');
-    expect(insertLegalContact).toBeInTheDocument();
+    const legalContacts = result.getByTestId('legalContacts');
+    expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const legalContacts = result.queryByTestId('legalContacts');
-    expect(legalContacts).not.toBeInTheDocument();
     const specialContact = result.queryByTestId('specialContact');
     expect(specialContact).not.toBeInTheDocument();
     expect(mock.history.get).toHaveLength(1);
@@ -70,19 +68,15 @@ describe('Contacts page', async () => {
   });
 
   it('renders Contacts (AppIO)', async () => {
-    const appIO = digitalCourtesyAddresses.find(
-      (addr) => addr.channelType === CourtesyChannelType.IOMSG
-    );
+    const appIO = digitalCourtesyAddresses.find((addr) => addr.channelType === ChannelType.IOMSG);
     mock.onGet('/bff/v1/addresses').reply(200, [appIO]);
     await act(async () => {
       result = render(<Contacts />);
     });
-    const insertLegalContact = result.getByTestId('insertLegalContact');
-    expect(insertLegalContact).toBeInTheDocument();
+    const legalContacts = result.getByTestId('legalContacts');
+    expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const legalContacts = result.queryByTestId('legalContacts');
-    expect(legalContacts).not.toBeInTheDocument();
     const specialContact = result.queryByTestId('specialContact');
     expect(specialContact).not.toBeInTheDocument();
   });
@@ -92,12 +86,10 @@ describe('Contacts page', async () => {
     await act(async () => {
       result = render(<Contacts />);
     });
-    const insertLegalContact = result.queryByTestId('insertLegalContact');
-    expect(insertLegalContact).not.toBeInTheDocument();
+    const legalContacts = result.queryByTestId('legalContacts');
+    expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const legalContacts = result.getByTestId('legalContacts');
-    expect(legalContacts).toBeInTheDocument();
     const specialContact = result.getByTestId('specialContact');
     expect(specialContact).toBeInTheDocument();
   });
@@ -107,12 +99,10 @@ describe('Contacts page', async () => {
     await act(async () => {
       result = render(<Contacts />);
     });
-    const insertLegalContact = result.getByTestId('insertLegalContact');
-    expect(insertLegalContact).toBeInTheDocument();
+    const legalContacts = result.getByTestId('legalContacts');
+    expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const legalContacts = result.queryByTestId('legalContacts');
-    expect(legalContacts).not.toBeInTheDocument();
     const specialContact = result.getByTestId('specialContact');
     expect(specialContact).toBeInTheDocument();
   });
@@ -122,12 +112,10 @@ describe('Contacts page', async () => {
     await act(async () => {
       result = render(<Contacts />);
     });
-    const insertLegalContact = result.queryByTestId('insertLegalContact');
-    expect(insertLegalContact).not.toBeInTheDocument();
+    const legalContacts = result.queryByTestId('legalContacts');
+    expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const legalContacts = result.getByTestId('legalContacts');
-    expect(legalContacts).toBeInTheDocument();
     const specialContact = result.getByTestId('specialContact');
     expect(specialContact).toBeInTheDocument();
   });

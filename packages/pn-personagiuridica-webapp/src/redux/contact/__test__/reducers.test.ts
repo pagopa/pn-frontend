@@ -7,7 +7,7 @@ import {
   digitalLegalAddresses,
 } from '../../../__mocks__/Contacts.mock';
 import { apiClient } from '../../../api/apiClients';
-import { AddressType, CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
+import { AddressType, ChannelType } from '../../../models/contacts';
 import { store } from '../../store';
 import { createOrUpdateAddress, deleteAddress, getDigitalAddresses } from '../actions';
 import { resetPecValidation, resetState } from '../reducers';
@@ -60,7 +60,7 @@ describe('Contacts redux state tests', () => {
       createOrUpdateAddress({
         addressType: AddressType.LEGAL,
         senderId: updatedDigitalAddress.senderId,
-        channelType: updatedDigitalAddress.channelType as LegalChannelType,
+        channelType: updatedDigitalAddress.channelType as ChannelType,
         value: updatedDigitalAddress.value,
       })
     );
@@ -80,7 +80,7 @@ describe('Contacts redux state tests', () => {
       createOrUpdateAddress({
         addressType: AddressType.LEGAL,
         senderId: updatedDigitalAddress.senderId,
-        channelType: updatedDigitalAddress.channelType as LegalChannelType,
+        channelType: updatedDigitalAddress.channelType as ChannelType,
         value: updatedDigitalAddress.value,
       })
     );
@@ -103,7 +103,7 @@ describe('Contacts redux state tests', () => {
       createOrUpdateAddress({
         addressType: AddressType.LEGAL,
         senderId: updatedDigitalAddress.senderId,
-        channelType: updatedDigitalAddress.channelType as LegalChannelType,
+        channelType: updatedDigitalAddress.channelType as ChannelType,
         value: updatedDigitalAddress.value,
       })
     );
@@ -130,7 +130,7 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to update the digital address with courtesy value (email to verify)', async () => {
     const emailContact = digitalCourtesyAddresses.find(
-      (el) => el.channelType === CourtesyChannelType.EMAIL
+      (el) => el.channelType === ChannelType.EMAIL
     );
     const updatedDigitalAddress = { ...emailContact!, value: 'mario.rossi@mail.it' };
     mock
@@ -154,7 +154,7 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to update the digital address with courtesy value (email verified)', async () => {
     const emailContact = digitalCourtesyAddresses.find(
-      (el) => el.channelType === CourtesyChannelType.EMAIL
+      (el) => el.channelType === ChannelType.EMAIL
     );
     const updatedDigitalAddress = { ...emailContact!, value: 'mario.rossi@mail.it' };
     mock
@@ -176,7 +176,7 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to remove the digital address with courtesy value', async () => {
     const emailContact = digitalCourtesyAddresses.find(
-      (el) => el.channelType === CourtesyChannelType.EMAIL
+      (el) => el.channelType === ChannelType.EMAIL
     );
     mock.onDelete(`/bff/v1/addresses/COURTESY/${emailContact!.senderId}/EMAIL`).reply(204);
     const action = await store.dispatch(
@@ -217,12 +217,16 @@ describe('Contacts redux state tests', () => {
         value: updatedDigitalAddress.value,
       })
     );
-    const action = store.dispatch(resetPecValidation());
+    const action = store.dispatch(resetPecValidation('default'));
     expect(action.type).toBe('contactsSlice/resetPecValidation');
-    expect(action.payload).toEqual(void 0);
+    expect(action.payload).toEqual('default');
     const state = store
       .getState()
-      .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL);
+      .contactsState.digitalAddresses.filter(
+        (address) =>
+          (address.senderId !== action.payload && address.addressType === AddressType.LEGAL) ||
+          address.addressType === AddressType.COURTESY
+      );
     expect(state).toEqual([]);
   });
 });

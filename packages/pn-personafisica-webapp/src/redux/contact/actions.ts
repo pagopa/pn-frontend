@@ -7,7 +7,7 @@ import {
   BffAddressVerificationResponse,
 } from '../../generated-client/digital-addresses';
 import { InfoRecipientApiFactory } from '../../generated-client/recipient-info';
-import { AddressType, CourtesyChannelType, DigitalAddress } from '../../models/contacts';
+import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
 import { FilterPartiesParams, Party } from '../../models/party';
 import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from './types';
 
@@ -115,7 +115,7 @@ export const enableIOAddress = createAsyncThunk<BffAddressVerificationResponse>(
       const response = await digitalAddressesFactory.createOrUpdateAddressV1(
         AddressType.COURTESY,
         'default',
-        CourtesyChannelType.IOMSG,
+        ChannelType.IOMSG,
         { value: 'APPIO', verificationCode: '00000' }
       );
 
@@ -134,7 +134,7 @@ export const disableIOAddress = createAsyncThunk<void>(
       const response = await digitalAddressesFactory.deleteAddressV1(
         AddressType.COURTESY,
         'default',
-        CourtesyChannelType.IOMSG
+        ChannelType.IOMSG
       );
 
       return response.data;

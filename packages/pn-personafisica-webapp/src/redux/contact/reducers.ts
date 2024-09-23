@@ -1,11 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import {
-  AddressType,
-  CourtesyChannelType,
-  DigitalAddress,
-  IOAllowedValues,
-} from '../../models/contacts';
+import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { Party } from '../../models/party';
 import {
   createOrUpdateAddress,
@@ -30,9 +25,11 @@ const contactsSlice = createSlice({
     resetState: () => initialState,
     // we remove the default legal address only interface side, with the goal of letting the user know that needs to add
     // a new email to modify the verifying pec address
-    resetPecValidation: (state) => {
+    resetPecValidation: (state, action: PayloadAction<string>) => {
       state.digitalAddresses = state.digitalAddresses.filter(
-        (address) => address.senderId !== 'default' && address.addressType === AddressType.LEGAL
+        (address) =>
+          (address.senderId !== action.payload && address.addressType === AddressType.LEGAL) ||
+          address.addressType === AddressType.COURTESY
       );
     },
   },
@@ -66,8 +63,7 @@ const contactsSlice = createSlice({
     builder.addCase(enableIOAddress.fulfilled, (state) => {
       const addressIndex = state.digitalAddresses.findIndex(
         (address) =>
-          address.channelType === CourtesyChannelType.IOMSG &&
-          address.addressType === AddressType.COURTESY
+          address.channelType === ChannelType.IOMSG && address.addressType === AddressType.COURTESY
       );
       if (addressIndex > -1) {
         state.digitalAddresses[addressIndex].value = IOAllowedValues.ENABLED;
@@ -76,8 +72,7 @@ const contactsSlice = createSlice({
     builder.addCase(disableIOAddress.fulfilled, (state) => {
       const addressIndex = state.digitalAddresses.findIndex(
         (address) =>
-          address.channelType === CourtesyChannelType.IOMSG &&
-          address.addressType === AddressType.COURTESY
+          address.channelType === ChannelType.IOMSG && address.addressType === AddressType.COURTESY
       );
       if (addressIndex > -1) {
         state.digitalAddresses[addressIndex].value = IOAllowedValues.DISABLED;

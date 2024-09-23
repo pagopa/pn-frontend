@@ -7,13 +7,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import {
-  AppRouteParams,
-  Layout,
-  getSessionLanguage,
-  setSessionLanguage,
-  useIsMobile,
-} from '@pagopa-pn/pn-commons';
+import { AppRouteParams, Layout, setSessionLanguage, useIsMobile } from '@pagopa-pn/pn-commons';
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
@@ -43,14 +37,8 @@ const Login = () => {
     storageAarOps.write(aar);
   }
 
-  const handleSetUserLanguage = () => {
-    const language = getSessionLanguage() || 'it';
-    void changeLanguageHandler(language);
-  };
-
   useEffect(() => {
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN);
-    handleSetUserLanguage();
   }, []);
 
   const goCIE = () => {

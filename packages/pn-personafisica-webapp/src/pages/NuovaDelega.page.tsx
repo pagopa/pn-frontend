@@ -470,7 +470,6 @@ const NuovaDelega = () => {
                               textField: {
                                 id: 'expirationDate',
                                 name: 'expirationDate',
-                                'aria-label': t('nuovaDelega.form.endDate-aria-label'), // aria-label for (TextField + Button) Group
                                 inputProps: {
                                   inputMode: 'text',
                                   'aria-label': t('nuovaDelega.form.endDate-input-aria-label'),

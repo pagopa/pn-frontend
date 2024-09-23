@@ -24,6 +24,7 @@ vi.mock('react-i18next', () => ({
     t: (str: string) => str,
     i18n: { language: 'it' },
   }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 const dateFormatter = (date: Date) => {
@@ -218,7 +219,7 @@ describe('Statistics Page tests', () => {
         const startDate = statisticsFilter.querySelector(`input[name="startDate"]`);
         expect(startDate).toHaveValue(dateFormatter(sixMonthsAgo));
         const endDate = statisticsFilter.querySelector(`input[name="endDate"]`);
-        expect(endDate).toHaveValue(dateFormatter(today));
+        expect(endDate).toHaveValue(dateFormatter(new Date(rawResponseMock.lastDate)));
         const confirmBtn = within(statisticsFilter).getByTestId('filterButton');
         const cancelBtn = within(statisticsFilter).getByTestId('cancelButton');
         expect(confirmBtn).toBeDisabled();
@@ -231,9 +232,7 @@ describe('Statistics Page tests', () => {
     expect(mock.history.get[1].url).toBe(
       `/bff/v1/sender-dashboard/dashboard-data-request/PA/${
         userResponse.organization.id
-      }?startDate=${formatToSlicedISOString(sixMonthsAgo)}&endDate=${formatToSlicedISOString(
-        today
-      )}`
+      }?startDate=${formatToSlicedISOString(sixMonthsAgo)}&endDate=${rawResponseMock.lastDate}`
     );
 
     // cancel filters
@@ -246,7 +245,7 @@ describe('Statistics Page tests', () => {
         const startDate = statisticsFilter.querySelector(`input[name="startDate"]`);
         expect(startDate).toHaveValue(dateFormatter(twelveMonthsAgo));
         const endDate = statisticsFilter.querySelector(`input[name="endDate"]`);
-        expect(endDate).toHaveValue(dateFormatter(today));
+        expect(endDate).toHaveValue(dateFormatter(new Date(rawResponseMock.lastDate)));
         const confirmBtn = within(statisticsFilter).getByTestId('filterButton');
         const cancelBtn = within(statisticsFilter).getByTestId('cancelButton');
         expect(confirmBtn).toBeDisabled();
@@ -259,9 +258,7 @@ describe('Statistics Page tests', () => {
     expect(mock.history.get[2].url).toBe(
       `/bff/v1/sender-dashboard/dashboard-data-request/PA/${
         userResponse.organization.id
-      }?startDate=${formatToSlicedISOString(twelveMonthsAgo)}&endDate=${formatToSlicedISOString(
-        today
-      )}`
+      }?startDate=${formatToSlicedISOString(twelveMonthsAgo)}&endDate=${rawResponseMock.lastDate}`
     );
 
     // set custom date

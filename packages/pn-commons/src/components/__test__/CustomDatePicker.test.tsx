@@ -1,5 +1,28 @@
-import { fireEvent, render, screen } from '../../test-utils';
+import { createMatchMedia, fireEvent, render, screen, waitFor } from '../../test-utils';
 import CustomDatePicker from '../CustomDatePicker';
+
+const languages = [
+  {
+    language: 'it',
+    month: 'gennaio',
+  },
+  {
+    language: 'en',
+    month: 'january',
+  },
+  {
+    language: 'fr',
+    month: 'janvier',
+  },
+  {
+    language: 'de',
+    month: 'januar',
+  },
+  {
+    language: 'sl',
+    month: 'januar',
+  },
+];
 
 const RenderDatePicker = ({ language = 'it' }: { language?: string }) => (
   <CustomDatePicker
@@ -18,37 +41,16 @@ const RenderDatePicker = ({ language = 'it' }: { language?: string }) => (
 );
 
 describe('test CustomDatePicker component', () => {
-  it('renders the component', () => {
-    const { getByPlaceholderText, container } = render(<RenderDatePicker />);
-    const input = getByPlaceholderText(/datepickerinput/i);
+  it('renders the component', async () => {
+    const { getByRole, getByTestId, container } = render(<RenderDatePicker />);
     expect(container).toHaveTextContent(/datepicker/i);
-    expect(input).toBeInTheDocument();
-  });
-});
 
-describe('test CustomDatePicker languages', () => {
-  const languages = [
-    {
-      language: 'it',
-      month: 'gennaio',
-    },
-    {
-      language: 'en',
-      month: 'january',
-    },
-    {
-      language: 'fr',
-      month: 'janvier',
-    },
-    {
-      language: 'de',
-      month: 'januar',
-    },
-    {
-      language: 'sl',
-      month: 'januar',
-    },
-  ];
+    const calendarButton = getByTestId(/calendaricon/i);
+    expect(calendarButton).toBeInTheDocument();
+    fireEvent.click(calendarButton);
+    const datePicker = await waitFor(() => getByRole('dialog'));
+    expect(datePicker).toBeInTheDocument();
+  });
 
   it.each(languages)('check january month to be $month in $language', (language) => {
     const { container, getByRole } = render(<RenderDatePicker language={language.language} />);
@@ -57,5 +59,14 @@ describe('test CustomDatePicker languages', () => {
     fireEvent.click(button);
     const regExMonth = new RegExp(`${language.month}`, 'i');
     expect(screen.getByText(regExMonth)).toBeInTheDocument();
+  });
+
+  it('renders the component with mobile window', () => {
+    window.matchMedia = createMatchMedia(550, 600);
+    const { getByPlaceholderText, getByRole } = render(<RenderDatePicker />);
+    const input = getByPlaceholderText(/datepickerinput/i);
+    fireEvent.click(input);
+    const dialog = getByRole('dialog');
+    expect(dialog).toBeInTheDocument();
   });
 });

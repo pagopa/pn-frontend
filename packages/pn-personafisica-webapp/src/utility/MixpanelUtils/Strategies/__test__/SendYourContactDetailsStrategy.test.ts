@@ -7,7 +7,7 @@ import {
 } from '../../../../__mocks__/Contacts.mock';
 import {
   AddressType,
-  CourtesyChannelType,
+  ChannelType,
   DigitalAddress,
   IOAllowedValues,
 } from '../../../../models/contacts';
@@ -40,7 +40,7 @@ describe('Mixpanel - Your Contact Details Strategy', () => {
     const contactIO: DigitalAddress | null = {
       addressType: AddressType.COURTESY,
       senderId: 'senderId',
-      channelType: CourtesyChannelType.IOMSG,
+      channelType: ChannelType.IOMSG,
       value: IOAllowedValues.ENABLED,
     };
 
@@ -51,11 +51,9 @@ describe('Mixpanel - Your Contact Details Strategy', () => {
         event_type: EventAction.SCREEN_VIEW,
         PEC_exists: digitalLegalAddresses.length > 0,
         email_exists:
-          digitalCourtesyAddresses.filter((c) => c.channelType === CourtesyChannelType.EMAIL)
-            .length > 0,
+          digitalCourtesyAddresses.filter((c) => c.channelType === ChannelType.EMAIL).length > 0,
         telephone_exists:
-          digitalCourtesyAddresses.filter((c) => c.channelType === CourtesyChannelType.SMS).length >
-          0,
+          digitalCourtesyAddresses.filter((c) => c.channelType === ChannelType.SMS).length > 0,
         appIO_status: contactIO
           ? contactIO.value === IOAllowedValues.ENABLED
             ? 'activated'

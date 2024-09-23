@@ -89,6 +89,7 @@ import { Product } from './Products';
 import { SideMenuItem } from './SideMenuItem';
 import { SmartTableData } from './SmartTable';
 import { BasicUser, ConsentUser, basicNoLoggedUserData } from './User';
+import { WithRequired } from './UtilityTypes';
 
 export {
   basicNoLoggedUserData,
@@ -187,4 +188,5 @@ export type {
   TosPrivacyConsent,
   NotificationDocumentRequest,
   NotificationDocumentResponse,
+  WithRequired,
 };

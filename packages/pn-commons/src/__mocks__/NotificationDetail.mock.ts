@@ -1129,7 +1129,7 @@ export const notificationDTOMultiRecipient: NotificationDetail = {
       },
       contentType: 'application/pdf',
       ref: {
-        key: 'PN_NOTIFICATION_ATTACHMENTS-abb7804b6e442c8b2223648af970cd1.pdf',
+        key: 'PN_NOTIFICATION_ATTACHMENTS-abb7804b6e442c8b2223648af970cd2.pdf',
         versionToken: 'v1',
       },
       docIdx: '1',

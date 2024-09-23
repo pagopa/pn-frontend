@@ -4,7 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { apiClient } from '../../api/apiClients';
 import { AddressesApiFactory } from '../../generated-client/digital-addresses';
 import { MandateApiFactory } from '../../generated-client/mandate';
-import { CourtesyChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
+import { ChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { Delegator } from '../delegation/types';
 
 export enum SIDEMENU_ACTIONS {
@@ -33,9 +33,8 @@ export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
   async (_params, { rejectWithValue }) => {
     try {
       const isDefaultAddress = (address: DigitalAddress) =>
-        (address.channelType !== CourtesyChannelType.IOMSG && address.senderId === 'default') ||
-        (address.channelType === CourtesyChannelType.IOMSG &&
-          address.value !== IOAllowedValues.DISABLED);
+        (address.channelType !== ChannelType.IOMSG && address.senderId === 'default') ||
+        (address.channelType === ChannelType.IOMSG && address.value !== IOAllowedValues.DISABLED);
 
       const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
       const response = await digitalAddressesFactory.getAddressesV1();

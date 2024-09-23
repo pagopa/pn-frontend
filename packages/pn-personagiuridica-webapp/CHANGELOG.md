@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.7.0](https://github.com/pagopa/pn-frontend/compare/v2.7.0-RC.1...v2.7.0) (2024-09-18)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.7.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.7.0-RC.0...v2.7.0-RC.1) (2024-09-10)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.7.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.6.1...v2.7.0-RC.0) (2024-09-09)
+
+
+### Bug Fixes
+
+* **pn-11704:** fix group button allignment ([#1307](https://github.com/pagopa/pn-frontend/issues/1307)) ([cff4910](https://github.com/pagopa/pn-frontend/commit/cff49101fbf550264c1525e2e5c47fe0a41e8877))
+* **pn-12097:** translation on breadcrumb ([#1284](https://github.com/pagopa/pn-frontend/issues/1284)) ([d6889a6](https://github.com/pagopa/pn-frontend/commit/d6889a6b0e0959b74ab8856a757cd676328df57f))
+
+
+### Features
+
+* **pn-11371:** Remove useless aria-label and tabIndex attributes ([#1286](https://github.com/pagopa/pn-frontend/issues/1286)) ([22f8683](https://github.com/pagopa/pn-frontend/commit/22f868373e9b57e9512837bbac29a583ca9788b5))
+* **pn-11896:** rework on courtesyAddressContacts ([#1267](https://github.com/pagopa/pn-frontend/issues/1267)) ([37839d7](https://github.com/pagopa/pn-frontend/commit/37839d77b3a06a795ba82b49612d9eb631fe606f))
+* **pn-11898:** DigitalContactElem component refactor ([#1290](https://github.com/pagopa/pn-frontend/issues/1290)) ([ca61889](https://github.com/pagopa/pn-frontend/commit/ca6188964060fe74569e2ad9226b5daaaaac4300))
+* **pn-11965:** Rework courtesy contact item ([#1291](https://github.com/pagopa/pn-frontend/issues/1291)) ([7b62ed5](https://github.com/pagopa/pn-frontend/commit/7b62ed5fe94ae03710395ad38a1d1a5567d35ec6))
+* **pn-11966:** reworked PecContactItem ([#1293](https://github.com/pagopa/pn-frontend/issues/1293)) ([c55b4f6](https://github.com/pagopa/pn-frontend/commit/c55b4f6ac267e4ca7b1df14e6969ce2e275d5342))
+* **pn-11969:** Remove context from courtesy contacts ([#1294](https://github.com/pagopa/pn-frontend/issues/1294)) ([fda5e6f](https://github.com/pagopa/pn-frontend/commit/fda5e6f9628bc37f1dd8d4cacb38664516c32605))
+* **pn-11970:** removed context from PecContactItem ([#1295](https://github.com/pagopa/pn-frontend/issues/1295)) ([cb87d6c](https://github.com/pagopa/pn-frontend/commit/cb87d6cbff44b3b75030e15b4a6f5d191d1b4a97))
+* **pn-12055:** Rework special contacts ([#1292](https://github.com/pagopa/pn-frontend/issues/1292)) ([644dbf6](https://github.com/pagopa/pn-frontend/commit/644dbf67f08b229bb6a37ff9203c5bd6b08ebb59))
+* **pn-12056:**  created two components for email and sms ([#1296](https://github.com/pagopa/pn-frontend/issues/1296)) ([f045c00](https://github.com/pagopa/pn-frontend/commit/f045c00fe804aa7cf8db6c7199bd247be1b46e36))
+* **pn-12069:** use single contact component into SpecialContactElem ([#1297](https://github.com/pagopa/pn-frontend/issues/1297)) ([c35cd7f](https://github.com/pagopa/pn-frontend/commit/c35cd7fc66b59feb6b72c5b522d6fc2e674a3838))
+* **pn-12070:** removed context from contacts ([#1298](https://github.com/pagopa/pn-frontend/issues/1298)) ([bd0892e](https://github.com/pagopa/pn-frontend/commit/bd0892e2a345a698703a2629709dcf4a502fc602))
+
+
+
+
+
 ## [2.6.1](https://github.com/pagopa/pn-frontend/compare/v2.6.0...v2.6.1) (2024-07-30)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp

@@ -57,22 +57,18 @@ type LinkRemoveFiltersProps = {
  */
 const IS_SORT_ENABLED = false;
 
-const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => {
-  const { t } = useTranslation(['notifiche']);
-  return (
-    <Link
-      component={'button'}
-      variant="body1"
-      id="call-to-action-first"
-      aria-label={t('empty-state.aria-label-remove-filters')}
-      key="remove-filters"
-      data-testid="link-remove-filters"
-      onClick={cleanFilters}
-    >
-      {children}
-    </Link>
-  );
-};
+const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => (
+  <Link
+    component={'button'}
+    variant="body1"
+    id="call-to-action-first"
+    key="remove-filters"
+    data-testid="link-remove-filters"
+    onClick={cleanFilters}
+  >
+    {children}
+  </Link>
+);
 
 const MobileNotifications = ({
   notifications,

@@ -46,18 +46,24 @@ const IOContact: React.FC<Props> = ({ contact }) => {
 
   const enableIO = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
-    void dispatch(enableIOAddress()).then(() => {
-      setIsConfirmModalOpen(false);
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS);
-    });
+    dispatch(enableIOAddress())
+      .unwrap()
+      .then(() => {
+        setIsConfirmModalOpen(false);
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS);
+      })
+      .catch(() => {});
   };
 
   const disableIO = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION);
-    void dispatch(disableIOAddress()).then(() => {
-      setIsConfirmModalOpen(false);
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS);
-    });
+    dispatch(disableIOAddress())
+      .unwrap()
+      .then(() => {
+        setIsConfirmModalOpen(false);
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS);
+      })
+      .catch(() => {});
   };
 
   const handleConfirmationModal = () => {
@@ -109,15 +115,10 @@ const IOContact: React.FC<Props> = ({ contact }) => {
         <Alert
           role="banner"
           sx={{ mt: 4 }}
-          aria-label={
-            status === IOContactStatus.UNAVAILABLE
-              ? t('io-contact.disclaimer-message-unavailable', { ns: 'recapiti' })
-              : t('io-contact.disclaimer-message', { ns: 'recapiti' })
-          }
           severity={status !== IOContactStatus.UNAVAILABLE ? 'info' : 'warning'}
           data-testid="appIO-contact-disclaimer"
         >
-          <Typography component="span" variant="body1" role="banner">
+          <Typography component="span" variant="body1">
             {status === IOContactStatus.UNAVAILABLE
               ? t('io-contact.disclaimer-message-unavailable', { ns: 'recapiti' })
               : t('io-contact.disclaimer-message', { ns: 'recapiti' })}{' '}
@@ -144,8 +145,9 @@ const IOContact: React.FC<Props> = ({ contact }) => {
     >
       {getContent()}
       {getDisclaimer()}
-      {status === IOContactStatus.DISABLED && isConfirmModalOpen && (
+      {status === IOContactStatus.DISABLED && (
         <DisclaimerModal
+          open={isConfirmModalOpen}
           onConfirm={enableIO}
           title={t('io-contact.enable-modal.title', { ns: 'recapiti' })}
           content={t('io-contact.enable-modal.content', { ns: 'recapiti' })}
@@ -154,8 +156,9 @@ const IOContact: React.FC<Props> = ({ contact }) => {
           onCancel={() => setIsConfirmModalOpen(false)}
         />
       )}
-      {status === IOContactStatus.ENABLED && isConfirmModalOpen && (
+      {status === IOContactStatus.ENABLED && (
         <DisclaimerModal
+          open={isConfirmModalOpen}
           onConfirm={disableIO}
           title={t('io-contact.disable-modal.title', { ns: 'recapiti' })}
           content={t('io-contact.disable-modal.content', { ns: 'recapiti' })}

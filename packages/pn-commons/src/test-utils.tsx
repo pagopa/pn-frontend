@@ -88,9 +88,9 @@ const customRender = (
 
 // utility function
 /** This function simulate media query and is useful to test differences between mobile and desktop view */
-function createMatchMedia(width: number) {
+function createMatchMedia(width: number, height?: number) {
   return (query: string): MediaQueryList => ({
-    matches: mediaQuery.match(query, { width }),
+    matches: mediaQuery.match(query, { width, height }),
     media: '',
     addListener: () => {},
     removeListener: () => {},
