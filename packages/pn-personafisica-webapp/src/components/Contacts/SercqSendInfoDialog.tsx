@@ -21,7 +21,6 @@ type Props = {
   open: boolean;
   onDiscard: () => void;
   onConfirm: () => void;
-  senderId?: string;
 };
 
 const redirectPrivacyLink = () => window.open(`${PRIVACY_POLICY_SERCQ_SEND}`, '_blank');
