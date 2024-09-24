@@ -11,6 +11,9 @@ type SendRemoveAddressReturn =
     }
   | {
       SEND_HAS_PEC: 'no';
+    }
+  | {
+      SEND_HAS_SERCQ_SEND: 'no';
     };
 
 type SendRemoveAddressData = {
@@ -50,6 +53,17 @@ export class SendRemoveAddressStrategy implements EventStrategy {
           },
           [EventPropertyType.SUPER_PROPERTY]: {
             SEND_HAS_PEC: 'no',
+          },
+        };
+      }
+
+      if (params.channelType === ChannelType.SERCQ_SEND) {
+        return {
+          [EventPropertyType.PROFILE]: {
+            SEND_HAS_SERCQ_SEND: 'no',
+          },
+          [EventPropertyType.SUPER_PROPERTY]: {
+            SEND_HAS_SERCQ_SEND: 'no',
           },
         };
       }

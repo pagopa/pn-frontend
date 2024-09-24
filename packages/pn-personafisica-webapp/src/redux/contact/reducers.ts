@@ -1,6 +1,12 @@
 import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 
-import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  DigitalAddress,
+  ExternalEvent,
+  IOAllowedValues,
+} from '../../models/contacts';
 import { Party } from '../../models/party';
 import { addressesRelationships } from '../../utility/contacts.utility';
 import { RootState } from '../store';
@@ -13,10 +19,16 @@ import {
   getDigitalAddresses,
 } from './actions';
 
-const initialState = {
+const initialState: {
+  loading: boolean;
+  digitalAddresses: Array<DigitalAddress>;
+  parties: Array<Party>;
+  event: ExternalEvent | null;
+} = {
   loading: false,
-  digitalAddresses: [] as Array<DigitalAddress>,
-  parties: [] as Array<Party>,
+  digitalAddresses: [],
+  parties: [],
+  event: null,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -33,6 +45,12 @@ const contactsSlice = createSlice({
           (address.senderId !== action.payload && address.addressType === AddressType.LEGAL) ||
           address.addressType === AddressType.COURTESY
       );
+    },
+    setExternalEvent: (state, action: PayloadAction<ExternalEvent>) => {
+      state.event = action.payload;
+    },
+    resetExternalEvent: (state) => {
+      state.event = null;
     },
   },
   extraReducers: (builder) => {
@@ -89,7 +107,8 @@ const contactsSlice = createSlice({
   },
 });
 
-export const { resetState, resetPecValidation } = contactsSlice.actions;
+export const { resetState, resetPecValidation, setExternalEvent, resetExternalEvent } =
+  contactsSlice.actions;
 
 // START: SELECTORS
 const contactState = (state: RootState) => state.contactsState;

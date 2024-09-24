@@ -19,8 +19,10 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
+import { PFEventsType } from '../../models/PFEventsType';
 import { enableIOAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 
 type Props = {
   open: boolean;
@@ -39,9 +41,14 @@ const SercqSendIODialog: React.FC<Props> = ({ open, onDiscard }) => {
   });
 
   const handleConfirm = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_START);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
     dispatch(enableIOAddress())
       .unwrap()
-      .then(() => onDiscard())
+      .then(() => {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS, true);
+        onDiscard();
+      })
       .catch(() => {});
   };
 

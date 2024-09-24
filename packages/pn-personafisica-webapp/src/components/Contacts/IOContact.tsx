@@ -48,7 +48,7 @@ const IOContact: React.FC = () => {
       .unwrap()
       .then(() => {
         // setIsConfirmModalOpen(false);
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS);
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS, false);
       })
       .catch(() => {});
   };

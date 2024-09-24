@@ -18,6 +18,18 @@ export enum AddressType {
   COURTESY = 'COURTESY',
 }
 
+export enum ContactSource {
+  RECAPITI = 'recapiti',
+  PROFILO = 'profilo',
+  HOME_NOTIFICHE = 'home_notifiche',
+  DETTAGLIO_NOTIFICA = 'dettaglio_notifica',
+}
+
+export enum ContactOperation {
+  ADD = 'ADD',
+  SCROLL = 'SCROLL',
+}
+
 export interface Sender {
   senderId: string;
   senderName?: string;
@@ -42,4 +54,10 @@ export interface SaveDigitalAddressParams extends Sender {
   channelType: ChannelType;
   value: string;
   code?: string;
+}
+
+export interface ExternalEvent {
+  source: ContactSource;
+  destination: ChannelType;
+  operation: ContactOperation;
 }

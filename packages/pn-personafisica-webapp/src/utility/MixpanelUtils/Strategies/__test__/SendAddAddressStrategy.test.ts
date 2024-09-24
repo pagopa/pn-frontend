@@ -1,6 +1,7 @@
 import { EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import {
+  digitalAddressesSercq,
   digitalCourtesyAddresses,
   digitalLegalAddresses,
 } from '../../../../__mocks__/Contacts.mock';
@@ -163,6 +164,30 @@ describe('Mixpanel - Add Address Strategy', () => {
         },
         [EventPropertyType.SUPER_PROPERTY]: {
           SEND_HAS_PEC: 'yes',
+        },
+      });
+    });
+
+    it('should return has sercq send when adding a SERCQ address', () => {
+      const strategy = new SendAddAddressStrategy();
+      const address = digitalAddressesSercq.find((a) => a.channelType === ChannelType.SERCQ_SEND);
+
+      const event = strategy.performComputations({
+        payload: address,
+        params: {
+          addressType: address!.addressType,
+          channelType: address!.channelType,
+          senderId: 'default',
+          value: address!.value,
+        },
+      });
+
+      expect(event).toEqual({
+        [EventPropertyType.PROFILE]: {
+          SEND_HAS_SERCQ_SEND: 'yes',
+        },
+        [EventPropertyType.SUPER_PROPERTY]: {
+          SEND_HAS_SERCQ_SEND: 'yes',
         },
       });
     });
