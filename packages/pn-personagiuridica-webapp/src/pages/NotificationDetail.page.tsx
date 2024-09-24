@@ -34,6 +34,7 @@ import {
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import { ContactSource } from '../models/contacts';
 import * as routes from '../navigation/routes.const';
 import { getDowntimeLegalFact } from '../redux/appStatus/actions';
 import { PNRole } from '../redux/auth/types';
@@ -396,6 +397,9 @@ const NotificationDetail = () => {
       {!hasNotificationReceivedApiError && (
         <Box sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumb}
+          {isMobile && visibleDomicileBanner() && (
+            <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
+          )}
           <Grid
             container
             direction={isMobile ? 'column-reverse' : 'row'}
@@ -403,6 +407,9 @@ const NotificationDetail = () => {
           >
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
+              {!isMobile && visibleDomicileBanner() && (
+                <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
+              )}
               <Stack spacing={3}>
                 {(isCancelled.cancelled || isCancelled.cancellationInProgress) && (
                   <Alert data-testid="cancelledAlertText" severity="warning">
@@ -410,8 +417,6 @@ const NotificationDetail = () => {
                   </Alert>
                 )}
                 <NotificationDetailTable rows={detailTableRows} />
-
-                {visibleDomicileBanner() && <DomicileBanner />}
                 <Paper sx={{ p: 3 }} elevation={0}>
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}

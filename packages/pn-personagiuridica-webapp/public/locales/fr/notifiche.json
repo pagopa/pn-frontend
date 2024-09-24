@@ -63,10 +63,6 @@
     "show-history": "Afficher l’historique",
     "show-more": "Voir plus de détails",
     "show-less": "Voir moins de détails",
-    "add_domicile_PEC": "Ajouter PEC",
-    "add_domicile_EMAIL": "Ajouter e-mail",
-    "domicile_PEC": "Vous avez une adresse PEC ? Ajoutez-la et vous ne recevrez plus les recommandations papier.",
-    "domicile_EMAIL": "Ajoutez votre adresse e-mail : nous vous enverrons un message chaque fois que vous recevrez une notification.",
     "cancelled-alert-text": "Cette notification a été annulée par l’organisme émetteur. Vous pouvez ignorer son contenu.",
     "disclaimer-link": "En savoir plus",
     "payment": {

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -15,6 +15,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import {
   AddressType,
   ChannelType,
+  ContactOperation,
   SERCQ_SEND_VALUE,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
@@ -24,8 +25,9 @@ import {
   deleteAddress,
   getSercqSendTosPrivacyApproval,
 } from '../../redux/contact/actions';
-import { contactsSelectors } from '../../redux/contact/reducers';
+import { contactsSelectors, resetExternalEvent } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import { internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
@@ -67,6 +69,7 @@ const SercqSendContactItem: React.FC = () => {
   const { defaultSERCQ_SENDAddress, courtesyAddresses, specialPECAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
+  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
 
   const value = defaultSERCQ_SENDAddress?.value ?? '';
@@ -211,6 +214,17 @@ const SercqSendContactItem: React.FC = () => {
       })
       .catch(() => {});
   };
+
+  useEffect(() => {
+    if (
+      externalEvent &&
+      externalEvent.destination === ChannelType.SERCQ_SEND &&
+      externalEvent.operation === ContactOperation.ADD
+    ) {
+      handleActivation();
+      dispatch(resetExternalEvent());
+    }
+  }, [externalEvent]);
 
   return (
     <DigitalContactsCard

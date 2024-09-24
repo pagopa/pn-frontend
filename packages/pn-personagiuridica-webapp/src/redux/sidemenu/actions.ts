@@ -29,12 +29,9 @@ export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
   SIDEMENU_ACTIONS.GET_DOMICILE_INFO,
   async (_, { rejectWithValue }) => {
     try {
-      const isDefaultAddress = (address: DigitalAddress) => address.senderId === 'default';
       const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
       const response = await digitalAddressesFactory.getAddressesV1();
-      const allAddresses = response.data as Array<DigitalAddress>;
-
-      return [...allAddresses.filter(isDefaultAddress)];
+      return response.data as Array<DigitalAddress>;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
