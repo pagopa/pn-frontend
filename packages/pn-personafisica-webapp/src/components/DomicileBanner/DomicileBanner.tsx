@@ -50,7 +50,7 @@ const DomicileBanner = forwardRef(({ source = 'home_notifiche' }: Props, ref) =>
     console.log('------------------------', defaultAddresses);
 
     if (
-      addresses.defaultSERCQAddress &&
+      addresses.defaultSERCQ_SENDAddress &&
       defaultAddresses.filter(
         (e) =>
           e.channelType === ChannelType.EMAIL ||
@@ -62,7 +62,7 @@ const DomicileBanner = forwardRef(({ source = 'home_notifiche' }: Props, ref) =>
     } else {
       setOpen(true);
     }
-  }, [addresses.defaultSERCQAddress]);
+  }, [addresses.defaultSERCQ_SENDAddress]);
 
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -78,7 +78,7 @@ const DomicileBanner = forwardRef(({ source = 'home_notifiche' }: Props, ref) =>
       ChannelType.PEC,
       ChannelType.EMAIL,
       ChannelType.IOMSG,
-      ChannelType.SERCQ,
+      ChannelType.SERCQ_SEND,
     ].filter((type) => !defaultAddresses.some((address) => address.channelType === type));
     const messageIndex = Math.floor(Math.random() * lackingAddressTypes.length);
     return lackingAddressTypes.length > 0 ? (lackingAddressTypes[messageIndex] as string) : null;
@@ -92,41 +92,136 @@ const DomicileBanner = forwardRef(({ source = 'home_notifiche' }: Props, ref) =>
 
   useImperativeHandle(ref, () => messageType);
 
-  return open ? (
-    <Box mb={5}>
-      <Alert
-        severity="warning"
-        variant="outlined"
-        onClose={handleClose}
-        data-testid="addDomicileBanner"
-        sx={{ padding: 2 }}
-      >
-        {/* 
+  return (
+    <>
+      {/* BANNER 1 = ATTIVA*/}
+      <Box mb={5}>
+        <Alert
+          severity="info"
+          variant="outlined"
+          onClose={handleClose}
+          data-testid="addDomicileBanner"
+          sx={{ padding: 2 }}
+        >
+          <Box>
+            <Typography fontWeight="bold" variant="body2">
+              {t(`detail.banner_sercq.activate_title`)}
+            </Typography>
+            <Typography variant="body2">{t(`detail.banner_sercq.activate_body`)}</Typography>
+            <Link
+              role="button"
+              component="button"
+              variant="body2"
+              fontWeight="bold"
+              onClick={handleAddDomicile}
+              display="inline-block"
+              sx={{ cursor: 'pointer' }}
+            >
+              {t(`detail.add_domicile_SERCQ`)}
+            </Link>
+          </Box>
+        </Alert>
+      </Box>
+
+      {/* BANNER 2 = DISMISSED*/}
+      <Box mb={5}>
+        <Alert
+          severity="info"
+          variant="outlined"
+          onClose={handleClose}
+          data-testid="addDomicileBanner"
+          sx={{ padding: 2 }}
+        >
+          <Box>
+            <Typography fontWeight="bold" variant="body2">
+              {t(`detail.banner_sercq.activate_dismissed_title`)}
+            </Typography>
+            <Typography variant="body2">
+              {t(`detail.banner_sercq.activate_dismissed_body`)}
+            </Typography>
+            <Link
+              role="button"
+              component="button"
+              variant="body2"
+              fontWeight="bold"
+              onClick={handleAddDomicile}
+              display="inline-block"
+              sx={{ cursor: 'pointer' }}
+            >
+              {t(`detail.banner_sercq.activate_dismissed_cta`)}
+            </Link>
+          </Box>
+        </Alert>
+      </Box>
+
+      {/* BANNER 3 = COMPLETA*/}
+      <Box mb={5}>
+        <Alert
+          severity="warning"
+          variant="outlined"
+          onClose={handleClose}
+          data-testid="addDomicileBanner"
+          sx={{ padding: 2 }}
+        >
+          {/* 
           The link has the attribute component="button" since this allows it to be launched by pressing the Enter key,
           otherwise it is launched through the mouse only.
           Cfr. PN-5528.
         */}
-        <Box>
-          <Typography fontWeight="bold" variant="body2">
-            {t(`detail.domicile_SERCQ_title`)}
-          </Typography>
-          <Typography variant="body2">{t(`detail.domicile_SERCQ`)}</Typography>
-          <Link
-            role="button"
-            component="button"
-            variant="body2"
-            fontWeight="bold"
-            onClick={handleAddDomicile}
-            display="inline-block"
-            sx={{ cursor: 'pointer' }}
-          >
-            {t(`detail.add_domicile_SERCQ`)}
-          </Link>
-        </Box>
-      </Alert>
-    </Box>
-  ) : (
-    <></>
+          <Box>
+            <Typography fontWeight="bold" variant="body2">
+              {t(`detail.banner_sercq.complete_title`)}
+            </Typography>
+            <Typography variant="body2">{t(`detail.banner_sercq.complete_body`)}</Typography>
+            <Link
+              role="button"
+              component="button"
+              variant="body2"
+              fontWeight="bold"
+              onClick={handleAddDomicile}
+              display="inline-block"
+              sx={{ cursor: 'pointer' }}
+            >
+              {t(`detail.banner_sercq.complete_cta`)}
+            </Link>
+          </Box>
+        </Alert>
+      </Box>
+
+      {/* BANNER 4 = APP IO*/}
+      <Box mb={5}>
+        <Alert
+          severity="info"
+          variant="outlined"
+          onClose={handleClose}
+          data-testid="addDomicileBanner"
+          sx={{ padding: 2 }}
+        >
+          {/* 
+          The link has the attribute component="button" since this allows it to be launched by pressing the Enter key,
+          otherwise it is launched through the mouse only.
+          Cfr. PN-5528.
+        */}
+          <Box>
+            <Typography fontWeight="bold" variant="body2">
+              {t(`detail.banner_sercq.appio_title`)}
+            </Typography>
+            <Typography variant="body2">{t(`detail.banner_sercq.appio_body`)}</Typography>
+            <Link
+              role="button"
+              component="button"
+              variant="body2"
+              fontWeight="bold"
+              onClick={handleAddDomicile}
+              display="inline-block"
+              sx={{ cursor: 'pointer' }}
+            >
+              {t(`detail.banner_sercq.appio_cta`)}
+            </Link>
+          </Box>
+        </Alert>
+      </Box>
+    </>
   );
 });
 
