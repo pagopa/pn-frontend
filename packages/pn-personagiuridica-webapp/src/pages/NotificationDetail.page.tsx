@@ -18,6 +18,7 @@ import {
   NotificationDocumentType,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
+  NotificationStatus,
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
@@ -380,7 +381,12 @@ const NotificationDetail = () => {
   );
 
   const visibleDomicileBanner = () =>
-    userHasAdminPermissions && !currentUser.hasGroup && !mandateId;
+    userHasAdminPermissions &&
+    !currentUser.hasGroup &&
+    !mandateId &&
+    notification.notificationStatusHistory.findIndex(
+      (history) => history.status === NotificationStatus.VIEWED
+    ) > -1;
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
