@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { ConsentType } from '@pagopa-pn/pn-commons';
+import { ConsentType, SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 import { getById, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
@@ -21,7 +21,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { ChannelType, SERCQ_SEND_VALUE } from '../../../models/contacts';
+import { ChannelType } from '../../../models/contacts';
 import { internationalPhonePrefix } from '../../../utility/contacts.utility';
 import SercqSendContactItem from '../SercqSendContactItem';
 import { fillCodeDialog } from './test-utils';

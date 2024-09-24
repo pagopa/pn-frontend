@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Card, CardContent, Divider, Stack, Typography } from '@mui/material';
-import { appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
+import { SERCQ_SEND_VALUE, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -11,7 +11,6 @@ import {
   ChannelType,
   ContactSource,
   DigitalAddress,
-  SERCQ_SEND_VALUE,
   SaveDigitalAddressParams,
   Sender,
 } from '../../models/contacts';

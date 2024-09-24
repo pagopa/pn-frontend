@@ -6,18 +6,14 @@ import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import {
   ConsentActionType,
   ConsentType,
+  SERCQ_SEND_VALUE,
   TosPrivacyConsent,
   appStateActions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import {
-  AddressType,
-  ChannelType,
-  SERCQ_SEND_VALUE,
-  SaveDigitalAddressParams,
-} from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import {
   acceptSercqSendTosPrivacy,
   createOrUpdateAddress,

@@ -1,35 +1,49 @@
-import { SendDigitalDetails } from '../../models';
+import { DigitalDomicileType, SERCQ_SEND_VALUE, SendDigitalDetails } from '../../models';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class SendDigitalFeedbackStep extends TimelineStep {
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
-    if ((payload.step.details as SendDigitalDetails).responseStatus === 'KO') {
+    const details = payload.step.details as SendDigitalDetails;
+    if (details.responseStatus === 'KO') {
       return {
         ...this.localizeTimelineStatus(
           'send-digital-error',
           payload.isMultiRecipient,
           'Invio via PEC non riuscito',
-          `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${
-            (payload.step.details as SendDigitalDetails).digitalAddress?.address
-          } non è riuscito perché la casella è satura, non valida o inattiva.`,
+          `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${details.digitalAddress?.address} non è riuscito perché la casella è satura, non valida o inattiva.`,
           {
             ...this.nameAndTaxId(payload),
-            address: (payload.step.details as SendDigitalDetails).digitalAddress?.address,
+            address: details.digitalAddress?.address,
+          }
+        ),
+      };
+    }
+    if (
+      details.digitalAddress?.type === DigitalDomicileType.SERCQ &&
+      details.digitalAddress?.address === SERCQ_SEND_VALUE
+    ) {
+      return {
+        ...this.localizeTimelineStatus(
+          'send-digital-success-SERCQ-SEND',
+          payload.isMultiRecipient,
+          undefined,
+          undefined,
+          {
+            ...this.nameAndTaxId(payload),
+            address: details.digitalAddress?.address,
           }
         ),
       };
     }
     return {
       ...this.localizeTimelineStatus(
-        'send-digital-success',
+        'send-digital-success-PEC',
         payload.isMultiRecipient,
         'Invio via PEC riuscito',
-        `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${
-          (payload.step.details as SendDigitalDetails).digitalAddress?.address
-        } è riuscito.`,
+        `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${details.digitalAddress?.address} è riuscito.`,
         {
           ...this.nameAndTaxId(payload),
-          address: (payload.step.details as SendDigitalDetails).digitalAddress?.address,
+          address: details.digitalAddress?.address,
         }
       ),
     };

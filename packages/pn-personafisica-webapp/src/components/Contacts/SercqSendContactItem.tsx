@@ -6,6 +6,7 @@ import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import {
   ConsentActionType,
   ConsentType,
+  SERCQ_SEND_VALUE,
   TosPrivacyConsent,
   appStateActions,
   useIsMobile,
@@ -18,7 +19,6 @@ import {
   ChannelType,
   ContactSource,
   IOAllowedValues,
-  SERCQ_SEND_VALUE,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
 import {
