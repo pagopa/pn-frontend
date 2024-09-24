@@ -11,6 +11,9 @@ type SendAddAddressReturn =
     }
   | {
       SEND_HAS_PEC: 'yes';
+    }
+  | {
+      SEND_HAS_SERCQ_SEND: 'yes';
     };
 
 type SendAddAddressData = {
@@ -60,6 +63,17 @@ export class SendAddAddressStrategy implements EventStrategy {
         },
         [EventPropertyType.SUPER_PROPERTY]: {
           SEND_HAS_PEC: 'yes',
+        },
+      };
+    }
+
+    if (channelType === ChannelType.SERCQ_SEND) {
+      return {
+        [EventPropertyType.PROFILE]: {
+          SEND_HAS_SERCQ_SEND: 'yes',
+        },
+        [EventPropertyType.SUPER_PROPERTY]: {
+          SEND_HAS_SERCQ_SEND: 'yes',
         },
       };
     }

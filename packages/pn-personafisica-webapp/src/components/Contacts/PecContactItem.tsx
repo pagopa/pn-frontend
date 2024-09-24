@@ -1,10 +1,17 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Divider, Stack, Typography } from '@mui/material';
 import { appStateActions } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  ContactSource,
+  SaveDigitalAddressParams,
+} from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -17,6 +24,7 @@ import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
 import ExistingContactDialog from './ExistingContactDialog';
 import PecValidationItem from './PecValidationItem';
+import PecValueDialog from './PecValueDialog';
 import PecVerificationDialog from './PecVerificationDialog';
 
 enum ModalType {
@@ -25,13 +33,18 @@ enum ModalType {
   CANCEL_VALIDATION = 'cancel_validation',
   DELETE = 'delete',
   CODE = 'code',
+  VALUE = 'value',
 }
 
 const PecContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultPECAddress, specialPECAddresses, addresses } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const {
+    defaultPECAddress,
+    specialPECAddresses,
+    specialSERCQ_SENDAddresses,
+    addresses,
+    defaultSERCQ_SENDAddress,
+  } = useAppSelector(contactsSelectors.selectAddresses);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
@@ -45,11 +58,14 @@ const PecContactItem: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const currentValue = defaultPECAddress?.value ?? '';
-  const blockDelete = specialPECAddresses.length > 0;
+  const blockDelete = specialPECAddresses.length > 0 || specialSERCQ_SENDAddresses.length > 0;
   const verifyingAddress = defaultPECAddress ? !defaultPECAddress.pecValid : false;
 
   const handleSubmit = (value: string) => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, 'default');
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, {
+      senderId: 'default',
+      source: ContactSource.RECAPITI,
+    });
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { value };
     // first check if contact already exists
@@ -138,6 +154,10 @@ const PecContactItem: React.FC = () => {
       .catch(() => {});
   };
 
+  const handlePecAdd = () => {
+    setModalOpen(ModalType.VALUE);
+  };
+
   /*
    * if *some* value has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
@@ -150,10 +170,17 @@ const PecContactItem: React.FC = () => {
    */
   return (
     <DigitalContactsCard
-      title={t('legal-contacts.pec-title', { ns: 'recapiti' })}
-      subtitle={t('legal-contacts.pec-description', { ns: 'recapiti' })}
+      title={defaultSERCQ_SENDAddress ? '' : t('legal-contacts.pec-title', { ns: 'recapiti' })}
+      subtitle={
+        defaultSERCQ_SENDAddress ? '' : t('legal-contacts.pec-description', { ns: 'recapiti' })
+      }
+      sx={{
+        pt: defaultSERCQ_SENDAddress ? 0 : 3,
+        borderTopLeftRadius: defaultSERCQ_SENDAddress ? 0 : 4,
+        borderTopRightRadius: defaultSERCQ_SENDAddress ? 0 : 4,
+      }}
     >
-      {!verifyingAddress && (
+      {!verifyingAddress && !defaultSERCQ_SENDAddress && (
         <DefaultDigitalContact
           label={t('legal-contacts.pec-to-add', { ns: 'recapiti' })}
           value={currentValue}
@@ -173,6 +200,19 @@ const PecContactItem: React.FC = () => {
       )}
       {verifyingAddress && (
         <PecValidationItem senderId="default" onCancelValidation={handleCancelValidation} />
+      )}
+      {defaultSERCQ_SENDAddress && (
+        <>
+          <Divider sx={{ color: 'text.secondary' }} />
+          <Stack direction="row" spacing={0.5} mt={2}>
+            <Typography variant="body2" color="text.secondary" display="inline-flex">
+              {t('legal-contacts.sercq-send-pec', { ns: 'recapiti' })}
+            </Typography>
+            <ButtonNaked color={'primary'} size="medium" onClick={handlePecAdd}>
+              {t('legal-contacts.sercq-send-add-pec', { ns: 'recapiti' })}
+            </ButtonNaked>
+          </Stack>
+        </>
       )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
@@ -210,6 +250,13 @@ const PecContactItem: React.FC = () => {
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
+      />
+      <PecValueDialog
+        open={modalOpen === ModalType.VALUE}
+        onDiscard={() => setModalOpen(null)}
+        onConfirm={(value) => {
+          handleSubmit(value);
+        }}
       />
     </DigitalContactsCard>
   );

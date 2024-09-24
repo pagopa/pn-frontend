@@ -49,7 +49,7 @@ describe('SpecialContactItem Component', () => {
   const sercqAddress = {
     addressType: AddressType.LEGAL,
     senderId: 'default',
-    channelType: ChannelType.SERCQ,
+    channelType: ChannelType.SERCQ_SEND,
     value: 'sercq_address',
     codeValid: true,
   };
@@ -70,6 +70,7 @@ describe('SpecialContactItem Component', () => {
     // render component
     const { container, getAllByTestId } = render(
       <SpecialContactItem
+        index={0}
         addresses={[pecAddress, emailAddress, phoneAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}
@@ -111,6 +112,7 @@ describe('SpecialContactItem Component', () => {
     // render component
     const { container, getAllByTestId } = render(
       <SpecialContactItem
+        index={0}
         addresses={[pecNotValid]}
         onDelete={deleteHandler}
         onEdit={editHandler}
@@ -137,6 +139,7 @@ describe('SpecialContactItem Component', () => {
     // render component
     const { getAllByTestId } = render(
       <SpecialContactItem
+        index={0}
         addresses={[pecAddress, emailAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}
@@ -157,6 +160,7 @@ describe('SpecialContactItem Component', () => {
     // render component
     const { getAllByTestId } = render(
       <SpecialContactItem
+        index={0}
         addresses={[pecAddress, emailAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}
@@ -179,6 +183,7 @@ describe('SpecialContactItem Component', () => {
     const deafultPhoneAddress = { ...phoneAddress, senderId: 'default' };
     const { container } = render(
       <SpecialContactItem
+        index={0}
         addresses={[pecAddress, emailAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}
@@ -205,6 +210,7 @@ describe('SpecialContactItem Component', () => {
   it('should show Domicilio Digitale SEND value and no edit button', () => {
     const { getAllByTestId } = render(
       <SpecialContactItem
+        index={0}
         addresses={[sercqAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}
@@ -213,9 +219,9 @@ describe('SpecialContactItem Component', () => {
       />
     );
 
-    const specialContactForms = getAllByTestId(/_sercqContact$/);
+    const specialContactForms = getAllByTestId(/sercq_sendContact$/);
     expect(specialContactForms).toHaveLength(1);
-    expect(specialContactForms[0]).toHaveTextContent('special-contacts.sercq');
+    expect(specialContactForms[0]).toHaveTextContent('special-contacts.sercq_send');
     const buttons = specialContactForms[0].querySelectorAll('button');
     expect(buttons).toHaveLength(1);
     expect(buttons[0]).toHaveTextContent('button.disable');

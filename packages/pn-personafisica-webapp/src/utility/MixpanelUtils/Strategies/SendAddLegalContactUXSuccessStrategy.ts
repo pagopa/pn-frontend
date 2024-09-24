@@ -6,7 +6,7 @@ import {
   TrackedEvent,
 } from '@pagopa-pn/pn-commons';
 
-export class SendAddContactActionStrategy implements EventStrategy {
+export class SendAddLegalContactUXSuccessStrategy implements EventStrategy {
   performComputations(senderId: string): TrackedEvent<{ other_contact: string }> {
     return {
       [EventPropertyType.TRACK]: {

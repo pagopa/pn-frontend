@@ -1,12 +1,12 @@
 import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
-import { SendAddContactActionStrategy } from '../SendAddContactActionStrategy';
+import { SendAddLegalContactUXSuccessStrategy } from '../SendAddLegalContactUXSuccessStrategy';
 
-describe('Mixpanel - Add contact action Strategy', () => {
-  it('should return add contact action event', () => {
-    const strategy = new SendAddContactActionStrategy();
+describe('Mixpanel - Add legal contact ux success action Strategy', () => {
+  it('should return add legal action event', () => {
+    const strategy = new SendAddLegalContactUXSuccessStrategy();
 
-    const isOtherContactEvent = strategy.performComputations('1233456');
+    const isOtherContactEvent = strategy.performComputations('not-default');
     expect(isOtherContactEvent).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,

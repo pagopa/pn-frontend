@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Box, Divider, Link, Stack } from '@mui/material';
+import { Box, Link, Stack } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
 import ContactsSummaryCards from '../components/Contacts/ContactsSummaryCards';
@@ -11,7 +11,6 @@ import SpecialContacts from '../components/Contacts/SpecialContacts';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
-import { ChannelType } from '../models/contacts';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { contactsSelectors, resetState } from '../redux/contact/reducers';
@@ -27,9 +26,7 @@ const Contacts = () => {
   const { LANDING_SITE_URL } = getConfiguration();
   const domicileBannerTypeRef = useRef('');
 
-  const showSpecialContactsSection = Object.values(ChannelType)
-    .filter((a) => a !== ChannelType.IOMSG)
-    .some((address) => addressesData[`default${address}Address`]);
+  const showSpecialContactsSection = addressesData.legalAddresses.length > 0;
 
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses()).then(() => {
@@ -104,16 +101,13 @@ const Contacts = () => {
           reloadAction={fetchAddresses}
         >
           <ContactsSummaryCards />
-          <Stack direction="column" spacing={4}>
-            <LegalContacts />
+          <Stack direction="column" spacing={6}>
+            <Box>
+              <LegalContacts />
+              {showSpecialContactsSection && <SpecialContacts />}
+            </Box>
             <CourtesyContacts />
           </Stack>
-          {showSpecialContactsSection && (
-            <>
-              <Divider sx={{ backgroundColor: 'white', color: 'text.secondary', mt: 6, mb: 3 }} />
-              <SpecialContacts />
-            </>
-          )}
         </ApiErrorWrapper>
       </Box>
     </LoadingPageWrapper>

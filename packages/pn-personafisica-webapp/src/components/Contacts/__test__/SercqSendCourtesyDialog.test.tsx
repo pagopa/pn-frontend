@@ -24,14 +24,7 @@ describe('test SercqSendCourtesyDialog', () => {
 
   it('render component - no AppIO', async () => {
     // render component
-    render(
-      <SercqSendCourtesyDialog
-        open
-        onConfirm={confirmHandler}
-        onDiscard={discardHandler}
-        hasAppIO={false}
-      />
-    );
+    render(<SercqSendCourtesyDialog open onConfirm={confirmHandler} onDiscard={discardHandler} />);
     const dialog = screen.getByTestId('sercqSendCourtesyDialog');
     const titleEl = getById(dialog, 'dialog-title');
     expect(titleEl).toBeInTheDocument();
@@ -52,48 +45,9 @@ describe('test SercqSendCourtesyDialog', () => {
     expect(confirmButton).toBeDisabled();
   });
 
-  it('render component - AppIO', async () => {
+  it('click on buttons', async () => {
     // render component
-    render(
-      <SercqSendCourtesyDialog
-        open
-        onConfirm={confirmHandler}
-        onDiscard={discardHandler}
-        hasAppIO
-      />
-    );
-    const dialog = screen.getByTestId('sercqSendCourtesyDialog');
-    const titleEl = getById(dialog, 'dialog-title');
-    expect(titleEl).toBeInTheDocument();
-    expect(titleEl).toHaveTextContent('legal-contacts.sercq-send-courtesy-title');
-    const bodyEl = within(dialog).getByTestId('dialog-content');
-    expect(bodyEl).toBeInTheDocument();
-    expect(bodyEl).toHaveTextContent('legal-contacts.sercq-send-courtesy-description');
-    const courtesyAddressRadio = within(bodyEl).getAllByTestId('courtesyAddressRadio');
-    expect(courtesyAddressRadio).toHaveLength(3);
-    expect(courtesyAddressRadio[0]).toHaveTextContent('io-contact.title');
-    expect(courtesyAddressRadio[0]).toHaveTextContent('io-contact.dialog-description');
-    expect(courtesyAddressRadio[1]).toHaveTextContent('courtesy-contacts.email-title');
-    expect(courtesyAddressRadio[1]).toHaveTextContent('courtesy-contacts.email-dialog-description');
-    expect(courtesyAddressRadio[2]).toHaveTextContent('courtesy-contacts.sms-title');
-    expect(courtesyAddressRadio[2]).toHaveTextContent('courtesy-contacts.sms-dialog-description');
-    const cancelButton = screen.getByText('button.not-now');
-    expect(cancelButton).toBeInTheDocument();
-    const confirmButton = await waitFor(() => screen.getByText('button.conferma'));
-    expect(confirmButton).toBeInTheDocument();
-    expect(confirmButton).toBeDisabled();
-  });
-
-  it('click on buttons - no AppIO', async () => {
-    // render component
-    render(
-      <SercqSendCourtesyDialog
-        open
-        onConfirm={confirmHandler}
-        onDiscard={discardHandler}
-        hasAppIO={false}
-      />
-    );
+    render(<SercqSendCourtesyDialog open onConfirm={confirmHandler} onDiscard={discardHandler} />);
     const cancelButton = screen.getByText('button.not-now');
     fireEvent.click(cancelButton);
     expect(discardHandler).toHaveBeenCalledTimes(1);
@@ -147,38 +101,6 @@ describe('test SercqSendCourtesyDialog', () => {
     await waitFor(() => {
       expect(confirmHandler).toHaveBeenCalledTimes(2);
       expect(confirmHandler).toHaveBeenCalledWith(ChannelType.SMS, '333333333');
-    });
-  });
-
-  it('click on buttons - AppIO', async () => {
-    // render component
-    render(
-      <SercqSendCourtesyDialog
-        open
-        onConfirm={confirmHandler}
-        onDiscard={discardHandler}
-        hasAppIO
-      />
-    );
-    const cancelButton = screen.getByText('button.not-now');
-    fireEvent.click(cancelButton);
-    expect(discardHandler).toHaveBeenCalledTimes(1);
-    const confirmButton = screen.getByText('button.conferma');
-    // select an option
-    const dialog = screen.getByTestId('sercqSendCourtesyDialog');
-    // AppIO case
-    await testRadio(
-      dialog,
-      'courtesyAddressRadio',
-      ['io-contact.title', 'courtesy-contacts.email-title', 'courtesy-contacts.sms-title'],
-      0,
-      true
-    );
-    expect(confirmButton).toBeEnabled();
-    fireEvent.click(confirmButton);
-    await waitFor(() => {
-      expect(confirmHandler).toHaveBeenCalledTimes(1);
-      expect(confirmHandler).toHaveBeenCalledWith(ChannelType.IOMSG, '');
     });
   });
 });

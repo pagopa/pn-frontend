@@ -67,7 +67,7 @@ describe('Mixpanel - Remove Address Strategy', () => {
   });
 
   describe('Send Remove Legal Address', () => {
-    it('should return remove legal address event if senderId is default', () => {
+    it('should return remove legal address event when remove a PEC address', () => {
       const strategy = new SendRemoveAddressStrategy();
 
       const params: { payload: string; params: DeleteDigitalAddressParams } = {
@@ -87,6 +87,30 @@ describe('Mixpanel - Remove Address Strategy', () => {
         },
         [EventPropertyType.SUPER_PROPERTY]: {
           SEND_HAS_PEC: 'no',
+        },
+      });
+    });
+
+    it('should return remove legal address event when remove a SERCQ address', () => {
+      const strategy = new SendRemoveAddressStrategy();
+
+      const params: { payload: string; params: DeleteDigitalAddressParams } = {
+        payload: 'OK',
+        params: {
+          addressType: AddressType.LEGAL,
+          senderId: 'default',
+          channelType: ChannelType.SERCQ_SEND,
+        },
+      };
+
+      const event = strategy.performComputations(params);
+
+      expect(event).toEqual({
+        [EventPropertyType.PROFILE]: {
+          SEND_HAS_SERCQ_SEND: 'no',
+        },
+        [EventPropertyType.SUPER_PROPERTY]: {
+          SEND_HAS_SERCQ_SEND: 'no',
         },
       });
     });

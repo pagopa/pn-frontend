@@ -1,6 +1,5 @@
 import { Configuration, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
-import { StringRuleValidator } from '@pagopa-pn/pn-validator/src/ruleValidators/StringRuleValidator';
 
 interface PgConfigurationFromFile {
   API_BASE_URL: string;
@@ -9,6 +8,9 @@ interface PgConfigurationFromFile {
   ONE_TRUST_DRAFT_MODE?: boolean;
   ONE_TRUST_PP?: string;
   ONE_TRUST_TOS?: string;
+  ONE_TRUST_SERCQ_SEND_DRAFT_MODE?: boolean;
+  ONE_TRUST_PP_SERCQ_SEND?: string;
+  ONE_TRUST_TOS_SERCQ_SEND?: string;
   OT_DOMAIN_ID?: string;
   PAGOPA_HELP_EMAIL: string;
   PAYMENT_DISCLAIMER_URL?: string;
@@ -19,6 +21,7 @@ interface PgConfigurationFromFile {
   DELEGATIONS_TO_PG_ENABLED: boolean;
   WORK_IN_PROGRESS?: boolean;
   F24_DOWNLOAD_WAIT_TIME: number;
+  DOD_DISABLED: boolean;
 }
 
 interface PgConfiguration extends PgConfigurationFromFile {
@@ -29,6 +32,9 @@ interface PgConfiguration extends PgConfigurationFromFile {
   ONE_TRUST_DRAFT_MODE: boolean;
   ONE_TRUST_PP: string;
   ONE_TRUST_TOS: string;
+  ONE_TRUST_SERCQ_SEND_DRAFT_MODE: boolean;
+  ONE_TRUST_PP_SERCQ_SEND: string;
+  ONE_TRUST_TOS_SERCQ_SEND: string;
   OT_DOMAIN_ID: string;
   PAGOPA_HELP_EMAIL: string;
   PAYMENT_DISCLAIMER_URL: string;
@@ -43,22 +49,22 @@ interface PgConfiguration extends PgConfigurationFromFile {
 class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
   constructor() {
     super();
-    this.makeRequired(this.ruleFor('API_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
-    this.makeRequired(this.ruleFor('PAGOPA_HELP_EMAIL').isString().matches(dataRegex.email));
-    this.makeRequired(this.ruleFor('SELFCARE_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
+    this.ruleFor('API_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('PAGOPA_HELP_EMAIL').isString().isRequired().matches(dataRegex.email);
+    this.ruleFor('SELFCARE_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('MIXPANEL_TOKEN').isString();
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
     this.ruleFor('ONE_TRUST_PP').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_TOS_SERCQ_SEND').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_PP_SERCQ_SEND').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_SERCQ_SEND_DRAFT_MODE').isBoolean();
     this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.lettersNumbersAndDashs);
-    this.makeRequired(this.ruleFor('LANDING_SITE_URL').isString());
+    this.ruleFor('LANDING_SITE_URL').isString().isRequired();
     this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();
     this.ruleFor('WORK_IN_PROGRESS').isBoolean();
     this.ruleFor('F24_DOWNLOAD_WAIT_TIME').isNumber();
-  }
-
-  makeRequired(rule: StringRuleValidator<PgConfigurationFromFile, string>): void {
-    rule.not().isEmpty().not().isUndefined().not().isNull();
+    this.ruleFor('DOD_DISABLED').isBoolean();
   }
 }
 
@@ -73,6 +79,9 @@ export function getConfiguration(): PgConfiguration {
     ONE_TRUST_DRAFT_MODE: Boolean(configurationFromFile.ONE_TRUST_DRAFT_MODE),
     ONE_TRUST_PP: configurationFromFile.ONE_TRUST_PP || '',
     ONE_TRUST_TOS: configurationFromFile.ONE_TRUST_TOS || '',
+    ONE_TRUST_PP_SERCQ_SEND: configurationFromFile.ONE_TRUST_PP_SERCQ_SEND || '',
+    ONE_TRUST_TOS_SERCQ_SEND: configurationFromFile.ONE_TRUST_TOS_SERCQ_SEND || '',
+    ONE_TRUST_SERCQ_SEND_DRAFT_MODE: Boolean(configurationFromFile.ONE_TRUST_SERCQ_SEND_DRAFT_MODE),
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID || '',
     PAYMENT_DISCLAIMER_URL: configurationFromFile.PAYMENT_DISCLAIMER_URL || '',
     IS_DEVELOP,

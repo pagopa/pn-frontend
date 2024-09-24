@@ -43,6 +43,7 @@ import FileUpload from './FileUpload';
 import Footer from './Footer/Footer';
 import Header from './Header/Header';
 import { IllusAppIO } from './Illustrations/IllusAppIO';
+import { IllusAppIODialog } from './Illustrations/IllusAppIODialog';
 import { IllusQuestion } from './Illustrations/IllusQuestion';
 import { IllusStatistics } from './Illustrations/IllusStatistics';
 import InactivityHandler from './InactivityHandler';
@@ -146,4 +147,5 @@ export {
   IllusQuestion,
   IllusStatistics,
   IllusAppIO,
+  IllusAppIODialog,
 };

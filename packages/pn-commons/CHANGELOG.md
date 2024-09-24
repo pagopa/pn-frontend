@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.7.0](https://github.com/pagopa/pn-frontend/compare/v2.7.0-RC.1...v2.7.0) (2024-09-18)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.7.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.7.0-RC.0...v2.7.0-RC.1) (2024-09-10)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.7.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.6.1...v2.7.0-RC.0) (2024-09-09)
+
+
+### Bug Fixes
+
+* **pn-11700:** fixed horizontal scroll when title of F24 is too much long ([#1311](https://github.com/pagopa/pn-frontend/issues/1311)) ([e9a5135](https://github.com/pagopa/pn-frontend/commit/e9a51352cf85dddafffd509d8b0c335ec5d75c9b))
+* **pn-11701:** use mobile version of date picker on small screens ([#1308](https://github.com/pagopa/pn-frontend/issues/1308)) ([fa65f36](https://github.com/pagopa/pn-frontend/commit/fa65f368921949973c2ba470496a9bead2202b72))
+* **pn-12098:** app status chips color ([#1283](https://github.com/pagopa/pn-frontend/issues/1283)) ([9db4018](https://github.com/pagopa/pn-frontend/commit/9db4018e6800a21afa0b3006bb084449a1cf119c))
+
+
+### Features
+
+* **pn-11371:** Remove useless aria-label and tabIndex attributes ([#1286](https://github.com/pagopa/pn-frontend/issues/1286)) ([22f8683](https://github.com/pagopa/pn-frontend/commit/22f868373e9b57e9512837bbac29a583ca9788b5))
+* **pn-11898:** DigitalContactElem component refactor ([#1290](https://github.com/pagopa/pn-frontend/issues/1290)) ([ca61889](https://github.com/pagopa/pn-frontend/commit/ca6188964060fe74569e2ad9226b5daaaaac4300))
+* **pn-11969:** Remove context from courtesy contacts ([#1294](https://github.com/pagopa/pn-frontend/issues/1294)) ([fda5e6f](https://github.com/pagopa/pn-frontend/commit/fda5e6f9628bc37f1dd8d4cacb38664516c32605))
+
+
+
+
+
 ## [2.6.1](https://github.com/pagopa/pn-frontend/compare/v2.6.0...v2.6.1) (2024-07-30)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons

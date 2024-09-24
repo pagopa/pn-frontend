@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AddCircle, Verified, WarningOutlined } from '@mui/icons-material';
+import { AddCircleOutline, Verified, WarningOutlined } from '@mui/icons-material';
 import { Card, CardActionArea, Stack, Typography } from '@mui/material';
 
-import { AddressType, DigitalAddress } from '../../models/contacts';
+import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 
@@ -20,7 +20,12 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
   addressType,
 }) => {
   const { t } = useTranslation('recapiti');
-  const hasAddress = contacts.length > 0;
+  const hasAddress =
+    contacts.filter(
+      (contact) =>
+        contact.channelType !== ChannelType.IOMSG ||
+        (contact.channelType === ChannelType.IOMSG && contact.value === IOAllowedValues.ENABLED)
+    ).length > 0;
   const isCourtesyCard = addressType === AddressType.COURTESY;
   const title = isCourtesyCard ? 'summary-card.courtesy-title' : 'summary-card.legal-title';
 
@@ -29,10 +34,10 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
       if (isCourtesyCard && isSercQEnabled) {
         return <WarningOutlined color="warning" data-testid="warningIcon" />;
       }
-      return <AddCircle color="primary" data-testid="addIcon" />;
+      return <AddCircleOutline color="primary" data-testid="addIcon" />;
     }
 
-    return <Verified color="success" data-testid="verifiedIcon" />;
+    return <Verified color="primary" data-testid="verifiedIcon" />;
   };
 
   const getDescription = () => {
@@ -72,14 +77,19 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
         {getIcon()}
         <Typography
           variant="body2"
-          fontWeight={700}
+          fontWeight={600}
           data-testid="cardTitle"
           aria-hidden
           sx={{ mt: 0.5, mb: 1 }}
         >
           {t(title)}
         </Typography>
-        <Typography variant="body2" data-testid="cardDescription" aria-hidden>
+        <Typography
+          variant="body2"
+          data-testid="cardDescription"
+          aria-hidden
+          color={hasAddress ? 'primary' : 'text.secondary'}
+        >
           {getDescription()}
         </Typography>
       </CardActionArea>
@@ -88,7 +98,7 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
 };
 
 const ContactsSummaryCards: React.FC = () => {
-  const { legalAddresses, courtesyAddresses, defaultSERCQAddress } = useAppSelector(
+  const { legalAddresses, courtesyAddresses, defaultSERCQ_SENDAddress } = useAppSelector(
     contactsSelectors.selectAddresses
   );
 
@@ -97,7 +107,7 @@ const ContactsSummaryCards: React.FC = () => {
       <ContactsSummaryCard contacts={legalAddresses} addressType={AddressType.LEGAL} />
       <ContactsSummaryCard
         contacts={courtesyAddresses}
-        isSercQEnabled={!!defaultSERCQAddress}
+        isSercQEnabled={!!defaultSERCQ_SENDAddress}
         addressType={AddressType.COURTESY}
       />
     </Stack>

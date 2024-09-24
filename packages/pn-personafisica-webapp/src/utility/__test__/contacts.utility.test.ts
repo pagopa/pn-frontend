@@ -8,7 +8,6 @@ import { SelectedAddresses } from '../../redux/contact/reducers';
 import {
   contactAlreadyExists,
   countContactsByType,
-  DISABLED_REASON,
   specialContactsAvailableAddressTypes,
 } from '../contacts.utility';
 
@@ -55,50 +54,7 @@ describe('Contacts utility test', () => {
     expect(result).toBe(false);
   });
 
-  it('test specialContactsAvailableAddressTypes function -> email enabled, sms disabled, pec and sercq hidden', () => {
-    const defaultEMAILAddress = digitalAddresses.find(
-      (addr) => addr.channelType === ChannelType.EMAIL && addr.senderId === 'default'
-    )!;
-    const result = specialContactsAvailableAddressTypes(
-      {
-        defaultEMAILAddress,
-        specialEMAILAddresses: [] as Array<DigitalAddress>,
-        specialPECAddresses: [] as Array<DigitalAddress>,
-        specialSERCQAddresses: [] as Array<DigitalAddress>,
-        specialSMSAddresses: [] as Array<DigitalAddress>,
-      } as SelectedAddresses,
-      { senderId: 'mocked-senderId' }
-    );
-
-    expect(result).toStrictEqual([
-      {
-        disabled: false,
-        disabledReason: DISABLED_REASON.NONE,
-        id: ChannelType.EMAIL,
-        shown: true,
-      },
-      {
-        disabled: true,
-        disabledReason: DISABLED_REASON.NO_DEFAULT,
-        id: ChannelType.SMS,
-        shown: true,
-      },
-      {
-        disabled: false,
-        disabledReason: DISABLED_REASON.NONE,
-        id: ChannelType.PEC,
-        shown: false,
-      },
-      {
-        disabled: false,
-        disabledReason: DISABLED_REASON.NONE,
-        id: ChannelType.SERCQ,
-        shown: false,
-      },
-    ]);
-  });
-
-  it('test specialContactsAvailableAddressTypes function -> email disabled, sms enabled, pec and sercq shown', () => {
+  it('test specialContactsAvailableAddressTypes function -> pec and sercq shown', () => {
     const defaultSMSAddress = digitalAddresses.find(
       (addr) => addr.channelType === ChannelType.SMS && addr.senderId === 'default'
     )!;
@@ -111,7 +67,7 @@ describe('Contacts utility test', () => {
         defaultSMSAddress,
         specialEMAILAddresses: [] as Array<DigitalAddress>,
         specialPECAddresses: [] as Array<DigitalAddress>,
-        specialSERCQAddresses: [] as Array<DigitalAddress>,
+        specialSERCQ_SENDAddresses: [] as Array<DigitalAddress>,
         specialSMSAddresses: [] as Array<DigitalAddress>,
       } as SelectedAddresses,
       { senderId: 'mocked-senderId' }
@@ -119,46 +75,42 @@ describe('Contacts utility test', () => {
 
     expect(result).toStrictEqual([
       {
-        disabled: true,
-        disabledReason: DISABLED_REASON.NO_DEFAULT,
+        disabled: false,
         id: ChannelType.EMAIL,
-        shown: true,
+        shown: false,
       },
       {
         disabled: false,
-        disabledReason: DISABLED_REASON.NONE,
         id: ChannelType.SMS,
-        shown: true,
+        shown: false,
       },
       {
         disabled: false,
-        disabledReason: DISABLED_REASON.NONE,
         id: ChannelType.PEC,
         shown: true,
       },
       {
         disabled: false,
-        disabledReason: DISABLED_REASON.NONE,
-        id: ChannelType.SERCQ,
+        id: ChannelType.SERCQ_SEND,
         shown: true,
       },
     ]);
   });
 
-  it('test specialContactsAvailableAddressTypes function -> email disabled, sms enabled, pec shown and sercq hidden', () => {
+  it('test specialContactsAvailableAddressTypes function -> pec shown and sercq hidden', () => {
     const defaultSMSAddress = digitalAddresses.find(
       (addr) => addr.channelType === ChannelType.SMS && addr.senderId === 'default'
     )!;
-    const defaultSERCQAddress = digitalAddressesSercq.find(
-      (addr) => addr.channelType === ChannelType.SERCQ && addr.senderId === 'default'
+    const defaultSERCQ_SENDAddress = digitalAddressesSercq.find(
+      (addr) => addr.channelType === ChannelType.SERCQ_SEND && addr.senderId === 'default'
     )!;
     const result = specialContactsAvailableAddressTypes(
       {
-        defaultSERCQAddress,
+        defaultSERCQ_SENDAddress,
         defaultSMSAddress,
         specialEMAILAddresses: [] as Array<DigitalAddress>,
         specialPECAddresses: [] as Array<DigitalAddress>,
-        specialSERCQAddresses: [] as Array<DigitalAddress>,
+        specialSERCQ_SENDAddresses: [] as Array<DigitalAddress>,
         specialSMSAddresses: [] as Array<DigitalAddress>,
       } as SelectedAddresses,
       { senderId: 'mocked-senderId' }
@@ -166,74 +118,66 @@ describe('Contacts utility test', () => {
 
     expect(result).toStrictEqual([
       {
-        disabled: true,
-        disabledReason: DISABLED_REASON.NO_DEFAULT,
+        disabled: false,
         id: ChannelType.EMAIL,
-        shown: true,
+        shown: false,
       },
       {
         disabled: false,
-        disabledReason: DISABLED_REASON.NONE,
         id: ChannelType.SMS,
-        shown: true,
+        shown: false,
       },
       {
         disabled: false,
-        disabledReason: DISABLED_REASON.NONE,
         id: ChannelType.PEC,
         shown: true,
       },
       {
         disabled: false,
-        disabledReason: DISABLED_REASON.NONE,
-        id: ChannelType.SERCQ,
+        id: ChannelType.SERCQ_SEND,
         shown: false,
       },
     ]);
   });
 
   it('test specialContactsAvailableAddressTypes function -> contact already added', () => {
-    const defaultEMAILAddress = digitalAddresses.find(
-      (addr) => addr.channelType === ChannelType.EMAIL && addr.senderId === 'default'
+    const defaultPECAddress = digitalAddresses.find(
+      (addr) => addr.channelType === ChannelType.PEC && addr.senderId === 'default'
     )!;
-    const specialEMAILAddress = digitalAddresses.find(
-      (addr) => addr.channelType === ChannelType.EMAIL && addr.senderId !== 'default'
+    const specialPECAddress = digitalAddresses.find(
+      (addr) => addr.channelType === ChannelType.PEC && addr.senderId !== 'default'
     )!;
     const result = specialContactsAvailableAddressTypes(
       {
-        defaultEMAILAddress,
-        specialEMAILAddresses: [specialEMAILAddress],
-        specialPECAddresses: [] as Array<DigitalAddress>,
-        specialSERCQAddresses: [] as Array<DigitalAddress>,
+        defaultPECAddress,
+        specialEMAILAddresses: [] as Array<DigitalAddress>,
+        specialPECAddresses: [specialPECAddress] as Array<DigitalAddress>,
+        specialSERCQ_SENDAddresses: [] as Array<DigitalAddress>,
         specialSMSAddresses: [] as Array<DigitalAddress>,
       } as SelectedAddresses,
-      { senderId: specialEMAILAddress.senderId }
+      { senderId: specialPECAddress.senderId }
     );
 
     expect(result).toStrictEqual([
       {
-        disabled: true,
-        disabledReason: DISABLED_REASON.ALREADY_ADDED,
+        disabled: false,
         id: ChannelType.EMAIL,
-        shown: true,
+        shown: false,
+      },
+      {
+        disabled: false,
+        id: ChannelType.SMS,
+        shown: false,
       },
       {
         disabled: true,
-        disabledReason: DISABLED_REASON.NO_DEFAULT,
-        id: ChannelType.SMS,
+        id: ChannelType.PEC,
         shown: true,
       },
       {
         disabled: false,
-        disabledReason: DISABLED_REASON.NONE,
-        id: ChannelType.PEC,
-        shown: false,
-      },
-      {
-        disabled: false,
-        disabledReason: DISABLED_REASON.NONE,
-        id: ChannelType.SERCQ,
-        shown: false,
+        id: ChannelType.SERCQ_SEND,
+        shown: true,
       },
     ]);
   });

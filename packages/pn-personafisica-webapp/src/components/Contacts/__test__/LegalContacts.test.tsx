@@ -28,7 +28,7 @@ describe('LegalContacts Component', async () => {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
     });
     expect(container).toHaveTextContent('legal-contacts.title');
-    expect(container).toHaveTextContent('legal-contacts.list');
+    expect(container).toHaveTextContent('legal-contacts.sub-title');
     const pecContact = getByTestId(`default_pecContact`);
     const pecInput = pecContact.querySelector(`[name="default_pec"]`);
     expect(pecInput).not.toBeInTheDocument();
@@ -46,20 +46,14 @@ describe('LegalContacts Component', async () => {
   });
 
   it('renders component - SERCQ enabled', async () => {
-    const { container, getByTestId } = render(<LegalContacts />, {
+    const { container, getByTestId, queryByTestId } = render(<LegalContacts />, {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddressesSercq } },
     });
     expect(container).toHaveTextContent('legal-contacts.title');
-    expect(container).toHaveTextContent('legal-contacts.list');
-    const pecContact = getByTestId(`default_pecContact`);
-    const pecInput = pecContact.querySelector(`[name="default_pec"]`);
-    expect(pecInput).toBeInTheDocument();
-    expect(pecInput).toHaveValue('');
-    const button = await waitFor(() =>
-      within(pecContact).getByRole('button', { name: 'button.conferma' })
-    );
-    expect(button).toBeDisabled();
-
+    expect(container).toHaveTextContent('legal-contacts.sub-title');
+    // check contacts
+    const pecContact = queryByTestId(`default_pecContact`);
+    expect(pecContact).not.toBeInTheDocument();
     const sercqSendContact = getByTestId(`default_sercqSendContact`);
     expect(sercqSendContact).toBeInTheDocument();
     expect(sercqSendContact).toHaveTextContent('legal-contacts.sercq-send-enabled');
@@ -72,7 +66,7 @@ describe('LegalContacts Component', async () => {
       preloadedState: { contactsState: { digitalAddresses: [] } },
     });
     expect(container).toHaveTextContent('legal-contacts.title');
-    expect(container).toHaveTextContent('legal-contacts.list');
+    expect(container).toHaveTextContent('legal-contacts.sub-title');
     // check contacts
     const pecContact = getByTestId(`default_pecContact`);
     const pecInput = pecContact.querySelector(`[name="default_pec"]`);
