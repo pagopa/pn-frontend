@@ -42,7 +42,7 @@ describe('DomicileBanner component', () => {
   it('renders the component - pec added', () => {
     const { container, getByTestId } = render(<DomicileBanner />, {
       preloadedState: {
-        generalInfoState: { defaultAddresses: [pecDefault], domicileBannerOpened: true },
+        generalInfoState: { digitalAddresses: [pecDefault], domicileBannerOpened: true },
       },
     });
     const dialog = getByTestId('addDomicileBanner');
@@ -57,7 +57,7 @@ describe('DomicileBanner component', () => {
     const { container, getByTestId } = render(<DomicileBanner />, {
       preloadedState: {
         generalInfoState: {
-          defaultAddresses: [pecDefault, emailDefault],
+          digitalAddresses: [pecDefault, emailDefault],
           domicileBannerOpened: true,
         },
       },
@@ -72,7 +72,7 @@ describe('DomicileBanner component', () => {
     const { container, getByTestId } = render(<DomicileBanner />, {
       preloadedState: {
         generalInfoState: {
-          defaultAddresses: [IODefault, emailDefault],
+          digitalAddresses: [IODefault, emailDefault],
           domicileBannerOpened: true,
         },
       },

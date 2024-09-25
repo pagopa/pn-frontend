@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -16,6 +16,7 @@ import { PFEventsType } from '../../models/PFEventsType';
 import {
   AddressType,
   ChannelType,
+  ContactOperation,
   ContactSource,
   IOAllowedValues,
   SERCQ_SEND_VALUE,
@@ -27,7 +28,7 @@ import {
   deleteAddress,
   getSercqSendTosPrivacyApproval,
 } from '../../redux/contact/actions';
-import { contactsSelectors } from '../../redux/contact/reducers';
+import { contactsSelectors, resetExternalEvent } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -275,6 +276,17 @@ const SercqSendContactItem: React.FC = () => {
       .catch(() => {});
   };
 
+  useEffect(() => {
+    if (
+      externalEvent &&
+      externalEvent.destination === ChannelType.SERCQ_SEND &&
+      externalEvent.operation === ContactOperation.ADD
+    ) {
+      handleActivation();
+      dispatch(resetExternalEvent());
+    }
+  }, [externalEvent]);
+
   return (
     <DigitalContactsCard
       title={
@@ -363,3 +375,9 @@ const SercqSendContactItem: React.FC = () => {
 };
 
 export default SercqSendContactItem;
+function handleActivation() {
+  throw new Error('Function not implemented.');
+}
+function dispatch(arg0: { payload: undefined; type: 'contactsSlice/resetExternalEvent' }) {
+  throw new Error('Function not implemented.');
+}

@@ -11,9 +11,14 @@ const generalInfoSlice = createSlice({
   initialState: {
     pendingDelegators: 0,
     delegators: [] as Array<Delegator>,
-    defaultAddresses: [] as Array<DigitalAddress>,
+    digitalAddresses: [] as Array<DigitalAddress>,
+    domicileBannerOpened: true,
   },
-  reducers: {},
+  reducers: {
+    closeDomicileBanner: (state) => {
+      state.domicileBannerOpened = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getSidemenuInformation.fulfilled, (state, action) => {
       state.pendingDelegators = action.payload.filter(
@@ -22,7 +27,7 @@ const generalInfoSlice = createSlice({
       state.delegators = action.payload.filter((delegator) => delegator.status !== 'pending');
     });
     builder.addCase(getDomicileInfo.fulfilled, (state, action) => {
-      state.defaultAddresses = action.payload;
+      state.digitalAddresses = action.payload;
     });
     builder.addCase(acceptMandate.fulfilled, (state) => {
       if (state.pendingDelegators > 0) {

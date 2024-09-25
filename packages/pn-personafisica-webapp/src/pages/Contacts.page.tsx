@@ -88,8 +88,6 @@ const Contacts = () => {
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
-        <DomicileBanner ref={domicileBannerTypeRef} />
-
         <TitleBox
           variantTitle="h4"
           title={t('title')}

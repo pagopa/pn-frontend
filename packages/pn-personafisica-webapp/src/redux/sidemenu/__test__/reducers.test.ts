@@ -12,7 +12,7 @@ import { closeDomicileBanner } from '../reducers';
 const initialState = {
   pendingDelegators: 0,
   delegators: [],
-  defaultAddresses: [],
+  digitalAddresses: [],
   domicileBannerOpened: true,
 };
 

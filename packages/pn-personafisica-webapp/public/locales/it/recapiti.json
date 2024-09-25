@@ -176,5 +176,16 @@
     "APPIO": "App IO",
     "SERCQ_SEND": "Domicilio Digitale",
     "add-icon-arialabel": "Aggiungi"
+  },
+  "domicile-banner": {
+    "no-sercq-send-title": "Vuoi ricevere le prossime notifiche solo in digitale?",
+    "no-sercq-send-description": "Attiva SEND come Domicilio Digitale e non preoccuparti più delle raccomandate cartacee.",
+    "no-courtesy-title": "Non perderti le comunicazioni importanti",
+    "no-courtesy-description": "Aggiungi un indirizzo email per ricevere un avviso quando hai una nuova notifica su SEND.",
+    "no-courtesy-sercq-send-title": "Non perderti le comunicazioni importanti",
+    "no-courtesy-sercq-send-description": "Attiva un recapito di cortesia per ricevere un avviso quando hai una nuova notifica sul tuo Domicilio Digitale SEND.",
+    "complete-configuration": "Completa la configurazione",
+    "confirm-email": "Conferma la tua email",
+    "complete-addresses": "Completa i recapiti"
   }
 }

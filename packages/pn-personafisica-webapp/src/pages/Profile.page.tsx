@@ -16,7 +16,9 @@ import {
 } from '@mui/material';
 import { TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 
+import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import { PFEventsType } from '../models/PFEventsType';
+import { ContactSource } from '../models/contacts';
 import { RECAPITI } from '../navigation/routes.const';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -44,6 +46,8 @@ const Profile = () => {
 
   return (
     <Box p={3}>
+      <DomicileBanner source={ContactSource.PROFILO} />
+
       <TitleBox
         variantTitle="h4"
         title={t('title', { ns: 'profilo' })}
