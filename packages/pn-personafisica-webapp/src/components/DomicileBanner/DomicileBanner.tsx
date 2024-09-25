@@ -39,18 +39,20 @@ const getOpenStatusFromSession = () => {
 const getDomicileData = (
   source: ContactSource,
   hasSercqSend: boolean,
-  hasCourtesyAddresses: boolean
+  hasCourtesyAddresses: boolean,
+  hasAppIO?: boolean
 ): DomicileBannerData | null => {
   const sessionClosed = getOpenStatusFromSession();
   if (source !== ContactSource.RECAPITI && !hasSercqSend && !sessionClosed) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     return {
       destination: ChannelType.SERCQ_SEND,
       operation: ContactOperation.ADD,
       severity: 'info',
       message: 'no-sercq-send',
       canBeClosed: true,
-      callToAction: 'complete-configuration',
+      callToAction: 'no-sercq-cta',
     };
   } else if (
     source !== ContactSource.RECAPITI &&
@@ -66,6 +68,20 @@ const getDomicileData = (
       message: 'no-courtesy',
       canBeClosed: false,
       callToAction: 'confirm-email',
+    };
+  } else if (
+    source !== ContactSource.RECAPITI &&
+    hasSercqSend &&
+    !hasAppIO &&
+    hasCourtesyAddresses
+  ) {
+    return {
+      destination: ChannelType.IOMSG,
+      operation: ContactOperation.SCROLL,
+      severity: 'info',
+      message: 'no-io',
+      canBeClosed: true,
+      callToAction: 'add-io',
     };
   } else if (hasSercqSend && !hasCourtesyAddresses) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -101,7 +117,7 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
 
   const handleClose = () => {
     dispatch(closeDomicileBanner());
-    // sessionStorage.setItem('domicileBannerClosed', 'true');
+    sessionStorage.setItem('domicileBannerClosed', 'true');
   };
 
   const handleClick = (destination?: ChannelType, operation?: ContactOperation) => {

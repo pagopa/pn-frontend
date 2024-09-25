@@ -24,7 +24,6 @@ const Contacts = () => {
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
   const [pageReady, setPageReady] = useState(false);
   const { LANDING_SITE_URL } = getConfiguration();
-  const domicileBannerTypeRef = useRef('');
 
   const showSpecialContactsSection = addressesData.legalAddresses.length > 0;
 
