@@ -101,7 +101,7 @@ const SercqSendContactItem: React.FC = () => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t(`legal-contacts.sercq-send-added-successfully`, { ns: 'recapiti' }),
+            message: t(`legal-contacts.sercq_send-added-successfully`, { ns: 'recapiti' }),
           })
         );
         if (hasCourtesy) {
@@ -208,7 +208,7 @@ const SercqSendContactItem: React.FC = () => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t(`legal-contacts.sercq-send-removed-successfully`, { ns: 'recapiti' }),
+            message: t(`legal-contacts.sercq_send-removed-successfully`, { ns: 'recapiti' }),
           })
         );
       })
@@ -216,12 +216,12 @@ const SercqSendContactItem: React.FC = () => {
   };
 
   useEffect(() => {
-    if (
-      externalEvent &&
-      externalEvent.destination === ChannelType.SERCQ_SEND &&
-      externalEvent.operation === ContactOperation.ADD
-    ) {
-      handleActivation();
+    if (externalEvent && externalEvent.destination === ChannelType.SERCQ_SEND) {
+      if (externalEvent.operation === ContactOperation.ADD) {
+        handleActivation();
+      } else if (externalEvent.operation === ContactOperation.ADD_COURTESY && !hasCourtesy) {
+        setModalOpen({ type: ModalType.COURTESY });
+      }
       dispatch(resetExternalEvent());
     }
   }, [externalEvent]);
