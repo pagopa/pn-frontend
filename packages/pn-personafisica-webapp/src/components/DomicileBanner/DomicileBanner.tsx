@@ -44,8 +44,8 @@ const getDomicileData = (
 ): DomicileBannerData | null => {
   const sessionClosed = getOpenStatusFromSession();
   if (source !== ContactSource.RECAPITI && !hasSercqSend && !sessionClosed) {
+    // ATTIVAZIONE DOMICILIO E RECAPITI (BANNER 1 PRIMO ACCESSO)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-
     return {
       destination: ChannelType.SERCQ_SEND,
       operation: ContactOperation.ADD,
@@ -55,6 +55,7 @@ const getDomicileData = (
       callToAction: 'no-sercq-cta',
     };
   } else if (
+    // ATTIVAZIONE DOMICILIO E RECAPITI  (BANNER 1 ACCESSO SUCCESSIVO)
     source !== ContactSource.RECAPITI &&
     !hasSercqSend &&
     sessionClosed &&
@@ -66,10 +67,11 @@ const getDomicileData = (
       operation: ContactOperation.SCROLL,
       severity: 'info',
       message: 'no-courtesy',
-      canBeClosed: false,
-      callToAction: 'confirm-email',
+      canBeClosed: true,
+      callToAction: 'complete-configuration',
     };
   } else if (
+    // AGGIUNTA APPIO  (BANNER 3)
     source !== ContactSource.RECAPITI &&
     hasSercqSend &&
     !hasAppIO &&
@@ -84,12 +86,13 @@ const getDomicileData = (
       callToAction: 'add-io',
     };
   } else if (hasSercqSend && !hasCourtesyAddresses) {
+    // AGGIUNTA RECAPIITI  (BANNER 2)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return {
       destination: ChannelType.EMAIL,
       operation: ContactOperation.SCROLL,
       severity: 'warning',
-      message: 'no-courtesy-sercq-send',
+      message: 'no-courtesy',
       canBeClosed: false,
       callToAction: source === ContactSource.RECAPITI ? undefined : 'complete-addresses',
     };
