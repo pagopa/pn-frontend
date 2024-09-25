@@ -10,6 +10,7 @@ import { setExternalEvent } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { closeDomicileBanner } from '../../redux/sidemenu/reducers';
 import { RootState } from '../../redux/store';
+import { getConfiguration } from '../../services/configuration.service';
 
 type Props = {
   source: ContactSource;
@@ -36,10 +37,11 @@ const getOpenStatusFromSession = () => {
 const getDomicileData = (
   source: ContactSource,
   hasSercqSend: boolean,
-  hasCourtesyAddresses: boolean
+  hasCourtesyAddresses: boolean,
+  dodDisabled: boolean
 ): DomicileBannerData | null => {
   const sessionClosed = getOpenStatusFromSession();
-  if (source !== ContactSource.RECAPITI && !hasSercqSend && !sessionClosed) {
+  if (!dodDisabled && source !== ContactSource.RECAPITI && !hasSercqSend && !sessionClosed) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return {
       destination: ChannelType.SERCQ_SEND,
@@ -51,8 +53,7 @@ const getDomicileData = (
     };
   } else if (
     source !== ContactSource.RECAPITI &&
-    !hasSercqSend &&
-    sessionClosed &&
+    ((!hasSercqSend && sessionClosed) || dodDisabled) &&
     !hasCourtesyAddresses
   ) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -64,7 +65,7 @@ const getDomicileData = (
       canBeClosed: false,
       callToAction: 'confirm-email',
     };
-  } else if (hasSercqSend && !hasCourtesyAddresses) {
+  } else if (!dodDisabled && hasSercqSend && !hasCourtesyAddresses) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return {
       destination: ChannelType.EMAIL,
@@ -83,6 +84,7 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
+  const { DOD_DISABLED } = getConfiguration();
 
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.generalInfoState.digitalAddresses
@@ -94,7 +96,8 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   const domicileBannerData: DomicileBannerData | null = getDomicileData(
     source,
     !!hasSercqSend,
-    hasCourtesyAddresses
+    hasCourtesyAddresses,
+    DOD_DISABLED
   );
 
   const handleClose = () => {
