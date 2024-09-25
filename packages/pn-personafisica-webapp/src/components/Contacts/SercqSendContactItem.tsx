@@ -269,7 +269,7 @@ const SercqSendContactItem: React.FC = () => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t(`legal-contacts.sercq-send-removed-successfully`, { ns: 'recapiti' }),
+            message: t(`legal-contacts.sercq_send-removed-successfully`, { ns: 'recapiti' }),
           })
         );
       })

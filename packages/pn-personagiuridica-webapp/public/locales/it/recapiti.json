@@ -48,7 +48,7 @@
     ],
     "sercq-send-info-pec-disclaimer": "Se hai già inserito una PEC tra i tuoi recapiti, il Domicilio Digitale la sostituisce come recapito a valore legale di SEND.",
     "sercq-send-info-tos-privacy": "Selezionando “Attiva” dichiari di aver letto e di accettare i <0>Termini del servizio</0> e l’<1>Informativa Privacy</1>.",
-    "sercq-send-added-successfully": "Domicilio Digitale attivato correttamente",
+    "sercq_send-added-successfully": "Domicilio Digitale attivato correttamente",
     "sercq-send-enabled": "SEND è il tuo Domicilio Digitale",
     "sercq-send-courtesy-title": "Scegli un recapito di cortesia",
     "sercq-send-courtesy-description": "Scegli il recapito che preferisci per ricevere un avviso quando ci sono nuove notifiche sul tuo Domicilio Digitale, così non <strong>rischi di perdere comunicazioni importanti</strong>.",
@@ -56,7 +56,7 @@
     "remove-sercq-send-message": "Non avrai più un recapito digitale a valore legale per le comunicazioni della Pubblica Amministrazione e potresti tornare a ricevere le notifiche in forma cartacea.",
     "block-remove-sercq-send-title": "Non è possibile disattivare il Domicilio Digitale",
     "block-remove-sercq-send-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Recapiti secondari”.",
-    "sercq-send-removed-successfully": "Domicilio Digitale disattivato correttamente",
+    "sercq_send-removed-successfully": "Domicilio Digitale disattivato correttamente",
     "sercq-send-pec": "Preferisci usare una PEC come recapito a valore legale?",
     "sercq-send-add-pec": "Inserisci PEC",
     "sercq-send-add-pec-description": "La PEC sostituirà il Domicilio Digitale come tuo recapito a valore legale di SEND. Il Domicilio Digitale verrà disattivato automaticamente."

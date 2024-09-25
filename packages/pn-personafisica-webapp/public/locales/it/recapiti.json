@@ -56,7 +56,7 @@
     "remove-sercq-send-message": "Non avrai più un recapito digitale a valore legale per le comunicazioni della Pubblica Amministrazione e potresti tornare a ricevere le notifiche in forma cartacea.",
     "block-remove-sercq-send-title": "Non è possibile disattivare il Domicilio Digitale",
     "block-remove-sercq-send-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Recapiti secondari”.",
-    "sercq-send-removed-successfully": "Domicilio Digitale disattivato correttamente",
+    "sercq_send-removed-successfully": "Domicilio Digitale disattivato correttamente",
     "sercq-send-io-title": "Collega l’app IO a SEND",
     "sercq-send-io-description": "Attiva il servizio SEND su IO per <strong>ricevere direttamente nell'app</strong> tutte le comunicazioni inviate al tuo Domicilio Digitale SEND.",
     "sercq-send-io-advantages": "Su IO potrai",
