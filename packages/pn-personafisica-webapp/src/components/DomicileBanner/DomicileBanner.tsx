@@ -44,7 +44,6 @@ const getDomicileData = (
 ): DomicileBannerData | null => {
   const sessionClosed = getOpenStatusFromSession();
   if (source !== ContactSource.RECAPITI && !hasSercqSend && !sessionClosed) {
-    // ATTIVAZIONE DOMICILIO E RECAPITI (BANNER 1 PRIMO ACCESSO)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return {
       destination: ChannelType.SERCQ_SEND,
@@ -55,7 +54,6 @@ const getDomicileData = (
       callToAction: 'no-sercq-cta',
     };
   } else if (
-    // ATTIVAZIONE DOMICILIO E RECAPITI  (BANNER 1 ACCESSO SUCCESSIVO)
     source !== ContactSource.RECAPITI &&
     !hasSercqSend &&
     sessionClosed &&
@@ -71,7 +69,6 @@ const getDomicileData = (
       callToAction: 'complete-configuration',
     };
   } else if (
-    // AGGIUNTA APPIO  (BANNER 3)
     source !== ContactSource.RECAPITI &&
     hasSercqSend &&
     !hasAppIO &&
@@ -86,7 +83,6 @@ const getDomicileData = (
       callToAction: 'add-io',
     };
   } else if (hasSercqSend && !hasCourtesyAddresses) {
-    // AGGIUNTA RECAPIITI  (BANNER 2)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return {
       destination: ChannelType.EMAIL,
@@ -120,7 +116,7 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
 
   const handleClose = () => {
     dispatch(closeDomicileBanner());
-    sessionStorage.setItem('domicileBannerClosed', 'true');
+    // sessionStorage.setItem('domicileBannerClosed', 'true');
   };
 
   const handleClick = (destination?: ChannelType, operation?: ContactOperation) => {

@@ -373,11 +373,4 @@ const SercqSendContactItem: React.FC = () => {
     </DigitalContactsCard>
   );
 };
-
 export default SercqSendContactItem;
-function handleActivation() {
-  throw new Error('Function not implemented.');
-}
-function dispatch(arg0: { payload: undefined; type: 'contactsSlice/resetExternalEvent' }) {
-  throw new Error('Function not implemented.');
-}
