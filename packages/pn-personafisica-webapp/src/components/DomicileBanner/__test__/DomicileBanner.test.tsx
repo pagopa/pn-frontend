@@ -26,9 +26,6 @@ const sercqSendDefault = digitalAddressesSercq.find(
 const emailDefault = digitalCourtesyAddresses.find(
   (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.EMAIL
 );
-// const IODefault = digitalCourtesyAddresses.find(
-//   (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.IOMSG
-// );
 
 describe('DomicileBanner component', () => {
   afterEach(() => {
@@ -56,28 +53,29 @@ describe('DomicileBanner component', () => {
     });
   });
 
-  // it('renders the component - no SERCQ SEND enabled - banner closed', () => {
-  //   sessionStorage.setItem('domicileBannerClosed', 'true');
-  //   const { container, getByTestId, getByText, queryByTestId } = render(
-  //     <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />
-  //   );
-  //   const dialog = getByTestId('addDomicileBanner');
-  //   expect(dialog).toBeInTheDocument();
-  //   expect(container).toHaveTextContent('domicile-banner.no-courtesy-title');
-  //   expect(container).toHaveTextContent('domicile-banner.no-courtesy-description');
-  //   const closeButton = queryByTestId('CloseIcon');
-  //   expect(closeButton).not.toBeInTheDocument();
-  //   const button = getByText('domicile-banner.confirm-email');
-  //   fireEvent.click(button);
-  //   expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-  //   expect(mockNavigateFn).toHaveBeenCalledWith(routes.RECAPITI);
-  //   expect(testStore.getState().contactsState.event).toStrictEqual({
-  //     destination: ChannelType.EMAIL,
-  //     source: ContactSource.HOME_NOTIFICHE,
-  //     operation: ContactOperation.SCROLL,
-  //   });
-  //   sessionStorage.removeItem('domicileBannerClosed');
-  // });
+  it('renders the component - no SERCQ SEND enabled - banner closed', () => {
+    sessionStorage.setItem('domicileBannerClosed', 'true');
+    const { container, getByTestId, getByText, queryByTestId } = render(
+      <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />
+    );
+    const dialog = getByTestId('addDomicileBanner');
+    expect(dialog).toBeInTheDocument();
+    expect(container).toHaveTextContent('domicile-banner.no-courtesy-title');
+    expect(container).toHaveTextContent('domicile-banner.no-courtesy-description');
+    const closeButton = queryByTestId('CloseIcon');
+    expect(closeButton).not.toBeInTheDocument();
+
+    const button = getByText('domicile-banner.complete-configuration');
+    fireEvent.click(button);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(routes.RECAPITI);
+    expect(testStore.getState().contactsState.event).toStrictEqual({
+      destination: ChannelType.EMAIL,
+      source: ContactSource.HOME_NOTIFICHE,
+      operation: ContactOperation.SCROLL,
+    });
+    sessionStorage.removeItem('domicileBannerClosed');
+  });
 
   it('renders the component - SERCQ SEND enabled, no courtesy address', () => {
     const { container, getByTestId, getByText, queryByTestId } = render(

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Alert, AlertColor, Box, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-// import { PFEventsType } from '../../models/PFEventsType';
+import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, ChannelType, ContactOperation, ContactSource } from '../../models/contacts';
 import * as routes from '../../navigation/routes.const';
 import { setExternalEvent } from '../../redux/contact/reducers';
@@ -12,8 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { closeDomicileBanner } from '../../redux/sidemenu/reducers';
 import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
-
-// import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 
 type Props = {
   source: ContactSource;
@@ -104,6 +103,7 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
   const { DOD_DISABLED } = getConfiguration();
+
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.generalInfoState.digitalAddresses
   );
@@ -127,6 +127,7 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
     if (destination && operation) {
       dispatch(setExternalEvent({ destination, source, operation }));
     }
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, { source });
     navigate(routes.RECAPITI);
   };
 
