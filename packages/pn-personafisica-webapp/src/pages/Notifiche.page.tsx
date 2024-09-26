@@ -15,7 +15,6 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
-// import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
@@ -114,7 +113,7 @@ const Notifiche = () => {
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
-        <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />
+        {!mandateId && <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />}
         <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
         <ApiErrorWrapper
           apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}

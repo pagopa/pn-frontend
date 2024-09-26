@@ -146,7 +146,7 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
             onClick={() =>
               handleClick(domicileBannerData?.destination, domicileBannerData?.operation)
             }
-            sx={{ mt: '12px', fontSize: '1rem', fontWeight: 700 }}
+            sx={{ mt: '12px', fontSize: '1rem', fontWeight: 700, textAlign: 'left' }}
           >
             {t(`domicile-banner.${domicileBannerData.callToAction}`)}
           </ButtonNaked>

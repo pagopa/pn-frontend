@@ -468,7 +468,10 @@ const NotificationDetail: React.FC = () => {
                     {t('detail.cancelled-alert-text', { ns: 'notifiche' })}
                   </Alert>
                 )}
-                {!mandateId && <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />}
+
+                {!isMobile && !mandateId && (
+                  <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
+                )}
 
                 <NotificationDetailTable rows={detailTableRows} />
                 <Paper sx={{ p: 3 }} elevation={0}>
@@ -538,6 +541,9 @@ const NotificationDetail: React.FC = () => {
               </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>
+              {isMobile && !mandateId && (
+                <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
+              )}
               <Box
                 component="section"
                 sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
