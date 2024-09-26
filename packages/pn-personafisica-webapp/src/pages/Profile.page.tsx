@@ -39,7 +39,7 @@ const Profile = () => {
 
   const handleRedirectToContactsPage = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, {
-      source: 'profilo',
+      source: ContactSource.PROFILO,
     });
     navigate(RECAPITI);
   };
