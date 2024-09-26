@@ -49,7 +49,7 @@ const getDomicileData = (
       severity: 'info',
       message: 'no-sercq-send',
       canBeClosed: true,
-      callToAction: 'complete-configuration',
+      callToAction: 'no-sercq-cta',
     };
   } else if (
     source !== ContactSource.RECAPITI &&
@@ -63,7 +63,7 @@ const getDomicileData = (
       severity: 'info',
       message: 'no-courtesy',
       canBeClosed: false,
-      callToAction: 'confirm-email',
+      callToAction: 'complete-configuration',
     };
   } else if (!dodDisabled && hasSercqSend && !hasCourtesyAddresses) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -71,7 +71,7 @@ const getDomicileData = (
       destination: ChannelType.EMAIL,
       operation: ContactOperation.SCROLL,
       severity: 'warning',
-      message: 'no-courtesy-sercq-send',
+      message: 'no-courtesy',
       canBeClosed: false,
       callToAction: source === ContactSource.RECAPITI ? undefined : 'complete-addresses',
     };

@@ -41,7 +41,7 @@ describe('DomicileBanner component', () => {
     expect(container).toHaveTextContent('domicile-banner.no-sercq-send-description');
     const closeButton = getByTestId('CloseIcon');
     expect(closeButton).toBeInTheDocument();
-    const button = getByText('domicile-banner.complete-configuration');
+    const button = getByText('domicile-banner.no-sercq-cta');
     fireEvent.click(button);
     expect(mockNavigateFn).toHaveBeenCalledTimes(1);
     expect(mockNavigateFn).toHaveBeenCalledWith(routes.RECAPITI);
@@ -63,7 +63,7 @@ describe('DomicileBanner component', () => {
     expect(container).toHaveTextContent('domicile-banner.no-courtesy-description');
     const closeButton = queryByTestId('CloseIcon');
     expect(closeButton).not.toBeInTheDocument();
-    const button = getByText('domicile-banner.confirm-email');
+    const button = getByText('domicile-banner.complete-configuration');
     fireEvent.click(button);
     expect(mockNavigateFn).toHaveBeenCalledTimes(1);
     expect(mockNavigateFn).toHaveBeenCalledWith(routes.RECAPITI);
@@ -86,8 +86,8 @@ describe('DomicileBanner component', () => {
     );
     const dialog = getByTestId('addDomicileBanner');
     expect(dialog).toBeInTheDocument();
-    expect(container).toHaveTextContent('domicile-banner.no-courtesy-sercq-send-title');
-    expect(container).toHaveTextContent('domicile-banner.no-courtesy-sercq-send-description');
+    expect(container).toHaveTextContent('domicile-banner.no-courtesy-title');
+    expect(container).toHaveTextContent('domicile-banner.no-courtesy-description');
     const closeButton = queryByTestId('CloseIcon');
     expect(closeButton).not.toBeInTheDocument();
     const button = getByText('domicile-banner.complete-addresses');
@@ -112,8 +112,8 @@ describe('DomicileBanner component', () => {
     );
     const dialog = getByTestId('addDomicileBanner');
     expect(dialog).toBeInTheDocument();
-    expect(container).toHaveTextContent('domicile-banner.no-courtesy-sercq-send-title');
-    expect(container).toHaveTextContent('domicile-banner.no-courtesy-sercq-send-description');
+    expect(container).toHaveTextContent('domicile-banner.no-courtesy-title');
+    expect(container).toHaveTextContent('domicile-banner.no-courtesy-description');
     const closeButton = queryByTestId('CloseIcon');
     expect(closeButton).not.toBeInTheDocument();
     const button = queryByText('domicile-banner.complete-addresses');
