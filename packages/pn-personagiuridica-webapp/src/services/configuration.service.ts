@@ -22,6 +22,7 @@ interface PgConfigurationFromFile {
   WORK_IN_PROGRESS?: boolean;
   F24_DOWNLOAD_WAIT_TIME: number;
   DOD_DISABLED: boolean;
+  IS_B2B_ENABLED: boolean;
 }
 
 interface PgConfiguration extends PgConfigurationFromFile {
@@ -44,6 +45,7 @@ interface PgConfiguration extends PgConfigurationFromFile {
   DELEGATIONS_TO_PG_ENABLED: boolean;
   WORK_IN_PROGRESS: boolean;
   F24_DOWNLOAD_WAIT_TIME: number;
+  IS_B2B_ENABLED: boolean;
 }
 
 class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
@@ -65,6 +67,7 @@ class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
     this.ruleFor('WORK_IN_PROGRESS').isBoolean();
     this.ruleFor('F24_DOWNLOAD_WAIT_TIME').isNumber();
     this.ruleFor('DOD_DISABLED').isBoolean();
+    this.ruleFor('IS_B2B_ENABLED').isBoolean();
   }
 }
 
@@ -93,6 +96,7 @@ export function getConfiguration(): PgConfiguration {
     DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED),
     WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
     F24_DOWNLOAD_WAIT_TIME: configurationFromFile.F24_DOWNLOAD_WAIT_TIME || 0,
+    IS_B2B_ENABLED: Boolean(configurationFromFile.IS_B2B_ENABLED),
   };
 }
 
