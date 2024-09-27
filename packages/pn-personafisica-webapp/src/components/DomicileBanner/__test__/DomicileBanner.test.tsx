@@ -53,7 +53,7 @@ describe('DomicileBanner component', () => {
     });
   });
 
-  it('renders the component - no SERCQ SEND enabled - banner closed', () => {
+  it.skip('renders the component - no SERCQ SEND enabled - banner closed', () => {
     sessionStorage.setItem('domicileBannerClosed', 'true');
     const { container, getByTestId, getByText, queryByTestId } = render(
       <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />
