@@ -59,8 +59,8 @@ describe('DomicileBanner component', () => {
     );
     const dialog = getByTestId('addDomicileBanner');
     expect(dialog).toBeInTheDocument();
-    expect(container).toHaveTextContent('domicile-banner.no-courtesy-title');
-    expect(container).toHaveTextContent('domicile-banner.no-courtesy-description');
+    expect(container).toHaveTextContent('domicile-banner.no-courtesy-no-sercq-send-title');
+    expect(container).toHaveTextContent('domicile-banner.no-courtesy-no-sercq-send-description');
     const closeButton = queryByTestId('CloseIcon');
     expect(closeButton).not.toBeInTheDocument();
     const button = getByText('domicile-banner.no-courtesy-no-sercq-send-cta');
