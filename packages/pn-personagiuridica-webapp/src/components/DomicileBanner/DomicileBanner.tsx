@@ -61,9 +61,9 @@ const getDomicileData = (
       destination: ChannelType.EMAIL,
       operation: ContactOperation.SCROLL,
       severity: 'info',
-      message: 'no-courtesy',
+      message: 'no-courtesy-no-sercq-send',
       canBeClosed: false,
-      callToAction: 'complete-configuration',
+      callToAction: 'no-courtesy-no-sercq-send-cta',
     };
   } else if (!dodDisabled && hasSercqSend && !hasCourtesyAddresses) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

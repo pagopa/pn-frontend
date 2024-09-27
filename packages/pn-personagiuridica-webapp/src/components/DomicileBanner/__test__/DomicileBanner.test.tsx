@@ -63,7 +63,7 @@ describe('DomicileBanner component', () => {
     expect(container).toHaveTextContent('domicile-banner.no-courtesy-description');
     const closeButton = queryByTestId('CloseIcon');
     expect(closeButton).not.toBeInTheDocument();
-    const button = getByText('domicile-banner.complete-configuration');
+    const button = getByText('domicile-banner.no-courtesy-no-sercq-send-cta');
     fireEvent.click(button);
     expect(mockNavigateFn).toHaveBeenCalledTimes(1);
     expect(mockNavigateFn).toHaveBeenCalledWith(routes.RECAPITI);
