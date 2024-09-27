@@ -58,9 +58,6 @@
     "show-history": "Verlauf anzeigen",
     "show-more": "Mehr Details anzeigen",
     "show-less": "Weniger Details anzeigen",
-    "domicile_PEC": "Hast du eine PEC-Adresse? Füge sie hinzu und du bekommst keine Einschreiben mehr in Papierform.",
-    "domicile_EMAIL": "Füge deine E-Mail-Adresse hinzu: Wir senden dir eine Nachricht, wenn du einen Bescheid erhältst.",
-    "domicile_APPIO": "Hast du die IO-App? Aktiviere den Dienst „Notifiche Digitali“, um Bescheide direkt in der App anzuzeigen und zu bezahlen.",
     "cancelled-alert-text": "Dieser Bescheid wurde von der absendenden Körperschaft storniert. Du kannst den Inhalt ignorieren.",
     "disclaimer-link": "Mehr erfahren",
     "payment": {

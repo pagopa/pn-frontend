@@ -53,15 +53,15 @@ describe('DomicileBanner component', () => {
     });
   });
 
-  it.skip('renders the component - no SERCQ SEND enabled - banner closed', () => {
+  it('renders the component - no SERCQ SEND enabled - banner closed', () => {
     sessionStorage.setItem('domicileBannerClosed', 'true');
     const { container, getByTestId, getByText, queryByTestId } = render(
       <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />
     );
     const dialog = getByTestId('addDomicileBanner');
     expect(dialog).toBeInTheDocument();
-    expect(container).toHaveTextContent('domicile-banner.no-courtesy-title');
-    expect(container).toHaveTextContent('domicile-banner.no-courtesy-description');
+    expect(container).toHaveTextContent('domicile-banner.no-courtesy-no-sercq-sendtitle');
+    expect(container).toHaveTextContent('domicile-banner.no-courtesy-no-sercq-senddescription');
     const closeButton = queryByTestId('CloseIcon');
     expect(closeButton).not.toBeInTheDocument();
 

@@ -64,9 +64,9 @@ const getDomicileData = (
       destination: ChannelType.EMAIL,
       operation: ContactOperation.SCROLL,
       severity: 'info',
-      message: 'no-courtesy',
-      canBeClosed: true,
-      callToAction: 'complete-configuration',
+      message: 'no-courtesy-no-sercq-send',
+      canBeClosed: false,
+      callToAction: 'no-courtesy-no-sercq-send-cta',
     };
   } else if (
     !dodDisabled &&
@@ -109,12 +109,14 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   );
 
   const hasSercqSend = digitalAddresses.find((addr) => addr.channelType === ChannelType.SERCQ_SEND);
+  const hasAppIO = digitalAddresses.find((addr) => addr.channelType === ChannelType.IOMSG);
   const hasCourtesyAddresses =
     digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY).length > 0;
   const domicileBannerData: DomicileBannerData | null = getDomicileData(
     source,
     !!hasSercqSend,
     hasCourtesyAddresses,
+    !!hasAppIO,
     DOD_DISABLED
   );
 

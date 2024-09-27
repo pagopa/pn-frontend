@@ -58,9 +58,6 @@
     "show-history": "Show history",
     "show-more": "View more details",
     "show-less": "View less details",
-    "domicile_PEC": "Do you have a PEC address? Add it and you will no longer receive registered mail.",
-    "domicile_EMAIL": "Add your email address – we'll send you a message every time you get a notification.",
-    "domicile_APPIO": "Do you have the IO app? Activate the \"Notifiche Digitali\" service to view and pay for notifications directly in the app.",
     "cancelled-alert-text": "This notification has been cancelled by the sending organisation. You can ignore the content.",
     "disclaimer-link": "Find out more",
     "payment": {
