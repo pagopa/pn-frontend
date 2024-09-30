@@ -5,7 +5,13 @@ import { Alert, AlertColor, Box, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { AddressType, ChannelType, ContactOperation, ContactSource } from '../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  ContactOperation,
+  ContactSource,
+  IOAllowedValues,
+} from '../../models/contacts';
 import * as routes from '../../navigation/routes.const';
 import { setExternalEvent } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -110,7 +116,7 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
 
   const hasSercqSend = digitalAddresses.find((addr) => addr.channelType === ChannelType.SERCQ_SEND);
   const hasAppIO = digitalAddresses.find(
-    (addr) => addr.channelType === ChannelType.IOMSG && addr.value !== 'DISABLED'
+    (addr) => addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.ENABLED
   );
   const hasCourtesyAddresses =
     digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY).length > 0;
