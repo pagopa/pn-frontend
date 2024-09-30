@@ -32,16 +32,16 @@ export enum VIRTUAL_APIKEYS_ACTIONS {
   UPDATE_VIRTUAL_APIKEY_STATUS = 'updateVirtualApiKeyStatus',
 }
 
-export const getPublicKeys = createAsyncThunk<PublicKeys, GetApiKeysParams>(
+export const getPublicKeys = createAsyncThunk<PublicKeys, GetApiKeysParams | undefined>(
   PUBLIC_APIKEYS_ACTIONS.GET_PUBLIC_APIKEYS,
   async (params, { rejectWithValue }) => {
     try {
       const apiKeysFactory = PublicKeysApiFactory(undefined, undefined, apiClient);
       const response = await apiKeysFactory.getPublicKeysV1(
-        params.limit,
-        params.lastkey,
-        params.createdAte,
-        params.showPublicKey
+        params?.limit,
+        params?.lastKey,
+        params?.createdAt,
+        params?.showPublicKey
       );
 
       return response.data as PublicKeys;
@@ -127,16 +127,16 @@ export const checkPublicKeyIssuer = createAsyncThunk<CheckIssuerStatus>(
 );
 
 // -- VIRTUAL API KEYS
-export const getVirtualApiKeys = createAsyncThunk<VirtualKeys, GetApiKeysParams>(
+export const getVirtualApiKeys = createAsyncThunk<VirtualKeys, GetApiKeysParams | undefined>(
   VIRTUAL_APIKEYS_ACTIONS.GET_VIRTUAL_APIKEYS,
   async (params, { rejectWithValue }) => {
     try {
       const apiKeysFactory = VirtualKeysApiFactory(undefined, undefined, apiClient);
       const response = await apiKeysFactory.getVirtualKeysV1(
-        params.limit,
-        params.lastkey,
-        params.createdAte,
-        params.showPublicKey
+        params?.limit,
+        params?.lastKey,
+        params?.createdAt,
+        params?.showPublicKey
       );
 
       return response.data as VirtualKeys;

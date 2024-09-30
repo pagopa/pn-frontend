@@ -19,8 +19,8 @@ type initialStateType = {
   loading: boolean;
   publicKeys: PublicKeys;
   virtualKeys: VirtualKeys;
-  publicKey: PublicKeyBaseParams;
-  virtualKey: VirtualKeyBaseParams;
+  publicKey: PublicKeyBaseParams | null;
+  virtualKey: VirtualKeyBaseParams | null;
   issuerStatus: CheckIssuerStatus | null;
 };
 
@@ -29,17 +29,13 @@ const initialState: initialStateType = {
   publicKeys: {
     items: [],
     total: 0,
-    createdAt: '',
-    lastKey: '',
-  } as PublicKeys,
+  },
   virtualKeys: {
     items: [],
     total: 0,
-    createdAt: '',
-    lastKey: '',
-  } as VirtualKeys,
-  publicKey: {} as PublicKeyBaseParams,
-  virtualKey: {} as VirtualKeyBaseParams,
+  },
+  publicKey: null,
+  virtualKey: null,
   issuerStatus: null,
 };
 

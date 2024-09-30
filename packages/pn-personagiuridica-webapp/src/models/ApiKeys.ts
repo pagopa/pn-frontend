@@ -1,4 +1,4 @@
-enum ApiKeyStatus {
+export enum ApiKeyStatus {
   CREATED = 'CREATED',
   ACTIVE = 'ACTIVE',
   ROTATED = 'ROTATED',
@@ -11,11 +11,11 @@ enum ApiKeyActions {
   ENABLE = 'ENABLE',
 }
 
-enum ApiKeyAlgorithm {
+export enum ApiKeyAlgorithm {
   RS256 = 'RS256',
 }
 
-enum IssuerStatus {
+export enum IssuerStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
 }
@@ -30,19 +30,19 @@ export type VirtualKeyBaseParams = {
   virtualKey: string;
 };
 
-type ApiKeysResponseDetails = {
-  lastKey: string;
-  createdAt: string;
-  total: number;
-};
-
 export type PublicKeys = {
   items: Array<PublicKey>;
-} & ApiKeysResponseDetails;
+  lastKey?: string;
+  createdAt?: string;
+  total?: number;
+};
 
 export type VirtualKeys = {
   items: Array<VirtualKey>;
-} & ApiKeysResponseDetails;
+  lastKey?: string;
+  lastUpdate?: string;
+  total?: number;
+};
 
 type PublicKey = {
   name: string;
@@ -80,8 +80,8 @@ export type CheckIssuerStatus = {
 
 export type GetApiKeysParams = {
   limit?: number;
-  lastkey?: string;
-  createdAte?: string;
+  lastKey?: string;
+  createdAt?: string;
   showPublicKey?: boolean;
 };
 
