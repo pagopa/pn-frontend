@@ -78,7 +78,7 @@ const PecValueDialog: React.FC<Props> = ({ open, onConfirm, onDiscard }) => {
           {t('button.annulla')}
         </Button>
         <Button onClick={formik.submitForm} variant="contained" disabled={!formik.isValid}>
-          {t('button.attiva')}
+          {t('button.conferma')}
         </Button>
       </PnDialogActions>
     </PnDialog>
