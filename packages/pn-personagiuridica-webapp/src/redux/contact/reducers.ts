@@ -2,7 +2,7 @@ import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 
 import { AddressType, ChannelType, DigitalAddress, ExternalEvent } from '../../models/contacts';
 import { Party } from '../../models/party';
-import { addressesRelationships } from '../../utility/contacts.utility';
+import { removeAddress, updateAddressesList } from '../../utility/contacts.utility';
 import { RootState } from '../store';
 import {
   createOrUpdateAddress,
@@ -51,28 +51,21 @@ const contactsSlice = createSlice({
     });
     builder.addCase(createOrUpdateAddress.fulfilled, (state, action) => {
       if (action.payload) {
-        const relation = addressesRelationships.find(
-          (rel) => rel.channelType === action.meta.arg.channelType
+        updateAddressesList(
+          action.meta.arg.addressType,
+          action.meta.arg.channelType,
+          action.meta.arg.senderId,
+          state.digitalAddresses,
+          action.payload
         );
-        const addressIndex = state.digitalAddresses.findIndex(
-          (l) =>
-            l.senderId === action.meta.arg.senderId &&
-            l.addressType === action.meta.arg.addressType &&
-            relation?.relationWith.includes(l.channelType)
-        );
-        if (addressIndex > -1) {
-          state.digitalAddresses[addressIndex] = action.payload;
-        } else {
-          state.digitalAddresses.push(action.payload);
-        }
       }
     });
     builder.addCase(deleteAddress.fulfilled, (state, action) => {
-      state.digitalAddresses = state.digitalAddresses.filter(
-        (address) =>
-          address.senderId !== action.meta.arg.senderId ||
-          address.addressType !== action.meta.arg.addressType ||
-          address.channelType !== action.meta.arg.channelType
+      state.digitalAddresses = removeAddress(
+        action.meta.arg.addressType,
+        action.meta.arg.channelType,
+        action.meta.arg.senderId,
+        state.digitalAddresses
       );
     });
     builder.addCase(getAllActivatedParties.fulfilled, (state, action) => {
