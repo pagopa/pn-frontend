@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Divider, Stack, Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 import { appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
