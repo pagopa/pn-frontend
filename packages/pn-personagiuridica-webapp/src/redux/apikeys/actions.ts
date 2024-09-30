@@ -117,7 +117,7 @@ export const checkPublicKeyIssuer = createAsyncThunk<CheckIssuerStatus>(
   async (_, { rejectWithValue }) => {
     try {
       const apiKeysFactory = PublicKeysApiFactory(undefined, undefined, apiClient);
-      const response = await apiKeysFactory.getIssuerStatusPublicKeyV1();
+      const response = await apiKeysFactory.checkIssuerPublicKeyV1();
 
       return response.data as CheckIssuerStatus;
     } catch (e: any) {

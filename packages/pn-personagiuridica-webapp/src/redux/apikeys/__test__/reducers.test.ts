@@ -99,7 +99,7 @@ describe('api keys redux state test', () => {
   });
 
   it('should be able to fetch virtual api keys list', async () => {
-    mock.onGet('/bff/v1/virtual-keys').reply(200, virtualKeys);
+    mock.onGet('/bff/v1/pg/virtual-keys').reply(200, virtualKeys);
     const action = await store.dispatch(getVirtualApiKeys());
     const payload = action.payload;
     expect(action.type).toBe('getVirtualApiKeys/fulfilled');
@@ -113,7 +113,7 @@ describe('api keys redux state test', () => {
       virtualKey: 'virtual-key-test',
     };
 
-    mock.onPost('/bff/v1/virtual-keys').reply(200, newVirtualKey);
+    mock.onPost('/bff/v1/pg/virtual-keys').reply(200, newVirtualKey);
     const action = await store.dispatch(createVirtualApiKey({ name: 'test' }));
     const payload = action.payload;
     expect(action.type).toBe('createVirtualApiKey/fulfilled');

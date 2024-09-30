@@ -83,7 +83,7 @@
       },
       "bff-pg-apikeys": {
         "generatorName": "typescript-axios",
-        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/da593dfdca10d1e84e41b820d57a78c970ed96c5/docs/openapi/api-external-pn-bff-pg-apikeys.yaml",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/99f5094b0490281f9307be54458c98b74768521e/docs/openapi/api-external-pn-bff-pg-apikeys.yaml",
         "output": "./src/generated-client/pg-apikeys",
         "additionalProperties": {
           "supportsES6": true,
