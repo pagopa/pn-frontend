@@ -18,14 +18,10 @@ const initialState = {
   publicKeys: {
     items: [],
     total: 0,
-    createdAt: '',
-    lastKey: '',
   },
   virtualKeys: {
     items: [],
     total: 0,
-    lastUpdate: '',
-    lastKey: '',
   },
   publicKey: null,
   virtualKey: null,
