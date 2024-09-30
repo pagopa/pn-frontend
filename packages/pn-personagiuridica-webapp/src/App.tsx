@@ -9,6 +9,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
+import SettingsEthernet from '@mui/icons-material/SettingsEthernet';
 import { Box } from '@mui/material';
 import {
   AppMessage,
@@ -62,8 +63,10 @@ const App = () => {
   return isInitialized ? <ActualApp /> : <div />;
 };
 
+// eslint-disable-next-line complexity
 const ActualApp = () => {
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION, SELFCARE_BASE_URL } = getConfiguration();
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION, SELFCARE_BASE_URL, IS_B2B_ENABLED } =
+    getConfiguration();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
@@ -197,6 +200,15 @@ const ActualApp = () => {
       label: t('menu.contacts'),
       icon: MarkunreadMailboxIcon,
       route: routes.RECAPITI,
+    });
+  }
+
+  if (IS_B2B_ENABLED) {
+    /* eslint-disable-next-line functional/immutable-data */
+    menuItems.splice(3, 0, {
+      label: t('menu.integrazione-api'),
+      icon: SettingsEthernet,
+      route: routes.INTEGRAZIONE_API,
     });
   }
 

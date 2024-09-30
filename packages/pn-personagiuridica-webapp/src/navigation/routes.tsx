@@ -12,6 +12,7 @@ import {
 
 import DelegatesByCompany from '../components/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../components/Deleghe/DelegationsOfTheCompany';
+import ApiIntegration from '../pages/ApiIntegration.page';
 import { PNRole } from '../redux/auth/types';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -39,6 +40,8 @@ const handleAssistanceClick = () => {
 function Router() {
   const { organization, hasGroup } = useAppSelector((state: RootState) => state.userState.user);
   const currentRoles = organization?.roles ? organization.roles.map((role) => role.role) : [];
+  const { IS_B2B_ENABLED } = getConfiguration();
+
   return (
     <Suspense fallback={<LoadingPage />}>
       <Routes>
@@ -127,6 +130,19 @@ function Router() {
                       redirectTo={<NotFound />}
                     >
                       <Contacts />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path={routes.INTEGRAZIONE_API}
+                  element={
+                    <PrivateRoute
+                      currentRoles={[]}
+                      requiredRoles={[]}
+                      additionalCondition={IS_B2B_ENABLED}
+                      redirectTo={<NotFound />}
+                    >
+                      <ApiIntegration />
                     </PrivateRoute>
                   }
                 />
