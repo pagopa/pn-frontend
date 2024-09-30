@@ -157,7 +157,7 @@ const PecContactItem: React.FC = () => {
           inputProps={{
             label: t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' }),
           }}
-          insertButtonLabel={t('button.conferma')}
+          insertButtonLabel={t('button.attiva')}
           onSubmit={handleSubmit}
           onDelete={() => {
             setModalOpen(ModalType.DELETE);

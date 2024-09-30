@@ -31,7 +31,7 @@ describe('PecVerificationDialog Component', () => {
     expect(bodyEl).toBeInTheDocument();
     expect(bodyEl).toHaveTextContent('legal-contacts.sercq-send-add-pec-description');
     await testInput(dialog, `default_modal_pec`, '');
-    const confirmButton = screen.getByText('button.conferma');
+    const confirmButton = screen.getByText('button.attiva');
     expect(confirmButton).toBeInTheDocument();
     expect(confirmButton).toBeDisabled();
     const cancelButton = screen.getByText('button.annulla');

@@ -65,9 +65,9 @@
     "show-more": "Vedi più dettagli",
     "show-less": "Vedi meno dettagli",
     "add_domicile_PEC": "Aggiungi PEC",
-    "add_domicile_EMAIL": "Aggiungi e-mail",
+    "add_domicile_EMAIL": "Aggiungi email",
     "domicile_PEC": "Hai un indirizzo PEC? Aggiungilo e non riceverai più le raccomandate cartacee.",
-    "domicile_EMAIL": "Aggiungi il tuo indirizzo e-mail: ti invieremo un messaggio ogni volta che ricevi una notifica.",
+    "domicile_EMAIL": "Aggiungi il tuo indirizzo email: ti invieremo un messaggio ogni volta che ricevi una notifica.",
     "cancelled-alert-text": "Questa notifica è stata annullata dall’ente mittente. Puoi ignorarne il contenuto.",
     "disclaimer-link": "Scopri di più",
     "payment": {
