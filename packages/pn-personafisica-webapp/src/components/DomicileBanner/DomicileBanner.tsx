@@ -76,7 +76,7 @@ const getDomicileData = (
     hasCourtesyAddresses
   ) {
     return {
-      destination: ChannelType.IOMSG,
+      destination: ChannelType.EMAIL,
       operation: ContactOperation.SCROLL,
       severity: 'info',
       message: 'no-io',
