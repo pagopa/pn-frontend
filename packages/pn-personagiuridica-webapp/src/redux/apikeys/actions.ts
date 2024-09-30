@@ -2,24 +2,38 @@ import { parseError } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
-import { PublicKeysApiFactory } from '../../generated-client/pg-apikeys';
+import { PublicKeysApiFactory, VirtualKeysApiFactory } from '../../generated-client/pg-apikeys';
 import {
-  GetPublicKeysParams,
-  NewApiKeyRequest,
+  CheckIssuerStatus,
+  GetApiKeysParams,
+  NewPublicApiKeyRequest,
+  NewVirtualApiKeyRequest,
   PublicKeyBaseParams,
   PublicKeys,
+  RotateApiKeyRequest,
   UpdateApiKeyStatusRequest,
+  VirtualKeyBaseParams,
+  VirtualKeys,
 } from '../../models/ApiKeys';
 
-export enum APIKEYS_ACTIONS {
-  GET_PUBLIC_KEYS = 'getPublicKeys',
-  CREATE_PUBLIC_KEY = 'createPublicKey',
-  DELETE_PUBLIC_KEY = 'deletePublicKey',
-  UPDATE_PUBLIC_KEY = 'updatePublicKey',
+export enum PUBLIC_APIKEYS_ACTIONS {
+  GET_PUBLIC_APIKEYS = 'getPublicApiKeys',
+  CREATE_PUBLIC_APIKEY = 'createPublicApiKey',
+  DELETE_PUBLIC_APIKEY = 'deletePublicApiKey',
+  UPDATE_PUBLIC_APIKEY_STATUS = 'updatePublicApiKeyStatus',
+  ROTATE_PUBLIC_APIKEY = 'rotatePublicApiKey',
+  CHECK_PUBLIC_APIKEY_ISSUER = 'checkPublicApiKeyIssuer',
 }
 
-export const getPublicKeys = createAsyncThunk<PublicKeys, GetPublicKeysParams>(
-  APIKEYS_ACTIONS.GET_PUBLIC_KEYS,
+export enum VIRTUAL_APIKEYS_ACTIONS {
+  GET_VIRTUAL_APIKEYS = 'getVirtualApiKeys',
+  CREATE_VIRTUAL_APIKEY = 'createVirtualApiKey',
+  DELETE_VIRTUAL_APIKEY = 'deleteVirtualApiKey',
+  UPDATE_VIRTUAL_APIKEY_STATUS = 'updateVirtualApiKeyStatus',
+}
+
+export const getPublicKeys = createAsyncThunk<PublicKeys, GetApiKeysParams>(
+  PUBLIC_APIKEYS_ACTIONS.GET_PUBLIC_APIKEYS,
   async (params, { rejectWithValue }) => {
     try {
       const apiKeysFactory = PublicKeysApiFactory(undefined, undefined, apiClient);
@@ -37,8 +51,8 @@ export const getPublicKeys = createAsyncThunk<PublicKeys, GetPublicKeysParams>(
   }
 );
 
-export const createPublicKey = createAsyncThunk<PublicKeyBaseParams, NewApiKeyRequest>(
-  APIKEYS_ACTIONS.CREATE_PUBLIC_KEY,
+export const createPublicKey = createAsyncThunk<PublicKeyBaseParams, NewPublicApiKeyRequest>(
+  PUBLIC_APIKEYS_ACTIONS.CREATE_PUBLIC_APIKEY,
   async (params, { rejectWithValue }) => {
     try {
       const apiKeysFactory = PublicKeysApiFactory(undefined, undefined, apiClient);
@@ -52,7 +66,7 @@ export const createPublicKey = createAsyncThunk<PublicKeyBaseParams, NewApiKeyRe
 );
 
 export const deletePublicKey = createAsyncThunk<void, string>(
-  APIKEYS_ACTIONS.DELETE_PUBLIC_KEY,
+  PUBLIC_APIKEYS_ACTIONS.DELETE_PUBLIC_APIKEY,
   async (params, { rejectWithValue }) => {
     try {
       const apiKeysFactory = PublicKeysApiFactory(undefined, undefined, apiClient);
@@ -66,11 +80,108 @@ export const deletePublicKey = createAsyncThunk<void, string>(
 );
 
 export const updatePublicKeyStatus = createAsyncThunk<void, UpdateApiKeyStatusRequest>(
-  APIKEYS_ACTIONS.UPDATE_PUBLIC_KEY,
+  PUBLIC_APIKEYS_ACTIONS.UPDATE_PUBLIC_APIKEY_STATUS,
   async (params, { rejectWithValue }) => {
     try {
       const apiKeysFactory = PublicKeysApiFactory(undefined, undefined, apiClient);
       const response = await apiKeysFactory.changeStatusPublicKeyV1(params.kid, params.status);
+
+      return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+export const rotatePublicKey = createAsyncThunk<PublicKeyBaseParams, RotateApiKeyRequest>(
+  PUBLIC_APIKEYS_ACTIONS.ROTATE_PUBLIC_APIKEY,
+  async (params, { rejectWithValue }) => {
+    try {
+      const apiKeysFactory = PublicKeysApiFactory(undefined, undefined, apiClient);
+      const response = await apiKeysFactory.rotatePublicKeyV1(params.kid, {
+        name: params.name,
+        publicKey: params.publicKey,
+        exponent: params.exponent,
+        algorithm: params.algorithm,
+      });
+
+      return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+export const checkPublicKeyIssuer = createAsyncThunk<CheckIssuerStatus>(
+  PUBLIC_APIKEYS_ACTIONS.CHECK_PUBLIC_APIKEY_ISSUER,
+  async (_, { rejectWithValue }) => {
+    try {
+      const apiKeysFactory = PublicKeysApiFactory(undefined, undefined, apiClient);
+      const response = await apiKeysFactory.getIssuerStatusPublicKeyV1();
+
+      return response.data as CheckIssuerStatus;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+// -- VIRTUAL API KEYS
+export const getVirtualApiKeys = createAsyncThunk<VirtualKeys, GetApiKeysParams>(
+  VIRTUAL_APIKEYS_ACTIONS.GET_VIRTUAL_APIKEYS,
+  async (params, { rejectWithValue }) => {
+    try {
+      const apiKeysFactory = VirtualKeysApiFactory(undefined, undefined, apiClient);
+      const response = await apiKeysFactory.getVirtualKeysV1(
+        params.limit,
+        params.lastkey,
+        params.createdAte,
+        params.showPublicKey
+      );
+
+      return response.data as VirtualKeys;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+export const createVirtualApiKey = createAsyncThunk<VirtualKeyBaseParams, NewVirtualApiKeyRequest>(
+  VIRTUAL_APIKEYS_ACTIONS.CREATE_VIRTUAL_APIKEY,
+  async (params, { rejectWithValue }) => {
+    try {
+      const apiKeysFactory = VirtualKeysApiFactory(undefined, undefined, apiClient);
+      const response = await apiKeysFactory.newVirtualKeyV1(params);
+
+      return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+export const deleteVirtualApiKey = createAsyncThunk<void, string>(
+  VIRTUAL_APIKEYS_ACTIONS.DELETE_VIRTUAL_APIKEY,
+  async (params, { rejectWithValue }) => {
+    try {
+      const apiKeysFactory = VirtualKeysApiFactory(undefined, undefined, apiClient);
+      const response = await apiKeysFactory.deleteVirtualKeyV1(params);
+
+      return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+export const updateVirtualApiKeyStatus = createAsyncThunk<void, UpdateApiKeyStatusRequest>(
+  VIRTUAL_APIKEYS_ACTIONS.UPDATE_VIRTUAL_APIKEY_STATUS,
+  async (params, { rejectWithValue }) => {
+    try {
+      const apiKeysFactory = VirtualKeysApiFactory(undefined, undefined, apiClient);
+      const response = await apiKeysFactory.changeStatusVirtualKeysV1(params.kid, {
+        status: params.status,
+      });
 
       return response.data;
     } catch (e: any) {
