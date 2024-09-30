@@ -14,5 +14,6 @@
   "LANDING_SITE_URL": "https://www.test.notifichedigitali.it",
   "DELEGATIONS_TO_PG_ENABLED": true,
   "WORK_IN_PROGRESS": false,
-  "F24_DOWNLOAD_WAIT_TIME": 15000
+  "F24_DOWNLOAD_WAIT_TIME": 15000,
+  "IS_B2B_ENABLED": false
 }
