@@ -395,7 +395,7 @@ describe('PecContactItem component', () => {
     const dialog = await waitFor(() => result.getByTestId('pecValueDialog'));
     expect(dialog).toBeInTheDocument();
     await testInput(dialog, `default_modal_pec`, VALID_PEC);
-    const confirmButton = screen.getByText('button.attiva');
+    const confirmButton = screen.getByText('button.conferma');
     expect(confirmButton).toBeEnabled();
     fireEvent.click(confirmButton);
     await waitFor(() => {
