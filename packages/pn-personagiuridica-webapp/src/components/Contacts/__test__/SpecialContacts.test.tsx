@@ -73,9 +73,7 @@ describe('SpecialContacts Component', async () => {
     const button = within(container).getByTestId('addSpecialContactButton');
     expect(button).toBeInTheDocument();
     // contacts list
-    const specialContactForms = getAllByTestId(
-      /^[a-zA-Z0-9\-]+(?:_pecContact|_sercq_sendContact)$/
-    );
+    const specialContactForms = getAllByTestId(/^[a-zA-Z0-9-]+(?:_pecContact|_sercq_sendContact)$/);
     expect(specialContactForms).toHaveLength(specialAddresses.length);
     specialAddresses.forEach((addr) => {
       const addressItem = getByTestId(`${addr.senderId}_${addr.channelType.toLowerCase()}Contact`);
@@ -127,16 +125,16 @@ describe('SpecialContacts Component', async () => {
     expect(addSpecialContactDialog).toBeInTheDocument();
 
     // change sender
-    await testAutocomplete(addSpecialContactDialog!, 'sender', parties, true, 2, true);
+    await testAutocomplete(addSpecialContactDialog, 'sender', parties, true, 2, true);
     // change addressType
     await testSelect(
-      addSpecialContactDialog!,
+      addSpecialContactDialog,
       'channelType',
       channelTypesItems,
       channelTypesItems.findIndex((item) => item.value === ChannelType.PEC)
     );
     // change pec
-    await testInput(addSpecialContactDialog!, 's_value', pecValue);
+    await testInput(addSpecialContactDialog, 's_value', pecValue);
 
     const confirmButton = within(addSpecialContactDialog).getByText('button.associa');
     fireEvent.click(confirmButton);
@@ -190,7 +188,7 @@ describe('SpecialContacts Component', async () => {
     await waitFor(() => {
       // contacts list
       const specialContactForms = result.getAllByTestId(
-        /^[a-zA-Z0-9\-]+(?:_pecContact|_sercq_sendContact)$/
+        /^[a-zA-Z0-9-]+(?:_pecContact|_sercq_sendContact)$/
       );
       expect(specialContactForms).toHaveLength(specialAddresses.length + 1);
     });
@@ -219,7 +217,7 @@ describe('SpecialContacts Component', async () => {
     // ATTENTION: the order in the mock is very important
     // change pec
     const specialContactForms = result.getAllByTestId(
-      /^[a-zA-Z0-9\-]+(?:_pecContact|_sercq_sendContact)$/
+      /^[a-zA-Z0-9-]+(?:_pecContact|_sercq_sendContact)$/
     );
     const editButton = within(specialContactForms[0]).getByRole('button', {
       name: 'button.modifica',
@@ -230,7 +228,7 @@ describe('SpecialContacts Component', async () => {
     );
     expect(addSpecialContactDialog).toBeInTheDocument();
     const input = getById(addSpecialContactDialog, 's_value');
-    fireEvent.change(input!, { target: { value: pecValue } });
+    fireEvent.change(input, { target: { value: pecValue } });
     const senderInput = getById(addSpecialContactDialog, 'sender');
     expect(senderInput).toBeDisabled();
     const associaButton = within(addSpecialContactDialog).getByText('button.associa');
@@ -276,7 +274,7 @@ describe('SpecialContacts Component', async () => {
     await waitFor(() => {
       // contacts list
       const specialContactForms = result.getAllByTestId(
-        /^[a-zA-Z0-9\-]+(?:_pecContact|_sercq_sendContact)$/
+        /^[a-zA-Z0-9-]+(?:_pecContact|_sercq_sendContact)$/
       );
       expect(specialContactForms[0]).toHaveTextContent(pecValue);
     });
@@ -291,9 +289,7 @@ describe('SpecialContacts Component', async () => {
     });
     // ATTENTION: the order in the mock is very important
     // delete mail
-    const specialContactForms = getAllByTestId(
-      /^[a-zA-Z0-9\-]+(?:_pecContact|_sercq_sendContact)$/
-    );
+    const specialContactForms = getAllByTestId(/^[a-zA-Z0-9-]+(?:_pecContact|_sercq_sendContact)$/);
     const deleteButton = within(specialContactForms[0]).getByRole('button', {
       name: 'button.elimina',
     });
@@ -315,7 +311,7 @@ describe('SpecialContacts Component', async () => {
     await waitFor(() => {
       // contacts list
       const specialContactForms = getAllByTestId(
-        /^[a-zA-Z0-9\-]+(?:_pecContact|_sercq_sendContact)$/
+        /^[a-zA-Z0-9-]+(?:_pecContact|_sercq_sendContact)$/
       );
       expect(specialContactForms).toHaveLength(specialAddresses.length - 1);
     });
@@ -336,16 +332,16 @@ describe('SpecialContacts Component', async () => {
     );
     expect(addSpecialContactDialog).toBeInTheDocument();
     // change sender
-    await testAutocomplete(addSpecialContactDialog!, 'sender', parties, true, 1, true);
+    await testAutocomplete(addSpecialContactDialog, 'sender', parties, true, 1, true);
     // change addressType
     await testSelect(
-      addSpecialContactDialog!,
+      addSpecialContactDialog,
       'channelType',
       channelTypesItems,
       channelTypesItems.findIndex((item) => item.value === ChannelType.PEC)
     );
     // change pec
-    await testInput(addSpecialContactDialog!, 's_value', pecValue);
+    await testInput(addSpecialContactDialog, 's_value', pecValue);
 
     const confirmButton = within(addSpecialContactDialog).getByText('button.associa');
     fireEvent.click(confirmButton);
