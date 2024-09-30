@@ -109,7 +109,9 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   );
 
   const hasSercqSend = digitalAddresses.find((addr) => addr.channelType === ChannelType.SERCQ_SEND);
-  const hasAppIO = digitalAddresses.find((addr) => addr.channelType === ChannelType.IOMSG);
+  const hasAppIO = digitalAddresses.find(
+    (addr) => addr.channelType === ChannelType.IOMSG && addr.value !== 'DISABLED'
+  );
   const hasCourtesyAddresses =
     digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY).length > 0;
   const domicileBannerData: DomicileBannerData | null = getDomicileData(
