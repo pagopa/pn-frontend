@@ -47,7 +47,7 @@ const getDomicileData = (
   hasSercqSend: boolean,
   hasCourtesyAddresses: boolean,
   dodDisabled: boolean,
-  hasAppIO?: boolean
+  hasAppIODisabled?: boolean
 ): DomicileBannerData | null => {
   const sessionClosed = getOpenStatusFromSession();
   if (!dodDisabled && source !== ContactSource.RECAPITI && !hasSercqSend && !sessionClosed) {
@@ -78,7 +78,7 @@ const getDomicileData = (
     !dodDisabled &&
     source !== ContactSource.RECAPITI &&
     hasSercqSend &&
-    !hasAppIO &&
+    hasAppIODisabled &&
     hasCourtesyAddresses
   ) {
     return {
@@ -115,16 +115,17 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   );
 
   const hasSercqSend = digitalAddresses.find((addr) => addr.channelType === ChannelType.SERCQ_SEND);
-  const hasAppIO = digitalAddresses.find(
-    (addr) => addr.channelType === ChannelType.IOMSG && addr.value !== IOAllowedValues.DISABLED
+  const hasAppIODisabled = digitalAddresses.find(
+    (addr) => addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.DISABLED
   );
+
   const hasCourtesyAddresses =
     digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY).length > 0;
   const domicileBannerData: DomicileBannerData | null = getDomicileData(
     source,
     !!hasSercqSend,
     hasCourtesyAddresses,
-    !!hasAppIO,
+    !!hasAppIODisabled,
     DOD_DISABLED
   );
 
