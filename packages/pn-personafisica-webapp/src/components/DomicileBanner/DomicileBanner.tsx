@@ -120,7 +120,9 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   );
 
   const hasCourtesyAddresses =
-    digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY).length > 0;
+    digitalAddresses.filter(
+      (addr) => addr.addressType === AddressType.COURTESY && addr.channelType !== ChannelType.IOMSG
+    ).length > 0;
   const domicileBannerData: DomicileBannerData | null = getDomicileData(
     source,
     !!hasSercqSend,
