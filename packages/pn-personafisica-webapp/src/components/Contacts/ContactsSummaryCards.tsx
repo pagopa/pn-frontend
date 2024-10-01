@@ -27,12 +27,12 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
   addressType,
 }) => {
   const { t } = useTranslation('recapiti');
-  const hasAddress =
-    contacts.filter(
-      (contact) =>
-        contact.channelType !== ChannelType.IOMSG ||
-        (contact.channelType === ChannelType.IOMSG && contact.value === IOAllowedValues.ENABLED)
-    ).length > 0;
+  const availableAddresses = contacts.filter(
+    (contact) =>
+      contact.channelType !== ChannelType.IOMSG ||
+      (contact.channelType === ChannelType.IOMSG && contact.value === IOAllowedValues.ENABLED)
+  );
+  const hasAddress = availableAddresses.length > 0;
   const isCourtesyCard = addressType === AddressType.COURTESY;
   const title = isCourtesyCard ? 'summary-card.courtesy-title' : 'summary-card.legal-title';
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
@@ -54,7 +54,7 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
       return t('summary-card.no-address');
     }
 
-    const contactsType = contacts.reduce((acc, item) => {
+    const contactsType = availableAddresses.reduce((acc, item) => {
       // eslint-disable-next-line functional/immutable-data
       acc[item.channelType] = t(`summary-card.${item.channelType}`);
       return acc;
