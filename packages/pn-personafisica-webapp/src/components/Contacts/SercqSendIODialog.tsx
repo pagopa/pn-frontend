@@ -98,7 +98,7 @@ const SercqSendIODialog: React.FC<Props> = ({ open, onDiscard }) => {
           {t('button.not-now')}
         </Button>
         <Button onClick={handleConfirm} variant="contained">
-          {t('button.conferma')}
+          {t('button.attiva')}
         </Button>
       </PnDialogActions>
     </PnDialog>

@@ -172,7 +172,7 @@ const PecContactItem: React.FC = () => {
       {defaultSERCQ_SENDAddress && (
         <>
           <Divider sx={{ color: 'text.secondary' }} />
-          <Typography mt={2} variant="body2" color="text.secondary" display="inline-flex">
+          <Typography mt={2} variant="body2" color="text.secondary">
             {t('legal-contacts.sercq-send-pec', { ns: 'recapiti' })}
           </Typography>
           <ButtonNaked color={'primary'} size="medium" onClick={handlePecAdd}>
