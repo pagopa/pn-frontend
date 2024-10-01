@@ -63,10 +63,6 @@
     "show-history": "Show history",
     "show-more": "View more details",
     "show-less": "View fewer details",
-    "add_domicile_PEC": "Add PEC (PEC address)",
-    "add_domicile_EMAIL": "Add email",
-    "domicile_PEC": "Do you have a PEC (PEC address)? Add it to stop receiving paper mail.",
-    "domicile_EMAIL": "Add your email address – we'll send you a message every time you get a notification.",
     "cancelled-alert-text": "This notification has been cancelled by the sending organisation. You can ignore the content.",
     "disclaimer-link": "Learn more",
     "payment": {
