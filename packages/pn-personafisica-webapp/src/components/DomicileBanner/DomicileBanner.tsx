@@ -46,8 +46,8 @@ const getDomicileData = (
   source: ContactSource,
   hasSercqSend: boolean,
   hasCourtesyAddresses: boolean,
-  dodDisabled: boolean,
-  hasAppIODisabled?: boolean
+  hasAppIODisabled: boolean,
+  dodDisabled: boolean
 ): DomicileBannerData | null => {
   const sessionClosed = getOpenStatusFromSession();
   if (!dodDisabled && source !== ContactSource.RECAPITI && !hasSercqSend && !sessionClosed) {
