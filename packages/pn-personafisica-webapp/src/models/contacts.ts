@@ -27,6 +27,7 @@ export enum ContactSource {
 
 export enum ContactOperation {
   ADD = 'ADD',
+  ADD_COURTESY = 'ADD_COURTESY',
   SCROLL = 'SCROLL',
 }
 

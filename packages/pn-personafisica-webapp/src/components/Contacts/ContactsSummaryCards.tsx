@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AddCircleOutline, Verified, WarningOutlined } from '@mui/icons-material';
 import { Card, CardActionArea, Stack, Typography } from '@mui/material';
 
-import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
-import { contactsSelectors } from '../../redux/contact/reducers';
-import { useAppSelector } from '../../redux/hooks';
+import {
+  AddressType,
+  ChannelType,
+  ContactOperation,
+  DigitalAddress,
+  IOAllowedValues,
+} from '../../models/contacts';
+import { contactsSelectors, resetExternalEvent } from '../../redux/contact/reducers';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 
 type ContactsSummaryCardProps = {
   contacts: Array<DigitalAddress>;
@@ -20,14 +27,16 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
   addressType,
 }) => {
   const { t } = useTranslation('recapiti');
-  const hasAddress =
-    contacts.filter(
-      (contact) =>
-        contact.channelType !== ChannelType.IOMSG ||
-        (contact.channelType === ChannelType.IOMSG && contact.value === IOAllowedValues.ENABLED)
-    ).length > 0;
+  const availableAddresses = contacts.filter(
+    (contact) =>
+      contact.channelType !== ChannelType.IOMSG ||
+      (contact.channelType === ChannelType.IOMSG && contact.value === IOAllowedValues.ENABLED)
+  );
+  const hasAddress = availableAddresses.length > 0;
   const isCourtesyCard = addressType === AddressType.COURTESY;
   const title = isCourtesyCard ? 'summary-card.courtesy-title' : 'summary-card.legal-title';
+  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
+  const dispatch = useAppDispatch();
 
   const getIcon = () => {
     if (!hasAddress) {
@@ -45,7 +54,7 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
       return t('summary-card.no-address');
     }
 
-    const contactsType = contacts.reduce((acc, item) => {
+    const contactsType = availableAddresses.reduce((acc, item) => {
       // eslint-disable-next-line functional/immutable-data
       acc[item.channelType] = t(`summary-card.${item.channelType}`);
       return acc;
@@ -61,6 +70,17 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
     document.getElementById(titleId)?.focus({ preventScroll: true });
   };
+  useEffect(() => {
+    if (
+      externalEvent &&
+      externalEvent.destination === ChannelType.EMAIL &&
+      externalEvent.operation === ContactOperation.SCROLL &&
+      isCourtesyCard
+    ) {
+      goToSection();
+      dispatch(resetExternalEvent());
+    }
+  }, [externalEvent]);
 
   return (
     <Card

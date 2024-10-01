@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AddCircleOutline, Verified, WarningOutlined } from '@mui/icons-material';
 import { Card, CardActionArea, Stack, Typography } from '@mui/material';
 
-import { AddressType, DigitalAddress } from '../../models/contacts';
-import { contactsSelectors } from '../../redux/contact/reducers';
-import { useAppSelector } from '../../redux/hooks';
+import { AddressType, ChannelType, ContactOperation, DigitalAddress } from '../../models/contacts';
+import { contactsSelectors, resetExternalEvent } from '../../redux/contact/reducers';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 
 type ContactsSummaryCardProps = {
   contacts: Array<DigitalAddress>;
@@ -23,6 +24,8 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
   const hasAddress = contacts.length > 0;
   const isCourtesyCard = addressType === AddressType.COURTESY;
   const title = isCourtesyCard ? 'summary-card.courtesy-title' : 'summary-card.legal-title';
+  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
+  const dispatch = useAppDispatch();
 
   const getIcon = () => {
     if (!hasAddress) {
@@ -56,6 +59,18 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
     document.getElementById(titleId)?.focus({ preventScroll: true });
   };
+
+  useEffect(() => {
+    if (
+      externalEvent &&
+      externalEvent.destination === ChannelType.EMAIL &&
+      externalEvent.operation === ContactOperation.SCROLL &&
+      isCourtesyCard
+    ) {
+      goToSection();
+      dispatch(resetExternalEvent());
+    }
+  }, [externalEvent]);
 
   return (
     <Card
