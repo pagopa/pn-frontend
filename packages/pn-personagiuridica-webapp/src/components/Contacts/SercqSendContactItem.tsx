@@ -64,14 +64,17 @@ const SercqSendContactItem: React.FC = () => {
   const isMobile = useIsMobile();
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
-  const { defaultSERCQ_SENDAddress, courtesyAddresses, specialPECAddresses } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const {
+    defaultSERCQ_SENDAddress,
+    courtesyAddresses,
+    specialPECAddresses,
+    specialSERCQ_SENDAddresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
   const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
 
   const value = defaultSERCQ_SENDAddress?.value ?? '';
   const hasCourtesy = courtesyAddresses.length > 0;
-  const blockDelete = specialPECAddresses.length > 0;
+  const blockDelete = specialPECAddresses.length > 0 || specialSERCQ_SENDAddresses.length > 0;
 
   const handleActivation = () => {
     dispatch(getSercqSendTosPrivacyApproval())
