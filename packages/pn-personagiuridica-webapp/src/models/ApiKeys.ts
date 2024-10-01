@@ -44,7 +44,7 @@ export type VirtualKeys = {
   total?: number;
 };
 
-type PublicKey = {
+export type PublicKey = {
   name: string;
   value: string;
   createdAt: string;
@@ -64,7 +64,7 @@ type VirtualKey = {
   status: ApiKeyStatus;
 };
 
-type StatusHistoryApikey = {
+export type StatusHistoryApikey = {
   status: ApiKeyStatus;
   date: string;
   changedByDenomination: string;
@@ -104,3 +104,13 @@ export type RotateApiKeyRequest = {
 export type NewVirtualApiKeyRequest = {
   name: string;
 };
+
+export type PublicKeysColumnData = PublicKey & { menu: string };
+
+export enum ModalApiKeyView {
+  NONE = 'NONE',
+  VIEW = 'VIEW',
+  BLOCK = 'BLOCK',
+  ROTATE = 'ROTATE',
+  DELETE = 'DELETE',
+}
