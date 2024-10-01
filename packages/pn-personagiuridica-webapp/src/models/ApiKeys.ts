@@ -6,7 +6,7 @@ export enum ApiKeyStatus {
   DELETED = 'DELETED',
 }
 
-enum ApiKeyActions {
+export enum ApiKeyActions {
   BLOCK = 'BLOCK',
   ENABLE = 'ENABLE',
 }

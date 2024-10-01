@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Block } from '@mui/icons-material';
+import { Block, Delete } from '@mui/icons-material';
 import { Box, Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
@@ -12,8 +12,13 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
-import { ModalApiKeyView, PublicKey } from '../../models/ApiKeys';
-import { PUBLIC_APIKEYS_ACTIONS, getPublicKeys } from '../../redux/apikeys/actions';
+import { ApiKeyActions, ApiKeyStatus, ModalApiKeyView, PublicKey } from '../../models/ApiKeys';
+import {
+  PUBLIC_APIKEYS_ACTIONS,
+  changePublicKeyStatus,
+  deletePublicKey,
+  getPublicKeys,
+} from '../../redux/apikeys/actions';
 import { PNRole } from '../../redux/auth/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -58,6 +63,7 @@ const PublicKeys: React.FC = () => {
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
 
   const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
+  const hasOneActiveKey = publicKeys.items.some((key) => key.status === ApiKeyStatus.ACTIVE);
 
   const handleModalClick = (view: ModalApiKeyView, publicKeyId: number) => {
     setModal({ view, publicKey: publicKeys.items[publicKeyId] });
@@ -75,6 +81,18 @@ const PublicKeys: React.FC = () => {
     fetchPublicKeys();
   }, []);
 
+  const blockPublicKey = (publicKeyId: string) => {
+    handleCloseModal();
+    void dispatch(changePublicKeyStatus({ kid: publicKeyId, status: ApiKeyActions.BLOCK })).then(
+      fetchPublicKeys
+    );
+  };
+
+  const deleteApiKey = (publicKeyId: string) => {
+    handleCloseModal();
+    void dispatch(deletePublicKey(publicKeyId)).then(fetchPublicKeys);
+  };
+
   return (
     <Box mt={5}>
       <Box
@@ -88,7 +106,7 @@ const PublicKeys: React.FC = () => {
         <Typography variant="h6" sx={{ marginBottom: isMobile ? 3 : undefined }}>
           {t('publicKeys.title')}
         </Typography>
-        {isAdminWithoutGroups && (
+        {isAdminWithoutGroups && !hasOneActiveKey && (
           <Button
             id="generate-public-key"
             data-testid="generatePublicKey"
@@ -141,8 +159,19 @@ const PublicKeys: React.FC = () => {
               closeButtonLabel={t('cancel-button')}
               closeModalHandler={handleCloseModal}
               actionButtonLabel={t('block-button')}
-              // actionHandler={() => apiKeyBlocked(modal.apiKey?.id as string)}
               buttonIcon={<Block fontSize="small" sx={{ mr: 1 }} />}
+              actionHandler={() => blockPublicKey(modal.publicKey?.kid as string)}
+            />
+          )}
+          {modal.view === ModalApiKeyView.DELETE && (
+            <ApiKeyModal
+              title={t('publicKeys.delete-title')}
+              subTitle={t('publicKeys.delete-subtitle')}
+              closeButtonLabel={t('cancel-button')}
+              closeModalHandler={handleCloseModal}
+              actionButtonLabel={t('delete-button')}
+              buttonIcon={<Delete fontSize="small" sx={{ mr: 1 }} />}
+              actionHandler={() => deleteApiKey(modal.publicKey?.kid as string)}
             />
           )}
         </Box>

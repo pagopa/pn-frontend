@@ -5,6 +5,7 @@
   "close-button": "Chiudi",
   "cancel-button": "Annulla",
   "block-button": "Blocca",
+  "delete-button": "Elimina",
   "error-fecth-public-api-keys": "Errore durante il recupero delle chiavi pubbliche",
   "status": {
     "enabled": "Attiva",
@@ -46,6 +47,8 @@
     "view-subtitle": "Copia i codici di cui hai bisogno.",
     "block-title": "Blocca chiave",
     "block-subtitle": "Se blocchi la chiave, qualsiasi richiesta effettuata attraverso di essa avrà esito negativo.",
-    "block-warning": "Puoi attivarla di nuovo in qualsiasi momento."
+    "block-warning": "Puoi attivarla di nuovo in qualsiasi momento.",
+    "delete-title": "Elimina chiave",
+    "delete-subtitle": "Se elimini definitivamente la chiave, questa non potrà essere nuovamente attivata e utilizzata."
   }
 }

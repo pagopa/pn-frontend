@@ -56,6 +56,11 @@ const ApiKeyModal = ({
           data-testid="action-modal-button"
           variant="contained"
           onClick={actionHandler}
+          // sx={{
+          //   color: 'white',
+          //   backgroundColor: 'error.dark',
+          //   ':hover': { backgroundColor: 'error.main' },
+          // }}
         >
           {buttonIcon}
           {actionButtonLabel}
