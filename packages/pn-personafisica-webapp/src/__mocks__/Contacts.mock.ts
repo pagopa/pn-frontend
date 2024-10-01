@@ -51,6 +51,12 @@ export const digitalAddresses: Array<DigitalAddress> = [
     channelType: ChannelType.IOMSG,
     value: IOAllowedValues.DISABLED,
   },
+  {
+    addressType: AddressType.COURTESY,
+    senderId: 'default',
+    channelType: ChannelType.IOMSG,
+    value: IOAllowedValues.ENABLED,
+  },
 ];
 
 export const digitalAddressesSercq: Array<DigitalAddress> = [
