@@ -20,7 +20,7 @@ export enum PUBLIC_APIKEYS_ACTIONS {
   GET_PUBLIC_APIKEYS = 'getPublicApiKeys',
   CREATE_PUBLIC_APIKEY = 'createPublicApiKey',
   DELETE_PUBLIC_APIKEY = 'deletePublicApiKey',
-  UPDATE_PUBLIC_APIKEY_STATUS = 'updatePublicApiKeyStatus',
+  CHANGE_PUBLIC_APIKEY_STATUS = 'changePublicApiKeyStatus',
   ROTATE_PUBLIC_APIKEY = 'rotatePublicApiKey',
   CHECK_PUBLIC_APIKEY_ISSUER = 'checkPublicApiKeyIssuer',
 }
@@ -29,7 +29,7 @@ export enum VIRTUAL_APIKEYS_ACTIONS {
   GET_VIRTUAL_APIKEYS = 'getVirtualApiKeys',
   CREATE_VIRTUAL_APIKEY = 'createVirtualApiKey',
   DELETE_VIRTUAL_APIKEY = 'deleteVirtualApiKey',
-  UPDATE_VIRTUAL_APIKEY_STATUS = 'updateVirtualApiKeyStatus',
+  CHANGE_VIRTUAL_APIKEY_STATUS = 'changeVirtualApiKeyStatus',
 }
 
 export const getPublicKeys = createAsyncThunk<PublicKeys, GetApiKeysParams | undefined>(
@@ -79,8 +79,8 @@ export const deletePublicKey = createAsyncThunk<void, string>(
   }
 );
 
-export const updatePublicKeyStatus = createAsyncThunk<void, UpdateApiKeyStatusRequest>(
-  PUBLIC_APIKEYS_ACTIONS.UPDATE_PUBLIC_APIKEY_STATUS,
+export const changePublicKeyStatus = createAsyncThunk<void, UpdateApiKeyStatusRequest>(
+  PUBLIC_APIKEYS_ACTIONS.CHANGE_PUBLIC_APIKEY_STATUS,
   async (params, { rejectWithValue }) => {
     try {
       const apiKeysFactory = PublicKeysApiFactory(undefined, undefined, apiClient);
@@ -174,8 +174,8 @@ export const deleteVirtualApiKey = createAsyncThunk<void, string>(
   }
 );
 
-export const updateVirtualApiKeyStatus = createAsyncThunk<void, UpdateApiKeyStatusRequest>(
-  VIRTUAL_APIKEYS_ACTIONS.UPDATE_VIRTUAL_APIKEY_STATUS,
+export const changeVirtualApiKeyStatus = createAsyncThunk<void, UpdateApiKeyStatusRequest>(
+  VIRTUAL_APIKEYS_ACTIONS.CHANGE_VIRTUAL_APIKEY_STATUS,
   async (params, { rejectWithValue }) => {
     try {
       const apiKeysFactory = VirtualKeysApiFactory(undefined, undefined, apiClient);

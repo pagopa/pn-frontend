@@ -11,7 +11,7 @@ enum ApiKeyActions {
   ENABLE = 'ENABLE',
 }
 
-export enum ApiKeyAlgorithm {
+enum ApiKeyAlgorithm {
   RS256 = 'RS256',
 }
 
@@ -88,8 +88,8 @@ export type GetApiKeysParams = {
 export type NewPublicApiKeyRequest = {
   name: string;
   publicKey: string;
-  exponent: string;
-  algorithm: ApiKeyAlgorithm;
+  exponent?: string;
+  algorithm?: ApiKeyAlgorithm;
 };
 
 export type UpdateApiKeyStatusRequest = {

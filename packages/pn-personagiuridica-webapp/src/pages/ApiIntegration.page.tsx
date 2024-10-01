@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
-import { TitleBox } from '@pagopa-pn/pn-commons';
+import { TitleBox, useHasPermissions } from '@pagopa-pn/pn-commons';
 
 import PublicKeys from '../components/IntegrazioneApi/PublicKeys';
 import { PNRole } from '../redux/auth/types';
@@ -11,10 +11,9 @@ import { RootState } from '../redux/store';
 
 const ApiIntegration: React.FC = () => {
   const { t } = useTranslation(['integrazioneApi']);
-  const { organization } = useAppSelector((state: RootState) => state.userState.user);
-  const currentRoles = organization?.roles ? organization.roles.map((role) => role.role) : [];
-
-  const isAdmin = currentRoles.includes(PNRole.ADMIN);
+  const currentUser = useAppSelector((state: RootState) => state.userState.user);
+  const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
+  const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
 
   return (
     <Box p={3}>
@@ -25,7 +24,7 @@ const ApiIntegration: React.FC = () => {
         variantSubTitle="body1"
       />
 
-      {isAdmin && <PublicKeys />}
+      {userHasAdminPermissions && <PublicKeys />}
     </Box>
   );
 };
