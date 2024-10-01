@@ -3,10 +3,45 @@ import * as yup from 'yup';
 
 import { dataRegex } from '@pagopa-pn/pn-commons';
 
-import { ChannelType, DigitalAddress, Sender } from '../models/contacts';
+import { AddressType, ChannelType, DigitalAddress, Sender } from '../models/contacts';
 import { SelectedAddresses } from '../redux/contact/reducers';
 
 export const internationalPhonePrefix = '+39';
+
+type AddressTypeItem = {
+  id: ChannelType;
+  shown: boolean;
+  disabled: boolean;
+};
+
+type AddressRelation = {
+  channelType: ChannelType;
+  relationWith: Array<ChannelType>;
+  shownDependsOn: Array<ChannelType>;
+};
+
+const addressesRelationships: Array<AddressRelation> = [
+  {
+    channelType: ChannelType.EMAIL,
+    relationWith: [ChannelType.EMAIL],
+    shownDependsOn: [],
+  },
+  {
+    channelType: ChannelType.SMS,
+    relationWith: [ChannelType.SMS],
+    shownDependsOn: [],
+  },
+  {
+    channelType: ChannelType.PEC,
+    relationWith: [ChannelType.PEC, ChannelType.SERCQ_SEND],
+    shownDependsOn: [ChannelType.PEC, ChannelType.SERCQ_SEND],
+  },
+  {
+    channelType: ChannelType.SERCQ_SEND,
+    relationWith: [ChannelType.SERCQ_SEND, ChannelType.PEC],
+    shownDependsOn: [ChannelType.PEC],
+  },
+];
 
 export function countContactsByType(contacts: Array<DigitalAddress>, type: ChannelType) {
   return contacts.reduce((total, contact) => (contact.channelType === type ? total + 1 : total), 0);
@@ -47,41 +82,6 @@ export const phoneValidationSchema = (t: TFunction, withPrefix = false) =>
       withPrefix ? dataRegex.phoneNumberWithItalyPrefix : dataRegex.phoneNumber,
       t('courtesy-contacts.valid-sms', { ns: 'recapiti' })
     );
-
-type AddressTypeItem = {
-  id: ChannelType;
-  shown: boolean;
-  disabled: boolean;
-};
-
-type AddressRelation = {
-  channelType: ChannelType;
-  relationWith: Array<ChannelType>;
-  shownDependsOn: Array<ChannelType>;
-};
-
-export const addressesRelationships: Array<AddressRelation> = [
-  {
-    channelType: ChannelType.EMAIL,
-    relationWith: [ChannelType.EMAIL],
-    shownDependsOn: [],
-  },
-  {
-    channelType: ChannelType.SMS,
-    relationWith: [ChannelType.SMS],
-    shownDependsOn: [],
-  },
-  {
-    channelType: ChannelType.PEC,
-    relationWith: [ChannelType.PEC, ChannelType.SERCQ_SEND],
-    shownDependsOn: [ChannelType.PEC, ChannelType.SERCQ_SEND],
-  },
-  {
-    channelType: ChannelType.SERCQ_SEND,
-    relationWith: [ChannelType.SERCQ_SEND, ChannelType.PEC],
-    shownDependsOn: [ChannelType.PEC],
-  },
-];
 
 const isDropdownItemDisabled = (
   allowedAddress: AddressRelation,
@@ -133,3 +133,39 @@ export const specialContactsAvailableAddressTypes = (
       disabled: isDisabled,
     };
   });
+
+export const updateAddressesList = (
+  addressType: AddressType,
+  channelType: ChannelType,
+  senderId: string,
+  addresses: Array<DigitalAddress>,
+  newAddress: DigitalAddress
+) => {
+  const relation = addressesRelationships.find((rel) => rel.channelType === channelType);
+  const addressIndex = addresses.findIndex(
+    (l) =>
+      l.senderId === senderId &&
+      l.addressType === addressType &&
+      relation?.relationWith.includes(l.channelType)
+  );
+  if (addressIndex > -1) {
+    // eslint-disable-next-line functional/immutable-data
+    addresses[addressIndex] = newAddress;
+  } else {
+    // eslint-disable-next-line functional/immutable-data
+    addresses.push(newAddress);
+  }
+};
+
+export const removeAddress = (
+  addressType: AddressType,
+  channelType: ChannelType,
+  senderId: string,
+  addresses: Array<DigitalAddress>
+) =>
+  addresses.filter(
+    (address) =>
+      address.senderId !== senderId ||
+      address.addressType !== addressType ||
+      address.channelType !== channelType
+  );

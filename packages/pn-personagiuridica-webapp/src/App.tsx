@@ -33,8 +33,9 @@ import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { logout } from './redux/auth/actions';
 import { PNRole } from './redux/auth/types';
+import { getDigitalAddresses } from './redux/contact/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
+import { getSidemenuInformation } from './redux/sidemenu/actions';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
@@ -126,7 +127,7 @@ const ActualApp = () => {
         void dispatch(getSidemenuInformation());
       }
       if (userHasAdminPermissions && !loggedUser.hasGroup) {
-        void dispatch(getDomicileInfo());
+        void dispatch(getDigitalAddresses());
       }
 
       void dispatch(getCurrentAppStatus());
