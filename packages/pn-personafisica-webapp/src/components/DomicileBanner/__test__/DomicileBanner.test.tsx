@@ -32,18 +32,8 @@ const emailDefault = digitalCourtesyAddresses.find(
   (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.EMAIL
 );
 
-const appIOEnabled = digitalCourtesyAddresses.find(
-  (addr) =>
-    addr.senderId === 'default' &&
-    addr.channelType === ChannelType.IOMSG &&
-    addr.value === IOAllowedValues.ENABLED
-);
-
-const appIODisabled = digitalCourtesyAddresses.find(
-  (addr) =>
-    addr.senderId === 'default' &&
-    addr.channelType === ChannelType.IOMSG &&
-    addr.value === IOAllowedValues.DISABLED
+const appIO = digitalCourtesyAddresses.find(
+  (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.IOMSG
 );
 
 describe('DomicileBanner component', () => {
@@ -160,7 +150,7 @@ describe('DomicileBanner component', () => {
       {
         preloadedState: {
           generalInfoState: {
-            digitalAddresses: [sercqSendDefault, emailDefault, appIODisabled],
+            digitalAddresses: [sercqSendDefault, emailDefault, appIO],
             domicileBannerOpened: true,
           },
         },
@@ -179,10 +169,11 @@ describe('DomicileBanner component', () => {
   });
 
   it('renders the component - SERCQ SEND enabled, email added, app IO enabled', () => {
+    appIO!.value = IOAllowedValues.ENABLED;
     const { queryByTestId } = render(<DomicileBanner source={ContactSource.HOME_NOTIFICHE} />, {
       preloadedState: {
         generalInfoState: {
-          digitalAddresses: [sercqSendDefault, emailDefault, appIOEnabled],
+          digitalAddresses: [sercqSendDefault, emailDefault, appIO],
           domicileBannerOpened: true,
         },
       },
