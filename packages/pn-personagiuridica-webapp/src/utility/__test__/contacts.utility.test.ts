@@ -1,5 +1,7 @@
+import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
+
 import { digitalAddresses, digitalAddressesSercq } from '../../__mocks__/Contacts.mock';
-import { AddressType, ChannelType, DigitalAddress, SERCQ_SEND_VALUE } from '../../models/contacts';
+import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
 import { SelectedAddresses } from '../../redux/contact/reducers';
 import {
   contactAlreadyExists,
