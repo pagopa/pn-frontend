@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box, Button, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { EmptyState, KnownSentiment, useHasPermissions, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { PNRole } from '../../redux/auth/types';
@@ -18,13 +18,14 @@ const PublicKeys: React.FC = () => {
   const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
 
   return (
-    <Box mt={5}>
-      <Box
+    <>
+      <Stack
+        direction={isMobile ? 'column' : 'row'}
         sx={{
-          display: isMobile ? 'block' : 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           marginBottom: 3,
+          marginTop: 5,
         }}
       >
         <Typography variant="h6" sx={{ marginBottom: isMobile ? 3 : undefined }}>
@@ -41,10 +42,10 @@ const PublicKeys: React.FC = () => {
             {t('new-public-key-button')}
           </Button>
         )}
-      </Box>
+      </Stack>
 
       <EmptyState sentimentIcon={KnownSentiment.NONE}>{t('public-keys-empty-state')}</EmptyState>
-    </Box>
+    </>
   );
 };
 
