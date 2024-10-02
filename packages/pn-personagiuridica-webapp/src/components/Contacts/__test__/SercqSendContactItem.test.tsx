@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { ConsentType } from '@pagopa-pn/pn-commons';
+import { ConsentType, SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 import { getById, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
@@ -21,7 +21,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { ChannelType, SERCQ_SEND_VALUE } from '../../../models/contacts';
+import { ChannelType } from '../../../models/contacts';
 import { internationalPhonePrefix } from '../../../utility/contacts.utility';
 import SercqSendContactItem from '../SercqSendContactItem';
 import { fillCodeDialog } from './test-utils';
@@ -72,10 +72,12 @@ describe('test SercqSendContactItem', () => {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
-    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false, false));
+    mock
+      .onGet(/\/bff\/v1\/pg\/tos-privacy.*/)
+      .reply(200, sercqSendTosPrivacyConsentMock(false, false));
     mock
       .onPut(
-        '/bff/v2/tos-privacy',
+        '/bff/v1/pg/tos-privacy',
         acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
       )
       .reply(200);
@@ -132,7 +134,9 @@ describe('test SercqSendContactItem', () => {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
-    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(true, true));
+    mock
+      .onGet(/\/bff\/v1\/pg\/tos-privacy.*/)
+      .reply(200, sercqSendTosPrivacyConsentMock(true, true));
     // render component
     const { container, getByTestId, getByText } = render(<SercqSendContactItem />);
     const activateButton = getByTestId('activateButton');
@@ -182,7 +186,9 @@ describe('test SercqSendContactItem', () => {
         verificationCode: '01234',
       })
       .reply(204);
-    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(true, true));
+    mock
+      .onGet(/\/bff\/v1\/pg\/tos-privacy.*/)
+      .reply(200, sercqSendTosPrivacyConsentMock(true, true));
     // render component
     const result = render(<SercqSendContactItem />);
     const activateButton = result.getByTestId('activateButton');

@@ -139,7 +139,7 @@ export const getSercqSendTosPrivacyApproval = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
-      const response = await tosPrivacyFactory.getTosPrivacyV2([
+      const response = await tosPrivacyFactory.getPgConsentByType([
         ConsentType.TOS_SERCQ,
         ConsentType.DATAPRIVACY_SERCQ,
       ]);
@@ -159,7 +159,7 @@ export const acceptSercqSendTosPrivacy = createAsyncThunk<void, Array<BffTosPriv
   async (body: Array<BffTosPrivacyActionBody>, { rejectWithValue }) => {
     try {
       const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
-      const response = await tosPrivacyFactory.acceptTosPrivacyV2(body);
+      const response = await tosPrivacyFactory.acceptPgTosPrivacyV1(body);
 
       return response.data;
     } catch (e: any) {

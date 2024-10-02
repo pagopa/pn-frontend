@@ -1,8 +1,8 @@
 import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 
-import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
+import { AddressType, ChannelType, DigitalAddress, ExternalEvent } from '../../models/contacts';
 import { Party } from '../../models/party';
-import { addressesRelationships } from '../../utility/contacts.utility';
+import { removeAddress, updateAddressesList } from '../../utility/contacts.utility';
 import { RootState } from '../store';
 import {
   createOrUpdateAddress,
@@ -11,10 +11,16 @@ import {
   getDigitalAddresses,
 } from './actions';
 
-const initialState = {
+const initialState: {
+  loading: boolean;
+  digitalAddresses: Array<DigitalAddress>;
+  parties: Array<Party>;
+  event: ExternalEvent | null;
+} = {
   loading: false,
-  digitalAddresses: [] as Array<DigitalAddress>,
-  parties: [] as Array<Party>,
+  digitalAddresses: [],
+  parties: [],
+  event: null,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -32,6 +38,12 @@ const contactsSlice = createSlice({
           address.addressType === AddressType.COURTESY
       );
     },
+    setExternalEvent: (state, action: PayloadAction<ExternalEvent>) => {
+      state.event = action.payload;
+    },
+    resetExternalEvent: (state) => {
+      state.event = null;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getDigitalAddresses.fulfilled, (state, action) => {
@@ -39,28 +51,21 @@ const contactsSlice = createSlice({
     });
     builder.addCase(createOrUpdateAddress.fulfilled, (state, action) => {
       if (action.payload) {
-        const relation = addressesRelationships.find(
-          (rel) => rel.channelType === action.meta.arg.channelType
+        updateAddressesList(
+          action.meta.arg.addressType,
+          action.meta.arg.channelType,
+          action.meta.arg.senderId,
+          state.digitalAddresses,
+          action.payload
         );
-        const addressIndex = state.digitalAddresses.findIndex(
-          (l) =>
-            l.senderId === action.meta.arg.senderId &&
-            l.addressType === action.meta.arg.addressType &&
-            relation?.relationWith.includes(l.channelType)
-        );
-        if (addressIndex > -1) {
-          state.digitalAddresses[addressIndex] = action.payload;
-        } else {
-          state.digitalAddresses.push(action.payload);
-        }
       }
     });
     builder.addCase(deleteAddress.fulfilled, (state, action) => {
-      state.digitalAddresses = state.digitalAddresses.filter(
-        (address) =>
-          address.senderId !== action.meta.arg.senderId ||
-          address.addressType !== action.meta.arg.addressType ||
-          address.channelType !== action.meta.arg.channelType
+      state.digitalAddresses = removeAddress(
+        action.meta.arg.addressType,
+        action.meta.arg.channelType,
+        action.meta.arg.senderId,
+        state.digitalAddresses
       );
     });
     builder.addCase(getAllActivatedParties.fulfilled, (state, action) => {
@@ -69,7 +74,8 @@ const contactsSlice = createSlice({
   },
 });
 
-export const { resetState, resetPecValidation } = contactsSlice.actions;
+export const { resetState, resetPecValidation, setExternalEvent, resetExternalEvent } =
+  contactsSlice.actions;
 
 // START: SELECTORS
 const contactState = (state: RootState) => state.contactsState;

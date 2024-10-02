@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -6,6 +6,7 @@ import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import {
   ConsentActionType,
   ConsentType,
+  SERCQ_SEND_VALUE,
   TosPrivacyConsent,
   appStateActions,
   useIsMobile,
@@ -16,9 +17,9 @@ import { PFEventsType } from '../../models/PFEventsType';
 import {
   AddressType,
   ChannelType,
+  ContactOperation,
   ContactSource,
   IOAllowedValues,
-  SERCQ_SEND_VALUE,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
 import {
@@ -27,7 +28,7 @@ import {
   deleteAddress,
   getSercqSendTosPrivacyApproval,
 } from '../../redux/contact/actions';
-import { contactsSelectors } from '../../redux/contact/reducers';
+import { contactsSelectors, resetExternalEvent } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -72,8 +73,13 @@ const SercqSendContactItem: React.FC = () => {
   const isMobile = useIsMobile();
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
-  const { defaultSERCQ_SENDAddress, defaultAPPIOAddress, courtesyAddresses, specialPECAddresses } =
-    useAppSelector(contactsSelectors.selectAddresses);
+  const {
+    defaultSERCQ_SENDAddress,
+    defaultAPPIOAddress,
+    courtesyAddresses,
+    specialPECAddresses,
+    specialSERCQ_SENDAddresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
 
   const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
@@ -81,7 +87,7 @@ const SercqSendContactItem: React.FC = () => {
   const hasAppIO = defaultAPPIOAddress?.value === IOAllowedValues.DISABLED;
   const hasCourtesy =
     hasAppIO && courtesyAddresses.length === 1 ? false : courtesyAddresses.length > 0;
-  const blockDelete = specialPECAddresses.length > 0;
+  const blockDelete = specialPECAddresses.length > 0 || specialSERCQ_SENDAddresses.length > 0;
 
   const handleActivation = () => {
     dispatch(getSercqSendTosPrivacyApproval())
@@ -268,12 +274,23 @@ const SercqSendContactItem: React.FC = () => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t(`legal-contacts.sercq-send-removed-successfully`, { ns: 'recapiti' }),
+            message: t(`legal-contacts.sercq_send-removed-successfully`, { ns: 'recapiti' }),
           })
         );
       })
       .catch(() => {});
   };
+
+  useEffect(() => {
+    if (
+      externalEvent &&
+      externalEvent.destination === ChannelType.SERCQ_SEND &&
+      externalEvent.operation === ContactOperation.ADD
+    ) {
+      handleActivation();
+      dispatch(resetExternalEvent());
+    }
+  }, [externalEvent]);
 
   return (
     <DigitalContactsCard
@@ -361,5 +378,4 @@ const SercqSendContactItem: React.FC = () => {
     </DigitalContactsCard>
   );
 };
-
 export default SercqSendContactItem;

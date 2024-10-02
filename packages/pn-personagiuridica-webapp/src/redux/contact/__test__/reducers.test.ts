@@ -17,6 +17,7 @@ const initialState = {
   loading: false,
   digitalAddresses: [],
   parties: [],
+  event: null,
 };
 
 describe('Contacts redux state tests', () => {

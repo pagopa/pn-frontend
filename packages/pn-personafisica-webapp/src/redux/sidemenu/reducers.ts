@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { DigitalAddress } from '../../models/contacts';
+import { removeAddress, updateAddressesList } from '../../utility/contacts.utility';
+import { createOrUpdateAddress, deleteAddress, getDigitalAddresses } from '../contact/actions';
 import { acceptMandate, rejectMandate } from '../delegation/actions';
 import { Delegator } from '../delegation/types';
-import { getDomicileInfo, getSidemenuInformation } from './actions';
+import { getSidemenuInformation } from './actions';
 
 /* eslint-disable functional/immutable-data */
 const generalInfoSlice = createSlice({
@@ -11,7 +13,7 @@ const generalInfoSlice = createSlice({
   initialState: {
     pendingDelegators: 0,
     delegators: [] as Array<Delegator>,
-    defaultAddresses: [] as Array<DigitalAddress>,
+    digitalAddresses: [] as Array<DigitalAddress>,
     domicileBannerOpened: true,
   },
   reducers: {
@@ -26,8 +28,27 @@ const generalInfoSlice = createSlice({
       ).length;
       state.delegators = action.payload.filter((delegator) => delegator.status !== 'pending');
     });
-    builder.addCase(getDomicileInfo.fulfilled, (state, action) => {
-      state.defaultAddresses = action.payload;
+    builder.addCase(getDigitalAddresses.fulfilled, (state, action) => {
+      state.digitalAddresses = action.payload;
+    });
+    builder.addCase(createOrUpdateAddress.fulfilled, (state, action) => {
+      if (action.payload) {
+        updateAddressesList(
+          action.meta.arg.addressType,
+          action.meta.arg.channelType,
+          action.meta.arg.senderId,
+          state.digitalAddresses,
+          action.payload
+        );
+      }
+    });
+    builder.addCase(deleteAddress.fulfilled, (state, action) => {
+      state.digitalAddresses = removeAddress(
+        action.meta.arg.addressType,
+        action.meta.arg.channelType,
+        action.meta.arg.senderId,
+        state.digitalAddresses
+      );
     });
     builder.addCase(acceptMandate.fulfilled, (state) => {
       if (state.pendingDelegators > 0) {
