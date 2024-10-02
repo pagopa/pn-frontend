@@ -1,15 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Block, Delete } from '@mui/icons-material';
+import { Block, Delete, Sync } from '@mui/icons-material';
 import { Box, Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
-import {
-  ApiErrorWrapper,
-  EmptyState,
-  KnownSentiment,
-  useHasPermissions,
-  useIsMobile,
-} from '@pagopa-pn/pn-commons';
+import { ApiErrorWrapper, useHasPermissions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import { ApiKeyActions, ApiKeyStatus, ModalApiKeyView, PublicKey } from '../../models/ApiKeys';
@@ -36,13 +30,18 @@ const ShowCodesInput = ({ value, label }: { value: string; label: string }) => {
   return (
     <TextField
       value={value}
-      fullWidth={true}
+      fullWidth
       label={t(label)}
       InputProps={{
         readOnly: true,
+        sx: { padding: 0 },
         endAdornment: (
           <InputAdornment position="end">
-            <CopyToClipboardButton value={() => value} tooltipTitle={t('api-key-copied')} />
+            <CopyToClipboardButton
+              value={() => value}
+              tooltipTitle={t('api-key-copied')}
+              color="primary"
+            />
           </InputAdornment>
         ),
       }}
@@ -124,20 +123,15 @@ const PublicKeys: React.FC = () => {
         mainText={t('error-fecth-public-api-keys')}
         mt={3}
       >
-        {publicKeys.items.length > 0 ? (
-          <PublicKeysTable publicKeys={publicKeys} handleModalClick={handleModalClick} />
-        ) : (
-          <EmptyState sentimentIcon={KnownSentiment.NONE}>{t('publicKeys.empty-state')}</EmptyState>
-        )}
+        <PublicKeysTable publicKeys={publicKeys} handleModalClick={handleModalClick} />
 
-        <Box sx={{ minWidth: isMobile ? '0' : '600px' }}>
+        <Box minWidth={isMobile ? '0' : '600px'}>
           {modal.view === ModalApiKeyView.VIEW && (
             <ApiKeyModal
-              aria-modal="true"
               title={t('publicKeys.view-title')}
               subTitle={t('publicKeys.view-subtitle')}
               content={
-                <Stack spacing={2}>
+                <Stack spacing={2} width="536px">
                   <ShowCodesInput
                     value={modal.publicKey?.value || ''}
                     label="publicKeys.personal-key"
@@ -161,6 +155,18 @@ const PublicKeys: React.FC = () => {
               actionButtonLabel={t('block-button')}
               buttonIcon={<Block fontSize="small" sx={{ mr: 1 }} />}
               actionHandler={() => blockPublicKey(modal.publicKey?.kid as string)}
+            />
+          )}
+          {modal.view === ModalApiKeyView.ROTATE && (
+            <ApiKeyModal
+              title={t('publicKeys.rotate-title')}
+              subTitle={t('publicKeys.rotate-subtitle')}
+              content={<Typography>{t('publicKeys.rotate-warning')}</Typography>}
+              closeButtonLabel={t('cancel-button')}
+              closeModalHandler={handleCloseModal}
+              actionButtonLabel={t('rotate-button')}
+              buttonIcon={<Sync fontSize="small" sx={{ mr: 1 }} />}
+              // actionHandler={() => apiKeyRotated(modal.apiKey?.id as string)}
             />
           )}
           {modal.view === ModalApiKeyView.DELETE && (

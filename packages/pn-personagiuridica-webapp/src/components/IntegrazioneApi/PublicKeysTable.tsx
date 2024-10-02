@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
 import {
+  EmptyState,
+  KnownSentiment,
   Row,
   SmartBody,
   SmartBodyCell,
@@ -83,6 +85,13 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
       },
     },
   ];
+
+  if (!publicKeys || publicKeys.items.length === 0) {
+    return (
+      <EmptyState sentimentIcon={KnownSentiment.NONE}>{t('publicKeys.empty-state')}</EmptyState>
+    );
+  }
+
   return (
     <SmartTable
       data={data}
