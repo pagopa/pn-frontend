@@ -34,15 +34,13 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
   );
 
   const hasAddress = availableAddresses.length > 0;
-  const hasOnlyAppIO =
-    availableAddresses.length === 1 && availableAddresses[0].channelType === ChannelType.IOMSG;
   const isCourtesyCard = addressType === AddressType.COURTESY;
   const title = isCourtesyCard ? 'summary-card.courtesy-title' : 'summary-card.legal-title';
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const dispatch = useAppDispatch();
 
   const getIcon = () => {
-    if (!hasAddress || hasOnlyAppIO) {
+    if (!hasAddress) {
       if (isCourtesyCard && isSercQEnabled) {
         return <WarningOutlined color="warning" data-testid="warningIcon" />;
       } else {
