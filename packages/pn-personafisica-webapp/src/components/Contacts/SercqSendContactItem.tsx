@@ -73,8 +73,13 @@ const SercqSendContactItem: React.FC = () => {
   const isMobile = useIsMobile();
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
-  const { defaultSERCQ_SENDAddress, defaultAPPIOAddress, courtesyAddresses, specialPECAddresses } =
-    useAppSelector(contactsSelectors.selectAddresses);
+  const {
+    defaultSERCQ_SENDAddress,
+    defaultAPPIOAddress,
+    courtesyAddresses,
+    specialPECAddresses,
+    specialSERCQ_SENDAddresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
 
   const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
@@ -82,7 +87,7 @@ const SercqSendContactItem: React.FC = () => {
   const hasAppIO = defaultAPPIOAddress?.value === IOAllowedValues.DISABLED;
   const hasCourtesy =
     hasAppIO && courtesyAddresses.length === 1 ? false : courtesyAddresses.length > 0;
-  const blockDelete = specialPECAddresses.length > 0;
+  const blockDelete = specialPECAddresses.length > 0 || specialSERCQ_SENDAddresses.length > 0;
 
   const handleActivation = () => {
     dispatch(getSercqSendTosPrivacyApproval())
