@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -17,6 +17,7 @@ import { PFEventsType } from '../../models/PFEventsType';
 import {
   AddressType,
   ChannelType,
+  ContactOperation,
   ContactSource,
   IOAllowedValues,
   SaveDigitalAddressParams,
@@ -27,7 +28,7 @@ import {
   deleteAddress,
   getSercqSendTosPrivacyApproval,
 } from '../../redux/contact/actions';
-import { contactsSelectors } from '../../redux/contact/reducers';
+import { contactsSelectors, resetExternalEvent } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -268,12 +269,23 @@ const SercqSendContactItem: React.FC = () => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t(`legal-contacts.sercq-send-removed-successfully`, { ns: 'recapiti' }),
+            message: t(`legal-contacts.sercq_send-removed-successfully`, { ns: 'recapiti' }),
           })
         );
       })
       .catch(() => {});
   };
+
+  useEffect(() => {
+    if (
+      externalEvent &&
+      externalEvent.destination === ChannelType.SERCQ_SEND &&
+      externalEvent.operation === ContactOperation.ADD
+    ) {
+      handleActivation();
+      dispatch(resetExternalEvent());
+    }
+  }, [externalEvent]);
 
   return (
     <DigitalContactsCard
@@ -361,5 +373,4 @@ const SercqSendContactItem: React.FC = () => {
     </DigitalContactsCard>
   );
 };
-
 export default SercqSendContactItem;

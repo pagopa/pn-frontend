@@ -58,12 +58,6 @@
     "show-history": "Afficher l’historique",
     "show-more": "Afficher plus de détails",
     "show-less": "Afficher moins de détails",
-    "add_domicile_PEC": "Ajouter PEC",
-    "add_domicile_EMAIL": "Ajouter e-mail",
-    "add_domicile_APPIO": "Activer le service",
-    "domicile_PEC": "Vous avez une adresse PEC ? Ajoutez-la et vous ne recevrez plus les recommandations au format papier.",
-    "domicile_EMAIL": "Ajoutez votre adresse e-mail : nous vous enverrons un message chaque fois que vous recevrez une notification.",
-    "domicile_APPIO": "Avez-vous l’application IO ? Activez le service « Notifiche Digitali » pour afficher et payer les notifications directement dans l’application.",
     "cancelled-alert-text": "Cette notification a été annulée par l’organisme émetteur. Vous pouvez ignorer son contenu.",
     "disclaimer-link": "En savoir plus",
     "payment": {

@@ -63,10 +63,6 @@
     "show-history": "Prikaži zgodovino",
     "show-more": "Prikaži več podrobnosti",
     "show-less": "Prikaži manj podrobnosti",
-    "add_domicile_PEC": "Dodaj PEC",
-    "add_domicile_EMAIL": "Dodaj e-poštni naslov",
-    "domicile_PEC": "Ali imate PEC? Dodajte ga in ne boste več prejemali papirne priporočene pošte.",
-    "domicile_EMAIL": "Dodajte svoj e-poštni naslov: poslali vam bomo sporočilo vsakič, ko prejmete obvestilo.",
     "cancelled-alert-text": "To obvestilo je preklical pošiljatelj. Vsebino lahko prezrete.",
     "disclaimer-link": "Izvedite več",
     "payment": {

@@ -35,6 +35,7 @@ import {
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
+import { ContactSource } from '../models/contacts';
 import * as routes from '../navigation/routes.const';
 import { getDowntimeLegalFact } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -467,9 +468,12 @@ const NotificationDetail: React.FC = () => {
                     {t('detail.cancelled-alert-text', { ns: 'notifiche' })}
                   </Alert>
                 )}
-                <NotificationDetailTable rows={detailTableRows} />
 
-                {!mandateId && <DomicileBanner source="dettaglio_notifica" />}
+                {!isMobile && !mandateId && (
+                  <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
+                )}
+
+                <NotificationDetailTable rows={detailTableRows} />
                 <Paper sx={{ p: 3 }} elevation={0}>
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
@@ -490,7 +494,6 @@ const NotificationDetail: React.FC = () => {
                     </Alert>
                   )}
                 </Paper>
-
                 {checkIfUserHasPayments && (
                   <Paper sx={{ p: 3 }} elevation={0}>
                     <ApiErrorWrapper
@@ -514,7 +517,6 @@ const NotificationDetail: React.FC = () => {
                     </ApiErrorWrapper>
                   </Paper>
                 )}
-
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarBox">
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
@@ -539,6 +541,9 @@ const NotificationDetail: React.FC = () => {
               </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>
+              {isMobile && !mandateId && (
+                <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
+              )}
               <Box
                 component="section"
                 sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}

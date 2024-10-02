@@ -3,12 +3,14 @@ import {
   digitalAddressesSercq,
   digitalCourtesyAddresses,
 } from '../../__mocks__/Contacts.mock';
-import { ChannelType, DigitalAddress } from '../../models/contacts';
+import { AddressType, ChannelType, DigitalAddress, SERCQ_SEND_VALUE } from '../../models/contacts';
 import { SelectedAddresses } from '../../redux/contact/reducers';
 import {
   contactAlreadyExists,
   countContactsByType,
+  removeAddress,
   specialContactsAvailableAddressTypes,
+  updateAddressesList,
 } from '../contacts.utility';
 
 const calcExpetcedCount = (courtesyChannelType: ChannelType) =>
@@ -180,5 +182,89 @@ describe('Contacts utility test', () => {
         shown: true,
       },
     ]);
+  });
+
+  it('test updateAddressesList function, new address', () => {
+    const newAddress: DigitalAddress = {
+      addressType: AddressType.LEGAL,
+      channelType: ChannelType.PEC,
+      senderId: 'new-mocked-sender-id',
+      value: 'new@pec.it',
+    };
+    const previousDigitalAddresses = [...digitalAddresses];
+    updateAddressesList(
+      newAddress.addressType,
+      newAddress.channelType,
+      newAddress.senderId,
+      digitalAddresses,
+      newAddress
+    );
+
+    expect(digitalAddresses).toStrictEqual([...previousDigitalAddresses, newAddress]);
+  });
+
+  it('test updateAddressesList function, existing courtesy address', () => {
+    const addressIndex = digitalAddresses.findIndex(
+      (addr) => addr.addressType === AddressType.COURTESY && addr.channelType === ChannelType.EMAIL
+    );
+    const newAddress = { ...digitalAddresses[addressIndex], value: 'new-value@mail.it' };
+    const previousDigitalAddresses = [...digitalAddresses];
+    previousDigitalAddresses[addressIndex].value = newAddress.value;
+
+    updateAddressesList(
+      newAddress.addressType,
+      newAddress.channelType,
+      newAddress.senderId,
+      digitalAddresses,
+      newAddress
+    );
+
+    expect(digitalAddresses).toStrictEqual(previousDigitalAddresses);
+  });
+
+  it('test updateAddressesList function, existing legal address', () => {
+    const addressIndex = digitalAddresses.findIndex(
+      (addr) => addr.addressType === AddressType.LEGAL && addr.channelType === ChannelType.PEC
+    );
+    const newAddress = {
+      ...digitalAddresses[addressIndex],
+      channelType: ChannelType.SERCQ_SEND,
+      value: SERCQ_SEND_VALUE,
+    };
+    const previousDigitalAddresses = [...digitalAddresses];
+    previousDigitalAddresses[addressIndex].value = newAddress.value;
+    previousDigitalAddresses[addressIndex].channelType = ChannelType.SERCQ_SEND;
+
+    updateAddressesList(
+      newAddress.addressType,
+      newAddress.channelType,
+      newAddress.senderId,
+      digitalAddresses,
+      newAddress
+    );
+
+    expect(digitalAddresses).toStrictEqual(previousDigitalAddresses);
+  });
+
+  it('test removeAddress function', () => {
+    const address = digitalAddresses.find(
+      (addr) => addr.addressType === AddressType.LEGAL && addr.channelType === ChannelType.PEC
+    )!;
+
+    const currentAddresses = digitalAddresses.filter(
+      (addr) =>
+        addr.addressType !== address.addressType ||
+        addr.channelType !== address.channelType ||
+        addr.senderId !== address.senderId
+    );
+
+    const result = removeAddress(
+      address.addressType,
+      address.channelType,
+      address.senderId,
+      digitalAddresses
+    );
+
+    expect(result).toStrictEqual(currentAddresses);
   });
 });

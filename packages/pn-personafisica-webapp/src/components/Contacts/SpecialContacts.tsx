@@ -2,20 +2,33 @@ import { useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Card, CardContent, Divider, Stack, Typography } from '@mui/material';
-import { SERCQ_SEND_VALUE, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
+import {
+  ConsentActionType,
+  ConsentType,
+  SERCQ_SEND_VALUE,
+  TosPrivacyConsent,
+  appStateActions,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
   AddressType,
   ChannelType,
+  ContactOperation,
   ContactSource,
   DigitalAddress,
   SaveDigitalAddressParams,
   Sender,
 } from '../../models/contacts';
-import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
-import { contactsSelectors } from '../../redux/contact/reducers';
+import {
+  acceptSercqSendTosPrivacy,
+  createOrUpdateAddress,
+  deleteAddress,
+  getSercqSendTosPrivacyApproval,
+} from '../../redux/contact/actions';
+import { contactsSelectors, setExternalEvent } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
@@ -27,6 +40,7 @@ import DeleteDialog from './DeleteDialog';
 import ExistingContactDialog from './ExistingContactDialog';
 import LegalContactAssociationDialog from './LegalContactAssociationDialog';
 import PecVerificationDialog from './PecVerificationDialog';
+import SercqSendInfoDialog from './SercqSendInfoDialog';
 import SpecialContactItem from './SpecialContactItem';
 
 enum ModalType {
@@ -37,6 +51,7 @@ enum ModalType {
   VALIDATION = 'validation',
   CANCEL_VALIDATION = 'cancel_validation',
   CONFIRM_LEGAL_ASSOCIATION = 'confirm_legal_association',
+  INFO = 'info',
 }
 
 type Addresses = {
@@ -59,6 +74,7 @@ const SpecialContacts: React.FC = () => {
     senderId: 'default',
     channelType: ChannelType.PEC,
   });
+  const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
 
   const labelRoot = `legal-contacts`;
   const contactType = currentAddress.current.channelType.toLowerCase();
@@ -104,6 +120,62 @@ const SpecialContacts: React.FC = () => {
       return;
     }
     setModalOpen(ModalType.CONFIRM_LEGAL_ASSOCIATION);
+  };
+
+  const handleAssociation = () => {
+    if (currentAddress.current.channelType === ChannelType.SERCQ_SEND) {
+      dispatch(getSercqSendTosPrivacyApproval())
+        .unwrap()
+        .then((consent) => {
+          // eslint-disable-next-line functional/immutable-data
+          tosPrivacy.current = consent;
+          setModalOpen(ModalType.INFO);
+        })
+        .catch(() => {});
+      return;
+    }
+    handleCodeVerification();
+  };
+
+  const handleInfoConfirm = () => {
+    if (!tosPrivacy.current) {
+      return;
+    }
+    // first check tos and privacy status
+    const [tos, privacy] = tosPrivacy.current.filter(
+      (consent) =>
+        consent.consentType === ConsentType.TOS_SERCQ ||
+        consent.consentType === ConsentType.DATAPRIVACY_SERCQ
+    );
+    // if tos and privacy are already accepted, proceede with the activation
+    if (tos.accepted && privacy.accepted) {
+      handleCodeVerification();
+      return;
+    }
+    // accept tos and privacy
+    const tosPrivacyBody = [];
+    if (!tos.accepted) {
+      // eslint-disable-next-line functional/immutable-data
+      tosPrivacyBody.push({
+        action: ConsentActionType.ACCEPT,
+        version: tos.consentVersion,
+        type: ConsentType.TOS_SERCQ,
+      });
+    }
+    if (!privacy.accepted) {
+      // eslint-disable-next-line functional/immutable-data
+      tosPrivacyBody.push({
+        action: ConsentActionType.ACCEPT,
+        version: privacy.consentVersion,
+        type: ConsentType.DATAPRIVACY_SERCQ,
+      });
+    }
+    dispatch(acceptSercqSendTosPrivacy(tosPrivacyBody))
+      .unwrap()
+      .then(() => {
+        handleCodeVerification();
+      })
+      .catch(() => {});
   };
 
   const handleCodeVerification = (verificationCode?: string) => {
@@ -159,6 +231,14 @@ const SpecialContacts: React.FC = () => {
             })
           );
           handleCloseModal();
+          // init the flux to add the courtesy address
+          dispatch(
+            setExternalEvent({
+              source: ContactSource.RECAPITI,
+              destination: ChannelType.SERCQ_SEND,
+              operation: ContactOperation.ADD_COURTESY,
+            })
+          );
           return;
         }
         // contact must be validated
@@ -194,6 +274,14 @@ const SpecialContacts: React.FC = () => {
           senderId: 'default',
           senderName: undefined,
         };
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t(`${labelRoot}.${contactType}-removed-successfully`, {
+              ns: 'recapiti',
+            }),
+          })
+        );
       })
       .catch(() => {});
   };
@@ -388,7 +476,12 @@ const SpecialContacts: React.FC = () => {
             : t('special-contacts.sercq_send', { ns: 'recapiti' })
         }
         handleClose={handleCloseModal}
-        handleConfirm={() => handleCodeVerification()}
+        handleConfirm={handleAssociation}
+      />
+      <SercqSendInfoDialog
+        open={modalOpen === ModalType.INFO}
+        onDiscard={() => setModalOpen(null)}
+        onConfirm={handleInfoConfirm}
       />
     </>
   );
