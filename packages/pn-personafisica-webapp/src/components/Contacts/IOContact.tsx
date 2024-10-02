@@ -156,7 +156,7 @@ const IOContact: React.FC = () => {
       title={t('io-contact.title', { ns: 'recapiti' })}
       subtitle={t('io-contact.description', { ns: 'recapiti' })}
       illustration={<IllusAppIO />}
-      sx={{ paddingTop: '1.5rem' }}
+      sx={{ pt: '1.5rem' }}
     >
       {getContent()}
       {/* <DisclaimerModal
