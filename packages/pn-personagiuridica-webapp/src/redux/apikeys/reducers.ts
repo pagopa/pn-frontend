@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { PublicKeys, VirtualKeys } from '../../models/ApiKeys';
+import { BffPublicKeysResponse, BffVirtualKeysResponse } from '../../generated-client/pg-apikeys';
 import { getPublicKeys, getVirtualApiKeys } from './actions';
 
 type initialStateType = {
   loading: boolean;
-  publicKeys: PublicKeys;
-  virtualKeys: VirtualKeys;
+  publicKeys: BffPublicKeysResponse;
+  virtualKeys: BffVirtualKeysResponse;
 };
 
 const initialState: initialStateType = {
