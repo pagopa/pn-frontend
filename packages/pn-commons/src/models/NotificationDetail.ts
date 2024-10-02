@@ -286,6 +286,7 @@ export enum DigitalDomicileType {
   EMAIL = 'EMAIL',
   APPIO = 'APPIO', // PN-2068
   SMS = 'SMS', // possible type for courtesy message
+  SERCQ = 'SERCQ',
 }
 
 export enum RecipientType {

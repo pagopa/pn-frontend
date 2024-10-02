@@ -5,6 +5,7 @@ import { Card, CardContent, Divider, Stack, Typography } from '@mui/material';
 import {
   ConsentActionType,
   ConsentType,
+  SERCQ_SEND_VALUE,
   TosPrivacyConsent,
   appStateActions,
   useIsMobile,
@@ -18,7 +19,6 @@ import {
   ContactOperation,
   ContactSource,
   DigitalAddress,
-  SERCQ_SEND_VALUE,
   SaveDigitalAddressParams,
   Sender,
 } from '../../models/contacts';

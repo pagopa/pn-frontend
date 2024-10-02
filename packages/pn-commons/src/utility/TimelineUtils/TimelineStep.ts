@@ -23,8 +23,8 @@ export abstract class TimelineStep {
   localizeTimelineStatus(
     category: string,
     isMultiRecipient: boolean,
-    defaultLabel: string,
-    defaultDescription: string,
+    defaultLabel?: string,
+    defaultDescription?: string,
     data?: { [key: string]: string | undefined }
   ): { label: string; description: string } {
     return {
