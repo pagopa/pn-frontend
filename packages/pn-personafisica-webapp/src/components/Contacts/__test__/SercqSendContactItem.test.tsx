@@ -296,7 +296,7 @@ describe('test SercqSendContactItem', () => {
     const ioDialog = await waitFor(() => screen.getByTestId('sercqSendIODialog'));
     expect(ioDialog).toBeInTheDocument();
     // click on confirm button
-    const confirmButton = within(ioDialog).getByText('button.conferma');
+    const confirmButton = within(ioDialog).getByText('button.attiva');
     fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(2);
