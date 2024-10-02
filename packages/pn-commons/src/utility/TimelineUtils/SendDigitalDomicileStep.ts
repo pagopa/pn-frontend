@@ -10,7 +10,7 @@ export class SendDigitalDomicileStep extends TimelineStep {
     }
     if (
       details.digitalAddress?.type === DigitalDomicileType.SERCQ &&
-      details.digitalAddress?.address === SERCQ_SEND_VALUE
+      details.digitalAddress?.address.startsWith(SERCQ_SEND_VALUE)
     ) {
       return {
         ...this.localizeTimelineStatus(
