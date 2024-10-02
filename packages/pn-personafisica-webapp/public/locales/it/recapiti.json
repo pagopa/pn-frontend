@@ -134,17 +134,17 @@
     "link-sercq-label": "Il tuo Domicilio Digitale SEND",
     "senders": "Enti",
     "contact-to-add": "Recapito",
-    "contact-to-add-description": "Puoi associare un recapito a un ente solo se hai già impostato un recapito principale dello stesso tipo.",
+    "contact-to-add-description": "Associa un recapito a un ente specifico per personalizzare le comunicazioni che ricevi in base al mittente.",
     "contact-already-exists": "L'ente selezionato è già associato a questo recapito. Se premi “Associa”, verrà sostituito da quello che hai indicato qui.",
     "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito.",
-    "modal-title": "Aggiungi un recapito associato a un ente",
+    "modal-title": "Personalizza il recapito associato a un ente",
     "card-title": "Già associati",
     "sender": "Ente",
     "remove-special-title": "Vuoi eliminare {{contactValue}}?",
     "remove-special-description": "Gli avvisi relativi alle notifiche degli enti associati non saranno più inviati a questo recapito, ma a quello principale.",
     "contacts": "Recapiti",
     "legal-association-title": "Conferma associazione",
-    "legal-association-description": "Confermando l’associazione, per le notifiche inviate da <strong>{{senderName}}</strong> il tuo recapito a valore legale di riferimento sarà <strong>{{newAddress}}</strong> invece che <strong>{{oldAddress}}</strong>."
+    "legal-association-description": "Per le notifiche inviate da <strong>{{senderName}}</strong> il tuo recapito a valore legale sarà <strong>{{newAddress}}</strong> invece che <strong>{{oldAddress}}</strong>."
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",
