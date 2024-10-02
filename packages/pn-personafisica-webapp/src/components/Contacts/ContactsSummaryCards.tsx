@@ -43,9 +43,8 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
     if (!hasAddress) {
       if (isCourtesyCard && isSercQEnabled) {
         return <WarningOutlined color="warning" data-testid="warningIcon" />;
-      } else {
-        return <AddCircleOutline color="primary" data-testid="addIcon" />;
       }
+      return <AddCircleOutline color="primary" data-testid="addIcon" />;
     }
 
     return <Verified color="primary" data-testid="verifiedIcon" />;
