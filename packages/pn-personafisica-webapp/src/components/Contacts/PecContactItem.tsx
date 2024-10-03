@@ -150,6 +150,12 @@ const PecContactItem: React.FC = () => {
       .unwrap()
       .then(() => {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_PEC_SUCCESS, 'default');
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t(`legal-contacts.pec-removed-successfully`, { ns: 'recapiti' }),
+          })
+        );
       })
       .catch(() => {});
   };
