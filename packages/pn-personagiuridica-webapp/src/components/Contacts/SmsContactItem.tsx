@@ -106,13 +106,23 @@ const SmsContactItem: React.FC = () => {
 
   const deleteConfirmHandler = () => {
     setModalOpen(null);
-    void dispatch(
+    dispatch(
       deleteAddress({
         addressType: AddressType.COURTESY,
         senderId: 'default',
         channelType: ChannelType.SMS,
       })
-    );
+    )
+      .unwrap()
+      .then(() => {
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t(`courtesy-contacts.sms-removed-successfully`, { ns: 'recapiti' }),
+          })
+        );
+      })
+      .catch(() => {});
   };
 
   /*

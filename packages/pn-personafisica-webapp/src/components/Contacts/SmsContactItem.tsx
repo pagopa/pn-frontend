@@ -134,6 +134,12 @@ const SmsContactItem: React.FC = () => {
       .unwrap()
       .then(() => {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_SUCCESS, 'default');
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t(`courtesy-contacts.sms-removed-successfully`, { ns: 'recapiti' }),
+          })
+        );
       })
       .catch(() => {});
   };
