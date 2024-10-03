@@ -16,7 +16,7 @@ import { getApiKeyStatusInfos } from '../../utility/apikeys.utility';
  */
 const isApiKeyRotated = (data: Row<PublicKeysColumnData>): boolean =>
   data.statusHistory
-    ? !!data.statusHistory.find((status) => status.status === PublicKeyStatus.Active)
+    ? !!data.statusHistory.find((status) => status.status === PublicKeyStatus.Rotated)
     : false;
 
 const setRowColorByStatus = (data: Row<PublicKeysColumnData>): string | undefined =>
