@@ -11,6 +11,7 @@ export const NOTIFICHE_DELEGATO = `${NOTIFICHE}-delegato`;
 export const DELEGHE = `/deleghe`;
 export const DELEGHEACARICO = `${DELEGHE}/a-carico`;
 export const DELEGATI = `${DELEGHE}/delegati`;
+export const INTEGRAZIONE_API = '/integrazione-api';
 
 const NOTIFICA = '/dettaglio';
 export const DETTAGLIO_NOTIFICA = `${NOTIFICHE}/:id${NOTIFICA}`;
