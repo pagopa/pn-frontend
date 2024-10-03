@@ -139,7 +139,6 @@ export const acceptTosPrivacy = createAsyncThunk<void, Array<BffTosPrivacyAction
     try {
       const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
       const response = await tosPrivacyFactory.acceptPgTosPrivacyV1(body);
-      // const response = await tosPrivacyFactory.acceptPgTosPrivacyV1(body);
 
       return response.data;
     } catch (e: any) {

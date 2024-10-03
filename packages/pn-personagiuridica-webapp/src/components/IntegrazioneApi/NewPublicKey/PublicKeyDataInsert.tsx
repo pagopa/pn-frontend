@@ -14,10 +14,11 @@ import NewPublicKeyCard from './NewPublicKeyCard';
 
 type Props = {
     onConfirm: (publicKey: BffPublicKeyRequest) => void;
+    duplicateKey: (publicKey: string | undefined) => boolean;
 };
 
-const PublicKeyDataInsert: React.FC<Props> = ({onConfirm}) => {
-    const { t } = useTranslation(['integrazioneApi', 'common']);
+const PublicKeyDataInsert: React.FC<Props> = ({onConfirm, duplicateKey}) => {
+    const { t } = useTranslation(['integrazioneApi']);
     const { t: tc } = useTranslation(['common']);
     const navigate = useNavigate();
 
@@ -43,6 +44,7 @@ const PublicKeyDataInsert: React.FC<Props> = ({onConfirm}) => {
         publicKey: yup
             .string()
             .required("Campo obbligatorio")
+            .test('publicKey', t('message.error.key-already-registered'), duplicateKey)
             // .matches()
     });
 

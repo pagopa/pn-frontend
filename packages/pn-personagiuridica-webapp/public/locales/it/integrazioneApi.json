@@ -101,7 +101,8 @@
   },
   "message": {
     "error": {
-      "rotate-invalid-kid": "Identificativo della chiave da ruotare errato!"
+      "rotate-invalid-kid": "Identificativo della chiave da ruotare errato!",
+      "key-already-registered": "Questo valore è già stato inserito in precedenza. Inserisci una chiave diversa."
     },
     "success": {
 

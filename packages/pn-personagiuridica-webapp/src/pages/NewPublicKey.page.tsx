@@ -16,18 +16,19 @@ import PublicKeyDataInsert from '../components/IntegrazioneApi/NewPublicKey/Publ
 import ShowPublicKeyParams from '../components/IntegrazioneApi/NewPublicKey/ShowPublicKeyParams';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { checkPublicKeyIssuer, createPublicKey, rotatePublicKey } from '../redux/apikeys/actions';
+import { acceptTosPrivacy, checkPublicKeyIssuer, createPublicKey, rotatePublicKey } from '../redux/apikeys/actions';
 import {
   BffPublicKeyRequest,
   BffPublicKeyResponse,
   PublicKeyStatus,
 } from '../generated-client/pg-apikeys';
+import { BffTosPrivacyActionBodyActionEnum, ConsentType } from '../generated-client/tos-privacy';
 
 const NewPublicKey = () => {
   const { t } = useTranslation(['common', 'integrazioneApi']);
   const isMobile = useIsMobile();
   const [activeStep, setActiveStep] = useState(0);
-  // const [isTosAccepted, setIsTosAccepted] = useState<boolean | undefined>();
+  const [isTosAccepted, setIsTosAccepted] = useState<boolean | undefined>();
   const [creationResponse, setCreationResponse] = useState<BffPublicKeyResponse | undefined>(
     undefined
   );
@@ -62,8 +63,8 @@ const NewPublicKey = () => {
     }
     
     // verify if tos are accepted
-    void dispatch(checkPublicKeyIssuer()).then((response) => {
-      console.log(response);
+    void dispatch(checkPublicKeyIssuer()).unwrap().then((response) => {
+      setIsTosAccepted(() => response.tosAccepted);
     });
   }, []);
 
@@ -75,7 +76,16 @@ const NewPublicKey = () => {
     publicKey: BffPublicKeyRequest
   ): Promise<BffPublicKeyResponse> => dispatch(rotatePublicKey({ kid, body: publicKey })).unwrap();
 
+ 
   const publicKeyRegistration = async (publicKey: BffPublicKeyRequest) => {
+    // if tos not accepted -> accept
+    if(!isTosAccepted){
+      await dispatch(acceptTosPrivacy([{
+        action: BffTosPrivacyActionBodyActionEnum.Accept,
+        version: "1", // ???
+        type: ConsentType.TosDestB2B
+      }]));
+    }
     const returned = kid ? handleRotate(kid, publicKey) : handleCreate(publicKey);
 
     returned
@@ -89,6 +99,8 @@ const NewPublicKey = () => {
         console.error(error);
       });
   };
+
+  const checkPublicKeyValueAllowed = (pk: string | undefined) => !publicKeys.items.find((key) => key.value === pk && key.status === PublicKeyStatus.Active);
 
   const steps = [
     t('new-public-key.steps.insert-data.title', { ns: 'integrazioneApi' }),
@@ -144,7 +156,7 @@ const NewPublicKey = () => {
           message={t('new-public-key.prompt.message', { ns: 'integrazioneApi' })}
         >
           <StepperContainer>
-            <PublicKeyDataInsert onConfirm={publicKeyRegistration} />
+            <PublicKeyDataInsert onConfirm={publicKeyRegistration} duplicateKey={checkPublicKeyValueAllowed} />
           </StepperContainer>
         </Prompt>
       ) : (
