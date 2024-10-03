@@ -16,7 +16,7 @@ import PublicKeyDataInsert from '../components/IntegrazioneApi/NewPublicKey/Publ
 import ShowPublicKeyParams from '../components/IntegrazioneApi/NewPublicKey/ShowPublicKeyParams';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { createPublicKey, rotatePublicKey } from '../redux/apikeys/actions';
+import { checkPublicKeyIssuer, createPublicKey, rotatePublicKey } from '../redux/apikeys/actions';
 import {
   BffPublicKeyRequest,
   BffPublicKeyResponse,
@@ -48,8 +48,6 @@ const NewPublicKey = () => {
     );
 
   useEffect(() => {
-    // verify if tos are accepted
-    // void dispatch(checkPublicKeyIssuer()).then((response) => console.log(response));
     if (isRotate && !isActiveKey) {
       // it's not a valid kid -> redirect to api dashboard
       navigate(routes.INTEGRAZIONE_API);
@@ -62,6 +60,11 @@ const NewPublicKey = () => {
         })
       );
     }
+    
+    // verify if tos are accepted
+    void dispatch(checkPublicKeyIssuer()).then((response) => {
+      console.log(response);
+    });
   }, []);
 
   const handleCreate = (publicKey: BffPublicKeyRequest): Promise<BffPublicKeyResponse> =>

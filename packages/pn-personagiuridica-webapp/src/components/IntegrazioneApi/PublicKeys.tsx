@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
 import { Box, Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
@@ -21,6 +22,7 @@ import {
 import { PNRole } from '../../redux/auth/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import * as routes from '../../navigation/routes.const';
 import ApiKeyModal from './ApiKeyModal';
 import PublicKeysTable from './PublicKeysTable';
 
@@ -56,6 +58,7 @@ const ShowCodesInput = ({ value, label }: { value: string; label: string }) => {
 
 const PublicKeys: React.FC = () => {
   const { t } = useTranslation(['integrazioneApi']);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const publicKeys = useAppSelector((state: RootState) => state.apiKeysState.publicKeys);
@@ -80,14 +83,20 @@ const PublicKeys: React.FC = () => {
     void dispatch(getPublicKeys({ showPublicKey: true }));
   }, []);
 
-  const blockPublicKey = (publicKeyId: string) => {
+  const handleGeneratePublicKey = (publicKeyId?: string) => {
+    handleCloseModal();
+    const queryStr = publicKeyId ? `?kid=${publicKeyId}` : '';
+    navigate(`${routes.REGISTRA_CHIAVE_PUBBLICA}${queryStr}`);
+  };
+
+  const handleBlockPublicKey = (publicKeyId: string) => {
     handleCloseModal();
     void dispatch(
       changePublicKeyStatus({ kid: publicKeyId, status: ChangeStatusPublicKeyV1StatusEnum.Block })
     ).then(fetchPublicKeys);
   };
 
-  const deleteApiKey = (publicKeyId: string) => {
+  const handleDeletePublicKey = (publicKeyId: string) => {
     handleCloseModal();
     void dispatch(deletePublicKey(publicKeyId)).then(fetchPublicKeys);
   };
@@ -116,7 +125,7 @@ const PublicKeys: React.FC = () => {
             data-testid="generatePublicKey"
             variant="contained"
             sx={{ mb: { xs: 3, lg: 0 } }}
-            //   onClick={handleGeneratePublicKey}
+              onClick={() => handleGeneratePublicKey()}
           >
             {t('publicKeys.new-key-button')}
           </Button>
@@ -159,7 +168,7 @@ const PublicKeys: React.FC = () => {
               closeModalHandler={handleCloseModal}
               actionButtonLabel={t('block-button')}
               buttonIcon={<Block fontSize="small" sx={{ mr: 1 }} />}
-              actionHandler={() => blockPublicKey(modal.publicKey?.kid as string)}
+              actionHandler={() => handleBlockPublicKey(modal.publicKey?.kid as string)}
             />
           )}
           {modal.view === ModalApiKeyView.ROTATE && (
@@ -171,7 +180,7 @@ const PublicKeys: React.FC = () => {
               closeModalHandler={handleCloseModal}
               actionButtonLabel={t('rotate-button')}
               buttonIcon={<Sync fontSize="small" sx={{ mr: 1 }} />}
-              // actionHandler={() => apiKeyRotated(modal.apiKey?.id as string)}
+              actionHandler={() => handleGeneratePublicKey(modal.publicKey?.kid as string)}
             />
           )}
           {modal.view === ModalApiKeyView.DELETE && (
@@ -182,7 +191,7 @@ const PublicKeys: React.FC = () => {
               closeModalHandler={handleCloseModal}
               actionButtonLabel={t('delete-button')}
               buttonIcon={<Delete fontSize="small" sx={{ mr: 1 }} />}
-              actionHandler={() => deleteApiKey(modal.publicKey?.kid as string)}
+              actionHandler={() => handleDeletePublicKey(modal.publicKey?.kid as string)}
             />
           )}
         </Box>
