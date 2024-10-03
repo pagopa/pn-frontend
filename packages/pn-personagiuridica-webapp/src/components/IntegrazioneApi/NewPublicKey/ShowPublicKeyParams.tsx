@@ -6,11 +6,11 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import { InputAdornment, InputLabel, TextField, Typography } from '@mui/material';
 import { Box, Stack } from "@mui/system";
 
-import { PublicKeyBaseParams } from '../../../models/ApiKeys';
+import { BffPublicKeyResponse } from "../../../generated-client/pg-apikeys";
 import NewPublicKeyCard from './NewPublicKeyCard';
 
 type Props = {
-    params: PublicKeyBaseParams | undefined;
+    params: BffPublicKeyResponse | undefined;
 };
 
 const ShowPublicKeyParams: React.FC<Props> = ({params}) => {

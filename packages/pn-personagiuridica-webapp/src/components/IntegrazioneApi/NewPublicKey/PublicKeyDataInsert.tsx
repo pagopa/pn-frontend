@@ -8,12 +8,12 @@ import { useFormik } from 'formik';
 import { formatDate, PRIVACY_LINK_RELATIVE_PATH, today, TOS_LINK_RELATIVE_PATH } from '@pagopa-pn/pn-commons';
 import { Link, TextField, Typography } from '@mui/material';
 
-import { NewPublicApiKeyRequest } from "../../../models/ApiKeys";
+import { BffPublicKeyRequest } from '../../../generated-client/pg-apikeys';
 import * as routes from '../../../navigation/routes.const';
 import NewPublicKeyCard from './NewPublicKeyCard';
 
 type Props = {
-    onConfirm: (publicKey: NewPublicApiKeyRequest) => void;
+    onConfirm: (publicKey: BffPublicKeyRequest) => void;
 };
 
 const PublicKeyDataInsert: React.FC<Props> = ({onConfirm}) => {

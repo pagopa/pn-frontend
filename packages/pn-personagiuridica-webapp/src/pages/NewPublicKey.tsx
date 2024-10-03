@@ -10,18 +10,18 @@ import { Box, Grid, Step, StepLabel, Stepper } from "@mui/material";
 
 import * as routes from '../navigation/routes.const';
 import PublicKeyDataInsert from "../components/IntegrazioneApi/NewPublicKey/PublicKeyDataInsert";
-import { ApiKeyStatus, NewPublicApiKeyRequest, PublicKeyBaseParams } from "../models/ApiKeys";
 import ShowPublicKeyParams from "../components/IntegrazioneApi/NewPublicKey/ShowPublicKeyParams";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import { createPublicKey, rotatePublicKey } from "../redux/apikeys/actions";
+import { BffPublicKeyRequest, BffPublicKeyResponse, PublicKeyStatus } from "../generated-client/pg-apikeys";
 
 const NewPublicKey = () => {
     const { t } = useTranslation(['common', 'integrazioneApi']);
     const isMobile = useIsMobile();
     const [activeStep, setActiveStep] = useState(0);
     // const [isTosAccepted, setIsTosAccepted] = useState<boolean | undefined>();
-    const [creationResponse, setCreationResponse] = useState<PublicKeyBaseParams | undefined>(undefined);
+    const [creationResponse, setCreationResponse] = useState<BffPublicKeyResponse | undefined>(undefined);
     const [searchParams] = useSearchParams();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -49,7 +49,7 @@ const NewPublicKey = () => {
     
     const isRotate: boolean = !!kid;
     
-    const activeKey: boolean = !!(kid && publicKeys.items.find(item => item.kid === kid && item.status === ApiKeyStatus.ACTIVE));
+    const activeKey: boolean = !!(kid && publicKeys.items.find(item => item.kid === kid && item.status === PublicKeyStatus.Active));
     
     // const redirectApiDashboard = () => {
     //     setInterval(() => {
@@ -57,14 +57,9 @@ const NewPublicKey = () => {
     //     }, 200);
     // };
 
-    
-    
-    const publicKeyRegistration = async (publicKey: NewPublicApiKeyRequest) => {
-        const dispatchAction = () => isRotate? rotatePublicKey ({ kid: kid ?? '', ...publicKey}) : createPublicKey(publicKey);
-        
-        dispatch(dispatchAction())
+    const dispatchCreate = (publicKey: BffPublicKeyRequest) => dispatch(createPublicKey(publicKey))
         .unwrap()
-        .then((response: PublicKeyBaseParams) => {
+        .then((response: BffPublicKeyResponse) => {
             if(response.issuer) {
                 setActiveStep((previousStep) => previousStep + 1);
                 setCreationResponse(response);
@@ -73,6 +68,44 @@ const NewPublicKey = () => {
         .catch(error => {
             console.error(error);
         });
+
+    const dispatchRotate = (kid: string, publicKey: BffPublicKeyRequest) => dispatch(rotatePublicKey({kid, body: publicKey}))
+        .unwrap()
+        .then((response: BffPublicKeyResponse) => {
+            if(response.issuer) {
+                setActiveStep((previousStep) => previousStep + 1);
+                setCreationResponse(response);
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    
+    const publicKeyRegistration = async (publicKey: BffPublicKeyRequest) => {
+        if(kid){
+            await dispatchRotate(kid, publicKey);
+        }
+        else {
+            await dispatchCreate(publicKey);
+        }
+    
+    // const publicKeyRegistration = async (publicKey: BffPublicKeyRequest) => {
+    //     const dispatchAction = isRotate? rotatePublicKey({ kid: kid ?? '', body: publicKey}) : createPublicKey(publicKey);
+
+    //     // eslint-disable-next-line functional/no-let
+    //     let params = kid ? { kid, body: publicKey} : publicKey;
+        
+    //     dispatch(dispatchAction)
+    //     .unwrap()
+    //     .then((response: BffPublicKeyResponse) => {
+    //         if(response.issuer) {
+    //             setActiveStep((previousStep) => previousStep + 1);
+    //             setCreationResponse(response);
+    //         }
+    //     })
+    //     .catch(error => {
+    //         console.error(error);
+    //     });
         
     };
 
