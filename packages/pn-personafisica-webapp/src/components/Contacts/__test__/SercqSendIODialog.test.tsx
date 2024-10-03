@@ -48,7 +48,7 @@ describe('test SercqSendInfoDialog', () => {
     expect(bodyEl).toHaveTextContent('legal-contacts.sercq-send-io-list');
     const cancelButton = screen.getByText('button.not-now');
     expect(cancelButton).toBeInTheDocument();
-    const confirmButton = screen.getByText('button.conferma');
+    const confirmButton = screen.getByText('button.attiva');
     expect(confirmButton).toBeInTheDocument();
   });
 
@@ -64,7 +64,7 @@ describe('test SercqSendInfoDialog', () => {
     const cancelButton = screen.getByText('button.not-now');
     fireEvent.click(cancelButton);
     expect(discardHandler).toHaveBeenCalledTimes(1);
-    const confirmButton = screen.getByText('button.conferma');
+    const confirmButton = screen.getByText('button.attiva');
     fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
