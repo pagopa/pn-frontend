@@ -1,4 +1,6 @@
-import { AddressType, ChannelType, DigitalAddress, SERCQ_SEND_VALUE } from '../models/contacts';
+import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
+
+import { AddressType, ChannelType, DigitalAddress } from '../models/contacts';
 
 export const digitalAddresses: Array<DigitalAddress> = [
   {

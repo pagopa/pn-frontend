@@ -1,47 +1,48 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Typography } from '@mui/material';
-import { EmptyState, KnownSentiment, useIsMobile } from '@pagopa-pn/pn-commons';
+import { Button, Stack, Typography } from '@mui/material';
+import { EmptyState, KnownSentiment } from '@pagopa-pn/pn-commons';
+import { useNavigate } from 'react-router-dom';
 
 import * as routes from '../../navigation/routes.const';
 
 const PublicKeys: React.FC = () => {
   const { t } = useTranslation(['integrazioneApi']);
-  const isMobile = useIsMobile();
   const navigate = useNavigate();
 
-    const handleGeneratePublicKey = () => {
-      navigate(routes.REGISTRA_CHIAVE_PUBBLICA);
-    };
+  const handleGeneratePublicKey = () => {
+    navigate(routes.REGISTRA_CHIAVE_PUBBLICA);
+  };
 
   return (
-    <Box mt={5}>
-      <Box
+    <>
+      <Stack
+        direction={{ xs: 'column', lg: 'row' }}
         sx={{
-          display: isMobile ? 'block' : 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 3,
+          alignItems: { xs: 'start', lg: 'center' },
+          mb: 3,
+          mt: 5,
         }}
       >
-        <Typography variant="h6" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+        <Typography variant="h6" sx={{ mb: { xs: 3, lg: 0 } }}>
           {t('public-keys-title')}
         </Typography>
+
         <Button
           id="generate-public-key"
           data-testid="generatePublicKey"
           variant="contained"
-          sx={{ marginBottom: isMobile ? 3 : undefined }}
-            onClick={handleGeneratePublicKey}
+          sx={{ mb: { xs: 3, lg: 0 } }}
+          onClick={handleGeneratePublicKey}
         >
           {t('new-public-key-button')}
         </Button>
-      </Box>
+      </Stack>
 
       <EmptyState sentimentIcon={KnownSentiment.NONE}>{t('public-keys-empty-state')}</EmptyState>
-    </Box>
+    </>
   );
 };
 

@@ -2,6 +2,8 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Box, Stack, Typography } from '@mui/material';
 
+import { ContactSource } from '../../models/contacts';
+import DomicileBanner from '../DomicileBanner/DomicileBanner';
 import EmailContactItem from './EmailContactItem';
 import SmsContactItem from './SmsContactItem';
 
@@ -17,6 +19,7 @@ const CourtesyContacts: React.FC = () => {
         <Trans i18nKey="courtesy-contacts.sub-title" ns="recapiti" />
       </Typography>
       <Stack spacing={3} mt={4} data-testid="courtesyContacts">
+        <DomicileBanner source={ContactSource.RECAPITI} />
         <EmailContactItem />
         <SmsContactItem />
       </Stack>

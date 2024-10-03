@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { ConsentType } from '@pagopa-pn/pn-commons';
+import { ConsentType, SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 import { getById, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
@@ -21,12 +21,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import {
-  AddressType,
-  ChannelType,
-  IOAllowedValues,
-  SERCQ_SEND_VALUE,
-} from '../../../models/contacts';
+import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
 import { internationalPhonePrefix } from '../../../utility/contacts.utility';
 import SercqSendContactItem from '../SercqSendContactItem';
 import { fillCodeDialog } from './test-utils';
@@ -296,7 +291,7 @@ describe('test SercqSendContactItem', () => {
     const ioDialog = await waitFor(() => screen.getByTestId('sercqSendIODialog'));
     expect(ioDialog).toBeInTheDocument();
     // click on confirm button
-    const confirmButton = within(ioDialog).getByText('button.conferma');
+    const confirmButton = within(ioDialog).getByText('button.attiva');
     fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(2);

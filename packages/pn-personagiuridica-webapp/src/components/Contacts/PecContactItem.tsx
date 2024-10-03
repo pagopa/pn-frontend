@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Divider, Stack, Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 import { appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -157,7 +157,7 @@ const PecContactItem: React.FC = () => {
           inputProps={{
             label: t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' }),
           }}
-          insertButtonLabel={t('button.conferma')}
+          insertButtonLabel={t('button.attiva')}
           onSubmit={handleSubmit}
           onDelete={() => {
             setModalOpen(ModalType.DELETE);
@@ -172,14 +172,12 @@ const PecContactItem: React.FC = () => {
       {defaultSERCQ_SENDAddress && (
         <>
           <Divider sx={{ color: 'text.secondary' }} />
-          <Stack direction="row" spacing={0.5} mt={2}>
-            <Typography variant="body2" color="text.secondary" display="inline-flex">
-              {t('legal-contacts.sercq-send-pec', { ns: 'recapiti' })}
-            </Typography>
-            <ButtonNaked color={'primary'} size="medium" onClick={handlePecAdd}>
-              {t('legal-contacts.sercq-send-add-pec', { ns: 'recapiti' })}
-            </ButtonNaked>
-          </Stack>
+          <Typography mt={2} variant="body2" color="text.secondary">
+            {t('legal-contacts.sercq-send-pec', { ns: 'recapiti' })}
+          </Typography>
+          <ButtonNaked color={'primary'} size="medium" onClick={handlePecAdd}>
+            {t('legal-contacts.sercq-send-add-pec', { ns: 'recapiti' })}
+          </ButtonNaked>
         </>
       )}
       <ExistingContactDialog
