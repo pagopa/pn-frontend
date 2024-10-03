@@ -123,13 +123,23 @@ const PecContactItem: React.FC = () => {
 
   const deleteConfirmHandler = () => {
     setModalOpen(null);
-    void dispatch(
+    dispatch(
       deleteAddress({
         addressType: AddressType.LEGAL,
         senderId: 'default',
         channelType: ChannelType.PEC,
       })
-    );
+    )
+      .unwrap()
+      .then(() => {
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t(`legal-contacts.pec-removed-successfully`, { ns: 'recapiti' }),
+          })
+        );
+      })
+      .catch(() => {});
   };
 
   const handlePecAdd = () => {
