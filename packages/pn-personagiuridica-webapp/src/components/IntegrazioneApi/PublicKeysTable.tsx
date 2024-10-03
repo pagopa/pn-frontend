@@ -2,7 +2,6 @@ import { add } from 'date-fns';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box } from '@mui/material';
 import {
   EmptyState,
   KnownSentiment,
@@ -118,7 +117,6 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
         ))}
       </SmartHeader>
       <SmartBody>
-        <Box />
         {data.map((row, index) => (
           <SmartBodyRow key={row.id} index={index} testId="publicKeysBodyRow">
             {publicKeysColumns.map((column) => (
@@ -131,6 +129,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
               >
                 <ApiKeysDataSwitch
                   data={row}
+                  keys={publicKeys}
                   type={column.id}
                   handleModalClick={handleModalClick}
                 />

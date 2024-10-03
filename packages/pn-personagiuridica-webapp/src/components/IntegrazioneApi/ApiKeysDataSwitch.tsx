@@ -6,27 +6,23 @@ import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { Row, StatusTooltip } from '@pagopa-pn/pn-commons';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
-import { PublicKeyStatus } from '../../generated-client/pg-apikeys';
+import { BffPublicKeysResponse, PublicKeyStatus } from '../../generated-client/pg-apikeys';
 import { ModalApiKeyView, PublicKeysColumnData } from '../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../utility/apikeys.utility';
 
-/**
- * Checks if status history of a api key contains a status set as ROTATED
- * @returns true if the api key history contains status ROTATED, otherwise false
- */
-const isApiKeyRotated = (data: Row<PublicKeysColumnData>): boolean =>
-  data.statusHistory
-    ? !!data.statusHistory.find((status) => status.status === PublicKeyStatus.Rotated)
-    : false;
+const isApiKeyDisactivated = (data: Row<PublicKeysColumnData>): boolean =>
+  data.status !== PublicKeyStatus.Active;
 
 const setRowColorByStatus = (data: Row<PublicKeysColumnData>): string | undefined =>
-  isApiKeyRotated(data) ? 'text.disabled' : undefined;
+  isApiKeyDisactivated(data) ? 'text.disabled' : undefined;
 
 const ApiKeyContextMenu = ({
   data,
+  keys,
   handleModalClick,
 }: {
   data: Row<PublicKeysColumnData>;
+  keys: BffPublicKeysResponse;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
 }) => {
   const apiKeyId = Number(data.id);
@@ -41,12 +37,16 @@ const ApiKeyContextMenu = ({
     setAnchorEl(null);
   };
 
+  const checkIfStatusIsAlreadyPresent = (status: PublicKeyStatus): boolean =>
+    keys.items.some((key) => key.status === status);
+
   return (
     <Box data-testid="contextMenu">
       <Box>
         <IconButton
           onClick={handleClick}
           size="small"
+          color="primary"
           data-testid="contextMenuButton"
           aria-label={t('context-menu.title')}
           aria-controls={open ? 'context-menu' : undefined}
@@ -73,37 +73,39 @@ const ApiKeyContextMenu = ({
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {data.status !== PublicKeyStatus.Rotated && data.status !== PublicKeyStatus.Blocked && (
-          <MenuItem
-            id="button-rotate"
-            data-testid="buttonRotate"
-            onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}
-          >
-            <Sync sx={{ mr: 1 }} />
-            {t('context-menu.rotate')}
-          </MenuItem>
-        )}
-        {(data.status === PublicKeyStatus.Active || data.status === PublicKeyStatus.Rotated) && (
-          <MenuItem
-            id="button-block"
-            data-testid="buttonBlock"
-            onClick={() => handleModalClick(ModalApiKeyView.BLOCK, apiKeyId)}
-          >
-            <Block sx={{ mr: 1 }} />
-            {t('context-menu.block')}
-          </MenuItem>
-        )}
-        {data.status !== PublicKeyStatus.Rotated && (
-          <MenuItem
-            id="button-view"
-            data-testid="buttonView"
-            onClick={() => handleModalClick(ModalApiKeyView.VIEW, apiKeyId)}
-          >
-            <RemoveRedEye sx={{ mr: 1 }} />
-            {t('context-menu.view')}
-          </MenuItem>
-        )}
-        {data.status === PublicKeyStatus.Blocked && (
+        {data.status === PublicKeyStatus.Active &&
+          !checkIfStatusIsAlreadyPresent(PublicKeyStatus.Rotated) && (
+            <MenuItem
+              id="button-rotate"
+              data-testid="buttonRotate"
+              onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}
+            >
+              <Sync sx={{ mr: 1 }} />
+              {t('context-menu.rotate')}
+            </MenuItem>
+          )}
+        {data.status === PublicKeyStatus.Active &&
+          !checkIfStatusIsAlreadyPresent(PublicKeyStatus.Blocked) && (
+            <MenuItem
+              id="button-block"
+              data-testid="buttonBlock"
+              onClick={() => handleModalClick(ModalApiKeyView.BLOCK, apiKeyId)}
+            >
+              <Block sx={{ mr: 1 }} />
+              {t('context-menu.block')}
+            </MenuItem>
+          )}
+
+        <MenuItem
+          id="button-view"
+          data-testid="buttonView"
+          onClick={() => handleModalClick(ModalApiKeyView.VIEW, apiKeyId)}
+        >
+          <RemoveRedEye sx={{ mr: 1 }} />
+          {t('context-menu.view')}
+        </MenuItem>
+
+        {data.status !== PublicKeyStatus.Active && (
           <MenuItem
             id="button-delete"
             data-testid="buttonDelete"
@@ -121,9 +123,10 @@ const ApiKeyContextMenu = ({
 
 const ApiKeysDataSwitch: React.FC<{
   data: Row<PublicKeysColumnData>;
+  keys: BffPublicKeysResponse;
   type: keyof PublicKeysColumnData;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
-}> = ({ data, type, handleModalClick }) => {
+}> = ({ data, keys, type, handleModalClick }) => {
   const { t } = useTranslation(['integrazioneApi']);
 
   if (type === 'name') {
@@ -142,7 +145,7 @@ const ApiKeysDataSwitch: React.FC<{
         {`${data.value?.substring(0, 12)}...`}
         <CopyToClipboardButton
           data-testid="copyToClipboard"
-          disabled={isApiKeyRotated(data)}
+          disabled={isApiKeyDisactivated(data)}
           tooltipTitle={t('api-key-copied')}
           value={() => data.value || ''}
         />
@@ -170,7 +173,7 @@ const ApiKeysDataSwitch: React.FC<{
     );
   }
   if (type === 'menu') {
-    return <ApiKeyContextMenu data={data} handleModalClick={handleModalClick} />;
+    return <ApiKeyContextMenu data={data} keys={keys} handleModalClick={handleModalClick} />;
   }
   return <></>;
 };
