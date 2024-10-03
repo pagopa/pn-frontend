@@ -74,7 +74,7 @@ const getDomicileData = (
       canBeClosed: false,
       callToAction: 'no-courtesy-no-sercq-send-cta',
     };
-  } else if (!dodDisabled && hasSercqSend && !hasCourtesyAddresses && hasAppIODisabled) {
+  } else if (!dodDisabled && hasSercqSend && !hasCourtesyAddresses) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return {
       destination: ChannelType.EMAIL,
