@@ -11,8 +11,6 @@ export enum IOAllowedValues {
   DISABLED = 'DISABLED',
 }
 
-export const SERCQ_SEND_VALUE = 'x-pagopa-pn-sercq:send-self:notification-already-delivered';
-
 export enum AddressType {
   LEGAL = 'LEGAL',
   COURTESY = 'COURTESY',
@@ -27,6 +25,7 @@ export enum ContactSource {
 
 export enum ContactOperation {
   ADD = 'ADD',
+  ADD_COURTESY = 'ADD_COURTESY',
   SCROLL = 'SCROLL',
 }
 

@@ -15,6 +15,8 @@ const ApiIntegration: React.FC = () => {
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
 
+  const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
+
   return (
     <Box p={3}>
       <TitleBox
@@ -24,7 +26,7 @@ const ApiIntegration: React.FC = () => {
         variantSubTitle="body1"
       />
 
-      {userHasAdminPermissions && <PublicKeys />}
+      {isAdminWithoutGroups && <PublicKeys />}
     </Box>
   );
 };

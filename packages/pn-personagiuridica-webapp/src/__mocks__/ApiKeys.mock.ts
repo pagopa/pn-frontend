@@ -1,6 +1,11 @@
-import { ApiKeyStatus, PublicKeys, VirtualKeys } from '../models/ApiKeys';
+import {
+  BffPublicKeysResponse,
+  BffVirtualKeysResponse,
+  PublicKeyStatus,
+  VirtualKeyStatus,
+} from '../generated-client/pg-apikeys';
 
-export const publicKeys: PublicKeys = {
+export const publicKeys: BffPublicKeysResponse = {
   items: [
     {
       kid: '92461124-9cc2-4608-a0d4-63a98b75c8f1',
@@ -8,10 +13,10 @@ export const publicKeys: PublicKeys = {
       name: 'public-key-1',
       value: 'string',
       createdAt: '2024-09-30T12:53:02.405Z',
-      status: ApiKeyStatus.ROTATED,
+      status: PublicKeyStatus.Rotated,
       statusHistory: [
         {
-          status: ApiKeyStatus.ROTATED,
+          status: PublicKeyStatus.Rotated,
           date: '2024-09-30T12:53:02.405Z',
           changedByDenomination: 'e490f02e-9429-4b38-bb11-ddb8a561fb62',
         },
@@ -23,10 +28,10 @@ export const publicKeys: PublicKeys = {
       name: 'public-key-2',
       value: 'string',
       createdAt: '2024-09-30T12:53:02.405Z',
-      status: ApiKeyStatus.BLOCKED,
+      status: PublicKeyStatus.Blocked,
       statusHistory: [
         {
-          status: ApiKeyStatus.BLOCKED,
+          status: PublicKeyStatus.Blocked,
           date: '2024-09-30T12:53:02.405Z',
           changedByDenomination: 'e490f02e-9429-4b38-bb11-ddb8a561fb62',
         },
@@ -36,7 +41,7 @@ export const publicKeys: PublicKeys = {
   total: 2,
 };
 
-export const virtualKeys: VirtualKeys = {
+export const virtualKeys: BffVirtualKeysResponse = {
   items: [
     {
       id: 'string',
@@ -47,7 +52,7 @@ export const virtualKeys: VirtualKeys = {
         denomination: 'string',
         fiscalCode: 'string',
       },
-      status: ApiKeyStatus.CREATED,
+      status: VirtualKeyStatus.Created,
     },
     {
       id: 'string',
@@ -58,7 +63,7 @@ export const virtualKeys: VirtualKeys = {
         denomination: 'string',
         fiscalCode: 'string',
       },
-      status: ApiKeyStatus.ROTATED,
+      status: VirtualKeyStatus.Rotated,
     },
   ],
   total: 2,

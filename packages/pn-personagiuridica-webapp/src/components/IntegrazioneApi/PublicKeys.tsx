@@ -3,10 +3,15 @@ import { useTranslation } from 'react-i18next';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
 import { Box, Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
-import { ApiErrorWrapper, useHasPermissions, useIsMobile } from '@pagopa-pn/pn-commons';
+import { ApiErrorWrapper, useHasPermissions } from '@pagopa-pn/pn-commons';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
-import { ApiKeyActions, ApiKeyStatus, ModalApiKeyView, PublicKey } from '../../models/ApiKeys';
+import {
+  ChangeStatusPublicKeyV1StatusEnum,
+  PublicKeyRow,
+  PublicKeyStatus,
+} from '../../generated-client/pg-apikeys';
+import { ModalApiKeyView } from '../../models/ApiKeys';
 import {
   PUBLIC_APIKEYS_ACTIONS,
   changePublicKeyStatus,
@@ -21,7 +26,7 @@ import PublicKeysTable from './PublicKeysTable';
 
 type ModalType = {
   view: ModalApiKeyView;
-  publicKey?: PublicKey;
+  publicKey?: PublicKeyRow;
 };
 
 const ShowCodesInput = ({ value, label }: { value: string; label: string }) => {
@@ -34,7 +39,7 @@ const ShowCodesInput = ({ value, label }: { value: string; label: string }) => {
       label={t(label)}
       InputProps={{
         readOnly: true,
-        sx: { padding: 0 },
+        sx: { p: 0 },
         endAdornment: (
           <InputAdornment position="end">
             <CopyToClipboardButton
@@ -52,7 +57,6 @@ const ShowCodesInput = ({ value, label }: { value: string; label: string }) => {
 const PublicKeys: React.FC = () => {
   const { t } = useTranslation(['integrazioneApi']);
   const dispatch = useAppDispatch();
-  const isMobile = useIsMobile();
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const publicKeys = useAppSelector((state: RootState) => state.apiKeysState.publicKeys);
 
@@ -62,7 +66,7 @@ const PublicKeys: React.FC = () => {
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
 
   const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
-  const hasOneActiveKey = publicKeys.items.some((key) => key.status === ApiKeyStatus.ACTIVE);
+  const hasOneActiveKey = publicKeys.items.some((key) => key.status === PublicKeyStatus.Active);
 
   const handleModalClick = (view: ModalApiKeyView, publicKeyId: number) => {
     setModal({ view, publicKey: publicKeys.items[publicKeyId] });
@@ -76,15 +80,11 @@ const PublicKeys: React.FC = () => {
     void dispatch(getPublicKeys({ showPublicKey: true }));
   }, []);
 
-  useEffect(() => {
-    fetchPublicKeys();
-  }, []);
-
   const blockPublicKey = (publicKeyId: string) => {
     handleCloseModal();
-    void dispatch(changePublicKeyStatus({ kid: publicKeyId, status: ApiKeyActions.BLOCK })).then(
-      fetchPublicKeys
-    );
+    void dispatch(
+      changePublicKeyStatus({ kid: publicKeyId, status: ChangeStatusPublicKeyV1StatusEnum.Block })
+    ).then(fetchPublicKeys);
   };
 
   const deleteApiKey = (publicKeyId: string) => {
@@ -92,17 +92,22 @@ const PublicKeys: React.FC = () => {
     void dispatch(deletePublicKey(publicKeyId)).then(fetchPublicKeys);
   };
 
+  useEffect(() => {
+    fetchPublicKeys();
+  }, []);
+
   return (
-    <Box mt={5}>
-      <Box
+    <>
+      <Stack
+        direction={{ xs: 'column', lg: 'row' }}
         sx={{
-          display: isMobile ? 'block' : 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 3,
+          alignItems: { xs: 'start', lg: 'center' },
+          mb: 3,
+          mt: 5,
         }}
       >
-        <Typography variant="h6" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+        <Typography variant="h6" sx={{ mb: { xs: 3, lg: 0 } }}>
           {t('publicKeys.title')}
         </Typography>
         {isAdminWithoutGroups && !hasOneActiveKey && (
@@ -110,13 +115,13 @@ const PublicKeys: React.FC = () => {
             id="generate-public-key"
             data-testid="generatePublicKey"
             variant="contained"
-            sx={{ marginBottom: isMobile ? 3 : undefined }}
+            sx={{ mb: { xs: 3, lg: 0 } }}
             //   onClick={handleGeneratePublicKey}
           >
             {t('publicKeys.new-key-button')}
           </Button>
         )}
-      </Box>
+      </Stack>
       <ApiErrorWrapper
         apiId={PUBLIC_APIKEYS_ACTIONS.GET_PUBLIC_APIKEYS}
         reloadAction={() => fetchPublicKeys()}
@@ -125,7 +130,7 @@ const PublicKeys: React.FC = () => {
       >
         <PublicKeysTable publicKeys={publicKeys} handleModalClick={handleModalClick} />
 
-        <Box minWidth={isMobile ? '0' : '600px'}>
+        <Box minWidth={{ xs: '0', lg: '600px' }}>
           {modal.view === ModalApiKeyView.VIEW && (
             <ApiKeyModal
               title={t('publicKeys.view-title')}
@@ -182,7 +187,7 @@ const PublicKeys: React.FC = () => {
           )}
         </Box>
       </ApiErrorWrapper>
-    </Box>
+    </>
   );
 };
 

@@ -17,20 +17,21 @@ import {
   formatDate,
 } from '@pagopa-pn/pn-commons';
 
-import { ModalApiKeyView, PublicKey, PublicKeys, PublicKeysColumnData } from '../../models/ApiKeys';
+import { BffPublicKeysResponse, PublicKeyRow } from '../../generated-client/pg-apikeys';
+import { ModalApiKeyView, PublicKeysColumnData } from '../../models/ApiKeys';
 import ApiKeysDataSwitch from './ApiKeysDataSwitch';
 
 type Props = {
-  publicKeys: PublicKeys;
+  publicKeys: BffPublicKeysResponse;
   handleModalClick: (view: ModalApiKeyView, publicKeyId: number) => void;
 };
 
 const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
   const { t } = useTranslation(['integrazioneApi']);
 
-  const data: Array<Row<PublicKeysColumnData>> = publicKeys.items.map((n: PublicKey, index) => ({
+  const data: Array<Row<PublicKeysColumnData>> = publicKeys.items.map((n: PublicKeyRow, index) => ({
     ...n,
-    createdAt: formatDate(add(new Date(n.createdAt), { days: 355 }).toISOString()),
+    createdAt: formatDate(add(new Date(n.createdAt ?? ''), { days: 355 }).toISOString()),
     id: index.toString(),
     menu: '',
   }));

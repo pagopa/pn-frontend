@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { formatDate, isToday } from '@pagopa-pn/pn-commons';
 
-import { ApiKeyStatus, StatusHistoryApikey } from '../models/ApiKeys';
+import { PublicKeyStatus, PublicKeyStatusHistory } from '../generated-client/pg-apikeys';
 
 function localizeStatus(
   status: string,
-  history: Array<StatusHistoryApikey>
+  history: Array<PublicKeyStatusHistory>
 ): {
   label: string;
   tooltip: ReactNode;
@@ -19,7 +19,7 @@ function localizeStatus(
   };
 }
 
-type TooltipApiKeyProps = { history: Array<StatusHistoryApikey> };
+type TooltipApiKeyProps = { history: Array<PublicKeyStatusHistory> };
 
 export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
   const { t } = useTranslation(['integrazioneApi']);
@@ -32,24 +32,24 @@ export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
       }}
     >
       {history?.map((h, index) => {
-        const output = (p: string, h: StatusHistoryApikey) => (
+        const output = (p: string, h: PublicKeyStatusHistory) => (
           <Box sx={{ textAlign: 'left' }} key={index}>
             <Box>
-              {t(`tooltip.${p}`)} {formatDate(h.date)}
+              {t(`tooltip.${p}`)} {formatDate(h.date ?? '')}
             </Box>
           </Box>
         );
 
-        const suffixToday = isToday(new Date(h.date)) ? '' : '-in';
+        const suffixToday = isToday(new Date(h.date ?? '')) ? '' : '-in';
 
         switch (h.status) {
-          case ApiKeyStatus.ACTIVE:
+          case PublicKeyStatus.Active:
             return output(`enabled${suffixToday}`, h);
-          case ApiKeyStatus.CREATED:
+          case PublicKeyStatus.Created:
             return output(`created${suffixToday}`, h);
-          case ApiKeyStatus.BLOCKED:
+          case PublicKeyStatus.Blocked:
             return output(`blocked${suffixToday}`, h);
-          case ApiKeyStatus.ROTATED:
+          case PublicKeyStatus.Rotated:
             return output(`rotated${suffixToday}`, h);
           default:
             return <></>;
@@ -60,25 +60,25 @@ export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
 };
 
 export function getApiKeyStatusInfos(
-  status: ApiKeyStatus,
-  statusHistory: Array<StatusHistoryApikey>
+  status: PublicKeyStatus,
+  statusHistory: Array<PublicKeyStatusHistory>
 ): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
   tooltip: ReactNode;
 } {
   switch (status) {
-    case ApiKeyStatus.ACTIVE:
+    case PublicKeyStatus.Active:
       return {
         color: 'success',
         ...localizeStatus('enabled', statusHistory),
       };
-    case ApiKeyStatus.BLOCKED:
+    case PublicKeyStatus.Blocked:
       return {
         color: 'default',
         ...localizeStatus('blocked', statusHistory),
       };
-    case ApiKeyStatus.ROTATED:
+    case PublicKeyStatus.Rotated:
       return {
         color: 'warning',
         ...localizeStatus('rotated', statusHistory),

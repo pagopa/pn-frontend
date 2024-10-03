@@ -6,7 +6,8 @@ import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { Row, StatusTooltip } from '@pagopa-pn/pn-commons';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
-import { ApiKeyStatus, ModalApiKeyView, PublicKeysColumnData } from '../../models/ApiKeys';
+import { PublicKeyStatus } from '../../generated-client/pg-apikeys';
+import { ModalApiKeyView, PublicKeysColumnData } from '../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../utility/apikeys.utility';
 
 /**
@@ -14,8 +15,9 @@ import { getApiKeyStatusInfos } from '../../utility/apikeys.utility';
  * @returns true if the api key history contains status ROTATED, otherwise false
  */
 const isApiKeyRotated = (data: Row<PublicKeysColumnData>): boolean =>
-  data.statusHistory &&
-  !!data.statusHistory.find((status) => status.status === ApiKeyStatus.ACTIVE);
+  data.statusHistory
+    ? !!data.statusHistory.find((status) => status.status === PublicKeyStatus.Active)
+    : false;
 
 const setRowColorByStatus = (data: Row<PublicKeysColumnData>): string | undefined =>
   isApiKeyRotated(data) ? 'text.disabled' : undefined;
@@ -71,7 +73,7 @@ const ApiKeyContextMenu = ({
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {data.status !== ApiKeyStatus.ROTATED && data.status !== ApiKeyStatus.BLOCKED && (
+        {data.status !== PublicKeyStatus.Rotated && data.status !== PublicKeyStatus.Blocked && (
           <MenuItem
             id="button-rotate"
             data-testid="buttonRotate"
@@ -81,7 +83,7 @@ const ApiKeyContextMenu = ({
             {t('context-menu.rotate')}
           </MenuItem>
         )}
-        {(data.status === ApiKeyStatus.ACTIVE || data.status === ApiKeyStatus.ROTATED) && (
+        {(data.status === PublicKeyStatus.Active || data.status === PublicKeyStatus.Rotated) && (
           <MenuItem
             id="button-block"
             data-testid="buttonBlock"
@@ -91,7 +93,7 @@ const ApiKeyContextMenu = ({
             {t('context-menu.block')}
           </MenuItem>
         )}
-        {data.status !== ApiKeyStatus.ROTATED && (
+        {data.status !== PublicKeyStatus.Rotated && (
           <MenuItem
             id="button-view"
             data-testid="buttonView"
@@ -101,7 +103,7 @@ const ApiKeyContextMenu = ({
             {t('context-menu.view')}
           </MenuItem>
         )}
-        {data.status === ApiKeyStatus.BLOCKED && (
+        {data.status === PublicKeyStatus.Blocked && (
           <MenuItem
             id="button-delete"
             data-testid="buttonDelete"
@@ -151,6 +153,9 @@ const ApiKeysDataSwitch: React.FC<{
     return <Typography sx={{ color: setRowColorByStatus(data) }}>{data.createdAt}</Typography>;
   }
   if (type === 'status') {
+    if (!data.status || !data.statusHistory) {
+      return <></>;
+    }
     const { label, tooltip, color } = getApiKeyStatusInfos(data.status, data.statusHistory);
     return (
       <Box
