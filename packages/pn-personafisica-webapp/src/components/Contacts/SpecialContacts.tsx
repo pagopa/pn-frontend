@@ -339,10 +339,6 @@ const SpecialContacts: React.FC = () => {
     setModalOpen(ModalType.SPECIAL);
   };
 
-  const handleCancelCode = async () => {
-    setModalOpen(null);
-  };
-
   const handleClickAddSpecialContact = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SECONDARY_CONTACT);
     setModalOpen(ModalType.SPECIAL);
@@ -427,7 +423,7 @@ const SpecialContacts: React.FC = () => {
         channelType={currentAddress.current.channelType}
         open={modalOpen === ModalType.CODE}
         onConfirm={(code) => handleCodeVerification(code)}
-        onDiscard={handleCancelCode}
+        onDiscard={handleCloseModal}
         onError={() => sendCodeErrorEvent(currentAddress.current.channelType)}
       />
       <DeleteDialog
@@ -480,7 +476,7 @@ const SpecialContacts: React.FC = () => {
       />
       <SercqSendInfoDialog
         open={modalOpen === ModalType.INFO}
-        onDiscard={() => setModalOpen(null)}
+        onDiscard={handleCloseModal}
         onConfirm={handleInfoConfirm}
       />
     </>

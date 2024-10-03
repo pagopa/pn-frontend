@@ -295,10 +295,6 @@ const SpecialContacts: React.FC = () => {
     setModalOpen(ModalType.SPECIAL);
   };
 
-  const handleCancelCode = async () => {
-    setModalOpen(null);
-  };
-
   const groupedAddresses: Addresses = specialAddresses.reduce((obj, a) => {
     if (!obj[a.senderId]) {
       // eslint-disable-next-line functional/immutable-data
@@ -378,7 +374,7 @@ const SpecialContacts: React.FC = () => {
         channelType={currentAddress.current.channelType}
         open={modalOpen === ModalType.CODE}
         onConfirm={(code) => handleCodeVerification(code)}
-        onDiscard={handleCancelCode}
+        onDiscard={handleCloseModal}
       />
       <DeleteDialog
         showModal={modalOpen === ModalType.DELETE}
@@ -430,7 +426,7 @@ const SpecialContacts: React.FC = () => {
       />
       <SercqSendInfoDialog
         open={modalOpen === ModalType.INFO}
-        onDiscard={() => setModalOpen(null)}
+        onDiscard={handleCloseModal}
         onConfirm={handleInfoConfirm}
       />
     </>
