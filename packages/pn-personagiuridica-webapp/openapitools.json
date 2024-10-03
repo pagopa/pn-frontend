@@ -80,6 +80,17 @@
           "modelPackage": "models",
           "cleanupOutput": true
         }
+      },
+      "bff-pg-apikeys": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/99f5094b0490281f9307be54458c98b74768521e/docs/openapi/api-external-pn-bff-pg-apikeys.yaml",
+        "output": "./src/generated-client/pg-apikeys",
+        "additionalProperties": {
+          "supportsES6": true,
+          "apiPackage": "apis",
+          "modelPackage": "models",
+          "cleanupOutput": true
+        }
       }
     }
   }
