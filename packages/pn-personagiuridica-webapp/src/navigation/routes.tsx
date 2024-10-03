@@ -13,7 +13,7 @@ import {
 import DelegatesByCompany from '../components/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../components/Deleghe/DelegationsOfTheCompany';
 import ApiIntegration from '../pages/ApiIntegration.page';
-import NewPublicKey from '../pages/NewPublicKey';
+import NewPublicKey from '../pages/NewPublicKey.page';
 import { PNRole } from '../redux/auth/types';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
