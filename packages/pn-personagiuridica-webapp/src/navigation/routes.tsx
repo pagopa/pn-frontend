@@ -13,6 +13,7 @@ import {
 import DelegatesByCompany from '../components/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../components/Deleghe/DelegationsOfTheCompany';
 import ApiIntegration from '../pages/ApiIntegration.page';
+import NewPublicKey from '../pages/NewPublicKey';
 import { PNRole } from '../redux/auth/types';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -146,6 +147,36 @@ function Router() {
                     </PrivateRoute>
                   }
                 />
+                <Route
+                  path={routes.REGISTRA_CHIAVE_PUBBLICA}
+                  element={
+                    <PrivateRoute
+                      currentRoles={[]}
+                      requiredRoles={[]}
+                      additionalCondition={IS_B2B_ENABLED}
+                      redirectTo={<NotFound />}
+                    >
+                      <NewPublicKey />
+                    </PrivateRoute>
+                  }
+                />
+
+                {/* <Route
+                  path={routes.REGISTRA_CHIAVE_PUBBLICA}
+                  element={
+                    <PrivateRoute
+                      currentRoles={currentRoles}
+                      requiredRoles={[PNRole.ADMIN]}
+                      additionalCondition={IS_B2B_ENABLED}
+                      redirectTo={<NotFound />}
+                    >
+                      <NewPublicKey />
+                    </PrivateRoute>
+                  }
+                >
+                  <Route path={routes.RUOTA_CHIAVE_PUBBLICA} element={<NewPublicKey rotate />} />
+                </Route> */}
+
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
               </Route>
             </Route>

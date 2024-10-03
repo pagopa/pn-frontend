@@ -15,6 +15,7 @@ import {
   VirtualKeyBaseParams,
   VirtualKeys,
 } from '../../models/ApiKeys';
+import { BffTosPrivacyActionBody, UserConsentsApiFactory } from '../../generated-client/tos-privacy';
 
 export enum PUBLIC_APIKEYS_ACTIONS {
   GET_PUBLIC_APIKEYS = 'getPublicApiKeys',
@@ -23,6 +24,7 @@ export enum PUBLIC_APIKEYS_ACTIONS {
   UPDATE_PUBLIC_APIKEY_STATUS = 'updatePublicApiKeyStatus',
   ROTATE_PUBLIC_APIKEY = 'rotatePublicApiKey',
   CHECK_PUBLIC_APIKEY_ISSUER = 'checkPublicApiKeyIssuer',
+  ACCEPT_TOS_PRIVACY = 'acceptTosPrivacy'
 }
 
 export enum VIRTUAL_APIKEYS_ACTIONS {
@@ -120,6 +122,24 @@ export const checkPublicKeyIssuer = createAsyncThunk<CheckIssuerStatus>(
       const response = await apiKeysFactory.checkIssuerPublicKeyV1();
 
       return response.data as CheckIssuerStatus;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+/**
+ * Accepts the terms of service
+ */
+export const acceptTosPrivacy = createAsyncThunk<void, Array<BffTosPrivacyActionBody>>(
+  PUBLIC_APIKEYS_ACTIONS.ACCEPT_TOS_PRIVACY,
+  async (body: Array<BffTosPrivacyActionBody>, { rejectWithValue }) => {
+    try {
+      const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
+      const response = await tosPrivacyFactory.acceptTosPrivacyV2(body);
+      // const response = await tosPrivacyFactory.acceptPgTosPrivacyV1(body);
+
+      return response.data;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }

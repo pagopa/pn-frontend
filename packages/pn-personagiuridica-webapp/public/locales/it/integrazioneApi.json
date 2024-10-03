@@ -3,5 +3,57 @@
   "subTitle": "Genera e gestisci le chiavi per abilitare l'integrazione sicura tra i gestionali della tua impresa e SEND.",
   "public-keys-title": "Chiave pubblica",
   "new-public-key-button": "Registra chiave pubblica",
-  "public-keys-empty-state": "Ancora nessuna chiave pubblica. Registra una chiave pubblica per abilitare l’integrazione."
+  "public-keys-empty-state": "Ancora nessuna chiave pubblica. Registra una chiave pubblica per abilitare l’integrazione.",
+  "new-public-key": {
+    "title": "Registra chiave pubblica",
+    "subtitle": "Inserisci i dati richiesti per abilitare l'integrazione sicura dei gestionali della tua impresa.",
+    "button": {
+      "register": "Registra",
+      "back": "Indietro",
+      "end": "Fine"
+    },
+    "prompt": {
+      "title": "Vuoi uscire?",
+      "message": "Se esci, perderai tutti i dati inseriti finora."
+    },
+    "steps": {
+      "insert-data": {
+        "title": "Inserisci i dati",
+        "content_1": "La chiave pubblica (JWKS) è necessaria per ",
+        "content_2": "autenticare in modo sicuro le richieste provenienti dai tuoi gestionali.",
+        "content_3": "La chiave scade dopo 355 giorni.",
+        "tos_privacy_1": "Premendo “Registra” dichiari di aver letto e di accettare i ",
+        "tos_privacy_2": "Termini del Servizio",
+        "tos_privacy_3": " e l'",
+        "tos_privacy_4": "Informativa Privacy",
+        "name": {
+          "label": "Nome",
+          "default": "Chiave_",
+          "description": "Scegli un nome per la chiave o mantieni quello di default"
+        },
+        "publicKey": {
+          "begin": "-----BEGIN PUBLIC KEY-----",
+          "description": "Inserisci il valore della chiave",
+          "placeholder": "Inserisci Public Key",
+          "end": "-----END PUBLIC KEY-----"
+        }
+      },
+      "get-returned-parameters": {
+        "title": "Ottieni parametri",
+        "kid": "Kid",
+        "issuer": "Issuer",
+        "description": "Ecco i parametri per l’integrazione: utilizza questi dati per configurare la tua chiave di accesso a SEND. Puoi recuperare i dati in ogni momento nella sezione “Integrazione API”."
+      }
+    },
+    "kid-copied": "Kid copiato!",
+    "issuer-copied": "Issuer copiato!"
+  },
+  "message": {
+      "error": {
+        "rotate-invalid-kid": "Identificativo della chiave da ruotare errato!"
+      },
+      "success": {
+
+      }
+    }
 }
