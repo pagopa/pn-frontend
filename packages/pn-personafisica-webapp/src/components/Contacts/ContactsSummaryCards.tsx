@@ -32,6 +32,7 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
       contact.channelType !== ChannelType.IOMSG ||
       (contact.channelType === ChannelType.IOMSG && contact.value === IOAllowedValues.ENABLED)
   );
+
   const hasAddress = availableAddresses.length > 0;
   const isCourtesyCard = addressType === AddressType.COURTESY;
   const title = isCourtesyCard ? 'summary-card.courtesy-title' : 'summary-card.legal-title';

@@ -104,13 +104,23 @@ const EmailContactItem: React.FC = () => {
 
   const deleteConfirmHandler = () => {
     setModalOpen(null);
-    void dispatch(
+    dispatch(
       deleteAddress({
         addressType: AddressType.COURTESY,
         senderId: 'default',
         channelType: ChannelType.EMAIL,
       })
-    );
+    )
+      .unwrap()
+      .then(() => {
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t(`courtesy-contacts.email-removed-successfully`, { ns: 'recapiti' }),
+          })
+        );
+      })
+      .catch(() => {});
   };
 
   /*
