@@ -7,13 +7,13 @@ import { Row, StatusTooltip } from '@pagopa-pn/pn-commons';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import { BffPublicKeysResponse, PublicKeyStatus } from '../../generated-client/pg-apikeys';
-import { ModalApiKeyView, PublicKeysColumnData } from '../../models/ApiKeys';
+import { ApiKeyColumnData, ModalApiKeyView } from '../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../utility/apikeys.utility';
 
-const isApiKeyDisactivated = (data: Row<PublicKeysColumnData>): boolean =>
+const isApiKeyDisactivated = (data: Row<ApiKeyColumnData>): boolean =>
   data.status !== PublicKeyStatus.Active;
 
-const setRowColorByStatus = (data: Row<PublicKeysColumnData>): string | undefined =>
+const setRowColorByStatus = (data: Row<ApiKeyColumnData>): string | undefined =>
   isApiKeyDisactivated(data) ? 'text.disabled' : undefined;
 
 const ApiKeyContextMenu = ({
@@ -21,7 +21,7 @@ const ApiKeyContextMenu = ({
   keys,
   handleModalClick,
 }: {
-  data: Row<PublicKeysColumnData>;
+  data: Row<ApiKeyColumnData>;
   keys: BffPublicKeysResponse;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
 }) => {
@@ -121,9 +121,9 @@ const ApiKeyContextMenu = ({
 };
 
 const ApiKeysDataSwitch: React.FC<{
-  data: Row<PublicKeysColumnData>;
+  data: Row<ApiKeyColumnData>;
   keys: BffPublicKeysResponse;
-  type: keyof PublicKeysColumnData;
+  type: keyof ApiKeyColumnData;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
 }> = ({ data, keys, type, handleModalClick }) => {
   const { t } = useTranslation(['integrazioneApi']);
@@ -151,15 +151,21 @@ const ApiKeysDataSwitch: React.FC<{
       </Box>
     );
   }
-  if (type === 'createdAt') {
-    return <Typography sx={{ color: setRowColorByStatus(data) }}>{data.createdAt}</Typography>;
+  if (type === 'date') {
+    return <Typography sx={{ color: setRowColorByStatus(data) }}>{data.date}</Typography>;
   }
   if (type === 'status') {
-    if (!data.status || !data.statusHistory) {
+    if (!data.status) {
       return <></>;
     }
     const { label, tooltip, color } = getApiKeyStatusInfos(data.status, data.statusHistory);
-    return <StatusTooltip label={t(label)} tooltip={tooltip} color={color} />;
+    return (
+      <StatusTooltip
+        label={t(label)}
+        tooltip={data.statusHistory ? tooltip : undefined}
+        color={color}
+      />
+    );
   }
   if (type === 'menu') {
     return <ApiKeyContextMenu data={data} keys={keys} handleModalClick={handleModalClick} />;

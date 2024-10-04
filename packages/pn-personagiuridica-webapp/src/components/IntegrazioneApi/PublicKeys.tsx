@@ -55,7 +55,7 @@ const ShowCodesInput = ({ value, label }: { value: string; label: string }) => {
 };
 
 const PublicKeys: React.FC = () => {
-  const { t } = useTranslation(['common', 'integrazioneApi']);
+  const { t } = useTranslation(['integrazioneApi', 'common']);
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const publicKeys = useAppSelector((state: RootState) => state.apiKeysState.publicKeys);
@@ -115,7 +115,7 @@ const PublicKeys: React.FC = () => {
         }}
       >
         <Typography variant="h6" sx={{ mb: { xs: 3, lg: 0 } }}>
-          {t('publicKeys.title', { ns: 'integrazioneApi' })}
+          {t('publicKeys.title')}
         </Typography>
         {isAdminWithoutGroups && !hasOneActiveKey && (
           <Button
@@ -125,22 +125,22 @@ const PublicKeys: React.FC = () => {
             sx={{ mb: { xs: 3, lg: 0 } }}
             //   onClick={handleGeneratePublicKey}
           >
-            {t('publicKeys.new-key-button', { ns: 'integrazioneApi' })}
+            {t('publicKeys.new-key-button')}
           </Button>
         )}
       </Stack>
       <ApiErrorWrapper
         apiId={PUBLIC_APIKEYS_ACTIONS.GET_PUBLIC_APIKEYS}
         reloadAction={() => fetchPublicKeys()}
-        mainText={t('error-fecth-public-api-keys', { ns: 'integrazioneApi' })}
+        mainText={t('error-fecth-public-api-keys')}
         mt={3}
       >
         <PublicKeysTable publicKeys={publicKeys} handleModalClick={handleModalClick} />
 
         {modal.view === ModalApiKeyView.VIEW && (
           <ApiKeyModal
-            title={t('publicKeys.view-title', { ns: 'integrazioneApi' })}
-            subTitle={t('publicKeys.view-subtitle', { ns: 'integrazioneApi' })}
+            title={t('publicKeys.view-title')}
+            subTitle={t('publicKeys.view-subtitle')}
             content={
               <Stack spacing={2} width="536px">
                 <ShowCodesInput
@@ -151,46 +151,42 @@ const PublicKeys: React.FC = () => {
                 <ShowCodesInput value={modal.publicKey?.issuer || ''} label="publicKeys.issuer" />
               </Stack>
             }
-            closeButtonLabel={t('button.close')}
+            closeButtonLabel={t('button.close', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             closeButtonVariant="contained"
           />
         )}
         {modal.view === ModalApiKeyView.BLOCK && (
           <ApiKeyModal
-            title={t('publicKeys.block-title', { ns: 'integrazioneApi' })}
-            subTitle={t('publicKeys.block-subtitle', { ns: 'integrazioneApi' })}
-            content={
-              <Typography>{t('publicKeys.block-warning', { ns: 'integrazioneApi' })}</Typography>
-            }
-            closeButtonLabel={t('button.annulla')}
+            title={t('publicKeys.block-title')}
+            subTitle={t('publicKeys.block-subtitle')}
+            content={<Typography>{t('publicKeys.block-warning')}</Typography>}
+            closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
-            actionButtonLabel={t('button.block')}
+            actionButtonLabel={t('button.block', { ns: 'common' })}
             buttonIcon={<Block fontSize="small" sx={{ mr: 1 }} />}
             actionHandler={() => blockPublicKey(modal.publicKey?.kid)}
           />
         )}
         {modal.view === ModalApiKeyView.ROTATE && (
           <ApiKeyModal
-            title={t('publicKeys.rotate-title', { ns: 'integrazioneApi' })}
-            subTitle={t('publicKeys.rotate-subtitle', { ns: 'integrazioneApi' })}
-            content={
-              <Typography>{t('publicKeys.rotate-warning', { ns: 'integrazioneApi' })}</Typography>
-            }
-            closeButtonLabel={t('button.annulla')}
+            title={t('publicKeys.rotate-title')}
+            subTitle={t('publicKeys.rotate-subtitle')}
+            content={<Typography>{t('publicKeys.rotate-warning')}</Typography>}
+            closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
-            actionButtonLabel={t('rotate-button')}
+            actionButtonLabel={t('rotate-button', { ns: 'common' })}
             buttonIcon={<Sync fontSize="small" sx={{ mr: 1 }} />}
             // actionHandler={() => apiKeyRotated(modal.apiKey?.id)}
           />
         )}
         {modal.view === ModalApiKeyView.DELETE && (
           <ApiKeyModal
-            title={t('publicKeys.delete-title', { ns: 'integrazioneApi' })}
-            subTitle={t('publicKeys.delete-subtitle', { ns: 'integrazioneApi' })}
-            closeButtonLabel={t('button.annulla')}
+            title={t('publicKeys.delete-title')}
+            subTitle={t('publicKeys.delete-subtitle')}
+            closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
-            actionButtonLabel={t('button.elimina')}
+            actionButtonLabel={t('button.elimina', { ns: 'common' })}
             buttonIcon={<Delete fontSize="small" sx={{ mr: 1 }} />}
             actionHandler={() => deleteApiKey(modal.publicKey?.kid)}
           />

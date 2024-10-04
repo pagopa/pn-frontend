@@ -4,18 +4,22 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { formatDate, isToday } from '@pagopa-pn/pn-commons';
 
-import { PublicKeyStatus, PublicKeyStatusHistory } from '../generated-client/pg-apikeys';
+import {
+  PublicKeyStatus,
+  PublicKeyStatusHistory,
+  VirtualKeyStatus,
+} from '../generated-client/pg-apikeys';
 
 function localizeStatus(
   status: string,
-  history: Array<PublicKeyStatusHistory>
+  history?: Array<PublicKeyStatusHistory>
 ): {
   label: string;
-  tooltip: ReactNode;
+  tooltip?: ReactNode;
 } {
   return {
     label: `status.${status}`,
-    tooltip: <TooltipApiKey history={history} />,
+    tooltip: history ? <TooltipApiKey history={history} /> : undefined,
   };
 }
 
@@ -60,12 +64,12 @@ export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
 };
 
 export function getApiKeyStatusInfos(
-  status: PublicKeyStatus,
-  statusHistory: Array<PublicKeyStatusHistory>
+  status: PublicKeyStatus | VirtualKeyStatus,
+  statusHistory?: Array<PublicKeyStatusHistory>
 ): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
-  tooltip: ReactNode;
+  tooltip?: ReactNode;
 } {
   switch (status) {
     case PublicKeyStatus.Active:

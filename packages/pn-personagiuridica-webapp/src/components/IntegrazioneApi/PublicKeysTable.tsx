@@ -17,7 +17,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { BffPublicKeysResponse, PublicKeyRow } from '../../generated-client/pg-apikeys';
-import { ModalApiKeyView, PublicKeysColumnData } from '../../models/ApiKeys';
+import { ApiKeyColumnData, ModalApiKeyView } from '../../models/ApiKeys';
 import ApiKeysDataSwitch from './ApiKeysDataSwitch';
 
 type Props = {
@@ -28,14 +28,14 @@ type Props = {
 const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
   const { t } = useTranslation(['integrazioneApi']);
 
-  const data: Array<Row<PublicKeysColumnData>> = publicKeys.items.map((n: PublicKeyRow) => ({
+  const data: Array<Row<ApiKeyColumnData>> = publicKeys.items.map((n: PublicKeyRow) => ({
     ...n,
-    createdAt: formatDate(add(new Date(n.createdAt ?? ''), { days: 355 }).toISOString()),
+    date: formatDate(add(new Date(n.createdAt ?? ''), { days: 355 }).toISOString()),
     id: n.kid ?? '',
     menu: '',
   }));
 
-  const publicKeysColumns: Array<SmartTableData<PublicKeysColumnData>> = [
+  const publicKeysColumns: Array<SmartTableData<ApiKeyColumnData>> = [
     {
       id: 'name',
       label: t('publicKeys.table.name'),
@@ -54,7 +54,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
       },
     },
     {
-      id: 'createdAt',
+      id: 'date',
       label: t('publicKeys.table.endDate'),
       tableConfiguration: {
         cellProps: { width: '24%' },
