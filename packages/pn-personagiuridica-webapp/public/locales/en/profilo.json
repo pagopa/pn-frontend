@@ -5,10 +5,5 @@
     "name": "Name",
     "family_name": "Surname",
     "fiscal_number": "Fiscal code"
-  },
-  "alert-redirect-to-contacts": {
-    "title": "Do you want to manage your contact details?",
-    "message": "Enter, view or edit the contact details to receive notifications and communications from SEND.",
-    "action-text": "Go to your contact details"
   }
 }

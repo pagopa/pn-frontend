@@ -5,10 +5,5 @@
     "name": "Vorname",
     "family_name": "Nachname",
     "fiscal_number": "Steuernummer"
-  },
-  "alert-redirect-to-contacts": {
-    "title": "Möchtest du deine Anschriften verwalten?",
-    "message": "Adresse angeben, anzeigen oder ändern, an die Bescheide und Mitteilungen von SEND gesendet werden sollen.",
-    "action-text": "Zu deinen Kontaktdaten"
   }
 }
