@@ -19,6 +19,7 @@ import {
   NotificationDocumentType,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
+  NotificationStatus,
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
@@ -89,6 +90,7 @@ const NotificationDetail: React.FC = () => {
   );
 
   const isCancelled = useIsCancelled({ notification });
+  const isViewed = notification.notificationStatus === NotificationStatus.VIEWED;
   const currentRecipient = notification?.currentRecipient;
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
@@ -469,7 +471,7 @@ const NotificationDetail: React.FC = () => {
                   </Alert>
                 )}
 
-                {!isMobile && !mandateId && (
+                {!isMobile && !mandateId && isViewed && (
                   <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
                 )}
 
@@ -541,7 +543,7 @@ const NotificationDetail: React.FC = () => {
               </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>
-              {isMobile && !mandateId && (
+              {isMobile && !mandateId && isViewed && (
                 <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
               )}
               <Box

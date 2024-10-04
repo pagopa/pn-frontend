@@ -94,32 +94,6 @@ const Profile = () => {
             </Grid>
           </Paper>
         </Grid>
-
-        <Grid item lg={8} xs={12}>
-          <Alert
-            severity="info"
-            data-testid="contacts-redirect"
-            action={
-              <Button
-                component={Link}
-                color="primary"
-                sx={alertButtonStyle}
-                onClick={handleRedirectToContactsPage}
-              >
-                {t('alert-redirect-to-contacts.action-text', { ns: 'profilo' })}
-              </Button>
-            }
-          >
-            <AlertTitle>
-              <Typography fontWeight={'bold'} variant="body1">
-                {t('alert-redirect-to-contacts.title', { ns: 'profilo' })}
-              </Typography>
-            </AlertTitle>
-            <Typography variant="body2">
-              {t('alert-redirect-to-contacts.message', { ns: 'profilo' })}
-            </Typography>
-          </Alert>
-        </Grid>
       </Grid>
     </Box>
   );
