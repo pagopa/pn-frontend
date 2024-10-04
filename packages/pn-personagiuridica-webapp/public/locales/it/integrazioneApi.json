@@ -79,7 +79,7 @@
         "tos_privacy_4": "Informativa Privacy",
         "name": {
           "label": "Nome",
-          "default": "Chiave_",
+          "default": "Chiave-",
           "description": "Scegli un nome per la chiave o mantieni quello di default"
         },
         "publicKey": {
@@ -102,7 +102,8 @@
   "message": {
     "error": {
       "rotate-invalid-kid": "Identificativo della chiave da ruotare errato!",
-      "key-already-registered": "Questo valore è già stato inserito in precedenza. Inserisci una chiave diversa."
+      "key-already-registered": "Questo valore è già stato inserito in precedenza. Inserisci una chiave diversa.",
+      "name-allowed-charset": "Il campo nome può contenere solamente i seguenti caratteri: \"{{allowedCharset}}\""
     },
     "success": {
 

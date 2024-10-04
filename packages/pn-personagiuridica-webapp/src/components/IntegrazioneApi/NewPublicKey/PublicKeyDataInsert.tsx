@@ -12,6 +12,14 @@ import { BffPublicKeyRequest } from '../../../generated-client/pg-apikeys';
 import * as routes from '../../../navigation/routes.const';
 import NewPublicKeyCard from './NewPublicKeyCard';
 
+const nameMaxLen = 254;
+const nameAllowedChars = "a-zA-Z0-9-\\";
+
+const validateName = (name: string | undefined): boolean => {
+    const pattern = /^[a-zA-Z0-9-\\s]+$/i;
+    return pattern.test(name ?? '');
+};
+
 type Props = {
     onConfirm: (publicKey: BffPublicKeyRequest) => void;
     duplicateKey: (publicKey: string | undefined) => boolean;
@@ -40,7 +48,9 @@ const PublicKeyDataInsert: React.FC<Props> = ({onConfirm, duplicateKey}) => {
     const validationSchema = yup.object().shape({
         name: yup
             .string()
-            .required("Campo obbligatorio"),
+            .required("Campo obbligatorio")
+            .max(nameMaxLen, tc('too-long-field-error', { maxLength: 254 }))
+            .test('name',  t('message.error.name-allowed-charset', { allowedCharset: nameAllowedChars }), validateName),
         publicKey: yup
             .string()
             .required("Campo obbligatorio")

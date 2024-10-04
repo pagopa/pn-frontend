@@ -82,7 +82,7 @@ const NewPublicKey = () => {
     if(!isTosAccepted){
       await dispatch(acceptTosPrivacy([{
         action: BffTosPrivacyActionBodyActionEnum.Accept,
-        version: "1", // ???
+        version: "2",
         type: ConsentType.TosDestB2B
       }]));
     }
