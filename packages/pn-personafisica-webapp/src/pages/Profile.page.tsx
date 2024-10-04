@@ -1,48 +1,23 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
-import {
-  Alert,
-  AlertTitle,
-  Box,
-  Button,
-  Grid,
-  Link,
-  Paper,
-  SxProps,
-  Theme,
-  Typography,
-} from '@mui/material';
-import { TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { Box, Grid, Paper, Typography } from '@mui/material';
+import { TitleBox } from '@pagopa-pn/pn-commons';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import { PFEventsType } from '../models/PFEventsType';
 import { ContactSource } from '../models/contacts';
-import { RECAPITI } from '../navigation/routes.const';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const Profile = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation(['profilo']);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
 
   useEffect(() => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PROFILE);
   }, []);
-
-  const alertButtonStyle: SxProps<Theme> = useIsMobile()
-    ? { textAlign: 'center' }
-    : { textAlign: 'center', minWidth: 'max-content' };
-
-  const handleRedirectToContactsPage = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, {
-      source: ContactSource.PROFILO,
-    });
-    navigate(RECAPITI);
-  };
 
   return (
     <Box p={3}>
