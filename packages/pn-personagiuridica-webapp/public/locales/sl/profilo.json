@@ -1,9 +1,0 @@
-{
-  "title": "Vaši podatki",
-  "subtitle": "Ti podatki so vzeti iz vašega SPID ali CIE in jih ni mogoče urejati.",
-  "profile": {
-    "name": "Ime",
-    "family_name": "Priimek",
-    "fiscal_number": "Davčna številka"
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "title": "Your details",
-  "subtitle": "This data is taken from your SPID or CIE and is not editable.",
-  "profile": {
-    "name": "Name",
-    "family_name": "Surname",
-    "fiscal_number": "Fiscal code"
-  }
-}
