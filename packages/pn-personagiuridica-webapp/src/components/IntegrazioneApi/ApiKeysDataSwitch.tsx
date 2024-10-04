@@ -23,11 +23,11 @@ const ApiKeyContextMenu = ({
 }: {
   data: Row<PublicKeysColumnData>;
   keys: BffPublicKeysResponse;
-  handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
+  handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
 }) => {
-  const apiKeyId = Number(data.id);
+  const apiKeyId = data.id;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { t } = useTranslation(['integrazioneApi']);
+  const { t } = useTranslation(['integrazioneApi', 'common']);
   const open = Boolean(anchorEl);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -42,20 +42,19 @@ const ApiKeyContextMenu = ({
 
   return (
     <Box data-testid="contextMenu">
-      <Box>
-        <IconButton
-          onClick={handleClick}
-          size="small"
-          color="primary"
-          data-testid="contextMenuButton"
-          aria-label={t('context-menu.title')}
-          aria-controls={open ? 'context-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-        >
-          <MoreVert />
-        </IconButton>
-      </Box>
+      <IconButton
+        onClick={handleClick}
+        size="small"
+        color="primary"
+        data-testid="contextMenuButton"
+        aria-label={t('context-menu.title')}
+        aria-controls={open ? 'context-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+      >
+        <MoreVert />
+      </IconButton>
+
       <Menu
         data-testid="menuContext"
         anchorEl={anchorEl}
@@ -81,7 +80,7 @@ const ApiKeyContextMenu = ({
               onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}
             >
               <Sync sx={{ mr: 1 }} />
-              {t('context-menu.rotate')}
+              {t('button.rotate', { ns: 'common' })}
             </MenuItem>
           )}
         {data.status === PublicKeyStatus.Active &&
@@ -92,7 +91,7 @@ const ApiKeyContextMenu = ({
               onClick={() => handleModalClick(ModalApiKeyView.BLOCK, apiKeyId)}
             >
               <Block sx={{ mr: 1 }} />
-              {t('context-menu.block')}
+              {t('button.block', { ns: 'common' })}
             </MenuItem>
           )}
 
@@ -113,7 +112,7 @@ const ApiKeyContextMenu = ({
             sx={{ color: 'error.dark' }}
           >
             <Delete sx={{ mr: 1 }} />
-            {t('context-menu.delete')}
+            {t('button.elimina', { ns: 'common' })}
           </MenuItem>
         )}
       </Menu>
@@ -125,7 +124,7 @@ const ApiKeysDataSwitch: React.FC<{
   data: Row<PublicKeysColumnData>;
   keys: BffPublicKeysResponse;
   type: keyof PublicKeysColumnData;
-  handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
+  handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
 }> = ({ data, keys, type, handleModalClick }) => {
   const { t } = useTranslation(['integrazioneApi']);
 
@@ -160,17 +159,7 @@ const ApiKeysDataSwitch: React.FC<{
       return <></>;
     }
     const { label, tooltip, color } = getApiKeyStatusInfos(data.status, data.statusHistory);
-    return (
-      <Box
-        sx={{
-          alignItems: 'left',
-          width: '100%',
-          justifyContent: 'center',
-        }}
-      >
-        <StatusTooltip label={t(label)} tooltip={tooltip} color={color} />
-      </Box>
-    );
+    return <StatusTooltip label={t(label)} tooltip={tooltip} color={color} />;
   }
   if (type === 'menu') {
     return <ApiKeyContextMenu data={data} keys={keys} handleModalClick={handleModalClick} />;

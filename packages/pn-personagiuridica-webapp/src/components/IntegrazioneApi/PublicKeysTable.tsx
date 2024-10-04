@@ -22,16 +22,16 @@ import ApiKeysDataSwitch from './ApiKeysDataSwitch';
 
 type Props = {
   publicKeys: BffPublicKeysResponse;
-  handleModalClick: (view: ModalApiKeyView, publicKeyId: number) => void;
+  handleModalClick: (view: ModalApiKeyView, publicKeyId: string) => void;
 };
 
 const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
   const { t } = useTranslation(['integrazioneApi']);
 
-  const data: Array<Row<PublicKeysColumnData>> = publicKeys.items.map((n: PublicKeyRow, index) => ({
+  const data: Array<Row<PublicKeysColumnData>> = publicKeys.items.map((n: PublicKeyRow) => ({
     ...n,
     createdAt: formatDate(add(new Date(n.createdAt ?? ''), { days: 355 }).toISOString()),
-    id: index.toString(),
+    id: n.kid ?? '',
     menu: '',
   }));
 
