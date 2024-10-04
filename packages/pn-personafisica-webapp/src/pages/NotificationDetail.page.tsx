@@ -90,7 +90,6 @@ const NotificationDetail: React.FC = () => {
   );
 
   const isCancelled = useIsCancelled({ notification });
-  const isViewed = notification.notificationStatus === NotificationStatus.VIEWED;
   const currentRecipient = notification?.currentRecipient;
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
