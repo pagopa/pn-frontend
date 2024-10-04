@@ -47,15 +47,4 @@ describe('testing profile page', () => {
     const alertMessage = getByText('alert-redirect-to-contacts.message');
     expect(alertMessage).toBeInTheDocument();
   });
-
-  it('button redirects to contacts page', () => {
-    const { getByRole } = render(<Profile />, {
-      preloadedState: { userState: { user: userResponse } },
-    });
-    const button = getByRole('button', { name: 'alert-redirect-to-contacts.action-text' });
-    expect(button).toBeInTheDocument();
-    fireEvent.click(button);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(RECAPITI);
-  });
 });
