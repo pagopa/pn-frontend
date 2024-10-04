@@ -189,6 +189,7 @@ const PublicKeys: React.FC = () => {
             actionButtonLabel={t('button.elimina', { ns: 'common' })}
             buttonIcon={<Delete fontSize="small" sx={{ mr: 1 }} />}
             actionHandler={() => deleteApiKey(modal.publicKey?.kid)}
+            hasDeleteButton
           />
         )}
       </ApiErrorWrapper>
