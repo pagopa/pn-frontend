@@ -5,10 +5,5 @@
     "name": "Ime",
     "family_name": "Priimek",
     "fiscal_number": "Davčna številka"
-  },
-  "alert-redirect-to-contacts": {
-    "title": "Ali želite upravljati svoje kontaktne podatke?",
-    "message": "Vnesite, si oglejte ali uredite kontaktne podatke, na katere želite prejemati obvestila in sporočila s strani SEND.",
-    "action-text": "Pojdite na svoje kontaktne podatke"
   }
 }
