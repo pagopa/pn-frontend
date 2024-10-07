@@ -11,6 +11,7 @@ interface PgConfigurationFromFile {
   ONE_TRUST_SERCQ_SEND_DRAFT_MODE?: boolean;
   ONE_TRUST_PP_SERCQ_SEND?: string;
   ONE_TRUST_TOS_SERCQ_SEND?: string;
+  ONE_TRUST_MASSIVI_DRAFT_MODE?: boolean;
   ONE_TRUST_MASSIVI_TOS?: string;
   OT_DOMAIN_ID?: string;
   PAGOPA_HELP_EMAIL: string;
@@ -37,6 +38,7 @@ interface PgConfiguration extends PgConfigurationFromFile {
   ONE_TRUST_SERCQ_SEND_DRAFT_MODE: boolean;
   ONE_TRUST_PP_SERCQ_SEND: string;
   ONE_TRUST_TOS_SERCQ_SEND: string;
+  ONE_TRUST_MASSIVI_DRAFT_MODE: boolean;
   ONE_TRUST_MASSIVI_TOS: string;
   OT_DOMAIN_ID: string;
   PAGOPA_HELP_EMAIL: string;
@@ -61,6 +63,7 @@ class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
     this.ruleFor('ONE_TRUST_PP').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_TOS_SERCQ_SEND').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_MASSIVI_DRAFT_MODE').isBoolean();
     this.ruleFor('ONE_TRUST_MASSIVI_TOS').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_PP_SERCQ_SEND').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_SERCQ_SEND_DRAFT_MODE').isBoolean();
@@ -87,6 +90,7 @@ export function getConfiguration(): PgConfiguration {
     ONE_TRUST_TOS: configurationFromFile.ONE_TRUST_TOS || '',
     ONE_TRUST_PP_SERCQ_SEND: configurationFromFile.ONE_TRUST_PP_SERCQ_SEND || '',
     ONE_TRUST_TOS_SERCQ_SEND: configurationFromFile.ONE_TRUST_TOS_SERCQ_SEND || '',
+    ONE_TRUST_MASSIVI_DRAFT_MODE: Boolean(configurationFromFile.ONE_TRUST_MASSIVI_DRAFT_MODE),
     ONE_TRUST_MASSIVI_TOS: configurationFromFile.ONE_TRUST_MASSIVI_TOS || '',
     ONE_TRUST_SERCQ_SEND_DRAFT_MODE: Boolean(configurationFromFile.ONE_TRUST_SERCQ_SEND_DRAFT_MODE),
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID || '',
