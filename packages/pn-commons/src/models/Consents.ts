@@ -3,6 +3,7 @@ export enum ConsentType {
   DATAPRIVACY = 'DATAPRIVACY',
   TOS_SERCQ = 'TOS_SERCQ',
   DATAPRIVACY_SERCQ = 'DATAPRIVACY_SERCQ',
+  TOS_B2B = 'TOS_B2B',
 }
 
 export enum ConsentActionType {

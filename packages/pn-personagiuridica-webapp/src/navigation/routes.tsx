@@ -166,6 +166,10 @@ function Router() {
           element={<TermsOfServicePage type={ConsentType.TOS_SERCQ} />}
         />
         <Route
+          path={routes.TERMS_OF_SERVICE_B2B}
+          element={<TermsOfServicePage type={ConsentType.TOS_B2B} />}
+        />
+        <Route
           path={routes.NOT_ACCESSIBLE}
           element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}
         />
