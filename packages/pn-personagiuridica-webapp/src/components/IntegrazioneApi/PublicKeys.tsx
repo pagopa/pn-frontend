@@ -69,7 +69,6 @@ const PublicKeys: React.FC = () => {
   const hasOneActiveKey = publicKeys.items.some((key) => key.status === PublicKeyStatus.Active);
 
   const handleModalClick = (view: ModalApiKeyView, publicKeyId: string) => {
-    console.log(view, publicKeyId);
     setModal({ view, publicKey: publicKeys.items.find((key) => key.kid === publicKeyId) });
   };
 
@@ -163,7 +162,7 @@ const PublicKeys: React.FC = () => {
             content={<Typography>{t('publicKeys.block-warning')}</Typography>}
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
-            actionButtonLabel={t('button.block', { ns: 'common' })}
+            actionButtonLabel={t('block-button')}
             buttonIcon={<Block fontSize="small" sx={{ mr: 1 }} />}
             actionHandler={() => blockPublicKey(modal.publicKey?.kid)}
           />
@@ -175,7 +174,7 @@ const PublicKeys: React.FC = () => {
             content={<Typography>{t('publicKeys.rotate-warning')}</Typography>}
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
-            actionButtonLabel={t('rotate-button', { ns: 'common' })}
+            actionButtonLabel={t('rotate-button')}
             buttonIcon={<Sync fontSize="small" sx={{ mr: 1 }} />}
             // actionHandler={() => apiKeyRotated(modal.apiKey?.id)}
           />

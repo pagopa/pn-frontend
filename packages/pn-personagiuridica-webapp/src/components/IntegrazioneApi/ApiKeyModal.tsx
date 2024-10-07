@@ -58,15 +58,8 @@ const ApiKeyModal = ({
           data-testid="action-modal-button"
           variant="contained"
           onClick={actionHandler}
-          sx={
-            hasDeleteButton
-              ? {
-                  color: 'white',
-                  backgroundColor: 'error.dark',
-                  ':hover': { backgroundColor: 'error.main' },
-                }
-              : null
-          }
+          color={hasDeleteButton ? 'error' : 'primary'}
+          sx={hasDeleteButton ? { color: 'white' } : null}
         >
           {buttonIcon}
           {actionButtonLabel}

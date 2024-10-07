@@ -80,7 +80,7 @@ const ApiKeyContextMenu = ({
               onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}
             >
               <Sync sx={{ mr: 1 }} />
-              {t('button.rotate', { ns: 'common' })}
+              {t('context-menu.rotate')}
             </MenuItem>
           )}
         {data.status === PublicKeyStatus.Active &&
@@ -91,7 +91,7 @@ const ApiKeyContextMenu = ({
               onClick={() => handleModalClick(ModalApiKeyView.BLOCK, apiKeyId)}
             >
               <Block sx={{ mr: 1 }} />
-              {t('button.block', { ns: 'common' })}
+              {t('context-menu.block')}
             </MenuItem>
           )}
 
