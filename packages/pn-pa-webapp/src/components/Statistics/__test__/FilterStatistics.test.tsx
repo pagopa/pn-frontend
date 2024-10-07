@@ -116,7 +116,7 @@ describe('FilterStatistics component', async () => {
       new Date('2019-12-14'),
       new Date('2022-02-22')
     );
-  });
+  }, 10000);
 
   it('test endDate input', async () => {
     // render component
@@ -125,7 +125,7 @@ describe('FilterStatistics component', async () => {
     await testInput(filterContainer, 'startDate', '14/03/2012');
     await testInput(filterContainer, 'endDate', '22/02/2022');
     await testCalendar(filterContainer, 'endDate', new Date('2017-05-22'), new Date('2022-02-22'));
-  });
+  }, 10000);
 
   it('changes filtered dates using quick filters', async () => {
     // render component

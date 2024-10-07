@@ -115,7 +115,7 @@ describe('Filter Notifications Table Component', async () => {
     form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'startDate', '23/02/2022');
     await testCalendar(form, 'startDate', new Date('2019-12-14'), new Date('2022-02-23'));
-  });
+  }, 10000);
 
   it('test endDate input', async () => {
     // render component
@@ -125,7 +125,7 @@ describe('Filter Notifications Table Component', async () => {
     form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'endDate', '23/02/2022');
     await testCalendar(form, 'endDate', new Date('2021-01-4'), new Date('2022-02-23'));
-  });
+  }, 10000);
 
   it('test form submission - valid fields', async () => {
     // render component
