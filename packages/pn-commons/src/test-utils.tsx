@@ -296,11 +296,9 @@ async function testCalendar(
     const yearIcon = within(dialog).getByTestId('ArrowDropDownIcon');
     expect(yearIcon).toBeInTheDocument();
     fireEvent.click(yearIcon);
-    const yearButton = await waitFor(() =>
-      document
-        .evaluate(`//button[text()="${year.toString()}"]`, dialog, null, XPathResult.ANY_TYPE, null)
-        .iterateNext()
-    );
+    const yearButton = document
+      .evaluate(`//button[text()="${year.toString()}"]`, dialog, null, XPathResult.ANY_TYPE, null)
+      .iterateNext();
     expect(yearButton).toBeInTheDocument();
     fireEvent.click(yearButton!);
   }
