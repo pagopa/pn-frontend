@@ -16,7 +16,7 @@ import PublicKeyDataInsert from '../components/IntegrazioneApi/NewPublicKey/Publ
 import ShowPublicKeyParams from '../components/IntegrazioneApi/NewPublicKey/ShowPublicKeyParams';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { acceptTosPrivacy, checkPublicKeyIssuer, createPublicKey, rotatePublicKey } from '../redux/apikeys/actions';
+import { acceptTosPrivacy, checkPublicKeyIssuer, createPublicKey, getTosPrivacy, rotatePublicKey } from '../redux/apikeys/actions';
 import {
   BffPublicKeyRequest,
   BffPublicKeyResponse,
@@ -29,6 +29,7 @@ const NewPublicKey = () => {
   const isMobile = useIsMobile();
   const [activeStep, setActiveStep] = useState(0);
   const [isTosAccepted, setIsTosAccepted] = useState<boolean | undefined>();
+  const [tosVersion, setTosVersion] = useState<string | undefined>();
   const [creationResponse, setCreationResponse] = useState<BffPublicKeyResponse | undefined>(
     undefined
   );
@@ -66,6 +67,25 @@ const NewPublicKey = () => {
     void dispatch(checkPublicKeyIssuer()).unwrap().then((response) => {
       setIsTosAccepted(() => response.tosAccepted);
     });
+
+    // retrieve tos and privacy version
+    void dispatch(getTosPrivacy()).unwrap().then(response => {
+
+      // server response contains an invalid consent version
+      if(response.length === 0 || !response[0].consentVersion){
+        navigate(routes.INTEGRAZIONE_API);
+        dispatch(
+          appStateActions.addError({
+            title: '',
+            message: t('message.error.no-tos-version', {
+              ns: 'integrazioneApi',
+            }),
+          })
+        );
+        return;
+      }
+      setTosVersion(() => response[0].consentVersion);
+    });
   }, []);
 
   const handleCreate = (publicKey: BffPublicKeyRequest): Promise<BffPublicKeyResponse> =>
@@ -78,17 +98,28 @@ const NewPublicKey = () => {
 
  
   const publicKeyRegistration = async (publicKey: BffPublicKeyRequest) => {
-    // if tos not accepted -> accept
     if(!isTosAccepted){
-      await dispatch(acceptTosPrivacy([{
+      const acceptTosResponse = await dispatch(acceptTosPrivacy([{
         action: BffTosPrivacyActionBodyActionEnum.Accept,
-        version: "2",
+        version: tosVersion ?? '',
         type: ConsentType.TosDestB2B
       }]));
-    }
-    const returned = kid ? handleRotate(kid, publicKey) : handleCreate(publicKey);
 
-    returned
+      if(acceptTosResponse.meta.requestStatus === "rejected") {
+        dispatch(
+          appStateActions.addError({
+            title: '',
+            message: t('message.error.accept-tos-failed', {
+              ns: 'integrazioneApi',
+            }),
+          })
+        );
+        return;
+      }
+    }
+    const returnedPromise = kid ? handleRotate(kid, publicKey) : handleCreate(publicKey);
+
+    returnedPromise
       .then((response: BffPublicKeyResponse) => {
         if (response.issuer) {
           setActiveStep((previousStep) => previousStep + 1);
@@ -150,7 +181,7 @@ const NewPublicKey = () => {
 
   return (
     <>
-      {activeStep === 0 && !(isRotate && !isActiveKey) ? (
+      {activeStep === 0 && !(isRotate && !isActiveKey && tosVersion) ? (
         <Prompt
           title={t('new-public-key.prompt.title', { ns: 'integrazioneApi' })}
           message={t('new-public-key.prompt.message', { ns: 'integrazioneApi' })}

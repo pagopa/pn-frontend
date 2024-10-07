@@ -103,7 +103,9 @@
     "error": {
       "rotate-invalid-kid": "Identificativo della chiave da ruotare errato!",
       "key-already-registered": "Questo valore è già stato inserito in precedenza. Inserisci una chiave diversa.",
-      "name-allowed-charset": "Il campo nome può contenere solamente i seguenti caratteri: \"{{allowedCharset}}\""
+      "name-allowed-charset": "Il campo nome può contenere solamente i seguenti caratteri: \"{{allowedCharset}}\"",
+      "no-tos-version": "Si è verificato un errore nel recupero delle informazioni relative ai termini del servizio e privacy.",
+      "accept-tos-failed": "Non è stato possibile accettare i termini del servizio e l'informativa della privacy."
     },
     "success": {
 
