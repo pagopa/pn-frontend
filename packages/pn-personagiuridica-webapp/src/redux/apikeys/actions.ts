@@ -1,4 +1,4 @@
-import { parseError, TosPrivacyConsent } from '@pagopa-pn/pn-commons';
+import { TosPrivacyConsent, parseError } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
@@ -15,8 +15,12 @@ import {
   PublicKeysApiFactory,
   VirtualKeysApiFactory,
 } from '../../generated-client/pg-apikeys';
+import {
+  BffTosPrivacyActionBody,
+  ConsentType,
+  UserConsentsApiFactory,
+} from '../../generated-client/tos-privacy';
 import { GetApiKeysParams } from '../../models/ApiKeys';
-import { BffTosPrivacyActionBody, ConsentType, UserConsentsApiFactory } from '../../generated-client/tos-privacy';
 
 export enum PUBLIC_APIKEYS_ACTIONS {
   GET_PUBLIC_APIKEYS = 'getPublicApiKeys',
@@ -25,8 +29,8 @@ export enum PUBLIC_APIKEYS_ACTIONS {
   CHANGE_PUBLIC_APIKEY_STATUS = 'changePublicApiKeyStatus',
   ROTATE_PUBLIC_APIKEY = 'rotatePublicApiKey',
   CHECK_PUBLIC_APIKEY_ISSUER = 'checkPublicApiKeyIssuer',
-  ACCEPT_TOS_PRIVACY = 'acceptTosPrivacy',
-  GET_TOS_PRIVACY = 'getTosPrivacy'
+  ACCEPT_TOS_PRIVACY = 'acceptTosPrivacyB2B',
+  GET_TOS_PRIVACY = 'getTosPrivacyB2B',
 }
 
 export enum VIRTUAL_APIKEYS_ACTIONS {
@@ -139,9 +143,7 @@ export const getTosPrivacy = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
-      const response = await tosPrivacyFactory.getPgTosPrivacyV1([
-        ConsentType.TosDestB2B
-      ]);
+      const response = await tosPrivacyFactory.getPgTosPrivacyV1([ConsentType.TosDestB2B]);
 
       return response.data as Array<TosPrivacyConsent>;
     } catch (e: any) {
