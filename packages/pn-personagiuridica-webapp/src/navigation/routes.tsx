@@ -167,7 +167,7 @@ function Router() {
         />
         <Route
           path={routes.TERMS_OF_SERVICE_B2B}
-          element={<TermsOfServicePage type={ConsentType.TOS_B2B} />}
+          element={<TermsOfServicePage type={ConsentType.TOS_DEST_B2B} />}
         />
         <Route
           path={routes.NOT_ACCESSIBLE}

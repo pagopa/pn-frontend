@@ -34,7 +34,7 @@ const TermsOfServicePage: React.FC<{ type?: ConsentType }> = ({ type }) => {
     route = routes.TERMS_OF_SERVICE_SERCQ_SEND;
   }
 
-  if (type === ConsentType.TOS_B2B) {
+  if (type === ConsentType.TOS_DEST_B2B) {
     tos = configuration.ONE_TRUST_MASSIVI_TOS;
     draft = true;
     route = routes.TERMS_OF_SERVICE_B2B;
