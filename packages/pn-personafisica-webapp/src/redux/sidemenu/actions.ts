@@ -7,7 +7,6 @@ import { Delegator } from '../delegation/types';
 
 export enum SIDEMENU_ACTIONS {
   GET_SIDEMENU_INFORMATION = 'getSidemenuInformation',
-  GET_DOMICILE_INFO = 'getDomicileInfo',
 }
 
 export const getSidemenuInformation = createAsyncThunk<Array<Delegator>>(
