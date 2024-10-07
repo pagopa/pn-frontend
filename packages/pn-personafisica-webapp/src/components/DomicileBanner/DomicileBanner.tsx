@@ -74,6 +74,16 @@ const getDomicileData = (
       canBeClosed: false,
       callToAction: 'no-courtesy-no-sercq-send-cta',
     };
+  } else if (!dodDisabled && hasSercqSend && !hasCourtesyAddresses) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    return {
+      destination: ChannelType.EMAIL,
+      operation: ContactOperation.SCROLL,
+      severity: 'warning',
+      message: 'no-courtesy',
+      canBeClosed: false,
+      callToAction: source === ContactSource.RECAPITI ? undefined : 'complete-addresses',
+    };
   } else if (
     !dodDisabled &&
     source !== ContactSource.RECAPITI &&
@@ -88,16 +98,6 @@ const getDomicileData = (
       message: 'no-io',
       canBeClosed: true,
       callToAction: 'add-io',
-    };
-  } else if (!dodDisabled && hasSercqSend && !hasCourtesyAddresses) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return {
-      destination: ChannelType.EMAIL,
-      operation: ContactOperation.SCROLL,
-      severity: 'warning',
-      message: 'no-courtesy',
-      canBeClosed: false,
-      callToAction: source === ContactSource.RECAPITI ? undefined : 'complete-addresses',
     };
   }
   return null;
@@ -120,7 +120,9 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   );
 
   const hasCourtesyAddresses =
-    digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY).length > 0;
+    digitalAddresses.filter(
+      (addr) => addr.addressType === AddressType.COURTESY && addr.value !== IOAllowedValues.DISABLED
+    ).length > 0;
   const domicileBannerData: DomicileBannerData | null = getDomicileData(
     source,
     !!hasSercqSend,
