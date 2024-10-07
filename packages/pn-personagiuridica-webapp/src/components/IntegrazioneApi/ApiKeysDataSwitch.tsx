@@ -6,12 +6,17 @@ import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { Row, StatusTooltip } from '@pagopa-pn/pn-commons';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
-import { BffPublicKeysResponse, PublicKeyStatus } from '../../generated-client/pg-apikeys';
+import {
+  BffPublicKeysResponse,
+  BffVirtualKeysResponse,
+  PublicKeyStatus,
+  VirtualKeyStatus,
+} from '../../generated-client/pg-apikeys';
 import { ApiKeyColumnData, ModalApiKeyView } from '../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../utility/apikeys.utility';
 
 const isApiKeyDisactivated = (data: Row<ApiKeyColumnData>): boolean =>
-  data.status !== PublicKeyStatus.Active;
+  data.status !== PublicKeyStatus.Active && data.status !== VirtualKeyStatus.Enabled;
 
 const setRowColorByStatus = (data: Row<ApiKeyColumnData>): string | undefined =>
   isApiKeyDisactivated(data) ? 'text.disabled' : undefined;
@@ -22,7 +27,7 @@ const ApiKeyContextMenu = ({
   handleModalClick,
 }: {
   data: Row<ApiKeyColumnData>;
-  keys: BffPublicKeysResponse;
+  keys: BffPublicKeysResponse | BffVirtualKeysResponse;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
 }) => {
   const apiKeyId = data.id;
@@ -122,7 +127,7 @@ const ApiKeyContextMenu = ({
 
 const ApiKeysDataSwitch: React.FC<{
   data: Row<ApiKeyColumnData>;
-  keys: BffPublicKeysResponse;
+  keys: BffPublicKeysResponse | BffVirtualKeysResponse;
   type: keyof ApiKeyColumnData;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
 }> = ({ data, keys, type, handleModalClick }) => {
@@ -132,6 +137,9 @@ const ApiKeysDataSwitch: React.FC<{
     return <Typography sx={{ color: setRowColorByStatus(data) }}>{data.name}</Typography>;
   }
   if (type === 'value') {
+    if (!data.value) {
+      return <>-</>;
+    }
     return (
       <Box
         sx={{

@@ -50,5 +50,17 @@
     "rotate-warning": "Dopo che hai concluso questa operazione, blocca ed elimina la chiave ruotata.",
     "delete-title": "Elimina chiave",
     "delete-subtitle": "Se elimini definitivamente la chiave, questa non potrà essere nuovamente attivata e utilizzata."
+  },
+  "virtualKeys": {
+    "title": "Chiave personale",
+    "tos-empty-state": "Per poter creare una chiave personale, un amministratore deve prima abilitare l’integrazione.",
+    "empty-state": "Non è stata ancora generata nessuna chiave personale perla tua impresa.",
+    "table": {
+      "name": "Nome",
+      "value": "Valore",
+      "lastUpdate": "Ultima modifica",
+      "status": "Stato",
+      "personal": "Tu"
+    }
   }
 }

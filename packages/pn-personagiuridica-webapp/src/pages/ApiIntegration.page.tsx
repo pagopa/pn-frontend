@@ -5,6 +5,7 @@ import { Box } from '@mui/material';
 import { TitleBox, useHasPermissions } from '@pagopa-pn/pn-commons';
 
 import PublicKeys from '../components/IntegrazioneApi/PublicKeys';
+import VirtualKeys from '../components/IntegrazioneApi/VirtualKeys';
 import { PNRole } from '../redux/auth/types';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -27,6 +28,8 @@ const ApiIntegration: React.FC = () => {
       />
 
       {isAdminWithoutGroups && <PublicKeys />}
+
+      <VirtualKeys />
     </Box>
   );
 };
