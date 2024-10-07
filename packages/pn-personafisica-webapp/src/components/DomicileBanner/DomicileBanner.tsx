@@ -85,9 +85,8 @@ const getDomicileData = (
       callToAction: source === ContactSource.RECAPITI ? undefined : 'complete-addresses',
     };
   } else if (
-    !dodDisabled &&
     source !== ContactSource.RECAPITI &&
-    hasSercqSend &&
+    (hasSercqSend || dodDisabled) &&
     hasAppIODisabled &&
     hasCourtesyAddresses
   ) {
