@@ -72,6 +72,7 @@ export function getApiKeyStatusInfos(
   tooltip?: ReactNode;
 } {
   switch (status) {
+    case VirtualKeyStatus.Enabled:
     case PublicKeyStatus.Active:
       return {
         color: 'success',
