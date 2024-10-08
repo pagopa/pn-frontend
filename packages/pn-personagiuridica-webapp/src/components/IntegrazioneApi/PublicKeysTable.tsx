@@ -52,12 +52,18 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
       tableConfiguration: {
         cellProps: { width: '24%' },
       },
+      cardConfiguration: {
+        wrapValueInTypography: false,
+      },
     },
     {
       id: 'date',
       label: t('publicKeys.table.endDate'),
       tableConfiguration: {
         cellProps: { width: '24%' },
+      },
+      cardConfiguration: {
+        wrapValueInTypography: false,
       },
     },
     {
