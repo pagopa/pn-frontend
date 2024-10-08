@@ -32,73 +32,66 @@ const setRowColorByStatus = (data: Row<ApiKeyColumnData>): string | undefined =>
 const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick, menuType }) => {
   const { t } = useTranslation(['integrazioneApi']);
 
-  if (type === 'name') {
-    return <Typography sx={{ color: setRowColorByStatus(data) }}>{data.name}</Typography>;
-  }
-  if (type === 'value') {
-    if (!data.value) {
-      return <>-</>;
-    }
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          userSelect: 'none',
-          color: setRowColorByStatus(data),
-        }}
-      >
-        {`${data.value?.substring(0, 12)}...`}
-        <CopyToClipboardButton
-          data-testid="copyToClipboard"
-          disabled={isApiKeyDisactivated(data)}
-          tooltipTitle={t('api-key-copied')}
-          value={() => data.value || ''}
+  switch (type) {
+    case 'name':
+      return <Typography sx={{ color: setRowColorByStatus(data) }}>{data.name}</Typography>;
+    case 'value':
+      if (!data.value) {
+        return <>-</>;
+      }
+      return (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            userSelect: 'none',
+            color: setRowColorByStatus(data),
+          }}
+        >
+          {`${data.value?.substring(0, 12)}...`}
+          <CopyToClipboardButton
+            data-testid="copyToClipboard"
+            disabled={isApiKeyDisactivated(data)}
+            tooltipTitle={t('api-key-copied')}
+            value={() => data.value || ''}
+          />
+        </Box>
+      );
+    case 'date':
+      return <Typography sx={{ color: setRowColorByStatus(data) }}>{data.date}</Typography>;
+    case 'status':
+      if (!data.status) {
+        return <></>;
+      }
+      const { label, tooltip, color } = getApiKeyStatusInfos(data.status, data.statusHistory);
+      return tooltip ? (
+        <StatusTooltip
+          label={t(label)}
+          tooltip={data.statusHistory ? tooltip : undefined}
+          color={color}
         />
-      </Box>
-    );
-  }
-  if (type === 'date') {
-    return <Typography sx={{ color: setRowColorByStatus(data) }}>{data.date}</Typography>;
-  }
-  if (type === 'status') {
-    if (!data.status) {
+      ) : (
+        <Chip
+          id={`status-chip-${t(label)}`}
+          label={t(label)}
+          color={color}
+          sx={{ cursor: 'default' }}
+          data-testid={`statusChip-${t(label)}`}
+        />
+      );
+    case 'menu':
+      return menuType === 'publicKeys' ? (
+        <ApiKeyContextMenu data={data} keys={keys} handleModalClick={handleModalClick} />
+      ) : (
+        <VirtualKeyItemMenu
+          data={data}
+          keys={keys as BffVirtualKeysResponse}
+          handleModalClick={handleModalClick}
+        />
+      );
+    default:
       return <></>;
-    }
-    const { label, tooltip, color } = getApiKeyStatusInfos(data.status, data.statusHistory);
-    return tooltip ? (
-      <StatusTooltip
-        label={t(label)}
-        tooltip={data.statusHistory ? tooltip : undefined}
-        color={color}
-      />
-    ) : (
-      <Chip
-        id={`status-chip-${t(label)}`}
-        label={t(label)}
-        color={color}
-        sx={{ cursor: 'default' }}
-        data-testid={`statusChip-${t(label)}`}
-      />
-    );
   }
-  if (type === 'menu') {
-    return menuType === 'publicKeys' ? (
-      <ApiKeyContextMenu
-        data={data}
-        keys={keys}
-        handleModalClick={handleModalClick}
-        menuType={menuType}
-      />
-    ) : (
-      <VirtualKeyItemMenu
-        data={data}
-        keys={keys as BffVirtualKeysResponse}
-        handleModalClick={handleModalClick}
-      />
-    );
-  }
-  return <></>;
 };
 
 export default ApiKeysDataSwitch;

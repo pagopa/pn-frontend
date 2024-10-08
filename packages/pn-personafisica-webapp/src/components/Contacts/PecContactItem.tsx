@@ -207,7 +207,7 @@ const PecContactItem: React.FC = () => {
       {verifyingAddress && (
         <PecValidationItem senderId="default" onCancelValidation={handleCancelValidation} />
       )}
-      {defaultSERCQ_SENDAddress && (
+      {!verifyingAddress && defaultSERCQ_SENDAddress && (
         <>
           <Divider sx={{ color: 'text.secondary' }} />
           <Typography mt={2} variant="body2" color="text.secondary">

@@ -1,6 +1,7 @@
 import {
   PublicKeyStatus,
   PublicKeyStatusHistory,
+  UserDto,
   VirtualKeyStatus,
 } from '../generated-client/pg-apikeys';
 
@@ -25,5 +26,6 @@ export type ApiKeyColumnData = {
   date?: string;
   status?: PublicKeyStatus | VirtualKeyStatus;
   statusHistory?: Array<PublicKeyStatusHistory>;
+  user?: UserDto;
   menu: string;
 };

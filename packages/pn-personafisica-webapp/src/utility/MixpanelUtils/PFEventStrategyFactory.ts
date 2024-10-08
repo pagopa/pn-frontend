@@ -64,7 +64,7 @@ const uxActionStrategy = [
   PFEventsType.SEND_PAYMENT_LIST_CHANGE_PAGE,
   PFEventsType.SEND_F24_DOWNLOAD,
   PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE,
-  PFEventsType.SEND_ADD_SECONDARY_CONTACT,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT,
 ] as const;
 
 const sendAddContactWithSourceActionStrategy = [

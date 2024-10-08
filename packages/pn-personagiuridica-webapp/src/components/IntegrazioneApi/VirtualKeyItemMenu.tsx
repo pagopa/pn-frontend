@@ -49,23 +49,11 @@ const VirtualKeyItemMenu: React.FC<Props> = ({ data, keys, handleModalClick }) =
     );
   };
 
-  const shouldShowBlockButton = (): boolean => {
-    if (!isUserAdmin || isPersonalKey) {
-      return (
-        data.status === VirtualKeyStatus.Enabled &&
-        !checkIfStatusIsAlreadyPresent(VirtualKeyStatus.Blocked)
-      );
-    }
-
-    // Admin can block multiple keys (not personal) and not if there are already blocked keys for that user
-    return (
-      data.status === VirtualKeyStatus.Enabled &&
-      !keys.items
-        // @ts-expect-error - Data user exists
-        .filter((key) => key.user?.fiscalCode === data.user?.fiscalCode)
-        .some((key) => key.status === VirtualKeyStatus.Blocked)
-    );
-  };
+  const shouldShowBlockButton =
+    !keys.items.find(
+      (key) =>
+        key.user?.fiscalCode === data.user?.fiscalCode && key.status === VirtualKeyStatus.Blocked
+    ) && data.status !== VirtualKeyStatus.Rotated;
 
   return (
     <Box data-testid="contextMenu">
@@ -109,7 +97,7 @@ const VirtualKeyItemMenu: React.FC<Props> = ({ data, keys, handleModalClick }) =
             {t('context-menu.rotate')}
           </MenuItem>
         )}
-        {shouldShowBlockButton() && (
+        {shouldShowBlockButton && (
           <MenuItem
             id="button-block"
             data-testid="buttonBlock"

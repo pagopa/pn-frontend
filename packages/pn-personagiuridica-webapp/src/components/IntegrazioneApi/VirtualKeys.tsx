@@ -35,6 +35,7 @@ const VirtualKeys: React.FC = () => {
   const { t } = useTranslation('integrazioneApi');
   const dispatch = useAppDispatch();
   const virtualKeys = useAppSelector((state: RootState) => state.apiKeysState.virtualKeys);
+  const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const [modal, setModal] = useState<ModalType>({ view: ModalApiKeyView.NONE });
 
   const issuerState = useRef<BffPublicKeysCheckIssuerResponse>({
@@ -45,7 +46,11 @@ const VirtualKeys: React.FC = () => {
     },
   });
 
-  const hasOneEnabledKey = virtualKeys.items.some((key) => key.status === VirtualKeyStatus.Enabled);
+  const hasOneEnabledKey = virtualKeys.items.find(
+    (key) =>
+      key.status === VirtualKeyStatus.Enabled &&
+      (!key.user || key.user?.fiscalCode === currentUser.fiscal_number)
+  );
   const isCreationEnabled =
     !hasOneEnabledKey &&
     issuerState.current.tosAccepted &&
