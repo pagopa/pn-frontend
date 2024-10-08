@@ -340,7 +340,7 @@ const SpecialContacts: React.FC = () => {
   };
 
   const handleClickAddSpecialContact = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SECONDARY_CONTACT);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT);
     setModalOpen(ModalType.SPECIAL);
   };
 

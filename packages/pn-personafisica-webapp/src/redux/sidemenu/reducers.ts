@@ -2,10 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { DigitalAddress } from '../../models/contacts';
 import { removeAddress, updateAddressesList } from '../../utility/contacts.utility';
-import { createOrUpdateAddress, deleteAddress, getDigitalAddresses } from '../contact/actions';
+import { createOrUpdateAddress, deleteAddress } from '../contact/actions';
 import { acceptMandate, rejectMandate } from '../delegation/actions';
 import { Delegator } from '../delegation/types';
-import { getSidemenuInformation } from './actions';
+import { getDomicileInfo, getSidemenuInformation } from './actions';
 
 /* eslint-disable functional/immutable-data */
 const generalInfoSlice = createSlice({
@@ -28,7 +28,8 @@ const generalInfoSlice = createSlice({
       ).length;
       state.delegators = action.payload.filter((delegator) => delegator.status !== 'pending');
     });
-    builder.addCase(getDigitalAddresses.fulfilled, (state, action) => {
+    builder.addCase(getDomicileInfo.fulfilled, (state, action) => {
+      // this action is needed for mixpanel tracking
       state.digitalAddresses = action.payload;
     });
     builder.addCase(createOrUpdateAddress.fulfilled, (state, action) => {
