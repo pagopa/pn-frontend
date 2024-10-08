@@ -16,7 +16,6 @@ type Props = {
   data: Row<ApiKeyColumnData>;
   keys: BffPublicKeysResponse | BffVirtualKeysResponse;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
-  menuType: 'publicKeys' | 'virtualKeys';
 };
 
 const ApiKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }) => {
