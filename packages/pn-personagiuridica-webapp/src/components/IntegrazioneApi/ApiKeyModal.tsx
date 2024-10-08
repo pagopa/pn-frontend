@@ -13,6 +13,7 @@ export type ApiKeyModalProps = {
   actionHandler?: () => void;
   closeButtonVariant?: 'text' | 'outlined' | 'contained';
   buttonIcon?: ReactNode;
+  hasDeleteButton?: boolean;
 };
 
 const ApiKeyModal = ({
@@ -25,8 +26,9 @@ const ApiKeyModal = ({
   actionHandler,
   closeButtonVariant = 'outlined',
   buttonIcon,
+  hasDeleteButton,
 }: ApiKeyModalProps) => (
-  <PnDialog open onClose={closeModalHandler}>
+  <PnDialog open onClose={closeModalHandler} fullWidth>
     {title && <DialogTitle>{title}</DialogTitle>}
     <PnDialogContent>
       {subTitle && (
@@ -56,11 +58,8 @@ const ApiKeyModal = ({
           data-testid="action-modal-button"
           variant="contained"
           onClick={actionHandler}
-          // sx={{
-          //   color: 'white',
-          //   backgroundColor: 'error.dark',
-          //   ':hover': { backgroundColor: 'error.main' },
-          // }}
+          color={hasDeleteButton ? 'error' : 'primary'}
+          sx={hasDeleteButton ? { color: 'white' } : null}
         >
           {buttonIcon}
           {actionButtonLabel}

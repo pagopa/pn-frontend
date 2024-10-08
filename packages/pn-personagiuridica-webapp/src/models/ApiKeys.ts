@@ -1,4 +1,8 @@
-import { PublicKeyRow } from '../generated-client/pg-apikeys';
+import {
+  PublicKeyStatus,
+  PublicKeyStatusHistory,
+  VirtualKeyStatus,
+} from '../generated-client/pg-apikeys';
 
 export type GetApiKeysParams = {
   limit?: number;
@@ -15,4 +19,11 @@ export enum ModalApiKeyView {
   DELETE = 'DELETE',
 }
 
-export type PublicKeysColumnData = PublicKeyRow & { menu: string };
+export type ApiKeyColumnData = {
+  name?: string;
+  value?: string;
+  date?: string;
+  status?: PublicKeyStatus | VirtualKeyStatus;
+  statusHistory?: Array<PublicKeyStatusHistory>;
+  menu: string;
+};

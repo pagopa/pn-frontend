@@ -7,13 +7,13 @@ import { Row, StatusTooltip } from '@pagopa-pn/pn-commons';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import { BffPublicKeysResponse, PublicKeyStatus } from '../../generated-client/pg-apikeys';
-import { ModalApiKeyView, PublicKeysColumnData } from '../../models/ApiKeys';
+import { ApiKeyColumnData, ModalApiKeyView } from '../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../utility/apikeys.utility';
 
-const isApiKeyDisactivated = (data: Row<PublicKeysColumnData>): boolean =>
+const isApiKeyDisactivated = (data: Row<ApiKeyColumnData>): boolean =>
   data.status !== PublicKeyStatus.Active;
 
-const setRowColorByStatus = (data: Row<PublicKeysColumnData>): string | undefined =>
+const setRowColorByStatus = (data: Row<ApiKeyColumnData>): string | undefined =>
   isApiKeyDisactivated(data) ? 'text.disabled' : undefined;
 
 const ApiKeyContextMenu = ({
@@ -21,13 +21,13 @@ const ApiKeyContextMenu = ({
   keys,
   handleModalClick,
 }: {
-  data: Row<PublicKeysColumnData>;
+  data: Row<ApiKeyColumnData>;
   keys: BffPublicKeysResponse;
-  handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
+  handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
 }) => {
-  const apiKeyId = Number(data.id);
+  const apiKeyId = data.id;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { t } = useTranslation(['integrazioneApi']);
+  const { t } = useTranslation(['integrazioneApi', 'common']);
   const open = Boolean(anchorEl);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -42,20 +42,19 @@ const ApiKeyContextMenu = ({
 
   return (
     <Box data-testid="contextMenu">
-      <Box>
-        <IconButton
-          onClick={handleClick}
-          size="small"
-          color="primary"
-          data-testid="contextMenuButton"
-          aria-label={t('context-menu.title')}
-          aria-controls={open ? 'context-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-        >
-          <MoreVert />
-        </IconButton>
-      </Box>
+      <IconButton
+        onClick={handleClick}
+        size="small"
+        color="primary"
+        data-testid="contextMenuButton"
+        aria-label={t('context-menu.title')}
+        aria-controls={open ? 'context-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+      >
+        <MoreVert />
+      </IconButton>
+
       <Menu
         data-testid="menuContext"
         anchorEl={anchorEl}
@@ -113,7 +112,7 @@ const ApiKeyContextMenu = ({
             sx={{ color: 'error.dark' }}
           >
             <Delete sx={{ mr: 1 }} />
-            {t('context-menu.delete')}
+            {t('button.elimina', { ns: 'common' })}
           </MenuItem>
         )}
       </Menu>
@@ -122,10 +121,10 @@ const ApiKeyContextMenu = ({
 };
 
 const ApiKeysDataSwitch: React.FC<{
-  data: Row<PublicKeysColumnData>;
+  data: Row<ApiKeyColumnData>;
   keys: BffPublicKeysResponse;
-  type: keyof PublicKeysColumnData;
-  handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
+  type: keyof ApiKeyColumnData;
+  handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
 }> = ({ data, keys, type, handleModalClick }) => {
   const { t } = useTranslation(['integrazioneApi']);
 
@@ -152,24 +151,20 @@ const ApiKeysDataSwitch: React.FC<{
       </Box>
     );
   }
-  if (type === 'createdAt') {
-    return <Typography sx={{ color: setRowColorByStatus(data) }}>{data.createdAt}</Typography>;
+  if (type === 'date') {
+    return <Typography sx={{ color: setRowColorByStatus(data) }}>{data.date}</Typography>;
   }
   if (type === 'status') {
-    if (!data.status || !data.statusHistory) {
+    if (!data.status) {
       return <></>;
     }
     const { label, tooltip, color } = getApiKeyStatusInfos(data.status, data.statusHistory);
     return (
-      <Box
-        sx={{
-          alignItems: 'left',
-          width: '100%',
-          justifyContent: 'center',
-        }}
-      >
-        <StatusTooltip label={t(label)} tooltip={tooltip} color={color} />
-      </Box>
+      <StatusTooltip
+        label={t(label)}
+        tooltip={data.statusHistory ? tooltip : undefined}
+        color={color}
+      />
     );
   }
   if (type === 'menu') {
