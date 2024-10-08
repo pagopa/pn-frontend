@@ -12,7 +12,7 @@ interface PgConfigurationFromFile {
   ONE_TRUST_PP_SERCQ_SEND?: string;
   ONE_TRUST_TOS_SERCQ_SEND?: string;
   ONE_TRUST_MASSIVI_DRAFT_MODE?: boolean;
-  ONE_TRUST_MASSIVI_TOS?: string;
+  ONE_TRUST_TOS_MASSIVI?: string;
   OT_DOMAIN_ID?: string;
   PAGOPA_HELP_EMAIL: string;
   PAYMENT_DISCLAIMER_URL?: string;
@@ -39,7 +39,7 @@ interface PgConfiguration extends PgConfigurationFromFile {
   ONE_TRUST_PP_SERCQ_SEND: string;
   ONE_TRUST_TOS_SERCQ_SEND: string;
   ONE_TRUST_MASSIVI_DRAFT_MODE: boolean;
-  ONE_TRUST_MASSIVI_TOS: string;
+  ONE_TRUST_TOS_MASSIVI: string;
   OT_DOMAIN_ID: string;
   PAGOPA_HELP_EMAIL: string;
   PAYMENT_DISCLAIMER_URL: string;
@@ -64,7 +64,7 @@ class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
     this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_TOS_SERCQ_SEND').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_MASSIVI_DRAFT_MODE').isBoolean();
-    this.ruleFor('ONE_TRUST_MASSIVI_TOS').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_TOS_MASSIVI').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_PP_SERCQ_SEND').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_SERCQ_SEND_DRAFT_MODE').isBoolean();
     this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.lettersNumbersAndDashs);
@@ -91,7 +91,7 @@ export function getConfiguration(): PgConfiguration {
     ONE_TRUST_PP_SERCQ_SEND: configurationFromFile.ONE_TRUST_PP_SERCQ_SEND || '',
     ONE_TRUST_TOS_SERCQ_SEND: configurationFromFile.ONE_TRUST_TOS_SERCQ_SEND || '',
     ONE_TRUST_MASSIVI_DRAFT_MODE: Boolean(configurationFromFile.ONE_TRUST_MASSIVI_DRAFT_MODE),
-    ONE_TRUST_MASSIVI_TOS: configurationFromFile.ONE_TRUST_MASSIVI_TOS || '',
+    ONE_TRUST_TOS_MASSIVI: configurationFromFile.ONE_TRUST_TOS_MASSIVI || '',
     ONE_TRUST_SERCQ_SEND_DRAFT_MODE: Boolean(configurationFromFile.ONE_TRUST_SERCQ_SEND_DRAFT_MODE),
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID || '',
     PAYMENT_DISCLAIMER_URL: configurationFromFile.PAYMENT_DISCLAIMER_URL || '',

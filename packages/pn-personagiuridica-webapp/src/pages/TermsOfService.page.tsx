@@ -35,7 +35,7 @@ const TermsOfServicePage: React.FC<{ type?: ConsentType }> = ({ type }) => {
   }
 
   if (type === ConsentType.TOS_DEST_B2B) {
-    tos = configuration.ONE_TRUST_MASSIVI_TOS;
+    tos = configuration.ONE_TRUST_TOS_MASSIVI;
     draft = configuration.ONE_TRUST_MASSIVI_DRAFT_MODE;
     route = routes.TERMS_OF_SERVICE_B2B;
   }
