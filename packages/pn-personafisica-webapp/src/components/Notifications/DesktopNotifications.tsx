@@ -21,6 +21,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
+import { ContactSource } from '../../models/contacts';
 import * as routes from '../../navigation/routes.const';
 import { Delegator } from '../../redux/delegation/types';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -58,7 +59,7 @@ const LinkRouteContacts: React.FC<{ children?: React.ReactNode }> = ({ children 
   const navigate = useNavigate();
   const goToContactsPage = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, {
-      source: 'home_notifiche',
+      source: ContactSource.HOME_NOTIFICHE,
     });
     navigate(routes.RECAPITI);
   };

@@ -6,8 +6,15 @@ import {
   digitalCourtesyAddresses,
   digitalLegalAddresses,
 } from '../../../__mocks__/Contacts.mock';
+import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  ContactOperation,
+  ContactSource,
+  IOAllowedValues,
+} from '../../../models/contacts';
 import { store } from '../../store';
 import {
   createOrUpdateAddress,
@@ -16,12 +23,19 @@ import {
   enableIOAddress,
   getDigitalAddresses,
 } from '../actions';
-import { resetPecValidation, resetState } from '../reducers';
+import {
+  contactsSelectors,
+  resetExternalEvent,
+  resetPecValidation,
+  resetState,
+  setExternalEvent,
+} from '../reducers';
 
 const initialState = {
   loading: false,
   digitalAddresses: [],
   parties: [],
+  event: null,
 };
 
 describe('Contacts redux state tests', () => {
@@ -158,7 +172,7 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to update the digital address with courtesy value (email verified)', async () => {
     const emailContact = digitalCourtesyAddresses.find(
-      (el) => el.channelType === ChannelType.EMAIL
+      (el) => el.channelType === ChannelType.EMAIL && el.senderId === 'default'
     );
     const updatedDigitalAddress = { ...emailContact!, value: 'mario.rossi@mail.it' };
     mock
@@ -254,5 +268,56 @@ describe('Contacts redux state tests', () => {
           address.addressType === AddressType.COURTESY
       );
     expect(state).toEqual([]);
+  });
+
+  it('Shoud be able to retrieve addresses', () => {
+    // init store
+    const testStore = createMockedStore({
+      contactsState: {
+        digitalAddresses,
+      },
+    });
+    const result = contactsSelectors.selectAddresses(testStore.getState());
+    expect(result.addresses).toStrictEqual(digitalAddresses);
+    expect(result.legalAddresses).toStrictEqual(
+      digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
+    );
+    expect(result.courtesyAddresses).toStrictEqual(
+      digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
+    );
+    for (const channelType of Object.values(ChannelType)) {
+      expect(result[`default${channelType}Address`]).toStrictEqual(
+        digitalAddresses.find(
+          (addr) => addr.channelType === channelType && addr.senderId === 'default'
+        )
+      );
+      expect(result[`special${channelType}Addresses`]).toStrictEqual(
+        digitalAddresses.filter(
+          (addr) => addr.channelType === channelType && addr.senderId !== 'default'
+        )
+      );
+    }
+  });
+
+  it('should set event', () => {
+    const externalEvent = {
+      source: ContactSource.RECAPITI,
+      destination: ChannelType.SERCQ_SEND,
+      operation: ContactOperation.ADD,
+    };
+
+    const action = store.dispatch(setExternalEvent(externalEvent));
+    expect(action.payload).toEqual(externalEvent);
+
+    const state = store.getState().contactsState;
+    expect(state.event).toEqual(externalEvent);
+  });
+
+  it('should reset event', () => {
+    const action = store.dispatch(resetExternalEvent());
+    expect(action.payload).toEqual(undefined);
+
+    const state = store.getState().contactsState;
+    expect(state.event).toEqual(initialState.event);
   });
 });

@@ -14,9 +14,8 @@ async function testStatusTooltip(
   const buttonClass = `${classRoot}${color.charAt(0).toUpperCase() + color.slice(1)}`;
   expect(button.classList.contains(buttonClass)).toBe(true);
   fireEvent.mouseOver(button);
-  await waitFor(() => {
-    expect(screen.getByRole('tooltip')).toHaveTextContent(/mocked tooltip test/i);
-  });
+  const ttip = await waitFor(() => screen.getByRole('tooltip'));
+  expect(ttip).toHaveTextContent(/mocked tooltip test/i);
 }
 
 describe('Status Tooltip Component', () => {

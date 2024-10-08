@@ -1,4 +1,4 @@
-import { formatFiscalCode, sanitizeString } from '../string.utility';
+import { formatFiscalCode, fromStringToBase64, sanitizeString } from '../string.utility';
 
 describe('String utility', () => {
   it('formatFiscalCode', () => {
@@ -26,5 +26,17 @@ describe('String utility', () => {
     const srt = "Giovanna D'Arco & C.O.";
     const result = sanitizeString(srt);
     expect(result).toStrictEqual("Giovanna D'Arco & C.O.");
+  });
+
+  it('convert string into base64 - empty string', () => {
+    const srt = '';
+    const result = fromStringToBase64(srt);
+    expect(result).toStrictEqual('');
+  });
+
+  it('convert string into base64', () => {
+    const srt = 'Hello';
+    const result = fromStringToBase64(srt);
+    expect(result).toStrictEqual('SGVsbG8=');
   });
 });

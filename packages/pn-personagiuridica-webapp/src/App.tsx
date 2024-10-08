@@ -9,6 +9,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
+import SettingsEthernet from '@mui/icons-material/SettingsEthernet';
 import { Box } from '@mui/material';
 import {
   AppMessage,
@@ -33,8 +34,9 @@ import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { logout } from './redux/auth/actions';
 import { PNRole } from './redux/auth/types';
+import { getDigitalAddresses } from './redux/contact/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
+import { getSidemenuInformation } from './redux/sidemenu/actions';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
@@ -62,8 +64,10 @@ const App = () => {
   return isInitialized ? <ActualApp /> : <div />;
 };
 
+// eslint-disable-next-line complexity
 const ActualApp = () => {
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION, SELFCARE_BASE_URL } = getConfiguration();
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION, SELFCARE_BASE_URL, IS_B2B_ENABLED } =
+    getConfiguration();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
@@ -126,7 +130,7 @@ const ActualApp = () => {
         void dispatch(getSidemenuInformation());
       }
       if (userHasAdminPermissions && !loggedUser.hasGroup) {
-        void dispatch(getDomicileInfo());
+        void dispatch(getDigitalAddresses());
       }
 
       void dispatch(getCurrentAppStatus());
@@ -197,6 +201,15 @@ const ActualApp = () => {
       label: t('menu.contacts'),
       icon: MarkunreadMailboxIcon,
       route: routes.RECAPITI,
+    });
+  }
+
+  if (IS_B2B_ENABLED) {
+    /* eslint-disable-next-line functional/immutable-data */
+    menuItems.splice(3, 0, {
+      label: t('menu.integrazione-api'),
+      icon: SettingsEthernet,
+      route: routes.INTEGRAZIONE_API,
     });
   }
 

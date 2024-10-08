@@ -34,6 +34,7 @@ export enum EventAction {
   ACTION = 'action',
   ERROR = 'error',
   SCREEN_VIEW = 'screen_view',
+  CONFIRM = 'confirm',
 }
 
 export enum EventCategory {

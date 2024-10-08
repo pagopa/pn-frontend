@@ -1,7 +1,13 @@
 import { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { AppNotAccessible, LoadingPage, NotFound, lazyRetry } from '@pagopa-pn/pn-commons';
+import {
+  AppNotAccessible,
+  ConsentType,
+  LoadingPage,
+  NotFound,
+  lazyRetry,
+} from '@pagopa-pn/pn-commons';
 
 import { getConfiguration } from '../services/configuration.service';
 import AARGuard from './AARGuard';
@@ -56,6 +62,14 @@ function Router() {
         </Route>
         <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
         <Route path={routes.TERMS_OF_SERVICE} element={<TermsOfServicePage />} />
+        <Route
+          path={routes.PRIVACY_POLICY_SERCQ_SEND}
+          element={<PrivacyPolicyPage type={ConsentType.DATAPRIVACY_SERCQ} />}
+        />
+        <Route
+          path={routes.TERMS_OF_SERVICE_SERCQ_SEND}
+          element={<TermsOfServicePage type={ConsentType.TOS_SERCQ} />}
+        />
         <Route path={routes.PARTICIPATING_ENTITIES} element={<ParticipatingEntitiesPage />} />
         <Route
           path={routes.NOT_ACCESSIBLE}

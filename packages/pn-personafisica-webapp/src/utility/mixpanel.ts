@@ -9,3 +9,6 @@ import PFEventStrategyFactory from './MixpanelUtils/PFEventStrategyFactory';
  */
 export const trackingMiddleware: Middleware = () => (next: Dispatch<AnyAction>) =>
   interceptDispatch<PFEventsType>(next, PFEventStrategyFactory, eventsActionsMap);
+
+export const isPFEvent = (eventKey: string): eventKey is keyof typeof PFEventsType =>
+  Object.keys(PFEventsType).includes(eventKey);

@@ -8,10 +8,9 @@ import {
   digitalCourtesyAddresses,
   digitalLegalAddresses,
 } from '../../__mocks__/Contacts.mock';
-import { RenderResult, act, fireEvent, render, screen } from '../../__test__/test-utils';
+import { RenderResult, act, render, screen } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { ChannelType } from '../../models/contacts';
-import { PROFILO } from '../../navigation/routes.const';
 import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
 
@@ -26,8 +25,8 @@ vi.mock('react-router-dom', async () => ({
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
+    t: (str: string, options?: { returnObjects: boolean }) =>
+      options?.returnObjects ? [str] : str,
   }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
@@ -61,8 +60,6 @@ describe('Contacts page', async () => {
     expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const specialContact = result.queryByTestId('specialContact');
-    expect(specialContact).not.toBeInTheDocument();
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/addresses');
   });
@@ -77,8 +74,6 @@ describe('Contacts page', async () => {
     expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const specialContact = result.queryByTestId('specialContact');
-    expect(specialContact).not.toBeInTheDocument();
   });
 
   it('renders Contacts (legal contacts)', async () => {
@@ -90,8 +85,6 @@ describe('Contacts page', async () => {
     expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const specialContact = result.getByTestId('specialContact');
-    expect(specialContact).toBeInTheDocument();
   });
 
   it('renders Contacts (courtesy contacts)', async () => {
@@ -103,8 +96,6 @@ describe('Contacts page', async () => {
     expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const specialContact = result.getByTestId('specialContact');
-    expect(specialContact).toBeInTheDocument();
   });
 
   it('renders Contacts (courtesy and legal contacts filled)', async () => {
@@ -116,20 +107,6 @@ describe('Contacts page', async () => {
     expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const specialContact = result.getByTestId('specialContact');
-    expect(specialContact).toBeInTheDocument();
-  });
-
-  it('subtitle link properly redirects to profile page', async () => {
-    mock.onGet('/bff/v1/addresses').reply(200, []);
-    await act(async () => {
-      result = render(<Contacts />);
-    });
-    const subtitleLink = result.getByText('subtitle-link-3');
-    expect(subtitleLink).toBeInTheDocument();
-    fireEvent.click(subtitleLink);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(PROFILO);
   });
 
   it('API error', async () => {

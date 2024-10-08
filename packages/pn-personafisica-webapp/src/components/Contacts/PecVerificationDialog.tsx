@@ -11,6 +11,7 @@ type Props = {
 
 const PecVerificationDialog: React.FC<Props> = ({ open = false, handleConfirm }) => {
   const { t } = useTranslation();
+
   return (
     <PnDialog
       open={open}

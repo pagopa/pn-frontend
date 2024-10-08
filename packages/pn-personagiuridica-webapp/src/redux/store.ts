@@ -4,6 +4,7 @@ import { appStateReducer } from '@pagopa-pn/pn-commons';
 import { Middleware, MiddlewareArray, configureStore } from '@reduxjs/toolkit';
 
 import { getConfiguration } from '../services/configuration.service';
+import apiKeysSlice from './apikeys/reducers';
 import appStatusSlice from './appStatus/reducers';
 import userSlice from './auth/reducers';
 import contactsSlice from './contact/reducers';
@@ -23,6 +24,7 @@ export const appReducers = {
   newDelegationState: newDelegationSlice.reducer,
   contactsState: contactsSlice.reducer,
   generalInfoState: generalInfoSlice.reducer,
+  apiKeysState: apiKeysSlice.reducer,
 };
 
 const createStore = (logReduxActions?: boolean) => {

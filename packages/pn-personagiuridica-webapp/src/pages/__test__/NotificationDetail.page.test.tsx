@@ -595,7 +595,7 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: userResponse },
           generalInfoState: {
-            defaultAddresses: [],
+            digitalAddresses: [],
           },
         },
       });

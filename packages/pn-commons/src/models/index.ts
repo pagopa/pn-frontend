@@ -14,6 +14,7 @@ import {
   isKnownFunctionality,
 } from './AppStatus';
 import { ConsentActionType, ConsentType, TosPrivacyConsent } from './Consents';
+import { SERCQ_SEND_VALUE } from './Contacts';
 import { KnownSentiment } from './EmptyState';
 import EventStrategy from './EventStrategy';
 import { EventType } from './EventType';
@@ -118,6 +119,7 @@ export {
   ConsentType,
   ConsentActionType,
   NotificationDocumentType,
+  SERCQ_SEND_VALUE,
 };
 export type {
   AnalogWorkflowDetails,

@@ -583,7 +583,7 @@ describe('NotificationDetail Page', async () => {
           userState: { user: { fiscal_number: 'CGNNMO80A03H501U' } },
           generalInfoState: {
             delegators: mandatesByDelegate,
-            defaultAddresses: [],
+            digitalAddresses: [],
           },
         },
       });

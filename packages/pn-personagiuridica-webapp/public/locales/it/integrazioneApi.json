@@ -1,0 +1,7 @@
+{
+  "title": "Integrazione API",
+  "subTitle": "Genera e gestisci le chiavi per abilitare l'integrazione sicura tra i gestionali della tua impresa e SEND.",
+  "public-keys-title": "Chiave pubblica",
+  "new-public-key-button": "Registra chiave pubblica",
+  "public-keys-empty-state": "Ancora nessuna chiave pubblica. Registra una chiave pubblica per abilitare l’integrazione."
+}

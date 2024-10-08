@@ -1,11 +1,13 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
+import { getById, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import {
-  RenderResult,
+  digitalLegalAddresses,
+  digitalLegalAddressesSercq,
+} from '../../../__mocks__/Contacts.mock';
+import {
   fireEvent,
   render,
   screen,
@@ -14,8 +16,9 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { AddressType } from '../../../models/contacts';
+import { AddressType, ChannelType } from '../../../models/contacts';
 import PecContactItem from '../PecContactItem';
+import { fillCodeDialog } from './test-utils';
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -25,26 +28,15 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-const fillCodeDialog = async (result: RenderResult) => {
-  const dialog = await waitFor(() => result.getByTestId('codeDialog'));
-  expect(dialog).toBeInTheDocument();
-  const codeInputs = dialog?.querySelectorAll('input');
-  // fill inputs with values
-  codeInputs?.forEach((codeInput, index) => {
-    fireEvent.change(codeInput, { target: { value: index.toString() } });
-  });
-  // confirm the addition
-  const dialogButtons = dialog.querySelectorAll('button');
-  fireEvent.click(dialogButtons[1]);
-  return dialog;
-};
-
 describe('PecContactItem component', () => {
   let mock: MockAdapter;
   const defaultAddress = digitalLegalAddresses.find(
     (addr) => addr.senderId === 'default' && addr.pecValid
   );
-  const VALID_PEC = 'mail@valida.com';
+  const defaultSercqAddress = digitalLegalAddressesSercq.find(
+    (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SERCQ_SEND
+  );
+  const VALID_PEC = 'pec@valida.com';
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -60,7 +52,9 @@ describe('PecContactItem component', () => {
 
   it('type in an invalid pec', async () => {
     // render component
-    const { container } = render(<PecContactItem value="" verifyingAddress={false} />);
+    const { container } = render(<PecContactItem />);
+    expect(container).toHaveTextContent('legal-contacts.pec-title');
+    expect(container).toHaveTextContent('legal-contacts.pec-description');
     const form = container.querySelector('form');
     const input = form!.querySelector('input[name="default_pec"]');
     // add invalid values
@@ -91,7 +85,7 @@ describe('PecContactItem component', () => {
         verificationCode: '01234',
       })
       .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
-    const result = render(<PecContactItem value="" verifyingAddress={false} />);
+    const result = render(<PecContactItem />);
     // insert new pec
     const form = result.container.querySelector('form');
     let input = form!.querySelector('input[name="default_pec"]');
@@ -99,7 +93,7 @@ describe('PecContactItem component', () => {
     await waitFor(() => expect(input!).toHaveValue(VALID_PEC));
     const errorMessage = form?.querySelector('#default_pec-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
-    const button = result.getByTestId('addContact');
+    const button = result.getByTestId('default_pec-button');
     expect(button).toBeEnabled();
     fireEvent.click(button);
     await waitFor(() => {
@@ -132,13 +126,11 @@ describe('PecContactItem component', () => {
         .getState()
         .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
     ).toStrictEqual([{ ...defaultAddress, pecValid: false, value: '', senderName: undefined }]);
-    // simulate rerendering due to redux changes
-    result.rerender(<PecContactItem value={VALID_PEC} verifyingAddress={true} />);
+    // wait rerendering due to redux changes
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
     expect(result.container).toHaveTextContent('legal-contacts.pec-validating');
-    expect(result.container).toHaveTextContent('legal-contacts.validation-in-progress');
     // cancel validation
     const cancelValidationBtn = result.getByTestId('cancelValidation');
     fireEvent.click(cancelValidationBtn);
@@ -154,11 +146,9 @@ describe('PecContactItem component', () => {
           .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
       ).toStrictEqual([]);
     });
-    // simulate rerendering due to redux changes
-    result.rerender(<PecContactItem value="" verifyingAddress={false} />);
+    // wait rerendering due to redux changes
     await waitFor(() => {
       expect(result.container).not.toHaveTextContent('legal-contacts.pec-validating');
-      expect(result.container).not.toHaveTextContent('legal-contacts.validation-in-progress');
       input = result.container.querySelector('input[name="default_pec"]');
       expect(input).toBeInTheDocument();
     });
@@ -178,7 +168,7 @@ describe('PecContactItem component', () => {
         verificationCode: '01234',
       })
       .reply(204);
-    const result = render(<PecContactItem value="" verifyingAddress={false} />);
+    const result = render(<PecContactItem />);
     // insert new pec
     const form = result.container.querySelector('form');
     const input = form!.querySelector('input[name="default_pec"]');
@@ -186,7 +176,7 @@ describe('PecContactItem component', () => {
     await waitFor(() => expect(input!).toHaveValue(VALID_PEC));
     const errorMessage = form?.querySelector('#default_pec-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
-    const button = result.getByTestId('addContact');
+    const button = result.getByTestId('default_pec-button');
     expect(button).toBeEnabled();
     fireEvent.click(button);
     await waitFor(() => {
@@ -213,25 +203,28 @@ describe('PecContactItem component', () => {
     ).toStrictEqual([
       { ...defaultAddress, pecValid: true, value: VALID_PEC, senderName: undefined },
     ]);
-    // simulate rerendering due to redux changes
-    result.rerender(<PecContactItem value={VALID_PEC} verifyingAddress={false} />);
+    // wait rerendering due to redux changes
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
     const pecValue = getById(form!, 'default_pec-typography');
     expect(pecValue).toBeInTheDocument();
     expect(pecValue).toHaveTextContent(VALID_PEC);
-    const editButton = getById(form!, 'modifyContact-default');
+    const editButton = getById(form!, 'modifyContact-default_pec');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default');
+    const deleteButton = getById(form!, 'cancelContact-default_pec');
     expect(deleteButton).toBeInTheDocument();
   });
 
   it('type in an invalid pec while in "edit mode"', async () => {
     // render component
-    const { container, getByRole } = render(
-      <PecContactItem value={defaultAddress!.value} verifyingAddress={false} />
-    );
+    const { container, getByRole } = render(<PecContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [defaultAddress],
+        },
+      },
+    });
     const form = container.querySelector('form');
     const pecValue = getById(form!, 'default_pec-typography');
     expect(pecValue).toHaveTextContent(defaultAddress!.value);
@@ -265,9 +258,13 @@ describe('PecContactItem component', () => {
       })
       .reply(204);
     // render component
-    const result = render(
-      <PecContactItem value={defaultAddress!.value} verifyingAddress={false} />
-    );
+    const result = render(<PecContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [defaultAddress],
+        },
+      },
+    });
     // edit value
     const form = result.container.querySelector('form');
     let pecValue = getById(form!, 'default_pec-typography');
@@ -308,26 +305,29 @@ describe('PecContactItem component', () => {
     ).toStrictEqual([
       { ...defaultAddress, pecValid: true, value: VALID_PEC, senderName: undefined },
     ]);
-    // simulate rerendering due to redux changes
-    result.rerender(<PecContactItem value={VALID_PEC} verifyingAddress={false} />);
+    // wait rerendering due to redux changes
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
     pecValue = getById(form!, 'default_pec-typography');
     expect(pecValue).toBeInTheDocument();
     expect(pecValue).toHaveTextContent(VALID_PEC);
-    editButton = getById(form!, 'modifyContact-default');
+    editButton = getById(form!, 'modifyContact-default_pec');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default');
+    const deleteButton = getById(form!, 'cancelContact-default_pec');
     expect(deleteButton).toBeInTheDocument();
   });
 
   it('remove contact', async () => {
     mock.onDelete('/bff/v1/addresses/LEGAL/default/PEC').reply(204);
     // render component
-    const result = render(
-      <PecContactItem value={defaultAddress!.value} verifyingAddress={false} />
-    );
+    const result = render(<PecContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [defaultAddress],
+        },
+      },
+    });
     const buttons = result.container.querySelectorAll('button');
     // click on cancel
     fireEvent.click(buttons[1]);
@@ -357,12 +357,87 @@ describe('PecContactItem component', () => {
           .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
       ).toStrictEqual([]);
     });
-    // simulate rerendering due to redux changes
-    result.rerender(<PecContactItem value="" verifyingAddress={false} />);
+    // wait rerendering due to redux changes
     await waitFor(() => {
       const input = result.container.querySelector('input[name="default_pec"]');
       expect(input).toBeInTheDocument();
       expect(result.container).not.toHaveTextContent('');
     });
+  });
+
+  it('render component when sercq send is enabled, open dialog and add pec', async () => {
+    mock
+      .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
+        value: VALID_PEC,
+      })
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
+    mock
+      .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
+        value: VALID_PEC,
+        verificationCode: '01234',
+      })
+      .reply(204);
+    // render component
+    const result = render(<PecContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [defaultSercqAddress],
+        },
+      },
+    });
+    expect(result.container).toHaveTextContent('legal-contacts.sercq-send-pec');
+    const addPecButton = result.getByText('legal-contacts.sercq-send-add-pec');
+    expect(addPecButton).toBeInTheDocument();
+    fireEvent.click(addPecButton);
+    // open modal, fill pec and click on confirm
+    const dialog = await waitFor(() => result.getByTestId('pecValueDialog'));
+    expect(dialog).toBeInTheDocument();
+    await testInput(dialog, `default_modal_pec`, VALID_PEC);
+    const confirmButton = screen.getByText('button.conferma');
+    expect(confirmButton).toBeEnabled();
+    fireEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        value: VALID_PEC,
+      });
+    });
+    // inser otp and confirm
+    const codeDialog = await fillCodeDialog(result);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
+        value: VALID_PEC,
+        verificationCode: '01234',
+      });
+    });
+    // check that contact has been added
+    await waitFor(() => expect(codeDialog).not.toBeInTheDocument());
+    expect(
+      testStore
+        .getState()
+        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
+    ).toStrictEqual([
+      {
+        ...defaultSercqAddress,
+        pecValid: true,
+        value: VALID_PEC,
+        senderName: undefined,
+        channelType: ChannelType.PEC,
+      },
+    ]);
+    // wait rerendering due to redux changes
+    await waitFor(() => {
+      expect(result.container).not.toHaveTextContent('legal-contacts.sercq-send-pec');
+    });
+    const pecValue = getById(result.container, 'default_pec-typography');
+    expect(pecValue).toBeInTheDocument();
+    expect(pecValue).toHaveTextContent(VALID_PEC);
+    const editButton = getById(result.container, 'modifyContact-default_pec');
+    expect(editButton).toBeInTheDocument();
+    const deleteButton = getById(result.container, 'cancelContact-default_pec');
+    expect(deleteButton).toBeInTheDocument();
   });
 });

@@ -42,6 +42,8 @@ import EmptyState from './EmptyState';
 import FileUpload from './FileUpload';
 import Footer from './Footer/Footer';
 import Header from './Header/Header';
+import { IllusAppIO } from './Illustrations/IllusAppIO';
+import { IllusAppIODialog } from './Illustrations/IllusAppIODialog';
 import { IllusQuestion } from './Illustrations/IllusQuestion';
 import { IllusStatistics } from './Illustrations/IllusStatistics';
 import InactivityHandler from './InactivityHandler';
@@ -68,7 +70,6 @@ import SectionHeading from './SectionHeading';
 import SessionModal from './SessionModal';
 import SideMenu from './SideMenu/SideMenu';
 import SnackBar from './SnackBar/SnackBar';
-import { SpecialContactsProvider, useSpecialContactsContext } from './SpecialContacts.context';
 import TabPanel from './TabPanel';
 import TitleBox from './TitleBox';
 
@@ -124,11 +125,9 @@ export {
   LoadingPage,
   Layout,
   SnackBar,
-  SpecialContactsProvider,
   StatusTooltip,
   TabPanel,
   TitleBox,
-  useSpecialContactsContext,
   CollapsedList,
   PnDialog,
   PnDialogContent,
@@ -147,4 +146,6 @@ export {
   PnCardHeaderItem,
   IllusQuestion,
   IllusStatistics,
+  IllusAppIO,
+  IllusAppIODialog,
 };

@@ -17,6 +17,9 @@ beforeAll(() => {
     ONE_TRUST_PARTICIPATING_ENTITIES: 'mocked-id',
     ONE_TRUST_PP: 'mocked-id',
     ONE_TRUST_TOS: 'mocked-id',
+    ONE_TRUST_SERCQ_SEND_DRAFT_MODE: false,
+    ONE_TRUST_PP_SERCQ_SEND: 'mocked-id-sercq-send',
+    ONE_TRUST_TOS_SERCQ_SEND: 'mocked-id-sercq-send',
     OT_DOMAIN_ID: '29cc1c86-f2ef-494d-8242-9bec8009cd29',
     PAGOPA_HELP_EMAIL: 'assistenza@pn.it',
     IS_DEVELOP: false,
@@ -29,6 +32,9 @@ beforeAll(() => {
     DELEGATIONS_TO_PG_ENABLED: true,
     LANDING_SITE_URL: 'https://www.dev.notifichedigitali.it',
     PAGOPA_HELP_PP: 'https://www.fake-page.it',
+    APP_IO_SITE: 'https://www.fake.appio.it',
+    APP_IO_ANDROID: 'https://www.fake.android-appio.it',
+    APP_IO_IOS: 'https://www.fake.ios-appio.it',
   });
   initStore(false);
   initAxiosClients();

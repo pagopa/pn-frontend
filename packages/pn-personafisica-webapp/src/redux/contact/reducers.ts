@@ -1,7 +1,15 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 
-import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  DigitalAddress,
+  ExternalEvent,
+  IOAllowedValues,
+} from '../../models/contacts';
 import { Party } from '../../models/party';
+import { removeAddress, updateAddressesList } from '../../utility/contacts.utility';
+import { RootState } from '../store';
 import {
   createOrUpdateAddress,
   deleteAddress,
@@ -11,10 +19,16 @@ import {
   getDigitalAddresses,
 } from './actions';
 
-const initialState = {
+const initialState: {
+  loading: boolean;
+  digitalAddresses: Array<DigitalAddress>;
+  parties: Array<Party>;
+  event: ExternalEvent | null;
+} = {
   loading: false,
-  digitalAddresses: [] as Array<DigitalAddress>,
-  parties: [] as Array<Party>,
+  digitalAddresses: [],
+  parties: [],
+  event: null,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -32,6 +46,12 @@ const contactsSlice = createSlice({
           address.addressType === AddressType.COURTESY
       );
     },
+    setExternalEvent: (state, action: PayloadAction<ExternalEvent>) => {
+      state.event = action.payload;
+    },
+    resetExternalEvent: (state) => {
+      state.event = null;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getDigitalAddresses.fulfilled, (state, action) => {
@@ -39,25 +59,21 @@ const contactsSlice = createSlice({
     });
     builder.addCase(createOrUpdateAddress.fulfilled, (state, action) => {
       if (action.payload) {
-        const addressIndex = state.digitalAddresses.findIndex(
-          (l) =>
-            l.senderId === action.meta.arg.senderId &&
-            l.addressType === action.meta.arg.addressType &&
-            l.channelType === action.meta.arg.channelType
+        updateAddressesList(
+          action.meta.arg.addressType,
+          action.meta.arg.channelType,
+          action.meta.arg.senderId,
+          state.digitalAddresses,
+          action.payload
         );
-        if (addressIndex > -1) {
-          state.digitalAddresses[addressIndex] = action.payload;
-        } else {
-          state.digitalAddresses.push(action.payload);
-        }
       }
     });
     builder.addCase(deleteAddress.fulfilled, (state, action) => {
-      state.digitalAddresses = state.digitalAddresses.filter(
-        (address) =>
-          address.senderId !== action.meta.arg.senderId ||
-          address.addressType !== action.meta.arg.addressType ||
-          address.channelType !== action.meta.arg.channelType
+      state.digitalAddresses = removeAddress(
+        action.meta.arg.addressType,
+        action.meta.arg.channelType,
+        action.meta.arg.senderId,
+        state.digitalAddresses
       );
     });
     builder.addCase(enableIOAddress.fulfilled, (state) => {
@@ -84,6 +100,58 @@ const contactsSlice = createSlice({
   },
 });
 
-export const { resetState, resetPecValidation } = contactsSlice.actions;
+export const { resetState, resetPecValidation, setExternalEvent, resetExternalEvent } =
+  contactsSlice.actions;
+
+// START: SELECTORS
+const contactState = (state: RootState) => state.contactsState;
+
+const digitalAddresses = createSelector(
+  [contactState],
+  (contactsState) => contactsState.digitalAddresses
+);
+
+export type SelectedAddresses = {
+  addresses: Array<DigitalAddress>;
+  legalAddresses: Array<DigitalAddress>;
+  courtesyAddresses: Array<DigitalAddress>;
+  specialAddresses: Array<DigitalAddress>;
+} & { [key in `default${ChannelType}Address`]: DigitalAddress | undefined } & {
+  [key in `special${ChannelType}Addresses`]: Array<DigitalAddress>;
+};
+
+const memoizedSelectAddresses = createSelector([digitalAddresses], (digitalAddresses) => {
+  const initialValue = {
+    addresses: digitalAddresses,
+    legalAddresses: [] as Array<DigitalAddress>,
+    courtesyAddresses: [] as Array<DigitalAddress>,
+    specialAddresses: [] as Array<DigitalAddress>,
+  } as SelectedAddresses;
+  for (const channelType of Object.values(ChannelType)) {
+    initialValue[`default${channelType}Address`] = undefined;
+    initialValue[`special${channelType}Addresses`] = [];
+  }
+  return digitalAddresses.reduce((obj, addr) => {
+    if (addr.addressType === AddressType.LEGAL) {
+      obj.legalAddresses.push(addr);
+    }
+    if (addr.addressType === AddressType.COURTESY) {
+      obj.courtesyAddresses.push(addr);
+    }
+    if (addr.senderId === 'default') {
+      obj[`default${addr.channelType}Address`] = addr;
+    }
+    if (addr.senderId !== 'default') {
+      obj[`special${addr.channelType}Addresses`].push(addr);
+      obj.specialAddresses.push(addr);
+    }
+    return obj;
+  }, initialValue);
+});
+
+export const contactsSelectors = {
+  selectAddresses: memoizedSelectAddresses,
+};
+// END: SELECTORS
 
 export default contactsSlice;

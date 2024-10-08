@@ -6,6 +6,7 @@
     "associa": "Associa",
     "capito": "Ho capito",
     "conferma": "Conferma",
+    "attiva": "Attiva",
     "annulla": "Annulla",
     "modifica": "Modifica",
     "salva": "Salva",
@@ -17,7 +18,9 @@
     "disable": "Disattiva",
     "continue": "Avanti",
     "go-to-home": "Vai alla homepage",
-    "go-to-login": "Accedi"
+    "go-to-login": "Accedi",
+    "not-now": "Non ora",
+    "add": "Aggiungi"
   },
   "menu": {
     "notifiche": "Notifiche",
@@ -174,5 +177,11 @@
       "title": "Questo campo accetta solo valori numerici",
       "message": "Controlla il codice di verifica e inseriscilo di nuovo"
     }
+  },
+  "badges": {
+    "news": "Novità"
+  },
+  "conjunctions": {
+    "or": "oppure"
   }
 }
