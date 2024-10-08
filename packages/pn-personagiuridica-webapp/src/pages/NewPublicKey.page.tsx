@@ -35,11 +35,12 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
   children,
   activeStep,
 }) => {
-  const { t } = useTranslation(['common', 'integrazioneApi']);
+  const { t } = useTranslation(['integrazioneApi']);
+  const { t: tc } = useTranslation(['common']);
   const isMobile = useIsMobile();
   const steps = [
-    t('new-public-key.steps.insert-data.title', { ns: 'integrazioneApi' }),
-    t('new-public-key.steps.get-returned-parameters.title', { ns: 'integrazioneApi' }),
+    t('new-public-key.steps.insert-data.title'),
+    t('new-public-key.steps.get-returned-parameters.title'),
   ];
 
   return (
@@ -48,15 +49,15 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
         <Grid item xs={12} lg={8}>
           <PnBreadcrumb
             linkRoute={routes.INTEGRAZIONE_API}
-            linkLabel={t('title', { ns: 'integrazioneApi' })}
-            currentLocationLabel={t('new-public-key.title', { ns: 'integrazioneApi' })}
-            goBackLabel={t('button.exit', { ns: 'common' })}
+            linkLabel={t('title')}
+            currentLocationLabel={t('new-public-key.title')}
+            goBackLabel={tc('button.exit')}
           />
           <TitleBox
             variantTitle="h4"
-            title={t('new-public-key.title', { ns: 'integrazioneApi' })}
+            title={t('new-public-key.title')}
             sx={{ pt: '20px', mb: 4 }}
-            subTitle={t('new-public-key.subtitle', { ns: 'integrazioneApi' })}
+            subTitle={t('new-public-key.subtitle')}
             variantSubTitle="body1"
           ></TitleBox>
           <Stepper
@@ -85,10 +86,10 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
 };
 
 const NewPublicKey = () => {
-  const { t } = useTranslation(['common', 'integrazioneApi']);
+  const { t } = useTranslation(['integrazioneApi']);
   const [activeStep, setActiveStep] = useState(0);
   const [isTosAccepted, setIsTosAccepted] = useState<boolean | undefined>();
-  const [tosVersion, setTosVersion] = useState<string | undefined>();
+  const [tosVersion, setTosVersion] = useState<string | undefined>("1");
   const [creationResponse, setCreationResponse] = useState<BffPublicKeyResponse | undefined>(
     undefined
   );
@@ -114,9 +115,7 @@ const NewPublicKey = () => {
       dispatch(
         appStateActions.addError({
           title: '',
-          message: t('message.error.rotate-invalid-kid', {
-            ns: 'integrazioneApi',
-          }),
+          message: t('message.error.rotate-invalid-kid'),
         })
       );
     }
@@ -138,9 +137,7 @@ const NewPublicKey = () => {
           dispatch(
             appStateActions.addError({
               title: '',
-              message: t('message.error.no-tos-version', {
-                ns: 'integrazioneApi',
-              }),
+              message: t('message.error.no-tos-version'),
             })
           );
           return;
@@ -161,9 +158,17 @@ const NewPublicKey = () => {
     dispatch(
       appStateActions.addError({
         title: '',
-        message: t('message.error.accept-tos-failed', {
-          ns: 'integrazioneApi',
-        }),
+        message: t('message.error.accept-tos-failed'),
+      })
+    );
+  };
+
+  const showSuccessMessage = () => {
+    const message = kid ? 'message.success.public-key-rotated' : 'message.success.public-key-registered';
+    dispatch(
+      appStateActions.addSuccess({
+        title: '',
+        message: t(message),
       })
     );
   };
@@ -191,6 +196,7 @@ const NewPublicKey = () => {
         if (response.issuer) {
           setActiveStep((previousStep) => previousStep + 1);
           setCreationResponse(response);
+          showSuccessMessage();
         }
       })
       .catch((error) => {
@@ -203,18 +209,20 @@ const NewPublicKey = () => {
 
   useEffect(() => {
     AppResponsePublisher.error.subscribe('acceptTosPrivacyB2B', handleErrorTosPrivacy);
+    AppResponsePublisher.error.subscribe('getTosPrivacyB2B', handleErrorTosPrivacy);
 
     return () => {
       AppResponsePublisher.error.unsubscribe('acceptTosPrivacyB2B', handleErrorTosPrivacy);
+      AppResponsePublisher.error.subscribe('getTosPrivacyB2B', handleErrorTosPrivacy);
     };
   }, []);
 
   return (
     <>
-      {activeStep === 0 && !(isRotate && !isActiveKey && tosVersion) ? (
+      {(activeStep === 0 && !((isRotate && !isActiveKey) || !tosVersion)) ? (
         <Prompt
-          title={t('new-public-key.prompt.title', { ns: 'integrazioneApi' })}
-          message={t('new-public-key.prompt.message', { ns: 'integrazioneApi' })}
+          title={t('new-public-key.prompt.title')}
+          message={t('new-public-key.prompt.message')}
         >
           <StepperContainer activeStep={activeStep}>
             <PublicKeyDataInsert

@@ -108,7 +108,8 @@
       "accept-tos-failed": "Non è stato possibile accettare i termini del servizio e l'informativa della privacy."
     },
     "success": {
-
+      "public-key-registered": "Chiave pubblica registrata con successo.",
+      "public-key-rotated": "Chiave pubblica ruotata con successo."
     }
   }
 }
