@@ -70,8 +70,8 @@ const VirtualKeys: React.FC = () => {
     .unwrap()
     .then(response => {
       const newVirtualKey: VirtualKey = { value: response.virtualKey };
-      setModal({ view: ModalApiKeyView.CREATE, virtualKey: newVirtualKey });
-      void dispatch(getVirtualApiKeys());
+      setModal({ view: ModalApiKeyView.VIEW, virtualKey: newVirtualKey });
+      fetchVirtualKeys();
     });
   };
 
@@ -149,23 +149,7 @@ const VirtualKeys: React.FC = () => {
         <VirtualKeysTable virtualKeys={virtualKeys} handleModalClick={handleModalClick} />
       )}
 
-      {modal.view === ModalApiKeyView.CREATE && (
-        <ApiKeyModal
-          title={t('virtualKeys.create-title')}
-          subTitle={t('virtualKeys.create-subtitle')}
-          content={
-            <Stack spacing={2} width="536px">
-              <ShowCodesInput
-                value={modal.virtualKey?.value ?? ''}
-                label="virtualKeys.personal-key"
-              />
-            </Stack>
-          }
-          closeButtonLabel={t('virtualKeys.understood-button')}
-          closeModalHandler={handleCloseModal}
-          closeButtonVariant="contained"
-        />
-      )}
+      
       {modal.view === ModalApiKeyView.VIEW && (
         <ApiKeyModal
           title={t('virtualKeys.view-title')}

@@ -64,8 +64,6 @@
       "personal": "Tu"
     },
     "personal-key": "Chiave personale",
-    "create-title": "La tua chiave personale",
-    "create-subtitle": "Puoi usarla per autenticarti in piattaforma e integrare SEND. Puoi copiare la tua chiave personale in ogni momento nella sezione “Integrazione API”.",
     "view-title": "La tua chiave personale",
     "view-subtitle": "Puoi usarla per autenticarti in piattaforma e integrare SEND. Puoi copiare la tua chiave personale in ogni momento nella sezione “Integrazione API”.",
     "understood-button": "Ok, ho capito"

@@ -13,7 +13,6 @@ export type GetApiKeysParams = {
 
 export enum ModalApiKeyView {
   NONE = 'NONE',
-  CREATE = 'CREATE',
   VIEW = 'VIEW',
   BLOCK = 'BLOCK',
   ROTATE = 'ROTATE',
