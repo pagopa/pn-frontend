@@ -30,7 +30,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
 
   const data: Array<Row<ApiKeyColumnData>> = publicKeys.items.map((n: PublicKeyRow) => ({
     ...n,
-    date: formatDate(add(new Date(n.createdAt ?? ''), { days: 355 }).toISOString()),
+    date: n.createdAt ? formatDate(add(new Date(n.createdAt), { days: 355 }).toISOString()) : '',
     id: n.kid ?? '',
     menu: '',
   }));
@@ -52,12 +52,18 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
       tableConfiguration: {
         cellProps: { width: '24%' },
       },
+      cardConfiguration: {
+        wrapValueInTypography: false,
+      },
     },
     {
       id: 'date',
       label: t('publicKeys.table.endDate'),
       tableConfiguration: {
         cellProps: { width: '24%' },
+      },
+      cardConfiguration: {
+        wrapValueInTypography: false,
       },
     },
     {

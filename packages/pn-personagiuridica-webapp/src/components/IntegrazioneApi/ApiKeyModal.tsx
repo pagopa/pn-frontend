@@ -28,7 +28,7 @@ const ApiKeyModal = ({
   buttonIcon,
   hasDeleteButton,
 }: ApiKeyModalProps) => (
-  <PnDialog open onClose={closeModalHandler}>
+  <PnDialog open onClose={closeModalHandler} fullWidth>
     {title && <DialogTitle>{title}</DialogTitle>}
     <PnDialogContent>
       {subTitle && (

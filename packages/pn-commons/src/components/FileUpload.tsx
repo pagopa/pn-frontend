@@ -1,13 +1,4 @@
-import {
-  ChangeEvent,
-  DragEvent,
-  Fragment,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-} from 'react';
+import { ChangeEvent, DragEvent, ReactNode, useEffect, useMemo, useReducer, useRef } from 'react';
 
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
@@ -21,6 +12,7 @@ import {
   IconButton,
   Input,
   LinearProgress,
+  Stack,
   SxProps,
   Typography,
 } from '@mui/material';
@@ -132,7 +124,7 @@ const FilenameBox = ({ filename }: { filename: string }) => {
   const isMobile = useIsMobile();
   const [name, extension] = filename.split('.');
   return (
-    <Typography display="flex" color="primary" width={isMobile ? 1 : 'auto'} textAlign="center">
+    <Stack direction="row" color="primary" width={isMobile ? 1 : 'auto'}>
       <Typography
         sx={{
           textOverflow: 'ellipsis',
@@ -144,7 +136,7 @@ const FilenameBox = ({ filename }: { filename: string }) => {
         {name}.
       </Typography>
       <Typography>{extension}</Typography>
-    </Typography>
+    </Stack>
   );
 };
 
@@ -361,7 +353,7 @@ const FileUpload = ({
           </OrientedBox>
         )}
         {fileData.status === UploadStatus.UPLOADED && (
-          <Fragment>
+          <>
             <Box
               display="flex"
               justifyContent="space-between"
@@ -423,7 +415,7 @@ const FileUpload = ({
                 </Grid>
               </Box>
             )}
-          </Fragment>
+          </>
         )}
       </Box>
       {fileData.error && (

@@ -27,6 +27,7 @@ const CustomDatePicker = (
           ...props.slotProps,
           toolbar: { hidden: true },
           actionBar: { actions: [] },
+          layout: { className: 'PnDatePicker' }, // don't remove it! it is used for tests
         }}
         closeOnSelect
         localeText={{
@@ -46,6 +47,7 @@ const CustomDatePicker = (
             return getLocalizedOrDefaultLabel('common', 'date-picker.select-date');
           },
         }}
+        data-testid="ciao"
       />
     </LocalizationProvider>
   );

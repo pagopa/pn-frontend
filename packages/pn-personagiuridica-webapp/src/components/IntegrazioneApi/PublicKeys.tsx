@@ -116,7 +116,7 @@ const PublicKeys: React.FC = () => {
             title={t('publicKeys.view-title')}
             subTitle={t('publicKeys.view-subtitle')}
             content={
-              <Stack spacing={2} width="536px">
+              <Stack spacing={2}>
                 <ShowCodesInput
                   value={modal.publicKey?.value || ''}
                   label="publicKeys.personal-key"

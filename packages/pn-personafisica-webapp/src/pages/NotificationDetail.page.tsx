@@ -19,6 +19,7 @@ import {
   NotificationDocumentType,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
+  NotificationStatus,
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
@@ -334,6 +335,12 @@ const NotificationDetail: React.FC = () => {
     [currentRecipient.payments]
   );
 
+  const visibleDomicileBanner = () =>
+    !mandateId &&
+    notification.notificationStatusHistory.findIndex(
+      (history) => history.status === NotificationStatus.VIEWED
+    ) > -1;
+
   useEffect(() => {
     if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
       fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
@@ -469,7 +476,7 @@ const NotificationDetail: React.FC = () => {
                   </Alert>
                 )}
 
-                {!isMobile && !mandateId && (
+                {!isMobile && visibleDomicileBanner() && (
                   <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
                 )}
 
@@ -541,7 +548,7 @@ const NotificationDetail: React.FC = () => {
               </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>
-              {isMobile && !mandateId && (
+              {isMobile && visibleDomicileBanner() && (
                 <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
               )}
               <Box
