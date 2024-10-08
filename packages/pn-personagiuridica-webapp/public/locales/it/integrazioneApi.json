@@ -2,11 +2,8 @@
   "title": "Integrazione API",
   "subTitle": "Genera e gestisci le chiavi per abilitare l'integrazione sicura tra i gestionali della tua impresa e SEND.",
   "api-key-copied": "API Key copiata",
-  "close-button": "Chiudi",
-  "cancel-button": "Annulla",
   "block-button": "Blocca",
   "rotate-button": "Ruota e registra nuova chiave",
-  "delete-button": "Elimina",
   "error-fecth-public-api-keys": "Errore durante il recupero delle chiavi pubbliche",
   "status": {
     "enabled": "Attiva",
@@ -26,10 +23,9 @@
   },
   "context-menu": {
     "title": "Opzioni su API Key",
+    "view": "Visualizza codice",
     "block": "Blocca",
-    "rotate": "Ruota",
-    "delete": "Elimina",
-    "view": "Visualizza codice"
+    "rotate": "Ruota"
   },
   "publicKeys": {
     "title": "Chiave pubblica",
