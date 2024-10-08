@@ -132,6 +132,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
                   keys={publicKeys}
                   type={column.id}
                   handleModalClick={handleModalClick}
+                  menuType="publicKeys"
                 />
               </SmartBodyCell>
             ))}

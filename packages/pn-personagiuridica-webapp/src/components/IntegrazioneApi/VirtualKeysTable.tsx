@@ -144,6 +144,7 @@ const VirtualKeysTable: React.FC<Props> = ({ virtualKeys, handleModalClick }) =>
                   keys={virtualKeys}
                   type={column.id}
                   handleModalClick={handleModalClick}
+                  menuType="virtualKeys"
                 />
               </SmartBodyCell>
             ))}
