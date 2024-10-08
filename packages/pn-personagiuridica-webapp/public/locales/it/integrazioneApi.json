@@ -61,6 +61,10 @@
       "lastUpdate": "Ultima modifica",
       "status": "Stato",
       "personal": "Tu"
-    }
+    },
+    "personal-key": "Chiave personale",
+    "view-title": "La tua chiave personale",
+    "view-subtitle": "Puoi usarla per autenticarti in piattaforma e integrare SEND. Puoi copiare la tua chiave personale in ogni momento nella sezione “Integrazione API”.",
+    "understood-button": "Ok, ho capito"
   }
 }

@@ -26,6 +26,9 @@ const VirtualKeyItemMenu: React.FC<Props> = ({ data, keys, handleModalClick }) =
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
   const isUserAdmin = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
 
+  const isPersonalKey =
+    keys.items.find((key) => key.id === apiKeyId)?.user?.fiscalCode === currentUser.fiscal_number;
+
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -35,6 +38,16 @@ const VirtualKeyItemMenu: React.FC<Props> = ({ data, keys, handleModalClick }) =
 
   const checkIfStatusIsAlreadyPresent = (status: VirtualKeyStatus): boolean =>
     keys.items.some((key) => key.status === status);
+
+  const shouldShowRotateButton = (): boolean => {
+    if (isUserAdmin && !isPersonalKey) {
+      return false;
+    }
+    return (
+      data.status === VirtualKeyStatus.Enabled &&
+      !checkIfStatusIsAlreadyPresent(VirtualKeyStatus.Rotated)
+    );
+  };
 
   return (
     <Box data-testid="contextMenu">
@@ -68,17 +81,16 @@ const VirtualKeyItemMenu: React.FC<Props> = ({ data, keys, handleModalClick }) =
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {data.status === VirtualKeyStatus.Enabled &&
-          !checkIfStatusIsAlreadyPresent(VirtualKeyStatus.Rotated) && (
-            <MenuItem
-              id="button-rotate"
-              data-testid="buttonRotate"
-              onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}
-            >
-              <Sync sx={{ mr: 1 }} />
-              {t('context-menu.rotate')}
-            </MenuItem>
-          )}
+        {shouldShowRotateButton() && (
+          <MenuItem
+            id="button-rotate"
+            data-testid="buttonRotate"
+            onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}
+          >
+            <Sync sx={{ mr: 1 }} />
+            {t('context-menu.rotate')}
+          </MenuItem>
+        )}
         {data.status === VirtualKeyStatus.Enabled &&
           !checkIfStatusIsAlreadyPresent(VirtualKeyStatus.Blocked) && (
             <MenuItem
@@ -91,14 +103,16 @@ const VirtualKeyItemMenu: React.FC<Props> = ({ data, keys, handleModalClick }) =
             </MenuItem>
           )}
 
-        <MenuItem
-          id="button-view"
-          data-testid="buttonView"
-          onClick={() => handleModalClick(ModalApiKeyView.VIEW, apiKeyId)}
-        >
-          <RemoveRedEye sx={{ mr: 1 }} />
-          {t('context-menu.view')}
-        </MenuItem>
+        {(!isUserAdmin || isPersonalKey) && (
+          <MenuItem
+            id="button-view"
+            data-testid="buttonView"
+            onClick={() => handleModalClick(ModalApiKeyView.VIEW, apiKeyId)}
+          >
+            <RemoveRedEye sx={{ mr: 1 }} />
+            {t('context-menu.view')}
+          </MenuItem>
+        )}
 
         {data.status !== VirtualKeyStatus.Enabled && (
           <MenuItem

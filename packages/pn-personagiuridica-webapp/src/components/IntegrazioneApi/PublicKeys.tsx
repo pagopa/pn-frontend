@@ -2,9 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
-import { Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { ApiErrorWrapper, useHasPermissions } from '@pagopa-pn/pn-commons';
-import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import {
   ChangeStatusPublicKeyV1StatusEnum,
@@ -22,36 +21,12 @@ import { PNRole } from '../../redux/auth/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import ApiKeyModal from './ApiKeyModal';
+import { ShowCodesInput } from './ApiKeysElements';
 import PublicKeysTable from './PublicKeysTable';
 
 type ModalType = {
   view: ModalApiKeyView;
   publicKey?: PublicKeyRow;
-};
-
-const ShowCodesInput = ({ value, label }: { value: string; label: string }) => {
-  const { t } = useTranslation(['integrazioneApi']);
-
-  return (
-    <TextField
-      value={value}
-      fullWidth
-      label={t(label)}
-      InputProps={{
-        readOnly: true,
-        sx: { p: 0 },
-        endAdornment: (
-          <InputAdornment position="end">
-            <CopyToClipboardButton
-              value={() => value}
-              tooltipTitle={t('api-key-copied')}
-              color="primary"
-            />
-          </InputAdornment>
-        ),
-      }}
-    />
-  );
 };
 
 const PublicKeys: React.FC = () => {
