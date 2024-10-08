@@ -132,9 +132,9 @@ const PublicKeys: React.FC = () => {
         )}
         {modal.view === ModalApiKeyView.BLOCK && (
           <ApiKeyModal
-            title={t('publicKeys.block-title')}
-            subTitle={t('publicKeys.block-subtitle')}
-            content={<Typography>{t('publicKeys.block-warning')}</Typography>}
+            title={t('block-title')}
+            subTitle={t('block-subtitle')}
+            content={<Typography>{t('block-warning')}</Typography>}
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('block-button')}
@@ -144,9 +144,9 @@ const PublicKeys: React.FC = () => {
         )}
         {modal.view === ModalApiKeyView.ROTATE && (
           <ApiKeyModal
-            title={t('publicKeys.rotate-title')}
-            subTitle={t('publicKeys.rotate-subtitle')}
-            content={<Typography>{t('publicKeys.rotate-warning')}</Typography>}
+            title={t('rotate-title')}
+            subTitle={t('rotate-subtitle')}
+            content={<Typography>{t('rotate-warning')}</Typography>}
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('rotate-button')}
@@ -156,8 +156,8 @@ const PublicKeys: React.FC = () => {
         )}
         {modal.view === ModalApiKeyView.DELETE && (
           <ApiKeyModal
-            title={t('publicKeys.delete-title')}
-            subTitle={t('publicKeys.delete-subtitle')}
+            title={t('delete-title')}
+            subTitle={t('delete-subtitle')}
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('button.elimina', { ns: 'common' })}

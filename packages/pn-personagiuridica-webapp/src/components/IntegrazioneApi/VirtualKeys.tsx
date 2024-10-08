@@ -7,12 +7,18 @@ import { EmptyState, KnownSentiment } from '@pagopa-pn/pn-commons';
 
 import {
   BffPublicKeysCheckIssuerResponse,
+  BffVirtualKeyStatusRequestStatusEnum,
   PublicKeysIssuerResponseIssuerStatusEnum,
   VirtualKey,
   VirtualKeyStatus,
 } from '../../generated-client/pg-apikeys';
 import { ModalApiKeyView } from '../../models/ApiKeys';
-import { checkPublicKeyIssuer, getVirtualApiKeys } from '../../redux/apikeys/actions';
+import {
+  changeVirtualApiKeyStatus,
+  checkPublicKeyIssuer,
+  deleteVirtualApiKey,
+  getVirtualApiKeys,
+} from '../../redux/apikeys/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import ApiKeyModal from './ApiKeyModal';
@@ -66,6 +72,32 @@ const VirtualKeys: React.FC = () => {
 
   const handleCloseModal = () => {
     setModal({ view: ModalApiKeyView.NONE });
+  };
+
+  const handleChangeVirtualKeyStatus = (
+    status: BffVirtualKeyStatusRequestStatusEnum,
+    virtualKeyId?: string
+  ) => {
+    if (!virtualKeyId) {
+      return;
+    }
+    handleCloseModal();
+    void dispatch(
+      changeVirtualApiKeyStatus({
+        kid: virtualKeyId,
+        body: {
+          status,
+        },
+      })
+    ).then(fetchVirtualKeys);
+  };
+
+  const handleDeleteVirtualKey = (virtualKeyId?: string) => {
+    if (!virtualKeyId) {
+      return;
+    }
+    handleCloseModal();
+    void dispatch(deleteVirtualApiKey(virtualKeyId)).then(fetchVirtualKeys);
   };
 
   useEffect(() => {
@@ -127,37 +159,47 @@ const VirtualKeys: React.FC = () => {
       )}
       {modal.view === ModalApiKeyView.BLOCK && (
         <ApiKeyModal
-          title={t('publicKeys.block-title')}
-          subTitle={t('publicKeys.block-subtitle')}
-          content={<Typography>{t('publicKeys.block-warning')}</Typography>}
+          title={t('block-title')}
+          subTitle={t('block-subtitle')}
+          content={<Typography>{t('block-warning')}</Typography>}
           closeButtonLabel={t('button.annulla', { ns: 'common' })}
           closeModalHandler={handleCloseModal}
           actionButtonLabel={t('block-button')}
           buttonIcon={<Block fontSize="small" sx={{ mr: 1 }} />}
-          // actionHandler={() => blockPublicKey(modal.publicKey?.kid)}
+          actionHandler={() =>
+            handleChangeVirtualKeyStatus(
+              BffVirtualKeyStatusRequestStatusEnum.Block,
+              modal.virtualKey?.id
+            )
+          }
         />
       )}
       {modal.view === ModalApiKeyView.ROTATE && (
         <ApiKeyModal
-          title={t('publicKeys.rotate-title')}
-          subTitle={t('publicKeys.rotate-subtitle')}
-          content={<Typography>{t('publicKeys.rotate-warning')}</Typography>}
+          title={t('rotate-title')}
+          subTitle={t('rotate-subtitle')}
+          content={<Typography>{t('rotate-warning')}</Typography>}
           closeButtonLabel={t('button.annulla', { ns: 'common' })}
           closeModalHandler={handleCloseModal}
           actionButtonLabel={t('rotate-button')}
           buttonIcon={<Sync fontSize="small" sx={{ mr: 1 }} />}
-          // actionHandler={() => apiKeyRotated(modal.apiKey?.id)}
+          actionHandler={() =>
+            handleChangeVirtualKeyStatus(
+              BffVirtualKeyStatusRequestStatusEnum.Rotate,
+              modal.virtualKey?.id
+            )
+          }
         />
       )}
       {modal.view === ModalApiKeyView.DELETE && (
         <ApiKeyModal
-          title={t('publicKeys.delete-title')}
-          subTitle={t('publicKeys.delete-subtitle')}
+          title={t('delete-title')}
+          subTitle={t('delete-subtitle')}
           closeButtonLabel={t('button.annulla', { ns: 'common' })}
           closeModalHandler={handleCloseModal}
           actionButtonLabel={t('button.elimina', { ns: 'common' })}
           buttonIcon={<Delete fontSize="small" sx={{ mr: 1 }} />}
-          // actionHandler={() => deleteApiKey(modal.publicKey?.kid)}
+          actionHandler={() => handleDeleteVirtualKey(modal.virtualKey?.id)}
           hasDeleteButton
         />
       )}
