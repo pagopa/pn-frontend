@@ -4,46 +4,17 @@ import StatusTooltip from '../StatusTooltip';
 const tooltip = 'mocked tooltip test';
 const label = 'mocked label';
 const classRoot = 'MuiChip-color';
-
-async function testStatusTooltip(
-  color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary'
-) {
-  const { getByRole } = render(<StatusTooltip tooltip={tooltip} label={label} color={color} />);
-  const button = getByRole('button');
-  expect(button).toHaveTextContent(/mocked label/i);
-  const buttonClass = `${classRoot}${color.charAt(0).toUpperCase() + color.slice(1)}`;
-  expect(button.classList.contains(buttonClass)).toBe(true);
-  fireEvent.mouseOver(button);
-  const ttip = await waitFor(() => screen.getByRole('tooltip'));
-  expect(ttip).toHaveTextContent(/mocked tooltip test/i);
-}
+const colors = ['warning', 'error', 'success', 'info', 'default', 'primary', 'secondary'] as const;
 
 describe('Status Tooltip Component', () => {
-  it('renders status tooltip (warning)', () => {
-    testStatusTooltip('warning');
-  });
-
-  it('renders status tooltip (error)', () => {
-    testStatusTooltip('error');
-  });
-
-  it('renders status tooltip (success)', () => {
-    testStatusTooltip('success');
-  });
-
-  it('renders status tooltip (info)', () => {
-    testStatusTooltip('info');
-  });
-
-  it('renders status tooltip (default)', () => {
-    testStatusTooltip('default');
-  });
-
-  it('renders status tooltip (primary)', () => {
-    testStatusTooltip('primary');
-  });
-
-  it('renders status tooltip (secondary)', () => {
-    testStatusTooltip('secondary');
+  it.each(colors)('renders status tooltip (%s)', async (color) => {
+    const { getByRole } = render(<StatusTooltip tooltip={tooltip} label={label} color={color} />);
+    const button = getByRole('button');
+    expect(button).toHaveTextContent(/mocked label/i);
+    const buttonClass = `${classRoot}${color.charAt(0).toUpperCase() + color.slice(1)}`;
+    expect(button.classList.contains(buttonClass)).toBe(true);
+    fireEvent.mouseOver(button);
+    const ttip = await waitFor(() => screen.getByRole('tooltip'));
+    expect(ttip).toHaveTextContent(/mocked tooltip test/i);
   });
 });
