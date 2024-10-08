@@ -53,6 +53,7 @@
   },
   "virtualKeys": {
     "title": "Chiave personale",
+    "new-key-button": "Genera chiave personale",
     "tos-empty-state": "Per poter creare una chiave personale, un amministratore deve prima abilitare l’integrazione.",
     "empty-state": "Non è stata ancora generata nessuna chiave personale perla tua impresa.",
     "table": {
@@ -63,6 +64,8 @@
       "personal": "Tu"
     },
     "personal-key": "Chiave personale",
+    "create-title": "La tua chiave personale",
+    "create-subtitle": "Puoi usarla per autenticarti in piattaforma e integrare SEND. Puoi copiare la tua chiave personale in ogni momento nella sezione “Integrazione API”.",
     "view-title": "La tua chiave personale",
     "view-subtitle": "Puoi usarla per autenticarti in piattaforma e integrare SEND. Puoi copiare la tua chiave personale in ogni momento nella sezione “Integrazione API”.",
     "understood-button": "Ok, ho capito"

@@ -12,7 +12,7 @@ import {
   VirtualKeyStatus,
 } from '../../generated-client/pg-apikeys';
 import { ModalApiKeyView } from '../../models/ApiKeys';
-import { checkPublicKeyIssuer, getVirtualApiKeys } from '../../redux/apikeys/actions';
+import { checkPublicKeyIssuer, createVirtualApiKey, getVirtualApiKeys } from '../../redux/apikeys/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import ApiKeyModal from './ApiKeyModal';
@@ -58,7 +58,15 @@ const VirtualKeys: React.FC = () => {
       });
   }, []);
 
-  const handleGenerateVirtualKey = () => {};
+  const handleGenerateVirtualKey = async () => {
+    void dispatch(createVirtualApiKey({ name: "chiave-nuova"}))
+    .unwrap()
+    .then(response => {
+      const newVirtualKey: VirtualKey = { value: response.virtualKey };
+      setModal({ view: ModalApiKeyView.CREATE, virtualKey: newVirtualKey });
+      void dispatch(getVirtualApiKeys());
+    });
+  };
 
   const handleModalClick = (view: ModalApiKeyView, publicKeyId: string) => {
     setModal({ view, virtualKey: virtualKeys.items.find((key) => key.id === publicKeyId) });
@@ -95,7 +103,7 @@ const VirtualKeys: React.FC = () => {
             sx={{ mb: { xs: 3, lg: 0 } }}
             onClick={handleGenerateVirtualKey}
           >
-            {t('publicKeys.new-key-button')}
+            {t('virtualKeys.new-key-button')}
           </Button>
         )}
       </Stack>
@@ -108,6 +116,23 @@ const VirtualKeys: React.FC = () => {
         <VirtualKeysTable virtualKeys={virtualKeys} handleModalClick={handleModalClick} />
       )}
 
+      {modal.view === ModalApiKeyView.CREATE && (
+        <ApiKeyModal
+          title={t('virtualKeys.create-title')}
+          subTitle={t('virtualKeys.create-subtitle')}
+          content={
+            <Stack spacing={2} width="536px">
+              <ShowCodesInput
+                value={modal.virtualKey?.value ?? ''}
+                label="virtualKeys.personal-key"
+              />
+            </Stack>
+          }
+          closeButtonLabel={t('virtualKeys.understood-button')}
+          closeModalHandler={handleCloseModal}
+          closeButtonVariant="contained"
+        />
+      )}
       {modal.view === ModalApiKeyView.VIEW && (
         <ApiKeyModal
           title={t('virtualKeys.view-title')}
