@@ -49,10 +49,11 @@ const VirtualKeyItemMenu: React.FC<Props> = ({ data, keys, handleModalClick }) =
     );
   };
 
-  const shouldShowBlockButton = !keys.items.find(
-    (key) =>
-      key.user?.fiscalCode === data.user?.fiscalCode && key.status === VirtualKeyStatus.Blocked
-  );
+  const shouldShowBlockButton =
+    !keys.items.find(
+      (key) =>
+        key.user?.fiscalCode === data.user?.fiscalCode && key.status === VirtualKeyStatus.Blocked
+    ) && data.status !== VirtualKeyStatus.Rotated;
 
   return (
     <Box data-testid="contextMenu">
