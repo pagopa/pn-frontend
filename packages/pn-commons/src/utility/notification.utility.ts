@@ -6,7 +6,6 @@
 import _ from 'lodash';
 
 import {
-  AnalogWorkflowDetails,
   ExtRegistriesPaymentDetails,
   F24PaymentDetails,
   INotificationDetailTimeline,
@@ -309,6 +308,12 @@ export function getLegalFactLabel(
   legalFactType?: LegalFactType | 'AAR',
   legalFactKey?: string
 ): string {
+  console.log(
+    'timelineStep,legalFactType,legalFactKey :>> ',
+    timelineStep,
+    legalFactType,
+    legalFactKey
+  );
   const legalFactLabel = getLocalizedOrDefaultLabel(
     'notifications',
     `detail.legalfact`,
@@ -386,10 +391,7 @@ export function getLegalFactLabel(
       'detail.timeline.legalfact.analog-failure-delivery',
       'Deposito di avvenuta ricezione'
     );
-  } else if (
-    timelineStep.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW &&
-    (timelineStep.details as AnalogWorkflowDetails).getGeneratedAarUrl
-  ) {
+  } else if (timelineStep.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW) {
     return getLocalizedOrDefaultLabel(
       'notifications',
       'detail.timeline.aar-document',
@@ -489,14 +491,14 @@ export function getNotificationTimelineStatusInfos(
   const recipient = _.isNil(step.details.recIndex)
     ? undefined
     : // For the accesses from recipient apps (cittadino / impresa)
-    // the API response will probably (in some future) include only the info about the requester recipient,
-    // i.e. recipients will be an array with exactly one element, disregarding how many recipients are included
-    // in the notification being requested.
-    // In that case, we don't consider the recIndex indicated in each timeline step,
-    // but otherwise take all steps as related with the only recipient included in the API response.
-    recipients.length === 1
-    ? recipients[0]
-    : recipients[step.details.recIndex];
+      // the API response will probably (in some future) include only the info about the requester recipient,
+      // i.e. recipients will be an array with exactly one element, disregarding how many recipients are included
+      // in the notification being requested.
+      // In that case, we don't consider the recIndex indicated in each timeline step,
+      // but otherwise take all steps as related with the only recipient included in the API response.
+      recipients.length === 1
+      ? recipients[0]
+      : recipients[step.details.recIndex];
 
   // we show the multirecipient versions of the step descriptions
   // only if the array of recipients include more than one "full" element
