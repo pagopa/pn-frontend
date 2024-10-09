@@ -6,6 +6,7 @@
 import _ from 'lodash';
 
 import {
+  AnalogWorkflowDetails,
   ExtRegistriesPaymentDetails,
   F24PaymentDetails,
   INotificationDetailTimeline,
@@ -308,12 +309,6 @@ export function getLegalFactLabel(
   legalFactType?: LegalFactType | 'AAR',
   legalFactKey?: string
 ): string {
-  console.log(
-    'timelineStep,legalFactType,legalFactKey :>> ',
-    timelineStep,
-    legalFactType,
-    legalFactKey
-  );
   const legalFactLabel = getLocalizedOrDefaultLabel(
     'notifications',
     `detail.legalfact`,
@@ -391,7 +386,10 @@ export function getLegalFactLabel(
       'detail.timeline.legalfact.analog-failure-delivery',
       'Deposito di avvenuta ricezione'
     );
-  } else if (timelineStep.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW) {
+  } else if (
+    timelineStep.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW &&
+    (timelineStep.details as AnalogWorkflowDetails).generatedAarUrl
+  ) {
     return getLocalizedOrDefaultLabel(
       'notifications',
       'detail.timeline.aar-document',

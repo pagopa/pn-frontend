@@ -109,7 +109,7 @@ interface BaseDetails {
 
 export interface AnalogWorkflowDetails extends BaseDetails {
   physicalAddress?: PhysicalAddress;
-  getGeneratedAarUrl?: string;
+  generatedAarUrl?: string;
 }
 
 export interface SendCourtesyMessageDetails extends BaseDetails {
