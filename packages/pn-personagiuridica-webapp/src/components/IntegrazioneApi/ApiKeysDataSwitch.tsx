@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { Box, Chip, Typography } from '@mui/material';
+import { Chip, Stack, Typography } from '@mui/material';
 import { Row, StatusTooltip } from '@pagopa-pn/pn-commons';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
@@ -12,8 +12,8 @@ import {
 } from '../../generated-client/pg-apikeys';
 import { ApiKeyColumnData, ModalApiKeyView } from '../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../utility/apikeys.utility';
-import ApiKeyContextMenu from './ApiKeyItemMenu';
-import VirtualKeyItemMenu from './VirtualKeyItemMenu';
+import PublicKeyContextMenu from './PublicKeyContextMenu';
+import VirtualKeyContextMenu from './VirtualKeyContextMenu';
 
 type Props = {
   data: Row<ApiKeyColumnData>;
@@ -40,11 +40,10 @@ const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick
         return <>-</>;
       }
       return (
-        <Box
+        <Stack
+          direction="row"
           sx={{
-            display: 'flex',
             alignItems: 'center',
-            userSelect: 'none',
             color: setRowColorByStatus(data),
           }}
         >
@@ -55,7 +54,7 @@ const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick
             tooltipTitle={t('api-key-copied')}
             value={() => data.value || ''}
           />
-        </Box>
+        </Stack>
       );
     case 'date':
       return <Typography sx={{ color: setRowColorByStatus(data) }}>{data.date}</Typography>;
@@ -65,11 +64,7 @@ const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick
       }
       const { label, tooltip, color } = getApiKeyStatusInfos(data.status, data.statusHistory);
       return tooltip ? (
-        <StatusTooltip
-          label={t(label)}
-          tooltip={data.statusHistory ? tooltip : undefined}
-          color={color}
-        />
+        <StatusTooltip label={t(label)} tooltip={tooltip} color={color} />
       ) : (
         <Chip
           id={`status-chip-${t(label)}`}
@@ -81,9 +76,13 @@ const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick
       );
     case 'menu':
       return menuType === 'publicKeys' ? (
-        <ApiKeyContextMenu data={data} keys={keys} handleModalClick={handleModalClick} />
+        <PublicKeyContextMenu
+          data={data}
+          keys={keys as BffPublicKeysResponse}
+          handleModalClick={handleModalClick}
+        />
       ) : (
-        <VirtualKeyItemMenu
+        <VirtualKeyContextMenu
           data={data}
           keys={keys as BffVirtualKeysResponse}
           handleModalClick={handleModalClick}

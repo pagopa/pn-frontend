@@ -3,7 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { InputAdornment, TextField } from '@mui/material';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
-export const ShowCodesInput = ({ value, label }: { value: string; label: string }) => {
+type Props = {
+  value: string;
+  label: string;
+};
+
+export const ShowCodesInput: React.FC<Props> = ({ value, label }) => {
   const { t } = useTranslation(['integrazioneApi']);
 
   return (

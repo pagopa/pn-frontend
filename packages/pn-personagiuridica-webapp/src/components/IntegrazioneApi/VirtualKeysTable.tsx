@@ -41,7 +41,7 @@ const VirtualKeysTable: React.FC<Props> = ({ virtualKeys, handleModalClick }) =>
       ...n,
       name: isPersonalKey ? `${n.name} (${t('virtualKeys.table.personal')})` : n.name,
       value: !isUserAdmin || isPersonalKey ? n.value : undefined,
-      date: formatDate(n.lastUpdate ?? '', false),
+      date: n.lastUpdate ? formatDate(n.lastUpdate, false) : '',
       id: n.id ?? '',
       menu: '',
     };

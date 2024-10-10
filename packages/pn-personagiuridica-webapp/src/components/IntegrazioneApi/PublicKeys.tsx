@@ -21,8 +21,8 @@ import { PNRole } from '../../redux/auth/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import ApiKeyModal from './ApiKeyModal';
-import { ShowCodesInput } from './ApiKeysElements';
 import PublicKeysTable from './PublicKeysTable';
+import { ShowCodesInput } from './ShowCodesInput';
 
 type ModalType = {
   view: ModalApiKeyView;
@@ -132,9 +132,9 @@ const PublicKeys: React.FC = () => {
         )}
         {modal.view === ModalApiKeyView.BLOCK && (
           <ApiKeyModal
-            title={t('block-title')}
-            subTitle={t('block-subtitle')}
-            content={<Typography>{t('block-warning')}</Typography>}
+            title={t('dialogs.block-title')}
+            subTitle={t('dialogs.block-subtitle')}
+            content={<Typography>{t('dialogs.block-warning')}</Typography>}
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('block-button')}
@@ -144,9 +144,9 @@ const PublicKeys: React.FC = () => {
         )}
         {modal.view === ModalApiKeyView.ROTATE && (
           <ApiKeyModal
-            title={t('rotate-title')}
-            subTitle={t('rotate-subtitle')}
-            content={<Typography>{t('rotate-warning')}</Typography>}
+            title={t('dialogs.rotate-title')}
+            subTitle={t('dialogs.rotate-subtitle')}
+            content={<Typography>{t('dialogs.rotate-warning')}</Typography>}
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('rotate-button')}
@@ -156,8 +156,8 @@ const PublicKeys: React.FC = () => {
         )}
         {modal.view === ModalApiKeyView.DELETE && (
           <ApiKeyModal
-            title={t('delete-title')}
-            subTitle={t('delete-subtitle')}
+            title={t('dialogs.delete-title')}
+            subTitle={t('dialogs.delete-subtitle')}
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('button.elimina', { ns: 'common' })}

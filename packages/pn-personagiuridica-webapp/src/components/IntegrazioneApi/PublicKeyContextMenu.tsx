@@ -5,20 +5,16 @@ import { Block, Delete, MoreVert, RemoveRedEye, Sync } from '@mui/icons-material
 import { Box, IconButton, Menu, MenuItem } from '@mui/material';
 import { Row } from '@pagopa-pn/pn-commons';
 
-import {
-  BffPublicKeysResponse,
-  BffVirtualKeysResponse,
-  PublicKeyStatus,
-} from '../../generated-client/pg-apikeys';
+import { BffPublicKeysResponse, PublicKeyStatus } from '../../generated-client/pg-apikeys';
 import { ApiKeyColumnData, ModalApiKeyView } from '../../models/ApiKeys';
 
 type Props = {
   data: Row<ApiKeyColumnData>;
-  keys: BffPublicKeysResponse | BffVirtualKeysResponse;
+  keys: BffPublicKeysResponse;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
 };
 
-const ApiKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }) => {
+const PublicKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }) => {
   const apiKeyId = data.id;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { t } = useTranslation(['integrazioneApi', 'common']);
@@ -55,12 +51,14 @@ const ApiKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }) =>
         open={open}
         onClose={handleClose}
         onClick={handleClose}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            overflow: 'visible',
-            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-            mt: 1.5,
+        slotProps={{
+          paper: {
+            elevation: 0,
+            sx: {
+              overflow: 'visible',
+              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+              mt: 1.5,
+            },
           },
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
@@ -114,4 +112,4 @@ const ApiKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }) =>
   );
 };
 
-export default ApiKeyContextMenu;
+export default PublicKeyContextMenu;

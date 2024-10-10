@@ -17,7 +17,7 @@ type Props = {
   handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
 };
 
-const VirtualKeyItemMenu: React.FC<Props> = ({ data, keys, handleModalClick }) => {
+const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }) => {
   const apiKeyId = data.id;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { t } = useTranslation(['integrazioneApi', 'common']);
@@ -76,12 +76,14 @@ const VirtualKeyItemMenu: React.FC<Props> = ({ data, keys, handleModalClick }) =
         open={open}
         onClose={handleClose}
         onClick={handleClose}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            overflow: 'visible',
-            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-            mt: 1.5,
+        slotProps={{
+          paper: {
+            elevation: 0,
+            sx: {
+              overflow: 'visible',
+              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+              mt: 1.5,
+            },
           },
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
@@ -135,4 +137,4 @@ const VirtualKeyItemMenu: React.FC<Props> = ({ data, keys, handleModalClick }) =
   );
 };
 
-export default VirtualKeyItemMenu;
+export default VirtualKeyContextMenu;
