@@ -88,11 +88,11 @@ export function isToday(date: DatePickerTypes): boolean {
 }
 
 export function formatDate(
-  dateString: string | Date,
+  dateString: string,
   todayLabelizzation: boolean = true,
   separator: string = '/'
 ): string {
-  const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
+  const date = new Date(dateString);
   const month = `0${date.getMonth() + 1}`.slice(-2);
   const day = `0${date.getDate()}`.slice(-2);
   const todayLabel = getLocalizedOrDefaultLabel(

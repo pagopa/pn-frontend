@@ -55,9 +55,7 @@
     "title": "Registra chiave pubblica",
     "subtitle": "Inserisci i dati richiesti per abilitare l'integrazione sicura dei gestionali della tua impresa.",
     "button": {
-      "register": "Registra",
-      "back": "Indietro",
-      "end": "Fine"
+      "register": "Registra"
     },
     "prompt": {
       "title": "Vuoi uscire?",
@@ -66,13 +64,8 @@
     "steps": {
       "insert-data": {
         "title": "Inserisci i dati",
-        "content_1": "La chiave pubblica (JWKS) è necessaria per ",
-        "content_2": "autenticare in modo sicuro le richieste provenienti dai tuoi gestionali.",
-        "content_3": "La chiave scade dopo 355 giorni.",
-        "tos_privacy_1": "Premendo “Registra” dichiari di aver letto e di accettare i ",
-        "tos_privacy_2": "Termini del Servizio",
-        "tos_privacy_3": " e l'",
-        "tos_privacy_4": "Informativa Privacy",
+        "content": "La chiave pubblica (JWKS) è necessaria per <0>autenticare in modo sicuro le richieste provenienti dai tuoi gestionali.</0> La chiave scade dopo 355 giorni.",
+        "tos_privacy": "Premendo “Registra” dichiari di aver letto e di accettare i <0>Termini del Servizio</0> e l'<1>Informativa Privacy</1>",
         "name": {
           "label": "Nome",
           "default": "Chiave-",
@@ -95,7 +88,7 @@
     "kid-copied": "Kid copiato!",
     "issuer-copied": "Issuer copiato!"
   },
-  "message": {
+  "messages": {
     "error": {
       "rotate-invalid-kid": "Identificativo della chiave da ruotare errato!",
       "key-already-registered": "Questo valore è già stato inserito in precedenza. Inserisci una chiave diversa.",

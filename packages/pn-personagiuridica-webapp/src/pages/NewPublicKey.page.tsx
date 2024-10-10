@@ -2,14 +2,13 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Box, Grid, Step, StepLabel, Stepper } from '@mui/material';
+import { Box, Step, StepLabel, Stepper } from '@mui/material';
 import {
   AppResponsePublisher,
   PnBreadcrumb,
   Prompt,
   TitleBox,
   appStateActions,
-  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
 import PublicKeyDataInsert from '../components/IntegrazioneApi/NewPublicKey/PublicKeyDataInsert';
@@ -35,52 +34,46 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
   children,
   activeStep,
 }) => {
-  const { t } = useTranslation(['integrazioneApi']);
-  const { t: tc } = useTranslation(['common']);
-  const isMobile = useIsMobile();
+  const { t } = useTranslation(['integrazioneApi', 'common']);
   const steps = [
     t('new-public-key.steps.insert-data.title'),
     t('new-public-key.steps.get-returned-parameters.title'),
   ];
 
   return (
-    <Box p={3}>
-      <Grid container sx={{ padding: isMobile ? '0 20px' : 0 }}>
-        <Grid item xs={12} lg={8}>
-          <PnBreadcrumb
-            linkRoute={routes.INTEGRAZIONE_API}
-            linkLabel={t('title')}
-            currentLocationLabel={t('new-public-key.title')}
-            goBackLabel={tc('button.exit')}
-          />
-          <TitleBox
-            variantTitle="h4"
-            title={t('new-public-key.title')}
-            sx={{ pt: '20px', mb: 4 }}
-            subTitle={t('new-public-key.subtitle')}
-            variantSubTitle="body1"
-          ></TitleBox>
-          <Stepper
-            activeStep={activeStep}
-            alternativeLabel
-            sx={{ marginTop: '60px' }}
-            data-testid="stepper"
+    <Box p={3} sx={{ maxWidth: { xs: '100%', lg: '70%'} }} >
+      <PnBreadcrumb
+        linkRoute={routes.INTEGRAZIONE_API}
+        linkLabel={t('title')}
+        currentLocationLabel={t('new-public-key.title')}
+        goBackLabel={t('button.exit', { ns: 'common' })}
+      />
+      <TitleBox
+        variantTitle="h4"
+        title={t('new-public-key.title')}
+        sx={{ pt: '20px', mb: 4 }}
+        subTitle={t('new-public-key.subtitle')}
+        variantSubTitle="body1"
+      ></TitleBox>
+      <Stepper
+        activeStep={activeStep}
+        alternativeLabel
+        sx={{ marginTop: '60px' }}
+        data-testid="stepper"
+      >
+        {steps.map((label, index) => (
+          <Step
+            id={label}
+            key={label}
+            sx={{ cursor: index < activeStep ? 'pointer' : 'auto' }}
+            data-testid={`step-${index}`}
           >
-            {steps.map((label, index) => (
-              <Step
-                id={label}
-                key={label}
-                sx={{ cursor: index < activeStep ? 'pointer' : 'auto' }}
-                data-testid={`step-${index}`}
-              >
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
 
-          {children}
-        </Grid>
-      </Grid>
+      {children}
     </Box>
   );
 };
@@ -115,7 +108,7 @@ const NewPublicKey = () => {
       dispatch(
         appStateActions.addError({
           title: '',
-          message: t('message.error.rotate-invalid-kid'),
+          message: t('messages.error.rotate-invalid-kid'),
         })
       );
     }
@@ -137,7 +130,7 @@ const NewPublicKey = () => {
           dispatch(
             appStateActions.addError({
               title: '',
-              message: t('message.error.no-tos-version'),
+              message: t('messages.error.no-tos-version'),
             })
           );
           return;
@@ -158,13 +151,13 @@ const NewPublicKey = () => {
     dispatch(
       appStateActions.addError({
         title: '',
-        message: t('message.error.accept-tos-failed'),
+        message: t('messages.error.accept-tos-failed'),
       })
     );
   };
 
   const showSuccessMessage = () => {
-    const message = kid ? 'message.success.public-key-rotated' : 'message.success.public-key-registered';
+    const message = kid ? 'messages.success.public-key-rotated' : 'messages.success.public-key-registered';
     dispatch(
       appStateActions.addSuccess({
         title: '',

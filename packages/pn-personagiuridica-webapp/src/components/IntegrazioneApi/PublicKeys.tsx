@@ -131,7 +131,7 @@ const PublicKeys: React.FC = () => {
             data-testid="generatePublicKey"
             variant="contained"
             sx={{ mb: { xs: 3, lg: 0 } }}
-              onClick={() => handleGeneratePublicKey()}
+            onClick={() => handleGeneratePublicKey()}
           >
             {t('publicKeys.new-key-button')}
           </Button>
@@ -185,7 +185,7 @@ const PublicKeys: React.FC = () => {
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('rotate-button')}
             buttonIcon={<Sync fontSize="small" sx={{ mr: 1 }} />}
-            actionHandler={() => handleGeneratePublicKey(modal.publicKey?.kid as string)}
+            actionHandler={() => handleGeneratePublicKey(modal.publicKey?.kid)}
           />
         )}
         {modal.view === ModalApiKeyView.DELETE && (

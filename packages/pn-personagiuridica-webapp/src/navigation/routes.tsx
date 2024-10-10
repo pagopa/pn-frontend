@@ -151,8 +151,8 @@ function Router() {
                   path={routes.REGISTRA_CHIAVE_PUBBLICA}
                   element={
                     <PrivateRoute
-                      currentRoles={[]}
-                      requiredRoles={[]}
+                      currentRoles={currentRoles}
+                      requiredRoles={[PNRole.ADMIN]}
                       additionalCondition={IS_B2B_ENABLED}
                       redirectTo={<NotFound />}
                     >

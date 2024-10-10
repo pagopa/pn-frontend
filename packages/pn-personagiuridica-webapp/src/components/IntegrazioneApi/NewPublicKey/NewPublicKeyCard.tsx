@@ -1,4 +1,4 @@
-import { Fragment, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Paper } from '@mui/material';
@@ -8,10 +8,10 @@ type Props = {
   children: ReactNode;
   isContinueDisabled: boolean;
   title?: string;
-  content?: JSX.Element;
-  noPaper?: boolean;
+  content?: ReactNode;
   submitLabel?: string;
   previousStepLabel?: string;
+  onSubmit?: () => void;
   previousStepOnClick?: () => void;
 };
 
@@ -20,56 +20,56 @@ const NewPublicKeyCard = ({
   isContinueDisabled,
   title,
   content,
-  noPaper = false,
   submitLabel,
   previousStepLabel,
+  onSubmit,
   previousStepOnClick,
 }: Props) => {
-  const { t } = useTranslation(['integrazioneApi']);
+  const { t } = useTranslation(['common']);
   const isMobile = useIsMobile();
 
   return (
-    <Fragment>
-      {!noPaper && (
-        <Paper sx={{ p: 3, mt: 5 }} elevation={0}>
-          {title && <SectionHeading data-testid="title">{title}</SectionHeading>}
-          {content}
-          <Box sx={{ mt: 3 }}>{children}</Box>
-        </Paper>
-      )}
-      {noPaper && <Box>{children}</Box>}
-      <Box
-        display="flex"
-        flexDirection={isMobile ? 'column' : 'row-reverse'}
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ marginTop: '40px', mb: 3 }}
-      >
-        <Button
-          id="step-submit"
-          variant="contained"
-          type="submit"
-          disabled={isContinueDisabled}
-          data-testid="step-submit"
-          fullWidth={isMobile}
+    <>
+      <Paper sx={{ p: 3, mt: 5 }} elevation={0}>
+        {title && <SectionHeading data-testid="title">{title}</SectionHeading>}
+        {content}
+        <Box sx={{ mt: 3 }}>{children}</Box>
+      </Paper>
+      <form onSubmit={onSubmit} data-testid="publicKeyDataInsertForm">
+        <Box
+          display="flex"
+          // flexDirection={isMobile ? 'column' : 'row-reverse'}
+          flexDirection={{xs: 'column', lg: 'row-reverse'}}
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ mt: 5, mb: 3 }}
         >
-          {submitLabel || t('new-public-key.button.end')}
-        </Button>
-        {previousStepLabel && (
           <Button
-            id="previous-step"
-            variant="outlined"
-            type="button"
-            onClick={previousStepOnClick}
-            data-testid="previous-step"
+            id="step-submit"
+            variant="contained"
+            type="submit"
+            disabled={isContinueDisabled}
+            data-testid="step-submit"
             fullWidth={isMobile}
-            sx={{ marginTop: isMobile ? 2 : 0 }}
           >
-            {previousStepLabel}
+            {submitLabel || t('button.end')}
           </Button>
-        )}
-      </Box>
-    </Fragment>
+          {previousStepLabel && (
+            <Button
+              id="previous-step"
+              variant="outlined"
+              type="button"
+              onClick={previousStepOnClick}
+              data-testid="previous-step"
+              fullWidth={isMobile}
+              sx={{mt: {xs: 2, lg: 0}}}
+            >
+              {previousStepLabel}
+            </Button>
+          )}
+        </Box>
+      </form>
+    </>
   );
 };
 

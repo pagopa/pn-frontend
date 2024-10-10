@@ -12,7 +12,7 @@ export const DELEGHE = `/deleghe`;
 export const DELEGHEACARICO = `${DELEGHE}/a-carico`;
 export const DELEGATI = `${DELEGHE}/delegati`;
 export const INTEGRAZIONE_API = '/integrazione-api';
-export const REGISTRA_CHIAVE_PUBBLICA = '/integrazione-api/registra-chiave-pubblica';
+export const REGISTRA_CHIAVE_PUBBLICA = `${INTEGRAZIONE_API}/registra-chiave-pubblica`;
 
 const NOTIFICA = '/dettaglio';
 export const DETTAGLIO_NOTIFICA = `${NOTIFICHE}/:id${NOTIFICA}`;
