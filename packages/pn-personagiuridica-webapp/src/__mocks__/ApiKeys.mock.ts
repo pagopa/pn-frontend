@@ -23,7 +23,7 @@ export const publicKeys: BffPublicKeysResponse = {
       ],
     },
     {
-      kid: '92461124-9cc2-4608-a0d4-63a98b75c8f1',
+      kid: '92461124-9cc2-4608-a0d4-63a98b75c8g2',
       issuer: 'PG-d0f52c7d-76d5-4520-8971-edffeb5b46d5',
       name: 'public-key-2',
       value: 'string',
