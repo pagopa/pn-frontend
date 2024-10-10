@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
 import { Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
@@ -21,6 +22,7 @@ import {
 import { PNRole } from '../../redux/auth/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import * as routes from '../../navigation/routes.const';
 import ApiKeyModal from './ApiKeyModal';
 import PublicKeysTable from './PublicKeysTable';
 
@@ -56,6 +58,7 @@ const ShowCodesInput = ({ value, label }: { value: string; label: string }) => {
 
 const PublicKeys: React.FC = () => {
   const { t } = useTranslation(['integrazioneApi', 'common']);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const publicKeys = useAppSelector((state: RootState) => state.apiKeysState.publicKeys);
@@ -79,6 +82,12 @@ const PublicKeys: React.FC = () => {
   const fetchPublicKeys = useCallback(() => {
     void dispatch(getPublicKeys({ showPublicKey: true }));
   }, []);
+
+  const handleGeneratePublicKey = (publicKeyId?: string) => {
+    handleCloseModal();
+    const queryStr = publicKeyId ? `/${publicKeyId}` : '';
+    navigate(`${routes.REGISTRA_CHIAVE_PUBBLICA}${queryStr}`);
+  };
 
   const blockPublicKey = (publicKeyId?: string) => {
     if (!publicKeyId) {
@@ -122,7 +131,7 @@ const PublicKeys: React.FC = () => {
             data-testid="generatePublicKey"
             variant="contained"
             sx={{ mb: { xs: 3, lg: 0 } }}
-            //   onClick={handleGeneratePublicKey}
+            onClick={() => handleGeneratePublicKey()}
           >
             {t('publicKeys.new-key-button')}
           </Button>
@@ -176,7 +185,7 @@ const PublicKeys: React.FC = () => {
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('rotate-button')}
             buttonIcon={<Sync fontSize="small" sx={{ mr: 1 }} />}
-            // actionHandler={() => apiKeyRotated(modal.apiKey?.id)}
+            actionHandler={() => handleGeneratePublicKey(modal.publicKey?.kid)}
           />
         )}
         {modal.view === ModalApiKeyView.DELETE && (
