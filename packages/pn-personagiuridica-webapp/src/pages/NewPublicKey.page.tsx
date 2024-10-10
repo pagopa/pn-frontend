@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Step, StepLabel, Stepper } from '@mui/material';
 import {
@@ -85,13 +85,14 @@ const NewPublicKey = () => {
   const [creationResponse, setCreationResponse] = useState<BffPublicKeyResponse | undefined>(
     undefined
   );
-  const [searchParams] = useSearchParams();
+  
+  const { kid } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const publicKeys = useAppSelector((state: RootState) => state.apiKeysState.publicKeys);
 
-  const kid = searchParams.get('kid');
+  // const kid = searchParams.get('kid');
 
   const isRotate: boolean = !!kid;
 

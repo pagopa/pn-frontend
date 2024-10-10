@@ -147,10 +147,12 @@ function Router() {
                     </PrivateRoute>
                   }
                 />
-                <Route
-                  path={routes.REGISTRA_CHIAVE_PUBBLICA}
-                  element={
-                    <PrivateRoute
+
+                <Route path={routes.REGISTRA_CHIAVE_PUBBLICA}>
+                  <Route
+                    index
+                    element={
+                      <PrivateRoute
                       currentRoles={currentRoles}
                       requiredRoles={[PNRole.ADMIN]}
                       additionalCondition={IS_B2B_ENABLED}
@@ -158,24 +160,22 @@ function Router() {
                     >
                       <NewPublicKeyPage />
                     </PrivateRoute>
-                  }
-                />
-
-                {/* <Route
-                  path={routes.REGISTRA_CHIAVE_PUBBLICA}
-                  element={
-                    <PrivateRoute
+                    }
+                  />
+                  <Route
+                    path=":kid"
+                    element={
+                      <PrivateRoute
                       currentRoles={currentRoles}
                       requiredRoles={[PNRole.ADMIN]}
                       additionalCondition={IS_B2B_ENABLED}
                       redirectTo={<NotFound />}
                     >
-                      <NewPublicKey />
+                      <NewPublicKeyPage />
                     </PrivateRoute>
-                  }
-                >
-                  <Route path={routes.RUOTA_CHIAVE_PUBBLICA} element={<NewPublicKey rotate />} />
-                </Route> */}
+                    }
+                  />
+                </Route>
 
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
               </Route>

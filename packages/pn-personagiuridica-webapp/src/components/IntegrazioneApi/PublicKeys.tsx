@@ -85,7 +85,7 @@ const PublicKeys: React.FC = () => {
 
   const handleGeneratePublicKey = (publicKeyId?: string) => {
     handleCloseModal();
-    const queryStr = publicKeyId ? `?kid=${publicKeyId}` : '';
+    const queryStr = publicKeyId ? `/${publicKeyId}` : '';
     navigate(`${routes.REGISTRA_CHIAVE_PUBBLICA}${queryStr}`);
   };
 
