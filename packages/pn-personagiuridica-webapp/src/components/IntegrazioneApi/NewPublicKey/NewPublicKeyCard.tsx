@@ -30,16 +30,16 @@ const NewPublicKeyCard: React.FC<Props> = ({
 
   return (
     <>
-      <Paper sx={{ p: 3, mt: 5 }} elevation={0}>
+      <Paper sx={{ p: 3, mt: 3 }} elevation={0}>
         {title && <SectionHeading data-testid="title">{title}</SectionHeading>}
         {content}
-        <Box sx={{ mt: 3 }}>{children}</Box>
+        <Box>{children}</Box>
       </Paper>
       <Stack
         direction={{ xs: 'column', lg: 'row-reverse' }}
         justifyContent="space-between"
         alignItems="center"
-        sx={{ mt: 5, mb: 3 }}
+        sx={{ mt: 3, mb: 5 }}
       >
         <Button
           id="step-submit"

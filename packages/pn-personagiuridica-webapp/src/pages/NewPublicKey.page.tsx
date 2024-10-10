@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Step, StepLabel, Stepper } from '@mui/material';
+import { Box, Button, Stack, Step, StepLabel, Stepper } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {
   AppResponsePublisher,
-  PnBreadcrumb,
   Prompt,
   TitleBox,
   appStateActions,
@@ -35,37 +35,39 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
   activeStep,
 }) => {
   const { t } = useTranslation(['integrazioneApi', 'common']);
+  const navigate = useNavigate();
   const steps = [
     t('new-public-key.steps.insert-data.title'),
     t('new-public-key.steps.get-returned-parameters.title'),
   ];
 
   return (
-    <Box p={3} sx={{ maxWidth: { xs: '100%', lg: '70%' } }}>
-      <PnBreadcrumb
-        linkRoute={routes.INTEGRAZIONE_API}
-        linkLabel={t('title')}
-        currentLocationLabel={t('new-public-key.title')}
-        goBackLabel={t('button.exit', { ns: 'common' })}
-      />
+    <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
+    <Box p={3} sx={{ maxWidth: { xs: '100%', lg: '90%' } }}>
+      <Button
+        sx={{ p: 0, m: 0}}
+        startIcon={<ArrowBackIcon />}
+        onClick={() => navigate(routes.INTEGRAZIONE_API)}
+      >
+        {t('button.exit', { ns: 'common' })}
+      </Button>
+
       <TitleBox
         variantTitle="h4"
         title={t('new-public-key.title')}
-        sx={{ pt: '20px', mb: 4 }}
+        sx={{ mt: 2, mb: 3 }}
         subTitle={t('new-public-key.subtitle')}
         variantSubTitle="body1"
       />
       <Stepper
         activeStep={activeStep}
         alternativeLabel
-        sx={{ marginTop: '60px' }}
         data-testid="stepper"
       >
         {steps.map((label, index) => (
           <Step
             id={label}
             key={label}
-            sx={{ cursor: index < activeStep ? 'pointer' : 'auto' }}
             data-testid={`step-${index}`}
           >
             <StepLabel>{label}</StepLabel>
@@ -74,6 +76,7 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
       </Stepper>
       {children}
     </Box>
+    </Stack>
   );
 };
 
@@ -91,8 +94,6 @@ const NewPublicKey = () => {
   const navigate = useNavigate();
 
   const publicKeys = useAppSelector((state: RootState) => state.apiKeysState.publicKeys);
-
-  // const kid = searchParams.get('kid');
 
   const isRotate: boolean = !!kid;
 
