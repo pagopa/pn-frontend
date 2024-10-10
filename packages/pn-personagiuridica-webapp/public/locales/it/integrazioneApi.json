@@ -7,6 +7,7 @@
   "error-fecth-public-api-keys": "Errore durante il recupero delle chiavi pubbliche",
   "status": {
     "enabled": "Attiva",
+    "active": "Attiva",
     "blocked": "Bloccata",
     "rotated": "Ruotata"
   },
@@ -27,6 +28,16 @@
     "block": "Blocca",
     "rotate": "Ruota"
   },
+  "dialogs": {
+    "block-title": "Blocca chiave",
+    "block-subtitle": "Se blocchi la chiave, qualsiasi richiesta effettuata attraverso di essa avrà esito negativo.",
+    "block-warning": "Puoi attivarla di nuovo in qualsiasi momento.",
+    "rotate-title": "Ruota chiave",
+    "rotate-subtitle": "Ruotando la chiave pubblica esistente, ne dovrai inserire una nuova e otterrai i valori di Kid e Issuer.",
+    "rotate-warning": "Dopo che hai concluso questa operazione, blocca ed elimina la chiave ruotata.",
+    "delete-title": "Elimina chiave",
+    "delete-subtitle": "Se elimini definitivamente la chiave, questa non potrà essere nuovamente attivata e utilizzata."
+  },
   "publicKeys": {
     "title": "Chiave pubblica",
     "new-key-button": "Registra chiave pubblica",
@@ -41,14 +52,22 @@
     "kid": "Kid",
     "issuer": "Issuer",
     "view-title": "Visualizza codice",
-    "view-subtitle": "Copia i codici di cui hai bisogno.",
-    "block-title": "Blocca chiave",
-    "block-subtitle": "Se blocchi la chiave, qualsiasi richiesta effettuata attraverso di essa avrà esito negativo.",
-    "block-warning": "Puoi attivarla di nuovo in qualsiasi momento.",
-    "rotate-title": "Ruota chiave",
-    "rotate-subtitle": "Ruotando la chiave pubblica esistente, ne dovrai inserire una nuova e otterrai i valori di Kid e Issuer.",
-    "rotate-warning": "Dopo che hai concluso questa operazione, blocca ed elimina la chiave ruotata.",
-    "delete-title": "Elimina chiave",
-    "delete-subtitle": "Se elimini definitivamente la chiave, questa non potrà essere nuovamente attivata e utilizzata."
+    "view-subtitle": "Copia i codici di cui hai bisogno."
+  },
+  "virtualKeys": {
+    "title": "Chiave personale",
+    "tos-empty-state": "Per poter creare una chiave personale, un amministratore deve prima abilitare l’integrazione.",
+    "empty-state": "Non è stata ancora generata nessuna chiave personale perla tua impresa.",
+    "table": {
+      "name": "Nome",
+      "value": "Valore",
+      "lastUpdate": "Ultima modifica",
+      "status": "Stato",
+      "personal": "Tu"
+    },
+    "personal-key": "Chiave personale",
+    "view-title": "La tua chiave personale",
+    "view-subtitle": "Puoi usarla per autenticarti in piattaforma e integrare SEND. Puoi copiare la tua chiave personale in ogni momento nella sezione “Integrazione API”.",
+    "understood-button": "Ok, ho capito"
   }
 }

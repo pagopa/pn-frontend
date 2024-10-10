@@ -2,9 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
-import { Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { ApiErrorWrapper, useHasPermissions } from '@pagopa-pn/pn-commons';
-import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import {
   ChangeStatusPublicKeyV1StatusEnum,
@@ -23,35 +22,11 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import ApiKeyModal from './ApiKeyModal';
 import PublicKeysTable from './PublicKeysTable';
+import { ShowCodesInput } from './ShowCodesInput';
 
 type ModalType = {
   view: ModalApiKeyView;
   publicKey?: PublicKeyRow;
-};
-
-const ShowCodesInput = ({ value, label }: { value: string; label: string }) => {
-  const { t } = useTranslation(['integrazioneApi']);
-
-  return (
-    <TextField
-      value={value}
-      fullWidth
-      label={t(label)}
-      InputProps={{
-        readOnly: true,
-        sx: { p: 0 },
-        endAdornment: (
-          <InputAdornment position="end">
-            <CopyToClipboardButton
-              value={() => value}
-              tooltipTitle={t('api-key-copied')}
-              color="primary"
-            />
-          </InputAdornment>
-        ),
-      }}
-    />
-  );
 };
 
 const PublicKeys: React.FC = () => {
@@ -157,9 +132,9 @@ const PublicKeys: React.FC = () => {
         )}
         {modal.view === ModalApiKeyView.BLOCK && (
           <ApiKeyModal
-            title={t('publicKeys.block-title')}
-            subTitle={t('publicKeys.block-subtitle')}
-            content={<Typography>{t('publicKeys.block-warning')}</Typography>}
+            title={t('dialogs.block-title')}
+            subTitle={t('dialogs.block-subtitle')}
+            content={<Typography>{t('dialogs.block-warning')}</Typography>}
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('block-button')}
@@ -169,9 +144,9 @@ const PublicKeys: React.FC = () => {
         )}
         {modal.view === ModalApiKeyView.ROTATE && (
           <ApiKeyModal
-            title={t('publicKeys.rotate-title')}
-            subTitle={t('publicKeys.rotate-subtitle')}
-            content={<Typography>{t('publicKeys.rotate-warning')}</Typography>}
+            title={t('dialogs.rotate-title')}
+            subTitle={t('dialogs.rotate-subtitle')}
+            content={<Typography>{t('dialogs.rotate-warning')}</Typography>}
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('rotate-button')}
@@ -181,8 +156,8 @@ const PublicKeys: React.FC = () => {
         )}
         {modal.view === ModalApiKeyView.DELETE && (
           <ApiKeyModal
-            title={t('publicKeys.delete-title')}
-            subTitle={t('publicKeys.delete-subtitle')}
+            title={t('dialogs.delete-title')}
+            subTitle={t('dialogs.delete-subtitle')}
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('button.elimina', { ns: 'common' })}
