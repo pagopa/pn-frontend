@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import {
   AppNotAccessible,
+  ConsentType,
   LoadingPage,
   NotFound,
   PrivateRoute,
@@ -11,6 +12,7 @@ import {
 
 import DelegatesByCompany from '../components/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../components/Deleghe/DelegationsOfTheCompany';
+import ApiIntegration from '../pages/ApiIntegration.page';
 import { PNRole } from '../redux/auth/types';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -38,6 +40,8 @@ const handleAssistanceClick = () => {
 function Router() {
   const { organization, hasGroup } = useAppSelector((state: RootState) => state.userState.user);
   const currentRoles = organization?.roles ? organization.roles.map((role) => role.role) : [];
+  const { IS_B2B_ENABLED } = getConfiguration();
+
   return (
     <Suspense fallback={<LoadingPage />}>
       <Routes>
@@ -129,6 +133,19 @@ function Router() {
                     </PrivateRoute>
                   }
                 />
+                <Route
+                  path={routes.INTEGRAZIONE_API}
+                  element={
+                    <PrivateRoute
+                      currentRoles={[]}
+                      requiredRoles={[]}
+                      additionalCondition={IS_B2B_ENABLED}
+                      redirectTo={<NotFound />}
+                    >
+                      <ApiIntegration />
+                    </PrivateRoute>
+                  }
+                />
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
               </Route>
             </Route>
@@ -140,6 +157,18 @@ function Router() {
         </Route>
         <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
         <Route path={routes.TERMS_OF_SERVICE} element={<TermsOfServicePage />} />
+        <Route
+          path={routes.PRIVACY_POLICY_SERCQ_SEND}
+          element={<PrivacyPolicyPage type={ConsentType.DATAPRIVACY_SERCQ} />}
+        />
+        <Route
+          path={routes.TERMS_OF_SERVICE_SERCQ_SEND}
+          element={<TermsOfServicePage type={ConsentType.TOS_SERCQ} />}
+        />
+        <Route
+          path={routes.TERMS_OF_SERVICE_B2B}
+          element={<TermsOfServicePage type={ConsentType.TOS_DEST_B2B} />}
+        />
         <Route
           path={routes.NOT_ACCESSIBLE}
           element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}

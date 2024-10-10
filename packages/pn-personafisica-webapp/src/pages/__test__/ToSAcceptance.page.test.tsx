@@ -95,7 +95,7 @@ describe('test Terms of Service page', async () => {
   });
 
   it('accept ToS and Privacy', async () => {
-    mock.onPut('/bff/v1/tos-privacy', acceptTosPrivacyConsentBodyMock).reply(200);
+    mock.onPut('/bff/v2/tos-privacy', acceptTosPrivacyConsentBodyMock()).reply(200);
     const { getByRole } = render(
       <ToSAcceptance tosConsent={tosConsent} privacyConsent={privacyConsent} />
     );
@@ -107,7 +107,7 @@ describe('test Terms of Service page', async () => {
     fireEvent.click(acceptButton);
     await waitFor(() => {
       expect(mock.history.put).toHaveLength(1);
-      expect(mock.history.put[0].url).toBe('/bff/v1/tos-privacy');
+      expect(mock.history.put[0].url).toBe('/bff/v2/tos-privacy');
     });
   });
 

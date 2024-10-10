@@ -51,11 +51,17 @@ async function setFormValues(
   endDate: Date,
   status: string,
   recipientId: string,
-  iunMatch: string
+  iunMatch: string,
+  isMobile: boolean = false
 ) {
   recipientId !== '' && (await testInput(form, 'recipientId', recipientId));
-  await testInput(form, 'startDate', formatDate(startDate.toISOString(), false));
-  await testInput(form, 'endDate', formatDate(endDate.toISOString(), false));
+  if (isMobile) {
+    await testCalendar(form, 'startDate', startDate, undefined, true);
+    await testCalendar(form, 'endDate', endDate, undefined, true);
+  } else {
+    await testInput(form, 'startDate', formatDate(startDate.toISOString(), false));
+    await testInput(form, 'endDate', formatDate(endDate.toISOString(), false));
+  }
   await testInput(form, 'status', status);
   iunMatch !== '' && (await testInput(form, 'iunMatch', iunMatch));
 }
@@ -130,8 +136,8 @@ describe('Filter Notifications Table Component', async () => {
     });
     form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'startDate', '23/02/2022');
-    await testCalendar(form, 'startDate');
-  });
+    await testCalendar(form, 'startDate', new Date('2019-12-14'), new Date('2022-02-23'));
+  }, 10000);
 
   it('test endDate input', async () => {
     // render component
@@ -140,8 +146,8 @@ describe('Filter Notifications Table Component', async () => {
     });
     form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'endDate', '23/02/2022');
-    await testCalendar(form, 'endDate');
-  });
+    await testCalendar(form, 'endDate', new Date('2021-01-4'), new Date('2022-02-23'));
+  }, 10000);
 
   it('test status select', async () => {
     // render component
@@ -334,7 +340,8 @@ describe('Filter Notifications Table Component', async () => {
       oneYearAgo,
       localizedNotificationStatus[2].value,
       'RSSMRA80A01H501U',
-      'ABCD-EFGH-ILMN-123456-A-1'
+      'ABCD-EFGH-ILMN-123456-A-1',
+      true
     );
     const submitButton = dialogForm.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();

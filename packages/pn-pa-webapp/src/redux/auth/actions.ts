@@ -1,4 +1,5 @@
 import {
+  ConsentType,
   PartyEntityWithUrl,
   TosPrivacyConsent,
   parseError,
@@ -10,7 +11,10 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { apiClient } from '../../api/apiClients';
 import { AuthApi } from '../../api/auth/Auth.api';
 import { InfoPaApiFactory } from '../../generated-client/info-pa';
-import { BffTosPrivacyBody, UserConsentsApiFactory } from '../../generated-client/tos-privacy';
+import {
+  BffTosPrivacyActionBody,
+  UserConsentsApiFactory,
+} from '../../generated-client/tos-privacy';
 import { PNRole, PartyRole } from '../../models/user';
 import { RootState } from '../store';
 import { User } from './types';
@@ -111,9 +115,12 @@ export const getTosPrivacyApproval = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
-      const response = await tosPrivacyFactory.getTosPrivacyV1();
+      const response = await tosPrivacyFactory.getTosPrivacyV2([
+        ConsentType.TOS,
+        ConsentType.DATAPRIVACY,
+      ]);
 
-      return response.data as TosPrivacyConsent;
+      return response.data as Array<TosPrivacyConsent>;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
@@ -123,12 +130,12 @@ export const getTosPrivacyApproval = createAsyncThunk(
 /**
  * Accepts the terms of service
  */
-export const acceptTosPrivacy = createAsyncThunk<void, BffTosPrivacyBody>(
+export const acceptTosPrivacy = createAsyncThunk<void, Array<BffTosPrivacyActionBody>>(
   AUTH_ACTIONS.ACCEPT_TOS_PRIVACY,
-  async (body: BffTosPrivacyBody, { rejectWithValue }) => {
+  async (body: Array<BffTosPrivacyActionBody>, { rejectWithValue }) => {
     try {
       const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
-      const response = await tosPrivacyFactory.acceptTosPrivacyV1(body);
+      const response = await tosPrivacyFactory.acceptTosPrivacyV2(body);
 
       return response.data;
     } catch (e: any) {

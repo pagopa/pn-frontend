@@ -44,7 +44,6 @@ const FilterNotificationsFormBody = ({
   const isMobile = useIsMobile();
   const { t, i18n } = useTranslation(['notifiche']);
   const localizedNotificationStatus = getNotificationAllowedStatus();
-
   const handlePaste = async (e: React.ClipboardEvent) => {
     e.preventDefault();
     const trimmedValue = e.clipboardData.getData('text').trim();
@@ -105,7 +104,7 @@ const FilterNotificationsFormBody = ({
         }
         size="small"
         fullWidth={isMobile}
-        sx={{ marginBottom: isMobile ? '20px' : '0' }}
+        sx={{ mb: isMobile ? '20px' : 0 }}
       />
       <TextField
         id="iunMatch"
@@ -122,10 +121,9 @@ const FilterNotificationsFormBody = ({
         }
         size="small"
         fullWidth={isMobile}
-        sx={{ marginBottom: isMobile ? '20px' : '0' }}
+        sx={{ mb: isMobile ? '20px' : 0 }}
         inputProps={{ maxLength: 25 }}
       />
-
       <CustomDatePicker
         language={i18n.language}
         label={t('filters.data_da')}
@@ -147,7 +145,7 @@ const FilterNotificationsFormBody = ({
               'aria-label': t('filters.data_da-input-aria-label'),
             },
             fullWidth: isMobile,
-            sx: { marginBottom: isMobile ? '20px' : '0' },
+            sx: { mb: isMobile ? '20px' : '0' },
           },
         }}
         disableFuture={true}
@@ -175,7 +173,7 @@ const FilterNotificationsFormBody = ({
               'aria-label': t('filters.data_a-input-aria-label'),
             },
             fullWidth: isMobile,
-            sx: { marginBottom: isMobile ? '20px' : '0' },
+            sx: { mb: isMobile ? '20px' : 0 },
           },
         }}
         disableFuture={true}
@@ -192,7 +190,7 @@ const FilterNotificationsFormBody = ({
         size="small"
         fullWidth={isMobile}
         sx={{
-          marginBottom: isMobile ? '20px' : '0',
+          mb: isMobile ? '20px' : 0,
           '& .MuiInputBase-root': {
             overflow: 'hidden',
             textOverflow: 'ellipsis',

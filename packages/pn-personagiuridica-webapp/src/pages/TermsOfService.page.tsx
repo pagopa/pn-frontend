@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
 
-import { compileOneTrustPath, rewriteLinks, waitForElement } from '@pagopa-pn/pn-commons';
+import {
+  ConsentType,
+  compileOneTrustPath,
+  rewriteLinks,
+  waitForElement,
+} from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
@@ -14,19 +19,34 @@ declare const OneTrust: {
   };
 };
 
-const TermsOfServicePage = () => {
-  const { ONE_TRUST_DRAFT_MODE, ONE_TRUST_TOS } = getConfiguration();
+const TermsOfServicePage: React.FC<{ type?: ConsentType }> = ({ type }) => {
+  const configuration = getConfiguration();
+  // eslint-disable-next-line functional/no-let
+  let tos = configuration.ONE_TRUST_TOS;
+  // eslint-disable-next-line functional/no-let
+  let draft = configuration.ONE_TRUST_DRAFT_MODE;
+  // eslint-disable-next-line functional/no-let
+  let route = routes.TERMS_OF_SERVICE;
+
+  if (type === ConsentType.TOS_SERCQ) {
+    tos = configuration.ONE_TRUST_TOS_SERCQ_SEND;
+    draft = configuration.ONE_TRUST_SERCQ_SEND_DRAFT_MODE;
+    route = routes.TERMS_OF_SERVICE_SERCQ_SEND;
+  }
+
+  if (type === ConsentType.TOS_DEST_B2B) {
+    tos = configuration.ONE_TRUST_TOS_MASSIVI;
+    draft = configuration.ONE_TRUST_MASSIVI_DRAFT_MODE;
+    route = routes.TERMS_OF_SERVICE_B2B;
+  }
 
   useEffect(() => {
-    if (ONE_TRUST_TOS) {
+    if (tos) {
       OneTrust.NoticeApi.Initialized.then(function () {
-        OneTrust.NoticeApi.LoadNotices(
-          [compileOneTrustPath(ONE_TRUST_TOS, ONE_TRUST_DRAFT_MODE)],
-          false
-        );
+        OneTrust.NoticeApi.LoadNotices([compileOneTrustPath(tos, draft)], false);
 
         void waitForElement('.otnotice-content').then(() => {
-          rewriteLinks(routes.TERMS_OF_SERVICE, '.otnotice-content a');
+          rewriteLinks(route, '.otnotice-content a');
         });
       });
     }
@@ -34,11 +54,7 @@ const TermsOfServicePage = () => {
 
   return (
     <>
-      <div
-        role="article"
-        id="otnotice-112fd95d-6e88-461b-b8fc-534ee4277e96"
-        className="otnotice"
-      ></div>
+      <div role="article" id={`otnotice-${tos}`} className="otnotice"></div>
     </>
   );
 };

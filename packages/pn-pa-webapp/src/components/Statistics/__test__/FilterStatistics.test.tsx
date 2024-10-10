@@ -23,7 +23,8 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-const lastDate = new Date('2024-03-14T00:00:00.000Z');
+const lastDate = new Date();
+lastDate.setDate(lastDate.getDate() - 5);
 
 const defaultValues: StatisticsFilter = {
   startDate: twelveMonthsAgo,
@@ -109,8 +110,13 @@ describe('FilterStatistics component', async () => {
     const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={null} />);
     const filterContainer = getByTestId('statistics-filter') as HTMLDivElement;
     await testInput(filterContainer, 'startDate', '22/02/2022');
-    await testCalendar(filterContainer, 'startDate');
-  });
+    await testCalendar(
+      filterContainer,
+      'startDate',
+      new Date('2019-12-14'),
+      new Date('2022-02-22')
+    );
+  }, 10000);
 
   it('test endDate input', async () => {
     // render component
@@ -118,8 +124,8 @@ describe('FilterStatistics component', async () => {
     const filterContainer = getByTestId('statistics-filter') as HTMLDivElement;
     await testInput(filterContainer, 'startDate', '14/03/2012');
     await testInput(filterContainer, 'endDate', '22/02/2022');
-    await testCalendar(filterContainer, 'endDate');
-  });
+    await testCalendar(filterContainer, 'endDate', new Date('2017-05-22'), new Date('2022-02-22'));
+  }, 10000);
 
   it('changes filtered dates using quick filters', async () => {
     // render component

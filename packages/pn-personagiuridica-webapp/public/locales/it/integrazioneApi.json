@@ -1,0 +1,54 @@
+{
+  "title": "Integrazione API",
+  "subTitle": "Genera e gestisci le chiavi per abilitare l'integrazione sicura tra i gestionali della tua impresa e SEND.",
+  "api-key-copied": "API Key copiata",
+  "block-button": "Blocca",
+  "rotate-button": "Ruota e registra nuova chiave",
+  "error-fecth-public-api-keys": "Errore durante il recupero delle chiavi pubbliche",
+  "status": {
+    "enabled": "Attiva",
+    "blocked": "Bloccata",
+    "rotated": "Ruotata"
+  },
+  "tooltip": {
+    "created": "Creata",
+    "created-in": "Creata il",
+    "blocked": "Bloccata",
+    "blocked-in": "Bloccata il",
+    "enabled": "Attivata",
+    "enabled-in": "Attivata il",
+    "rotated": "Ruotata",
+    "rotated-in": "Ruotata il",
+    "from": "da"
+  },
+  "context-menu": {
+    "title": "Opzioni su API Key",
+    "view": "Visualizza codice",
+    "block": "Blocca",
+    "rotate": "Ruota"
+  },
+  "publicKeys": {
+    "title": "Chiave pubblica",
+    "new-key-button": "Registra chiave pubblica",
+    "empty-state": "Ancora nessuna chiave pubblica. Registra una chiave pubblica per abilitare l’integrazione.",
+    "table": {
+      "name": "Nome",
+      "value": "Valore",
+      "endDate": "Scadenza",
+      "status": "Stato"
+    },
+    "personal-key": "Chiave personale",
+    "kid": "Kid",
+    "issuer": "Issuer",
+    "view-title": "Visualizza codice",
+    "view-subtitle": "Copia i codici di cui hai bisogno.",
+    "block-title": "Blocca chiave",
+    "block-subtitle": "Se blocchi la chiave, qualsiasi richiesta effettuata attraverso di essa avrà esito negativo.",
+    "block-warning": "Puoi attivarla di nuovo in qualsiasi momento.",
+    "rotate-title": "Ruota chiave",
+    "rotate-subtitle": "Ruotando la chiave pubblica esistente, ne dovrai inserire una nuova e otterrai i valori di Kid e Issuer.",
+    "rotate-warning": "Dopo che hai concluso questa operazione, blocca ed elimina la chiave ruotata.",
+    "delete-title": "Elimina chiave",
+    "delete-subtitle": "Se elimini definitivamente la chiave, questa non potrà essere nuovamente attivata e utilizzata."
+  }
+}

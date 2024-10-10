@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
 
-import { compileOneTrustPath, rewriteLinks, waitForElement } from '@pagopa-pn/pn-commons';
+import {
+  ConsentType,
+  compileOneTrustPath,
+  rewriteLinks,
+  waitForElement,
+} from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
@@ -14,19 +19,28 @@ declare const OneTrust: {
   };
 };
 
-const PrivacyPolicyPage = () => {
-  const { ONE_TRUST_DRAFT_MODE, ONE_TRUST_PP } = getConfiguration();
+const PrivacyPolicyPage: React.FC<{ type?: ConsentType }> = ({ type }) => {
+  const configuration = getConfiguration();
+  // eslint-disable-next-line functional/no-let
+  let pp = configuration.ONE_TRUST_PP;
+  // eslint-disable-next-line functional/no-let
+  let draft = configuration.ONE_TRUST_DRAFT_MODE;
+  // eslint-disable-next-line functional/no-let
+  let route = routes.PRIVACY_POLICY;
+
+  if (type === ConsentType.DATAPRIVACY_SERCQ) {
+    pp = configuration.ONE_TRUST_PP_SERCQ_SEND;
+    draft = configuration.ONE_TRUST_SERCQ_SEND_DRAFT_MODE;
+    route = routes.PRIVACY_POLICY_SERCQ_SEND;
+  }
 
   useEffect(() => {
-    if (ONE_TRUST_PP) {
+    if (pp) {
       OneTrust.NoticeApi.Initialized.then(function () {
-        OneTrust.NoticeApi.LoadNotices(
-          [compileOneTrustPath(ONE_TRUST_PP, ONE_TRUST_DRAFT_MODE)],
-          false
-        );
+        OneTrust.NoticeApi.LoadNotices([compileOneTrustPath(pp, draft)], false);
 
         void waitForElement('.otnotice-content').then(() => {
-          rewriteLinks(routes.PRIVACY_POLICY, '.otnotice-content a');
+          rewriteLinks(route, '.otnotice-content a');
         });
       });
     }
@@ -34,11 +48,7 @@ const PrivacyPolicyPage = () => {
 
   return (
     <>
-      <div
-        role="article"
-        id="otnotice-9d7b7236-956b-4669-8943-5284fba6a815"
-        className="otnotice"
-      ></div>
+      <div role="article" id={`otnotice-${pp}`} className="otnotice"></div>
     </>
   );
 };

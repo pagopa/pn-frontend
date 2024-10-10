@@ -1,6 +1,9 @@
 export enum ConsentType {
   TOS = 'TOS',
   DATAPRIVACY = 'DATAPRIVACY',
+  TOS_SERCQ = 'TOS_SERCQ',
+  DATAPRIVACY_SERCQ = 'DATAPRIVACY_SERCQ',
+  TOS_DEST_B2B = 'TOS_DEST_B2B',
 }
 
 export enum ConsentActionType {
@@ -8,15 +11,10 @@ export enum ConsentActionType {
   DECLINE = 'DECLINE',
 }
 
-interface Consent {
+export interface TosPrivacyConsent {
   recipientId: string;
   consentType: ConsentType;
   accepted: boolean;
   isFirstAccept: boolean;
   consentVersion: string;
-}
-
-export interface TosPrivacyConsent {
-  tos: Consent;
-  privacy: Consent;
 }

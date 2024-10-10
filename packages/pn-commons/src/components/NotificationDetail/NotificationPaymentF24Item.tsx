@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Download, InfoRounded } from '@mui/icons-material';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { CircularProgress, Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { downloadDocument, useIsMobile } from '../../hooks';
+import { downloadDocument } from '../../hooks';
 import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
@@ -37,7 +37,6 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
   disableDownload,
   handleDownload,
 }) => {
-  const isMobile = useIsMobile();
   const [maxTimeError, setMaxTimeError] = useState<string | null>(null);
   const timer = useRef<NodeJS.Timeout>();
   const interval = useRef<NodeJS.Timeout>();
@@ -144,41 +143,47 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
           onClick={downloadF24}
           disabled={disableDownload}
           data-testid="download-f24-button"
+          sx={{ mt: { xs: 1, sm: 0 } }}
         >
-          <Download fontSize="small" sx={{ mr: 1 }} />
+          <Download fontSize="small" sx={{ mr: 0.5 }} />
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
         </ButtonNaked>
       );
     }
 
     return (
-      <Box display="flex" alignItems="center" justifyContent="center" gap={0.5}>
+      <Stack
+        alignItems="center"
+        justifyContent="center"
+        gap={0.5}
+        direction="row"
+        sx={{ mt: { xs: 1, sm: 0 } }}
+      >
         <Typography variant="caption" color="text.secondary" data-testid="f24-download-message">
           {getLocalizedOrDefaultLabel('notifications', downloadingMessage)}
         </Typography>
         <CircularProgress size="1.125rem" role="loadingSpinner" sx={{ color: 'text.secondary' }} />
-      </Box>
+      </Stack>
     );
   };
 
   return (
-    <Box
+    <Stack
       py={isPagoPaAttachment ? 0 : 1}
       px={isPagoPaAttachment ? 0 : 2}
-      display="flex"
-      alignItems="center"
-      alignSelf="stretch"
+      alignItems={{ xs: 'flex-start', sm: 'center' }}
+      direction={{ xs: 'column', sm: 'row' }}
       sx={{
         backgroundColor: isPagoPaAttachment ? 'transparent' : 'grey.50',
         borderRadius: '6px',
       }}
+      spacing={1}
     >
-      <Box
-        display="flex"
-        justifyContent={isMobile ? 'flex-start' : 'inherit'}
+      <Stack
+        justifyContent={{ xs: 'flex-start', sm: 'inherit' }}
         gap={0.5}
-        flexDirection="column"
-        flex="1 0 0"
+        direction="column"
+        flexGrow="1"
       >
         {isPagoPaAttachment ? (
           <Typography variant="body2">
@@ -186,7 +191,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
           </Typography>
         ) : (
           <>
-            <Typography variant="sidenav" color="text.primary">
+            <Typography variant="sidenav" color="text.primary" sx={{ overflowWrap: 'anywhere' }}>
               {f24Item.title}
             </Typography>
             {f24Item.applyCost && (
@@ -203,7 +208,12 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
           </>
         )}
         {maxTimeError && (
-          <Box display="flex" alignItems="center" gap={0.5} data-testid="f24-maxTime-error">
+          <Stack
+            direction="row"
+            alignItems={{ xs: 'center' }}
+            gap={0.5}
+            data-testid="f24-maxTime-error"
+          >
             <InfoRounded
               sx={{
                 color: 'error.dark',
@@ -213,11 +223,11 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
             <Typography fontSize="12px" lineHeight="12px" fontWeight="600" color="error.dark">
               {getLocalizedOrDefaultLabel('notifications', maxTimeError)}
             </Typography>
-          </Box>
+          </Stack>
         )}
-      </Box>
-      <Box>{getElement()}</Box>
-    </Box>
+      </Stack>
+      {getElement()}
+    </Stack>
   );
 };
 
