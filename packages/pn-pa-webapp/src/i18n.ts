@@ -1,13 +1,28 @@
 import i18next from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import LanguageDetector, { CustomDetector } from 'i18next-browser-languagedetector';
 import HttpApi from 'i18next-http-backend';
-import { sanitizeString } from '@pagopa-pn/pn-commons';
+import { initReactI18next } from 'react-i18next';
 
-void i18next
+import { sanitizeString, setSessionLanguage } from '@pagopa-pn/pn-commons';
+
+const languageDetector = new LanguageDetector();
+
+const customHashDetector: CustomDetector = {
+  name: 'customHashDetector',
+  lookup() {
+    const hash = window.location.hash;
+    const lang = hash.match(/lang=([a-z]{2})/);
+    return lang ? lang[1] : undefined;
+  },
+};
+
+languageDetector.addDetector(customHashDetector);
+
+i18next
+  .use(languageDetector)
   .use(initReactI18next)
   .use(HttpApi)
   .init({
-    lng: 'it',
     fallbackLng: 'it',
     debug: process.env.NODE_ENV === 'development',
     ns: ['common'],
@@ -17,6 +32,16 @@ void i18next
       // this customization is needed to fix pn-2838
       escape: (srt: string): string => sanitizeString(srt),
     },
+    detection: {
+      order: ['customHashDetector', 'sessionStorage'],
+      lookupSessionStorage: 'lang',
+    },
+  })
+  .then(async () => {
+    setSessionLanguage(i18next.language);
+  })
+  .catch((err: any) => {
+    throw new Error(err);
   });
 
 export default i18next;
