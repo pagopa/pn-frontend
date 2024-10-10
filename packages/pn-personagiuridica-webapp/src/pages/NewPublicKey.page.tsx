@@ -41,7 +41,7 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
   ];
 
   return (
-    <Box p={3} sx={{ maxWidth: { xs: '100%', lg: '70%'} }} >
+    <Box p={3} sx={{ maxWidth: { xs: '100%', lg: '70%' } }}>
       <PnBreadcrumb
         linkRoute={routes.INTEGRAZIONE_API}
         linkLabel={t('title')}
@@ -54,7 +54,7 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
         sx={{ pt: '20px', mb: 4 }}
         subTitle={t('new-public-key.subtitle')}
         variantSubTitle="body1"
-      ></TitleBox>
+      />
       <Stepper
         activeStep={activeStep}
         alternativeLabel
@@ -72,7 +72,6 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
           </Step>
         ))}
       </Stepper>
-
       {children}
     </Box>
   );
@@ -82,7 +81,7 @@ const NewPublicKey = () => {
   const { t } = useTranslation(['integrazioneApi']);
   const [activeStep, setActiveStep] = useState(0);
   const [isTosAccepted, setIsTosAccepted] = useState<boolean | undefined>();
-  const [tosVersion, setTosVersion] = useState<string | undefined>("1");
+  const [tosVersion, setTosVersion] = useState<string | undefined>('1');
   const [creationResponse, setCreationResponse] = useState<BffPublicKeyResponse | undefined>(
     undefined
   );
@@ -157,7 +156,9 @@ const NewPublicKey = () => {
   };
 
   const showSuccessMessage = () => {
-    const message = kid ? 'messages.success.public-key-rotated' : 'messages.success.public-key-registered';
+    const message = kid
+      ? 'messages.success.public-key-rotated'
+      : 'messages.success.public-key-registered';
     dispatch(
       appStateActions.addSuccess({
         title: '',
@@ -212,7 +213,7 @@ const NewPublicKey = () => {
 
   return (
     <>
-      {(activeStep === 0 && !((isRotate && !isActiveKey) || !tosVersion)) ? (
+      {activeStep === 0 && !((isRotate && !isActiveKey) || !tosVersion) ? (
         <Prompt
           title={t('new-public-key.prompt.title')}
           message={t('new-public-key.prompt.message')}

@@ -64,7 +64,7 @@
     "steps": {
       "insert-data": {
         "title": "Inserisci i dati",
-        "content": "La chiave pubblica (JWKS) è necessaria per <0>autenticare in modo sicuro le richieste provenienti dai tuoi gestionali.</0> La chiave scade dopo 355 giorni.",
+        "content": "La chiave pubblica (JWKS) è necessaria per <strong>autenticare in modo sicuro le richieste provenienti dai tuoi gestionali.</strong> La chiave scade dopo 355 giorni.",
         "tos_privacy": "Premendo “Registra” dichiari di aver letto e di accettare i <0>Termini del Servizio</0> e l'<1>Informativa Privacy</1>",
         "name": {
           "label": "Nome",
