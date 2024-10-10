@@ -11,7 +11,6 @@ void i18next
     backend: {
       loadPath: '/auth/locales/{{lng}}/{{ns}}.json',
     },
-    lng: 'it',
     fallbackLng: 'it',
     debug: process.env.NODE_ENV === 'development',
     interpolation: {
@@ -23,12 +22,6 @@ void i18next
       lookupQuerystring: 'lang',
       lookupSessionStorage: 'lang',
     },
-  })
-  .then(async () => {
-    await i18next.changeLanguage();
-  })
-  .catch((err: any) => {
-    throw new Error(err);
   });
 
 export default i18next;

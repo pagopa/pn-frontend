@@ -8,7 +8,7 @@ export const getSessionLanguage = (): string => {
 };
 
 export const setSessionLanguage = (lang: string) => {
-  sessionStorage.setItem(LANGUAGE_SESSION_KEY, lang);
+  sessionStorage.setItem(LANGUAGE_SESSION_KEY, validateLanguage(lang));
 };
 
 const validateLanguage = (lang: string): string => {
