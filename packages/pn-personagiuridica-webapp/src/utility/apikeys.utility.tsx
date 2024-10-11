@@ -17,9 +17,7 @@ export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
 
   const getApiKeyHistory = (label: string, history: PublicKeyStatusHistory) => (
     <Box sx={{ textAlign: 'left' }} key={`${label}-${history.date}`}>
-      <Box>
-        {t(`tooltip.${label}`)} {history.date ? formatDate(history.date) : ''}
-      </Box>
+      {t(`tooltip.${label}`)} {history.date ? formatDate(history.date) : ''}
     </Box>
   );
 
