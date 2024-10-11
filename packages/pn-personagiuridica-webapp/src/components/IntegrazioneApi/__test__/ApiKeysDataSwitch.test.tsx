@@ -79,7 +79,7 @@ describe('Api Keys Data Switch', () => {
     const viewGroupsId = getByTestId('buttonView');
     expect(viewGroupsId).toBeInTheDocument();
     fireEvent.click(viewGroupsId);
-    expect(mockClick).toBeCalledTimes(1);
+    expect(mockClick).toHaveBeenCalledTimes(1);
   });
 });
 

@@ -91,7 +91,7 @@ describe('Public Keys Table', () => {
     );
   });
 
-  it.only('Check click block api key', async () => {
+  it('Check click block api key', async () => {
     // ensure that there is no blocked key already
     const keys = {
       ...defaultProps.publicKeys,

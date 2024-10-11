@@ -36,7 +36,7 @@ describe('Api Key Modal', () => {
     expect(dialog).toHaveTextContent('mock-title');
     const closeButton = getByTestId('close-modal-button');
     fireEvent.click(closeButton);
-    expect(closeModalFn).toBeCalledTimes(1);
+    expect(closeModalFn).toHaveBeenCalledTimes(1);
   });
 
   it('render component and click action button', () => {
@@ -45,6 +45,6 @@ describe('Api Key Modal', () => {
     expect(dialog).toHaveTextContent('mock-title');
     const actionButton = getByTestId('action-modal-button');
     fireEvent.click(actionButton);
-    expect(actionModalFn).toBeCalledTimes(1);
+    expect(actionModalFn).toHaveBeenCalledTimes(1);
   });
 });
