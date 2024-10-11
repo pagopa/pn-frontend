@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
 import { Button, Stack, Typography } from '@mui/material';
-import { EmptyState, KnownSentiment } from '@pagopa-pn/pn-commons';
+import { EmptyState, formatDate, KnownSentiment, today } from '@pagopa-pn/pn-commons';
 
 import {
   BffPublicKeysCheckIssuerResponse,
@@ -71,7 +71,9 @@ const VirtualKeys: React.FC = () => {
   }, []);
 
   const handleGenerateVirtualKey = async () => {
-    void dispatch(createVirtualApiKey({ name: "chiave-nuova"}))
+    void dispatch(createVirtualApiKey({
+      name: `${t('virtualKeys.default')}${formatDate(today.toISOString(), false, '')}`
+    }))
     .unwrap()
     .then(response => {
       const newVirtualKey: VirtualKey = { value: response.virtualKey };

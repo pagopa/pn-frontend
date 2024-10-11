@@ -56,6 +56,7 @@
     "new-key-button": "Genera chiave personale",
     "tos-empty-state": "Per poter creare una chiave personale, un amministratore deve prima abilitare l’integrazione.",
     "empty-state": "Non è stata ancora generata nessuna chiave personale perla tua impresa.",
+    "default": "Chiave-",
     "table": {
       "name": "Nome",
       "value": "Valore",
