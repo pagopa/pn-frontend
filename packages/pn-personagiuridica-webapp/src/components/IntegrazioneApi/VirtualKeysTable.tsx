@@ -41,7 +41,7 @@ const VirtualKeysTable: React.FC<Props> = ({ virtualKeys, handleModalClick }) =>
       ...n,
       name: isPersonalKey ? `${n.name} (${t('virtualKeys.table.personal')})` : n.name,
       value: !isUserAdmin || isPersonalKey ? n.value : undefined,
-      date: formatDate(n.lastUpdate ?? '', false),
+      date: n.lastUpdate ? formatDate(n.lastUpdate, false) : '',
       id: n.id ?? '',
       menu: '',
     };
@@ -52,7 +52,7 @@ const VirtualKeysTable: React.FC<Props> = ({ virtualKeys, handleModalClick }) =>
       id: 'name',
       label: t('virtualKeys.table.name'),
       tableConfiguration: {
-        cellProps: { width: '24%' },
+        cellProps: { width: '20%' },
       },
       cardConfiguration: {
         wrapValueInTypography: false,
@@ -62,21 +62,21 @@ const VirtualKeysTable: React.FC<Props> = ({ virtualKeys, handleModalClick }) =>
       id: 'value',
       label: t('virtualKeys.table.value'),
       tableConfiguration: {
-        cellProps: { width: '24%' },
+        cellProps: { width: '41%' },
       },
     },
     {
       id: 'date',
       label: t('virtualKeys.table.lastUpdate'),
       tableConfiguration: {
-        cellProps: { width: '24%' },
+        cellProps: { width: '15%' },
       },
     },
     {
       id: 'status',
       label: t('virtualKeys.table.status'),
       tableConfiguration: {
-        cellProps: { width: '24%' },
+        cellProps: { width: '20%' },
       },
       cardConfiguration: {
         position: 'left',
@@ -115,7 +115,8 @@ const VirtualKeysTable: React.FC<Props> = ({ virtualKeys, handleModalClick }) =>
         asc: t('sort.asc', { ns: 'notifiche' }),
         dsc: t('sort.desc', { ns: 'notifiche' }),
       }}
-      testId="publicKeysTable"
+      testId="virtualKeysTable"
+      slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
     >
       <SmartHeader>
         {virtualKeysColumns.map((column) => (
@@ -123,6 +124,7 @@ const VirtualKeysTable: React.FC<Props> = ({ virtualKeys, handleModalClick }) =>
             key={column.id.toString()}
             columnId={column.id}
             sortable={column.tableConfiguration.sortable}
+            cellProps={column.tableConfiguration.cellProps}
           >
             {column.label}
           </SmartHeaderCell>

@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
 import { Button, Stack, Typography } from '@mui/material';
-import { EmptyState, formatDate, KnownSentiment, today } from '@pagopa-pn/pn-commons';
+import { EmptyState, KnownSentiment, formatDate, today } from '@pagopa-pn/pn-commons';
 
 import {
   BffPublicKeysCheckIssuerResponse,
@@ -23,7 +23,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import ApiKeyModal from './ApiKeyModal';
-import { ShowCodesInput } from './ApiKeysElements';
+import { ShowCodesInput } from './ShowCodesInput';
 import VirtualKeysTable from './VirtualKeysTable';
 
 type ModalType = {
@@ -38,7 +38,7 @@ const VirtualKeys: React.FC = () => {
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const [modal, setModal] = useState<ModalType>({ view: ModalApiKeyView.NONE });
 
-  const issuerState = useRef<BffPublicKeysCheckIssuerResponse>({
+  const [issuerState, setIssuerState] = useState<BffPublicKeysCheckIssuerResponse>({
     tosAccepted: false,
     issuer: {
       isPresent: false,
@@ -53,33 +53,36 @@ const VirtualKeys: React.FC = () => {
   );
   const isCreationEnabled =
     !hasOneEnabledKey &&
-    issuerState.current.tosAccepted &&
-    issuerState.current.issuer.isPresent &&
-    issuerState.current.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
+    issuerState.tosAccepted &&
+    issuerState.issuer.isPresent &&
+    issuerState.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
 
   const fetchVirtualKeys = useCallback(() => {
     void dispatch(getVirtualApiKeys({ showPublicKey: true }));
   }, []);
 
   const fetchCheckIssuer = useCallback(() => {
-    void dispatch(checkPublicKeyIssuer())
+    dispatch(checkPublicKeyIssuer())
       .unwrap()
       .then((response) => {
-        // eslint-disable-next-line functional/immutable-data
-        issuerState.current = response;
-      });
+        setIssuerState(response);
+      })
+      .catch(() => {});
   }, []);
 
-  const handleGenerateVirtualKey = async () => {
-    void dispatch(createVirtualApiKey({
-      name: `${t('virtualKeys.default')}${formatDate(today.toISOString(), false, '')}`
-    }))
-    .unwrap()
-    .then(response => {
-      const newVirtualKey: VirtualKey = { value: response.virtualKey };
-      setModal({ view: ModalApiKeyView.VIEW, virtualKey: newVirtualKey });
-      fetchVirtualKeys();
-    });
+  const handleGenerateVirtualKey = () => {
+    dispatch(
+      createVirtualApiKey({
+        name: `${t('virtualKeys.default')}${formatDate(today.toISOString(), false, '')}`,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        const newVirtualKey: VirtualKey = { value: response.virtualKey };
+        setModal({ view: ModalApiKeyView.VIEW, virtualKey: newVirtualKey });
+        fetchVirtualKeys();
+      })
+      .catch(() => {});
   };
 
   const handleModalClick = (view: ModalApiKeyView, publicKeyId: string) => {
@@ -98,14 +101,17 @@ const VirtualKeys: React.FC = () => {
       return;
     }
     handleCloseModal();
-    void dispatch(
+    dispatch(
       changeVirtualApiKeyStatus({
         kid: virtualKeyId,
         body: {
           status,
         },
       })
-    ).then(fetchVirtualKeys);
+    )
+      .unwrap()
+      .then(fetchVirtualKeys)
+      .catch(() => {});
   };
 
   const handleDeleteVirtualKey = (virtualKeyId?: string) => {
@@ -113,7 +119,10 @@ const VirtualKeys: React.FC = () => {
       return;
     }
     handleCloseModal();
-    void dispatch(deleteVirtualApiKey(virtualKeyId)).then(fetchVirtualKeys);
+    dispatch(deleteVirtualApiKey(virtualKeyId))
+      .unwrap()
+      .then(fetchVirtualKeys)
+      .catch(() => {});
   };
 
   useEffect(() => {
@@ -137,8 +146,8 @@ const VirtualKeys: React.FC = () => {
         </Typography>
         {isCreationEnabled && (
           <Button
-            id="generate-public-key"
-            data-testid="generatePublicKey"
+            id="generate-virtual-key"
+            data-testid="generateVirtualKey"
             variant="contained"
             sx={{ mb: { xs: 3, lg: 0 } }}
             onClick={handleGenerateVirtualKey}
@@ -148,7 +157,7 @@ const VirtualKeys: React.FC = () => {
         )}
       </Stack>
 
-      {!issuerState.current.tosAccepted ? (
+      {!issuerState.tosAccepted ? (
         <EmptyState sentimentIcon={KnownSentiment.NONE}>
           {t('virtualKeys.tos-empty-state')}
         </EmptyState>
@@ -156,13 +165,12 @@ const VirtualKeys: React.FC = () => {
         <VirtualKeysTable virtualKeys={virtualKeys} handleModalClick={handleModalClick} />
       )}
 
-      
       {modal.view === ModalApiKeyView.VIEW && (
         <ApiKeyModal
           title={t('virtualKeys.view-title')}
           subTitle={t('virtualKeys.view-subtitle')}
           content={
-            <Stack spacing={2} width="536px">
+            <Stack spacing={2}>
               <ShowCodesInput
                 value={modal.virtualKey?.value || ''}
                 label="virtualKeys.personal-key"
@@ -176,9 +184,9 @@ const VirtualKeys: React.FC = () => {
       )}
       {modal.view === ModalApiKeyView.BLOCK && (
         <ApiKeyModal
-          title={t('block-title')}
-          subTitle={t('block-subtitle')}
-          content={<Typography>{t('block-warning')}</Typography>}
+          title={t('dialogs.block-title')}
+          subTitle={t('dialogs.block-subtitle')}
+          content={<Typography>{t('dialog.block-warning')}</Typography>}
           closeButtonLabel={t('button.annulla', { ns: 'common' })}
           closeModalHandler={handleCloseModal}
           actionButtonLabel={t('block-button')}
@@ -193,12 +201,12 @@ const VirtualKeys: React.FC = () => {
       )}
       {modal.view === ModalApiKeyView.ROTATE && (
         <ApiKeyModal
-          title={t('rotate-title')}
-          subTitle={t('rotate-subtitle')}
-          content={<Typography>{t('rotate-warning')}</Typography>}
+          title={t('dialogs.rotate-title')}
+          subTitle={t('dialogs.rotate-virtual-key-subtitle')}
+          content={<Typography>{t('dialogs.rotate-warning')}</Typography>}
           closeButtonLabel={t('button.annulla', { ns: 'common' })}
           closeModalHandler={handleCloseModal}
-          actionButtonLabel={t('rotate-button')}
+          actionButtonLabel={t('rotate-virtual-key-button')}
           buttonIcon={<Sync fontSize="small" sx={{ mr: 1 }} />}
           actionHandler={() =>
             handleChangeVirtualKeyStatus(
@@ -210,8 +218,8 @@ const VirtualKeys: React.FC = () => {
       )}
       {modal.view === ModalApiKeyView.DELETE && (
         <ApiKeyModal
-          title={t('delete-title')}
-          subTitle={t('delete-subtitle')}
+          title={t('dialogs.delete-title')}
+          subTitle={t('dialogs.delete-subtitle')}
           closeButtonLabel={t('button.annulla', { ns: 'common' })}
           closeModalHandler={handleCloseModal}
           actionButtonLabel={t('button.elimina', { ns: 'common' })}
