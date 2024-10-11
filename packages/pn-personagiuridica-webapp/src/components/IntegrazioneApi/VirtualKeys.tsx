@@ -156,7 +156,7 @@ const VirtualKeys: React.FC = () => {
           title={t('virtualKeys.view-title')}
           subTitle={t('virtualKeys.view-subtitle')}
           content={
-            <Stack spacing={2} width="536px">
+            <Stack spacing={2}>
               <ShowCodesInput
                 value={modal.virtualKey?.value || ''}
                 label="virtualKeys.personal-key"
@@ -172,7 +172,6 @@ const VirtualKeys: React.FC = () => {
         <ApiKeyModal
           title={t('dialogs.block-title')}
           subTitle={t('dialogs.block-subtitle')}
-          content={<Typography>{t('dialogs.block-warning')}</Typography>}
           closeButtonLabel={t('button.annulla', { ns: 'common' })}
           closeModalHandler={handleCloseModal}
           actionButtonLabel={t('block-button')}
@@ -188,11 +187,11 @@ const VirtualKeys: React.FC = () => {
       {modal.view === ModalApiKeyView.ROTATE && (
         <ApiKeyModal
           title={t('dialogs.rotate-title')}
-          subTitle={t('dialogs.rotate-subtitle')}
+          subTitle={t('dialogs.rotate-virtual-key-subtitle')}
           content={<Typography>{t('dialogs.rotate-warning')}</Typography>}
           closeButtonLabel={t('button.annulla', { ns: 'common' })}
           closeModalHandler={handleCloseModal}
-          actionButtonLabel={t('rotate-button')}
+          actionButtonLabel={t('rotate-virtual-key-button')}
           buttonIcon={<Sync fontSize="small" sx={{ mr: 1 }} />}
           actionHandler={() =>
             handleChangeVirtualKeyStatus(
