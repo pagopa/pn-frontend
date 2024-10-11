@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { AppRouteParams, Layout, setSessionLanguage, useIsMobile } from '@pagopa-pn/pn-commons';
+import { AppRouteParams, Layout, useIsMobile } from '@pagopa-pn/pn-commons';
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
@@ -59,7 +59,6 @@ const Login = () => {
   }
 
   const changeLanguageHandler = async (langCode: string) => {
-    setSessionLanguage(langCode);
     await i18n.changeLanguage(langCode);
   };
 
@@ -72,6 +71,7 @@ const Login = () => {
     <Layout
       productsList={[]}
       onAssistanceClick={handleAssistanceClick}
+      currentLanguage={i18n.language}
       onLanguageChanged={changeLanguageHandler}
       showSideMenu={false}
       loggedUser={{

@@ -2,23 +2,19 @@ import i18next from 'i18next';
 import LanguageDetector, { CustomDetector } from 'i18next-browser-languagedetector';
 import HttpApi from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
-
-import { sanitizeString, setSessionLanguage } from '@pagopa-pn/pn-commons';
+import { getLangCode, sanitizeString, setSessionLanguage } from '@pagopa-pn/pn-commons';
+import { hashDetectorLookup } from '@pagopa-pn/pn-commons/src/utility/multilanguage.utility';
 
 const languageDetector = new LanguageDetector();
 
 const customHashDetector: CustomDetector = {
-  name: 'customHashDetector',
-  lookup() {
-    const hash = window.location.hash;
-    const lang = hash.match(/lang=([a-z]{2})/);
-    return lang ? lang[1] : undefined;
-  },
+  name: 'hashDetector',
+  lookup: hashDetectorLookup,
 };
 
 languageDetector.addDetector(customHashDetector);
 
-i18next
+void i18next
   .use(languageDetector)
   .use(initReactI18next)
   .use(HttpApi)
@@ -33,15 +29,15 @@ i18next
       escape: (srt: string): string => sanitizeString(srt),
     },
     detection: {
-      order: ['customHashDetector', 'sessionStorage'],
+      order: ['hashDetector', 'sessionStorage', 'navigator'],
       lookupSessionStorage: 'lang',
     },
-  })
-  .then(async () => {
-    setSessionLanguage(i18next.language);
-  })
-  .catch((err: any) => {
-    throw new Error(err);
   });
+
+i18next.on('languageChanged', (language: string) => {
+  const lang = getLangCode(language);
+  setSessionLanguage(lang);
+  document.documentElement.setAttribute('lang', lang);
+});
 
 export default i18next;
