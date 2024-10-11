@@ -40,7 +40,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
       id: 'name',
       label: t('publicKeys.table.name'),
       tableConfiguration: {
-        cellProps: { width: '24%' },
+        cellProps: { width: '20%' },
       },
       cardConfiguration: {
         wrapValueInTypography: false,
@@ -50,7 +50,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
       id: 'value',
       label: t('publicKeys.table.value'),
       tableConfiguration: {
-        cellProps: { width: '24%' },
+        cellProps: { width: '41%' },
       },
       cardConfiguration: {
         wrapValueInTypography: false,
@@ -60,7 +60,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
       id: 'date',
       label: t('publicKeys.table.endDate'),
       tableConfiguration: {
-        cellProps: { width: '24%' },
+        cellProps: { width: '15%' },
       },
       cardConfiguration: {
         wrapValueInTypography: false,
@@ -70,7 +70,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
       id: 'status',
       label: t('publicKeys.table.status'),
       tableConfiguration: {
-        cellProps: { width: '24%' },
+        cellProps: { width: '20%' },
       },
       cardConfiguration: {
         position: 'left',
@@ -110,6 +110,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
         dsc: t('sort.desc', { ns: 'notifiche' }),
       }}
       testId="publicKeysTable"
+      slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
     >
       <SmartHeader>
         {publicKeysColumns.map((column) => (
@@ -117,6 +118,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
             key={column.id.toString()}
             columnId={column.id}
             sortable={column.tableConfiguration.sortable}
+            cellProps={column.tableConfiguration.cellProps}
           >
             {column.label}
           </SmartHeaderCell>

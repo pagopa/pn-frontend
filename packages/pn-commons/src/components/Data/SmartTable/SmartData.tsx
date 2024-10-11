@@ -2,6 +2,7 @@ import { Children, ReactElement, isValidElement } from 'react';
 
 import { useIsMobile } from '../../../hooks';
 import { Sort } from '../../../models';
+import { SlotProps } from '../../../models/PnTable';
 import PnCard from '../PnCard/PnCard';
 import PnCardActions from '../PnCard/PnCardActions';
 import PnCardContent from '../PnCard/PnCardContent';
@@ -32,12 +33,21 @@ type Props<T> = {
   sort?: Sort<T>;
   /** the function to be invoked if the user change sorting */
   onChangeSorting?: (sort: Sort<T>) => void;
+  /** Components props */
+  slotProps?: SlotProps;
 };
 
 const calcTestId = (suffix: string, testId?: string): string | undefined =>
   testId ? `${testId}${suffix}` : undefined;
 
-const SmartData = <T,>({ children, testId, ariaTitle, sort, onChangeSorting }: Props<T>) => {
+const SmartData = <T,>({
+  children,
+  testId,
+  ariaTitle,
+  sort,
+  onChangeSorting,
+  slotProps,
+}: Props<T>) => {
   const isMobile = useIsMobile();
   const suffix = isMobile ? 'Mobile' : 'Desktop';
 
@@ -115,7 +125,7 @@ const SmartData = <T,>({ children, testId, ariaTitle, sort, onChangeSorting }: P
   }
 
   return (
-    <PnTable testId={calcTestId(suffix, testId)} ariaTitle={ariaTitle}>
+    <PnTable testId={calcTestId(suffix, testId)} ariaTitle={ariaTitle} slotProps={slotProps}>
       <PnTableHeader testId={calcTestId(suffix, header.props.testId)}>
         {Children.map(
           header.props.children,

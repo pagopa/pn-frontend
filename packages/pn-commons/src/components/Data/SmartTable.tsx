@@ -4,6 +4,7 @@ import { Box, Grid } from '@mui/material';
 
 import { useIsMobile } from '../../hooks';
 import { PaginationData, Row, SmartTableData, Sort } from '../../models';
+import { SlotProps } from '../../models/PnTable';
 import { calculatePages } from '../../utility';
 import checkChildren from '../../utility/children.utility';
 import CustomPagination from '../Pagination/CustomPagination';
@@ -59,6 +60,8 @@ type Props<T> = {
   testId?: string;
   /** Table title used in aria-label */
   ariaTitle?: string;
+  /** Components props */
+  slotProps?: SlotProps;
 };
 
 /**
@@ -75,6 +78,7 @@ const SmartTable = <T,>({
   emptyState,
   testId,
   ariaTitle,
+  slotProps,
 }: PropsWithChildren<Props<T>>) => {
   const isMobile = useIsMobile();
 
@@ -131,6 +135,7 @@ const SmartTable = <T,>({
             testId={testId}
             sort={currentSort}
             onChangeSorting={onChangeSorting}
+            slotProps={slotProps}
           >
             {children}
           </SmartData>
@@ -170,6 +175,7 @@ const SmartTable = <T,>({
           testId={testId}
           sort={currentSort}
           onChangeSorting={onChangeSorting}
+          slotProps={slotProps}
         >
           {children}
         </SmartData>

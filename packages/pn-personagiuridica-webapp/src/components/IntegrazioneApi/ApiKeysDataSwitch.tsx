@@ -47,7 +47,16 @@ const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick
             color: setRowColorByStatus(data),
           }}
         >
-          {`${data.value?.substring(0, 12)}...`}
+          <Typography
+            variant="body2"
+            sx={{
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {data.value}
+          </Typography>
           <CopyToClipboardButton
             data-testid="copyToClipboard"
             disabled={isApiKeyDisactivated(data)}
