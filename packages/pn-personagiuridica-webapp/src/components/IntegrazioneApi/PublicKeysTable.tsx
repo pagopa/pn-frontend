@@ -99,18 +99,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
   }
 
   return (
-    <SmartTable
-      data={data}
-      conf={publicKeysColumns}
-      sortLabels={{
-        title: t('sort.title', { ns: 'notifiche' }),
-        optionsTitle: t('sort.options', { ns: 'notifiche' }),
-        cancel: t('sort.cancel', { ns: 'notifiche' }),
-        asc: t('sort.asc', { ns: 'notifiche' }),
-        dsc: t('sort.desc', { ns: 'notifiche' }),
-      }}
-      testId="publicKeysTable"
-    >
+    <SmartTable data={data} conf={publicKeysColumns} testId="publicKeysTable">
       <SmartHeader>
         {publicKeysColumns.map((column) => (
           <SmartHeaderCell
