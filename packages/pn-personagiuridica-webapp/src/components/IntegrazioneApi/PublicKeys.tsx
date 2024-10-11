@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
 import { Button, Stack, Typography } from '@mui/material';
-import { ApiErrorWrapper, useHasPermissions } from '@pagopa-pn/pn-commons';
+import { ApiErrorWrapper } from '@pagopa-pn/pn-commons';
 
 import {
   ChangeStatusPublicKeyV1StatusEnum,
@@ -17,7 +17,6 @@ import {
   deletePublicKey,
   getPublicKeys,
 } from '../../redux/apikeys/actions';
-import { PNRole } from '../../redux/auth/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import ApiKeyModal from './ApiKeyModal';
@@ -32,15 +31,10 @@ type ModalType = {
 const PublicKeys: React.FC = () => {
   const { t } = useTranslation(['integrazioneApi', 'common']);
   const dispatch = useAppDispatch();
-  const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const publicKeys = useAppSelector((state: RootState) => state.apiKeysState.publicKeys);
 
   const [modal, setModal] = useState<ModalType>({ view: ModalApiKeyView.NONE });
 
-  const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
-  const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
-
-  const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
   const hasOneActiveKey = publicKeys.items.some((key) => key.status === PublicKeyStatus.Active);
 
   const handleModalClick = (view: ModalApiKeyView, publicKeyId: string) => {
@@ -91,7 +85,7 @@ const PublicKeys: React.FC = () => {
         <Typography variant="h6" sx={{ mb: { xs: 3, lg: 0 } }}>
           {t('publicKeys.title')}
         </Typography>
-        {isAdminWithoutGroups && !hasOneActiveKey && (
+        {!hasOneActiveKey && (
           <Button
             id="generate-public-key"
             data-testid="generatePublicKey"

@@ -6,6 +6,7 @@ import { TitleBox, useHasPermissions } from '@pagopa-pn/pn-commons';
 
 import PublicKeys from '../components/IntegrazioneApi/PublicKeys';
 import VirtualKeys from '../components/IntegrazioneApi/VirtualKeys';
+import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PNRole } from '../redux/auth/types';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -19,18 +20,20 @@ const ApiIntegration: React.FC = () => {
   const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
 
   return (
-    <Box p={3}>
-      <TitleBox
-        variantTitle="h4"
-        title={t('title')}
-        subTitle={t('subTitle')}
-        variantSubTitle="body1"
-      />
+    <LoadingPageWrapper isInitialized={true}>
+      <Box p={3}>
+        <TitleBox
+          variantTitle="h4"
+          title={t('title')}
+          subTitle={t('subTitle')}
+          variantSubTitle="body1"
+        />
 
-      {isAdminWithoutGroups && <PublicKeys />}
+        {isAdminWithoutGroups && <PublicKeys />}
 
-      <VirtualKeys />
-    </Box>
+        <VirtualKeys />
+      </Box>
+    </LoadingPageWrapper>
   );
 };
 

@@ -132,13 +132,13 @@ const VirtualKeys: React.FC = () => {
         </Typography>
         {isCreationEnabled && (
           <Button
-            id="generate-public-key"
-            data-testid="generatePublicKey"
+            id="generate-virtual-key"
+            data-testid="generateVirtualKey"
             variant="contained"
             sx={{ mb: { xs: 3, lg: 0 } }}
             onClick={handleGenerateVirtualKey}
           >
-            {t('publicKeys.new-key-button')}
+            {t('virtualKeys.new-key-button')}
           </Button>
         )}
       </Stack>
