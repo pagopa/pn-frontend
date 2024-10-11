@@ -1,6 +1,4 @@
 import { LangCode, Footer as MuiFooter } from '@pagopa/mui-italia';
-
-import { getSessionLanguage } from '../../utility';
 import {
   LANGUAGES,
   companyLegalInfo,
@@ -8,8 +6,11 @@ import {
   postLoginLinks,
   preLoginLinks,
 } from '../../utility/costants';
+import { getLangCode } from '../../utility';
+import { useMemo } from 'react';
 
 type Props = {
+  currentLanguage?: string;
   onLanguageChanged?: (langCode: string) => void;
   loggedUser?: boolean;
   /** Enables the Terms of Service Link */
@@ -21,6 +22,7 @@ type Props = {
 };
 
 const Footer: React.FC<Props> = ({
+  currentLanguage,
   onLanguageChanged = () => {},
   loggedUser = false,
   hasTermsOfService,
@@ -31,6 +33,10 @@ const Footer: React.FC<Props> = ({
   const changeLanguageHandler = (langCode: LangCode) => {
     onLanguageChanged(langCode);
   };
+  const currentLangCode = useMemo(
+    () => getLangCode(currentLanguage),
+    [currentLanguage]
+  );
 
   return (
     <MuiFooter
@@ -43,8 +49,8 @@ const Footer: React.FC<Props> = ({
       postLoginLinks={postLoginLinks()}
       preLoginLinks={preLoginLinks(hasTermsOfService, privacyPolicyHref, termsOfServiceHref)}
       languages={LANGUAGES}
+      currentLangCode={currentLangCode}
       onLanguageChanged={changeLanguageHandler}
-      currentLangCode={getSessionLanguage() as LangCode}
     />
   );
 };

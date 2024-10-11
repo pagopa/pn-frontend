@@ -8,6 +8,17 @@ import Footer from '../Footer';
 
 const mockOpenFn = vi.fn();
 
+const i18n: any = {
+  language: 'it',
+  changeLanguage: (lang: string) => new Promise(() => {
+    sessionStorage.setItem('lang', lang);
+    i18n.language = lang;
+  }),
+};
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({ i18n }),
+}));
+
 describe('Footer Component', () => {
   const original = window.open;
 
@@ -54,7 +65,8 @@ describe('Footer Component', () => {
     const { getByRole, rerender } = render(
       <Footer
         loggedUser={true}
-        onLanguageChanged={(langCode) => sessionStorage.setItem('lang', langCode)}
+        currentLanguage={i18n.language}
+        onLanguageChanged={(langCode) => i18n.changeLanguage(langCode)}
       />
     );
     let dropdownLanguageButton = getByRole('button');
@@ -77,8 +89,9 @@ describe('Footer Component', () => {
     // check that the right language is selected
     const languageCode = Object.keys(LANGUAGES)[2] as keyof Languages;
     expect(sessionStorage.getItem('lang')).toBe(languageCode);
+    expect(i18n.language).toBe(languageCode);
     // simulate rerendering due to language change
-    rerender(<Footer loggedUser={true} />);
+    rerender(<Footer loggedUser={true} currentLanguage={i18n.language} />);
     dropdownLanguageButton = getByRole('button');
     expect(dropdownLanguageButton).toHaveTextContent(Object.values(LANGUAGES[languageCode]!)[2]);
     // check the dropdown languages
@@ -94,8 +107,8 @@ describe('Footer Component', () => {
   it('check language when sessionStorage is initially set', async () => {
     // we assume that the languages array has at least a length of 4
     const languageCode = Object.keys(LANGUAGES)[3] as keyof Languages;
-    sessionStorage.setItem('lang', languageCode);
-    const { getByRole } = render(<Footer loggedUser={true} />);
+    i18n.language = languageCode;
+    const { getByRole } = render(<Footer loggedUser={true} currentLanguage={i18n.language} />);
     const dropdownLanguageButton = getByRole('button');
     const expectedLanguagesLabels = Object.values(LANGUAGES[languageCode]!);
     expect(dropdownLanguageButton).toHaveTextContent(Object.values(LANGUAGES[languageCode]!)[3]);
