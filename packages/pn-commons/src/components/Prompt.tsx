@@ -9,6 +9,7 @@ import PnDialogActions from './PnDialog/PnDialogActions';
 import PnDialogContent from './PnDialog/PnDialogContent';
 
 type Props = {
+  disabled: boolean;
   title: string;
   message: string;
   eventTrackingCallbackPromptOpened?: () => void;
@@ -18,6 +19,7 @@ type Props = {
 };
 
 const Prompt: React.FC<Props> = ({
+  disabled = false,
   title,
   message,
   children,
@@ -26,7 +28,7 @@ const Prompt: React.FC<Props> = ({
   eventTrackingCallbackConfirm,
 }) => {
   const [showPrompt, confirmNavigation, cancelNavigation] = usePrompt(
-    true,
+    !disabled,
     eventTrackingCallbackCancel,
     eventTrackingCallbackConfirm
   );

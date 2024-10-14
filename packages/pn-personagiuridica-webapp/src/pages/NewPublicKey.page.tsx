@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Button, Stack, Step, StepLabel, Stepper } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
+import { Box, Stack, Step, StepLabel, Stepper } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {
   AppResponsePublisher,
@@ -18,11 +19,10 @@ import {
   BffPublicKeyResponse,
   PublicKeyStatus,
 } from '../generated-client/pg-apikeys';
-import { BffTosPrivacyActionBodyActionEnum, ConsentType } from '../generated-client/tos-privacy';
+import { BffTosPrivacyActionBodyActionEnum, Consent, ConsentType } from '../generated-client/tos-privacy';
 import * as routes from '../navigation/routes.const';
 import {
   acceptTosPrivacy,
-  checkPublicKeyIssuer,
   createPublicKey,
   getTosPrivacy,
   rotatePublicKey,
@@ -44,13 +44,14 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
   return (
     <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
     <Box p={3} sx={{ maxWidth: { xs: '100%', lg: '90%' } }}>
-      <Button
-        sx={{ p: 0, m: 0}}
+      <ButtonNaked
+        size="medium"
+        color="primary"
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate(routes.INTEGRAZIONE_API)}
       >
         {t('button.exit', { ns: 'common' })}
-      </Button>
+      </ButtonNaked>
 
       <TitleBox
         variantTitle="h4"
@@ -83,8 +84,7 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
 const NewPublicKey = () => {
   const { t } = useTranslation(['integrazioneApi']);
   const [activeStep, setActiveStep] = useState(0);
-  const [isTosAccepted, setIsTosAccepted] = useState<boolean | undefined>();
-  const [tosVersion, setTosVersion] = useState<string | undefined>('1');
+  const consent = useRef<Consent>();
   const [creationResponse, setCreationResponse] = useState<BffPublicKeyResponse | undefined>(
     undefined
   );
@@ -114,41 +114,33 @@ const NewPublicKey = () => {
       );
     }
 
-    // verify if tos are accepted
-    void dispatch(checkPublicKeyIssuer())
-      .unwrap()
-      .then((response) => {
-        setIsTosAccepted(() => response.tosAccepted);
-      });
-
     // retrieve tos and privacy version
-    void dispatch(getTosPrivacy())
+    dispatch(getTosPrivacy())
       .unwrap()
       .then((response) => {
         // server response contains an invalid consent version
         if (response.length === 0 || !response[0].consentVersion) {
-          navigate(routes.INTEGRAZIONE_API);
-          dispatch(
-            appStateActions.addError({
-              title: '',
-              message: t('messages.error.no-tos-version'),
-            })
-          );
+          handleRetrieveTosError();
           return;
         }
-        setTosVersion(() => response[0].consentVersion);
-      });
+        // eslint-disable-next-line functional/immutable-data
+        consent.current = response[0];
+      })
+      .catch(() => {});
   }, []);
 
-  const handleCreate = (publicKey: BffPublicKeyRequest): Promise<BffPublicKeyResponse> =>
-    dispatch(createPublicKey(publicKey)).unwrap();
+  const handleRetrieveTosError = () => {
+    navigate(routes.INTEGRAZIONE_API);
+    dispatch(
+      appStateActions.addError({
+        title: '',
+        message: t('messages.error.no-tos-version'),
+      })
+    );
+  };
 
-  const handleRotate = (
-    kid: string,
-    publicKey: BffPublicKeyRequest
-  ): Promise<BffPublicKeyResponse> => dispatch(rotatePublicKey({ kid, body: publicKey })).unwrap();
-
-  const handleErrorTosPrivacy = () => {
+  const handleAcceptTosError = () => {
+    navigate(routes.INTEGRAZIONE_API);
     dispatch(
       appStateActions.addError({
         title: '',
@@ -170,69 +162,63 @@ const NewPublicKey = () => {
   };
 
   const publicKeyRegistration = async (publicKey: BffPublicKeyRequest) => {
-    if (!isTosAccepted) {
-      const acceptTosResponse = await dispatch(
-        acceptTosPrivacy([
-          {
-            action: BffTosPrivacyActionBodyActionEnum.Accept,
-            version: tosVersion ?? '',
-            type: ConsentType.TosDestB2B,
-          },
-        ])
-      );
+    if (!consent.current?.accepted) {
+      try{
+        await dispatch(acceptTosPrivacy([{
+          action: BffTosPrivacyActionBodyActionEnum.Accept,
+          version: consent.current?.consentVersion ?? '',
+          type: ConsentType.TosDestB2B,
+        }]))
+        .unwrap();
 
-      if (acceptTosResponse.meta.requestStatus === 'rejected') {
-        return handleErrorTosPrivacy();
+      } catch(error) {
+        return handleAcceptTosError();
       }
     }
-    const returnedPromise = kid ? handleRotate(kid, publicKey) : handleCreate(publicKey);
+    const returnedPromise = kid ? dispatch(rotatePublicKey({ kid, body: publicKey })) : dispatch(createPublicKey(publicKey));
 
     returnedPromise
-      .then((response: BffPublicKeyResponse) => {
-        if (response.issuer) {
-          setActiveStep((previousStep) => previousStep + 1);
-          setCreationResponse(response);
-          showSuccessMessage();
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    .unwrap()
+    .then((response: BffPublicKeyResponse) => {
+      if (response.issuer) {
+        setActiveStep((previousStep) => previousStep + 1);
+        setCreationResponse(response);
+        showSuccessMessage();
+      }
+    })
+    .catch(() => {});
   };
 
   const checkPublicKeyValueAllowed = (pk: string | undefined) =>
     !publicKeys.items.find((key) => key.value === pk && key.status === PublicKeyStatus.Active);
 
   useEffect(() => {
-    AppResponsePublisher.error.subscribe('acceptTosPrivacyB2B', handleErrorTosPrivacy);
-    AppResponsePublisher.error.subscribe('getTosPrivacyB2B', handleErrorTosPrivacy);
+    AppResponsePublisher.error.subscribe('acceptTosPrivacyB2B', handleAcceptTosError);
+    AppResponsePublisher.error.subscribe('getTosPrivacyB2B', handleRetrieveTosError);
 
     return () => {
-      AppResponsePublisher.error.unsubscribe('acceptTosPrivacyB2B', handleErrorTosPrivacy);
-      AppResponsePublisher.error.subscribe('getTosPrivacyB2B', handleErrorTosPrivacy);
+      AppResponsePublisher.error.unsubscribe('acceptTosPrivacyB2B', handleAcceptTosError);
+      AppResponsePublisher.error.subscribe('getTosPrivacyB2B', handleRetrieveTosError);
     };
   }, []);
 
   return (
-    <>
-      {activeStep === 0 && !((isRotate && !isActiveKey) || !tosVersion) ? (
-        <Prompt
-          title={t('new-public-key.prompt.title')}
-          message={t('new-public-key.prompt.message')}
-        >
-          <StepperContainer activeStep={activeStep}>
-            <PublicKeyDataInsert
-              onConfirm={publicKeyRegistration}
-              duplicateKey={checkPublicKeyValueAllowed}
-            />
-          </StepperContainer>
-        </Prompt>
-      ) : (
-        <StepperContainer activeStep={activeStep}>
-          <ShowPublicKeyParams params={creationResponse} />
-        </StepperContainer>
-      )}
-    </>
+    <Prompt
+      disabled={activeStep === 1 || (isRotate && !isActiveKey)}
+      title={t('new-public-key.prompt.title')}
+      message={t('new-public-key.prompt.message')}
+    >
+      <StepperContainer activeStep={activeStep}>
+        {activeStep === 0 ?
+        <PublicKeyDataInsert
+          onConfirm={publicKeyRegistration}
+          duplicateKey={checkPublicKeyValueAllowed}
+        />
+        :
+        <ShowPublicKeyParams params={creationResponse} />
+        }
+      </StepperContainer>
+    </Prompt>
   );
 };
 

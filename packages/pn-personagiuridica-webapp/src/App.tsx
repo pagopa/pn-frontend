@@ -79,7 +79,6 @@ const ActualApp = () => {
   );
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { pathname, hash } = useLocation();
-  const path = pathname.split('/');
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -92,8 +91,7 @@ const ActualApp = () => {
     [loggedUser]
   );
 
-  const isPrivacyPage = path[1] === 'privacy-tos';
-  const isPublicKeyRegistrationPage = path.length >= 2 && `${path[1]}/${path[2]}` === 'integrazione-api/registra-chiave-pubblica';
+  const isPublicKeyRegistrationPage = pathname.includes(routes.REGISTRA_CHIAVE_PUBBLICA);
   
   const organization = loggedUser.organization;
   const role = loggedUser.organization?.roles ? loggedUser.organization?.roles[0] : null;
@@ -276,8 +274,8 @@ const ActualApp = () => {
     <>
       <ResponseEventDispatcher />
       <Layout
-        showHeader={!isPrivacyPage}
-        showFooter={!isPrivacyPage}
+        showHeader
+        showFooter
         onExitAction={handleUserLogout}
         sideMenu={<SideMenu menuItems={menuItems} selfCareItems={selfcareMenuItems} />}
         showSideMenu={
@@ -288,7 +286,6 @@ const ActualApp = () => {
           privacyConsent &&
           privacyConsent.accepted &&
           fetchedPrivacy &&
-          !isPrivacyPage &&
           !isPublicKeyRegistrationPage
         }
         productsList={productsList}

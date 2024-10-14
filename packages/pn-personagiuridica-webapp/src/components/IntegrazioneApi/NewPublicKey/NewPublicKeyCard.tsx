@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box, Button, Paper, Stack } from '@mui/material';
-import { SectionHeading, useIsMobile } from '@pagopa-pn/pn-commons';
+import { Box, Button, Paper, Stack, Typography } from '@mui/material';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 type Props = {
   children: ReactNode;
@@ -31,7 +31,7 @@ const NewPublicKeyCard: React.FC<Props> = ({
   return (
     <>
       <Paper sx={{ p: 3, mt: 3 }} elevation={0}>
-        {title && <SectionHeading data-testid="title">{title}</SectionHeading>}
+        {title && <Typography sx={{ fontSize: '1.5rem', fontWeight: 700, m: 0, p: 0 }} data-testid="title">{title}</Typography>}
         {content}
         <Box>{children}</Box>
       </Paper>

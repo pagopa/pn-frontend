@@ -33,10 +33,10 @@ const ShowPublicKeyParams: React.FC<Props> = ({ params }) => {
         </Typography>
       }
     >
-      <Box border="1px solid #E3E7EB" borderRadius="4px" px={2} py={3} mb={3}>
+      <Box border="1px solid" borderColor="divider" borderRadius={0.5} p={3} mb={3}>
         <InputAdornment position="start" sx={{ mt: 2, mb: 3 }}>
-          <VpnKeyIcon sx={{ color: '#17324D', width: '18px', height: '20px' }} />
-          <InputLabel sx={{ ml: 1, color: '#17324D', fontSize: '16px' }} htmlFor="kid">
+          <VpnKeyIcon sx={{ color: 'text.primary', width: '24px', height: '24px' }} />
+          <InputLabel sx={{ ml: 1, color: 'text.primary', fontSize: '16px' }} htmlFor="kid">
             {t('new-public-key.steps.get-returned-parameters.kid')}
           </InputLabel>
         </InputAdornment>
@@ -58,10 +58,10 @@ const ShowPublicKeyParams: React.FC<Props> = ({ params }) => {
           }}
         />
       </Box>
-      <Box border="1px solid #E3E7EB" borderRadius="4px" px={2} py={3}>
+      <Box border="1px solid" borderColor="divider" borderRadius={0.5} p={3}>
         <InputAdornment position="start" sx={{ mt: 2, mb: 3 }}>
-          <AssignmentIndIcon sx={{ color: '#17324D', width: '18px', height: '20px' }} />
-          <InputLabel sx={{ ml: 1, color: '#17324D', fontSize: '16px' }} htmlFor="issuer">
+          <AssignmentIndIcon sx={{ color: 'text.primary', width: '24px', height: '24px' }} />
+          <InputLabel sx={{ ml: 1, color: 'text.primary', fontSize: '16px' }} htmlFor="issuer">
             {t('new-public-key.steps.get-returned-parameters.issuer')}
           </InputLabel>
         </InputAdornment>

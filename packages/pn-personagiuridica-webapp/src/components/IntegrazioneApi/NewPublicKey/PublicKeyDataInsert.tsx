@@ -6,6 +6,7 @@ import * as yup from 'yup';
 
 import { Box, Link, TextField, Typography } from '@mui/material';
 import {
+  dataRegex,
   formatDate,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -16,11 +17,6 @@ import NewPublicKeyCard from './NewPublicKeyCard';
 
 const nameMaxLen = 254;
 const nameAllowedChars = 'a-zA-Z0-9-\\';
-
-const validateName = (name: string | undefined): boolean => {
-  const pattern = /^[a-zA-Z0-9-\\s]+$/i;
-  return pattern.test(name ?? '');
-};
 
 type Props = {
   onConfirm: (publicKey: BffPublicKeyRequest) => void;
@@ -48,11 +44,7 @@ const PublicKeyDataInsert: React.FC<Props> = ({ onConfirm, duplicateKey }) => {
       .string()
       .required(t('required-field', { ns: 'common' }))
       .max(nameMaxLen, t('too-long-field-error', { ns: 'common', maxLength: 254 }))
-      .test(
-        'name',
-        t('messages.error.name-allowed-charset', { allowedCharset: nameAllowedChars }),
-        validateName
-      ),
+      .matches(dataRegex.publicKeyName, t('messages.error.name-allowed-charset', { allowedCharset: nameAllowedChars })),
     publicKey: yup
       .string()
       .required(t('required-field', { ns: 'common' }))
@@ -89,8 +81,8 @@ const PublicKeyDataInsert: React.FC<Props> = ({ onConfirm, duplicateKey }) => {
       }
     >
       <form onSubmit={formik.handleSubmit} data-testid="publicKeyDataInsertForm">
-        <Box border="1px solid #E3E7EB" borderRadius="4px" px={2} py={3} mb={3}>
-          <Typography mb={2} fontWeight="bold" data-testid="content" variant="body2">
+        <Box border="1px solid" borderColor="divider" borderRadius={0.5} px={2} py={3} mb={3}>
+          <Typography mb={2} fontWeight="600" data-testid="content" variant="body2">
             {t('new-public-key.steps.insert-data.name.description')}
           </Typography>
           <TextField
@@ -106,8 +98,8 @@ const PublicKeyDataInsert: React.FC<Props> = ({ onConfirm, duplicateKey }) => {
             sx={{ mt: 1 }}
           />
         </Box>
-        <Box border="1px solid #E3E7EB" borderRadius="4px" px={2} py={3} mb={3}>
-          <Typography mb={2} fontWeight="bold" data-testid="content" variant="body2">
+        <Box border="1px solid" borderColor="divider" borderRadius={0.5} px={2} py={3} mb={3}>
+          <Typography mb={2} fontWeight="600" data-testid="content" variant="body2">
             {t('new-public-key.steps.insert-data.publicKey.description')}
           </Typography>
           <Typography mb={2} data-testid="content" variant="body2">
