@@ -28,7 +28,7 @@
     "cancel-pec-validation": "Annulla validazione",
     "remove-pec-title": "Rimuovi PEC",
     "remove-pec-message": "Confermi di voler rimuovere l'indirizzo PEC {{value}}?",
-    "disclaimer-message": "Questo è l’indirizzo principale a cui l’impresa riceverà gli avvisi di avvenuta ricezione. Inserendolo, non riceverà più raccomandate.",
+    "disclaimer-message": "Compilando i predetti campi, acconsenti a che tale indirizzo venga registrato su SEND e diventi l’indirizzo principale che verrà utilizzato per inviarti gli avvisi di avvenuta ricezione in via digitale. Inserendolo non riceverai più raccomandate cartacee.",
     "disclaimer-link": "Scopri di più",
     "block-remove-pec-title": "Non puoi eliminare la PEC",
     "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”.",
