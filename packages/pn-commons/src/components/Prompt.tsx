@@ -9,7 +9,7 @@ import PnDialogActions from './PnDialog/PnDialogActions';
 import PnDialogContent from './PnDialog/PnDialogContent';
 
 type Props = {
-  disabled: boolean;
+  disabled?: boolean;
   title: string;
   message: string;
   eventTrackingCallbackPromptOpened?: () => void;
