@@ -128,7 +128,6 @@ const PublicKeys: React.FC = () => {
           <ApiKeyModal
             title={t('dialogs.block-title')}
             subTitle={t('dialogs.block-subtitle')}
-            content={<Typography>{t('dialogs.block-warning')}</Typography>}
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('block-button')}

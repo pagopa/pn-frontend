@@ -32,7 +32,6 @@
   "dialogs": {
     "block-title": "Blocca chiave",
     "block-subtitle": "Se blocchi la chiave, qualsiasi richiesta effettuata attraverso di essa avrà esito negativo.",
-    "block-warning": "Puoi attivarla di nuovo in qualsiasi momento.",
     "rotate-title": "Ruota chiave",
     "rotate-public-key-subtitle": "Ruotando la chiave pubblica esistente, ne dovrai inserire una nuova e otterrai i valori di Kid e Issuer.",
     "rotate-virtual-key-subtitle": "Ruotando la chiave esistente, la disattivi e ne generi una nuova con gli stessi attributi.",
