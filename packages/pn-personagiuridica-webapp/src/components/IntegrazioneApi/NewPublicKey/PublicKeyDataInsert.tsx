@@ -102,7 +102,7 @@ const PublicKeyDataInsert: React.FC<Props> = ({ onConfirm, duplicateKey }) => {
           <Typography mb={2} fontWeight="600" data-testid="content" variant="body2">
             {t('new-public-key.steps.insert-data.publicKey.description')}
           </Typography>
-          <Typography mb={2} data-testid="content" variant="body2">
+          <Typography mb={2} data-testid="content" variant="body2" color="text.secondary">
             {t('new-public-key.steps.insert-data.publicKey.begin')}
           </Typography>
           <TextField
@@ -118,7 +118,7 @@ const PublicKeyDataInsert: React.FC<Props> = ({ onConfirm, duplicateKey }) => {
             helperText={formik.touched.publicKey && formik.errors.publicKey}
             size="medium"
           />
-          <Typography mt={2} data-testid="content" variant="body2">
+          <Typography mt={2} data-testid="content" variant="body2" color="text.secondary">
             {t('new-public-key.steps.insert-data.publicKey.end')}
           </Typography>
         </Box>
