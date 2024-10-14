@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.1](https://github.com/pagopa/pn-frontend/compare/v2.7.0...v2.7.1) (2024-10-14)
+
+
+### Bug Fixes
+
+* **PN-12893:** update PEC disclaimer message ([#1354](https://github.com/pagopa/pn-frontend/issues/1354)) ([5482db9](https://github.com/pagopa/pn-frontend/commit/5482db939047db5b8ba58c302c1683b3438d6497))
+
+
+
+
+
 # [2.7.0](https://github.com/pagopa/pn-frontend/compare/v2.7.0-RC.1...v2.7.0) (2024-09-18)
 
 
