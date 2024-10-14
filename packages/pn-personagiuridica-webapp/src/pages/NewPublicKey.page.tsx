@@ -2,15 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { ButtonNaked } from '@pagopa/mui-italia';
-import { Box, Stack, Step, StepLabel, Stepper } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import {
-  AppResponsePublisher,
-  Prompt,
-  TitleBox,
-  appStateActions,
-} from '@pagopa-pn/pn-commons';
+import { Box, Stack, Step, StepLabel, Stepper } from '@mui/material';
+import { AppResponsePublisher, Prompt, TitleBox, appStateActions } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import PublicKeyDataInsert from '../components/IntegrazioneApi/NewPublicKey/PublicKeyDataInsert';
 import ShowPublicKeyParams from '../components/IntegrazioneApi/NewPublicKey/ShowPublicKeyParams';
@@ -19,7 +14,11 @@ import {
   BffPublicKeyResponse,
   PublicKeyStatus,
 } from '../generated-client/pg-apikeys';
-import { BffTosPrivacyActionBodyActionEnum, Consent, ConsentType } from '../generated-client/tos-privacy';
+import {
+  BffTosPrivacyActionBodyActionEnum,
+  Consent,
+  ConsentType,
+} from '../generated-client/tos-privacy';
 import * as routes from '../navigation/routes.const';
 import {
   acceptTosPrivacy,
@@ -43,40 +42,32 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
 
   return (
     <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
-    <Box p={3} sx={{ maxWidth: { xs: '100%', lg: '90%' } }}>
-      <ButtonNaked
-        size="medium"
-        color="primary"
-        startIcon={<ArrowBackIcon />}
-        onClick={() => navigate(routes.INTEGRAZIONE_API)}
-      >
-        {t('button.exit', { ns: 'common' })}
-      </ButtonNaked>
+      <Box p={3} sx={{ maxWidth: { xs: '100%', lg: '90%' } }}>
+        <ButtonNaked
+          size="medium"
+          color="primary"
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate(routes.INTEGRAZIONE_API)}
+        >
+          {t('button.exit', { ns: 'common' })}
+        </ButtonNaked>
 
-      <TitleBox
-        variantTitle="h4"
-        title={t('new-public-key.title')}
-        sx={{ mt: 2, mb: 3 }}
-        subTitle={t('new-public-key.subtitle')}
-        variantSubTitle="body1"
-      />
-      <Stepper
-        activeStep={activeStep}
-        alternativeLabel
-        data-testid="stepper"
-      >
-        {steps.map((label, index) => (
-          <Step
-            id={label}
-            key={label}
-            data-testid={`step-${index}`}
-          >
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-      {children}
-    </Box>
+        <TitleBox
+          variantTitle="h4"
+          title={t('new-public-key.title')}
+          sx={{ mt: 2, mb: 3 }}
+          subTitle={t('new-public-key.subtitle')}
+          variantSubTitle="body1"
+        />
+        <Stepper activeStep={activeStep} alternativeLabel data-testid="stepper">
+          {steps.map((label, index) => (
+            <Step id={label} key={label} data-testid={`step-${index}`}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+        {children}
+      </Box>
     </Stack>
   );
 };
@@ -88,7 +79,8 @@ const NewPublicKey = () => {
   const [creationResponse, setCreationResponse] = useState<BffPublicKeyResponse | undefined>(
     undefined
   );
-  
+  const [tosError, setTosError] = useState(false);
+
   const { kid } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -130,7 +122,7 @@ const NewPublicKey = () => {
   }, []);
 
   const handleRetrieveTosError = () => {
-    navigate(routes.INTEGRAZIONE_API);
+    setTosError(true);
     dispatch(
       appStateActions.addError({
         title: '',
@@ -140,7 +132,7 @@ const NewPublicKey = () => {
   };
 
   const handleAcceptTosError = () => {
-    navigate(routes.INTEGRAZIONE_API);
+    setTosError(true);
     dispatch(
       appStateActions.addError({
         title: '',
@@ -163,30 +155,34 @@ const NewPublicKey = () => {
 
   const publicKeyRegistration = async (publicKey: BffPublicKeyRequest) => {
     if (!consent.current?.accepted) {
-      try{
-        await dispatch(acceptTosPrivacy([{
-          action: BffTosPrivacyActionBodyActionEnum.Accept,
-          version: consent.current?.consentVersion ?? '',
-          type: ConsentType.TosDestB2B,
-        }]))
-        .unwrap();
-
-      } catch(error) {
+      try {
+        await dispatch(
+          acceptTosPrivacy([
+            {
+              action: BffTosPrivacyActionBodyActionEnum.Accept,
+              version: consent.current?.consentVersion ?? '',
+              type: ConsentType.TosDestB2B,
+            },
+          ])
+        ).unwrap();
+      } catch (error) {
         return handleAcceptTosError();
       }
     }
-    const publicKeyAction = kid ? dispatch(rotatePublicKey({ kid, body: publicKey })) : dispatch(createPublicKey(publicKey));
+    const publicKeyAction = kid
+      ? dispatch(rotatePublicKey({ kid, body: publicKey }))
+      : dispatch(createPublicKey(publicKey));
 
     publicKeyAction
-    .unwrap()
-    .then((response: BffPublicKeyResponse) => {
-      if (response.issuer) {
-        setActiveStep((previousStep) => previousStep + 1);
-        setCreationResponse(response);
-        showSuccessMessage();
-      }
-    })
-    .catch(() => {});
+      .unwrap()
+      .then((response: BffPublicKeyResponse) => {
+        if (response.issuer) {
+          setActiveStep((previousStep) => previousStep + 1);
+          setCreationResponse(response);
+          showSuccessMessage();
+        }
+      })
+      .catch(() => {});
   };
 
   const checkPublicKeyValueAllowed = (pk: string | undefined) =>
@@ -198,25 +194,31 @@ const NewPublicKey = () => {
 
     return () => {
       AppResponsePublisher.error.unsubscribe('acceptTosPrivacyB2B', handleAcceptTosError);
-      AppResponsePublisher.error.subscribe('getTosPrivacyB2B', handleRetrieveTosError);
+      AppResponsePublisher.error.unsubscribe('getTosPrivacyB2B', handleRetrieveTosError);
     };
-  }, []);
+  }, [handleAcceptTosError, handleRetrieveTosError]);
+
+  useEffect(() => {
+    if (tosError) {
+      navigate(routes.INTEGRAZIONE_API);
+    }
+  }, [tosError]);
 
   return (
     <Prompt
-      disabled={activeStep === 1 || (isRotate && !isActiveKey)}
+      disabled={activeStep === 1 || (isRotate && !isActiveKey) || tosError}
       title={t('new-public-key.prompt.title')}
       message={t('new-public-key.prompt.message')}
     >
       <StepperContainer activeStep={activeStep}>
-        {activeStep === 0 ?
-        <PublicKeyDataInsert
-          onConfirm={publicKeyRegistration}
-          duplicateKey={checkPublicKeyValueAllowed}
-        />
-        :
-        <ShowPublicKeyParams params={creationResponse} />
-        }
+        {activeStep === 0 ? (
+          <PublicKeyDataInsert
+            onConfirm={publicKeyRegistration}
+            duplicateKey={checkPublicKeyValueAllowed}
+          />
+        ) : (
+          <ShowPublicKeyParams params={creationResponse} />
+        )}
       </StepperContainer>
     </Prompt>
   );

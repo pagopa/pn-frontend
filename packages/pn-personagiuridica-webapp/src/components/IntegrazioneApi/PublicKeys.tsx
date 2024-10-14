@@ -13,6 +13,7 @@ import {
   PublicKeyStatus,
 } from '../../generated-client/pg-apikeys';
 import { ModalApiKeyView } from '../../models/ApiKeys';
+import * as routes from '../../navigation/routes.const';
 import {
   PUBLIC_APIKEYS_ACTIONS,
   changePublicKeyStatus,
@@ -22,7 +23,6 @@ import {
 import { PNRole } from '../../redux/auth/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import * as routes from '../../navigation/routes.const';
 import ApiKeyModal from './ApiKeyModal';
 import PublicKeysTable from './PublicKeysTable';
 
