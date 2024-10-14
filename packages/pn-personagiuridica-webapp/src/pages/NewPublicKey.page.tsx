@@ -175,9 +175,9 @@ const NewPublicKey = () => {
         return handleAcceptTosError();
       }
     }
-    const returnedPromise = kid ? dispatch(rotatePublicKey({ kid, body: publicKey })) : dispatch(createPublicKey(publicKey));
+    const publicKeyAction = kid ? dispatch(rotatePublicKey({ kid, body: publicKey })) : dispatch(createPublicKey(publicKey));
 
-    returnedPromise
+    publicKeyAction
     .unwrap()
     .then((response: BffPublicKeyResponse) => {
       if (response.issuer) {
