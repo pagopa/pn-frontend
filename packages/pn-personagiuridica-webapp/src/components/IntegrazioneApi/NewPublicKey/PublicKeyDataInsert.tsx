@@ -21,9 +21,10 @@ const nameAllowedChars = 'a-zA-Z0-9-\\';
 type Props = {
   onConfirm: (publicKey: BffPublicKeyRequest) => void;
   duplicateKey: (publicKey: string | undefined) => boolean;
+  tosAccepted?: boolean;
 };
 
-const PublicKeyDataInsert: React.FC<Props> = ({ onConfirm, duplicateKey }) => {
+const PublicKeyDataInsert: React.FC<Props> = ({ onConfirm, duplicateKey, tosAccepted = false }) => {
   const { t } = useTranslation(['integrazioneApi', 'common']);
   const navigate = useNavigate();
 
@@ -123,6 +124,7 @@ const PublicKeyDataInsert: React.FC<Props> = ({ onConfirm, duplicateKey }) => {
           </Typography>
         </Box>
 
+        {!tosAccepted &&
         <Typography component={Box} mt={3} sx={{ fontSize: '14px' }}>
           <Trans
             i18nKey="new-public-key.steps.insert-data.tos"
@@ -137,6 +139,7 @@ const PublicKeyDataInsert: React.FC<Props> = ({ onConfirm, duplicateKey }) => {
             ]}
           />
         </Typography>
+        }
       </form>
     </NewPublicKeyCard>
   );

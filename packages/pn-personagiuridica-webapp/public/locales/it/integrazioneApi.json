@@ -90,7 +90,7 @@
   },
   "messages": {
     "error": {
-      "rotate-invalid-kid": "Identificativo della chiave da ruotare errato!",
+      "rotate-invalid-kid": "La chiave non può essere ruotata. Un altro amministratore ha già effettuato l'operazione.",
       "key-already-registered": "Questo valore è già stato inserito in precedenza. Inserisci una chiave diversa.",
       "name-allowed-charset": "Il campo nome può contenere solamente i seguenti caratteri: \"{{allowedCharset}}\"",
       "no-tos-version": "Si è verificato un errore nel recupero dei termini del servizio. Riprova",

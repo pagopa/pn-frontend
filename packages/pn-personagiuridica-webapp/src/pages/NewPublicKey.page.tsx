@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -75,7 +75,7 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
 const NewPublicKey = () => {
   const { t } = useTranslation(['integrazioneApi']);
   const [activeStep, setActiveStep] = useState(0);
-  const consent = useRef<Consent>();
+  const [consent, setConsent] = useState<Consent>();
   const [creationResponse, setCreationResponse] = useState<BffPublicKeyResponse | undefined>(
     undefined
   );
@@ -116,7 +116,7 @@ const NewPublicKey = () => {
           return;
         }
         // eslint-disable-next-line functional/immutable-data
-        consent.current = response[0];
+        setConsent(response[0]);
       })
       .catch(() => {});
   }, []);
@@ -154,13 +154,13 @@ const NewPublicKey = () => {
   };
 
   const publicKeyRegistration = async (publicKey: BffPublicKeyRequest) => {
-    if (!consent.current?.accepted) {
+    if (!consent?.accepted) {
       try {
         await dispatch(
           acceptTosPrivacy([
             {
               action: BffTosPrivacyActionBodyActionEnum.Accept,
-              version: consent.current?.consentVersion ?? '',
+              version: consent?.consentVersion ?? '',
               type: ConsentType.TosDestB2B,
             },
           ])
@@ -215,6 +215,7 @@ const NewPublicKey = () => {
           <PublicKeyDataInsert
             onConfirm={publicKeyRegistration}
             duplicateKey={checkPublicKeyValueAllowed}
+            tosAccepted={consent?.accepted}
           />
         ) : (
           <ShowPublicKeyParams params={creationResponse} />
