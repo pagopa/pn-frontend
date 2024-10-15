@@ -1,4 +1,4 @@
-import { TableCellProps } from '@mui/material';
+import { TableCellProps, TableContainerProps, TableProps } from '@mui/material';
 
 type Order = 'asc' | 'desc';
 
@@ -16,3 +16,8 @@ export interface Column<T> {
 }
 
 export type Row<T> = T & { id: string };
+
+export type SlotProps = {
+  tableContainer?: TableContainerProps;
+  table?: TableProps;
+};
