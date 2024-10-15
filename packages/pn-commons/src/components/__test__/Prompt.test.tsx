@@ -3,7 +3,11 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import { fireEvent, render } from '../../test-utils';
 import Prompt from '../Prompt';
 
-const WrappedPrompt = () => {
+interface PromptProps {
+  disabled?: boolean;
+}
+
+const WrappedPrompt: React.FC<PromptProps> = ({disabled = false}) => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
@@ -15,7 +19,7 @@ const WrappedPrompt = () => {
       <Route
         path={'/'}
         element={
-          <Prompt title={'Test title'} message={'Test subtitle'}>
+          <Prompt disabled={disabled} title={'Test title'} message={'Test subtitle'}>
             <div onClick={handleNavigate}>navigate</div>
           </Prompt>
         }
@@ -61,4 +65,9 @@ describe('test Prompt component', () => {
     expect(result.baseElement).not.toHaveTextContent(/test title/i);
     expect(result.baseElement).toHaveTextContent(/other/i);
   });
+
+  // TODO
+  // it('renders the prompt disabled' () => {
+    
+  // })
 });
