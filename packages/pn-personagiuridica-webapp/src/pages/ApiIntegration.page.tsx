@@ -28,9 +28,7 @@ const ApiIntegration: React.FC = () => {
           subTitle={t('subTitle')}
           variantSubTitle="body1"
         />
-
         {isAdminWithoutGroups && <PublicKeys />}
-
         <VirtualKeys />
       </Box>
     </LoadingPageWrapper>

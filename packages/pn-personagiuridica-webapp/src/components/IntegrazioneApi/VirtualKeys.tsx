@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
 import { Button, Stack, Typography } from '@mui/material';
-import { EmptyState, KnownSentiment } from '@pagopa-pn/pn-commons';
+import { EmptyState, KnownSentiment, formatDate, today } from '@pagopa-pn/pn-commons';
 
 import {
   BffPublicKeysCheckIssuerResponse,
@@ -16,6 +16,7 @@ import { ModalApiKeyView } from '../../models/ApiKeys';
 import {
   changeVirtualApiKeyStatus,
   checkPublicKeyIssuer,
+  createVirtualApiKey,
   deleteVirtualApiKey,
   getVirtualApiKeys,
 } from '../../redux/apikeys/actions';
@@ -69,7 +70,20 @@ const VirtualKeys: React.FC = () => {
       .catch(() => {});
   }, []);
 
-  const handleGenerateVirtualKey = () => {};
+  const handleGenerateVirtualKey = () => {
+    dispatch(
+      createVirtualApiKey({
+        name: `${t('virtualKeys.default')}${formatDate(today.toISOString(), false, '')}`,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        const newVirtualKey: VirtualKey = { value: response.virtualKey };
+        setModal({ view: ModalApiKeyView.VIEW, virtualKey: newVirtualKey });
+        fetchVirtualKeys();
+      })
+      .catch(() => {});
+  };
 
   const handleModalClick = (view: ModalApiKeyView, publicKeyId: string) => {
     setModal({ view, virtualKey: virtualKeys.items.find((key) => key.id === publicKeyId) });

@@ -88,7 +88,7 @@ const VirtualKeysTable: React.FC<Props> = ({ virtualKeys, handleModalClick }) =>
       id: 'menu',
       label: '',
       tableConfiguration: {
-        cellProps: { width: '4%' },
+        cellProps: { width: '5%' },
       },
       cardConfiguration: {
         position: 'right',
