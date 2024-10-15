@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
 import { Button, Stack, Typography } from '@mui/material';
@@ -11,6 +12,7 @@ import {
   PublicKeyStatus,
 } from '../../generated-client/pg-apikeys';
 import { ModalApiKeyView } from '../../models/ApiKeys';
+import * as routes from '../../navigation/routes.const';
 import {
   PUBLIC_APIKEYS_ACTIONS,
   changePublicKeyStatus,
@@ -30,6 +32,7 @@ type ModalType = {
 
 const PublicKeys: React.FC = () => {
   const { t } = useTranslation(['integrazioneApi', 'common']);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const publicKeys = useAppSelector((state: RootState) => state.apiKeysState.publicKeys);
 
@@ -48,6 +51,12 @@ const PublicKeys: React.FC = () => {
   const fetchPublicKeys = useCallback(() => {
     void dispatch(getPublicKeys({ showPublicKey: true }));
   }, []);
+
+  const handleGeneratePublicKey = (publicKeyId?: string) => {
+    handleCloseModal();
+    const pathStr = publicKeyId ? `/${publicKeyId}` : '';
+    navigate(`${routes.REGISTRA_CHIAVE_PUBBLICA}${pathStr}`);
+  };
 
   const blockPublicKey = (publicKeyId?: string) => {
     if (!publicKeyId) {
@@ -91,7 +100,7 @@ const PublicKeys: React.FC = () => {
             data-testid="generatePublicKey"
             variant="contained"
             sx={{ mb: { xs: 3, lg: 0 } }}
-            //   onClick={handleGeneratePublicKey}
+            onClick={() => handleGeneratePublicKey()}
           >
             {t('publicKeys.new-key-button')}
           </Button>
@@ -144,7 +153,7 @@ const PublicKeys: React.FC = () => {
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('rotate-public-key-button')}
             buttonIcon={<Sync fontSize="small" sx={{ mr: 1 }} />}
-            // actionHandler={() => apiKeyRotated(modal.apiKey?.id)}
+            actionHandler={() => handleGeneratePublicKey(modal.publicKey?.kid)}
           />
         )}
         {modal.view === ModalApiKeyView.DELETE && (
