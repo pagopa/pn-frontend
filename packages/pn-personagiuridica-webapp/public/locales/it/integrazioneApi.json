@@ -3,10 +3,12 @@
   "subTitle": "Genera e gestisci le chiavi per abilitare l'integrazione sicura tra i gestionali della tua impresa e SEND.",
   "api-key-copied": "API Key copiata",
   "block-button": "Blocca",
-  "rotate-button": "Ruota e registra nuova chiave",
+  "rotate-public-key-button": "Ruota e registra nuova chiave",
+  "rotate-virtual-key-button": "Ruota",
   "error-fecth-public-api-keys": "Errore durante il recupero delle chiavi pubbliche",
   "status": {
     "enabled": "Attiva",
+    "active": "Attiva",
     "blocked": "Bloccata",
     "rotated": "Ruotata"
   },
@@ -26,6 +28,17 @@
     "view": "Visualizza codice",
     "block": "Blocca",
     "rotate": "Ruota"
+  },
+  "dialogs": {
+    "block-title": "Blocca chiave",
+    "block-subtitle": "Se blocchi la chiave, qualsiasi richiesta effettuata attraverso di essa avrà esito negativo.",
+    "block-warning": "Puoi attivarla di nuovo in qualsiasi momento.",
+    "rotate-title": "Ruota chiave",
+    "rotate-public-key-subtitle": "Ruotando la chiave pubblica esistente, ne dovrai inserire una nuova e otterrai i valori di Kid e Issuer.",
+    "rotate-virtual-key-subtitle": "Ruotando la chiave esistente, la disattivi e ne generi una nuova con gli stessi attributi.",
+    "rotate-warning": "Dopo che hai concluso questa operazione, blocca ed elimina la chiave ruotata.",
+    "delete-title": "Elimina chiave",
+    "delete-subtitle": "Se elimini definitivamente la chiave, questa non potrà essere nuovamente attivata e utilizzata."
   },
   "publicKeys": {
     "title": "Chiave pubblica",
@@ -100,5 +113,22 @@
       "public-key-registered": "Chiave pubblica registrata con successo.",
       "public-key-rotated": "Chiave pubblica ruotata con successo."
     }
+  },
+  "virtualKeys": {
+    "title": "Chiave personale",
+    "new-key-button": "Genera chiave personale",
+    "tos-empty-state": "Per poter creare una chiave personale, un amministratore deve prima abilitare l’integrazione.",
+    "empty-state": "Non è stata ancora generata nessuna chiave personale per la tua impresa.",
+    "table": {
+      "name": "Nome",
+      "value": "Valore",
+      "lastUpdate": "Ultima modifica",
+      "status": "Stato",
+      "personal": "Tu"
+    },
+    "personal-key": "Chiave personale",
+    "view-title": "La tua chiave personale",
+    "view-subtitle": "Puoi usarla per autenticarti in piattaforma e integrare SEND. Puoi copiare la tua chiave personale in ogni momento nella sezione “Integrazione API”.",
+    "understood-button": "Ok, ho capito"
   }
 }

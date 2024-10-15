@@ -19,7 +19,7 @@ describe('test apikeys utilities', () => {
     );
     expect(statusInfo).toStrictEqual({
       color: 'success',
-      label: 'status.enabled',
+      label: 'status.active',
       tooltip: <TooltipApiKey history={publicKeys.items[0].statusHistory!} />,
     });
   });
@@ -52,7 +52,7 @@ describe('test apikeys utilities', () => {
     const statusInfo = getApiKeyStatusInfos(PublicKeyStatus.Active);
     expect(statusInfo).toStrictEqual({
       color: 'success',
-      label: 'status.enabled',
+      label: 'status.active',
       tooltip: undefined,
     });
   });
