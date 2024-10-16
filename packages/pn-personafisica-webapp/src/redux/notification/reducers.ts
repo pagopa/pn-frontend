@@ -147,7 +147,6 @@ const notificationSlice = createSlice({
 
       if (paymentInfo?.pagoPa) {
         state.paymentsData.pagoPaF24 = [
-          ...state.paymentsData.pagoPaF24,
           {
             ...paymentInfo?.f24,
             pagoPa: {
