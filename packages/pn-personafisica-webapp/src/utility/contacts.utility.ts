@@ -141,12 +141,11 @@ export const updateAddressesList = (
   addresses: Array<DigitalAddress>,
   newAddress: DigitalAddress
 ) => {
-  const relation = addressesRelationships.find((rel) => rel.channelType === channelType);
   const addressIndex = addresses.findIndex(
     (l) =>
       l.senderId === senderId &&
       l.addressType === addressType &&
-      relation?.relationWith.includes(l.channelType)
+      l.channelType === channelType
   );
   if (addressIndex > -1) {
     // eslint-disable-next-line functional/immutable-data
