@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.8.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0-RC.3...v2.8.0) (2024-10-16)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+# [2.8.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.7.0...v2.8.0-RC.0) (2024-10-08)
+
+
+### Bug Fixes
+
+* **pn-12392:** Migrated to pg api for tos retrieve and acceptance ([#1335](https://github.com/pagopa/pn-frontend/issues/1335)) ([18596a6](https://github.com/pagopa/pn-frontend/commit/18596a68993fb3bcdf535bbdfccbea62f5f1b893))
+* **pn-12392:** updated bff dependencies ([#1338](https://github.com/pagopa/pn-frontend/issues/1338)) ([b265ff7](https://github.com/pagopa/pn-frontend/commit/b265ff7e2eeae8b7895a80025592c93ab7c65d29))
+* **pn-12539:** localized sercq send event in timeline ([#1328](https://github.com/pagopa/pn-frontend/issues/1328)) ([10bb57f](https://github.com/pagopa/pn-frontend/commit/10bb57fad8d4dfcef005547484b553bca13792c4))
+* **pn-12661:** fixed tos and privacy pages ([#1327](https://github.com/pagopa/pn-frontend/issues/1327)) ([436c838](https://github.com/pagopa/pn-frontend/commit/436c8387cac525c45d330337c0fa7fba8d2a0da8))
+
+
+### Features
+
+* **pn-12392:** bff integration ([#1317](https://github.com/pagopa/pn-frontend/issues/1317)) ([4af8310](https://github.com/pagopa/pn-frontend/commit/4af8310b0d1191a94fe7527d65b53931c3a8abb0))
+* **pn-12424:** Sercq SEND management - NO PEC case ([#1304](https://github.com/pagopa/pn-frontend/issues/1304)) ([ba9c225](https://github.com/pagopa/pn-frontend/commit/ba9c225b0cbaba6286b272415279515894c6dd89))
+* **pn-12438:** Rework special contacts section ([#1313](https://github.com/pagopa/pn-frontend/issues/1313)) ([57d3ec8](https://github.com/pagopa/pn-frontend/commit/57d3ec8503c24a3bf1e9b0416402b7dc52278e37))
+* **pn-12661:** reworked layout ([#1318](https://github.com/pagopa/pn-frontend/issues/1318)) ([6a794a6](https://github.com/pagopa/pn-frontend/commit/6a794a6c7d9af6be7b9d8f6a6f47cbe97c6455eb))
+
+
+
+
+
 # [2.7.0](https://github.com/pagopa/pn-frontend/compare/v2.7.0-RC.1...v2.7.0) (2024-09-18)
 
 
