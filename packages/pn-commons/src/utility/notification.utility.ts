@@ -463,7 +463,7 @@ export function getLegalFactLabel(
       'mancato recapito digitale'
     )}`;
 
-    // this is (at least in the examples I've seen)
+    // this is(at least in the examples I've seen)
     // related to the category NOTIFICATION_VIEWED
   } else if (legalFactType === LegalFactType.RECIPIENT_ACCESS) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
@@ -490,23 +490,23 @@ export function getNotificationTimelineStatusInfos(
     ? undefined
     : // For the accesses from recipient apps (cittadino / impresa)
       // the API response will probably (in some future) include only the info about the requester recipient,
-      //  i.e. recipients will be an array with exactly one element, disregarding how many recipients are included
+      // i.e. recipients will be an array with exactly one element, disregarding how many recipients are included
       // in the notification being requested.
-      // In t hat case, we don't consider the recIndex indicated in each timeline step,
-      // but ot herwise take all steps as related with the only recipient included in the API response.
+      // In that case, we don't consider the recIndex indicated in each timeline step,
+      // but otherwise take all steps as related with the only recipient included in the API response.
       recipients.length === 1
       ? recipients[0]
       : recipients[step.details.recIndex];
 
-  // we show the  multirecipient versions of the step descriptions
-  // only if the  array of recipients include more than one "full" element
-  // (i.e. an ele ment including the full data about the recipient, instead of being included
-  //  just to pre serve the correlation with the recIndex in each step).
-  // We consider  a recipient description to be "full" if it includes recipientType, taxId and denomination.
-  // ------------ -------------------------
-  // Carlos Lomba rdi, 2023.05.17
+  // we show the multirecipient versions of the step descriptions
+  // only if the array of recipients include more than one "full" element
+  // (i.e. an element including the full data about the recipient, instead of being included
+  // just to preserve the correlation with the recIndex in each step).
+  // We consider a recipient description to be "full" if it includes recipientType, taxId and denomination.
+  // -------------------------------------
+  // Carlos Lombardi, 2023.05.17
   // cfr. PN-5911
-  // ------------ -------------------------
+  // -------------------------------------
   return TimelineStepFactory.createTimelineStep(step).getTimelineStepInfo({
     step,
     recipient,
@@ -526,7 +526,7 @@ export const getF24Payments = (
 ): Array<F24PaymentDetails> =>
   payments.reduce((arr, payment, index) => {
     if (payment.f24 && ((onlyF24 && !payment.pagoPa) || !onlyF24)) {
-      // eslint-disab le-next-line functional/immutable-data
+      // eslint-disable-next-line functional/immutable-data
       arr.push({
         ...payment.f24,
         attachmentIdx: index,
@@ -543,7 +543,7 @@ export const getPagoPaF24Payments = (
 ): Array<PaymentDetails> =>
   payments.reduce((arr, payment, index) => {
     if (payment.pagoPa) {
-      // eslint-disab le-next-line functional/immutable-data
+      // eslint-disable-next-line functional/immutable-data
       arr.push({
         pagoPa: {
           ...payment.pagoPa,
@@ -558,7 +558,7 @@ export const getPagoPaF24Payments = (
   }, [] as Array<PaymentDetails>);
 
 /**
- * Populate only pagoPA (with eventual f24 associated) payment history array before send notification to fe.
+ * Populate only pagoPA(with eventual f24 associated) payment history array before send notification to fe.
  * @param  {Array<INotificationDetailTimeline>} timeline
  * @param  {Array<PaymentDetails>} pagoPaF24Payemnts
  * @param  {Array<ExtRegistriesPaymentDetails>} checkoutPayments
@@ -575,10 +575,10 @@ export const populatePaymentsPagoPaF24 = (
     return [];
   }
 
-  // 1. Get all t imeline steps that have category payment
+  // 1. Get all timeline steps that have category payment
   const paymentTimelineStep = timeline.filter((t) => t.category === TimelineCategory.PAYMENT);
 
-  // 2. populate  payment history array with the informations from timeline and related recipients
+  // 2. populate payment history array with the informations from timeline and related recipients
   for (const userPayment of pagoPaF24Payemnts) {
     if (!userPayment.pagoPa) {
       continue;
@@ -595,7 +595,7 @@ export const populatePaymentsPagoPaF24 = (
       continue;
     }
 
-    // 3. Get payme nt by creditorTaxId and noticeCode from checkout
+    // 3. Get payment by creditorTaxId and noticeCode from checkout
     const checkoutPayment = checkoutPayments.find(
       (p) =>
         p.creditorTaxId === userPayment?.pagoPa?.creditorTaxId &&
@@ -624,7 +624,7 @@ export const populatePaymentsPagoPaF24 = (
     };
 
     if (timelineEvent && !checkoutPayment) {
-      // from timelin e we have only succeded payments
+      // from timeline we have only succeded payments
       pagoPAPayment.status = PaymentStatus.SUCCEEDED;
     }
 
