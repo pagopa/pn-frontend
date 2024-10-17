@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-
 import { Grid, GridSize, SxProps, Theme, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 
@@ -40,13 +39,19 @@ const TitleBox: React.FC<Props> = ({
   sx,
   children,
 }) => (
-  <Grid id="page-header-container" aria-orientation="horizontal" container mt={mtGrid} sx={sx}>
+  <Grid
+    id="page-header-container"
+    role="region"
+    aria-labelledby={title ? `${title}-page` : undefined}
+    container
+    mt={mtGrid}
+    sx={sx}
+  >
     {title && (
-      <Grid id="item" item xs={12} mb={mbTitle}>
+      <Grid id="title-item" item xs={12} mb={mbTitle}>
         <Typography
           id={`${title}-page`}
           data-testid="titleBox"
-          role="heading"
           variant={variantTitle}
           display="inline-block"
           sx={{ verticalAlign: 'middle' }}
@@ -57,9 +62,9 @@ const TitleBox: React.FC<Props> = ({
       </Grid>
     )}
     {subTitle && (
-      <Grid aria-orientation="horizontal" item xs={12} mb={mbSubTitle}>
+      <Grid item xs={12} mb={mbSubTitle} role="region" aria-labelledby="subtitle-heading">
         <Typography
-          id="subtitle-page"
+          id="subtitle-heading"
           variant={variantSubTitle}
           sx={{ fontSize: '18px' }}
           component={typeof subTitle !== 'string' ? 'div' : 'p'}
@@ -68,7 +73,7 @@ const TitleBox: React.FC<Props> = ({
         </Typography>
       </Grid>
     )}
-    <Grid aria-orientation="vertical" item xs={12}>
+    <Grid item xs={12}>
       <Typography sx={{ fontSize: '18px' }}>{children}</Typography>
     </Grid>
   </Grid>
