@@ -6,6 +6,7 @@
     "associa": "Associa",
     "capito": "Ho capito",
     "conferma": "Conferma",
+    "attiva": "Attiva",
     "annulla": "Annulla",
     "modifica": "Modifica",
     "salva": "Salva",
@@ -13,10 +14,13 @@
     "enter": "Entra",
     "exit": "Esci",
     "close": "Chiudi",
+    "end": "Fine",
     "enable": "Attiva",
     "disable": "Disattiva",
     "go-to-home": "Vai alla homepage",
-    "go-to-login": "Accedi"
+    "go-to-login": "Accedi",
+    "not-now": "Non ora",
+    "add": "Aggiungi"
   },
   "menu": {
     "notifiche": "Notifiche",
@@ -25,6 +29,7 @@
     "deleghe": "Deleghe",
     "profilo": "I tuoi dati",
     "contacts": "Recapiti",
+    "integrazione-api": "Integrazione API",
     "app-status": "Stato della piattaforma",
     "users": "Utenti",
     "groups": "Gruppi"
@@ -185,5 +190,11 @@
     "pg-operator": "Referente operativo",
     "pg-admin": "Amministratore"
   },
-  "required-field": "Campo obbligatorio"
+  "required-field": "Campo obbligatorio",
+  "badges": {
+    "news": "Novità"
+  },
+  "conjunctions": {
+    "or": "oppure"
+  }
 }

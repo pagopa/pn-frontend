@@ -236,7 +236,6 @@ const NuovaDelega = () => {
                         <Stack direction={isMobile ? 'column' : 'row'}>
                           <Stack justifyContent="center">
                             <RadioGroup
-                              aria-labelledby="radio-buttons-group-pf-pg"
                               defaultValue={RecipientType.PF}
                               name="selectPersonaFisicaOrPersonaGiuridica"
                               value={values.selectPersonaFisicaOrPersonaGiuridica.toString()}
@@ -345,7 +344,6 @@ const NuovaDelega = () => {
                       <FormControl sx={{ width: '100%' }}>
                         <Stack>
                           <RadioGroup
-                            aria-labelledby="radio-buttons-group-pf-pg"
                             defaultValue="tuttiGliEnti"
                             name="selectTuttiEntiOrSelezionati"
                             value={values.selectTuttiEntiOrSelezionati.toString()}

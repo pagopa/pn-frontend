@@ -1,29 +1,17 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
-import {
-  Alert,
-  AlertTitle,
-  Box,
-  Button,
-  Grid,
-  Link,
-  Paper,
-  SxProps,
-  Theme,
-  Typography,
-} from '@mui/material';
-import { TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { Box, Grid, Paper, Typography } from '@mui/material';
+import { TitleBox } from '@pagopa-pn/pn-commons';
 
+import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import { PFEventsType } from '../models/PFEventsType';
-import { RECAPITI } from '../navigation/routes.const';
+import { ContactSource } from '../models/contacts';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const Profile = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation(['profilo']);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
 
@@ -31,19 +19,10 @@ const Profile = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PROFILE);
   }, []);
 
-  const alertButtonStyle: SxProps<Theme> = useIsMobile()
-    ? { textAlign: 'center' }
-    : { textAlign: 'center', minWidth: 'max-content' };
-
-  const handleRedirectToContactsPage = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, {
-      source: 'profilo',
-    });
-    navigate(RECAPITI);
-  };
-
   return (
     <Box p={3}>
+      <DomicileBanner source={ContactSource.PROFILO} />
+
       <TitleBox
         variantTitle="h4"
         title={t('title', { ns: 'profilo' })}
@@ -89,32 +68,6 @@ const Profile = () => {
               </Grid>
             </Grid>
           </Paper>
-        </Grid>
-
-        <Grid item lg={8} xs={12}>
-          <Alert
-            severity="info"
-            data-testid="contacts-redirect"
-            action={
-              <Button
-                component={Link}
-                color="primary"
-                sx={alertButtonStyle}
-                onClick={handleRedirectToContactsPage}
-              >
-                {t('alert-redirect-to-contacts.action-text', { ns: 'profilo' })}
-              </Button>
-            }
-          >
-            <AlertTitle>
-              <Typography fontWeight={'bold'} variant="body1">
-                {t('alert-redirect-to-contacts.title', { ns: 'profilo' })}
-              </Typography>
-            </AlertTitle>
-            <Typography variant="body2">
-              {t('alert-redirect-to-contacts.message', { ns: 'profilo' })}
-            </Typography>
-          </Alert>
         </Grid>
       </Grid>
     </Box>

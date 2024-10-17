@@ -1,0 +1,134 @@
+{
+  "title": "Integrazione API",
+  "subTitle": "Genera e gestisci le chiavi per abilitare l'integrazione sicura tra i gestionali della tua impresa e SEND.",
+  "api-key-copied": "API Key copiata",
+  "block-button": "Blocca",
+  "rotate-public-key-button": "Ruota e registra nuova chiave",
+  "rotate-virtual-key-button": "Ruota",
+  "error-fecth-public-api-keys": "Errore durante il recupero delle chiavi pubbliche",
+  "status": {
+    "enabled": "Attiva",
+    "active": "Attiva",
+    "blocked": "Bloccata",
+    "rotated": "Ruotata"
+  },
+  "tooltip": {
+    "created": "Creata",
+    "created-in": "Creata il",
+    "blocked": "Bloccata",
+    "blocked-in": "Bloccata il",
+    "enabled": "Attivata",
+    "enabled-in": "Attivata il",
+    "rotated": "Ruotata",
+    "rotated-in": "Ruotata il",
+    "from": "da"
+  },
+  "context-menu": {
+    "title": "Opzioni su API Key",
+    "view": "Visualizza codice",
+    "block": "Blocca",
+    "rotate": "Ruota"
+  },
+  "dialogs": {
+    "block-title": "Blocca chiave",
+    "block-subtitle": "Se blocchi la chiave, qualsiasi richiesta effettuata attraverso di essa avrà esito negativo.",
+    "rotate-title": "Ruota chiave",
+    "rotate-public-key-subtitle": "Ruotando la chiave pubblica esistente, ne dovrai inserire una nuova e otterrai i valori di Kid e Issuer.",
+    "rotate-virtual-key-subtitle": "Ruotando la chiave esistente, la disattivi e ne generi una nuova con gli stessi attributi.",
+    "rotate-warning": "Dopo che hai concluso questa operazione, blocca ed elimina la chiave ruotata.",
+    "delete-title": "Elimina chiave",
+    "delete-subtitle": "Se elimini definitivamente la chiave, questa non potrà essere nuovamente attivata e utilizzata."
+  },
+  "publicKeys": {
+    "title": "Chiave pubblica",
+    "new-key-button": "Registra chiave pubblica",
+    "empty-state": "Ancora nessuna chiave pubblica. Registra una chiave pubblica per abilitare l’integrazione.",
+    "table": {
+      "name": "Nome",
+      "value": "Valore",
+      "endDate": "Scadenza",
+      "status": "Stato"
+    },
+    "personal-key": "Chiave personale",
+    "kid": "Kid",
+    "issuer": "Issuer",
+    "view-title": "Visualizza codice",
+    "view-subtitle": "Copia i codici di cui hai bisogno.",
+    "block-title": "Blocca chiave",
+    "block-subtitle": "Se blocchi la chiave, qualsiasi richiesta effettuata attraverso di essa avrà esito negativo.",
+    "block-warning": "Puoi attivarla di nuovo in qualsiasi momento.",
+    "rotate-title": "Ruota chiave",
+    "rotate-subtitle": "Ruotando la chiave pubblica esistente, ne dovrai inserire una nuova e otterrai i valori di Kid e Issuer.",
+    "rotate-warning": "Dopo che hai concluso questa operazione, blocca ed elimina la chiave ruotata.",
+    "delete-title": "Elimina chiave",
+    "delete-subtitle": "Se elimini definitivamente la chiave, questa non potrà essere nuovamente attivata e utilizzata."
+  },
+  "new-public-key": {
+    "title": "Registra chiave pubblica",
+    "subtitle": "Inserisci i dati richiesti per abilitare l'integrazione sicura dei gestionali della tua impresa.",
+    "button": {
+      "register": "Registra"
+    },
+    "prompt": {
+      "title": "Vuoi uscire?",
+      "message": "Se esci, perderai tutti i dati inseriti finora."
+    },
+    "steps": {
+      "insert-data": {
+        "title": "Inserisci i dati",
+        "content": "La chiave pubblica (JWKS) è necessaria per <strong>autenticare in modo sicuro le richieste provenienti dai tuoi gestionali.</strong> La chiave scade dopo 355 giorni.",
+        "tos": "Premendo “Registra” dichiari di aver letto e di accettare i <0>Termini del Servizio</0>",
+        "name": {
+          "label": "Nome",
+          "default": "Chiave-",
+          "description": "Scegli un nome per la chiave o mantieni quello di default"
+        },
+        "publicKey": {
+          "begin": "-----BEGIN PUBLIC KEY-----",
+          "description": "Inserisci il valore della chiave",
+          "placeholder": "Inserisci Public Key",
+          "end": "-----END PUBLIC KEY-----"
+        }
+      },
+      "get-returned-parameters": {
+        "title": "Ottieni parametri",
+        "kid": "Kid",
+        "issuer": "Issuer",
+        "description": "Ecco i parametri per l’integrazione: utilizza questi dati per configurare la tua chiave di accesso a SEND. Puoi recuperare i dati in ogni momento nella sezione “Integrazione API”."
+      }
+    },
+    "kid-copied": "Kid copiato!",
+    "issuer-copied": "Issuer copiato!"
+  },
+  "messages": {
+    "error": {
+      "rotate-invalid-kid": "La chiave non può essere ruotata. Un altro amministratore ha già effettuato l'operazione.",
+      "key-already-registered": "Questo valore è già stato inserito in precedenza. Inserisci una chiave diversa.",
+      "name-allowed-charset": "Il campo nome può contenere solamente i seguenti caratteri: \"{{allowedCharset}}\"",
+      "no-tos-version": "Si è verificato un errore nel recupero dei termini del servizio. Riprova",
+      "accept-tos-failed": "Si è verificato un errore. Riprova"
+    },
+    "success": {
+      "public-key-registered": "Chiave pubblica registrata con successo.",
+      "public-key-rotated": "Chiave pubblica ruotata con successo."
+    }
+  },
+  "virtualKeys": {
+    "title": "Chiave personale",
+    "new-key-button": "Genera chiave personale",
+    "tos-empty-state": "Per poter creare una chiave personale, un amministratore deve prima abilitare l’integrazione.",
+    "empty-state": "Non è stata ancora generata nessuna chiave personale per la tua impresa.",
+    "default": "Chiave-",
+    "table": {
+      "name": "Nome",
+      "value": "Valore",
+      "lastUpdate": "Ultima modifica",
+      "status": "Stato",
+      "personal": "Tu"
+    },
+    "personal-key": "Chiave personale",
+    "view-title": "La tua chiave personale",
+    "view-subtitle": "Puoi usarla per autenticarti in piattaforma e integrare SEND. Puoi copiare la tua chiave personale in ogni momento nella sezione “Integrazione API”.",
+    "understood-button": "Ok, ho capito"
+  }
+}

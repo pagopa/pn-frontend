@@ -3,9 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.8.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0-RC.3...v2.8.0) (2024-10-16)
 ## [2.7.1](https://github.com/pagopa/pn-frontend/compare/v2.7.0...v2.7.1) (2024-10-14)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [2.8.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.7.0...v2.8.0-RC.0) (2024-10-08)
+
+
+### Features
+
+* **pn-12661:** reworked layout ([#1318](https://github.com/pagopa/pn-frontend/issues/1318)) ([6a794a6](https://github.com/pagopa/pn-frontend/commit/6a794a6c7d9af6be7b9d8f6a6f47cbe97c6455eb))
 
 
 

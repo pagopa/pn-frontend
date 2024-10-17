@@ -1,51 +1,32 @@
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
-import { Alert, Box, Grid, Typography } from '@mui/material';
-import { IllusEmailValidation } from '@pagopa/mui-italia';
+import { Box, Divider, Stack, Typography } from '@mui/material';
 
-import { ChannelType, DigitalAddress } from '../../models/contacts';
-import DigitalContactsCard from './DigitalContactsCard';
+import { contactsSelectors } from '../../redux/contact/reducers';
+import { useAppSelector } from '../../redux/hooks';
+import { getConfiguration } from '../../services/configuration.service';
 import PecContactItem from './PecContactItem';
+import SercqSendContactItem from './SercqSendContactItem';
 
-type Props = {
-  legalAddresses: Array<DigitalAddress>;
-};
-
-const LegalContacts = ({ legalAddresses }: Props) => {
+const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-
-  const title = (
-    <Grid container spacing={1} alignItems="flex-end" direction="row">
-      <Grid item xs="auto">
-        {t('legal-contacts.subtitle-2', { ns: 'recapiti' })}
-      </Grid>
-    </Grid>
-  );
-
-  const pecAddress = legalAddresses.find(
-    (a) => a.senderId === 'default' && a.channelType === ChannelType.PEC
-  );
+  const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const { DOD_DISABLED } = getConfiguration();
 
   return (
-    <DigitalContactsCard
-      sectionTitle={t('legal-contacts.title', { ns: 'recapiti' })}
-      title={title}
-      subtitle={t('legal-contacts.description', { ns: 'recapiti' })}
-      avatar={<IllusEmailValidation />}
-    >
-      <Box sx={{ width: '100%' }} data-testid="legalContacts">
-        <PecContactItem
-          value={legalAddresses.find((a) => a.senderId === 'default')?.value ?? ''}
-          blockDelete={legalAddresses.length > 1}
-          verifyingAddress={pecAddress ? !pecAddress.pecValid : false}
-        />
-      </Box>
-      <Alert role="banner" sx={{ mt: 4 }} severity="info">
-        <Typography component="span" variant="body1" data-testid="legal-contact-disclaimer">
-          {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
-        </Typography>
-      </Alert>
-    </DigitalContactsCard>
+    <Box id="legalContactsSection">
+      <Typography variant="h6" fontWeight={700} tabIndex={-1} id="legalContactsTitle" mb={2}>
+        {t('legal-contacts.title', { ns: 'recapiti' })}
+      </Typography>
+      <Typography variant="body1">
+        <Trans i18nKey="legal-contacts.sub-title" ns="recapiti" />
+      </Typography>
+      <Stack spacing={!defaultSERCQ_SENDAddress ? 2 : 0} mt={3} data-testid="legalContacts">
+        {!DOD_DISABLED && <SercqSendContactItem />}
+        {!DOD_DISABLED && !defaultSERCQ_SENDAddress && <Divider>{t('conjunctions.or')}</Divider>}
+        <PecContactItem />
+      </Stack>
+    </Box>
   );
 };
 

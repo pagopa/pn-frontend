@@ -19,6 +19,7 @@ import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrap
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import GroupSelector from '../components/Notifications/GroupSelector';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
+import { ContactSource } from '../models/contacts';
 import { PNRole } from '../redux/auth/types';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
@@ -105,7 +106,9 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
-        {userHasAdminPermissions && !organizationGroup && !isDelegatedPage && <DomicileBanner />}
+        {userHasAdminPermissions && !organizationGroup && !isDelegatedPage && (
+          <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />
+        )}
         <TitleBox
           variantTitle="h4"
           title={pageTitle}

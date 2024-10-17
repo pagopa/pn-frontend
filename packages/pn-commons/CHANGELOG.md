@@ -3,9 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.8.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0-RC.3...v2.8.0) (2024-10-16)
 ## [2.7.1](https://github.com/pagopa/pn-frontend/compare/v2.7.0...v2.7.1) (2024-10-14)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.8.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.7.0...v2.8.0-RC.0) (2024-10-08)
+
+
+### Bug Fixes
+
+* **pn-12539:** localized sercq send event in timeline ([#1328](https://github.com/pagopa/pn-frontend/issues/1328)) ([10bb57f](https://github.com/pagopa/pn-frontend/commit/10bb57fad8d4dfcef005547484b553bca13792c4))
+* **pn-12740:** update accessibility link with last version ([#1329](https://github.com/pagopa/pn-frontend/issues/1329)) ([e9c7a1e](https://github.com/pagopa/pn-frontend/commit/e9c7a1e01fa3e2d4390e2b4ef4249f8e1fd58d08))
+
+
+### Features
+
+* **pn-12392:** bff integration ([#1317](https://github.com/pagopa/pn-frontend/issues/1317)) ([4af8310](https://github.com/pagopa/pn-frontend/commit/4af8310b0d1191a94fe7527d65b53931c3a8abb0))
+* **pn-12394:** reworked layout of contacts page ([#1301](https://github.com/pagopa/pn-frontend/issues/1301)) ([b300f49](https://github.com/pagopa/pn-frontend/commit/b300f499d2e2d12b5e6a5c304491a787df214c58))
+* **pn-12438:** Rework section "Altri recapiti" for Digital Domicile feature ([#1305](https://github.com/pagopa/pn-frontend/issues/1305)) ([adc18db](https://github.com/pagopa/pn-frontend/commit/adc18dbf44346eff1443a570ad3d963b466e938e))
+* **pn-12438:** Rework special contacts section ([#1313](https://github.com/pagopa/pn-frontend/issues/1313)) ([57d3ec8](https://github.com/pagopa/pn-frontend/commit/57d3ec8503c24a3bf1e9b0416402b7dc52278e37))
+* **pn-12540:** Digital domicile mixpanel events ([#1321](https://github.com/pagopa/pn-frontend/issues/1321)) ([c0fbba7](https://github.com/pagopa/pn-frontend/commit/c0fbba7cd729698980d474a853e5173cc544500b))
+* **pn-12661:** reworked layout ([#1318](https://github.com/pagopa/pn-frontend/issues/1318)) ([6a794a6](https://github.com/pagopa/pn-frontend/commit/6a794a6c7d9af6be7b9d8f6a6f47cbe97c6455eb))
+* **PN-12808:** update copy for digital domicile feature ([#1333](https://github.com/pagopa/pn-frontend/issues/1333)) ([9178a63](https://github.com/pagopa/pn-frontend/commit/9178a632dbf425d026878a08392d10f282eee2b9))
 
 
 

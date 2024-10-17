@@ -3,11 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.8.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0-RC.3...v2.8.0) (2024-10-16)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+# [2.8.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.7.0...v2.8.0-RC.0) (2024-10-08)
 ## [2.7.1](https://github.com/pagopa/pn-frontend/compare/v2.7.0...v2.7.1) (2024-10-14)
 
 
 ### Bug Fixes
 
+* **pn-12392:** Migrated to pg api for tos retrieve and acceptance ([#1335](https://github.com/pagopa/pn-frontend/issues/1335)) ([18596a6](https://github.com/pagopa/pn-frontend/commit/18596a68993fb3bcdf535bbdfccbea62f5f1b893))
+* **pn-12392:** updated bff dependencies ([#1338](https://github.com/pagopa/pn-frontend/issues/1338)) ([b265ff7](https://github.com/pagopa/pn-frontend/commit/b265ff7e2eeae8b7895a80025592c93ab7c65d29))
+* **pn-12394:** reset modal state when cancel is clicked ([#1339](https://github.com/pagopa/pn-frontend/issues/1339)) ([b65175c](https://github.com/pagopa/pn-frontend/commit/b65175c992cd90f9fcafaa0501bb60929faaafe5))
+* **pn-12424:** disabling SERCQ SEND deletion when special address is added ([#1334](https://github.com/pagopa/pn-frontend/issues/1334)) ([fd45986](https://github.com/pagopa/pn-frontend/commit/fd45986b2079d039bf626d10f59dcc097da1977b))
+* **pn-12537:** fixed layout when pec is in validation state ([#1340](https://github.com/pagopa/pn-frontend/issues/1340)) ([b26db35](https://github.com/pagopa/pn-frontend/commit/b26db357434bb76205144e178ef03238d3402181))
+* **pn-12538:** fix banner condition ([#1341](https://github.com/pagopa/pn-frontend/issues/1341)) ([e14891c](https://github.com/pagopa/pn-frontend/commit/e14891c7ffad352538ecdaf2cdc60f49f183aa7c))
+* **pn-12538:** fix bug on banner ([#1337](https://github.com/pagopa/pn-frontend/issues/1337)) ([37ecdd6](https://github.com/pagopa/pn-frontend/commit/37ecdd65e0e0c8d2443142b167e00db7430fd335))
+* **pn-12538:** show AppIO banner when dod feature is disabled ([#1345](https://github.com/pagopa/pn-frontend/issues/1345)) ([a185c7e](https://github.com/pagopa/pn-frontend/commit/a185c7eb31e3418d1ea15e9637fe51e98a256112))
+* **pn-12539:** localized sercq send event in timeline ([#1328](https://github.com/pagopa/pn-frontend/issues/1328)) ([10bb57f](https://github.com/pagopa/pn-frontend/commit/10bb57fad8d4dfcef005547484b553bca13792c4))
+* **pn-12540:** fixed mixpanel missed events ([#1347](https://github.com/pagopa/pn-frontend/issues/1347)) ([67e5014](https://github.com/pagopa/pn-frontend/commit/67e50141c0bd51c5b5caf091ee3060bb1b7be153))
+* **pn-12661:** fixed tos and privacy pages ([#1327](https://github.com/pagopa/pn-frontend/issues/1327)) ([436c838](https://github.com/pagopa/pn-frontend/commit/436c8387cac525c45d330337c0fa7fba8d2a0da8))
+
+
+### Features
+
+* **pn-12392:** bff integration ([#1317](https://github.com/pagopa/pn-frontend/issues/1317)) ([4af8310](https://github.com/pagopa/pn-frontend/commit/4af8310b0d1191a94fe7527d65b53931c3a8abb0))
+* **pn-12393:** add SERCQ value to channelType enumeration ([#1299](https://github.com/pagopa/pn-frontend/issues/1299)) ([b2384aa](https://github.com/pagopa/pn-frontend/commit/b2384aab2151de10d8a482c40e889eb06d5dbf85))
+* **pn-12394:** reworked layout of contacts page ([#1301](https://github.com/pagopa/pn-frontend/issues/1301)) ([b300f49](https://github.com/pagopa/pn-frontend/commit/b300f499d2e2d12b5e6a5c304491a787df214c58))
+* **pn-12405 :** reworked layout of EditDigitalContact ([#1302](https://github.com/pagopa/pn-frontend/issues/1302)) ([ab9abcf](https://github.com/pagopa/pn-frontend/commit/ab9abcf7f73b7066c076a02f6dd4fd351194c6df))
+* **pn-12424:** Sercq SEND management - NO PEC case ([#1304](https://github.com/pagopa/pn-frontend/issues/1304)) ([ba9c225](https://github.com/pagopa/pn-frontend/commit/ba9c225b0cbaba6286b272415279515894c6dd89))
+* **pn-12438:** Rework section "Altri recapiti" for Digital Domicile feature ([#1305](https://github.com/pagopa/pn-frontend/issues/1305)) ([adc18db](https://github.com/pagopa/pn-frontend/commit/adc18dbf44346eff1443a570ad3d963b466e938e))
+* **pn-12438:** Rework special contacts section ([#1313](https://github.com/pagopa/pn-frontend/issues/1313)) ([57d3ec8](https://github.com/pagopa/pn-frontend/commit/57d3ec8503c24a3bf1e9b0416402b7dc52278e37))
+* **pn-12492:** Add contacts summary cards ([#1310](https://github.com/pagopa/pn-frontend/issues/1310)) ([9832681](https://github.com/pagopa/pn-frontend/commit/98326814c22d039a6473ee8fe77f3da4b83a9aca))
+* **pn-12537:** Pec addtion when sercq send is enabled as default address ([#1323](https://github.com/pagopa/pn-frontend/issues/1323)) ([3ff9ee3](https://github.com/pagopa/pn-frontend/commit/3ff9ee37781d1e268b24b58dcca5b695ea8d1ca7))
+* **pn-12538:** work on banner for Digital Domicile ([#1324](https://github.com/pagopa/pn-frontend/issues/1324)) ([f155a93](https://github.com/pagopa/pn-frontend/commit/f155a939bbfc0e02d111907e191fb858187d0d57))
+* **pn-12540:** Digital domicile mixpanel events ([#1321](https://github.com/pagopa/pn-frontend/issues/1321)) ([c0fbba7](https://github.com/pagopa/pn-frontend/commit/c0fbba7cd729698980d474a853e5173cc544500b))
+* **pn-12661:** reworked layout ([#1318](https://github.com/pagopa/pn-frontend/issues/1318)) ([6a794a6](https://github.com/pagopa/pn-frontend/commit/6a794a6c7d9af6be7b9d8f6a6f47cbe97c6455eb))
+* **pn-12741:** Reworked "Altri recapiti" section ([#1325](https://github.com/pagopa/pn-frontend/issues/1325)) ([23fbf82](https://github.com/pagopa/pn-frontend/commit/23fbf82b443604d6e903c33809a4c1569ed6b20e))
+* **pn-12742:** Feature flag ([#1326](https://github.com/pagopa/pn-frontend/issues/1326)) ([eb2f8fe](https://github.com/pagopa/pn-frontend/commit/eb2f8fee093a2757462adf8dbe377f77ad6d5fce))
+* **PN-12808:** update copy for digital domicile feature ([#1333](https://github.com/pagopa/pn-frontend/issues/1333)) ([9178a63](https://github.com/pagopa/pn-frontend/commit/9178a632dbf425d026878a08392d10f282eee2b9))
 * **PN-12893:** update PEC disclaimer message ([#1354](https://github.com/pagopa/pn-frontend/issues/1354)) ([5482db9](https://github.com/pagopa/pn-frontend/commit/5482db939047db5b8ba58c302c1683b3438d6497))
 
 
