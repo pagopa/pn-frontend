@@ -12,6 +12,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 # [2.8.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.7.0...v2.8.0-RC.0) (2024-10-08)
+## [2.7.1](https://github.com/pagopa/pn-frontend/compare/v2.7.0...v2.7.1) (2024-10-14)
 
 
 ### Bug Fixes
@@ -50,6 +51,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **pn-12741:** Reworked "Altri recapiti" section ([#1325](https://github.com/pagopa/pn-frontend/issues/1325)) ([23fbf82](https://github.com/pagopa/pn-frontend/commit/23fbf82b443604d6e903c33809a4c1569ed6b20e))
 * **pn-12742:** Feature flag ([#1326](https://github.com/pagopa/pn-frontend/issues/1326)) ([eb2f8fe](https://github.com/pagopa/pn-frontend/commit/eb2f8fee093a2757462adf8dbe377f77ad6d5fce))
 * **PN-12808:** update copy for digital domicile feature ([#1333](https://github.com/pagopa/pn-frontend/issues/1333)) ([9178a63](https://github.com/pagopa/pn-frontend/commit/9178a632dbf425d026878a08392d10f282eee2b9))
+* **PN-12893:** update PEC disclaimer message ([#1354](https://github.com/pagopa/pn-frontend/issues/1354)) ([5482db9](https://github.com/pagopa/pn-frontend/commit/5482db939047db5b8ba58c302c1683b3438d6497))
 
 
 
