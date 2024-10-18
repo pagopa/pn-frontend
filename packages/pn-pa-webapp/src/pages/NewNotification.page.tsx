@@ -12,7 +12,7 @@ import SyncFeedback from '../components/NewNotification/SyncFeedback';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createNewNotification } from '../redux/newNotification/actions';
-import { resetState, setSenderInfos } from '../redux/newNotification/reducers';
+import { resetState, setSenderInfos, setNotificationLang } from '../redux/newNotification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 
@@ -83,6 +83,12 @@ const NewNotification = () => {
     }
   };
 
+  const fetchAdditionalLanguage = async () => {
+    // TODO simulate a real fetch
+    await new Promise((r) => setTimeout(r, 1000));
+    dispatch(setNotificationLang({ lang: 'de' }));
+  };
+
   useEffect(() => {
     createNotification();
   }, [isCompleted]);
@@ -99,6 +105,8 @@ const NewNotification = () => {
   }, [organization]);
 
   useEffect(() => () => void dispatch(resetState()), []);
+
+  useEffect(() => void fetchAdditionalLanguage(), []);
 
   if (activeStep === steps.length) {
     return <SyncFeedback />;

@@ -1,19 +1,16 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, ReactNode, useCallback, useEffect, useMemo } from 'react';
+import { ChangeEvent, useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { InfoOutlined } from '@mui/icons-material';
 import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  InputAdornment,
   MenuItem,
   Radio,
   RadioGroup,
   TextField,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import {
@@ -33,20 +30,14 @@ import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';
 import { FormBox } from '../FormBox/FormBox';
+import { FormBoxSubtitle } from '../FormBox/FormBoxSubtitle';
+import { FormBoxTitle } from '../FormBox/FormBoxTitle';
 import NewNotificationCard from './NewNotificationCard';
 
 type Props = {
   notification: NewNotification;
   onConfirm: () => void;
 };
-
-const InfoTooltip = ({ tooltip }: { tooltip: string | ReactNode; }) => (
-  <InputAdornment position="end">
-    <Tooltip arrow={true} title={tooltip} tabIndex={0}>
-      <InfoOutlined />
-    </Tooltip>
-  </InputAdornment>
-);
 
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
@@ -59,8 +50,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const senderDenomination = useAppSelector((state: RootState) =>
     state.userState.user.organization.rootParent?.description
       ? state.userState.user.organization.rootParent?.description +
-      ' - ' +
-      state.userState.user.organization.name
+        ' - ' +
+        state.userState.user.organization.name
       : state.userState.user.organization.name
   );
 
@@ -80,6 +71,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
       taxonomyCode: notification.taxonomyCode || '',
       physicalCommunicationType: notification.physicalCommunicationType || '',
       paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
+      lang: notification.lang || 'it',
     }),
     [notification, IS_PAYMENT_ENABLED]
   );
@@ -125,11 +117,11 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const handleChangeDeliveryMode = (e: ChangeEvent & { target: { value: any; }; }) => {
+  const handleChangeDeliveryMode = (e: ChangeEvent & { target: { value: any } }) => {
     formik.handleChange(e);
   };
 
-  const handleChangePaymentMode = (e: ChangeEvent & { target: { value: any; }; }) => {
+  const handleChangePaymentMode = (e: ChangeEvent & { target: { value: any } }) => {
     formik.handleChange(e);
   };
 
@@ -150,10 +142,30 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     >
       <form onSubmit={formik.handleSubmit} data-testid="preliminaryInformationsForm">
         <NewNotificationCard isContinueDisabled={!formik.isValid} title={t('title')}>
-          <FormBox
-            title={t('notification-content')}
-            subtitle={t('notification-content-subtitle')}
-          >
+          <FormBox>
+            <FormBoxTitle text={t('sender-denomination')} />
+            <TextField
+              id="senderDenomination"
+              label={`${t('sender-denomination')}*`}
+              fullWidth
+              name="senderDenomination"
+              value={formik.values.senderDenomination}
+              onChange={handleChangeTouched}
+              error={Boolean(formik.errors.senderDenomination)}
+              disabled={senderDenomination.length < 80}
+              helperText={formik.errors.senderDenomination}
+              size="small"
+              margin="normal"
+            />
+          </FormBox>
+          <FormBox>
+            <FormBoxTitle text={t('notification-language')} />
+            <FormBoxSubtitle text={t('notification-language-subtitle')} />
+            <div>{formik.values.lang}</div>
+          </FormBox>
+          <FormBox>
+            <FormBoxTitle text={t('notification-content')} />
+            <FormBoxSubtitle text={t('notification-content-subtitle')} />
             <TextField
               id="subject"
               label={`${t('subject')}*`}
@@ -179,10 +191,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
               margin="normal"
             />
           </FormBox>
-          <FormBox
-            title={t('protocol-number')}
-            subtitle={t('protocol-number-subtitle')}
-          >
+          <FormBox>
+            <FormBoxTitle text={t('protocol-number')} />
+            <FormBoxSubtitle text={t('protocol-number-subtitle')} />
             <TextField
               id="paProtocolNumber"
               label={`${t('protocol-number')}*`}
@@ -196,10 +207,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
               margin="normal"
             />
           </FormBox>
-          <FormBox
-            title={t('taxonomy-id')}
-            subtitle={t('taxonomy-id-subtitle')}
-          >
+          <FormBox>
+            <FormBoxTitle text={t('taxonomy-id')} />
+            <FormBoxSubtitle text={t('taxonomy-id-subtitle')} />
             <TextField
               id="taxonomyCode"
               label={`${t('taxonomy-id')}*`}
@@ -211,18 +221,14 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
               helperText={formik.touched.taxonomyCode && formik.errors.taxonomyCode}
               size="small"
               margin="normal"
-              InputProps={{
-                endAdornment: <InfoTooltip tooltip={t('taxonomy-tooltip')} />,
-              }}
             />
           </FormBox>
           <FormBox>
-            <FormControl margin="normal" fullWidth>
+            <FormControl margin="none" fullWidth>
               <FormLabel id="comunication-type-label">
-                <Typography fontWeight={600} fontSize={16}>
-                  {`${t('comunication-type')}*`}
-                </Typography>
+                <FormBoxTitle text={t('comunication-type')} />
               </FormLabel>
+              <FormBoxSubtitle text={t('comunication-type-subtitle')} />
               <RadioGroup
                 aria-labelledby="comunication-type-label"
                 name="physicalCommunicationType"
@@ -246,10 +252,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             </FormControl>
           </FormBox>
 
-          <FormBox
-            title={t('notification-management')}
-            subtitle={t('notification-management-subtitle')}
-          >
+          <FormBox>
+            <FormBoxTitle text={t('notification-management')} />
+            <FormBoxSubtitle text={t('notification-management-subtitle')} />
             <CustomDropdown
               id="group"
               label={`${t('group')}${hasGroups ? '*' : ''}`}
@@ -271,20 +276,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
                 ))}
             </CustomDropdown>
           </FormBox>
-
-          <TextField
-            id="senderDenomination"
-            label={`${t('sender-denomination')}*`}
-            fullWidth
-            name="senderDenomination"
-            value={formik.values.senderDenomination}
-            onChange={handleChangeTouched}
-            error={Boolean(formik.errors.senderDenomination)}
-            disabled={senderDenomination.length < 80}
-            helperText={formik.errors.senderDenomination}
-            size="small"
-            margin="normal"
-          />
 
           {IS_PAYMENT_ENABLED && (
             <FormControl margin="normal" fullWidth>

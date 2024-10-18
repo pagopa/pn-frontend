@@ -214,6 +214,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
         paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE,
         senderDenomination: newNotification.senderDenomination,
+        lang: 'it',
       });
     });
     expect(confirmHandlerMk).toBeCalledTimes(1);
@@ -445,6 +446,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
         paymentMode: PaymentModel.NOTHING,
         senderDenomination: newNotification.senderDenomination,
+        lang: 'it',
       });
     });
     expect(confirmHandlerMk).toBeCalledTimes(1);
