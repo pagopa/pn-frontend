@@ -169,6 +169,8 @@
       "prepare-analog-domicile-failure-ZZZ-description": "Non è stato trovato un indirizzo valido per predisporre un altro tentativo di invio - motivo non specificato.",
       "prepare-analog-domicile-failure-ZZZ-description-multirecipient": "Non è stato trovato un indirizzo valido per il destinatario {{name}} {{taxId}} per predisporre un altro tentativo di invio - motivo non specificato.",
       "send-analog-flow-description": "C'è un aggiornamento sull'invio cartaceo.",
+      "send-analog-flow-CON020-description": "Originale dell’AAR (documento nativo digitale) reso disponibile dal Consolidatore e firmato digitalmente da PagoPA",
+      "send-analog-flow-CON020-description-multirecipient": "Originale dell’AAR (documento nativo digitale) reso disponibile dal Consolidatore e firmato digitalmente da PagoPA",
       "send-analog-flow-CON080-description": "La raccomandata {{registeredLetterKind}} numero {{registeredLetterNumber}} è stata stampata ed imbustata.",
       "send-analog-flow-CON080-description-multirecipient": "La raccomandata {{registeredLetterKind}} numero {{registeredLetterNumber}} per {{name}} {{taxId}} è stata stampata ed imbustata.",
       "send-analog-flow-PNAG012-description": "Il destinatario non ha ritirato la raccomandata 890 numero {{registeredLetterNumber}} presso il punto di giacenza entro 10 giorni.",
