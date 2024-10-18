@@ -36,7 +36,7 @@ describe('Footer Component', () => {
 
   it('renders footer', () => {
     // render component
-    const { getAllByRole, getByRole } = render(<Footer loggedUser={true} />);
+    const { getAllByRole, getByRole } = render(<Footer currentLanguage={i18n.language ?? 'it'} loggedUser={true} />);
     const buttons = getAllByRole('link');
     expect(buttons).toHaveLength(4);
     buttons.forEach((button, index) => {
@@ -54,7 +54,7 @@ describe('Footer Component', () => {
   });
 
   it('clicks on company link', () => {
-    const { getAllByRole } = render(<Footer loggedUser={true} />);
+    const { getAllByRole } = render(<Footer currentLanguage={i18n.language ?? 'it'} loggedUser={true} />);
     const buttons = getAllByRole('link');
     fireEvent.click(buttons[0]);
     const localizedPagoPALink = pagoPALink();
@@ -66,7 +66,7 @@ describe('Footer Component', () => {
     const { getByRole, rerender } = render(
       <Footer
         loggedUser={true}
-        currentLanguage={i18n.language}
+        currentLanguage={i18n.language ?? 'it'}
         onLanguageChanged={(langCode) => i18n.changeLanguage!(langCode)}
       />
     );
@@ -92,7 +92,7 @@ describe('Footer Component', () => {
     expect(sessionStorage.getItem('lang')).toBe(languageCode);
     expect(i18n.language).toBe(languageCode);
     // simulate rerendering due to language change
-    rerender(<Footer loggedUser={true} currentLanguage={i18n.language} />);
+    rerender(<Footer loggedUser={true} currentLanguage={i18n.language ?? 'it'} />);
     dropdownLanguageButton = getByRole('button');
     expect(dropdownLanguageButton).toHaveTextContent(Object.values(LANGUAGES[languageCode]!)[2]);
     // check the dropdown languages

@@ -1,4 +1,5 @@
 import { LangCode, Footer as MuiFooter } from '@pagopa/mui-italia';
+import { useMemo } from 'react';
 import {
   LANGUAGES,
   companyLegalInfo,
@@ -7,10 +8,9 @@ import {
   preLoginLinks,
 } from '../../utility/costants';
 import { getLangCode } from '../../utility';
-import { useMemo } from 'react';
 
 type Props = {
-  currentLanguage?: string;
+  currentLanguage: string;
   onLanguageChanged?: (langCode: string) => void;
   loggedUser?: boolean;
   /** Enables the Terms of Service Link */
