@@ -32,6 +32,7 @@ import { PreliminaryInformationsPayload } from '../../redux/newNotification/type
 import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';
+import { FormBox } from '../FormBox/FormBox';
 import NewNotificationCard from './NewNotificationCard';
 
 type Props = {
@@ -39,7 +40,7 @@ type Props = {
   onConfirm: () => void;
 };
 
-const InfoTooltip = ({ tooltip }: { tooltip: string | ReactNode }) => (
+const InfoTooltip = ({ tooltip }: { tooltip: string | ReactNode; }) => (
   <InputAdornment position="end">
     <Tooltip arrow={true} title={tooltip} tabIndex={0}>
       <InfoOutlined />
@@ -58,8 +59,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const senderDenomination = useAppSelector((state: RootState) =>
     state.userState.user.organization.rootParent?.description
       ? state.userState.user.organization.rootParent?.description +
-        ' - ' +
-        state.userState.user.organization.name
+      ' - ' +
+      state.userState.user.organization.name
       : state.userState.user.organization.name
   );
 
@@ -124,11 +125,11 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const handleChangeDeliveryMode = (e: ChangeEvent & { target: { value: any } }) => {
+  const handleChangeDeliveryMode = (e: ChangeEvent & { target: { value: any; }; }) => {
     formik.handleChange(e);
   };
 
-  const handleChangePaymentMode = (e: ChangeEvent & { target: { value: any } }) => {
+  const handleChangePaymentMode = (e: ChangeEvent & { target: { value: any; }; }) => {
     formik.handleChange(e);
   };
 
@@ -149,30 +150,128 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     >
       <form onSubmit={formik.handleSubmit} data-testid="preliminaryInformationsForm">
         <NewNotificationCard isContinueDisabled={!formik.isValid} title={t('title')}>
-          <TextField
-            id="paProtocolNumber"
-            label={`${t('protocol-number')}*`}
-            fullWidth
-            name="paProtocolNumber"
-            value={formik.values.paProtocolNumber}
-            onChange={handleChangeTouched}
-            error={formik.touched.paProtocolNumber && Boolean(formik.errors.paProtocolNumber)}
-            helperText={formik.touched.paProtocolNumber && formik.errors.paProtocolNumber}
-            size="small"
-            margin="normal"
-          />
-          <TextField
-            id="subject"
-            label={`${t('subject')}*`}
-            fullWidth
-            name="subject"
-            value={formik.values.subject}
-            onChange={handleChangeTouched}
-            error={formik.touched.subject && Boolean(formik.errors.subject)}
-            helperText={formik.touched.subject && formik.errors.subject}
-            size="small"
-            margin="normal"
-          />
+          <FormBox
+            title={t('notification-content')}
+            subtitle={t('notification-content-subtitle')}
+          >
+            <TextField
+              id="subject"
+              label={`${t('subject')}*`}
+              fullWidth
+              name="subject"
+              value={formik.values.subject}
+              onChange={handleChangeTouched}
+              error={formik.touched.subject && Boolean(formik.errors.subject)}
+              helperText={formik.touched.subject && formik.errors.subject}
+              size="small"
+              margin="normal"
+            />
+            <TextField
+              id="abstract"
+              label={t('abstract')}
+              fullWidth
+              name="abstract"
+              value={formik.values.abstract}
+              onChange={handleChangeTouched}
+              error={formik.touched.abstract && Boolean(formik.errors.abstract)}
+              helperText={formik.touched.abstract && formik.errors.abstract}
+              size="small"
+              margin="normal"
+            />
+          </FormBox>
+          <FormBox
+            title={t('protocol-number')}
+            subtitle={t('protocol-number-subtitle')}
+          >
+            <TextField
+              id="paProtocolNumber"
+              label={`${t('protocol-number')}*`}
+              fullWidth
+              name="paProtocolNumber"
+              value={formik.values.paProtocolNumber}
+              onChange={handleChangeTouched}
+              error={formik.touched.paProtocolNumber && Boolean(formik.errors.paProtocolNumber)}
+              helperText={formik.touched.paProtocolNumber && formik.errors.paProtocolNumber}
+              size="small"
+              margin="normal"
+            />
+          </FormBox>
+          <FormBox
+            title={t('taxonomy-id')}
+            subtitle={t('taxonomy-id-subtitle')}
+          >
+            <TextField
+              id="taxonomyCode"
+              label={`${t('taxonomy-id')}*`}
+              fullWidth
+              name="taxonomyCode"
+              value={formik.values.taxonomyCode}
+              onChange={handleChangeTouched}
+              error={formik.touched.taxonomyCode && Boolean(formik.errors.taxonomyCode)}
+              helperText={formik.touched.taxonomyCode && formik.errors.taxonomyCode}
+              size="small"
+              margin="normal"
+              InputProps={{
+                endAdornment: <InfoTooltip tooltip={t('taxonomy-tooltip')} />,
+              }}
+            />
+          </FormBox>
+          <FormBox>
+            <FormControl margin="normal" fullWidth>
+              <FormLabel id="comunication-type-label">
+                <Typography fontWeight={600} fontSize={16}>
+                  {`${t('comunication-type')}*`}
+                </Typography>
+              </FormLabel>
+              <RadioGroup
+                aria-labelledby="comunication-type-label"
+                name="physicalCommunicationType"
+                row
+                value={formik.values.physicalCommunicationType}
+                onChange={handleChangeDeliveryMode}
+              >
+                <FormControlLabel
+                  value={PhysicalCommunicationType.REGISTERED_LETTER_890}
+                  control={<Radio />}
+                  label={t('registered-letter-890')}
+                  data-testid="comunicationTypeRadio"
+                />
+                <FormControlLabel
+                  value={PhysicalCommunicationType.AR_REGISTERED_LETTER}
+                  control={<Radio />}
+                  label={t('simple-registered-letter')}
+                  data-testid="comunicationTypeRadio"
+                />
+              </RadioGroup>
+            </FormControl>
+          </FormBox>
+
+          <FormBox
+            title={t('notification-management')}
+            subtitle={t('notification-management-subtitle')}
+          >
+            <CustomDropdown
+              id="group"
+              label={`${t('group')}${hasGroups ? '*' : ''}`}
+              fullWidth
+              name="group"
+              size="small"
+              margin="normal"
+              value={formik.values.group}
+              onChange={handleChangeTouched}
+              error={formik.touched.group && Boolean(formik.errors.group)}
+              helperText={formik.touched.group && formik.errors.group}
+              emptyStateMessage={t('no-groups')}
+            >
+              {groups.length > 0 &&
+                groups.map((group) => (
+                  <MenuItem key={group.id} value={group.id}>
+                    {group.name}
+                  </MenuItem>
+                ))}
+            </CustomDropdown>
+          </FormBox>
+
           <TextField
             id="senderDenomination"
             label={`${t('sender-denomination')}*`}
@@ -186,121 +285,46 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             size="small"
             margin="normal"
           />
-          <TextField
-            id="abstract"
-            label={t('abstract')}
-            fullWidth
-            name="abstract"
-            value={formik.values.abstract}
-            onChange={handleChangeTouched}
-            error={formik.touched.abstract && Boolean(formik.errors.abstract)}
-            helperText={formik.touched.abstract && formik.errors.abstract}
-            size="small"
-            margin="normal"
-          />
-          <CustomDropdown
-            id="group"
-            label={`${t('group')}${hasGroups ? '*' : ''}`}
-            fullWidth
-            name="group"
-            size="small"
-            margin="normal"
-            value={formik.values.group}
-            onChange={handleChangeTouched}
-            error={formik.touched.group && Boolean(formik.errors.group)}
-            helperText={formik.touched.group && formik.errors.group}
-            emptyStateMessage={t('no-groups')}
-          >
-            {groups.length > 0 &&
-              groups.map((group) => (
-                <MenuItem key={group.id} value={group.id}>
-                  {group.name}
-                </MenuItem>
-              ))}
-          </CustomDropdown>
-          <TextField
-            id="taxonomyCode"
-            label={`${t('taxonomy-id')}*`}
-            fullWidth
-            name="taxonomyCode"
-            value={formik.values.taxonomyCode}
-            onChange={handleChangeTouched}
-            error={formik.touched.taxonomyCode && Boolean(formik.errors.taxonomyCode)}
-            helperText={formik.touched.taxonomyCode && formik.errors.taxonomyCode}
-            size="small"
-            margin="normal"
-            InputProps={{
-              endAdornment: <InfoTooltip tooltip={t('taxonomy-tooltip')} />,
-            }}
-          />
-          <FormControl margin="normal" fullWidth>
-            <FormLabel id="comunication-type-label">
-              <Typography fontWeight={600} fontSize={16}>
-                {`${t('comunication-type')}*`}
-              </Typography>
-            </FormLabel>
-            <RadioGroup
-              aria-labelledby="comunication-type-label"
-              name="physicalCommunicationType"
-              row
-              value={formik.values.physicalCommunicationType}
-              onChange={handleChangeDeliveryMode}
-            >
-              <FormControlLabel
-                value={PhysicalCommunicationType.REGISTERED_LETTER_890}
-                control={<Radio />}
-                label={t('registered-letter-890')}
-                data-testid="comunicationTypeRadio"
-              />
-              <FormControlLabel
-                value={PhysicalCommunicationType.AR_REGISTERED_LETTER}
-                control={<Radio />}
-                label={t('simple-registered-letter')}
-                data-testid="comunicationTypeRadio"
-              />
-            </RadioGroup>
-          </FormControl>
+
           {IS_PAYMENT_ENABLED && (
-            <>
-              <FormControl margin="normal" fullWidth>
-                <FormLabel id="payment-method-label">
-                  <Typography fontWeight={600} fontSize={16}>
-                    {`${t('payment-method')}*`}
-                  </Typography>
-                </FormLabel>
-                <RadioGroup
-                  aria-labelledby="payment-method-label"
-                  name="paymentMode"
-                  value={formik.values.paymentMode}
-                  onChange={handleChangePaymentMode}
-                >
-                  <FormControlLabel
-                    value={PaymentModel.PAGO_PA_NOTICE}
-                    control={<Radio />}
-                    label={t('pagopa-notice')}
-                    data-testid="paymentMethodRadio"
-                  />
-                  <FormControlLabel
-                    value={PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE}
-                    control={<Radio />}
-                    label={t('pagopa-notice-f24-flatrate')}
-                    data-testid="paymentMethodRadio"
-                  />
-                  <FormControlLabel
-                    value={PaymentModel.PAGO_PA_NOTICE_F24}
-                    control={<Radio />}
-                    label={t('pagopa-notice-f24')}
-                    data-testid="paymentMethodRadio"
-                  />
-                  <FormControlLabel
-                    value={PaymentModel.NOTHING}
-                    control={<Radio />}
-                    label={t('nothing')}
-                    data-testid="paymentMethodRadio"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </>
+            <FormControl margin="normal" fullWidth>
+              <FormLabel id="payment-method-label">
+                <Typography fontWeight={600} fontSize={16}>
+                  {`${t('payment-method')}*`}
+                </Typography>
+              </FormLabel>
+              <RadioGroup
+                aria-labelledby="payment-method-label"
+                name="paymentMode"
+                value={formik.values.paymentMode}
+                onChange={handleChangePaymentMode}
+              >
+                <FormControlLabel
+                  value={PaymentModel.PAGO_PA_NOTICE}
+                  control={<Radio />}
+                  label={t('pagopa-notice')}
+                  data-testid="paymentMethodRadio"
+                />
+                <FormControlLabel
+                  value={PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE}
+                  control={<Radio />}
+                  label={t('pagopa-notice-f24-flatrate')}
+                  data-testid="paymentMethodRadio"
+                />
+                <FormControlLabel
+                  value={PaymentModel.PAGO_PA_NOTICE_F24}
+                  control={<Radio />}
+                  label={t('pagopa-notice-f24')}
+                  data-testid="paymentMethodRadio"
+                />
+                <FormControlLabel
+                  value={PaymentModel.NOTHING}
+                  control={<Radio />}
+                  label={t('nothing')}
+                  data-testid="paymentMethodRadio"
+                />
+              </RadioGroup>
+            </FormControl>
           )}
         </NewNotificationCard>
       </form>
