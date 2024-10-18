@@ -5,10 +5,11 @@ import { Languages } from '@pagopa/mui-italia';
 import { fireEvent, render, screen, waitFor } from '../../../test-utils';
 import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utility/costants';
 import Footer from '../Footer';
+import { i18n as i18nInterface } from 'i18next';
 
 const mockOpenFn = vi.fn();
 
-const i18n: any = {
+const i18n: Partial<i18nInterface> = {
   language: 'it',
   changeLanguage: (lang: string) => new Promise(() => {
     sessionStorage.setItem('lang', lang);
