@@ -40,6 +40,7 @@ const initialState = {
     taxonomyCode: '',
     notificationFeePolicy: '',
     senderDenomination: '',
+    lang: 'it',
   },
   groups: [],
   isCompleted: false,

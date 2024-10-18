@@ -30,6 +30,7 @@ interface BaseNewNotification {
   senderTaxId?: string;
   group?: string;
   taxonomyCode: string;
+  lang: string;
 }
 
 // New Notification DTO

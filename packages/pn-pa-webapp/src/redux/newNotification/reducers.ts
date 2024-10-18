@@ -33,6 +33,7 @@ const initialState = {
     paymentMode: '' as PaymentModel,
     notificationFeePolicy: '' as NotificationFeePolicy,
     senderDenomination: '',
+    lang: 'it',
   } as NewNotification,
   groups: [] as Array<UserGroup>,
   isCompleted: false,
@@ -96,6 +97,15 @@ const newNotificationSlice = createSlice({
     setIsCompleted: (state) => {
       state.isCompleted = true;
     },
+    setNotificationLang: (
+      state, 
+      action: PayloadAction<{ lang: string }>
+    ) => {
+      state.notification = {
+        ...state.notification,
+        lang: action.payload.lang,
+      };
+    },
     resetState: () => initialState,
   },
   extraReducers: (builder) => {
@@ -125,6 +135,7 @@ export const {
   setPaymentDocuments,
   resetState,
   setIsCompleted,
+  setNotificationLang,
 } = newNotificationSlice.actions;
 
 export default newNotificationSlice;
