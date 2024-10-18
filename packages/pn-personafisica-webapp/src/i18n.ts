@@ -1,9 +1,8 @@
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import HttpApi from 'i18next-http-backend';
-import { sanitizeString } from '@pagopa-pn/pn-commons';
+import { sanitizeString, getLangCode, hashDetectorLookup, setSessionLanguage } from '@pagopa-pn/pn-commons';
 import I18nextBrowserLanguageDetector, { CustomDetector } from 'i18next-browser-languagedetector';
-import { getLangCode, hashDetectorLookup, setSessionLanguage } from '@pagopa-pn/pn-commons/src/utility/multilanguage.utility';
 
 const languageDetector = new I18nextBrowserLanguageDetector();
 

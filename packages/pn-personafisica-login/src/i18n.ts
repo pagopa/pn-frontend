@@ -1,5 +1,4 @@
-import { setSessionLanguage } from '@pagopa-pn/pn-commons';
-import { getLangCode, hashDetectorLookup } from '@pagopa-pn/pn-commons/src/utility/multilanguage.utility';
+import { setSessionLanguage, getLangCode, hashDetectorLookup } from '@pagopa-pn/pn-commons';
 import i18next from 'i18next';
 import LanguageDetector, { CustomDetector } from 'i18next-browser-languagedetector';
 import HttpApi from 'i18next-http-backend';
