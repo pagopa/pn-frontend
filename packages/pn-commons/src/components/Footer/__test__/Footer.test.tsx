@@ -67,7 +67,7 @@ describe('Footer Component', () => {
       <Footer
         loggedUser={true}
         currentLanguage={i18n.language}
-        onLanguageChanged={(langCode) => i18n.changeLanguage(langCode)}
+        onLanguageChanged={(langCode) => i18n.changeLanguage!(langCode)}
       />
     );
     let dropdownLanguageButton = getByRole('button');
