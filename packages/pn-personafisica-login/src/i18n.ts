@@ -1,20 +1,11 @@
-import { setSessionLanguage, getLangCode, hashDetectorLookup } from '@pagopa-pn/pn-commons';
+import { setSessionLanguage, getLangCode } from '@pagopa-pn/pn-commons';
 import i18next from 'i18next';
-import LanguageDetector, { CustomDetector } from 'i18next-browser-languagedetector';
+import LanguageDetector from 'i18next-browser-languagedetector';
 import HttpApi from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
-const languageDetector = new LanguageDetector();
-
-const customHashDetector: CustomDetector = {
-  name: 'hashDetector',
-  lookup: hashDetectorLookup,
-};
-
-languageDetector.addDetector(customHashDetector);
-
 void i18next
-  .use(languageDetector)
+  .use(LanguageDetector)
   .use(initReactI18next)
   .use(HttpApi)
   .init({
@@ -28,7 +19,7 @@ void i18next
     },
     ns: ['common'],
     detection: {
-      order: ['hashDetector', 'sessionStorage', 'navigator'],
+      order: ['querystring', 'sessionStorage', 'navigator'],
       lookupQuerystring: 'lang',
       lookupSessionStorage: 'lang',
     },
