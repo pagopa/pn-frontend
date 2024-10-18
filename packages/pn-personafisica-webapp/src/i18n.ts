@@ -2,9 +2,9 @@ import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import HttpApi from 'i18next-http-backend';
 import { sanitizeString, getLangCode, hashDetectorLookup, setSessionLanguage } from '@pagopa-pn/pn-commons';
-import I18nextBrowserLanguageDetector, { CustomDetector } from 'i18next-browser-languagedetector';
+import LanguageDetector, { CustomDetector } from 'i18next-browser-languagedetector';
 
-const languageDetector = new I18nextBrowserLanguageDetector();
+const languageDetector = new LanguageDetector();
 
 const customHashDetector: CustomDetector = {
   name: 'hashDetector',
