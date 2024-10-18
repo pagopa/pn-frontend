@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
@@ -20,9 +20,7 @@ import {
   SideMenuItem,
   appStateActions,
   errorFactoryManager,
-  getSessionLanguage,
   initLocalization,
-  setSessionLanguage,
   useHasPermissions,
   useMultiEvent,
   useTracking,
@@ -78,7 +76,7 @@ const ActualApp = () => {
     (state: RootState) => state.generalInfoState.pendingDelegators
   );
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
-  const { pathname, hash } = useLocation();
+  const { pathname } = useLocation();
   const path = pathname.split('/');
 
   const sessionToken = loggedUser.sessionToken;
@@ -96,12 +94,6 @@ const ActualApp = () => {
   const organization = loggedUser.organization;
   const role = loggedUser.organization?.roles ? loggedUser.organization?.roles[0] : null;
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
-
-  const handleSetUserLanguage = useCallback(() => {
-    const langParam = new URLSearchParams(hash).get('lang');
-    const language = langParam || getSessionLanguage() || 'it';
-    void changeLanguageHandler(language);
-  }, [location]);
 
   // TODO: get products list from be (?)
   const productsList: Array<ProductEntity> = useMemo(
@@ -134,7 +126,6 @@ const ActualApp = () => {
       }
 
       void dispatch(getCurrentAppStatus());
-      handleSetUserLanguage();
     }
   }, [sessionToken]);
 
@@ -245,7 +236,6 @@ const ActualApp = () => {
   );
 
   const changeLanguageHandler = async (langCode: string) => {
-    setSessionLanguage(langCode);
     await i18n.changeLanguage(langCode);
   };
 
@@ -294,6 +284,7 @@ const ActualApp = () => {
           tosConsent && tosConsent.accepted && privacyConsent && privacyConsent.accepted
         }
         loggedUser={jwtUser}
+        currentLanguage={i18n.language}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
         partyList={partyList}
