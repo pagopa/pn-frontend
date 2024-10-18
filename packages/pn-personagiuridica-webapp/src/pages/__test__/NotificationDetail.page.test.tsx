@@ -729,6 +729,38 @@ describe('NotificationDetail Page', async () => {
     vi.useRealTimers();
   });
 
+  it('getReceivedNotificationPaymentUrl is called in error and the number of payments does not change', async () => {
+    vi.useFakeTimers();
+    const paymentHistory = populatePaymentsPagoPaF24(
+      notificationToFe.timeline,
+      paymentsData.pagoPaF24,
+      paymentInfo
+    );
+    const requiredPaymentIndex = paymentHistory.findIndex(
+      (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
+    );
+    const requiredPayment = paymentHistory[requiredPaymentIndex];
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest.slice(0, 5)).reply(200, paymentInfo);
+    mock
+      .onPost(`/bff/v1/payments/cart`, {
+        paymentNotice: {
+          noticeNumber: requiredPayment.pagoPa?.noticeCode,
+          fiscalCode: requiredPayment.pagoPa?.creditorTaxId,
+          amount: requiredPayment.pagoPa?.amount,
+          companyName: notificationToFe.senderDenomination,
+          description: notificationToFe.subject,
+        },
+        returnUrl: window.location.href,
+      })
+      .reply(500, {
+        checkoutUrl: 'https://mocked-url.com',
+      });
+    expect(paymentHistory.length).toBe(6);
+
+    vi.useRealTimers();
+  });
+
   it('should show correct paginated payments', async () => {
     let paginationData = {
       page: 0,

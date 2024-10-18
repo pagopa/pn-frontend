@@ -139,24 +139,16 @@ const notificationSlice = createSlice({
     builder.addCase(getReceivedNotificationPaymentUrl.rejected, (state, action) => {
       const noticeCode = action.meta.arg.paymentNotice.noticeNumber;
       const creditorTaxId = action.meta.arg.paymentNotice.fiscalCode;
-      const paymentInfo = state.paymentsData.pagoPaF24.find(
-        (payment) =>
-          payment.pagoPa?.creditorTaxId === creditorTaxId &&
-          payment.pagoPa?.noticeCode === noticeCode
-      );
 
-      if (paymentInfo?.pagoPa) {
-        state.paymentsData.pagoPaF24 = [
-          {
-            ...paymentInfo?.f24,
-            pagoPa: {
-              ...paymentInfo?.pagoPa,
-              status: PaymentStatus.FAILED,
-              detail: PaymentInfoDetail.GENERIC_ERROR,
-            },
-          },
-        ];
-      }
+      state.paymentsData.pagoPaF24.map((el) => {
+        if (el.pagoPa?.creditorTaxId === creditorTaxId && el.pagoPa?.noticeCode === noticeCode) {
+          el.pagoPa = {
+            ...el.pagoPa,
+            status: PaymentStatus.FAILED,
+            detail: PaymentInfoDetail.GENERIC_ERROR,
+          };
+        }
+      });
     });
     builder.addCase(getDowntimeHistory.fulfilled, (state, action) => {
       state.downtimeEvents = action.payload.result;
