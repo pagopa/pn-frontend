@@ -106,6 +106,7 @@ describe('New notification redux state tests', () => {
       group: '',
       taxonomyCode: '010801N',
       paymentMode: PaymentModel.PAGO_PA_NOTICE_F24,
+      lang: 'it',
     };
     const action = store.dispatch(setPreliminaryInformations(preliminaryInformations));
     expect(action.type).toBe('newNotificationSlice/setPreliminaryInformations');
