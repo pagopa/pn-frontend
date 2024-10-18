@@ -1,5 +1,6 @@
-import { LangCode } from '@pagopa/mui-italia';
 import * as yup from 'yup';
+
+import { LangCode } from '@pagopa/mui-italia';
 
 export const LANGUAGE_SESSION_KEY = 'lang';
 

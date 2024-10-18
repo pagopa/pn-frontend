@@ -1,8 +1,9 @@
-import { setSessionLanguage, getLangCode } from '@pagopa-pn/pn-commons';
 import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import HttpApi from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
+
+import { getLangCode, setSessionLanguage } from '@pagopa-pn/pn-commons';
 
 void i18next
   .use(LanguageDetector)

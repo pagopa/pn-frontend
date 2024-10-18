@@ -1,3 +1,4 @@
+import { i18n as i18nInterface } from 'i18next';
 import { vi } from 'vitest';
 
 import { Languages } from '@pagopa/mui-italia';
@@ -5,16 +6,16 @@ import { Languages } from '@pagopa/mui-italia';
 import { fireEvent, render, screen, waitFor } from '../../../test-utils';
 import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utility/costants';
 import Footer from '../Footer';
-import { i18n as i18nInterface } from 'i18next';
 
 const mockOpenFn = vi.fn();
 
 const i18n: Partial<i18nInterface> = {
   language: 'it',
-  changeLanguage: (lang: string) => new Promise(() => {
-    sessionStorage.setItem('lang', lang);
-    i18n.language = lang;
-  }),
+  changeLanguage: (lang: string) =>
+    new Promise(() => {
+      sessionStorage.setItem('lang', lang);
+      i18n.language = lang;
+    }),
 };
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ i18n }),
@@ -36,7 +37,9 @@ describe('Footer Component', () => {
 
   it('renders footer', () => {
     // render component
-    const { getAllByRole, getByRole } = render(<Footer currentLanguage={i18n.language ?? 'it'} loggedUser={true} />);
+    const { getAllByRole, getByRole } = render(
+      <Footer currentLanguage={i18n.language ?? 'it'} loggedUser={true} />
+    );
     const buttons = getAllByRole('link');
     expect(buttons).toHaveLength(4);
     buttons.forEach((button, index) => {
@@ -54,7 +57,9 @@ describe('Footer Component', () => {
   });
 
   it('clicks on company link', () => {
-    const { getAllByRole } = render(<Footer currentLanguage={i18n.language ?? 'it'} loggedUser={true} />);
+    const { getAllByRole } = render(
+      <Footer currentLanguage={i18n.language ?? 'it'} loggedUser={true} />
+    );
     const buttons = getAllByRole('link');
     fireEvent.click(buttons[0]);
     const localizedPagoPALink = pagoPALink();

@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { AppRouteParams, sanitizeString } from '@pagopa-pn/pn-commons';
 
-import { useTranslation } from 'react-i18next';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';

@@ -1,5 +1,8 @@
-import { LangCode, Footer as MuiFooter } from '@pagopa/mui-italia';
 import { useMemo } from 'react';
+
+import { LangCode, Footer as MuiFooter } from '@pagopa/mui-italia';
+
+import { getLangCode } from '../../utility';
 import {
   LANGUAGES,
   companyLegalInfo,
@@ -7,7 +10,6 @@ import {
   postLoginLinks,
   preLoginLinks,
 } from '../../utility/costants';
-import { getLangCode } from '../../utility';
 
 type Props = {
   currentLanguage: string;
@@ -33,10 +35,7 @@ const Footer: React.FC<Props> = ({
   const changeLanguageHandler = (langCode: LangCode) => {
     onLanguageChanged(langCode);
   };
-  const currentLangCode = useMemo(
-    () => getLangCode(currentLanguage),
-    [currentLanguage]
-  );
+  const currentLangCode = useMemo(() => getLangCode(currentLanguage), [currentLanguage]);
 
   return (
     <MuiFooter

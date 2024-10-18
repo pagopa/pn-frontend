@@ -40,7 +40,7 @@ import { filtersApplied, getValidValue, sortArray } from './genericFunctions.uti
 import { IUN_regex, formatIun } from './iun.utility';
 import { lazyRetry } from './lazyRetry.utility';
 import { initLocalization } from './localization.utility';
-import { setSessionLanguage, getLangCode, hashDetectorLookup } from './multilanguage.utility';
+import { getLangCode, hashDetectorLookup, setSessionLanguage } from './multilanguage.utility';
 import {
   getF24Payments,
   getLegalFactLabel,
