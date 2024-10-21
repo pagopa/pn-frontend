@@ -1,3 +1,5 @@
+/* eslint-disable complexity */
+// TODO: refactor
 import { useFormik } from 'formik';
 import { ChangeEvent, useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,8 +21,15 @@ import {
   PhysicalCommunicationType,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
+import { LANGUAGES } from '@pagopa-pn/pn-commons/src/utility/costants';
+import { LangCode } from '@pagopa/mui-italia';
 
-import { NewNotification, PaymentModel } from '../../models/NewNotification';
+import {
+  BILINGUALISM_LANGUAGES,
+  NewNotification,
+  NewNotificationLangOther,
+  PaymentModel,
+} from '../../models/NewNotification';
 import { GroupStatus } from '../../models/user';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { NEW_NOTIFICATION_ACTIONS, getUserGroups } from '../../redux/newNotification/actions';
@@ -39,6 +48,7 @@ type Props = {
   onConfirm: () => void;
 };
 
+/* eslint-disable-next-line sonarjs/cognitive-complexity */ // TODO: refactor
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
   const groups = useAppSelector((state: RootState) => state.newNotificationState.groups);
@@ -55,11 +65,16 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
       : state.userState.user.organization.name
   );
 
-  const { t } = useTranslation(['notifiche'], {
+  const { t, i18n } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.preliminary-informations',
   });
   const { t: tc } = useTranslation(['common']);
   const { IS_PAYMENT_ENABLED } = useMemo(() => getConfiguration(), []);
+
+  const languages = useMemo(() => {
+    const currentLang = i18n.language?.substring(0, 2) as LangCode;
+    return LANGUAGES[currentLang] ?? LANGUAGES.it;
+  }, [i18n.language]);
 
   const initialValues = useCallback(
     () => ({
@@ -72,6 +87,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
       physicalCommunicationType: notification.physicalCommunicationType || '',
       paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
       lang: notification.lang || 'it',
+      additionalLang: notification.additionalLang || '',
+      additionalSubject: notification.additionalSubject || '',
+      additionalAbstract: notification.additionalAbstract || '',
     }),
     [notification, IS_PAYMENT_ENABLED]
   );
@@ -96,6 +114,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
       .test('taxonomyCodeTest', `${t('taxonomy-id')} ${tc('invalid')}`, (value) =>
         dataRegex.taxonomyCode.test(value as string)
       ),
+    lang: yup.string().required(),
+    // TODO additionalLang,additionalSubject,additionalAbstract
   });
 
   const formik = useFormik({
@@ -125,6 +145,10 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     formik.handleChange(e);
   };
 
+  const handleChangeLanguage = (e: ChangeEvent & { target: { value: any } }) => {
+    formik.handleChange(e);
+  };
+
   const fetchGroups = useCallback(() => {
     void dispatch(getUserGroups(GroupStatus.ACTIVE));
   }, []);
@@ -142,6 +166,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     >
       <form onSubmit={formik.handleSubmit} data-testid="preliminaryInformationsForm">
         <NewNotificationCard isContinueDisabled={!formik.isValid} title={t('title')}>
+          <Typography variant="body2">{tc('required-fields')}</Typography>
           <FormBox>
             <FormBoxTitle text={t('sender-denomination')} />
             <TextField
@@ -158,14 +183,67 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
               margin="normal"
             />
           </FormBox>
+
           <FormBox>
-            <FormBoxTitle text={t('notification-language')} />
-            <FormBoxSubtitle text={t('notification-language-subtitle')} />
-            <div>{formik.values.lang}</div>
+            <FormControl margin="normal" fullWidth>
+              <FormLabel id="notification-language-label">
+                <FormBoxTitle text={t('notification-language')} />
+              </FormLabel>
+              <FormBoxSubtitle text={t('notification-language-subtitle')} />
+              <RadioGroup
+                aria-labelledby="notification-language-label"
+                name="lang"
+                value={formik.values.lang}
+                row
+                onChange={handleChangeLanguage}
+              >
+                <FormControlLabel
+                  value={'it'}
+                  control={<Radio />}
+                  label={languages.it}
+                  data-testid="notificationLanguageRadio"
+                />
+                <FormControlLabel
+                  value={NewNotificationLangOther}
+                  control={<Radio />}
+                  label={t('other-language')}
+                  data-testid="notificationLanguageRadio"
+                />
+              </RadioGroup>
+            </FormControl>
+            {formik.values.lang === NewNotificationLangOther && (
+              <CustomDropdown
+                id="additionalLang"
+                label={`${t('select-other-language')}*`}
+                name="additionalLang"
+                size="small"
+                margin="normal"
+                value={formik.values.additionalLang}
+                onChange={handleChangeTouched}
+              >
+                {Object.keys(languages)
+                  .filter((key) => BILINGUALISM_LANGUAGES.includes(key))
+                  .map((key) => (
+                    <MenuItem key={key} value={key}>
+                      {languages[key as LangCode]}
+                    </MenuItem>
+                  ))}
+              </CustomDropdown>
+            )}
           </FormBox>
           <FormBox>
             <FormBoxTitle text={t('notification-content')} />
             <FormBoxSubtitle text={t('notification-content-subtitle')} />
+            {formik.values.lang === NewNotificationLangOther && (
+              <Typography
+                variant="body2"
+                color={'text.secondary'}
+                marginTop={'16px'}
+                fontWeight={600}
+              >
+                {languages.it}
+              </Typography>
+            )}
             <TextField
               id="subject"
               label={`${t('subject')}*`}
@@ -190,6 +268,46 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
               size="small"
               margin="normal"
             />
+            {formik.values.lang === NewNotificationLangOther && (
+              <>
+                <Typography
+                  variant="body2"
+                  color={'text.secondary'}
+                  marginTop={'16px'}
+                  fontWeight={600}
+                >
+                  {languages[formik.values.additionalLang as LangCode]}
+                </Typography>
+                <TextField
+                  id="additionalSubject"
+                  label={`${t('subject')}*`}
+                  fullWidth
+                  name="additionalSubject"
+                  value={formik.values.additionalSubject}
+                  onChange={handleChangeTouched}
+                  error={
+                    formik.touched.additionalSubject && Boolean(formik.errors.additionalSubject)
+                  }
+                  helperText={formik.touched.additionalSubject && formik.errors.additionalSubject}
+                  size="small"
+                  margin="normal"
+                />
+                <TextField
+                  id="additionalAbstract"
+                  label={t('abstract')}
+                  fullWidth
+                  name="additionalAbstract"
+                  value={formik.values.additionalAbstract}
+                  onChange={handleChangeTouched}
+                  error={
+                    formik.touched.additionalAbstract && Boolean(formik.errors.additionalAbstract)
+                  }
+                  helperText={formik.touched.additionalAbstract && formik.errors.additionalAbstract}
+                  size="small"
+                  margin="normal"
+                />
+              </>
+            )}
           </FormBox>
           <FormBox>
             <FormBoxTitle text={t('protocol-number')} />

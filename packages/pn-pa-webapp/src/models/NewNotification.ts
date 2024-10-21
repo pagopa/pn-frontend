@@ -30,7 +30,6 @@ interface BaseNewNotification {
   senderTaxId?: string;
   group?: string;
   taxonomyCode: string;
-  lang: string;
 }
 
 // New Notification DTO
@@ -82,11 +81,18 @@ export interface NewNotificationDocument {
   };
 }
 
-export interface NewNotification extends BaseNewNotification {
+export interface NewNotification extends BaseNewNotification, NewNotificationBilingualism {
   paymentMode?: PaymentModel;
   recipients: Array<NewNotificationRecipient>;
   documents: Array<NewNotificationDocument>;
   payment?: { [key: string]: PaymentObject };
+}
+
+export interface NewNotificationBilingualism {
+  lang: 'it' | 'other' | string; // TODO refactor
+  additionalLang?: string;
+  additionalSubject?: string;
+  additionalAbstract?: string;
 }
 
 export interface PaymentObject {
@@ -100,3 +106,6 @@ export interface NewNotificationResponse {
   paProtocolNumber: string;
   idempotenceToken: string;
 }
+
+export const BILINGUALISM_LANGUAGES = ['de', 'sl', 'fr'];
+export const NewNotificationLangOther = 'other';

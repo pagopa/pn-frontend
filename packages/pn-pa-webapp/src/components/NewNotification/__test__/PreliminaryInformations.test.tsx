@@ -41,6 +41,7 @@ vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
 }));
 
@@ -215,6 +216,9 @@ describe('PreliminaryInformations component with payment enabled', async () => {
         paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE,
         senderDenomination: newNotification.senderDenomination,
         lang: 'it',
+        additionalAbstract: '',
+        additionalLang: '',
+        additionalSubject: '',
       });
     });
     expect(confirmHandlerMk).toBeCalledTimes(1);
@@ -447,6 +451,9 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
         paymentMode: PaymentModel.NOTHING,
         senderDenomination: newNotification.senderDenomination,
         lang: 'it',
+        additionalAbstract: '',
+        additionalLang: '',
+        additionalSubject: '',
       });
     });
     expect(confirmHandlerMk).toBeCalledTimes(1);

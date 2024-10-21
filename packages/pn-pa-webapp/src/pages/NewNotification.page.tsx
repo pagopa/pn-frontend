@@ -12,7 +12,7 @@ import SyncFeedback from '../components/NewNotification/SyncFeedback';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createNewNotification } from '../redux/newNotification/actions';
-import { resetState, setSenderInfos, setNotificationLang } from '../redux/newNotification/reducers';
+import { resetState, setNewNotificationLang, setSenderInfos } from '../redux/newNotification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 
@@ -86,7 +86,7 @@ const NewNotification = () => {
   const fetchAdditionalLanguage = async () => {
     // TODO simulate a real fetch
     await new Promise((r) => setTimeout(r, 1000));
-    dispatch(setNotificationLang({ lang: 'de' }));
+    dispatch(setNewNotificationLang({ lang: 'de' }));
   };
 
   useEffect(() => {
