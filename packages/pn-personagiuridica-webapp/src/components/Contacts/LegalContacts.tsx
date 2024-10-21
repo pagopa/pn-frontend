@@ -5,20 +5,29 @@ import { Alert, Box, Divider, Stack, Typography } from '@mui/material';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
+import { ChannelType } from '../../models/contacts';
 import PecContactItem from './PecContactItem';
 import SercqSendContactItem from './SercqSendContactItem';
 
 const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultSERCQ_SENDAddress, defaultPECAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultSERCQ_SENDAddress, defaultPECAddress, addresses } = useAppSelector(contactsSelectors.selectAddresses);
   const { DOD_DISABLED } = getConfiguration();
 
-  const isDodEnabled = defaultSERCQ_SENDAddress?.value ?? '';
+  const hasPartyDodEnabledAndValidatingPec = addresses.some(address_1 => 
+    address_1.channelType === ChannelType.PEC && 
+    !address_1.pecValid &&
+    addresses.some(address_2 =>
+      address_2.channelType === ChannelType.SERCQ_SEND &&
+      address_2.senderId === address_1.senderId
+    )
+  );
 
-  const verifyingPecAddress = defaultPECAddress ? !defaultPECAddress.pecValid : false;
+  const hasValidatingPecSpecialContact = addresses.some(address => address.channelType === ChannelType.PEC && !address.pecValid);
+  
+  const verifyingPecAddress = defaultPECAddress && !defaultPECAddress.pecValid || hasValidatingPecSpecialContact;
 
-  const message = isDodEnabled ? "legal-contacts.pec-validation-banner.dod-enabled-message" : "legal-contacts.pec-validation-banner.dod-disabled-message";
-
+  const message = hasPartyDodEnabledAndValidatingPec ? "legal-contacts.pec-validation-banner.dod-enabled-message" : "legal-contacts.pec-validation-banner.dod-disabled-message";
 
   return (
     <Box id="legalContactsSection">
@@ -29,7 +38,7 @@ const LegalContacts = () => {
         <Trans i18nKey="legal-contacts.sub-title" ns="recapiti" />
       </Typography>
       {verifyingPecAddress &&
-        <Alert data-testid="cancelledAlertPayment" severity="info" sx={{ mt: 4 }}>
+        <Alert data-testid="PecVerificationAlert" severity="info" sx={{ mt: 4 }}>
           <Typography variant="inherit" sx={{ fontWeight: '600' }}>
             { t('legal-contacts.pec-validation-banner.title', { ns: 'recapiti'}) }
           </Typography>

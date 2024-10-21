@@ -324,7 +324,7 @@ const SpecialContacts: React.FC = () => {
       </Typography>
       {Object.keys(groupedAddresses).length > 0 && (
         <Card sx={{ mt: 3 }}>
-          <CardContent>
+          <CardContent data-testid="specialContacts">
             <Typography variant="body1" fontWeight={700}>
               {t('special-contacts.card-title', { ns: 'recapiti' })}
             </Typography>
