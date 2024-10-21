@@ -12,6 +12,7 @@ import {
   NewNotification,
   NewNotificationDTO,
   NewNotificationDocument,
+  NewNotificationLangOther,
   NewNotificationRecipient,
   PaymentModel,
   PaymentObject,
@@ -55,9 +56,9 @@ const newNotificationRecipientsMapper = (
   recipients.map((recipient) => {
     const digitalDomicile = recipient.digitalDomicile
       ? {
-        type: recipient.type,
-        address: recipient.digitalDomicile,
-      }
+          type: recipient.type,
+          address: recipient.digitalDomicile,
+        }
       : undefined;
     const parsedRecipient: NotificationDetailRecipient = {
       denomination:
@@ -146,6 +147,16 @@ const newNotificationPaymentDocumentsMapper = (
 
 export function newNotificationMapper(newNotification: NewNotification): NewNotificationDTO {
   const clonedNotification = _.cloneDeep(newNotification);
+
+  /* eslint-disable functional/immutable-data */
+  // bilingualism
+  if (clonedNotification.lang === NewNotificationLangOther) {
+    clonedNotification.lang = clonedNotification.additionalLang || 'it';
+  }
+  delete clonedNotification.additionalAbstract;
+  delete clonedNotification.additionalLang;
+  delete clonedNotification.additionalSubject;
+
   /* eslint-disable functional/immutable-data */
   // remove useless data
   delete clonedNotification.paymentMode;
@@ -169,6 +180,7 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
       newNotification.payment
     );
   }
+
   /* eslint-enable functional/immutable-data */
   return newNotificationParsed;
 }
