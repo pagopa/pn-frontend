@@ -42,6 +42,7 @@ import { FormBox } from '../FormBox/FormBox';
 import { FormBoxSubtitle } from '../FormBox/FormBoxSubtitle';
 import { FormBoxTitle } from '../FormBox/FormBoxTitle';
 import NewNotificationCard from './NewNotificationCard';
+import { add } from 'lodash';
 
 type Props = {
   notification: NewNotification;
@@ -115,7 +116,21 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
         dataRegex.taxonomyCode.test(value as string)
       ),
     lang: yup.string().required(),
-    // TODO additionalLang,additionalSubject,additionalAbstract
+    additionalLang: yup.string().when('lang', {
+      is: NewNotificationLangOther,
+      then: requiredStringFieldValidation(tc),
+    }),
+    additionalSubject: yup.string().when('lang', {
+      is: NewNotificationLangOther,
+      then: requiredStringFieldValidation(tc, 134, 10),
+    }),
+    additionalAbstract: yup.string().when('lang', {
+      is: NewNotificationLangOther,
+      then: yup
+        .string()
+        .max(1024, tc('too-long-field-error', { maxLength: 1024 }))
+        .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
+    }),
   });
 
   const formik = useFormik({
