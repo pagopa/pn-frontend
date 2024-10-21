@@ -152,6 +152,12 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
   // bilingualism
   if (clonedNotification.lang === NewNotificationLangOther) {
     clonedNotification.lang = clonedNotification.additionalLang || 'it';
+    clonedNotification.subject += clonedNotification.additionalSubject
+      ? ` · ${clonedNotification.additionalSubject}`
+      : '';
+    clonedNotification.abstract += clonedNotification.additionalAbstract
+      ? ` · ${clonedNotification.additionalAbstract}`
+      : '';
   }
   delete clonedNotification.additionalAbstract;
   delete clonedNotification.additionalLang;
