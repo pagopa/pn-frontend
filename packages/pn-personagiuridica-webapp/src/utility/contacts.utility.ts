@@ -137,11 +137,18 @@ export const updateAddressesList = (
   addresses: Array<DigitalAddress>,
   newAddress: DigitalAddress
 ) => {
+  // we need to substitute the old address in the following cases:
+  // 1. has the same channel type of the previous one (i.e. we need to change the old PEC with a new one)
+  // 2. Sercq is enabled and a new PEC address which doesn't require validation is specified
+  // 3. PEC is enabled and validated and we enable Sercq
   const addressIndex = addresses.findIndex(
     (l) =>
       l.senderId === senderId &&
       l.addressType === addressType &&
-      l.channelType === channelType
+      (l.channelType === channelType || 
+        (l.channelType === ChannelType.SERCQ_SEND && channelType === ChannelType.PEC && newAddress.pecValid) ||
+        (l.channelType === ChannelType.PEC && channelType === ChannelType.SERCQ_SEND && l.pecValid)
+      )
   );
   if (addressIndex > -1) {
     // eslint-disable-next-line functional/immutable-data
