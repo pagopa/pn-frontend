@@ -24,9 +24,10 @@ const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }
   const open = Boolean(anchorEl);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
-  const isUserAdmin = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
+  const isUserAdmin = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]) && !currentUser.hasGroup;
 
   const isPersonalKey =
+    !isUserAdmin || 
     keys.items.find((key) => key.id === apiKeyId)?.user?.fiscalCode === currentUser.fiscal_number;
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -37,16 +38,16 @@ const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }
   };
 
   const checkIfStatusIsAlreadyPresent = (status: VirtualKeyStatus): boolean =>
-    keys.items.some((key) => key.status === status);
+    !!keys.items.find((key) => key.status === status && (!key.user || key.user?.fiscalCode === data.user?.fiscalCode));
 
   const shouldShowRotateButton = (): boolean => {
-    if (isUserAdmin && !isPersonalKey) {
-      return false;
+    if(isPersonalKey){
+      return (
+        data.status === VirtualKeyStatus.Enabled &&
+        !checkIfStatusIsAlreadyPresent(VirtualKeyStatus.Rotated)
+      );
     }
-    return (
-      data.status === VirtualKeyStatus.Enabled &&
-      !checkIfStatusIsAlreadyPresent(VirtualKeyStatus.Rotated)
-    );
+    return false;
   };
 
   const shouldShowBlockButton =
