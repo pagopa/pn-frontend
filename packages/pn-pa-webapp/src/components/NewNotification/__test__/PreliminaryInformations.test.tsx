@@ -7,11 +7,13 @@ import {
   ResponseEventDispatcher,
 } from '@pagopa-pn/pn-commons';
 import {
+  getById,
   testFormElements,
   testInput,
   testRadio,
   testSelect,
 } from '@pagopa-pn/pn-commons/src/test-utils';
+import userEvent from '@testing-library/user-event';
 
 import { userResponse } from '../../../__mocks__/Auth.mock';
 import {
@@ -137,7 +139,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     testFormElements(form, 'abstract', 'abstract');
     testFormElements(form, 'group', 'group');
     testFormElements(form, 'taxonomyCode', 'taxonomy-id*');
-    testFormElements(form, 'senderDenomination', 'sender-denomination*');
+    testFormElements(form, 'senderDenomination', 'sender-name*');
     testRadio(form, 'comunicationTypeRadio', ['registered-letter-890', 'simple-registered-letter']);
     testRadio(form, 'paymentMethodRadio', [
       'pagopa-notice',
@@ -321,7 +323,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     testFormElements(
       form,
       'senderDenomination',
-      'sender-denomination*',
+      'sender-name*',
       userResponse.organization.name
     );
     const physicalCommunicationType = form.querySelector(
@@ -492,5 +494,57 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
     const button = within(form).getByTestId('step-submit');
     // check submit button state
     expect(button).toBeDisabled();
+  });
+
+  it('change lang of notification and show additional input', async () => {
+    await act(async () => {
+      result = render(
+        <PreliminaryInformations
+          notification={{
+            ...newNotificationEmpty,
+          }}
+          onConfirm={confirmHandlerMk}
+        />,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                organization: { name: 'Comune di Palermo', hasGroup: true },
+              },
+            },
+          },
+        }
+      );
+    });
+    const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+
+    testRadio(form, 'notificationLanguageRadio', ['Italiano', 'italian-and-other-language']);
+
+    const otherLangRadio = within(form).getAllByTestId('notificationLanguageRadio')[1];
+    fireEvent.click(otherLangRadio);
+
+    const selectAdditionalLang = getById(form, 'additionalLang');
+    expect(selectAdditionalLang).toBeInTheDocument();
+
+    userEvent.click(selectAdditionalLang);
+
+    await act(async () => {
+      // time to appear the dropdown
+      await new Promise((r) => setTimeout(r, 500));
+    });
+
+    const dropdown = document.querySelector('#menu-additionalLang') as HTMLElement;
+    expect(dropdown).toBeInTheDocument();
+
+    const frOption = within(dropdown).getByText('Tedesco');
+    userEvent.click(frOption);
+
+    await testInput(form, 'additionalLang', 'de');
+
+    const additionalSubject = getById(form, 'additionalSubject');
+    expect(additionalSubject).toBeInTheDocument();
+
+    const additionalAbstract = getById(form, 'additionalAbstract');
+    expect(additionalAbstract).toBeInTheDocument();
   });
 });
