@@ -146,32 +146,42 @@ const newNotificationPaymentDocumentsMapper = (
   });
 
 export function newNotificationMapper(newNotification: NewNotification): NewNotificationDTO {
-  const clonedNotification = _.cloneDeep(newNotification);
+  const clonedNotification = _.omit(_.cloneDeep(newNotification), [
+    'paymentMode',
+    'payment',
+    'additionalAbstract',
+    'additionalLang',
+    'additionalSubject',
+    'lang',
+  ]);
 
   /* eslint-disable functional/immutable-data */
   // bilingualism
-  if (clonedNotification.lang === NewNotificationLangOther) {
-    clonedNotification.lang = clonedNotification.additionalLang || 'it';
-    clonedNotification.subject += clonedNotification.additionalSubject
-      ? ` · ${clonedNotification.additionalSubject}`
+  if (newNotification.lang === NewNotificationLangOther) {
+    clonedNotification.subject += newNotification.additionalSubject
+      ? ` · ${newNotification.additionalSubject}`
       : '';
-    clonedNotification.abstract += clonedNotification.additionalAbstract
-      ? ` · ${clonedNotification.additionalAbstract}`
+    clonedNotification.abstract += newNotification.additionalAbstract
+      ? ` · ${newNotification.additionalAbstract}`
       : '';
   }
-  delete clonedNotification.additionalAbstract;
-  delete clonedNotification.additionalLang;
-  delete clonedNotification.additionalSubject;
+
+  const additionalLanguages =
+    newNotification.lang === NewNotificationLangOther && newNotification.additionalLang
+      ? [newNotification.additionalLang]
+      : undefined;
 
   /* eslint-disable functional/immutable-data */
-  // remove useless data
-  delete clonedNotification.paymentMode;
-  delete clonedNotification.payment;
   const newNotificationParsed: NewNotificationDTO = {
     ...clonedNotification,
     recipients: [],
     documents: [],
   };
+
+  if (additionalLanguages) {
+    newNotificationParsed.additionalLanguages = additionalLanguages;
+  }
+
   // format recipients
   newNotificationParsed.recipients = newNotificationRecipientsMapper(
     newNotification.recipients,

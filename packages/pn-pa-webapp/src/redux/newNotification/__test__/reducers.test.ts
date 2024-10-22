@@ -25,6 +25,7 @@ import {
   setPreliminaryInformations,
   setSenderInfos,
 } from '../reducers';
+import { PreliminaryInformationsPayload } from '../types';
 
 const initialState = {
   loading: false,
@@ -98,7 +99,7 @@ describe('New notification redux state tests', () => {
   });
 
   it('Should be able to set preliminary informations', () => {
-    const preliminaryInformations = {
+    const preliminaryInformations: PreliminaryInformationsPayload = {
       paProtocolNumber: 'mocked-notificationId',
       subject: 'mocked-subject',
       abstract: '',

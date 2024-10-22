@@ -36,6 +36,7 @@ interface BaseNewNotification {
 export interface NewNotificationDTO extends BaseNewNotification {
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
+  additionalLanguages?: Array<string>;
 }
 
 // New Notification
@@ -89,7 +90,7 @@ export interface NewNotification extends BaseNewNotification, NewNotificationBil
 }
 
 export interface NewNotificationBilingualism {
-  lang: 'it' | 'other' | string; // TODO refactor
+  lang?: 'it' | 'other';
   additionalLang?: string;
   additionalSubject?: string;
   additionalAbstract?: string;
