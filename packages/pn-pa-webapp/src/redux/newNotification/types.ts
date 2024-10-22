@@ -10,6 +10,7 @@ export interface PreliminaryInformationsPayload extends NewNotificationBilingual
   group?: string;
   paymentMode: PaymentModel;
   taxonomyCode: string;
+  senderDenomination?: string;
 }
 
 export interface UploadDocumentParams {

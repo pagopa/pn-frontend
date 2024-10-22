@@ -1,5 +1,3 @@
-/* eslint-disable complexity */
-// TODO: refactor
 import { useFormik } from 'formik';
 import { ChangeEvent, useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +23,6 @@ import { LANGUAGES } from '@pagopa-pn/pn-commons/src/utility/costants';
 import { LangCode } from '@pagopa/mui-italia';
 
 import {
-  BILINGUALISM_LANGUAGES,
   NewNotification,
   NewNotificationLangOther,
   PaymentModel,
@@ -42,13 +39,14 @@ import { FormBox } from '../FormBox/FormBox';
 import { FormBoxSubtitle } from '../FormBox/FormBoxSubtitle';
 import { FormBoxTitle } from '../FormBox/FormBoxTitle';
 import NewNotificationCard from './NewNotificationCard';
+import PreliminaryInformationsContent from './PreliminaryInformationsContent';
+import PreliminaryInformationsLang from './PreliminaryInformationsLang';
 
 type Props = {
   notification: NewNotification;
   onConfirm: () => void;
 };
 
-/* eslint-disable-next-line sonarjs/cognitive-complexity */ // TODO: refactor
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
   const groups = useAppSelector((state: RootState) => state.newNotificationState.groups);
@@ -90,7 +88,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
       additionalLang: notification.additionalLang || '',
       additionalSubject: notification.additionalSubject || '',
       additionalAbstract: notification.additionalAbstract || '',
-    }),
+    } as PreliminaryInformationsPayload),
     [notification, IS_PAYMENT_ENABLED]
   );
 
@@ -140,7 +138,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     /** onSubmit validate */
     onSubmit: (values) => {
       if (formik.isValid) {
-        dispatch(setPreliminaryInformations(values as PreliminaryInformationsPayload));
+        dispatch(setPreliminaryInformations(values));
         onConfirm();
       }
     },
@@ -151,15 +149,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const handleChangeDeliveryMode = (e: ChangeEvent & { target: { value: any } }) => {
-    formik.handleChange(e);
-  };
-
-  const handleChangePaymentMode = (e: ChangeEvent & { target: { value: any } }) => {
-    formik.handleChange(e);
-  };
-
-  const handleChangeLanguage = (e: ChangeEvent & { target: { value: any } }) => {
+  const handleChange = (e: ChangeEvent & { target: { value: any } }) => {
     formik.handleChange(e);
   };
 
@@ -198,131 +188,18 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             />
           </FormBox>
 
-          <FormBox>
-            <FormControl margin="normal" fullWidth>
-              <FormLabel id="notification-language-label">
-                <FormBoxTitle text={t('notification-language')} />
-              </FormLabel>
-              <FormBoxSubtitle text={t('notification-language-subtitle')} />
-              <RadioGroup
-                aria-labelledby="notification-language-label"
-                name="lang"
-                value={formik.values.lang}
-                row
-                onChange={handleChangeLanguage}
-              >
-                <FormControlLabel
-                  value={'it'}
-                  control={<Radio />}
-                  label={languages.it}
-                  data-testid="notificationLanguageRadio"
-                />
-                <FormControlLabel
-                  value={NewNotificationLangOther}
-                  control={<Radio />}
-                  label={t('other-language')}
-                  data-testid="notificationLanguageRadio"
-                />
-              </RadioGroup>
-            </FormControl>
-            {formik.values.lang === NewNotificationLangOther && (
-              <CustomDropdown
-                id="additionalLang"
-                label={`${t('select-other-language')}*`}
-                name="additionalLang"
-                size="small"
-                margin="normal"
-                value={formik.values.additionalLang}
-                onChange={handleChangeTouched}
-              >
-                {Object.keys(languages)
-                  .filter((key) => BILINGUALISM_LANGUAGES.includes(key))
-                  .map((key) => (
-                    <MenuItem key={key} value={key}>
-                      {languages[key as LangCode]}
-                    </MenuItem>
-                  ))}
-              </CustomDropdown>
-            )}
-          </FormBox>
-          <FormBox>
-            <FormBoxTitle text={t('notification-content')} />
-            <FormBoxSubtitle text={t('notification-content-subtitle')} />
-            {formik.values.lang === NewNotificationLangOther && (
-              <Typography
-                variant="body2"
-                color={'text.secondary'}
-                marginTop={'16px'}
-                fontWeight={600}
-              >
-                {languages.it}
-              </Typography>
-            )}
-            <TextField
-              id="subject"
-              label={`${t('subject')}*`}
-              fullWidth
-              name="subject"
-              value={formik.values.subject}
-              onChange={handleChangeTouched}
-              error={formik.touched.subject && Boolean(formik.errors.subject)}
-              helperText={formik.touched.subject && formik.errors.subject}
-              size="small"
-              margin="normal"
-            />
-            <TextField
-              id="abstract"
-              label={t('abstract')}
-              fullWidth
-              name="abstract"
-              value={formik.values.abstract}
-              onChange={handleChangeTouched}
-              error={formik.touched.abstract && Boolean(formik.errors.abstract)}
-              helperText={formik.touched.abstract && formik.errors.abstract}
-              size="small"
-              margin="normal"
-            />
-            {formik.values.lang === NewNotificationLangOther && (
-              <>
-                <Typography
-                  variant="body2"
-                  color={'text.secondary'}
-                  marginTop={'16px'}
-                  fontWeight={600}
-                >
-                  {languages[formik.values.additionalLang as LangCode]}
-                </Typography>
-                <TextField
-                  id="additionalSubject"
-                  label={`${t('subject')}*`}
-                  fullWidth
-                  name="additionalSubject"
-                  value={formik.values.additionalSubject}
-                  onChange={handleChangeTouched}
-                  error={
-                    formik.touched.additionalSubject && Boolean(formik.errors.additionalSubject)
-                  }
-                  helperText={formik.touched.additionalSubject && formik.errors.additionalSubject}
-                  size="small"
-                  margin="normal"
-                />
-                <TextField
-                  id="additionalAbstract"
-                  label={t('abstract')}
-                  fullWidth
-                  name="additionalAbstract"
-                  value={formik.values.additionalAbstract}
-                  onChange={handleChangeTouched}
-                  error={
-                    formik.touched.additionalAbstract && Boolean(formik.errors.additionalAbstract)
-                  }
-                  helperText={formik.touched.additionalAbstract && formik.errors.additionalAbstract}
-                  size="small"
-                  margin="normal"
-                />
-              </>
-            )}
-          </FormBox>
+          <PreliminaryInformationsLang
+            formik={formik}
+            languages={languages}
+            onChange={handleChange}
+            onChangeTouched={handleChangeTouched}
+          />
+          <PreliminaryInformationsContent
+            formik={formik}
+            onChangeTouched={handleChangeTouched}
+            languages={languages}
+          />
+
           <FormBox>
             <FormBoxTitle text={t('protocol-number')} />
             <FormBoxSubtitle text={t('protocol-number-subtitle')} />
@@ -366,7 +243,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
                 name="physicalCommunicationType"
                 row
                 value={formik.values.physicalCommunicationType}
-                onChange={handleChangeDeliveryMode}
+                onChange={handleChange}
               >
                 <FormControlLabel
                   value={PhysicalCommunicationType.REGISTERED_LETTER_890}
@@ -420,7 +297,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
                 aria-labelledby="payment-method-label"
                 name="paymentMode"
                 value={formik.values.paymentMode}
-                onChange={handleChangePaymentMode}
+                onChange={handleChange}
               >
                 <FormControlLabel
                   value={PaymentModel.PAGO_PA_NOTICE}
