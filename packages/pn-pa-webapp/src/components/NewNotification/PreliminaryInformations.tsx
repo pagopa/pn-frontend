@@ -42,7 +42,6 @@ import { FormBox } from '../FormBox/FormBox';
 import { FormBoxSubtitle } from '../FormBox/FormBoxSubtitle';
 import { FormBoxTitle } from '../FormBox/FormBoxTitle';
 import NewNotificationCard from './NewNotificationCard';
-import { add } from 'lodash';
 
 type Props = {
   notification: NewNotification;
