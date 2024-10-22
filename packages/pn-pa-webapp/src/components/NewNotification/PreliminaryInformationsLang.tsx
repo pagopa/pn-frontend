@@ -6,6 +6,7 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
+  Grid,
   MenuItem,
   Radio,
   RadioGroup,
@@ -34,49 +35,56 @@ const PreliminaryInformationsLang = ({ formik, languages, onChange, onChangeTouc
     <FormBox>
       <FormControl margin="normal" fullWidth>
         <FormLabel id="notification-language-label">
-          <FormBoxTitle text={t('notification-language')} />
+          <FormBoxTitle text={t('notification-language-title')} />
         </FormLabel>
         <FormBoxSubtitle text={t('notification-language-subtitle')} />
-        <RadioGroup
-          aria-labelledby="notification-language-label"
-          name="lang"
-          value={formik.values.lang}
-          row
-          onChange={onChange}
-        >
-          <FormControlLabel
-            value={'it'}
-            control={<Radio />}
-            label={languages.it}
-            data-testid="notificationLanguageRadio"
-          />
-          <FormControlLabel
-            value={NewNotificationLangOther}
-            control={<Radio />}
-            label={t('other-language')}
-            data-testid="notificationLanguageRadio"
-          />
-        </RadioGroup>
+        <Grid container alignItems={'center'} spacing={2} paddingTop={'16px'}>
+          <Grid item xs={12} md={6}>
+            <RadioGroup
+              aria-labelledby="notification-language-label"
+              name="lang"
+              value={formik.values.lang}
+              row
+              onChange={onChange}
+            >
+              <FormControlLabel
+                value={'it'}
+                control={<Radio />}
+                label={languages.it}
+                data-testid="notificationLanguageRadio"
+              />
+              <FormControlLabel
+                value={NewNotificationLangOther}
+                control={<Radio />}
+                label={t('italian-and-other-language')}
+                data-testid="notificationLanguageRadio"
+              />
+            </RadioGroup>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            {formik.values.lang === NewNotificationLangOther && (
+              <CustomDropdown
+                id="additionalLang"
+                label={`${t('select-other-language')}*`}
+                name="additionalLang"
+                size="small"
+                margin="none"
+                value={formik.values.additionalLang}
+                onChange={onChangeTouched}
+                fullWidth
+              >
+                {Object.keys(languages)
+                  .filter((key) => BILINGUALISM_LANGUAGES.includes(key))
+                  .map((key) => (
+                    <MenuItem key={key} value={key}>
+                      {languages[key as LangCode]}
+                    </MenuItem>
+                  ))}
+              </CustomDropdown>
+            )}
+          </Grid>
+        </Grid>
       </FormControl>
-      {formik.values.lang === NewNotificationLangOther && (
-        <CustomDropdown
-          id="additionalLang"
-          label={`${t('select-other-language')}*`}
-          name="additionalLang"
-          size="small"
-          margin="normal"
-          value={formik.values.additionalLang}
-          onChange={onChangeTouched}
-        >
-          {Object.keys(languages)
-            .filter((key) => BILINGUALISM_LANGUAGES.includes(key))
-            .map((key) => (
-              <MenuItem key={key} value={key}>
-                {languages[key as LangCode]}
-              </MenuItem>
-            ))}
-        </CustomDropdown>
-      )}
     </FormBox>
   );
 };

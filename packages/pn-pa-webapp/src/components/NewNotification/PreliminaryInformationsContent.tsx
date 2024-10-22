@@ -23,7 +23,7 @@ const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: 
   });
   return (
     <FormBox>
-      <FormBoxTitle text={t('notification-content')} />
+      <FormBoxTitle text={t('notification-content-title')} />
       <FormBoxSubtitle text={t('notification-content-subtitle')} />
       {formik.values.lang === NewNotificationLangOther && (
         <Typography variant="body2" color={'text.secondary'} marginTop={'16px'} fontWeight={600}>
@@ -54,7 +54,7 @@ const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: 
         size="small"
         margin="normal"
       />
-      {formik.values.additionalLang === NewNotificationLangOther &&
+      {formik.values.lang === NewNotificationLangOther &&
         formik.values.additionalLang && (
           <>
             <Typography

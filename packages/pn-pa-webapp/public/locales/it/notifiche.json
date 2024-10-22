@@ -402,6 +402,7 @@
         "protocol-number": "Numero di protocollo",
         "subject": "Oggetto della notifica",
         "sender-denomination": "Ente mittente",
+        "sender-name": "Nome dell'ente",
         "abstract": "Descrizione",
         "group": "Gruppo",
         "no-groups": "Non ci sono gruppi per questo prodotto",
@@ -414,7 +415,13 @@
         "pagopa-notice": "Avviso pagoPA",
         "pagopa-notice-f24-flatrate": "Avviso pagoPA e Modello F24 forfettario",
         "pagopa-notice-f24": "Avviso pagoPA e Modello F24",
-        "nothing": "Nessuno"
+        "nothing": "Nessuno",
+        "notification-language-title": "Lingua di invio",
+        "notification-language-subtitle": "La notifica, i documenti e le attestazioni verranno inviati secondo le preferenze di lingua selezionate.",
+        "italian-and-other-language": "Italiano e altra lingua",
+        "select-other-language": "Seleziona altra lingua",
+        "notification-content-title": "Contenuti della notifica",
+        "notification-content-subtitle": "Queste informazioni aiuteranno il destinatario a comprendere il contenuto e l'importanza della comunicazione."
       },
       "recipient": {
         "title": "Destinatari",

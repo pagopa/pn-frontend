@@ -175,7 +175,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             <FormBoxTitle text={t('sender-denomination')} />
             <TextField
               id="senderDenomination"
-              label={`${t('sender-denomination')}*`}
+              label={`${t('sender-name')}*`}
               fullWidth
               name="senderDenomination"
               value={formik.values.senderDenomination}
