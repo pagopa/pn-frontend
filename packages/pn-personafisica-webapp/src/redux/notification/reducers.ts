@@ -140,7 +140,7 @@ const notificationSlice = createSlice({
       const noticeCode = action.meta.arg.paymentNotice.noticeNumber;
       const creditorTaxId = action.meta.arg.paymentNotice.fiscalCode;
 
-      state.paymentsData.pagoPaF24.map((el) => {
+      state.paymentsData.pagoPaF24.forEach((el) => {
         if (el.pagoPa?.creditorTaxId === creditorTaxId && el.pagoPa?.noticeCode === noticeCode) {
           el.pagoPa = {
             ...el.pagoPa,

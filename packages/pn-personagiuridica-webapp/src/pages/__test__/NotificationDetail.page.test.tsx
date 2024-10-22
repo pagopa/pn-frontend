@@ -729,7 +729,7 @@ describe('NotificationDetail Page', async () => {
     vi.useRealTimers();
   });
 
-  it('getReceivedNotificationPaymentUrl is called in error and the number of payments does not change', async () => {
+  it('should not duplicate payments when api call to cart respond with an error', async () => {
     vi.useFakeTimers();
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
@@ -757,6 +757,17 @@ describe('NotificationDetail Page', async () => {
         checkoutUrl: 'https://mocked-url.com',
       });
     expect(paymentHistory.length).toBe(6);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+
+    const reloadButton = result.getByTestId('reload-button');
+    expect(reloadButton).toBeVisible();
 
     vi.useRealTimers();
   });
