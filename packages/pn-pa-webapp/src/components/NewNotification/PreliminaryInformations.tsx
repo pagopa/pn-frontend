@@ -235,7 +235,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           <FormBox>
             <FormControl margin="none" fullWidth>
               <FormLabel id="comunication-type-label">
-                <FormBoxTitle text={t('comunication-type')} />
+                <FormBoxTitle text={t('comunication-type-title')} />
               </FormLabel>
               <FormBoxSubtitle text={t('comunication-type-subtitle')} />
               <RadioGroup
@@ -262,7 +262,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           </FormBox>
 
           <FormBox>
-            <FormBoxTitle text={t('notification-management')} />
+            <FormBoxTitle text={t('notification-management-title')} />
             <FormBoxSubtitle text={t('notification-management-subtitle')} />
             <CustomDropdown
               id="group"

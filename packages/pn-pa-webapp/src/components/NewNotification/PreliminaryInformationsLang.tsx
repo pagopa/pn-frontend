@@ -33,7 +33,7 @@ const PreliminaryInformationsLang = ({ formik, languages, onChange, onChangeTouc
   });
   return (
     <FormBox>
-      <FormControl margin="normal" fullWidth>
+      <FormControl fullWidth>
         <FormLabel id="notification-language-label">
           <FormBoxTitle text={t('notification-language-title')} />
         </FormLabel>

@@ -21,11 +21,15 @@ const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: 
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.preliminary-informations',
   });
+
+  const hasOtherLang =
+    formik.values.lang === NewNotificationLangOther && formik.values.additionalLang;
+
   return (
     <FormBox>
       <FormBoxTitle text={t('notification-content-title')} />
       <FormBoxSubtitle text={t('notification-content-subtitle')} />
-      {formik.values.lang === NewNotificationLangOther && (
+      {hasOtherLang && (
         <Typography variant="body2" color={'text.secondary'} marginTop={'16px'} fontWeight={600}>
           {languages.it}
         </Typography>
@@ -54,43 +58,37 @@ const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: 
         size="small"
         margin="normal"
       />
-      {formik.values.lang === NewNotificationLangOther &&
-        formik.values.additionalLang && (
-          <>
-            <Typography
-              variant="body2"
-              color={'text.secondary'}
-              marginTop={'16px'}
-              fontWeight={600}
-            >
-              {languages[formik.values.additionalLang as LangCode]}
-            </Typography>
-            <TextField
-              id="additionalSubject"
-              label={`${t('subject')}*`}
-              fullWidth
-              name="additionalSubject"
-              value={formik.values.additionalSubject}
-              onChange={onChangeTouched}
-              error={formik.touched.additionalSubject && Boolean(formik.errors.additionalSubject)}
-              helperText={formik.touched.additionalSubject && formik.errors.additionalSubject}
-              size="small"
-              margin="normal"
-            />
-            <TextField
-              id="additionalAbstract"
-              label={t('abstract')}
-              fullWidth
-              name="additionalAbstract"
-              value={formik.values.additionalAbstract}
-              onChange={onChangeTouched}
-              error={formik.touched.additionalAbstract && Boolean(formik.errors.additionalAbstract)}
-              helperText={formik.touched.additionalAbstract && formik.errors.additionalAbstract}
-              size="small"
-              margin="normal"
-            />
-          </>
-        )}
+      {hasOtherLang && (
+        <>
+          <Typography variant="body2" color={'text.secondary'} marginTop={'16px'} fontWeight={600}>
+            {languages[formik.values.additionalLang as LangCode]}
+          </Typography>
+          <TextField
+            id="additionalSubject"
+            label={`${t('subject')}*`}
+            fullWidth
+            name="additionalSubject"
+            value={formik.values.additionalSubject}
+            onChange={onChangeTouched}
+            error={formik.touched.additionalSubject && Boolean(formik.errors.additionalSubject)}
+            helperText={formik.touched.additionalSubject && formik.errors.additionalSubject}
+            size="small"
+            margin="normal"
+          />
+          <TextField
+            id="additionalAbstract"
+            label={t('abstract')}
+            fullWidth
+            name="additionalAbstract"
+            value={formik.values.additionalAbstract}
+            onChange={onChangeTouched}
+            error={formik.touched.additionalAbstract && Boolean(formik.errors.additionalAbstract)}
+            helperText={formik.touched.additionalAbstract && formik.errors.additionalAbstract}
+            size="small"
+            margin="normal"
+          />
+        </>
+      )}
     </FormBox>
   );
 };
