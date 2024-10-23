@@ -56,7 +56,7 @@ describe('Test notification utility', () => {
     });
     const response: NewNotificationDTO = {
       ...newNotificationDTO,
-      subject: 'Multone esagerato · subject for de',
+      subject: 'Multone esagerato • subject for de',
       abstract: 'abstract for de',
       additionalLanguages: ['de'],
     };
