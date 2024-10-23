@@ -50,6 +50,7 @@ const TitleBox: React.FC<Props> = ({
           variant={variantTitle}
           display="inline-block"
           sx={{ verticalAlign: 'middle' }}
+          aria-label={`${title}-pagina`}
         >
           {title}
         </Typography>
