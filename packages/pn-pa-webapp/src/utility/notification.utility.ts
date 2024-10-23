@@ -158,12 +158,14 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
   /* eslint-disable functional/immutable-data */
   // bilingualism
   if (newNotification.lang === NewNotificationLangOther) {
-    clonedNotification.subject += newNotification.additionalSubject
-      ? ` · ${newNotification.additionalSubject}`
-      : '';
-    clonedNotification.abstract += newNotification.additionalAbstract
-      ? ` · ${newNotification.additionalAbstract}`
-      : '';
+    clonedNotification.subject = concatAdditionalContent(
+      newNotification.subject,
+      newNotification.additionalSubject
+    );
+    clonedNotification.abstract = concatAdditionalContent(
+      newNotification.abstract,
+      newNotification.additionalAbstract
+    );
   }
 
   const additionalLanguages =
@@ -223,3 +225,10 @@ export function getDuplicateValuesByKeys<T>(
     .filter((value, i, valueList) => valueList.indexOf(value) !== i)
     .filter((value, i, valueList) => valueList.indexOf(value) === i);
 }
+
+const concatAdditionalContent = (content?: string, additionalContent?: string): string => {
+  if (content && additionalContent) {
+    return `${content} · ${additionalContent}`;
+  }
+  return content || additionalContent || '';
+};
