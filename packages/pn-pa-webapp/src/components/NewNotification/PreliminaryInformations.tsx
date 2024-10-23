@@ -1,12 +1,13 @@
 import { useFormik } from 'formik';
 import { ChangeEvent, useCallback, useEffect, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import {
   FormControl,
   FormControlLabel,
   FormLabel,
+  Link,
   MenuItem,
   Radio,
   RadioGroup,
@@ -67,7 +68,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     keyPrefix: 'new-notification.steps.preliminary-informations',
   });
   const { t: tc } = useTranslation(['common']);
-  const { IS_PAYMENT_ENABLED } = useMemo(() => getConfiguration(), []);
+  const { IS_PAYMENT_ENABLED, TAXONOMY_SEND_URL } = useMemo(() => getConfiguration(), []);
 
   const languages = useMemo(() => {
     const currentLang = i18n.language?.substring(0, 2) as LangCode;
@@ -75,20 +76,21 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   }, [i18n.language]);
 
   const initialValues = useCallback(
-    () => ({
-      paProtocolNumber: notification.paProtocolNumber || '',
-      subject: notification.subject || '',
-      senderDenomination: notification.senderDenomination ?? '',
-      abstract: notification.abstract ?? '',
-      group: notification.group ?? '',
-      taxonomyCode: notification.taxonomyCode || '',
-      physicalCommunicationType: notification.physicalCommunicationType || '',
-      paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
-      lang: notification.lang || 'it',
-      additionalLang: notification.additionalLang || '',
-      additionalSubject: notification.additionalSubject || '',
-      additionalAbstract: notification.additionalAbstract || '',
-    } as PreliminaryInformationsPayload),
+    () =>
+      ({
+        paProtocolNumber: notification.paProtocolNumber || '',
+        subject: notification.subject || '',
+        senderDenomination: notification.senderDenomination ?? '',
+        abstract: notification.abstract ?? '',
+        group: notification.group ?? '',
+        taxonomyCode: notification.taxonomyCode || '',
+        physicalCommunicationType: notification.physicalCommunicationType || '',
+        paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
+        lang: notification.lang || 'it',
+        additionalLang: notification.additionalLang || '',
+        additionalSubject: notification.additionalSubject || '',
+        additionalAbstract: notification.additionalAbstract || '',
+      } as PreliminaryInformationsPayload),
     [notification, IS_PAYMENT_ENABLED]
   );
 
@@ -218,7 +220,21 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           </FormBox>
           <FormBox>
             <FormBoxTitle text={t('taxonomy-id')} />
-            <FormBoxSubtitle text={t('taxonomy-id-subtitle')} />
+            <Typography variant="body2" fontSize={14} marginTop={'4px'}>
+              <Trans
+                t={t}
+                i18nKey={'taxonomy-id-subtitle'}
+                components={[
+                  <Link
+                    key={'taxonomy'}
+                    href={TAXONOMY_SEND_URL}
+                    target="_blank"
+                    color={'primary'}
+                    fontWeight={600}
+                  />,
+                ]}
+              />
+            </Typography>
             <TextField
               id="taxonomyCode"
               label={`${t('taxonomy-id')}*`}

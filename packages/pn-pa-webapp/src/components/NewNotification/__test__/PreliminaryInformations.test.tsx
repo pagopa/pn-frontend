@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import {
@@ -27,6 +28,7 @@ import {
   fireEvent,
   randomString,
   render,
+  screen,
   testStore,
   waitFor,
   within,
@@ -45,6 +47,11 @@ vi.mock('react-i18next', () => ({
     t: (str: string) => str,
     i18n: { language: 'it' },
   }),
+  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
+    <>
+      {props.i18nKey} {props.components?.map((c) => c)}
+    </>
+  ),
 }));
 
 vi.mock('../../../services/configuration.service', async () => {
@@ -52,6 +59,7 @@ vi.mock('../../../services/configuration.service', async () => {
     ...(await vi.importActual<any>('../../../services/configuration.service')),
     getConfiguration: () => ({
       IS_PAYMENT_ENABLED: mockIsPaymentEnabledGetter(),
+      TAXONOMY_SEND_URL: 'https://mock-taxonomy-url',
     }),
   };
 });
@@ -320,12 +328,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     testFormElements(form, 'abstract', 'abstract', newNotification.abstract);
     testFormElements(form, 'group', 'group', newNotification.group);
     testFormElements(form, 'taxonomyCode', 'taxonomy-id*', newNotification.taxonomyCode);
-    testFormElements(
-      form,
-      'senderDenomination',
-      'sender-name*',
-      userResponse.organization.name
-    );
+    testFormElements(form, 'senderDenomination', 'sender-name*', userResponse.organization.name);
     const physicalCommunicationType = form.querySelector(
       `input[name="physicalCommunicationType"][value="${newNotification.physicalCommunicationType}"]`
     );
@@ -546,5 +549,29 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
 
     const additionalAbstract = getById(form, 'additionalAbstract');
     expect(additionalAbstract).toBeInTheDocument();
+  });
+
+  it('should render taxonomy link with correct href', async () => {
+    await act(async () => {
+      result = render(
+        <PreliminaryInformations
+          notification={{
+            ...newNotificationEmpty,
+          }}
+          onConfirm={confirmHandlerMk}
+        />,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                organization: { name: 'Comune di Palermo', hasGroup: true },
+              },
+            },
+          },
+        }
+      );
+    });
+
+    expect(screen.getByRole('link')).toHaveAttribute('href', 'https://mock-taxonomy-url')
   });
 });

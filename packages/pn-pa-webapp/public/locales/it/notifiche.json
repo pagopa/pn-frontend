@@ -408,6 +408,7 @@
         "group": "Gruppo",
         "no-groups": "Non ci sono gruppi per questo prodotto",
         "taxonomy-id": "Codice tassonomico",
+        "taxonomy-id-subtitle": "È il codice che definisce la tipologia di documenti notificati. Se non lo conosci, consulta l'elenco in <0>Tassonomia SEND</0>.",
         "taxonomy-tooltip": "È il codice che definisce la tipologia della notifica. Trovi più informazioni nel manuale di SEND.",
         "comunication-type": "Modalità di invio",
         "comunication-type-title": "Modalità per l’invio cartaceo",

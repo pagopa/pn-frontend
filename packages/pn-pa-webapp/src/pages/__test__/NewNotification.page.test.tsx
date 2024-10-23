@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import { createBrowserHistory } from 'history';
+import { ReactNode } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -25,6 +26,11 @@ vi.mock('react-i18next', () => ({
     t: (str: string) => str,
     i18n: {},
   }),
+  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
+    <>
+      {props.i18nKey} {props.components?.map((c) => c)}
+    </>
+  ),
 }));
 
 const mockIsPaymentEnabledGetter = vi.fn();
