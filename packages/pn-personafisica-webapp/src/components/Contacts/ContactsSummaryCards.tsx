@@ -55,11 +55,14 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
       return t('summary-card.no-address');
     }
 
-    const contactsType = availableAddresses.reduce((acc, item) => {
-      // eslint-disable-next-line functional/immutable-data
-      acc[item.channelType] = t(`summary-card.${item.channelType}`);
-      return acc;
-    }, {} as { [key: string]: string });
+    const contactsType = availableAddresses.reduce(
+      (acc, item) => {
+        // eslint-disable-next-line functional/immutable-data
+        acc[item.channelType] = t(`summary-card.${item.channelType}`);
+        return acc;
+      },
+      {} as { [key: string]: string }
+    );
 
     return Object.values(contactsType).join(', ');
   };
@@ -89,18 +92,12 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
       sx={{ width: { xs: '100%', lg: '185px' } }}
       data-testid={isCourtesyCard ? 'courtesyContactsCard' : 'legalContactsCard'}
     >
-      <CardActionArea
-        onClick={goToSection}
-        sx={{ p: 2 }}
-        aria-label={t(title)}
-        aria-description={getDescription()}
-      >
+      <CardActionArea onClick={goToSection} sx={{ p: 2 }}>
         {getIcon()}
         <Typography
           variant="body2"
           fontWeight={600}
           data-testid="cardTitle"
-          aria-hidden
           sx={{ mt: 0.5, mb: 1 }}
         >
           {t(title)}
@@ -108,7 +105,6 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
         <Typography
           variant="body2"
           data-testid="cardDescription"
-          aria-hidden
           color={hasAddress ? 'primary' : 'text.secondary'}
         >
           {getDescription()}
