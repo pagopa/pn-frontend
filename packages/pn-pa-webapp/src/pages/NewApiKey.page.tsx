@@ -179,7 +179,7 @@ const NewApiKey = () => {
         </Prompt>
       )}
 
-      {apiKeySent && apiKey.id !== '' && <SyncFeedbackApiKey newApiKeyId={apiKey.id} />}
+      {apiKeySent && apiKey.apiKey !== '' && <SyncFeedbackApiKey newApiKey={apiKey.apiKey} />}
     </>
   );
 };
