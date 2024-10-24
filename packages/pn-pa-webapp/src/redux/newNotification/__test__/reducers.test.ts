@@ -25,6 +25,7 @@ import {
   setPreliminaryInformations,
   setSenderInfos,
 } from '../reducers';
+import { PreliminaryInformationsPayload } from '../types';
 
 const initialState = {
   loading: false,
@@ -40,6 +41,7 @@ const initialState = {
     taxonomyCode: '',
     notificationFeePolicy: '',
     senderDenomination: '',
+    lang: 'it',
   },
   groups: [],
   isCompleted: false,
@@ -97,7 +99,7 @@ describe('New notification redux state tests', () => {
   });
 
   it('Should be able to set preliminary informations', () => {
-    const preliminaryInformations = {
+    const preliminaryInformations: PreliminaryInformationsPayload = {
       paProtocolNumber: 'mocked-notificationId',
       subject: 'mocked-subject',
       abstract: '',
@@ -105,6 +107,7 @@ describe('New notification redux state tests', () => {
       group: '',
       taxonomyCode: '010801N',
       paymentMode: PaymentModel.PAGO_PA_NOTICE_F24,
+      lang: 'it',
     };
     const action = store.dispatch(setPreliminaryInformations(preliminaryInformations));
     expect(action.type).toBe('newNotificationSlice/setPreliminaryInformations');

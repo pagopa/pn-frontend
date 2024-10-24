@@ -1,7 +1,8 @@
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
-import { PaymentModel } from '../../models/NewNotification';
 
-export interface PreliminaryInformationsPayload {
+import { NewNotificationBilingualism, PaymentModel } from '../../models/NewNotification';
+
+export interface PreliminaryInformationsPayload extends NewNotificationBilingualism {
   paProtocolNumber: string;
   subject: string;
   abstract?: string;
@@ -9,6 +10,7 @@ export interface PreliminaryInformationsPayload {
   group?: string;
   paymentMode: PaymentModel;
   taxonomyCode: string;
+  senderDenomination?: string;
 }
 
 export interface UploadDocumentParams {
@@ -30,6 +32,6 @@ export interface UploadPaymentResponse {
 export interface UploadDocumentsResponse {
   [id: string]: {
     key: string;
-    versionToken: string;  
+    versionToken: string;
   };
 }

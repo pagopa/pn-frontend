@@ -1,4 +1,5 @@
 import { newNotification, newNotificationDTO } from '../../__mocks__/NewNotification.mock';
+import { NewNotificationDTO } from '../../models/NewNotification';
 import { getDuplicateValuesByKeys, newNotificationMapper } from '../notification.utility';
 
 const mockArray = [
@@ -43,5 +44,22 @@ describe('Test notification utility', () => {
   it('Checks that getDuplicateValuesByKeys returns duplicate values', () => {
     const result = getDuplicateValuesByKeys(mockArray, ['key1', 'key2', 'key3']);
     expect(result).toEqual(['value1value2value3', 'valueXvalueYvalueZ']);
+  });
+
+  it('Checks that notificationMapper returns correct bilingualism dto', () => {
+    const result = newNotificationMapper({
+      ...newNotification,
+      lang: 'other',
+      additionalLang: 'de',
+      additionalAbstract: 'abstract for de',
+      additionalSubject: 'subject for de',
+    });
+    const response: NewNotificationDTO = {
+      ...newNotificationDTO,
+      subject: 'Multone esagerato • subject for de',
+      abstract: 'abstract for de',
+      additionalLanguages: ['de'],
+    };
+    expect(result).toEqual(response);
   });
 });

@@ -19,6 +19,7 @@ interface PaConfigurationFromFile {
   API_B2B_LINK: string;
   IS_MANUAL_SEND_ENABLED: boolean;
   IS_STATISTICS_ENABLED: boolean;
+  TAXONOMY_SEND_URL: string;
 }
 
 export interface PaConfiguration extends PaConfigurationFromFile {
@@ -38,6 +39,7 @@ export interface PaConfiguration extends PaConfigurationFromFile {
   API_B2B_LINK: string;
   IS_MANUAL_SEND_ENABLED: boolean;
   IS_STATISTICS_ENABLED: boolean;
+  TAXONOMY_SEND_URL: string;
 }
 
 class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
@@ -85,6 +87,7 @@ export function getConfiguration(): PaConfiguration {
     API_B2B_LINK: configurationFromFile.API_B2B_LINK || '',
     IS_MANUAL_SEND_ENABLED: Boolean(configurationFromFile.IS_MANUAL_SEND_ENABLED),
     IS_STATISTICS_ENABLED: Boolean(configurationFromFile.IS_STATISTICS_ENABLED),
+    TAXONOMY_SEND_URL: configurationFromFile.TAXONOMY_SEND_URL,
   };
 }
 
