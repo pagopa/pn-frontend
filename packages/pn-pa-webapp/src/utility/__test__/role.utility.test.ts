@@ -6,6 +6,7 @@ import * as routes from '../../navigation/routes.const';
 import { getHomePage, getMenuItems, selfcareMenuItems } from '../role.utility';
 
 const mockedIdOrganization = 'mocked-id';
+const mockedLanguage = 'it';
 // The actual basicMenuItems includes an additional element, which would be cumbersome
 // to reproduce in the test since it accesses the Redux store and the MUI theme.
 // As the actual responsibility of getMenuItems is to decide whether to include the selfCareItems
@@ -20,13 +21,13 @@ const basicMenuItems: Array<SideMenuItem> = [
 
 describe('Test role utility', () => {
   it('return menu items for role REFERENTE_AMMINISTRATIVO', () => {
-    const items = getMenuItems(basicMenuItems, mockedIdOrganization, PNRole.ADMIN);
+    const items = getMenuItems(basicMenuItems, mockedIdOrganization, mockedLanguage, PNRole.ADMIN);
     expect(items).toEqual({
       menuItems: [
         ...basicMenuItems,
         // { label: 'menu.statistics', icon: ShowChart, route: routes.STATISTICHE },
       ],
-      selfCareItems: selfcareMenuItems(mockedIdOrganization),
+      selfCareItems: selfcareMenuItems(mockedIdOrganization, mockedLanguage),
     });
   });
 
