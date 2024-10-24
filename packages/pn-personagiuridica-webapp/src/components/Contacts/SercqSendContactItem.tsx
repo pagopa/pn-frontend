@@ -222,12 +222,12 @@ const SercqSendContactItem: React.FC = () => {
   };
 
   useEffect(() => {
-    if (externalEvent && externalEvent.destination === ChannelType.SERCQ_SEND) {
-      if (externalEvent.operation === ContactOperation.ADD) {
-        handleActivation();
-      } else if (externalEvent.operation === ContactOperation.ADD_COURTESY && !hasCourtesy) {
-        setModalOpen({ type: ModalType.COURTESY });
-      }
+    if (
+      externalEvent &&
+      externalEvent.destination === ChannelType.SERCQ_SEND &&
+      externalEvent.operation === ContactOperation.ADD
+    ) {
+      handleActivation();
       dispatch(resetExternalEvent());
     }
   }, [externalEvent]);

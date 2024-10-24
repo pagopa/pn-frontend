@@ -100,7 +100,7 @@ const SercqSendContactItem: React.FC = () => {
         tosPrivacy.current = consent;
         const source =
           externalEvent?.destination === ChannelType.SERCQ_SEND
-            ? externalEvent?.source ?? ContactSource.RECAPITI
+            ? (externalEvent?.source ?? ContactSource.RECAPITI)
             : ContactSource.RECAPITI;
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
           senderId: 'default',
@@ -252,7 +252,7 @@ const SercqSendContactItem: React.FC = () => {
     if (isPFEvent(eventKey)) {
       const source =
         externalEvent?.destination === ChannelType.SERCQ_SEND
-          ? externalEvent?.source ?? ContactSource.RECAPITI
+          ? (externalEvent?.source ?? ContactSource.RECAPITI)
           : ContactSource.RECAPITI;
       PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], {
         senderId: 'default',
