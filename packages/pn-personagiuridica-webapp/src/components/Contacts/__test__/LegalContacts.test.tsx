@@ -1,6 +1,7 @@
 import { vi } from 'vitest';
 
 import {
+  digitalAddressesPecValidation,
   digitalLegalAddresses,
   digitalLegalAddressesSercq,
 } from '../../../__mocks__/Contacts.mock';
@@ -79,5 +80,67 @@ describe('LegalContacts Component', async () => {
     expect(sercqSendContact).toBeInTheDocument();
     const activateButton = within(sercqSendContact).getByTestId('activateButton');
     expect(activateButton).toBeInTheDocument();
+  });
+
+  it('renders component - SERCQ enabled and validating PEC', async () => {
+    const { container, getByTestId, getByText } = render(<LegalContacts />, {
+      preloadedState: { contactsState: { digitalAddresses: digitalAddressesPecValidation() } },
+    });
+    expect(container).toHaveTextContent('legal-contacts.title');
+    expect(container).toHaveTextContent('legal-contacts.sub-title');
+    // check contacts
+    const pecValidationItem = getByTestId('default_pecContact');
+    expect(pecValidationItem).toBeInTheDocument();
+    const autorenewIcon = getByTestId('AutorenewIcon');
+    expect(autorenewIcon).toBeInTheDocument();
+    const validationPecProgress = getByText('legal-contacts.pec-validating');
+    expect(validationPecProgress).toBeInTheDocument();
+    const cancelValidationButton = getByText('legal-contacts.cancel-pec-validation');
+    expect(cancelValidationButton).toBeInTheDocument();
+
+    const sercqSendContact = getByTestId(`default_sercqSendContact`);
+    expect(sercqSendContact).toBeInTheDocument();
+    expect(sercqSendContact).toHaveTextContent('legal-contacts.sercq-send-enabled');
+
+    const disableButton = within(sercqSendContact).getByRole('button', { name: 'button.disable' });
+    expect(disableButton).toBeInTheDocument();
+    expect(disableButton).toBeDisabled();
+
+    const banner = within(container).getByTestId('PecVerificationAlert');
+    expect(banner).toBeInTheDocument();
+    const alertIcon = within(banner).getByTestId('InfoOutlinedIcon');
+    expect(alertIcon).toBeInTheDocument();
+    expect(banner).toHaveTextContent("legal-contacts.pec-validation-banner.title");
+    expect(banner).toHaveTextContent("legal-contacts.pec-validation-banner.dod-enabled-message");
+  });
+
+  it('renders component - SERCQ disabled and validating PEC', async () => {
+    const { container, getByTestId, getByText } = render(<LegalContacts />, {
+      preloadedState: { contactsState: { digitalAddresses: digitalAddressesPecValidation(false) } },
+    });
+    expect(container).toHaveTextContent('legal-contacts.title');
+    expect(container).toHaveTextContent('legal-contacts.sub-title');
+    // check contacts
+    const pecValidationItem = getByTestId('default_pecContact');
+    expect(pecValidationItem).toBeInTheDocument();
+    const autorenewIcon = getByTestId('AutorenewIcon');
+    expect(autorenewIcon).toBeInTheDocument();
+    const validationPecProgress = getByText('legal-contacts.pec-validating');
+    expect(validationPecProgress).toBeInTheDocument();
+    const cancelValidationButton = getByText('legal-contacts.cancel-pec-validation');
+    expect(cancelValidationButton).toBeInTheDocument();
+
+    const sercqSendContact = getByTestId(`default_sercqSendContact`);
+    expect(sercqSendContact).toBeInTheDocument();
+    const enableButton = within(sercqSendContact).getByText('legal-contacts.sercq-send-active');
+    expect(enableButton).toBeInTheDocument();
+    expect(enableButton).toBeDisabled();
+
+    const banner = within(container).getByTestId('PecVerificationAlert');
+    expect(banner).toBeInTheDocument();
+    const alertIcon = within(banner).getByTestId('InfoOutlinedIcon');
+    expect(alertIcon).toBeInTheDocument();
+    expect(banner).toHaveTextContent("legal-contacts.pec-validation-banner.title");
+    expect(banner).toHaveTextContent("legal-contacts.pec-validation-banner.dod-disabled-message");
   });
 });
