@@ -109,7 +109,7 @@ interface BaseDetails {
 
 export interface AnalogWorkflowDetails extends BaseDetails {
   physicalAddress?: PhysicalAddress;
-  getGeneratedAarUrl?: string;
+  generatedAarUrl?: string;
 }
 
 export interface SendCourtesyMessageDetails extends BaseDetails {
@@ -328,7 +328,7 @@ export type DigitalDetails = SendCourtesyMessageDetails | SendDigitalDetails;
 
 export type AnalogDetails = SendPaperDetails | AnalogWorkflowDetails;
 
-/** External Registries  */
+/* External Registries  */
 export enum PaymentInfoDetail {
   PAYMENT_UNAVAILABLE = 'PAYMENT_UNAVAILABLE', // Technical Error
   PAYMENT_UNKNOWN = 'PAYMENT_UNKNOWN', // Payment data error

@@ -110,6 +110,10 @@ describe('NewApiKey component', async () => {
     expect(mock.history.post).toHaveLength(1);
     expect(mock.history.post[0].url).toContain('/bff/v1/api-keys');
     expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(newApiKeyDTO);
+
+    // verify the key value is shown on the response page
+    const apiKeyInput = result.getByTestId("apiKeyValue").querySelector("input");
+    expect(apiKeyInput).toHaveValue(newApiKeyResponse.apiKey);
   });
 
   it('clicks on the breadcrumb button', async () => {
