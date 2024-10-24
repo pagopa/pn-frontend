@@ -674,19 +674,18 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest.slice(0, 5)).reply(200, paymentInfo);
     mock
-      .onPost(`/bff/v1/payments/cart`, {
-        paymentNotice: {
-          noticeNumber: requiredPayment.pagoPa?.noticeCode,
-          fiscalCode: requiredPayment.pagoPa?.creditorTaxId,
-          amount: requiredPayment.pagoPa?.amount,
-          companyName: notificationToFe.senderDenomination,
-          description: notificationToFe.subject,
-        },
-        returnUrl: window.location.href,
-      })
-      .reply(500, {
-        checkoutUrl: 'https://mocked-url.com',
-      });
+    .onPost(`/bff/v1/payments/cart`, {
+      paymentNotice: {
+        noticeNumber: requiredPayment.pagoPa?.noticeCode,
+        fiscalCode: requiredPayment.pagoPa?.creditorTaxId,
+        amount: requiredPayment.pagoPa?.amount,
+        companyName: notificationToFe.senderDenomination,
+        description: notificationToFe.subject,
+      },
+      returnUrl: window.location.href,
+    })
+    .reply(500);
+
     expect(paymentHistory.length).toBe(6);
 
     await act(async () => {
@@ -697,9 +696,29 @@ describe('NotificationDetail Page', async () => {
       });
     });
 
-    const reloadButton = result.getByTestId('reload-button');
-    expect(reloadButton).toBeVisible();
+    const payButton = result.getByTestId('pay-button');
+    const item = result.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
+    expect(item).toBeInTheDocument();
+    const radioButton = item?.querySelector('[data-testid="radio-button"] input');
+    fireEvent.click(radioButton!);
+    // after radio button click, there is a timer of 1 second after that the paymeny is enabled
+    // wait...
+    await act(async () => {
+      vi.advanceTimersByTime(1000);
+    });
+    expect(payButton).toBeEnabled();
+    // we need the act method, because the loading overlay is shown at button click
+    await act(async () => {
+      fireEvent.click(payButton);
+    });
 
+    const errorMessage = item?.querySelector('[data-testid="generic-error-message"]');
+    const reloadButton = item?.querySelector('[data-testid="reload-button"]');
+    
+    expect(errorMessage).toBeVisible();
+    expect(reloadButton).toBeVisible();
+    expect(paymentHistory.length).toBe(6);
+    
     vi.useRealTimers();
   });
 
