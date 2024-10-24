@@ -58,8 +58,10 @@ const AddSpecialContactDialog: React.FC<Props> = ({
 
   const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     await formik.setFieldValue('s_value', '');
-    formik.handleChange(e);
-    checkIfSenderIsAlreadyAdded(formik.values.sender, e.target.value as ChannelType);
+    if (e.target.value !== '') {
+      formik.handleChange(e);
+      checkIfSenderIsAlreadyAdded(formik.values.sender, e.target.value as ChannelType);
+    }
   };
 
   const checkIfSenderIsAlreadyAdded = (sender: Party, channelType: ChannelType | string) => {
@@ -81,7 +83,12 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const senderChangeHandler = async (_: any, newValue: Party | null) => {
     await formik.setFieldTouched('sender', true, false);
     await formik.setFieldValue('sender', { id: newValue?.id ?? '', name: newValue?.name ?? '' });
-    if (newValue && addressesData.addresses.some((a) => a.senderId === newValue.id)) {
+    if (
+      newValue &&
+      addressesData.addresses.some(
+        (a) => a.senderId === newValue.id && formik.values.channelType !== ''
+      )
+    ) {
       checkIfSenderIsAlreadyAdded(newValue, formik.values.channelType);
       return;
     }
@@ -118,7 +125,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   });
 
   const initialValues: {
-    sender: { id: string; name: string | '' };
+    sender: { id: string; name: string };
     channelType: ChannelType | '';
     s_value: string;
   } = {
@@ -222,23 +229,22 @@ const AddSpecialContactDialog: React.FC<Props> = ({
                 </MenuItem>
               ))}
           </CustomDropdown>
-          {formik.values.channelType !== ChannelType.SERCQ_SEND &&
-            formik.values.channelType !== '' && (
-              <TextField
-                size="small"
-                fullWidth
-                id="s_value"
-                name="s_value"
-                label={t(`special-contacts.link-${formik.values.channelType.toLowerCase()}-label`, {
-                  ns: 'recapiti',
-                })}
-                value={formik.values.s_value}
-                onChange={handleChangeTouched}
-                error={formik.touched.s_value && Boolean(formik.errors.s_value)}
-                helperText={formik.touched.s_value && formik.errors.s_value}
-                sx={{ mb: 2 }}
-              />
-            )}
+          {formik.values.channelType === ChannelType.PEC && (
+            <TextField
+              size="small"
+              fullWidth
+              id="s_value"
+              name="s_value"
+              label={t(`special-contacts.link-${formik.values.channelType.toLowerCase()}-label`, {
+                ns: 'recapiti',
+              })}
+              value={formik.values.s_value}
+              onChange={handleChangeTouched}
+              error={formik.touched.s_value && Boolean(formik.errors.s_value)}
+              helperText={formik.touched.s_value && formik.errors.s_value}
+              sx={{ mb: 2 }}
+            />
+          )}
           <Typography variant="caption-semibold" mb={1} display="block">
             {t(`special-contacts.sender`, { ns: 'recapiti' })}
           </Typography>

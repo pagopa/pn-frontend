@@ -61,6 +61,7 @@ describe('test AddSpecialContactDialog', () => {
     expect(titleEl).toHaveTextContent(`special-contacts.modal-title`);
     const bodyEl = within(dialog).getByTestId('dialog-content');
     expect(bodyEl).toBeInTheDocument();
+    expect(bodyEl).not.toHaveTextContent(`special-contacts.pec`);
     expect(bodyEl).toHaveTextContent(`special-contacts.contact-to-add-description`);
     expect(bodyEl).toHaveTextContent(`special-contacts.senders`);
     const senderAutoComplete = within(bodyEl).getByTestId('sender');

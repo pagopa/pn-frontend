@@ -8,7 +8,7 @@ import { SelectedAddresses } from '../redux/contact/reducers';
 
 export const internationalPhonePrefix = '+39';
 
-export type AddressTypeItem = {
+type AddressTypeItem = {
   id: ChannelType;
   shown: boolean;
   disabled: boolean;
