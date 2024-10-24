@@ -97,6 +97,17 @@ describe('test AddSpecialContactDialog', () => {
     );
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const bodyEl = within(dialog).getByTestId('dialog-content');
+
+    await testSelect(
+      bodyEl,
+      'channelType',
+      [
+        { value: ChannelType.PEC, label: 'special-contacts.pec' },
+        { value: ChannelType.SERCQ_SEND, label: 'special-contacts.sercq_send' },
+      ],
+      0
+    );
+
     const input = getById(bodyEl, 's_value');
     // fill with invalid value
     fireEvent.change(input, { target: { value: 'invalid value' } });
@@ -231,12 +242,6 @@ describe('test AddSpecialContactDialog', () => {
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const bodyEl = within(dialog).getByTestId('dialog-content');
 
-    const input = getById(bodyEl, 's_value');
-    fireEvent.change(input, { target: { value: 'test@test.it' } });
-    await waitFor(() => {
-      expect(input).toHaveValue('test@test.it');
-    });
-
     await testSelect(
       bodyEl,
       'channelType',
@@ -246,6 +251,12 @@ describe('test AddSpecialContactDialog', () => {
       ],
       0
     );
+
+    const input = getById(bodyEl, 's_value');
+    fireEvent.change(input, { target: { value: 'test@test.it' } });
+    await waitFor(() => {
+      expect(input).toHaveValue('test@test.it');
+    });
 
     await testAutocomplete(
       bodyEl,

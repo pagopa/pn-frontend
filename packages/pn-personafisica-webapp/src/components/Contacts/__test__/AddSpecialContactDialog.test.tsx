@@ -2,12 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
-import {
-  getById,
-  queryById,
-  testAutocomplete,
-  testSelect,
-} from '@pagopa-pn/pn-commons/src/test-utils';
+import { getById, testAutocomplete, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
 import { fireEvent, waitFor } from '@testing-library/react';
 
 import { digitalAddresses, digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
@@ -81,7 +76,7 @@ describe('test AddSpecialContactDialog', () => {
     expect(confirmButton).toBeDisabled();
   });
 
-  it.skip('insert address', async () => {
+  it('insert address', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
     render(
@@ -97,23 +92,18 @@ describe('test AddSpecialContactDialog', () => {
         preloadedState: { contactsState: { digitalAddresses } },
       }
     );
-
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const bodyEl = within(dialog).getByTestId('dialog-content');
-    const channelType = getById(bodyEl, 'channelType');
 
-    // Simula il focus sul combobox per aprire il menu a tendina
-    fireEvent.focus(channelType);
-    await waitFor(() => {
-      fireEvent.click(channelType);
-    });
-
-    await waitFor(() => {
-      const option = queryById(dialog, 'dropdown-PEC');
-      console.log('option :>> ', option);
-    });
-
-    screen.debug();
+    await testSelect(
+      bodyEl,
+      'channelType',
+      [
+        { value: ChannelType.PEC, label: 'special-contacts.pec' },
+        { value: ChannelType.SERCQ_SEND, label: 'special-contacts.sercq_send' },
+      ],
+      0
+    );
 
     const input = getById(bodyEl, 's_value');
     // fill with invalid value
@@ -229,11 +219,13 @@ describe('test AddSpecialContactDialog', () => {
     });
   });
 
-  it.skip('show already exist message', async () => {
+  it('show already exist message', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
+
     const specialAddresses = digitalAddresses.filter(
       (a) => a.senderId !== 'default' && a.channelType === ChannelType.PEC
     );
+
     render(
       <AddSpecialContactDialog
         open
@@ -247,14 +239,9 @@ describe('test AddSpecialContactDialog', () => {
         preloadedState: { contactsState: { digitalAddresses } },
       }
     );
+
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const bodyEl = within(dialog).getByTestId('dialog-content');
-
-    const input = getById(bodyEl, 's_value');
-    fireEvent.change(input, { target: { value: 'test@test.it' } });
-    await waitFor(() => {
-      expect(input).toHaveValue('test@test.it');
-    });
 
     await testSelect(
       bodyEl,
@@ -265,6 +252,12 @@ describe('test AddSpecialContactDialog', () => {
       ],
       0
     );
+
+    const input = getById(bodyEl, 's_value');
+    fireEvent.change(input, { target: { value: 'test@test.it' } });
+    await waitFor(() => {
+      expect(input).toHaveValue('test@test.it');
+    });
 
     await testAutocomplete(
       bodyEl,
