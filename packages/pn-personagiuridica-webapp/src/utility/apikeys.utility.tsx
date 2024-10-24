@@ -10,23 +10,17 @@ import {
   VirtualKeyStatus,
 } from '../generated-client/pg-apikeys';
 
-function localizeStatus(
-  status: string,
-  history?: Array<PublicKeyStatusHistory>
-): {
-  label: string;
-  tooltip?: ReactNode;
-} {
-  return {
-    label: `status.${status}`,
-    tooltip: history ? <TooltipApiKey history={history} /> : undefined,
-  };
-}
-
 type TooltipApiKeyProps = { history: Array<PublicKeyStatusHistory> };
 
 export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
   const { t } = useTranslation(['integrazioneApi']);
+
+  const getApiKeyHistory = (label: string, history: PublicKeyStatusHistory) => (
+    <Box sx={{ textAlign: 'left' }} key={`${label}-${history.date}`}>
+      {t(`tooltip.${label}`)} {history.date ? formatDate(history.date) : ''}
+    </Box>
+  );
+
   return (
     <Box
       sx={{
@@ -35,26 +29,18 @@ export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
         },
       }}
     >
-      {history?.map((h, index) => {
-        const output = (p: string, h: PublicKeyStatusHistory) => (
-          <Box sx={{ textAlign: 'left' }} key={index}>
-            <Box>
-              {t(`tooltip.${p}`)} {formatDate(h.date ?? '')}
-            </Box>
-          </Box>
-        );
-
-        const suffixToday = isToday(new Date(h.date ?? '')) ? '' : '-in';
+      {history?.map((h) => {
+        const suffixToday = h.date && isToday(new Date(h.date)) ? '' : '-in';
 
         switch (h.status) {
           case PublicKeyStatus.Active:
-            return output(`enabled${suffixToday}`, h);
+            return getApiKeyHistory(`enabled${suffixToday}`, h);
           case PublicKeyStatus.Created:
-            return output(`created${suffixToday}`, h);
+            return getApiKeyHistory(`created${suffixToday}`, h);
           case PublicKeyStatus.Blocked:
-            return output(`blocked${suffixToday}`, h);
+            return getApiKeyHistory(`blocked${suffixToday}`, h);
           case PublicKeyStatus.Rotated:
-            return output(`rotated${suffixToday}`, h);
+            return getApiKeyHistory(`rotated${suffixToday}`, h);
           default:
             return <></>;
         }
@@ -71,21 +57,28 @@ export function getApiKeyStatusInfos(
   label: string;
   tooltip?: ReactNode;
 } {
+  const label = `status.${status.toLowerCase()}`;
+  const tooltip = statusHistory ? <TooltipApiKey history={statusHistory} /> : undefined;
+
   switch (status) {
+    case VirtualKeyStatus.Enabled:
     case PublicKeyStatus.Active:
       return {
         color: 'success',
-        ...localizeStatus('enabled', statusHistory),
+        label,
+        tooltip,
       };
     case PublicKeyStatus.Blocked:
       return {
         color: 'default',
-        ...localizeStatus('blocked', statusHistory),
+        label,
+        tooltip,
       };
     case PublicKeyStatus.Rotated:
       return {
         color: 'warning',
-        ...localizeStatus('rotated', statusHistory),
+        label,
+        tooltip,
       };
     default:
       return {

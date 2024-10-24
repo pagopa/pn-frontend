@@ -1,4 +1,4 @@
-import { parseError } from '@pagopa-pn/pn-commons';
+import { TosPrivacyConsent, parseError } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
@@ -15,6 +15,11 @@ import {
   PublicKeysApiFactory,
   VirtualKeysApiFactory,
 } from '../../generated-client/pg-apikeys';
+import {
+  BffTosPrivacyActionBody,
+  ConsentType,
+  UserConsentsApiFactory,
+} from '../../generated-client/tos-privacy';
 import { GetApiKeysParams } from '../../models/ApiKeys';
 
 export enum PUBLIC_APIKEYS_ACTIONS {
@@ -24,6 +29,8 @@ export enum PUBLIC_APIKEYS_ACTIONS {
   CHANGE_PUBLIC_APIKEY_STATUS = 'changePublicApiKeyStatus',
   ROTATE_PUBLIC_APIKEY = 'rotatePublicApiKey',
   CHECK_PUBLIC_APIKEY_ISSUER = 'checkPublicApiKeyIssuer',
+  ACCEPT_TOS_PRIVACY = 'acceptTosPrivacyB2B',
+  GET_TOS_PRIVACY = 'getTosPrivacyB2B',
 }
 
 export enum VIRTUAL_APIKEYS_ACTIONS {
@@ -120,6 +127,40 @@ export const checkPublicKeyIssuer = createAsyncThunk<BffPublicKeysCheckIssuerRes
     try {
       const apiKeysFactory = PublicKeysApiFactory(undefined, undefined, apiClient);
       const response = await apiKeysFactory.checkIssuerPublicKeyV1();
+
+      return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+/**
+ * Retrieves if the terms of service are already approved
+ */
+export const getTosPrivacy = createAsyncThunk(
+  PUBLIC_APIKEYS_ACTIONS.GET_TOS_PRIVACY,
+  async (_, { rejectWithValue }) => {
+    try {
+      const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
+      const response = await tosPrivacyFactory.getPgTosPrivacyV1([ConsentType.TosDestB2B]);
+
+      return response.data as Array<TosPrivacyConsent>;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+/**
+ * Accepts the terms of service
+ */
+export const acceptTosPrivacy = createAsyncThunk<void, Array<BffTosPrivacyActionBody>>(
+  PUBLIC_APIKEYS_ACTIONS.ACCEPT_TOS_PRIVACY,
+  async (body: Array<BffTosPrivacyActionBody>, { rejectWithValue }) => {
+    try {
+      const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
+      const response = await tosPrivacyFactory.acceptPgTosPrivacyV1(body);
 
       return response.data;
     } catch (e: any) {

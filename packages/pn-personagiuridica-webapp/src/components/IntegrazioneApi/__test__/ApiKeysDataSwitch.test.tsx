@@ -29,7 +29,13 @@ describe('Api Keys Data Switch', () => {
 
   it('renders component - name', () => {
     const { container } = render(
-      <ApiKeysDataSwitch handleModalClick={mockClick} keys={publicKeys} data={data} type="name" />
+      <ApiKeysDataSwitch
+        handleModalClick={mockClick}
+        keys={publicKeys}
+        data={data}
+        type="name"
+        menuType="publicKeys"
+      />
     );
     const regexp = new RegExp(`^${data.name}$`, 'ig');
     expect(container).toHaveTextContent(regexp);

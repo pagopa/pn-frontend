@@ -80,11 +80,7 @@ const SercqSendCourtesyInput: React.FC<{
   );
 };
 
-const SercqSendCourtesyDialog: React.FC<Props> = ({
-  open = false,
-  onDiscard,
-  onConfirm,
-}) => {
+const SercqSendCourtesyDialog: React.FC<Props> = ({ open = false, onDiscard, onConfirm }) => {
   const { t } = useTranslation(['common', 'recapiti']);
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,6 +103,11 @@ const SercqSendCourtesyDialog: React.FC<Props> = ({
       }),
   });
 
+  const handleDiscard = () => {
+    onDiscard();
+    formik.resetForm();
+  };
+
   const formik = useFormik({
     initialValues: { channelType: '', value: '' },
     validateOnMount: true,
@@ -115,6 +116,7 @@ const SercqSendCourtesyDialog: React.FC<Props> = ({
     onSubmit: (values) => {
       if (values.channelType) {
         onConfirm(values.channelType as ChannelType, values.value);
+        formik.resetForm();
       }
     },
   });
@@ -170,7 +172,7 @@ const SercqSendCourtesyDialog: React.FC<Props> = ({
         </form>
       </PnDialogContent>
       <PnDialogActions>
-        <Button onClick={onDiscard} variant="naked">
+        <Button onClick={handleDiscard} variant="naked">
           {t('button.not-now')}
         </Button>
         <Button

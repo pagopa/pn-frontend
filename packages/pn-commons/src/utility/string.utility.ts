@@ -22,6 +22,7 @@ export const dataRegex = {
   // Carlos Lombardi, 2023.01.23
 
   name: /^[A-Za-zÀ-ÿ\-'" 0-9\.]+$/,
+  publicKeyName: /^[a-zA-Z0-9-\\s]+$/i,
   lettersAndNumbers: /^[A-Za-z0-9]+$/,
   // this for string that have numbers, characters, - and _
   lettersNumbersAndDashs: /^[A-Za-z0-9-_]+$/,

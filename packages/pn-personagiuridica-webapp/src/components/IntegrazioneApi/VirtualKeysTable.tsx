@@ -1,4 +1,3 @@
-import { add } from 'date-fns';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -14,31 +13,44 @@ import {
   SmartTable,
   SmartTableData,
   formatDate,
+  useHasPermissions,
 } from '@pagopa-pn/pn-commons';
 
-import { BffPublicKeysResponse, PublicKeyRow } from '../../generated-client/pg-apikeys';
+import { BffVirtualKeysResponse, VirtualKey } from '../../generated-client/pg-apikeys';
 import { ApiKeyColumnData, ModalApiKeyView } from '../../models/ApiKeys';
+import { PNRole } from '../../redux/auth/types';
+import { useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import ApiKeysDataSwitch from './ApiKeysDataSwitch';
 
 type Props = {
-  publicKeys: BffPublicKeysResponse;
+  virtualKeys: BffVirtualKeysResponse;
   handleModalClick: (view: ModalApiKeyView, publicKeyId: string) => void;
 };
 
-const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
+const VirtualKeysTable: React.FC<Props> = ({ virtualKeys, handleModalClick }) => {
   const { t } = useTranslation(['integrazioneApi']);
+  const currentUser = useAppSelector((state: RootState) => state.userState.user);
+  const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
+  const isUserAdmin = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]) && !currentUser.hasGroup;
 
-  const data: Array<Row<ApiKeyColumnData>> = publicKeys.items.map((n: PublicKeyRow) => ({
-    ...n,
-    date: n.createdAt ? formatDate(add(new Date(n.createdAt), { days: 355 }).toISOString()) : '',
-    id: n.kid ?? '',
-    menu: '',
-  }));
+  const data: Array<Row<ApiKeyColumnData>> = virtualKeys.items.map((n: VirtualKey) => {
+    const isPersonalKey = n.user?.fiscalCode === currentUser.fiscal_number;
 
-  const publicKeysColumns: Array<SmartTableData<ApiKeyColumnData>> = [
+    return {
+      ...n,
+      name: isPersonalKey ? `${n.name} (${t('virtualKeys.table.personal')})` : n.name,
+      value: !isUserAdmin || isPersonalKey ? n.value : undefined,
+      date: n.lastUpdate ? formatDate(n.lastUpdate, false) : '',
+      id: n.id ?? '',
+      menu: '',
+    };
+  });
+
+  const virtualKeysColumns: Array<SmartTableData<ApiKeyColumnData>> = [
     {
       id: 'name',
-      label: t('publicKeys.table.name'),
+      label: t('virtualKeys.table.name'),
       tableConfiguration: {
         cellProps: { width: '20%' },
       },
@@ -48,27 +60,21 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
     },
     {
       id: 'value',
-      label: t('publicKeys.table.value'),
+      label: t('virtualKeys.table.value'),
       tableConfiguration: {
         cellProps: { width: '41%' },
-      },
-      cardConfiguration: {
-        wrapValueInTypography: false,
       },
     },
     {
       id: 'date',
-      label: t('publicKeys.table.endDate'),
+      label: t('virtualKeys.table.lastUpdate'),
       tableConfiguration: {
         cellProps: { width: '15%' },
-      },
-      cardConfiguration: {
-        wrapValueInTypography: false,
       },
     },
     {
       id: 'status',
-      label: t('publicKeys.table.status'),
+      label: t('virtualKeys.table.status'),
       tableConfiguration: {
         cellProps: { width: '20%' },
       },
@@ -92,16 +98,16 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
     },
   ];
 
-  if (!publicKeys || publicKeys.items.length === 0) {
+  if (!virtualKeys || virtualKeys.items.length === 0) {
     return (
-      <EmptyState sentimentIcon={KnownSentiment.NONE}>{t('publicKeys.empty-state')}</EmptyState>
+      <EmptyState sentimentIcon={KnownSentiment.NONE}>{t('virtualKeys.empty-state')}</EmptyState>
     );
   }
 
   return (
     <SmartTable
       data={data}
-      conf={publicKeysColumns}
+      conf={virtualKeysColumns}
       sortLabels={{
         title: t('sort.title', { ns: 'notifiche' }),
         optionsTitle: t('sort.options', { ns: 'notifiche' }),
@@ -109,11 +115,11 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
         asc: t('sort.asc', { ns: 'notifiche' }),
         dsc: t('sort.desc', { ns: 'notifiche' }),
       }}
-      testId="publicKeysTable"
+      testId="virtualKeysTable"
       slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
     >
       <SmartHeader>
-        {publicKeysColumns.map((column) => (
+        {virtualKeysColumns.map((column) => (
           <SmartHeaderCell
             key={column.id.toString()}
             columnId={column.id}
@@ -127,7 +133,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
       <SmartBody>
         {data.map((row, index) => (
           <SmartBodyRow key={row.id} index={index} testId="publicKeysBodyRow">
-            {publicKeysColumns.map((column) => (
+            {virtualKeysColumns.map((column) => (
               <SmartBodyCell
                 key={column.id.toString()}
                 columnId={column.id}
@@ -137,10 +143,10 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
               >
                 <ApiKeysDataSwitch
                   data={row}
-                  keys={publicKeys}
+                  keys={virtualKeys}
                   type={column.id}
                   handleModalClick={handleModalClick}
-                  menuType="publicKeys"
+                  menuType="virtualKeys"
                 />
               </SmartBodyCell>
             ))}
@@ -151,4 +157,4 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
   );
 };
 
-export default PublicKeysTable;
+export default VirtualKeysTable;
