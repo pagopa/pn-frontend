@@ -5,7 +5,7 @@ import { Box, Stack, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { AddressType, ChannelType, DigitalAddress, Sender } from '../../models/contacts';
+import { ChannelType, DigitalAddress, Sender } from '../../models/contacts';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import { specialContactsAvailableAddressTypes } from '../../utility/contacts.utility';
@@ -69,7 +69,10 @@ const SpecialContactItem: React.FC<Props> = ({
     });
   };
 
-  const hasPecInValidationForEntity = (senderId: string) => !!addresses.find(addr => addr.channelType === ChannelType.PEC && addr.addressType === AddressType.LEGAL && addr.pecValid === false && addr.senderId === senderId);
+  const hasPecInValidationForEntity = (senderId: string) =>
+    !!addresses.find(
+      (addr) => addr.channelType === ChannelType.PEC && !addr.pecValid && addr.senderId === senderId
+    );
 
   const renderAddress = (address: DigitalAddress) => {
     const { value, channelType, senderId, senderName, pecValid } = address;

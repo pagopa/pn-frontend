@@ -80,7 +80,7 @@ const SercqSendContactItem: React.FC = () => {
   const hasCourtesy = courtesyAddresses.length > 0;
   const blockDelete = specialPECAddresses.length > 0 || specialSERCQ_SENDAddresses.length > 0;
 
-  const verifyingPecAddress = defaultPECAddress ? !defaultPECAddress.pecValid : false;
+  const verifyingPecAddress = defaultPECAddress?.pecValid === false;
 
   const handleActivation = () => {
     dispatch(getSercqSendTosPrivacyApproval())

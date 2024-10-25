@@ -57,18 +57,22 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     DOD_DISABLED ? addr.id !== ChannelType.SERCQ_SEND : true
   );
 
-  const pecInValidationForSender = (senderId: string) => addressesData.addresses.some((address) => address.senderId === senderId && !address.pecValid);
-  const shouldAllowSetDodForSender = (senderId: string) => !(formik.values.channelType === ChannelType.SERCQ_SEND && pecInValidationForSender(senderId));
+  const pecInValidationForSender = (senderId: string) =>
+    addressesData.specialAddresses.some(
+      (address) => address.senderId === senderId && !address.pecValid
+    );
 
   const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     await formik.setFieldValue('s_value', '');
     formik.handleChange(e);
     checkIfSenderIsAlreadyAdded(formik.values.sender, e.target.value as ChannelType);
 
-    if(e.target.value as ChannelType === ChannelType.SERCQ_SEND && pecInValidationForSender(formik.values.sender.id)){
+    if (
+      (e.target.value as ChannelType) === ChannelType.SERCQ_SEND &&
+      pecInValidationForSender(formik.values.sender.id)
+    ) {
       setIsPecInValidation(true);
-    }
-    else {
+    } else {
       setIsPecInValidation(false);
     }
   };
@@ -93,10 +97,14 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     await formik.setFieldTouched('sender', true, false);
     await formik.setFieldValue('sender', { id: newValue?.id ?? '', name: newValue?.name ?? '' });
 
-    if(shouldAllowSetDodForSender(newValue?.id ?? '')) {
+    if (
+      !(
+        formik.values.channelType === ChannelType.SERCQ_SEND &&
+        pecInValidationForSender(newValue?.id ?? '')
+      )
+    ) {
       setIsPecInValidation(false);
-    }
-    else {
+    } else {
       setIsPecInValidation(true);
     }
 
@@ -143,7 +151,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     },
     channelType: value
       ? channelType
-      : addressTypes.find((a) => !a.disabled && a.shown)?.id ?? ChannelType.PEC,
+      : (addressTypes.find((a) => !a.disabled && a.shown)?.id ?? ChannelType.PEC),
     s_value: value,
   };
 
@@ -303,7 +311,11 @@ const AddSpecialContactDialog: React.FC<Props> = ({
         <Button onClick={handleClose} variant="outlined">
           {t('button.annulla')}
         </Button>
-        <Button onClick={handleConfirm} variant="contained" disabled={!formik.isValid || isPecInValidation}>
+        <Button
+          onClick={handleConfirm}
+          variant="contained"
+          disabled={!formik.isValid || isPecInValidation}
+        >
           {t('button.associa')}
         </Button>
       </PnDialogActions>
