@@ -5,7 +5,7 @@ type Props = {
 };
 
 export const FormBoxTitle = ({ text }: Props) => (
-  <Typography variant="sidenav" fontWeight={600} fontSize={16}>
+  <Typography variant="sidenav" fontWeight={600} fontSize={'16px'}>
     {text}
   </Typography>
 );

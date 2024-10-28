@@ -30,7 +30,7 @@ const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: 
       <FormBoxTitle text={t('notification-content-title')} />
       <FormBoxSubtitle text={t('notification-content-subtitle')} />
       {hasOtherLang && (
-        <Typography variant="body2" color={'text.secondary'} marginTop={'16px'} fontWeight={600}>
+        <Typography variant="body2" color={'text.secondary'} marginTop={2} fontWeight={600}>
           {languages.it}
         </Typography>
       )}
@@ -60,7 +60,7 @@ const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: 
       />
       {hasOtherLang && (
         <>
-          <Typography variant="body2" color={'text.secondary'} marginTop={'16px'} fontWeight={600}>
+          <Typography variant="body2" color={'text.secondary'} marginTop={2} fontWeight={600}>
             {languages[formik.values.additionalLang as LangCode]}
           </Typography>
           <TextField

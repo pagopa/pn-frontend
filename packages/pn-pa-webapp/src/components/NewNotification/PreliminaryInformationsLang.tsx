@@ -38,7 +38,7 @@ const PreliminaryInformationsLang = ({ formik, languages, onChange, onChangeTouc
           <FormBoxTitle text={t('notification-language-title')} />
         </FormLabel>
         <FormBoxSubtitle text={t('notification-language-subtitle')} />
-        <Grid container alignItems={'center'} spacing={2} paddingTop={'16px'}>
+        <Grid container alignItems={'center'} spacing={2} paddingTop={2}>
           <Grid item xs={12} md={6}>
             <RadioGroup
               aria-labelledby="notification-language-label"

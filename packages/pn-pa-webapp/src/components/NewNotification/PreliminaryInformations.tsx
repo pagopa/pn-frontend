@@ -220,7 +220,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           </FormBox>
           <FormBox>
             <FormBoxTitle text={t('taxonomy-id')} />
-            <Typography variant="body2" fontSize={14} marginTop={'4px'}>
+            <Typography variant="body2" fontSize={'14px'} marginTop={0.5}>
               <Trans
                 t={t}
                 i18nKey={'taxonomy-id-subtitle'}
@@ -305,7 +305,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           {IS_PAYMENT_ENABLED && (
             <FormControl margin="normal" fullWidth>
               <FormLabel id="payment-method-label">
-                <Typography fontWeight={600} fontSize={16}>
+                <Typography fontWeight={600} fontSize={'16px'}>
                   {`${t('payment-method')}*`}
                 </Typography>
               </FormLabel>

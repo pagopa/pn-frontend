@@ -9,12 +9,12 @@ type Props = {
 export const FormBox = ({ children }: Props) => (
   <Box
     sx={{
-      borderRadius: '8px',
+      borderRadius: 1,
       borderColor: 'divider',
       borderStyle: 'solid',
       borderWidth: '1px',
-      padding: '24px',
-      marginTop: '16px',
+      padding: 3,
+      marginTop: 2,
     }}
   >
     {children}

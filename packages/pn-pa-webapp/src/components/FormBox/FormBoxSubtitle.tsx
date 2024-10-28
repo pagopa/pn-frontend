@@ -5,7 +5,7 @@ type Props = {
 };
 
 export const FormBoxSubtitle = ({ text }: Props) => (
-  <Typography variant="body2" fontSize={14} marginTop={'4px'}>
+  <Typography variant="body2" fontSize={'14px'} marginTop={0.5}>
     {text}
   </Typography>
 );
