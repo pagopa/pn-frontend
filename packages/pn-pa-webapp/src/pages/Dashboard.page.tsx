@@ -92,15 +92,23 @@ const Dashboard = () => {
               {t('subtitle')}
             </Typography>
             {getConfiguration().IS_MANUAL_SEND_ENABLED ? (
-              <Button
-                id="new-notification-btn"
-                variant="contained"
-                onClick={handleRouteManualSend}
-                data-testid="newNotificationBtn"
+              <Box
+                display="flex"
+                alignItems="center"
                 sx={{ marginBottom: isMobile ? 3 : undefined }}
               >
-                {t('new-notification-button')}
-              </Button>
+                <ButtonNaked color="primary" sx={{ marginRight: '32px' }}>
+                  Impostazioni lingua
+                </ButtonNaked>
+                <Button
+                  id="new-notification-btn"
+                  variant="contained"
+                  onClick={handleRouteManualSend}
+                  data-testid="newNotificationBtn"
+                >
+                  {t('new-notification-button')}
+                </Button>
+              </Box>
             ) : (
               <Alert
                 severity="warning"
