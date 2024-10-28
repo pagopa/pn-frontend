@@ -62,6 +62,7 @@ class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
     this.ruleFor('API_B2B_LINK').isString();
     this.ruleFor('IS_MANUAL_SEND_ENABLED').isBoolean();
     this.ruleFor('IS_STATISTICS_ENABLED').isBoolean();
+    this.ruleFor('TAXONOMY_SEND_URL').isString();
   }
 }
 
