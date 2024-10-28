@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DoDisturbOnOutlinedIcon from '@mui/icons-material/DoDisturbOnOutlined';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { Alert, Box, Button, Stack, Typography } from '@mui/material';
-import { IllusAppIO, useIsMobile } from '@pagopa-pn/pn-commons';
+import { appStateActions, IllusAppIO, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -49,6 +49,12 @@ const IOContact: React.FC = () => {
       .then(() => {
         // setIsConfirmModalOpen(false);
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS, false);
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t('courtesy-contacts.io-added-successfully', { ns: 'recapiti' }),
+          })
+        );
       })
       .catch(() => {});
   };
@@ -60,6 +66,12 @@ const IOContact: React.FC = () => {
       .then(() => {
         // etIsConfirmModalOpen(false);
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS);
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t('courtesy-contacts.io-removed-successfully', { ns: 'recapiti' }),
+          })
+        );
       })
       .catch(() => {});
   };
