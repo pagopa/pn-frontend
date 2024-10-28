@@ -1,5 +1,5 @@
 import { FormikProps } from 'formik';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { TextField, Typography } from '@mui/material';
@@ -13,9 +13,16 @@ type Props = {
   formik: FormikProps<PreliminaryInformationsPayload>;
   languages: LangLabels;
   onChangeTouched: (e: ChangeEvent) => Promise<void>;
+  subjectHelperText: string;
 };
 
-const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: Props) => {
+const PreliminaryInformationsContent = ({
+  formik,
+  languages,
+  onChangeTouched,
+  subjectHelperText,
+}: Props) => {
+  const [focused, setFocused] = useState('');
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.preliminary-informations',
   });
@@ -39,8 +46,13 @@ const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: 
         name="subject"
         value={formik.values.subject}
         onChange={onChangeTouched}
+        onFocus={() => setFocused('subject')}
+        onBlur={() => setFocused('')}
         error={formik.touched.subject && Boolean(formik.errors.subject)}
-        helperText={formik.touched.subject && formik.errors.subject}
+        helperText={
+          (formik.touched.subject && formik.errors.subject) ||
+          (focused === 'subject' && subjectHelperText)
+        }
         size="small"
         margin="normal"
       />
@@ -66,10 +78,15 @@ const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: 
             label={`${t('subject')}*`}
             fullWidth
             name="additionalSubject"
+            onFocus={() => setFocused('additionalSubject')}
+            onBlur={() => setFocused('')}
             value={formik.values.additionalSubject}
             onChange={onChangeTouched}
             error={formik.touched.additionalSubject && Boolean(formik.errors.additionalSubject)}
-            helperText={formik.touched.additionalSubject && formik.errors.additionalSubject}
+            helperText={
+              (formik.touched.additionalSubject && formik.errors.additionalSubject) ||
+              (focused === 'additionalSubject' && subjectHelperText)
+            }
             size="small"
             margin="normal"
           />

@@ -198,6 +198,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             formik={formik}
             onChangeTouched={handleChangeTouched}
             languages={languages}
+            subjectHelperText={tc('too-long-field-error', { maxLength: 134 })}
           />
 
           <FormBox>
