@@ -149,7 +149,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const handleChange = (e: ChangeEvent & { target: { value: any } }) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     formik.handleChange(e);
   };
 

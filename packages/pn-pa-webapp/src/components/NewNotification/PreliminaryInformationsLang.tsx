@@ -21,7 +21,7 @@ import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormEle
 type Props = {
   formik: FormikProps<PreliminaryInformationsPayload>;
   languages: LangLabels;
-  onChange: (e: ChangeEvent & { target: { value: any } }) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onChangeTouched: (e: ChangeEvent) => Promise<void>;
 };
 
