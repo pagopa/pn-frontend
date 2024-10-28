@@ -15,6 +15,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
+import NotificationSettingsButton from '../components/Notifications/NotificationSettingsButton';
 import * as routes from '../navigation/routes.const';
 import { DASHBOARD_ACTIONS, getSentNotifications } from '../redux/dashboard/actions';
 import { setPagination } from '../redux/dashboard/reducers';
@@ -97,9 +98,7 @@ const Dashboard = () => {
                 alignItems="center"
                 sx={{ marginBottom: isMobile ? 3 : undefined }}
               >
-                <ButtonNaked color="primary" sx={{ marginRight: '32px' }}>
-                  Impostazioni lingua
-                </ButtonNaked>
+                <NotificationSettingsButton />
                 <Button
                   id="new-notification-btn"
                   variant="contained"
