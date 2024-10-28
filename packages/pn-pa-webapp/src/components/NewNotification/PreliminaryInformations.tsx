@@ -229,6 +229,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
                     target="_blank"
                     color={'primary'}
                     fontWeight={600}
+                    sx={{ textDecoration: 'none' }}
                   />,
                 ]}
               />
