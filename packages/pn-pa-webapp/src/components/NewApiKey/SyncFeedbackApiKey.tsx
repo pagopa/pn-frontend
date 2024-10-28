@@ -7,7 +7,7 @@ import { IllusCompleted } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 
-const SyncFeedbackApiKey = ({ newApiKeyId = '' }) => {
+const SyncFeedbackApiKey = ({ newApiKey = '' }) => {
   const navigate = useNavigate();
   const { t } = useTranslation(['apikeys']);
   const isMobile = useIsMobile('xl');
@@ -44,7 +44,8 @@ const SyncFeedbackApiKey = ({ newApiKeyId = '' }) => {
         <Box sx={{ mt: 3, mb: 5 }}>
           <TextField
             id="apiKeyId"
-            value={newApiKeyId}
+            data-testid="apiKeyValue"
+            value={newApiKey}
             name="apiKeyId"
             sx={{
               width: isMobile ? '100%' : '450px',
@@ -61,7 +62,7 @@ const SyncFeedbackApiKey = ({ newApiKeyId = '' }) => {
                   <CopyToClipboard
                     tooltipMode={true}
                     tooltip={t('api-key-copied')}
-                    getValue={() => newApiKeyId || ''}
+                    getValue={() => newApiKey ?? ''}
                   />
                 </InputAdornment>
               ),
