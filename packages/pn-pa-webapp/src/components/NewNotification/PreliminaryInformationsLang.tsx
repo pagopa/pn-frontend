@@ -16,9 +16,7 @@ import { LangCode, LangLabels } from '@pagopa/mui-italia';
 
 import { BILINGUALISM_LANGUAGES, NewNotificationLangOther } from '../../models/NewNotification';
 import { PreliminaryInformationsPayload } from '../../redux/newNotification/types';
-import { FormBox } from '../FormBox/FormBox';
-import { FormBoxSubtitle } from '../FormBox/FormBoxSubtitle';
-import { FormBoxTitle } from '../FormBox/FormBoxTitle';
+import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 
 type Props = {
   formik: FormikProps<PreliminaryInformationsPayload>;

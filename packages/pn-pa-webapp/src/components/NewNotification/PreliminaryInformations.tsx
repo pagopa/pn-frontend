@@ -36,10 +36,8 @@ import { PreliminaryInformationsPayload } from '../../redux/newNotification/type
 import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';
-import { FormBox } from '../FormBox/FormBox';
-import { FormBoxSubtitle } from '../FormBox/FormBoxSubtitle';
-import { FormBoxTitle } from '../FormBox/FormBoxTitle';
 import NewNotificationCard from './NewNotificationCard';
+import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 import PreliminaryInformationsContent from './PreliminaryInformationsContent';
 import PreliminaryInformationsLang from './PreliminaryInformationsLang';
 
