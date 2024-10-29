@@ -508,5 +508,10 @@
         "message": "Il numero di protocollo inserito è già esistente"
       }
     }
+  },
+  "settings": {
+    "select-language-to-confirm": "Per confermare, seleziona una lingua",
+    "language-settings-title": "Impostazioni lingua",
+    "language-settings-subtitle": "In questa sezione puoi scegliere una lingua aggiuntiva\ncon cui inviare la notifica ai destinatari, oltre allitaliano."
   }
 }

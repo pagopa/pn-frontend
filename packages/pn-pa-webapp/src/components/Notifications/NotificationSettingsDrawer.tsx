@@ -19,12 +19,10 @@ import { CustomDropdown } from '@pagopa-pn/pn-commons';
 import { LANGUAGES } from '@pagopa-pn/pn-commons/src/utility/costants';
 import { ButtonNaked, LangCode } from '@pagopa/mui-italia';
 
+import { BILINGUALISM_LANGUAGES, NewNotificationLangOther } from '../../models/NewNotification';
 import { setAdditionalLanguages } from '../../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-
-const NewNotificationLangOther = 'other'; // TODO replace from merge 2.1
-const BILINGUALISM_LANGUAGES = ['sl', 'de', 'fr']; // TODO replace from merge 2.1
 
 const NotificationSettingsDrawer = () => {
   const dispatch = useAppDispatch();
@@ -50,7 +48,7 @@ const NotificationSettingsDrawer = () => {
     lang: yup.string().oneOf(['it', NewNotificationLangOther]).required(),
     additionalLang: yup.string().when('lang', {
       is: NewNotificationLangOther,
-      then: yup.string().required('Per confermare, seleziona una lingua'), // TODO translate
+      then: yup.string().required(t('settings.select-language-to-confirm')),
     }),
   });
 
@@ -99,7 +97,7 @@ const NotificationSettingsDrawer = () => {
         sx={{ marginRight: 4, fontSize: '16px', fontWeight: 700, marginLeft: 2 }}
         onClick={toggleDrawer}
       >
-        {/* TODO translate */}Impostazioni lingua
+        {t('settings.language-settings-title')}
       </ButtonNaked>
       <Drawer anchor="right" open={openDrawer} onClose={onCloseDrawer}>
         <Box display="flex" justifyContent="flex-end" padding={2}>
@@ -109,7 +107,7 @@ const NotificationSettingsDrawer = () => {
         </Box>
         <Box paddingX={4}>
           <Typography variant="h6" color="text.primary">
-            {/* TODO translate */}Impostazioni lingua
+            {t('settings.language-settings-title')}
           </Typography>
           <Typography
             variant="body2"
@@ -118,8 +116,7 @@ const NotificationSettingsDrawer = () => {
             marginTop={2}
             marginBottom={2}
           >
-            {/* TODO translate */}In questa sezione puoi scegliere una lingua aggiuntiva{'\n'}con
-            cui inviare la notifica ai destinatari, oltre allitaliano.
+            {t('settings.language-settings-subtitle')}
           </Typography>
           <FormControl fullWidth>
             <RadioGroup
@@ -137,14 +134,18 @@ const NotificationSettingsDrawer = () => {
               <FormControlLabel
                 value={NewNotificationLangOther}
                 control={<Radio />}
-                label={t('italian-and-other-language')}
+                label={t(
+                  'new-notification.steps.preliminary-informations.italian-and-other-language'
+                )}
                 data-testid="notificationLanguageRadio"
               />
             </RadioGroup>
             {formik.values.lang === NewNotificationLangOther && (
               <CustomDropdown
                 id="additionalLang"
-                label={`${t('select-other-language')}*`}
+                label={`${t(
+                  'new-notification.steps.preliminary-informations.select-other-language'
+                )}*`}
                 name="additionalLang"
                 size="medium"
                 margin="none"
