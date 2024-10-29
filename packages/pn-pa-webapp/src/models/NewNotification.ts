@@ -36,6 +36,7 @@ interface BaseNewNotification {
 export interface NewNotificationDTO extends BaseNewNotification {
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
+  additionalLanguages?: Array<string>;
 }
 
 // New Notification
@@ -81,11 +82,18 @@ export interface NewNotificationDocument {
   };
 }
 
-export interface NewNotification extends BaseNewNotification {
+export interface NewNotification extends BaseNewNotification, NewNotificationBilingualism {
   paymentMode?: PaymentModel;
   recipients: Array<NewNotificationRecipient>;
   documents: Array<NewNotificationDocument>;
   payment?: { [key: string]: PaymentObject };
+}
+
+export interface NewNotificationBilingualism {
+  lang?: 'it' | 'other';
+  additionalLang?: string;
+  additionalSubject?: string;
+  additionalAbstract?: string;
 }
 
 export interface PaymentObject {
@@ -99,3 +107,6 @@ export interface NewNotificationResponse {
   paProtocolNumber: string;
   idempotenceToken: string;
 }
+
+export const BILINGUALISM_LANGUAGES = ['de', 'sl', 'fr'];
+export const NewNotificationLangOther = 'other';
