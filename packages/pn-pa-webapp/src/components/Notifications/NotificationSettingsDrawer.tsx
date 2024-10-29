@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -20,18 +20,18 @@ import { LANGUAGES } from '@pagopa-pn/pn-commons/src/utility/costants';
 import { ButtonNaked, LangCode } from '@pagopa/mui-italia';
 
 const NewNotificationLangOther = 'other'; // TODO replace from merge 2.1
-const BILINGUALISM_LANGUAGES = ['it', 'en']; // TODO replace from merge 2.1
+const BILINGUALISM_LANGUAGES = ['sl', 'de', 'fr']; // TODO replace from merge 2.1
 
-const NotificationSettingsButton = () => {
+const NotificationSettingsDrawer = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const { t, i18n } = useTranslation(['notifiche']);
 
   const toggleDrawer = () => setOpenDrawer(!openDrawer);
 
-  const onClose = async () => {
+  const onCloseDrawer = async () => {
     await formik.validateForm();
     if (!formik.isValid) {
-      await formik.setTouched({ additionalLang: true });
+      await formik.setTouched({ lang: true, additionalLang: true });
       return;
     }
     formik.handleSubmit();
@@ -46,14 +46,17 @@ const NotificationSettingsButton = () => {
     }),
   });
 
+  const initialValues = {
+    lang: 'it',
+    additionalLang: '',
+  };
   const formik = useFormik({
-    initialValues: {
-      lang: 'it',
-      additionalLang: '',
-    },
+    initialValues,
     validationSchema,
     onSubmit: (values, { resetForm }) => {
-      resetForm();
+      resetForm({ values: initialValues });
+
+      // TODO call API
     },
   });
 
@@ -62,14 +65,33 @@ const NotificationSettingsButton = () => {
     return LANGUAGES[currentLang] ?? LANGUAGES.it;
   }, [i18n.language]);
 
+  const initForm = async () => {
+    // TODO replace with real data
+    await new Promise((r) => setTimeout(r, 2000));
+    await formik.setValues({
+      lang: NewNotificationLangOther,
+      additionalLang: 'de',
+    });
+  };
+
+  useEffect(() => {
+    if (openDrawer) {
+      void initForm();
+    }
+  }, [openDrawer]);
+
   return (
     <>
-      <ButtonNaked color="primary" sx={{ marginRight: '32px' }} onClick={toggleDrawer}>
+      <ButtonNaked
+        color="primary"
+        sx={{ marginRight: 4, fontSize: '16px', fontWeight: 700, marginLeft: 2 }}
+        onClick={toggleDrawer}
+      >
         Impostazioni lingua
       </ButtonNaked>
-      <Drawer anchor="right" open={openDrawer} onClose={onClose}>
+      <Drawer anchor="right" open={openDrawer} onClose={onCloseDrawer}>
         <Box display="flex" justifyContent="flex-end" padding={2}>
-          <IconButton aria-label="close" onClick={onClose}>
+          <IconButton aria-label="close" onClick={onCloseDrawer}>
             <CloseIcon fontSize="medium" sx={{ color: 'action.active' }} />
           </IconButton>
         </Box>
@@ -77,7 +99,13 @@ const NotificationSettingsButton = () => {
           <Typography variant="h6" color="text.primary">
             Impostazioni lingua
           </Typography>
-          <Typography variant="body2" color="text.primary" whiteSpace="pre" margin="16px 0">
+          <Typography
+            variant="body2"
+            color="text.primary"
+            whiteSpace="pre"
+            marginTop={2}
+            marginBottom={2}
+          >
             In questa sezione puoi scegliere una lingua aggiuntiva{'\n'}con cui inviare la notifica
             ai destinatari, oltre allitaliano.
           </Typography>
@@ -131,4 +159,4 @@ const NotificationSettingsButton = () => {
   );
 };
 
-export default NotificationSettingsButton;
+export default NotificationSettingsDrawer;
