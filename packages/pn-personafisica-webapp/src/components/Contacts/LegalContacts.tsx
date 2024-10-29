@@ -11,23 +11,32 @@ import SercqSendContactItem from './SercqSendContactItem';
 
 const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultSERCQ_SENDAddress, defaultPECAddress, addresses } = useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultSERCQ_SENDAddress, defaultPECAddress, addresses } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
   const { DOD_DISABLED } = getConfiguration();
 
-  const hasPartyDodEnabledAndValidatingPec = addresses.some(address_1 => 
-    address_1.channelType === ChannelType.PEC && 
-    !address_1.pecValid &&
-    addresses.some(address_2 =>
-      address_2.channelType === ChannelType.SERCQ_SEND &&
-      address_2.senderId === address_1.senderId
-    )
+  const hasPartyDodEnabledAndValidatingPec = addresses.some(
+    (address_1) =>
+      address_1.channelType === ChannelType.PEC &&
+      !address_1.pecValid &&
+      addresses.some(
+        (address_2) =>
+          address_2.channelType === ChannelType.SERCQ_SEND &&
+          address_2.senderId === address_1.senderId
+      )
   );
 
-  const hasValidatingPecSpecialContact = addresses.some(address => address.channelType === ChannelType.PEC && !address.pecValid);
-  
-  const verifyingPecAddress = defaultPECAddress && !defaultPECAddress.pecValid || hasValidatingPecSpecialContact;
+  const hasValidatingPecSpecialContact = addresses.some(
+    (address) => address.channelType === ChannelType.PEC && !address.pecValid
+  );
 
-  const message = hasPartyDodEnabledAndValidatingPec ? "legal-contacts.pec-validation-banner.dod-enabled-message" : "legal-contacts.pec-validation-banner.dod-disabled-message";
+  const verifyingPecAddress =
+    (defaultPECAddress && !defaultPECAddress.pecValid) || hasValidatingPecSpecialContact;
+
+  const message = hasPartyDodEnabledAndValidatingPec
+    ? 'legal-contacts.pec-validation-banner.dod-enabled-message'
+    : 'legal-contacts.pec-validation-banner.dod-disabled-message';
 
   return (
     <Box id="legalContactsSection">
@@ -37,20 +46,23 @@ const LegalContacts = () => {
       <Typography variant="body1">
         <Trans i18nKey="legal-contacts.sub-title" ns="recapiti" />
       </Typography>
-      {verifyingPecAddress &&
+      {verifyingPecAddress && (
         <Alert data-testid="PecVerificationAlert" severity="info" sx={{ mt: 4 }}>
           <Typography variant="inherit" sx={{ fontWeight: '600' }}>
-            { t('legal-contacts.pec-validation-banner.title', { ns: 'recapiti'}) }
+            {t('legal-contacts.pec-validation-banner.title', { ns: 'recapiti' })}
           </Typography>
-          <Typography variant="inherit">
-            { t(message, { ns: 'recapiti'}) }
-          </Typography>
+          <Typography variant="inherit">{t(message, { ns: 'recapiti' })}</Typography>
         </Alert>
-      }
+      )}
       <Stack spacing={!defaultSERCQ_SENDAddress ? 2 : 0} mt={4} data-testid="legalContacts">
-        {!DOD_DISABLED && <SercqSendContactItem />}
-        {!DOD_DISABLED && !defaultSERCQ_SENDAddress && <Divider>{t('conjunctions.or')}</Divider>}
+        {!DOD_DISABLED && !defaultPECAddress?.pecValid && <SercqSendContactItem />}
+        {!DOD_DISABLED && !defaultSERCQ_SENDAddress && !defaultPECAddress && (
+          <Divider>{t('conjunctions.or')}</Divider>
+        )}
         <PecContactItem />
+        {!DOD_DISABLED && !defaultSERCQ_SENDAddress && defaultPECAddress?.pecValid && (
+          <SercqSendContactItem />
+        )}
       </Stack>
     </Box>
   );

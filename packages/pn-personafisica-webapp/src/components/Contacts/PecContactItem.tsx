@@ -184,6 +184,8 @@ const PecContactItem: React.FC = () => {
         pt: defaultSERCQ_SENDAddress ? 0 : 3,
         borderTopLeftRadius: defaultSERCQ_SENDAddress ? 0 : 4,
         borderTopRightRadius: defaultSERCQ_SENDAddress ? 0 : 4,
+        borderBottomLeftRadius: defaultPECAddress?.pecValid ? 0 : 4,
+        borderBottomRightRadius: defaultPECAddress?.pecValid ? 0 : 4,
       }}
     >
       {!verifyingAddress && !defaultSERCQ_SENDAddress && (
