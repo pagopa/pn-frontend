@@ -39,7 +39,7 @@
       },
       "bff-pa-info": {
         "generatorName": "typescript-axios",
-        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/68e183ea4357df65ca73561bea8d9bd2094b50a8/docs/openapi/api-external-pn-bff-pa-info.yaml",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/f03559f0cf7fd16dc2fb59fe7da1bd8461fa4254/docs/openapi/api-external-pn-bff-pa-info.yaml",
         "output": "./src/generated-client/info-pa",
         "additionalProperties": {
           "supportsES6": true,

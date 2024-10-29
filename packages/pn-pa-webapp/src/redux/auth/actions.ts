@@ -151,7 +151,9 @@ export const getAdditionalLanguages = createAsyncThunk(
   AUTH_ACTIONS.GET_ADDITIONAL_LANGUAGES,
   async (_, { rejectWithValue }) => {
     try {
-      return { additionalLanguages: ['de'] }; // TODO call API
+      const infoPaFactory = InfoPaApiFactory(undefined, undefined, apiClient);
+      const { data } = await infoPaFactory.getAdditionalLang();
+      return data;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
