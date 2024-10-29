@@ -19,12 +19,20 @@ import { CustomDropdown } from '@pagopa-pn/pn-commons';
 import { LANGUAGES } from '@pagopa-pn/pn-commons/src/utility/costants';
 import { ButtonNaked, LangCode } from '@pagopa/mui-italia';
 
+import { setAdditionalLanguages } from '../../redux/auth/actions';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
+
 const NewNotificationLangOther = 'other'; // TODO replace from merge 2.1
 const BILINGUALISM_LANGUAGES = ['sl', 'de', 'fr']; // TODO replace from merge 2.1
 
 const NotificationSettingsDrawer = () => {
+  const dispatch = useAppDispatch();
   const [openDrawer, setOpenDrawer] = useState(false);
   const { t, i18n } = useTranslation(['notifiche']);
+  const additionalLanguages = useAppSelector(
+    (state: RootState) => state.userState.additionalLanguages
+  );
 
   const toggleDrawer = () => setOpenDrawer(!openDrawer);
 
@@ -39,10 +47,10 @@ const NotificationSettingsDrawer = () => {
   };
 
   const validationSchema = yup.object({
-    lang: yup.string().required(),
+    lang: yup.string().oneOf(['it', NewNotificationLangOther]).required(),
     additionalLang: yup.string().when('lang', {
       is: NewNotificationLangOther,
-      then: yup.string().required('Per confermare, seleziona una lingua'),
+      then: yup.string().required('Per confermare, seleziona una lingua'), // TODO translate
     }),
   });
 
@@ -53,10 +61,12 @@ const NotificationSettingsDrawer = () => {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values, { resetForm }) => {
-      resetForm({ values: initialValues });
-
-      // TODO call API
+    onSubmit: (values) => {
+      void dispatch(
+        setAdditionalLanguages(
+          values.lang === NewNotificationLangOther ? [values.additionalLang] : []
+        )
+      );
     },
   });
 
@@ -66,19 +76,21 @@ const NotificationSettingsDrawer = () => {
   }, [i18n.language]);
 
   const initForm = async () => {
-    // TODO replace with real data
-    await new Promise((r) => setTimeout(r, 2000));
-    await formik.setValues({
-      lang: NewNotificationLangOther,
-      additionalLang: 'de',
-    });
+    await formik.setValues(
+      additionalLanguages && additionalLanguages.length > 0
+        ? {
+            lang: NewNotificationLangOther,
+            additionalLang: additionalLanguages[0],
+          }
+        : initialValues
+    );
   };
 
   useEffect(() => {
     if (openDrawer) {
       void initForm();
     }
-  }, [openDrawer]);
+  }, [openDrawer, additionalLanguages]);
 
   return (
     <>
@@ -87,7 +99,7 @@ const NotificationSettingsDrawer = () => {
         sx={{ marginRight: 4, fontSize: '16px', fontWeight: 700, marginLeft: 2 }}
         onClick={toggleDrawer}
       >
-        Impostazioni lingua
+        {/* TODO translate */}Impostazioni lingua
       </ButtonNaked>
       <Drawer anchor="right" open={openDrawer} onClose={onCloseDrawer}>
         <Box display="flex" justifyContent="flex-end" padding={2}>
@@ -95,9 +107,9 @@ const NotificationSettingsDrawer = () => {
             <CloseIcon fontSize="medium" sx={{ color: 'action.active' }} />
           </IconButton>
         </Box>
-        <Box padding="0 16px">
+        <Box paddingX={4}>
           <Typography variant="h6" color="text.primary">
-            Impostazioni lingua
+            {/* TODO translate */}Impostazioni lingua
           </Typography>
           <Typography
             variant="body2"
@@ -106,8 +118,8 @@ const NotificationSettingsDrawer = () => {
             marginTop={2}
             marginBottom={2}
           >
-            In questa sezione puoi scegliere una lingua aggiuntiva{'\n'}con cui inviare la notifica
-            ai destinatari, oltre allitaliano.
+            {/* TODO translate */}In questa sezione puoi scegliere una lingua aggiuntiva{'\n'}con
+            cui inviare la notifica ai destinatari, oltre allitaliano.
           </Typography>
           <FormControl fullWidth>
             <RadioGroup
@@ -139,7 +151,7 @@ const NotificationSettingsDrawer = () => {
                 value={formik.values.additionalLang}
                 onChange={(e) => formik.handleChange(e)}
                 fullWidth
-                sx={{ marginTop: '16px' }}
+                sx={{ marginTop: 4 }}
                 error={formik.touched.additionalLang && !!formik.errors.additionalLang}
                 helperText={formik.touched.additionalLang && formik.errors.additionalLang}
               >

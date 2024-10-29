@@ -22,6 +22,7 @@ import { setPagination } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import { getAdditionalLanguages } from '../redux/auth/actions';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -77,6 +78,10 @@ const Dashboard = () => {
   useEffect(() => {
     fetchNotifications();
   }, [fetchNotifications]);
+
+  useEffect(() => {
+    void dispatch(getAdditionalLanguages());
+  }, []);
 
   return (
     <Box p={3}>
