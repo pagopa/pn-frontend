@@ -51,12 +51,8 @@ const SercqSendCardTitle: React.FC<SercqSendCardTitleProps> = ({ pecEnabled }) =
 
   return (
     <Box mb={2} data-testid="DigitalContactsCardTitle">
-      {pecEnabled && (
-        <>
-          <Divider sx={{ color: 'text.secondary', mb: 3 }} />
-          <Chip label={t('badges.news')} color="primary" data-testid="newsBadge" sx={{ mb: 1 }} />
-        </>
-      )}
+      {pecEnabled && <Divider sx={{ color: 'text.secondary', mb: 3 }} />}
+      <Chip label={t('badges.news')} color="primary" data-testid="newsBadge" sx={{ mb: 1 }} />
       <Typography
         color="text.primary"
         fontWeight={700}

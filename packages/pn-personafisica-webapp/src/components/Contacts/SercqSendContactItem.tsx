@@ -55,14 +55,11 @@ type SercqSendCardTitleProps = {
 
 const SercqSendCardTitle: React.FC<SercqSendCardTitleProps> = ({ pecEnabled }) => {
   const { t } = useTranslation(['common', 'recapiti']);
+
   return (
-    <Box data-testid="DigitalContactsCardTitle">
-      {pecEnabled && (
-        <>
-          <Divider sx={{ color: 'text.secondary', mb: 3 }} />
-          <Chip label={t('badges.news')} color="primary" data-testid="newsBadge" sx={{ mb: 1 }} />
-        </>
-      )}
+    <Box mb={2} data-testid="DigitalContactsCardTitle">
+      {pecEnabled && <Divider sx={{ color: 'text.secondary', mb: 3 }} />}
+      <Chip label={t('badges.news')} color="primary" data-testid="newsBadge" sx={{ mb: 1 }} />
       <Typography
         color="text.primary"
         fontWeight={700}
