@@ -66,7 +66,7 @@ const PreliminaryInformationsContent = ({
         error={formik.touched.abstract && Boolean(formik.errors.abstract)}
         helperText={formik.touched.abstract && formik.errors.abstract}
         size="small"
-        margin="normal"
+        margin="dense"
       />
       {hasOtherLang && (
         <>
@@ -100,7 +100,7 @@ const PreliminaryInformationsContent = ({
             error={formik.touched.additionalAbstract && Boolean(formik.errors.additionalAbstract)}
             helperText={formik.touched.additionalAbstract && formik.errors.additionalAbstract}
             size="small"
-            margin="normal"
+            margin="dense"
           />
         </>
       )}

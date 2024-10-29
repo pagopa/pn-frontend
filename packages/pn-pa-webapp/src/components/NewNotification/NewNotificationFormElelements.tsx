@@ -5,7 +5,7 @@ import { Box, Typography } from '@mui/material';
 export const FormBox = ({ children }: { children: ReactNode }) => (
   <Box
     sx={{
-      borderRadius: 1,
+      borderRadius: '8px',
       borderColor: 'divider',
       borderStyle: 'solid',
       borderWidth: '1px',
@@ -24,7 +24,7 @@ export const FormBoxTitle = ({ text }: { text: string }) => (
 );
 
 export const FormBoxSubtitle = ({ text }: { text: string }) => (
-  <Typography variant="body2" fontSize={'14px'} marginTop={0.5}>
+  <Typography variant="body2" fontSize={'14px'} marginTop={1} marginBottom={1}>
     {text}
   </Typography>
 );
