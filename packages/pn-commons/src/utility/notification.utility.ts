@@ -388,7 +388,7 @@ export function getLegalFactLabel(
     );
   } else if (
     timelineStep.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW &&
-    (timelineStep.details as AnalogWorkflowDetails).getGeneratedAarUrl
+    (timelineStep.details as AnalogWorkflowDetails).generatedAarUrl
   ) {
     return getLocalizedOrDefaultLabel(
       'notifications',
@@ -463,7 +463,7 @@ export function getLegalFactLabel(
       'mancato recapito digitale'
     )}`;
 
-    // this is (at least in the examples I've seen)
+    // this is(at least in the examples I've seen)
     // related to the category NOTIFICATION_VIEWED
   } else if (legalFactType === LegalFactType.RECIPIENT_ACCESS) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
@@ -479,7 +479,7 @@ export function getLegalFactLabel(
  * Returns the mapping between current notification timeline status and its label and descriptive message.
  * @param  {INotificationDetailTimeline} step
  * @param {Array<NotificationDetailRecipient>} recipients
- * @returns {TimelineStepInfo | null}
+ * @returns {TimelineStepInfo | null }
  */
 export function getNotificationTimelineStatusInfos(
   step: INotificationDetailTimeline,
@@ -489,19 +489,19 @@ export function getNotificationTimelineStatusInfos(
   const recipient = _.isNil(step.details.recIndex)
     ? undefined
     : // For the accesses from recipient apps (cittadino / impresa)
-    // the API response will probably (in some future) include only the info about the requester recipient,
-    // i.e. recipients will be an array with exactly one element, disregarding how many recipients are included
-    // in the notification being requested.
-    // In that case, we don't consider the recIndex indicated in each timeline step,
-    // but otherwise take all steps as related with the only recipient included in the API response.
-    recipients.length === 1
-    ? recipients[0]
-    : recipients[step.details.recIndex];
+      // the API response will probably (in some future) include only the info about the requester recipient,
+      // i.e. recipients will be an array with exactly one element, disregarding how many recipients are included
+      // in the notification being requested.
+      // In that case, we don't consider the recIndex indicated in each timeline step,
+      // but otherwise take all steps as related with the only recipient included in the API response.
+      recipients.length === 1
+      ? recipients[0]
+      : recipients[step.details.recIndex];
 
   // we show the multirecipient versions of the step descriptions
   // only if the array of recipients include more than one "full" element
   // (i.e. an element including the full data about the recipient, instead of being included
-  //  just to preserve the correlation with the recIndex in each step).
+  // just to preserve the correlation with the recIndex in each step).
   // We consider a recipient description to be "full" if it includes recipientType, taxId and denomination.
   // -------------------------------------
   // Carlos Lombardi, 2023.05.17
@@ -558,7 +558,7 @@ export const getPagoPaF24Payments = (
   }, [] as Array<PaymentDetails>);
 
 /**
- * Populate only pagoPA (with eventual f24 associated) payment history array before send notification to fe.
+ * Populate only pagoPA(with eventual f24 associated) payment history array before send notification to fe.
  * @param  {Array<INotificationDetailTimeline>} timeline
  * @param  {Array<PaymentDetails>} pagoPaF24Payemnts
  * @param  {Array<ExtRegistriesPaymentDetails>} checkoutPayments

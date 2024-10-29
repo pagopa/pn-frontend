@@ -46,7 +46,7 @@ const SercqSendCourtesyRadioLabel: React.FC<{ title: string; description: string
 );
 
 const SercqSendCourtesyInput: React.FC<{
-  formik: ReturnType<typeof useFormik<{channelType: string; value: string}>>;
+  formik: ReturnType<typeof useFormik<{ channelType: string; value: string }>>;
   sx?: SxProps;
 }> = ({ formik, sx }) => {
   const { t } = useTranslation(['common', 'recapiti']);
@@ -103,6 +103,11 @@ const SercqSendCourtesyDialog: React.FC<Props> = ({ open = false, onDiscard, onC
       }),
   });
 
+  const handleDiscard = () => {
+    onDiscard();
+    formik.resetForm();
+  };
+
   const formik = useFormik({
     initialValues: { channelType: '', value: '' },
     validateOnMount: true,
@@ -111,6 +116,7 @@ const SercqSendCourtesyDialog: React.FC<Props> = ({ open = false, onDiscard, onC
     onSubmit: (values) => {
       if (values.channelType) {
         onConfirm(values.channelType as ChannelType, values.value);
+        formik.resetForm();
       }
     },
   });
@@ -166,7 +172,7 @@ const SercqSendCourtesyDialog: React.FC<Props> = ({ open = false, onDiscard, onC
         </form>
       </PnDialogContent>
       <PnDialogActions>
-        <Button onClick={onDiscard} variant="naked">
+        <Button onClick={handleDiscard} variant="naked">
           {t('button.not-now')}
         </Button>
         <Button
