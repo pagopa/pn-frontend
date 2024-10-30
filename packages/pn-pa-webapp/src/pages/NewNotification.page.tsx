@@ -9,6 +9,7 @@ import Attachments from '../components/NewNotification/Attachments';
 import PreliminaryInformations from '../components/NewNotification/PreliminaryInformations';
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
+import { NewNotificationLangOther } from '../models/NewNotification';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createNewNotification } from '../redux/newNotification/actions';
@@ -169,6 +170,9 @@ const NewNotification = () => {
                 onPreviousStep={goToPreviousStep}
                 isCompleted={isCompleted}
                 attachmentsData={notification.documents}
+                hasAdditionalLang={
+                  notification.lang === NewNotificationLangOther && !!notification.additionalLang
+                }
                 ref={childRef}
               />
             )}
