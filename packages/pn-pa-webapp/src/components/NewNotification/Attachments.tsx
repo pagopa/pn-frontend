@@ -5,7 +5,7 @@ import * as yup from 'yup';
 
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, SxProps, TextField, Typography } from '@mui/material';
+import { Alert, Box, SxProps, TextField, Typography } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -105,6 +105,7 @@ type Props = {
   attachmentsData?: Array<NewNotificationDocument>;
   forwardedRef: ForwardedRef<unknown>;
   isCompleted: boolean;
+  hasAdditionalLang?: boolean;
 };
 
 const emptyFileData = {
@@ -130,6 +131,7 @@ const Attachments: React.FC<Props> = ({
   attachmentsData,
   forwardedRef,
   isCompleted,
+  hasAdditionalLang,
 }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
@@ -300,6 +302,11 @@ const Attachments: React.FC<Props> = ({
         previousStepLabel={t('back-to-recipient')}
         previousStepOnClick={() => handlePreviousStep()}
       >
+        {hasAdditionalLang && (
+          <Alert severity="info" sx={{ mt: 2, mb: 2 }} data-testid="bannerAdditionalLanguages">
+            {t('banner-additional-languages')}
+          </Alert>
+        )}
         {formik.values.documents.map((d, i) => (
           <AttachmentBox
             key={d.id}

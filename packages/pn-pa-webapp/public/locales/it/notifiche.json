@@ -474,7 +474,8 @@
         "add-doc": "Aggiungi un documento (per esempio, la lettera d’accompagnamento)",
         "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)",
         "back-to-recipient": "Torna a Destinatario",
-        "remove-document": "Rimuovi documento"
+        "remove-document": "Rimuovi documento",
+        "banner-additional-languages": "Hai scelto di inviare la notifica in più lingue. Ricorda di allegare i documenti in entrambe le lingue selezionate."
       },
       "payment-methods": {
         "title": "Modelli di pagamento",
