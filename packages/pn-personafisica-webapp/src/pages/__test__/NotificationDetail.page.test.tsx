@@ -34,6 +34,7 @@ import {
   fireEvent,
   render,
   screen,
+  testStore,
   waitFor,
   within,
 } from '../../__test__/test-utils';
@@ -667,26 +668,26 @@ describe('NotificationDetail Page', async () => {
       paymentsData.pagoPaF24,
       paymentInfo
     );
+
     const requiredPaymentIndex = paymentHistory.findIndex(
       (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
     );
+
     const requiredPayment = paymentHistory[requiredPaymentIndex];
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest.slice(0, 5)).reply(200, paymentInfo);
     mock
-    .onPost(`/bff/v1/payments/cart`, {
-      paymentNotice: {
-        noticeNumber: requiredPayment.pagoPa?.noticeCode,
-        fiscalCode: requiredPayment.pagoPa?.creditorTaxId,
-        amount: requiredPayment.pagoPa?.amount,
-        companyName: notificationToFe.senderDenomination,
-        description: notificationToFe.subject,
-      },
-      returnUrl: window.location.href,
-    })
-    .reply(500);
-
-    expect(paymentHistory.length).toBe(6);
+      .onPost(`/bff/v1/payments/cart`, {
+        paymentNotice: {
+          noticeNumber: requiredPayment.pagoPa?.noticeCode,
+          fiscalCode: requiredPayment.pagoPa?.creditorTaxId,
+          amount: requiredPayment.pagoPa?.amount,
+          companyName: notificationToFe.senderDenomination,
+          description: notificationToFe.subject,
+        },
+        returnUrl: window.location.href,
+      })
+      .reply(500);
 
     await act(async () => {
       result = render(<NotificationDetail />, {
@@ -695,6 +696,8 @@ describe('NotificationDetail Page', async () => {
         },
       });
     });
+
+    expect(testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
 
     const payButton = result.getByTestId('pay-button');
     const item = result.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
@@ -714,11 +717,11 @@ describe('NotificationDetail Page', async () => {
 
     const errorMessage = item?.querySelector('[data-testid="generic-error-message"]');
     const reloadButton = item?.querySelector('[data-testid="reload-button"]');
-    
+
     expect(errorMessage).toBeVisible();
     expect(reloadButton).toBeVisible();
-    expect(paymentHistory.length).toBe(6);
-    
+    expect(testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
+
     vi.useRealTimers();
   });
 

@@ -140,7 +140,7 @@ const notificationSlice = createSlice({
       const noticeCode = action.meta.arg.paymentNotice.noticeNumber;
       const creditorTaxId = action.meta.arg.paymentNotice.fiscalCode;
 
-      state.paymentsData.pagoPaF24.forEach((el) => {
+      /* state.paymentsData.pagoPaF24.forEach((el) => {
         if (el.pagoPa?.creditorTaxId === creditorTaxId && el.pagoPa?.noticeCode === noticeCode) {
           el.pagoPa = {
             ...el.pagoPa,
@@ -148,7 +148,17 @@ const notificationSlice = createSlice({
             detail: PaymentInfoDetail.GENERIC_ERROR,
           };
         }
-      });
+      }); */
+      const paymentInfoIndex = state.paymentsData.pagoPaF24.findIndex(
+        (paymentData) =>
+          paymentData.pagoPa?.creditorTaxId === creditorTaxId &&
+          paymentData.pagoPa?.noticeCode === noticeCode
+      );
+      if (paymentInfoIndex !== -1 && state.paymentsData.pagoPaF24[paymentInfoIndex].pagoPa) {
+        state.paymentsData.pagoPaF24[paymentInfoIndex].pagoPa.status = PaymentStatus.FAILED;
+        state.paymentsData.pagoPaF24[paymentInfoIndex].pagoPa.detail =
+          PaymentInfoDetail.GENERIC_ERROR;
+      }
     });
     builder.addCase(getDowntimeHistory.fulfilled, (state, action) => {
       state.downtimeEvents = action.payload.result;

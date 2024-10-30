@@ -35,6 +35,7 @@ import {
   fireEvent,
   render,
   screen,
+  testStore,
   waitFor,
   within,
 } from '../../__test__/test-utils';
@@ -755,7 +756,7 @@ describe('NotificationDetail Page', async () => {
       })
       .reply(500);
 
-    expect(paymentHistory.length).toBe(6);
+    expect(testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
 
     await act(async () => {
       result = render(<NotificationDetail />, {
@@ -783,10 +784,10 @@ describe('NotificationDetail Page', async () => {
 
     const errorMessage = item?.querySelector('[data-testid="generic-error-message"]');
     const reloadButton = item?.querySelector('[data-testid="reload-button"]');
-    
+
     expect(errorMessage).toBeVisible();
     expect(reloadButton).toBeVisible();
-    expect(paymentHistory.length).toBe(6);
+    expect(testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
 
     vi.useRealTimers();
   });
