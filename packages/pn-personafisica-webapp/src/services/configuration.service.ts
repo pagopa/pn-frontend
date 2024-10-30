@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-boolean-cast */
 import { Configuration, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
 
@@ -99,7 +100,7 @@ export function getConfiguration(): PfConfiguration {
     DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED),
     WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
     F24_DOWNLOAD_WAIT_TIME: configurationFromFile.F24_DOWNLOAD_WAIT_TIME || 0,
-    DOD_DISABLED: Boolean(configurationFromFile.DOD_DISABLED)
+    DOD_DISABLED: !Boolean(configurationFromFile.DOD_DISABLED)
   };
 }
 

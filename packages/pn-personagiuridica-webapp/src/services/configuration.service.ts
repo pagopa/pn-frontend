@@ -105,7 +105,8 @@ export function getConfiguration(): PgConfiguration {
     WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
     F24_DOWNLOAD_WAIT_TIME: configurationFromFile.F24_DOWNLOAD_WAIT_TIME || 0,
     IS_B2B_ENABLED: Boolean(configurationFromFile.IS_B2B_ENABLED),
-    DOD_DISABLED: Boolean(configurationFromFile.DOD_DISABLED),
+    // eslint-disable-next-line no-extra-boolean-cast
+    DOD_DISABLED: !Boolean(configurationFromFile.DOD_DISABLED),
   };
 }
 
