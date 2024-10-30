@@ -17,12 +17,12 @@ import DesktopNotifications from '../components/Notifications/DesktopNotificatio
 import MobileNotifications from '../components/Notifications/MobileNotifications';
 import NotificationSettingsDrawer from '../components/Notifications/NotificationSettingsDrawer';
 import * as routes from '../navigation/routes.const';
+import { getAdditionalLanguages } from '../redux/auth/actions';
 import { DASHBOARD_ACTIONS, getSentNotifications } from '../redux/dashboard/actions';
 import { setPagination } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
-import { getAdditionalLanguages } from '../redux/auth/actions';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -89,14 +89,17 @@ const Dashboard = () => {
         title={t('title')}
         variantTitle="h4"
         mbTitle={isMobile ? 3 : 2}
-        titleButton={
+        subTitle={
           <Box
-            display="inline-flex"
+            display={isMobile ? 'block' : 'flex'}
+            justifyContent="space-between"
             alignItems="center"
-            sx={{ marginBottom: isMobile ? 3 : undefined, float: isMobile ? 'inherit' : 'right' }}
           >
-            {IS_MANUAL_SEND_ENABLED ? (
-              <>
+            <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+              {t('subtitle')}
+            </Typography>
+            {getConfiguration().IS_MANUAL_SEND_ENABLED ? (
+              <Box display="flex" marginBottom={isMobile ? 3 : undefined}>
                 <NotificationSettingsDrawer />
                 <Button
                   id="new-notification-btn"
@@ -106,7 +109,7 @@ const Dashboard = () => {
                 >
                   {t('new-notification-button')}
                 </Button>
-              </>
+              </Box>
             ) : (
               <Alert
                 severity="warning"
@@ -123,17 +126,6 @@ const Dashboard = () => {
                 {t('manual-send-disabled-message')}
               </Alert>
             )}
-          </Box>
-        }
-        subTitle={
-          <Box
-            display={isMobile ? 'block' : 'flex'}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
-              {t('subtitle')}
-            </Typography>
           </Box>
         }
       />
