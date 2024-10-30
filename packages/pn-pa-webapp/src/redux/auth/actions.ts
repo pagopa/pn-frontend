@@ -165,7 +165,8 @@ export const setAdditionalLanguages = createAsyncThunk(
   AUTH_ACTIONS.SET_ADDITIONAL_LANGUAGES,
   async (additionalLanguages: Array<string>, { rejectWithValue }) => {
     try {
-      // TODO call API
+      const infoPaFactory = InfoPaApiFactory(undefined, undefined, apiClient);
+      await infoPaFactory.changeAdditionalLang({ additionalLanguages }); //
       return { additionalLanguages };
     } catch (e: any) {
       return rejectWithValue(parseError(e));

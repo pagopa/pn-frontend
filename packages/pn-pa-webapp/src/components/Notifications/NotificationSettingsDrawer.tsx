@@ -96,10 +96,16 @@ const NotificationSettingsDrawer = () => {
         color="primary"
         sx={{ marginRight: 4, fontSize: '16px', fontWeight: 700, marginLeft: 2 }}
         onClick={toggleDrawer}
+        data-testid="settingsLangBtn"
       >
         {t('settings.language-settings-title')}
       </ButtonNaked>
-      <Drawer anchor="right" open={openDrawer} onClose={onCloseDrawer}>
+      <Drawer
+        anchor="right"
+        open={openDrawer}
+        onClose={onCloseDrawer}
+        data-testid="settingsLangDrawer"
+      >
         <Box display="flex" justifyContent="flex-end" padding={2}>
           <IconButton aria-label="close" onClick={onCloseDrawer}>
             <CloseIcon fontSize="medium" sx={{ color: 'action.active' }} />
