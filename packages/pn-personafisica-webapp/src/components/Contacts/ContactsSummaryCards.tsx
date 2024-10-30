@@ -55,13 +55,25 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
       return t('summary-card.no-address');
     }
 
-    const contactsType = availableAddresses.reduce((acc, item) => {
-      // eslint-disable-next-line functional/immutable-data
-      acc[item.channelType] = t(`summary-card.${item.channelType}`);
-      return acc;
-    }, {} as { [key: string]: string });
+    const contactsType = availableAddresses.reduce(
+      (acc, item) => {
+        // eslint-disable-next-line functional/immutable-data
+        acc[item.channelType] = t(`summary-card.${item.channelType}`);
+        return acc;
+      },
+      {} as { [key: string]: string }
+    );
 
-    return Object.values(contactsType).join(', ');
+    if (
+      availableAddresses.some(
+        (addr) => addr.senderId === 'default' && addr.channelType === Object.keys(contactsType)[0]
+      )
+    ) {
+      return Object.values(contactsType).join(', ');
+    }
+
+    // eslint-disable-next-line functional/immutable-data
+    return Object.values(contactsType).reverse().join(', ');
   };
 
   const goToSection = () => {

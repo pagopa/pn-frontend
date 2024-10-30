@@ -84,7 +84,7 @@ describe('ContactsSummaryCards component', () => {
     const legalTitle = within(legalContacts).getByTestId('cardTitle');
     expect(legalTitle).toHaveTextContent('summary-card.legal-title');
     const legalDescription = within(legalContacts).getByTestId('cardDescription');
-    expect(legalDescription).toHaveTextContent('summary-card.PEC, summary-card.SERCQ_SEND');
+    expect(legalDescription).toHaveTextContent('summary-card.SERCQ_SEND, summary-card.PEC');
 
     const courtesyIcon = within(courtesyContacts).getByTestId('warningIcon');
     expect(courtesyIcon).toBeInTheDocument();
