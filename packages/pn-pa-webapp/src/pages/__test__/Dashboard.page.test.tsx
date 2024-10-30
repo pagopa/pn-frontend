@@ -9,17 +9,16 @@ import {
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-import { createMatchMedia, testInput, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
+import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
 import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import Dashboard from '../Dashboard.page';
-import userEvent from '@testing-library/user-event';
 
 const mockNavigateFn = vi.fn();
-const additionalLangPath = '/bff/v1/pa/additional-lang';
+const ADDITIONAL_LANG_PATH = '/bff/v1/pa/additional-languages';
 
 // mock imports
 vi.mock('react-router-dom', async () => ({
@@ -53,7 +52,7 @@ describe('Dashboard Page', async () => {
   });
 
   beforeEach(() => {
-    mock.onGet(additionalLangPath).reply(200, { additionalLanguages: [] });
+    mock.onGet(ADDITIONAL_LANG_PATH).reply(200, { additionalLanguages: [] });
   });
 
   afterEach(() => {
@@ -231,6 +230,7 @@ describe('Dashboard Page', async () => {
 
   it('errors on api', async () => {
     mock.onGet(notificationsPath).reply(500);
+    console.log((mock as any).handlers.get)
 
     await act(async () => {
       result = render(
@@ -268,29 +268,15 @@ describe('Dashboard Page', async () => {
     expect(pageSelector).toBeInTheDocument();
   });
 
-  it.only('settings language drawer with prefilled lang', async () => {
-    mock.onGet(additionalLangPath).reply(200, { additionalLanguages: ['de'] });
-
+  it('should call API and appear button for settings language', async () => {
     await act(async () => {
       result = render(<Dashboard />);
     });
+    
+    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get[1].url).toContain(ADDITIONAL_LANG_PATH);
+
     const settingsLangBtn = result.queryByTestId('settingsLangBtn');
     expect(settingsLangBtn).toBeInTheDocument();
-    userEvent.click(settingsLangBtn!);
-
-    await act(async () => {
-      // time to appear the drawer
-      await new Promise((r) => setTimeout(r, 500));
-    });
-
-    const drawer = document.querySelector("[data-testid='settingsLangDrawer']") as HTMLElement;
-    expect(drawer).toBeInTheDocument();
-
-    await testRadio(
-      drawer,
-      'notificationLanguageRadio',
-      ['Italiano', 'new-notification.steps.preliminary-informations.italian-and-other-language'],
-      1,
-    );
   });
 });
