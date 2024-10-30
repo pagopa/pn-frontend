@@ -47,7 +47,6 @@ const Dashboard = () => {
     Math.min(pagination.nextPagesKey.length + 1, 3),
     pagination.page + 1
   );
-  const { IS_MANUAL_SEND_ENABLED } = getConfiguration();
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
