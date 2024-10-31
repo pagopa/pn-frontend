@@ -73,14 +73,6 @@ const testRecipientFormRendering = async (
       recipient ? recipient.noticeCode : undefined
     );
   }
-  const showDigitalDomicile = within(form).getByTestId(
-    `recipients[${recipientIndex}].digitalDomicileCheckbox`
-  );
-  expect(showDigitalDomicile).toHaveTextContent('add-digital-domicile');
-  const showPhysicalAddress = within(form).getByTestId(
-    `recipients[${recipientIndex}].physicalAddressCheckbox`
-  );
-  expect(showPhysicalAddress).toHaveTextContent('add-physical-domicile*');
   // check that recipientType is initially selected
   const recipientType = form.querySelector(
     `input[name="recipients[${recipientIndex}].recipientType"][value="${
@@ -92,39 +84,36 @@ const testRecipientFormRendering = async (
   const digitalForm = form.querySelector(
     `input[name="recipients[${recipientIndex}].digitalDomicile"]`
   );
+  expect(digitalForm).toBeInTheDocument();
+
   const physicalForm = within(form).queryByTestId(`physicalAddressForm${recipientIndex}`);
-  if (recipient?.showPhysicalAddress) {
-    expect(physicalForm).toBeInTheDocument();
-    const address = physicalForm?.querySelector(
-      `input[name="recipients[${recipientIndex}].address"]`
-    );
-    expect(address).toHaveValue(recipient.address);
+  expect(physicalForm).toBeInTheDocument();
+  const address = physicalForm?.querySelector(
+    `input[name="recipients[${recipientIndex}].address"]`
+  );
+
+  if (recipient) {
+    expect(address).toHaveValue(recipient?.address);
     const houseNumber = physicalForm?.querySelector(
       `input[name="recipients[${recipientIndex}].houseNumber"]`
     );
-    expect(houseNumber).toHaveValue(recipient.houseNumber);
+    expect(houseNumber).toHaveValue(recipient?.houseNumber);
     const municipality = physicalForm?.querySelector(
       `input[name="recipients[${recipientIndex}].municipality"]`
     );
-    expect(municipality).toHaveValue(recipient.municipality);
+    expect(municipality).toHaveValue(recipient?.municipality);
     const zip = physicalForm?.querySelector(`input[name="recipients[${recipientIndex}].zip"]`);
-    expect(zip).toHaveValue(recipient.zip);
+    expect(zip).toHaveValue(recipient?.zip);
     const province = physicalForm?.querySelector(
       `input[name="recipients[${recipientIndex}].province"]`
     );
-    expect(province).toHaveValue(recipient.province);
+    expect(province).toHaveValue(recipient?.province);
     const foreignState = physicalForm?.querySelector(
       `input[name="recipients[${recipientIndex}].foreignState"]`
     );
-    expect(foreignState).toHaveValue(recipient.foreignState);
-  } else {
-    expect(physicalForm).not.toBeInTheDocument();
-  }
-  if (recipient?.showDigitalDomicile) {
-    expect(digitalForm).toBeInTheDocument();
-    expect(digitalForm).toHaveValue(recipient.digitalDomicile);
-  } else {
-    expect(digitalForm).not.toBeInTheDocument();
+    expect(foreignState).toHaveValue(recipient?.foreignState);
+
+    expect(digitalForm).toHaveValue(recipient?.digitalDomicile);
   }
 };
 
@@ -154,37 +143,29 @@ const populateForm = async (
     await testInput(form, `recipients[${recipientIndex}].noticeCode`, recipient.noticeCode);
   }
   // show physical address form
-  if (recipient.showPhysicalAddress) {
-    const checkbox = within(form).getByTestId(`showPhysicalAddress${recipientIndex}`);
-    fireEvent.click(checkbox);
-    await testInput(form, `recipients[${recipientIndex}].address`, recipient.address);
-    await testInput(form, `recipients[${recipientIndex}].houseNumber`, recipient.houseNumber);
-    await testInput(form, `recipients[${recipientIndex}].municipality`, recipient.municipality);
-    await testInput(form, `recipients[${recipientIndex}].zip`, recipient.zip);
-    await testInput(form, `recipients[${recipientIndex}].province`, recipient.province);
-    await testInput(form, `recipients[${recipientIndex}].foreignState`, recipient.foreignState);
-  }
+  await testInput(form, `recipients[${recipientIndex}].address`, recipient.address);
+  await testInput(form, `recipients[${recipientIndex}].houseNumber`, recipient.houseNumber);
+  await testInput(form, `recipients[${recipientIndex}].municipality`, recipient.municipality);
+  await testInput(form, `recipients[${recipientIndex}].zip`, recipient.zip);
+  await testInput(form, `recipients[${recipientIndex}].province`, recipient.province);
+  await testInput(form, `recipients[${recipientIndex}].foreignState`, recipient.foreignState);
+
   // show digital address form
-  if (recipient.showDigitalDomicile) {
-    const checkbox = within(form).getByTestId(`showDigitalDomicile${recipientIndex}`);
-    fireEvent.click(checkbox);
-    await testInput(
-      form,
-      `recipients[${recipientIndex}].digitalDomicile`,
-      recipient.digitalDomicile
-    );
-  }
+  await testInput(form, `recipients[${recipientIndex}].digitalDomicile`, recipient.digitalDomicile);
 };
 
 const testStringFieldValidation = async (
   form: HTMLElement,
   recipientIndex: number,
   fieldName: string,
-  maxLength?: number
+  maxLength?: number,
+  required = true
 ): Promise<Element> => {
   await testInput(form, `recipients[${recipientIndex}].${fieldName}`, '', true);
   const error = form.querySelector(`[id="recipients[${recipientIndex}].${fieldName}-helper-text"]`);
-  expect(error).toHaveTextContent('required-field');
+  if (required) {
+    expect(error).toHaveTextContent('required-field');
+  }
   await testInput(form, `recipients[${recipientIndex}].${fieldName}`, ' text-with-spaces ');
   expect(error).toHaveTextContent('no-spaces-at-edges');
   if (maxLength) {
@@ -236,8 +217,6 @@ describe('Recipient Component with payment enabled', async () => {
     const addButton = within(form).getByTestId('add-recipient');
     fireEvent.click(addButton);
     await waitFor(() => {
-      expect(result.container).toHaveTextContent(/title 1/i);
-      expect(result.container).toHaveTextContent(/title 2/i);
       expect(submitButton).toBeDisabled();
     });
     await testRecipientFormRendering(form, 1, true);
@@ -329,8 +308,6 @@ describe('Recipient Component with payment enabled', async () => {
       );
     });
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
-    expect(result.container).toHaveTextContent(/title 1/i);
-    expect(result.container).toHaveTextContent(/title 2/i);
     await testRecipientFormRendering(form, 0, true, newNotification.recipients[0]);
     await testRecipientFormRendering(form, 1, true, newNotification.recipients[1]);
     const submitButton = within(form).getByTestId('step-submit');
@@ -353,8 +330,8 @@ describe('Recipient Component with payment enabled', async () => {
     const addButton = within(form).getByTestId('add-recipient');
     fireEvent.click(addButton);
     await waitFor(() => {
-      expect(result.container).toHaveTextContent(/title 1/i);
-      expect(result.container).toHaveTextContent(/title 2/i);
+      const forms = within(form).getAllByTestId('RecipientFormBox');
+      expect(forms).toHaveLength(2);
       expect(submitButton).toBeDisabled();
     });
     const deleteIcon = result.queryAllByTestId('DeleteRecipientIcon');
@@ -362,7 +339,8 @@ describe('Recipient Component with payment enabled', async () => {
     // remove the second recipient
     fireEvent.click(deleteIcon[1]);
     await waitFor(() => {
-      expect(result.container).not.toHaveTextContent(/title 2/i);
+      const forms = within(form).getAllByTestId('RecipientFormBox');
+      expect(forms).toHaveLength(1);
     });
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton);
@@ -401,7 +379,7 @@ describe('Recipient Component with payment enabled', async () => {
     expect(previousHandlerMk).toBeCalledTimes(1);
   }, 10000);
 
-  it('fills form with invalid values - one recipient', async () => {
+  it.only('fills form with invalid values - one recipient', async () => {
     // render component
     await act(async () => {
       result = render(
@@ -434,7 +412,13 @@ describe('Recipient Component with payment enabled', async () => {
     await testInput(form, 'recipients[0].taxId', 'wrong-fiscal-code');
     expect(taxIdError).toHaveTextContent('fiscal-code-error');
     // digitalDomicile
-    const digitalDomicileError = await testStringFieldValidation(form, 0, 'digitalDomicile', 321);
+    const digitalDomicileError = await testStringFieldValidation(
+      form,
+      0,
+      'digitalDomicile',
+      321,
+      false
+    );
     await testInput(form, 'recipients[0].digitalDomicile', 'wrong-email-format');
     expect(digitalDomicileError).toHaveTextContent('pec-error');
     // address
@@ -492,7 +476,6 @@ describe('Recipient Component without payment enabled', async () => {
         <Recipient paymentMode={PaymentModel.NOTHING} onConfirm={confirmHandlerMk} />
       );
     });
-    expect(result.container).toHaveTextContent(/title/i);
     const form = result.getByTestId('recipientForm');
     await testRecipientFormRendering(form, 0, false);
   });

@@ -51,7 +51,6 @@ export interface NewNotificationRecipient {
   lastName: string;
   type: DigitalDomicileType;
   digitalDomicile: string;
-  at?: string;
   address: string;
   houseNumber: string;
   addressDetails?: string;
@@ -60,8 +59,6 @@ export interface NewNotificationRecipient {
   municipalityDetails?: string;
   province: string;
   foreignState: string;
-  showDigitalDomicile?: boolean;
-  showPhysicalAddress?: boolean;
 }
 
 export interface NewNotificationDocument {
