@@ -153,7 +153,9 @@ export const getAdditionalLanguages = createAsyncThunk(
     try {
       const infoPaFactory = InfoPaApiFactory(undefined, undefined, apiClient);
       const { data } = await infoPaFactory.getAdditionalLang();
-      return data;
+      return {
+        additionalLanguages: data.additionalLanguages.map((lang) => lang.toLowerCase()),
+      };
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
@@ -166,7 +168,9 @@ export const setAdditionalLanguages = createAsyncThunk(
   async (additionalLanguages: Array<string>, { rejectWithValue }) => {
     try {
       const infoPaFactory = InfoPaApiFactory(undefined, undefined, apiClient);
-      await infoPaFactory.changeAdditionalLang({ additionalLanguages }); //
+      await infoPaFactory.changeAdditionalLang({
+        additionalLanguages: additionalLanguages.map((lang) => lang.toUpperCase()),
+      });
       return { additionalLanguages };
     } catch (e: any) {
       return rejectWithValue(parseError(e));
