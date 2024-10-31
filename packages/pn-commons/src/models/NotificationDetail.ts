@@ -371,7 +371,6 @@ export interface NotificationDocumentRequest {
   documentType: NotificationDocumentType;
   documentIdx?: number;
   documentId?: string;
-  documentCategory?: LegalFactType;
   mandateId?: string;
 }
 

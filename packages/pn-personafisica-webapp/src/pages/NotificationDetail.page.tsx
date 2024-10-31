@@ -209,7 +209,6 @@ const NotificationDetail: React.FC = () => {
           iun: notification.iun,
           documentType: NotificationDocumentType.LEGAL_FACT,
           documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
-          documentCategory: legalFact.category,
           mandateId,
         })
       )
