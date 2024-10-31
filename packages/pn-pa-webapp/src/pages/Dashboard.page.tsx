@@ -48,6 +48,8 @@ const Dashboard = () => {
     pagination.page + 1
   );
 
+  const { IS_MANUAL_SEND_ENABLED } = getConfiguration();
+
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
@@ -87,18 +89,18 @@ const Dashboard = () => {
       <TitleBox
         title={t('title')}
         variantTitle="h4"
-        mbTitle={isMobile ? 3 : 2}
-        subTitle={
-          <Box
-            display={isMobile ? 'block' : 'flex'}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
-              {t('subtitle')}
-            </Typography>
-            {getConfiguration().IS_MANUAL_SEND_ENABLED ? (
-              <Box display="flex" marginBottom={isMobile ? 3 : undefined}>
+        mbTitle={3}
+        sxTitle={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 3,
+        }}
+        titleButton={
+          <>
+            {IS_MANUAL_SEND_ENABLED ? (
+              <Box display="flex" gap={5}>
                 <NotificationSettingsDrawer />
                 <Button
                   id="new-notification-btn"
@@ -125,6 +127,17 @@ const Dashboard = () => {
                 {t('manual-send-disabled-message')}
               </Alert>
             )}
+          </>
+        }
+        subTitle={
+          <Box
+            display={isMobile ? 'block' : 'flex'}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+              {t('subtitle')}
+            </Typography>
           </Box>
         }
       />

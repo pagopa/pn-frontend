@@ -94,7 +94,7 @@ const NotificationSettingsDrawer = () => {
     <>
       <ButtonNaked
         color="primary"
-        sx={{ marginRight: 4, fontSize: '16px', fontWeight: 700, marginLeft: 2 }}
+        sx={{ fontSize: '16px', fontWeight: 700 }}
         onClick={toggleDrawer}
         data-testid="settingsLangBtn"
       >

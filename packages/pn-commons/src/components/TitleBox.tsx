@@ -12,6 +12,8 @@ type Props = {
   subTitle?: string | JSX.Element;
   /** Gridsize for title on mobile devices */
   mbTitle?: GridSize;
+  /** style for title Grid item */
+  sxTitle?: SxProps<Theme>;
   mtGrid?: number;
   /** Gridsize for subtitle on mobile devices */
   mbSubTitle?: number;
@@ -33,6 +35,7 @@ const TitleBox: React.FC<Props> = ({
   titleButton,
   subTitle,
   mbTitle = 2,
+  sxTitle,
   mtGrid,
   mbSubTitle,
   variantTitle = 'h1',
@@ -42,7 +45,7 @@ const TitleBox: React.FC<Props> = ({
 }) => (
   <Grid id="page-header-container" aria-orientation="horizontal" container mt={mtGrid} sx={sx}>
     {title && (
-      <Grid id="item" item xs={12} mb={mbTitle}>
+      <Grid id="item" item xs={12} mb={mbTitle} sx={sxTitle}>
         <Typography
           id={`${title}-page`}
           data-testid="titleBox"
