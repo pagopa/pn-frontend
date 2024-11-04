@@ -138,8 +138,8 @@ const Recipient: React.FC<Props> = ({
       digitalDomicile: yup
         .string()
         .max(320, tc('too-long-field-error'))
-        .matches(dataRegex.email, t('pec-error'))
-        .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
+        .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges'))
+        .matches(dataRegex.email, t('pec-error')),
       address: requiredStringFieldValidation(tc, 1024),
       houseNumber: yup.string().required(tc('required-field')),
       /*
