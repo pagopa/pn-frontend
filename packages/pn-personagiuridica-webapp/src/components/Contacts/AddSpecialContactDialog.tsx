@@ -79,7 +79,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     }
   };
 
-  const checkIfSenderIsAlreadyAdded = (sender: Party, channelType: ChannelType | '') => {
+  const checkIfSenderIsAlreadyAdded = (sender: Party, channelType: ChannelType ) => {
     const alreadyExists = addressesData.specialAddresses.some(
       (a) => a.senderId === sender.id && a.channelType === channelType
     );
@@ -99,7 +99,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     await formik.setFieldTouched('sender', true, false);
     await formik.setFieldValue('sender', { id: newValue?.id ?? '', name: newValue?.name ?? '' });
 
-    if (newValue && addressesData.addresses.some((a) => a.senderId === newValue.id)) {
+    if (newValue && addressesData.addresses.some((a) => a.senderId === newValue.id) && formik.values.channelType) {
       checkIfSenderIsAlreadyAdded(newValue, formik.values.channelType);
       return;
     }
@@ -150,7 +150,6 @@ const AddSpecialContactDialog: React.FC<Props> = ({
 
   const formik = useFormik({
     initialValues,
-    initialErrors: { ...initialValues },
     validateOnMount: true,
     validationSchema,
     enableReinitialize: true,
@@ -191,8 +190,9 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     getParties();
   }, [formik.values.sender.name, open]);
 
-  const handleClose = () => {
+  const handleClose = async () => {
     formik.resetForm({ values: initialValues });
+    await formik.validateForm(initialValues);
     setAlreadyExistsMessage('');
     onDiscard();
   };
