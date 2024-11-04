@@ -8,6 +8,11 @@
     "title": "Recapito a valore legale",
     "sub-title": "È il recapito ufficiale che scegli per ricevere comunicazioni a valore legale dalla PA. Se attivi un recapito a valore legale <strong>riceverai le notifiche di SEND solo in digitale</strong>, senza più preoccuparti dei documenti cartacei.",
     "pec-title": "PEC",
+    "pec-validation-banner": {
+      "title": "La PEC è in validazione",
+      "dod-enabled-message": "Fino al termine del processo, la Piattaforma SEND rimane attiva come domicilio digitale.",
+      "dod-disabled-message": "Fino al termine del processo non sarà possibile modificare i recapiti a valore legale."
+    },
     "pec-description": "Quando un ente invia una comunicazione per te su SEND, ricevi l’avviso ufficiale sulla PEC che hai scelto.",
     "link-pec-placeholder": "La tua PEC",
     "valid-pec": "Indirizzo PEC non valido",

@@ -8,6 +8,11 @@
     "title": "Recapito a valore legale",
     "sub-title": "È il recapito ufficialmente riconosciuto per le comunicazioni della PA. Se lo attivi <strong>l’impresa riceverà le notifiche di SEND solo in digitale</strong>.",
     "pec-title": "PEC",
+    "pec-validation-banner": {
+      "title": "La PEC è in validazione",
+      "dod-enabled-message": "Fino al termine del processo, la Piattaforma SEND rimane attiva come domicilio digitale.",
+      "dod-disabled-message": "Fino al termine del processo non sarà possibile modificare i recapiti a valore legale."
+    },
     "pec-description": "Quando c’è una notifica per l’impresa, l’avviso di avvenuta ricezione viene inviato a questo indirizzo. Per leggere la notifica e pagare eventuali spese è necessario accedere alla piattaforma.",
     "link-pec-placeholder": "Indirizzo PEC",
     "valid-pec": "Indirizzo PEC non valido",
