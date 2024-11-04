@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -52,13 +52,21 @@ const NotificationSettingsDrawer = () => {
     }),
   });
 
-  const initialValues = {
-    lang: 'it',
-    additionalLang: '',
-  };
+  const initialValues =
+    additionalLanguages && additionalLanguages.length > 0
+      ? {
+          lang: NewNotificationLangOther,
+          additionalLang: additionalLanguages[0],
+        }
+      : {
+          lang: 'it',
+          additionalLang: '',
+        };
+
   const formik = useFormik({
     initialValues,
     validationSchema,
+    enableReinitialize: true,
     onSubmit: (values) => {
       void dispatch(
         setAdditionalLanguages(
@@ -72,23 +80,6 @@ const NotificationSettingsDrawer = () => {
     const currentLang = i18n.language?.substring(0, 2) as LangCode;
     return LANGUAGES[currentLang] ?? LANGUAGES.it;
   }, [i18n.language]);
-
-  const initForm = async () => {
-    await formik.setValues(
-      additionalLanguages && additionalLanguages.length > 0
-        ? {
-            lang: NewNotificationLangOther,
-            additionalLang: additionalLanguages[0],
-          }
-        : initialValues
-    );
-  };
-
-  useEffect(() => {
-    if (openDrawer) {
-      void initForm();
-    }
-  }, [openDrawer, additionalLanguages]);
 
   return (
     <>
