@@ -99,9 +99,9 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     await formik.setFieldTouched('sender', true, false);
     await formik.setFieldValue('sender', { id: newValue?.id ?? '', name: newValue?.name ?? '' });
     if (
-      newValue &&
+      newValue && formik.values.channelType && 
       addressesData.addresses.some(
-        (a) => a.senderId === newValue.id && formik.values.channelType !== ''
+        (a) => a.senderId === newValue.id 
       )
     ) {
 
@@ -157,12 +157,12 @@ const AddSpecialContactDialog: React.FC<Props> = ({
 
   const formik = useFormik({
     initialValues,
-    initialErrors: { ...initialValues },
+    // initialErrors: { ...initialValues },
     validateOnMount: true,
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      if (values.channelType !== '') {
+      if (values.channelType) {
         onConfirm(values.s_value, values.channelType, {
           senderId: values.sender.id,
           senderName: values.sender.name,
@@ -198,8 +198,9 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     getParties();
   }, [formik.values.sender.name, open]);
 
-  const handleClose = () => {
+  const handleClose = async () => {
     formik.resetForm({ values: initialValues });
+    await formik.validateForm(initialValues);
     setAlreadyExistsMessage('');
     onDiscard();
   };

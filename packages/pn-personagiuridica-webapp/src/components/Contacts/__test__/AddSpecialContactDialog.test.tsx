@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
-import { getById, testAutocomplete, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
+import { getById, queryById, testAutocomplete, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
 import { fireEvent, waitFor } from '@testing-library/react';
 
 import { digitalAddresses, digitalAddressesPecValidation, digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
@@ -62,6 +62,9 @@ describe('test AddSpecialContactDialog', () => {
     const bodyEl = within(dialog).getByTestId('dialog-content');
     expect(bodyEl).toBeInTheDocument();
     expect(bodyEl).not.toHaveTextContent(`special-contacts.pec`);
+    const input = queryById(bodyEl, 's_value');
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveValue('');
     expect(bodyEl).toHaveTextContent(`special-contacts.contact-to-add-description`);
     expect(bodyEl).toHaveTextContent(`special-contacts.senders`);
     const senderAutoComplete = within(bodyEl).getByTestId('sender');

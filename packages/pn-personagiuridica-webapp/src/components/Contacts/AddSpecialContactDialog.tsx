@@ -64,7 +64,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
 
   const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     await formik.setFieldValue('s_value', '');
-    if (e.target.value !== '') {
+    if (e.target.value) {
 
     formik.handleChange(e);
     checkIfSenderIsAlreadyAdded(formik.values.sender, e.target.value as ChannelType);
@@ -155,7 +155,7 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      if (values.channelType !== '') {
+      if (values.channelType) {
         onConfirm(values.s_value, values.channelType, {
           senderId: values.sender.id,
           senderName: values.sender.name,
