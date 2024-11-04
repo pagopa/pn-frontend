@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0...v2.8.2-RC.0) (2024-11-04)
+
+
+### Bug Fixes
+
+* **PN-13161:** add cache-control policies when fetching config.json ([d7718cb](https://github.com/pagopa/pn-frontend/commit/d7718cb030695539e892149846b11c2c59fa33b3))
+* wrong cast for env variable ([329a67f](https://github.com/pagopa/pn-frontend/commit/329a67fda085015783d1d7f95c4a81e8f37fa009))
+* wrong casting on env variable and fix wrong tests ([f596c3c](https://github.com/pagopa/pn-frontend/commit/f596c3cfdf588945467e5dda7af5a6d08d4c6c52))
+
+
+
+## [2.7.1](https://github.com/pagopa/pn-frontend/compare/v2.8.0-RC.0...v2.7.1) (2024-10-14)
+
+
+### Bug Fixes
+
+* **PN-12893:** update PEC disclaimer message ([#1354](https://github.com/pagopa/pn-frontend/issues/1354)) ([5482db9](https://github.com/pagopa/pn-frontend/commit/5482db939047db5b8ba58c302c1683b3438d6497))
+
+
+
+
+
 # [2.8.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0-RC.3...v2.8.0) (2024-10-16)
 
 **Note:** Version bump only for package pn-frontend
