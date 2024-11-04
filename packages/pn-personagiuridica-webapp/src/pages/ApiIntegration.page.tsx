@@ -20,7 +20,9 @@ const ApiIntegration: React.FC = () => {
   const publicKeys = useAppSelector((state: RootState) => state.apiKeysState.publicKeys);
   const hasOneActiveKey = publicKeys.items.some((key) => key.status === PublicKeyStatus.Active);
   const hasOneRotateKey = publicKeys.items.some((key) => key.status === PublicKeyStatus.Rotated);
+  const hasValidKey = hasOneActiveKey || hasOneRotateKey;
 
+  
   const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
 
   return (
@@ -33,7 +35,7 @@ const ApiIntegration: React.FC = () => {
           variantSubTitle="body1"
         />
         {isAdminWithoutGroups && <PublicKeys />}
-        {(hasOneActiveKey || hasOneRotateKey) && <VirtualKeys />}
+        {hasValidKey && <VirtualKeys />}
       </Box>
     </LoadingPageWrapper>
   );
