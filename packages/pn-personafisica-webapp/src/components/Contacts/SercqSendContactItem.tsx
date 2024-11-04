@@ -127,7 +127,7 @@ const SercqSendContactItem: React.FC = () => {
             message: t(`legal-contacts.sercq_send-added-successfully`, { ns: 'recapiti' }),
           })
         );
-        // here the user doesn't have a corutesy address
+        // here the user doesn't have a courtesy address
         if (!hasCourtesy) {
           setModalOpen({ type: ModalType.COURTESY });
           return;
@@ -244,6 +244,14 @@ const SercqSendContactItem: React.FC = () => {
       .catch(() => {});
   };
 
+  const handleCourtesyDiscard = () => {
+    if (!hasCourtesy && hasAppIO) {
+      setModalOpen({ type: ModalType.IO });
+      return;
+    }
+    setModalOpen(null);
+  };
+
   const handleCourtesyConfirm = (channelType: ChannelType, value: string) => {
     const eventKey = `SEND_ADD_${channelType}_START`;
     if (isPFEvent(eventKey)) {
@@ -340,7 +348,7 @@ const SercqSendContactItem: React.FC = () => {
       />
       <SercqSendCourtesyDialog
         open={modalOpen?.type === ModalType.COURTESY}
-        onDiscard={() => setModalOpen(null)}
+        onDiscard={handleCourtesyDiscard}
         onConfirm={handleCourtesyConfirm}
       />
       <ContactCodeDialog
