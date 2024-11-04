@@ -379,7 +379,7 @@ describe('Recipient Component with payment enabled', async () => {
     expect(previousHandlerMk).toBeCalledTimes(1);
   }, 10000);
 
-  it.only('fills form with invalid values - one recipient', async () => {
+  it('fills form with invalid values - one recipient', async () => {
     // render component
     await act(async () => {
       result = render(
