@@ -412,15 +412,12 @@ describe('Recipient Component with payment enabled', async () => {
     await testInput(form, 'recipients[0].taxId', 'wrong-fiscal-code');
     expect(taxIdError).toHaveTextContent('fiscal-code-error');
     // digitalDomicile
-    const digitalDomicileError = await testStringFieldValidation(
-      form,
-      0,
-      'digitalDomicile',
-      321,
-      false
-    );
+    await testInput(form, 'recipients[0].digitalDomicile', ' text-with-spaces ');
+    const digitalDomicileError = form.querySelector(`[id="recipients[0].digitalDomicile-helper-text"]`);
+    expect(digitalDomicileError).toHaveTextContent('no-spaces-at-edges');
     await testInput(form, 'recipients[0].digitalDomicile', 'wrong-email-format');
     expect(digitalDomicileError).toHaveTextContent('pec-error');
+    
     // address
     await testStringFieldValidation(form, 0, 'address', 1025);
     // houseNumber
