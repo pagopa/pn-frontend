@@ -5,7 +5,7 @@ import * as yup from 'yup';
 
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Alert, Box, SxProps, TextField, Typography } from '@mui/material';
+import { Alert, Box, IconButton, SxProps, TextField, Typography } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -16,6 +16,7 @@ import { setAttachments } from '../../redux/newNotification/reducers';
 import { getConfiguration } from '../../services/configuration.service';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
+import { FormBox, FormBoxTitle } from './NewNotificationFormElelements';
 
 type AttachmentBoxProps = {
   id: string;
@@ -58,30 +59,19 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
   const isMobile = useIsMobile('md');
   return (
     <Box data-testid="attachmentBox">
-      <Box display="flex" justifyContent="space-between" alignItems="center" sx={sx}>
-        <Typography fontWeight={600}>{title}</Typography>
+      <Box display="flex" alignItems="center" sx={sx}>
+        <FormBoxTitle text={title} />
         {canBeDeleted && (
-          <ButtonNaked
+          <IconButton
             onClick={onDelete}
             data-testid="deletebutton"
             aria-label={t('new-notification.steps.attachments.remove-document')}
+            sx={{ marginLeft: 2 }}
           >
-            <DeleteIcon color="action" sx={{ cursor: 'pointer' }} />
-          </ButtonNaked>
+            <DeleteIcon color="error" />
+          </IconButton>
         )}
       </Box>
-      <FileUpload
-        key={`${new Date()}`}
-        uploadText={
-          isMobile ? t('new-notification.drag-doc-mobile') : t('new-notification.drag-doc-pc')
-        }
-        accept="application/pdf"
-        onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
-        onRemoveFile={() => onRemoveFile(id)}
-        sx={{ marginTop: '10px' }}
-        calcSha256
-        fileUploaded={fileUploaded}
-      />
       <TextField
         id={`${id}.name`}
         label={fieldLabel}
@@ -94,6 +84,18 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
         size="small"
         margin="normal"
         data-testid="attachmentNameInput"
+      />
+      <FileUpload
+        key={`${new Date()}`}
+        uploadText={
+          isMobile ? t('new-notification.drag-doc-mobile') : t('new-notification.drag-doc-pc')
+        }
+        accept="application/pdf"
+        onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
+        onRemoveFile={() => onRemoveFile(id)}
+        sx={{ marginTop: 2 }}
+        calcSha256
+        fileUploaded={fileUploaded}
       />
     </Box>
   );
@@ -297,42 +299,50 @@ const Attachments: React.FC<Props> = ({
       <NewNotificationCard
         isContinueDisabled={!formik.isValid}
         title={t('attach-for-recipients')}
-        subtitle={t('max-attachments', { maxNumber: MAX_NUMBER_OF_ATTACHMENTS })}
         submitLabel={IS_PAYMENT_ENABLED ? tc('button.continue') : tc('button.send')}
         previousStepLabel={t('back-to-recipient')}
         previousStepOnClick={() => handlePreviousStep()}
       >
+        <Typography variant="body2">
+          {t('max-attachments', { maxNumber: MAX_NUMBER_OF_ATTACHMENTS })}
+        </Typography>
         {hasAdditionalLang && (
           <Alert severity="info" sx={{ mt: 2, mb: 2 }} data-testid="bannerAdditionalLanguages">
             {t('banner-additional-languages')}
           </Alert>
         )}
-        {formik.values.documents.map((d, i) => (
-          <AttachmentBox
-            key={d.id}
-            id={d.id}
-            title={i === 0 ? `${t('act-attachment')}*` : `${t('doc-attachment')}*`}
-            canBeDeleted={i > 0}
-            onDelete={() => deleteDocumentHandler(i)}
-            fieldLabel={i === 0 ? `${t('act-name')}*` : `${t('doc-name')}*`}
-            fieldValue={d.name}
-            fileUploaded={d}
-            fieldTouched={
-              formik.touched.documents && formik.touched.documents[i]
-                ? formik.touched.documents[i].name
-                : undefined
-            }
-            fieldErros={
-              formik.errors.documents && formik.errors.documents[i]
-                ? (formik.errors.documents[i] as FormikErrors<{ file: string; name: string }>).name
-                : undefined
-            }
-            onFieldTouched={handleChangeTouched}
-            onFileUploaded={(id, file, sha256) => fileUploadedHandler(i, id, file, sha256)}
-            onRemoveFile={(id) => removeFileHandler(id, i)}
-            sx={{ marginTop: i > 0 ? '30px' : '10px' }}
-          />
-        ))}
+        <Typography variant="body2" mt={2}>
+          {tc('required-fields')}
+        </Typography>
+        <FormBox data-testid="attachmentBox">
+          {formik.values.documents.map((d, i) => (
+            <AttachmentBox
+              key={d.id}
+              id={d.id}
+              title={i === 0 ? `${t('act-attachment')}` : `${t('doc-attachment')}`}
+              canBeDeleted={i > 0}
+              onDelete={() => deleteDocumentHandler(i)}
+              fieldLabel={`${t('doc-name')}*`}
+              fieldValue={d.name}
+              fileUploaded={d}
+              fieldTouched={
+                formik.touched.documents && formik.touched.documents[i]
+                  ? formik.touched.documents[i].name
+                  : undefined
+              }
+              fieldErros={
+                formik.errors.documents && formik.errors.documents[i]
+                  ? (formik.errors.documents[i] as FormikErrors<{ file: string; name: string }>)
+                      .name
+                  : undefined
+              }
+              onFieldTouched={handleChangeTouched}
+              onFileUploaded={(id, file, sha256) => fileUploadedHandler(i, id, file, sha256)}
+              onRemoveFile={(id) => removeFileHandler(id, i)}
+              sx={{ marginTop: i > 0 ? 4 : 0 }}
+            />
+          ))}
+        </FormBox>
         {formik.values.documents.length <= MAX_NUMBER_OF_ATTACHMENTS && (
           <ButtonNaked
             onClick={addDocumentHandler}
