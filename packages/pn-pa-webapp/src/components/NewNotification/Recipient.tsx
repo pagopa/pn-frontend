@@ -331,7 +331,7 @@ const Recipient: React.FC<Props> = ({
                           )
                         }
                       >
-                        <Delete />
+                        <Delete color="error" />
                       </ButtonNaked>
                     )}
                   </Stack>
@@ -448,7 +448,7 @@ const Recipient: React.FC<Props> = ({
                     <Grid item xs={12} lg={6}>
                       <FormTextField
                         keyName={`recipients[${index}].digitalDomicile`}
-                        label={`${t('digital-domicile')}`}
+                        label={`${t('pec-address')}`}
                         values={values}
                         touched={touched}
                         errors={errors}
@@ -486,7 +486,7 @@ const Recipient: React.FC<Props> = ({
                   )}
                 </FormBox>
                 {values.recipients.length < 5 && values.recipients.length - 1 === index && (
-                  <Stack mt={4} display="flex" direction="row" justifyContent="space-between">
+                  <Stack mt={2} display="flex" direction="row" justifyContent="space-between">
                     <ButtonNaked
                       id="add-recipient"
                       startIcon={<Add />}
@@ -494,7 +494,6 @@ const Recipient: React.FC<Props> = ({
                         handleAddRecipient(values, setFieldValue);
                       }}
                       color="primary"
-                      size="large"
                       disabled={values.recipients.length >= 5}
                       data-testid="add-recipient"
                     >
