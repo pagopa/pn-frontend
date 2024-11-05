@@ -1,88 +1,164 @@
 {
-  "title": "Deine Anschriften",
-  "subtitle": "Hier können die digitalen Anschriften zur Versendung angeben und geändert werden für <0>Benachrichtigungen über den Empfang</0> und <1>informelle Benachrichtigungen<1/> bezüglich deiner Bescheide.",
-  "alert-dialog-email": "Solltest du keine PEC-Adresse haben und den Bescheid innerhalb 5 Tagen (120 Stunden) nach Versand der E-Mails über SEND aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben.",
-  "alert-dialog-sms": "Solltest du keine PEC-Adresse haben und den Bescheid innerhalb 5 Tagen (120 Stunden) nach Versand der SMS über SEND aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben.",
+  "title": "Adressen",
+  "subtitle": "Hier kannst du die Adressen verwalten, an die du die Zustellungen der SEND beigetretenen Körperschaften erhalten möchtest.",
+  "alert-dialog-email": "Solltest du keine PEC-Adresse haben und die Zustellung innerhalb 5 Tagen (120 Stunden) nach Versand der E-Mail über SEND aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben.",
+  "alert-dialog-sms": "Solltest du keine PEC-Adresse haben und die Zustellung innerhalb 5 Tagen (120 Stunden) nach Versand der SMS über SEND aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben.",
   "insert-code": "Code eingeben",
   "legal-contacts": {
-    "title": "",
-    "link-pec-placeholder": "Deine PEC-Adresse",
+    "title": "Rechtsgültige Adresse",
+    "sub-title": "Dies ist die offizielle Adresse, die du wählst, um rechtsgültige Mitteilungen von der ÖV zu erhalten. Wenn du eine rechtsgültige Adresse aktivierst, <strong>erhältst du die Zustellungen von SEND nur auf digitalem Wege</strong>, ohne dich um Papierdokumente kümmern zu müssen.",
+    "pec-title": "PEC",
+    "pec-description": "Wenn eine Körperschaft eine Mitteilung für dich über SEND sendet, erhältst du die offizielle Mitteilung in dem von dir gewählten PEC-Postfach.",
+    "link-pec-placeholder": "Deine PEC",
     "valid-pec": "Ungültige PEC-Adresse",
-    "pec-verify": "Wir haben einen Code gesendet an {{value}}",
-    "pec-verify-descr": "Unten eingeben, um die PEC-Adresse zu bestätigen. Der Code ist <strong>10 Minuten</strong> gültig.",
-    "pec-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die PEC-Adresse korrekt ist oder <0>generiere einen neuen</0>.",
+    "pec-verify": "Überprüfung der PEC {{value}}",
+    "pec-verify-descr": "Wir haben einen Code an die angegebene PEC-Adresse gesendet. Der Code ist <strong>15 Minuten</strong> lang gültig.",
+    "pec-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die richtige PEC eingegeben wurde oder <0>generiere einen neuen Code</0>.",
     "pec-added-successfully": "PEC erfolgreich zugeordnet",
-    "pec-to-add": "PEC zugeordnet",
+    "pec-removed-successfully": "PEC erfolgreich entfernt",
+    "pec-to-add": "PEC-Adresse",
     "pec-validating": "Validierung der PEC läuft",
     "cancel-pec-validation": "Validierung abbrechen",
     "remove-pec-title": "PEC entfernen",
     "remove-pec-message": "Möchtest du die PEC-Adresse {{value}} wirklich entfernen?",
     "block-remove-pec-title": "PEC-Adresse kann nicht gelöscht werden",
-    "block-remove-pec-message": "Dazu müssen zuerst alle PEC-Adressen unter „Weitere Anschriften“ gelöscht werden.",
+    "block-remove-pec-message": "Dazu müssen zuerst alle PEC-Adressen und digitalen Domizile SEND unter „Sekundäre Anschriften“ gelöscht werden.",
     "validation-cancel-title": "Überprüfung abbrechen?",
     "validation-cancel-content": "Wird die Überprüfung abgebrochen, muss eine neue PEC-Adresse eingegeben und der Vorgang erneut begonnen werden.",
     "validation-progress-title": "Danke!",
-    "validation-progress-content": "Wir prüfen, ob die PEC-Adresse gültig ist. Du erhältst innerhalb von 24 Stunden eine E-Mail mit dem Ergebnis."
+    "validation-progress-content": "Wir prüfen, ob die PEC-Adresse gültig ist. Du erhältst innerhalb von 24 Stunden eine E-Mail mit dem Ergebnis.",
+    "sercq-send-title": "Digitales Domizil SEND",
+    "sercq-send-description": "Ist wie ein physisches Domizil, aber online. Wenn du SEND als digitales Domizil wählst, erhältst du in Echtzeit Zustellungen von den beigetretenen Körperschaften und kannst diese einsehen, wo immer du bist.",
+    "sercq-send-active": "Aktivieren",
+    "sercq-send-info-title": "Aktiviere SEND als dein digitales Domizil",
+    "sercq-send-info-description": "Wenn du das digitale Domizil aktivierst, wird SEND deine <strong>rechtsgültige Adresse</strong> für die Mitteilungen der ÖV.",
+    "sercq-send-info-advantages": "Vorteile",
+    "sercq-send-info-list": [
+      {
+        "title": "100% digitale Zustellungen",
+        "description": "Du wirst keine Zustellungen mehr in Papierform erhalten."
+      },
+      {
+        "title": "Keine Zustellungsgebühren",
+        "description": "Du musst dich nicht um das Abholen der Papierdokumente und die damit verbundenen Kosten kümmern."
+      },
+      {
+        "title": "Alles an einem Ort",
+        "description": "Die Zustellungen, die dir die Körperschaften über SEND senden, werden immer an dein digitales Domizil zugestellt und sind in deinem reservierten Bereich verfügbar."
+      }
+    ],
+    "sercq-send-info-pec-disclaimer": "Wenn du unter deinen Adressen bereits eine PEC angegeben hast, ersetzt das digitale Domizil diese als rechtsgültige Adresse auf SEND.",
+    "sercq-send-info-tos-privacy": "Durch Klicken auf „Aktivieren“ erklärst du, die <0>Nutzungsbedingungen des Dienstes</0> sowie die <1>Datenschutzerklärung</1> gelesen zu haben und diese zu akzeptieren.",
+    "sercq_send-added-successfully": "Digitales Domizil erfolgreich aktiviert",
+    "sercq-send-enabled": "SEND ist dein digitales Domizil",
+    "sercq-send-courtesy-title": "Wähle, wie du die Bescheide erhalten möchtest",
+    "sercq-send-courtesy-description": "Wähle eine informelle Adresse aus, an der wir dich in Echtzeit benachrichtigen können, wenn es eine rechtsgültige Mitteilung auf SEND zu lesen gibt.",
+    "remove-sercq-send-title": "Möchtest du das digitale Domizil auf SEND wirklich deaktivieren?",
+    "remove-sercq-send-message": "Du hast keine rechtsgültige digitale Adresse mehr für die Zustellungen der öffentlichen Verwaltung und kannst wieder Zustellungen in Papierform erhalten.",
+    "block-remove-sercq-send-title": "Das digitale Domizil kann nicht deaktiviert werden",
+    "block-remove-sercq-send-message": "Lösche zunächst die PEC-Adressen, die du in den personalisierten Adressen eingegeben hast.",
+    "sercq_send-removed-successfully": "Digitales Domizil erfolgreich deaktiviert",
+    "sercq-send-io-title": "Aktiviere SEND auf IO",
+    "sercq-send-io-description": "Aktiviere SEND - Notifiche Digitali auf IO, um<strong> direkt in der App</strong> die an dein digitales Domizil SEND gesendeten Zustellungen zu erhalten.",
+    "sercq-send-io-advantages": "Auf IO",
+    "sercq-send-io-list": [
+      "<strong>Du erhältst die Zustellungen in Echtzeit</strong>, sobald sie die Körperschaft auf SEND geladen hat",
+      "<strong>Öffne die angehängten Dokumente</strong> in der App",
+      "<strong>Zahle die geschuldeten Beträge,</strong> falls die Zustellung eine Zahlung vorsieht"
+    ],
+    "sercq-send-pec": "Ziehst du es vor, eine PEC als rechtsgültige Adresse für die Zustellungen von SEND zu verwenden?",
+    "sercq-send-add-pec": "Aktiviere eine PEC",
+    "sercq-send-add-pec-description": "Wenn du eine PEC aktivierst, so wird diese das digitale Domizil als rechtsgültige Adresse auf SEND ersetzen. Das digitale Domizil wird deaktiviert."
   },
   "io-contact": {
     "title": "IO-App",
-    "description": "Aktiviere den Dienst „Notifiche Digitali“: Wenn ein Bescheid für dich vorliegt, senden wir dir eine Nachricht in der App, in der du ihn lesen und eventuelle Gebühren bezahlen kannst. Hier erhältst du auch wichtige Mitteilungen.",
-    "enabled": "Aktiv",
-    "disabled": "Nicht aktiv",
+    "description": "Lies und verwalte rechtsgültige Mitteilungen direkt auf IO: Wenn eine Zustellung für dich vorliegt, erhältst du sie in der App und kannst etwaige Gebühren bezahlen.",
+    "dialog-description": "Für jede neue Zustellung erhältst due eine Nachricht in der App. Du kannst sie lesen und etwaige Gebühren direkt auf IO bezahlen.",
+    "enabled": "Servizio Notifiche Digitali ist aktiv",
+    "disabled": "Servizio Notifiche Digitali ist nicht aktiv",
+    "unavailable": "Zum Aktivieren des Dienstes lade zuerst die IO-APP herunter",
+    "enable": "Aktiviere SEND auf IO",
+    "download": "IO-App herunterladen",
     "enable-modal": {
       "title": "Möchtest du den Dienst „Notifiche Digitali“ auf IO aktivieren?",
       "checkbox": "Verstanden",
       "confirm": "Dienst aktivieren",
-      "content": "Solltest du keine PEC-Adresse haben und den Bescheid innerhalb 5 Tagen (120 Stunden) nach Versand der Nachricht aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben."
+      "content": "Solltest du keine PEC-Adresse haben und die Zustellung innerhalb 5 Tagen (120 Stunden) nach Versand aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben."
     },
     "disable-modal": {
       "title": "Möchtest du den Dienst „Notifiche Digitali“ auf IO deaktivieren?",
       "confirm": "Dienst deaktivieren",
-      "content": "Wenn du den Bescheid aufgerufen hast, bekommst du keine Nachricht mehr in der App."
+      "content": "Wenn du die Zustellung aufgerufen hast, bekommst du keine Nachricht mehr in der App."
     }
   },
   "courtesy-contacts": {
-    "title": "",
+    "title": "Informelle Adressen",
+    "sub-title": "Die informellen Adressen benachrichtigen dich, wenn neue Zustellungen für dich vorliegen. Wenn du keine rechtsgültige Adresse aktiviert hast und die Zustellung nicht innerhalb von 5 Tagen öffnest, erhältst du sie auch in Papierform zu Hause.",
+    "email-title": "E-Mail",
+    "email-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer E-Mail an die gewählte Adresse.",
+    "email-dialog-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer E-Mail. ",
+    "sms-title": "SMS",
+    "sms-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer SMS an die gewählte Nummer.",
+    "sms-dialog-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer SMS.",
     "link-sms-placeholder": "Deine Handynummer",
     "link-email-placeholder": "Deine E-Mail-Adresse",
     "sms-add": "Benachrichtige mich per SMS",
     "email-add": "Benachrichtige mich per E-Mail",
-    "email-verify": "Wir haben einen Code gesendet an {{value}}",
-    "email-verify-descr": "Gib ihn unten ein, um die E-Mail-Adresse zu bestätigen. Der Code ist <strong>10 Minuten</strong> gültig.",
-    "sms-verify": "Wir haben einen Code gesendet an {{value}}",
-    "sms-verify-descr": "Gib ihn unten ein, um die Handynummer zu bestätigen. Der Code ist <strong>10 Minuten</strong> gültig.",
-    "email-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die E-Mail-Adresse korrekt ist oder <0>generiere einen neuen</0>.",
-    "sms-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die Handynummer korrekt ist oder <0>generiere einen neuen</0>.",
+    "email-verify": "Verifizierung der E-Mail {{value}}",
+    "email-verify-descr": "Wir haben einen Code an die angegebene E-Mail-Adresse gesendet. Der Code ist <strong>15 Minuten</strong> lang gültig.",
+    "sms-verify": "Verifizierung der Handynummer {{value}}",
+    "sms-verify-descr": "Wir haben einen Code an die angegebene Handynummer gesendet. Der Code ist <strong>15 Minuten</strong> lang gültig.",
+    "email-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die richtige E-Mail-Adresse eingegeben wurde oder <0>generiere einen neuen Code</0>.",
+    "sms-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die richtige Handynummer eingegeben wurde oder <0>generiere einen neuen Code</0>.",
     "email-to-add": "E-Mail-Adresse",
     "sms-to-add": "Handynummer",
     "valid-email": "E-Mail-Adresse ungültig",
     "valid-sms": "Handynummer ungültig",
     "email-added-successfully": "E-Mail-Adresse erfolgreich hinzugefügt",
     "sms-added-successfully": "Handynummer erfolgreich hinzugefügt",
+    "email-removed-successfully": "E-Mail-Adresse erfolgreich entfernt",
+    "sms-removed-successfully": "Handynummer erfolgreich entfernt",
     "remove-email-title": "E-Mail-Adresse entfernen",
     "remove-email-message": "Möchtest du die E-Mail-Adresse {{value}} wirklich entfernen?",
     "remove-sms-title": "Handynummer entfernen",
     "remove-sms-message": "Möchtest du die Handynummer {{value}} wirklich entfernen?",
     "block-remove-email-title": "E-Mail-Adresse kann nicht gelöscht werden",
-    "block-remove-email-message": "Dazu müssen zuerst alle E-Mail-Adressen unter „Weitere Anschriften“ gelöscht werden.",
+    "block-remove-email-message": "Dazu müssen zuerst alle E-Mail-Adressen unter „Sekundäre Anschriften“ gelöscht werden.",
     "block-remove-sms-title": "Telefonnummer kann nicht gelöscht werden",
-    "block-remove-sms-message": "Dazu müssen zunächst alle Telefonnummern unter „Weitere Anschriften“ gelöscht werden."
+    "block-remove-sms-message": "Dazu müssen zunächst alle Telefonnummern unter „Sekundäre Anschriften“ gelöscht werden."
   },
   "special-contacts": {
+    "description": "Wusstest du? Wenn du die Zustellungen von bestimmten Körperschaften an anderen Adressen als die Hauptadresse empfangen möchtest, so kannst du die <0>Anschriften personalisieren</0>.",
+    "select-address": "Anschrift wählen",
+    "add-sender": "Zu verknüpfende Körperschaft",
     "pec": "PEC-Adresse",
-    "sms": "Handy",
-    "email": "E-Mail-Adresse",
-    "fetch-party-error": "Wir konnten die Daten, die benötigt werden, um eine neue Anschrift zu erstellen, nicht wiederherstellen."
+    "sercq_send": "Digitales Domizil SEND",
+    "link-pec-label": "Deine PEC",
+    "link-sercq-label": "Dein digitales Domizil SEND",
+    "senders": "Körperschaften",
+    "contact-to-add": "Adresse",
+    "contact-to-add-description": "Verknüpfe eine Adresse mit einer bestimmten Körperschaft, um die Mitteilungen nach Empfänger zu personalisieren.",
+    "contact-already-exists": "Die gewählte Körperschaft ist bereits mit dieser Adresse verknüpft. Wenn du „Verknüpfen“ drückst, wird sie durch die hier eingegebene ersetzt.",
+    "fetch-party-error": "Wir konnten die Daten, die benötigt werden, um eine neue Adresse zu erstellen, nicht wiederherstellen.",
+    "modal-title": "Personalisiere die mit einer Körperschaft verknüpfte Adresse",
+    "card-title": "Personalisiert",
+    "sender": "Körperschaft",
+    "remove-special-title": "Möchtest du {{contactValue}} entfernen?",
+    "remove-special-description": "Die Benachrichtigungen der Zustellungen der verknüpften Körperschaften werden nicht mehr an diese Adresse geschickt, sondern an die Hauptadresse.",
+    "contacts": "Adressen",
+    "legal-association-title": "Verknüpfung bestätigen",
+    "legal-association-description": "Für die von <strong>{{senderName}}</strong> gesendeten Zustellungen ist deine rechtsgültige Adresse <strong>{{newAddress}}</strong> statt <strong>{{oldAddress}}</strong>."
   },
   "common": {
-    "duplicate-contact-title": "Anschrift bereits vorhanden",
-    "duplicate-contact-descr": "Der Kontakt {{value}} ist bereits vorhanden, möchtest du trotzdem fortfahren?",
-    "enti-not-found": "Keine Körperschaft gefunden"
+    "duplicate-contact-title": "Adresse bereits vorhanden",
+    "duplicate-contact-descr": "Der Kontakt {{value}} ist bereits vorhanden, dennoch fortfahren?",
+    "enti-not-found": "Keine Körperschaft gefunden",
+    "too-long-field-error": "Höchstens {{maxLength}} Zeichen schreiben"
   },
   "errors": {
     "invalid_verification_code": {
       "title": "Der Code ist falsch",
-      "message": "Überprüfe ihn und geben ihn erneut ein, oder generiere einen neuen."
+      "message": "Überprüfe ihn und gib ihn erneut ein, oder erstelle einen neuen."
     },
     "retry_limit_code": {
       "title": "Zu viele Versuche",
@@ -90,7 +166,35 @@
     },
     "expired_verification_code": {
       "title": "Code abgelaufen",
-      "message": "Einen neuen generieren und eingeben."
+      "message": "Einen neuen erstellen und eingeben."
     }
+  },
+  "summary-card": {
+    "legal-title": "Rechtsgültig",
+    "courtesy-title": "Informell",
+    "no-address": "Keine Adresse",
+    "PEC": "PEC",
+    "SMS": "SMS",
+    "EMAIL": "E-Mail",
+    "APPIO": "IO-App",
+    "SERCQ_SEND": "Digitales Domizil",
+    "add-icon-arialabel": "Hinzufügen"
+  },
+  "domicile-banner": {
+    "no-sercq-send-title": "Keine Papierdokumente mehr: aktiviere SEND als digitales Domizil",
+    "no-sercq-send-description": "Wähle die Plattform SEND als digitales Domizil, um die nächsten Zustellung ausschließlich digital zu empfangen und sie in Echtzeit zu lesen, wo immer du bist.",
+    "no-sercq-cta": "Aktivieren",
+    "no-courtesy-title": "Versäume keine wichtigen Mitteilungen",
+    "no-courtesy-description": "Ohne informelle Adresse können wir dich nicht benachrichtigen, wenn es eine rechtsgültige Mitteilung auf SEND zu lesen gibt.",
+    "complete-addresses": "Eine E-Mail-Adresse eingeben",
+    "no-io-title": "Deine Zustellungen per App",
+    "no-io-description": "Wenn eine Zustellung für dich vorliegt, so kannst du sie in der IO-App empfangen, lesen und etwaige Gebühren direkt in der App bezahlen!",
+    "add-io": "Aktiviere SEND auf der IO-App",
+    "no-courtesy-sercq-send-title": "Möchtest du die nächsten Zustellungen ausschließlich digital empfangen?",
+    "no-courtesy-sercq-send-description": "Aktiviere SEND als digitales Domizil und mach dir nie wieder Sorgen um Einschreiben in Papierform.",
+    "complete-configuration": "Konfiguration fertigstellen",
+    "no-courtesy-no-sercq-send-title": "Versäume keine wichtigen Mitteilungen ",
+    "no-courtesy-no-sercq-send-description": "Füge eine E-Mail-Adresse hinzu, um eine Benachrichtigung zum Vorliegen einer neuen Zustellung auf SEND zu erhalten.",
+    "no-courtesy-no-sercq-send-cta": "Deine E-Mail-Adresse bestätigen"
   }
 }

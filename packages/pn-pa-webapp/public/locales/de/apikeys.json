@@ -1,6 +1,6 @@
 {
   "title": "API-Schlüssel",
-  "subtitle": "SEND bietet APIs für <0>Senden von Bescheiden und Zugriff zu Daten</0> zu ihrem Status. Hier kannst du die API-Schlüssel generieren und verwalten, die zur Authentifizierung der Anfragen der Körperschaft verwendet werden.",
+  "subtitle": "SEND bietet APIs für das <0>Senden von Zustellungen und den Zugriff auf Daten</0> zu ihrem Status. Hier kannst du die API-Schlüssel generieren und verwalten, die zur Authentifizierung der Anfragen der Körperschaft verwendet werden.",
   "error-fecth-api-keys": "Die Liste der API-Schlüssel konnte nicht abgerufen werden",
   "api-key-succesfully-generated": "API-Schlüssel erfolgreich generiert!",
   "copy-the-api-key": "Um die Integration zu ermöglichen, kopiere den Code und gib ihn auf der Plattform der jeweiligen Körperschaft ein.",
@@ -11,7 +11,7 @@
   "enable-button": "Aktivieren",
   "block-button": "Sperren",
   "rotate-button": "Rotieren",
-  "delete-button": "Löschen",
+  "delete-button": "Entfernen",
   "block-api-key": "API-Schlüssel sperren",
   "enable-api-key": "API-Schlüssel aktivieren",
   "rotate-api-key": "API-Schlüssel rotieren",
@@ -34,7 +34,7 @@
   "go-to-api-keys": "Zurück zu API-Schlüssel",
   "table": {
     "title": "Tabelle API-Schlüssel",
-    "name": "Vorname",
+    "name": "Name",
     "api-key": "API-Schlüssel",
     "last-update": "Letzte Änderung",
     "groups": "Gruppen",
@@ -45,7 +45,7 @@
     "enable": "Aktivieren",
     "block": "Sperren",
     "rotate": "Rotieren",
-    "delete": "Löschen",
+    "delete": "Entfernen",
     "view": "Code anzeigen",
     "view-groups-id": "Gruppen-ID anzeigen"
   },
@@ -83,7 +83,7 @@
     "form-label-groups": "Wähle die Gruppen aus, denen der API-Schlüssel zugewiesen werden soll",
     "form-placeholder-groups": "Gruppe suchen",
     "form-error-groups": "Mindestens eine Gruppe auswählen",
-    "continue-button": "Fortfahren",
+    "continue-button": "Weiter",
     "required-fields": "Pflichtfelder",
     "no-groups": "Keine Gruppe verfügbar"
   }
