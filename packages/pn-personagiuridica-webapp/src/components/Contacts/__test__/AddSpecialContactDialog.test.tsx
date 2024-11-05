@@ -381,7 +381,7 @@ describe('test AddSpecialContactDialog', () => {
       true
     );
 
-    expect(confirmButton).toBeDisabled();
+    expect(confirmButton).toBeEnabled();
 
   });
 
