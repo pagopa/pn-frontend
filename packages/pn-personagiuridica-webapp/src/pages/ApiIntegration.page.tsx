@@ -18,9 +18,7 @@ const ApiIntegration: React.FC = () => {
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
   const publicKeys = useAppSelector((state: RootState) => state.apiKeysState.publicKeys);
-  const hasOneActiveKey = publicKeys.items.some((key) => key.status === PublicKeyStatus.Active);
-  const hasOneRotateKey = publicKeys.items.some((key) => key.status === PublicKeyStatus.Rotated);
-  const hasValidKey = hasOneActiveKey || hasOneRotateKey;
+  const hasValidKey =publicKeys.items.some((key) => key.status === PublicKeyStatus.Active ||  key.status === PublicKeyStatus.Rotated);
 
   
   const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
