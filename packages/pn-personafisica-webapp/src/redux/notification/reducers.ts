@@ -144,10 +144,13 @@ const notificationSlice = createSlice({
           paymentData.pagoPa?.creditorTaxId === creditorTaxId &&
           paymentData.pagoPa?.noticeCode === noticeCode
       );
-      if (paymentInfoIndex !== -1 && state.paymentsData.pagoPaF24[paymentInfoIndex].pagoPa) {
-        state.paymentsData.pagoPaF24[paymentInfoIndex].pagoPa.status = PaymentStatus.FAILED;
-        state.paymentsData.pagoPaF24[paymentInfoIndex].pagoPa.detail =
-          PaymentInfoDetail.GENERIC_ERROR;
+      if (paymentInfoIndex !== -1) {
+        const pagoPa = state.paymentsData.pagoPaF24[paymentInfoIndex].pagoPa;
+
+        if (pagoPa) {
+          pagoPa.status = PaymentStatus.FAILED;
+          pagoPa.detail = PaymentInfoDetail.GENERIC_ERROR;
+        }
       }
     });
     builder.addCase(getDowntimeHistory.fulfilled, (state, action) => {

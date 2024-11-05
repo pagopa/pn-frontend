@@ -756,15 +756,16 @@ describe('NotificationDetail Page', async () => {
       })
       .reply(500);
 
-    expect(testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
-
-    await act(async () => {
-      result = render(<NotificationDetail />, {
-        preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-        },
+      await act(async () => {
+        result = render(<NotificationDetail />, {
+          preloadedState: {
+            userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } }
+            ,
+          },
+        });
       });
-    });
+
+    expect(testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
 
     const payButton = result.getByTestId('pay-button');
     const item = result.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
