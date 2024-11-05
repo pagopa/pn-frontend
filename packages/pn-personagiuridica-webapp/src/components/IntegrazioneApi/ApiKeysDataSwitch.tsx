@@ -53,6 +53,7 @@ const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick
               textOverflow: 'ellipsis',
               overflow: 'hidden',
               whiteSpace: 'nowrap',
+              color: 'inherit',
             }}
           >
             {data.value}
