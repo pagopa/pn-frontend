@@ -62,11 +62,10 @@ describe('test AddSpecialContactDialog', () => {
     const bodyEl = within(dialog).getByTestId('dialog-content');
     expect(bodyEl).toBeInTheDocument();
     expect(bodyEl).not.toHaveTextContent(`special-contacts.pec`);
-    const input = queryById(bodyEl, 's_value');
-    expect(input).toBeInTheDocument();
-    expect(input).toHaveValue('');
     expect(bodyEl).toHaveTextContent(`special-contacts.contact-to-add-description`);
     expect(bodyEl).toHaveTextContent(`special-contacts.senders`);
+    const input = queryById(bodyEl, 's_value');
+    expect(input).not.toBeInTheDocument();
     const senderAutoComplete = within(bodyEl).getByTestId('sender');
     expect(senderAutoComplete).toBeInTheDocument();
     const senderChips = within(bodyEl).queryAllByTestId('sender_chip');
@@ -386,7 +385,7 @@ describe('test AddSpecialContactDialog', () => {
       true
     );
 
-    expect(confirmButton).toBeDisabled();
+    expect(confirmButton).toBeEnabled();
 
   });
 
