@@ -5,7 +5,7 @@ import * as yup from 'yup';
 
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Alert, Box, IconButton, SxProps, TextField, Typography } from '@mui/material';
+import { Alert, Box, SxProps, TextField, Typography } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -342,18 +342,18 @@ const Attachments: React.FC<Props> = ({
               sx={{ marginTop: i > 0 ? 4 : 0 }}
             />
           ))}
+          {formik.values.documents.length <= MAX_NUMBER_OF_ATTACHMENTS && (
+            <ButtonNaked
+              onClick={addDocumentHandler}
+              color="primary"
+              startIcon={<AddIcon />}
+              sx={{ marginTop: 4 }}
+              data-testid="add-another-doc"
+            >
+              {t('add-another-doc')}
+            </ButtonNaked>
+          )}
         </FormBox>
-        {formik.values.documents.length <= MAX_NUMBER_OF_ATTACHMENTS && (
-          <ButtonNaked
-            onClick={addDocumentHandler}
-            color="primary"
-            startIcon={<AddIcon />}
-            sx={{ marginTop: 2 }}
-            data-testid="add-another-doc"
-          >
-            {formik.values.documents.length === 1 ? t('add-doc') : t('add-another-doc')}
-          </ButtonNaked>
-        )}
       </NewNotificationCard>
     </form>
   );

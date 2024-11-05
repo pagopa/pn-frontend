@@ -17,11 +17,11 @@ import {
   Typography,
   styled,
 } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../hooks';
 import { calcSha256String, parseFileSize } from '../utility/file.utility';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
-import { ButtonNaked } from '@pagopa/mui-italia';
 
 type Props = {
   uploadText: string;
