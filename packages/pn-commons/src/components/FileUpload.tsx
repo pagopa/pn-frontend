@@ -3,12 +3,10 @@ import { ChangeEvent, DragEvent, ReactNode, useEffect, useMemo, useReducer, useR
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import ContentCopy from '@mui/icons-material/ContentCopy';
 import {
   Box,
   Button,
   FormHelperText,
-  IconButton,
   Input,
   LinearProgress,
   Stack,
@@ -17,7 +15,7 @@ import {
   Typography,
   styled,
 } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../hooks';
 import { calcSha256String, parseFileSize } from '../utility/file.utility';
@@ -282,15 +280,6 @@ const FileUpload = ({
     }
   }, [attachmentExists]);
 
-  const CopyHashButton = () => (
-    <IconButton
-      data-testid="copyHashButton"
-      onClick={() => navigator.clipboard.writeText(fileData.sha256)}
-    >
-      <ContentCopy />
-    </IconButton>
-  );
-
   return (
     <>
       <Box
@@ -408,7 +397,7 @@ const FileUpload = ({
             margin="dense"
             disabled={true}
             InputProps={{
-              endAdornment: <CopyHashButton />,
+              endAdornment: <CopyToClipboardButton value={fileData.sha256} />,
             }}
           />
         </Box>
