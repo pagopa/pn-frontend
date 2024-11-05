@@ -21,6 +21,7 @@ import {
 import { useIsMobile } from '../hooks';
 import { calcSha256String, parseFileSize } from '../utility/file.utility';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 type Props = {
   uploadText: string;
@@ -373,7 +374,7 @@ const FileUpload = ({
                   {parseFileSize(fileData.file.size)}
                 </Typography>
               </Box>
-              <IconButton
+              <ButtonNaked
                 data-testid="removeDocument"
                 onClick={removeFileHandler}
                 aria-label={getLocalizedOrDefaultLabel(
@@ -383,7 +384,7 @@ const FileUpload = ({
                 )}
               >
                 <CloseIcon />
-              </IconButton>
+              </ButtonNaked>
             </Box>
           </>
         )}

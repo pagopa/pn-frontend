@@ -62,14 +62,14 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
       <Box display="flex" alignItems="center" sx={sx}>
         <FormBoxTitle text={title} />
         {canBeDeleted && (
-          <IconButton
+          <ButtonNaked
             onClick={onDelete}
             data-testid="deletebutton"
             aria-label={t('new-notification.steps.attachments.remove-document')}
             sx={{ marginLeft: 2 }}
           >
             <DeleteIcon color="error" />
-          </IconButton>
+          </ButtonNaked>
         )}
       </Box>
       <TextField
@@ -348,7 +348,7 @@ const Attachments: React.FC<Props> = ({
             onClick={addDocumentHandler}
             color="primary"
             startIcon={<AddIcon />}
-            sx={{ marginTop: '30px' }}
+            sx={{ marginTop: 2 }}
             data-testid="add-another-doc"
           >
             {formik.values.documents.length === 1 ? t('add-doc') : t('add-another-doc')}
