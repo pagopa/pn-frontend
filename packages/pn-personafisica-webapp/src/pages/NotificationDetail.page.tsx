@@ -10,6 +10,7 @@ import {
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
   LegalFactId,
+  LegalFactType,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -199,7 +200,10 @@ const NotificationDetail: React.FC = () => {
   };
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    if (isCancelled.cancelled || isCancelled.cancellationInProgress) {
+    if (
+      legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED &&
+      (isCancelled.cancelled || isCancelled.cancellationInProgress)
+    ) {
       return;
     }
     if (legalFact.category !== 'AAR') {
