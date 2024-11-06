@@ -5,6 +5,7 @@ import {
   digitalAddresses,
   digitalCourtesyAddresses,
   digitalLegalAddresses,
+  orderedDigitalAddresses,
 } from '../../../__mocks__/Contacts.mock';
 import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
@@ -63,7 +64,7 @@ describe('Contacts redux state tests', () => {
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     const action = await store.dispatch(getDigitalAddresses());
     expect(action.type).toBe('getDigitalAddresses/fulfilled');
-    expect(action.payload).toEqual(digitalAddresses);
+    expect(action.payload).toEqual(orderedDigitalAddresses);
   });
 
   it('Should be able to update the digital address with legal value (pec to verify)', async () => {

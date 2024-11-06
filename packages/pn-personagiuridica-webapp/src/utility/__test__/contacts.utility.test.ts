@@ -1,11 +1,12 @@
 import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 
-import { digitalAddresses, digitalAddressesSercq } from '../../__mocks__/Contacts.mock';
+import { digitalAddresses, digitalAddressesSercq, orderedDigitalAddresses } from '../../__mocks__/Contacts.mock';
 import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
 import { SelectedAddresses } from '../../redux/contact/reducers';
 import {
   contactAlreadyExists,
   removeAddress,
+  sortAddresses,
   specialContactsAvailableAddressTypes,
   updateAddressesList,
 } from '../contacts.utility';
@@ -161,6 +162,12 @@ describe('Contacts utility test', () => {
     ]);
   });
 
+  it('test sortAddresses function', () => {
+    sortAddresses(digitalAddresses);
+
+    expect(digitalAddresses).toStrictEqual(orderedDigitalAddresses);
+  });
+
   it('test updateAddressesList function, new address', () => {
     const newAddress: DigitalAddress = {
       addressType: AddressType.LEGAL,
@@ -177,7 +184,7 @@ describe('Contacts utility test', () => {
       newAddress
     );
 
-    expect(digitalAddresses).toStrictEqual([...previousDigitalAddresses, newAddress]);
+    expect(digitalAddresses).toStrictEqual(sortAddresses([...previousDigitalAddresses, newAddress]));
   });
 
   it('test updateAddressesList function, existing courtesy address', () => {

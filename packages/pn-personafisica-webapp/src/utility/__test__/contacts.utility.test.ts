@@ -4,6 +4,7 @@ import {
   digitalAddresses,
   digitalAddressesSercq,
   digitalCourtesyAddresses,
+  orderedDigitalAddresses,
 } from '../../__mocks__/Contacts.mock';
 import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
 import { SelectedAddresses } from '../../redux/contact/reducers';
@@ -11,6 +12,7 @@ import {
   contactAlreadyExists,
   countContactsByType,
   removeAddress,
+  sortAddresses,
   specialContactsAvailableAddressTypes,
   updateAddressesList,
 } from '../contacts.utility';
@@ -268,5 +270,11 @@ describe('Contacts utility test', () => {
     );
 
     expect(result).toStrictEqual(currentAddresses);
+  });
+
+  it('test sortAddresses function', () => {
+    sortAddresses(digitalAddresses);
+
+    expect(digitalAddresses).toStrictEqual(orderedDigitalAddresses);
   });
 });

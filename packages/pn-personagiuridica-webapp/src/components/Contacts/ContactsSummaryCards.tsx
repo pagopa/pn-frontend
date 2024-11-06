@@ -52,16 +52,7 @@ const ContactsSummaryCard: React.FC<ContactsSummaryCardProps> = ({
       {} as { [key: string]: string }
     );
 
-    if (
-      contacts.some(
-        (addr) => addr.senderId === 'default' && addr.channelType === Object.keys(contactsType)[0]
-      )
-    ) {
-      return Object.values(contactsType).join(', ');
-    }
-
-    // eslint-disable-next-line functional/immutable-data
-    return Object.values(contactsType).reverse().join(', ');
+    return Object.values(contactsType).join(', ');
   };
 
   const goToSection = () => {
