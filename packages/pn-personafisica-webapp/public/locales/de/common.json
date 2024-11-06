@@ -6,37 +6,33 @@
     "associa": "Zuordnen",
     "capito": "Verstanden",
     "conferma": "Bestätigen",
-    "attiva": "Aktivieren",
     "annulla": "Abbrechen",
-    "modifica": "Ändern",
+    "modifica": "Bearbeiten",
     "salva": "Speichern",
-    "elimina": "Entfernen",
-    "enter": "Einwählen",
-    "exit": "Beenden",
+    "elimina": "Löschen",
+    "enter": "Zugreifen",
+    "exit": "Abmelden",
     "close": "Schließen",
     "enable": "Aktivieren",
     "disable": "Deaktivieren",
-    "continue": "Weiter",
-    "go-to-home": "Zur Homepage",
-    "go-to-login": "Anmelden",
-    "not-now": "Nicht jetzt",
-    "add": "Hinzufügen"
+    "go-to-home": "Zur Startseite",
+    "go-to-login": "Anmelden"
   },
   "menu": {
-    "notifiche": "Zustellungen",
+    "notifiche": "Bescheide",
     "deleghe": "Vollmachten",
     "profilo": "Deine Daten",
-    "contacts": "Deine Adressen",
+    "contacts": "Deine Anschriften",
     "app-status": "Plattformstatus"
   },
   "header": {
-    "logout": "Beenden",
+    "logout": "Abmelden",
     "pago-pa-link": "Website von PagoPA S.p.A."
   },
   "tos": {
     "title": "SEND - Servizio Notifiche Digitali",
-    "body": "Zum Anmelden lies und akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung.",
-    "redo-body": "Die Nutzungsbedingungen für den Dienst und die Datenschutzerklärung haben sich geändert. Zum Anmelden akzeptiere und bestätige, dass du die neuen Versionen gelesen hast.",
+    "body": "Um darauf zuzugreifen, lese und akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung.",
+    "redo-body": "Die Nutzungsbedingungen für den Dienst und die Datenschutzerklärung haben sich geändert. Um zuzugreifen, akzeptiere und bestätige, dass du die neuen Versionen gelesen hast.",
     "switch-label": "Ich akzeptiere die <1>Nutzungsbedingungen</1> und bestätige, dass ich die <0>Datenschutzerklärung</0> gelesen habe",
     "button": "Anmelden"
   },
@@ -59,8 +55,8 @@
   "date-picker": {
     "left-arrow": "Zum Vormonat",
     "right-arrow": "Zum nächsten Monat",
-    "switch-to-year": "Kalendermodus aktiv, wechsele in den Jahreswahlmodus",
-    "switch-to-calendar": "Jahreswahlmodus aktiv, wechsele in den Kalendermodus",
+    "switch-to-year": "Kalendermodus aktiv, wechselt in den Jahreswahlmodus",
+    "switch-to-calendar": "Jahreswahlmodus aktiv, wechselt in den Kalendermodus",
     "select-date": "Datum wählen",
     "date-selected": "Datum wählen, das gewählte Datum ist {{date}}"
   },
@@ -74,13 +70,13 @@
     "action": "Seite neu laden"
   },
   "not-accessible": {
-    "title": "Zugriff auf die Plattform nicht möglich",
-    "description": "SEND befindet sich derzeit in der Testphase und ist noch nicht verfügbar. Weitere Informationen dazu",
+    "title": "Der Zugriff auf die Plattform ist nicht möglich",
+    "description": "SEND befindet sich derzeit in der Testphase und ist noch nicht verfügbar. Weitere Informationen dazu ",
     "action": "auf der entsprechenden Website"
   },
   "access-denied": "Du bist für den Zugriff auf diese Seite nicht berechtigt",
-  "not-logged": "Login auf SEND",
-  "not-logged-subtitle": "Melde dich mit SPID oder CIE an, um Zustellungen anzuzeigen oder zu verwalten.",
+  "not-logged": "Auf SEND zugreifen",
+  "not-logged-subtitle": "Anmeldung mit SPID oder CIE, um Bescheide anzuzeigen oder zu verwalten.",
   "not-found": {
     "title": "404: Die gesuchte Seite existiert nicht",
     "descpription": "Du bist versehentlich hier gelandet, benutze die Navigation."
@@ -90,20 +86,20 @@
     "message": "Du wirst weitergeleitet"
   },
   "error-when-fetching-tos-status": {
-    "title": "Probleme beim Login auf SEND",
+    "title": "Probleme beim Zugriff auf SEND",
     "message": "Bitte später erneut versuchen"
   },
   "messages": {
     "404-title": "Quelle nicht gefunden",
     "404-message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut",
-    "403-title": "Die Sitzung ist abgelaufen",
+    "403-title": "Sitzung abgelaufen",
     "403-message": "Melde dich mit SPID oder CIE an.",
     "401-title": "Unberechtigter Benutzer",
     "401-message": "Der aktuelle Benutzer hat keine Berechtigungen",
     "451-title": "Plattform nicht zugänglich",
-    "451-message": "Zugriff auf die Plattform nicht möglich",
+    "451-message": "Der Zugriff auf die Plattform ist nicht möglich",
     "500-title": "Dienst nicht erreichbar",
-    "500-message": "Aufgrund eines vorübergehenden Problems wurde deine Anfrage nicht gesendet. Bitte später erneut versuchen.",
+    "500-message": "Aufgrund eines vorübergehenden Problems wurde deine Anfrage nicht gesendet. Versuche es später noch einmal.",
     "lacking-grants-for-app-title": "Du bist nicht zur Anmeldung berechtigt",
     "invalid-token-title": "Anmeldung wegen technischem Problem nicht möglich - Token ungültig",
     "generic-token-exchange-problem": "Die Anmeldung konnte nicht abgeschlossen werden",
@@ -121,23 +117,23 @@
     "certifications": "Zertifizierungen",
     "security": "Informationssicherheit",
     "personal-data": "Recht auf Schutz personenbezogener Daten",
-    "cookie": "Cookie-Präferenzen",
+    "cookie": "Cookie-Einstellungen",
     "terms-conditions": "Allgemeine Geschäftsbedingungen",
     "company": "Transparente Gesellschaft",
     "disclosure": "Responsible Disclosure Policy",
     "321-model": "Vordruck 231",
-    "accessibility": "Barrierefreiheit",
+    "accessibility": "Zugänglichkeit",
     "social": "Link: Gehe auf die Website {{social}} von PagoPA S.p.A.",
-    "resources": "Ressourcen",
-    "follow": "Folgen Sie uns auf",
+    "resources": "Quellen",
+    "follow": "Folge uns auf",
     "legal-part-1": "Aktiengesellschaft mit einem einzigen Gesellschafter - voll eingezahltes Grundkapital von 1.000.000 Euro - eingetragener Sitz in Rom, Piazza Colonna 370",
-    "legal-part-2": "PLZ 00187 – Eintragungsnummer im Handelsregister von Rom, Steuernummer und USt-IdNr. 15376371009"
+    "legal-part-2": "PLZ 00187 – Eintrag im Handelsregister von Rom Nr., Steuernummer und USt-IdNr. 15376371009"
   },
-  "required-fields": "*Pflichtfelder",
+  "required-fields": "* Pflichtfelder",
   "required-field": "Pflichtfeld",
-  "too-long-field-error": "Höchstens {{maxLength}} Zeichen schreiben",
+  "too-long-field-error": "Maximal {{maxLength}} Zeichen",
   "validation": {
-    "search-pattern-length-limit": "Maximal {{maxLength}} Zeichen suchen",
+    "search-pattern-length-limit": "Suche max. {{maxLength}} Zeichen",
     "invalid-characters-not-inserted": "Ungültige Zeichen wurden nicht eingegeben."
   },
   "errors": {
@@ -151,37 +147,27 @@
     },
     "unavailable_legal_reasons": {
       "title": "Plattform nicht zugänglich",
-      "message": "Zugriff auf die Plattform nicht möglich"
+      "message": "Der Zugriff auf die Plattform ist nicht möglich"
     },
     "forbidden": {
-      "title": "Die Sitzung ist abgelaufen",
+      "title": "Sitzung abgelaufen",
       "message": "Melde dich mit SPID oder CIE an."
     },
     "not_found": {
       "title": "Quelle nicht gefunden",
-      "message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut."
+      "message": "Es ist ein Fehler aufgetreten. Bitte später erneut versuchen."
     },
     "internal_server": {
       "title": "Dienst nicht erreichbar",
-      "message": "Aufgrund eines vorübergehenden Problems wurde deine Anfrage nicht gesendet. Bitte später erneut versuchen."
+      "message": "Aufgrund eines vorübergehenden Problems wurde deine Anfrage nicht gesendet. Versuche es später noch einmal."
     },
     "unhandled": {
       "title": "Allgemeiner Fehler",
-      "message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut."
+      "message": "Es ist ein Fehler aufgetreten. Bitte später erneut versuchen."
     },
     "unknown": {
       "title": "Fehler",
       "message": "Unerwarteter Fehler"
-    },
-    "invalid_type_code": {
-      "title": "Dieses Feld akzeptiert nur numerische Werte",
-      "message": "Kontrolliere den Bestätigungscode und gib ihn erneut ein"
     }
-  },
-  "badges": {
-    "news": "Neues"
-  },
-  "conjunctions": {
-    "or": "oder"
   }
 }

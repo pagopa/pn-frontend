@@ -1,9 +1,9 @@
 {
   "title": "Your data",
-  "subtitle": "This data is taken from your SPID or CIE and cannot be edited.",
+  "subtitle": "This data is taken from your SPID or CIE and is not editable.",
   "profile": {
-    "name": "First name",
+    "name": "Name",
     "family_name": "Surname",
-    "fiscal_number": "Tax code"
+    "fiscal_number": "Fiscal code"
   }
 }

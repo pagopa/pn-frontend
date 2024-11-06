@@ -38,7 +38,7 @@
     "api-key": "Ključ API",
     "last-update": "Zadnja sprememba",
     "groups": "Skupine",
-    "status": "Država"
+    "status": "Stanje"
   },
   "context-menu": {
     "title": "Možnosti na ključu API",
@@ -83,7 +83,7 @@
     "form-label-groups": "Izberite skupine, ki jim želite dodeliti ključ API",
     "form-placeholder-groups": "Iskanje skupine",
     "form-error-groups": "Izberite vsaj eno skupino",
-    "continue-button": "Nadaljuj",
+    "continue-button": "Nadaljujte",
     "required-fields": "Obvezna polja",
     "no-groups": "Ni razpoložljivih skupin"
   }
