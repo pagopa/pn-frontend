@@ -2,7 +2,6 @@ import { Formik, FormikProps } from 'formik';
 import { vi } from 'vitest';
 
 import {
-  act,
   fireEvent,
   getById,
   getByText,
@@ -10,6 +9,7 @@ import {
   screen,
   testInput,
   testRadio,
+  waitFor,
   within,
 } from '@pagopa-pn/pn-commons/src/test-utils';
 import { LangLabels } from '@pagopa/mui-italia';
@@ -129,12 +129,7 @@ describe('PreliminaryInformationsLang', () => {
 
     userEvent.click(selectAdditionalLang);
 
-    await act(async () => {
-      // time to appear the dropdown
-      await new Promise((r) => setTimeout(r, 500));
-    });
-
-    const dropdown = document.querySelector('#menu-additionalLang') as HTMLElement;
+    const dropdown = await waitFor(() => getById(document.body, 'menu-additionalLang'));
     expect(dropdown).toBeInTheDocument();
 
     const frOption = within(dropdown).getByText('Tedesco');
