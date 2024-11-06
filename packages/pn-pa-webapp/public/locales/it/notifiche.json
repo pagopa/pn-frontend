@@ -275,6 +275,7 @@
       "send-analog-outcome-unknown": "Invio per via cartacea completato - esito non determinato",
       "send-analog-unknown": "Evento su spedizione raccomandata - non riconosciuto",
       "aar-document": "Avviso di avvenuta ricezione",
+      "notification-cancelled-document": "Dichiarazione annullamento notifica",
       "legalfact": {
         "sender-ack": "notifica presa in carico",
         "digital-delivery-success": "notifica digitale",
@@ -474,7 +475,8 @@
         "add-doc": "Aggiungi un documento (per esempio, la lettera d’accompagnamento)",
         "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)",
         "back-to-recipient": "Torna a Destinatario",
-        "remove-document": "Rimuovi documento"
+        "remove-document": "Rimuovi documento",
+        "banner-additional-languages": "Hai scelto di inviare la notifica in più lingue. Ricorda di allegare i documenti in entrambe le lingue selezionate."
       },
       "payment-methods": {
         "title": "Modelli di pagamento",

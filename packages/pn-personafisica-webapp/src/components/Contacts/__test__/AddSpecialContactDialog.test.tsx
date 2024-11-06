@@ -5,7 +5,7 @@ import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commo
 import { getById, testAutocomplete, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
 import { fireEvent, waitFor } from '@testing-library/react';
 
-import { digitalAddresses, digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
+import { digitalAddresses, digitalAddressesPecValidation, digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { act, render, screen, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
@@ -315,6 +315,63 @@ describe('test AddSpecialContactDialog', () => {
       [{ value: ChannelType.PEC, label: 'special-contacts.pec' }],
       0
     );
+  });
+
+  it('should not allow adding SERCQ while validating PEC', async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    render(
+      <AddSpecialContactDialog
+        open
+        value=""
+        sender={{ senderId: 'default', senderName: '' }}
+        channelType={ChannelType.PEC}
+        onDiscard={discardHandler}
+        onConfirm={confirmHandler}
+      />,
+      {
+        preloadedState: { contactsState: { digitalAddresses: [
+          ...digitalAddressesPecValidation(true, true),
+          ...digitalAddressesPecValidation(false, false, parties[1]),
+        ]} },
+      }
+    );
+
+    const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
+    const bodyEl = within(dialog).getByTestId('dialog-content');
+    
+    await testSelect(
+      bodyEl,
+      'channelType',
+      [
+        { value: ChannelType.PEC, label: 'special-contacts.pec' },
+        { value: ChannelType.SERCQ_SEND, label: 'special-contacts.sercq_send' },
+      ],
+      1
+    );
+
+    await testAutocomplete(
+      bodyEl,
+      'sender',
+      parties,
+      true,
+      parties.findIndex((p) => p.name === parties[2].name),
+      true
+    );
+    
+    const confirmButton = within(dialog).getByText('button.associa');
+    expect(confirmButton).toBeEnabled();
+
+    await testAutocomplete(
+      bodyEl,
+      'sender',
+      parties,
+      true,
+      parties.findIndex((p) => p.name === parties[1].name),
+      true
+    );
+
+    expect(confirmButton).toBeDisabled();
+
   });
 
   it('API error', async () => {

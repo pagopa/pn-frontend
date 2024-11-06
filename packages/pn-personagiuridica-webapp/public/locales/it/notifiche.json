@@ -294,6 +294,7 @@
       "send-analog-outcome-unknown": "Invio per via cartacea completato - esito non determinato",
       "send-analog-unknown": "Evento su spedizione raccomandata - non riconosciuto",
       "aar-document": "Avviso di avvenuta ricezione",
+      "notification-cancelled-document": "Dichiarazione annullamento notifica",
       "legalfact": {
         "sender-ack": "notifica presa in carico",
         "digital-delivery-success": "notifica digitale",
