@@ -1,6 +1,7 @@
 import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType, DigitalAddress } from '../models/contacts';
+import { Party } from '../models/party';
 
 export const digitalAddresses: Array<DigitalAddress> = [
   {
@@ -108,3 +109,27 @@ export const digitalLegalAddresses = digitalAddresses.filter(
 export const digitalLegalAddressesSercq = digitalAddressesSercq.filter(
   (addr) => addr.addressType === AddressType.LEGAL
 );
+
+export const digitalAddressesPecValidation = (sercqEnabled = true, pecValid = false, sender: Party = { id: 'default', name: '' }): Array<DigitalAddress> => {
+  let retVal: Array<DigitalAddress> = [{
+    addressType: AddressType.LEGAL,
+    senderId: sender.id,
+    senderName: sender.name,
+    channelType: ChannelType.PEC,
+    value: 'nome.utente@pec.it',
+    pecValid,
+    codeValid: true,
+  }];
+  
+  if(sercqEnabled){
+    retVal.push({
+      addressType: AddressType.LEGAL,
+      senderId: sender.id,
+      senderName: sender.name,
+      channelType: ChannelType.SERCQ_SEND,
+      value: SERCQ_SEND_VALUE,
+      codeValid: true,
+    });
+  };
+  return retVal;
+};
