@@ -97,6 +97,12 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
         calcSha256
         fileUploaded={fileUploaded}
       />
+      <Typography variant="caption" color="text.secondary">
+        {t('new-notification.steps.attachments.file-upload-helper', {
+          format: '.PDF',
+          size: '20 mb',
+        })}
+      </Typography>
     </Box>
   );
 };

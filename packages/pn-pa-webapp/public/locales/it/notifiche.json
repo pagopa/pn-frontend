@@ -475,7 +475,8 @@
         "add-another-doc": "Aggiungi un altro documento",
         "back-to-recipient": "Torna a Destinatario",
         "remove-document": "Rimuovi documento",
-        "banner-additional-languages": "Hai scelto di inviare la notifica in più lingue. Ricorda di allegare i documenti in entrambe le lingue selezionate."
+        "banner-additional-languages": "Hai scelto di inviare la notifica in più lingue. Ricorda di allegare i documenti in entrambe le lingue selezionate.",
+        "file-upload-helper": "Il documento deve essere in formato {{format}} e non deve superare le dimensioni di {{size}}"
       },
       "payment-methods": {
         "title": "Modelli di pagamento",
