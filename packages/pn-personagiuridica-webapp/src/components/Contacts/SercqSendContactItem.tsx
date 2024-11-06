@@ -67,6 +67,7 @@ const SercqSendContactItem: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
   const {
+    defaultPECAddress,
     defaultSERCQ_SENDAddress,
     courtesyAddresses,
     specialPECAddresses,
@@ -78,6 +79,8 @@ const SercqSendContactItem: React.FC = () => {
   const value = defaultSERCQ_SENDAddress?.value ?? '';
   const hasCourtesy = courtesyAddresses.length > 0;
   const blockDelete = specialPECAddresses.length > 0 || specialSERCQ_SENDAddresses.length > 0;
+
+  const verifyingPecAddress = defaultPECAddress?.pecValid === false;
 
   const handleActivation = () => {
     dispatch(getSercqSendTosPrivacyApproval())
@@ -243,7 +246,12 @@ const SercqSendContactItem: React.FC = () => {
     >
       <Box data-testid={`default_sercqSendContact`} style={{ width: isMobile ? '100%' : '50%' }}>
         {!value && (
-          <Button variant="contained" data-testid="activateButton" onClick={handleActivation}>
+          <Button
+            variant="contained"
+            data-testid="activateButton"
+            onClick={handleActivation}
+            disabled={verifyingPecAddress}
+          >
             {t('legal-contacts.sercq-send-active', { ns: 'recapiti' })}
           </Button>
         )}
@@ -263,6 +271,7 @@ const SercqSendContactItem: React.FC = () => {
                 color="error"
                 sx={{ fontWeight: 700 }}
                 size="medium"
+                disabled={verifyingPecAddress}
               >
                 {t('button.disable')}
               </ButtonNaked>

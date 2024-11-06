@@ -1,11 +1,6 @@
 import { useEffect } from 'react';
 
-import {
-  ConsentType,
-  compileOneTrustPath,
-  rewriteLinks,
-  waitForElement,
-} from '@pagopa-pn/pn-commons';
+import { compileOneTrustPath, rewriteLinks, waitForElement } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
@@ -19,20 +14,11 @@ declare const OneTrust: {
   };
 };
 
-const PrivacyPolicyPage: React.FC<{ type?: ConsentType }> = ({ type }) => {
+const PrivacyPolicyPage: React.FC = () => {
   const configuration = getConfiguration();
-  // eslint-disable-next-line functional/no-let
-  let pp = configuration.ONE_TRUST_PP;
-  // eslint-disable-next-line functional/no-let
-  let draft = configuration.ONE_TRUST_DRAFT_MODE;
-  // eslint-disable-next-line functional/no-let
-  let route = routes.PRIVACY_POLICY;
-
-  if (type === ConsentType.DATAPRIVACY_SERCQ) {
-    pp = configuration.ONE_TRUST_PP_SERCQ_SEND;
-    draft = configuration.ONE_TRUST_SERCQ_SEND_DRAFT_MODE;
-    route = routes.PRIVACY_POLICY_SERCQ_SEND;
-  }
+  const pp = configuration.ONE_TRUST_PP;
+  const draft = configuration.ONE_TRUST_DRAFT_MODE;
+  const route = routes.PRIVACY_POLICY;
 
   useEffect(() => {
     if (pp) {

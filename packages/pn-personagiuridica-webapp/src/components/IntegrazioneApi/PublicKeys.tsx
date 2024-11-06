@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
 import { Button, Stack, Typography } from '@mui/material';
-import { ApiErrorWrapper } from '@pagopa-pn/pn-commons';
+import { ApiErrorWrapper, appStateActions } from '@pagopa-pn/pn-commons';
 
 import {
   ChangeStatusPublicKeyV1StatusEnum,
@@ -65,7 +65,15 @@ const PublicKeys: React.FC = () => {
     handleCloseModal();
     void dispatch(
       changePublicKeyStatus({ kid: publicKeyId, status: ChangeStatusPublicKeyV1StatusEnum.Block })
-    ).then(fetchPublicKeys);
+    ).then(() => {
+      dispatch(
+        appStateActions.addSuccess({
+          title: '',
+          message: t('messages.success.public-key-blocked'),
+        })
+      );
+      fetchPublicKeys();
+    });
   };
 
   const deleteApiKey = (publicKeyId?: string) => {
@@ -73,7 +81,15 @@ const PublicKeys: React.FC = () => {
       return;
     }
     handleCloseModal();
-    void dispatch(deletePublicKey(publicKeyId)).then(fetchPublicKeys);
+    void dispatch(deletePublicKey(publicKeyId)).then(() => {
+      dispatch(
+        appStateActions.addSuccess({
+          title: '',
+          message: t('messages.success.public-key-deleted'),
+        })
+      );
+      fetchPublicKeys();
+    });
   };
 
   useEffect(() => {

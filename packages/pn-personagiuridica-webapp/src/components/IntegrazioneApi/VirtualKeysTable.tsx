@@ -32,14 +32,17 @@ const VirtualKeysTable: React.FC<Props> = ({ virtualKeys, handleModalClick }) =>
   const { t } = useTranslation(['integrazioneApi']);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
-  const isUserAdmin = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]) && !currentUser.hasGroup;
+  const isUserAdmin =
+    useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]) && !currentUser.hasGroup;
 
   const data: Array<Row<ApiKeyColumnData>> = virtualKeys.items.map((n: VirtualKey) => {
     const isPersonalKey = n.user?.fiscalCode === currentUser.fiscal_number;
 
     return {
       ...n,
-      name: isPersonalKey ? `${n.name} (${t('virtualKeys.table.personal')})` : n.name,
+      name: isPersonalKey
+        ? `${n.user?.denomination} (${t('virtualKeys.table.personal')})`
+        : n.user?.denomination,
       value: !isUserAdmin || isPersonalKey ? n.value : undefined,
       date: n.lastUpdate ? formatDate(n.lastUpdate, false) : '',
       id: n.id ?? '',
