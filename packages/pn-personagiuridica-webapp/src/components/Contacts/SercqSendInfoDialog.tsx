@@ -12,10 +12,7 @@ import {
 } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
-import {
-  PRIVACY_POLICY_SERCQ_SEND,
-  TERMS_OF_SERVICE_SERCQ_SEND,
-} from '../../navigation/routes.const';
+import { TERMS_OF_SERVICE_SERCQ_SEND } from '../../navigation/routes.const';
 
 type Props = {
   open: boolean;
@@ -23,7 +20,6 @@ type Props = {
   onConfirm: () => void;
 };
 
-const redirectPrivacyLink = () => window.open(`${PRIVACY_POLICY_SERCQ_SEND}`, '_blank');
 const redirectToSLink = () => window.open(`${TERMS_OF_SERVICE_SERCQ_SEND}`, '_blank');
 
 const SercqSendInfoDialog: React.FC<Props> = ({ open = false, onDiscard, onConfirm }) => {
@@ -81,7 +77,7 @@ const SercqSendInfoDialog: React.FC<Props> = ({ open = false, onDiscard, onConfi
         </Typography>
         <Typography fontWeight={400} fontSize="14px">
           <Trans
-            i18nKey="legal-contacts.sercq-send-info-tos-privacy"
+            i18nKey="legal-contacts.sercq-send-info-tos"
             ns="recapiti"
             components={[
               <Link
@@ -89,12 +85,6 @@ const SercqSendInfoDialog: React.FC<Props> = ({ open = false, onDiscard, onConfi
                 sx={{ cursor: 'pointer', textDecoration: 'none !important', fontWeight: 'bold' }}
                 onClick={redirectToSLink}
                 data-testid="tos-link"
-              />,
-              <Link
-                key="privacy"
-                sx={{ cursor: 'pointer', textDecoration: 'none !important', fontWeight: 'bold' }}
-                onClick={redirectPrivacyLink}
-                data-testid="privacy-link"
               />,
             ]}
           />

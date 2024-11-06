@@ -4,10 +4,7 @@ import { vi } from 'vitest';
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render, screen, within } from '../../../__test__/test-utils';
-import {
-  PRIVACY_POLICY_SERCQ_SEND,
-  TERMS_OF_SERVICE_SERCQ_SEND,
-} from '../../../navigation/routes.const';
+import { TERMS_OF_SERVICE_SERCQ_SEND } from '../../../navigation/routes.const';
 import SercqSendInfoDialog from '../SercqSendInfoDialog';
 
 vi.mock('react-i18next', () => ({
@@ -57,24 +54,20 @@ describe('test SercqSendInfoDialog', () => {
     expect(bodyEl).toHaveTextContent('legal-contacts.sercq-send-info-description');
     expect(bodyEl).toHaveTextContent('legal-contacts.sercq-send-info-advantages');
     expect(bodyEl).toHaveTextContent('legal-contacts.sercq-send-info-pec-disclaimer');
-    expect(bodyEl).toHaveTextContent('legal-contacts.sercq-send-info-tos-privacy');
+    expect(bodyEl).toHaveTextContent('legal-contacts.sercq-send-info-tos');
     const cancelButton = screen.getByText('button.annulla');
     expect(cancelButton).toBeInTheDocument();
     const enableButton = screen.getByText('button.enable');
     expect(enableButton).toBeInTheDocument();
   });
 
-  it('navigate to privacy and tos pages', () => {
+  it('navigate to tos page', () => {
     // render component
     render(<SercqSendInfoDialog open onConfirm={confirmHandler} onDiscard={discardHandler} />);
     const tosLink = screen.getByTestId('tos-link');
     fireEvent.click(tosLink);
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
     expect(mockOpenFn).toHaveBeenCalledWith(TERMS_OF_SERVICE_SERCQ_SEND, '_blank');
-    const privacyLink = screen.getByTestId('privacy-link');
-    fireEvent.click(privacyLink);
-    expect(mockOpenFn).toHaveBeenCalledTimes(2);
-    expect(mockOpenFn).toHaveBeenCalledWith(PRIVACY_POLICY_SERCQ_SEND, '_blank');
   });
 
   it('click on buttons', () => {

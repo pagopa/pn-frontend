@@ -27,7 +27,6 @@ export const GET_NOTIFICHE_DELEGATO_PATH = (mandateId: string) => `${NOTIFICHE}/
 export const APP_STATUS = '/app-status';
 export { PRIVACY_POLICY, TERMS_OF_SERVICE };
 export const NOT_ACCESSIBLE = '/non-accessibile';
-export const PRIVACY_POLICY_SERCQ_SEND = '/informativa-privacy/sercq-send';
 export const TERMS_OF_SERVICE_SERCQ_SEND = '/termini-di-servizio/sercq-send';
 export const TERMS_OF_SERVICE_B2B = '/termini-di-servizio/b2b';
 

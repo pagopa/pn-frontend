@@ -301,6 +301,7 @@ export enum LegalFactType {
   ANALOG_FAILURE_DELIVERY = 'ANALOG_FAILURE_DELIVERY',
   RECIPIENT_ACCESS = 'RECIPIENT_ACCESS',
   PEC_RECEIPT = 'PEC_RECEIPT', // PN-2107
+  NOTIFICATION_CANCELLED = 'NOTIFICATION_CANCELLED',
 }
 
 export interface LegalFactId {
@@ -371,7 +372,6 @@ export interface NotificationDocumentRequest {
   documentType: NotificationDocumentType;
   documentIdx?: number;
   documentId?: string;
-  documentCategory?: LegalFactType;
   mandateId?: string;
 }
 
