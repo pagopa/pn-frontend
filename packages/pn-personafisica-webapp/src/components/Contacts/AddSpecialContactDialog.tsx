@@ -65,17 +65,17 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     await formik.setFieldValue('s_value', '');
     if (e.target.value) {
-
-    formik.handleChange(e);
-    checkIfSenderIsAlreadyAdded(formik.values.sender, e.target.value as ChannelType);
-    }
-    if (
-      (e.target.value as ChannelType) === ChannelType.SERCQ_SEND &&
-      pecInValidationForSender(formik.values.sender.id)
-    ) {
-      setIsPecInValidation(true);
-    } else {
-      setIsPecInValidation(false);
+      formik.handleChange(e);
+      checkIfSenderIsAlreadyAdded(formik.values.sender, e.target.value as ChannelType);
+      
+      if (
+        (e.target.value as ChannelType) === ChannelType.SERCQ_SEND &&
+        pecInValidationForSender(formik.values.sender.id)
+      ) {
+        setIsPecInValidation(true);
+      } else {
+        setIsPecInValidation(false);
+      }
     }
   };
 
@@ -99,13 +99,27 @@ const AddSpecialContactDialog: React.FC<Props> = ({
     await formik.setFieldTouched('sender', true, false);
     await formik.setFieldValue('sender', { id: newValue?.id ?? '', name: newValue?.name ?? '' });
 
-    if (newValue && addressesData.addresses.some((a) => a.senderId === newValue.id) && formik.values.channelType) {
+    if (
+      !(
+        formik.values.channelType === ChannelType.SERCQ_SEND &&
+        pecInValidationForSender(newValue?.id ?? '')
+      )
+    ) {
+      setIsPecInValidation(false);
+    } else {
+      setIsPecInValidation(true);
+    }
+
+    if (
+      newValue &&
+      addressesData.addresses.some((a) => a.senderId === newValue.id) &&
+      formik.values.channelType
+    ) {
       checkIfSenderIsAlreadyAdded(newValue, formik.values.channelType);
       return;
     }
     setAlreadyExistsMessage('');
   };
-  
 
   const renderOption = (props: any, option: Party) => (
     <MenuItem {...props} value={option.id} key={option.id}>
