@@ -90,7 +90,7 @@ const Dashboard = () => {
         title={t('title')}
         variantTitle="h4"
         mbTitle={3}
-        sxTitle={{
+        propsTitle={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',

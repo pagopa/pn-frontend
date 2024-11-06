@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Grid, GridSize, SxProps, Theme, Typography } from '@mui/material';
+import { Grid, GridProps, GridSize, SxProps, Theme, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
   /** Gridsize for title on mobile devices */
   mbTitle?: GridSize;
   /** style for title Grid item */
-  sxTitle?: SxProps<Theme>;
+  propsTitle?: GridProps;
   mtGrid?: number;
   /** Gridsize for subtitle on mobile devices */
   mbSubTitle?: number;
@@ -35,7 +35,7 @@ const TitleBox: React.FC<Props> = ({
   titleButton,
   subTitle,
   mbTitle = 2,
-  sxTitle,
+  propsTitle,
   mtGrid,
   mbSubTitle,
   variantTitle = 'h1',
@@ -45,7 +45,7 @@ const TitleBox: React.FC<Props> = ({
 }) => (
   <Grid id="page-header-container" aria-orientation="horizontal" container mt={mtGrid} sx={sx}>
     {title && (
-      <Grid id="item" item xs={12} mb={mbTitle} sx={sxTitle}>
+      <Grid id="item" item xs={12} mb={mbTitle} {...propsTitle}>
         <Typography
           id={`${title}-page`}
           data-testid="titleBox"
