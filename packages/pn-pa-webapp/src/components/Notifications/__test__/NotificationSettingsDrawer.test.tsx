@@ -1,7 +1,7 @@
-import { act } from 'react-dom/test-utils';
 import { vi } from 'vitest';
 
 import { testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
+import { getByTestId, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { RenderResult, render } from '../../../__test__/test-utils';
@@ -37,12 +37,7 @@ describe('Notification Settings Drawer', async () => {
     expect(settingsLangBtn).toBeInTheDocument();
     userEvent.click(settingsLangBtn!);
 
-    await act(async () => {
-      // time to appear the drawer
-      await new Promise((r) => setTimeout(r, 500));
-    });
-
-    const drawer = document.querySelector("[data-testid='settingsLangDrawer']") as HTMLElement;
+    const drawer = await waitFor(() => getByTestId(document.body, 'settingsLangDrawer'));
     expect(drawer).toBeInTheDocument();
 
     await testRadio(
@@ -62,12 +57,7 @@ describe('Notification Settings Drawer', async () => {
     expect(settingsLangBtn).toBeInTheDocument();
     userEvent.click(settingsLangBtn!);
 
-    await act(async () => {
-      // time to appear the drawer
-      await new Promise((r) => setTimeout(r, 500));
-    });
-
-    const drawer = document.querySelector("[data-testid='settingsLangDrawer']") as HTMLElement;
+    const drawer = await waitFor(() => getByTestId(document.body, 'settingsLangDrawer'));
     expect(drawer).toBeInTheDocument();
 
     await testRadio(
