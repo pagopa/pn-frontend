@@ -21,6 +21,7 @@ import {
   NotificationDetailRecipient,
   NotificationStatus,
   NotificationStatusHistory,
+  TimelineCategory,
 } from '../../models';
 import {
   formatDay,
@@ -202,7 +203,10 @@ const NotificationDetailTimelineStep = ({
                     color="primary"
                     sx={{ marginTop: '10px', textAlign: 'left' }}
                     data-testid="download-legalfact"
-                    disabled={disableDownloads}
+                    disabled={
+                      lf.step.category !== TimelineCategory.NOTIFICATION_CANCELLED &&
+                      disableDownloads
+                    }
                   >
                     {getLegalFactLabel(lf.step, lf.file.category, lf.file.key || '')}
                   </ButtonNaked>

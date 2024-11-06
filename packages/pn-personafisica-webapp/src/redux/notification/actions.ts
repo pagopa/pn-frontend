@@ -90,8 +90,7 @@ export const getReceivedNotificationDocument = createAsyncThunk<
         params.documentType,
         params.mandateId,
         params.documentIdx,
-        params.documentId,
-        params.documentCategory
+        params.documentId
       );
       return response.data as NotificationDocumentResponse;
     } catch (e) {
