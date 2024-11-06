@@ -1,0 +1,20 @@
+{
+  "title": "Kako vam lahko pomagamo?",
+  "sub-title": "Navedite elektronski naslov, na katerega želite prejeti odgovor s strani podpore.",
+  "form": {
+    "email": "Vnesite elektronki naslov",
+    "confirm-email": "Potrdite elektronki naslov",
+    "errors": {
+      "not-valid": "Elektronki naslov ni veljaven",
+      "required": "Zahtevano polje",
+      "not-the-same": "Potrditveni elektronski naslov se ne ujema z elektronskim naslovom, ki ste ga vnesli"
+    }
+  },
+  "disclaimer": "Z nadaljevanjem izjavljate, da ste prebrali <0>Pravilnik o varovanju zasebnosti\r\n</0>",
+  "exit-title": "Ali res želite zapreti?",
+  "exit-message": "Če se odjavite, bo zahteva za podporo izgubljena.",
+  "messages": {
+    "generic-title": "Prišlo je do nepričakovane napake",
+    "generic-message": "Predlagamo, da poskusite znova pozneje"
+  }
+}

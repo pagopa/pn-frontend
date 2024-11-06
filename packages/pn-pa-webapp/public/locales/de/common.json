@@ -4,16 +4,16 @@
     "annulla filtro": "Filter entfernen",
     "indietro": "Zurück",
     "annulla": "Abbrechen",
-    "enter": "Zugreifen",
-    "exit": "Abmelden",
-    "continue": "Fortfahren",
+    "enter": "Einwählen",
+    "exit": "Beenden",
+    "continue": "Weiter",
     "send": "Senden",
     "go-to-home": "Zurück zur Startseite",
     "go-to-login": "Anmelden",
     "close": "Schließen"
   },
   "menu": {
-    "notifications": "Bescheide",
+    "notifications": "Zustellungen",
     "users": "Benutzer",
     "groups": "Gruppen",
     "api-key": "API-Schlüssel",
@@ -21,21 +21,21 @@
     "app-status": "Plattformstatus"
   },
   "header": {
-    "logout": "Abmelden",
+    "logout": "Beenden",
     "pago-pa-link": "Website von PagoPA S.p.A.",
-    "reserved-area": "Area Riservata",
+    "reserved-area": "Reservierten Bereich",
     "notification-platform": "SEND - Servizio Notifiche Digitali"
   },
   "tos": {
     "title": "SEND - Servizio Notifiche Digitali",
-    "switch-label": "Mit dem Zugriff akzeptierst du die <0>Nutzungsbedingungen</0> des Dienstes und bestätigst, dass du die <1>Datenschutzerklärung</1> gelesen hast.",
+    "switch-label": "Durch Anmelden am Dienst erklärst du dich mit dessen <0>Nutzungsbedingungen</0> einverstanden und bestätigst, die <1>Datenschutzerklärung gelesen zu haben</1>.",
     "button": "Anmelden"
   },
   "table": {
     "aria-label": "Item-Tabelle"
   },
   "paginator": {
-    "aria-label": "Menü Paginierung",
+    "aria-label": "Menü Seite",
     "first": "Erstes Element",
     "last": "Letztes Element",
     "page": "Seite",
@@ -50,14 +50,28 @@
   "date-picker": {
     "left-arrow": "Zum Vormonat",
     "right-arrow": "Zum nächsten Monat",
-    "switch-to-year": "Kalendermodus aktiv, wechselt in den Jahreswahlmodus",
-    "switch-to-calendar": "Jahreswahlmodus aktiv, wechselt in den Kalendermodus",
+    "switch-to-year": "Kalendermodus aktiv, wechsele in den Jahreswahlmodus",
+    "switch-to-calendar": "Jahreswahlmodus aktiv, wechsele in den Kalendermodus",
     "select-date": "Datum wählen",
-    "date-selected": "Datum wählen, das gewählte Datum ist {{date}} "
+    "date-selected": "Datum wählen, das gewählte Datum ist {{date}}"
   },
   "date-time": {
     "today-uppercase-initial": "Heute",
-    "hour-of-day": "Stunden"
+    "hour-of-day": "Stunden",
+    "s-month": {
+      "0": "Jan",
+      "1": "Feb",
+      "2": "März",
+      "3": "April",
+      "4": "Mai",
+      "5": "Juni",
+      "6": "Juli",
+      "7": "Aug",
+      "8": "Sept",
+      "9": "Okt",
+      "10": "Nov",
+      "11": "Dez"
+    }
   },
   "error-boundary": {
     "title": "Etwas ist schiefgelaufen",
@@ -66,7 +80,7 @@
   },
   "not-accessible": {
     "title": "Zugriff auf die Plattform nicht möglich",
-    "description": "SEND befindet sich derzeit in der Testphase und ist noch nicht verfügbar. Wenn du eine Körperschaft bist und dich angemeldet hast, wirst du über das Aktivierungsdatum der Plattform informiert. Weitere Informationen dazu ",
+    "description": "SEND befindet sich derzeit in der Testphase und ist noch nicht verfügbar. Wenn du eine Körperschaft bist und dich angemeldet hast, wirst du über das Aktivierungsdatum der Plattform informiert. Weitere Informationen dazu",
     "action": "auf der entsprechenden Website"
   },
   "access-denied": "Du bist für den Zugriff auf diese Seite nicht berechtigt",
@@ -81,26 +95,26 @@
     "message": "Du wirst weitergeleitet"
   },
   "error-when-fetching-tos-status": {
-    "title": "Probleme beim Zugriff auf SEND",
+    "title": "Probleme beim Login auf SEND",
     "message": "Bitte später erneut versuchen"
   },
   "messages": {
     "404-title": "Quelle nicht gefunden",
-    "404-message": "Es ist ein Fehler aufgetreten. Bitte später erneut versuchen",
-    "403-title": "Sitzung abgelaufen",
+    "404-message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut",
+    "403-title": "Die Sitzung ist abgelaufen",
     "403-message": "Melde dich mit SPID oder CIE an.",
     "401-title": "Unberechtigter Benutzer",
     "401-message": "Der aktuelle Benutzer hat keine Berechtigungen",
     "451-title": "Plattform nicht zugänglich",
     "451-message": "Zugriff auf die Plattform nicht möglich",
     "500-title": "Dienst nicht erreichbar",
-    "500-message": "Aufgrund eines vorübergehenden Problems wurde deine Anfrage nicht gesendet. Versuche es später noch einmal.",
+    "500-message": "Aufgrund eines vorübergehenden Problems wurde deine Anfrage nicht gesendet. Bitte später erneut versuchen.",
     "lacking-grants-for-app-title": "Du bist nicht zur Anmeldung berechtigt",
     "generic-token-exchange-problem": "Die Anmeldung konnte nicht abgeschlossen werden",
     "error-in-initial-info-loading": "Wir konnten keine Daten wiederherstellen, die für den Start der Anwendung erforderlich sind",
     "invalid-token-title": "Anmeldung wegen technischem Problem nicht möglich - Token ungültig",
     "generic-title": "Allgemeiner Fehler",
-    "generic-message": "Es ist ein Fehler aufgetreten. Bitte später erneut versuchen",
+    "generic-message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut",
     "generic-api-error-main-text": "Wir konnten diese Daten nicht wiederherstellen.",
     "generic-api-error-action-text": "Erneut laden"
   },
@@ -113,36 +127,35 @@
     "security": "Informationssicherheit",
     "privacy-info": "Datenschutzerklärung",
     "personal-data": "Recht auf Schutz personenbezogener Daten",
-    "cookie": "Cookie-Einstellungen",
+    "cookie": "Cookie-Präferenzen",
     "terms-conditions": "Allgemeine Geschäftsbedingungen",
     "company": "Transparente Gesellschaft",
     "disclosure": "Responsible Disclosure Policy",
     "321-model": "Vordruck 231",
-    "accessibility": "Zugänglichkeit",
+    "accessibility": "Barrierefreiheit",
     "social": "Link: Gehe auf die Website {{social}} von PagoPA S.p.A.",
-    "resources": "Quellen",
-    "follow": "Folge uns auf",
+    "resources": "Ressourcen",
+    "follow": "Folgen Sie uns auf",
     "legal-part-1": "Aktiengesellschaft mit einem einzigen Gesellschafter - voll eingezahltes Grundkapital von 1.000.000 Euro - eingetragener Sitz in Rom, Piazza Colonna 370",
-    "legal-part-2": "PLZ 00187 – Eintrag im Handelsregister von Rom Nr., Steuernummer und USt-IdNr. 15376371009"
+    "legal-part-2": "PLZ 00187 – Eintragungsnummer im Handelsregister von Rom, Steuernummer und USt-IdNr. 15376371009"
   },
-  "required-fields": "* Pflichtfelder",
+  "required-fields": "*Pflichtfelder",
   "required-field": "Pflichtfeld",
   "required": "obligatorisch",
-  "too-long-field-error": "Maximal {{maxLength}} Zeichen",
-  "too-short-field-error": "Mindestens {{minLength}} Zeichen eingeben",
+  "too-long-field-error": "Höchstens {{maxLength}} Zeichen schreiben",
+  "too-short-field-error": "Mindestens {{minLength}} Zeichen schreiben",
   "no-spaces-at-edges": "Lösche die Leerzeichen am Anfang oder Ende",
   "invalid": "Ungültig",
   "upload-file": {
     "or": "oder",
-    "select-from-pc": "wähle es von deinem Computer",
-    "select-from-mobile": "Dokument hochladen",
+    "select-file": "lade die Datei",
     "loading": "Ladevorgang läuft...",
     "sending": "Sendevorgang läuft...",
     "hash-code": "Hash-Code",
     "hash-code-descr": "Der Hash-Code ist ein eindeutiger alphanumerischer Code, der zur Identifizierung einer bestimmten Datei verwendet wird",
     "ext-not-supported": "Dateiformat wird nicht unterstützt. Bitte versuche es mit einer anderen Datei.",
     "file-size-exceeded": "Die ausgewählte Datei überschreitet die maximale Größe von {{limit}}.",
-    "loading-error": "Beim hochladen der Datei ist ein Fehler aufgetreten. Bitte erneut versuchen."
+    "loading-error": "Beim Hochladen der Datei ist ein Fehler aufgetreten. Bitte erneut versuchen."
   },
   "roles": {
     "operator": "Sachbearbeiter",

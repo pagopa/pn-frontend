@@ -1,17 +1,17 @@
 {
   "appStatus": {
     "title": "Platform status",
-    "subtitle": "Check the operation of SEND, view the history of disruptions and download the related certificates enforceable against third parties. ",
+    "subtitle": "Check the operation of SEND, view the history of disruptions and download the related certificates enforceable against third parties.",
     "statusDescription": {
       "ok": "All SEND services are operational.",
-      "not-ok": "There's a disruption going on. For more details, see the table below."
+      "not-ok": "There is a current disruption. For more details, see the table below."
     },
-    "lastCheckLegend": "Last updated – {{ lastCheckTimestamp }} "
+    "lastCheckLegend": "Last update - {{ lastCheckTimestamp }}"
   },
   "downtimeList": {
     "title": "Disruption history",
     "columnHeader": {
-      "startDate": "Commencement date",
+      "startDate": "Start date",
       "endDate": "End date",
       "functionality": "Service involved",
       "legalFactId": "Certificates enforceable against third parties",
@@ -28,7 +28,7 @@
     "unknownFunctionality": "Unknown service ({{functionality}})",
     "status": {
       "OK": "Resolved",
-      "KO": "Ongoing"
+      "KO": "In progress"
     },
     "noFileAvailableByStatus": {
       "OK": "The certificate will be available shortly",

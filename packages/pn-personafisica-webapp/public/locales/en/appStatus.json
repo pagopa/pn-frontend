@@ -4,9 +4,9 @@
     "subtitle": "Check the operation of SEND, view the history of disruptions and download the related certificates enforceable against third parties. Each certification certifies a disruption: it may be useful if this has involved a notification intended for you.",
     "statusDescription": {
       "ok": "All SEND services are operational.",
-      "not-ok": "There's a disruption going on. For more details, see the table below."
+      "not-ok": "There is a current disruption. For more details, see the table below."
     },
-    "lastCheckLegend": "Last updated – {{ lastCheckTimestamp }} "
+    "lastCheckLegend": "Last update - {{ lastCheckTimestamp }}"
   },
   "downtimeList": {
     "title": "Disruption history",
@@ -28,7 +28,7 @@
     "unknownFunctionality": "Unknown service ({{functionality}})",
     "status": {
       "OK": "Resolved",
-      "KO": "Ongoing"
+      "KO": "In progress"
     },
     "noFileAvailableByStatus": {
       "OK": "The certificate will be available shortly",

@@ -1,6 +1,6 @@
 {
   "deleghe": {
-    "title": "Prenosi pooblastil",
+    "title": "Pooblastila",
     "close": "Zapri",
     "description": "Tukaj lahko upravljate svoje pooblaščence in prenose pooblastil na vas. Prvi so fizične ali pravne osebe, ki ste jih pooblastili za ogled in upravljanje vaših obvestil, drugi pa so tisti, ki so vas pooblastili.",
     "delegatesTitle": "Vaši pooblaščenci",
@@ -10,9 +10,9 @@
     "delegationEnd": "Konec prenosa pooblastila",
     "empty_state": "Nikogar niste pooblastili za ogled vaših obvestil.",
     "accept_title": "Vnesite potrditveno kodo",
-    "accept_description": "Če želite sprejeti prenešeno pooblastilo, vnesite kodo, ki jo je {{name}} delil z vami.",
+    "accept_description": "Če želite sprejeti preneseno pooblastilo, vnesite kodo, ki jo je {{name}} delil z vami.",
     "add": "Dodajte prenos pooblastila",
-    "revoke": "Preklic",
+    "revoke": "Prekliči",
     "reject": "Zavrni",
     "accept": "Sprejmi",
     "show": "Prikaži kodo",
@@ -26,7 +26,7 @@
     "no_delegates": "Nikogar niste pooblastili za ogled vaših obvestil. <0>Dodajte prenos pooblastila</0>",
     "no_delegators": "Nimate pooblastil prenesenih na vas.",
     "show_code_title": "Potrditvena koda za prenos pooblastila na {{name}}",
-    "show_code_subtitle": "Delite to kodo s pooblaščencem: moral jo bo vnesti ob sprejetju prenosa pooblastila.",
+    "show_code_subtitle": "Delite to kodo s pooblaščencem: moral jo bo vnesti ob sprejetju prenosa pooblastila. Koda velja 7 dni od generiranja zahtevka za pooblastilo.",
     "verification_code": "Koda za preverjanje",
     "code_copied": "Koda je kopirana",
     "table": {
@@ -36,7 +36,7 @@
       "permissions": "Dovoljenja",
       "status": "Država",
       "showCode": "Prikaži kodo",
-      "revoke": "Preklic",
+      "revoke": "Prekliči",
       "reject": "Zavrni",
       "accept": "Sprejmi",
       "notificationsFrom": "Obvestila od:",
@@ -49,7 +49,7 @@
     "breadcrumb": "Nov prenos pooblastila",
     "backToDelegations": "Nazaj na prenos pooblastil",
     "createdTitle": "Zahteva za prenos pooblastila je bila ustvarjena",
-    "createdDescription": "Delite potrditveno kodo s pooblaščencem: moral jo bo vnesti, ko se bo prvič prijavil v SEND in sprejeti vašo zahtevo.",
+    "createdDescription": "Delite potrditveno kodo s pooblaščencem: moral jo bo vnesti, ko se bo prvič prijavil v SEND in sprejeti svojo zahtevo.",
     "title": "Dodajte prenos pooblastila",
     "subtitle": "Vnesite podatke fizične ali pravne osebe, na katero želite prenesti pooblastilo za branje vaših obvestil.",
     "form": {
@@ -59,15 +59,16 @@
       "firstName": "Ime*",
       "lastName": "Priimek*",
       "fiscalCode": "Davčna številka*",
-      "businessName": "Ime podjetja*",
-      "viewFrom": "Ogledali si boste laho obvestila s strani*:",
-      "allEntities": "Vse organizacije",
-      "onlySelected": "Samo izbrane organizacije",
-      "selectEntities": "Izberite organizacijo*",
+      "businessName": "Naziv podjetja*",
+      "viewFrom": "Ogledali si boste lahko obvestila s strani*:",
+      "allEntities": "Vseh organizacij",
+      "onlySelected": "Samo izbranih organizacij",
+      "selectEntities": "Izberite organizacije*",
       "date-duration": "Obdobje veljavnosti pooblastila*",
       "endDate": "Konec prenosa pooblastila",
+      "endDate-input-aria-label": "Vnesite končni datum prenosa pooblastila",
       "verificationCode": "Koda za preverjanje",
-      "verificationCodeDescr": "Delite to kodo s pooblaščencem: moral jo bo vnesti ob sprejetju prenosa pooblastila.",
+      "verificationCodeDescr": "Delite to kodo s pooblaščencem: moral jo bo vnesti ob sprejetju prenosa pooblastila. Koda velja 7 dni od generiranja zahtevka za pooblastilo.",
       "submit": "Pošlji zahtevo",
       "mandatoryField": "Obvezna polja*",
       "party-not-found": "Najdena ni bila nobena organizacija"
@@ -86,7 +87,9 @@
       "businessName": {
         "required": "Ime podjetja je obvezno"
       },
-      "entiSelected": { "required": "Izberite vsaj eno organizacijo" },
+      "entiSelected": {
+        "required": "Izberite vsaj eno organizacijo"
+      },
       "expirationDate": {
         "required": "Datum zaključka prenosa pooblastila je obvezen",
         "wrong": "Napačen datum"

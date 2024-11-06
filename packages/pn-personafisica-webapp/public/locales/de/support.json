@@ -1,0 +1,20 @@
+{
+  "title": "Wie kann ich dir behilflich sein?",
+  "sub-title": "Bitte gib die E-Mail-Adresse an, an die du Antworten vom Kundendienst erhalten möchtest.",
+  "form": {
+    "email": "Gib die E-Mail-Adresse ein",
+    "confirm-email": "Bestätige die E-Mail-Adresse",
+    "errors": {
+      "not-valid": "Die E-Mail-Adresse ist ungültig",
+      "required": "Pflichtfeld",
+      "not-the-same": "Die Bestätigungs-E-Mail-Adresse stimmt nicht mit der eingegebenen E-Mail-Adresse überein"
+    }
+  },
+  "disclaimer": "Durch Fortfahren erklärst du, die <0>Datenschutzerklärung zum Kundendienst</0> gelesen zu haben",
+  "exit-title": "Wirklich beenden?",
+  "exit-message": "Wenn du beendest, geht die Kundendienstanforderung verloren.",
+  "messages": {
+    "generic-title": "Ein unvorhergesehener Fehler ist aufgetreten",
+    "generic-message": "Bitte versuche es später erneut"
+  }
+}

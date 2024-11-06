@@ -15,7 +15,7 @@
   },
   "loginError": {
     "title": "Zaradi sistemske napake postopka ni mogoče dokončati.",
-    "message": "Zaradi sistemske napake postopka ni mogoče dokončati.<1 />Poskusite znova pozneje.",
+    "message": "Zaradi sistemske napake postopka ni mogoče dokončati. Poskusite znova pozneje.",
     "code": {
       "error_19": "Prevečkrat ste vnesli napačno uporabniško ime ali geslo. Poskusite znova čez nekaj minut ali se obrnite na ponudnika identitete SPID, da spremenite svoje poverilnice.",
       "error_20": "Iz varnostnih razlogov je potrebna prijava z drugim faktorjem preverjanja pristnosti: če želite izvedeti, kako ga uporabljati, se obrnite na ponudnika identitete SPID.",
