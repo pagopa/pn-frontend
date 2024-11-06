@@ -15,7 +15,7 @@ import {
   RadioGroup,
   Typography,
 } from '@mui/material';
-import { CustomDropdown } from '@pagopa-pn/pn-commons';
+import { CustomDropdown, useIsMobile } from '@pagopa-pn/pn-commons';
 import { LANGUAGES } from '@pagopa-pn/pn-commons/src/utility/costants';
 import { ButtonNaked, LangCode } from '@pagopa/mui-italia';
 
@@ -31,6 +31,7 @@ const NotificationSettingsDrawer = () => {
   const additionalLanguages = useAppSelector(
     (state: RootState) => state.userState.additionalLanguages
   );
+  const isMobile = useIsMobile();
 
   const toggleDrawer = () => setOpenDrawer(!openDrawer);
 
@@ -109,7 +110,7 @@ const NotificationSettingsDrawer = () => {
           <Typography
             variant="body2"
             color="text.primary"
-            whiteSpace="pre"
+            whiteSpace={isMobile ? 'normal' : 'pre-line'}
             marginTop={2}
             marginBottom={2}
           >
