@@ -335,37 +335,39 @@ const Recipient: React.FC<Props> = ({
                       </ButtonNaked>
                     )}
                   </Stack>
-                  <FormControl sx={{ marginTop: 3, marginBottom: 1 }}>
-                    <RadioGroup
-                      row
-                      defaultValue={RecipientType.PF}
-                      name={`recipients[${index}].recipientType`}
-                      value={values.recipients[index].recipientType}
-                      onChange={(event) =>
-                        changeRecipientTypeHandler(event, index, values, setFieldValue)
-                      }
-                    >
-                      <FormControlLabel
-                        id="recipient-pf"
-                        value={RecipientType.PF}
-                        control={<Radio />}
+                  <Box mt={3} mb={1}>
+                    <FormControl>
+                      <RadioGroup
+                        row
+                        defaultValue={RecipientType.PF}
                         name={`recipients[${index}].recipientType`}
-                        label={t('physical-person')}
-                        data-testid={`recipientType${index}`}
-                      />
-                      <FormControlLabel
-                        id="recipient-pg"
-                        value={RecipientType.PG}
-                        control={<Radio />}
-                        name={`recipients[${index}].recipientType`}
-                        label={t('legal-person')}
-                        data-testid={`recipientType${index}`}
-                      />
-                    </RadioGroup>
-                  </FormControl>
+                        value={values.recipients[index].recipientType}
+                        onChange={(event) =>
+                          changeRecipientTypeHandler(event, index, values, setFieldValue)
+                        }
+                      >
+                        <FormControlLabel
+                          id="recipient-pf"
+                          value={RecipientType.PF}
+                          control={<Radio />}
+                          name={`recipients[${index}].recipientType`}
+                          label={t('physical-person')}
+                          data-testid={`recipientType${index}`}
+                        />
+                        <FormControlLabel
+                          id="recipient-pg"
+                          value={RecipientType.PG}
+                          control={<Radio />}
+                          name={`recipients[${index}].recipientType`}
+                          label={t('legal-person')}
+                          data-testid={`recipientType${index}`}
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  </Box>
 
                   {/* Codice fiscale e nome */}
-                  <Grid container spacing={2}>
+                  <Grid container columnSpacing={1} rowSpacing={2} mt={1} mb={2}>
                     <Grid item lg={8} xs={12}>
                       <FormTextField
                         keyName={`recipients[${index}].taxId`}
@@ -379,10 +381,10 @@ const Recipient: React.FC<Props> = ({
                         errors={errors}
                         setFieldValue={setFieldValue}
                         handleBlur={handleBlur}
-                        sx={{ marginTop: 2 }}
                       />
                     </Grid>
-                    <Grid item lg={4} sx={{ display: { xs: 'none', lg: 'block' } }}></Grid>
+                  </Grid>
+                  <Grid container columnSpacing={1} rowSpacing={2}>
                     {values.recipients[index].recipientType === RecipientType.PF && (
                       <>
                         <Grid item xs={12} lg={4}>
@@ -428,7 +430,12 @@ const Recipient: React.FC<Props> = ({
                   <Box marginTop={4} marginBottom={3}>
                     <FormBoxTitle text={t('address')} />
                   </Box>
-                  <Grid container spacing={2} data-testid={`physicalAddressForm${index}`}>
+                  <Grid
+                    container
+                    columnSpacing={1}
+                    rowSpacing={2}
+                    data-testid={`physicalAddressForm${index}`}
+                  >
                     <PhysicalAddress
                       values={values}
                       setFieldValue={setFieldValue}
@@ -444,7 +451,7 @@ const Recipient: React.FC<Props> = ({
                     <FormBoxTitle text={t('digital-domicile')} />
                     <FormBoxSubtitle text={t('digital-domicile-subtitle')} />
                   </Box>
-                  <Grid container spacing={2}>
+                  <Grid container columnSpacing={1} rowSpacing={2}>
                     <Grid item xs={12} lg={6}>
                       <FormTextField
                         keyName={`recipients[${index}].digitalDomicile`}
@@ -459,7 +466,7 @@ const Recipient: React.FC<Props> = ({
                   </Grid>
 
                   {paymentMode !== PaymentModel.NOTHING && (
-                    <Grid container spacing={2} marginTop={4}>
+                    <Grid container columnSpacing={1} rowSpacing={2} marginTop={4}>
                       <Grid item xs={12} lg={6}>
                         <FormTextField
                           keyName={`recipients[${index}].creditorTaxId`}
