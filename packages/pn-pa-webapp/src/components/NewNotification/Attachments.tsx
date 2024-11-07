@@ -1,5 +1,12 @@
 import { FormikErrors, useFormik } from 'formik';
-import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useMemo } from 'react';
+import {
+  ChangeEvent,
+  ForwardedRef,
+  forwardRef,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -27,7 +34,7 @@ type AttachmentBoxProps = {
   fieldLabel: string;
   fieldValue: string;
   fieldTouched?: boolean;
-  fieldErros?: string;
+  fieldErrors?: string;
   onFieldTouched: (e: ChangeEvent) => void;
   onFileUploaded: (
     id: string,
@@ -49,14 +56,18 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
   fieldLabel,
   fieldValue,
   fieldTouched,
-  fieldErros,
+  fieldErrors,
   onFieldTouched,
   onFileUploaded,
   onRemoveFile,
   fileUploaded,
 }) => {
+  const [focused, setFocused] = useState(false);
   const { t } = useTranslation(['notifiche']);
+  const { t: tc } = useTranslation(['common']);
+
   const isMobile = useIsMobile('md');
+
   return (
     <Box data-testid="attachmentBox">
       <Box display="flex" alignItems="center" sx={sx}>
@@ -79,11 +90,16 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
         name={`${id}.name`}
         value={fieldValue}
         onChange={onFieldTouched}
-        error={fieldTouched && Boolean(fieldErros)}
-        helperText={fieldTouched && fieldErros}
+        error={fieldTouched && Boolean(fieldErrors)}
+        helperText={
+          (fieldTouched && fieldErrors) ||
+          (focused && tc('too-long-field-error', { maxLength: 512 }))
+        }
         size="small"
         margin="normal"
         data-testid="attachmentNameInput"
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
       />
       <FileUpload
         key={`${new Date()}`}
@@ -165,7 +181,7 @@ const Attachments: React.FC<Props> = ({
               .required(),
           })
           .required(),
-        name: requiredStringFieldValidation(tc),
+        name: requiredStringFieldValidation(tc, 512),
       })
     ),
   });
@@ -336,7 +352,7 @@ const Attachments: React.FC<Props> = ({
                   ? formik.touched.documents[i].name
                   : undefined
               }
-              fieldErros={
+              fieldErrors={
                 formik.errors.documents && formik.errors.documents[i]
                   ? (formik.errors.documents[i] as FormikErrors<{ file: string; name: string }>)
                       .name
