@@ -315,7 +315,7 @@ const Recipient: React.FC<Props> = ({
               <Fragment key={recipient.id}>
                 <FormBox testid="RecipientFormBox">
                   {/* Soggetto giuridico */}
-                  <Stack display="flex" direction="row" justifyContent="space-between">
+                  <Stack direction="row" justifyContent="space-between">
                     <FormBoxTitle text={`${t('legal-entity')}*`} />
                     {values.recipients.length > 1 && (
                       <ButtonNaked
