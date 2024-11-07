@@ -36,11 +36,7 @@ const NotificationSettingsDrawer = () => {
   const toggleDrawer = () => setOpenDrawer(!openDrawer);
 
   const onCloseDrawer = async () => {
-    await formik.setTouched({ lang: true, additionalLang: true });
-    if (formik.isValid) {
-      formik.handleSubmit();
-      setOpenDrawer(false);
-    }
+    formik.handleSubmit();
   };
 
   const validationSchema = yup.object({
@@ -72,6 +68,7 @@ const NotificationSettingsDrawer = () => {
           values.lang === NewNotificationLangOther ? [values.additionalLang] : []
         )
       );
+      setOpenDrawer(false);
     },
   });
 
@@ -101,69 +98,71 @@ const NotificationSettingsDrawer = () => {
             <CloseIcon fontSize="medium" sx={{ color: 'action.active' }} />
           </IconButton>
         </Box>
-        <Box paddingX={4}>
-          <Typography variant="h6" color="text.primary">
-            {t('settings.language-settings-title')}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.primary"
-            whiteSpace={isMobile ? 'normal' : 'pre-line'}
-            mt={2}
-            mb={2}
-          >
-            {t('settings.language-settings-subtitle')}
-          </Typography>
-          <FormControl fullWidth>
-            <RadioGroup
-              aria-labelledby="notification-language-label"
-              name="lang"
-              value={formik.values.lang}
-              onChange={(e) => formik.handleChange(e)}
+        <form onSubmit={formik.handleSubmit}>
+          <Box paddingX={4}>
+            <Typography variant="h6" color="text.primary">
+              {t('settings.language-settings-title')}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.primary"
+              whiteSpace={isMobile ? 'normal' : 'pre-line'}
+              mt={2}
+              mb={2}
             >
-              <FormControlLabel
-                value={'it'}
-                control={<Radio />}
-                label={languages.it}
-                data-testid="notificationLanguageRadio"
-              />
-              <FormControlLabel
-                value={NewNotificationLangOther}
-                control={<Radio />}
-                label={t(
-                  'new-notification.steps.preliminary-informations.italian-and-other-language'
-                )}
-                data-testid="notificationLanguageRadio"
-              />
-            </RadioGroup>
-            {formik.values.lang === NewNotificationLangOther && (
-              <Box mt={4}>
-                <CustomDropdown
-                  id="additionalLang"
-                  label={`${t(
-                    'new-notification.steps.preliminary-informations.select-other-language'
-                  )}*`}
-                  name="additionalLang"
-                  size="medium"
-                  margin="none"
-                  value={formik.values.additionalLang}
-                  onChange={(e) => formik.handleChange(e)}
-                  fullWidth
-                  error={formik.touched.additionalLang && !!formik.errors.additionalLang}
-                  helperText={formik.touched.additionalLang && formik.errors.additionalLang}
-                >
-                  {Object.keys(languages)
-                    .filter((key) => BILINGUALISM_LANGUAGES.includes(key))
-                    .map((key) => (
-                      <MenuItem key={key} value={key}>
-                        {languages[key as LangCode]}
-                      </MenuItem>
-                    ))}
-                </CustomDropdown>
-              </Box>
-            )}
-          </FormControl>
-        </Box>
+              {t('settings.language-settings-subtitle')}
+            </Typography>
+            <FormControl fullWidth>
+              <RadioGroup
+                aria-labelledby="notification-language-label"
+                name="lang"
+                value={formik.values.lang}
+                onChange={(e) => formik.handleChange(e)}
+              >
+                <FormControlLabel
+                  value={'it'}
+                  control={<Radio />}
+                  label={languages.it}
+                  data-testid="notificationLanguageRadio"
+                />
+                <FormControlLabel
+                  value={NewNotificationLangOther}
+                  control={<Radio />}
+                  label={t(
+                    'new-notification.steps.preliminary-informations.italian-and-other-language'
+                  )}
+                  data-testid="notificationLanguageRadio"
+                />
+              </RadioGroup>
+              {formik.values.lang === NewNotificationLangOther && (
+                <Box mt={4}>
+                  <CustomDropdown
+                    id="additionalLang"
+                    label={`${t(
+                      'new-notification.steps.preliminary-informations.select-other-language'
+                    )}*`}
+                    name="additionalLang"
+                    size="medium"
+                    margin="none"
+                    value={formik.values.additionalLang}
+                    onChange={(e) => formik.handleChange(e)}
+                    fullWidth
+                    error={formik.touched.additionalLang && !!formik.errors.additionalLang}
+                    helperText={formik.touched.additionalLang && formik.errors.additionalLang}
+                  >
+                    {Object.keys(languages)
+                      .filter((key) => BILINGUALISM_LANGUAGES.includes(key))
+                      .map((key) => (
+                        <MenuItem key={key} value={key}>
+                          {languages[key as LangCode]}
+                        </MenuItem>
+                      ))}
+                  </CustomDropdown>
+                </Box>
+              )}
+            </FormControl>
+          </Box>
+        </form>
       </Drawer>
     </>
   );
