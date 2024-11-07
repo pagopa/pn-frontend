@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.1...v2.9.0-RC.0) (2024-11-07)
+
+
+### Features
+
+* **pn-13032:** update commitId and migrate to new getNotificationDocument ([#1383](https://github.com/pagopa/pn-frontend/issues/1383)) ([#1393](https://github.com/pagopa/pn-frontend/issues/1393)) ([bef2483](https://github.com/pagopa/pn-frontend/commit/bef24836df0ea4a249272c81def7c448c4b3bf13)), closes [#1390](https://github.com/pagopa/pn-frontend/issues/1390)
+
+
+
+
+
 ## [2.8.1](https://github.com/pagopa/pn-frontend/compare/v2.8.1-RC.1...v2.8.1) (2024-10-30)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp

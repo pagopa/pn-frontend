@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.1...v2.9.0-RC.0) (2024-11-07)
+
+
+### Bug Fixes
+
+* **pn-12729:** duplicated payment when cart api goes in error ([#1360](https://github.com/pagopa/pn-frontend/issues/1360)) ([0c7c400](https://github.com/pagopa/pn-frontend/commit/0c7c400799a1256d0d0005e343a8fc15653da740))
+* **pn-12897:** Channel type select initially empty in the dialog for the addition of a new special contact ([#1357](https://github.com/pagopa/pn-frontend/issues/1357)) ([f4e9ee0](https://github.com/pagopa/pn-frontend/commit/f4e9ee02be21d0e710a60fca98827fef9fef7afe))
+* **pn-12958:** hide virtual key section when there is no public key ([#1375](https://github.com/pagopa/pn-frontend/issues/1375)) ([a7b154b](https://github.com/pagopa/pn-frontend/commit/a7b154b2199c421a1692e4b7bebfea373cfe9f1a))
+* **PN-12960:** Show successful message on public key block/delete ([#1372](https://github.com/pagopa/pn-frontend/issues/1372)) ([366ada1](https://github.com/pagopa/pn-frontend/commit/366ada188f163c78cd7bb65caf17b17e9a6c8514))
+* **PN-12968:** replace key name with user denomination in virtual key table for PG ([#1373](https://github.com/pagopa/pn-frontend/issues/1373)) ([f286afc](https://github.com/pagopa/pn-frontend/commit/f286afc77bfe81fb5393891870006577123bc0fe))
+
+
+### Features
+
+* **PN-11301:** create custom error type to handle PN_INVALID_BODY server response error for PF and PG ([#1371](https://github.com/pagopa/pn-frontend/issues/1371)) ([9d6f915](https://github.com/pagopa/pn-frontend/commit/9d6f9156c89e9102ff7d9f7c3370a6e883c84fde))
+* **pn-13032:** update commitId and migrate to new getNotificationDocument ([#1383](https://github.com/pagopa/pn-frontend/issues/1383)) ([#1393](https://github.com/pagopa/pn-frontend/issues/1393)) ([bef2483](https://github.com/pagopa/pn-frontend/commit/bef24836df0ea4a249272c81def7c448c4b3bf13)), closes [#1390](https://github.com/pagopa/pn-frontend/issues/1390)
+
+
+
+
+
 ## [2.8.1](https://github.com/pagopa/pn-frontend/compare/v2.8.1-RC.1...v2.8.1) (2024-10-30)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
