@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { useMemo, useState } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -72,6 +72,13 @@ const NotificationSettingsDrawer = () => {
     },
   });
 
+  const handleChangeLang = async (e: ChangeEvent<HTMLInputElement>) => {
+    formik.handleChange(e);
+    await formik.setFieldValue('additionalLang', '');
+    await formik.setFieldTouched('additionalLang', false);
+    formik.setFieldError('additionalLang', undefined);
+  };
+
   const languages = useMemo(() => {
     const currentLang = i18n.language?.substring(0, 2) as LangCode;
     return LANGUAGES[currentLang] ?? LANGUAGES.it;
@@ -117,7 +124,7 @@ const NotificationSettingsDrawer = () => {
                 aria-labelledby="notification-language-label"
                 name="lang"
                 value={formik.values.lang}
-                onChange={(e) => formik.handleChange(e)}
+                onChange={handleChangeLang}
               >
                 <FormControlLabel
                   value={'it'}
