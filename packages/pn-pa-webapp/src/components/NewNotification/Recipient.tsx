@@ -427,7 +427,7 @@ const Recipient: React.FC<Props> = ({
                   </Grid>
 
                   {/* Indirizzo */}
-                  <Box marginTop={4} marginBottom={3}>
+                  <Box mt={4} mb={3}>
                     <FormBoxTitle text={t('address')} />
                   </Box>
                   <Grid
@@ -447,7 +447,7 @@ const Recipient: React.FC<Props> = ({
                   </Grid>
 
                   {/* Domicilio digitale */}
-                  <Box marginTop={4} marginBottom={2}>
+                  <Box mt={4} mb={2}>
                     <FormBoxTitle text={t('digital-domicile')} />
                     <FormBoxSubtitle text={t('digital-domicile-subtitle')} />
                   </Box>
@@ -493,7 +493,7 @@ const Recipient: React.FC<Props> = ({
                   )}
                 </FormBox>
                 {values.recipients.length < 5 && values.recipients.length - 1 === index && (
-                  <Stack mt={2} display="flex" direction="row" justifyContent="space-between">
+                  <Stack mt={2} direction="row" justifyContent="space-between">
                     <ButtonNaked
                       id="add-recipient"
                       startIcon={<Add />}
