@@ -36,13 +36,11 @@ const NotificationSettingsDrawer = () => {
   const toggleDrawer = () => setOpenDrawer(!openDrawer);
 
   const onCloseDrawer = async () => {
-    await formik.validateForm();
-    if (!formik.isValid) {
-      await formik.setTouched({ lang: true, additionalLang: true });
-      return;
+    await formik.setTouched({ lang: true, additionalLang: true });
+    if (formik.isValid) {
+      formik.handleSubmit();
+      setOpenDrawer(false);
     }
-    formik.handleSubmit();
-    setOpenDrawer(false);
   };
 
   const validationSchema = yup.object({
@@ -111,8 +109,8 @@ const NotificationSettingsDrawer = () => {
             variant="body2"
             color="text.primary"
             whiteSpace={isMobile ? 'normal' : 'pre-line'}
-            marginTop={2}
-            marginBottom={2}
+            mt={2}
+            mb={2}
           >
             {t('settings.language-settings-subtitle')}
           </Typography>
@@ -139,29 +137,30 @@ const NotificationSettingsDrawer = () => {
               />
             </RadioGroup>
             {formik.values.lang === NewNotificationLangOther && (
-              <CustomDropdown
-                id="additionalLang"
-                label={`${t(
-                  'new-notification.steps.preliminary-informations.select-other-language'
-                )}*`}
-                name="additionalLang"
-                size="medium"
-                margin="none"
-                value={formik.values.additionalLang}
-                onChange={(e) => formik.handleChange(e)}
-                fullWidth
-                sx={{ marginTop: 4 }}
-                error={formik.touched.additionalLang && !!formik.errors.additionalLang}
-                helperText={formik.touched.additionalLang && formik.errors.additionalLang}
-              >
-                {Object.keys(languages)
-                  .filter((key) => BILINGUALISM_LANGUAGES.includes(key))
-                  .map((key) => (
-                    <MenuItem key={key} value={key}>
-                      {languages[key as LangCode]}
-                    </MenuItem>
-                  ))}
-              </CustomDropdown>
+              <Box mt={4}>
+                <CustomDropdown
+                  id="additionalLang"
+                  label={`${t(
+                    'new-notification.steps.preliminary-informations.select-other-language'
+                  )}*`}
+                  name="additionalLang"
+                  size="medium"
+                  margin="none"
+                  value={formik.values.additionalLang}
+                  onChange={(e) => formik.handleChange(e)}
+                  fullWidth
+                  error={formik.touched.additionalLang && !!formik.errors.additionalLang}
+                  helperText={formik.touched.additionalLang && formik.errors.additionalLang}
+                >
+                  {Object.keys(languages)
+                    .filter((key) => BILINGUALISM_LANGUAGES.includes(key))
+                    .map((key) => (
+                      <MenuItem key={key} value={key}>
+                        {languages[key as LangCode]}
+                      </MenuItem>
+                    ))}
+                </CustomDropdown>
+              </Box>
             )}
           </FormControl>
         </Box>
