@@ -17,5 +17,5 @@
   "WORK_IN_PROGRESS": false,
   "F24_DOWNLOAD_WAIT_TIME": 15000,
   "IS_B2B_ENABLED": true,
-  "DOD_DISABLED": true
+  "DOD_DISABLED": false
 }
