@@ -24,7 +24,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-* **PN-13161:** add cache-control policies when fetching config.json ([d7718cb](https://github.com/pagopa/pn-frontend/commit/d7718cb030695539e892149846b11c2c59fa33b3))
+* **PN-12757:** correct copy when timeline status is analog failure workflow ([#1351](https://github.com/pagopa/pn-frontend/issues/1351)) ([43e7b6e](https://github.com/pagopa/pn-frontend/commit/43e7b6ed5064d7ebaad51fbeba3b326342abad1c))
+
+
+### Features
+
+* **pn-12878:** New copy for analog flow ([#1359](https://github.com/pagopa/pn-frontend/issues/1359)) ([7fc60b1](https://github.com/pagopa/pn-frontend/commit/7fc60b1759762a9771a39cda6339985a041edcb0))
 
 
 

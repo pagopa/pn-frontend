@@ -109,7 +109,7 @@ interface BaseDetails {
 
 export interface AnalogWorkflowDetails extends BaseDetails {
   physicalAddress?: PhysicalAddress;
-  getGeneratedAarUrl?: string;
+  generatedAarUrl?: string;
 }
 
 export interface SendCourtesyMessageDetails extends BaseDetails {
@@ -301,6 +301,7 @@ export enum LegalFactType {
   ANALOG_FAILURE_DELIVERY = 'ANALOG_FAILURE_DELIVERY',
   RECIPIENT_ACCESS = 'RECIPIENT_ACCESS',
   PEC_RECEIPT = 'PEC_RECEIPT', // PN-2107
+  NOTIFICATION_CANCELLED = 'NOTIFICATION_CANCELLED',
 }
 
 export interface LegalFactId {
@@ -328,7 +329,7 @@ export type DigitalDetails = SendCourtesyMessageDetails | SendDigitalDetails;
 
 export type AnalogDetails = SendPaperDetails | AnalogWorkflowDetails;
 
-/** External Registries  */
+/* External Registries  */
 export enum PaymentInfoDetail {
   PAYMENT_UNAVAILABLE = 'PAYMENT_UNAVAILABLE', // Technical Error
   PAYMENT_UNKNOWN = 'PAYMENT_UNKNOWN', // Payment data error
@@ -371,7 +372,6 @@ export interface NotificationDocumentRequest {
   documentType: NotificationDocumentType;
   documentIdx?: number;
   documentId?: string;
-  documentCategory?: LegalFactType;
   mandateId?: string;
 }
 

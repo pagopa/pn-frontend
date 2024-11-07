@@ -27,6 +27,15 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **PN-13161:** add cache-control policies when fetching config.json ([d7718cb](https://github.com/pagopa/pn-frontend/commit/d7718cb030695539e892149846b11c2c59fa33b3))
 * wrong cast for env variable ([329a67f](https://github.com/pagopa/pn-frontend/commit/329a67fda085015783d1d7f95c4a81e8f37fa009))
 * wrong casting on env variable and fix wrong tests ([f596c3c](https://github.com/pagopa/pn-frontend/commit/f596c3cfdf588945467e5dda7af5a6d08d4c6c52))
+* **PN-12757:** correct copy when timeline status is analog failure workflow ([#1351](https://github.com/pagopa/pn-frontend/issues/1351)) ([43e7b6e](https://github.com/pagopa/pn-frontend/commit/43e7b6ed5064d7ebaad51fbeba3b326342abad1c))
+* **PN-12934:** now SercqSendCourtesyDialog does not appear when adding Sercq for a specific Party ([#1367](https://github.com/pagopa/pn-frontend/issues/1367)) ([8c15489](https://github.com/pagopa/pn-frontend/commit/8c15489c3edec1f64de0b63fc73ce65c1a74a3df))
+* **PN-12966:** set maximum length for public key value ([#1365](https://github.com/pagopa/pn-frontend/issues/1365)) ([1c5cc00](https://github.com/pagopa/pn-frontend/commit/1c5cc0072e3c40560128611017c1a3dd005dc7c6))
+* **PN-13045:** new API key confirmation component wrongly shows key id instead of value (PA) ([#1368](https://github.com/pagopa/pn-frontend/issues/1368)) ([e1b80d8](https://github.com/pagopa/pn-frontend/commit/e1b80d86d1ab976678bee358209487c5b5e374f9))
+
+
+### Features
+
+* **pn-12878:** New copy for analog flow ([#1359](https://github.com/pagopa/pn-frontend/issues/1359)) ([7fc60b1](https://github.com/pagopa/pn-frontend/commit/7fc60b1759762a9771a39cda6339985a041edcb0))
 
 
 

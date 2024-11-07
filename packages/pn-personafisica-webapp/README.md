@@ -13,9 +13,13 @@ HOST='cittadini.dev.notifichedigitali.it'
 HTTPS=true
 PORT=443
 ```
+
 ### Env variables (development)
 
 Copy the content of the file located in `public/conf/env/config.dev.json` in a file config.json located in `public/conf/`
 
+### Login url (dev, uat, test)
+
+Make sure you also change the server.proxy.target value of the object returned by the defineConfig method in `vite.config.mts` to match the login url required for the specific environment
 
 Now you can run `yarn start` to run your application and to make redirect from reference URL to app in localhost.

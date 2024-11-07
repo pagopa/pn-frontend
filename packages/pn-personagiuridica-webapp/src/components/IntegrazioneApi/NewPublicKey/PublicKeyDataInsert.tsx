@@ -16,6 +16,7 @@ import * as routes from '../../../navigation/routes.const';
 import NewPublicKeyCard from './NewPublicKeyCard';
 
 const nameMaxLen = 254;
+const publicKeyMaxLen = 500;
 const nameAllowedChars = 'a-zA-Z0-9-\\';
 
 type Props = {
@@ -44,11 +45,12 @@ const PublicKeyDataInsert: React.FC<Props> = ({ onConfirm, duplicateKey, tosAcce
     name: yup
       .string()
       .required(t('required-field', { ns: 'common' }))
-      .max(nameMaxLen, t('too-long-field-error', { ns: 'common', maxLength: 254 }))
+      .max(nameMaxLen, t('too-long-field-error', { ns: 'common', maxLength: nameMaxLen }))
       .matches(dataRegex.publicKeyName, t('messages.error.name-allowed-charset', { allowedCharset: nameAllowedChars })),
     publicKey: yup
       .string()
       .required(t('required-field', { ns: 'common' }))
+      .max(publicKeyMaxLen, t('too-long-field-error', { ns: 'common', maxLength: publicKeyMaxLen }))
       .test('publicKey', t('messages.error.key-already-registered'), duplicateKey),
   });
 

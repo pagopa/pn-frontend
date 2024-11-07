@@ -25,6 +25,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * wrong cast for env variable ([329a67f](https://github.com/pagopa/pn-frontend/commit/329a67fda085015783d1d7f95c4a81e8f37fa009))
+## [2.8.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0...v2.8.1-RC.0) (2024-10-28)
+
+
+### Features
+
+* **pn-12878:** New copy for analog flow ([#1359](https://github.com/pagopa/pn-frontend/issues/1359)) ([7fc60b1](https://github.com/pagopa/pn-frontend/commit/7fc60b1759762a9771a39cda6339985a041edcb0))
 
 
 

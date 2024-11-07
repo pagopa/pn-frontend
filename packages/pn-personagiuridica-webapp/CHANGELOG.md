@@ -20,11 +20,19 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 ## [2.8.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0...v2.8.2-RC.0) (2024-11-04)
+## [2.8.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0...v2.8.1-RC.0) (2024-10-28)
 
 
 ### Bug Fixes
 
 * wrong casting on env variable and fix wrong tests ([f596c3c](https://github.com/pagopa/pn-frontend/commit/f596c3cfdf588945467e5dda7af5a6d08d4c6c52))
+* **PN-12934:** now SercqSendCourtesyDialog does not appear when adding Sercq for a specific Party ([#1367](https://github.com/pagopa/pn-frontend/issues/1367)) ([8c15489](https://github.com/pagopa/pn-frontend/commit/8c15489c3edec1f64de0b63fc73ce65c1a74a3df))
+* **PN-12966:** set maximum length for public key value ([#1365](https://github.com/pagopa/pn-frontend/issues/1365)) ([1c5cc00](https://github.com/pagopa/pn-frontend/commit/1c5cc0072e3c40560128611017c1a3dd005dc7c6))
+
+
+### Features
+
+* **pn-12878:** New copy for analog flow ([#1359](https://github.com/pagopa/pn-frontend/issues/1359)) ([7fc60b1](https://github.com/pagopa/pn-frontend/commit/7fc60b1759762a9771a39cda6339985a041edcb0))
 
 
 

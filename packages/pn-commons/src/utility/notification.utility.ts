@@ -388,7 +388,7 @@ export function getLegalFactLabel(
     );
   } else if (
     timelineStep.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW &&
-    (timelineStep.details as AnalogWorkflowDetails).getGeneratedAarUrl
+    (timelineStep.details as AnalogWorkflowDetails).generatedAarUrl
   ) {
     return getLocalizedOrDefaultLabel(
       'notifications',
@@ -463,13 +463,19 @@ export function getLegalFactLabel(
       'mancato recapito digitale'
     )}`;
 
-    // this is (at least in the examples I've seen)
+    // this is(at least in the examples I've seen)
     // related to the category NOTIFICATION_VIEWED
   } else if (legalFactType === LegalFactType.RECIPIENT_ACCESS) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
       'notifications',
       'detail.timeline.legalfact.recipient-access',
       'avvenuto accesso'
+    )}`;
+  } else if (legalFactType === LegalFactType.NOTIFICATION_CANCELLED) {
+    return `${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.notification-cancelled-document',
+      'Dichiarazione annullamento notifica'
     )}`;
   }
   return legalFactLabel;
@@ -479,7 +485,7 @@ export function getLegalFactLabel(
  * Returns the mapping between current notification timeline status and its label and descriptive message.
  * @param  {INotificationDetailTimeline} step
  * @param {Array<NotificationDetailRecipient>} recipients
- * @returns {TimelineStepInfo | null}
+ * @returns {TimelineStepInfo | null }
  */
 export function getNotificationTimelineStatusInfos(
   step: INotificationDetailTimeline,
@@ -501,7 +507,7 @@ export function getNotificationTimelineStatusInfos(
   // we show the multirecipient versions of the step descriptions
   // only if the array of recipients include more than one "full" element
   // (i.e. an element including the full data about the recipient, instead of being included
-  //  just to preserve the correlation with the recIndex in each step).
+  // just to preserve the correlation with the recIndex in each step).
   // We consider a recipient description to be "full" if it includes recipientType, taxId and denomination.
   // -------------------------------------
   // Carlos Lombardi, 2023.05.17
@@ -558,7 +564,7 @@ export const getPagoPaF24Payments = (
   }, [] as Array<PaymentDetails>);
 
 /**
- * Populate only pagoPA (with eventual f24 associated) payment history array before send notification to fe.
+ * Populate only pagoPA(with eventual f24 associated) payment history array before send notification to fe.
  * @param  {Array<INotificationDetailTimeline>} timeline
  * @param  {Array<PaymentDetails>} pagoPaF24Payemnts
  * @param  {Array<ExtRegistriesPaymentDetails>} checkoutPayments
