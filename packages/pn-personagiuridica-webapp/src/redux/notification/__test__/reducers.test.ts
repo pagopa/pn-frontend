@@ -1,7 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import {
-  LegalFactType,
   NotificationDocumentType,
   PAYMENT_CACHE_KEY,
   PaidDetails,
@@ -157,12 +156,11 @@ describe('Notification detail redux state tests', () => {
       iun: notificationDTO.iun,
       documentType: NotificationDocumentType.LEGAL_FACT,
       documentId: 'mocked-key',
-      documentCategory: LegalFactType.ANALOG_DELIVERY,
     };
     const mockResponse = { url: 'http://mocked-url.com' };
     mock
       .onGet(
-        `/bff/v1/notifications/received/${mockRequest.iun}/documents/${mockRequest.documentType}?documentId=${mockRequest.documentId}&documentCategory=${mockRequest.documentCategory}`
+        `/bff/v1/notifications/received/${mockRequest.iun}/documents/${mockRequest.documentType}?documentId=${mockRequest.documentId}`
       )
       .reply(200, mockResponse);
     const action = await store.dispatch(getReceivedNotificationDocument(mockRequest));
