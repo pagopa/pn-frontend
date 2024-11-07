@@ -28,7 +28,6 @@ const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
     recipient.foreignState
   ) {
     const address = {
-      at: recipient.at,
       address: `${recipient.address} ${recipient.houseNumber}`,
       addressDetails: recipient.addressDetails,
       zip: recipient.zip,

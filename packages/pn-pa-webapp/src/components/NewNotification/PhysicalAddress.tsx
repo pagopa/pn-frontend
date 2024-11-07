@@ -1,5 +1,8 @@
-import { useTranslation } from 'react-i18next';
 import { FormikErrors, FormikTouched, FormikValues } from 'formik';
+import { useTranslation } from 'react-i18next';
+
+import { Grid } from '@mui/material';
+
 import FormTextField from './FormTextField';
 
 type Props = {
@@ -24,31 +27,30 @@ const PhysicalAddress = ({
   });
 
   const physicalAddressFields = [
+    { key: 'foreignState', label: `${t('foreign-state')}*`, width: 4 },
+    { key: 'province', label: `${t('province')}*`, width: 4 },
+    { key: 'zip', label: `${t('zip')}*`, width: 4 },
+    { key: 'municipality', label: `${t('municipality')}*`, width: 6 },
+    { key: 'municipalityDetails', label: t('municipality-details'), width: 6 },
     { key: 'address', label: `${t('address')}*`, width: 9 },
     { key: 'houseNumber', label: `${t('house-number')}*`, width: 3 },
-    { key: 'municipalityDetails', label: t('municipality-details'), width: 6 },
-    { key: 'municipality', label: `${t('municipality')}*`, width: 6 },
-    { key: 'province', label: `${t('province')}*`, width: 6 },
-    { key: 'zip', label: `${t('zip')}*`, width: 6 },
-    { key: 'foreignState', label: `${t('foreign-state')}*`, width: 6 },
-    { key: 'at', label: t('at'), width: 6 },
     { key: 'addressDetails', label: t('address-details'), width: 12 },
   ];
 
   return (
     <>
       {physicalAddressFields.map((field) => (
-        <FormTextField
-          key={field.key}
-          keyName={`recipients[${recipient}].${field.key}`}
-          label={field.label}
-          values={values}
-          touched={touched}
-          errors={errors}
-          setFieldValue={setFieldValue}
-          width={field.width}
-          handleBlur={handleBlur}
-        />
+        <Grid item xs={12} lg={field.width} key={field.key}>
+          <FormTextField
+            keyName={`recipients[${recipient}].${field.key}`}
+            label={field.label}
+            values={values}
+            touched={touched}
+            errors={errors}
+            setFieldValue={setFieldValue}
+            handleBlur={handleBlur}
+          />
+        </Grid>
       ))}
     </>
   );
