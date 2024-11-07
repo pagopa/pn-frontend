@@ -63,9 +63,7 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
   fileUploaded,
 }) => {
   const [focused, setFocused] = useState(false);
-  const { t } = useTranslation(['notifiche']);
-  const { t: tc } = useTranslation(['common']);
-
+  const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile('md');
 
   return (
@@ -76,8 +74,10 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
           <ButtonNaked
             onClick={onDelete}
             data-testid="deletebutton"
-            aria-label={t('new-notification.steps.attachments.remove-document')}
-            sx={{ marginLeft: 2 }}
+            aria-label={t('new-notification.steps.attachments.remove-document', {
+              ns: 'notifiche',
+            })}
+            sx={{ ml: 2 }}
           >
             <DeleteIcon color="error" />
           </ButtonNaked>
@@ -93,7 +93,7 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
         error={fieldTouched && Boolean(fieldErrors)}
         helperText={
           (fieldTouched && fieldErrors) ||
-          (focused && tc('too-long-field-error', { maxLength: 512 }))
+          (focused && t('too-long-field-error', { maxLength: 512, ns: 'common' }))
         }
         size="small"
         margin="normal"
@@ -103,13 +103,14 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
       />
       <FileUpload
         key={`${new Date()}`}
-        uploadText={
-          isMobile ? t('new-notification.drag-doc-mobile') : t('new-notification.drag-doc-pc')
-        }
+        uploadText={t(
+          isMobile ? 'new-notification.drag-doc-mobile' : 'new-notification.drag-doc-pc',
+          { ns: 'notifiche' }
+        )}
         accept="application/pdf"
         onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
         onRemoveFile={() => onRemoveFile(id)}
-        sx={{ marginTop: 2 }}
+        sx={{ mt: 2 }}
         calcSha256
         fileUploaded={fileUploaded}
       />
@@ -117,6 +118,7 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
         {t('new-notification.steps.attachments.file-upload-helper', {
           format: '.PDF',
           size: '20 mb',
+          ns: 'notifiche',
         })}
       </Typography>
     </Box>
@@ -361,7 +363,7 @@ const Attachments: React.FC<Props> = ({
               onFieldTouched={handleChangeTouched}
               onFileUploaded={(id, file, sha256) => fileUploadedHandler(i, id, file, sha256)}
               onRemoveFile={(id) => removeFileHandler(id, i)}
-              sx={{ marginTop: i > 0 ? 4 : 0 }}
+              sx={{ mt: i > 0 ? 4 : 0 }}
             />
           ))}
           {formik.values.documents.length <= MAX_NUMBER_OF_ATTACHMENTS && (
@@ -369,7 +371,7 @@ const Attachments: React.FC<Props> = ({
               onClick={addDocumentHandler}
               color="primary"
               startIcon={<AddIcon />}
-              sx={{ marginTop: 4 }}
+              sx={{ mt: 4 }}
               data-testid="add-another-doc"
             >
               {t('add-another-doc')}
