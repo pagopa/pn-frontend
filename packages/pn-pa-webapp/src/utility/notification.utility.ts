@@ -169,7 +169,7 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
 
   const additionalLanguages =
     newNotification.lang === NewNotificationLangOther && newNotification.additionalLang
-      ? [newNotification.additionalLang]
+      ? [newNotification.additionalLang.toUpperCase()]
       : undefined;
 
   /* eslint-disable functional/immutable-data */
