@@ -1,6 +1,7 @@
-import { Formik, FormikProps } from 'formik';
+import { Formik } from 'formik';
 import { vi } from 'vitest';
 
+import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 import {
   fireEvent,
   getById,
@@ -15,6 +16,7 @@ import {
 import { LangLabels } from '@pagopa/mui-italia';
 import userEvent from '@testing-library/user-event';
 
+import { PaymentModel } from '../../../models/NewNotification';
 import { PreliminaryInformationsPayload } from '../../../redux/newNotification/types';
 import PreliminaryInformationsLang from '../PreliminaryInformationsLang';
 
@@ -26,33 +28,36 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-const mockFormikProps = {
-  values: {
+describe('PreliminaryInformationsLang', () => {
+  const initialValues: PreliminaryInformationsPayload = {
     lang: 'it',
     additionalLang: '',
-  },
-  handleChange: jest.fn(),
-  setFieldTouched: jest.fn(),
-} as unknown as FormikProps<PreliminaryInformationsPayload>;
+    paymentMode: PaymentModel.NOTHING,
+    paProtocolNumber: '',
+    subject: '',
+    physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
+    taxonomyCode: '',
+  };
 
-const mockLanguages: LangLabels = {
-  it: 'Italiano',
-  de: 'Tedesco',
-};
+  const mockLanguages: LangLabels = {
+    it: 'Italiano',
+    de: 'Tedesco',
+  };
 
-const mockOnChange = jest.fn();
-const mockOnChangeTouched = jest.fn();
+  const mockOnChange = jest.fn();
+  const mockOnChangeTouched = jest.fn();
 
-describe('PreliminaryInformationsLang', () => {
   it('renders correctly with initial values', async () => {
     const { container } = render(
-      <Formik initialValues={mockFormikProps.values} onSubmit={() => {}}>
-        <PreliminaryInformationsLang
-          formik={mockFormikProps}
-          languages={mockLanguages}
-          onChange={mockOnChange}
-          onChangeTouched={mockOnChangeTouched}
-        />
+      <Formik initialValues={initialValues} onSubmit={() => {}}>
+        {(formik) => (
+          <PreliminaryInformationsLang
+            formik={formik}
+            languages={mockLanguages}
+            onChange={mockOnChange}
+            onChangeTouched={mockOnChangeTouched}
+          />
+        )}
       </Formik>
     );
     const title = getByText(container, 'notification-language-title');
@@ -68,13 +73,15 @@ describe('PreliminaryInformationsLang', () => {
 
   it('calls onChange when language is changed', () => {
     const { container } = render(
-      <Formik initialValues={mockFormikProps.values} onSubmit={() => {}}>
-        <PreliminaryInformationsLang
-          formik={mockFormikProps}
-          languages={mockLanguages}
-          onChange={mockOnChange}
-          onChangeTouched={mockOnChangeTouched}
-        />
+      <Formik initialValues={initialValues} onSubmit={() => {}}>
+        {(formik) => (
+          <PreliminaryInformationsLang
+            formik={formik}
+            languages={mockLanguages}
+            onChange={mockOnChange}
+            onChangeTouched={mockOnChangeTouched}
+          />
+        )}
       </Formik>
     );
     fireEvent.click(getByText(container, 'italian-and-other-language'));
@@ -82,22 +89,21 @@ describe('PreliminaryInformationsLang', () => {
   });
 
   it('renders additional language dropdown when "Italian and other language" is selected', () => {
-    const updatedFormikProps = {
-      ...mockFormikProps,
-      values: {
-        ...mockFormikProps.values,
-        lang: 'other',
-      },
-    } as unknown as FormikProps<PreliminaryInformationsPayload>;
+    const initialValuesLangOther: PreliminaryInformationsPayload = {
+      ...initialValues,
+      lang: 'other',
+    };
 
     const { container } = render(
-      <Formik initialValues={updatedFormikProps.values} onSubmit={() => {}}>
-        <PreliminaryInformationsLang
-          formik={updatedFormikProps}
-          languages={mockLanguages}
-          onChange={mockOnChange}
-          onChangeTouched={mockOnChangeTouched}
-        />
+      <Formik initialValues={initialValuesLangOther} onSubmit={() => {}}>
+        {(formik) => (
+          <PreliminaryInformationsLang
+            formik={formik}
+            languages={mockLanguages}
+            onChange={mockOnChange}
+            onChangeTouched={mockOnChangeTouched}
+          />
+        )}
       </Formik>
     );
 
@@ -105,22 +111,21 @@ describe('PreliminaryInformationsLang', () => {
   });
 
   it('calls onChangeTouched when additional language is changed', async () => {
-    const updatedFormikProps = {
-      ...mockFormikProps,
-      values: {
-        ...mockFormikProps.values,
-        lang: 'other',
-      },
-    } as unknown as FormikProps<PreliminaryInformationsPayload>;
+    const initialValuesLangOther: PreliminaryInformationsPayload = {
+      ...initialValues,
+      lang: 'other',
+    };
 
     const { container } = render(
-      <Formik initialValues={updatedFormikProps.values} onSubmit={() => {}}>
-        <PreliminaryInformationsLang
-          formik={updatedFormikProps}
-          languages={mockLanguages}
-          onChange={mockOnChange}
-          onChangeTouched={mockOnChangeTouched}
-        />
+      <Formik initialValues={initialValuesLangOther} onSubmit={() => {}}>
+        {(formik) => (
+          <PreliminaryInformationsLang
+            formik={formik}
+            languages={mockLanguages}
+            onChange={mockOnChange}
+            onChangeTouched={mockOnChangeTouched}
+          />
+        )}
       </Formik>
     );
 
