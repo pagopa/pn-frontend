@@ -36,7 +36,11 @@ const NotificationSettingsDrawer = () => {
   const toggleDrawer = () => setOpenDrawer(!openDrawer);
 
   const onCloseDrawer = async () => {
-    formik.handleSubmit();
+    if (formik.dirty) {
+      formik.handleSubmit();
+      return;
+    }
+    setOpenDrawer(false);
   };
 
   const validationSchema = yup.object({
@@ -74,9 +78,7 @@ const NotificationSettingsDrawer = () => {
 
   const handleChangeLang = async (e: ChangeEvent<HTMLInputElement>) => {
     formik.handleChange(e);
-    await formik.setFieldValue('additionalLang', '');
     await formik.setFieldTouched('additionalLang', false);
-    formik.setFieldError('additionalLang', undefined);
   };
 
   const languages = useMemo(() => {
