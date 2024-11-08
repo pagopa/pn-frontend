@@ -2,8 +2,9 @@ import { ReactNode } from 'react';
 
 import { Box, Typography } from '@mui/material';
 
-export const FormBox = ({ children }: { children: ReactNode }) => (
+export const FormBox = ({ testid, children }: { testid?: string; children: ReactNode }) => (
   <Box
+    data-testid={testid}
     sx={{
       borderRadius: '8px',
       borderColor: 'divider',

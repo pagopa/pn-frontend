@@ -275,6 +275,7 @@
       "send-analog-outcome-unknown": "Invio per via cartacea completato - esito non determinato",
       "send-analog-unknown": "Evento su spedizione raccomandata - non riconosciuto",
       "aar-document": "Avviso di avvenuta ricezione",
+      "notification-cancelled-document": "Dichiarazione annullamento notifica",
       "legalfact": {
         "sender-ack": "notifica presa in carico",
         "digital-delivery-success": "notifica digitale",
@@ -450,16 +451,18 @@
         "add-digital-domicile": "Aggiungi un domicilio digitale",
         "back-to-preliminary-informations": "Torna a Informazioni preliminari",
         "digital-domicile": "Domicilio digitale",
+        "digital-domicile-subtitle": "Se conosci l'indirizzo PEC del destinatario inseriscilo qui. In questo modo, assicuri che la notifica venga recapitata in formato digitale, riducendo i tempi di consegna rispetto ai canali analogici tradizionali.",
+        "pec-address": "Indirizzo PEC",
         "add-physical-domicile": "Aggiungi un indirizzo fisico",
         "address": "Indirizzo",
         "house-number": "Numero civico",
         "municipality-details": "Località",
         "municipality": "Comune",
         "province": "Provincia",
-        "zip": "Codice postale",
+        "zip": "CAP",
         "foreign-state": "Stato",
         "at": "Presso",
-        "address-details": "Note aggiuntive (scala, piano)",
+        "address-details": "Note aggiuntive (presso, scala, piano)",
         "add-recipient": "Aggiungi un destinatario",
         "remove-recipient": "Rimuovi destinatario"
       },
@@ -510,5 +513,10 @@
         "message": "Il numero di protocollo inserito è già esistente"
       }
     }
+  },
+  "settings": {
+    "select-language-to-confirm": "Per confermare, seleziona una lingua",
+    "language-settings-title": "Impostazioni lingua",
+    "language-settings-subtitle": "In questa sezione puoi scegliere una lingua aggiuntiva\ncon cui inviare la notifica ai destinatari, oltre all'italiano."
   }
 }

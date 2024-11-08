@@ -1,28 +1,33 @@
 import { FormikProps } from 'formik';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { TextField, Typography } from '@mui/material';
+import { TextField, Typography, useFormControl } from '@mui/material';
 import { LangCode, LangLabels } from '@pagopa/mui-italia';
 
 import { NewNotificationLangOther } from '../../models/NewNotification';
 import { PreliminaryInformationsPayload } from '../../redux/newNotification/types';
 import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 
+function SubjectFocusHelperText() {
+  const { t } = useTranslation(['common']);
+  const { focused } = useFormControl() || {};
+
+  return useMemo(() => {
+    if (focused) {
+      return t('too-long-field-error', { maxLength: 134 });
+    }
+    return false;
+  }, [focused]);
+}
+
 type Props = {
   formik: FormikProps<PreliminaryInformationsPayload>;
   languages: LangLabels;
   onChangeTouched: (e: ChangeEvent) => Promise<void>;
-  subjectHelperText: string;
 };
 
-const PreliminaryInformationsContent = ({
-  formik,
-  languages,
-  onChangeTouched,
-  subjectHelperText,
-}: Props) => {
-  const [focused, setFocused] = useState('');
+const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: Props) => {
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.preliminary-informations',
   });
@@ -46,13 +51,8 @@ const PreliminaryInformationsContent = ({
         name="subject"
         value={formik.values.subject}
         onChange={onChangeTouched}
-        onFocus={() => setFocused('subject')}
-        onBlur={() => setFocused('')}
         error={formik.touched.subject && Boolean(formik.errors.subject)}
-        helperText={
-          (formik.touched.subject && formik.errors.subject) ||
-          (focused === 'subject' && subjectHelperText)
-        }
+        helperText={(formik.touched.subject && formik.errors.subject) || <SubjectFocusHelperText />}
         size="small"
         margin="normal"
       />
@@ -78,14 +78,13 @@ const PreliminaryInformationsContent = ({
             label={`${t('subject')}*`}
             fullWidth
             name="additionalSubject"
-            onFocus={() => setFocused('additionalSubject')}
-            onBlur={() => setFocused('')}
             value={formik.values.additionalSubject}
             onChange={onChangeTouched}
             error={formik.touched.additionalSubject && Boolean(formik.errors.additionalSubject)}
             helperText={
-              (formik.touched.additionalSubject && formik.errors.additionalSubject) ||
-              (focused === 'additionalSubject' && subjectHelperText)
+              (formik.touched.additionalSubject && formik.errors.additionalSubject) || (
+                <SubjectFocusHelperText />
+              )
             }
             size="small"
             margin="normal"

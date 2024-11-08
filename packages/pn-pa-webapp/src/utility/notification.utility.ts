@@ -28,7 +28,6 @@ const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
     recipient.foreignState
   ) {
     const address = {
-      at: recipient.at,
       address: `${recipient.address} ${recipient.houseNumber}`,
       addressDetails: recipient.addressDetails,
       zip: recipient.zip,
@@ -170,7 +169,7 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
 
   const additionalLanguages =
     newNotification.lang === NewNotificationLangOther && newNotification.additionalLang
-      ? [newNotification.additionalLang]
+      ? [newNotification.additionalLang.toUpperCase()]
       : undefined;
 
   /* eslint-disable functional/immutable-data */
