@@ -1,18 +1,19 @@
 import { FormikErrors, useFormik } from 'formik';
-import {
-  ChangeEvent,
-  ForwardedRef,
-  forwardRef,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from 'react';
+import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Alert, Box, SxProps, TextField, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  FormControl,
+  SxProps,
+  TextField,
+  Typography,
+  useFormControl,
+} from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -24,6 +25,18 @@ import { getConfiguration } from '../../services/configuration.service';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
 import { FormBox, FormBoxTitle } from './NewNotificationFormElelements';
+
+function NameFocusHelperText() {
+  const { t } = useTranslation(['common']);
+  const { focused } = useFormControl() || {};
+
+  return useMemo(() => {
+    if (focused) {
+      return t('too-long-field-error', { maxLength: 512 });
+    }
+    return false;
+  }, [focused]);
+}
 
 type AttachmentBoxProps = {
   id: string;
@@ -62,8 +75,7 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
   onRemoveFile,
   fileUploaded,
 }) => {
-  const [focused, setFocused] = useState(false);
-  const { t } = useTranslation(['common', 'notifiche']);
+  const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile('md');
 
   return (
@@ -74,38 +86,32 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
           <ButtonNaked
             onClick={onDelete}
             data-testid="deletebutton"
-            aria-label={t('new-notification.steps.attachments.remove-document', {
-              ns: 'notifiche',
-            })}
+            aria-label={t('new-notification.steps.attachments.remove-document')}
             sx={{ ml: 2 }}
           >
             <DeleteIcon color="error" />
           </ButtonNaked>
         )}
       </Box>
-      <TextField
-        id={`${id}.name`}
-        label={fieldLabel}
-        fullWidth
-        name={`${id}.name`}
-        value={fieldValue}
-        onChange={onFieldTouched}
-        error={fieldTouched && Boolean(fieldErrors)}
-        helperText={
-          (fieldTouched && fieldErrors) ||
-          (focused && t('too-long-field-error', { maxLength: 512, ns: 'common' }))
-        }
-        size="small"
-        margin="normal"
-        data-testid="attachmentNameInput"
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-      />
+      <FormControl fullWidth>
+        <TextField
+          id={`${id}.name`}
+          label={fieldLabel}
+          fullWidth
+          name={`${id}.name`}
+          value={fieldValue}
+          onChange={onFieldTouched}
+          error={fieldTouched && Boolean(fieldErrors)}
+          helperText={(fieldTouched && fieldErrors) || <NameFocusHelperText />}
+          size="small"
+          margin="normal"
+          data-testid="attachmentNameInput"
+        />
+      </FormControl>
       <FileUpload
         key={`${new Date()}`}
         uploadText={t(
-          isMobile ? 'new-notification.drag-doc-mobile' : 'new-notification.drag-doc-pc',
-          { ns: 'notifiche' }
+          isMobile ? 'new-notification.drag-doc-mobile' : 'new-notification.drag-doc-pc'
         )}
         accept="application/pdf"
         onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
@@ -118,7 +124,6 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
         {t('new-notification.steps.attachments.file-upload-helper', {
           format: '.PDF',
           size: '20 mb',
-          ns: 'notifiche',
         })}
       </Typography>
     </Box>
