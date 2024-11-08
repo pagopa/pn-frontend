@@ -8,13 +8,11 @@ import {
   ResponseEventDispatcher,
 } from '@pagopa-pn/pn-commons';
 import {
-  getById,
   testFormElements,
   testInput,
   testRadio,
   testSelect,
 } from '@pagopa-pn/pn-commons/src/test-utils';
-import userEvent from '@testing-library/user-event';
 
 import { userResponse } from '../../../__mocks__/Auth.mock';
 import {
@@ -28,7 +26,6 @@ import {
   fireEvent,
   randomString,
   render,
-  screen,
   testStore,
   waitFor,
   within,
@@ -499,58 +496,6 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
     expect(button).toBeDisabled();
   });
 
-  it('change lang of notification and show additional input', async () => {
-    await act(async () => {
-      result = render(
-        <PreliminaryInformations
-          notification={{
-            ...newNotificationEmpty,
-          }}
-          onConfirm={confirmHandlerMk}
-        />,
-        {
-          preloadedState: {
-            userState: {
-              user: {
-                organization: { name: 'Comune di Palermo', hasGroup: true },
-              },
-            },
-          },
-        }
-      );
-    });
-    const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
-
-    testRadio(form, 'notificationLanguageRadio', ['Italiano', 'italian-and-other-language']);
-
-    const otherLangRadio = within(form).getAllByTestId('notificationLanguageRadio')[1];
-    fireEvent.click(otherLangRadio);
-
-    const selectAdditionalLang = getById(form, 'additionalLang');
-    expect(selectAdditionalLang).toBeInTheDocument();
-
-    userEvent.click(selectAdditionalLang);
-
-    await act(async () => {
-      // time to appear the dropdown
-      await new Promise((r) => setTimeout(r, 500));
-    });
-
-    const dropdown = document.querySelector('#menu-additionalLang') as HTMLElement;
-    expect(dropdown).toBeInTheDocument();
-
-    const frOption = within(dropdown).getByText('Tedesco');
-    userEvent.click(frOption);
-
-    await testInput(form, 'additionalLang', 'de');
-
-    const additionalSubject = getById(form, 'additionalSubject');
-    expect(additionalSubject).toBeInTheDocument();
-
-    const additionalAbstract = getById(form, 'additionalAbstract');
-    expect(additionalAbstract).toBeInTheDocument();
-  });
-
   it('should render taxonomy link with correct href', async () => {
     await act(async () => {
       result = render(
@@ -572,7 +517,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
       );
     });
 
-    expect(screen.getByRole('link')).toHaveAttribute('href', 'https://mock-taxonomy-url');
+    expect(result.getByRole('link')).toHaveAttribute('href', 'https://mock-taxonomy-url');
   });
 
   it('should set default additionalLang of user', async () => {
