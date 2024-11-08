@@ -5,7 +5,6 @@ import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 import {
   fireEvent,
   getById,
-  getByText,
   render,
   testFormElements,
 } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -39,7 +38,6 @@ describe('PreliminaryInformationsContent', () => {
   };
 
   const mockOnChangeTouched = jest.fn();
-  const mockSubjectHelperText = 'Helper text for subject';
 
   it('renders the component', () => {
     const { container } = render(
@@ -49,7 +47,6 @@ describe('PreliminaryInformationsContent', () => {
             formik={formik}
             languages={mockLanguages}
             onChangeTouched={mockOnChangeTouched}
-            subjectHelperText={mockSubjectHelperText}
           />
         )}
       </Formik>
@@ -67,7 +64,6 @@ describe('PreliminaryInformationsContent', () => {
             formik={formik}
             languages={mockLanguages}
             onChangeTouched={mockOnChangeTouched}
-            subjectHelperText={mockSubjectHelperText}
           />
         )}
       </Formik>
@@ -80,23 +76,22 @@ describe('PreliminaryInformationsContent', () => {
   });
 
   it('displays helper text when subject field is focused', () => {
-    const { container } = render(
+    const result = render(
       <Formik initialValues={initialValues} onSubmit={() => {}}>
         {(formik) => (
           <PreliminaryInformationsContent
             formik={formik}
             languages={mockLanguages}
             onChangeTouched={mockOnChangeTouched}
-            subjectHelperText={mockSubjectHelperText}
           />
         )}
       </Formik>
     );
-
-    const subjectInput = getById(container, 'subject');
+    
+    const subjectInput = getById(result.container, 'subject');
     fireEvent.focus(subjectInput);
 
-    expect(getByText(container, mockSubjectHelperText)).toBeInTheDocument();
+    expect(result.getByText('too-long-field-error')).toBeInTheDocument();
   });
 
   it('renders additional language fields when hasOtherLang is true', () => {
@@ -106,26 +101,25 @@ describe('PreliminaryInformationsContent', () => {
       additionalLang: 'de',
     };
 
-    const { container } = render(
+    const result = render(
       <Formik initialValues={initialValuesWithOtherLang} onSubmit={() => {}}>
         {(formik) => (
           <PreliminaryInformationsContent
             formik={formik}
             languages={mockLanguages}
             onChangeTouched={mockOnChangeTouched}
-            subjectHelperText={mockSubjectHelperText}
           />
         )}
       </Formik>
     );
 
-    expect(getByText(container, mockLanguages.it)).toBeInTheDocument();
-    expect(getByText(container, mockLanguages.de)).toBeInTheDocument();
+    expect(result.getByText(mockLanguages.it)).toBeInTheDocument();
+    expect(result.getByText(mockLanguages.de)).toBeInTheDocument();
 
-    const additionalSubjectInput = getById(container, 'additionalSubject');
+    const additionalSubjectInput = getById(result.container, 'additionalSubject');
     expect(additionalSubjectInput).toBeInTheDocument();
 
-    const additionalAbstractInput = getById(container, 'additionalAbstract');
+    const additionalAbstractInput = getById(result.container, 'additionalAbstract');
     expect(additionalAbstractInput).toBeInTheDocument();
   });
 });

@@ -5,8 +5,6 @@ import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 import {
   fireEvent,
   getById,
-  getByLabelText,
-  getByText,
   render,
   testInput,
   testRadio,
@@ -48,7 +46,7 @@ describe('PreliminaryInformationsLang', () => {
   const mockOnChangeTouched = jest.fn();
 
   it('renders correctly with initial values', async () => {
-    const { container } = render(
+    const result = render(
       <Formik initialValues={initialValues} onSubmit={() => {}}>
         {(formik) => (
           <PreliminaryInformationsLang
@@ -60,11 +58,11 @@ describe('PreliminaryInformationsLang', () => {
         )}
       </Formik>
     );
-    const title = getByText(container, 'notification-language-title');
+    const title = result.getByText('notification-language-title');
     expect(title).toBeInTheDocument();
 
     await testRadio(
-      container,
+      result.container,
       'notificationLanguageRadio',
       ['Italiano', 'italian-and-other-language'],
       0
@@ -72,7 +70,7 @@ describe('PreliminaryInformationsLang', () => {
   });
 
   it('calls onChange when language is changed', () => {
-    const { container } = render(
+    const result = render(
       <Formik initialValues={initialValues} onSubmit={() => {}}>
         {(formik) => (
           <PreliminaryInformationsLang
@@ -84,7 +82,8 @@ describe('PreliminaryInformationsLang', () => {
         )}
       </Formik>
     );
-    fireEvent.click(getByText(container, 'italian-and-other-language'));
+    const radioInput = result.getByText('italian-and-other-language');
+    fireEvent.click(radioInput);
     expect(mockOnChange).toHaveBeenCalled();
   });
 
@@ -94,7 +93,7 @@ describe('PreliminaryInformationsLang', () => {
       lang: 'other',
     };
 
-    const { container } = render(
+    const result = render(
       <Formik initialValues={initialValuesLangOther} onSubmit={() => {}}>
         {(formik) => (
           <PreliminaryInformationsLang
@@ -107,7 +106,7 @@ describe('PreliminaryInformationsLang', () => {
       </Formik>
     );
 
-    expect(getByLabelText(container, 'select-other-language*')).toBeInTheDocument();
+    expect(result.getByLabelText('select-other-language*')).toBeInTheDocument();
   });
 
   it('calls onChangeTouched when additional language is changed', async () => {
