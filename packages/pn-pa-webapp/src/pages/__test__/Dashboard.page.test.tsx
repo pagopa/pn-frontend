@@ -230,7 +230,6 @@ describe('Dashboard Page', async () => {
 
   it('errors on api', async () => {
     mock.onGet(notificationsPath).reply(500);
-    console.log((mock as any).handlers.get)
 
     await act(async () => {
       result = render(

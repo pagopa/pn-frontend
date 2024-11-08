@@ -572,6 +572,39 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
       );
     });
 
-    expect(screen.getByRole('link')).toHaveAttribute('href', 'https://mock-taxonomy-url')
+    expect(screen.getByRole('link')).toHaveAttribute('href', 'https://mock-taxonomy-url');
+  });
+
+  it('should set default additionalLang of user', async () => {
+    await act(async () => {
+      result = render(
+        <PreliminaryInformations
+          notification={{
+            ...newNotificationEmpty,
+          }}
+          onConfirm={confirmHandlerMk}
+        />,
+        {
+          preloadedState: {
+            userState: {
+              additionalLanguages: ['de'],
+              user: {
+                organization: { name: 'Comune di Palermo', hasGroup: true },
+              },
+            },
+          },
+        }
+      );
+    });
+
+    const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+
+    await testRadio(
+      form,
+      'notificationLanguageRadio',
+      ['Italiano', 'italian-and-other-language'],
+      1
+    );
+    testFormElements(form, 'additionalLang', 'select-other-language*', 'de');
   });
 });

@@ -33,7 +33,6 @@ const initialState = {
     paymentMode: '' as PaymentModel,
     notificationFeePolicy: '' as NotificationFeePolicy,
     senderDenomination: '',
-    lang: 'it',
   } as NewNotification,
   groups: [] as Array<UserGroup>,
   isCompleted: false,
