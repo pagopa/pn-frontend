@@ -13,7 +13,6 @@ import {
   SxProps,
   TextField,
   Typography,
-  styled,
 } from '@mui/material';
 import { ButtonNaked, CopyToClipboardButton } from '@pagopa/mui-italia';
 
@@ -138,12 +137,6 @@ const FilenameBox = ({ filename }: { filename: string }) => {
     </Stack>
   );
 };
-
-const TextFieldDisabled = styled(TextField)(({ theme }) => ({
-  '& .MuiInputBase-input.Mui-disabled': {
-    WebkitTextFillColor: theme.palette.text.primary,
-  },
-}));
 
 /**
  * This component allows file upload
@@ -390,13 +383,13 @@ const FileUpload = ({
               'Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file'
             )}
           </Typography>
-          <TextFieldDisabled
+          <TextField
             fullWidth
             value={fileData.sha256}
             size="small"
             margin="dense"
-            disabled={true}
             InputProps={{
+              readOnly: true,
               endAdornment: <CopyToClipboardButton value={fileData.sha256} />,
             }}
           />
