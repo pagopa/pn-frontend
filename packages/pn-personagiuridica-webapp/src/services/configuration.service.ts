@@ -24,6 +24,7 @@ interface PgConfigurationFromFile {
   F24_DOWNLOAD_WAIT_TIME: number;
   DOD_DISABLED: boolean;
   IS_B2B_ENABLED: boolean;
+  DOWNTIME_EXAMPLE_LINK: string;
 }
 
 interface PgConfiguration extends PgConfigurationFromFile {
@@ -48,6 +49,7 @@ interface PgConfiguration extends PgConfigurationFromFile {
   WORK_IN_PROGRESS: boolean;
   F24_DOWNLOAD_WAIT_TIME: number;
   IS_B2B_ENABLED: boolean;
+  DOWNTIME_EXAMPLE_LINK: string;
 }
 
 class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
@@ -71,6 +73,7 @@ class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
     this.ruleFor('F24_DOWNLOAD_WAIT_TIME').isNumber();
     this.ruleFor('DOD_DISABLED').isBoolean();
     this.ruleFor('IS_B2B_ENABLED').isBoolean();
+    this.ruleFor('DOWNTIME_EXAMPLE_LINK').isString();
   }
 }
 
@@ -102,6 +105,7 @@ export function getConfiguration(): PgConfiguration {
     F24_DOWNLOAD_WAIT_TIME: configurationFromFile.F24_DOWNLOAD_WAIT_TIME || 0,
     IS_B2B_ENABLED: Boolean(configurationFromFile.IS_B2B_ENABLED),
     DOD_DISABLED: Boolean(configurationFromFile.DOD_DISABLED),
+    DOWNTIME_EXAMPLE_LINK: configurationFromFile.DOWNTIME_EXAMPLE_LINK,
   };
 }
 

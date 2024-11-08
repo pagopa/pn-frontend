@@ -4,6 +4,11 @@ import { LangCode } from '@pagopa/mui-italia';
 
 export const LANGUAGE_SESSION_KEY = 'lang';
 
+export const getSessionLanguage = (): string => {
+  const lang = sessionStorage.getItem(LANGUAGE_SESSION_KEY);
+  return lang ?? 'it';
+};
+
 export const setSessionLanguage = (lang: LangCode) => {
   sessionStorage.setItem(LANGUAGE_SESSION_KEY, lang);
 };

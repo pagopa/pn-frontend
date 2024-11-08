@@ -25,6 +25,7 @@ interface PfConfigurationFromFile {
   APP_IO_ANDROID: string;
   APP_IO_IOS: string;
   DOD_DISABLED: boolean;
+  DOWNTIME_EXAMPLE_LINK: string;
 }
 
 interface PfConfiguration extends PfConfigurationFromFile {
@@ -68,6 +69,7 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
     this.ruleFor('APP_IO_ANDROID').isString();
     this.ruleFor('APP_IO_IOS').isString();
     this.ruleFor('DOD_DISABLED').isBoolean();
+    this.ruleFor('DOWNTIME_EXAMPLE_LINK').isString();
   }
 }
 
@@ -95,7 +97,8 @@ export function getConfiguration(): PfConfiguration {
     DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED),
     WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
     F24_DOWNLOAD_WAIT_TIME: configurationFromFile.F24_DOWNLOAD_WAIT_TIME || 0,
-    DOD_DISABLED: Boolean(configurationFromFile.DOD_DISABLED)
+    DOD_DISABLED: Boolean(configurationFromFile.DOD_DISABLED),
+    DOWNTIME_EXAMPLE_LINK: configurationFromFile.DOWNTIME_EXAMPLE_LINK || '',
   };
 }
 
