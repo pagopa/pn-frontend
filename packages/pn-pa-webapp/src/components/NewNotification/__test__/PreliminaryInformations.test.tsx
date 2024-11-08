@@ -26,7 +26,6 @@ import {
   fireEvent,
   randomString,
   render,
-  screen,
   testStore,
   waitFor,
   within,
@@ -518,6 +517,9 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
       );
     });
 
-    expect(screen.getByRole('link')).toHaveAttribute('href', 'https://mock-taxonomy-url');
+    expect(result.getByRole('link')).toHaveAttribute(
+      'href',
+      'https://mock-taxonomy-url'
+    );
   });
 });

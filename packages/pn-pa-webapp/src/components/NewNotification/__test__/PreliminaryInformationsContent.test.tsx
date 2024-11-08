@@ -4,8 +4,8 @@ import { vi } from 'vitest';
 import {
   fireEvent,
   getById,
+  getByText,
   render,
-  screen,
   testFormElements,
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
@@ -45,7 +45,7 @@ describe('PreliminaryInformationsContent', () => {
   const mockSubjectHelperText = 'Helper text for subject';
 
   it('renders the component', () => {
-    const result = render(
+    const { container } = render(
       <Formik initialValues={mockFormikProps.values} onSubmit={() => {}}>
         <PreliminaryInformationsContent
           formik={mockFormikProps}
@@ -56,12 +56,12 @@ describe('PreliminaryInformationsContent', () => {
       </Formik>
     );
 
-    testFormElements(result.container, 'subject', 'subject*');
-    testFormElements(result.container, 'abstract', 'abstract');
+    testFormElements(container, 'subject', 'subject*');
+    testFormElements(container, 'abstract', 'abstract');
   });
 
   it('calls onChangeTouched when subject field changes', () => {
-    const result = render(
+    const { container } = render(
       <Formik initialValues={mockFormikProps.values} onSubmit={() => {}}>
         <PreliminaryInformationsContent
           formik={mockFormikProps}
@@ -72,14 +72,14 @@ describe('PreliminaryInformationsContent', () => {
       </Formik>
     );
 
-    const subjectInput = getById(result.container, 'subject');
+    const subjectInput = getById(container, 'subject');
     fireEvent.change(subjectInput, { target: { value: 'New Subject' } });
 
     expect(mockOnChangeTouched).toHaveBeenCalled();
   });
 
   it('displays helper text when subject field is focused', () => {
-    const result = render(
+    const { container } = render(
       <Formik initialValues={mockFormikProps.values} onSubmit={() => {}}>
         <PreliminaryInformationsContent
           formik={mockFormikProps}
@@ -90,10 +90,10 @@ describe('PreliminaryInformationsContent', () => {
       </Formik>
     );
 
-    const subjectInput = getById(result.container, 'subject');
+    const subjectInput = getById(container, 'subject');
     fireEvent.focus(subjectInput);
 
-    expect(screen.getByText(mockSubjectHelperText)).toBeInTheDocument();
+    expect(getByText(container, mockSubjectHelperText)).toBeInTheDocument();
   });
 
   it('renders additional language fields when hasOtherLang is true', () => {
@@ -106,7 +106,7 @@ describe('PreliminaryInformationsContent', () => {
       },
     } as unknown as FormikProps<PreliminaryInformationsPayload>;
 
-    const result = render(
+    const { container } = render(
       <Formik initialValues={mockFormikPropsWithOtherLang.values} onSubmit={() => {}}>
         <PreliminaryInformationsContent
           formik={mockFormikPropsWithOtherLang}
@@ -117,15 +117,13 @@ describe('PreliminaryInformationsContent', () => {
       </Formik>
     );
 
-    expect(screen.getByText(mockLanguages.it!)).toBeInTheDocument();
-    expect(screen.getByText(mockLanguages.de!)).toBeInTheDocument();
+    expect(getByText(container, mockLanguages.it!)).toBeInTheDocument();
+    expect(getByText(container, mockLanguages.de!)).toBeInTheDocument();
 
-    const additionalSubjectInput = getById(result.container, 'additionalSubject');
+    const additionalSubjectInput = getById(container, 'additionalSubject');
     expect(additionalSubjectInput).toBeInTheDocument();
 
-    const additionalAbstractInput = getById(result.container, 'additionalAbstract');
+    const additionalAbstractInput = getById(container, 'additionalAbstract');
     expect(additionalAbstractInput).toBeInTheDocument();
   });
-
-
 });

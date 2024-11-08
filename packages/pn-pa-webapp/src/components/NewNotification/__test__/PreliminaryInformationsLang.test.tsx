@@ -4,9 +4,9 @@ import { vi } from 'vitest';
 import {
   fireEvent,
   getById,
+  getByLabelText,
   getByText,
   render,
-  screen,
   testInput,
   testRadio,
   waitFor,
@@ -45,7 +45,7 @@ const mockOnChangeTouched = jest.fn();
 
 describe('PreliminaryInformationsLang', () => {
   it('renders correctly with initial values', async () => {
-    const result = render(
+    const { container } = render(
       <Formik initialValues={mockFormikProps.values} onSubmit={() => {}}>
         <PreliminaryInformationsLang
           formik={mockFormikProps}
@@ -55,11 +55,11 @@ describe('PreliminaryInformationsLang', () => {
         />
       </Formik>
     );
-    const title = getByText(result.container, 'notification-language-title');
+    const title = getByText(container, 'notification-language-title');
     expect(title).toBeInTheDocument();
 
     await testRadio(
-      result.container,
+      container,
       'notificationLanguageRadio',
       ['Italiano', 'italian-and-other-language'],
       0
@@ -67,7 +67,7 @@ describe('PreliminaryInformationsLang', () => {
   });
 
   it('calls onChange when language is changed', () => {
-    render(
+    const { container } = render(
       <Formik initialValues={mockFormikProps.values} onSubmit={() => {}}>
         <PreliminaryInformationsLang
           formik={mockFormikProps}
@@ -77,7 +77,7 @@ describe('PreliminaryInformationsLang', () => {
         />
       </Formik>
     );
-    fireEvent.click(screen.getByLabelText('italian-and-other-language'));
+    fireEvent.click(getByText(container, 'italian-and-other-language'));
     expect(mockOnChange).toHaveBeenCalled();
   });
 
@@ -90,7 +90,7 @@ describe('PreliminaryInformationsLang', () => {
       },
     } as unknown as FormikProps<PreliminaryInformationsPayload>;
 
-    render(
+    const { container } = render(
       <Formik initialValues={updatedFormikProps.values} onSubmit={() => {}}>
         <PreliminaryInformationsLang
           formik={updatedFormikProps}
@@ -101,7 +101,7 @@ describe('PreliminaryInformationsLang', () => {
       </Formik>
     );
 
-    expect(screen.getByLabelText('select-other-language*')).toBeInTheDocument();
+    expect(getByLabelText(container, 'select-other-language*')).toBeInTheDocument();
   });
 
   it('calls onChangeTouched when additional language is changed', async () => {
@@ -113,7 +113,7 @@ describe('PreliminaryInformationsLang', () => {
       },
     } as unknown as FormikProps<PreliminaryInformationsPayload>;
 
-    const result = render(
+    const { container } = render(
       <Formik initialValues={updatedFormikProps.values} onSubmit={() => {}}>
         <PreliminaryInformationsLang
           formik={updatedFormikProps}
@@ -124,7 +124,7 @@ describe('PreliminaryInformationsLang', () => {
       </Formik>
     );
 
-    const selectAdditionalLang = getById(result.container, 'additionalLang');
+    const selectAdditionalLang = getById(container, 'additionalLang');
     expect(selectAdditionalLang).toBeInTheDocument();
 
     userEvent.click(selectAdditionalLang);
@@ -135,7 +135,7 @@ describe('PreliminaryInformationsLang', () => {
     const frOption = within(dropdown).getByText('Tedesco');
     userEvent.click(frOption);
 
-    await testInput(result.container, 'additionalLang', 'de');
+    await testInput(container, 'additionalLang', 'de');
 
     expect(mockOnChangeTouched).toHaveBeenCalled();
   });
