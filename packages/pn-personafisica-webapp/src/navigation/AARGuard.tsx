@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { AccessDenied, IllusQuestion, LoadingPage } from '@pagopa-pn/pn-commons';
+import { AccessDenied, AppResponsePublisher, IllusQuestion, LoadingPage } from '@pagopa-pn/pn-commons';
 
 import { NotificationId } from '../models/Notifications';
 import { PFEventsType } from '../models/PFEventsType';
@@ -51,6 +51,14 @@ const AARGuard = () => {
       void fetchNotificationFromQrCode();
     }
   }, [aar]);
+
+  useEffect(() => {
+    AppResponsePublisher.error.subscribe('exchangeNotificationQrCode', ()=>false);
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe('exchangeNotificationQrCode', ()=>false);
+    };
+  }, []);
 
   useEffect(() => {
     if (notificationId) {

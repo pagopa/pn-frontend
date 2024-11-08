@@ -15,7 +15,6 @@ import { UserAttributesInvalidVerificationCodeAppError } from './UserAttributesI
 import { GenericInvalidParameterPatternAppError } from './GenericInvalidParameterPatternAppError';
 import { DeliveryMandateNotFoundAppError } from './DeliveryMandateNotFoundAppError';
 import { InvalidBodyAppError } from './InvalidBodyAppError';
-import { WrongLoginCredentialsByAARAppError } from './WrongLoginCredentialsByAARAppError';
 
 export class PFAppErrorFactory extends AppErrorFactory {
   private translateFunction: (path: string, ns: string) => string;
@@ -39,8 +38,6 @@ export class PFAppErrorFactory extends AppErrorFactory {
         return new MandateDelegateHimselfAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_MANDATE_INVALIDVERIFICATIONCODE:
         return new MandateInvalidVerificationCodeAppError(error, this.translateFunction);
-      case ServerResponseErrorCode.PN_DELIVERY_NOTIFICATIONNOTFOUND:
-        return new WrongLoginCredentialsByAARAppError(error,this.translateFunction);
       // I am using a fallthrough to avoid to define a factory for every error of user attributes having the same
       // scope, i find it easier to edit them all in one place instead of three
       case ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE:
