@@ -78,7 +78,7 @@ const NotificationSettingsDrawer = () => {
 
   const handleChangeLang = async (e: ChangeEvent<HTMLInputElement>) => {
     formik.handleChange(e);
-    await formik.setFieldTouched('additionalLang', false);
+    await formik.setFieldTouched('additionalLang', false, false);
   };
 
   const languages = useMemo(() => {
