@@ -91,7 +91,7 @@ const isDropdownItemDisabled = (
 ): boolean => {
   // the address is disabled if there is an address with the same sender, already added
   const senderHasAlreadyAddress =
-    addresses[`special${allowedAddress.channelType}Addresses`].findIndex(
+    addresses[`special${allowedAddress.channelType}Addresses`]?.findIndex(
       (a) => a.senderId === sender.senderId
     ) > -1;
   if (senderHasAlreadyAddress) {
