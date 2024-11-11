@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
-import { getById, testAutocomplete, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
+import { getById, queryById, testAutocomplete, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
 import { fireEvent, waitFor } from '@testing-library/react';
 
 import { digitalAddresses, digitalAddressesPecValidation, digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
@@ -61,10 +61,10 @@ describe('test AddSpecialContactDialog', () => {
     expect(titleEl).toHaveTextContent(`special-contacts.modal-title`);
     const bodyEl = within(dialog).getByTestId('dialog-content');
     expect(bodyEl).toBeInTheDocument();
-    expect(bodyEl).toHaveTextContent(`special-contacts.pec`);
-    const input = getById(bodyEl, 's_value');
-    expect(input).toBeInTheDocument();
-    expect(input).toHaveValue('');
+    expect(bodyEl).not.toHaveTextContent(`special-contacts.pec`);
+    const input = queryById(bodyEl, 's_value');
+    expect(input).not.toBeInTheDocument();
+    expect(bodyEl).toHaveTextContent(`special-contacts.contact-to-add-description`);
     expect(bodyEl).toHaveTextContent(`special-contacts.senders`);
     const senderAutoComplete = within(bodyEl).getByTestId('sender');
     expect(senderAutoComplete).toBeInTheDocument();
@@ -97,6 +97,17 @@ describe('test AddSpecialContactDialog', () => {
     );
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const bodyEl = within(dialog).getByTestId('dialog-content');
+
+    await testSelect(
+      bodyEl,
+      'channelType',
+      [
+        { value: ChannelType.PEC, label: 'special-contacts.pec' },
+        { value: ChannelType.SERCQ_SEND, label: 'special-contacts.sercq_send' },
+      ],
+      0
+    );
+
     const input = getById(bodyEl, 's_value');
     // fill with invalid value
     fireEvent.change(input, { target: { value: 'invalid value' } });
@@ -231,12 +242,6 @@ describe('test AddSpecialContactDialog', () => {
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const bodyEl = within(dialog).getByTestId('dialog-content');
 
-    const input = getById(bodyEl, 's_value');
-    fireEvent.change(input, { target: { value: 'test@test.it' } });
-    await waitFor(() => {
-      expect(input).toHaveValue('test@test.it');
-    });
-
     await testSelect(
       bodyEl,
       'channelType',
@@ -246,6 +251,12 @@ describe('test AddSpecialContactDialog', () => {
       ],
       0
     );
+
+    const input = getById(bodyEl, 's_value');
+    fireEvent.change(input, { target: { value: 'test@test.it' } });
+    await waitFor(() => {
+      expect(input).toHaveValue('test@test.it');
+    });
 
     await testAutocomplete(
       bodyEl,
