@@ -36,8 +36,9 @@ const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
       province: recipient.province,
       foreignState: recipient.foreignState,
     };
+
     // clean the object from undefined keys
-    (Object.keys(address) as Array<keyof PhysicalAddress>).forEach((key) => {
+    (Object.keys(address) as Array<Exclude<keyof PhysicalAddress, 'at'>>).forEach((key) => {
       if (!address[key]) {
         // eslint-disable-next-line functional/immutable-data
         delete address[key];
