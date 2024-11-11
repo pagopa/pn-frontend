@@ -48,7 +48,7 @@
       }
     ],
     "sercq-send-info-pec-disclaimer": "If you entered a PEC among your addresses, the Digital Domicile will replace it as the SEND legal address.",
-    "sercq-send-info-tos": "By pressing “Activate” you declare to have read and accepted the <0>Terms of service</0> and the <1>Privacy Notice</1>.",
+    "sercq-send-info-tos": "By pressing “Activate” you declare to have read and accepted the <0>Terms of service</0>.",
     "sercq_send-added-successfully": "Digital Domicile activated correctly",
     "sercq-send-enabled": "SEND is your Digital Domicile",
     "sercq-send-courtesy-title": "Select how to receive the notifications",

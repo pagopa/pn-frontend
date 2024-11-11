@@ -48,7 +48,7 @@
       }
     ],
     "sercq-send-info-pec-disclaimer": "Si vous avez déjà indiqué une PEC parmi vos adresses, le Domicile Numérique la remplace en tant qu’adresse à valeur juridique de SEND.",
-    "sercq-send-info-tos": "En cliquant sur « Activer », vous déclarez avoir lu et accepté les <0>Conditions d’utilisation du service</0> et la <1>Charte de confidentialité</1>.",
+    "sercq-send-info-tos": "En cliquant sur « Activer », vous déclarez avoir lu et accepté les <0>Conditions d’utilisation du service</0>.",
     "sercq_send-added-successfully": "Domicile Numérique correctement activé",
     "sercq-send-enabled": "SEND est votre Domicile Numérique",
     "sercq-send-courtesy-title": "Choisissez comment recevoir les avis",
