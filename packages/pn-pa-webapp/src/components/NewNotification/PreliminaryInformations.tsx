@@ -52,6 +52,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const hasGroups = useAppSelector(
     (state: RootState) => state.userState.user.organization.hasGroups
   );
+  const additionalLanguages = useAppSelector(
+    (state: RootState) => state.userState.additionalLanguages
+  );
 
   // this is the initial value of the sender denomination. it used to show the error
   const senderDenomination = useAppSelector((state: RootState) =>
@@ -73,24 +76,24 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     return LANGUAGES[currentLang] ?? LANGUAGES.it;
   }, [i18n.language]);
 
-  const initialValues = useCallback(
-    () =>
-      ({
-        paProtocolNumber: notification.paProtocolNumber || '',
-        subject: notification.subject || '',
-        senderDenomination: notification.senderDenomination ?? '',
-        abstract: notification.abstract ?? '',
-        group: notification.group ?? '',
-        taxonomyCode: notification.taxonomyCode || '',
-        physicalCommunicationType: notification.physicalCommunicationType || '',
-        paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
-        lang: notification.lang || 'it',
-        additionalLang: notification.additionalLang || '',
-        additionalSubject: notification.additionalSubject || '',
-        additionalAbstract: notification.additionalAbstract || '',
-      } as PreliminaryInformationsPayload),
-    [notification, IS_PAYMENT_ENABLED]
-  );
+  const initialValues = useCallback(() => {
+    const additionalLang = additionalLanguages?.length > 0 ? additionalLanguages[0] : undefined;
+
+    return {
+      paProtocolNumber: notification.paProtocolNumber || '',
+      subject: notification.subject || '',
+      senderDenomination: notification.senderDenomination ?? '',
+      abstract: notification.abstract ?? '',
+      group: notification.group ?? '',
+      taxonomyCode: notification.taxonomyCode || '',
+      physicalCommunicationType: notification.physicalCommunicationType || '',
+      paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
+      lang: notification.lang || (additionalLang ? NewNotificationLangOther : 'it'),
+      additionalLang: notification.additionalLang || additionalLang || '',
+      additionalSubject: notification.additionalSubject || '',
+      additionalAbstract: notification.additionalAbstract || '',
+    } as PreliminaryInformationsPayload;
+  }, [notification, IS_PAYMENT_ENABLED, additionalLanguages]);
 
   const validationSchema = yup.object({
     paProtocolNumber: requiredStringFieldValidation(tc, 256),
@@ -198,7 +201,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             formik={formik}
             onChangeTouched={handleChangeTouched}
             languages={languages}
-            subjectHelperText={tc('too-long-field-error', { maxLength: 134 })}
           />
 
           <FormBox>

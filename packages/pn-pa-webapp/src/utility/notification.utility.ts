@@ -36,8 +36,9 @@ const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
       province: recipient.province,
       foreignState: recipient.foreignState,
     };
+
     // clean the object from undefined keys
-    (Object.keys(address) as Array<keyof PhysicalAddress>).forEach((key) => {
+    (Object.keys(address) as Array<Exclude<keyof PhysicalAddress, 'at'>>).forEach((key) => {
       if (!address[key]) {
         // eslint-disable-next-line functional/immutable-data
         delete address[key];
@@ -169,7 +170,7 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
 
   const additionalLanguages =
     newNotification.lang === NewNotificationLangOther && newNotification.additionalLang
-      ? [newNotification.additionalLang]
+      ? [newNotification.additionalLang.toUpperCase()]
       : undefined;
 
   /* eslint-disable functional/immutable-data */

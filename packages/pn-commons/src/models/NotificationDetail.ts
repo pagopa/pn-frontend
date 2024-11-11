@@ -271,6 +271,7 @@ interface DigitalAddress {
 }
 
 export interface PhysicalAddress {
+  at?: string;
   address: string;
   addressDetails?: string;
   zip: string;

@@ -58,7 +58,7 @@ describe('Test notification utility', () => {
       ...newNotificationDTO,
       subject: 'Multone esagerato • subject for de',
       abstract: 'abstract for de',
-      additionalLanguages: ['de'],
+      additionalLanguages: ['DE'],
     };
     expect(result).toEqual(response);
   });

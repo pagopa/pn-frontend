@@ -468,17 +468,18 @@
       },
       "attachments": {
         "title": "Allegati",
-        "max-attachments": "Puoi caricare fino a 11 allegati, incluso il documento da notificare.",
-        "attach-for-recipients": "Allegati",
-        "act-attachment": "Allega l'atto",
+        "max-attachments": "Questi sono i documenti che saranno notificati tramite SEND a tutti i destinatari inseriti. Puoi allegare fino a un massimo di {{maxNumber}} documenti.",
+        "attach-for-recipients": "Documenti allegati",
+        "act-attachment": "Allega documento",
         "doc-attachment": "Allega un altro documento",
         "act-name": "Nome dell'atto",
-        "doc-name": "Nome del documento",
-        "add-doc": "Aggiungi un documento (per esempio, la lettera d’accompagnamento)",
-        "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)",
+        "doc-name": "Titolo del documento",
+        "add-doc": "Aggiungi un documento",
+        "add-another-doc": "Aggiungi un altro documento",
         "back-to-recipient": "Torna a Destinatario",
         "remove-document": "Rimuovi documento",
-        "banner-additional-languages": "Hai scelto di inviare la notifica in più lingue. Ricorda di allegare i documenti in entrambe le lingue selezionate."
+        "banner-additional-languages": "Hai scelto di inviare la notifica in più lingue. Ricorda di allegare i documenti in entrambe le lingue selezionate.",
+        "file-upload-helper": "Il documento deve essere in formato {{format}} e non deve superare le dimensioni di {{size}}"
       },
       "payment-methods": {
         "title": "Modelli di pagamento",
@@ -512,5 +513,10 @@
         "message": "Il numero di protocollo inserito è già esistente"
       }
     }
+  },
+  "settings": {
+    "select-language-to-confirm": "Per confermare, seleziona una lingua",
+    "language-settings-title": "Impostazioni lingua",
+    "language-settings-subtitle": "In questa sezione puoi scegliere una lingua aggiuntiva\ncon cui inviare la notifica ai destinatari, oltre all'italiano."
   }
 }
