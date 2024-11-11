@@ -186,7 +186,7 @@ export const removeAddress = (
         acc[item.channelType] = item.priority;
         return acc;
       },
-      {} as { [key: string]: number }
+      {} as { [key in ChannelType]: number }
     );
     
     // eslint-disable-next-line functional/immutable-data

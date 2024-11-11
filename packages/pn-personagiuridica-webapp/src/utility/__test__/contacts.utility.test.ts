@@ -1,6 +1,6 @@
 import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 
-import { digitalAddresses, digitalAddressesSercq, orderedDigitalAddresses } from '../../__mocks__/Contacts.mock';
+import { digitalAddresses, digitalAddressesSercq } from '../../__mocks__/Contacts.mock';
 import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts';
 import { SelectedAddresses } from '../../redux/contact/reducers';
 import {
@@ -162,10 +162,65 @@ describe('Contacts utility test', () => {
     ]);
   });
 
-  it('test sortAddresses function', () => {
-    sortAddresses(digitalAddresses);
+  it('test sortAddresses function - legal contacts', () => {
+    const sercqDefaultAddress = digitalAddressesSercq[digitalAddressesSercq.length - 1];
 
-    expect(digitalAddresses).toStrictEqual(orderedDigitalAddresses);
+    // test with two default addresses
+    let addresses = [digitalAddresses[0], sercqDefaultAddress];
+    let sortedAddresses = [addresses[1], addresses[0]];
+
+    expect(sortedAddresses).toStrictEqual(sortAddresses(addresses));
+
+    addresses = [sercqDefaultAddress, digitalAddresses[0]];
+    sortedAddresses = [addresses[0], addresses[1]];
+
+    expect(sortedAddresses).toStrictEqual(sortAddresses(addresses));
+
+    // test with one default and one non default addresses
+    addresses = [digitalAddresses[1], sercqDefaultAddress]
+    sortedAddresses = [addresses[1], addresses[0]];
+
+    expect(sortedAddresses).toStrictEqual(sortAddresses(addresses));
+
+    // test with two non default addresses
+    addresses = [
+      digitalAddresses[1],
+      {
+        ...sercqDefaultAddress,
+        senderId: 'comune-milano'
+      }
+    ];
+    sortedAddresses = [addresses[1], addresses[0]];
+
+    expect(sortedAddresses).toStrictEqual(sortAddresses(addresses));
+  });
+
+  it('test sortAddresses function - courtesy contacts', () => {
+    let addresses = [digitalAddresses[3], digitalAddresses[4]];
+    let sortedAddresses = [addresses[0], addresses[1]];
+
+    expect(sortedAddresses).toStrictEqual(sortAddresses(addresses));
+
+    // check the other way around
+    addresses = [digitalAddresses[4], digitalAddresses[3]];
+    sortedAddresses = [addresses[1], addresses[0]];
+
+    expect(sortedAddresses).toStrictEqual(sortAddresses(addresses));
+  });
+
+  it('test sortAddresses function - both legal and courtesy', () => {
+    const sercqDefaultAddress = digitalAddressesSercq[digitalAddressesSercq.length - 1];
+    // test sortAddress with PEC and SMS
+    let addresses = [digitalAddresses[4], digitalAddresses[0]];
+    let sortedAddresses = [addresses[1], addresses[0]];
+
+    expect(sortedAddresses).toStrictEqual(sortAddresses(addresses));
+    
+    // test sortAddress with SERCQ and EMAIL
+    addresses = [digitalAddresses[3], sercqDefaultAddress];
+    sortedAddresses = [addresses[1], addresses[0]];
+
+    expect(sortedAddresses).toStrictEqual(sortAddresses(addresses));
   });
 
   it('test updateAddressesList function, new address', () => {

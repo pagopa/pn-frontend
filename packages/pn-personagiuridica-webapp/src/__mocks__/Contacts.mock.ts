@@ -44,47 +44,6 @@ export const digitalAddresses: Array<DigitalAddress> = [
   },
 ];
 
-export const orderedDigitalAddresses: Array<DigitalAddress> = [
-  {
-    addressType: AddressType.LEGAL,
-    senderId: 'default',
-    channelType: ChannelType.PEC,
-    value: 'nome.utente@pec.it',
-    pecValid: true,
-    codeValid: true,
-  },
-  {
-    addressType: AddressType.COURTESY,
-    senderId: 'default',
-    channelType: ChannelType.EMAIL,
-    value: 'nome.utente@mail.it',
-  },
-  {
-    addressType: AddressType.COURTESY,
-    senderId: 'default',
-    channelType: ChannelType.SMS,
-    value: '+393333333333',
-  },
-  {
-    addressType: AddressType.LEGAL,
-    senderId: 'comune-milano',
-    senderName: 'Comune di Milano',
-    channelType: ChannelType.PEC,
-    value: 'nome.utente@pec-comune-milano.it',
-    pecValid: true,
-    codeValid: true,
-  },
-  {
-    addressType: AddressType.LEGAL,
-    senderId: 'tribunale-milano',
-    senderName: 'Tribunale di Milano',
-    channelType: ChannelType.PEC,
-    value: 'nome.utente@pec-tribunale-milano.it',
-    pecValid: true,
-    codeValid: true,
-  },
-];
-
 export const digitalAddressesSercq: Array<DigitalAddress> = [
   ...digitalAddresses.filter(
     (addr) => addr.channelType !== ChannelType.PEC || addr.senderId !== 'default'
