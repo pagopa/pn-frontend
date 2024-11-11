@@ -1,12 +1,12 @@
 {
   "appStatus": {
     "title": "État de la plateforme",
-    "subtitle": "Vérifie le fonctionnement de SEND, affiche l’historique des dysfonctionnements et télécharge les attestations correspondantes opposables à des tiers. ",
+    "subtitle": "Il vérifie le fonctionnement de SEND, affiche l’historique des dysfonctionnements et télécharge les attestations correspondantes opposables à des tiers.",
     "statusDescription": {
       "ok": "Tous les services de SEND sont opérationnels.",
       "not-ok": "Il y a un dysfonctionnement en cours. Pour plus de détails, consultez le tableau ci-dessous."
     },
-    "lastCheckLegend": "Dernière mise à jour - {{ lastCheckTimestamp }} "
+    "lastCheckLegend": "Dernière mise à jour - {{ lastCheckTimestamp }}"
   },
   "downtimeList": {
     "title": "Historique des dysfonctionnements",
@@ -23,7 +23,7 @@
     "knownFunctionality": {
       "NOTIFICATION_CREATE": "Envoi des notifications",
       "NOTIFICATION_VISUALIZATION": "Affichage des notifications et téléchargements des pièces jointes",
-      "NOTIFICATION_WORKFLOW": "Changement de statut des notifications"
+      "NOTIFICATION_WORKFLOW": "Changement d'état des notifications"
     },
     "unknownFunctionality": "Service inconnu ({{functionality}})",
     "status": {

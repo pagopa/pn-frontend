@@ -4,14 +4,14 @@
     "close": "Schließen",
     "description": "Hier können die Bevollmächtigten des Unternehmens und deren Vollmachten verwaltet werden. Die ersten sind die natürlichen oder juristischen Personen, denen du die Vollmacht erteilt hast, deine Bescheide zu lesen und zu verwalten, die zweiten sind diejenigen, die dich bevollmächtigt haben.",
     "delegatesTitle": "Deine Bevollmächtigten",
-    "delegatorsTitle": "Deine Bevollmächtigungen",
+    "delegatorsTitle": "Deine Vollmachten",
     "delegatorsApiErrorMessage": "Wir konnten die Daten zu den von dir erteilten Vollmachten nicht wiederherstellen.",
     "delegationStart": "Beginn Vollmacht",
     "delegationEnd": "Ende Vollmacht",
-    "empty_state": "Du hast niemanden zur Anzeige deiner Bescheide bevollmächtigt.",
+    "empty_state": "Du hast niemanden zur Anzeige deiner Zustellungen bevollmächtigt.",
     "accept_title": "Bestätigungscode eingeben",
     "accept_description": "Um die Vollmacht zu akzeptieren, gib den Code ein, den {{name}} mit dir geteilt hat.",
-    "add": "Vollmacht hinzufügen",
+    "add": "Eine Vollmacht hinzufügen",
     "revoke": "Widerrufen",
     "reject": "Ablehnen",
     "accept": "Zustimmen",
@@ -20,27 +20,27 @@
     "rejection_question": "Möchtest du die Vollmacht wirklich ablehnen?",
     "confirm_revocation": "Vollmacht widerrufen",
     "confirm_rejection": "Vollmacht ablehnen",
-    "error_title": "Es ist leider ein Fehler aufgetreten",
+    "error_title": "Leider ist etwas schiefgelaufen",
     "error_subtitle": "Die Seite konnte nicht geladen werden. Seite neu laden oder später erneut versuchen.",
     "error_button": "Seite neu laden",
-    "no_delegates": "Du hast niemanden zur Anzeige deiner Bescheide bevollmächtigt. <0>Vollmacht hinzufügen</0>",
+    "no_delegates": "Du hast niemanden zur Anzeige deiner Zustellungen bevollmächtigt. <0>Eine Vollmacht hinzufügen</0>",
     "no_delegators": "Du hast keine Vollmachten.",
     "show_code_title": "Bestätigungscode für die Vollmacht an {{name}}",
-    "show_code_subtitle": "Teile diesen Code mit der bevollmächtigten Person: Sie muss ihn bei der Annahme der Vollmacht eingeben.",
+    "show_code_subtitle": "Teile diesen Code mit der bevollmächtigten Person: Sie muss ihn bei Annahme der Vollmacht eingeben. Der Code ist 7 Tage lang nach der Erstellung der Vollmachtsanfrage gültig.",
     "verification_code": "Bestätigungscode",
     "code_copied": "Code kopiert",
     "table": {
-      "name": "Vorname",
+      "name": "Name",
       "delegationStart": "Beginn Vollmacht",
       "delegationEnd": "Ende Vollmacht",
       "permissions": "Genehmigungen",
-      "status": "Staat",
+      "status": "Status",
       "showCode": "Code anzeigen",
       "revoke": "Widerrufen",
       "reject": "Ablehnen",
       "accept": "Zustimmen",
-      "notificationsFrom": "Bescheid von:",
-      "allNotifications": "Alle Bescheide",
+      "notificationsFrom": "Zustellungen von:",
+      "allNotifications": "Alle Zustellungen",
       "active": "Aktivieren",
       "pending": "Wartet auf Bestätigung"
     }
@@ -49,25 +49,26 @@
     "breadcrumb": "Neue Vollmacht",
     "backToDelegations": "Zurück zu den Vollmachten",
     "createdTitle": "Vollmachtsanfrage erstellt",
-    "createdDescription": "Teile den Bestätigungscode mit der bevollmächtigten Person: Sie muss ihn beim ersten Zugriff auf SEND eingeben und die Anfrage akzeptieren.",
-    "title": "Vollmacht hinzufügen",
-    "subtitle": "Gib die Daten der natürlichen oder juristischen Person ein, der du eine Vollmacht zum Lesen deiner Bescheide erteilen möchtest.",
+    "createdDescription": "Teile den Bestätigungscode mit der bevollmächtigten Person: Sie muss ihn beim ersten Zugriff auf SEND eingeben und deine Anfrage akzeptieren.",
+    "title": "Eine Vollmacht hinzufügen",
+    "subtitle": "Gib die Daten der natürlichen oder juristischen Person ein, der du eine Vollmacht zum Lesen deiner Zustellungen erteilen möchtest.",
     "form": {
       "personType": "Rechtssubjekt*:",
       "naturalPerson": "Natürliche Person",
       "legalPerson": "Juristische Person",
-      "firstName": "Vorname*",
+      "firstName": "Name*",
       "lastName": "Nachname*",
       "fiscalCode": "Steuernummer*",
       "businessName": "Firmenbezeichnung*",
-      "viewFrom": "Kann Bescheide von* anzeigen:",
+      "viewFrom": "Kann Zustellungen von* anzeigen:",
       "allEntities": "Alle Körperschaften",
       "onlySelected": "Nur ausgewählte Körperschaften",
       "selectEntities": "Körperschaft wählen*",
       "date-duration": "Gültigkeitsdauer der Vollmacht*",
       "endDate": "Ende der Vollmacht",
+      "endDate-input-aria-label": "Enddatum der Vollmacht eingeben",
       "verificationCode": "Bestätigungscode",
-      "verificationCodeDescr": "Teile diesen Code mit der bevollmächtigten Person: Sie muss ihn bei der Annahme der Vollmacht eingeben.",
+      "verificationCodeDescr": "Teile diesen Code mit der bevollmächtigten Person: Sie muss ihn bei Annahme der Vollmacht eingeben. Der Code ist 7 Tage lang nach der Erstellung der Vollmachtsanfrage gültig.",
       "submit": "Anfrage senden",
       "mandatoryField": "Pflichtfelder*",
       "party-not-found": "Keine Körperschaft gefunden"
@@ -75,7 +76,7 @@
     "validation": {
       "fiscalCode": {
         "required": "Die Steuernummer ist erforderlich",
-        "wrong": "Der eingegebene Code ist falsch"
+        "wrong": "Die eingegebene Steuernummer ist falsch"
       },
       "name": {
         "required": "Der Name ist erforderlich"
@@ -84,9 +85,11 @@
         "required": "Der Nachname ist erforderlich"
       },
       "businessName": {
-        "required": "Der Firmenname ist erforderlich"
+        "required": "Die Firmenbezeichnung ist erforderlich"
       },
-      "entiSelected": { "required": "Wähle mindestens eine Körperschaft aus" },
+      "entiSelected": {
+        "required": "Wähle mindestens eine Körperschaft aus"
+      },
       "expirationDate": {
         "required": "Das Ablaufdatum der Vollmacht ist erforderlich",
         "wrong": "Falsches Datum"
@@ -119,7 +122,7 @@
       "message": "Überprüfe ihn und gib ihn erneut ein"
     },
     "fiscal_code": {
-      "title": "Ungültige Steuernummer",
+      "title": "Steuernummer ungültig",
       "message": "Die eingegebene Steuernummer ist ungültig"
     },
     "invalid_parameter": {

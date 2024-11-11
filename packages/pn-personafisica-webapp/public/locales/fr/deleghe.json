@@ -12,7 +12,7 @@
     "accept_title": "Saisir le code de vérification",
     "accept_description": "Pour accepter la procuration, saisissez le code que {{name}} a partagé avec vous.",
     "add": "Ajouter une procuration",
-    "revoke": "Révoquer",
+    "revoke": "Supprimer",
     "reject": "Refuser",
     "accept": "Accepter",
     "show": "Afficher le code",
@@ -20,13 +20,13 @@
     "rejection_question": "Voulez-vous vraiment refuser la procuration ?",
     "confirm_revocation": "Révoquer la procuration",
     "confirm_rejection": "Refuser la procuration",
-    "error_title": "Désolé, une erreur s'est produite",
+    "error_title": "Désolé, quelque chose s’est mal passé",
     "error_subtitle": "Nous n’avons pas pu charger la page. Rechargez-la, ou essayez plus tard.",
-    "error_button": "Rechargement de la page",
-    "no_delegates": "Vous n’avez mandaté personne pour visualiser vos notifications. <0>Ajouter une procuration</0>",
+    "error_button": "Recharger la page",
+    "no_delegates": "Vous n’avez délégué personne pour visualiser vos notifications. <0>Ajouter une procuration<0>",
     "no_delegators": "Vous n’avez pas de procuration à votre charge.",
     "show_code_title": "Code de vérification pour la procuration à {{name}}",
-    "show_code_subtitle": "Partagez ce code avec la personne mandatée : elle devra le saisir lors de l’acceptation de la procuration.",
+    "show_code_subtitle": "Partagez ce code avec la personne mandatée : elle devra le saisir lors de l’acceptation de la procuration. Le code est valable 7 jours à compter de la création de la demande de procuration.",
     "verification_code": "Code de vérification",
     "code_copied": "Code copié",
     "table": {
@@ -36,7 +36,7 @@
       "permissions": "Autorisations",
       "status": "État",
       "showCode": "Afficher le code",
-      "revoke": "Révoquer",
+      "revoke": "Supprimer",
       "reject": "Refuser",
       "accept": "Accepter",
       "notificationsFrom": "Notifications de :",
@@ -58,16 +58,17 @@
       "legalPerson": "Personnalité juridique",
       "firstName": "Prénom*",
       "lastName": "Nom de famille*",
-      "fiscalCode": "Numéro fiscal*",
+      "fiscalCode": "Code fiscal*",
       "businessName": "Raison sociale*",
       "viewFrom": "Vous pourrez visualiser les notifications de* :",
       "allEntities": "Tous les organismes",
       "onlySelected": "Uniquement les organismes sélectionnés",
       "selectEntities": "Sélectionner entités*",
-      "date-duration": "Période de validité de la procuration*",
+      "date-duration": "Sélectionner organismes*",
       "endDate": "Terminer la procuration",
+      "endDate-input-aria-label": "Terminer la procuration",
       "verificationCode": "Code de vérification",
-      "verificationCodeDescr": "Partagez ce code avec la personne mandatée : elle devra le saisir lors de l’acceptation de la procuration.",
+      "verificationCodeDescr": "Partagez ce code avec la personne mandatée : elle devra le saisir lors de l’acceptation de la procuration. Le code est valable 7 jours à compter de la création de la demande de procuration.",
       "submit": "Envoyez votre demande",
       "mandatoryField": "Champs obligatoires*",
       "party-not-found": "Aucun organisme trouvé"
@@ -86,7 +87,9 @@
       "businessName": {
         "required": "La raison sociale est obligatoire"
       },
-      "entiSelected": { "required": "Sélectionner au moins un organisme" },
+      "entiSelected": {
+        "required": "Sélectionner au moins un organisme"
+      },
       "expirationDate": {
         "required": "La date de fin de procuration est obligatoire",
         "wrong": "Date erronée"
@@ -120,7 +123,7 @@
     },
     "fiscal_code": {
       "title": "Code fiscal non valide",
-      "message": "Le code fiscal saisi est incorrect "
+      "message": "Le code fiscal saisi est incorrect"
     },
     "invalid_parameter": {
       "title": "Données non valides",

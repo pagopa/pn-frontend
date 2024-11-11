@@ -1,5 +1,94 @@
 {
   "title": "Statistiken",
-  "subtitle": "Anzeige der SEND-Nutzungsstatistiken von{{organization}}. Die Daten in der Übersicht beziehen sich auf die gesamte Nutzungsdauer der Plattform.",
-  "export_all": "Alle exportieren"
+  "subtitle": "Erkunde die Statistiken der Zustellungen deiner Körperschaft auf SEND - Servizio Notifiche Digitali",
+  "section_1": "Übersicht der Zustellungen",
+  "subtitle_section_1": "Wähle das Erfassungsintervall",
+  "tooltip_section_1": "Der neueste Erfassungstag entspricht dem Datum der letzten Datenaktualisierung",
+  "section_2": "Detail der digital gesendeten Zustellungen",
+  "error-fetch": "Derzeit liegt ein technisches Problem mit dem Laden der Daten vor. Bitte versuche es später erneut",
+  "export_all": "JPEG exportieren",
+  "last_update": "Letzte Aktualisierung {{dateTime}}",
+  "aggregate_graph": "Aggregiert",
+  "trend_graph": "Verlauf",
+  "graph_type_label": "Diagramm",
+  "save_as_image": "Als Bild speichern",
+  "trend": {
+    "days": "Tage",
+    "weeks": "Wochen"
+  },
+  "filter": {
+    "from_date": "Von",
+    "from_date-input-aria-label": "Startdatum der Suche eingeben",
+    "to_date": "Bis",
+    "to_date-input-aria-label": "Enddatum der Suche eingeben",
+    "lastMonth": "Letzte 30 Tage",
+    "last3Months": "Letzte 3 Monate",
+    "last6Months": "Letzte 6 Monate",
+    "last12Months": "Letzte 12 Monate",
+    "buttons": {
+      "filter": "Filtern",
+      "clear_filter": "Filter löschen"
+    }
+  },
+  "filed": {
+    "title": "Zustellungen der Körperschaft auf SEND",
+    "description": "Anzahl der von der Plattform SEND akzeptierten Zustellungen an der Gesamtzahl der von der Körperschaft geladenen Zustellungen",
+    "description2": " zur Gesamtanzahl der auf SEND geladenen Zustellungen",
+    "accepted": "Akzeptiert",
+    "refused": "Ausgesondert"
+  },
+  "last_state": {
+    "title": "Gesendete Zustellungen pro Status",
+    "description": "Anzahl der akzeptierten Zustellungen pro letztem erreichten Status während des Versandverfahrens über SEND",
+    "delivering": "Wird gesendet",
+    "delivered": "Zugestellt",
+    "viewed": "Zugriff erfolgt",
+    "effective_date": "Vervollständigt wegen\nAblauf der Fristen",
+    "canceled": "Abgebrochen",
+    "unreachable": "Empfänger\nunauffindbar"
+  },
+  "delivery_mode": {
+    "title": "Übermittelte Zustellungen pro Versandart",
+    "description": "Anzahl der übermittelten Zustellungen pro Versandart (digital oder analog)",
+    "digital": "Digitaler Versand",
+    "analog": "Analoger Versand"
+  },
+  "digital_state": {
+    "title": "Digitaler Versand pro Ergebnis",
+    "description": "Anzahl der digital gesendeten Zustellungen pro Ergebnis",
+    "ok": "Übermittelt über\ndigitale Kanäle",
+    "ko": "Übermittelt über\neinfaches\nEinschreiben",
+    "progress": "Wird gesendet",
+    "ok_title": "Übermittelt über digitale Kanäle",
+    "ok_description": "Mittels PEC übermittelte oder auf SEND vervollständigte Zustellungen",
+    "ko_title": "Übermittelt über einfaches Einschreiben",
+    "ko_description": "Über einfaches Einschreiben übermittelte Zustellungen, da sie von der PEC des Empfängers zurückgewiesen wurden",
+    "progress_title": "Wird gesendet",
+    "progress_description": "Zustellungen, die derzeit noch gesendet werden"
+  },
+  "digital_mean_time": {
+    "title": "Durchschnittliche Zeit des digitalen Versands",
+    "description": "Durchschnittliche Zeit (in Tagen) für die Übermittlung, den erfolgten Zugriff und die Vervollständigung der digital gesendeten Zustellungen",
+    "delivered": "Zugestellt",
+    "viewed": "Zugriff erfolgt",
+    "refined": "Vervollständigt wegen\nAblauf der Fristen",
+    "delivered_description": "Tage zur Übermittlung",
+    "viewed_description": "Tage zum erfolgten Zugriff",
+    "refined_description": "Tage für die Vervollständigung wegen Ablauf der Fristen"
+  },
+  "digital_errors_detail": {
+    "title": "Technische Fehler pro Typ",
+    "description": "Prozentsatz der technischen Fehler pro Fehlertyp an der Gesamtanzahl der technischen Fehler beim Versand",
+    "delivery_title": "Übermittlungsfehler",
+    "delivery_description": "Die Zustellung wurde wegen technischer Empfangsprobleme nicht zugestellt",
+    "pec_title": "PEC-Domainfehler",
+    "pec_description": "Die Zustellung wurde wegen ungültiger PEC-Domain nicht zugestellt",
+    "rejected_title": "Versandfehler",
+    "rejected_description": "Die Zustellung wurde wegen technischer Versandprobleme nicht akzeptiert"
+  },
+  "empty": {
+    "no_data_found": "Für das gewählte Zeitintervall stehen keine Daten zur Verfügung",
+    "not_enough_data": "Die Anzahl der von der Körperschaft auf SEND geladenen Zustellungen reicht derzeit nicht aus, um die Versandstatistiken zu verarbeiten und anzuzeigen. Erkunde den <0>Abschnitt Zustellungen</0>, um die bisher geladenen einzusehen.",
+    "notification_section_aria_label": "Abschnitt Zustellungen"
+  }
 }
