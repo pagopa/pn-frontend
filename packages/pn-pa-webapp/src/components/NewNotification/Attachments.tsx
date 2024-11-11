@@ -109,7 +109,6 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
         />
       </FormControl>
       <FileUpload
-        key={`${new Date()}`}
         uploadText={t(
           isMobile ? 'new-notification.drag-doc-mobile' : 'new-notification.drag-doc-pc'
         )}
