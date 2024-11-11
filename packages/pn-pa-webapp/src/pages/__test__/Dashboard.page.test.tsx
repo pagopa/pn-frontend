@@ -18,7 +18,6 @@ import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import Dashboard from '../Dashboard.page';
 
 const mockNavigateFn = vi.fn();
-const ADDITIONAL_LANG_PATH = '/bff/v1/pa/additional-languages';
 
 // mock imports
 vi.mock('react-router-dom', async () => ({
@@ -51,10 +50,6 @@ describe('Dashboard Page', async () => {
     mock = new MockAdapter(apiClient);
   });
 
-  beforeEach(() => {
-    mock.onGet(ADDITIONAL_LANG_PATH).reply(200, { additionalLanguages: [] });
-  });
-
   afterEach(() => {
     mock.reset();
     vi.clearAllMocks();
@@ -71,7 +66,7 @@ describe('Dashboard Page', async () => {
       result = render(<Dashboard />);
     });
     expect(result.container).toHaveTextContent(/empty-state/);
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const newNotificationBtn = result.queryByTestId('link-create-notification');
     fireEvent.click(newNotificationBtn!);
@@ -86,7 +81,7 @@ describe('Dashboard Page', async () => {
       result = render(<Dashboard />);
     });
     expect(result.container).toHaveTextContent(/empty-state/);
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const newNotificationBtn = result.queryByTestId('newNotificationBtn');
     expect(newNotificationBtn).toHaveTextContent('new-notification-button');
@@ -102,7 +97,7 @@ describe('Dashboard Page', async () => {
       result = render(<Dashboard />);
     });
     expect(result.container).toHaveTextContent(/empty-state/);
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const apiKeysBtn = result.queryByTestId('link-api-keys');
     fireEvent.click(apiKeysBtn!);
@@ -118,7 +113,7 @@ describe('Dashboard Page', async () => {
       result = render(<Dashboard />);
     });
     expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const filterForm = result.getByTestId('filter-form');
     expect(filterForm).toBeInTheDocument();
@@ -141,7 +136,7 @@ describe('Dashboard Page', async () => {
     await act(async () => {
       result = render(<Dashboard />);
     });
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
@@ -152,8 +147,8 @@ describe('Dashboard Page', async () => {
     const itemsPerPageList = screen.getAllByRole('menuitem');
     fireEvent.click(itemsPerPageList[1]!);
     await waitFor(() => {
-      expect(mock.history.get).toHaveLength(3);
-      expect(mock.history.get[2].url).toContain('/bff/v1/notifications/sent');
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/sent');
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(4);
@@ -174,7 +169,7 @@ describe('Dashboard Page', async () => {
     await act(async () => {
       result = render(<Dashboard />);
     });
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
@@ -185,8 +180,8 @@ describe('Dashboard Page', async () => {
     // the buttons are < 1 2 >
     fireEvent.click(pageButtons[2]);
     await waitFor(() => {
-      expect(mock.history.get).toHaveLength(3);
-      expect(mock.history.get[2].url).toContain('/bff/v1/notifications/sent');
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/sent');
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
@@ -206,7 +201,7 @@ describe('Dashboard Page', async () => {
     await act(async () => {
       result = render(<Dashboard />);
     });
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(4);
@@ -220,8 +215,8 @@ describe('Dashboard Page', async () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(mock.history.get).toHaveLength(3);
-      expect(mock.history.get[2].url).toContain('/bff/v1/notifications/sent');
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/sent');
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
@@ -230,7 +225,6 @@ describe('Dashboard Page', async () => {
 
   it('errors on api', async () => {
     mock.onGet(notificationsPath).reply(500);
-    console.log((mock as any).handlers.get)
 
     await act(async () => {
       result = render(
@@ -256,7 +250,7 @@ describe('Dashboard Page', async () => {
       result = render(<Dashboard />);
     });
     expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const filterForm = result.getByTestId('dialogToggle');
     expect(filterForm).toBeInTheDocument();
@@ -266,17 +260,5 @@ describe('Dashboard Page', async () => {
     expect(itemsPerPageSelector).toBeInTheDocument();
     const pageSelector = result.queryByTestId('pageSelector');
     expect(pageSelector).toBeInTheDocument();
-  });
-
-  it('should call API and appear button for settings language', async () => {
-    await act(async () => {
-      result = render(<Dashboard />);
-    });
-    
-    expect(mock.history.get).toHaveLength(2);
-    expect(mock.history.get[1].url).toContain(ADDITIONAL_LANG_PATH);
-
-    const settingsLangBtn = result.queryByTestId('settingsLangBtn');
-    expect(settingsLangBtn).toBeInTheDocument();
   });
 });

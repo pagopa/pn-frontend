@@ -97,6 +97,7 @@ describe('App', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/v1/institutions').reply(200, institutionsDTO);
     mock.onGet('/bff/v1/institutions/products').reply(200, productsDTO);
+    mock.onGet('/bff/v1/pa/additional-languages').reply(200, { additionalLanguages: [] });
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
@@ -108,7 +109,7 @@ describe('App', async () => {
     const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).toBeInTheDocument();
     expect(result.container).toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(4);
+    expect(mock.history.get).toHaveLength(5);
   });
 
   it('Sidemenu not included if error in API call to fetch TOS and Privacy', async () => {
@@ -116,13 +117,14 @@ describe('App', async () => {
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/institutions').reply(200, institutionsDTO);
     mock.onGet('/bff/v1/institutions/products').reply(200, productsDTO);
+    mock.onGet('/bff/v1/pa/additional-languages').reply(200, { additionalLanguages: [] });
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
     const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
     expect(result.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(4);
+    expect(mock.history.get).toHaveLength(5);
   });
 
   it('Sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
@@ -130,6 +132,7 @@ describe('App', async () => {
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/institutions').reply(200, institutionsDTO);
     mock.onGet('/bff/v1/institutions/products').reply(200, productsDTO);
+    mock.onGet('/bff/v1/pa/additional-languages').reply(200, { additionalLanguages: [] });
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -138,6 +141,6 @@ describe('App', async () => {
     const tosPage = result.queryByTestId('tos-acceptance-page');
     expect(tosPage).toBeInTheDocument();
     expect(result.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(4);
+    expect(mock.history.get).toHaveLength(5);
   });
 });

@@ -28,7 +28,7 @@ import { LinkType, ProductEntity } from '@pagopa/mui-italia';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { getInstitutions, getProductsOfInstitution, logout } from './redux/auth/actions';
+import { getAdditionalLanguages, getInstitutions, getProductsOfInstitution, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
@@ -182,6 +182,7 @@ const ActualApp = () => {
     if (sessionToken) {
       void dispatch(getCurrentAppStatus());
       void dispatch(getInstitutions());
+      void dispatch(getAdditionalLanguages());
     }
     if (idOrganization) {
       void dispatch(getProductsOfInstitution());

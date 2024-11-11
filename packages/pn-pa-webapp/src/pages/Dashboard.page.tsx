@@ -17,7 +17,6 @@ import DesktopNotifications from '../components/Notifications/DesktopNotificatio
 import MobileNotifications from '../components/Notifications/MobileNotifications';
 import NotificationSettingsDrawer from '../components/Notifications/NotificationSettingsDrawer';
 import * as routes from '../navigation/routes.const';
-import { getAdditionalLanguages } from '../redux/auth/actions';
 import { DASHBOARD_ACTIONS, getSentNotifications } from '../redux/dashboard/actions';
 import { setPagination } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -79,10 +78,6 @@ const Dashboard = () => {
   useEffect(() => {
     fetchNotifications();
   }, [fetchNotifications]);
-
-  useEffect(() => {
-    void dispatch(getAdditionalLanguages());
-  }, []);
 
   return (
     <Box p={3}>

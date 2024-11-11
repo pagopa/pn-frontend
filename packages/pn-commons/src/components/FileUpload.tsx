@@ -3,24 +3,22 @@ import { ChangeEvent, DragEvent, ReactNode, useEffect, useMemo, useReducer, useR
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import {
   Box,
   Button,
   FormHelperText,
-  Grid,
-  IconButton,
   Input,
   LinearProgress,
   Stack,
   SxProps,
+  TextField,
   Typography,
 } from '@mui/material';
+import { ButtonNaked, CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../hooks';
 import { calcSha256String, parseFileSize } from '../utility/file.utility';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
-import CustomTooltip from './CustomTooltip';
 
 type Props = {
   uploadText: string;
@@ -275,22 +273,6 @@ const FileUpload = ({
     }
   }, [attachmentExists]);
 
-  const HashToolTip = () => (
-    <CustomTooltip
-      openOnClick
-      tooltipContent={getLocalizedOrDefaultLabel(
-        'common',
-        'upload-file.hash-code-descr',
-        'Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file'
-      )}
-      sx={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '10px' }}
-    >
-      <IconButton>
-        <InfoOutlinedIcon color="action" />
-      </IconButton>
-    </CustomTooltip>
-  );
-
   return (
     <>
       <Box
@@ -374,7 +356,7 @@ const FileUpload = ({
                   {parseFileSize(fileData.file.size)}
                 </Typography>
               </Box>
-              <IconButton
+              <ButtonNaked
                 data-testid="removeDocument"
                 onClick={removeFileHandler}
                 aria-label={getLocalizedOrDefaultLabel(
@@ -384,40 +366,35 @@ const FileUpload = ({
                 )}
               >
                 <CloseIcon />
-              </IconButton>
+              </ButtonNaked>
             </Box>
-            {fileData.sha256 && (
-              <Box sx={{ marginTop: '20px' }}>
-                <Grid container wrap="nowrap" alignItems={'center'}>
-                  <Grid item xs="auto">
-                    <Typography id="file-upload-hash-code" display="inline" fontWeight={700}>
-                      {getLocalizedOrDefaultLabel('common', 'upload-file.hash-code', 'Codice hash')}
-                    </Typography>
-                  </Grid>
-                  <Grid item zeroMinWidth>
-                    <Typography
-                      sx={{
-                        marginLeft: '10px',
-                        marginTop: '3px',
-                        textOverflow: 'ellipsis',
-                        overflow: 'hidden',
-                        whiteSpace: 'nowrap',
-                        display: 'block',
-                      }}
-                      variant="caption"
-                    >
-                      {fileData.sha256}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs="auto">
-                    <HashToolTip />
-                  </Grid>
-                </Grid>
-              </Box>
-            )}
           </>
         )}
       </Box>
+      {fileData.sha256 && (
+        <Box sx={{ marginTop: '20px' }}>
+          <Typography variant="body2" fontWeight={600} fontSize={'16px'} color="text.secondary">
+            {getLocalizedOrDefaultLabel('common', 'upload-file.hash-code', 'Codice hash')}
+          </Typography>
+          <Typography variant="body2" fontSize={'14px'} marginTop={1}>
+            {getLocalizedOrDefaultLabel(
+              'common',
+              'upload-file.hash-code-descr',
+              'Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file'
+            )}
+          </Typography>
+          <TextField
+            fullWidth
+            value={fileData.sha256}
+            size="small"
+            margin="dense"
+            InputProps={{
+              readOnly: true,
+              endAdornment: <CopyToClipboardButton value={fileData.sha256} />,
+            }}
+          />
+        </Box>
+      )}
       {fileData.error && (
         <FormHelperText id="file-upload-error" error sx={{ mt: 0.5, mx: '14px' }}>
           {fileData.error}
