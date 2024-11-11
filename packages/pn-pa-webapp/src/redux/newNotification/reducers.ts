@@ -2,8 +2,10 @@ import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import {
+  BILINGUALISM_LANGUAGES,
   NewNotification,
   NewNotificationDocument,
+  NewNotificationLangOther,
   NewNotificationRecipient,
   NotificationFeePolicy,
   PaymentModel,
@@ -33,6 +35,7 @@ const initialState = {
     paymentMode: '' as PaymentModel,
     notificationFeePolicy: '' as NotificationFeePolicy,
     senderDenomination: '',
+    lang: 'it',
   } as NewNotification,
   groups: [] as Array<UserGroup>,
   isCompleted: false,
@@ -96,6 +99,21 @@ const newNotificationSlice = createSlice({
     setIsCompleted: (state) => {
       state.isCompleted = true;
     },
+    setNewNotificationLang: (state, action: PayloadAction<{ lang: string }>) => {
+      if (BILINGUALISM_LANGUAGES.includes(action.payload.lang)) {
+        state.notification = {
+          ...state.notification,
+          lang: NewNotificationLangOther,
+          additionalLang: action.payload.lang,
+        };
+        return;
+      }
+      state.notification = {
+        ...state.notification,
+        lang: 'it',
+        additionalLang: undefined,
+      };
+    },
     resetState: () => initialState,
   },
   extraReducers: (builder) => {
@@ -125,6 +143,7 @@ export const {
   setPaymentDocuments,
   resetState,
   setIsCompleted,
+  setNewNotificationLang,
 } = newNotificationSlice.actions;
 
 export default newNotificationSlice;

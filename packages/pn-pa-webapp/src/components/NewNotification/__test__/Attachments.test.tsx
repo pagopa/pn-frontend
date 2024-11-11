@@ -394,6 +394,16 @@ describe('Attachments Component with payment enabled', async () => {
     }
     expect(buttonAddAnotherDoc).not.toBeInTheDocument();
   });
+  
+  it('should appear info banner with additional languages', async () => {
+    // render component
+    await act(async () => {
+      result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} hasAdditionalLang={true}/>);
+    });
+    const form = result.container.querySelector('form');
+    const banner = within(form!).getByTestId('bannerAdditionalLanguages');
+    expect(banner).toBeInTheDocument();
+  });
 });
 
 describe('Attachments Component without payment enabled', () => {

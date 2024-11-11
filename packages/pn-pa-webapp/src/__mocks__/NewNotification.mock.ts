@@ -49,15 +49,12 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     digitalDomicile: 'mario.rossi@pec.it',
     address: 'via del corso',
     addressDetails: '',
-    at: '',
     houseNumber: '49',
     zip: '00122',
     municipality: 'Roma',
     municipalityDetails: '',
     province: 'Roma',
     foreignState: 'Italia',
-    showPhysicalAddress: true,
-    showDigitalDomicile: true,
   },
   {
     id: 'recipient.1',
@@ -72,15 +69,12 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     digitalDomicile: '',
     address: 'via delle cicale',
     addressDetails: '',
-    at: '',
     houseNumber: '21',
     zip: '00035',
     municipality: 'Anzio',
     municipalityDetails: '',
     province: 'Roma',
     foreignState: 'Italia',
-    showDigitalDomicile: false,
-    showPhysicalAddress: true,
   },
 ];
 
@@ -183,6 +177,7 @@ export const newNotification: NewNotification = {
   notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
   senderDenomination: userResponse.organization.name,
   senderTaxId: userResponse.organization.fiscal_code,
+  lang: 'it',
 };
 
 export const newNotificationEmpty: NewNotification = {
@@ -197,6 +192,7 @@ export const newNotificationEmpty: NewNotification = {
   taxonomyCode: '',
   notificationFeePolicy: '' as NotificationFeePolicy,
   senderDenomination: userResponse.organization.name,
+  lang: 'it',
 };
 
 export const newNotificationDTO: NewNotificationDTO = newNotificationMapper(newNotification);

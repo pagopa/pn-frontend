@@ -12,6 +12,7 @@ import {
   NewNotification,
   NewNotificationDTO,
   NewNotificationDocument,
+  NewNotificationLangOther,
   NewNotificationRecipient,
   PaymentModel,
   PaymentObject,
@@ -27,7 +28,6 @@ const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
     recipient.foreignState
   ) {
     const address = {
-      at: recipient.at,
       address: `${recipient.address} ${recipient.houseNumber}`,
       addressDetails: recipient.addressDetails,
       zip: recipient.zip,
@@ -55,9 +55,9 @@ const newNotificationRecipientsMapper = (
   recipients.map((recipient) => {
     const digitalDomicile = recipient.digitalDomicile
       ? {
-        type: recipient.type,
-        address: recipient.digitalDomicile,
-      }
+          type: recipient.type,
+          address: recipient.digitalDomicile,
+        }
       : undefined;
     const parsedRecipient: NotificationDetailRecipient = {
       denomination:
@@ -145,16 +145,44 @@ const newNotificationPaymentDocumentsMapper = (
   });
 
 export function newNotificationMapper(newNotification: NewNotification): NewNotificationDTO {
-  const clonedNotification = _.cloneDeep(newNotification);
+  const clonedNotification = _.omit(_.cloneDeep(newNotification), [
+    'paymentMode',
+    'payment',
+    'additionalAbstract',
+    'additionalLang',
+    'additionalSubject',
+    'lang',
+  ]);
+
   /* eslint-disable functional/immutable-data */
-  // remove useless data
-  delete clonedNotification.paymentMode;
-  delete clonedNotification.payment;
+  // bilingualism
+  if (newNotification.lang === NewNotificationLangOther) {
+    clonedNotification.subject = concatAdditionalContent(
+      newNotification.subject,
+      newNotification.additionalSubject
+    );
+    clonedNotification.abstract = concatAdditionalContent(
+      newNotification.abstract,
+      newNotification.additionalAbstract
+    );
+  }
+
+  const additionalLanguages =
+    newNotification.lang === NewNotificationLangOther && newNotification.additionalLang
+      ? [newNotification.additionalLang.toUpperCase()]
+      : undefined;
+
+  /* eslint-disable functional/immutable-data */
   const newNotificationParsed: NewNotificationDTO = {
     ...clonedNotification,
     recipients: [],
     documents: [],
   };
+
+  if (additionalLanguages) {
+    newNotificationParsed.additionalLanguages = additionalLanguages;
+  }
+
   // format recipients
   newNotificationParsed.recipients = newNotificationRecipientsMapper(
     newNotification.recipients,
@@ -169,6 +197,7 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
       newNotification.payment
     );
   }
+
   /* eslint-enable functional/immutable-data */
   return newNotificationParsed;
 }
@@ -195,3 +224,10 @@ export function getDuplicateValuesByKeys<T>(
     .filter((value, i, valueList) => valueList.indexOf(value) !== i)
     .filter((value, i, valueList) => valueList.indexOf(value) === i);
 }
+
+const concatAdditionalContent = (content?: string, additionalContent?: string): string => {
+  if (content && additionalContent) {
+    return `${content} • ${additionalContent}`;
+  }
+  return content || additionalContent || '';
+};
