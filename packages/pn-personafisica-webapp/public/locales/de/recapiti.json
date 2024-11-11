@@ -48,7 +48,7 @@
       }
     ],
     "sercq-send-info-pec-disclaimer": "Wenn du unter deinen Adressen bereits eine PEC angegeben hast, ersetzt das digitale Domizil diese als rechtsgültige Adresse auf SEND.",
-    "sercq-send-info-tos-privacy": "Durch Klicken auf „Aktivieren“ erklärst du, die <0>Nutzungsbedingungen des Dienstes</0> sowie die <1>Datenschutzerklärung</1> gelesen zu haben und diese zu akzeptieren.",
+    "sercq-send-info-tos": "Durch Klicken auf „Aktivieren“ erklärst du, die <0>Nutzungsbedingungen des Dienstes</0> sowie die <1>Datenschutzerklärung</1> gelesen zu haben und diese zu akzeptieren.",
     "sercq_send-added-successfully": "Digitales Domizil erfolgreich aktiviert",
     "sercq-send-enabled": "SEND ist dein digitales Domizil",
     "sercq-send-courtesy-title": "Wähle, wie du die Bescheide erhalten möchtest",

@@ -48,7 +48,7 @@
       }
     ],
     "sercq-send-info-pec-disclaimer": "Če ste med svojimi kontaktnimi podatki že vnesli PEC, ga digitalno prebivališče nadomesti kot uradni naslov za SEND.",
-    "sercq-send-info-tos-privacy": "S pritiskom na »Aktiviraj« izjavljate, da ste prebrali in se strinjate s <0>Pogoji storitve</0> in <1>Obvestilom o varovanju zasebnosti</1>.",
+    "sercq-send-info-tos": "S pritiskom na »Aktiviraj« izjavljate, da ste prebrali in se strinjate s <0>Pogoji storitve</0> in <1>Obvestilom o varovanju zasebnosti</1>.",
     "sercq_send-added-successfully": "Digitalno prebivališče je pravilno aktivirano",
     "sercq-send-enabled": "SEND je vaše digitalno prebivališče",
     "sercq-send-courtesy-title": "Izberite način prejemanja obvestil",
