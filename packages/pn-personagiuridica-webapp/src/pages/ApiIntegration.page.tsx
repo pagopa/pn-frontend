@@ -33,6 +33,7 @@ const ApiIntegration: React.FC = () => {
     fetchCheckIssuer();
   },[publicKeys]);
 
+  
   const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
 
   return (
