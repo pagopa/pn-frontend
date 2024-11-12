@@ -34,6 +34,7 @@ beforeAll(() => {
     APP_IO_SITE: 'https://www.fake.appio.it',
     APP_IO_ANDROID: 'https://www.fake.android-appio.it',
     APP_IO_IOS: 'https://www.fake.ios-appio.it',
+    DOD_DISABLED: false
   });
   initStore(false);
   initAxiosClients();

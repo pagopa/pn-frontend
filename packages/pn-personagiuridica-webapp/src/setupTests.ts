@@ -35,6 +35,8 @@ beforeAll(async () => {
     IS_PAYMENT_ENABLED: false,
     DELEGATIONS_TO_PG_ENABLED: true,
     LANDING_SITE_URL: 'https://www.dev.notifichedigitali.it',
+    DOD_DISABLED: false,
+    IS_B2B_ENABLED: true
   });
   initStore(false);
   initAxiosClients();
