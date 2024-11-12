@@ -76,7 +76,7 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
-  const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL } = getConfiguration();
+  const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL, DOWNTIME_EXAMPLE_LINK } = getConfiguration();
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -490,6 +490,7 @@ const NotificationDetail = () => {
                   fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
                   apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
                   disableDownloads={isCancelled.cancellationInTimeline}
+                  downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                 />
               </Stack>
             </Grid>
