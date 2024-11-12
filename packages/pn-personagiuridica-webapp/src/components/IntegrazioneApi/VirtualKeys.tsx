@@ -6,7 +6,7 @@ import { Button, Stack, Typography } from '@mui/material';
 import { EmptyState, KnownSentiment, formatDate, today } from '@pagopa-pn/pn-commons';
 
 import {
-  BffPublicKeysCheckIssuerResponse,
+  // BffPublicKeysCheckIssuerResponse,
   BffVirtualKeyStatusRequestStatusEnum,
   PublicKeysIssuerResponseIssuerStatusEnum,
   VirtualKey,
@@ -15,7 +15,7 @@ import {
 import { ModalApiKeyView } from '../../models/ApiKeys';
 import {
   changeVirtualApiKeyStatus,
-  checkPublicKeyIssuer,
+  // checkPublicKeyIssuer,
   createVirtualApiKey,
   deleteVirtualApiKey,
   getVirtualApiKeys,
@@ -35,16 +35,9 @@ const VirtualKeys: React.FC = () => {
   const { t } = useTranslation('integrazioneApi');
   const dispatch = useAppDispatch();
   const virtualKeys = useAppSelector((state: RootState) => state.apiKeysState.virtualKeys);
+  const issuerState = useAppSelector((state: RootState) => state.apiKeysState.issuerState);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const [modal, setModal] = useState<ModalType>({ view: ModalApiKeyView.NONE });
-
-  const [issuerState, setIssuerState] = useState<BffPublicKeysCheckIssuerResponse>({
-    tosAccepted: false,
-    issuer: {
-      isPresent: false,
-      issuerStatus: PublicKeysIssuerResponseIssuerStatusEnum.Inactive,
-    },
-  });
 
   const hasOneEnabledKey = virtualKeys.items.find(
     (key) =>
@@ -59,15 +52,6 @@ const VirtualKeys: React.FC = () => {
 
   const fetchVirtualKeys = useCallback(() => {
     void dispatch(getVirtualApiKeys({ showPublicKey: true }));
-  }, []);
-
-  const fetchCheckIssuer = useCallback(() => {
-    dispatch(checkPublicKeyIssuer())
-      .unwrap()
-      .then((response) => {
-        setIssuerState(response);
-      })
-      .catch(() => {});
   }, []);
 
   const handleGenerateVirtualKey = () => {
@@ -127,7 +111,7 @@ const VirtualKeys: React.FC = () => {
 
   useEffect(() => {
     fetchVirtualKeys();
-    fetchCheckIssuer();
+    // fetchCheckIssuer();
   }, []);
 
   return (
