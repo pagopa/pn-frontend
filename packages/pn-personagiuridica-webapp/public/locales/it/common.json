@@ -200,5 +200,9 @@
   },
   "conjunctions": {
     "or": "oppure"
+  },
+  "downtime_language_banner": {
+    "message": "Il testo originario di questi documenti è in lingua italiana. In caso di contrasto tra la versione italiana e le traduzioni in altre lingue, prevarranno il significato e le condizioni della lingua italiana.",
+    "link": "Consulta le traduzioni"
   }
 }

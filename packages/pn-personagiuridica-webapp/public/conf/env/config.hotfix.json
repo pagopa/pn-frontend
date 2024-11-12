@@ -16,6 +16,7 @@
   "DELEGATIONS_TO_PG_ENABLED": true,
   "WORK_IN_PROGRESS": false,
   "F24_DOWNLOAD_WAIT_TIME": 15000,
-  "IS_B2B_ENABLED": true,
-  "DOD_DISABLED": true
+  "IS_B2B_ENABLED": false,
+  "DOD_DISABLED": true,
+  "DOWNTIME_EXAMPLE_LINK": "/static/documents/LegalFactMalfunction.pdf"
 }

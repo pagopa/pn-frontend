@@ -6,7 +6,7 @@
       "ok": "Vse storitve SEND delujejo.",
       "not-ok": "Motnja je v teku. Za več podrobnosti si oglejte spodnjo tabelo."
     },
-    "lastCheckLegend": "Nazadnje posodobljeno - {{ lastCheckTimestamp }}"
+    "lastCheckLegend": "Zadnja posodobitev – {{ lastCheckTimestamp }}"
   },
   "downtimeList": {
     "title": "Zgodovina motenj",
