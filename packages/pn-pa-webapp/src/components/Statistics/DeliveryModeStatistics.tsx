@@ -51,7 +51,7 @@ const DeliveryModeStatistics: React.FC<Props> = ({
 
   return (
     <Paper sx={{ ...sx, p: 3, mb: 3 }} elevation={0} data-testid="deliveryMode">
-      <Typography variant="h6" component="h3">
+      <Typography variant="h6" component="h3" tabIndex={-1}>
         {t('delivery_mode.title')}
       </Typography>
       <Typography sx={{ my: 3 }} variant="body1" color="text.primary">

@@ -141,7 +141,7 @@ const VirtualKeys: React.FC = () => {
           mt: 8,
         }}
       >
-        <Typography variant="h6" sx={{ mb: { xs: 3, lg: 0 } }}>
+        <Typography variant="h6" sx={{ mb: { xs: 3, lg: 0 } }} tabIndex={-1}>
           {t('virtualKeys.title')}
         </Typography>
         {isCreationEnabled && (

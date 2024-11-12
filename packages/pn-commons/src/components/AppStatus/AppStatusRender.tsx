@@ -146,7 +146,7 @@ export const AppStatusRender = (props: Props) => {
         </ApiErrorWrapper>
 
         {/* Titolo elenco di downtime */}
-        <Typography variant="h6" sx={{ mt: '36px', mb: 2 }}>
+        <Typography variant="h6" sx={{ mt: '36px', mb: 2 }} tabIndex={-1}>
           {downtimeListTitle}
         </Typography>
 

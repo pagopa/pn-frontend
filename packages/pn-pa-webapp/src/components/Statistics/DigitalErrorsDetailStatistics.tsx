@@ -80,7 +80,7 @@ const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
     <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="digitalErrorsDetail">
       <Grid container direction={{ lg: 'row', xs: 'column' }} spacing={3}>
         <Grid item lg={5} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
-          <Typography variant="h6" component="h3">
+          <Typography variant="h6" component="h3" tabIndex={-1}>
             {t('digital_errors_detail.title')}
           </Typography>
           <Typography sx={{ my: 3 }} variant="body1" color="text.primary">

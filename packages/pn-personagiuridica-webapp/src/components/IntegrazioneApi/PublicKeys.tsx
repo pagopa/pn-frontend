@@ -91,7 +91,7 @@ const PublicKeys: React.FC = () => {
           mt: 5,
         }}
       >
-        <Typography variant="h6" sx={{ mb: { xs: 3, lg: 0 } }}>
+        <Typography variant="h6" sx={{ mb: { xs: 3, lg: 0 } }} tabIndex={-1}>
           {t('publicKeys.title')}
         </Typography>
         {!hasOneActiveKey && (
