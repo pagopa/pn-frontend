@@ -20,10 +20,10 @@ vi.mock('react-i18next', () => ({
 
 describe('testing profile page', () => {
   it('profile page renders properly', () => {
-    const { getByText } = render(<Profile />, {
+    const { getByRole, getByText } = render(<Profile />, {
       preloadedState: { userState: { user: userResponse } },
     });
-    const title = getByText('title');
+    const title = getByRole('heading', { name: 'title'});
     expect(title).toBeInTheDocument();
     const subtitle = getByText('subtitle');
     expect(subtitle).toBeInTheDocument();
