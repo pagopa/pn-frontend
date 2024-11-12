@@ -22,6 +22,8 @@ import { User } from './types';
 export enum AUTH_ACTIONS {
   GET_TOS_PRIVACY_APPROVAL = 'getTosPrivacyApproval',
   ACCEPT_TOS_PRIVACY = 'acceptTosPrivacy',
+  GET_ADDITIONAL_LANGUAGES = 'getAdditionalLanguages',
+  SET_ADDITIONAL_LANGUAGES = 'setAdditionalLanguages',
 }
 
 /**
@@ -138,6 +140,38 @@ export const acceptTosPrivacy = createAsyncThunk<void, Array<BffTosPrivacyAction
       const response = await tosPrivacyFactory.acceptTosPrivacyV2(body);
 
       return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+/** Retrieves user additional language */
+export const getAdditionalLanguages = createAsyncThunk(
+  AUTH_ACTIONS.GET_ADDITIONAL_LANGUAGES,
+  async (_, { rejectWithValue }) => {
+    try {
+      const infoPaFactory = InfoPaApiFactory(undefined, undefined, apiClient);
+      const { data } = await infoPaFactory.getAdditionalLang();
+      return {
+        additionalLanguages: data.additionalLanguages.map((lang) => lang.toLowerCase()),
+      };
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+/** Update user additional language */
+export const setAdditionalLanguages = createAsyncThunk(
+  AUTH_ACTIONS.SET_ADDITIONAL_LANGUAGES,
+  async (additionalLanguages: Array<string>, { rejectWithValue }) => {
+    try {
+      const infoPaFactory = InfoPaApiFactory(undefined, undefined, apiClient);
+      await infoPaFactory.changeAdditionalLang({
+        additionalLanguages: additionalLanguages.map((lang) => lang.toUpperCase()),
+      });
+      return { additionalLanguages };
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
