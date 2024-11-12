@@ -6,7 +6,6 @@ import { Button, Stack, Typography } from '@mui/material';
 import { EmptyState, KnownSentiment, formatDate, today } from '@pagopa-pn/pn-commons';
 
 import {
-  // BffPublicKeysCheckIssuerResponse,
   BffVirtualKeyStatusRequestStatusEnum,
   PublicKeysIssuerResponseIssuerStatusEnum,
   VirtualKey,
@@ -15,7 +14,6 @@ import {
 import { ModalApiKeyView } from '../../models/ApiKeys';
 import {
   changeVirtualApiKeyStatus,
-  // checkPublicKeyIssuer,
   createVirtualApiKey,
   deleteVirtualApiKey,
   getVirtualApiKeys,
