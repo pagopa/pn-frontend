@@ -5,36 +5,33 @@ import { Alert, Box, Divider, Stack, Typography } from '@mui/material';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
-import { ChannelType } from '../../models/contacts';
 import PecContactItem from './PecContactItem';
 import SercqSendContactItem from './SercqSendContactItem';
 
 const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultSERCQ_SENDAddress, defaultPECAddress, addresses } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const {
+    defaultPECAddress,
+    defaultSERCQ_SENDAddress,
+    specialPECAddresses,
+    specialSERCQ_SENDAddresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
   const { DOD_DISABLED } = getConfiguration();
 
-  const hasPartyDodEnabledAndValidatingPec = addresses.some(
-    (address_1) =>
-      address_1.channelType === ChannelType.PEC &&
-      !address_1.pecValid &&
-      addresses.some(
-        (address_2) =>
-          address_2.channelType === ChannelType.SERCQ_SEND &&
-          address_2.senderId === address_1.senderId
+  const hasDodEnabledAndValidatingPec =
+    (!defaultPECAddress?.pecValid && defaultSERCQ_SENDAddress) ||
+    specialSERCQ_SENDAddresses.some((sercqAddr) =>
+      specialPECAddresses.some(
+        (pecAddr) => !pecAddr.pecValid && pecAddr.senderId === sercqAddr.senderId
       )
-  );
+    );
 
-  const hasValidatingPecSpecialContact = addresses.some(
-    (address) => address.channelType === ChannelType.PEC && !address.pecValid
-  );
+  const hasValidatingPecSpecialContact = specialPECAddresses.some((address) => !address.pecValid);
 
   const verifyingPecAddress =
     (defaultPECAddress && !defaultPECAddress.pecValid) || hasValidatingPecSpecialContact;
 
-  const message = hasPartyDodEnabledAndValidatingPec
+  const message = hasDodEnabledAndValidatingPec
     ? 'legal-contacts.pec-validation-banner.dod-enabled-message'
     : 'legal-contacts.pec-validation-banner.dod-disabled-message';
 
@@ -54,15 +51,17 @@ const LegalContacts = () => {
           <Typography variant="inherit">{t(message, { ns: 'recapiti' })}</Typography>
         </Alert>
       )}
-      <Stack spacing={!defaultSERCQ_SENDAddress ? 2 : 0} mt={4} data-testid="legalContacts">
-        {!DOD_DISABLED && !defaultPECAddress?.pecValid && <SercqSendContactItem />}
-        {!DOD_DISABLED && !defaultSERCQ_SENDAddress && !defaultPECAddress && (
+      <Stack
+        direction={defaultSERCQ_SENDAddress ? 'column' : 'column-reverse'}
+        spacing={!defaultSERCQ_SENDAddress && !defaultPECAddress?.pecValid ? 2 : 0}
+        mt={4}
+        data-testid="legalContacts"
+      >
+        {!DOD_DISABLED && <SercqSendContactItem />}
+        {!DOD_DISABLED && !defaultSERCQ_SENDAddress && !defaultPECAddress?.pecValid && (
           <Divider>{t('conjunctions.or')}</Divider>
         )}
         <PecContactItem />
-        {!DOD_DISABLED && !defaultSERCQ_SENDAddress && defaultPECAddress?.pecValid && (
-          <SercqSendContactItem />
-        )}
       </Stack>
     </Box>
   );
