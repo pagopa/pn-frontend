@@ -186,7 +186,7 @@ describe('Statistics Page tests', () => {
     expect(digitalErrorsDetail).toBeInTheDocument();
   });
 
-  it.skip('filters Statistics Page', async () => {
+  it('filters Statistics Page', async () => {
     mock.onGet(/\/bff\/v1\/sender-dashboard\/dashboard-data-request*/).reply(200, rawResponseMock);
     const { getAllByTestId } = render(<Statistics />, {
       preloadedState: {
