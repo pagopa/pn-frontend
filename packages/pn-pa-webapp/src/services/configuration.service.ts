@@ -91,7 +91,9 @@ export function getConfiguration(): PaConfiguration {
     IS_MANUAL_SEND_ENABLED: Boolean(configurationFromFile.IS_MANUAL_SEND_ENABLED),
     IS_STATISTICS_ENABLED: Boolean(configurationFromFile.IS_STATISTICS_ENABLED),
     TAXONOMY_SEND_URL: configurationFromFile.TAXONOMY_SEND_URL,
-    DOWNTIME_EXAMPLE_LINK: configurationFromFile.DOWNTIME_EXAMPLE_LINK,
+    DOWNTIME_EXAMPLE_LINK:
+      (configurationFromFile.LANDING_SITE_URL || '') +
+      (configurationFromFile.DOWNTIME_EXAMPLE_LINK || ''),
   };
 }
 

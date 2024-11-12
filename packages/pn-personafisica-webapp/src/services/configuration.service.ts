@@ -98,7 +98,9 @@ export function getConfiguration(): PfConfiguration {
     WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
     F24_DOWNLOAD_WAIT_TIME: configurationFromFile.F24_DOWNLOAD_WAIT_TIME || 0,
     DOD_DISABLED: Boolean(configurationFromFile.DOD_DISABLED),
-    DOWNTIME_EXAMPLE_LINK: configurationFromFile.DOWNTIME_EXAMPLE_LINK || '',
+    DOWNTIME_EXAMPLE_LINK:
+      (configurationFromFile.LANDING_SITE_URL || '') +
+      (configurationFromFile.DOWNTIME_EXAMPLE_LINK || ''),
   };
 }
 

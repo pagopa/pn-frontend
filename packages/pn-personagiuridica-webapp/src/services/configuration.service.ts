@@ -105,7 +105,9 @@ export function getConfiguration(): PgConfiguration {
     F24_DOWNLOAD_WAIT_TIME: configurationFromFile.F24_DOWNLOAD_WAIT_TIME || 0,
     IS_B2B_ENABLED: Boolean(configurationFromFile.IS_B2B_ENABLED),
     DOD_DISABLED: Boolean(configurationFromFile.DOD_DISABLED),
-    DOWNTIME_EXAMPLE_LINK: configurationFromFile.DOWNTIME_EXAMPLE_LINK,
+    DOWNTIME_EXAMPLE_LINK:
+      (configurationFromFile.LANDING_SITE_URL || '') +
+      (configurationFromFile.DOWNTIME_EXAMPLE_LINK || ''),
   };
 }
 

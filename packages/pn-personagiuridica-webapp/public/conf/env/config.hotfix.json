@@ -18,5 +18,5 @@
   "F24_DOWNLOAD_WAIT_TIME": 15000,
   "IS_B2B_ENABLED": false,
   "DOD_DISABLED": true,
-  "DOWNTIME_EXAMPLE_LINK": "https://notifichedigitali.pagopa.it/static/documents/LegalFactMalfunction.pdf"
+  "DOWNTIME_EXAMPLE_LINK": "/static/documents/LegalFactMalfunction.pdf"
 }
