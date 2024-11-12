@@ -37,7 +37,7 @@
     "title": "SEND - Servizio Notifiche Digitali",
     "body": "Pour y accéder, vous devez accepter les conditions d’utilisation du service et lire la politique de confidentialité.",
     "redo-body": "Les conditions d’utilisation du service et la politique de confidentialité ont changé. Pour accéder, vous devez accepter et confirmer avoir lu les nouvelles versions.",
-    "switch-label": "J’accepte les <1>Conditions générales d’utilisation<1> et je confirme avoir lu la <0>Politique de confidentialité<0>",
+    "switch-label": "J’accepte les <1>Conditions générales d’utilisation</1> et je confirme avoir lu la <0>Politique de confidentialité</0>",
     "button": "Se connecter"
   },
   "table": {
@@ -82,7 +82,7 @@
   "not-logged": "Se connecter à SEND",
   "not-logged-subtitle": "Pour voir et gérer vos notifications, connectez-vous avec SPID ou CIE.",
   "not-found": {
-    "title": "404 : la page que vous cherchez n’existe pas La page que vous cherchez n’existe pas",
+    "title": "404 : la page que vous cherchez n’existe pas",
     "descpription": "Vous êtes ici par erreur, essayez d’utiliser la navigation."
   },
   "leaving-app": {

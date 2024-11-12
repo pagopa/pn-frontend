@@ -28,7 +28,7 @@
   "empty-state": {
     "filtered": "Nous n’avons pas trouvé de résultats : essayez avec des filtres différents. <0>Supprimer filtres</0>.",
     "delegate": "{{name}} n’a reçu aucune notification.",
-    "no-notifications": "Vous n’avez reçu aucune notification. <0>Allez à vos adresses<0> et entrez une ou plusieurs adresses de courtoisie : si vous recevez une notification, nous pourrons ainsi vous le communiquer.",
+    "no-notifications": "Vous n’avez reçu aucune notification. <0>Allez à vos adresses</0> et entrez une ou plusieurs adresses de courtoisie : si vous recevez une notification, nous pourrons ainsi vous le communiquer.",
     "aria-label-remove-filters": "Supprimer les filtres",
     "aria-label-route-contacts": "Allez à vos adresses"
   },
