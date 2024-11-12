@@ -11,6 +11,7 @@ import {
 } from '../../../models';
 import { RenderResult, initLocalizationForTest, render, within } from '../../../test-utils';
 import { formatDate, isToday } from '../../../utility';
+import { LANGUAGE_SESSION_KEY } from '../../../utility/multilanguage.utility';
 import NotificationRelatedDowntimes from '../NotificationRelatedDowntimes';
 
 const fakePalette = {
@@ -63,6 +64,7 @@ function renderComponent(
       notificationStatusHistory={history}
       apiId="getNotificationDowntimeHistory"
       fetchDowntimeLegalFactDocumentDetails={() => {}}
+      downtimeExampleLink=""
     />,
     setApiError ? mockErrorState : undefined
   );
@@ -390,5 +392,25 @@ describe('NotificationRelatedDowntimes component', () => {
     expect(fetchDowntimeEventsMock).toHaveBeenCalledTimes(0);
     const mainComponent = queryByTestId('notification-related-downtimes-main');
     expect(mainComponent).not.toBeInTheDocument();
+  });
+
+  it('should show downtime language banner if language is not italian', () => {
+    sessionStorage.setItem(LANGUAGE_SESSION_KEY, 'en');
+    const { getByTestId } = renderComponent(
+      beDowntimeHistoryWithIncidents.result,
+      notificationDTO.notificationStatusHistory
+    );
+    const languageBanner = getByTestId('downtimeLanguageBanner');
+    expect(languageBanner).toBeInTheDocument();
+  });
+
+  it('should not show downtime language banner if language is italian', () => {
+    sessionStorage.setItem(LANGUAGE_SESSION_KEY, 'it');
+    const { queryByTestId } = renderComponent(
+      beDowntimeHistoryWithIncidents.result,
+      notificationDTO.notificationStatusHistory
+    );
+    const languageBanner = queryByTestId('downtimeLanguageBanner');
+    expect(languageBanner).not.toBeInTheDocument();
   });
 });
