@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [2.8.1](https://github.com/pagopa/pn-frontend/compare/v2.8.1-RC.1...v2.8.1) (2024-10-30)
+## [2.8.2](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.1...v2.8.2) (2024-11-07)
 
 **Note:** Version bump only for package pn-frontend
 
@@ -11,11 +11,22 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [2.8.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0...v2.8.1-RC.0) (2024-10-28)
+## [2.8.2-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.0...v2.8.2-RC.1) (2024-11-04)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+## [2.8.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0...v2.8.2-RC.0) (2024-11-04)
 
 
 ### Bug Fixes
 
+* **PN-13161:** add cache-control policies when fetching config.json ([d7718cb](https://github.com/pagopa/pn-frontend/commit/d7718cb030695539e892149846b11c2c59fa33b3))
+* wrong cast for env variable ([329a67f](https://github.com/pagopa/pn-frontend/commit/329a67fda085015783d1d7f95c4a81e8f37fa009))
+* wrong casting on env variable and fix wrong tests ([f596c3c](https://github.com/pagopa/pn-frontend/commit/f596c3cfdf588945467e5dda7af5a6d08d4c6c52))
 * **PN-12757:** correct copy when timeline status is analog failure workflow ([#1351](https://github.com/pagopa/pn-frontend/issues/1351)) ([43e7b6e](https://github.com/pagopa/pn-frontend/commit/43e7b6ed5064d7ebaad51fbeba3b326342abad1c))
 * **PN-12934:** now SercqSendCourtesyDialog does not appear when adding Sercq for a specific Party ([#1367](https://github.com/pagopa/pn-frontend/issues/1367)) ([8c15489](https://github.com/pagopa/pn-frontend/commit/8c15489c3edec1f64de0b63fc73ce65c1a74a3df))
 * **PN-12966:** set maximum length for public key value ([#1365](https://github.com/pagopa/pn-frontend/issues/1365)) ([1c5cc00](https://github.com/pagopa/pn-frontend/commit/1c5cc0072e3c40560128611017c1a3dd005dc7c6))
