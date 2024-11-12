@@ -76,8 +76,7 @@ export const getSentNotificationDocument = createAsyncThunk<
         params.iun,
         params.documentType,
         params.documentIdx,
-        params.documentId,
-        params.documentCategory
+        params.documentId
       );
       return response.data as NotificationDocumentResponse;
     } catch (e) {

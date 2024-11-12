@@ -15,10 +15,12 @@ import { PNRole, PartyRole, Role } from '../../models/user';
 import {
   acceptTosPrivacy,
   exchangeToken,
+  getAdditionalLanguages,
   getInstitutions,
   getProductsOfInstitution,
   getTosPrivacyApproval,
   logout,
+  setAdditionalLanguages,
 } from './actions';
 import { Organization, User } from './types';
 
@@ -95,6 +97,7 @@ const userSlice = createSlice({
     },
     institutions: [] as Array<PartyEntity>,
     productsOfInstitution: [] as Array<ProductEntity>,
+    additionalLanguages: [] as Array<string>,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -163,6 +166,12 @@ const userSlice = createSlice({
     });
     builder.addCase(getProductsOfInstitution.fulfilled, (state, action) => {
       state.productsOfInstitution = action.payload;
+    });
+    builder.addCase(getAdditionalLanguages.fulfilled, (state, action) => {
+      state.additionalLanguages = action.payload.additionalLanguages;
+    });
+    builder.addCase(setAdditionalLanguages.fulfilled, (state, action) => {
+      state.additionalLanguages = action.payload.additionalLanguages;
     });
   },
 });

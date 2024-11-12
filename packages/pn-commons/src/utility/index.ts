@@ -40,7 +40,7 @@ import { filtersApplied, getValidValue, sortArray } from './genericFunctions.uti
 import { IUN_regex, formatIun } from './iun.utility';
 import { lazyRetry } from './lazyRetry.utility';
 import { initLocalization } from './localization.utility';
-import { getSessionLanguage, setSessionLanguage } from './multilanguage.utility';
+import { getLangCode, hashDetectorLookup, setSessionLanguage } from './multilanguage.utility';
 import {
   getF24Payments,
   getLegalFactLabel,
@@ -148,8 +148,9 @@ export {
   validateCurrentStatus,
   validateLegaFact,
   convertHoursToDays,
-  getSessionLanguage,
+  getLangCode,
   setSessionLanguage,
+  hashDetectorLookup,
   screenshot,
   getDaysFromDateRange,
   getWeeksFromDateRange,

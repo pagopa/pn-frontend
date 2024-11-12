@@ -7,7 +7,9 @@ import { AppStatusData, GetDowntimeHistoryParams, KnownSentiment } from '../../m
 import { PaginationData } from '../../models/Pagination';
 import { formatDateTime } from '../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import { getSessionLanguage } from '../../utility/multilanguage.utility';
 import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';
+import DowntimeLanguageBanner from '../DowntimeLanguageBanner';
 import EmptyState from '../EmptyState';
 import CustomPagination from '../Pagination/CustomPagination';
 import TitleBox from '../TitleBox';
@@ -24,19 +26,20 @@ type Props = {
   setPagination: (data: PaginationData) => void;
   actionIds: { GET_CURRENT_STATUS: string; GET_DOWNTIME_HISTORY: string };
   handleTrackDownloadCertificateOpposable3dparties?: () => void;
+  downtimeExampleLink: string;
 };
 
-export const AppStatusRender = (props: Props) => {
-  const {
-    appStatus,
-    actionIds,
-    fetchCurrentStatus,
-    fetchDowntimeLogPage,
-    clearPagination,
-    setPagination,
-    fetchDowntimeLegalFactDocumentDetails,
-    handleTrackDownloadCertificateOpposable3dparties,
-  } = props;
+export const AppStatusRender: React.FC<Props> = ({
+  appStatus,
+  actionIds,
+  fetchCurrentStatus,
+  fetchDowntimeLogPage,
+  clearPagination,
+  setPagination,
+  fetchDowntimeLegalFactDocumentDetails,
+  handleTrackDownloadCertificateOpposable3dparties,
+  downtimeExampleLink,
+}) => {
   const { currentStatus, downtimeLogPage, pagination: paginationData } = appStatus;
   const [isInitialized, setIsInitialized] = useState(false);
   const isMobile = useIsMobile();
@@ -123,6 +126,10 @@ export const AppStatusRender = (props: Props) => {
       <Stack direction="column">
         {/* Titolo status */}
         <TitleBox title={title} variantTitle="h4" subTitle={subtitle} variantSubTitle="body1" />
+
+        {getSessionLanguage() !== 'it' && (
+          <DowntimeLanguageBanner downtimeExampleLink={downtimeExampleLink} />
+        )}
 
         {/* Dati relativi al status */}
         <ApiErrorWrapper

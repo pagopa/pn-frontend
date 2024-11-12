@@ -1,0 +1,20 @@
+{
+  "title": "Comment pouvons-nous vous aider ?",
+  "sub-title": "Veuillez indiquer l’adresse mail à laquelle vous souhaitez recevoir les réponses de l’assistance.",
+  "form": {
+    "email": "Saisissez l’adresse mail",
+    "confirm-email": "Confirmez l’adresse mail",
+    "errors": {
+      "not-valid": "L’adresse mail est invalide",
+      "required": "Champ obligatoire",
+      "not-the-same": "L’adresse mail de confirmation n’est pas la même que l’adresse mail saisie"
+    }
+  },
+  "disclaimer": "En poursuivant, vous déclarez avoir lu la <0>Politique de Confidentialité Assistance</0>",
+  "exit-title": "Voulez-vous vraiment sortir ?",
+  "exit-message": "Si vous sortez, votre demande d’assistance sera perdue.",
+  "messages": {
+    "generic-title": "Une erreur inattendue s’est produite",
+    "generic-message": "Veuillez réessayer plus tard"
+  }
+}

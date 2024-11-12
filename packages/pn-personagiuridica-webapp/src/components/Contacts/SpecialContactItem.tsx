@@ -21,16 +21,18 @@ type Props = {
 };
 
 interface AddMoreButtonProps {
+  disabled?: boolean;
   onClick: () => void;
 }
 
-const AddMoreButton: React.FC<AddMoreButtonProps> = ({ onClick }) => {
+const AddMoreButton: React.FC<AddMoreButtonProps> = ({ disabled = false, onClick }) => {
   const { t } = useTranslation();
   return (
     <ButtonNaked
       data-testid="addMoreSpecialContacts"
       color="primary"
       size="medium"
+      disabled={disabled}
       onClick={onClick}
     >
       {t('button.add')}
@@ -66,6 +68,11 @@ const SpecialContactItem: React.FC<Props> = ({
       senderName: addresses[0].senderName,
     });
   };
+
+  const hasPecInValidationForEntity = (senderId: string) =>
+    !!addresses.find(
+      (addr) => addr.channelType === ChannelType.PEC && !addr.pecValid && addr.senderId === senderId
+    );
 
   const renderAddress = (address: DigitalAddress) => {
     const { value, channelType, senderId, senderName, pecValid } = address;
@@ -123,6 +130,7 @@ const SpecialContactItem: React.FC<Props> = ({
                   })
                 }
                 size="medium"
+                disabled={hasPecInValidationForEntity(senderId)}
               >
                 {t(`button.${isSercq ? 'disable' : 'elimina'}`, { ns: 'common' })}
               </ButtonNaked>
@@ -158,7 +166,10 @@ const SpecialContactItem: React.FC<Props> = ({
       {addresses.map((address) => renderAddress(address))}
       {shouldShowAddButton && (
         <Box sx={{ flexGrow: 1, textAlign: 'right' }}>
-          <AddMoreButton onClick={handleClickAddButton} />
+          <AddMoreButton
+            onClick={handleClickAddButton}
+            disabled={hasPecInValidationForEntity(addresses[0].senderId)}
+          />
         </Box>
       )}
     </Stack>

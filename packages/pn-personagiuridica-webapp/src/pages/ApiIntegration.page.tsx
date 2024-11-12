@@ -10,13 +10,17 @@ import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrap
 import { PNRole } from '../redux/auth/types';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import { PublicKeyStatus } from '../generated-client/pg-apikeys';
 
 const ApiIntegration: React.FC = () => {
   const { t } = useTranslation(['integrazioneApi']);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
+  const publicKeys = useAppSelector((state: RootState) => state.apiKeysState.publicKeys);
+  const hasValidKey =publicKeys.items.some((key) => key.status === PublicKeyStatus.Active ||  key.status === PublicKeyStatus.Rotated);
 
+  
   const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
 
   return (
@@ -29,7 +33,7 @@ const ApiIntegration: React.FC = () => {
           variantSubTitle="body1"
         />
         {isAdminWithoutGroups && <PublicKeys />}
-        <VirtualKeys />
+        {hasValidKey && <VirtualKeys />}
       </Box>
     </LoadingPageWrapper>
   );

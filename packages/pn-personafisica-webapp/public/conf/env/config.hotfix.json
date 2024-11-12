@@ -7,7 +7,6 @@
   "ONE_TRUST_PP": "365c84c5-9329-4ec5-89f5-e53572eda132",
   "ONE_TRUST_TOS": "b0da531e-8370-4373-8bd2-61ddc89e7fa6",
   "ONE_TRUST_SERCQ_SEND_DRAFT_MODE": true,
-  "ONE_TRUST_PP_SERCQ_SEND": "87929435-61fe-4b02-9a43-3fb7b1c0d9c6",
   "ONE_TRUST_TOS_SERCQ_SEND": "cfb44399-cac3-4c41-b225-b7c0372474c9",
   "OT_DOMAIN_ID": "29cc1c86-f2ef-494d-8242-9bec8009cd29-test",
   "PAGOPA_HELP_EMAIL": "destinatari-send@assistenza.pagopa.it",
@@ -19,5 +18,6 @@
   "APP_IO_SITE": "https://io.italia.it/",
   "APP_IO_ANDROID": "https://play.google.com/store/apps/details?id=it.pagopa.io.app",
   "APP_IO_IOS": "https://apps.apple.com/it/app/io/id1501681835",
-  "DOD_DISABLED": false
+  "DOD_DISABLED": true,
+  "DOWNTIME_EXAMPLE_LINK": "/static/documents/LegalFactMalfunction.pdf"
 }
