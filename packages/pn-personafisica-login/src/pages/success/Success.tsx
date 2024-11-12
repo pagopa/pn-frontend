@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AppRouteParams, sanitizeString } from '@pagopa-pn/pn-commons';
+import { AppRouteParams, getLangCode, sanitizeString } from '@pagopa-pn/pn-commons';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
@@ -29,7 +29,7 @@ const SuccessPage = () => {
     // the findIndex check is needed to prevent xss attacks
     if (redirectUrl && [PF_URL].findIndex((url) => url && redirectUrl.startsWith(url)) > -1) {
       window.location.replace(
-        `${redirectUrl}${sanitizeString(token)}&lang=${sanitizeString(i18n.language)}`
+        `${redirectUrl}${sanitizeString(token)}&lang=${sanitizeString(getLangCode(i18n.language))}`
       );
     }
   }, [aar, token, i18n.language]);
