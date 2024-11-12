@@ -26,7 +26,7 @@
   "delete-warning": "Si vous supprimez définitivement l’API key <strong>{{apiKeyName}}</strong>, elle ne pourra plus être activée et utilisée.",
   "copy-api-key-info": "Copiez le code et entrez-le dans la plateforme de l’organisme.",
   "empty-message": "Aucune API key n’a encore été générée pour cet organisme. <0>Générer API Key</0>.",
-  "empty-action-label": "Générer Api Key",
+  "empty-action-label": "Générer API Key",
   "group-id": "Group ID",
   "api-key-copied": "API key copiée",
   "group-id-copied": "Group ID copié",
