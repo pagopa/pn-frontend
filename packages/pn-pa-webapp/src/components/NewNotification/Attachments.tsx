@@ -266,7 +266,10 @@ const Attachments: React.FC<Props> = ({
       },
       false
     );
-    await formik.setFieldTouched(`${id}.file`, true, true);
+
+    setTimeout(async () => {
+      await formik.setFieldTouched(`${id}.file`, true, true);
+    });
   };
 
   const removeFileHandler = async (id: string, index: number) => {
