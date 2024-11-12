@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.9.0-RC.0...v2.9.0-RC.1) (2024-11-12)
+
+
+### Features
+
+* **PN-12891:** set one_trust_draft_mode on true in dev and test ([ca529b6](https://github.com/pagopa/pn-frontend/commit/ca529b681f76f0d1e6dba4f95c3fd20b1168530d))
+* **pn-12896:** added drawer to set lang preference ([#1378](https://github.com/pagopa/pn-frontend/issues/1378)) ([2c2870e](https://github.com/pagopa/pn-frontend/commit/2c2870ec4b6b378a23989c4c0e030aec0a073ebb))
+* **pn-12898:** add tests for new form components ([#1394](https://github.com/pagopa/pn-frontend/issues/1394)) ([9528eae](https://github.com/pagopa/pn-frontend/commit/9528eae7fccaa7acf6a8ebce56387927f33d704d))
+* **pn-13039:** refactor 2nd step "recipient" in notification creation ([#1387](https://github.com/pagopa/pn-frontend/issues/1387)) ([f5e7604](https://github.com/pagopa/pn-frontend/commit/f5e7604030a1e57b121f60188cb7b64a6e614fbf))
+* **pn-13040:** refactor 3rd step "attachments" in notification creation ([#1392](https://github.com/pagopa/pn-frontend/issues/1392)) ([9ae9cc9](https://github.com/pagopa/pn-frontend/commit/9ae9cc99cdea61f976a4a0170b0e162f254619f2))
+* **pn-13043:** pre-select additionalLanguage from settings in the new notification wizard ([#1401](https://github.com/pagopa/pn-frontend/issues/1401)) ([e918ae2](https://github.com/pagopa/pn-frontend/commit/e918ae20f0c03111d1af8555a057472f449bf2cb))
+* **PN-13234:** set true ONE_TRUST_DRAFT_MODE in uat ([b5a832c](https://github.com/pagopa/pn-frontend/commit/b5a832ca06e12415b619b9822b1d2abd1e3f20d1))
+
+
+
+## [2.8.2](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.1...v2.8.2) (2024-11-07)
+
+
+
+## [2.8.2-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.0...v2.8.2-RC.1) (2024-11-04)
+
+
+
+## [2.8.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.1...v2.8.2-RC.0) (2024-11-04)
+
+
+### Features
+
+* **PN-11636:** handle multi-language on PA ([7e94525](https://github.com/pagopa/pn-frontend/commit/7e945250434abb0614a2f00d4049305b0a2cfbd2))
+* **PN-12889:** custom language detector in PF/PG/PA ([#1353](https://github.com/pagopa/pn-frontend/issues/1353)) ([1d65783](https://github.com/pagopa/pn-frontend/commit/1d6578364fdfbda063bacfa330fbfa87ed0ae476))
+* **PN-12898:** additional language in notification manual creation ([#1366](https://github.com/pagopa/pn-frontend/issues/1366)) ([8c5447f](https://github.com/pagopa/pn-frontend/commit/8c5447f4a62f296c4652a253b7907075ed5403ce))
+* **PN-1380:** add bilingualism banner in attachments tab ([#1380](https://github.com/pagopa/pn-frontend/issues/1380)) ([e2c6a6d](https://github.com/pagopa/pn-frontend/commit/e2c6a6d5369d1adb6baf81a4c787328adda44d30))
+
+
+
+
+
 # [2.9.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.1...v2.9.0-RC.0) (2024-11-07)
 
 ### Features

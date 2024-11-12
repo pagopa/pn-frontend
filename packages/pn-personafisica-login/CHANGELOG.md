@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.9.0-RC.0...v2.9.0-RC.1) (2024-11-12)
+
+
+### Bug Fixes
+
+* validate lang in redirect url ([cb09bba](https://github.com/pagopa/pn-frontend/commit/cb09bba4a527de1dd72c9bc2641a61e0e27426cd))
+
+
+
+## [2.8.2](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.1...v2.8.2) (2024-11-07)
+
+
+
+## [2.8.2-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.0...v2.8.2-RC.1) (2024-11-04)
+
+
+
+## [2.8.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.1...v2.8.2-RC.0) (2024-11-04)
+
+
+### Features
+
+* **PN-11636:** handle multi-language on PA ([7e94525](https://github.com/pagopa/pn-frontend/commit/7e945250434abb0614a2f00d4049305b0a2cfbd2))
+* **PN-12889:** custom language detector in PF/PG/PA ([#1353](https://github.com/pagopa/pn-frontend/issues/1353)) ([1d65783](https://github.com/pagopa/pn-frontend/commit/1d6578364fdfbda063bacfa330fbfa87ed0ae476))
+
+
+
+
+
 # [2.9.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.1...v2.9.0-RC.0) (2024-11-07)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login

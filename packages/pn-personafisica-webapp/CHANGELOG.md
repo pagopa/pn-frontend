@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.9.0-RC.0...v2.9.0-RC.1) (2024-11-12)
+
+
+### Features
+
+* **PN-13234:** set one_trust_draft_mode to true in test and dev config ([0b6719b](https://github.com/pagopa/pn-frontend/commit/0b6719bd6e7d61433ae11587800544f5287f8733))
+* **PN-13234:** set true ONE_TRUST_DRAFT_MODE in uat ([b5a832c](https://github.com/pagopa/pn-frontend/commit/b5a832ca06e12415b619b9822b1d2abd1e3f20d1))
+
+
+
+## [2.8.2](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.1...v2.8.2) (2024-11-07)
+
+
+
+## [2.8.2-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.0...v2.8.2-RC.1) (2024-11-04)
+
+
+
+## [2.8.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.1...v2.8.2-RC.0) (2024-11-04)
+
+
+### Bug Fixes
+
+* wrong cast for env variable ([329a67f](https://github.com/pagopa/pn-frontend/commit/329a67fda085015783d1d7f95c4a81e8f37fa009))
+
+
+### Features
+
+* **PN-12889:** custom language detector in PF/PG/PA ([#1353](https://github.com/pagopa/pn-frontend/issues/1353)) ([1d65783](https://github.com/pagopa/pn-frontend/commit/1d6578364fdfbda063bacfa330fbfa87ed0ae476))
+
+
+
+
+
 # [2.9.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.1...v2.9.0-RC.0) (2024-11-07)
 
 ### Bug Fixes

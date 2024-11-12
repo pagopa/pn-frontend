@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.9.0-RC.0...v2.9.0-RC.1) (2024-11-12)
+
+
+### Features
+
+* **pn-12896:** added drawer to set lang preference ([#1378](https://github.com/pagopa/pn-frontend/issues/1378)) ([2c2870e](https://github.com/pagopa/pn-frontend/commit/2c2870ec4b6b378a23989c4c0e030aec0a073ebb))
+* **pn-13039:** refactor 2nd step "recipient" in notification creation ([#1387](https://github.com/pagopa/pn-frontend/issues/1387)) ([f5e7604](https://github.com/pagopa/pn-frontend/commit/f5e7604030a1e57b121f60188cb7b64a6e614fbf))
+* **pn-13040:** refactor 3rd step "attachments" in notification creation ([#1392](https://github.com/pagopa/pn-frontend/issues/1392)) ([9ae9cc9](https://github.com/pagopa/pn-frontend/commit/9ae9cc99cdea61f976a4a0170b0e162f254619f2))
+
+
+
+## [2.8.2](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.1...v2.8.2) (2024-11-07)
+
+
+
+## [2.8.2-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.0...v2.8.2-RC.1) (2024-11-04)
+
+
+
+## [2.8.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.1...v2.8.2-RC.0) (2024-11-04)
+
+
+### Bug Fixes
+
+* **PN-13161:** add cache-control policies when fetching config.json ([d7718cb](https://github.com/pagopa/pn-frontend/commit/d7718cb030695539e892149846b11c2c59fa33b3))
+
+
+### Features
+
+* **PN-11636:** handle multi-language on PA ([7e94525](https://github.com/pagopa/pn-frontend/commit/7e945250434abb0614a2f00d4049305b0a2cfbd2))
+* **PN-12889:** custom language detector in PF/PG/PA ([#1353](https://github.com/pagopa/pn-frontend/issues/1353)) ([1d65783](https://github.com/pagopa/pn-frontend/commit/1d6578364fdfbda063bacfa330fbfa87ed0ae476))
+
+
+
+
+
 # [2.9.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.1...v2.9.0-RC.0) (2024-11-07)
 
 ### Features
