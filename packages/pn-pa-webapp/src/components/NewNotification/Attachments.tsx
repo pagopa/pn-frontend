@@ -251,7 +251,6 @@ const Attachments: React.FC<Props> = ({
     file?: File,
     sha256?: { hashBase64: string; hashHex: string }
   ) => {
-    // await formik.setFieldTouched(`${id}.file`, true, true);
     await formik.setFieldValue(
       id,
       {
