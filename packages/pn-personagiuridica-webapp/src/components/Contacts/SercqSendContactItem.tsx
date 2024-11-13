@@ -257,6 +257,8 @@ const SercqSendContactItem: React.FC = () => {
         pt: defaultPECAddress?.pecValid ? 0 : 3,
         borderTopLeftRadius: defaultPECAddress?.pecValid ? 0 : 4,
         borderTopRightRadius: defaultPECAddress?.pecValid ? 0 : 4,
+        borderBottomLeftRadius: value ? 0 : 4,
+        borderBottomRightRadius: value ? 0 : 4,
       }}
     >
       <Box data-testid={`default_sercqSendContact`} style={{ width: isMobile ? '100%' : '50%' }}>

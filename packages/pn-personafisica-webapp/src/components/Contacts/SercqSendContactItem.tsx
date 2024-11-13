@@ -1,3 +1,4 @@
+import { de } from 'date-fns/locale';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -105,7 +106,7 @@ const SercqSendContactItem: React.FC = () => {
         tosPrivacy.current = consent;
         const source =
           externalEvent?.destination === ChannelType.SERCQ_SEND
-            ? (externalEvent?.source ?? ContactSource.RECAPITI)
+            ? externalEvent?.source ?? ContactSource.RECAPITI
             : ContactSource.RECAPITI;
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
           senderId: 'default',
@@ -265,7 +266,7 @@ const SercqSendContactItem: React.FC = () => {
     if (isPFEvent(eventKey)) {
       const source =
         externalEvent?.destination === ChannelType.SERCQ_SEND
-          ? (externalEvent?.source ?? ContactSource.RECAPITI)
+          ? externalEvent?.source ?? ContactSource.RECAPITI
           : ContactSource.RECAPITI;
       PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], {
         senderId: 'default',
@@ -328,6 +329,8 @@ const SercqSendContactItem: React.FC = () => {
         pt: defaultPECAddress?.pecValid ? 0 : 3,
         borderTopLeftRadius: defaultPECAddress?.pecValid ? 0 : 4,
         borderTopRightRadius: defaultPECAddress?.pecValid ? 0 : 4,
+        borderBottomLeftRadius: value ? 0 : 4,
+        borderBottomRightRadius: value ? 0 : 4,
       }}
     >
       <Box data-testid={`default_sercqSendContact`} style={{ width: isMobile ? '100%' : '50%' }}>

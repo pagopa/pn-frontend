@@ -52,7 +52,7 @@ const LegalContacts = () => {
         </Alert>
       )}
       <Stack
-        direction={defaultSERCQ_SENDAddress ? 'column' : 'column-reverse'}
+        direction={defaultPECAddress?.pecValid ? 'column-reverse' : 'column'}
         spacing={!defaultSERCQ_SENDAddress && !defaultPECAddress?.pecValid ? 2 : 0}
         mt={4}
         data-testid="legalContacts"
