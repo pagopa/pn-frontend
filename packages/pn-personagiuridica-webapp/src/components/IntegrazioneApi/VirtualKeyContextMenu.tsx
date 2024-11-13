@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Block, Delete, MoreVert, RemoveRedEye, Sync } from '@mui/icons-material';
@@ -25,6 +25,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
   const isUserAdmin = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]) && !currentUser.hasGroup;
+  const menuElement : Array<null | ReactNode> = [];
 
   const isPersonalKey =
     !isUserAdmin || 
@@ -56,9 +57,73 @@ const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }
         key.user?.fiscalCode === data.user?.fiscalCode && key.status === VirtualKeyStatus.Blocked
     ) && data.status !== VirtualKeyStatus.Rotated;
 
+    const handleMenu = () =>{
+      if(shouldShowRotateButton()){
+        // eslint-disable-next-line functional/immutable-data
+        menuElement.push((
+          <MenuItem
+            id="button-rotate"
+            data-testid="buttonRotate"
+            onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}
+          >
+            <Sync sx={{ mr: 1 }} />
+            {t('context-menu.rotate')}
+          </MenuItem>
+        ));
+      }
+      if(shouldShowBlockButton){
+        // eslint-disable-next-line functional/immutable-data
+        menuElement.push((
+          <MenuItem
+            id="button-block"
+            data-testid="buttonBlock"
+            onClick={() => handleModalClick(ModalApiKeyView.BLOCK, apiKeyId)}
+          >
+            <Block sx={{ mr: 1 }} />
+            {t('context-menu.block')}
+          </MenuItem>
+        ));
+      }
+      if((!isUserAdmin || isPersonalKey)){
+        // eslint-disable-next-line functional/immutable-data
+        menuElement.push((
+          <MenuItem
+            id="button-view"
+            data-testid="buttonView"
+            onClick={() => handleModalClick(ModalApiKeyView.VIEW, apiKeyId)}
+          >
+            <RemoveRedEye sx={{ mr: 1 }} />
+            {t('context-menu.view')}
+          </MenuItem>
+        ));
+      }
+      if(data.status !== VirtualKeyStatus.Enabled){
+        // eslint-disable-next-line functional/immutable-data
+        menuElement.push((
+          <MenuItem
+            id="button-delete"
+            data-testid="buttonDelete"
+            onClick={() => handleModalClick(ModalApiKeyView.DELETE, apiKeyId)}
+            sx={{ color: 'error.dark' }}
+          >
+            <Delete sx={{ mr: 1 }} />
+            {t('button.elimina', { ns: 'common' })}
+          </MenuItem>
+        ));
+      }
+      return {
+        size : menuElement.length,
+        element : menuElement
+      };
+    };
+
+    const menuHandled = handleMenu();
+
   return (
     <Box data-testid="contextMenu">
-      <IconButton
+     {menuHandled.size > 0 && 
+     <>
+     <IconButton
         onClick={handleClick}
         size="small"
         color="primary"
@@ -70,6 +135,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }
       >
         <MoreVert />
       </IconButton>
+       
 
       <Menu
         data-testid="menuContext"
@@ -90,50 +156,10 @@ const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {shouldShowRotateButton() && (
-          <MenuItem
-            id="button-rotate"
-            data-testid="buttonRotate"
-            onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}
-          >
-            <Sync sx={{ mr: 1 }} />
-            {t('context-menu.rotate')}
-          </MenuItem>
-        )}
-        {shouldShowBlockButton && (
-          <MenuItem
-            id="button-block"
-            data-testid="buttonBlock"
-            onClick={() => handleModalClick(ModalApiKeyView.BLOCK, apiKeyId)}
-          >
-            <Block sx={{ mr: 1 }} />
-            {t('context-menu.block')}
-          </MenuItem>
-        )}
-
-        {(!isUserAdmin || isPersonalKey) && (
-          <MenuItem
-            id="button-view"
-            data-testid="buttonView"
-            onClick={() => handleModalClick(ModalApiKeyView.VIEW, apiKeyId)}
-          >
-            <RemoveRedEye sx={{ mr: 1 }} />
-            {t('context-menu.view')}
-          </MenuItem>
-        )}
-
-        {data.status !== VirtualKeyStatus.Enabled && (
-          <MenuItem
-            id="button-delete"
-            data-testid="buttonDelete"
-            onClick={() => handleModalClick(ModalApiKeyView.DELETE, apiKeyId)}
-            sx={{ color: 'error.dark' }}
-          >
-            <Delete sx={{ mr: 1 }} />
-            {t('button.elimina', { ns: 'common' })}
-          </MenuItem>
-        )}
+        {menuHandled.element}
       </Menu>
+      </>
+      }
     </Box>
   );
 };
