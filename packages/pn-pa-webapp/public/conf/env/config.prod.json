@@ -15,5 +15,7 @@
   "SELFCARE_SEND_PROD_ID": "prod-pn",
   "IS_MANUAL_SEND_ENABLED": true,
   "API_B2B_LINK": "https://developer.pagopa.it/send/api#/",
-  "IS_STATISTICS_ENABLED": true
+  "IS_STATISTICS_ENABLED": true,
+  "TAXONOMY_SEND_URL": "https://docs.pagopa.it/f.a.q.-per-integratori/tassonomia-send",
+  "DOWNTIME_EXAMPLE_LINK": "/static/documents/LegalFactMalfunction.pdf"
 }
