@@ -174,7 +174,7 @@ const FileUpload = ({
   });
   const uploadInputRef = useRef();
 
-  const attachmentExists = fileUploaded?.file && fileUploaded?.file.data;
+  const attachmentExists = fileUploaded?.file?.data;
 
   const isMobile = useIsMobile();
 
@@ -335,40 +335,38 @@ const FileUpload = ({
           </OrientedBox>
         )}
         {fileData.status === UploadStatus.UPLOADED && (
-          <>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ width: '100%' }}
+          >
             <Box
-              display="flex"
-              justifyContent="space-between"
+              display={isMobile ? 'block' : 'flex'}
               alignItems="center"
-              sx={{ width: '100%' }}
+              justifyContent="start"
+              width={isMobile ? 0.85 : 'auto'}
             >
-              <Box
-                display={isMobile ? 'block' : 'flex'}
-                alignItems="center"
-                justifyContent="start"
-                width={isMobile ? 0.85 : 'auto'}
-              >
-                <Box display="flex" width={isMobile ? 0.7 : 'auto'} justifyContent="start">
-                  <AttachFileIcon color="primary" />
-                  <FilenameBox filename={fileData.file.name} />
-                </Box>
-                <Typography fontWeight={600} sx={{ marginLeft: { lg: '30px' } }}>
-                  {parseFileSize(fileData.file.size)}
-                </Typography>
+              <Box display="flex" width={isMobile ? 0.7 : 'auto'} justifyContent="start">
+                <AttachFileIcon color="primary" />
+                <FilenameBox filename={fileData.file.name} />
               </Box>
-              <ButtonNaked
-                data-testid="removeDocument"
-                onClick={removeFileHandler}
-                aria-label={getLocalizedOrDefaultLabel(
-                  'common',
-                  'attachments.remove-attachment',
-                  'Elimina allegato'
-                )}
-              >
-                <CloseIcon />
-              </ButtonNaked>
+              <Typography fontWeight={600} sx={{ marginLeft: { lg: '30px' } }}>
+                {parseFileSize(fileData.file.size)}
+              </Typography>
             </Box>
-          </>
+            <ButtonNaked
+              data-testid="removeDocument"
+              onClick={removeFileHandler}
+              aria-label={getLocalizedOrDefaultLabel(
+                'common',
+                'attachments.remove-attachment',
+                'Elimina allegato'
+              )}
+            >
+              <CloseIcon />
+            </ButtonNaked>
+          </Box>
         )}
       </Box>
       {fileData.sha256 && (
