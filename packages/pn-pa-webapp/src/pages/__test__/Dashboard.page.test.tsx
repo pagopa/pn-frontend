@@ -225,6 +225,7 @@ describe('Dashboard Page', async () => {
 
   it('errors on api', async () => {
     mock.onGet(notificationsPath).reply(500);
+
     await act(async () => {
       result = render(
         <>
@@ -234,6 +235,7 @@ describe('Dashboard Page', async () => {
         </>
       );
     });
+
     const statusApiErrorComponent = screen.queryByTestId(
       `api-error-${DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}`
     );

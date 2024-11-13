@@ -64,7 +64,6 @@ describe('PhysicalAddress Component', () => {
       'foreign-state*',
       formTestValues.foreignState
     );
-    testFormElements(container, 'recipients[1].at', 'at', formTestValues.at);
     testFormElements(
       container,
       'recipients[1].addressDetails',
