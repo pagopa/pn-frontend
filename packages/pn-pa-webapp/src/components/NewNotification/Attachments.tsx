@@ -264,9 +264,8 @@ const Attachments: React.FC<Props> = ({
           versionToken: '',
         },
       },
-      false
+      true
     );
-    await formik.setFieldTouched(`${id}.file`, true, true);
   };
 
   const removeFileHandler = async (id: string, index: number) => {
@@ -277,10 +276,7 @@ const Attachments: React.FC<Props> = ({
         key: '',
         versionToken: '',
       },
-      name: '',
     });
-
-    await formik.setFieldTouched(`${id}.name`, false, false);
   };
 
   const addDocumentHandler = async () => {
@@ -354,12 +350,10 @@ const Attachments: React.FC<Props> = ({
               fieldValue={d.name}
               fileUploaded={d}
               fieldTouched={
-                formik.touched.documents && formik.touched.documents[i]
-                  ? formik.touched.documents[i].name
-                  : undefined
+                formik.touched.documents?.[i] ? formik.touched.documents[i].name : undefined
               }
               fieldErrors={
-                formik.errors.documents && formik.errors.documents[i]
+                formik.errors.documents?.[i]
                   ? (formik.errors.documents[i] as FormikErrors<{ file: string; name: string }>)
                       .name
                   : undefined
