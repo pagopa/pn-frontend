@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 
 import { Grid, GridProps, GridSize, SxProps, Theme, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
+import React from 'react';
+import { useIsMobile } from '../hooks';
 
 type Props = {
   /** Title of the page to render */
@@ -42,7 +44,11 @@ const TitleBox: React.FC<Props> = ({
   variantSubTitle = 'h5',
   sx,
   children,
-}) => (
+}) => {
+
+  const isMobile = useIsMobile();
+
+  return (
   <Grid id="page-header-container" aria-orientation="horizontal" container mt={mtGrid} sx={sx}>
     {title && (
       <Grid id="item" item xs={12} mb={mbTitle} {...propsTitle}>
@@ -52,7 +58,9 @@ const TitleBox: React.FC<Props> = ({
           role="heading"
           variant={variantTitle}
           display="inline-block"
-          sx={{ verticalAlign: 'middle' }}
+          sx={{ verticalAlign: 'middle', maxWidth: `${isMobile ? '70vw': '40vw' }`,
+          wordWrap: 'break-word',overflow: 'visible' }}
+          
         >
           {title}
         </Typography>
@@ -76,5 +84,6 @@ const TitleBox: React.FC<Props> = ({
     </Grid>
   </Grid>
 );
+};
 
 export default TitleBox;
