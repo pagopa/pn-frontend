@@ -1,4 +1,3 @@
-import { de } from 'date-fns/locale';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

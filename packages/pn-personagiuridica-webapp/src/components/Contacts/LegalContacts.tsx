@@ -53,12 +53,12 @@ const LegalContacts = () => {
       )}
       <Stack
         direction={defaultPECAddress?.pecValid ? 'column-reverse' : 'column'}
-        spacing={!defaultSERCQ_SENDAddress && !defaultPECAddress?.pecValid ? 2 : 0}
+        spacing={(!defaultSERCQ_SENDAddress && !defaultPECAddress) || verifyingPecAddress ? 2 : 0}
         mt={4}
         data-testid="legalContacts"
       >
         {!DOD_DISABLED && <SercqSendContactItem />}
-        {!DOD_DISABLED && !defaultSERCQ_SENDAddress && !defaultPECAddress?.pecValid && (
+        {!DOD_DISABLED && !defaultSERCQ_SENDAddress && !defaultPECAddress && (
           <Divider>{t('conjunctions.or')}</Divider>
         )}
         <PecContactItem />
