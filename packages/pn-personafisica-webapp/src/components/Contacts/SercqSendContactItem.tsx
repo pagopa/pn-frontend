@@ -73,6 +73,7 @@ const SercqSendCardTitle: React.FC<SercqSendCardTitleProps> = ({ pecEnabled }) =
   );
 };
 
+// eslint-disable-next-line complexity
 const SercqSendContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const isMobile = useIsMobile();
