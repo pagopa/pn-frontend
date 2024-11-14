@@ -1,4 +1,3 @@
-import { de } from 'date-fns/locale';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -74,6 +73,7 @@ const SercqSendCardTitle: React.FC<SercqSendCardTitleProps> = ({ pecEnabled }) =
   );
 };
 
+// eslint-disable-next-line complexity
 const SercqSendContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const isMobile = useIsMobile();
