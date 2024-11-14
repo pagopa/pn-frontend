@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.2](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.1...v2.8.2) (2024-11-07)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+## [2.8.2-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.0...v2.8.2-RC.1) (2024-11-04)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+## [2.8.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0...v2.8.2-RC.0) (2024-11-04)
+## [2.8.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0...v2.8.1-RC.0) (2024-10-28)
+
+
+### Bug Fixes
+
+* **PN-13045:** new API key confirmation component wrongly shows key id instead of value (PA) ([#1368](https://github.com/pagopa/pn-frontend/issues/1368)) ([e1b80d8](https://github.com/pagopa/pn-frontend/commit/e1b80d86d1ab976678bee358209487c5b5e374f9))
+
+
+### Features
+
+* **pn-12878:** New copy for analog flow ([#1359](https://github.com/pagopa/pn-frontend/issues/1359)) ([7fc60b1](https://github.com/pagopa/pn-frontend/commit/7fc60b1759762a9771a39cda6339985a041edcb0))
+
+
+
+## [2.7.1](https://github.com/pagopa/pn-frontend/compare/v2.8.0-RC.0...v2.7.1) (2024-10-14)
+
+
+
+
+
 # [2.8.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0-RC.3...v2.8.0) (2024-10-16)
 ## [2.7.1](https://github.com/pagopa/pn-frontend/compare/v2.7.0...v2.7.1) (2024-10-14)
 

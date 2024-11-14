@@ -10,12 +10,12 @@
   },
   "spidSelect": {
     "title": "Choisissez votre SPID",
-    "hintText": "Vous n’avez pas de SPID ?<0> En savoir plus</0>",
+    "hintText": "Pas de SPID ?<0> En savoir plus</0>",
     "cancelButton": "Annuler"
   },
   "loginError": {
     "title": "En raison d’une erreur du système, il n’est pas possible de terminer la procédure.",
-    "message": "En raison d’une erreur du système, il n’est pas possible de terminer la procédure.<1 />Veuillez réessayer plus tard.",
+    "message": "En raison d’une erreur du système, il n’est pas possible de terminer la procédure. Veuillez réessayer plus tard.",
     "code": {
       "error_19": "Vous avez saisi trop souvent un nom d’utilisateur ou un mot de passe incorrect : réessayez dans quelques minutes ou contactez votre fournisseur d’identité SPID pour modifier vos informations d’identification.",
       "error_20": "Pour des raisons de sécurité, une connexion avec un deuxième facteur d’authentification est requise : contactez votre fournisseur d’identité SPID pour comprendre comment il est utilisé.",

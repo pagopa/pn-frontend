@@ -13,6 +13,7 @@ import {
   waitFor,
 } from '../../../test-utils';
 import { formatDateTime } from '../../../utility/date.utility';
+import { LANGUAGE_SESSION_KEY } from '../../../utility/multilanguage.utility';
 import { apiOutcomeTestHelper } from '../../../utility/test.utility';
 import { AppStatusRender } from '../AppStatusRender';
 
@@ -62,6 +63,7 @@ describe('AppStatusRender component', () => {
           fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
           fetchDowntimeLogPage={fetchDowntimeLogPage}
           setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
         />
       );
     });
@@ -117,6 +119,7 @@ describe('AppStatusRender component', () => {
           fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
           fetchDowntimeLogPage={fetchDowntimeLogPage}
           setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
         />
       );
     });
@@ -146,6 +149,7 @@ describe('AppStatusRender component', () => {
           fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
           fetchDowntimeLogPage={fetchDowntimeLogPage}
           setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
         />
       );
     });
@@ -174,6 +178,7 @@ describe('AppStatusRender component', () => {
           fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
           fetchDowntimeLogPage={fetchDowntimeLogPage}
           setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
         />
       );
     });
@@ -203,6 +208,7 @@ describe('AppStatusRender component', () => {
         fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
         fetchDowntimeLogPage={fetchDowntimeLogPage}
         setPagination={setPagination}
+        downtimeExampleLink="mock-downtime-example-link"
       />
     );
     expect(fetchCurrentStatus).toBeCalledTimes(2);
@@ -225,6 +231,7 @@ describe('AppStatusRender component', () => {
         fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
         fetchDowntimeLogPage={fetchDowntimeLogPage}
         setPagination={setPagination}
+        downtimeExampleLink="mock-downtime-example-link"
       />
     );
     rows = result.getAllByTestId('tableDowntimeLog.row');
@@ -249,6 +256,7 @@ describe('AppStatusRender component', () => {
           fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
           fetchDowntimeLogPage={fetchDowntimeLogPage}
           setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
         />
       );
     });
@@ -277,6 +285,7 @@ describe('AppStatusRender component', () => {
         fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
         fetchDowntimeLogPage={fetchDowntimeLogPage}
         setPagination={setPagination}
+        downtimeExampleLink="mock-downtime-example-link"
       />
     );
     expect(fetchCurrentStatus).toBeCalledTimes(2);
@@ -299,6 +308,7 @@ describe('AppStatusRender component', () => {
         fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
         fetchDowntimeLogPage={fetchDowntimeLogPage}
         setPagination={setPagination}
+        downtimeExampleLink="mock-downtime-example-link"
       />
     );
     rows = result.getAllByTestId('tableDowntimeLog.row');
@@ -323,6 +333,7 @@ describe('AppStatusRender component', () => {
           fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
           fetchDowntimeLogPage={fetchDowntimeLogPage}
           setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
         />,
         {
           preloadedState: {
@@ -372,6 +383,7 @@ describe('AppStatusRender component', () => {
           fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
           fetchDowntimeLogPage={fetchDowntimeLogPage}
           setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
         />,
         {
           preloadedState: {
@@ -396,5 +408,53 @@ describe('AppStatusRender component', () => {
     expect(emptyStateComponent).not.toBeInTheDocument();
     expect(errorStatusComponent).toBeInTheDocument();
     expect(errorDowntimeComponent).toBeInTheDocument();
+  });
+
+  it('should show downtime language banner if language is not italian', async () => {
+    sessionStorage.setItem(LANGUAGE_SESSION_KEY, 'en');
+    await act(async () => {
+      result = render(
+        <AppStatusRender
+          actionIds={mockActionIds}
+          appStatus={{
+            ...mockAppStatus,
+            downtimeLogPage: { result: beDowntimeHistoryWithIncidents.result },
+          }}
+          clearPagination={clearPagination}
+          fetchCurrentStatus={fetchCurrentStatus}
+          fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+          fetchDowntimeLogPage={fetchDowntimeLogPage}
+          setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
+        />
+      );
+    });
+
+    const languageBanner = result.queryByTestId('downtimeLanguageBanner');
+    expect(languageBanner).toBeInTheDocument();
+  });
+
+  it('should not show downtime language banner if language is italian', async () => {
+    sessionStorage.setItem(LANGUAGE_SESSION_KEY, 'it');
+    await act(async () => {
+      result = render(
+        <AppStatusRender
+          actionIds={mockActionIds}
+          appStatus={{
+            ...mockAppStatus,
+            downtimeLogPage: { result: beDowntimeHistoryWithIncidents.result },
+          }}
+          clearPagination={clearPagination}
+          fetchCurrentStatus={fetchCurrentStatus}
+          fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+          fetchDowntimeLogPage={fetchDowntimeLogPage}
+          setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
+        />
+      );
+    });
+
+    const languageBanner = result.queryByTestId('downtimeLanguageBanner');
+    expect(languageBanner).not.toBeInTheDocument();
   });
 });

@@ -78,6 +78,7 @@ describe('Auth redux state tests', () => {
       isForbiddenUser: false,
       institutions: [],
       productsOfInstitution: [],
+      additionalLanguages: [],
     });
   });
 

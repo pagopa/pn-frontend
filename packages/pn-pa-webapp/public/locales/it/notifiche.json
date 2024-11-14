@@ -275,6 +275,7 @@
       "send-analog-outcome-unknown": "Invio per via cartacea completato - esito non determinato",
       "send-analog-unknown": "Evento su spedizione raccomandata - non riconosciuto",
       "aar-document": "Avviso di avvenuta ricezione",
+      "notification-cancelled-document": "Dichiarazione annullamento notifica",
       "legalfact": {
         "sender-ack": "notifica presa in carico",
         "digital-delivery-success": "notifica digitale",
@@ -400,21 +401,34 @@
         "fetch-groups-error": "Non siamo riusciti a recuperare i dati che servono per poter creare una nuova notifica.",
         "title": "Informazioni preliminari",
         "protocol-number": "Numero di protocollo",
+        "protocol-number-subtitle": "È il codice univoco fornito dall'Ufficio Protocollo della Pubblica Amministrazione. Serve per identificare ufficialmente la notifica e tracciarne il percorso all'interno del sistema.",
         "subject": "Oggetto della notifica",
         "sender-denomination": "Ente mittente",
+        "sender-name": "Nome dell'ente",
         "abstract": "Descrizione",
         "group": "Gruppo",
         "no-groups": "Non ci sono gruppi per questo prodotto",
         "taxonomy-id": "Codice tassonomico",
+        "taxonomy-id-subtitle": "È il codice che definisce la tipologia di documenti notificati. Se non lo conosci, consulta l'elenco in <0>Tassonomia SEND</0>.",
         "taxonomy-tooltip": "È il codice che definisce la tipologia della notifica. Trovi più informazioni nel manuale di SEND.",
         "comunication-type": "Modalità di invio",
+        "comunication-type-title": "Modalità per l’invio cartaceo",
+        "comunication-type-subtitle": "Se l'invio in digitale non risultasse possibile, la notifica sarà inviata in via analogica nella modalità selezionata.",
         "registered-letter-890": "Modello 890",
         "simple-registered-letter": "Raccomandata A/R",
         "payment-method": "Modello di pagamento",
         "pagopa-notice": "Avviso pagoPA",
         "pagopa-notice-f24-flatrate": "Avviso pagoPA e Modello F24 forfettario",
         "pagopa-notice-f24": "Avviso pagoPA e Modello F24",
-        "nothing": "Nessuno"
+        "nothing": "Nessuno",
+        "notification-language-title": "Lingua di invio",
+        "notification-language-subtitle": "La notifica, i documenti e le attestazioni verranno inviati secondo le preferenze di lingua selezionate.",
+        "italian-and-other-language": "Italiano e altra lingua",
+        "select-other-language": "Seleziona altra lingua",
+        "notification-content-title": "Contenuti della notifica",
+        "notification-content-subtitle": "Queste informazioni aiuteranno il destinatario a comprendere il contenuto e l'importanza della comunicazione.",
+        "notification-management-title": "Gestione notifica",
+        "notification-management-subtitle": "Scegli il gruppo di utenti responsabile della gestione della notifica."
       },
       "recipient": {
         "title": "Destinatari",
@@ -437,31 +451,35 @@
         "add-digital-domicile": "Aggiungi un domicilio digitale",
         "back-to-preliminary-informations": "Torna a Informazioni preliminari",
         "digital-domicile": "Domicilio digitale",
+        "digital-domicile-subtitle": "Se conosci l'indirizzo PEC del destinatario inseriscilo qui. In questo modo, assicuri che la notifica venga recapitata in formato digitale, riducendo i tempi di consegna rispetto ai canali analogici tradizionali.",
+        "pec-address": "Indirizzo PEC",
         "add-physical-domicile": "Aggiungi un indirizzo fisico",
         "address": "Indirizzo",
         "house-number": "Numero civico",
         "municipality-details": "Località",
         "municipality": "Comune",
         "province": "Provincia",
-        "zip": "Codice postale",
+        "zip": "CAP",
         "foreign-state": "Stato",
         "at": "Presso",
-        "address-details": "Note aggiuntive (scala, piano)",
+        "address-details": "Note aggiuntive (presso, scala, piano)",
         "add-recipient": "Aggiungi un destinatario",
         "remove-recipient": "Rimuovi destinatario"
       },
       "attachments": {
         "title": "Allegati",
-        "max-attachments": "Puoi caricare fino a 11 allegati, incluso il documento da notificare.",
-        "attach-for-recipients": "Allegati",
-        "act-attachment": "Allega l'atto",
+        "max-attachments": "Questi sono i documenti che saranno notificati tramite SEND a tutti i destinatari inseriti. Puoi allegare fino a un massimo di {{maxNumber}} documenti.",
+        "attach-for-recipients": "Documenti allegati",
+        "act-attachment": "Allega documento",
         "doc-attachment": "Allega un altro documento",
         "act-name": "Nome dell'atto",
-        "doc-name": "Nome del documento",
-        "add-doc": "Aggiungi un documento (per esempio, la lettera d’accompagnamento)",
-        "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)",
+        "doc-name": "Titolo del documento",
+        "add-doc": "Aggiungi un documento",
+        "add-another-doc": "Aggiungi un altro documento",
         "back-to-recipient": "Torna a Destinatario",
-        "remove-document": "Rimuovi documento"
+        "remove-document": "Rimuovi documento",
+        "banner-additional-languages": "Hai scelto di inviare la notifica in più lingue. Ricorda di allegare i documenti in entrambe le lingue selezionate.",
+        "file-upload-helper": "Il documento deve essere in formato {{format}} e non deve superare le dimensioni di {{size}}"
       },
       "payment-methods": {
         "title": "Modelli di pagamento",
@@ -499,5 +517,10 @@
         "message": "Il codice tassonomico inserito non è tra quelli gestiti dalla piattaforma."
       }
     }
+  },
+  "settings": {
+    "select-language-to-confirm": "Per confermare, seleziona una lingua",
+    "language-settings-title": "Impostazioni lingua",
+    "language-settings-subtitle": "In questa sezione puoi scegliere una lingua aggiuntiva\ncon cui inviare la notifica ai destinatari, oltre all'italiano."
   }
 }
