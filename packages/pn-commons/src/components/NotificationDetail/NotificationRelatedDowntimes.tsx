@@ -7,7 +7,9 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { Downtime, NotificationStatus, NotificationStatusHistory } from '../../models';
 import { formatDate, isToday } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import { getSessionLanguage } from '../../utility/multilanguage.utility';
 import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';
+import DowntimeLanguageBanner from '../DowntimeLanguageBanner';
 
 type Props = {
   // the notification history, needed to compute the time range for the downtime events query
@@ -22,6 +24,8 @@ type Props = {
   apiId: string;
   // for disabled downloads
   disableDownloads?: boolean;
+  // link to the downtime example
+  downtimeExampleLink: string;
 };
 
 /*
@@ -63,6 +67,7 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
   fetchDowntimeLegalFactDocumentDetails,
   apiId,
   disableDownloads,
+  downtimeExampleLink,
 }) => {
   const theme = useTheme();
 
@@ -172,6 +177,11 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
               </Typography>
             </Grid>
           </Grid>
+
+          {getSessionLanguage() !== 'it' && (
+            <DowntimeLanguageBanner downtimeExampleLink={downtimeExampleLink} />
+          )}
+
           <Grid key={'detail-documents-message'} item>
             <Stack direction="column">
               {/* Render each downtime event */}
