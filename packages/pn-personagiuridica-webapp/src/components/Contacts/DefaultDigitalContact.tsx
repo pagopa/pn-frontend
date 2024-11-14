@@ -92,6 +92,11 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       },
     }));
 
+    const changeContact = async (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      void handleChangeTouched(event);
+      await formik.setFieldValue(`default_${contactType}`, event.currentTarget.value.trim());
+    };
+
     // INSERT MODE
     if (!value) {
       return (
@@ -122,7 +127,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 ) : null,
               }}
               value={formik.values[`default_${contactType}`]}
-              onChange={(e) => void handleChangeTouched(e)}
+              onChange={changeContact}
               error={
                 formik.touched[`default_${contactType}`] &&
                 Boolean(formik.errors[`default_${contactType}`])
