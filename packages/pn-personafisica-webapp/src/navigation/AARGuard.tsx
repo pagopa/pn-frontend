@@ -59,8 +59,7 @@ const AARGuard = () => {
       return false;
     }
     return true;
-  }
-  ;
+  };
 
   useEffect(() => {
     AppResponsePublisher.error.subscribe('exchangeNotificationQrCode', handleError);
