@@ -65,6 +65,7 @@ export const pecValidationSchema = (t: TFunction) =>
     .string()
     .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
     .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
+    .matches(dataRegex.noSpaceAtEdges, t('no-spaces-at-edges'))
     .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' }));
 
 export const emailValidationSchema = (t: TFunction) =>
@@ -72,12 +73,14 @@ export const emailValidationSchema = (t: TFunction) =>
     .string()
     .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
     .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
+    .matches(dataRegex.noSpaceAtEdges, t('no-spaces-at-edges'))
     .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' }));
 
 export const phoneValidationSchema = (t: TFunction, withPrefix = false) =>
   yup
     .string()
     .required(t('courtesy-contacts.valid-sms', { ns: 'recapiti' }))
+    .matches(dataRegex.noSpaceAtEdges, t('no-spaces-at-edges'))
     .matches(
       withPrefix ? dataRegex.phoneNumberWithItalyPrefix : dataRegex.phoneNumber,
       t('courtesy-contacts.valid-sms', { ns: 'recapiti' })
