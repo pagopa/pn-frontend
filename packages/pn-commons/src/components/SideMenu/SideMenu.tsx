@@ -84,8 +84,9 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
   };
 
   useEffect(() => {
-    setState(false);
-   
+    if(isMobile){
+      setState(false);
+    }
   }, [location]);
 
   const handleNavigation = (item: SideMenuItem) => {
