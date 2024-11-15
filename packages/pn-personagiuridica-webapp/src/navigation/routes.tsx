@@ -153,26 +153,26 @@ function Router() {
                     index
                     element={
                       <PrivateRoute
-                      currentRoles={currentRoles}
-                      requiredRoles={[PNRole.ADMIN]}
-                      additionalCondition={IS_B2B_ENABLED}
-                      redirectTo={<NotFound />}
-                    >
-                      <NewPublicKeyPage />
-                    </PrivateRoute>
+                        currentRoles={currentRoles}
+                        requiredRoles={[PNRole.ADMIN]}
+                        additionalCondition={IS_B2B_ENABLED}
+                        redirectTo={<NotFound />}
+                      >
+                        <NewPublicKeyPage />
+                      </PrivateRoute>
                     }
                   />
                   <Route
                     path=":kid"
                     element={
                       <PrivateRoute
-                      currentRoles={currentRoles}
-                      requiredRoles={[PNRole.ADMIN]}
-                      additionalCondition={IS_B2B_ENABLED}
-                      redirectTo={<NotFound />}
-                    >
-                      <NewPublicKeyPage />
-                    </PrivateRoute>
+                        currentRoles={currentRoles}
+                        requiredRoles={[PNRole.ADMIN]}
+                        additionalCondition={IS_B2B_ENABLED}
+                        redirectTo={<NotFound />}
+                      >
+                        <NewPublicKeyPage />
+                      </PrivateRoute>
                     }
                   />
                 </Route>
@@ -188,10 +188,6 @@ function Router() {
         </Route>
         <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
         <Route path={routes.TERMS_OF_SERVICE} element={<TermsOfServicePage />} />
-        <Route
-          path={routes.PRIVACY_POLICY_SERCQ_SEND}
-          element={<PrivacyPolicyPage type={ConsentType.DATAPRIVACY_SERCQ} />}
-        />
         <Route
           path={routes.TERMS_OF_SERVICE_SERCQ_SEND}
           element={<TermsOfServicePage type={ConsentType.TOS_SERCQ} />}

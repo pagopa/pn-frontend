@@ -19,12 +19,14 @@ import {
 import { clearPagination, setPagination } from '../redux/appStatus/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const AppStatus = () => {
   const dispatch = useAppDispatch();
   const appStatus = useAppSelector((state: RootState) => state.appStatus);
   const { t } = useTranslation(['appStatus']);
+  const { DOWNTIME_EXAMPLE_LINK } = getConfiguration();
 
   const fetchCurrentStatus = useCallback(() => {
     void dispatch(getCurrentAppStatus());
@@ -90,6 +92,7 @@ const AppStatus = () => {
       handleTrackDownloadCertificateOpposable3dparties={
         handleTrackDownloadCertificateOpposable3dparties
       }
+      downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
     />
   );
 };

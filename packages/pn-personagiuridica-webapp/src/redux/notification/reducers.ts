@@ -136,27 +136,22 @@ const notificationSlice = createSlice({
         }
       }
     });
+
     builder.addCase(getReceivedNotificationPaymentUrl.rejected, (state, action) => {
       const noticeCode = action.meta.arg.paymentNotice.noticeNumber;
       const creditorTaxId = action.meta.arg.paymentNotice.fiscalCode;
-      const paymentInfo = state.paymentsData.pagoPaF24.find(
-        (payment) =>
-          payment.pagoPa?.creditorTaxId === creditorTaxId &&
-          payment.pagoPa?.noticeCode === noticeCode
+      const paymentInfoIndex = state.paymentsData.pagoPaF24.findIndex(
+        (paymentData) =>
+          paymentData.pagoPa?.creditorTaxId === creditorTaxId &&
+          paymentData.pagoPa?.noticeCode === noticeCode
       );
+      if (paymentInfoIndex !== -1) {
+        const pagoPa = state.paymentsData.pagoPaF24[paymentInfoIndex].pagoPa;
 
-      if (paymentInfo?.pagoPa) {
-        state.paymentsData.pagoPaF24 = [
-          ...state.paymentsData.pagoPaF24,
-          {
-            ...paymentInfo?.f24,
-            pagoPa: {
-              ...paymentInfo?.pagoPa,
-              status: PaymentStatus.FAILED,
-              detail: PaymentInfoDetail.GENERIC_ERROR,
-            },
-          },
-        ];
+        if (pagoPa) {
+          pagoPa.status = PaymentStatus.FAILED;
+          pagoPa.detail = PaymentInfoDetail.GENERIC_ERROR;
+        }
       }
     });
     builder.addCase(getDowntimeHistory.fulfilled, (state, action) => {

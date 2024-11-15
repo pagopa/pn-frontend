@@ -9,6 +9,7 @@ import Attachments from '../components/NewNotification/Attachments';
 import PreliminaryInformations from '../components/NewNotification/PreliminaryInformations';
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
+import { NewNotificationLangOther } from '../models/NewNotification';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createNewNotification } from '../redux/newNotification/actions';
@@ -125,11 +126,8 @@ const NewNotification = () => {
               subTitle={<SubTitle />}
               variantSubTitle="body1"
             ></TitleBox>
-            <Typography sx={{ marginTop: '10px' }} variant="body2">
-              {t('required-fields')}
-            </Typography>
             {!IS_PAYMENT_ENABLED && (
-              <Alert role="alert" data-testid="alert" sx={{ mt: 4 }} severity={'warning'}>
+              <Alert role="alert" data-testid="alert" sx={{ mt: 3 }} severity={'warning'}>
                 <Typography component="span" variant="body1">
                   {t('new-notification.warning-payment-disabled', { ns: 'notifiche' })}
                 </Typography>
@@ -172,6 +170,9 @@ const NewNotification = () => {
                 onPreviousStep={goToPreviousStep}
                 isCompleted={isCompleted}
                 attachmentsData={notification.documents}
+                hasAdditionalLang={
+                  notification.lang === NewNotificationLangOther && !!notification.additionalLang
+                }
                 ref={childRef}
               />
             )}

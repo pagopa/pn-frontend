@@ -22,7 +22,6 @@ beforeAll(async () => {
     ONE_TRUST_PP: 'mocked-id',
     ONE_TRUST_TOS: 'mocked-id',
     ONE_TRUST_SERCQ_SEND_DRAFT_MODE: false,
-    ONE_TRUST_PP_SERCQ_SEND: 'mocked-id-sercq-send',
     ONE_TRUST_TOS_SERCQ_SEND: 'mocked-id-sercq-send',
     OT_DOMAIN_ID: '29cc1c86-f2ef-494d-8242-9bec8009cd29',
     PAGOPA_HELP_EMAIL: 'assistenza@pn.it',
@@ -36,6 +35,8 @@ beforeAll(async () => {
     IS_PAYMENT_ENABLED: false,
     DELEGATIONS_TO_PG_ENABLED: true,
     LANDING_SITE_URL: 'https://www.dev.notifichedigitali.it',
+    DOD_DISABLED: false,
+    IS_B2B_ENABLED: true
   });
   initStore(false);
   initAxiosClients();
