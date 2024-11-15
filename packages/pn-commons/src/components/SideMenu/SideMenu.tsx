@@ -1,4 +1,4 @@
-import { FC, Fragment, useState } from 'react';
+import { FC, Fragment, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Menu } from '@mui/icons-material';
@@ -83,10 +83,12 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
     setState(!state);
   };
 
-  const handleNavigation = (item: SideMenuItem, menuFlag?: boolean) => {
-    if (isMobile && !menuFlag) {
-      setState(false);
-    }
+  useEffect(() => {
+    setState(false);
+   
+  }, [location]);
+
+  const handleNavigation = (item: SideMenuItem) => {
     if (!item.notSelectable) {
       if (item.route && item.route.length > 0) {
         navigate(item.route);
