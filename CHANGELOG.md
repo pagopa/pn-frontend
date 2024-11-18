@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0](https://github.com/pagopa/pn-frontend/compare/v2.9.0-RC.2...v2.9.0) (2024-11-18)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
 # [2.9.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.9.0-RC.1...v2.9.0-RC.2) (2024-11-13)
 
 
