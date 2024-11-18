@@ -18,11 +18,13 @@ import { APP_STATUS_ACTIONS } from '../redux/appStatus/actions';
 import { clearPagination, setPagination } from '../redux/appStatus/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import { getConfiguration } from '../services/configuration.service';
 
 const AppStatus = () => {
   const dispatch = useAppDispatch();
   const appStatus = useAppSelector((state: RootState) => state.appStatus);
   const { t } = useTranslation(['appStatus']);
+  const { DOWNTIME_EXAMPLE_LINK } = getConfiguration();
 
   const fetchCurrentStatus = useCallback(() => {
     void dispatch(getCurrentAppStatus());
@@ -69,6 +71,7 @@ const AppStatus = () => {
       }
       clearPagination={() => dispatch(clearPagination())}
       actionIds={APP_STATUS_ACTIONS}
+      downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
     />
   );
 };

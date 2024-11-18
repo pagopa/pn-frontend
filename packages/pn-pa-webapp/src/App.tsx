@@ -19,9 +19,7 @@ import {
   SideMenuItem,
   appStateActions,
   errorFactoryManager,
-  getSessionLanguage,
   initLocalization,
-  setSessionLanguage,
   useMultiEvent,
   useTracking,
 } from '@pagopa-pn/pn-commons';
@@ -30,7 +28,7 @@ import { LinkType, ProductEntity } from '@pagopa/mui-italia';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { getInstitutions, getProductsOfInstitution, logout } from './redux/auth/actions';
+import { getAdditionalLanguages, getInstitutions, getProductsOfInstitution, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
@@ -77,13 +75,19 @@ const ActualApp = () => {
   const reservedArea: ProductEntity = {
     id: 'selfcare',
     title: t('header.reserved-area'),
-    productUrl: `${SELFCARE_BASE_URL}/dashboard/${idOrganization}`,
+    productUrl: `${SELFCARE_BASE_URL}/dashboard/${idOrganization}?lang=${i18n.language}`,
     linkType: 'external',
   };
 
   const productsList =
     products.length > 0
-      ? [reservedArea, ...products]
+      ? [
+          reservedArea,
+          ...products.map((product) => ({
+            ...product,
+            productUrl: `${product.productUrl}&lang=${i18n.language}`,
+          })),
+        ]
       : [
           reservedArea,
           {
@@ -93,6 +97,7 @@ const ActualApp = () => {
             linkType: 'internal' as LinkType,
           },
         ];
+
   const productId = products.length > 0 ? SELFCARE_SEND_PROD_ID : '0';
   const institutionsList = institutions.map((institution) => ({
     ...institution,
@@ -151,7 +156,7 @@ const ActualApp = () => {
         route: routes.STATISTICHE,
       });
     }
-    const items = { ...getMenuItems(basicMenuItems, idOrganization, role?.role) };
+    const items = { ...getMenuItems(basicMenuItems, idOrganization, i18n.language, role?.role) };
     // localize menu items
     /* eslint-disable-next-line functional/immutable-data */
     items.menuItems = items.menuItems.map((item) => ({ ...item, label: t(item.label) }));
@@ -177,7 +182,7 @@ const ActualApp = () => {
     if (sessionToken) {
       void dispatch(getCurrentAppStatus());
       void dispatch(getInstitutions());
-      handleSetUserLanguage();
+      void dispatch(getAdditionalLanguages());
     }
     if (idOrganization) {
       void dispatch(getProductsOfInstitution());
@@ -199,13 +204,7 @@ const ActualApp = () => {
       : `mailto:${configuration.PAGOPA_HELP_EMAIL}`;
   };
 
-  const handleSetUserLanguage = () => {
-    const language = getSessionLanguage() || 'it';
-    void changeLanguageHandler(language);
-  };
-
   const changeLanguageHandler = async (langCode: string) => {
-    setSessionLanguage(langCode);
     await i18n.changeLanguage(langCode);
   };
 
@@ -245,6 +244,7 @@ const ActualApp = () => {
         partyId={idOrganization}
         partyList={institutionsList}
         loggedUser={jwtUser}
+        currentLanguage={i18n.language}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}
