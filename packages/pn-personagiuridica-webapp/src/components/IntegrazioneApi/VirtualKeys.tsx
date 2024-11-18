@@ -109,7 +109,6 @@ const VirtualKeys: React.FC = () => {
 
   useEffect(() => {
     fetchVirtualKeys();
-    // fetchCheckIssuer();
   }, []);
 
   return (

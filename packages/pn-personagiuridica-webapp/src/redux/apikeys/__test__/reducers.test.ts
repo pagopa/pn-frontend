@@ -1,10 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { publicKeys, virtualKeys } from '../../../__mocks__/ApiKeys.mock';
+import { checkIssuerPublicKey, publicKeys, virtualKeys } from '../../../__mocks__/ApiKeys.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { apiClient } from '../../../api/apiClients';
 import { store } from '../../store';
-import { getPublicKeys, getVirtualApiKeys } from '../actions';
+import { checkPublicKeyIssuer, getPublicKeys, getVirtualApiKeys } from '../actions';
 import { PublicKeysIssuerResponseIssuerStatusEnum } from '../../../generated-client/pg-apikeys';
 
 const initialState = {
@@ -65,5 +65,14 @@ describe('api keys redux state test', () => {
     expect(action.type).toBe('getVirtualApiKeys/fulfilled');
     expect(payload).toEqual(virtualKeys);
     expect(store.getState().apiKeysState.virtualKeys).toEqual(virtualKeys);
+  });
+
+  it('should be able to fetch check public key issuer', async () => {
+    mock.onGet('/bff/v1/pg/public-keys/check-issuer').reply(200, checkIssuerPublicKey);
+    const action = await store.dispatch(checkPublicKeyIssuer());
+    const payload = action.payload;
+    expect(action.type).toBe('checkPublicApiKeyIssuer/fulfilled');
+    expect(payload).toEqual(checkIssuerPublicKey);
+    expect(store.getState().apiKeysState.issuerState).toEqual(checkIssuerPublicKey);
   });
 });
