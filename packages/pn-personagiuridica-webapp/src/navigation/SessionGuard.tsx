@@ -1,13 +1,15 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import {
   AppResponsePublisher,
+  AppRouteParams,
   InactivityHandler,
   LoadingPage,
   SessionModal,
   appStateActions,
+  sanitizeString,
   useErrors,
   useProcess,
   useSessionCheck,
@@ -53,6 +55,8 @@ const manageUnforbiddenError = (e: any) => {
  * SessionGuardRender: logica di renderizzazione
  */
 const SessionGuardRender = () => {
+  const [params] = useSearchParams();
+
   const { DISABLE_INACTIVITY_HANDLER } = getConfiguration();
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
@@ -64,44 +68,54 @@ const SessionGuardRender = () => {
   const { hasApiErrors } = useErrors();
 
   const isAnonymousUser = !isUnauthorizedUser && !sessionToken;
-  const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
+  const hasTosPrivacyApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_PRIVACY_APPROVAL);
 
   const hasErrorMessage = {
-    title: hasTosApiErrors
+    title: hasTosPrivacyApiErrors
       ? t('error-when-fetching-tos-status.title')
-      : t('leaving-app.title'), message: hasTosApiErrors
-        ? t('error-when-fetching-tos-status.message')
-        : t('leaving-app.message')
+      : t('leaving-app.title'),
+    message: hasTosPrivacyApiErrors
+      ? t('error-when-fetching-tos-status.message')
+      : t('leaving-app.message'),
   };
 
   const goodbyeMessage = {
-    title: isUnauthorizedUser
-      ? messageUnauthorizedUser.title
-      : hasErrorMessage.title,
-    message: isUnauthorizedUser
-      ? messageUnauthorizedUser.message
-      : hasErrorMessage.message,
+    title: isUnauthorizedUser ? messageUnauthorizedUser.title : hasErrorMessage.title,
+    message: isUnauthorizedUser ? messageUnauthorizedUser.message : hasErrorMessage.message,
   };
 
-  const renderIfInitialized = () =>
-    isUnauthorizedUser || hasTosApiErrors || isClosedSession ? (
-      <SessionModal
-        open
-        title={goodbyeMessage.title}
-        message={goodbyeMessage.message}
-        handleClose={() => goToLoginPortal()}
-        initTimeout
-      />
-    ) : isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? (
-      <Outlet />
-    ) : (
+  const renderIfInitialized = () => {
+    // 1. isUnauthorizedUser (errore exchange o validazione utente) || hasTosPrivacyApiErrors || isClosedSession => modale con errore e redirect a logout
+    // 2. isAnonymousUser (utente non loggato) => redirect alla login
+    // 3. se è loggato => outlet
+    if (isUnauthorizedUser || hasTosPrivacyApiErrors || isClosedSession) {
+      return (
+        <SessionModal
+          open
+          title={goodbyeMessage.title}
+          message={goodbyeMessage.message}
+          handleClose={() => goToLoginPortal()}
+          initTimeout
+        />
+      );
+    } else if (isAnonymousUser) {
+      const aar = params.get(AppRouteParams.AAR);
+      if (aar) {
+        // save to localstorage
+        localStorage.setItem(AppRouteParams.AAR, sanitizeString(aar));
+      }
+      goToLoginPortal();
+      return <></>;
+    }
+    return (
       <InactivityHandler
-        inactivityTimer={inactivityTimer}
+        inactivityTimer={isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? 0 : inactivityTimer}
         onTimerExpired={() => dispatch(logout())}
       >
         <Outlet />
       </InactivityHandler>
     );
+  };
 
   return isInitialized ? renderIfInitialized() : <LoadingPage renderType="whole" />;
 };
@@ -129,7 +143,7 @@ const SessionGuard = () => {
   // vedi il commentone in useProcess
   const { isFinished, performStep } = useProcess(INITIALIZATION_SEQUENCE);
 
-  const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
+  const hasTosPrivacyApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_PRIVACY_APPROVAL);
   const hasAnyForbiddenError = hasSpecificStatusError(403);
 
   const getTokenParam = useCallback(() => {
@@ -181,7 +195,7 @@ const SessionGuard = () => {
    */
   useEffect(() => {
     const doInitalPageDetermination = async () => {
-      if (sessionToken && !isClosedSession && !hasTosApiErrors && !isForbiddenUser) {
+      if (sessionToken && !isClosedSession && !hasTosPrivacyApiErrors && !isForbiddenUser) {
         const rootPath = location.pathname === '/';
         if (rootPath) {
           // ----------------------
@@ -236,7 +250,7 @@ const SessionGuard = () => {
    */
   useEffect(() => {
     void performStep(INITIALIZATION_STEPS.SESSION_CHECK, () => {
-      if (sessionToken && !isClosedSession && !hasTosApiErrors && !isForbiddenUser) {
+      if (sessionToken && !isClosedSession && !hasTosPrivacyApiErrors && !isForbiddenUser) {
         sessionCheck(expDate);
       }
     });

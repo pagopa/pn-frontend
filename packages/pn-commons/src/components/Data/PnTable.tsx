@@ -1,6 +1,7 @@
 import { Table, TableContainer } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
+import { SlotProps } from '../../models/PnTable';
 import checkChildren from '../../utility/children.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnTableBody from './PnTable/PnTableBody';
@@ -13,6 +14,8 @@ type Props = {
   testId?: string;
   /** Table children (body and header) */
   children: React.ReactNode;
+  /** Components props */
+  slotProps?: SlotProps;
 };
 
 // Table style
@@ -33,7 +36,7 @@ const Root = styled('div')(
   `
 );
 
-const PnTable: React.FC<Props> = ({ ariaTitle, testId, children }) => {
+const PnTable: React.FC<Props> = ({ ariaTitle, testId, children, slotProps }) => {
   // check on children
   checkChildren(
     children,
@@ -46,12 +49,13 @@ const PnTable: React.FC<Props> = ({ ariaTitle, testId, children }) => {
 
   return (
     <Root>
-      <TableContainer sx={{ marginBottom: '10px' }}>
+      <TableContainer sx={{ marginBottom: '10px' }} {...slotProps?.tableContainer}>
         <Table
           id="notifications-table"
           stickyHeader
           aria-label={ariaTitle ?? getLocalizedOrDefaultLabel('common', 'table.aria-label')}
           data-testid={testId}
+          {...slotProps?.table}
         >
           {children}
         </Table>

@@ -11,6 +11,8 @@ export const NOTIFICHE_DELEGATO = `${NOTIFICHE}-delegato`;
 export const DELEGHE = `/deleghe`;
 export const DELEGHEACARICO = `${DELEGHE}/a-carico`;
 export const DELEGATI = `${DELEGHE}/delegati`;
+export const INTEGRAZIONE_API = '/integrazione-api';
+export const REGISTRA_CHIAVE_PUBBLICA = `${INTEGRAZIONE_API}/registra-chiave-pubblica`;
 
 const NOTIFICA = '/dettaglio';
 export const DETTAGLIO_NOTIFICA = `${NOTIFICHE}/:id${NOTIFICA}`;
@@ -25,6 +27,8 @@ export const GET_NOTIFICHE_DELEGATO_PATH = (mandateId: string) => `${NOTIFICHE}/
 export const APP_STATUS = '/app-status';
 export { PRIVACY_POLICY, TERMS_OF_SERVICE };
 export const NOT_ACCESSIBLE = '/non-accessibile';
+export const TERMS_OF_SERVICE_SERCQ_SEND = '/termini-di-servizio/sercq-send';
+export const TERMS_OF_SERVICE_B2B = '/termini-di-servizio/b2b';
 
 const DASHBOARD = '/dashboard';
 const USERS_SEGMENT = '/users';
@@ -33,17 +37,21 @@ const GROUPS_SEGMENT = '/groups';
 /** USERS navigation link to SelfCare "Referenti" section for SEND
  * @param idOrganization
  */
-export const USERS = (idOrganization: string) =>
-  `${getConfiguration().SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${USERS_SEGMENT}`;
+export const USERS = (idOrganization: string, lang: string) =>
+  `${
+    getConfiguration().SELFCARE_BASE_URL
+  }${DASHBOARD}/${idOrganization}${USERS_SEGMENT}?lang=${lang}`;
 
 /** GROUPS navigation link to SelfCare "Gruppi" section for SEND
  * @param idOrganization
  */
-export const GROUPS = (idOrganization: string) =>
-  `${getConfiguration().SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${GROUPS_SEGMENT}`;
+export const GROUPS = (idOrganization: string, lang: string) =>
+  `${
+    getConfiguration().SELFCARE_BASE_URL
+  }${DASHBOARD}/${idOrganization}${GROUPS_SEGMENT}?lang=${lang}`;
 
 /** PROFILE navigation link to PNPG "Profilo" section for SEND
  * @param idOrganization
  */
-export const PROFILE = (idOrganization: string) =>
-  `${getConfiguration().SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}`;
+export const PROFILE = (idOrganization: string, lang: string) =>
+  `${getConfiguration().SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}?lang=${lang}`;

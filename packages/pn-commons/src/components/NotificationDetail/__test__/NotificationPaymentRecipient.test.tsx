@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
-import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
+import { notificationDTO, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../models';
 import { act, fireEvent, render, within } from '../../../test-utils';
 import { setPaymentCache } from '../../../utility';
@@ -15,7 +15,7 @@ import NotificationPaymentRecipient from '../NotificationPaymentRecipient';
 describe('NotificationPaymentRecipient Component', () => {
   const paymentsData: PaymentsData = {
     pagoPaF24: populatePaymentsPagoPaF24(
-      notificationToFe.timeline,
+      notificationDTO.timeline,
       getPagoPaF24Payments(payments, 0),
       paymentInfo
     ),
@@ -23,7 +23,7 @@ describe('NotificationPaymentRecipient Component', () => {
   };
 
   const F24TIMER = 15000;
-  const iun = notificationToFe.iun;
+  const iun = notificationDTO.iun;
 
   it('should render component', () => {
     const { getByTestId, queryByTestId, queryAllByTestId } = render(
@@ -344,7 +344,7 @@ describe('NotificationPaymentRecipient Component', () => {
   it('should go to specific page if is present on session storage', async () => {
     setPaymentCache(
       {
-        iun: notificationToFe.iun,
+        iun: notificationDTO.iun,
         timestamp: new Date().toISOString(),
         payments: [],
         currentPaymentPage: 1, // pages starts from 0

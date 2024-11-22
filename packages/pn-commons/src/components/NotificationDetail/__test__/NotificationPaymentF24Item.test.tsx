@@ -10,7 +10,7 @@ import NotificationPaymentF24Item from '../NotificationPaymentF24Item';
 let counter = 0;
 const downloadUrl = 'https://www.mocked-url.com';
 const retryAfterDelay = 2000;
-const getPaymentAttachment = createAsyncThunk<
+const getSentNotificationPayment = createAsyncThunk<
   PaymentAttachment,
   {
     name: PaymentAttachmentSName;
@@ -74,7 +74,7 @@ describe('NotificationPaymentF24Item Component', () => {
     downloadStatus: 'immediatly' | 'ready' | 'not-ready' | 'error',
     name: PaymentAttachmentSName,
     attachmentIdx?: number | undefined
-  ) => store.dispatch(getPaymentAttachment({ name, attachmentIdx, downloadStatus }));
+  ) => store.dispatch(getSentNotificationPayment({ name, attachmentIdx, downloadStatus }));
 
   it('renders component - should show title of f24Item', () => {
     const item = { ...f24Item, applyCost: true };
@@ -184,19 +184,13 @@ describe('NotificationPaymentF24Item Component', () => {
     expect(downloadingMessage).toBeInTheDocument();
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-in-progress');
     // wait...
-    await act(async () => {
-      vi.advanceTimersToNextTimerAsync();
-    });
+    await act(() => vi.advanceTimersToNextTimerAsync());
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-waiting');
     // wait...
-    await act(async () => {
-      vi.advanceTimersToNextTimerAsync();
-    });
+    await act(() => vi.advanceTimersToNextTimerAsync());
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-ongoing');
     // download the file
-    act(() => {
-      vi.advanceTimersByTime(1000);
-    });
+    await act(() => vi.advanceTimersByTime(1000));
     await vi.waitFor(() => {
       expect(downloadingMessage).not.toBeInTheDocument();
     });
@@ -226,19 +220,13 @@ describe('NotificationPaymentF24Item Component', () => {
     expect(downloadingMessage).toBeInTheDocument();
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-in-progress');
     // wait...
-    await act(async () => {
-      vi.advanceTimersToNextTimerAsync();
-    });
+    await act(() => vi.advanceTimersToNextTimerAsync());
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-waiting');
     // wait...
-    await act(async () => {
-      vi.advanceTimersToNextTimerAsync();
-    });
+    await act(() => vi.advanceTimersToNextTimerAsync());
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-ongoing');
     // show the error
-    await act(async () => {
-      vi.advanceTimersByTimeAsync(1000);
-    });
+    await act(() => vi.advanceTimersByTimeAsync(1000));
     const error = await vi.waitFor(() => getByTestId('f24-maxTime-error'));
     expect(error).toBeInTheDocument();
     expect(error).toHaveTextContent('detail.payment.f24-download-error');

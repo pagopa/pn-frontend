@@ -1,9 +1,10 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import {
   AppResponsePublisher,
+  AppRouteParams,
   InactivityHandler,
   LoadingPage,
   SessionModal,
@@ -53,6 +54,9 @@ const manageUnforbiddenError = (e: any) => {
  * SessionGuardRender: logica di renderizzazione
  */
 const SessionGuardRender = () => {
+  const [params] = useSearchParams();
+  const { DISABLE_INACTIVITY_HANDLER } = getConfiguration();
+
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
   const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession } = useAppSelector(
@@ -63,13 +67,13 @@ const SessionGuardRender = () => {
   const { hasApiErrors } = useErrors();
 
   const isAnonymousUser = !isUnauthorizedUser && !sessionToken;
-  const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
-
-  const { DISABLE_INACTIVITY_HANDLER } = getConfiguration();
+  const hasTosPrivacyApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_PRIVACY_APPROVAL);
 
   const hasErrorMessage = {
-    title: hasTosApiErrors ? t('error-when-fetching-tos-status.title') : t('leaving-app.title'),
-    message: hasTosApiErrors
+    title: hasTosPrivacyApiErrors
+      ? t('error-when-fetching-tos-status.title')
+      : t('leaving-app.title'),
+    message: hasTosPrivacyApiErrors
       ? t('error-when-fetching-tos-status.message')
       : t('leaving-app.message'),
   };
@@ -79,25 +83,31 @@ const SessionGuardRender = () => {
     message: isUnauthorizedUser ? messageUnauthorizedUser.message : hasErrorMessage.message,
   };
 
-  const renderIfInitialized = () =>
-    isUnauthorizedUser || hasTosApiErrors || isClosedSession ? (
-      <SessionModal
-        open
-        title={goodbyeMessage.title}
-        message={goodbyeMessage.message}
-        handleClose={() => goToLoginPortal()}
-        initTimeout
-      />
-    ) : isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? (
-      <Outlet />
-    ) : (
+  const renderIfInitialized = () => {
+    if (isUnauthorizedUser || hasTosPrivacyApiErrors || isClosedSession) {
+      return (
+        <SessionModal
+          open
+          title={goodbyeMessage.title}
+          message={goodbyeMessage.message}
+          handleClose={() => goToLoginPortal()}
+          initTimeout
+        />
+      );
+    } else if (isAnonymousUser) {
+      const aar = params.get(AppRouteParams.AAR);
+      goToLoginPortal(aar);
+      return <></>;
+    }
+    return (
       <InactivityHandler
-        inactivityTimer={inactivityTimer}
+        inactivityTimer={isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? 0 : inactivityTimer}
         onTimerExpired={() => dispatch(logout())}
       >
         <Outlet />
       </InactivityHandler>
     );
+  };
 
   return isInitialized ? renderIfInitialized() : <LoadingPage renderType="whole" />;
 };
@@ -121,7 +131,7 @@ const SessionGuard = () => {
   // vedi il commentone in useProcess
   const { isFinished, performStep } = useProcess(INITIALIZATION_SEQUENCE);
 
-  const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
+  const hasTosPrivacyApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_PRIVACY_APPROVAL);
   const hasAnyForbiddenError = hasSpecificStatusError(403);
 
   const getTokenParam = useCallback(() => {
@@ -173,7 +183,7 @@ const SessionGuard = () => {
    */
   useEffect(() => {
     const doInitalPageDetermination = async () => {
-      if (sessionToken && !isClosedSession && !hasTosApiErrors && !isForbiddenUser) {
+      if (sessionToken && !isClosedSession && !hasTosPrivacyApiErrors && !isForbiddenUser) {
         const rootPath = location.pathname === '/';
         if (rootPath) {
           // ----------------------
@@ -221,7 +231,7 @@ const SessionGuard = () => {
    */
   useEffect(() => {
     void performStep(INITIALIZATION_STEPS.SESSION_CHECK, () => {
-      if (sessionToken && !isClosedSession && !hasTosApiErrors && !isForbiddenUser) {
+      if (sessionToken && !isClosedSession && !hasTosPrivacyApiErrors && !isForbiddenUser) {
         sessionCheck(expDate);
       }
     });

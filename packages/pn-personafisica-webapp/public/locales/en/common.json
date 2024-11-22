@@ -1,31 +1,33 @@
 {
   "button": {
     "filtra": "Filter",
-    "annulla filtro": "Reset filters",
-    "indietro": "Back",
-    "associa": "Associate",
-    "capito": "OK, I got it",
+    "annulla filtro": "Remove filters",
+    "indietro": "Go back",
+    "associa": "Link",
+    "capito": "OK, I understand",
     "conferma": "Confirm",
+    "attiva": "Active",
     "annulla": "Cancel",
-    "modifica": "Edit",
+    "modifica": "Modification",
     "salva": "Save",
     "elimina": "Delete",
     "enter": "Enter",
     "exit": "Exit",
     "close": "Close",
-    "enable": "Activate",
+    "enable": "Active",
     "disable": "Deactivate",
-    "go-to-home": "Go to the home page",
-    "go-to-login": "Log in"
+    "continue": "Go forward",
+    "go-to-home": "Go to home page",
+    "go-to-login": "Login",
+    "not-now": "Not now",
+    "add": "Add"
   },
   "menu": {
     "notifiche": "Notifications",
     "deleghe": "Delegates",
     "profilo": "Your data",
-    "contacts": "Your contact information",
-    "app-status": "Platform status",
-    "aria-label": "platform-notifications main navigation",
-    "aria-label-inner": "platform-notifications recipient navigation"
+    "contacts": "Your addresses",
+    "app-status": "Platform status"
   },
   "header": {
     "logout": "Exit",
@@ -35,8 +37,8 @@
     "title": "SEND - Servizio Notifiche Digitali",
     "body": "To log in, accept the Terms and Conditions of Service and read the Privacy Policy.",
     "redo-body": "The Terms and Conditions of Service and Privacy Policy have changed. To log in, you must agree and confirm that you have read the new versions.",
-    "switch-label": "I accept the <1>Terms and Conditions of Use</1> and confirm that I have read the <0>Privacy Policy </0>",
-    "button": "Log in"
+    "switch-label": "By continuing you accept the service <1>terms and conditions of use</1> and confirm to have read the <0>Privacy Policy</0>",
+    "button": "Login"
   },
   "table": {
     "aria-label": "Item table"
@@ -45,7 +47,7 @@
     "aria-label": "Pagination Menu",
     "first": "first element",
     "last": "last element",
-    "page": "page",
+    "page": "Page",
     "next": "Go to next page",
     "previous": "Go to previous page",
     "selected": "selected item",
@@ -59,24 +61,24 @@
     "right-arrow": "Go to the next month",
     "switch-to-year": "calendar mode active, switch to year selection mode",
     "switch-to-calendar": "year selection mode active, switch to calendar mode",
-    "select-date": "Choose date",
-    "date-selected": "Choose date, the selected date is {{date}} "
+    "select-date": "Select date",
+    "date-selected": "Select date, the selected date is {{date}}"
   },
   "date-time": {
     "today-uppercase-initial": "Today",
-    "hour-of-day": "hours"
+    "hour-of-day": "time"
   },
   "error-boundary": {
     "title": "Something went wrong",
-    "description": "We were unable to load the page. Please reload it, or try again later.",
-    "action": "Reload page"
+    "description": "We were unable to load the page. Reload it, or try again later.",
+    "action": "Reload the page"
   },
   "not-accessible": {
-    "title": "Cannot access the platform",
+    "title": "The platform cannot be accessed",
     "description": "SEND is currently being tested and is not yet available. For more information on the initiative,",
     "action": "visit the dedicated website"
   },
-  "access-denied": "You do not have the necessary permissions to access this page",
+  "access-denied": "You do not have the necessary authorizations to access this page",
   "not-logged": "Log in to SEND",
   "not-logged-subtitle": "To view and manage your notifications, log in with SPID or CIE.",
   "not-found": {
@@ -89,20 +91,20 @@
   },
   "error-when-fetching-tos-status": {
     "title": "Issues logging into SEND",
-    "message": "Please try again later"
+    "message": "Try again later"
   },
   "messages": {
     "404-title": "Resource not found",
     "404-message": "An error has occurred. Please try again later",
-    "403-title": "Your session has timed out",
+    "403-title": "The session has expired",
     "403-message": "Enter and log in with SPID or CIE.",
-    "401-title": "Unauthorised user",
-    "401-message": "Current user does not have permissions",
+    "401-title": "User not authorized",
+    "401-message": "Current user does not have the authorizations",
     "451-title": "Platform not accessible",
-    "451-message": "Cannot access the platform",
+    "451-message": "The platform cannot be accessed",
     "500-title": "Service not available",
-    "500-message": "Due to a temporary service issue, your request has not been submitted. Please come back later.",
-    "lacking-grants-for-app-title": "You are not authorised to log in",
+    "500-message": "Due to a temporary service issue, your request has not been submitted. Try again later.",
+    "lacking-grants-for-app-title": "You are not authorized to log in",
     "invalid-token-title": "You cannot log in due to a technical issue – invalid token",
     "generic-token-exchange-problem": "Login could not be completed",
     "generic-title": "Generic error",
@@ -118,24 +120,24 @@
     "work": "Work with us",
     "certifications": "Certifications",
     "security": "Information security",
-    "personal-data": "Right to protection of personal data",
-    "cookie": "Cookie Preferences",
+    "personal-data": "Right to the protection of personal data",
+    "cookie": "Cookie preferences",
     "terms-conditions": "Terms and Conditions",
     "company": "Transparent company",
     "disclosure": "Responsible Disclosure Policy",
-    "321-model": "Form 231",
+    "321-model": "Model 231",
     "accessibility": "Accessibility",
-    "social": "Link: go to the website {{social}} of PagoPA S.p.A.",
+    "social": "Link: go to the {{social}} website of PagoPA S.p.A.",
     "resources": "Resources",
     "follow": "Follow us on",
-    "legal-part-1": "joint stock company with sole shareholder – share capital of 1,000,000 euros fully paid up – registered office in Rome, Piazza Colonna 370",
-    "legal-part-2": "CAP 00187 – Reg. no. in the Rome Business Register, Fiscal code and VAT number 15376371009"
+    "legal-part-1": "joint stock company with sole shareholder – share capital of € 1,000,000 fully paid up – registered office in Rome, Piazza Colonna 370",
+    "legal-part-2": "ZIP CODE 00187 – Reg. no. in the Rome Business Register, Fiscal code and VAT number 15376371009"
   },
-  "required-fields": "*Required fields",
-  "required-field": "Required field",
-  "too-long-field-error": "Write maximum {{maxLength}} characters",
+  "required-fields": "*Mandatory fields",
+  "required-field": "Mandatory field",
+  "too-long-field-error": "Enter a maximum of {{maxLength}} characters",
   "validation": {
-    "search-pattern-length-limit": "Search max {{maxLength}} characters",
+    "search-pattern-length-limit": "search max {{maxLength}} characters",
     "invalid-characters-not-inserted": "Invalid characters have not been entered."
   },
   "errors": {
@@ -144,15 +146,15 @@
       "message": "The request format is invalid."
     },
     "unauthorized": {
-      "title": "Unauthorised user",
-      "message": "The current user does not have permissions."
+      "title": "User not authorized",
+      "message": "Current user does not have the authorizations."
     },
     "unavailable_legal_reasons": {
       "title": "Platform not accessible",
-      "message": "Cannot access the platform"
+      "message": "The platform cannot be accessed"
     },
     "forbidden": {
-      "title": "Your session has timed out",
+      "title": "The session has expired",
       "message": "Enter and log in with SPID or CIE."
     },
     "not_found": {
@@ -161,7 +163,7 @@
     },
     "internal_server": {
       "title": "Service not available",
-      "message": "Due to a temporary service issue, your request has not been submitted. Please come back later."
+      "message": "Due to a temporary service issue, your request has not been submitted. Try again later."
     },
     "unhandled": {
       "title": "Generic error",
@@ -170,6 +172,16 @@
     "unknown": {
       "title": "Error",
       "message": "Unexpected error"
+    },
+    "invalid_type_code": {
+      "title": "This field only accepts numerical values",
+      "message": "Check the verification code and enter it again"
     }
+  },
+  "badges": {
+    "news": "New"
+  },
+  "conjunctions": {
+    "or": "or"
   }
 }

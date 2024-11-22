@@ -3,6 +3,238 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.2](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.1...v2.8.2) (2024-11-07)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+## [2.8.2-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.0...v2.8.2-RC.1) (2024-11-04)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+## [2.8.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0...v2.8.2-RC.0) (2024-11-04)
+
+
+### Bug Fixes
+
+* **PN-12757:** correct copy when timeline status is analog failure workflow ([#1351](https://github.com/pagopa/pn-frontend/issues/1351)) ([43e7b6e](https://github.com/pagopa/pn-frontend/commit/43e7b6ed5064d7ebaad51fbeba3b326342abad1c))
+
+
+### Features
+
+* **pn-12878:** New copy for analog flow ([#1359](https://github.com/pagopa/pn-frontend/issues/1359)) ([7fc60b1](https://github.com/pagopa/pn-frontend/commit/7fc60b1759762a9771a39cda6339985a041edcb0))
+
+
+
+## [2.7.1](https://github.com/pagopa/pn-frontend/compare/v2.8.0-RC.0...v2.7.1) (2024-10-14)
+
+
+
+
+
+# [2.8.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0-RC.3...v2.8.0) (2024-10-16)
+## [2.7.1](https://github.com/pagopa/pn-frontend/compare/v2.7.0...v2.7.1) (2024-10-14)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.8.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.7.0...v2.8.0-RC.0) (2024-10-08)
+
+
+### Bug Fixes
+
+* **pn-12539:** localized sercq send event in timeline ([#1328](https://github.com/pagopa/pn-frontend/issues/1328)) ([10bb57f](https://github.com/pagopa/pn-frontend/commit/10bb57fad8d4dfcef005547484b553bca13792c4))
+* **pn-12740:** update accessibility link with last version ([#1329](https://github.com/pagopa/pn-frontend/issues/1329)) ([e9c7a1e](https://github.com/pagopa/pn-frontend/commit/e9c7a1e01fa3e2d4390e2b4ef4249f8e1fd58d08))
+
+
+### Features
+
+* **pn-12392:** bff integration ([#1317](https://github.com/pagopa/pn-frontend/issues/1317)) ([4af8310](https://github.com/pagopa/pn-frontend/commit/4af8310b0d1191a94fe7527d65b53931c3a8abb0))
+* **pn-12394:** reworked layout of contacts page ([#1301](https://github.com/pagopa/pn-frontend/issues/1301)) ([b300f49](https://github.com/pagopa/pn-frontend/commit/b300f499d2e2d12b5e6a5c304491a787df214c58))
+* **pn-12438:** Rework section "Altri recapiti" for Digital Domicile feature ([#1305](https://github.com/pagopa/pn-frontend/issues/1305)) ([adc18db](https://github.com/pagopa/pn-frontend/commit/adc18dbf44346eff1443a570ad3d963b466e938e))
+* **pn-12438:** Rework special contacts section ([#1313](https://github.com/pagopa/pn-frontend/issues/1313)) ([57d3ec8](https://github.com/pagopa/pn-frontend/commit/57d3ec8503c24a3bf1e9b0416402b7dc52278e37))
+* **pn-12540:** Digital domicile mixpanel events ([#1321](https://github.com/pagopa/pn-frontend/issues/1321)) ([c0fbba7](https://github.com/pagopa/pn-frontend/commit/c0fbba7cd729698980d474a853e5173cc544500b))
+* **pn-12661:** reworked layout ([#1318](https://github.com/pagopa/pn-frontend/issues/1318)) ([6a794a6](https://github.com/pagopa/pn-frontend/commit/6a794a6c7d9af6be7b9d8f6a6f47cbe97c6455eb))
+* **PN-12808:** update copy for digital domicile feature ([#1333](https://github.com/pagopa/pn-frontend/issues/1333)) ([9178a63](https://github.com/pagopa/pn-frontend/commit/9178a632dbf425d026878a08392d10f282eee2b9))
+
+
+
+
+
+# [2.7.0](https://github.com/pagopa/pn-frontend/compare/v2.7.0-RC.1...v2.7.0) (2024-09-18)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.7.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.7.0-RC.0...v2.7.0-RC.1) (2024-09-10)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.7.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.6.1...v2.7.0-RC.0) (2024-09-09)
+
+
+### Bug Fixes
+
+* **pn-11700:** fixed horizontal scroll when title of F24 is too much long ([#1311](https://github.com/pagopa/pn-frontend/issues/1311)) ([e9a5135](https://github.com/pagopa/pn-frontend/commit/e9a51352cf85dddafffd509d8b0c335ec5d75c9b))
+* **pn-11701:** use mobile version of date picker on small screens ([#1308](https://github.com/pagopa/pn-frontend/issues/1308)) ([fa65f36](https://github.com/pagopa/pn-frontend/commit/fa65f368921949973c2ba470496a9bead2202b72))
+* **pn-12098:** app status chips color ([#1283](https://github.com/pagopa/pn-frontend/issues/1283)) ([9db4018](https://github.com/pagopa/pn-frontend/commit/9db4018e6800a21afa0b3006bb084449a1cf119c))
+
+
+### Features
+
+* **pn-11371:** Remove useless aria-label and tabIndex attributes ([#1286](https://github.com/pagopa/pn-frontend/issues/1286)) ([22f8683](https://github.com/pagopa/pn-frontend/commit/22f868373e9b57e9512837bbac29a583ca9788b5))
+* **pn-11898:** DigitalContactElem component refactor ([#1290](https://github.com/pagopa/pn-frontend/issues/1290)) ([ca61889](https://github.com/pagopa/pn-frontend/commit/ca6188964060fe74569e2ad9226b5daaaaac4300))
+* **pn-11969:** Remove context from courtesy contacts ([#1294](https://github.com/pagopa/pn-frontend/issues/1294)) ([fda5e6f](https://github.com/pagopa/pn-frontend/commit/fda5e6f9628bc37f1dd8d4cacb38664516c32605))
+
+
+
+
+
+## [2.6.1](https://github.com/pagopa/pn-frontend/compare/v2.6.0...v2.6.1) (2024-07-30)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.6.0](https://github.com/pagopa/pn-frontend/compare/v2.6.0-RC.1...v2.6.0) (2024-07-22)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.6.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.6.0-RC.0...v2.6.0-RC.1) (2024-07-18)
+
+
+### Bug Fixes
+
+* **pn-12118:** Removed meta characters escaping ([#1279](https://github.com/pagopa/pn-frontend/issues/1279)) ([994a8cf](https://github.com/pagopa/pn-frontend/commit/994a8cfa866e0b399d6b11e79bef2e58e80347b2))
+
+
+
+
+
+# [2.6.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.5.1...v2.6.0-RC.0) (2024-07-15)
+
+
+### Bug Fixes
+
+* **pn-10628:** SmartFilter component - close modal on submit button ([#1250](https://github.com/pagopa/pn-frontend/issues/1250)) ([e768063](https://github.com/pagopa/pn-frontend/commit/e768063211175d4844a6f4bc7a506e9ab2b458d0))
+* **PN-11250:** fixed aar link for PG users ([#1224](https://github.com/pagopa/pn-frontend/issues/1224)) ([ba3d75a](https://github.com/pagopa/pn-frontend/commit/ba3d75a379bf2254cd10dd8edc87e4ee7c72d1d3))
+* **pn-11331:** reworked login and access denied page to simplify html structure ([#1252](https://github.com/pagopa/pn-frontend/issues/1252)) ([ec27b89](https://github.com/pagopa/pn-frontend/commit/ec27b899e33ff1a43235e16b890952bd00be5196))
+* **pn-11618:** Added min and max width to DelegationsElements for pf and pg ([#1264](https://github.com/pagopa/pn-frontend/issues/1264)) ([3461f8e](https://github.com/pagopa/pn-frontend/commit/3461f8eb3b1539988de02c3e5c672e9e196350bc))
+
+
+### Features
+
+* **pn-11563:** Add 'download jpeg' button to sender dashboard ([#1259](https://github.com/pagopa/pn-frontend/issues/1259)) ([89b0508](https://github.com/pagopa/pn-frontend/commit/89b05080935f9019c3c476e0ab40a1d8aa882b24))
+* **pn-11747:** Handle multi language on PF ([#1274](https://github.com/pagopa/pn-frontend/issues/1274)) ([3ae5b39](https://github.com/pagopa/pn-frontend/commit/3ae5b39f6202091225cda8ddf742ea097cf83a13))
+
+
+
+
+
+## [2.5.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0...v2.5.1) (2024-06-26)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.5.0](https://github.com/pagopa/pn-frontend/compare/v2.5.0-RC.2...v2.5.0) (2024-06-14)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.5.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0-RC.0...v2.5.0-RC.1) (2024-06-05)
+
+
+### Bug Fixes
+
+* **PN-11334:** make closeIcon as button in drawer ([#1225](https://github.com/pagopa/pn-frontend/issues/1225)) ([3a2dded](https://github.com/pagopa/pn-frontend/commit/3a2dded902c69997bc5ce1aa310979cd1f757ffd))
+
+
+### Features
+
+* **PN-10910:** Integrate and test Sender Dashboard api ([#1223](https://github.com/pagopa/pn-frontend/issues/1223)) ([0b6f8b8](https://github.com/pagopa/pn-frontend/commit/0b6f8b8315acd5bb513207e33d0ccbe5fe5e9e4e))
+
+
+
+
+
+# [2.5.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.4.2...v2.5.0-RC.0) (2024-05-30)
+
+
+### Bug Fixes
+
+* **pn-10641:** contacts - show error message when user insert a wrong code twice ([#1219](https://github.com/pagopa/pn-frontend/issues/1219)) ([2338969](https://github.com/pagopa/pn-frontend/commit/2338969d0d8a751032b1d44a323149eb5e606381))
+* **pn-11219:** fixed `disservice_status` property on SEND_NOTIFICATION_DETAIL event ([ff2c706](https://github.com/pagopa/pn-frontend/commit/ff2c706d4df0978751f01e985a6864ebbf123717))
+
+
+### Features
+
+* **pn-10287:** Models autogeneration ([#1163](https://github.com/pagopa/pn-frontend/issues/1163)) ([b8f951e](https://github.com/pagopa/pn-frontend/commit/b8f951e1b6c838ef760c0ff21112fae72ac37b20))
+* **pn-10579:** migrate tos and privacy api to bff ones ([#1192](https://github.com/pagopa/pn-frontend/issues/1192)) ([6ca28cc](https://github.com/pagopa/pn-frontend/commit/6ca28cc1c06cd222307ce056dde3e1a57085c00d))
+* **pn-10738:** Downtime logs api bff integration ([#1196](https://github.com/pagopa/pn-frontend/issues/1196)) ([1602529](https://github.com/pagopa/pn-frontend/commit/16025293ac107a8df9948b606f7429ad89a7b5c5))
+* **PN-10855:** Sender Dashboard components - aggregate and andamental charts ([#1214](https://github.com/pagopa/pn-frontend/issues/1214)) ([8900b8b](https://github.com/pagopa/pn-frontend/commit/8900b8bb9b80c3e4e4f66b8257403f16f6a8317a))
+* **PN-10858:** Sender Dashboard Components 2/2 ([#1222](https://github.com/pagopa/pn-frontend/issues/1222)) ([f002364](https://github.com/pagopa/pn-frontend/commit/f0023640cfdf0bca360d9b01282a9deccc89f9cf))
+* **pn-10889:** Download notification documents bff api ([#1199](https://github.com/pagopa/pn-frontend/issues/1199)) ([0586a3b](https://github.com/pagopa/pn-frontend/commit/0586a3b04be1401b9d1a3ed11051a1e3258c489c))
+* **pn-10936:** payments api migration ([#1204](https://github.com/pagopa/pn-frontend/issues/1204)) ([0d27d4f](https://github.com/pagopa/pn-frontend/commit/0d27d4fcabe5f7b499ba1fa7ace647c009edf28a))
+* **pn-10953:** Mandate api migration ([#1209](https://github.com/pagopa/pn-frontend/issues/1209)) ([c85c72f](https://github.com/pagopa/pn-frontend/commit/c85c72f05e54ccf8bbdf6adf94f12dc9bc3cdebf))
+* **pn-9831:** migration to bff api for notification detail ([#1153](https://github.com/pagopa/pn-frontend/issues/1153)) ([b3936dc](https://github.com/pagopa/pn-frontend/commit/b3936dcaccdb3cb9b134d21303559d0dd13be166))
+
+
+
+
+
+## [2.4.2](https://github.com/pagopa/pn-frontend/compare/v2.4.2-RC.3...v2.4.2) (2024-05-02)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+## [2.4.2-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.4.2-RC.2...v2.4.2-RC.3) (2024-04-29)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+## [2.4.1](https://github.com/pagopa/pn-frontend/compare/v2.4.1-RC.1...v2.4.1) (2024-04-09)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
 # [2.4.0](https://github.com/pagopa/pn-frontend/compare/v2.4.0-RC.0...v2.4.0) (2024-03-07)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons

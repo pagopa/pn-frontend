@@ -1,17 +1,17 @@
 import { Row, formatDate } from '@pagopa-pn/pn-commons';
 
-import { Delegation, DelegationData, Person } from '../models/Deleghe';
+import { Delegate, DelegationData, Delegator, Person } from '../models/Deleghe';
 
 /**
  * Maps Delegation object to Item, in order to be visualised in an PnCardsList or PnTable component
- * @param  {Array<Delegation>} delegations
+ * @param  {Array<Delegate | Delegator>} delegations
  * @param  {boolean} isDelegator
  * @returns Array<Row>
  */
-export default function delegationToItem(
-  delegations: Array<Delegation>
+export default function delegationToItem<T extends Delegate | Delegator>(
+  delegations: Array<T>
 ): Array<Row<DelegationData>> {
-  return delegations.map((delegation: Delegation) => ({
+  return delegations.map((delegation: T) => ({
     id: delegation.mandateId,
     name: getFirstName(delegation),
     // la data arriva nel formato YYYY-MM-DDZ rimuovere slice in caso di rimozione di Z
@@ -32,9 +32,13 @@ export function generateVCode() {
   return crypto.getRandomValues(array).toString().slice(0, 5);
 }
 
-export function sortDelegations(order: string, sortAttr: string, values: Array<Delegation>) {
+export function sortDelegations<T extends Delegate | Delegator>(
+  order: string,
+  sortAttr: string,
+  values: Array<T>
+) {
   /* eslint-disable-next-line functional/immutable-data */
-  return values.sort((a: Delegation, b: Delegation) => {
+  return values.sort((a: T, b: T) => {
     const orderDirection = order === 'desc' ? 1 : -1;
     if (sortAttr === 'endDate') {
       const dateA = new Date(a.dateto).getTime();
@@ -45,7 +49,7 @@ export function sortDelegations(order: string, sortAttr: string, values: Array<D
   });
 }
 
-function compareDelegationsStrings(a: Delegation, b: Delegation, orderAttr: string) {
+function compareDelegationsStrings<T extends Delegate | Delegator>(a: T, b: T, orderAttr: string) {
   if ('delegator' in a && a.delegator && 'delegator' in b && b.delegator) {
     const delegator1 = compareOrderAttribute(a.delegator, orderAttr);
     const delegator2 = compareOrderAttribute(b.delegator, orderAttr);
@@ -65,7 +69,7 @@ function compareOrderAttribute(person: Person, orderAttr: string) {
     : person[orderAttr as keyof Person] ?? '';
 }
 
-function getFirstName(delegation: Delegation): string {
+function getFirstName<T extends Delegate | Delegator>(delegation: T): string {
   if ('delegator' in delegation && delegation.delegator) {
     return `${delegation.delegator?.displayName}`;
   } else if ('delegate' in delegation && delegation.delegate) {

@@ -1,21 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { DOWNTIME_HISTORY, DOWNTIME_STATUS } from '@pagopa-pn/pn-commons';
-import {
-  clearPagination,
-  setPagination,
-} from '@pagopa-pn/pn-personafisica-webapp/src/redux/appStatus/reducers';
-
-import {
-  currentStatusDTO,
-  currentStatusOk,
-  downtimesDTO,
-  simpleDowntimeLogPage,
-} from '../../../__mocks__/AppStatus.mock';
+import { currentStatusDTO, downtimesDTO } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { apiClient } from '../../../api/apiClients';
 import { store } from '../../store';
-import { getCurrentAppStatus, getDowntimeLogPage } from '../actions';
+import { getCurrentAppStatus, getDowntimeHistory, getDowntimeLegalFact } from '../actions';
+import { clearPagination, setPagination } from '../reducers';
 
 describe('App Status redux state tests', () => {
   let mock: MockAdapter;
@@ -40,21 +30,20 @@ describe('App Status redux state tests', () => {
   });
 
   it('Should be able to fetch the current status', async () => {
-    mock.onGet(DOWNTIME_STATUS()).reply(200, currentStatusDTO);
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
     const action = await store.dispatch(getCurrentAppStatus());
     expect(action.type).toBe('getCurrentAppStatus/fulfilled');
-    expect(action.payload).toEqual({
-      ...currentStatusOk,
-      lastCheckTimestamp: new Date().toISOString().slice(0, -5) + 'Z',
-    });
+    expect(action.payload).toEqual(currentStatusDTO);
   });
 
   it('Should be able to fetch a downtime page', async () => {
     const mockRequest = { startDate: '2012-11-01T00:00:00Z' };
-    mock.onGet(DOWNTIME_HISTORY(mockRequest)).reply(200, downtimesDTO);
-    const action = await store.dispatch(getDowntimeLogPage(mockRequest));
-    expect(action.type).toBe('getDowntimeLogPage/fulfilled');
-    expect(action.payload).toEqual(simpleDowntimeLogPage);
+    mock
+      .onGet(`/bff/v1/downtime/history?fromTime=${encodeURIComponent(mockRequest.startDate)}`)
+      .reply(200, downtimesDTO);
+    const action = await store.dispatch(getDowntimeHistory(mockRequest));
+    expect(action.type).toBe('getDowntimeHistory/fulfilled');
+    expect(action.payload).toEqual(downtimesDTO);
   });
 
   it('Should set the pagination', async () => {
@@ -75,5 +64,19 @@ describe('App Status redux state tests', () => {
     const clearedAppState = store.getState().appStatus;
 
     expect(clearedAppState.pagination).toEqual({ size: 10, page: 0, resultPages: ['0'] });
+  });
+
+  it('Should be able to fetch a downtime legal fact', async () => {
+    const mockRequest = 'mocked-legalfact-id';
+    const mockResponse = {
+      filename: 'mocked-filename',
+      contentLength: 0,
+      url: 'mocked-url',
+    };
+    mock.onGet(`/bff/v1/downtime/legal-facts/${mockRequest}`).reply(200, mockResponse);
+    const action = await store.dispatch(getDowntimeLegalFact(mockRequest));
+    const payload = action.payload;
+    expect(action.type).toBe('getDowntimeLegalFact/fulfilled');
+    expect(payload).toEqual(mockResponse);
   });
 });

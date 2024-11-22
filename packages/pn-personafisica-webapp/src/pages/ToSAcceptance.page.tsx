@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Link, Switch, Typography } from '@mui/material';
 import {
+  ConsentActionType,
+  ConsentType,
   ConsentUser,
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
@@ -12,7 +14,7 @@ import { TOSAgreement } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import * as routes from '../navigation/routes.const';
-import { acceptPrivacy, acceptToS } from '../redux/auth/actions';
+import { acceptTosPrivacy } from '../redux/auth/actions';
 import { useAppDispatch } from '../redux/hooks';
 
 type TermsOfServiceProps = {
@@ -62,16 +64,27 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
   );
 
   const handleAccept = async () => {
-    try {
-      if (!tosConsent.accepted) {
-        await dispatch(acceptToS(tosConsent.consentVersion)).unwrap();
-      }
-      if (!privacyConsent.accepted) {
-        await dispatch(acceptPrivacy(privacyConsent.consentVersion)).unwrap();
-      }
-    } catch (e) {
-      console.log(e);
+    const tosPrivacyBody = [];
+
+    if (!tosConsent.accepted) {
+      // eslint-disable-next-line functional/immutable-data
+      tosPrivacyBody.push({
+        action: ConsentActionType.ACCEPT,
+        version: tosConsent.consentVersion,
+        type: ConsentType.TOS,
+      });
     }
+
+    if (!privacyConsent.accepted) {
+      // eslint-disable-next-line functional/immutable-data
+      tosPrivacyBody.push({
+        action: ConsentActionType.ACCEPT,
+        version: privacyConsent.consentVersion,
+        type: ConsentType.DATAPRIVACY,
+      });
+    }
+
+    await dispatch(acceptTosPrivacy(tosPrivacyBody));
   };
 
   useEffect(() => {

@@ -20,62 +20,14 @@ export function isKnownFunctionality(functionality: string): boolean {
    Params for API calls
    ------------------------------------------------------------------------ */
 export interface GetDowntimeHistoryParams {
-  startDate: string;
+  startDate?: string;
   endDate?: string;
-  functionality?: Array<KnownFunctionality>;
   page?: string;
   size?: string;
 }
 
 /* ------------------------------------------------------------------------
    Internal model
-   ------------------------------------------------------------------------ */
-
-export interface Downtime {
-  rawFunctionality: string;
-  knownFunctionality?: KnownFunctionality;
-  status: DowntimeStatus;
-  startDate: string;
-  endDate?: string;
-  legalFactId?: string;
-  fileAvailable?: boolean;
-}
-
-export interface FunctionalityStatus {
-  rawFunctionality: string;
-  knownFunctionality?: KnownFunctionality;
-  isOperative: boolean;
-  currentDowntime?: Downtime;
-}
-
-export interface AppCurrentStatus {
-  appIsFullyOperative: boolean;
-  statusByFunctionality: Array<FunctionalityStatus>;
-  lastCheckTimestamp: string;
-}
-
-export interface DowntimeLogPage {
-  downtimes: Array<Downtime>;
-  nextPage?: string;
-}
-
-// use in internal model the same format for legal fact documents
-// as in the BE response
-export interface LegalFactDocumentDetails {
-  filename: string;
-  contentLength: number;
-  url: string;
-}
-
-export interface AppStatusData {
-  currentStatus?: AppCurrentStatus;
-  downtimeLogPage?: DowntimeLogPage;
-  legalFactDocumentData?: LegalFactDocumentDetails;
-  pagination: { size: number; page: number; resultPages: Array<string> };
-}
-
-/* ------------------------------------------------------------------------
-   BE responses
    ------------------------------------------------------------------------ */
 
 /**
@@ -89,24 +41,36 @@ export interface AppStatusData {
  * - startDate not a valid date
  * - endDate, if present, not a valid date
  */
-export interface DowntimeDTO {
-  functionality: string;
-  status: string;
+export interface Downtime {
+  functionality: KnownFunctionality;
+  status: DowntimeStatus;
   startDate: string;
   endDate?: string;
   legalFactId?: string;
   fileAvailable?: boolean;
 }
 
-/**
- * Possible errors: just those of open incidents
- */
-export interface AppStatusDTO {
-  functionalities: Array<string>;
-  openIncidents: Array<DowntimeDTO>;
+export interface AppCurrentStatus {
+  appIsFullyOperative: boolean;
+  lastCheckTimestamp: string;
 }
 
-export interface DowntimeLogPageDTO {
-  result: Array<DowntimeDTO>;
+export interface DowntimeLogHistory {
+  result: Array<Downtime>;
   nextPage?: string;
+}
+
+// use in internal model the same format for legal fact documents
+// as in the BE response
+export interface LegalFactDocumentDetails {
+  filename: string;
+  contentLength: number;
+  url: string;
+  retryAfter?: number;
+}
+
+export interface AppStatusData {
+  currentStatus?: AppCurrentStatus;
+  downtimeLogPage?: DowntimeLogHistory;
+  pagination: { size: number; page: number; resultPages: Array<string> };
 }

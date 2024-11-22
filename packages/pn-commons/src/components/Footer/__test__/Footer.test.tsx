@@ -1,12 +1,25 @@
+import { i18n as i18nInterface } from 'i18next';
 import { vi } from 'vitest';
 
 import { Languages } from '@pagopa/mui-italia';
 
-import { fireEvent, render, screen } from '../../../test-utils';
+import { fireEvent, render, screen, waitFor } from '../../../test-utils';
 import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utility/costants';
 import Footer from '../Footer';
 
 const mockOpenFn = vi.fn();
+
+const i18n: Partial<i18nInterface> = {
+  language: 'it',
+  changeLanguage: (lang: string) =>
+    new Promise(() => {
+      sessionStorage.setItem('lang', lang);
+      i18n.language = lang;
+    }),
+};
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({ i18n }),
+}));
 
 describe('Footer Component', () => {
   const original = window.open;
@@ -24,7 +37,9 @@ describe('Footer Component', () => {
 
   it('renders footer', () => {
     // render component
-    const { getAllByRole, getByRole } = render(<Footer loggedUser={true} />);
+    const { getAllByRole, getByRole } = render(
+      <Footer currentLanguage={i18n.language ?? 'it'} loggedUser={true} />
+    );
     const buttons = getAllByRole('link');
     expect(buttons).toHaveLength(4);
     buttons.forEach((button, index) => {
@@ -42,34 +57,74 @@ describe('Footer Component', () => {
   });
 
   it('clicks on company link', () => {
-    const { getAllByRole } = render(<Footer loggedUser={true} />);
+    const { getAllByRole } = render(
+      <Footer currentLanguage={i18n.language ?? 'it'} loggedUser={true} />
+    );
     const buttons = getAllByRole('link');
     fireEvent.click(buttons[0]);
     const localizedPagoPALink = pagoPALink();
-    expect(mockOpenFn).toBeCalledTimes(1);
-    expect(mockOpenFn).toBeCalledWith(localizedPagoPALink.href, '_blank');
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(localizedPagoPALink.href, '_blank');
   });
 
-  it('shows languages dropdown', async () => {
-    const { getByRole } = render(<Footer loggedUser={true} />);
+  it('change language', async () => {
+    const { getByRole, rerender } = render(
+      <Footer
+        loggedUser={true}
+        currentLanguage={i18n.language ?? 'it'}
+        onLanguageChanged={(langCode) => i18n.changeLanguage!(langCode)}
+      />
+    );
+    let dropdownLanguageButton = getByRole('button');
+    let expectedLanguagesLabels = Object.values(LANGUAGES.it);
+    // open the dropdown
+    fireEvent.click(dropdownLanguageButton);
+    let languageSelector = screen.getByRole('presentation');
+    expect(languageSelector).toBeInTheDocument();
+    let languageOptions = languageSelector?.querySelectorAll('ul li');
+    expect(languageOptions).toHaveLength(expectedLanguagesLabels.length);
+    // check the dropdown languages - by default the it language is selected
+    languageOptions.forEach((option, index) => {
+      expect(option).toHaveTextContent(expectedLanguagesLabels[index]);
+    });
+    // select a language - we assume that the languages array has at least a length of 3
+    fireEvent.click(languageOptions[2]);
+    await waitFor(() => {
+      expect(languageSelector).not.toBeInTheDocument();
+    });
+    // check that the right language is selected
+    const languageCode = Object.keys(LANGUAGES)[2] as keyof Languages;
+    expect(sessionStorage.getItem('lang')).toBe(languageCode);
+    expect(i18n.language).toBe(languageCode);
+    // simulate rerendering due to language change
+    rerender(<Footer loggedUser={true} currentLanguage={i18n.language ?? 'it'} />);
+    dropdownLanguageButton = getByRole('button');
+    expect(dropdownLanguageButton).toHaveTextContent(Object.values(LANGUAGES[languageCode]!)[2]);
+    // check the dropdown languages
+    expectedLanguagesLabels = Object.values(LANGUAGES[languageCode]!);
+    fireEvent.click(dropdownLanguageButton);
+    languageSelector = screen.getByRole('presentation');
+    languageOptions = languageSelector?.querySelectorAll('ul li');
+    languageOptions.forEach((option, index) => {
+      expect(option).toHaveTextContent(expectedLanguagesLabels[index]);
+    });
+  });
+
+  it('check language when sessionStorage is initially set', async () => {
+    // we assume that the languages array has at least a length of 4
+    const languageCode = Object.keys(LANGUAGES)[3] as keyof Languages;
+    i18n.language = languageCode;
+    const { getByRole } = render(<Footer loggedUser={true} currentLanguage={i18n.language} />);
     const dropdownLanguageButton = getByRole('button');
-    const languageKeys = Object.keys(LANGUAGES) as Array<keyof Languages>;
-    // This array represents how the options labels should sequentially change when you click the option.
-    const expectedLanguagesLabels = new Array();
-    for (let i = 0; i < languageKeys.length; i++) {
-      expectedLanguagesLabels.push(
-        LANGUAGES[languageKeys[i - 1 < 0 ? 0 : i - 1]]![languageKeys[i]]
-      );
-    }
-    languageKeys.forEach((currentDropdownLanguage, index) => {
-      fireEvent.click(dropdownLanguageButton);
-      const languageSelector = screen.getByRole('presentation');
-      expect(languageSelector).toBeInTheDocument();
-      const languageOptions = languageSelector?.querySelectorAll('ul li');
-      expect(languageOptions).toHaveLength(Object.keys(LANGUAGES[currentDropdownLanguage]!).length);
-      const languageOptionsArray = Array.from(languageOptions);
-      expect(languageOptionsArray[index]).toHaveTextContent(expectedLanguagesLabels[index]);
-      fireEvent.click(languageOptionsArray[index]);
+    const expectedLanguagesLabels = Object.values(LANGUAGES[languageCode]!);
+    expect(dropdownLanguageButton).toHaveTextContent(Object.values(LANGUAGES[languageCode]!)[3]);
+    // open the dropdown
+    fireEvent.click(dropdownLanguageButton);
+    const languageSelector = screen.getByRole('presentation');
+    const languageOptions = languageSelector?.querySelectorAll('ul li');
+    // check the dropdown languages
+    languageOptions.forEach((option, index) => {
+      expect(option).toHaveTextContent(expectedLanguagesLabels[index]);
     });
   });
 });

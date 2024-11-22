@@ -1,6 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 import { DigitalAddress } from '../../models/contacts';
-import { acceptDelegation, rejectDelegation } from '../delegation/actions';
+import { removeAddress, updateAddressesList } from '../../utility/contacts.utility';
+import { createOrUpdateAddress, deleteAddress } from '../contact/actions';
+import { acceptMandate, rejectMandate } from '../delegation/actions';
 import { Delegator } from '../delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './actions';
 
@@ -10,7 +13,7 @@ const generalInfoSlice = createSlice({
   initialState: {
     pendingDelegators: 0,
     delegators: [] as Array<Delegator>,
-    defaultAddresses: [] as Array<DigitalAddress>,
+    digitalAddresses: [] as Array<DigitalAddress>,
     domicileBannerOpened: true,
   },
   reducers: {
@@ -26,14 +29,34 @@ const generalInfoSlice = createSlice({
       state.delegators = action.payload.filter((delegator) => delegator.status !== 'pending');
     });
     builder.addCase(getDomicileInfo.fulfilled, (state, action) => {
-      state.defaultAddresses = action.payload;
+      // this action is needed for mixpanel tracking
+      state.digitalAddresses = action.payload;
     });
-    builder.addCase(acceptDelegation.fulfilled, (state) => {
+    builder.addCase(createOrUpdateAddress.fulfilled, (state, action) => {
+      if (action.payload) {
+        updateAddressesList(
+          action.meta.arg.addressType,
+          action.meta.arg.channelType,
+          action.meta.arg.senderId,
+          state.digitalAddresses,
+          action.payload
+        );
+      }
+    });
+    builder.addCase(deleteAddress.fulfilled, (state, action) => {
+      state.digitalAddresses = removeAddress(
+        action.meta.arg.addressType,
+        action.meta.arg.channelType,
+        action.meta.arg.senderId,
+        state.digitalAddresses
+      );
+    });
+    builder.addCase(acceptMandate.fulfilled, (state) => {
       if (state.pendingDelegators > 0) {
         state.pendingDelegators--;
       }
     });
-    builder.addCase(rejectDelegation.fulfilled, (state, action) => {
+    builder.addCase(rejectMandate.fulfilled, (state, action) => {
       const startingDelegatorsNum = state.delegators.length;
       state.delegators = state.delegators.filter(
         (delegator) => delegator.mandateId !== action.meta.arg

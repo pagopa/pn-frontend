@@ -1,30 +1,34 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { Party } from '../../models/party';
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 
 import {
-  DigitalAddresses,
+  AddressType,
+  ChannelType,
   DigitalAddress,
-  CourtesyChannelType,
+  ExternalEvent,
   IOAllowedValues,
 } from '../../models/contacts';
+import { Party } from '../../models/party';
+import { removeAddress, updateAddressesList } from '../../utility/contacts.utility';
+import { RootState } from '../store';
 import {
-  createOrUpdateCourtesyAddress,
-  createOrUpdateLegalAddress,
-  deleteCourtesyAddress,
-  deleteLegalAddress,
+  createOrUpdateAddress,
+  deleteAddress,
   disableIOAddress,
   enableIOAddress,
   getAllActivatedParties,
   getDigitalAddresses,
 } from './actions';
 
-const initialState = {
+const initialState: {
+  loading: boolean;
+  digitalAddresses: Array<DigitalAddress>;
+  parties: Array<Party>;
+  event: ExternalEvent | null;
+} = {
   loading: false,
-  digitalAddresses: {
-    legal: [],
-    courtesy: [],
-  } as DigitalAddresses,
-  parties: [] as Array<Party>,
+  digitalAddresses: [],
+  parties: [],
+  event: null,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -35,77 +39,59 @@ const contactsSlice = createSlice({
     resetState: () => initialState,
     // we remove the default legal address only interface side, with the goal of letting the user know that needs to add
     // a new email to modify the verifying pec address
-    resetPecValidation: (state) => {
-      state.digitalAddresses.legal = state
-        .digitalAddresses.legal.filter((address) => address.senderId !== 'default');
+    resetPecValidation: (state, action: PayloadAction<string>) => {
+      state.digitalAddresses = state.digitalAddresses.filter(
+        (address) =>
+          (address.senderId !== action.payload && address.addressType === AddressType.LEGAL) ||
+          address.addressType === AddressType.COURTESY
+      );
+    },
+    setExternalEvent: (state, action: PayloadAction<ExternalEvent>) => {
+      state.event = action.payload;
+    },
+    resetExternalEvent: (state) => {
+      state.event = null;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(getDigitalAddresses.fulfilled, (state, action) => {
       state.digitalAddresses = action.payload;
     });
-    builder.addCase(createOrUpdateLegalAddress.fulfilled, (state, action) => {
-      // update or add digital address
-      if (action.payload && action.payload.senderId) {
-        const addressIndex = state.digitalAddresses.legal.findIndex(
-          (l) => l.senderId === (action.payload as DigitalAddress).senderId
-        );
-        if (addressIndex > -1) {
-          // update if found
-          state.digitalAddresses.legal[addressIndex] = action.payload;
-        } else {
-          state.digitalAddresses.legal.push(action.payload);
-        }
-      }
-    });
-    builder.addCase(createOrUpdateCourtesyAddress.fulfilled, (state, action) => {
-      // update or add courtesy address
-      if (action.payload && action.payload.senderId) {
-        const addressIndex = state.digitalAddresses.courtesy.findIndex(
-          (address) =>
-            address.senderId === (action.payload as DigitalAddress).senderId &&
-            address.channelType === (action.payload as DigitalAddress).channelType
-        );
-        if (addressIndex > -1) {
-          // update if found
-          state.digitalAddresses.courtesy[addressIndex] = action.payload;
-        } else {
-          state.digitalAddresses.courtesy.push(action.payload);
-        }
-      }
-    });
-    builder.addCase(deleteLegalAddress.fulfilled, (state, action) => {
-      // remove digital address
+    builder.addCase(createOrUpdateAddress.fulfilled, (state, action) => {
       if (action.payload) {
-        state.digitalAddresses.legal = state.digitalAddresses.legal.filter(
-          (l) => l.senderId !== action.payload
+        updateAddressesList(
+          action.meta.arg.addressType,
+          action.meta.arg.channelType,
+          action.meta.arg.senderId,
+          state.digitalAddresses,
+          action.payload
         );
       }
     });
-    builder.addCase(deleteCourtesyAddress.fulfilled, (state, action) => {
-      // remove digital address
-      if (action.payload) {
-        state.digitalAddresses.courtesy = state.digitalAddresses.courtesy.filter(
-          (address) =>
-            address.senderId !== action.payload ||
-            address.channelType !== action.meta.arg.channelType
-        );
-      }
+    builder.addCase(deleteAddress.fulfilled, (state, action) => {
+      state.digitalAddresses = removeAddress(
+        action.meta.arg.addressType,
+        action.meta.arg.channelType,
+        action.meta.arg.senderId,
+        state.digitalAddresses
+      );
     });
     builder.addCase(enableIOAddress.fulfilled, (state) => {
-      const addressIndex = state.digitalAddresses.courtesy.findIndex(
-        (address) => address.channelType === CourtesyChannelType.IOMSG
+      const addressIndex = state.digitalAddresses.findIndex(
+        (address) =>
+          address.channelType === ChannelType.IOMSG && address.addressType === AddressType.COURTESY
       );
       if (addressIndex > -1) {
-        state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.ENABLED;
+        state.digitalAddresses[addressIndex].value = IOAllowedValues.ENABLED;
       }
     });
     builder.addCase(disableIOAddress.fulfilled, (state) => {
-      const addressIndex = state.digitalAddresses.courtesy.findIndex(
-        (address) => address.channelType === CourtesyChannelType.IOMSG
+      const addressIndex = state.digitalAddresses.findIndex(
+        (address) =>
+          address.channelType === ChannelType.IOMSG && address.addressType === AddressType.COURTESY
       );
       if (addressIndex > -1) {
-        state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.DISABLED;
+        state.digitalAddresses[addressIndex].value = IOAllowedValues.DISABLED;
       }
     });
     builder.addCase(getAllActivatedParties.fulfilled, (state, action) => {
@@ -114,6 +100,58 @@ const contactsSlice = createSlice({
   },
 });
 
-export const { resetState, resetPecValidation } = contactsSlice.actions;
+export const { resetState, resetPecValidation, setExternalEvent, resetExternalEvent } =
+  contactsSlice.actions;
+
+// START: SELECTORS
+const contactState = (state: RootState) => state.contactsState;
+
+const digitalAddresses = createSelector(
+  [contactState],
+  (contactsState) => contactsState.digitalAddresses
+);
+
+export type SelectedAddresses = {
+  addresses: Array<DigitalAddress>;
+  legalAddresses: Array<DigitalAddress>;
+  courtesyAddresses: Array<DigitalAddress>;
+  specialAddresses: Array<DigitalAddress>;
+} & { [key in `default${ChannelType}Address`]: DigitalAddress | undefined } & {
+  [key in `special${ChannelType}Addresses`]: Array<DigitalAddress>;
+};
+
+const memoizedSelectAddresses = createSelector([digitalAddresses], (digitalAddresses) => {
+  const initialValue = {
+    addresses: digitalAddresses,
+    legalAddresses: [] as Array<DigitalAddress>,
+    courtesyAddresses: [] as Array<DigitalAddress>,
+    specialAddresses: [] as Array<DigitalAddress>,
+  } as SelectedAddresses;
+  for (const channelType of Object.values(ChannelType)) {
+    initialValue[`default${channelType}Address`] = undefined;
+    initialValue[`special${channelType}Addresses`] = [];
+  }
+  return digitalAddresses.reduce((obj, addr) => {
+    if (addr.addressType === AddressType.LEGAL) {
+      obj.legalAddresses.push(addr);
+    }
+    if (addr.addressType === AddressType.COURTESY) {
+      obj.courtesyAddresses.push(addr);
+    }
+    if (addr.senderId === 'default') {
+      obj[`default${addr.channelType}Address`] = addr;
+    }
+    if (addr.senderId !== 'default') {
+      obj[`special${addr.channelType}Addresses`].push(addr);
+      obj.specialAddresses.push(addr);
+    }
+    return obj;
+  }, initialValue);
+});
+
+export const contactsSelectors = {
+  selectAddresses: memoizedSelectAddresses,
+};
+// END: SELECTORS
 
 export default contactsSlice;

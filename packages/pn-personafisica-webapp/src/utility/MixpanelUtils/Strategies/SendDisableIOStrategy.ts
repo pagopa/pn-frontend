@@ -10,6 +10,9 @@ export class SendDisableIOStrategy implements EventStrategy {
       [EventPropertyType.PROFILE]: {
         SEND_APPIO_STATUS: 'deactivated',
       },
+      [EventPropertyType.SUPER_PROPERTY]: {
+        SEND_APPIO_STATUS: 'deactivated',
+      },
     };
   }
 }

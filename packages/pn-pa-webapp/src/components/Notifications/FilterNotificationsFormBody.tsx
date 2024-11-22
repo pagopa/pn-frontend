@@ -44,7 +44,6 @@ const FilterNotificationsFormBody = ({
   const isMobile = useIsMobile();
   const { t, i18n } = useTranslation(['notifiche']);
   const localizedNotificationStatus = getNotificationAllowedStatus();
-
   const handlePaste = async (e: React.ClipboardEvent) => {
     e.preventDefault();
     const trimmedValue = e.clipboardData.getData('text').trim();
@@ -105,7 +104,7 @@ const FilterNotificationsFormBody = ({
         }
         size="small"
         fullWidth={isMobile}
-        sx={{ marginBottom: isMobile ? '20px' : '0' }}
+        sx={{ mb: isMobile ? '20px' : 0 }}
       />
       <TextField
         id="iunMatch"
@@ -122,10 +121,9 @@ const FilterNotificationsFormBody = ({
         }
         size="small"
         fullWidth={isMobile}
-        sx={{ marginBottom: isMobile ? '20px' : '0' }}
+        sx={{ mb: isMobile ? '20px' : 0 }}
         inputProps={{ maxLength: 25 }}
       />
-
       <CustomDatePicker
         language={i18n.language}
         label={t('filters.data_da')}
@@ -141,20 +139,18 @@ const FilterNotificationsFormBody = ({
             id: 'startDate',
             name: 'startDate',
             size: 'small',
-            'aria-label': t('filters.data_da-aria-label'), // aria-label for (TextField + Button) Group
             inputProps: {
               inputMode: 'text',
-              placeholder: 'gg/mm/aaaa',
               type: 'text',
               'aria-label': t('filters.data_da-input-aria-label'),
             },
             fullWidth: isMobile,
-            sx: { marginBottom: isMobile ? '20px' : '0' },
+            sx: { mb: isMobile ? '20px' : '0' },
           },
         }}
         disableFuture={true}
         minDate={tenYearsAgo}
-        maxDate={endDate ? endDate : undefined}
+        maxDate={endDate ?? undefined}
       />
       <CustomDatePicker
         language={i18n.language}
@@ -171,19 +167,17 @@ const FilterNotificationsFormBody = ({
             id: 'endDate',
             name: 'endDate',
             size: 'small',
-            'aria-label': t('filters.data_a-aria-label'),
             inputProps: {
               inputMode: 'text',
-              placeholder: 'gg/mm/aaaa',
               type: 'text',
               'aria-label': t('filters.data_a-input-aria-label'),
             },
             fullWidth: isMobile,
-            sx: { marginBottom: isMobile ? '20px' : '0' },
+            sx: { mb: isMobile ? '20px' : 0 },
           },
         }}
         disableFuture={true}
-        minDate={startDate ? startDate : tenYearsAgo}
+        minDate={startDate ?? tenYearsAgo}
       />
       <TextField
         id="status"
@@ -196,7 +190,7 @@ const FilterNotificationsFormBody = ({
         size="small"
         fullWidth={isMobile}
         sx={{
-          marginBottom: isMobile ? '20px' : '0',
+          mb: isMobile ? '20px' : 0,
           '& .MuiInputBase-root': {
             overflow: 'hidden',
             textOverflow: 'ellipsis',

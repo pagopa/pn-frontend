@@ -1,5 +1,5 @@
-import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
-import { DigitalDomicileType, TimelineCategory } from '../../../models';
+import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
+import { DigitalDomicileType, SERCQ_SEND_VALUE, TimelineCategory } from '../../../models';
 import { initLocalizationForTest } from '../../../test-utils';
 import { SendDigitalDomicileStep } from '../SendDigitalDomicileStep';
 
@@ -12,14 +12,14 @@ describe('SendDigitalDomicileStep', () => {
     const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_DOMICILE, {});
     const payload = {
       step: timelineElem,
-      recipient: notificationToFe.recipients[0],
+      recipient: notificationDTO.recipients[0],
       isMultiRecipient: false,
     };
     const sendDigitalDomicileStep = new SendDigitalDomicileStep();
     expect(sendDigitalDomicileStep.getTimelineStepInfo(payload)).toStrictEqual(null);
   });
 
-  it('test getTimelineStepInfo with digitalAddress data', () => {
+  it('test getTimelineStepInfo with digitalAddress data - PEC', () => {
     const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_DOMICILE, {
       digitalAddress: {
         address: 'nome.cognome@pec.it',
@@ -28,14 +28,14 @@ describe('SendDigitalDomicileStep', () => {
     });
     const payload = {
       step: timelineElem,
-      recipient: notificationToFe.recipients[0],
+      recipient: notificationDTO.recipients[0],
       isMultiRecipient: false,
     };
     const sendDigitalDomicileStep = new SendDigitalDomicileStep();
     // mono recipient
     expect(sendDigitalDomicileStep.getTimelineStepInfo(payload)).toStrictEqual({
-      label: `notifiche - detail.timeline.send-digital-domicile`,
-      description: `notifiche - detail.timeline.send-digital-domicile-description - ${JSON.stringify(
+      label: `notifiche - detail.timeline.send-digital-domicile-PEC`,
+      description: `notifiche - detail.timeline.send-digital-domicile-PEC-description - ${JSON.stringify(
         {
           ...sendDigitalDomicileStep.nameAndTaxId(payload),
           address: 'nome.cognome@pec.it',
@@ -46,11 +46,48 @@ describe('SendDigitalDomicileStep', () => {
     expect(
       sendDigitalDomicileStep.getTimelineStepInfo({ ...payload, isMultiRecipient: true })
     ).toStrictEqual({
-      label: `notifiche - detail.timeline.send-digital-domicile`,
-      description: `notifiche - detail.timeline.send-digital-domicile-description-multirecipient - ${JSON.stringify(
+      label: `notifiche - detail.timeline.send-digital-domicile-PEC`,
+      description: `notifiche - detail.timeline.send-digital-domicile-PEC-description-multirecipient - ${JSON.stringify(
         {
           ...sendDigitalDomicileStep.nameAndTaxId(payload),
           address: 'nome.cognome@pec.it',
+        }
+      )}`,
+    });
+  });
+
+  it('test getTimelineStepInfo with digitalAddress data - SERCQ SEND', () => {
+    const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_DOMICILE, {
+      digitalAddress: {
+        address: SERCQ_SEND_VALUE,
+        type: DigitalDomicileType.SERCQ,
+      },
+    });
+    const payload = {
+      step: timelineElem,
+      recipient: notificationDTO.recipients[0],
+      isMultiRecipient: false,
+    };
+    const sendDigitalDomicileStep = new SendDigitalDomicileStep();
+    // mono recipient
+    expect(sendDigitalDomicileStep.getTimelineStepInfo(payload)).toStrictEqual({
+      label: `notifiche - detail.timeline.send-digital-domicile-SERCQ-SEND`,
+      description: `notifiche - detail.timeline.send-digital-domicile-SERCQ-SEND-description - ${JSON.stringify(
+        {
+          ...sendDigitalDomicileStep.nameAndTaxId(payload),
+          address: SERCQ_SEND_VALUE,
+        }
+      )}`,
+    });
+    // multi recipient
+    expect(
+      sendDigitalDomicileStep.getTimelineStepInfo({ ...payload, isMultiRecipient: true })
+    ).toStrictEqual({
+      label: `notifiche - detail.timeline.send-digital-domicile-SERCQ-SEND`,
+      description: `notifiche - detail.timeline.send-digital-domicile-SERCQ-SEND-description-multirecipient - ${JSON.stringify(
+        {
+          ...sendDigitalDomicileStep.nameAndTaxId(payload),
+          address: SERCQ_SEND_VALUE,
         }
       )}`,
     });

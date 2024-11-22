@@ -1,10 +1,9 @@
 import {
   DigitalDomicileType,
+  NotificationDetailDocument,
   NotificationDetailRecipient,
-  NotificationFeePolicy,
   PhysicalCommunicationType,
   RecipientType,
-  NotificationDetailDocument,
 } from '@pagopa-pn/pn-commons';
 
 export enum PaymentModel {
@@ -12,6 +11,11 @@ export enum PaymentModel {
   PAGO_PA_NOTICE_F24_FLATRATE = 'PAGO_PA_NOTICE_F24_FLATRATE',
   PAGO_PA_NOTICE_F24 = 'PAGO_PA_NOTICE_F24',
   NOTHING = 'NOTHING',
+}
+
+export enum NotificationFeePolicy {
+  FLAT_RATE = 'FLAT_RATE',
+  DELIVERY_MODE = 'DELIVERY_MODE',
 }
 
 interface BaseNewNotification {
@@ -22,7 +26,7 @@ interface BaseNewNotification {
   abstract?: string;
   cancelledIun?: string;
   physicalCommunicationType: PhysicalCommunicationType;
-  senderDenomination?: string;
+  senderDenomination: string;
   senderTaxId?: string;
   group?: string;
   taxonomyCode: string;
@@ -32,6 +36,7 @@ interface BaseNewNotification {
 export interface NewNotificationDTO extends BaseNewNotification {
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
+  additionalLanguages?: Array<string>;
 }
 
 // New Notification
@@ -46,7 +51,6 @@ export interface NewNotificationRecipient {
   lastName: string;
   type: DigitalDomicileType;
   digitalDomicile: string;
-  at?: string;
   address: string;
   houseNumber: string;
   addressDetails?: string;
@@ -55,8 +59,6 @@ export interface NewNotificationRecipient {
   municipalityDetails?: string;
   province: string;
   foreignState: string;
-  showDigitalDomicile?: boolean;
-  showPhysicalAddress?: boolean;
 }
 
 export interface NewNotificationDocument {
@@ -77,11 +79,18 @@ export interface NewNotificationDocument {
   };
 }
 
-export interface NewNotification extends BaseNewNotification {
+export interface NewNotification extends BaseNewNotification, NewNotificationBilingualism {
   paymentMode?: PaymentModel;
   recipients: Array<NewNotificationRecipient>;
   documents: Array<NewNotificationDocument>;
   payment?: { [key: string]: PaymentObject };
+}
+
+export interface NewNotificationBilingualism {
+  lang?: 'it' | 'other';
+  additionalLang?: string;
+  additionalSubject?: string;
+  additionalAbstract?: string;
 }
 
 export interface PaymentObject {
@@ -95,3 +104,6 @@ export interface NewNotificationResponse {
   paProtocolNumber: string;
   idempotenceToken: string;
 }
+
+export const BILINGUALISM_LANGUAGES = ['de', 'sl', 'fr'];
+export const NewNotificationLangOther = 'other';

@@ -12,7 +12,6 @@ import {
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient } from '../../../api/apiClients';
-import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
 import { store } from '../../store';
 import { getReceivedNotifications } from '../actions';
 import { setNotificationFilters, setPagination, setSorting } from '../reducers';
@@ -60,10 +59,9 @@ describe('Dashbaord redux state tests', () => {
   it('Should be able to fetch the notifications list', async () => {
     mock
       .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-        })
+        `/bff/v1/notifications/received?startDate=${encodeURIComponent(
+          formatToTimezoneString(tenYearsAgo)
+        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
       )
       .reply(200, notificationsDTO);
     const action = await store.dispatch(
@@ -71,6 +69,27 @@ describe('Dashbaord redux state tests', () => {
         startDate: tenYearsAgo,
         endDate: today,
         isDelegatedPage: false,
+        size: 10,
+      })
+    );
+    expect(action.type).toBe('getReceivedNotifications/fulfilled');
+    expect(action.payload).toEqual(notificationsToFe);
+  });
+
+  it('Should be able to fetch the notifications list from delegated page', async () => {
+    mock
+      .onGet(
+        `/bff/v1/notifications/received/delegated?startDate=${encodeURIComponent(
+          formatToTimezoneString(tenYearsAgo)
+        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
+      )
+      .reply(200, notificationsDTO);
+    const action = await store.dispatch(
+      getReceivedNotifications({
+        startDate: tenYearsAgo,
+        endDate: today,
+        isDelegatedPage: true,
+        size: 10,
       })
     );
     expect(action.type).toBe('getReceivedNotifications/fulfilled');

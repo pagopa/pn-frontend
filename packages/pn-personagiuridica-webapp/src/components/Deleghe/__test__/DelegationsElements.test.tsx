@@ -4,15 +4,9 @@ import { vi } from 'vitest';
 import { Row } from '@pagopa-pn/pn-commons';
 import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
+import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import {
-  ACCEPT_DELEGATION,
-  REJECT_DELEGATION,
-  REVOKE_DELEGATION,
-  UPDATE_DELEGATION,
-} from '../../../api/delegations/delegations.routes';
 import { DelegationColumnData, DelegationStatus } from '../../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
@@ -134,7 +128,7 @@ describe('DelegationElements', async () => {
       { id: 'group-1', name: 'Group 1', status: 'ACTIVE' },
       { id: 'group-2', name: 'Group 2', status: 'ACTIVE' },
     ];
-    mock.onPatch(ACCEPT_DELEGATION('4')).reply(204);
+    mock.onPatch(`/bff/v1/mandate/4/accept`).reply(204);
     const { container, getByTestId } = render(
       <AcceptButton id="4" name="test" onAccept={actionCbk} />,
       {
@@ -142,7 +136,7 @@ describe('DelegationElements', async () => {
           delegationsState: {
             groups,
             delegations: {
-              delegators: arrayOfDelegators,
+              delegators: mandatesByDelegate,
             },
           },
         },
@@ -175,7 +169,7 @@ describe('DelegationElements', async () => {
     fireEvent.click(groupConfirmButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
-      expect(mock.history.patch[0].url).toContain(ACCEPT_DELEGATION('4'));
+      expect(mock.history.patch[0].url).toContain(`/bff/v1/mandate/4/accept`);
       expect(JSON.parse(mock.history.patch[0].data)).toStrictEqual({
         groups: ['group-2'],
         verificationCode: '01234',
@@ -213,7 +207,7 @@ describe('DelegationElements', async () => {
   });
 
   it('check revoke for delegatates', async () => {
-    mock.onPatch(REVOKE_DELEGATION('111')).reply(204);
+    mock.onPatch('/bff/v1/mandate/111/revoke').reply(204);
     const { getByTestId } = render(
       <Menu
         menuType="delegates"
@@ -232,7 +226,7 @@ describe('DelegationElements', async () => {
     fireEvent.click(revokeButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
-      expect(mock.history.patch[0].url).toContain('mandate/api/v1/mandate/111/revoke');
+      expect(mock.history.patch[0].url).toContain('/bff/v1/mandate/111/revoke');
       expect(showDialog).not.toBeInTheDocument();
     });
     expect(actionCbk).toBeCalledTimes(1);
@@ -260,7 +254,7 @@ describe('DelegationElements', async () => {
   });
 
   it('check reject for delegator', async () => {
-    mock.onPatch(REJECT_DELEGATION('111')).reply(204);
+    mock.onPatch('/bff/v1/mandate/111/reject').reply(204);
     const { getByTestId } = render(
       <Menu
         menuType="delegators"
@@ -278,7 +272,7 @@ describe('DelegationElements', async () => {
     fireEvent.click(rejectButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
-      expect(mock.history.patch[0].url).toContain('mandate/api/v1/mandate/111/reject');
+      expect(mock.history.patch[0].url).toContain('/bff/v1/mandate/111/reject');
       expect(showDialog).not.toBeInTheDocument();
     });
   });
@@ -352,7 +346,7 @@ describe('DelegationElements', async () => {
       { id: 'group-2', name: 'Group 2', status: 'ACTIVE' },
       { id: 'group-3', name: 'Group 3', status: 'ACTIVE' },
     ];
-    mock.onPatch(UPDATE_DELEGATION('4')).reply(204);
+    mock.onPatch(`/bff/v1/mandate/4/update`).reply(204);
     const { getByTestId } = render(
       <Menu
         menuType="delegators"
@@ -372,7 +366,7 @@ describe('DelegationElements', async () => {
           delegationsState: {
             groups,
             delegations: {
-              delegators: arrayOfDelegators,
+              delegators: mandatesByDelegate,
             },
           },
         },
@@ -392,7 +386,7 @@ describe('DelegationElements', async () => {
     fireEvent.click(groupConfirmButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
-      expect(mock.history.patch[0].url).toContain('/mandate/api/v1/mandate/4/update');
+      expect(mock.history.patch[0].url).toContain(`/bff/v1/mandate/4/update`);
       expect(JSON.parse(mock.history.patch[0].data)).toStrictEqual({
         groups: ['group-2', 'group-3'],
       });

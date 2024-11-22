@@ -11,17 +11,21 @@
     "work": "Work with us",
     "certifications": "Certifications",
     "security": "Information security",
-    "personal-data": "Right to protection of personal data",
-    "cookie": "Cookie Preferences",
+    "personal-data": "Right to the protection of personal data",
+    "cookie": "Cookie preferences",
     "terms-conditions": "Terms and Conditions",
     "company": "Transparent company",
     "disclosure": "Responsible Disclosure Policy",
     "321-model": "Model 231",
     "accessibility": "Accessibility",
-    "social": "Link: go to the website {{social}} of PagoPA S.p.A.",
+    "social": "Link: go to the {{social}} website of PagoPA S.p.A.",
     "resources": "Resources",
     "follow": "Follow us on",
-    "legal-part-1": "joint stock company with sole shareholder – share capital of 1,000,000 euros fully paid up – registered office in Rome, Piazza Colonna 370",
-    "legal-part-2": "CAP 00187 – Reg. no. in the Rome Business Register, Fiscal code and VAT number 15376371009"
+    "legal-part-1": "joint stock company with sole shareholder – share capital of € 1,000,000 fully paid up – registered office in Rome, Piazza Colonna 370",
+    "legal-part-2": "ZIP CODE 00187 – Reg. no. in the Rome Business Register, Fiscal code and VAT number 15376371009"
+  },
+  "button": {
+    "close": "Close",
+    "go-to-login": "Login"
   }
 }

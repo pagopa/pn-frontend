@@ -8,6 +8,10 @@ import PrivacyPolicyPage from '../PrivacyPolicy.page';
 describe('test the Privacy Policy page', () => {
   const loadNoticesFn = vi.fn();
 
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   beforeAll(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
@@ -25,8 +29,8 @@ describe('test the Privacy Policy page', () => {
 
   it('check that Privacy Policy page container is rendered', () => {
     const result = render(<PrivacyPolicyPage />);
-    expect(loadNoticesFn).toBeCalledTimes(1);
-    expect(loadNoticesFn).toBeCalledWith([compileOneTrustPath('mocked-id')], false);
+    expect(loadNoticesFn).toHaveBeenCalledTimes(1);
+    expect(loadNoticesFn).toHaveBeenCalledWith([compileOneTrustPath('mocked-id')], false);
     expect(result.getByRole('article')).toBeInTheDocument();
   });
 });

@@ -1,11 +1,9 @@
-export enum LegalChannelType {
+export enum ChannelType {
   PEC = 'PEC',
-}
-
-export enum CourtesyChannelType {
   EMAIL = 'EMAIL',
   SMS = 'SMS',
   IOMSG = 'APPIO',
+  SERCQ_SEND = 'SERCQ_SEND',
 }
 
 export enum IOAllowedValues {
@@ -13,19 +11,52 @@ export enum IOAllowedValues {
   DISABLED = 'DISABLED',
 }
 
-export interface DigitalAddress {
-  addressType: string;
-  recipientId: string;
+export enum AddressType {
+  LEGAL = 'LEGAL',
+  COURTESY = 'COURTESY',
+}
+
+export enum ContactSource {
+  RECAPITI = 'recapiti',
+  PROFILO = 'profilo',
+  HOME_NOTIFICHE = 'home_notifiche',
+  DETTAGLIO_NOTIFICA = 'dettaglio_notifica',
+}
+
+export enum ContactOperation {
+  ADD = 'ADD',
+  ADD_COURTESY = 'ADD_COURTESY',
+  SCROLL = 'SCROLL',
+}
+
+export interface Sender {
   senderId: string;
   senderName?: string;
-  channelType: LegalChannelType | CourtesyChannelType;
+}
+
+export interface DigitalAddress extends Sender {
+  addressType: AddressType;
+  channelType: ChannelType;
   value: string;
-  requestId?: string;
   pecValid?: boolean;
   codeValid?: boolean;
 }
 
-export interface DigitalAddresses {
-  legal: Array<DigitalAddress>;
-  courtesy: Array<DigitalAddress>;
+export interface DeleteDigitalAddressParams {
+  addressType: AddressType;
+  senderId: string;
+  channelType: ChannelType;
+}
+
+export interface SaveDigitalAddressParams extends Sender {
+  addressType: AddressType;
+  channelType: ChannelType;
+  value: string;
+  code?: string;
+}
+
+export interface ExternalEvent {
+  source: ContactSource;
+  destination: ChannelType;
+  operation: ContactOperation;
 }

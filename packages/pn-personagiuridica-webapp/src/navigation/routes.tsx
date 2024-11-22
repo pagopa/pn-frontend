@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import {
   AppNotAccessible,
+  ConsentType,
   LoadingPage,
   NotFound,
   PrivateRoute,
@@ -29,6 +30,8 @@ const NotificationDetail = lazyRetry(() => import('../pages/NotificationDetail.p
 const Notifiche = lazyRetry(() => import('../pages/Notifiche.page'));
 const PrivacyPolicyPage = lazyRetry(() => import('../pages/PrivacyPolicy.page'));
 const TermsOfServicePage = lazyRetry(() => import('../pages/TermsOfService.page'));
+const ApiIntegrationPage = lazyRetry(() => import('../pages/ApiIntegration.page'));
+const NewPublicKeyPage = lazyRetry(() => import('../pages/NewPublicKey.page'));
 
 const handleAssistanceClick = () => {
   /* eslint-disable-next-line functional/immutable-data */
@@ -38,6 +41,8 @@ const handleAssistanceClick = () => {
 function Router() {
   const { organization, hasGroup } = useAppSelector((state: RootState) => state.userState.user);
   const currentRoles = organization?.roles ? organization.roles.map((role) => role.role) : [];
+  const { IS_B2B_ENABLED } = getConfiguration();
+
   return (
     <Suspense fallback={<LoadingPage />}>
       <Routes>
@@ -129,6 +134,49 @@ function Router() {
                     </PrivateRoute>
                   }
                 />
+                <Route
+                  path={routes.INTEGRAZIONE_API}
+                  element={
+                    <PrivateRoute
+                      currentRoles={[]}
+                      requiredRoles={[]}
+                      additionalCondition={IS_B2B_ENABLED}
+                      redirectTo={<NotFound />}
+                    >
+                      <ApiIntegrationPage />
+                    </PrivateRoute>
+                  }
+                />
+
+                <Route path={routes.REGISTRA_CHIAVE_PUBBLICA}>
+                  <Route
+                    index
+                    element={
+                      <PrivateRoute
+                        currentRoles={currentRoles}
+                        requiredRoles={[PNRole.ADMIN]}
+                        additionalCondition={IS_B2B_ENABLED}
+                        redirectTo={<NotFound />}
+                      >
+                        <NewPublicKeyPage />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path=":kid"
+                    element={
+                      <PrivateRoute
+                        currentRoles={currentRoles}
+                        requiredRoles={[PNRole.ADMIN]}
+                        additionalCondition={IS_B2B_ENABLED}
+                        redirectTo={<NotFound />}
+                      >
+                        <NewPublicKeyPage />
+                      </PrivateRoute>
+                    }
+                  />
+                </Route>
+
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
               </Route>
             </Route>
@@ -140,6 +188,14 @@ function Router() {
         </Route>
         <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
         <Route path={routes.TERMS_OF_SERVICE} element={<TermsOfServicePage />} />
+        <Route
+          path={routes.TERMS_OF_SERVICE_SERCQ_SEND}
+          element={<TermsOfServicePage type={ConsentType.TOS_SERCQ} />}
+        />
+        <Route
+          path={routes.TERMS_OF_SERVICE_B2B}
+          element={<TermsOfServicePage type={ConsentType.TOS_DEST_B2B} />}
+        />
         <Route
           path={routes.NOT_ACCESSIBLE}
           element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}

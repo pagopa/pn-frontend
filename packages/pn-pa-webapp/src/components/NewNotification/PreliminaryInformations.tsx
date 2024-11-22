@@ -1,19 +1,17 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, ReactNode, useCallback, useEffect, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { ChangeEvent, useCallback, useEffect, useMemo } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { InfoOutlined } from '@mui/icons-material';
 import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  InputAdornment,
+  Link,
   MenuItem,
   Radio,
   RadioGroup,
   TextField,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import {
@@ -22,8 +20,14 @@ import {
   PhysicalCommunicationType,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
+import { LANGUAGES } from '@pagopa-pn/pn-commons/src/utility/costants';
+import { LangCode } from '@pagopa/mui-italia';
 
-import { NewNotification, PaymentModel } from '../../models/NewNotification';
+import {
+  NewNotification,
+  NewNotificationLangOther,
+  PaymentModel,
+} from '../../models/NewNotification';
 import { GroupStatus } from '../../models/user';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { NEW_NOTIFICATION_ACTIONS, getUserGroups } from '../../redux/newNotification/actions';
@@ -33,19 +37,14 @@ import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
+import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
+import PreliminaryInformationsContent from './PreliminaryInformationsContent';
+import PreliminaryInformationsLang from './PreliminaryInformationsLang';
 
 type Props = {
   notification: NewNotification;
   onConfirm: () => void;
 };
-
-const InfoTooltip = ({ tooltip }: { tooltip: string | ReactNode }) => (
-  <InputAdornment position="end">
-    <Tooltip arrow={true} title={tooltip}>
-      <InfoOutlined />
-    </Tooltip>
-  </InputAdornment>
-);
 
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
@@ -53,29 +52,56 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const hasGroups = useAppSelector(
     (state: RootState) => state.userState.user.organization.hasGroups
   );
+  const additionalLanguages = useAppSelector(
+    (state: RootState) => state.userState.additionalLanguages
+  );
 
-  const { t } = useTranslation(['notifiche'], {
+  // this is the initial value of the sender denomination. it used to show the error
+  const senderDenomination = useAppSelector((state: RootState) =>
+    state.userState.user.organization.rootParent?.description
+      ? state.userState.user.organization.rootParent?.description +
+        ' - ' +
+        state.userState.user.organization.name
+      : state.userState.user.organization.name
+  );
+
+  const { t, i18n } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.preliminary-informations',
   });
   const { t: tc } = useTranslation(['common']);
-  const { IS_PAYMENT_ENABLED } = useMemo(() => getConfiguration(), []);
+  const { IS_PAYMENT_ENABLED, TAXONOMY_SEND_URL } = useMemo(() => getConfiguration(), []);
 
-  const initialValues = useCallback(
-    () => ({
+  const languages = useMemo(() => {
+    const currentLang = i18n.language?.substring(0, 2) as LangCode;
+    return LANGUAGES[currentLang] ?? LANGUAGES.it;
+  }, [i18n.language]);
+
+  const initialValues = useCallback(() => {
+    const additionalLang = additionalLanguages?.length > 0 ? additionalLanguages[0] : undefined;
+
+    return {
       paProtocolNumber: notification.paProtocolNumber || '',
       subject: notification.subject || '',
+      senderDenomination: notification.senderDenomination ?? '',
       abstract: notification.abstract ?? '',
       group: notification.group ?? '',
       taxonomyCode: notification.taxonomyCode || '',
       physicalCommunicationType: notification.physicalCommunicationType || '',
       paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
-    }),
-    [notification, IS_PAYMENT_ENABLED]
-  );
+      lang: notification.lang || (additionalLang ? NewNotificationLangOther : 'it'),
+      additionalLang: notification.additionalLang || additionalLang || '',
+      additionalSubject: notification.additionalSubject || '',
+      additionalAbstract: notification.additionalAbstract || '',
+    } as PreliminaryInformationsPayload;
+  }, [notification, IS_PAYMENT_ENABLED, additionalLanguages]);
 
   const validationSchema = yup.object({
     paProtocolNumber: requiredStringFieldValidation(tc, 256),
     subject: requiredStringFieldValidation(tc, 134, 10),
+    senderDenomination: yup
+      .string()
+      .required(`${t('sender-denomination')} ${tc('required')}`)
+      .max(80, tc('too-long-field-error', { maxLength: 80 })),
     abstract: yup
       .string()
       .max(1024, tc('too-long-field-error', { maxLength: 1024 }))
@@ -89,16 +115,33 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
       .test('taxonomyCodeTest', `${t('taxonomy-id')} ${tc('invalid')}`, (value) =>
         dataRegex.taxonomyCode.test(value as string)
       ),
+    lang: yup.string().required(),
+    additionalLang: yup.string().when('lang', {
+      is: NewNotificationLangOther,
+      then: requiredStringFieldValidation(tc),
+    }),
+    additionalSubject: yup.string().when('lang', {
+      is: NewNotificationLangOther,
+      then: requiredStringFieldValidation(tc, 134, 10),
+    }),
+    additionalAbstract: yup.string().when('lang', {
+      is: NewNotificationLangOther,
+      then: yup
+        .string()
+        .max(1024, tc('too-long-field-error', { maxLength: 1024 }))
+        .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
+    }),
   });
 
   const formik = useFormik({
     initialValues: initialValues(),
     validateOnMount: true,
     validationSchema,
+    enableReinitialize: true,
     /** onSubmit validate */
     onSubmit: (values) => {
       if (formik.isValid) {
-        dispatch(setPreliminaryInformations(values as PreliminaryInformationsPayload));
+        dispatch(setPreliminaryInformations(values));
         onConfirm();
       }
     },
@@ -109,11 +152,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const handleChangeDeliveryMode = (e: ChangeEvent & { target: { value: any } }) => {
-    formik.handleChange(e);
-  };
-
-  const handleChangePaymentMode = (e: ChangeEvent & { target: { value: any } }) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     formik.handleChange(e);
   };
 
@@ -134,145 +173,176 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     >
       <form onSubmit={formik.handleSubmit} data-testid="preliminaryInformationsForm">
         <NewNotificationCard isContinueDisabled={!formik.isValid} title={t('title')}>
-          <TextField
-            id="paProtocolNumber"
-            label={`${t('protocol-number')}*`}
-            fullWidth
-            name="paProtocolNumber"
-            value={formik.values.paProtocolNumber}
-            onChange={handleChangeTouched}
-            error={formik.touched.paProtocolNumber && Boolean(formik.errors.paProtocolNumber)}
-            helperText={formik.touched.paProtocolNumber && formik.errors.paProtocolNumber}
-            size="small"
-            margin="normal"
+          <Typography variant="body2">{tc('required-fields')}</Typography>
+          <FormBox>
+            <FormBoxTitle text={t('sender-denomination')} />
+            <TextField
+              id="senderDenomination"
+              label={`${t('sender-name')}*`}
+              fullWidth
+              name="senderDenomination"
+              value={formik.values.senderDenomination}
+              onChange={handleChangeTouched}
+              error={Boolean(formik.errors.senderDenomination)}
+              disabled={senderDenomination.length < 80}
+              helperText={formik.errors.senderDenomination}
+              size="small"
+              margin="normal"
+            />
+          </FormBox>
+
+          <PreliminaryInformationsLang
+            formik={formik}
+            languages={languages}
+            onChange={handleChange}
+            onChangeTouched={handleChangeTouched}
           />
-          <TextField
-            id="subject"
-            label={`${t('subject')}*`}
-            fullWidth
-            name="subject"
-            value={formik.values.subject}
-            onChange={handleChangeTouched}
-            error={formik.touched.subject && Boolean(formik.errors.subject)}
-            helperText={formik.touched.subject && formik.errors.subject}
-            size="small"
-            margin="normal"
+          <PreliminaryInformationsContent
+            formik={formik}
+            onChangeTouched={handleChangeTouched}
+            languages={languages}
           />
-          <TextField
-            id="abstract"
-            label={t('abstract')}
-            fullWidth
-            name="abstract"
-            value={formik.values.abstract}
-            onChange={handleChangeTouched}
-            error={formik.touched.abstract && Boolean(formik.errors.abstract)}
-            helperText={formik.touched.abstract && formik.errors.abstract}
-            size="small"
-            margin="normal"
-          />
-          <CustomDropdown
-            id="group"
-            label={`${t('group')}${hasGroups ? '*' : ''}`}
-            fullWidth
-            name="group"
-            size="small"
-            margin="normal"
-            value={formik.values.group}
-            onChange={handleChangeTouched}
-            error={formik.touched.group && Boolean(formik.errors.group)}
-            helperText={formik.touched.group && formik.errors.group}
-            emptyStateMessage={t('no-groups')}
-          >
-            {groups.length > 0 &&
-              groups.map((group) => (
-                <MenuItem key={group.id} value={group.id}>
-                  {group.name}
-                </MenuItem>
-              ))}
-          </CustomDropdown>
-          <TextField
-            id="taxonomyCode"
-            label={`${t('taxonomy-id')}*`}
-            fullWidth
-            name="taxonomyCode"
-            value={formik.values.taxonomyCode}
-            onChange={handleChangeTouched}
-            error={formik.touched.taxonomyCode && Boolean(formik.errors.taxonomyCode)}
-            helperText={formik.touched.taxonomyCode && formik.errors.taxonomyCode}
-            size="small"
-            margin="normal"
-            InputProps={{
-              endAdornment: <InfoTooltip tooltip={t('taxonomy-tooltip')} />,
-            }}
-          />
-          <FormControl margin="normal" fullWidth>
-            <FormLabel id="comunication-type-label">
-              <Typography fontWeight={600} fontSize={16}>
-                {`${t('comunication-type')}*`}
-              </Typography>
-            </FormLabel>
-            <RadioGroup
-              aria-labelledby="comunication-type-label"
-              name="physicalCommunicationType"
-              row
-              value={formik.values.physicalCommunicationType}
-              onChange={handleChangeDeliveryMode}
+
+          <FormBox>
+            <FormBoxTitle text={t('protocol-number')} />
+            <FormBoxSubtitle text={t('protocol-number-subtitle')} />
+            <TextField
+              id="paProtocolNumber"
+              label={`${t('protocol-number')}*`}
+              fullWidth
+              name="paProtocolNumber"
+              value={formik.values.paProtocolNumber}
+              onChange={handleChangeTouched}
+              error={formik.touched.paProtocolNumber && Boolean(formik.errors.paProtocolNumber)}
+              helperText={formik.touched.paProtocolNumber && formik.errors.paProtocolNumber}
+              size="small"
+              margin="normal"
+            />
+          </FormBox>
+          <FormBox>
+            <FormBoxTitle text={t('taxonomy-id')} />
+            <Typography variant="body2" fontSize={'14px'} marginTop={0.5}>
+              <Trans
+                t={t}
+                i18nKey={'taxonomy-id-subtitle'}
+                components={[
+                  <Link
+                    key={'taxonomy'}
+                    href={TAXONOMY_SEND_URL}
+                    target="_blank"
+                    color={'primary'}
+                    fontWeight={600}
+                    sx={{ textDecoration: 'none' }}
+                  />,
+                ]}
+              />
+            </Typography>
+            <TextField
+              id="taxonomyCode"
+              label={`${t('taxonomy-id')}*`}
+              fullWidth
+              name="taxonomyCode"
+              value={formik.values.taxonomyCode}
+              onChange={handleChangeTouched}
+              error={formik.touched.taxonomyCode && Boolean(formik.errors.taxonomyCode)}
+              helperText={formik.touched.taxonomyCode && formik.errors.taxonomyCode}
+              size="small"
+              margin="normal"
+            />
+          </FormBox>
+          <FormBox>
+            <FormControl margin="none" fullWidth>
+              <FormLabel id="comunication-type-label">
+                <FormBoxTitle text={t('comunication-type-title')} />
+              </FormLabel>
+              <FormBoxSubtitle text={t('comunication-type-subtitle')} />
+              <RadioGroup
+                aria-labelledby="comunication-type-label"
+                name="physicalCommunicationType"
+                row
+                value={formik.values.physicalCommunicationType}
+                onChange={handleChange}
+              >
+                <FormControlLabel
+                  value={PhysicalCommunicationType.REGISTERED_LETTER_890}
+                  control={<Radio />}
+                  label={t('registered-letter-890')}
+                  data-testid="comunicationTypeRadio"
+                />
+                <FormControlLabel
+                  value={PhysicalCommunicationType.AR_REGISTERED_LETTER}
+                  control={<Radio />}
+                  label={t('simple-registered-letter')}
+                  data-testid="comunicationTypeRadio"
+                />
+              </RadioGroup>
+            </FormControl>
+          </FormBox>
+
+          <FormBox>
+            <FormBoxTitle text={t('notification-management-title')} />
+            <FormBoxSubtitle text={t('notification-management-subtitle')} />
+            <CustomDropdown
+              id="group"
+              label={`${t('group')}${hasGroups ? '*' : ''}`}
+              fullWidth
+              name="group"
+              size="small"
+              margin="normal"
+              value={formik.values.group}
+              onChange={handleChangeTouched}
+              error={formik.touched.group && Boolean(formik.errors.group)}
+              helperText={formik.touched.group && formik.errors.group}
+              emptyStateMessage={t('no-groups')}
             >
-              <FormControlLabel
-                value={PhysicalCommunicationType.REGISTERED_LETTER_890}
-                control={<Radio />}
-                label={t('registered-letter-890')}
-                data-testid="comunicationTypeRadio"
-              />
-              <FormControlLabel
-                value={PhysicalCommunicationType.AR_REGISTERED_LETTER}
-                control={<Radio />}
-                label={t('simple-registered-letter')}
-                data-testid="comunicationTypeRadio"
-              />
-            </RadioGroup>
-          </FormControl>
+              {groups.length > 0 &&
+                groups.map((group) => (
+                  <MenuItem key={group.id} value={group.id}>
+                    {group.name}
+                  </MenuItem>
+                ))}
+            </CustomDropdown>
+          </FormBox>
+
           {IS_PAYMENT_ENABLED && (
-            <>
-              <FormControl margin="normal" fullWidth>
-                <FormLabel id="payment-method-label">
-                  <Typography fontWeight={600} fontSize={16}>
-                    {`${t('payment-method')}*`}
-                  </Typography>
-                </FormLabel>
-                <RadioGroup
-                  aria-labelledby="payment-method-label"
-                  name="paymentMode"
-                  value={formik.values.paymentMode}
-                  onChange={handleChangePaymentMode}
-                >
-                  <FormControlLabel
-                    value={PaymentModel.PAGO_PA_NOTICE}
-                    control={<Radio />}
-                    label={t('pagopa-notice')}
-                    data-testid="paymentMethodRadio"
-                  />
-                  <FormControlLabel
-                    value={PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE}
-                    control={<Radio />}
-                    label={t('pagopa-notice-f24-flatrate')}
-                    data-testid="paymentMethodRadio"
-                  />
-                  <FormControlLabel
-                    value={PaymentModel.PAGO_PA_NOTICE_F24}
-                    control={<Radio />}
-                    label={t('pagopa-notice-f24')}
-                    data-testid="paymentMethodRadio"
-                  />
-                  <FormControlLabel
-                    value={PaymentModel.NOTHING}
-                    control={<Radio />}
-                    label={t('nothing')}
-                    data-testid="paymentMethodRadio"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </>
+            <FormControl margin="normal" fullWidth>
+              <FormLabel id="payment-method-label">
+                <Typography fontWeight={600} fontSize={'16px'}>
+                  {`${t('payment-method')}*`}
+                </Typography>
+              </FormLabel>
+              <RadioGroup
+                aria-labelledby="payment-method-label"
+                name="paymentMode"
+                value={formik.values.paymentMode}
+                onChange={handleChange}
+              >
+                <FormControlLabel
+                  value={PaymentModel.PAGO_PA_NOTICE}
+                  control={<Radio />}
+                  label={t('pagopa-notice')}
+                  data-testid="paymentMethodRadio"
+                />
+                <FormControlLabel
+                  value={PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE}
+                  control={<Radio />}
+                  label={t('pagopa-notice-f24-flatrate')}
+                  data-testid="paymentMethodRadio"
+                />
+                <FormControlLabel
+                  value={PaymentModel.PAGO_PA_NOTICE_F24}
+                  control={<Radio />}
+                  label={t('pagopa-notice-f24')}
+                  data-testid="paymentMethodRadio"
+                />
+                <FormControlLabel
+                  value={PaymentModel.NOTHING}
+                  control={<Radio />}
+                  label={t('nothing')}
+                  data-testid="paymentMethodRadio"
+                />
+              </RadioGroup>
+            </FormControl>
           )}
         </NewNotificationCard>
       </form>

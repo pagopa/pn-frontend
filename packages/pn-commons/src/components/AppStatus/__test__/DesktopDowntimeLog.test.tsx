@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
+import { beDowntimeHistoryWithIncidents } from '../../../__mocks__/AppStatus.mock';
 import { DowntimeStatus, KnownFunctionality } from '../../../models';
 import {
   RenderResult,
@@ -22,15 +22,11 @@ const checkDateField = (date: string | undefined, column: HTMLElement) => {
   expect(column).toHaveTextContent(text);
 };
 
-const checkFunctionalityField = (
-  functionality: KnownFunctionality | undefined,
-  rawFunctionality: string,
-  column: HTMLElement
-) => {
+const checkFunctionalityField = (functionality: KnownFunctionality, column: HTMLElement) => {
   const text = functionality
     ? `appStatus - legends.knownFunctionality.${functionality}`
     : `appStatus - legends.unknownFunctionality - ${JSON.stringify({
-        functionality: rawFunctionality,
+        functionality: functionality,
       })}`;
   expect(column).toHaveTextContent(text);
 };
@@ -53,7 +49,7 @@ const checkStatusField = (status: DowntimeStatus, column: HTMLElement) => {
   const statusChip = within(column).getByTestId('downtime-status');
   expect(statusChip).toHaveStyle({
     'background-color':
-      status === DowntimeStatus.KO ? theme.palette.error.light : theme.palette.success.light,
+      status === DowntimeStatus.KO ? theme.palette.error.main : theme.palette.success.main,
   });
 };
 
@@ -70,7 +66,7 @@ describe('DesktopDowntimeLog component', () => {
     await act(async () => {
       result = render(
         <DesktopDowntimeLog
-          downtimeLog={exampleDowntimeLogPage}
+          downtimeLog={beDowntimeHistoryWithIncidents}
           getDowntimeLegalFactDocumentDetails={getLegalFactDetailsMock}
         />
       );
@@ -82,20 +78,16 @@ describe('DesktopDowntimeLog component', () => {
     });
     // check body
     const rows = result.getAllByTestId('tableDowntimeLog.row');
-    expect(rows).toHaveLength(exampleDowntimeLogPage.downtimes.length);
+    expect(rows).toHaveLength(beDowntimeHistoryWithIncidents.result.length);
     rows.forEach((row, index) => {
       const dataColumns = within(row).getAllByTestId('tableDowntimeLog.row.cell');
-      const currentLog = exampleDowntimeLogPage.downtimes[index];
+      const currentLog = beDowntimeHistoryWithIncidents.result[index];
       dataColumns.forEach((column, jindex) => {
         if (columns[jindex] === 'startDate' || columns[jindex] === 'endDate') {
           checkDateField(currentLog[columns[jindex] as 'startDate' | 'endDate'], column);
         }
         if (columns[jindex] === 'functionality') {
-          checkFunctionalityField(
-            currentLog.knownFunctionality,
-            currentLog.rawFunctionality,
-            column
-          );
+          checkFunctionalityField(currentLog.functionality, column);
         }
         if (columns[jindex] === 'legalFactId') {
           checkLegalFactField(currentLog.fileAvailable, currentLog.status, column);
@@ -112,19 +104,19 @@ describe('DesktopDowntimeLog component', () => {
     await act(async () => {
       result = render(
         <DesktopDowntimeLog
-          downtimeLog={exampleDowntimeLogPage}
+          downtimeLog={beDowntimeHistoryWithIncidents}
           getDowntimeLegalFactDocumentDetails={getLegalFactDetailsMock}
         />
       );
     });
     expect(getLegalFactDetailsMock).toHaveBeenCalledTimes(0);
     const rows = result.getAllByTestId('tableDowntimeLog.row');
-    const logWithFile = exampleDowntimeLogPage.downtimes.findIndex((log) => log.fileAvailable);
+    const logWithFile = beDowntimeHistoryWithIncidents.result.findIndex((log) => log.fileAvailable);
     const button = within(rows[logWithFile]).getByRole('button');
     fireEvent.click(button);
     expect(getLegalFactDetailsMock).toHaveBeenCalledTimes(1);
     expect(getLegalFactDetailsMock).toHaveBeenCalledWith(
-      exampleDowntimeLogPage.downtimes[logWithFile].legalFactId
+      beDowntimeHistoryWithIncidents.result[logWithFile].legalFactId
     );
   });
 });

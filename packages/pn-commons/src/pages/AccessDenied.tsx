@@ -40,31 +40,31 @@ const AccessDenied: React.FC<Props> = ({
     >
       {icon && <Box mt={11}>{icon}</Box>}
 
-      <Box mt={2}>
-        <Typography align="center" color="text.primary" variant="h4" id="login-page-title">
-          {finalMessage}
-        </Typography>
-      </Box>
-      <Box my={2} maxWidth={700}>
-        <Typography align="center" color="text.primary" variant="body1">
-          {finalSubTitle}
-        </Typography>
-      </Box>
+      <Typography
+        align="center"
+        color="text.primary"
+        variant="h4"
+        id="login-page-title"
+        component="h1"
+        mt={2}
+      >
+        {finalMessage}
+      </Typography>
 
-      <Box my={4}>
-        <Button
-          id="login-button"
-          variant="contained"
-          onClick={() => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            isLogged ? goToHomePage() : goToLogin();
-          }}
-        >
-          {isLogged
-            ? getLocalizedOrDefaultLabel('common', 'button.go-to-home', 'Vai alla homepage')
-            : getLocalizedOrDefaultLabel('common', 'button.go-to-login', 'Accedi')}
-        </Button>
-      </Box>
+      <Typography align="center" color="text.primary" variant="body1" my={2} maxWidth={700}>
+        {finalSubTitle}
+      </Typography>
+
+      <Button
+        id="login-button"
+        variant="contained"
+        onClick={isLogged ? goToHomePage : goToLogin}
+        sx={{ my: 4 }}
+      >
+        {isLogged
+          ? getLocalizedOrDefaultLabel('common', 'button.go-to-home', 'Vai alla homepage')
+          : getLocalizedOrDefaultLabel('common', 'button.go-to-login', 'Accedi')}
+      </Button>
     </Stack>
   );
 };

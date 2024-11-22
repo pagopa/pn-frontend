@@ -1,7 +1,7 @@
-import { NotificationDetail, parseNotificationDetail } from '@pagopa-pn/pn-commons';
+import { NotificationDetail } from '@pagopa-pn/pn-commons';
 
-import { Delegator } from '../redux/delegation/types';
 import { NotificationDetailForRecipient } from '../models/NotificationDetail';
+import { Delegator } from '../redux/delegation/types';
 
 function fiscalNumberDaDelegator(
   delegatorsFromStore: Array<Delegator>,
@@ -31,12 +31,9 @@ export function parseNotificationDetailForRecipient(
     candidateCurrentRecipientIndex > -1 ? candidateCurrentRecipientIndex : 0;
   const currentRecipient = notification.recipients[currentRecipientIndex];
 
-  // do the changes common to the pa and pf
-  const commonNotificationDetailForFe = parseNotificationDetail(notification);
-
   return {
-    ...commonNotificationDetailForFe,
-    otherDocuments: commonNotificationDetailForFe.otherDocuments?.filter(
+    ...notification,
+    otherDocuments: notification.otherDocuments?.filter(
       (d) => d.recIndex === currentRecipientIndex
     ),
     currentRecipient,

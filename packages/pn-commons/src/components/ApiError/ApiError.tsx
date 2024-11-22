@@ -1,5 +1,5 @@
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
-import { Stack, Typography, styled } from '@mui/material';
+import { Link, Stack, Typography, styled } from '@mui/material';
 
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
@@ -45,14 +45,15 @@ const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText, apiId })
         sx={{ verticalAlign: 'middle', margin: '0 20px' }}
       />
       <Typography sx={{ marginRight: '8px' }}>{text}</Typography>
-      <Typography
+      <Link
         color="primary"
         fontWeight="bold"
-        sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+        component="button"
+        sx={{ cursor: 'pointer', textDecoration: 'underline', verticalAlign: 'inherit' }}
         onClick={onClick || (() => window.location.reload())}
       >
         {actionLaunchText}
-      </Typography>
+      </Link>
     </StyledStack>
   );
 };

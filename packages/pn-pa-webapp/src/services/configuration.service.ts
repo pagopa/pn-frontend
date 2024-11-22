@@ -18,6 +18,9 @@ interface PaConfigurationFromFile {
   SELFCARE_SEND_PROD_ID: string;
   API_B2B_LINK: string;
   IS_MANUAL_SEND_ENABLED: boolean;
+  IS_STATISTICS_ENABLED: boolean;
+  TAXONOMY_SEND_URL: string;
+  DOWNTIME_EXAMPLE_LINK: string;
 }
 
 export interface PaConfiguration extends PaConfigurationFromFile {
@@ -36,22 +39,22 @@ export interface PaConfiguration extends PaConfigurationFromFile {
   SELFCARE_SEND_PROD_ID: string;
   API_B2B_LINK: string;
   IS_MANUAL_SEND_ENABLED: boolean;
+  IS_STATISTICS_ENABLED: boolean;
+  TAXONOMY_SEND_URL: string;
 }
 
 class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
   constructor() {
     super();
     this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.token);
-    this.makeRequired(
-      this.ruleFor('SELFCARE_URL_FE_LOGIN').isString().matches(dataRegex.htmlPageUrl)
-    );
-    this.makeRequired(this.ruleFor('SELFCARE_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
-    this.makeRequired(this.ruleFor('API_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
-    this.makeRequired(this.ruleFor('LANDING_SITE_URL').isString());
+    this.ruleFor('SELFCARE_URL_FE_LOGIN').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('SELFCARE_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('API_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('LANDING_SITE_URL').isString().isRequired();
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
     this.ruleFor('ONE_TRUST_PP').isString().matches(dataRegex.token);
     this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.token);
-    this.makeRequired(this.ruleFor('PAGOPA_HELP_EMAIL').isString().matches(dataRegex.email));
+    this.ruleFor('PAGOPA_HELP_EMAIL').isString().isRequired().matches(dataRegex.email);
     this.ruleFor('DISABLE_INACTIVITY_HANDLER').isBoolean();
     this.ruleFor('IS_PAYMENT_ENABLED').isBoolean();
     this.ruleFor('MIXPANEL_TOKEN').isString();
@@ -59,10 +62,9 @@ class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
     this.ruleFor('SELFCARE_SEND_PROD_ID').isString();
     this.ruleFor('API_B2B_LINK').isString();
     this.ruleFor('IS_MANUAL_SEND_ENABLED').isBoolean();
-  }
-
-  makeRequired(rule: any): void {
-    rule.not().isEmpty().not().isUndefined().not().isNull();
+    this.ruleFor('IS_STATISTICS_ENABLED').isBoolean();
+    this.ruleFor('TAXONOMY_SEND_URL').isString();
+    this.ruleFor('DOWNTIME_EXAMPLE_LINK').isString();
   }
 }
 
@@ -86,7 +88,12 @@ export function getConfiguration(): PaConfiguration {
     WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
     SELFCARE_SEND_PROD_ID: configurationFromFile.SELFCARE_SEND_PROD_ID,
     API_B2B_LINK: configurationFromFile.API_B2B_LINK || '',
-    IS_MANUAL_SEND_ENABLED: Boolean(configurationFromFile.IS_MANUAL_SEND_ENABLED)
+    IS_MANUAL_SEND_ENABLED: Boolean(configurationFromFile.IS_MANUAL_SEND_ENABLED),
+    IS_STATISTICS_ENABLED: Boolean(configurationFromFile.IS_STATISTICS_ENABLED),
+    TAXONOMY_SEND_URL: configurationFromFile.TAXONOMY_SEND_URL,
+    DOWNTIME_EXAMPLE_LINK:
+      (configurationFromFile.LANDING_SITE_URL || '') +
+      (configurationFromFile.DOWNTIME_EXAMPLE_LINK || ''),
   };
 }
 

@@ -1,10 +1,14 @@
 import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
-import { digitalAddresses } from '../../../../__mocks__/Contacts.mock';
 import {
-  CourtesyChannelType,
+  digitalAddresses,
+  digitalCourtesyAddresses,
+  digitalLegalAddresses,
+} from '../../../../__mocks__/Contacts.mock';
+import {
+  AddressType,
+  ChannelType,
   DigitalAddress,
-  DigitalAddresses,
   IOAllowedValues,
 } from '../../../../models/contacts';
 import { SendYourContactDetailsStrategy } from '../SendYourContactDetailsStrategy';
@@ -13,10 +17,7 @@ describe('Mixpanel - Your Contact Details Strategy', () => {
   it('empty addresses', () => {
     const strategy = new SendYourContactDetailsStrategy();
 
-    const digitalAddresses: DigitalAddresses = {
-      legal: [],
-      courtesy: [],
-    };
+    const digitalAddresses: Array<DigitalAddress> = [];
 
     const contactIO: DigitalAddress | null = null;
 
@@ -37,10 +38,9 @@ describe('Mixpanel - Your Contact Details Strategy', () => {
     const strategy = new SendYourContactDetailsStrategy();
 
     const contactIO: DigitalAddress | null = {
-      addressType: 'addressType',
-      recipientId: 'recipientId',
+      addressType: AddressType.COURTESY,
       senderId: 'senderId',
-      channelType: CourtesyChannelType.IOMSG,
+      channelType: ChannelType.IOMSG,
       value: IOAllowedValues.ENABLED,
     };
 
@@ -49,13 +49,11 @@ describe('Mixpanel - Your Contact Details Strategy', () => {
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.SCREEN_VIEW,
-        PEC_exists: digitalAddresses.legal.length > 0,
+        PEC_exists: digitalLegalAddresses.length > 0,
         email_exists:
-          digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.EMAIL)
-            .length > 0,
+          digitalCourtesyAddresses.filter((c) => c.channelType === ChannelType.EMAIL).length > 0,
         telephone_exists:
-          digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.SMS)
-            .length > 0,
+          digitalCourtesyAddresses.filter((c) => c.channelType === ChannelType.SMS).length > 0,
         appIO_status: contactIO
           ? contactIO.value === IOAllowedValues.ENABLED
             ? 'activated'

@@ -5,10 +5,5 @@
     "name": "Nome",
     "family_name": "Cognome",
     "fiscal_number": "Codice fiscale"
-  },
-  "alert-redirect-to-contacts": {
-    "title": "Vuoi gestire i tuoi recapiti?",
-    "message": "Inserisci, visualizza o modifica i recapiti a cui vuoi ricevere le notifiche e comunicazioni di SEND.",
-    "action-text": "Vai ai tuoi recapiti"
   }
 }

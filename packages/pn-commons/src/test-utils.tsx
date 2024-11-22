@@ -19,6 +19,7 @@ import {
 } from '@testing-library/react';
 
 import { appStateSlice } from './redux/slices/appStateSlice';
+import { formatDate } from './utility';
 import { initLocalization } from './utility/localization.utility';
 
 type NavigationRouter = 'default' | 'none';
@@ -88,9 +89,9 @@ const customRender = (
 
 // utility function
 /** This function simulate media query and is useful to test differences between mobile and desktop view */
-function createMatchMedia(width: number) {
+function createMatchMedia(width: number, height?: number) {
   return (query: string): MediaQueryList => ({
-    matches: mediaQuery.match(query, { width }),
+    matches: mediaQuery.match(query, { width, height }),
     media: '',
     addListener: () => {},
     removeListener: () => {},
@@ -126,7 +127,9 @@ async function testSelect(
   optToSelect: number
 ) {
   const selectInput = container.querySelector(`input[name="${elementName}"]`);
-  const selectButton = container.querySelector(`div[id="${elementName}"]`);
+  const selectButton = container.querySelector(
+    `div[id="${elementName}"], div[data-testid="${elementName}"] [role="combobox"]`
+  );
   fireEvent.mouseDown(selectButton!);
   const selectOptionsContainer = screen.getByRole('presentation');
   expect(selectOptionsContainer).toBeInTheDocument();
@@ -263,6 +266,69 @@ async function testRadio(
   }
 }
 
+async function testCalendar(
+  form: HTMLFormElement | HTMLDivElement,
+  elementName: string,
+  dateToSelect: Date,
+  dateSelected: Date = new Date(),
+  isMobile: boolean = false
+) {
+  const input = form.querySelector(`input[name="${elementName}"]`);
+  // on mobile version we don't have the button, but
+  // the modal opens when the input is focused
+  if (isMobile) {
+    fireEvent.click(input!);
+  } else {
+    const button = input!.parentElement!.querySelector(`button`);
+    fireEvent.click(button!);
+  }
+  const dialog = await waitFor(() => document.querySelector('.PnDatePicker') as HTMLElement);
+  expect(dialog).toBeInTheDocument();
+  // get year, month and day
+  const year = dateToSelect.getFullYear();
+  const month = dateToSelect.getMonth() + 1;
+  const day = dateToSelect.getDate();
+  // compare with date initially selected
+  const selectedYear = dateSelected.getFullYear();
+  const selectedMonth = dateSelected.getMonth() + 1;
+  // select the new date
+  if (selectedYear !== year) {
+    const yearIcon = within(dialog).getByTestId('ArrowDropDownIcon');
+    expect(yearIcon).toBeInTheDocument();
+    fireEvent.click(yearIcon);
+    const yearButton = document
+      .evaluate(`//button[text()="${year.toString()}"]`, dialog, null, XPathResult.ANY_TYPE, null)
+      .iterateNext();
+    expect(yearButton).toBeInTheDocument();
+    fireEvent.click(yearButton!);
+  }
+  if (selectedMonth !== month) {
+    const diff = month - selectedMonth;
+    const monthIcon =
+      diff > 0
+        ? within(dialog).getByTestId('ArrowRightIcon')
+        : within(dialog).getByTestId('ArrowLeftIcon');
+    expect(monthIcon).toBeInTheDocument();
+    // eslint-disable-next-line functional/no-let
+    for (let i = 0; i < Math.abs(diff); i++) {
+      fireEvent.click(monthIcon);
+    }
+  }
+  // select the day to close the dialog
+  const dateButton = document.evaluate(
+    `//button[text()="${day}"]`,
+    dialog,
+    null,
+    XPathResult.ANY_TYPE,
+    null
+  );
+  fireEvent.click(dateButton.iterateNext()!);
+  await waitFor(() => {
+    expect(input).toHaveValue(formatDate(dateToSelect.toISOString(), false));
+    expect(dialog).not.toBeInTheDocument();
+  });
+}
+
 /**
  * Init localization and set the translate function to a default value
  */
@@ -316,6 +382,7 @@ export {
   testFormElements,
   testInput,
   testRadio,
+  testCalendar,
   initLocalizationForTest,
   getById,
   queryById,

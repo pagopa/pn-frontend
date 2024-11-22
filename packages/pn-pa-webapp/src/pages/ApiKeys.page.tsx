@@ -17,13 +17,12 @@ import { CopyToClipboardButton } from '@pagopa/mui-italia';
 import ApiKeyModal from '../components/ApiKeys/ApiKeyModal';
 import DesktopApiKeys from '../components/ApiKeys/DesktopApiKeys';
 import { ApiKey, ApiKeySetStatus, ModalApiKeyView } from '../models/ApiKeys';
-import { UserGroup } from '../models/user';
 import * as routes from '../navigation/routes.const';
 import {
   API_KEYS_ACTIONS,
+  changeApiKeyStatus,
   deleteApiKey,
   getApiKeys,
-  setApiKeyStatus,
 } from '../redux/apiKeys/actions';
 import { setPagination } from '../redux/apiKeys/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -32,46 +31,46 @@ import { getConfiguration } from '../services/configuration.service';
 
 const LinkApiB2b: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { API_B2B_LINK } = getConfiguration();
-  return <Link href={API_B2B_LINK}>{children}</Link>;
+  return (
+    <Link href={API_B2B_LINK} target="_blank">
+      {children}
+    </Link>
+  );
 };
 
-const TableGroupsId = ({ groups }: { groups?: Array<UserGroup> }) => {
+const TableGroupsId = ({ groups }: { groups?: Array<{ id: string; name: string }> }) => {
   const { t } = useTranslation(['apikeys']);
   return (
     <Box>
-      {groups &&
-        groups.map((group, index) => (
-          <Box
-            key={group.name}
+      {groups?.map((group, index) => (
+        <Box
+          key={group.name}
+          sx={{
+            display: 'flex',
+            alignContent: 'center',
+            justifyContent: 'center',
+            flexDirection: 'column',
+          }}
+        >
+          <Typography variant="body2" sx={{ mb: 2 }}>
+            <strong>{group.name}</strong>
+          </Typography>
+          <TextField
+            label={t('group-id')}
+            defaultValue={group.id}
+            fullWidth
             sx={{
-              display: 'flex',
-              alignContent: 'center',
-              justifyContent: 'center',
-              flexDirection: 'column',
+              mb: index < groups.length - 1 ? 2 : 0,
             }}
-          >
-            <Typography variant="body2" sx={{ mb: 2 }}>
-              <strong>{group.name}</strong>
-            </Typography>
-            <TextField
-              label={t('group-id')}
-              defaultValue={group.id}
-              fullWidth
-              sx={{
-                mb: index < groups.length - 1 ? 2 : 0,
-              }}
-              InputProps={{
-                readOnly: true,
-                endAdornment: (
-                  <CopyToClipboardButton
-                    value={() => group.id}
-                    tooltipTitle={t('group-id-copied')}
-                  />
-                ),
-              }}
-            />
-          </Box>
-        ))}
+            InputProps={{
+              readOnly: true,
+              endAdornment: (
+                <CopyToClipboardButton value={() => group.id} tooltipTitle={t('group-id-copied')} />
+              ),
+            }}
+          />
+        </Box>
+      ))}
     </Box>
   );
 };
@@ -103,7 +102,7 @@ const ApiKeys = () => {
 
   type modalType = {
     view: ModalApiKeyView;
-    apiKey?: ApiKey<UserGroup>;
+    apiKey?: ApiKey;
   };
 
   const [modal, setModal] = useState<modalType>({ view: ModalApiKeyView.NONE });
@@ -126,21 +125,21 @@ const ApiKeys = () => {
 
   const apiKeyBlocked = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.BLOCK })).then(
+    void dispatch(changeApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.BLOCK })).then(
       fetchApiKeys
     );
   };
 
   const apiKeyEnabled = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ENABLE })).then(
+    void dispatch(changeApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ENABLE })).then(
       fetchApiKeys
     );
   };
 
   const apiKeyRotated = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ROTATE })).then(
+    void dispatch(changeApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ROTATE })).then(
       fetchApiKeys
     );
   };
@@ -177,12 +176,7 @@ const ApiKeys = () => {
           marginTop: isMobile ? 3 : 10,
         }}
       >
-        <Typography
-          tabIndex={0}
-          aria-label={t('generated-api-keys')}
-          variant="h5"
-          sx={{ marginBottom: isMobile ? 3 : undefined }}
-        >
+        <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
           {t('generated-api-keys')}
         </Typography>
         <Button

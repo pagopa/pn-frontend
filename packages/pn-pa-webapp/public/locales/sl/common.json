@@ -1,12 +1,12 @@
 {
   "button": {
     "filtra": "Filtriraj",
-    "annulla filtro": "Odstrani filtre",
+    "annulla filtro": "Odstranite filtre",
     "indietro": "Nazaj",
     "annulla": "Prekliči",
-    "enter": "Dostop",
+    "enter": "Vstopi",
     "exit": "Izhod",
-    "continue": "Nadaljujte",
+    "continue": "Nadaljuj",
     "send": "Pošlji",
     "go-to-home": "Nazaj na domačo stran",
     "go-to-login": "Prijava",
@@ -18,19 +18,17 @@
     "groups": "Skupine",
     "api-key": "Ključ API",
     "statistics": "Statistični podatki",
-    "app-status": "Stanje platforme",
-    "aria-label": "platforma-obvestila glavna navigacija",
-    "aria-label-inner": "platforma-obvestila navigacija pošiljatelja"
+    "app-status": "Stanje platforme"
   },
   "header": {
     "logout": "Izhod",
     "pago-pa-link": "Spletna stran PagoPA S.p.A.",
-    "reserved-area": "Rezervirano območje",
+    "reserved-area": "rezerviranega območja",
     "notification-platform": "SEND - Servizio Notifiche Digitali"
   },
   "tos": {
     "title": "SEND - Servizio Notifiche Digitali",
-    "switch-label": "S prijavo se strinjate s <0>Pogoji in določili uporabe</0> storitve in potrjujete, da ste prebrali <1>Pravilnik o zasebnosti</1>.",
+    "switch-label": "Z dostopom sprejemate <0>Pogoje in določila uporabe</0> storitve in potrjujete, da ste prebrali <1>Politiko varovanja zasebnosti</1>.",
     "button": "Prijava"
   },
   "table": {
@@ -43,7 +41,7 @@
     "page": "stran",
     "next": "Pojdi na naslednjo stran",
     "previous": "Pojdi na prejšnjo stran",
-    "selected": "izbrani artikel",
+    "selected": "izbrani element",
     "rows-per-page": "Vrstice na stran"
   },
   "toast": {
@@ -59,7 +57,21 @@
   },
   "date-time": {
     "today-uppercase-initial": "Danes",
-    "hour-of-day": "ure"
+    "hour-of-day": "ure",
+    "s-month": {
+      "0": "jan",
+      "1": "feb",
+      "2": "mar",
+      "3": "apr",
+      "4": "maj",
+      "5": "jun",
+      "6": "jul",
+      "7": "avg",
+      "8": "sept",
+      "9": "okt",
+      "10": "nov",
+      "11": "dec"
+    }
   },
   "error-boundary": {
     "title": "Nekaj je šlo narobe",
@@ -73,7 +85,7 @@
   },
   "access-denied": "Nimate potrebnih dovoljenj za dostop do te strani",
   "not-logged": "Dostop do rezerviranega območja",
-  "not-logged-subtitle": "Če želite uporabiti SEND, dostopajte do omejenega območja s SPID ali CIE. Nato na ustrezni kartici pritisnite \"Upravljaj\".",
+  "not-logged-subtitle": "Če želite uporabiti SEND, dostopajte do omejenega območja s SPID ali CIE. Nato na ustrezni kartici pritisnite »Upravljaj«.",
   "not-found": {
     "title": "404: Stran, ki jo iščete, ne obstaja",
     "descpription": "Tukaj ste po pomoti, poskusite uporabiti navigacijo."
@@ -100,7 +112,7 @@
     "lacking-grants-for-app-title": "Nimate dovoljenja za dostop",
     "generic-token-exchange-problem": "Prijave ni bilo mogoče dokončati",
     "error-in-initial-info-loading": "Podatkov, potrebnih za zagon aplikacije, ni bilo mogoče pridobiti",
-    "invalid-token-title": "Ne morete se prijaviti zaradi tehnične težave - neveljaven žeton",
+    "invalid-token-title": "Ne morete se prijaviti zaradi tehnične težave – neveljaven žeton",
     "generic-title": "Splošna napaka",
     "generic-message": "Prišlo je do napake. Poskusite znova pozneje",
     "generic-api-error-main-text": "Teh podatkov ni bilo mogoče pridobiti.",
@@ -113,7 +125,7 @@
     "work": "Sodeluj z nami",
     "certifications": "Certifikati",
     "security": "Varnost podatkov",
-    "privacy-info": "Izjava o zasebnosti",
+    "privacy-info": "Obvestilo o varovanju zasebnosti",
     "personal-data": "Pravica do varstva osebnih podatkov",
     "cookie": "Nastavitve piškotkov",
     "terms-conditions": "Pogoji in določila",
@@ -128,20 +140,19 @@
     "legal-part-2": "Poštna številka 00187 – št. vpisa v Poslovni register v Rimu, davčna številka in identifikacijska številka za DDV 15376371009"
   },
   "required-fields": "*Obvezna polja",
-  "required-field": "Obvezno polje",
+  "required-field": "Zahtevano polje",
   "required": "obvezno",
-  "too-long-field-error": "Napišite največ {{maxLength}} znakov",
-  "too-short-field-error": "Napišite najmanj {{minLength}} znakov",
+  "too-long-field-error": "Vpišite največ {{maxLength}} znakov",
+  "too-short-field-error": "Vpišite najmanj {{minLength}} znakov",
   "no-spaces-at-edges": "Izbrišite presledke na začetku ali koncu",
   "invalid": "neveljavno",
   "upload-file": {
     "or": "ali",
-    "select-from-pc": "izberite ga iz računalnika",
-    "select-from-mobile": "Naložite dokument",
-    "loading": "Nalaganje v teku ...",
-    "sending": "Pošiljanje ...",
-    "hash-code": "Koda razpršitve",
-    "hash-code-descr": "Koda razpršitve je edinstvena alfanumerična koda, ki se uporablja za identifikacijo določene datoteke",
+    "select-file": "naloži datoteko",
+    "loading": "Naložite dokument ...",
+    "sending": "Pošiljanje v teku ...",
+    "hash-code": "Pošiljanje ...",
+    "hash-code-descr": "Koda razpršitveKoda razpršitve je edinstvena alfanumerična koda, ki se uporablja za identifikacijo določene datoteke",
     "ext-not-supported": "Končnica datoteke ni podprta. Poskusite znova z drugo datoteko.",
     "file-size-exceeded": "Izbrana datoteka presega največjo velikost {{limit}}.",
     "loading-error": "Pri nalaganju datoteke je prišlo do napake. Poskusite ponovno."

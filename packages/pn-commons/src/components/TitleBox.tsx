@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Grid, GridSize, SxProps, Theme, Typography } from '@mui/material';
+import { Grid, GridProps, GridSize, SxProps, Theme, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 
 type Props = {
@@ -12,6 +12,8 @@ type Props = {
   subTitle?: string | JSX.Element;
   /** Gridsize for title on mobile devices */
   mbTitle?: GridSize;
+  /** style for title Grid item */
+  propsTitle?: GridProps;
   mtGrid?: number;
   /** Gridsize for subtitle on mobile devices */
   mbSubTitle?: number;
@@ -21,8 +23,6 @@ type Props = {
   variantSubTitle?: Variant;
   /** style to apply */
   sx?: SxProps<Theme>;
-  /** a11y for component */
-  ariaLabel?: string;
   /** paragraph component */
   children?: React.ReactNode;
 };
@@ -35,30 +35,21 @@ const TitleBox: React.FC<Props> = ({
   titleButton,
   subTitle,
   mbTitle = 2,
+  propsTitle,
   mtGrid,
   mbSubTitle,
   variantTitle = 'h1',
   variantSubTitle = 'h5',
   sx,
-  ariaLabel,
   children,
 }) => (
-  <Grid
-    id="page-header-container"
-    aria-orientation="horizontal"
-    tabIndex={0}
-    container
-    mt={mtGrid}
-    sx={sx}
-  >
+  <Grid id="page-header-container" aria-orientation="horizontal" container mt={mtGrid} sx={sx}>
     {title && (
-      <Grid id="item" item xs={12} mb={mbTitle}>
+      <Grid id="item" item xs={12} mb={mbTitle} {...propsTitle}>
         <Typography
           id={`${title}-page`}
           data-testid="titleBox"
           role="heading"
-          aria-label={ariaLabel}
-          aria-selected="true"
           variant={variantTitle}
           display="inline-block"
           sx={{ verticalAlign: 'middle' }}

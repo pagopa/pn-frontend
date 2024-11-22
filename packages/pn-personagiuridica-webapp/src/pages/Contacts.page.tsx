@@ -1,34 +1,35 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
-import { Box, Link, Stack, Typography } from '@mui/material';
+import { Box, Link, Stack } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
+import ContactsSummaryCards from '../components/Contacts/ContactsSummaryCards';
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
-import { DigitalContactsCodeVerificationProvider } from '../components/Contacts/DigitalContactsCodeVerification.context';
-import InsertLegalContact from '../components/Contacts/InsertLegalContact';
-import LegalContactsList from '../components/Contacts/LegalContactsList';
+import LegalContacts from '../components/Contacts/LegalContacts';
 import SpecialContacts from '../components/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PROFILE } from '../navigation/routes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
-import { resetState } from '../redux/contact/reducers';
+import { contactsSelectors, resetState } from '../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
 const Contacts = () => {
-  const { t } = useTranslation(['recapiti']);
+  const { t, i18n } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
-  const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
+  const addressesData = useAppSelector(contactsSelectors.selectAddresses);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
-  const profileUrl = PROFILE(organization?.id);
-  const digitalAddresses = useAppSelector(
-    (state: RootState) => state.contactsState.digitalAddresses
-  );
+  const profileUrl = PROFILE(organization?.id, i18n.language);
+
   const [pageReady, setPageReady] = useState(false);
 
+  const showSpecialContactsSection =
+    !!addressesData.defaultSERCQ_SENDAddress ||
+    !!addressesData.defaultPECAddress?.pecValid !== false;
+
   const fetchAddresses = useCallback(() => {
-    void dispatch(getDigitalAddresses(recipientId)).then(() => {
+    void dispatch(getDigitalAddresses()).then(() => {
       setPageReady(true);
     });
   }, []);
@@ -45,69 +46,46 @@ const Contacts = () => {
   };
 
   const subtitle = (
-    <>
-      {t('subtitle-1', { ns: 'recapiti', recipient: organization.name })}
-      <Link
-        color="primary"
-        fontWeight={'bold'}
-        onClick={handleRedirectToProfilePage}
-        sx={{ cursor: 'pointer' }}
-        aria-label={t('subtitle-link', { ns: 'recapiti' })}
-      >
-        {t('subtitle-link', { ns: 'recapiti' })}
-      </Link>
-      {t('subtitle-2', { ns: 'recapiti' })}
-    </>
+    <Trans
+      i18nKey="subtitle"
+      ns="recapiti"
+      values={{ recipient: organization.name }}
+      components={[
+        <Link
+          key="profilePageLink"
+          color="primary"
+          fontWeight="bold"
+          onClick={handleRedirectToProfilePage}
+          sx={{ verticalAlign: 'inherit' }}
+          component="button"
+        />,
+      ]}
+    ></Trans>
   );
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
-      <DigitalContactsCodeVerificationProvider>
-        <Box p={3}>
-          <TitleBox
-            variantTitle="h4"
-            title={t('title')}
-            subTitle={subtitle}
-            variantSubTitle={'body1'}
-            ariaLabel={t('title')}
-          />
-          <ApiErrorWrapper
-            apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
-            reloadAction={fetchAddresses}
-            mt={2}
-          >
-            <Stack direction="column" spacing={8} mt={8}>
-              <Stack spacing={3}>
-                <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
-                  <Box sx={{ width: '100%' }}>
-                    {digitalAddresses.legal.length === 0 ? (
-                      <InsertLegalContact recipientId={recipientId} />
-                    ) : (
-                      <LegalContactsList
-                        recipientId={recipientId}
-                        legalAddresses={digitalAddresses.legal}
-                      />
-                    )}
-                  </Box>
-                </Stack>
-                <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
-              </Stack>
-              {(digitalAddresses.legal.length > 0 || digitalAddresses.courtesy.length > 0) && (
-                <Stack spacing={2}>
-                  <Typography id="specialContactTitle" variant="h5" fontWeight={600} fontSize={28}>
-                    {t('special-contacts-title')}
-                  </Typography>
-                  <SpecialContacts
-                    recipientId={recipientId}
-                    legalAddresses={digitalAddresses.legal}
-                    courtesyAddresses={digitalAddresses.courtesy}
-                  />
-                </Stack>
-              )}
-            </Stack>
-          </ApiErrorWrapper>
-        </Box>
-      </DigitalContactsCodeVerificationProvider>
+      <Box p={3}>
+        <TitleBox
+          variantTitle="h4"
+          title={t('title')}
+          subTitle={subtitle}
+          variantSubTitle={'body1'}
+        />
+        <ApiErrorWrapper
+          apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
+          reloadAction={fetchAddresses}
+        >
+          <ContactsSummaryCards />
+          <Stack direction="column" spacing={6}>
+            <Box>
+              <LegalContacts />
+              {showSpecialContactsSection && <SpecialContacts />}
+            </Box>
+            <CourtesyContacts />
+          </Stack>
+        </ApiErrorWrapper>
+      </Box>
     </LoadingPageWrapper>
   );
 };

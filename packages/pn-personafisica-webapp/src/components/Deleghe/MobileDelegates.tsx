@@ -21,7 +21,7 @@ import {
 import { DelegationColumnData, DelegationData } from '../../models/Deleghe';
 import { PFEventsType } from '../../models/PFEventsType';
 import * as routes from '../../navigation/routes.const';
-import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions';
+import { DELEGATION_ACTIONS, getMandatesByDelegator } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -33,22 +33,18 @@ type Props = {
   children?: React.ReactNode;
 };
 
-const LinkAddDelegate: React.FC<Props> = ({ children, handleAddDelegationClick }) => {
-  const { t } = useTranslation(['deleghe']);
-  return (
-    <Link
-      component={'button'}
-      variant="body1"
-      id="call-to-action-first"
-      aria-label={t('deleghe.add')}
-      key="add-delegate"
-      data-testid="link-add-delegate"
-      onClick={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
-    >
-      {children}
-    </Link>
-  );
-};
+const LinkAddDelegate: React.FC<Props> = ({ children, handleAddDelegationClick }) => (
+  <Link
+    component={'button'}
+    variant="body1"
+    id="call-to-action-first"
+    key="add-delegate"
+    data-testid="link-add-delegate"
+    onClick={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
+  >
+    {children}
+  </Link>
+);
 
 const MobileDelegates = () => {
   const { t } = useTranslation(['deleghe']);
@@ -120,8 +116,8 @@ const MobileDelegates = () => {
           </Button>
         </Box>
         <ApiErrorWrapper
-          apiId={DELEGATION_ACTIONS.GET_DELEGATES}
-          reloadAction={() => dispatch(getDelegates())}
+          apiId={DELEGATION_ACTIONS.GET_MANDATES_BY_DELEGATOR}
+          reloadAction={() => dispatch(getMandatesByDelegator())}
         >
           {cardData.length ? (
             <PnCardsList>

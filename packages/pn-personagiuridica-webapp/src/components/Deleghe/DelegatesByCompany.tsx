@@ -22,7 +22,7 @@ import {
 
 import { DelegationColumnData } from '../../models/Deleghe';
 import * as routes from '../../navigation/routes.const';
-import { DELEGATION_ACTIONS, getDelegatesByCompany } from '../../redux/delegation/actions';
+import { DELEGATION_ACTIONS, getMandatesByDelegator } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utility/delegation.utility';
@@ -33,22 +33,18 @@ type Props = {
   children?: React.ReactNode;
 };
 
-const LinkAddDelegate: React.FC<Props> = ({ children, handleAddDelegationClick }) => {
-  const { t } = useTranslation(['deleghe']);
-  return (
-    <Link
-      component={'button'}
-      variant="body1"
-      id="call-to-action-first"
-      aria-label={t('deleghe.add')}
-      key="add-delegate"
-      data-testid="link-add-delegate"
-      onClick={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
-    >
-      {children}
-    </Link>
-  );
-};
+const LinkAddDelegate: React.FC<Props> = ({ children, handleAddDelegationClick }) => (
+  <Link
+    component={'button'}
+    variant="body1"
+    id="call-to-action-first"
+    key="add-delegate"
+    data-testid="link-add-delegate"
+    onClick={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
+  >
+    {children}
+  </Link>
+);
 
 const DelegatesByCompany = () => {
   const isMobile = useIsMobile();
@@ -165,8 +161,8 @@ const DelegatesByCompany = () => {
         </Button>
       </Stack>
       <ApiErrorWrapper
-        apiId={DELEGATION_ACTIONS.GET_DELEGATES_BY_COMPANY}
-        reloadAction={() => dispatch(getDelegatesByCompany())}
+        apiId={DELEGATION_ACTIONS.GET_MANDATES_BY_DELEGATOR}
+        reloadAction={() => dispatch(getMandatesByDelegator())}
       >
         {delegatesByCompany.length > 0 ? (
           <SmartTable

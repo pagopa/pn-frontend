@@ -15,6 +15,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
+import NotificationSettingsDrawer from '../components/Notifications/NotificationSettingsDrawer';
 import * as routes from '../navigation/routes.const';
 import { DASHBOARD_ACTIONS, getSentNotifications } from '../redux/dashboard/actions';
 import { setPagination } from '../redux/dashboard/reducers';
@@ -45,6 +46,8 @@ const Dashboard = () => {
     Math.min(pagination.nextPagesKey.length + 1, 3),
     pagination.page + 1
   );
+
+  const { IS_MANUAL_SEND_ENABLED } = getConfiguration();
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
@@ -81,27 +84,28 @@ const Dashboard = () => {
       <TitleBox
         title={t('title')}
         variantTitle="h4"
-        mbTitle={isMobile ? 3 : 2}
-        subTitle={
-          <Box
-            display={isMobile ? 'block' : 'flex'}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
-              {t('subtitle')}
-            </Typography>
-            {getConfiguration().IS_MANUAL_SEND_ENABLED ? (
-              <Button
-                id="new-notification-btn"
-                variant="contained"
-                onClick={handleRouteManualSend}
-                aria-label={t('new-notification-button')}
-                data-testid="newNotificationBtn"
-                sx={{ marginBottom: isMobile ? 3 : undefined }}
-              >
-                {t('new-notification-button')}
-              </Button>
+        mbTitle={3}
+        propsTitle={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 3,
+        }}
+        titleButton={
+          <>
+            {IS_MANUAL_SEND_ENABLED ? (
+              <Box display="flex" gap={5}>
+                <NotificationSettingsDrawer />
+                <Button
+                  id="new-notification-btn"
+                  variant="contained"
+                  onClick={handleRouteManualSend}
+                  data-testid="newNotificationBtn"
+                >
+                  {t('new-notification-button')}
+                </Button>
+              </Box>
             ) : (
               <Alert
                 severity="warning"
@@ -118,6 +122,17 @@ const Dashboard = () => {
                 {t('manual-send-disabled-message')}
               </Alert>
             )}
+          </>
+        }
+        subTitle={
+          <Box
+            display={isMobile ? 'block' : 'flex'}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+              {t('subtitle')}
+            </Typography>
           </Box>
         }
       />

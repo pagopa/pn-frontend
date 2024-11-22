@@ -1,7 +1,6 @@
 import { vi } from 'vitest';
 
-import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
-import { KnownFunctionality } from '../../../models';
+import { beDowntimeHistoryWithIncidents } from '../../../__mocks__/AppStatus.mock';
 import { AppStatusData } from '../../../models';
 import {
   RenderResult,
@@ -14,12 +13,13 @@ import {
   waitFor,
 } from '../../../test-utils';
 import { formatDateTime } from '../../../utility/date.utility';
+import { LANGUAGE_SESSION_KEY } from '../../../utility/multilanguage.utility';
 import { apiOutcomeTestHelper } from '../../../utility/test.utility';
 import { AppStatusRender } from '../AppStatusRender';
 
 const mockActionIds = {
   GET_CURRENT_STATUS: 'mock-get-current-status',
-  GET_DOWNTIME_LOG_PAGE: 'mock-get-downtime-log-page',
+  GET_DOWNTIME_HISTORY: 'mock-get-downtime-log-page',
 };
 
 const mockAppStatus: AppStatusData = {
@@ -27,17 +27,15 @@ const mockAppStatus: AppStatusData = {
   currentStatus: {
     appIsFullyOperative: true,
     lastCheckTimestamp: '2022-12-28T15:43:19.190Z',
-    statusByFunctionality: [],
   },
   downtimeLogPage: {
-    downtimes: [],
+    result: [],
   },
 };
 
 describe('AppStatusRender component', () => {
   let result: RenderResult;
   const original = window.matchMedia;
-  const clearLegalFactDocument = vi.fn();
   const clearPagination = vi.fn();
   const fetchCurrentStatus = vi.fn();
   const fetchDowntimeLegalFactDocumentDetails = vi.fn();
@@ -59,13 +57,13 @@ describe('AppStatusRender component', () => {
       result = render(
         <AppStatusRender
           actionIds={mockActionIds}
-          appStatus={{ ...mockAppStatus, downtimeLogPage: { downtimes: [] } }}
-          clearLegalFactDocument={clearLegalFactDocument}
+          appStatus={{ ...mockAppStatus, downtimeLogPage: { result: [] } }}
           clearPagination={clearPagination}
           fetchCurrentStatus={fetchCurrentStatus}
           fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
           fetchDowntimeLogPage={fetchDowntimeLogPage}
           setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
         />
       );
     });
@@ -99,21 +97,11 @@ describe('AppStatusRender component', () => {
     expect(fetchCurrentStatus).toBeCalledTimes(1);
     expect(fetchDowntimeLogPage).toBeCalledTimes(1);
     expect(fetchDowntimeLogPage).toBeCalledWith({
-      startDate: '1900-01-01T00:00:00Z',
-      endDate: expect.stringMatching(
-        /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+(?:[+-][0-2]\d:[0-5]\d|Z)/
-      ),
-      functionality: [
-        KnownFunctionality.NotificationCreate,
-        KnownFunctionality.NotificationVisualization,
-        KnownFunctionality.NotificationWorkflow,
-      ],
       size: '10',
       page: '0',
     });
     expect(setPagination).toBeCalledTimes(0);
     expect(fetchDowntimeLegalFactDocumentDetails).toBeCalledTimes(0);
-    expect(clearLegalFactDocument).toBeCalledTimes(0);
   });
 
   it('with downtime - desktop', async () => {
@@ -124,14 +112,14 @@ describe('AppStatusRender component', () => {
           actionIds={mockActionIds}
           appStatus={{
             ...mockAppStatus,
-            downtimeLogPage: { downtimes: exampleDowntimeLogPage.downtimes },
+            downtimeLogPage: { result: beDowntimeHistoryWithIncidents.result },
           }}
-          clearLegalFactDocument={clearLegalFactDocument}
           clearPagination={clearPagination}
           fetchCurrentStatus={fetchCurrentStatus}
           fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
           fetchDowntimeLogPage={fetchDowntimeLogPage}
           setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
         />
       );
     });
@@ -154,14 +142,14 @@ describe('AppStatusRender component', () => {
           actionIds={mockActionIds}
           appStatus={{
             ...mockAppStatus,
-            downtimeLogPage: { downtimes: exampleDowntimeLogPage.downtimes },
+            downtimeLogPage: { result: beDowntimeHistoryWithIncidents.result },
           }}
-          clearLegalFactDocument={clearLegalFactDocument}
           clearPagination={clearPagination}
           fetchCurrentStatus={fetchCurrentStatus}
           fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
           fetchDowntimeLogPage={fetchDowntimeLogPage}
           setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
         />
       );
     });
@@ -183,14 +171,14 @@ describe('AppStatusRender component', () => {
           actionIds={mockActionIds}
           appStatus={{
             ...mockAppStatus,
-            downtimeLogPage: { downtimes: [exampleDowntimeLogPage.downtimes[0]] },
+            downtimeLogPage: { result: [beDowntimeHistoryWithIncidents.result[0]] },
           }}
-          clearLegalFactDocument={clearLegalFactDocument}
           clearPagination={clearPagination}
           fetchCurrentStatus={fetchCurrentStatus}
           fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
           fetchDowntimeLogPage={fetchDowntimeLogPage}
           setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
         />
       );
     });
@@ -213,28 +201,19 @@ describe('AppStatusRender component', () => {
         appStatus={{
           ...mockAppStatus,
           pagination: { page: 0, size: 20, resultPages: ['0', '1', '3'] },
-          downtimeLogPage: { downtimes: [exampleDowntimeLogPage.downtimes[0]] },
+          downtimeLogPage: { result: [beDowntimeHistoryWithIncidents.result[0]] },
         }}
-        clearLegalFactDocument={clearLegalFactDocument}
         clearPagination={clearPagination}
         fetchCurrentStatus={fetchCurrentStatus}
         fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
         fetchDowntimeLogPage={fetchDowntimeLogPage}
         setPagination={setPagination}
+        downtimeExampleLink="mock-downtime-example-link"
       />
     );
     expect(fetchCurrentStatus).toBeCalledTimes(2);
     expect(fetchDowntimeLogPage).toBeCalledTimes(2);
     expect(fetchDowntimeLogPage).toBeCalledWith({
-      startDate: '1900-01-01T00:00:00Z',
-      endDate: expect.stringMatching(
-        /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+(?:[+-][0-2]\d:[0-5]\d|Z)/
-      ),
-      functionality: [
-        KnownFunctionality.NotificationCreate,
-        KnownFunctionality.NotificationVisualization,
-        KnownFunctionality.NotificationWorkflow,
-      ],
       size: '20',
       page: '0',
     });
@@ -245,18 +224,18 @@ describe('AppStatusRender component', () => {
         appStatus={{
           ...mockAppStatus,
           pagination: { page: 0, size: 20, resultPages: ['0', '1'] },
-          downtimeLogPage: { downtimes: exampleDowntimeLogPage.downtimes.slice(1) },
+          downtimeLogPage: { result: beDowntimeHistoryWithIncidents.result.slice(1) },
         }}
-        clearLegalFactDocument={clearLegalFactDocument}
         clearPagination={clearPagination}
         fetchCurrentStatus={fetchCurrentStatus}
         fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
         fetchDowntimeLogPage={fetchDowntimeLogPage}
         setPagination={setPagination}
+        downtimeExampleLink="mock-downtime-example-link"
       />
     );
     rows = result.getAllByTestId('tableDowntimeLog.row');
-    expect(rows).toHaveLength(exampleDowntimeLogPage.downtimes.length - 1);
+    expect(rows).toHaveLength(beDowntimeHistoryWithIncidents.result.length - 1);
     // check that no extra calls are done
     expect(fetchCurrentStatus).toBeCalledTimes(2);
     expect(fetchDowntimeLogPage).toBeCalledTimes(2);
@@ -270,14 +249,14 @@ describe('AppStatusRender component', () => {
           actionIds={mockActionIds}
           appStatus={{
             ...mockAppStatus,
-            downtimeLogPage: { downtimes: [exampleDowntimeLogPage.downtimes[0]] },
+            downtimeLogPage: { result: [beDowntimeHistoryWithIncidents.result[0]] },
           }}
-          clearLegalFactDocument={clearLegalFactDocument}
           clearPagination={clearPagination}
           fetchCurrentStatus={fetchCurrentStatus}
           fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
           fetchDowntimeLogPage={fetchDowntimeLogPage}
           setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
         />
       );
     });
@@ -299,28 +278,19 @@ describe('AppStatusRender component', () => {
         appStatus={{
           ...mockAppStatus,
           pagination: { page: 1, size: 10, resultPages: ['0', '1', '3'] },
-          downtimeLogPage: { downtimes: [exampleDowntimeLogPage.downtimes[0]] },
+          downtimeLogPage: { result: [beDowntimeHistoryWithIncidents.result[0]] },
         }}
-        clearLegalFactDocument={clearLegalFactDocument}
         clearPagination={clearPagination}
         fetchCurrentStatus={fetchCurrentStatus}
         fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
         fetchDowntimeLogPage={fetchDowntimeLogPage}
         setPagination={setPagination}
+        downtimeExampleLink="mock-downtime-example-link"
       />
     );
     expect(fetchCurrentStatus).toBeCalledTimes(2);
     expect(fetchDowntimeLogPage).toBeCalledTimes(2);
     expect(fetchDowntimeLogPage).toBeCalledWith({
-      startDate: '1900-01-01T00:00:00Z',
-      endDate: expect.stringMatching(
-        /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+(?:[+-][0-2]\d:[0-5]\d|Z)/
-      ),
-      functionality: [
-        KnownFunctionality.NotificationCreate,
-        KnownFunctionality.NotificationVisualization,
-        KnownFunctionality.NotificationWorkflow,
-      ],
       size: '10',
       page: '1',
     });
@@ -331,18 +301,18 @@ describe('AppStatusRender component', () => {
         appStatus={{
           ...mockAppStatus,
           pagination: { page: 1, size: 10, resultPages: ['0', '1', '3'] },
-          downtimeLogPage: { downtimes: exampleDowntimeLogPage.downtimes.slice(1) },
+          downtimeLogPage: { result: beDowntimeHistoryWithIncidents.result.slice(1) },
         }}
-        clearLegalFactDocument={clearLegalFactDocument}
         clearPagination={clearPagination}
         fetchCurrentStatus={fetchCurrentStatus}
         fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
         fetchDowntimeLogPage={fetchDowntimeLogPage}
         setPagination={setPagination}
+        downtimeExampleLink="mock-downtime-example-link"
       />
     );
     rows = result.getAllByTestId('tableDowntimeLog.row');
-    expect(rows).toHaveLength(exampleDowntimeLogPage.downtimes.length - 1);
+    expect(rows).toHaveLength(beDowntimeHistoryWithIncidents.result.length - 1);
     // check that no extra calls are done
     expect(fetchCurrentStatus).toBeCalledTimes(2);
     expect(fetchDowntimeLogPage).toBeCalledTimes(2);
@@ -356,14 +326,14 @@ describe('AppStatusRender component', () => {
           actionIds={mockActionIds}
           appStatus={{
             ...mockAppStatus,
-            downtimeLogPage: { downtimes: [exampleDowntimeLogPage.downtimes[0]] },
+            downtimeLogPage: { result: [beDowntimeHistoryWithIncidents.result[0]] },
           }}
-          clearLegalFactDocument={clearLegalFactDocument}
           clearPagination={clearPagination}
           fetchCurrentStatus={fetchCurrentStatus}
           fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
           fetchDowntimeLogPage={fetchDowntimeLogPage}
           setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
         />,
         {
           preloadedState: {
@@ -382,7 +352,7 @@ describe('AppStatusRender component', () => {
       `api-error-${mockActionIds.GET_CURRENT_STATUS}`
     );
     const errorDowntimeComponent = result.queryByTestId(
-      `api-error-${mockActionIds.GET_DOWNTIME_LOG_PAGE}`
+      `api-error-${mockActionIds.GET_DOWNTIME_HISTORY}`
     );
     expect(appStatusBarComponent).not.toBeInTheDocument();
     expect(desktopDonwtimeLogComponent).toBeInTheDocument();
@@ -397,7 +367,7 @@ describe('AppStatusRender component', () => {
       mockActionIds.GET_CURRENT_STATUS
     );
     mockAppState.messages.errors.push(
-      apiOutcomeTestHelper.errorMessageForAction(mockActionIds.GET_DOWNTIME_LOG_PAGE)
+      apiOutcomeTestHelper.errorMessageForAction(mockActionIds.GET_DOWNTIME_HISTORY)
     );
     // render component
     await act(async () => {
@@ -406,14 +376,14 @@ describe('AppStatusRender component', () => {
           actionIds={mockActionIds}
           appStatus={{
             ...mockAppStatus,
-            downtimeLogPage: { downtimes: [exampleDowntimeLogPage.downtimes[0]] },
+            downtimeLogPage: { result: [beDowntimeHistoryWithIncidents.result[0]] },
           }}
-          clearLegalFactDocument={clearLegalFactDocument}
           clearPagination={clearPagination}
           fetchCurrentStatus={fetchCurrentStatus}
           fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
           fetchDowntimeLogPage={fetchDowntimeLogPage}
           setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
         />,
         {
           preloadedState: {
@@ -430,7 +400,7 @@ describe('AppStatusRender component', () => {
       `api-error-${mockActionIds.GET_CURRENT_STATUS}`
     );
     const errorDowntimeComponent = result.getByTestId(
-      `api-error-${mockActionIds.GET_DOWNTIME_LOG_PAGE}`
+      `api-error-${mockActionIds.GET_DOWNTIME_HISTORY}`
     );
     expect(appStatusBarComponent).not.toBeInTheDocument();
     expect(desktopDonwtimeLogComponent).not.toBeInTheDocument();
@@ -438,5 +408,53 @@ describe('AppStatusRender component', () => {
     expect(emptyStateComponent).not.toBeInTheDocument();
     expect(errorStatusComponent).toBeInTheDocument();
     expect(errorDowntimeComponent).toBeInTheDocument();
+  });
+
+  it('should show downtime language banner if language is not italian', async () => {
+    sessionStorage.setItem(LANGUAGE_SESSION_KEY, 'en');
+    await act(async () => {
+      result = render(
+        <AppStatusRender
+          actionIds={mockActionIds}
+          appStatus={{
+            ...mockAppStatus,
+            downtimeLogPage: { result: beDowntimeHistoryWithIncidents.result },
+          }}
+          clearPagination={clearPagination}
+          fetchCurrentStatus={fetchCurrentStatus}
+          fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+          fetchDowntimeLogPage={fetchDowntimeLogPage}
+          setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
+        />
+      );
+    });
+
+    const languageBanner = result.queryByTestId('downtimeLanguageBanner');
+    expect(languageBanner).toBeInTheDocument();
+  });
+
+  it('should not show downtime language banner if language is italian', async () => {
+    sessionStorage.setItem(LANGUAGE_SESSION_KEY, 'it');
+    await act(async () => {
+      result = render(
+        <AppStatusRender
+          actionIds={mockActionIds}
+          appStatus={{
+            ...mockAppStatus,
+            downtimeLogPage: { result: beDowntimeHistoryWithIncidents.result },
+          }}
+          clearPagination={clearPagination}
+          fetchCurrentStatus={fetchCurrentStatus}
+          fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+          fetchDowntimeLogPage={fetchDowntimeLogPage}
+          setPagination={setPagination}
+          downtimeExampleLink="mock-downtime-example-link"
+        />
+      );
+    });
+
+    const languageBanner = result.queryByTestId('downtimeLanguageBanner');
+    expect(languageBanner).not.toBeInTheDocument();
   });
 });

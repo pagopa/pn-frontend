@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { useFieldSpecs } from '../../hooks/useFieldSpecs';
-import { CardElement, Downtime, DowntimeLogPage } from '../../models';
+import { CardElement, Downtime, DowntimeLogHistory } from '../../models';
 import PnCard from '../Data/PnCard/PnCard';
 import PnCardContent from '../Data/PnCard/PnCardContent';
 import PnCardContentItem from '../Data/PnCard/PnCardContentItem';
@@ -11,7 +11,7 @@ import PnCardsList from '../Data/PnCardsList';
 import DowntimeLogDataSwitch from './DowntimeLogDataSwitch';
 
 type Props = {
-  downtimeLog: DowntimeLogPage;
+  downtimeLog: DowntimeLogHistory;
   getDowntimeLegalFactDocumentDetails: (legalFactId: string) => any;
   handleTrackDownloadCertificateOpposable3dparties?: () => void;
 };
@@ -36,7 +36,7 @@ const MobileDowntimeLog = ({
         ...getField('endDate'),
         wrapValueInTypography: false,
       },
-      getField('knownFunctionality'),
+      getField('functionality'),
       { ...getField('legalFactId'), wrapValueInTypography: false },
     ],
     [getField]

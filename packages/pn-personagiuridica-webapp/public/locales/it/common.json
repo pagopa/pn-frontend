@@ -6,6 +6,7 @@
     "associa": "Associa",
     "capito": "Ho capito",
     "conferma": "Conferma",
+    "attiva": "Attiva",
     "annulla": "Annulla",
     "modifica": "Modifica",
     "salva": "Salva",
@@ -13,10 +14,13 @@
     "enter": "Entra",
     "exit": "Esci",
     "close": "Chiudi",
+    "end": "Fine",
     "enable": "Attiva",
     "disable": "Disattiva",
     "go-to-home": "Vai alla homepage",
-    "go-to-login": "Accedi"
+    "go-to-login": "Accedi",
+    "not-now": "Non ora",
+    "add": "Aggiungi"
   },
   "menu": {
     "notifiche": "Notifiche",
@@ -25,11 +29,10 @@
     "deleghe": "Deleghe",
     "profilo": "I tuoi dati",
     "contacts": "Recapiti",
+    "integrazione-api": "Integrazione API",
     "app-status": "Stato della piattaforma",
     "users": "Utenti",
-    "groups": "Gruppi",
-    "aria-label": "piattaforma-notifiche navigazione principale",
-    "aria-label-inner": "piattaforma-notifiche navigazione persona giuridica"
+    "groups": "Gruppi"
   },
   "header": {
     "product": {
@@ -177,11 +180,29 @@
     "unknown": {
       "title": "Errore",
       "message": "Errore non previsto"
+    },
+    "invalid_type_code": {
+      "title": "Questo campo accetta solo valori numerici",
+      "message": "Controlla il codice di verifica e inseriscilo di nuovo"
+    },
+    "invalid_body": {
+      "title": "Errore",
+      "message": "C'è stato un errore in fase di invio dei dati ai nostri server. Ricontrolla che i dati inseriti siano corretti e non siano contenuti caratteri speciali e spazi."
     }
   },
   "roles": {
     "pg-operator": "Referente operativo",
     "pg-admin": "Amministratore"
   },
-  "required-field": "Campo obbligatorio"
+  "required-field": "Campo obbligatorio",
+  "badges": {
+    "news": "Novità"
+  },
+  "conjunctions": {
+    "or": "oppure"
+  },
+  "downtime_language_banner": {
+    "message": "Il testo originario di questi documenti è in lingua italiana. In caso di contrasto tra la versione italiana e le traduzioni in altre lingue, prevarranno il significato e le condizioni della lingua italiana.",
+    "link": "Consulta le traduzioni"
+  }
 }

@@ -5,17 +5,38 @@ import * as yup from 'yup';
 
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, SxProps, TextField, Typography } from '@mui/material';
-import { FileUpload } from '@pagopa-pn/pn-commons';
+import {
+  Alert,
+  Box,
+  FormControl,
+  SxProps,
+  TextField,
+  Typography,
+  useFormControl,
+} from '@mui/material';
+import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { NewNotificationDocument } from '../../models/NewNotification';
 import { useAppDispatch } from '../../redux/hooks';
-import { uploadNotificationAttachment } from '../../redux/newNotification/actions';
+import { uploadNotificationDocument } from '../../redux/newNotification/actions';
 import { setAttachments } from '../../redux/newNotification/reducers';
 import { getConfiguration } from '../../services/configuration.service';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
+import { FormBox, FormBoxTitle } from './NewNotificationFormElelements';
+
+function NameFocusHelperText() {
+  const { t } = useTranslation(['common']);
+  const { focused } = useFormControl() || {};
+
+  return useMemo(() => {
+    if (focused) {
+      return t('too-long-field-error', { maxLength: 512 });
+    }
+    return false;
+  }, [focused]);
+}
 
 type AttachmentBoxProps = {
   id: string;
@@ -26,7 +47,7 @@ type AttachmentBoxProps = {
   fieldLabel: string;
   fieldValue: string;
   fieldTouched?: boolean;
-  fieldErros?: string;
+  fieldErrors?: string;
   onFieldTouched: (e: ChangeEvent) => void;
   onFileUploaded: (
     id: string,
@@ -48,51 +69,62 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
   fieldLabel,
   fieldValue,
   fieldTouched,
-  fieldErros,
+  fieldErrors,
   onFieldTouched,
   onFileUploaded,
   onRemoveFile,
   fileUploaded,
 }) => {
   const { t } = useTranslation(['notifiche']);
+  const isMobile = useIsMobile('md');
 
   return (
     <Box data-testid="attachmentBox">
-      <Box display="flex" justifyContent="space-between" alignItems="center" sx={sx}>
-        <Typography fontWeight={600}>{title}</Typography>
+      <Box display="flex" alignItems="center" sx={sx}>
+        <FormBoxTitle text={title} />
         {canBeDeleted && (
           <ButtonNaked
             onClick={onDelete}
             data-testid="deletebutton"
-            aria-label={t('new-notification.steps.remove-document')}
+            aria-label={t('new-notification.steps.attachments.remove-document')}
+            sx={{ ml: 2 }}
           >
-            <DeleteIcon color="action" sx={{ cursor: 'pointer' }} />
+            <DeleteIcon color="error" />
           </ButtonNaked>
         )}
       </Box>
+      <FormControl fullWidth>
+        <TextField
+          id={`${id}.name`}
+          label={fieldLabel}
+          fullWidth
+          name={`${id}.name`}
+          value={fieldValue}
+          onChange={onFieldTouched}
+          error={fieldTouched && Boolean(fieldErrors)}
+          helperText={(fieldTouched && fieldErrors) || <NameFocusHelperText />}
+          size="small"
+          margin="normal"
+          data-testid="attachmentNameInput"
+        />
+      </FormControl>
       <FileUpload
-        key={`${new Date()}`}
-        uploadText={t('new-notification.drag-doc')}
+        uploadText={t(
+          isMobile ? 'new-notification.drag-doc-mobile' : 'new-notification.drag-doc-pc'
+        )}
         accept="application/pdf"
         onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
         onRemoveFile={() => onRemoveFile(id)}
-        sx={{ marginTop: '10px' }}
+        sx={{ mt: 2 }}
         calcSha256
         fileUploaded={fileUploaded}
       />
-      <TextField
-        id={`${id}.name`}
-        label={fieldLabel}
-        fullWidth
-        name={`${id}.name`}
-        value={fieldValue}
-        onChange={onFieldTouched}
-        error={fieldTouched && Boolean(fieldErros)}
-        helperText={fieldTouched && fieldErros}
-        size="small"
-        margin="normal"
-        data-testid="attachmentNameInput"
-      />
+      <Typography variant="caption" color="text.secondary">
+        {t('new-notification.steps.attachments.file-upload-helper', {
+          format: '.PDF',
+          size: '20 mb',
+        })}
+      </Typography>
     </Box>
   );
 };
@@ -103,6 +135,7 @@ type Props = {
   attachmentsData?: Array<NewNotificationDocument>;
   forwardedRef: ForwardedRef<unknown>;
   isCompleted: boolean;
+  hasAdditionalLang?: boolean;
 };
 
 const emptyFileData = {
@@ -128,6 +161,7 @@ const Attachments: React.FC<Props> = ({
   attachmentsData,
   forwardedRef,
   isCompleted,
+  hasAdditionalLang,
 }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
@@ -153,7 +187,7 @@ const Attachments: React.FC<Props> = ({
               .required(),
           })
           .required(),
-        name: requiredStringFieldValidation(tc),
+        name: requiredStringFieldValidation(tc, 512),
       })
     ),
   });
@@ -193,7 +227,7 @@ const Attachments: React.FC<Props> = ({
         } else {
           storeAttachments(values.documents);
           // upload attachments
-          dispatch(uploadNotificationAttachment(values.documents))
+          dispatch(uploadNotificationDocument(values.documents))
             .unwrap()
             .then((docs) => {
               // update formik
@@ -230,9 +264,8 @@ const Attachments: React.FC<Props> = ({
           versionToken: '',
         },
       },
-      false
+      true
     );
-    await formik.setFieldTouched(`${id}.file`, true, true);
   };
 
   const removeFileHandler = async (id: string, index: number) => {
@@ -290,48 +323,59 @@ const Attachments: React.FC<Props> = ({
       <NewNotificationCard
         isContinueDisabled={!formik.isValid}
         title={t('attach-for-recipients')}
-        subtitle={t('max-attachments', { maxNumber: MAX_NUMBER_OF_ATTACHMENTS })}
         submitLabel={IS_PAYMENT_ENABLED ? tc('button.continue') : tc('button.send')}
         previousStepLabel={t('back-to-recipient')}
         previousStepOnClick={() => handlePreviousStep()}
       >
-        {formik.values.documents.map((d, i) => (
-          <AttachmentBox
-            key={d.id}
-            id={d.id}
-            title={i === 0 ? `${t('act-attachment')}*` : `${t('doc-attachment')}*`}
-            canBeDeleted={i > 0}
-            onDelete={() => deleteDocumentHandler(i)}
-            fieldLabel={i === 0 ? `${t('act-name')}*` : `${t('doc-name')}*`}
-            fieldValue={d.name}
-            fileUploaded={d}
-            fieldTouched={
-              formik.touched.documents && formik.touched.documents[i]
-                ? formik.touched.documents[i].name
-                : undefined
-            }
-            fieldErros={
-              formik.errors.documents && formik.errors.documents[i]
-                ? (formik.errors.documents[i] as FormikErrors<{ file: string; name: string }>).name
-                : undefined
-            }
-            onFieldTouched={handleChangeTouched}
-            onFileUploaded={(id, file, sha256) => fileUploadedHandler(i, id, file, sha256)}
-            onRemoveFile={(id) => removeFileHandler(id, i)}
-            sx={{ marginTop: i > 0 ? '30px' : '10px' }}
-          />
-        ))}
-        {formik.values.documents.length <= MAX_NUMBER_OF_ATTACHMENTS && (
-          <ButtonNaked
-            onClick={addDocumentHandler}
-            color="primary"
-            startIcon={<AddIcon />}
-            sx={{ marginTop: '30px' }}
-            data-testid="add-another-doc"
-          >
-            {formik.values.documents.length === 1 ? t('add-doc') : t('add-another-doc')}
-          </ButtonNaked>
+        <Typography variant="body2">
+          {t('max-attachments', { maxNumber: MAX_NUMBER_OF_ATTACHMENTS })}
+        </Typography>
+        {hasAdditionalLang && (
+          <Alert severity="info" sx={{ mt: 2, mb: 2 }} data-testid="bannerAdditionalLanguages">
+            {t('banner-additional-languages')}
+          </Alert>
         )}
+        <Typography variant="body2" mt={2}>
+          {tc('required-fields')}
+        </Typography>
+        <FormBox data-testid="attachmentBox">
+          {formik.values.documents.map((d, i) => (
+            <AttachmentBox
+              key={d.id}
+              id={d.id}
+              title={i === 0 ? `${t('act-attachment')}` : `${t('doc-attachment')}`}
+              canBeDeleted={i > 0}
+              onDelete={() => deleteDocumentHandler(i)}
+              fieldLabel={`${t('doc-name')}*`}
+              fieldValue={d.name}
+              fileUploaded={d}
+              fieldTouched={
+                formik.touched.documents?.[i] ? formik.touched.documents[i].name : undefined
+              }
+              fieldErrors={
+                formik.errors.documents?.[i]
+                  ? (formik.errors.documents[i] as FormikErrors<{ file: string; name: string }>)
+                      .name
+                  : undefined
+              }
+              onFieldTouched={handleChangeTouched}
+              onFileUploaded={(id, file, sha256) => fileUploadedHandler(i, id, file, sha256)}
+              onRemoveFile={(id) => removeFileHandler(id, i)}
+              sx={{ mt: i > 0 ? 4 : 0 }}
+            />
+          ))}
+          {formik.values.documents.length <= MAX_NUMBER_OF_ATTACHMENTS && (
+            <ButtonNaked
+              onClick={addDocumentHandler}
+              color="primary"
+              startIcon={<AddIcon />}
+              sx={{ mt: 4 }}
+              data-testid="add-another-doc"
+            >
+              {t('add-another-doc')}
+            </ButtonNaked>
+          )}
+        </FormBox>
       </NewNotificationCard>
     </form>
   );

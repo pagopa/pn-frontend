@@ -1,34 +1,24 @@
-import {
-  ChangeEvent,
-  DragEvent,
-  Fragment,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-} from 'react';
+import { ChangeEvent, DragEvent, ReactNode, useEffect, useMemo, useReducer, useRef } from 'react';
 
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import {
-  Alert,
   Box,
-  Grid,
-  IconButton,
+  Button,
+  FormHelperText,
   Input,
   LinearProgress,
+  Stack,
   SxProps,
+  TextField,
   Typography,
 } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../hooks';
 import { calcSha256String, parseFileSize } from '../utility/file.utility';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
-import CustomTooltip from './CustomTooltip';
 
 type Props = {
   uploadText: string;
@@ -119,14 +109,34 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
 const OrientedBox = ({ vertical, children }: { vertical: boolean; children: ReactNode }) => (
   <Box
     display="flex"
-    justifyContent="center"
     alignItems="center"
+    justifyContent="center"
     flexDirection={vertical ? 'column' : 'row'}
     margin="auto"
   >
     {children}
   </Box>
 );
+
+const FilenameBox = ({ filename }: { filename: string }) => {
+  const isMobile = useIsMobile();
+  const [name, extension] = filename.split('.');
+  return (
+    <Stack direction="row" color="primary" width={isMobile ? 1 : 'auto'}>
+      <Typography
+        sx={{
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          justifyContent: 'start',
+        }}
+      >
+        {name}.
+      </Typography>
+      <Typography>{extension}</Typography>
+    </Stack>
+  );
+};
 
 /**
  * This component allows file upload
@@ -164,7 +174,7 @@ const FileUpload = ({
   });
   const uploadInputRef = useRef();
 
-  const attachmentExists = fileUploaded?.file && fileUploaded?.file.data;
+  const attachmentExists = fileUploaded?.file?.data;
 
   const isMobile = useIsMobile();
 
@@ -185,10 +195,10 @@ const FileUpload = ({
     }
     return {
       border: '1px dashed',
-      borderColor: 'primary.main',
-      backgroundColor: 'primaryAction.selected',
+      borderColor: fileData.error ? 'error.main' : 'primary.main',
+      backgroundColor: fileData.error ? '#fe66661a' : 'primaryAction.selected',
     };
-  }, [fileData.status]);
+  }, [fileData.status, fileData.error]);
 
   const chooseFileHandler = () => {
     (uploadInputRef.current as any).click();
@@ -263,96 +273,89 @@ const FileUpload = ({
     }
   }, [attachmentExists]);
 
-  const HashToolTip = () => (
-    <CustomTooltip
-      openOnClick
-      tooltipContent={getLocalizedOrDefaultLabel(
-        'common',
-        'upload-file.hash-code-descr',
-        'Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file'
-      )}
-      sx={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '10px' }}
-    >
-      <IconButton>
-        <InfoOutlinedIcon color="action" />
-      </IconButton>
-    </CustomTooltip>
-  );
   return (
-    <Box
-      sx={{ ...containerStyle, padding: '24px', borderRadius: '10px', ...sx }}
-      onDragOver={handleDragOver}
-      onDrop={handleDrop}
-      onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}
-      component="div"
-    >
-      {fileData.status === UploadStatus.TO_UPLOAD && (
-        <OrientedBox vertical={vertical}>
-          {!isMobile && (
-            <>
-              <CloudUploadIcon color="primary" sx={{ margin: '0 10px' }} />
-              <Typography display="inline" variant="body2">
-                {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or', 'oppure')}
-                &nbsp;
-              </Typography>
-            </>
-          )}
-          <ButtonNaked onClick={chooseFileHandler} data-testid="loadFromPc">
-            <Typography display="inline" variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
-              {getLocalizedOrDefaultLabel(
-                'common',
-                isMobile ? 'upload-file.select-from-mobile' : 'upload-file.select-from-pc',
-                'selezionalo dal tuo computer'
-              )}
+    <>
+      <Box
+        sx={{ ...containerStyle, padding: '24px', borderRadius: '10px', ...sx }}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        component="div"
+      >
+        {fileData.status === UploadStatus.TO_UPLOAD && (
+          <OrientedBox vertical={isMobile}>
+            <CloudUploadIcon
+              color={fileData.error ? 'error' : 'primary'}
+              sx={{ margin: '0 10px' }}
+            />
+            <Typography
+              display="inline"
+              variant="body2"
+              textAlign="center"
+              color={fileData.error ? 'error' : ''}
+            >
+              {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or')}
+              &nbsp;
             </Typography>
-          </ButtonNaked>
-          <Input
-            id="file-input"
-            type="file"
-            sx={{ display: 'none' }}
-            inputRef={uploadInputRef}
-            inputProps={{ accept }}
-            onChange={uploadFileHandler}
-            data-testid="fileInput"
-          />
-        </OrientedBox>
-      )}
-      {(fileData.status === UploadStatus.IN_PROGRESS ||
-        fileData.status === UploadStatus.SENDING) && (
-        <OrientedBox vertical={vertical}>
-          <Typography display="inline" variant="body2">
-            {fileData.status === UploadStatus.IN_PROGRESS
-              ? getLocalizedOrDefaultLabel(
-                  'common',
-                  'upload-file.loading',
-                  'Caricamento in corso...'
-                )
-              : getLocalizedOrDefaultLabel('common', 'upload-file.sending', 'Invio in corso...')}
-          </Typography>
-          <Typography sx={{ margin: '0 20px', width: 'calc(100% - 200px)' }}>
-            <LinearProgress />
-          </Typography>
-        </OrientedBox>
-      )}
-      {fileData.status === UploadStatus.UPLOADED && (
-        <Fragment>
+            <Button
+              variant="contained"
+              onClick={chooseFileHandler}
+              data-testid="loadFromPc"
+              sx={{ margin: isMobile ? '10px 0' : '0 10px' }}
+            >
+              {getLocalizedOrDefaultLabel('common', 'upload-file.select-file')}
+            </Button>
+            <Input
+              id="file-input"
+              type="file"
+              sx={{ display: 'none' }}
+              inputRef={uploadInputRef}
+              inputProps={{ accept }}
+              onChange={uploadFileHandler}
+              data-testid="fileInput"
+            />
+          </OrientedBox>
+        )}
+        {(fileData.status === UploadStatus.IN_PROGRESS ||
+          fileData.status === UploadStatus.SENDING) && (
+          <OrientedBox vertical={vertical}>
+            <Typography display="inline" variant="body2">
+              {fileData.status === UploadStatus.IN_PROGRESS
+                ? getLocalizedOrDefaultLabel(
+                    'common',
+                    'upload-file.loading',
+                    'Caricamento in corso...'
+                  )
+                : getLocalizedOrDefaultLabel('common', 'upload-file.sending', 'Invio in corso...')}
+            </Typography>
+            <Typography sx={{ margin: '0 20px', width: 'calc(100% - 200px)' }}>
+              <LinearProgress />
+            </Typography>
+          </OrientedBox>
+        )}
+        {fileData.status === UploadStatus.UPLOADED && (
           <Box
             display="flex"
             justifyContent="space-between"
             alignItems="center"
             sx={{ width: '100%' }}
           >
-            <Box display={isMobile ? 'block' : 'flex'} alignItems="center">
-              <Box display="flex">
+            <Box
+              display={isMobile ? 'block' : 'flex'}
+              alignItems="center"
+              justifyContent="start"
+              width={isMobile ? 0.85 : 'auto'}
+            >
+              <Box display="flex" width={isMobile ? 0.7 : 'auto'} justifyContent="start">
                 <AttachFileIcon color="primary" />
-                <Typography color="primary">{fileData.file.name}</Typography>
+                <FilenameBox filename={fileData.file.name} />
               </Box>
               <Typography fontWeight={600} sx={{ marginLeft: { lg: '30px' } }}>
                 {parseFileSize(fileData.file.size)}
               </Typography>
             </Box>
-            <IconButton
+            <ButtonNaked
               data-testid="removeDocument"
               onClick={removeFileHandler}
               aria-label={getLocalizedOrDefaultLabel(
@@ -362,45 +365,40 @@ const FileUpload = ({
               )}
             >
               <CloseIcon />
-            </IconButton>
+            </ButtonNaked>
           </Box>
-          {fileData.sha256 && (
-            <Box sx={{ marginTop: '20px' }}>
-              <Grid container wrap="nowrap" alignItems={'center'}>
-                <Grid item xs="auto">
-                  <Typography id="file-upload-hash-code" display="inline" fontWeight={700}>
-                    {getLocalizedOrDefaultLabel('common', 'upload-file.hash-code', 'Codice hash')}
-                  </Typography>
-                </Grid>
-                <Grid item zeroMinWidth>
-                  <Typography
-                    sx={{
-                      marginLeft: '10px',
-                      marginTop: '3px',
-                      textOverflow: 'ellipsis',
-                      overflow: 'hidden',
-                      whiteSpace: 'nowrap',
-                      display: 'block',
-                    }}
-                    variant="caption"
-                  >
-                    {fileData.sha256}
-                  </Typography>
-                </Grid>
-                <Grid item xs="auto">
-                  <HashToolTip />
-                </Grid>
-              </Grid>
-            </Box>
-          )}
-        </Fragment>
+        )}
+      </Box>
+      {fileData.sha256 && (
+        <Box sx={{ marginTop: '20px' }}>
+          <Typography variant="body2" fontWeight={600} fontSize={'16px'} color="text.secondary">
+            {getLocalizedOrDefaultLabel('common', 'upload-file.hash-code', 'Codice hash')}
+          </Typography>
+          <Typography variant="body2" fontSize={'14px'} marginTop={1}>
+            {getLocalizedOrDefaultLabel(
+              'common',
+              'upload-file.hash-code-descr',
+              'Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file'
+            )}
+          </Typography>
+          <TextField
+            fullWidth
+            value={fileData.sha256}
+            size="small"
+            margin="dense"
+            InputProps={{
+              readOnly: true,
+              endAdornment: <CopyToClipboardButton value={fileData.sha256} />,
+            }}
+          />
+        </Box>
       )}
       {fileData.error && (
-        <Alert id="file-upload-error" severity="error" sx={{ marginTop: '10px' }}>
+        <FormHelperText id="file-upload-error" error sx={{ mt: 0.5, mx: '14px' }}>
           {fileData.error}
-        </Alert>
+        </FormHelperText>
       )}
-    </Box>
+    </>
   );
 };
 

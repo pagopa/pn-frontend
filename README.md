@@ -16,11 +16,11 @@ Starting applications
 - `yarn start:pg` to start app for legal entities in local
 - `yarn start:login` to start the login section for citizens in local (url: localhost:3000)
 
-You can also run `yarn start` in the relative package folder:
+You can also run `yarn dev` in the relative package folder:
 
 ```
 cd packages/<package-folder>
-yarn start
+yarn dev
 ```
 
 To run test for all packages
@@ -51,7 +51,7 @@ As rule of thumb, merge with squash is preferred over merge. Rebase is not advis
 
 ### Lerna
 
-This project uses [lerna](https://github.com/lerna/lerna) and [craco](https://github.com/gsoft-inc/craco)
+This project uses [lerna](https://github.com/lerna/lerna) and [vitejs](https://vitejs.dev/config/)
 These tools allow to handle a monorepo with multiple webapps which share common components.
 The content of monorepo is:
 
@@ -60,8 +60,7 @@ The content of monorepo is:
 - packages/pn-pa-webapp app for public administration
 - packages/pn-personafisica-webapp app for citizens
 - packages/pn-personafisica-login login section for citizen app
-
-https://medium.com/geekculture/setting-up-monorepo-with-create-react-app-cb2cfa763b96
+- packages/pn-data-viz component-library for statistical data visualization for SEND
 
 ### Sonar
 
@@ -73,7 +72,7 @@ You can run a task analysis with sonar-scanner using this script in each package
 
 ### Versioning
 
-These scripts use [lerna version](https://github.com/lerna/lerna/blob/main/commands/version/README.md).
+These scripts use [lerna version](https://github.com/lerna/lerna/tree/main/libs/commands/version#readme).
 
 Release a prepatch:
 

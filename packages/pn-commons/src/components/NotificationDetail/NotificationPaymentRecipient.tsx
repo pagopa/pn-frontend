@@ -6,10 +6,8 @@ import { Alert, Box, Button, CircularProgress, Link, RadioGroup, Typography } fr
 import { downloadDocument } from '../../hooks';
 import {
   EventPaymentRecipientType,
-  F24PaymentDetails,
   NotificationDetailPayment,
   PaginationData,
-  PagoPAPaymentFullDetails,
   PaymentAttachment,
   PaymentAttachmentSName,
   PaymentDetails,
@@ -70,7 +68,11 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     (paginationData.page + 1) * paginationData.size
   );
 
-  const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentFullDetails | null>(null);
+  const [selectedPayment, setSelectedPayment] = useState<
+    PaymentDetails | { pagoPa: null; f24?: null }
+  >({
+    pagoPa: null,
+  });
   const [loadingPayment, setLoadingPayment] = useState(false);
   const loadingPaymentTimeout = useRef<NodeJS.Timeout>();
 
@@ -81,28 +83,27 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
     setLoadingPayment(true);
-    setSelectedPayment(null);
+    setSelectedPayment(
+      pagoPaF24.find((item) => item.pagoPa?.noticeCode === radioSelection) ?? { pagoPa: null }
+    );
     // eslint-disable-next-line functional/immutable-data
     loadingPaymentTimeout.current = setTimeout(() => {
       setLoadingPayment(false);
-      setSelectedPayment(
-        pagoPaF24.find((item) => item.pagoPa?.noticeCode === radioSelection)?.pagoPa || null
-      );
     }, 1000);
   };
 
   const handleDeselectPayment = () => {
     setLoadingPayment(false);
-    setSelectedPayment(null);
+    setSelectedPayment({ pagoPa: null });
     if (loadingPaymentTimeout.current) {
       clearTimeout(loadingPaymentTimeout.current);
     }
   };
 
   const downloadAttachment = (attachmentName: PaymentAttachmentSName) => {
-    if (selectedPayment) {
+    if (selectedPayment?.pagoPa) {
       handleTrackEventFn(EventPaymentRecipientType.SEND_DOWNLOAD_PAYMENT_NOTICE);
-      void getPaymentAttachmentAction(attachmentName, selectedPayment.attachmentIdx)
+      void getPaymentAttachmentAction(attachmentName, selectedPayment.pagoPa.attachmentIdx)
         .unwrap()
         .then((response) => {
           if (response.url) {
@@ -126,7 +127,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   useEffect(() => {
     const unpaidPayments = pagoPaF24.some((f) => f.pagoPa?.status === PaymentStatus.REQUIRED);
     if (isSinglePayment && unpaidPayments) {
-      setSelectedPayment(pagoPaF24[0].pagoPa ?? null);
+      setSelectedPayment(pagoPaF24[0] ?? { pagoPa: null });
     }
     // track event only if payments are changed and there aren't in loading state
     const paymentsLoaded = paginatedPayments.every((payment) => !payment.isLoading);
@@ -161,7 +162,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       </Typography>
 
       {isCancelled ? (
-        <Alert tabIndex={0} data-testid="cancelledAlertPayment" severity="info">
+        <Alert data-testid="cancelledAlertPayment" severity="info">
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.cancelled-message')}
           &nbsp;
           <Link
@@ -195,14 +196,22 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
       {pagoPaF24.length > 0 && (
         <>
-          <RadioGroup name="radio-buttons-group" value={selectedPayment} onChange={handleClick}>
-            {paginatedPayments.map((payment, index) =>
+          <RadioGroup
+            name="radio-buttons-group"
+            value={selectedPayment?.pagoPa}
+            onChange={handleClick}
+          >
+            {paginatedPayments.map((payment) =>
               payment.pagoPa ? (
-                <Box mb={2} key={`payment-${index}`} data-testid="pagopa-item">
+                <Box
+                  mb={2}
+                  key={`payment-${payment.pagoPa.noticeCode}-${payment.pagoPa.creditorTaxId}`}
+                  data-testid="pagopa-item"
+                >
                   <NotificationPaymentPagoPAItem
                     pagoPAItem={payment.pagoPa}
                     loading={payment.isLoading ?? false}
-                    isSelected={payment.pagoPa.noticeCode === selectedPayment?.noticeCode}
+                    isSelected={payment.pagoPa.noticeCode === selectedPayment?.pagoPa?.noticeCode}
                     handleFetchPaymentsInfo={() => handleFetchPaymentsInfo([payment])}
                     handleDeselectPayment={handleDeselectPayment}
                     isSinglePayment={isSinglePayment}
@@ -231,26 +240,28 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                 fullWidth
                 variant="contained"
                 data-testid="pay-button"
-                disabled={!selectedPayment && !loadingPayment}
+                disabled={!selectedPayment?.pagoPa && !loadingPayment}
                 onClick={() =>
                   onPayClick(
-                    selectedPayment?.noticeCode,
-                    selectedPayment?.creditorTaxId,
-                    selectedPayment?.amount
+                    selectedPayment?.pagoPa?.noticeCode,
+                    selectedPayment?.pagoPa?.creditorTaxId,
+                    selectedPayment?.pagoPa?.amount
                   )
                 }
               >
                 {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit')}
                 &nbsp;
                 {loadingPayment && <CircularProgress size={18} sx={{ ml: 1 }} color="inherit" />}
-                {selectedPayment?.amount ? formatEurocentToCurrency(selectedPayment.amount) : null}
+                {!loadingPayment && selectedPayment?.pagoPa?.amount
+                  ? formatEurocentToCurrency(selectedPayment.pagoPa?.amount)
+                  : null}
               </Button>
-              {selectedPayment?.attachment && (
+              {!loadingPayment && selectedPayment?.pagoPa?.attachment && (
                 <Button
                   fullWidth
                   variant="outlined"
                   data-testid="download-pagoPA-notice-button"
-                  disabled={!selectedPayment}
+                  disabled={!selectedPayment.pagoPa}
                   onClick={() => downloadAttachment(PaymentAttachmentSName.PAGOPA)}
                 >
                   <Download fontSize="small" sx={{ mr: 1 }} />
@@ -260,27 +271,20 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                   )}
                 </Button>
               )}
-              {selectedPayment &&
-              pagoPaF24.find(
-                (payment) => payment.pagoPa?.noticeCode === selectedPayment?.noticeCode
-              )?.f24 ? (
+              {selectedPayment?.f24 ? (
                 <Box key="attachment" data-testid="f24-download">
                   <NotificationPaymentF24Item
-                    f24Item={
-                      pagoPaF24.find(
-                        (payment) => payment.pagoPa?.noticeCode === selectedPayment?.noticeCode
-                      )?.f24 as F24PaymentDetails
-                    }
+                    f24Item={selectedPayment?.f24}
                     getPaymentAttachmentAction={getPaymentAttachmentAction}
                     isPagoPaAttachment
                     handleTrackDownloadF24={() =>
-                      void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD)
+                      handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD)
                     }
                     handleTrackDownloadF24Success={() =>
-                      void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_SUCCESS)
+                      handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_SUCCESS)
                     }
                     handleTrackDownloadF24Timeout={() =>
-                      void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
+                      handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
                     }
                     timerF24={timerF24}
                     disableDownload={areOtherDowloading}

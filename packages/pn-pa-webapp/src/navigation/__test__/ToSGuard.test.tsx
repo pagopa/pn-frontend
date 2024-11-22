@@ -3,10 +3,9 @@ import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
+import { tosPrivacyConsentMock } from '../../__mocks__/Consents.mock';
 import { act, render, screen } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { GET_CONSENTS } from '../../api/consents/consents.routes';
-import { ConsentType } from '../../models/consents';
 import ToSGuard from '../ToSGuard';
 
 // mock imports
@@ -60,66 +59,14 @@ describe('Tests the ToSGuard component', async () => {
   });
 
   it('renders the loading page component if tos and privacy are not fetched', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(() => {
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(() => {
       return new Promise((resolve) => {
         setTimeout(() => {
-          resolve([
-            200,
-            {
-              recipientId: 'mocked-recipientId',
-              consentType: ConsentType.TOS,
-              accepted: false,
-            },
-          ]);
+          resolve([200, tosPrivacyConsentMock(false, false)]);
         }, 2000);
       });
     });
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(() => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve([
-            200,
-            {
-              recipientId: 'mocked-recipientId',
-              consentType: ConsentType.DATAPRIVACY,
-              accepted: false,
-            },
-          ]);
-        }, 2000);
-      });
-    });
-    await act(async () => {
-      render(<Guard />, { preloadedState: reduxState });
-    });
-    const pageComponent = screen.queryByTestId('loading-skeleton');
-    const tosComponent = screen.queryByTestId('tos-acceptance-page');
-    const genericPage = screen.queryByText('Generic Page');
-    expect(pageComponent).toBeTruthy();
-    expect(tosComponent).toBeNull();
-    expect(genericPage).toBeNull();
-    expect(mock.history.get).toHaveLength(2);
-  });
 
-  it('renders the loading page component if tos are not fetched', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-      recipientId: 'mocked-recipientId',
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: false,
-    });
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(() => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve([
-            200,
-            {
-              recipientId: 'mocked-recipientId',
-              consentType: ConsentType.TOS,
-              accepted: false,
-            },
-          ]);
-        }, 2000);
-      });
-    });
     await act(async () => {
       render(<Guard />, { preloadedState: reduxState });
     });
@@ -129,52 +76,12 @@ describe('Tests the ToSGuard component', async () => {
     expect(pageComponent).toBeTruthy();
     expect(tosComponent).toBeNull();
     expect(genericPage).toBeNull();
-    expect(mock.history.get).toHaveLength(2);
-  });
-
-  it('renders the loading page component if privacy are not fetched', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-      recipientId: 'mocked-recipientId',
-      consentType: ConsentType.TOS,
-      accepted: false,
-    });
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(() => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve([
-            200,
-            {
-              recipientId: 'mocked-recipientId',
-              consentType: ConsentType.DATAPRIVACY,
-              accepted: false,
-            },
-          ]);
-        }, 2000);
-      });
-    });
-    await act(async () => {
-      render(<Guard />, { preloadedState: reduxState });
-    });
-    const pageComponent = screen.queryByTestId('loading-skeleton');
-    const tosComponent = screen.queryByTestId('tos-acceptance-page');
-    const genericPage = screen.queryByText('Generic Page');
-    expect(pageComponent).toBeTruthy();
-    expect(tosComponent).toBeNull();
-    expect(genericPage).toBeNull();
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(1);
   });
 
   it('renders the tos page component if privacy are not accepted', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-      recipientId: 'mocked-recipientId',
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: false,
-    });
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-      recipientId: 'mocked-recipientId',
-      consentType: ConsentType.TOS,
-      accepted: true,
-    });
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, false));
+
     await act(async () => {
       render(<Guard />, { preloadedState: reduxState });
     });
@@ -184,20 +91,11 @@ describe('Tests the ToSGuard component', async () => {
     expect(pageComponent).toBeNull();
     expect(tosComponent).toBeTruthy();
     expect(genericPage).toBeNull();
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(1);
   });
 
   it('renders the tos page component if tos are not accepted', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-      recipientId: 'mocked-recipientId',
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: true,
-    });
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-      recipientId: 'mocked-recipientId',
-      consentType: ConsentType.TOS,
-      accepted: false,
-    });
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(false, true));
     await act(async () => {
       render(<Guard />, { preloadedState: reduxState });
     });
@@ -207,20 +105,11 @@ describe('Tests the ToSGuard component', async () => {
     expect(pageComponent).toBeNull();
     expect(tosComponent).toBeTruthy();
     expect(genericPage).toBeNull();
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(1);
   });
 
   it('renders the generic page component if tos and privacy are accepted', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-      recipientId: 'mocked-recipientId',
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: true,
-    });
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-      recipientId: 'mocked-recipientId',
-      consentType: ConsentType.TOS,
-      accepted: true,
-    });
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     await act(async () => {
       render(<Guard />, { preloadedState: reduxState });
     });
@@ -230,6 +119,6 @@ describe('Tests the ToSGuard component', async () => {
     expect(pageComponent).toBeNull();
     expect(tosComponent).toBeNull();
     expect(genericPage).toBeTruthy();
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(1);
   });
 });

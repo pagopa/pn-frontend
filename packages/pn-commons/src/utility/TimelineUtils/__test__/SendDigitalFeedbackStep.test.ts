@@ -1,5 +1,10 @@
-import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
-import { DigitalDomicileType, TimelineCategory } from '../../../models';
+import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
+import {
+  DigitalDomicileType,
+  ResponseStatus,
+  SERCQ_SEND_VALUE,
+  TimelineCategory,
+} from '../../../models';
 import { initLocalizationForTest } from '../../../test-utils';
 import { SendDigitalFeedbackStep } from '../SendDigitalFeedbackStep';
 
@@ -8,24 +13,24 @@ describe('SendDigitalFeedbackStep', () => {
     initLocalizationForTest();
   });
 
-  it('test getTimelineStepInfo with responseStatus OK', () => {
-    const timelineElem = getTimelineElem(TimelineCategory.SEND_ANALOG_FEEDBACK, {
+  it('test getTimelineStepInfo with responseStatus OK - PEC', () => {
+    const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_FEEDBACK, {
       digitalAddress: {
         address: 'nome.cognome@pec.it',
         type: DigitalDomicileType.PEC,
       },
-      responseStatus: 'OK',
+      responseStatus: ResponseStatus.OK,
     });
     const payload = {
       step: timelineElem,
-      recipient: notificationToFe.recipients[0],
+      recipient: notificationDTO.recipients[0],
       isMultiRecipient: false,
     };
     const sendDigitalDomicileStep = new SendDigitalFeedbackStep();
     // mono recipient
     expect(sendDigitalDomicileStep.getTimelineStepInfo(payload)).toStrictEqual({
-      label: `notifiche - detail.timeline.send-digital-success`,
-      description: `notifiche - detail.timeline.send-digital-success-description - ${JSON.stringify(
+      label: `notifiche - detail.timeline.send-digital-success-PEC`,
+      description: `notifiche - detail.timeline.send-digital-success-PEC-description - ${JSON.stringify(
         {
           ...sendDigitalDomicileStep.nameAndTaxId(payload),
           address: 'nome.cognome@pec.it',
@@ -36,8 +41,8 @@ describe('SendDigitalFeedbackStep', () => {
     expect(
       sendDigitalDomicileStep.getTimelineStepInfo({ ...payload, isMultiRecipient: true })
     ).toStrictEqual({
-      label: `notifiche - detail.timeline.send-digital-success`,
-      description: `notifiche - detail.timeline.send-digital-success-description-multirecipient - ${JSON.stringify(
+      label: `notifiche - detail.timeline.send-digital-success-PEC`,
+      description: `notifiche - detail.timeline.send-digital-success-PEC-description-multirecipient - ${JSON.stringify(
         {
           ...sendDigitalDomicileStep.nameAndTaxId(payload),
           address: 'nome.cognome@pec.it',
@@ -46,17 +51,55 @@ describe('SendDigitalFeedbackStep', () => {
     });
   });
 
+  it('test getTimelineStepInfo with responseStatus OK - SERCQ', () => {
+    const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_FEEDBACK, {
+      digitalAddress: {
+        address: SERCQ_SEND_VALUE,
+        type: DigitalDomicileType.SERCQ,
+      },
+      responseStatus: ResponseStatus.OK,
+    });
+    const payload = {
+      step: timelineElem,
+      recipient: notificationDTO.recipients[0],
+      isMultiRecipient: false,
+    };
+    const sendDigitalDomicileStep = new SendDigitalFeedbackStep();
+    // mono recipient
+    expect(sendDigitalDomicileStep.getTimelineStepInfo(payload)).toStrictEqual({
+      label: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND`,
+      description: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND-description - ${JSON.stringify(
+        {
+          ...sendDigitalDomicileStep.nameAndTaxId(payload),
+          address: SERCQ_SEND_VALUE,
+        }
+      )}`,
+    });
+    // multi recipient
+    expect(
+      sendDigitalDomicileStep.getTimelineStepInfo({ ...payload, isMultiRecipient: true })
+    ).toStrictEqual({
+      label: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND`,
+      description: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND-description-multirecipient - ${JSON.stringify(
+        {
+          ...sendDigitalDomicileStep.nameAndTaxId(payload),
+          address: SERCQ_SEND_VALUE,
+        }
+      )}`,
+    });
+  });
+
   it('test getTimelineStepInfo with responseStatus KO', () => {
-    const timelineElem = getTimelineElem(TimelineCategory.SEND_ANALOG_FEEDBACK, {
+    const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_FEEDBACK, {
       digitalAddress: {
         address: 'nome.cognome@pec.it',
         type: DigitalDomicileType.PEC,
       },
-      responseStatus: 'KO',
+      responseStatus: ResponseStatus.KO,
     });
     const payload = {
       step: timelineElem,
-      recipient: notificationToFe.recipients[0],
+      recipient: notificationDTO.recipients[0],
       isMultiRecipient: false,
     };
     const sendDigitalDomicileStep = new SendDigitalFeedbackStep();

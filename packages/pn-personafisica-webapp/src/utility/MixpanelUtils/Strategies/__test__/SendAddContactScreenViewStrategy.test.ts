@@ -6,7 +6,7 @@ describe('Mixpanel - Add contact screen view Strategy', () => {
   it('should return add contact screen view event', () => {
     const strategy = new SendAddContactScreenViewStrategy();
 
-    const isOtherContactEvent = strategy.performComputations(true);
+    const isOtherContactEvent = strategy.performComputations('123456');
     expect(isOtherContactEvent).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
@@ -15,7 +15,7 @@ describe('Mixpanel - Add contact screen view Strategy', () => {
       },
     });
 
-    const isNotOtherContactEvent = strategy.performComputations(false);
+    const isNotOtherContactEvent = strategy.performComputations('default');
     expect(isNotOtherContactEvent).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,

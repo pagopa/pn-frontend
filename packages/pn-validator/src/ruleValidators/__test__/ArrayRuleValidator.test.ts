@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+
 import { ForEachElement } from '../../rules/ForEachElement';
 import { IsEmpty } from '../../rules/IsEmpty';
 import { ArrayRuleValidator } from '../ArrayRuleValidator';
@@ -7,15 +8,15 @@ const pushRuleMk = vi.fn();
 const dummyRuleValidator = new ArrayRuleValidator(pushRuleMk);
 
 vi.mock('../../rules/IsEmpty', () => {
-    return {
-        IsEmpty: vi.fn()
-    }
+  return {
+    IsEmpty: vi.fn(),
+  };
 });
 
 vi.mock('../../rules/ForEachElement', () => {
-    return {
-        ForEachElement: vi.fn()
-    }
+  return {
+    ForEachElement: vi.fn(),
+  };
 });
 
 describe('Test ArrayRuleValidator', () => {

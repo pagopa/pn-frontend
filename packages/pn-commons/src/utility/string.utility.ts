@@ -22,6 +22,7 @@ export const dataRegex = {
   // Carlos Lombardi, 2023.01.23
 
   name: /^[A-Za-zÀ-ÿ\-'" 0-9\.]+$/,
+  publicKeyName: /^[a-zA-Z0-9-\\s]+$/i,
   lettersAndNumbers: /^[A-Za-z0-9]+$/,
   // this for string that have numbers, characters, - and _
   lettersNumbersAndDashs: /^[A-Za-z0-9-_]+$/,
@@ -156,4 +157,16 @@ export function sanitizeString(srt: string): string {
   // for this reason, this solution doesn't bring a loss of functionality, but instead it can increase the security against malicious code
   // Andrea Cimini, 2023.07.12
   return html.body.textContent ?? '';
+}
+
+/**
+ * Convert string in base64
+ * @param str input string
+ * @returns base64 string
+ */
+export function fromStringToBase64(str: string): string {
+  if (str.length === 0) {
+    return '';
+  }
+  return window.btoa(str);
 }

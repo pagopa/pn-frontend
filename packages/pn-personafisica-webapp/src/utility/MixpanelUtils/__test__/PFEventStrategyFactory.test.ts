@@ -1,12 +1,15 @@
 import { PFEventsType } from '../../../models/PFEventsType';
 import PFEventStrategyFactory from '../PFEventStrategyFactory';
 import { SendAcceptDelegationStrategy } from '../Strategies/SendAcceptDelegationStrategy';
-import { SendAddContactActionStrategy } from '../Strategies/SendAddContactActionStrategy';
+import { SendActiveIOUxSuccessStrategy } from '../Strategies/SendActiveIOUxSuccessStrategy';
+import { SendAddAddressStrategy } from '../Strategies/SendAddAddressStrategy';
 import { SendAddContactScreenViewStrategy } from '../Strategies/SendAddContactScreenViewStrategy';
-import { SendAddCourtesyAddressStrategy } from '../Strategies/SendAddCourtesyAddressStrategy';
-import { SendAddLegalAddressStrategy } from '../Strategies/SendAddLegalAddressStrategy';
+import { SendAddContactWithSourceActionStrategy } from '../Strategies/SendAddContactWithSourceActionStrategy';
+import { SendAddCourtesyContactUXSuccessStrategy } from '../Strategies/SendAddCourtesyContactUXSuccessStrategy';
+import { SendAddLegalContactUXSuccessStrategy } from '../Strategies/SendAddLegalContactUXSuccessStrategy';
 import { SendAddMandateUXConversionStrategy } from '../Strategies/SendAddMandateUXConversionStrategy';
 import { SendAddMandateUXSuccessStrategy } from '../Strategies/SendAddMandateUXSuccessStrategy';
+import { SendAddSercqSendUxSuccessStrategy } from '../Strategies/SendAddSercqSendUxSuccessStrategy';
 import { SendDisableIOStrategy } from '../Strategies/SendDisableIOStrategy';
 import { SendDownloadCertificateOpposable } from '../Strategies/SendDownloadCertificateOpposable';
 import { SendDownloadResponseStrategy } from '../Strategies/SendDownloadResponse';
@@ -23,9 +26,9 @@ import { SendPaymentOutcomeStrategy } from '../Strategies/SendPaymentOutcomeStra
 import { SendPaymentStatusStrategy } from '../Strategies/SendPaymentStatusStrategy';
 import { SendPaymentsCountStrategy } from '../Strategies/SendPaymentsCountStrategy';
 import { SendRefreshPageStrategy } from '../Strategies/SendRefreshPageStrategy';
+import { SendRemoveAddressStrategy } from '../Strategies/SendRemoveAddressStrategy';
 import { SendRemoveContactSuccessStrategy } from '../Strategies/SendRemoveContactSuccess';
-import { SendRemoveCourtesyAddressStrategy } from '../Strategies/SendRemoveCourtesyAddress';
-import { SendRemoveLegalAddressStrategy } from '../Strategies/SendRemoveLegalAddress';
+import { SendRemoveSercqSendSuccessStrategy } from '../Strategies/SendRemoveSercqSendSuccessStrategy';
 import { SendServiceStatusStrategy } from '../Strategies/SendServiceStatusStrategy';
 import { SendToastErrorStrategy } from '../Strategies/SendToastErrorStrategy';
 import { SendViewContactDetailsStrategy } from '../Strategies/SendViewContactDetailsStrategy';
@@ -159,25 +162,43 @@ describe('Event Strategy Factory', () => {
     });
   });
 
-  it('should return SendAddContactActionStrategy for add contacts start events', () => {
+  it('should return sendAddContactWithSourceActionStrategy for add contacts action events', () => {
     const eventTypes = [
+      PFEventsType.SEND_ADD_SERCQ_SEND_START,
+      PFEventsType.SEND_ADD_PEC_START,
       PFEventsType.SEND_ADD_EMAIL_START,
       PFEventsType.SEND_ADD_SMS_START,
-      PFEventsType.SEND_ADD_PEC_START,
-      PFEventsType.SEND_ADD_PEC_UX_CONVERSION,
-      PFEventsType.SEND_ADD_SMS_UX_CONVERSION,
-      PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION,
     ];
     eventTypes.forEach((eventType) => {
-      expect(factory.getStrategy(eventType)).toBeInstanceOf(SendAddContactActionStrategy);
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(SendAddContactWithSourceActionStrategy);
+    });
+  });
+
+  it('should return SendAddCourtesyContactUXSuccessStrategy for add courtesy contacts start events', () => {
+    const eventTypes = [
+      PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS,
+      PFEventsType.SEND_ADD_SMS_UX_SUCCESS,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(
+        SendAddCourtesyContactUXSuccessStrategy
+      );
+    });
+  });
+
+  it('should return SendAddLegalContactUXSuccessStrategy for add contacts action events', () => {
+    const eventTypes = [PFEventsType.SEND_ADD_PEC_UX_SUCCESS];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(SendAddLegalContactUXSuccessStrategy);
     });
   });
 
   it('should return SendAddContactScreenViewStrategy for add contacts success events', () => {
     const eventTypes = [
-      PFEventsType.SEND_ADD_PEC_UX_SUCCESS,
-      PFEventsType.SEND_ADD_SMS_UX_SUCCESS,
-      PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS,
+      PFEventsType.SEND_ADD_SMS_UX_CONVERSION,
+      PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION,
+      PFEventsType.SEND_ADD_PEC_UX_CONVERSION,
+      PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(SendAddContactScreenViewStrategy);
@@ -188,7 +209,6 @@ describe('Event Strategy Factory', () => {
     const eventTypes = [
       PFEventsType.SEND_PROFILE,
       PFEventsType.SEND_ADD_MANDATE_DATA_INPUT,
-      PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS,
       PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS,
     ];
     eventTypes.forEach((eventType) => {
@@ -292,15 +312,15 @@ describe('Event Strategy Factory', () => {
     );
   });
 
-  it('should return SendRemoveLegalAddressStrategy for SEND_REMOVE_LEGAL_ADDRESS event', () => {
-    expect(factory.getStrategy(PFEventsType.SEND_REMOVE_LEGAL_ADDRESS)).toBeInstanceOf(
-      SendRemoveLegalAddressStrategy
+  it('should return SendRemoveLegalAddressStrategy for SEND_DELETE_ADDRESS event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_DELETE_ADDRESS)).toBeInstanceOf(
+      SendRemoveAddressStrategy
     );
   });
 
   it('should return SendAddLegalAddressStrategy for SEND_ADD_LEGAL_ADDRESS event', () => {
-    expect(factory.getStrategy(PFEventsType.SEND_ADD_LEGAL_ADDRESS)).toBeInstanceOf(
-      SendAddLegalAddressStrategy
+    expect(factory.getStrategy(PFEventsType.SEND_ADD_ADDRESS)).toBeInstanceOf(
+      SendAddAddressStrategy
     );
   });
 
@@ -316,15 +336,21 @@ describe('Event Strategy Factory', () => {
     );
   });
 
-  it('should return SendRemoveCourtesyAddressStrategy for SEND_REMOVE_COURTESY_ADDRESS event', () => {
-    expect(factory.getStrategy(PFEventsType.SEND_REMOVE_COURTESY_ADDRESS)).toBeInstanceOf(
-      SendRemoveCourtesyAddressStrategy
+  it('should return SendAddSercqSendUxSuccessStrategy for SEND_ADD_SERCQ_SEND_UX_SUCCESS', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS)).toBeInstanceOf(
+      SendAddSercqSendUxSuccessStrategy
     );
   });
 
-  it('should return SendAddCourtesyAddressStrategy for SEND_ADD_COURTESY_ADDRESS event', () => {
-    expect(factory.getStrategy(PFEventsType.SEND_ADD_COURTESY_ADDRESS)).toBeInstanceOf(
-      SendAddCourtesyAddressStrategy
+  it('should return SendRemoveSercqSendSuccessStrategy for SEND_REMOVE_SERCQ_SEND_SUCCESS', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_REMOVE_SERCQ_SEND_SUCCESS)).toBeInstanceOf(
+      SendRemoveSercqSendSuccessStrategy
+    );
+  });
+
+  it('should return SendActiveIOUxSuccessStrategy for SEND_ACTIVE_IO_UX_SUCCESS', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS)).toBeInstanceOf(
+      SendActiveIOUxSuccessStrategy
     );
   });
 

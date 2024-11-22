@@ -4,15 +4,9 @@ import { vi } from 'vitest';
 
 import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
+import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import {
-  ACCEPT_DELEGATION,
-  DELEGATIONS_BY_DELEGATE,
-  REJECT_DELEGATION,
-  UPDATE_DELEGATION,
-} from '../../../api/delegations/delegations.routes';
 import { DelegationStatus } from '../../../models/Deleghe';
 import DelegationsOfTheCompany from '../DelegationsOfTheCompany';
 
@@ -100,7 +94,7 @@ describe('DelegationsOfTheCompany Component', async () => {
         delegationsState: {
           ...initialState,
           delegations: {
-            delegators: arrayOfDelegators,
+            delegators: mandatesByDelegate,
           },
         },
       },
@@ -116,20 +110,20 @@ describe('DelegationsOfTheCompany Component', async () => {
     const table = getByTestId('delegationsDesktop');
     expect(table).toBeInTheDocument();
     const rows = getAllByTestId('delegationsBodyRowDesktop');
-    expect(rows).toHaveLength(arrayOfDelegators.length);
+    expect(rows).toHaveLength(mandatesByDelegate.length);
     rows.forEach((row, index) => {
-      expect(row).toHaveTextContent(arrayOfDelegators[index].delegator?.displayName!);
+      expect(row).toHaveTextContent(mandatesByDelegate[index].delegator?.displayName!);
     });
   });
 
   it('filters the results', async () => {
     mock
-      .onPost(DELEGATIONS_BY_DELEGATE({ size: 10, nextPageKey: undefined }), {
+      .onPost('/bff/v1/mandate/delegate?size=10', {
         groups: ['group-2'],
         status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
       })
       .reply(200, {
-        resultsPage: [arrayOfDelegators[1]],
+        resultsPage: [mandatesByDelegate[1]],
         moreResult: false,
         nextPagesKey: [],
       });
@@ -155,7 +149,7 @@ describe('DelegationsOfTheCompany Component', async () => {
         delegationsState: {
           ...initialState,
           delegations: {
-            delegators: arrayOfDelegators,
+            delegators: mandatesByDelegate,
           },
           groups,
         },
@@ -176,7 +170,7 @@ describe('DelegationsOfTheCompany Component', async () => {
     fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.post.length).toBe(1);
-      expect(mock.history.post[0].url).toContain('mandate/api/v1/mandates-by-delegate?size=10');
+      expect(mock.history.post[0].url).toContain('/bff/v1/mandate/delegate?size=10');
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
         groups: ['group-2'],
         status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
@@ -184,13 +178,13 @@ describe('DelegationsOfTheCompany Component', async () => {
     });
     const rows = getAllByTestId('delegationsBodyRowDesktop');
     expect(rows).toHaveLength(1);
-    expect(rows[0]).toHaveTextContent(arrayOfDelegators[1].delegator?.displayName!);
+    expect(rows[0]).toHaveTextContent(mandatesByDelegate[1].delegator?.displayName!);
     expect(cancelButton).toBeEnabled();
   });
 
   it('filters the results and show empty state', async () => {
     mock
-      .onPost(DELEGATIONS_BY_DELEGATE({ size: 10, nextPageKey: undefined }), {
+      .onPost('/bff/v1/mandate/delegate?size=10', {
         groups: ['group-2'],
         status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
       })
@@ -199,8 +193,8 @@ describe('DelegationsOfTheCompany Component', async () => {
         moreResult: false,
         nextPagesKey: [],
       });
-    mock.onPost(DELEGATIONS_BY_DELEGATE({ size: 10, nextPageKey: undefined })).reply(200, {
-      resultsPage: arrayOfDelegators,
+    mock.onPost('/bff/v1/mandate/delegate?size=10').reply(200, {
+      resultsPage: mandatesByDelegate,
       moreResult: false,
       nextPagesKey: [],
     });
@@ -226,7 +220,7 @@ describe('DelegationsOfTheCompany Component', async () => {
         delegationsState: {
           ...initialState,
           delegations: {
-            delegators: arrayOfDelegators,
+            delegators: mandatesByDelegate,
           },
           groups,
         },
@@ -246,7 +240,7 @@ describe('DelegationsOfTheCompany Component', async () => {
     fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.post.length).toBe(1);
-      expect(mock.history.post[0].url).toContain('mandate/api/v1/mandates-by-delegate?size=10');
+      expect(mock.history.post[0].url).toContain('/bff/v1/mandate/delegate?size=10');
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
         groups: ['group-2'],
         status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
@@ -260,7 +254,7 @@ describe('DelegationsOfTheCompany Component', async () => {
     fireEvent.click(button);
     await waitFor(() => {
       expect(mock.history.post.length).toBe(2);
-      expect(mock.history.post[0].url).toContain('mandate/api/v1/mandates-by-delegate?size=10');
+      expect(mock.history.post[0].url).toContain('/bff/v1/mandate/delegate?size=10');
     });
     expect(container).not.toHaveTextContent(/deleghe.no_delegators_after_filters/i);
     table = getByTestId('delegationsDesktop');
@@ -268,8 +262,8 @@ describe('DelegationsOfTheCompany Component', async () => {
   });
 
   it('change pagination size', async () => {
-    mock.onPost(DELEGATIONS_BY_DELEGATE({ size: 20 })).reply(200, {
-      resultsPage: [arrayOfDelegators[1]],
+    mock.onPost('/bff/v1/mandate/delegate?size=20').reply(200, {
+      resultsPage: [mandatesByDelegate[1]],
       moreResult: false,
       nextPagesKey: [],
     });
@@ -278,7 +272,7 @@ describe('DelegationsOfTheCompany Component', async () => {
         delegationsState: {
           ...initialState,
           delegations: {
-            delegators: [arrayOfDelegators[0]],
+            delegators: [mandatesByDelegate[0]],
           },
         },
       },
@@ -286,7 +280,7 @@ describe('DelegationsOfTheCompany Component', async () => {
 
     let rows = getAllByTestId('delegationsBodyRowDesktop');
     expect(rows).toHaveLength(1);
-    expect(rows[0]).toHaveTextContent(arrayOfDelegators[0].delegator?.displayName!);
+    expect(rows[0]).toHaveTextContent(mandatesByDelegate[0].delegator?.displayName!);
     const itemsPerPageSelector = getByTestId('itemsPerPageSelector');
     const button = itemsPerPageSelector.querySelector('button');
     expect(button).toHaveTextContent(/10/i);
@@ -299,16 +293,16 @@ describe('DelegationsOfTheCompany Component', async () => {
     await waitFor(() => {
       expect(button).toHaveTextContent(/20/i);
       expect(mock.history.post.length).toBe(1);
-      expect(mock.history.post[0].url).toContain('mandate/api/v1/mandates-by-delegate?size=20');
+      expect(mock.history.post[0].url).toContain('/bff/v1/mandate/delegate?size=20');
     });
     rows = getAllByTestId('delegationsBodyRowDesktop');
     expect(rows).toHaveLength(1);
-    expect(rows[0]).toHaveTextContent(arrayOfDelegators[1].delegator?.displayName!);
+    expect(rows[0]).toHaveTextContent(mandatesByDelegate[1].delegator?.displayName!);
   });
 
   it('change pagination page', async () => {
-    mock.onPost(DELEGATIONS_BY_DELEGATE({ size: 10, nextPageKey: 'page-1' })).reply(200, {
-      resultsPage: [arrayOfDelegators[1]],
+    mock.onPost('/bff/v1/mandate/delegate?size=10&nextPageKey=page-1').reply(200, {
+      resultsPage: [mandatesByDelegate[1]],
       moreResult: false,
       nextPagesKey: [],
     });
@@ -317,7 +311,7 @@ describe('DelegationsOfTheCompany Component', async () => {
         delegationsState: {
           ...initialState,
           delegations: {
-            delegators: [arrayOfDelegators[0]],
+            delegators: [mandatesByDelegate[0]],
           },
           pagination: {
             nextPagesKey: ['page-1', 'page-2', 'page-3'],
@@ -328,7 +322,7 @@ describe('DelegationsOfTheCompany Component', async () => {
     });
     let rows = getAllByTestId('delegationsBodyRowDesktop');
     expect(rows).toHaveLength(1);
-    expect(rows[0]).toHaveTextContent(arrayOfDelegators[0].delegator?.displayName!);
+    expect(rows[0]).toHaveTextContent(mandatesByDelegate[0].delegator?.displayName!);
     const pageSelector = getByTestId('pageSelector');
     const pageButtons = pageSelector.querySelectorAll('button');
     // depends on mui pagination
@@ -341,22 +335,22 @@ describe('DelegationsOfTheCompany Component', async () => {
     await waitFor(() => {
       expect(mock.history.post.length).toBe(1);
       expect(mock.history.post[0].url).toContain(
-        'mandate/api/v1/mandates-by-delegate?size=10&nextPageKey=page-1'
+        '/bff/v1/mandate/delegate?size=10&nextPageKey=page-1'
       );
     });
     rows = getAllByTestId('delegationsBodyRowDesktop');
     expect(rows).toHaveLength(1);
-    expect(rows[0]).toHaveTextContent(arrayOfDelegators[1].delegator?.displayName!);
+    expect(rows[0]).toHaveTextContent(mandatesByDelegate[1].delegator?.displayName!);
   });
 
   it('test reject delegation', async () => {
-    mock.onPatch(REJECT_DELEGATION(arrayOfDelegators[0].mandateId)).reply(204);
+    mock.onPatch(`/bff/v1/mandate/${mandatesByDelegate[0].mandateId}/reject`).reply(204);
     const { getAllByTestId, getByTestId } = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
           delegations: {
-            delegators: arrayOfDelegators,
+            delegators: mandatesByDelegate,
             delegates: [],
           },
         },
@@ -377,26 +371,26 @@ describe('DelegationsOfTheCompany Component', async () => {
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain(
-        `mandate/api/v1/mandate/${arrayOfDelegators[0].mandateId}/reject`
+        `/bff/v1/mandate/${mandatesByDelegate[0].mandateId}/reject`
       );
       expect(dialog).not.toBeInTheDocument();
     });
     const rows = getAllByTestId('delegationsBodyRowDesktop');
-    expect(rows).toHaveLength(arrayOfDelegators.length - 1);
+    expect(rows).toHaveLength(mandatesByDelegate.length - 1);
     // the index + 1 is because we reject the first delegator
     rows.forEach((row, index) => {
-      expect(row).toHaveTextContent(arrayOfDelegators[index + 1].delegator?.displayName!);
+      expect(row).toHaveTextContent(mandatesByDelegate[index + 1].delegator?.displayName!);
     });
   });
 
   it('test accept delegation', async () => {
-    mock.onPatch(ACCEPT_DELEGATION(arrayOfDelegators[0].mandateId)).reply(204);
+    mock.onPatch(`/bff/v1/mandate/${mandatesByDelegate[0].mandateId}/accept`).reply(204);
     const { getByTestId } = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
           delegations: {
-            delegators: arrayOfDelegators,
+            delegators: mandatesByDelegate,
             delegates: [],
           },
         },
@@ -420,7 +414,7 @@ describe('DelegationsOfTheCompany Component', async () => {
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain(
-        `mandate/api/v1/mandate/${arrayOfDelegators[0].mandateId}/accept`
+        `/bff/v1/mandate/${mandatesByDelegate[0].mandateId}/accept`
       );
       expect(JSON.parse(mock.history.patch[0].data)).toStrictEqual({
         groups: [],
@@ -437,13 +431,13 @@ describe('DelegationsOfTheCompany Component', async () => {
       { id: 'group-2', name: 'Group 2', status: 'ACTIVE' },
       { id: 'group-3', name: 'Group 3', status: 'ACTIVE' },
     ];
-    mock.onPatch(UPDATE_DELEGATION(arrayOfDelegators[1].mandateId)).reply(204);
+    mock.onPatch(`/bff/v1/mandate/${mandatesByDelegate[1].mandateId}/update`).reply(204);
     const { getByTestId, getAllByTestId } = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
           delegations: {
-            delegators: arrayOfDelegators,
+            delegators: mandatesByDelegate,
             delegates: [],
           },
           groups,
@@ -469,7 +463,7 @@ describe('DelegationsOfTheCompany Component', async () => {
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain(
-        `/mandate/api/v1/mandate/${arrayOfDelegators[1].mandateId}/update`
+        `/bff/v1/mandate/${mandatesByDelegate[1].mandateId}/update`
       );
       expect(JSON.parse(mock.history.patch[0].data)).toStrictEqual({
         groups: ['group-3'],

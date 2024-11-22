@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { Row } from '@pagopa-pn/pn-commons';
 
-import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
+import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { render } from '../../../__test__/test-utils';
 import { DelegationColumnData } from '../../../models/Deleghe';
 import delegationToItem from '../../../utility/delegation.utility';
@@ -17,7 +17,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 const data = {
-  ...(delegationToItem(arrayOfDelegators)[0] as Row<DelegationColumnData>),
+  ...(delegationToItem(mandatesByDelegate)[0] as Row<DelegationColumnData>),
 };
 
 describe('DowntimeLogDataSwitch Component', () => {

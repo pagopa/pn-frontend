@@ -4,23 +4,20 @@ import { IAppMessage } from './AppMessage';
 import { AppResponse, AppResponseError, ErrorMessage, ServerResponseError } from './AppResponse';
 import {
   AppCurrentStatus,
-  AppStatusDTO,
   AppStatusData,
   Downtime,
-  DowntimeDTO,
-  DowntimeLogPage,
-  DowntimeLogPageDTO,
+  DowntimeLogHistory,
   DowntimeStatus,
-  FunctionalityStatus,
   GetDowntimeHistoryParams,
   KnownFunctionality,
   LegalFactDocumentDetails,
   isKnownFunctionality,
 } from './AppStatus';
+import { ConsentActionType, ConsentType, TosPrivacyConsent } from './Consents';
+import { SERCQ_SEND_VALUE } from './Contacts';
 import { KnownSentiment } from './EmptyState';
 import EventStrategy from './EventStrategy';
 import { EventType } from './EventType';
-import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
 import { Institution, PartyEntityWithUrl } from './Institutions';
 import {
   ActionMeta,
@@ -39,13 +36,9 @@ import {
   TrackedEvent,
 } from './MixpanelEvents';
 import {
-  AarDetails,
-  AddressSource,
   AnalogDetails,
   AnalogWorkflowDetails,
-  AppIoCourtesyMessageEventType,
   DigitalDomicileType,
-  DigitalWorkflowDetails,
   ExtRegistriesPaymentDetails,
   F24PaymentDetails,
   INotificationDetailTimeline,
@@ -60,12 +53,13 @@ import {
   NotificationDetailRecipient,
   NotificationDetailTableRow,
   NotificationDetailTimelineDetails,
-  NotificationFeePolicy,
+  NotificationDocumentRequest,
+  NotificationDocumentResponse,
+  NotificationDocumentType,
   NotificationStatusHistory,
   PagoPAPaymentFullDetails,
   PaidDetails,
   PaymentAttachment,
-  PaymentAttachmentNameType,
   PaymentAttachmentSName,
   PaymentDetails,
   PaymentInfoDetail,
@@ -80,7 +74,6 @@ import {
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
-  ViewedDetails,
 } from './NotificationDetail';
 import { NotificationStatus } from './NotificationStatus';
 import {
@@ -97,17 +90,16 @@ import { Product } from './Products';
 import { SideMenuItem } from './SideMenuItem';
 import { SmartTableData } from './SmartTable';
 import { BasicUser, ConsentUser, basicNoLoggedUserData } from './User';
+import { WithRequired } from './UtilityTypes';
 
 export {
   basicNoLoggedUserData,
   NotificationStatus,
-  NotificationFeePolicy,
   NotificationDeliveryMode,
   TimelineCategory,
   DigitalDomicileType,
   RecipientType,
   ResponseStatus,
-  AddressSource,
   LegalFactType,
   EventPageType,
   EventDowntimeType,
@@ -122,9 +114,12 @@ export {
   DowntimeStatus,
   isKnownFunctionality,
   KnownFunctionality,
-  AppIoCourtesyMessageEventType,
   PrivateRoute,
   EventPropertyType,
+  ConsentType,
+  ConsentActionType,
+  NotificationDocumentType,
+  SERCQ_SEND_VALUE,
 };
 export type {
   AnalogWorkflowDetails,
@@ -158,18 +153,13 @@ export type {
   NotificationDetailPayment,
   NotificationDetailTableRow,
   NotificationStatusHistory,
-  GetNotificationDowntimeEventsParams,
   PaginationData,
   PaidDetails,
-  PaymentAttachmentNameType,
   PaymentAttachment,
   PaymentNotice,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
-  DigitalWorkflowDetails,
-  AarDetails,
-  ViewedDetails,
   SideMenuItem,
   Sort,
   AppResponse,
@@ -178,14 +168,10 @@ export type {
   ErrorMessage,
   SmartTableData,
   PhysicalAddress,
-  DowntimeDTO,
-  AppStatusDTO,
-  DowntimeLogPageDTO,
+  DowntimeLogHistory,
   GetDowntimeHistoryParams,
   AppCurrentStatus,
-  FunctionalityStatus,
   Downtime,
-  DowntimeLogPage,
   LegalFactDocumentDetails,
   F24PaymentDetails,
   PagoPAPaymentFullDetails,
@@ -201,4 +187,8 @@ export type {
   EventStrategy,
   EventType,
   ActionMeta,
+  TosPrivacyConsent,
+  NotificationDocumentRequest,
+  NotificationDocumentResponse,
+  WithRequired,
 };

@@ -4,6 +4,7 @@ import { formatDate, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import {
   createEvent,
   createMatchMedia,
+  testCalendar,
   testFormElements,
   testInput,
 } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -21,7 +22,6 @@ import {
 import FilterNotifications from '../FilterNotifications';
 
 vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it.skip without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
     i18n: { language: 'it' },
@@ -34,34 +34,20 @@ const initialState = {
   iunMatch: '',
 };
 
-async function testCalendar(form: HTMLFormElement, elementName: string) {
-  const input = form.querySelector(`input[name="${elementName}"]`);
-  const button = input?.parentElement!.querySelector(`button`);
-  fireEvent.click(button!);
-  const dialog = screen.getByRole('dialog');
-  expect(dialog).toBeInTheDocument();
-  const dateButton = document.evaluate(
-    `//button[text()="1"]`,
-    document,
-    null,
-    XPathResult.ANY_TYPE,
-    null
-  );
-  fireEvent.click(dateButton.iterateNext()!);
-  await waitFor(() => {
-    expect(input).toHaveValue('01/02/2022');
-    expect(dialog).not.toBeInTheDocument();
-  });
-}
-
 async function setFormValues(
   form: HTMLFormElement,
   startDate: Date,
   endDate: Date,
-  iunMatch: string
+  iunMatch: string,
+  isMobile: boolean = false
 ) {
-  await testInput(form, 'startDate', formatDate(startDate.toISOString(), false));
-  await testInput(form, 'endDate', formatDate(endDate.toISOString(), false));
+  if (isMobile) {
+    await testCalendar(form, 'startDate', startDate, undefined, true);
+    await testCalendar(form, 'endDate', endDate, undefined, true);
+  } else {
+    await testInput(form, 'startDate', formatDate(startDate.toISOString(), false));
+    await testInput(form, 'endDate', formatDate(endDate.toISOString(), false));
+  }
   await testInput(form, 'iunMatch', iunMatch);
 }
 
@@ -125,8 +111,8 @@ describe('Filter Notifications Table Component', async () => {
     });
     form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form!, 'startDate', '23/02/2022');
-    await testCalendar(form!, 'startDate');
-  });
+    await testCalendar(form!, 'startDate', new Date('2019-12-14'), new Date('2022-02-23'));
+  }, 10000);
 
   it('test endDate input', async () => {
     // render component
@@ -135,8 +121,8 @@ describe('Filter Notifications Table Component', async () => {
     });
     form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form!, 'endDate', '23/02/2022');
-    await testCalendar(form!, 'endDate');
-  });
+    await testCalendar(form!, 'endDate', new Date('2021-01-4'), new Date('2022-02-23'));
+  }, 10000);
 
   it('test form submission - valid fields', async () => {
     // render component
@@ -255,7 +241,7 @@ describe('Filter Notifications Table Component', async () => {
     const button = result.getByTestId('dialogToggleButton');
     fireEvent.click(button);
     let dialogForm = await waitFor(() => screen.getByTestId('filter-form') as HTMLFormElement);
-    await setFormValues(dialogForm!, nineYearsAgo, oneYearAgo, 'ABCD-EFGH-ILMN-123456-A-1');
+    await setFormValues(dialogForm!, nineYearsAgo, oneYearAgo, 'ABCD-EFGH-ILMN-123456-A-1', true);
     const submitButton = dialogForm!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);

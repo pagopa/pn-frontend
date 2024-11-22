@@ -14,7 +14,6 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient, externalClient } from '../../../api/apiClients';
-import { NOTIFICATION_PRELOAD_DOCUMENT } from '../../../api/notifications/notifications.routes';
 import { NewNotificationDocument } from '../../../models/NewNotification';
 import Attachments from '../Attachments';
 
@@ -103,9 +102,8 @@ describe('Attachments Component with payment enabled', async () => {
 
   it('changes form values and clicks on confirm - one document', async () => {
     mock
-      .onPost(NOTIFICATION_PRELOAD_DOCUMENT(), [
+      .onPost('/bff/v1/notifications/sent/documents/preload', [
         {
-          key: newNotification.documents[0].name,
           contentType: newNotification.documents[0].contentType,
           sha256: 'mocked-hashBase64',
         },
@@ -188,9 +186,8 @@ describe('Attachments Component with payment enabled', async () => {
       expect(buttonSubmit).toBeDisabled();
     });
     await testInput(form!, `documents.0.name`, '');
-    const error = form!.querySelector(`[id="documents.0.name-helper-text"]`);
-    expect(error).toHaveTextContent('required-field');
     await testInput(form!, `documents.0.name`, ' text-with-spaces ');
+    const error = form!.querySelector(`[id="documents.0.name-helper-text"]`);
     expect(error).toHaveTextContent('no-spaces-at-edges');
   });
 
@@ -238,14 +235,12 @@ describe('Attachments Component with payment enabled', async () => {
 
   it('changes form values and clicks on confirm - two documents', async () => {
     mock
-      .onPost(NOTIFICATION_PRELOAD_DOCUMENT(), [
+      .onPost('/bff/v1/notifications/sent/documents/preload', [
         {
-          key: newNotification.documents[0].name,
           contentType: newNotification.documents[0].contentType,
           sha256: 'mocked-hashBase64',
         },
         {
-          key: newNotification.documents[1].name,
           contentType: newNotification.documents[1].contentType,
           sha256: 'mocked-hashBase64',
         },
@@ -398,6 +393,16 @@ describe('Attachments Component with payment enabled', async () => {
       });
     }
     expect(buttonAddAnotherDoc).not.toBeInTheDocument();
+  });
+  
+  it('should appear info banner with additional languages', async () => {
+    // render component
+    await act(async () => {
+      result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} hasAdditionalLang={true}/>);
+    });
+    const form = result.container.querySelector('form');
+    const banner = within(form!).getByTestId('bannerAdditionalLanguages');
+    expect(banner).toBeInTheDocument();
   });
 });
 

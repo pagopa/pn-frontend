@@ -8,18 +8,20 @@ import {
   ApiError,
   AppResponse,
   AppResponsePublisher,
-  GetNotificationDowntimeEventsParams,
+  GetDowntimeHistoryParams,
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailTimeline,
   NotificationDetail as NotificationDetailType,
+  NotificationDocumentResponse,
+  NotificationDocumentType,
   NotificationRelatedDowntimes,
   PnBreadcrumb,
   TitleBox,
   appStateActions,
   dateIsLessThan10Years,
-  useDownloadDocument,
+  downloadDocument,
   useErrors,
   useIsCancelled,
   useIsMobile,
@@ -28,23 +30,18 @@ import {
 import NotificationDetailTableSender from '../components/Notifications/NotificationDetailTableSender';
 import NotificationPaymentSender from '../components/Notifications/NotificationPaymentSender';
 import * as routes from '../navigation/routes.const';
+import { getDowntimeLegalFact } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
   cancelNotification,
-  getDowntimeEvents,
-  getDowntimeLegalFactDocumentDetails,
+  getDowntimeHistory,
   getSentNotification,
   getSentNotificationDocument,
-  getSentNotificationLegalfact,
-  getSentNotificationOtherDocument,
 } from '../redux/notification/actions';
-import {
-  clearDowntimeLegalFactData,
-  resetLegalFactState,
-  resetState,
-} from '../redux/notification/reducers';
+import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
+import { getConfiguration } from '../services/configuration.service';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
 
 type Props = {
@@ -57,7 +54,7 @@ const AlertNotificationCancel: React.FC<Props> = (notification) => {
 
   if (cancelled || cancellationInProgress) {
     return (
-      <Alert tabIndex={0} data-testid="alert" sx={{ mt: 1 }} severity={'warning'}>
+      <Alert data-testid="alert" sx={{ mt: 1 }} severity="warning">
         <Typography component="span" variant="body1">
           {cancellationInProgress
             ? t('detail.alert-cancellation-in-progress')
@@ -76,21 +73,10 @@ const NotificationDetail: React.FC = () => {
   const { hasApiErrors } = useErrors();
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const { DOWNTIME_EXAMPLE_LINK } = getConfiguration();
 
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
-  );
-  const downtimeLegalFactUrl = useAppSelector(
-    (state: RootState) => state.notificationState.downtimeLegalFactUrl
-  );
-  const documentDownloadUrl = useAppSelector(
-    (state: RootState) => state.notificationState.documentDownloadUrl
-  );
-  const otherDocumentDownloadUrl = useAppSelector(
-    (state: RootState) => state.notificationState.otherDocumentDownloadUrl
-  );
-  const legalFactDownloadUrl = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
 
   const { recipients } = notification;
@@ -108,64 +94,76 @@ const NotificationDetail: React.FC = () => {
     (recipient) => recipient.payments && recipient.payments.length > 0
   );
 
+  const showInfoMessageIfRetryAfterOrDownload = (response: NotificationDocumentResponse) => {
+    if (response.retryAfter) {
+      dispatch(
+        appStateActions.addInfo({
+          title: '',
+          message: t(`detail.document-not-available`, {
+            ns: 'notifiche',
+          }),
+        })
+      );
+    } else if (response.url) {
+      downloadDocument(response.url);
+    }
+  };
+
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
     if (_.isObject(document)) {
-      void dispatch(
-        getSentNotificationOtherDocument({ iun: notification.iun, otherDocument: document })
-      )
-        .unwrap()
-        .then((response) => {
-          if (response.retryAfter) {
-            dispatch(
-              appStateActions.addInfo({
-                title: '',
-                message: t(`detail.document-not-available`, {
-                  ns: 'notifiche',
-                }),
-              })
-            );
-          }
-        });
-    } else {
-      const documentIndex = document as string;
-      void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
-    }
-  };
-
-  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument
-  // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
-  // Cfr. comment in the definition of INotificationDetailTimeline in pn-commons/src/types/NotificationDetail.ts.
-  const legalFactDownloadHandler = (legalFact: LegalFactId | NotificationDetailOtherDocument) => {
-    if ((legalFact as LegalFactId).key) {
-      const legalFactAsLegalFact = legalFact as LegalFactId;
-      dispatch(resetLegalFactState());
-      void dispatch(
-        getSentNotificationLegalfact({
+      // AAR case
+      dispatch(
+        getSentNotificationDocument({
           iun: notification.iun,
-          legalFact: {
-            key: legalFactAsLegalFact.key.substring(legalFactAsLegalFact.key.lastIndexOf('/') + 1),
-            category: legalFactAsLegalFact.category,
-          },
+          documentType: NotificationDocumentType.AAR,
+          documentId: document.documentId,
         })
       )
         .unwrap()
-        .then((response) => {
-          if (response.retryAfter) {
-            dispatch(
-              appStateActions.addInfo({
-                title: '',
-                message: t(`detail.document-not-available`, {
-                  ns: 'notifiche',
-                }),
-              })
-            );
-          }
-        });
-    } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
-      const otherDocument = legalFact as NotificationDetailOtherDocument;
-      void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }));
+        .then(showInfoMessageIfRetryAfterOrDownload)
+        .catch(() => {});
+    } else {
+      // Attachment case
+      dispatch(
+        getSentNotificationDocument({
+          iun: notification.iun,
+          documentType: NotificationDocumentType.ATTACHMENT,
+          documentIdx: Number(document as string),
+        })
+      )
+        .unwrap()
+        .then(showInfoMessageIfRetryAfterOrDownload)
+        .catch(() => {});
+    }
+  };
+
+  const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    if (legalFact.category !== 'AAR') {
+      // Legal fact case
+      dispatch(
+        getSentNotificationDocument({
+          iun: notification.iun,
+          documentType: NotificationDocumentType.LEGAL_FACT,
+          documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
+        })
+      )
+        .unwrap()
+        .then(showInfoMessageIfRetryAfterOrDownload)
+        .catch(() => {});
+    } else {
+      // AAR in timeline case
+      dispatch(
+        getSentNotificationDocument({
+          iun: notification.iun,
+          documentType: NotificationDocumentType.AAR,
+          documentId: legalFact.key,
+        })
+      )
+        .unwrap()
+        .then(showInfoMessageIfRetryAfterOrDownload)
+        .catch(() => {});
     }
   };
 
@@ -244,21 +242,19 @@ const NotificationDetail: React.FC = () => {
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
-    const fetchParams: GetNotificationDowntimeEventsParams = {
+    const fetchParams: GetDowntimeHistoryParams = {
       startDate: fromDate,
       endDate: toDate,
     };
-    void dispatch(getDowntimeEvents(fetchParams));
+    void dispatch(getDowntimeHistory(fetchParams));
   }, []);
 
-  const fetchDowntimeLegalFactDocumentDetails = useCallback(
-    (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)),
-    []
-  );
-
-  useDownloadDocument({ url: legalFactDownloadUrl });
-  useDownloadDocument({ url: documentDownloadUrl });
-  useDownloadDocument({ url: otherDocumentDownloadUrl });
+  const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
+    dispatch(getDowntimeLegalFact(legalFactId))
+      .unwrap()
+      .then(showInfoMessageIfRetryAfterOrDownload)
+      .catch((e) => console.log(e));
+  }, []);
 
   const properBreadcrumb = (
     <PnBreadcrumb
@@ -353,10 +349,9 @@ const NotificationDetail: React.FC = () => {
                   downtimeEvents={downtimeEvents}
                   fetchDowntimeEvents={fetchDowntimeEvents}
                   notificationStatusHistory={notification.notificationStatusHistory}
-                  downtimeLegalFactUrl={downtimeLegalFactUrl}
                   fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
-                  clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData())}
-                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
+                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
+                  downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                 />
               </Stack>
             </Grid>

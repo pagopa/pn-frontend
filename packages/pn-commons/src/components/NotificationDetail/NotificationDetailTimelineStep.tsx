@@ -18,10 +18,10 @@ import { useIsMobile } from '../../hooks';
 import {
   INotificationDetailTimeline,
   LegalFactId,
-  NotificationDetailOtherDocument,
   NotificationDetailRecipient,
   NotificationStatus,
   NotificationStatusHistory,
+  TimelineCategory,
 } from '../../models';
 import {
   formatDay,
@@ -35,10 +35,7 @@ import {
 type Props = {
   timelineStep: NotificationStatusHistory;
   recipients: Array<NotificationDetailRecipient>;
-  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument
-  // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
-  // Cfr. comment in the definition of INotificationDetailTimeline in src/models/NotificationDetail.ts.
-  clickHandler: (legalFactId: LegalFactId | NotificationDetailOtherDocument) => void;
+  clickHandler: (legalFactId: LegalFactId) => void;
   position?: 'first' | 'last' | 'middle';
   showMoreButtonLabel?: string;
   showLessButtonLabel?: string;
@@ -130,7 +127,7 @@ const NotificationDetailTimelineStep = ({
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
   let legalFactsIds: Array<{
-    file: LegalFactId | NotificationDetailOtherDocument;
+    file: LegalFactId;
     step: INotificationDetailTimeline;
   }> = [];
   let visibleSteps: Array<INotificationDetailTimeline> = [];
@@ -145,7 +142,7 @@ const NotificationDetailTimelineStep = ({
         return arr.concat(s.legalFactsIds.map((lf) => ({ file: lf, step: s })));
       }
       return arr;
-    }, [] as Array<{ file: LegalFactId | NotificationDetailOtherDocument; step: INotificationDetailTimeline }>);
+    }, [] as Array<{ file: LegalFactId; step: INotificationDetailTimeline }>);
 
     visibleSteps = timelineStep.steps.filter((s) => !s.hidden);
     /* eslint-enable functional/immutable-data */
@@ -200,23 +197,18 @@ const NotificationDetailTimelineStep = ({
                 legalFactsIds.length > 0 &&
                 legalFactsIds.map((lf) => (
                   <ButtonNaked
-                    key={
-                      (lf.file as LegalFactId).key ||
-                      (lf.file as NotificationDetailOtherDocument).documentId
-                    }
+                    key={lf.file.key}
                     startIcon={<AttachFileIcon />}
                     onClick={() => clickHandler(lf.file)}
                     color="primary"
                     sx={{ marginTop: '10px', textAlign: 'left' }}
                     data-testid="download-legalfact"
-                    disabled={disableDownloads}
+                    disabled={
+                      lf.step.category !== TimelineCategory.NOTIFICATION_CANCELLED &&
+                      disableDownloads
+                    }
                   >
-                    {getLegalFactLabel(
-                      lf.step,
-                      (lf.file as LegalFactId).category ||
-                        (lf.file as NotificationDetailOtherDocument).documentType,
-                      (lf.file as LegalFactId).key || ''
-                    )}
+                    {getLegalFactLabel(lf.step, lf.file.category, lf.file.key || '')}
                   </ButtonNaked>
                 ))}
             </Box>
@@ -300,18 +292,10 @@ const NotificationDetailTimelineStep = ({
                       color={disableDownloads ? 'text.disabled' : 'primary'}
                       sx={{ cursor: disableDownloads ? 'default' : 'pointer' }}
                       onClick={() => clickHandler(lf)}
-                      key={
-                        (lf as LegalFactId).key ||
-                        (lf as NotificationDetailOtherDocument).documentId
-                      }
+                      key={lf.key}
                       data-testid="download-legalfact-micro"
                     >
-                      {getLegalFactLabel(
-                        s,
-                        (lf as LegalFactId).category ||
-                          (lf as NotificationDetailOtherDocument).documentType,
-                        (lf as LegalFactId).key || ''
-                      )}
+                      {getLegalFactLabel(s, lf.category, lf.key || '')}
                     </Typography>
                   ))}
               </Typography>

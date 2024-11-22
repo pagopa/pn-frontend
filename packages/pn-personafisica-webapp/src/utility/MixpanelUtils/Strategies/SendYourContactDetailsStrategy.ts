@@ -7,14 +7,14 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import {
-  CourtesyChannelType,
+  AddressType,
+  ChannelType,
   DigitalAddress,
-  DigitalAddresses,
   IOAllowedValues,
 } from '../../../models/contacts';
 
 type SendYourContactDetails = {
-  digitalAddresses: DigitalAddresses;
+  digitalAddresses: Array<DigitalAddress>;
   contactIO: DigitalAddress | null;
 };
 
@@ -30,17 +30,22 @@ export class SendYourContactDetailsStrategy implements EventStrategy {
     digitalAddresses,
     contactIO,
   }: SendYourContactDetails): TrackedEvent<SendYourContactDetailsReturn> {
+    const legalAddresses = digitalAddresses.filter(
+      (address) => address.addressType === AddressType.LEGAL
+    );
+    const courtesyAddresses = digitalAddresses.filter(
+      (address) => address.addressType === AddressType.COURTESY
+    );
+
     return {
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.SCREEN_VIEW,
-        PEC_exists: digitalAddresses.legal.length > 0,
+        PEC_exists: legalAddresses.length > 0,
         email_exists:
-          digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.EMAIL)
-            .length > 0,
+          courtesyAddresses.filter((c) => c.channelType === ChannelType.EMAIL).length > 0,
         telephone_exists:
-          digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.SMS)
-            .length > 0,
+          courtesyAddresses.filter((c) => c.channelType === ChannelType.SMS).length > 0,
         appIO_status: contactIO
           ? contactIO.value === IOAllowedValues.ENABLED
             ? 'activated'

@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 
 import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
-import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
+import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import {
   RenderResult,
@@ -66,7 +66,7 @@ describe('DesktopNotifications Component', () => {
     // render component
     await act(async () => {
       result = render(
-        <DesktopNotifications notifications={[]} currentDelegator={arrayOfDelegators[0]} />
+        <DesktopNotifications notifications={[]} currentDelegator={mandatesByDelegate[0]} />
       );
     });
     const filters = result.queryByTestId('filter-form');

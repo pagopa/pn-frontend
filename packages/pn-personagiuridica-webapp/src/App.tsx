@@ -9,6 +9,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
+import SettingsEthernet from '@mui/icons-material/SettingsEthernet';
 import { Box } from '@mui/material';
 import {
   AppMessage,
@@ -31,8 +32,9 @@ import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { logout } from './redux/auth/actions';
 import { PNRole } from './redux/auth/types';
+import { getDigitalAddresses } from './redux/contact/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
+import { getSidemenuInformation } from './redux/sidemenu/actions';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
@@ -60,8 +62,10 @@ const App = () => {
   return isInitialized ? <ActualApp /> : <div />;
 };
 
+// eslint-disable-next-line complexity
 const ActualApp = () => {
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION, SELFCARE_BASE_URL } = getConfiguration();
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION, SELFCARE_BASE_URL, IS_B2B_ENABLED } =
+    getConfiguration();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
@@ -73,7 +77,6 @@ const ActualApp = () => {
   );
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { pathname } = useLocation();
-  const path = pathname.split('/');
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -86,7 +89,8 @@ const ActualApp = () => {
     [loggedUser]
   );
 
-  const isPrivacyPage = path[1] === 'privacy-tos';
+  const isPublicKeyRegistrationPage = pathname.includes(routes.REGISTRA_CHIAVE_PUBBLICA);
+
   const organization = loggedUser.organization;
   const role = loggedUser.organization?.roles ? loggedUser.organization?.roles[0] : null;
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
@@ -97,7 +101,7 @@ const ActualApp = () => {
       {
         id: '1',
         title: t('header.product.organization-dashboard'),
-        productUrl: routes.PROFILE(organization?.id),
+        productUrl: routes.PROFILE(organization?.id, i18n.language),
         linkType: 'external',
       },
       {
@@ -118,7 +122,7 @@ const ActualApp = () => {
         void dispatch(getSidemenuInformation());
       }
       if (userHasAdminPermissions && !loggedUser.hasGroup) {
-        void dispatch(getDomicileInfo());
+        void dispatch(getDigitalAddresses());
       }
 
       void dispatch(getCurrentAppStatus());
@@ -191,9 +195,26 @@ const ActualApp = () => {
     });
   }
 
+  if (IS_B2B_ENABLED) {
+    /* eslint-disable-next-line functional/immutable-data */
+    menuItems.splice(3, 0, {
+      label: t('menu.integrazione-api'),
+      icon: SettingsEthernet,
+      route: routes.INTEGRAZIONE_API,
+    });
+  }
+
   const selfcareMenuItems: Array<SideMenuItem> = [
-    { label: t('menu.users'), icon: People, route: routes.USERS(organization?.id) },
-    { label: t('menu.groups'), icon: SupervisedUserCircle, route: routes.GROUPS(organization?.id) },
+    {
+      label: t('menu.users'),
+      icon: People,
+      route: routes.USERS(organization?.id, i18n.language),
+    },
+    {
+      label: t('menu.groups'),
+      icon: SupervisedUserCircle,
+      route: routes.GROUPS(organization?.id, i18n.language),
+    },
   ];
 
   const partyList: Array<PartyEntity> = useMemo(
@@ -243,8 +264,8 @@ const ActualApp = () => {
     <>
       <ResponseEventDispatcher />
       <Layout
-        showHeader={!isPrivacyPage}
-        showFooter={!isPrivacyPage}
+        showHeader
+        showFooter
         onExitAction={handleUserLogout}
         sideMenu={<SideMenu menuItems={menuItems} selfCareItems={selfcareMenuItems} />}
         showSideMenu={
@@ -255,7 +276,7 @@ const ActualApp = () => {
           privacyConsent &&
           privacyConsent.accepted &&
           fetchedPrivacy &&
-          !isPrivacyPage
+          !isPublicKeyRegistrationPage
         }
         productsList={productsList}
         productId={'0'}
@@ -263,6 +284,7 @@ const ActualApp = () => {
           tosConsent && tosConsent.accepted && privacyConsent && privacyConsent.accepted
         }
         loggedUser={jwtUser}
+        currentLanguage={i18n.language}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
         partyList={partyList}

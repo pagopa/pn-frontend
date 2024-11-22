@@ -1,31 +1,32 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AppStatusRender, GetDowntimeHistoryParams, PaginationData } from '@pagopa-pn/pn-commons';
+import {
+  AppStatusRender,
+  GetDowntimeHistoryParams,
+  PaginationData,
+  appStateActions,
+  downloadDocument,
+} from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../models/PFEventsType';
 import {
+  APP_STATUS_ACTIONS,
   getCurrentAppStatus,
-  getDowntimeLegalFactDocumentDetails,
-  getDowntimeLogPage,
+  getDowntimeHistory,
+  getDowntimeLegalFact,
 } from '../redux/appStatus/actions';
-import { APP_STATUS_ACTIONS } from '../redux/appStatus/actions';
-import {
-  clearLegalFactDocumentData,
-  clearPagination,
-  setPagination,
-} from '../redux/appStatus/reducers';
+import { clearPagination, setPagination } from '../redux/appStatus/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const AppStatus = () => {
   const dispatch = useAppDispatch();
   const appStatus = useAppSelector((state: RootState) => state.appStatus);
-  // The useTranslation *must* be activated, even when it is not directly used in this component' code,
-  // to avoid problems in the components defined in pn-commons,
-  // when these components need to access to localized messages.
-  useTranslation(['appStatus']);
+  const { t } = useTranslation(['appStatus']);
+  const { DOWNTIME_EXAMPLE_LINK } = getConfiguration();
 
   const fetchCurrentStatus = useCallback(() => {
     void dispatch(getCurrentAppStatus());
@@ -33,14 +34,32 @@ const AppStatus = () => {
 
   const fetchDowntimeLogPage = useCallback(
     (fetchParams: GetDowntimeHistoryParams) => {
-      void dispatch(getDowntimeLogPage(fetchParams));
+      void dispatch(getDowntimeHistory(fetchParams));
     },
-    [dispatch, getDowntimeLogPage]
+    [dispatch, getDowntimeHistory]
   );
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback(
-    (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)),
-    [dispatch, getDowntimeLegalFactDocumentDetails]
+    (legalFactId: string) => {
+      dispatch(getDowntimeLegalFact(legalFactId))
+        .unwrap()
+        .then((response) => {
+          if (response.retryAfter) {
+            dispatch(
+              appStateActions.addInfo({
+                title: '',
+                message: t(`detail.document-not-available`, {
+                  ns: 'notifiche',
+                }),
+              })
+            );
+          } else if (response.url) {
+            downloadDocument(response.url);
+          }
+        })
+        .catch((e) => console.log(e));
+    },
+    [dispatch, getDowntimeLegalFact]
   );
 
   const handleTrackDownloadCertificateOpposable3dparties = () => {
@@ -53,9 +72,10 @@ const AppStatus = () => {
   };
 
   useEffect(() => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_SERVICE_STATUS, {
-      service_status_OK: appStatus.currentStatus?.appIsFullyOperative,
-    });
+    PFEventStrategyFactory.triggerEvent(
+      PFEventsType.SEND_SERVICE_STATUS,
+      appStatus.currentStatus?.appIsFullyOperative
+    );
   }, [getCurrentAppStatus]);
 
   return (
@@ -64,7 +84,6 @@ const AppStatus = () => {
       fetchCurrentStatus={fetchCurrentStatus}
       fetchDowntimeLogPage={fetchDowntimeLogPage}
       fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
-      clearLegalFactDocument={() => dispatch(clearLegalFactDocumentData())}
       setPagination={(paginationData: PaginationData) =>
         dispatch(setPagination({ size: paginationData.size, page: paginationData.page }))
       }
@@ -73,6 +92,7 @@ const AppStatus = () => {
       handleTrackDownloadCertificateOpposable3dparties={
         handleTrackDownloadCertificateOpposable3dparties
       }
+      downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
     />
   );
 };

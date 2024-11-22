@@ -1,6 +1,5 @@
 import {
   DigitalDomicileType,
-  NotificationFeePolicy,
   PhysicalCommunicationType,
   RecipientType,
 } from '@pagopa-pn/pn-commons';
@@ -10,9 +9,10 @@ import {
   NewNotificationDTO,
   NewNotificationDocument,
   NewNotificationRecipient,
+  NotificationFeePolicy,
   PaymentModel,
 } from '../models/NewNotification';
-import { GroupStatus, UserGroup } from '../models/user';
+import { UserGroup } from '../models/user';
 import { newNotificationMapper } from '../utility/notification.utility';
 import { userResponse } from './Auth.mock';
 
@@ -20,26 +20,18 @@ export const newNotificationGroups: Array<UserGroup> = [
   {
     id: 'mock-id-1',
     name: 'mock-group-1',
-    description: 'mock-description-1',
-    status: GroupStatus.ACTIVE,
   },
   {
     id: 'mock-id-2',
     name: 'mock-group-2',
-    description: 'mock-description-2',
-    status: GroupStatus.ACTIVE,
   },
   {
     id: 'mock-id-3',
     name: 'mock-group-3',
-    description: 'mock-description-3',
-    status: GroupStatus.ACTIVE,
   },
   {
     id: 'mock-id-4',
     name: 'mock-group-4',
-    description: 'mock-description-4',
-    status: GroupStatus.ACTIVE,
   },
 ];
 
@@ -57,15 +49,12 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     digitalDomicile: 'mario.rossi@pec.it',
     address: 'via del corso',
     addressDetails: '',
-    at: '',
     houseNumber: '49',
     zip: '00122',
     municipality: 'Roma',
     municipalityDetails: '',
     province: 'Roma',
     foreignState: 'Italia',
-    showPhysicalAddress: true,
-    showDigitalDomicile: true,
   },
   {
     id: 'recipient.1',
@@ -80,15 +69,12 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     digitalDomicile: '',
     address: 'via delle cicale',
     addressDetails: '',
-    at: '',
     houseNumber: '21',
     zip: '00035',
     municipality: 'Anzio',
     municipalityDetails: '',
     province: 'Roma',
     foreignState: 'Italia',
-    showDigitalDomicile: false,
-    showPhysicalAddress: true,
   },
 ];
 
@@ -204,6 +190,7 @@ export const newNotificationEmpty: NewNotification = {
   group: '',
   taxonomyCode: '',
   notificationFeePolicy: '' as NotificationFeePolicy,
+  senderDenomination: userResponse.organization.name,
 };
 
 export const newNotificationDTO: NewNotificationDTO = newNotificationMapper(newNotification);

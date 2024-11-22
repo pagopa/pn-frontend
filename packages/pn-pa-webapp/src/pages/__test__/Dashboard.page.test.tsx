@@ -14,7 +14,6 @@ import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-util
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
 import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import Dashboard from '../Dashboard.page';
 
@@ -43,6 +42,9 @@ describe('Dashboard Page', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const original = window.matchMedia;
+  const notificationsPath = `/bff/v1/notifications/sent?startDate=${encodeURIComponent(
+    formatToTimezoneString(tenYearsAgo)
+  )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -59,21 +61,13 @@ describe('Dashboard Page', async () => {
   });
 
   it('Dashboard without notifications, clicks on new notification inside empty state', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, emptyNotificationsFromBe);
+    mock.onGet(notificationsPath).reply(200, emptyNotificationsFromBe);
     await act(async () => {
       result = render(<Dashboard />);
     });
     expect(result.container).toHaveTextContent(/empty-state/);
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const newNotificationBtn = result.queryByTestId('link-create-notification');
     fireEvent.click(newNotificationBtn!);
     await waitFor(() => {
@@ -82,21 +76,13 @@ describe('Dashboard Page', async () => {
   });
 
   it('Dashboard without notifications, clicks on new notification button', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, emptyNotificationsFromBe);
+    mock.onGet(notificationsPath).reply(200, emptyNotificationsFromBe);
     await act(async () => {
       result = render(<Dashboard />);
     });
     expect(result.container).toHaveTextContent(/empty-state/);
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const newNotificationBtn = result.queryByTestId('newNotificationBtn');
     expect(newNotificationBtn).toHaveTextContent('new-notification-button');
     fireEvent.click(newNotificationBtn!);
@@ -106,21 +92,13 @@ describe('Dashboard Page', async () => {
   });
 
   it('Dashboard without notifications, clicks on API KEYS page inside empty state', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, emptyNotificationsFromBe);
+    mock.onGet(notificationsPath).reply(200, emptyNotificationsFromBe);
     await act(async () => {
       result = render(<Dashboard />);
     });
     expect(result.container).toHaveTextContent(/empty-state/);
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const apiKeysBtn = result.queryByTestId('link-api-keys');
     fireEvent.click(apiKeysBtn!);
     await waitFor(() => {
@@ -129,22 +107,14 @@ describe('Dashboard Page', async () => {
   });
 
   it('renders page', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, notificationsDTO);
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
 
     await act(async () => {
       result = render(<Dashboard />);
     });
     expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const filterForm = result.getByTestId('filter-form');
     expect(filterForm).toBeInTheDocument();
     const notificationsTable = result.container.querySelector('table');
@@ -157,28 +127,17 @@ describe('Dashboard Page', async () => {
 
   it('change pagination', async () => {
     mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
+      .onGet(notificationsPath)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 20,
-        })
-      )
-      .reply(200, notificationsDTO);
+    const notificationsPathWithSize = `/bff/v1/notifications/sent?startDate=${encodeURIComponent(
+      formatToTimezoneString(tenYearsAgo)
+    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=20`;
+    mock.onGet(notificationsPathWithSize).reply(200, notificationsDTO);
     await act(async () => {
       result = render(<Dashboard />);
     });
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     // change size
@@ -189,7 +148,7 @@ describe('Dashboard Page', async () => {
     fireEvent.click(itemsPerPageList[1]!);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
-      expect(mock.history.get[1].url).toContain('/notifications/sent');
+      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/sent');
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(4);
@@ -197,29 +156,21 @@ describe('Dashboard Page', async () => {
 
   it('changes page', async () => {
     mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
+      .onGet(notificationsPath)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
+    const notificationsPathSecondPage = `/bff/v1/notifications/sent?startDate=${encodeURIComponent(
+      formatToTimezoneString(tenYearsAgo)
+    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10&nextPagesKey=${
+      notificationsDTO.nextPagesKey[0]
+    }`;
     mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-          nextPagesKey: notificationsDTO.nextPagesKey[0],
-        })
-      )
+      .onGet(notificationsPathSecondPage)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
     await act(async () => {
       result = render(<Dashboard />);
     });
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[0].iun);
@@ -230,7 +181,7 @@ describe('Dashboard Page', async () => {
     fireEvent.click(pageButtons[2]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
-      expect(mock.history.get[1].url).toContain('/notifications/sent');
+      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/sent');
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
@@ -238,30 +189,20 @@ describe('Dashboard Page', async () => {
   });
 
   it('filter', async () => {
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
+    const notificationsPathFiltered = `/bff/v1/notifications/sent?startDate=${encodeURIComponent(
+      formatToTimezoneString(tenYearsAgo)
+    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&recipientId=${
+      notificationsDTO.resultsPage[0].recipients[0]
+    }&size=10`;
     mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, notificationsDTO);
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-          recipientId: notificationsDTO.resultsPage[1].recipients[0],
-        })
-      )
+      .onGet(notificationsPathFiltered)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
     await act(async () => {
       result = render(<Dashboard />);
     });
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(4);
     rows?.forEach((row, index) => {
@@ -275,7 +216,7 @@ describe('Dashboard Page', async () => {
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
-      expect(mock.history.get[1].url).toContain('/notifications/sent');
+      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/sent');
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
@@ -283,15 +224,8 @@ describe('Dashboard Page', async () => {
   });
 
   it('errors on api', async () => {
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(500);
+    mock.onGet(notificationsPath).reply(500);
+
     await act(async () => {
       result = render(
         <>
@@ -301,6 +235,7 @@ describe('Dashboard Page', async () => {
         </>
       );
     });
+
     const statusApiErrorComponent = screen.queryByTestId(
       `api-error-${DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}`
     );
@@ -309,22 +244,14 @@ describe('Dashboard Page', async () => {
 
   it('renders page - mobile', async () => {
     window.matchMedia = createMatchMedia(800);
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          size: 10,
-        })
-      )
-      .reply(200, notificationsDTO);
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
 
     await act(async () => {
       result = render(<Dashboard />);
     });
     expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
     expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const filterForm = result.getByTestId('dialogToggle');
     expect(filterForm).toBeInTheDocument();
     const notificationsCards = result.getAllByTestId('mobileCards');

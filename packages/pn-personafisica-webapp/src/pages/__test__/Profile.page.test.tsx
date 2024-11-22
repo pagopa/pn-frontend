@@ -1,8 +1,7 @@
 import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
-import { fireEvent, render } from '../../__test__/test-utils';
-import { RECAPITI } from '../../navigation/routes.const';
+import { render } from '../../__test__/test-utils';
 import Profile from '../Profile.page';
 
 const mockNavigateFn = vi.fn();
@@ -40,22 +39,5 @@ describe('testing profile page', () => {
     expect(familyName).toBeInTheDocument();
     const fiscalNumber = getByText(userResponse.fiscal_number);
     expect(fiscalNumber).toBeInTheDocument();
-    const alert = getByRole('alert', { name: 'contacts-redirect' });
-    expect(alert).toBeInTheDocument();
-    const alertTitle = getByText('alert-redirect-to-contacts.title');
-    expect(alertTitle).toBeInTheDocument();
-    const alertMessage = getByText('alert-redirect-to-contacts.message');
-    expect(alertMessage).toBeInTheDocument();
-  });
-
-  it('button redirects to contacts page', () => {
-    const { getByRole } = render(<Profile />, {
-      preloadedState: { userState: { user: userResponse } },
-    });
-    const button = getByRole('button', { name: 'alert-redirect-to-contacts.action-text' });
-    expect(button).toBeInTheDocument();
-    fireEvent.click(button);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(RECAPITI);
   });
 });

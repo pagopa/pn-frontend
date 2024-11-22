@@ -1,21 +1,18 @@
 import _ from 'lodash';
 
 import {
-  AddressSource,
   INotificationDetailTimeline,
   LegalFactType,
   NotificationDetail,
   NotificationDetailPayment,
   NotificationDetailRecipient,
-  NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
-  PaidDetails,
   PaymentCache,
   PaymentsData,
   PhysicalCommunicationType,
   RecipientType,
-  SendPaperDetails,
+  ResponseStatus,
   TimelineCategory,
   getF24Payments,
   getPagoPaF24Payments,
@@ -122,6 +119,339 @@ export const payments: Array<NotificationDetailPayment> = [
 
 const notificationStatusHistory: Array<NotificationStatusHistory> = [
   {
+    status: NotificationStatus.VIEWED,
+    activeFrom: '2023-08-23T08:35:27.109686054Z',
+    relatedTimelineElements: [
+      'NOTIFICATION_VIEWED.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'NOTIFICATION_VIEWED_CREATION_REQUEST.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'NOTIFICATION_VIEWED.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+      'NOTIFICATION_VIEWED_CREATION_REQUEST.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+    ],
+    steps: [
+      {
+        elementId: 'NOTIFICATION_VIEWED.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+        timestamp: '2023-08-23T12:38:42.172599701Z',
+        legalFactsIds: [
+          {
+            key: 'PN_LEGAL_FACTS-4751a48146e41819522e4567b13c5a2.pdf',
+            category: LegalFactType.RECIPIENT_ACCESS,
+          },
+        ],
+        category: TimelineCategory.NOTIFICATION_VIEWED,
+        details: {
+          recIndex: 2,
+        },
+        index: 16,
+        hidden: true,
+      },
+    ],
+  },
+  {
+    status: NotificationStatus.EFFECTIVE_DATE,
+    activeFrom: '2023-08-23T07:47:35.995132435Z',
+    relatedTimelineElements: [
+      'REFINEMENT.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
+      'REFINEMENT.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.ATTEMPT_0.IDX_1',
+      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.ATTEMPT_0.IDX_2',
+      'SEND_ANALOG_FEEDBACK.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.ATTEMPT_0',
+      'ANALOG_SUCCESS_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'SCHEDULE_REFINEMENT_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'REFINEMENT.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+    ],
+    steps: [
+      {
+        elementId: 'REFINEMENT.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+        timestamp: '2023-08-23T07:47:36.05742356Z',
+        legalFactsIds: [],
+        category: TimelineCategory.REFINEMENT,
+        details: {
+          recIndex: 2,
+        },
+        index: 15,
+        hidden: true,
+      },
+    ],
+  },
+  {
+    status: NotificationStatus.DELIVERING,
+    activeFrom: '2023-08-23T07:40:47.833137272Z',
+    relatedTimelineElements: [
+      'REQUEST_ACCEPTED.IUN_DAPQ-LWQV-DKQH-202308-A-1',
+      'AAR_CREATION_REQUEST.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
+      'AAR_CREATION_REQUEST.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'AAR_CREATION_REQUEST.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+      'AAR_GEN.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+      'AAR_GEN.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'AAR_GEN.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
+      'SEND_COURTESY_MESSAGE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.COURTESYADDRESSTYPE_EMAIL',
+      'PROBABLE_SCHEDULING_ANALOG_DATE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.SOURCE_PLATFORM.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.SOURCE_PLATFORM.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_PLATFORM.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.SOURCE_SPECIAL.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_SPECIAL.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.SOURCE_SPECIAL.ATTEMPT_0',
+      'NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+      'NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+      'NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+      'NATIONAL_REGISTRY_RESPONSE.CORRELATIONID_NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.SOURCE_GENERAL.ATTEMPT_0',
+      'SCHEDULE_ANALOG_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
+      'NATIONAL_REGISTRY_RESPONSE.CORRELATIONID_NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_GENERAL.ATTEMPT_0',
+      'SCHEDULE_ANALOG_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+      'PREPARE_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.ATTEMPT_0',
+      'PREPARE_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+      'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.ATTEMPT_0',
+      'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+      'NATIONAL_REGISTRY_RESPONSE.CORRELATIONID_NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.SOURCE_GENERAL.ATTEMPT_0',
+      'SCHEDULE_ANALOG_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0.IDX_1',
+      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.ATTEMPT_0.IDX_1',
+      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0.IDX_2',
+      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.ATTEMPT_0.IDX_2',
+      'SEND_ANALOG_FEEDBACK.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.ATTEMPT_0',
+      'SEND_ANALOG_FEEDBACK.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+      'ANALOG_SUCCESS_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
+      'SCHEDULE_REFINEMENT_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
+      'ANALOG_SUCCESS_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+      'SCHEDULE_REFINEMENT_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+      'PREPARE_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.ATTEMPT_0',
+      'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.ATTEMPT_0',
+    ],
+    steps: [
+      {
+        elementId: 'SCHEDULE_REFINEMENT_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+        timestamp: '2023-08-23T07:45:33.897717635Z',
+        legalFactsIds: [],
+        category: TimelineCategory.SCHEDULE_REFINEMENT,
+        details: {
+          recIndex: 2,
+        },
+        index: 14,
+        hidden: true,
+      },
+      {
+        elementId: 'ANALOG_SUCCESS_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+        timestamp: '2023-08-23T07:45:33.831087008Z',
+        legalFactsIds: [],
+        category: TimelineCategory.ANALOG_SUCCESS_WORKFLOW,
+        details: {
+          recIndex: 2,
+          physicalAddress: {
+            at: '',
+            address: 'VIATORINO 15',
+            addressDetails: '',
+            zip: '20092',
+            municipality: 'CINISELLOBALSAMO',
+            municipalityDetails: 'CINISELLOBALSAMO',
+            province: 'MI',
+            foreignState: 'ITALIA',
+          },
+        },
+        index: 13,
+        hidden: true,
+      },
+      {
+        elementId: 'SEND_ANALOG_FEEDBACK.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+        timestamp: '2023-08-23T07:45:25Z',
+        legalFactsIds: [],
+        category: TimelineCategory.SEND_ANALOG_FEEDBACK,
+        details: {
+          recIndex: 2,
+          physicalAddress: {
+            at: '',
+            address: 'VIATORINO 15',
+            addressDetails: '',
+            zip: '20092',
+            municipality: 'CINISELLOBALSAMO',
+            municipalityDetails: 'CINISELLOBALSAMO',
+            province: 'MI',
+            foreignState: 'ITALIA',
+          },
+          responseStatus: ResponseStatus.OK,
+          deliveryDetailCode: 'RECRN001C',
+          serviceLevel: PhysicalCommunicationType.AR_REGISTERED_LETTER,
+          sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+          registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
+        },
+        index: 12,
+        hidden: false,
+      },
+      {
+        elementId: 'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0.IDX_2',
+        timestamp: '2023-08-23T07:45:19Z',
+        legalFactsIds: [
+          {
+            key: 'PN_EXTERNAL_LEGAL_FACTS-e944f4be54804c69a5e61621a17b22fb.pdf',
+            category: LegalFactType.ANALOG_DELIVERY,
+          },
+        ],
+        category: TimelineCategory.SEND_ANALOG_PROGRESS,
+        details: {
+          recIndex: 2,
+          deliveryDetailCode: 'RECRN001B',
+          attachments: [
+            {
+              id: '0',
+              documentType: 'AR',
+              url: 'PN_EXTERNAL_LEGAL_FACTS-e944f4be54804c69a5e61621a17b22fb.pdf',
+            },
+          ],
+          sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+          registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
+        },
+        index: 11,
+        hidden: false,
+      },
+      {
+        elementId: 'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0.IDX_1',
+        timestamp: '2023-08-23T07:45:10Z',
+        legalFactsIds: [],
+        category: TimelineCategory.SEND_ANALOG_PROGRESS,
+        details: {
+          recIndex: 2,
+          deliveryDetailCode: 'CON080',
+          sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+          registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
+        },
+        index: 10,
+        hidden: false,
+      },
+      {
+        elementId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+        timestamp: '2023-08-23T07:40:48.49281686Z',
+        legalFactsIds: [],
+        category: TimelineCategory.SEND_ANALOG_DOMICILE,
+        details: {
+          recIndex: 2,
+          physicalAddress: {
+            address: 'VIATORINO 15',
+            zip: '20092',
+            municipality: 'CINISELLOBALSAMO',
+            municipalityDetails: 'CINISELLOBALSAMO',
+            province: 'MI',
+            foreignState: 'ITALIA',
+          },
+          productType: 'AR',
+        },
+        index: 9,
+        hidden: false,
+      },
+      {
+        elementId: 'PREPARE_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+        timestamp: '2023-08-23T07:40:45.061648749Z',
+        legalFactsIds: [],
+        category: TimelineCategory.PREPARE_ANALOG_DOMICILE,
+        details: {
+          recIndex: 2,
+          physicalAddress: {
+            at: '',
+            address: 'VIATORINO 15',
+            addressDetails: '',
+            zip: '20092',
+            municipality: 'CINISELLOBALSAMO',
+            municipalityDetails: 'CINISELLOBALSAMO',
+            province: 'MI',
+            foreignState: 'ITALIA',
+          },
+        },
+        index: 8,
+        hidden: true,
+      },
+      {
+        elementId: 'SCHEDULE_ANALOG_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+        timestamp: '2023-08-23T07:40:37.803744183Z',
+        legalFactsIds: [],
+        category: TimelineCategory.SCHEDULE_ANALOG_WORKFLOW,
+        details: {
+          recIndex: 2,
+        },
+        index: 7,
+        hidden: true,
+      },
+      {
+        elementId: 'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_GENERAL.ATTEMPT_0',
+        timestamp: '2023-08-23T07:40:37.770115085Z',
+        legalFactsIds: [],
+        category: TimelineCategory.GET_ADDRESS,
+        details: {
+          recIndex: 2,
+        },
+        index: 6,
+        hidden: true,
+      },
+      {
+        elementId:
+          'NATIONAL_REGISTRY_RESPONSE.CORRELATIONID_NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+        timestamp: '2023-08-23T07:40:37.727768001Z',
+        legalFactsIds: [],
+        category: TimelineCategory.PUBLIC_REGISTRY_RESPONSE,
+        details: {
+          recIndex: 2,
+        },
+        index: 5,
+        hidden: true,
+      },
+      {
+        elementId:
+          'NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+        timestamp: '2023-08-23T07:40:35.112444462Z',
+        legalFactsIds: [],
+        category: TimelineCategory.PUBLIC_REGISTRY_CALL,
+        details: {
+          recIndex: 2,
+        },
+        index: 4,
+        hidden: true,
+      },
+      {
+        elementId: 'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_SPECIAL.ATTEMPT_0',
+        timestamp: '2023-08-23T07:40:34.924030215Z',
+        legalFactsIds: [],
+        category: TimelineCategory.GET_ADDRESS,
+        details: {
+          recIndex: 2,
+        },
+        index: 3,
+        hidden: true,
+      },
+      {
+        elementId: 'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_PLATFORM.ATTEMPT_0',
+        timestamp: '2023-08-23T07:40:34.878603762Z',
+        legalFactsIds: [],
+        category: TimelineCategory.GET_ADDRESS,
+        details: {
+          recIndex: 2,
+        },
+        index: 2,
+        hidden: true,
+      },
+      {
+        elementId: 'AAR_GEN.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+        timestamp: '2023-08-23T07:40:24.804602803Z',
+        legalFactsIds: [],
+        category: TimelineCategory.AAR_GENERATION,
+        details: {
+          recIndex: 2,
+        },
+        index: 1,
+        hidden: true,
+      },
+      {
+        elementId: 'REQUEST_ACCEPTED.IUN_DAPQ-LWQV-DKQH-202308-A-1',
+        timestamp: '2023-08-23T07:39:54.877429741Z',
+        legalFactsIds: [],
+        category: TimelineCategory.REQUEST_ACCEPTED,
+        details: {},
+        index: 0,
+        hidden: true,
+      },
+    ],
+  },
+  {
     status: NotificationStatus.ACCEPTED,
     activeFrom: '2023-08-23T07:38:49.601270863Z',
     relatedTimelineElements: [
@@ -152,52 +482,121 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
       'PREPARE_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.ATTEMPT_0',
       'PREPARE_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
     ],
-  },
-  {
-    status: NotificationStatus.DELIVERING,
-    activeFrom: '2023-08-23T07:40:47.833137272Z',
-    relatedTimelineElements: [
-      'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.ATTEMPT_0',
-      'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
-      'NATIONAL_REGISTRY_RESPONSE.CORRELATIONID_NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
-      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.SOURCE_GENERAL.ATTEMPT_0',
-      'SCHEDULE_ANALOG_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
-      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0.IDX_1',
-      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.ATTEMPT_0.IDX_1',
-      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0.IDX_2',
-      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.ATTEMPT_0.IDX_2',
-      'SEND_ANALOG_FEEDBACK.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.ATTEMPT_0',
-      'SEND_ANALOG_FEEDBACK.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
-      'ANALOG_SUCCESS_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
-      'SCHEDULE_REFINEMENT_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
-      'ANALOG_SUCCESS_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
-      'SCHEDULE_REFINEMENT_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
-      'PREPARE_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.ATTEMPT_0',
-      'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.ATTEMPT_0',
-    ],
-  },
-  {
-    status: NotificationStatus.EFFECTIVE_DATE,
-    activeFrom: '2023-08-23T07:47:35.995132435Z',
-    relatedTimelineElements: [
-      'REFINEMENT.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
-      'REFINEMENT.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
-      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.ATTEMPT_0.IDX_1',
-      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.ATTEMPT_0.IDX_2',
-      'SEND_ANALOG_FEEDBACK.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.ATTEMPT_0',
-      'ANALOG_SUCCESS_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
-      'SCHEDULE_REFINEMENT_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
-      'REFINEMENT.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
-    ],
-  },
-  {
-    status: NotificationStatus.VIEWED,
-    activeFrom: '2023-08-23T08:35:27.109686054Z',
-    relatedTimelineElements: [
-      'NOTIFICATION_VIEWED.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
-      'NOTIFICATION_VIEWED_CREATION_REQUEST.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
-      'NOTIFICATION_VIEWED.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
-      'NOTIFICATION_VIEWED_CREATION_REQUEST.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+    steps: [
+      {
+        elementId: 'PREPARE_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+        timestamp: '2023-08-23T07:40:45.061648749Z',
+        legalFactsIds: [],
+        category: TimelineCategory.PREPARE_ANALOG_DOMICILE,
+        details: {
+          recIndex: 2,
+          physicalAddress: {
+            at: '',
+            address: 'VIATORINO 15',
+            addressDetails: '',
+            zip: '20092',
+            municipality: 'CINISELLOBALSAMO',
+            municipalityDetails: 'CINISELLOBALSAMO',
+            province: 'MI',
+            foreignState: 'ITALIA',
+          },
+        },
+        index: 8,
+        hidden: true,
+      },
+      {
+        elementId: 'SCHEDULE_ANALOG_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+        timestamp: '2023-08-23T07:40:37.803744183Z',
+        legalFactsIds: [],
+        category: TimelineCategory.SCHEDULE_ANALOG_WORKFLOW,
+        details: {
+          recIndex: 2,
+        },
+        index: 7,
+        hidden: true,
+      },
+      {
+        elementId: 'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_GENERAL.ATTEMPT_0',
+        timestamp: '2023-08-23T07:40:37.770115085Z',
+        legalFactsIds: [],
+        category: TimelineCategory.GET_ADDRESS,
+        details: {
+          recIndex: 2,
+        },
+        index: 6,
+        hidden: true,
+      },
+      {
+        elementId:
+          'NATIONAL_REGISTRY_RESPONSE.CORRELATIONID_NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+        timestamp: '2023-08-23T07:40:37.727768001Z',
+        legalFactsIds: [],
+        category: TimelineCategory.PUBLIC_REGISTRY_RESPONSE,
+        details: {
+          recIndex: 2,
+        },
+        index: 5,
+        hidden: true,
+      },
+      {
+        elementId:
+          'NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+        timestamp: '2023-08-23T07:40:35.112444462Z',
+        legalFactsIds: [],
+        category: TimelineCategory.PUBLIC_REGISTRY_CALL,
+        details: {
+          recIndex: 2,
+        },
+        index: 4,
+        hidden: true,
+      },
+      {
+        elementId: 'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_SPECIAL.ATTEMPT_0',
+        timestamp: '2023-08-23T07:40:34.924030215Z',
+        legalFactsIds: [],
+        category: TimelineCategory.GET_ADDRESS,
+        details: {
+          recIndex: 2,
+        },
+        index: 3,
+        hidden: true,
+      },
+      {
+        elementId: 'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_PLATFORM.ATTEMPT_0',
+        timestamp: '2023-08-23T07:40:34.878603762Z',
+        legalFactsIds: [],
+        category: TimelineCategory.GET_ADDRESS,
+        details: {
+          recIndex: 2,
+        },
+        index: 2,
+        hidden: true,
+      },
+      {
+        elementId: 'AAR_GEN.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+        timestamp: '2023-08-23T07:40:24.804602803Z',
+        legalFactsIds: [],
+        category: TimelineCategory.AAR_GENERATION,
+        details: {
+          recIndex: 2,
+        },
+        index: 1,
+        hidden: true,
+      },
+      {
+        elementId: 'REQUEST_ACCEPTED.IUN_DAPQ-LWQV-DKQH-202308-A-1',
+        timestamp: '2023-08-23T07:39:54.877429741Z',
+        legalFactsIds: [
+          {
+            key: 'PN_LEGAL_FACTS-e0f9106c3ca4c1aaa8de73ecbc0eba5.pdf',
+            category: LegalFactType.SENDER_ACK,
+          },
+        ],
+        category: TimelineCategory.REQUEST_ACCEPTED,
+        details: {},
+        index: 0,
+        hidden: true,
+      },
     ],
   },
 ];
@@ -214,6 +613,8 @@ export const timeline: Array<INotificationDetailTimeline> = [
     ],
     category: TimelineCategory.REQUEST_ACCEPTED,
     details: {},
+    index: 0,
+    hidden: true,
   },
   {
     elementId: 'AAR_GEN.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
@@ -222,9 +623,9 @@ export const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.AAR_GENERATION,
     details: {
       recIndex: 2,
-      generatedAarUrl: 'PN_AAR-f773e631f0934287999939fefb0b0db6.pdf',
-      numberOfPages: 1,
     },
+    index: 1,
+    hidden: true,
   },
   {
     elementId: 'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_PLATFORM.ATTEMPT_0',
@@ -233,10 +634,9 @@ export const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.GET_ADDRESS,
     details: {
       recIndex: 2,
-      digitalAddressSource: AddressSource.PLATFORM,
-      isAvailable: false,
-      attemptDate: '2023-08-23T07:40:34.878603673Z',
     },
+    index: 2,
+    hidden: true,
   },
   {
     elementId: 'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_SPECIAL.ATTEMPT_0',
@@ -245,10 +645,9 @@ export const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.GET_ADDRESS,
     details: {
       recIndex: 2,
-      digitalAddressSource: AddressSource.SPECIAL,
-      isAvailable: false,
-      attemptDate: '2023-08-23T07:40:34.924030072Z',
     },
+    index: 3,
+    hidden: true,
   },
   {
     elementId:
@@ -258,9 +657,9 @@ export const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.PUBLIC_REGISTRY_CALL,
     details: {
       recIndex: 2,
-      sentAttemptMade: 0,
-      sendDate: '2023-08-23T07:40:35.112443796Z',
     },
+    index: 4,
+    hidden: true,
   },
   {
     elementId:
@@ -271,6 +670,8 @@ export const timeline: Array<INotificationDetailTimeline> = [
     details: {
       recIndex: 2,
     },
+    index: 5,
+    hidden: true,
   },
   {
     elementId: 'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_GENERAL.ATTEMPT_0',
@@ -279,10 +680,9 @@ export const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.GET_ADDRESS,
     details: {
       recIndex: 2,
-      digitalAddressSource: AddressSource.GENERAL,
-      isAvailable: false,
-      attemptDate: '2023-08-23T07:40:37.770114893Z',
     },
+    index: 6,
+    hidden: true,
   },
   {
     elementId: 'SCHEDULE_ANALOG_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
@@ -292,6 +692,8 @@ export const timeline: Array<INotificationDetailTimeline> = [
     details: {
       recIndex: 2,
     },
+    index: 7,
+    hidden: true,
   },
   {
     elementId: 'PREPARE_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
@@ -310,8 +712,9 @@ export const timeline: Array<INotificationDetailTimeline> = [
         province: 'MI',
         foreignState: 'ITALIA',
       },
-      sentAttemptMade: 0,
     },
+    index: 8,
+    hidden: true,
   },
   {
     elementId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
@@ -328,10 +731,10 @@ export const timeline: Array<INotificationDetailTimeline> = [
         province: 'MI',
         foreignState: 'ITALIA',
       },
-      sentAttemptMade: 0,
       productType: 'AR',
-      numberOfPages: 2,
     },
+    index: 9,
+    hidden: false,
   },
   {
     elementId: 'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0.IDX_1',
@@ -340,11 +743,12 @@ export const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.SEND_ANALOG_PROGRESS,
     details: {
       recIndex: 2,
-      notificationDate: '2023-08-23T07:45:10Z',
       deliveryDetailCode: 'CON080',
       sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
       registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
     },
+    index: 10,
+    hidden: false,
   },
   {
     elementId: 'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0.IDX_2',
@@ -358,7 +762,6 @@ export const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.SEND_ANALOG_PROGRESS,
     details: {
       recIndex: 2,
-      notificationDate: '2023-08-23T07:45:19Z',
       deliveryDetailCode: 'RECRN001B',
       attachments: [
         {
@@ -370,6 +773,8 @@ export const timeline: Array<INotificationDetailTimeline> = [
       sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
       registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
     },
+    index: 11,
+    hidden: false,
   },
   {
     elementId: 'SEND_ANALOG_FEEDBACK.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
@@ -388,14 +793,14 @@ export const timeline: Array<INotificationDetailTimeline> = [
         province: 'MI',
         foreignState: 'ITALIA',
       },
-      sentAttemptMade: 0,
-      responseStatus: 'OK',
-      notificationDate: '2023-08-23T07:45:25Z',
+      responseStatus: ResponseStatus.OK,
       deliveryDetailCode: 'RECRN001C',
-      serviceLevel: 'AR_REGISTERED_LETTER',
+      serviceLevel: PhysicalCommunicationType.AR_REGISTERED_LETTER,
       sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
       registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
-    } as SendPaperDetails,
+    },
+    index: 12,
+    hidden: false,
   },
   {
     elementId: 'ANALOG_SUCCESS_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
@@ -415,6 +820,8 @@ export const timeline: Array<INotificationDetailTimeline> = [
         foreignState: 'ITALIA',
       },
     },
+    index: 13,
+    hidden: true,
   },
   {
     elementId: 'SCHEDULE_REFINEMENT_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
@@ -424,6 +831,8 @@ export const timeline: Array<INotificationDetailTimeline> = [
     details: {
       recIndex: 2,
     },
+    index: 14,
+    hidden: true,
   },
   {
     elementId: 'REFINEMENT.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
@@ -433,6 +842,8 @@ export const timeline: Array<INotificationDetailTimeline> = [
     details: {
       recIndex: 2,
     },
+    index: 15,
+    hidden: true,
   },
   {
     elementId: 'NOTIFICATION_VIEWED.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
@@ -447,6 +858,8 @@ export const timeline: Array<INotificationDetailTimeline> = [
     details: {
       recIndex: 2,
     },
+    index: 16,
+    hidden: true,
   },
   {
     elementId: 'NOTIFICATION_PAID.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
@@ -460,7 +873,9 @@ export const timeline: Array<INotificationDetailTimeline> = [
       noticeCode: '302011686772695132',
       paymentSourceChannel: 'EXTERNAL_REGISTRY',
       amount: 8000,
-    } as PaidDetails,
+    },
+    index: 17,
+    hidden: true,
   },
 ];
 
@@ -491,7 +906,6 @@ export const recipients: Array<NotificationDetailRecipient> = [
 
 export const notificationDTO: NotificationDetail = {
   abstract: 'PAGAMENTO RATA IMU',
-  paProtocolNumber: 'TA-FFSMRC-20230823-2',
   subject: 'Pagamento rata IMU',
   recipients,
   documents: [
@@ -508,18 +922,30 @@ export const notificationDTO: NotificationDetail = {
       docIdx: '0',
     },
   ],
-  notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
-  physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
   senderDenomination: 'Comune di Palermo',
-  senderTaxId: '80016350821',
   group: '6467344676f10c7617353c90',
-  senderPaId: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce',
   iun: 'DAPQ-LWQV-DKQH-202308-A-1',
   sentAt: '2023-08-23T07:38:49.601270863Z',
   documentsAvailable: true,
   notificationStatus: NotificationStatus.VIEWED,
   notificationStatusHistory,
   timeline,
+  otherDocuments: [
+    {
+      recIndex: 2,
+      documentId: 'PN_AAR-f773e631f0934287999939fefb0b0db6.pdf',
+      documentType: 'AAR',
+      title: 'Avviso di avvenuta ricezione',
+      digests: {
+        sha256: '',
+      },
+      ref: {
+        key: '',
+        versionToken: '',
+      },
+      contentType: '',
+    },
+  ],
 };
 
 export const cancelledNotificationDTO: NotificationDetail = {
@@ -558,11 +984,19 @@ export const raddNotificationDTO: NotificationDetail = {
       details: {
         recIndex: 1,
         eventTimestamp: '2022-06-21T11:44:28Z',
-        raddType: 'ALT',
-        raddTransactionId: '6',
       },
     },
   ],
+  radd: {
+    elementId: 'NOTIFICATION_RADD_RETRIEVED_mock',
+    timestamp: '2022-06-21T11:44:28Z',
+    legalFactsIds: [],
+    category: TimelineCategory.NOTIFICATION_RADD_RETRIEVED,
+    details: {
+      recIndex: 1,
+      eventTimestamp: '2022-06-21T11:44:28Z',
+    },
+  },
 };
 
 export const paymentsData: PaymentsData = {

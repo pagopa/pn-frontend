@@ -27,8 +27,8 @@ describe('SideMenu', () => {
   });
 
   it('renders component (no mobile)', async () => {
-    const { getByRole } = render(<SideMenu menuItems={sideMenuItems} />);
-    const ul = getByRole('navigation');
+    const { getByTestId } = render(<SideMenu menuItems={sideMenuItems} />);
+    const ul = getByTestId('menu-list');
     expect(ul).toBeInTheDocument();
     const buttons = within(ul).getAllByTestId(/^sideMenuItem-Item \d$/);
     expect(buttons).toHaveLength(sideMenuItems.length);
@@ -46,8 +46,8 @@ describe('SideMenu', () => {
 
   it('checks menu voice selection - route without children', () => {
     mockPathname = sideMenuItems[0].route;
-    const { getByRole } = render(<SideMenu menuItems={sideMenuItems} />);
-    const ul = getByRole('navigation');
+    const { getByTestId } = render(<SideMenu menuItems={sideMenuItems} />);
+    const ul = getByTestId('menu-list');
     const buttons = within(ul).getAllByTestId(/^sideMenuItem-Item \d$/);
     buttons.forEach((button, index) => {
       if (index === 0) {
@@ -70,8 +70,8 @@ describe('SideMenu', () => {
 
   it('checks menu voice selection - route with children', () => {
     mockPathname = sideMenuItems[1].children![0].route;
-    const { getByRole } = render(<SideMenu menuItems={sideMenuItems} />);
-    const ul = getByRole('navigation');
+    const { getByTestId } = render(<SideMenu menuItems={sideMenuItems} />);
+    const ul = getByTestId('menu-list');
     const buttons = within(ul).getAllByTestId(/^sideMenuItem-Item \d$/);
     buttons.forEach((button) => {
       expect(button).not.toHaveClass('Mui-selected');
@@ -106,8 +106,8 @@ describe('SideMenu', () => {
     const menuItems = sideMenuItems.map((item) =>
       item.action ? { ...item, action: mockedAction } : item
     );
-    const { getByRole } = render(<SideMenu menuItems={menuItems} />);
-    const ul = getByRole('navigation');
+    const { getByTestId } = render(<SideMenu menuItems={menuItems} />);
+    const ul = getByTestId('menu-list');
     const buttons = within(ul).getAllByTestId(/^sideMenuItem-Item \d$/);
     // no children
     // navigation

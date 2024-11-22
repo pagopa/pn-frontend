@@ -1,6 +1,5 @@
 import { Configuration, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
-import { StringRuleValidator } from '@pagopa-pn/pn-validator/src/ruleValidators/StringRuleValidator';
 
 interface PfConfigurationFromFile {
   API_BASE_URL: string;
@@ -10,6 +9,8 @@ interface PfConfigurationFromFile {
   ONE_TRUST_PARTICIPATING_ENTITIES?: string;
   ONE_TRUST_PP?: string;
   ONE_TRUST_TOS?: string;
+  ONE_TRUST_SERCQ_SEND_DRAFT_MODE?: boolean;
+  ONE_TRUST_TOS_SERCQ_SEND?: string;
   OT_DOMAIN_ID?: string;
   PAGOPA_HELP_EMAIL: string;
   PAYMENT_DISCLAIMER_URL?: string;
@@ -20,6 +21,11 @@ interface PfConfigurationFromFile {
   WORK_IN_PROGRESS?: boolean;
   F24_DOWNLOAD_WAIT_TIME: number;
   PAGOPA_HELP_PP: string;
+  APP_IO_SITE: string;
+  APP_IO_ANDROID: string;
+  APP_IO_IOS: string;
+  DOD_DISABLED: boolean;
+  DOWNTIME_EXAMPLE_LINK: string;
 }
 
 interface PfConfiguration extends PfConfigurationFromFile {
@@ -30,6 +36,8 @@ interface PfConfiguration extends PfConfigurationFromFile {
   ONE_TRUST_PARTICIPATING_ENTITIES: string;
   ONE_TRUST_PP: string;
   ONE_TRUST_TOS: string;
+  ONE_TRUST_SERCQ_SEND_DRAFT_MODE: boolean;
+  ONE_TRUST_TOS_SERCQ_SEND: string;
   OT_DOMAIN_ID: string;
   PAYMENT_DISCLAIMER_URL: string;
   VERSION: string;
@@ -40,8 +48,8 @@ interface PfConfiguration extends PfConfigurationFromFile {
 class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
   constructor() {
     super();
-    this.makeRequired(this.ruleFor('API_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
-    this.makeRequired(this.ruleFor('PAGOPA_HELP_EMAIL').isString().matches(dataRegex.email));
+    this.ruleFor('API_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('PAGOPA_HELP_EMAIL').isString().isRequired().matches(dataRegex.email);
     this.ruleFor('MIXPANEL_TOKEN').isString();
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
     this.ruleFor('ONE_TRUST_PP').isString().matches(dataRegex.lettersNumbersAndDashs);
@@ -49,16 +57,19 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
       .isString()
       .matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_TOS_SERCQ_SEND').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_SERCQ_SEND_DRAFT_MODE').isBoolean();
     this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.lettersNumbersAndDashs);
-    this.makeRequired(this.ruleFor('LANDING_SITE_URL').isString());
+    this.ruleFor('LANDING_SITE_URL').isString().isRequired();
     this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();
     this.ruleFor('WORK_IN_PROGRESS').isBoolean();
     this.ruleFor('F24_DOWNLOAD_WAIT_TIME').isNumber();
     this.ruleFor('PAGOPA_HELP_PP').isString();
-  }
-
-  makeRequired(rule: StringRuleValidator<PfConfigurationFromFile, string>): void {
-    rule.not().isEmpty().not().isUndefined().not().isNull();
+    this.ruleFor('APP_IO_SITE').isString();
+    this.ruleFor('APP_IO_ANDROID').isString();
+    this.ruleFor('APP_IO_IOS').isString();
+    this.ruleFor('DOD_DISABLED').isBoolean();
+    this.ruleFor('DOWNTIME_EXAMPLE_LINK').isString();
   }
 }
 
@@ -74,6 +85,8 @@ export function getConfiguration(): PfConfiguration {
     ONE_TRUST_PARTICIPATING_ENTITIES: configurationFromFile.ONE_TRUST_PARTICIPATING_ENTITIES || '',
     ONE_TRUST_PP: configurationFromFile.ONE_TRUST_PP || '',
     ONE_TRUST_TOS: configurationFromFile.ONE_TRUST_TOS || '',
+    ONE_TRUST_TOS_SERCQ_SEND: configurationFromFile.ONE_TRUST_TOS_SERCQ_SEND || '',
+    ONE_TRUST_SERCQ_SEND_DRAFT_MODE: Boolean(configurationFromFile.ONE_TRUST_SERCQ_SEND_DRAFT_MODE),
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID || '',
     PAYMENT_DISCLAIMER_URL: configurationFromFile.PAYMENT_DISCLAIMER_URL || '',
     IS_DEVELOP,
@@ -84,6 +97,10 @@ export function getConfiguration(): PfConfiguration {
     DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED),
     WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
     F24_DOWNLOAD_WAIT_TIME: configurationFromFile.F24_DOWNLOAD_WAIT_TIME || 0,
+    DOD_DISABLED: Boolean(configurationFromFile.DOD_DISABLED),
+    DOWNTIME_EXAMPLE_LINK:
+      (configurationFromFile.LANDING_SITE_URL || '') +
+      (configurationFromFile.DOWNTIME_EXAMPLE_LINK || ''),
   };
 }
 

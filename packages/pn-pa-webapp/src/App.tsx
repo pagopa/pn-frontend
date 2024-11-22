@@ -6,6 +6,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Email from '@mui/icons-material/Email';
 import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
+import StatisticsIcon from '@mui/icons-material/ShowChart';
 import VpnKey from '@mui/icons-material/VpnKey';
 import { Box } from '@mui/material';
 import {
@@ -27,7 +28,7 @@ import { LinkType, ProductEntity } from '@pagopa/mui-italia';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { getInstitutions, getProductsOfInstitution, logout } from './redux/auth/actions';
+import { getAdditionalLanguages, getInstitutions, getProductsOfInstitution, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
@@ -65,7 +66,7 @@ const ActualApp = () => {
   const idOrganization = loggedUserOrganizationParty?.id;
   const { tosConsent, privacyConsent } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
-  const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID } = getConfiguration();
+  const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID, IS_STATISTICS_ENABLED } = getConfiguration();
   const products = useAppSelector((state: RootState) => state.userState.productsOfInstitution);
   const institutions = useAppSelector((state: RootState) => state.userState.institutions);
   const dispatch = useAppDispatch();
@@ -74,13 +75,19 @@ const ActualApp = () => {
   const reservedArea: ProductEntity = {
     id: 'selfcare',
     title: t('header.reserved-area'),
-    productUrl: `${SELFCARE_BASE_URL}/dashboard/${idOrganization}`,
+    productUrl: `${SELFCARE_BASE_URL}/dashboard/${idOrganization}?lang=${i18n.language}`,
     linkType: 'external',
   };
 
   const productsList =
     products.length > 0
-      ? [reservedArea, ...products]
+      ? [
+          reservedArea,
+          ...products.map((product) => ({
+            ...product,
+            productUrl: `${product.productUrl}&lang=${i18n.language}`,
+          })),
+        ]
       : [
           reservedArea,
           {
@@ -90,21 +97,12 @@ const ActualApp = () => {
             linkType: 'internal' as LinkType,
           },
         ];
+
   const productId = products.length > 0 ? SELFCARE_SEND_PROD_ID : '0';
-  const institutionsList =
-    institutions.length > 0
-      ? institutions.map((institution) => ({
-          ...institution,
-          productRole: t(`roles.${role.role}`),
-        }))
-      : [
-          {
-            id: idOrganization,
-            name: loggedUserOrganizationParty.name,
-            productRole: t(`roles.${role.role}`),
-            parentName: loggedUserOrganizationParty?.rootParent?.description,
-          },
-        ];
+  const institutionsList = institutions.map((institution) => ({
+    ...institution,
+    productRole: t(`roles.${institution.productRole}`),
+  }));
 
   const sessionToken = loggedUser.sessionToken;
 
@@ -148,7 +146,17 @@ const ActualApp = () => {
     // -------------------------------
     // Carlos Lombardi, 2022.11.08
     // -------------------------------
-    const items = { ...getMenuItems(basicMenuItems, idOrganization, role?.role) };
+
+    // TODO fix positioning for this item PN-10851
+    if (IS_STATISTICS_ENABLED) {
+      // eslint-disable-next-line functional/immutable-data
+      basicMenuItems.splice(2, 0, {
+        label: 'menu.statistics',
+        icon: StatisticsIcon,
+        route: routes.STATISTICHE,
+      });
+    }
+    const items = { ...getMenuItems(basicMenuItems, idOrganization, i18n.language, role?.role) };
     // localize menu items
     /* eslint-disable-next-line functional/immutable-data */
     items.menuItems = items.menuItems.map((item) => ({ ...item, label: t(item.label) }));
@@ -174,9 +182,10 @@ const ActualApp = () => {
     if (sessionToken) {
       void dispatch(getCurrentAppStatus());
       void dispatch(getInstitutions());
+      void dispatch(getAdditionalLanguages());
     }
     if (idOrganization) {
-      void dispatch(getProductsOfInstitution(idOrganization));
+      void dispatch(getProductsOfInstitution());
     }
   }, [sessionToken, getCurrentAppStatus, idOrganization]);
 
@@ -235,6 +244,7 @@ const ActualApp = () => {
         partyId={idOrganization}
         partyList={institutionsList}
         loggedUser={jwtUser}
+        currentLanguage={i18n.language}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}

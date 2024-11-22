@@ -1,9 +1,15 @@
 import _ from 'lodash';
 
-import { calcUnit8Array, performThunkAction } from '@pagopa-pn/pn-commons';
+import { calcUnit8Array, parseError } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { apiClient } from '../../api/apiClients';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
+import { InfoPaApiFactory } from '../../generated-client/info-pa';
+import {
+  BffNewNotificationRequest,
+  NotificationSentApiFactory,
+} from '../../generated-client/notifications';
 import {
   NewNotification,
   NewNotificationDocument,
@@ -16,10 +22,24 @@ import { UploadDocumentParams, UploadDocumentsResponse } from './types';
 
 export enum NEW_NOTIFICATION_ACTIONS {
   GET_USER_GROUPS = 'getUserGroups',
+  UPLOAD_DOCUMENT = 'uploadNotificationDocument',
+  UPLOAD_PAYMENT_DOCUMENT = 'uploadNotificationPaymentDocument',
+  CREATE_NOTIFICATION = 'createNewNotification',
 }
-export const getUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | undefined>(
+/**
+ * Get user groups
+ */
+export const getUserGroups = createAsyncThunk(
   NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS,
-  performThunkAction((status: GroupStatus | undefined) => NotificationsApi.getUserGroups(status))
+  async (params: GroupStatus | undefined, { rejectWithValue }) => {
+    try {
+      const infoPaFactory = InfoPaApiFactory(undefined, undefined, apiClient);
+      const response = await infoPaFactory.getPAGroupsV1(params);
+      return response.data as Array<UserGroup>;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
 const createPayloadToUpload = async (
@@ -39,31 +59,38 @@ const uploadNotificationDocumentCbk = async (
   items: Array<UploadDocumentParams>
 ): Promise<UploadDocumentsResponse> => {
   try {
-    const presignedUrls = await NotificationsApi.preloadNotificationDocument(
-      items.map((item) => ({ contentType: item.contentType, key: item.key, sha256: item.sha256 }))
+    const notificationSentApiFactory = NotificationSentApiFactory(undefined, undefined, apiClient);
+    const presignedUrlsResponse = await notificationSentApiFactory.preSignedUploadV1(
+      items.map((item) => ({ contentType: item.contentType, sha256: item.sha256 }))
     );
+    const presignedUrls = presignedUrlsResponse.data;
     if (presignedUrls.length) {
       const uploadDocumentCalls: Array<Promise<string>> = [];
       // upload document
       presignedUrls.forEach((presigneUrl, index) => {
-        /* eslint-disable-next-line functional/immutable-data */
-        uploadDocumentCalls.push(
-          NotificationsApi.uploadNotificationAttachment(
-            presigneUrl.url,
-            items[index].sha256,
-            presigneUrl.secret,
-            items[index].file as Uint8Array,
-            presigneUrl.httpMethod
-          )
-        );
+        if (presigneUrl.url && presigneUrl.secret && presigneUrl.httpMethod) {
+          /* eslint-disable-next-line functional/immutable-data */
+          uploadDocumentCalls.push(
+            NotificationsApi.uploadNotificationDocument(
+              presigneUrl.url,
+              items[index].sha256,
+              presigneUrl.secret,
+              items[index].file as Uint8Array,
+              presigneUrl.httpMethod
+            )
+          );
+        }
       });
       const documentsToken = await Promise.all(uploadDocumentCalls);
       return items.reduce((obj, item, index) => {
-        /* eslint-disable-next-line functional/immutable-data */
-        obj[item.id] = {
-          key: presignedUrls[index].key,
-          versionToken: documentsToken[index],
-        };
+        const key = presignedUrls[index].key;
+        if (key) {
+          /* eslint-disable-next-line functional/immutable-data */
+          obj[item.id] = {
+            key,
+            versionToken: documentsToken[index],
+          };
+        }
         return obj;
       }, {} as UploadDocumentsResponse);
     }
@@ -73,11 +100,11 @@ const uploadNotificationDocumentCbk = async (
   }
 };
 
-export const uploadNotificationAttachment = createAsyncThunk<
+export const uploadNotificationDocument = createAsyncThunk<
   Array<NewNotificationDocument>,
   Array<NewNotificationDocument>
 >(
-  'uploadNotificationAttachment',
+  NEW_NOTIFICATION_ACTIONS.UPLOAD_DOCUMENT,
   async (items: Array<NewNotificationDocument>, { rejectWithValue }) => {
     try {
       // before upload, filter out documents already uploaded
@@ -100,7 +127,7 @@ export const uploadNotificationAttachment = createAsyncThunk<
         };
       });
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(parseError(e));
     }
   }
 );
@@ -129,7 +156,7 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
   { [key: string]: PaymentObject },
   { [key: string]: PaymentObject }
 >(
-  'uploadNotificationPaymentDocument',
+  NEW_NOTIFICATION_ACTIONS.UPLOAD_PAYMENT_DOCUMENT,
   async (items: { [key: string]: PaymentObject }, { rejectWithValue }) => {
     try {
       // before upload, filter out documents already uploaded
@@ -157,15 +184,27 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
       }
       return updatedItems;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(parseError(e));
     }
   }
 );
 
 export const createNewNotification = createAsyncThunk<NewNotificationResponse, NewNotification>(
-  'createNewNotification',
-  performThunkAction(async (notification: NewNotification) => {
-    const mappedNotification = newNotificationMapper(notification);
-    return await NotificationsApi.createNewNotification(mappedNotification);
-  })
+  NEW_NOTIFICATION_ACTIONS.CREATE_NOTIFICATION,
+  async (notification: NewNotification, { rejectWithValue }) => {
+    try {
+      const notificationSentApiFactory = NotificationSentApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const mappedNotification = newNotificationMapper(notification);
+      const response = await notificationSentApiFactory.newSentNotificationV1(
+        mappedNotification as BffNewNotificationRequest
+      );
+      return response.data as NewNotificationResponse;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
 );

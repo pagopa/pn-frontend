@@ -1,4 +1,4 @@
-import { ReactNode, memo, useCallback, useEffect, useState } from 'react';
+import { ReactNode, forwardRef, memo, useCallback, useImperativeHandle, useState } from 'react';
 
 import {
   Alert,
@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
+import { ErrorMessage } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnDialog from '../PnDialog/PnDialog';
 import PnDialogActions from '../PnDialog/PnDialogActions';
@@ -30,9 +31,11 @@ type Props = {
   cancelCallback?: () => void;
   confirmCallback?: (values: Array<string>) => void;
   isReadOnly?: boolean;
-  hasError?: boolean;
-  errorTitle?: string;
-  errorMessage?: string;
+  error?: { title: string; message: string; hasError: boolean };
+};
+
+type ModalHandle = {
+  updateError: (error: ErrorMessage, codeNotValid: boolean) => void;
 };
 
 /**
@@ -46,32 +49,30 @@ type Props = {
  * @param confirmLabel label of the confirm button
  * @param cancelLabel label of the cancel button
  * @param isReadOnly set if code is in readonly mode
- * @param hasError set if there is an error
- * @param errorTitle title to show when there is an error
- * @param errorMessage message to show when there is an error
  */
-const CodeModal = memo(
-  ({
-    title,
-    subtitle,
-    open,
-    initialValues,
-    codeSectionTitle,
-    codeSectionAdditional,
-    confirmLabel,
-    cancelLabel,
-    cancelCallback,
-    confirmCallback,
-    isReadOnly = false,
-    hasError = false,
-    errorTitle,
-    errorMessage,
-  }: Props) => {
+const CodeModal = forwardRef<ModalHandle, Props>(
+  (
+    {
+      title,
+      subtitle,
+      open,
+      initialValues,
+      codeSectionTitle,
+      codeSectionAdditional,
+      confirmLabel,
+      cancelLabel,
+      cancelCallback,
+      confirmCallback,
+      isReadOnly = false,
+      error,
+    }: Props,
+    ref
+  ) => {
     const [code, setCode] = useState(initialValues);
     const [internalError, setInternalError] = useState({
-      internalHasError: hasError,
-      internalErrorTitle: errorTitle,
-      internalErrorMessage: errorMessage,
+      internalHasError: false,
+      internalErrorTitle: '',
+      internalErrorMessage: '',
     });
 
     const { internalHasError, internalErrorTitle, internalErrorMessage } = internalError;
@@ -84,19 +85,19 @@ const CodeModal = memo(
         setInternalError({
           internalHasError: true,
           internalErrorTitle: getLocalizedOrDefaultLabel(
-            'recapiti',
+            'common',
             `errors.invalid_type_code.title`
           ),
           internalErrorMessage: getLocalizedOrDefaultLabel(
-            'recapiti',
+            'common',
             `errors.invalid_type_code.message`
           ),
         });
       } else {
         setInternalError({
-          internalHasError: false,
-          internalErrorTitle: '',
-          internalErrorMessage: '',
+          internalHasError: error?.hasError ?? false,
+          internalErrorTitle: error?.title ?? '',
+          internalErrorMessage: error?.message ?? '',
         });
       }
     }, []);
@@ -108,13 +109,15 @@ const CodeModal = memo(
       confirmCallback(code);
     };
 
-    useEffect(() => {
+    const updateError = useCallback((error: ErrorMessage, codeNotValid: boolean) => {
       setInternalError({
-        internalHasError: hasError,
-        internalErrorTitle: errorTitle,
-        internalErrorMessage: errorMessage,
+        internalHasError: codeNotValid,
+        internalErrorTitle: error.title,
+        internalErrorMessage: error.content,
       });
-    }, [hasError, errorTitle, errorMessage]);
+    }, []);
+
+    useImperativeHandle(ref, () => ({ updateError }));
 
     return (
       <PnDialog
@@ -190,4 +193,4 @@ const CodeModal = memo(
   }
 );
 
-export default CodeModal;
+export default memo(CodeModal);

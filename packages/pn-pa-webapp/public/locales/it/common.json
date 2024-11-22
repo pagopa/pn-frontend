@@ -18,9 +18,7 @@
     "groups": "Gruppi",
     "api-key": "API Key",
     "statistics": "Statistiche",
-    "app-status": "Stato della piattaforma",
-    "aria-label": "piattaforma-notifiche navigazione principale",
-    "aria-label-inner": "piattaforma-notifiche navigazione mittente"
+    "app-status": "Stato della piattaforma"
   },
   "header": {
     "logout": "Esci",
@@ -59,7 +57,21 @@
   },
   "date-time": {
     "today-uppercase-initial": "Oggi",
-    "hour-of-day": "ore"
+    "hour-of-day": "ore",
+    "s-month": {
+      "0": "gen",
+      "1": "feb",
+      "2": "mar",
+      "3": "apr",
+      "4": "mag",
+      "5": "giu",
+      "6": "lug",
+      "7": "ago",
+      "8": "set",
+      "9": "ott",
+      "10": "nov",
+      "11": "dic"
+    }
   },
   "error-boundary": {
     "title": "Qualcosa è andato storto",
@@ -136,8 +148,7 @@
   "invalid": "non valido",
   "upload-file": {
     "or": "oppure",
-    "select-from-pc": "selezionalo dal tuo computer",
-    "select-from-mobile": "Carica un documento",
+    "select-file": "carica il file",
     "loading": "Caricamento in corso...",
     "sending": "Invio in corso...",
     "hash-code": "Codice hash",
@@ -152,5 +163,9 @@
   },
   "attachments": {
     "remove-attachment": "Elimina allegato"
+  },
+  "downtime_language_banner": {
+    "message": "Il testo originario di questi documenti è in lingua italiana. In caso di contrasto tra la versione italiana e le traduzioni in altre lingue, prevarranno il significato e le condizioni della lingua italiana.",
+    "link": "Consulta le traduzioni"
   }
 }

@@ -13,6 +13,7 @@ vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
 }));
 
@@ -37,7 +38,9 @@ describe('test login page', () => {
       </BrowserRouter>
     );
     expect(mockLocationAssign).toBeCalled();
-    expect(mockLocationAssign).toBeCalledWith(getConfiguration().PF_URL + '#token=fake-token');
+    expect(mockLocationAssign).toBeCalledWith(
+      getConfiguration().PF_URL + '#token=fake-token&lang=it'
+    );
   });
 
   it('test redirect - aar', () => {
@@ -50,7 +53,7 @@ describe('test login page', () => {
 
     expect(mockLocationAssign).toBeCalled();
     expect(mockLocationAssign).toBeCalledWith(
-      getConfiguration().PF_URL + '?aar=aar-token#token=fake-token'
+      getConfiguration().PF_URL + '?aar=aar-token#token=fake-token&lang=it'
     );
   });
 
@@ -64,7 +67,7 @@ describe('test login page', () => {
 
     expect(mockLocationAssign).toBeCalled();
     expect(mockLocationAssign).toBeCalledWith(
-      getConfiguration().PF_URL + '?aar=aar-malicious-token#token=fake-token'
+      getConfiguration().PF_URL + '?aar=aar-malicious-token#token=fake-token&lang=it'
     );
   });
 });

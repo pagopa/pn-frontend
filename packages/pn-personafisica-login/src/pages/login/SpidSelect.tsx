@@ -29,10 +29,6 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
       SPID_IDP_ID: IDP.entityId,
     });
 
-    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_METHOD, {
-      entityID: IDP.entityId,
-    });
-
     window.location.assign(
       `${URL_API_LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2&RelayState=send`
     );
@@ -44,13 +40,21 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
       direction="column"
       sx={{ backgroundColor: '#FFF', minHeight: '100vh' }}
       id="spidSelect"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="spid-select"
     >
       <Grid container direction="row" justifyContent="space-around" mt={3}>
         <Grid item xs={1}>
-          <img src={SpidBig} />
+          <img src={SpidBig} aria-hidden />
         </Grid>
         <Grid item xs={1} sx={{ textAlign: 'right' }}>
-          <IconButton color="primary" onClick={onBack} id="backIcon">
+          <IconButton
+            color="primary"
+            onClick={onBack}
+            id="backIcon"
+            aria-label={t('button.close', { ns: 'common' })}
+          >
             <ClearOutlinedIcon />
           </IconButton>
         </Grid>
@@ -63,10 +67,8 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
             px={0}
             color="textPrimary"
             variant="h3"
-            sx={{
-              textAlign: 'center',
-            }}
-            component="div"
+            component="h1"
+            sx={{ textAlign: 'center' }}
           >
             {t('spidSelect.title')}
           </Typography>

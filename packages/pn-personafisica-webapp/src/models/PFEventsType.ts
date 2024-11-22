@@ -62,6 +62,11 @@ export enum PFEventsType {
   SEND_F24_DOWNLOAD_SUCCESS = 'SEND_F24_DOWNLOAD_SUCCESS',
   SEND_DOWNLOAD_PAYMENT_NOTICE = 'SEND_DOWNLOAD_PAYMENT_NOTICE',
   SEND_F24_DOWNLOAD_TIMEOUT = 'SEND_F24_DOWNLOAD_TIMEOUT',
+  SEND_ADD_CUSTOMIZED_CONTACT = 'SEND_ADD_CUSTOMIZED_CONTACT',
+  SEND_ADD_SERCQ_SEND_START = 'SEND_ADD_SERCQ_SEND_START',
+  SEND_ADD_SERCQ_SEND_UX_CONVERSION = 'SEND_ADD_SERCQ_SEND_UX_CONVERSION',
+  SEND_ADD_SERCQ_SEND_UX_SUCCESS = 'SEND_ADD_SERCQ_SEND_UX_SUCCESS',
+  SEND_REMOVE_SERCQ_SEND_SUCCESS = 'SEND_REMOVE_SERCQ_SEND_SUCCESS',
 
   // --- PROFILE_PROPERTY
   SEND_PAYMENTS_COUNT = 'SEND_PAYMENTS_COUNT',
@@ -73,10 +78,8 @@ export enum PFEventsType {
   SEND_ENABLE_IO = 'SEND_ENABLE_IO',
   SEND_DISABLE_IO = 'SEND_DISABLE_IO',
   SEND_ACCEPT_DELEGATION = 'SEND_ACCEPT_DELEGATION',
-  SEND_ADD_LEGAL_ADDRESS = 'SEND_ADD_LEGAL_ADDRESS',
-  SEND_REMOVE_LEGAL_ADDRESS = 'SEND_REMOVE_LEGAL_ADDRESS',
-  SEND_REMOVE_COURTESY_ADDRESS = 'SEND_REMOVE_COURTESY_ADDRESS',
-  SEND_ADD_COURTESY_ADDRESS = 'SEND_ADD_COURTESY_ADDRESS',
+  SEND_ADD_ADDRESS = 'SEND_ADD_ADDRESS',
+  SEND_DELETE_ADDRESS = 'SEND_DELETE_ADDRESS',
 }
 
 export const eventsActionsMap: Record<string, PFEventsType> = {
@@ -87,12 +90,10 @@ export const eventsActionsMap: Record<string, PFEventsType> = {
   // --- PROFILE_PROPERTY
   'getDomicileInfo/fulfilled': PFEventsType.SEND_HAS_ADDRESSES,
   'getSidemenuInformation/fulfilled': PFEventsType.SEND_HAS_MANDATE_LOGIN,
-  'getDelegates/fulfilled': PFEventsType.SEND_MANDATE_GIVEN,
+  'getMandatesByDelegator/fulfilled': PFEventsType.SEND_MANDATE_GIVEN,
   'enableIOAddress/fulfilled': PFEventsType.SEND_ENABLE_IO,
   'disableIOAddress/fulfilled': PFEventsType.SEND_DISABLE_IO,
-  'acceptDelegation/fulfilled': PFEventsType.SEND_ACCEPT_DELEGATION,
-  'createOrUpdateLegalAddress/fulfilled': PFEventsType.SEND_ADD_LEGAL_ADDRESS,
-  'deleteLegalAddress/fulfilled': PFEventsType.SEND_REMOVE_LEGAL_ADDRESS,
-  'deleteCourtesyAddress/fulfilled': PFEventsType.SEND_REMOVE_COURTESY_ADDRESS,
-  'createOrUpdateCourtesyAddress/fulfilled': PFEventsType.SEND_ADD_COURTESY_ADDRESS,
+  'acceptMandate/fulfilled': PFEventsType.SEND_ACCEPT_DELEGATION,
+  'createOrUpdateAddress/fulfilled': PFEventsType.SEND_ADD_ADDRESS,
+  'deleteAddress/fulfilled': PFEventsType.SEND_DELETE_ADDRESS,
 };

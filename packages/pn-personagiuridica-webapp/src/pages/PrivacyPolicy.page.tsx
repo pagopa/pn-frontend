@@ -14,19 +14,19 @@ declare const OneTrust: {
   };
 };
 
-const PrivacyPolicyPage = () => {
-  const { ONE_TRUST_DRAFT_MODE, ONE_TRUST_PP } = getConfiguration();
+const PrivacyPolicyPage: React.FC = () => {
+  const configuration = getConfiguration();
+  const pp = configuration.ONE_TRUST_PP;
+  const draft = configuration.ONE_TRUST_DRAFT_MODE;
+  const route = routes.PRIVACY_POLICY;
 
   useEffect(() => {
-    if (ONE_TRUST_PP) {
+    if (pp) {
       OneTrust.NoticeApi.Initialized.then(function () {
-        OneTrust.NoticeApi.LoadNotices(
-          [compileOneTrustPath(ONE_TRUST_PP, ONE_TRUST_DRAFT_MODE)],
-          false
-        );
+        OneTrust.NoticeApi.LoadNotices([compileOneTrustPath(pp, draft)], false);
 
         void waitForElement('.otnotice-content').then(() => {
-          rewriteLinks(routes.PRIVACY_POLICY, '.otnotice-content a');
+          rewriteLinks(route, '.otnotice-content a');
         });
       });
     }
@@ -34,11 +34,7 @@ const PrivacyPolicyPage = () => {
 
   return (
     <>
-      <div
-        role="article"
-        id="otnotice-9d7b7236-956b-4669-8943-5284fba6a815"
-        className="otnotice"
-      ></div>
+      <div role="article" id={`otnotice-${pp}`} className="otnotice"></div>
     </>
   );
 };

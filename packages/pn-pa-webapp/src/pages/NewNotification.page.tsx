@@ -9,6 +9,7 @@ import Attachments from '../components/NewNotification/Attachments';
 import PreliminaryInformations from '../components/NewNotification/PreliminaryInformations';
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
+import { NewNotificationLangOther } from '../models/NewNotification';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createNewNotification } from '../redux/newNotification/actions';
@@ -71,8 +72,7 @@ const NewNotification = () => {
       void dispatch(createNewNotification(notification))
         .unwrap()
         .then(() => setActiveStep((previousStep) => previousStep + 1))
-        .catch((e) => {
-          console.debug(e);
+        .catch(() => {
           /** Without this catch vitest return errors of unhandle errors.
            * The error is handled in other parts of the application with
            * the appearance of a toast with the related error, but it's
@@ -91,8 +91,8 @@ const NewNotification = () => {
   useEffect(() => {
     dispatch(
       setSenderInfos({
-        senderDenomination: organization.parentDescription
-          ? organization.parentDescription + ' - ' + organization.name
+        senderDenomination: organization.rootParent?.description
+          ? organization.rootParent?.description + ' - ' + organization.name
           : organization.name,
         senderTaxId: organization.fiscal_code,
       })
@@ -126,17 +126,8 @@ const NewNotification = () => {
               subTitle={<SubTitle />}
               variantSubTitle="body1"
             ></TitleBox>
-            <Typography sx={{ marginTop: '10px' }} variant="body2">
-              {t('required-fields')}
-            </Typography>
             {!IS_PAYMENT_ENABLED && (
-              <Alert
-                tabIndex={0}
-                aria-label={t('new-notification.warning-payment-disabled', { ns: 'notifiche' })}
-                data-testid="alert"
-                sx={{ mt: 4 }}
-                severity={'warning'}
-              >
+              <Alert role="alert" data-testid="alert" sx={{ mt: 3 }} severity={'warning'}>
                 <Typography component="span" variant="body1">
                   {t('new-notification.warning-payment-disabled', { ns: 'notifiche' })}
                 </Typography>
@@ -179,6 +170,9 @@ const NewNotification = () => {
                 onPreviousStep={goToPreviousStep}
                 isCompleted={isCompleted}
                 attachmentsData={notification.documents}
+                hasAdditionalLang={
+                  notification.lang === NewNotificationLangOther && !!notification.additionalLang
+                }
                 ref={childRef}
               />
             )}

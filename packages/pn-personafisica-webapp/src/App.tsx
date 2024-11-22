@@ -34,7 +34,6 @@ import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { logout } from './redux/auth/actions';
-import { Delegation } from './redux/delegation/types';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
 import { RootState } from './redux/store';
@@ -149,7 +148,7 @@ const App = () => {
         label: t('title', { ns: 'notifiche' }),
         route: routes.NOTIFICHE,
       };
-      const mappedDelegators = delegators.map((delegator: Delegation) => ({
+      const mappedDelegators = delegators.map((delegator) => ({
         label:
           'delegator' in delegator && delegator.delegator
             ? `${delegator.delegator.displayName}`
@@ -250,7 +249,7 @@ const App = () => {
 
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_TOAST_ERROR, {
       reason: error.code,
-      traceid: traceId,
+      traceId,
       page_name: getCurrentEventTypePage(pathname),
       message: error.message,
       httpStatusCode: status,
@@ -293,6 +292,7 @@ const App = () => {
         loggedUser={jwtUser}
         enableUserDropdown
         userActions={userActions}
+        currentLanguage={i18n.language}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}

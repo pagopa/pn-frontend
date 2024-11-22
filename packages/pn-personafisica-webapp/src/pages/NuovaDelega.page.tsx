@@ -270,7 +270,6 @@ const NuovaDelega = () => {
                         <Stack direction={isMobile ? 'column' : 'row'}>
                           <Stack justifyContent="center">
                             <RadioGroup
-                              aria-labelledby="radio-buttons-group-pf-pg"
                               defaultValue={RecipientType.PF}
                               name="selectPersonaFisicaOrPersonaGiuridica"
                               value={values.selectPersonaFisicaOrPersonaGiuridica.toString()}
@@ -365,7 +364,7 @@ const NuovaDelega = () => {
                         id="codiceFiscale"
                         value={values.codiceFiscale.toString()}
                         onChange={(event) => {
-                          setFieldValue('codiceFiscale', event.currentTarget.value);
+                          setFieldValue('codiceFiscale', event.currentTarget.value.toUpperCase());
                         }}
                         label={t('nuovaDelega.form.fiscalCode')}
                         name="codiceFiscale"
@@ -380,7 +379,6 @@ const NuovaDelega = () => {
                         <Stack>
                           <RadioGroup
                             id="radio-buttons-group-enti"
-                            aria-labelledby="radio-buttons-group-pf-pg"
                             defaultValue="tuttiGliEnti"
                             name="selectTuttiEntiOrSelezionati"
                             value={values.selectTuttiEntiOrSelezionati.toString()}
@@ -471,7 +469,6 @@ const NuovaDelega = () => {
                               textField: {
                                 id: 'expirationDate',
                                 name: 'expirationDate',
-                                'aria-label': t('nuovaDelega.form.endDate-aria-label'), // aria-label for (TextField + Button) Group
                                 inputProps: {
                                   inputMode: 'text',
                                   'aria-label': t('nuovaDelega.form.endDate-input-aria-label'),

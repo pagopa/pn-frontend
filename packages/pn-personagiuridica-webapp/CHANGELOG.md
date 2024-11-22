@@ -3,6 +3,264 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.2](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.1...v2.8.2) (2024-11-07)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+## [2.8.2-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.8.2-RC.0...v2.8.2-RC.1) (2024-11-04)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+## [2.8.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0...v2.8.2-RC.0) (2024-11-04)
+## [2.8.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0...v2.8.1-RC.0) (2024-10-28)
+
+
+### Bug Fixes
+
+* wrong casting on env variable and fix wrong tests ([f596c3c](https://github.com/pagopa/pn-frontend/commit/f596c3cfdf588945467e5dda7af5a6d08d4c6c52))
+* **PN-12934:** now SercqSendCourtesyDialog does not appear when adding Sercq for a specific Party ([#1367](https://github.com/pagopa/pn-frontend/issues/1367)) ([8c15489](https://github.com/pagopa/pn-frontend/commit/8c15489c3edec1f64de0b63fc73ce65c1a74a3df))
+* **PN-12966:** set maximum length for public key value ([#1365](https://github.com/pagopa/pn-frontend/issues/1365)) ([1c5cc00](https://github.com/pagopa/pn-frontend/commit/1c5cc0072e3c40560128611017c1a3dd005dc7c6))
+
+
+### Features
+
+* **pn-12878:** New copy for analog flow ([#1359](https://github.com/pagopa/pn-frontend/issues/1359)) ([7fc60b1](https://github.com/pagopa/pn-frontend/commit/7fc60b1759762a9771a39cda6339985a041edcb0))
+
+
+
+## [2.7.1](https://github.com/pagopa/pn-frontend/compare/v2.8.0-RC.0...v2.7.1) (2024-10-14)
+
+
+### Bug Fixes
+
+* **PN-12893:** update PEC disclaimer message ([#1354](https://github.com/pagopa/pn-frontend/issues/1354)) ([5482db9](https://github.com/pagopa/pn-frontend/commit/5482db939047db5b8ba58c302c1683b3438d6497))
+
+
+
+
+
+# [2.8.0](https://github.com/pagopa/pn-frontend/compare/v2.8.0-RC.3...v2.8.0) (2024-10-16)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.8.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.7.0...v2.8.0-RC.0) (2024-10-08)
+## [2.7.1](https://github.com/pagopa/pn-frontend/compare/v2.7.0...v2.7.1) (2024-10-14)
+
+
+### Bug Fixes
+
+* **pn-12392:** Migrated to pg api for tos retrieve and acceptance ([#1335](https://github.com/pagopa/pn-frontend/issues/1335)) ([18596a6](https://github.com/pagopa/pn-frontend/commit/18596a68993fb3bcdf535bbdfccbea62f5f1b893))
+* **pn-12392:** updated bff dependencies ([#1338](https://github.com/pagopa/pn-frontend/issues/1338)) ([b265ff7](https://github.com/pagopa/pn-frontend/commit/b265ff7e2eeae8b7895a80025592c93ab7c65d29))
+* **pn-12394:** reset modal state when cancel is clicked ([#1339](https://github.com/pagopa/pn-frontend/issues/1339)) ([b65175c](https://github.com/pagopa/pn-frontend/commit/b65175c992cd90f9fcafaa0501bb60929faaafe5))
+* **pn-12424:** disabling SERCQ SEND deletion when special address is added ([#1334](https://github.com/pagopa/pn-frontend/issues/1334)) ([fd45986](https://github.com/pagopa/pn-frontend/commit/fd45986b2079d039bf626d10f59dcc097da1977b))
+* **pn-12537:** fixed layout when pec is in validation state ([#1340](https://github.com/pagopa/pn-frontend/issues/1340)) ([b26db35](https://github.com/pagopa/pn-frontend/commit/b26db357434bb76205144e178ef03238d3402181))
+* **pn-12538:** fix banner condition ([#1341](https://github.com/pagopa/pn-frontend/issues/1341)) ([e14891c](https://github.com/pagopa/pn-frontend/commit/e14891c7ffad352538ecdaf2cdc60f49f183aa7c))
+* **pn-12538:** fix bug on banner ([#1337](https://github.com/pagopa/pn-frontend/issues/1337)) ([37ecdd6](https://github.com/pagopa/pn-frontend/commit/37ecdd65e0e0c8d2443142b167e00db7430fd335))
+* **pn-12539:** localized sercq send event in timeline ([#1328](https://github.com/pagopa/pn-frontend/issues/1328)) ([10bb57f](https://github.com/pagopa/pn-frontend/commit/10bb57fad8d4dfcef005547484b553bca13792c4))
+* **pn-12661:** fixed tos and privacy pages ([#1327](https://github.com/pagopa/pn-frontend/issues/1327)) ([436c838](https://github.com/pagopa/pn-frontend/commit/436c8387cac525c45d330337c0fa7fba8d2a0da8))
+* **pn-12661:** updated tos and privacy pages for pg ([#1330](https://github.com/pagopa/pn-frontend/issues/1330)) ([019ed1a](https://github.com/pagopa/pn-frontend/commit/019ed1a076fd0ec2d9429626f129802d24638233))
+* **pn-12791:** Store and API for PG api keys ([#1332](https://github.com/pagopa/pn-frontend/issues/1332)) ([7e69eb4](https://github.com/pagopa/pn-frontend/commit/7e69eb41d3fd44ea833c140c58fe5984d805b729))
+
+
+### Features
+
+* **12777:** feature flag for B2B ([#1331](https://github.com/pagopa/pn-frontend/issues/1331)) ([6f6abf8](https://github.com/pagopa/pn-frontend/commit/6f6abf80603bf368f11529a95438c63c6f22ffc6))
+* **pn-12392:** bff integration ([#1317](https://github.com/pagopa/pn-frontend/issues/1317)) ([4af8310](https://github.com/pagopa/pn-frontend/commit/4af8310b0d1191a94fe7527d65b53931c3a8abb0))
+* **pn-12393:** add SERCQ value to channelType enumeration ([#1299](https://github.com/pagopa/pn-frontend/issues/1299)) ([b2384aa](https://github.com/pagopa/pn-frontend/commit/b2384aab2151de10d8a482c40e889eb06d5dbf85))
+* **pn-12394:** reworked layout of contacts page ([#1301](https://github.com/pagopa/pn-frontend/issues/1301)) ([b300f49](https://github.com/pagopa/pn-frontend/commit/b300f499d2e2d12b5e6a5c304491a787df214c58))
+* **pn-12405 :** reworked layout of EditDigitalContact ([#1302](https://github.com/pagopa/pn-frontend/issues/1302)) ([ab9abcf](https://github.com/pagopa/pn-frontend/commit/ab9abcf7f73b7066c076a02f6dd4fd351194c6df))
+* **pn-12424:** Sercq SEND management - NO PEC case ([#1304](https://github.com/pagopa/pn-frontend/issues/1304)) ([ba9c225](https://github.com/pagopa/pn-frontend/commit/ba9c225b0cbaba6286b272415279515894c6dd89))
+* **pn-12438:** Rework section "Altri recapiti" for Digital Domicile feature ([#1305](https://github.com/pagopa/pn-frontend/issues/1305)) ([adc18db](https://github.com/pagopa/pn-frontend/commit/adc18dbf44346eff1443a570ad3d963b466e938e))
+* **pn-12438:** Rework special contacts section ([#1313](https://github.com/pagopa/pn-frontend/issues/1313)) ([57d3ec8](https://github.com/pagopa/pn-frontend/commit/57d3ec8503c24a3bf1e9b0416402b7dc52278e37))
+* **pn-12492:** Add contacts summary cards ([#1310](https://github.com/pagopa/pn-frontend/issues/1310)) ([9832681](https://github.com/pagopa/pn-frontend/commit/98326814c22d039a6473ee8fe77f3da4b83a9aca))
+* **pn-12537:** Pec addtion when sercq send is enabled as default address ([#1323](https://github.com/pagopa/pn-frontend/issues/1323)) ([3ff9ee3](https://github.com/pagopa/pn-frontend/commit/3ff9ee37781d1e268b24b58dcca5b695ea8d1ca7))
+* **pn-12538:** work on banner for Digital Domicile ([#1324](https://github.com/pagopa/pn-frontend/issues/1324)) ([f155a93](https://github.com/pagopa/pn-frontend/commit/f155a939bbfc0e02d111907e191fb858187d0d57))
+* **pn-12540:** Digital domicile mixpanel events ([#1321](https://github.com/pagopa/pn-frontend/issues/1321)) ([c0fbba7](https://github.com/pagopa/pn-frontend/commit/c0fbba7cd729698980d474a853e5173cc544500b))
+* **pn-12661:** reworked layout ([#1318](https://github.com/pagopa/pn-frontend/issues/1318)) ([6a794a6](https://github.com/pagopa/pn-frontend/commit/6a794a6c7d9af6be7b9d8f6a6f47cbe97c6455eb))
+* **pn-12741:** Reworked "Altri recapiti" section ([#1325](https://github.com/pagopa/pn-frontend/issues/1325)) ([23fbf82](https://github.com/pagopa/pn-frontend/commit/23fbf82b443604d6e903c33809a4c1569ed6b20e))
+* **pn-12742:** Feature flag ([#1326](https://github.com/pagopa/pn-frontend/issues/1326)) ([eb2f8fe](https://github.com/pagopa/pn-frontend/commit/eb2f8fee093a2757462adf8dbe377f77ad6d5fce))
+* **PN-12808:** update copy for digital domicile feature ([#1333](https://github.com/pagopa/pn-frontend/issues/1333)) ([9178a63](https://github.com/pagopa/pn-frontend/commit/9178a632dbf425d026878a08392d10f282eee2b9))
+* **PN-12893:** update PEC disclaimer message ([#1354](https://github.com/pagopa/pn-frontend/issues/1354)) ([5482db9](https://github.com/pagopa/pn-frontend/commit/5482db939047db5b8ba58c302c1683b3438d6497))
+
+
+
+
+
+# [2.7.0](https://github.com/pagopa/pn-frontend/compare/v2.7.0-RC.1...v2.7.0) (2024-09-18)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.7.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.7.0-RC.0...v2.7.0-RC.1) (2024-09-10)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.7.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.6.1...v2.7.0-RC.0) (2024-09-09)
+
+
+### Bug Fixes
+
+* **pn-11704:** fix group button allignment ([#1307](https://github.com/pagopa/pn-frontend/issues/1307)) ([cff4910](https://github.com/pagopa/pn-frontend/commit/cff49101fbf550264c1525e2e5c47fe0a41e8877))
+* **pn-12097:** translation on breadcrumb ([#1284](https://github.com/pagopa/pn-frontend/issues/1284)) ([d6889a6](https://github.com/pagopa/pn-frontend/commit/d6889a6b0e0959b74ab8856a757cd676328df57f))
+
+
+### Features
+
+* **pn-11371:** Remove useless aria-label and tabIndex attributes ([#1286](https://github.com/pagopa/pn-frontend/issues/1286)) ([22f8683](https://github.com/pagopa/pn-frontend/commit/22f868373e9b57e9512837bbac29a583ca9788b5))
+* **pn-11896:** rework on courtesyAddressContacts ([#1267](https://github.com/pagopa/pn-frontend/issues/1267)) ([37839d7](https://github.com/pagopa/pn-frontend/commit/37839d77b3a06a795ba82b49612d9eb631fe606f))
+* **pn-11898:** DigitalContactElem component refactor ([#1290](https://github.com/pagopa/pn-frontend/issues/1290)) ([ca61889](https://github.com/pagopa/pn-frontend/commit/ca6188964060fe74569e2ad9226b5daaaaac4300))
+* **pn-11965:** Rework courtesy contact item ([#1291](https://github.com/pagopa/pn-frontend/issues/1291)) ([7b62ed5](https://github.com/pagopa/pn-frontend/commit/7b62ed5fe94ae03710395ad38a1d1a5567d35ec6))
+* **pn-11966:** reworked PecContactItem ([#1293](https://github.com/pagopa/pn-frontend/issues/1293)) ([c55b4f6](https://github.com/pagopa/pn-frontend/commit/c55b4f6ac267e4ca7b1df14e6969ce2e275d5342))
+* **pn-11969:** Remove context from courtesy contacts ([#1294](https://github.com/pagopa/pn-frontend/issues/1294)) ([fda5e6f](https://github.com/pagopa/pn-frontend/commit/fda5e6f9628bc37f1dd8d4cacb38664516c32605))
+* **pn-11970:** removed context from PecContactItem ([#1295](https://github.com/pagopa/pn-frontend/issues/1295)) ([cb87d6c](https://github.com/pagopa/pn-frontend/commit/cb87d6cbff44b3b75030e15b4a6f5d191d1b4a97))
+* **pn-12055:** Rework special contacts ([#1292](https://github.com/pagopa/pn-frontend/issues/1292)) ([644dbf6](https://github.com/pagopa/pn-frontend/commit/644dbf67f08b229bb6a37ff9203c5bd6b08ebb59))
+* **pn-12056:**  created two components for email and sms ([#1296](https://github.com/pagopa/pn-frontend/issues/1296)) ([f045c00](https://github.com/pagopa/pn-frontend/commit/f045c00fe804aa7cf8db6c7199bd247be1b46e36))
+* **pn-12069:** use single contact component into SpecialContactElem ([#1297](https://github.com/pagopa/pn-frontend/issues/1297)) ([c35cd7f](https://github.com/pagopa/pn-frontend/commit/c35cd7fc66b59feb6b72c5b522d6fc2e674a3838))
+* **pn-12070:** removed context from contacts ([#1298](https://github.com/pagopa/pn-frontend/issues/1298)) ([bd0892e](https://github.com/pagopa/pn-frontend/commit/bd0892e2a345a698703a2629709dcf4a502fc602))
+
+
+
+
+
+## [2.6.1](https://github.com/pagopa/pn-frontend/compare/v2.6.0...v2.6.1) (2024-07-30)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.6.0](https://github.com/pagopa/pn-frontend/compare/v2.6.0-RC.1...v2.6.0) (2024-07-22)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.6.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.6.0-RC.1...v2.6.0-RC.2) (2024-07-18)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.6.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.5.1...v2.6.0-RC.0) (2024-07-15)
+
+
+### Bug Fixes
+
+* **PN-11250:** fixed aar link for PG users ([#1224](https://github.com/pagopa/pn-frontend/issues/1224)) ([ba3d75a](https://github.com/pagopa/pn-frontend/commit/ba3d75a379bf2254cd10dd8edc87e4ee7c72d1d3))
+* **pn-11618:** Added min and max width to DelegationsElements for pf and pg ([#1264](https://github.com/pagopa/pn-frontend/issues/1264)) ([3461f8e](https://github.com/pagopa/pn-frontend/commit/3461f8eb3b1539988de02c3e5c672e9e196350bc))
+
+
+### Features
+
+* **pn-10800:** add sitemap.xml to PF/PG/PA ([#1265](https://github.com/pagopa/pn-frontend/issues/1265)) ([d8eb2c2](https://github.com/pagopa/pn-frontend/commit/d8eb2c21a60d03a435ecb99c3e122560af3a7173))
+* **pn-11372:** Move client generation to the start, test and buil phases ([#1260](https://github.com/pagopa/pn-frontend/issues/1260)) ([da50caa](https://github.com/pagopa/pn-frontend/commit/da50caa9b690889aee218d3e466b57b49fee3e15))
+
+
+
+
+
+## [2.5.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0...v2.5.1) (2024-06-26)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.5.0](https://github.com/pagopa/pn-frontend/compare/v2.5.0-RC.2...v2.5.0) (2024-06-14)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.5.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.5.0-RC.0...v2.5.0-RC.1) (2024-06-05)
+
+
+### Features
+
+* **pn-11273:** updated bff dependencies ([#1242](https://github.com/pagopa/pn-frontend/issues/1242)) ([0939949](https://github.com/pagopa/pn-frontend/commit/093994978a517c62aa21ce69089651e5fc2cb970))
+
+
+
+
+
+# [2.5.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.4.2...v2.5.0-RC.0) (2024-05-30)
+
+
+### Bug Fixes
+
+* **pn-10637:** new mandate -> made case insensitive fiscalCode field ([#1217](https://github.com/pagopa/pn-frontend/issues/1217)) ([d9a91a4](https://github.com/pagopa/pn-frontend/commit/d9a91a4540ae8d4f2be78f14e7a812ae5268410e))
+* **pn-10641:** contacts - show error message when user insert a wrong code twice ([#1219](https://github.com/pagopa/pn-frontend/issues/1219)) ([2338969](https://github.com/pagopa/pn-frontend/commit/2338969d0d8a751032b1d44a323149eb5e606381))
+
+
+### Features
+
+* **pn-10287:** Models autogeneration ([#1163](https://github.com/pagopa/pn-frontend/issues/1163)) ([b8f951e](https://github.com/pagopa/pn-frontend/commit/b8f951e1b6c838ef760c0ff21112fae72ac37b20))
+* **pn-10579:** migrate tos and privacy api to bff ones ([#1192](https://github.com/pagopa/pn-frontend/issues/1192)) ([6ca28cc](https://github.com/pagopa/pn-frontend/commit/6ca28cc1c06cd222307ce056dde3e1a57085c00d))
+* **pn-10591:** migrated api key api to bff ones ([#1184](https://github.com/pagopa/pn-frontend/issues/1184)) ([3e3717d](https://github.com/pagopa/pn-frontend/commit/3e3717d248a2bc843dd47f87b6341f2fdb78217d))
+* **pn-10738:** Downtime logs api bff integration ([#1196](https://github.com/pagopa/pn-frontend/issues/1196)) ([1602529](https://github.com/pagopa/pn-frontend/commit/16025293ac107a8df9948b606f7429ad89a7b5c5))
+* **pN-10843:** notifications list api ([#1198](https://github.com/pagopa/pn-frontend/issues/1198)) ([b4e0fb6](https://github.com/pagopa/pn-frontend/commit/b4e0fb63a479be0242bef22a76fa4fc73ea81481))
+* **pn-10889:** Download notification documents bff api ([#1199](https://github.com/pagopa/pn-frontend/issues/1199)) ([0586a3b](https://github.com/pagopa/pn-frontend/commit/0586a3b04be1401b9d1a3ed11051a1e3258c489c))
+* **pn-10936:** payments api migration ([#1204](https://github.com/pagopa/pn-frontend/issues/1204)) ([0d27d4f](https://github.com/pagopa/pn-frontend/commit/0d27d4fcabe5f7b499ba1fa7ace647c009edf28a))
+* **pn-10951:** exchange qr code api migration ([#1210](https://github.com/pagopa/pn-frontend/issues/1210)) ([479bf47](https://github.com/pagopa/pn-frontend/commit/479bf477bdc6c94f6cabcc9ba5250335499bbda4))
+* **pn-10953:** Mandate api migration ([#1209](https://github.com/pagopa/pn-frontend/issues/1209)) ([c85c72f](https://github.com/pagopa/pn-frontend/commit/c85c72f05e54ccf8bbdf6adf94f12dc9bc3cdebf))
+* **pn-10957:** PG groups list api migration ([#1212](https://github.com/pagopa/pn-frontend/issues/1212)) ([3b96005](https://github.com/pagopa/pn-frontend/commit/3b960057d6f48fbeacb406d97bda87347c6ebcde))
+* **pn-9831:** migration to bff api for notification detail ([#1153](https://github.com/pagopa/pn-frontend/issues/1153)) ([b3936dc](https://github.com/pagopa/pn-frontend/commit/b3936dcaccdb3cb9b134d21303559d0dd13be166))
+
+
+
+
+
+## [2.4.2](https://github.com/pagopa/pn-frontend/compare/v2.4.2-RC.3...v2.4.2) (2024-05-02)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+## [2.4.2-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.4.2-RC.2...v2.4.2-RC.3) (2024-04-29)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+## [2.4.1](https://github.com/pagopa/pn-frontend/compare/v2.4.1-RC.1...v2.4.1) (2024-04-09)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
 # [2.4.0](https://github.com/pagopa/pn-frontend/compare/v2.4.0-RC.0...v2.4.0) (2024-03-07)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp

@@ -1,88 +1,113 @@
-import { performThunkAction } from '@pagopa-pn/pn-commons';
+import { ConsentType, TosPrivacyConsent, parseError } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { ContactsApi } from '../../api/contacts/Contacts.api';
-import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
+import { apiClient } from '../../api/apiClients';
+import { AddressesApiFactory } from '../../generated-client/digital-addresses';
+import { InfoRecipientApiFactory } from '../../generated-client/recipient-info';
 import {
-  CourtesyChannelType,
+  BffTosPrivacyActionBody,
+  UserConsentsApiFactory,
+} from '../../generated-client/tos-privacy';
+import {
+  AddressType,
+  DeleteDigitalAddressParams,
   DigitalAddress,
-  DigitalAddresses,
-  LegalChannelType,
+  SaveDigitalAddressParams,
 } from '../../models/contacts';
 import { FilterPartiesParams, Party } from '../../models/party';
-import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from './types';
 
 export enum CONTACT_ACTIONS {
   GET_DIGITAL_ADDRESSES = 'getDigitalAddresses',
+  CREATE_OR_UPDATE_ADDRESS = 'createOrUpdateAddress',
+  DELETE_ADDRESS = 'deleteAddress',
   GET_ALL_ACTIVATED_PARTIES = 'getAllActivatedParties',
+  GET_SERCQ_SEND_TOS_PRIVACY_APPROVAL = 'getSercqSendTosPrivacyApproval',
+  ACCEPT_SERCQ_SEND_TOS_PRIVACY = 'acceptSercqSendTosPrivacyApproval',
 }
 
-export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
+export const getDigitalAddresses = createAsyncThunk<Array<DigitalAddress>>(
   CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES,
-  performThunkAction(() => ContactsApi.getDigitalAddresses())
-);
-
-export const createOrUpdateLegalAddress = createAsyncThunk<
-  DigitalAddress | void,
-  SaveDigitalAddressParams
->('createOrUpdateLegalAddress', async (params: SaveDigitalAddressParams, { rejectWithValue }) => {
-  try {
-    return await ContactsApi.createOrUpdateLegalAddress(
-      params.recipientId,
-      params.senderId,
-      params.channelType as LegalChannelType,
-      { value: params.value, verificationCode: params.code },
-      params.senderName
-    );
-  } catch (e: any) {
-    return rejectWithValue(e);
-  }
-});
-
-export const deleteLegalAddress = createAsyncThunk<string, DeleteDigitalAddressParams>(
-  'deleteLegalAddress',
-  async (params: DeleteDigitalAddressParams, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      return await ContactsApi.deleteLegalAddress(
-        params.senderId,
-        params.channelType as LegalChannelType
-      );
-    } catch (e) {
-      return rejectWithValue(e);
+      const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
+      const response = await digitalAddressesFactory.getAddressesV1();
+
+      return response.data.filter(
+        (addr) => addr.addressType === AddressType.COURTESY || addr.codeValid
+      ) as Array<DigitalAddress>;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
     }
   }
 );
 
-export const createOrUpdateCourtesyAddress = createAsyncThunk<
-  DigitalAddress | void,
+export const createOrUpdateAddress = createAsyncThunk<
+  DigitalAddress | undefined,
   SaveDigitalAddressParams
 >(
-  'createOrUpdateCourtesyAddress',
+  CONTACT_ACTIONS.CREATE_OR_UPDATE_ADDRESS,
   async (params: SaveDigitalAddressParams, { rejectWithValue }) => {
     try {
-      return await ContactsApi.createOrUpdateCourtesyAddress(
-        params.recipientId,
+      const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
+      const response = await digitalAddressesFactory.createOrUpdateAddressV1(
+        params.addressType,
         params.senderId,
-        params.channelType as CourtesyChannelType,
-        { value: params.value, verificationCode: params.code },
-        params.senderName
+        params.channelType,
+        { value: params.value, verificationCode: params.code }
       );
+
+      // user must verify contact
+      if (response.data?.result === 'CODE_VERIFICATION_REQUIRED') {
+        return;
+      }
+
+      const address: DigitalAddress = {
+        addressType: params.addressType,
+        senderId: params.senderId,
+        senderName: params.senderName,
+        channelType: params.channelType,
+        value: params.value,
+      };
+
+      // waiting for pec validation
+      if (response.data?.result === 'PEC_VALIDATION_REQUIRED') {
+        // eslint-disable-next-line functional/immutable-data
+        address.value = '';
+        // eslint-disable-next-line functional/immutable-data
+        address.pecValid = false;
+        // eslint-disable-next-line functional/immutable-data
+        address.codeValid = true;
+        return address;
+      }
+
+      // address validated
+      if (address.addressType === AddressType.LEGAL) {
+        // eslint-disable-next-line functional/immutable-data
+        address.pecValid = true;
+        // eslint-disable-next-line functional/immutable-data
+        address.codeValid = true;
+      }
+      return address;
     } catch (e: any) {
-      return rejectWithValue(e);
+      return rejectWithValue(parseError(e));
     }
   }
 );
 
-export const deleteCourtesyAddress = createAsyncThunk<string, DeleteDigitalAddressParams>(
-  'deleteCourtesyAddress',
+export const deleteAddress = createAsyncThunk<void, DeleteDigitalAddressParams>(
+  CONTACT_ACTIONS.DELETE_ADDRESS,
   async (params: DeleteDigitalAddressParams, { rejectWithValue }) => {
     try {
-      return await ContactsApi.deleteCourtesyAddress(
+      const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
+      const response = await digitalAddressesFactory.deleteAddressV1(
+        params.addressType,
         params.senderId,
-        params.channelType as CourtesyChannelType
+        params.channelType
       );
-    } catch (e) {
-      return rejectWithValue(e);
+
+      return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
     }
   }
 );
@@ -91,12 +116,54 @@ export const getAllActivatedParties = createAsyncThunk<Array<Party>, FilterParti
   CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES,
   async (payload, { rejectWithValue }) => {
     try {
-      return await ExternalRegistriesAPI.getAllActivatedParties(payload ? payload : {});
+      const infoRecipientFactory = InfoRecipientApiFactory(undefined, undefined, apiClient);
+      const response = await infoRecipientFactory.getPAListV1(
+        payload?.paNameFilter ? payload.paNameFilter : undefined
+      );
+
+      return response.data as Array<Party>;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(parseError(e));
     }
   },
   {
     getPendingMeta: ({ arg }) => ({ blockLoading: arg?.blockLoading }),
+  }
+);
+
+/**
+ * Retrieves if the terms of service are already approved
+ */
+export const getSercqSendTosPrivacyApproval = createAsyncThunk(
+  CONTACT_ACTIONS.GET_SERCQ_SEND_TOS_PRIVACY_APPROVAL,
+  async (_, { rejectWithValue }) => {
+    try {
+      const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
+      const response = await tosPrivacyFactory.getPgTosPrivacyV1([
+        ConsentType.TOS_SERCQ,
+        ConsentType.DATAPRIVACY_SERCQ,
+      ]);
+
+      return response.data as Array<TosPrivacyConsent>;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+/**
+ * Accepts the terms of service
+ */
+export const acceptSercqSendTosPrivacy = createAsyncThunk<void, Array<BffTosPrivacyActionBody>>(
+  CONTACT_ACTIONS.ACCEPT_SERCQ_SEND_TOS_PRIVACY,
+  async (body: Array<BffTosPrivacyActionBody>, { rejectWithValue }) => {
+    try {
+      const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
+      const response = await tosPrivacyFactory.acceptPgTosPrivacyV1(body);
+
+      return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
   }
 );

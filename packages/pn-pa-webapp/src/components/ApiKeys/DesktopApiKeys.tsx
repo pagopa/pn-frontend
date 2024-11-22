@@ -15,25 +15,22 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { ApiKey, ModalApiKeyView } from '../../models/ApiKeys';
-import { UserGroup } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import ApiKeyDataSwitch from './ApiKeyDataSwitch';
 
 type Props = {
-  apiKeys: Array<ApiKey<UserGroup>>;
+  apiKeys: Array<ApiKey>;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
   children?: React.ReactNode;
 };
 
 const LinkNewApiKey: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
-  const { t } = useTranslation(['apikeys']);
   return (
     <Link
       component={'button'}
       variant="body1"
       id="call-to-action-first"
-      aria-label={t('empty-action-label')}
       key="new-api-key"
       data-testid="link-new-api-key"
       onClick={() => navigate(routes.NUOVA_API_KEY)}
@@ -46,12 +43,12 @@ const LinkNewApiKey: React.FC<{ children?: React.ReactNode }> = ({ children }) =
 const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
   const { t } = useTranslation(['apikeys']);
 
-  const rows: Array<Row<ApiKey<UserGroup>>> = apiKeys.map((n: ApiKey<UserGroup>, index) => ({
+  const rows: Array<Row<ApiKey>> = apiKeys.map((n: ApiKey, index) => ({
     ...n,
     id: index.toString(),
   }));
 
-  const columns: Array<Column<ApiKey<UserGroup> & { contextMenu: string }>> = [
+  const columns: Array<Column<ApiKey & { contextMenu: string }>> = [
     {
       id: 'name',
       label: t('table.name'),

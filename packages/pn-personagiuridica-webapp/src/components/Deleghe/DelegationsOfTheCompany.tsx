@@ -45,7 +45,7 @@ import {
   GetDelegatorsFilters,
 } from '../../models/Deleghe';
 import { GroupStatus } from '../../models/groups';
-import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
+import { DELEGATION_ACTIONS, searchMandatesByDelegate } from '../../redux/delegation/actions';
 import { setFilters } from '../../redux/delegation/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -67,22 +67,18 @@ type Props = {
   children?: React.ReactNode;
 };
 
-const LinkRemoveFilters: React.FC<Props> = ({ children, clearFiltersHandler }) => {
-  const { t } = useTranslation(['deleghe']);
-  return (
-    <Link
-      component={'button'}
-      variant="body1"
-      id="call-to-action-first"
-      aria-label={t('empty-state.aria-label-remove-filters')}
-      key="remove-filters"
-      data-testid="link-remove-filters"
-      onClick={clearFiltersHandler}
-    >
-      {children}
-    </Link>
-  );
-};
+const LinkRemoveFilters: React.FC<Props> = ({ children, clearFiltersHandler }) => (
+  <Link
+    component={'button'}
+    variant="body1"
+    id="call-to-action-first"
+    key="remove-filters"
+    data-testid="link-remove-filters"
+    onClick={clearFiltersHandler}
+  >
+    {children}
+  </Link>
+);
 
 const DelegationsOfTheCompany = () => {
   const { t } = useTranslation(['deleghe', 'common']);
@@ -309,7 +305,7 @@ const DelegationsOfTheCompany = () => {
       groups: filters.groups,
       status: filters.status,
     } as GetDelegatorsFilters;
-    void dispatch(getDelegators(delegatorsFilters));
+    void dispatch(searchMandatesByDelegate(delegatorsFilters));
   };
 
   useEffect(() => {
@@ -327,8 +323,8 @@ const DelegationsOfTheCompany = () => {
         {t('deleghe.delegatorsTitle')}
       </Typography>
       <ApiErrorWrapper
-        apiId={DELEGATION_ACTIONS.GET_DELEGATORS}
-        reloadAction={() => dispatch(getDelegators(filters))}
+        apiId={DELEGATION_ACTIONS.SEARCH_MANDATES_BY_DELEGATE}
+        reloadAction={() => dispatch(searchMandatesByDelegate(filters))}
         mainText={t('deleghe.delegatorsApiErrorMessage')}
       >
         {rows.length > 0 || !_.isEqual({ size: 10, page: 0 }, filters) ? (
