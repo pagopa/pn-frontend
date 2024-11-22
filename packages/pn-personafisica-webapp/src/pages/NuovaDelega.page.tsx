@@ -91,7 +91,6 @@ const NuovaDelega = () => {
       selectTuttiEntiOrSelezionati: values.selectTuttiEntiOrSelezionati,
     });
     void dispatch(createDelegation(values));
-    // void dispatch(createDelegation(values));
   };
   const handleDelegationsClick = () => {
     navigate(routes.DELEGHE);
