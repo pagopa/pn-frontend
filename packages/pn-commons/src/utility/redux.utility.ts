@@ -9,10 +9,13 @@ This is needed because redux, when recives an action, does a serializability che
 */
 export function parseError(e: any) {
   if (e.response) {
-    const { data, status } = e.response;
+    const { data, status, headers } = e.response;
     return {
       response: {
-        data,
+        data: {
+          ...data,
+          traceId: data.traceId || headers['x-amzn-trace-id'],
+        },
         status: status || 500,
       },
     };

@@ -90,7 +90,7 @@ const NuovaDelega = () => {
       selectPersonaFisicaOrPersonaGiuridica: values.selectPersonaFisicaOrPersonaGiuridica,
       selectTuttiEntiOrSelezionati: values.selectTuttiEntiOrSelezionati,
     });
-    void dispatch(createDelegation({ ...values, codiceFiscale: 'a' }));
+    void dispatch(createDelegation(values));
     // void dispatch(createDelegation(values));
   };
   const handleDelegationsClick = () => {
