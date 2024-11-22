@@ -78,7 +78,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
 
   const initialValues = useCallback(() => {
     const additionalLang = additionalLanguages?.length > 0 ? additionalLanguages[0] : undefined;
-
+     
     return {
       paProtocolNumber: notification.paProtocolNumber || '',
       subject: notification.subject || '',
@@ -97,7 +97,12 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
 
   const validationSchema = yup.object({
     paProtocolNumber: requiredStringFieldValidation(tc, 256),
-    subject: requiredStringFieldValidation(tc, 134, 10),
+    subject: yup.string()
+     .when('lang',{
+      is:'other',
+      then: requiredStringFieldValidation(tc, 67, 10),
+      otherwise:requiredStringFieldValidation(tc, 134, 10)
+    }),
     senderDenomination: yup
       .string()
       .required(`${t('sender-denomination')} ${tc('required')}`)
@@ -122,7 +127,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     }),
     additionalSubject: yup.string().when('lang', {
       is: NewNotificationLangOther,
-      then: requiredStringFieldValidation(tc, 134, 10),
+      then: requiredStringFieldValidation(tc, 67, 10),
     }),
     additionalAbstract: yup.string().when('lang', {
       is: NewNotificationLangOther,
@@ -148,11 +153,14 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   });
 
   const handleChangeTouched = async (e: ChangeEvent) => {
+    
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    void formik.setFieldValue('subject','');
+    formik.setFieldError('subject','');
     formik.handleChange(e);
   };
 
