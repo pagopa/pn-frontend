@@ -18,28 +18,39 @@ type AddressRelation = {
   channelType: ChannelType;
   relationWith: Array<ChannelType>;
   shownDependsOn: Array<ChannelType>;
+  priority: number;
 };
 
 const addressesRelationships: Array<AddressRelation> = [
   {
+    channelType: ChannelType.IOMSG,
+    relationWith: [ChannelType.IOMSG],
+    shownDependsOn: [],
+    priority: 2
+  },
+  {
     channelType: ChannelType.EMAIL,
     relationWith: [ChannelType.EMAIL],
     shownDependsOn: [],
+    priority: 1
   },
   {
     channelType: ChannelType.SMS,
     relationWith: [ChannelType.SMS],
     shownDependsOn: [],
+    priority: 0
   },
   {
     channelType: ChannelType.PEC,
     relationWith: [ChannelType.PEC, ChannelType.SERCQ_SEND],
     shownDependsOn: [ChannelType.PEC, ChannelType.SERCQ_SEND],
+    priority: 3
   },
   {
     channelType: ChannelType.SERCQ_SEND,
     relationWith: [ChannelType.SERCQ_SEND, ChannelType.PEC],
     shownDependsOn: [ChannelType.PEC],
+    priority: 4
   },
 ];
 
@@ -160,6 +171,7 @@ export const updateAddressesList = (
   } else {
     // eslint-disable-next-line functional/immutable-data
     addresses.push(newAddress);
+    sortAddresses(addresses);
   }
 };
 
@@ -175,3 +187,27 @@ export const removeAddress = (
       address.addressType !== addressType ||
       address.channelType !== channelType
   );
+
+export const sortAddresses = (addresses: Array<DigitalAddress>) => {
+
+  const priorityObj = addressesRelationships.reduce(
+    (acc, item) => {
+      // eslint-disable-next-line functional/immutable-data
+      acc[item.channelType] = item.priority;
+      return acc;
+    },
+    {} as { [key in ChannelType]: number }
+  );
+  
+  // eslint-disable-next-line functional/immutable-data
+  addresses.sort((addr1, addr2) => {
+    if((addr1.senderId === 'default' && addr2.senderId === 'default') || (addr1.senderId !== 'default' && addr2.senderId !== 'default')) {
+      return priorityObj[addr2.channelType] - priorityObj[addr1.channelType];
+    }
+    else if(addr1.senderId === 'default') {
+      return -1;
+    }
+    return 1;
+  });
+  return addresses;
+};

@@ -1,5 +1,94 @@
 {
   "title": "Statistics",
-  "subtitle": "Explore the statistics of SEND usage by {{organization}}. The overview data refers to the entire period of use of the platform.",
-  "export_all": "Export all"
+  "subtitle": "Explore the statistics related to the notifications of your institution on SEND - Servizio Notifiche Digitali",
+  "section_1": "Overview of the notifications",
+  "subtitle_section_1": "Select the data collection interval",
+  "tooltip_section_1": "The most recent day of data collection is the last date the data was updated",
+  "section_2": "Details of notifications sent digitally",
+  "error-fetch": "At this moment, there is a technical problem affecting data uploading. Please try again later",
+  "export_all": "Export JPEG",
+  "last_update": "Last update {{dateTime}}",
+  "aggregate_graph": "Aggregated",
+  "trend_graph": "Performance",
+  "graph_type_label": "Chart",
+  "save_as_image": "Save as image",
+  "trend": {
+    "days": "Days",
+    "weeks": "Weeks"
+  },
+  "filter": {
+    "from_date": "From",
+    "from_date-input-aria-label": "Enter the search start date",
+    "to_date": "To",
+    "to_date-input-aria-label": "Enter search end date",
+    "lastMonth": "Last 30 days",
+    "last3Months": "Last 3 months",
+    "last6Months": "Last 6 months",
+    "last12Months": "Last 12 months",
+    "buttons": {
+      "filter": "Filter",
+      "clear_filter": "Delete filters"
+    }
+  },
+  "filed": {
+    "title": "Institution notifications on SEND",
+    "description": "Number of notifications accepted by the SEND platform out of the total notifications uploaded by the institution",
+    "description2": " of the total notifications uploaded on SEND",
+    "accepted": "Accepted",
+    "refused": "Rejected"
+  },
+  "last_state": {
+    "title": "Notifications sent by status",
+    "description": "Number of notifications accepted by the last status reached during the sending process via SEND",
+    "delivering": "Sending in progress",
+    "delivered": "Delivered",
+    "viewed": "Logged in",
+    "effective_date": "Finalized due to\nexpiration of terms",
+    "canceled": "Canceled",
+    "unreachable": "Recipient\nuntraceable"
+  },
+  "delivery_mode": {
+    "title": "Notifications delivered by sending method",
+    "description": "Number of notifications delivered by sending method (digital or analog)",
+    "digital": "Digital notifications",
+    "analog": "Analog notifications"
+  },
+  "digital_state": {
+    "title": "Digital notifications by outcome",
+    "description": "Number of notifications sent digitally by outcome",
+    "ok": "Delivered via\ndigital channels",
+    "ko": "Delivered via\nordinary\nregistered mail",
+    "progress": "sending in progress",
+    "ok_title": "Delivered via digital channels",
+    "ok_description": "Notifications delivered via PEC or finalized on SEND",
+    "ko_title": "Delivered via ordinary registered mail",
+    "ko_description": "Notifications delivered via ordinary registered mail because it was rejected by the recipient's PEC",
+    "progress_title": "Sending in progress",
+    "progress_description": "Notifications whose sending process is still in progress"
+  },
+  "digital_mean_time": {
+    "title": "Average time of digital sending",
+    "description": "Average delivery time (in days), log in performed and finalization of the notifications sent digitally",
+    "delivered": "Delivered",
+    "viewed": "Logged in",
+    "refined": "Finalized due to\nexpiration of terms",
+    "delivered_description": "Days for delivery",
+    "viewed_description": "Days for performed login",
+    "refined_description": "Days for finalization due to expiry of deadline"
+  },
+  "digital_errors_detail": {
+    "title": "Technical errors by type",
+    "description": "Percentage of technical errors by type of error out of total technical errors during the sending phase",
+    "delivery_title": "Delivery error",
+    "delivery_description": "The notification was not delivered due to technical reception problems",
+    "pec_title": "PEC domain error",
+    "pec_description": "The notification was not delivered due to an invalid PEC domain",
+    "rejected_title": "Sending error",
+    "rejected_description": "The notification was not accepted due to technical sending problems"
+  },
+  "empty": {
+    "no_data_found": "No data is available for the selected time period",
+    "not_enough_data": "The number of notifications uploaded on SEND by the institution at the moment is not sufficient for processing and displaying sending statistics. Explore the <0>Notifications section</0> to consult those uploaded up until now.",
+    "notification_section_aria_label": "Notifications section"
+  }
 }

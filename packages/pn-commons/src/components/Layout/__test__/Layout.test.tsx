@@ -29,6 +29,7 @@ describe('Layout Component', () => {
     // render component
     const { container, getByTestId } = render(
       <Layout
+        currentLanguage={'it'}
         sideMenu={<SideMenu menuItems={menuItems} />}
         productsList={productsList}
         loggedUser={loggedUser}

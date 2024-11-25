@@ -1023,7 +1023,6 @@ export const recipients: Array<NotificationDetailRecipient> = [
       address: 'notifichedigitali-uat@pec.pagopa.it',
     },
     physicalAddress: {
-      at: 'Presso',
       address: 'VIA SENZA NOME',
       addressDetails: 'SCALA B',
       zip: '87100',
@@ -1043,7 +1042,6 @@ export const recipients: Array<NotificationDetailRecipient> = [
       address: 'testpagopa3@pec.pagopa.it',
     },
     physicalAddress: {
-      at: 'Presso',
       address: 'VIA SENZA NOME',
       addressDetails: 'SCALA B',
       zip: '87100',
