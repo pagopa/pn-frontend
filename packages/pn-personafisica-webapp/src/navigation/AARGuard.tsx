@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { AccessDenied, IllusQuestion, LoadingPage } from '@pagopa-pn/pn-commons';
+import { AccessDenied, AppResponse, AppResponsePublisher, IllusQuestion, LoadingPage } from '@pagopa-pn/pn-commons';
+import { ServerResponseErrorCode } from '../utility/AppError/types';
 
 import { NotificationId } from '../models/Notifications';
 import { PFEventsType } from '../models/PFEventsType';
@@ -51,6 +52,22 @@ const AARGuard = () => {
       void fetchNotificationFromQrCode();
     }
   }, [aar]);
+
+  const handleError =(e: AppResponse)=>{
+    const error = e.errors ? e.errors[0] : null;
+    if(error && error.code === ServerResponseErrorCode.PN_DELIVERY_NOTIFICATIONNOTFOUND){
+      return false;
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    AppResponsePublisher.error.subscribe('exchangeNotificationQrCode', handleError);
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe('exchangeNotificationQrCode', handleError);
+    };
+  }, []);
 
   useEffect(() => {
     if (notificationId) {
