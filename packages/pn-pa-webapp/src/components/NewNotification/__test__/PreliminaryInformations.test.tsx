@@ -184,7 +184,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     testFormElements(form, 'group', 'group');
   });
 
-  it.only('changes form values and clicks on confirm', async () => {
+  it('changes form values and clicks on confirm', async () => {
     mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
@@ -207,14 +207,10 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     const button = within(form).getByTestId('step-submit');
     expect(button).toBeDisabled();
     await populateForm(form, true);
-    await waitFor(()=>{
-      expect(button).toBeEnabled();
-
-    })
+    expect(button).toBeEnabled();
     fireEvent.click(button);
     await waitFor(() => {
       const state = testStore.getState();
-      console.log('state :>> ', state);
       expect(state.newNotificationState.notification).toEqual({
         paProtocolNumber: newNotification.paProtocolNumber,
         abstract: '',

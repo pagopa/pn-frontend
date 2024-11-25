@@ -160,11 +160,10 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if(value!== PhysicalCommunicationType.AR_REGISTERED_LETTER && value !== PhysicalCommunicationType.REGISTERED_LETTER_890){
-      void formik.setFieldValue('subject','');
-      formik.setFieldError('subject','');
+    if(value === 'it'){
+      void formik.setFieldValue('additionalLang','');
+      void formik.setFieldValue('additionalSubject','');
     }
-    
     formik.handleChange(e);
   };
 
