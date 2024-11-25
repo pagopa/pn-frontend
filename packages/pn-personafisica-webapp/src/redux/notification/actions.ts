@@ -274,6 +274,7 @@ export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, 
       const response = await notificationReceivedApiFactory.checkAarQrCodeV1(params);
       return response.data;
     } catch (e: any) {
+      
       return rejectWithValue(parseError(e));
     }
   }

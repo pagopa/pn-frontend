@@ -181,5 +181,6 @@
     "pg-operator": "Operativna kontaktna oseba",
     "pg-admin": "Upravitelj"
   },
-  "required-field": "Obvezno polje"
+  "required-field": "Obvezno polje",
+  "no-spaces-at-edges": "Izbrišite presledke na začetku ali koncu"
 }
