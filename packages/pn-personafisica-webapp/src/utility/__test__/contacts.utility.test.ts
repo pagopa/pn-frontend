@@ -11,6 +11,7 @@ import {
   contactAlreadyExists,
   countContactsByType,
   removeAddress,
+  sortAddresses,
   specialContactsAvailableAddressTypes,
   updateAddressesList,
 } from '../contacts.utility';
@@ -73,11 +74,17 @@ describe('Contacts utility test', () => {
         specialPECAddresses: [] as Array<DigitalAddress>,
         specialSERCQ_SENDAddresses: [] as Array<DigitalAddress>,
         specialSMSAddresses: [] as Array<DigitalAddress>,
+        specialAPPIOAddresses: [] as Array<DigitalAddress>,
       } as SelectedAddresses,
       { senderId: 'mocked-senderId' }
     );
 
     expect(result).toStrictEqual([
+      {
+        disabled: false,
+        id: ChannelType.IOMSG,
+        shown: false,
+      },
       {
         disabled: false,
         id: ChannelType.EMAIL,
@@ -116,11 +123,17 @@ describe('Contacts utility test', () => {
         specialPECAddresses: [] as Array<DigitalAddress>,
         specialSERCQ_SENDAddresses: [] as Array<DigitalAddress>,
         specialSMSAddresses: [] as Array<DigitalAddress>,
+        specialAPPIOAddresses: [] as Array<DigitalAddress>,
       } as SelectedAddresses,
       { senderId: 'mocked-senderId' }
     );
 
     expect(result).toStrictEqual([
+      {
+        disabled: false,
+        id: ChannelType.IOMSG,
+        shown: false,
+      },
       {
         disabled: false,
         id: ChannelType.EMAIL,
@@ -158,11 +171,17 @@ describe('Contacts utility test', () => {
         specialPECAddresses: [specialPECAddress] as Array<DigitalAddress>,
         specialSERCQ_SENDAddresses: [] as Array<DigitalAddress>,
         specialSMSAddresses: [] as Array<DigitalAddress>,
+        specialAPPIOAddresses: [] as Array<DigitalAddress>,
       } as SelectedAddresses,
       { senderId: specialPECAddress.senderId }
     );
 
     expect(result).toStrictEqual([
+      {
+        disabled: false,
+        id: ChannelType.IOMSG,
+        shown: false,
+      },
       {
         disabled: false,
         id: ChannelType.EMAIL,
@@ -186,6 +205,101 @@ describe('Contacts utility test', () => {
     ]);
   });
 
+  it('test sortAddresses function - legal contacts', () => {
+    const defaultPecAddress = digitalAddresses.find(
+      addr => addr.channelType === ChannelType.PEC && addr.senderId === 'default'
+    )!;
+    const defaultSercqAddress = digitalAddressesSercq.find(
+      addr => addr.channelType === ChannelType.SERCQ_SEND
+    )!;
+
+    // test with two default addresses
+    let addresses: Array<DigitalAddress> = [
+      {
+        ...defaultPecAddress,
+        value: '',
+        pecValid: false
+      },
+      defaultSercqAddress
+    ];
+    let sortedAddresses = [addresses[1], addresses[0]];
+
+    expect(sortedAddresses).toStrictEqual(sortAddresses(addresses));
+
+    addresses = [
+      defaultSercqAddress,
+      {
+        ...defaultPecAddress,
+        value: '',
+        pecValid: false
+      }
+    ];
+    sortedAddresses = [addresses[0], addresses[1]];
+
+    expect(sortedAddresses).toStrictEqual(sortAddresses(addresses));
+
+    // test with one default and one non default addresses
+    addresses = [
+      {
+        ...defaultPecAddress,
+        senderId: 'comune-milano'
+      },
+      defaultSercqAddress
+    ]
+    sortedAddresses = [addresses[1], addresses[0]];
+
+    expect(sortedAddresses).toStrictEqual(sortAddresses(addresses));
+
+    // test with two non default addresses
+    addresses = [
+      {
+        ...defaultPecAddress,
+        senderId: 'comune-milano'
+      },
+      {
+        ...defaultSercqAddress,
+        senderId: 'comune-milano'
+      }
+    ];
+    sortedAddresses = [addresses[1], addresses[0]];
+
+    expect(sortedAddresses).toStrictEqual(sortAddresses(addresses));
+  });
+
+  it('test sortAddresses function - courtesy contacts', () => {
+    const appIOAddress = digitalAddresses.find(addr => addr.channelType === ChannelType.IOMSG)!;
+    const mailAddress = digitalAddresses.find(addr => addr.channelType === ChannelType.EMAIL)!;
+    const smsAddress = digitalAddresses.find(addr => addr.channelType === ChannelType.SMS)!;
+
+    const addresses = [mailAddress, smsAddress, appIOAddress];
+    const sortedAddresses = [addresses[2], addresses[0], addresses[1]];
+
+    expect(sortedAddresses).toStrictEqual(sortAddresses(addresses));
+  });
+
+  it('test sortAddresses function - both legal and courtesy', () => {
+    const defaultPecAddress = digitalAddresses.find(
+      addr => addr.channelType === ChannelType.PEC && addr.senderId === 'default'
+    )!;
+    const defaultSercqAddress = digitalAddressesSercq.find(
+      addr => addr.channelType === ChannelType.SERCQ_SEND
+    )!;
+    const mailAddress = digitalAddresses.find(addr => addr.channelType === ChannelType.EMAIL)!;
+    const smsAddress = digitalAddresses.find(addr => addr.channelType === ChannelType.SMS)!;
+    
+    // test sortAddress with PEC and SMS
+    let addresses = [smsAddress, defaultPecAddress];
+    let sortedAddresses = [addresses[1], addresses[0]];
+
+    expect(sortedAddresses).toStrictEqual(sortAddresses(addresses));
+
+    // test sortAddress with SERCQ and EMAIL
+    addresses = [mailAddress, defaultSercqAddress];
+    sortedAddresses = [addresses[1], addresses[0]];
+
+    expect(sortedAddresses).toStrictEqual(sortAddresses(addresses));
+  });
+
   it('test updateAddressesList function, new address', () => {
     const newAddress: DigitalAddress = {
       addressType: AddressType.LEGAL,
@@ -202,7 +316,7 @@ describe('Contacts utility test', () => {
       newAddress
     );
 
-    expect(digitalAddresses).toStrictEqual([...previousDigitalAddresses, newAddress]);
+    expect(digitalAddresses).toStrictEqual(sortAddresses([...previousDigitalAddresses, newAddress]));
   });
 
   it('test updateAddressesList function, existing courtesy address', () => {
