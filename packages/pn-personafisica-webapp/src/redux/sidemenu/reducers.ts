@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { DigitalAddress } from '../../models/contacts';
+import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { removeAddress, updateAddressesList } from '../../utility/contacts.utility';
-import { createOrUpdateAddress, deleteAddress } from '../contact/actions';
+import { createOrUpdateAddress, deleteAddress, disableIOAddress, enableIOAddress } from '../contact/actions';
 import { acceptMandate, rejectMandate } from '../delegation/actions';
 import { Delegator } from '../delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './actions';
@@ -50,6 +50,24 @@ const generalInfoSlice = createSlice({
         action.meta.arg.senderId,
         state.digitalAddresses
       );
+    });
+    builder.addCase(enableIOAddress.fulfilled, (state) => {
+      const addressIndex = state.digitalAddresses.findIndex(
+        (address) =>
+          address.channelType === ChannelType.IOMSG && address.addressType === AddressType.COURTESY
+      );
+      if (addressIndex > -1) {
+        state.digitalAddresses[addressIndex].value = IOAllowedValues.ENABLED;
+      }
+    });
+    builder.addCase(disableIOAddress.fulfilled, (state) => {
+      const addressIndex = state.digitalAddresses.findIndex(
+        (address) =>
+          address.channelType === ChannelType.IOMSG && address.addressType === AddressType.COURTESY
+      );
+      if (addressIndex > -1) {
+        state.digitalAddresses[addressIndex].value = IOAllowedValues.DISABLED;
+      }
     });
     builder.addCase(acceptMandate.fulfilled, (state) => {
       if (state.pendingDelegators > 0) {
