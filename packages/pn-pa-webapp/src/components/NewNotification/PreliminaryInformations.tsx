@@ -99,9 +99,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     paProtocolNumber: requiredStringFieldValidation(tc, 256),
     subject: yup.string()
      .when('lang',{
-      is:'other',
+      is: NewNotificationLangOther,
       then: requiredStringFieldValidation(tc, 67, 10),
-      otherwise:requiredStringFieldValidation(tc, 134, 10)
+      otherwise: requiredStringFieldValidation(tc, 134, 10)
     }),
     senderDenomination: yup
       .string()
@@ -159,8 +159,12 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    void formik.setFieldValue('subject','');
-    formik.setFieldError('subject','');
+    const value = e.target.value;
+    if(value!== PhysicalCommunicationType.AR_REGISTERED_LETTER && value !== PhysicalCommunicationType.REGISTERED_LETTER_890){
+      void formik.setFieldValue('subject','');
+      formik.setFieldError('subject','');
+    }
+    
     formik.handleChange(e);
   };
 
