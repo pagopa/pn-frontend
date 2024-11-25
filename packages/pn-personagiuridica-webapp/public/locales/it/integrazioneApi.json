@@ -110,7 +110,9 @@
     },
     "success": {
       "public-key-registered": "Chiave pubblica registrata con successo.",
-      "public-key-rotated": "Chiave pubblica ruotata con successo."
+      "public-key-rotated": "Chiave pubblica ruotata con successo.",
+      "public-key-blocked": "Chiave pubblica bloccata con successo.",
+      "public-key-deleted": "Chiave pubblica eliminata con successo."
     }
   },
   "virtualKeys": {

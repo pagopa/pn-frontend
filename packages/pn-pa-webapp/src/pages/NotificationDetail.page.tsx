@@ -41,6 +41,7 @@ import {
 } from '../redux/notification/actions';
 import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
+import { getConfiguration } from '../services/configuration.service';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
 
 type Props = {
@@ -72,6 +73,7 @@ const NotificationDetail: React.FC = () => {
   const { hasApiErrors } = useErrors();
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const { DOWNTIME_EXAMPLE_LINK } = getConfiguration();
 
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
@@ -145,7 +147,6 @@ const NotificationDetail: React.FC = () => {
           iun: notification.iun,
           documentType: NotificationDocumentType.LEGAL_FACT,
           documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
-          documentCategory: legalFact.category,
         })
       )
         .unwrap()
@@ -350,6 +351,7 @@ const NotificationDetail: React.FC = () => {
                   notificationStatusHistory={notification.notificationStatusHistory}
                   fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
                   apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
+                  downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                 />
               </Stack>
             </Grid>

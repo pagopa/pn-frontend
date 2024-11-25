@@ -22,7 +22,7 @@ vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
-    i18n: { language: 'it' },
+    i18n: {},
   }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
@@ -186,7 +186,7 @@ describe('Statistics Page tests', () => {
     expect(digitalErrorsDetail).toBeInTheDocument();
   });
 
-  it.skip('filters Statistics Page', async () => {
+  it('filters Statistics Page', async () => {
     mock.onGet(/\/bff\/v1\/sender-dashboard\/dashboard-data-request*/).reply(200, rawResponseMock);
     const { getAllByTestId } = render(<Statistics />, {
       preloadedState: {

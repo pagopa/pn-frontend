@@ -2,11 +2,10 @@
   "API_BASE_URL": "https://webapi.test.notifichedigitali.it/",
   "DISABLE_INACTIVITY_HANDLER": true,
   "MIXPANEL_TOKEN": "41f1a1ad6abcc5fc5ed5809b9a9d5761",
-  "ONE_TRUST_DRAFT_MODE": false,
+  "ONE_TRUST_DRAFT_MODE": true,
   "ONE_TRUST_PP": "9d7b7236-956b-4669-8943-5284fba6a815",
   "ONE_TRUST_TOS": "112fd95d-6e88-461b-b8fc-534ee4277e96",
   "ONE_TRUST_SERCQ_SEND_DRAFT_MODE": true,
-  "ONE_TRUST_PP_SERCQ_SEND": "d9c5bcd6-209e-4d73-8d95-32790178d695",
   "ONE_TRUST_TOS_SERCQ_SEND": "07d821f3-614e-45d1-867a-83a7384ae973",
   "ONE_TRUST_MASSIVI_DRAFT_MODE": true,
   "ONE_TRUST_TOS_MASSIVI": "c0eddb99-3dfe-4c2e-817e-cd53887dd161",
@@ -18,5 +17,6 @@
   "WORK_IN_PROGRESS": false,
   "F24_DOWNLOAD_WAIT_TIME": 15000,
   "IS_B2B_ENABLED": true,
-  "DOD_DISABLED": true
+  "DOD_DISABLED": false,
+  "DOWNTIME_EXAMPLE_LINK": "/static/documents/LegalFactMalfunction.pdf"
 }

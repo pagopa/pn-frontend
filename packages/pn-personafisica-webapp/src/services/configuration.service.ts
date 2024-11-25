@@ -10,7 +10,6 @@ interface PfConfigurationFromFile {
   ONE_TRUST_PP?: string;
   ONE_TRUST_TOS?: string;
   ONE_TRUST_SERCQ_SEND_DRAFT_MODE?: boolean;
-  ONE_TRUST_PP_SERCQ_SEND?: string;
   ONE_TRUST_TOS_SERCQ_SEND?: string;
   OT_DOMAIN_ID?: string;
   PAGOPA_HELP_EMAIL: string;
@@ -26,6 +25,7 @@ interface PfConfigurationFromFile {
   APP_IO_ANDROID: string;
   APP_IO_IOS: string;
   DOD_DISABLED: boolean;
+  DOWNTIME_EXAMPLE_LINK: string;
 }
 
 interface PfConfiguration extends PfConfigurationFromFile {
@@ -37,7 +37,6 @@ interface PfConfiguration extends PfConfigurationFromFile {
   ONE_TRUST_PP: string;
   ONE_TRUST_TOS: string;
   ONE_TRUST_SERCQ_SEND_DRAFT_MODE: boolean;
-  ONE_TRUST_PP_SERCQ_SEND: string;
   ONE_TRUST_TOS_SERCQ_SEND: string;
   OT_DOMAIN_ID: string;
   PAYMENT_DISCLAIMER_URL: string;
@@ -59,7 +58,6 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
       .matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_TOS_SERCQ_SEND').isString().matches(dataRegex.lettersNumbersAndDashs);
-    this.ruleFor('ONE_TRUST_PP_SERCQ_SEND').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_SERCQ_SEND_DRAFT_MODE').isBoolean();
     this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('LANDING_SITE_URL').isString().isRequired();
@@ -71,6 +69,7 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
     this.ruleFor('APP_IO_ANDROID').isString();
     this.ruleFor('APP_IO_IOS').isString();
     this.ruleFor('DOD_DISABLED').isBoolean();
+    this.ruleFor('DOWNTIME_EXAMPLE_LINK').isString();
   }
 }
 
@@ -86,7 +85,6 @@ export function getConfiguration(): PfConfiguration {
     ONE_TRUST_PARTICIPATING_ENTITIES: configurationFromFile.ONE_TRUST_PARTICIPATING_ENTITIES || '',
     ONE_TRUST_PP: configurationFromFile.ONE_TRUST_PP || '',
     ONE_TRUST_TOS: configurationFromFile.ONE_TRUST_TOS || '',
-    ONE_TRUST_PP_SERCQ_SEND: configurationFromFile.ONE_TRUST_PP_SERCQ_SEND || '',
     ONE_TRUST_TOS_SERCQ_SEND: configurationFromFile.ONE_TRUST_TOS_SERCQ_SEND || '',
     ONE_TRUST_SERCQ_SEND_DRAFT_MODE: Boolean(configurationFromFile.ONE_TRUST_SERCQ_SEND_DRAFT_MODE),
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID || '',
@@ -99,7 +97,10 @@ export function getConfiguration(): PfConfiguration {
     DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED),
     WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
     F24_DOWNLOAD_WAIT_TIME: configurationFromFile.F24_DOWNLOAD_WAIT_TIME || 0,
-    DOD_DISABLED: configurationFromFile.DOD_DISABLED ?? true
+    DOD_DISABLED: Boolean(configurationFromFile.DOD_DISABLED),
+    DOWNTIME_EXAMPLE_LINK:
+      (configurationFromFile.LANDING_SITE_URL || '') +
+      (configurationFromFile.DOWNTIME_EXAMPLE_LINK || ''),
   };
 }
 

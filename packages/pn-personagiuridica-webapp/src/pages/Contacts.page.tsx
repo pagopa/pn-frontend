@@ -18,13 +18,15 @@ import { RootState } from '../redux/store';
 const Contacts = () => {
   const { t, i18n } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
-  const { legalAddresses } = useAppSelector(contactsSelectors.selectAddresses);
+  const addressesData = useAppSelector(contactsSelectors.selectAddresses);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const profileUrl = PROFILE(organization?.id, i18n.language);
 
   const [pageReady, setPageReady] = useState(false);
 
-  const showSpecialContactsSection = legalAddresses.length > 0;
+  const showSpecialContactsSection =
+    !!addressesData.defaultSERCQ_SENDAddress ||
+    !!addressesData.defaultPECAddress?.pecValid !== false;
 
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses()).then(() => {

@@ -74,6 +74,7 @@ const SercqSendContactItem: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
   const {
+    defaultPECAddress,
     defaultSERCQ_SENDAddress,
     defaultAPPIOAddress,
     courtesyAddresses,
@@ -89,6 +90,8 @@ const SercqSendContactItem: React.FC = () => {
     hasAppIO && courtesyAddresses.length === 1 ? false : courtesyAddresses.length > 0;
   const blockDelete = specialPECAddresses.length > 0 || specialSERCQ_SENDAddresses.length > 0;
 
+  const verifyingPecAddress = defaultPECAddress?.pecValid === false;
+
   const handleActivation = () => {
     dispatch(getSercqSendTosPrivacyApproval())
       .unwrap()
@@ -97,7 +100,7 @@ const SercqSendContactItem: React.FC = () => {
         tosPrivacy.current = consent;
         const source =
           externalEvent?.destination === ChannelType.SERCQ_SEND
-            ? externalEvent?.source ?? ContactSource.RECAPITI
+            ? (externalEvent?.source ?? ContactSource.RECAPITI)
             : ContactSource.RECAPITI;
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
           senderId: 'default',
@@ -127,7 +130,7 @@ const SercqSendContactItem: React.FC = () => {
             message: t(`legal-contacts.sercq_send-added-successfully`, { ns: 'recapiti' }),
           })
         );
-        // here the user doesn't have a corutesy address
+        // here the user doesn't have a courtesy address
         if (!hasCourtesy) {
           setModalOpen({ type: ModalType.COURTESY });
           return;
@@ -244,12 +247,20 @@ const SercqSendContactItem: React.FC = () => {
       .catch(() => {});
   };
 
+  const handleCourtesyDiscard = () => {
+    if (!hasCourtesy && hasAppIO) {
+      setModalOpen({ type: ModalType.IO });
+      return;
+    }
+    setModalOpen(null);
+  };
+
   const handleCourtesyConfirm = (channelType: ChannelType, value: string) => {
     const eventKey = `SEND_ADD_${channelType}_START`;
     if (isPFEvent(eventKey)) {
       const source =
         externalEvent?.destination === ChannelType.SERCQ_SEND
-          ? externalEvent?.source ?? ContactSource.RECAPITI
+          ? (externalEvent?.source ?? ContactSource.RECAPITI)
           : ContactSource.RECAPITI;
       PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], {
         senderId: 'default',
@@ -306,7 +317,12 @@ const SercqSendContactItem: React.FC = () => {
     >
       <Box data-testid={`default_sercqSendContact`} style={{ width: isMobile ? '100%' : '50%' }}>
         {!value && (
-          <Button variant="contained" data-testid="activateButton" onClick={handleActivation}>
+          <Button
+            variant="contained"
+            data-testid="activateButton"
+            onClick={handleActivation}
+            disabled={verifyingPecAddress}
+          >
             {t('legal-contacts.sercq-send-active', { ns: 'recapiti' })}
           </Button>
         )}
@@ -326,6 +342,7 @@ const SercqSendContactItem: React.FC = () => {
                 color="error"
                 sx={{ fontWeight: 700 }}
                 size="medium"
+                disabled={verifyingPecAddress}
               >
                 {t('button.disable')}
               </ButtonNaked>
@@ -340,7 +357,7 @@ const SercqSendContactItem: React.FC = () => {
       />
       <SercqSendCourtesyDialog
         open={modalOpen?.type === ModalType.COURTESY}
-        onDiscard={() => setModalOpen(null)}
+        onDiscard={handleCourtesyDiscard}
         onConfirm={handleCourtesyConfirm}
       />
       <ContactCodeDialog
