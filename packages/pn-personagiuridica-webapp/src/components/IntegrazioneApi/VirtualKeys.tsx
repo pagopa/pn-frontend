@@ -8,6 +8,7 @@ import { EmptyState, KnownSentiment, formatDate, today } from '@pagopa-pn/pn-com
 import {
   BffVirtualKeyStatusRequestStatusEnum,
   PublicKeysIssuerResponseIssuerStatusEnum,
+  PublicKeyStatus,
   VirtualKey,
   VirtualKeyStatus,
 } from '../../generated-client/pg-apikeys';
@@ -34,16 +35,23 @@ const VirtualKeys: React.FC = () => {
   const dispatch = useAppDispatch();
   const virtualKeys = useAppSelector((state: RootState) => state.apiKeysState.virtualKeys);
   const issuerState = useAppSelector((state: RootState) => state.apiKeysState.issuerState);
+  const publicKeys = useAppSelector((state:RootState)=> state.apiKeysState.publicKeys);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const [modal, setModal] = useState<ModalType>({ view: ModalApiKeyView.NONE });
 
-  const hasOneEnabledKey = virtualKeys.items.find(
+  const hasOneEnabledVirtualKey = virtualKeys.items.find(
     (key) =>
       key.status === VirtualKeyStatus.Enabled &&
       (!key.user || key.user?.fiscalCode === currentUser.fiscal_number)
   );
+
+  const hasOneEnabledPublicKey = publicKeys.items.find(
+    (key) =>key.status === PublicKeyStatus.Active
+  );
+
   const isCreationEnabled =
-    !hasOneEnabledKey &&
+    !hasOneEnabledVirtualKey &&
+    hasOneEnabledPublicKey && 
     issuerState.tosAccepted &&
     issuerState.issuer.isPresent &&
     issuerState.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
