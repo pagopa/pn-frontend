@@ -511,6 +511,10 @@
       "invalid_parameter_protocol_number_duplicate": {
         "title": "Dati non validi",
         "message": "Il numero di protocollo inserito è già esistente"
+      },
+      "invalid_parameter_taxonomy_code": {
+        "title": "Codice tassonomico non valido",
+        "message": "Il codice tassonomico inserito non è tra quelli gestiti dalla piattaforma."
       }
     }
   },

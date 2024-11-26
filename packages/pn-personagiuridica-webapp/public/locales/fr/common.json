@@ -181,5 +181,6 @@
     "pg-operator": "Personne de contact opérationnelle",
     "pg-admin": "Administrateur"
   },
-  "required-field": "Champ obligatoire"
+  "required-field": "Champ obligatoire",
+  "no-spaces-at-edges": "Supprimer les espaces au début ou à la fin"
 }
