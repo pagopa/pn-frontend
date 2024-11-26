@@ -100,7 +100,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     subject: yup.string()
      .when('lang',{
       is: NewNotificationLangOther,
-      then: requiredStringFieldValidation(tc, 67, 10),
+      then: requiredStringFieldValidation(tc, 66, 10),
       otherwise: requiredStringFieldValidation(tc, 134, 10)
     }),
     senderDenomination: yup
@@ -127,7 +127,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     }),
     additionalSubject: yup.string().when('lang', {
       is: NewNotificationLangOther,
-      then: requiredStringFieldValidation(tc, 67, 10),
+      then: requiredStringFieldValidation(tc, 66, 10),
     }),
     additionalAbstract: yup.string().when('lang', {
       is: NewNotificationLangOther,
