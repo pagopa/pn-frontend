@@ -485,34 +485,6 @@ Resources:
                 ViewerProtocolPolicy: redirect-to-https
                 CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-                PathPattern: /assets/icons/*
-              - !Ref "AWS::NoValue"
-          - Fn::If:
-              - IsPortalePg
-              - AllowedMethods:
-                  - GET
-                  - HEAD
-                CachedMethods:
-                  - GET
-                  - HEAD
-                TargetOriginId: pn-SelfCare-PG
-                ViewerProtocolPolicy: redirect-to-https
-                CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
-                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-                PathPattern: /assets/index.html
-              - !Ref "AWS::NoValue"
-          - Fn::If:
-              - IsPortalePg
-              - AllowedMethods:
-                  - GET
-                  - HEAD
-                CachedMethods:
-                  - GET
-                  - HEAD
-                TargetOriginId: pn-SelfCare-PG
-                ViewerProtocolPolicy: redirect-to-https
-                CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
-                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
                 PathPattern: /assets*
               - !Ref "AWS::NoValue"
           - Fn::If:
