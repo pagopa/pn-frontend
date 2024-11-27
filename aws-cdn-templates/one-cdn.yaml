@@ -317,7 +317,7 @@ Resources:
                 ViewerProtocolPolicy: redirect-to-https
                 CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-                PathPattern: /auth/static/icons/*
+                PathPattern: /auth/icons/*
               - !Ref "AWS::NoValue"
           - Fn::If:
               - IsPortalePg
@@ -359,7 +359,7 @@ Resources:
                 ViewerProtocolPolicy: redirect-to-https
                 CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-                PathPattern: /dashboard/static/icons/*
+                PathPattern: /dashboard/icons/*
               - !Ref "AWS::NoValue"
           - Fn::If:
               - IsPortalePg
@@ -401,7 +401,7 @@ Resources:
                 ViewerProtocolPolicy: redirect-to-https
                 CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-                PathPattern: /assistenza/static/icons/*
+                PathPattern: /assistenza/icons/*
               - !Ref "AWS::NoValue"
           - Fn::If:
               - IsPortalePg
@@ -443,7 +443,7 @@ Resources:
                 ViewerProtocolPolicy: redirect-to-https
                 CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-                PathPattern: /onboarding/static/icons/*
+                PathPattern: /onboarding/icons/*
               - !Ref "AWS::NoValue"
           - Fn::If:
               - IsPortalePg
@@ -485,7 +485,7 @@ Resources:
                 ViewerProtocolPolicy: redirect-to-https
                 CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-                PathPattern: /assets/static/icons/*
+                PathPattern: /assets/icons/*
               - !Ref "AWS::NoValue"
           - Fn::If:
               - IsPortalePg
