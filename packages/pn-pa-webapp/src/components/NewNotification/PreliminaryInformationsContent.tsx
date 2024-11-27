@@ -19,7 +19,7 @@ function SubjectFocusHelperText({hasOtherLang} : SubjectFocusHelperTextProps) {
 
   return useMemo(() => {
     if (focused) {
-      return t('too-long-field-error', { maxLength: hasOtherLang ? 67: 134 });
+      return t('too-long-field-error', { maxLength: hasOtherLang ? 66: 134 });
     }
     return false;
   }, [focused]);
