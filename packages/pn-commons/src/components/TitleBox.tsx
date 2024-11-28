@@ -52,8 +52,8 @@ const TitleBox: React.FC<Props> = ({
           role="heading"
           variant={variantTitle}
           display="inline-block"
-          sx={{ verticalAlign: 'middle', maxWidth:{ xs:'70vw', lg:'40vw' },
-          wordWrap: 'break-word',overflow: 'visible' }}
+          sx={{ verticalAlign: 'middle',
+          wordWrap: 'break-word',overflowWrap: 'anywhere' }}
           
         >
           {title}
