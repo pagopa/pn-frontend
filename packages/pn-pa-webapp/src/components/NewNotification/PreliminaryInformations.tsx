@@ -153,7 +153,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   });
 
   const handleChangeTouched = async (e: ChangeEvent) => {
-    
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
   };
@@ -161,8 +160,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if(value === 'it'){
-      void formik.setFieldValue('additionalLang','');
-      void formik.setFieldValue('additionalSubject','');
+      void formik.setValues({...formik.values, additionalLang:'', additionalSubject: ''},false);
+      void formik.setFieldTouched('additionalSubject');
     }
     formik.handleChange(e);
   };
