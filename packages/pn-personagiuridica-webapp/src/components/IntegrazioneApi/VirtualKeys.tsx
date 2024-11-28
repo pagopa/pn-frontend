@@ -6,16 +6,15 @@ import { Button, Stack, Typography } from '@mui/material';
 import { EmptyState, KnownSentiment, formatDate, today } from '@pagopa-pn/pn-commons';
 
 import {
-  BffPublicKeysCheckIssuerResponse,
   BffVirtualKeyStatusRequestStatusEnum,
   PublicKeysIssuerResponseIssuerStatusEnum,
+  PublicKeyStatus,
   VirtualKey,
   VirtualKeyStatus,
 } from '../../generated-client/pg-apikeys';
 import { ModalApiKeyView } from '../../models/ApiKeys';
 import {
   changeVirtualApiKeyStatus,
-  checkPublicKeyIssuer,
   createVirtualApiKey,
   deleteVirtualApiKey,
   getVirtualApiKeys,
@@ -35,39 +34,30 @@ const VirtualKeys: React.FC = () => {
   const { t } = useTranslation('integrazioneApi');
   const dispatch = useAppDispatch();
   const virtualKeys = useAppSelector((state: RootState) => state.apiKeysState.virtualKeys);
+  const issuerState = useAppSelector((state: RootState) => state.apiKeysState.issuerState);
+  const publicKeys = useAppSelector((state:RootState)=> state.apiKeysState.publicKeys);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const [modal, setModal] = useState<ModalType>({ view: ModalApiKeyView.NONE });
 
-  const [issuerState, setIssuerState] = useState<BffPublicKeysCheckIssuerResponse>({
-    tosAccepted: false,
-    issuer: {
-      isPresent: false,
-      issuerStatus: PublicKeysIssuerResponseIssuerStatusEnum.Inactive,
-    },
-  });
-
-  const hasOneEnabledKey = virtualKeys.items.find(
+  const hasOneEnabledVirtualKey = virtualKeys.items.find(
     (key) =>
       key.status === VirtualKeyStatus.Enabled &&
       (!key.user || key.user?.fiscalCode === currentUser.fiscal_number)
   );
+
+  const hasOneEnabledPublicKey = publicKeys.items.find(
+    (key) =>key.status === PublicKeyStatus.Active
+  );
+
   const isCreationEnabled =
-    !hasOneEnabledKey &&
+    !hasOneEnabledVirtualKey &&
+    hasOneEnabledPublicKey && 
     issuerState.tosAccepted &&
     issuerState.issuer.isPresent &&
     issuerState.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
 
   const fetchVirtualKeys = useCallback(() => {
     void dispatch(getVirtualApiKeys({ showPublicKey: true }));
-  }, []);
-
-  const fetchCheckIssuer = useCallback(() => {
-    dispatch(checkPublicKeyIssuer())
-      .unwrap()
-      .then((response) => {
-        setIssuerState(response);
-      })
-      .catch(() => {});
   }, []);
 
   const handleGenerateVirtualKey = () => {
@@ -127,7 +117,6 @@ const VirtualKeys: React.FC = () => {
 
   useEffect(() => {
     fetchVirtualKeys();
-    fetchCheckIssuer();
   }, []);
 
   return (
