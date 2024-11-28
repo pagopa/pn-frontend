@@ -161,7 +161,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     const value = e.target.value;
     if(value === 'it'){
       void formik.setValues({...formik.values, additionalLang:'', additionalSubject: ''},false);
-      void formik.setFieldTouched('additionalSubject');
+      void formik.setFieldTouched('additionalSubject',false);
     }
     formik.handleChange(e);
   };
