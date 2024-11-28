@@ -17,7 +17,7 @@ import SideMenuListItem from './SideMenuListItem';
 type Props = {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
-  handleLinkClick: (item: SideMenuItem, flag?: boolean) => void;
+  handleLinkClick: (item: SideMenuItem) => void;
   selectedItem: { index: number; label: string; route: string; parent?: string };
 };
 
@@ -81,7 +81,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                   if (!item.notSelectable) {
                     setSelectedIndex({ label: item.label, index, route: item.route });
                   }
-                  handleLinkClick(item, true);
+                  handleLinkClick(item);
                   handleClick(item.label);
                 }}
                 data-testid={`sideMenuItem-${item.label}`}
