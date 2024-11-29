@@ -53,6 +53,7 @@ const TitleBox: React.FC<Props> = ({
           variant={variantTitle}
           display="inline-block"
           sx={{ verticalAlign: 'middle' }}
+          tabIndex={-1}
         >
           {title}
         </Typography>

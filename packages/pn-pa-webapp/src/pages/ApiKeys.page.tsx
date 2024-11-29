@@ -176,7 +176,7 @@ const ApiKeys = () => {
           marginTop: isMobile ? 3 : 10,
         }}
       >
-        <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+        <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }} tabIndex={-1}>
           {t('generated-api-keys')}
         </Typography>
         <Button

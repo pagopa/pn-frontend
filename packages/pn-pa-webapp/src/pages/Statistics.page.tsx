@@ -129,7 +129,7 @@ const Statistics = () => {
               {getLastUpdateText()}
             </Typography>
             <Box ref={exportJpgNode}>
-              <Typography variant="h6" component="h5" mt={7}>
+              <Typography variant="h6" component="h5" mt={7} tabIndex={-1}>
                 {t('section_1')}
               </Typography>
 
@@ -179,7 +179,7 @@ const Statistics = () => {
                       />
                     </Grid>
                   </Grid>
-                  <Typography variant="h6" component="h5" mt={9}>
+                  <Typography variant="h6" component="h5" mt={9} tabIndex={-1}>
                     {t('section_2')}
                   </Typography>
                   <FilterStatistics

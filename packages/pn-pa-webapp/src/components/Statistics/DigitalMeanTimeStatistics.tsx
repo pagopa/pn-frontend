@@ -106,7 +106,7 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
 
   return (
     <Paper sx={{ ...props.sx, p: 3, mb: 3 }} elevation={0} data-testid="digitalMeanTimeContainer">
-      <Typography variant="h6" component="h3">
+      <Typography variant="h6" component="h3" tabIndex={-1}>
         {t('digital_mean_time.title')}
       </Typography>
       <Typography sx={{ my: 3 }} variant="body1" color="text.primary">

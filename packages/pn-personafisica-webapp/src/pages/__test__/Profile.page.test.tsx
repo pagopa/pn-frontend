@@ -23,7 +23,7 @@ describe('testing profile page', () => {
     const { getByRole, getByText } = render(<Profile />, {
       preloadedState: { userState: { user: userResponse } },
     });
-    const title = getByRole('heading', { name: 'title' });
+    const title = getByRole('heading', { name: 'title'});
     expect(title).toBeInTheDocument();
     const subtitle = getByText('subtitle');
     expect(subtitle).toBeInTheDocument();
