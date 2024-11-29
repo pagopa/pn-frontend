@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.10.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.9.0...v2.10.0-RC.0) (2024-11-29)
+
+
+### Bug Fixes
+
+* **12155:** hide toast error when check aar api returns notification not found ([#1384](https://github.com/pagopa/pn-frontend/issues/1384)) ([396b9ee](https://github.com/pagopa/pn-frontend/commit/396b9ee74c0580b49b70918d65b1d88589b840a2))
+* **pn-11392:** more generic download message for those documents in glacier ([#1411](https://github.com/pagopa/pn-frontend/issues/1411)) ([bb93a20](https://github.com/pagopa/pn-frontend/commit/bb93a207cb4bd522cb48a6cd640ed827afdc2240))
+* **pn-13071:** Change how SERCQ component is displayed when PEC is enabled (PF and PG) ([#1377](https://github.com/pagopa/pn-frontend/issues/1377)) ([bdad114](https://github.com/pagopa/pn-frontend/commit/bdad1145fe44a3a1225384440fbff3f4ab992a1b))
+* **pn-13073:** fix the order of legal contacts types ([#1381](https://github.com/pagopa/pn-frontend/issues/1381)) ([f241d4a](https://github.com/pagopa/pn-frontend/commit/f241d4a192314a9b26bfabeb7a575c13f524293a))
+* **pn-13174:** Add blank spaces validation to digital contact input field (PF and PG) ([#1409](https://github.com/pagopa/pn-frontend/issues/1409)) ([9e2fe76](https://github.com/pagopa/pn-frontend/commit/9e2fe766edbd00fc251857de43d0ee4554de32d9))
+
+
+
+
+
+
 # [2.9.0](https://github.com/pagopa/pn-frontend/compare/v2.9.0-RC.2...v2.9.0) (2024-11-18)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
