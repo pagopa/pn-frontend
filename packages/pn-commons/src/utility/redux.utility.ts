@@ -14,7 +14,8 @@ export function parseError(e: any) {
       response: {
         data: {
           ...data,
-          traceId: data.traceId || headers['x-amzn-trace-id'],
+          traceId: data?.traceId || headers?.['x-amzn-trace-id'] || '',
+          // traceId: data.traceId || headers['x-amzn-trace-id'] || '',
         },
         status: status || 500,
       },
