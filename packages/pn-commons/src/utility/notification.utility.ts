@@ -236,6 +236,16 @@ export function getNotificationStatusInfos(
           'Annullamento in corso. Lo stato sarà aggiornato a breve.'
         ),
       };
+      case NotificationStatus.RETURNED_TO_SENDER:
+      return {
+        color: 'info',
+        ...localizeStatus(
+          'returned-to-sender',
+          'Resa al mittente fallback label',
+          'Resa al mittente fallback tooltip',
+          'Resa al mittente fallback description'
+        ),
+      };
     default:
       return {
         color: 'default',
