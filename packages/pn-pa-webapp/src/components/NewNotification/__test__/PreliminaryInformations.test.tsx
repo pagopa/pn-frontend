@@ -15,6 +15,7 @@ import {
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { userResponse } from '../../../__mocks__/Auth.mock';
+import { errorMock } from '../../../__mocks__/Errors.mock';
 import {
   newNotification,
   newNotificationEmpty,
@@ -339,7 +340,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
   });
 
   it('errors on api call', async () => {
-    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(500);
+    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(errorMock.status, errorMock.data);
     await act(async () => {
       result = render(
         <>

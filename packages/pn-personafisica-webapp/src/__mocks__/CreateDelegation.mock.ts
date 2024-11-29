@@ -20,10 +20,6 @@ export const createDelegationSelectedPayload: NewDelegationFormProps = {
   enti: [{ name: 'test', id: 'test' }],
 };
 
-export const createDelegationGenericErrorResponse = {
-  status: 401,
-};
-
 export const createDelegationDuplicatedErrorResponse = {
   detail: 'Non è possibile creare due deleghe per lo stesso delegato',
   errors: [],

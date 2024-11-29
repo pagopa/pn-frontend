@@ -6,6 +6,7 @@ import { AppResponseMessage, ResponseEventDispatcher, formatDate } from '@pagopa
 import { theme } from '@pagopa/mui-italia';
 
 import { currentStatusDTO, downtimesDTO } from '../../__mocks__/AppStatus.mock';
+import { errorMock } from '../../__mocks__/Errors.mock';
 import { act, fireEvent, render, screen, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { APP_STATUS_ACTIONS } from '../../redux/appStatus/actions';
@@ -93,7 +94,7 @@ describe('AppStatus page', async () => {
   });
 
   it('Desktop - error in app status API', async () => {
-    mock.onGet('/bff/v1/downtime/status').reply(500);
+    mock.onGet('/bff/v1/downtime/status').reply(errorMock.status, errorMock.data);
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       render(<AppStatusWithErrorHandling />);
@@ -111,7 +112,7 @@ describe('AppStatus page', async () => {
 
   it('Desktop - error in downtime log API', async () => {
     mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
-    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(500);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(errorMock.status, errorMock.data);
     await act(async () => {
       render(<AppStatusWithErrorHandling />);
     });
