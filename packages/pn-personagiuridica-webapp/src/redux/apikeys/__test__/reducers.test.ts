@@ -5,6 +5,7 @@ import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { apiClient } from '../../../api/apiClients';
 import { store } from '../../store';
 import { getPublicKeys, getVirtualApiKeys } from '../actions';
+import { PublicKeysIssuerResponseIssuerStatusEnum } from '../../../generated-client/pg-apikeys';
 
 const initialState = {
   loading: false,
@@ -16,6 +17,13 @@ const initialState = {
     items: [],
     total: 0,
   },
+  issuerState:{
+    tosAccepted: false,
+    issuer: {
+      isPresent: false,
+      issuerStatus: PublicKeysIssuerResponseIssuerStatusEnum.Inactive,
+    }
+  }
 };
 
 describe('api keys redux state test', () => {
