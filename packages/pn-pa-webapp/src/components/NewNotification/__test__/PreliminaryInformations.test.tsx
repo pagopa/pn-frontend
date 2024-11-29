@@ -26,6 +26,7 @@ import {
   fireEvent,
   randomString,
   render,
+  
   testStore,
   waitFor,
   within,
@@ -83,6 +84,7 @@ const populateForm = async (
     1,
     true
   );
+  
   if (hasPayment) {
     await testRadio(
       form,

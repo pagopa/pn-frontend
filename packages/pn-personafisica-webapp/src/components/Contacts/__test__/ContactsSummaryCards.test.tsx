@@ -4,6 +4,7 @@ import { digitalAddresses, digitalAddressesSercq } from '../../../__mocks__/Cont
 import { fireEvent, render, within } from '../../../__test__/test-utils';
 import { AddressType } from '../../../models/contacts';
 import ContactsSummaryCards from '../ContactsSummaryCards';
+import { sortAddresses } from '../../../utility/contacts.utility';
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -67,8 +68,8 @@ describe('ContactsSummaryCards component', () => {
     const { getByTestId } = render(<ContactsSummaryCards />, {
       preloadedState: {
         contactsState: {
-          digitalAddresses: digitalAddressesSercq.filter(
-            (addr) => addr.addressType === AddressType.LEGAL
+          digitalAddresses: sortAddresses(
+            digitalAddressesSercq.filter((addr) => addr.addressType === AddressType.LEGAL)
           ),
         },
       },
@@ -84,7 +85,7 @@ describe('ContactsSummaryCards component', () => {
     const legalTitle = within(legalContacts).getByTestId('cardTitle');
     expect(legalTitle).toHaveTextContent('summary-card.legal-title');
     const legalDescription = within(legalContacts).getByTestId('cardDescription');
-    expect(legalDescription).toHaveTextContent('summary-card.PEC, summary-card.SERCQ_SEND');
+    expect(legalDescription).toHaveTextContent('summary-card.SERCQ_SEND, summary-card.PEC');
 
     const courtesyIcon = within(courtesyContacts).getByTestId('warningIcon');
     expect(courtesyIcon).toBeInTheDocument();

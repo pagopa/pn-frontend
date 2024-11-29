@@ -183,5 +183,6 @@
   },
   "conjunctions": {
     "or": "or"
-  }
+  },
+  "no-spaces-at-edges": "Delete spaces at the beginning or end"
 }

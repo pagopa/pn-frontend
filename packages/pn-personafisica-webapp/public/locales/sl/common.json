@@ -183,5 +183,6 @@
   },
   "conjunctions": {
     "or": "ali"
-  }
+  },
+  "no-spaces-at-edges": "Izbrišite presledke na začetku ali koncu"
 }

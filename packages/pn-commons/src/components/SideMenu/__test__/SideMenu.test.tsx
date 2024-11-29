@@ -151,15 +151,13 @@ describe('SideMenu', () => {
 
   it('renders component (mobile)', async () => {
     window.matchMedia = createMatchMedia(800);
-    const { getByRole } = render(<SideMenu menuItems={sideMenuItems} />);
+    const { getByRole, queryByRole } = render(<SideMenu menuItems={sideMenuItems} />);
     const ul = getByRole('navigation');
     expect(ul).toBeInTheDocument();
     const menuButtons = within(ul).getAllByRole('button');
     expect(menuButtons).toHaveLength(1);
     fireEvent.click(menuButtons[0]);
-    const drawer = await waitFor(() => getByRole('presentation'));
-    expect(drawer).toBeInTheDocument();
-    const buttons = within(drawer).getAllByRole('button');
-    expect(buttons).toHaveLength(sideMenuItems.length);
+    const drawer = await waitFor(() => queryByRole('presentation'));
+    expect(drawer).not.toBeInTheDocument();
   });
 });

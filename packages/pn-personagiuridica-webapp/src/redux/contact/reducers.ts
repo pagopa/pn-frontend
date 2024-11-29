@@ -2,7 +2,7 @@ import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 
 import { AddressType, ChannelType, DigitalAddress, ExternalEvent } from '../../models/contacts';
 import { Party } from '../../models/party';
-import { removeAddress, updateAddressesList } from '../../utility/contacts.utility';
+import { removeAddress, sortAddresses, updateAddressesList } from '../../utility/contacts.utility';
 import { RootState } from '../store';
 import {
   createOrUpdateAddress,
@@ -47,7 +47,7 @@ const contactsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getDigitalAddresses.fulfilled, (state, action) => {
-      state.digitalAddresses = action.payload;
+      state.digitalAddresses = sortAddresses(action.payload);
     });
     builder.addCase(createOrUpdateAddress.fulfilled, (state, action) => {
       if (action.payload) {

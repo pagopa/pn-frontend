@@ -44,6 +44,9 @@ describe('LegalContacts Component', async () => {
     expect(sercqSendContact).toBeInTheDocument();
     const activateButton = within(sercqSendContact).getByTestId('activateButton');
     expect(activateButton).toBeInTheDocument();
+    expect(activateButton).toHaveTextContent('legal-contacts.sercq-send-active-pec-enabled');
+    const descriptionText = getByText('legal-contacts.sercq-send-description-pec-enabled');
+    expect(descriptionText).toBeInTheDocument();
   });
 
   it('renders component - SERCQ enabled', async () => {
@@ -111,8 +114,8 @@ describe('LegalContacts Component', async () => {
     expect(banner).toBeInTheDocument();
     const alertIcon = within(banner).getByTestId('InfoOutlinedIcon');
     expect(alertIcon).toBeInTheDocument();
-    expect(banner).toHaveTextContent("legal-contacts.pec-validation-banner.title");
-    expect(banner).toHaveTextContent("legal-contacts.pec-validation-banner.dod-enabled-message");
+    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.title');
+    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.dod-enabled-message');
   });
 
   it('renders component - SERCQ disabled and validating PEC', async () => {
@@ -141,7 +144,7 @@ describe('LegalContacts Component', async () => {
     expect(banner).toBeInTheDocument();
     const alertIcon = within(banner).getByTestId('InfoOutlinedIcon');
     expect(alertIcon).toBeInTheDocument();
-    expect(banner).toHaveTextContent("legal-contacts.pec-validation-banner.title");
-    expect(banner).toHaveTextContent("legal-contacts.pec-validation-banner.dod-disabled-message");
+    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.title');
+    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.dod-disabled-message');
   });
 });

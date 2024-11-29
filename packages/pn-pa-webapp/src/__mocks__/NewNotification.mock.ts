@@ -177,6 +177,10 @@ export const newNotification: NewNotification = {
   notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
   senderDenomination: userResponse.organization.name,
   senderTaxId: userResponse.organization.fiscal_code,
+  lang: 'it',
+  additionalLang: '',
+  additionalSubject: '',
+  additionalAbstract: '',
 };
 
 export const newNotificationEmpty: NewNotification = {

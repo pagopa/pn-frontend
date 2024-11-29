@@ -183,5 +183,6 @@
   },
   "conjunctions": {
     "or": "ou"
-  }
+  },
+  "no-spaces-at-edges": "Supprimer les espaces au début ou à la fin"
 }

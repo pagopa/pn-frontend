@@ -127,7 +127,9 @@ const CodeModal = forwardRef<ModalHandle, Props>(
         data-testid="codeDialog"
         disableEscapeKeyDown
       >
-        <DialogTitle id="dialog-title">{title}</DialogTitle>
+        <DialogTitle id="dialog-title" sx={{ overflowWrap: 'anywhere' }}>
+          {title}
+        </DialogTitle>
         <PnDialogContent>
           <DialogContentText id="dialog-description">{subtitle}</DialogContentText>
           <Divider sx={{ my: 2 }} />

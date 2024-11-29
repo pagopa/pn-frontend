@@ -181,5 +181,6 @@
     "pg-operator": "Sachbearbeiter",
     "pg-admin": "Administrator"
   },
-  "required-field": "Pflichtfeld"
+  "required-field": "Pflichtfeld",
+  "no-spaces-at-edges": "Lösche die Leerzeichen am Anfang oder Ende"
 }

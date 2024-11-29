@@ -9,13 +9,17 @@ import { NewNotificationLangOther } from '../../models/NewNotification';
 import { PreliminaryInformationsPayload } from '../../redux/newNotification/types';
 import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 
-function SubjectFocusHelperText() {
+type SubjectFocusHelperTextProps = {
+  hasOtherLang: boolean | undefined | string;
+};
+
+function SubjectFocusHelperText({hasOtherLang} : SubjectFocusHelperTextProps) {
   const { t } = useTranslation(['common']);
   const { focused } = useFormControl() || {};
 
   return useMemo(() => {
     if (focused) {
-      return t('too-long-field-error', { maxLength: 134 });
+      return t('too-long-field-error', { maxLength: hasOtherLang ? 66: 134 });
     }
     return false;
   }, [focused]);
@@ -52,7 +56,7 @@ const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: 
         value={formik.values.subject}
         onChange={onChangeTouched}
         error={formik.touched.subject && Boolean(formik.errors.subject)}
-        helperText={(formik.touched.subject && formik.errors.subject) || <SubjectFocusHelperText />}
+        helperText={(formik.touched.subject && formik.errors.subject) || <SubjectFocusHelperText hasOtherLang ={hasOtherLang} />}
         size="small"
         margin="normal"
       />
@@ -83,7 +87,7 @@ const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: 
             error={formik.touched.additionalSubject && Boolean(formik.errors.additionalSubject)}
             helperText={
               (formik.touched.additionalSubject && formik.errors.additionalSubject) || (
-                <SubjectFocusHelperText />
+                <SubjectFocusHelperText hasOtherLang={hasOtherLang} />
               )
             }
             size="small"

@@ -148,14 +148,22 @@ const PecContactItem: React.FC = () => {
 
   return (
     <DigitalContactsCard
-      title={defaultSERCQ_SENDAddress ? '' : t('legal-contacts.pec-title', { ns: 'recapiti' })}
+      title={
+        defaultSERCQ_SENDAddress && !verifyingAddress
+          ? ''
+          : t('legal-contacts.pec-title', { ns: 'recapiti' })
+      }
       subtitle={
-        defaultSERCQ_SENDAddress ? '' : t('legal-contacts.pec-description', { ns: 'recapiti' })
+        defaultSERCQ_SENDAddress && !verifyingAddress
+          ? ''
+          : t('legal-contacts.pec-description', { ns: 'recapiti' })
       }
       sx={{
         pt: defaultSERCQ_SENDAddress ? 0 : 3,
         borderTopLeftRadius: defaultSERCQ_SENDAddress ? 0 : 4,
         borderTopRightRadius: defaultSERCQ_SENDAddress ? 0 : 4,
+        borderBottomLeftRadius: currentValue ? 0 : 4,
+        borderBottomRightRadius: currentValue ? 0 : 4,
       }}
     >
       {!verifyingAddress && !defaultSERCQ_SENDAddress && (

@@ -183,5 +183,6 @@
   },
   "conjunctions": {
     "or": "oder"
-  }
+  },
+  "no-spaces-at-edges": "Lösche die Leerzeichen am Anfang oder Ende"
 }
