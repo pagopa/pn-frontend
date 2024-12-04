@@ -238,13 +238,13 @@ export function getNotificationStatusInfos(
       };
       case NotificationStatus.RETURNED_TO_SENDER:
       return {
-        color: 'info',
+        color: 'error',
         ...localizeStatus(
           'returned-to-sender',
-          'Resa al mittente fallback label',
-          'Resa al mittente fallback tooltip',
-          'Resa al mittente fallback description'
-        ),
+          'Resa al mittente',
+          `Il destinatario risulta deceduto.`,
+          `Il destinatario risulta deceduto.`,
+          { isMultiRecipient }),
       };
     default:
       return {
@@ -295,6 +295,14 @@ export const getNotificationAllowedStatus = () => [
       'notifications',
       'status.unreachable',
       'Destinatario irreperibile'
+    ),
+  },
+  {
+    value: NotificationStatus.RETURNED_TO_SENDER,
+    label: getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.returned-to-sender',
+      'Resa al mittente'
     ),
   },
 ];
