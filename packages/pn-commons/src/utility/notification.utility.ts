@@ -238,7 +238,7 @@ export function getNotificationStatusInfos(
       };
       case NotificationStatus.RETURNED_TO_SENDER:
       return {
-        color: 'error',
+        color: 'warning',
         ...localizeStatus(
           'returned-to-sender',
           'Resa al mittente',
