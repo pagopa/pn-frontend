@@ -91,6 +91,7 @@ import { SideMenuItem } from './SideMenuItem';
 import { SmartTableData } from './SmartTable';
 import { BasicUser, ConsentUser, basicNoLoggedUserData } from './User';
 import { WithRequired } from './UtilityTypes';
+import { PnWizardRef } from './Wizard';
 
 export {
   basicNoLoggedUserData,
@@ -191,4 +192,5 @@ export type {
   NotificationDocumentRequest,
   NotificationDocumentResponse,
   WithRequired,
+  PnWizardRef,
 };
