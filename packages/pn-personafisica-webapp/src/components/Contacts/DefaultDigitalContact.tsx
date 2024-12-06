@@ -3,8 +3,10 @@ import { ChangeEvent, forwardRef, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import VerifiedIcon from '@mui/icons-material/Verified';
-import { Box, Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CreateIcon from '@mui/icons-material/Create';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -21,12 +23,27 @@ type Props = {
   channelType: ChannelType;
   inputProps: { label: string; prefix?: string };
   insertButtonLabel: string;
+  showOkIcon?: boolean;
   onSubmit: (value: string) => void;
-  onDelete: () => void;
+  onDelete?: () => void;
+  onCancelAdd?: () => void;
 };
 
 const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
-  ({ label, value, channelType, inputProps, insertButtonLabel, onSubmit, onDelete }, ref) => {
+  (
+    {
+      label,
+      value,
+      channelType,
+      inputProps,
+      insertButtonLabel,
+      showOkIcon = false,
+      onSubmit,
+      onDelete,
+      onCancelAdd,
+    },
+    ref
+  ) => {
     const { t } = useTranslation(['common', 'recapiti']);
     const isMobile = useIsMobile();
     const [editMode, setEditMode] = useState(false);
@@ -143,6 +160,16 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             >
               {insertButtonLabel}
             </Button>
+            {onCancelAdd && (
+              <ButtonNaked
+                color="error"
+                onClick={onCancelAdd}
+                sx={{ fontWeight: 700 }}
+                size="medium"
+              >
+                {t('button.annulla')}
+              </ButtonNaked>
+            )}
           </Stack>
         </form>
       );
@@ -198,44 +225,61 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
           </>
         )}
         {!editMode && (
-          <Stack direction="row" spacing={2}>
-            <VerifiedIcon
-              fontSize="small"
-              color="primary"
-              sx={{ position: 'relative', top: '2px' }}
-            />
-            <Box>
+          <Stack
+            direction={{ xs: 'column', lg: 'row' }}
+            spacing={3}
+            alignItems="start"
+            sx={{ mb: 2 }}
+          >
+            <Stack
+              width={{ xs: '100%', lg: 'auto' }}
+              direction="row"
+              justifyContent={{ xs: 'space-between', lg: 'auto' }}
+            >
               <Typography
                 sx={{
                   wordBreak: 'break-word',
                   fontWeight: 600,
-                  mb: 2,
                 }}
+                component="span"
                 variant="body2"
                 id={`default_${contactType}-typography`}
               >
                 {value}
               </Typography>
+              {showOkIcon && <CheckCircleIcon sx={{ ml: 1 }} fontSize="small" color="success" />}
+            </Stack>
+            <Stack
+              direction={{ xs: 'column', lg: 'row' }}
+              justifyContent="left"
+              alignItems="left"
+              textAlign="left"
+              spacing={{ xs: 2, lg: 3 }}
+            >
               <ButtonNaked
                 key="editButton"
                 color="primary"
                 onClick={toggleEdit}
-                sx={{ mr: 2, fontWeight: 700 }}
+                startIcon={<CreateIcon />}
+                sx={{ fontWeight: 700, justifyContent: 'left' }}
                 id={`modifyContact-default_${contactType}`}
                 size="medium"
               >
                 {t('button.modifica')}
               </ButtonNaked>
-              <ButtonNaked
-                id={`cancelContact-default_${contactType}`}
-                color="error"
-                onClick={onDelete}
-                sx={{ fontWeight: 700 }}
-                size="medium"
-              >
-                {t('button.elimina')}
-              </ButtonNaked>
-            </Box>
+              {onDelete && (
+                <ButtonNaked
+                  id={`cancelContact-default_${contactType}`}
+                  color="error"
+                  onClick={onDelete}
+                  startIcon={<DeleteIcon />}
+                  sx={{ fontWeight: 700, justifyContent: 'left' }}
+                  size="medium"
+                >
+                  {t('button.elimina')}
+                </ButtonNaked>
+              )}
+            </Stack>
           </Stack>
         )}
       </form>
