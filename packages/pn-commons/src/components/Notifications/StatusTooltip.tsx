@@ -26,6 +26,7 @@ const StatusTooltip = ({
         id={`status-chip-${label}`}
         label={label}
         color={color}
+        role={undefined}
         sx={{ ...chipProps, cursor: 'default' }}
         data-testid={`statusChip-${label}`}
       />
