@@ -1,18 +1,10 @@
-import React, {
-  ElementType,
-  ReactElement,
-  ReactNode,
-  forwardRef,
-  useImperativeHandle,
-  useState,
-} from 'react';
+import React, { ReactElement, ReactNode, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, ButtonProps, Paper, Stack, Step, StepLabel, Stepper } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { PnWizardRef } from '../../models/Wizard';
 import checkChildren from '../../utility/children.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnWizardStep, { PnWizardStepProps } from './PnWizardStep';
@@ -21,8 +13,8 @@ type Props = {
   title: ReactNode;
   children: ReactNode;
   slots?: {
-    nextButton: ElementType;
-    prevButton: ElementType;
+    nextButton?: ReactNode;
+    prevButton?: ReactNode;
   };
   slotsProps?: {
     nextButton?: Omit<ButtonProps, 'onClick'> & {
@@ -34,7 +26,25 @@ type Props = {
   };
 };
 
-const PnWizard = forwardRef<PnWizardRef, Props>(({ title, children, slots, slotsProps }, ref) => {
+const renderButton = (
+  slot: ReactNode | undefined,
+  Component: React.FC<ButtonProps>,
+  onClick: () => void,
+  label: string,
+  props?: Omit<ButtonProps, 'onClick'>
+) => {
+  if (slot) {
+    return slot;
+  }
+
+  return (
+    <Component type="button" {...props} onClick={onClick}>
+      {label}
+    </Component>
+  );
+};
+
+const PnWizard: React.FC<Props> = ({ title, children, slots, slotsProps }) => {
   checkChildren(children, [{ cmp: PnWizardStep }], 'PnWizard');
 
   const navigate = useNavigate();
@@ -48,41 +58,27 @@ const PnWizard = forwardRef<PnWizardRef, Props>(({ title, children, slots, slots
     )
     .map((child) => ({ label: child.props.label }));
 
-  const NextButton = slots?.nextButton ?? Button;
-  const PrevButton = slots?.prevButton ?? Button;
-
   const goToStep = (step: number) => {
     if (step >= 0 && step < steps.length) {
       setActiveStep(step);
     }
   };
 
-  const goToNextStep = () => goToStep(activeStep + 1);
-  const goToPrevStep = () => goToStep(activeStep - 1);
-
   const handleNextStep = async () => {
     if (slotsProps?.nextButton?.onClick) {
-      slotsProps.nextButton.onClick(goToNextStep, activeStep);
+      slotsProps.nextButton.onClick(() => goToStep(activeStep + 1), activeStep);
       return;
     }
-    goToNextStep();
+    goToStep(activeStep + 1);
   };
 
   const handlePrevStep = async () => {
     if (slotsProps?.prevButton?.onClick) {
-      slotsProps.prevButton.onClick(goToPrevStep, activeStep);
+      slotsProps.prevButton.onClick(() => goToStep(activeStep - 1), activeStep);
       return;
     }
-    goToPrevStep();
+    goToStep(activeStep - 1);
   };
-
-  useImperativeHandle(
-    ref,
-    () => ({
-      activeStep,
-    }),
-    [activeStep]
-  );
 
   return (
     <Stack display="flex" alignItems="center" justifyContent="center">
@@ -114,26 +110,25 @@ const PnWizard = forwardRef<PnWizardRef, Props>(({ title, children, slots, slots
         </Paper>
 
         <Stack direction={{ xs: 'column-reverse', md: 'row' }} justifyContent="space-between">
-          <PrevButton
-            type="button"
-            disabled={activeStep === 0}
-            {...slotsProps?.prevButton}
-            onClick={handlePrevStep}
-          >
-            {getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro')}
-          </PrevButton>
-          <NextButton
-            type="button"
-            variant="contained"
-            {...slotsProps?.nextButton}
-            onClick={handleNextStep}
-          >
-            {getLocalizedOrDefaultLabel('common', 'button.conferma', 'Conferma')}
-          </NextButton>
+          {renderButton(
+            slots?.prevButton,
+            Button,
+            handlePrevStep,
+            getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro'),
+            slotsProps?.prevButton
+          )}
+
+          {renderButton(
+            slots?.nextButton,
+            Button,
+            handleNextStep,
+            getLocalizedOrDefaultLabel('common', 'button.conferma', 'Conferma'),
+            slotsProps?.nextButton
+          )}
         </Stack>
       </Box>
     </Stack>
   );
-});
+};
 
 export default PnWizard;
