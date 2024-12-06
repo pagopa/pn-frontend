@@ -4,14 +4,12 @@ import { Typography } from '@mui/material';
 import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 
 const TestPage: React.FC = () => {
-  const [currentStep, setCurrentStep] = React.useState(0);
-
-  const onStepChange = (step: number) => {
-    setCurrentStep(step);
-  };
+  const [activeStep, setActiveStep] = React.useState(0);
 
   return (
     <PnWizard
+      activeStep={activeStep}
+      setActiveStep={setActiveStep}
       title={
         <Typography
           data-testid="titleBox"
@@ -23,20 +21,14 @@ const TestPage: React.FC = () => {
           Attiva domicilio digitale
         </Typography>
       }
-      slots={{
-        nextButton: currentStep === 1 ? () => <></> : undefined,
-      }}
       slotsProps={{
         nextButton: {
           onClick: (next, activeStep) => {
             console.log('next', activeStep);
             next();
           },
-          variant: 'contained',
-          color: 'primary',
         },
       }}
-      onStepChange={onStepChange}
     >
       <PnWizardStep label="step 1">
         <div>Step 1</div>

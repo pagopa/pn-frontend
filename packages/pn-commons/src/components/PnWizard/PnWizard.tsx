@@ -1,4 +1,4 @@
-import React, { JSXElementConstructor, ReactElement, ReactNode, useState } from 'react';
+import React, { JSXElementConstructor, ReactElement, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -10,6 +10,8 @@ import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnWizardStep, { PnWizardStepProps } from './PnWizardStep';
 
 type Props = {
+  activeStep: number;
+  setActiveStep: (step: number) => void;
   title: ReactNode;
   children: ReactNode;
   slots?: {
@@ -24,14 +26,22 @@ type Props = {
       onClick?: (previous: () => void, step: number) => void;
     };
   };
-  onStepChange?: (step: number) => void;
 };
 
-const PnWizard: React.FC<Props> = ({ title, children, slots, slotsProps, onStepChange }) => {
+const PnWizard: React.FC<Props> = ({
+  activeStep,
+  setActiveStep,
+  title,
+  children,
+  slots,
+  slotsProps,
+}) => {
   checkChildren(children, [{ cmp: PnWizardStep }], 'PnWizard');
 
   const navigate = useNavigate();
-  const [activeStep, setActiveStep] = useState(0);
+
+  const PrevButton = slots?.prevButton || Button;
+  const NextButton = slots?.nextButton || Button;
 
   const childrens = React.Children.toArray(children);
   const steps = childrens
@@ -44,12 +54,8 @@ const PnWizard: React.FC<Props> = ({ title, children, slots, slotsProps, onStepC
   const goToStep = (step: number) => {
     if (step >= 0 && step < steps.length) {
       setActiveStep(step);
-      onStepChange?.(step);
     }
   };
-
-  const PrevButton = slots?.prevButton || Button;
-  const NextButton = slots?.nextButton || Button;
 
   const handleNextStep = async () => {
     if (slotsProps?.nextButton?.onClick) {
@@ -96,15 +102,22 @@ const PnWizard: React.FC<Props> = ({ title, children, slots, slotsProps, onStepC
           {childrens[activeStep]}
         </Paper>
 
-        <Stack direction={{ xs: 'column-reverse', md: 'row' }} justifyContent="space-between">
-          <PrevButton
-            disabled={activeStep === 0}
-            {...slotsProps?.prevButton}
-            onClick={handlePrevStep}
+        <Stack direction={{ xs: 'column-reverse', md: 'row' }}>
+          {activeStep !== 0 && (
+            <PrevButton
+              sx={{ mt: { xs: 2, md: 0 } }}
+              {...slotsProps?.prevButton}
+              onClick={handlePrevStep}
+            >
+              {getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro')}
+            </PrevButton>
+          )}
+          <NextButton
+            variant="contained"
+            sx={{ ml: { md: 'auto' } }}
+            {...slotsProps?.nextButton}
+            onClick={handleNextStep}
           >
-            {getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro')}
-          </PrevButton>
-          <NextButton {...slotsProps?.nextButton} onClick={handleNextStep}>
             {getLocalizedOrDefaultLabel('common', 'button.conferma', 'Conferma')}
           </NextButton>
         </Stack>
