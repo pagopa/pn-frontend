@@ -86,7 +86,9 @@ const PnWizard: React.FC<Props> = ({
           {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
         </ButtonNaked>
 
-        <Box sx={{ mt: 2, mb: 3 }}>{title}</Box>
+        <Box sx={{ mt: 2, mb: 3 }} data-testid="wizard-title">
+          {title}
+        </Box>
 
         {steps.length > 0 && (
           <Stepper activeStep={activeStep} alternativeLabel>
@@ -105,6 +107,7 @@ const PnWizard: React.FC<Props> = ({
         <Stack direction={{ xs: 'column-reverse', md: 'row' }}>
           {activeStep !== 0 && (
             <PrevButton
+              data-testid="prev-button"
               sx={{ mt: { xs: 2, md: 0 } }}
               {...slotsProps?.prevButton}
               onClick={handlePrevStep}
@@ -113,6 +116,7 @@ const PnWizard: React.FC<Props> = ({
             </PrevButton>
           )}
           <NextButton
+            data-testid="next-button"
             variant="contained"
             sx={{ ml: { md: 'auto' } }}
             {...slotsProps?.nextButton}
