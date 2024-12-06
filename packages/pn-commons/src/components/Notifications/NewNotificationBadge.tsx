@@ -7,6 +7,7 @@ export const isNewNotification = (value: NotificationStatus) => {
     case NotificationStatus.VIEWED:
     case NotificationStatus.PAID:
     case NotificationStatus.CANCELLED:
+    case NotificationStatus.RETURNED_TO_SENDER:
       return false;
     default:
       return true;
