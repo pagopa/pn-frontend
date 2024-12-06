@@ -45,7 +45,9 @@ const NotificationDetailDocuments: React.FC<Props> = (
   const mapOtherDocuments = (documents: Array<NotificationDetailDocument>) =>
     documents.map((d) => {
       const recipient =
-        documents.length > 1 ? ` - ${d.recipient.denomination} (${d.recipient.taxId})` : '';
+        documents.length > 1 && d.recipient
+          ? ` - ${d.recipient.denomination} (${d.recipient.taxId})`
+          : '';
       const document = {
         key: d.ref.key || d.documentId,
         name:
