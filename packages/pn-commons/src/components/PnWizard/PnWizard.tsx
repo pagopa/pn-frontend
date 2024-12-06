@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode, useState } from 'react';
+import React, { JSXElementConstructor, ReactElement, ReactNode, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -13,8 +13,8 @@ type Props = {
   title: ReactNode;
   children: ReactNode;
   slots?: {
-    nextButton?: ReactNode;
-    prevButton?: ReactNode;
+    nextButton?: JSXElementConstructor<ButtonProps>;
+    prevButton?: JSXElementConstructor<ButtonProps>;
   };
   slotsProps?: {
     nextButton?: Omit<ButtonProps, 'onClick'> & {
@@ -24,27 +24,10 @@ type Props = {
       onClick?: (previous: () => void, step: number) => void;
     };
   };
+  onStepChange?: (step: number) => void;
 };
 
-const renderButton = (
-  slot: ReactNode | undefined,
-  Component: React.FC<ButtonProps>,
-  onClick: () => void,
-  label: string,
-  props?: Omit<ButtonProps, 'onClick'>
-) => {
-  if (slot) {
-    return slot;
-  }
-
-  return (
-    <Component type="button" {...props} onClick={onClick}>
-      {label}
-    </Component>
-  );
-};
-
-const PnWizard: React.FC<Props> = ({ title, children, slots, slotsProps }) => {
+const PnWizard: React.FC<Props> = ({ title, children, slots, slotsProps, onStepChange }) => {
   checkChildren(children, [{ cmp: PnWizardStep }], 'PnWizard');
 
   const navigate = useNavigate();
@@ -61,8 +44,12 @@ const PnWizard: React.FC<Props> = ({ title, children, slots, slotsProps }) => {
   const goToStep = (step: number) => {
     if (step >= 0 && step < steps.length) {
       setActiveStep(step);
+      onStepChange?.(step);
     }
   };
+
+  const PrevButton = slots?.prevButton || Button;
+  const NextButton = slots?.nextButton || Button;
 
   const handleNextStep = async () => {
     if (slotsProps?.nextButton?.onClick) {
@@ -110,21 +97,16 @@ const PnWizard: React.FC<Props> = ({ title, children, slots, slotsProps }) => {
         </Paper>
 
         <Stack direction={{ xs: 'column-reverse', md: 'row' }} justifyContent="space-between">
-          {renderButton(
-            slots?.prevButton,
-            Button,
-            handlePrevStep,
-            getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro'),
-            slotsProps?.prevButton
-          )}
-
-          {renderButton(
-            slots?.nextButton,
-            Button,
-            handleNextStep,
-            getLocalizedOrDefaultLabel('common', 'button.conferma', 'Conferma'),
-            slotsProps?.nextButton
-          )}
+          <PrevButton
+            disabled={activeStep === 0}
+            {...slotsProps?.prevButton}
+            onClick={handlePrevStep}
+          >
+            {getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro')}
+          </PrevButton>
+          <NextButton {...slotsProps?.nextButton} onClick={handleNextStep}>
+            {getLocalizedOrDefaultLabel('common', 'button.conferma', 'Conferma')}
+          </NextButton>
         </Stack>
       </Box>
     </Stack>
