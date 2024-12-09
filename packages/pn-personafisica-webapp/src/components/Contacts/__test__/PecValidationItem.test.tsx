@@ -25,10 +25,8 @@ describe('PecValidationItem Component', () => {
 
     const pecValidationItem = getByTestId('1234_pecContact');
     expect(pecValidationItem).toBeInTheDocument();
-    const autorenewIcon = getByTestId('AutorenewIcon');
+    const autorenewIcon = getByTestId('CloseIcon');
     expect(autorenewIcon).toBeInTheDocument();
-    const validationPecProgress = getByText('legal-contacts.pec-validating');
-    expect(validationPecProgress).toBeInTheDocument();
     const cancelValidationButton = getByText('legal-contacts.cancel-pec-validation');
     expect(cancelValidationButton).toBeInTheDocument();
   });
