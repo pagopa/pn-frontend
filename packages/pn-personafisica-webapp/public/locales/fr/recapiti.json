@@ -65,10 +65,7 @@
       "<strong>Recevez les notifications en temps réel</strong>, dès que l’organisme les télécharge sur SEND",
       "<strong>Ouvrez les documents joints</strong> dans l’app",
       "<strong>Payez les montants dus</strong> si la notification prévoit un paiement"
-    ],
-    "sercq-send-pec": "Vous préférez utiliser une PEC comme adresse à valeur juridique pour les notifications de SEND ?",
-    "sercq-send-add-pec": "Activez une PEC",
-    "sercq-send-add-pec-description": "Si vous activez une PEC, celle-ci remplacera le Domicile Numérique en tant qu’adresse à valeur juridique SEND. Le Domicile Numérique sera désactivé."
+    ]
   },
   "io-contact": {
     "title": "App IO",

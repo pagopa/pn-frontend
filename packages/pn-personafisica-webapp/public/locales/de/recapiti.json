@@ -65,10 +65,7 @@
       "<strong>Du erhältst die Zustellungen in Echtzeit</strong>, sobald sie die Körperschaft auf SEND geladen hat",
       "<strong>Öffne die angehängten Dokumente</strong> in der App",
       "<strong>Zahle die geschuldeten Beträge,</strong> falls die Zustellung eine Zahlung vorsieht"
-    ],
-    "sercq-send-pec": "Ziehst du es vor, eine PEC als rechtsgültige Adresse für die Zustellungen von SEND zu verwenden?",
-    "sercq-send-add-pec": "Aktiviere eine PEC",
-    "sercq-send-add-pec-description": "Wenn du eine PEC aktivierst, so wird diese das digitale Domizil als rechtsgültige Adresse auf SEND ersetzen. Das digitale Domizil wird deaktiviert."
+    ]
   },
   "io-contact": {
     "title": "IO-App",
