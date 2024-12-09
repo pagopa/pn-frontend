@@ -59,6 +59,10 @@ const notificationDetailDocumentSchema: yup.SchemaOf<NotificationDetailDocument>
       documentId: yup.string().optional(),
       documentType: yup.string().optional(),
       recIndex: yup.number().optional(),
+      recipient: yup.object().shape({
+        denomination: yup.string().required(),
+        taxId: yup.string().required()
+      }).default(undefined)
     })
   )
   .noUnknown(true);
