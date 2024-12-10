@@ -46,7 +46,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
           : '';
       const document = {
         key: d.ref.key || d.documentId,
-        name: d.title + recipient || d.ref.key,
+        name: d.title ? `${d.title}${recipient}` : d.ref.key,
         downloadHandler: d.documentId
           ? ({
               documentId: d.documentId,
