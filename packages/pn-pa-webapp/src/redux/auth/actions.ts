@@ -3,7 +3,6 @@ import {
   PartyEntityWithUrl,
   TosPrivacyConsent,
   parseError,
-  performThunkAction,
 } from '@pagopa-pn/pn-commons';
 import { ProductEntity } from '@pagopa/mui-italia';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -32,7 +31,13 @@ export enum AUTH_ACTIONS {
  */
 export const exchangeToken = createAsyncThunk<User, string>(
   'exchangeToken',
-  performThunkAction((selfCareToken: string) => AuthApi.exchangeToken(selfCareToken))
+  async (selfCareToken, { rejectWithValue }) => {
+    try {
+      return await AuthApi.exchangeToken(selfCareToken);
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
 /**

@@ -2,10 +2,20 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
-import { getById, queryById, testAutocomplete, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
+import {
+  getById,
+  queryById,
+  testAutocomplete,
+  testSelect,
+} from '@pagopa-pn/pn-commons/src/test-utils';
 import { fireEvent, waitFor } from '@testing-library/react';
 
-import { digitalAddresses, digitalAddressesPecValidation, digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
+import {
+  digitalAddresses,
+  digitalAddressesPecValidation,
+  digitalAddressesSercq,
+} from '../../../__mocks__/Contacts.mock';
+import { errorMock } from '../../../__mocks__/Errors.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { act, render, screen, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
@@ -340,16 +350,20 @@ describe('test AddSpecialContactDialog', () => {
         onConfirm={confirmHandler}
       />,
       {
-        preloadedState: { contactsState: { digitalAddresses: [
-          ...digitalAddressesPecValidation(true, true),
-          ...digitalAddressesPecValidation(false, false, parties[1]),
-        ]} },
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: [
+              ...digitalAddressesPecValidation(true, true),
+              ...digitalAddressesPecValidation(false, false, parties[1]),
+            ],
+          },
+        },
       }
     );
 
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const bodyEl = within(dialog).getByTestId('dialog-content');
-    
+
     await testSelect(
       bodyEl,
       'channelType',
@@ -368,7 +382,7 @@ describe('test AddSpecialContactDialog', () => {
       parties.findIndex((p) => p.name === parties[2].name),
       true
     );
-    
+
     const confirmButton = within(dialog).getByText('button.associa');
     expect(confirmButton).toBeEnabled();
 
@@ -382,11 +396,10 @@ describe('test AddSpecialContactDialog', () => {
     );
 
     expect(confirmButton).toBeDisabled();
-
   });
 
   it('API error', async () => {
-    mock.onGet('/bff/v1/pa-list').reply(500);
+    mock.onGet(/\/bff\/v1\/pa-list.*/).reply(errorMock.status, errorMock.data);
     await act(async () => {
       render(
         <>

@@ -9,6 +9,7 @@ import {
   digitalCourtesyAddresses,
   digitalLegalAddresses,
 } from '../../__mocks__/Contacts.mock';
+import { errorMock } from '../../__mocks__/Errors.mock';
 import { RenderResult, act, render, screen, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { ChannelType } from '../../models/contacts';
@@ -111,10 +112,12 @@ describe('Contacts page', async () => {
   });
 
   it('renders Special Contact having Sercq enabled and pec in validation', async () => {
-    mock.onGet('/bff/v1/addresses').reply(200, [
-      ...digitalAddressesPecValidation(true, true),
-      ...digitalAddressesPecValidation(true, false, { id: '1234', name: '1234' }),
-    ]);
+    mock
+      .onGet('/bff/v1/addresses')
+      .reply(200, [
+        ...digitalAddressesPecValidation(true, true),
+        ...digitalAddressesPecValidation(true, false, { id: '1234', name: '1234' }),
+      ]);
     await act(async () => {
       result = render(<Contacts />);
     });
@@ -123,9 +126,9 @@ describe('Contacts page', async () => {
     expect(banner).toBeInTheDocument();
     const alertIcon = within(banner).getByTestId('InfoOutlinedIcon');
     expect(alertIcon).toBeInTheDocument();
-    expect(banner).toHaveTextContent("legal-contacts.pec-validation-banner.title");
-    expect(banner).toHaveTextContent("legal-contacts.pec-validation-banner.dod-enabled-message");
-    
+    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.title');
+    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.dod-enabled-message');
+
     const specialContacts = result.getByTestId('specialContacts');
     expect(specialContacts).toBeInTheDocument();
     // check contacts
@@ -133,9 +136,13 @@ describe('Contacts page', async () => {
     expect(pecValidationItem).toBeInTheDocument();
     const autorenewIcon = within(specialContacts).getByTestId('AutorenewIcon');
     expect(autorenewIcon).toBeInTheDocument();
-    const validationPecProgress = within(specialContacts).getByText('legal-contacts.pec-validating');
+    const validationPecProgress = within(specialContacts).getByText(
+      'legal-contacts.pec-validating'
+    );
     expect(validationPecProgress).toBeInTheDocument();
-    const cancelValidationButton = within(specialContacts).getByText('legal-contacts.cancel-pec-validation');
+    const cancelValidationButton = within(specialContacts).getByText(
+      'legal-contacts.cancel-pec-validation'
+    );
     expect(cancelValidationButton).toBeInTheDocument();
 
     const sercqSendContact = within(specialContacts).getByTestId('1234_sercq_sendContact');
@@ -148,10 +155,12 @@ describe('Contacts page', async () => {
   });
 
   it('renders Special Contact having Sercq disabled and pec in validation', async () => {
-    mock.onGet('/bff/v1/addresses').reply(200, [
-      ...digitalAddressesPecValidation(true, true),
-      ...digitalAddressesPecValidation(false, false, { id: '1234', name: '1234' }),
-    ]);
+    mock
+      .onGet('/bff/v1/addresses')
+      .reply(200, [
+        ...digitalAddressesPecValidation(true, true),
+        ...digitalAddressesPecValidation(false, false, { id: '1234', name: '1234' }),
+      ]);
     await act(async () => {
       result = render(<Contacts />);
     });
@@ -160,9 +169,9 @@ describe('Contacts page', async () => {
     expect(banner).toBeInTheDocument();
     const alertIcon = within(banner).getByTestId('InfoOutlinedIcon');
     expect(alertIcon).toBeInTheDocument();
-    expect(banner).toHaveTextContent("legal-contacts.pec-validation-banner.title");
-    expect(banner).toHaveTextContent("legal-contacts.pec-validation-banner.dod-disabled-message");
-    
+    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.title');
+    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.dod-disabled-message');
+
     const specialContacts = result.getByTestId('specialContacts');
     expect(specialContacts).toBeInTheDocument();
     // check contacts
@@ -170,9 +179,13 @@ describe('Contacts page', async () => {
     expect(pecValidationItem).toBeInTheDocument();
     const autorenewIcon = within(specialContacts).getByTestId('AutorenewIcon');
     expect(autorenewIcon).toBeInTheDocument();
-    const validationPecProgress = within(specialContacts).getByText('legal-contacts.pec-validating');
+    const validationPecProgress = within(specialContacts).getByText(
+      'legal-contacts.pec-validating'
+    );
     expect(validationPecProgress).toBeInTheDocument();
-    const cancelValidationButton = within(specialContacts).getByText('legal-contacts.cancel-pec-validation');
+    const cancelValidationButton = within(specialContacts).getByText(
+      'legal-contacts.cancel-pec-validation'
+    );
     expect(cancelValidationButton).toBeInTheDocument();
 
     const addMoreContactsBtn = within(specialContacts).getByTestId('addMoreSpecialContacts');
@@ -181,7 +194,7 @@ describe('Contacts page', async () => {
   });
 
   it('API error', async () => {
-    mock.onGet('/bff/v1/addresses').reply(500);
+    mock.onGet('/bff/v1/addresses').reply(errorMock.status, errorMock.data);
     await act(async () => {
       render(
         <>
