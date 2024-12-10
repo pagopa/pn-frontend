@@ -1,26 +1,13 @@
-import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Box,
-  Button,
-  DialogContentText,
-  DialogTitle,
-  Stack,
-  Typography,
-  TypographyProps,
-} from '@mui/material';
+import { Button, DialogContentText, DialogTitle, Typography } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 type DialogProps = {
   open: boolean;
   title: string;
   subtitle: string;
-  content?: string;
-  slotProps?: {
-    contentProps: TypographyProps;
-  };
-  illustration?: ReactNode;
+  content: string;
   onConfirm: () => void;
   onDiscard: () => void;
 };
@@ -30,8 +17,6 @@ const InformativeDialog: React.FC<DialogProps> = ({
   title,
   subtitle,
   content,
-  slotProps,
-  illustration,
   onConfirm,
   onDiscard,
 }) => {
@@ -47,35 +32,13 @@ const InformativeDialog: React.FC<DialogProps> = ({
     >
       <DialogTitle id="dialog-title">{title}</DialogTitle>
       <PnDialogContent>
-        <Stack
-          spacing={2}
-          direction={{ xs: 'column', lg: 'row' }}
-          alignItems={illustration ? 'center' : 'flex-start'}
-        >
-          <Stack spacing={1}>
-            <DialogContentText id="dialog-description" color="text.primary">
-              {subtitle}
-            </DialogContentText>
+        <DialogContentText id="dialog-description" color="text.primary">
+          {subtitle}
+        </DialogContentText>
 
-            {content && (
-              <Typography sx={{ mt: 2 }} color="text.primary" {...slotProps?.contentProps}>
-                {content}
-              </Typography>
-            )}
-          </Stack>
-
-          {illustration && (
-            <Box
-              sx={{
-                flex: '0 0 249px',
-                position: 'relative',
-                top: 8,
-              }}
-            >
-              {illustration}
-            </Box>
-          )}
-        </Stack>
+        <Typography sx={{ mt: 2 }} color="text.primary">
+          {content}
+        </Typography>
       </PnDialogContent>
       <PnDialogActions>
         <Button key="cancel" onClick={onDiscard} variant="outlined" data-testid="discardButton">
