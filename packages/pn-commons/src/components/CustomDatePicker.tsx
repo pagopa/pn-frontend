@@ -47,7 +47,6 @@ const CustomDatePicker = (
             return getLocalizedOrDefaultLabel('common', 'date-picker.select-date');
           },
         }}
-        data-testid="ciao"
       />
     </LocalizationProvider>
   );

@@ -2,7 +2,7 @@ import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Grid, TextField } from '@mui/material';
+import { FormHelperText, Grid, TextField } from '@mui/material';
 import {
   CustomDatePicker,
   DATE_FORMAT,
@@ -156,10 +156,13 @@ const FilterNotificationsFormBody = ({
               size: 'small',
               inputProps: {
                 inputMode: 'text',
-                'aria-label': t('filters.data_a-input-aria-label'),
+                'aria-label':t('filters.data_a-input-aria-label'),
                 type: 'text',
                 'data-testid': 'input(end date)',
+                "aria-invalid": !!formikInstance.errors.endDate,
+                "aria-errormessage":'error-message'
               },
+              helperText : !!formikInstance.errors.endDate && <FormHelperText error id='error-message'>, inserire la data corretta</FormHelperText>
             },
           }}
           disableFuture={true}
