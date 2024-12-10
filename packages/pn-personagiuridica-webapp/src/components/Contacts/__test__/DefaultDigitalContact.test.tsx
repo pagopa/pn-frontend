@@ -17,6 +17,7 @@ vi.mock('react-i18next', () => ({
 
 const mockSubmitCbk = vi.fn();
 const mockDeleteCbk = vi.fn();
+const mockCancelCbk = vi.fn();
 
 describe('DefaultDigitalContact Component', () => {
   afterEach(() => {
@@ -50,6 +51,32 @@ describe('DefaultDigitalContact Component', () => {
     const button = await waitFor(() => getById(container, 'default_pec-button'));
     expect(button).toHaveTextContent('Button');
     expect(button).toBeDisabled();
+  });
+
+  it('renders component - empty with cancelInsert button', async () => {
+    // render component
+    const result = render(
+      <DefaultDigitalContact
+        label="Mocked label"
+        value=""
+        channelType={ChannelType.PEC}
+        inputProps={{
+          label: 'Mocked input label',
+        }}
+        insertButtonLabel="Button"
+        onSubmit={mockSubmitCbk}
+        onDelete={mockDeleteCbk}
+        onCancelInsert={mockCancelCbk}
+      />
+    );
+
+    const buttonCancel = result.getByRole('button', { name: 'button.annulla' });
+    expect(buttonCancel).toBeInTheDocument();
+
+    fireEvent.click(buttonCancel);
+    await waitFor(() => {
+      expect(mockCancelCbk).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('insert value', async () => {
@@ -131,6 +158,27 @@ describe('DefaultDigitalContact Component', () => {
     expect(buttons).toHaveLength(2);
     expect(buttons[0]).toHaveTextContent('button.modifica');
     expect(buttons[1]).toHaveTextContent('button.elimina');
+  });
+
+  it('renders component - filled with verified icon', () => {
+    // render component
+    const result = render(
+      <DefaultDigitalContact
+        label="Mocked label"
+        value="mocked@pec.it"
+        channelType={ChannelType.PEC}
+        inputProps={{
+          label: 'Mocked input label',
+        }}
+        insertButtonLabel="Button"
+        onSubmit={mockSubmitCbk}
+        onDelete={mockDeleteCbk}
+        showVerifiedIcon
+      />
+    );
+
+    const verifiedIcon = result.getByTestId('CheckCircleIcon');
+    expect(verifiedIcon).toBeInTheDocument();
   });
 
   it('edit value', async () => {

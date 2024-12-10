@@ -23,10 +23,10 @@ type Props = {
   channelType: ChannelType;
   inputProps: { label: string; prefix?: string };
   insertButtonLabel: string;
-  showOkIcon?: boolean;
+  showVerifiedIcon?: boolean;
   onSubmit: (value: string) => void;
   onDelete?: () => void;
-  onCancelAdd?: () => void;
+  onCancelInsert?: () => void;
 };
 
 const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
@@ -37,10 +37,10 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       channelType,
       inputProps,
       insertButtonLabel,
-      showOkIcon = false,
+      showVerifiedIcon = false,
       onSubmit,
       onDelete,
-      onCancelAdd,
+      onCancelInsert,
     },
     ref
   ) => {
@@ -92,7 +92,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       setEditMode(!editMode);
     };
 
-    const onCancel = () => {
+    const onCancelEdit = () => {
       formik.resetForm({ values: initialValues });
       toggleEdit();
     };
@@ -159,10 +159,10 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             >
               {insertButtonLabel}
             </Button>
-            {onCancelAdd && (
+            {onCancelInsert && (
               <ButtonNaked
                 color="error"
-                onClick={onCancelAdd}
+                onClick={onCancelInsert}
                 sx={{ fontWeight: 700 }}
                 size="medium"
               >
@@ -218,7 +218,12 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             >
               {t('button.salva')}
             </ButtonNaked>
-            <ButtonNaked color="error" onClick={onCancel} sx={{ fontWeight: 700 }} size="medium">
+            <ButtonNaked
+              color="error"
+              onClick={onCancelEdit}
+              sx={{ fontWeight: 700 }}
+              size="medium"
+            >
               {t('button.annulla')}
             </ButtonNaked>
           </>
@@ -246,7 +251,9 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               >
                 {value}
               </Typography>
-              {showOkIcon && <CheckCircleIcon sx={{ ml: 1 }} fontSize="small" color="success" />}
+              {showVerifiedIcon && (
+                <CheckCircleIcon sx={{ ml: 1 }} fontSize="small" color="success" />
+              )}
             </Stack>
             <Stack
               direction={{ xs: 'column', lg: 'row' }}
