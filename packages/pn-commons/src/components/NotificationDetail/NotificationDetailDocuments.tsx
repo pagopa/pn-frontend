@@ -1,5 +1,3 @@
-import { useTranslation } from 'react-i18next';
-
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { Box, Grid, Stack, Typography, TypographyProps } from '@mui/material';
 // import DownloadIcon from '@mui/icons-material/Download';
@@ -40,20 +38,15 @@ const NotificationDetailDocuments: React.FC<Props> = (
     titleVariant = 'overline',
   } // TODO: remove comment when link ready downloadFilesLink
 ) => {
-  const { t } = useTranslation(['notifiche']);
-
   const mapOtherDocuments = (documents: Array<NotificationDetailDocument>) =>
     documents.map((d) => {
       const recipient =
-        documents.length > 1 && d.recipient
+        documents.length > 1 && d.documentType === 'AAR' && d.recipient
           ? ` - ${d.recipient.denomination} (${d.recipient.taxId})`
           : '';
       const document = {
         key: d.ref.key || d.documentId,
-        name:
-          d.documentType === 'AAR'
-            ? `${t('detail.aar-acts', { ns: 'notifiche' })}${recipient}`
-            : d.title || d.ref.key,
+        name: d.title + recipient || d.ref.key,
         downloadHandler: d.documentId
           ? ({
               documentId: d.documentId,

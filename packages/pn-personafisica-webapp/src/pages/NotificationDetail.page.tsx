@@ -530,7 +530,12 @@ const NotificationDetail: React.FC = () => {
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarBox">
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
-                    documents={notification.otherDocuments ?? []}
+                    documents={
+                      notification.otherDocuments?.map((document) => ({
+                        ...document,
+                        title: t('detail.aar-acts', { ns: 'notifiche' }),
+                      })) ?? []
+                    }
                     clickHandler={documentDowloadHandler}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
