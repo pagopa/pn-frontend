@@ -81,6 +81,14 @@ describe('IOContact component', async () => {
       expect(disclaimerConfirmButton).toBeEnabled();
     });
     fireEvent.click(disclaimerConfirmButton); */
+    const informativeDialog = await waitFor(() => getByTestId('informativeDialog'));
+    expect(informativeDialog).toBeInTheDocument();
+    const understandButton = getByTestId('understandButton');
+    expect(understandButton).toBeInTheDocument();
+    fireEvent.click(understandButton);
+    await waitFor(() => {
+      expect(informativeDialog).not.toBeVisible();
+    });
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
