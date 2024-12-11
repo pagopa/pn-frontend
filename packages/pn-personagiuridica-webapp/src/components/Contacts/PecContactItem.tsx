@@ -122,7 +122,6 @@ const PecContactItem: React.FC = () => {
           }}
           insertButtonLabel={t('button.attiva')}
           onSubmit={handleSubmit}
-          onDelete={() => {}}
         />
       )}
       {verifyingAddress && (
