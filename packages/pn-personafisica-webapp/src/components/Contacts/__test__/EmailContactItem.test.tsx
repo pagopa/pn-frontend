@@ -52,7 +52,7 @@ describe('testing EmailContactItem', () => {
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('courtesy-contacts.valid-email');
     const buttons = form!.querySelectorAll('button');
-    expect(buttons[0]).toBeDisabled();
+    expect(buttons[0]).toBeEnabled();
     fireEvent.change(input!, { target: { value: '' } });
     await waitFor(() => expect(input!).toHaveValue(''));
     expect(errorMessage).toBeInTheDocument();

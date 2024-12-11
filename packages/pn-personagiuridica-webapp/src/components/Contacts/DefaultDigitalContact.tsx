@@ -150,8 +150,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             />
             <Button
               id={`default_${contactType}-button`}
-              variant="outlined"
-              disabled={!formik.isValid}
+              variant="contained"
               fullWidth
               type="submit"
               data-testid={`default_${contactType}-button`}

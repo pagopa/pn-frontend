@@ -50,7 +50,15 @@ describe('DefaultDigitalContact Component', () => {
     expect(input).toHaveValue('');
     const button = await waitFor(() => getById(container, 'default_pec-button'));
     expect(button).toHaveTextContent('Button');
-    expect(button).toBeDisabled();
+    expect(button).toBeEnabled();
+
+    let errorText = queryById(container, 'default_pec-helper-text');
+    expect(errorText).not.toBeInTheDocument();
+
+    fireEvent.click(button);
+
+    errorText = getById(container, 'default_pec-helper-text');
+    expect(errorText).toBeInTheDocument();
   });
 
   it('renders component - empty with cancelInsert button', async () => {
@@ -129,7 +137,7 @@ describe('DefaultDigitalContact Component', () => {
       expect(input).toHaveValue('not valid');
     });
     const button = await waitFor(() => getById(container, 'default_pec-button'));
-    expect(button).toBeDisabled();
+    expect(button).toBeEnabled();
     const errorMessage = container.querySelector(`#default_pec-helper-text`);
     expect(errorMessage).toBeInTheDocument();
   });
