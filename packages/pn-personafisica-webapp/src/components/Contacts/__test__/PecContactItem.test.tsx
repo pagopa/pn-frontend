@@ -197,8 +197,6 @@ describe('PecContactItem component', () => {
     expect(pecValue).toHaveTextContent(VALID_PEC);
     const editButton = getById(form!, 'modifyContact-default_pec');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default_pec');
-    expect(deleteButton).toBeInTheDocument();
   });
 
   it('type in an invalid pec while in "edit mode"', async () => {
@@ -216,7 +214,7 @@ describe('PecContactItem component', () => {
     const editButton = getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = container.querySelector('[name="default_pec"]');
-    const saveButton = getByRole('button', { name: 'button.salva' });
+    const saveButton = getByRole('button', { name: 'button.conferma' });
     expect(input).toHaveValue(defaultAddress!.value);
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: 'invalid-pec' } });
@@ -257,7 +255,7 @@ describe('PecContactItem component', () => {
     let editButton = result.getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = result.container.querySelector('[name="default_pec"]');
-    const saveButton = result.getByRole('button', { name: 'button.salva' });
+    const saveButton = result.getByRole('button', { name: 'button.conferma' });
     expect(input).toHaveValue(defaultAddress!.value);
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: VALID_PEC } });
@@ -299,7 +297,5 @@ describe('PecContactItem component', () => {
     expect(pecValue).toHaveTextContent(VALID_PEC);
     editButton = getById(form!, 'modifyContact-default_pec');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default_pec');
-    expect(deleteButton).toBeInTheDocument();
   });
 });

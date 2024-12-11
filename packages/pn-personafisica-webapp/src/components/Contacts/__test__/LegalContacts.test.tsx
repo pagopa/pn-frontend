@@ -37,9 +37,7 @@ describe('LegalContacts Component', async () => {
     expect(pec).toBeInTheDocument();
     const pecButtons = within(pecContact).getAllByRole('button');
     expect(pecButtons[0]).toBeEnabled();
-    expect(pecButtons[1]).toBeEnabled();
     expect(pecButtons[0].textContent).toMatch('button.modifica');
-    expect(pecButtons[1].textContent).toMatch('button.elimina');
     const sercqSendContact = getByTestId(`default_sercqSendContact`);
     expect(sercqSendContact).toBeInTheDocument();
     const activateButton = within(sercqSendContact).getByTestId('activateButton');
