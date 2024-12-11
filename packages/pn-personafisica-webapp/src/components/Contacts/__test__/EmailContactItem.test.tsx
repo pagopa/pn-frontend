@@ -69,7 +69,7 @@ describe('testing EmailContactItem', () => {
     const editButton = getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = container.querySelector(`[name="default_email"]`);
-    const saveButton = getByRole('button', { name: 'button.salva' });
+    const saveButton = getByRole('button', { name: 'button.conferma' });
     expect(input).toHaveValue(defaultAddress?.value);
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
@@ -177,7 +177,7 @@ describe('testing EmailContactItem', () => {
     let editButton = result.getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = result.container.querySelector(`[name="default_email"]`);
-    const saveButton = result.getByRole('button', { name: 'button.salva' });
+    const saveButton = result.getByRole('button', { name: 'button.conferma' });
     expect(input).toHaveValue(defaultAddress!.value);
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: emailValue } });
