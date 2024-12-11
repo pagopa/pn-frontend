@@ -134,12 +134,8 @@ describe('Contacts page', async () => {
     // check contacts
     const pecValidationItem = within(specialContacts).getByTestId('1234_pecContact');
     expect(pecValidationItem).toBeInTheDocument();
-    const autorenewIcon = within(specialContacts).getByTestId('AutorenewIcon');
-    expect(autorenewIcon).toBeInTheDocument();
-    const validationPecProgress = within(specialContacts).getByText(
-      'legal-contacts.pec-validating'
-    );
-    expect(validationPecProgress).toBeInTheDocument();
+    const closeIcon = within(specialContacts).getByTestId('CloseIcon');
+    expect(closeIcon).toBeInTheDocument();
     const cancelValidationButton = within(specialContacts).getByText(
       'legal-contacts.cancel-pec-validation'
     );
@@ -177,12 +173,8 @@ describe('Contacts page', async () => {
     // check contacts
     const pecValidationItem = within(specialContacts).getByTestId('1234_pecContact');
     expect(pecValidationItem).toBeInTheDocument();
-    const autorenewIcon = within(specialContacts).getByTestId('AutorenewIcon');
-    expect(autorenewIcon).toBeInTheDocument();
-    const validationPecProgress = within(specialContacts).getByText(
-      'legal-contacts.pec-validating'
-    );
-    expect(validationPecProgress).toBeInTheDocument();
+    const closeIcon = within(specialContacts).getByTestId('CloseIcon');
+    expect(closeIcon).toBeInTheDocument();
     const cancelValidationButton = within(specialContacts).getByText(
       'legal-contacts.cancel-pec-validation'
     );

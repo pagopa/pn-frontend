@@ -65,10 +65,7 @@
       "<strong>You will receive the notifications in real time</strong>, as soon as the institution uploads it on SEND",
       "<strong>Open the attached documents</strong> in app",
       "<strong>Pay the amounts due</strong> if the notification requires a payment"
-    ],
-    "sercq-send-pec": "Do you prefer using a PEC as a legal address for SEND notifications?",
-    "sercq-send-add-pec": "Activate a PEC",
-    "sercq-send-add-pec-description": "If you activate a PEC, this will replace the Digital Domicile as your SEND legal address. The Digital Domicile will be deactivated."
+    ]
   },
   "io-contact": {
     "title": "IO app",

@@ -3,7 +3,9 @@ import { ChangeEvent, forwardRef, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import CheckIcon from '@mui/icons-material/Check';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloseIcon from '@mui/icons-material/Close';
 import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
@@ -207,25 +209,33 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               }
               sx={{ mb: 2 }}
             />
-            <ButtonNaked
-              key="saveButton"
-              color="primary"
-              disabled={!formik.isValid}
-              type="submit"
-              sx={{ mr: 2, fontWeight: 700 }}
-              id={`saveContact-default_${contactType}`}
-              size="medium"
-            >
-              {t('button.salva')}
-            </ButtonNaked>
-            <ButtonNaked
-              color="error"
-              onClick={onCancelEdit}
-              sx={{ fontWeight: 700 }}
-              size="medium"
-            >
-              {t('button.annulla')}
-            </ButtonNaked>
+            <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
+              <ButtonNaked
+                key="saveButton"
+                color="primary"
+                disabled={!formik.isValid}
+                type="submit"
+                sx={{ fontWeight: 700, justifyContent: 'left' }}
+                id={`saveContact-default_${contactType}`}
+                size="medium"
+                startIcon={<CheckIcon />}
+              >
+                {t('button.conferma')}
+              </ButtonNaked>
+              <ButtonNaked
+                color="error"
+                onClick={onCancelEdit}
+                sx={{
+                  fontWeight: 700,
+                  color: 'error.dark',
+                  justifyContent: 'left',
+                }}
+                size="medium"
+                startIcon={<CloseIcon />}
+              >
+                {t('button.annulla')}
+              </ButtonNaked>
+            </Stack>
           </>
         )}
         {!editMode && (

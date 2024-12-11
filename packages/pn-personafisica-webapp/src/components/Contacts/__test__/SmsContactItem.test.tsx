@@ -74,7 +74,7 @@ describe('test SmsContactItem', () => {
     const editButton = getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = container.querySelector(`[name="default_sms"]`);
-    const saveButton = getByRole('button', { name: 'button.salva' });
+    const saveButton = getByRole('button', { name: 'button.conferma' });
     expect(input).toHaveValue(defaultAddress?.value.replace(internationalPhonePrefix, ''));
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
@@ -184,7 +184,7 @@ describe('test SmsContactItem', () => {
     let editButton = result.getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = result.container.querySelector(`[name="default_sms"]`);
-    const saveButton = result.getByRole('button', { name: 'button.salva' });
+    const saveButton = result.getByRole('button', { name: 'button.conferma' });
     expect(input).toHaveValue(defaultAddress!.value.replace(internationalPhonePrefix, ''));
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: phoneValue } });

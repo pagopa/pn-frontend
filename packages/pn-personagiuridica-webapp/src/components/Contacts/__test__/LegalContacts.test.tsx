@@ -36,9 +36,7 @@ describe('LegalContacts Component', async () => {
     expect(pec).toBeInTheDocument();
     const pecButtons = within(pecContact).getAllByRole('button');
     expect(pecButtons[0]).toBeEnabled();
-    expect(pecButtons[1]).toBeEnabled();
     expect(pecButtons[0].textContent).toMatch('button.modifica');
-    expect(pecButtons[1].textContent).toMatch('button.elimina');
     const sercqSendContact = getByTestId(`default_sercqSendContact`);
     expect(sercqSendContact).toBeInTheDocument();
     const activateButton = within(sercqSendContact).getByTestId('activateButton');
@@ -94,10 +92,8 @@ describe('LegalContacts Component', async () => {
     // check contacts
     const pecValidationItem = getByTestId('default_pecContact');
     expect(pecValidationItem).toBeInTheDocument();
-    const autorenewIcon = getByTestId('AutorenewIcon');
-    expect(autorenewIcon).toBeInTheDocument();
-    const validationPecProgress = getByText('legal-contacts.pec-validating');
-    expect(validationPecProgress).toBeInTheDocument();
+    const closeIcon = getByTestId('CloseIcon');
+    expect(closeIcon).toBeInTheDocument();
     const cancelValidationButton = getByText('legal-contacts.cancel-pec-validation');
     expect(cancelValidationButton).toBeInTheDocument();
 
@@ -126,10 +122,8 @@ describe('LegalContacts Component', async () => {
     // check contacts
     const pecValidationItem = getByTestId('default_pecContact');
     expect(pecValidationItem).toBeInTheDocument();
-    const autorenewIcon = getByTestId('AutorenewIcon');
-    expect(autorenewIcon).toBeInTheDocument();
-    const validationPecProgress = getByText('legal-contacts.pec-validating');
-    expect(validationPecProgress).toBeInTheDocument();
+    const closeIcon = getByTestId('CloseIcon');
+    expect(closeIcon).toBeInTheDocument();
     const cancelValidationButton = getByText('legal-contacts.cancel-pec-validation');
     expect(cancelValidationButton).toBeInTheDocument();
 
