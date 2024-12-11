@@ -9,6 +9,7 @@ import {
   digitalCourtesyAddresses,
   digitalLegalAddresses,
 } from '../../__mocks__/Contacts.mock';
+import { errorMock } from '../../__mocks__/Errors.mock';
 import { RenderResult, act, render, screen, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { CONTACT_ACTIONS } from '../../redux/contact/actions';
@@ -173,7 +174,7 @@ describe('Contacts page', async () => {
   });
 
   it('API error', async () => {
-    mock.onGet('/bff/v1/addresses').reply(500);
+    mock.onGet('/bff/v1/addresses').reply(errorMock.status, errorMock.data);
     await act(async () => {
       render(
         <>

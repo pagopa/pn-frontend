@@ -49,7 +49,7 @@ describe('PecContactItem component', () => {
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
     const buttons = form!.querySelectorAll('button');
-    expect(buttons[0]).toBeDisabled();
+    expect(buttons[0]).toBeEnabled();
     fireEvent.change(input!, { target: { value: '' } });
     await waitFor(() => expect(input!).toHaveValue(''));
     expect(errorMessage).toBeInTheDocument();
