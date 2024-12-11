@@ -154,7 +154,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               fullWidth
               type="submit"
               data-testid={`default_${contactType}-button`}
-              sx={{ flexBasis: { xs: 'unset', lg: '33.33%' }, height: '43px' }}
+              sx={{ flexBasis: { xs: 'unset', lg: '33.33%' }, height: '43px', fontWeight: 700 }}
             >
               {insertButtonLabel}
             </Button>
@@ -242,6 +242,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               <Typography
                 sx={{
                   wordBreak: 'break-word',
+                  fontSize: '18px',
                   fontWeight: 600,
                 }}
                 component="span"
