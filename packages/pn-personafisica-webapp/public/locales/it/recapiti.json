@@ -28,8 +28,8 @@
     "remove-pec-message": "Confermi di voler rimuovere l'indirizzo PEC {{value}}?",
     "block-remove-pec-title": "Non puoi eliminare la PEC",
     "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC e i Domicili Digitali SEND che hai indicato alla voce “Recapiti secondari”.",
-    "validation-cancel-title": "Vuoi annullare la verifica?",
-    "validation-cancel-content": "Se annulli la verifica, dovrai inserire una nuova PEC e ricominciare il processo.",
+    "validation-cancel-title": "Annulla validazione della PEC",
+    "validation-cancel-content": "Se confermi, annulli l’attivazione della PEC come domicilio digitale su SEND.",
     "validation-progress-title": "Grazie!",
     "validation-progress-content": "Stiamo verificando che l’indirizzo PEC sia valido. Riceverai una email con l’esito entro 24 ore.",
     "sercq-send-title": "Domicilio Digitale SEND",
@@ -72,10 +72,7 @@
       "<strong>Ricevi le notifiche in tempo reale</strong>, appena l’ente le carica su SEND",
       "<strong>Apri i documenti allegati</strong> in app",
       "<strong>Paghi gli importi dovuti</strong> se la notifica prevede un pagamento"
-    ],
-    "sercq-send-pec": "Preferisci usare una PEC come recapito a valore legale per le notifiche di SEND?",
-    "sercq-send-add-pec": "Attiva una PEC",
-    "sercq-send-add-pec-description": "Se attivi una PEC questa sostituirà il Domicilio Digitale come tuo recapito a valore legale di SEND. Il Domicilio Digitale verrà disattivato."
+    ]
   },
   "io-contact": {
     "title": "App IO",

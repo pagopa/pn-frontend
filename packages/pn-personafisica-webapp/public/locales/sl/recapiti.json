@@ -65,10 +65,7 @@
       "<strong>Prejemajte obvestila v realnem času</strong>, takoj ko jih organizacija naloži v SEND",
       "<strong>Odprite priložene dokumente</strong> v aplikaciji",
       "<strong>Plačajte neporavnane zneske</strong>, če obvestilo vključuje zahtevo za plačilo"
-    ],
-    "sercq-send-pec": "Ali raje uporabljate PEC kot uradni naslov za dostavo obvestil SEND?",
-    "sercq-send-add-pec": "Aktivirajte PEC",
-    "sercq-send-add-pec-description": "Če aktivirate PEC, bo to nadomestilo digitalno prebivališče kot vaš uradni naslov SEND. Digitalno prebivališče bo deaktivirano."
+    ]
   },
   "io-contact": {
     "title": "Aplikacija IO",
