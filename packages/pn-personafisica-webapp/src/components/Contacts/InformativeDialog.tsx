@@ -67,7 +67,7 @@ const InformativeDialog: React.FC<DialogProps> = ({
           {illustration && (
             <Box
               sx={{
-                flex: '0 0 249px',
+                flex: { xs: '0 0 auto', lg: '0 0 249px' },
                 position: 'relative',
                 top: 8,
               }}
