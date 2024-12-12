@@ -125,7 +125,6 @@
     "block-remove-sms-message": "Če želite to narediti, morate najprej izbrisati vse telefonske številke, ki ste jih navedli v razdelku »Sekundarni kontaktni podatki«."
   },
   "special-contacts": {
-    "description": "Ali ste vedeli? Če želite prejemati obvestila od določenih organizacij na naslove, ki niso glavni, lahko <0>prilagodite kontaktne podatke</0>.",
     "select-address": "Izberite kontaktne podatke",
     "add-sender": "Organizacija, ki bo povezana",
     "pec": "Naslov PEC",
