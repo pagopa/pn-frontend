@@ -53,7 +53,6 @@ describe('SpecialContactItem Component', () => {
     // render component
     const { container, getAllByTestId } = render(
       <SpecialContactItem
-        index={0}
         addresses={[pecAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}
@@ -81,7 +80,6 @@ describe('SpecialContactItem Component', () => {
     // render component
     const { container, getAllByTestId } = render(
       <SpecialContactItem
-        index={0}
         addresses={[pecNotValid]}
         onDelete={deleteHandler}
         onEdit={editHandler}
@@ -104,7 +102,6 @@ describe('SpecialContactItem Component', () => {
     // render component
     const { getAllByTestId, container } = render(
       <SpecialContactItem
-        index={0}
         addresses={[pecAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}
@@ -127,7 +124,6 @@ describe('SpecialContactItem Component', () => {
     // render component
     const { getAllByTestId } = render(
       <SpecialContactItem
-        index={0}
         addresses={[pecAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}
@@ -146,7 +142,6 @@ describe('SpecialContactItem Component', () => {
   it('should show Domicilio Digitale SEND value and no edit button', () => {
     const { getAllByTestId } = render(
       <SpecialContactItem
-        index={0}
         addresses={[sercqAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}

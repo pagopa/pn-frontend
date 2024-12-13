@@ -9,7 +9,6 @@ import DefaultDigitalContact from './DefaultDigitalContact';
 import PecValidationItem from './PecValidationItem';
 
 type Props = {
-  index: number;
   addresses: Array<DigitalAddress>;
   onEdit: (value: string, channelType: ChannelType, sender: Sender) => void;
   onDelete: (value: string, channelType: ChannelType, sender: Sender) => void;

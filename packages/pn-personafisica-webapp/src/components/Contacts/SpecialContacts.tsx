@@ -261,9 +261,8 @@ const SpecialContacts: React.FC = () => {
               spacing={3}
               divider={<Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }} />}
             >
-              {Object.entries(groupedAddresses).map(([senderId, addr], index) => (
+              {Object.entries(groupedAddresses).map(([senderId, addr]) => (
                 <SpecialContactItem
-                  index={index}
                   key={`sender-${senderId}`}
                   addresses={addr}
                   onEdit={handleEdit}
