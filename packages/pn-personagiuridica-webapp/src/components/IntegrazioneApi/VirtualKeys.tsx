@@ -8,7 +8,6 @@ import { EmptyState, KnownSentiment, formatDate, today } from '@pagopa-pn/pn-com
 import {
   BffVirtualKeyStatusRequestStatusEnum,
   PublicKeysIssuerResponseIssuerStatusEnum,
-  PublicKeyStatus,
   VirtualKey,
   VirtualKeyStatus,
 } from '../../generated-client/pg-apikeys';
@@ -30,12 +29,15 @@ type ModalType = {
   virtualKey?: VirtualKey;
 };
 
-const VirtualKeys: React.FC = () => {
+type Props = {
+  hasPublicActive : boolean;
+};
+
+const VirtualKeys: React.FC<Props> = ({hasPublicActive}) => {
   const { t } = useTranslation('integrazioneApi');
   const dispatch = useAppDispatch();
   const virtualKeys = useAppSelector((state: RootState) => state.apiKeysState.virtualKeys);
   const issuerState = useAppSelector((state: RootState) => state.apiKeysState.issuerState);
-  const publicKeys = useAppSelector((state:RootState)=> state.apiKeysState.publicKeys);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const [modal, setModal] = useState<ModalType>({ view: ModalApiKeyView.NONE });
 
@@ -45,13 +47,9 @@ const VirtualKeys: React.FC = () => {
       (!key.user || key.user?.fiscalCode === currentUser.fiscal_number)
   );
 
-  const hasOneEnabledPublicKey = publicKeys.items.find(
-    (key) =>key.status === PublicKeyStatus.Active
-  );
 
   const isCreationEnabled =
-    !hasOneEnabledVirtualKey &&
-    hasOneEnabledPublicKey && 
+    !hasOneEnabledVirtualKey && 
     issuerState.tosAccepted &&
     issuerState.issuer.isPresent &&
     issuerState.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
@@ -151,7 +149,7 @@ const VirtualKeys: React.FC = () => {
           {t('virtualKeys.tos-empty-state')}
         </EmptyState>
       ) : (
-        <VirtualKeysTable virtualKeys={virtualKeys} handleModalClick={handleModalClick} />
+        <VirtualKeysTable virtualKeys={virtualKeys} handleModalClick={handleModalClick} hasPublicActive ={hasPublicActive}/>
       )}
 
       {modal.view === ModalApiKeyView.VIEW && (

@@ -6,6 +6,10 @@
   "rotate-public-key-button": "Ruota e registra nuova chiave",
   "rotate-virtual-key-button": "Ruota",
   "error-fecth-public-api-keys": "Errore durante il recupero delle chiavi pubbliche",
+  "banner" : {
+        "title":"Integrazione disabilitata",
+        "description": "Le chiavi personali non sono utilizzabili perché l’integrazione è stata disabilitata. Per usarle, registra una chiave pubblica."
+  },
   "status": {
     "enabled": "Attiva",
     "active": "Attiva",

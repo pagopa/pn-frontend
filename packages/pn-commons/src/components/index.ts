@@ -72,6 +72,7 @@ import SideMenu from './SideMenu/SideMenu';
 import SnackBar from './SnackBar/SnackBar';
 import TabPanel from './TabPanel';
 import TitleBox from './TitleBox';
+import IntegrationApiBanner from './IntegrationApiBanner';
 
 export {
   ApiError,
@@ -148,4 +149,5 @@ export {
   IllusStatistics,
   IllusAppIO,
   IllusAppIODialog,
+  IntegrationApiBanner
 };

@@ -21,6 +21,7 @@ type Props = {
   type: keyof ApiKeyColumnData;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
   menuType: 'publicKeys' | 'virtualKeys';
+  hasPublicActive?: boolean;
 };
 
 const isApiKeyDisactivated = (data: Row<ApiKeyColumnData>): boolean =>
@@ -29,7 +30,7 @@ const isApiKeyDisactivated = (data: Row<ApiKeyColumnData>): boolean =>
 const setRowColorByStatus = (data: Row<ApiKeyColumnData>): string | undefined =>
   isApiKeyDisactivated(data) ? 'text.disabled' : undefined;
 
-const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick, menuType }) => {
+const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick, menuType, hasPublicActive }) => {
   const { t } = useTranslation(['integrazioneApi']);
 
   switch (type) {
@@ -71,6 +72,15 @@ const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick
     case 'status':
       if (!data.status) {
         return <></>;
+      }
+      if(!hasPublicActive && data.status === VirtualKeyStatus.Enabled){
+        return <Chip
+        id={`status-chip-disabled`}
+        label={'Disabilitata'}
+        color={'info'}
+        sx={{ cursor: 'default' }}
+        data-testid={`status-chip-disabled`}
+      />;
       }
       const { label, tooltip, color } = getApiKeyStatusInfos(data.status, data.statusHistory);
       return tooltip ? (
