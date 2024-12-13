@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Divider, Typography } from '@mui/material';
-import { appStateActions } from '@pagopa-pn/pn-commons';
+import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
@@ -14,7 +14,6 @@ import CancelVerificationModal from './CancelVerificationModal';
 import ContactCodeDialog from './ContactCodeDialog';
 import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
-import DigitalContactsCard from './DigitalContactsCard';
 import ExistingContactDialog from './ExistingContactDialog';
 import PecValidationItem from './PecValidationItem';
 import PecValueDialog from './PecValueDialog';
@@ -147,7 +146,7 @@ const PecContactItem: React.FC = () => {
   };
 
   return (
-    <DigitalContactsCard
+    <PnInfoCard
       title={
         defaultSERCQ_SENDAddress && !verifyingAddress
           ? ''
@@ -241,7 +240,7 @@ const PecContactItem: React.FC = () => {
           handleSubmit(value);
         }}
       />
-    </DigitalContactsCard>
+    </PnInfoCard>
   );
 };
 

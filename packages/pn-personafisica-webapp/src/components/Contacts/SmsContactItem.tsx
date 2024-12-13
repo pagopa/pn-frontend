@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { appStateActions } from '@pagopa-pn/pn-commons';
+import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -18,7 +18,6 @@ import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/co
 import ContactCodeDialog from './ContactCodeDialog';
 import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
-import DigitalContactsCard from './DigitalContactsCard';
 import ExistingContactDialog from './ExistingContactDialog';
 
 enum ModalType {
@@ -154,7 +153,7 @@ const SmsContactItem: React.FC = () => {
    */
 
   return (
-    <DigitalContactsCard
+    <PnInfoCard
       title={t('courtesy-contacts.sms-title', { ns: 'recapiti' })}
       subtitle={t('courtesy-contacts.sms-description', { ns: 'recapiti' })}
     >
@@ -216,7 +215,7 @@ const SmsContactItem: React.FC = () => {
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
       />
-    </DigitalContactsCard>
+    </PnInfoCard>
   );
 };
 

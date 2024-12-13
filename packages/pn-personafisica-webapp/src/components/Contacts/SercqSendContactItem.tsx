@@ -6,6 +6,7 @@ import { Box, Button, Chip, Divider, Stack, Typography } from '@mui/material';
 import {
   ConsentActionType,
   ConsentType,
+  PnInfoCard,
   SERCQ_SEND_VALUE,
   TosPrivacyConsent,
   appStateActions,
@@ -36,7 +37,6 @@ import { internationalPhonePrefix } from '../../utility/contacts.utility';
 import { isPFEvent } from '../../utility/mixpanel';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
-import DigitalContactsCard from './DigitalContactsCard';
 import SercqSendCourtesyDialog from './SercqSendCourtesyDialog';
 import SercqSendIODialog from './SercqSendIODialog';
 import SercqSendInfoDialog from './SercqSendInfoDialog';
@@ -57,7 +57,7 @@ const SercqSendCardTitle: React.FC<SercqSendCardTitleProps> = ({ pecEnabled }) =
   const { t } = useTranslation(['common', 'recapiti']);
 
   return (
-    <Box mb={2} data-testid="DigitalContactsCardTitle">
+    <Box mb={2} data-testid="PnInfoCardTitle">
       {pecEnabled && <Divider sx={{ color: 'text.secondary', mb: 3 }} />}
       <Chip label={t('badges.news')} color="primary" data-testid="newsBadge" sx={{ mb: 1 }} />
       <Typography
@@ -310,7 +310,7 @@ const SercqSendContactItem: React.FC = () => {
   }, [externalEvent]);
 
   return (
-    <DigitalContactsCard
+    <PnInfoCard
       title={
         value ? (
           t('legal-contacts.sercq-send-title', { ns: 'recapiti' })
@@ -420,7 +420,7 @@ const SercqSendContactItem: React.FC = () => {
         open={modalOpen?.type === ModalType.IO}
         onDiscard={() => setModalOpen(null)}
       />
-    </DigitalContactsCard>
+    </PnInfoCard>
   );
 };
 export default SercqSendContactItem;
