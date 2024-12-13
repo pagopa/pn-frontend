@@ -162,9 +162,12 @@ const FilterNotificationsFormBody = ({
                 "aria-invalid": !!formikInstance.errors.endDate,
                 "aria-errormessage":'error-message'
               },
-              helperText : !!formikInstance.errors.endDate && <FormHelperText error id='error-message'>, inserire la data corretta</FormHelperText>
+              // aria-live legge cambiamenti dei figli
+              helperText : <FormHelperText error id='error-message' aria-live='assertive'>{!!formikInstance.errors.endDate && ", inserire la data corretta"}</FormHelperText>
             },
           }}
+          // chiedere a carlotta se va bene cancellare l errore fino a che non scrivo tutta la data
+          // pensare di usare aria-live senza riepilogare l'errore alla fine
           disableFuture={true}
           minDate={startDate ?? tenYearsAgo}
         />
