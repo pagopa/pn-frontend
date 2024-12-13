@@ -12,6 +12,7 @@ import {
 import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 import { getEndOfDay, today } from '@pagopa-pn/pn-commons/src/utility/date.utility';
 
+import { errorMock } from '../../__mocks__/Errors.mock';
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
 import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
@@ -208,7 +209,7 @@ describe('Notifiche Page', async () => {
   });
 
   it('errors on api', async () => {
-    mock.onGet(notificationsPath).reply(500);
+    mock.onGet(notificationsPath).reply(errorMock.status, errorMock.data);
     await act(async () => {
       result = render(
         <>

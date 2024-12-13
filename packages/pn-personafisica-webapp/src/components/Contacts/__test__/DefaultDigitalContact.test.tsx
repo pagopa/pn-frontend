@@ -220,7 +220,7 @@ describe('DefaultDigitalContact Component', () => {
     expect(input).toHaveValue('mocked@pec.it');
     let newButtons = container.querySelectorAll('button');
     expect(newButtons).toHaveLength(2);
-    expect(newButtons[0]).toHaveTextContent('button.salva');
+    expect(newButtons[0]).toHaveTextContent('button.conferma');
     expect(newButtons[1]).toHaveTextContent('button.annulla');
     // cancel edit
     fireEvent.change(input!, { target: { value: 'new-mocked@pec.it' } });

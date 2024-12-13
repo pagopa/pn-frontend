@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DoDisturbOnOutlinedIcon from '@mui/icons-material/DoDisturbOnOutlined';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { Alert, Box, Button, Stack, Typography } from '@mui/material';
-import { PnInfoCard, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
+import { IllusAppIO, PnInfoCard, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -13,6 +14,7 @@ import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
+import InformativeDialog from './InformativeDialog';
 
 enum IOContactStatus {
   UNAVAILABLE = 'unavailable',
@@ -25,7 +27,10 @@ const IOContact: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
-  const { defaultAPPIOAddress: contact } = useAppSelector(contactsSelectors.selectAddresses);
+  const [openInfoModal, setOpenInfoModal] = useState(false);
+  const { defaultAPPIOAddress: contact, defaultSERCQ_SENDAddress } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
   const { APP_IO_SITE, APP_IO_ANDROID, APP_IO_IOS } = getConfiguration();
 
   const parseContact = () => {
@@ -75,13 +80,9 @@ const IOContact: React.FC = () => {
       .catch(() => {});
   };
 
-  /* const handleConfirm = () => {
-    if (status === IOContactStatus.ENABLED) {
-      disableIO();
-    } else if (status === IOContactStatus.DISABLED) {
-      enableIO();
-    }
-  }; */
+  const handleOpenInfoModal = () => {
+    setOpenInfoModal(true);
+  };
 
   const handleConfirm = () => {
     PFEventStrategyFactory.triggerEvent(
@@ -95,6 +96,7 @@ const IOContact: React.FC = () => {
       return;
     }
     enableIO();
+    setOpenInfoModal(false);
   };
 
   const handleDownload = () => {
@@ -140,7 +142,12 @@ const IOContact: React.FC = () => {
               {t('io-contact.disabled', { ns: 'recapiti' })}
             </Typography>
           </Stack>
-          <Button variant="contained" onClick={handleConfirm} color="primary" fullWidth={isMobile}>
+          <Button
+            variant="contained"
+            onClick={handleOpenInfoModal}
+            color="primary"
+            fullWidth={isMobile}
+          >
             {t('io-contact.enable', { ns: 'recapiti' })}
           </Button>
         </>
@@ -178,6 +185,29 @@ const IOContact: React.FC = () => {
         confirmLabel={t(`io-contact.${disclaimerLabel}-modal.confirm`, { ns: 'recapiti' })}
         onCancel={() => setIsConfirmModalOpen(false)}
       /> */}
+      <InformativeDialog
+        open={openInfoModal}
+        title={t('io-contact.info-modal.title', { ns: 'recapiti' })}
+        subtitle={t('io-contact.info-modal.subtitle', { ns: 'recapiti' })}
+        content={
+          !defaultSERCQ_SENDAddress
+            ? t('io-contact.info-modal.content', { ns: 'recapiti' })
+            : undefined
+        }
+        slotProps={
+          !defaultSERCQ_SENDAddress
+            ? {
+                contentProps: {
+                  color: 'text.secondary',
+                  fontSize: '16px',
+                },
+              }
+            : undefined
+        }
+        illustration={<IllusAppIO />}
+        onConfirm={() => handleConfirm()}
+        onDiscard={() => setOpenInfoModal(false)}
+      />
     </PnInfoCard>
   );
 };

@@ -19,19 +19,20 @@ import ContactCodeDialog from './ContactCodeDialog';
 import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
 import ExistingContactDialog from './ExistingContactDialog';
+import InformativeDialog from './InformativeDialog';
 
 enum ModalType {
   EXISTING = 'existing',
   DISCLAIMER = 'disclaimer',
   CODE = 'code',
   DELETE = 'delete',
+  INFORMATIVE = 'informative',
 }
 
 const SmsContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultSMSAddress, specialSMSAddresses, addresses } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const { defaultSMSAddress, specialSMSAddresses, addresses, defaultSERCQ_SENDAddress } =
+    useAppSelector(contactsSelectors.selectAddresses);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
@@ -59,6 +60,10 @@ const SmsContactItem: React.FC = () => {
       contactAlreadyExists(addresses, internationalPhonePrefix + value, 'default', ChannelType.SMS)
     ) {
       setModalOpen(ModalType.EXISTING);
+      return;
+    }
+    if (!defaultSERCQ_SENDAddress) {
+      setModalOpen(ModalType.INFORMATIVE);
       return;
     }
     // disclaimer modal must be opened only when we are adding a default address and no legal address has been added
@@ -214,6 +219,14 @@ const SmsContactItem: React.FC = () => {
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
+      />
+      <InformativeDialog
+        open={modalOpen === ModalType.INFORMATIVE}
+        title={t('courtesy-contacts.info-modal-sms-title', { ns: 'recapiti' })}
+        subtitle={t('courtesy-contacts.info-modal-sms-subtitle', { ns: 'recapiti' })}
+        content={t('courtesy-contacts.info-modal-sms-content', { ns: 'recapiti' })}
+        onConfirm={() => handleCodeVerification()}
+        onDiscard={() => setModalOpen(null)}
       />
     </PnInfoCard>
   );
