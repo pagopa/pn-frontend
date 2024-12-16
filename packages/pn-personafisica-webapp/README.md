@@ -16,7 +16,7 @@ PORT=443
 
 ### Env variables (development)
 
-Copy the content of the file located in `public/conf/env/config.dev.json` in a file config.json located in `public/conf/`
+Copy the content of the file located in `public/conf/config.dev.json` in a file config.json located in `public/conf/`
 
 ### Login url (dev, uat, test)
 
