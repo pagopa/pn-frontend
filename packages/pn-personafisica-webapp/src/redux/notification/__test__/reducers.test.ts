@@ -13,6 +13,7 @@ import {
 
 import { downtimesDTO } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { errorMock } from '../../../__mocks__/Errors.mock';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import {
   cancelledNotificationDTO,
@@ -407,15 +408,10 @@ describe('Notification detail redux state tests', () => {
       },
       returnUrl: 'mocked-return-url',
     };
-    mock.onPost(`/bff/v1/payments/cart`, request).reply(500);
+    mock.onPost(`/bff/v1/payments/cart`, request).reply(errorMock.status, errorMock.data);
     const action = await store.dispatch(getReceivedNotificationPaymentUrl(request));
     expect(action.type).toBe('getReceivedNotificationPaymentUrl/rejected');
-    expect(action.payload).toEqual({
-      response: {
-        data: undefined,
-        status: 500,
-      },
-    });
+    expect(action.payload).toEqual({ response: errorMock });
     const state = store.getState().notificationState;
     expect(state.paymentsData.pagoPaF24).toStrictEqual(initialState);
   });
