@@ -18,7 +18,6 @@ import {
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 type Props = {
-  header?: ReactNode;
   title: ReactNode;
   subtitle?: string | ReactNode;
   actions?: Array<ReactNode>;
@@ -130,64 +129,63 @@ const MobileContextMenu: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
   );
 };
 
-const PnInfoCardContent: React.FC<
-  Pick<Props, 'title' | 'subtitle' | 'actions' | 'children' | 'expanded'> & { sx?: SxProps }
-> = ({ title, subtitle, actions, expanded, sx, children }) => {
-  const isMobile = useIsMobile();
-  const [showDescription, setShowDescription] = useState(expanded);
-  return (
-    <Box sx={sx}>
-      <Stack direction="row" justifyContent="space-between" alignItems="start">
-        {title && <PnInfoCardTitle title={title} />}
-        {actions && <PnInfoCardActions actions={actions} mobile={isMobile} />}
-        {isMobile && !actions && !showDescription && (
-          <KeyboardArrowDownOutlinedIcon
-            color="primary"
-            onClick={() => setShowDescription(true)}
-            sx={{ mb: 2 }}
-          />
-        )}
-        {isMobile && !actions && showDescription && (
-          <KeyboardArrowUpOutlinedIcon
-            color="primary"
-            onClick={() => setShowDescription(false)}
-            sx={{ mb: 2 }}
-          />
-        )}
-      </Stack>
-      {subtitle && <PnInfoCardSubtitle subtitle={subtitle} />}
-      {(!isMobile || (isMobile && showDescription)) && children}
-    </Box>
-  );
-};
-
 const PnInfoCard: React.FC<Props> = ({
-  header,
   title,
   subtitle,
   actions,
   expanded = false,
   sx,
   children,
-}) => (
-  <Card sx={{ ...sx }}>
-    {header && (
-      <Stack direction="row">
-        <CardHeader data-testid="PnInfoCardHeader" sx={{ p: 0 }} title={header} />
-      </Stack>
-    )}
-    <CardContent data-testid="PnInfoCardBody" sx={{ p: 0, paddingBottom: '0 !important' }}>
-      <PnInfoCardContent
-        title={title}
-        subtitle={subtitle}
-        actions={actions}
-        sx={{ p: { xs: 2, lg: 3 } }}
-        expanded={expanded}
-      >
-        {children}
-      </PnInfoCardContent>
-    </CardContent>
-  </Card>
-);
+}) => {
+  const isMobile = useIsMobile();
+  const [showDescription, setShowDescription] = useState(expanded);
+
+  const showContent = !isMobile || (isMobile && showDescription);
+
+  const getExpandCollapseActions = () => {
+    if (!isMobile) {
+      return '';
+    }
+    if (!showDescription) {
+      return (
+        <KeyboardArrowDownOutlinedIcon
+          color="primary"
+          onClick={() => setShowDescription(true)}
+          sx={{ mb: 2 }}
+        />
+      );
+    }
+    return (
+      <KeyboardArrowUpOutlinedIcon
+        color="primary"
+        onClick={() => setShowDescription(false)}
+        sx={{ mb: 2 }}
+      />
+    );
+  };
+
+  return (
+    <Card sx={{ p: { xs: 2, lg: 3 }, ...sx }}>
+      <CardHeader
+        data-testid="PnInfoCardHeader"
+        sx={{ p: 0 }}
+        title={<PnInfoCardTitle title={title} />}
+        action={
+          actions ? (
+            <PnInfoCardActions actions={actions} mobile={isMobile} />
+          ) : (
+            getExpandCollapseActions()
+          )
+        }
+        subheader={<PnInfoCardSubtitle subtitle={subtitle} />}
+      />
+      {showContent && (
+        <CardContent data-testid="PnInfoCardBody" sx={{ p: 0, paddingBottom: '0 !important' }}>
+          {children}
+        </CardContent>
+      )}
+    </Card>
+  );
+};
 
 export default PnInfoCard;

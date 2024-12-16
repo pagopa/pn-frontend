@@ -8,7 +8,6 @@ import PnInfoCard from '../PnInfoCard';
 const mockBtnOneCbk = vi.fn();
 const mockBtnTwoCbk = vi.fn();
 
-const header = 'Mocked header';
 const title = 'Mocked title';
 const subTitle = 'Mocked subtitle';
 const body = <div data-testid="body">Body</div>;
@@ -44,6 +43,8 @@ describe('PnInfoCard Component', () => {
         {body}
       </PnInfoCard>
     );
+    const headerEl = queryByTestId('PnInfoCardHeader');
+    expect(headerEl).toBeInTheDocument();
     const titleEl = getByTestId('PnInfoCardTitle');
     expect(titleEl).toBeInTheDocument();
     expect(titleEl).toHaveTextContent(title);
@@ -51,8 +52,6 @@ describe('PnInfoCard Component', () => {
     const bodyEl = getByTestId('body');
     expect(bodyEl).toBeInTheDocument();
     expect(bodyEl).toHaveTextContent(/Body/i);
-    const headerEl = queryByTestId('PnInfoCardHeader');
-    expect(headerEl).not.toBeInTheDocument();
 
     const btnOne = getByTestId('btn-one');
     expect(btnOne).toBeInTheDocument();
@@ -71,10 +70,12 @@ describe('PnInfoCard Component', () => {
   it('renders component - with header', () => {
     // render component
     const { container, getByTestId } = render(
-      <PnInfoCard header={header} title={title} subtitle={subTitle}>
+      <PnInfoCard title={title} subtitle={subTitle}>
         {body}
       </PnInfoCard>
     );
+    const headerEl = getByTestId('PnInfoCardHeader');
+    expect(headerEl).toBeInTheDocument();
     const titleEl = getByTestId('PnInfoCardTitle');
     expect(titleEl).toBeInTheDocument();
     expect(titleEl).toHaveTextContent(title);
@@ -82,8 +83,6 @@ describe('PnInfoCard Component', () => {
     const bodyEl = getByTestId('body');
     expect(bodyEl).toBeInTheDocument();
     expect(bodyEl).toHaveTextContent(/Body/i);
-    const headerEl = getByTestId('PnInfoCardHeader');
-    expect(headerEl).toBeInTheDocument();
   });
 
   it('renders component - mobile', async () => {
@@ -99,13 +98,13 @@ describe('PnInfoCard Component', () => {
     expect(container).toHaveTextContent(subTitle);
     let bodyEl = queryByTestId(container, 'body');
     expect(bodyEl).not.toBeInTheDocument();
-    const collapseIcon = getByTestId('KeyboardArrowDownOutlinedIcon');
-    expect(collapseIcon).toBeInTheDocument();
-    fireEvent.click(collapseIcon);
-    await waitFor(() => expect(container).toHaveTextContent(subTitle));
-    expect(collapseIcon).not.toBeInTheDocument();
-    const expandIcon = getByTestId('KeyboardArrowUpOutlinedIcon');
+    const expandIcon = getByTestId('KeyboardArrowDownOutlinedIcon');
     expect(expandIcon).toBeInTheDocument();
+    fireEvent.click(expandIcon);
+    await waitFor(() => expect(container).toHaveTextContent(subTitle));
+    expect(expandIcon).not.toBeInTheDocument();
+    const collapseIcon = getByTestId('KeyboardArrowUpOutlinedIcon');
+    expect(collapseIcon).toBeInTheDocument();
     bodyEl = getByTestId('body');
     expect(bodyEl).toBeInTheDocument();
     expect(bodyEl).toHaveTextContent(/Body/i);
