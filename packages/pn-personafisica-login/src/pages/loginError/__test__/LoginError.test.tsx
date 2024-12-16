@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 import { act, getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { render } from '../../../__test__/test-utils';
-import { getConfiguration } from '../../../services/configuration.service';
+import { ROUTE_LOGIN } from '../../../navigation/routes';
 import LoginError from '../LoginError';
 
 const mockNavigateFn = vi.fn();
@@ -54,7 +54,7 @@ describe('LoginError component', () => {
       vi.advanceTimersByTime(2000);
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -76,7 +76,7 @@ describe('LoginError component', () => {
       vi.advanceTimersByTime(2000);
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -98,7 +98,7 @@ describe('LoginError component', () => {
       vi.advanceTimersByTime(2000);
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -120,7 +120,7 @@ describe('LoginError component', () => {
       vi.advanceTimersByTime(2000);
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -142,7 +142,7 @@ describe('LoginError component', () => {
       vi.advanceTimersByTime(2000);
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -164,7 +164,7 @@ describe('LoginError component', () => {
       vi.advanceTimersByTime(2000);
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -186,7 +186,7 @@ describe('LoginError component', () => {
       vi.advanceTimersByTime(2000);
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -208,7 +208,7 @@ describe('LoginError component', () => {
       vi.advanceTimersByTime(2000);
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -230,7 +230,7 @@ describe('LoginError component', () => {
       vi.advanceTimersByTime(2000);
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
     vi.useRealTimers();
   });
 });

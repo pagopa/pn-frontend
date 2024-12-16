@@ -30,8 +30,8 @@ const Login = () => {
   const isMobile = useIsMobile();
   const [params] = useSearchParams();
   const aar = params.get(AppRouteParams.AAR);
-  const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL, ROUTE_PRIVACY_POLICY } =
-    getConfiguration();
+  const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL, PF_URL } = getConfiguration();
+  const ROUTE_PRIVACY_POLICY = PF_URL + '/informativa-privacy';
 
   if (aar !== null && aar !== '') {
     storageAarOps.write(aar);
