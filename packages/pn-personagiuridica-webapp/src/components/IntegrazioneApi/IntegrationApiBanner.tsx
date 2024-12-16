@@ -1,5 +1,5 @@
 import { Alert, Typography } from '@mui/material';
-import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
+import { getLocalizedOrDefaultLabel } from '@pagopa-pn/pn-commons/src/utility/localization.utility';
 
 type Props = {
     isAdminWithoutGroups : boolean;

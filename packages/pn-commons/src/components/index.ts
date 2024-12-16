@@ -71,11 +71,9 @@ import SessionModal from './SessionModal';
 import SideMenu from './SideMenu/SideMenu';
 import SnackBar from './SnackBar/SnackBar';
 import TabPanel from './TabPanel';
-import IntegrationApiBanner from './IntegrationApiBanner';
 import TitleBox from './TitleBox';
 
 export {
-  IntegrationApiBanner,
   ApiError,
   ApiErrorWrapper,
   AppMessage,

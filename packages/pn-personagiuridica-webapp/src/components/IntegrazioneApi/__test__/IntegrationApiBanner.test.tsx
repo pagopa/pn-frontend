@@ -1,4 +1,4 @@
-import { render } from '../../test-utils';
+import { render } from '@pagopa-pn/pn-commons/src/test-utils';
 import IntegrationApiBanner from '../IntegrationApiBanner';
 
 describe('IntegrationApiBanner Component', () => {

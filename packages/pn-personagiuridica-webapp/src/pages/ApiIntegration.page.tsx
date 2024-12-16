@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
-import { IntegrationApiBanner, TitleBox, useHasPermissions } from '@pagopa-pn/pn-commons';
+import { TitleBox, useHasPermissions } from '@pagopa-pn/pn-commons';
 
 import PublicKeys from '../components/IntegrazioneApi/PublicKeys';
 import VirtualKeys from '../components/IntegrazioneApi/VirtualKeys';
@@ -12,6 +12,7 @@ import { checkPublicKeyIssuer } from '../redux/apikeys/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { PublicKeysIssuerResponseIssuerStatusEnum, PublicKeyStatus } from '../generated-client/pg-apikeys';
+import IntegrationApiBanner from '../components/IntegrazioneApi/IntegrationApiBanner';
 
 const ApiIntegration: React.FC = () => {
   const dispatch = useAppDispatch();
