@@ -15,7 +15,8 @@
     "enabled": "Attiva",
     "active": "Attiva",
     "blocked": "Bloccata",
-    "rotated": "Ruotata"
+    "rotated": "Ruotata",
+    "disabled" : "Disabilitata"
   },
   "tooltip": {
     "created": "Creata",

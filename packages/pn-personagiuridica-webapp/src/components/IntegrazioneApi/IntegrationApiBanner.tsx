@@ -1,19 +1,22 @@
 import { Alert, Typography } from '@mui/material';
-import { getLocalizedOrDefaultLabel } from '@pagopa-pn/pn-commons/src/utility/localization.utility';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     isAdminWithoutGroups : boolean;
 };
 
-const IntegrationApiBanner = ({ isAdminWithoutGroups }:Props) => (
+const IntegrationApiBanner = ({ isAdminWithoutGroups }:Props) => {
+    const { t } = useTranslation(['integrazioneApi', 'common']);
+    return (
         <Alert severity="warning" data-testid="integrationApiBanner" sx={{ mt: 2 }}>
             <Typography variant="body2" fontWeight={600}>
-            {getLocalizedOrDefaultLabel('integrazioneApi', 'banner.title')}
+            {t('banner.title')}
         </Typography>
         <Typography variant="body2">
-        {getLocalizedOrDefaultLabel('integrazioneApi', isAdminWithoutGroups ? 'banner.description-admin': 'banner.description-operator' )}
+        {t(isAdminWithoutGroups ? 'banner.description-admin': 'banner.description-operator' )}
         </Typography>
         </Alert>
     );
+};
 
 export default IntegrationApiBanner;

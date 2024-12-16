@@ -50,8 +50,8 @@ export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
 };
 
 export function getApiKeyStatusInfos(
-  status: PublicKeyStatus | VirtualKeyStatus,
-  statusHistory?: Array<PublicKeyStatusHistory>
+  status: PublicKeyStatus | VirtualKeyStatus | "Disabled",
+  statusHistory?: Array<PublicKeyStatusHistory>,
 ): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
@@ -61,6 +61,12 @@ export function getApiKeyStatusInfos(
   const tooltip = statusHistory ? <TooltipApiKey history={statusHistory} /> : undefined;
 
   switch (status) {
+    case "Disabled":
+      return {
+        color: 'info',
+        label,
+        tooltip,
+      };
     case VirtualKeyStatus.Enabled:
     case PublicKeyStatus.Active:
       return {
