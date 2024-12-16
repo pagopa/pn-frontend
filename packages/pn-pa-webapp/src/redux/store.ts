@@ -24,7 +24,7 @@ export const appReducers = {
 };
 
 const createStore = (logReduxActions?: boolean) => {
-  const mustLogActions = logReduxActions ?? getConfiguration().LOG_REDUX_ACTIONS;
+  const mustLogActions = logReduxActions ?? getConfiguration().IS_DEVELOP;
   const additionalMiddlewares = [mustLogActions ? logger : undefined];
   return configureStore({
     reducer: appReducers,
