@@ -59,7 +59,7 @@ import {
   setPaymentCache,
   setPaymentsInCache,
 } from './paymentCaching.utility';
-import { parseError, performThunkAction } from './redux.utility';
+import { parseError } from './redux.utility';
 import { AppRouteParams, compileRoute } from './routes.utility';
 import { searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';
 import { storageOpsBuilder } from './storage.utility';
@@ -115,7 +115,6 @@ export {
   adaptedTokenExchangeError,
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
-  performThunkAction,
   AppResponsePublisher,
   ResponseEventDispatcher,
   AppError,

@@ -126,7 +126,6 @@ describe('SpecialContactItem Component', () => {
       /^[a-zA-Z0-9\-]+(?:_pecContact|_emailContact|_smsContact)$/
     );
     expect(specialContactForms).toHaveLength(1);
-    expect(specialContactForms[0]).toHaveTextContent('legal-contacts.pec-validating');
     const buttons = specialContactForms[0].querySelectorAll('button');
     expect(buttons).toHaveLength(1);
     expect(buttons[0]).toHaveTextContent('legal-contacts.cancel-pec-validation');

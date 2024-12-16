@@ -17,6 +17,7 @@ vi.mock('react-i18next', () => ({
 
 const mockSubmitCbk = vi.fn();
 const mockDeleteCbk = vi.fn();
+const mockCancelCbk = vi.fn();
 
 describe('DefaultDigitalContact Component', () => {
   afterEach(() => {
@@ -49,7 +50,41 @@ describe('DefaultDigitalContact Component', () => {
     expect(input).toHaveValue('');
     const button = await waitFor(() => getById(container, 'default_pec-button'));
     expect(button).toHaveTextContent('Button');
-    expect(button).toBeDisabled();
+    expect(button).toBeEnabled();
+
+    let errorText = queryById(container, 'default_pec-helper-text');
+    expect(errorText).not.toBeInTheDocument();
+
+    fireEvent.click(button);
+
+    errorText = getById(container, 'default_pec-helper-text');
+    expect(errorText).toBeInTheDocument();
+  });
+
+  it('renders component - empty with cancelInsert button', async () => {
+    // render component
+    const result = render(
+      <DefaultDigitalContact
+        label="Mocked label"
+        value=""
+        channelType={ChannelType.PEC}
+        inputProps={{
+          label: 'Mocked input label',
+        }}
+        insertButtonLabel="Button"
+        onSubmit={mockSubmitCbk}
+        onDelete={mockDeleteCbk}
+        onCancelInsert={mockCancelCbk}
+      />
+    );
+
+    const buttonCancel = result.getByRole('button', { name: 'button.annulla' });
+    expect(buttonCancel).toBeInTheDocument();
+
+    fireEvent.click(buttonCancel);
+    await waitFor(() => {
+      expect(mockCancelCbk).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('insert value', async () => {
@@ -102,7 +137,7 @@ describe('DefaultDigitalContact Component', () => {
       expect(input).toHaveValue('not valid');
     });
     const button = await waitFor(() => getById(container, 'default_pec-button'));
-    expect(button).toBeDisabled();
+    expect(button).toBeEnabled();
     const errorMessage = container.querySelector(`#default_pec-helper-text`);
     expect(errorMessage).toBeInTheDocument();
   });
@@ -131,6 +166,27 @@ describe('DefaultDigitalContact Component', () => {
     expect(buttons).toHaveLength(2);
     expect(buttons[0]).toHaveTextContent('button.modifica');
     expect(buttons[1]).toHaveTextContent('button.elimina');
+  });
+
+  it('renders component - filled with verified icon', () => {
+    // render component
+    const result = render(
+      <DefaultDigitalContact
+        label="Mocked label"
+        value="mocked@pec.it"
+        channelType={ChannelType.PEC}
+        inputProps={{
+          label: 'Mocked input label',
+        }}
+        insertButtonLabel="Button"
+        onSubmit={mockSubmitCbk}
+        onDelete={mockDeleteCbk}
+        showVerifiedIcon
+      />
+    );
+
+    const verifiedIcon = result.getByTestId('CheckCircleIcon');
+    expect(verifiedIcon).toBeInTheDocument();
   });
 
   it('edit value', async () => {
@@ -164,7 +220,7 @@ describe('DefaultDigitalContact Component', () => {
     expect(input).toHaveValue('mocked@pec.it');
     let newButtons = container.querySelectorAll('button');
     expect(newButtons).toHaveLength(2);
-    expect(newButtons[0]).toHaveTextContent('button.salva');
+    expect(newButtons[0]).toHaveTextContent('button.conferma');
     expect(newButtons[1]).toHaveTextContent('button.annulla');
     // cancel edit
     fireEvent.change(input!, { target: { value: 'new-mocked@pec.it' } });

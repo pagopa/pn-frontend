@@ -28,8 +28,8 @@
     "remove-pec-message": "Confermi di voler rimuovere l'indirizzo PEC {{value}}?",
     "block-remove-pec-title": "Non puoi eliminare la PEC",
     "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC e i Domicili Digitali SEND che hai indicato alla voce “Recapiti secondari”.",
-    "validation-cancel-title": "Vuoi annullare la verifica?",
-    "validation-cancel-content": "Se annulli la verifica, dovrai inserire una nuova PEC e ricominciare il processo.",
+    "validation-cancel-title": "Annulla validazione della PEC",
+    "validation-cancel-content": "Se confermi, annulli l’attivazione della PEC come domicilio digitale su SEND.",
     "validation-progress-title": "Grazie!",
     "validation-progress-content": "Stiamo verificando che l’indirizzo PEC sia valido. Riceverai una email con l’esito entro 24 ore.",
     "sercq-send-title": "Domicilio Digitale SEND",
@@ -64,10 +64,7 @@
     "remove-sercq-send-message": "Non avrai più un recapito digitale a valore legale per le comunicazioni della Pubblica Amministrazione e potresti tornare a ricevere le notifiche in forma cartacea.",
     "block-remove-sercq-send-title": "Non è possibile disattivare il Domicilio Digitale",
     "block-remove-sercq-send-message": "Prima elimina gli indirizzi PEC che hai inserito nei recapiti personalizzati.",
-    "sercq_send-removed-successfully": "Domicilio Digitale disattivato correttamente",
-    "sercq-send-pec": "Preferisci usare una PEC come recapito a valore legale per le notifiche di SEND?",
-    "sercq-send-add-pec": "Attiva una PEC",
-    "sercq-send-add-pec-description": "Se attivi una PEC questa sostituirà il Domicilio Digitale come tuo recapito a valore legale di SEND. Il Domicilio Digitale verrà disattivato."
+    "sercq_send-removed-successfully": "Domicilio Digitale disattivato correttamente"
   },
   "courtesy-contacts": {
     "title": "Recapiti di cortesia",
@@ -103,7 +100,13 @@
     "block-remove-email-title": "Non puoi eliminare l'email",
     "block-remove-email-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi email che hai indicato alla voce “Recapiti secondari”.",
     "block-remove-sms-title": "Non puoi eliminare il numero di telefono",
-    "block-remove-sms-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Recapiti secondari”."
+    "block-remove-sms-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Recapiti secondari”.",
+    "info-modal-email-title": "Avvisi via email: come funzionano",
+    "info-modal-email-subtitle": "Quando ci sono nuove notifiche SEND per te, riceverai un avviso all’indirizzo email inserito.",
+    "info-modal-email-content": "Se non hai il domicilio digitale attivo e non apri la notifica entro 5 giorni dall’invio della email, riceverai i documenti in formato cartaceo a casa.",
+    "info-modal-sms-title": "Avvisi via SMS: come funzionano",
+    "info-modal-sms-subtitle": "Quando ci sono nuove notifiche per te, riceverai un SMS al numero inserito.",
+    "info-modal-sms-content": "Se non hai il domicilio digitale attivo e non apri la notifica entro 5 giorni dall’invio dell’SMS, riceverai i documenti in formato cartaceo a casa."
   },
   "special-contacts": {
     "description": "Lo sapevi? Se vuoi ricevere le notifiche di enti specifici a recapiti diversi da quello principale, puoi <0>personalizzare i recapiti</0>.",
