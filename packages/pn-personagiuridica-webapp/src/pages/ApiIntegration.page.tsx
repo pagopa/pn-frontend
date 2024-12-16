@@ -34,7 +34,7 @@ const ApiIntegration: React.FC = () => {
   },[]);
   
   const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
-  const isPresent = isAdminWithoutGroups ? keyIssuer.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active && hasPublicActive : keyIssuer.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
+  const integrationApiIsEnabled = isAdminWithoutGroups ? keyIssuer.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active && hasPublicActive : keyIssuer.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
 
   return (
     <LoadingPageWrapper isInitialized={true}>
@@ -45,9 +45,9 @@ const ApiIntegration: React.FC = () => {
           subTitle={t('subTitle')}
           variantSubTitle="body1"
         />
-        {!isPresent && <IntegrationApiBanner isAdminWithoutGroups={isAdminWithoutGroups}/>}
+        {!integrationApiIsEnabled && <IntegrationApiBanner isAdminWithoutGroups={isAdminWithoutGroups}/>}
         {isAdminWithoutGroups && <PublicKeys />}
-        <VirtualKeys isPresent={isPresent} />
+        <VirtualKeys integrationApiIsEnabled={integrationApiIsEnabled} />
       </Box>
     </LoadingPageWrapper>
   );

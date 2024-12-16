@@ -26,10 +26,10 @@ import ApiKeysDataSwitch from './ApiKeysDataSwitch';
 type Props = {
   virtualKeys: BffVirtualKeysResponse;
   handleModalClick: (view: ModalApiKeyView, publicKeyId: string) => void;
-  isPresent?: boolean;
+  integrationApiIsEnabled?: boolean;
 };
 
-const VirtualKeysTable: React.FC<Props> = ({ virtualKeys, handleModalClick, isPresent}) => {
+const VirtualKeysTable: React.FC<Props> = ({ virtualKeys, handleModalClick, integrationApiIsEnabled}) => {
   const { t } = useTranslation(['integrazioneApi']);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
@@ -151,8 +151,7 @@ const VirtualKeysTable: React.FC<Props> = ({ virtualKeys, handleModalClick, isPr
                   type={column.id}
                   handleModalClick={handleModalClick}
                   menuType="virtualKeys"
-                  isPresent={isPresent}
-                
+                  integrationApiIsEnabled={integrationApiIsEnabled}
                 />
               </SmartBodyCell>
             ))}

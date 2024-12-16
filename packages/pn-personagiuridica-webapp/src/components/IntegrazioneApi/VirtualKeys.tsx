@@ -30,10 +30,10 @@ type ModalType = {
 };
 
 type Props = {
-  isPresent : boolean;
+  integrationApiIsEnabled : boolean;
 };
 
-const VirtualKeys: React.FC<Props> = ({isPresent}) => {
+const VirtualKeys: React.FC<Props> = ({integrationApiIsEnabled}) => {
   const { t } = useTranslation('integrazioneApi');
   const dispatch = useAppDispatch();
   const virtualKeys = useAppSelector((state: RootState) => state.apiKeysState.virtualKeys);
@@ -148,7 +148,7 @@ const VirtualKeys: React.FC<Props> = ({isPresent}) => {
           {t('virtualKeys.tos-empty-state')}
         </EmptyState>
       ) : (
-        <VirtualKeysTable virtualKeys={virtualKeys} handleModalClick={handleModalClick} isPresent={isPresent} />
+        <VirtualKeysTable virtualKeys={virtualKeys} handleModalClick={handleModalClick} integrationApiIsEnabled={integrationApiIsEnabled} />
       )}
 
       {modal.view === ModalApiKeyView.VIEW && (
