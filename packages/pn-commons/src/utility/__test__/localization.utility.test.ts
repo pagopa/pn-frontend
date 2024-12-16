@@ -19,7 +19,6 @@ describe('localization service', () => {
       appStatus: 'appStatus',
       delegations: 'deleghe',
       recapiti: 'recapiti',
-      integrazioneApi: 'integrazionApi'
     });
     const label = getLocalizedOrDefaultLabel('notifications', 'mocked.path', 'default label');
     expect(label).toBe('different-namespace mocked.path');
