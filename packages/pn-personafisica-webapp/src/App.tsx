@@ -79,7 +79,7 @@ const App = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const path = pathname.split('/');
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } = getConfiguration();
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, APP_VERSION } = getConfiguration();
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -219,7 +219,7 @@ const App = () => {
       dispatch(
         appStateActions.addSuccess({
           title: 'Current version',
-          message: `v${VERSION}`,
+          message: `v${APP_VERSION}`,
         })
       ),
   });

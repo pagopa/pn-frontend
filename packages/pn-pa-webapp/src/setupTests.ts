@@ -9,9 +9,10 @@ import '@testing-library/jest-dom';
 
 import { initAxiosClients } from './api/apiClients';
 import { initStore } from './redux/store';
+import { PaConfiguration } from './services/configuration.service';
 
 beforeAll(() => {
-  Configuration.setForTest<any>({
+  Configuration.setForTest<PaConfiguration>({
     API_BASE_URL: 'https://mock-api-base-url',
     IS_INACTIVITY_HANDLER_ENABLED: false,
     ONE_TRUST_DRAFT_MODE: true,
@@ -27,6 +28,12 @@ beforeAll(() => {
     IS_PAYMENT_ENABLED: false,
     MIXPANEL_TOKEN: 'DUMMY',
     IS_MANUAL_SEND_ENABLED: true,
+    IS_STATISTICS_ENABLED: true,
+    WORK_IN_PROGRESS: false,
+    API_B2B_LINK: 'https://test.b2b.pagopa.it',
+    TAXONOMY_SEND_URL: 'https://test.taxonomy.pagopa.it',
+    DOWNTIME_EXAMPLE_LINK: 'https://test.downtime.pagopa.it',
+    LANDING_SITE_URL: 'https://test.landing.pagopa.it',
   });
   initStore(false);
   initAxiosClients();

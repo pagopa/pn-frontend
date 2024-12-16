@@ -1,8 +1,7 @@
 import { Configuration, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
-import { StringRuleValidator } from '@pagopa-pn/pn-validator/src/ruleValidators/StringRuleValidator';
 
-interface LoginConfiguration {
+export interface LoginConfiguration {
   MIXPANEL_TOKEN: string;
   OT_DOMAIN_ID?: string;
   PAGOPA_HELP_EMAIL: string;
@@ -11,7 +10,7 @@ interface LoginConfiguration {
   SPID_VALIDATOR_ENV_ENABLED?: boolean;
   SPID_CIE_ENTITY_ID: string;
   URL_API_LOGIN: string;
-  VERSION: string;
+  APP_VERSION: string;
   IS_DEVELOP: boolean;
 }
 
@@ -35,12 +34,12 @@ class LoginConfigurationValidator extends Validator<LoginConfiguration> {
 export function getConfiguration(): LoginConfiguration {
   const configurationFromFile = Configuration.get<LoginConfiguration>();
   const IS_DEVELOP = process.env.NODE_ENV === 'development';
-  const VERSION = import.meta.env.VITE_APP_VERSION ?? '';
+  const APP_VERSION = import.meta.env.VITE_APP_VERSION ?? '';
 
   return {
     ...configurationFromFile,
     IS_DEVELOP,
-    VERSION,
+    APP_VERSION,
   };
 }
 

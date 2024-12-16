@@ -7,7 +7,6 @@ import { act, render, screen, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
 import { store } from '../../redux/store';
-import { getConfiguration } from '../../services/configuration.service';
 import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
 
@@ -89,7 +88,7 @@ describe('SessionGuard Component', async () => {
       render(<Guard />);
     });
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(`${getConfiguration().URL_FE_LOGOUT}`, '_self');
+    expect(mockOpenFn).toHaveBeenCalledWith(`${routes.URL_FE_LOGOUT}`, '_self');
   });
 
   // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken

@@ -14,7 +14,7 @@ const App = () => {
   useTracking(configuration.MIXPANEL_TOKEN, process.env.NODE_ENV);
 
   const [clickVersion] = useMultiEvent({
-    callback: () => console.log(`v${configuration.VERSION}`),
+    callback: () => console.log(`v${configuration.APP_VERSION}`),
   });
 
   const { t } = useTranslation(['common']);
