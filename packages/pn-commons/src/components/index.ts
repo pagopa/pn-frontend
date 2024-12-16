@@ -67,6 +67,8 @@ import PnBreadcrumb from './PnBreadcrumb';
 import PnDialog from './PnDialog/PnDialog';
 import PnDialogActions from './PnDialog/PnDialogActions';
 import PnDialogContent from './PnDialog/PnDialogContent';
+import PnWizard from './PnWizard/PnWizard';
+import PnWizardStep from './PnWizard/PnWizardStep';
 import Prompt from './Prompt';
 import SectionHeading from './SectionHeading';
 import SessionModal from './SessionModal';
@@ -152,4 +154,6 @@ export {
   IllusAppIODialog,
   IllusAppIoLogo,
   IllusSendLogo,
+  PnWizard,
+  PnWizardStep,
 };
