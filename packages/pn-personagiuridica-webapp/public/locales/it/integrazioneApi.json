@@ -8,8 +8,9 @@
   "error-fecth-public-api-keys": "Errore durante il recupero delle chiavi pubbliche",
   "banner" : {
         "title":"Integrazione disabilitata",
-        "description": "Le chiavi personali non sono utilizzabili perché l’integrazione è stata disabilitata. Per usarle, registra una chiave pubblica."
-  },
+        "description-admin": "Le chiavi personali non sono utilizzabili perché l’integrazione è stata disabilitata. Per usarle, registra una chiave pubblica.",
+        "description-operator": "Le chiavi personali non sono utilizzabili perché l’integrazione è stata disabilitata. Per usarle, chiedi a un amministratore di abilitare l’integrazione."
+      },
   "status": {
     "enabled": "Attiva",
     "active": "Attiva",

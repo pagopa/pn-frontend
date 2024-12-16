@@ -30,10 +30,10 @@ type ModalType = {
 };
 
 type Props = {
-  hasPublicActive : boolean;
+  isPresent : boolean;
 };
 
-const VirtualKeys: React.FC<Props> = ({hasPublicActive}) => {
+const VirtualKeys: React.FC<Props> = ({isPresent}) => {
   const { t } = useTranslation('integrazioneApi');
   const dispatch = useAppDispatch();
   const virtualKeys = useAppSelector((state: RootState) => state.apiKeysState.virtualKeys);
@@ -46,7 +46,6 @@ const VirtualKeys: React.FC<Props> = ({hasPublicActive}) => {
       key.status === VirtualKeyStatus.Enabled &&
       (!key.user || key.user?.fiscalCode === currentUser.fiscal_number)
   );
-
 
   const isCreationEnabled =
     !hasOneEnabledVirtualKey && 
@@ -149,7 +148,7 @@ const VirtualKeys: React.FC<Props> = ({hasPublicActive}) => {
           {t('virtualKeys.tos-empty-state')}
         </EmptyState>
       ) : (
-        <VirtualKeysTable virtualKeys={virtualKeys} handleModalClick={handleModalClick} hasPublicActive ={hasPublicActive}/>
+        <VirtualKeysTable virtualKeys={virtualKeys} handleModalClick={handleModalClick} isPresent={isPresent} />
       )}
 
       {modal.view === ModalApiKeyView.VIEW && (

@@ -11,7 +11,7 @@ import { PNRole } from '../redux/auth/types';
 import { checkPublicKeyIssuer } from '../redux/apikeys/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { PublicKeyStatus } from '../generated-client/pg-apikeys';
+import { PublicKeysIssuerResponseIssuerStatusEnum, PublicKeyStatus } from '../generated-client/pg-apikeys';
 
 const ApiIntegration: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -21,7 +21,7 @@ const ApiIntegration: React.FC = () => {
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
   const publicKeys = useAppSelector((state: RootState) => state.apiKeysState.publicKeys);
   const hasPublicActive = !!publicKeys.items.find(el=>el.status === PublicKeyStatus.Active);
-
+  const keyIssuer = useAppSelector((state: RootState) => state.apiKeysState.issuerState);
 
   const fetchCheckIssuer = useCallback(() => {
     void dispatch(checkPublicKeyIssuer())
@@ -33,6 +33,7 @@ const ApiIntegration: React.FC = () => {
   },[]);
   
   const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
+  const isPresent = isAdminWithoutGroups ? keyIssuer.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active && hasPublicActive : keyIssuer.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
 
   return (
     <LoadingPageWrapper isInitialized={true}>
@@ -43,9 +44,9 @@ const ApiIntegration: React.FC = () => {
           subTitle={t('subTitle')}
           variantSubTitle="body1"
         />
-        {!hasPublicActive && <IntegrationApiBanner/>}
+        {!isPresent && <IntegrationApiBanner isAdminWithoutGroups={isAdminWithoutGroups}/>}
         {isAdminWithoutGroups && <PublicKeys />}
-         <VirtualKeys hasPublicActive={hasPublicActive} />
+        <VirtualKeys isPresent={isPresent} />
       </Box>
     </LoadingPageWrapper>
   );

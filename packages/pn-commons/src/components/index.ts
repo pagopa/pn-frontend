@@ -71,10 +71,11 @@ import SessionModal from './SessionModal';
 import SideMenu from './SideMenu/SideMenu';
 import SnackBar from './SnackBar/SnackBar';
 import TabPanel from './TabPanel';
-import TitleBox from './TitleBox';
 import IntegrationApiBanner from './IntegrationApiBanner';
+import TitleBox from './TitleBox';
 
 export {
+  IntegrationApiBanner,
   ApiError,
   ApiErrorWrapper,
   AppMessage,
@@ -149,5 +150,4 @@ export {
   IllusStatistics,
   IllusAppIO,
   IllusAppIODialog,
-  IntegrationApiBanner
 };

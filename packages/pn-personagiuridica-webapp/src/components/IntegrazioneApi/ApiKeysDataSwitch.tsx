@@ -21,7 +21,7 @@ type Props = {
   type: keyof ApiKeyColumnData;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
   menuType: 'publicKeys' | 'virtualKeys';
-  hasPublicActive?: boolean;
+  isPresent?: boolean;
 };
 
 const isApiKeyDisactivated = (data: Row<ApiKeyColumnData>): boolean =>
@@ -30,7 +30,7 @@ const isApiKeyDisactivated = (data: Row<ApiKeyColumnData>): boolean =>
 const setRowColorByStatus = (data: Row<ApiKeyColumnData>): string | undefined =>
   isApiKeyDisactivated(data) ? 'text.disabled' : undefined;
 
-const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick, menuType, hasPublicActive }) => {
+const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick, menuType, isPresent }) => {
   const { t } = useTranslation(['integrazioneApi']);
 
   switch (type) {
@@ -73,7 +73,7 @@ const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick
       if (!data.status) {
         return <></>;
       }
-      if(!hasPublicActive && data.status === VirtualKeyStatus.Enabled){
+      if(!isPresent && data.status === VirtualKeyStatus.Enabled){
         return <Chip
         id={`status-chip-disabled`}
         label={'Disabilitata'}
