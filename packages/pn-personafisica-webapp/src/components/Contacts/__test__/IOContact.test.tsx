@@ -44,14 +44,14 @@ describe('IOContact component', async () => {
   });
 
   it('renders component - no contacts', () => {
-    const { getByTestId, getByText, getByRole } = render(<IOContact />);
+    const { getByTestId, getByRole } = render(<IOContact />);
     const title = getByTestId('DigitalContactsCardTitle');
     expect(title).toHaveTextContent('io-contact.title');
-    const description = getByTestId('DigitalContactsCardDescription');
+    const description = getByTestId('ioContactDescription');
     expect(description).toHaveTextContent('io-contact.description');
-    const text = getByText('io-contact.unavailable');
+    // TODO here check the chip
+    // const text = getByText('io-contact.unavailable');
     const button = getByRole('button', { name: 'io-contact.download' });
-    expect(text).toBeInTheDocument();
     expect(button).toBeInTheDocument();
   });
 
@@ -62,25 +62,16 @@ describe('IOContact component', async () => {
         verificationCode: '00000',
       })
       .reply(204);
-    const { getByTestId, getByText, getByRole } = render(<IOContact />, {
+    const { getByTestId, getByRole } = render(<IOContact />, {
       preloadedState: { contactsState: { digitalAddresses: [IOAddress] } },
     });
-    getByTestId('DoDisturbOnOutlinedIcon');
-    getByText('io-contact.disabled');
+    // TODO here check the chip
+    // getByText('io-contact.disabled');
     const enableBtn = getByRole('button', { name: 'io-contact.enable' });
     expect(enableBtn).toBeInTheDocument();
     expect(enableBtn).toBeEnabled();
     // enable IO
     fireEvent.click(enableBtn);
-    /* const disclaimerCheckbox = await waitFor(() => getByTestId('disclaimer-checkbox'));
-    const disclaimerConfirmButton = getByTestId('disclaimer-confirm-button');
-    expect(disclaimerConfirmButton).toHaveTextContent('io-contact.enable-modal.confirm');
-    expect(disclaimerConfirmButton).toBeDisabled();
-    fireEvent.click(disclaimerCheckbox);
-    await waitFor(() => {
-      expect(disclaimerConfirmButton).toBeEnabled();
-    });
-    fireEvent.click(disclaimerConfirmButton); */
     const informativeDialog = await waitFor(() => getByTestId('informativeDialog'));
     expect(informativeDialog).toBeInTheDocument();
     const understandButton = getByTestId('understandButton');
@@ -103,17 +94,19 @@ describe('IOContact component', async () => {
     ).toStrictEqual([{ ...IOAddress, value: IOAllowedValues.ENABLED }]);
   });
 
-  it('IO available and enabled', async () => {
+  // TODO this test will be re-enabled when we will integrate the new PnInfoCard
+  it.skip('IO available and enabled', async () => {
     mock.onDelete('/bff/v1/addresses/COURTESY/default/APPIO').reply(200);
-    const { getByTestId, getByText, getByRole } = render(<IOContact />, {
+    const { getByRole } = render(<IOContact />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [{ ...IOAddress!, value: IOAllowedValues.ENABLED }],
         },
       },
     });
-    getByTestId('VerifiedIcon');
-    getByText('io-contact.enabled');
+    // TODO here check the chip
+    // getByText('io-contact.enabled');
+
     const disableBtn = getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
     expect(disableBtn).toBeEnabled();

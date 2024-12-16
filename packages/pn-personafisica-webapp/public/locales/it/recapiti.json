@@ -75,8 +75,9 @@
     ]
   },
   "io-contact": {
-    "title": "App IO",
-    "description": "Leggi e gestisci le comunicazioni a valore legale direttamente su IO: quando c’è una notifica per te, la ricevi in app e puoi pagare eventuali spese.",
+    "title": "SEND sull’app IO",
+    "description": "Collegare SEND a IO è il modo più pratico per ricevere e gestire comunicazioni a valore legale: quando c’è una notifica per te, la ricevi in app e puoi pagare eventuali spese.",
+    "description-enabled": "Quando c’è una notifica per te, la ricevi direttamente in app e puoi pagare eventuali spese.",
     "dialog-description": "Riceverai un messaggio in app per ogni nuova notifica. Potrai leggerla e pagare eventuali importi direttamente su IO.",
     "enabled": "Servizio Notifiche Digitali attivo",
     "disabled": "Servizio Notifiche Digitali non attivo",

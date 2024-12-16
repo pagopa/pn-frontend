@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DoDisturbOnOutlinedIcon from '@mui/icons-material/DoDisturbOnOutlined';
-import VerifiedIcon from '@mui/icons-material/Verified';
-import { Alert, Box, Button, Stack, Typography } from '@mui/material';
-import { IllusAppIO, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import { Avatar, Box, Button, Stack, Typography } from '@mui/material';
+import {
+  IllusAppIO,
+  IllusAppIoLogo,
+  IllusSendLogo,
+  appStateActions,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { IOAllowedValues } from '../../models/contacts';
@@ -24,7 +28,6 @@ enum IOContactStatus {
 }
 
 const IOContact: React.FC = () => {
-  // const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
@@ -52,7 +55,6 @@ const IOContact: React.FC = () => {
     dispatch(enableIOAddress())
       .unwrap()
       .then(() => {
-        // setIsConfirmModalOpen(false);
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS, false);
         dispatch(
           appStateActions.addSuccess({
@@ -69,7 +71,6 @@ const IOContact: React.FC = () => {
     dispatch(disableIOAddress())
       .unwrap()
       .then(() => {
-        // etIsConfirmModalOpen(false);
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS);
         dispatch(
           appStateActions.addSuccess({
@@ -91,7 +92,6 @@ const IOContact: React.FC = () => {
         ? PFEventsType.SEND_DEACTIVE_IO_START
         : PFEventsType.SEND_ACTIVE_IO_START
     );
-    // setIsConfirmModalOpen(true);
     if (status === IOContactStatus.ENABLED) {
       disableIO();
       return;
@@ -112,81 +112,50 @@ const IOContact: React.FC = () => {
     }
   };
 
-  const getContent = () => {
+  const getButton = () => {
     if (status === IOContactStatus.UNAVAILABLE) {
       return (
-        <Stack
-          direction={{
-            lg: 'row',
-            xs: 'column',
-          }}
-          spacing={2}
-          alignItems="center"
-          mb={2}
-          data-testid="ioContact"
-        >
-          <Alert severity="info" sx={{ width: isMobile ? '100%' : 'auto' }}>
-            {t('io-contact.unavailable', { ns: 'recapiti' })}
-          </Alert>
-          <Button variant="contained" onClick={handleDownload} color="primary" fullWidth={isMobile}>
-            {t('io-contact.download', { ns: 'recapiti' })}
-          </Button>
-        </Stack>
+        <Button variant="contained" onClick={handleDownload} color="primary" fullWidth={isMobile}>
+          {t('io-contact.download', { ns: 'recapiti' })}
+        </Button>
       );
     }
     if (status === IOContactStatus.DISABLED) {
       return (
-        <>
-          <Stack direction="row" spacing={2} alignItems="center" mb={2} data-testid="ioContact">
-            <DoDisturbOnOutlinedIcon fontSize="small" color="disabled" />
-            <Typography data-testid="IO status" fontWeight={600}>
-              {t('io-contact.disabled', { ns: 'recapiti' })}
-            </Typography>
-          </Stack>
-          <Button
-            variant="contained"
-            onClick={handleOpenInfoModal}
-            color="primary"
-            fullWidth={isMobile}
-          >
-            {t('io-contact.enable', { ns: 'recapiti' })}
-          </Button>
-        </>
+        <Button
+          variant="contained"
+          onClick={handleOpenInfoModal}
+          color="primary"
+          fullWidth={isMobile}
+        >
+          {t('io-contact.enable', { ns: 'recapiti' })}
+        </Button>
       );
     }
-
-    return (
-      <Stack direction="row" spacing={1} data-testid="ioContact">
-        <VerifiedIcon fontSize="small" color="primary" sx={{ position: 'relative', top: '2px' }} />
-        <Box>
-          <Typography data-testid="IO status" fontWeight={600} mb={2}>
-            {t('io-contact.enabled', { ns: 'recapiti' })}
-          </Typography>
-          <ButtonNaked onClick={handleConfirm} color="error" sx={{ fontWeight: 700 }} size="medium">
-            {t('button.disable')}
-          </ButtonNaked>
-        </Box>
-      </Stack>
-    );
+    return null;
   };
 
   return (
     <DigitalContactsCard
       title={t('io-contact.title', { ns: 'recapiti' })}
-      subtitle={t('io-contact.description', { ns: 'recapiti' })}
-      illustration={<IllusAppIO />}
+      subtitle=""
       sx={{ pt: '1.5rem' }}
     >
-      {getContent()}
-      {/* <DisclaimerModal
-        open={isConfirmModalOpen}
-        onConfirm={handleConfirm}
-        title={t(`io-contact.${disclaimerLabel}-modal.title`, { ns: 'recapiti' })}
-        content={t(`io-contact.${disclaimerLabel}-modal.content`, { ns: 'recapiti' })}
-        checkboxLabel={t(`io-contact.${disclaimerLabel}-modal.checkbox`, { ns: 'recapiti' })}
-        confirmLabel={t(`io-contact.${disclaimerLabel}-modal.confirm`, { ns: 'recapiti' })}
-        onCancel={() => setIsConfirmModalOpen(false)}
-      /> */}
+      <Stack direction="row" alignItems="center" data-testid="ioContact">
+        <Avatar variant="rounded" sx={{ bgcolor: '#0B3EE3', width: '36px', height: '36px' }}>
+          <IllusAppIoLogo />
+        </Avatar>
+        <CompareArrowsIcon sx={{ width: '24px', height: '24px', mx: 1, color: 'text.secondary' }} />
+        <Avatar variant="rounded" sx={{ bgcolor: '#0B3EE3', width: '36px', height: '36px' }}>
+          <IllusSendLogo />
+        </Avatar>
+      </Stack>
+      <Typography mt={3} variant="body1" color="text.secondary" data-testid="ioContactDescription">
+        {status === IOContactStatus.ENABLED
+          ? t('io-contact.description-enabled', { ns: 'recapiti' })
+          : t('io-contact.description', { ns: 'recapiti' })}
+      </Typography>
+      <Box mt={3}>{getButton()}</Box>
       <InformativeDialog
         open={openInfoModal}
         title={t('io-contact.info-modal.title', { ns: 'recapiti' })}
