@@ -100,7 +100,13 @@
     "block-remove-email-title": "Non puoi eliminare l'email",
     "block-remove-email-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi email che hai indicato alla voce “Recapiti secondari”.",
     "block-remove-sms-title": "Non puoi eliminare il numero di telefono",
-    "block-remove-sms-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Recapiti secondari”."
+    "block-remove-sms-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Recapiti secondari”.",
+    "info-modal-email-title": "Avvisi via email: come funzionano",
+    "info-modal-email-subtitle": "Quando ci sono nuove notifiche SEND per te, riceverai un avviso all’indirizzo email inserito.",
+    "info-modal-email-content": "Se non hai il domicilio digitale attivo e non apri la notifica entro 5 giorni dall’invio della email, riceverai i documenti in formato cartaceo a casa.",
+    "info-modal-sms-title": "Avvisi via SMS: come funzionano",
+    "info-modal-sms-subtitle": "Quando ci sono nuove notifiche per te, riceverai un SMS al numero inserito.",
+    "info-modal-sms-content": "Se non hai il domicilio digitale attivo e non apri la notifica entro 5 giorni dall’invio dell’SMS, riceverai i documenti in formato cartaceo a casa."
   },
   "special-contacts": {
     "select-address": "Seleziona recapito",

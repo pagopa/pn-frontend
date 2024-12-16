@@ -13,19 +13,20 @@ import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
 import DigitalContactsCard from './DigitalContactsCard';
 import ExistingContactDialog from './ExistingContactDialog';
+import InformativeDialog from './InformativeDialog';
 
 enum ModalType {
   EXISTING = 'existing',
   DISCLAIMER = 'disclaimer',
   CODE = 'code',
   DELETE = 'delete',
+  INFORMATIVE = 'informative',
 }
 
 const EmailContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultEMAILAddress, specialEMAILAddresses, addresses } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const { defaultEMAILAddress, specialEMAILAddresses, addresses, defaultSERCQ_SENDAddress } =
+    useAppSelector(contactsSelectors.selectAddresses);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
@@ -47,6 +48,10 @@ const EmailContactItem: React.FC = () => {
     // first check if contact already exists
     if (contactAlreadyExists(addresses, value, 'default', ChannelType.EMAIL)) {
       setModalOpen(ModalType.EXISTING);
+      return;
+    }
+    if (!defaultSERCQ_SENDAddress) {
+      setModalOpen(ModalType.INFORMATIVE);
       return;
     }
     // disclaimer modal must be opened only when we are adding a default address
@@ -191,6 +196,14 @@ const EmailContactItem: React.FC = () => {
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
+      />
+      <InformativeDialog
+        open={modalOpen === ModalType.INFORMATIVE}
+        title={t('courtesy-contacts.info-modal-email-title', { ns: 'recapiti' })}
+        subtitle={t('courtesy-contacts.info-modal-email-subtitle', { ns: 'recapiti' })}
+        content={t('courtesy-contacts.info-modal-email-content', { ns: 'recapiti' })}
+        onConfirm={() => handleCodeVerification()}
+        onDiscard={() => setModalOpen(null)}
       />
     </DigitalContactsCard>
   );
