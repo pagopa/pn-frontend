@@ -30,11 +30,14 @@ const TestPage: React.FC = () => {
         },
       }}
     >
-      <PnWizardStep label="step 1">
+      <PnWizardStep label="Come funziona">
         <div>Step 1</div>
       </PnWizardStep>
-      <PnWizardStep label="step 2">
+      <PnWizardStep label="Attiva AppIO">
         <div>Step 2</div>
+      </PnWizardStep>
+      <PnWizardStep label="Attiva Email">
+        <div>Step 3</div>
       </PnWizardStep>
     </PnWizard>
   );
