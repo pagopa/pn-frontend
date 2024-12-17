@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 import { getConfiguration } from '../../services/configuration.service';
-import { goToLoginPortal } from '../navigation.utility';
+import { goToLoginPortal, SELFCARE_ROUTE_LOGOUT } from '../navigation.utility';
 
 const mockOpenFn = vi.fn();
 
@@ -26,14 +26,14 @@ describe('Tests navigation utility methods', () => {
   it('goToLoginPortal', () => {
     goToLoginPortal();
     expect(mockOpenFn).toBeCalledTimes(1);
-    expect(mockOpenFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}`, '_self');
+    expect(mockOpenFn).toBeCalledWith(`${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_ROUTE_LOGOUT}`, '_self');
   });
 
   // it('goToLoginPortal - aar', () => {
   //   goToLoginPortal('fake-aar-token');
   //   expect(replaceFn).toBeCalledTimes(1);
   //   expect(replaceFn).toBeCalledWith(
-  //     `${getConfiguration().URL_FE_LOGOUT}?type=PG&aar=fake-aar-token`
+  //     `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_ROUTE_LOGOUT}?type=PG&aar=fake-aar-token`
   //   );
   // });
 
@@ -41,7 +41,7 @@ describe('Tests navigation utility methods', () => {
   //   goToLoginPortal('<script>malicious code</script>malicious-aar-token');
   //   expect(replaceFn).toBeCalledTimes(1);
   //   expect(replaceFn).toBeCalledWith(
-  //     `${getConfiguration().URL_FE_LOGOUT}?type=PG&aar=malicious-aar-token`
+  //     `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_ROUTE_LOGOUT}?type=PG&aar=malicious-aar-token`
   //   );
   // });
 });

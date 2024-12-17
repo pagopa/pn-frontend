@@ -1,6 +1,6 @@
 {
   "API_BASE_URL": "https://webapi.dev.notifichedigitali.it/",
-  "DISABLE_INACTIVITY_HANDLER": true,
+  "IS_INACTIVITY_HANDLER_ENABLED": false,
   "MIXPANEL_TOKEN": "41f1a1ad6abcc5fc5ed5809b9a9d5761",
   "ONE_TRUST_DRAFT_MODE": true,
   "ONE_TRUST_PP": "9d7b7236-956b-4669-8943-5284fba6a815",
@@ -17,6 +17,6 @@
   "WORK_IN_PROGRESS": false,
   "F24_DOWNLOAD_WAIT_TIME": 15000,
   "IS_B2B_ENABLED": true,
-  "DOD_DISABLED": false,
-  "DOWNTIME_EXAMPLE_LINK": "/static/documents/LegalFactMalfunction.pdf"
+  "IS_DOD_ENABLED": true,
+  "DOWNTIME_EXAMPLE_LINK": "https://www.dev.notifichedigitali.it/static/documents/LegalFactMalfunction.pdf"
 }

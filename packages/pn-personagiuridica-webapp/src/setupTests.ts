@@ -7,6 +7,7 @@ import '@testing-library/jest-dom';
 
 import { initAxiosClients } from './api/apiClients';
 import { initStore } from './redux/store';
+import { PgConfiguration } from './services/configuration.service';
 
 // This is a workaround related to this issue https://github.com/nickcolley/jest-axe/issues/147
 const { getComputedStyle } = window;
@@ -14,11 +15,10 @@ const { getComputedStyle } = window;
 window.getComputedStyle = (elt) => getComputedStyle(elt);
 
 beforeAll(async () => {
-  Configuration.setForTest<any>({
+  Configuration.setForTest<PgConfiguration>({
     API_BASE_URL: 'https://webapi.test.notifichedigitali.it/',
-    DISABLE_INACTIVITY_HANDLER: true,
+    IS_INACTIVITY_HANDLER_ENABLED: false,
     ONE_TRUST_DRAFT_MODE: false,
-    ONE_TRUST_PARTICIPATING_ENTITIES: 'mocked-id',
     ONE_TRUST_PP: 'mocked-id',
     ONE_TRUST_TOS: 'mocked-id',
     ONE_TRUST_SERCQ_SEND_DRAFT_MODE: false,
@@ -27,16 +27,17 @@ beforeAll(async () => {
     PAGOPA_HELP_EMAIL: 'assistenza@pn.it',
     IS_DEVELOP: false,
     MIXPANEL_TOKEN: 'DUMMY',
-    MOCK_USER: false,
-    LOG_REDUX_ACTIONS: false,
     APP_VERSION: 'mock-version',
-    SELFCARE_URL_FE_LOGIN: 'https://test.selfcare.pagopa.it/auth/login',
     SELFCARE_BASE_URL: 'https://test.selfcare.pagopa.it',
-    IS_PAYMENT_ENABLED: false,
     DELEGATIONS_TO_PG_ENABLED: true,
     LANDING_SITE_URL: 'https://www.dev.notifichedigitali.it',
-    DOD_DISABLED: false,
-    IS_B2B_ENABLED: true
+    IS_DOD_ENABLED: true,
+    IS_B2B_ENABLED: true,
+    ONE_TRUST_MASSIVI_DRAFT_MODE: false,
+    ONE_TRUST_TOS_MASSIVI: '',
+    WORK_IN_PROGRESS: false,
+    F24_DOWNLOAD_WAIT_TIME: 0,
+    DOWNTIME_EXAMPLE_LINK: 'https://www.example.com',
   });
   initStore(false);
   initAxiosClients();
