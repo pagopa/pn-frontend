@@ -30,8 +30,8 @@ describe('PnWizardStepper', () => {
 
     const mobileWizardStepper = getByTestId('mobileWizardStepper');
     expect(mobileWizardStepper).toBeInTheDocument();
-    expect(getByText('1 di 3')).toBeInTheDocument();
-    expect(getByText('Step 1')).toBeInTheDocument();
+    expect(getByText('wizard.stepper.of')).toBeInTheDocument();
+    expect(getByText('wizard.stepper.activeStep')).toBeInTheDocument();
     expect(getByText(steps[0].label)).toBeInTheDocument();
   });
 
@@ -41,7 +41,7 @@ describe('PnWizardStepper', () => {
 
     const mobileWizardStepper = getByTestId('mobileWizardStepper');
     expect(mobileWizardStepper).toBeInTheDocument();
-    expect(getByText('2 di 3')).toBeInTheDocument();
+    expect(getByText('wizard.stepper.of')).toBeInTheDocument();
     expect(getByText(steps[1].label)).toBeInTheDocument();
   });
 });
