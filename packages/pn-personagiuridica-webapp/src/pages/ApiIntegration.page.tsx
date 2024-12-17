@@ -36,6 +36,7 @@ const ApiIntegration: React.FC = () => {
   const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
   const integrationApiIsEnabled = isAdminWithoutGroups ? keyIssuer.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active && hasPublicActive : keyIssuer.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
 
+  console.log('keyIssuer :>> ', keyIssuer);
   return (
     <LoadingPageWrapper isInitialized={true}>
       <Box p={3}>
