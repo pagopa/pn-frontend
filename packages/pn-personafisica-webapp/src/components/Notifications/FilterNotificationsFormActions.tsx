@@ -1,7 +1,7 @@
-import { Fragment } from 'react';
+import {  Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
-import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
+import { A11yContainerInvisible, CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
 
 type Props = {
   filtersApplied: boolean;
@@ -17,6 +17,7 @@ const FilterNotificationsFormActions = ({
   isInitialSearch,
 }: Props) => {
   const { t } = useTranslation(['common']);
+  const [feedBack, setFeedBack] = useState(false);
 
   const confirmAction = (
     <Grid item lg="auto" xs={12}>
@@ -26,9 +27,13 @@ const FilterNotificationsFormActions = ({
         type="submit"
         size="small"
         disabled={isInitialSearch && !filtersApplied}
+        onClick={()=>setFeedBack(true)}
       >
         {t('button.filtra')}
       </Button>
+      {feedBack && (
+      <A11yContainerInvisible field="ciao"></A11yContainerInvisible>
+    )}
     </Grid>
   );
 

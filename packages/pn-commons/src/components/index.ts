@@ -72,8 +72,10 @@ import SideMenu from './SideMenu/SideMenu';
 import SnackBar from './SnackBar/SnackBar';
 import TabPanel from './TabPanel';
 import TitleBox from './TitleBox';
+import A11yContainerInvisible from './A11yContainerInvisible';
 
 export {
+  A11yContainerInvisible,
   ApiError,
   ApiErrorWrapper,
   AppMessage,
