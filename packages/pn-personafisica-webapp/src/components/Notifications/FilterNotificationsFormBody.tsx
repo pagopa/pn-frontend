@@ -125,7 +125,10 @@ const FilterNotificationsFormBody = ({
                 'aria-label': t('filters.data_da-input-aria-label'),
                 type: 'text',
                 'data-testid': 'input(start date)',
+                "aria-invalid": !!formikInstance.errors.startDate,
+                "aria-errormessage":'error-message'
               },
+              helperText : <FormHelperText error id='error-message' aria-live='assertive'>{!!formikInstance.errors.startDate && t('filters.errors.data_a', { ns: 'notifiche' })}</FormHelperText>
             },
           }}
           disableFuture={true}
@@ -163,11 +166,9 @@ const FilterNotificationsFormBody = ({
                 "aria-errormessage":'error-message'
               },
               // aria-live legge cambiamenti dei figli
-              helperText : <FormHelperText error id='error-message' aria-live='assertive'>{!!formikInstance.errors.endDate && ", inserire la data corretta"}</FormHelperText>
+              helperText : <FormHelperText sx={{ml:0}} error id='error-message' aria-live='assertive'>{!!formikInstance.errors.endDate && t('filters.errors.data_a', { ns: 'notifiche' })}</FormHelperText>
             },
           }}
-          // chiedere a carlotta se va bene cancellare l errore fino a che non scrivo tutta la data
-          // pensare di usare aria-live senza riepilogare l'errore alla fine
           disableFuture={true}
           minDate={startDate ?? tenYearsAgo}
         />
