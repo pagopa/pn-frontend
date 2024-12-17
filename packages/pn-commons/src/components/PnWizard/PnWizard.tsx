@@ -76,7 +76,7 @@ const PnWizard: React.FC<Props> = ({
 
   return (
     <Stack display="flex" alignItems="center" justifyContent="center">
-      <Box p={3} sx={{ maxWidth: { xs: '100%', lg: '90%' } }}>
+      <Box p={3}>
         <ButtonNaked
           type="button"
           size="medium"
