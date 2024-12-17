@@ -181,5 +181,6 @@
     "pg-operator": "Operational contact person",
     "pg-admin": "Administrator"
   },
-  "required-field": "Required field"
+  "required-field": "Required field",
+  "no-spaces-at-edges": "Delete spaces at the beginning or end"
 }
