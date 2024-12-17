@@ -9,7 +9,6 @@ import {
   lazyRetry,
 } from '@pagopa-pn/pn-commons';
 
-import TestPage from '../pages/Test.page';
 import { getConfiguration } from '../services/configuration.service';
 import AARGuard from './AARGuard';
 import RouteGuard from './RouteGuard';
@@ -53,7 +52,6 @@ function Router() {
                 <Route path={routes.PROFILO} element={<Profile />} />
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
                 <Route path={routes.SUPPORT} element={<SupportPage />} />
-                <Route path="/test" element={<TestPage />} />
               </Route>
             </Route>
             {/* not found - non-logged users will see the common AccessDenied component */}
