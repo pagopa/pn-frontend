@@ -19,8 +19,7 @@ function showSideMenu(
     path !== routes.SUPPORT.slice(1) &&
     isLogged &&
     tosAccepted &&
-    privacyAccepted &&
-    path !== 'test'
+    privacyAccepted
   );
 }
 
