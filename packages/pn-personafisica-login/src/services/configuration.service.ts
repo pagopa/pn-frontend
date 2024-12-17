@@ -1,4 +1,4 @@
-import { Configuration, dataRegex } from '@pagopa-pn/pn-commons';
+import { Configuration, IS_DEVELOP, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
 
 export interface LoginConfiguration {
@@ -10,8 +10,6 @@ export interface LoginConfiguration {
   SPID_VALIDATOR_ENV_ENABLED?: boolean;
   SPID_CIE_ENTITY_ID: string;
   URL_API_LOGIN: string;
-  APP_VERSION: string;
-  IS_DEVELOP: boolean;
 }
 
 class LoginConfigurationValidator extends Validator<LoginConfiguration> {
@@ -32,18 +30,10 @@ class LoginConfigurationValidator extends Validator<LoginConfiguration> {
 }
 
 export function getConfiguration(): LoginConfiguration {
-  const configurationFromFile = Configuration.get<LoginConfiguration>();
-  const IS_DEVELOP = process.env.NODE_ENV === 'development';
-  const APP_VERSION = import.meta.env.VITE_APP_VERSION ?? '';
-
-  return {
-    ...configurationFromFile,
-    IS_DEVELOP,
-    APP_VERSION,
-  };
+  return Configuration.get<LoginConfiguration>();
 }
 
 export async function loadLoginConfiguration(): Promise<void> {
   await Configuration.load(new LoginConfigurationValidator());
-  getConfiguration().IS_DEVELOP && console.log(getConfiguration());
+  IS_DEVELOP && console.log(getConfiguration());
 }

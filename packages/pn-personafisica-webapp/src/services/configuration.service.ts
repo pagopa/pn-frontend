@@ -1,4 +1,4 @@
-import { Configuration, dataRegex } from '@pagopa-pn/pn-commons';
+import { Configuration, dataRegex, IS_DEVELOP } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
 
 export interface PfConfiguration {
@@ -24,8 +24,6 @@ export interface PfConfiguration {
   APP_IO_IOS: string;
   IS_DOD_ENABLED: boolean;
   DOWNTIME_EXAMPLE_LINK: string;
-  APP_VERSION: string;
-  IS_DEVELOP: boolean;
 }
 
 class PfConfigurationValidator extends Validator<PfConfiguration> {
@@ -58,17 +56,10 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
 }
 
 export function getConfiguration(): PfConfiguration {
-  const configurationFromFile = Configuration.get<PfConfiguration>();
-  const IS_DEVELOP = process.env.NODE_ENV === 'development';
-  const APP_VERSION = import.meta.env.VITE_APP_VERSION ?? '';
-  return {
-    ...configurationFromFile,
-    IS_DEVELOP,
-    APP_VERSION,
-  };
+  return Configuration.get<PfConfiguration>();
 }
 
 export async function loadPfConfiguration(): Promise<void> {
   await Configuration.load(new PfConfigurationValidator());
-  getConfiguration().IS_DEVELOP && console.log(getConfiguration());
+  IS_DEVELOP && console.log(getConfiguration());
 }

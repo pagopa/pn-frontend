@@ -16,7 +16,5 @@ beforeAll(async () => {
     SPID_VALIDATOR_ENV_ENABLED: true,
     SPID_CIE_ENTITY_ID: 'xx_servizicie_test',
     URL_API_LOGIN: 'https://hub-login.spid.dev.notifichedigitali.it',
-    APP_VERSION: 'mock-version',
-    IS_DEVELOP: false,
   });
 });

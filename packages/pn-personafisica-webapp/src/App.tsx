@@ -12,6 +12,7 @@ import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Box } from '@mui/material';
 import {
+  APP_VERSION,
   AppMessage,
   AppResponse,
   AppResponseError,
@@ -79,7 +80,7 @@ const App = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const path = pathname.split('/');
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, APP_VERSION } = getConfiguration();
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL } = getConfiguration();
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(

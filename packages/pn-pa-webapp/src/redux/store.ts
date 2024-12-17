@@ -1,9 +1,8 @@
 import logger from 'redux-logger';
 
-import { appStateReducer } from '@pagopa-pn/pn-commons';
+import { IS_DEVELOP, appStateReducer } from '@pagopa-pn/pn-commons';
 import { Middleware, MiddlewareArray, configureStore } from '@reduxjs/toolkit';
 
-import { getConfiguration } from '../services/configuration.service';
 import apiKeysSlice from './apiKeys/reducers';
 import appStatusSlice from './appStatus/reducers';
 import userSlice from './auth/reducers';
@@ -24,7 +23,7 @@ export const appReducers = {
 };
 
 const createStore = (logReduxActions?: boolean) => {
-  const mustLogActions = logReduxActions ?? getConfiguration().IS_DEVELOP;
+  const mustLogActions = logReduxActions ?? IS_DEVELOP;
   const additionalMiddlewares = [mustLogActions ? logger : undefined];
   return configureStore({
     reducer: appReducers,
