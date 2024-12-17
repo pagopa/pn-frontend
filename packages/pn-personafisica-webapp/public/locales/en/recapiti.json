@@ -125,7 +125,6 @@
     "block-remove-sms-message": "In order to do this, you must first delete all the phone numbers you have indicated under \"Secondary addresses\"."
   },
   "special-contacts": {
-    "description": "Did you know? If you want to receive notifications from specific institutions at addresses different than the main address, you can <0>customize addresses</0>.",
     "select-address": "Select an address",
     "add-sender": "Institution to associate",
     "pec": "PEC address",
