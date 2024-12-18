@@ -39,8 +39,8 @@ const EmptyLegalContacts = () => {
         sx={{ mb: 3 }}
       >
         {infoIcons.map((Icon, index) => {
-          const title = sercqSendInfoList[index].title;
-          const description = sercqSendInfoList[index].description;
+          const title = sercqSendInfoList[index]?.title;
+          const description = sercqSendInfoList[index]?.description;
           return (
             <Stack key={title} direction={{ xs: 'row', lg: 'column' }} spacing={2}>
               <Icon sx={{ height: '24px', width: '24px', color: '#35C1EC' }} />

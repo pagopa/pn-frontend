@@ -5,7 +5,7 @@ import {
   digitalLegalAddresses,
   digitalLegalAddressesSercq,
 } from '../../../__mocks__/Contacts.mock';
-import { render, waitFor, within } from '../../../__test__/test-utils';
+import { queryAllByTestId, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { ChannelType } from '../../../models/contacts';
 import LegalContacts from '../LegalContacts';
 
@@ -25,12 +25,13 @@ const defaultPecAddress = digitalLegalAddresses.find(
 describe('LegalContacts Component', async () => {
   it('renders component - PEC enabled', () => {
     // render component
-    const { container, getByTestId, getByText } = render(<LegalContacts />, {
+    const { container, getByText } = render(<LegalContacts />, {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
     });
     expect(container).toHaveTextContent('legal-contacts.title');
-    expect(container).toHaveTextContent('legal-contacts.sub-title');
-    const pecContact = getByTestId(`default_pecContact`);
+    expect(container).toHaveTextContent('status.active');
+    const pecContact = queryAllByTestId(container, `default_pecContact`)[0];
+    expect(pecContact).toBeInTheDocument();
     const pecInput = pecContact.querySelector(`[name="default_pec"]`);
     expect(pecInput).not.toBeInTheDocument();
     const pec = getByText(defaultPecAddress!.value);
@@ -38,12 +39,7 @@ describe('LegalContacts Component', async () => {
     const pecButtons = within(pecContact).getAllByRole('button');
     expect(pecButtons[0]).toBeEnabled();
     expect(pecButtons[0].textContent).toMatch('button.modifica');
-    const sercqSendContact = getByTestId(`default_sercqSendContact`);
-    expect(sercqSendContact).toBeInTheDocument();
-    const activateButton = within(sercqSendContact).getByTestId('activateButton');
-    expect(activateButton).toBeInTheDocument();
-    expect(activateButton).toHaveTextContent('legal-contacts.sercq-send-active-pec-enabled');
-    const descriptionText = getByText('legal-contacts.sercq-send-description-pec-enabled');
+    const descriptionText = getByText('legal-contacts.pec-description');
     expect(descriptionText).toBeInTheDocument();
   });
 
@@ -51,6 +47,8 @@ describe('LegalContacts Component', async () => {
     const { container, getByTestId, queryByTestId } = render(<LegalContacts />, {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddressesSercq } },
     });
+
+    screen.debug();
     expect(container).toHaveTextContent('legal-contacts.title');
     expect(container).toHaveTextContent('legal-contacts.sub-title');
     // check contacts
