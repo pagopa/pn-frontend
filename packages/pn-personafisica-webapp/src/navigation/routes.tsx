@@ -27,6 +27,7 @@ const TermsOfServicePage = lazyRetry(() => import('../pages/TermsOfService.page'
 const AppStatus = lazyRetry(() => import('../pages/AppStatus.page'));
 const ParticipatingEntitiesPage = lazyRetry(() => import('../pages/ParticipatingEntities.page'));
 const SupportPage = lazyRetry(() => import('../pages/Support.page'));
+const SercqSendActivation = lazyRetry(() => import('../pages/SercqSendActivation.page'));
 
 const handleAssistanceClick = () => {
   /* eslint-disable-next-line functional/immutable-data */
@@ -52,6 +53,7 @@ function Router() {
                 <Route path={routes.PROFILO} element={<Profile />} />
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
                 <Route path={routes.SUPPORT} element={<SupportPage />} />
+                <Route path={routes.SERCQ_SEND_ACTIVATION} element={<SercqSendActivation />} />
               </Route>
             </Route>
             {/* not found - non-logged users will see the common AccessDenied component */}

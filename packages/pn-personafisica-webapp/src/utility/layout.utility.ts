@@ -8,18 +8,22 @@ function showFooter(path: string): boolean {
   return path !== 'privacy-tos';
 }
 
+const WIZARD_PAGES = [routes.SERCQ_SEND_ACTIVATION.slice(1)];
+
 function showSideMenu(
   path: string,
   isLogged: boolean,
   tosAccepted: boolean,
   privacyAccepted: boolean
 ): boolean {
+  console.log('path', path);
   return (
     path !== 'privacy-tos' &&
     path !== routes.SUPPORT.slice(1) &&
     isLogged &&
     tosAccepted &&
-    privacyAccepted
+    privacyAccepted &&
+    !WIZARD_PAGES.includes(path)
   );
 }
 
