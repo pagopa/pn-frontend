@@ -11,7 +11,7 @@ describe('CustomTooltip Component', () => {
     await act(async () => {
       result = render(
         <CustomTooltip tooltipContent="Mocked content" openOnClick={false}>
-          <p >Mocked Text</p>
+          <p>Mocked Text</p>
         </CustomTooltip>
       );
     });
@@ -28,7 +28,7 @@ describe('CustomTooltip Component', () => {
           openOnClick={false}
           onOpen={mockOnOpenCallback}
         >
-          <p data-testid="testTooltipText">Mocked Text</p>       
+          <p data-testid="testTooltipText">Mocked Text</p>
         </CustomTooltip>
       );
     });
@@ -42,7 +42,7 @@ describe('CustomTooltip Component', () => {
     tooltip = await waitFor(() => result.getByRole('tooltip'));
     expect(tooltip).toBeInTheDocument();
     expect(tooltip).toHaveTextContent(/Mocked content/i);
-    expect(mockOnOpenCallback).toBeCalledTimes(1);
+    expect(mockOnOpenCallback).toHaveBeenCalledTimes(1);
     // again check that click doesn't work
     fireEvent.click(paragraph!);
     await waitFor(() => {
@@ -54,8 +54,8 @@ describe('CustomTooltip Component', () => {
     // render component
     const { container, getByRole } = render(
       <CustomTooltip tooltipContent="Mocked content" openOnClick={true}>
-        <p>Mocked Text</p>     
-       </CustomTooltip>
+        <p>Mocked Text</p>
+      </CustomTooltip>
     );
     const paragraph = container.querySelector('p');
     // open tooltip
