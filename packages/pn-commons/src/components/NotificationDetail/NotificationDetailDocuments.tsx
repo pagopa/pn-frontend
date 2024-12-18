@@ -40,9 +40,13 @@ const NotificationDetailDocuments: React.FC<Props> = (
 ) => {
   const mapOtherDocuments = (documents: Array<NotificationDetailDocument>) =>
     documents.map((d) => {
+      const recipient =
+        documents.length > 1 && d.documentType === 'AAR' && d.recipient
+          ? ` - ${d.recipient.denomination} (${d.recipient.taxId})`
+          : '';
       const document = {
         key: d.ref.key || d.documentId,
-        name: d.title || d.ref.key,
+        name: d.title ? `${d.title}${recipient}` : d.ref.key,
         downloadHandler: d.documentId
           ? ({
               documentId: d.documentId,
