@@ -164,7 +164,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               <ButtonNaked
                 color="error"
                 onClick={onCancelInsert}
-                sx={{ fontWeight: 700 }}
+                sx={{ fontWeight: 700, color: 'error.dark' }}
                 size="medium"
               >
                 {t('button.annulla')}
@@ -289,7 +289,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                   color="error"
                   onClick={onDelete}
                   startIcon={<DeleteIcon />}
-                  sx={{ fontWeight: 700, justifyContent: 'left' }}
+                  sx={{ fontWeight: 700, justifyContent: 'left', color: 'error.dark' }}
                   size="medium"
                 >
                   {t('button.elimina')}

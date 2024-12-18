@@ -10,7 +10,6 @@ import { PnInfoCard, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
-// import { getConfiguration } from '../../services/configuration.service';
 import PecContactItem from './PecContactItem';
 import SpecialContacts from './SpecialContacts';
 
@@ -64,18 +63,16 @@ const EmptyLegalContacts = () => {
 
 const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultPECAddress, defaultSERCQ_SENDAddress } = useAppSelector(
+  const { defaultPECAddress, defaultSERCQ_SENDAddress, specialAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
-  // const { DOD_DISABLED } = getConfiguration();
 
   const isValidatingPec = defaultPECAddress?.value && defaultPECAddress.pecValid === false;
   const hasNoLegalAddress = !defaultPECAddress?.value && !defaultSERCQ_SENDAddress;
   const hasPecActive = defaultPECAddress?.value && defaultPECAddress.pecValid === true;
   const hasSercqSendActive = !!defaultSERCQ_SENDAddress;
   const isActive = hasPecActive || hasSercqSendActive;
-  const showSpecialContactsSection =
-    !!defaultSERCQ_SENDAddress || !!defaultPECAddress?.pecValid !== false;
+  const showSpecialContactsSection = specialAddresses.length > 0;
 
   type SubtitleParams = {
     label: string;

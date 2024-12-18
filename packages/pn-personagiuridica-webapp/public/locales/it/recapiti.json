@@ -117,7 +117,6 @@
     "info-modal-sms-content": "Se non hai il domicilio digitale attivo e non apri la notifica entro 5 giorni dall’invio dell’SMS, riceverai i documenti in formato cartaceo a casa."
   },
   "special-contacts": {
-    "description": "Lo sapevi? Se vuoi ricevere le notifiche di enti specifici a recapiti diversi da quello principale, puoi <0>personalizzare i recapiti</0>.",
     "select-address": "Seleziona recapito",
     "add-sender": "Ente da associare",
     "pec": "Indirizzo PEC",
@@ -130,7 +129,7 @@
     "contact-already-exists": "L'ente selezionato è già associato a questo recapito. Se premi “Associa”, verrà sostituito da quello che hai indicato qui.",
     "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito.",
     "modal-title": "Personalizza il recapito associato a un ente",
-    "card-title": "Personalizzati",
+    "card-title": "PERSONALIZZATI PER ENTE",
     "sender": "Ente",
     "remove-special-title": "Vuoi eliminare {{contactValue}}?",
     "remove-special-description": "Gli avvisi relativi alle notifiche degli enti associati non saranno più inviati a questo recapito, ma a quello principale.",
