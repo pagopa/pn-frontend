@@ -51,6 +51,7 @@ const VirtualKeys: React.FC = () => {
       key.status === VirtualKeyStatus.Enabled &&
       (!key.user || key.user?.fiscalCode === currentUser.fiscal_number)
   );
+  
   const isCreationEnabled =
     !hasOneEnabledKey &&
     issuerState.tosAccepted &&
