@@ -10,7 +10,7 @@ import {
   PublicKeyStatus,
   VirtualKeyStatus,
 } from '../../generated-client/pg-apikeys';
-import { ApiKeyColumnData, ModalApiKeyView } from '../../models/ApiKeys';
+import { ApiKeyColumnData, ExtendedVirtualKeyStatusType, ModalApiKeyView } from '../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../utility/apikeys.utility';
 import PublicKeyContextMenu from './PublicKeyContextMenu';
 import VirtualKeyContextMenu from './VirtualKeyContextMenu';
@@ -74,7 +74,7 @@ const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick
         return <></>;
       }
       const { label, tooltip, color } = !integrationApiIsEnabled && data.status === VirtualKeyStatus.Enabled ?
-          getApiKeyStatusInfos("DISABLED",data.statusHistory) : getApiKeyStatusInfos(data.status, data.statusHistory);
+          getApiKeyStatusInfos(ExtendedVirtualKeyStatusType.Disabled,data.statusHistory) : getApiKeyStatusInfos(data.status, data.statusHistory);
       return tooltip ? (
         <StatusTooltip label={t(label)} tooltip={tooltip} color={color} />
       ) : (
