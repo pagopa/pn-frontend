@@ -8,7 +8,7 @@ function showFooter(path: string): boolean {
   return path !== 'privacy-tos';
 }
 
-const WIZARD_PAGES = [routes.SERCQ_SEND_ACTIVATION.slice(1)];
+const WIZARD_PAGES = [routes.DIGITAL_DOMICILE_ACTIVATION.slice(1)];
 
 function showSideMenu(
   path: string,

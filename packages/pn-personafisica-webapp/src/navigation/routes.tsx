@@ -53,7 +53,10 @@ function Router() {
                 <Route path={routes.PROFILO} element={<Profile />} />
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
                 <Route path={routes.SUPPORT} element={<SupportPage />} />
-                <Route path={routes.SERCQ_SEND_ACTIVATION} element={<SercqSendActivation />} />
+                <Route
+                  path={routes.DIGITAL_DOMICILE_ACTIVATION}
+                  element={<SercqSendActivation />}
+                />
               </Route>
             </Route>
             {/* not found - non-logged users will see the common AccessDenied component */}
