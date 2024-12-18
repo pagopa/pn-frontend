@@ -78,6 +78,8 @@ describe('SercqSendContactWizard', () => {
     expect(pecSection).not.toBeInTheDocument();
     const activateButton = getByTestId('activateButton');
     expect(activateButton).toBeInTheDocument();
+    const alertMessage = getByTestId('default-pec-info');
+    expect(alertMessage).toBeInTheDocument();
   });
 
   it('should activate sercq send', async () => {

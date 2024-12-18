@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import {
+  Alert,
   Box,
   Button,
   Divider,
@@ -208,6 +209,12 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
             ))}
           </List>
 
+          {defaultPECAddress && (
+            <Alert severity="info" sx={{ mb: 4 }} data-testid="default-pec-info">
+              {t('legal-contacts.sercq-send-wizard.step_1.pec-info-alert')}
+            </Alert>
+          )}
+
           <Typography fontSize="14px" color="text.secondary" mb={4}>
             <Trans
               i18nKey="legal-contacts.sercq-send-wizard.step_1.info-tos"
@@ -232,7 +239,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
             variant="contained"
             color="primary"
             onClick={handleActivation}
-            sx={{ textTransform: 'none', mb: 4 }}
+            sx={{ textTransform: 'none', mb: !defaultPECAddress ? 4 : 0 }}
             data-testid="activateButton"
           >
             {t('button.enable', { ns: 'common' })}

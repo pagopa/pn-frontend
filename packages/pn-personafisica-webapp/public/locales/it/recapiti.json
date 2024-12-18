@@ -81,7 +81,8 @@
         "have-pec-description": "In alternativa, puoi usare una PEC come domicilio digitale per le notifiche di SEND.",
         "insert-pec": "Inserisci PEC",
         "delivered-dialog-title": "Valore giuridico della notifica sul domicilio digitale SEND",
-        "delivered-dialog-description": "Se scegli SEND come domicilio digitale e non apri la notifica entro 7 giorni dalla consegna, questa risulterà legalmente recapitata, proprio come accade con le raccomandate cartacee."
+        "delivered-dialog-description": "Se scegli SEND come domicilio digitale e non apri la notifica entro 7 giorni dalla consegna, questa risulterà legalmente recapitata, proprio come accade con le raccomandate cartacee.",
+        "pec-info-alert": "La piattaforma SEND sostituirà la PEC come tuo domicilio digitale."
       }
     }
   },
