@@ -7,7 +7,6 @@ import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 import ContactsSummaryCards from '../components/Contacts/ContactsSummaryCards';
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import LegalContacts from '../components/Contacts/LegalContacts';
-import SpecialContacts from '../components/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
@@ -23,10 +22,6 @@ const Contacts = () => {
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
   const [pageReady, setPageReady] = useState(false);
   const { LANDING_SITE_URL } = getConfiguration();
-
-  const showSpecialContactsSection =
-    !!addressesData.defaultSERCQ_SENDAddress ||
-    !!addressesData.defaultPECAddress?.pecValid !== false;
 
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses()).then(() => {
@@ -100,10 +95,7 @@ const Contacts = () => {
         >
           <ContactsSummaryCards />
           <Stack direction="column" spacing={6}>
-            <Box>
-              <LegalContacts />
-              {showSpecialContactsSection && <SpecialContacts />}
-            </Box>
+            <LegalContacts />
             <CourtesyContacts />
           </Stack>
         </ApiErrorWrapper>

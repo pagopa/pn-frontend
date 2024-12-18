@@ -1,69 +1,165 @@
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import { Alert, Box, Divider, Stack, Typography } from '@mui/material';
+import ConstructionIcon from '@mui/icons-material/Construction';
+import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import SavingsIcon from '@mui/icons-material/Savings';
+import TouchAppIcon from '@mui/icons-material/TouchApp';
+import { Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/material';
+import { PnInfoCard, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
-import { getConfiguration } from '../../services/configuration.service';
+// import { getConfiguration } from '../../services/configuration.service';
 import PecContactItem from './PecContactItem';
-import SercqSendContactItem from './SercqSendContactItem';
+import SpecialContacts from './SpecialContacts';
+
+const EmptyLegalContacts = () => {
+  const { t } = useTranslation(['recapiti']);
+  const isMobile = useIsMobile();
+
+  const infoIcons = [LaptopChromebookIcon, SavingsIcon, TouchAppIcon];
+  const sercqSendInfoList: Array<{ title: string; description: string }> = t(
+    'legal-contacts.sercq-send-info-list',
+    {
+      returnObjects: true,
+      defaultValue: [],
+      ns: 'recapiti',
+    }
+  );
+
+  return (
+    <Box>
+      <Typography variant="body2" fontSize="14px" mb={3}>
+        {t('legal-contacts.sercq-send-info-advantages', { ns: 'recapiti' })}
+      </Typography>
+      <Stack
+        direction={{ xs: 'column', lg: 'row' }}
+        spacing={3}
+        justifyContent="space-between"
+        sx={{ mb: 3 }}
+      >
+        {infoIcons.map((Icon, index) => {
+          const title = sercqSendInfoList[index].title;
+          const description = sercqSendInfoList[index].description;
+          return (
+            <Stack key={title} direction={{ xs: 'row', lg: 'column' }} spacing={2}>
+              <Icon sx={{ height: '24px', width: '24px', color: '#35C1EC' }} />
+              <Box>
+                <Typography variant="body2" fontWeight={600} mb={1}>
+                  {title}
+                </Typography>
+                <Typography fontSize="14px">{description}</Typography>
+              </Box>
+            </Stack>
+          );
+        })}
+      </Stack>
+      <Button variant="contained" fullWidth={isMobile}>
+        {t('legal-contacts.sercq-send-start')}
+      </Button>
+    </Box>
+  );
+};
 
 const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const {
-    defaultPECAddress,
-    defaultSERCQ_SENDAddress,
-    specialPECAddresses,
-    specialSERCQ_SENDAddresses,
-  } = useAppSelector(contactsSelectors.selectAddresses);
-  const { DOD_DISABLED } = getConfiguration();
+  const { defaultPECAddress, defaultSERCQ_SENDAddress } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
+  // const { DOD_DISABLED } = getConfiguration();
 
-  const hasDodEnabledAndValidatingPec =
-    (!defaultPECAddress?.pecValid && defaultSERCQ_SENDAddress) ||
-    specialSERCQ_SENDAddresses.some((sercqAddr) =>
-      specialPECAddresses.some(
-        (pecAddr) => !pecAddr.pecValid && pecAddr.senderId === sercqAddr.senderId
-      )
-    );
+  const isValidatingPec = defaultPECAddress?.value && defaultPECAddress.pecValid === false;
+  const hasNoLegalAddress = !defaultPECAddress?.value && !defaultSERCQ_SENDAddress;
+  const hasPecActive = defaultPECAddress?.value && defaultPECAddress.pecValid === true;
+  const hasSercqSendActive = !!defaultSERCQ_SENDAddress;
+  const isActive = hasPecActive || hasSercqSendActive;
+  const showSpecialContactsSection =
+    !!defaultSERCQ_SENDAddress || !!defaultPECAddress?.pecValid !== false;
 
-  const hasValidatingPecSpecialContact = specialPECAddresses.some((address) => !address.pecValid);
+  type SubtitleParams = {
+    label: string;
+    color: ChipOwnProps['color'];
+  };
 
-  const verifyingPecAddress =
-    (defaultPECAddress && !defaultPECAddress.pecValid) || hasValidatingPecSpecialContact;
+  const getSubtitle = () => {
+    // eslint-disable-next-line functional/no-let
+    let params: SubtitleParams;
+    if (isValidatingPec) {
+      params = {
+        label: t('status.pec-validation', { ns: 'recapiti' }),
+        color: 'warning',
+      };
+    } else if (hasNoLegalAddress) {
+      params = {
+        label: t('status.inactive', { ns: 'recapiti' }),
+        color: 'default',
+      };
+    } else {
+      params = {
+        label: t('status.active', { ns: 'recapiti' }),
+        color: 'success',
+      };
+    }
+    return <Chip {...params} sx={{ mb: 2 }} />;
+  };
 
-  const message = hasDodEnabledAndValidatingPec
-    ? 'legal-contacts.pec-validation-banner.dod-enabled-message'
-    : 'legal-contacts.pec-validation-banner.dod-disabled-message';
+  const getActions = () =>
+    isActive
+      ? [
+          <Button
+            key="manage"
+            variant="naked"
+            color="primary"
+            startIcon={<ConstructionIcon />}
+            onClick={() => console.log('Gestisci!')}
+            sx={{ p: '10px 16px' }}
+          >
+            {t('manage', { ns: 'recapiti' })}
+          </Button>,
+          <Button
+            key="disable"
+            variant="naked"
+            color="error"
+            startIcon={<PowerSettingsNewIcon />}
+            onClick={() => console.log('Disattiva!')}
+            sx={{ p: '10px 16px' }}
+          >
+            {t('disable', { ns: 'recapiti' })}
+          </Button>,
+        ]
+      : undefined;
+
+  const getContactDescriptionMessage = () => {
+    if (hasSercqSendActive) {
+      return t('legal-contacts.sercq-send-description', { ns: 'recapiti' });
+    } else if (hasPecActive || isValidatingPec) {
+      return t('legal-contacts.pec-description', { ns: 'recapiti' });
+    }
+    return '';
+  };
 
   return (
-    <Box id="legalContactsSection">
-      <Typography variant="h6" fontWeight={700} tabIndex={-1} id="legalContactsTitle" mb={2}>
-        {t('legal-contacts.title', { ns: 'recapiti' })}
-      </Typography>
-      <Typography variant="body1">
-        <Trans i18nKey="legal-contacts.sub-title" ns="recapiti" />
-      </Typography>
-      {verifyingPecAddress && (
-        <Alert data-testid="PecVerificationAlert" severity="info" sx={{ mt: 4 }}>
-          <Typography variant="inherit" sx={{ fontWeight: '600' }}>
-            {t('legal-contacts.pec-validation-banner.title', { ns: 'recapiti' })}
-          </Typography>
-          <Typography variant="inherit">{t(message, { ns: 'recapiti' })}</Typography>
-        </Alert>
+    <PnInfoCard
+      title={t('legal-contacts.title', { ns: 'recapiti' })}
+      subtitle={getSubtitle()}
+      actions={getActions()}
+      expanded={isActive}
+    >
+      {(isValidatingPec || hasPecActive) && <PecContactItem />}
+      {hasSercqSendActive && (
+        <Typography variant="body1" sx={{ fontWeight: '600', mb: 2 }}>
+          {t('legal-contacts.sercq-send-title', { ns: 'recapiti' })}
+        </Typography>
       )}
-      <Stack
-        direction={defaultPECAddress?.pecValid ? 'column-reverse' : 'column'}
-        spacing={(!defaultSERCQ_SENDAddress && !defaultPECAddress) || verifyingPecAddress ? 2 : 0}
-        mt={4}
-        data-testid="legalContacts"
-      >
-        {!DOD_DISABLED && <SercqSendContactItem />}
-        {!DOD_DISABLED && !defaultSERCQ_SENDAddress && !defaultPECAddress && (
-          <Divider>{t('conjunctions.or')}</Divider>
-        )}
-        <PecContactItem />
-      </Stack>
-    </Box>
+      {!hasNoLegalAddress && (
+        <Typography variant="body1" mt={2}>
+          {getContactDescriptionMessage()}
+        </Typography>
+      )}
+      {hasNoLegalAddress && <EmptyLegalContacts />}
+      {showSpecialContactsSection && <SpecialContacts />}
+    </PnInfoCard>
   );
 };
 

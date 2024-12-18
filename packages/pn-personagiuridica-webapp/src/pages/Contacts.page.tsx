@@ -7,26 +7,20 @@ import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 import ContactsSummaryCards from '../components/Contacts/ContactsSummaryCards';
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import LegalContacts from '../components/Contacts/LegalContacts';
-import SpecialContacts from '../components/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PROFILE } from '../navigation/routes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
-import { contactsSelectors, resetState } from '../redux/contact/reducers';
+import { resetState } from '../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
 const Contacts = () => {
   const { t, i18n } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
-  const addressesData = useAppSelector(contactsSelectors.selectAddresses);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const profileUrl = PROFILE(organization?.id, i18n.language);
 
   const [pageReady, setPageReady] = useState(false);
-
-  const showSpecialContactsSection =
-    !!addressesData.defaultSERCQ_SENDAddress ||
-    !!addressesData.defaultPECAddress?.pecValid !== false;
 
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses()).then(() => {
@@ -78,10 +72,7 @@ const Contacts = () => {
         >
           <ContactsSummaryCards />
           <Stack direction="column" spacing={6}>
-            <Box>
-              <LegalContacts />
-              {showSpecialContactsSection && <SpecialContacts />}
-            </Box>
+            <LegalContacts />
             <CourtesyContacts />
           </Stack>
         </ApiErrorWrapper>

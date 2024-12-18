@@ -1,4 +1,4 @@
-import { MouseEvent, ReactNode, useState } from 'react';
+import { MouseEvent, ReactNode, useEffect, useState } from 'react';
 
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
@@ -139,6 +139,10 @@ const PnInfoCard: React.FC<Props> = ({
 }) => {
   const isMobile = useIsMobile();
   const [showDescription, setShowDescription] = useState(expanded);
+
+  useEffect(() => {
+    setShowDescription(expanded);
+  }, [expanded]);
 
   const showContent = !isMobile || (isMobile && showDescription);
 
