@@ -17,7 +17,13 @@ const FilterNotificationsFormActions = ({
   isInitialSearch,
 }: Props) => {
   const { t } = useTranslation(['common']);
-  const [feedBack, setFeedBack] = useState(false);
+  const [feedbackSubmit, setFeedbackSubmit] = useState(false);
+  const [feedbackCancel, setFeedbackCancel] = useState(false);
+
+  const handleCancel = () =>{
+    setFeedbackCancel(true);
+    cleanFilters();
+  };
 
   const confirmAction = (
     <Grid item lg="auto" xs={12}>
@@ -27,12 +33,12 @@ const FilterNotificationsFormActions = ({
         type="submit"
         size="small"
         disabled={isInitialSearch && !filtersApplied}
-        onClick={()=>setFeedBack(true)}
+        onClick={()=>setFeedbackSubmit(true)}
       >
         {t('button.filtra')}
       </Button>
-      {feedBack && (
-      <A11yContainerInvisible field="ciao"></A11yContainerInvisible>
+      {feedbackSubmit && (
+      <A11yContainerInvisible field="Azione completata"></A11yContainerInvisible>
     )}
     </Grid>
   );
@@ -42,11 +48,14 @@ const FilterNotificationsFormActions = ({
       <Button
         data-testid="cancelButton"
         size="small"
-        onClick={cleanFilters}
+        onClick={handleCancel}
         disabled={!filtersApplied}
+        
       >
         {t('button.annulla filtro')}
       </Button>
+      {feedbackCancel && <A11yContainerInvisible field="Cancellazione Completata"></A11yContainerInvisible>
+      }
     </Grid>
   );
 
