@@ -16,7 +16,7 @@ const LegalContacts = () => {
     specialPECAddresses,
     specialSERCQ_SENDAddresses,
   } = useAppSelector(contactsSelectors.selectAddresses);
-  const { DOD_DISABLED } = getConfiguration();
+  const { IS_DOD_ENABLED } = getConfiguration();
 
   const hasDodEnabledAndValidatingPec =
     (!defaultPECAddress?.pecValid && defaultSERCQ_SENDAddress) ||
@@ -57,8 +57,8 @@ const LegalContacts = () => {
         mt={4}
         data-testid="legalContacts"
       >
-        {!DOD_DISABLED && <SercqSendContactItem />}
-        {!DOD_DISABLED && !defaultSERCQ_SENDAddress && !defaultPECAddress && (
+        {IS_DOD_ENABLED && <SercqSendContactItem />}
+        {IS_DOD_ENABLED && !defaultSERCQ_SENDAddress && !defaultPECAddress && (
           <Divider>{t('conjunctions.or')}</Divider>
         )}
         <PecContactItem />

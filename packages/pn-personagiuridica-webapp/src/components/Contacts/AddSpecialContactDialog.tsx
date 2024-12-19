@@ -50,11 +50,11 @@ const AddSpecialContactDialog: React.FC<Props> = ({
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
-  const { DOD_DISABLED } = getConfiguration();
+  const { IS_DOD_ENABLED } = getConfiguration();
   const [isPecInValidation, setIsPecInValidation] = useState(false);
 
   const addressTypes = specialContactsAvailableAddressTypes(addressesData, sender).filter((addr) =>
-    DOD_DISABLED ? addr.id !== ChannelType.SERCQ_SEND : true
+    !IS_DOD_ENABLED ? addr.id !== ChannelType.SERCQ_SEND : true
   );
 
   const pecInValidationForSender = (senderId: string) =>

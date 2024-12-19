@@ -2,7 +2,6 @@ import { matchPath } from 'react-router-dom';
 
 import { AppRouteParams, EventPageType, sanitizeString } from '@pagopa-pn/pn-commons';
 
-import { getConfiguration } from '../services/configuration.service';
 import {
   APP_STATUS,
   DELEGHE,
@@ -11,10 +10,10 @@ import {
   NOTIFICHE,
   NOTIFICHE_DELEGATO,
   RECAPITI,
+  URL_FE_LOGOUT,
 } from './routes.const';
 
 export function goToLoginPortal(aarToken?: string | null) {
-  const { URL_FE_LOGOUT } = getConfiguration();
   // eslint-disable-next-line functional/no-let
   let urlToRiderect = `${URL_FE_LOGOUT}`;
   // the startsWith check is to prevent xss attacks

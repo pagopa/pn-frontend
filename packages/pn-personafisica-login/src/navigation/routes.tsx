@@ -4,14 +4,16 @@ import Login from '../pages/login/Login';
 import LoginError from '../pages/loginError/LoginError';
 import Logout from '../pages/logout/Logout';
 import SuccessPage from '../pages/success/Success';
-import { getConfiguration } from '../services/configuration.service';
+
+const ROUTE_LOGOUT = '/logout';
+export const ROUTE_LOGIN = '/login';
+const ROUTE_LOGIN_ERROR = '/login/error';
+const ROUTE_SUCCESS = '/login/success';
 
 /** login request operations */
 const onLoginRequest = () => <Login />;
 
 function Router() {
-  const { ROUTE_LOGIN, ROUTE_LOGIN_ERROR, ROUTE_LOGOUT, ROUTE_SUCCESS } = getConfiguration();
-
   return (
     <Routes>
       <Route path={ROUTE_LOGIN} element={onLoginRequest()} />

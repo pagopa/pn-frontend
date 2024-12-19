@@ -38,10 +38,10 @@ const getDomicileData = (
   source: ContactSource,
   hasSercqSend: boolean,
   hasCourtesyAddresses: boolean,
-  dodDisabled: boolean
+  isDodEnabled: boolean
 ): DomicileBannerData | null => {
   const sessionClosed = getOpenStatusFromSession();
-  if (!dodDisabled && source !== ContactSource.RECAPITI && !hasSercqSend && !sessionClosed) {
+  if (isDodEnabled && source !== ContactSource.RECAPITI && !hasSercqSend && !sessionClosed) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return {
       destination: ChannelType.SERCQ_SEND,
@@ -53,7 +53,7 @@ const getDomicileData = (
     };
   } else if (
     source !== ContactSource.RECAPITI &&
-    ((!hasSercqSend && sessionClosed) || dodDisabled) &&
+    ((!hasSercqSend && sessionClosed) || !isDodEnabled) &&
     !hasCourtesyAddresses
   ) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -65,7 +65,7 @@ const getDomicileData = (
       canBeClosed: false,
       callToAction: 'no-courtesy-no-sercq-send-cta',
     };
-  } else if (!dodDisabled && hasSercqSend && !hasCourtesyAddresses) {
+  } else if (isDodEnabled && hasSercqSend && !hasCourtesyAddresses) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return {
       destination: ChannelType.EMAIL,
@@ -84,7 +84,7 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
-  const { DOD_DISABLED } = getConfiguration();
+  const { IS_DOD_ENABLED } = getConfiguration();
 
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.generalInfoState.digitalAddresses
@@ -97,7 +97,7 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
     source,
     !!hasSercqSend,
     hasCourtesyAddresses,
-    DOD_DISABLED
+    IS_DOD_ENABLED
   );
 
   const handleClose = () => {

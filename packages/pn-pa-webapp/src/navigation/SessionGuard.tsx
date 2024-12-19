@@ -84,7 +84,7 @@ const SessionGuardRender = () => {
         handleClose={goToSelfcareLogin}
         initTimeout
       />
-    ) : isAnonymousUser || getConfiguration().DISABLE_INACTIVITY_HANDLER ? (
+    ) : isAnonymousUser || !getConfiguration().IS_INACTIVITY_HANDLER_ENABLED ? (
       <Outlet />
     ) : (
       <InactivityHandler

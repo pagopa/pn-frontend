@@ -10,6 +10,7 @@ import StatisticsIcon from '@mui/icons-material/ShowChart';
 import VpnKey from '@mui/icons-material/VpnKey';
 import { Box } from '@mui/material';
 import {
+  APP_VERSION,
   AppMessage,
   AppResponseMessage,
   Layout,
@@ -28,7 +29,12 @@ import { LinkType, ProductEntity } from '@pagopa/mui-italia';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { getAdditionalLanguages, getInstitutions, getProductsOfInstitution, logout } from './redux/auth/actions';
+import {
+  getAdditionalLanguages,
+  getInstitutions,
+  getProductsOfInstitution,
+  logout,
+} from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
@@ -213,7 +219,7 @@ const ActualApp = () => {
       dispatch(
         appStateActions.addSuccess({
           title: 'Current version',
-          message: `v${configuration.APP_VERSION}`,
+          message: `v${APP_VERSION}`,
         })
       ),
   });

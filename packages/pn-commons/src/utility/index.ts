@@ -35,6 +35,7 @@ import {
   twelveMonthsAgo,
 } from './date.utility';
 import { waitForElement } from './dom.utility';
+import { APP_VERSION, IS_DEVELOP } from './environment.utility';
 import { calcUnit8Array } from './file.utility';
 import { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
 import { IUN_regex, formatIun } from './iun.utility';
@@ -155,4 +156,6 @@ export {
   getWeeksFromDateRange,
   getDateFromString,
   fromStringToBase64,
+  IS_DEVELOP,
+  APP_VERSION,
 };

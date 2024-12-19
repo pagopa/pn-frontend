@@ -55,7 +55,7 @@ const manageUnforbiddenError = (e: any) => {
  */
 const SessionGuardRender = () => {
   const [params] = useSearchParams();
-  const { DISABLE_INACTIVITY_HANDLER } = getConfiguration();
+  const { IS_INACTIVITY_HANDLER_ENABLED } = getConfiguration();
 
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
@@ -101,7 +101,7 @@ const SessionGuardRender = () => {
     }
     return (
       <InactivityHandler
-        inactivityTimer={isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? 0 : inactivityTimer}
+        inactivityTimer={isAnonymousUser || !IS_INACTIVITY_HANDLER_ENABLED ? 0 : inactivityTimer}
         onTimerExpired={() => dispatch(logout())}
       >
         <Outlet />
