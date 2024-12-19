@@ -324,14 +324,6 @@ const SercqSendContactItem: React.FC = () => {
           : t('legal-contacts.sercq-send-description', { ns: 'recapiti' })
       }
       expanded
-      sx={{
-        mt: defaultPECAddress?.pecValid ? '0 !important' : 2,
-        pt: defaultPECAddress?.pecValid ? 0 : 3,
-        borderTopLeftRadius: defaultPECAddress?.pecValid ? 0 : 4,
-        borderTopRightRadius: defaultPECAddress?.pecValid ? 0 : 4,
-        borderBottomLeftRadius: value ? 0 : 4,
-        borderBottomRightRadius: value ? 0 : 4,
-      }}
     >
       <Box data-testid={`default_sercqSendContact`} style={{ width: isMobile ? '100%' : '50%' }}>
         {!value && !defaultPECAddress?.pecValid && (

@@ -20,13 +20,6 @@ const actions = [
   </button>,
 ];
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 describe('PnInfoCard Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -56,18 +49,14 @@ describe('PnInfoCard Component', () => {
     const btnOne = getByTestId('btn-one');
     expect(btnOne).toBeInTheDocument();
     fireEvent.click(btnOne);
-    await waitFor(() => {
-      expect(mockBtnOneCbk).toHaveBeenCalledTimes(1);
-    });
+    expect(mockBtnOneCbk).toHaveBeenCalledTimes(1);
     const btnTwo = getByTestId('btn-two');
     expect(btnTwo).toBeInTheDocument();
     fireEvent.click(btnTwo);
-    await waitFor(() => {
-      expect(mockBtnTwoCbk).toHaveBeenCalledTimes(1);
-    });
+    expect(mockBtnTwoCbk).toHaveBeenCalledTimes(1);
   });
 
-  it('renders component - with header', () => {
+  it('renders component - no actions', () => {
     // render component
     const { container, getByTestId } = render(
       <PnInfoCard title={title} subtitle={subTitle}>
@@ -83,6 +72,11 @@ describe('PnInfoCard Component', () => {
     const bodyEl = getByTestId('body');
     expect(bodyEl).toBeInTheDocument();
     expect(bodyEl).toHaveTextContent(/Body/i);
+
+    const btnOne = queryByTestId(container, 'btn-one');
+    expect(btnOne).not.toBeInTheDocument();
+    const btnTwo = queryByTestId(container, 'btn-two');
+    expect(btnTwo).not.toBeInTheDocument();
   });
 
   it('renders component - mobile', async () => {
@@ -122,19 +116,15 @@ describe('PnInfoCard Component', () => {
     expect(menuBtn).toBeInTheDocument();
     fireEvent.click(menuBtn);
 
-    await waitFor(() => {
-      const btnOne = getByTestId('btn-one');
-      expect(btnOne).toBeInTheDocument();
-      fireEvent.click(btnOne);
+    const btnOne = getByTestId('btn-one');
+    expect(btnOne).toBeInTheDocument();
+    fireEvent.click(btnOne);
 
-      const btnTwo = getByTestId('btn-two');
-      expect(btnTwo).toBeInTheDocument();
-      fireEvent.click(btnTwo);
-    });
+    const btnTwo = getByTestId('btn-two');
+    expect(btnTwo).toBeInTheDocument();
+    fireEvent.click(btnTwo);
 
-    await waitFor(() => {
-      expect(mockBtnOneCbk).toHaveBeenCalledTimes(1);
-      expect(mockBtnTwoCbk).toHaveBeenCalledTimes(1);
-    });
+    expect(mockBtnOneCbk).toHaveBeenCalledTimes(1);
+    expect(mockBtnTwoCbk).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,4 +1,4 @@
-import { MouseEvent, ReactNode, useState } from 'react';
+import { MouseEvent, ReactNode, useEffect, useState } from 'react';
 
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
@@ -8,76 +8,42 @@ import {
   Card,
   CardContent,
   CardHeader,
+  CardProps,
   IconButton,
   Menu,
   MenuItem,
   Stack,
-  SxProps,
   Typography,
+  TypographyProps,
 } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 type Props = {
   title: ReactNode;
-  subtitle?: string | ReactNode;
+  subtitle?: ReactNode;
   actions?: Array<ReactNode>;
   expanded?: boolean;
-  sx?: SxProps;
+  slotProps?: CardProps;
   children: ReactNode;
 };
 
-const PnInfoCardTitle: React.FC<Pick<Props, 'title'>> = ({ title }) => (
+const PnInfoCardHeading: React.FC<{
+  content: ReactNode;
+  dataTestid?: string;
+  sx?: TypographyProps;
+}> = ({ dataTestid, content, sx }) => (
   <>
-    {typeof title === 'string' && (
-      <Typography
-        color="text.primary"
-        fontWeight={700}
-        fontSize={24}
-        variant="body1"
-        mb={2}
-        data-testid="PnInfoCardTitle"
-      >
-        {title}
+    {typeof content === 'string' && (
+      <Typography data-testid={dataTestid} {...sx}>
+        {content}
       </Typography>
     )}
-    {typeof title !== 'string' && title}
+    {typeof content !== 'string' && content}
   </>
 );
 
-const PnInfoCardSubtitle: React.FC<Pick<Props, 'subtitle'>> = ({ subtitle }) => (
-  <>
-    {typeof subtitle === 'string' && (
-      <Typography
-        color="text.primary"
-        fontWeight={600}
-        fontSize={14}
-        variant="body1"
-        mb={2}
-        data-testid="PnInfoCardSubtitle"
-      >
-        {subtitle}
-      </Typography>
-    )}
-    {typeof subtitle !== 'string' && subtitle}
-  </>
-);
-
-const PnInfoCardActions: React.FC<Pick<Props, 'actions'> & { mobile: boolean }> = ({
-  actions,
-  mobile,
-}) => (
-  <>
-    {mobile ? (
-      <MobileContextMenu actions={actions} />
-    ) : (
-      <Stack direction="row" alignItems="end" spacing={3}>
-        {actions?.map((action) => action)}
-      </Stack>
-    )}
-  </>
-);
-
-const MobileContextMenu: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
+const PnInfoCardActions: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
+  const isMobile = useIsMobile();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -88,7 +54,7 @@ const MobileContextMenu: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
     setAnchorEl(null);
   };
 
-  return (
+  return isMobile ? (
     <Box data-testid="contextMenu">
       <IconButton
         onClick={handleClick}
@@ -126,6 +92,10 @@ const MobileContextMenu: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
         ))}
       </Menu>
     </Box>
+  ) : (
+    <Stack direction="row" alignItems="end" spacing={3}>
+      {actions?.map((action) => action)}
+    </Stack>
   );
 };
 
@@ -134,7 +104,7 @@ const PnInfoCard: React.FC<Props> = ({
   subtitle,
   actions,
   expanded = false,
-  sx,
+  slotProps,
   children,
 }) => {
   const isMobile = useIsMobile();
@@ -164,20 +134,42 @@ const PnInfoCard: React.FC<Props> = ({
     );
   };
 
+  useEffect(() => {
+    setShowDescription(expanded);
+  }, [expanded]);
+
   return (
-    <Card sx={{ p: { xs: 2, lg: 3 }, ...sx }}>
+    <Card sx={{ p: { xs: 2, lg: 3 }, ...slotProps }}>
       <CardHeader
         data-testid="PnInfoCardHeader"
         sx={{ p: 0 }}
-        title={<PnInfoCardTitle title={title} />}
-        action={
-          actions ? (
-            <PnInfoCardActions actions={actions} mobile={isMobile} />
-          ) : (
-            getExpandCollapseActions()
-          )
+        title={
+          <PnInfoCardHeading
+            content={title}
+            dataTestid="PnInfoCardTitle"
+            sx={{
+              color: 'text.primary',
+              fontWeight: 700,
+              fontSize: 24,
+              variant: 'body1',
+              mb: 2,
+            }}
+          />
         }
-        subheader={<PnInfoCardSubtitle subtitle={subtitle} />}
+        action={actions ? <PnInfoCardActions actions={actions} /> : getExpandCollapseActions()}
+        subheader={
+          <PnInfoCardHeading
+            content={subtitle}
+            dataTestid="PnInfoCardSubtitle"
+            sx={{
+              color: 'text.primary',
+              fontWeight: 600,
+              fontSize: 14,
+              variant: 'body1',
+              mb: 2,
+            }}
+          />
+        }
       />
       {showContent && (
         <CardContent data-testid="PnInfoCardBody" sx={{ p: 0, paddingBottom: '0 !important' }}>
