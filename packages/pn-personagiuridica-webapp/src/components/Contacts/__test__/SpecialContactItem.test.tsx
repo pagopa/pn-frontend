@@ -19,7 +19,6 @@ describe('SpecialContactItem Component', () => {
   const editHandler = vi.fn();
   const deleteHandler = vi.fn();
   const cancelValidationHandler = vi.fn();
-  const createNewAssociationHandler = vi.fn();
 
   const pecAddress = {
     addressType: AddressType.LEGAL,
@@ -28,22 +27,6 @@ describe('SpecialContactItem Component', () => {
     channelType: ChannelType.PEC,
     value: 'mocked@pec.it',
     pecValid: true,
-  };
-
-  const emailAddress = {
-    addressType: AddressType.COURTESY,
-    senderId: 'mocked-senderId',
-    senderName: 'Mocked Sender',
-    channelType: ChannelType.EMAIL,
-    value: 'mocked@mail.it',
-  };
-
-  const phoneAddress = {
-    addressType: AddressType.COURTESY,
-    senderId: 'mocked-senderId',
-    senderName: 'Mocked Sender',
-    channelType: ChannelType.SMS,
-    value: '+39333333333',
   };
 
   const sercqAddress = {
@@ -70,12 +53,10 @@ describe('SpecialContactItem Component', () => {
     // render component
     const { container, getAllByTestId } = render(
       <SpecialContactItem
-        index={0}
-        addresses={[pecAddress, emailAddress, phoneAddress]}
+        addresses={[pecAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
-        handleCreateNewAssociation={createNewAssociationHandler}
       />
     );
 
@@ -83,25 +64,12 @@ describe('SpecialContactItem Component', () => {
     const specialContactForms = getAllByTestId(
       /^[a-zA-Z0-9\-]+(?:_pecContact|_emailContact|_smsContact)$/
     );
-    expect(specialContactForms).toHaveLength(3);
+    expect(specialContactForms).toHaveLength(1);
     expect(specialContactForms[0]).toHaveTextContent('mocked@pec.it');
-    expect(specialContactForms[1]).toHaveTextContent('mocked@mail.it');
     const pecButtons = specialContactForms[0].querySelectorAll('button');
     expect(pecButtons).toHaveLength(2);
     expect(pecButtons[0]).toHaveTextContent('button.modifica');
     expect(pecButtons[1]).toHaveTextContent('button.elimina');
-    const emailButtons = specialContactForms[1].querySelectorAll('button');
-    expect(emailButtons).toHaveLength(2);
-    expect(emailButtons[0]).toHaveTextContent('button.modifica');
-    expect(emailButtons[1]).toHaveTextContent('button.elimina');
-    const phoneButtons = specialContactForms[2].querySelectorAll('button');
-    expect(phoneButtons).toHaveLength(2);
-    expect(phoneButtons[0]).toHaveTextContent('button.modifica');
-    expect(phoneButtons[1]).toHaveTextContent('button.elimina');
-    const addMoreSpecialContacts = container.querySelector(
-      '[data-testid="addMoreSpecialContacts"]'
-    );
-    expect(addMoreSpecialContacts).not.toBeInTheDocument();
   });
 
   it('should show pec validation progress if pec is not valid', () => {
@@ -112,19 +80,15 @@ describe('SpecialContactItem Component', () => {
     // render component
     const { container, getAllByTestId } = render(
       <SpecialContactItem
-        index={0}
         addresses={[pecNotValid]}
         onDelete={deleteHandler}
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
-        handleCreateNewAssociation={createNewAssociationHandler}
       />
     );
 
     expect(container).toHaveTextContent('Mocked Sender');
-    const specialContactForms = getAllByTestId(
-      /^[a-zA-Z0-9\-]+(?:_pecContact|_emailContact|_smsContact)$/
-    );
+    const specialContactForms = getAllByTestId(`${pecNotValid.senderId}_pecContact`);
     expect(specialContactForms).toHaveLength(1);
     const buttons = specialContactForms[0].querySelectorAll('button');
     expect(buttons).toHaveLength(1);
@@ -136,22 +100,23 @@ describe('SpecialContactItem Component', () => {
 
   it('calls onEdit when edit button is clicked', async () => {
     // render component
-    const { getAllByTestId } = render(
+    const { getAllByTestId, container } = render(
       <SpecialContactItem
-        index={0}
-        addresses={[pecAddress, emailAddress]}
+        addresses={[pecAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
-        handleCreateNewAssociation={createNewAssociationHandler}
       />
     );
 
     const specialContactForms = getAllByTestId(
-      /^[a-zA-Z0-9\-]+(?:_pecContact|_emailContact|_smsContact)$/
+      /^[a-zA-Z0-9\-]+(?:_pecSpecialContact|_emailSpecialContact|_smsSpecialContact)$/
     );
     const buttons = specialContactForms[0].querySelectorAll('button');
     fireEvent.click(buttons[0]);
+    // Click Confirm button of DefaultDigitalContact
+    const confirmButton = container.querySelectorAll('button');
+    fireEvent.click(confirmButton[0]);
     await waitFor(() => expect(editHandler).toHaveBeenCalledTimes(1));
   });
 
@@ -159,66 +124,32 @@ describe('SpecialContactItem Component', () => {
     // render component
     const { getAllByTestId } = render(
       <SpecialContactItem
-        index={0}
-        addresses={[pecAddress, emailAddress]}
+        addresses={[pecAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
-        handleCreateNewAssociation={createNewAssociationHandler}
       />
     );
 
     const specialContactForms = getAllByTestId(
-      /^[a-zA-Z0-9\-]+(?:_pecContact|_emailContact|_smsContact)$/
+      /^[a-zA-Z0-9\-]+(?:_pecSpecialContact|_emailSpecialContact|_smsSpecialContact)$/
     );
     const buttons = specialContactForms[0].querySelectorAll('button');
     fireEvent.click(buttons[1]);
     await waitFor(() => expect(deleteHandler).toHaveBeenCalledTimes(1));
   });
 
-  it('should render add button and call createNewAssociationHandler when is clicked', () => {
-    const defaultPecAddress = { ...pecAddress, senderId: 'default' };
-    const defaultEmailAddress = { ...emailAddress, senderId: 'default' };
-    const deafultPhoneAddress = { ...phoneAddress, senderId: 'default' };
-    const { container } = render(
-      <SpecialContactItem
-        index={0}
-        addresses={[pecAddress, emailAddress]}
-        onDelete={deleteHandler}
-        onEdit={editHandler}
-        onCancelValidation={cancelValidationHandler}
-        handleCreateNewAssociation={createNewAssociationHandler}
-      />,
-      {
-        preloadedState: {
-          contactsState: {
-            digitalAddresses: [defaultPecAddress, defaultEmailAddress, deafultPhoneAddress],
-          },
-        },
-      }
-    );
-
-    const addMoreSpecialContacts = container.querySelector(
-      '[data-testid="addMoreSpecialContacts"]'
-    );
-    expect(addMoreSpecialContacts).toBeInTheDocument();
-    fireEvent.click(addMoreSpecialContacts!);
-    expect(createNewAssociationHandler).toHaveBeenCalledTimes(1);
-  });
-
   it('should show Domicilio Digitale SEND value and no edit button', () => {
     const { getAllByTestId } = render(
       <SpecialContactItem
-        index={0}
         addresses={[sercqAddress]}
         onDelete={deleteHandler}
         onEdit={editHandler}
         onCancelValidation={cancelValidationHandler}
-        handleCreateNewAssociation={createNewAssociationHandler}
       />
     );
 
-    const specialContactForms = getAllByTestId(/sercq_sendContact$/);
+    const specialContactForms = getAllByTestId(/sercq_sendSpecialContact$/);
     expect(specialContactForms).toHaveLength(1);
     expect(specialContactForms[0]).toHaveTextContent('special-contacts.sercq_send');
     const buttons = specialContactForms[0].querySelectorAll('button');

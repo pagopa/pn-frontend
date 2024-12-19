@@ -125,7 +125,6 @@
     "block-remove-sms-message": "Pour ce faire, vous devez d’abord supprimer tous les numéros de téléphone que vous avez indiqués sous « Adresses secondaires »."
   },
   "special-contacts": {
-    "description": "Le saviez-vous ? Si vous souhaitez recevoir les notifications d’organismes spécifiques à des adresses autres que l’adresse principale, vous pouvez <0>personnaliser les adresses</0>.",
     "select-address": "Sélectionner adresse",
     "add-sender": "Organisme à associer",
     "pec": "Adresse PEC",
