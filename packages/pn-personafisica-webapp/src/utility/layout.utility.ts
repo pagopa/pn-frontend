@@ -8,6 +8,8 @@ function showFooter(path: string): boolean {
   return path !== 'privacy-tos';
 }
 
+const WIZARD_PAGES = [routes.DIGITAL_DOMICILE_ACTIVATION.slice(1)];
+
 function showSideMenu(
   path: string,
   isLogged: boolean,
@@ -19,7 +21,8 @@ function showSideMenu(
     path !== routes.SUPPORT.slice(1) &&
     isLogged &&
     tosAccepted &&
-    privacyAccepted
+    privacyAccepted &&
+    !WIZARD_PAGES.includes(path)
   );
 }
 
