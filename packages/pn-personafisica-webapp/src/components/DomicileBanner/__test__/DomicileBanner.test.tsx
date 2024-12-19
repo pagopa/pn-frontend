@@ -91,7 +91,8 @@ describe('DomicileBanner component', () => {
       <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />,
       {
         preloadedState: {
-          generalInfoState: { digitalAddresses: [sercqSendDefault], domicileBannerOpened: true },
+          contactsState: { digitalAddresses: [sercqSendDefault] },
+          generalInfoState: { domicileBannerOpened: true },
         },
       }
     );
@@ -117,7 +118,8 @@ describe('DomicileBanner component', () => {
       <DomicileBanner source={ContactSource.RECAPITI} />,
       {
         preloadedState: {
-          generalInfoState: { digitalAddresses: [sercqSendDefault], domicileBannerOpened: true },
+          contactsState: { digitalAddresses: [sercqSendDefault] },
+          generalInfoState: { domicileBannerOpened: true },
         },
       }
     );
@@ -134,10 +136,8 @@ describe('DomicileBanner component', () => {
   it('renders the component - SERCQ SEND enabled, email added, app IO not installed', () => {
     const { queryByTestId } = render(<DomicileBanner source={ContactSource.HOME_NOTIFICHE} />, {
       preloadedState: {
-        generalInfoState: {
-          digitalAddresses: [sercqSendDefault, emailDefault],
-          domicileBannerOpened: true,
-        },
+        contactsState: { digitalAddresses: [sercqSendDefault, emailDefault] },
+        generalInfoState: { domicileBannerOpened: true },
       },
     });
     const dialog = queryByTestId('addDomicileBanner');
@@ -149,10 +149,8 @@ describe('DomicileBanner component', () => {
       <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />,
       {
         preloadedState: {
-          generalInfoState: {
-            digitalAddresses: [sercqSendDefault, emailDefault, appIO],
-            domicileBannerOpened: true,
-          },
+          contactsState: { digitalAddresses: [sercqSendDefault, emailDefault, appIO] },
+          generalInfoState: { domicileBannerOpened: true },
         },
       }
     );
@@ -169,11 +167,14 @@ describe('DomicileBanner component', () => {
   });
 
   it('renders the component - SERCQ SEND enabled, email added, app IO enabled', () => {
-    appIO!.value = IOAllowedValues.ENABLED;
+    const enabledAppIO = {
+      ...appIO,
+      value: IOAllowedValues.ENABLED,
+    };
     const { queryByTestId } = render(<DomicileBanner source={ContactSource.HOME_NOTIFICHE} />, {
       preloadedState: {
+        contactsState: { digitalAddresses: [sercqSendDefault, emailDefault, enabledAppIO] },
         generalInfoState: {
-          digitalAddresses: [sercqSendDefault, emailDefault, appIO],
           domicileBannerOpened: true,
         },
       },
