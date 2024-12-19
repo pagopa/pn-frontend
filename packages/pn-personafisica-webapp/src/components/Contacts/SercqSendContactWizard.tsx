@@ -37,6 +37,7 @@ import {
 } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import InformativeDialog from './InformativeDialog';
@@ -57,9 +58,8 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
 
   const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const { defaultPECAddress, defaultSERCQ_SENDAddress } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const { defaultPECAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const { DOD_DISABLED } = getConfiguration();
 
   const sercqSendInfoList: Array<{ title: string; description: string }> = t(
@@ -76,11 +76,10 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
       .then((consent) => {
         // eslint-disable-next-line functional/immutable-data
         tosPrivacy.current = consent;
-        // const source =
-        //   externalEvent?.destination === ChannelType.SERCQ_SEND
-        //     ? externalEvent?.source ?? ContactSource.RECAPITI
-        //     : ContactSource.RECAPITI;
-        const source = ContactSource.RECAPITI;
+        const source =
+          externalEvent?.destination === ChannelType.SERCQ_SEND
+            ? externalEvent?.source ?? ContactSource.RECAPITI
+            : ContactSource.RECAPITI;
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
           senderId: 'default',
           source,
@@ -245,7 +244,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
             {t('button.enable', { ns: 'common' })}
           </Button>
 
-          {!defaultSERCQ_SENDAddress && !defaultPECAddress && (
+          {!defaultPECAddress && (
             <Divider
               sx={{ mb: 4, fontSize: '14px', color: 'text.secondary', textTransform: 'capitalize' }}
             >

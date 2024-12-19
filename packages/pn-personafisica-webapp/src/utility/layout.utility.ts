@@ -16,7 +16,6 @@ function showSideMenu(
   tosAccepted: boolean,
   privacyAccepted: boolean
 ): boolean {
-  console.log('path', path);
   return (
     path !== 'privacy-tos' &&
     path !== routes.SUPPORT.slice(1) &&

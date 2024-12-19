@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import { fireEvent, render } from '../../__test__/test-utils';
-import SercqSendActivation from '../SercqSendActivation.page';
+import DigitalContactActivation from '../DigitalContactActivation.page';
 
 const mockNavigateFn = vi.fn();
 
@@ -24,15 +24,15 @@ vi.mock('react-i18next', () => ({
   ),
 }));
 
-describe('SercqSendActivation', () => {
+describe('DigitalContactActivation', () => {
   it('render component', () => {
-    const { getByText } = render(<SercqSendActivation />);
+    const { getByText } = render(<DigitalContactActivation />);
     const title = getByText('legal-contacts.sercq-send-wizard.title');
     expect(title).toBeInTheDocument();
   });
 
   it('should go back when clicking on the back button', () => {
-    const { getByText } = render(<SercqSendActivation />);
+    const { getByText } = render(<DigitalContactActivation />);
     const backButton = getByText('button.annulla');
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);

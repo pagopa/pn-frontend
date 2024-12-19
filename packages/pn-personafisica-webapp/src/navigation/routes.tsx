@@ -27,7 +27,7 @@ const TermsOfServicePage = lazyRetry(() => import('../pages/TermsOfService.page'
 const AppStatus = lazyRetry(() => import('../pages/AppStatus.page'));
 const ParticipatingEntitiesPage = lazyRetry(() => import('../pages/ParticipatingEntities.page'));
 const SupportPage = lazyRetry(() => import('../pages/Support.page'));
-const SercqSendActivation = lazyRetry(() => import('../pages/SercqSendActivation.page'));
+const DigitalContactActivation = lazyRetry(() => import('../pages/DigitalContactActivation.page'));
 
 const handleAssistanceClick = () => {
   /* eslint-disable-next-line functional/immutable-data */
@@ -55,7 +55,7 @@ function Router() {
                 <Route path={routes.SUPPORT} element={<SupportPage />} />
                 <Route
                   path={routes.DIGITAL_DOMICILE_ACTIVATION}
-                  element={<SercqSendActivation />}
+                  element={<DigitalContactActivation />}
                 />
               </Route>
             </Route>
