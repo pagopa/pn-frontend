@@ -6,6 +6,7 @@ type Props = {
     role : React.AriaRole;
 };
 // Questo componente fa leggere allo screen reader il field passato dai proprio quando viene renderizzato
+// role alert ha di default aria live assertive
 const A11yContainerInvisible: React.FC<Props> = ({ field, ariaLive, role }: Props) =>(
         <div
         aria-live={ariaLive}
@@ -20,8 +21,7 @@ const A11yContainerInvisible: React.FC<Props> = ({ field, ariaLive, role }: Prop
           whiteSpace: 'nowrap',
           border: 0,
         }}
-      >{field}      
-      </div>
+      >{field}</div>
     );
 
 export default A11yContainerInvisible;

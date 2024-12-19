@@ -39,7 +39,7 @@ const FilterNotificationsFormActions = ({
       </Button>
       {feedbackSubmit && (
       <A11yContainerInvisible field="Azione completata" ariaLive='assertive' role='alert'></A11yContainerInvisible>
-    )}
+      )}
     </Grid>
   );
 
