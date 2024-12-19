@@ -73,7 +73,7 @@ const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick
       if (!data.status) {
         return <></>;
       }
-      const { label, tooltip, color } = !integrationApiIsEnabled && data.status === VirtualKeyStatus.Enabled ?
+      const { label, tooltip, color } = !integrationApiIsEnabled && data.status === VirtualKeyStatus.Enabled?
           getApiKeyStatusInfos(ExtendedVirtualKeyStatusType.Disabled,data.statusHistory) : getApiKeyStatusInfos(data.status, data.statusHistory);
       return tooltip ? (
         <StatusTooltip label={t(label)} tooltip={tooltip} color={color} />

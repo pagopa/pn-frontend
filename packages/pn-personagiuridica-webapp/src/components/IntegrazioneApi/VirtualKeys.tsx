@@ -38,14 +38,13 @@ const VirtualKeys: React.FC<Props> = ({integrationApiIsEnabled}) => {
   const dispatch = useAppDispatch();
   const virtualKeys = useAppSelector((state: RootState) => state.apiKeysState.virtualKeys);
   const issuerState = useAppSelector((state: RootState) => state.apiKeysState.issuerState);
-  const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const [modal, setModal] = useState<ModalType>({ view: ModalApiKeyView.NONE });
 
-  const hasOneEnabledVirtualKey = virtualKeys.items.find(
+   const hasOneEnabledVirtualKey = !!virtualKeys.items.find(
     (key) =>
-      key.status === VirtualKeyStatus.Enabled &&
-      (!key.user || key.user?.fiscalCode === currentUser.fiscal_number)
-  );
+      key.status === VirtualKeyStatus.Enabled ); 
+
+  const isEmptyVirtual = virtualKeys.items.length === 0;
 
   const isCreationEnabled =
     !hasOneEnabledVirtualKey && 
@@ -130,7 +129,7 @@ const VirtualKeys: React.FC<Props> = ({integrationApiIsEnabled}) => {
         <Typography variant="h6" sx={{ mb: { xs: 3, lg: 0 } }}>
           {t('virtualKeys.title')}
         </Typography>
-        {isCreationEnabled && (
+        {(isCreationEnabled  || isEmptyVirtual) && (
           <Button
             id="generate-virtual-key"
             data-testid="generateVirtualKey"
