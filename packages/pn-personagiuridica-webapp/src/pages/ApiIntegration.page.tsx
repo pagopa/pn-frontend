@@ -11,7 +11,7 @@ import { PNRole } from '../redux/auth/types';
 import { checkPublicKeyIssuer } from '../redux/apikeys/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { PublicKeysIssuerResponseIssuerStatusEnum, PublicKeyStatus } from '../generated-client/pg-apikeys';
+import { PublicKeysIssuerResponseIssuerStatusEnum, PublicKeyStatus, VirtualKeyStatus } from '../generated-client/pg-apikeys';
 import IntegrationApiBanner from '../components/IntegrazioneApi/IntegrationApiBanner';
 
 const ApiIntegration: React.FC = () => {
@@ -21,8 +21,16 @@ const ApiIntegration: React.FC = () => {
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
   const publicKeys = useAppSelector((state: RootState) => state.apiKeysState.publicKeys);
-  const hasPublicActive = !!publicKeys.items.find(el=>el.status === PublicKeyStatus.Active);
+  const virtualKeys = useAppSelector((state: RootState) => state.apiKeysState.virtualKeys);
+  const hasPublicActive = !!publicKeys.items.find(el=>el.status === PublicKeyStatus.Active || PublicKeyStatus.Rotated);
+  const hasVirtualActive = !!virtualKeys.items.find(el=>el.status === VirtualKeyStatus.Enabled || VirtualKeyStatus.Rotated);
   const keyIssuer = useAppSelector((state: RootState) => state.apiKeysState.issuerState);
+
+  const allTypeOfKeys = hasPublicActive && hasVirtualActive;
+  const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
+  const integrationApiIsEnabled = isAdminWithoutGroups ? keyIssuer.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active && hasPublicActive : keyIssuer.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
+  const shouldRenderVirtualKeys =
+  (allTypeOfKeys && isAdminWithoutGroups) || !isAdminWithoutGroups;
 
   const fetchCheckIssuer = useCallback(() => {
     void dispatch(checkPublicKeyIssuer())
@@ -30,13 +38,9 @@ const ApiIntegration: React.FC = () => {
   }, []); 
 
   useEffect(()=>{
-    fetchCheckIssuer();
+    !isAdminWithoutGroups && fetchCheckIssuer();
   },[]);
   
-  const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
-  const integrationApiIsEnabled = isAdminWithoutGroups ? keyIssuer.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active && hasPublicActive : keyIssuer.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
-
-  console.log('keyIssuer :>> ', keyIssuer);
   return (
     <LoadingPageWrapper isInitialized={true}>
       <Box p={3}>
@@ -48,7 +52,7 @@ const ApiIntegration: React.FC = () => {
         />
         {!integrationApiIsEnabled && <IntegrationApiBanner isAdminWithoutGroups={isAdminWithoutGroups}/>}
         {isAdminWithoutGroups && <PublicKeys />}
-        <VirtualKeys integrationApiIsEnabled={integrationApiIsEnabled} />
+        {shouldRenderVirtualKeys&& <VirtualKeys integrationApiIsEnabled={integrationApiIsEnabled} />}
       </Box>
     </LoadingPageWrapper>
   );
