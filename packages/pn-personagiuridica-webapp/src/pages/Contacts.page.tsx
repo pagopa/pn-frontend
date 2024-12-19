@@ -24,9 +24,7 @@ const Contacts = () => {
 
   const [pageReady, setPageReady] = useState(false);
 
-  const showSpecialContactsSection =
-    !!addressesData.defaultSERCQ_SENDAddress ||
-    !!addressesData.defaultPECAddress?.pecValid !== false;
+  const showSpecialContactsSection = addressesData.specialAddresses.length > 0;
 
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses()).then(() => {
