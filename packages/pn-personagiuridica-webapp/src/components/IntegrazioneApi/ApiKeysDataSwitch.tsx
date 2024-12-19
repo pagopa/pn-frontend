@@ -10,7 +10,7 @@ import {
   PublicKeyStatus,
   VirtualKeyStatus,
 } from '../../generated-client/pg-apikeys';
-import { ApiKeyColumnData, ModalApiKeyView } from '../../models/ApiKeys';
+import { ApiKeyColumnData, ExtendedVirtualKeyStatusType, ModalApiKeyView } from '../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../utility/apikeys.utility';
 import PublicKeyContextMenu from './PublicKeyContextMenu';
 import VirtualKeyContextMenu from './VirtualKeyContextMenu';
@@ -21,6 +21,7 @@ type Props = {
   type: keyof ApiKeyColumnData;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
   menuType: 'publicKeys' | 'virtualKeys';
+  integrationApiIsEnabled?: boolean;
 };
 
 const isApiKeyDisactivated = (data: Row<ApiKeyColumnData>): boolean =>
@@ -29,7 +30,7 @@ const isApiKeyDisactivated = (data: Row<ApiKeyColumnData>): boolean =>
 const setRowColorByStatus = (data: Row<ApiKeyColumnData>): string | undefined =>
   isApiKeyDisactivated(data) ? 'text.disabled' : undefined;
 
-const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick, menuType }) => {
+const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick, menuType, integrationApiIsEnabled }) => {
   const { t } = useTranslation(['integrazioneApi']);
 
   switch (type) {
@@ -72,7 +73,8 @@ const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick
       if (!data.status) {
         return <></>;
       }
-      const { label, tooltip, color } = getApiKeyStatusInfos(data.status, data.statusHistory);
+      const { label, tooltip, color } = !integrationApiIsEnabled && data.status === VirtualKeyStatus.Enabled?
+          getApiKeyStatusInfos(ExtendedVirtualKeyStatusType.Disabled,data.statusHistory) : getApiKeyStatusInfos(data.status, data.statusHistory);
       return tooltip ? (
         <StatusTooltip label={t(label)} tooltip={tooltip} color={color} />
       ) : (

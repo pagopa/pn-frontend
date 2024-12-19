@@ -7,10 +7,12 @@ import { formatDate, isToday } from '@pagopa-pn/pn-commons';
 import {
   PublicKeyStatus,
   PublicKeyStatusHistory,
-  VirtualKeyStatus,
+  
 } from '../generated-client/pg-apikeys';
+import { ExtendedVirtualKeyStatusType } from '../models/ApiKeys';
 
 type TooltipApiKeyProps = { history: Array<PublicKeyStatusHistory> };
+
 
 export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
   const { t } = useTranslation(['integrazioneApi']);
@@ -50,8 +52,8 @@ export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
 };
 
 export function getApiKeyStatusInfos(
-  status: PublicKeyStatus | VirtualKeyStatus,
-  statusHistory?: Array<PublicKeyStatusHistory>
+  status: PublicKeyStatus | ExtendedVirtualKeyStatusType,
+  statusHistory?: Array<PublicKeyStatusHistory>,
 ): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
@@ -61,7 +63,13 @@ export function getApiKeyStatusInfos(
   const tooltip = statusHistory ? <TooltipApiKey history={statusHistory} /> : undefined;
 
   switch (status) {
-    case VirtualKeyStatus.Enabled:
+    case ExtendedVirtualKeyStatusType.Disabled:
+      return {
+        color: 'info',
+        label,
+        tooltip,
+      };
+    case ExtendedVirtualKeyStatusType.Enabled:
     case PublicKeyStatus.Active:
       return {
         color: 'success',
