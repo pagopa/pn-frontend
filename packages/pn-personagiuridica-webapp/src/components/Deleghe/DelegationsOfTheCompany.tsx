@@ -377,7 +377,8 @@ const DelegationsOfTheCompany = () => {
                   sx={{ marginBottom: isMobile ? '20px' : '0' }}
                 />
               </Grid>
-              <Grid item xs={12} lg={3}>
+              <Grid item xs={12} lg={3} sx={{justifyContent:'space-between'}}>
+                {/* c''e ancora il bottone anche se non é raggiungibile o cliccabile */}
                 <PnAutocomplete
                   id="groups"
                   size="small"
@@ -388,12 +389,13 @@ const DelegationsOfTheCompany = () => {
                   noOptionsText={t('deleghe.table.no-group-found')}
                   getOptionLabel={getOptionLabel}
                   isOptionEqualToValue={(option, value) => option.id === value.id}
-                  popupIcon={<SearchIcon />}
+                  popupIcon={<SearchIcon/>}
                   sx={{
-                    [`& .MuiAutocomplete-popupIndicator`]: {
+                     [`& .MuiAutocomplete-popupIndicator`]: {
                       transform: 'none',
-                    },
-                    marginBottom: isMobile ? '20px' : '0',
+                       pointerEvents: 'none',
+                    }, 
+                     marginBottom: isMobile ? '20px' : '0',
                   }}
                   renderOption={renderOption}
                   renderInput={(params) => (
