@@ -1,16 +1,18 @@
 import React, { ReactNode } from "react";
 
 type Props = {
-    field : ReactNode | string;
-    ariaLive: 'assertive' | 'polite' | 'off';
-    role : React.AriaRole;
+    field: ReactNode | string;
+    ariaLive?: 'assertive' | 'polite' | 'off';
+    role?: React.AriaRole;
+    id? : string;
 };
 // Questo componente fa leggere allo screen reader il field passato dai proprio quando viene renderizzato
 // role alert ha di default aria live assertive
-const A11yContainerInvisible: React.FC<Props> = ({ field, ariaLive, role }: Props) =>(
+const A11yContainerInvisible: React.FC<Props> = ({ field, ariaLive, role, id }: Props) =>(
         <div
         aria-live={ariaLive}
         role={role}
+        id={id || 'invisibleComponent'}
         style={{
           position: 'absolute',
           width: '1px',

@@ -20,6 +20,7 @@ import {
   Typography,
 } from '@mui/material';
 import {
+  // A11yContainerInvisible,
   ApiErrorWrapper,
   EmptyState,
   KnownSentiment,
@@ -404,6 +405,7 @@ const DelegationsOfTheCompany = () => {
                       label={t('deleghe.table.group')}
                       placeholder={t('deleghe.table.group')}
                       name="groups"
+                      aria-describedby='dataSummary'
                     />
                   )}
                   value={formik.values.groups}
