@@ -386,11 +386,11 @@ const DelegationsOfTheCompany = () => {
                   fullWidth
                   options={groups.filter((group) => group.status === GroupStatus.ACTIVE)}
                   disableCloseOnSelect
+                  forcePopupIcon={false}
                   multiple
                   noOptionsText={t('deleghe.table.no-group-found')}
                   getOptionLabel={getOptionLabel}
                   isOptionEqualToValue={(option, value) => option.id === value.id}
-                  popupIcon={<SearchIcon/>}
                   sx={{
                      [`& .MuiAutocomplete-popupIndicator`]: {
                       transform: 'none',
@@ -406,6 +406,12 @@ const DelegationsOfTheCompany = () => {
                       placeholder={t('deleghe.table.group')}
                       name="groups"
                       aria-describedby='dataSummary'
+                      InputProps={{
+                        ...params.InputProps,
+                        endAdornment: (
+                          <SearchIcon color='primary'/> // margine sinistro negativo per spostarlo a sinistra
+                        ),
+                      }}
                     />
                   )}
                   value={formik.values.groups}
