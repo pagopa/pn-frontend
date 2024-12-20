@@ -110,7 +110,7 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   const { DOD_DISABLED } = getConfiguration();
 
   const digitalAddresses = useAppSelector(
-    (state: RootState) => state.generalInfoState.digitalAddresses
+    (state: RootState) => state.contactsState.digitalAddresses
   );
 
   const hasSercqSend = digitalAddresses.find((addr) => addr.channelType === ChannelType.SERCQ_SEND);

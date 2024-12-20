@@ -80,7 +80,8 @@ describe('DomicileBanner component', () => {
       <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />,
       {
         preloadedState: {
-          generalInfoState: { digitalAddresses: [sercqSendDefault], domicileBannerOpened: true },
+          contactsState: { digitalAddresses: [sercqSendDefault] },
+          generalInfoState: { domicileBannerOpened: true },
         },
       }
     );
@@ -106,7 +107,8 @@ describe('DomicileBanner component', () => {
       <DomicileBanner source={ContactSource.RECAPITI} />,
       {
         preloadedState: {
-          generalInfoState: { digitalAddresses: [sercqSendDefault], domicileBannerOpened: true },
+          contactsState: { digitalAddresses: [sercqSendDefault] },
+          generalInfoState: { domicileBannerOpened: true },
         },
       }
     );
@@ -123,10 +125,8 @@ describe('DomicileBanner component', () => {
   it('renders the component - SERCQ SEND enabled, email added', () => {
     const { queryByTestId } = render(<DomicileBanner source={ContactSource.HOME_NOTIFICHE} />, {
       preloadedState: {
-        generalInfoState: {
-          digitalAddresses: [sercqSendDefault, emailDefault],
-          domicileBannerOpened: true,
-        },
+        contactsState: { digitalAddresses: [sercqSendDefault, emailDefault] },
+        generalInfoState: { domicileBannerOpened: true },
       },
     });
     const dialog = queryByTestId('addDomicileBanner');

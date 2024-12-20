@@ -1,3 +1,4 @@
+import * as routes from '../../navigation/routes.const';
 import showLayoutParts from '../layout.utility';
 
 describe('Tests layout utility', () => {
@@ -48,6 +49,16 @@ describe('Tests layout utility', () => {
     expect(showFooter).toBeTruthy();
     expect(showSideMenu).toBeFalsy();
     expect(showHeaderProduct).toBeFalsy();
+    expect(showAssistanceButton).toBeTruthy();
+  });
+
+  it('wizard page', () => {
+    const [showHeader, showFooter, showSideMenu, showHeaderProduct, showAssistanceButton] =
+      showLayoutParts(routes.DIGITAL_DOMICILE_ACTIVATION.slice(1), true, true, true);
+    expect(showHeader).toBeTruthy();
+    expect(showFooter).toBeTruthy();
+    expect(showSideMenu).toBeFalsy();
+    expect(showHeaderProduct).toBeTruthy();
     expect(showAssistanceButton).toBeTruthy();
   });
 });
