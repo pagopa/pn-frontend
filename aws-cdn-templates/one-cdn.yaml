@@ -315,7 +315,7 @@ Resources:
                   - HEAD
                 TargetOriginId: pn-SelfCare-PG
                 ViewerProtocolPolicy: redirect-to-https
-                CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
                 PathPattern: /auth/icons/*
               - !Ref "AWS::NoValue"
@@ -329,7 +329,7 @@ Resources:
                   - HEAD
                 TargetOriginId: pn-SelfCare-PG
                 ViewerProtocolPolicy: redirect-to-https
-                CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
                 PathPattern: /auth/index.html
               - !Ref "AWS::NoValue"
@@ -357,7 +357,7 @@ Resources:
                   - HEAD
                 TargetOriginId: pn-SelfCare-PG
                 ViewerProtocolPolicy: redirect-to-https
-                CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
                 PathPattern: /dashboard/icons/*
               - !Ref "AWS::NoValue"
@@ -371,7 +371,7 @@ Resources:
                   - HEAD
                 TargetOriginId: pn-SelfCare-PG
                 ViewerProtocolPolicy: redirect-to-https
-                CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
                 PathPattern: /dashboard/index.html
               - !Ref "AWS::NoValue"
@@ -399,7 +399,7 @@ Resources:
                   - HEAD
                 TargetOriginId: pn-SelfCare-PG
                 ViewerProtocolPolicy: redirect-to-https
-                CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
                 PathPattern: /assistenza/icons/*
               - !Ref "AWS::NoValue"
@@ -413,7 +413,7 @@ Resources:
                   - HEAD
                 TargetOriginId: pn-SelfCare-PG
                 ViewerProtocolPolicy: redirect-to-https
-                CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
                 PathPattern: /assistenza/index.html
               - !Ref "AWS::NoValue"
@@ -441,7 +441,7 @@ Resources:
                   - HEAD
                 TargetOriginId: pn-SelfCare-PG
                 ViewerProtocolPolicy: redirect-to-https
-                CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
                 PathPattern: /onboarding/icons/*
               - !Ref "AWS::NoValue"
@@ -455,7 +455,7 @@ Resources:
                   - HEAD
                 TargetOriginId: pn-SelfCare-PG
                 ViewerProtocolPolicy: redirect-to-https
-                CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
                 PathPattern: /onboarding/index.html
               - !Ref "AWS::NoValue"
@@ -483,7 +483,7 @@ Resources:
                   - HEAD
                 TargetOriginId: pn-SelfCare-PG
                 ViewerProtocolPolicy: redirect-to-https
-                CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
                 PathPattern: /assets*
               - !Ref "AWS::NoValue"
@@ -497,7 +497,7 @@ Resources:
                   - HEAD
                 TargetOriginId: pn-SelfCare-PG
                 ViewerProtocolPolicy: redirect-to-https
-                CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
                 PathPattern: /microcomponents/static/icons/*
               - !Ref "AWS::NoValue"
@@ -511,7 +511,7 @@ Resources:
                   - HEAD
                 TargetOriginId: pn-SelfCare-PG
                 ViewerProtocolPolicy: redirect-to-https
-                CachePolicyId: WebsiteCDNCachingPolicyFiveMinutes
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
                 PathPattern: /microcomponents/index.html
               - !Ref "AWS::NoValue"
