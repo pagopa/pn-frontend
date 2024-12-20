@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+import { AppResponseMessage, IAppMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
 import {
   digitalAddresses,
@@ -9,7 +9,6 @@ import {
   digitalCourtesyAddresses,
   digitalLegalAddresses,
 } from '../../__mocks__/Contacts.mock';
-import { errorMock } from '../../__mocks__/Errors.mock';
 import { RenderResult, act, render, screen, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { ChannelType } from '../../models/contacts';
@@ -177,16 +176,37 @@ describe('Contacts page', async () => {
     expect(disableButton).toBeDisabled();
   });
 
-  // TODO - Capire come gestire errore
-  it.skip('API error', async () => {
-    mock.onGet('/bff/v1/addresses').reply(errorMock.status, errorMock.data);
+  it('API error', async () => {
+    const errors: Array<IAppMessage> = [
+      {
+        id: 'mocked-id',
+        title: 'Mocked title',
+        message: 'Mocked message',
+        blocking: false,
+        toNotify: true,
+        alreadyShown: true,
+        action: CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES,
+      },
+    ];
+
     await act(async () => {
       render(
         <>
           <ResponseEventDispatcher />
           <AppResponseMessage />
           <Contacts />
-        </>
+        </>,
+        {
+          preloadedState: {
+            appState: {
+              messages: {
+                errors,
+                success: [],
+                info: [],
+              },
+            },
+          },
+        }
       );
     });
     const statusApiErrorComponent = screen.queryByTestId(

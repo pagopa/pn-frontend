@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Box, Link, Stack } from '@mui/material';
@@ -25,14 +25,14 @@ const Contacts = () => {
   const showSpecialContactsSection = addressesData.specialAddresses.length > 0;
 
   const fetchAddresses = useCallback(() => {
-    void dispatch(getDigitalAddresses());
-  }, []);
-
-  useEffect(() => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_YOUR_CONTACT_DETAILS, {
-      digitalAddresses: addressesData.addresses,
-      contactIO: addressesData.defaultAPPIOAddress,
-    });
+    void dispatch(getDigitalAddresses())
+      .unwrap()
+      .then(() => {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_YOUR_CONTACT_DETAILS, {
+          digitalAddresses: addressesData.addresses,
+          contactIO: addressesData.defaultAPPIOAddress,
+        });
+      });
   }, []);
 
   const faqWhatIsAarCompleteLink = useMemo(
