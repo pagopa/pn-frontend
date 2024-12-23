@@ -339,6 +339,7 @@ const NotificationDetail: React.FC = () => {
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
+                    recipients={notification.recipients}
                     clickHandler={documentDowloadHandler}
                     disableDownloads={!dateIsLessThan10Years(notification.sentAt)}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}

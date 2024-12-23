@@ -531,6 +531,7 @@ const NotificationDetail: React.FC = () => {
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
+                    recipients={notification.recipients}
                     clickHandler={documentDowloadHandler}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
