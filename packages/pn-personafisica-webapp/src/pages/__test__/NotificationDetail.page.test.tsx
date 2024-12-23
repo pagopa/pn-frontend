@@ -351,6 +351,12 @@ describe('NotificationDetail Page', async () => {
     const otherDocument: NotificationDetailOtherDocument = {
       documentId: notificationToFe.otherDocuments?.[0].documentId ?? '',
       documentType: notificationToFe.otherDocuments?.[0].documentType ?? '',
+      digests: { sha256: '' },
+      contentType: '',
+      ref: {
+        key: '',
+        versionToken: '',
+      },
     };
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);

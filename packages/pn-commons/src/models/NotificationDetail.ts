@@ -165,10 +165,6 @@ export interface NotificationDetailDocument extends Attachment {
   documentId?: string;
   documentType?: string;
   recIndex?: number;
-  recipient?: {
-    denomination: string;
-    taxId: string;
-  };
 }
 
 export interface PaymentAttachment {
@@ -313,9 +309,11 @@ export interface LegalFactId {
   category: LegalFactType | 'AAR';
 }
 
-export interface NotificationDetailOtherDocument {
-  documentId: string;
-  documentType: string;
+export interface NotificationDetailOtherDocument extends NotificationDetailDocument {
+  recipient?: {
+    denomination: string;
+    taxId: string;
+  };
 }
 
 export enum PhysicalCommunicationType {
