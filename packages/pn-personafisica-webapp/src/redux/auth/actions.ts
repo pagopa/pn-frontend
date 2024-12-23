@@ -1,9 +1,4 @@
-import {
-  ConsentType,
-  TosPrivacyConsent,
-  parseError,
-  performThunkAction,
-} from '@pagopa-pn/pn-commons';
+import { ConsentType, TosPrivacyConsent, parseError } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
@@ -25,7 +20,13 @@ export enum AUTH_ACTIONS {
  */
 export const exchangeToken = createAsyncThunk<User, string>(
   'exchangeToken',
-  performThunkAction((spidToken: string) => AuthApi.exchangeToken(spidToken))
+  async (spidToken, { rejectWithValue }) => {
+    try {
+      return await AuthApi.exchangeToken(spidToken);
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
 /**

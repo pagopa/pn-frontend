@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
 import { mockApiKeysDTO } from '../../__mocks__/ApiKeys.mock';
+import { errorMock } from '../../__mocks__/Errors.mock';
 import {
   RenderResult,
   act,
@@ -245,7 +246,9 @@ describe('ApiKeys Page', async () => {
   });
 
   it('api return error', async () => {
-    mock.onGet('/bff/v1/api-keys?limit=10&showVirtualKey=true').reply(500);
+    mock
+      .onGet('/bff/v1/api-keys?limit=10&showVirtualKey=true')
+      .reply(errorMock.status, errorMock.data);
     await act(async () => {
       result = render(
         <>
