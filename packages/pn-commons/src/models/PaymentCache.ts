@@ -58,7 +58,7 @@ const notificationDetailDocumentSchema: yup.SchemaOf<NotificationDetailDocument>
       docIdx: yup.string().optional(),
       documentId: yup.string().optional(),
       documentType: yup.string().optional(),
-      recIndex: yup.number().optional()
+      recIndex: yup.number().optional(),
     })
   )
   .noUnknown(true);

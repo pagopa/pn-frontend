@@ -57,12 +57,12 @@ const NotificationDetailDocuments: React.FC<Props> = (
           ? ` - ${d.recipient?.denomination} (${d.recipient?.taxId})`
           : '';
       const docName = isOtherDocument
-        ? getLocalizedOrDefaultLabel('notifications', 'detail.aar-acts')
+        ? `${getLocalizedOrDefaultLabel('notifications', 'detail.aar-acts')}${recipient}`
         : d.title || d.ref.key;
 
       const document = {
         key: d.ref.key || d.documentId,
-        name: `${docName}${recipient}`,
+        name: docName,
         downloadHandler: d.documentId
           ? {
               documentId: d.documentId,
