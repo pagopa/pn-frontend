@@ -29,3 +29,7 @@ export type ApiKeyColumnData = {
   user?: UserDto;
   menu: string;
 };
+
+export const ExtendedVirtualKeyStatus = { ...VirtualKeyStatus, Disabled: 'DISABLED' } as const;
+export type ExtendedVirtualKeyStatus =
+  (typeof ExtendedVirtualKeyStatus)[keyof typeof ExtendedVirtualKeyStatus];
