@@ -24,6 +24,8 @@ const vitestConfig = defineVitestConfig({
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
+  const webAppEnv = env.HOST.split('.')[1]; // the host value is like "cittadini.dev.notifichedigitali.it"
+
   return mergeConfig(vitestConfig, {
     plugins: [react(), basicSsl(), splitVendorChunkPlugin()],
     server: {
@@ -34,7 +36,7 @@ export default defineConfig(({ mode }) => {
       open: true,
       proxy: {
         '^/auth/.*': {
-          target: 'https://login.dev.notifichedigitali.it',
+          target: `https://login.${webAppEnv}.notifichedigitali.it`,
           changeOrigin: true,
         },
       },
