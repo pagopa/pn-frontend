@@ -14,14 +14,6 @@ import { PaymentObject } from '../../../models/NewNotification';
 import * as actions from '../../../redux/newNotification/actions';
 import PaymentMethods from '../PaymentMethods';
 
-// mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const file = new File(['mocked content'], 'Mocked file', { type: 'application/pdf' });
 
 function uploadDocument(elem: HTMLElement) {
@@ -116,9 +108,9 @@ describe.skip('PaymentMethods Component', () => {
     expect(buttons![0]).toBeEnabled();
     fireEvent.click(buttons![0]);
     await waitFor(() => {
-      expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith(
+      expect(mockDispatchFn).toHaveBeenCalledTimes(1);
+      expect(mockActionFn).toHaveBeenCalledTimes(1);
+      expect(mockActionFn).toHaveBeenCalledWith(
         newNotification.recipients.reduce((obj: { [key: string]: PaymentObject }, r, index) => {
           obj[r.taxId] = {
             pagoPaForm: {

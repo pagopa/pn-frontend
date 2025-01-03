@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
 
 import { ThemeProvider } from '@mui/material';
 import { AppResponseMessage, ResponseEventDispatcher, formatDate } from '@pagopa-pn/pn-commons';
@@ -11,13 +10,6 @@ import { act, fireEvent, render, screen, waitFor, within } from '../../__test__/
 import { apiClient } from '../../api/apiClients';
 import { APP_STATUS_ACTIONS } from '../../redux/appStatus/actions';
 import AppStatus from '../AppStatus.page';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string, data: any) => `${str} - ${JSON.stringify(data)}`,
-  }),
-}));
 
 const AppStatusWithErrorHandling = () => (
   <ThemeProvider theme={theme}>
@@ -185,7 +177,7 @@ describe('AppStatus page', async () => {
     const button = itemsPerPageSelector?.querySelector('button');
     fireEvent.click(button!);
     const itemsPerPageList = screen.getAllByRole('menuitem');
-    fireEvent.click(itemsPerPageList[1]!);
+    fireEvent.click(itemsPerPageList[1]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(6);
     });

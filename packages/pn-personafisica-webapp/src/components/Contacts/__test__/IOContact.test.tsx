@@ -8,14 +8,6 @@ import { AddressType, ChannelType, IOAllowedValues } from '../../../models/conta
 import { getConfiguration } from '../../../services/configuration.service';
 import IOContact from '../IOContact';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
-
 const IOAddress = digitalCourtesyAddresses.find((addr) => addr.channelType === ChannelType.IOMSG);
 const assignFn = vi.fn();
 
