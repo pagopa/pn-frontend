@@ -19,12 +19,6 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const Guard = () => (
   <Routes>
     <Route path="/" element={<SessionGuard />}>

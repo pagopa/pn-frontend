@@ -13,13 +13,6 @@ import DomicileBanner from '../DomicileBanner';
 
 const mockNavigateFn = vi.fn();
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,

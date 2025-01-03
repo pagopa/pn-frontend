@@ -7,13 +7,6 @@ import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { getApiKeyStatusInfos } from '../../../utility/apikeys.utility';
 import ApiKeyDataSwitch from '../ApiKeyDataSwitch';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const data = mockApiKeysDTO.items[0];
 
 describe('ApiKeyDataSwitch Component', () => {
@@ -96,7 +89,7 @@ describe('ApiKeyDataSwitch Component', () => {
     const viewGroupsId = getByTestId('buttonViewGroupsId');
     expect(viewGroupsId).toBeInTheDocument();
     fireEvent.click(viewGroupsId);
-    expect(mockClick).toBeCalledTimes(1);
+    expect(mockClick).toHaveBeenCalledTimes(1);
   });
 
   it('renders component - contextMenu no groups', async () => {

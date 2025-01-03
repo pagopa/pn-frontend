@@ -5,13 +5,6 @@ import { fireEvent, render, screen, testStore, within } from '../../../__test__/
 import { AddressType } from '../../../models/contacts';
 import CancelVerificationModal from '../CancelVerificationModal';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const mockCloseHandler = vi.fn();
 
 describe('CancelVerificationModal component', async () => {
@@ -29,7 +22,7 @@ describe('CancelVerificationModal component', async () => {
     expect(buttons[0]).toHaveTextContent('button.annulla');
     expect(buttons[1]).toHaveTextContent('button.conferma');
     fireEvent.click(buttons[0]);
-    expect(mockCloseHandler).toBeCalledTimes(1);
+    expect(mockCloseHandler).toHaveBeenCalledTimes(1);
   });
 
   it('clicks on confirm button', () => {

@@ -1,5 +1,4 @@
 import { Formik } from 'formik';
-import { vi } from 'vitest';
 
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 import {
@@ -17,14 +16,6 @@ import userEvent from '@testing-library/user-event';
 import { PaymentModel } from '../../../models/NewNotification';
 import { PreliminaryInformationsPayload } from '../../../redux/newNotification/types';
 import PreliminaryInformationsLang from '../PreliminaryInformationsLang';
-
-// mock imports
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
-  }),
-}));
 
 describe('PreliminaryInformationsLang', () => {
   const initialValues: PreliminaryInformationsPayload = {

@@ -1,5 +1,3 @@
-import { vi } from 'vitest';
-
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
@@ -9,13 +7,6 @@ const header = 'Mocked header';
 const title = 'Mocked title';
 const subTitle = 'Mocked subtitle';
 const body = <div data-testid="body">Body</div>;
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
 
 describe('DigitalContactsCard Component', () => {
   it('renders component', () => {

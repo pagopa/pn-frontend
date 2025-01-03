@@ -28,7 +28,6 @@ const SercqSendInfoDialog: React.FC<Props> = ({ open = false, onDiscard, onConfi
   const sercqSendInfoList: Array<{ title: string; description: string }> = t(
     'legal-contacts.sercq-send-info-list',
     {
-      returnObjects: true,
       defaultValue: [],
       ns: 'recapiti',
     }

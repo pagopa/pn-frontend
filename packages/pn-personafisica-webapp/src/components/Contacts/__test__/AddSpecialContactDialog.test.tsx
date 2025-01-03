@@ -23,13 +23,6 @@ import { ChannelType } from '../../../models/contacts';
 import { CONTACT_ACTIONS } from '../../../redux/contact/actions';
 import AddSpecialContactDialog from '../AddSpecialContactDialog';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const discardHandler = vi.fn();
 const confirmHandler = vi.fn();
 

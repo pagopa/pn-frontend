@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
 
 import { ThemeProvider } from '@mui/material';
 import { AppResponseMessage, ResponseEventDispatcher, formatDate } from '@pagopa-pn/pn-commons';
@@ -11,14 +10,6 @@ import { act, fireEvent, render, screen, waitFor, within } from '../../__test__/
 import { apiClient } from '../../api/apiClients';
 import { APP_STATUS_ACTIONS } from '../../redux/appStatus/actions';
 import AppStatus from '../AppStatus.page';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string, data: any) => `${str} - ${JSON.stringify(data)}`,
-  }),
-  Trans: () => 'mocked verify description',
-}));
 
 const AppStatusWithErrorHandling = () => (
   <ThemeProvider theme={theme}>

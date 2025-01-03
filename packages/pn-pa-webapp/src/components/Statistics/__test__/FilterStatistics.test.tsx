@@ -15,14 +15,6 @@ import { fireEvent, render, testStore, waitFor, within } from '../../../__test__
 import { SelectedStatisticsFilter, StatisticsFilter } from '../../../models/Statistics';
 import FilterStatistics from '../FilterStatistics';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
-  }),
-}));
-
 const lastDate = new Date();
 lastDate.setDate(lastDate.getDate() - 5);
 

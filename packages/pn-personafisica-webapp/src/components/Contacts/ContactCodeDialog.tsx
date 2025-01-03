@@ -27,8 +27,9 @@ const ContactCodeDialog: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const contactType = channelType.toLowerCase();
-  const codeModalRef =
-    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
+  const codeModalRef = useRef<{
+    updateError: (error: ErrorMessage, codeNotValid: boolean) => void;
+  }>(null);
   const labelRoot = `${addressType.toLowerCase()}-contacts`;
 
   const handleAddressUpdateError = useCallback(

@@ -6,14 +6,6 @@ import SyncFeedback from '../SyncFeedback';
 
 const mockNavigateFn = vi.fn();
 
-// mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
@@ -39,7 +31,7 @@ describe('SyncFeedback Component', () => {
     const result = render(<SyncFeedback />);
     const button = result.container.querySelector('button');
     fireEvent.click(button!);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.DASHBOARD);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DASHBOARD);
   });
 });

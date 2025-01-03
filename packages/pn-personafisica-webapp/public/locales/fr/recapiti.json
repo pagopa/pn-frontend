@@ -65,10 +65,7 @@
       "<strong>Recevez les notifications en temps réel</strong>, dès que l’organisme les télécharge sur SEND",
       "<strong>Ouvrez les documents joints</strong> dans l’app",
       "<strong>Payez les montants dus</strong> si la notification prévoit un paiement"
-    ],
-    "sercq-send-pec": "Vous préférez utiliser une PEC comme adresse à valeur juridique pour les notifications de SEND ?",
-    "sercq-send-add-pec": "Activez une PEC",
-    "sercq-send-add-pec-description": "Si vous activez une PEC, celle-ci remplacera le Domicile Numérique en tant qu’adresse à valeur juridique SEND. Le Domicile Numérique sera désactivé."
+    ]
   },
   "io-contact": {
     "title": "App IO",
@@ -128,7 +125,6 @@
     "block-remove-sms-message": "Pour ce faire, vous devez d’abord supprimer tous les numéros de téléphone que vous avez indiqués sous « Adresses secondaires »."
   },
   "special-contacts": {
-    "description": "Le saviez-vous ? Si vous souhaitez recevoir les notifications d’organismes spécifiques à des adresses autres que l’adresse principale, vous pouvez <0>personnaliser les adresses</0>.",
     "select-address": "Sélectionner adresse",
     "add-sender": "Organisme à associer",
     "pec": "Adresse PEC",

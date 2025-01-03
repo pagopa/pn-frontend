@@ -7,13 +7,6 @@ import {
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import NotificationRecipientsDetail from '../NotificationRecipientsDetail';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 describe('NotificationRecipientsDetail Component', () => {
   const original = navigator.clipboard;
 
@@ -96,8 +89,10 @@ describe('NotificationRecipientsDetail Component', () => {
     const copyToClipboardBtn = within(dialogAllRecipients[0]).queryByRole('button');
     fireEvent.click(copyToClipboardBtn!);
     await waitFor(() => {
-      expect(writeTextFn).toBeCalledTimes(1);
-      expect(writeTextFn).toBeCalledWith(recipients[0].denomination + ' - ' + recipients[0].taxId);
+      expect(writeTextFn).toHaveBeenCalledTimes(1);
+      expect(writeTextFn).toHaveBeenCalledWith(
+        recipients[0].denomination + ' - ' + recipients[0].taxId
+      );
     });
     // close dialog
     const closeDialogBtn = within(dialog!).queryByTestId('close-dialog');

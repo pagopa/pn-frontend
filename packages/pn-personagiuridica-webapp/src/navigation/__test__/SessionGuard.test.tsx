@@ -20,12 +20,6 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const Guard = () => (
   <Routes>
     <Route path="/" element={<SessionGuard />}>
@@ -136,8 +130,11 @@ describe('SessionGuard Component', async () => {
     expect(logoutComponent).toBeTruthy();
     const logoutTitleComponent = screen.queryByText('leaving-app.title');
     expect(logoutTitleComponent).toBeNull();
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith({ pathname: routes.NOT_ACCESSIBLE }, { replace: true });
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(
+      { pathname: routes.NOT_ACCESSIBLE },
+      { replace: true }
+    );
   });
 
   // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck
@@ -158,8 +155,8 @@ describe('SessionGuard Component', async () => {
     });
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(
       { pathname: routes.NOTIFICHE, search: '' },
       { replace: true }
     );
@@ -184,8 +181,8 @@ describe('SessionGuard Component', async () => {
     });
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(
       { pathname: routes.NOTIFICHE_DELEGATO, search: '' },
       { replace: true }
     );
@@ -210,8 +207,8 @@ describe('SessionGuard Component', async () => {
     });
     const pageComponent = screen.queryByText('Mocked Page');
     expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(
       { pathname: location.pathname, search: '', hash: 'greet=hola' },
       { replace: true }
     );

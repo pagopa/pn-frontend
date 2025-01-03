@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
 
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
@@ -10,14 +9,6 @@ import { AddressType, ChannelType } from '../../../models/contacts';
 import { internationalPhonePrefix } from '../../../utility/contacts.utility';
 import SmsContactItem from '../SmsContactItem';
 import { fillCodeDialog } from './test-utils';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
 
 const defaultAddress = digitalCourtesyAddresses.find(
   (addr) => addr.channelType === ChannelType.SMS && addr.senderId === 'default'
@@ -55,7 +46,7 @@ describe('test SmsContactItem', () => {
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('courtesy-contacts.valid-sms');
     const buttons = form!.querySelectorAll('button');
-    expect(buttons[0]).toBeDisabled();
+    expect(buttons[0]).toBeEnabled();
     fireEvent.change(input!, { target: { value: '' } });
     await waitFor(() => {
       expect(input!).toHaveValue('');
@@ -74,7 +65,7 @@ describe('test SmsContactItem', () => {
     const editButton = getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = container.querySelector(`[name="default_sms"]`);
-    const saveButton = getByRole('button', { name: 'button.salva' });
+    const saveButton = getByRole('button', { name: 'button.conferma' });
     expect(input).toHaveValue(defaultAddress?.value.replace(internationalPhonePrefix, ''));
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
@@ -117,6 +108,14 @@ describe('test SmsContactItem', () => {
     fireEvent.click(disclaimerCheckbox);
     const disclaimerConfirmButton = result.getByTestId('disclaimer-confirm-button');
     fireEvent.click(disclaimerConfirmButton); */
+    const informativeDialog = await waitFor(() => result.getByTestId('informativeDialog'));
+    expect(informativeDialog).toBeInTheDocument();
+    const understandButton = result.getByTestId('understandButton');
+    expect(understandButton).toBeInTheDocument();
+    fireEvent.click(understandButton);
+    await waitFor(() => {
+      expect(informativeDialog).not.toBeVisible();
+    });
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
@@ -184,7 +183,7 @@ describe('test SmsContactItem', () => {
     let editButton = result.getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = result.container.querySelector(`[name="default_sms"]`);
-    const saveButton = result.getByRole('button', { name: 'button.salva' });
+    const saveButton = result.getByRole('button', { name: 'button.conferma' });
     expect(input).toHaveValue(defaultAddress!.value.replace(internationalPhonePrefix, ''));
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: phoneValue } });
@@ -198,6 +197,14 @@ describe('test SmsContactItem', () => {
     fireEvent.click(disclaimerCheckbox);
     const disclaimerConfirmButton = result.getByTestId('disclaimer-confirm-button');
     fireEvent.click(disclaimerConfirmButton); */
+    const informativeDialog = await waitFor(() => result.getByTestId('informativeDialog'));
+    expect(informativeDialog).toBeInTheDocument();
+    const understandButton = result.getByTestId('understandButton');
+    expect(understandButton).toBeInTheDocument();
+    fireEvent.click(understandButton);
+    await waitFor(() => {
+      expect(informativeDialog).not.toBeVisible();
+    });
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({

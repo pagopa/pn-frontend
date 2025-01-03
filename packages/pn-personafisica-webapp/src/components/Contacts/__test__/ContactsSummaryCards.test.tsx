@@ -3,15 +3,8 @@ import { vi } from 'vitest';
 import { digitalAddresses, digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, within } from '../../../__test__/test-utils';
 import { AddressType } from '../../../models/contacts';
-import ContactsSummaryCards from '../ContactsSummaryCards';
 import { sortAddresses } from '../../../utility/contacts.utility';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
+import ContactsSummaryCards from '../ContactsSummaryCards';
 
 describe('ContactsSummaryCards component', () => {
   it('renders component - no contacts', () => {

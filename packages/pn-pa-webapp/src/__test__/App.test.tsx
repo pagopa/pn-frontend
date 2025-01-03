@@ -11,19 +11,6 @@ import { institutionsDTO, productsDTO } from '../__mocks__/User.mock';
 import { apiClient } from '../api/apiClients';
 import { RenderResult, act, render } from './test-utils';
 
-// mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translation hook can use it without a warning being shown
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: {
-      language: 'it',
-      changeLanguage: () => new Promise(() => {}),
-    },
-  }),
-}));
-
 vi.mock('../pages/Dashboard.page', () => ({ default: () => <div>Generic Page</div> }));
 
 const unmockedFetch = global.fetch;

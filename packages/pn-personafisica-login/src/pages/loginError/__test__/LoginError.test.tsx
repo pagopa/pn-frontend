@@ -11,13 +11,6 @@ const mockNavigateFn = vi.fn();
 let spidErrorCode: string;
 
 // mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translation hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
@@ -53,8 +46,8 @@ describe('LoginError component', () => {
     act(() => {
       vi.advanceTimersByTime(2000);
     });
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(getConfiguration().ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -75,8 +68,8 @@ describe('LoginError component', () => {
     act(() => {
       vi.advanceTimersByTime(2000);
     });
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(getConfiguration().ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -97,8 +90,8 @@ describe('LoginError component', () => {
     act(() => {
       vi.advanceTimersByTime(2000);
     });
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(getConfiguration().ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -119,8 +112,8 @@ describe('LoginError component', () => {
     act(() => {
       vi.advanceTimersByTime(2000);
     });
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(getConfiguration().ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -141,8 +134,8 @@ describe('LoginError component', () => {
     act(() => {
       vi.advanceTimersByTime(2000);
     });
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(getConfiguration().ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -163,8 +156,8 @@ describe('LoginError component', () => {
     act(() => {
       vi.advanceTimersByTime(2000);
     });
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(getConfiguration().ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -185,8 +178,8 @@ describe('LoginError component', () => {
     act(() => {
       vi.advanceTimersByTime(2000);
     });
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(getConfiguration().ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -207,8 +200,8 @@ describe('LoginError component', () => {
     act(() => {
       vi.advanceTimersByTime(2000);
     });
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(getConfiguration().ROUTE_LOGIN);
     vi.useRealTimers();
   });
 
@@ -229,8 +222,8 @@ describe('LoginError component', () => {
     act(() => {
       vi.advanceTimersByTime(2000);
     });
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(getConfiguration().ROUTE_LOGIN);
     vi.useRealTimers();
   });
 });

@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -6,19 +5,6 @@ import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 import { fireEvent, render, screen, within } from '../../../__test__/test-utils';
 import { TERMS_OF_SERVICE_SERCQ_SEND } from '../../../navigation/routes.const';
 import SercqSendInfoDialog from '../SercqSendInfoDialog';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string, options?: { returnObjects: boolean }) =>
-      options?.returnObjects ? [str] : str,
-  }),
-  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
-    <>
-      {props.i18nKey} {props.components?.map((c) => c)}
-    </>
-  ),
-}));
 
 const discardHandler = vi.fn();
 const confirmHandler = vi.fn();
