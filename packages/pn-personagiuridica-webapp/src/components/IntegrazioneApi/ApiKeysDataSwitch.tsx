@@ -10,7 +10,7 @@ import {
   PublicKeyStatus,
   VirtualKeyStatus,
 } from '../../generated-client/pg-apikeys';
-import { ApiKeyColumnData, ExtendedVirtualKeyStatusType, ModalApiKeyView } from '../../models/ApiKeys';
+import { ApiKeyColumnData, ExtendedVirtualKeyStatus, ModalApiKeyView } from '../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../utility/apikeys.utility';
 import PublicKeyContextMenu from './PublicKeyContextMenu';
 import VirtualKeyContextMenu from './VirtualKeyContextMenu';
@@ -21,7 +21,7 @@ type Props = {
   type: keyof ApiKeyColumnData;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
   menuType: 'publicKeys' | 'virtualKeys';
-  integrationApiIsEnabled?: boolean;
+  issuerIsActive?: boolean;
 };
 
 const isApiKeyDisactivated = (data: Row<ApiKeyColumnData>): boolean =>
@@ -30,7 +30,14 @@ const isApiKeyDisactivated = (data: Row<ApiKeyColumnData>): boolean =>
 const setRowColorByStatus = (data: Row<ApiKeyColumnData>): string | undefined =>
   isApiKeyDisactivated(data) ? 'text.disabled' : undefined;
 
-const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick, menuType, integrationApiIsEnabled }) => {
+const ApiKeysDataSwitch: React.FC<Props> = ({
+  data,
+  keys,
+  type,
+  handleModalClick,
+  menuType,
+  issuerIsActive,
+}) => {
   const { t } = useTranslation(['integrazioneApi']);
 
   switch (type) {
@@ -69,12 +76,14 @@ const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick
       );
     case 'date':
       return <Typography sx={{ color: setRowColorByStatus(data) }}>{data.date}</Typography>;
-    case 'status':
+    case 'status': {
       if (!data.status) {
         return <></>;
       }
-      const { label, tooltip, color } = !integrationApiIsEnabled && data.status === VirtualKeyStatus.Enabled?
-          getApiKeyStatusInfos(ExtendedVirtualKeyStatusType.Disabled,data.statusHistory) : getApiKeyStatusInfos(data.status, data.statusHistory);
+      const { label, tooltip, color } =
+        !issuerIsActive && data.status === VirtualKeyStatus.Enabled
+          ? getApiKeyStatusInfos(ExtendedVirtualKeyStatus.Disabled, data.statusHistory)
+          : getApiKeyStatusInfos(data.status, data.statusHistory);
       return tooltip ? (
         <StatusTooltip label={t(label)} tooltip={tooltip} color={color} />
       ) : (
@@ -86,6 +95,7 @@ const ApiKeysDataSwitch: React.FC<Props> = ({ data, keys, type, handleModalClick
           data-testid={`statusChip-${t(label)}`}
         />
       );
+    }
     case 'menu':
       return menuType === 'publicKeys' ? (
         <PublicKeyContextMenu

@@ -30,24 +30,22 @@ type ModalType = {
 };
 
 type Props = {
-  integrationApiIsEnabled : boolean;
+  issuerIsActive: boolean;
 };
 
-const VirtualKeys: React.FC<Props> = ({integrationApiIsEnabled}) => {
+const VirtualKeys: React.FC<Props> = ({ issuerIsActive }) => {
   const { t } = useTranslation('integrazioneApi');
   const dispatch = useAppDispatch();
   const virtualKeys = useAppSelector((state: RootState) => state.apiKeysState.virtualKeys);
   const issuerState = useAppSelector((state: RootState) => state.apiKeysState.issuerState);
   const [modal, setModal] = useState<ModalType>({ view: ModalApiKeyView.NONE });
 
-   const hasOneEnabledVirtualKey = !!virtualKeys.items.find(
-    (key) =>
-      key.status === VirtualKeyStatus.Enabled ); 
-
-  const isEmptyVirtual = virtualKeys.items.length === 0;
+  const hasOneEnabledVirtualKey = !!virtualKeys.items.find(
+    (key) => key.status === VirtualKeyStatus.Enabled
+  );
 
   const isCreationEnabled =
-    !hasOneEnabledVirtualKey && 
+    !hasOneEnabledVirtualKey &&
     issuerState.tosAccepted &&
     issuerState.issuer.isPresent &&
     issuerState.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
@@ -129,7 +127,7 @@ const VirtualKeys: React.FC<Props> = ({integrationApiIsEnabled}) => {
         <Typography variant="h6" sx={{ mb: { xs: 3, lg: 0 } }}>
           {t('virtualKeys.title')}
         </Typography>
-        {(isCreationEnabled  || isEmptyVirtual) && (
+        {isCreationEnabled && (
           <Button
             id="generate-virtual-key"
             data-testid="generateVirtualKey"
@@ -147,7 +145,11 @@ const VirtualKeys: React.FC<Props> = ({integrationApiIsEnabled}) => {
           {t('virtualKeys.tos-empty-state')}
         </EmptyState>
       ) : (
-        <VirtualKeysTable virtualKeys={virtualKeys} handleModalClick={handleModalClick} integrationApiIsEnabled={integrationApiIsEnabled} />
+        <VirtualKeysTable
+          virtualKeys={virtualKeys}
+          handleModalClick={handleModalClick}
+          issuerIsActive={issuerIsActive}
+        />
       )}
 
       {modal.view === ModalApiKeyView.VIEW && (
