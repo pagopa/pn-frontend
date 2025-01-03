@@ -157,6 +157,12 @@ describe('NotificationDetail Page', async () => {
     const otherDocument: NotificationDetailOtherDocument = {
       documentId: notificationAfter150Days.otherDocuments?.[0].documentId ?? '',
       documentType: notificationAfter150Days.otherDocuments?.[0].documentType ?? '',
+      digests: { sha256: '' },
+      contentType: '',
+      ref: {
+        key: '',
+        versionToken: '',
+      },
     };
 
     mock
