@@ -1,4 +1,4 @@
-import { MouseEvent, ReactNode, useEffect, useState } from 'react';
+import { MouseEvent, ReactElement, ReactNode, useEffect, useState } from 'react';
 
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
@@ -21,7 +21,7 @@ import { useIsMobile } from '@pagopa-pn/pn-commons';
 type Props = {
   title: ReactNode;
   subtitle?: ReactNode;
-  actions?: Array<ReactNode>;
+  actions?: Array<ReactElement>;
   expanded?: boolean;
   slotProps?: {
     Card: CardProps;
@@ -29,11 +29,8 @@ type Props = {
   children: ReactNode;
 };
 
-const PnInfoCardHeading: React.FC<TypographyProps> = (children, ...props) => (
-  <>
-    {typeof children === 'string' && <Typography {...props}>{children}</Typography>}
-    {typeof children !== 'string' && children}
-  </>
+const PnInfoCardHeading: React.FC<TypographyProps> = ({ children, ...props }) => (
+  <>{typeof children === 'string' ? <Typography {...props}>{children}</Typography> : children}</>
 );
 
 const PnInfoCardActions: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
@@ -81,14 +78,14 @@ const PnInfoCardActions: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {actions?.map((action, index) => (
-          <MenuItem key={index}>{action}</MenuItem>
+        {actions?.map((action) => (
+          <MenuItem key={action.key}>{action}</MenuItem>
         ))}
       </Menu>
     </Box>
   ) : (
     <Stack direction="row" alignItems="end" spacing={3}>
-      {actions?.map((action) => action)}
+      {actions}
     </Stack>
   );
 };
