@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import {
@@ -21,18 +20,6 @@ const mockOpenFn = vi.fn();
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
-}));
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  Trans: (props: { i18nKey: string; components: Array<ReactNode> }) => (
-    <>
-      {props.i18nKey} {props.components.map((c) => c)}
-    </>
-  ),
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
 }));
 
 const tosConsent: ConsentUser = {
@@ -105,8 +92,8 @@ describe('test Terms of Service page', async () => {
         />
       );
     });
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.DASHBOARD);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DASHBOARD);
   });
 
   it('navigate to privacy and tos pages', async () => {
@@ -115,11 +102,11 @@ describe('test Terms of Service page', async () => {
     });
     const tosLink = result?.getByTestId('tos-link');
     fireEvent.click(tosLink!);
-    expect(mockOpenFn).toBeCalledTimes(1);
-    expect(mockOpenFn).toBeCalledWith(TOS_LINK_RELATIVE_PATH, '_blank');
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(TOS_LINK_RELATIVE_PATH, '_blank');
     const privacyLink = result?.getByTestId('privacy-link');
     fireEvent.click(privacyLink!);
-    expect(mockOpenFn).toBeCalledTimes(2);
-    expect(mockOpenFn).toBeCalledWith(PRIVACY_LINK_RELATIVE_PATH, '_blank');
+    expect(mockOpenFn).toHaveBeenCalledTimes(2);
+    expect(mockOpenFn).toHaveBeenCalledWith(PRIVACY_LINK_RELATIVE_PATH, '_blank');
   });
 });

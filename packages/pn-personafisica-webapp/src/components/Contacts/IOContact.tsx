@@ -7,6 +7,7 @@ import {
   IllusAppIO,
   IllusAppIoLogo,
   IllusSendLogo,
+  PnInfoCard,
   appStateActions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
@@ -18,7 +19,6 @@ import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
-import DigitalContactsCard from './DigitalContactsCard';
 import InformativeDialog from './InformativeDialog';
 
 enum IOContactStatus {
@@ -136,10 +136,10 @@ const IOContact: React.FC = () => {
   };
 
   return (
-    <DigitalContactsCard
+    <PnInfoCard
       title={t('io-contact.title', { ns: 'recapiti' })}
-      subtitle=""
-      sx={{ pt: '1.5rem' }}
+      subtitle={t('io-contact.description', { ns: 'recapiti' })}
+      slotProps={{ Card: { sx: { pt: '1.5rem' } } }}
     >
       <Stack direction="row" alignItems="center" data-testid="ioContact">
         <Avatar variant="rounded" sx={{ bgcolor: '#0B3EE3', width: '36px', height: '36px' }}>
@@ -179,7 +179,7 @@ const IOContact: React.FC = () => {
         onConfirm={() => handleConfirm()}
         onDiscard={() => setOpenInfoModal(false)}
       />
-    </DigitalContactsCard>
+    </PnInfoCard>
   );
 };
 

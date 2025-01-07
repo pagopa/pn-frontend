@@ -24,15 +24,6 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string, options?: { returnObjects: boolean }) =>
-      options?.returnObjects ? [str] : str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
-
 describe('Contacts page', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
@@ -141,48 +132,13 @@ describe('Contacts page', async () => {
     );
     expect(cancelValidationButton).toBeInTheDocument();
 
-    const sercqSendContact = within(specialContacts).getByTestId('1234_sercq_sendContact');
+    const sercqSendContact = within(specialContacts).getByTestId('1234_sercq_sendSpecialContact');
     expect(sercqSendContact).toBeInTheDocument();
     expect(sercqSendContact).toHaveTextContent('special-contacts.sercq_send');
 
     const disableButton = within(sercqSendContact).getByRole('button', { name: 'button.disable' });
     expect(disableButton).toBeInTheDocument();
     expect(disableButton).toBeDisabled();
-  });
-
-  it('renders Special Contact having Sercq disabled and pec in validation', async () => {
-    mock
-      .onGet('/bff/v1/addresses')
-      .reply(200, [
-        ...digitalAddressesPecValidation(true, true),
-        ...digitalAddressesPecValidation(false, false, { id: '1234', name: '1234' }),
-      ]);
-    await act(async () => {
-      result = render(<Contacts />);
-    });
-
-    const banner = result.getByTestId('PecVerificationAlert');
-    expect(banner).toBeInTheDocument();
-    const alertIcon = within(banner).getByTestId('InfoOutlinedIcon');
-    expect(alertIcon).toBeInTheDocument();
-    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.title');
-    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.dod-disabled-message');
-
-    const specialContacts = result.getByTestId('specialContacts');
-    expect(specialContacts).toBeInTheDocument();
-    // check contacts
-    const pecValidationItem = within(specialContacts).getByTestId('1234_pecContact');
-    expect(pecValidationItem).toBeInTheDocument();
-    const closeIcon = within(specialContacts).getByTestId('CloseIcon');
-    expect(closeIcon).toBeInTheDocument();
-    const cancelValidationButton = within(specialContacts).getByText(
-      'legal-contacts.cancel-pec-validation'
-    );
-    expect(cancelValidationButton).toBeInTheDocument();
-
-    const addMoreContactsBtn = within(specialContacts).getByTestId('addMoreSpecialContacts');
-    expect(addMoreContactsBtn).toBeInTheDocument();
-    expect(addMoreContactsBtn).toBeDisabled();
   });
 
   it('API error', async () => {

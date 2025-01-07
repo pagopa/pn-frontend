@@ -8,14 +8,6 @@ import { AddressType, ChannelType, IOAllowedValues } from '../../../models/conta
 import { getConfiguration } from '../../../services/configuration.service';
 import IOContact from '../IOContact';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
-
 const IOAddress = digitalCourtesyAddresses.find((addr) => addr.channelType === ChannelType.IOMSG);
 const assignFn = vi.fn();
 
@@ -44,13 +36,13 @@ describe('IOContact component', async () => {
   });
 
   it('renders component - no contacts', () => {
-    const { getByTestId, getByRole } = render(<IOContact />);
-    const title = getByTestId('DigitalContactsCardTitle');
+    const { getByTestId, getByRole, getByText } = render(<IOContact />);
+    const title = getByTestId('PnInfoCardTitle');
     expect(title).toHaveTextContent('io-contact.title');
     const description = getByTestId('ioContactDescription');
     expect(description).toHaveTextContent('io-contact.description');
-    // TODO here check the chip
-    // const text = getByText('io-contact.unavailable');
+    const text = getByText('io-contact.unavailable');
+    expect(text).toBeInTheDocument();
     const button = getByRole('button', { name: 'io-contact.download' });
     expect(button).toBeInTheDocument();
   });

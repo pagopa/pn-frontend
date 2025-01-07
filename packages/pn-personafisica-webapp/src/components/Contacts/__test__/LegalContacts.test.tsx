@@ -1,5 +1,3 @@
-import { vi } from 'vitest';
-
 import {
   digitalAddressesPecValidation,
   digitalLegalAddresses,
@@ -8,15 +6,6 @@ import {
 import { render, waitFor, within } from '../../../__test__/test-utils';
 import { ChannelType } from '../../../models/contacts';
 import LegalContacts from '../LegalContacts';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string, options?: { returnObjects: boolean }) =>
-      options?.returnObjects ? [str] : str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
 
 const defaultPecAddress = digitalLegalAddresses.find(
   (addr) => addr.senderId === 'default' && addr.pecValid && addr.channelType === ChannelType.PEC

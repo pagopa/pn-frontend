@@ -5,13 +5,6 @@ import { fireEvent, render, screen, waitFor, within } from '../../../__test__/te
 import { apiClient } from '../../../api/apiClients';
 import GroupSelector from '../GroupSelector';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const onGroupSelectionCbk = vi.fn();
 
 describe('GroupSelector component', async () => {
@@ -51,8 +44,8 @@ describe('GroupSelector component', async () => {
     expect(menuItems[0]).toHaveTextContent('Group 1');
     expect(menuItems[1]).toHaveTextContent('Group 2');
     fireEvent.click(menuItems[1]);
-    expect(onGroupSelectionCbk).toBeCalledTimes(1);
-    expect(onGroupSelectionCbk).toBeCalledWith('group-2');
+    expect(onGroupSelectionCbk).toHaveBeenCalledTimes(1);
+    expect(onGroupSelectionCbk).toHaveBeenCalledWith('group-2');
     await waitFor(() => {
       expect(dropdown).not.toBeInTheDocument();
     });

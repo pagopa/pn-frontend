@@ -125,7 +125,6 @@
     "block-remove-sms-message": "Dazu müssen zunächst alle Telefonnummern unter „Sekundäre Anschriften“ gelöscht werden."
   },
   "special-contacts": {
-    "description": "Wusstest du? Wenn du die Zustellungen von bestimmten Körperschaften an anderen Adressen als die Hauptadresse empfangen möchtest, so kannst du die <0>Anschriften personalisieren</0>.",
     "select-address": "Anschrift wählen",
     "add-sender": "Zu verknüpfende Körperschaft",
     "pec": "PEC-Adresse",

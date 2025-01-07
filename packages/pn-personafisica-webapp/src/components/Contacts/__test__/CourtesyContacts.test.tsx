@@ -1,18 +1,7 @@
-import { vi } from 'vitest';
-
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
 import { render, waitFor, within } from '../../../__test__/test-utils';
 import { ChannelType } from '../../../models/contacts';
 import CourtesyContacts from '../CourtesyContacts';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string, options?: { returnObjects: boolean }) =>
-      options?.returnObjects ? [str] : str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
 
 describe('CourtesyContacts Component', async () => {
   it('renders component - no contacts', async () => {

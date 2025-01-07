@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import {
@@ -24,19 +23,6 @@ const mockNavigateFn = vi.fn();
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
-}));
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
-  }),
-  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
-    <>
-      {props.i18nKey} {props.components!.map((c) => c)}
-    </>
-  ),
 }));
 
 describe('Dashboard Page', async () => {
@@ -72,7 +58,7 @@ describe('Dashboard Page', async () => {
     const newNotificationBtn = result.queryByTestId('link-create-notification');
     fireEvent.click(newNotificationBtn!);
     await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
+      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -88,7 +74,7 @@ describe('Dashboard Page', async () => {
     expect(newNotificationBtn).toHaveTextContent('new-notification-button');
     fireEvent.click(newNotificationBtn!);
     await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
+      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -103,7 +89,7 @@ describe('Dashboard Page', async () => {
     const apiKeysBtn = result.queryByTestId('link-api-keys');
     fireEvent.click(apiKeysBtn!);
     await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
+      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -146,7 +132,7 @@ describe('Dashboard Page', async () => {
     const itemsPerPageSelectorBtn = itemsPerPageSelector?.querySelector('button');
     fireEvent.click(itemsPerPageSelectorBtn!);
     const itemsPerPageList = screen.getAllByRole('menuitem');
-    fireEvent.click(itemsPerPageList[1]!);
+    fireEvent.click(itemsPerPageList[1]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/bff/v1/notifications/sent');

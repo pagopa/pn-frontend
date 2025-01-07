@@ -2,12 +2,13 @@ import React, { JSXElementConstructor, ReactElement, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Button, ButtonProps, Paper, Stack, Step, StepLabel, Stepper } from '@mui/material';
+import { Box, Button, ButtonProps, Paper, Stack } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import checkChildren from '../../utility/children.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnWizardStep, { PnWizardStepProps } from './PnWizardStep';
+import PnWizardStepper from './PnWizardStepper';
 
 type Props = {
   activeStep: number;
@@ -75,7 +76,7 @@ const PnWizard: React.FC<Props> = ({
 
   return (
     <Stack display="flex" alignItems="center" justifyContent="center">
-      <Box p={3} sx={{ maxWidth: { xs: '100%', lg: '90%' } }}>
+      <Box p={3}>
         <ButtonNaked
           type="button"
           size="medium"
@@ -90,15 +91,7 @@ const PnWizard: React.FC<Props> = ({
           {title}
         </Box>
 
-        {steps.length > 0 && (
-          <Stepper activeStep={activeStep} alternativeLabel>
-            {steps.map((step, index) => (
-              <Step key={index}>
-                <StepLabel>{step.label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-        )}
+        {steps.length > 0 && <PnWizardStepper steps={steps} activeStep={activeStep} />}
 
         <Paper sx={{ p: 3, mb: '20px', mt: 3 }} elevation={0}>
           {childrens[activeStep]}
