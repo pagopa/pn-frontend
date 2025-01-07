@@ -17,16 +17,6 @@ import Contacts from '../Contacts.page';
 
 const mockOpenFn = vi.fn();
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string, options?: { returnObjects: boolean }) =>
-      options?.returnObjects ? [str] : str,
-    i18n: { language: 'it' },
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
-
 describe('Contacts page', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
@@ -54,7 +44,7 @@ describe('Contacts page', async () => {
   it('renders Contacts (no contacts)', async () => {
     mock.onGet('/bff/v1/addresses').reply(200, []);
     await act(async () => {
-      result = await render(<Contacts />);
+      result = render(<Contacts />);
     });
     expect(result.container).toHaveTextContent(/title/i);
     expect(result.container).toHaveTextContent(/subtitle/i);
@@ -69,7 +59,7 @@ describe('Contacts page', async () => {
   it('renders Contacts (legal contacts)', async () => {
     mock.onGet('/bff/v1/addresses').reply(200, digitalLegalAddresses);
     await act(async () => {
-      result = await render(<Contacts />);
+      result = render(<Contacts />);
     });
     const legalContacts = result?.queryByTestId('legalContacts');
     expect(legalContacts).toBeInTheDocument();
@@ -80,7 +70,7 @@ describe('Contacts page', async () => {
   it('renders Contacts (courtesy contacts)', async () => {
     mock.onGet('/bff/v1/addresses').reply(200, digitalCourtesyAddresses);
     await act(async () => {
-      result = await render(<Contacts />);
+      result = render(<Contacts />);
     });
     const legalContacts = result?.getByTestId('legalContacts');
     expect(legalContacts).toBeInTheDocument();
@@ -91,7 +81,7 @@ describe('Contacts page', async () => {
   it('renders Contacts (courtesy and legal contacts filled)', async () => {
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     await act(async () => {
-      result = await render(<Contacts />);
+      result = render(<Contacts />);
     });
     const legalContacts = result?.queryByTestId('legalContacts');
     expect(legalContacts).toBeInTheDocument();

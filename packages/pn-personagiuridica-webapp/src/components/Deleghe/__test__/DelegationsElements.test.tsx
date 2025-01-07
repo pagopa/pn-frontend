@@ -10,13 +10,6 @@ import { apiClient } from '../../../api/apiClients';
 import { DelegationColumnData, DelegationStatus } from '../../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const actionCbk = vi.fn();
 
 describe('DelegationElements', async () => {
@@ -120,7 +113,7 @@ describe('DelegationElements', async () => {
     const cancelButton = getByTestId('codeCancelButton');
     fireEvent.click(cancelButton);
     await waitFor(() => expect(codeDialog).not.toBeInTheDocument());
-    expect(actionCbk).not.toBeCalled();
+    expect(actionCbk).not.toHaveBeenCalled();
   });
 
   it('renders the AcceptButton - accept the delegation', async () => {
@@ -175,7 +168,7 @@ describe('DelegationElements', async () => {
         verificationCode: '01234',
       });
     });
-    expect(actionCbk).toBeCalledTimes(1);
+    expect(actionCbk).toHaveBeenCalledTimes(1);
   });
 
   it('check verificationCode for delegates', async () => {
@@ -200,7 +193,7 @@ describe('DelegationElements', async () => {
       expect(input).toHaveValue(arrayOfVerificationCode[index]);
     });
     const cancelButton = within(showDialog).getByTestId('codeCancelButton');
-    fireEvent.click(cancelButton!);
+    fireEvent.click(cancelButton);
     await waitFor(() => {
       expect(showDialog).not.toBeInTheDocument();
     });
@@ -229,7 +222,7 @@ describe('DelegationElements', async () => {
       expect(mock.history.patch[0].url).toContain('/bff/v1/mandate/111/revoke');
       expect(showDialog).not.toBeInTheDocument();
     });
-    expect(actionCbk).toBeCalledTimes(1);
+    expect(actionCbk).toHaveBeenCalledTimes(1);
   });
 
   it('check close confimationDialog', async () => {
@@ -247,7 +240,7 @@ describe('DelegationElements', async () => {
     fireEvent.click(revoke);
     const showDialog = await waitFor(() => screen.getByTestId('confirmationDialog'));
     const cancelButton = within(showDialog).getAllByTestId('dialogAction')[0];
-    fireEvent.click(cancelButton!);
+    fireEvent.click(cancelButton);
     await waitFor(() => {
       expect(showDialog).not.toBeInTheDocument();
     });
@@ -337,7 +330,7 @@ describe('DelegationElements', async () => {
     const cancelButton = getByTestId('groupCancelButton');
     fireEvent.click(cancelButton);
     await waitFor(() => expect(updateDialog).not.toBeInTheDocument());
-    expect(actionCbk).not.toBeCalled();
+    expect(actionCbk).not.toHaveBeenCalled();
   });
 
   it('update groups - delegator', async () => {
@@ -391,6 +384,6 @@ describe('DelegationElements', async () => {
         groups: ['group-2', 'group-3'],
       });
     });
-    expect(actionCbk).toBeCalledTimes(1);
+    expect(actionCbk).toHaveBeenCalledTimes(1);
   });
 });

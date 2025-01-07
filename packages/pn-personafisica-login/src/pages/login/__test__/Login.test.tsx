@@ -22,18 +22,6 @@ function mockCreateMockedSearchParams() {
 }
 
 // mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translation hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: {
-      language: 'it',
-      changeLanguage: () => new Promise(() => {}),
-    },
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
-
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual<any>('react-router-dom')),
   useSearchParams: () => [mockCreateMockedSearchParams(), null],
@@ -79,7 +67,7 @@ describe('test login page', () => {
       </BrowserRouter>
     );
     const spidButton = getById(container, 'spidButton');
-    fireEvent.click(spidButton!);
+    fireEvent.click(spidButton);
     const spidSelect = getById(container, 'spidSelect');
     expect(spidSelect).toBeInTheDocument();
   });
@@ -92,9 +80,9 @@ describe('test login page', () => {
       </BrowserRouter>
     );
     const cieButton = getById(container, 'cieButton');
-    fireEvent.click(cieButton!);
-    expect(mockAssign).toBeCalledTimes(1);
-    expect(mockAssign).toBeCalledWith(
+    fireEvent.click(cieButton);
+    expect(mockAssign).toHaveBeenCalledTimes(1);
+    expect(mockAssign).toHaveBeenCalledWith(
       `${URL_API_LOGIN}/login?entityID=${SPID_CIE_ENTITY_ID}&authLevel=SpidL2&RelayState=send`
     );
   });

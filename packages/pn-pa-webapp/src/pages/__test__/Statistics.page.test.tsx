@@ -19,15 +19,6 @@ import { render } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import Statistics from '../Statistics.page';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: {},
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
-
 const dateFormatter = (date: Date) => {
   const month = `0${date.getMonth() + 1}`.slice(-2);
   const day = `0${date.getDate()}`.slice(-2);

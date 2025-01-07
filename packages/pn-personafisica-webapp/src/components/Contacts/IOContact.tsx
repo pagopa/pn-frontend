@@ -173,7 +173,7 @@ const IOContact: React.FC = () => {
     <PnInfoCard
       title={t('io-contact.title', { ns: 'recapiti' })}
       subtitle={t('io-contact.description', { ns: 'recapiti' })}
-      sx={{ pt: '1.5rem' }}
+      slotProps={{ Card: { sx: { pt: '1.5rem' } } }}
     >
       {getContent()}
       {/* <DisclaimerModal

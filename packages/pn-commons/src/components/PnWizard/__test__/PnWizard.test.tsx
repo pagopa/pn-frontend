@@ -1,10 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { fireEvent, render } from '../../../test-utils';
+import { disableConsoleLogging, fireEvent, render } from '../../../test-utils';
 import PnWizard from '../PnWizard';
 import PnWizardStep from '../PnWizardStep';
 
 describe('PnWizard Component', () => {
+  disableConsoleLogging('error');
   const setActiveStep = vi.fn();
 
   it('renders PnWizard', () => {
