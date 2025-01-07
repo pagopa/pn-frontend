@@ -1,34 +1,41 @@
 import * as routes from '../navigation/routes.const';
 
-function showHeader(path: string): boolean {
-  return path !== 'privacy-tos';
+function showHeader(pathname: string): boolean {
+  return pathname !== '/privacy-tos';
 }
 
-function showFooter(path: string): boolean {
-  return path !== 'privacy-tos';
+function showFooter(pathname: string): boolean {
+  return pathname !== '/privacy-tos';
 }
+
+const WIZARD_PAGES = [routes.DIGITAL_DOMICILE_ACTIVATION];
 
 function showSideMenu(
-  path: string,
+  pathname: string,
   isLogged: boolean,
   tosAccepted: boolean,
   privacyAccepted: boolean
 ): boolean {
   return (
-    path !== 'privacy-tos' &&
-    path !== routes.SUPPORT.slice(1) &&
+    pathname !== '/privacy-tos' &&
+    pathname !== routes.SUPPORT &&
     isLogged &&
     tosAccepted &&
-    privacyAccepted
+    privacyAccepted &&
+    !WIZARD_PAGES.includes(pathname)
   );
 }
 
-function showHeaderProduct(path: string, tosAccepted: boolean, privacyAccepted: boolean): boolean {
-  return path !== routes.SUPPORT.slice(1) && tosAccepted && privacyAccepted;
+function showHeaderProduct(
+  pathname: string,
+  tosAccepted: boolean,
+  privacyAccepted: boolean
+): boolean {
+  return pathname !== routes.SUPPORT && tosAccepted && privacyAccepted;
 }
 
-function showAssistanceButton(path: string): boolean {
-  return path !== routes.SUPPORT.slice(1);
+function showAssistanceButton(pathname: string): boolean {
+  return pathname !== routes.SUPPORT;
 }
 
 export default function showLayoutParts(
