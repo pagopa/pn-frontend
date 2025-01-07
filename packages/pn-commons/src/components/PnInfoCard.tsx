@@ -23,22 +23,16 @@ type Props = {
   subtitle?: ReactNode;
   actions?: Array<ReactNode>;
   expanded?: boolean;
-  slotProps?: CardProps;
+  slotProps?: {
+    Card: CardProps;
+  };
   children: ReactNode;
 };
 
-const PnInfoCardHeading: React.FC<{
-  content: ReactNode;
-  dataTestid?: string;
-  sx?: TypographyProps;
-}> = ({ dataTestid, content, sx }) => (
+const PnInfoCardHeading: React.FC<TypographyProps> = (children, ...props) => (
   <>
-    {typeof content === 'string' && (
-      <Typography data-testid={dataTestid} {...sx}>
-        {content}
-      </Typography>
-    )}
-    {typeof content !== 'string' && content}
+    {typeof children === 'string' && <Typography {...props}>{children}</Typography>}
+    {typeof children !== 'string' && children}
   </>
 );
 
@@ -74,7 +68,7 @@ const PnInfoCardActions: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
         open={open}
         onClose={handleClose}
         onClick={handleClose}
-        slotProps={{
+        sx={{
           paper: {
             elevation: 0,
             sx: {
@@ -145,30 +139,28 @@ const PnInfoCard: React.FC<Props> = ({
         sx={{ p: 0 }}
         title={
           <PnInfoCardHeading
-            content={title}
-            dataTestid="PnInfoCardTitle"
-            sx={{
-              color: 'text.primary',
-              fontWeight: 700,
-              fontSize: 24,
-              variant: 'body1',
-              mb: 2,
-            }}
-          />
+            data-testid="PnInfoCardTitle"
+            color="text.primary"
+            fontWeight={700}
+            fontSize="24"
+            variant="body1"
+            mb={2}
+          >
+            {title}
+          </PnInfoCardHeading>
         }
         action={actions ? <PnInfoCardActions actions={actions} /> : getExpandCollapseActions()}
         subheader={
           <PnInfoCardHeading
-            content={subtitle}
-            dataTestid="PnInfoCardSubtitle"
-            sx={{
-              color: 'text.primary',
-              fontWeight: 600,
-              fontSize: 14,
-              variant: 'body1',
-              mb: 2,
-            }}
-          />
+            data-testid="PnInfoCardSubtitle"
+            color="text.primary"
+            fontWeight={600}
+            fontSize={14}
+            variant="body1"
+            mb={2}
+          >
+            {subtitle}
+          </PnInfoCardHeading>
         }
       />
       {showContent && (
