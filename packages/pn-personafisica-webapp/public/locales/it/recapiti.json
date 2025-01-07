@@ -40,22 +40,7 @@
     "sercq-send-info-title": "Attiva SEND come tuo Domicilio Digitale",
     "sercq-send-info-description": "Se attivi il Domicilio Digitale, SEND diventa <strong>il tuo recapito a valore legale</strong> per le comunicazioni della PA.",
     "sercq-send-info-advantages": "Vantaggi",
-    "sercq-send-info-list": [
-      {
-        "title": "Notifiche 100% digitali",
-        "description": "Non riceverai più notifiche in forma cartacea."
-      },
-      {
-        "title": "Nessun costo di notificazione",
-        "description": "Non dovrai preoccuparti di ritirare i documenti cartacei e pagare i relativi costi."
-      },
-      {
-        "title": "Tutto in un unico spazio",
-        "description": "Le notifiche che gli enti ti inviano tramite SEND saranno sempre recapitate sul tuo Domicilio Digitale e disponibili nella tua area riservata."
-      }
-    ],
     "sercq-send-info-pec-disclaimer": "Se hai già inserito una PEC tra i tuoi recapiti, il Domicilio Digitale la sostituisce come recapito a valore legale di SEND.",
-    "sercq-send-info-tos": "Premendo “Attiva” dichiari di aver letto e di accettare i <0>Termini del servizio</0>.",
     "sercq_send-added-successfully": "Domicilio Digitale attivato correttamente",
     "sercq-send-enabled": "SEND è il tuo Domicilio Digitale",
     "sercq-send-courtesy-title": "Scegli come ricevere gli avvisi",
@@ -72,7 +57,34 @@
       "<strong>Ricevi le notifiche in tempo reale</strong>, appena l’ente le carica su SEND",
       "<strong>Apri i documenti allegati</strong> in app",
       "<strong>Paghi gli importi dovuti</strong> se la notifica prevede un pagamento"
-    ]
+    ],
+    "sercq-send-wizard": {
+      "title": "Attiva domicilio digitale",
+      "step_1": {
+        "title": "Come funziona",
+        "info-list": [
+          {
+            "title": "Un ente ti invia una notifica su SEND",
+            "description": "La notifica ti viene <0>consegnata</0> in modo sicuro e con valore legale tramite la piattaforma"
+          },
+          {
+            "title": "Ricevi un aggiornamento in tempo reale",
+            "description": "Puoi riceverlo tramite email, SMS o sull’app IO, a seconda dei canali che hai scelto di attivare"
+          },
+          {
+            "title": "Accedi alla notifica",
+            "description": "Apri il dettaglio della notifica digitale sulla piattaforma SEND o, se hai attivato il servizio, direttamente dall’app IO"
+          }
+        ],
+        "info-tos": "Premendo “Attiva” dichiari di aver letto e di accettare i <0>Termini del servizio</0>.",
+        "have-pec": "Hai una PEC?",
+        "have-pec-description": "In alternativa, puoi usare una PEC come domicilio digitale per le notifiche di SEND.",
+        "insert-pec": "Inserisci PEC",
+        "delivered-dialog-title": "Valore giuridico della notifica sul domicilio digitale SEND",
+        "delivered-dialog-description": "Se scegli SEND come domicilio digitale e non apri la notifica entro 7 giorni dalla consegna, questa risulterà legalmente recapitata, proprio come accade con le raccomandate cartacee.",
+        "pec-info-alert": "La piattaforma SEND sostituirà la PEC come tuo domicilio digitale."
+      }
+    }
   },
   "io-contact": {
     "title": "SEND sull’app IO",

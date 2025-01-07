@@ -7,9 +7,9 @@ type DialogProps = {
   open: boolean;
   title: string;
   subtitle: string;
-  content: string;
+  content?: string;
   onConfirm: () => void;
-  onDiscard: () => void;
+  onDiscard?: () => void;
 };
 
 const InformativeDialog: React.FC<DialogProps> = ({
@@ -36,14 +36,18 @@ const InformativeDialog: React.FC<DialogProps> = ({
           {subtitle}
         </DialogContentText>
 
-        <Typography sx={{ mt: 2 }} color="text.primary">
-          {content}
-        </Typography>
+        {content && (
+          <Typography sx={{ mt: 2 }} color="text.primary">
+            {content}
+          </Typography>
+        )}
       </PnDialogContent>
       <PnDialogActions>
-        <Button key="cancel" onClick={onDiscard} variant="outlined" data-testid="discardButton">
-          {t('button.annulla')}
-        </Button>
+        {onDiscard && (
+          <Button key="cancel" onClick={onDiscard} variant="outlined" data-testid="discardButton">
+            {t('button.annulla')}
+          </Button>
+        )}
         <Button
           key="confirm"
           onClick={onConfirm}
