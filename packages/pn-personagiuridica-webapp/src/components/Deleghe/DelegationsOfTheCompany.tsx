@@ -20,7 +20,7 @@ import {
   Typography,
 } from '@mui/material';
 import {
-  // A11yContainerInvisible,
+  A11yContainerInvisible,
   ApiErrorWrapper,
   EmptyState,
   KnownSentiment,
@@ -318,6 +318,8 @@ const DelegationsOfTheCompany = () => {
     getDelegatorsData();
   }, [filters]);
 
+  console.log('groups :>> ', formik.values.groups);
+
   return (
     <Box data-testid="delegationsOfTheCompany">
       <Typography variant="h6" mb={4}>
@@ -379,6 +381,7 @@ const DelegationsOfTheCompany = () => {
                 />
               </Grid>
               <Grid item xs={12} lg={3} sx={{justifyContent:'space-between'}}>
+              {formik.values.groups && <A11yContainerInvisible field={ 'gruppi selezionati, ' + formik.values.groups.map((group) => group.name).join(', ') }></A11yContainerInvisible>}
                 {/* c''e ancora il bottone anche se non é raggiungibile o cliccabile */}
                 <PnAutocomplete
                   id="groups"
