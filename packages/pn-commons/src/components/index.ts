@@ -65,6 +65,7 @@ import PnBreadcrumb from './PnBreadcrumb';
 import PnDialog from './PnDialog/PnDialog';
 import PnDialogActions from './PnDialog/PnDialogActions';
 import PnDialogContent from './PnDialog/PnDialogContent';
+import PnInfoCard from './PnInfoCard';
 import PnWizard from './PnWizard/PnWizard';
 import PnWizardStep from './PnWizard/PnWizardStep';
 import Prompt from './Prompt';
@@ -146,6 +147,7 @@ export {
   PnCardActions,
   PnCard,
   PnCardHeaderItem,
+  PnInfoCard,
   IllusQuestion,
   IllusStatistics,
   IllusAppIO,

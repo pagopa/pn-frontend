@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import DoDisturbOnOutlinedIcon from '@mui/icons-material/DoDisturbOnOutlined';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { Alert, Box, Button, Stack, Typography } from '@mui/material';
-import { IllusAppIO, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
+import { IllusAppIO, PnInfoCard, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -14,7 +14,6 @@ import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
-import DigitalContactsCard from './DigitalContactsCard';
 import InformativeDialog from './InformativeDialog';
 
 enum IOContactStatus {
@@ -171,11 +170,10 @@ const IOContact: React.FC = () => {
   };
 
   return (
-    <DigitalContactsCard
+    <PnInfoCard
       title={t('io-contact.title', { ns: 'recapiti' })}
       subtitle={t('io-contact.description', { ns: 'recapiti' })}
-      illustration={<IllusAppIO />}
-      sx={{ pt: '1.5rem' }}
+      slotProps={{ Card: { sx: { pt: '1.5rem' } } }}
     >
       {getContent()}
       {/* <DisclaimerModal
@@ -210,7 +208,7 @@ const IOContact: React.FC = () => {
         onConfirm={() => handleConfirm()}
         onDiscard={() => setOpenInfoModal(false)}
       />
-    </DigitalContactsCard>
+    </PnInfoCard>
   );
 };
 
