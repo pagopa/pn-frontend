@@ -6,14 +6,6 @@ import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import SpecialContactItem from '../SpecialContactItem';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
-
 describe('SpecialContactItem Component', () => {
   let mock: MockAdapter;
   const editHandler = vi.fn();
@@ -62,7 +54,7 @@ describe('SpecialContactItem Component', () => {
 
     expect(container).toHaveTextContent('Mocked Sender');
     const specialContactForms = getAllByTestId(
-      /^[a-zA-Z0-9\-]+(?:_pecContact|_emailContact|_smsContact)$/
+      /^[a-zA-Z0-9-]+(?:_pecContact|_emailContact|_smsContact)$/
     );
     expect(specialContactForms).toHaveLength(1);
     expect(specialContactForms[0]).toHaveTextContent('mocked@pec.it');
@@ -110,7 +102,7 @@ describe('SpecialContactItem Component', () => {
     );
 
     const specialContactForms = getAllByTestId(
-      /^[a-zA-Z0-9\-]+(?:_pecSpecialContact|_emailSpecialContact|_smsSpecialContact)$/
+      /^[a-zA-Z0-9-]+(?:_pecSpecialContact|_emailSpecialContact|_smsSpecialContact)$/
     );
     const buttons = specialContactForms[0].querySelectorAll('button');
     fireEvent.click(buttons[0]);
@@ -132,7 +124,7 @@ describe('SpecialContactItem Component', () => {
     );
 
     const specialContactForms = getAllByTestId(
-      /^[a-zA-Z0-9\-]+(?:_pecSpecialContact|_emailSpecialContact|_smsSpecialContact)$/
+      /^[a-zA-Z0-9-]+(?:_pecSpecialContact|_emailSpecialContact|_smsSpecialContact)$/
     );
     const buttons = specialContactForms[0].querySelectorAll('button');
     fireEvent.click(buttons[1]);

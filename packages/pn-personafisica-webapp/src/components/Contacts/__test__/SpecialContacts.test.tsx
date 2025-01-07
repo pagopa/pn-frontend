@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import {
@@ -16,19 +15,6 @@ import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import SpecialContacts from '../SpecialContacts';
 import { fillCodeDialog } from './test-utils';
-
-vi.mock('react-i18next', () => ({
-  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
-    <>
-      {props.i18nKey} {props.components?.map((c) => c)}
-    </>
-  ),
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string, options?: { returnObjects: boolean }) =>
-      options?.returnObjects ? [str] : str,
-  }),
-}));
 
 const defaultAddress = digitalLegalAddresses.find((addr) => addr.senderId === 'default');
 const specialAddresses = digitalLegalAddresses.filter((addr) => addr.senderId !== 'default');

@@ -9,14 +9,6 @@ import SuccessPage from '../Success';
 const mockLocationAssign = vi.fn();
 
 // mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translation hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
-  }),
-}));
-
 describe('test login page', () => {
   const original = window.location;
 
@@ -37,8 +29,8 @@ describe('test login page', () => {
         <SuccessPage />
       </BrowserRouter>
     );
-    expect(mockLocationAssign).toBeCalled();
-    expect(mockLocationAssign).toBeCalledWith(
+    expect(mockLocationAssign).toHaveBeenCalled();
+    expect(mockLocationAssign).toHaveBeenCalledWith(
       getConfiguration().PF_URL + '#token=fake-token&lang=it'
     );
   });
@@ -51,8 +43,8 @@ describe('test login page', () => {
       </BrowserRouter>
     );
 
-    expect(mockLocationAssign).toBeCalled();
-    expect(mockLocationAssign).toBeCalledWith(
+    expect(mockLocationAssign).toHaveBeenCalled();
+    expect(mockLocationAssign).toHaveBeenCalledWith(
       getConfiguration().PF_URL + '?aar=aar-token#token=fake-token&lang=it'
     );
   });
@@ -65,8 +57,8 @@ describe('test login page', () => {
       </BrowserRouter>
     );
 
-    expect(mockLocationAssign).toBeCalled();
-    expect(mockLocationAssign).toBeCalledWith(
+    expect(mockLocationAssign).toHaveBeenCalled();
+    expect(mockLocationAssign).toHaveBeenCalledWith(
       getConfiguration().PF_URL + '?aar=aar-malicious-token#token=fake-token&lang=it'
     );
   });

@@ -37,6 +37,7 @@ void i18next
       order: ['hashDetector', 'sessionStorage', 'navigator'],
       lookupSessionStorage: 'lang',
     },
+    returnObjects: true,
   });
 
 i18next.on('languageChanged', (language: string) => {

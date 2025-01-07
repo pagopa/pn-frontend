@@ -15,14 +15,6 @@ import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
 import NewApiKey from '../NewApiKey.page';
 
-// mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 describe('NewApiKey component', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
@@ -112,7 +104,7 @@ describe('NewApiKey component', async () => {
     expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(newApiKeyDTO);
 
     // verify the key value is shown on the response page
-    const apiKeyInput = result.getByTestId("apiKeyValue").querySelector("input");
+    const apiKeyInput = result.getByTestId('apiKeyValue').querySelector('input');
     expect(apiKeyInput).toHaveValue(newApiKeyResponse.apiKey);
   });
 

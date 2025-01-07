@@ -1,16 +1,6 @@
-import { vi } from 'vitest';
-
 import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { render } from '../../../__test__/test-utils';
 import MobileDelegators from '../MobileDelegators';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
 
 describe('MobileDelegators Component', () => {
   it('renders the empty state', () => {

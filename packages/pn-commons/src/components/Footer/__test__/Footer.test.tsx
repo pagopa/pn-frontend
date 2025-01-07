@@ -17,9 +17,6 @@ const i18n: Partial<i18nInterface> = {
       i18n.language = lang;
     }),
 };
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({ i18n }),
-}));
 
 describe('Footer Component', () => {
   const original = window.open;
