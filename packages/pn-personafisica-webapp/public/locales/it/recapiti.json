@@ -4,6 +4,10 @@
   "alert-dialog-email": "Se non hai una PEC e accedi alla notifica su SEND entro 5 giorni (120 ore) dall’invio dell'email, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
   "alert-dialog-sms": "Se non hai una PEC e accedi alla notifica su SEND entro 5 giorni (120 ore) dall’invio dell'SMS, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
   "insert-code": "Inserisci codice",
+  "chip": {
+    "to-enable": "Da attivare",
+    "enabled": "Attivo"
+  },
   "legal-contacts": {
     "title": "Recapito a valore legale",
     "sub-title": "È il recapito ufficiale che scegli per ricevere comunicazioni a valore legale dalla PA. Se attivi un recapito a valore legale <strong>riceverai le notifiche di SEND solo in digitale</strong>, senza più preoccuparti dei documenti cartacei.",
@@ -103,9 +107,8 @@
       "content": "Se non hai una PEC e accedi alla notifica entro 5 giorni (120 ore) dall’invio del messaggio, non riceverai l'avviso di avvenuta ricezione tramite raccomandata."
     },
     "disable-modal": {
-      "title": "Vuoi disattivare il servizio \"Notifiche digitali\" su IO?",
-      "confirm": "Disattiva servizio",
-      "content": "Quando ti arriva una notifica, non riceverai più un messaggio in app."
+      "title": "Disattiva SEND sull’app IO",
+      "content": "Se confermi, non riceverai più le notifiche SEND in app."
     },
     "info-modal": {
       "title": "SEND su IO: come funziona",

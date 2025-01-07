@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
-import { Avatar, Box, Button, Stack, Typography } from '@mui/material';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import { Avatar, Button, Chip, Stack, Typography } from '@mui/material';
 import {
   IllusAppIO,
   IllusAppIoLogo,
@@ -11,6 +12,7 @@ import {
   appStateActions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { IOAllowedValues } from '../../models/contacts';
@@ -19,6 +21,7 @@ import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
+import DeleteDialog from './DeleteDialog';
 import InformativeDialog from './InformativeDialog';
 
 enum IOContactStatus {
@@ -27,11 +30,16 @@ enum IOContactStatus {
   DISABLED = 'disabled',
 }
 
+enum ModalType {
+  INFORMATIVE = 'informative',
+  DELETE = 'delete',
+}
+
 const IOContact: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
-  const [openInfoModal, setOpenInfoModal] = useState(false);
+  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const { defaultAPPIOAddress: contact, defaultSERCQ_SENDAddress } = useAppSelector(
     contactsSelectors.selectAddresses
   );
@@ -48,7 +56,6 @@ const IOContact: React.FC = () => {
   };
 
   const status = parseContact();
-  // const disclaimerLabel = status === IOContactStatus.ENABLED ? 'disable' : 'enable';
 
   const enableIO = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
@@ -71,6 +78,7 @@ const IOContact: React.FC = () => {
     dispatch(disableIOAddress())
       .unwrap()
       .then(() => {
+        setModalOpen(null);
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS);
         dispatch(
           appStateActions.addSuccess({
@@ -83,7 +91,11 @@ const IOContact: React.FC = () => {
   };
 
   const handleOpenInfoModal = () => {
-    setOpenInfoModal(true);
+    setModalOpen(ModalType.INFORMATIVE);
+  };
+
+  const handleOpenDeleteModal = () => {
+    setModalOpen(ModalType.DELETE);
   };
 
   const handleConfirm = () => {
@@ -97,7 +109,7 @@ const IOContact: React.FC = () => {
       return;
     }
     enableIO();
-    setOpenInfoModal(false);
+    setModalOpen(null);
   };
 
   const handleDownload = () => {
@@ -115,7 +127,13 @@ const IOContact: React.FC = () => {
   const getButton = () => {
     if (status === IOContactStatus.UNAVAILABLE) {
       return (
-        <Button variant="contained" onClick={handleDownload} color="primary" fullWidth={isMobile}>
+        <Button
+          variant="contained"
+          onClick={handleDownload}
+          color="primary"
+          fullWidth={isMobile}
+          sx={{ mt: 3 }}
+        >
           {t('io-contact.download', { ns: 'recapiti' })}
         </Button>
       );
@@ -127,6 +145,7 @@ const IOContact: React.FC = () => {
           onClick={handleOpenInfoModal}
           color="primary"
           fullWidth={isMobile}
+          sx={{ mt: 3 }}
         >
           {t('io-contact.enable', { ns: 'recapiti' })}
         </Button>
@@ -135,10 +154,43 @@ const IOContact: React.FC = () => {
     return null;
   };
 
+  const getChip = () => {
+    const isEnabled = status === IOContactStatus.ENABLED;
+
+    return (
+      <Chip
+        label={t(`chip.${isEnabled ? 'enabled' : 'to-enable'}`, { ns: 'recapiti' })}
+        color={isEnabled ? 'success' : 'default'}
+        size="small"
+        sx={{ mb: 2 }}
+      />
+    );
+  };
+
   return (
     <PnInfoCard
-      title={t('io-contact.title', { ns: 'recapiti' })}
-      subtitle={t('io-contact.description', { ns: 'recapiti' })}
+      title={
+        <Typography variant="h6" fontWeight={700} mb={2} data-testid="ioContactTitle">
+          {t('io-contact.title', { ns: 'recapiti' })}
+        </Typography>
+      }
+      subtitle={getChip()}
+      actions={
+        status === IOContactStatus.ENABLED
+          ? [
+              <ButtonNaked
+                key="disable"
+                onClick={handleOpenDeleteModal}
+                color="error"
+                startIcon={<PowerSettingsNewIcon />}
+                sx={{ fontSize: '16px', color: 'error.dark' }}
+              >
+                {t('button.disable')}
+              </ButtonNaked>,
+            ]
+          : undefined
+      }
+      expanded={status === IOContactStatus.ENABLED}
       slotProps={{ Card: { sx: { pt: '1.5rem' } } }}
     >
       <Stack direction="row" alignItems="center" data-testid="ioContact">
@@ -150,14 +202,20 @@ const IOContact: React.FC = () => {
           <IllusSendLogo />
         </Avatar>
       </Stack>
-      <Typography mt={3} variant="body1" color="text.secondary" data-testid="ioContactDescription">
+      <Typography
+        mt={2}
+        variant="body1"
+        fontSize="16px"
+        color="text.secondary"
+        data-testid="ioContactDescription"
+      >
         {status === IOContactStatus.ENABLED
           ? t('io-contact.description-enabled', { ns: 'recapiti' })
           : t('io-contact.description', { ns: 'recapiti' })}
       </Typography>
-      <Box mt={3}>{getButton()}</Box>
+      {getButton()}
       <InformativeDialog
-        open={openInfoModal}
+        open={modalOpen === ModalType.INFORMATIVE}
         title={t('io-contact.info-modal.title', { ns: 'recapiti' })}
         subtitle={t('io-contact.info-modal.subtitle', { ns: 'recapiti' })}
         content={
@@ -177,7 +235,14 @@ const IOContact: React.FC = () => {
         }
         illustration={<IllusAppIO />}
         onConfirm={() => handleConfirm()}
-        onDiscard={() => setOpenInfoModal(false)}
+        onDiscard={() => setModalOpen(null)}
+      />
+      <DeleteDialog
+        showModal={modalOpen === ModalType.DELETE}
+        removeModalTitle={t('io-contact.disable-modal.title', { ns: 'recapiti' })}
+        removeModalBody={t('io-contact.disable-modal.content', { ns: 'recapiti' })}
+        handleModalClose={() => setModalOpen(null)}
+        confirmHandler={disableIO}
       />
     </PnInfoCard>
   );
