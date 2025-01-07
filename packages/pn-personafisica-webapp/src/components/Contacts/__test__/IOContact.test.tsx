@@ -37,10 +37,8 @@ describe('IOContact component', async () => {
 
   it('renders component - no contacts', () => {
     const { getByTestId, getByText, getByRole } = render(<IOContact />);
-    const title = getByTestId('DigitalContactsCardTitle');
+    const title = getByTestId('PnInfoCardTitle');
     expect(title).toHaveTextContent('io-contact.title');
-    const description = getByTestId('DigitalContactsCardDescription');
-    expect(description).toHaveTextContent('io-contact.description');
     const text = getByText('io-contact.unavailable');
     const button = getByRole('button', { name: 'io-contact.download' });
     expect(text).toBeInTheDocument();
