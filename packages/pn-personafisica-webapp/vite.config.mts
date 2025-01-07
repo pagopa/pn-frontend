@@ -24,7 +24,7 @@ const vitestConfig = defineVitestConfig({
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
-  const webAppEnv = env.HOST.split('.')[1] || 'dev'; // the host value is like "cittadini.dev.notifichedigitali.it"
+  const webAppEnv = env.HOST ? env.HOST.split('.')[1] : 'dev'; // the host value is like "cittadini.dev.notifichedigitali.it"
 
   return mergeConfig(vitestConfig, {
     plugins: [react(), basicSsl(), splitVendorChunkPlugin()],
