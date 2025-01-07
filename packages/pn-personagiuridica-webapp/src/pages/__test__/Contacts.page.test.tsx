@@ -16,16 +16,6 @@ import Contacts from '../Contacts.page';
 
 const mockOpenFn = vi.fn();
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string, options?: { returnObjects: boolean }) =>
-      options?.returnObjects ? [str] : str,
-    i18n: { language: 'it' },
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
-
 describe('Contacts page', async () => {
   let mock: MockAdapter;
   let result: RenderResult;

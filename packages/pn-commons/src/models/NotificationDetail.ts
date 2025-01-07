@@ -309,9 +309,11 @@ export interface LegalFactId {
   category: LegalFactType | 'AAR';
 }
 
-export interface NotificationDetailOtherDocument {
-  documentId: string;
-  documentType: string;
+export interface NotificationDetailOtherDocument extends NotificationDetailDocument {
+  recipient?: {
+    denomination: string;
+    taxId: string;
+  };
 }
 
 export enum PhysicalCommunicationType {

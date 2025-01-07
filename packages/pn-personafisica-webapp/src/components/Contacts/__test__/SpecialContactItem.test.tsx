@@ -6,14 +6,6 @@ import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import SpecialContactItem from '../SpecialContactItem';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
-
 describe('SpecialContactItem Component', () => {
   let mock: MockAdapter;
   const editHandler = vi.fn();

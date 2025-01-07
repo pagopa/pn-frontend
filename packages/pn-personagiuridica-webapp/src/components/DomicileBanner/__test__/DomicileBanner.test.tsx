@@ -6,13 +6,6 @@ import { ChannelType, ContactOperation, ContactSource } from '../../../models/co
 import * as routes from '../../../navigation/routes.const';
 import DomicileBanner from '../DomicileBanner';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const mockNavigateFn = vi.fn();
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual<any>('react-router-dom')),

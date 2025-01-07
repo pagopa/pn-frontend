@@ -7,14 +7,6 @@ import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { ChannelType } from '../../../models/contacts';
 import DefaultDigitalContact from '../DefaultDigitalContact';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
-
 const mockSubmitCbk = vi.fn();
 const mockDeleteCbk = vi.fn();
 const mockCancelCbk = vi.fn();

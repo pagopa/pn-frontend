@@ -30,7 +30,6 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "tsc && vitest --run",
-    "test:fast": "vitest --run",
     "test:coverage": "tsc && vitest run --coverage",
     "lint-autofix": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx ",

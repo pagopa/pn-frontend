@@ -5,14 +5,6 @@ import NewNotificationCard from '../NewNotificationCard';
 
 const mockStepBackFn = vi.fn();
 
-// mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 describe('NewNotificationCard Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -121,6 +113,6 @@ describe('NewNotificationCard Component', () => {
     );
     const previousButton = getByTestId('previous-step');
     fireEvent.click(previousButton);
-    expect(mockStepBackFn).toBeCalledTimes(1);
+    expect(mockStepBackFn).toHaveBeenCalledTimes(1);
   });
 });
