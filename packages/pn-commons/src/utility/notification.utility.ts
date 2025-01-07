@@ -12,6 +12,8 @@ import {
   INotificationDetailTimeline,
   LegalFactType,
   NotificationDeliveryMode,
+  NotificationDetailDocument,
+  NotificationDetailOtherDocument,
   NotificationDetailPayment,
   NotificationDetailRecipient,
   NotificationDetailTimelineDetails,
@@ -660,3 +662,7 @@ export const populatePaymentsPagoPaF24 = (
 
   return paymentDetails;
 };
+
+export const isNotificationDetailOtherDocument = 
+(value: NotificationDetailDocument | NotificationDetailOtherDocument): value is NotificationDetailOtherDocument => 
+  value.documentType === 'AAR';
