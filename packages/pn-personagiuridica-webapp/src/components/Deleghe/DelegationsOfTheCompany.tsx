@@ -409,7 +409,7 @@ const DelegationsOfTheCompany = () => {
                       InputProps={{
                         ...params.InputProps,
                         endAdornment: (
-                          <SearchIcon sx={{color:'GrayText'}}/> // margine sinistro negativo per spostarlo a sinistra
+                          <SearchIcon sx={{color:'text.secondary'}}/>
                         ),
                       }}
                     />
