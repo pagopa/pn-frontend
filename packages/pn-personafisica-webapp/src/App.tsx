@@ -79,7 +79,6 @@ const App = () => {
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const path = pathname.split('/');
   const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } = getConfiguration();
 
   const sessionToken = loggedUser.sessionToken;
@@ -96,12 +95,12 @@ const App = () => {
   const [showHeader, showFooter, showSideMenu, showHeaderProduct, showAssistanceButton] = useMemo(
     () =>
       showLayoutParts(
-        path[1],
+        pathname,
         !!sessionToken,
         tosConsent && tosConsent.accepted && fetchedTos,
         privacyConsent && privacyConsent.accepted && fetchedPrivacy
       ),
-    [path[1], sessionToken, tosConsent, fetchedTos, privacyConsent, fetchedPrivacy]
+    [pathname, sessionToken, tosConsent, fetchedTos, privacyConsent, fetchedPrivacy]
   );
 
   const userActions = useMemo(() => {
