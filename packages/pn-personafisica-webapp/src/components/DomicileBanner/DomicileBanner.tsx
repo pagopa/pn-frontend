@@ -47,10 +47,10 @@ const getDomicileData = (
   hasSercqSend: boolean,
   hasCourtesyAddresses: boolean,
   hasAppIODisabled: boolean,
-  idDodEnabled: boolean
+  isDodEnabled: boolean
 ): DomicileBannerData | null => {
   const sessionClosed = getOpenStatusFromSession();
-  if (idDodEnabled && source !== ContactSource.RECAPITI && !hasSercqSend && !sessionClosed) {
+  if (isDodEnabled && source !== ContactSource.RECAPITI && !hasSercqSend && !sessionClosed) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return {
       destination: ChannelType.SERCQ_SEND,
@@ -62,7 +62,7 @@ const getDomicileData = (
     };
   } else if (
     source !== ContactSource.RECAPITI &&
-    ((!hasSercqSend && sessionClosed) || !idDodEnabled) &&
+    ((!hasSercqSend && sessionClosed) || !isDodEnabled) &&
     !hasCourtesyAddresses
   ) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -74,7 +74,7 @@ const getDomicileData = (
       canBeClosed: false,
       callToAction: 'no-courtesy-no-sercq-send-cta',
     };
-  } else if (idDodEnabled && hasSercqSend && !hasCourtesyAddresses) {
+  } else if (isDodEnabled && hasSercqSend && !hasCourtesyAddresses) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return {
       destination: ChannelType.EMAIL,
@@ -86,7 +86,7 @@ const getDomicileData = (
     };
   } else if (
     source !== ContactSource.RECAPITI &&
-    (hasSercqSend || !idDodEnabled) &&
+    (hasSercqSend || !isDodEnabled) &&
     hasAppIODisabled &&
     hasCourtesyAddresses
   ) {
