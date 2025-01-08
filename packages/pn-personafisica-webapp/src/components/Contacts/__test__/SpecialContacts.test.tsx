@@ -305,7 +305,9 @@ describe('SpecialContacts Component', async () => {
     });
     fireEvent.click(editButton);
 
-    await testInput(specialContactForms[1], 'default_pec', pecValue);
+    const senderId = digitalLegalAddresses.filter((address) => address.senderId !== 'default')[1]
+      .senderId;
+    await testInput(specialContactForms[1], `${senderId}_pec`, pecValue);
 
     const confirmButton = within(specialContactForms[1]).getByText('button.conferma');
     fireEvent.click(confirmButton);

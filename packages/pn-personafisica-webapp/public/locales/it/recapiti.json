@@ -20,7 +20,7 @@
       "dod-enabled-message": "Fino al termine del processo, la Piattaforma SEND rimane attiva come domicilio digitale.",
       "dod-disabled-message": "Fino al termine del processo non sarà possibile modificare i recapiti a valore legale."
     },
-    "pec-description": "Quando un ente ti invia una notifica su SEND, ricevi l’avviso a valore legale sulla PEC che hai scelto.",
+    "pec-description": "Quando un ente ti invia una notifica SEND, ricevi l’avviso a valore legale sulla PEC che hai scelto.",
     "link-pec-placeholder": "La tua PEC",
     "valid-pec": "Indirizzo PEC non valido",
     "pec-verify": "Verifica PEC {{value}}",
@@ -40,7 +40,7 @@
     "validation-progress-title": "Grazie!",
     "validation-progress-content": "Stiamo verificando che l’indirizzo PEC sia valido. Riceverai una email con l’esito entro 24 ore.",
     "sercq-send-title": "Piattaforma SEND",
-    "sercq-send-description": "Quando un ente ti invia una notifica su SEND, viene recapitata in modo sicuro e con valore legale tramite la piattaforma stessa.",
+    "sercq-send-description": "Quando un ente ti invia una notifica SEND, viene recapitata in modo sicuro e con valore legale tramite la piattaforma stessa.",
     "sercq-send-start": "Inizia",
     "sercq-send-description-pec-enabled": "Usa SEND come Domicilio Digitale per gestire le tue notifiche SEND in un unico punto, senza preoccuparti più delle raccomandate cartacee e dei costi annessi.",
     "sercq-send-active": "Attiva",

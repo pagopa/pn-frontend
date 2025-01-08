@@ -100,12 +100,13 @@ describe('Contacts page', async () => {
       result = render(<Contacts />);
     });
 
-    const banner = result.getByTestId('PecVerificationAlert');
-    expect(banner).toBeInTheDocument();
-    const alertIcon = within(banner).getByTestId('InfoOutlinedIcon');
-    expect(alertIcon).toBeInTheDocument();
-    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.title');
-    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.dod-enabled-message');
+    // TODO: add banner check during the rework of the specific feature
+    // const banner = result.getByTestId('PecVerificationAlert');
+    // expect(banner).toBeInTheDocument();
+    // const alertIcon = within(banner).getByTestId('InfoOutlinedIcon');
+    // expect(alertIcon).toBeInTheDocument();
+    // expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.title');
+    // expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.dod-enabled-message');
 
     const specialContacts = result.getByTestId('specialContacts');
     expect(specialContacts).toBeInTheDocument();

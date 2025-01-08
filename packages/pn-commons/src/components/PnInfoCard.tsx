@@ -97,6 +97,7 @@ const PnInfoCard: React.FC<Props> = ({
   expanded = false,
   slotProps,
   children,
+  ...rest
 }) => {
   const isMobile = useIsMobile();
   const [showDescription, setShowDescription] = useState(expanded);
@@ -130,7 +131,7 @@ const PnInfoCard: React.FC<Props> = ({
   }, [expanded]);
 
   return (
-    <Card sx={{ p: { xs: 2, lg: 3 }, ...slotProps }}>
+    <Card sx={{ p: { xs: 2, lg: 3 }, ...slotProps }} {...rest}>
       <CardHeader
         data-testid="PnInfoCardHeader"
         sx={{ p: 0 }}

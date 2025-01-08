@@ -96,6 +96,7 @@ const SpecialContactItem: React.FC<Props> = ({
             <DefaultDigitalContact
               value={value}
               channelType={channelType}
+              senderId={senderId}
               label=""
               inputProps={{
                 label: t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' }),

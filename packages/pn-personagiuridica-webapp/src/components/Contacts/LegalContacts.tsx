@@ -39,8 +39,8 @@ const EmptyLegalContacts = () => {
         sx={{ mb: 3 }}
       >
         {infoIcons.map((Icon, index) => {
-          const title = sercqSendInfoList[index].title;
-          const description = sercqSendInfoList[index].description;
+          const title = sercqSendInfoList[index]?.title;
+          const description = sercqSendInfoList[index]?.description;
           return (
             <Stack key={title} direction={{ xs: 'row', lg: 'column' }} spacing={2}>
               <Icon sx={{ height: '24px', width: '24px', color: '#35C1EC' }} />
@@ -71,7 +71,7 @@ const LegalContacts = () => {
   const hasNoLegalAddress = !defaultPECAddress?.value && !defaultSERCQ_SENDAddress;
   const hasPecActive = defaultPECAddress?.value && defaultPECAddress.pecValid === true;
   const hasSercqSendActive = !!defaultSERCQ_SENDAddress;
-  const isActive = hasPecActive || hasSercqSendActive;
+  const isActive = (hasPecActive || hasSercqSendActive) && !isValidatingPec;
   const showSpecialContactsSection = specialAddresses.length > 0;
 
   type SubtitleParams = {
@@ -128,7 +128,7 @@ const LegalContacts = () => {
       : undefined;
 
   const getContactDescriptionMessage = () => {
-    if (hasSercqSendActive) {
+    if (hasSercqSendActive && !isValidatingPec) {
       return t('legal-contacts.sercq-send-description', { ns: 'recapiti' });
     } else if (hasPecActive || isValidatingPec) {
       return t('legal-contacts.pec-description', { ns: 'recapiti' });
@@ -142,9 +142,10 @@ const LegalContacts = () => {
       subtitle={getSubtitle()}
       actions={getActions()}
       expanded={isActive}
+      data-testid="legalContacts"
     >
       {(isValidatingPec || hasPecActive) && <PecContactItem />}
-      {hasSercqSendActive && (
+      {hasSercqSendActive && !isValidatingPec && (
         <Typography variant="body1" sx={{ fontWeight: '600', mb: 2 }}>
           {t('legal-contacts.sercq-send-title', { ns: 'recapiti' })}
         </Typography>

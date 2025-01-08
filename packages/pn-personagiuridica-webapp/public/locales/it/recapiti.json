@@ -20,7 +20,7 @@
       "dod-enabled-message": "Fino al termine del processo, la Piattaforma SEND rimane attiva come domicilio digitale.",
       "dod-disabled-message": "Fino al termine del processo non sarà possibile modificare i recapiti a valore legale."
     },
-    "pec-description": "Quando un ente invia alla tua impresa una notifica SEND, viene recapitata in modo sicuro e con valore legale tramite la piattaforma stessa.",
+    "pec-description": "Quando un ente invia alla tua impresa una notifica SEND, viene recapitata in modo sicuro e con valore legale sulla PEC che hai scelto.",
     "link-pec-placeholder": "Indirizzo PEC",
     "valid-pec": "Indirizzo PEC non valido",
     "pec-verify": "Verifica PEC {{value}}",
