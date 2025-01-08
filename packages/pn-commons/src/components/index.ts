@@ -44,7 +44,9 @@ import Footer from './Footer/Footer';
 import Header from './Header/Header';
 import { IllusAppIO } from './Illustrations/IllusAppIO';
 import { IllusAppIODialog } from './Illustrations/IllusAppIODialog';
+import { IllusAppIoLogo } from './Illustrations/IllusAppIOLogo';
 import { IllusQuestion } from './Illustrations/IllusQuestion';
+import { IllusSendLogo } from './Illustrations/IllusSendLogo';
 import { IllusStatistics } from './Illustrations/IllusStatistics';
 import InactivityHandler from './InactivityHandler';
 import Layout from './Layout/Layout';
@@ -152,6 +154,8 @@ export {
   IllusStatistics,
   IllusAppIO,
   IllusAppIODialog,
+  IllusAppIoLogo,
+  IllusSendLogo,
   PnWizard,
   PnWizardStep,
 };
