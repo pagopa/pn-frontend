@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.10.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0-RC.0...v2.10.0) (2025-01-07)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+# [2.10.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.9.0...v2.10.0-RC.0) (2024-11-29)
+
+
+### Bug Fixes
+
+* **pn-11392:** more generic download message for those documents in glacier ([#1411](https://github.com/pagopa/pn-frontend/issues/1411)) ([bb93a20](https://github.com/pagopa/pn-frontend/commit/bb93a207cb4bd522cb48a6cd640ed827afdc2240))
+* **pn-13314, pn-13353, pn-13324:** fixed max width on bilingual subjects, fixed PEC bilingual subject and fixed field reset on bilingual subjects ([#1412](https://github.com/pagopa/pn-frontend/issues/1412)) ([98b9549](https://github.com/pagopa/pn-frontend/commit/98b95499db44b99073052879ca97f0066fdeab66))
+
+
+### Features
+
+* **pn-13066:** manage taxonomy code error during notification creation (PA) ([#1388](https://github.com/pagopa/pn-frontend/issues/1388)) ([cf83f71](https://github.com/pagopa/pn-frontend/commit/cf83f713fea047466ef00f3ef7e03f9d4b282d4c))
+
+
+
+
+
+
 # [2.9.0](https://github.com/pagopa/pn-frontend/compare/v2.9.0-RC.2...v2.9.0) (2024-11-18)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp

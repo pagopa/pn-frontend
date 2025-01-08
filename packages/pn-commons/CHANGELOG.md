@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.10.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0-RC.0...v2.10.0) (2025-01-07)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.10.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.9.0...v2.10.0-RC.0) (2024-11-29)
+
+
+### Bug Fixes
+
+* **pn-11648:** Close Drawer when clicking on side menu voice ([#1410](https://github.com/pagopa/pn-frontend/issues/1410)) ([e38420c](https://github.com/pagopa/pn-frontend/commit/e38420cef045e8dd08a35773731efaadba12f97b))
+* **pn-12735:** set overflow-wrap property on CodeModal title to grant very long pec/mail addresses are shown ([#1407](https://github.com/pagopa/pn-frontend/issues/1407)) ([8137f7c](https://github.com/pagopa/pn-frontend/commit/8137f7c3b29b6b2e386a5f6aa07a44a69c60d3a1))
+
+
+
+
+
+
 # [2.9.0](https://github.com/pagopa/pn-frontend/compare/v2.9.0-RC.2...v2.9.0) (2024-11-18)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons
