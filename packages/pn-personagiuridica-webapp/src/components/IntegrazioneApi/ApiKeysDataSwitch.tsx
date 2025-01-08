@@ -22,6 +22,7 @@ type Props = {
   handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
   menuType: 'publicKeys' | 'virtualKeys';
   issuerIsActive?: boolean;
+  issuerIsPresent?: boolean;
 };
 
 const isApiKeyDisactivated = (data: Row<ApiKeyColumnData>): boolean =>
@@ -37,6 +38,7 @@ const ApiKeysDataSwitch: React.FC<Props> = ({
   handleModalClick,
   menuType,
   issuerIsActive,
+  issuerIsPresent,
 }) => {
   const { t } = useTranslation(['integrazioneApi']);
 
@@ -96,20 +98,28 @@ const ApiKeysDataSwitch: React.FC<Props> = ({
         />
       );
     }
-    case 'menu':
-      return menuType === 'publicKeys' ? (
-        <PublicKeyContextMenu
-          data={data}
-          keys={keys as BffPublicKeysResponse}
-          handleModalClick={handleModalClick}
-        />
-      ) : (
-        <VirtualKeyContextMenu
-          data={data}
-          keys={keys as BffVirtualKeysResponse}
-          handleModalClick={handleModalClick}
-        />
-      );
+    case 'menu': {
+      if (menuType === 'publicKeys') {
+        return (
+          <PublicKeyContextMenu
+            data={data}
+            keys={keys as BffPublicKeysResponse}
+            handleModalClick={handleModalClick}
+          />
+        );
+      } else if (issuerIsPresent) {
+        return (
+          <VirtualKeyContextMenu
+            data={data}
+            keys={keys as BffVirtualKeysResponse}
+            handleModalClick={handleModalClick}
+            issuerIsActive={issuerIsActive}
+          />
+        );
+      } else {
+        return <></>;
+      }
+    }
     default:
       return <></>;
   }

@@ -27,9 +27,15 @@ type Props = {
   virtualKeys: BffVirtualKeysResponse;
   handleModalClick: (view: ModalApiKeyView, publicKeyId: string) => void;
   issuerIsActive?: boolean;
+  issuerIsPresent?: boolean;
 };
 
-const VirtualKeysTable: React.FC<Props> = ({ virtualKeys, handleModalClick, issuerIsActive }) => {
+const VirtualKeysTable: React.FC<Props> = ({
+  virtualKeys,
+  handleModalClick,
+  issuerIsActive,
+  issuerIsPresent,
+}) => {
   const { t } = useTranslation(['integrazioneApi']);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
@@ -152,6 +158,7 @@ const VirtualKeysTable: React.FC<Props> = ({ virtualKeys, handleModalClick, issu
                   handleModalClick={handleModalClick}
                   menuType="virtualKeys"
                   issuerIsActive={issuerIsActive}
+                  issuerIsPresent={issuerIsPresent}
                 />
               </SmartBodyCell>
             ))}

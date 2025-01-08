@@ -79,7 +79,7 @@ const ApiIntegration: React.FC = () => {
           <IntegrationApiBanner isAdminWithoutGroups={isAdminWithoutGroups} />
         )}
         {isAdminWithoutGroups && <PublicKeys />}
-        {shouldRenderVirtualKeys && <VirtualKeys issuerIsActive={issuerIsActive} />}
+        {shouldRenderVirtualKeys && <VirtualKeys />}
       </Box>
     </LoadingPageWrapper>
   );

@@ -29,11 +29,7 @@ type ModalType = {
   virtualKey?: VirtualKey;
 };
 
-type Props = {
-  issuerIsActive: boolean;
-};
-
-const VirtualKeys: React.FC<Props> = ({ issuerIsActive }) => {
+const VirtualKeys: React.FC = () => {
   const { t } = useTranslation('integrazioneApi');
   const dispatch = useAppDispatch();
   const virtualKeys = useAppSelector((state: RootState) => state.apiKeysState.virtualKeys);
@@ -49,6 +45,10 @@ const VirtualKeys: React.FC<Props> = ({ issuerIsActive }) => {
     issuerState.tosAccepted &&
     issuerState.issuer.isPresent &&
     issuerState.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
+
+  const issuerIsActive =
+    issuerState.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
+  const issuerIsPresent = issuerState.issuer.isPresent;
 
   const fetchVirtualKeys = useCallback(() => {
     void dispatch(getVirtualApiKeys({ showVirtualKey: true }));
@@ -145,6 +145,7 @@ const VirtualKeys: React.FC<Props> = ({ issuerIsActive }) => {
           virtualKeys={virtualKeys}
           handleModalClick={handleModalClick}
           issuerIsActive={issuerIsActive}
+          issuerIsPresent={issuerIsPresent}
         />
       )}
 
