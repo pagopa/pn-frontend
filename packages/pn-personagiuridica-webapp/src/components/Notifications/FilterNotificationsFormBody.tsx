@@ -2,7 +2,7 @@ import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Grid, TextField } from '@mui/material';
+import { FormHelperText, Grid, TextField } from '@mui/material';
 import {
   CustomDatePicker,
   DATE_FORMAT,
@@ -125,7 +125,10 @@ const FilterNotificationsFormBody = ({
                 'aria-label': t('filters.data_da-input-aria-label'),
                 type: 'text',
                 'data-testid': 'input(start date)',
+                "aria-invalid": !!formikInstance.errors.startDate,
+                "aria-errormessage":'error-message'
               },
+              helperText : <FormHelperText error id='error-message' aria-live='assertive'>{!!formikInstance.errors.startDate && t('filters.errors.data_a', { ns: 'notifiche' })}</FormHelperText>
             },
           }}
           disableFuture={true}
@@ -159,7 +162,10 @@ const FilterNotificationsFormBody = ({
                 'aria-label': t('filters.data_a-input-aria-label'),
                 type: 'text',
                 'data-testid': 'input(end date)',
+                "aria-invalid": !!formikInstance.errors.endDate,
+                "aria-errormessage":'error-message'
               },
+              helperText : <FormHelperText sx={{ml:0}} error id='error-message' aria-live='assertive'>{!!formikInstance.errors.endDate && t('filters.errors.data_a', { ns: 'notifiche' })}</FormHelperText>
             },
           }}
           disableFuture={true}

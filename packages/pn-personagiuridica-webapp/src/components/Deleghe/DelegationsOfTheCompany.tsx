@@ -197,6 +197,8 @@ const DelegationsOfTheCompany = () => {
   ) => (
     <li {...props} key={option.id}>
       <Checkbox
+        inputProps={{    'aria-label': option.name,
+          'aria-live': 'assertive',  }}
         icon={icon}
         checkedIcon={checkedIcon}
         style={{ marginRight: 8 }}
@@ -381,7 +383,7 @@ const DelegationsOfTheCompany = () => {
                 />
               </Grid>
               <Grid item xs={12} lg={3} sx={{justifyContent:'space-between'}}>
-              {formik.values.groups && <A11yContainerInvisible field={ 'gruppi selezionati, ' + formik.values.groups.map((group) => group.name).join(', ') }></A11yContainerInvisible>}
+              {formik.values.groups && <A11yContainerInvisible field={'gruppi selezionati, ' + formik.values.groups.map((group) => group.name).join(', ') }></A11yContainerInvisible>}
                 {/* c''e ancora il bottone anche se non é raggiungibile o cliccabile */}
                 <PnAutocomplete
                   id="groups"
@@ -404,6 +406,9 @@ const DelegationsOfTheCompany = () => {
                   renderOption={renderOption}
                   renderInput={(params) => (
                     <TextField
+                      role="combobox"
+                      aria-autocomplete="list"
+                      aria-expanded="false"
                       {...params}
                       label={t('deleghe.table.group')}
                       placeholder={t('deleghe.table.group')}

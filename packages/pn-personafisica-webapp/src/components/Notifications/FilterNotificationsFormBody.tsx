@@ -165,7 +165,6 @@ const FilterNotificationsFormBody = ({
                 "aria-invalid": !!formikInstance.errors.endDate,
                 "aria-errormessage":'error-message'
               },
-              // aria-live legge cambiamenti dei figli
               helperText : <FormHelperText sx={{ml:0}} error id='error-message' aria-live='assertive'>{!!formikInstance.errors.endDate && t('filters.errors.data_a', { ns: 'notifiche' })}</FormHelperText>
             },
           }}
