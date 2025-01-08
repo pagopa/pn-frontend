@@ -12,7 +12,7 @@ import {
   PublicKeyStatus,
   PublicKeysIssuerResponseIssuerStatusEnum,
 } from '../generated-client/pg-apikeys';
-import { checkPublicKeyIssuer } from '../redux/apikeys/actions';
+import { checkPublicKeyIssuer, getPublicKeys, getVirtualApiKeys } from '../redux/apikeys/actions';
 import { PNRole } from '../redux/auth/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -52,14 +52,19 @@ const ApiIntegration: React.FC = () => {
     // When the user is not an admin, the public key api is never called and so we have only one useEffect run.
     if (
       isAdminWithoutGroups &&
-      ((!issuer.isPresent && publicKeys.items.length === 0) ||
+      ((!issuer.isPresent && publicKeys.items.length === 0 && virtualKeys.items.length === 0) ||
         (issuer.isPresent && issuerIsActive && hasPublicActive) ||
         (issuer.isPresent && !issuerIsActive && !hasPublicActive))
     ) {
       return;
     }
     void dispatch(checkPublicKeyIssuer());
-  }, [publicKeys]);
+  }, [publicKeys, virtualKeys]);
+
+  useEffect(() => {
+    void dispatch(getPublicKeys({ showPublicKey: true }));
+    void dispatch(getVirtualApiKeys({ showVirtualKey: true }));
+  }, []);
 
   return (
     <LoadingPageWrapper isInitialized={true}>

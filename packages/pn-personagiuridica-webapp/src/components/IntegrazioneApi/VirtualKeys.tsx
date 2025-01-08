@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
@@ -51,7 +51,7 @@ const VirtualKeys: React.FC<Props> = ({ issuerIsActive }) => {
     issuerState.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
 
   const fetchVirtualKeys = useCallback(() => {
-    void dispatch(getVirtualApiKeys({ showPublicKey: true }));
+    void dispatch(getVirtualApiKeys({ showVirtualKey: true }));
   }, []);
 
   const handleGenerateVirtualKey = () => {
@@ -108,10 +108,6 @@ const VirtualKeys: React.FC<Props> = ({ issuerIsActive }) => {
       .then(fetchVirtualKeys)
       .catch(() => {});
   };
-
-  useEffect(() => {
-    fetchVirtualKeys();
-  }, []);
 
   return (
     <>
