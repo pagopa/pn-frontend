@@ -32,7 +32,7 @@ beforeAll(async () => {
     IS_DOD_ENABLED: true,
     IS_B2B_ENABLED: true,
     ONE_TRUST_MASSIVI_DRAFT_MODE: false,
-    ONE_TRUST_TOS_MASSIVI: '',
+    ONE_TRUST_TOS_MASSIVI: '39cc1c86-f2ef-494d-8242-9bec8009cd23',
     WORK_IN_PROGRESS: false,
     F24_DOWNLOAD_WAIT_TIME: 0,
     DOWNTIME_EXAMPLE_LINK: 'https://www.example.com',

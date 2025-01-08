@@ -32,7 +32,7 @@ beforeAll(() => {
     IS_DOD_ENABLED: true,
     WORK_IN_PROGRESS: false,
     F24_DOWNLOAD_WAIT_TIME: 0,
-    DOWNTIME_EXAMPLE_LINK: ''
+    DOWNTIME_EXAMPLE_LINK: 'https://fake.downtime.pagopa.it'
   });
   initStore(false);
   initAxiosClients();
