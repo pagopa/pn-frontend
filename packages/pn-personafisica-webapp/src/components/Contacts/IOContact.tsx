@@ -15,7 +15,7 @@ import {
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { IOAllowedValues } from '../../models/contacts';
+import { AddressType, IOAllowedValues } from '../../models/contacts';
 import { disableIOAddress, enableIOAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -40,10 +40,17 @@ const IOContact: React.FC = () => {
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const { defaultAPPIOAddress: contact, defaultSERCQ_SENDAddress } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const {
+    defaultAPPIOAddress: contact,
+    defaultSERCQ_SENDAddress,
+    addresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
   const { APP_IO_SITE, APP_IO_ANDROID, APP_IO_IOS } = getConfiguration();
+
+  const hasCourtesyAddresses =
+    addresses.filter(
+      (addr) => addr.addressType === AddressType.COURTESY && addr.value !== IOAllowedValues.DISABLED
+    ).length > 0;
 
   const parseContact = () => {
     if (!contact) {
@@ -56,6 +63,8 @@ const IOContact: React.FC = () => {
   };
 
   const status = parseContact();
+
+  const isAppIOEnabled = status === IOContactStatus.ENABLED;
 
   const enableIO = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
@@ -100,11 +109,9 @@ const IOContact: React.FC = () => {
 
   const handleConfirm = () => {
     PFEventStrategyFactory.triggerEvent(
-      status === IOContactStatus.ENABLED
-        ? PFEventsType.SEND_DEACTIVE_IO_START
-        : PFEventsType.SEND_ACTIVE_IO_START
+      isAppIOEnabled ? PFEventsType.SEND_DEACTIVE_IO_START : PFEventsType.SEND_ACTIVE_IO_START
     );
-    if (status === IOContactStatus.ENABLED) {
+    if (isAppIOEnabled) {
       disableIO();
       return;
     }
@@ -154,17 +161,14 @@ const IOContact: React.FC = () => {
     return null;
   };
 
-  const getChip = () => {
-    const isEnabled = status === IOContactStatus.ENABLED;
-
-    return (
-      <Chip
-        label={t(`chip.${isEnabled ? 'enabled' : 'to-enable'}`, { ns: 'recapiti' })}
-        color={isEnabled ? 'success' : 'default'}
-        size="small"
-        sx={{ mb: 2 }}
-      />
-    );
+  const getChipColor = () => {
+    if (isAppIOEnabled) {
+      return 'success';
+    }
+    if (defaultSERCQ_SENDAddress && !hasCourtesyAddresses) {
+      return 'warning';
+    }
+    return 'default';
   };
 
   return (
@@ -174,9 +178,16 @@ const IOContact: React.FC = () => {
           {t('io-contact.title', { ns: 'recapiti' })}
         </Typography>
       }
-      subtitle={getChip()}
+      subtitle={
+        <Chip
+          label={t(`chip.${isAppIOEnabled ? 'enabled' : 'to-enable'}`, { ns: 'recapiti' })}
+          color={getChipColor()}
+          size="small"
+          sx={{ mb: 2 }}
+        />
+      }
       actions={
-        status === IOContactStatus.ENABLED
+        isAppIOEnabled
           ? [
               <ButtonNaked
                 key="disable"
@@ -190,7 +201,7 @@ const IOContact: React.FC = () => {
             ]
           : undefined
       }
-      expanded={status === IOContactStatus.ENABLED}
+      expanded={isAppIOEnabled}
       slotProps={{ Card: { sx: { pt: '1.5rem' } } }}
     >
       <Stack direction="row" alignItems="center" data-testid="ioContact">
@@ -209,7 +220,7 @@ const IOContact: React.FC = () => {
         color="text.secondary"
         data-testid="ioContactDescription"
       >
-        {status === IOContactStatus.ENABLED
+        {isAppIOEnabled
           ? t('io-contact.description-enabled', { ns: 'recapiti' })
           : t('io-contact.description', { ns: 'recapiti' })}
       </Typography>
