@@ -6,7 +6,7 @@ import { Box, Button, Dialog, Typography } from '@mui/material';
 import { IllusError } from '@pagopa/mui-italia';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
-import { ROUTE_LOGIN } from '../../navigation/routes';
+import { ROUTE_LOGIN } from '../../navigation/routes.const';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 
 const handleError = (queryParams: string, errorMessage: string) => {

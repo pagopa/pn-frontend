@@ -4,11 +4,7 @@ import Login from '../pages/login/Login';
 import LoginError from '../pages/loginError/LoginError';
 import Logout from '../pages/logout/Logout';
 import SuccessPage from '../pages/success/Success';
-
-const ROUTE_LOGOUT = '/logout';
-export const ROUTE_LOGIN = '/login';
-const ROUTE_LOGIN_ERROR = '/login/error';
-const ROUTE_SUCCESS = '/login/success';
+import { ROUTE_LOGIN, ROUTE_LOGIN_ERROR, ROUTE_LOGOUT, ROUTE_SUCCESS } from './routes.const';
 
 /** login request operations */
 const onLoginRequest = () => <Login />;

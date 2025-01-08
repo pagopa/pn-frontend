@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 import { act, getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { render } from '../../../__test__/test-utils';
-import { ROUTE_LOGIN } from '../../../navigation/routes';
+import { ROUTE_LOGIN } from '../../../navigation/routes.const';
 import LoginError from '../LoginError';
 
 const mockNavigateFn = vi.fn();

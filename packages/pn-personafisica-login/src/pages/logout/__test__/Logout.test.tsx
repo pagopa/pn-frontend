@@ -2,7 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { render } from '../../../__test__/test-utils';
-import { ROUTE_LOGIN } from '../../../navigation/routes';
+import { ROUTE_LOGIN } from '../../../navigation/routes.const';
 import { storageAarOps } from '../../../utility/storage';
 import Logout from '../Logout';
 

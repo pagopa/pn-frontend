@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { ROUTE_LOGIN } from '../../navigation/routes';
+import { ROUTE_LOGIN } from '../../navigation/routes.const';
 import { storageAarOps } from '../../utility/storage';
 
 const Logout = () => {
