@@ -6,13 +6,20 @@ import { Box, Typography } from '@mui/material';
 import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import IOContactWizard from '../components/Contacts/IOContactWizard';
 import SercqSendContactWizard from '../components/Contacts/SercqSendContactWizard';
+import { IOAllowedValues } from '../models/contacts';
+import { contactsSelectors } from '../redux/contact/reducers';
+import { useAppSelector } from '../redux/hooks';
 
 const DigitalContactActivation: React.FC = () => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
+  const { defaultAPPIOAddress } = useAppSelector(contactsSelectors.selectAddresses);
 
   const [activeStep, setActiveStep] = useState(0);
+
+  const hasAppIO = defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.DISABLED;
 
   const goToNextStep = () => {
     setActiveStep(activeStep + 1);
@@ -23,6 +30,14 @@ const DigitalContactActivation: React.FC = () => {
       return (
         <ButtonNaked onClick={() => navigate(-1)} color="primary" size="medium" sx={{ mx: 'auto' }}>
           {t('button.annulla', { ns: 'common' })}
+        </ButtonNaked>
+      );
+    }
+
+    if (activeStep === 1 && hasAppIO) {
+      return (
+        <ButtonNaked onClick={goToNextStep} color="primary" size="medium" sx={{ mx: 'auto' }}>
+          {t('button.not-now', { ns: 'common' })}
         </ButtonNaked>
       );
     }
@@ -43,11 +58,17 @@ const DigitalContactActivation: React.FC = () => {
           setActiveStep={setActiveStep}
           slots={{
             nextButton: getNextButton,
+            prevButton: () => <></>,
           }}
         >
           <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_1.title')}>
             <SercqSendContactWizard goToNextStep={goToNextStep} />
           </PnWizardStep>
+          {hasAppIO && (
+            <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_2.title')}>
+              <IOContactWizard goToNextStep={goToNextStep} />
+            </PnWizardStep>
+          )}
         </PnWizard>
       </Box>
     </Box>
