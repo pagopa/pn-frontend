@@ -7,23 +7,23 @@ import {
   DELEGHE,
   DETTAGLIO_NOTIFICA,
   DETTAGLIO_NOTIFICA_DELEGATO,
+  LOGOUT,
   NOTIFICHE,
   NOTIFICHE_DELEGATO,
   RECAPITI,
-  URL_FE_LOGOUT,
 } from './routes.const';
 
 export function goToLoginPortal(aarToken?: string | null) {
   // eslint-disable-next-line functional/no-let
-  let urlToRiderect = `${URL_FE_LOGOUT}`;
+  let urlToRedirect = `${LOGOUT}`;
   // the startsWith check is to prevent xss attacks
-  if (urlToRiderect.startsWith(URL_FE_LOGOUT) && aarToken) {
+  if (urlToRedirect.startsWith(LOGOUT) && aarToken) {
     // eslint-disable-next-line functional/immutable-data
-    urlToRiderect += `?${AppRouteParams.AAR}=${sanitizeString(aarToken)}`;
+    urlToRedirect += `?${AppRouteParams.AAR}=${sanitizeString(aarToken)}`;
   }
   // the indexOf check is to prevent xss attacks
-  if (urlToRiderect.startsWith(URL_FE_LOGOUT)) {
-    window.open(`${urlToRiderect}`, '_self');
+  if (urlToRedirect.startsWith(LOGOUT)) {
+    window.open(`${urlToRedirect}`, '_self');
   }
 }
 

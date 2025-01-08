@@ -12,6 +12,7 @@ import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { mandatesByDelegate } from '../__mocks__/Delegations.mock';
 import { apiClient } from '../api/apiClients';
+import { LOGOUT } from '../navigation/routes.const';
 import {
   RenderResult,
   act,
@@ -22,7 +23,6 @@ import {
   waitFor,
   within,
 } from './test-utils';
-import { URL_FE_LOGOUT } from '../navigation/routes.const';
 
 // mock imports
 vi.mock('react-i18next', () => ({
@@ -111,7 +111,7 @@ describe('App', async () => {
     const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(`${URL_FE_LOGOUT}`, '_self');
+    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}`, '_self');
   });
 
   it('render component - user logged in', async () => {

@@ -88,7 +88,7 @@ describe('SessionGuard Component', async () => {
       render(<Guard />);
     });
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(`${routes.URL_FE_LOGOUT}`, '_self');
+    expect(mockOpenFn).toHaveBeenCalledWith(`${routes.LOGOUT}`, '_self');
   });
 
   // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken
