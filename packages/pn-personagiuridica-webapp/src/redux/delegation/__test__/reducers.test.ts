@@ -2,6 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { mandatesByDelegate, mandatesByDelegator } from '../../../__mocks__/Delegations.mock';
+import { errorMock } from '../../../__mocks__/Errors.mock';
 import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { DelegationStatus } from '../../../models/Deleghe';
@@ -116,10 +117,10 @@ describe('delegation redux state tests', () => {
   });
 
   it('should throw an error trying to accept a delegation', async () => {
-    mock.onPatch(`/bff/v1/mandate/1/accept`).reply(500, 'error');
+    mock.onPatch(`/bff/v1/mandate/1/accept`).reply(errorMock.status, errorMock.data);
     const action = await store.dispatch(acceptMandate({ id: '1', code: '12345', groups: [] }));
     expect(action.type).toBe('acceptMandate/rejected');
-    expect(action.payload).toStrictEqual({ response: { status: 500, data: 'error' } });
+    expect(action.payload).toStrictEqual({ response: errorMock });
   });
 
   it('should reject a delegation from a delegator', async () => {
@@ -144,10 +145,10 @@ describe('delegation redux state tests', () => {
   });
 
   it('should throw an error trying to reject a delegation', async () => {
-    mock.onPatch(`/bff/v1/mandate/2/reject`).reply(500, 'error');
+    mock.onPatch(`/bff/v1/mandate/2/reject`).reply(errorMock.status, errorMock.data);
     const action = await store.dispatch(rejectMandate('2'));
     expect(action.type).toBe('rejectMandate/rejected');
-    expect(action.payload).toEqual({ response: { status: 500, data: 'error' } });
+    expect(action.payload).toEqual({ response: errorMock });
   });
 
   it('should revoke a delegation for a delegate', async () => {
@@ -171,10 +172,10 @@ describe('delegation redux state tests', () => {
   });
 
   it('should throw an error trying to revoke a delegation', async () => {
-    mock.onPatch(`/bff/v1/mandate/2/revoke`).reply(500, 'error');
+    mock.onPatch(`/bff/v1/mandate/2/revoke`).reply(errorMock.status, errorMock.data);
     const action = await store.dispatch(revokeMandate('2'));
     expect(action.type).toBe('revokeMandate/rejected');
-    expect(action.payload).toEqual({ response: { status: 500, data: 'error' } });
+    expect(action.payload).toEqual({ response: errorMock });
   });
 
   it('should get groups for the current PG', async () => {
@@ -219,10 +220,10 @@ describe('delegation redux state tests', () => {
   });
 
   it('should throw an error trying to update a delegation', async () => {
-    mock.onPatch(`/bff/v1/mandate/1/update`).reply(500, 'error');
+    mock.onPatch(`/bff/v1/mandate/1/update`).reply(errorMock.status, errorMock.data);
     const action = await store.dispatch(updateMandate({ id: '1', groups: [] }));
     expect(action.type).toBe('updateMandate/rejected');
-    expect(action.payload).toEqual({ response: { status: 500, data: 'error' } });
+    expect(action.payload).toEqual({ response: errorMock });
   });
 
   it('Should be able to set filters', () => {
