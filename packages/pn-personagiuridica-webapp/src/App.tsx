@@ -12,6 +12,7 @@ import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import SettingsEthernet from '@mui/icons-material/SettingsEthernet';
 import { Box } from '@mui/material';
 import {
+  APP_VERSION,
   AppMessage,
   AppResponseMessage,
   Layout,
@@ -64,7 +65,7 @@ const App = () => {
 
 // eslint-disable-next-line complexity
 const ActualApp = () => {
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION, SELFCARE_BASE_URL, IS_B2B_ENABLED } =
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, IS_B2B_ENABLED } =
     getConfiguration();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -251,7 +252,7 @@ const ActualApp = () => {
       dispatch(
         appStateActions.addSuccess({
           title: 'Current version',
-          message: `v${VERSION}`,
+          message: `v${APP_VERSION}`,
         })
       ),
   });
