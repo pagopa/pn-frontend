@@ -9,7 +9,6 @@ import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
 import { store } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import SessionGuard from '../SessionGuard';
-import { SELFCARE_ROUTE_LOGOUT } from '../navigation.utility';
 import * as routes from '../routes.const';
 import { DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM } from '../routes.const';
 
@@ -97,7 +96,7 @@ describe('SessionGuard Component', async () => {
     });
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
     expect(mockOpenFn).toHaveBeenCalledWith(
-      `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_ROUTE_LOGOUT}`,
+      `${getConfiguration().SELFCARE_BASE_URL}${routes.SELFCARE_LOGOUT}`,
       '_self'
     );
   });

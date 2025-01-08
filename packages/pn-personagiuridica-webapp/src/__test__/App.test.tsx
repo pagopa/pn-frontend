@@ -11,10 +11,10 @@ import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { apiClient } from '../api/apiClients';
 import { DelegationStatus } from '../models/Deleghe';
+import { SELFCARE_LOGOUT } from '../navigation/routes.const';
 import { PNRole, PartyRole } from '../redux/auth/types';
 import { getConfiguration } from '../services/configuration.service';
 import { RenderResult, act, render } from './test-utils';
-import { SELFCARE_ROUTE_LOGOUT } from '../navigation/navigation.utility';
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
@@ -98,7 +98,10 @@ describe('App', async () => {
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(`${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_ROUTE_LOGOUT}`, '_self');
+    expect(mockOpenFn).toHaveBeenCalledWith(
+      `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT}`,
+      '_self'
+    );
   });
 
   it('render component - user logged in', async () => {
