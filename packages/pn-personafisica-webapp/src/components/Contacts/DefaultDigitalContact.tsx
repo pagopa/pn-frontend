@@ -122,7 +122,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 ) : null,
               }}
               value={formik.values[`default_${contactType}`]}
-              onChange={(e) => void handleChangeTouched(e)}
+              onChange={handleChangeTouched}
               error={
                 formik.touched[`default_${contactType}`] &&
                 Boolean(formik.errors[`default_${contactType}`])

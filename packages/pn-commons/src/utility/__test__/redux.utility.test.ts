@@ -1,84 +1,110 @@
-import { vi } from 'vitest';
+import { parseError } from '../redux.utility';
 
-import { performThunkAction } from '../redux.utility';
-
-// Mock an asynchronous action function for testing
-const mockAsyncAction = async (params: string) => {
-  if (params === 'error') {
-    throw new Error('Test Error');
-  } else if (params === 'error_response_no_status') {
-    throw {
+describe('parseError', () => {
+  it('should use traceId from headers if present', () => {
+    const error = {
       response: {
-        data: 'Some error data',
+        data: {
+          message: 'An error occurred',
+        },
+        status: 404,
+        headers: {
+          'x-amzn-trace-id': '1-67891233-abcdef1234567890abcdef',
+        },
       },
     };
-  } else if (params === 'error_response') {
-    throw {
-      extraData: 'Some extra data',
+
+    const result = parseError(error);
+
+    expect(result).toEqual({
       response: {
-        data: 'Some error data',
-        status: 400,
+        data: {
+          message: 'An error occurred',
+          traceId: '1-67891233-abcdef1234567890abcdef',
+        },
+        status: 404,
       },
-    };
-  }
-  return `Result for ${params}`;
-};
-
-describe('performThunkAction', () => {
-  it('should call the action function with the provided parameters', async () => {
-    const params = 'testParams';
-    const actionSpy = vi.fn(mockAsyncAction);
-    const thunkAction = performThunkAction(actionSpy);
-
-    await thunkAction(params, { rejectWithValue: vi.fn() });
-
-    expect(actionSpy).toHaveBeenCalledWith(params);
-  });
-
-  it('should return the result of the action function on success', async () => {
-    const params = 'testParams';
-    const expectedResult = `Result for ${params}`;
-    const thunkAction = performThunkAction(mockAsyncAction);
-
-    const result = await thunkAction(params, { rejectWithValue: vi.fn() });
-
-    expect(result).toBe(expectedResult);
-  });
-
-  it('should call rejectWithValue with a parsed error on failure - no error response', async () => {
-    const errorParams = 'error';
-    const rejectWithValueSpy = vi.fn();
-    const thunkAction = performThunkAction(mockAsyncAction);
-
-    await thunkAction(errorParams, { rejectWithValue: rejectWithValueSpy });
-
-    // Check if rejectWithValue was called with an error object
-    expect(rejectWithValueSpy).toHaveBeenCalledWith({ response: { status: 500 } });
-  });
-
-  it('should call rejectWithValue with a parsed error on failure - error without status', async () => {
-    const errorParams = 'error_response_no_status';
-    const rejectWithValueSpy = vi.fn();
-    const thunkAction = performThunkAction(mockAsyncAction);
-
-    await thunkAction(errorParams, { rejectWithValue: rejectWithValueSpy });
-
-    // Check if rejectWithValue was called with an error object
-    expect(rejectWithValueSpy).toHaveBeenCalledWith({
-      response: { data: 'Some error data', status: 500 },
     });
   });
 
-  it('should call rejectWithValue with a parsed error on failure - error with all data', async () => {
-    const errorParams = 'error_response';
-    const rejectWithValueSpy = vi.fn();
-    const thunkAction = performThunkAction(mockAsyncAction);
+  it('should use traceId from data if present', () => {
+    const error = {
+      response: {
+        data: {
+          message: 'An error occurred',
+          traceId: 'custom-trace-id',
+        },
+        status: 400,
+        headers: {
+          'x-amzn-trace-id': '1-67891233-abcdef1234567890abcdef',
+        },
+      },
+    };
 
-    await thunkAction(errorParams, { rejectWithValue: rejectWithValueSpy });
+    const result = parseError(error);
 
-    // Check if rejectWithValue was called with an error object
-    expect(rejectWithValueSpy).toHaveBeenCalledWith({
-      response: { data: 'Some error data', status: 400 },
+    expect(result).toEqual({
+      response: {
+        data: {
+          message: 'An error occurred',
+          traceId: 'custom-trace-id',
+        },
+        status: 400,
+      },
+    });
+  });
+
+  it('should set default status to 500 if not provided', () => {
+    const error = {
+      response: {
+        data: {
+          message: 'An error occurred',
+        },
+        headers: {},
+      },
+    };
+
+    const result = parseError(error);
+
+    expect(result).toEqual({
+      response: {
+        data: {
+          message: 'An error occurred',
+          traceId: '',
+        },
+        status: 500,
+      },
+    });
+  });
+
+  it('should handle error without response', () => {
+    const error = {
+      message: 'Something went wrong',
+    };
+
+    const result = parseError(error);
+
+    expect(result).toEqual({
+      response: {
+        status: 500,
+      },
+    });
+  });
+
+  it('should handle empty response object', () => {
+    const error = {
+      response: {},
+    };
+
+    const result = parseError(error);
+
+    expect(result).toEqual({
+      response: {
+        data: {
+          traceId: '',
+        },
+        status: 500,
+      },
     });
   });
 });

@@ -3,6 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { oneMonthAgo, today, twelveMonthsAgo } from '@pagopa-pn/pn-commons';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { errorMock } from '../../../__mocks__/Errors.mock';
 import { filters, parsedResponseMock, rawResponseMock } from '../../../__mocks__/Statistics.mock';
 import { apiClient } from '../../../api/apiClients';
 import {
@@ -76,11 +77,13 @@ describe('Statistics redux state tests', () => {
   });
 
   it('should handle error response', async () => {
-    mock.onGet(/\/bff\/v1\/sender-dashboard\/dashboard-data-request*/).reply(401);
+    mock
+      .onGet(/\/bff\/v1\/sender-dashboard\/dashboard-data-request*/)
+      .reply(errorMock.status, errorMock.data);
     const action = await store.dispatch(getStatistics(requestParams));
     const payload = action.payload;
     expect(action.type).toBe('getStatistics/rejected');
-    expect(payload).toEqual({ response: { status: 401 } });
+    expect(payload).toEqual({ response: errorMock });
   });
 
   it('should reset state', () => {
