@@ -70,18 +70,8 @@
   "io-contact": {
     "title": "IO-App",
     "description": "Lies und verwalte rechtsgültige Mitteilungen direkt auf IO: Wenn eine Zustellung für dich vorliegt, erhältst du sie in der App und kannst etwaige Gebühren bezahlen.",
-    "dialog-description": "Für jede neue Zustellung erhältst due eine Nachricht in der App. Du kannst sie lesen und etwaige Gebühren direkt auf IO bezahlen.",
-    "enabled": "Servizio Notifiche Digitali ist aktiv",
-    "disabled": "Servizio Notifiche Digitali ist nicht aktiv",
-    "unavailable": "Zum Aktivieren des Dienstes lade zuerst die IO-APP herunter",
     "enable": "Aktiviere SEND auf IO",
     "download": "IO-App herunterladen",
-    "enable-modal": {
-      "title": "Möchtest du den Dienst „Notifiche Digitali“ auf IO aktivieren?",
-      "checkbox": "Verstanden",
-      "confirm": "Dienst aktivieren",
-      "content": "Solltest du keine PEC-Adresse haben und die Zustellung innerhalb 5 Tagen (120 Stunden) nach Versand aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben."
-    },
     "disable-modal": {
       "title": "Möchtest du den Dienst „Notifiche Digitali“ auf IO deaktivieren?",
       "confirm": "Dienst deaktivieren",

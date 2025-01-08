@@ -70,18 +70,8 @@
   "io-contact": {
     "title": "Aplikacija IO",
     "description": "Preberite in upravljajte uradno komunikacijo neposredno na IO: ko za vas prispe obvestilo, ga prejmete v aplikaciji in lahko poravnate vse stroške.",
-    "dialog-description": "Za vsako novo obvestilo boste prejeli sporočilo v aplikaciji. Lahko ga boste prebrali in poljubne zneske poravnali neposredno v IO.",
-    "enabled": "Storitev digitalnega obveščanja je aktivna",
-    "disabled": "Storitev digitalnega obveščanja ni aktivna",
-    "unavailable": "Če želite aktivirati storitev, najprej prenesite aplikacijo IO",
     "enable": "Aktivirajte SEND na IO",
     "download": "Prenesite aplikacijo IO",
-    "enable-modal": {
-      "title": "Ali želite aktivirati storitev »Notifiche Digitali« v IO?",
-      "checkbox": "Razumem",
-      "confirm": "Aktiviraj storitev",
-      "content": "Če nimate PEC in dostopate do obvestila v roku 5 dni (120 ur) od pošiljanja sporočila, potrdila o prejemu ne boste prejeli po priporočeni pošti."
-    },
     "disable-modal": {
       "title": "Ali želite deaktivirati storitev »Notifiche Digitali« v IO?",
       "confirm": "Deaktiviraj storitev",

@@ -70,18 +70,8 @@
   "io-contact": {
     "title": "App IO",
     "description": "Lisez et gérez les communications à valeur juridique directement sur IO : lorsqu’une notification vous est destinée, vous la recevez dans l’app et vous pouvez payer d’éventuels frais.",
-    "dialog-description": "Vous recevrez un message dans l’app pour chaque nouvelle notification. Vous pourrez la lire et payer les frais éventuels directement sur IO.",
-    "enabled": "Servizio Notifiche Digitali activé",
-    "disabled": "Servizio Notifiche Digitali désactivé",
-    "unavailable": "Pour activer le service, téléchargez d’abord l’app IO",
     "enable": "Activez SEND sur IO",
     "download": "Téléchargez l’app IO",
-    "enable-modal": {
-      "title": "Voulez-vous activer le service « Notifiche Digitali » sur IO ?",
-      "checkbox": "J’ai compris",
-      "confirm": "Activer le service",
-      "content": "Si vous ne disposez pas de PEC et que vous accédez à la notification dans les 5 jours (120 heures) suivant l’envoi du message, vous ne recevrez pas d’avis de réception par lettre recommandée."
-    },
     "disable-modal": {
       "title": "Voulez-vous désactiver le service « Notifiche Digitali » sur IO ?",
       "confirm": "Désactiver le service",
