@@ -88,7 +88,7 @@ export const eventsActionsMap: Record<string, PFEventsType> = {
   'exchangeToken/fulfilled': PFEventsType.SEND_AUTH_SUCCESS,
 
   // --- PROFILE_PROPERTY
-  'getDomicileInfo/fulfilled': PFEventsType.SEND_HAS_ADDRESSES,
+  'getDigitalAddresses/fulfilled': PFEventsType.SEND_HAS_ADDRESSES,
   'getSidemenuInformation/fulfilled': PFEventsType.SEND_HAS_MANDATE_LOGIN,
   'getMandatesByDelegator/fulfilled': PFEventsType.SEND_MANDATE_GIVEN,
   'enableIOAddress/fulfilled': PFEventsType.SEND_ENABLE_IO,

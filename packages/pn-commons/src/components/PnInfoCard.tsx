@@ -134,7 +134,7 @@ const PnInfoCard: React.FC<Props> = ({
     <Card sx={{ p: { xs: 2, lg: 3 }, ...slotProps }} {...rest}>
       <CardHeader
         data-testid="PnInfoCardHeader"
-        sx={{ p: 0 }}
+        sx={{ p: 0, '.MuiCardHeader-action': { m: 0 } }}
         title={
           <PnInfoCardHeading
             data-testid="PnInfoCardTitle"

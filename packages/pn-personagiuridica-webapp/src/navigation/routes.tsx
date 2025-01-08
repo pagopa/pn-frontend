@@ -32,6 +32,7 @@ const PrivacyPolicyPage = lazyRetry(() => import('../pages/PrivacyPolicy.page'))
 const TermsOfServicePage = lazyRetry(() => import('../pages/TermsOfService.page'));
 const ApiIntegrationPage = lazyRetry(() => import('../pages/ApiIntegration.page'));
 const NewPublicKeyPage = lazyRetry(() => import('../pages/NewPublicKey.page'));
+const DigitalContactActivation = lazyRetry(() => import('../pages/DigitalContactActivation.page'));
 
 const handleAssistanceClick = () => {
   /* eslint-disable-next-line functional/immutable-data */
@@ -133,6 +134,10 @@ function Router() {
                       <Contacts />
                     </PrivateRoute>
                   }
+                />
+                <Route
+                  path={routes.DIGITAL_DOMICILE_ACTIVATION}
+                  element={<DigitalContactActivation />}
                 />
                 <Route
                   path={routes.INTEGRAZIONE_API}

@@ -72,7 +72,34 @@
     "remove-sercq-send-message": "Non avrai più un recapito digitale a valore legale per le comunicazioni della Pubblica Amministrazione e potresti tornare a ricevere le notifiche in forma cartacea.",
     "block-remove-sercq-send-title": "Non è possibile disattivare il Domicilio Digitale",
     "block-remove-sercq-send-message": "Prima elimina gli indirizzi PEC che hai inserito nei recapiti personalizzati.",
-    "sercq_send-removed-successfully": "Domicilio Digitale disattivato correttamente"
+    "sercq_send-removed-successfully": "Domicilio Digitale disattivato correttamente",
+    "sercq-send-wizard": {
+      "title": "Attiva domicilio digitale",
+      "step_1": {
+        "title": "Come funziona",
+        "info-list": [
+          {
+            "title": "Un ente ti invia una notifica su SEND",
+            "description": "La notifica ti viene <0>consegnata</0> in modo sicuro e con valore legale tramite la piattaforma"
+          },
+          {
+            "title": "Ricevi un aggiornamento in tempo reale",
+            "description": "Puoi riceverlo tramite email o SMS, a seconda dei canali che hai scelto di attivare"
+          },
+          {
+            "title": "Accedi alla notifica",
+            "description": "Apri il dettaglio della notifica digitale sulla piattaforma SEND"
+          }
+        ],
+        "info-tos": "Premendo “Attiva” dichiari di aver letto e di accettare i <0>Termini del servizio</0>.",
+        "have-pec": "Preferisci usare la PEC aziendale?",
+        "have-pec-description": "In alternativa, puoi usare una PEC come domicilio digitale per le notifiche di SEND.",
+        "insert-pec": "Inserisci PEC",
+        "delivered-dialog-title": "Valore giuridico della notifica sul domicilio digitale SEND",
+        "delivered-dialog-description": "Se scegli SEND come domicilio digitale e non apri la notifica entro 7 giorni dalla consegna, questa risulterà legalmente recapitata, proprio come accade con le raccomandate cartacee.",
+        "pec-info-alert": "La piattaforma SEND sostituirà la PEC aziendale come tuo domicilio digitale della tua impresa. "
+      }
+    }
   },
   "courtesy-contacts": {
     "title": "Recapiti di cortesia",
