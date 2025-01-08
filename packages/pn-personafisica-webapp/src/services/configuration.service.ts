@@ -1,4 +1,4 @@
-import { Configuration, dataRegex, IS_DEVELOP } from '@pagopa-pn/pn-commons';
+import { Configuration, IS_DEVELOP, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
 
 export interface PfConfiguration {
@@ -35,12 +35,16 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
     this.ruleFor('ONE_TRUST_PARTICIPATING_ENTITIES')
       .isString()
+      .isRequired()
       .matches(dataRegex.lettersNumbersAndDashs);
-    this.ruleFor('ONE_TRUST_PP').isString().matches(dataRegex.lettersNumbersAndDashs);
-    this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_PP').isString().isRequired().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_TOS').isString().isRequired().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_SERCQ_SEND_DRAFT_MODE').isBoolean();
-    this.ruleFor('ONE_TRUST_TOS_SERCQ_SEND').isString().matches(dataRegex.lettersNumbersAndDashs);
-    this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_TOS_SERCQ_SEND')
+      .isString()
+      .isRequired()
+      .matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('OT_DOMAIN_ID').isString().isRequired().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('PAGOPA_HELP_EMAIL').isString().isRequired().matches(dataRegex.email);
     this.ruleFor('LANDING_SITE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();

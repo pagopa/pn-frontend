@@ -1,4 +1,4 @@
-import { Configuration, dataRegex, IS_DEVELOP } from '@pagopa-pn/pn-commons';
+import { Configuration, IS_DEVELOP, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
 
 export interface PgConfiguration {
@@ -29,15 +29,21 @@ class PgConfigurationValidator extends Validator<PgConfiguration> {
     super();
     this.ruleFor('API_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('IS_INACTIVITY_HANDLER_ENABLED').isBoolean();
-    this.ruleFor('MIXPANEL_TOKEN').isString();
+    this.ruleFor('MIXPANEL_TOKEN').isString().isRequired();
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
-    this.ruleFor('ONE_TRUST_PP').isString().matches(dataRegex.lettersNumbersAndDashs);
-    this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_PP').isString().isRequired().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_TOS').isString().isRequired().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_SERCQ_SEND_DRAFT_MODE').isBoolean();
-    this.ruleFor('ONE_TRUST_TOS_SERCQ_SEND').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_TOS_SERCQ_SEND')
+      .isString()
+      .isRequired()
+      .matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_MASSIVI_DRAFT_MODE').isBoolean();
-    this.ruleFor('ONE_TRUST_TOS_MASSIVI').isString().matches(dataRegex.lettersNumbersAndDashs);
-    this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_TOS_MASSIVI')
+      .isString()
+      .isRequired()
+      .matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('OT_DOMAIN_ID').isString().isRequired().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('PAGOPA_HELP_EMAIL').isString().isRequired().matches(dataRegex.email);
     this.ruleFor('LANDING_SITE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();
