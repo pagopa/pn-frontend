@@ -1,4 +1,4 @@
-import { MouseEvent, ReactNode, useMemo, useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Block, Delete, MoreVert, RemoveRedEye, Sync } from '@mui/icons-material';
@@ -66,105 +66,96 @@ const VirtualKeyContextMenu: React.FC<Props> = ({
         key.user?.fiscalCode === data.user?.fiscalCode && key.status === VirtualKeyStatus.Blocked
     ) && data.status !== VirtualKeyStatus.Rotated;
 
-  const menuElements: Array<ReactNode> = useMemo(() => {
-    const elements: Array<ReactNode> = [];
+  const shoudlShowViewButton = !isUserAdmin || isPersonalKey;
 
-    if (shouldShowRotateButton()) {
-      // eslint-disable-next-line functional/immutable-data
-      elements.push(
-        <MenuItem
-          id="button-rotate"
-          data-testid="buttonRotate"
-          onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}
-        >
-          <Sync sx={{ mr: 1 }} />
-          {t('context-menu.rotate')}
-        </MenuItem>
-      );
-    }
-    if (shouldShowBlockButton) {
-      // eslint-disable-next-line functional/immutable-data
-      elements.push(
-        <MenuItem
-          id="button-block"
-          data-testid="buttonBlock"
-          onClick={() => handleModalClick(ModalApiKeyView.BLOCK, apiKeyId)}
-        >
-          <Block sx={{ mr: 1 }} />
-          {t('context-menu.block')}
-        </MenuItem>
-      );
-    }
-    if (!isUserAdmin || isPersonalKey) {
-      // eslint-disable-next-line functional/immutable-data
-      elements.push(
-        <MenuItem
-          id="button-view"
-          data-testid="buttonView"
-          onClick={() => handleModalClick(ModalApiKeyView.VIEW, apiKeyId)}
-        >
-          <RemoveRedEye sx={{ mr: 1 }} />
-          {t('context-menu.view')}
-        </MenuItem>
-      );
-    }
-    if (data.status !== VirtualKeyStatus.Enabled) {
-      // eslint-disable-next-line functional/immutable-data
-      elements.push(
-        <MenuItem
-          id="button-delete"
-          data-testid="buttonDelete"
-          onClick={() => handleModalClick(ModalApiKeyView.DELETE, apiKeyId)}
-          sx={{ color: 'error.dark' }}
-        >
-          <Delete sx={{ mr: 1 }} />
-          {t('button.elimina', { ns: 'common' })}
-        </MenuItem>
-      );
-    }
-    return elements;
-  }, [data.status, isUserAdmin, isPersonalKey, shouldShowRotateButton, shouldShowBlockButton]);
+  const shouldShowDeleteButton = data.status !== VirtualKeyStatus.Enabled;
+
+  // if no action is available, return empty element
+  if (
+    !shouldShowRotateButton() &&
+    !shouldShowBlockButton &&
+    !shoudlShowViewButton &&
+    !shouldShowDeleteButton
+  ) {
+    return <></>;
+  }
 
   return (
     <Box data-testid="contextMenu">
-      {menuElements.length > 0 && (
-        <>
-          <IconButton
-            onClick={handleClick}
-            size="small"
-            color="primary"
-            data-testid="contextMenuButton"
-            aria-label={t('context-menu.title')}
-            aria-controls={open ? 'context-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-          >
-            <MoreVert />
-          </IconButton>
+      <IconButton
+        onClick={handleClick}
+        size="small"
+        color="primary"
+        data-testid="contextMenuButton"
+        aria-label={t('context-menu.title')}
+        aria-controls={open ? 'context-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+      >
+        <MoreVert />
+      </IconButton>
 
-          <Menu
-            data-testid="menuContext"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            onClick={handleClose}
-            slotProps={{
-              paper: {
-                elevation: 0,
-                sx: {
-                  overflow: 'visible',
-                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                  mt: 1.5,
-                },
-              },
-            }}
-            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      <Menu
+        data-testid="menuContext"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        slotProps={{
+          paper: {
+            elevation: 0,
+            sx: {
+              overflow: 'visible',
+              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+              mt: 1.5,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        {shouldShowRotateButton() && (
+          <MenuItem
+            id="button-rotate"
+            data-testid="buttonRotate"
+            onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}
           >
-            {menuElements}
-          </Menu>
-        </>
-      )}
+            <Sync sx={{ mr: 1 }} />
+            {t('context-menu.rotate')}
+          </MenuItem>
+        )}
+        {shouldShowBlockButton && (
+          <MenuItem
+            id="button-block"
+            data-testid="buttonBlock"
+            onClick={() => handleModalClick(ModalApiKeyView.BLOCK, apiKeyId)}
+          >
+            <Block sx={{ mr: 1 }} />
+            {t('context-menu.block')}
+          </MenuItem>
+        )}
+        {shoudlShowViewButton && (
+          <MenuItem
+            id="button-view"
+            data-testid="buttonView"
+            onClick={() => handleModalClick(ModalApiKeyView.VIEW, apiKeyId)}
+          >
+            <RemoveRedEye sx={{ mr: 1 }} />
+            {t('context-menu.view')}
+          </MenuItem>
+        )}
+        {shouldShowDeleteButton && (
+          <MenuItem
+            id="button-delete"
+            data-testid="buttonDelete"
+            onClick={() => handleModalClick(ModalApiKeyView.DELETE, apiKeyId)}
+            sx={{ color: 'error.dark' }}
+          >
+            <Delete sx={{ mr: 1 }} />
+            {t('button.elimina', { ns: 'common' })}
+          </MenuItem>
+        )}
+      </Menu>
     </Box>
   );
 };

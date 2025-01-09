@@ -62,7 +62,9 @@ const ApiIntegration: React.FC = () => {
   }, [publicKeys, virtualKeys]);
 
   useEffect(() => {
-    void dispatch(getPublicKeys({ showPublicKey: true }));
+    if (isAdminWithoutGroups) {
+      void dispatch(getPublicKeys({ showPublicKey: true }));
+    }
     void dispatch(getVirtualApiKeys({ showVirtualKey: true }));
   }, []);
 
