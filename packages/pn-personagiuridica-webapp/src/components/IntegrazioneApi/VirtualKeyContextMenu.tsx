@@ -15,19 +15,26 @@ type Props = {
   data: Row<ApiKeyColumnData>;
   keys: BffVirtualKeysResponse;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
+  issuerIsActive?: boolean;
 };
 
-const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }) => {
+const VirtualKeyContextMenu: React.FC<Props> = ({
+  data,
+  keys,
+  issuerIsActive,
+  handleModalClick,
+}) => {
   const apiKeyId = data.id;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { t } = useTranslation(['integrazioneApi', 'common']);
   const open = Boolean(anchorEl);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
-  const isUserAdmin = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]) && !currentUser.hasGroup;
+  const isUserAdmin =
+    useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]) && !currentUser.hasGroup;
 
   const isPersonalKey =
-    !isUserAdmin || 
+    !isUserAdmin ||
     keys.items.find((key) => key.id === apiKeyId)?.user?.fiscalCode === currentUser.fiscal_number;
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -38,10 +45,13 @@ const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }
   };
 
   const checkIfStatusIsAlreadyPresent = (status: VirtualKeyStatus): boolean =>
-    !!keys.items.find((key) => key.status === status && (!key.user || key.user?.fiscalCode === data.user?.fiscalCode));
+    !!keys.items.find(
+      (key) =>
+        key.status === status && (!key.user || key.user?.fiscalCode === data.user?.fiscalCode)
+    );
 
   const shouldShowRotateButton = (): boolean => {
-    if(isPersonalKey){
+    if (isPersonalKey && issuerIsActive) {
       return (
         data.status === VirtualKeyStatus.Enabled &&
         !checkIfStatusIsAlreadyPresent(VirtualKeyStatus.Rotated)
@@ -55,6 +65,20 @@ const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }
       (key) =>
         key.user?.fiscalCode === data.user?.fiscalCode && key.status === VirtualKeyStatus.Blocked
     ) && data.status !== VirtualKeyStatus.Rotated;
+
+  const shoudlShowViewButton = !isUserAdmin || isPersonalKey;
+
+  const shouldShowDeleteButton = data.status !== VirtualKeyStatus.Enabled;
+
+  // if no action is available, return empty element
+  if (
+    !shouldShowRotateButton() &&
+    !shouldShowBlockButton &&
+    !shoudlShowViewButton &&
+    !shouldShowDeleteButton
+  ) {
+    return <></>;
+  }
 
   return (
     <Box data-testid="contextMenu">
@@ -110,8 +134,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }
             {t('context-menu.block')}
           </MenuItem>
         )}
-
-        {(!isUserAdmin || isPersonalKey) && (
+        {shoudlShowViewButton && (
           <MenuItem
             id="button-view"
             data-testid="buttonView"
@@ -121,8 +144,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }
             {t('context-menu.view')}
           </MenuItem>
         )}
-
-        {data.status !== VirtualKeyStatus.Enabled && (
+        {shouldShowDeleteButton && (
           <MenuItem
             id="button-delete"
             data-testid="buttonDelete"

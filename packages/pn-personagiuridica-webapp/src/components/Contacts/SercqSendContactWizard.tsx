@@ -51,7 +51,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
   const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const { defaultPECAddress } = useAppSelector(contactsSelectors.selectAddresses);
-  const { DOD_DISABLED } = getConfiguration();
+  const { IS_DOD_ENABLED } = getConfiguration();
 
   const sercqSendInfoList: Array<{ title: string; description: string }> = t(
     'legal-contacts.sercq-send-wizard.step_1.info-list',
@@ -142,7 +142,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
         {t('legal-contacts.sercq-send-wizard.step_1.title')}
       </Typography>
 
-      {!DOD_DISABLED && (
+      {IS_DOD_ENABLED && (
         <>
           <List dense sx={{ p: 0 }} data-testid="sercq-send-info-list">
             {sercqSendInfoList.map((item, index) => (
