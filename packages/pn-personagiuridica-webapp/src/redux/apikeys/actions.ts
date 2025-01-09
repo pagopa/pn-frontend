@@ -20,7 +20,7 @@ import {
   ConsentType,
   UserConsentsApiFactory,
 } from '../../generated-client/tos-privacy';
-import { GetApiKeysParams } from '../../models/ApiKeys';
+import { GetPublicKeysParams, GetVirtualKeysParams } from '../../models/ApiKeys';
 
 export enum PUBLIC_APIKEYS_ACTIONS {
   GET_PUBLIC_APIKEYS = 'getPublicApiKeys',
@@ -40,24 +40,24 @@ export enum VIRTUAL_APIKEYS_ACTIONS {
   CHANGE_VIRTUAL_APIKEY_STATUS = 'changeVirtualApiKeyStatus',
 }
 
-export const getPublicKeys = createAsyncThunk<BffPublicKeysResponse, GetApiKeysParams | undefined>(
-  PUBLIC_APIKEYS_ACTIONS.GET_PUBLIC_APIKEYS,
-  async (params, { rejectWithValue }) => {
-    try {
-      const apiKeysFactory = PublicKeysApiFactory(undefined, undefined, apiClient);
-      const response = await apiKeysFactory.getPublicKeysV1(
-        params?.limit,
-        params?.lastKey,
-        params?.createdAt,
-        params?.showPublicKey
-      );
+export const getPublicKeys = createAsyncThunk<
+  BffPublicKeysResponse,
+  GetPublicKeysParams | undefined
+>(PUBLIC_APIKEYS_ACTIONS.GET_PUBLIC_APIKEYS, async (params, { rejectWithValue }) => {
+  try {
+    const apiKeysFactory = PublicKeysApiFactory(undefined, undefined, apiClient);
+    const response = await apiKeysFactory.getPublicKeysV1(
+      params?.limit,
+      params?.lastKey,
+      params?.createdAt,
+      params?.showPublicKey
+    );
 
-      return response.data;
-    } catch (e: any) {
-      return rejectWithValue(parseError(e));
-    }
+    return response.data;
+  } catch (e: any) {
+    return rejectWithValue(parseError(e));
   }
-);
+});
 
 export const createPublicKey = createAsyncThunk<BffPublicKeyResponse, BffPublicKeyRequest>(
   PUBLIC_APIKEYS_ACTIONS.CREATE_PUBLIC_APIKEY,
@@ -172,7 +172,7 @@ export const acceptTosPrivacy = createAsyncThunk<void, Array<BffTosPrivacyAction
 // -- VIRTUAL API KEYS
 export const getVirtualApiKeys = createAsyncThunk<
   BffVirtualKeysResponse,
-  GetApiKeysParams | undefined
+  GetVirtualKeysParams | undefined
 >(VIRTUAL_APIKEYS_ACTIONS.GET_VIRTUAL_APIKEYS, async (params, { rejectWithValue }) => {
   try {
     const apiKeysFactory = VirtualKeysApiFactory(undefined, undefined, apiClient);
@@ -180,7 +180,7 @@ export const getVirtualApiKeys = createAsyncThunk<
       params?.limit,
       params?.lastKey,
       params?.createdAt,
-      params?.showPublicKey
+      params?.showVirtualKey
     );
 
     return response.data;

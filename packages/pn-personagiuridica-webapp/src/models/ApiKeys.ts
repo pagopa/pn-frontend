@@ -5,11 +5,18 @@ import {
   VirtualKeyStatus,
 } from '../generated-client/pg-apikeys';
 
-export type GetApiKeysParams = {
+export type GetPublicKeysParams = {
   limit?: number;
   lastKey?: string;
   createdAt?: string;
   showPublicKey?: boolean;
+};
+
+export type GetVirtualKeysParams = {
+  limit?: number;
+  lastKey?: string;
+  createdAt?: string;
+  showVirtualKey?: boolean;
 };
 
 export enum ModalApiKeyView {
@@ -29,3 +36,7 @@ export type ApiKeyColumnData = {
   user?: UserDto;
   menu: string;
 };
+
+export const ExtendedVirtualKeyStatus = { ...VirtualKeyStatus, Disabled: 'DISABLED' } as const;
+export type ExtendedVirtualKeyStatus =
+  (typeof ExtendedVirtualKeyStatus)[keyof typeof ExtendedVirtualKeyStatus];
