@@ -78,7 +78,7 @@ const NotificationDetail: React.FC = () => {
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
   const [downtimesReady, setDowntimesReady] = useState(false);
-  const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL } = getConfiguration();
+  const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL, DOWNTIME_EXAMPLE_LINK } = getConfiguration();
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -531,6 +531,7 @@ const NotificationDetail: React.FC = () => {
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
+                    recipients={notification.recipients}
                     clickHandler={documentDowloadHandler}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
@@ -547,6 +548,7 @@ const NotificationDetail: React.FC = () => {
                   fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
                   apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
                   disableDownloads={isCancelled.cancellationInTimeline}
+                  downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                 />
               </Stack>
             </Grid>

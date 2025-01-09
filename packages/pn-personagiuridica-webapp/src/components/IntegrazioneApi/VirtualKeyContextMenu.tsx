@@ -15,9 +15,15 @@ type Props = {
   data: Row<ApiKeyColumnData>;
   keys: BffVirtualKeysResponse;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: string) => void;
+  issuerIsActive?: boolean;
 };
 
-const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }) => {
+const VirtualKeyContextMenu: React.FC<Props> = ({
+  data,
+  keys,
+  issuerIsActive,
+  handleModalClick,
+}) => {
   const apiKeyId = data.id;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { t } = useTranslation(['integrazioneApi', 'common']);
@@ -44,10 +50,15 @@ const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }
         key.status === status && (!key.user || key.user?.fiscalCode === data.user?.fiscalCode)
     );
 
-  const shouldShowRotateButton = isPersonalKey
-    ? data.status === VirtualKeyStatus.Enabled &&
-      !checkIfStatusIsAlreadyPresent(VirtualKeyStatus.Rotated)
-    : false;
+  const shouldShowRotateButton = (): boolean => {
+    if (isPersonalKey && issuerIsActive) {
+      return (
+        data.status === VirtualKeyStatus.Enabled &&
+        !checkIfStatusIsAlreadyPresent(VirtualKeyStatus.Rotated)
+      );
+    }
+    return false;
+  };
 
   const shouldShowBlockButton =
     !keys.items.find(
@@ -55,10 +66,10 @@ const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }
         key.user?.fiscalCode === data.user?.fiscalCode && key.status === VirtualKeyStatus.Blocked
     ) && data.status !== VirtualKeyStatus.Rotated;
 
-  const menuElements : Array<ReactNode> = useMemo(()=>{
+  const menuElements: Array<ReactNode> = useMemo(() => {
     const elements: Array<ReactNode> = [];
 
-    if (shouldShowRotateButton) {
+    if (shouldShowRotateButton()) {
       // eslint-disable-next-line functional/immutable-data
       elements.push(
         <MenuItem
@@ -110,10 +121,10 @@ const VirtualKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick }
           {t('button.elimina', { ns: 'common' })}
         </MenuItem>
       );
-    }  
+    }
     return elements;
-  },[data.status, isUserAdmin, isPersonalKey, shouldShowRotateButton, shouldShowBlockButton ]);
- 
+  }, [data.status, isUserAdmin, isPersonalKey, shouldShowRotateButton, shouldShowBlockButton]);
+
   return (
     <Box data-testid="contextMenu">
       {menuElements.length > 0 && (

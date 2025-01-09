@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -91,10 +91,6 @@ const PublicKeys: React.FC = () => {
       fetchPublicKeys();
     });
   };
-
-  useEffect(() => {
-    fetchPublicKeys();
-  }, []);
 
   return (
     <>

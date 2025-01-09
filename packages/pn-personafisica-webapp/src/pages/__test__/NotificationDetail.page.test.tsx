@@ -20,6 +20,7 @@ import {
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
+import { errorMock } from '../../__mocks__/Errors.mock';
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
   cachedPayments,
@@ -351,6 +352,12 @@ describe('NotificationDetail Page', async () => {
     const otherDocument: NotificationDetailOtherDocument = {
       documentId: notificationToFe.otherDocuments?.[0].documentId ?? '',
       documentType: notificationToFe.otherDocuments?.[0].documentType ?? '',
+      digests: { sha256: '' },
+      contentType: '',
+      ref: {
+        key: '',
+        versionToken: '',
+      },
     };
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
@@ -484,7 +491,9 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('API error', async () => {
-    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(500);
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
+      .reply(errorMock.status, errorMock.data);
     // custom render
     await act(async () => {
       render(
@@ -687,7 +696,7 @@ describe('NotificationDetail Page', async () => {
         },
         returnUrl: window.location.href,
       })
-      .reply(500);
+      .reply(errorMock.status, errorMock.data);
 
     await act(async () => {
       result = render(<NotificationDetail />, {

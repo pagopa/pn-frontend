@@ -1,5 +1,94 @@
 {
   "title": "Statistiques",
-  "subtitle": "Explorez les statistiques d’utilisation de SEND par {{organization}}. Les données de l’aperçu se rapportent à l’ensemble de la période d’utilisation de la plateforme.",
-  "export_all": "Exporter tous"
+  "subtitle": "Explorez les statistiques des notifications de votre organisme sur SEND - Servizio Notifiche Digitali",
+  "section_1": "Aperçu des notifications",
+  "subtitle_section_1": "Choisissez l’intervalle d’analyse",
+  "tooltip_section_1": "Le jour d’analyse le plus récent correspond à la date de la dernière mise à jour des données",
+  "section_2": "Détail des notifications envoyées par voie  numérique",
+  "error-fetch": "Il y a un problème technique au niveau du téléchargement des données. Veuillez réessayer plus tard",
+  "export_all": "Exporter JPEG",
+  "last_update": "Dernière mise à jour {{dateTime}}",
+  "aggregate_graph": "Agrégat",
+  "trend_graph": "Tendance",
+  "graph_type_label": "Graphique",
+  "save_as_image": "Enregistrer sous forme d’image",
+  "trend": {
+    "days": "Jours",
+    "weeks": "Semaines"
+  },
+  "filter": {
+    "from_date": "De",
+    "from_date-input-aria-label": "Entrez la date de début de la recherche",
+    "to_date": "À",
+    "to_date-input-aria-label": "Entrez la date de fin de la recherche",
+    "lastMonth": "30 derniers jours",
+    "last3Months": "3 derniers mois",
+    "last6Months": "6 derniers mois",
+    "last12Months": "12 derniers mois",
+    "buttons": {
+      "filter": "Filtrer",
+      "clear_filter": "Annuler filtres"
+    }
+  },
+  "filed": {
+    "title": "Notifications de l’organisme sur SEND",
+    "description": "Nombre de notifications acceptées par la plateforme SEND sur le total des notifications téléchargées par l’organisme",
+    "description2": " du total des notifications téléchargées sur SEND",
+    "accepted": "Acceptées",
+    "refused": "Rejetées"
+  },
+  "last_state": {
+    "title": "Notifications envoyées par état",
+    "description": "Nombre de notifications acceptées pour le dernier état atteint durant le processus d’envoi via SEND",
+    "delivering": "Envoi en cours",
+    "delivered": "Livrée",
+    "viewed": "Accès réussi",
+    "effective_date": "Finalisée pour\nexpiration des délais",
+    "canceled": "Annulée",
+    "unreachable": "Destinataire\nintrouvable"
+  },
+  "delivery_mode": {
+    "title": "Notifications transmises par modalité d’envoi",
+    "description": "Nombre de notifications transmises par modalité d’envoi (numérique ou analogique)",
+    "digital": "Envois numériques",
+    "analog": "Envois analogiques"
+  },
+  "digital_state": {
+    "title": "Envois numériques par résultat",
+    "description": "Nombre de notifications envoyées par voie  numérique par résultat",
+    "ok": "Transmises par\ncanaux numériques",
+    "ko": "Transmises par\ncourrier recommandé\nsimple",
+    "progress": "Envois en cours",
+    "ok_title": "Transmises par canaux numériques",
+    "ok_description": "Notifications transmises via PEC ou finalisées sur SEND",
+    "ko_title": "Transmises par courrier recommandé simple",
+    "ko_description": "Notifications transmises par courrier recommandé simple car refusées par la PEC du destinataire",
+    "progress_title": "Envois en cours",
+    "progress_description": "Notifications dont le processus d’envoi est encore en cours"
+  },
+  "digital_mean_time": {
+    "title": "Délai moyen des envois numériques",
+    "description": "Délai moyen (en jours) pour la remise, l’accès réussi et la finalisation des notifications envoyées par voie numérique",
+    "delivered": "Livrée",
+    "viewed": "Accès réussi",
+    "refined": "Finalisée pour\nexpiration des délais",
+    "delivered_description": "Jours pour remise",
+    "viewed_description": "Jours pour accès réussi",
+    "refined_description": "Jours pour finalisation pour expiration des délais"
+  },
+  "digital_errors_detail": {
+    "title": "Erreurs techniques par typologie",
+    "description": "Pourcentage d’erreurs techniques par typologie d’erreur sur le total des erreurs techniques en phase d’envoi",
+    "delivery_title": "Erreur de remise",
+    "delivery_description": "La notification n’a pas été délivrée en raison de problèmes techniques de réception",
+    "pec_title": "Erreur de domaine PEC",
+    "pec_description": "La notification n’a pas été délivrée pour domaine PEC invalide",
+    "rejected_title": "Erreur d’envoi",
+    "rejected_description": "La notification n’a pas été acceptée en raison de problèmes techniques d’envoi"
+  },
+  "empty": {
+    "no_data_found": "Aucune donnée disponible pour l’intervalle de temps sélectionné",
+    "not_enough_data": "Le nombre de notifications téléchargées par l’organisme sur SEND n’est pas encore suffisant pour élaborer et  montrer les statistiques d’envoi. Explorez la <0>section Notifications</0> pour consulter celles téléchargées jusqu’à présent.",
+    "notification_section_aria_label": "Section notifications"
+  }
 }

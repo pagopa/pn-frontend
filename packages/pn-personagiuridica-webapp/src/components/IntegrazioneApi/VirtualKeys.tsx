@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
@@ -34,22 +34,24 @@ const VirtualKeys: React.FC = () => {
   const dispatch = useAppDispatch();
   const virtualKeys = useAppSelector((state: RootState) => state.apiKeysState.virtualKeys);
   const issuerState = useAppSelector((state: RootState) => state.apiKeysState.issuerState);
-  const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const [modal, setModal] = useState<ModalType>({ view: ModalApiKeyView.NONE });
 
-  const hasOneEnabledKey = virtualKeys.items.find(
-    (key) =>
-      key.status === VirtualKeyStatus.Enabled &&
-      (!key.user || key.user?.fiscalCode === currentUser.fiscal_number)
+  const hasOneEnabledVirtualKey = !!virtualKeys.items.find(
+    (key) => key.status === VirtualKeyStatus.Enabled
   );
+
   const isCreationEnabled =
-    !hasOneEnabledKey &&
+    !hasOneEnabledVirtualKey &&
     issuerState.tosAccepted &&
     issuerState.issuer.isPresent &&
     issuerState.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
 
+  const issuerIsActive =
+    issuerState.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
+  const issuerIsPresent = issuerState.issuer.isPresent;
+
   const fetchVirtualKeys = useCallback(() => {
-    void dispatch(getVirtualApiKeys({ showPublicKey: true }));
+    void dispatch(getVirtualApiKeys({ showVirtualKey: true }));
   }, []);
 
   const handleGenerateVirtualKey = () => {
@@ -107,11 +109,6 @@ const VirtualKeys: React.FC = () => {
       .catch(() => {});
   };
 
-  useEffect(() => {
-    fetchVirtualKeys();
-    // fetchCheckIssuer();
-  }, []);
-
   return (
     <>
       <Stack
@@ -144,7 +141,12 @@ const VirtualKeys: React.FC = () => {
           {t('virtualKeys.tos-empty-state')}
         </EmptyState>
       ) : (
-        <VirtualKeysTable virtualKeys={virtualKeys} handleModalClick={handleModalClick} />
+        <VirtualKeysTable
+          virtualKeys={virtualKeys}
+          handleModalClick={handleModalClick}
+          issuerIsActive={issuerIsActive}
+          issuerIsPresent={issuerIsPresent}
+        />
       )}
 
       {modal.view === ModalApiKeyView.VIEW && (
