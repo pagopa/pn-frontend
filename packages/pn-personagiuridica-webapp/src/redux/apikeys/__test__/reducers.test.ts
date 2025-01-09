@@ -3,9 +3,9 @@ import MockAdapter from 'axios-mock-adapter';
 import { checkIssuerPublicKey, publicKeys, virtualKeys } from '../../../__mocks__/ApiKeys.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { apiClient } from '../../../api/apiClients';
+import { PublicKeysIssuerResponseIssuerStatusEnum } from '../../../generated-client/pg-apikeys';
 import { store } from '../../store';
 import { checkPublicKeyIssuer, getPublicKeys, getVirtualApiKeys } from '../actions';
-import { PublicKeysIssuerResponseIssuerStatusEnum } from '../../../generated-client/pg-apikeys';
 
 const initialState = {
   loading: false,
@@ -17,13 +17,13 @@ const initialState = {
     items: [],
     total: 0,
   },
-  issuerState:{
+  issuerState: {
     tosAccepted: false,
     issuer: {
       isPresent: false,
       issuerStatus: PublicKeysIssuerResponseIssuerStatusEnum.Inactive,
-    }
-  }
+    },
+  },
 };
 
 describe('api keys redux state test', () => {

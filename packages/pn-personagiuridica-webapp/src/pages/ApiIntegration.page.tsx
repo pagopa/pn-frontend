@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
 const ApiIntegration: React.FC = () => {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation(['integrazioneApi']);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
@@ -28,7 +29,6 @@ const ApiIntegration: React.FC = () => {
     (el) => el.status === PublicKeyStatus.Active || el.status === PublicKeyStatus.Rotated
   );
   const issuer = useAppSelector((state: RootState) => state.apiKeysState.issuerState.issuer);
-  const dispatch = useAppDispatch();
 
   const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
   const issuerIsActive = issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
@@ -62,7 +62,9 @@ const ApiIntegration: React.FC = () => {
   }, [publicKeys, virtualKeys]);
 
   useEffect(() => {
-    void dispatch(getPublicKeys({ showPublicKey: true }));
+    if (isAdminWithoutGroups) {
+      void dispatch(getPublicKeys({ showPublicKey: true }));
+    }
     void dispatch(getVirtualApiKeys({ showVirtualKey: true }));
   }, []);
 

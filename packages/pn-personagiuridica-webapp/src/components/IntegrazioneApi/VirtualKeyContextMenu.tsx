@@ -66,6 +66,20 @@ const VirtualKeyContextMenu: React.FC<Props> = ({
         key.user?.fiscalCode === data.user?.fiscalCode && key.status === VirtualKeyStatus.Blocked
     ) && data.status !== VirtualKeyStatus.Rotated;
 
+  const shoudlShowViewButton = !isUserAdmin || isPersonalKey;
+
+  const shouldShowDeleteButton = data.status !== VirtualKeyStatus.Enabled;
+
+  // if no action is available, return empty element
+  if (
+    !shouldShowRotateButton() &&
+    !shouldShowBlockButton &&
+    !shoudlShowViewButton &&
+    !shouldShowDeleteButton
+  ) {
+    return <></>;
+  }
+
   return (
     <Box data-testid="contextMenu">
       <IconButton
@@ -120,8 +134,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({
             {t('context-menu.block')}
           </MenuItem>
         )}
-
-        {(!isUserAdmin || isPersonalKey) && (
+        {shoudlShowViewButton && (
           <MenuItem
             id="button-view"
             data-testid="buttonView"
@@ -131,8 +144,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({
             {t('context-menu.view')}
           </MenuItem>
         )}
-
-        {data.status !== VirtualKeyStatus.Enabled && (
+        {shouldShowDeleteButton && (
           <MenuItem
             id="button-delete"
             data-testid="buttonDelete"
