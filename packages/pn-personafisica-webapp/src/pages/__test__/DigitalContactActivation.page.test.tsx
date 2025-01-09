@@ -1,6 +1,14 @@
+import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { fireEvent, render } from '../../__test__/test-utils';
+import { ConsentType, SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
+
+import {
+  acceptTosPrivacyConsentBodyMock,
+  sercqSendTosPrivacyConsentMock,
+} from '../../__mocks__/Consents.mock';
+import { fireEvent, render, waitFor, within } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import { AddressType, ChannelType, IOAllowedValues } from '../../models/contacts';
 import DigitalContactActivation from '../DigitalContactActivation.page';
 
@@ -12,6 +20,20 @@ vi.mock('react-router-dom', async () => ({
 }));
 
 describe('DigitalContactActivation', () => {
+  let mock: MockAdapter;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
   it('render component', () => {
     const { getByText } = render(<DigitalContactActivation />);
     const title = getByText('legal-contacts.sercq-send-wizard.title');
@@ -28,13 +50,30 @@ describe('DigitalContactActivation', () => {
   });
 
   it('renders the first step label correctly', () => {
-    const { queryAllByText } = render(<DigitalContactActivation />);
-    const step1Label = queryAllByText('legal-contacts.sercq-send-wizard.step_1.title')[0];
+    const { getByTestId } = render(<DigitalContactActivation />);
+    const stepper = getByTestId('desktopWizardStepper');
+    expect(stepper).toBeInTheDocument();
+    const step1Label = within(stepper).getByText('legal-contacts.sercq-send-wizard.step_1.title');
     expect(step1Label).toBeInTheDocument();
+    const sercqSendContent = getByTestId('sercqSendContactWizard');
+    expect(sercqSendContent).toBeInTheDocument();
   });
 
-  it('renders the second step label if has appIO and is disabled', () => {
-    const { getByText } = render(<DigitalContactActivation />, {
+  it('renders the second step label if has appIO and is disabled', async () => {
+    mock
+      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
+        value: SERCQ_SEND_VALUE,
+      })
+      .reply(204);
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false, false));
+    mock
+      .onPut(
+        '/bff/v2/tos-privacy',
+        acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
+      )
+      .reply(200);
+
+    const { getByTestId } = render(<DigitalContactActivation />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [
@@ -48,8 +87,20 @@ describe('DigitalContactActivation', () => {
         },
       },
     });
-    const step2Label = getByText('legal-contacts.sercq-send-wizard.step_2.title');
+    const stepper = getByTestId('desktopWizardStepper');
+    expect(stepper).toBeInTheDocument();
+    const step2Label = within(stepper).getByText('legal-contacts.sercq-send-wizard.step_2.title');
     expect(step2Label).toBeInTheDocument();
+
+    const activateSercqSendButton = getByTestId('activateButton');
+    fireEvent.click(activateSercqSendButton);
+
+    await waitFor(() => {
+      expect(mock.history.post.length).toBe(1);
+    });
+
+    const ioContactWizard = getByTestId('ioContactWizard');
+    expect(ioContactWizard).toBeInTheDocument();
   });
 
   it('does not render the second step label if has no app IO contact', () => {

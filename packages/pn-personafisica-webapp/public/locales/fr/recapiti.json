@@ -60,12 +60,7 @@
     "sercq_send-removed-successfully": "Domicile Numérique correctement désactivé",
     "sercq-send-io-title": "Activez SEND sur IO",
     "sercq-send-io-description": "Activez SEND - Notifiche Digitali sur IO pour<strong> recevoir directement dans l’app</strong> les communications envoyées à votre Domicile Numérique SEND.",
-    "sercq-send-io-advantages": "Sur IO",
-    "sercq-send-io-list": [
-      "<strong>Recevez les notifications en temps réel</strong>, dès que l’organisme les télécharge sur SEND",
-      "<strong>Ouvrez les documents joints</strong> dans l’app",
-      "<strong>Payez les montants dus</strong> si la notification prévoit un paiement"
-    ]
+    "sercq-send-io-advantages": "Sur IO"
   },
   "io-contact": {
     "title": "App IO",

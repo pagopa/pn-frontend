@@ -45,7 +45,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
   };
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} data-testid="ioContactWizard">
       <Typography fontSize="22px" fontWeight={700}>
         {t('legal-contacts.sercq-send-wizard.step_2.title')}
       </Typography>
