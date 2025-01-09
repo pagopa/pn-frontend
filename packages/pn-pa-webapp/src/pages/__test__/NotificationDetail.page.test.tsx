@@ -18,6 +18,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
+import { errorMock } from '../../__mocks__/Errors.mock';
 import {
   cancelledNotificationDTO,
   notificationDTO,
@@ -164,6 +165,12 @@ describe('NotificationDetail Page', async () => {
     const otherDocument: NotificationDetailOtherDocument = {
       documentId: notificationAfter150Days.otherDocuments?.[0].documentId ?? '',
       documentType: notificationAfter150Days.otherDocuments?.[0].documentType ?? '',
+      digests: { sha256: '' },
+      contentType: '',
+      ref: {
+        key: '',
+        versionToken: '',
+      },
     };
 
     mock
@@ -393,7 +400,9 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('errors on api call - mono recipient', async () => {
-    mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(500);
+    mock
+      .onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`)
+      .reply(errorMock.status, errorMock.data);
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {

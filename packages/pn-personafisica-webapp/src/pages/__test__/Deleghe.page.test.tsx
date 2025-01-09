@@ -5,6 +5,7 @@ import { ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { mandatesByDelegate, mandatesByDelegator } from '../../__mocks__/Delegations.mock';
+import { errorMock } from '../../__mocks__/Errors.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { DelegationStatus } from '../../utility/status.utility';
@@ -221,7 +222,7 @@ describe('Deleghe page', async () => {
       .onPatch(`/bff/v1/mandate/${mandatesByDelegate[0].mandateId}/accept`, {
         verificationCode: mandatesByDelegate[0].verificationCode,
       })
-      .reply(500);
+      .reply(errorMock.status, errorMock.data);
     await act(async () => {
       result = render(
         <>

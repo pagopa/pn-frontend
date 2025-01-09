@@ -3,11 +3,18 @@ import { Box, Grid, Stack, Typography, TypographyProps } from '@mui/material';
 // import DownloadIcon from '@mui/icons-material/Download';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { NotificationDetailDocument, NotificationDetailOtherDocument } from '../../models';
+import {
+  NotificationDetailDocument,
+  NotificationDetailOtherDocument,
+  NotificationDetailRecipient,
+} from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import { isNotificationDetailOtherDocument } from '../../utility/notification.utility';
 
 type Props = {
   title: string;
   documents: Array<NotificationDetailDocument> | undefined;
+  recipients?: Array<NotificationDetailRecipient>;
   clickHandler: (document: string | NotificationDetailOtherDocument | undefined) => void;
   documentsAvailable?: boolean;
   downloadFilesMessage?: string;
@@ -20,6 +27,7 @@ type Props = {
  *  Notification detail documents
  *  @param title title to show
  *  @param documents data to show
+ *  @param recipient the notification recipients
  *  @param clickHandler function called when user clicks on the download button
  *  @param documentsAvailable flag that allows download file or not (after 120 days)
  *  @param downloadFilesMessage disclaimer to show about downloadable acts
@@ -31,6 +39,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
   {
     title,
     documents = [],
+    recipients = [],
     clickHandler,
     documentsAvailable = true,
     downloadFilesMessage,
@@ -38,16 +47,30 @@ const NotificationDetailDocuments: React.FC<Props> = (
     titleVariant = 'overline',
   } // TODO: remove comment when link ready downloadFilesLink
 ) => {
-  const mapOtherDocuments = (documents: Array<NotificationDetailDocument>) =>
+  const mapOtherDocuments = (
+    documents: Array<NotificationDetailDocument | NotificationDetailOtherDocument>
+  ) =>
     documents.map((d) => {
+      const isOtherDocument = isNotificationDetailOtherDocument(d);
+      const recipient =
+        recipients.filter((recipient) => recipient.taxId).length > 1 && isOtherDocument
+          ? ` - ${d.recipient?.denomination} (${d.recipient?.taxId})`
+          : '';
+      const docName = isOtherDocument
+        ? `${getLocalizedOrDefaultLabel('notifications', 'detail.aar-acts')}${recipient}`
+        : d.title || d.ref.key;
+
       const document = {
         key: d.ref.key || d.documentId,
-        name: d.title || d.ref.key,
+        name: docName,
         downloadHandler: d.documentId
-          ? ({
+          ? {
               documentId: d.documentId,
               documentType: d.documentType,
-            } as NotificationDetailOtherDocument)
+              digests: d.digests,
+              contentType: d.contentType,
+              ref: d.ref,
+            }
           : d.docIdx,
       };
 

@@ -35,6 +35,7 @@ import {
   twelveMonthsAgo,
 } from './date.utility';
 import { waitForElement } from './dom.utility';
+import { APP_VERSION, IS_DEVELOP } from './environment.utility';
 import { calcUnit8Array } from './file.utility';
 import { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
 import { IUN_regex, formatIun } from './iun.utility';
@@ -59,7 +60,7 @@ import {
   setPaymentCache,
   setPaymentsInCache,
 } from './paymentCaching.utility';
-import { parseError, performThunkAction } from './redux.utility';
+import { parseError } from './redux.utility';
 import { AppRouteParams, compileRoute } from './routes.utility';
 import { searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';
 import { storageOpsBuilder } from './storage.utility';
@@ -115,7 +116,6 @@ export {
   adaptedTokenExchangeError,
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
-  performThunkAction,
   AppResponsePublisher,
   ResponseEventDispatcher,
   AppError,
@@ -156,4 +156,6 @@ export {
   getWeeksFromDateRange,
   getDateFromString,
   fromStringToBase64,
+  IS_DEVELOP,
+  APP_VERSION,
 };

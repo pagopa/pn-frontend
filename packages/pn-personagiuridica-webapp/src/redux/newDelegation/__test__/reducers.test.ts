@@ -3,10 +3,10 @@ import MockAdapter from 'axios-mock-adapter';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import {
   createDelegationDuplicatedErrorResponse,
-  createDelegationGenericErrorResponse,
   createDelegationPayload,
   createDelegationSelectedPayload,
 } from '../../../__mocks__/CreateDelegation.mock';
+import { errorMock } from '../../../__mocks__/Errors.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { apiClient } from '../../../api/apiClients';
 import { store } from '../../store';
@@ -58,11 +58,11 @@ describe('delegation redux state tests', () => {
 
   it("can't create a new delegation", async () => {
     mock
-      .onPost('/bff/v1/mandate', createDelegationMapper(createDelegationPayload))
-      .reply(401, createDelegationGenericErrorResponse);
+      .onPost(/\/bff\/v1\/mandate.*/, createDelegationMapper(createDelegationPayload))
+      .reply(errorMock.status, errorMock.data);
     const action = await store.dispatch(createDelegation(createDelegationPayload));
     expect(action.type).toBe('createDelegation/rejected');
-    expect((action.payload as any).response.data).toEqual(createDelegationGenericErrorResponse);
+    expect((action.payload as any).response.data).toEqual(errorMock.data);
   });
 
   it("can't create a new delegation (duplicated)", async () => {

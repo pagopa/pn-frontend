@@ -42,7 +42,7 @@ describe('CustomTooltip Component', () => {
     tooltip = await waitFor(() => result.getByRole('tooltip'));
     expect(tooltip).toBeInTheDocument();
     expect(tooltip).toHaveTextContent(/Mocked content/i);
-    expect(mockOnOpenCallback).toBeCalledTimes(1);
+    expect(mockOnOpenCallback).toHaveBeenCalledTimes(1);
     // again check that click doesn't work
     fireEvent.click(paragraph!);
     await waitFor(() => {
