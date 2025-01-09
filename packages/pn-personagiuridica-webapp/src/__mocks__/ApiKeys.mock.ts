@@ -1,6 +1,8 @@
 import {
+  BffPublicKeysCheckIssuerResponse,
   BffPublicKeysResponse,
   BffVirtualKeysResponse,
+  PublicKeysIssuerResponseIssuerStatusEnum,
   PublicKeyStatus,
   VirtualKeyStatus,
 } from '../generated-client/pg-apikeys';
@@ -68,3 +70,12 @@ export const virtualKeys: BffVirtualKeysResponse = {
   ],
   total: 2,
 };
+
+  
+  export const checkIssuerPublicKey : BffPublicKeysCheckIssuerResponse = { 
+    tosAccepted: true,
+    issuer: {
+      isPresent: true,
+      issuerStatus: PublicKeysIssuerResponseIssuerStatusEnum.Inactive,
+    }
+  }
