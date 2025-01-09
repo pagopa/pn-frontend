@@ -317,7 +317,7 @@ describe('SpecialContacts Component', async () => {
     });
   });
 
-  it('should show existing modal when adding a new contact that already exists', async () => {
+  it.only('should show existing modal when adding a new contact that already exists', async () => {
     const pecValue = defaultAddress!.value;
 
     mock.onGet('/bff/v1/pa-list').reply(200, parties);

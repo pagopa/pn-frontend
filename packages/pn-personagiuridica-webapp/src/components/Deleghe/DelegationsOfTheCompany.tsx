@@ -399,7 +399,7 @@ const DelegationsOfTheCompany = () => {
                   sx={{
                      [`& .MuiAutocomplete-popupIndicator`]: {
                       transform: 'none',
-                       pointerEvents: 'none',
+                      pointerEvents: 'none',
                     }, 
                      marginBottom: isMobile ? '20px' : '0',
                   }}
@@ -413,7 +413,6 @@ const DelegationsOfTheCompany = () => {
                       label={t('deleghe.table.group')}
                       placeholder={t('deleghe.table.group')}
                       name="groups"
-                      aria-describedby='dataSummary'
                       InputProps={{
                         ...params.InputProps,
                         endAdornment: (
