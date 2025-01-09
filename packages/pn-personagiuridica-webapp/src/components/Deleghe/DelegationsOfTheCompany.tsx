@@ -431,6 +431,7 @@ const DelegationsOfTheCompany = () => {
                   onInputChange={(_event, newInputValue) => setGroupInputValue(newInputValue)}
                 />
               </Grid>
+              {formik.values.groups && <A11yContainerInvisible field={'gruppi selezionati, ' + formik.values.groups.map((group) => group.name).join(', ') }></A11yContainerInvisible>}
               <Grid item xs={12} lg={3}>
                 <TextField
                   label={t('deleghe.table.status')}
