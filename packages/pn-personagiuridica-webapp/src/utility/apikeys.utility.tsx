@@ -50,7 +50,7 @@ export function getApiKeyStatusInfos(
   status: PublicKeyStatus | ExtendedVirtualKeyStatus,
   statusHistory?: Array<PublicKeyStatusHistory>
 ): {
-  color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary'  |undefined;
+  color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
   tooltip?: ReactNode;
 } {
@@ -65,7 +65,7 @@ export function getApiKeyStatusInfos(
         label,
         tooltip,
       };
-      case ExtendedVirtualKeyStatus.Disabled:
+    case ExtendedVirtualKeyStatus.Disabled:
     case PublicKeyStatus.Blocked:
       return {
         color: 'default',
