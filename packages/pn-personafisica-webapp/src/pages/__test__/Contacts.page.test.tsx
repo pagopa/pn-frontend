@@ -190,6 +190,9 @@ describe('Contacts page', async () => {
         {
           preloadedState: {
             appState: {
+              loading: {
+                result: false,
+              },
               messages: {
                 errors,
                 success: [],

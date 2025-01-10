@@ -59,6 +59,16 @@ describe('DigitalContactActivation', () => {
     expect(sercqSendContent).toBeInTheDocument();
   });
 
+  it('renders pec contact wizard correctly', () => {
+    const { getByTestId, getByText } = render(<DigitalContactActivation />);
+    const pecSection = getByTestId('pec-section');
+    expect(pecSection).toBeInTheDocument();
+    const pecButton = within(pecSection).getByRole('button');
+    fireEvent.click(pecButton);
+    const pecWizard = getByText('legal-contacts.pec-contact-wizard.title');
+    expect(pecWizard).toBeInTheDocument();
+  });
+
   it('renders the second step label if has appIO and is disabled', async () => {
     mock
       .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {

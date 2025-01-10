@@ -93,6 +93,13 @@
         ],
         "confirm": "Collega SEND su IO"
       }
+    },
+    "pec-contact-wizard": {
+      "title": "Usa una PEC come domicilio digitale",
+      "content-title": "Inserisci la tua PEC",
+      "content-description": "Quando un ente ti invia una notifica SEND, ricevi l’avviso a valore legale sulla PEC che hai scelto.",
+      "input-label": "Indirizzo PEC",
+      "input-placeholder": "La tua PEC"
     }
   },
   "io-contact": {

@@ -98,16 +98,15 @@ const PnWizard: React.FC<Props> = ({
         </Paper>
 
         <Stack direction={{ xs: 'column-reverse', md: 'row' }}>
-          {activeStep !== 0 && (
-            <PrevButton
-              data-testid="prev-button"
-              sx={{ mt: { xs: 2, md: 0 } }}
-              {...slotsProps?.prevButton}
-              onClick={handlePrevStep}
-            >
-              {getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro')}
-            </PrevButton>
-          )}
+          <PrevButton
+            data-testid="prev-button"
+            sx={{ mt: { xs: 2, md: 0 } }}
+            {...slotsProps?.prevButton}
+            onClick={handlePrevStep}
+          >
+            {getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro')}
+          </PrevButton>
+
           <NextButton
             data-testid="next-button"
             variant="contained"
