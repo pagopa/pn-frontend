@@ -238,6 +238,16 @@ export function getNotificationStatusInfos(
           'Annullamento in corso. Lo stato sarà aggiornato a breve.'
         ),
       };
+      case NotificationStatus.RETURNED_TO_SENDER:
+      return {
+        color: 'warning',
+        ...localizeStatus(
+          'returned-to-sender',
+          'Resa al mittente',
+          `Il destinatario risulta deceduto.`,
+          `Il destinatario risulta deceduto.`,
+          { isMultiRecipient }),
+      };
     default:
       return {
         color: 'default',
@@ -287,6 +297,14 @@ export const getNotificationAllowedStatus = () => [
       'notifications',
       'status.unreachable',
       'Destinatario irreperibile'
+    ),
+  },
+  {
+    value: NotificationStatus.RETURNED_TO_SENDER,
+    label: getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.returned-to-sender',
+      'Resa al mittente'
     ),
   },
 ];
