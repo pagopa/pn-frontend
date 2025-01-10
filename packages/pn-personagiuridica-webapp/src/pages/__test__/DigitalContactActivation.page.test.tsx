@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { fireEvent, render } from '../../__test__/test-utils';
+import { fireEvent, render, within } from '../../__test__/test-utils';
 import DigitalContactActivation from '../DigitalContactActivation.page';
 
 const mockNavigateFn = vi.fn();
@@ -24,5 +24,15 @@ describe('DigitalContactActivation', () => {
     fireEvent.click(backButton);
     expect(mockNavigateFn).toHaveBeenCalledTimes(1);
     expect(mockNavigateFn).toHaveBeenCalledWith(-1);
+  });
+
+  it('renders pec contact wizard correctly', () => {
+    const { getByTestId, getByText } = render(<DigitalContactActivation />);
+    const pecSection = getByTestId('pec-section');
+    expect(pecSection).toBeInTheDocument();
+    const pecButton = within(pecSection).getByRole('button');
+    fireEvent.click(pecButton);
+    const pecWizard = getByText('legal-contacts.pec-contact-wizard.title');
+    expect(pecWizard).toBeInTheDocument();
   });
 });
