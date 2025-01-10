@@ -179,7 +179,7 @@ describe('Filter Notifications Table Component', async () => {
     expect(form).toHaveTextContent('filters.errors.iun');
   });
 
-  it.only('test invalid date range - end before start', async () => {
+  it('test invalid date range - end before start', async () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
@@ -192,8 +192,8 @@ describe('Filter Notifications Table Component', async () => {
     oneYearAgo.setHours(0, 0, 0, 0);
     // wrong since endDate is before startDate
     await setFormValues(form, oneYearAgo, nineYearsAgo, 'ABCD-EFGH-ILMN-123456-A-1');
-    const errorText = form.querySelector('p[id="error-message"]')
-    expect(errorText).toBeInTheDocument()
+    const errorText = form.querySelector('p[id="error-message"]');
+    expect(errorText).toBeInTheDocument();
     const submitButton = form.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {

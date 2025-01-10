@@ -53,7 +53,7 @@ const VirtualKeys: React.FC = () => {
       (!isAdminWithoutGroups ||
         (isAdminWithoutGroups && key.user?.fiscalCode === currentUser.fiscal_number))
   );
-  
+
   const isCreationEnabled =
     !hasOneEnabledVirtualKey &&
     issuerState.tosAccepted &&
