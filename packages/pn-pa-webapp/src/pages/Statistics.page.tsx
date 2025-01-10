@@ -141,7 +141,7 @@ const Statistics = () => {
                   tooltipProps={{
                     role: 'tooltip',
                     id: 'tooltip-section-1',
-                    sx: { display: 'inline-block', verticalAlign: 'middle', marginLeft: 0.5 },
+                    sx: { marginLeft: 0.5 },
                   }}
                 >
                   <IconButton aria-describedby="tooltip-section-1">
