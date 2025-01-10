@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.0...v2.11.0-RC.1) (2025-01-10)
+
+
+### Bug Fixes
+
+* **pn-12958:** default color for disabled chip and fixed creation button visualization ([#1437](https://github.com/pagopa/pn-frontend/issues/1437)) ([4b63fa7](https://github.com/pagopa/pn-frontend/commit/4b63fa79c09cedc869a4a2a4abacd2d09bb3d03f))
+
+
+
+
+
 # [2.11.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0...v2.11.0-RC.0) (2025-01-10)
 
 
