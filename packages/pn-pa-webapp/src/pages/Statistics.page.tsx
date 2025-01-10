@@ -138,8 +138,11 @@ const Statistics = () => {
                 <CustomTooltip
                   openOnClick
                   tooltipContent={t('tooltip_section_1')}
-                  tooltipProps={{ role: 'tooltip', id: 'tooltip-section-1' }}
-                  sx={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 0.5 }}
+                  tooltipProps={{
+                    role: 'tooltip',
+                    id: 'tooltip-section-1',
+                    sx: { display: 'inline-block', verticalAlign: 'middle', marginLeft: 0.5 },
+                  }}
                 >
                   <IconButton aria-describedby="tooltip-section-1">
                     <InfoOutlinedIcon color="action" fontSize="small" />
