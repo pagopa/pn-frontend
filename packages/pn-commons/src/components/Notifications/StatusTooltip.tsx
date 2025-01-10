@@ -42,7 +42,6 @@ const StatusTooltip = ({
         data-testid={`statusChip-${label}`}
         // for a11y
         onClick={() => {}}
-        aria-describedby="notification-status-tooltip"
       />
     </CustomTooltip>
   );
