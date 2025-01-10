@@ -45,7 +45,6 @@ const CustomTooltip: React.FC<Props> = ({
           title={tooltipContent}
           onClose={handleTooltipClose}
           open={openOnClick ? open : undefined}
-          disableFocusListener={openOnClick}
           disableHoverListener={openOnClick}
           disableTouchListener={openOnClick}
           enterTouchDelay={0}
