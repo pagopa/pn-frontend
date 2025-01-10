@@ -36,7 +36,7 @@ const StatusTooltip = ({
           ...chipProps,
           cursor: 'default',
           '&:focus': {
-            outline: '2px solid #0073E6',
+            outline: '2px solid currentColor',
           },
         }}
         data-testid={`statusChip-${label}`}
