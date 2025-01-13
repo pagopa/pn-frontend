@@ -81,9 +81,10 @@
     "pec-contact-wizard": {
       "title": "Usa una PEC come domicilio digitale",
       "content-title": "Inserisci la tua PEC",
-      "content-description": "Quando un ente ti invia una notifica SEND, ricevi l’avviso a valore legale sulla PEC che hai scelto.",
+      "content-description": "Quando un ente invia una notifica su SEND alla tua impresa, ricevi l’avviso a valore legale sulla PEC che hai scelto. ",
       "input-label": "Indirizzo PEC",
-      "input-placeholder": "La tua PEC"
+      "input-placeholder": "La tua PEC",
+      "sercq-info-alert": "La PEC aziendale sostituirà la piattaforma SEND come tuo domicilio digitale. "
     }
   },
   "courtesy-contacts": {

@@ -17,10 +17,12 @@ import { useAppSelector } from '../redux/hooks';
 const DigitalContactActivation: React.FC = () => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
-  const { defaultAPPIOAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultAPPIOAddress, defaultSERCQ_SENDAddress } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
 
   const [activeStep, setActiveStep] = useState(0);
-  const [showPecWizard, setShowPecWizard] = useState(false);
+  const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress);
 
   const hasAppIO = defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.DISABLED;
 

@@ -1,8 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
+import { digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
+import { ChannelType } from '../../../models/contacts';
 import PecContactWizard from '../PecContactWizard';
 import { fillCodeDialog } from './test-utils';
 
@@ -62,6 +64,21 @@ describe('PecContactWizard', () => {
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(0);
     });
+  });
+
+  it('should show alert when SERCQ SEND is enabled', async () => {
+    const { getByTestId } = render(<PecContactWizard setShowPecWizard={setShowPecWizardMock} />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: digitalAddressesSercq.filter(
+            (addr) => addr.channelType === ChannelType.SERCQ_SEND
+          ),
+        },
+      },
+    });
+
+    const alertMessage = getByTestId('sercq-info-alert');
+    expect(alertMessage).toBeInTheDocument();
   });
 
   it('submits form and opens the code modal on valid PEC input', async () => {

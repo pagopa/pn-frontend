@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { TextField, Typography } from '@mui/material';
+import { Alert, Box, TextField, Typography } from '@mui/material';
 import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -16,7 +16,8 @@ import {
   SaveDigitalAddressParams,
 } from '../../models/contacts';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
-import { useAppDispatch } from '../../redux/hooks';
+import { contactsSelectors } from '../../redux/contact/reducers';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { pecValidationSchema } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -29,6 +30,7 @@ const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
   const [openCodeModal, setOpenCodeModal] = useState(false);
 
   const validationSchema = yup.object().shape({
@@ -86,7 +88,7 @@ const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
   };
 
   return (
-    <>
+    <Box data-testid="pec-contact-wizard">
       <PnWizard
         title={
           <Typography fontSize="28px" fontWeight={700} data-testid="pec-wizard-title">
@@ -119,9 +121,15 @@ const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
             {t('legal-contacts.pec-contact-wizard.content-title')}
           </Typography>
 
-          <Typography variant="body2" mb={3}>
+          <Typography variant="body2" mb={defaultSERCQ_SENDAddress ? { xs: 2, lg: 3 } : 4}>
             {t('legal-contacts.pec-contact-wizard.content-description')}
           </Typography>
+
+          {defaultSERCQ_SENDAddress && (
+            <Alert severity="info" sx={{ mb: 3 }} data-testid="sercq-info-alert">
+              {t('legal-contacts.pec-contact-wizard.sercq-info-alert')}
+            </Alert>
+          )}
 
           <Typography fontSize="18px" fontWeight={600} mb={2}>
             {t('legal-contacts.pec-contact-wizard.input-label')}
@@ -152,7 +160,7 @@ const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
         onDiscard={() => setOpenCodeModal(false)}
         onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR)}
       />
-    </>
+    </Box>
   );
 };
 

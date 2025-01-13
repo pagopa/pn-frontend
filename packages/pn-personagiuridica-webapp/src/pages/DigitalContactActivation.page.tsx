@@ -9,13 +9,16 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import PecContactWizard from '../components/Contacts/PecContactWizard';
 import SercqSendContactWizard from '../components/Contacts/SercqSendContactWizard';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import { contactsSelectors } from '../redux/contact/reducers';
+import { useAppSelector } from '../redux/hooks';
 
 const DigitalContactActivation: React.FC = () => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
+  const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
 
   const [activeStep, setActiveStep] = useState(0);
-  const [showPecWizard, setShowPecWizard] = useState(false);
+  const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress);
 
   const goToNextStep = () => {
     setActiveStep(activeStep + 1);
