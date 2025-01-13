@@ -51,4 +51,14 @@ describe('DigitalContactActivation', () => {
     const pecSection = getByTestId('pec-contact-wizard');
     expect(pecSection).toBeInTheDocument();
   });
+
+  it('renders the first step label correctly', () => {
+    const { getByTestId } = render(<DigitalContactActivation />);
+    const stepper = getByTestId('desktopWizardStepper');
+    expect(stepper).toBeInTheDocument();
+    const step1Label = within(stepper).getByText('legal-contacts.sercq-send-wizard.step_1.title');
+    expect(step1Label).toBeInTheDocument();
+    const sercqSendContent = getByTestId('sercqSendContactWizard');
+    expect(sercqSendContent).toBeInTheDocument();
+  });
 });
