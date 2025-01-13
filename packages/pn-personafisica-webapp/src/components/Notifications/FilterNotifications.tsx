@@ -29,7 +29,7 @@ import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 
 type Props = {
   showFilters: boolean;
-  lengthOfNotifications: number;
+  lengthOfNotifications?: number;
   /** Delegator */
   currentDelegator?: Delegator;
 };
@@ -147,7 +147,6 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator, lengthO
   if (!showFilters) {
     return <></>;
   }
-
   const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
   return isMobile ? (
     <CustomMobileDialog>
