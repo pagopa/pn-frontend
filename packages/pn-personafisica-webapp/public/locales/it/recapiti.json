@@ -57,11 +57,6 @@
     "sercq-send-io-title": "Attiva SEND su IO",
     "sercq-send-io-description": "Attiva SEND - Notifiche Digitali su IO per<strong> ricevere direttamente in app</strong> le comunicazioni inviate al tuo Domicilio Digitale SEND.",
     "sercq-send-io-advantages": "Su IO",
-    "sercq-send-io-list": [
-      "<strong>Ricevi le notifiche in tempo reale</strong>, appena l’ente le carica su SEND",
-      "<strong>Apri i documenti allegati</strong> in app",
-      "<strong>Paghi gli importi dovuti</strong> se la notifica prevede un pagamento"
-    ],
     "sercq-send-wizard": {
       "title": "Attiva domicilio digitale",
       "step_1": {
@@ -87,6 +82,16 @@
         "delivered-dialog-title": "Valore giuridico della notifica sul domicilio digitale SEND",
         "delivered-dialog-description": "Se scegli SEND come domicilio digitale e non apri la notifica entro 7 giorni dalla consegna, questa risulterà legalmente recapitata, proprio come accade con le raccomandate cartacee.",
         "pec-info-alert": "La piattaforma SEND sostituirà la PEC come tuo domicilio digitale."
+      },
+      "step_2": {
+        "title": "Collega SEND all’app IO",
+        "content": "Collegare SEND a IO è il modo più pratico per ricevere e gestire comunicazioni a valore legale.",
+        "io-list": [
+          "Ricevi le notifiche in tempo reale, appena l’ente le carica su SEND",
+          "Puoi aprire e leggere i documenti allegati alla notifica",
+          "Puoi pagare gli importi dovuti se la notifica prevede un pagamento"
+        ],
+        "confirm": "Collega SEND su IO"
       }
     }
   },
@@ -94,18 +99,8 @@
     "title": "SEND sull’app IO",
     "description": "Collegare SEND a IO è il modo più pratico per ricevere e gestire comunicazioni a valore legale: quando c’è una notifica per te, la ricevi in app e puoi pagare eventuali spese.",
     "description-enabled": "Quando c’è una notifica per te, la ricevi direttamente in app e puoi pagare eventuali spese.",
-    "dialog-description": "Riceverai un messaggio in app per ogni nuova notifica. Potrai leggerla e pagare eventuali importi direttamente su IO.",
-    "enabled": "Servizio Notifiche Digitali attivo",
-    "disabled": "Servizio Notifiche Digitali non attivo",
-    "unavailable": "Per attivare il servizio, prima scarica l’app IO",
     "enable": "Attiva SEND su IO",
     "download": "Scarica l'app IO",
-    "enable-modal": {
-      "title": "Vuoi attivare il servizio \"Notifiche digitali\" su IO?",
-      "checkbox": "Ho capito",
-      "confirm": "Attiva servizio",
-      "content": "Se non hai una PEC e accedi alla notifica entro 5 giorni (120 ore) dall’invio del messaggio, non riceverai l'avviso di avvenuta ricezione tramite raccomandata."
-    },
     "disable-modal": {
       "title": "Disattiva SEND sull’app IO",
       "content": "Se confermi, non riceverai più le notifiche SEND in app."

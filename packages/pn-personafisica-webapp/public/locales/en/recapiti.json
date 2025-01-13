@@ -60,28 +60,13 @@
     "sercq_send-removed-successfully": "Digital Domicile deactivated correctly",
     "sercq-send-io-title": "Activate SEND on IO",
     "sercq-send-io-description": "Activate SEND - Notifiche Digitali on IO to receive the communications sent directly to your SEND digital domicile <strong>directly in app</strong>.",
-    "sercq-send-io-advantages": "On IO",
-    "sercq-send-io-list": [
-      "<strong>You will receive the notifications in real time</strong>, as soon as the institution uploads it on SEND",
-      "<strong>Open the attached documents</strong> in app",
-      "<strong>Pay the amounts due</strong> if the notification requires a payment"
-    ]
+    "sercq-send-io-advantages": "On IO"
   },
   "io-contact": {
     "title": "IO app",
     "description": "Read and manage legal communications directly on IO: when there is a notification for you, you will receive it in app and you can pay any expenses.",
-    "dialog-description": "You will receive a message in app for each new notification. You can read it and pay any amounts directly on IO.",
-    "enabled": "Digital Notification Service active",
-    "disabled": "Digital Notification Service not active",
-    "unavailable": "To activate the service, first download the IO app",
     "enable": "Activate SEND on IO",
     "download": "Download the IO app",
-    "enable-modal": {
-      "title": "Do you want to activate the \"Notifiche Digitali\" service on IO?",
-      "checkbox": "OK, I understand",
-      "confirm": "Activate service",
-      "content": "If you do not have a PEC and access the notification within 5 days (120 hours) of sending the message, you will not receive the notification of receipt by registered mail."
-    },
     "disable-modal": {
       "title": "Do you want to deactivate the \"Notifiche Digitali\" service on IO?",
       "confirm": "Deactivate service",

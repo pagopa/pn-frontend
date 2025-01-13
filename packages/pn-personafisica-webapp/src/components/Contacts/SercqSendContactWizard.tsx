@@ -156,7 +156,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
   };
 
   return (
-    <>
+    <Box data-testid="sercqSendContactWizard">
       <Typography fontSize="22px" fontWeight={700} mb={3}>
         {t('legal-contacts.sercq-send-wizard.step_1.title')}
       </Typography>
@@ -190,6 +190,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
                       <Trans
                         i18nKey={item.description}
                         ns="recapiti"
+                        t={(s: string) => s}
                         components={[
                           <Link
                             key="consegnata"
@@ -274,7 +275,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
         subtitle={t('legal-contacts.sercq-send-wizard.step_1.delivered-dialog-description')}
         onConfirm={() => setModalOpen(null)}
       />
-    </>
+    </Box>
   );
 };
 
