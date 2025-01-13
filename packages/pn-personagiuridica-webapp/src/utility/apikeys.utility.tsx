@@ -58,12 +58,6 @@ export function getApiKeyStatusInfos(
   const tooltip = statusHistory ? <TooltipApiKey history={statusHistory} /> : undefined;
 
   switch (status) {
-    case ExtendedVirtualKeyStatus.Disabled:
-      return {
-        color: 'info',
-        label,
-        tooltip,
-      };
     case ExtendedVirtualKeyStatus.Enabled:
     case PublicKeyStatus.Active:
       return {
@@ -71,6 +65,7 @@ export function getApiKeyStatusInfos(
         label,
         tooltip,
       };
+    case ExtendedVirtualKeyStatus.Disabled:
     case PublicKeyStatus.Blocked:
       return {
         color: 'default',

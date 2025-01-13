@@ -17,6 +17,7 @@ import {
   waitFor,
   within,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { appStateSlice } from './redux/slices/appStateSlice';
 import { formatDate } from './utility';
@@ -164,20 +165,16 @@ async function testAutocomplete(
   closeOnSelect?: boolean
 ) {
   const autocomplete = within(container as HTMLElement).getByTestId(elementName);
-  const autocompleteInput = autocomplete.querySelector('input[role="combobox"]');
+  const autocompleteInput = autocomplete.querySelector('input');
   expect(autocompleteInput).toBeInTheDocument();
-
-  screen.debug(container, 10000);
   if (mustBeOpened) {
-    fireEvent.click(autocompleteInput!);
+    await userEvent.click(autocompleteInput!);
   }
-
-  const dropdown = (await waitFor(() =>
-    document.querySelector('[role="presentation"][class*="MuiAutocomplete-popper"]')
-  )) as HTMLElement;
-
+  const dropdown = await waitFor(() =>
+    document.querySelector<HTMLElement>('[role="presentation"][class*="MuiAutocomplete-popper"]')
+  );
   expect(dropdown).toBeInTheDocument();
-  const dropdownOptionsList = within(dropdown).getByRole('listbox');
+  const dropdownOptionsList = within(dropdown!).getByRole('listbox');
   expect(dropdownOptionsList).toBeInTheDocument();
   const dropdownOptionsListItems = within(dropdownOptionsList).getAllByRole('option');
   expect(dropdownOptionsListItems).toHaveLength(options.length);

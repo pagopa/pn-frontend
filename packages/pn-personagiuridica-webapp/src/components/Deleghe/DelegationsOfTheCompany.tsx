@@ -197,8 +197,7 @@ const DelegationsOfTheCompany = () => {
   ) => (
     <li {...props} key={option.id}>
       <Checkbox
-        inputProps={{    'aria-label': option.name,
-          'aria-live': 'assertive',  }}
+        inputProps={{ 'aria-label': option.name, 'aria-live': 'assertive' }}
         icon={icon}
         checkedIcon={checkedIcon}
         style={{ marginRight: 8 }}
@@ -320,8 +319,6 @@ const DelegationsOfTheCompany = () => {
     getDelegatorsData();
   }, [filters]);
 
-  console.log('groups :>> ', formik.values.groups);
-
   return (
     <Box data-testid="delegationsOfTheCompany">
       <Typography variant="h6" mb={4}>
@@ -382,8 +379,15 @@ const DelegationsOfTheCompany = () => {
                   sx={{ marginBottom: isMobile ? '20px' : '0' }}
                 />
               </Grid>
-              <Grid item xs={12} lg={3} sx={{justifyContent:'space-between'}}>
-              {formik.values.groups && <A11yContainerInvisible field={'gruppi selezionati, ' + formik.values.groups.map((group) => group.name).join(', ') }></A11yContainerInvisible>}
+              <Grid item xs={12} lg={3} sx={{ justifyContent: 'space-between' }}>
+                {formik.values.groups && (
+                  <A11yContainerInvisible
+                    field={
+                      'gruppi selezionati, ' +
+                      formik.values.groups.map((group) => group.name).join(', ')
+                    }
+                  ></A11yContainerInvisible>
+                )}
                 {/* c''e ancora il bottone anche se non é raggiungibile o cliccabile */}
                 <PnAutocomplete
                   id="groups"
@@ -397,11 +401,11 @@ const DelegationsOfTheCompany = () => {
                   getOptionLabel={getOptionLabel}
                   isOptionEqualToValue={(option, value) => option.id === value.id}
                   sx={{
-                     [`& .MuiAutocomplete-popupIndicator`]: {
+                    [`& .MuiAutocomplete-popupIndicator`]: {
                       transform: 'none',
                       pointerEvents: 'none',
-                    }, 
-                     marginBottom: isMobile ? '20px' : '0',
+                    },
+                    marginBottom: isMobile ? '20px' : '0',
                   }}
                   renderOption={renderOption}
                   renderInput={(params) => (
@@ -415,9 +419,7 @@ const DelegationsOfTheCompany = () => {
                       name="groups"
                       InputProps={{
                         ...params.InputProps,
-                        endAdornment: (
-                          <SearchIcon sx={{color:'text.secondary'}}/>
-                        ),
+                        endAdornment: <SearchIcon sx={{ color: 'text.secondary' }} />,
                       }}
                     />
                   )}
@@ -430,7 +432,14 @@ const DelegationsOfTheCompany = () => {
                   onInputChange={(_event, newInputValue) => setGroupInputValue(newInputValue)}
                 />
               </Grid>
-              {formik.values.groups && <A11yContainerInvisible field={'gruppi selezionati, ' + formik.values.groups.map((group) => group.name).join(', ') }></A11yContainerInvisible>}
+              {formik.values.groups && (
+                <A11yContainerInvisible
+                  field={
+                    'gruppi selezionati, ' +
+                    formik.values.groups.map((group) => group.name).join(', ')
+                  }
+                ></A11yContainerInvisible>
+              )}
               <Grid item xs={12} lg={3}>
                 <TextField
                   label={t('deleghe.table.status')}

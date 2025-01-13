@@ -147,6 +147,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator, lengthO
   if (!showFilters) {
     return <></>;
   }
+
   const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
   return isMobile ? (
     <CustomMobileDialog>
