@@ -7,6 +7,7 @@ import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import IOContactWizard from '../components/Contacts/IOContactWizard';
+
 import PecContactWizard from '../components/Contacts/PecContactWizard';
 import SercqSendContactWizard from '../components/Contacts/SercqSendContactWizard';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
