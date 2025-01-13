@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import {
   NotificationDetailDocument,
+  NotificationDetailPayment,
   NotificationDetailRecipient,
   PhysicalAddress,
   RecipientType,
@@ -104,43 +105,36 @@ const newNotificationPaymentDocumentsMapper = (
   paymentDocuments: { [key: string]: PaymentObject }
 ): Array<NotificationDetailRecipient> =>
   recipients.map((r) => {
-    const documents: {
-      pagoPaForm?: NotificationDetailDocument;
-      f24flatRate?: NotificationDetailDocument;
-      f24standard?: NotificationDetailDocument;
-    } = {};
+    const payment: NotificationDetailPayment = {};
     /* eslint-disable functional/immutable-data */
     if (
-      paymentDocuments[r.taxId].pagoPaForm &&
-      paymentDocuments[r.taxId].pagoPaForm.file.sha256.hashBase64 !== ''
+      paymentDocuments[r.taxId].pagoPa &&
+      paymentDocuments[r.taxId].pagoPa.file.sha256.hashBase64 !== ''
     ) {
-      documents.pagoPaForm = newNotificationDocumentMapper(paymentDocuments[r.taxId].pagoPaForm);
+      payment.pagoPa = {
+        creditorTaxId: '',
+        noticeCode: '',
+        attachment: newNotificationDocumentMapper(paymentDocuments[r.taxId].pagoPa),
+        applyCost: false,
+      };
     }
     if (
-      paymentDocuments[r.taxId].f24flatRate &&
-      paymentDocuments[r.taxId].f24flatRate?.file.sha256.hashBase64 !== ''
+      paymentDocuments[r.taxId].f24 &&
+      paymentDocuments[r.taxId].f24?.file.sha256.hashBase64 !== ''
     ) {
-      documents.f24flatRate = newNotificationDocumentMapper(
-        paymentDocuments[r.taxId].f24flatRate as NewNotificationDocument
-      );
+      payment.f24 = {
+        title: paymentDocuments[r.taxId].f24!.name,
+        applyCost: true,
+        metadataAttachment: {
+          digests: {
+            sha256: paymentDocuments[r.taxId].f24!.file.sha256.hashBase64,
+          },
+          contentType: paymentDocuments[r.taxId].f24!.contentType,
+          ref: paymentDocuments[r.taxId].f24!.ref,
+        },
+      };
     }
-    if (
-      paymentDocuments[r.taxId].f24standard &&
-      paymentDocuments[r.taxId].f24standard?.file.sha256.hashBase64 !== ''
-    ) {
-      documents.f24standard = newNotificationDocumentMapper(
-        paymentDocuments[r.taxId].f24standard as NewNotificationDocument
-      );
-    }
-    // Con l'introduzione dei multi pagamenti (pn-7336), è necessario apportare delle modifiche anche in fase di creazione
-    // Andrea Cimini - 16/08/2023
-    /*
-    r.payment = {
-      ...documents,
-      creditorTaxId: r.payment ? r.payment.creditorTaxId : '',
-      noticeCode: r.payment?.noticeCode,
-    };
-    */
+    r.payments = [payment];
     /* eslint-enable functional/immutable-data */
     return r;
   });

@@ -78,7 +78,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
 
   const initialValues = useCallback(() => {
     const additionalLang = additionalLanguages?.length > 0 ? additionalLanguages[0] : undefined;
-     
+
     return {
       paProtocolNumber: notification.paProtocolNumber || '',
       subject: notification.subject || '',
@@ -97,11 +97,10 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
 
   const validationSchema = yup.object({
     paProtocolNumber: requiredStringFieldValidation(tc, 256),
-    subject: yup.string()
-     .when('lang',{
+    subject: yup.string().when('lang', {
       is: NewNotificationLangOther,
       then: requiredStringFieldValidation(tc, 66, 10),
-      otherwise: requiredStringFieldValidation(tc, 134, 10)
+      otherwise: requiredStringFieldValidation(tc, 134, 10),
     }),
     senderDenomination: yup
       .string()
@@ -159,9 +158,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if(value === 'it'){
-      void formik.setValues({...formik.values, additionalLang:'', additionalSubject: ''},false);
-      void formik.setFieldTouched('additionalSubject',false);
+    if (value === 'it') {
+      void formik.setValues({ ...formik.values, additionalLang: '', additionalSubject: '' }, false);
+      void formik.setFieldTouched('additionalSubject', false);
     }
     formik.handleChange(e);
   };
@@ -334,15 +333,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
                   data-testid="paymentMethodRadio"
                 />
                 <FormControlLabel
-                  value={PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE}
+                  value={PaymentModel.F24}
                   control={<Radio />}
-                  label={t('pagopa-notice-f24-flatrate')}
-                  data-testid="paymentMethodRadio"
-                />
-                <FormControlLabel
-                  value={PaymentModel.PAGO_PA_NOTICE_F24}
-                  control={<Radio />}
-                  label={t('pagopa-notice-f24')}
+                  label={t('f24')}
                   data-testid="paymentMethodRadio"
                 />
                 <FormControlLabel

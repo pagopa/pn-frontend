@@ -412,8 +412,7 @@
         "simple-registered-letter": "Einschreiben mit Rückschein",
         "payment-method": "Zahlungsmodell",
         "pagopa-notice": "Bescheid pagoPA",
-        "pagopa-notice-f24-flatrate": "Bescheid pagoPA und Vordruck F24 pauschal",
-        "pagopa-notice-f24": "Bescheid pagoPA und Vordruck F24",
+        "f24": "Vordruck F24",
         "nothing": "Keine"
       },
       "recipient": {
@@ -466,11 +465,9 @@
       "payment-methods": {
         "title": "Zahlungsmodelle",
         "pagopa-notice": "Bescheid pagoPA",
-        "pagopa-notice-f24-flatrate": "F24 pauschal",
-        "pagopa-notice-f24": "F24",
+        "f24": "F24",
         "payment-models": "Zahlungsvordrucke für",
         "attach-pagopa-notice": "Bescheid pagoPA anhängen",
-        "attach-f24-flatrate": "Muster F24 pauschal anhängen",
         "attach-f24": "Modell F24 anhängen",
         "nothing": "<0>Wenn diese Zustellung eine Zahlung vorsieht, kehre zu </0><1>Vorabinformationen</1><2> zurück und wähle einen Vordruck aus. Komm dann hierher zurück, um diesen zu laden.</2>",
         "back-to-attachments": "Zurück zu Anhänge"

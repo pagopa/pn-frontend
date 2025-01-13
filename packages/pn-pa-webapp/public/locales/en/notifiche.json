@@ -412,8 +412,7 @@
         "simple-registered-letter": "Registered letter with acknowledgment of receipt",
         "payment-method": "Payment form",
         "pagopa-notice": "PagoPA notice",
-        "pagopa-notice-f24-flatrate": "pagoPA Notice and Flat-rate Form F24",
-        "pagopa-notice-f24": "pagoPA Notice and Form F24",
+        "f24": "Form F24",
         "nothing": "None"
       },
       "recipient": {
@@ -466,11 +465,9 @@
       "payment-methods": {
         "title": "Payment forms",
         "pagopa-notice": "PagoPA notice",
-        "pagopa-notice-f24-flatrate": "F24 flat rate",
-        "pagopa-notice-f24": "F24",
+        "f24": "F24",
         "payment-models": "Payment forms for",
         "attach-pagopa-notice": "Attach pagoPA Notice",
-        "attach-f24-flatrate": "Attach Flat-rate Form F24",
         "attach-f24": "Attach Form F24",
         "nothing": "<0>If this notification involves a payment, go back to </0><1>Preliminary Information</1><2> and select a form. Then, return here to upload it.</2>",
         "back-to-attachments": "Back to Attachments"

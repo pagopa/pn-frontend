@@ -412,8 +412,7 @@
         "simple-registered-letter": "Lettre recommandée avec A/R",
         "payment-method": "Modèle de paiement",
         "pagopa-notice": "Avis de pagoPA",
-        "pagopa-notice-f24-flatrate": "Avis de pagoPA et modèle F24 forfaitaire",
-        "pagopa-notice-f24": "Avis de pagoPA et modèle F24",
+        "f24": "Modèle F24",
         "nothing": "Aucun"
       },
       "recipient": {
@@ -466,11 +465,9 @@
       "payment-methods": {
         "title": "Modèles de paiement",
         "pagopa-notice": "Avis de pagoPA",
-        "pagopa-notice-f24-flatrate": "F24 forfaitaire",
-        "pagopa-notice-f24": "F24",
+        "f24": "F24",
         "payment-models": "Modèles de paiement pour",
         "attach-pagopa-notice": "Joindre un avis de pagoPA",
-        "attach-f24-flatrate": "Joindre Modèle F24 forfaitaire",
         "attach-f24": "Joindre Modèle F24",
         "nothing": "<0>Si cette notification prévoit un paiement, revenez à <0><1>Informations préliminaires<1><2> et sélectionnez un modèle. Ensuite, revenez ici pour le charger.<2>",
         "back-to-attachments": "Retour à Pièces jointes"

@@ -8,8 +8,7 @@ import {
 
 export enum PaymentModel {
   PAGO_PA_NOTICE = 'PAGO_PA_NOTICE',
-  PAGO_PA_NOTICE_F24_FLATRATE = 'PAGO_PA_NOTICE_F24_FLATRATE',
-  PAGO_PA_NOTICE_F24 = 'PAGO_PA_NOTICE_F24',
+  F24 = 'F24',
   NOTHING = 'NOTHING',
 }
 
@@ -94,9 +93,8 @@ export interface NewNotificationBilingualism {
 }
 
 export interface PaymentObject {
-  pagoPaForm: NewNotificationDocument;
-  f24flatRate?: NewNotificationDocument;
-  f24standard?: NewNotificationDocument;
+  pagoPa: NewNotificationDocument;
+  f24?: NewNotificationDocument;
 }
 
 export interface NewNotificationResponse {

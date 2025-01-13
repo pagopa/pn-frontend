@@ -6,6 +6,7 @@ import { Alert, Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/mat
 import { PnBreadcrumb, Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import Attachments from '../components/NewNotification/Attachments';
+import PaymentMethods from '../components/NewNotification/PaymentMethods';
 import PreliminaryInformations from '../components/NewNotification/PreliminaryInformations';
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
@@ -176,8 +177,7 @@ const NewNotification = () => {
                 ref={childRef}
               />
             )}
-            {/*
-            activeStep === 3 && (
+            {activeStep === 3 && IS_PAYMENT_ENABLED && (
               <PaymentMethods
                 onConfirm={createNotification}
                 notification={notification}
@@ -185,8 +185,7 @@ const NewNotification = () => {
                 onPreviousStep={goToPreviousStep}
                 ref={childRef}
               />
-            )
-            */}
+            )}
           </Grid>
         </Grid>
       </Box>

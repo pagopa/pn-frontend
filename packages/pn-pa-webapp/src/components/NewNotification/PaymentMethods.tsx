@@ -84,11 +84,6 @@ const newPaymentDocument = (id: string, name: string): NewNotificationDocument =
   },
 });
 
-/**
- * @deprecated
- * Last step of the notification creation, where the user configures the payments
- * @returns
- */
 const PaymentMethods: React.FC<Props> = ({
   notification,
   onConfirm,
@@ -109,26 +104,16 @@ const PaymentMethods: React.FC<Props> = ({
         const recipientPayment = paymentDocumentsExists
           ? (notification.payment as { [key: string]: PaymentObject })[r.taxId]
           : undefined;
-        const pagoPaForm = recipientPayment?.pagoPaForm;
-        const f24flatRate = recipientPayment?.f24flatRate;
-        const f24standard = recipientPayment?.f24standard;
+        const pagoPa = recipientPayment?.pagoPa;
+        const f24 = recipientPayment?.f24;
         // eslint-disable-next-line functional/immutable-data
         obj[r.taxId] = {
-          pagoPaForm: pagoPaForm
-            ? pagoPaForm
-            : newPaymentDocument(`${r.taxId}-pagoPaDoc`, t('pagopa-notice')),
+          pagoPa: pagoPa ?? newPaymentDocument(`${r.taxId}-pagoPaDoc`, t('pagopa-notice')),
         };
-        if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE) {
+        if (notification.paymentMode === PaymentModel.F24) {
           // eslint-disable-next-line functional/immutable-data
-          obj[r.taxId].f24flatRate = f24flatRate
-            ? f24flatRate
-            : newPaymentDocument(`${r.taxId}-f24flatRateDoc`, t('pagopa-notice-f24-flatrate'));
-        }
-        if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24) {
-          // eslint-disable-next-line functional/immutable-data
-          obj[r.taxId].f24standard = f24standard
-            ? f24standard
-            : newPaymentDocument(`${r.taxId}-f24standardDoc`, t('pagopa-notice-f24'));
+          obj[r.taxId].f24 =
+            f24 ?? newPaymentDocument(`${r.taxId}-f24standardDoc`, t('pagopa-notice-f24'));
         }
         return obj;
       }, {}),
@@ -137,9 +122,8 @@ const PaymentMethods: React.FC<Props> = ({
 
   const formatPaymentDocuments = () =>
     notification.recipients.reduce((obj: { [key: string]: PaymentObject }, r) => {
-      const formikPagoPaForm = formik.values[r.taxId].pagoPaForm;
-      const formikF24flatRate = formik.values[r.taxId].f24flatRate;
-      const formikF24standard = formik.values[r.taxId].f24standard;
+      const formikPagoPa = formik.values[r.taxId].pagoPa;
+      const formikF24 = formik.values[r.taxId].f24;
       // I avoid including empty file object into the result
       // hence I check for any file object that it actually points to a file
       // (this is the condition XXX.file.data)
@@ -148,54 +132,37 @@ const PaymentMethods: React.FC<Props> = ({
       // ---------------------------------------------
       // Carlos Lombardi, 2023.01.10
       const paymentsForThisRecipient: any = {};
-      if (formikPagoPaForm.file.data) {
+      if (formikPagoPa.file.data) {
         // eslint-disable-next-line functional/immutable-data
         paymentsForThisRecipient.pagoPaForm = {
           ...newPaymentDocument(`${r.taxId}-pagoPaDoc`, t('pagopa-notice')),
           file: {
-            data: formikPagoPaForm.file.data,
+            data: formikPagoPa.file.data,
             sha256: {
-              hashBase64: formikPagoPaForm.file.sha256.hashBase64,
-              hashHex: formikPagoPaForm.file.sha256.hashHex,
+              hashBase64: formikPagoPa.file.sha256.hashBase64,
+              hashHex: formikPagoPa.file.sha256.hashHex,
             },
           },
           ref: {
-            key: formikPagoPaForm.ref.key,
-            versionToken: formikPagoPaForm.ref.versionToken,
+            key: formikPagoPa.ref.key,
+            versionToken: formikPagoPa.ref.versionToken,
           },
         };
       }
-      if (formikF24flatRate?.file.data) {
-        // eslint-disable-next-line functional/immutable-data
-        paymentsForThisRecipient.f24flatRate = {
-          ...newPaymentDocument(`${r.taxId}-f24flatRateDoc`, t('pagopa-notice-f24-flatrate')),
-          file: {
-            data: formikF24flatRate.file.data,
-            sha256: {
-              hashBase64: formikF24flatRate.file.sha256.hashBase64,
-              hashHex: formikF24flatRate.file.sha256.hashHex,
-            },
-          },
-          ref: {
-            key: formikF24flatRate.ref.key,
-            versionToken: formikF24flatRate.ref.versionToken,
-          },
-        };
-      }
-      if (formikF24standard?.file.data) {
+      if (formikF24?.file.data) {
         // eslint-disable-next-line functional/immutable-data
         paymentsForThisRecipient.f24standard = {
-          ...newPaymentDocument(`${r.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
+          ...newPaymentDocument(`${r.taxId}-f24standardDoc`, t('f24')),
           file: {
-            data: formikF24standard.file.data,
+            data: formikF24.file.data,
             sha256: {
-              hashBase64: formikF24standard.file.sha256.hashBase64,
-              hashHex: formikF24standard.file.sha256.hashHex,
+              hashBase64: formikF24.file.sha256.hashBase64,
+              hashHex: formikF24.file.sha256.hashHex,
             },
           },
           ref: {
-            key: formikF24standard.ref.key,
-            versionToken: formikF24standard.ref.versionToken,
+            key: formikF24.ref.key,
+            versionToken: formikF24.ref.versionToken,
           },
         };
       }
@@ -216,14 +183,11 @@ const PaymentMethods: React.FC<Props> = ({
   const updateRefAfterUpload = async (paymentPayload: { [key: string]: PaymentObject }) => {
     // set ref
     for (const [taxId, payment] of Object.entries(paymentPayload)) {
-      if (payment.pagoPaForm) {
-        await formik.setFieldValue(`${taxId}.pagoPaForm.ref`, payment.pagoPaForm.ref, false);
+      if (payment.pagoPa) {
+        await formik.setFieldValue(`${taxId}.pagoPaForm.ref`, payment.pagoPa.ref, false);
       }
-      if (payment.f24standard) {
-        await formik.setFieldValue(`${taxId}.f24standard.ref`, payment.f24standard.ref, false);
-      }
-      if (payment.f24flatRate) {
-        await formik.setFieldValue(`${taxId}.f24flatRate.ref`, payment.f24flatRate.ref, false);
+      if (payment.f24) {
+        await formik.setFieldValue(`${taxId}.f24standard.ref`, payment.f24.ref, false);
       }
     }
   };
@@ -286,7 +250,7 @@ const PaymentMethods: React.FC<Props> = ({
 
   const fileUploadedHandler = async (
     taxId: string,
-    paymentType: 'pagoPaForm' | 'f24flatRate' | 'f24standard',
+    paymentType: 'pagoPa' | 'f24',
     id: string,
     file?: File,
     sha256?: { hashBase64: string; hashHex: string }
@@ -306,11 +270,7 @@ const PaymentMethods: React.FC<Props> = ({
     await formik.setFieldTouched(`${id}.file`, true, true);
   };
 
-  const removeFileHandler = async (
-    id: string,
-    taxId: string,
-    paymentType: 'pagoPaForm' | 'f24flatRate' | 'f24standard'
-  ) => {
+  const removeFileHandler = async (id: string, taxId: string, paymentType: 'pagoPa' | 'f24') => {
     await formik.setFieldValue(id, {
       ...formik.values[taxId][paymentType],
       file: emptyFileData,
@@ -342,35 +302,26 @@ const PaymentMethods: React.FC<Props> = ({
               <SectionHeading>
                 {t('payment-models')} {recipient.firstName} {recipient.lastName}
               </SectionHeading>
-              <PaymentBox
-                id={`${recipient.taxId}.pagoPaForm`}
-                title={`${t('attach-pagopa-notice')}`}
-                onFileUploaded={(id, file, sha256) =>
-                  fileUploadedHandler(recipient.taxId, 'pagoPaForm', id, file, sha256)
-                }
-                onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPaForm')}
-                fileUploaded={formik.values[recipient.taxId].pagoPaForm}
-              />
-              {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE && (
+              {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE && (
                 <PaymentBox
-                  id={`${recipient.taxId}.f24flatRate`}
-                  title={`${t('attach-f24-flatrate')}`}
+                  id={`${recipient.taxId}.pagoPa`}
+                  title={`${t('attach-pagopa-notice')}`}
                   onFileUploaded={(id, file, sha256) =>
-                    fileUploadedHandler(recipient.taxId, 'f24flatRate', id, file, sha256)
+                    fileUploadedHandler(recipient.taxId, 'pagoPa', id, file, sha256)
                   }
-                  onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24flatRate')}
-                  fileUploaded={formik.values[recipient.taxId].f24flatRate}
+                  onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPa')}
+                  fileUploaded={formik.values[recipient.taxId].pagoPa}
                 />
               )}
-              {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24 && (
+              {notification.paymentMode === PaymentModel.F24 && (
                 <PaymentBox
-                  id={`${recipient.taxId}.f24standard`}
+                  id={`${recipient.taxId}.f24`}
                   title={`${t('attach-f24')}`}
                   onFileUploaded={(id, file, sha256) =>
-                    fileUploadedHandler(recipient.taxId, 'f24standard', id, file, sha256)
+                    fileUploadedHandler(recipient.taxId, 'f24', id, file, sha256)
                   }
-                  onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24standard')}
-                  fileUploaded={formik.values[recipient.taxId].f24standard}
+                  onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24')}
+                  fileUploaded={formik.values[recipient.taxId].f24}
                 />
               )}
             </Paper>

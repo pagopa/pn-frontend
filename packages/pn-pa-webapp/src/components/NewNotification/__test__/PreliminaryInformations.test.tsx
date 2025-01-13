@@ -27,7 +27,6 @@ import {
   fireEvent,
   randomString,
   render,
-  
   testStore,
   waitFor,
   within,
@@ -85,15 +84,9 @@ const populateForm = async (
     1,
     true
   );
-  
+
   if (hasPayment) {
-    await testRadio(
-      form,
-      'paymentMethodRadio',
-      ['pagopa-notice', 'pagopa-notice-f24-flatrate', 'pagopa-notice-f24', 'nothing'],
-      1,
-      true
-    );
+    await testRadio(form, 'paymentMethodRadio', ['pagopa-notice', 'f24', 'nothing'], 1, true);
   }
 };
 
@@ -149,12 +142,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     testFormElements(form, 'taxonomyCode', 'taxonomy-id*');
     testFormElements(form, 'senderDenomination', 'sender-name*');
     testRadio(form, 'comunicationTypeRadio', ['registered-letter-890', 'simple-registered-letter']);
-    testRadio(form, 'paymentMethodRadio', [
-      'pagopa-notice',
-      'pagopa-notice-f24-flatrate',
-      'pagopa-notice-f24',
-      'nothing',
-    ]);
+    testRadio(form, 'paymentMethodRadio', ['pagopa-notice', 'f24', 'nothing']);
     const button = within(form).getByTestId('step-submit');
     expect(button).toBeDisabled();
   });
@@ -223,7 +211,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
         documents: [],
         recipients: [],
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
-        paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE,
+        paymentMode: PaymentModel.F24,
         senderDenomination: newNotification.senderDenomination,
         lang: 'it',
         additionalAbstract: '',

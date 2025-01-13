@@ -412,8 +412,7 @@
         "simple-registered-letter": "Priporočeno pismo s povratnico",
         "payment-method": "Plačilni obrazec",
         "pagopa-notice": "Opozorilo PagoPA",
-        "pagopa-notice-f24-flatrate": "Obvestilo pagoPA in pavšalni obrazec F24",
-        "pagopa-notice-f24": "Obvestilo PagoPA in obrazec F24",
+        "f24": "Obrazec F24",
         "nothing": "Noben"
       },
       "recipient": {
@@ -466,11 +465,9 @@
       "payment-methods": {
         "title": "Plačilni obrazci",
         "pagopa-notice": "Opozorilo PagoPA",
-        "pagopa-notice-f24-flatrate": "Pavšalni F24",
-        "pagopa-notice-f24": "F24",
+        "f24": "F24",
         "payment-models": "Plačilni obrazci za",
         "attach-pagopa-notice": "Priložite obvestilo pagoPA",
-        "attach-f24-flatrate": "Priložite pavšalni obrazec F24",
         "attach-f24": "Priložite obrazec F24",
         "nothing": "<0>Če to obvestilo vključuje plačilo, se vrnite na </0><1>Uvodne informacije</1><2> in izberite obrazec. Nato se vrnite in ga naložite.</2>",
         "back-to-attachments": "Nazaj na priloge"
