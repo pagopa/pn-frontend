@@ -29,6 +29,7 @@ import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 
 type Props = {
   showFilters: boolean;
+  lengthOfNotifications: number;
   /** Delegator */
   currentDelegator?: Delegator;
 };
@@ -58,7 +59,7 @@ const initialValues = (
   };
 };
 
-const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props, ref) => {
+const FilterNotifications = forwardRef(({ showFilters, currentDelegator, lengthOfNotifications }: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const { t } = useTranslation(['common', 'notifiche']);
@@ -206,6 +207,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
             cleanFilters={cleanFilters}
             filtersApplied={isFilterApplied(filtersCount)}
             isInitialSearch={isInitialSearch}
+            lengthOfNotifications={lengthOfNotifications}
           />
         </Grid>
       </Box>

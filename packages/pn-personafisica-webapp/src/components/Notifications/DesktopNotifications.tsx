@@ -147,6 +147,7 @@ const DesktopNotifications = ({
         ref={filterNotificationsRef}
         showFilters={showFilters}
         currentDelegator={currentDelegator}
+        lengthOfNotifications={rows.length}
       />
       {rows.length ? (
         <PnTable testId="notificationsTable">

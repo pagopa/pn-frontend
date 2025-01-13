@@ -1,13 +1,14 @@
-import {  Fragment, useState } from 'react';
+import {  Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
-import { A11yContainerInvisible, CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
+import {  CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
 
 type Props = {
   filtersApplied: boolean;
   isInitialSearch: boolean;
   cleanFilters: () => void;
   isInDialog?: boolean;
+  lengthOfNotifications?: number;
 };
 
 const FilterNotificationsFormActions = ({
@@ -15,6 +16,7 @@ const FilterNotificationsFormActions = ({
   cleanFilters,
   isInDialog = false,
   isInitialSearch,
+  lengthOfNotifications
 }: Props) => {
   const { t } = useTranslation(['common']);
   const [feedbackSubmit, setFeedbackSubmit] = useState(false);
@@ -23,11 +25,20 @@ const FilterNotificationsFormActions = ({
   const handleCancel = () =>{
     setFeedbackCancel(true);
     cleanFilters();
+    setFeedbackSubmit(false);
+    setFeedbackCancel(false);
   };
+
+  useEffect(()=>{
+    console.log('feedbackSubmit :>> ', feedbackSubmit);
+    console.log('feedbackCancel :>> ', feedbackCancel);
+    console.log('object :>> ', lengthOfNotifications);
+  },[feedbackSubmit,feedbackCancel]);
 
   const confirmAction = (
     <Grid item lg="auto" xs={12}>
       <Button
+        aria-label={feedbackSubmit ? lengthOfNotifications ?`Filtro completato: risultati prodotti ${lengthOfNotifications}, Sei su Filtra pulsante`:'Il filtro non ha prodotto risultati, Sei sul pulsante filtra ': 'Bottone Filtra'}
         id="filter-notifications-button"
         variant="outlined"
         type="submit"
@@ -37,25 +48,20 @@ const FilterNotificationsFormActions = ({
       >
         {t('button.filtra')}
       </Button>
-      {feedbackSubmit && (
-      <A11yContainerInvisible field="Azione completata" ariaLive='assertive' role='alert'></A11yContainerInvisible>
-      )}
     </Grid>
   );
 
   const cancelAction = (
     <Grid item lg="auto" xs={12}>
       <Button
+        aria-label={feedbackSubmit ? 'Cancellazione Completata, Sei su Cancella filtri pulsante':'Sei su Cancella filtri pulsante'}
         data-testid="cancelButton"
         size="small"
         onClick={handleCancel}
         disabled={!filtersApplied}
-        
       >
         {t('button.annulla filtro')}
       </Button>
-      {feedbackCancel && <A11yContainerInvisible field="Cancellazione Completata" ariaLive='assertive' role='alert'></A11yContainerInvisible>
-      }
     </Grid>
   );
 
