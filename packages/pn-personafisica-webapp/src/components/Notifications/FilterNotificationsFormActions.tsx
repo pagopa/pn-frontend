@@ -1,4 +1,4 @@
-import {  Fragment, useEffect, useState } from 'react';
+import {  Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
 import {  CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
@@ -29,12 +29,6 @@ const FilterNotificationsFormActions = ({
     setFeedbackCancel(false);
   };
 
-  useEffect(()=>{
-    console.log('feedbackSubmit :>> ', feedbackSubmit);
-    console.log('feedbackCancel :>> ', feedbackCancel);
-    console.log('object :>> ', lengthOfNotifications);
-  },[feedbackSubmit,feedbackCancel]);
-
   const confirmAction = (
     <Grid item lg="auto" xs={12}>
       <Button
@@ -54,7 +48,7 @@ const FilterNotificationsFormActions = ({
   const cancelAction = (
     <Grid item lg="auto" xs={12}>
       <Button
-        aria-label={feedbackSubmit ? 'Cancellazione Completata, Sei su Cancella filtri pulsante':'Sei su Cancella filtri pulsante'}
+        aria-label={feedbackCancel ? 'Cancellazione Completata, Sei su Cancella filtri pulsante':'Sei su Cancella filtri pulsante'}
         data-testid="cancelButton"
         size="small"
         onClick={handleCancel}
