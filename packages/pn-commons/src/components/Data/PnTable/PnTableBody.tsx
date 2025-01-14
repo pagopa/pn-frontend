@@ -13,7 +13,7 @@ const PnTableBody: React.FC<PnTableBodyProps> = ({ testId, children }) => {
   checkChildren(children, [{ cmp: PnTableBodyRow }], 'PnTableBody');
 
   return (
-    <TableBody sx={{ backgroundColor: 'background.paper' }} role="rowgroup" data-testid={testId} aria-live='assertive'>
+    <TableBody sx={{ backgroundColor: 'background.paper' }} role="rowgroup" data-testid={testId}>
       {children}
     </TableBody>
   );
