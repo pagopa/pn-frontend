@@ -54,7 +54,7 @@ const ApiIntegration: React.FC = () => {
       isAdminWithoutGroups &&
       ((!issuer.isPresent && publicKeys.items.length === 0 && virtualKeys.items.length === 0) ||
         (issuer.isPresent && issuerIsActive && hasPublicActive) ||
-        (issuer.isPresent && !issuerIsActive && !hasPublicActive))
+        (issuer.isPresent && !issuerIsActive && publicKeys.items.length > 0 && !hasPublicActive))
     ) {
       return;
     }
