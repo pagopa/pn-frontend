@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { Alert, Box, TextField, Typography } from '@mui/material';
+import { Alert, TextField, Typography } from '@mui/material';
 import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -88,7 +88,7 @@ const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
   };
 
   return (
-    <Box data-testid="pec-contact-wizard">
+    <>
       <PnWizard
         title={
           <Typography fontSize="28px" fontWeight={700} data-testid="pec-wizard-title">
@@ -113,6 +113,9 @@ const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
         slotsProps={{
           nextButton: {
             onClick: () => formik.submitForm(),
+          },
+          container: {
+            'data-testid': 'pec-contact-wizard',
           },
         }}
       >
@@ -160,7 +163,7 @@ const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
         onDiscard={() => setOpenCodeModal(false)}
         onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR)}
       />
-    </Box>
+    </>
   );
 };
 
