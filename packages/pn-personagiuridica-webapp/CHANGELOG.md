@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.1...v2.11.0-RC.2) (2025-01-14)
+
+
+### Bug Fixes
+
+* **pn-13028:** hide actions when public key is removed ([#1441](https://github.com/pagopa/pn-frontend/issues/1441)) ([f1c87d8](https://github.com/pagopa/pn-frontend/commit/f1c87d8a9369541e32b7213c79c6c2387ff8f8fa))
+
+
+
+
+
 # [2.11.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.0...v2.11.0-RC.1) (2025-01-10)
 
 
