@@ -290,7 +290,14 @@ const NotificationDetailTimelineStep = ({
                       display="inline"
                       variant="button"
                       color={disableDownloads ? 'text.disabled' : 'primary'}
-                      sx={{ cursor: disableDownloads ? 'default' : 'pointer' }}
+                      sx={{ cursor: disableDownloads ? 'default' : 'pointer', outline: 'none',
+                        '&:focus': {
+                          outline: (theme) => `2px solid ${theme.palette.primary.main}`, 
+                          outlineOffset: '2px',
+                          borderRadius: 2,
+                          px:0.5 
+                        }, }}
+                      tabIndex={disableDownloads ? -1 : 0}
                       onClick={() => clickHandler(lf)}
                       key={lf.key}
                       data-testid="download-legalfact-micro"
