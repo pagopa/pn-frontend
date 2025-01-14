@@ -1,7 +1,7 @@
-import {  Fragment, useState } from 'react';
+import {  Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
-import {  A11yContainerInvisible, CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
+import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
 
 type Props = {
   filtersApplied: boolean;
@@ -19,14 +19,14 @@ const FilterNotificationsFormActions = ({
   // lengthOfNotifications
 }: Props) => {
   const { t } = useTranslation(['common']);
-  const [feedbackSubmit, setFeedbackSubmit] = useState(false);
-  const [feedbackCancel, setFeedbackCancel] = useState(false);
+  /* const [feedbackSubmit, setFeedbackSubmit] = useState(false);
+  const [feedbackCancel, setFeedbackCancel] = useState(false); */
 
   const handleCancel = () =>{
-    setFeedbackCancel(true);
+   // setFeedbackCancel(true);
     cleanFilters();
-    setFeedbackSubmit(false);
-    setFeedbackCancel(false);
+   /*  setFeedbackSubmit(false);
+    setFeedbackCancel(false); */
   };
 
   const confirmAction = (
@@ -38,18 +38,17 @@ const FilterNotificationsFormActions = ({
         type="submit"
         size="small"
         disabled={isInitialSearch && !filtersApplied}
-        onClick={()=>setFeedbackSubmit(true)}
+        // onClick={()=>setFeedbackSubmit(true)}
       >
         {t('button.filtra')}
       </Button>
-      <A11yContainerInvisible field="ciao" ariaLive='assertive'></A11yContainerInvisible>
     </Grid> 
   );
 
   const cancelAction = (
     <Grid item lg="auto" xs={12}>
       <Button
-        aria-label={feedbackCancel ? 'Cancellazione Completata, Sei su Cancella filtri pulsante':'Sei su Cancella filtri pulsante'}
+        // aria-label={feedbackCancel ? 'Cancellazione Completata, Sei su Cancella filtri pulsante':'Sei su Cancella filtri pulsante'}
         data-testid="cancelButton"
         size="small"
         onClick={handleCancel}
