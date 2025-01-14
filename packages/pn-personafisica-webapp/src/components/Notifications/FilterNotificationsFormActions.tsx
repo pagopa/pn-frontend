@@ -1,7 +1,7 @@
 import {  Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
-import {  CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
+import {  A11yContainerInvisible, CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
 
 type Props = {
   filtersApplied: boolean;
@@ -16,7 +16,7 @@ const FilterNotificationsFormActions = ({
   cleanFilters,
   isInDialog = false,
   isInitialSearch,
-  lengthOfNotifications
+  // lengthOfNotifications
 }: Props) => {
   const { t } = useTranslation(['common']);
   const [feedbackSubmit, setFeedbackSubmit] = useState(false);
@@ -32,7 +32,7 @@ const FilterNotificationsFormActions = ({
   const confirmAction = (
     <Grid item lg="auto" xs={12}>
       <Button
-        aria-label={feedbackSubmit ? lengthOfNotifications ?`Filtro completato: risultati prodotti ${lengthOfNotifications}, Sei su Filtra pulsante`:'Il filtro non ha prodotto risultati, Sei sul pulsante filtra ': 'Bottone Filtra'}
+        // aria-label={feedbackSubmit ? lengthOfNotifications ?`Filtro completato: risultati prodotti ${lengthOfNotifications}, Sei su Filtra pulsante`:'Il filtro non ha prodotto risultati, Sei sul pulsante filtra ': 'Bottone Filtra'}
         id="filter-notifications-button"
         variant="outlined"
         type="submit"
@@ -42,7 +42,8 @@ const FilterNotificationsFormActions = ({
       >
         {t('button.filtra')}
       </Button>
-    </Grid>
+      <A11yContainerInvisible field="ciao" ariaLive='assertive'></A11yContainerInvisible>
+    </Grid> 
   );
 
   const cancelAction = (
