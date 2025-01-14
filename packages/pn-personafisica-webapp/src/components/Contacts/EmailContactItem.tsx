@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import { Box, Button, Chip, Divider, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -8,6 +10,7 @@ import {
   AddressType,
   ChannelType,
   ContactSource,
+  IOAllowedValues,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
@@ -20,6 +23,7 @@ import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
 import ExistingContactDialog from './ExistingContactDialog';
 import InformativeDialog from './InformativeDialog';
+import SmsContactItem from './SmsContactItem';
 
 enum ModalType {
   EXISTING = 'existing',
@@ -29,14 +33,53 @@ enum ModalType {
   INFORMATIVE = 'informative',
 }
 
+const EmailSmsComponent: React.FC = () => {
+  const { t } = useTranslation(['recapiti']);
+
+  const [insertMode, setInsertMode] = useState(false);
+
+  return (
+    <Box mt={3}>
+      <Divider />
+      {insertMode ? (
+        <Box mt={3}>
+          <SmsContactItem onCancelInsert={() => setInsertMode(false)} />
+        </Box>
+      ) : (
+        <>
+          <Typography variant="body1" fontWeight={600} fontSize="16px" mt={3} mb={1}>
+            {t('courtesy-contacts.email-sms-updates')}
+          </Typography>
+          <Button variant="naked" sx={{ fontSize: '16px' }} onClick={() => setInsertMode(true)}>
+            {t('courtesy-contacts.email-sms-add')}
+          </Button>
+        </>
+      )}
+    </Box>
+  );
+};
+
 const EmailContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultEMAILAddress, specialEMAILAddresses, defaultSERCQ_SENDAddress, addresses } =
-    useAppSelector(contactsSelectors.selectAddresses);
+  const {
+    defaultEMAILAddress,
+    defaultSMSAddress,
+    specialEMAILAddresses,
+    defaultSERCQ_SENDAddress,
+    addresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
   });
+
+  const isActive = !!defaultEMAILAddress;
+
+  const hasCourtesyAddresses =
+    addresses.filter(
+      (addr) => addr.addressType === AddressType.COURTESY && addr.value !== IOAllowedValues.DISABLED
+    ).length > 0;
+
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   // currentAddress is needed to store what address we are creating/editing/removing
   // because this variable isn't been used to render, we can use useRef
@@ -146,6 +189,37 @@ const EmailContactItem: React.FC = () => {
       .catch(() => {});
   };
 
+  const getChipColor = () => {
+    if (isActive) {
+      return 'success';
+    }
+    if (defaultSERCQ_SENDAddress && !hasCourtesyAddresses) {
+      return 'warning';
+    }
+    return 'default';
+  };
+
+  const getActions = () =>
+    isActive
+      ? [
+          <Button
+            data-testid="disable-email"
+            key="disable"
+            variant="naked"
+            color="error"
+            startIcon={<PowerSettingsNewIcon />}
+            onClick={() => {
+              setModalOpen(ModalType.DELETE);
+              // eslint-disable-next-line functional/immutable-data
+              currentAddress.current = { value: currentValue };
+            }}
+            sx={{ p: '10px 16px' }}
+          >
+            {t('disable', { ns: 'recapiti' })}
+          </Button>,
+        ]
+      : undefined;
+
   /*
    * if *some* value (phone number, email address) has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
@@ -156,9 +230,34 @@ const EmailContactItem: React.FC = () => {
    */
   return (
     <PnInfoCard
-      title={t('courtesy-contacts.email-title', { ns: 'recapiti' })}
-      subtitle={t('courtesy-contacts.email-description', { ns: 'recapiti' })}
+      title={
+        <Typography
+          variant="h6"
+          fontSize={{ xs: '22px', lg: '24px' }}
+          fontWeight={700}
+          mb={2}
+          data-testid="emailContactTitle"
+        >
+          {t('courtesy-contacts.email-title', { ns: 'recapiti' })}
+        </Typography>
+      }
+      subtitle={
+        <Chip
+          label={t(`status.${isActive ? 'active' : 'inactive'}`, { ns: 'recapiti' })}
+          color={getChipColor()}
+          size="small"
+          sx={{ mb: 2 }}
+        />
+      }
+      actions={getActions()}
+      expanded={isActive}
+      data-testid="emailContact"
     >
+      {!isActive && (
+        <Typography variant="body1" fontSize={{ xs: '14px', lg: '18px' }} mb={3}>
+          {t('courtesy-contacts.email-empty-description', { ns: 'recapiti' })}
+        </Typography>
+      )}
       <DefaultDigitalContact
         label={t(`courtesy-contacts.email-to-add`, { ns: 'recapiti' })}
         value={currentValue}
@@ -171,12 +270,13 @@ const EmailContactItem: React.FC = () => {
         }}
         insertButtonLabel={t(`courtesy-contacts.email-add`, { ns: 'recapiti' })}
         onSubmit={handleSubmit}
-        onDelete={() => {
-          setModalOpen(ModalType.DELETE);
-          // eslint-disable-next-line functional/immutable-data
-          currentAddress.current = { value: currentValue };
-        }}
       />
+      {isActive && (
+        <Typography variant="body1" fontSize={{ xs: '14px', lg: '18px' }} mt={2}>
+          {t('courtesy-contacts.email-filled-description', { ns: 'recapiti' })}
+        </Typography>
+      )}
+      {!defaultSMSAddress && <EmailSmsComponent />}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
         value={currentAddress.current.value}

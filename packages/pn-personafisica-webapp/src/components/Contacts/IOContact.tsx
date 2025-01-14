@@ -174,7 +174,13 @@ const IOContact: React.FC = () => {
   return (
     <PnInfoCard
       title={
-        <Typography variant="h6" fontWeight={700} mb={2} data-testid="ioContactTitle">
+        <Typography
+          variant="h6"
+          fontSize={{ xs: '22px', lg: '24px' }}
+          fontWeight={700}
+          mb={2}
+          data-testid="ioContactTitle"
+        >
           {t('io-contact.title', { ns: 'recapiti' })}
         </Typography>
       }
@@ -216,7 +222,7 @@ const IOContact: React.FC = () => {
       <Typography
         mt={2}
         variant="body1"
-        fontSize="16px"
+        fontSize={{ xs: '14px', lg: '18px' }}
         color="text.secondary"
         data-testid="ioContactDescription"
       >

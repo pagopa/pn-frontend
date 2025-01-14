@@ -138,7 +138,17 @@ const LegalContacts = () => {
 
   return (
     <PnInfoCard
-      title={t('legal-contacts.title', { ns: 'recapiti' })}
+      title={
+        <Typography
+          variant="h6"
+          fontSize={{ xs: '22px', lg: '24px' }}
+          fontWeight={700}
+          mb={2}
+          data-testid="legalContactsTitle"
+        >
+          {t('legal-contacts.title', { ns: 'recapiti' })}
+        </Typography>
+      }
       subtitle={getSubtitle()}
       actions={getActions()}
       expanded={isActive}
@@ -151,7 +161,7 @@ const LegalContacts = () => {
         </Typography>
       )}
       {!hasNoLegalAddress && (
-        <Typography variant="body1" mt={2}>
+        <Typography variant="body1" fontSize={{ xs: '14px', lg: '18px' }} mt={2}>
           {getContactDescriptionMessage()}
         </Typography>
       )}

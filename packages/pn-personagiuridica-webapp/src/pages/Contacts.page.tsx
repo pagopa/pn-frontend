@@ -7,6 +7,8 @@ import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 import ContactsSummaryCards from '../components/Contacts/ContactsSummaryCards';
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import LegalContacts from '../components/Contacts/LegalContacts';
+import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
+import { ContactSource } from '../models/contacts';
 import { PROFILE } from '../navigation/routes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -56,7 +58,8 @@ const Contacts = () => {
       />
       <ApiErrorWrapper apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES} reloadAction={fetchAddresses}>
         <ContactsSummaryCards />
-        <Stack direction="column" spacing={6}>
+        <DomicileBanner source={ContactSource.RECAPITI} />
+        <Stack direction="column" spacing={2}>
           <LegalContacts />
           <CourtesyContacts />
         </Stack>

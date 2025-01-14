@@ -33,7 +33,10 @@ describe('testing EmailContactItem', () => {
     // render component
     const { container } = render(<EmailContactItem />);
     expect(container).toHaveTextContent('courtesy-contacts.email-title');
-    expect(container).toHaveTextContent('courtesy-contacts.email-description');
+    expect(container).toHaveTextContent('status.inactive');
+    expect(container).toHaveTextContent('courtesy-contacts.email-empty-description');
+    expect(container).toHaveTextContent('courtesy-contacts.email-sms-updates');
+    expect(container).toHaveTextContent('courtesy-contacts.email-sms-add');
     const form = container.querySelector('form');
     const input = form!.querySelector(`[name="default_email"]`);
     // set invalid values
@@ -150,8 +153,8 @@ describe('testing EmailContactItem', () => {
     expect(emailValue).toHaveTextContent(mailValue);
     const editButton = getById(form!, 'modifyContact-default_email');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default_email');
-    expect(deleteButton).toBeInTheDocument();
+    const disableBtn = screen.getByRole('button', { name: 'disable' });
+    expect(disableBtn).toBeInTheDocument();
   });
 
   it('override an existing email with a new one', async () => {
@@ -241,8 +244,9 @@ describe('testing EmailContactItem', () => {
     expect(mailValue).toHaveTextContent(emailValue);
     editButton = getById(form!, 'modifyContact-default_email');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default_email');
-    expect(deleteButton).toBeInTheDocument();
+    const disableBtn = screen.getByRole('button', { name: 'disable' });
+    expect(disableBtn).toBeInTheDocument();
+    expect(disableBtn).toHaveTextContent('disable');
   });
 
   it('delete email', async () => {
@@ -254,9 +258,10 @@ describe('testing EmailContactItem', () => {
         },
       },
     });
-    const buttons = result.container.querySelectorAll('button');
+    const disableBtn = screen.getByRole('button', { name: 'disable' });
+    expect(disableBtn).toBeInTheDocument();
     // click on cancel
-    fireEvent.click(buttons[1]);
+    fireEvent.click(disableBtn);
     let dialog = await waitFor(() => screen.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
     let dialogButtons = dialog.querySelectorAll('button');
@@ -264,7 +269,7 @@ describe('testing EmailContactItem', () => {
     fireEvent.click(dialogButtons[0]);
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
     // click on confirm
-    fireEvent.click(buttons[1]);
+    fireEvent.click(disableBtn);
     dialog = await waitFor(() => screen.getByRole('dialog'));
     dialogButtons = dialog.querySelectorAll('button');
     fireEvent.click(dialogButtons[1]);

@@ -244,7 +244,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
         {!editMode && (
           <Stack
             direction={{ xs: 'column', lg: 'row' }}
-            spacing={3}
+            spacing={{ xs: 2, lg: 3 }}
             alignItems="start"
             sx={{ mb: 2 }}
           >

@@ -33,8 +33,7 @@ describe('test SmsContactItem', () => {
   it('type in an invalid number', async () => {
     // render component
     const { container } = render(<SmsContactItem />);
-    expect(container).toHaveTextContent('courtesy-contacts.sms-title');
-    expect(container).toHaveTextContent('courtesy-contacts.sms-description');
+    expect(container).toHaveTextContent('courtesy-contacts.sms-to-add');
     const form = container.querySelector('form');
     const input = form!.querySelector(`[name="default_sms"]`);
     // add invalid values
@@ -59,6 +58,9 @@ describe('test SmsContactItem', () => {
     const { container, getByRole } = render(<SmsContactItem />, {
       preloadedState: { contactsState: { digitalAddresses: [defaultAddress] } },
     });
+    expect(container).toHaveTextContent('courtesy-contacts.sms-title');
+    expect(container).toHaveTextContent('status.active');
+    expect(container).toHaveTextContent('courtesy-contacts.sms-description');
     const form = container.querySelector('form');
     const phoneValue = getById(form!, 'default_sms-typography');
     expect(phoneValue).toHaveTextContent(defaultAddress?.value!);
@@ -93,8 +95,8 @@ describe('test SmsContactItem', () => {
       })
       .reply(204);
     const result = render(<SmsContactItem />);
-    // insert new phone
-    const form = result.container.querySelector('form');
+    // // insert new phone
+    let form = result.container.querySelector('form');
     const input = form!.querySelector(`[name="default_sms"]`);
     fireEvent.change(input!, { target: { value: phoneValue } });
     await waitFor(() => expect(input!).toHaveValue(phoneValue));
@@ -148,13 +150,16 @@ describe('test SmsContactItem', () => {
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
+    // the component should have been re-rendered, need to take the updated form
+    form = result.container.querySelector('form');
     const smsValue = getById(form!, 'default_sms-typography');
     expect(smsValue).toBeInTheDocument();
     expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
     const editButton = getById(form!, 'modifyContact-default_sms');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default_sms');
-    expect(deleteButton).toBeInTheDocument();
+    const disableBtn = screen.getByRole('button', { name: 'disable' });
+    expect(disableBtn).toBeInTheDocument();
+    expect(disableBtn).toHaveTextContent('disable');
   });
 
   it('override an existing phone number with a new one', async () => {
@@ -242,8 +247,9 @@ describe('test SmsContactItem', () => {
     expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
     editButton = getById(form!, 'modifyContact-default_sms');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default_sms');
-    expect(deleteButton).toBeInTheDocument();
+    const disableBtn = screen.getByRole('button', { name: 'disable' });
+    expect(disableBtn).toBeInTheDocument();
+    expect(disableBtn).toHaveTextContent('disable');
   });
 
   it('delete phone number', async () => {
@@ -252,9 +258,10 @@ describe('test SmsContactItem', () => {
     const result = render(<SmsContactItem />, {
       preloadedState: { contactsState: { digitalAddresses: [defaultAddress] } },
     });
-    const buttons = result.container.querySelectorAll('button');
+    const disableBtn = screen.getByRole('button', { name: 'disable' });
+    expect(disableBtn).toBeInTheDocument();
     // click on cancel
-    fireEvent.click(buttons[1]);
+    fireEvent.click(disableBtn);
     let dialog = await waitFor(() => screen.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
     let dialogButtons = dialog.querySelectorAll('button');
@@ -262,7 +269,7 @@ describe('test SmsContactItem', () => {
     fireEvent.click(dialogButtons[0]);
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
     // click on confirm
-    fireEvent.click(buttons[1]);
+    fireEvent.click(disableBtn);
     dialog = await waitFor(() => screen.getByRole('dialog'));
     dialogButtons = dialog.querySelectorAll('button');
     fireEvent.click(dialogButtons[1]);

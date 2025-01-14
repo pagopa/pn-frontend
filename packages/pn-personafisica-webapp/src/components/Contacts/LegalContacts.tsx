@@ -138,7 +138,17 @@ const LegalContacts = () => {
 
   return (
     <PnInfoCard
-      title={t('legal-contacts.title', { ns: 'recapiti' })}
+      title={
+        <Typography
+          variant="h6"
+          fontSize={{ xs: '22px', lg: '24px' }}
+          fontWeight={700}
+          mb={2}
+          data-testid="legalContactsTitle"
+        >
+          {t('legal-contacts.title', { ns: 'recapiti' })}
+        </Typography>
+      }
       subtitle={getSubtitle()}
       actions={getActions()}
       expanded={isActive}
@@ -146,12 +156,12 @@ const LegalContacts = () => {
     >
       {(isValidatingPec || hasPecActive) && <PecContactItem />}
       {hasSercqSendActive && !isValidatingPec && (
-        <Typography variant="body1" sx={{ fontWeight: '600', mb: 2 }}>
+        <Typography variant="body1" fontWeight={600} mb={2} fontSize={{ xs: '14px', lg: '18px' }}>
           {t('legal-contacts.sercq-send-title', { ns: 'recapiti' })}
         </Typography>
       )}
       {!hasNoLegalAddress && (
-        <Typography variant="body1" mt={2}>
+        <Typography variant="body1" mt={2} fontSize={{ xs: '14px', lg: '18px' }}>
           {getContactDescriptionMessage()}
         </Typography>
       )}
