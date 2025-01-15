@@ -8,6 +8,7 @@ import ContactsSummaryCards from '../components/Contacts/ContactsSummaryCards';
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import LegalContacts from '../components/Contacts/LegalContacts';
 import SpecialContacts from '../components/Contacts/SpecialContacts';
+import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
@@ -73,24 +74,29 @@ const Contacts = () => {
   );
 
   return (
-    <Box p={3}>
-      <TitleBox
-        variantTitle="h4"
-        title={t('title')}
-        subTitle={subtitle}
-        variantSubTitle={'body1'}
-      />
-      <ApiErrorWrapper apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES} reloadAction={fetchAddresses}>
-        <ContactsSummaryCards />
-        <Stack direction="column" spacing={6}>
-          <Box>
-            <LegalContacts />
-            {showSpecialContactsSection && <SpecialContacts />}
-          </Box>
-          <CourtesyContacts />
-        </Stack>
-      </ApiErrorWrapper>
-    </Box>
+    <LoadingPageWrapper isInitialized={true}>
+      <Box p={3}>
+        <TitleBox
+          variantTitle="h4"
+          title={t('title')}
+          subTitle={subtitle}
+          variantSubTitle={'body1'}
+        />
+        <ApiErrorWrapper
+          apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
+          reloadAction={fetchAddresses}
+        >
+          <ContactsSummaryCards />
+          <Stack direction="column" spacing={6}>
+            <Box>
+              <LegalContacts />
+              {showSpecialContactsSection && <SpecialContacts />}
+            </Box>
+            <CourtesyContacts />
+          </Stack>
+        </ApiErrorWrapper>
+      </Box>
+    </LoadingPageWrapper>
   );
 };
 

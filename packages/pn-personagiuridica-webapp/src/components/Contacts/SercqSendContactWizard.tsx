@@ -42,9 +42,10 @@ enum ModalType {
 
 type Props = {
   goToNextStep?: () => void;
+  setShowPecWizard: (showPecWizard: boolean) => void;
 };
 
-const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
+const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWizard }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
 
@@ -243,7 +244,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
           <Typography variant="body2" mb={1}>
             {t('legal-contacts.sercq-send-wizard.step_1.have-pec-description')}
           </Typography>
-          <ButtonNaked color="primary" size="medium" onClick={() => console.log('Inserisci PEC')}>
+          <ButtonNaked color="primary" size="medium" onClick={() => setShowPecWizard(true)}>
             {t('legal-contacts.sercq-send-wizard.step_1.insert-pec')}
           </ButtonNaked>
         </Box>

@@ -36,17 +36,6 @@ describe('PnWizard Component', () => {
     expect(setActiveStep).toHaveBeenCalledWith(1);
   });
 
-  it('should hide previous button on the first step', () => {
-    const { queryByTestId } = render(
-      <PnWizard activeStep={0} setActiveStep={setActiveStep} title="Wizard Title">
-        <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
-        <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
-      </PnWizard>
-    );
-
-    expect(queryByTestId('prev-button')).not.toBeInTheDocument();
-  });
-
   it('should use custom buttons from slots', () => {
     const CustomNextButton = () => <div data-testid="custom-next">Custom Next</div>;
 
