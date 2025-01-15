@@ -24,7 +24,7 @@ type Props = {
   actions?: Array<ReactElement>;
   expanded?: boolean;
   slotProps?: {
-    Card: CardProps & { 'data-testid': string };
+    Card: CardProps & { 'data-testid'?: string };
   };
   children: ReactNode;
 };
