@@ -91,6 +91,8 @@ const LegalContacts = () => {
   const showSpecialContactsSection = specialAddresses.length > 0;
   const blockDisableDefaultLegalContact = showSpecialContactsSection;
 
+  const channelType = hasSercqSendActive ? ChannelType.SERCQ_SEND : ChannelType.PEC;
+
   type SubtitleParams = {
     label: string;
     color: ChipOwnProps['color'];
@@ -124,24 +126,21 @@ const LegalContacts = () => {
       deleteAddress({
         addressType: AddressType.LEGAL,
         senderId: 'default',
-        channelType: hasSercqSendActive ? ChannelType.SERCQ_SEND : ChannelType.PEC,
+        channelType,
       })
     )
       .unwrap()
       .then(() => {
         PFEventStrategyFactory.triggerEvent(
-          hasSercqSendActive
-            ? PFEventsType.SEND_REMOVE_SERCQ_SEND_SUCCESS
-            : PFEventsType.SEND_REMOVE_PEC_SUCCESS,
+          PFEventsType[`SEND_REMOVE_${channelType}_SUCCESS`],
           'default'
         );
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t(
-              `legal-contacts.${hasSercqSendActive ? 'sercq_send' : 'pec'}-removed-successfully`,
-              { ns: 'recapiti' }
-            ),
+            message: t(`legal-contacts.${channelType.toLowerCase()}-removed-successfully`, {
+              ns: 'recapiti',
+            }),
           })
         );
       })
@@ -183,8 +182,8 @@ const LegalContacts = () => {
     return '';
   };
 
-  const removeModalTitle = hasSercqSendActive ? 'remove-sercq-send-title' : 'remove-pec-title';
-  const removeModalBody = hasSercqSendActive ? 'remove-sercq-send-message' : 'remove-pec-message';
+  const removeModalTitle = `remove-${channelType.toLowerCase()}-send-title`;
+  const removeModalBody = `remove-${channelType.toLowerCase()}-message`;
 
   return (
     <PnInfoCard
