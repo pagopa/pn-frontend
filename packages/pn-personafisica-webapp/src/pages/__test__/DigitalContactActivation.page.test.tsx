@@ -7,6 +7,7 @@ import {
   acceptTosPrivacyConsentBodyMock,
   sercqSendTosPrivacyConsentMock,
 } from '../../__mocks__/Consents.mock';
+import { digitalAddressesSercq } from '../../__mocks__/Contacts.mock';
 import { fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { AddressType, ChannelType, IOAllowedValues } from '../../models/contacts';
@@ -57,6 +58,30 @@ describe('DigitalContactActivation', () => {
     expect(step1Label).toBeInTheDocument();
     const sercqSendContent = getByTestId('sercqSendContactWizard');
     expect(sercqSendContent).toBeInTheDocument();
+  });
+
+  it('renders pec contact wizard correctly', () => {
+    const { getByTestId } = render(<DigitalContactActivation />);
+    const pecSection = getByTestId('pec-section');
+    expect(pecSection).toBeInTheDocument();
+    const pecButton = within(pecSection).getByRole('button');
+    fireEvent.click(pecButton);
+    const pecWizard = getByTestId('pec-contact-wizard');
+    expect(pecWizard).toBeInTheDocument();
+  });
+
+  it('renders pec contact wizard if SERCQ SEND is already enabled', () => {
+    const { getByTestId } = render(<DigitalContactActivation />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: digitalAddressesSercq.filter(
+            (addr) => addr.channelType === ChannelType.SERCQ_SEND
+          ),
+        },
+      },
+    });
+    const pecSection = getByTestId('pec-contact-wizard');
+    expect(pecSection).toBeInTheDocument();
   });
 
   it('renders the second step label if has appIO and is disabled', async () => {

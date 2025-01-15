@@ -2,16 +2,7 @@ import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
-import {
-  Avatar,
-  Box,
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Avatar, Button, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import { IllusAppIoLogo, IllusSendLogo } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -45,7 +36,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
   };
 
   return (
-    <Stack spacing={2} data-testid="ioContactWizard">
+    <Stack useFlexGap spacing={2} data-testid="ioContactWizard">
       <Typography fontSize="22px" fontWeight={700}>
         {t('legal-contacts.sercq-send-wizard.step_2.title')}
       </Typography>
@@ -69,19 +60,17 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
         {t('legal-contacts.sercq-send-wizard.step_2.content')}
       </Typography>
 
-      <Box>
-        <List dense sx={{ p: 0, mx: 3, pb: 1, listStyleType: 'square' }}>
-          {sercqSendIoList.map((item, index) => (
-            <ListItem key={index} sx={{ display: 'list-item' }} disablePadding>
-              <ListItemText disableTypography>
-                <Typography variant="body2" fontSize="16px">
-                  <Trans i18nKey={item} t={(s: string) => s} />
-                </Typography>
-              </ListItemText>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
+      <List dense sx={{ p: 0, mx: 3, pb: 1, listStyleType: 'square' }}>
+        {sercqSendIoList.map((item, index) => (
+          <ListItem key={index} sx={{ display: 'list-item' }} disablePadding>
+            <ListItemText disableTypography>
+              <Typography variant="body2" fontSize="16px">
+                <Trans i18nKey={item} t={(s: string) => s} />
+              </Typography>
+            </ListItemText>
+          </ListItem>
+        ))}
+      </List>
 
       <Button
         variant="contained"
