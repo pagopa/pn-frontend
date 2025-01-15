@@ -1,6 +1,5 @@
 import { cloneElement, useState } from 'react';
 
-import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Tooltip, { TooltipProps } from '@mui/material/Tooltip';
 
 type Props = {
@@ -33,25 +32,23 @@ const CustomTooltip: React.FC<Props> = ({
   };
 
   return (
-    <ClickAwayListener onClickAway={handleTooltipClose}>
-      <Tooltip
-        arrow
-        leaveTouchDelay={5000}
-        title={tooltipContent}
-        onClose={handleTooltipClose}
-        open={openOnClick ? open : undefined}
-        disableHoverListener={openOnClick}
-        enterTouchDelay={0}
-        onOpen={onOpen}
-        {...tooltipProps}
-      >
-        {openOnClick
-          ? cloneElement(children, {
-              onClick: handleTooltipOpen,
-            })
-          : children}
-      </Tooltip>
-    </ClickAwayListener>
+    <Tooltip
+      arrow
+      leaveTouchDelay={5000}
+      title={tooltipContent}
+      onClose={handleTooltipClose}
+      open={openOnClick ? open : undefined}
+      disableHoverListener={openOnClick}
+      enterTouchDelay={0}
+      onOpen={onOpen}
+      {...tooltipProps}
+    >
+      {openOnClick
+        ? cloneElement(children, {
+            onClick: handleTooltipOpen,
+          })
+        : children}
+    </Tooltip>
   );
 };
 
