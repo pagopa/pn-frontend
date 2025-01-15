@@ -88,7 +88,7 @@ const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
               data-testid="prev-button"
               sx={{ mt: { xs: 2, lg: 0 } }}
             >
-              {t('button.annulla', { ns: 'common' })}
+              {t('button.indietro', { ns: 'common' })}
             </ButtonNaked>
           ),
         }}
