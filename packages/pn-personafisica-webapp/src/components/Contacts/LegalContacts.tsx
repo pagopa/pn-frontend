@@ -142,7 +142,7 @@ const LegalContacts = () => {
       subtitle={getSubtitle()}
       actions={getActions()}
       expanded={isActive}
-      data-testid="legalContacts"
+      slotProps={{ Card: { 'data-testid': 'legalContacts' } }}
     >
       {(isValidatingPec || hasPecActive) && <PecContactItem />}
       {hasSercqSendActive && !isValidatingPec && (
