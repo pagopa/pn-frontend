@@ -2,7 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { render } from '../../../__test__/test-utils';
-import { getConfiguration } from '../../../services/configuration.service';
+import { ROUTE_LOGIN } from '../../../navigation/routes.const';
 import { storageAarOps } from '../../../utility/storage';
 import Logout from '../Logout';
 
@@ -27,6 +27,6 @@ describe('Logout page', () => {
     );
     expect(storageAarOps.read()).toBeUndefined();
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
   });
 });

@@ -60,28 +60,13 @@
     "sercq_send-removed-successfully": "Domicile Numérique correctement désactivé",
     "sercq-send-io-title": "Activez SEND sur IO",
     "sercq-send-io-description": "Activez SEND - Notifiche Digitali sur IO pour<strong> recevoir directement dans l’app</strong> les communications envoyées à votre Domicile Numérique SEND.",
-    "sercq-send-io-advantages": "Sur IO",
-    "sercq-send-io-list": [
-      "<strong>Recevez les notifications en temps réel</strong>, dès que l’organisme les télécharge sur SEND",
-      "<strong>Ouvrez les documents joints</strong> dans l’app",
-      "<strong>Payez les montants dus</strong> si la notification prévoit un paiement"
-    ]
+    "sercq-send-io-advantages": "Sur IO"
   },
   "io-contact": {
     "title": "App IO",
     "description": "Lisez et gérez les communications à valeur juridique directement sur IO : lorsqu’une notification vous est destinée, vous la recevez dans l’app et vous pouvez payer d’éventuels frais.",
-    "dialog-description": "Vous recevrez un message dans l’app pour chaque nouvelle notification. Vous pourrez la lire et payer les frais éventuels directement sur IO.",
-    "enabled": "Servizio Notifiche Digitali activé",
-    "disabled": "Servizio Notifiche Digitali désactivé",
-    "unavailable": "Pour activer le service, téléchargez d’abord l’app IO",
     "enable": "Activez SEND sur IO",
     "download": "Téléchargez l’app IO",
-    "enable-modal": {
-      "title": "Voulez-vous activer le service « Notifiche Digitali » sur IO ?",
-      "checkbox": "J’ai compris",
-      "confirm": "Activer le service",
-      "content": "Si vous ne disposez pas de PEC et que vous accédez à la notification dans les 5 jours (120 heures) suivant l’envoi du message, vous ne recevrez pas d’avis de réception par lettre recommandée."
-    },
     "disable-modal": {
       "title": "Voulez-vous désactiver le service « Notifiche Digitali » sur IO ?",
       "confirm": "Désactiver le service",

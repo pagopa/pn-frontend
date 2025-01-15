@@ -3,11 +3,10 @@ import {
   /*  ShowChart */
   SupervisedUserCircle,
 } from '@mui/icons-material';
-import { SideMenuItem } from '@pagopa-pn/pn-commons';
+import { IS_DEVELOP, SideMenuItem } from '@pagopa-pn/pn-commons';
 
 import { PNRole } from '../models/user';
 import * as routes from '../navigation/routes.const';
-import { getConfiguration } from '../services/configuration.service';
 
 // const statisticsMenuItem = { label: 'menu.statistics', icon: ShowChart, route: routes.STATISTICHE };
 
@@ -39,7 +38,7 @@ export function getMenuItems(
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
 } {
-  if (getConfiguration().IS_DEVELOP) {
+  if (IS_DEVELOP) {
     return {
       menuItems: [...basicMenuItems],
       selfCareItems: selfcareMenuItems(idOrganization, lang),
