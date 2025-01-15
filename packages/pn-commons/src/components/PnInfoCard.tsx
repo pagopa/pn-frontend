@@ -24,7 +24,7 @@ type Props = {
   actions?: Array<ReactElement>;
   expanded?: boolean;
   slotProps?: {
-    Card: CardProps;
+    Card: CardProps & { 'data-testid'?: string };
   };
   children: ReactNode;
 };
@@ -97,7 +97,6 @@ const PnInfoCard: React.FC<Props> = ({
   expanded = false,
   slotProps,
   children,
-  ...rest
 }) => {
   const isMobile = useIsMobile();
   const [showDescription, setShowDescription] = useState(expanded);
@@ -131,7 +130,7 @@ const PnInfoCard: React.FC<Props> = ({
   }, [expanded]);
 
   return (
-    <Card sx={{ p: { xs: 2, lg: 3 }, ...slotProps }} {...rest}>
+    <Card sx={{ p: { xs: 2, lg: 3 }, ...slotProps?.Card.sx }} {...slotProps?.Card}>
       <CardHeader
         data-testid="PnInfoCardHeader"
         sx={{ p: 0, '.MuiCardHeader-action': { m: 0 } }}

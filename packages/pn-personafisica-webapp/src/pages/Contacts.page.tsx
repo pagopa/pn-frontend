@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Box, Link, Stack } from '@mui/material';
+import { Alert, Box, Link, Stack, Typography } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
 import ContactsSummaryCards from '../components/Contacts/ContactsSummaryCards';
@@ -21,7 +21,14 @@ import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFact
 const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
-  const addressesData = useAppSelector(contactsSelectors.selectAddresses);
+  const {
+    defaultPECAddress,
+    defaultAPPIOAddress,
+    defaultSERCQ_SENDAddress,
+    specialPECAddresses,
+    specialSERCQ_SENDAddresses,
+    addresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
   const { LANDING_SITE_URL } = getConfiguration();
 
   const fetchAddresses = useCallback(() => {
@@ -29,11 +36,24 @@ const Contacts = () => {
       .unwrap()
       .then(() => {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_YOUR_CONTACT_DETAILS, {
-          digitalAddresses: addressesData.addresses,
-          contactIO: addressesData.defaultAPPIOAddress,
+          digitalAddresses: addresses,
+          contactIO: defaultAPPIOAddress,
         });
       });
   }, []);
+
+  const hasDodEnabledAndValidatingPec =
+    (!defaultPECAddress?.pecValid && defaultSERCQ_SENDAddress) ||
+    specialSERCQ_SENDAddresses.some((sercqAddr) =>
+      specialPECAddresses.some(
+        (pecAddr) => !pecAddr.pecValid && pecAddr.senderId === sercqAddr.senderId
+      )
+    );
+
+  const hasValidatingPecSpecialContact = specialPECAddresses.some((address) => !address.pecValid);
+
+  const verifyingPecAddress =
+    (defaultPECAddress && !defaultPECAddress.pecValid) || hasValidatingPecSpecialContact;
 
   const faqWhatIsAarCompleteLink = useMemo(
     () =>
@@ -72,6 +92,10 @@ const Contacts = () => {
     />
   );
 
+  const bannerMessage = hasDodEnabledAndValidatingPec
+    ? 'legal-contacts.pec-validation-banner.dod-enabled-message'
+    : 'legal-contacts.pec-validation-banner.dod-disabled-message';
+
   return (
     <Box p={3}>
       <TitleBox
@@ -83,6 +107,14 @@ const Contacts = () => {
       <ApiErrorWrapper apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES} reloadAction={fetchAddresses}>
         <ContactsSummaryCards />
         <DomicileBanner source={ContactSource.RECAPITI} />
+        {verifyingPecAddress && (
+          <Alert data-testid="PecVerificationAlert" severity="info" sx={{ my: { xs: 2, lg: 4 } }}>
+            <Typography variant="inherit" sx={{ fontWeight: '600' }}>
+              {t('legal-contacts.pec-validation-banner.title', { ns: 'recapiti' })}
+            </Typography>
+            <Typography variant="inherit">{t(bannerMessage, { ns: 'recapiti' })}</Typography>
+          </Alert>
+        )}
         <Stack direction="column" spacing={2}>
           <LegalContacts />
           <IOContact />

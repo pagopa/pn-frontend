@@ -32,7 +32,7 @@ type Props = {
   onCancelInsert?: () => void;
 };
 
-const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
+const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
   (
     {
       label,
@@ -308,4 +308,4 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
   }
 );
 
-export default DefaultDigitalContact;
+export default DigitalContact;

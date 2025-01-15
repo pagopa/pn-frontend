@@ -19,8 +19,8 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
-import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
+import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import InformativeDialog from './InformativeDialog';
 
@@ -144,7 +144,7 @@ const SmsContactElem: React.FC<Props> = ({ onCancelInsert }) => {
 
   return (
     <>
-      <DefaultDigitalContact
+      <DigitalContact
         label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
         value={currentValue}
         channelType={ChannelType.SMS}

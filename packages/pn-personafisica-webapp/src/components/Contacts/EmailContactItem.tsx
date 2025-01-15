@@ -19,8 +19,8 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
-import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
+import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import InformativeDialog from './InformativeDialog';
 import SmsContactItem from './SmsContactItem';
@@ -223,7 +223,7 @@ const EmailContactItem: React.FC = () => {
   /*
    * if *some* value (phone number, email address) has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
-   * (the DefaultDigitalContact component includes the "update" button)
+   * (the DigitalContact component includes the "update" button)
    * if *no* value (phone number, email address) has been attached to the contact type,
    * then we show the input field allowing the user to enter it along with the button
    * to perform the addition.
@@ -254,11 +254,11 @@ const EmailContactItem: React.FC = () => {
       data-testid="emailContact"
     >
       {!isActive && (
-        <Typography variant="body1" fontSize={{ xs: '14px', lg: '18px' }} mb={3}>
+        <Typography variant="body1" fontSize={{ xs: '14px', lg: '16px' }} mb={3}>
           {t('courtesy-contacts.email-empty-description', { ns: 'recapiti' })}
         </Typography>
       )}
-      <DefaultDigitalContact
+      <DigitalContact
         label={t(`courtesy-contacts.email-to-add`, { ns: 'recapiti' })}
         value={currentValue}
         channelType={ChannelType.EMAIL}
@@ -272,7 +272,7 @@ const EmailContactItem: React.FC = () => {
         onSubmit={handleSubmit}
       />
       {isActive && (
-        <Typography variant="body1" fontSize={{ xs: '14px', lg: '18px' }} mt={2}>
+        <Typography variant="body1" fontSize={{ xs: '14px', lg: '16px' }} mt={2}>
           {t('courtesy-contacts.email-filled-description', { ns: 'recapiti' })}
         </Typography>
       )}
