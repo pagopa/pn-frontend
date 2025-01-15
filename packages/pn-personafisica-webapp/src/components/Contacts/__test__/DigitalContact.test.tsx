@@ -5,13 +5,13 @@ import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { ChannelType } from '../../../models/contacts';
-import DefaultDigitalContact from '../DefaultDigitalContact';
+import DigitalContact from '../DigitalContact';
 
 const mockSubmitCbk = vi.fn();
 const mockDeleteCbk = vi.fn();
 const mockCancelCbk = vi.fn();
 
-describe('DefaultDigitalContact Component', () => {
+describe('DigitalContact Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -23,7 +23,7 @@ describe('DefaultDigitalContact Component', () => {
   it('renders component - empty', async () => {
     // render component
     const { container } = render(
-      <DefaultDigitalContact
+      <DigitalContact
         label="Mocked label"
         value=""
         channelType={ChannelType.PEC}
@@ -56,7 +56,7 @@ describe('DefaultDigitalContact Component', () => {
   it('renders component - empty with cancelInsert button', async () => {
     // render component
     const result = render(
-      <DefaultDigitalContact
+      <DigitalContact
         label="Mocked label"
         value=""
         channelType={ChannelType.PEC}
@@ -82,7 +82,7 @@ describe('DefaultDigitalContact Component', () => {
   it('insert value', async () => {
     // render component
     const { container } = render(
-      <DefaultDigitalContact
+      <DigitalContact
         label="Mocked label"
         value=""
         channelType={ChannelType.PEC}
@@ -111,7 +111,7 @@ describe('DefaultDigitalContact Component', () => {
   it('insert invalid value', async () => {
     // render component
     const { container } = render(
-      <DefaultDigitalContact
+      <DigitalContact
         label="Mocked label"
         value=""
         channelType={ChannelType.PEC}
@@ -137,7 +137,7 @@ describe('DefaultDigitalContact Component', () => {
   it('renders component - filled', () => {
     // render component
     const { container } = render(
-      <DefaultDigitalContact
+      <DigitalContact
         label="Mocked label"
         value="mocked@pec.it"
         channelType={ChannelType.PEC}
@@ -163,7 +163,7 @@ describe('DefaultDigitalContact Component', () => {
   it('renders component - filled with verified icon', () => {
     // render component
     const result = render(
-      <DefaultDigitalContact
+      <DigitalContact
         label="Mocked label"
         value="mocked@pec.it"
         channelType={ChannelType.PEC}
@@ -189,7 +189,7 @@ describe('DefaultDigitalContact Component', () => {
         digitalElemRef.current.toggleEdit();
       };
       return (
-        <DefaultDigitalContact
+        <DigitalContact
           label="Mocked label"
           value="mocked@pec.it"
           channelType={ChannelType.PEC}
@@ -247,7 +247,7 @@ describe('DefaultDigitalContact Component', () => {
   it('edit with invalid value', async () => {
     // render component
     const { container } = render(
-      <DefaultDigitalContact
+      <DigitalContact
         label="Mocked label"
         value="mocked@pec.it"
         channelType={ChannelType.PEC}
@@ -275,7 +275,7 @@ describe('DefaultDigitalContact Component', () => {
   it('remove contact', () => {
     // render component
     const { container } = render(
-      <DefaultDigitalContact
+      <DigitalContact
         label="Mocked label"
         value="mocked@pec.it"
         channelType={ChannelType.PEC}

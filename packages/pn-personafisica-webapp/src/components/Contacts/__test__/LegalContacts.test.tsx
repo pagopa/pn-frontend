@@ -14,13 +14,13 @@ const defaultPecAddress = digitalLegalAddresses.find(
 describe('LegalContacts Component', async () => {
   it('renders component - PEC enabled', () => {
     // render component
-    const { container, getByText } = render(<LegalContacts />, {
+    const { container, getByText, getByTestId } = render(<LegalContacts />, {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
     });
 
     expect(container).toHaveTextContent('legal-contacts.title');
     expect(container).toHaveTextContent('status.active');
-    const pecContact = queryAllByTestId(container, `default_pecContact`)[0];
+    const pecContact = getByTestId(`default_pecContact`);
     expect(pecContact).toBeInTheDocument();
     const pecInput = pecContact.querySelector(`[name="default_pec"]`);
     expect(pecInput).not.toBeInTheDocument();
@@ -32,14 +32,13 @@ describe('LegalContacts Component', async () => {
     const descriptionText = getByText('legal-contacts.pec-description');
     expect(descriptionText).toBeInTheDocument();
 
-    const manageBtn = getByRole(container, 'button', { name: 'manage' });
+    const manageBtn = getByRole(container, 'button', { name: 'button.manage' });
     expect(manageBtn).toBeInTheDocument();
-    const disableBtn = getByRole(container, 'button', { name: 'disable' });
+    const disableBtn = getByRole(container, 'button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
   });
 
   it('renders component - SERCQ enabled', async () => {
-    // const { container, getByTestId, queryByTestId } = render(<LegalContacts />, {
     const { container } = render(<LegalContacts />, {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddressesSercq } },
     });
@@ -49,9 +48,9 @@ describe('LegalContacts Component', async () => {
     expect(container).toHaveTextContent('legal-contacts.sercq-send-title');
     expect(container).toHaveTextContent('legal-contacts.sercq-send-description');
 
-    const manageBtn = getByRole(container, 'button', { name: 'manage' });
+    const manageBtn = getByRole(container, 'button', { name: 'button.manage' });
     expect(manageBtn).toBeInTheDocument();
-    const disableBtn = getByRole(container, 'button', { name: 'disable' });
+    const disableBtn = getByRole(container, 'button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
 
     const defaultPecContacts = queryAllByTestId(container, `default_pecContact`);
@@ -59,7 +58,7 @@ describe('LegalContacts Component', async () => {
   });
 
   it('renders component - no contacts', async () => {
-    const { container, getByRole } = render(<LegalContacts />, {
+    const { container, getByRole, getByTestId } = render(<LegalContacts />, {
       preloadedState: { contactsState: { digitalAddresses: [] } },
     });
 
@@ -68,7 +67,13 @@ describe('LegalContacts Component', async () => {
     expect(container).toHaveTextContent('legal-contacts.sercq-send-info-advantages');
 
     // TODO: find a way to access sercq-send-info-list translations to test the EmptyLegalContacts content
-    const startButton = getByRole('button', { name: 'legal-contacts.sercq-send-start' });
+    const digitalNotificationsIcon = getByTestId('LaptopChromebookIcon');
+    expect(digitalNotificationsIcon).toBeInTheDocument();
+    const savingsIcon = getByTestId('SavingsIcon');
+    expect(savingsIcon).toBeInTheDocument();
+    const allInOnePlaceIcon = getByTestId('TouchAppIcon');
+    expect(allInOnePlaceIcon).toBeInTheDocument();
+    const startButton = getByRole('button', { name: 'button.start' });
     expect(startButton).toBeInTheDocument();
   });
 
@@ -88,14 +93,6 @@ describe('LegalContacts Component', async () => {
     expect(cancelValidationButton).toBeInTheDocument();
     const pecDescription = getByText('legal-contacts.pec-description');
     expect(pecDescription).toBeInTheDocument();
-
-    // TODO: add banner check during the rework of the specific feature
-    // const banner = within(container).getByTestId('PecVerificationAlert');
-    // expect(banner).toBeInTheDocument();
-    // const alertIcon = within(banner).getByTestId('InfoOutlinedIcon');
-    // expect(alertIcon).toBeInTheDocument();
-    // expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.title');
-    // expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.dod-enabled-message');
   });
 
   it('renders component - SERCQ disabled and validating PEC', async () => {

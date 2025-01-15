@@ -32,7 +32,7 @@ type Props = {
   onCancelInsert?: () => void;
 };
 
-const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
+const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
   (
     {
       label,
@@ -160,6 +160,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               type="submit"
               data-testid={`${senderId}_${contactType}-button`}
               sx={{ flexBasis: { xs: 'unset', lg: '33.33%' }, height: '43px', fontWeight: 700 }}
+              size="medium"
             >
               {insertButtonLabel}
             </Button>
@@ -307,4 +308,4 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
   }
 );
 
-export default DefaultDigitalContact;
+export default DigitalContact;
