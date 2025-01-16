@@ -98,7 +98,7 @@ const DelegatesByCompany = () => {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
       tableConfiguration: {
-        cellProps: { width: '11%' },
+        cellProps: { width: 'auto' },
       },
       cardConfiguration: {
         wrapValueInTypography: false,

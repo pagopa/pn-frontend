@@ -81,7 +81,7 @@ const Delegates = () => {
     {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
-      cellProps: { width: '14%' },
+      cellProps: { width: 'auto' },
     },
     {
       id: 'status',
