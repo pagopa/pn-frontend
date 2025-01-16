@@ -34,7 +34,7 @@ const StatusTooltip = ({
           },
         }}
         data-testid={`statusChip-${label}`}
-        aria-label={`${label}: ${tooltipContent}`}
+        aria-label={`${label}: ${tooltip}`}
       />
     </CustomTooltip>
   );
