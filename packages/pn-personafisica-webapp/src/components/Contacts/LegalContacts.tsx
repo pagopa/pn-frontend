@@ -90,7 +90,8 @@ const LegalContacts = () => {
   const showSpecialContactsSection = specialAddresses.length > 0;
   const blockDisableDefaultLegalContact = showSpecialContactsSection;
 
-  const channelType = hasSercqSendActive ? ChannelType.SERCQ_SEND : ChannelType.PEC;
+  const channelType =
+    hasSercqSendActive && !isValidatingPec ? ChannelType.SERCQ_SEND : ChannelType.PEC;
 
   type SubtitleParams = {
     label: string;
