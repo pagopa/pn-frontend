@@ -1,18 +1,56 @@
+import MockAdapter from 'axios-mock-adapter';
+import { vi } from 'vitest';
+
 import {
+  digitalAddresses,
   digitalAddressesPecValidation,
   digitalLegalAddresses,
   digitalLegalAddressesSercq,
 } from '../../../__mocks__/Contacts.mock';
-import { getByRole, queryAllByTestId, render, within } from '../../../__test__/test-utils';
-import { ChannelType } from '../../../models/contacts';
+import {
+  fireEvent,
+  getByRole,
+  queryAllByTestId,
+  render,
+  screen,
+  testStore,
+  waitFor,
+  within,
+} from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
+import { AddressType, ChannelType } from '../../../models/contacts';
 import LegalContacts from '../LegalContacts';
 
 const defaultPecAddress = digitalLegalAddresses.find(
   (addr) => addr.senderId === 'default' && addr.pecValid && addr.channelType === ChannelType.PEC
 );
+const assignFn = vi.fn();
 
 describe('LegalContacts Component', async () => {
-  it('renders component - PEC enabled', () => {
+  let mock: MockAdapter;
+  const originalLocation = window.location;
+  const originalNavigator = window.navigator;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { assign: assignFn },
+    });
+  });
+
+  afterEach(() => {
+    mock.reset();
+    vi.clearAllMocks();
+  });
+
+  afterAll(() => {
+    mock.restore();
+    Object.defineProperty(window, 'location', { configurable: true, value: originalLocation });
+    Object.defineProperty(window, 'navigator', { value: originalNavigator });
+  });
+
+  it('renders component - PEC enabled', async () => {
     // render component
     const { container, getByText, getByTestId } = render(<LegalContacts />, {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
@@ -36,6 +74,20 @@ describe('LegalContacts Component', async () => {
     expect(manageBtn).toBeInTheDocument();
     const disableBtn = getByRole(container, 'button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
+
+    // verify digital domicile could not be disabled
+    fireEvent.click(disableBtn);
+    const dialog = await waitFor(() => screen.getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+    const confirmBtn = screen.getByRole('button', { name: 'button.understand' });
+    fireEvent.click(confirmBtn);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+
+    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(
+      digitalLegalAddresses
+    );
   });
 
   it('renders component - SERCQ enabled', async () => {
@@ -111,5 +163,55 @@ describe('LegalContacts Component', async () => {
     expect(cancelValidationButton).toBeInTheDocument();
     const pecDescription = getByText('legal-contacts.pec-description');
     expect(pecDescription).toBeInTheDocument();
+  });
+
+  it('disable digital domicile', async () => {
+    mock.onDelete('bff/v1/addresses/LEGAL/default/PEC').reply(200);
+    const initialAddresses = digitalAddresses.filter(
+      (addr) => addr.addressType !== AddressType.LEGAL || addr.senderId === 'default'
+    );
+    const { container, getByTestId, getByText } = render(<LegalContacts />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: initialAddresses,
+        },
+      },
+    });
+
+    expect(container).toHaveTextContent('legal-contacts.title');
+    expect(container).toHaveTextContent('status.active');
+    const pecContact = getByTestId(`default_pecContact`);
+    expect(pecContact).toBeInTheDocument();
+    const pecInput = pecContact.querySelector(`[name="default_pec"]`);
+    expect(pecInput).not.toBeInTheDocument();
+    const pec = getByText(defaultPecAddress!.value);
+    expect(pec).toBeInTheDocument();
+    const pecButtons = within(pecContact).getAllByRole('button');
+    expect(pecButtons[0]).toBeEnabled();
+    expect(pecButtons[0].textContent).toMatch('button.modifica');
+    const descriptionText = getByText('legal-contacts.pec-description');
+    expect(descriptionText).toBeInTheDocument();
+
+    const manageBtn = getByRole(container, 'button', { name: 'button.manage' });
+    expect(manageBtn).toBeInTheDocument();
+    const disableBtn = getByRole(container, 'button', { name: 'button.disable' });
+    expect(disableBtn).toBeInTheDocument();
+
+    fireEvent.click(disableBtn);
+    const dialog = await waitFor(() => screen.getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+    const confirmBtn = screen.getByRole('button', { name: 'button.conferma' });
+    fireEvent.click(confirmBtn);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(1);
+    });
+
+    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(
+      initialAddresses.filter((addr) => addr.addressType !== AddressType.LEGAL)
+    );
   });
 });
