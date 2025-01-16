@@ -30,6 +30,7 @@ const StatusTooltip = ({
           ...chipProps,
           cursor: 'default',
         }}
+        aria-live="polite"
         data-testid={`statusChip-${label}`}
       />
     </CustomTooltip>
