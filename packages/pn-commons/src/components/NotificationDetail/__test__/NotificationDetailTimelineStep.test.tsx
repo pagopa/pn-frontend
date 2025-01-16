@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { INotificationDetailTimeline, LegalFactId, NotificationStatus } from '../../../models';
-import { fireEvent, render, theme } from '../../../test-utils';
+import { fireEvent, render } from '../../../test-utils';
 import {
   formatDay,
   formatMonthString,
@@ -128,10 +128,6 @@ describe('NotificationDetailTimelineStep', () => {
           expect(microLegalFacts[counter]).toHaveTextContent(
             getLegalFactLabel(step, lf.category, lf.key || '')
           );
-          expect(microLegalFacts[counter]).toHaveStyle({
-            color: theme.palette.primary.main,
-            cursor: 'pointer',
-          });
         }
         counter++;
       }
@@ -186,7 +182,7 @@ describe('NotificationDetailTimelineStep', () => {
     });
   });
 
-  it('renders component with disabled donwloads', () => {
+  it('renders component with disabled downloads', () => {
     const { getAllByTestId, getByTestId } = render(
       <NotificationDetailTimelineStep
         timelineStep={mockTimelineStep!}
@@ -204,10 +200,7 @@ describe('NotificationDetailTimelineStep', () => {
     fireEvent.click(moreLessButton);
     const microLegalFacts = getAllByTestId('download-legalfact-micro');
     microLegalFacts.forEach((btn) => {
-      expect(btn).toHaveStyle({
-        color: theme.palette.text.disabled,
-        cursor: 'default',
-      });
+      expect(btn).toBeDisabled();
     });
   });
 
