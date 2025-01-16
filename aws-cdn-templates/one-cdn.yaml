@@ -315,9 +315,65 @@ Resources:
                   - HEAD
                 TargetOriginId: pn-SelfCare-PG
                 ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /auth/icons/*
+              - !Ref "AWS::NoValue"
+          - Fn::If:
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /auth/index.html
+              - !Ref "AWS::NoValue"
+          - Fn::If:
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
                 CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
                 PathPattern: /auth*
+              - !Ref "AWS::NoValue"
+          - Fn::If:
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /dashboard/icons/*
+              - !Ref "AWS::NoValue"
+          - Fn::If:
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /dashboard/index.html
               - !Ref "AWS::NoValue"
           - Fn::If:
               - IsPortalePg
@@ -343,9 +399,65 @@ Resources:
                   - HEAD
                 TargetOriginId: pn-SelfCare-PG
                 ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /assistenza/icons/*
+              - !Ref "AWS::NoValue"
+          - Fn::If:
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /assistenza/index.html
+              - !Ref "AWS::NoValue"
+          - Fn::If:
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
                 CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
                 PathPattern: /assistenza*
+              - !Ref "AWS::NoValue"
+          - Fn::If:
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /onboarding/icons/*
+              - !Ref "AWS::NoValue"
+          - Fn::If:
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /onboarding/index.html
               - !Ref "AWS::NoValue"
           - Fn::If:
               - IsPortalePg
@@ -371,9 +483,37 @@ Resources:
                   - HEAD
                 TargetOriginId: pn-SelfCare-PG
                 ViewerProtocolPolicy: redirect-to-https
-                CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
                 ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
                 PathPattern: /assets*
+              - !Ref "AWS::NoValue"
+          - Fn::If:
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /microcomponents/static/icons/*
+              - !Ref "AWS::NoValue"
+          - Fn::If:
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /microcomponents/index.html
               - !Ref "AWS::NoValue"
           - Fn::If:
               - IsPortalePg
