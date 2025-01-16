@@ -6,13 +6,19 @@ import { Box, Typography } from '@mui/material';
 import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import PecContactWizard from '../components/Contacts/PecContactWizard';
 import SercqSendContactWizard from '../components/Contacts/SercqSendContactWizard';
+import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import { contactsSelectors } from '../redux/contact/reducers';
+import { useAppSelector } from '../redux/hooks';
 
 const DigitalContactActivation: React.FC = () => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
+  const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
 
   const [activeStep, setActiveStep] = useState(0);
+  const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress);
 
   const goToNextStep = () => {
     setActiveStep(activeStep + 1);
@@ -31,26 +37,36 @@ const DigitalContactActivation: React.FC = () => {
   };
 
   return (
-    <Box display="flex" justifyContent="center">
-      <Box sx={{ width: { xs: '100%', lg: '760px' } }}>
-        <PnWizard
-          title={
-            <Typography fontSize="28px" fontWeight={700}>
-              {t('legal-contacts.sercq-send-wizard.title')}
-            </Typography>
-          }
-          activeStep={activeStep}
-          setActiveStep={setActiveStep}
-          slots={{
-            nextButton: getNextButton,
-          }}
-        >
-          <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_1.title')}>
-            <SercqSendContactWizard goToNextStep={goToNextStep} />
-          </PnWizardStep>
-        </PnWizard>
+    <LoadingPageWrapper isInitialized={true}>
+      <Box display="flex" justifyContent="center">
+        <Box sx={{ width: { xs: '100%', lg: '760px' } }}>
+          {!showPecWizard ? (
+            <PnWizard
+              title={
+                <Typography fontSize="28px" fontWeight={700}>
+                  {t('legal-contacts.sercq-send-wizard.title')}
+                </Typography>
+              }
+              activeStep={activeStep}
+              setActiveStep={setActiveStep}
+              slots={{
+                nextButton: getNextButton,
+                prevButton: () => <></>,
+              }}
+            >
+              <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_1.title')}>
+                <SercqSendContactWizard
+                  goToNextStep={goToNextStep}
+                  setShowPecWizard={setShowPecWizard}
+                />
+              </PnWizardStep>
+            </PnWizard>
+          ) : (
+            <PecContactWizard setShowPecWizard={setShowPecWizard} />
+          )}
+        </Box>
       </Box>
-    </Box>
+    </LoadingPageWrapper>
   );
 };
 

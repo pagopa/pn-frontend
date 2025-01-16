@@ -9,6 +9,7 @@ import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import IOContact from '../components/Contacts/IOContact';
 import LegalContacts from '../components/Contacts/LegalContacts';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
+import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
 import { ContactSource } from '../models/contacts';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
@@ -97,31 +98,36 @@ const Contacts = () => {
     : 'legal-contacts.pec-validation-banner.dod-disabled-message';
 
   return (
-    <Box p={3}>
-      <TitleBox
-        variantTitle="h4"
-        title={t('title')}
-        subTitle={subtitle}
-        variantSubTitle={'body1'}
-      />
-      <ApiErrorWrapper apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES} reloadAction={fetchAddresses}>
-        <ContactsSummaryCards />
-        <DomicileBanner source={ContactSource.RECAPITI} />
-        {verifyingPecAddress && (
-          <Alert data-testid="PecVerificationAlert" severity="info" sx={{ my: { xs: 2, lg: 4 } }}>
-            <Typography variant="inherit" sx={{ fontWeight: '600' }}>
-              {t('legal-contacts.pec-validation-banner.title', { ns: 'recapiti' })}
-            </Typography>
-            <Typography variant="inherit">{t(bannerMessage, { ns: 'recapiti' })}</Typography>
-          </Alert>
-        )}
-        <Stack direction="column" spacing={2}>
-          <LegalContacts />
-          <IOContact />
-          <CourtesyContacts />
-        </Stack>
-      </ApiErrorWrapper>
-    </Box>
+    <LoadingPageWrapper isInitialized={true}>
+      <Box p={3}>
+        <TitleBox
+          variantTitle="h4"
+          title={t('title')}
+          subTitle={subtitle}
+          variantSubTitle={'body1'}
+        />
+        <ApiErrorWrapper
+          apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
+          reloadAction={fetchAddresses}
+        >
+          <ContactsSummaryCards />
+          <DomicileBanner source={ContactSource.RECAPITI} />
+          {verifyingPecAddress && (
+            <Alert data-testid="PecVerificationAlert" severity="info" sx={{ my: { xs: 2, lg: 4 } }}>
+              <Typography variant="inherit" sx={{ fontWeight: '600' }}>
+                {t('legal-contacts.pec-validation-banner.title', { ns: 'recapiti' })}
+              </Typography>
+              <Typography variant="inherit">{t(bannerMessage, { ns: 'recapiti' })}</Typography>
+            </Alert>
+          )}
+          <Stack direction="column" spacing={2}>
+            <LegalContacts />
+            <IOContact />
+            <CourtesyContacts />
+          </Stack>
+        </ApiErrorWrapper>
+      </Box>
+    </LoadingPageWrapper>
   );
 };
 

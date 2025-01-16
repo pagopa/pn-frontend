@@ -2,7 +2,7 @@ import React, { JSXElementConstructor, ReactElement, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Button, ButtonProps, Paper, Stack } from '@mui/material';
+import { Box, Button, ButtonProps, Paper, Stack, StackProps } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import checkChildren from '../../utility/children.utility';
@@ -26,6 +26,7 @@ type Props = {
     prevButton?: Omit<ButtonProps, 'onClick'> & {
       onClick?: (previous: () => void, step: number) => void;
     };
+    container?: Omit<StackProps, 'children'> & { 'data-testid'?: string };
   };
 };
 
@@ -75,7 +76,7 @@ const PnWizard: React.FC<Props> = ({
   };
 
   return (
-    <Stack display="flex" alignItems="center" justifyContent="center">
+    <Stack display="flex" alignItems="center" justifyContent="center" {...slotsProps?.container}>
       <Box p={3}>
         <ButtonNaked
           type="button"
@@ -98,16 +99,15 @@ const PnWizard: React.FC<Props> = ({
         </Paper>
 
         <Stack direction={{ xs: 'column-reverse', md: 'row' }}>
-          {activeStep !== 0 && (
-            <PrevButton
-              data-testid="prev-button"
-              sx={{ mt: { xs: 2, md: 0 } }}
-              {...slotsProps?.prevButton}
-              onClick={handlePrevStep}
-            >
-              {getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro')}
-            </PrevButton>
-          )}
+          <PrevButton
+            data-testid="prev-button"
+            sx={{ mt: { xs: 2, md: 0 } }}
+            {...slotsProps?.prevButton}
+            onClick={handlePrevStep}
+          >
+            {getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro')}
+          </PrevButton>
+
           <NextButton
             data-testid="next-button"
             variant="contained"

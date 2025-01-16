@@ -16,7 +16,6 @@ import { deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import DeleteDialog from './DeleteDialog';
-import InformativeDialog from './InformativeDialog';
 import PecContactItem from './PecContactItem';
 import SpecialContacts from './SpecialContacts';
 
@@ -88,6 +87,9 @@ const LegalContacts = () => {
   const isActive = (hasPecActive || hasSercqSendActive) && !isValidatingPec;
   const showSpecialContactsSection = specialAddresses.length > 0;
   const blockDisableDefaultLegalContact = showSpecialContactsSection;
+
+  const channelType =
+    hasSercqSendActive && !isValidatingPec ? ChannelType.SERCQ_SEND : ChannelType.PEC;
 
   type SubtitleParams = {
     label: string;
@@ -166,18 +168,6 @@ const LegalContacts = () => {
         ]
       : undefined;
 
-  const getContactDescriptionMessage = () => {
-    if (hasSercqSendActive && !isValidatingPec) {
-      return t('legal-contacts.sercq-send-description', { ns: 'recapiti' });
-    } else if (hasPecActive || isValidatingPec) {
-      return t('legal-contacts.pec-description', { ns: 'recapiti' });
-    }
-    return '';
-  };
-
-  const removeModalTitle = hasSercqSendActive ? 'remove-sercq-send-title' : 'remove-pec-title';
-  const removeModalBody = hasSercqSendActive ? 'remove-sercq-send-message' : 'remove-pec-message';
-
   return (
     <PnInfoCard
       title={
@@ -199,48 +189,30 @@ const LegalContacts = () => {
       {(isValidatingPec || hasPecActive) && <PecContactItem />}
       {hasSercqSendActive && !isValidatingPec && (
         <Typography variant="body1" fontWeight={600} mb={2} fontSize="18px">
-          {t('legal-contacts.sercq-send-title', { ns: 'recapiti' })}
+          {t('legal-contacts.sercq_send-title', { ns: 'recapiti' })}
         </Typography>
       )}
-      {!hasNoDefaultLegalAddress && (
-        <Typography variant="body1" mt={2} fontSize={{ xs: '14px', lg: '16px' }}>
-          {getContactDescriptionMessage()}
-        </Typography>
-      )}
-      {hasNoDefaultLegalAddress && <EmptyLegalContacts />}
-      {showSpecialContactsSection && <SpecialContacts />}
-      {blockDisableDefaultLegalContact ? (
-        <InformativeDialog
-          open={modalOpen}
-          title={t('legal-contacts.block-remove-digital-domicile-title', {
-            ns: 'recapiti',
-          })}
-          subtitle={t('legal-contacts.block-remove-digital-domicile-message', {
-            ns: 'recapiti',
-          })}
-          onConfirm={() => setModalOpen(false)}
-        />
+      {hasNoDefaultLegalAddress ? (
+        <EmptyLegalContacts />
       ) : (
-        <DeleteDialog
-          showModal={modalOpen}
-          removeModalTitle={t(
-            `legal-contacts.${blockDisableDefaultLegalContact ? 'block-' : ''}${removeModalTitle}`,
-            {
-              ns: 'recapiti',
-            }
-          )}
-          removeModalBody={t(
-            `legal-contacts.${blockDisableDefaultLegalContact ? 'block-' : ''}${removeModalBody}`,
-            {
-              ns: 'recapiti',
-              value: defaultPECAddress?.value,
-            }
-          )}
-          handleModalClose={() => setModalOpen(false)}
-          confirmHandler={deleteConfirmHandler}
-          blockDelete={blockDisableDefaultLegalContact}
-        />
+        <Typography variant="body1" mt={2} fontSize={{ xs: '14px', lg: '16px' }}>
+          {t(`legal-contacts.${channelType.toLowerCase()}-description`, { ns: 'recapiti' })}
+        </Typography>
       )}
+      {showSpecialContactsSection && <SpecialContacts />}
+      <DeleteDialog
+        showModal={modalOpen}
+        removeModalTitle={t('legal-contacts.block-remove-digital-domicile-title', {
+          ns: 'recapiti',
+        })}
+        removeModalBody={t('legal-contacts.block-remove-digital-domicile-message', {
+          ns: 'recapiti',
+          value: defaultPECAddress?.value,
+        })}
+        handleModalClose={() => setModalOpen(false)}
+        confirmHandler={deleteConfirmHandler}
+        blockDelete={blockDisableDefaultLegalContact}
+      />
     </PnInfoCard>
   );
 };

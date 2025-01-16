@@ -45,8 +45,8 @@ describe('LegalContacts Component', async () => {
 
     expect(container).toHaveTextContent('legal-contacts.title');
     expect(container).toHaveTextContent('status.active');
-    expect(container).toHaveTextContent('legal-contacts.sercq-send-title');
-    expect(container).toHaveTextContent('legal-contacts.sercq-send-description');
+    expect(container).toHaveTextContent('legal-contacts.sercq_send-title');
+    expect(container).toHaveTextContent('legal-contacts.sercq_send-description');
 
     const manageBtn = getByRole(container, 'button', { name: 'button.manage' });
     expect(manageBtn).toBeInTheDocument();

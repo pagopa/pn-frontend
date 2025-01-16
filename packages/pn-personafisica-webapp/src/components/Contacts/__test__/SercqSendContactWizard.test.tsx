@@ -28,10 +28,11 @@ describe('SercqSendContactWizard', () => {
   });
 
   const goToNextStep = vi.fn();
+  const setShowPecWizard = vi.fn();
 
   it('render components', async () => {
     const { getByText, getByTestId } = render(
-      <SercqSendContactWizard goToNextStep={goToNextStep} />
+      <SercqSendContactWizard goToNextStep={goToNextStep} setShowPecWizard={setShowPecWizard} />
     );
 
     expect(getByText('legal-contacts.sercq-send-wizard.step_1.title')).toBeInTheDocument();
@@ -46,7 +47,7 @@ describe('SercqSendContactWizard', () => {
 
   it('should not show pec section if default pec address is present', async () => {
     const { getByTestId, queryByTestId } = render(
-      <SercqSendContactWizard goToNextStep={goToNextStep} />,
+      <SercqSendContactWizard goToNextStep={goToNextStep} setShowPecWizard={setShowPecWizard} />,
       {
         preloadedState: {
           contactsState: {
@@ -87,7 +88,9 @@ describe('SercqSendContactWizard', () => {
       )
       .reply(200);
     // render component
-    const { getByTestId } = render(<SercqSendContactWizard goToNextStep={goToNextStep} />);
+    const { getByTestId } = render(
+      <SercqSendContactWizard goToNextStep={goToNextStep} setShowPecWizard={setShowPecWizard} />
+    );
     const activateButton = getByTestId('activateButton');
     fireEvent.click(activateButton);
 
