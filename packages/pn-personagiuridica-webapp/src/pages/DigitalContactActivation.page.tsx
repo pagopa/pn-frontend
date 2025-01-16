@@ -12,7 +12,11 @@ import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrap
 import { contactsSelectors } from '../redux/contact/reducers';
 import { useAppSelector } from '../redux/hooks';
 
-const DigitalContactActivation: React.FC = () => {
+type Props = {
+  isTransferring?: boolean;
+};
+
+const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
@@ -44,7 +48,7 @@ const DigitalContactActivation: React.FC = () => {
             <PnWizard
               title={
                 <Typography fontSize="28px" fontWeight={700}>
-                  {t('legal-contacts.sercq-send-wizard.title')}
+                  {t(`legal-contacts.sercq-send-wizard.title${isTransferring ? '-transfer' : ''}`)}
                 </Typography>
               }
               activeStep={activeStep}
@@ -52,6 +56,17 @@ const DigitalContactActivation: React.FC = () => {
               slots={{
                 nextButton: getNextButton,
                 prevButton: () => <></>,
+              }}
+              slotsProps={{
+                feedback: {
+                  title: t(
+                    `legal-contacts.sercq-send-wizard.feedback.title-${
+                      isTransferring ? 'transfer' : 'activation'
+                    }`
+                  ),
+                  buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
+                  onClick: () => navigate(-1),
+                },
               }}
             >
               <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_1.title')}>
@@ -62,7 +77,7 @@ const DigitalContactActivation: React.FC = () => {
               </PnWizardStep>
             </PnWizard>
           ) : (
-            <PecContactWizard setShowPecWizard={setShowPecWizard} />
+            <PecContactWizard setShowPecWizard={setShowPecWizard} isTransferring={isTransferring} />
           )}
         </Box>
       </Box>

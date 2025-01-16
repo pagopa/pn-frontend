@@ -83,6 +83,68 @@ describe('PnWizard Component', () => {
     expect(customPrevClick).toHaveBeenCalledTimes(1);
   });
 
+  it('should render feedback step', () => {
+    const { getByTestId } = render(
+      <PnWizard activeStep={2} setActiveStep={setActiveStep} title="Wizard Title" showFeedbackStep>
+        <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
+        <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
+      </PnWizard>
+    );
+
+    const feedbackStep = getByTestId('wizard-feedback-step');
+    expect(feedbackStep).toBeInTheDocument();
+  });
+
+  it('should not render feedback step', () => {
+    const { queryByTestId } = render(
+      <PnWizard
+        activeStep={2}
+        setActiveStep={setActiveStep}
+        title="Wizard Title"
+        showFeedbackStep={false}
+      >
+        <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
+        <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
+      </PnWizard>
+    );
+
+    const feedbackStep = queryByTestId('wizard-feedback-step');
+    expect(feedbackStep).not.toBeInTheDocument();
+  });
+
+  it('should render custom feedback step', () => {
+    const customFeedbackFn = vi.fn();
+
+    const { getByTestId } = render(
+      <PnWizard
+        activeStep={2}
+        setActiveStep={setActiveStep}
+        title="Wizard Title"
+        showFeedbackStep
+        slotsProps={{
+          feedback: {
+            title: 'Custom title',
+            buttonText: 'Custom button text',
+            onClick: customFeedbackFn,
+          },
+        }}
+      >
+        <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
+        <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
+      </PnWizard>
+    );
+
+    const feedbackStep = getByTestId('wizard-feedback-step');
+    expect(feedbackStep).toBeInTheDocument();
+
+    const title = getByTestId('wizard-feedback-title');
+    expect(title).toHaveTextContent('Custom title');
+    const button = getByTestId('wizard-feedback-button');
+    expect(button).toHaveTextContent('Custom button text');
+    fireEvent.click(button);
+    expect(customFeedbackFn).toHaveBeenCalledTimes(1);
+  });
+
   it('should throw an error if children are not PnWizardStep', () => {
     expect(() =>
       render(

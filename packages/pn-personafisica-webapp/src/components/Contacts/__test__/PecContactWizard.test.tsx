@@ -98,7 +98,7 @@ describe('PecContactWizard', () => {
       .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
 
     const result = render(<PecContactWizard setShowPecWizard={setShowPecWizardMock} />);
-    const { getByTestId, container } = result;
+    const { getByTestId, queryByTestId, container } = result;
 
     const pecInput = container.querySelector('[name="pec"]');
     fireEvent.change(pecInput!, { target: { value: VALID_PEC } });
@@ -119,5 +119,50 @@ describe('PecContactWizard', () => {
 
     expect(setShowPecWizardMock).toHaveBeenCalledWith(false);
     expect(setShowPecWizardMock).toHaveBeenCalledTimes(1);
+
+    const feedbackStep = queryByTestId('wizard-feedback-step');
+    expect(feedbackStep).not.toBeInTheDocument();
+  });
+
+  it('should render component and feedback step correctly when transferring', async () => {
+    mock
+      .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
+        value: VALID_PEC,
+      })
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
+
+    mock
+      .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
+        value: VALID_PEC,
+        verificationCode: '01234',
+      })
+      .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
+
+    const result = render(
+      <PecContactWizard setShowPecWizard={setShowPecWizardMock} isTransferring />
+    );
+    const { getByTestId, queryByTestId, container } = result;
+
+    const pecInput = container.querySelector('[name="pec"]');
+    fireEvent.change(pecInput!, { target: { value: VALID_PEC } });
+
+    const nextButton = getByTestId('next-button');
+    fireEvent.click(nextButton);
+
+    const dialog = await fillCodeDialog(result);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
+        value: VALID_PEC,
+        verificationCode: '01234',
+      });
+    });
+
+    await waitFor(() => expect(dialog).not.toBeInTheDocument());
+
+    const feedbackStep = queryByTestId('wizard-feedback-step');
+    expect(feedbackStep).toBeInTheDocument();
   });
 });

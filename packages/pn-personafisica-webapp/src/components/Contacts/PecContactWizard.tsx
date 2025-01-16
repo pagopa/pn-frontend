@@ -23,13 +23,15 @@ import { pecValidationSchema } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
 
 interface Props {
+  isTransferring?: boolean;
   setShowPecWizard: (showPecWizard: boolean) => void;
 }
 
-const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
+const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecWizard }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [activeStep, setActiveStep] = useState(0);
   const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
   const [openCodeModal, setOpenCodeModal] = useState(false);
 
@@ -82,7 +84,7 @@ const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
         }
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_SUCCESS, 'default');
         setOpenCodeModal(false);
-        navigate(-1);
+        return isTransferring ? setActiveStep(activeStep + 1) : navigate(-1);
       })
       .catch(() => {});
   };
@@ -92,11 +94,11 @@ const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
       <PnWizard
         title={
           <Typography fontSize="28px" fontWeight={700} data-testid="pec-wizard-title">
-            {t('legal-contacts.pec-contact-wizard.title')}
+            {t(`legal-contacts.pec-contact-wizard.title${isTransferring ? '-transfer' : ''}`)}
           </Typography>
         }
-        activeStep={0}
-        setActiveStep={() => null}
+        activeStep={activeStep}
+        setActiveStep={setActiveStep}
         slots={{
           prevButton: () => (
             <ButtonNaked
@@ -117,7 +119,17 @@ const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
           container: {
             'data-testid': 'pec-contact-wizard',
           },
+          feedback: {
+            title: t(
+              `legal-contacts.sercq-send-wizard.feedback.title-${
+                isTransferring ? 'transfer' : 'activation'
+              }`
+            ),
+            buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
+            onClick: () => navigate(-1),
+          },
         }}
+        showFeedbackStep={isTransferring}
       >
         <PnWizardStep>
           <Typography fontSize="22px" fontWeight={700} mb={{ xs: 2, lg: 3 }}>

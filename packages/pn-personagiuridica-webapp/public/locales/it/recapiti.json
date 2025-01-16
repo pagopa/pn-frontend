@@ -53,6 +53,7 @@
     "sercq_send-removed-successfully": "Domicilio Digitale disattivato correttamente",
     "sercq-send-wizard": {
       "title": "Attiva domicilio digitale",
+      "title-transfer": "Trasferisci il domicilio digitale sulla piattaforma SEND",
       "step_1": {
         "title": "Come funziona",
         "info-list": [
@@ -76,10 +77,16 @@
         "delivered-dialog-title": "Valore giuridico della notifica sul domicilio digitale SEND",
         "delivered-dialog-description": "Se scegli SEND come domicilio digitale e non apri la notifica entro 7 giorni dalla consegna, questa risulterà legalmente recapitata, proprio come accade con le raccomandate cartacee.",
         "pec-info-alert": "La piattaforma SEND sostituirà la PEC aziendale come tuo domicilio digitale della tua impresa. "
+      },
+      "feedback": {
+        "title-activation": "Hai attivato il tuo domicilio digitale",
+        "title-transfer": "Hai aggiornato il domicilio digitale della tua impresa",
+        "back-to-contacts": "Torna ai tuoi recapiti"
       }
     },
     "pec-contact-wizard": {
       "title": "Usa una PEC come domicilio digitale",
+      "title-transfer": "Trasferisci il domicilio digitale su una PEC aziendale",
       "content-title": "Inserisci la tua PEC",
       "content-description": "Quando un ente invia una notifica su SEND alla tua impresa, ricevi l’avviso a valore legale sulla PEC che hai scelto. ",
       "input-label": "Indirizzo PEC",

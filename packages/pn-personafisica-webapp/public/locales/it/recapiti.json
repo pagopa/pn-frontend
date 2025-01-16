@@ -59,6 +59,7 @@
     "sercq-send-io-advantages": "Su IO",
     "sercq-send-wizard": {
       "title": "Attiva domicilio digitale",
+      "title-transfer": "Trasferisci il domicilio digitale sulla piattaforma SEND",
       "step_1": {
         "title": "Come funziona",
         "info-list": [
@@ -92,10 +93,16 @@
           "Puoi pagare gli importi dovuti se la notifica prevede un pagamento"
         ],
         "confirm": "Collega SEND su IO"
+      },
+      "feedback": {
+        "title-activation": "Hai attivato il tuo domicilio digitale",
+        "title-transfer": "Hai aggiornato il tuo domicilio digitale",
+        "back-to-contacts": "Torna ai tuoi recapiti"
       }
     },
     "pec-contact-wizard": {
       "title": "Usa una PEC come domicilio digitale",
+      "title-transfer": "Trasferisci il domicilio digitale su una PEC",
       "content-title": "Inserisci la tua PEC",
       "content-description": "Quando un ente ti invia una notifica SEND, ricevi l’avviso a valore legale sulla PEC che hai scelto.",
       "input-label": "Indirizzo PEC",
