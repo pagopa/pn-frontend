@@ -19,22 +19,19 @@ const StatusTooltip = ({
   chipProps?: SxProps;
 }) => {
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
+  const chipLabel = <span aria-label={`${label}: ${tooltip}`}>{label}</span>;
 
   return (
     <CustomTooltip openOnClick={false} tooltipContent={tooltipContent} tooltipProps={tooltipProps}>
       <Chip
         id={`status-chip-${label}`}
-        label={label}
+        label={chipLabel}
         color={color}
         sx={{
           ...chipProps,
           cursor: 'default',
-          '&:focus': {
-            outline: '2px solid currentColor',
-          },
         }}
         data-testid={`statusChip-${label}`}
-        aria-label={`${label}: ${tooltip}`}
       />
     </CustomTooltip>
   );
