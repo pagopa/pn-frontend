@@ -53,7 +53,7 @@
     "sercq-send-courtesy-description": "Choisissez une adresse de courtoisie nous permettant de vous informer en temps réel de l’existence d’une communication à valeur juridique sur SEND.",
     "remove-sercq_send-title": "Vous confirmez vouloir désactiver le Domicile Numérique sur SEND ?",
     "remove-sercq_send-message": "Vous n’aurez plus une adresse numérique à valeur juridique pour les communications de l’Administration Publique et vous risquerez de recevoir à nouveau des notifications sur papier.",
-    "block-remove-digital_domicile-title": "Impossible de désactiver le Domicile Numérique",
+    "block-remove-digital-domicile-title": "Impossible de désactiver le Domicile Numérique",
     "sercq_send-removed-successfully": "Domicile Numérique correctement désactivé",
     "sercq-send-io-title": "Activez SEND sur IO",
     "sercq-send-io-description": "Activez SEND - Notifiche Digitali sur IO pour<strong> recevoir directement dans l’app</strong> les communications envoyées à votre Domicile Numérique SEND.",

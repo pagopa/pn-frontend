@@ -53,7 +53,7 @@
     "sercq-send-courtesy-description": "Wähle eine informelle Adresse aus, an der wir dich in Echtzeit benachrichtigen können, wenn es eine rechtsgültige Mitteilung auf SEND zu lesen gibt.",
     "remove-sercq_send-title": "Möchtest du das digitale Domizil auf SEND wirklich deaktivieren?",
     "remove-sercq_send-message": "Du hast keine rechtsgültige digitale Adresse mehr für die Zustellungen der öffentlichen Verwaltung und kannst wieder Zustellungen in Papierform erhalten.",
-    "block-remove-digital_domicile-title": "Das digitale Domizil kann nicht deaktiviert werden",
+    "block-remove-digital-domicile-title": "Das digitale Domizil kann nicht deaktiviert werden",
     "sercq_send-removed-successfully": "Digitales Domizil erfolgreich deaktiviert",
     "sercq-send-io-title": "Aktiviere SEND auf IO",
     "sercq-send-io-description": "Aktiviere SEND - Notifiche Digitali auf IO, um<strong> direkt in der App</strong> die an dein digitales Domizil SEND gesendeten Zustellungen zu erhalten.",

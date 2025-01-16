@@ -53,7 +53,7 @@
     "sercq-send-courtesy-description": "Izberite vljudnostni naslov, na katerega vas lahko obveščamo v realnem času, ko vas na SEND čaka uradno sporočilo.",
     "remove-sercq_send-title": "Ali ste prepričani, da želite onemogočiti digitalno prebivališče pri SEND?",
     "remove-sercq_send-message": "Ne boste več imeli uradnega digitalnega naslova za komunikacijo z javno upravo in lahko se vrnete na prejemanje obvestil v papirnati obliki.",
-    "block-remove-digital_domicile-title": "Digitalnega prebivališča ni mogoče deaktivirati",
+    "block-remove-digital-domicile-title": "Digitalnega prebivališča ni mogoče deaktivirati",
     "sercq_send-removed-successfully": "Digitalno prebivališče je pravilno deaktivirano",
     "sercq-send-io-title": "Aktivirajte SEND na IO",
     "sercq-send-io-description": "Aktivirajte SEND - Notifiche Digitali na IO za<strong> prejemanje sporočil, poslanih na vaše digitalno prebivališče SEND neposredno v aplikaciji</strong>.",

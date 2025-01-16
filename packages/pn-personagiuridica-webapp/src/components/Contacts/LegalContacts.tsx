@@ -201,10 +201,10 @@ const LegalContacts = () => {
       {showSpecialContactsSection && <SpecialContacts />}
       <DeleteDialog
         showModal={modalOpen}
-        removeModalTitle={t('legal-contacts.block-remove-digital_domicile-title', {
+        removeModalTitle={t('legal-contacts.block-remove-digital-domicile-title', {
           ns: 'recapiti',
         })}
-        removeModalBody={t('legal-contacts.block-remove-digital_domicile-message', {
+        removeModalBody={t('legal-contacts.block-remove-digital-domicile-message', {
           ns: 'recapiti',
           value: defaultPECAddress?.value,
         })}

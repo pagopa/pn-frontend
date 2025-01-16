@@ -53,7 +53,7 @@
     "sercq-send-courtesy-description": "Select a courtesy address to which we can inform you in real time when there is a legal communication to read on SEND.",
     "remove-sercq_send-title": "Do you confirm to want to deactivate the Digital Domicile on SEND?",
     "remove-sercq_send-message": "You will no longer have a legal digital address for the communications of the Public Administration and can return to receiving paper copies of the notifications.",
-    "block-remove-digital_domicile-title": "It is not possible to deactivate the Digital Domicile",
+    "block-remove-digital-domicile-title": "It is not possible to deactivate the Digital Domicile",
     "sercq_send-removed-successfully": "Digital Domicile deactivated correctly",
     "sercq-send-io-title": "Activate SEND on IO",
     "sercq-send-io-description": "Activate SEND - Notifiche Digitali on IO to receive the communications sent directly to your SEND digital domicile <strong>directly in app</strong>.",
