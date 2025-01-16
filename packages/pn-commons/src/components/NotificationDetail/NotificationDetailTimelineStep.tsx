@@ -285,25 +285,17 @@ const NotificationDetailTimelineStep = ({
                 {s.legalFactsIds &&
                   s.legalFactsIds.length > 0 &&
                   s.legalFactsIds.map((lf) => (
-                    <Typography
+                    <ButtonNaked
                       fontSize={14}
                       display="inline"
-                      variant="button"
-                      color={disableDownloads ? 'text.disabled' : 'primary'}
-                      sx={{ cursor: disableDownloads ? 'default' : 'pointer', outline: 'none',
-                        '&:focus': {
-                          outline: (theme) => `2px solid ${theme.palette.primary.main}`, 
-                          outlineOffset: '2px',
-                          borderRadius: 2,
-                          px:0.5 
-                        }, }}
-                      tabIndex={disableDownloads ? -1 : 0}
+                      color='primary'
                       onClick={() => clickHandler(lf)}
+                      disabled={disableDownloads}
                       key={lf.key}
                       data-testid="download-legalfact-micro"
                     >
                       {getLegalFactLabel(s, lf.category, lf.key || '')}
-                    </Typography>
+                    </ButtonNaked>
                   ))}
               </Typography>
             </Box>
