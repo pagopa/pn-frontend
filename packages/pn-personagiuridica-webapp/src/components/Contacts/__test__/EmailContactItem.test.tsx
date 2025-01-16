@@ -153,7 +153,7 @@ describe('testing EmailContactItem', () => {
     expect(emailValue).toHaveTextContent(mailValue);
     const editButton = getById(form!, 'modifyContact-default_email');
     expect(editButton).toBeInTheDocument();
-    const disableBtn = screen.getByRole('button', { name: 'disable' });
+    const disableBtn = screen.getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
   });
 
@@ -244,9 +244,8 @@ describe('testing EmailContactItem', () => {
     expect(mailValue).toHaveTextContent(emailValue);
     editButton = getById(form!, 'modifyContact-default_email');
     expect(editButton).toBeInTheDocument();
-    const disableBtn = screen.getByRole('button', { name: 'disable' });
+    const disableBtn = screen.getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
-    expect(disableBtn).toHaveTextContent('disable');
   });
 
   it('delete email', async () => {
@@ -258,7 +257,7 @@ describe('testing EmailContactItem', () => {
         },
       },
     });
-    const disableBtn = screen.getByRole('button', { name: 'disable' });
+    const disableBtn = screen.getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
     // click on cancel
     fireEvent.click(disableBtn);

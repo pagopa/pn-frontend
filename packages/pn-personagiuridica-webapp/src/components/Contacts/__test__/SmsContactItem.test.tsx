@@ -161,9 +161,8 @@ describe('test SmsContactItem', () => {
     expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
     const editButton = getById(form!, 'modifyContact-default_sms');
     expect(editButton).toBeInTheDocument();
-    const disableBtn = screen.getByRole('button', { name: 'disable' });
+    const disableBtn = screen.getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
-    expect(disableBtn).toHaveTextContent('disable');
   });
 
   it('override an existing phone number with a new one', async () => {
@@ -255,9 +254,8 @@ describe('test SmsContactItem', () => {
     expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
     editButton = getById(form!, 'modifyContact-default_sms');
     expect(editButton).toBeInTheDocument();
-    const disableBtn = screen.getByRole('button', { name: 'disable' });
+    const disableBtn = screen.getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
-    expect(disableBtn).toHaveTextContent('disable');
   });
 
   it('delete phone number', async () => {
@@ -270,7 +268,7 @@ describe('test SmsContactItem', () => {
         },
       },
     });
-    const disableBtn = screen.getByRole('button', { name: 'disable' });
+    const disableBtn = screen.getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
     // click on cancel
     fireEvent.click(disableBtn);
