@@ -79,6 +79,12 @@ describe('LegalContacts Component', async () => {
     fireEvent.click(disableBtn);
     const dialog = await waitFor(() => screen.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
+
+    const dialogTitle = getByText('legal-contacts.block-remove-digital-domicile-title');
+    expect(dialogTitle).toBeInTheDocument();
+    const dialogMessage = getByText('legal-contacts.block-remove-digital-domicile-message');
+    expect(dialogMessage).toBeInTheDocument();
+
     const confirmBtn = screen.getByRole('button', { name: 'button.understand' });
     fireEvent.click(confirmBtn);
     await waitFor(() => {
@@ -200,6 +206,14 @@ describe('LegalContacts Component', async () => {
     fireEvent.click(disableBtn);
     const dialog = await waitFor(() => screen.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
+
+    const dialogTitle = getByText('legal-contacts.remove-pec-title');
+    expect(dialogTitle).toBeInTheDocument();
+    const dialogMessage = getByText('legal-contacts.remove-pec-message');
+    expect(dialogMessage).toBeInTheDocument();
+
+    const cancelBtn = screen.getByRole('button', { name: 'button.annulla' });
+    expect(cancelBtn).toBeInTheDocument();
     const confirmBtn = screen.getByRole('button', { name: 'button.conferma' });
     fireEvent.click(confirmBtn);
     await waitFor(() => {
