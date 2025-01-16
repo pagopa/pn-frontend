@@ -193,7 +193,7 @@ const EmailContactItem: React.FC = () => {
             }}
             sx={{ p: '10px 16px' }}
           >
-            {t('disable', { ns: 'recapiti' })}
+            {t('button.disable')}
           </Button>,
         ]
       : undefined;

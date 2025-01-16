@@ -259,7 +259,7 @@ const SmsContactItem: React.FC<Props> = ({ onCancelInsert }) => {
             }}
             sx={{ p: '10px 16px' }}
           >
-            {t('disable', { ns: 'recapiti' })}
+            {t('button.disable')}
           </Button>,
         ]
       : undefined;

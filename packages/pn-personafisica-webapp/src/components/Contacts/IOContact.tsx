@@ -208,7 +208,7 @@ const IOContact: React.FC = () => {
           : undefined
       }
       expanded={isAppIOEnabled}
-      slotProps={{ Card: { sx: { pt: '1.5rem' } } }}
+      slotProps={{ Card: { sx: { p: { xs: 2, lg: 3 } } } }}
     >
       <Stack direction="row" alignItems="center" data-testid="ioContact">
         <Avatar variant="rounded" sx={{ bgcolor: '#0B3EE3', width: '36px', height: '36px' }}>
@@ -222,7 +222,7 @@ const IOContact: React.FC = () => {
       <Typography
         mt={2}
         variant="body1"
-        fontSize={{ xs: '14px', lg: '18px' }}
+        fontSize={{ xs: '14px', lg: '16px' }}
         color="text.secondary"
         data-testid="ioContactDescription"
       >
