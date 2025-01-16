@@ -41,7 +41,6 @@ const CustomTooltip: React.FC<Props> = ({
       disableHoverListener={openOnClick}
       enterTouchDelay={0}
       onOpen={onOpen}
-      describeChild={openOnClick}
       {...tooltipProps}
     >
       {openOnClick
