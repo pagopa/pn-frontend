@@ -26,31 +26,31 @@ const addressesRelationships: Array<AddressRelation> = [
     channelType: ChannelType.IOMSG,
     relationWith: [ChannelType.IOMSG],
     shownDependsOn: [],
-    priority: 2
+    priority: 2,
   },
   {
     channelType: ChannelType.EMAIL,
     relationWith: [ChannelType.EMAIL],
     shownDependsOn: [],
-    priority: 1
+    priority: 1,
   },
   {
     channelType: ChannelType.SMS,
     relationWith: [ChannelType.SMS],
     shownDependsOn: [],
-    priority: 0
+    priority: 0,
   },
   {
     channelType: ChannelType.PEC,
     relationWith: [ChannelType.PEC, ChannelType.SERCQ_SEND],
     shownDependsOn: [ChannelType.PEC, ChannelType.SERCQ_SEND],
-    priority: 3
+    priority: 3,
   },
   {
     channelType: ChannelType.SERCQ_SEND,
     relationWith: [ChannelType.SERCQ_SEND, ChannelType.PEC],
     shownDependsOn: [ChannelType.PEC],
-    priority: 4
+    priority: 4,
   },
 ];
 
@@ -76,7 +76,7 @@ export const pecValidationSchema = (t: TFunction) =>
     .string()
     .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
     .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
-    .matches(dataRegex.noSpaceAtEdges, t('no-spaces-at-edges'))
+    .matches(dataRegex.noSpaceAtEdges, t('no-spaces-at-edges', { ns: 'common' }))
     .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' }));
 
 export const emailValidationSchema = (t: TFunction) =>
@@ -84,14 +84,14 @@ export const emailValidationSchema = (t: TFunction) =>
     .string()
     .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
     .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
-    .matches(dataRegex.noSpaceAtEdges, t('no-spaces-at-edges'))
+    .matches(dataRegex.noSpaceAtEdges, t('no-spaces-at-edges', { ns: 'common' }))
     .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' }));
 
 export const phoneValidationSchema = (t: TFunction, withPrefix = false) =>
   yup
     .string()
     .required(t('courtesy-contacts.valid-sms', { ns: 'recapiti' }))
-    .matches(dataRegex.noSpaceAtEdges, t('no-spaces-at-edges'))
+    .matches(dataRegex.noSpaceAtEdges, t('no-spaces-at-edges', { ns: 'common' }))
     .matches(
       withPrefix ? dataRegex.phoneNumberWithItalyPrefix : dataRegex.phoneNumber,
       t('courtesy-contacts.valid-sms', { ns: 'recapiti' })
@@ -163,10 +163,11 @@ export const updateAddressesList = (
     (l) =>
       l.senderId === senderId &&
       l.addressType === addressType &&
-      (l.channelType === channelType || 
-        (l.channelType === ChannelType.SERCQ_SEND && channelType === ChannelType.PEC && newAddress.pecValid) ||
-        (l.channelType === ChannelType.PEC && channelType === ChannelType.SERCQ_SEND && l.pecValid)
-      )
+      (l.channelType === channelType ||
+        (l.channelType === ChannelType.SERCQ_SEND &&
+          channelType === ChannelType.PEC &&
+          newAddress.pecValid) ||
+        (l.channelType === ChannelType.PEC && channelType === ChannelType.SERCQ_SEND && l.pecValid))
   );
   if (addressIndex > -1) {
     // eslint-disable-next-line functional/immutable-data
@@ -192,22 +193,20 @@ export const removeAddress = (
   );
 
 export const sortAddresses = (addresses: Array<DigitalAddress>) => {
+  const priorityObj = addressesRelationships.reduce((acc, item) => {
+    // eslint-disable-next-line functional/immutable-data
+    acc[item.channelType] = item.priority;
+    return acc;
+  }, {} as { [key in ChannelType]: number });
 
-  const priorityObj = addressesRelationships.reduce(
-    (acc, item) => {
-      // eslint-disable-next-line functional/immutable-data
-      acc[item.channelType] = item.priority;
-      return acc;
-    },
-    {} as { [key in ChannelType]: number }
-  );
-  
   // eslint-disable-next-line functional/immutable-data
   addresses.sort((addr1, addr2) => {
-    if((addr1.senderId === 'default' && addr2.senderId === 'default') || (addr1.senderId !== 'default' && addr2.senderId !== 'default')) {
+    if (
+      (addr1.senderId === 'default' && addr2.senderId === 'default') ||
+      (addr1.senderId !== 'default' && addr2.senderId !== 'default')
+    ) {
       return priorityObj[addr2.channelType] - priorityObj[addr1.channelType];
-    }
-    else if(addr1.senderId === 'default') {
+    } else if (addr1.senderId === 'default') {
       return -1;
     }
     return 1;

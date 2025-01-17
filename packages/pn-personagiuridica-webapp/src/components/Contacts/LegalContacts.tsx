@@ -80,13 +80,12 @@ const LegalContacts = () => {
     contactsSelectors.selectAddresses
   );
 
-  const isValidatingPec = defaultPECAddress?.value && defaultPECAddress.pecValid === false;
-  const hasNoDefaultLegalAddress = !defaultPECAddress?.value && !defaultSERCQ_SENDAddress;
+  const isValidatingPec = defaultPECAddress?.pecValid === false;
+  const hasNoDefaultLegalAddress = !defaultPECAddress && !defaultSERCQ_SENDAddress;
   const hasPecActive = defaultPECAddress?.value && defaultPECAddress.pecValid === true;
   const hasSercqSendActive = !!defaultSERCQ_SENDAddress;
-  const isActive = (hasPecActive || hasSercqSendActive) && !isValidatingPec;
+  const isActive = hasPecActive || (hasSercqSendActive && !isValidatingPec);
   const showSpecialContactsSection = specialAddresses.length > 0;
-  const blockDisableDefaultLegalContact = showSpecialContactsSection;
 
   const channelType =
     hasSercqSendActive && !isValidatingPec ? ChannelType.SERCQ_SEND : ChannelType.PEC;
@@ -206,7 +205,7 @@ const LegalContacts = () => {
         showModal={modalOpen}
         removeModalTitle={t(
           `legal-contacts.${
-            blockDisableDefaultLegalContact ? 'block-remove-digital-domicile' : removeDialogLabel
+            showSpecialContactsSection ? 'block-remove-digital-domicile' : removeDialogLabel
           }-title`,
           {
             ns: 'recapiti',
@@ -214,7 +213,7 @@ const LegalContacts = () => {
         )}
         removeModalBody={t(
           `legal-contacts.${
-            blockDisableDefaultLegalContact ? 'block-remove-digital-domicile' : removeDialogLabel
+            showSpecialContactsSection ? 'block-remove-digital-domicile' : removeDialogLabel
           }-message`,
           {
             ns: 'recapiti',
@@ -223,7 +222,7 @@ const LegalContacts = () => {
         )}
         handleModalClose={() => setModalOpen(false)}
         confirmHandler={deleteConfirmHandler}
-        blockDelete={blockDisableDefaultLegalContact}
+        blockDelete={showSpecialContactsSection}
       />
     </PnInfoCard>
   );
