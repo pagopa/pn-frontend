@@ -88,7 +88,6 @@ const LegalContacts = () => {
   const hasSercqSendActive = !!defaultSERCQ_SENDAddress;
   const isActive = (hasPecActive || hasSercqSendActive) && !isValidatingPec;
   const showSpecialContactsSection = specialAddresses.length > 0;
-  const blockDisableDefaultLegalContact = showSpecialContactsSection;
 
   const channelType =
     hasSercqSendActive && !isValidatingPec ? ChannelType.SERCQ_SEND : ChannelType.PEC;
@@ -173,6 +172,8 @@ const LegalContacts = () => {
         ]
       : undefined;
 
+  const removeDialogLabel = `remove-${channelType.toLowerCase()}`;
+
   return (
     <PnInfoCard
       title={
@@ -207,16 +208,26 @@ const LegalContacts = () => {
       {showSpecialContactsSection && <SpecialContacts />}
       <DeleteDialog
         showModal={modalOpen}
-        removeModalTitle={t('legal-contacts.block-remove-digital-domicile-title', {
-          ns: 'recapiti',
-        })}
-        removeModalBody={t('legal-contacts.block-remove-digital-domicile-message', {
-          ns: 'recapiti',
-          value: defaultPECAddress?.value,
-        })}
+        removeModalTitle={t(
+          `legal-contacts.${
+            showSpecialContactsSection ? 'block-remove-digital-domicile' : removeDialogLabel
+          }-title`,
+          {
+            ns: 'recapiti',
+          }
+        )}
+        removeModalBody={t(
+          `legal-contacts.${
+            showSpecialContactsSection ? 'block-remove-digital-domicile' : removeDialogLabel
+          }-message`,
+          {
+            ns: 'recapiti',
+            value: defaultPECAddress?.value,
+          }
+        )}
         handleModalClose={() => setModalOpen(false)}
         confirmHandler={deleteConfirmHandler}
-        blockDelete={blockDisableDefaultLegalContact}
+        blockDelete={showSpecialContactsSection}
       />
     </PnInfoCard>
   );

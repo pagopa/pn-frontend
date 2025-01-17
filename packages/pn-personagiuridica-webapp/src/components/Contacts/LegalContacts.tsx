@@ -168,6 +168,8 @@ const LegalContacts = () => {
         ]
       : undefined;
 
+  const removeDialogLabel = `remove-${channelType.toLowerCase()}`;
+
   return (
     <PnInfoCard
       title={
@@ -202,13 +204,23 @@ const LegalContacts = () => {
       {showSpecialContactsSection && <SpecialContacts />}
       <DeleteDialog
         showModal={modalOpen}
-        removeModalTitle={t('legal-contacts.block-remove-digital-domicile-title', {
-          ns: 'recapiti',
-        })}
-        removeModalBody={t('legal-contacts.block-remove-digital-domicile-message', {
-          ns: 'recapiti',
-          value: defaultPECAddress?.value,
-        })}
+        removeModalTitle={t(
+          `legal-contacts.${
+            blockDisableDefaultLegalContact ? 'block-remove-digital-domicile' : removeDialogLabel
+          }-title`,
+          {
+            ns: 'recapiti',
+          }
+        )}
+        removeModalBody={t(
+          `legal-contacts.${
+            blockDisableDefaultLegalContact ? 'block-remove-digital-domicile' : removeDialogLabel
+          }-message`,
+          {
+            ns: 'recapiti',
+            value: defaultPECAddress?.value,
+          }
+        )}
         handleModalClose={() => setModalOpen(false)}
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDisableDefaultLegalContact}
