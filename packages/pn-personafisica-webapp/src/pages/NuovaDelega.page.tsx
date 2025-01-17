@@ -252,7 +252,7 @@ const NuovaDelega = () => {
             <Grid item lg={8} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumbs}
               <Paper sx={{ padding: '24px', marginBottom: '20px' }} elevation={0}>
-                <Typography sx={{ fontWeight: 'bold' }}>
+                <Typography sx={{ fontWeight: 'bold' }} id='personType'>
                   {t('nuovaDelega.form.personType')}
                 </Typography>
                 <Formik
@@ -278,6 +278,7 @@ const NuovaDelega = () => {
                                   event.currentTarget.value
                                 );
                               }}
+                              aria-labelledby='personType'
                             >
                               <FormControlLabel
                                 id="recipient-pf"
@@ -371,7 +372,7 @@ const NuovaDelega = () => {
                         helperText={getError(touched.codiceFiscale, errors.codiceFiscale)}
                         fullWidth
                       />
-                      <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }}>
+                      <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }} id={'selectEnti'}>
                         {t('nuovaDelega.form.viewFrom')}
                       </Typography>
                       <FormControl sx={{ width: '100%' }}>
@@ -390,6 +391,7 @@ const NuovaDelega = () => {
                                 handleGetAllEntities();
                               }
                             }}
+                            aria-labelledby='selectEnti'
                           >
                             <FormControlLabel
                               id="tutti-gli-enti-selezionati"
