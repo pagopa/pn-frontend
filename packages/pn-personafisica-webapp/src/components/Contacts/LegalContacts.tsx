@@ -88,7 +88,6 @@ const LegalContacts = () => {
   const hasSercqSendActive = !!defaultSERCQ_SENDAddress;
   const isActive = (hasPecActive || hasSercqSendActive) && !isValidatingPec;
   const showSpecialContactsSection = specialAddresses.length > 0;
-  const blockDisableDefaultLegalContact = showSpecialContactsSection;
 
   const channelType =
     hasSercqSendActive && !isValidatingPec ? ChannelType.SERCQ_SEND : ChannelType.PEC;
@@ -211,7 +210,7 @@ const LegalContacts = () => {
         showModal={modalOpen}
         removeModalTitle={t(
           `legal-contacts.${
-            blockDisableDefaultLegalContact ? 'block-remove-digital-domicile' : removeDialogLabel
+            showSpecialContactsSection ? 'block-remove-digital-domicile' : removeDialogLabel
           }-title`,
           {
             ns: 'recapiti',
@@ -219,7 +218,7 @@ const LegalContacts = () => {
         )}
         removeModalBody={t(
           `legal-contacts.${
-            blockDisableDefaultLegalContact ? 'block-remove-digital-domicile' : removeDialogLabel
+            showSpecialContactsSection ? 'block-remove-digital-domicile' : removeDialogLabel
           }-message`,
           {
             ns: 'recapiti',
@@ -228,7 +227,7 @@ const LegalContacts = () => {
         )}
         handleModalClose={() => setModalOpen(false)}
         confirmHandler={deleteConfirmHandler}
-        blockDelete={blockDisableDefaultLegalContact}
+        blockDelete={showSpecialContactsSection}
       />
     </PnInfoCard>
   );
