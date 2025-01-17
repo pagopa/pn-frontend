@@ -111,7 +111,7 @@
     "email-dialog-description": "Quando c’è una notifica per l’impresa, avvisiamo con una email. Un utente dovrà accedere a SEND per leggerla e pagare eventuali importi.",
     "email-sms-updates": "Vuoi ricevere gli aggiornamenti via SMS?",
     "email-sms-add": "Aggiungi un numero di cellulare",
-    "sms-title": "Indirizzo email aziendale",
+    "sms-title": "Cellulare",
     "sms-description": "Quando c’è una notifica SEND per la tua impresa, ti avvisiamo con un SMS.",
     "sms-dialog-description": "Quando c’è una notifica per l’impresa, avvisiamo con un SMS. Un utente dovrà accedere a SEND per leggerla e pagare eventuali importi.",
     "link-sms-placeholder": "Cellulare",

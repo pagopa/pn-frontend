@@ -30,9 +30,8 @@ type Props = {
 
 const SmsContactElem: React.FC<Props> = ({ onCancelInsert }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultSMSAddress, addresses, defaultSERCQ_SENDAddress } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const { defaultSERCQ_SENDAddress, defaultPECAddress, defaultSMSAddress, addresses } =
+    useAppSelector(contactsSelectors.selectAddresses);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
@@ -44,6 +43,8 @@ const SmsContactElem: React.FC<Props> = ({ onCancelInsert }) => {
     value: '',
   });
   const dispatch = useAppDispatch();
+
+  const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
 
   const currentValue = defaultSMSAddress?.value ?? '';
 
@@ -57,7 +58,7 @@ const SmsContactElem: React.FC<Props> = ({ onCancelInsert }) => {
       setModalOpen(ModalType.EXISTING);
       return;
     }
-    if (!defaultSERCQ_SENDAddress) {
+    if (!isDigitalDomicileActive) {
       setModalOpen(ModalType.INFORMATIVE);
       return;
     }

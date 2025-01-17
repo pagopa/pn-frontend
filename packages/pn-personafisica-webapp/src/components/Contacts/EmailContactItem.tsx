@@ -62,10 +62,11 @@ const EmailSmsComponent: React.FC = () => {
 const EmailContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const {
+    defaultSERCQ_SENDAddress,
+    defaultPECAddress,
     defaultEMAILAddress,
     defaultSMSAddress,
     specialEMAILAddresses,
-    defaultSERCQ_SENDAddress,
     addresses,
   } = useAppSelector(contactsSelectors.selectAddresses);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
@@ -73,6 +74,7 @@ const EmailContactItem: React.FC = () => {
     resetForm: () => Promise.resolve(),
   });
 
+  const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
   const isActive = !!defaultEMAILAddress;
 
   const hasCourtesyAddresses =
@@ -103,7 +105,7 @@ const EmailContactItem: React.FC = () => {
       setModalOpen(ModalType.EXISTING);
       return;
     }
-    if (!defaultSERCQ_SENDAddress) {
+    if (!isDigitalDomicileActive) {
       setModalOpen(ModalType.INFORMATIVE);
       return;
     }
