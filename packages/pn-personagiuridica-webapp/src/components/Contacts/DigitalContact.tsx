@@ -23,6 +23,7 @@ type Props = {
   label: string;
   value: string;
   channelType: ChannelType;
+  senderId?: string;
   inputProps: { label: string; prefix?: string };
   insertButtonLabel: string;
   showVerifiedIcon?: boolean;
@@ -31,12 +32,13 @@ type Props = {
   onCancelInsert?: () => void;
 };
 
-const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
+const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
   (
     {
       label,
       value,
       channelType,
+      senderId = 'default',
       inputProps,
       insertButtonLabel,
       showVerifiedIcon = false,
@@ -54,11 +56,11 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     // value contains the prefix
     const contactValue = inputProps.prefix ? value.replace(inputProps.prefix, '') : value;
     const initialValues = {
-      [`default_${contactType}`]: contactValue,
+      [`${senderId}_${contactType}`]: contactValue,
     };
 
     const validationSchema = yup.object().shape({
-      [`default_${contactType}`]: yup
+      [`${senderId}_${contactType}`]: yup
         .string()
         .when([], {
           is: () => channelType === ChannelType.PEC,
@@ -81,7 +83,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       enableReinitialize: true,
       /** onSubmit validate */
       onSubmit: (values) => {
-        onSubmit(values[`default_${contactType}`]);
+        onSubmit(values[`${senderId}_${contactType}`]);
       },
     });
 
@@ -102,10 +104,10 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     useImperativeHandle(ref, () => ({
       toggleEdit,
       resetForm: async () => {
-        await formik.setFieldTouched(`default_${contactType}`, false, false);
+        await formik.setFieldTouched(`${senderId}_${contactType}`, false, false);
         await formik.setFieldValue(
-          `default_${contactType}`,
-          initialValues[`default_${contactType}`],
+          `${senderId}_${contactType}`,
+          initialValues[`${senderId}_${contactType}`],
           true
         );
       },
@@ -116,11 +118,11 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       return (
         <form
           onSubmit={formik.handleSubmit}
-          data-testid={`default_${contactType}Contact`}
+          data-testid={`${senderId}_${contactType}Contact`}
           style={{ width: isMobile ? '100%' : '50%' }}
         >
           <Typography
-            id={`default_${contactType}-label`}
+            id={`${senderId}_${contactType}-label`}
             variant="body2"
             mb={1}
             sx={{ fontWeight: 'bold' }}
@@ -129,8 +131,8 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
           </Typography>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
-              id={`default_${contactType}`}
-              name={`default_${contactType}`}
+              id={`${senderId}_${contactType}`}
+              name={`${senderId}_${contactType}`}
               placeholder={inputProps.label}
               size="small"
               fullWidth
@@ -140,22 +142,23 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                   <InputAdornment position="start">{inputProps.prefix}</InputAdornment>
                 ) : null,
               }}
-              value={formik.values[`default_${contactType}`]}
+              value={formik.values[`${senderId}_${contactType}`]}
               onChange={handleChangeTouched}
               error={
-                formik.touched[`default_${contactType}`] &&
-                Boolean(formik.errors[`default_${contactType}`])
+                formik.touched[`${senderId}_${contactType}`] &&
+                Boolean(formik.errors[`${senderId}_${contactType}`])
               }
               helperText={
-                formik.touched[`default_${contactType}`] && formik.errors[`default_${contactType}`]
+                formik.touched[`${senderId}_${contactType}`] &&
+                formik.errors[`${senderId}_${contactType}`]
               }
             />
             <Button
-              id={`default_${contactType}-button`}
+              id={`${senderId}_${contactType}-button`}
               variant="contained"
               fullWidth
               type="submit"
-              data-testid={`default_${contactType}-button`}
+              data-testid={`${senderId}_${contactType}-button`}
               sx={{ flexBasis: { xs: 'unset', lg: '33.33%' }, height: '43px', fontWeight: 700 }}
             >
               {insertButtonLabel}
@@ -179,32 +182,33 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     return (
       <form
         onSubmit={formik.handleSubmit}
-        data-testid={`default_${contactType}Contact`}
+        data-testid={`${senderId}_${contactType}Contact`}
         style={{ width: isMobile ? '100%' : '50%' }}
       >
         {editMode && (
           <>
             <TextField
-              id={`default_${contactType}`}
-              name={`default_${contactType}`}
+              id={`${senderId}_${contactType}`}
+              name={`${senderId}_${contactType}`}
               label={inputProps.label}
               fullWidth
               variant="outlined"
               size="small"
-              data-testid={`default_${contactType}`}
+              data-testid={`${senderId}_${contactType}`}
               InputProps={{
                 startAdornment: inputProps.prefix ? (
                   <InputAdornment position="start">{inputProps.prefix}</InputAdornment>
                 ) : null,
               }}
-              value={formik.values[`default_${contactType}`]}
+              value={formik.values[`${senderId}_${contactType}`]}
               onChange={(e) => void handleChangeTouched(e)}
               error={
-                formik.touched[`default_${contactType}`] &&
-                Boolean(formik.errors[`default_${contactType}`])
+                formik.touched[`${senderId}_${contactType}`] &&
+                Boolean(formik.errors[`${senderId}_${contactType}`])
               }
               helperText={
-                formik.touched[`default_${contactType}`] && formik.errors[`default_${contactType}`]
+                formik.touched[`${senderId}_${contactType}`] &&
+                formik.errors[`${senderId}_${contactType}`]
               }
               sx={{ mb: 2 }}
             />
@@ -215,7 +219,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 disabled={!formik.isValid}
                 type="submit"
                 sx={{ fontWeight: 700, justifyContent: 'left' }}
-                id={`saveContact-default_${contactType}`}
+                id={`saveContact-${senderId}_${contactType}`}
                 size="medium"
                 startIcon={<CheckIcon />}
               >
@@ -257,7 +261,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 }}
                 component="span"
                 variant="body2"
-                id={`default_${contactType}-typography`}
+                id={`${senderId}_${contactType}-typography`}
               >
                 {value}
               </Typography>
@@ -278,14 +282,14 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 onClick={toggleEdit}
                 startIcon={<CreateIcon />}
                 sx={{ fontWeight: 700, justifyContent: 'left' }}
-                id={`modifyContact-default_${contactType}`}
+                id={`modifyContact-${senderId}_${contactType}`}
                 size="medium"
               >
                 {t('button.modifica')}
               </ButtonNaked>
               {onDelete && (
                 <ButtonNaked
-                  id={`cancelContact-default_${contactType}`}
+                  id={`cancelContact-${senderId}_${contactType}`}
                   color="error"
                   onClick={onDelete}
                   startIcon={<DeleteIcon />}
@@ -303,4 +307,4 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
   }
 );
 
-export default DefaultDigitalContact;
+export default DigitalContact;

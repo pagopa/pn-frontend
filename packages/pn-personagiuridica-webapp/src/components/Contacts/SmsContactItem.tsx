@@ -9,8 +9,8 @@ import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
-import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
+import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import InformativeDialog from './InformativeDialog';
 
@@ -142,7 +142,7 @@ const SmsContactItem: React.FC = () => {
       title={t('courtesy-contacts.sms-title', { ns: 'recapiti' })}
       subtitle={t('courtesy-contacts.sms-description', { ns: 'recapiti' })}
     >
-      <DefaultDigitalContact
+      <DigitalContact
         label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
         value={currentValue}
         channelType={ChannelType.SMS}

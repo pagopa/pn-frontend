@@ -16,8 +16,8 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
-import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
+import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import InformativeDialog from './InformativeDialog';
 
@@ -151,7 +151,7 @@ const SmsContactItem: React.FC = () => {
   /*
    * if *some* value (phone number, email address) has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
-   * (the DefaultDigitalContact component includes the "update" button)
+   * (the DigitalContact component includes the "update" button)
    * if *no* value (phone number, email address) has been attached to the contact type,
    * then we show the input field allowing the user to enter it along with the button
    * to perform the addition.
@@ -162,7 +162,7 @@ const SmsContactItem: React.FC = () => {
       title={t('courtesy-contacts.sms-title', { ns: 'recapiti' })}
       subtitle={t('courtesy-contacts.sms-description', { ns: 'recapiti' })}
     >
-      <DefaultDigitalContact
+      <DigitalContact
         label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
         value={currentValue}
         channelType={ChannelType.SMS}

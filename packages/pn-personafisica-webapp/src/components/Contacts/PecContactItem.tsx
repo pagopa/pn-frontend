@@ -17,7 +17,7 @@ import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyF
 import { contactAlreadyExists } from '../../utility/contacts.utility';
 import CancelVerificationModal from './CancelVerificationModal';
 import ContactCodeDialog from './ContactCodeDialog';
-import DefaultDigitalContact from './DefaultDigitalContact';
+import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import PecValidationItem from './PecValidationItem';
 import PecVerificationDialog from './PecVerificationDialog';
@@ -127,7 +127,7 @@ const PecContactItem: React.FC = () => {
   /*
    * if *some* value has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
-   * (the DefaultDigitalContact component includes the "update" button)
+   * (the DigitalContact component includes the "update" button)
    */
   /*
    * if *no* value has been attached to the contact type,
@@ -137,7 +137,7 @@ const PecContactItem: React.FC = () => {
   return (
     <>
       {!verifyingAddress && (
-        <DefaultDigitalContact
+        <DigitalContact
           label={t('legal-contacts.pec-to-add', { ns: 'recapiti' })}
           value={currentValue}
           channelType={ChannelType.PEC}

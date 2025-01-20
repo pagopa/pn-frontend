@@ -9,8 +9,8 @@ import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { contactAlreadyExists } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
-import DefaultDigitalContact from './DefaultDigitalContact';
 import DeleteDialog from './DeleteDialog';
+import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import InformativeDialog from './InformativeDialog';
 
@@ -140,7 +140,7 @@ const EmailContactItem: React.FC = () => {
       title={t('courtesy-contacts.email-title', { ns: 'recapiti' })}
       subtitle={t('courtesy-contacts.email-description', { ns: 'recapiti' })}
     >
-      <DefaultDigitalContact
+      <DigitalContact
         label={t(`courtesy-contacts.email-to-add`, { ns: 'recapiti' })}
         value={currentValue}
         channelType={ChannelType.EMAIL}
