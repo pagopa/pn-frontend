@@ -30,6 +30,8 @@ export const NOT_ACCESSIBLE = '/non-accessibile';
 export const TERMS_OF_SERVICE_SERCQ_SEND = '/termini-di-servizio/sercq-send';
 export const TERMS_OF_SERVICE_B2B = '/termini-di-servizio/b2b';
 export const DIGITAL_DOMICILE_ACTIVATION = `${RECAPITI}/attivazione-domicilio-digitale`;
+export const DIGITAL_DOMICILE_TRANSFER = `${RECAPITI}/trasferimento-domicilio-digitale`;
+export const DIGITAL_DOMICILE_MANAGEMENT = `${RECAPITI}/gestione-domicilio-digitale`;
 export const SELFCARE_LOGOUT = '/auth/logout';
 
 const DASHBOARD = '/dashboard';

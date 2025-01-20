@@ -25,4 +25,6 @@ export const NOT_ACCESSIBLE = '/non-accessibile';
 export const SUPPORT = '/assistenza';
 export const TERMS_OF_SERVICE_SERCQ_SEND = '/termini-di-servizio/sercq-send';
 export const DIGITAL_DOMICILE_ACTIVATION = `${RECAPITI}/attivazione-domicilio-digitale`;
+export const DIGITAL_DOMICILE_TRANSFER = `${RECAPITI}/trasferimento-domicilio-digitale`;
+export const DIGITAL_DOMICILE_MANAGEMENT = `${RECAPITI}/gestione-domicilio-digitale`;
 export const LOGOUT = '/auth/logout';

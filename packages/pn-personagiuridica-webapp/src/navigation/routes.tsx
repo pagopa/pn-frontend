@@ -12,6 +12,7 @@ import {
 
 import DelegatesByCompany from '../components/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../components/Deleghe/DelegationsOfTheCompany';
+import DigitalContactManagement from '../pages/DigitalContactManagement.page';
 import { PNRole } from '../redux/auth/types';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -138,6 +139,16 @@ function Router() {
                 <Route
                   path={routes.DIGITAL_DOMICILE_ACTIVATION}
                   element={<DigitalContactActivation />}
+                />
+                <Route
+                  path={routes.DIGITAL_DOMICILE_TRANSFER}
+                  // TODO: change the following line as fix/PN-13444 is merged
+                  // element={<DigitalContactActivation isTransferring />}
+                  element={<DigitalContactActivation />}
+                />
+                <Route
+                  path={routes.DIGITAL_DOMICILE_MANAGEMENT}
+                  element={<DigitalContactManagement />}
                 />
                 <Route
                   path={routes.INTEGRAZIONE_API}

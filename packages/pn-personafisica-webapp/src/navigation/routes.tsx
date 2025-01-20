@@ -9,6 +9,7 @@ import {
   lazyRetry,
 } from '@pagopa-pn/pn-commons';
 
+import DigitalContactManagement from '../pages/DigitalContactManagement.page';
 import { getConfiguration } from '../services/configuration.service';
 import AARGuard from './AARGuard';
 import RouteGuard from './RouteGuard';
@@ -56,6 +57,16 @@ function Router() {
                 <Route
                   path={routes.DIGITAL_DOMICILE_ACTIVATION}
                   element={<DigitalContactActivation />}
+                />
+                <Route
+                  path={routes.DIGITAL_DOMICILE_TRANSFER}
+                  // TODO: change the following line as fix/PN-13444 is merged
+                  // element={<DigitalContactActivation isTransferring />}
+                  element={<DigitalContactActivation />}
+                />
+                <Route
+                  path={routes.DIGITAL_DOMICILE_MANAGEMENT}
+                  element={<DigitalContactManagement />}
                 />
               </Route>
             </Route>

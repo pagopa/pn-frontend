@@ -1,6 +1,6 @@
 import * as routes from '../navigation/routes.const';
 
-const WIZARD_PAGES = [routes.DIGITAL_DOMICILE_ACTIVATION];
+const WIZARD_PAGES = [routes.DIGITAL_DOMICILE_ACTIVATION, routes.DIGITAL_DOMICILE_TRANSFER, routes.DIGITAL_DOMICILE_MANAGEMENT];
 
 function showSideMenu(
   pathname: string,

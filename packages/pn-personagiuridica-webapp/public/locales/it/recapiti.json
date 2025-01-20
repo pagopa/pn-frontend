@@ -102,6 +102,24 @@
       "input-label": "Indirizzo PEC",
       "input-placeholder": "La tua PEC",
       "sercq-info-alert": "La PEC aziendale sostituirà la piattaforma SEND come tuo domicilio digitale. "
+    },
+    "digital-domicile-management": {
+      "title": "Gestisci domicilio digitale",
+      "sercq_send-active": "La piattaforma SEND è il domicilio digitale della tua impresa",
+      "choose-action": "Scegli un’opzione",
+      "transfer": {
+        "title-pec": "Trasferisci il domicilio digitale sulla piattaforma SEND",
+        "content-pec": "La piattaforma SEND ti garantisce consegne sicure e con valore legale. Il servizio è gratuito e non richiede strumenti aggiuntivi.",
+        "action-pec": "Trasferisci su SEND",
+        "title-sercq_send": "Trasferisci il domicilio digitale su una PEC aziendale",
+        "content-sercq_send": "Se hai una PEC, puoi usarla come domicilio digitale per le notifiche di SEND.",
+        "action-sercq_send": "Trasferisci su una PEC"
+      },
+      "special_contacts": {
+        "title": "Personalizza il tuo domicilio digitale per ente mittente",
+        "content": "Scegli dove ricevere le notifiche inviate alla tua impresa da un ente specifico.",
+        "action": "Personalizza per ente"
+      }
     }
   },
   "courtesy-contacts": {

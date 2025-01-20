@@ -8,7 +8,7 @@ function showFooter(pathname: string): boolean {
   return pathname !== '/privacy-tos';
 }
 
-const WIZARD_PAGES = [routes.DIGITAL_DOMICILE_ACTIVATION];
+const WIZARD_PAGES = [routes.DIGITAL_DOMICILE_ACTIVATION, routes.DIGITAL_DOMICILE_TRANSFER, routes.DIGITAL_DOMICILE_MANAGEMENT];
 
 function showSideMenu(
   pathname: string,

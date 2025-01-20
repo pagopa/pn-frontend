@@ -11,7 +11,10 @@ import { Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/materia
 import { PnInfoCard, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType } from '../../models/contacts';
-import { DIGITAL_DOMICILE_ACTIVATION } from '../../navigation/routes.const';
+import {
+  DIGITAL_DOMICILE_ACTIVATION,
+  DIGITAL_DOMICILE_MANAGEMENT,
+} from '../../navigation/routes.const';
 import { deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -75,6 +78,7 @@ const EmptyLegalContacts = () => {
 const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { defaultPECAddress, defaultSERCQ_SENDAddress, specialAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
@@ -149,7 +153,7 @@ const LegalContacts = () => {
             variant="naked"
             color="primary"
             startIcon={<ConstructionIcon />}
-            onClick={() => console.log('Gestisci!')}
+            onClick={() => navigate(`${DIGITAL_DOMICILE_MANAGEMENT}`)}
             sx={{ p: '10px 16px' }}
           >
             {t('button.manage')}
