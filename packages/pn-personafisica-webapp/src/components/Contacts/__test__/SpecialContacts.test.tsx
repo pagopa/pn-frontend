@@ -300,17 +300,14 @@ describe('SpecialContacts Component', async () => {
     const specialContactForms = result.getAllByTestId(
       /^[a-zA-Z0-9-]+(?:_pecSpecialContact|_sercq_sendSpecialContact)$/
     );
-    const editButton = within(specialContactForms[0]).getByRole('button', {
+    const editButton = within(specialContactForms[1]).getByRole('button', {
       name: 'button.modifica',
     });
     fireEvent.click(editButton);
 
-    const senderId = digitalLegalAddresses.find(
-      (address) => address.senderId !== 'default'
-    )!.senderId;
-    await testInput(specialContactForms[0], `${senderId}_pec`, pecValue);
+    await testInput(specialContactForms[1], `${specialAddresses[1].senderId}_pec`, pecValue);
 
-    const confirmButton = within(specialContactForms[0]).getByText('button.conferma');
+    const confirmButton = within(specialContactForms[1]).getByText('button.conferma');
     fireEvent.click(confirmButton);
 
     await waitFor(() => {

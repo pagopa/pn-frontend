@@ -14,7 +14,6 @@ const assignFn = vi.fn();
 describe('IOContact component', async () => {
   let mock: MockAdapter;
   const originalLocation = window.location;
-  const originalNavigator = window.navigator;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -32,7 +31,6 @@ describe('IOContact component', async () => {
   afterAll(() => {
     mock.restore();
     Object.defineProperty(window, 'location', { configurable: true, value: originalLocation });
-    Object.defineProperty(window, 'navigator', { value: originalNavigator });
   });
 
   it('renders component - no contacts', () => {
