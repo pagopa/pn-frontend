@@ -14,7 +14,6 @@ const assignFn = vi.fn();
 describe('IOContact component', async () => {
   let mock: MockAdapter;
   const originalLocation = window.location;
-  const originalNavigator = window.navigator;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -32,7 +31,6 @@ describe('IOContact component', async () => {
   afterAll(() => {
     mock.restore();
     Object.defineProperty(window, 'location', { configurable: true, value: originalLocation });
-    Object.defineProperty(window, 'navigator', { value: originalNavigator });
   });
 
   it('renders component - no contacts', () => {
@@ -41,7 +39,7 @@ describe('IOContact component', async () => {
     expect(title).toHaveTextContent('io-contact.title');
     const description = getByTestId('ioContactDescription');
     expect(description).toHaveTextContent('io-contact.description');
-    const chip = getByText('chip.to-enable');
+    const chip = getByText('status.inactive');
     expect(chip).toBeInTheDocument();
     const button = getByRole('button', { name: 'io-contact.download' });
     expect(button).toBeInTheDocument();
@@ -57,7 +55,7 @@ describe('IOContact component', async () => {
     const { getByTestId, getByRole, getByText } = render(<IOContact />, {
       preloadedState: { contactsState: { digitalAddresses: [IOAddress] } },
     });
-    const chip = getByText('chip.to-enable');
+    const chip = getByText('status.inactive');
     expect(chip).toBeInTheDocument();
     const enableBtn = getByRole('button', { name: 'io-contact.enable' });
     expect(enableBtn).toBeInTheDocument();
@@ -95,7 +93,7 @@ describe('IOContact component', async () => {
         },
       },
     });
-    const chip = getByText('chip.enabled');
+    const chip = getByText('status.active');
     expect(chip).toBeInTheDocument();
 
     const disableBtn = getByRole('button', { name: 'button.disable' });

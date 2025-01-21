@@ -106,7 +106,7 @@ describe('SpecialContactItem Component', () => {
     );
     const buttons = specialContactForms[0].querySelectorAll('button');
     fireEvent.click(buttons[0]);
-    // Click Confirm button of DefaultDigitalContact
+    // Click Confirm button of DigitalContact
     const confirmButton = container.querySelectorAll('button');
     fireEvent.click(confirmButton[0]);
     await waitFor(() => expect(editHandler).toHaveBeenCalledTimes(1));

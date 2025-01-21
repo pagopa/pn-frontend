@@ -1,13 +1,12 @@
 import { useCallback, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Box, Link, Stack } from '@mui/material';
+import { Alert, Box, Link, Stack, Typography } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
 import ContactsSummaryCards from '../components/Contacts/ContactsSummaryCards';
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import LegalContacts from '../components/Contacts/LegalContacts';
-import SpecialContacts from '../components/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
@@ -20,21 +19,39 @@ import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFact
 const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
-  const addressesData = useAppSelector(contactsSelectors.selectAddresses);
+  const {
+    defaultPECAddress,
+    defaultAPPIOAddress,
+    defaultSERCQ_SENDAddress,
+    specialPECAddresses,
+    specialSERCQ_SENDAddresses,
+    addresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
   const { LANDING_SITE_URL } = getConfiguration();
-
-  const showSpecialContactsSection = addressesData.specialAddresses.length > 0;
 
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses())
       .unwrap()
       .then(() => {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_YOUR_CONTACT_DETAILS, {
-          digitalAddresses: addressesData.addresses,
-          contactIO: addressesData.defaultAPPIOAddress,
+          digitalAddresses: addresses,
+          contactIO: defaultAPPIOAddress,
         });
       });
   }, []);
+
+  const hasDodEnabledAndValidatingPec =
+    (!defaultPECAddress?.pecValid && defaultSERCQ_SENDAddress) ||
+    specialSERCQ_SENDAddresses.some((sercqAddr) =>
+      specialPECAddresses.some(
+        (pecAddr) => !pecAddr.pecValid && pecAddr.senderId === sercqAddr.senderId
+      )
+    );
+
+  const hasValidatingPecSpecialContact = specialPECAddresses.some((address) => !address.pecValid);
+
+  const verifyingPecAddress =
+    (defaultPECAddress && !defaultPECAddress.pecValid) || hasValidatingPecSpecialContact;
 
   const faqWhatIsAarCompleteLink = useMemo(
     () =>
@@ -73,6 +90,10 @@ const Contacts = () => {
     />
   );
 
+  const bannerMessage = hasDodEnabledAndValidatingPec
+    ? 'legal-contacts.pec-validation-banner.dod-enabled-message'
+    : 'legal-contacts.pec-validation-banner.dod-disabled-message';
+
   return (
     <LoadingPageWrapper isInitialized={true}>
       <Box p={3}>
@@ -87,11 +108,16 @@ const Contacts = () => {
           reloadAction={fetchAddresses}
         >
           <ContactsSummaryCards />
+          {verifyingPecAddress && (
+            <Alert data-testid="PecVerificationAlert" severity="info" sx={{ my: { xs: 2, lg: 4 } }}>
+              <Typography variant="inherit" sx={{ fontWeight: '600' }}>
+                {t('legal-contacts.pec-validation-banner.title', { ns: 'recapiti' })}
+              </Typography>
+              <Typography variant="inherit">{t(bannerMessage, { ns: 'recapiti' })}</Typography>
+            </Alert>
+          )}
           <Stack direction="column" spacing={6}>
-            <Box>
-              <LegalContacts />
-              {showSpecialContactsSection && <SpecialContacts />}
-            </Box>
+            <LegalContacts />
             <CourtesyContacts />
           </Stack>
         </ApiErrorWrapper>

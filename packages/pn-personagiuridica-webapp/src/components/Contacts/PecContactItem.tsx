@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { contactAlreadyExists } from '../../utility/contacts.utility';
 import CancelVerificationModal from './CancelVerificationModal';
 import ContactCodeDialog from './ContactCodeDialog';
-import DefaultDigitalContact from './DefaultDigitalContact';
+import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import PecValidationItem from './PecValidationItem';
 import PecVerificationDialog from './PecVerificationDialog';
@@ -112,7 +112,7 @@ const PecContactItem: React.FC = () => {
   return (
     <>
       {!verifyingAddress && !defaultSERCQ_SENDAddress && (
-        <DefaultDigitalContact
+        <DigitalContact
           label={t('legal-contacts.pec-to-add', { ns: 'recapiti' })}
           value={currentValue}
           channelType={ChannelType.PEC}

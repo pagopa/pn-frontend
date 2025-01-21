@@ -180,7 +180,7 @@ const IOContact: React.FC = () => {
       }
       subtitle={
         <Chip
-          label={t(`chip.${isAppIOEnabled ? 'enabled' : 'to-enable'}`, { ns: 'recapiti' })}
+          label={t(`status.${isAppIOEnabled ? 'active' : 'inactive'}`, { ns: 'recapiti' })}
           color={getChipColor()}
           size="small"
           sx={{ mb: 2 }}
@@ -202,7 +202,6 @@ const IOContact: React.FC = () => {
           : undefined
       }
       expanded={isAppIOEnabled}
-      slotProps={{ Card: { sx: { pt: '1.5rem' } } }}
     >
       <Stack direction="row" alignItems="center" data-testid="ioContact">
         <Avatar variant="rounded" sx={{ bgcolor: '#0B3EE3', width: '36px', height: '36px' }}>

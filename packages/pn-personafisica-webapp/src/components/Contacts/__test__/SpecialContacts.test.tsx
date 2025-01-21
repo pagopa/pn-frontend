@@ -305,7 +305,7 @@ describe('SpecialContacts Component', async () => {
     });
     fireEvent.click(editButton);
 
-    await testInput(specialContactForms[1], 'default_pec', pecValue);
+    await testInput(specialContactForms[1], `${specialAddresses[1].senderId}_pec`, pecValue);
 
     const confirmButton = within(specialContactForms[1]).getByText('button.conferma');
     fireEvent.click(confirmButton);

@@ -5,7 +5,7 @@ import { Box, Chip, Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { ChannelType, DigitalAddress, Sender } from '../../models/contacts';
-import DefaultDigitalContact from './DefaultDigitalContact';
+import DigitalContact from './DigitalContact';
 import PecValidationItem from './PecValidationItem';
 
 type Props = {
@@ -93,9 +93,10 @@ const SpecialContactItem: React.FC<Props> = ({
               </ButtonNaked>
             </Stack>
           ) : (
-            <DefaultDigitalContact
+            <DigitalContact
               value={value}
               channelType={channelType}
+              senderId={senderId}
               label=""
               inputProps={{
                 label: t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' }),
