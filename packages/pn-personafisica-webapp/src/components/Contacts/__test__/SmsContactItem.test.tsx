@@ -79,7 +79,7 @@ describe('test SmsContactItem', () => {
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-sms');
   });
 
-  it.only('add new phone number', async () => {
+  it('add new phone number', async () => {
     const phoneValue = '3333333333';
     mock
       .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
