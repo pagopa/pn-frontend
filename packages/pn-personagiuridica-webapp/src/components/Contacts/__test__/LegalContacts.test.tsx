@@ -124,7 +124,6 @@ describe('LegalContacts Component', async () => {
     expect(container).toHaveTextContent('status.inactive');
     expect(container).toHaveTextContent('legal-contacts.sercq-send-info-advantages');
 
-    // TODO: find a way to access sercq-send-info-list translations to test the EmptyLegalContacts content
     const digitalNotificationsIcon = getByTestId('LaptopChromebookIcon');
     expect(digitalNotificationsIcon).toBeInTheDocument();
     const savingsIcon = getByTestId('SavingsIcon');

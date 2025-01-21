@@ -381,7 +381,12 @@
     "viewed-description-multirecipient": "Almeno un destinatario ha letto la notifica.",
     "canceled": "Annullata",
     "canceled-tooltip": "L'ente ha annullato l'invio della notifica",
-    "canceled-description": "L'ente ha annullato l'invio della notifica."
+    "canceled-description": "L'ente ha annullato l'invio della notifica.",
+    "returned-to-sender":"Resa al mittente",
+    "returned-to-sender-tooltip": "Il destinatario risulta deceduto",
+    "returned-to-sender-tooltip-multirecipient": "Tutti i destinatari risultano deceduti",
+    "returned-to-sender-description": "Il destinatario risulta deceduto.",
+    "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti."
   },
   "new-notification": {
     "title": "Invia una nuova notifica",
