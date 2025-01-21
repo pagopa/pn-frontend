@@ -50,14 +50,13 @@ const CustomTagGroup: React.FC<CustomTagGroupProps> = ({
               onOpen={onOpen}
               tooltipContent={<>{arrayChildren.slice(visibleItems).map((c) => c)}</>}
             >
-              <div>
+              <Box sx={{ width: 'fit-content' }}>
                 <TagIndicator
-                  boxProps={{ role: 'button' }}
                   arrayChildren={arrayChildren}
                   visibleItems={visibleItems as number}
                   dataTestId="custom-tooltip-indicator"
                 />
-              </div>
+              </Box>
             </CustomTooltip>
           )}
           {disableTooltip && (
