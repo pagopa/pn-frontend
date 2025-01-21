@@ -1,8 +1,7 @@
-import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
+import { digitalAddressesSercq } from '../../__mocks__/Contacts.mock';
 import { fireEvent, render } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
 import DigitalContactManagement from '../DigitalContactManagement.page';
 
 const mockNavigateFn = vi.fn();
@@ -12,19 +11,13 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-describe('DigitalContactActivation', () => {
-  let mock: MockAdapter;
-
-  beforeAll(() => {
-    mock = new MockAdapter(apiClient);
-  });
-
-  afterEach(() => {
-    mock.reset();
+describe('DigitalContactManagement', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
-    mock.restore();
+    vi.restoreAllMocks();
   });
 
   it('render component', () => {
@@ -34,7 +27,13 @@ describe('DigitalContactActivation', () => {
   });
 
   it('should go back when clicking on the back button', () => {
-    const { getByText } = render(<DigitalContactManagement />);
+    const { getByText } = render(<DigitalContactManagement />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: digitalAddressesSercq,
+        },
+      },
+    });
     const backButton = getByText('button.indietro');
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
