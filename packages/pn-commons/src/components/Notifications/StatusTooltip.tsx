@@ -4,6 +4,7 @@ import { SxProps, TooltipProps } from '@mui/material';
 import Chip from '@mui/material/Chip';
 
 import CustomTooltip from '../CustomTooltip';
+import { useIsMobile } from '../../hooks';
 
 const StatusTooltip = ({
   tooltip,
@@ -18,14 +19,14 @@ const StatusTooltip = ({
   tooltipProps?: Partial<TooltipProps>;
   chipProps?: SxProps;
 }) => {
+  const isMobile = useIsMobile();
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
-  const labelContent = <span aria-label={`${label}: ${tooltip}`}>{label}</span>;
 
   return (
-    <CustomTooltip openOnClick={false} tooltipContent={tooltipContent} tooltipProps={tooltipProps}>
+    <CustomTooltip openOnClick={isMobile} tooltipContent={tooltipContent} tooltipProps={tooltipProps}>
       <Chip
         id={`status-chip-${label}`}
-        label={labelContent}
+        label={label}
         color={color}
         sx={{
           ...chipProps,
