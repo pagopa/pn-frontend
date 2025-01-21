@@ -97,11 +97,7 @@ describe('testing EmailContactItem', () => {
     const button = result.getByTestId('default_email-button');
     expect(button).toBeEnabled();
     fireEvent.click(button);
-    // Confirms the disclaimer dialog
-    /* const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
-    fireEvent.click(disclaimerCheckbox);
-    const disclaimerConfirmButton = result.getByTestId('disclaimer-confirm-button');
-    fireEvent.click(disclaimerConfirmButton); */
+    // Confirms the informative dialog
     const informativeDialog = await waitFor(() => result.getByTestId('informativeDialog'));
     expect(informativeDialog).toBeInTheDocument();
     const understandButton = result.getByTestId('understandButton');
@@ -186,11 +182,7 @@ describe('testing EmailContactItem', () => {
     await waitFor(() => expect(input!).toHaveValue(emailValue));
     // confirm new value
     fireEvent.click(saveButton);
-    // Confirms the disclaimer dialog
-    /* const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
-    fireEvent.click(disclaimerCheckbox);
-    const disclaimerConfirmButton = result.getByTestId('disclaimer-confirm-button');
-    fireEvent.click(disclaimerConfirmButton); */
+    // Confirms the informative dialog
     const informativeDialog = await waitFor(() => result.getByTestId('informativeDialog'));
     expect(informativeDialog).toBeInTheDocument();
     const understandButton = result.getByTestId('understandButton');
