@@ -34,7 +34,8 @@ const StatusTooltip = ({
       }}
     >
       <Chip
-        id={`status-chip-${label}-${iun}`}
+        id={`status-chip-${label}`}
+        key={`status-chip-${label}`}
         label={label}
         color={color}
         sx={{
