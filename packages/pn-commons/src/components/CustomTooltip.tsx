@@ -49,6 +49,7 @@ const CustomTooltip: React.FC<Props> = ({
       {openOnClick
         ? cloneElement(children, {
             onClick: handleTooltipOpen,
+            'aria-describedby': open ? id : undefined,
           })
         : children}
     </Tooltip>
