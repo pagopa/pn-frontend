@@ -17,6 +17,9 @@ import {
 import {
   ApiErrorWrapper,
   CustomDropdown,
+  FormBox,
+  FormBoxSubtitle,
+  FormBoxTitle,
   PhysicalCommunicationType,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
@@ -37,7 +40,6 @@ import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
-import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 import PreliminaryInformationsContent from './PreliminaryInformationsContent';
 import PreliminaryInformationsLang from './PreliminaryInformationsLang';
 
@@ -185,7 +187,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
         <NewNotificationCard isContinueDisabled={!formik.isValid} title={t('title')}>
           <Typography variant="body2">{tc('required-fields')}</Typography>
           <FormBox>
-            <FormBoxTitle text={t('sender-denomination')} />
+            <FormBoxTitle variantType="sidenav" sx={{fontWeight:600 , fontSize:'16px'}} text={t('sender-denomination')} />
             <TextField
               id="senderDenomination"
               label={`${t('sender-name')}*`}
@@ -214,8 +216,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           />
 
           <FormBox>
-            <FormBoxTitle text={t('protocol-number')} />
-            <FormBoxSubtitle text={t('protocol-number-subtitle')} />
+            <FormBoxTitle variantType="sidenav" sx={{fontWeight:600 , fontSize:'16px'}} text={t('protocol-number')} />
+            <FormBoxSubtitle variantType="body2" sx={{fontSize:'14px', mt:1, mb:1}} text={t('protocol-number-subtitle')} />
             <TextField
               id="paProtocolNumber"
               label={`${t('protocol-number')}*`}
@@ -230,7 +232,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             />
           </FormBox>
           <FormBox>
-            <FormBoxTitle text={t('taxonomy-id')} />
+            <FormBoxTitle variantType="sidenav" sx={{fontWeight:600 , fontSize:'16px'}} text={t('taxonomy-id')} />
             <Typography variant="body2" fontSize={'14px'} marginTop={0.5}>
               <Trans
                 t={t}
@@ -263,9 +265,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           <FormBox>
             <FormControl margin="none" fullWidth>
               <FormLabel id="comunication-type-label">
-                <FormBoxTitle text={t('comunication-type-title')} />
+                <FormBoxTitle variantType="sidenav" sx={{fontWeight:600 , fontSize:'16px'}} text={t('comunication-type-title')} />
               </FormLabel>
-              <FormBoxSubtitle text={t('comunication-type-subtitle')} />
+              <FormBoxSubtitle variantType="body2" sx={{fontSize:'14px', mt:1, mb:1}} text={t('comunication-type-subtitle')} />
               <RadioGroup
                 aria-labelledby="comunication-type-label"
                 name="physicalCommunicationType"
@@ -290,8 +292,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           </FormBox>
 
           <FormBox>
-            <FormBoxTitle text={t('notification-management-title')} />
-            <FormBoxSubtitle text={t('notification-management-subtitle')} />
+            <FormBoxTitle variantType="sidenav" sx={{fontWeight:600 , fontSize:'16px'}} text={t('notification-management-title')} />
+            <FormBoxSubtitle variantType="body2" sx={{fontSize:'14px', mt:1, mb:1}} text={t('notification-management-subtitle')} />
             <CustomDropdown
               id="group"
               label={`${t('group')}${hasGroups ? '*' : ''}`}

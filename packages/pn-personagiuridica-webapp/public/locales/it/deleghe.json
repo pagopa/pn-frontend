@@ -92,7 +92,7 @@
       "lastName": "Cognome*",
       "fiscalCode": "Codice Fiscale*",
       "businessName": "Ragione Sociale*",
-      "viewFrom": "Potrà visualizzare le notifiche da parte di*:",
+      "viewFrom": "Potrà consultare le notifiche da parte di*:",
       "allEntities": "Tutti gli enti",
       "onlySelected": "Solo enti selezionati",
       "selectEntities": "Seleziona enti*",

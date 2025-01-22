@@ -24,7 +24,7 @@ import { setAttachments } from '../../redux/newNotification/reducers';
 import { getConfiguration } from '../../services/configuration.service';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
-import { FormBox, FormBoxTitle } from './NewNotificationFormElelements';
+import { FormBox, FormBoxTitle } from './NewNotificationFormElements';
 
 function NameFocusHelperText() {
   const { t } = useTranslation(['common']);

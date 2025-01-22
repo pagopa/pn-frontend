@@ -14,7 +14,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { DigitalDomicileType, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
+import { DigitalDomicileType, FormBox, FormBoxSubtitle, FormBoxTitle, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { NewNotificationRecipient, PaymentModel } from '../../models/NewNotification';
@@ -29,7 +29,6 @@ import {
 } from '../../utility/validation.utility';
 import FormTextField from './FormTextField';
 import NewNotificationCard from './NewNotificationCard';
-import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 import PhysicalAddress from './PhysicalAddress';
 
 const singleRecipient = {
@@ -316,7 +315,7 @@ const Recipient: React.FC<Props> = ({
                 <FormBox testid="RecipientFormBox">
                   {/* Soggetto giuridico */}
                   <Stack direction="row" justifyContent="space-between">
-                    <FormBoxTitle text={`${t('legal-entity')}*`} />
+                    <FormBoxTitle variantType="sidenav" sx={{fontWeight:600 , fontSize:'16px'}} text={`${t('legal-entity')}*`} />
                     {values.recipients.length > 1 && (
                       <ButtonNaked
                         data-testid="DeleteRecipientIcon"
@@ -428,7 +427,7 @@ const Recipient: React.FC<Props> = ({
 
                   {/* Indirizzo */}
                   <Box mt={4} mb={3}>
-                    <FormBoxTitle text={t('address')} />
+                    <FormBoxTitle variantType="sidenav" sx={{fontWeight:600 , fontSize:'16px'}} text={t('address')} />
                   </Box>
                   <Grid
                     container
@@ -448,8 +447,8 @@ const Recipient: React.FC<Props> = ({
 
                   {/* Domicilio digitale */}
                   <Box mt={4} mb={2}>
-                    <FormBoxTitle text={t('digital-domicile')} />
-                    <FormBoxSubtitle text={t('digital-domicile-subtitle')} />
+                    <FormBoxTitle variantType="sidenav" sx={{fontWeight:600 , fontSize:'16px'}} text={t('digital-domicile')} />
+                    <FormBoxSubtitle variantType="body2" sx={{fontSize:'14px', mt:1, mb:1}} text={t('digital-domicile-subtitle')} />
                   </Box>
                   <Grid container columnSpacing={1} rowSpacing={2}>
                     <Grid item xs={12} lg={6}>
