@@ -12,7 +12,7 @@ const NotificationStatusChip: React.FC<{
   const { label, tooltip, color } = getNotificationStatusInfos(data.notificationStatus, {
     recipients: data.recipients,
   });
-  return <StatusTooltip label={label} tooltip={tooltip} color={color} />;
+  return <StatusTooltip label={label} tooltip={tooltip} color={color} iun={data.iun} />;
 };
 
 const NotificationsDataSwitch: React.FC<{

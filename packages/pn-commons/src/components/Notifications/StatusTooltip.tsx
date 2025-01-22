@@ -12,12 +12,14 @@ const StatusTooltip = ({
   color,
   tooltipProps,
   chipProps,
+  iun,
 }: {
   tooltip: string | ReactNode;
   label: string;
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   tooltipProps?: Partial<TooltipProps>;
   chipProps?: SxProps;
+  iun?: string;
 }) => {
   const isMobile = useIsMobile();
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
@@ -26,18 +28,21 @@ const StatusTooltip = ({
     <CustomTooltip
       openOnClick={isMobile}
       tooltipContent={tooltipContent}
-      tooltipProps={tooltipProps}
-      id="status-tooltip"
+      tooltipProps={{
+        ...tooltipProps,
+        id: `notification-status-${iun}`,
+      }}
     >
       <Chip
-        id={`status-chip-${label}`}
+        id={`status-chip-${label}-${iun}`}
         label={label}
         color={color}
         sx={{
           ...chipProps,
           cursor: 'default',
         }}
-        data-testid={`statusChip-${label}`}
+        data-testid={`statusChip-${label}-${iun}`}
+        aria-live='polite'
       />
     </CustomTooltip>
   );
