@@ -42,7 +42,6 @@ const CustomTooltip: React.FC<Props> = ({
       enterTouchDelay={0}
       onOpen={onOpen}
       {...tooltipProps}
-      key={(tooltipProps?.id || '') + '-' + new Date().getTime()}
     >
       {openOnClick
         ? cloneElement(children, {
