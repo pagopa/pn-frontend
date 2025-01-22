@@ -49,10 +49,9 @@ describe('CourtesyContacts Component', async () => {
     expect(emailInput).not.toBeInTheDocument();
     const email = getByText(defaultEmail!.value);
     expect(email).toBeInTheDocument();
-    const emailButtons = within(emailContact).getAllByRole('button');
-    expect(emailButtons).toHaveLength(1);
-    expect(emailButtons[0]).toBeEnabled();
-    expect(emailButtons[0].textContent).toMatch('button.modifica');
+    const emailButton = within(emailContact).getByRole('button');
+    expect(emailButton).toBeEnabled();
+    expect(emailButton.textContent).toMatch('button.modifica');
     const emailDisableBtn = getByTestId('disable-email');
     expect(emailDisableBtn).toBeInTheDocument();
     expect(emailDisableBtn).toHaveTextContent('disable');
@@ -62,10 +61,9 @@ describe('CourtesyContacts Component', async () => {
     expect(phoneInput).not.toBeInTheDocument();
     const phoneNumber = getByText(defaultPhone!.value);
     expect(phoneNumber).toBeInTheDocument();
-    const phoneButtons = within(phoneContact).getAllByRole('button');
-    expect(phoneButtons).toHaveLength(1);
-    expect(phoneButtons[0]).toBeEnabled();
-    expect(phoneButtons[0].textContent).toMatch('button.modifica');
+    const phoneButton = within(phoneContact).getByRole('button');
+    expect(phoneButton).toBeEnabled();
+    expect(phoneButton.textContent).toMatch('button.modifica');
     const smsDisableBtn = getByTestId('disable-sms');
     expect(smsDisableBtn).toBeInTheDocument();
     expect(smsDisableBtn).toHaveTextContent('disable');

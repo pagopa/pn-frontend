@@ -6,7 +6,6 @@ import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
 import ContactsSummaryCards from '../components/Contacts/ContactsSummaryCards';
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
-import IOContact from '../components/Contacts/IOContact';
 import LegalContacts from '../components/Contacts/LegalContacts';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -122,7 +121,6 @@ const Contacts = () => {
           )}
           <Stack direction="column" spacing={2}>
             <LegalContacts />
-            <IOContact />
             <CourtesyContacts />
           </Stack>
         </ApiErrorWrapper>

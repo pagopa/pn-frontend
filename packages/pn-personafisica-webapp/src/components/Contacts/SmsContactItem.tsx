@@ -137,7 +137,7 @@ const SmsContactElem: React.FC<Props> = ({ onCancelInsert }) => {
   /*
    * if *some* value (phone number, email address) has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
-   * (the DefaultDigitalContact component includes the "update" button)
+   * (the DigitalContact component includes the "update" button)
    * if *no* value (phone number, email address) has been attached to the contact type,
    * then we show the input field allowing the user to enter it along with the button
    * to perform the addition.

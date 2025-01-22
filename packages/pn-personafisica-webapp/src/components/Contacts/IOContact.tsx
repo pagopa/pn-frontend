@@ -208,7 +208,6 @@ const IOContact: React.FC = () => {
           : undefined
       }
       expanded={isAppIOEnabled}
-      slotProps={{ Card: { sx: { p: { xs: 2, lg: 3 } } } }}
     >
       <Stack direction="row" alignItems="center" data-testid="ioContact">
         <Avatar variant="rounded" sx={{ bgcolor: '#0B3EE3', width: '36px', height: '36px' }}>

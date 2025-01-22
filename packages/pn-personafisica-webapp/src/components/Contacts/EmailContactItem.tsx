@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { Box, Button, Chip, Divider, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -50,9 +51,13 @@ const EmailSmsComponent: React.FC = () => {
           <Typography variant="body1" fontWeight={600} fontSize="16px" mt={3} mb={1}>
             {t('courtesy-contacts.email-sms-updates')}
           </Typography>
-          <Button variant="naked" sx={{ fontSize: '16px' }} onClick={() => setInsertMode(true)}>
+          <ButtonNaked
+            color="primary"
+            sx={{ fontSize: '16px' }}
+            onClick={() => setInsertMode(true)}
+          >
             {t('courtesy-contacts.email-sms-add')}
-          </Button>
+          </ButtonNaked>
         </>
       )}
     </Box>
@@ -75,7 +80,7 @@ const EmailContactItem: React.FC = () => {
   });
 
   const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
-  const isActive = !!defaultEMAILAddress;
+  const isEmailActive = !!defaultEMAILAddress;
 
   const hasCourtesyAddresses =
     addresses.filter(
@@ -192,7 +197,7 @@ const EmailContactItem: React.FC = () => {
   };
 
   const getChipColor = () => {
-    if (isActive) {
+    if (isEmailActive) {
       return 'success';
     }
     if (defaultSERCQ_SENDAddress && !hasCourtesyAddresses) {
@@ -202,7 +207,7 @@ const EmailContactItem: React.FC = () => {
   };
 
   const getActions = () =>
-    isActive
+    isEmailActive
       ? [
           <Button
             data-testid="disable-email"
@@ -245,17 +250,17 @@ const EmailContactItem: React.FC = () => {
       }
       subtitle={
         <Chip
-          label={t(`status.${isActive ? 'active' : 'inactive'}`, { ns: 'recapiti' })}
+          label={t(`status.${isEmailActive ? 'active' : 'inactive'}`, { ns: 'recapiti' })}
           color={getChipColor()}
           size="small"
           sx={{ mb: 2 }}
         />
       }
       actions={getActions()}
-      expanded={isActive}
+      expanded={isEmailActive}
       data-testid="emailContact"
     >
-      {!isActive && (
+      {!isEmailActive && (
         <Typography variant="body1" fontSize={{ xs: '14px', lg: '16px' }} mb={3}>
           {t('courtesy-contacts.email-empty-description', { ns: 'recapiti' })}
         </Typography>
@@ -273,7 +278,7 @@ const EmailContactItem: React.FC = () => {
         insertButtonLabel={t(`courtesy-contacts.email-add`, { ns: 'recapiti' })}
         onSubmit={handleSubmit}
       />
-      {isActive && (
+      {isEmailActive && (
         <Typography variant="body1" fontSize={{ xs: '14px', lg: '16px' }} mt={2}>
           {t('courtesy-contacts.email-filled-description', { ns: 'recapiti' })}
         </Typography>

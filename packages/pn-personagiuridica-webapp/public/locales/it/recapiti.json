@@ -64,7 +64,7 @@
     "sercq-send-courtesy-title": "Scegli come ricevere gli avvisi",
     "sercq-send-courtesy-description": "Senza un recapito di cortesia non possiamo avvisarti quando c’è da leggere una comunicazione a valore legale su SEND.",
     "remove-sercq_send-title": "Confermi di voler disattivare il Domicilio Digitale su SEND?",
-    "remove-sercq_send-message": "Non avrai più un recapito digitale a valore legale per le comunicazioni della Pubblica Amministrazione e potresti tornare a ricevere le notifiche in forma cartacea.",
+    "remove-sercq_send-message": "Non avrai più un recapito digitale a valore legale per le comunicazioni della Pubblica Amministrazione e potresti riceverle su carta.",
     "block-remove-digital-domicile-title": "Non è possibile disattivare il Domicilio Digitale",
     "block-remove-digital-domicile-message": "Per procedere, devi prima disattivare i domicili digitali personalizzati per ente.",
     "sercq_send-removed-successfully": "Domicilio Digitale disattivato correttamente",
@@ -105,7 +105,7 @@
     }
   },
   "courtesy-contacts": {
-   "email-title": "Indirizzo email aziendale",
+    "email-title": "Indirizzo email aziendale",
     "email-empty-description": "Aggiungi un indirizzo email aziendale su cui possiamo avvisarti quando c’è una notifica SEND per la tua impresa.",
     "email-filled-description": "Quando c’è una notifica per la tua impresa, ti informiamo con una email.",
     "email-dialog-description": "Quando c’è una notifica per l’impresa, avvisiamo con una email. Un utente dovrà accedere a SEND per leggerla e pagare eventuali importi.",
@@ -136,10 +136,6 @@
     "remove-email-message": "Se confermi, non riceverai più l’email su {{value}} quando c’è una notifica SEND da leggere.",
     "remove-sms-title": "Disattiva cellulare",
     "remove-sms-message": "Se confermi, non riceverai più l’SMS su {{value}} quando c’è una notifica SEND da leggere.",
-    "block-remove-email-title": "Non puoi eliminare l'email",
-    "block-remove-email-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi email che hai indicato alla voce “Recapiti secondari”.",
-    "block-remove-sms-title": "Non puoi eliminare il numero di telefono",
-    "block-remove-sms-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Recapiti secondari”.",
     "info-modal-email-title": "Avvisi via email: come funzionano",
     "info-modal-email-subtitle": "Quando ci sono nuove notifiche SEND per la tua impresa, riceverai un avviso all’indirizzo email aziendale inserito.",
     "info-modal-email-content": "Se non hai il domicilio digitale attivo e non apri la notifica entro 5 giorni dalla ricezione della email, riceverai i documenti in formato cartaceo a casa.",

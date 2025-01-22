@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, screen, testStore, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import { internationalPhonePrefix } from '../../../utility/contacts.utility';
@@ -161,7 +161,7 @@ describe('test SmsContactItem', () => {
     expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
     const editButton = getById(form!, 'modifyContact-default_sms');
     expect(editButton).toBeInTheDocument();
-    const disableBtn = screen.getByRole('button', { name: 'button.disable' });
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
   });
 
@@ -254,7 +254,7 @@ describe('test SmsContactItem', () => {
     expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
     editButton = getById(form!, 'modifyContact-default_sms');
     expect(editButton).toBeInTheDocument();
-    const disableBtn = screen.getByRole('button', { name: 'button.disable' });
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
   });
 
@@ -268,11 +268,11 @@ describe('test SmsContactItem', () => {
         },
       },
     });
-    const disableBtn = screen.getByRole('button', { name: 'button.disable' });
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
     // click on cancel
     fireEvent.click(disableBtn);
-    let dialog = await waitFor(() => screen.getByRole('dialog'));
+    let dialog = await waitFor(() => result.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
     let dialogButtons = dialog.querySelectorAll('button');
     // cancel remove operation
@@ -280,7 +280,7 @@ describe('test SmsContactItem', () => {
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
     // click on confirm
     fireEvent.click(disableBtn);
-    dialog = await waitFor(() => screen.getByRole('dialog'));
+    dialog = await waitFor(() => result.getByRole('dialog'));
     dialogButtons = dialog.querySelectorAll('button');
     fireEvent.click(dialogButtons[1]);
     await waitFor(() => {
