@@ -22,7 +22,7 @@ const StatusTooltip = ({
   iun?: string;
 }) => {
   const isMobile = useIsMobile();
-  const tooltipContent = <Fragment key={`tooltip-${iun}`}>{tooltip}</Fragment>;
+  const tooltipContent = <Fragment>{tooltip}</Fragment>;
 
   return (
     <CustomTooltip
@@ -34,6 +34,7 @@ const StatusTooltip = ({
       }}
     >
       <Chip
+        key={(iun || '') + '-' + new Date().getTime()}
         label={label}
         color={color}
         sx={{
