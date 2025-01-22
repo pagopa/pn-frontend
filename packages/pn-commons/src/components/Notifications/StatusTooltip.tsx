@@ -34,7 +34,6 @@ const StatusTooltip = ({
       }}
     >
       <Chip
-        key={(iun || '') + '-' + new Date().getTime()}
         label={label}
         color={color}
         sx={{
