@@ -37,7 +37,7 @@ const StatusTooltip = ({
           cursor: 'default',
         }}
         data-testid={`statusChip-${label}`}
-        aria-live="assertive"
+        aria-live="polite"
       />
     </CustomTooltip>
   );
