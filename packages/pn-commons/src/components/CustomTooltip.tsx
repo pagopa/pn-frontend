@@ -8,6 +8,7 @@ type Props = {
   onOpen?: () => void;
   children: JSX.Element;
   tooltipProps?: Partial<TooltipProps>;
+  id?: string;
 };
 
 const CustomTooltip: React.FC<Props> = ({
@@ -16,6 +17,7 @@ const CustomTooltip: React.FC<Props> = ({
   children,
   onOpen,
   tooltipProps,
+  id,
 }) => {
   // tooltip state
   const [open, setOpen] = useState(false);
@@ -33,6 +35,7 @@ const CustomTooltip: React.FC<Props> = ({
 
   return (
     <Tooltip
+      id={id}
       arrow
       leaveTouchDelay={5000}
       title={tooltipContent}

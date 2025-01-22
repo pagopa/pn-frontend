@@ -27,6 +27,7 @@ const StatusTooltip = ({
       openOnClick={isMobile}
       tooltipContent={tooltipContent}
       tooltipProps={tooltipProps}
+      id="status-tooltip"
     >
       <Chip
         id={`status-chip-${label}`}
@@ -36,6 +37,7 @@ const StatusTooltip = ({
           ...chipProps,
           cursor: 'default',
         }}
+        aria-describedby="status-tooltip"
         data-testid={`statusChip-${label}`}
       />
     </CustomTooltip>
