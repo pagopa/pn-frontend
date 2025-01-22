@@ -36,6 +36,7 @@ const StatusTooltip = ({
           cursor: 'default',
         }}
         data-testid={`statusChip-${label}`}
+        aria-describedby={tooltipProps?.id}
       />
     </CustomTooltip>
   );
