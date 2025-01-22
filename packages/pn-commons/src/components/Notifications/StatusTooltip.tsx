@@ -42,7 +42,6 @@ const StatusTooltip = ({
           cursor: 'default',
         }}
         data-testid={`statusChip-${label}-${iun}`}
-        aria-live='polite'
       />
     </CustomTooltip>
   );
