@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 
+import { Dialog, DialogContent } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -59,10 +60,6 @@ const Login = () => {
     });
   };
 
-  if (showIDPS) {
-    return <SpidSelect onBack={() => setShowIDPS(false)} />;
-  }
-
   const changeLanguageHandler = async (langCode: string) => {
     await i18n.changeLanguage(langCode);
   };
@@ -70,6 +67,10 @@ const Login = () => {
   const handleAssistanceClick = () => {
     // eslint-disable-next-line functional/immutable-data
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+  };
+
+  const closeIDPS = () => {
+    setShowIDPS(false);
   };
 
   return (
@@ -167,6 +168,17 @@ const Login = () => {
           </Box>
         </Grid>
       </Grid>
+      <Dialog
+        open={showIDPS}
+        fullScreen
+        aria-labelledby="spid-select"
+        transitionDuration={0}
+        onClose={closeIDPS}
+      >
+        <DialogContent sx={{ p: 0 }}>
+          <SpidSelect onBack={closeIDPS} />
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 };
