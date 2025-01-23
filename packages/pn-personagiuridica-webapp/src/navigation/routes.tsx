@@ -142,9 +142,7 @@ function Router() {
                 />
                 <Route
                   path={routes.DIGITAL_DOMICILE_TRANSFER}
-                  // TODO: change the following line as fix/PN-13444 is merged
-                  // element={<DigitalContactActivation isTransferring />}
-                  element={<DigitalContactActivation />}
+                  element={<DigitalContactActivation isTransferring />}
                 />
                 <Route
                   path={routes.DIGITAL_DOMICILE_MANAGEMENT}

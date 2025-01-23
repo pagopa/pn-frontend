@@ -16,13 +16,15 @@ import { pecValidationSchema } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
 
 interface Props {
+  isTransferring?: boolean;
   setShowPecWizard: (showPecWizard: boolean) => void;
 }
 
-const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
+const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecWizard }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [activeStep, setActiveStep] = useState(0);
   const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
   const [openCodeModal, setOpenCodeModal] = useState(false);
 
@@ -64,7 +66,7 @@ const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
           return;
         }
         setOpenCodeModal(false);
-        navigate(-1);
+        return isTransferring ? setActiveStep(activeStep + 1) : navigate(-1);
       })
       .catch(() => {});
   };
@@ -74,17 +76,15 @@ const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
       <PnWizard
         title={
           <Typography fontSize="28px" fontWeight={700} data-testid="pec-wizard-title">
-            {t('legal-contacts.pec-contact-wizard.title')}
+            {t(`legal-contacts.pec-contact-wizard.title${isTransferring ? '-transfer' : ''}`)}
           </Typography>
         }
-        activeStep={0}
-        setActiveStep={() => null}
+        activeStep={activeStep}
+        setActiveStep={setActiveStep}
         slots={{
           prevButton: () => (
             <ButtonNaked
-              // TODO: change the following line as fix/PN-13444 is merged
-              // onClick={isTransferring ? navigate(-1) : () => setShowPecWizard(false)}
-              onClick={() => setShowPecWizard(false)}
+              onClick={isTransferring ? () => navigate(-1) : () => setShowPecWizard(false)}
               color="primary"
               size="medium"
               data-testid="prev-button"
@@ -101,6 +101,17 @@ const PecContactWizard: React.FC<Props> = ({ setShowPecWizard }) => {
           container: {
             'data-testid': 'pec-contact-wizard',
           },
+          feedback: isTransferring
+            ? {
+                title: t(
+                  `legal-contacts.sercq-send-wizard.feedback.title-${
+                    isTransferring ? 'transfer' : 'activation'
+                  }`
+                ),
+                buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
+                onClick: () => navigate(-1),
+              }
+            : undefined,
         }}
       >
         <PnWizardStep>
