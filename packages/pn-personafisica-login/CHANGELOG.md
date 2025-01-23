@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.2...v2.11.0) (2025-01-20)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [2.11.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0...v2.11.0-RC.0) (2025-01-10)
+
+
+### Features
+
+* **pn-13499:** improve configuration ([#1429](https://github.com/pagopa/pn-frontend/issues/1429)) ([e0956fb](https://github.com/pagopa/pn-frontend/commit/e0956fb6afcce8fd7fcd954105be74ab03e8b140))
+
+
+
+
+
 # [2.10.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0-RC.0...v2.10.0) (2025-01-07)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
