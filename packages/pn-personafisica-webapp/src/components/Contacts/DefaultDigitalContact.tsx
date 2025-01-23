@@ -62,7 +62,9 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       enableReinitialize: true,
       /** onSubmit validate */
       onSubmit: (values) => {
-        onSubmit(values[`default_${contactType}`]);
+        if (formik.isValid) {
+          onSubmit(values[`default_${contactType}`]);
+        }
       },
     });
 
@@ -134,7 +136,6 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             <Button
               id={`default_${contactType}-button`}
               variant="outlined"
-              disabled={!formik.isValid}
               fullWidth
               type="submit"
               data-testid={`default_${contactType}-button`}
@@ -184,7 +185,6 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             <ButtonNaked
               key="saveButton"
               color="primary"
-              disabled={!formik.isValid}
               type="submit"
               sx={{ mr: 2, fontWeight: 700 }}
               id={`saveContact-default_${contactType}`}
