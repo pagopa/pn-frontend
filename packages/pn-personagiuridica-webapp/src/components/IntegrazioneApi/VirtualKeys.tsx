@@ -1,12 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
 import { Button, Stack, Typography } from '@mui/material';
-import { EmptyState, KnownSentiment, formatDate, today } from '@pagopa-pn/pn-commons';
+import {
+  EmptyState,
+  KnownSentiment,
+  formatDate,
+  today,
+  useHasPermissions,
+} from '@pagopa-pn/pn-commons';
 
 import {
-  BffPublicKeysCheckIssuerResponse,
   BffVirtualKeyStatusRequestStatusEnum,
   PublicKeysIssuerResponseIssuerStatusEnum,
   VirtualKey,
@@ -15,11 +20,11 @@ import {
 import { ModalApiKeyView } from '../../models/ApiKeys';
 import {
   changeVirtualApiKeyStatus,
-  checkPublicKeyIssuer,
   createVirtualApiKey,
   deleteVirtualApiKey,
   getVirtualApiKeys,
 } from '../../redux/apikeys/actions';
+import { PNRole } from '../../redux/auth/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import ApiKeyModal from './ApiKeyModal';
@@ -35,39 +40,32 @@ const VirtualKeys: React.FC = () => {
   const { t } = useTranslation('integrazioneApi');
   const dispatch = useAppDispatch();
   const virtualKeys = useAppSelector((state: RootState) => state.apiKeysState.virtualKeys);
-  const currentUser = useAppSelector((state: RootState) => state.userState.user);
+  const issuerState = useAppSelector((state: RootState) => state.apiKeysState.issuerState);
   const [modal, setModal] = useState<ModalType>({ view: ModalApiKeyView.NONE });
+  const currentUser = useAppSelector((state: RootState) => state.userState.user);
+  const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
+  const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
+  const isAdminWithoutGroups = userHasAdminPermissions && !currentUser.hasGroup;
 
-  const [issuerState, setIssuerState] = useState<BffPublicKeysCheckIssuerResponse>({
-    tosAccepted: false,
-    issuer: {
-      isPresent: false,
-      issuerStatus: PublicKeysIssuerResponseIssuerStatusEnum.Inactive,
-    },
-  });
-
-  const hasOneEnabledKey = virtualKeys.items.find(
+  const hasOneEnabledVirtualKey = !!virtualKeys.items.find(
     (key) =>
       key.status === VirtualKeyStatus.Enabled &&
-      (!key.user || key.user?.fiscalCode === currentUser.fiscal_number)
+      (!isAdminWithoutGroups ||
+        (isAdminWithoutGroups && key.user?.fiscalCode === currentUser.fiscal_number))
   );
+
   const isCreationEnabled =
-    !hasOneEnabledKey &&
+    !hasOneEnabledVirtualKey &&
     issuerState.tosAccepted &&
     issuerState.issuer.isPresent &&
     issuerState.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
 
-  const fetchVirtualKeys = useCallback(() => {
-    void dispatch(getVirtualApiKeys({ showPublicKey: true }));
-  }, []);
+  const issuerIsActive =
+    issuerState.issuer.issuerStatus === PublicKeysIssuerResponseIssuerStatusEnum.Active;
+  const issuerIsPresent = issuerState.issuer.isPresent;
 
-  const fetchCheckIssuer = useCallback(() => {
-    dispatch(checkPublicKeyIssuer())
-      .unwrap()
-      .then((response) => {
-        setIssuerState(response);
-      })
-      .catch(() => {});
+  const fetchVirtualKeys = useCallback(() => {
+    void dispatch(getVirtualApiKeys({ showVirtualKey: true }));
   }, []);
 
   const handleGenerateVirtualKey = () => {
@@ -125,11 +123,6 @@ const VirtualKeys: React.FC = () => {
       .catch(() => {});
   };
 
-  useEffect(() => {
-    fetchVirtualKeys();
-    fetchCheckIssuer();
-  }, []);
-
   return (
     <>
       <Stack
@@ -162,7 +155,12 @@ const VirtualKeys: React.FC = () => {
           {t('virtualKeys.tos-empty-state')}
         </EmptyState>
       ) : (
-        <VirtualKeysTable virtualKeys={virtualKeys} handleModalClick={handleModalClick} />
+        <VirtualKeysTable
+          virtualKeys={virtualKeys}
+          handleModalClick={handleModalClick}
+          issuerIsActive={issuerIsActive}
+          issuerIsPresent={issuerIsPresent}
+        />
       )}
 
       {modal.view === ModalApiKeyView.VIEW && (

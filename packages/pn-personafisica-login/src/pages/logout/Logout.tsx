@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { getConfiguration } from '../../services/configuration.service';
+import { ROUTE_LOGIN } from '../../navigation/routes.const';
 import { storageAarOps } from '../../utility/storage';
 
 const Logout = () => {
-  const { ROUTE_LOGIN } = getConfiguration();
   const navigate = useNavigate();
   const searchParams = window.location.search ?? '';
 

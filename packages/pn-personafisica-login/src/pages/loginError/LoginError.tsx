@@ -6,7 +6,7 @@ import { Box, Button, Dialog, Typography } from '@mui/material';
 import { IllusError } from '@pagopa/mui-italia';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
-import { getConfiguration } from '../../services/configuration.service';
+import { ROUTE_LOGIN } from '../../navigation/routes.const';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 
 const handleError = (queryParams: string, errorMessage: string) => {
@@ -22,7 +22,6 @@ const handleError = (queryParams: string, errorMessage: string) => {
 };
 
 const LoginError = () => {
-  const { ROUTE_LOGIN } = getConfiguration();
   const { t } = useTranslation(['login', 'common']);
   const navigate = useNavigate();
   const [urlSearchParams] = useSearchParams();

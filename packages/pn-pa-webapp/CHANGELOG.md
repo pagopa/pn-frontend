@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.2...v2.11.0) (2025-01-20)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+# [2.11.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.0...v2.11.0-RC.1) (2025-01-10)
+
+
+### Features
+
+* **pn-13265:** cache refresh updated for selfcare-PG ([#1413](https://github.com/pagopa/pn-frontend/issues/1413)) ([b5d2292](https://github.com/pagopa/pn-frontend/commit/b5d2292f2c7701f5f21858caf48ea6ed71352543))
+
+
+
+
+
+# [2.11.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0...v2.11.0-RC.0) (2025-01-10)
+
+
+### Bug Fixes
+
+* **pn-13269:** Translate AAR label in the notification detail page ([#1420](https://github.com/pagopa/pn-frontend/issues/1420)) ([05ee4f0](https://github.com/pagopa/pn-frontend/commit/05ee4f0cfdeb71779038d04ba83eb13569dbf029))
+* **pn-9848:** Get TraceId from header ([#1176](https://github.com/pagopa/pn-frontend/issues/1176)) ([2e613a7](https://github.com/pagopa/pn-frontend/commit/2e613a722a0e667813a20eac1b12fc6936fa1322))
+
+
+### Features
+
+* **pn-13347:** add new status return to sender to timeline ([#1416](https://github.com/pagopa/pn-frontend/issues/1416)) ([82b17fa](https://github.com/pagopa/pn-frontend/commit/82b17faa6eeef406f9e75033246fd5f5f2a9dbda))
+* **pn-13499:** improve configuration ([#1429](https://github.com/pagopa/pn-frontend/issues/1429)) ([e0956fb](https://github.com/pagopa/pn-frontend/commit/e0956fb6afcce8fd7fcd954105be74ab03e8b140))
+
+
+
+
+
 # [2.10.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0-RC.0...v2.10.0) (2025-01-07)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
