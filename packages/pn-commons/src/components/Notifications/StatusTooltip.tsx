@@ -27,7 +27,6 @@ const StatusTooltip = ({
       openOnClick={isMobile}
       tooltipContent={tooltipContent}
       tooltipProps={tooltipProps}
-      id="status-tooltip"
     >
       <Chip
         id={`status-chip-${label}`}
