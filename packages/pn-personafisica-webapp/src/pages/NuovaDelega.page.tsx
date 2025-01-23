@@ -254,7 +254,7 @@ const NuovaDelega = () => {
             <Grid item lg={8} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumbs}
               <Paper sx={{ padding: '24px', marginBottom: '20px' }} elevation={0}>
-               <FormBoxTitle variantType="sidenav" sx={{ fontWeight: 'bold', fontSize:'16px' }} id='personType' text={t('nuovaDelega.form.personType')}></FormBoxTitle>
+               <FormBoxTitle variantType="sidenav" sx={{ fontWeight: 'bold' }} id='personType' text={t('nuovaDelega.form.personType')}></FormBoxTitle>
                 <FormBoxSubtitle variantType="body2" sx={{fontSize:'14px', mt:1, mb:1}} text={t('nuovaDelega.form.personType-content-subtitle')}></FormBoxSubtitle>
                 <Formik
                   initialValues={initialValues}
@@ -450,8 +450,8 @@ const NuovaDelega = () => {
                         </Stack>
                       </FormControl>
                       <br />
-                      <Box sx={{ marginTop: '1rem', width: '100%' }}>
-                      <FormBoxTitle  variantType="sidenav" sx={{ fontWeight:'bold', mb:2 }} text={t('nuovaDelega.form.date-duration')}></FormBoxTitle>
+                      <Box sx={{ marginTop: '0.5rem', width: '100%' }}>
+                      <FormBoxTitle sx={{ fontWeight:'bold', mb:2 }} text={t('nuovaDelega.form.date-duration')}></FormBoxTitle>
                         <FormControl fullWidth>
                           <CustomDatePicker
                             language={i18n.language}

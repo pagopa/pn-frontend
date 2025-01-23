@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const FormBoxSubtitle = ({ text, sx, variantType, id }:Props) => (
-    <Typography sx={{ ...sx }} variant={variantType} id={id}>
+    <Typography sx={{ ...sx }} variant={variantType} id={id} data-testid={id}>
       {text}
     </Typography>
   );

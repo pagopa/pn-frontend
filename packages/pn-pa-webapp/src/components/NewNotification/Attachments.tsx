@@ -14,7 +14,7 @@ import {
   Typography,
   useFormControl,
 } from '@mui/material';
-import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
+import { FileUpload, FormBox, FormBoxTitle, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { NewNotificationDocument } from '../../models/NewNotification';
@@ -24,7 +24,6 @@ import { setAttachments } from '../../redux/newNotification/reducers';
 import { getConfiguration } from '../../services/configuration.service';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
-import { FormBox, FormBoxTitle } from './NewNotificationFormElements';
 
 function NameFocusHelperText() {
   const { t } = useTranslation(['common']);

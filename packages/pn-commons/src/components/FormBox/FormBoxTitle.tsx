@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const FormBoxTitle = ({ text, sx, variantType, id }:Props) => (
-    <Typography sx={{ ...sx }} variant={variantType} id={id}>
+    <Typography sx={{ ...sx }} variant={variantType} id={id} data-testid={id}>
       {text}
     </Typography>
   );
