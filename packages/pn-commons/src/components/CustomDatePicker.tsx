@@ -31,7 +31,7 @@ const CustomDatePicker = (
         }}
         closeOnSelect
         localeText={{
-          cancelButtonLabel:'Chiudi',
+          cancelButtonLabel: getLocalizedOrDefaultLabel('common', 'button.close'),
           openPreviousView: getLocalizedOrDefaultLabel('common', 'date-picker.left-arrow'),
           openNextView: getLocalizedOrDefaultLabel('common', 'date-picker.right-arrow'),
           calendarViewSwitchingButtonAriaLabel: (view) =>
