@@ -85,7 +85,18 @@ describe('PnWizard Component', () => {
 
   it('should render feedback step', () => {
     const { getByTestId } = render(
-      <PnWizard activeStep={2} setActiveStep={setActiveStep} title="Wizard Title" showFeedbackStep>
+      <PnWizard
+        activeStep={2}
+        setActiveStep={setActiveStep}
+        title="Wizard Title"
+        slotsProps={{
+          feedback: {
+            title: 'Custom title',
+            buttonText: 'Custom button text',
+            onClick: vi.fn(),
+          },
+        }}
+      >
         <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
         <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
       </PnWizard>
@@ -97,12 +108,7 @@ describe('PnWizard Component', () => {
 
   it('should not render feedback step', () => {
     const { queryByTestId } = render(
-      <PnWizard
-        activeStep={2}
-        setActiveStep={setActiveStep}
-        title="Wizard Title"
-        showFeedbackStep={false}
-      >
+      <PnWizard activeStep={2} setActiveStep={setActiveStep} title="Wizard Title">
         <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
         <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
       </PnWizard>
@@ -120,7 +126,6 @@ describe('PnWizard Component', () => {
         activeStep={2}
         setActiveStep={setActiveStep}
         title="Wizard Title"
-        showFeedbackStep
         slotsProps={{
           feedback: {
             title: 'Custom title',

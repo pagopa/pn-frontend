@@ -15,7 +15,6 @@ type Props = {
   setActiveStep: (step: number) => void;
   title: ReactNode;
   children: ReactNode;
-  showFeedbackStep?: boolean;
   slots?: {
     nextButton?: JSXElementConstructor<ButtonProps>;
     prevButton?: JSXElementConstructor<ButtonProps>;
@@ -41,7 +40,6 @@ const PnWizard: React.FC<Props> = ({
   setActiveStep,
   title,
   children,
-  showFeedbackStep = true,
   slots,
   slotsProps,
 }) => {
@@ -82,7 +80,7 @@ const PnWizard: React.FC<Props> = ({
     goToStep(activeStep - 1);
   };
 
-  if (activeStep >= childrens.length && showFeedbackStep) {
+  if (activeStep >= childrens.length && slotsProps?.feedback) {
     return (
       <Box
         sx={{ minHeight: '350px', height: '100%', display: 'flex' }}

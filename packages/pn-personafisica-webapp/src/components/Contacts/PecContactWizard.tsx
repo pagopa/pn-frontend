@@ -119,17 +119,18 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
           container: {
             'data-testid': 'pec-contact-wizard',
           },
-          feedback: {
-            title: t(
-              `legal-contacts.sercq-send-wizard.feedback.title-${
-                isTransferring ? 'transfer' : 'activation'
-              }`
-            ),
-            buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
-            onClick: () => navigate(-1),
-          },
+          feedback: isTransferring
+            ? {
+                title: t(
+                  `legal-contacts.sercq-send-wizard.feedback.title-${
+                    isTransferring ? 'transfer' : 'activation'
+                  }`
+                ),
+                buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
+                onClick: () => navigate(-1),
+              }
+            : undefined,
         }}
-        showFeedbackStep={isTransferring}
       >
         <PnWizardStep>
           <Typography fontSize="22px" fontWeight={700} mb={{ xs: 2, lg: 3 }}>
