@@ -83,11 +83,6 @@ const EmailContactItem: React.FC = () => {
       setModalOpen(ModalType.INFORMATIVE);
       return;
     }
-    // disclaimer modal must be opened only when we are adding a default address
-    /* if (legalAddresses.length === 0) {
-      setModalOpen(ModalType.DISCLAIMER);
-      return;
-    } */
     handleCodeVerification();
   };
 
@@ -259,17 +254,6 @@ const EmailContactItem: React.FC = () => {
         handleDiscard={handleCancelCode}
         handleConfirm={() => handleCodeVerification()}
       />
-      {/* <DisclaimerModal
-        open={modalOpen === ModalType.DISCLAIMER}
-        onConfirm={() => {
-          setModalOpen(null);
-          handleCodeVerification();
-        }}
-        onCancel={handleCancelCode}
-        confirmLabel={t('button.conferma')}
-        checkboxLabel={t('button.capito')}
-        content={t(`alert-dialog-email`, { ns: 'recapiti' })}
-      /> */}
       <ContactCodeDialog
         value={currentAddress.current.value}
         addressType={AddressType.COURTESY}
