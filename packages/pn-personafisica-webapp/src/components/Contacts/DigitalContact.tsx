@@ -119,7 +119,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
         <form
           onSubmit={formik.handleSubmit}
           data-testid={`${senderId}_${contactType}Contact`}
-          style={{ width: isMobile ? '100%' : '50%' }}
+          style={{ width: isMobile ? '100%' : 'auto' }}
         >
           <Typography
             id={`${senderId}_${contactType}-label`}
@@ -129,14 +129,14 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
           >
             {label}
           </Typography>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
             <TextField
               id={`${senderId}_${contactType}`}
               name={`${senderId}_${contactType}`}
               placeholder={inputProps.label}
               size="small"
               fullWidth
-              sx={{ flexBasis: { xs: 'unset', lg: '66.66%' } }}
+              sx={{ flexBasis: { xs: 'unset', lg: '358px' } }}
               InputProps={{
                 startAdornment: inputProps.prefix ? (
                   <InputAdornment position="start">{inputProps.prefix}</InputAdornment>
@@ -159,8 +159,13 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               fullWidth
               type="submit"
               data-testid={`${senderId}_${contactType}-button`}
-              sx={{ flexBasis: { xs: 'unset', lg: '33.33%' }, height: '43px', fontWeight: 700 }}
-              size="medium"
+              sx={{
+                flexBasis: { xs: 'unset', lg: '33.33%' },
+                maxWidth: { xs: 'none', lg: '250px' },
+                height: '43px',
+                fontWeight: 700,
+              }}
+              size="small"
             >
               {insertButtonLabel}
             </Button>

@@ -32,7 +32,9 @@ describe('test SmsContactItem', () => {
 
   it('type in an invalid number', async () => {
     // render component
-    const { container } = render(<SmsContactItem />);
+    const { container, getByRole } = render(<SmsContactItem />);
+    const addBtn = getByRole('button', { name: 'courtesy-contacts.email-sms-add' });
+    fireEvent.click(addBtn);
     expect(container).toHaveTextContent('courtesy-contacts.sms-to-add');
     const form = container.querySelector('form');
     const input = form!.querySelector(`[name="default_sms"]`);
@@ -95,6 +97,8 @@ describe('test SmsContactItem', () => {
       })
       .reply(204);
     const result = render(<SmsContactItem />);
+    const addBtn = result.getByRole('button', { name: 'courtesy-contacts.email-sms-add' });
+    fireEvent.click(addBtn);
     // // insert new phone
     let form = result.container.querySelector('form');
     const input = form!.querySelector(`[name="default_sms"]`);
@@ -286,11 +290,7 @@ describe('test SmsContactItem', () => {
           )
       ).toStrictEqual([]);
     });
-    // wait rerendering due to redux changes
-    await waitFor(() => {
-      const input = result.container.querySelector(`[name="default_sms"]`);
-      expect(input).toBeInTheDocument();
-      expect(result.container).not.toHaveTextContent('');
-    });
+    expect(result.container).toHaveTextContent('courtesy-contacts.email-sms-updates');
+    expect(result.container).toHaveTextContent('courtesy-contacts.email-sms-add');
   });
 });

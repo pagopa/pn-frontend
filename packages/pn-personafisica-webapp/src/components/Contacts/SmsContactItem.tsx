@@ -2,8 +2,9 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Button, Chip, Typography } from '@mui/material';
+import { Box, Button, Chip, Divider, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -198,7 +199,7 @@ const SmsContactElem: React.FC<Props> = ({ onCancelInsert }) => {
   );
 };
 
-const SmsContactItem: React.FC<Props> = ({ onCancelInsert }) => {
+const SmsContactItem: React.FC<Props> = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses } = useAppSelector(
@@ -206,6 +207,7 @@ const SmsContactItem: React.FC<Props> = ({ onCancelInsert }) => {
   );
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  const [insertMode, setInsertMode] = useState(false);
 
   const isActive = !!defaultSMSAddress;
 
@@ -265,7 +267,7 @@ const SmsContactItem: React.FC<Props> = ({ onCancelInsert }) => {
         ]
       : undefined;
 
-  if (defaultSMSAddress) {
+  if (isActive) {
     return (
       <PnInfoCard
         title={
@@ -316,7 +318,29 @@ const SmsContactItem: React.FC<Props> = ({ onCancelInsert }) => {
       </PnInfoCard>
     );
   }
-  return <SmsContactElem onCancelInsert={onCancelInsert} />;
+  return (
+    <Box mt={3}>
+      <Divider />
+      {insertMode ? (
+        <Box mt={3}>
+          <SmsContactElem onCancelInsert={() => setInsertMode(false)} />
+        </Box>
+      ) : (
+        <>
+          <Typography variant="body1" fontWeight={600} fontSize="16px" mt={3} mb={1}>
+            {t('courtesy-contacts.email-sms-updates', { ns: 'recapiti' })}
+          </Typography>
+          <ButtonNaked
+            color="primary"
+            sx={{ fontSize: '16px' }}
+            onClick={() => setInsertMode(true)}
+          >
+            {t('courtesy-contacts.email-sms-add', { ns: 'recapiti' })}
+          </ButtonNaked>
+        </>
+      )}
+    </Box>
+  );
 };
 
 export default SmsContactItem;
