@@ -25,6 +25,8 @@ import {
   CustomDatePicker,
   DATE_FORMAT,
   DatePickerTypes,
+  FormBoxSubtitle,
+  FormBoxTitle,
   PnAutocomplete,
   PnBreadcrumb,
   RecipientType,
@@ -219,9 +221,8 @@ const NuovaDelega = () => {
             <Grid item lg={8} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumbs}
               <Paper sx={{ padding: '24px', marginBottom: '20px' }}>
-                <Typography sx={{ fontWeight: 'bold' }}>
-                  {t('nuovaDelega.form.personType')}
-                </Typography>
+                <FormBoxTitle variantType="sidenav" sx={{ fontWeight: 'bold' }} id='personType' text={t('nuovaDelega.form.personType')}></FormBoxTitle>
+                <FormBoxSubtitle variantType="body2" sx={{fontSize:'14px', mt:1, mb:1}} text={t('nuovaDelega.form.personType-content-subtitle')}></FormBoxSubtitle>
                 <Formik
                   initialValues={initialValues}
                   validationSchema={validationSchema}
@@ -245,6 +246,7 @@ const NuovaDelega = () => {
                                   event.currentTarget.value
                                 );
                               }}
+                              aria-labelledby='personType'
                             >
                               <FormControlLabel
                                 id="select-pf"
@@ -338,9 +340,8 @@ const NuovaDelega = () => {
                         helperText={getError(touched.codiceFiscale, errors.codiceFiscale)}
                         fullWidth
                       />
-                      <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }}>
-                        {t('nuovaDelega.form.viewFrom')}
-                      </Typography>
+                      <FormBoxTitle  variantType="sidenav" sx={{ fontWeight:'bold', mt: 1 }} id={'selectEnti'} text={t('nuovaDelega.form.viewFrom')}></FormBoxTitle>
+                      <FormBoxSubtitle variantType="body2" sx={{fontSize:'14px', mt:1, mb:1}} text= {t('nuovaDelega.form.viewFrom-content-subtitle')}></FormBoxSubtitle>
                       <FormControl sx={{ width: '100%' }}>
                         <Stack>
                           <RadioGroup
@@ -356,6 +357,7 @@ const NuovaDelega = () => {
                                 handleGetAllEntities();
                               }
                             }}
+                            aria-labelledby='selectEnti'
                           >
                             <FormControlLabel
                               id="tutti-gli-enti-selezionati"
@@ -414,9 +416,7 @@ const NuovaDelega = () => {
                         </Stack>
                       </FormControl>
                       <Box sx={{ marginTop: '1rem', width: '100%' }}>
-                        <Typography fontWeight="bold" marginBottom={2}>
-                          {t('nuovaDelega.form.date-duration')}
-                        </Typography>
+                      <FormBoxTitle sx={{ fontWeight:'bold', mb:2 }} text={t('nuovaDelega.form.date-duration')}></FormBoxTitle>
                         <FormControl fullWidth>
                           <CustomDatePicker
                             language={i18n.language}
