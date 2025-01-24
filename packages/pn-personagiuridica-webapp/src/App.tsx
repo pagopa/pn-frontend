@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import SettingsEthernet from '@mui/icons-material/SettingsEthernet';
 import { Box } from '@mui/material';
 import {
+  APP_VERSION,
   AppMessage,
   AppResponseMessage,
   Layout,
@@ -20,9 +21,7 @@ import {
   SideMenuItem,
   appStateActions,
   errorFactoryManager,
-  getSessionLanguage,
   initLocalization,
-  setSessionLanguage,
   useHasPermissions,
   useMultiEvent,
   useTracking,
@@ -66,7 +65,7 @@ const App = () => {
 
 // eslint-disable-next-line complexity
 const ActualApp = () => {
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION, SELFCARE_BASE_URL, IS_B2B_ENABLED } =
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, IS_B2B_ENABLED } =
     getConfiguration();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -78,8 +77,7 @@ const ActualApp = () => {
     (state: RootState) => state.generalInfoState.pendingDelegators
   );
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
-  const { pathname, hash } = useLocation();
-  const path = pathname.split('/');
+  const { pathname } = useLocation();
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -92,16 +90,11 @@ const ActualApp = () => {
     [loggedUser]
   );
 
-  const isPrivacyPage = path[1] === 'privacy-tos';
+  const isPublicKeyRegistrationPage = pathname.includes(routes.REGISTRA_CHIAVE_PUBBLICA);
+
   const organization = loggedUser.organization;
   const role = loggedUser.organization?.roles ? loggedUser.organization?.roles[0] : null;
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
-
-  const handleSetUserLanguage = useCallback(() => {
-    const langParam = new URLSearchParams(hash).get('lang');
-    const language = langParam || getSessionLanguage() || 'it';
-    void changeLanguageHandler(language);
-  }, [location]);
 
   // TODO: get products list from be (?)
   const productsList: Array<ProductEntity> = useMemo(
@@ -134,7 +127,6 @@ const ActualApp = () => {
       }
 
       void dispatch(getCurrentAppStatus());
-      handleSetUserLanguage();
     }
   }, [sessionToken]);
 
@@ -245,7 +237,6 @@ const ActualApp = () => {
   );
 
   const changeLanguageHandler = async (langCode: string) => {
-    setSessionLanguage(langCode);
     await i18n.changeLanguage(langCode);
   };
 
@@ -261,7 +252,7 @@ const ActualApp = () => {
       dispatch(
         appStateActions.addSuccess({
           title: 'Current version',
-          message: `v${VERSION}`,
+          message: `v${APP_VERSION}`,
         })
       ),
   });
@@ -274,8 +265,8 @@ const ActualApp = () => {
     <>
       <ResponseEventDispatcher />
       <Layout
-        showHeader={!isPrivacyPage}
-        showFooter={!isPrivacyPage}
+        showHeader
+        showFooter
         onExitAction={handleUserLogout}
         sideMenu={<SideMenu menuItems={menuItems} selfCareItems={selfcareMenuItems} />}
         showSideMenu={
@@ -286,7 +277,7 @@ const ActualApp = () => {
           privacyConsent &&
           privacyConsent.accepted &&
           fetchedPrivacy &&
-          !isPrivacyPage
+          !isPublicKeyRegistrationPage
         }
         productsList={productsList}
         productId={'0'}
@@ -294,6 +285,7 @@ const ActualApp = () => {
           tosConsent && tosConsent.accepted && privacyConsent && privacyConsent.accepted
         }
         loggedUser={jwtUser}
+        currentLanguage={i18n.language}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
         partyList={partyList}

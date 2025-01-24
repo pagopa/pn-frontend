@@ -7,7 +7,12 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { AppRouteParams, Layout, setSessionLanguage, useIsMobile } from '@pagopa-pn/pn-commons';
+import {
+  AppRouteParams,
+  Layout,
+  PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
@@ -30,8 +35,8 @@ const Login = () => {
   const isMobile = useIsMobile();
   const [params] = useSearchParams();
   const aar = params.get(AppRouteParams.AAR);
-  const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL, ROUTE_PRIVACY_POLICY } =
-    getConfiguration();
+  const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL, PF_URL } = getConfiguration();
+  const privacyPolicyUrl = `${PF_URL}${PRIVACY_POLICY}`;
 
   if (aar !== null && aar !== '') {
     storageAarOps.write(aar);
@@ -59,7 +64,6 @@ const Login = () => {
   }
 
   const changeLanguageHandler = async (langCode: string) => {
-    setSessionLanguage(langCode);
     await i18n.changeLanguage(langCode);
   };
 
@@ -72,6 +76,7 @@ const Login = () => {
     <Layout
       productsList={[]}
       onAssistanceClick={handleAssistanceClick}
+      currentLanguage={i18n.language}
       onLanguageChanged={changeLanguageHandler}
       showSideMenu={false}
       loggedUser={{
@@ -80,7 +85,7 @@ const Login = () => {
         surname: undefined,
         email: undefined,
       }}
-      privacyPolicyHref={ROUTE_PRIVACY_POLICY}
+      privacyPolicyHref={privacyPolicyUrl}
     >
       <Grid container direction="column" my={isMobile ? 4 : 16} alignItems="center" id="loginPage">
         <Grid item>

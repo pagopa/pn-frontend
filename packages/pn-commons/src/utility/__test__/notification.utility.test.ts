@@ -410,7 +410,7 @@ describe('timeline legal fact link text', () => {
       timestamp: '2023-08-25T09:35:37.467148235Z',
       category: TimelineCategory.ANALOG_FAILURE_WORKFLOW,
       details: {
-        getGeneratedAarUrl: 'https://aar-fake-url.com',
+        generatedAarUrl: 'https://aar-fake-url.com',
       },
     };
     const label = getLegalFactLabel(timelineElem);

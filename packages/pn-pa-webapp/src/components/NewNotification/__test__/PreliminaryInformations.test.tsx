@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import {
@@ -14,6 +15,7 @@ import {
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { userResponse } from '../../../__mocks__/Auth.mock';
+import { errorMock } from '../../../__mocks__/Errors.mock';
 import {
   newNotification,
   newNotificationEmpty,
@@ -25,6 +27,7 @@ import {
   fireEvent,
   randomString,
   render,
+  
   testStore,
   waitFor,
   within,
@@ -41,7 +44,13 @@ vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
+  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
+    <>
+      {props.i18nKey} {props.components?.map((c) => c)}
+    </>
+  ),
 }));
 
 vi.mock('../../../services/configuration.service', async () => {
@@ -49,6 +58,7 @@ vi.mock('../../../services/configuration.service', async () => {
     ...(await vi.importActual<any>('../../../services/configuration.service')),
     getConfiguration: () => ({
       IS_PAYMENT_ENABLED: mockIsPaymentEnabledGetter(),
+      TAXONOMY_SEND_URL: 'https://mock-taxonomy-url',
     }),
   };
 });
@@ -75,6 +85,7 @@ const populateForm = async (
     1,
     true
   );
+  
   if (hasPayment) {
     await testRadio(
       form,
@@ -136,7 +147,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     testFormElements(form, 'abstract', 'abstract');
     testFormElements(form, 'group', 'group');
     testFormElements(form, 'taxonomyCode', 'taxonomy-id*');
-    testFormElements(form, 'senderDenomination', 'sender-denomination*');
+    testFormElements(form, 'senderDenomination', 'sender-name*');
     testRadio(form, 'comunicationTypeRadio', ['registered-letter-890', 'simple-registered-letter']);
     testRadio(form, 'paymentMethodRadio', [
       'pagopa-notice',
@@ -214,6 +225,10 @@ describe('PreliminaryInformations component with payment enabled', async () => {
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
         paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE,
         senderDenomination: newNotification.senderDenomination,
+        lang: 'it',
+        additionalAbstract: '',
+        additionalLang: '',
+        additionalSubject: '',
       });
     });
     expect(confirmHandlerMk).toBeCalledTimes(1);
@@ -313,12 +328,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     testFormElements(form, 'abstract', 'abstract', newNotification.abstract);
     testFormElements(form, 'group', 'group', newNotification.group);
     testFormElements(form, 'taxonomyCode', 'taxonomy-id*', newNotification.taxonomyCode);
-    testFormElements(
-      form,
-      'senderDenomination',
-      'sender-denomination*',
-      userResponse.organization.name
-    );
+    testFormElements(form, 'senderDenomination', 'sender-name*', userResponse.organization.name);
     const physicalCommunicationType = form.querySelector(
       `input[name="physicalCommunicationType"][value="${newNotification.physicalCommunicationType}"]`
     );
@@ -330,7 +340,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
   });
 
   it('errors on api call', async () => {
-    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(500);
+    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(errorMock.status, errorMock.data);
     await act(async () => {
       result = render(
         <>
@@ -445,6 +455,10 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
         paymentMode: PaymentModel.NOTHING,
         senderDenomination: newNotification.senderDenomination,
+        lang: 'it',
+        additionalAbstract: '',
+        additionalLang: '',
+        additionalSubject: '',
       });
     });
     expect(confirmHandlerMk).toBeCalledTimes(1);
@@ -483,5 +497,62 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
     const button = within(form).getByTestId('step-submit');
     // check submit button state
     expect(button).toBeDisabled();
+  });
+
+  it('should render taxonomy link with correct href', async () => {
+    await act(async () => {
+      result = render(
+        <PreliminaryInformations
+          notification={{
+            ...newNotificationEmpty,
+          }}
+          onConfirm={confirmHandlerMk}
+        />,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                organization: { name: 'Comune di Palermo', hasGroup: true },
+              },
+            },
+          },
+        }
+      );
+    });
+
+    expect(result.getByRole('link')).toHaveAttribute('href', 'https://mock-taxonomy-url');
+  });
+
+  it('should set default additionalLang of user', async () => {
+    await act(async () => {
+      result = render(
+        <PreliminaryInformations
+          notification={{
+            ...newNotificationEmpty,
+          }}
+          onConfirm={confirmHandlerMk}
+        />,
+        {
+          preloadedState: {
+            userState: {
+              additionalLanguages: ['de'],
+              user: {
+                organization: { name: 'Comune di Palermo', hasGroup: true },
+              },
+            },
+          },
+        }
+      );
+    });
+
+    const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+
+    await testRadio(
+      form,
+      'notificationLanguageRadio',
+      ['Italiano', 'italian-and-other-language'],
+      1
+    );
+    testFormElements(form, 'additionalLang', 'select-other-language*', 'de');
   });
 });

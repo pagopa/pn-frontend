@@ -1,26 +1,30 @@
 {
   "button": {
     "filtra": "Filtriraj",
-    "annulla filtro": "Odstrani filtre",
+    "annulla filtro": "Odstranite filtre",
     "indietro": "Nazaj",
     "associa": "Poveži",
     "capito": "Razumem",
     "conferma": "Potrdi",
+    "attiva": "Aktiviraj",
     "annulla": "Prekliči",
     "modifica": "Spremeni",
     "salva": "Shrani",
     "elimina": "Izbriši",
-    "enter": "Dostop",
+    "enter": "Vstopi",
     "exit": "Izhod",
     "close": "Zapri",
     "enable": "Aktiviraj",
     "disable": "Deaktiviraj",
+    "continue": "Naprej",
     "go-to-home": "Pojdi na domačo stran",
-    "go-to-login": "Prijava"
+    "go-to-login": "Prijava",
+    "not-now": "Ne zdaj",
+    "add": "Dodaj"
   },
   "menu": {
     "notifiche": "Obvestila",
-    "deleghe": "Prenosi pooblastil",
+    "deleghe": "Pooblastila",
     "profilo": "Vaši podatki",
     "contacts": "Vaši kontaktni podatki",
     "app-status": "Stanje platforme"
@@ -31,9 +35,9 @@
   },
   "tos": {
     "title": "SEND - Servizio Notifiche Digitali",
-    "body": "Za dostop sprejmite Pogoje in določila storitve in preberite Pravilnik o zasebnosti.",
-    "redo-body": "Pogoji in določila storitve in Pravilnik o zasebnosti so se spremenili. Za dostop se strinjate in potrjujete, da ste prebrali nove različice.",
-    "switch-label": "Sprejmem <1>Pogoje in določila uporabe</1> in potrjujem, da sem prebral/-a <0>Pravilnik o zasebnosti</0>",
+    "body": "Za dostop sprejmite Pogoje in določila storitve in preberite Pravilnik o varovanju zasebnosti.",
+    "redo-body": "Pogoji in določila storitve in Pravilnik o varovanju zasebnosti so se spremenili. Za dostop se strinjate in potrjujete, da ste prebrali nove različice.",
+    "switch-label": "Sprejemam <1>Pogoje in določila uporabe</1> in potrjujem, da sem prebral/-a <0>Pravilnik o varovanju zasebnosti </0>",
     "button": "Prijava"
   },
   "table": {
@@ -46,7 +50,7 @@
     "page": "stran",
     "next": "Pojdi na naslednjo stran",
     "previous": "Pojdi na prejšnjo stran",
-    "selected": "izbrani artikel",
+    "selected": "izbrani element",
     "rows-per-page": "Vrstice na stran"
   },
   "toast": {
@@ -55,7 +59,7 @@
   "date-picker": {
     "left-arrow": "Pojdi na prejšnji mesec",
     "right-arrow": "Pojdi na naslednji mesec",
-    "switch-to-year": "aktivni način koledarja, preklopite na način izbire leta",
+    "switch-to-year": "aktiven način koledarja, preklopite na način izbire leta",
     "switch-to-calendar": "aktiven način izbire leta, preklopite v način koledarja",
     "select-date": "Izberite datum",
     "date-selected": "Izberite datum, izbrani datum je {{date}}"
@@ -75,7 +79,7 @@
     "action": "obiščite namensko spletno mesto"
   },
   "access-denied": "Nimate potrebnih dovoljenj za dostop do te strani",
-  "not-logged": "Dostopite do SEND",
+  "not-logged": "Prijavite se v SEND",
   "not-logged-subtitle": "Če si želite ogledati in upravljati obvestila, se prijavite s SPID ali CIE.",
   "not-found": {
     "title": "404: Stran, ki jo iščete, ne obstaja",
@@ -101,7 +105,7 @@
     "500-title": "Storitev ni na voljo",
     "500-message": "Vaša zahteva ni bila poslana zaradi začasne težave s storitvijo. Poskusite znova pozneje.",
     "lacking-grants-for-app-title": "Nimate dovoljenja za dostop",
-    "invalid-token-title": "Ne morete se prijaviti zaradi tehnične težave - neveljaven žeton",
+    "invalid-token-title": "Ne morete se prijaviti zaradi tehnične težave – neveljaven žeton",
     "generic-token-exchange-problem": "Prijave ni bilo mogoče dokončati",
     "generic-title": "Splošna napaka",
     "generic-message": "Prišlo je do napake. Poskusite znova pozneje",
@@ -111,7 +115,7 @@
   "footer": {
     "go-to-pagopa": "Povezava: pojdi na spletno mesto družbe PagoPA S.p.A.",
     "go-to": "Pojdi na povezavo",
-    "privacy-info": "Izjava o zasebnosti",
+    "privacy-info": "Obvestilo o varovanju zasebnosti",
     "who": "Kdo smo",
     "work": "Sodeluj z nami",
     "certifications": "Certifikati",
@@ -130,10 +134,10 @@
     "legal-part-2": "Poštna številka 00187 – št. vpisa v Poslovni register v Rimu, davčna številka in identifikacijska številka za DDV 15376371009"
   },
   "required-fields": "*Obvezna polja",
-  "required-field": "Obvezno polje",
-  "too-long-field-error": "Napišite največ {{maxLength}} znakov",
+  "required-field": "Zahtevano polje",
+  "too-long-field-error": "Vpišite največ {{maxLength}} znakov",
   "validation": {
-    "search-pattern-length-limit": "iskanje največ {{maxLength}} znakov",
+    "search-pattern-length-limit": "iskanje najv. {{maxLength}} znakov",
     "invalid-characters-not-inserted": "Neveljavni znaki niso bili vneseni."
   },
   "errors": {
@@ -168,6 +172,17 @@
     "unknown": {
       "title": "Napaka",
       "message": "Nepričakovana napaka"
+    },
+    "invalid_type_code": {
+      "title": "V to polje lahko vnesete samo številčne vrednosti",
+      "message": "Preverite potrditveno kodo in jo znova vnesite"
     }
-  }
+  },
+  "badges": {
+    "news": "Novosti"
+  },
+  "conjunctions": {
+    "or": "ali"
+  },
+  "no-spaces-at-edges": "Izbrišite presledke na začetku ali koncu"
 }

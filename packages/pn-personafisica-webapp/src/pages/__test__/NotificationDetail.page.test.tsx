@@ -20,6 +20,7 @@ import {
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
+import { errorMock } from '../../__mocks__/Errors.mock';
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
   cachedPayments,
@@ -34,6 +35,7 @@ import {
   fireEvent,
   render,
   screen,
+  testStore,
   waitFor,
   within,
 } from '../../__test__/test-utils';
@@ -294,7 +296,7 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     mock
       .onGet(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}`
       )
       .reply(200, {
         retryAfter: 1,
@@ -318,14 +320,14 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[2].url).toContain(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}`
       );
     });
     const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock
       .onGet(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}`
       )
       .reply(200, {
         filename: 'mocked-filename',
@@ -338,7 +340,7 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}&documentCategory=${mockLegalIds.category}`
+        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}`
       );
     });
     await waitFor(() => {
@@ -350,6 +352,12 @@ describe('NotificationDetail Page', async () => {
     const otherDocument: NotificationDetailOtherDocument = {
       documentId: notificationToFe.otherDocuments?.[0].documentId ?? '',
       documentType: notificationToFe.otherDocuments?.[0].documentType ?? '',
+      digests: { sha256: '' },
+      contentType: '',
+      ref: {
+        key: '',
+        versionToken: '',
+      },
     };
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
@@ -483,7 +491,9 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('API error', async () => {
-    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(500);
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
+      .reply(errorMock.status, errorMock.data);
     // custom render
     await act(async () => {
       render(
@@ -657,6 +667,70 @@ describe('NotificationDetail Page', async () => {
       expect(mockAssignFn).toBeCalledTimes(1);
       expect(mockAssignFn).toBeCalledWith('https://mocked-url.com');
     });
+    vi.useRealTimers();
+  });
+
+  it('should not duplicate payments when api call to cart respond with an error', async () => {
+    vi.useFakeTimers();
+    const paymentHistory = populatePaymentsPagoPaF24(
+      notificationToFe.timeline,
+      paymentsData.pagoPaF24,
+      paymentInfo
+    );
+
+    const requiredPaymentIndex = paymentHistory.findIndex(
+      (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
+    );
+
+    const requiredPayment = paymentHistory[requiredPaymentIndex];
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest.slice(0, 5)).reply(200, paymentInfo);
+    mock
+      .onPost(`/bff/v1/payments/cart`, {
+        paymentNotice: {
+          noticeNumber: requiredPayment.pagoPa?.noticeCode,
+          fiscalCode: requiredPayment.pagoPa?.creditorTaxId,
+          amount: requiredPayment.pagoPa?.amount,
+          companyName: notificationToFe.senderDenomination,
+          description: notificationToFe.subject,
+        },
+        returnUrl: window.location.href,
+      })
+      .reply(errorMock.status, errorMock.data);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+
+    expect(testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
+
+    const payButton = result.getByTestId('pay-button');
+    const item = result.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
+    expect(item).toBeInTheDocument();
+    const radioButton = item?.querySelector('[data-testid="radio-button"] input');
+    fireEvent.click(radioButton!);
+    // after radio button click, there is a timer of 1 second after that the paymeny is enabled
+    // wait...
+    await act(async () => {
+      vi.advanceTimersByTime(1000);
+    });
+    expect(payButton).toBeEnabled();
+    // we need the act method, because the loading overlay is shown at button click
+    await act(async () => {
+      fireEvent.click(payButton);
+    });
+
+    const errorMessage = item?.querySelector('[data-testid="generic-error-message"]');
+    const reloadButton = item?.querySelector('[data-testid="reload-button"]');
+
+    expect(errorMessage).toBeVisible();
+    expect(reloadButton).toBeVisible();
+    expect(testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
+
     vi.useRealTimers();
   });
 

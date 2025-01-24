@@ -11,6 +11,7 @@ import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { apiClient } from '../api/apiClients';
 import { DelegationStatus } from '../models/Deleghe';
+import { SELFCARE_LOGOUT } from '../navigation/routes.const';
 import { PNRole, PartyRole } from '../redux/auth/types';
 import { getConfiguration } from '../services/configuration.service';
 import { RenderResult, act, render } from './test-utils';
@@ -97,7 +98,10 @@ describe('App', async () => {
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(`${getConfiguration().URL_FE_LOGOUT}`, '_self');
+    expect(mockOpenFn).toHaveBeenCalledWith(
+      `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT}`,
+      '_self'
+    );
   });
 
   it('render component - user logged in', async () => {
@@ -164,7 +168,8 @@ describe('App', async () => {
     const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
     // link to notifications + link to delegated notifications + link to app status + link to delegations +
     // link to contacts + 2 links to selfcare + collapsible menu that contains the first two links
-    expect(sideMenuItems).toHaveLength(8);
+    // + link to Chiavi personali
+    expect(sideMenuItems).toHaveLength(9);
     const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
     expect(collapsibleMenu).toBeInTheDocument();
   });
@@ -191,8 +196,8 @@ describe('App', async () => {
     const sideMenu = result!.getByTestId('side-menu');
     const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
     // link to delegated notifications + link to app status + link to delegations +
-    // 2 links to selfcare
-    expect(sideMenuItems).toHaveLength(5);
+    // 2 links to selfcare + link to Chiavi personali
+    expect(sideMenuItems).toHaveLength(6);
     const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
     expect(collapsibleMenu).not.toBeInTheDocument();
   });
@@ -226,8 +231,8 @@ describe('App', async () => {
     const sideMenu = result!.getByTestId('side-menu');
     const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
     // link to notifications + link to delegated notifications + link to app status +
-    // 2 links to selfcare + collapsible menu that contains the first two links
-    expect(sideMenuItems).toHaveLength(6);
+    // 2 links to selfcare + collapsible menu that contains the first two links + link to Chiavi personali
+    expect(sideMenuItems).toHaveLength(7);
     const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
     expect(collapsibleMenu).toBeInTheDocument();
   });
@@ -262,8 +267,8 @@ describe('App', async () => {
     const sideMenu = result!.getByTestId('side-menu');
     const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
     // link to delegated notifications + link to app status +
-    // 2 links to selfcare
-    expect(sideMenuItems).toHaveLength(4);
+    // 2 links to selfcare  + link to Chiavi personali
+    expect(sideMenuItems).toHaveLength(5);
     const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
     expect(collapsibleMenu).not.toBeInTheDocument();
   });

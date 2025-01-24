@@ -9,6 +9,9 @@ export async function fetchConfiguration(): Promise<any> {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Expires': '0'
       },
     });
     return await res.json();

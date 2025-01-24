@@ -32,6 +32,8 @@ type Props = {
   enableUserDropdown?: boolean;
   /** Actions linked to user dropdown */
   userActions?: Array<UserAction>;
+  /** Current language */
+  currentLanguage: string;
   /** Function called when user chenge language */
   onLanguageChanged?: (langCode: string) => void;
   /** event callback on app crash  */
@@ -68,6 +70,7 @@ const Layout: React.FC<Props> = ({
   loggedUser,
   enableUserDropdown,
   userActions,
+  currentLanguage,
   onLanguageChanged = () => {},
   eventTrackingCallbackAppCrash,
   eventTrackingCallbackRefreshPage,
@@ -128,8 +131,9 @@ const Layout: React.FC<Props> = ({
         </Stack>
         {showFooter && (
           <Footer
-            loggedUser={loggedUser.id !== ''}
+            currentLanguage={currentLanguage}
             onLanguageChanged={onLanguageChanged}
+            loggedUser={loggedUser.id !== ''}
             hasTermsOfService={hasTermsOfService}
             privacyPolicyHref={privacyPolicyHref}
             termsOfServiceHref={termsOfServiceHref}

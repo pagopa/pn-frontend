@@ -3,6 +3,8 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import HttpApi from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
+import { getLangCode, setSessionLanguage } from '@pagopa-pn/pn-commons';
+
 void i18next
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -11,7 +13,6 @@ void i18next
     backend: {
       loadPath: '/auth/locales/{{lng}}/{{ns}}.json',
     },
-    lng: 'it',
     fallbackLng: 'it',
     debug: process.env.NODE_ENV === 'development',
     interpolation: {
@@ -19,16 +20,16 @@ void i18next
     },
     ns: ['common'],
     detection: {
-      order: ['querystring', 'sessionStorage'],
+      order: ['querystring', 'sessionStorage', 'navigator'],
       lookupQuerystring: 'lang',
       lookupSessionStorage: 'lang',
     },
-  })
-  .then(async () => {
-    await i18next.changeLanguage();
-  })
-  .catch((err: any) => {
-    throw new Error(err);
   });
+
+i18next.on('languageChanged', (language: string) => {
+  const lang = getLangCode(language);
+  setSessionLanguage(lang);
+  document.documentElement.setAttribute('lang', lang);
+});
 
 export default i18next;

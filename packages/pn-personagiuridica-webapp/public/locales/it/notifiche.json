@@ -42,7 +42,7 @@
     "not-found-subtitle": "Può essere letta solo dagli utenti censiti dall’impresa destinataria o da un suo delegato."
   },
   "detail": {
-    "document-not-available": "Il documento sarà scaricabile tra pochi minuti. Puoi riprovare ricaricando la pagina o cliccando sul link del documento richiesto",
+    "document-not-available": "Al momento non è possibile scaricare il documento, riprova più tardi. Per riprovare, ricarica la pagina o premi sul link del documento.",
     "table-aria-label": "Dettaglio notifica",
     "payment-table-aria-label": "Dettaglio pagamenti",
     "date": "Data di invio",
@@ -173,6 +173,8 @@
       "prepare-analog-domicile-failure-ZZZ-description": "Non è stato trovato un indirizzo valido per predisporre un altro tentativo di invio - motivo non specificato.",
       "prepare-analog-domicile-failure-ZZZ-description-multirecipient": "Non è stato trovato un indirizzo valido per il destinatario {{name}} {{taxId}} per predisporre un altro tentativo di invio - motivo non specificato.",
       "send-analog-flow-description": "C'è un aggiornamento sull'invio cartaceo.",
+      "send-analog-flow-CON020-description": "Originale dell’AAR (documento nativo digitale) reso disponibile dal Consolidatore e firmato digitalmente da PagoPA.",
+      "send-analog-flow-CON020-description-multirecipient": "Originale dell’AAR (documento nativo digitale) reso disponibile dal Consolidatore e firmato digitalmente da PagoPA.",
       "send-analog-flow-CON080-description": "La raccomandata {{registeredLetterKind}} numero {{registeredLetterNumber}} è stata stampata ed imbustata.",
       "send-analog-flow-CON080-description-multirecipient": "La raccomandata {{registeredLetterKind}} numero {{registeredLetterNumber}} per {{name}} {{taxId}} è stata stampata ed imbustata.",
       "send-analog-flow-PNAG012-description": "Il destinatario non ha ritirato la raccomandata 890 numero {{registeredLetterNumber}} presso il punto di giacenza entro 10 giorni.",
@@ -292,6 +294,7 @@
       "send-analog-outcome-unknown": "Invio per via cartacea completato - esito non determinato",
       "send-analog-unknown": "Evento su spedizione raccomandata - non riconosciuto",
       "aar-document": "Avviso di avvenuta ricezione",
+      "notification-cancelled-document": "Dichiarazione annullamento notifica",
       "legalfact": {
         "sender-ack": "notifica presa in carico",
         "digital-delivery-success": "notifica digitale",
@@ -398,6 +401,11 @@
     "viewed-description-multirecipient": "Almeno un destinatario ha letto la notifica.",
     "canceled": "Annullata",
     "canceled-tooltip": "L'ente ha annullato l'invio della notifica",
-    "canceled-description": "L'ente ha annullato l'invio della notifica."
+    "canceled-description": "L'ente ha annullato l'invio della notifica.",
+    "returned-to-sender":"Resa al mittente",
+    "returned-to-sender-tooltip-monorecipient": "Il destinatario risulta deceduto",
+    "returned-to-sender-tooltip-multirecipient": "Tutti i destinatari risultano deceduti",
+    "returned-to-sender-description-monorecipient": "Il destinatario risulta deceduto.",
+    "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti."
   }
 }

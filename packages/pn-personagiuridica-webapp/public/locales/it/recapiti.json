@@ -8,6 +8,11 @@
     "title": "Recapito a valore legale",
     "sub-title": "È il recapito ufficialmente riconosciuto per le comunicazioni della PA. Se lo attivi <strong>l’impresa riceverà le notifiche di SEND solo in digitale</strong>.",
     "pec-title": "PEC",
+    "pec-validation-banner": {
+      "title": "La PEC è in validazione",
+      "dod-enabled-message": "Fino al termine del processo, la Piattaforma SEND rimane attiva come domicilio digitale.",
+      "dod-disabled-message": "Fino al termine del processo non sarà possibile modificare i recapiti a valore legale."
+    },
     "pec-description": "Quando c’è una notifica per l’impresa, l’avviso di avvenuta ricezione viene inviato a questo indirizzo. Per leggere la notifica e pagare eventuali spese è necessario accedere alla piattaforma.",
     "link-pec-placeholder": "Indirizzo PEC",
     "valid-pec": "Indirizzo PEC non valido",
@@ -29,7 +34,9 @@
     "validation-progress-content": "Stiamo verificando che l’indirizzo PEC sia valido. Riceverai una email con l’esito entro 24 ore.",
     "sercq-send-title": "Domicilio Digitale SEND",
     "sercq-send-description": "È come un domicilio fisico, ma online. Se scegli SEND come Domicilio Digitale ricevi le notifiche dagli enti che aderiscono alla piattaforma in tempo reale e puoi consultarle ovunque tu sia.",
+    "sercq-send-description-pec-enabled": "Usa SEND come Domicilio Digitale per gestire le tue notifiche SEND in un unico punto, senza preoccuparti più delle raccomandate cartacee e dei costi annessi.",
     "sercq-send-active": "Attiva",
+    "sercq-send-active-pec-enabled": "Attiva Domicilio Digitale",
     "sercq-send-info-title": "Attiva SEND come Domicilio Digitale",
     "sercq-send-info-description": "Attivando il Domicilio Digitale, SEND diventa <strong>il recapito a valore legale della tua impresa</strong> per le comunicazioni della PA.",
     "sercq-send-info-advantages": "Vantaggi",
@@ -48,7 +55,7 @@
       }
     ],
     "sercq-send-info-pec-disclaimer": "Se hai già inserito una PEC tra i tuoi recapiti, il Domicilio Digitale la sostituisce come recapito a valore legale di SEND.",
-    "sercq-send-info-tos-privacy": "Selezionando “Attiva” dichiari di aver letto e di accettare i <0>Termini del servizio</0> e l’<1>Informativa Privacy</1>.",
+    "sercq-send-info-tos": "Selezionando “Attiva” dichiari di aver letto e di accettare i <0>Termini del servizio</0>.",
     "sercq_send-added-successfully": "Domicilio Digitale attivato correttamente",
     "sercq-send-enabled": "SEND è il tuo Domicilio Digitale",
     "sercq-send-courtesy-title": "Scegli come ricevere gli avvisi",

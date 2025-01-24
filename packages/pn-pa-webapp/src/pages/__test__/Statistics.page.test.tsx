@@ -13,6 +13,7 @@ import { initLocalizationForTest, testInput } from '@pagopa-pn/pn-commons/src/te
 import { fireEvent, waitFor, within } from '@testing-library/react';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
+import { errorMock } from '../../__mocks__/Errors.mock';
 import { rawEmptyResponseMock, rawResponseMock } from '../../__mocks__/Statistics.mock';
 import { render } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
@@ -22,7 +23,7 @@ vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
-    i18n: { language: 'it' },
+    i18n: {},
   }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
@@ -294,7 +295,9 @@ describe('Statistics Page tests', () => {
   });
 
   it('api returns error', async () => {
-    mock.onGet(/\/bff\/v1\/sender-dashboard\/dashboard-data-request*/).reply(500);
+    mock
+      .onGet(/\/bff\/v1\/sender-dashboard\/dashboard-data-request*/)
+      .reply(errorMock.status, errorMock.data);
     const { container } = render(
       <>
         <ResponseEventDispatcher />

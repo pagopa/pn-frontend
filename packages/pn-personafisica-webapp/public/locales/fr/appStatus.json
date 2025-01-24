@@ -6,7 +6,7 @@
       "ok": "Tous les services de SEND sont opérationnels.",
       "not-ok": "Il y a un dysfonctionnement en cours. Pour plus de détails, consultez le tableau ci-dessous."
     },
-    "lastCheckLegend": "Dernière mise à jour - {{ lastCheckTimestamp }} "
+    "lastCheckLegend": "Dernière mise à jour - {{ lastCheckTimestamp }}"
   },
   "downtimeList": {
     "title": "Historique des dysfonctionnements",

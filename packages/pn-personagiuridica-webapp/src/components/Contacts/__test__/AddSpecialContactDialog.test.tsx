@@ -2,10 +2,20 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
-import { getById, testAutocomplete, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
+import {
+  getById,
+  queryById,
+  testAutocomplete,
+  testSelect,
+} from '@pagopa-pn/pn-commons/src/test-utils';
 import { fireEvent, waitFor } from '@testing-library/react';
 
-import { digitalAddresses, digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
+import {
+  digitalAddresses,
+  digitalAddressesPecValidation,
+  digitalAddressesSercq,
+} from '../../../__mocks__/Contacts.mock';
+import { errorMock } from '../../../__mocks__/Errors.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { act, render, screen, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
@@ -61,10 +71,10 @@ describe('test AddSpecialContactDialog', () => {
     expect(titleEl).toHaveTextContent(`special-contacts.modal-title`);
     const bodyEl = within(dialog).getByTestId('dialog-content');
     expect(bodyEl).toBeInTheDocument();
-    expect(bodyEl).toHaveTextContent(`special-contacts.pec`);
-    const input = getById(bodyEl, 's_value');
-    expect(input).toBeInTheDocument();
-    expect(input).toHaveValue('');
+    expect(bodyEl).not.toHaveTextContent(`special-contacts.pec`);
+    const input = queryById(bodyEl, 's_value');
+    expect(input).not.toBeInTheDocument();
+    expect(bodyEl).toHaveTextContent(`special-contacts.contact-to-add-description`);
     expect(bodyEl).toHaveTextContent(`special-contacts.senders`);
     const senderAutoComplete = within(bodyEl).getByTestId('sender');
     expect(senderAutoComplete).toBeInTheDocument();
@@ -97,6 +107,17 @@ describe('test AddSpecialContactDialog', () => {
     );
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const bodyEl = within(dialog).getByTestId('dialog-content');
+
+    await testSelect(
+      bodyEl,
+      'channelType',
+      [
+        { value: ChannelType.PEC, label: 'special-contacts.pec' },
+        { value: ChannelType.SERCQ_SEND, label: 'special-contacts.sercq_send' },
+      ],
+      0
+    );
+
     const input = getById(bodyEl, 's_value');
     // fill with invalid value
     fireEvent.change(input, { target: { value: 'invalid value' } });
@@ -231,12 +252,6 @@ describe('test AddSpecialContactDialog', () => {
     const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
     const bodyEl = within(dialog).getByTestId('dialog-content');
 
-    const input = getById(bodyEl, 's_value');
-    fireEvent.change(input, { target: { value: 'test@test.it' } });
-    await waitFor(() => {
-      expect(input).toHaveValue('test@test.it');
-    });
-
     await testSelect(
       bodyEl,
       'channelType',
@@ -246,6 +261,12 @@ describe('test AddSpecialContactDialog', () => {
       ],
       0
     );
+
+    const input = getById(bodyEl, 's_value');
+    fireEvent.change(input, { target: { value: 'test@test.it' } });
+    await waitFor(() => {
+      expect(input).toHaveValue('test@test.it');
+    });
 
     await testAutocomplete(
       bodyEl,
@@ -317,8 +338,68 @@ describe('test AddSpecialContactDialog', () => {
     );
   });
 
+  it('should not allow adding SERCQ while validating PEC', async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    render(
+      <AddSpecialContactDialog
+        open
+        value=""
+        sender={{ senderId: 'default', senderName: '' }}
+        channelType={ChannelType.PEC}
+        onDiscard={discardHandler}
+        onConfirm={confirmHandler}
+      />,
+      {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: [
+              ...digitalAddressesPecValidation(true, true),
+              ...digitalAddressesPecValidation(false, false, parties[1]),
+            ],
+          },
+        },
+      }
+    );
+
+    const dialog = await waitFor(() => screen.getByTestId('addSpecialContactDialog'));
+    const bodyEl = within(dialog).getByTestId('dialog-content');
+
+    await testSelect(
+      bodyEl,
+      'channelType',
+      [
+        { value: ChannelType.PEC, label: 'special-contacts.pec' },
+        { value: ChannelType.SERCQ_SEND, label: 'special-contacts.sercq_send' },
+      ],
+      1
+    );
+
+    await testAutocomplete(
+      bodyEl,
+      'sender',
+      parties,
+      true,
+      parties.findIndex((p) => p.name === parties[2].name),
+      true
+    );
+
+    const confirmButton = within(dialog).getByText('button.associa');
+    expect(confirmButton).toBeEnabled();
+
+    await testAutocomplete(
+      bodyEl,
+      'sender',
+      parties,
+      true,
+      parties.findIndex((p) => p.name === parties[1].name),
+      true
+    );
+
+    expect(confirmButton).toBeDisabled();
+  });
+
   it('API error', async () => {
-    mock.onGet('/bff/v1/pa-list').reply(500);
+    mock.onGet(/\/bff\/v1\/pa-list.*/).reply(errorMock.status, errorMock.data);
     await act(async () => {
       render(
         <>

@@ -90,8 +90,7 @@ export const getReceivedNotificationDocument = createAsyncThunk<
         params.documentType,
         params.mandateId,
         params.documentIdx,
-        params.documentId,
-        params.documentCategory
+        params.documentId
       );
       return response.data as NotificationDocumentResponse;
     } catch (e) {
@@ -275,6 +274,7 @@ export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, 
       const response = await notificationReceivedApiFactory.checkAarQrCodeV1(params);
       return response.data;
     } catch (e: any) {
+      
       return rejectWithValue(parseError(e));
     }
   }

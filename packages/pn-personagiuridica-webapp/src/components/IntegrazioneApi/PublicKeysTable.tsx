@@ -40,7 +40,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
       id: 'name',
       label: t('publicKeys.table.name'),
       tableConfiguration: {
-        cellProps: { width: '24%' },
+        cellProps: { width: '20%' },
       },
       cardConfiguration: {
         wrapValueInTypography: false,
@@ -50,7 +50,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
       id: 'value',
       label: t('publicKeys.table.value'),
       tableConfiguration: {
-        cellProps: { width: '24%' },
+        cellProps: { width: '41%' },
       },
       cardConfiguration: {
         wrapValueInTypography: false,
@@ -60,7 +60,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
       id: 'date',
       label: t('publicKeys.table.endDate'),
       tableConfiguration: {
-        cellProps: { width: '24%' },
+        cellProps: { width: '15%' },
       },
       cardConfiguration: {
         wrapValueInTypography: false,
@@ -70,7 +70,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
       id: 'status',
       label: t('publicKeys.table.status'),
       tableConfiguration: {
-        cellProps: { width: '24%' },
+        cellProps: { width: '20%' },
       },
       cardConfiguration: {
         position: 'left',
@@ -82,7 +82,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
       id: 'menu',
       label: '',
       tableConfiguration: {
-        cellProps: { width: '4%' },
+        cellProps: { width: '5%' },
       },
       cardConfiguration: {
         position: 'right',
@@ -99,13 +99,26 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
   }
 
   return (
-    <SmartTable data={data} conf={publicKeysColumns} testId="publicKeysTable">
+    <SmartTable
+      data={data}
+      conf={publicKeysColumns}
+      sortLabels={{
+        title: t('sort.title', { ns: 'notifiche' }),
+        optionsTitle: t('sort.options', { ns: 'notifiche' }),
+        cancel: t('sort.cancel', { ns: 'notifiche' }),
+        asc: t('sort.asc', { ns: 'notifiche' }),
+        dsc: t('sort.desc', { ns: 'notifiche' }),
+      }}
+      testId="publicKeysTable"
+      slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
+    >
       <SmartHeader>
         {publicKeysColumns.map((column) => (
           <SmartHeaderCell
             key={column.id.toString()}
             columnId={column.id}
             sortable={column.tableConfiguration.sortable}
+            cellProps={column.tableConfiguration.cellProps}
           >
             {column.label}
           </SmartHeaderCell>
@@ -127,6 +140,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
                   keys={publicKeys}
                   type={column.id}
                   handleModalClick={handleModalClick}
+                  menuType="publicKeys"
                 />
               </SmartBodyCell>
             ))}

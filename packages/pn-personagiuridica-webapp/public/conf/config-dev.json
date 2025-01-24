@@ -1,21 +1,22 @@
 {
-  "API_BASE_URL": "https://webapi.uat.notifichedigitali.it/",
-  "DISABLE_INACTIVITY_HANDLER": true,
+  "API_BASE_URL": "https://webapi.dev.notifichedigitali.it/",
+  "IS_INACTIVITY_HANDLER_ENABLED": false,
   "MIXPANEL_TOKEN": "41f1a1ad6abcc5fc5ed5809b9a9d5761",
-  "ONE_TRUST_DRAFT_MODE": false,
+  "ONE_TRUST_DRAFT_MODE": true,
   "ONE_TRUST_PP": "9d7b7236-956b-4669-8943-5284fba6a815",
   "ONE_TRUST_TOS": "112fd95d-6e88-461b-b8fc-534ee4277e96",
   "ONE_TRUST_SERCQ_SEND_DRAFT_MODE": true,
-  "ONE_TRUST_PP_SERCQ_SEND": "d9c5bcd6-209e-4d73-8d95-32790178d695",
   "ONE_TRUST_TOS_SERCQ_SEND": "07d821f3-614e-45d1-867a-83a7384ae973",
   "ONE_TRUST_MASSIVI_DRAFT_MODE": true,
   "ONE_TRUST_TOS_MASSIVI": "c0eddb99-3dfe-4c2e-817e-cd53887dd161",
   "OT_DOMAIN_ID": "8d53193a-e4c2-44e5-9fb7-01f08007d083-test",
   "SELFCARE_BASE_URL": "https://imprese.uat.notifichedigitali.it",
   "PAGOPA_HELP_EMAIL": "destinatari-send@assistenza.pagopa.it",
-  "LANDING_SITE_URL": "https://www.uat.notifichedigitali.it",
+  "LANDING_SITE_URL": "https://www.dev.notifichedigitali.it",
   "DELEGATIONS_TO_PG_ENABLED": true,
   "WORK_IN_PROGRESS": false,
   "F24_DOWNLOAD_WAIT_TIME": 15000,
-  "IS_B2B_ENABLED": false
+  "IS_B2B_ENABLED": true,
+  "IS_DOD_ENABLED": true,
+  "DOWNTIME_EXAMPLE_LINK": "https://www.dev.notifichedigitali.it/static/documents/LegalFactMalfunction.pdf"
 }

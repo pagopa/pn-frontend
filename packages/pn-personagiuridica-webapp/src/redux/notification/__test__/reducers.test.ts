@@ -1,7 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import {
-  LegalFactType,
   NotificationDocumentType,
   PAYMENT_CACHE_KEY,
   PaidDetails,
@@ -14,6 +13,7 @@ import {
 
 import { downtimesDTO } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { errorMock } from '../../../__mocks__/Errors.mock';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import {
   cancelledNotificationDTO,
@@ -157,12 +157,11 @@ describe('Notification detail redux state tests', () => {
       iun: notificationDTO.iun,
       documentType: NotificationDocumentType.LEGAL_FACT,
       documentId: 'mocked-key',
-      documentCategory: LegalFactType.ANALOG_DELIVERY,
     };
     const mockResponse = { url: 'http://mocked-url.com' };
     mock
       .onGet(
-        `/bff/v1/notifications/received/${mockRequest.iun}/documents/${mockRequest.documentType}?documentId=${mockRequest.documentId}&documentCategory=${mockRequest.documentCategory}`
+        `/bff/v1/notifications/received/${mockRequest.iun}/documents/${mockRequest.documentType}?documentId=${mockRequest.documentId}`
       )
       .reply(200, mockResponse);
     const action = await store.dispatch(getReceivedNotificationDocument(mockRequest));
@@ -348,15 +347,10 @@ describe('Notification detail redux state tests', () => {
       },
       returnUrl: 'mocked-return-url',
     };
-    mock.onPost(`/bff/v1/payments/cart`, request).reply(500);
+    mock.onPost(`/bff/v1/payments/cart`, request).reply(errorMock.status, errorMock.data);
     const action = await store.dispatch(getReceivedNotificationPaymentUrl(request));
     expect(action.type).toBe('getReceivedNotificationPaymentUrl/rejected');
-    expect(action.payload).toEqual({
-      response: {
-        data: undefined,
-        status: 500,
-      },
-    });
+    expect(action.payload).toEqual({ response: errorMock });
     const state = store.getState().notificationState;
     expect(state.paymentsData.pagoPaF24).toStrictEqual(initialState);
   });

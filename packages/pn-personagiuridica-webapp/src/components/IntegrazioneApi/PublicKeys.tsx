@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
-import { Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
-import { ApiErrorWrapper } from '@pagopa-pn/pn-commons';
-import { CopyToClipboardButton } from '@pagopa/mui-italia';
+import { Button, Stack, Typography } from '@mui/material';
+import { ApiErrorWrapper, appStateActions } from '@pagopa-pn/pn-commons';
 
 import {
   ChangeStatusPublicKeyV1StatusEnum,
@@ -12,6 +12,7 @@ import {
   PublicKeyStatus,
 } from '../../generated-client/pg-apikeys';
 import { ModalApiKeyView } from '../../models/ApiKeys';
+import * as routes from '../../navigation/routes.const';
 import {
   PUBLIC_APIKEYS_ACTIONS,
   changePublicKeyStatus,
@@ -22,39 +23,16 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import ApiKeyModal from './ApiKeyModal';
 import PublicKeysTable from './PublicKeysTable';
+import { ShowCodesInput } from './ShowCodesInput';
 
 type ModalType = {
   view: ModalApiKeyView;
   publicKey?: PublicKeyRow;
 };
 
-const ShowCodesInput = ({ value, label }: { value: string; label: string }) => {
-  const { t } = useTranslation(['integrazioneApi']);
-
-  return (
-    <TextField
-      value={value}
-      fullWidth
-      label={t(label)}
-      InputProps={{
-        readOnly: true,
-        sx: { p: 0 },
-        endAdornment: (
-          <InputAdornment position="end">
-            <CopyToClipboardButton
-              value={() => value}
-              tooltipTitle={t('api-key-copied')}
-              color="primary"
-            />
-          </InputAdornment>
-        ),
-      }}
-    />
-  );
-};
-
 const PublicKeys: React.FC = () => {
   const { t } = useTranslation(['integrazioneApi', 'common']);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const publicKeys = useAppSelector((state: RootState) => state.apiKeysState.publicKeys);
 
@@ -74,6 +52,12 @@ const PublicKeys: React.FC = () => {
     void dispatch(getPublicKeys({ showPublicKey: true }));
   }, []);
 
+  const handleGeneratePublicKey = (publicKeyId?: string) => {
+    handleCloseModal();
+    const pathStr = publicKeyId ? `/${publicKeyId}` : '';
+    navigate(`${routes.REGISTRA_CHIAVE_PUBBLICA}${pathStr}`);
+  };
+
   const blockPublicKey = (publicKeyId?: string) => {
     if (!publicKeyId) {
       return;
@@ -81,7 +65,15 @@ const PublicKeys: React.FC = () => {
     handleCloseModal();
     void dispatch(
       changePublicKeyStatus({ kid: publicKeyId, status: ChangeStatusPublicKeyV1StatusEnum.Block })
-    ).then(fetchPublicKeys);
+    ).then(() => {
+      dispatch(
+        appStateActions.addSuccess({
+          title: '',
+          message: t('messages.success.public-key-blocked'),
+        })
+      );
+      fetchPublicKeys();
+    });
   };
 
   const deleteApiKey = (publicKeyId?: string) => {
@@ -89,12 +81,16 @@ const PublicKeys: React.FC = () => {
       return;
     }
     handleCloseModal();
-    void dispatch(deletePublicKey(publicKeyId)).then(fetchPublicKeys);
+    void dispatch(deletePublicKey(publicKeyId)).then(() => {
+      dispatch(
+        appStateActions.addSuccess({
+          title: '',
+          message: t('messages.success.public-key-deleted'),
+        })
+      );
+      fetchPublicKeys();
+    });
   };
-
-  useEffect(() => {
-    fetchPublicKeys();
-  }, []);
 
   return (
     <>
@@ -117,7 +113,7 @@ const PublicKeys: React.FC = () => {
             data-testid="generatePublicKey"
             variant="contained"
             sx={{ mb: { xs: 3, lg: 0 } }}
-            //   onClick={handleGeneratePublicKey}
+            onClick={() => handleGeneratePublicKey()}
           >
             {t('publicKeys.new-key-button')}
           </Button>
@@ -152,9 +148,8 @@ const PublicKeys: React.FC = () => {
         )}
         {modal.view === ModalApiKeyView.BLOCK && (
           <ApiKeyModal
-            title={t('publicKeys.block-title')}
-            subTitle={t('publicKeys.block-subtitle')}
-            content={<Typography>{t('publicKeys.block-warning')}</Typography>}
+            title={t('dialogs.block-title')}
+            subTitle={t('dialogs.block-subtitle')}
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('block-button')}
@@ -164,20 +159,20 @@ const PublicKeys: React.FC = () => {
         )}
         {modal.view === ModalApiKeyView.ROTATE && (
           <ApiKeyModal
-            title={t('publicKeys.rotate-title')}
-            subTitle={t('publicKeys.rotate-subtitle')}
-            content={<Typography>{t('publicKeys.rotate-warning')}</Typography>}
+            title={t('dialogs.rotate-title')}
+            subTitle={t('dialogs.rotate-public-key-subtitle')}
+            content={<Typography>{t('dialogs.rotate-warning')}</Typography>}
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
-            actionButtonLabel={t('rotate-button')}
+            actionButtonLabel={t('rotate-public-key-button')}
             buttonIcon={<Sync fontSize="small" sx={{ mr: 1 }} />}
-            // actionHandler={() => apiKeyRotated(modal.apiKey?.id)}
+            actionHandler={() => handleGeneratePublicKey(modal.publicKey?.kid)}
           />
         )}
         {modal.view === ModalApiKeyView.DELETE && (
           <ApiKeyModal
-            title={t('publicKeys.delete-title')}
-            subTitle={t('publicKeys.delete-subtitle')}
+            title={t('dialogs.delete-title')}
+            subTitle={t('dialogs.delete-subtitle')}
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('button.elimina', { ns: 'common' })}

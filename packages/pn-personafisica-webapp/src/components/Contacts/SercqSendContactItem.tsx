@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
-import { Box, Button, Chip, Stack, Typography } from '@mui/material';
+import { Box, Button, Chip, Divider, Stack, Typography } from '@mui/material';
 import {
   ConsentActionType,
   ConsentType,
@@ -49,11 +49,16 @@ enum ModalType {
   IO = 'io',
 }
 
-const SercqSendCardTitle: React.FC = () => {
+type SercqSendCardTitleProps = {
+  pecEnabled: boolean;
+};
+
+const SercqSendCardTitle: React.FC<SercqSendCardTitleProps> = ({ pecEnabled }) => {
   const { t } = useTranslation(['common', 'recapiti']);
 
   return (
-    <Box data-testid="DigitalContactsCardTitle">
+    <Box mb={2} data-testid="DigitalContactsCardTitle">
+      {pecEnabled && <Divider sx={{ color: 'text.secondary', mb: 3 }} />}
       <Chip label={t('badges.news')} color="primary" data-testid="newsBadge" sx={{ mb: 1 }} />
       <Typography
         color="text.primary"
@@ -62,18 +67,20 @@ const SercqSendCardTitle: React.FC = () => {
         variant="body1"
         sx={{ mb: '12px' }}
       >
-        {t('legal-contacts.sercq-send-title', { ns: 'recapiti' })}
+        {pecEnabled ? '' : t('legal-contacts.sercq-send-title', { ns: 'recapiti' })}
       </Typography>
     </Box>
   );
 };
 
+// eslint-disable-next-line complexity
 const SercqSendContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const isMobile = useIsMobile();
   const [modalOpen, setModalOpen] = useState<{ type: ModalType; data?: any } | null>(null);
   const dispatch = useAppDispatch();
   const {
+    defaultPECAddress,
     defaultSERCQ_SENDAddress,
     defaultAPPIOAddress,
     courtesyAddresses,
@@ -88,6 +95,8 @@ const SercqSendContactItem: React.FC = () => {
   const hasCourtesy =
     hasAppIO && courtesyAddresses.length === 1 ? false : courtesyAddresses.length > 0;
   const blockDelete = specialPECAddresses.length > 0 || specialSERCQ_SENDAddresses.length > 0;
+
+  const verifyingPecAddress = defaultPECAddress?.pecValid === false;
 
   const handleActivation = () => {
     dispatch(getSercqSendTosPrivacyApproval())
@@ -127,7 +136,7 @@ const SercqSendContactItem: React.FC = () => {
             message: t(`legal-contacts.sercq_send-added-successfully`, { ns: 'recapiti' }),
           })
         );
-        // here the user doesn't have a corutesy address
+        // here the user doesn't have a courtesy address
         if (!hasCourtesy) {
           setModalOpen({ type: ModalType.COURTESY });
           return;
@@ -244,6 +253,14 @@ const SercqSendContactItem: React.FC = () => {
       .catch(() => {});
   };
 
+  const handleCourtesyDiscard = () => {
+    if (!hasCourtesy && hasAppIO) {
+      setModalOpen({ type: ModalType.IO });
+      return;
+    }
+    setModalOpen(null);
+  };
+
   const handleCourtesyConfirm = (channelType: ChannelType, value: string) => {
     const eventKey = `SEND_ADD_${channelType}_START`;
     if (isPFEvent(eventKey)) {
@@ -295,20 +312,47 @@ const SercqSendContactItem: React.FC = () => {
   return (
     <DigitalContactsCard
       title={
-        value ? t('legal-contacts.sercq-send-title', { ns: 'recapiti' }) : <SercqSendCardTitle />
+        value ? (
+          t('legal-contacts.sercq-send-title', { ns: 'recapiti' })
+        ) : (
+          <SercqSendCardTitle pecEnabled={!!defaultPECAddress?.pecValid} />
+        )
       }
-      subtitle={t('legal-contacts.sercq-send-description', { ns: 'recapiti' })}
+      subtitle={
+        defaultPECAddress?.pecValid
+          ? t('legal-contacts.sercq-send-description-pec-enabled', { ns: 'recapiti' })
+          : t('legal-contacts.sercq-send-description', { ns: 'recapiti' })
+      }
       expanded
       sx={{
+        mt: defaultPECAddress?.pecValid ? '0 !important' : 2,
+        pt: defaultPECAddress?.pecValid ? 0 : 3,
+        borderTopLeftRadius: defaultPECAddress?.pecValid ? 0 : 4,
+        borderTopRightRadius: defaultPECAddress?.pecValid ? 0 : 4,
         borderBottomLeftRadius: value ? 0 : 4,
         borderBottomRightRadius: value ? 0 : 4,
       }}
     >
       <Box data-testid={`default_sercqSendContact`} style={{ width: isMobile ? '100%' : '50%' }}>
-        {!value && (
-          <Button variant="contained" data-testid="activateButton" onClick={handleActivation}>
+        {!value && !defaultPECAddress?.pecValid && (
+          <Button
+            variant="contained"
+            data-testid="activateButton"
+            onClick={handleActivation}
+            disabled={verifyingPecAddress}
+          >
             {t('legal-contacts.sercq-send-active', { ns: 'recapiti' })}
           </Button>
+        )}
+        {!value && defaultPECAddress?.pecValid && (
+          <ButtonNaked
+            color={'primary'}
+            size="medium"
+            data-testid="activateButton"
+            onClick={handleActivation}
+          >
+            {t('legal-contacts.sercq-send-active-pec-enabled', { ns: 'recapiti' })}
+          </ButtonNaked>
         )}
         {value && (
           <Stack direction="row" spacing={1}>
@@ -326,6 +370,7 @@ const SercqSendContactItem: React.FC = () => {
                 color="error"
                 sx={{ fontWeight: 700 }}
                 size="medium"
+                disabled={verifyingPecAddress}
               >
                 {t('button.disable')}
               </ButtonNaked>
@@ -340,7 +385,7 @@ const SercqSendContactItem: React.FC = () => {
       />
       <SercqSendCourtesyDialog
         open={modalOpen?.type === ModalType.COURTESY}
-        onDiscard={() => setModalOpen(null)}
+        onDiscard={handleCourtesyDiscard}
         onConfirm={handleCourtesyConfirm}
       />
       <ContactCodeDialog

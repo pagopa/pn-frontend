@@ -12,15 +12,18 @@ import {
   StatisticsResponse,
 } from '../models/Statistics';
 
+const baseDate = threeMonthsAgo.toISOString();
+const dateYearMonth = baseDate.substring(0, 7);
+
 export const rawResponseMock: StatisticsResponse = {
   senderId: 'sender-id',
-  genTimestamp: '2024-04-24T11:09:36.432251Z',
-  lastDate: '2024-04-21',
-  startDate: '2023-12-06',
-  endDate: '2024-04-24',
+  genTimestamp: `${dateYearMonth}-24T11:09:36.432251Z`,
+  lastDate: `${dateYearMonth}-21`,
+  startDate: baseDate,
+  endDate: `${dateYearMonth}-24`,
   notificationsOverview: [
     {
-      notification_send_date: '2024-03-15',
+      notification_send_date: `${dateYearMonth}-15`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.DELIVERED,
       notification_type: DeliveryMode.ANALOG,
@@ -36,7 +39,7 @@ export const rawResponseMock: StatisticsResponse = {
       validation_time: 2.77,
     },
     {
-      notification_send_date: '2024-03-15',
+      notification_send_date: `${dateYearMonth}-15`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.DELIVERED,
       notification_type: DeliveryMode.ANALOG,
@@ -52,7 +55,7 @@ export const rawResponseMock: StatisticsResponse = {
       validation_time: 0.11,
     },
     {
-      notification_send_date: '2024-03-15',
+      notification_send_date: `${dateYearMonth}-15`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.DELIVERING,
       notification_type: DeliveryMode.ANALOG,
@@ -68,7 +71,7 @@ export const rawResponseMock: StatisticsResponse = {
       validation_time: 67.24,
     },
     {
-      notification_send_date: '2024-03-15',
+      notification_send_date: `${dateYearMonth}-15`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.EFFECTIVE_DATE,
       notification_type: DeliveryMode.ANALOG,
@@ -84,7 +87,7 @@ export const rawResponseMock: StatisticsResponse = {
       validation_time: 31.62,
     },
     {
-      notification_send_date: '2024-03-15',
+      notification_send_date: `${dateYearMonth}-15`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.EFFECTIVE_DATE,
       notification_type: DeliveryMode.ANALOG,
@@ -100,7 +103,7 @@ export const rawResponseMock: StatisticsResponse = {
       validation_time: 7.63,
     },
     {
-      notification_send_date: '2024-03-15',
+      notification_send_date: `${dateYearMonth}-15`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.VIEWED,
       notification_type: DeliveryMode.DIGITAL,
@@ -116,7 +119,7 @@ export const rawResponseMock: StatisticsResponse = {
       validation_time: 7.23,
     },
     {
-      notification_send_date: '2024-03-18',
+      notification_send_date: `${dateYearMonth}-18`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.DELIVERED,
       notification_type: DeliveryMode.ANALOG,
@@ -132,7 +135,7 @@ export const rawResponseMock: StatisticsResponse = {
       validation_time: 8.47,
     },
     {
-      notification_send_date: '2024-03-18',
+      notification_send_date: `${dateYearMonth}-18`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.DELIVERING,
       notification_type: DeliveryMode.ANALOG,
@@ -148,7 +151,7 @@ export const rawResponseMock: StatisticsResponse = {
       validation_time: 1.95,
     },
     {
-      notification_send_date: '2024-03-18',
+      notification_send_date: `${dateYearMonth}-18`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.EFFECTIVE_DATE,
       notification_type: DeliveryMode.ANALOG,
@@ -164,7 +167,7 @@ export const rawResponseMock: StatisticsResponse = {
       validation_time: 40.56,
     },
     {
-      notification_send_date: '2024-03-18',
+      notification_send_date: `${dateYearMonth}-18`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.EFFECTIVE_DATE,
       notification_type: DeliveryMode.ANALOG,
@@ -180,7 +183,7 @@ export const rawResponseMock: StatisticsResponse = {
       validation_time: 7.1,
     },
     {
-      notification_send_date: '2024-03-18',
+      notification_send_date: `${dateYearMonth}-18`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.EFFECTIVE_DATE,
       notification_type: DeliveryMode.DIGITAL,
@@ -198,25 +201,25 @@ export const rawResponseMock: StatisticsResponse = {
   ],
   digitalNotificationFocus: [
     {
-      notification_send_date: '2024-03-15',
+      notification_send_date: `${dateYearMonth}-15`,
       error_type: DigitaErrorTypes.DELIVERY_ERROR,
       failed_attempts_count: 11,
       notifications_count: 4,
     },
     {
-      notification_send_date: '2024-03-15',
+      notification_send_date: `${dateYearMonth}-15`,
       error_type: DigitaErrorTypes.UNKNOWN,
       failed_attempts_count: 0,
       notifications_count: 234,
     },
     {
-      notification_send_date: '2024-03-18',
+      notification_send_date: `${dateYearMonth}-18`,
       error_type: DigitaErrorTypes.INVALID_PEC,
       failed_attempts_count: 7,
       notifications_count: 4,
     },
     {
-      notification_send_date: '2024-03-18',
+      notification_send_date: `${dateYearMonth}-18`,
       error_type: DigitaErrorTypes.UNKNOWN,
       failed_attempts_count: 0,
       notifications_count: 227,
@@ -240,8 +243,8 @@ export const parsedResponseMock: StatisticsParsedResponse = {
       [NotificationStatus.ACCEPTED]: {
         count: 1802,
         details: [
-          { send_date: '2024-03-15', count: 920 },
-          { send_date: '2024-03-18', count: 882 },
+          { send_date: `${dateYearMonth}-15`, count: 920 },
+          { send_date: `${dateYearMonth}-18`, count: 882 },
         ],
       },
       [NotificationStatus.REFUSED]: { count: 0, details: [] },
@@ -260,15 +263,15 @@ export const parsedResponseMock: StatisticsParsedResponse = {
       [DeliveryMode.ANALOG]: {
         count: 1591,
         details: [
-          { send_date: '2024-03-15', count: 788 },
-          { send_date: '2024-03-18', count: 803 },
+          { send_date: `${dateYearMonth}-15`, count: 788 },
+          { send_date: `${dateYearMonth}-18`, count: 803 },
         ],
       },
       [DeliveryMode.DIGITAL]: {
         count: 211,
         details: [
-          { send_date: '2024-03-15', count: 132 },
-          { send_date: '2024-03-18', count: 79 },
+          { send_date: `${dateYearMonth}-15`, count: 132 },
+          { send_date: `${dateYearMonth}-18`, count: 79 },
         ],
       },
       [DeliveryMode.UNKNOWN]: {
@@ -363,8 +366,8 @@ export const filters: Array<StatisticsFilter> = [
   },
   {
     selected: SelectedStatisticsFilter.custom,
-    startDate: new Date('2023-08-26'),
-    endDate: new Date('2024-06-22'),
+    startDate: new Date(`${dateYearMonth}-15`),
+    endDate: new Date(`${dateYearMonth}-18`),
   },
 ];
 

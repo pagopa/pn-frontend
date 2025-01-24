@@ -176,6 +176,10 @@
     "invalid_type_code": {
       "title": "Questo campo accetta solo valori numerici",
       "message": "Controlla il codice di verifica e inseriscilo di nuovo"
+    },
+    "invalid_body": {
+      "title": "Errore",
+      "message": "C'è stato un errore in fase di invio dei dati ai nostri server. Ricontrolla che i dati inseriti siano corretti e non siano contenuti caratteri speciali e spazi."
     }
   },
   "badges": {
@@ -183,5 +187,10 @@
   },
   "conjunctions": {
     "or": "oppure"
-  }
+  },
+  "downtime_language_banner": {
+    "message": "Il testo originario di questi documenti è in lingua italiana. In caso di contrasto tra la versione italiana e le traduzioni in altre lingue, prevarranno il significato e le condizioni della lingua italiana.",
+    "link": "Consulta le traduzioni"
+  },
+  "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine"
 }

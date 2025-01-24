@@ -9,6 +9,7 @@ import {
   ApiErrorWrapper,
   GetDowntimeHistoryParams,
   LegalFactId,
+  LegalFactType,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -75,7 +76,7 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
-  const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL } = getConfiguration();
+  const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL, DOWNTIME_EXAMPLE_LINK } = getConfiguration();
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -194,7 +195,10 @@ const NotificationDetail = () => {
   };
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    if (isCancelled.cancelled || isCancelled.cancellationInProgress) {
+    if (
+      legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED &&
+      (isCancelled.cancelled || isCancelled.cancellationInProgress)
+    ) {
       return;
     }
     if (legalFact.category !== 'AAR') {
@@ -204,7 +208,6 @@ const NotificationDetail = () => {
           iun: notification.iun,
           documentType: NotificationDocumentType.LEGAL_FACT,
           documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
-          documentCategory: legalFact.category,
           mandateId,
         })
       )
@@ -471,6 +474,7 @@ const NotificationDetail = () => {
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
+                    recipients={notification.recipients}
                     clickHandler={documentDowloadHandler}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
@@ -487,6 +491,7 @@ const NotificationDetail = () => {
                   fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
                   apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
                   disableDownloads={isCancelled.cancellationInTimeline}
+                  downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                 />
               </Stack>
             </Grid>

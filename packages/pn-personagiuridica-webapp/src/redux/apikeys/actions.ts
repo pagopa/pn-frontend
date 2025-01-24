@@ -1,4 +1,4 @@
-import { parseError } from '@pagopa-pn/pn-commons';
+import { TosPrivacyConsent, parseError } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
@@ -15,7 +15,12 @@ import {
   PublicKeysApiFactory,
   VirtualKeysApiFactory,
 } from '../../generated-client/pg-apikeys';
-import { GetApiKeysParams } from '../../models/ApiKeys';
+import {
+  BffTosPrivacyActionBody,
+  ConsentType,
+  UserConsentsApiFactory,
+} from '../../generated-client/tos-privacy';
+import { GetPublicKeysParams, GetVirtualKeysParams } from '../../models/ApiKeys';
 
 export enum PUBLIC_APIKEYS_ACTIONS {
   GET_PUBLIC_APIKEYS = 'getPublicApiKeys',
@@ -24,6 +29,8 @@ export enum PUBLIC_APIKEYS_ACTIONS {
   CHANGE_PUBLIC_APIKEY_STATUS = 'changePublicApiKeyStatus',
   ROTATE_PUBLIC_APIKEY = 'rotatePublicApiKey',
   CHECK_PUBLIC_APIKEY_ISSUER = 'checkPublicApiKeyIssuer',
+  ACCEPT_TOS_PRIVACY = 'acceptTosPrivacyB2B',
+  GET_TOS_PRIVACY = 'getTosPrivacyB2B',
 }
 
 export enum VIRTUAL_APIKEYS_ACTIONS {
@@ -33,24 +40,24 @@ export enum VIRTUAL_APIKEYS_ACTIONS {
   CHANGE_VIRTUAL_APIKEY_STATUS = 'changeVirtualApiKeyStatus',
 }
 
-export const getPublicKeys = createAsyncThunk<BffPublicKeysResponse, GetApiKeysParams | undefined>(
-  PUBLIC_APIKEYS_ACTIONS.GET_PUBLIC_APIKEYS,
-  async (params, { rejectWithValue }) => {
-    try {
-      const apiKeysFactory = PublicKeysApiFactory(undefined, undefined, apiClient);
-      const response = await apiKeysFactory.getPublicKeysV1(
-        params?.limit,
-        params?.lastKey,
-        params?.createdAt,
-        params?.showPublicKey
-      );
+export const getPublicKeys = createAsyncThunk<
+  BffPublicKeysResponse,
+  GetPublicKeysParams | undefined
+>(PUBLIC_APIKEYS_ACTIONS.GET_PUBLIC_APIKEYS, async (params, { rejectWithValue }) => {
+  try {
+    const apiKeysFactory = PublicKeysApiFactory(undefined, undefined, apiClient);
+    const response = await apiKeysFactory.getPublicKeysV1(
+      params?.limit,
+      params?.lastKey,
+      params?.createdAt,
+      params?.showPublicKey
+    );
 
-      return response.data;
-    } catch (e: any) {
-      return rejectWithValue(parseError(e));
-    }
+    return response.data;
+  } catch (e: any) {
+    return rejectWithValue(parseError(e));
   }
-);
+});
 
 export const createPublicKey = createAsyncThunk<BffPublicKeyResponse, BffPublicKeyRequest>(
   PUBLIC_APIKEYS_ACTIONS.CREATE_PUBLIC_APIKEY,
@@ -128,10 +135,44 @@ export const checkPublicKeyIssuer = createAsyncThunk<BffPublicKeysCheckIssuerRes
   }
 );
 
+/**
+ * Retrieves if the terms of service are already approved
+ */
+export const getTosPrivacy = createAsyncThunk(
+  PUBLIC_APIKEYS_ACTIONS.GET_TOS_PRIVACY,
+  async (_, { rejectWithValue }) => {
+    try {
+      const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
+      const response = await tosPrivacyFactory.getPgTosPrivacyV1([ConsentType.TosDestB2B]);
+
+      return response.data as Array<TosPrivacyConsent>;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+/**
+ * Accepts the terms of service
+ */
+export const acceptTosPrivacy = createAsyncThunk<void, Array<BffTosPrivacyActionBody>>(
+  PUBLIC_APIKEYS_ACTIONS.ACCEPT_TOS_PRIVACY,
+  async (body: Array<BffTosPrivacyActionBody>, { rejectWithValue }) => {
+    try {
+      const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
+      const response = await tosPrivacyFactory.acceptPgTosPrivacyV1(body);
+
+      return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
 // -- VIRTUAL API KEYS
 export const getVirtualApiKeys = createAsyncThunk<
   BffVirtualKeysResponse,
-  GetApiKeysParams | undefined
+  GetVirtualKeysParams | undefined
 >(VIRTUAL_APIKEYS_ACTIONS.GET_VIRTUAL_APIKEYS, async (params, { rejectWithValue }) => {
   try {
     const apiKeysFactory = VirtualKeysApiFactory(undefined, undefined, apiClient);
@@ -139,7 +180,7 @@ export const getVirtualApiKeys = createAsyncThunk<
       params?.limit,
       params?.lastKey,
       params?.createdAt,
-      params?.showPublicKey
+      params?.showVirtualKey
     );
 
     return response.data;

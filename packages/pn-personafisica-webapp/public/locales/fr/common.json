@@ -4,29 +4,33 @@
     "annulla filtro": "Supprimer les filtres",
     "indietro": "Retour",
     "associa": "Associer",
-    "capito": "J'ai compris",
+    "capito": "J’ai compris",
     "conferma": "Confirmer",
+    "attiva": "Activer",
     "annulla": "Annuler",
     "modifica": "Modifier",
     "salva": "Enregistrer",
     "elimina": "Supprimer",
     "enter": "Entrer",
-    "exit": "Quitter",
+    "exit": "Sortir",
     "close": "Fermer",
     "enable": "Activer",
     "disable": "Désactiver",
+    "continue": "Suivant",
     "go-to-home": "Aller à la page d’accueil",
-    "go-to-login": "Se connecter"
+    "go-to-login": "Se connecter",
+    "not-now": "Pas maintenant",
+    "add": "Ajouter"
   },
   "menu": {
     "notifiche": "Notifications",
     "deleghe": "Procurations",
     "profilo": "Vos données",
-    "contacts": "Vos coordonnées",
+    "contacts": "Vos adresses",
     "app-status": "État de la plateforme"
   },
   "header": {
-    "logout": "Quitter",
+    "logout": "Sortir",
     "pago-pa-link": "Site de PagoPA S.p.A."
   },
   "tos": {
@@ -58,7 +62,7 @@
     "switch-to-year": "mode calendrier actif, passez au mode de choix de l’année",
     "switch-to-calendar": "mode de choix de l’année active, passez en mode calendrier",
     "select-date": "Choisir la date",
-    "date-selected": "Choisissez la date, la date sélectionnée est {{date}} "
+    "date-selected": "Choisir la date, la date sélectionnée est {{date}}"
   },
   "date-time": {
     "today-uppercase-initial": "Aujourd’hui",
@@ -67,7 +71,7 @@
   "error-boundary": {
     "title": "Une erreur s’est produite",
     "description": "Nous n’avons pas pu charger la page. Rechargez-la, ou essayez plus tard.",
-    "action": "Rechargement de la page"
+    "action": "Recharger la page"
   },
   "not-accessible": {
     "title": "Impossible d’accéder à la plateforme",
@@ -92,7 +96,7 @@
   "messages": {
     "404-title": "Ressource introuvable",
     "404-message": "Une erreur s’est produite. Veuillez réessayer ultérieurement.",
-    "403-title": "Votre session a expiré",
+    "403-title": "La session a expiré",
     "403-message": "Entrez et connectez-vous avec SPID ou CIE.",
     "401-title": "Utilisateur non autorisé",
     "401-message": "L’utilisateur actuel ne dispose pas des autorisations nécessaires",
@@ -111,7 +115,7 @@
   "footer": {
     "go-to-pagopa": "Lien : aller sur le site de PagoPA S.p.A.",
     "go-to": "Cliquer sur le lien",
-    "privacy-info": "Politique de confidentialité",
+    "privacy-info": "Charte de confidentialité",
     "who": "Qui sommes-nous ?",
     "work": "Carrière",
     "certifications": "Certifications",
@@ -123,7 +127,7 @@
     "disclosure": "Politique de divulgation responsable",
     "321-model": "Formulaire 231",
     "accessibility": "Accessibilité",
-    "social": "Lien : va sur le site {{social}} de PagoPA S.p.A.",
+    "social": "Lien : aller sur le site {{social}} de PagoPA S.p.A.",
     "resources": "Ressources",
     "follow": "Suis-nous sur",
     "legal-part-1": "société anonyme à associé unique – capital social de 1 000 000 d’euros entièrement libéré – siège social à Rome, Piazza Colonna 370",
@@ -131,9 +135,9 @@
   },
   "required-fields": "*Champs obligatoires",
   "required-field": "Champ obligatoire",
-  "too-long-field-error": "Saisir un maximum de {{maxLength}} caractères",
+  "too-long-field-error": "Écrire un maximum de {{maxLength}} caractères",
   "validation": {
-    "search-pattern-length-limit": "recherche de {{maxLength}} caractères max",
+    "search-pattern-length-limit": "recherche de {{maxLength}} caractères max.",
     "invalid-characters-not-inserted": "Les caractères non valides n’ont pas été saisis."
   },
   "errors": {
@@ -150,7 +154,7 @@
       "message": "Impossible d’accéder à la plateforme"
     },
     "forbidden": {
-      "title": "Votre session a expiré",
+      "title": "La session a expiré",
       "message": "Entrez et connectez-vous avec SPID ou CIE."
     },
     "not_found": {
@@ -168,6 +172,17 @@
     "unknown": {
       "title": "Erreur",
       "message": "Erreur inattendue"
+    },
+    "invalid_type_code": {
+      "title": "Ce champ n’accepte que des valeurs numériques",
+      "message": "Contrôlez le code de vérification et saisissez-le à nouveau"
     }
-  }
+  },
+  "badges": {
+    "news": "Nouveauté"
+  },
+  "conjunctions": {
+    "or": "ou"
+  },
+  "no-spaces-at-edges": "Supprimer les espaces au début ou à la fin"
 }
