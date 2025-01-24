@@ -116,11 +116,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     // INSERT MODE
     if (!value) {
       return (
-        <form
-          onSubmit={formik.handleSubmit}
-          data-testid={`${senderId}_${contactType}Contact`}
-          style={{ width: isMobile ? '100%' : 'auto' }}
-        >
+        <form onSubmit={formik.handleSubmit} data-testid={`${senderId}_${contactType}Contact`}>
           <Typography
             id={`${senderId}_${contactType}-label`}
             variant="body2"
@@ -135,8 +131,8 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               name={`${senderId}_${contactType}`}
               placeholder={inputProps.label}
               size="small"
-              fullWidth
-              sx={{ flexBasis: { xs: 'unset', lg: '358px' } }}
+              fullWidth={isMobile}
+              sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
               InputProps={{
                 startAdornment: inputProps.prefix ? (
                   <InputAdornment position="start">{inputProps.prefix}</InputAdornment>
@@ -156,15 +152,10 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             <Button
               id={`${senderId}_${contactType}-button`}
               variant="contained"
-              fullWidth
+              fullWidth={isMobile}
               type="submit"
               data-testid={`${senderId}_${contactType}-button`}
-              sx={{
-                flexBasis: { xs: 'unset', lg: '33.33%' },
-                maxWidth: { xs: 'none', lg: '250px' },
-                height: '43px',
-                fontWeight: 700,
-              }}
+              sx={{ height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '16.67%' } }}
               size="small"
             >
               {insertButtonLabel}
