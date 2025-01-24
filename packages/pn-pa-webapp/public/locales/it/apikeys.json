@@ -41,7 +41,7 @@
     "status": "Stato"
   },
   "context-menu": {
-    "title": "Opzioni su API Key",
+    "title": "Menu azioni su API Key",
     "enable": "Attiva",
     "block": "Blocca",
     "rotate": "Ruota",
