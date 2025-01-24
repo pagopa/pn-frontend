@@ -50,7 +50,13 @@ describe('Api Keys Data Switch', () => {
 
   it('renders component - value filled', () => {
     const { container, getByTestId } = render(
-      <ApiKeysDataSwitch handleModalClick={mockClick} keys={publicKeys} data={data} type="value" />
+      <ApiKeysDataSwitch
+        handleModalClick={mockClick}
+        keys={publicKeys}
+        data={data}
+        menuType="publicKeys"
+        type="value"
+      />
     );
     const regexp = new RegExp(`^${data.value!.substring(0, 10)}...$`, 'ig');
     expect(container).toHaveTextContent(regexp);
@@ -60,7 +66,13 @@ describe('Api Keys Data Switch', () => {
 
   it('renders component - date', () => {
     const { container } = render(
-      <ApiKeysDataSwitch handleModalClick={mockClick} keys={publicKeys} data={data} type="date" />
+      <ApiKeysDataSwitch
+        handleModalClick={mockClick}
+        keys={publicKeys}
+        data={data}
+        menuType="publicKeys"
+        type="date"
+      />
     );
     const regexp = new RegExp(`^${data.date!}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
@@ -69,7 +81,13 @@ describe('Api Keys Data Switch', () => {
   it('renders component - status', () => {
     const { label } = getApiKeyStatusInfos(data.status!, data.statusHistory);
     const { container } = render(
-      <ApiKeysDataSwitch handleModalClick={mockClick} keys={publicKeys} data={data} type="status" />
+      <ApiKeysDataSwitch
+        handleModalClick={mockClick}
+        keys={publicKeys}
+        data={data}
+        menuType="publicKeys"
+        type="status"
+      />
     );
     const regexp = new RegExp(`^${label}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
@@ -77,7 +95,13 @@ describe('Api Keys Data Switch', () => {
 
   it('renders component - contextMenu', async () => {
     const { getByTestId } = render(
-      <ApiKeysDataSwitch handleModalClick={mockClick} keys={publicKeys} data={data} type="menu" />
+      <ApiKeysDataSwitch
+        handleModalClick={mockClick}
+        keys={publicKeys}
+        data={data}
+        menuType="publicKeys"
+        type="menu"
+      />
     );
     const contextMenu = getByTestId('contextMenuButton');
     expect(contextMenu).toBeInTheDocument();
@@ -92,7 +116,13 @@ describe('Api Keys Data Switch', () => {
 describe('Menu items', async () => {
   const renderMenu = (data: Row<ApiKeyColumnData>, keys: BffPublicKeysResponse) => {
     const result = render(
-      <ApiKeysDataSwitch handleModalClick={vi.fn()} keys={keys} data={data} type="menu" />
+      <ApiKeysDataSwitch
+        handleModalClick={vi.fn()}
+        keys={keys}
+        data={data}
+        menuType="publicKeys"
+        type="menu"
+      />
     );
     const contextMenu = result.getByTestId('contextMenuButton');
     expect(contextMenu).toBeInTheDocument();
