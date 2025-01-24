@@ -4,7 +4,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Dialog, DialogTitle, Grid, Slide, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { TransitionProps } from '@mui/material/transitions';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { useCustomMobileDialogContext } from './CustomMobileDialog.context';
 
 type Props = {
@@ -81,18 +83,19 @@ const CustomMobileDialogContent = forwardRef<{ toggleOpen: () => void }, Props>(
                 {title}
               </Typography>
             </Grid>
-            <Grid item xs={6} textAlign="right">
-              <CloseIcon
+            <Grid item xs={6} display="flex" alignItems={'center'} justifyContent="end">
+              <ButtonNaked
                 onClick={handleClose}
-                sx={{
-                  position: 'relative',
-                  right: 0,
-                  top: 4,
-                  color: 'action.active',
-                  width: '32px',
-                  height: '32px',
-                }}
-              />
+                aria-label={getLocalizedOrDefaultLabel('common', 'button.close')}
+              >
+                <CloseIcon
+                  sx={{
+                    color: 'action.active',
+                    width: '32px',
+                    height: '32px',
+                  }}
+                />
+              </ButtonNaked>
             </Grid>
           </Grid>
         </DialogTitle>
