@@ -122,6 +122,9 @@ export function PnECharts({
                   color,
                 },
               }}
+              inputProps={{
+                'aria-label': item,
+              }}
             />
             <ListItemAvatar sx={{ minWidth: 18 }}>
               <Avatar sx={avatarSx}>&nbsp;</Avatar>
