@@ -3,7 +3,6 @@ import { Fragment, ReactNode } from 'react';
 import { SxProps, TooltipProps } from '@mui/material';
 import Chip from '@mui/material/Chip';
 
-import { useIsMobile } from '../../hooks';
 import CustomTooltip from '../CustomTooltip';
 
 const StatusTooltip = ({
