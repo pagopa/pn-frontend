@@ -162,7 +162,7 @@ const SmsContactElem: React.FC<Props> = ({ onCancelInsert }) => {
   );
 };
 
-const SmsContactItem: React.FC<Props> = () => {
+const SmsContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses } = useAppSelector(
