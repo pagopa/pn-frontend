@@ -102,6 +102,7 @@ const PublicKeys: React.FC = () => {
           mb: 3,
           mt: 5,
         }}
+        data-testid="publicKeys"
       >
         <Typography variant="h6" sx={{ mb: { xs: 3, lg: 0 } }}>
           {t('publicKeys.title')}
