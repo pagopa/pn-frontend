@@ -71,11 +71,9 @@
     }
   },
   "courtesy-contacts": {
-    "title": "Courtesy addresses",
-    "sub-title": "The courtesy addresses will inform you when there are new notifications for you. If you have not activated a legal address and you do not open the notification within 5 days, a paper copy will also be sent to your home.",
     "email-title": "Email",
-    "email-description": "When there is a notification for you, we will inform you with an email to the address you selected.",
-    "email-dialog-description": "When there is a notification for you, we will inform you with an email. ",
+    "email-filled-description": "When there is a notification for you, we will inform you with an email to the address you selected.",
+    "email-dialog-description": "When there is a notification for you, we will inform you with an email.",
     "sms-title": "SMS",
     "sms-description": "When there is a notification for you, we will inform you with an SMS to the number you selected.",
     "sms-dialog-description": "When there is a notification for you, we will inform you with an SMS.",
@@ -100,11 +98,7 @@
     "remove-email-title": "Remove email",
     "remove-email-message": "Are you sure you want to remove the email address {{value}}?",
     "remove-sms-title": "Remove mobile",
-    "remove-sms-message": "Are you sure you want to remove the mobile number {{value}}?",
-    "block-remove-email-title": "You cannot delete the email",
-    "block-remove-email-message": "In order to do this, you must first delete all the email addresses you have indicated under \"Secondary addresses\".",
-    "block-remove-sms-title": "You cannot delete the phone number",
-    "block-remove-sms-message": "In order to do this, you must first delete all the phone numbers you have indicated under \"Secondary addresses\"."
+    "remove-sms-message": "Are you sure you want to remove the mobile number {{value}}?"
   },
   "special-contacts": {
     "select-address": "Select an address",

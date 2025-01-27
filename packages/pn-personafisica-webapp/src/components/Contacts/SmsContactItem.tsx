@@ -1,13 +1,17 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import { Box, Button, Chip, Divider, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
   AddressType,
   ChannelType,
   ContactSource,
+  IOAllowedValues,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
@@ -29,9 +33,13 @@ enum ModalType {
   INFORMATIVE = 'informative',
 }
 
-const SmsContactItem: React.FC = () => {
+type Props = {
+  onCancelInsert?: () => void;
+};
+
+const SmsContactElem: React.FC<Props> = ({ onCancelInsert }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultSMSAddress, specialSMSAddresses, addresses, defaultSERCQ_SENDAddress } =
+  const { defaultSERCQ_SENDAddress, defaultPECAddress, defaultSMSAddress, addresses } =
     useAppSelector(contactsSelectors.selectAddresses);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
@@ -45,8 +53,9 @@ const SmsContactItem: React.FC = () => {
   });
   const dispatch = useAppDispatch();
 
+  const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
+
   const currentValue = defaultSMSAddress?.value ?? '';
-  const blockDelete = specialSMSAddresses.length > 0;
 
   const handleSubmit = (value: string) => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_START, {
@@ -62,15 +71,10 @@ const SmsContactItem: React.FC = () => {
       setModalOpen(ModalType.EXISTING);
       return;
     }
-    if (!defaultSERCQ_SENDAddress) {
+    if (!isDigitalDomicileActive) {
       setModalOpen(ModalType.INFORMATIVE);
       return;
     }
-    // disclaimer modal must be opened only when we are adding a default address and no legal address has been added
-    /* if (legalAddresses.length === 0) {
-      setModalOpen(ModalType.DISCLAIMER);
-      return;
-    } */
     handleCodeVerification();
   };
 
@@ -126,6 +130,76 @@ const SmsContactItem: React.FC = () => {
     await digitalContactRef.current.resetForm();
   };
 
+  /*
+   * if *some* value (phone number, email address) has been attached to the contact type,
+   * then we show the value giving the user the possibility of changing it
+   * (the DigitalContact component includes the "update" button)
+   * if *no* value (phone number, email address) has been attached to the contact type,
+   * then we show the input field allowing the user to enter it along with the button
+   * to perform the addition.
+   */
+
+  return (
+    <>
+      <DigitalContact
+        label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
+        value={currentValue}
+        channelType={ChannelType.SMS}
+        ref={digitalContactRef}
+        inputProps={{
+          label: t(`courtesy-contacts.link-sms-placeholder`, {
+            ns: 'recapiti',
+          }),
+          prefix: internationalPhonePrefix,
+        }}
+        insertButtonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
+        onSubmit={handleSubmit}
+        onCancelInsert={onCancelInsert}
+      />
+      <ExistingContactDialog
+        open={modalOpen === ModalType.EXISTING}
+        value={currentAddress.current.value}
+        handleDiscard={handleCancelCode}
+        handleConfirm={() => handleCodeVerification()}
+      />
+      <ContactCodeDialog
+        value={currentAddress.current.value}
+        addressType={AddressType.COURTESY}
+        channelType={ChannelType.SMS}
+        open={modalOpen === ModalType.CODE}
+        onConfirm={(code) => handleCodeVerification(code)}
+        onDiscard={handleCancelCode}
+        onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_CODE_ERROR)}
+      />
+      <InformativeDialog
+        open={modalOpen === ModalType.INFORMATIVE}
+        title={t('courtesy-contacts.info-modal-sms-title', { ns: 'recapiti' })}
+        subtitle={t('courtesy-contacts.info-modal-sms-subtitle', { ns: 'recapiti' })}
+        content={t('courtesy-contacts.info-modal-sms-content', { ns: 'recapiti' })}
+        onConfirm={() => handleCodeVerification()}
+        onDiscard={() => setModalOpen(null)}
+      />
+    </>
+  );
+};
+
+const SmsContactItem: React.FC = () => {
+  const { t } = useTranslation(['common', 'recapiti']);
+  const dispatch = useAppDispatch();
+  const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
+
+  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  const [insertMode, setInsertMode] = useState(false);
+
+  const isActive = !!defaultSMSAddress;
+
+  const hasCourtesyAddresses =
+    addresses.filter(
+      (addr) => addr.addressType === AddressType.COURTESY && addr.value !== IOAllowedValues.DISABLED
+    ).length > 0;
+
   const deleteConfirmHandler = () => {
     setModalOpen(null);
     dispatch(
@@ -148,87 +222,108 @@ const SmsContactItem: React.FC = () => {
       .catch(() => {});
   };
 
-  /*
-   * if *some* value (phone number, email address) has been attached to the contact type,
-   * then we show the value giving the user the possibility of changing it
-   * (the DigitalContact component includes the "update" button)
-   * if *no* value (phone number, email address) has been attached to the contact type,
-   * then we show the input field allowing the user to enter it along with the button
-   * to perform the addition.
-   */
+  const getChipColor = () => {
+    if (isActive) {
+      return 'success';
+    }
+    if (defaultSERCQ_SENDAddress && !hasCourtesyAddresses) {
+      return 'warning';
+    }
+    return 'default';
+  };
 
-  return (
-    <PnInfoCard
-      title={t('courtesy-contacts.sms-title', { ns: 'recapiti' })}
-      subtitle={t('courtesy-contacts.sms-description', { ns: 'recapiti' })}
-    >
-      <DigitalContact
-        label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
-        value={currentValue}
-        channelType={ChannelType.SMS}
-        ref={digitalContactRef}
-        inputProps={{
-          label: t(`courtesy-contacts.link-sms-placeholder`, {
+  const getActions = () =>
+    isActive
+      ? [
+          <Button
+            data-testid="disable-sms"
+            key="disable"
+            variant="naked"
+            color="error"
+            startIcon={<PowerSettingsNewIcon />}
+            onClick={() => {
+              setModalOpen(ModalType.DELETE);
+            }}
+            sx={{ p: '10px 16px' }}
+          >
+            {t('button.disable')}
+          </Button>,
+        ]
+      : undefined;
+
+  if (isActive) {
+    return (
+      <PnInfoCard
+        title={
+          <Typography
+            variant="h6"
+            fontWeight={700}
+            fontSize={{ xs: '22px', lg: '24px' }}
+            mb={2}
+            data-testid="smsContactTitle"
+          >
+            {t('courtesy-contacts.sms-title', { ns: 'recapiti' })}
+          </Typography>
+        }
+        subtitle={
+          <Chip
+            label={t(`status.${isActive ? 'active' : 'inactive'}`, { ns: 'recapiti' })}
+            color={getChipColor()}
+            size="small"
+            sx={{ mb: 2 }}
+          />
+        }
+        actions={getActions()}
+        expanded={isActive}
+        data-testid="smsContact"
+      >
+        <SmsContactElem />
+        <Typography
+          mt={2}
+          variant="body1"
+          fontSize={{ xs: '14px', lg: '18px' }}
+          color="text.secondary"
+          data-testid="smsContactDescription"
+        >
+          {t('courtesy-contacts.sms-description', { ns: 'recapiti' })}
+        </Typography>
+        <DeleteDialog
+          showModal={modalOpen === ModalType.DELETE}
+          removeModalTitle={t('courtesy-contacts.remove-sms-title', {
             ns: 'recapiti',
-          }),
-          prefix: internationalPhonePrefix,
-        }}
-        insertButtonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
-        onSubmit={handleSubmit}
-        onDelete={() => {
-          setModalOpen(ModalType.DELETE);
-          // eslint-disable-next-line functional/immutable-data
-          currentAddress.current = { value: currentValue };
-        }}
-      />
-      <ExistingContactDialog
-        open={modalOpen === ModalType.EXISTING}
-        value={currentAddress.current.value}
-        handleDiscard={handleCancelCode}
-        handleConfirm={() => handleCodeVerification()}
-      />
-      {/* <DisclaimerModal
-        open={modalOpen === ModalType.DISCLAIMER}
-        onConfirm={() => {
-          setModalOpen(null);
-          handleCodeVerification();
-        }}
-        onCancel={handleCancelCode}
-        confirmLabel={t('button.conferma')}
-        checkboxLabel={t('button.capito')}
-        content={t(`alert-dialog-sms`, { ns: 'recapiti' })}
-      /> */}
-      <ContactCodeDialog
-        value={currentAddress.current.value}
-        addressType={AddressType.COURTESY}
-        channelType={ChannelType.SMS}
-        open={modalOpen === ModalType.CODE}
-        onConfirm={(code) => handleCodeVerification(code)}
-        onDiscard={handleCancelCode}
-        onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_CODE_ERROR)}
-      />
-      <DeleteDialog
-        showModal={modalOpen === ModalType.DELETE}
-        removeModalTitle={t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-sms-title`, {
-          ns: 'recapiti',
-        })}
-        removeModalBody={t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-sms-message`, {
-          value: currentAddress.current.value,
-          ns: 'recapiti',
-        })}
-        handleModalClose={() => setModalOpen(null)}
-        confirmHandler={deleteConfirmHandler}
-        blockDelete={blockDelete}
-      />
-      <InformativeDialog
-        open={modalOpen === ModalType.INFORMATIVE}
-        title={t('courtesy-contacts.info-modal-sms-title', { ns: 'recapiti' })}
-        subtitle={t('courtesy-contacts.info-modal-sms-subtitle', { ns: 'recapiti' })}
-        content={t('courtesy-contacts.info-modal-sms-content', { ns: 'recapiti' })}
-        onConfirm={() => handleCodeVerification()}
-        onDiscard={() => setModalOpen(null)}
-      />
-    </PnInfoCard>
+          })}
+          removeModalBody={t('courtesy-contacts.remove-sms-message', {
+            value: defaultSMSAddress.value,
+            ns: 'recapiti',
+          })}
+          handleModalClose={() => setModalOpen(null)}
+          confirmHandler={deleteConfirmHandler}
+        />
+      </PnInfoCard>
+    );
+  }
+  return (
+    <Box mt={3}>
+      <Divider />
+      {insertMode ? (
+        <Box mt={3}>
+          <SmsContactElem onCancelInsert={() => setInsertMode(false)} />
+        </Box>
+      ) : (
+        <>
+          <Typography variant="body1" fontWeight={600} fontSize="16px" mt={3} mb={1}>
+            {t('courtesy-contacts.email-sms-updates', { ns: 'recapiti' })}
+          </Typography>
+          <ButtonNaked
+            color="primary"
+            sx={{ fontSize: '16px' }}
+            onClick={() => setInsertMode(true)}
+          >
+            {t('courtesy-contacts.email-sms-add', { ns: 'recapiti' })}
+          </ButtonNaked>
+        </>
+      )}
+    </Box>
   );
 };
 

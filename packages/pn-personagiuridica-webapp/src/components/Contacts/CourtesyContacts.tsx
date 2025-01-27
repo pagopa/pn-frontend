@@ -1,29 +1,18 @@
-import { Trans, useTranslation } from 'react-i18next';
+import { Stack } from '@mui/material';
 
-import { Box, Stack, Typography } from '@mui/material';
-
-import { ContactSource } from '../../models/contacts';
-import DomicileBanner from '../DomicileBanner/DomicileBanner';
+import { contactsSelectors } from '../../redux/contact/reducers';
+import { useAppSelector } from '../../redux/hooks';
 import EmailContactItem from './EmailContactItem';
 import SmsContactItem from './SmsContactItem';
 
 const CourtesyContacts: React.FC = () => {
-  const { t } = useTranslation(['common', 'recapiti']);
+  const { defaultSMSAddress } = useAppSelector(contactsSelectors.selectAddresses);
 
   return (
-    <Box id="courtesyContactsSection">
-      <Typography variant="h6" fontWeight={700} tabIndex={-1} id="courtesyContactsTitle" mb={2}>
-        {t('courtesy-contacts.title', { ns: 'recapiti' })}
-      </Typography>
-      <Typography variant="body1">
-        <Trans i18nKey="courtesy-contacts.sub-title" ns="recapiti" />
-      </Typography>
-      <Stack spacing={3} mt={4} data-testid="courtesyContacts">
-        <DomicileBanner source={ContactSource.RECAPITI} />
-        <EmailContactItem />
-        <SmsContactItem />
-      </Stack>
-    </Box>
+    <Stack spacing={2} data-testid="courtesyContacts">
+      <EmailContactItem />
+      {defaultSMSAddress && <SmsContactItem />}
+    </Stack>
   );
 };
 

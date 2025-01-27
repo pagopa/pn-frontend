@@ -71,10 +71,8 @@
     }
   },
   "courtesy-contacts": {
-    "title": "Informelle Adressen",
-    "sub-title": "Die informellen Adressen benachrichtigen dich, wenn neue Zustellungen für dich vorliegen. Wenn du keine rechtsgültige Adresse aktiviert hast und die Zustellung nicht innerhalb von 5 Tagen öffnest, erhältst du sie auch in Papierform zu Hause.",
     "email-title": "E-Mail",
-    "email-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer E-Mail an die gewählte Adresse.",
+    "email-filled-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer E-Mail an die gewählte Adresse.",
     "email-dialog-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer E-Mail. ",
     "sms-title": "SMS",
     "sms-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer SMS an die gewählte Nummer.",
@@ -100,11 +98,7 @@
     "remove-email-title": "E-Mail-Adresse entfernen",
     "remove-email-message": "Möchtest du die E-Mail-Adresse {{value}} wirklich entfernen?",
     "remove-sms-title": "Handynummer entfernen",
-    "remove-sms-message": "Möchtest du die Handynummer {{value}} wirklich entfernen?",
-    "block-remove-email-title": "E-Mail-Adresse kann nicht gelöscht werden",
-    "block-remove-email-message": "Dazu müssen zuerst alle E-Mail-Adressen unter „Sekundäre Anschriften“ gelöscht werden.",
-    "block-remove-sms-title": "Telefonnummer kann nicht gelöscht werden",
-    "block-remove-sms-message": "Dazu müssen zunächst alle Telefonnummern unter „Sekundäre Anschriften“ gelöscht werden."
+    "remove-sms-message": "Möchtest du die Handynummer {{value}} wirklich entfernen?"
   },
   "special-contacts": {
     "select-address": "Anschrift wählen",
