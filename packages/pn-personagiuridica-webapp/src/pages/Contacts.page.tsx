@@ -7,7 +7,9 @@ import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 import ContactsSummaryCards from '../components/Contacts/ContactsSummaryCards';
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import LegalContacts from '../components/Contacts/LegalContacts';
+import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import { ContactSource } from '../models/contacts';
 import { PROFILE } from '../navigation/routes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { contactsSelectors } from '../redux/contact/reducers';
@@ -85,6 +87,7 @@ const Contacts = () => {
           reloadAction={fetchAddresses}
         >
           <ContactsSummaryCards />
+          <DomicileBanner source={ContactSource.RECAPITI} />
           {verifyingPecAddress && (
             <Alert data-testid="PecVerificationAlert" severity="info" sx={{ my: { xs: 2, lg: 4 } }}>
               <Typography variant="inherit" sx={{ fontWeight: '600' }}>
@@ -93,7 +96,7 @@ const Contacts = () => {
               <Typography variant="inherit">{t(bannerMessage, { ns: 'recapiti' })}</Typography>
             </Alert>
           )}
-          <Stack direction="column" spacing={6}>
+          <Stack direction="column" spacing={2}>
             <LegalContacts />
             <CourtesyContacts />
           </Stack>

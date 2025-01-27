@@ -116,11 +116,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     // INSERT MODE
     if (!value) {
       return (
-        <form
-          onSubmit={formik.handleSubmit}
-          data-testid={`${senderId}_${contactType}Contact`}
-          style={{ width: isMobile ? '100%' : '50%' }}
-        >
+        <form onSubmit={formik.handleSubmit} data-testid={`${senderId}_${contactType}Contact`}>
           <Typography
             id={`${senderId}_${contactType}-label`}
             variant="body2"
@@ -129,14 +125,14 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
           >
             {label}
           </Typography>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
             <TextField
               id={`${senderId}_${contactType}`}
               name={`${senderId}_${contactType}`}
               placeholder={inputProps.label}
               size="small"
-              fullWidth
-              sx={{ flexBasis: { xs: 'unset', lg: '66.66%' } }}
+              fullWidth={isMobile}
+              sx={{ flexBasis: { xs: 'unset', lg: '33.33%' } }}
               InputProps={{
                 startAdornment: inputProps.prefix ? (
                   <InputAdornment position="start">{inputProps.prefix}</InputAdornment>
@@ -156,10 +152,11 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             <Button
               id={`${senderId}_${contactType}-button`}
               variant="contained"
-              fullWidth
+              fullWidth={isMobile}
               type="submit"
               data-testid={`${senderId}_${contactType}-button`}
-              sx={{ flexBasis: { xs: 'unset', lg: '33.33%' }, height: '43px', fontWeight: 700 }}
+              sx={{ height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '16.67%' } }}
+              size="small"
             >
               {insertButtonLabel}
             </Button>
@@ -244,7 +241,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
         {!editMode && (
           <Stack
             direction={{ xs: 'column', lg: 'row' }}
-            spacing={3}
+            spacing={{ xs: 2, lg: 3 }}
             alignItems="start"
             sx={{ mb: 2 }}
           >
