@@ -1,5 +1,3 @@
-import { vi } from 'vitest';
-
 import { formatDate, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import {
   createEvent,
@@ -20,13 +18,6 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
-
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
-  }),
-}));
 
 const initialState = {
   startDate: tenYearsAgo,
@@ -240,9 +231,9 @@ describe('Filter Notifications Table Component', async () => {
     oneYearAgo.setHours(0, 0, 0, 0);
     const button = result.getByTestId('dialogToggleButton');
     fireEvent.click(button);
-    let dialogForm = await waitFor(() => screen.getByTestId('filter-form') as HTMLFormElement);
-    await setFormValues(dialogForm!, nineYearsAgo, oneYearAgo, 'ABCD-EFGH-ILMN-123456-A-1', true);
-    const submitButton = dialogForm!.querySelector(`button[type="submit"]`);
+    let dialogForm = await waitFor(() => screen.getByTestId<HTMLFormElement>('filter-form'));
+    await setFormValues(dialogForm, nineYearsAgo, oneYearAgo, 'ABCD-EFGH-ILMN-123456-A-1', true);
+    const submitButton = dialogForm.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
@@ -258,8 +249,8 @@ describe('Filter Notifications Table Component', async () => {
     });
     // cancel filters
     fireEvent.click(button);
-    dialogForm = await waitFor(() => screen.getByTestId('filter-form') as HTMLFormElement);
-    const cancelButton = within(dialogForm!).getByTestId('cancelButton');
+    dialogForm = await waitFor(() => screen.getByTestId<HTMLFormElement>('filter-form'));
+    const cancelButton = within(dialogForm).getByTestId('cancelButton');
     expect(cancelButton).toBeEnabled();
     fireEvent.click(cancelButton);
     await waitFor(() => {

@@ -1,3 +1,6 @@
+import { ReactNode } from 'react';
+import { vi } from 'vitest';
+
 import { Configuration } from '@pagopa-pn/pn-commons';
 import '@testing-library/jest-dom';
 
@@ -32,8 +35,33 @@ beforeAll(() => {
     IS_DOD_ENABLED: true,
     WORK_IN_PROGRESS: false,
     F24_DOWNLOAD_WAIT_TIME: 0,
-    DOWNTIME_EXAMPLE_LINK: 'https://fake.downtime.pagopa.it'
+    DOWNTIME_EXAMPLE_LINK: 'https://fake.downtime.pagopa.it',
   });
   initStore(false);
   initAxiosClients();
+  // mock translations
+  vi.mock('react-i18next', () => ({
+    // this mock makes sure any components using the translate hook can use it without a warning being shown
+    useTranslation: () => ({
+      t: (str: string, options?: { defaultValue: any }) => {
+        if (Array.isArray(options?.defaultValue)) {
+          return [str];
+        }
+        return str;
+      },
+      i18n: {
+        language: 'it',
+        changeLanguage: () => new Promise(() => {}),
+      },
+    }),
+    Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
+      <>
+        {props.i18nKey} {props.components?.map((c) => c)}
+      </>
+    ),
+    initReactI18next: {
+      type: '3rdParty',
+      init: () => {},
+    },
+  }));
 });

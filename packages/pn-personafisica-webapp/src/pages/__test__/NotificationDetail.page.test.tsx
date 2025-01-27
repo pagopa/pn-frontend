@@ -60,14 +60,6 @@ vi.mock('react-router-dom', async () => ({
   useLocation: () => ({ state: { fromQrCode: mockIsFromQrCode }, pathname: '/' }),
 }));
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
-  }),
-}));
-
 const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number) => {
   const timelineElementDigitalSuccessWorkflow = notification.timeline.filter(
     (t) => t.category === TimelineCategory.NOTIFICATION_VIEWED && t.details.recIndex === recIndex

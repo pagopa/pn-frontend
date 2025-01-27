@@ -35,8 +35,9 @@ import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { logout } from './redux/auth/actions';
+import { getDigitalAddresses } from './redux/contact/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
+import { getSidemenuInformation } from './redux/sidemenu/actions';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PFAppErrorFactory } from './utility/AppError/PFAppErrorFactory';
@@ -79,7 +80,6 @@ const App = () => {
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const path = pathname.split('/');
   const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL } = getConfiguration();
 
   const sessionToken = loggedUser.sessionToken;
@@ -96,12 +96,12 @@ const App = () => {
   const [showHeader, showFooter, showSideMenu, showHeaderProduct, showAssistanceButton] = useMemo(
     () =>
       showLayoutParts(
-        path[1],
+        pathname,
         !!sessionToken,
         tosConsent && tosConsent.accepted && fetchedTos,
         privacyConsent && privacyConsent.accepted && fetchedPrivacy
       ),
-    [path[1], sessionToken, tosConsent, fetchedTos, privacyConsent, fetchedPrivacy]
+    [pathname, sessionToken, tosConsent, fetchedTos, privacyConsent, fetchedPrivacy]
   );
 
   const userActions = useMemo(() => {
@@ -260,7 +260,7 @@ const App = () => {
 
   useEffect(() => {
     if (sessionToken !== '') {
-      void dispatch(getDomicileInfo());
+      void dispatch(getDigitalAddresses());
       void dispatch(getSidemenuInformation());
       void dispatch(getCurrentAppStatus());
     }

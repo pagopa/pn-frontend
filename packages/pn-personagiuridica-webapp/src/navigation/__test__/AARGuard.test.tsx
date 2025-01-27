@@ -19,12 +19,6 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const Guard = () => (
   <Routes>
     <Route path="/" element={<AARGuard />}>
@@ -79,8 +73,8 @@ describe('Notification from QR code', async () => {
     const loadingComponent = screen.queryByTestId('loading-skeleton');
     expect(loadingComponent).toBeInTheDocument();
     await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(GET_DETTAGLIO_NOTIFICA_PATH('mock-iun'), {
+      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+      expect(mockNavigateFn).toHaveBeenCalledWith(GET_DETTAGLIO_NOTIFICA_PATH('mock-iun'), {
         replace: true,
         state: { fromQrCode: true },
       });
@@ -104,8 +98,8 @@ describe('Notification from QR code', async () => {
       aarQrCodeValue: mockQrCode,
     });
     await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(
+      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+      expect(mockNavigateFn).toHaveBeenCalledWith(
         GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH('mock-iun', 'mock-mandateId'),
         { replace: true, state: { fromQrCode: true } }
       );
@@ -129,7 +123,7 @@ describe('Notification from QR code', async () => {
       aarQrCodeValue: mockQrCode,
     });
     await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(0);
+      expect(mockNavigateFn).toHaveBeenCalledTimes(0);
     });
     const accessDeniedComponent = screen.getByTestId('access-denied');
     expect(accessDeniedComponent).toBeInTheDocument();
@@ -160,7 +154,7 @@ describe('Notification from QR code', async () => {
       render(<Guard />);
     });
     expect(mock.history.post).toHaveLength(0);
-    expect(mockNavigateFn).toBeCalledTimes(0);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(0);
 
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();

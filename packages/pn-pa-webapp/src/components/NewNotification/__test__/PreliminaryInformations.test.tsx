@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import {
@@ -27,7 +26,6 @@ import {
   fireEvent,
   randomString,
   render,
-  
   testStore,
   waitFor,
   within,
@@ -38,20 +36,6 @@ import { NEW_NOTIFICATION_ACTIONS } from '../../../redux/newNotification/actions
 import PreliminaryInformations from '../PreliminaryInformations';
 
 const mockIsPaymentEnabledGetter = vi.fn();
-
-// mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
-  }),
-  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
-    <>
-      {props.i18nKey} {props.components?.map((c) => c)}
-    </>
-  ),
-}));
 
 vi.mock('../../../services/configuration.service', async () => {
   return {
@@ -85,7 +69,7 @@ const populateForm = async (
     1,
     true
   );
-  
+
   if (hasPayment) {
     await testRadio(
       form,
@@ -231,7 +215,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
         additionalSubject: '',
       });
     });
-    expect(confirmHandlerMk).toBeCalledTimes(1);
+    expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
   });
 
   it('fills form with invalid values', async () => {
@@ -461,7 +445,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
         additionalSubject: '',
       });
     });
-    expect(confirmHandlerMk).toBeCalledTimes(1);
+    expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
   });
 
   it('set senderDenomination longer than 80 characters', async () => {

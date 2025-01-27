@@ -7,13 +7,6 @@ import FiledNotificationsStatistics from '../FiledNotificationsStatistics';
 
 const mockInput = vi.fn();
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 vi.mock('../AggregateAndTrendStatistics.tsx', async () => {
   const original = await vi.importActual<any>('../AggregateAndTrendStatistics.tsx');
   return {

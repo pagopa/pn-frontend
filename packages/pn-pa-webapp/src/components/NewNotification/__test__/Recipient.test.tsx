@@ -17,13 +17,6 @@ import {
 import { NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
 import Recipient from '../Recipient';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const testRecipientFormRendering = async (
   form: HTMLElement,
   recipientIndex: number,
@@ -88,7 +81,7 @@ const testRecipientFormRendering = async (
 
   const physicalForm = within(form).queryByTestId(`physicalAddressForm${recipientIndex}`);
   expect(physicalForm).toBeInTheDocument();
-  
+
   if (recipient) {
     const address = physicalForm?.querySelector(
       `input[name="recipients[${recipientIndex}].address"]`
@@ -230,7 +223,7 @@ describe('Recipient Component with payment enabled', async () => {
         newNotification.recipients
       );
     });
-    expect(confirmHandlerMk).toBeCalledTimes(1);
+    expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
   }, 10000);
 
   it('fills form with invalid values - two recipients', async () => {
@@ -350,7 +343,7 @@ describe('Recipient Component with payment enabled', async () => {
         newNotification.recipients[0],
       ]);
     });
-    expect(confirmHandlerMk).toBeCalledTimes(1);
+    expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
   }, 10000);
 
   it('changes form values and clicks on back - one recipient', async () => {
@@ -376,7 +369,7 @@ describe('Recipient Component with payment enabled', async () => {
         newNotification.recipients[0],
       ]);
     });
-    expect(previousHandlerMk).toBeCalledTimes(1);
+    expect(previousHandlerMk).toHaveBeenCalledTimes(1);
   }, 10000);
 
   it('fills form with invalid values - one recipient', async () => {
@@ -413,11 +406,13 @@ describe('Recipient Component with payment enabled', async () => {
     expect(taxIdError).toHaveTextContent('fiscal-code-error');
     // digitalDomicile
     await testInput(form, 'recipients[0].digitalDomicile', ' text-with-spaces ');
-    const digitalDomicileError = form.querySelector(`[id="recipients[0].digitalDomicile-helper-text"]`);
+    const digitalDomicileError = form.querySelector(
+      `[id="recipients[0].digitalDomicile-helper-text"]`
+    );
     expect(digitalDomicileError).toHaveTextContent('no-spaces-at-edges');
     await testInput(form, 'recipients[0].digitalDomicile', 'wrong-email-format');
     expect(digitalDomicileError).toHaveTextContent('pec-error');
-    
+
     // address
     await testStringFieldValidation(form, 0, 'address', 1025);
     // houseNumber
@@ -496,6 +491,6 @@ describe('Recipient Component without payment enabled', async () => {
         { ...newNotification.recipients[0], creditorTaxId: '', noticeCode: '' },
       ]);
     });
-    expect(confirmHandlerMk).toBeCalledTimes(1);
+    expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
   });
 });

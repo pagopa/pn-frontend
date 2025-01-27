@@ -1,18 +1,8 @@
-import { vi } from 'vitest';
-
 import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
 import { Delegator } from '../../../redux/delegation/types';
 import { sortDelegations } from '../../../utility/delegation.utility';
 import Delegators from '../Delegators';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
 
 describe('Delegators Component', async () => {
   it('renders the empty state', () => {

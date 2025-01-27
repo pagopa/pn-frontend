@@ -1,0 +1,88 @@
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+import { Box, Typography } from '@mui/material';
+import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
+
+import PecContactWizard from '../components/Contacts/PecContactWizard';
+import SercqSendContactWizard from '../components/Contacts/SercqSendContactWizard';
+import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import { contactsSelectors } from '../redux/contact/reducers';
+import { useAppSelector } from '../redux/hooks';
+
+type Props = {
+  isTransferring?: boolean;
+};
+
+const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) => {
+  const { t } = useTranslation(['recapiti', 'common']);
+  const navigate = useNavigate();
+  const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
+
+  const [activeStep, setActiveStep] = useState(0);
+  const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress);
+
+  const goToNextStep = () => {
+    setActiveStep(activeStep + 1);
+  };
+
+  const getNextButton = () => {
+    if (activeStep === 0) {
+      return (
+        <ButtonNaked onClick={() => navigate(-1)} color="primary" size="medium" sx={{ mx: 'auto' }}>
+          {t('button.annulla', { ns: 'common' })}
+        </ButtonNaked>
+      );
+    }
+
+    return null;
+  };
+
+  return (
+    <LoadingPageWrapper isInitialized={true}>
+      <Box display="flex" justifyContent="center">
+        <Box sx={{ width: { xs: '100%', lg: '760px' } }}>
+          {!showPecWizard ? (
+            <PnWizard
+              title={
+                <Typography fontSize="28px" fontWeight={700}>
+                  {t(`legal-contacts.sercq-send-wizard.title${isTransferring ? '-transfer' : ''}`)}
+                </Typography>
+              }
+              activeStep={activeStep}
+              setActiveStep={setActiveStep}
+              slots={{
+                nextButton: getNextButton,
+                prevButton: () => <></>,
+              }}
+              slotsProps={{
+                feedback: {
+                  title: t(
+                    `legal-contacts.sercq-send-wizard.feedback.title-${
+                      isTransferring ? 'transfer' : 'activation'
+                    }`
+                  ),
+                  buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
+                  onClick: () => navigate(-1),
+                },
+              }}
+            >
+              <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_1.title')}>
+                <SercqSendContactWizard
+                  goToNextStep={goToNextStep}
+                  setShowPecWizard={setShowPecWizard}
+                />
+              </PnWizardStep>
+            </PnWizard>
+          ) : (
+            <PecContactWizard setShowPecWizard={setShowPecWizard} isTransferring={isTransferring} />
+          )}
+        </Box>
+      </Box>
+    </LoadingPageWrapper>
+  );
+};
+
+export default DigitalContactActivation;

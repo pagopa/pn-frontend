@@ -1,5 +1,3 @@
-import { vi } from 'vitest';
-
 import {
   NotificationDetailPayment,
   NotificationDetailRecipient,
@@ -20,13 +18,6 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import NotificationPaymentSender from '../NotificationPaymentSender';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
 
 async function selectRecipient(recipientToSelect: number) {
   const recipientsSelect = document.querySelector('div[id="recipients-select"]');

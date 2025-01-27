@@ -28,10 +28,6 @@
     "validation-progress-content": "We are verifying that the PEC address is valid. You will receive an email with the result within 24 hours."
   },
   "courtesy-contacts": {
-    "title": "",
-    "list": [
-      "When there is a notification for the company, a message will be sent to these contacts. To read the notification and pay any fees, you must log in to the platform."
-    ],
     "link-sms-placeholder": "Mobile phone number",
     "link-email-placeholder": "Email address",
     "sms-add": "Notify me by text",
@@ -51,11 +47,7 @@
     "remove-email-title": "Remove email",
     "remove-email-message": "Are you sure you want to remove the email address {{value}}?",
     "remove-sms-title": "Remove mobile",
-    "remove-sms-message": "Are you sure you want to remove the mobile number {{value}}?",
-    "block-remove-email-title": "You can't delete the email",
-    "block-remove-email-message": "In order to do this, you must first delete all the email addresses you have indicated under \"Other contact details\".",
-    "block-remove-sms-title": "You can't delete the phone number",
-    "block-remove-sms-message": "In order to do this, you must first delete all the phone numbers you have indicated under \"Other contact details\"."
+    "remove-sms-message": "Are you sure you want to remove the mobile number {{value}}?"
   },
   "special-contacts": {
     "pec": "PEC address",

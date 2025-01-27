@@ -28,10 +28,6 @@
     "validation-progress-content": "Nous vérifions que l’adresse PEC est valide. Vous recevrez un e-mail avec le résultat dans les 24 heures."
   },
   "courtesy-contacts": {
-    "title": "",
-    "list": [
-      "Lorsqu’il y a une notification pour l’entreprise, un message est envoyé à ces contacts. Pour lire la notification et payer les frais éventuels, il est nécessaire d’accéder à la plateforme."
-    ],
     "link-sms-placeholder": "Numéro de téléphone mobile",
     "link-email-placeholder": "Adresse e-mail",
     "sms-add": "Prévenez-moi par SMS",
@@ -51,11 +47,7 @@
     "remove-email-title": "Supprimer l’e-mail",
     "remove-email-message": "Confirmez-vous vouloir supprimer l’adresse e-mail {{value}} ?",
     "remove-sms-title": "Supprimer téléphone portable",
-    "remove-sms-message": "Confirmez-vous vouloir supprimer le numéro de téléphone portable {{value}} ?",
-    "block-remove-email-title": "Vous ne pouvez pas supprimer l’e-mail",
-    "block-remove-email-message": "Pour ce faire, vous devez d’abord supprimer toutes les adresses PEC que vous avez indiquées dans la rubrique « Autres coordonnées ».",
-    "block-remove-sms-title": "Vous ne pouvez pas supprimer le numéro de téléphone",
-    "block-remove-sms-message": "Pour ce faire, vous devez d’abord supprimer tous les numéros de téléphone que vous avez indiqués sous « Autres coordonnées »."
+    "remove-sms-message": "Confirmez-vous vouloir supprimer le numéro de téléphone portable {{value}} ?"
   },
   "special-contacts": {
     "pec": "Adresse PEC",
