@@ -129,6 +129,7 @@ describe('NotificationDetailTimelineStep', () => {
             getLegalFactLabel(step, lf.category, lf.key || '')
           );
         }
+        expect(microLegalFacts[counter]).toBeEnabled()
         counter++;
       }
     });
