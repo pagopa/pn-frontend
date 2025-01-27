@@ -137,7 +137,7 @@ describe('NotificationDetailTimelineStep', () => {
     moreLessButton = getByTestId('more-less-timeline-step');
     expect(moreLessButton).toHaveTextContent('Show Less');
     fireEvent.click(moreLessButton);
-    expect(eventTrackingCallbackShowMore).toBeCalledTimes(2);
+    expect(eventTrackingCallbackShowMore).toHaveBeenCalledTimes(2);
     // After clicking "Show Less", additional steps should be hidden
     dateItemsMicro = queryAllByTestId('dateItemMicro');
     expect(dateItemsMicro).toHaveLength(0);
@@ -162,7 +162,7 @@ describe('NotificationDetailTimelineStep', () => {
       fireEvent.click(btn);
       // Verify that the clickHandler function is called with the expected arguments
       expect(mockClickHandler).toHaveBeenCalledTimes(index + 1);
-      expect(mockClickHandler).toBeCalledWith(legalFacts[index].file);
+      expect(mockClickHandler).toHaveBeenCalledWith(legalFacts[index].file);
     });
     // expand step
     const moreLessButton = getByTestId('more-less-timeline-step');
@@ -176,7 +176,7 @@ describe('NotificationDetailTimelineStep', () => {
           fireEvent.click(microLegalFacts[counter]);
           // Verify that the clickHandler function is called with the expected arguments
           expect(mockClickHandler).toHaveBeenCalledTimes(legalFacts.length + counter + 1);
-          expect(mockClickHandler).toBeCalledWith(lf);
+          expect(mockClickHandler).toHaveBeenCalledWith(lf);
         }
         counter++;
       }
