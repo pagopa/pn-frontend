@@ -19,24 +19,20 @@ const StatusTooltip = ({
   tooltipProps?: Partial<TooltipProps>;
   chipProps?: SxProps;
 }) => {
-  const isMobile = useIsMobile();
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
 
   return (
-    <CustomTooltip
-      openOnClick={isMobile}
-      tooltipContent={tooltipContent}
-      tooltipProps={tooltipProps}
-    >
+    <CustomTooltip openOnClick={false} tooltipContent={tooltipContent} tooltipProps={tooltipProps}>
       <Chip
         id={`status-chip-${label}`}
-        label={label}
+        label={<span aria-hidden="true">{label}</span>}
         color={color}
         sx={{
           ...chipProps,
           cursor: 'default',
         }}
         data-testid={`statusChip-${label}`}
+        aria-label={`${label}: ${tooltip}`}
       />
     </CustomTooltip>
   );
