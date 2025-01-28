@@ -282,22 +282,21 @@ const NotificationDetailTimelineStep = ({
             <Box sx={{ overflowWrap: 'anywhere' }}>
               <Typography color="text.primary" fontSize={14}>
                 {timelineStatusInfos.description}&nbsp;
-                {s.legalFactsIds &&
-                  s.legalFactsIds.length > 0 &&
-                  s.legalFactsIds.map((lf) => (
-                    <ButtonNaked
-                      fontSize={14}
-                      display="inline"
-                      color='primary'
-                      onClick={() => clickHandler(lf)}
-                      disabled={disableDownloads}
-                      key={lf.key}
-                      data-testid="download-legalfact-micro"
-                    >
-                      {getLegalFactLabel(s, lf.category, lf.key || '')}
-                    </ButtonNaked>
-                  ))}
               </Typography>
+              {s.legalFactsIds &&
+                s.legalFactsIds.length > 0 &&
+                s.legalFactsIds.map((lf) => (
+                  <ButtonNaked
+                    fontSize={14}
+                    color='primary'
+                    onClick={() => clickHandler(lf)}
+                    disabled={disableDownloads}
+                    key={lf.key}
+                    data-testid="download-legalfact-micro"
+                  >
+                    {getLegalFactLabel(s, lf.category, lf.key || '')}
+                  </ButtonNaked>
+                ))}
             </Box>
           </Fragment>
         }
