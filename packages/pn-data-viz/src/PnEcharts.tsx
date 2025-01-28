@@ -10,8 +10,6 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-  ListItem,
-  ListItemAvatar,
   ListItemText,
   Stack,
 } from '@mui/material';
