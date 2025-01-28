@@ -8,6 +8,8 @@ import {
   Avatar,
   Box,
   Checkbox,
+  FormControl,
+  FormControlLabel,
   ListItem,
   ListItemAvatar,
   ListItemText,
@@ -110,27 +112,31 @@ export function PnECharts({
           bgcolor: color,
           width: 10,
           height: 10,
+          mr: 1
         };
         return (
-          <ListItem key={item} sx={{ width: 'auto' }} data-testid="legendItem">
-            <Checkbox
-              onChange={() => toggleSerie(item)}
-              defaultChecked
-              sx={{
-                color,
-                '&.Mui-checked': {
+          <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <FormControlLabel
+              key={item}
+              sx={{ width: 'auto' }}
+              data-testid="legendItem"
+              control={<Checkbox onChange={() => toggleSerie(item)}
+                defaultChecked
+                sx={{
                   color,
-                },
-              }}
-              inputProps={{
-                'aria-label': item,
-              }}
+                  '&.Mui-checked': {
+                    color,
+                  },
+                }}
+              />}
+              label={
+                <Stack sx={{ minWidth: 18, flexDirection: 'row', alignItems: 'center' }}>
+                  <Avatar sx={avatarSx}>&nbsp;</Avatar>
+                  <ListItemText secondary={item}></ListItemText>
+                </Stack>
+              }
             />
-            <ListItemAvatar sx={{ minWidth: 18 }}>
-              <Avatar sx={avatarSx}>&nbsp;</Avatar>
-            </ListItemAvatar>
-            <ListItemText secondary={item} />
-          </ListItem>
+          </FormControl>
         );
       }),
     [theme]
