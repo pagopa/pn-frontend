@@ -21,9 +21,15 @@ const TagIndicator: React.FC<{
   arrayChildren: Array<JSX.Element>;
   visibleItems: number;
   dataTestId: string;
-}> = ({ boxProps, arrayChildren, visibleItems, dataTestId }) => (
-  <Box {...boxProps} sx={{ cursor: 'pointer', display: 'inline-block' }} data-testid={dataTestId}>
-    <Tag value={`+${arrayChildren.length - visibleItems}`} />
+  ariaLabel?: string;
+}> = ({ boxProps, arrayChildren, visibleItems, dataTestId, ariaLabel }) => (
+  <Box
+    {...boxProps}
+    sx={{ cursor: 'pointer', display: 'inline-block' }}
+    data-testid={dataTestId}
+    aria-label={ariaLabel || undefined}
+  >
+    <Tag value={`+${arrayChildren.length - visibleItems}`} aria-hidden={!!ariaLabel} />
   </Box>
 );
 
@@ -55,6 +61,11 @@ const CustomTagGroup: React.FC<CustomTagGroupProps> = ({
                   arrayChildren={arrayChildren}
                   visibleItems={visibleItems as number}
                   dataTestId="custom-tooltip-indicator"
+                  ariaLabel={arrayChildren
+                    .slice(visibleItems)
+                    .map((c) => c.props?.children?.props?.value) // <Box><Tag value={v}></Tag></Box>
+                    .filter(Boolean)
+                    .join(',')}
                 />
               </Box>
             </CustomTooltip>
