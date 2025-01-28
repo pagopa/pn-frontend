@@ -23,7 +23,7 @@ describe('InactivityHandler Component', () => {
     render(<Component />);
     await waitFor(
       () => {
-        expect(timerExpiredHandler).toBeCalledTimes(1);
+        expect(timerExpiredHandler).toHaveBeenCalledTimes(1);
       },
       { timeout: inactivityTimer + 1000 }
     );
@@ -32,12 +32,18 @@ describe('InactivityHandler Component', () => {
   it('test user interaction', async () => {
     // render component
     const result = render(<Component />);
-    fireEvent.mouseMove(result.container);
+    await waitFor(
+      () => { },
+      { timeout: inactivityTimer - 1000 }
+    );
+    const buttonOfSessionModal = result.getByTestId('buttonOfSessionModal')
+    fireEvent.click(buttonOfSessionModal);
     await waitFor(
       () => {
-        expect(timerExpiredHandler).toBeCalledTimes(0);
+        expect(timerExpiredHandler).toHaveBeenCalledTimes(0);
       },
       { timeout: inactivityTimer + 1000 }
     );
+    expect(buttonOfSessionModal).not.toBeInTheDocument()
   });
 });

@@ -32,7 +32,7 @@ const INITIALIZATION_SEQUENCE = [
   INITIALIZATION_STEPS.SESSION_CHECK,
 ];
 
-const inactivityTimer = 5 * 60 * 1000;
+const inactivityTimer = 10 * 1000;
 
 const manageUnforbiddenError = (e: any) => {
   if (e.status === 451) {
@@ -54,7 +54,6 @@ const SessionGuardRender = () => {
   const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession } = useAppSelector(
     (state: RootState) => state.userState
   );
-  const dispatch = useAppDispatch();
   const { t } = useTranslation(['common']);
   const { hasApiErrors } = useErrors();
 
@@ -89,7 +88,10 @@ const SessionGuardRender = () => {
     ) : (
       <InactivityHandler
         inactivityTimer={inactivityTimer}
-        onTimerExpired={() => dispatch(logout())}
+        onTimerExpired={() => {
+          sessionStorage.clear()
+          goToSelfcareLogin()
+        }}
       >
         <Outlet />
       </InactivityHandler>

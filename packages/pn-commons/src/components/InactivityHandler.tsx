@@ -1,4 +1,5 @@
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import SessionModal from './SessionModal';
 
 type Props = {
   /** Inactivity timer (in milliseconds), if 0 the inactivity timer is disabled */
@@ -8,43 +9,48 @@ type Props = {
   children?: React.ReactNode;
 };
 
-const InactivityHandler: React.FC<Props> = ({ inactivityTimer, children, onTimerExpired }) => {
+const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, children }) => {
   const [initTimeout, setInitTimeout] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
 
   const resetTimer = () => setInitTimeout(!initTimeout);
 
-  const initListeners = () => {
-    window.addEventListener('mousemove', resetTimer);
-    window.addEventListener('scroll', resetTimer);
-    window.addEventListener('keydown', resetTimer);
-  };
-
-  const cleanUpListeners = () => {
-    window.removeEventListener('mousemove', resetTimer);
-    window.removeEventListener('scroll', resetTimer);
-    window.removeEventListener('keydown', resetTimer);
-  };
 
   // init timer
   useEffect(() => {
     if (inactivityTimer) {
-      // init listeners
-      initListeners();
       // init timer
       const timer = setTimeout(() => {
-        cleanUpListeners();
         onTimerExpired();
       }, inactivityTimer);
+
+      const differenceTimerModal = setTimeout(() => {
+        setOpenModal(true)
+
+      }, inactivityTimer - (5 * 1000))
+
       // cleanup function
       return () => {
+        setOpenModal(false)
         clearTimeout(timer);
-        cleanUpListeners();
+        clearTimeout(differenceTimerModal);
       };
     }
-    return () => {};
+    return () => { };
   }, [initTimeout]);
 
-  return <Fragment>{children}</Fragment>;
+  return (
+    <>
+      {openModal && <SessionModal
+        open
+        title={'ciao'}
+        message={'ciao'}
+        onConfirm={resetTimer}
+        onConfirmLabel='resta attivo'
+        initTimeout={false}
+      />}
+      {children}
+    </>)
 };
 
 export default InactivityHandler;

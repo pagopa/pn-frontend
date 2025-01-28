@@ -63,7 +63,7 @@ const SessionGuardRender = () => {
   const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession } = useAppSelector(
     (state: RootState) => state.userState
   );
-  const dispatch = useAppDispatch();
+
   const { t } = useTranslation(['common']);
   const { hasApiErrors } = useErrors();
 
@@ -110,7 +110,10 @@ const SessionGuardRender = () => {
     return (
       <InactivityHandler
         inactivityTimer={isAnonymousUser || !IS_INACTIVITY_HANDLER_ENABLED ? 0 : inactivityTimer}
-        onTimerExpired={() => dispatch(logout())}
+        onTimerExpired={() => {
+          sessionStorage.clear()
+          goToLoginPortal()
+        }}
       >
         <Outlet />
       </InactivityHandler>
