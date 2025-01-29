@@ -1,19 +1,23 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Chip, Paper, Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { ChannelType } from '../../models/contacts';
-import { DIGITAL_DOMICILE_TRANSFER } from '../../navigation/routes.const';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
 
+export enum DigitalDomicileManagementAction {
+  DEFAULT = 'DEFAULT',
+  ADD_SPECIAL_CONTACT = 'ADD_SPECIAL_CONTACT',
+  DIGITAL_DOMICILE_TRANSFER = 'DIGITAL_DOMICILE_TRANSFER',
+}
+
 type Props = {
-  goToNextStep: () => void;
+  setAction: (action: DigitalDomicileManagementAction) => void;
 };
 
 type DigitalDomicileOption = {
@@ -45,9 +49,8 @@ const DigitalDomicileOption: React.FC<DigitalDomicileOption> = ({ title, content
   </Stack>
 );
 
-const LegalContactManager: React.FC<Props> = ({ goToNextStep }) => {
+const LegalContactManager: React.FC<Props> = ({ setAction }) => {
   const { t } = useTranslation(['recapiti', 'common']);
-  const navigate = useNavigate();
   const { defaultPECAddress, defaultSERCQ_SENDAddress } = useAppSelector(
     contactsSelectors.selectAddresses
   );
@@ -89,9 +92,8 @@ const LegalContactManager: React.FC<Props> = ({ goToNextStep }) => {
                 text: t(
                   `legal-contacts.digital-domicile-management.transfer.action-${channelType.toLowerCase()}`
                 ),
-                callback: () => {
-                  navigate(`${DIGITAL_DOMICILE_TRANSFER}`);
-                },
+                callback: () =>
+                  setAction(DigitalDomicileManagementAction.DIGITAL_DOMICILE_TRANSFER),
               }}
             />
           )}
@@ -100,7 +102,7 @@ const LegalContactManager: React.FC<Props> = ({ goToNextStep }) => {
             content={t('legal-contacts.digital-domicile-management.special_contacts.content')}
             action={{
               text: t('legal-contacts.digital-domicile-management.special_contacts.action'),
-              callback: goToNextStep,
+              callback: () => setAction(DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT),
             }}
           />
         </Stack>

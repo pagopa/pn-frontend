@@ -9,7 +9,6 @@ import {
   lazyRetry,
 } from '@pagopa-pn/pn-commons';
 
-import DigitalContactManagement from '../pages/DigitalContactManagement.page';
 import { getConfiguration } from '../services/configuration.service';
 import AARGuard from './AARGuard';
 import RouteGuard from './RouteGuard';
@@ -28,7 +27,13 @@ const TermsOfServicePage = lazyRetry(() => import('../pages/TermsOfService.page'
 const AppStatus = lazyRetry(() => import('../pages/AppStatus.page'));
 const ParticipatingEntitiesPage = lazyRetry(() => import('../pages/ParticipatingEntities.page'));
 const SupportPage = lazyRetry(() => import('../pages/Support.page'));
-const DigitalContactActivation = lazyRetry(() => import('../pages/DigitalContactActivation.page'));
+const DigitalContact = lazyRetry(() => import('../pages/DigitalContact.page'));
+const DigitalContactActivation = lazyRetry(
+  () => import('../components/Contacts/DigitalContactActivation')
+);
+const DigitalContactManagement = lazyRetry(
+  () => import('../components/Contacts/DigitalContactManagement')
+);
 
 const handleAssistanceClick = () => {
   /* eslint-disable-next-line functional/immutable-data */
@@ -54,18 +59,16 @@ function Router() {
                 <Route path={routes.PROFILO} element={<Profile />} />
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
                 <Route path={routes.SUPPORT} element={<SupportPage />} />
-                <Route
-                  path={routes.DIGITAL_DOMICILE_ACTIVATION}
-                  element={<DigitalContactActivation />}
-                />
-                <Route
-                  path={routes.DIGITAL_DOMICILE_TRANSFER}
-                  element={<DigitalContactActivation isTransferring />}
-                />
-                <Route
-                  path={routes.DIGITAL_DOMICILE_MANAGEMENT}
-                  element={<DigitalContactManagement />}
-                />
+                <Route path={routes.DIGITAL_DOMICILE} element={<DigitalContact />}>
+                  <Route
+                    path={routes.DIGITAL_DOMICILE_ACTIVATION}
+                    element={<DigitalContactActivation />}
+                  />
+                  <Route
+                    path={routes.DIGITAL_DOMICILE_MANAGEMENT}
+                    element={<DigitalContactManagement />}
+                  />
+                </Route>
               </Route>
             </Route>
             {/* not found - non-logged users will see the common AccessDenied component */}

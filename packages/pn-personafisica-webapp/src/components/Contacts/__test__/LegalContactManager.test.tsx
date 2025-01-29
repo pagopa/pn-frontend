@@ -3,16 +3,9 @@ import { vi } from 'vitest';
 import { digitalAddresses, digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render } from '../../../__test__/test-utils';
 import { ChannelType } from '../../../models/contacts';
-import * as routes from '../../../navigation/routes.const';
-import LegalContactManager from '../LegalContactManager';
+import LegalContactManager, { DigitalDomicileManagementAction } from '../LegalContactManager';
 
-const mockNavigateFn = vi.fn();
-const mockGoToNextStep = vi.fn();
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
+const mockSetAction = vi.fn();
 
 describe('LegalContactManager', () => {
   beforeEach(() => {
@@ -24,16 +17,13 @@ describe('LegalContactManager', () => {
   });
 
   it('render component when SERCQ SEND is enabled', () => {
-    const { getByText, getByRole } = render(
-      <LegalContactManager goToNextStep={mockGoToNextStep} />,
-      {
-        preloadedState: {
-          contactsState: {
-            digitalAddresses: digitalAddressesSercq,
-          },
+    const { getByText, getByRole } = render(<LegalContactManager setAction={mockSetAction} />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: digitalAddressesSercq,
         },
-      }
-    );
+      },
+    });
 
     getByText('status.active');
     getByText('legal-contacts.digital-domicile-management.sercq_send-active');
@@ -53,23 +43,23 @@ describe('LegalContactManager', () => {
     expect(specialContactsBtn).toBeInTheDocument();
 
     fireEvent.click(transferBtn);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DIGITAL_DOMICILE_TRANSFER);
+    expect(mockSetAction).toHaveBeenCalledTimes(1);
+    expect(mockSetAction).toHaveBeenCalledWith(
+      DigitalDomicileManagementAction.DIGITAL_DOMICILE_TRANSFER
+    );
     fireEvent.click(specialContactsBtn);
-    expect(mockGoToNextStep).toHaveBeenCalledTimes(1);
+    expect(mockSetAction).toHaveBeenCalledTimes(2);
+    expect(mockSetAction).toHaveBeenCalledWith(DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT);
   });
 
   it('render component when PEC is enabled', () => {
-    const { getByText, getByRole } = render(
-      <LegalContactManager goToNextStep={mockGoToNextStep} />,
-      {
-        preloadedState: {
-          contactsState: {
-            digitalAddresses: digitalAddresses,
-          },
+    const { getByText, getByRole } = render(<LegalContactManager setAction={mockSetAction} />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: digitalAddresses,
         },
-      }
-    );
+      },
+    });
 
     getByText('status.active');
     const pecValue = digitalAddresses.find((addr) => addr.channelType === ChannelType.PEC)?.value!;
@@ -90,9 +80,12 @@ describe('LegalContactManager', () => {
     expect(specialContactsBtn).toBeInTheDocument();
 
     fireEvent.click(transferBtn);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DIGITAL_DOMICILE_TRANSFER);
+    expect(mockSetAction).toHaveBeenCalledTimes(1);
+    expect(mockSetAction).toHaveBeenCalledWith(
+      DigitalDomicileManagementAction.DIGITAL_DOMICILE_TRANSFER
+    );
     fireEvent.click(specialContactsBtn);
-    expect(mockGoToNextStep).toHaveBeenCalledTimes(1);
+    expect(mockSetAction).toHaveBeenCalledTimes(2);
+    expect(mockSetAction).toHaveBeenCalledWith(DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT);
   });
 });
