@@ -230,7 +230,6 @@ const App = () => {
 
   const handleUserLogout = () => {
     setOpenModal(true)
-    //void dispatch(logout());
   };
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {

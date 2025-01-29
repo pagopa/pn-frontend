@@ -13,6 +13,7 @@ import {
   APP_VERSION,
   AppMessage,
   AppResponseMessage,
+  DisclaimerModal,
   Layout,
   LoadingOverlay,
   ResponseEventDispatcher,
@@ -70,6 +71,7 @@ const ActualApp = () => {
   // TODO check if it can exist more than one role on user
   const role = loggedUserOrganizationParty?.roles[0];
   const idOrganization = loggedUserOrganizationParty?.id;
+  const [openModal, setOpenModal] = useState(false)
   const { tosConsent, privacyConsent } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID, IS_STATISTICS_ENABLED } = getConfiguration();
@@ -88,21 +90,21 @@ const ActualApp = () => {
   const productsList =
     products.length > 0
       ? [
-          reservedArea,
-          ...products.map((product) => ({
-            ...product,
-            productUrl: `${product.productUrl}&lang=${i18n.language}`,
-          })),
-        ]
+        reservedArea,
+        ...products.map((product) => ({
+          ...product,
+          productUrl: `${product.productUrl}&lang=${i18n.language}`,
+        })),
+      ]
       : [
-          reservedArea,
-          {
-            id: '0',
-            title: t('header.notification-platform'),
-            productUrl: '',
-            linkType: 'internal' as LinkType,
-          },
-        ];
+        reservedArea,
+        {
+          id: '0',
+          title: t('header.notification-platform'),
+          productUrl: '',
+          linkType: 'internal' as LinkType,
+        },
+      ];
 
   const productId = products.length > 0 ? SELFCARE_SEND_PROD_ID : '0';
   const institutionsList = institutions.map((institution) => ({
@@ -200,7 +202,7 @@ const ActualApp = () => {
   const isPrivacyPage = path[1] === 'privacy-tos';
 
   const handleLogout = () => {
-    void dispatch(logout());
+    setOpenModal(true)
   };
 
   const handleAssistanceClick = () => {
@@ -255,6 +257,16 @@ const ActualApp = () => {
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}
       >
+        <DisclaimerModal
+          open={openModal}
+          title={t("header.logout-message")}
+          onConfirm={() => {
+            void dispatch(logout())
+            setOpenModal(false)
+          }}
+          confirmLabel={t("header.logout-confirm")}
+          onCancel={() => setOpenModal(false)}
+        />
         <AppMessage />
         <AppResponseMessage />
         <LoadingOverlay />

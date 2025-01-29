@@ -15,6 +15,7 @@ import {
   APP_VERSION,
   AppMessage,
   AppResponseMessage,
+  DisclaimerModal,
   Layout,
   ResponseEventDispatcher,
   SideMenu,
@@ -69,6 +70,7 @@ const ActualApp = () => {
     getConfiguration();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
+  const [openModal, setOpenModal] = useState(false)
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
     (state: RootState) => state.userState
@@ -258,7 +260,7 @@ const ActualApp = () => {
   });
 
   const handleUserLogout = () => {
-    void dispatch(logout());
+    setOpenModal(true)
   };
 
   return (
@@ -292,6 +294,16 @@ const ActualApp = () => {
         isLogged={!!sessionToken}
         hasTermsOfService={true}
       >
+        <DisclaimerModal
+          open={openModal}
+          title={t("header.logout-message")}
+          onConfirm={() => {
+            void dispatch(logout())
+            setOpenModal(false)
+          }}
+          confirmLabel={t("header.logout-confirm")}
+          onCancel={() => setOpenModal(false)}
+        />
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
         <AppMessage />
         <AppResponseMessage />
