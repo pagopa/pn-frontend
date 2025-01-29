@@ -161,10 +161,8 @@ const ApiKeyDataSwitch: React.FC<{
         sx={{
           alignItems: 'center',
           color: setRowColorByStatus(data),
-          flexWrap: 'wrap'
         }}
       >
-        {/* `${data.value.substring(0, 10)}...` */}
         <Typography
           variant="body2"
           sx={{
@@ -172,8 +170,6 @@ const ApiKeyDataSwitch: React.FC<{
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             color: 'inherit',
-            maxWidth: '100%',
-            flex: 2
           }}
         >
           {data.value}
