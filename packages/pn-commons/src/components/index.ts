@@ -72,9 +72,6 @@ import SideMenu from './SideMenu/SideMenu';
 import SnackBar from './SnackBar/SnackBar';
 import TabPanel from './TabPanel';
 import TitleBox from './TitleBox';
-import { FormBox } from './FormBox/FormBox';
-import { FormBoxSubtitle } from './FormBox/FormBoxSubtitle';
-import { FormBoxTitle } from './FormBox/FormBoxTitle';
 
 export {
   ApiError,
@@ -151,7 +148,4 @@ export {
   IllusStatistics,
   IllusAppIO,
   IllusAppIODialog,
-  FormBox,
-  FormBoxTitle,
-  FormBoxSubtitle
 };

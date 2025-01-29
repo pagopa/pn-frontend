@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next';
 
 import { TextField, Typography, useFormControl } from '@mui/material';
 import { LangCode, LangLabels } from '@pagopa/mui-italia';
-import { FormBox, FormBoxSubtitle, FormBoxTitle } from '@pagopa-pn/pn-commons';
+
 import { NewNotificationLangOther } from '../../models/NewNotification';
 import { PreliminaryInformationsPayload } from '../../redux/newNotification/types';
+import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 
 type SubjectFocusHelperTextProps = {
   hasOtherLang: boolean | undefined | string;
@@ -40,8 +41,8 @@ const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: 
 
   return (
     <FormBox>
-      <FormBoxTitle variantType="sidenav" sx={{fontWeight:600 , fontSize:'16px'}} text={t('notification-content-title')} />
-      <FormBoxSubtitle variantType="body2" sx={{fontSize:'14px', mt:1, mb:1}} text={t('notification-content-subtitle')} />
+      <FormBoxTitle text={t('notification-content-title')} />
+      <FormBoxSubtitle text={t('notification-content-subtitle')} />
       {hasOtherLang && (
         <Typography variant="body2" color={'text.secondary'} marginTop={2} fontWeight={600}>
           {languages.it}

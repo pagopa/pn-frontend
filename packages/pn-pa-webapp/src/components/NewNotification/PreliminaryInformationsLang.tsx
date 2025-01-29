@@ -11,11 +11,12 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material';
-import { CustomDropdown, FormBox, FormBoxSubtitle, FormBoxTitle } from '@pagopa-pn/pn-commons';
+import { CustomDropdown } from '@pagopa-pn/pn-commons';
 import { LangCode, LangLabels } from '@pagopa/mui-italia';
 
 import { BILINGUALISM_LANGUAGES, NewNotificationLangOther } from '../../models/NewNotification';
 import { PreliminaryInformationsPayload } from '../../redux/newNotification/types';
+import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 
 type Props = {
   formik: FormikProps<PreliminaryInformationsPayload>;
@@ -32,9 +33,9 @@ const PreliminaryInformationsLang = ({ formik, languages, onChange, onChangeTouc
     <FormBox>
       <FormControl fullWidth>
         <FormLabel id="notification-language-label">
-          <FormBoxTitle variantType="sidenav" sx={{fontWeight:600 , fontSize:'16px'}} text={t('notification-language-title')} />
+          <FormBoxTitle text={t('notification-language-title')} />
         </FormLabel>
-        <FormBoxSubtitle variantType="body2" sx={{fontSize:'14px', mt:1, mb:1}} text={t('notification-language-subtitle')} />
+        <FormBoxSubtitle text={t('notification-language-subtitle')} />
         <Grid container alignItems={'center'} spacing={2} paddingTop={2}>
           <Grid item xs={12} md={6}>
             <RadioGroup
