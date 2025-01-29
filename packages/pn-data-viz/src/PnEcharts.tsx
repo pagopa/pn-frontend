@@ -113,9 +113,8 @@ export function PnECharts({
           mr: 1
         };
         return (
-          <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          <FormControl key={item} sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <FormControlLabel
-              key={item}
               sx={{ width: 'auto' }}
               data-testid="legendItem"
               control={<Checkbox onChange={() => toggleSerie(item)}
