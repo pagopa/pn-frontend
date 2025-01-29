@@ -375,7 +375,7 @@ const NuovaDelega = () => {
                         helperText={getError(touched.codiceFiscale, errors.codiceFiscale)}
                         fullWidth
                       />
-                      <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }} id={'selectEnti'}>
+                      <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }} id='selectEntities'>
                         {t('nuovaDelega.form.viewFrom')}
                       </Typography>
                       <Typography variant="body2" fontSize={'14px'} marginTop={1} marginBottom={1}>
@@ -397,7 +397,7 @@ const NuovaDelega = () => {
                                 handleGetAllEntities();
                               }
                             }}
-                            aria-labelledby='selectEnti'
+                            aria-labelledby='selectEntities'
                           >
                             <FormControlLabel
                               id="tutti-gli-enti-selezionati"
