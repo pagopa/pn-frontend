@@ -31,7 +31,9 @@
   },
   "header": {
     "logout": "Esci",
-    "pago-pa-link": "Sito di PagoPA S.p.A."
+    "pago-pa-link": "Sito di PagoPA S.p.A.",
+    "logout-message": "Confermi di voler uscire da SEND?",
+    "logout-confirm": "Esci"
   },
   "tos": {
     "title": "SEND - Servizio Notifiche Digitali",

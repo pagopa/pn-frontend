@@ -17,6 +17,7 @@ import {
   AppResponse,
   AppResponseError,
   AppResponseMessage,
+  DisclaimerModal,
   Layout,
   ResponseEventDispatcher,
   SideMenu,
@@ -69,6 +70,7 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [openModal, setOpenModal] = useState(false)
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
     (state: RootState) => state.userState
@@ -81,6 +83,7 @@ const App = () => {
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL } = getConfiguration();
+
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -226,7 +229,8 @@ const App = () => {
   });
 
   const handleUserLogout = () => {
-    void dispatch(logout());
+    setOpenModal(true)
+    //void dispatch(logout());
   };
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
@@ -302,6 +306,16 @@ const App = () => {
         eventTrackingCallbackRefreshPage={handleEventTrackingCallbackRefreshPage}
         enableAssistanceButton={showAssistanceButton}
       >
+        <DisclaimerModal
+          open={openModal}
+          title={t("header.logout-message")}
+          onConfirm={() => {
+            void dispatch(logout())
+            setOpenModal(false)
+          }}
+          confirmLabel={t("header.logout-confirm")}
+          onCancel={() => setOpenModal(false)}
+        />
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
         <AppMessage />
         <AppResponseMessage
