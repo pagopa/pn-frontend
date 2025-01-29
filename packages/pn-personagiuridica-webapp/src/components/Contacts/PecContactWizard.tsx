@@ -84,7 +84,7 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
         slots={{
           prevButton: () => (
             <ButtonNaked
-              onClick={() => setShowPecWizard(false)}
+              onClick={isTransferring ? () => navigate(-1) : () => setShowPecWizard(false)}
               color="primary"
               size="medium"
               data-testid="prev-button"

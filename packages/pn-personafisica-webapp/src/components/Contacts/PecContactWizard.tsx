@@ -102,7 +102,8 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
         slots={{
           prevButton: () => (
             <ButtonNaked
-              onClick={() => setShowPecWizard(false)}
+              // TODO: change the following line as fix/PN-13444 is merged
+              onClick={isTransferring ? () => navigate(-1) : () => setShowPecWizard(false)}
               color="primary"
               size="medium"
               data-testid="prev-button"

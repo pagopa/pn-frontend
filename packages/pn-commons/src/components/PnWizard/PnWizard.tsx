@@ -2,7 +2,17 @@ import React, { JSXElementConstructor, ReactElement, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Button, ButtonProps, Paper, Stack, StackProps, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  ButtonProps,
+  Paper,
+  PaperProps,
+  Stack,
+  StackProps,
+  Typography,
+} from '@mui/material';
+import { BoxProps } from '@mui/system';
 import { ButtonNaked, IllusCompleted } from '@pagopa/mui-italia';
 
 import checkChildren from '../../utility/children.utility';
@@ -11,15 +21,17 @@ import PnWizardStep, { PnWizardStepProps } from './PnWizardStep';
 import PnWizardStepper from './PnWizardStepper';
 
 type Props = {
-  activeStep: number;
-  setActiveStep: (step: number) => void;
+  activeStep?: number;
+  setActiveStep?: (step: number) => void;
   title: ReactNode;
   children: ReactNode;
   slots?: {
+    stepContainer?: JSXElementConstructor<BoxProps>;
     nextButton?: JSXElementConstructor<ButtonProps>;
     prevButton?: JSXElementConstructor<ButtonProps>;
   };
   slotsProps?: {
+    stepContainer?: BoxProps & Partial<PaperProps>;
     nextButton?: Omit<ButtonProps, 'onClick'> & {
       onClick?: (next: () => void, step: number) => void;
     };
@@ -36,8 +48,8 @@ type Props = {
 };
 
 const PnWizard: React.FC<Props> = ({
-  activeStep,
-  setActiveStep,
+  activeStep = 0,
+  setActiveStep = () => {},
   title,
   children,
   slots,
@@ -47,6 +59,7 @@ const PnWizard: React.FC<Props> = ({
 
   const navigate = useNavigate();
 
+  const StepContainer = slots?.stepContainer || Paper;
   const PrevButton = slots?.prevButton || Button;
   const NextButton = slots?.nextButton || Button;
 
@@ -128,9 +141,13 @@ const PnWizard: React.FC<Props> = ({
 
         {steps.length > 0 && <PnWizardStepper steps={steps} activeStep={activeStep} />}
 
-        <Paper sx={{ p: 3, mb: '20px', mt: 3 }} elevation={0}>
+        <StepContainer
+          sx={{ p: 3, mb: '20px', mt: 3 }}
+          elevation={0}
+          {...slotsProps?.stepContainer}
+        >
           {childrens[activeStep]}
-        </Paper>
+        </StepContainer>
 
         <Stack direction={{ xs: 'column-reverse', md: 'row' }}>
           <PrevButton
