@@ -1,8 +1,8 @@
 import { vi } from 'vitest';
 
-import { digitalAddressesSercq } from '../../__mocks__/Contacts.mock';
-import { fireEvent, render } from '../../__test__/test-utils';
-import DigitalContactManagement from '../DigitalContactManagement.page';
+import { digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
+import { fireEvent, render } from '../../../__test__/test-utils';
+import DigitalContactManagement from '../DigitalContactManagement';
 
 const mockNavigateFn = vi.fn();
 
