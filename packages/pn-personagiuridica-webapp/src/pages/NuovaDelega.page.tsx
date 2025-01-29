@@ -25,8 +25,6 @@ import {
   CustomDatePicker,
   DATE_FORMAT,
   DatePickerTypes,
-  FormBoxSubtitle,
-  FormBoxTitle,
   PnAutocomplete,
   PnBreadcrumb,
   RecipientType,
@@ -221,8 +219,12 @@ const NuovaDelega = () => {
             <Grid item lg={8} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumbs}
               <Paper sx={{ padding: '24px', marginBottom: '20px' }}>
-                <FormBoxTitle variantType="sidenav" sx={{ fontWeight: 'bold' }} id='personType' text={t('nuovaDelega.form.personType')}></FormBoxTitle>
-                <FormBoxSubtitle variantType="body2" sx={{fontSize:'14px', mt:1, mb:1}} text={t('nuovaDelega.form.personType-content-subtitle')}></FormBoxSubtitle>
+                <Typography sx={{ fontWeight: 'bold' }} id='personType'>
+                  {t('nuovaDelega.form.personType')}
+                </Typography>
+                <Typography variant="body2" fontSize={'14px'} marginTop={1} marginBottom={1}>
+                  {t('nuovaDelega.form.personType-content-subtitle')}
+                </Typography>
                 <Formik
                   initialValues={initialValues}
                   validationSchema={validationSchema}
@@ -340,8 +342,12 @@ const NuovaDelega = () => {
                         helperText={getError(touched.codiceFiscale, errors.codiceFiscale)}
                         fullWidth
                       />
-                      <FormBoxTitle  variantType="sidenav" sx={{ fontWeight:'bold', mt: 1 }} id={'selectEnti'} text={t('nuovaDelega.form.viewFrom')}></FormBoxTitle>
-                      <FormBoxSubtitle variantType="body2" sx={{fontSize:'14px', mt:1, mb:1}} text= {t('nuovaDelega.form.viewFrom-content-subtitle')}></FormBoxSubtitle>
+                      <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }} id='selectEnti'>
+                        {t('nuovaDelega.form.viewFrom')}
+                      </Typography>
+                      <Typography variant="body2" fontSize={'14px'} marginTop={1} marginBottom={1}>
+                        {t('nuovaDelega.form.viewFrom-content-subtitle')}
+                      </Typography>
                       <FormControl sx={{ width: '100%' }}>
                         <Stack>
                           <RadioGroup
@@ -416,7 +422,9 @@ const NuovaDelega = () => {
                         </Stack>
                       </FormControl>
                       <Box sx={{ marginTop: '1rem', width: '100%' }}>
-                      <FormBoxTitle sx={{ fontWeight:'bold', mb:2 }} text={t('nuovaDelega.form.date-duration')}></FormBoxTitle>
+                        <Typography fontWeight="bold" marginBottom={2}>
+                          {t('nuovaDelega.form.date-duration')}
+                        </Typography>
                         <FormControl fullWidth>
                           <CustomDatePicker
                             language={i18n.language}

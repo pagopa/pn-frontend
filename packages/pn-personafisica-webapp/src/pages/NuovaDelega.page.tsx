@@ -255,6 +255,9 @@ const NuovaDelega = () => {
                 <Typography sx={{ fontWeight: 'bold' }} id='personType'>
                   {t('nuovaDelega.form.personType')}
                 </Typography>
+                <Typography variant="body2" fontSize={'14px'} marginTop={1} marginBottom={1}>
+                  {t('nuovaDelega.form.personType-content-subtitle')}
+                </Typography>
                 <Formik
                   initialValues={initialValues}
                   validationSchema={validationSchema}
@@ -374,6 +377,9 @@ const NuovaDelega = () => {
                       />
                       <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }} id={'selectEnti'}>
                         {t('nuovaDelega.form.viewFrom')}
+                      </Typography>
+                      <Typography variant="body2" fontSize={'14px'} marginTop={1} marginBottom={1}>
+                        {t('nuovaDelega.form.viewFrom-content-subtitle')}
                       </Typography>
                       <FormControl sx={{ width: '100%' }}>
                         <Stack>
