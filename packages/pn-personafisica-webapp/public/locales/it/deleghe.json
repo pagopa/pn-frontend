@@ -43,7 +43,9 @@
       "allNotifications": "Tutte le notifiche",
       "active": "Attiva",
       "pending": "In attesa di conferma"
-    }
+    },
+    "revoke-successfully": "La delega è stata revocata.",
+    "reject-successfully": "La delega è stata rifiutata."
   },
   "nuovaDelega": {
     "breadcrumb": "Nuova delega",

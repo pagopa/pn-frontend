@@ -43,7 +43,9 @@
       "allNotifications": "Alle Zustellungen",
       "active": "Aktivieren",
       "pending": "Wartet auf Bestätigung"
-    }
+    },
+    "revoke-successfully": "Vollmacht wurde widerrufen.",
+    "reject-successfully": "Vollmacht wurde abgelehnt."
   },
   "nuovaDelega": {
     "breadcrumb": "Neue Vollmacht",

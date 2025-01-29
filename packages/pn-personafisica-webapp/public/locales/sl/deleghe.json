@@ -43,7 +43,9 @@
       "allNotifications": "Vsa obvestila",
       "active": "Aktiviraj",
       "pending": "Čakanje na potrditev"
-    }
+    },
+    "revoke-successfully": "Prenos pooblastila je bil preklican.",
+    "reject-successfully": "Prenos pooblastila je bil zavrnjen."
   },
   "nuovaDelega": {
     "breadcrumb": "Nov prenos pooblastila",
