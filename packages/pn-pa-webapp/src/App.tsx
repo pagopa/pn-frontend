@@ -34,7 +34,6 @@ import {
   getAdditionalLanguages,
   getInstitutions,
   getProductsOfInstitution,
-  logout,
 } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
@@ -42,6 +41,7 @@ import { getConfiguration } from './services/configuration.service';
 import { PAAppErrorFactory } from './utility/AppError/PAAppErrorFactory';
 import './utility/onetrust';
 import { getMenuItems } from './utility/role.utility';
+import { goToSelfcareLogin } from './navigation/navigation.utility';
 
 // Cfr. PN-6096
 // --------------------
@@ -261,7 +261,7 @@ const ActualApp = () => {
           open={openModal}
           title={t("header.logout-message")}
           onConfirm={() => {
-            void dispatch(logout())
+            goToSelfcareLogin()
             setOpenModal(false)
           }}
           confirmLabel={t("header.logout-confirm")}

@@ -31,11 +31,10 @@ import {
 import { ProductEntity } from '@pagopa/mui-italia';
 
 import { PFEventsType } from './models/PFEventsType';
-import { getCurrentEventTypePage } from './navigation/navigation.utility';
+import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
 import { RootState } from './redux/store';
@@ -309,7 +308,7 @@ const App = () => {
           open={openModal}
           title={t("header.logout-message")}
           onConfirm={() => {
-            void dispatch(logout())
+            goToLoginPortal()
             setOpenModal(false)
           }}
           confirmLabel={t("header.logout-confirm")}
