@@ -26,7 +26,7 @@ const StatusTooltip = ({
     <CustomTooltip openOnClick={false} tooltipContent={tooltipContent} tooltipProps={tooltipProps}>
       <Chip
         id={`status-chip-${label}`}
-        label={isMobile ? label : <span aria-hidden="true">{label}</span>}
+        label={isMobile ? <span aria-hidden="true">{label}</span> : label}
         color={color}
         sx={{
           ...chipProps,
