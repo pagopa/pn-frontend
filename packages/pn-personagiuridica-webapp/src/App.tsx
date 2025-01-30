@@ -298,6 +298,7 @@ const ActualApp = () => {
           open={openModal}
           title={t("header.logout-message")}
           onConfirm={() => {
+            sessionStorage.clear()
             goToLoginPortal()
             setOpenModal(false)
           }}
