@@ -281,7 +281,7 @@ const NotificationDetailTimelineStep = ({
             </Typography>
             <Box sx={{ overflowWrap: 'anywhere' }}>
               <Typography color="text.primary" fontSize={14}>
-                {timelineStatusInfos.description}&nbsp;
+                {timelineStatusInfos.description}
               </Typography>
               {s.legalFactsIds &&
                 s.legalFactsIds.length > 0 &&
