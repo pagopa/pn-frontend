@@ -10,8 +10,8 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-  ListItemText,
   Stack,
+  Typography,
 } from '@mui/material';
 
 import senderDashboard from './theme/senderDashboard';
@@ -129,7 +129,10 @@ export function PnECharts({
               label={
                 <Stack sx={{ minWidth: 18, flexDirection: 'row', alignItems: 'center' }}>
                   <Avatar sx={avatarSx}>&nbsp;</Avatar>
-                  <ListItemText secondary={item}></ListItemText>
+                  <Typography variant='caption'
+                    sx={{ fontSize: '1rem', letterSpacing: '0.15px' }}
+                    color='text.secondary'
+                  >{item}</Typography>
                 </Stack>
               }
             />
