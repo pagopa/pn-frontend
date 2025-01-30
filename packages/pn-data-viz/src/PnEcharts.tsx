@@ -128,7 +128,7 @@ export function PnECharts({
               />}
               label={
                 <Stack sx={{ minWidth: 18, flexDirection: 'row', alignItems: 'center' }}>
-                  <Avatar sx={avatarSx}>&nbsp;</Avatar>
+                  <Avatar sx={avatarSx} />
                   <Typography variant='caption'
                     sx={{ fontSize: '1rem', letterSpacing: '0.15px' }}
                     color='text.secondary'
