@@ -5,7 +5,6 @@ import { useEffect, useMemo, useRef } from 'react';
 import type { CSSProperties } from 'react';
 
 import {
-  Avatar,
   Box,
   Checkbox,
   FormControl,
@@ -13,6 +12,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import CircleIcon from '@mui/icons-material/Circle'
 
 import senderDashboard from './theme/senderDashboard';
 
@@ -106,7 +106,7 @@ export function PnECharts({
     () =>
       legend?.map((item, index) => {
         const color = option.color?.[index] ?? '';
-        const avatarSx = {
+        const circleSx = {
           bgcolor: color,
           width: 10,
           height: 10,
@@ -128,7 +128,7 @@ export function PnECharts({
               />}
               label={
                 <Stack sx={{ minWidth: 18, flexDirection: 'row', alignItems: 'center' }}>
-                  <Avatar sx={avatarSx} />
+                  <CircleIcon sx={circleSx} />
                   <Typography variant='caption'
                     sx={{ fontSize: '1rem', letterSpacing: '0.15px' }}
                     color='text.secondary'
