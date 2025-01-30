@@ -4,7 +4,6 @@ import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-
 
 import {
   AppResponsePublisher,
-  AppRouteParams,
   InactivityHandler,
   LoadingPage,
   SessionModal,
@@ -18,7 +17,7 @@ import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
-import { goToLoginPortal } from './navigation.utility';
+import { goToLoginPortal, goToLoginPortalWithParams } from './navigation.utility';
 import * as routes from './routes.const';
 
 enum INITIALIZATION_STEPS {
@@ -95,8 +94,7 @@ const SessionGuardRender = () => {
         />
       );
     } else if (isAnonymousUser) {
-      const aar = params.get(AppRouteParams.AAR);
-      goToLoginPortal(aar);
+      goToLoginPortalWithParams(params);
       return <></>;
     }
     return (

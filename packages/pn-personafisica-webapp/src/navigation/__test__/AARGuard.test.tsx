@@ -6,10 +6,10 @@ import { act, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import AARGuard from '../AARGuard';
 import {
-  DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM,
   GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH,
   GET_DETTAGLIO_NOTIFICA_PATH,
 } from '../routes.const';
+import { AppRouteParams } from '@pagopa-pn/pn-commons';
 
 const mockNavigateFn = vi.fn(() => {});
 
@@ -57,7 +57,7 @@ describe('Notification from QR code', async () => {
 
   it('QR code requested by a recipient', async () => {
     const mockQrCode = 'qr-code';
-    window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
+    window.location.search = `?${AppRouteParams.AAR}=${mockQrCode}`;
     mock
       .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
       .reply(
@@ -91,7 +91,7 @@ describe('Notification from QR code', async () => {
 
   it('QR code requested by a delegate', async () => {
     const mockQrCode = 'qr-code-delegate';
-    window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
+    window.location.search = `?${AppRouteParams.AAR}=${mockQrCode}`;
     mock
       .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
       .reply(200, { iun: 'mock-iun', mandateId: 'mock-mandateId' });
@@ -116,7 +116,7 @@ describe('Notification from QR code', async () => {
 
   it('invalid QR code', async () => {
     const mockQrCode = 'bad-qr-code';
-    window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
+    window.location.search = `?${AppRouteParams.AAR}=${mockQrCode}`;
     mock
       .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
       .reply(500);
@@ -138,7 +138,7 @@ describe('Notification from QR code', async () => {
 
   it('invalid recipient accesses to QR code', async () => {
     const mockQrCode = 'bad-qr-code';
-    window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
+    window.location.search = `?${AppRouteParams.AAR}=${mockQrCode}`;
     mock
       .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
       .reply(404);
@@ -155,7 +155,7 @@ describe('Notification from QR code', async () => {
 
   it('no QR code', async () => {
     const mockQrCode = '';
-    window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
+    window.location.search = `?${AppRouteParams.AAR}=${mockQrCode}`;
     await act(async () => {
       render(<Guard />);
     });

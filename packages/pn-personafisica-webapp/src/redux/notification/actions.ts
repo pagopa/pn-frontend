@@ -43,6 +43,7 @@ export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION_PAYMENT_URL = 'getReceivedNotificationPaymentUrl',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
   EXCHANGE_NOTIFICATION_QR_CODE = 'exchangeNotificationQrCode',
+  EXCHANGE_NOTIFICATION_RETRIEVAL_ID = 'exchangeNotificationRetrievalId',
 }
 
 export const getReceivedNotification = createAsyncThunk<
@@ -274,7 +275,30 @@ export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, 
       const response = await notificationReceivedApiFactory.checkAarQrCodeV1(params);
       return response.data;
     } catch (e: any) {
-      
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+// TODO update with bff microservice
+interface response {
+  iun: string;
+}
+interface request {
+  retrievalId: string;
+}
+export const exchangeNotificationRetrievalId = createAsyncThunk<response, request>(
+  NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
+  async (params: request, { rejectWithValue }) => {
+    try {
+      // const notificationReceivedApiFactory = NotificationReceivedApiFactory(
+      //   undefined,
+      //   undefined,
+      //   apiClient
+      // );
+      // const response = await notificationReceivedApiFactory.checkAarQrCodeV1(params);
+      return { iun: 'mock-iun' };
+    } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
   }

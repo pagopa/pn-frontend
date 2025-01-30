@@ -1,17 +1,27 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { AccessDenied, AppResponse, AppResponsePublisher, IllusQuestion, LoadingPage } from '@pagopa-pn/pn-commons';
-import { ServerResponseErrorCode } from '../utility/AppError/types';
+import {
+  AccessDenied,
+  AppResponse,
+  AppResponsePublisher,
+  AppRouteParams,
+  IllusQuestion,
+  LoadingPage,
+} from '@pagopa-pn/pn-commons';
 
 import { NotificationId } from '../models/Notifications';
 import { PFEventsType } from '../models/PFEventsType';
 import { useAppDispatch } from '../redux/hooks';
-import { exchangeNotificationQrCode } from '../redux/notification/actions';
+import {
+  NOTIFICATION_ACTIONS,
+  exchangeNotificationQrCode,
+  exchangeNotificationRetrievalId,
+} from '../redux/notification/actions';
+import { ServerResponseErrorCode } from '../utility/AppError/types';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 import {
-  DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM,
   GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH,
   GET_DETTAGLIO_NOTIFICA_PATH,
   NOTIFICHE,
@@ -24,17 +34,15 @@ function notificationDetailPath(notificationId: NotificationId): string {
 }
 
 const AARGuard = () => {
-  const location = useLocation();
+  const [params] = useSearchParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche']);
   const [fetchError, setFetchError] = useState(false);
   const [notificationId, setNotificationId] = useState<NotificationId | undefined>();
 
-  const aar = useMemo(() => {
-    const queryParams = new URLSearchParams(location.search);
-    return queryParams.get(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM);
-  }, [location]);
+  const aar = params.get(AppRouteParams.AAR);
+  const retrievalId = params.get(AppRouteParams.RETRIEVAL_ID);
 
   useEffect(() => {
     if (aar) {
@@ -51,21 +59,50 @@ const AARGuard = () => {
           });
       void fetchNotificationFromQrCode();
     }
-  }, [aar]);
 
-  const handleError =(e: AppResponse)=>{
+    if (retrievalId) {
+      const fetchNotificationFromRetrievalId = () =>
+        dispatch(exchangeNotificationRetrievalId({ retrievalId }))
+          .unwrap()
+          .then((notification) => {
+            if (notification) {
+              setNotificationId(notification);
+            }
+          })
+          .catch(() => {
+            setFetchError(true);
+          });
+      void fetchNotificationFromRetrievalId();
+    }
+  }, [aar, retrievalId]);
+
+  const handleError = (e: AppResponse) => {
     const error = e.errors ? e.errors[0] : null;
-    if(error && error.code === ServerResponseErrorCode.PN_DELIVERY_NOTIFICATIONNOTFOUND){
+    if (error && error.code === ServerResponseErrorCode.PN_DELIVERY_NOTIFICATIONNOTFOUND) {
       return false;
     }
     return true;
   };
 
   useEffect(() => {
-    AppResponsePublisher.error.subscribe('exchangeNotificationQrCode', handleError);
+    AppResponsePublisher.error.subscribe(
+      NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
+      handleError
+    );
+    AppResponsePublisher.error.subscribe(
+      NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
+      handleError
+    );
 
     return () => {
-      AppResponsePublisher.error.unsubscribe('exchangeNotificationQrCode', handleError);
+      AppResponsePublisher.error.unsubscribe(
+        NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
+        handleError
+      );
+      AppResponsePublisher.error.unsubscribe(
+        NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
+        handleError
+      );
     };
   }, []);
 
@@ -74,12 +111,12 @@ const AARGuard = () => {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_RAPID_ACCESS);
       navigate(notificationDetailPath(notificationId), {
         replace: true,
-        state: { fromQrCode: true },
+        state: { fromQrCode: true }, // TODO differenziamo tra qr code e retrievalId?
       });
     }
   }, [notificationId]);
 
-  if (!aar) {
+  if (!aar || !retrievalId) {
     return <Outlet />;
   }
   if (fetchError) {

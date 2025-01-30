@@ -13,18 +13,33 @@ import {
   RECAPITI,
 } from './routes.const';
 
-export function goToLoginPortal(aarToken?: string | null) {
+export function goToLoginPortal(queryString?: string) {
   // eslint-disable-next-line functional/no-let
   let urlToRedirect = `${LOGOUT}`;
   // the startsWith check is to prevent xss attacks
-  if (urlToRedirect.startsWith(LOGOUT) && aarToken) {
+  if (urlToRedirect.startsWith(LOGOUT) && queryString) {
     // eslint-disable-next-line functional/immutable-data
-    urlToRedirect += `?${AppRouteParams.AAR}=${sanitizeString(aarToken)}`;
+    urlToRedirect += `?${queryString}`;
   }
   // the indexOf check is to prevent xss attacks
   if (urlToRedirect.startsWith(LOGOUT)) {
     window.open(`${urlToRedirect}`, '_self');
   }
+}
+
+export function goToLoginPortalWithParams(params: URLSearchParams) {
+  // eslint-disable-next-line functional/no-let
+  let queryString = '';
+  const aar = params.get(AppRouteParams.AAR);
+  const tpp = params.get(AppRouteParams.RETRIEVAL_ID);
+  if (aar) {
+    queryString = `${AppRouteParams.AAR}=${sanitizeString(aar)}`;
+    return;
+  } else if (tpp) {
+    queryString = `${AppRouteParams.RETRIEVAL_ID}=${sanitizeString(tpp)}`;
+    return;
+  }
+  goToLoginPortal(queryString);
 }
 
 /**

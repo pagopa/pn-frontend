@@ -71,4 +71,5 @@ export function compileRoute(route: Route) {
 
 export enum AppRouteParams {
   AAR = 'aar',
+  RETRIEVAL_ID = 'retrievalId',
 }

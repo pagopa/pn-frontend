@@ -2,8 +2,19 @@ import { vi } from 'vitest';
 
 import { EventPageType } from '@pagopa-pn/pn-commons';
 
-import { getCurrentEventTypePage, goToLoginPortal } from '../navigation.utility';
-import { APP_STATUS, DELEGHE, DETTAGLIO_NOTIFICA, LOGOUT, NOTIFICHE, RECAPITI } from '../routes.const';
+import {
+  getCurrentEventTypePage,
+  goToLoginPortal,
+  goToLoginPortalWithParams,
+} from '../navigation.utility';
+import {
+  APP_STATUS,
+  DELEGHE,
+  DETTAGLIO_NOTIFICA,
+  LOGOUT,
+  NOTIFICHE,
+  RECAPITI,
+} from '../routes.const';
 
 const mockOpenFn = vi.fn();
 
@@ -32,21 +43,17 @@ describe('Tests navigation utility methods', () => {
   });
 
   it('goToLoginPortal - aar', () => {
-    goToLoginPortal('fake-aar-token');
+    goToLoginPortalWithParams(new URLSearchParams('aar=fake-aar-token'));
     expect(mockOpenFn).toBeCalledTimes(1);
-    expect(mockOpenFn).toBeCalledWith(
-      `${LOGOUT}?aar=fake-aar-token`,
-      '_self'
-    );
+    expect(mockOpenFn).toBeCalledWith(`${LOGOUT}?aar=fake-aar-token`, '_self');
   });
 
   it('goToLoginPortal - aar with malicious code', () => {
-    goToLoginPortal('<script>malicious code</script>malicious-aar-token');
-    expect(mockOpenFn).toBeCalledTimes(1);
-    expect(mockOpenFn).toBeCalledWith(
-      `${LOGOUT}?aar=malicious-aar-token`,
-      '_self'
+    goToLoginPortalWithParams(
+      new URLSearchParams('aar=<script>malicious code</script>malicious-aar-token')
     );
+    expect(mockOpenFn).toBeCalledTimes(1);
+    expect(mockOpenFn).toBeCalledWith(`${LOGOUT}?aar=malicious-aar-token`, '_self');
   });
 
   it('getCurrentPage - test for notifications list page', () => {
