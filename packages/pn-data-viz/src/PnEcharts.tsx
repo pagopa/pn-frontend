@@ -107,7 +107,7 @@ export function PnECharts({
       legend?.map((item, index) => {
         const color = option.color?.[index] ?? '';
         const circleSx = {
-          bgcolor: color,
+          color,
           width: 10,
           height: 10,
           mr: 1
