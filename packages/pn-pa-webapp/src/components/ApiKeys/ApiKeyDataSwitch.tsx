@@ -2,7 +2,7 @@ import { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { MoreVert } from '@mui/icons-material';
-import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, IconButton, Menu, MenuItem, Stack, Typography } from '@mui/material';
 import {
   CustomTagGroup,
   CustomTooltip,
@@ -163,22 +163,31 @@ const ApiKeyDataSwitch: React.FC<{
   }
   if (type === 'value') {
     return (
-      <Box
+      <Stack
+        direction="row"
         sx={{
-          display: 'flex',
           alignItems: 'center',
-          userSelect: 'none',
           color: setRowColorByStatus(data),
         }}
       >
-        {`${data.value.substring(0, 10)}...`}
+        <Typography
+          variant="body2"
+          sx={{
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            color: 'inherit',
+          }}
+        >
+          {data.value}
+        </Typography>
         <CopyToClipboardButton
           data-testid="copyToClipboard"
           disabled={isApiKeyRotated(data)}
           tooltipTitle={t('api-key-copied')}
           value={() => data.value || ''}
         />
-      </Box>
+      </Stack>
     );
   }
   if (type === 'lastUpdate') {
