@@ -44,10 +44,10 @@ const DisclaimerModal: React.FC<Props> = ({
   };
 
   return (
-    <PnDialog open={open} data-testid="disclaimerDialog" aria-labelledby="modal-title" aria-describedby="modal-description">
-      {title && <DialogTitle id="modal-title" >{title}</DialogTitle>}
+    <PnDialog open={open} data-testid="disclaimerDialog" >
+      {title && <DialogTitle >{title}</DialogTitle>}
       <PnDialogContent>
-        {content && <Box id="modal-description">{content}</Box>}
+        {content && <Box >{content}</Box>}
         {checkboxLabel && (
           <Box sx={{ mt: 2 }}>
             <FormControlLabel

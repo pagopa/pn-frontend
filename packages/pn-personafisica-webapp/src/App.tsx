@@ -312,7 +312,7 @@ const App = () => {
             goToLoginPortal()
             setOpenModal(false)
           }}
-          confirmLabel={t("header.logout-confirm")}
+          confirmLabel={t("header.logout")}
           onCancel={() => setOpenModal(false)}
         />
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}

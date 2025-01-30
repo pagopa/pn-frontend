@@ -19,6 +19,7 @@ import {
   fireEvent,
   render,
   screen,
+  testStore,
   waitFor,
   within,
 } from './test-utils';
@@ -162,7 +163,7 @@ describe('App', async () => {
     await waitFor(async () => {
       const buttonConfirmLogout = await result.findByTestId('disclaimer-confirm-button')
       fireEvent.click(buttonConfirmLogout);
-      expect(menu).not.toBeInTheDocument();
+      expect(testStore.getState().userState.user.sessionToken).toBe('');
 
     });
     Object.defineProperty(window, 'location', { writable: true, value: original });

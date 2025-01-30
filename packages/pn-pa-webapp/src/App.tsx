@@ -8,14 +8,15 @@ import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
 import StatisticsIcon from '@mui/icons-material/ShowChart';
 import VpnKey from '@mui/icons-material/VpnKey';
-import { Box } from '@mui/material';
+import { Box, Button, DialogTitle } from '@mui/material';
 import {
   APP_VERSION,
   AppMessage,
   AppResponseMessage,
-  DisclaimerModal,
   Layout,
   LoadingOverlay,
+  PnDialog,
+  PnDialogActions,
   ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
@@ -257,17 +258,30 @@ const ActualApp = () => {
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}
       >
-        <DisclaimerModal
-          open={openModal}
-          title={t("header.logout-message")}
-          onConfirm={() => {
-            sessionStorage.clear()
-            goToSelfcareLogin()
-            setOpenModal(false)
-          }}
-          confirmLabel={t("header.logout-confirm")}
-          onCancel={() => setOpenModal(false)}
-        />
+        <PnDialog open={openModal}
+        >
+          <DialogTitle sx={{ mb: 2 }} >{t("header.logout-message")}</DialogTitle>
+          <PnDialogActions>
+            <Button
+              id="cancelButton"
+              variant="outlined"
+              onClick={() => setOpenModal(false)}
+            >
+              {t("button.annulla")}
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                sessionStorage.clear()
+                goToSelfcareLogin()
+                setOpenModal(false)
+              }}
+            >
+              {t("header.logout")}
+            </Button>
+          </PnDialogActions>
+        </PnDialog>
+
         <AppMessage />
         <AppResponseMessage />
         <LoadingOverlay />
