@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import {
   AppResponsePublisher,
@@ -17,7 +17,7 @@ import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
-import { goToLoginPortal, goToLoginPortalWithParams } from './navigation.utility';
+import { goToLoginPortal, useRapidAccessParam } from './navigation.utility';
 import * as routes from './routes.const';
 
 enum INITIALIZATION_STEPS {
@@ -53,7 +53,7 @@ const manageUnforbiddenError = (e: any) => {
  * SessionGuardRender: logica di renderizzazione
  */
 const SessionGuardRender = () => {
-  const [params] = useSearchParams();
+  const rapidAccess = useRapidAccessParam();
   const { IS_INACTIVITY_HANDLER_ENABLED } = getConfiguration();
 
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
@@ -94,7 +94,7 @@ const SessionGuardRender = () => {
         />
       );
     } else if (isAnonymousUser) {
-      goToLoginPortalWithParams(params);
+      goToLoginPortal(rapidAccess);
       return <></>;
     }
     return (

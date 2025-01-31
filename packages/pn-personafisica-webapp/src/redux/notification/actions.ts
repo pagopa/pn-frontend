@@ -263,16 +263,17 @@ export const getDowntimeHistory = createAsyncThunk<DowntimeLogHistory, GetDownti
   }
 );
 
-export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, BffCheckAarRequest>(
+export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, string>(
   NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
-  async (params: BffCheckAarRequest, { rejectWithValue }) => {
+  async (aarQrCodeValue: string, { rejectWithValue }) => {
     try {
       const notificationReceivedApiFactory = NotificationReceivedApiFactory(
         undefined,
         undefined,
         apiClient
       );
-      const response = await notificationReceivedApiFactory.checkAarQrCodeV1(params);
+      const request: BffCheckAarRequest = { aarQrCodeValue };
+      const response = await notificationReceivedApiFactory.checkAarQrCodeV1(request);
       return response.data;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
@@ -284,13 +285,12 @@ export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, 
 interface response {
   iun: string;
 }
-interface request {
-  retrievalId: string;
-}
-export const exchangeNotificationRetrievalId = createAsyncThunk<response, request>(
+
+export const exchangeNotificationRetrievalId = createAsyncThunk<response, string>(
   NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
-  async (params: request, { rejectWithValue }) => {
+  async (retrievalId: string, { rejectWithValue }) => {
     try {
+      console.log('params', retrievalId);
       // const notificationReceivedApiFactory = NotificationReceivedApiFactory(
       //   undefined,
       //   undefined,

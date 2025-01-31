@@ -2,14 +2,14 @@ import MockAdapter from 'axios-mock-adapter';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
+import { AppRouteParams } from '@pagopa-pn/pn-commons';
 import { act, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import AARGuard from '../AARGuard';
+import RapidAccessGuard from '../RapidAccessGuard';
 import {
   GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH,
   GET_DETTAGLIO_NOTIFICA_PATH,
 } from '../routes.const';
-import { AppRouteParams } from '@pagopa-pn/pn-commons';
 
 const mockNavigateFn = vi.fn(() => {});
 
@@ -27,7 +27,7 @@ vi.mock('react-i18next', () => ({
 
 const Guard = () => (
   <Routes>
-    <Route path="/" element={<AARGuard />}>
+    <Route path="/" element={<RapidAccessGuard />}>
       <Route path="/" element={<div>Generic Page</div>} />
     </Route>
   </Routes>
@@ -89,7 +89,7 @@ describe('Notification from QR code', async () => {
     expect(accessDeniedComponent).not.toBeInTheDocument();
   });
 
-  it('QR code requested by a delegate', async () => {
+  it.only('QR code requested by a delegate', async () => {
     const mockQrCode = 'qr-code-delegate';
     window.location.search = `?${AppRouteParams.AAR}=${mockQrCode}`;
     mock

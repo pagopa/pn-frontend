@@ -1,6 +1,8 @@
-import { matchPath } from 'react-router-dom';
+import { useMemo } from 'react';
+import { matchPath, useSearchParams } from 'react-router-dom';
 
 import { AppRouteParams, EventPageType, sanitizeString } from '@pagopa-pn/pn-commons';
+import { getRapidAccessParam } from '@pagopa-pn/pn-commons/src/utility/routes.utility';
 
 import {
   APP_STATUS,
@@ -13,31 +15,18 @@ import {
   RECAPITI,
 } from './routes.const';
 
-export function goToLoginPortal(queryString?: string) {
+export function goToLoginPortal(rapidAccess?: [AppRouteParams, string]) {
   // eslint-disable-next-line functional/no-let
   let urlToRedirect = `${LOGOUT}`;
   // the startsWith check is to prevent xss attacks
-  if (urlToRedirect.startsWith(LOGOUT) && queryString) {
+  if (urlToRedirect.startsWith(LOGOUT) && rapidAccess) {
     // eslint-disable-next-line functional/immutable-data
-    urlToRedirect += `?${queryString}`;
+    urlToRedirect += `?${rapidAccess[0]}=${sanitizeString(rapidAccess[1])}`;
   }
   // the indexOf check is to prevent xss attacks
   if (urlToRedirect.startsWith(LOGOUT)) {
     window.open(`${urlToRedirect}`, '_self');
   }
-}
-
-export function goToLoginPortalWithParams(params: URLSearchParams) {
-  // eslint-disable-next-line functional/no-let
-  let queryString = '';
-  const aar = params.get(AppRouteParams.AAR);
-  const tpp = params.get(AppRouteParams.RETRIEVAL_ID);
-  if (aar) {
-    queryString = `${AppRouteParams.AAR}=${sanitizeString(aar)}`;
-  } else if (tpp) {
-    queryString = `${AppRouteParams.RETRIEVAL_ID}=${sanitizeString(tpp)}`;
-  }
-  goToLoginPortal(queryString);
 }
 
 /**
@@ -71,3 +60,9 @@ export const getCurrentEventTypePage = (location: string): EventPageType | undef
 
   return pageType;
 };
+
+export function useRapidAccessParam() {
+  const [params] = useSearchParams();
+
+  return useMemo(() => getRapidAccessParam(params), [params]);
+}

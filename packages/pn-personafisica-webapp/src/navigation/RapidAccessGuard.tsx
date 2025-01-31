@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 import {
   AccessDenied,
@@ -21,6 +21,7 @@ import {
 } from '../redux/notification/actions';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
+import { useRapidAccessParam } from './navigation.utility';
 import {
   GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH,
   GET_DETTAGLIO_NOTIFICA_PATH,
@@ -33,48 +34,36 @@ function notificationDetailPath(notificationId: NotificationId): string {
     : GET_DETTAGLIO_NOTIFICA_PATH(notificationId.iun);
 }
 
-const AARGuard = () => {
-  const [params] = useSearchParams();
+const RapidAccessActions = {
+  [AppRouteParams.AAR]: exchangeNotificationQrCode,
+  [AppRouteParams.RETRIEVAL_ID]: exchangeNotificationRetrievalId,
+};
+
+const RapidAccessGuard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche']);
   const [fetchError, setFetchError] = useState(false);
   const [notificationId, setNotificationId] = useState<NotificationId | undefined>();
-
-  const aar = params.get(AppRouteParams.AAR);
-  const retrievalId = params.get(AppRouteParams.RETRIEVAL_ID);
+  const rapidAccess = useRapidAccessParam();
 
   useEffect(() => {
-    if (aar) {
-      const fetchNotificationFromQrCode = () =>
-        dispatch(exchangeNotificationQrCode({ aarQrCodeValue: aar }))
-          .unwrap()
-          .then((notification) => {
-            if (notification) {
-              setNotificationId(notification);
-            }
-          })
-          .catch(() => {
-            setFetchError(true);
-          });
-      void fetchNotificationFromQrCode();
+    const [type, value] = rapidAccess || [];
+    if (!type || !value) {
+      return;
     }
 
-    if (retrievalId) {
-      const fetchNotificationFromRetrievalId = () =>
-        dispatch(exchangeNotificationRetrievalId({ retrievalId }))
-          .unwrap()
-          .then((notification) => {
-            if (notification) {
-              setNotificationId(notification);
-            }
-          })
-          .catch(() => {
-            setFetchError(true);
-          });
-      void fetchNotificationFromRetrievalId();
-    }
-  }, [aar, retrievalId]);
+    dispatch(RapidAccessActions[type](value))
+      .unwrap()
+      .then((notification) => {
+        if (notification) {
+          setNotificationId(notification);
+        }
+      })
+      .catch(() => {
+        setFetchError(true);
+      });
+  }, [rapidAccess]);
 
   const handleError = (e: AppResponse) => {
     const error = e.errors ? e.errors[0] : null;
@@ -116,7 +105,7 @@ const AARGuard = () => {
     }
   }, [notificationId]);
 
-  if (!aar || !retrievalId) {
+  if (!rapidAccess) {
     return <Outlet />;
   }
   if (fetchError) {
@@ -136,4 +125,4 @@ const AARGuard = () => {
   return <LoadingPage />;
 };
 
-export default AARGuard;
+export default RapidAccessGuard;
