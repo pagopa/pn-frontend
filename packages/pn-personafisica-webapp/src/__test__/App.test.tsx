@@ -32,7 +32,7 @@ vi.mock('react-i18next', () => ({
     t: (str: string) => str,
     i18n: {
       language: 'it',
-      changeLanguage: () => new Promise(() => { }),
+      changeLanguage: () => new Promise(() => {}),
     },
   }),
 }));
@@ -161,10 +161,9 @@ describe('App', async () => {
     menuItems = within(menu).getAllByRole('menuitem');
     fireEvent.click(menuItems[1]);
     await waitFor(async () => {
-      const buttonConfirmLogout = await result.findByTestId('disclaimer-confirm-button')
+      const buttonConfirmLogout = await result.findByTestId('disclaimer-confirm-button');
       fireEvent.click(buttonConfirmLogout);
       expect(testStore.getState().userState.user.sessionToken).toBe('');
-
     });
     Object.defineProperty(window, 'location', { writable: true, value: original });
   });

@@ -69,7 +69,7 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const [isInitialized, setIsInitialized] = useState(false);
-  const [openModal, setOpenModal] = useState(false)
+  const [openModal, setOpenModal] = useState(false);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
     (state: RootState) => state.userState
@@ -82,7 +82,6 @@ const App = () => {
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL } = getConfiguration();
-
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -228,7 +227,7 @@ const App = () => {
   });
 
   const handleUserLogout = () => {
-    setOpenModal(true)
+    setOpenModal(true);
   };
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
@@ -306,13 +305,13 @@ const App = () => {
       >
         <DisclaimerModal
           open={openModal}
-          title={t("header.logout-message")}
+          title={t('header.logout-message')}
           onConfirm={() => {
-            sessionStorage.clear()
-            goToLoginPortal()
-            setOpenModal(false)
+            sessionStorage.clear();
+            goToLoginPortal();
+            setOpenModal(false);
           }}
-          confirmLabel={t("header.logout")}
+          confirmLabel={t('header.logout')}
           onCancel={() => setOpenModal(false)}
         />
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
