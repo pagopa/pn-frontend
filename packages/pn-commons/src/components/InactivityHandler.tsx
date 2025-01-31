@@ -30,7 +30,7 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
       const differenceTimerModal = setTimeout(() => {
         setOpenModal(true);
 
-      }, inactivityTimer - (5 * 1000));
+      }, inactivityTimer - (20 * 1000));
 
       // cleanup function
       return () => {
