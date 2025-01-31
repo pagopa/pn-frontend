@@ -84,7 +84,6 @@ const App = () => {
   const path = pathname.split('/');
   const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL } = getConfiguration();
 
-
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
     () => ({

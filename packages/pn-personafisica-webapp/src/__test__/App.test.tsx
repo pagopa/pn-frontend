@@ -32,7 +32,7 @@ vi.mock('react-i18next', () => ({
     t: (str: string) => str,
     i18n: {
       language: 'it',
-      changeLanguage: () => new Promise(() => { }),
+      changeLanguage: () => new Promise(() => {}),
     },
   }),
 }));
