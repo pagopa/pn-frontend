@@ -42,8 +42,7 @@ export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION_PAYMENT_INFO = 'getReceivedNotificationPaymentInfo',
   GET_RECEIVED_NOTIFICATION_PAYMENT_URL = 'getReceivedNotificationPaymentUrl',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
-  EXCHANGE_NOTIFICATION_QR_CODE = 'exchangeNotificationQrCode',
-  EXCHANGE_NOTIFICATION_RETRIEVAL_ID = 'exchangeNotificationRetrievalId',
+  EXCHANGE_NOTIFICATION_RAPID_ACCESS = 'exchangeNotificationRapidAccess',
 }
 
 export const getReceivedNotification = createAsyncThunk<
@@ -264,7 +263,7 @@ export const getDowntimeHistory = createAsyncThunk<DowntimeLogHistory, GetDownti
 );
 
 export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, string>(
-  NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
+  NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RAPID_ACCESS,
   async (aarQrCodeValue: string, { rejectWithValue }) => {
     try {
       const notificationReceivedApiFactory = NotificationReceivedApiFactory(
@@ -287,7 +286,7 @@ interface response {
 }
 
 export const exchangeNotificationRetrievalId = createAsyncThunk<response, string>(
-  NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
+  NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RAPID_ACCESS,
   async (retrievalId: string, { rejectWithValue }) => {
     try {
       console.log('params', retrievalId);

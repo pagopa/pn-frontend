@@ -39,6 +39,11 @@ const RapidAccessActions = {
   [AppRouteParams.RETRIEVAL_ID]: exchangeNotificationRetrievalId,
 };
 
+/** 
+  Il cittadino può accedere direttamente a SEND tramite:
+  - QR code dell'aar:                            https://cittadini.notifichedigitali.it/?aar=123456
+  - Messaggi di cortesia da app di terze parti:  https://cittadini.notifichedigitali.it/?retrievalId=123456 
+*/
 const RapidAccessGuard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -75,21 +80,13 @@ const RapidAccessGuard = () => {
 
   useEffect(() => {
     AppResponsePublisher.error.subscribe(
-      NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
-      handleError
-    );
-    AppResponsePublisher.error.subscribe(
-      NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
+      NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RAPID_ACCESS,
       handleError
     );
 
     return () => {
       AppResponsePublisher.error.unsubscribe(
-        NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
-        handleError
-      );
-      AppResponsePublisher.error.unsubscribe(
-        NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
+        NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RAPID_ACCESS,
         handleError
       );
     };

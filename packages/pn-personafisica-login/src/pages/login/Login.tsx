@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -12,10 +11,10 @@ import {
   PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { getRapidAccessParam } from '@pagopa-pn/pn-commons/src/utility/routes.utility';
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
+import { useRapidAccessParam } from '../../navigation/navigation.utility';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 import { storageRapidAccessOps } from '../../utility/storage';
@@ -33,8 +32,7 @@ const Login = () => {
   const [showIDPS, setShowIDPS] = useState(false);
   const { t, i18n } = useTranslation(['login']);
   const isMobile = useIsMobile();
-  const [params] = useSearchParams();
-  const rapidAccess = getRapidAccessParam(params);
+  const rapidAccess = useRapidAccessParam();
   const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL, PF_URL } = getConfiguration();
   const privacyPolicyUrl = `${PF_URL}${PRIVACY_POLICY}`;
 
