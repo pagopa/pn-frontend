@@ -6,13 +6,14 @@ import { AppRouteParams, getLangCode, sanitizeString } from '@pagopa-pn/pn-commo
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
-import { storageAarOps } from '../../utility/storage';
+import { storageAarOps, storageRetrievalIdOps } from '../../utility/storage';
 
 const SuccessPage = () => {
   const { PF_URL } = getConfiguration();
   const { i18n } = useTranslation();
 
   const aar = useMemo(() => storageAarOps.read(), []);
+  const retrievalId = useMemo(() => storageRetrievalIdOps.read(), []);
   const token = useMemo(() => window.location.hash, []);
 
   const calcRedirectUrl = useCallback(() => {
@@ -20,10 +21,16 @@ const SuccessPage = () => {
     let redirectUrl = PF_URL ?? '';
 
     // the includes check is needed to prevent xss attacks
-    if (redirectUrl && [PF_URL].includes(redirectUrl) && aar) {
-      storageAarOps.delete();
-      // eslint-disable-next-line functional/immutable-data
-      redirectUrl += `?${AppRouteParams.AAR}=${sanitizeString(aar)}`;
+    if (redirectUrl && [PF_URL].includes(redirectUrl)) {
+      if (aar) {
+        storageAarOps.delete();
+        // eslint-disable-next-line functional/immutable-data
+        redirectUrl += `?${AppRouteParams.AAR}=${sanitizeString(aar)}`;
+      } else if (retrievalId) {
+        storageRetrievalIdOps.delete();
+        // eslint-disable-next-line functional/immutable-data
+        redirectUrl += `?${AppRouteParams.RETRIEVAL_ID}=${sanitizeString(retrievalId)}`;
+      }
     }
 
     // the findIndex check is needed to prevent xss attacks
@@ -32,7 +39,7 @@ const SuccessPage = () => {
         `${redirectUrl}${sanitizeString(token)}&lang=${sanitizeString(getLangCode(i18n.language))}`
       );
     }
-  }, [aar, token, i18n.language]);
+  }, [aar, retrievalId, token, i18n.language]);
 
   useEffect(() => {
     calcRedirectUrl();

@@ -18,7 +18,7 @@ import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
-import { storageAarOps } from '../../utility/storage';
+import { storageAarOps, storageRetrievalIdOps } from '../../utility/storage';
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -35,11 +35,15 @@ const Login = () => {
   const isMobile = useIsMobile();
   const [params] = useSearchParams();
   const aar = params.get(AppRouteParams.AAR);
+  const retrievalId = params.get(AppRouteParams.RETRIEVAL_ID);
   const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL, PF_URL } = getConfiguration();
   const privacyPolicyUrl = `${PF_URL}${PRIVACY_POLICY}`;
 
   if (aar !== null && aar !== '') {
     storageAarOps.write(aar);
+  }
+  if (retrievalId !== null && retrievalId !== '') {
+    storageRetrievalIdOps.write(retrievalId);
   }
 
   useEffect(() => {

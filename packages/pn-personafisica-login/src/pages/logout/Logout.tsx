@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ROUTE_LOGIN } from '../../navigation/routes.const';
-import { storageAarOps } from '../../utility/storage';
+import { storageDeleteAll } from '../../utility/storage';
 
 const Logout = () => {
   const navigate = useNavigate();
   const searchParams = window.location.search ?? '';
 
   useEffect(() => {
-    storageAarOps.delete();
+    storageDeleteAll();
 
     navigate(ROUTE_LOGIN + searchParams);
   }, []);

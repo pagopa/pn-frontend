@@ -6,17 +6,21 @@ import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
-import { storageAarOps } from '../../../utility/storage';
+import { storageAarOps, storageDeleteAll, storageRetrievalIdOps } from '../../../utility/storage';
 import Login from '../Login';
 
 const mockAssign = vi.fn();
-let mockSearchParams = true;
+let mockSearchParamsAar = true;
+let mockSearchParamsRetrievalId = false;
 
 // simulate url params
 function mockCreateMockedSearchParams() {
   const mockedSearchParams = new URLSearchParams();
-  if (mockSearchParams) {
+  if (mockSearchParamsAar) {
     mockedSearchParams.set(AppRouteParams.AAR, 'fake-aar-token');
+  }
+  if (mockSearchParamsRetrievalId) {
+    mockedSearchParams.set(AppRouteParams.RETRIEVAL_ID, 'fake-retrieval_id');
   }
   return mockedSearchParams;
 }
@@ -47,7 +51,7 @@ describe('test login page', () => {
   });
 
   afterEach(() => {
-    storageAarOps.delete();
+    storageDeleteAll();
     vi.clearAllMocks();
   });
 
@@ -100,12 +104,22 @@ describe('test login page', () => {
   });
 
   it('not store data in session storage', () => {
-    mockSearchParams = false;
+    mockSearchParamsAar = false;
     render(
       <BrowserRouter>
         <Login />
       </BrowserRouter>
     );
     expect(storageAarOps.read()).toBeUndefined();
+  });
+  
+  it('store retrievalId in session storage', () => {
+    mockSearchParamsRetrievalId = true;
+    render(
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
+    expect(storageRetrievalIdOps.read()).toBe('fake-retrieval_id');
   });
 });

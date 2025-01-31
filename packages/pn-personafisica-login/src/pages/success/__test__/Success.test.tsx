@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 
 import { render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
-import { storageAarOps } from '../../../utility/storage';
+import { storageAarOps, storageRetrievalIdOps } from '../../../utility/storage';
 import SuccessPage from '../Success';
 
 const mockLocationAssign = vi.fn();
@@ -54,6 +54,20 @@ describe('test login page', () => {
     expect(mockLocationAssign).toBeCalled();
     expect(mockLocationAssign).toBeCalledWith(
       getConfiguration().PF_URL + '?aar=aar-token#token=fake-token&lang=it'
+    );
+  });
+
+  it('test redirect - retrievalId', () => {
+    storageRetrievalIdOps.write('retrieval-id');
+    render(
+      <BrowserRouter>
+        <SuccessPage />
+      </BrowserRouter>
+    );
+
+    expect(mockLocationAssign).toBeCalled();
+    expect(mockLocationAssign).toBeCalledWith(
+      getConfiguration().PF_URL + '?retrievalId=retrieval-id#token=fake-token&lang=it'
     );
   });
 
