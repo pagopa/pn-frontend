@@ -6,7 +6,7 @@ import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
-import { storageAarOps, storageDeleteAll, storageRetrievalIdOps } from '../../../utility/storage';
+import { storageRapidAccessOps } from '../../../utility/storage';
 import Login from '../Login';
 
 const mockAssign = vi.fn();
@@ -51,7 +51,7 @@ describe('test login page', () => {
   });
 
   afterEach(() => {
-    storageDeleteAll();
+    storageRapidAccessOps.delete();
     vi.clearAllMocks();
   });
 
@@ -73,7 +73,7 @@ describe('test login page', () => {
     expect(cieButton).toBeInTheDocument();
     const spidSelect = queryById(container, 'spidSelect');
     expect(spidSelect).not.toBeInTheDocument();
-    expect(storageAarOps.read()).toBe('fake-aar-token');
+    expect(storageRapidAccessOps.read()).toEqual([AppRouteParams.AAR, 'fake-aar-token']);
   });
 
   it('select spid login', () => {
@@ -110,9 +110,9 @@ describe('test login page', () => {
         <Login />
       </BrowserRouter>
     );
-    expect(storageAarOps.read()).toBeUndefined();
+    expect(storageRapidAccessOps.read()).toBeUndefined();
   });
-  
+
   it('store retrievalId in session storage', () => {
     mockSearchParamsRetrievalId = true;
     render(
@@ -120,6 +120,6 @@ describe('test login page', () => {
         <Login />
       </BrowserRouter>
     );
-    expect(storageRetrievalIdOps.read()).toBe('fake-retrieval_id');
+    expect(storageRapidAccessOps.read()).toEqual([AppRouteParams.RETRIEVAL_ID, 'fake-retrieval_id']);
   });
 });

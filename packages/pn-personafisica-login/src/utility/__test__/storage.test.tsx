@@ -1,27 +1,22 @@
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
 
-import { storageAarOps, storageRetrievalIdOps, storageDeleteAll } from '../storage';
+import { STORAGE_RAPID_ACCESS_KEY, storageRapidAccessOps } from '../storage';
 
 describe('storage utility test', () => {
-  it('storageAarOps', () => {
-    storageAarOps.write('test');
-    expect(sessionStorage.getItem(AppRouteParams.AAR)).toBe('test');
-    expect(storageAarOps.read()).toBe('test');
-    storageAarOps.delete();
-    expect(sessionStorage.getItem(AppRouteParams.AAR)).toBeNull();
+  it('storage Aar', () => {
+    const aar: [AppRouteParams, string] = [AppRouteParams.AAR, 'test'];
+    storageRapidAccessOps.write(aar);
+    expect(sessionStorage.getItem(STORAGE_RAPID_ACCESS_KEY)).toBe(JSON.stringify(aar));
+    expect(storageRapidAccessOps.read()).toEqual(aar);
+    storageRapidAccessOps.delete();
+    expect(sessionStorage.getItem(STORAGE_RAPID_ACCESS_KEY)).toBeNull();
   });
-  it('storageRetrievalIdOps', () => {
-    storageRetrievalIdOps.write('test-retrieval-id');
-    expect(sessionStorage.getItem(AppRouteParams.RETRIEVAL_ID)).toBe('test-retrieval-id');
-    expect(storageRetrievalIdOps.read()).toBe('test-retrieval-id');
-    storageRetrievalIdOps.delete();
-    expect(sessionStorage.getItem(AppRouteParams.RETRIEVAL_ID)).toBeNull();
-  });
-  it('storageDeleteAll', () => {
-    storageAarOps.write('test');
-    storageRetrievalIdOps.write('test-retrieval-id');
-    storageDeleteAll();
-    expect(sessionStorage.getItem(AppRouteParams.AAR)).toBeNull();
-    expect(sessionStorage.getItem(AppRouteParams.RETRIEVAL_ID)).toBeNull();
+  it('storageRetrievalId test', () => {
+    const retrievalId: [AppRouteParams, string] = [AppRouteParams.RETRIEVAL_ID, 'test'];
+    storageRapidAccessOps.write(retrievalId);
+    expect(sessionStorage.getItem(STORAGE_RAPID_ACCESS_KEY)).toBe(JSON.stringify(retrievalId));
+    expect(storageRapidAccessOps.read()).toEqual(retrievalId);
+    storageRapidAccessOps.delete();
+    expect(sessionStorage.getItem(STORAGE_RAPID_ACCESS_KEY)).toBeNull();
   });
 });

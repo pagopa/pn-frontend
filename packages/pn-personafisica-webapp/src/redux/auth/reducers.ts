@@ -13,6 +13,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { acceptTosPrivacy, exchangeToken, getTosPrivacyApproval, logout } from './actions';
 import { User } from './types';
 
+// TODO check con "token_send" verificare se vengono restituti sempre
 const userDataMatcher = yup
   .object({
     ...basicUserDataMatcherContents,

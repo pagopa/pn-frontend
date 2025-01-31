@@ -8,17 +8,17 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import {
-  AppRouteParams,
   Layout,
   PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { getRapidAccessParam } from '@pagopa-pn/pn-commons/src/utility/routes.utility';
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
-import { storageAarOps, storageRetrievalIdOps } from '../../utility/storage';
+import { storageRapidAccessOps } from '../../utility/storage';
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -34,16 +34,12 @@ const Login = () => {
   const { t, i18n } = useTranslation(['login']);
   const isMobile = useIsMobile();
   const [params] = useSearchParams();
-  const aar = params.get(AppRouteParams.AAR);
-  const retrievalId = params.get(AppRouteParams.RETRIEVAL_ID);
+  const rapidAccess = getRapidAccessParam(params);
   const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL, PF_URL } = getConfiguration();
   const privacyPolicyUrl = `${PF_URL}${PRIVACY_POLICY}`;
 
-  if (aar !== null && aar !== '') {
-    storageAarOps.write(aar);
-  }
-  if (retrievalId !== null && retrievalId !== '') {
-    storageRetrievalIdOps.write(retrievalId);
+  if (rapidAccess) {
+    storageRapidAccessOps.write(rapidAccess);
   }
 
   useEffect(() => {

@@ -73,3 +73,10 @@ export enum AppRouteParams {
   AAR = 'aar',
   RETRIEVAL_ID = 'retrievalId',
 }
+
+// Trova il primo dei parametri consentiti in AppRouteParams 
+export function getRapidAccessParam(params: URLSearchParams): [AppRouteParams, string] | undefined {
+  const keys = Object.values(AppRouteParams);
+  const key = keys.find((k) => params.has(k));
+  return key ? [key, params.get(key) || ''] : undefined;
+}
