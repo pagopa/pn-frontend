@@ -132,7 +132,7 @@ describe('App', async () => {
     expect(mock.history.get).toHaveLength(4);
   });
 
-  it.only('check header actions - user logged in', async () => {
+  it('check header actions - user logged in', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
@@ -152,16 +152,19 @@ describe('App', async () => {
     await waitFor(() => {
       expect(result.container).toHaveTextContent('Profile Page');
     });
+
     const replaceSpy = vi.fn();
 
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { href: '', replace: replaceSpy },
     });
+
     fireEvent.click(userButton!);
     menu = await waitFor(() => screen.getByRole('presentation'));
     menuItems = within(menu).getAllByRole('menuitem');
     fireEvent.click(menuItems[1]);
+    
     const buttonConfirmLogout = await waitFor(() => screen.findByTestId('confirm-button'));
     fireEvent.click(buttonConfirmLogout);
     
