@@ -12,7 +12,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import CircleIcon from '@mui/icons-material/Circle'
+import CircleIcon from '@mui/icons-material/Circle';
 
 import senderDashboard from './theme/senderDashboard';
 
@@ -127,13 +127,13 @@ export function PnECharts({
                 }}
               />}
               label={
-                <Stack sx={{ minWidth: 18, flexDirection: 'row', alignItems: 'center' }}>
+                <>
                   <CircleIcon sx={circleSx} />
                   <Typography variant='caption'
                     sx={{ fontSize: '1rem', letterSpacing: '0.15px' }}
                     color='text.secondary'
                   >{item}</Typography>
-                </Stack>
+                </>
               }
             />
           </FormControl>
