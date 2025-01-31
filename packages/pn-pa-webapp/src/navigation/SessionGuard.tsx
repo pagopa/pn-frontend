@@ -89,8 +89,8 @@ const SessionGuardRender = () => {
       <InactivityHandler
         inactivityTimer={inactivityTimer}
         onTimerExpired={() => {
-          sessionStorage.clear()
-          goToSelfcareLogin()
+          sessionStorage.clear();
+          goToSelfcareLogin();
         }}
       >
         <Outlet />

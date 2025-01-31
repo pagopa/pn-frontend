@@ -146,6 +146,9 @@
   "too-short-field-error": "Scrivi minimo {{minLength}} caratteri",
   "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine",
   "invalid": "non valido",
+  "inactivity-title": "Stai per uscire da SEND",
+  "inactivity-body": "A breve sarai reindirizzato: vuoi restare loggato?",
+  "inactivity-action": "Si",
   "upload-file": {
     "or": "oppure",
     "select-file": "carica il file",

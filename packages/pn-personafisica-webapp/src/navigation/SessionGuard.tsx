@@ -102,8 +102,8 @@ const SessionGuardRender = () => {
       <InactivityHandler
         inactivityTimer={isAnonymousUser || !IS_INACTIVITY_HANDLER_ENABLED ? 0 : inactivityTimer}
         onTimerExpired={() => {
-          sessionStorage.clear()
-          goToLoginPortal()
+          sessionStorage.clear();
+          goToLoginPortal();
         }}
       >
         <Outlet />
