@@ -10,13 +10,14 @@ import HelpIcon from '@mui/icons-material/Help';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import SettingsEthernet from '@mui/icons-material/SettingsEthernet';
-import { Box } from '@mui/material';
+import { Box, Button, DialogTitle } from '@mui/material';
 import {
   APP_VERSION,
   AppMessage,
   AppResponseMessage,
-  DisclaimerModal,
   Layout,
+  PnDialog,
+  PnDialogActions,
   ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
@@ -70,7 +71,7 @@ const ActualApp = () => {
     getConfiguration();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
-  const [openModal, setOpenModal] = useState(false)
+  const [openModal, setOpenModal] = useState(false);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
     (state: RootState) => state.userState
@@ -260,7 +261,7 @@ const ActualApp = () => {
   });
 
   const handleUserLogout = () => {
-    setOpenModal(true)
+    setOpenModal(true);
   };
 
   return (
@@ -294,17 +295,29 @@ const ActualApp = () => {
         isLogged={!!sessionToken}
         hasTermsOfService={true}
       >
-        <DisclaimerModal
-          open={openModal}
-          title={t("header.logout-message")}
-          onConfirm={() => {
-            sessionStorage.clear()
-            goToLoginPortal()
-            setOpenModal(false)
-          }}
-          confirmLabel={t("header.logout-confirm")}
-          onCancel={() => setOpenModal(false)}
-        />
+       <PnDialog open={openModal}
+        >
+          <DialogTitle sx={{ mb: 2 }} >{t("header.logout-message")}</DialogTitle>
+          <PnDialogActions>
+            <Button
+              id="cancelButton"
+              variant="outlined"
+              onClick={() => setOpenModal(false)}
+            >
+              {t("button.annulla")}
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                sessionStorage.clear();
+                goToLoginPortal();
+                setOpenModal(false);
+              }}
+            >
+              {t("header.logout")}
+            </Button>
+          </PnDialogActions>
+        </PnDialog>
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
         <AppMessage />
         <AppResponseMessage />

@@ -72,7 +72,7 @@ const ActualApp = () => {
   // TODO check if it can exist more than one role on user
   const role = loggedUserOrganizationParty?.roles[0];
   const idOrganization = loggedUserOrganizationParty?.id;
-  const [openModal, setOpenModal] = useState(false)
+  const [openModal, setOpenModal] = useState(false);
   const { tosConsent, privacyConsent } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID, IS_STATISTICS_ENABLED } = getConfiguration();
@@ -203,7 +203,7 @@ const ActualApp = () => {
   const isPrivacyPage = path[1] === 'privacy-tos';
 
   const handleLogout = () => {
-    setOpenModal(true)
+    setOpenModal(true);
   };
 
   const handleAssistanceClick = () => {
@@ -270,11 +270,12 @@ const ActualApp = () => {
               {t("button.annulla")}
             </Button>
             <Button
+              data-testid='confirm-button'
               variant="contained"
               onClick={() => {
-                sessionStorage.clear()
-                goToSelfcareLogin()
-                setOpenModal(false)
+                sessionStorage.clear();
+                goToSelfcareLogin();
+                setOpenModal(false);
               }}
             >
               {t("header.logout")}
