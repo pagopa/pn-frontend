@@ -34,10 +34,8 @@ export function goToLoginPortalWithParams(params: URLSearchParams) {
   const tpp = params.get(AppRouteParams.RETRIEVAL_ID);
   if (aar) {
     queryString = `${AppRouteParams.AAR}=${sanitizeString(aar)}`;
-    return;
   } else if (tpp) {
     queryString = `${AppRouteParams.RETRIEVAL_ID}=${sanitizeString(tpp)}`;
-    return;
   }
   goToLoginPortal(queryString);
 }

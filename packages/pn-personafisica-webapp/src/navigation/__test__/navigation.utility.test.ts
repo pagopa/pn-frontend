@@ -48,6 +48,12 @@ describe('Tests navigation utility methods', () => {
     expect(mockOpenFn).toBeCalledWith(`${LOGOUT}?aar=fake-aar-token`, '_self');
   });
 
+  it('goToLoginPortal - retrievalId', () => {
+    goToLoginPortalWithParams(new URLSearchParams('retrievalId=fake-id'));
+    expect(mockOpenFn).toBeCalledTimes(1);
+    expect(mockOpenFn).toBeCalledWith(`${LOGOUT}?retrievalId=fake-id`, '_self');
+  });
+
   it('goToLoginPortal - aar with malicious code', () => {
     goToLoginPortalWithParams(
       new URLSearchParams('aar=<script>malicious code</script>malicious-aar-token')
