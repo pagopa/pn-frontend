@@ -29,8 +29,7 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
 
       const differenceTimerModal = setTimeout(() => {
         setOpenModal(true);
-
-      }, inactivityTimer - (20 * 1000));
+      }, inactivityTimer - (5 * 1000));
 
       // cleanup function
       return () => {
@@ -44,7 +43,6 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
 
   return (
     <>
-
       <PnDialog
         open={openModal}
         aria-labelledby="session-dialog-title"

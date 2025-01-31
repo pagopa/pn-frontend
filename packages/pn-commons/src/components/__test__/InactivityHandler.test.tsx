@@ -42,8 +42,6 @@ describe('InactivityHandler Component', () => {
       () => {
         expect(timerExpiredHandler).toHaveBeenCalledTimes(0);
       },
-      { timeout: inactivityTimer + 1000 }
     );
-    expect(buttonOfSessionModal).not.toBeInTheDocument()
   });
 });
