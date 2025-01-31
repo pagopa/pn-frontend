@@ -4,11 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { formatDate, isToday } from '@pagopa-pn/pn-commons';
 
-import {
-  PublicKeyStatus,
-  PublicKeyStatusHistory,
-  VirtualKeyStatus,
-} from '../generated-client/pg-apikeys';
+import { PublicKeyStatus, PublicKeyStatusHistory } from '../generated-client/pg-apikeys';
+import { ExtendedVirtualKeyStatus } from '../models/ApiKeys';
 
 type TooltipApiKeyProps = { history: Array<PublicKeyStatusHistory> };
 
@@ -50,7 +47,7 @@ export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
 };
 
 export function getApiKeyStatusInfos(
-  status: PublicKeyStatus | VirtualKeyStatus,
+  status: PublicKeyStatus | ExtendedVirtualKeyStatus,
   statusHistory?: Array<PublicKeyStatusHistory>
 ): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
@@ -61,13 +58,14 @@ export function getApiKeyStatusInfos(
   const tooltip = statusHistory ? <TooltipApiKey history={statusHistory} /> : undefined;
 
   switch (status) {
-    case VirtualKeyStatus.Enabled:
+    case ExtendedVirtualKeyStatus.Enabled:
     case PublicKeyStatus.Active:
       return {
         color: 'success',
         label,
         tooltip,
       };
+    case ExtendedVirtualKeyStatus.Disabled:
     case PublicKeyStatus.Blocked:
       return {
         color: 'default',

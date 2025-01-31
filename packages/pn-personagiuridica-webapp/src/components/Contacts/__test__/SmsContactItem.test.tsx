@@ -1,23 +1,14 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
 
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, screen, testStore, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import { internationalPhonePrefix } from '../../../utility/contacts.utility';
 import SmsContactItem from '../SmsContactItem';
 import { fillCodeDialog } from './test-utils';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
 
 const defaultAddress = digitalCourtesyAddresses.find(
   (addr) => addr.channelType === ChannelType.SMS && addr.senderId === 'default'
@@ -41,9 +32,10 @@ describe('test SmsContactItem', () => {
 
   it('type in an invalid number', async () => {
     // render component
-    const { container } = render(<SmsContactItem />);
-    expect(container).toHaveTextContent('courtesy-contacts.sms-title');
-    expect(container).toHaveTextContent('courtesy-contacts.sms-description');
+    const { container, getByRole } = render(<SmsContactItem />);
+    const addBtn = getByRole('button', { name: 'courtesy-contacts.email-sms-add' });
+    fireEvent.click(addBtn);
+    expect(container).toHaveTextContent('courtesy-contacts.sms-to-add');
     const form = container.querySelector('form');
     const input = form!.querySelector(`[name="default_sms"]`);
     // add invalid values
@@ -72,6 +64,9 @@ describe('test SmsContactItem', () => {
         },
       },
     });
+    expect(container).toHaveTextContent('courtesy-contacts.sms-title');
+    expect(container).toHaveTextContent('status.active');
+    expect(container).toHaveTextContent('courtesy-contacts.sms-description');
     const form = container.querySelector('form');
     const phoneValue = getById(form!, 'default_sms-typography');
     expect(phoneValue).toHaveTextContent(defaultAddress?.value!);
@@ -106,8 +101,10 @@ describe('test SmsContactItem', () => {
       })
       .reply(204);
     const result = render(<SmsContactItem />);
+    const addBtn = result.getByRole('button', { name: 'courtesy-contacts.email-sms-add' });
+    fireEvent.click(addBtn);
     // insert new phone
-    const form = result.container.querySelector('form');
+    let form = result.container.querySelector('form');
     const input = form!.querySelector(`[name="default_sms"]`);
     fireEvent.change(input!, { target: { value: phoneValue } });
     await waitFor(() => expect(input!).toHaveValue(phoneValue));
@@ -116,11 +113,7 @@ describe('test SmsContactItem', () => {
     const button = result.getByTestId('default_sms-button');
     expect(button).toBeEnabled();
     fireEvent.click(button);
-    // Confirms the disclaimer dialog
-    /* const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
-    fireEvent.click(disclaimerCheckbox);
-    const disclaimerConfirmButton = result.getByTestId('disclaimer-confirm-button');
-    fireEvent.click(disclaimerConfirmButton); */
+    // Confirms the informative dialog
     const informativeDialog = await waitFor(() => result.getByTestId('informativeDialog'));
     expect(informativeDialog).toBeInTheDocument();
     const understandButton = result.getByTestId('understandButton');
@@ -161,13 +154,15 @@ describe('test SmsContactItem', () => {
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
+    // the component should have been re-rendered, need to take the updated form
+    form = result.container.querySelector('form');
     const smsValue = getById(form!, 'default_sms-typography');
     expect(smsValue).toBeInTheDocument();
     expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
     const editButton = getById(form!, 'modifyContact-default_sms');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default_sms');
-    expect(deleteButton).toBeInTheDocument();
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
+    expect(disableBtn).toBeInTheDocument();
   });
 
   it('override an existing phone number with a new one', async () => {
@@ -209,11 +204,7 @@ describe('test SmsContactItem', () => {
     });
     // confirm new value
     fireEvent.click(saveButton);
-    // Confirms the disclaimer dialog
-    /* const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
-    fireEvent.click(disclaimerCheckbox);
-    const disclaimerConfirmButton = result.getByTestId('disclaimer-confirm-button');
-    fireEvent.click(disclaimerConfirmButton); */
+    // Confirms the informative dialog
     const informativeDialog = await waitFor(() => result.getByTestId('informativeDialog'));
     expect(informativeDialog).toBeInTheDocument();
     const understandButton = result.getByTestId('understandButton');
@@ -259,8 +250,8 @@ describe('test SmsContactItem', () => {
     expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
     editButton = getById(form!, 'modifyContact-default_sms');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default_sms');
-    expect(deleteButton).toBeInTheDocument();
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
+    expect(disableBtn).toBeInTheDocument();
   });
 
   it('delete phone number', async () => {
@@ -273,18 +264,19 @@ describe('test SmsContactItem', () => {
         },
       },
     });
-    const buttons = result.container.querySelectorAll('button');
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
+    expect(disableBtn).toBeInTheDocument();
     // click on cancel
-    fireEvent.click(buttons[1]);
-    let dialog = await waitFor(() => screen.getByRole('dialog'));
+    fireEvent.click(disableBtn);
+    let dialog = await waitFor(() => result.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
     let dialogButtons = dialog.querySelectorAll('button');
     // cancel remove operation
     fireEvent.click(dialogButtons[0]);
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
     // click on confirm
-    fireEvent.click(buttons[1]);
-    dialog = await waitFor(() => screen.getByRole('dialog'));
+    fireEvent.click(disableBtn);
+    dialog = await waitFor(() => result.getByRole('dialog'));
     dialogButtons = dialog.querySelectorAll('button');
     fireEvent.click(dialogButtons[1]);
     await waitFor(() => {
@@ -302,11 +294,7 @@ describe('test SmsContactItem', () => {
           )
       ).toStrictEqual([]);
     });
-    // whait rerendering due to redux changes
-    await waitFor(() => {
-      const input = result.container.querySelector(`[name="default_sms"]`);
-      expect(input).toBeInTheDocument();
-      expect(result.container).not.toHaveTextContent('');
-    });
+    expect(result.container).toHaveTextContent('courtesy-contacts.email-sms-updates');
+    expect(result.container).toHaveTextContent('courtesy-contacts.email-sms-add');
   });
 });

@@ -1,10 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { fireEvent, render } from '../../../test-utils';
+import { disableConsoleLogging, fireEvent, render } from '../../../test-utils';
 import PnWizard from '../PnWizard';
 import PnWizardStep from '../PnWizardStep';
 
 describe('PnWizard Component', () => {
+  disableConsoleLogging('error');
   const setActiveStep = vi.fn();
 
   it('renders PnWizard', () => {
@@ -33,17 +34,6 @@ describe('PnWizard Component', () => {
     fireEvent.click(nextButton);
     expect(setActiveStep).toHaveBeenCalledTimes(1);
     expect(setActiveStep).toHaveBeenCalledWith(1);
-  });
-
-  it('should hide previous button on the first step', () => {
-    const { queryByTestId } = render(
-      <PnWizard activeStep={0} setActiveStep={setActiveStep} title="Wizard Title">
-        <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
-        <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
-      </PnWizard>
-    );
-
-    expect(queryByTestId('prev-button')).not.toBeInTheDocument();
   });
 
   it('should use custom buttons from slots', () => {
@@ -91,6 +81,73 @@ describe('PnWizard Component', () => {
 
     fireEvent.click(prevButton);
     expect(customPrevClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('should render feedback step', () => {
+    const { getByTestId } = render(
+      <PnWizard
+        activeStep={2}
+        setActiveStep={setActiveStep}
+        title="Wizard Title"
+        slotsProps={{
+          feedback: {
+            title: 'Custom title',
+            buttonText: 'Custom button text',
+            onClick: vi.fn(),
+          },
+        }}
+      >
+        <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
+        <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
+      </PnWizard>
+    );
+
+    const feedbackStep = getByTestId('wizard-feedback-step');
+    expect(feedbackStep).toBeInTheDocument();
+  });
+
+  it('should not render feedback step', () => {
+    const { queryByTestId } = render(
+      <PnWizard activeStep={2} setActiveStep={setActiveStep} title="Wizard Title">
+        <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
+        <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
+      </PnWizard>
+    );
+
+    const feedbackStep = queryByTestId('wizard-feedback-step');
+    expect(feedbackStep).not.toBeInTheDocument();
+  });
+
+  it('should render custom feedback step', () => {
+    const customFeedbackFn = vi.fn();
+
+    const { getByTestId } = render(
+      <PnWizard
+        activeStep={2}
+        setActiveStep={setActiveStep}
+        title="Wizard Title"
+        slotsProps={{
+          feedback: {
+            title: 'Custom title',
+            buttonText: 'Custom button text',
+            onClick: customFeedbackFn,
+          },
+        }}
+      >
+        <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
+        <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
+      </PnWizard>
+    );
+
+    const feedbackStep = getByTestId('wizard-feedback-step');
+    expect(feedbackStep).toBeInTheDocument();
+
+    const title = getByTestId('wizard-feedback-title');
+    expect(title).toHaveTextContent('Custom title');
+    const button = getByTestId('wizard-feedback-button');
+    expect(button).toHaveTextContent('Custom button text');
+    fireEvent.click(button);
+    expect(customFeedbackFn).toHaveBeenCalledTimes(1);
   });
 
   it('should throw an error if children are not PnWizardStep', () => {

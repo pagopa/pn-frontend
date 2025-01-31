@@ -1,6 +1,6 @@
 {
   "name": "@pagopa-pn/pn-data-viz",
-  "version": "2.9.0",
+  "version": "2.11.0",
   "private": true,
   "description": "SEND component library for data visualization",
   "keywords": [
@@ -19,8 +19,6 @@
   "scripts": {
     "build": "tsc",
     "test": "tsc && vitest --run",
-    "test:fast": "vitest --run",
-    "test:all": "vitest --run --config ./vite.config.all.ts",
     "test:coverage": "tsc && vitest run --coverage"
   },
   "devDependencies": {

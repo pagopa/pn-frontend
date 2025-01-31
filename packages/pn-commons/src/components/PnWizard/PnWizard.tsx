@@ -2,8 +2,8 @@ import React, { JSXElementConstructor, ReactElement, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Button, ButtonProps, Paper, Stack } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { Box, Button, ButtonProps, Paper, Stack, StackProps, Typography } from '@mui/material';
+import { ButtonNaked, IllusCompleted } from '@pagopa/mui-italia';
 
 import checkChildren from '../../utility/children.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -25,6 +25,12 @@ type Props = {
     };
     prevButton?: Omit<ButtonProps, 'onClick'> & {
       onClick?: (previous: () => void, step: number) => void;
+    };
+    container?: Omit<StackProps, 'children'> & { 'data-testid'?: string };
+    feedback?: {
+      title: string;
+      buttonText: string;
+      onClick: () => void;
     };
   };
 };
@@ -74,9 +80,38 @@ const PnWizard: React.FC<Props> = ({
     goToStep(activeStep - 1);
   };
 
+  if (activeStep >= childrens.length && slotsProps?.feedback) {
+    return (
+      <Box
+        sx={{ minHeight: '350px', height: '100%', display: 'flex' }}
+        data-testid="wizard-feedback-step"
+      >
+        <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
+          <IllusCompleted />
+          <Typography
+            data-testid="wizard-feedback-title"
+            variant="h4"
+            color="text.primary"
+            sx={{ margin: '20px 0 10px 0' }}
+          >
+            {slotsProps?.feedback?.title}
+          </Typography>
+          <Button
+            data-testid="wizard-feedback-button"
+            variant="contained"
+            sx={{ marginTop: '30px' }}
+            onClick={slotsProps?.feedback?.onClick}
+          >
+            {slotsProps?.feedback?.buttonText}
+          </Button>
+        </Box>
+      </Box>
+    );
+  }
+
   return (
-    <Stack display="flex" alignItems="center" justifyContent="center">
-      <Box p={3} sx={{ maxWidth: { xs: '100%', lg: '90%' } }}>
+    <Stack display="flex" alignItems="center" justifyContent="center" {...slotsProps?.container}>
+      <Box p={3}>
         <ButtonNaked
           type="button"
           size="medium"
@@ -98,16 +133,15 @@ const PnWizard: React.FC<Props> = ({
         </Paper>
 
         <Stack direction={{ xs: 'column-reverse', md: 'row' }}>
-          {activeStep !== 0 && (
-            <PrevButton
-              data-testid="prev-button"
-              sx={{ mt: { xs: 2, md: 0 } }}
-              {...slotsProps?.prevButton}
-              onClick={handlePrevStep}
-            >
-              {getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro')}
-            </PrevButton>
-          )}
+          <PrevButton
+            data-testid="prev-button"
+            sx={{ mt: { xs: 2, md: 0 } }}
+            {...slotsProps?.prevButton}
+            onClick={handlePrevStep}
+          >
+            {getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro')}
+          </PrevButton>
+
           <NextButton
             data-testid="next-button"
             variant="contained"

@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.2...v2.11.0) (2025-01-20)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.11.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0...v2.11.0-RC.0) (2025-01-10)
+
+
+### Bug Fixes
+
+* **pn-12727:** Fix of render a long title of notification ([#1408](https://github.com/pagopa/pn-frontend/issues/1408)) ([696ad4c](https://github.com/pagopa/pn-frontend/commit/696ad4c6f555e55711c4f50f50d1a47d0984b840))
+* **pn-13212:** chip stato notifica/pagamenti ([#1419](https://github.com/pagopa/pn-frontend/issues/1419)) ([015c83f](https://github.com/pagopa/pn-frontend/commit/015c83f76f6460acd847a3a4e5526145ee42c536))
+* **pn-13269:** Translate AAR label in the notification detail page ([#1420](https://github.com/pagopa/pn-frontend/issues/1420)) ([05ee4f0](https://github.com/pagopa/pn-frontend/commit/05ee4f0cfdeb71779038d04ba83eb13569dbf029))
+* **pn-9848:** Get TraceId from header ([#1176](https://github.com/pagopa/pn-frontend/issues/1176)) ([2e613a7](https://github.com/pagopa/pn-frontend/commit/2e613a722a0e667813a20eac1b12fc6936fa1322))
+
+
+### Features
+
+* **pn-13347:** add new status return to sender to timeline ([#1416](https://github.com/pagopa/pn-frontend/issues/1416)) ([82b17fa](https://github.com/pagopa/pn-frontend/commit/82b17faa6eeef406f9e75033246fd5f5f2a9dbda))
+* **pn-13499:** improve configuration ([#1429](https://github.com/pagopa/pn-frontend/issues/1429)) ([e0956fb](https://github.com/pagopa/pn-frontend/commit/e0956fb6afcce8fd7fcd954105be74ab03e8b140))
+
+
+
+
+
+# [2.10.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0-RC.0...v2.10.0) (2025-01-07)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.10.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.9.0...v2.10.0-RC.0) (2024-11-29)
+
+
+### Bug Fixes
+
+* **pn-11648:** Close Drawer when clicking on side menu voice ([#1410](https://github.com/pagopa/pn-frontend/issues/1410)) ([e38420c](https://github.com/pagopa/pn-frontend/commit/e38420cef045e8dd08a35773731efaadba12f97b))
+* **pn-12735:** set overflow-wrap property on CodeModal title to grant very long pec/mail addresses are shown ([#1407](https://github.com/pagopa/pn-frontend/issues/1407)) ([8137f7c](https://github.com/pagopa/pn-frontend/commit/8137f7c3b29b6b2e386a5f6aa07a44a69c60d3a1))
+
+
+
+
+
+
 # [2.9.0](https://github.com/pagopa/pn-frontend/compare/v2.9.0-RC.2...v2.9.0) (2024-11-18)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons

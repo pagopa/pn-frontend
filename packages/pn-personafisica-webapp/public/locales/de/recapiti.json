@@ -21,14 +21,12 @@
     "cancel-pec-validation": "Validierung abbrechen",
     "remove-pec-title": "PEC entfernen",
     "remove-pec-message": "Möchtest du die PEC-Adresse {{value}} wirklich entfernen?",
-    "block-remove-pec-title": "PEC-Adresse kann nicht gelöscht werden",
-    "block-remove-pec-message": "Dazu müssen zuerst alle PEC-Adressen und digitalen Domizile SEND unter „Sekundäre Anschriften“ gelöscht werden.",
     "validation-cancel-title": "Überprüfung abbrechen?",
     "validation-cancel-content": "Wird die Überprüfung abgebrochen, muss eine neue PEC-Adresse eingegeben und der Vorgang erneut begonnen werden.",
     "validation-progress-title": "Danke!",
     "validation-progress-content": "Wir prüfen, ob die PEC-Adresse gültig ist. Du erhältst innerhalb von 24 Stunden eine E-Mail mit dem Ergebnis.",
-    "sercq-send-title": "Digitales Domizil SEND",
-    "sercq-send-description": "Ist wie ein physisches Domizil, aber online. Wenn du SEND als digitales Domizil wählst, erhältst du in Echtzeit Zustellungen von den beigetretenen Körperschaften und kannst diese einsehen, wo immer du bist.",
+    "sercq_send-title": "Digitales Domizil SEND",
+    "sercq_send-description": "Ist wie ein physisches Domizil, aber online. Wenn du SEND als digitales Domizil wählst, erhältst du in Echtzeit Zustellungen von den beigetretenen Körperschaften und kannst diese einsehen, wo immer du bist.",
     "sercq-send-active": "Aktivieren",
     "sercq-send-info-title": "Aktiviere SEND als dein digitales Domizil",
     "sercq-send-info-description": "Wenn du das digitale Domizil aktivierst, wird SEND deine <strong>rechtsgültige Adresse</strong> für die Mitteilungen der ÖV.",
@@ -53,35 +51,19 @@
     "sercq-send-enabled": "SEND ist dein digitales Domizil",
     "sercq-send-courtesy-title": "Wähle, wie du die Bescheide erhalten möchtest",
     "sercq-send-courtesy-description": "Wähle eine informelle Adresse aus, an der wir dich in Echtzeit benachrichtigen können, wenn es eine rechtsgültige Mitteilung auf SEND zu lesen gibt.",
-    "remove-sercq-send-title": "Möchtest du das digitale Domizil auf SEND wirklich deaktivieren?",
-    "remove-sercq-send-message": "Du hast keine rechtsgültige digitale Adresse mehr für die Zustellungen der öffentlichen Verwaltung und kannst wieder Zustellungen in Papierform erhalten.",
-    "block-remove-sercq-send-title": "Das digitale Domizil kann nicht deaktiviert werden",
-    "block-remove-sercq-send-message": "Lösche zunächst die PEC-Adressen, die du in den personalisierten Adressen eingegeben hast.",
+    "remove-sercq_send-title": "Möchtest du das digitale Domizil auf SEND wirklich deaktivieren?",
+    "remove-sercq_send-message": "Du hast keine rechtsgültige digitale Adresse mehr für die Zustellungen der öffentlichen Verwaltung und kannst wieder Zustellungen in Papierform erhalten.",
+    "block-remove-digital-domicile-title": "Das digitale Domizil kann nicht deaktiviert werden",
     "sercq_send-removed-successfully": "Digitales Domizil erfolgreich deaktiviert",
     "sercq-send-io-title": "Aktiviere SEND auf IO",
     "sercq-send-io-description": "Aktiviere SEND - Notifiche Digitali auf IO, um<strong> direkt in der App</strong> die an dein digitales Domizil SEND gesendeten Zustellungen zu erhalten.",
-    "sercq-send-io-advantages": "Auf IO",
-    "sercq-send-io-list": [
-      "<strong>Du erhältst die Zustellungen in Echtzeit</strong>, sobald sie die Körperschaft auf SEND geladen hat",
-      "<strong>Öffne die angehängten Dokumente</strong> in der App",
-      "<strong>Zahle die geschuldeten Beträge,</strong> falls die Zustellung eine Zahlung vorsieht"
-    ]
+    "sercq-send-io-advantages": "Auf IO"
   },
   "io-contact": {
     "title": "IO-App",
     "description": "Lies und verwalte rechtsgültige Mitteilungen direkt auf IO: Wenn eine Zustellung für dich vorliegt, erhältst du sie in der App und kannst etwaige Gebühren bezahlen.",
-    "dialog-description": "Für jede neue Zustellung erhältst due eine Nachricht in der App. Du kannst sie lesen und etwaige Gebühren direkt auf IO bezahlen.",
-    "enabled": "Servizio Notifiche Digitali ist aktiv",
-    "disabled": "Servizio Notifiche Digitali ist nicht aktiv",
-    "unavailable": "Zum Aktivieren des Dienstes lade zuerst die IO-APP herunter",
     "enable": "Aktiviere SEND auf IO",
     "download": "IO-App herunterladen",
-    "enable-modal": {
-      "title": "Möchtest du den Dienst „Notifiche Digitali“ auf IO aktivieren?",
-      "checkbox": "Verstanden",
-      "confirm": "Dienst aktivieren",
-      "content": "Solltest du keine PEC-Adresse haben und die Zustellung innerhalb 5 Tagen (120 Stunden) nach Versand aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben."
-    },
     "disable-modal": {
       "title": "Möchtest du den Dienst „Notifiche Digitali“ auf IO deaktivieren?",
       "confirm": "Dienst deaktivieren",
@@ -89,10 +71,8 @@
     }
   },
   "courtesy-contacts": {
-    "title": "Informelle Adressen",
-    "sub-title": "Die informellen Adressen benachrichtigen dich, wenn neue Zustellungen für dich vorliegen. Wenn du keine rechtsgültige Adresse aktiviert hast und die Zustellung nicht innerhalb von 5 Tagen öffnest, erhältst du sie auch in Papierform zu Hause.",
     "email-title": "E-Mail",
-    "email-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer E-Mail an die gewählte Adresse.",
+    "email-filled-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer E-Mail an die gewählte Adresse.",
     "email-dialog-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer E-Mail. ",
     "sms-title": "SMS",
     "sms-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer SMS an die gewählte Nummer.",
@@ -118,14 +98,9 @@
     "remove-email-title": "E-Mail-Adresse entfernen",
     "remove-email-message": "Möchtest du die E-Mail-Adresse {{value}} wirklich entfernen?",
     "remove-sms-title": "Handynummer entfernen",
-    "remove-sms-message": "Möchtest du die Handynummer {{value}} wirklich entfernen?",
-    "block-remove-email-title": "E-Mail-Adresse kann nicht gelöscht werden",
-    "block-remove-email-message": "Dazu müssen zuerst alle E-Mail-Adressen unter „Sekundäre Anschriften“ gelöscht werden.",
-    "block-remove-sms-title": "Telefonnummer kann nicht gelöscht werden",
-    "block-remove-sms-message": "Dazu müssen zunächst alle Telefonnummern unter „Sekundäre Anschriften“ gelöscht werden."
+    "remove-sms-message": "Möchtest du die Handynummer {{value}} wirklich entfernen?"
   },
   "special-contacts": {
-    "description": "Wusstest du? Wenn du die Zustellungen von bestimmten Körperschaften an anderen Adressen als die Hauptadresse empfangen möchtest, so kannst du die <0>Anschriften personalisieren</0>.",
     "select-address": "Anschrift wählen",
     "add-sender": "Zu verknüpfende Körperschaft",
     "pec": "PEC-Adresse",

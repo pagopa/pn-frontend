@@ -11,21 +11,11 @@ import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { apiClient } from '../api/apiClients';
 import { DelegationStatus } from '../models/Deleghe';
+import { SELFCARE_LOGOUT } from '../navigation/routes.const';
 import { PNRole, PartyRole } from '../redux/auth/types';
 import { getConfiguration } from '../services/configuration.service';
 import { RenderResult, act, render } from './test-utils';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translation hook can use it without a warning being shown
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: {
-      language: 'it',
-      changeLanguage: () => new Promise(() => {}),
-    },
-  }),
-}));
 vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
 
 const unmockedFetch = global.fetch;
@@ -97,7 +87,10 @@ describe('App', async () => {
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(`${getConfiguration().URL_FE_LOGOUT}`, '_self');
+    expect(mockOpenFn).toHaveBeenCalledWith(
+      `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT}`,
+      '_self'
+    );
   });
 
   it('render component - user logged in', async () => {

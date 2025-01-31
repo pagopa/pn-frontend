@@ -15,7 +15,9 @@
     "exit": "Esci",
     "close": "Chiudi",
     "enable": "Attiva",
+    "manage": "Gestisci",
     "disable": "Disattiva",
+    "start": "Inizia",
     "continue": "Avanti",
     "go-to-home": "Vai alla homepage",
     "go-to-login": "Accedi",
@@ -193,5 +195,11 @@
     "message": "Il testo originario di questi documenti è in lingua italiana. In caso di contrasto tra la versione italiana e le traduzioni in altre lingue, prevarranno il significato e le condizioni della lingua italiana.",
     "link": "Consulta le traduzioni"
   },
-  "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine"
+  "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine",
+  "wizard": {
+    "stepper": {
+      "of": "{{currentStep}} di {{totalSteps}}",
+      "activeStep": "Step {{currentStep}}"
+    }
+  }
 }

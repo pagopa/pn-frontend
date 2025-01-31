@@ -12,6 +12,7 @@ import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import SettingsEthernet from '@mui/icons-material/SettingsEthernet';
 import { Box } from '@mui/material';
 import {
+  APP_VERSION,
   AppMessage,
   AppResponseMessage,
   Layout,
@@ -38,6 +39,7 @@ import { getSidemenuInformation } from './redux/sidemenu/actions';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
+import showLayoutParts from './utility/layout.utility';
 import './utility/onetrust';
 
 // Cfr. PN-6096
@@ -64,7 +66,7 @@ const App = () => {
 
 // eslint-disable-next-line complexity
 const ActualApp = () => {
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION, SELFCARE_BASE_URL, IS_B2B_ENABLED } =
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, IS_B2B_ENABLED } =
     getConfiguration();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -89,7 +91,16 @@ const ActualApp = () => {
     [loggedUser]
   );
 
-  const isPublicKeyRegistrationPage = pathname.includes(routes.REGISTRA_CHIAVE_PUBBLICA);
+  const [showSideMenu] = useMemo(
+    () =>
+      showLayoutParts(
+        pathname,
+        !!sessionToken,
+        tosConsent && tosConsent.accepted && fetchedTos,
+        privacyConsent && privacyConsent.accepted && fetchedPrivacy
+      ),
+    [pathname, sessionToken, tosConsent, fetchedTos, privacyConsent, fetchedPrivacy]
+  );
 
   const organization = loggedUser.organization;
   const role = loggedUser.organization?.roles ? loggedUser.organization?.roles[0] : null;
@@ -251,7 +262,7 @@ const ActualApp = () => {
       dispatch(
         appStateActions.addSuccess({
           title: 'Current version',
-          message: `v${VERSION}`,
+          message: `v${APP_VERSION}`,
         })
       ),
   });
@@ -268,16 +279,7 @@ const ActualApp = () => {
         showFooter
         onExitAction={handleUserLogout}
         sideMenu={<SideMenu menuItems={menuItems} selfCareItems={selfcareMenuItems} />}
-        showSideMenu={
-          !!sessionToken &&
-          tosConsent &&
-          tosConsent.accepted &&
-          fetchedTos &&
-          privacyConsent &&
-          privacyConsent.accepted &&
-          fetchedPrivacy &&
-          !isPublicKeyRegistrationPage
-        }
+        showSideMenu={showSideMenu}
         productsList={productsList}
         productId={'0'}
         showHeaderProduct={

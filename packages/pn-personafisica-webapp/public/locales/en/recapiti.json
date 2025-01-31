@@ -21,14 +21,12 @@
     "cancel-pec-validation": "Cancel validation",
     "remove-pec-title": "Remove PEC address",
     "remove-pec-message": "Are you sure you want to remove the PEC address {{value}}?",
-    "block-remove-pec-title": "You cannot delete the PEC address",
-    "block-remove-pec-message": "In order to do this, you must first delete all the PEC addresses and the SEND digital domiciles you have indicated under \"Secondary addresses\".",
     "validation-cancel-title": "Do you want to cancel the verification?",
     "validation-cancel-content": "If you cancel the verification, you will need to enter a new PEC address and restart the process.",
     "validation-progress-title": "Thank you!",
     "validation-progress-content": "We are verifying that the PEC address is valid. You will receive an email with the result within 24 hours.",
-    "sercq-send-title": "SEND digital domicile",
-    "sercq-send-description": "It is like a physical domicile, but online. If you select SEND as a digital domicile, you will receive notifications from the institutions that are registered with the platform in real time and you can consult them anywhere.",
+    "sercq_send-title": "SEND digital domicile",
+    "sercq_send-description": "It is like a physical domicile, but online. If you select SEND as a digital domicile, you will receive notifications from the institutions that are registered with the platform in real time and you can consult them anywhere.",
     "sercq-send-active": "Active",
     "sercq-send-info-title": "Activate SEND as your Digital Domicile",
     "sercq-send-info-description": "If you activate the Digital Domicile, SEND will become <strong>your legal address</strong> for PA communications.",
@@ -53,35 +51,19 @@
     "sercq-send-enabled": "SEND is your Digital Domicile",
     "sercq-send-courtesy-title": "Select how to receive the notifications",
     "sercq-send-courtesy-description": "Select a courtesy address to which we can inform you in real time when there is a legal communication to read on SEND.",
-    "remove-sercq-send-title": "Do you confirm to want to deactivate the Digital Domicile on SEND?",
-    "remove-sercq-send-message": "You will no longer have a legal digital address for the communications of the Public Administration and can return to receiving paper copies of the notifications.",
-    "block-remove-sercq-send-title": "It is not possible to deactivate the Digital Domicile",
-    "block-remove-sercq-send-message": "First delete the PEC addresses you entered for your customized addresses.",
+    "remove-sercq_send-title": "Do you confirm to want to deactivate the Digital Domicile on SEND?",
+    "remove-sercq_send-message": "You will no longer have a legal digital address for the communications of the Public Administration and can return to receiving paper copies of the notifications.",
+    "block-remove-digital-domicile-title": "It is not possible to deactivate the Digital Domicile",
     "sercq_send-removed-successfully": "Digital Domicile deactivated correctly",
     "sercq-send-io-title": "Activate SEND on IO",
     "sercq-send-io-description": "Activate SEND - Notifiche Digitali on IO to receive the communications sent directly to your SEND digital domicile <strong>directly in app</strong>.",
-    "sercq-send-io-advantages": "On IO",
-    "sercq-send-io-list": [
-      "<strong>You will receive the notifications in real time</strong>, as soon as the institution uploads it on SEND",
-      "<strong>Open the attached documents</strong> in app",
-      "<strong>Pay the amounts due</strong> if the notification requires a payment"
-    ]
+    "sercq-send-io-advantages": "On IO"
   },
   "io-contact": {
     "title": "IO app",
     "description": "Read and manage legal communications directly on IO: when there is a notification for you, you will receive it in app and you can pay any expenses.",
-    "dialog-description": "You will receive a message in app for each new notification. You can read it and pay any amounts directly on IO.",
-    "enabled": "Digital Notification Service active",
-    "disabled": "Digital Notification Service not active",
-    "unavailable": "To activate the service, first download the IO app",
     "enable": "Activate SEND on IO",
     "download": "Download the IO app",
-    "enable-modal": {
-      "title": "Do you want to activate the \"Notifiche Digitali\" service on IO?",
-      "checkbox": "OK, I understand",
-      "confirm": "Activate service",
-      "content": "If you do not have a PEC and access the notification within 5 days (120 hours) of sending the message, you will not receive the notification of receipt by registered mail."
-    },
     "disable-modal": {
       "title": "Do you want to deactivate the \"Notifiche Digitali\" service on IO?",
       "confirm": "Deactivate service",
@@ -89,11 +71,9 @@
     }
   },
   "courtesy-contacts": {
-    "title": "Courtesy addresses",
-    "sub-title": "The courtesy addresses will inform you when there are new notifications for you. If you have not activated a legal address and you do not open the notification within 5 days, a paper copy will also be sent to your home.",
     "email-title": "Email",
-    "email-description": "When there is a notification for you, we will inform you with an email to the address you selected.",
-    "email-dialog-description": "When there is a notification for you, we will inform you with an email. ",
+    "email-filled-description": "When there is a notification for you, we will inform you with an email to the address you selected.",
+    "email-dialog-description": "When there is a notification for you, we will inform you with an email.",
     "sms-title": "SMS",
     "sms-description": "When there is a notification for you, we will inform you with an SMS to the number you selected.",
     "sms-dialog-description": "When there is a notification for you, we will inform you with an SMS.",
@@ -118,14 +98,9 @@
     "remove-email-title": "Remove email",
     "remove-email-message": "Are you sure you want to remove the email address {{value}}?",
     "remove-sms-title": "Remove mobile",
-    "remove-sms-message": "Are you sure you want to remove the mobile number {{value}}?",
-    "block-remove-email-title": "You cannot delete the email",
-    "block-remove-email-message": "In order to do this, you must first delete all the email addresses you have indicated under \"Secondary addresses\".",
-    "block-remove-sms-title": "You cannot delete the phone number",
-    "block-remove-sms-message": "In order to do this, you must first delete all the phone numbers you have indicated under \"Secondary addresses\"."
+    "remove-sms-message": "Are you sure you want to remove the mobile number {{value}}?"
   },
   "special-contacts": {
-    "description": "Did you know? If you want to receive notifications from specific institutions at addresses different than the main address, you can <0>customize addresses</0>.",
     "select-address": "Select an address",
     "add-sender": "Institution to associate",
     "pec": "PEC address",

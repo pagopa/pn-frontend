@@ -12,7 +12,7 @@ import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { mandatesByDelegate } from '../__mocks__/Delegations.mock';
 import { apiClient } from '../api/apiClients';
-import { getConfiguration } from '../services/configuration.service';
+import { LOGOUT } from '../navigation/routes.const';
 import {
   RenderResult,
   act,
@@ -23,19 +23,6 @@ import {
   waitFor,
   within,
 } from './test-utils';
-
-// mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translation hook can use it without a warning being shown
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: {
-      language: 'it',
-      changeLanguage: () => new Promise(() => {}),
-    },
-  }),
-}));
 
 vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
 vi.mock('../pages/Profile.page', () => ({ default: () => <div>Profile Page</div> }));
@@ -111,7 +98,7 @@ describe('App', async () => {
     const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(`${getConfiguration().URL_FE_LOGOUT}`, '_self');
+    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}`, '_self');
   });
 
   it('render component - user logged in', async () => {

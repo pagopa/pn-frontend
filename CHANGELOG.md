@@ -3,6 +3,96 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.2...v2.11.0) (2025-01-20)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+# [2.11.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.1...v2.11.0-RC.2) (2025-01-14)
+
+
+### Bug Fixes
+
+* **pn-13028:** hide actions when public key is removed ([#1441](https://github.com/pagopa/pn-frontend/issues/1441)) ([f1c87d8](https://github.com/pagopa/pn-frontend/commit/f1c87d8a9369541e32b7213c79c6c2387ff8f8fa))
+
+
+
+
+
+# [2.11.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.0...v2.11.0-RC.1) (2025-01-10)
+
+
+### Bug Fixes
+
+* **pn-12958:** default color for disabled chip and fixed creation button visualization ([#1437](https://github.com/pagopa/pn-frontend/issues/1437)) ([4b63fa7](https://github.com/pagopa/pn-frontend/commit/4b63fa79c09cedc869a4a2a4abacd2d09bb3d03f))
+
+
+### Features
+
+* **pn-13265:** cache refresh updated for selfcare-PG ([#1413](https://github.com/pagopa/pn-frontend/issues/1413)) ([b5d2292](https://github.com/pagopa/pn-frontend/commit/b5d2292f2c7701f5f21858caf48ea6ed71352543))
+
+
+
+
+
+# [2.11.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0...v2.11.0-RC.0) (2025-01-10)
+
+
+### Bug Fixes
+
+* **pn-12727:** Fix of render a long title of notification ([#1408](https://github.com/pagopa/pn-frontend/issues/1408)) ([696ad4c](https://github.com/pagopa/pn-frontend/commit/696ad4c6f555e55711c4f50f50d1a47d0984b840))
+* **pn-12958:** enhanced the visualization of the virtualkey section ([#1403](https://github.com/pagopa/pn-frontend/issues/1403)) ([48e8d55](https://github.com/pagopa/pn-frontend/commit/48e8d5548b12bf98ccc11d689247fb534bc713b6))
+* **pn-12975:** hide menu in virtualKeysTable when no action is available ([#1406](https://github.com/pagopa/pn-frontend/issues/1406)) ([09cacea](https://github.com/pagopa/pn-frontend/commit/09cacea51f287149dd216e1074eaf1e95377c95c))
+* **pn-13212:** chip stato notifica/pagamenti ([#1419](https://github.com/pagopa/pn-frontend/issues/1419)) ([015c83f](https://github.com/pagopa/pn-frontend/commit/015c83f76f6460acd847a3a4e5526145ee42c536))
+* **pn-13269:** Translate AAR label in the notification detail page ([#1420](https://github.com/pagopa/pn-frontend/issues/1420)) ([05ee4f0](https://github.com/pagopa/pn-frontend/commit/05ee4f0cfdeb71779038d04ba83eb13569dbf029))
+* **pn-9848:** Get TraceId from header ([#1176](https://github.com/pagopa/pn-frontend/issues/1176)) ([2e613a7](https://github.com/pagopa/pn-frontend/commit/2e613a722a0e667813a20eac1b12fc6936fa1322))
+
+
+### Features
+
+* **pn-13347:** add new status return to sender to timeline ([#1416](https://github.com/pagopa/pn-frontend/issues/1416)) ([82b17fa](https://github.com/pagopa/pn-frontend/commit/82b17faa6eeef406f9e75033246fd5f5f2a9dbda))
+* **pn-13499:** improve configuration ([#1429](https://github.com/pagopa/pn-frontend/issues/1429)) ([e0956fb](https://github.com/pagopa/pn-frontend/commit/e0956fb6afcce8fd7fcd954105be74ab03e8b140))
+
+
+
+
+
+# [2.10.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0-RC.0...v2.10.0) (2025-01-07)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+# [2.10.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.9.0...v2.10.0-RC.0) (2024-11-29)
+
+
+### Bug Fixes
+
+* **12155:** hide toast error when check aar api returns notification not found ([#1384](https://github.com/pagopa/pn-frontend/issues/1384)) ([396b9ee](https://github.com/pagopa/pn-frontend/commit/396b9ee74c0580b49b70918d65b1d88589b840a2))
+* **pn-11392:** more generic download message for those documents in glacier ([#1411](https://github.com/pagopa/pn-frontend/issues/1411)) ([bb93a20](https://github.com/pagopa/pn-frontend/commit/bb93a207cb4bd522cb48a6cd640ed827afdc2240))
+* **pn-11648:** Close Drawer when clicking on side menu voice ([#1410](https://github.com/pagopa/pn-frontend/issues/1410)) ([e38420c](https://github.com/pagopa/pn-frontend/commit/e38420cef045e8dd08a35773731efaadba12f97b))
+* **pn-12735:** set overflow-wrap property on CodeModal title to grant very long pec/mail addresses are shown ([#1407](https://github.com/pagopa/pn-frontend/issues/1407)) ([8137f7c](https://github.com/pagopa/pn-frontend/commit/8137f7c3b29b6b2e386a5f6aa07a44a69c60d3a1))
+* **pn-13023:** update IO status in generalInfoSlice ([#1404](https://github.com/pagopa/pn-frontend/issues/1404)) ([308b499](https://github.com/pagopa/pn-frontend/commit/308b4991c4fe81310b5e98e52e939b654cd2b20f))
+* **pn-13071:** Change how SERCQ component is displayed when PEC is enabled (PF and PG) ([#1377](https://github.com/pagopa/pn-frontend/issues/1377)) ([bdad114](https://github.com/pagopa/pn-frontend/commit/bdad1145fe44a3a1225384440fbff3f4ab992a1b))
+* **pn-13073:** fix the order of legal contacts types ([#1381](https://github.com/pagopa/pn-frontend/issues/1381)) ([f241d4a](https://github.com/pagopa/pn-frontend/commit/f241d4a192314a9b26bfabeb7a575c13f524293a))
+* **pn-13174:** Add blank spaces validation to digital contact input field (PF and PG) ([#1409](https://github.com/pagopa/pn-frontend/issues/1409)) ([9e2fe76](https://github.com/pagopa/pn-frontend/commit/9e2fe766edbd00fc251857de43d0ee4554de32d9))
+* **pn-13314, pn-13353, pn-13324:** fixed max width on bilingual subjects, fixed PEC bilingual subject and fixed field reset on bilingual subjects ([#1412](https://github.com/pagopa/pn-frontend/issues/1412)) ([98b9549](https://github.com/pagopa/pn-frontend/commit/98b95499db44b99073052879ca97f0066fdeab66))
+
+
+### Features
+
+* **pn-13066:** manage taxonomy code error during notification creation (PA) ([#1388](https://github.com/pagopa/pn-frontend/issues/1388)) ([cf83f71](https://github.com/pagopa/pn-frontend/commit/cf83f713fea047466ef00f3ef7e03f9d4b282d4c))
+
+
+
+
+
+
 # [2.9.0](https://github.com/pagopa/pn-frontend/compare/v2.9.0-RC.2...v2.9.0) (2024-11-18)
 
 **Note:** Version bump only for package pn-frontend

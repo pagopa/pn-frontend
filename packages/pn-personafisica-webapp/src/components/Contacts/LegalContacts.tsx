@@ -1,69 +1,235 @@
-import { Trans, useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
-import { Alert, Box, Divider, Stack, Typography } from '@mui/material';
+import ConstructionIcon from '@mui/icons-material/Construction';
+import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import SavingsIcon from '@mui/icons-material/Savings';
+import TouchAppIcon from '@mui/icons-material/TouchApp';
+import { Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/material';
+import { PnInfoCard, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 
+import { PFEventsType } from '../../models/PFEventsType';
+import { AddressType, ChannelType } from '../../models/contacts';
+import { DIGITAL_DOMICILE_ACTIVATION } from '../../navigation/routes.const';
+import { deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
-import { useAppSelector } from '../../redux/hooks';
-import { getConfiguration } from '../../services/configuration.service';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
+import DeleteDialog from './DeleteDialog';
 import PecContactItem from './PecContactItem';
-import SercqSendContactItem from './SercqSendContactItem';
+import SpecialContacts from './SpecialContacts';
+
+const EmptyLegalContacts = () => {
+  const { t } = useTranslation(['common', 'recapiti']);
+  const navigate = useNavigate();
+  const isMobile = useIsMobile();
+
+  const infoIcons = [LaptopChromebookIcon, SavingsIcon, TouchAppIcon];
+  const sercqSendInfoList: Array<{ title: string; description: string }> = t(
+    'legal-contacts.sercq-send-info-list',
+    {
+      returnObjects: true,
+      defaultValue: [],
+      ns: 'recapiti',
+    }
+  );
+
+  return (
+    <>
+      <Typography variant="body2" fontSize="14px" mb={3}>
+        {t('legal-contacts.sercq-send-info-advantages', { ns: 'recapiti' })}
+      </Typography>
+      <Stack
+        direction={{ xs: 'column', lg: 'row' }}
+        spacing={3}
+        justifyContent="space-between"
+        sx={{ mb: 3 }}
+      >
+        {infoIcons.map((Icon, index) => {
+          const title = sercqSendInfoList[index]?.title;
+          const description = sercqSendInfoList[index]?.description;
+          return (
+            <Stack key={title} direction={{ xs: 'row', lg: 'column' }} spacing={2}>
+              <Icon sx={{ height: '24px', width: '24px', color: '#35C1EC' }} />
+              <Box>
+                <Typography variant="body2" fontWeight={600} mb={1}>
+                  {title}
+                </Typography>
+                <Typography fontSize="14px">{description}</Typography>
+              </Box>
+            </Stack>
+          );
+        })}
+      </Stack>
+      <Button
+        variant="contained"
+        fullWidth={isMobile}
+        onClick={() => navigate(`${DIGITAL_DOMICILE_ACTIVATION}`)}
+      >
+        {t('button.start')}
+      </Button>
+    </>
+  );
+};
 
 const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const {
-    defaultPECAddress,
-    defaultSERCQ_SENDAddress,
-    specialPECAddresses,
-    specialSERCQ_SENDAddresses,
-  } = useAppSelector(contactsSelectors.selectAddresses);
-  const { DOD_DISABLED } = getConfiguration();
+  const dispatch = useAppDispatch();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const { defaultPECAddress, defaultSERCQ_SENDAddress, specialAddresses } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
 
-  const hasDodEnabledAndValidatingPec =
-    (!defaultPECAddress?.pecValid && defaultSERCQ_SENDAddress) ||
-    specialSERCQ_SENDAddresses.some((sercqAddr) =>
-      specialPECAddresses.some(
-        (pecAddr) => !pecAddr.pecValid && pecAddr.senderId === sercqAddr.senderId
-      )
-    );
+  const isValidatingPec = defaultPECAddress?.pecValid === false;
+  const hasNoDefaultLegalAddress = !defaultPECAddress && !defaultSERCQ_SENDAddress;
+  const hasPecActive = defaultPECAddress?.value && defaultPECAddress.pecValid === true;
+  const hasSercqSendActive = !!defaultSERCQ_SENDAddress;
+  const isActive = hasPecActive || (hasSercqSendActive && !isValidatingPec);
+  const showSpecialContactsSection = specialAddresses.length > 0;
 
-  const hasValidatingPecSpecialContact = specialPECAddresses.some((address) => !address.pecValid);
+  const channelType =
+    hasSercqSendActive && !isValidatingPec ? ChannelType.SERCQ_SEND : ChannelType.PEC;
 
-  const verifyingPecAddress =
-    (defaultPECAddress && !defaultPECAddress.pecValid) || hasValidatingPecSpecialContact;
+  type SubtitleParams = {
+    label: string;
+    color: ChipOwnProps['color'];
+  };
 
-  const message = hasDodEnabledAndValidatingPec
-    ? 'legal-contacts.pec-validation-banner.dod-enabled-message'
-    : 'legal-contacts.pec-validation-banner.dod-disabled-message';
+  const getSubtitle = () => {
+    // eslint-disable-next-line functional/no-let
+    let params: SubtitleParams;
+    if (isValidatingPec) {
+      params = {
+        label: t('status.pec-validation', { ns: 'recapiti' }),
+        color: 'warning',
+      };
+    } else if (hasNoDefaultLegalAddress) {
+      params = {
+        label: t('status.inactive', { ns: 'recapiti' }),
+        color: 'default',
+      };
+    } else {
+      params = {
+        label: t('status.active', { ns: 'recapiti' }),
+        color: 'success',
+      };
+    }
+    return <Chip {...params} sx={{ mb: 2 }} />;
+  };
+
+  const deleteConfirmHandler = () => {
+    setModalOpen(false);
+    dispatch(
+      deleteAddress({
+        addressType: AddressType.LEGAL,
+        senderId: 'default',
+        channelType,
+      })
+    )
+      .unwrap()
+      .then(() => {
+        PFEventStrategyFactory.triggerEvent(
+          PFEventsType[`SEND_REMOVE_${channelType}_SUCCESS`],
+          'default'
+        );
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t(`legal-contacts.${channelType.toLowerCase()}-removed-successfully`, {
+              ns: 'recapiti',
+            }),
+          })
+        );
+      })
+      .catch(() => {});
+  };
+
+  const getActions = () =>
+    isActive
+      ? [
+          <Button
+            key="manage"
+            variant="naked"
+            color="primary"
+            startIcon={<ConstructionIcon />}
+            onClick={() => console.log('Gestisci!')}
+            sx={{ p: '10px 16px' }}
+          >
+            {t('button.manage')}
+          </Button>,
+          <Button
+            key="disable"
+            variant="naked"
+            color="error"
+            startIcon={<PowerSettingsNewIcon />}
+            onClick={() => setModalOpen(true)}
+            sx={{ p: '10px 16px' }}
+          >
+            {t('button.disable')}
+          </Button>,
+        ]
+      : undefined;
+
+  const removeDialogLabel = `remove-${channelType.toLowerCase()}`;
 
   return (
-    <Box id="legalContactsSection">
-      <Typography variant="h6" fontWeight={700} tabIndex={-1} id="legalContactsTitle" mb={2}>
-        {t('legal-contacts.title', { ns: 'recapiti' })}
-      </Typography>
-      <Typography variant="body1">
-        <Trans i18nKey="legal-contacts.sub-title" ns="recapiti" />
-      </Typography>
-      {verifyingPecAddress && (
-        <Alert data-testid="PecVerificationAlert" severity="info" sx={{ mt: 4 }}>
-          <Typography variant="inherit" sx={{ fontWeight: '600' }}>
-            {t('legal-contacts.pec-validation-banner.title', { ns: 'recapiti' })}
-          </Typography>
-          <Typography variant="inherit">{t(message, { ns: 'recapiti' })}</Typography>
-        </Alert>
+    <PnInfoCard
+      title={
+        <Typography
+          variant="h6"
+          fontSize={{ xs: '22px', lg: '24px' }}
+          fontWeight={700}
+          mb={2}
+          data-testid="legalContactsTitle"
+        >
+          {t('legal-contacts.title', { ns: 'recapiti' })}
+        </Typography>
+      }
+      subtitle={getSubtitle()}
+      actions={getActions()}
+      expanded={isActive}
+      slotProps={{ Card: { 'data-testid': 'legalContacts' } }}
+    >
+      {(isValidatingPec || hasPecActive) && <PecContactItem />}
+      {hasSercqSendActive && !isValidatingPec && (
+        <Typography variant="body1" fontWeight={600} mb={2} fontSize="18px">
+          {t('legal-contacts.sercq_send-title', { ns: 'recapiti' })}
+        </Typography>
       )}
-      <Stack
-        direction={defaultPECAddress?.pecValid ? 'column-reverse' : 'column'}
-        spacing={(!defaultSERCQ_SENDAddress && !defaultPECAddress) || verifyingPecAddress ? 2 : 0}
-        mt={4}
-        data-testid="legalContacts"
-      >
-        {!DOD_DISABLED && <SercqSendContactItem />}
-        {!DOD_DISABLED && !defaultSERCQ_SENDAddress && !defaultPECAddress && (
-          <Divider>{t('conjunctions.or')}</Divider>
+      {hasNoDefaultLegalAddress ? (
+        <EmptyLegalContacts />
+      ) : (
+        <Typography variant="body1" mt={2} fontSize={{ xs: '14px', lg: '16px' }}>
+          {t(`legal-contacts.${channelType.toLowerCase()}-description`, { ns: 'recapiti' })}
+        </Typography>
+      )}
+      {showSpecialContactsSection && <SpecialContacts />}
+      <DeleteDialog
+        showModal={modalOpen}
+        removeModalTitle={t(
+          `legal-contacts.${
+            showSpecialContactsSection ? 'block-remove-digital-domicile' : removeDialogLabel
+          }-title`,
+          {
+            ns: 'recapiti',
+          }
         )}
-        <PecContactItem />
-      </Stack>
-    </Box>
+        removeModalBody={t(
+          `legal-contacts.${
+            showSpecialContactsSection ? 'block-remove-digital-domicile' : removeDialogLabel
+          }-message`,
+          {
+            ns: 'recapiti',
+            value: defaultPECAddress?.value,
+          }
+        )}
+        handleModalClose={() => setModalOpen(false)}
+        confirmHandler={deleteConfirmHandler}
+        blockDelete={showSpecialContactsSection}
+      />
+    </PnInfoCard>
   );
 };
 

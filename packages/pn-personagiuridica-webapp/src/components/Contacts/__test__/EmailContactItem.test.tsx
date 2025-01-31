@@ -1,22 +1,13 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
 
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, screen, testStore, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import EmailContactItem from '../EmailContactItem';
 import { fillCodeDialog } from './test-utils';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
 
 const defaultAddress = digitalCourtesyAddresses.find(
   (addr) => addr.channelType === ChannelType.EMAIL && addr.senderId === 'default'
@@ -42,7 +33,10 @@ describe('testing EmailContactItem', () => {
     // render component
     const { container } = render(<EmailContactItem />);
     expect(container).toHaveTextContent('courtesy-contacts.email-title');
-    expect(container).toHaveTextContent('courtesy-contacts.email-description');
+    expect(container).toHaveTextContent('status.inactive');
+    expect(container).toHaveTextContent('courtesy-contacts.email-empty-description');
+    expect(container).toHaveTextContent('courtesy-contacts.email-sms-updates');
+    expect(container).toHaveTextContent('courtesy-contacts.email-sms-add');
     const form = container.querySelector('form');
     const input = form!.querySelector(`[name="default_email"]`);
     // set invalid values
@@ -74,7 +68,7 @@ describe('testing EmailContactItem', () => {
     fireEvent.click(editButton);
     const input = container.querySelector(`[name="default_email"]`);
     const saveButton = getByRole('button', { name: 'button.conferma' });
-    expect(input).toHaveValue(defaultAddress?.value!);
+    expect(input).toHaveValue(defaultAddress?.value);
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
     await waitFor(() => {
@@ -107,11 +101,7 @@ describe('testing EmailContactItem', () => {
     const button = result.getByTestId('default_email-button');
     expect(button).toBeEnabled();
     fireEvent.click(button);
-    // Confirms the disclaimer dialog
-    /* const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
-    fireEvent.click(disclaimerCheckbox);
-    const disclaimerConfirmButton = result.getByTestId('disclaimer-confirm-button');
-    fireEvent.click(disclaimerConfirmButton); */
+    // Confirms the informative dialog
     const informativeDialog = await waitFor(() => result.getByTestId('informativeDialog'));
     expect(informativeDialog).toBeInTheDocument();
     const understandButton = result.getByTestId('understandButton');
@@ -159,8 +149,8 @@ describe('testing EmailContactItem', () => {
     expect(emailValue).toHaveTextContent(mailValue);
     const editButton = getById(form!, 'modifyContact-default_email');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default_email');
-    expect(deleteButton).toBeInTheDocument();
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
+    expect(disableBtn).toBeInTheDocument();
   });
 
   it('override an existing email with a new one', async () => {
@@ -200,11 +190,7 @@ describe('testing EmailContactItem', () => {
     await waitFor(() => expect(input!).toHaveValue(emailValue));
     // confirm new value
     fireEvent.click(saveButton);
-    // Confirms the disclaimer dialog
-    /* const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
-    fireEvent.click(disclaimerCheckbox);
-    const disclaimerConfirmButton = result.getByTestId('disclaimer-confirm-button');
-    fireEvent.click(disclaimerConfirmButton); */
+    // Confirms the informative dialog
     const informativeDialog = await waitFor(() => result.getByTestId('informativeDialog'));
     expect(informativeDialog).toBeInTheDocument();
     const understandButton = result.getByTestId('understandButton');
@@ -250,8 +236,8 @@ describe('testing EmailContactItem', () => {
     expect(mailValue).toHaveTextContent(emailValue);
     editButton = getById(form!, 'modifyContact-default_email');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default_email');
-    expect(deleteButton).toBeInTheDocument();
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
+    expect(disableBtn).toBeInTheDocument();
   });
 
   it('delete email', async () => {
@@ -263,18 +249,19 @@ describe('testing EmailContactItem', () => {
         },
       },
     });
-    const buttons = result.container.querySelectorAll('button');
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
+    expect(disableBtn).toBeInTheDocument();
     // click on cancel
-    fireEvent.click(buttons[1]);
-    let dialog = await waitFor(() => screen.getByRole('dialog'));
+    fireEvent.click(disableBtn);
+    let dialog = await waitFor(() => result.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
     let dialogButtons = dialog.querySelectorAll('button');
     // cancel remove operation
     fireEvent.click(dialogButtons[0]);
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
     // click on confirm
-    fireEvent.click(buttons[1]);
-    dialog = await waitFor(() => screen.getByRole('dialog'));
+    fireEvent.click(disableBtn);
+    dialog = await waitFor(() => result.getByRole('dialog'));
     dialogButtons = dialog.querySelectorAll('button');
     fireEvent.click(dialogButtons[1]);
     await waitFor(() => {

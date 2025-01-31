@@ -3,6 +3,7 @@ import React, { ReactNode } from 'react';
 import { Box, CircularProgress, Stack, Step, StepLabel, Stepper, Typography } from '@mui/material';
 
 import { useIsMobile } from '../../hooks';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type Props = {
   steps: Array<{ label: ReactNode }>;
@@ -14,7 +15,7 @@ const PnWizardStepper: React.FC<Props> = ({ steps, activeStep }) => {
 
   return isMobile ? (
     <Stack direction="row" spacing={2} alignItems="center">
-      <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+      <Box sx={{ position: 'relative', display: 'inline-flex' }} data-testid="mobileWizardStepper">
         <CircularProgress
           variant="determinate"
           value={100}
@@ -42,19 +43,26 @@ const PnWizardStepper: React.FC<Props> = ({ steps, activeStep }) => {
           }}
         >
           <Typography variant="caption" component="div" fontSize="12px">
-            {`${activeStep + 1} di ${steps.length}`}
+            {getLocalizedOrDefaultLabel('common', 'wizard.stepper.of', undefined, {
+              currentStep: activeStep + 1,
+              totalSteps: steps.length,
+            })}
           </Typography>
         </Box>
       </Box>
       <Stack direction="column">
-        <Typography variant="caption">Step {activeStep + 1}</Typography>
+        <Typography variant="caption">
+          {getLocalizedOrDefaultLabel('common', 'wizard.stepper.activeStep', undefined, {
+            currentStep: activeStep + 1,
+          })}
+        </Typography>
         <Typography variant="caption" fontWeight={600}>
           {steps[activeStep].label}
         </Typography>
       </Stack>
     </Stack>
   ) : (
-    <Stepper activeStep={activeStep} alternativeLabel>
+    <Stepper activeStep={activeStep} alternativeLabel data-testid="desktopWizardStepper">
       {steps.map((step, index) => (
         <Step key={index}>
           <StepLabel>{step.label}</StepLabel>

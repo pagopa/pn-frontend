@@ -21,14 +21,12 @@
     "cancel-pec-validation": "Annuler la validation",
     "remove-pec-title": "Supprimer PEC",
     "remove-pec-message": "Confirmez-vous vouloir supprimer l’adresse PEC {{value}}?",
-    "block-remove-pec-title": "Vous ne pouvez pas supprimer la PEC",
-    "block-remove-pec-message": "Pour ce faire, vous devez d’abord supprimer toutes les adresses PEC et les Domiciles Numériques SEND que vous avez indiqués sous « Adresses secondaires ».",
     "validation-cancel-title": "Voulez-vous annuler la vérification ?",
     "validation-cancel-content": "Si vous annulez la vérification, vous devrez entrer une nouvelle PEC et recommencer le processus.",
     "validation-progress-title": "Merci !",
     "validation-progress-content": "Nous vérifions que l’adresse PEC est valide. Vous recevrez un email avec le résultat dans les 24 heures.",
-    "sercq-send-title": "Domicile Numérique SEND",
-    "sercq-send-description": "C’est comme un domicile physique, mais en ligne. Si vous choisissez SEND comme Domicile Numérique, vous recevez en temps réel les notifications des entités participant à la plateforme et pouvez les consulter où que vous soyez.",
+    "sercq_send-title": "Domicile Numérique SEND",
+    "sercq_send-description": "C’est comme un domicile physique, mais en ligne. Si vous choisissez SEND comme Domicile Numérique, vous recevez en temps réel les notifications des entités participant à la plateforme et pouvez les consulter où que vous soyez.",
     "sercq-send-active": "Activer",
     "sercq-send-info-title": "Activer SEND comme votre Domicile Numérique",
     "sercq-send-info-description": "Si vous activez le Domicile Numérique, SEND devient <strong>votre adresse à valeur juridique</strong> pour les communications de l’AP.",
@@ -53,35 +51,19 @@
     "sercq-send-enabled": "SEND est votre Domicile Numérique",
     "sercq-send-courtesy-title": "Choisissez comment recevoir les avis",
     "sercq-send-courtesy-description": "Choisissez une adresse de courtoisie nous permettant de vous informer en temps réel de l’existence d’une communication à valeur juridique sur SEND.",
-    "remove-sercq-send-title": "Vous confirmez vouloir désactiver le Domicile Numérique sur SEND ?",
-    "remove-sercq-send-message": "Vous n’aurez plus une adresse numérique à valeur juridique pour les communications de l’Administration Publique et vous risquerez de recevoir à nouveau des notifications sur papier.",
-    "block-remove-sercq-send-title": "Impossible de désactiver le Domicile Numérique",
-    "block-remove-sercq-send-message": "Éliminez avant les adresses PEC que vous avez introduites dans vos adresses personnalisées.",
+    "remove-sercq_send-title": "Vous confirmez vouloir désactiver le Domicile Numérique sur SEND ?",
+    "remove-sercq_send-message": "Vous n’aurez plus une adresse numérique à valeur juridique pour les communications de l’Administration Publique et vous risquerez de recevoir à nouveau des notifications sur papier.",
+    "block-remove-digital-domicile-title": "Impossible de désactiver le Domicile Numérique",
     "sercq_send-removed-successfully": "Domicile Numérique correctement désactivé",
     "sercq-send-io-title": "Activez SEND sur IO",
     "sercq-send-io-description": "Activez SEND - Notifiche Digitali sur IO pour<strong> recevoir directement dans l’app</strong> les communications envoyées à votre Domicile Numérique SEND.",
-    "sercq-send-io-advantages": "Sur IO",
-    "sercq-send-io-list": [
-      "<strong>Recevez les notifications en temps réel</strong>, dès que l’organisme les télécharge sur SEND",
-      "<strong>Ouvrez les documents joints</strong> dans l’app",
-      "<strong>Payez les montants dus</strong> si la notification prévoit un paiement"
-    ]
+    "sercq-send-io-advantages": "Sur IO"
   },
   "io-contact": {
     "title": "App IO",
     "description": "Lisez et gérez les communications à valeur juridique directement sur IO : lorsqu’une notification vous est destinée, vous la recevez dans l’app et vous pouvez payer d’éventuels frais.",
-    "dialog-description": "Vous recevrez un message dans l’app pour chaque nouvelle notification. Vous pourrez la lire et payer les frais éventuels directement sur IO.",
-    "enabled": "Servizio Notifiche Digitali activé",
-    "disabled": "Servizio Notifiche Digitali désactivé",
-    "unavailable": "Pour activer le service, téléchargez d’abord l’app IO",
     "enable": "Activez SEND sur IO",
     "download": "Téléchargez l’app IO",
-    "enable-modal": {
-      "title": "Voulez-vous activer le service « Notifiche Digitali » sur IO ?",
-      "checkbox": "J’ai compris",
-      "confirm": "Activer le service",
-      "content": "Si vous ne disposez pas de PEC et que vous accédez à la notification dans les 5 jours (120 heures) suivant l’envoi du message, vous ne recevrez pas d’avis de réception par lettre recommandée."
-    },
     "disable-modal": {
       "title": "Voulez-vous désactiver le service « Notifiche Digitali » sur IO ?",
       "confirm": "Désactiver le service",
@@ -89,10 +71,8 @@
     }
   },
   "courtesy-contacts": {
-    "title": "Adresses de courtoisie",
-    "sub-title": "Les adresses de courtoisie vous préviennent lorsqu’il y a de nouvelles notifications pour vous. Si vous n’avez pas activé d’adresse à valeur juridique et que vous n’ouvrez pas la notification dans les 5 jours, vous la recevrez également en format papier à votre domicile.",
     "email-title": "Email",
-    "email-description": "Lorsqu’une notification vous est adressée, nous vous en informons par courrier électronique à l’adresse que vous avez choisie.",
+    "email-filled-description": "Lorsqu’une notification vous est adressée, nous vous en informons par courrier électronique à l’adresse que vous avez choisie.",
     "email-dialog-description": "Lorsqu’une notification vous est envoyée, nous vous prévenons via mail. ",
     "sms-title": "SMS",
     "sms-description": "Lorsqu’une notification vous est adressée, nous vous en informons par SMS au numéro vous avez choisi.",
@@ -118,14 +98,9 @@
     "remove-email-title": "Supprimer l’email",
     "remove-email-message": "Confirmez-vous vouloir supprimer l’adresse email {{value}}?",
     "remove-sms-title": "Supprimer le téléphone portable",
-    "remove-sms-message": "Confirmez-vous vouloir supprimer le numéro de téléphone portable {{value}} ?",
-    "block-remove-email-title": "Vous ne pouvez pas supprimer l’email",
-    "block-remove-email-message": "Pour ce faire, vous devez d’abord supprimer toutes les adresses email que vous avez indiquées dans la rubrique « Adresses secondaires ».",
-    "block-remove-sms-title": "Vous ne pouvez pas supprimer le numéro de téléphone",
-    "block-remove-sms-message": "Pour ce faire, vous devez d’abord supprimer tous les numéros de téléphone que vous avez indiqués sous « Adresses secondaires »."
+    "remove-sms-message": "Confirmez-vous vouloir supprimer le numéro de téléphone portable {{value}} ?"
   },
   "special-contacts": {
-    "description": "Le saviez-vous ? Si vous souhaitez recevoir les notifications d’organismes spécifiques à des adresses autres que l’adresse principale, vous pouvez <0>personnaliser les adresses</0>.",
     "select-address": "Sélectionner adresse",
     "add-sender": "Organisme à associer",
     "pec": "Adresse PEC",

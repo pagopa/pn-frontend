@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+import { AppResponseMessage, IAppMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
 import {
   digitalAddresses,
@@ -9,23 +9,12 @@ import {
   digitalCourtesyAddresses,
   digitalLegalAddresses,
 } from '../../__mocks__/Contacts.mock';
-import { errorMock } from '../../__mocks__/Errors.mock';
 import { RenderResult, act, render, screen, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
 
 const mockOpenFn = vi.fn();
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string, options?: { returnObjects: boolean }) =>
-      options?.returnObjects ? [str] : str,
-    i18n: { language: 'it' },
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
 
 describe('Contacts page', async () => {
   let mock: MockAdapter;
@@ -52,9 +41,14 @@ describe('Contacts page', async () => {
   });
 
   it('renders Contacts (no contacts)', async () => {
-    mock.onGet('/bff/v1/addresses').reply(200, []);
     await act(async () => {
-      result = await render(<Contacts />);
+      result = render(<Contacts />, {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: [],
+          },
+        },
+      });
     });
     expect(result.container).toHaveTextContent(/title/i);
     expect(result.container).toHaveTextContent(/subtitle/i);
@@ -62,14 +56,18 @@ describe('Contacts page', async () => {
     expect(legalContacts).toBeInTheDocument();
     const courtesyContacts = result?.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/bff/v1/addresses');
+    expect(mock.history.get).toHaveLength(0);
   });
 
   it('renders Contacts (legal contacts)', async () => {
-    mock.onGet('/bff/v1/addresses').reply(200, digitalLegalAddresses);
     await act(async () => {
-      result = await render(<Contacts />);
+      result = render(<Contacts />, {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: digitalLegalAddresses,
+          },
+        },
+      });
     });
     const legalContacts = result?.queryByTestId('legalContacts');
     expect(legalContacts).toBeInTheDocument();
@@ -78,9 +76,14 @@ describe('Contacts page', async () => {
   });
 
   it('renders Contacts (courtesy contacts)', async () => {
-    mock.onGet('/bff/v1/addresses').reply(200, digitalCourtesyAddresses);
     await act(async () => {
-      result = await render(<Contacts />);
+      result = render(<Contacts />, {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: digitalCourtesyAddresses,
+          },
+        },
+      });
     });
     const legalContacts = result?.getByTestId('legalContacts');
     expect(legalContacts).toBeInTheDocument();
@@ -89,9 +92,14 @@ describe('Contacts page', async () => {
   });
 
   it('renders Contacts (courtesy and legal contacts filled)', async () => {
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     await act(async () => {
-      result = await render(<Contacts />);
+      result = render(<Contacts />, {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses,
+          },
+        },
+      });
     });
     const legalContacts = result?.queryByTestId('legalContacts');
     expect(legalContacts).toBeInTheDocument();
@@ -100,14 +108,17 @@ describe('Contacts page', async () => {
   });
 
   it('renders Special Contact having Sercq enabled and pec in validation', async () => {
-    mock
-      .onGet('/bff/v1/addresses')
-      .reply(200, [
-        ...digitalAddressesPecValidation(true, true),
-        ...digitalAddressesPecValidation(true, false, { id: '1234', name: '1234' }),
-      ]);
     await act(async () => {
-      result = render(<Contacts />);
+      result = render(<Contacts />, {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: [
+              ...digitalAddressesPecValidation(true, true),
+              ...digitalAddressesPecValidation(true, false, { id: '1234', name: '1234' }),
+            ],
+          },
+        },
+      });
     });
 
     const banner = result.getByTestId('PecVerificationAlert');
@@ -129,7 +140,7 @@ describe('Contacts page', async () => {
     );
     expect(cancelValidationButton).toBeInTheDocument();
 
-    const sercqSendContact = within(specialContacts).getByTestId('1234_sercq_sendContact');
+    const sercqSendContact = within(specialContacts).getByTestId('1234_sercq_sendSpecialContact');
     expect(sercqSendContact).toBeInTheDocument();
     expect(sercqSendContact).toHaveTextContent('special-contacts.sercq_send');
 
@@ -138,50 +149,40 @@ describe('Contacts page', async () => {
     expect(disableButton).toBeDisabled();
   });
 
-  it('renders Special Contact having Sercq disabled and pec in validation', async () => {
-    mock
-      .onGet('/bff/v1/addresses')
-      .reply(200, [
-        ...digitalAddressesPecValidation(true, true),
-        ...digitalAddressesPecValidation(false, false, { id: '1234', name: '1234' }),
-      ]);
-    await act(async () => {
-      result = render(<Contacts />);
-    });
-
-    const banner = result.getByTestId('PecVerificationAlert');
-    expect(banner).toBeInTheDocument();
-    const alertIcon = within(banner).getByTestId('InfoOutlinedIcon');
-    expect(alertIcon).toBeInTheDocument();
-    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.title');
-    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.dod-disabled-message');
-
-    const specialContacts = result.getByTestId('specialContacts');
-    expect(specialContacts).toBeInTheDocument();
-    // check contacts
-    const pecValidationItem = within(specialContacts).getByTestId('1234_pecContact');
-    expect(pecValidationItem).toBeInTheDocument();
-    const closeIcon = within(specialContacts).getByTestId('CloseIcon');
-    expect(closeIcon).toBeInTheDocument();
-    const cancelValidationButton = within(specialContacts).getByText(
-      'legal-contacts.cancel-pec-validation'
-    );
-    expect(cancelValidationButton).toBeInTheDocument();
-
-    const addMoreContactsBtn = within(specialContacts).getByTestId('addMoreSpecialContacts');
-    expect(addMoreContactsBtn).toBeInTheDocument();
-    expect(addMoreContactsBtn).toBeDisabled();
-  });
-
   it('API error', async () => {
-    mock.onGet('/bff/v1/addresses').reply(errorMock.status, errorMock.data);
+    const errors: Array<IAppMessage> = [
+      {
+        id: 'mocked-id',
+        title: 'Mocked title',
+        message: 'Mocked message',
+        blocking: false,
+        toNotify: true,
+        alreadyShown: true,
+        action: CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES,
+      },
+    ];
+
     await act(async () => {
       render(
         <>
           <ResponseEventDispatcher />
           <AppResponseMessage />
           <Contacts />
-        </>
+        </>,
+        {
+          preloadedState: {
+            appState: {
+              loading: {
+                result: false,
+              },
+              messages: {
+                errors,
+                success: [],
+                info: [],
+              },
+            },
+          },
+        }
       );
     });
     const statusApiErrorComponent = screen.queryByTestId(

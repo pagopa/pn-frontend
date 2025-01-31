@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.2...v2.11.0) (2025-01-20)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+# [2.11.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0...v2.11.0-RC.0) (2025-01-10)
+
+
+### Bug Fixes
+
+* **pn-13269:** Translate AAR label in the notification detail page ([#1420](https://github.com/pagopa/pn-frontend/issues/1420)) ([05ee4f0](https://github.com/pagopa/pn-frontend/commit/05ee4f0cfdeb71779038d04ba83eb13569dbf029))
+* **pn-9848:** Get TraceId from header ([#1176](https://github.com/pagopa/pn-frontend/issues/1176)) ([2e613a7](https://github.com/pagopa/pn-frontend/commit/2e613a722a0e667813a20eac1b12fc6936fa1322))
+
+
+### Features
+
+* **pn-13347:** add new status return to sender to timeline ([#1416](https://github.com/pagopa/pn-frontend/issues/1416)) ([82b17fa](https://github.com/pagopa/pn-frontend/commit/82b17faa6eeef406f9e75033246fd5f5f2a9dbda))
+* **pn-13499:** improve configuration ([#1429](https://github.com/pagopa/pn-frontend/issues/1429)) ([e0956fb](https://github.com/pagopa/pn-frontend/commit/e0956fb6afcce8fd7fcd954105be74ab03e8b140))
+
+
+
+
+
+# [2.10.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0-RC.0...v2.10.0) (2025-01-07)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+# [2.10.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.9.0...v2.10.0-RC.0) (2024-11-29)
+
+
+### Bug Fixes
+
+* **12155:** hide toast error when check aar api returns notification not found ([#1384](https://github.com/pagopa/pn-frontend/issues/1384)) ([396b9ee](https://github.com/pagopa/pn-frontend/commit/396b9ee74c0580b49b70918d65b1d88589b840a2))
+* **pn-11392:** more generic download message for those documents in glacier ([#1411](https://github.com/pagopa/pn-frontend/issues/1411)) ([bb93a20](https://github.com/pagopa/pn-frontend/commit/bb93a207cb4bd522cb48a6cd640ed827afdc2240))
+* **pn-13023:** update IO status in generalInfoSlice ([#1404](https://github.com/pagopa/pn-frontend/issues/1404)) ([308b499](https://github.com/pagopa/pn-frontend/commit/308b4991c4fe81310b5e98e52e939b654cd2b20f))
+* **pn-13071:** Change how SERCQ component is displayed when PEC is enabled (PF and PG) ([#1377](https://github.com/pagopa/pn-frontend/issues/1377)) ([bdad114](https://github.com/pagopa/pn-frontend/commit/bdad1145fe44a3a1225384440fbff3f4ab992a1b))
+* **pn-13073:** fix the order of legal contacts types ([#1381](https://github.com/pagopa/pn-frontend/issues/1381)) ([f241d4a](https://github.com/pagopa/pn-frontend/commit/f241d4a192314a9b26bfabeb7a575c13f524293a))
+* **pn-13174:** Add blank spaces validation to digital contact input field (PF and PG) ([#1409](https://github.com/pagopa/pn-frontend/issues/1409)) ([9e2fe76](https://github.com/pagopa/pn-frontend/commit/9e2fe766edbd00fc251857de43d0ee4554de32d9))
+
+
+
+
+
+
 # [2.9.0](https://github.com/pagopa/pn-frontend/compare/v2.9.0-RC.2...v2.9.0) (2024-11-18)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp

@@ -25,8 +25,9 @@ const ContactCodeDialog: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const contactType = channelType.toLowerCase();
-  const codeModalRef =
-    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
+  const codeModalRef = useRef<{
+    updateError: (error: ErrorMessage, codeNotValid: boolean) => void;
+  }>(null);
   const labelRoot = `${addressType.toLowerCase()}-contacts`;
 
   const handleAddressUpdateError = useCallback(
@@ -60,32 +61,28 @@ const ContactCodeDialog: React.FC<Props> = ({
 
   return (
     <CodeModal
-      title={open ? t(`${labelRoot}.${contactType}-verify`, { ns: 'recapiti', value }) : ''}
-      subtitle={
-        open ? <Trans i18nKey={`${labelRoot}.${contactType}-verify-descr`} ns="recapiti" /> : ''
-      }
+      title={t(`${labelRoot}.${contactType}-verify`, { ns: 'recapiti', value })}
+      subtitle={<Trans i18nKey={`${labelRoot}.${contactType}-verify-descr`} ns="recapiti" />}
       open={open}
       initialValues={new Array(5).fill('')}
-      codeSectionTitle={open ? t(`insert-code`, { ns: 'recapiti' }) : ''}
+      codeSectionTitle={t(`insert-code`, { ns: 'recapiti' })}
       codeSectionAdditional={
-        open && (
-          <Typography component={Box} variant="body2">
-            <Trans
-              i18nKey={`${labelRoot}.${contactType}-new-code`}
-              ns="recapiti"
-              components={[
-                <Typography
-                  key="newCodeBtn"
-                  variant="body2"
-                  onClick={() => onConfirm()}
-                  color="primary"
-                  sx={{ textDecoration: 'underline', display: 'inline', cursor: 'pointer' }}
-                  data-testid="newCodeBtn"
-                />,
-              ]}
-            />
-          </Typography>
-        )
+        <Typography component={Box} variant="body2">
+          <Trans
+            i18nKey={`${labelRoot}.${contactType}-new-code`}
+            ns="recapiti"
+            components={[
+              <Typography
+                key="newCodeBtn"
+                variant="body2"
+                onClick={() => onConfirm()}
+                color="primary"
+                sx={{ textDecoration: 'underline', display: 'inline', cursor: 'pointer' }}
+                data-testid="newCodeBtn"
+              />,
+            ]}
+          />
+        </Typography>
       }
       cancelLabel={t('button.annulla')}
       confirmLabel={t('button.conferma')}

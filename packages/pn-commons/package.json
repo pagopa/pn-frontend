@@ -1,6 +1,6 @@
 {
   "name": "@pagopa-pn/pn-commons",
-  "version": "2.9.0",
+  "version": "2.11.0",
   "private": true,
   "main": "./src/index.ts",
   "dependencies": {
@@ -27,8 +27,6 @@
   "scripts": {
     "build": "tsc -p tsconfig.prod.json",
     "test": "tsc --noEmit && vitest --run",
-    "test:fast": "vitest --run",
-    "test:all": "vitest --run --config ./vite.config.all.ts",
     "test:coverage": "tsc --noEmit && vitest run --coverage",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "format": "prettier \"./**/*.{ts,tsx}\" --write",
