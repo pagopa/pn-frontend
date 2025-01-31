@@ -4,15 +4,8 @@ import type { EChartOption, SetOptionOpts } from 'echarts';
 import { useEffect, useMemo, useRef } from 'react';
 import type { CSSProperties } from 'react';
 
-import {
-  Box,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  Stack,
-  Typography,
-} from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
+import { Box, Checkbox, FormControl, FormControlLabel, Stack, Typography } from '@mui/material';
 
 import senderDashboard from './theme/senderDashboard';
 
@@ -110,29 +103,33 @@ export function PnECharts({
           color,
           width: 10,
           height: 10,
-          mr: 1
+          mr: 1,
         };
         return (
-          <FormControl key={item} sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          <FormControl key={item} data-testid="legendItem">
             <FormControlLabel
-              sx={{ width: 'auto' }}
-              data-testid="legendItem"
-              control={<Checkbox onChange={() => toggleSerie(item)}
-                defaultChecked
-                sx={{
-                  color,
-                  '&.Mui-checked': {
+              control={
+                <Checkbox
+                  onChange={() => toggleSerie(item)}
+                  defaultChecked
+                  sx={{
                     color,
-                  },
-                }}
-              />}
+                    '&.Mui-checked': {
+                      color,
+                    },
+                  }}
+                />
+              }
               label={
                 <>
                   <CircleIcon sx={circleSx} />
-                  <Typography variant='caption'
+                  <Typography
+                    variant="caption"
                     sx={{ fontSize: '1rem', letterSpacing: '0.15px' }}
-                    color='text.secondary'
-                  >{item}</Typography>
+                    color="text.secondary"
+                  >
+                    {item}
+                  </Typography>
                 </>
               }
             />
