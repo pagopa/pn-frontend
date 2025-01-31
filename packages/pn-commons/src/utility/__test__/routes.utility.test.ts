@@ -1,4 +1,4 @@
-import { compileRoute } from '../routes.utility';
+import { AppRouteParams, compileRoute, getRapidAccessParam } from '../routes.utility';
 
 describe('Routes utility', () => {
   it('Route with no params and no path', () => {
@@ -75,5 +75,36 @@ describe('Routes utility', () => {
       version: 'v1',
     });
     expect(route).toEqual('/prefix/v1');
+  });
+
+  // Tests for getRapidAccessParam
+  it('getRapidAccessParam returns correct param when present', () => {
+    const params = new URLSearchParams({ aar: 'value' });
+    const result = getRapidAccessParam(params);
+    expect(result).toEqual([AppRouteParams.AAR, 'value']);
+  });
+
+  it('getRapidAccessParam returns undefined when no params are present', () => {
+    const params = new URLSearchParams();
+    const result = getRapidAccessParam(params);
+    expect(result).toBeUndefined();
+  });
+
+  it('getRapidAccessParam returns correct param when multiple params are present', () => {
+    const params = new URLSearchParams({ aar: 'value', retrievalId: '123' });
+    const result = getRapidAccessParam(params);
+    expect(result).toEqual([AppRouteParams.AAR, 'value']);
+  });
+
+  it('getRapidAccessParam returns correct param when only retrievalId is present', () => {
+    const params = new URLSearchParams({ retrievalId: '123' });
+    const result = getRapidAccessParam(params);
+    expect(result).toEqual([AppRouteParams.RETRIEVAL_ID, '123']);
+  });
+
+  it('getRapidAccessParam returns undefined when param is empty', () => {
+    const params = new URLSearchParams({ aar: '' });
+    const result = getRapidAccessParam(params);
+    expect(result).toEqual([AppRouteParams.AAR, '']);
   });
 });
