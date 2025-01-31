@@ -142,14 +142,15 @@ const DesktopNotifications = ({
   };
 
   return (
-    <>
+    <div aria-live='assertive'>
       <FilterNotifications
         ref={filterNotificationsRef}
         showFilters={showFilters}
         currentDelegator={currentDelegator}
+        lengthOfNotifications={rows.length}
       />
       {rows.length ? (
-        <PnTable testId="notificationsTable">
+        <PnTable testId="notificationsTable" >
           <PnTableHeader>
             {columns.map((column) => (
               <PnTableHeaderCell
@@ -214,7 +215,7 @@ const DesktopNotifications = ({
           )}
         </EmptyState>
       )}
-    </>
+    </div>
   );
 };
 

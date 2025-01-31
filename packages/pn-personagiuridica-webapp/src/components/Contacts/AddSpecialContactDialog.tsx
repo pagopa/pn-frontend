@@ -13,6 +13,7 @@ import {
   PnDialogContent,
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
+import SearchIcon from '@mui/icons-material/Search';
 
 import { ChannelType, Sender } from '../../models/contacts';
 import { Party } from '../../models/party';
@@ -303,6 +304,12 @@ const AddSpecialContactDialog: React.FC<Props> = ({
                   label={entitySearchLabel}
                   error={formik.touched.sender && Boolean(formik.errors.sender?.name)}
                   helperText={formik.touched.sender && formik.errors.sender?.name}
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <SearchIcon sx={{color:'text.secondary'}}/>
+                    ),
+                  }}
                 />
               )}
               sx={{ flexGrow: 1, flexBasis: 0 }}

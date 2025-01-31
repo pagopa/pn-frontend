@@ -29,6 +29,7 @@ import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 
 type Props = {
   showFilters: boolean;
+  lengthOfNotifications?: number;
   /** Delegator */
   currentDelegator?: Delegator;
 };
@@ -58,7 +59,7 @@ const initialValues = (
   };
 };
 
-const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props, ref) => {
+const FilterNotifications = forwardRef(({ showFilters, currentDelegator, lengthOfNotifications }: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const { t } = useTranslation(['common', 'notifiche']);
@@ -146,7 +147,6 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   if (!showFilters) {
     return <></>;
   }
-
   const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
   return isMobile ? (
     <CustomMobileDialog>
@@ -186,7 +186,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       </CustomMobileDialogContent>
     </CustomMobileDialog>
   ) : (
-    <form onSubmit={formik.handleSubmit} data-testid="filter-form">
+    <form onSubmit={formik.handleSubmit} data-testid="filter-form" >
       <Box sx={{ flexGrow: 1, mt: 3 }}>
         <Grid
           container
@@ -207,6 +207,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
             cleanFilters={cleanFilters}
             filtersApplied={isFilterApplied(filtersCount)}
             isInitialSearch={isInitialSearch}
+            lengthOfNotifications={lengthOfNotifications}
           />
         </Grid>
       </Box>

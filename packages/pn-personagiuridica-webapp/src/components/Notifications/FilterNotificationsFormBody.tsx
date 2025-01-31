@@ -2,7 +2,7 @@ import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Grid, TextField } from '@mui/material';
+import { FormHelperText, Grid, TextField } from '@mui/material';
 import {
   CustomDatePicker,
   DATE_FORMAT,
@@ -87,11 +87,13 @@ const FilterNotificationsFormBody = ({
           onPaste={handlePaste}
           label={t('filters.iun', { ns: 'notifiche' })}
           name="iunMatch"
+          aria-invalid={!!formikInstance.errors.startDate}
+          aria-errormessage='error-message-iun'
           error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
           helperText={
             formikInstance.touched.iunMatch &&
             formikInstance.errors.iunMatch &&
-            String(formikInstance.errors.iunMatch)
+            <FormHelperText error id='error-message-iun' aria-live='assertive'>{String(formikInstance.errors.iunMatch)}</FormHelperText>
           }
           fullWidth
           sx={{ marginBottom: isMobile ? '20px' : '0' }}
@@ -125,7 +127,10 @@ const FilterNotificationsFormBody = ({
                 'aria-label': t('filters.data_da-input-aria-label'),
                 type: 'text',
                 'data-testid': 'input(start date)',
+                "aria-invalid": !!formikInstance.errors.startDate,
+                "aria-errormessage":'error-message-dateTo'
               },
+              helperText : <FormHelperText error id='error-message-dateTo' aria-live='assertive'>{!!formikInstance.errors.startDate && t('filters.errors.data_a', { ns: 'notifiche' })}</FormHelperText>
             },
           }}
           disableFuture={true}
@@ -159,7 +164,10 @@ const FilterNotificationsFormBody = ({
                 'aria-label': t('filters.data_a-input-aria-label'),
                 type: 'text',
                 'data-testid': 'input(end date)',
+                "aria-invalid": !!formikInstance.errors.endDate,
+                "aria-errormessage":'error-message-dateFrom'
               },
+              helperText : <FormHelperText sx={{ml:0}} error id='error-message-dateFrom' aria-live='assertive'>{!!formikInstance.errors.endDate && t('filters.errors.data_a', { ns: 'notifiche' })}</FormHelperText>
             },
           }}
           disableFuture={true}

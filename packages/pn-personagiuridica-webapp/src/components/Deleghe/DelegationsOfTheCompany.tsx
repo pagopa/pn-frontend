@@ -20,6 +20,7 @@ import {
   Typography,
 } from '@mui/material';
 import {
+  A11yContainerInvisible,
   ApiErrorWrapper,
   EmptyState,
   KnownSentiment,
@@ -196,6 +197,7 @@ const DelegationsOfTheCompany = () => {
   ) => (
     <li {...props} key={option.id}>
       <Checkbox
+        inputProps={{ 'aria-label': option.name, 'aria-live': 'assertive' }}
         icon={icon}
         checkedIcon={checkedIcon}
         style={{ marginRight: 8 }}
@@ -377,31 +379,48 @@ const DelegationsOfTheCompany = () => {
                   sx={{ marginBottom: isMobile ? '20px' : '0' }}
                 />
               </Grid>
-              <Grid item xs={12} lg={3}>
+              <Grid item xs={12} lg={3} sx={{ justifyContent: 'space-between' }}>
+                {formik.values.groups && (
+                  <A11yContainerInvisible
+                    field={
+                      'gruppi selezionati, ' +
+                      formik.values.groups.map((group) => group.name).join(', ')
+                    }
+                  ></A11yContainerInvisible>
+                )}
+                {/* c''e ancora il bottone anche se non é raggiungibile o cliccabile */}
                 <PnAutocomplete
                   id="groups"
                   size="small"
                   fullWidth
                   options={groups.filter((group) => group.status === GroupStatus.ACTIVE)}
                   disableCloseOnSelect
+                  forcePopupIcon={false}
                   multiple
                   noOptionsText={t('deleghe.table.no-group-found')}
                   getOptionLabel={getOptionLabel}
                   isOptionEqualToValue={(option, value) => option.id === value.id}
-                  popupIcon={<SearchIcon />}
                   sx={{
                     [`& .MuiAutocomplete-popupIndicator`]: {
                       transform: 'none',
+                      pointerEvents: 'none',
                     },
                     marginBottom: isMobile ? '20px' : '0',
                   }}
                   renderOption={renderOption}
                   renderInput={(params) => (
                     <TextField
+                      role="combobox"
+                      aria-autocomplete="list"
+                      aria-expanded="false"
                       {...params}
                       label={t('deleghe.table.group')}
                       placeholder={t('deleghe.table.group')}
                       name="groups"
+                      InputProps={{
+                        ...params.InputProps,
+                        endAdornment: <SearchIcon sx={{ color: 'text.secondary' }} />,
+                      }}
                     />
                   )}
                   value={formik.values.groups}
@@ -413,6 +432,14 @@ const DelegationsOfTheCompany = () => {
                   onInputChange={(_event, newInputValue) => setGroupInputValue(newInputValue)}
                 />
               </Grid>
+              {formik.values.groups && (
+                <A11yContainerInvisible
+                  field={
+                    'gruppi selezionati, ' +
+                    formik.values.groups.map((group) => group.name).join(', ')
+                  }
+                ></A11yContainerInvisible>
+              )}
               <Grid item xs={12} lg={3}>
                 <TextField
                   label={t('deleghe.table.status')}

@@ -22,6 +22,7 @@ import {
   PnDialogActions,
   PnDialogContent,
 } from '@pagopa-pn/pn-commons';
+import SearchIcon from '@mui/icons-material/Search';
 
 import { GroupStatus } from '../../models/groups';
 import { useAppSelector } from '../../redux/hooks';
@@ -224,6 +225,12 @@ const AcceptDelegationModal: React.FC<Props> = ({
                     ? t('required-field', { ns: 'common' })
                     : ''
                 }
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <SearchIcon sx={{color:'text.secondary'}}/>
+                  ),
+                }}
               />
             )}
             value={groupForm.value}

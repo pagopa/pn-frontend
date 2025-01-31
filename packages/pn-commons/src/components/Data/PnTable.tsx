@@ -49,7 +49,7 @@ const PnTable: React.FC<Props> = ({ ariaTitle, testId, children, slotProps }) =>
 
   return (
     <Root>
-      <TableContainer sx={{ marginBottom: '10px' }} {...slotProps?.tableContainer}>
+      <TableContainer  sx={{ marginBottom: '10px' }} {...slotProps?.tableContainer}>
         <Table
           id="notifications-table"
           stickyHeader
