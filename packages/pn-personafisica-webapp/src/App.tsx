@@ -305,17 +305,13 @@ const App = () => {
         enableAssistanceButton={showAssistanceButton}
       >
         <PnDialog open={openModal}>
-          <DialogTitle sx={{ mb: 2 }} >{t("header.logout-message")}</DialogTitle>
+          <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>
           <PnDialogActions>
-            <Button
-              id="cancelButton"
-              variant="outlined"
-              onClick={() => setOpenModal(false)}
-            >
-              {t("button.annulla")}
+            <Button id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
+              {t('button.annulla')}
             </Button>
             <Button
-              data-testid='confirm-button'
+              data-testid="confirm-button"
               variant="contained"
               onClick={() => {
                 sessionStorage.clear();
@@ -323,7 +319,7 @@ const App = () => {
                 setOpenModal(false);
               }}
             >
-              {t("header.logout")}
+              {t('header.logout')}
             </Button>
           </PnDialogActions>
         </PnDialog>

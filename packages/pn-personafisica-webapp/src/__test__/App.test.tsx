@@ -13,16 +13,7 @@ import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { mandatesByDelegate } from '../__mocks__/Delegations.mock';
 import { apiClient } from '../api/apiClients';
 import { LOGOUT } from '../navigation/routes.const';
-import {
-  RenderResult,
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  within,
-} from './test-utils';
-
+import { RenderResult, act, fireEvent, render, screen, waitFor, within } from './test-utils';
 
 // mock imports
 vi.mock('react-i18next', () => ({
@@ -71,7 +62,6 @@ const reduxInitialState = {
 describe('App', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
-  const original = window.location;
   const mockOpenFn = vi.fn();
   const originalOpen = window.open;
 
@@ -153,22 +143,18 @@ describe('App', async () => {
       expect(result.container).toHaveTextContent('Profile Page');
     });
 
-    const replaceSpy = vi.fn();
-
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { href: '', replace: replaceSpy },
-    });
-
     fireEvent.click(userButton!);
     menu = await waitFor(() => screen.getByRole('presentation'));
     menuItems = within(menu).getAllByRole('menuitem');
     fireEvent.click(menuItems[1]);
-    
-    const buttonConfirmLogout = await waitFor(() => screen.findByTestId('confirm-button'));
-    fireEvent.click(buttonConfirmLogout);
-    
-    Object.defineProperty(window, 'location', { writable: true, value: original });
+
+    const logoutDialog = await waitFor(() => screen.getByTestId('dialog'));
+    expect(logoutDialog).toBeInTheDocument();
+    const confirmLogoutButton = within(logoutDialog).getByTestId('confirm-button');
+    fireEvent.click(confirmLogoutButton);
+    expect(sessionStorage.getItem('user')).toBeNull();
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}`, '_self');
   });
 
   it('sidemenu not included if error in API call to fetch TOS and Privacy', async () => {
