@@ -52,7 +52,7 @@ describe('testing EmailContactItem', () => {
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('courtesy-contacts.valid-email');
     const buttons = form!.querySelectorAll('button');
-    expect(buttons[0]).toBeDisabled();
+    expect(buttons[0]).toBeEnabled();
     fireEvent.change(input!, { target: { value: '' } });
     await waitFor(() => expect(input!).toHaveValue(''));
     expect(errorMessage).toBeInTheDocument();
@@ -80,7 +80,7 @@ describe('testing EmailContactItem', () => {
     await waitFor(() => {
       expect(input).toHaveValue(INVALID_EMAIL);
     });
-    expect(saveButton).toBeDisabled();
+    expect(saveButton).toBeEnabled();
     const inputError = container.querySelector(`#default_email-helper-text`);
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
   });

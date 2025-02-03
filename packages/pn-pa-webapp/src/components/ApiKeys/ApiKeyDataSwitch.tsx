@@ -45,6 +45,11 @@ const ApiKeyContextMenu = ({
     setAnchorEl(null);
   };
 
+  const handleModalClickAndClose = (view: ModalApiKeyView) => {
+    handleClose(); // a11y: force close menu for keyboard navigation
+    handleModalClick(view, apiKeyId);
+  };
+
   return (
     <Box data-testid="contextMenu">
       <Box>
@@ -66,12 +71,14 @@ const ApiKeyContextMenu = ({
         open={open}
         onClose={handleClose}
         onClick={handleClose}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            overflow: 'visible',
-            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-            mt: 1.5,
+        slotProps={{
+          paper: {
+            elevation: 0,
+            sx: {
+              overflow: 'visible',
+              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+              mt: 1.5,
+            },
           },
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
@@ -81,7 +88,7 @@ const ApiKeyContextMenu = ({
           <MenuItem
             id="button-view"
             data-testid="buttonView"
-            onClick={() => handleModalClick(ModalApiKeyView.VIEW, apiKeyId)}
+            onClick={() => handleModalClickAndClose(ModalApiKeyView.VIEW)}
           >
             {t('context-menu.view')}
           </MenuItem>
@@ -90,7 +97,7 @@ const ApiKeyContextMenu = ({
           <MenuItem
             id="button-rotate"
             data-testid="buttonRotate"
-            onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}
+            onClick={() => handleModalClickAndClose(ModalApiKeyView.ROTATE)}
           >
             {t('context-menu.rotate')}
           </MenuItem>
@@ -99,7 +106,7 @@ const ApiKeyContextMenu = ({
           <MenuItem
             id="button-block"
             data-testid="buttonBlock"
-            onClick={() => handleModalClick(ModalApiKeyView.BLOCK, apiKeyId)}
+            onClick={() => handleModalClickAndClose(ModalApiKeyView.BLOCK)}
           >
             {t('context-menu.block')}
           </MenuItem>
@@ -108,7 +115,7 @@ const ApiKeyContextMenu = ({
           <MenuItem
             id="button-delete"
             data-testid="buttonDelete"
-            onClick={() => handleModalClick(ModalApiKeyView.DELETE, apiKeyId)}
+            onClick={() => handleModalClickAndClose(ModalApiKeyView.DELETE)}
           >
             {t('context-menu.delete')}
           </MenuItem>
@@ -117,7 +124,7 @@ const ApiKeyContextMenu = ({
           <MenuItem
             id="button-enable"
             data-testid="buttonEnable"
-            onClick={() => handleModalClick(ModalApiKeyView.ENABLE, apiKeyId)}
+            onClick={() => handleModalClickAndClose(ModalApiKeyView.ENABLE)}
           >
             {t('context-menu.enable')}
           </MenuItem>
@@ -126,7 +133,7 @@ const ApiKeyContextMenu = ({
           <MenuItem
             id="button-view-groups-id"
             data-testid="buttonViewGroupsId"
-            onClick={() => handleModalClick(ModalApiKeyView.VIEW_GROUPS_ID, apiKeyId)}
+            onClick={() => handleModalClickAndClose(ModalApiKeyView.VIEW_GROUPS_ID)}
           >
             {t('context-menu.view-groups-id')}
           </MenuItem>

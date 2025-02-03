@@ -76,7 +76,7 @@ export const Menu = (props: any) => {
         id={`delegation-menu-icon-${props.id}`}
         onClick={handleClick}
         data-testid="delegationMenuIcon"
-        aria-label="Delegation Menu Icon"
+        aria-label={t('deleghe.table.menu-aria-label')}
       >
         <MoreVertIcon fontSize={'small'} />
       </IconButton>
