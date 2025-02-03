@@ -10,6 +10,7 @@ export interface Notification {
   recipients: Array<string>;
   group?: string;
   mandateId?: string;
+  action: ()=>void;
 }
 
 export interface GetNotificationsResponse {
