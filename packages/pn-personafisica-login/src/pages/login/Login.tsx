@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 
-import { Dialog, DialogContent } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -168,17 +167,7 @@ const Login = () => {
           </Box>
         </Grid>
       </Grid>
-      <Dialog
-        open={showIDPS}
-        fullScreen
-        aria-labelledby="spid-select"
-        transitionDuration={0}
-        onClose={closeIDPS}
-      >
-        <DialogContent sx={{ p: 0 }}>
-          <SpidSelect onBack={closeIDPS} />
-        </DialogContent>
-      </Dialog>
+      <SpidSelect onClose={closeIDPS} show={showIDPS} />
     </Layout>
   );
 };
