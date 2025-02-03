@@ -1,10 +1,9 @@
 import { ReactElement, ReactNode, Ref, forwardRef, useImperativeHandle } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
-import { Dialog, DialogTitle, Grid, Slide, Typography } from '@mui/material';
+import { Dialog, DialogTitle, Grid, IconButton, Slide, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { TransitionProps } from '@mui/material/transitions';
-import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { useCustomMobileDialogContext } from './CustomMobileDialog.context';
@@ -83,8 +82,9 @@ const CustomMobileDialogContent = forwardRef<{ toggleOpen: () => void }, Props>(
                 {title}
               </Typography>
             </Grid>
-            <Grid item xs={6} display="flex" alignItems={'center'} justifyContent="end">
-              <ButtonNaked
+            <Grid item xs={6} textAlign="right">
+              <IconButton
+                edge="end"
                 onClick={handleClose}
                 aria-label={getLocalizedOrDefaultLabel('common', 'button.close')}
               >
@@ -95,7 +95,7 @@ const CustomMobileDialogContent = forwardRef<{ toggleOpen: () => void }, Props>(
                     height: '32px',
                   }}
                 />
-              </ButtonNaked>
+              </IconButton>
             </Grid>
           </Grid>
         </DialogTitle>

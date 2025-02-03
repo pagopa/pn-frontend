@@ -62,9 +62,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       enableReinitialize: true,
       /** onSubmit validate */
       onSubmit: (values) => {
-        if (formik.isValid) {
-          onSubmit(values[`default_${contactType}`]);
-        }
+        onSubmit(values[`default_${contactType}`]);
       },
     });
 
