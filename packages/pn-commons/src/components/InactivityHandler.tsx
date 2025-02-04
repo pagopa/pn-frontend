@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+
 import { Button, DialogContentText, DialogTitle } from '@mui/material';
+
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import PnDialog from './PnDialog/PnDialog';
-import PnDialogContent from './PnDialog/PnDialogContent';
 import PnDialogActions from './PnDialog/PnDialogActions';
+import PnDialogContent from './PnDialog/PnDialogContent';
 
 type Props = {
   /** Inactivity timer (in milliseconds), if 0 the inactivity timer is disabled */
@@ -18,10 +20,11 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
   const [openModal, setOpenModal] = useState(false);
   const resetTimer = () => setInitTimeout(!initTimeout);
 
-
   // init timer
   useEffect(() => {
     if (inactivityTimer) {
+      // this is the timer after wich the inactivity modal is shown
+      const inactivityWarningTimer = inactivityTimer - 30 * 1000;
       // init timer
       const timer = setTimeout(() => {
         onTimerExpired();
@@ -29,7 +32,7 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
 
       const differenceTimerModal = setTimeout(() => {
         setOpenModal(true);
-      }, inactivityTimer - (5 * 1000));
+      }, inactivityWarningTimer);
 
       // cleanup function
       return () => {
@@ -38,31 +41,40 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
         clearTimeout(differenceTimerModal);
       };
     }
-    return () => { };
+    return () => {};
   }, [initTimeout]);
 
   return (
     <>
       <PnDialog
         open={openModal}
-        aria-labelledby="session-dialog-title"
-        aria-describedby="session-dialog-description"
-        data-testid="session-modal"
+        aria-labelledby="inactivity-dialog-title"
+        aria-describedby="inactivity-dialog-description"
+        data-testid="inactivity-modal"
       >
-        <DialogTitle id="session-dialog-title" sx={{ textAlign: 'center' }}>
-          {getLocalizedOrDefaultLabel('common', 'inactivity-title')}
+        <DialogTitle id="inactivity-dialog-title" sx={{ textAlign: 'center' }}>
+          {getLocalizedOrDefaultLabel('common', 'inactivity.title')}
         </DialogTitle>
         <PnDialogContent>
-          <DialogContentText id="session-dialog-description">{getLocalizedOrDefaultLabel('common', 'inactivity-body')}</DialogContentText>
+          <DialogContentText id="inactivity-dialog-description">
+            {getLocalizedOrDefaultLabel('common', 'inactivity.body')}
+          </DialogContentText>
         </PnDialogContent>
         <PnDialogActions>
-          <Button sx={{ width: '100%' }} color="primary" variant="outlined" data-testid='buttonOfSessionModal' onClick={resetTimer}>
-            {getLocalizedOrDefaultLabel('common', 'inactivity-action')}
+          <Button
+            sx={{ width: '100%' }}
+            color="primary"
+            variant="outlined"
+            data-testid="inactivity-button"
+            onClick={resetTimer}
+          >
+            {getLocalizedOrDefaultLabel('common', 'inactivity.action')}
           </Button>
         </PnDialogActions>
       </PnDialog>
       {children}
-    </>);
+    </>
+  );
 };
 
 export default InactivityHandler;

@@ -192,5 +192,10 @@
     "message": "Il testo originario di questi documenti è in lingua italiana. In caso di contrasto tra la versione italiana e le traduzioni in altre lingue, prevarranno il significato e le condizioni della lingua italiana.",
     "link": "Consulta le traduzioni"
   },
-  "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine"
+  "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine",
+  "inactivity": {
+    "title": "Stai per uscire da SEND",
+    "body": "A breve sarai reindirizzato: vuoi restare loggato?",
+    "action": "Si"
+  }
 }
