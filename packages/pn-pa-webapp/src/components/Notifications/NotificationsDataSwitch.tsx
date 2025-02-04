@@ -9,7 +9,7 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked, Tag, TagGroup } from '@pagopa/mui-italia';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { NotificationColumnData } from '@pagopa-pn/pn-commons/src/models/Notifications';
 
 const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data }) => {
@@ -33,33 +33,41 @@ const Subject: React.FC<{ subject: string }> = ({ subject }) => (
   <>{subject.length > 65 ? subject.substring(0, 65) + '...' : subject}</>
 );
 
-const GroupTag: React.FC<{ group: string | undefined; isMobile: boolean }> = ({ group, isMobile }) => !group? null:
-   isMobile ? (
+const GroupTag: React.FC<{ group: string | undefined; isMobile: boolean }> = ({
+  group,
+  isMobile,
+}) =>
+  group && isMobile ? (
     <CustomTagGroup visibleItems={1}>
       <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }}>
         <Tag value={group} />
       </Box>
     </CustomTagGroup>
-  ) : (
+  ) : group && !isMobile ? (
     <TagGroup visibleItems={4}>
       <Tag value={group} />
     </TagGroup>
+  ) : (
+    <></>
   );
 
 const ActionButton: React.FC<{ iun: string; handleRowClick?: (iun: string) => void }> = ({
   iun,
   handleRowClick,
 }) => (
-  <ButtonNaked  onClick={() => handleRowClick && handleRowClick(iun)}>
-    <ArrowForwardIosIcon color='primary' />
+  <ButtonNaked
+    data-testid="goToNotificationDetail"
+    onClick={() => handleRowClick && handleRowClick(iun)}
+  >
+    <ChevronRightIcon color="primary" />
   </ButtonNaked>
 );
 
-const NotificationsDataSwitch: React.FC<{ data: Row<Notification>; type: keyof NotificationColumnData; handleRowClick?: (iun: string) => void }> = ({
-  data,
-  type,
-  handleRowClick,
-}) => {
+const NotificationsDataSwitch: React.FC<{
+  data: Row<Notification>;
+  type: keyof NotificationColumnData;
+  handleRowClick?: (iun: string) => void;
+}> = ({ data, type, handleRowClick }) => {
   const isMobile = useIsMobile();
 
   const renderContent = () => {
