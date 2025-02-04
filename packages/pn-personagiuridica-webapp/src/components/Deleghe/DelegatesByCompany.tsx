@@ -98,7 +98,7 @@ const DelegatesByCompany = () => {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
       tableConfiguration: {
-        cellProps: { width: 'auto' },
+        cellProps: { width: '20%' },
       },
       cardConfiguration: {
         wrapValueInTypography: false,
@@ -108,7 +108,7 @@ const DelegatesByCompany = () => {
       id: 'status',
       label: t('deleghe.table.status'),
       tableConfiguration: {
-        cellProps: { width: '18%' },
+        cellProps: { width: '15%' },
       },
       cardConfiguration: {
         position: 'left',
@@ -178,6 +178,7 @@ const DelegatesByCompany = () => {
             currentSort={sort}
             onChangeSorting={setSort}
             testId="delegatesTable"
+            slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
           >
             <SmartHeader>
               {delegatesColumn.map((column) => (
@@ -185,6 +186,7 @@ const DelegatesByCompany = () => {
                   key={column.id.toString()}
                   columnId={column.id}
                   sortable={column.tableConfiguration.sortable}
+                  cellProps={column.tableConfiguration.cellProps}
                 >
                   {column.label}
                 </SmartHeaderCell>

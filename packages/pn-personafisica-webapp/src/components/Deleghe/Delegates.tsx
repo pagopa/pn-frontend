@@ -81,17 +81,17 @@ const Delegates = () => {
     {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
-      cellProps: { width: 'auto' },
+      cellProps: { width: '20%' },
     },
     {
       id: 'status',
       label: t('deleghe.table.status'),
-      cellProps: { width: '18%' },
+      cellProps: { width: '15%' },
     },
     {
       id: 'menu',
       label: '',
-      cellProps: { width: '5%' },
+      cellProps: { width: '5%', align: 'right' },
     },
   ];
 
@@ -140,7 +140,10 @@ const Delegates = () => {
           reloadAction={() => dispatch(getMandatesByDelegator())}
         >
           {rows.length > 0 ? (
-            <PnTable testId="delegatesTable">
+            <PnTable
+              testId="delegatesTable"
+              slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
+            >
               <PnTableHeader>
                 {delegatesColumns.map((column) => (
                   <PnTableHeaderCell
@@ -150,6 +153,7 @@ const Delegates = () => {
                     sortable={column.sortable}
                     handleClick={handleChangeSorting}
                     testId="delegatesTable.header.cell"
+                    cellProps={column.cellProps}
                   >
                     {column.label}
                   </PnTableHeaderCell>
