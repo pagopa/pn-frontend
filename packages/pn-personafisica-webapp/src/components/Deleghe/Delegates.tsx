@@ -91,7 +91,7 @@ const Delegates = () => {
     {
       id: 'menu',
       label: '',
-      cellProps: { width: '5%', align: 'right' },
+      cellProps: { width: '5%' },
     },
   ];
 
