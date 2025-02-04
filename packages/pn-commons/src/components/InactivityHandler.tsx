@@ -52,7 +52,7 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
         aria-describedby="inactivity-dialog-description"
         data-testid="inactivity-modal"
       >
-        <DialogTitle id="inactivity-dialog-title" sx={{ textAlign: 'center' }}>
+        <DialogTitle id="inactivity-dialog-title">
           {getLocalizedOrDefaultLabel('common', 'inactivity.title')}
         </DialogTitle>
         <PnDialogContent>

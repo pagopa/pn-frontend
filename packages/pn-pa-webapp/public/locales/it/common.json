@@ -170,8 +170,8 @@
     "link": "Consulta le traduzioni"
   },
   "inactivity": {
-    "title": "Stai per uscire da SEND",
-    "body": "A breve sarai reindirizzato: vuoi restare loggato?",
-    "action": "Si"
+    "title": "Vuoi davvero uscire da SEND?",
+    "body": "La disconnessione è in corso. Se hai cambiato idea premi “Mantieni l’accesso” entro pochi secondi.",
+    "action": "Mantieni l’accesso"
   }
 }
