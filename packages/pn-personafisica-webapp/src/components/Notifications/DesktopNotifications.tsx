@@ -125,8 +125,10 @@ const DesktopNotifications = ({
       id: 'action',
       label: '',
       cellProps: { width: '8%' },
+      sortable: false,
     },
   ];
+
 
   const rows: Array<Row<Notification>> = notifications.map((n) => ({
     ...n,

@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '../../hooks';
 import { Notification, NotificationColumnData, Row } from '../../models';
@@ -48,20 +48,20 @@ const Recipients: React.FC<{ recipients: Array<string> }> = ({ recipients }) => 
   </>
 );
 
-const ActionButton: React.FC<{ mandateId?: string; iun: string; handleRowClick: (iun: string, mandateId?: string) => void }> = ({
+const ActionButton: React.FC<{ mandateId?: string; iun: string; handleRowClick?: (iun: string, mandateId?: string) => void }> = ({
   mandateId,
   iun,
   handleRowClick,
 }) => (
-  <ButtonNaked onClick={() => handleRowClick(iun, mandateId)}>
-    <ArrowForwardIosIcon color='primary' />
+  <ButtonNaked data-testid='goToNotificationDetail' onClick={() => handleRowClick && handleRowClick(iun, mandateId)}>
+    <ChevronRightIcon  color='primary' />
   </ButtonNaked>
 );
 
 const NotificationsDataSwitch: React.FC<{
   data: Row<Notification>;
   type: keyof NotificationColumnData;
-  handleRowClick: (iun: string, mandateId?: string ) => void;
+  handleRowClick?: (iun: string, mandateId?: string ) => void;
 }> = ({ data, type, handleRowClick }) => {
   const isMobile = useIsMobile();
 

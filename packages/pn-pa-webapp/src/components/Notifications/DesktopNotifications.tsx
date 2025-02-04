@@ -18,6 +18,7 @@ import {
   Sort,
 } from '@pagopa-pn/pn-commons';
 
+import { NotificationColumnDataPA } from '@pagopa-pn/pn-commons/src/models/Notifications';
 import * as routes from '../../navigation/routes.const';
 import FilterNotifications from './FilterNotifications';
 import NotificationsDataSwitch from './NotificationsDataSwitch';
@@ -102,7 +103,7 @@ const DesktopNotifications = ({
   const { t } = useTranslation(['notifiche']);
   const navigate = useNavigate();
 
-  const columns: Array<Column<Notification>> = [
+  const columns: Array<Column<NotificationColumnDataPA>> = [
     {
       id: 'sentAt',
       label: t('table.date'),
@@ -140,6 +141,7 @@ const DesktopNotifications = ({
       id: 'action',
       label: '',
       cellProps: { width: '8%' },
+      sortable: false,
     },
   ];
 
