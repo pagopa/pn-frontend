@@ -18,7 +18,7 @@ import {
   Sort,
 } from '@pagopa-pn/pn-commons';
 
-import { NotificationColumnDataPA } from '@pagopa-pn/pn-commons/src/models/Notifications';
+import { NotificationColumnData } from '@pagopa-pn/pn-commons/src/models/Notifications';
 import * as routes from '../../navigation/routes.const';
 import FilterNotifications from './FilterNotifications';
 import NotificationsDataSwitch from './NotificationsDataSwitch';
@@ -26,9 +26,9 @@ import NotificationsDataSwitch from './NotificationsDataSwitch';
 type Props = {
   notifications: Array<Notification>;
   /** Table sort */
-  sort?: Sort<Notification>;
+  sort?: Sort<NotificationColumnData>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort<Notification>) => void;
+  onChangeSorting?: (s: Sort<NotificationColumnData>) => void;
   /** The function to be invoked if the user clicks on new notification link */
   onManualSend: () => void;
   /** The function to be invoked if the user clicks on api keys link */
@@ -103,7 +103,7 @@ const DesktopNotifications = ({
   const { t } = useTranslation(['notifiche']);
   const navigate = useNavigate();
 
-  const columns: Array<Column<NotificationColumnDataPA>> = [
+  const columns: Array<Column<NotificationColumnData>> = [
     {
       id: 'sentAt',
       label: t('table.date'),

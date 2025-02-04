@@ -10,7 +10,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked, Tag, TagGroup } from '@pagopa/mui-italia';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { NotificationColumnDataPA } from '@pagopa-pn/pn-commons/src/models/Notifications';
+import { NotificationColumnData } from '@pagopa-pn/pn-commons/src/models/Notifications';
 
 const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data }) => {
   const { label, tooltip, color } = getNotificationStatusInfos(data.notificationStatus, {
@@ -55,7 +55,7 @@ const ActionButton: React.FC<{ iun: string; handleRowClick?: (iun: string) => vo
   </ButtonNaked>
 );
 
-const NotificationsDataSwitch: React.FC<{ data: Row<Notification>; type: keyof NotificationColumnDataPA; handleRowClick?: (iun: string) => void }> = ({
+const NotificationsDataSwitch: React.FC<{ data: Row<Notification>; type: keyof NotificationColumnData; handleRowClick?: (iun: string) => void }> = ({
   data,
   type,
   handleRowClick,
