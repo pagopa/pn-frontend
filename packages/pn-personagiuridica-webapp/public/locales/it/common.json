@@ -39,6 +39,7 @@
       "organization-dashboard": "La tua impresa",
       "notification-platform": "SEND - Servizio Notifiche Digitali"
     },
+    "logout-message": "Confermi di voler uscire da SEND?",
     "logout": "Esci",
     "pago-pa-link": "Sito di PagoPA S.p.A."
   },

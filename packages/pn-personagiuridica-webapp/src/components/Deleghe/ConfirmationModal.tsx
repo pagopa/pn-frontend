@@ -28,7 +28,7 @@ export default function ConfirmationModal({
       id="confirmation-dialog"
       open={open}
       onClose={onClose}
-      aria-labelledby="responsive-dialog-title"
+      aria-labelledby="dialog-title"
       data-testid="confirmationDialog"
     >
       <DialogTitle id="dialog-title">{title}</DialogTitle>
