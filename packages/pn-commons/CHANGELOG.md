@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.11.1...v2.12.0-RC.0) (2025-02-04)
+
+
+### Bug Fixes
+
+* **pn-13210:** manage accessibility when closing modal ([#1451](https://github.com/pagopa/pn-frontend/issues/1451)) ([2b4981b](https://github.com/pagopa/pn-frontend/commit/2b4981bddc8f6651ac47bb2cf371f63e33962959))
+* **pn-13213:** aria label for payments and statistics checkboxes ([#1450](https://github.com/pagopa/pn-frontend/issues/1450)) ([0d4d250](https://github.com/pagopa/pn-frontend/commit/0d4d25007aa3c2012c6bd3cba235cc32e8d65be1))
+* **pn-13214:** inactivity handler accessibility ([#1454](https://github.com/pagopa/pn-frontend/issues/1454)) ([7af07bd](https://github.com/pagopa/pn-frontend/commit/7af07bdc5861815ae484e0856d17f80ec3ac6096))
+* **pn-13591:** Handle Calendar for a11y ([#1448](https://github.com/pagopa/pn-frontend/issues/1448)) ([7be12df](https://github.com/pagopa/pn-frontend/commit/7be12dfb572f2eb50e3f857d78174410b1a181ac))
+* **pn-13596:** screen reader doesn't read notification status tooltip on mobile ([#1439](https://github.com/pagopa/pn-frontend/issues/1439)) ([b28f472](https://github.com/pagopa/pn-frontend/commit/b28f47258e5bd3cf4d9a2a3c95b86bfb42114ce8))
+* **pn-13598:** accessibility for the delegation tag group ([#1452](https://github.com/pagopa/pn-frontend/issues/1452)) ([a8626a2](https://github.com/pagopa/pn-frontend/commit/a8626a27ca23f9de030bc0b51d825d685bcee737))
+
+
+### Features
+
+* **pn-13215:** Screen reader doesn't read all the attachments in timeline ([#1442](https://github.com/pagopa/pn-frontend/issues/1442)) ([877bf49](https://github.com/pagopa/pn-frontend/commit/877bf49c486485f9e0ce6b04b6423a78824180e8))
+
+
+
+
+
 ## [2.11.1](https://github.com/pagopa/pn-frontend/compare/v2.11.0...v2.11.1) (2025-01-31)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons
