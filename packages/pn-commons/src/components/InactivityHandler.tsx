@@ -30,7 +30,7 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
         onTimerExpired();
       }, inactivityTimer);
 
-      const differenceTimerModal = setTimeout(() => {
+      const warningTimer = setTimeout(() => {
         setOpenModal(true);
       }, inactivityWarningTimer);
 
@@ -38,7 +38,7 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
       return () => {
         setOpenModal(false);
         clearTimeout(timer);
-        clearTimeout(differenceTimerModal);
+        clearTimeout(warningTimer);
       };
     }
     return () => {};
@@ -62,7 +62,7 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
         </PnDialogContent>
         <PnDialogActions>
           <Button
-            sx={{ width: '100%' }}
+            fullWidth
             color="primary"
             variant="outlined"
             data-testid="inactivity-button"
