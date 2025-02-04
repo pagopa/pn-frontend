@@ -4,6 +4,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '../../hooks';
 import { Notification, NotificationColumnData, Row } from '../../models';
 import { formatDate, getNotificationStatusInfos } from '../../utility';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import NewNotificationBadge, { isNewNotification } from './NewNotificationBadge';
 import StatusTooltip from './StatusTooltip';
 
@@ -15,7 +16,9 @@ const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data })
 };
 
 const SentAt: React.FC<{ data: Row<Notification>; isMobile: boolean }> = ({ data, isMobile }) => {
-  if (!isMobile) {return <>{formatDate(data.sentAt)}</>;}
+  if (!isMobile) {
+    return <>{formatDate(data.sentAt)}</>;
+  }
 
   const newNotification = isNewNotification(data.notificationStatus);
   return newNotification ? (
@@ -48,20 +51,29 @@ const Recipients: React.FC<{ recipients: Array<string> }> = ({ recipients }) => 
   </>
 );
 
-const ActionButton: React.FC<{ mandateId?: string; iun: string; handleRowClick?: (iun: string, mandateId?: string) => void }> = ({
-  mandateId,
-  iun,
-  handleRowClick,
-}) => (
-  <ButtonNaked data-testid='goToNotificationDetail' onClick={() => handleRowClick && handleRowClick(iun, mandateId)}>
-    <ChevronRightIcon  color='primary' />
+const ActionButton: React.FC<{
+  mandateId?: string;
+  iun: string;
+  handleRowClick?: (iun: string, mandateId?: string) => void;
+}> = ({ mandateId, iun, handleRowClick }) => (
+  <ButtonNaked
+    data-testid="goToNotificationDetail"
+    onClick={() => handleRowClick && handleRowClick(iun, mandateId)}
+    aria-label={getLocalizedOrDefaultLabel(
+      'notifications',
+      'table.aria-action-table',
+      'Vedi dettaglio notifica con iun : ',
+      { iun }
+    )}
+  >
+    <ChevronRightIcon color="primary" />
   </ButtonNaked>
 );
 
 const NotificationsDataSwitch: React.FC<{
   data: Row<Notification>;
   type: keyof NotificationColumnData;
-  handleRowClick?: (iun: string, mandateId?: string ) => void;
+  handleRowClick?: (iun: string, mandateId?: string) => void;
 }> = ({ data, type, handleRowClick }) => {
   const isMobile = useIsMobile();
 
@@ -82,7 +94,13 @@ const NotificationsDataSwitch: React.FC<{
       case 'recipients':
         return <Recipients recipients={data.recipients} />;
       case 'action':
-        return <ActionButton iun={data.iun} mandateId={data?.mandateId} handleRowClick={handleRowClick} />;
+        return (
+          <ActionButton
+            iun={data.iun}
+            mandateId={data?.mandateId}
+            handleRowClick={handleRowClick}
+          />
+        );
       default:
         return null;
     }

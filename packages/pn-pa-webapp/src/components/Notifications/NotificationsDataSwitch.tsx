@@ -11,6 +11,7 @@ import {
 import { ButtonNaked, Tag, TagGroup } from '@pagopa/mui-italia';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { NotificationColumnData } from '@pagopa-pn/pn-commons/src/models/Notifications';
+import { useTranslation } from 'react-i18next';
 
 const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data }) => {
   const { label, tooltip, color } = getNotificationStatusInfos(data.notificationStatus, {
@@ -54,14 +55,18 @@ const GroupTag: React.FC<{ group: string | undefined; isMobile: boolean }> = ({
 const ActionButton: React.FC<{ iun: string; handleRowClick?: (iun: string) => void }> = ({
   iun,
   handleRowClick,
-}) => (
-  <ButtonNaked
-    data-testid="goToNotificationDetail"
-    onClick={() => handleRowClick && handleRowClick(iun)}
-  >
-    <ChevronRightIcon color="primary" />
-  </ButtonNaked>
-);
+}) => {
+  const { t } = useTranslation(['notifiche']);
+  return (
+    <ButtonNaked
+      data-testid="goToNotificationDetail"
+      onClick={() => handleRowClick && handleRowClick(iun)}
+      aria-label={t('table.aria-action-table', { iun })}
+    >
+      <ChevronRightIcon color="primary" />
+    </ButtonNaked>
+  );
+};
 
 const NotificationsDataSwitch: React.FC<{
   data: Row<Notification>;
