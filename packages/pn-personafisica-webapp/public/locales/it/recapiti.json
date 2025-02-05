@@ -1,6 +1,6 @@
 {
-  "title": "Recapiti",
-  "subtitle": "Qui puoi gestire i recapiti ai quali ricevere le notifiche che ti inviano gli enti aderenti a SEND.",
+  "title": "I tuoi recapiti",
+  "subtitle": "Gestisci i recapiti digitali su cui ricevere le comunicazioni a valore legale di SEND.",
   "alert-dialog-email": "Se non hai una PEC e accedi alla notifica su SEND entro 5 giorni (120 ore) dall’invio dell'email, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
   "alert-dialog-sms": "Se non hai una PEC e accedi alla notifica su SEND entro 5 giorni (120 ore) dall’invio dell'SMS, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
   "insert-code": "Inserisci codice",
@@ -210,6 +210,7 @@
     "contact-to-add": "Domicilio Digitale",
     "contact-to-add-description": "Il domicilio digitale personalizzato dove riceverai le notifiche SEND che ti invia un ente specifico",
     "contact-already-exists": "L'ente selezionato è già associato a questo recapito. Se premi “Associa”, verrà sostituito da quello che hai indicato qui.",
+    "validating-pec": "Esiste già un indirizzo PEC in corso di validazione per l'ente selezionato",
     "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito.",
     "add-title": "Inserisci l’ente e il recapito da associare",
     "card-title": "PERSONALIZZATI PER ENTE",

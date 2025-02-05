@@ -8,7 +8,7 @@ import {
   IOAllowedValues,
 } from '../../models/contacts';
 import { Party } from '../../models/party';
-import { removeAddress, sortAddresses, updateAddressesList } from '../../utility/contacts.utility';
+import { removeAddress, updateAddressesList } from '../../utility/contacts.utility';
 import { RootState } from '../store';
 import {
   createOrUpdateAddress,
@@ -55,7 +55,7 @@ const contactsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getDigitalAddresses.fulfilled, (state, action) => {
-      state.digitalAddresses = sortAddresses(action.payload);
+      state.digitalAddresses = action.payload;
     });
     builder.addCase(createOrUpdateAddress.fulfilled, (state, action) => {
       if (action.payload) {

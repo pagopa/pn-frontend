@@ -16,14 +16,7 @@ import {
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
 
-import { PFEventsType } from '../../models/PFEventsType';
-import {
-  AddressType,
-  ChannelType,
-  ContactSource,
-  SaveDigitalAddressParams,
-  Sender,
-} from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams, Sender } from '../../models/contacts';
 import { Party } from '../../models/party';
 import {
   CONTACT_ACTIONS,
@@ -36,13 +29,11 @@ import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
-import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import {
   contactAlreadyExists,
   pecValidationSchema,
   specialContactsAvailableAddressTypes,
 } from '../../utility/contacts.utility';
-import { isPFEvent } from '../../utility/mixpanel';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import ContactCodeDialog from './ContactCodeDialog';
 import ExistingContactDialog from './ExistingContactDialog';
@@ -222,20 +213,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const labelRoot = `legal-contacts`;
     const contactType = formik.values.channelType.toLowerCase();
 
-    const sendSuccessEvent = (type: ChannelType) => {
-      const eventKey = `SEND_ADD_${type}_UX_SUCCESS`;
-      if (isPFEvent(eventKey)) {
-        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], formik.values.sender.id);
-      }
-    };
-
-    const sendCodeErrorEvent = (type: ChannelType) => {
-      const eventKey = `SEND_ADD_${type}_CODE_ERROR`;
-      if (isPFEvent(eventKey)) {
-        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey]);
-      }
-    };
-
     const handleAssociation = () => {
       if (formik.values.channelType === ChannelType.SERCQ_SEND) {
         dispatch(getSercqSendTosPrivacyApproval())
@@ -256,14 +233,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       channelType: ChannelType,
       sender: Sender = { senderId: 'default' }
     ) => {
-      const eventKey = `SEND_ADD_${channelType}_START`;
-      if (isPFEvent(eventKey)) {
-        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], {
-          senderId: sender.senderId,
-          source: ContactSource.RECAPITI,
-        });
-      }
-
       // first check if contact already exists
       if (contactAlreadyExists(addressesData.addresses, value, sender.senderId, channelType)) {
         setModalOpen(ModalType.EXISTING);
@@ -349,13 +318,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     };
 
     const handleCodeVerification = (verificationCode?: string) => {
-      if (verificationCode || formik.values.channelType === ChannelType.SERCQ_SEND) {
-        const eventKey = `SEND_ADD_${formik.values.channelType}_UX_CONVERSION`;
-        if (isPFEvent(eventKey)) {
-          PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], formik.values.sender.id);
-        }
-      }
-
       // eslint-disable-next-line functional/no-let
       let value = formik.values.s_value;
       if (formik.values.channelType === ChannelType.SERCQ_SEND) {
@@ -379,8 +341,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             setModalOpen(ModalType.CODE);
             return;
           }
-
-          sendSuccessEvent(formik.values.channelType as ChannelType);
 
           // show success message
           if (formik.values.channelType !== ChannelType.PEC) {
@@ -414,7 +374,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
           open={modalOpen === ModalType.CODE}
           onConfirm={(code) => handleCodeVerification(code)}
           onDiscard={() => setModalOpen(null)}
-          onError={() => sendCodeErrorEvent(formik.values.channelType as ChannelType)}
         />
         <Typography
           variant="h6"
