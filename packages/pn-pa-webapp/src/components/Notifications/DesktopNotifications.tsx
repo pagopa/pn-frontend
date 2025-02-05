@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
- import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Link } from '@mui/material';
 import {
@@ -107,7 +107,7 @@ const DesktopNotifications = ({
     {
       id: 'sentAt',
       label: t('table.date'),
-      cellProps: { width: '11%' },
+      cellProps: { width: '9%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
@@ -119,17 +119,17 @@ const DesktopNotifications = ({
     {
       id: 'subject',
       label: t('table.subject'),
-      cellProps: { width: '18%' },
+      cellProps: { width: '20%' },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      cellProps: { width: '20%' },
+      cellProps: { width: '25%' },
     },
     {
       id: 'group',
       label: t('table.groups'),
-      cellProps: { width: '15%' },
+      cellProps: { width: '12%' },
     },
     {
       id: 'notificationStatus',
@@ -140,7 +140,7 @@ const DesktopNotifications = ({
     {
       id: 'action',
       label: '',
-      cellProps: { width: '8%' },
+      cellProps: { width: '3%' },
       sortable: false,
     },
   ];
@@ -154,10 +154,10 @@ const DesktopNotifications = ({
 
   const showFilters = notifications?.length > 0 || filtersApplied;
 
-    // Navigation handlers
-    const handleRowClick = (iun: string) => {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun));
-    };
+  // Navigation handlers
+  const handleRowClick = (iun: string) => {
+    navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun));
+  };
 
   return (
     <>
@@ -191,7 +191,11 @@ const DesktopNotifications = ({
                           // cursor: 'pointer',
                         }}
                       >
-                        <NotificationsDataSwitch handleRowClick={handleRowClick} data={row} type={column.id} />
+                        <NotificationsDataSwitch
+                          handleRowClick={handleRowClick}
+                          data={row}
+                          type={column.id}
+                        />
                       </PnTableBodyCell>
                     ))}
                   </PnTableBodyRow>

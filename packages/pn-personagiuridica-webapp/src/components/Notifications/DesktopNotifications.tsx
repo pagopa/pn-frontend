@@ -74,24 +74,24 @@ const DesktopNotifications = ({
     {
       id: 'sentAt',
       label: t('table.data'),
-      cellProps: { width: '11%' },
+      cellProps: { width: '8%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'sender',
       label: t('table.mittente'),
-      cellProps: { width: '13%' },
+      cellProps: { width: '21%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
-      cellProps: { width: '22%' },
+      cellProps: { width: '21%' },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      cellProps: { width: '20%' },
+      cellProps: { width: '28%' },
     },
     {
       id: 'notificationStatus',
@@ -102,7 +102,7 @@ const DesktopNotifications = ({
     {
       id: 'action',
       label: '',
-      cellProps: { width: '8%' },
+      cellProps: { width: '3%' },
     },
   ];
 
@@ -127,7 +127,7 @@ const DesktopNotifications = ({
   const showFilters = notifications?.length > 0 || filtersApplied;
 
   // Navigation handlers
-  const handleRowClick = (iun: string ,mandateId?: string) => {
+  const handleRowClick = (iun: string, mandateId?: string) => {
     if (isDelegatedPage && mandateId) {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(iun, mandateId));
     } else {
@@ -165,7 +165,11 @@ const DesktopNotifications = ({
                       // cursor: 'pointer',
                     }}
                   >
-                    <NotificationsDataSwitch handleRowClick={handleRowClick} data={row} type={column.id} />
+                    <NotificationsDataSwitch
+                      handleRowClick={handleRowClick}
+                      data={row}
+                      type={column.id}
+                    />
                   </PnTableBodyCell>
                 ))}
               </PnTableBodyRow>

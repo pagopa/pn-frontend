@@ -96,24 +96,24 @@ const DesktopNotifications = ({
     {
       id: 'sentAt',
       label: t('table.data'),
-      cellProps: { width: '11%' },
+      cellProps: { width: '8%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'sender',
       label: t('table.mittente'),
-      cellProps: { width: '13%' },
+      cellProps: { width: '21%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
-      cellProps: { width: '23%' },
+      cellProps: { width: '21%' },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      cellProps: { width: '20%' },
+      cellProps: { width: '28%' },
     },
     {
       id: 'notificationStatus',
@@ -124,11 +124,9 @@ const DesktopNotifications = ({
     {
       id: 'action',
       label: '',
-      cellProps: { width: '8%' },
-      sortable: false,
+      cellProps: { width: '3%' },
     },
   ];
-
 
   const rows: Array<Row<Notification>> = notifications.map((n) => ({
     ...n,
@@ -179,10 +177,14 @@ const DesktopNotifications = ({
                     // onClick={() => handleRowClick(row)}
                     cellProps={{
                       ...column.cellProps,
-                     //  cursor: 'pointer',
+                      //  cursor: 'pointer',
                     }}
                   >
-                    <NotificationsDataSwitch handleRowClick={handleRowClick} data={row} type={column.id} />
+                    <NotificationsDataSwitch
+                      handleRowClick={handleRowClick}
+                      data={row}
+                      type={column.id}
+                    />
                   </PnTableBodyCell>
                 ))}
               </PnTableBodyRow>
