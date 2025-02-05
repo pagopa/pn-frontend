@@ -1,4 +1,4 @@
-import { Box, SxProps, TableCell } from '@mui/material';
+import { SxProps, TableCell } from '@mui/material';
 /* import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { buttonNakedInheritStyle } from '../../../utility'; */
@@ -34,7 +34,7 @@ const PnTableBodyCell: React.FC<PnTableBodyCellProps> = ({
       </>
     )} */}
     {/* !onClick && <Box>{children}</Box> */}
-    <Box>{children}</Box>
+    {children}
   </TableCell>
 );
 export default PnTableBodyCell;
