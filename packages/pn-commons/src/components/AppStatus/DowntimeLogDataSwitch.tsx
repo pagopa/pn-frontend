@@ -21,7 +21,14 @@ const FormattedDateAndTime: React.FC<{ date: string; inTwoLines?: boolean }> = (
       <Typography variant="body2">{formatDateTime(date)}</Typography>
     );
   }
-  return <Typography variant="body2">-</Typography>;
+  return (
+    <Typography
+      variant="body2"
+      aria-label={getLocalizedOrDefaultLabel('appStatus', 'aria-missed-endDate')}
+    >
+      -
+    </Typography>
+  );
 };
 
 const DowntimeLogDataSwitch: React.FC<{
