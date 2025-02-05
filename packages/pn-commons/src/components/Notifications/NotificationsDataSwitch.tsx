@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '../../hooks';
@@ -38,7 +38,16 @@ const SentAt: React.FC<{ data: Row<Notification>; isMobile: boolean }> = ({ data
 const Sender: React.FC<{ sender: string }> = ({ sender }) => <>{sender}</>;
 
 const Subject: React.FC<{ subject: string }> = ({ subject }) => (
-  <>{subject.length > 65 ? subject.substring(0, 65) + '...' : subject}</>
+  <Box
+    sx={{
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      color: 'inherit',
+    }}
+  >
+    {subject}
+  </Box>
 );
 
 const Recipients: React.FC<{ recipients: Array<string> }> = ({ recipients }) => (

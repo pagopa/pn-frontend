@@ -139,7 +139,10 @@ const DesktopNotifications = ({
     <>
       <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
       {rows.length ? (
-        <PnTable testId="notificationsTable">
+        <PnTable
+          testId="notificationsTable"
+          slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
+        >
           <PnTableHeader>
             {columns.map((column) => (
               <PnTableHeaderCell
@@ -148,6 +151,7 @@ const DesktopNotifications = ({
                 columnId={column.id}
                 sortable={column.sortable}
                 handleClick={onChangeSorting}
+                cellProps={column.cellProps}
               >
                 {column.label}
               </PnTableHeaderCell>

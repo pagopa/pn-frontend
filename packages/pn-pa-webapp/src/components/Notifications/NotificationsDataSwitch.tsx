@@ -23,7 +23,16 @@ const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data })
 const Recipients: React.FC<{ recipients: Array<string> }> = ({ recipients }) => (
   <>
     {recipients.map((recipient) => (
-      <Typography key={recipient} variant="body2">
+      <Typography
+        key={recipient}
+        variant="body2"
+        sx={{
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          color: 'inherit',
+        }}
+      >
         {recipient}
       </Typography>
     ))}
@@ -31,7 +40,16 @@ const Recipients: React.FC<{ recipients: Array<string> }> = ({ recipients }) => 
 );
 
 const Subject: React.FC<{ subject: string }> = ({ subject }) => (
-  <>{subject.length > 65 ? subject.substring(0, 65) + '...' : subject}</>
+  <Box
+    sx={{
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      color: 'inherit',
+    }}
+  >
+    {subject}
+  </Box>
 );
 
 const GroupTag: React.FC<{ group: string | undefined; isMobile: boolean }> = ({
