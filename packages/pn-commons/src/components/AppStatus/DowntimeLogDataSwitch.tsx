@@ -26,7 +26,7 @@ const FormattedDateAndTime: React.FC<{ date: string; inTwoLines?: boolean }> = (
       variant="body2"
       aria-label={getLocalizedOrDefaultLabel('appStatus', 'appStatus.aria-missed-endDate')}
     >
-      -
+      {getLocalizedOrDefaultLabel('appStatus', 'appStatus.missed-endDate', 'In Corso')}
     </Typography>
   );
 };

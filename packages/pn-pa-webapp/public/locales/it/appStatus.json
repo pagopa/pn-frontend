@@ -7,7 +7,8 @@
       "not-ok": "C'è un disservizio in corso. Per maggiori dettagli, consulta la tabella qui sotto."
     },
     "lastCheckLegend": "Ultimo aggiornamento - {{ lastCheckTimestamp }}",
-    "aria-missed-endDate": "Data fine mancante, disservizio in corso"
+    "aria-missed-endDate": "Data fine mancante, disservizio in corso",
+    "missed-endDate": "In Corso"
   },
   "downtimeList": {
     "title": "Storico dei disservizi",
