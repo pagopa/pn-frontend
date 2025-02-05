@@ -22,12 +22,9 @@ const FormattedDateAndTime: React.FC<{ date: string; inTwoLines?: boolean }> = (
     );
   }
   return (
-    <Typography
-      variant="body2"
-      aria-label={getLocalizedOrDefaultLabel('appStatus', 'appStatus.aria-missed-endDate')}
-    >
+    <div aria-label={getLocalizedOrDefaultLabel('appStatus', 'appStatus.aria-missed-endDate')}>
       -
-    </Typography>
+    </div>
   );
 };
 
