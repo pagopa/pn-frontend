@@ -14,10 +14,11 @@ import {
   PnTableBodyRow,
   PnTableHeader,
   PnTableHeaderCell,
-  Row,
+  // Row,
   Sort,
 } from '@pagopa-pn/pn-commons';
 
+import { NotificationColumnData } from '@pagopa-pn/pn-commons/src/models/Notifications';
 import * as routes from '../../navigation/routes.const';
 import FilterNotifications from './FilterNotifications';
 import NotificationsDataSwitch from './NotificationsDataSwitch';
@@ -25,9 +26,9 @@ import NotificationsDataSwitch from './NotificationsDataSwitch';
 type Props = {
   notifications: Array<Notification>;
   /** Table sort */
-  sort?: Sort<Notification>;
+  sort?: Sort<NotificationColumnData>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort<Notification>) => void;
+  onChangeSorting?: (s: Sort<NotificationColumnData>) => void;
   /** The function to be invoked if the user clicks on new notification link */
   onManualSend: () => void;
   /** The function to be invoked if the user clicks on api keys link */
@@ -98,15 +99,15 @@ const DesktopNotifications = ({
   onManualSend,
   onApiKeys,
 }: Props) => {
-  const navigate = useNavigate();
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
   const { t } = useTranslation(['notifiche']);
+  const navigate = useNavigate();
 
-  const columns: Array<Column<Notification>> = [
+  const columns: Array<Column<NotificationColumnData>> = [
     {
       id: 'sentAt',
       label: t('table.date'),
-      cellProps: { width: '11%' },
+      cellProps: { width: '9%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
@@ -118,23 +119,29 @@ const DesktopNotifications = ({
     {
       id: 'subject',
       label: t('table.subject'),
-      cellProps: { width: '23%' },
+      cellProps: { width: '20%' },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      cellProps: { width: '20%' },
+      cellProps: { width: '25%' },
     },
     {
       id: 'group',
       label: t('table.groups'),
-      cellProps: { width: '15%' },
+      cellProps: { width: '12%' },
     },
     {
       id: 'notificationStatus',
       label: t('table.status'),
       cellProps: { width: '18%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
+    },
+    {
+      id: 'action',
+      label: '',
+      cellProps: { width: '3%' },
+      sortable: false,
     },
   ];
 
@@ -143,14 +150,14 @@ const DesktopNotifications = ({
     id: n.iun,
   }));
 
-  // Navigation handlers
-  const handleRowClick = (row: Row<Notification>) => {
-    navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun));
-  };
-
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   const showFilters = notifications?.length > 0 || filtersApplied;
+
+  // Navigation handlers
+  const handleRowClick = (iun: string) => {
+    navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun));
+  };
 
   return (
     <>
@@ -158,7 +165,11 @@ const DesktopNotifications = ({
         <>
           <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
           {notifications.length > 0 ? (
-            <PnTable ariaTitle={t('table.title')} testId="notificationsTable">
+            <PnTable
+              ariaTitle={t('table.title')}
+              testId="notificationsTable"
+              slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
+            >
               <PnTableHeader>
                 {columns.map((column) => (
                   <PnTableHeaderCell
@@ -167,6 +178,7 @@ const DesktopNotifications = ({
                     columnId={column.id}
                     sortable={column.sortable}
                     handleClick={onChangeSorting}
+                    cellProps={column.cellProps}
                   >
                     {column.label}
                   </PnTableHeaderCell>
@@ -178,13 +190,17 @@ const DesktopNotifications = ({
                     {columns.map((column) => (
                       <PnTableBodyCell
                         key={column.id}
-                        onClick={() => handleRowClick(row)}
+                        // onClick={() => handleRowClick(row)}
                         cellProps={{
                           ...column.cellProps,
-                          cursor: 'pointer',
+                          // cursor: 'pointer',
                         }}
                       >
-                        <NotificationsDataSwitch data={row} type={column.id} />
+                        <NotificationsDataSwitch
+                          handleRowClick={handleRowClick}
+                          data={row}
+                          type={column.id}
+                        />
                       </PnTableBodyCell>
                     ))}
                   </PnTableBodyRow>

@@ -37,7 +37,8 @@
     "iun": "Codice IUN",
     "groups": "Gruppi",
     "status": "Stato",
-    "show-detail": "Vedi dettaglio"
+    "show-detail": "Vedi dettaglio",
+    "aria-action-table": "Vedi dettaglio notifica con iun : {{iun}}"
   },
   "sort": {
     "title": "Ordina",
@@ -382,7 +383,7 @@
     "canceled": "Annullata",
     "canceled-tooltip": "L'ente ha annullato l'invio della notifica",
     "canceled-description": "L'ente ha annullato l'invio della notifica.",
-    "returned-to-sender":"Resa al mittente",
+    "returned-to-sender": "Resa al mittente",
     "returned-to-sender-tooltip": "Il destinatario risulta deceduto",
     "returned-to-sender-tooltip-multirecipient": "Tutti i destinatari risultano deceduti",
     "returned-to-sender-description": "Il destinatario risulta deceduto.",

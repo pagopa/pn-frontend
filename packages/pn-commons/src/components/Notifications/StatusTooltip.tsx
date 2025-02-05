@@ -34,6 +34,7 @@ const StatusTooltip = ({
         }}
         data-testid={`statusChip-${label}`}
         aria-label={isMobile ? `${label}: ${tooltip}` : undefined}
+        aria-describedby={`tooltip-${label}`} // Associa il chip al tooltip
       />
     </CustomTooltip>
   );

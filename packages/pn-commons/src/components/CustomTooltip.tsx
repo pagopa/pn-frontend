@@ -30,6 +30,17 @@ const CustomTooltip: React.FC<Props> = ({
       setOpen(!open);
     }
   };
+  const tooltipId = `tooltip-${Math.random().toString(36).substr(2, 9)}`; // Genera un ID unico per ogni tooltip
+
+  // Funzione per gestire il focus su tastiera
+  const handleFocus = () => {
+    handleTooltipOpen(); // Apre il tooltip quando l'elemento riceve il focus
+  };
+
+  // Funzione per gestire il mouseover
+  const handleMouseOver = () => {
+    handleTooltipOpen(); // Apre il tooltip quando il mouse passa sopra l'elemento
+  };
 
   return (
     <Tooltip
@@ -41,13 +52,21 @@ const CustomTooltip: React.FC<Props> = ({
       disableHoverListener={openOnClick}
       enterTouchDelay={0}
       onOpen={onOpen}
+      aria-live="polite" // Tooltip letto dal lettore di schermo quando visibile
+      aria-describedby={open ? tooltipId : undefined} // Associa il tooltip se visibile
       {...tooltipProps}
     >
       {openOnClick
         ? cloneElement(children, {
-            onClick: handleTooltipOpen,
+            onClick: () => handleTooltipOpen(), // Apre il tooltip su click
+            'aria-describedby': tooltipId, // Associa il tooltip all'elemento
           })
-        : children}
+        : cloneElement(children, {
+            onFocus: handleFocus, // Apre il tooltip su focus
+            onMouseOver: handleMouseOver, // Apre il tooltip su mouseover
+            'aria-describedby': tooltipId,
+            tabIndex: 0, // Associa il tooltip all'elemento
+          })}
     </Tooltip>
   );
 };

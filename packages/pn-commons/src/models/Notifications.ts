@@ -31,4 +31,5 @@ export interface GetNotificationsParams<TDate extends string | Date> {
   group?: string;
 }
 
-export type NotificationColumnData = Notification & { badge: string };
+export type NotificationColumnData = Notification & { badge?: string; action:string } ;
+
