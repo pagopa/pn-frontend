@@ -360,7 +360,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     };
 
     return (
-      <Paper data-testid="addSpecialContactDialog" sx={{ p: { xs: 2, lg: 3 }, mb: 3 }}>
+      <Paper data-testid="addSpecialContact" sx={{ p: { xs: 2, lg: 3 }, mb: 3 }}>
         <ExistingContactDialog
           open={modalOpen === ModalType.EXISTING}
           value={formik.values.s_value}
