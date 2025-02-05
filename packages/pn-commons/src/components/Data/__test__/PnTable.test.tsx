@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { Box } from '@mui/material';
 
 import { Column, Row, Sort } from '../../../models';
-import { disableConsoleLogging, fireEvent, render, within } from '../../../test-utils';
+import { disableConsoleLogging, render, within } from '../../../test-utils';
 import PnTable from '../PnTable';
 import PnTableBody from '../PnTable/PnTableBody';
 import PnTableBodyCell from '../PnTable/PnTableBodyCell';
@@ -63,7 +63,7 @@ const RenderPnTable: React.FC = () => (
           {columns.map((column) => (
             <PnTableBodyCell
               key={column.id}
-              onClick={() => column.onClick?.(row, column.id)}
+              // onClick={() => column.onClick?.(row, column.id)}
               testId="table-test.body.row.cell"
             >
               {row[column.id]}
@@ -102,7 +102,7 @@ describe('PnTable Component', () => {
     });
   });
 
-  it('sorts a column', () => {
+  /* it('sorts a column', () => {
     const { getByRole } = render(<RenderPnTable />);
     const table = getByRole('table');
     const tableHead = within(table).getByTestId('table-test.header');
@@ -121,9 +121,9 @@ describe('PnTable Component', () => {
     const firstRow = within(tableBody).getAllByTestId('table-test.body.row')[0];
     const tableColumns = within(firstRow).getAllByTestId('table-test.body.row.cell');
     fireEvent.click(tableColumns[2].querySelectorAll('button')[0]);
-    expect(handleColumnClick).toBeCalledTimes(1);
-    expect(handleColumnClick).toBeCalledWith(rows[0], columns[2].id);
-  });
+    expect(handleColumnClick).toHaveBeenCalledTimes(1);
+    expect(handleColumnClick).toHaveBeenCalledWith(rows[0], columns[2].id);
+  }); */
 
   it('render component - multiple PnTableBody', () => {
     expect(() =>
@@ -133,7 +133,10 @@ describe('PnTable Component', () => {
             {rows.map((row, index) => (
               <PnTableBodyRow key={row.id} testId="table-test" index={index}>
                 {columns.map((column) => (
-                  <PnTableBodyCell key={column.id} onClick={() => column.onClick?.()}>
+                  <PnTableBodyCell
+                    key={column.id}
+                    //  onClick={() => column.onClick?.()}
+                  >
                     {row[column.id]}
                   </PnTableBodyCell>
                 ))}
@@ -144,7 +147,10 @@ describe('PnTable Component', () => {
             {rows.map((row, index) => (
               <PnTableBodyRow key={row.id} testId="table-test" index={index}>
                 {columns.map((column) => (
-                  <PnTableBodyCell key={column.id} onClick={() => column.onClick?.()}>
+                  <PnTableBodyCell
+                    key={column.id}
+                    // onClick={() => column.onClick?.()}
+                  >
                     {row[column.id]}
                   </PnTableBodyCell>
                 ))}

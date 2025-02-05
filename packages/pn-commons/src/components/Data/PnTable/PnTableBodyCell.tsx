@@ -6,7 +6,7 @@ import { buttonNakedInheritStyle } from '../../../utility'; */
 export type PnTableBodyCellProps = {
   testId?: string;
   cellProps?: SxProps;
- //  onClick?: () => void;
+  // onClick?: () => void;
   children: React.ReactNode;
 };
 
@@ -14,7 +14,7 @@ const PnTableBodyCell: React.FC<PnTableBodyCellProps> = ({
   testId,
   cellProps,
   children,
- // onClick,
+  // onClick,
 }) => (
   <TableCell
     scope="col"
@@ -25,7 +25,7 @@ const PnTableBodyCell: React.FC<PnTableBodyCellProps> = ({
     }}
     // onClick={onClick}
   >
-  {/*   {onClick && (
+    {/*   {onClick && (
       <>
         {/* Even there is a onClick function on the TableCell, leave ButtonNaked below as is.
             This makes spacebar key with accessibility to trigger the onClick function.
