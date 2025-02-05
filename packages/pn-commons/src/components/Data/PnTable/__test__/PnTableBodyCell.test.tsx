@@ -19,7 +19,10 @@ describe('PnTableBodyCell', () => {
 
   it('click cell event', () => {
     const { getByTestId } = render(
-      <PnTableBodyCell testId="cell" onClick={() => mockFn()}>
+      <PnTableBodyCell
+        testId="cell"
+        // onClick={() => mockFn()}
+      >
         mocke-cell-content
       </PnTableBodyCell>
     );

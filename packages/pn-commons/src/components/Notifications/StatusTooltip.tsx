@@ -29,14 +29,16 @@ const StatusTooltip = ({
       tooltipProps={tooltipProps}
     >
       <Chip
-        label={label}
+        id={`status-chip-${label}`}
+        label={isMobile ? <span aria-hidden="true">{label}</span> : label}
         color={color}
         sx={{
           ...chipProps,
           cursor: 'default',
         }}
         data-testid={`statusChip-${label}`}
-        aria-describedby={tooltipProps?.id}
+        aria-label={isMobile ? `${label}: ${tooltip}` : undefined}
+        aria-describedby={`tooltip-${label}`} // Associa il chip al tooltip
       />
     </CustomTooltip>
   );

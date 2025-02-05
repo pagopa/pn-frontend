@@ -219,8 +219,11 @@ const NuovaDelega = () => {
             <Grid item lg={8} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumbs}
               <Paper sx={{ padding: '24px', marginBottom: '20px' }}>
-                <Typography sx={{ fontWeight: 'bold' }}>
+                <Typography sx={{ fontWeight: 'bold' }} id='personType'>
                   {t('nuovaDelega.form.personType')}
+                </Typography>
+                <Typography variant="body2" fontSize={'14px'} marginTop={1} marginBottom={1}>
+                  {t('nuovaDelega.form.personType-content-subtitle')}
                 </Typography>
                 <Formik
                   initialValues={initialValues}
@@ -245,6 +248,7 @@ const NuovaDelega = () => {
                                   event.currentTarget.value
                                 );
                               }}
+                              aria-labelledby='personType'
                             >
                               <FormControlLabel
                                 id="select-pf"
@@ -338,8 +342,11 @@ const NuovaDelega = () => {
                         helperText={getError(touched.codiceFiscale, errors.codiceFiscale)}
                         fullWidth
                       />
-                      <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }}>
+                      <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }} id='selectEntities'>
                         {t('nuovaDelega.form.viewFrom')}
+                      </Typography>
+                      <Typography variant="body2" fontSize={'14px'} marginTop={1} marginBottom={1}>
+                        {t('nuovaDelega.form.viewFrom-content-subtitle')}
                       </Typography>
                       <FormControl sx={{ width: '100%' }}>
                         <Stack>
@@ -356,6 +363,7 @@ const NuovaDelega = () => {
                                 handleGetAllEntities();
                               }
                             }}
+                            aria-labelledby='selectEntities'
                           >
                             <FormControlLabel
                               id="tutti-gli-enti-selezionati"

@@ -26,7 +26,6 @@ const LoginError = () => {
   const navigate = useNavigate();
   const [urlSearchParams] = useSearchParams();
   const errorCode = urlSearchParams.has('errorCode') ? urlSearchParams.get('errorCode') : null;
-  const navigationTimeout = process.env.NODE_ENV !== 'test' ? 15000 : 2000;
 
   // PN-1989 - per alcune causali di errore, si evita il passaggio transitorio per la pagina di errore
   //           e si fa il redirect verso la pagina di login immediatamente
@@ -64,21 +63,10 @@ const LoginError = () => {
   };
 
   const goToLogin = () => navigate(ROUTE_LOGIN);
+
   // log error
   useEffect(() => {
     handleError(window.location.search, errorCode!);
-  }, []);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      navigate(ROUTE_LOGIN);
-    }, navigationTimeout);
-
-    return () => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-    };
   }, []);
 
   return (

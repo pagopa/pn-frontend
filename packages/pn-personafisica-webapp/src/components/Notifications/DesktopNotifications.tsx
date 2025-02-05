@@ -121,7 +121,14 @@ const DesktopNotifications = ({
       cellProps: { width: '18%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
+    {
+      id: 'action',
+      label: '',
+      cellProps: { width: '8%' },
+      sortable: false,
+    },
   ];
+
 
   const rows: Array<Row<Notification>> = notifications.map((n) => ({
     ...n,
@@ -133,11 +140,11 @@ const DesktopNotifications = ({
   const showFilters = notifications?.length > 0 || filtersApplied;
 
   // Navigation handlers
-  const handleRowClick = (row: Row<Notification>) => {
+  const handleRowClick = (iun: string) => {
     if (currentDelegator) {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun, currentDelegator.mandateId));
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(iun, currentDelegator.mandateId));
     } else {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun));
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun));
     }
   };
 
@@ -169,13 +176,13 @@ const DesktopNotifications = ({
                 {columns.map((column) => (
                   <PnTableBodyCell
                     key={column.id}
-                    onClick={() => handleRowClick(row)}
+                    // onClick={() => handleRowClick(row)}
                     cellProps={{
                       ...column.cellProps,
-                      cursor: 'pointer',
+                     //  cursor: 'pointer',
                     }}
                   >
-                    <NotificationsDataSwitch data={row} type={column.id} />
+                    <NotificationsDataSwitch handleRowClick={handleRowClick} data={row} type={column.id} />
                   </PnTableBodyCell>
                 ))}
               </PnTableBodyRow>

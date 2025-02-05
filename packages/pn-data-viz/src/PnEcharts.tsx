@@ -4,15 +4,8 @@ import type { EChartOption, SetOptionOpts } from 'echarts';
 import { useEffect, useMemo, useRef } from 'react';
 import type { CSSProperties } from 'react';
 
-import {
-  Avatar,
-  Box,
-  Checkbox,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Stack,
-} from '@mui/material';
+import CircleIcon from '@mui/icons-material/Circle';
+import { Box, Checkbox, FormControl, FormControlLabel, Stack, Typography } from '@mui/material';
 
 import senderDashboard from './theme/senderDashboard';
 
@@ -106,28 +99,41 @@ export function PnECharts({
     () =>
       legend?.map((item, index) => {
         const color = option.color?.[index] ?? '';
-        const avatarSx = {
-          bgcolor: color,
+        const circleSx = {
+          color,
           width: 10,
           height: 10,
+          mr: 1,
         };
         return (
-          <ListItem key={item} sx={{ width: 'auto' }} data-testid="legendItem">
-            <Checkbox
-              onChange={() => toggleSerie(item)}
-              defaultChecked
-              sx={{
-                color,
-                '&.Mui-checked': {
-                  color,
-                },
-              }}
+          <FormControl key={item} data-testid="legendItem">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={() => toggleSerie(item)}
+                  defaultChecked
+                  sx={{
+                    color,
+                    '&.Mui-checked': {
+                      color,
+                    },
+                  }}
+                />
+              }
+              label={
+                <>
+                  <CircleIcon sx={circleSx} />
+                  <Typography
+                    variant="caption"
+                    sx={{ fontSize: '1rem', letterSpacing: '0.15px' }}
+                    color="text.secondary"
+                  >
+                    {item}
+                  </Typography>
+                </>
+              }
             />
-            <ListItemAvatar sx={{ minWidth: 18 }}>
-              <Avatar sx={avatarSx}>&nbsp;</Avatar>
-            </ListItemAvatar>
-            <ListItemText secondary={item} />
-          </ListItem>
+          </FormControl>
         );
       }),
     [theme]
