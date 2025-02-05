@@ -9,6 +9,7 @@ import {
   CustomPagination,
   PaginationData,
   TitleBox,
+  appStateActions,
   calculatePages,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
@@ -146,7 +147,16 @@ const ApiKeys = () => {
 
   const apiKeyDeleted = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(deleteApiKey(apiKeyId)).then(fetchApiKeys);
+    void dispatch(deleteApiKey(apiKeyId))
+      .then(() =>
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t('api-key-succesfully-deleted'),
+          })
+        )
+      )
+      .then(fetchApiKeys);
   };
 
   // Pagination handlers

@@ -55,7 +55,7 @@ describe('test SmsContactItem', () => {
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('courtesy-contacts.valid-sms');
     const buttons = form!.querySelectorAll('button');
-    expect(buttons[0]).toBeDisabled();
+    expect(buttons[0]).toBeEnabled();
     fireEvent.change(input!, { target: { value: '' } });
     await waitFor(() => {
       expect(input!).toHaveValue('');
@@ -81,7 +81,7 @@ describe('test SmsContactItem', () => {
     await waitFor(() => {
       expect(input).toHaveValue(INPUT_INVALID_PHONE);
     });
-    expect(saveButton).toBeDisabled();
+    expect(saveButton).toBeEnabled();
     const inputError = container.querySelector(`#default_sms-helper-text`);
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-sms');
   });

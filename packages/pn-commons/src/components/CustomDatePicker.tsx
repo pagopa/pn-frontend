@@ -26,11 +26,12 @@ const CustomDatePicker = (
         slotProps={{
           ...props.slotProps,
           toolbar: { hidden: true },
-          actionBar: { actions: [] },
+          actionBar: { actions: ['cancel'] },
           layout: { className: 'PnDatePicker' }, // don't remove it! it is used for tests
         }}
         closeOnSelect
         localeText={{
+          cancelButtonLabel: getLocalizedOrDefaultLabel('common', 'button.close'),
           openPreviousView: getLocalizedOrDefaultLabel('common', 'date-picker.left-arrow'),
           openNextView: getLocalizedOrDefaultLabel('common', 'date-picker.right-arrow'),
           calendarViewSwitchingButtonAriaLabel: (view) =>
@@ -47,7 +48,6 @@ const CustomDatePicker = (
             return getLocalizedOrDefaultLabel('common', 'date-picker.select-date');
           },
         }}
-        data-testid="ciao"
       />
     </LocalizationProvider>
   );

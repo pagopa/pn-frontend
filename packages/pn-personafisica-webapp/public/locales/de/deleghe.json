@@ -42,7 +42,8 @@
       "notificationsFrom": "Zustellungen von:",
       "allNotifications": "Alle Zustellungen",
       "active": "Aktivieren",
-      "pending": "Wartet auf Bestätigung"
+      "pending": "Wartet auf Bestätigung",
+      "menu-aria-label": "Aktionsmenü"
     }
   },
   "nuovaDelega": {

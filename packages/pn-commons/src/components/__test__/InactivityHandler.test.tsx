@@ -1,10 +1,10 @@
 import { vi } from 'vitest';
 
-import { fireEvent, render, waitFor } from '../../test-utils';
+import { act, fireEvent, render, within } from '../../test-utils';
 import InactivityHandler from '../InactivityHandler';
 
 const timerExpiredHandler = vi.fn();
-const inactivityTimer = 2000;
+const inactivityTimer = 60 * 1000;
 
 const Component = () => (
   <InactivityHandler inactivityTimer={inactivityTimer} onTimerExpired={timerExpiredHandler}>
@@ -13,31 +13,35 @@ const Component = () => (
 );
 
 describe('InactivityHandler Component', () => {
+  beforeAll(() => {
+    vi.useFakeTimers();
+  });
+
   beforeEach(() => {
     vi.resetAllMocks();
     vi.clearAllMocks();
   });
 
+  afterAll(() => {
+    vi.useRealTimers();
+  });
+
   it('test inactivity', async () => {
     // render component
-    render(<Component />);
-    await waitFor(
-      () => {
-        expect(timerExpiredHandler).toBeCalledTimes(1);
-      },
-      { timeout: inactivityTimer + 1000 }
-    );
+    const { container } = render(<Component />);
+    expect(container).toHaveTextContent('Mocked children');
+    await act(() => vi.advanceTimersByTime(inactivityTimer));
+    expect(timerExpiredHandler).toHaveBeenCalledTimes(1);
   });
 
   it('test user interaction', async () => {
     // render component
-    const result = render(<Component />);
-    fireEvent.mouseMove(result.container);
-    await waitFor(
-      () => {
-        expect(timerExpiredHandler).toBeCalledTimes(0);
-      },
-      { timeout: inactivityTimer + 1000 }
-    );
+    const { getByTestId } = render(<Component />);
+    await act(() => vi.advanceTimersByTime(inactivityTimer - 30 * 1000));
+    const inactivityDialog = getByTestId('inactivity-modal');
+    expect(inactivityDialog).toBeInTheDocument();
+    const inactivityButton = within(inactivityDialog).getByTestId('inactivity-button');
+    fireEvent.click(inactivityButton);
+    expect(timerExpiredHandler).toHaveBeenCalledTimes(0);
   });
 });

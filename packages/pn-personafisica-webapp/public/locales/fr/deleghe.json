@@ -42,7 +42,8 @@
       "notificationsFrom": "Notifications de :",
       "allNotifications": "Toutes les notifications",
       "active": "Activer",
-      "pending": "En attente de confirmation"
+      "pending": "En attente de confirmation",
+      "menu-aria-label": "Menu actions"
     }
   },
   "nuovaDelega": {
