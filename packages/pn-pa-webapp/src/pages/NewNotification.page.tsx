@@ -47,11 +47,6 @@ const NewNotification = () => {
 
   const childRef = useRef<{ confirm: () => void }>();
 
-  if (IS_PAYMENT_ENABLED) {
-    // eslint-disable-next-line functional/immutable-data
-    steps.push(t('new-notification.steps.payment-methods.title', { ns: 'notifiche' }));
-  }
-
   const goToNextStep = () => {
     setActiveStep((previousStep) => previousStep + 1);
   };

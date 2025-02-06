@@ -312,41 +312,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
                 ))}
             </CustomDropdown>
           </FormBox>
-
-          {IS_PAYMENT_ENABLED && (
-            <FormControl margin="normal" fullWidth>
-              <FormLabel id="payment-method-label">
-                <Typography fontWeight={600} fontSize={'16px'}>
-                  {`${t('payment-method')}*`}
-                </Typography>
-              </FormLabel>
-              <RadioGroup
-                aria-labelledby="payment-method-label"
-                name="paymentMode"
-                value={formik.values.paymentMode}
-                onChange={handleChange}
-              >
-                <FormControlLabel
-                  value={PaymentModel.PAGO_PA_NOTICE}
-                  control={<Radio />}
-                  label={t('pagopa-notice')}
-                  data-testid="paymentMethodRadio"
-                />
-                <FormControlLabel
-                  value={PaymentModel.F24}
-                  control={<Radio />}
-                  label={t('f24')}
-                  data-testid="paymentMethodRadio"
-                />
-                <FormControlLabel
-                  value={PaymentModel.NOTHING}
-                  control={<Radio />}
-                  label={t('nothing')}
-                  data-testid="paymentMethodRadio"
-                />
-              </RadioGroup>
-            </FormControl>
-          )}
         </NewNotificationCard>
       </form>
     </ApiErrorWrapper>
