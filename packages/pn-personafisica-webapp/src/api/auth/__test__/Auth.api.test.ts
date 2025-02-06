@@ -8,7 +8,6 @@ import { AuthApi } from '../Auth.api';
 import { AUTH_TOKEN_EXCHANGE } from '../auth.routes';
 
 describe('Auth api tests', () => {
-
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -33,7 +32,12 @@ describe('Auth api tests', () => {
   it('exchangeToken with rapidAccess', async () => {
     const spidToken = 'mocked-token';
     const rapidAccess: [AppRouteParams, string] = [AppRouteParams.AAR, 'mocked-qr-code'];
-    mock.onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: spidToken }).reply(200, userResponseWithRetrievalId);
+    mock
+      .onPost(AUTH_TOKEN_EXCHANGE(), {
+        authorizationToken: spidToken,
+        aarQRCodeValue: 'mocked-qr-code',
+      })
+      .reply(200, userResponseWithRetrievalId);
     const res = await AuthApi.exchangeToken({ spidToken, rapidAccess });
     expect(res).toStrictEqual(userResponseWithRetrievalId);
   });
