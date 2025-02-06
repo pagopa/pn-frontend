@@ -138,7 +138,7 @@ describe('SmartData', () => {
     expect(rows).toHaveLength(data.length);
   });
 
-  it('interact with table - sort and click', () => {
+  it('interact with table - sort', () => {
     const { getByTestId } = render(<RenderSmartData />);
     const table = getByTestId('containerDesktop');
     expect(table).toBeInTheDocument();
