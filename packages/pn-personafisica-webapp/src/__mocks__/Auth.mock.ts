@@ -9,7 +9,7 @@ import { store } from '../redux/store';
 export const mockLogin = async (): Promise<any> => {
   const mock = new MockAdapter(authClient);
   mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(200, userResponse);
-  const action = store.dispatch(exchangeToken('mocked-token'));
+  const action = store.dispatch(exchangeToken({ spidToken: 'mocked-token' }));
   mock.reset();
   mock.restore();
   return action;
@@ -23,7 +23,7 @@ export const mockAuthentication = () => {
   beforeAll(() => {
     mock = new MockAdapter(authClient);
     mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(200, userResponse);
-    store.dispatch(exchangeToken('mocked-token'));
+    store.dispatch(exchangeToken({ spidToken: 'mocked-token' }));
   });
 
   afterAll(() => {
@@ -48,4 +48,10 @@ export const userResponse: User = {
   exp: 4850004251,
   iss: 'https://spid-hub-test.dev.pn.pagopa.it',
   jti: 'mockedJTI004',
+};
+
+export const userResponseWithRetrievalId: User = {
+  ...userResponse,
+  retrievalId: 'mocked-retrieval-id',
+  tppId: 'mocked-tpp-id',
 };

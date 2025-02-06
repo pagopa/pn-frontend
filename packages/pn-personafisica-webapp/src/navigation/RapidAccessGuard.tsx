@@ -68,7 +68,7 @@ const RapidAccessGuard = () => {
         path = GET_DETTAGLIO_NOTIFICA_PATH(retrievalPayload.originId!);
       }
 
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_RAPID_ACCESS);
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_RAPID_ACCESS, { source: param });
 
       const state: NotificationDetailRouteState = { source: param };
       navigate(path, {

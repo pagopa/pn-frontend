@@ -25,6 +25,8 @@ const userDataMatcher = yup
     iss: yup.string().url(),
     jti: yup.string().matches(dataRegex.lettersNumbersAndDashs),
     mobile_phone: yup.string().matches(dataRegex.phoneNumber),
+    retrievalId: yup.string().optional(),
+    tppId: yup.string().optional(),
   })
   .noUnknown(true);
 

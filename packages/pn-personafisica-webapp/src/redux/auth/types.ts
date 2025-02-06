@@ -14,4 +14,6 @@ export interface User extends BasicUser {
   exp: number;
   iss: string;
   jti: string;
+  retrievalId?: string; // TODO verificare il nome
+  tppId?: string;       // TODO verificare il nome
 }

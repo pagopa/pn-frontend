@@ -122,6 +122,7 @@ const SessionGuard = () => {
   );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const rapidAccess = useRapidAccessParam();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
   const { hasApiErrors, hasSpecificStatusError } = useErrors();
   const { WORK_IN_PROGRESS } = getConfiguration();
@@ -157,7 +158,7 @@ const SessionGuard = () => {
       const spidToken = getTokenParam();
       if (spidToken) {
         AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
-        await dispatch(exchangeToken(spidToken));
+        await dispatch(exchangeToken({ spidToken, rapidAccess }));
       }
     };
     void performStep(INITIALIZATION_STEPS.USER_DETERMINATION, doUserDetermination);

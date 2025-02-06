@@ -2,7 +2,7 @@ import { ConsentType, TosPrivacyConsent, parseError } from '@pagopa-pn/pn-common
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
-import { AuthApi } from '../../api/auth/Auth.api';
+import { AuthApi, TokenExchangeRequest } from '../../api/auth/Auth.api';
 import {
   BffTosPrivacyActionBody,
   UserConsentsApiFactory,
@@ -18,11 +18,11 @@ export enum AUTH_ACTIONS {
  * Exchange token action between selfcare and pn.
  * If token is valid, user info are set in sessionStorage
  */
-export const exchangeToken = createAsyncThunk<User, string>(
+export const exchangeToken = createAsyncThunk<User, TokenExchangeRequest>(
   'exchangeToken',
-  async (spidToken, { rejectWithValue }) => {
+  async (request: TokenExchangeRequest, { rejectWithValue }) => {
     try {
-      return await AuthApi.exchangeToken(spidToken);
+      return await AuthApi.exchangeToken(request);
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }

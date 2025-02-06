@@ -34,7 +34,6 @@ import {
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { EventNotificationSource } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -62,18 +61,6 @@ import { NotificationData } from '../utility/MixpanelUtils/Strategies/SendNotifi
 // (to include in navigation or Link to the route/s arriving to it)
 export type NotificationDetailRouteState = {
   source?: AppRouteParams; // indicates whether the user arrived to the notification detail page from the QR code
-};
-
-const getEventNotificationSource = (
-  source: AppRouteParams | undefined
-): EventNotificationSource => {
-  if (source === AppRouteParams.AAR) {
-    return 'QRcode';
-  }
-  if (source === AppRouteParams.RETRIEVAL_ID) {
-    return '3Papp';
-  }
-  return 'LISTA_NOTIFICHE';
 };
 
 const NotificationDetail: React.FC = () => {
@@ -455,7 +442,7 @@ const NotificationDetail: React.FC = () => {
         notificationStatus: notification.notificationStatus,
         checkIfUserHasPayments,
         userPayments,
-        source: getEventNotificationSource(rapidAccessSource),
+        source: rapidAccessSource,
         timeline: notification.timeline,
       } as NotificationData);
 

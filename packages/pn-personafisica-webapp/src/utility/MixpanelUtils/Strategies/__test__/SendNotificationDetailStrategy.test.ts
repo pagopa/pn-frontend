@@ -1,4 +1,5 @@
 import {
+  AppRouteParams,
   DowntimeStatus,
   EventAction,
   EventCategory,
@@ -32,7 +33,7 @@ describe('Mixpanel - Notification detail Strategy', () => {
         pagoPaF24: paymentsData.pagoPaF24,
         f24Only: paymentsData.f24Only,
       },
-      source: 'QRcode',
+      source: AppRouteParams.AAR,
       timeline: timeline,
     };
 
