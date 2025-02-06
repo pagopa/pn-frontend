@@ -25,6 +25,7 @@ import { DowntimeApiFactory } from '../../generated-client/downtime-logs';
 import {
   BffCheckAarRequest,
   BffCheckAarResponse,
+  BffCheckTPPResponse,
   NotificationReceivedApiFactory,
 } from '../../generated-client/notifications';
 import { PaymentsApiFactory } from '../../generated-client/payments';
@@ -42,7 +43,8 @@ export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION_PAYMENT_INFO = 'getReceivedNotificationPaymentInfo',
   GET_RECEIVED_NOTIFICATION_PAYMENT_URL = 'getReceivedNotificationPaymentUrl',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
-  EXCHANGE_NOTIFICATION_RAPID_ACCESS = 'exchangeNotificationRapidAccess',
+  EXCHANGE_NOTIFICATION_QR_CODE = 'exchangeNotificationQrCode',
+  EXCHANGE_NOTIFICATION_RETRIEVAL_ID = 'exchangeNotificationRetrievalId',
 }
 
 export const getReceivedNotification = createAsyncThunk<
@@ -263,7 +265,7 @@ export const getDowntimeHistory = createAsyncThunk<DowntimeLogHistory, GetDownti
 );
 
 export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, string>(
-  NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RAPID_ACCESS,
+  NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
   async (aarQrCodeValue: string, { rejectWithValue }) => {
     try {
       const notificationReceivedApiFactory = NotificationReceivedApiFactory(
@@ -280,23 +282,17 @@ export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, 
   }
 );
 
-// TODO update with bff microservice
-interface response {
-  iun: string;
-}
-
-export const exchangeNotificationRetrievalId = createAsyncThunk<response, string>(
-  NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RAPID_ACCESS,
+export const exchangeNotificationRetrievalId = createAsyncThunk<BffCheckTPPResponse, string>(
+  NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
   async (retrievalId: string, { rejectWithValue }) => {
     try {
-      console.log('params', retrievalId);
-      // const notificationReceivedApiFactory = NotificationReceivedApiFactory(
-      //   undefined,
-      //   undefined,
-      //   apiClient
-      // );
-      // const response = await notificationReceivedApiFactory.checkAarQrCodeV1(params);
-      return { iun: 'mock-iun' };
+      const notificationReceivedApiFactory = NotificationReceivedApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await notificationReceivedApiFactory.checkTppV1(retrievalId);
+      return response.data;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }

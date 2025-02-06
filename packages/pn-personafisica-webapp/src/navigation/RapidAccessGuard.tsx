@@ -13,6 +13,7 @@ import {
 
 import { NotificationId } from '../models/Notifications';
 import { PFEventsType } from '../models/PFEventsType';
+import { NotificationDetailRouteState } from '../pages/NotificationDetail.page';
 import { useAppDispatch } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
@@ -34,11 +35,6 @@ function notificationDetailPath(notificationId: NotificationId): string {
     : GET_DETTAGLIO_NOTIFICA_PATH(notificationId.iun);
 }
 
-const RapidAccessActions = {
-  [AppRouteParams.AAR]: exchangeNotificationQrCode,
-  [AppRouteParams.RETRIEVAL_ID]: exchangeNotificationRetrievalId,
-};
-
 /** 
   Il cittadino può accedere direttamente a SEND tramite:
   - QR code dell'aar:                            https://cittadini.notifichedigitali.it/?aar=123456
@@ -49,28 +45,43 @@ const RapidAccessGuard = () => {
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche']);
   const [fetchError, setFetchError] = useState(false);
-  const [notificationId, setNotificationId] = useState<NotificationId | undefined>();
   const rapidAccess = useRapidAccessParam();
 
   useEffect(() => {
-    const [type, value] = rapidAccess || [];
-    if (!type || !value) {
-      return;
+    const [param, value] = rapidAccess || [];
+    if (param && value) {
+      void exchangeNotification(param, value);
     }
-
-    dispatch(RapidAccessActions[type](value))
-      .unwrap()
-      .then((notification) => {
-        if (notification) {
-          setNotificationId(notification);
-        }
-      })
-      .catch(() => {
-        setFetchError(true);
-      });
   }, [rapidAccess]);
 
+  const exchangeNotification = async (param: AppRouteParams, value: string) => {
+    try {
+      // eslint-disable-next-line functional/no-let
+      let path = '';
+      if (param === AppRouteParams.AAR) {
+        const notificationId = await dispatch(exchangeNotificationQrCode(value)).unwrap();
+        path = notificationDetailPath(notificationId);
+      }
+      if (param === AppRouteParams.RETRIEVAL_ID) {
+        const retrievalPayload = await dispatch(exchangeNotificationRetrievalId(value)).unwrap();
+        path = GET_DETTAGLIO_NOTIFICA_PATH(retrievalPayload.originId!);
+      }
+
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_RAPID_ACCESS);
+
+      const state: NotificationDetailRouteState = { source: param };
+      navigate(path, {
+        replace: true,
+        state,
+      });
+    } catch (e: any) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_NOT_ALLOWED);
+      setFetchError(true);
+    }
+  };
+
   const handleError = (e: AppResponse) => {
+    // fix(12155): hide toast error when check aar api returns notification not found
     const error = e.errors ? e.errors[0] : null;
     if (error && error.code === ServerResponseErrorCode.PN_DELIVERY_NOTIFICATIONNOTFOUND) {
       return false;
@@ -80,33 +91,23 @@ const RapidAccessGuard = () => {
 
   useEffect(() => {
     AppResponsePublisher.error.subscribe(
-      NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RAPID_ACCESS,
+      NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
       handleError
     );
 
     return () => {
       AppResponsePublisher.error.unsubscribe(
-        NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RAPID_ACCESS,
+        NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
         handleError
       );
     };
   }, []);
 
-  useEffect(() => {
-    if (notificationId) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_RAPID_ACCESS);
-      navigate(notificationDetailPath(notificationId), {
-        replace: true,
-        state: { fromQrCode: true }, // TODO differenziamo tra qr code e retrievalId?
-      });
-    }
-  }, [notificationId]);
-
-  if (!rapidAccess) {
+  if (!rapidAccess || (fetchError && rapidAccess[0] !== AppRouteParams.AAR)) {
     return <Outlet />;
   }
+
   if (fetchError) {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_NOT_ALLOWED);
     return (
       <AccessDenied
         icon={<IllusQuestion />}

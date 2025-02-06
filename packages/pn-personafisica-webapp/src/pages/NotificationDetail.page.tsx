@@ -7,6 +7,7 @@ import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/mat
 import {
   ApiError,
   ApiErrorWrapper,
+  AppRouteParams,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
   LegalFactId,
@@ -33,6 +34,7 @@ import {
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { EventNotificationSource } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -54,11 +56,24 @@ import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
+import { NotificationData } from '../utility/MixpanelUtils/Strategies/SendNotificationDetailStrategy';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
-type LocationState = {
-  fromQrCode?: boolean; // indicates whether the user arrived to the notification detail page from the QR code
+export type NotificationDetailRouteState = {
+  source?: AppRouteParams; // indicates whether the user arrived to the notification detail page from the QR code
+};
+
+const getEventNotificationSource = (
+  source: AppRouteParams | undefined
+): EventNotificationSource => {
+  if (source === AppRouteParams.AAR) {
+    return 'QRcode';
+  }
+  if (source === AppRouteParams.RETRIEVAL_ID) {
+    return '3Papp';
+  }
+  return 'LISTA_NOTIFICHE';
 };
 
 const NotificationDetail: React.FC = () => {
@@ -378,8 +393,8 @@ const NotificationDetail: React.FC = () => {
     }
   }, []);
 
-  const fromQrCode = useMemo(
-    () => !!(location.state && (location.state as LocationState).fromQrCode),
+  const rapidAccessSource = useMemo<AppRouteParams | undefined>(
+    () => (location.state as NotificationDetailRouteState)?.source,
     [location]
   );
 
@@ -387,14 +402,14 @@ const NotificationDetail: React.FC = () => {
     const backRoute = mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE;
     return (
       <PnBreadcrumb
-        showBackAction={!fromQrCode}
+        showBackAction={!rapidAccessSource}
         linkRoute={backRoute}
         linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
         currentLocationLabel={`${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}`}
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [fromQrCode, i18n.language]);
+  }, [rapidAccessSource, i18n.language]);
 
   const breadcrumb = (
     <Fragment>
@@ -440,9 +455,9 @@ const NotificationDetail: React.FC = () => {
         notificationStatus: notification.notificationStatus,
         checkIfUserHasPayments,
         userPayments,
-        fromQrCode,
+        source: getEventNotificationSource(rapidAccessSource),
         timeline: notification.timeline,
-      });
+      } as NotificationData);
 
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATIONS_COUNT, {
         timeline: notification.timeline,

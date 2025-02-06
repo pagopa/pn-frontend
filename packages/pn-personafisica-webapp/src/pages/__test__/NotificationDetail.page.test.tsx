@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 import {
   AppMessage,
   AppResponseMessage,
+  AppRouteParams,
   LegalFactId,
   NotificationDetail as NotificationDetailModel,
   NotificationDetailOtherDocument,
@@ -46,7 +47,7 @@ import NotificationDetail from '../NotificationDetail.page';
 
 const mockNavigateFn = vi.fn();
 let mockIsDelegate = false;
-let mockIsFromQrCode = false;
+let mockSource: AppRouteParams | undefined = AppRouteParams.AAR;
 const mockAssignFn = vi.fn();
 
 // mock imports
@@ -57,7 +58,7 @@ vi.mock('react-router-dom', async () => ({
       ? { id: 'DAPQ-LWQV-DKQH-202308-A-1', mandateId: '5' }
       : { id: 'DAPQ-LWQV-DKQH-202308-A-1' },
   useNavigate: () => mockNavigateFn,
-  useLocation: () => ({ state: { fromQrCode: mockIsFromQrCode }, pathname: '/' }),
+  useLocation: () => ({ state: { source: mockSource }, pathname: '/' }),
 }));
 
 vi.mock('react-i18next', () => ({
@@ -100,7 +101,7 @@ describe('NotificationDetail Page', async () => {
     sessionStorage.removeItem(PAYMENT_CACHE_KEY);
     vi.clearAllMocks();
     mock.reset();
-    mockIsFromQrCode = false;
+    mockSource = undefined;
     mockIsDelegate = false;
     window.location.href = '';
   });
@@ -474,7 +475,24 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('navigation from QR code - does not include back button', async () => {
-    mockIsFromQrCode = true;
+    mockSource = AppRouteParams.AAR;
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onGet(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    // we use regexp to not set the query parameters
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+    const backButton = result.queryByTestId('breadcrumb-indietro-button');
+    expect(backButton).not.toBeInTheDocument();
+  });
+
+  it('navigation from Retrieval ID - does not include back button', async () => {
+    mockSource = AppRouteParams.RETRIEVAL_ID;
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onGet(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters

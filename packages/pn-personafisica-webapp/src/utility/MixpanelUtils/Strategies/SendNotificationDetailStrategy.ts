@@ -13,14 +13,15 @@ import {
   TimelineCategory,
   TrackedEvent,
 } from '@pagopa-pn/pn-commons';
+import { EventNotificationSource } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 
-type NotificationData = {
+export type NotificationData = {
   downtimeEvents: Array<Downtime>;
   mandateId: string | undefined;
   notificationStatus: NotificationStatus;
   checkIfUserHasPayments: boolean;
   userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> };
-  fromQrCode: boolean;
+  source: EventNotificationSource;
   timeline: Array<INotificationDetailTimeline>;
 };
 
@@ -31,7 +32,7 @@ export class SendNotificationDetailStrategy implements EventStrategy {
     notificationStatus,
     checkIfUserHasPayments,
     userPayments,
-    fromQrCode,
+    source,
     timeline,
   }: NotificationData): TrackedEvent<EventNotificationDetailType> {
     // eslint-disable-next-line functional/no-let
@@ -64,7 +65,7 @@ export class SendNotificationDetailStrategy implements EventStrategy {
         contains_f24: hasF24 ? 'yes' : 'no',
         first_time_opening:
           timeline.findIndex((el) => el.category === TimelineCategory.NOTIFICATION_VIEWED) === -1,
-        source: fromQrCode ? 'QRcode' : 'LISTA_NOTIFICHE',
+        source,
       },
     };
   }
