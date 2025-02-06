@@ -92,7 +92,7 @@ const RenderSmartData: React.FC<{
             <SmartBodyCell
               key={column.id.toString()}
               columnId={column.id}
-              tableProps={{}}
+              tableProps={column.tableConfiguration}
               cardProps={column.cardConfiguration}
               isCardHeader={column.cardConfiguration?.isCardHeader}
               testId="rowCell"
