@@ -8,7 +8,7 @@
     },
     "lastCheckLegend": "Ultimo aggiornamento - {{ lastCheckTimestamp }}",
     "aria-missed-endDate": "Data fine mancante, disservizio in corso",
-    "missed-endDate": "In Corso"
+    "missed-endDate": "In corso"
   },
   "downtimeList": {
     "title": "Storico dei disservizi",
