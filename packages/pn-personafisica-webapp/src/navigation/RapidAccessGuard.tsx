@@ -7,6 +7,7 @@ import {
   AppResponse,
   AppResponsePublisher,
   AppRouteParams,
+  appStateActions,
   IllusQuestion,
   LoadingPage,
 } from '@pagopa-pn/pn-commons';
@@ -80,7 +81,7 @@ const RapidAccessGuard = () => {
     }
   };
 
-  const handleError = (e: AppResponse) => {
+  const handleErrorQrCode = (e: AppResponse) => {
     // fix(12155): hide toast error when check aar api returns notification not found
     const error = e.errors ? e.errors[0] : null;
     if (error && error.code === ServerResponseErrorCode.PN_DELIVERY_NOTIFICATIONNOTFOUND) {
@@ -89,16 +90,34 @@ const RapidAccessGuard = () => {
     return true;
   };
 
+  const handleErrorRetrievalId = () => {
+    dispatch(
+      appStateActions.addError({
+        title: 'Errore Accesso Rapido',                           // TODO copy
+        message: 'Non è stato possibile recuperare la notifica',  // TODO copy
+      })
+    );
+    return false;
+  };
+
   useEffect(() => {
     AppResponsePublisher.error.subscribe(
       NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
-      handleError
+      handleErrorQrCode
+    );
+    AppResponsePublisher.error.subscribe(
+      NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
+      handleErrorRetrievalId
     );
 
     return () => {
       AppResponsePublisher.error.unsubscribe(
         NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
-        handleError
+        handleErrorQrCode
+      );
+      AppResponsePublisher.error.unsubscribe(
+        NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
+        handleErrorRetrievalId
       );
     };
   }, []);
