@@ -39,7 +39,9 @@ const CustomTagGroup: React.FC<CustomTagGroupProps> = ({
   onOpen,
   children,
 }) => {
-  const arrayChildren = Array.isArray(children) ? children : [children as JSX.Element];
+  const arrayChildren = React.Children.count(children)
+    ? (children as Array<JSX.Element>)
+    : [children as JSX.Element];
   const isOverflow = visibleItems ? arrayChildren.length > visibleItems : false;
   const maxCount = isOverflow ? visibleItems : arrayChildren.length;
 
