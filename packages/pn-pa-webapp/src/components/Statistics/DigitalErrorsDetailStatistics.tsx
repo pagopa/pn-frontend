@@ -1,4 +1,3 @@
-/* eslint-disable functional/immutable-data */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -37,40 +36,61 @@ const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
   const delivery_errors = sData[DigitaErrorTypes.DELIVERY_ERROR].count;
   const pec_errors = sData[DigitaErrorTypes.INVALID_PEC].count;
   const rejected_errors = sData[DigitaErrorTypes.REJECTED].count;
-
-  const delivery_title = t('digital_errors_detail.delivery_title');
-  const delivery_description = t('digital_errors_detail.delivery_description');
-  const pec_title = t('digital_errors_detail.pec_title');
-  const pec_description = t('digital_errors_detail.pec_description');
-  const rejected_title = t('digital_errors_detail.rejected_title');
-  const rejected_description = t('digital_errors_detail.rejected_description');
+  const virus_detected_errors = sData[DigitaErrorTypes.VIRUS_DETECTED].count;
+  const server_pec_comunication_errors = sData[DigitaErrorTypes.SERVER_PEC_COMUNICATION].count;
+  const sending_pec_errors = sData[DigitaErrorTypes.SENDING_PEC].count;
+  const malformed_pec_address_errors = sData[DigitaErrorTypes.MALFORMED_PEC_ADDRESS].count;
 
   const data: Array<AggregateErrorDetailDataItem> = [
     {
-      title: delivery_title,
-      description: delivery_description,
+      title: t('digital_errors_detail.delivery_title'),
+      description: t('digital_errors_detail.delivery_description'),
       value: delivery_errors,
       color: GraphColors.lightRed,
     },
     {
-      title: pec_title,
-      description: pec_description,
+      title: t('digital_errors_detail.pec_title'),
+      description: t('digital_errors_detail.pec_description'),
       value: pec_errors,
       color: GraphColors.darkRed,
     },
     {
-      title: rejected_title,
-      description: rejected_description,
+      title: t('digital_errors_detail.rejected_title'),
+      description: t('digital_errors_detail.rejected_description'),
       value: rejected_errors,
       color: GraphColors.pink,
     },
+    {
+      title: t('digital_errors_detail.virus_detected_title'),
+      description: t('digital_errors_detail.virus_detected_description'),
+      value: virus_detected_errors,
+      color: GraphColors.turquoise,
+    },
+    {
+      title: t('digital_errors_detail.server_pec_comunication_title'),
+      description: t('digital_errors_detail.server_pec_comunication_description'),
+      value: server_pec_comunication_errors,
+      color: GraphColors.blue,
+    },
+    {
+      title: t('digital_errors_detail.sending_pec_title'),
+      description: t('digital_errors_detail.sending_pec_description'),
+      value: sending_pec_errors,
+      color: GraphColors.darkGreen,
+    },
+    {
+      title: t('digital_errors_detail.malformed_pec_address_title'),
+      description: t('digital_errors_detail.malformed_pec_address_description'),
+      value: malformed_pec_address_errors,
+      color: GraphColors.navy,
+    },
   ];
 
-  const isEmpty = !data.find((item) => item.value > 0);
+  const isEmpty = data.every((item) => item.value === 0);
 
-  const aggregateData = [data[0], data[2], data[1]];
+  const aggregateData = data.filter((item) => item.value > 0);
 
-  const color = [GraphColors.lightRed, GraphColors.pink, GraphColors.darkRed];
+  const color = aggregateData.map((item) => item.color);
 
   const options: PnEChartsProps['option'] = {
     color,
@@ -79,35 +99,39 @@ const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
   return (
     <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="digitalErrorsDetail">
       <Grid container direction={{ lg: 'row', xs: 'column' }} spacing={3}>
-        <Grid item lg={5} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
+        <Grid item lg={isEmpty ? 12 : 5} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
           <Typography variant="h6" component="h3">
             {t('digital_errors_detail.title')}
           </Typography>
-          <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
-            {t('digital_errors_detail.description')}
-          </Typography>
-          <List>
-            {data.map((item) => {
-              const title = item.title;
-              const description = item.description;
-              const color = item.color;
-              const avatarSx = {
-                bgcolor: color,
-                width: 10,
-                height: 10,
-              };
-              return (
-                <ListItem key={title}>
-                  <ListItemAvatar sx={{ minWidth: 18 }}>
-                    <Avatar sx={avatarSx}>&nbsp;</Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary={title} secondary={description} />
-                </ListItem>
-              );
-            })}
-          </List>
+          {!isEmpty && (
+            <>
+              <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
+                {t('digital_errors_detail.description')}
+              </Typography>
+              <List>
+                {aggregateData.map((item) => {
+                  const title = item.title;
+                  const description = item.description;
+                  const color = item.color;
+                  const avatarSx = {
+                    bgcolor: color,
+                    width: 10,
+                    height: 10,
+                  };
+                  return (
+                    <ListItem key={title}>
+                      <ListItemAvatar sx={{ minWidth: 18 }}>
+                        <Avatar sx={avatarSx}>&nbsp;</Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={title} secondary={description} />
+                    </ListItem>
+                  );
+                })}
+              </List>
+            </>
+          )}
         </Grid>
-        <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
+        <Grid item lg={isEmpty ? 12 : 7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
           {isEmpty ? (
             <EmptyStatistics />
           ) : (
