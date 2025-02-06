@@ -178,10 +178,8 @@ const DesktopNotifications = ({
                 {columns.map((column) => (
                   <PnTableBodyCell
                     key={column.id}
-                    // onClick={() => handleRowClick(row)}
                     cellProps={{
                       ...column.cellProps,
-                      //  cursor: 'pointer',
                     }}
                   >
                     <NotificationsDataSwitch
