@@ -126,7 +126,6 @@ const DesktopNotifications = ({
 
   const showFilters = notifications?.length > 0 || filtersApplied;
 
-  // Navigation handlers
   const handleRowClick = (iun: string, mandateId?: string) => {
     if (isDelegatedPage && mandateId) {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(iun, mandateId));
@@ -163,10 +162,8 @@ const DesktopNotifications = ({
                 {columns.map((column) => (
                   <PnTableBodyCell
                     key={column.id}
-                    // onClick={() => handleRowClick(row)}
                     cellProps={{
                       ...column.cellProps,
-                      // cursor: 'pointer',
                     }}
                   >
                     <NotificationsDataSwitch

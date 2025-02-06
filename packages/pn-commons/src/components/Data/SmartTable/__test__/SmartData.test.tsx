@@ -150,12 +150,6 @@ describe('SmartData', () => {
     const sortToggle = within(table).getByTestId(`headerCellDesktop.sort.${sortableColumn!.id}`);
     fireEvent.click(sortToggle);
     expect(handleSort).toHaveBeenCalledTimes(1);
-    /* const clickableColumnIdx = smartCfg.findIndex((cfg) => cfg.tableConfiguration.onClick);
-    const rows = within(table).getAllByTestId('bodyRowDesktop');
-    // we can take the row we want
-    const cells = within(rows[0]).getAllByTestId('rowCellDesktop');
-    fireEvent.click(cells[clickableColumnIdx]);
-    expect(handleColumnClick).toHaveBeenCalledTimes(1); */
   });
 
   it('no sort available (desktop version)', () => {

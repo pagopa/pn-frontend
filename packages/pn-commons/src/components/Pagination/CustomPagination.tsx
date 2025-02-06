@@ -195,7 +195,7 @@ export default function CustomPagination({
                       : props2.type
                   }
                   {...props2}
-                  // sx={{ border: 'none' }}
+                  sx={{ border: 'none' }}
                 />
               );
             }}

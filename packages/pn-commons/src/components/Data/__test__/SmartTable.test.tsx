@@ -115,11 +115,7 @@ const RenderSmartable: React.FC<{
             <SmartBodyCell
               key={column.id.toString()}
               columnId={column.id}
-              tableProps={
-                {
-                  // sonClick: column.tableConfiguration.onClick,
-                }
-              }
+              tableProps={{}}
               cardProps={column.cardConfiguration}
               isCardHeader={column.cardConfiguration?.isCardHeader}
             >
@@ -231,11 +227,7 @@ describe('Smart Table Component', () => {
                   <SmartBodyCell
                     key={column.id.toString()}
                     columnId={column.id}
-                    tableProps={
-                      {
-                        // onClick: column.tableConfiguration.onClick,
-                      }
-                    }
+                    tableProps={{}}
                     cardProps={column.cardConfiguration}
                     isCardHeader={column.cardConfiguration?.isCardHeader}
                   >

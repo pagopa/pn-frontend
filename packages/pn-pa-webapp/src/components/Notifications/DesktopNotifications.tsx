@@ -14,7 +14,6 @@ import {
   PnTableBodyRow,
   PnTableHeader,
   PnTableHeaderCell,
-  // Row,
   Sort,
 } from '@pagopa-pn/pn-commons';
 
@@ -154,7 +153,6 @@ const DesktopNotifications = ({
 
   const showFilters = notifications?.length > 0 || filtersApplied;
 
-  // Navigation handlers
   const handleRowClick = (iun: string) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun));
   };
@@ -190,10 +188,8 @@ const DesktopNotifications = ({
                     {columns.map((column) => (
                       <PnTableBodyCell
                         key={column.id}
-                        // onClick={() => handleRowClick(row)}
                         cellProps={{
                           ...column.cellProps,
-                          // cursor: 'pointer',
                         }}
                       >
                         <NotificationsDataSwitch

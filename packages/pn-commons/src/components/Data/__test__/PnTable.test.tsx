@@ -102,29 +102,6 @@ describe('PnTable Component', () => {
     });
   });
 
-  /* it('sorts a column', () => {
-    const { getByRole } = render(<RenderPnTable />);
-    const table = getByRole('table');
-    const tableHead = within(table).getByTestId('table-test.header');
-    const firstColumn = within(tableHead).getAllByTestId('table-test.header.cell')[0];
-    const sortButton = within(firstColumn).getByRole('button');
-    expect(sortButton).toBeInTheDocument();
-    fireEvent.click(sortButton);
-    expect(handleSort).toBeCalledTimes(1);
-    expect(handleSort).toBeCalledWith({ order: 'desc', orderBy: 'column-1' });
-  });
-
-  it('click on a column', () => {
-    const { getByRole } = render(<RenderPnTable />);
-    const table = getByRole('table');
-    const tableBody = within(table).getByTestId('table-test.body');
-    const firstRow = within(tableBody).getAllByTestId('table-test.body.row')[0];
-    const tableColumns = within(firstRow).getAllByTestId('table-test.body.row.cell');
-    fireEvent.click(tableColumns[2].querySelectorAll('button')[0]);
-    expect(handleColumnClick).toHaveBeenCalledTimes(1);
-    expect(handleColumnClick).toHaveBeenCalledWith(rows[0], columns[2].id);
-  }); */
-
   it('render component - multiple PnTableBody', () => {
     expect(() =>
       render(
@@ -133,12 +110,7 @@ describe('PnTable Component', () => {
             {rows.map((row, index) => (
               <PnTableBodyRow key={row.id} testId="table-test" index={index}>
                 {columns.map((column) => (
-                  <PnTableBodyCell
-                    key={column.id}
-                    //  onClick={() => column.onClick?.()}
-                  >
-                    {row[column.id]}
-                  </PnTableBodyCell>
+                  <PnTableBodyCell key={column.id}>{row[column.id]}</PnTableBodyCell>
                 ))}
               </PnTableBodyRow>
             ))}
@@ -147,12 +119,7 @@ describe('PnTable Component', () => {
             {rows.map((row, index) => (
               <PnTableBodyRow key={row.id} testId="table-test" index={index}>
                 {columns.map((column) => (
-                  <PnTableBodyCell
-                    key={column.id}
-                    // onClick={() => column.onClick?.()}
-                  >
-                    {row[column.id]}
-                  </PnTableBodyCell>
+                  <PnTableBodyCell key={column.id}>{row[column.id]}</PnTableBodyCell>
                 ))}
               </PnTableBodyRow>
             ))}

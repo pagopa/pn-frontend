@@ -17,7 +17,6 @@ const CustomTooltip: React.FC<Props> = ({
   onOpen,
   tooltipProps,
 }) => {
-  // tooltip state
   const [open, setOpen] = useState(false);
   const handleTooltipClose = () => {
     if (openOnClick) {
@@ -30,16 +29,14 @@ const CustomTooltip: React.FC<Props> = ({
       setOpen(!open);
     }
   };
-  const tooltipId = `tooltip-${Math.random().toString(36).substr(2, 9)}`; // Genera un ID unico per ogni tooltip
+  const tooltipId = `tooltip-${Math.random().toString(36).substr(2, 9)}`;
 
-  // Funzione per gestire il focus su tastiera
   const handleFocus = () => {
-    handleTooltipOpen(); // Apre il tooltip quando l'elemento riceve il focus
+    handleTooltipOpen();
   };
 
-  // Funzione per gestire il mouseover
   const handleMouseOver = () => {
-    handleTooltipOpen(); // Apre il tooltip quando il mouse passa sopra l'elemento
+    handleTooltipOpen();
   };
 
   return (
@@ -52,20 +49,20 @@ const CustomTooltip: React.FC<Props> = ({
       disableHoverListener={openOnClick}
       enterTouchDelay={0}
       onOpen={onOpen}
-      aria-live="polite" // Tooltip letto dal lettore di schermo quando visibile
-      aria-describedby={open ? tooltipId : undefined} // Associa il tooltip se visibile
+      aria-live="polite"
+      aria-describedby={open ? tooltipId : undefined}
       {...tooltipProps}
     >
       {openOnClick
         ? cloneElement(children, {
-            onClick: () => handleTooltipOpen(), // Apre il tooltip su click
-            'aria-describedby': tooltipId, // Associa il tooltip all'elemento
+            onClick: () => handleTooltipOpen(),
+            'aria-describedby': tooltipId,
           })
         : cloneElement(children, {
-            onFocus: handleFocus, // Apre il tooltip su focus
-            onMouseOver: handleMouseOver, // Apre il tooltip su mouseover
+            onFocus: handleFocus,
+            onMouseOver: handleMouseOver,
             'aria-describedby': tooltipId,
-            tabIndex: 0, // Associa il tooltip all'elemento
+            tabIndex: 0,
           })}
     </Tooltip>
   );
