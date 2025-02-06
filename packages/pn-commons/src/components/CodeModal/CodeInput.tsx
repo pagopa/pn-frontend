@@ -138,10 +138,13 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
     onChange(currentValues);
   }, [currentValues]);
 
+  const cifre = ['primo', 'secondo', 'terzo', 'quarto', 'ultimo'];
+
   return (
     <Fragment>
       {initialValues.map((_value, index) => (
         <TextField
+          aria-label={`input numero ${cifre[index]}`}
           data-testid={`codeInput(${index})`}
           autoComplete="off"
           key={index}
