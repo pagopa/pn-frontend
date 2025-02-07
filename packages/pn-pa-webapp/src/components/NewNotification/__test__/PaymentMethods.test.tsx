@@ -121,7 +121,7 @@ describe.skip('PaymentMethods Component', () => {
       expect(mockActionFn).toBeCalledWith(
         newNotification.recipients.reduce((obj: { [key: string]: PaymentObject }, r, index) => {
           obj[r.taxId] = {
-            pagoPaForm: {
+            pagoPa: {
               id: index === 0 ? 'MRARSS90P08H501Q-pagoPaDoc' : 'SRAGLL00P48H501U-pagoPaDoc',
               idx: 0,
               name: 'pagopa-notice',
@@ -138,7 +138,7 @@ describe.skip('PaymentMethods Component', () => {
                 versionToken: '',
               },
             },
-            f24standard: {
+            f24: {
               id:
                 index === 0 ? 'MRARSS90P08H501Q-f24standardDoc' : 'SRAGLL00P48H501U-f24standardDoc',
               idx: 0,

@@ -138,14 +138,11 @@ const getPaymentDocumentsToUpload = (items: {
   const documentsArr: Array<Promise<UploadDocumentParams>> = [];
   for (const item of Object.values(items)) {
     /* eslint-disable functional/immutable-data */
-    if (item.pagoPaForm && !item.pagoPaForm.ref.key && !item.pagoPaForm.ref.versionToken) {
-      documentsArr.push(createPayloadToUpload(item.pagoPaForm));
+    if (item.pagoPa && !item.pagoPa.ref.key && !item.pagoPa.ref.versionToken) {
+      documentsArr.push(createPayloadToUpload(item.pagoPa));
     }
-    if (item.f24flatRate && !item.f24flatRate.ref.key && !item.f24flatRate.ref.versionToken) {
-      documentsArr.push(createPayloadToUpload(item.f24flatRate));
-    }
-    if (item.f24standard && !item.f24standard.ref.key && !item.f24standard.ref.versionToken) {
-      documentsArr.push(createPayloadToUpload(item.f24standard));
+    if (item.f24 && !item.f24.ref.key && !item.f24.ref.versionToken) {
+      documentsArr.push(createPayloadToUpload(item.f24));
     }
     /* eslint-enable functional/immutable-data */
   }
@@ -168,17 +165,13 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
       const updatedItems = _.cloneDeep(items);
       for (const item of Object.values(updatedItems)) {
         /* eslint-disable functional/immutable-data */
-        if (item.pagoPaForm && documentsUploaded[item.pagoPaForm.id]) {
-          item.pagoPaForm.ref.key = documentsUploaded[item.pagoPaForm.id].key;
-          item.pagoPaForm.ref.versionToken = documentsUploaded[item.pagoPaForm.id].versionToken;
+        if (item.pagoPa && documentsUploaded[item.pagoPa.id]) {
+          item.pagoPa.ref.key = documentsUploaded[item.pagoPa.id].key;
+          item.pagoPa.ref.versionToken = documentsUploaded[item.pagoPa.id].versionToken;
         }
-        if (item.f24flatRate && documentsUploaded[item.f24flatRate.id]) {
-          item.f24flatRate.ref.key = documentsUploaded[item.f24flatRate.id].key;
-          item.f24flatRate.ref.versionToken = documentsUploaded[item.f24flatRate.id].versionToken;
-        }
-        if (item.f24standard && documentsUploaded[item.f24standard.id]) {
-          item.f24standard.ref.key = documentsUploaded[item.f24standard.id].key;
-          item.f24standard.ref.versionToken = documentsUploaded[item.f24standard.id].versionToken;
+        if (item.f24 && documentsUploaded[item.f24.id]) {
+          item.f24.ref.key = documentsUploaded[item.f24.id].key;
+          item.f24.ref.versionToken = documentsUploaded[item.f24.id].versionToken;
         }
         /* eslint-enable functional/immutable-data */
       }

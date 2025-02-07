@@ -163,15 +163,15 @@ export const newNotification: NewNotification = {
   documents: newNotificationDocuments,
   payment: {
     [newNotificationRecipients[0].taxId]: {
-      pagoPaForm: { ...newNotificationPagoPa },
+      pagoPa: { ...newNotificationPagoPa },
     },
     [newNotificationRecipients[1].taxId]: {
-      pagoPaForm: { ...newNotificationPagoPa },
-      f24standard: { ...newNotificationF24Standard },
+      pagoPa: { ...newNotificationPagoPa },
+      f24: { ...newNotificationF24Standard },
     },
   },
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
-  paymentMode: PaymentModel.PAGO_PA_NOTICE_F24,
+  paymentMode: PaymentModel.PAGO_PA_NOTICE,
   group: newNotificationGroups[2].id,
   taxonomyCode: '010801N',
   notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
