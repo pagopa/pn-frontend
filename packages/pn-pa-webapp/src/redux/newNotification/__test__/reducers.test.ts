@@ -105,7 +105,7 @@ describe('New notification redux state tests', () => {
       physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
       group: '',
       taxonomyCode: '010801N',
-      paymentMode: PaymentModel.PAGO_PA_NOTICE_F24,
+      paymentMode: PaymentModel.PAGO_PA_NOTICE,
     };
     const action = store.dispatch(setPreliminaryInformations(preliminaryInformations));
     expect(action.type).toBe('newNotificationSlice/setPreliminaryInformations');
@@ -185,22 +185,16 @@ describe('New notification redux state tests', () => {
       .onPost(
         '/bff/v1/notifications/sent/documents/preload',
         Object.values(newNotification.payment!).reduce((arr, elem) => {
-          if (elem.pagoPaForm) {
+          if (elem.pagoPa) {
             arr.push({
-              contentType: elem.pagoPaForm.contentType,
-              sha256: elem.pagoPaForm.file.sha256.hashBase64,
+              contentType: elem.pagoPa.contentType,
+              sha256: elem.pagoPa.file.sha256.hashBase64,
             });
           }
-          if (elem.f24flatRate) {
+          if (elem.f24) {
             arr.push({
-              contentType: elem.f24flatRate.contentType,
-              sha256: elem.f24flatRate.file.sha256.hashBase64,
-            });
-          }
-          if (elem.f24standard) {
-            arr.push({
-              contentType: elem.f24standard.contentType,
-              sha256: elem.f24standard.file.sha256.hashBase64,
+              contentType: elem.f24.contentType,
+              sha256: elem.f24.file.sha256.hashBase64,
             });
           }
           return arr;
@@ -228,18 +222,13 @@ describe('New notification redux state tests', () => {
       ]);
     const extMock = new MockAdapter(externalClient);
     for (const payment of Object.values(newNotification.payment!)) {
-      if (payment.pagoPaForm) {
-        extMock.onPost(`https://mocked-url.com`).reply(200, payment.pagoPaForm.file.data, {
+      if (payment.pagoPa) {
+        extMock.onPost(`https://mocked-url.com`).reply(200, payment.pagoPa.file.data, {
           'x-amz-version-id': 'mocked-versionToken',
         });
       }
-      if (payment.f24flatRate) {
-        extMock.onPost(`https://mocked-url.com`).reply(200, payment.f24flatRate.file.data, {
-          'x-amz-version-id': 'mocked-versionToken',
-        });
-      }
-      if (payment.f24standard) {
-        extMock.onPost(`https://mocked-url.com`).reply(200, payment.f24standard.file.data, {
+      if (payment.f24) {
+        extMock.onPost(`https://mocked-url.com`).reply(200, payment.f24.file.data, {
           'x-amz-version-id': 'mocked-versionToken',
         });
       }
@@ -251,27 +240,18 @@ describe('New notification redux state tests', () => {
     const response: { [key: string]: PaymentObject } = {};
     for (const [key, value] of Object.entries(newNotification.payment!)) {
       response[key] = {} as PaymentObject;
-      if (value.pagoPaForm) {
-        response[key].pagoPaForm = {
-          ...value.pagoPaForm,
+      if (value.pagoPa) {
+        response[key].pagoPa = {
+          ...value.pagoPa,
           ref: {
             key: 'mocked-preload-key',
             versionToken: 'mocked-versionToken',
           },
         };
       }
-      if (value.f24flatRate) {
-        response[key].f24flatRate = {
-          ...value.f24flatRate,
-          ref: {
-            key: 'mocked-preload-key',
-            versionToken: 'mocked-versionToken',
-          },
-        };
-      }
-      if (value.f24standard) {
-        response[key].f24standard = {
-          ...value.f24standard,
+      if (value.f24) {
+        response[key].f24 = {
+          ...value.f24,
           ref: {
             key: 'mocked-preload-key',
             versionToken: 'mocked-versionToken',
