@@ -1,4 +1,4 @@
-import { BasicUser } from "@pagopa-pn/pn-commons";
+import { BasicUser } from '@pagopa-pn/pn-commons';
 
 export interface User extends BasicUser {
   from_aa: boolean;
@@ -8,6 +8,10 @@ export interface User extends BasicUser {
   exp: number;
   iss: string;
   jti: string;
-  retrievalId?: string; // TODO verificare il nome
-  tppId?: string;       // TODO verificare il nome
+  source?: UserSource;
+}
+
+export interface UserSource {
+  channel: string; // TPP o ??? 
+  details: string;
 }

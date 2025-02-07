@@ -44,11 +44,8 @@ export const AuthApi = {
       iss: response.data.iss,
       jti: response.data.jti,
     };
-    if (response.data.retrievalId) {
-      user.retrievalId = response.data.retrievalId;
-    }
-    if (response.data.tppId) {
-      user.tppId = response.data.tppId;
+    if (response.data.source) {
+      user.source = response.data.source;
     }
     return user;
   },

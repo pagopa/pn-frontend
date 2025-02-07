@@ -13,7 +13,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { acceptTosPrivacy, exchangeToken, getTosPrivacyApproval, logout } from './actions';
 import { User } from './types';
 
-// TODO check con "token_send" verificare se vengono restituti sempre
 const userDataMatcher = yup
   .object({
     ...basicUserDataMatcherContents,
@@ -24,8 +23,10 @@ const userDataMatcher = yup
     aud: yup.string().matches(dataRegex.simpleServer),
     iss: yup.string().url(),
     jti: yup.string().matches(dataRegex.lettersNumbersAndDashs),
-    retrievalId: yup.string().optional(),
-    tppId: yup.string().optional(),
+    source: yup.object({
+      channel: yup.string(),
+      details: yup.string(),
+    }).optional(),
   })
   .noUnknown(true);
 
