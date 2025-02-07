@@ -41,7 +41,6 @@ export const logout = createAsyncThunk<User>('logout', async () => {
     family_name: '',
     fiscal_number: '',
     email: '',
-    mobile_phone: '',
     from_aa: false,
     uid: '',
     level: '',

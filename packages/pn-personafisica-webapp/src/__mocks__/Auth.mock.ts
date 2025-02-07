@@ -39,7 +39,6 @@ export const userResponse: User = {
   family_name: 'Rossi',
   fiscal_number: 'RSSMRA80A01H501U',
   email: 'info@agid.gov.it',
-  mobile_phone: '333333334',
   from_aa: false,
   uid: 'a6c1350d-1d69-4209-8bf8-31de58c79d6f',
   aud: 'portale.dev.pn.pagopa.it',

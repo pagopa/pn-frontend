@@ -36,7 +36,6 @@ export const AuthApi = {
       family_name: response.data.family_name,
       uid: response.data.uid,
       fiscal_number: response.data.fiscal_number,
-      mobile_phone: response.data.mobile_phone,
       from_aa: response.data.from_aa,
       aud: response.data.aud,
       level: response.data.level,

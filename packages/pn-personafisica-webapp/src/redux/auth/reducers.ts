@@ -24,7 +24,6 @@ const userDataMatcher = yup
     aud: yup.string().matches(dataRegex.simpleServer),
     iss: yup.string().url(),
     jti: yup.string().matches(dataRegex.lettersNumbersAndDashs),
-    mobile_phone: yup.string().matches(dataRegex.phoneNumber),
     retrievalId: yup.string().optional(),
     tppId: yup.string().optional(),
   })
@@ -32,7 +31,6 @@ const userDataMatcher = yup
 
 const noLoggedUserData = {
   ...basicNoLoggedUserData,
-  mobile_phone: '',
   from_aa: false,
   level: '',
   iat: 0,
