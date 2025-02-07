@@ -143,6 +143,10 @@ function Router() {
                 />
                 <Route path={routes.DIGITAL_DOMICILE} element={<DigitalContact />}>
                   <Route
+                    path={`${routes.DIGITAL_DOMICILE}/`}
+                    element={<DigitalContactActivation />}
+                  />
+                  <Route
                     path={routes.DIGITAL_DOMICILE_ACTIVATION}
                     element={<DigitalContactActivation />}
                   />

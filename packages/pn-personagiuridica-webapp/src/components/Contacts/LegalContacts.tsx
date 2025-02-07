@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import ConstructionIcon from '@mui/icons-material/Construction';
 import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
@@ -8,7 +7,12 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import SavingsIcon from '@mui/icons-material/Savings';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
 import { Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/material';
-import { PnInfoCard, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
+import {
+  PnInfoCard,
+  appStateActions,
+  useIsMobile,
+  usePreviousLocation,
+} from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType } from '../../models/contacts';
 import {
@@ -24,7 +28,7 @@ import SpecialContacts from './SpecialContacts';
 
 const EmptyLegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const navigate = useNavigate();
+  const { navigateWithState } = usePreviousLocation();
   const isMobile = useIsMobile();
 
   const infoIcons = [LaptopChromebookIcon, SavingsIcon, TouchAppIcon];
@@ -67,7 +71,7 @@ const EmptyLegalContacts = () => {
       <Button
         variant="contained"
         fullWidth={isMobile}
-        onClick={() => navigate(`${DIGITAL_DOMICILE_ACTIVATION}`)}
+        onClick={() => navigateWithState(`${DIGITAL_DOMICILE_ACTIVATION}`)}
       >
         {t('button.start')}
       </Button>
@@ -78,7 +82,7 @@ const EmptyLegalContacts = () => {
 const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const { navigateWithState } = usePreviousLocation();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { defaultPECAddress, defaultSERCQ_SENDAddress, specialAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
@@ -153,7 +157,7 @@ const LegalContacts = () => {
             variant="naked"
             color="primary"
             startIcon={<ConstructionIcon />}
-            onClick={() => navigate(`${DIGITAL_DOMICILE_MANAGEMENT}`)}
+            onClick={() => navigateWithState(DIGITAL_DOMICILE_MANAGEMENT)}
             sx={{ p: '10px 16px' }}
           >
             {t('button.manage')}

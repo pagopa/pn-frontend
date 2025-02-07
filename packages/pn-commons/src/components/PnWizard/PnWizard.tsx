@@ -1,5 +1,4 @@
 import React, { JSXElementConstructor, ReactElement, ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {
@@ -12,9 +11,9 @@ import {
   StackProps,
   Typography,
 } from '@mui/material';
-import { BoxProps } from '@mui/system';
 import { ButtonNaked, IllusCompleted } from '@pagopa/mui-italia';
 
+import { usePreviousLocation } from '../../hooks';
 import checkChildren from '../../utility/children.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnWizardStep, { PnWizardStepProps } from './PnWizardStep';
@@ -26,12 +25,11 @@ type Props = {
   title: ReactNode;
   children: ReactNode;
   slots?: {
-    stepContainer?: JSXElementConstructor<BoxProps>;
     nextButton?: JSXElementConstructor<ButtonProps>;
     prevButton?: JSXElementConstructor<ButtonProps>;
   };
   slotsProps?: {
-    stepContainer?: BoxProps & Partial<PaperProps>;
+    stepContainer?: Partial<PaperProps>;
     nextButton?: Omit<ButtonProps, 'onClick'> & {
       onClick?: (next: () => void, step: number) => void;
     };
@@ -57,9 +55,8 @@ const PnWizard: React.FC<Props> = ({
 }) => {
   checkChildren(children, [{ cmp: PnWizardStep }], 'PnWizard');
 
-  const navigate = useNavigate();
+  const { navigateToPreviousLocation } = usePreviousLocation();
 
-  const StepContainer = slots?.stepContainer || Paper;
   const PrevButton = slots?.prevButton || Button;
   const NextButton = slots?.nextButton || Button;
 
@@ -130,7 +127,7 @@ const PnWizard: React.FC<Props> = ({
           size="medium"
           color="primary"
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate(-1)}
+          onClick={navigateToPreviousLocation}
         >
           {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
         </ButtonNaked>
@@ -141,13 +138,9 @@ const PnWizard: React.FC<Props> = ({
 
         {steps.length > 0 && <PnWizardStepper steps={steps} activeStep={activeStep} />}
 
-        <StepContainer
-          sx={{ p: 3, mb: '20px', mt: 3 }}
-          elevation={0}
-          {...slotsProps?.stepContainer}
-        >
+        <Paper sx={{ p: 3, mb: '20px', mt: 3 }} elevation={0} {...slotsProps?.stepContainer}>
           {childrens[activeStep]}
-        </StepContainer>
+        </Paper>
 
         <Stack direction={{ xs: 'column-reverse', md: 'row' }}>
           <PrevButton

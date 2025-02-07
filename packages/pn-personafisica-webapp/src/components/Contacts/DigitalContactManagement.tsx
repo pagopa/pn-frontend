@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Typography } from '@mui/material';
-import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { Button, Typography } from '@mui/material';
+import { PnWizard, PnWizardStep, usePreviousLocation } from '@pagopa-pn/pn-commons';
 
 import LegalContactManager, {
   DigitalDomicileManagementAction,
 } from '../../components/Contacts/LegalContactManager';
-import { RECAPITI } from '../../navigation/routes.const';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import DigitalContactActivation from './DigitalContactActivation';
 
 const DigitalContactManagement: React.FC = () => {
   const { t } = useTranslation(['recapiti', 'common']);
-  const navigate = useNavigate();
+  const { navigateToPreviousLocation } = usePreviousLocation();
   const [currentAction, setCurrentAction] = useState<DigitalDomicileManagementAction>(
     DigitalDomicileManagementAction.DEFAULT
   );
@@ -31,13 +29,13 @@ const DigitalContactManagement: React.FC = () => {
   // Prevent the user from accessing the management page while digital domicile is not active or PEC is validating
   useEffect(() => {
     if (!isDigitalDomicileActive) {
-      navigate(RECAPITI);
+      navigateToPreviousLocation();
     }
   }, []);
 
   const getPreviouButton = () => (
     <Button
-      onClick={() => navigate(-1)}
+      onClick={navigateToPreviousLocation}
       color="primary"
       size="medium"
       sx={{ mx: 'auto' }}
@@ -62,12 +60,11 @@ const DigitalContactManagement: React.FC = () => {
         </Typography>
       }
       slots={{
-        stepContainer: Box,
         prevButton: getPreviouButton,
         nextButton: () => <></>,
       }}
       slotsProps={{
-        stepContainer: { sx: { p: 0, mb: '20px', mt: 3 } },
+        stepContainer: { sx: { p: 0, mb: '20px', mt: 3, background: 'transparent' } },
       }}
     >
       <PnWizardStep>
