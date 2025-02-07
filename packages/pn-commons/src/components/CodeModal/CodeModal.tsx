@@ -136,6 +136,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
           <Typography fontSize={16} fontWeight={600}>
             {codeSectionTitle}
           </Typography>
+          {codeSectionAdditional && <Box sx={{ mt: 2 }}>{codeSectionAdditional}</Box>}
           <Box sx={{ mt: 2 }}>
             <CodeInput
               initialValues={initialValues}
@@ -157,7 +158,6 @@ const CodeModal = forwardRef<ModalHandle, Props>(
               />
             )}
           </Box>
-          {codeSectionAdditional && <Box sx={{ mt: 2 }}>{codeSectionAdditional}</Box>}
           {internalHasError && (
             <Alert id="error-alert" data-testid="errorAlert" severity="error" sx={{ mt: 2 }}>
               <AlertTitle id="codeModalErrorTitle" data-testid="CodeModal error title">
