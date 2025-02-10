@@ -68,20 +68,10 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
   };
 
   const keyDownHandler = (event: KeyboardEvent<HTMLDivElement>, index: number) => {
-    if (
-      event.key === 'Enter' ||
-      (event.key === 'Tab' && !event.shiftKey) ||
-      event.key === 'ArrowRight' ||
-      event.key === 'Delete' ||
-      event.key === currentValues[index]
-    ) {
+    if ((event.key === 'Tab' && !event.shiftKey) || event.key === 'ArrowRight') {
       // focus next element
       focusInput(index + 1);
-    } else if (
-      event.key === 'Backspace' ||
-      (event.key === 'Tab' && event.shiftKey) ||
-      event.key === 'ArrowLeft'
-    ) {
+    } else if ((event.key === 'Tab' && event.shiftKey) || event.key === 'ArrowLeft') {
       // focus previous element
       focusInput(index - 1);
     } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
@@ -115,8 +105,6 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
         value = value.charAt(cursorPosition === 1 ? 0 : 1);
       }
       changeInputValue(value, index);
-      // focus next element
-      focusInput(index + 1);
     }
   };
 
@@ -138,10 +126,13 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
     onChange(currentValues);
   }, [currentValues]);
 
+  const cifre = ['primo', 'secondo', 'terzo', 'quarto', 'ultimo'];
+
   return (
     <Fragment>
       {initialValues.map((_value, index) => (
         <TextField
+          aria-label={`input numero ${cifre[index]}`}
           data-testid={`codeInput(${index})`}
           autoComplete="off"
           key={index}
