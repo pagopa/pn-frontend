@@ -32,7 +32,13 @@ const PrivacyPolicyPage = lazyRetry(() => import('../pages/PrivacyPolicy.page'))
 const TermsOfServicePage = lazyRetry(() => import('../pages/TermsOfService.page'));
 const ApiIntegrationPage = lazyRetry(() => import('../pages/ApiIntegration.page'));
 const NewPublicKeyPage = lazyRetry(() => import('../pages/NewPublicKey.page'));
-const DigitalContactActivation = lazyRetry(() => import('../pages/DigitalContactActivation.page'));
+const DigitalContact = lazyRetry(() => import('../pages/DigitalContact.page'));
+const DigitalContactActivation = lazyRetry(
+  () => import('../components/Contacts/DigitalContactActivation')
+);
+const DigitalContactManagement = lazyRetry(
+  () => import('../components/Contacts/DigitalContactManagement')
+);
 
 const handleAssistanceClick = () => {
   /* eslint-disable-next-line functional/immutable-data */
@@ -135,10 +141,17 @@ function Router() {
                     </PrivateRoute>
                   }
                 />
-                <Route
-                  path={routes.DIGITAL_DOMICILE_ACTIVATION}
-                  element={<DigitalContactActivation />}
-                />
+                <Route path={routes.DIGITAL_DOMICILE} element={<DigitalContact />}>
+                  <Route
+                    path={routes.DIGITAL_DOMICILE_ACTIVATION}
+                    element={<DigitalContactActivation />}
+                  />
+                  <Route
+                    path={routes.DIGITAL_DOMICILE_MANAGEMENT}
+                    element={<DigitalContactManagement />}
+                  />
+                  <Route element={<Navigate to={routes.RECAPITI} replace />} index />
+                </Route>
                 <Route
                   path={routes.INTEGRAZIONE_API}
                   element={

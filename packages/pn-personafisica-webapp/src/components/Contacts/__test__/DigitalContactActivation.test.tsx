@@ -6,12 +6,12 @@ import { ConsentType, SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 import {
   acceptTosPrivacyConsentBodyMock,
   sercqSendTosPrivacyConsentMock,
-} from '../../__mocks__/Consents.mock';
-import { digitalAddressesSercq, digitalLegalAddresses } from '../../__mocks__/Contacts.mock';
-import { fireEvent, render, waitFor, within } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
-import { AddressType, ChannelType, IOAllowedValues } from '../../models/contacts';
-import DigitalContactActivation from '../DigitalContactActivation.page';
+} from '../../../__mocks__/Consents.mock';
+import { digitalAddressesSercq, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
+import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
+import DigitalContactActivation from '../DigitalContactActivation';
 
 const mockNavigateFn = vi.fn();
 
@@ -23,12 +23,12 @@ vi.mock('react-router-dom', async () => ({
 describe('DigitalContactActivation', () => {
   let mock: MockAdapter;
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
