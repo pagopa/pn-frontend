@@ -44,6 +44,7 @@ import { getDowntimeLegalFact } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
+  checkNotificationTpp,
   getDowntimeHistory,
   getReceivedNotification,
   getReceivedNotificationDocument,
@@ -356,6 +357,17 @@ const NotificationDetail: React.FC = () => {
     fetchReceivedNotification();
     return () => void dispatch(resetState());
   }, []);
+
+  /* if retrievalId is in user token and payment info tpp is not in redux store, fetch it PN-13915 */
+  useEffect(() => {
+    if (!currentUser.source?.retrievalId) {
+      return;
+    }
+    if (currentUser.source?.retrievalId === userPayments.tpp?.retrievalId) {
+      return;
+    }
+    void dispatch(checkNotificationTpp(currentUser.source.retrievalId));
+  }, [userPayments, currentUser]);
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {

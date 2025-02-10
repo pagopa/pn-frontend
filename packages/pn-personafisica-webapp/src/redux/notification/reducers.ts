@@ -10,17 +10,19 @@ import {
   PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
+  PaymentsData,
   RecipientType,
   TimelineCategory,
   getF24Payments,
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
-import { createSlice } from '@reduxjs/toolkit';
+import { PaymentTpp } from '@pagopa-pn/pn-commons/src/models/NotificationDetail';
+import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 
-import { BffCheckTPPResponse } from '../../generated-client/notifications';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import {
+  checkNotificationTpp,
   exchangeNotificationRetrievalId,
   getDowntimeHistory,
   getReceivedNotification,
@@ -52,8 +54,8 @@ const initialState = {
   paymentsData: {
     pagoPaF24: [] as Array<PaymentDetails>,
     f24Only: [] as Array<F24PaymentDetails>,
-    tpp: {} as BffCheckTPPResponse,
-  },
+    tpp: {} as PaymentTpp,
+  } as PaymentsData,
   downtimeEvents: [] as Array<Downtime>,
 };
 
@@ -159,9 +161,16 @@ const notificationSlice = createSlice({
     builder.addCase(getDowntimeHistory.fulfilled, (state, action) => {
       state.downtimeEvents = action.payload.result;
     });
-    builder.addCase(exchangeNotificationRetrievalId.fulfilled, (state, action) => {
-      state.paymentsData.tpp = action.payload;
-    });
+    builder.addMatcher(
+      isAnyOf(exchangeNotificationRetrievalId.fulfilled, checkNotificationTpp.fulfilled),
+      (state, action) => {
+        state.paymentsData.tpp = {
+          retrievalId: action.payload.retrievalId,
+          paymentButton: action.payload.paymentButton || '',
+          iun: action.payload.originId || '',
+        };
+      }
+    );
   },
 });
 

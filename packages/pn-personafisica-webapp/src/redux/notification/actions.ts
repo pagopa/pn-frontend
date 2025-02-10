@@ -282,19 +282,47 @@ export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, 
   }
 );
 
+/**
+ * TPP - RETRIEVAL ID
+ */
+
+const checkTpp = async (retrievalId: string) => {
+  const notificationReceivedApiFactory = NotificationReceivedApiFactory(
+    undefined,
+    undefined,
+    apiClient
+  );
+  return await notificationReceivedApiFactory.checkTppV1(retrievalId);
+};
+
 export const exchangeNotificationRetrievalId = createAsyncThunk<BffCheckTPPResponse, string>(
   NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
   async (retrievalId: string, { rejectWithValue }) => {
     try {
-      const notificationReceivedApiFactory = NotificationReceivedApiFactory(
-        undefined,
-        undefined,
-        apiClient
-      );
-      const response = await notificationReceivedApiFactory.checkTppV1(retrievalId);
+      const response = await checkTpp(retrievalId);
       return response.data;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+export const checkNotificationTpp = createAsyncThunk<BffCheckTPPResponse, string>(
+  'checkNotificationTpp',
+  async (retrievalId: string) => {
+    try {
+      const response = await checkTpp(retrievalId);
+      return response.data;
+    } catch (e: any) {
+      // TODO remove mock
+      return {
+        originId: 'YLPJ-XGVN-WDEX-202501-E-1',
+        retrievalId,
+        paymentButton: 'Hype',
+      } as BffCheckTPPResponse;
+
+      // ignore error: notification has not payment tpp
+      return {} as BffCheckTPPResponse;
     }
   }
 );

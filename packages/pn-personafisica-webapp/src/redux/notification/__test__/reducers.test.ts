@@ -444,7 +444,7 @@ describe('Notification detail redux state tests', () => {
     expect(action.payload).toEqual(mockResponse);
   });
 
-  it('Should be able to set paymentsData tpp', async () => {
+  it('Should be able to set tpp info from retrievalId', async () => {
     const mockRetrievalId = 'mocked-retrieval-id';
     const mockResponse: BffCheckTPPResponse = {
       paymentButton: 'Hype',
