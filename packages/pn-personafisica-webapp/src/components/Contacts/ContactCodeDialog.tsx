@@ -27,8 +27,9 @@ const ContactCodeDialog: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const contactType = channelType.toLowerCase();
-  const codeModalRef =
-    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
+  const codeModalRef = useRef<{
+    updateError: (error: ErrorMessage, codeNotValid: boolean) => void;
+  }>(null);
   const labelRoot = `${addressType.toLowerCase()}-contacts`;
 
   const handleAddressUpdateError = useCallback(
@@ -79,6 +80,8 @@ const ContactCodeDialog: React.FC<Props> = ({
               components={[
                 <Typography
                   key="newCodeBtn"
+                  role="button"
+                  tabIndex={0}
                   variant="body2"
                   onClick={() => onConfirm()}
                   color="primary"

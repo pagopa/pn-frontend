@@ -38,6 +38,24 @@ type ModalHandle = {
   updateError: (error: ErrorMessage, codeNotValid: boolean) => void;
 };
 
+const RenderCopyToClipboardButton: React.FC<{
+  isReadOnly: boolean;
+  initialValues: Array<string>;
+}> = ({ isReadOnly, initialValues }) =>
+  isReadOnly && (
+    <CopyToClipboardButton
+      id="copy-code-button"
+      data-testid="copyCodeButton"
+      sx={{ mt: 1.5 }}
+      value={initialValues.join('')}
+      tooltipTitle={getLocalizedOrDefaultLabel(
+        'delegations',
+        'deleghe.code_copied',
+        'Codice copiato'
+      )}
+    />
+  );
+
 /**
  * This modal allows the user to input a verification code.
  * @param title title to show
@@ -122,7 +140,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
     return (
       <PnDialog
         open={open}
-        aria-labelledby="dialog-title"
+        aria-labelledby={code.length ? 'dialog-title' : ''}
         aria-describedby="dialog-description"
         data-testid="codeDialog"
         disableEscapeKeyDown
@@ -144,20 +162,8 @@ const CodeModal = forwardRef<ModalHandle, Props>(
               hasError={internalHasError}
               onChange={changeHandler}
             />
-            {isReadOnly && (
-              <CopyToClipboardButton
-                id="copy-code-button"
-                data-testid="copyCodeButton"
-                sx={{ mt: 1.5 }}
-                value={initialValues.join('')}
-                tooltipTitle={getLocalizedOrDefaultLabel(
-                  'delegations',
-                  'deleghe.code_copied',
-                  'Codice copiato'
-                )}
-              />
-            )}
           </Box>
+          <RenderCopyToClipboardButton initialValues={initialValues} isReadOnly={isReadOnly} />
           {internalHasError && (
             <Alert id="error-alert" data-testid="errorAlert" severity="error" sx={{ mt: 2 }}>
               <AlertTitle id="codeModalErrorTitle" data-testid="CodeModal error title">
