@@ -6,7 +6,6 @@ import { Alert, Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/mat
 import { PnBreadcrumb, Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import Attachments from '../components/NewNotification/Attachments';
-import PaymentMethods from '../components/NewNotification/PaymentMethods';
 import PreliminaryInformations from '../components/NewNotification/PreliminaryInformations';
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
@@ -64,7 +63,9 @@ const NewNotification = () => {
   };
 
   const createNotification = () => {
+    console.log('------------------------ siamo a', activeStep, 'e isCompleted ', isCompleted);
     if (activeStep === steps.length - 1 && isCompleted) {
+    console.log('------------------------ siamo qui dentro');
       void dispatch(createNewNotification(notification))
         .unwrap()
         .then(() => setActiveStep((previousStep) => previousStep + 1))
@@ -162,22 +163,13 @@ const NewNotification = () => {
             )}
             {activeStep === 2 && (
               <Attachments
-                onConfirm={IS_PAYMENT_ENABLED ? goToNextStep : createNotification}
+                onConfirm={createNotification}
                 onPreviousStep={goToPreviousStep}
                 isCompleted={isCompleted}
                 attachmentsData={notification.documents}
                 hasAdditionalLang={
                   notification.lang === NewNotificationLangOther && !!notification.additionalLang
                 }
-                ref={childRef}
-              />
-            )}
-            {activeStep === 3 && IS_PAYMENT_ENABLED && (
-              <PaymentMethods
-                onConfirm={createNotification}
-                notification={notification}
-                isCompleted={isCompleted}
-                onPreviousStep={goToPreviousStep}
                 ref={childRef}
               />
             )}

@@ -87,7 +87,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
       group: notification.group ?? '',
       taxonomyCode: notification.taxonomyCode || '',
       physicalCommunicationType: notification.physicalCommunicationType || '',
-      paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
+      paymentMode: notification.paymentMode || PaymentModel.NOTHING, // temporarily removed for task PN-13918
+      // paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
       lang: notification.lang || (additionalLang ? NewNotificationLangOther : 'it'),
       additionalLang: notification.additionalLang || additionalLang || '',
       additionalSubject: notification.additionalSubject || '',

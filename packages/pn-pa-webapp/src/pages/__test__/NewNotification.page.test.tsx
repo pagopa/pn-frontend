@@ -267,6 +267,7 @@ describe('NewNotification Page without payment', async () => {
     const attachmentsForm = result.getByTestId('attachmentsForm');
     expect(attachmentsForm).toBeInTheDocument();
     // FINAL
+    expect(buttonSubmit).toBeEnabled();
     fireEvent.click(buttonSubmit);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);

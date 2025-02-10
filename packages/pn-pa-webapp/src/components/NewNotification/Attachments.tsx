@@ -20,7 +20,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { NewNotificationDocument } from '../../models/NewNotification';
 import { useAppDispatch } from '../../redux/hooks';
 import { uploadNotificationDocument } from '../../redux/newNotification/actions';
-import { setAttachments } from '../../redux/newNotification/reducers';
+import { setAttachments, setIsCompleted } from '../../redux/newNotification/reducers';
 import { getConfiguration } from '../../services/configuration.service';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
@@ -226,6 +226,7 @@ const Attachments: React.FC<Props> = ({
           onConfirm();
         } else {
           storeAttachments(values.documents);
+          dispatch(setIsCompleted());
           // upload attachments
           dispatch(uploadNotificationDocument(values.documents))
             .unwrap()
