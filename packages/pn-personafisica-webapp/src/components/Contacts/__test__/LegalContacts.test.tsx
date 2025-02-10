@@ -29,7 +29,6 @@ const assignFn = vi.fn();
 describe('LegalContacts Component', async () => {
   let mock: MockAdapter;
   const originalLocation = window.location;
-  const originalNavigator = window.navigator;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -47,7 +46,6 @@ describe('LegalContacts Component', async () => {
   afterAll(() => {
     mock.restore();
     Object.defineProperty(window, 'location', { configurable: true, value: originalLocation });
-    Object.defineProperty(window, 'navigator', { value: originalNavigator });
   });
 
   it('renders component - PEC enabled', async () => {
