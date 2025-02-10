@@ -8,13 +8,15 @@ import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
 import StatisticsIcon from '@mui/icons-material/ShowChart';
 import VpnKey from '@mui/icons-material/VpnKey';
-import { Box } from '@mui/material';
+import { Box, Button, DialogTitle } from '@mui/material';
 import {
   APP_VERSION,
   AppMessage,
   AppResponseMessage,
   Layout,
   LoadingOverlay,
+  PnDialog,
+  PnDialogActions,
   ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
@@ -33,7 +35,6 @@ import {
   getAdditionalLanguages,
   getInstitutions,
   getProductsOfInstitution,
-  logout,
 } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
@@ -41,6 +42,7 @@ import { getConfiguration } from './services/configuration.service';
 import { PAAppErrorFactory } from './utility/AppError/PAAppErrorFactory';
 import './utility/onetrust';
 import { getMenuItems } from './utility/role.utility';
+import { goToSelfcareLogin } from './navigation/navigation.utility';
 
 // Cfr. PN-6096
 // --------------------
@@ -70,6 +72,7 @@ const ActualApp = () => {
   // TODO check if it can exist more than one role on user
   const role = loggedUserOrganizationParty?.roles[0];
   const idOrganization = loggedUserOrganizationParty?.id;
+  const [openModal, setOpenModal] = useState(false);
   const { tosConsent, privacyConsent } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID, IS_STATISTICS_ENABLED } = getConfiguration();
@@ -88,21 +91,21 @@ const ActualApp = () => {
   const productsList =
     products.length > 0
       ? [
-          reservedArea,
-          ...products.map((product) => ({
-            ...product,
-            productUrl: `${product.productUrl}&lang=${i18n.language}`,
-          })),
-        ]
+        reservedArea,
+        ...products.map((product) => ({
+          ...product,
+          productUrl: `${product.productUrl}&lang=${i18n.language}`,
+        })),
+      ]
       : [
-          reservedArea,
-          {
-            id: '0',
-            title: t('header.notification-platform'),
-            productUrl: '',
-            linkType: 'internal' as LinkType,
-          },
-        ];
+        reservedArea,
+        {
+          id: '0',
+          title: t('header.notification-platform'),
+          productUrl: '',
+          linkType: 'internal' as LinkType,
+        },
+      ];
 
   const productId = products.length > 0 ? SELFCARE_SEND_PROD_ID : '0';
   const institutionsList = institutions.map((institution) => ({
@@ -200,7 +203,7 @@ const ActualApp = () => {
   const isPrivacyPage = path[1] === 'privacy-tos';
 
   const handleLogout = () => {
-    void dispatch(logout());
+    setOpenModal(true);
   };
 
   const handleAssistanceClick = () => {
@@ -255,6 +258,31 @@ const ActualApp = () => {
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}
       >
+        <PnDialog open={openModal}
+        >
+          <DialogTitle sx={{ mb: 2 }} >{t("header.logout-message")}</DialogTitle>
+          <PnDialogActions>
+            <Button
+              id="cancelButton"
+              variant="outlined"
+              onClick={() => setOpenModal(false)}
+            >
+              {t("button.annulla")}
+            </Button>
+            <Button
+              data-testid='confirm-button'
+              variant="contained"
+              onClick={() => {
+                sessionStorage.clear();
+                goToSelfcareLogin();
+                setOpenModal(false);
+              }}
+            >
+              {t("header.logout")}
+            </Button>
+          </PnDialogActions>
+        </PnDialog>
+
         <AppMessage />
         <AppResponseMessage />
         <LoadingOverlay />

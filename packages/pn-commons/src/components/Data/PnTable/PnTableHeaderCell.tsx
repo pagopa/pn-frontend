@@ -49,6 +49,13 @@ const PnTableHeaderCell = <T,>({
           direction={sort.orderBy === columnId ? sort.order : 'asc'}
           onClick={sortHandler(columnId)}
           data-testid={testId ? `${testId}.sort.${columnId.toString()}` : null}
+          sx={{
+            '&:focus-visible': {
+              borderRadius: '2px',
+              outlineOffset: '4px',
+              outline: '2px solid currentColor'
+            }
+          }}
         >
           {children}
           {sort.orderBy === columnId && (

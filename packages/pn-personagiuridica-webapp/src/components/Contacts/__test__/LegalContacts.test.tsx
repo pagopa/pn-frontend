@@ -77,7 +77,7 @@ describe('LegalContacts Component', async () => {
     expect(pecInput).toHaveValue('');
     const button = within(pecContact).getByRole('button', { name: 'button.attiva' });
     await waitFor(() => {
-      expect(button).toBeDisabled();
+      expect(button).toBeEnabled();
     });
     const sercqSendContact = getByTestId(`default_sercqSendContact`);
     expect(sercqSendContact).toBeInTheDocument();

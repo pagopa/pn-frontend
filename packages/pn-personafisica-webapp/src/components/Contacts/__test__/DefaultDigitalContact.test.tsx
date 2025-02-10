@@ -49,7 +49,7 @@ describe('DefaultDigitalContact Component', () => {
     expect(input).toHaveValue('');
     const button = await waitFor(() => getById(container, 'default_pec-button'));
     expect(button).toHaveTextContent('Button');
-    expect(button).toBeDisabled();
+    expect(button).toBeEnabled();
   });
 
   it('insert value', async () => {
@@ -102,7 +102,7 @@ describe('DefaultDigitalContact Component', () => {
       expect(input).toHaveValue('not valid');
     });
     const button = await waitFor(() => getById(container, 'default_pec-button'));
-    expect(button).toBeDisabled();
+    expect(button).toBeEnabled();
     const errorMessage = container.querySelector(`#default_pec-helper-text`);
     expect(errorMessage).toBeInTheDocument();
   });
@@ -221,7 +221,7 @@ describe('DefaultDigitalContact Component', () => {
       expect(input).toHaveValue('invalid value');
     });
     const newButtons = container.querySelectorAll('button');
-    expect(newButtons[0]).toBeDisabled();
+    expect(newButtons[0]).toBeEnabled();
   });
 
   it('remove contact', () => {

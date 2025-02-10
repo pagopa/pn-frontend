@@ -15,7 +15,7 @@ export const LANGUAGES: Languages = {
 export const PRIVACY_LINK_RELATIVE_PATH = '/informativa-privacy';
 export const TOS_LINK_RELATIVE_PATH = '/termini-di-servizio';
 
-const ACCESSIBILITY_LINK = 'https://form.agid.gov.it/view/5bd4c880-772d-11ef-b5af-e9d3099e743c';
+const ACCESSIBILITY_LINK = 'https://form.agid.gov.it/view/978876c0-df2d-11ef-8637-9f856ac3da10';
 
 const getFooterLinkLabels = (
   link: string,

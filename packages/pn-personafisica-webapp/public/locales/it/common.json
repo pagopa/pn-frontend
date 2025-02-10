@@ -31,7 +31,8 @@
   },
   "header": {
     "logout": "Esci",
-    "pago-pa-link": "Sito di PagoPA S.p.A."
+    "pago-pa-link": "Sito di PagoPA S.p.A.",
+    "logout-message": "Confermi di voler uscire da SEND?"
   },
   "tos": {
     "title": "SEND - Servizio Notifiche Digitali",
@@ -192,5 +193,10 @@
     "message": "Il testo originario di questi documenti è in lingua italiana. In caso di contrasto tra la versione italiana e le traduzioni in altre lingue, prevarranno il significato e le condizioni della lingua italiana.",
     "link": "Consulta le traduzioni"
   },
-  "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine"
+  "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine",
+  "inactivity": {
+    "title": "Vuoi davvero uscire da SEND?",
+    "body": "La disconnessione è in corso. Se hai cambiato idea premi “Mantieni l’accesso” entro pochi secondi.",
+    "action": "Mantieni l’accesso"
+  }
 }
