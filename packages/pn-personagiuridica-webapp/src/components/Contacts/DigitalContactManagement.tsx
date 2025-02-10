@@ -1,23 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import LegalContactManager, {
   DigitalDomicileManagementAction,
 } from '../../components/Contacts/LegalContactManager';
-import { RECAPITI } from '../../navigation/routes.const';
-import { contactsSelectors } from '../../redux/contact/reducers';
-import { useAppSelector } from '../../redux/hooks';
-import AddSpecialContact from './AddSpecialContact';
+import AddSpecialContact, { AddSpecialContactRef } from './AddSpecialContact';
 import DigitalContactActivation from './DigitalContactActivation';
-
-interface AddSpecialContactRef {
-  handleConfirm: () => Promise<void>;
-}
 
 const DigitalContactManagement: React.FC = () => {
   const { t } = useTranslation(['recapiti', 'common']);
@@ -27,9 +20,6 @@ const DigitalContactManagement: React.FC = () => {
   const [currentAction, setCurrentAction] = useState<DigitalDomicileManagementAction>(
     DigitalDomicileManagementAction.DEFAULT
   );
-  const { defaultPECAddress, defaultSERCQ_SENDAddress } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
   const addSpecialContactRef = useRef<AddSpecialContactRef>(null);
 
   const handleConfirmClick = async () => {
@@ -37,18 +27,6 @@ const DigitalContactManagement: React.FC = () => {
       await addSpecialContactRef.current.handleConfirm();
     }
   };
-
-  const hasSercqSendActive = !!defaultSERCQ_SENDAddress;
-  const isValidatingPec = defaultPECAddress?.pecValid === false;
-
-  const isDigitalDomicileActive = !isValidatingPec && (hasSercqSendActive || defaultPECAddress);
-
-  // Prevent the user from accessing the management page while digital domicile is not active or PEC is validating
-  useEffect(() => {
-    if (!isDigitalDomicileActive) {
-      navigate(RECAPITI);
-    }
-  }, []);
 
   const getPreviouButton = () =>
     currentAction === DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT ? (
@@ -96,14 +74,14 @@ const DigitalContactManagement: React.FC = () => {
 
   return (
     <PnWizard
-      activeStep={activeStep}
       title={
         <Typography fontSize="28px" fontWeight={700}>
           {title}
         </Typography>
       }
+      activeStep={activeStep}
+      setActiveStep={setActiveStep}
       slots={{
-        stepContainer: Box,
         prevButton: getPreviouButton,
         nextButton:
           currentAction === DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT

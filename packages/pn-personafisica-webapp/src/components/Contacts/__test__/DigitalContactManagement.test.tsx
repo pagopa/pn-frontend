@@ -20,10 +20,21 @@ describe('DigitalContactManagement', () => {
     vi.restoreAllMocks();
   });
 
-  it('render component', () => {
-    const { getByText } = render(<DigitalContactManagement />);
-    const title = getByText('legal-contacts.digital-domicile-management.title');
-    expect(title).toBeInTheDocument();
+  it('render main component', () => {
+    const { container } = render(<DigitalContactManagement />);
+    expect(container).toHaveTextContent('legal-contacts.digital-domicile-management.title');
+
+    expect(container).toHaveTextContent('status.active');
+  });
+
+  it('render the digital domicile transfer wizard', () => {
+    const { container, getByRole } = render(<DigitalContactManagement />);
+
+    const transferButton = getByRole('button', {
+      name: 'legal-contacts.digital-domicile-management.transfer.action-pec',
+    });
+    fireEvent.click(transferButton);
+    expect(container).toHaveTextContent('legal-contacts.sercq-send-wizard.title-transfer');
   });
 
   it('should go back when clicking on the back button', () => {

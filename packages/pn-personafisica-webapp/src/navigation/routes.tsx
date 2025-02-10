@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import {
   AppNotAccessible,
@@ -68,6 +68,7 @@ function Router() {
                     path={routes.DIGITAL_DOMICILE_MANAGEMENT}
                     element={<DigitalContactManagement />}
                   />
+                  <Route element={<Navigate to={routes.RECAPITI} replace />} index />
                 </Route>
               </Route>
             </Route>

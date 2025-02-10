@@ -12,7 +12,6 @@ import {
   StackProps,
   Typography,
 } from '@mui/material';
-import { BoxProps } from '@mui/system';
 import { ButtonNaked, IllusCompleted } from '@pagopa/mui-italia';
 
 import checkChildren from '../../utility/children.utility';
@@ -21,17 +20,16 @@ import PnWizardStep, { PnWizardStepProps } from './PnWizardStep';
 import PnWizardStepper from './PnWizardStepper';
 
 type Props = {
-  activeStep?: number;
-  setActiveStep?: (step: number) => void;
+  activeStep: number;
+  setActiveStep: (step: number) => void;
   title: ReactNode;
   children: ReactNode;
   slots?: {
-    stepContainer?: JSXElementConstructor<BoxProps>;
     nextButton?: JSXElementConstructor<ButtonProps>;
     prevButton?: JSXElementConstructor<ButtonProps>;
   };
   slotsProps?: {
-    stepContainer?: BoxProps & Partial<PaperProps>;
+    stepContainer?: Partial<PaperProps>;
     nextButton?: Omit<ButtonProps, 'onClick'> & {
       onClick?: (next: () => void, step: number) => void;
     };
@@ -48,8 +46,8 @@ type Props = {
 };
 
 const PnWizard: React.FC<Props> = ({
-  activeStep = 0,
-  setActiveStep = () => {},
+  activeStep,
+  setActiveStep,
   title,
   children,
   slots,
@@ -59,7 +57,6 @@ const PnWizard: React.FC<Props> = ({
 
   const navigate = useNavigate();
 
-  const StepContainer = slots?.stepContainer || Paper;
   const PrevButton = slots?.prevButton || Button;
   const NextButton = slots?.nextButton || Button;
 
@@ -141,13 +138,9 @@ const PnWizard: React.FC<Props> = ({
 
         {steps.length > 0 && <PnWizardStepper steps={steps} activeStep={activeStep} />}
 
-        <StepContainer
-          sx={{ p: 3, mb: '20px', mt: 3 }}
-          elevation={0}
-          {...slotsProps?.stepContainer}
-        >
+        <Paper sx={{ p: 3, mb: '20px', mt: 3 }} elevation={0} {...slotsProps?.stepContainer}>
           {childrens[activeStep]}
-        </StepContainer>
+        </Paper>
 
         <Stack direction={{ xs: 'column-reverse', md: 'row' }}>
           <PrevButton

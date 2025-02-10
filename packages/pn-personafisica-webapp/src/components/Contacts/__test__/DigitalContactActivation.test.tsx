@@ -23,12 +23,12 @@ vi.mock('react-router-dom', async () => ({
 describe('DigitalContactActivation', () => {
   let mock: MockAdapter;
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
   afterEach(() => {

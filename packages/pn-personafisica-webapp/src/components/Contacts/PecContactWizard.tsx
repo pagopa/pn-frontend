@@ -77,7 +77,6 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
       .unwrap()
       .then((res) => {
         // contact to verify
-        // open code modal
         if (!res) {
           setOpenCodeModal(true);
           return;
@@ -102,7 +101,6 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
         slots={{
           prevButton: () => (
             <ButtonNaked
-              // TODO: change the following line as fix/PN-13444 is merged
               onClick={isTransferring ? () => navigate(-1) : () => setShowPecWizard(false)}
               color="primary"
               size="medium"

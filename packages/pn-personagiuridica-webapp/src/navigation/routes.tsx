@@ -150,6 +150,7 @@ function Router() {
                     path={routes.DIGITAL_DOMICILE_MANAGEMENT}
                     element={<DigitalContactManagement />}
                   />
+                  <Route element={<Navigate to={routes.RECAPITI} replace />} index />
                 </Route>
                 <Route
                   path={routes.INTEGRAZIONE_API}

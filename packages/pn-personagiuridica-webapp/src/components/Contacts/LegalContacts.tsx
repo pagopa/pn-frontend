@@ -153,7 +153,7 @@ const LegalContacts = () => {
             variant="naked"
             color="primary"
             startIcon={<ConstructionIcon />}
-            onClick={() => navigate(`${DIGITAL_DOMICILE_MANAGEMENT}`)}
+            onClick={() => navigate(DIGITAL_DOMICILE_MANAGEMENT)}
             sx={{ p: '10px 16px' }}
           >
             {t('button.manage')}

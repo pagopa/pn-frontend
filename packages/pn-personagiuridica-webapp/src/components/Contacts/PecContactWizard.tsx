@@ -60,7 +60,6 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
       .unwrap()
       .then((res) => {
         // contact to verify
-        // open code modal
         if (!res) {
           setOpenCodeModal(true);
           return;
