@@ -64,7 +64,6 @@ vi.mock('../../../services/configuration.service', async () => {
 
 const populateForm = async (
   form: HTMLFormElement,
-  // hasPayment: boolean,  temporarily removed for task PN-13918
   organizationName: string = userResponse.organization.name
 ) => {
   await testInput(form, 'paProtocolNumber', newNotification.paProtocolNumber);
@@ -84,11 +83,6 @@ const populateForm = async (
     1,
     true
   );
-
-  // temporarily removed for task PN-13918
-  // if (hasPayment) {
-  //   await testRadio(form, 'paymentMethodRadio', ['pagopa-notice', 'f24', 'nothing'], 1, true);
-  // }
 };
 
 describe('PreliminaryInformations component with payment enabled', async () => {
@@ -143,7 +137,6 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     testFormElements(form, 'taxonomyCode', 'taxonomy-id*');
     testFormElements(form, 'senderDenomination', 'sender-name*');
     testRadio(form, 'comunicationTypeRadio', ['registered-letter-890', 'simple-registered-letter']);
-    // testRadio(form, 'paymentMethodRadio', ['pagopa-notice', 'f24', 'nothing']); temporarily removed for task PN-13918
     const button = within(form).getByTestId('step-submit');
     expect(button).toBeDisabled();
   });
@@ -322,11 +315,6 @@ describe('PreliminaryInformations component with payment enabled', async () => {
       `input[name="physicalCommunicationType"][value="${newNotification.physicalCommunicationType}"]`
     );
     expect(physicalCommunicationType).toBeChecked();
-    // temporarily removed for task PN-13918
-    // const paymentMode = form.querySelector(
-    //   `input[name="paymentMode"][value="${newNotification.paymentMode}"]`
-    // );
-    // expect(paymentMode).toBeChecked();
   });
 
   it('errors on api call', async () => {

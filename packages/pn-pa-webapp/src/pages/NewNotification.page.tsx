@@ -63,9 +63,7 @@ const NewNotification = () => {
   };
 
   const createNotification = () => {
-    console.log('------------------------ siamo a', activeStep, 'e isCompleted ', isCompleted);
     if (activeStep === steps.length - 1 && isCompleted) {
-    console.log('------------------------ siamo qui dentro');
       void dispatch(createNewNotification(notification))
         .unwrap()
         .then(() => setActiveStep((previousStep) => previousStep + 1))
