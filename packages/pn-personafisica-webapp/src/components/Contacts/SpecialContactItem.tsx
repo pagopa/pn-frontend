@@ -42,9 +42,9 @@ const SpecialContactItem: React.FC<Props> = ({
 
     if (isVerifyingPec) {
       return (
-        <Box key={address.value}>
+        <Box key={address.senderId}>
           <Chip
-            label={t('legal-contacts.pec-validating', { ns: 'recapiti' })}
+            label={t('legal-contacts.pec-validating')}
             color="warning"
             size="small"
             sx={{ mb: 2 }}
@@ -55,7 +55,7 @@ const SpecialContactItem: React.FC<Props> = ({
     }
 
     return (
-      <Box key={address.value}>
+      <Box key={address.senderId}>
         <Stack
           direction="row"
           spacing={1}
@@ -73,7 +73,7 @@ const SpecialContactItem: React.FC<Props> = ({
                 variant="body2"
                 data-testid={`special_${channelType}-typography`}
               >
-                {t('special-contacts.sercq_send', { ns: 'recapiti' })}
+                {t('special-contacts.sercq_send')}
               </Typography>
               <ButtonNaked
                 data-testid={`cancelContact-special_${channelType}`}
@@ -99,9 +99,9 @@ const SpecialContactItem: React.FC<Props> = ({
               senderId={senderId}
               label=""
               inputProps={{
-                label: t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' }),
+                label: t('legal-contacts.link-pec-placeholder'),
               }}
-              insertButtonLabel={t('button.attiva')}
+              insertButtonLabel={t('button.attiva', { ns: 'common' })}
               onSubmit={(pecValue) => onEdit(pecValue, channelType, { senderId, senderName })}
               onDelete={handleDelete}
             />
