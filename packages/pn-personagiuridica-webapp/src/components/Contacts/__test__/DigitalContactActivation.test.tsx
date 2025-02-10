@@ -13,16 +13,11 @@ import { apiClient } from '../../../api/apiClients';
 import { ChannelType } from '../../../models/contacts';
 import DigitalContactActivation from '../DigitalContactActivation';
 
-const mockNavigateWithStateFn = vi.fn();
-const mockNavigateToPreviuosLocationFn = vi.fn();
+const mockNavigateFn = vi.fn();
 
-vi.mock('@pagopa-pn/pn-commons', async () => ({
-  ...(await vi.importActual<any>('@pagopa-pn/pn-commons')),
-  usePreviousLocation: () => ({
-    previousLocation: '/mocked-page',
-    navigateWithState: mockNavigateWithStateFn,
-    navigateToPreviousLocation: mockNavigateToPreviuosLocationFn,
-  }),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
+  useNavigate: () => mockNavigateFn,
 }));
 
 describe('DigitalContactActivation', () => {
@@ -55,7 +50,8 @@ describe('DigitalContactActivation', () => {
     const backButton = getByText('button.annulla');
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
-    expect(mockNavigateToPreviuosLocationFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(-1);
   });
 
   it('renders pec contact wizard correctly', () => {
@@ -128,7 +124,8 @@ describe('DigitalContactActivation', () => {
       'legal-contacts.sercq-send-wizard.feedback.back-to-contacts'
     );
     fireEvent.click(feedbackButton);
-    expect(mockNavigateToPreviuosLocationFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(-1);
   });
 
   it('renders component correctly when transferring', async () => {

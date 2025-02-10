@@ -1,10 +1,11 @@
 import { useFormik } from 'formik';
 import React, { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { Alert, TextField, Typography } from '@mui/material';
-import { PnWizard, PnWizardStep, usePreviousLocation } from '@pagopa-pn/pn-commons';
+import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -29,7 +30,7 @@ interface Props {
 const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecWizard }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
-  const { navigateToPreviousLocation } = usePreviousLocation();
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
   const [openCodeModal, setOpenCodeModal] = useState(false);
@@ -82,7 +83,7 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
         }
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_SUCCESS, 'default');
         setOpenCodeModal(false);
-        return isTransferring ? setActiveStep(activeStep + 1) : navigateToPreviousLocation();
+        return isTransferring ? setActiveStep(activeStep + 1) : navigate(-1);
       })
       .catch(() => {});
   };
@@ -100,7 +101,7 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
         slots={{
           prevButton: () => (
             <ButtonNaked
-              onClick={isTransferring ? navigateToPreviousLocation : () => setShowPecWizard(false)}
+              onClick={isTransferring ? navigate(-1) : () => setShowPecWizard(false)}
               color="primary"
               size="medium"
               data-testid="prev-button"
@@ -125,7 +126,7 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
                   }`
                 ),
                 buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
-                onClick: navigateToPreviousLocation,
+                onClick: () => navigate(-1),
               }
             : undefined,
         }}
