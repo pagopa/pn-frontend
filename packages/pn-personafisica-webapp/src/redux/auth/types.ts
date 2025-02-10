@@ -14,4 +14,5 @@ export interface User extends BasicUser {
 export interface UserSource {
   channel: string; // TPP o ??? 
   details: string;
+  retrievalId: string;
 }

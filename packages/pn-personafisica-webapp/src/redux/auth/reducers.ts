@@ -26,6 +26,7 @@ const userDataMatcher = yup
     source: yup.object({
       channel: yup.string(),
       details: yup.string(),
+      retrievalId: yup.string(),
     }).optional(),
   })
   .noUnknown(true);

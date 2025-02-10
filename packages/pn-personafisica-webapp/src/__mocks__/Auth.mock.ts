@@ -54,5 +54,6 @@ export const userResponseWithRetrievalId: User = {
   source: {
     channel: 'TPP', 
     details: 'mock-tpp-id',
+    retrievalId: 'mock-retrieval-id',
   }
 };
