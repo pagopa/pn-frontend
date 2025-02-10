@@ -131,8 +131,6 @@ describe('SpecialContacts Component', async () => {
     ];
     expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     expect(input).not.toBeInTheDocument();
-    // simulate rerendering due to redux changes
-    result.rerender(<SpecialContacts />);
     await waitFor(() => {
       // contacts list
       const specialContactForms = result.getAllByTestId(
@@ -146,7 +144,7 @@ describe('SpecialContacts Component', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     mock.onDelete(`/bff/v1/addresses/LEGAL/${specialAddresses[0].senderId}/PEC`).reply(200);
     // render component
-    const { rerender, getAllByTestId, getByRole } = render(<SpecialContacts />, {
+    const { getAllByTestId, getByRole } = render(<SpecialContacts />, {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
     });
     // ATTENTION: the order in the mock is very important
@@ -168,8 +166,6 @@ describe('SpecialContacts Component', async () => {
     });
     const addresses = [defaultAddress, ...specialAddresses.slice(1)];
     expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
-    // simulate rerendering due to redux changes
-    rerender(<SpecialContacts />);
     await waitFor(() => {
       // contacts list
       const specialContactForms = getAllByTestId(
@@ -190,17 +186,14 @@ describe('SpecialContacts Component', async () => {
     const specialContactForms = result.getAllByTestId(
       /^[a-zA-Z0-9-]+(?:_pecSpecialContact|_sercq_sendSpecialContact)$/
     );
-    const editButton = within(specialContactForms[0]).getByRole('button', {
+    const editButton = within(specialContactForms[1]).getByRole('button', {
       name: 'button.modifica',
     });
     fireEvent.click(editButton);
 
-    const senderId = digitalLegalAddresses.find(
-      (address) => address.senderId !== 'default'
-    )!.senderId;
-    await testInput(specialContactForms[0], `${senderId}_pec`, pecValue);
+    await testInput(specialContactForms[1], `${specialAddresses[1].senderId}_pec`, pecValue);
 
-    const confirmButton = within(specialContactForms[0]).getByText('button.conferma');
+    const confirmButton = within(specialContactForms[1]).getByText('button.conferma');
     fireEvent.click(confirmButton);
 
     await waitFor(() => {

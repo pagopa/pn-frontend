@@ -29,6 +29,7 @@ const assignFn = vi.fn();
 describe('LegalContacts Component', async () => {
   let mock: MockAdapter;
   const originalLocation = window.location;
+
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
     Object.defineProperty(window, 'location', {
