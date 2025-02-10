@@ -38,7 +38,7 @@ const SpecialContactItem: React.FC<Props> = ({ address, onDelete, onEdit, onCanc
         {address.senderName}
       </Typography>
       {isVerifyingPec && (
-        <Box key={address.value}>
+        <Box key={`${address.senderId}-${address.value}`}>
           <Chip
             label={t('legal-contacts.pec-validating')}
             color="warning"
@@ -50,7 +50,7 @@ const SpecialContactItem: React.FC<Props> = ({ address, onDelete, onEdit, onCanc
       )}
       {!isVerifyingPec && (
         <Stack
-          key={address.value}
+          key={`${address.senderId}-${address.value}`}
           direction="row"
           spacing={1}
           data-testid={`${senderId}_${channelType.toLowerCase()}SpecialContact`}
