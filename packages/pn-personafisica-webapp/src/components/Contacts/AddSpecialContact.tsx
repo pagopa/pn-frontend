@@ -407,15 +407,17 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
           handleDiscard={() => setModalOpen(null)}
           handleConfirm={() => handleCodeVerification()}
         />
-        <ContactCodeDialog
-          value={formik.values.s_value}
-          addressType={AddressType.LEGAL}
-          channelType={formik.values.channelType as ChannelType}
-          open={modalOpen === ModalType.CODE}
-          onConfirm={(code) => handleCodeVerification(code)}
-          onDiscard={() => setModalOpen(null)}
-          onError={() => sendCodeErrorEvent(formik.values.channelType as ChannelType)}
-        />
+        {formik.values.channelType && (
+          <ContactCodeDialog
+            value={formik.values.s_value}
+            addressType={AddressType.LEGAL}
+            channelType={formik.values.channelType}
+            open={modalOpen === ModalType.CODE}
+            onConfirm={(code) => handleCodeVerification(code)}
+            onDiscard={() => setModalOpen(null)}
+            onError={() => sendCodeErrorEvent(formik.values.channelType as ChannelType)}
+          />
+        )}
         <Typography
           variant="h6"
           fontSize={{ xs: '22px', lg: '24px' }}
