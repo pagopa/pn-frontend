@@ -387,8 +387,6 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
     });
     expect(result.container).toHaveTextContent(/title/i);
     const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
-    // const paymentMethodRadio = within(form).queryAllByTestId('paymentMethodRadio');
-    // expect(paymentMethodRadio).toHaveLength(0);
     const button = within(form).getByTestId('step-submit');
     expect(button).toBeDisabled();
   });
