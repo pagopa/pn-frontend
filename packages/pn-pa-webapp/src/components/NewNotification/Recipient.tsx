@@ -464,33 +464,6 @@ const Recipient: React.FC<Props> = ({
                       />
                     </Grid>
                   </Grid>
-
-                  {paymentMode !== PaymentModel.NOTHING && (
-                    <Grid container columnSpacing={1} rowSpacing={2} marginTop={4}>
-                      <Grid item xs={12} lg={6}>
-                        <FormTextField
-                          keyName={`recipients[${index}].creditorTaxId`}
-                          label={`${t('creditor-fiscal-code')}*`}
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          handleBlur={handleBlur}
-                        />
-                      </Grid>
-                      <Grid item xs={12} lg={6}>
-                        <FormTextField
-                          keyName={`recipients[${index}].noticeCode`}
-                          label={`${t('notice-code')}*`}
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          handleBlur={handleBlur}
-                        />
-                      </Grid>
-                    </Grid>
-                  )}
                 </FormBox>
                 {values.recipients.length < 5 && values.recipients.length - 1 === index && (
                   <Stack mt={2} direction="row" justifyContent="space-between">
