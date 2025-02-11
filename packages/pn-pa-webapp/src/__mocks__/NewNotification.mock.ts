@@ -183,26 +183,6 @@ export const newNotification: NewNotification = {
   additionalAbstract: '',
 };
 
-export const newNotificationWithoutPayment: NewNotification = {
-  abstract: '',
-  paProtocolNumber: '12345678910',
-  subject: 'Multone esagerato',
-  recipients: newNotificationRecipients,
-  documents: newNotificationDocuments,
-  payment: {},
-  physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
-  paymentMode: PaymentModel.NOTHING,
-  group: newNotificationGroups[2].id,
-  taxonomyCode: '010801N',
-  notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
-  senderDenomination: userResponse.organization.name,
-  senderTaxId: userResponse.organization.fiscal_code,
-  lang: 'it',
-  additionalLang: '',
-  additionalSubject: '',
-  additionalAbstract: '',
-};
-
 export const newNotificationEmpty: NewNotification = {
   paProtocolNumber: '',
   subject: '',
