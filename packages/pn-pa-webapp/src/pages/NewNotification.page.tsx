@@ -16,6 +16,7 @@ import { createNewNotification } from '../redux/newNotification/actions';
 import { resetState, setSenderInfos } from '../redux/newNotification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PaymentMethods from '../components/NewNotification/PaymentMethods';
 
 const SubTitle = () => {
   const { t } = useTranslation(['common', 'notifiche']);
@@ -45,6 +46,11 @@ const NewNotification = () => {
   ];
 
   const childRef = useRef<{ confirm: () => void }>();
+
+  if (IS_PAYMENT_ENABLED) {
+    // eslint-disable-next-line functional/immutable-data
+    steps.push(t('new-notification.steps.payment-methods.title', { ns: 'notifiche' }));
+  }
 
   const goToNextStep = () => {
     setActiveStep((previousStep) => previousStep + 1);
@@ -161,7 +167,7 @@ const NewNotification = () => {
             )}
             {activeStep === 2 && (
               <Attachments
-                onConfirm={createNotification}
+                onConfirm={IS_PAYMENT_ENABLED ? goToNextStep : createNotification}
                 onPreviousStep={goToPreviousStep}
                 isCompleted={isCompleted}
                 attachmentsData={notification.documents}
@@ -171,6 +177,16 @@ const NewNotification = () => {
                 ref={childRef}
               />
             )}
+            {activeStep === 3 && IS_PAYMENT_ENABLED && (
+              <PaymentMethods
+                onConfirm={createNotification}
+                notification={notification}
+                isCompleted={isCompleted}
+                onPreviousStep={goToPreviousStep}
+                ref={childRef}
+              />
+            )}
+
           </Grid>
         </Grid>
       </Box>

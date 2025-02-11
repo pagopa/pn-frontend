@@ -226,7 +226,6 @@ const Attachments: React.FC<Props> = ({
           onConfirm();
         } else {
           storeAttachments(values.documents);
-          dispatch(setIsCompleted());
           // upload attachments
           dispatch(uploadNotificationDocument(values.documents))
             .unwrap()
