@@ -273,6 +273,7 @@ describe('NewNotification Page without payment enabled in configuration', async 
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
     });
+
     const finalStep = result.getByTestId('finalStep');
     expect(finalStep).toBeInTheDocument();
   });

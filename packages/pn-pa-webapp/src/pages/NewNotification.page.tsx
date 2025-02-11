@@ -16,7 +16,6 @@ import { createNewNotification } from '../redux/newNotification/actions';
 import { resetState, setSenderInfos } from '../redux/newNotification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
-import PaymentMethods from '../components/NewNotification/PaymentMethods';
 
 const SubTitle = () => {
   const { t } = useTranslation(['common', 'notifiche']);
@@ -70,6 +69,7 @@ const NewNotification = () => {
 
   const createNotification = () => {
     if (activeStep === steps.length - 1 && isCompleted) {
+      console.log('siamo qui dentro');
       void dispatch(createNewNotification(notification))
         .unwrap()
         .then(() => setActiveStep((previousStep) => previousStep + 1))
@@ -105,6 +105,8 @@ const NewNotification = () => {
   if (activeStep === steps.length) {
     return <SyncFeedback />;
   }
+
+  console.log(isCompleted);
 
   return (
     <Prompt
@@ -177,7 +179,7 @@ const NewNotification = () => {
                 ref={childRef}
               />
             )}
-            {activeStep === 3 && IS_PAYMENT_ENABLED && (
+            {/* {activeStep === 3 && IS_PAYMENT_ENABLED && (
               <PaymentMethods
                 onConfirm={createNotification}
                 notification={notification}
@@ -185,7 +187,7 @@ const NewNotification = () => {
                 onPreviousStep={goToPreviousStep}
                 ref={childRef}
               />
-            )}
+            )} */}
 
           </Grid>
         </Grid>
