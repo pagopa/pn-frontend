@@ -207,7 +207,13 @@
     "info-modal-email-content": "Se non hai il domicilio digitale attivo e non apri la notifica entro 5 giorni dall’invio della email, riceverai i documenti in formato cartaceo a casa.",
     "info-modal-sms-title": "Avvisi via SMS: come funzionano",
     "info-modal-sms-subtitle": "Quando ci sono nuove notifiche per te, riceverai un SMS al numero inserito.",
-    "info-modal-sms-content": "Se non hai il domicilio digitale attivo e non apri la notifica entro 5 giorni dall’invio dell’SMS, riceverai i documenti in formato cartaceo a casa."
+    "info-modal-sms-content": "Se non hai il domicilio digitale attivo e non apri la notifica entro 5 giorni dall’invio dell’SMS, riceverai i documenti in formato cartaceo a casa.",
+    "confirmation-modal-title": "Non rischiare di leggere in ritardo le tue notifiche",
+    "confirmation-modal-io-content": "<0>Se non colleghi SEND a IO non riceverai aggiornamenti in app quando ricevi una comunicazione a valore legale.</0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>",
+    "confirmation-modal-io-accept": "Collega SEND a IO",
+    "confirmation-modal-email-content": "<0>Senza un indirizzo email o un altro recapito non possiamo informarti quando ricevi una comunicazione a valore legale su SEND.</0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>",
+    "confirmation-modal-email-accept": "Inserisci email",
+    "confirmation-modal-decline": "Lo farò più tardi"
   },
   "special-contacts": {
     "select-address": "Seleziona recapito",
