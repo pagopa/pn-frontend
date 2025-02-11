@@ -69,7 +69,6 @@ const NewNotification = () => {
 
   const createNotification = () => {
     if (activeStep === steps.length - 1 && isCompleted) {
-      console.log('siamo qui dentro');
       void dispatch(createNewNotification(notification))
         .unwrap()
         .then(() => setActiveStep((previousStep) => previousStep + 1))
@@ -105,8 +104,6 @@ const NewNotification = () => {
   if (activeStep === steps.length) {
     return <SyncFeedback />;
   }
-
-  console.log(isCompleted);
 
   return (
     <Prompt
