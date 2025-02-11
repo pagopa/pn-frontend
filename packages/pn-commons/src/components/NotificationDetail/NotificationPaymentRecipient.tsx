@@ -78,7 +78,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const loadingPaymentTimeout = useRef<NodeJS.Timeout>();
 
   const allPaymentsIsPaid = pagoPaF24.every((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED);
-  console.log('..............allPaymentsIsPaid', allPaymentsIsPaid);
   const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
   const hasMoreThenOnePage = paginationData.totalElements > paginationData.size;
 
