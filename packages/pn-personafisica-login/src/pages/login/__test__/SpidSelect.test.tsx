@@ -28,7 +28,8 @@ describe('test spid select page', () => {
 
   it('renders page', () => {
     const { URL_API_LOGIN } = getConfiguration();
-    const { container } = render(<SpidSelect onBack={backHandler} />);
+    render(<SpidSelect onClose={backHandler} show={true} />);
+    const container = document.body;
     expect(container).toHaveTextContent('spidSelect.title');
     const backIcon = getById(container, 'backIcon');
     expect(backIcon).toBeInTheDocument();
@@ -47,8 +48,9 @@ describe('test spid select page', () => {
   });
 
   it('clicks on back buttons', () => {
-    const { container } = render(<SpidSelect onBack={backHandler} />);
-    const backIcon = getById(container, 'backIcon');
+    render(<SpidSelect onClose={backHandler} show={true} />);
+    const container = document.body;
+    const backIcon = getById(document.body, 'backIcon');
     fireEvent.click(backIcon);
     expect(backHandler).toHaveBeenCalledTimes(1);
     const backButton = getById(container, 'backButton');
@@ -57,7 +59,8 @@ describe('test spid select page', () => {
   });
 
   it('request spid', () => {
-    const { container } = render(<SpidSelect onBack={backHandler} />);
+    render(<SpidSelect onClose={backHandler} show={true} />);
+    const container = document.body;
     const requestForSpid = getById(container, 'requestForSpid');
     expect(requestForSpid).toHaveAttribute('href', idps.richiediSpid);
   });

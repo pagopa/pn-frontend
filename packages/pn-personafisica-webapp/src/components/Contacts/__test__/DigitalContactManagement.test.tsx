@@ -4,16 +4,11 @@ import { digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render } from '../../../__test__/test-utils';
 import DigitalContactManagement from '../DigitalContactManagement';
 
-const mockNavigateWithStateFn = vi.fn();
-const mockNavigateToPreviuosLocationFn = vi.fn();
+const mockNavigateFn = vi.fn();
 
-vi.mock('@pagopa-pn/pn-commons', async () => ({
-  ...(await vi.importActual<any>('@pagopa-pn/pn-commons')),
-  usePreviousLocation: () => ({
-    previousLocation: '/mocked-page',
-    navigateWithState: mockNavigateWithStateFn,
-    navigateToPreviousLocation: mockNavigateToPreviuosLocationFn,
-  }),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
+  useNavigate: () => mockNavigateFn,
 }));
 
 describe('DigitalContactManagement', () => {
@@ -53,6 +48,7 @@ describe('DigitalContactManagement', () => {
     const backButton = getByText('button.indietro');
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
-    expect(mockNavigateToPreviuosLocationFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(-1);
   });
 });

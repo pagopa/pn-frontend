@@ -143,10 +143,6 @@ function Router() {
                 />
                 <Route path={routes.DIGITAL_DOMICILE} element={<DigitalContact />}>
                   <Route
-                    path={`${routes.DIGITAL_DOMICILE}/`}
-                    element={<DigitalContactActivation />}
-                  />
-                  <Route
                     path={routes.DIGITAL_DOMICILE_ACTIVATION}
                     element={<DigitalContactActivation />}
                   />
@@ -154,6 +150,7 @@ function Router() {
                     path={routes.DIGITAL_DOMICILE_MANAGEMENT}
                     element={<DigitalContactManagement />}
                   />
+                  <Route element={<Navigate to={routes.RECAPITI} replace />} index />
                 </Route>
                 <Route
                   path={routes.INTEGRAZIONE_API}

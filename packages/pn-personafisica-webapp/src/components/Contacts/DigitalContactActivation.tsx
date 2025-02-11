@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { Button, DialogContentText, DialogTitle, Typography } from '@mui/material';
 import {
@@ -8,7 +9,6 @@ import {
   PnDialogContent,
   PnWizard,
   PnWizardStep,
-  usePreviousLocation,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -93,7 +93,7 @@ const CourtesyContactConfirmationDialog: React.FC<DialogProps> = ({
 
 const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) => {
   const { t } = useTranslation(['recapiti', 'common']);
-  const { navigateToPreviousLocation } = usePreviousLocation();
+  const navigate = useNavigate();
   const { defaultAPPIOAddress, defaultSMSAddress, defaultEMAILAddress, defaultSERCQ_SENDAddress } =
     useAppSelector(contactsSelectors.selectAddresses);
 
@@ -134,12 +134,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
   const getNextButton = () => {
     if (activeStep === 0) {
       return (
-        <ButtonNaked
-          onClick={navigateToPreviousLocation}
-          color="primary"
-          size="medium"
-          sx={{ mx: 'auto' }}
-        >
+        <ButtonNaked onClick={() => navigate(-1)} color="primary" size="medium" sx={{ mx: 'auto' }}>
           {t('button.annulla', { ns: 'common' })}
         </ButtonNaked>
       );
@@ -181,7 +176,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
               }`
             ),
             buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
-            onClick: navigateToPreviousLocation,
+            onClick: () => navigate(-1),
           },
         }}
       >

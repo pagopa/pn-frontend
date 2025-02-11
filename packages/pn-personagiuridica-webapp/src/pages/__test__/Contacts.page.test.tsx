@@ -140,13 +140,8 @@ describe('Contacts page', async () => {
     );
     expect(cancelValidationButton).toBeInTheDocument();
 
-    const sercqSendContact = within(specialContacts).getByTestId('1234_sercq_sendSpecialContact');
-    expect(sercqSendContact).toBeInTheDocument();
-    expect(sercqSendContact).toHaveTextContent('special-contacts.sercq_send');
-
-    const disableButton = within(sercqSendContact).getByRole('button', { name: 'button.disable' });
-    expect(disableButton).toBeInTheDocument();
-    expect(disableButton).toBeDisabled();
+    const sercqSendContact = within(specialContacts).queryByTestId('1234_sercq_sendSpecialContact');
+    expect(sercqSendContact).not.toBeInTheDocument();
   });
 
   it('API error', async () => {

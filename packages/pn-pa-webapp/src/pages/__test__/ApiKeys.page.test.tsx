@@ -121,8 +121,7 @@ describe('ApiKeys Page', async () => {
       .reply(200, { ...mockApiKeysDTO, items: mockApiKeysDTO.items.slice(0, 2) });
     mock
       .onGet(
-        `/bff/v1/api-keys?limit=10&lastKey=${
-          mockApiKeysDTO.lastKey
+        `/bff/v1/api-keys?limit=10&lastKey=${mockApiKeysDTO.lastKey
         }&lastUpdate=${encodeURIComponent(mockApiKeysDTO.lastUpdate!)}&showVirtualKey=true`
       )
       .reply(200, { ...mockApiKeysDTO, items: mockApiKeysDTO.items.slice(2) });
@@ -135,7 +134,7 @@ describe('ApiKeys Page', async () => {
     let rows = result.getAllByTestId('tableApiKeys.body.row');
     expect(rows).toHaveLength(2);
     rows.forEach((row, index) => {
-      expect(row).toHaveTextContent(`${mockApiKeysDTO.items[index].value.substring(0, 10)}...`);
+      expect(row).toHaveTextContent(`${mockApiKeysDTO.items[index].value}`);
     });
     expect(mock.history.get).toHaveLength(1);
     // change page
@@ -149,7 +148,7 @@ describe('ApiKeys Page', async () => {
     await waitFor(() => {
       rows = result.getAllByTestId('tableApiKeys.body.row');
       expect(rows).toHaveLength(1);
-      expect(rows[0]).toHaveTextContent(`${mockApiKeysDTO.items[2].value.substring(0, 10)}...`);
+      expect(rows[0]).toHaveTextContent(`${mockApiKeysDTO.items[2].value}`);
     });
     // change size
     const itemsPerPageSelector = result.getByTestId('itemsPerPageSelector');
@@ -164,7 +163,7 @@ describe('ApiKeys Page', async () => {
       rows = result.getAllByTestId('tableApiKeys.body.row');
       expect(rows).toHaveLength(3);
       rows.forEach((row, index) => {
-        expect(row).toHaveTextContent(`${mockApiKeysDTO.items[index].value.substring(0, 10)}...`);
+        expect(row).toHaveTextContent(`${mockApiKeysDTO.items[index].value.substring(0, 10)}`);
       });
     });
   });

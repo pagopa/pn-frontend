@@ -213,7 +213,6 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               <ButtonNaked
                 key="saveButton"
                 color="primary"
-                disabled={!formik.isValid}
                 type="submit"
                 sx={{ fontWeight: 700, justifyContent: 'left' }}
                 id={`saveContact-${senderId}_${contactType}`}

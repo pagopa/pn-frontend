@@ -1,13 +1,18 @@
 import { vi } from 'vitest';
 
 import { Box } from '@mui/material';
+import { Tag } from '@pagopa/mui-italia';
 
 import { fireEvent, render, screen, waitFor } from '../../../test-utils';
 import CustomTagGroup from '../CustomTagGroup';
 
 describe('CustomTagGroup component', () => {
   const tagsArray = ['mock-tag-1', 'mock-tag-2', 'mock-tag-3', 'mock-tag-4'];
-  const tags = tagsArray.map((v, i) => <Box key={i}>{v}</Box>);
+  const tags = tagsArray.map((v, i) => (
+    <Box key={i}>
+      <Tag value={v}></Tag>
+    </Box>
+  ));
   const mockCallbackFn = vi.fn();
 
   beforeEach(() => {
@@ -56,5 +61,16 @@ describe('CustomTagGroup component', () => {
     const tooltip = await waitFor(() => screen.queryByRole('tooltip'));
     expect(tooltip).not.toBeInTheDocument();
     expect(mockCallbackFn).toBeCalledTimes(0);
+  });
+
+  it('renders component with limited 1 tags with aria-label', () => {
+    const { getByTestId } = render(
+      <CustomTagGroup visibleItems={2} disableTooltip={false}>
+        {tags}
+      </CustomTagGroup>
+    );
+    const tooltipIndicator = getByTestId('custom-tooltip-indicator');
+    expect(tooltipIndicator).toBeInTheDocument();
+    expect(tooltipIndicator).toHaveAttribute('aria-label', 'mock-tag-3,mock-tag-4');
   });
 });

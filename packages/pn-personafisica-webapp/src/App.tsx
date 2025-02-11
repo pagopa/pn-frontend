@@ -10,7 +10,7 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Box } from '@mui/material';
+import { Box, Button, DialogTitle } from '@mui/material';
 import {
   APP_VERSION,
   AppMessage,
@@ -18,6 +18,8 @@ import {
   AppResponseError,
   AppResponseMessage,
   Layout,
+  PnDialog,
+  PnDialogActions,
   ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
@@ -30,11 +32,10 @@ import {
 import { ProductEntity } from '@pagopa/mui-italia';
 
 import { PFEventsType } from './models/PFEventsType';
-import { getCurrentEventTypePage } from './navigation/navigation.utility';
+import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { logout } from './redux/auth/actions';
 import { getDigitalAddresses } from './redux/contact/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
@@ -70,6 +71,7 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
     (state: RootState) => state.userState
@@ -226,7 +228,7 @@ const App = () => {
   });
 
   const handleUserLogout = () => {
-    void dispatch(logout());
+    setOpenModal(true);
   };
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
@@ -302,6 +304,25 @@ const App = () => {
         eventTrackingCallbackRefreshPage={handleEventTrackingCallbackRefreshPage}
         enableAssistanceButton={showAssistanceButton}
       >
+        <PnDialog open={openModal}>
+          <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>
+          <PnDialogActions>
+            <Button id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
+              {t('button.annulla')}
+            </Button>
+            <Button
+              data-testid="confirm-button"
+              variant="contained"
+              onClick={() => {
+                sessionStorage.clear();
+                goToLoginPortal();
+                setOpenModal(false);
+              }}
+            >
+              {t('header.logout')}
+            </Button>
+          </PnDialogActions>
+        </PnDialog>
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
         <AppMessage />
         <AppResponseMessage

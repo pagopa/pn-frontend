@@ -2,7 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
-import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
+import { getById, queryById, waitFor } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
@@ -60,7 +60,7 @@ describe('test login page', () => {
     expect(storageAarOps.read()).toBe('fake-aar-token');
   });
 
-  it('select spid login', () => {
+  it('select spid login', async () => {
     const { container } = render(
       <BrowserRouter>
         <Login />
@@ -68,7 +68,7 @@ describe('test login page', () => {
     );
     const spidButton = getById(container, 'spidButton');
     fireEvent.click(spidButton);
-    const spidSelect = getById(container, 'spidSelect');
+    const spidSelect = await waitFor(() => document.querySelector('#spidSelect'));
     expect(spidSelect).toBeInTheDocument();
   });
 

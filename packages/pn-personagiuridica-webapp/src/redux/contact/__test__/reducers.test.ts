@@ -12,7 +12,6 @@ import { AddressType, ChannelType } from '../../../models/contacts';
 import { store } from '../../store';
 import { createOrUpdateAddress, deleteAddress, getDigitalAddresses } from '../actions';
 import { contactsSelectors, resetPecValidation, resetState } from '../reducers';
-import { sortAddresses } from '../../../utility/contacts.utility';
 
 const initialState = {
   loading: false,
@@ -47,7 +46,7 @@ describe('Contacts redux state tests', () => {
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     const action = await store.dispatch(getDigitalAddresses());
     expect(action.type).toBe('getDigitalAddresses/fulfilled');
-    expect(action.payload).toEqual(sortAddresses(digitalAddresses));
+    expect(action.payload).toEqual(digitalAddresses);
   });
 
   it('Should be able to update the digital address with legal value (pec to verify)', async () => {
@@ -63,7 +62,7 @@ describe('Contacts redux state tests', () => {
       createOrUpdateAddress({
         addressType: AddressType.LEGAL,
         senderId: updatedDigitalAddress.senderId,
-        channelType: updatedDigitalAddress.channelType as ChannelType,
+        channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,
       })
     );
@@ -83,7 +82,7 @@ describe('Contacts redux state tests', () => {
       createOrUpdateAddress({
         addressType: AddressType.LEGAL,
         senderId: updatedDigitalAddress.senderId,
-        channelType: updatedDigitalAddress.channelType as ChannelType,
+        channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,
       })
     );
@@ -106,7 +105,7 @@ describe('Contacts redux state tests', () => {
       createOrUpdateAddress({
         addressType: AddressType.LEGAL,
         senderId: updatedDigitalAddress.senderId,
-        channelType: updatedDigitalAddress.channelType as ChannelType,
+        channelType: updatedDigitalAddress.channelType,
         value: updatedDigitalAddress.value,
       })
     );

@@ -1,4 +1,5 @@
 import React, { JSXElementConstructor, ReactElement, ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {
@@ -13,7 +14,6 @@ import {
 } from '@mui/material';
 import { ButtonNaked, IllusCompleted } from '@pagopa/mui-italia';
 
-import { usePreviousLocation } from '../../hooks';
 import checkChildren from '../../utility/children.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnWizardStep, { PnWizardStepProps } from './PnWizardStep';
@@ -55,7 +55,7 @@ const PnWizard: React.FC<Props> = ({
 }) => {
   checkChildren(children, [{ cmp: PnWizardStep }], 'PnWizard');
 
-  const { navigateToPreviousLocation } = usePreviousLocation();
+  const navigate = useNavigate();
 
   const PrevButton = slots?.prevButton || Button;
   const NextButton = slots?.nextButton || Button;
@@ -127,7 +127,7 @@ const PnWizard: React.FC<Props> = ({
           size="medium"
           color="primary"
           startIcon={<ArrowBackIcon />}
-          onClick={navigateToPreviousLocation}
+          onClick={() => navigate(-1)}
         >
           {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
         </ButtonNaked>

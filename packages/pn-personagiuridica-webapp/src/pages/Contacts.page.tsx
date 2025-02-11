@@ -4,7 +4,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Alert, Box, Link, Stack, Typography } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
-import ContactsSummaryCards from '../components/Contacts/ContactsSummaryCards';
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import LegalContacts from '../components/Contacts/LegalContacts';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
@@ -86,7 +85,6 @@ const Contacts = () => {
           apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
           reloadAction={fetchAddresses}
         >
-          <ContactsSummaryCards />
           <DomicileBanner source={ContactSource.RECAPITI} />
           {verifyingPecAddress && (
             <Alert data-testid="PecVerificationAlert" severity="info" sx={{ my: { xs: 2, lg: 4 } }}>
@@ -96,7 +94,7 @@ const Contacts = () => {
               <Typography variant="inherit">{t(bannerMessage, { ns: 'recapiti' })}</Typography>
             </Alert>
           )}
-          <Stack direction="column" spacing={2}>
+          <Stack direction="column" spacing={2} mt={2}>
             <LegalContacts />
             <CourtesyContacts />
           </Stack>

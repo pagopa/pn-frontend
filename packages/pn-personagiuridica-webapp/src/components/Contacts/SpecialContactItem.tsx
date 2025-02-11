@@ -9,54 +9,48 @@ import DigitalContact from './DigitalContact';
 import PecValidationItem from './PecValidationItem';
 
 type Props = {
-  addresses: Array<DigitalAddress>;
+  address: DigitalAddress;
   onEdit: (value: string, channelType: ChannelType, sender: Sender) => void;
   onDelete: (value: string, channelType: ChannelType, sender: Sender) => void;
   onCancelValidation: (senderId: string) => void;
 };
 
-const SpecialContactItem: React.FC<Props> = ({
-  addresses,
-  onDelete,
-  onEdit,
-  onCancelValidation,
-}) => {
+const SpecialContactItem: React.FC<Props> = ({ address, onDelete, onEdit, onCancelValidation }) => {
   const { t } = useTranslation(['recapiti', 'common']);
 
   const hasPecInValidationForEntity = (senderId: string) =>
-    !!addresses.find(
-      (addr) => addr.channelType === ChannelType.PEC && !addr.pecValid && addr.senderId === senderId
-    );
+    address.channelType === ChannelType.PEC && !address.pecValid && address.senderId === senderId;
 
-  const renderAddress = (address: DigitalAddress) => {
-    const { value, channelType, senderId, senderName, pecValid } = address;
-    const isVerifyingPec = channelType === ChannelType.PEC && !pecValid;
-    const isSercq = channelType === ChannelType.SERCQ_SEND;
+  const { value, channelType, senderId, senderName, pecValid } = address;
+  const isVerifyingPec = channelType === ChannelType.PEC && !pecValid;
+  const isSercq = channelType === ChannelType.SERCQ_SEND;
 
-    const handleDelete = () => {
-      onDelete(value, channelType, {
-        senderId,
-        senderName,
-      });
-    };
+  const handleDelete = () => {
+    onDelete(value, channelType, {
+      senderId,
+      senderName,
+    });
+  };
 
-    if (isVerifyingPec) {
-      return (
-        <Box key={address.value}>
+  return (
+    <Stack direction="column">
+      <Typography variant="caption" mb={1}>
+        {address.senderName}
+      </Typography>
+      {isVerifyingPec && (
+        <Box key={`${address.senderId}-${address.value}`}>
           <Chip
-            label={t('legal-contacts.pec-validating', { ns: 'recapiti' })}
+            label={t('legal-contacts.pec-validating')}
             color="warning"
             size="small"
             sx={{ mb: 2 }}
           />
           <PecValidationItem senderId={senderId} onCancelValidation={onCancelValidation} />
         </Box>
-      );
-    }
-
-    return (
-      <Box key={address.value}>
+      )}
+      {!isVerifyingPec && (
         <Stack
+          key={`${address.senderId}-${address.value}`}
           direction="row"
           spacing={1}
           data-testid={`${senderId}_${channelType.toLowerCase()}SpecialContact`}
@@ -73,7 +67,7 @@ const SpecialContactItem: React.FC<Props> = ({
                 variant="body2"
                 data-testid={`special_${channelType}-typography`}
               >
-                {t('special-contacts.sercq_send', { ns: 'recapiti' })}
+                {t('special-contacts.sercq_send')}
               </Typography>
               <ButtonNaked
                 data-testid={`cancelContact-special_${channelType}`}
@@ -99,25 +93,15 @@ const SpecialContactItem: React.FC<Props> = ({
               senderId={senderId}
               label=""
               inputProps={{
-                label: t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' }),
+                label: t('legal-contacts.link-pec-placeholder'),
               }}
-              insertButtonLabel={t('button.attiva')}
+              insertButtonLabel={t('button.attiva', { ns: 'common' })}
               onSubmit={(pecValue) => onEdit(pecValue, channelType, { senderId, senderName })}
               onDelete={handleDelete}
             />
           )}
         </Stack>
-      </Box>
-    );
-  };
-
-  return (
-    <Stack direction="column">
-      <Typography variant="caption" mb={1}>
-        {addresses[0].senderName}
-      </Typography>
-
-      {addresses.map((address) => renderAddress(address))}
+      )}
     </Stack>
   );
 };
