@@ -286,9 +286,9 @@ const PaymentMethods: React.FC<Props> = ({
       dispatch(setPaymentDocuments({ paymentDocuments: formatPaymentDocuments() }));
     },
   }));
-
+  
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} data-testid="paymentMethodForm">
       <NewNotificationCard
         noPaper
         isContinueDisabled={!formik.isValid}

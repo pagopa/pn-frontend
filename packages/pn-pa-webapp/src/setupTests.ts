@@ -23,7 +23,7 @@ beforeAll(() => {
     SELFCARE_URL_FE_LOGIN: 'https://test.selfcare.pagopa.it/auth/login',
     SELFCARE_BASE_URL: 'https://test.selfcare.pagopa.it',
     SELFCARE_SEND_PROD_ID: 'prod-pn-test',
-    IS_PAYMENT_ENABLED: true,
+    IS_PAYMENT_ENABLED: false,
     MIXPANEL_TOKEN: 'DUMMY',
     IS_MANUAL_SEND_ENABLED: true,
     IS_STATISTICS_ENABLED: true,
