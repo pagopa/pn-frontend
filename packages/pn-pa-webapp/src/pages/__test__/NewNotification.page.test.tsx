@@ -12,7 +12,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
-import { newNotification, newNotificationGroups, newNotificationWithoutPayment } from '../../__mocks__/NewNotification.mock';
+import { newNotification, newNotificationGroups } from '../../__mocks__/NewNotification.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
@@ -241,7 +241,7 @@ describe('NewNotification Page without payment enabled in configuration', async 
     await act(async () => {
       result = render(<NewNotification />, {
         preloadedState: {
-          newNotificationState: { notification: newNotificationWithoutPayment, groups: [] },
+          newNotificationState: { notification: newNotification, groups: [] },
           userState: { user: userResponse },
         },
       });
