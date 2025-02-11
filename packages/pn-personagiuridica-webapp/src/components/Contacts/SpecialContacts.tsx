@@ -32,10 +32,6 @@ enum ModalType {
   CANCEL_VALIDATION = 'cancel_validation',
 }
 
-type Addresses = {
-  [senderId: string]: Array<DigitalAddress>;
-};
-
 const SpecialContacts: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
@@ -191,41 +187,45 @@ const SpecialContacts: React.FC = () => {
     setModalOpen(ModalType.CANCEL_VALIDATION);
   };
 
-  const groupedAddresses: Addresses = specialAddresses.reduce((obj, a) => {
-    if (!obj[a.senderId]) {
-      // eslint-disable-next-line functional/immutable-data
-      obj[a.senderId] = [];
-    }
-    // eslint-disable-next-line functional/immutable-data
-    obj[a.senderId].push(a);
-    return obj;
-  }, {} as Addresses);
+  /**
+   * Case: we have a SERCQ SEND enabled on a sender and we decide to add a PEC for the same sender.
+   * Until when the PEC is not validated, we will have the SERCQ SEND address and the PEC address.
+   * This leads to an error, because on the interface we will show both the addresses.
+   */
+  const uniqueAddresses: Array<DigitalAddress> = specialAddresses.filter(
+    (addr, _, arr) =>
+      arr.findIndex(
+        (el) =>
+          addr.senderId === el.senderId &&
+          addr.channelType !== el.channelType &&
+          el.channelType === ChannelType.PEC &&
+          !el.pecValid
+      ) === -1
+  );
 
   return (
     <>
-      {Object.keys(groupedAddresses).length > 0 && (
-        <Card sx={{ mt: 3, backgroundColor: 'grey.50', borderRadius: 0.5 }}>
-          <CardContent data-testid="specialContacts" sx={{ padding: 2 }}>
-            <Typography fontSize="14px" fontWeight={700} mb={3}>
-              {t('special-contacts.card-title', { ns: 'recapiti' })}
-            </Typography>
-            <Stack
-              spacing={3}
-              divider={<Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }} />}
-            >
-              {Object.entries(groupedAddresses).map(([senderId, addr]) => (
-                <SpecialContactItem
-                  key={`sender-${senderId}`}
-                  addresses={addr}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
-                  onCancelValidation={handleCancelValidation}
-                />
-              ))}
-            </Stack>
-          </CardContent>
-        </Card>
-      )}
+      <Card sx={{ mt: 3, backgroundColor: 'grey.50', borderRadius: 0.5 }}>
+        <CardContent data-testid="specialContacts" sx={{ padding: 2 }}>
+          <Typography fontSize="14px" fontWeight={700} mb={3}>
+            {t('special-contacts.card-title', { ns: 'recapiti' })}
+          </Typography>
+          <Stack
+            spacing={3}
+            divider={<Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }} />}
+          >
+            {uniqueAddresses.map((addr) => (
+              <SpecialContactItem
+                key={`sender-${addr.senderId}`}
+                address={addr}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onCancelValidation={handleCancelValidation}
+              />
+            ))}
+          </Stack>
+        </CardContent>
+      </Card>
       <ContactCodeDialog
         value={currentAddress.current.value}
         addressType={AddressType.LEGAL}
