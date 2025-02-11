@@ -42,6 +42,7 @@
       "organization-dashboard": "La tua impresa",
       "notification-platform": "SEND - Servizio Notifiche Digitali"
     },
+    "logout-message": "Confermi di voler uscire da SEND?",
     "logout": "Esci",
     "pago-pa-link": "Sito di PagoPA S.p.A."
   },
@@ -214,5 +215,10 @@
       "of": "{{currentStep}} di {{totalSteps}}",
       "activeStep": "Step {{currentStep}}"
     }
+  },
+  "inactivity": {
+    "title": "Vuoi davvero uscire da SEND?",
+    "body": "La disconnessione è in corso. Se hai cambiato idea premi “Mantieni l’accesso” entro pochi secondi.",
+    "action": "Mantieni l’accesso"
   }
 }

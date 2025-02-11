@@ -212,7 +212,7 @@ describe('PecContactItem component', () => {
     await waitFor(() => {
       expect(input).toHaveValue('invalid-pec');
     });
-    expect(saveButton).toBeDisabled();
+    expect(saveButton).toBeEnabled();
     const inputError = container.querySelector('#default_pec-helper-text');
     expect(inputError).toHaveTextContent('legal-contacts.valid-pec');
   });

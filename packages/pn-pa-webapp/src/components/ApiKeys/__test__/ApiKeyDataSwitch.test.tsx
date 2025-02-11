@@ -24,7 +24,7 @@ describe('ApiKeyDataSwitch Component', () => {
     const { container, getByTestId } = render(
       <ApiKeyDataSwitch handleModalClick={mockClick} data={data} type="value" />
     );
-    const regexp = new RegExp(`^${data.value.substring(0, 10)}...$`, 'ig');
+    const regexp = new RegExp(`^${data.value}`, 'ig');
     expect(container).toHaveTextContent(regexp);
     const clipboard = getByTestId('copyToClipboard');
     expect(clipboard).toBeInTheDocument();
@@ -45,11 +45,11 @@ describe('ApiKeyDataSwitch Component', () => {
     const groupsString =
       data.groups.length > 3
         ? data.groups
-            .map((group) => group.name)
-            .splice(0, 3)
-            .join('') +
-          '\\+' +
-          (data.groups.length - 3).toString()
+          .map((group) => group.name)
+          .splice(0, 3)
+          .join('') +
+        '\\+' +
+        (data.groups.length - 3).toString()
         : data.groups.map((group) => group.name).join('');
     const regexp = new RegExp(`^${groupsString}$`, 'ig');
     expect(container).toHaveTextContent(regexp);

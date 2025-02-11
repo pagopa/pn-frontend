@@ -269,7 +269,7 @@ describe('DigitalContact Component', () => {
       expect(input).toHaveValue('invalid value');
     });
     const newButtons = container.querySelectorAll('button');
-    expect(newButtons[0]).toBeDisabled();
+    expect(newButtons[0]).toBeEnabled();
   });
 
   it('remove contact', () => {

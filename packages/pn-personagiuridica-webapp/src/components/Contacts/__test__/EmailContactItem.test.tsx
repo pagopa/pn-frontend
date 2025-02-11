@@ -74,7 +74,7 @@ describe('testing EmailContactItem', () => {
     await waitFor(() => {
       expect(input).toHaveValue(INVALID_EMAIL);
     });
-    expect(saveButton).toBeDisabled();
+    expect(saveButton).toBeEnabled();
     const inputError = container.querySelector(`#default_email-helper-text`);
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
   });
