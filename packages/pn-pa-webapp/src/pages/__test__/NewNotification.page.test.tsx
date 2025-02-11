@@ -227,7 +227,7 @@ describe('NewNotification Page without payment enabled in configuration', async 
     expect(preliminaryInformation).toBeInTheDocument();
   });
 
-  it.only('create new notification', async () => {
+  it('create new notification', async () => {
     const mappedNotification = newNotificationMapper(newNotification);
 
     const mockResponse = {
