@@ -20,6 +20,7 @@ import { getPaymentCache, setPaymentCache } from '../../utility/paymentCaching.u
 import CustomPagination from '../Pagination/CustomPagination';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
+import NotificationPaymentRecipientTppButton from './NotificationPaymentRecipientTppButton';
 import NotificationPaymentTitle from './NotificationPaymentTitle';
 
 const FAQ_NOTIFICATION_CANCELLED_REFUND = '/faq#notifica-pagata-rimborso';
@@ -77,9 +78,9 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const loadingPaymentTimeout = useRef<NodeJS.Timeout>();
 
   const allPaymentsIsPaid = pagoPaF24.every((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED);
+  console.log('..............allPaymentsIsPaid', allPaymentsIsPaid);
   const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
   const hasMoreThenOnePage = paginationData.totalElements > paginationData.size;
-  const paymentTpp = payments.tpp?.iun === iun ? payments.tpp : null;
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
@@ -237,13 +238,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
           {!allPaymentsIsPaid && (
             <Fragment>
-              { 
-                paymentTpp && (
-                <Button fullWidth variant="contained">
-                  paga con {paymentTpp.paymentButton}
-                </Button>
-                )
-              }
+              <NotificationPaymentRecipientTppButton payments={payments} iun={iun} />
               <Button
                 fullWidth
                 variant="contained"

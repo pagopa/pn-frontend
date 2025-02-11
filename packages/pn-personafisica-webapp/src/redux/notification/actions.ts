@@ -314,12 +314,12 @@ export const checkNotificationTpp = createAsyncThunk<BffCheckTPPResponse, string
       const response = await checkTpp(retrievalId);
       return response.data;
     } catch (e: any) {
-      // TODO remove mock
-      return {
-        originId: 'YLPJ-XGVN-WDEX-202501-E-1',
-        retrievalId,
-        paymentButton: 'Hype',
-      } as BffCheckTPPResponse;
+      // TODO remove comment
+      // return {
+      //   originId: 'YLPJ-XGVN-WDEX-202501-E-1',
+      //   retrievalId,
+      //   paymentButton: 'Hype',
+      // } as BffCheckTPPResponse;
 
       // ignore error: notification has not payment tpp
       return {} as BffCheckTPPResponse;

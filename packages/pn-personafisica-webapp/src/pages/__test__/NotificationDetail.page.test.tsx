@@ -34,6 +34,7 @@ import {
   RenderResult,
   act,
   fireEvent,
+  getByTestId,
   render,
   screen,
   testStore,
@@ -41,6 +42,7 @@ import {
   within,
 } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
+import { BffCheckTPPResponse } from '../../generated-client/notifications';
 import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';

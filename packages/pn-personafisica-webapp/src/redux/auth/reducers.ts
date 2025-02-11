@@ -72,12 +72,6 @@ const userSlice = createSlice({
     builder.addCase(exchangeToken.fulfilled, (state, action) => {
       const user = action.payload;
       // validate user from api before setting it in the sessionStorage
-      // TODO remove mock
-      user.source = {
-        channel: 'TPP',
-        details: 'tppId',
-        retrievalId: '123',
-      }
       try {
         userDataMatcher.validateSync(user, { stripUnknown: false });
         sessionStorage.setItem('user', JSON.stringify(user));
