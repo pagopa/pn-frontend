@@ -7,9 +7,16 @@ import { AUTH_TOKEN_EXCHANGE } from './auth.routes';
 
 interface TokenExchangeBody {
   authorizationToken: string;
-  retrievalId?: string;
-  aarQRCodeValue?: string;
+  source?: {
+    type: 'TPP' | 'QR';
+    id: string;
+  };
 }
+
+const paramsToSourceType: Record<AppRouteParams, 'TPP' | 'QR'> = {
+  [AppRouteParams.AAR]: 'QR',
+  [AppRouteParams.RETRIEVAL_ID]: 'TPP',
+};
 
 export interface TokenExchangeRequest {
   spidToken: string;
@@ -21,12 +28,10 @@ export const AuthApi = {
     const body: TokenExchangeBody = { authorizationToken: spidToken };
     if (rapidAccess) {
       const [param, value] = rapidAccess;
-      if (param === AppRouteParams.AAR) {
-        body.aarQRCodeValue = value;
-      }
-      if (param === AppRouteParams.RETRIEVAL_ID) {
-        body.retrievalId = value;
-      }
+      body.source = {
+        type: paramsToSourceType[param],
+        id: value,
+      };
     }
     const response = await authClient.post<User>(AUTH_TOKEN_EXCHANGE(), body);
     const user: User = {

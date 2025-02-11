@@ -29,13 +29,16 @@ describe('Auth api tests', () => {
     expect(res).toStrictEqual(userResponse);
   });
 
-  it('exchangeToken with rapidAccess', async () => {
+  it.only('exchangeToken with rapidAccess', async () => {
     const spidToken = 'mocked-token';
     const rapidAccess: [AppRouteParams, string] = [AppRouteParams.AAR, 'mocked-qr-code'];
     mock
       .onPost(AUTH_TOKEN_EXCHANGE(), {
         authorizationToken: spidToken,
-        aarQRCodeValue: 'mocked-qr-code',
+        source: {
+          type: 'QR',
+          id: 'mocked-qr-code',
+        },
       })
       .reply(200, userResponseWithRetrievalId);
     const res = await AuthApi.exchangeToken({ spidToken, rapidAccess });
