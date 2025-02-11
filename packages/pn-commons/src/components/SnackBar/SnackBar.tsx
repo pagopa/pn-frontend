@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
 import { Alert, AlertTitle, IconButton, Snackbar } from '@mui/material';
@@ -34,6 +34,15 @@ const SnackBar: React.FC<Props> = ({
 }) => {
   const [openStatus, setOpenStatus] = useState(open);
   const isMobile = useIsMobile();
+
+  const alertRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (alertRef.current) {
+      console.log('alertRef.current :>> ', alertRef.current);
+      alertRef.current.focus();
+    }
+  }, []);
 
   const closeSnackBar = () => {
     setOpenStatus(false);
@@ -71,9 +80,12 @@ const SnackBar: React.FC<Props> = ({
   return (
     <>
       {openStatus && (
-        <div data-testid="snackBarContainer">
+        <div data-testid="snackBarContainer" aria-live="assertive">
           <Snackbar open={open} action={action}>
             <Alert
+              ref={alertRef}
+              aria-live="assertive"
+              autoFocus
               onClose={closeSnackBar}
               severity={getColor.get(type)}
               sx={{
