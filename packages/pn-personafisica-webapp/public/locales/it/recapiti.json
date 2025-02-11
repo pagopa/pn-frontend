@@ -107,6 +107,17 @@
         ],
         "confirm": "Collega SEND su IO"
       },
+      "step_3": {
+        "title": "La tua mail per ricevere aggiornamenti",
+        "step-title": "Inserisci una email",
+        "content": "L’email dove possiamo informarti quando c’è una comunicazione a valore legale per te su SEND.",
+        "io-list": [
+          "Ricevi le notifiche in tempo reale, appena l’ente le carica su SEND",
+          "Puoi aprire e leggere i documenti allegati alla notifica",
+          "Puoi pagare gli importi dovuti se la notifica prevede un pagamento"
+        ],
+        "confirm": "Collega SEND su IO"
+      },
       "feedback": {
         "title-activation": "Hai attivato il tuo domicilio digitale",
         "title-transfer": "Hai aggiornato il tuo domicilio digitale",

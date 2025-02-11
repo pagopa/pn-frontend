@@ -11,6 +11,7 @@ import SercqSendContactWizard from '../../components/Contacts/SercqSendContactWi
 import { IOAllowedValues } from '../../models/contacts';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
+import EmailSmsContactWizard from './EmailSmsContactWizard';
 
 type Props = {
   isTransferring?: boolean;
@@ -19,14 +20,16 @@ type Props = {
 const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const { navigateToPreviousLocation } = usePreviousLocation();
-  const { defaultAPPIOAddress, defaultSERCQ_SENDAddress } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const { defaultAPPIOAddress, defaultSMSAddress, defaultEMAILAddress, defaultSERCQ_SENDAddress } =
+    useAppSelector(contactsSelectors.selectAddresses);
 
   const [activeStep, setActiveStep] = useState(0);
   const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress);
 
-  const hasAppIO = defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.DISABLED;
+  const [hasAppIO] = useState(
+    defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.DISABLED
+  );
+  const [hasCourtesyContact] = useState(!(defaultSMSAddress || defaultEMAILAddress));
 
   const goToNextStep = () => {
     setActiveStep(activeStep + 1);
@@ -46,7 +49,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
       );
     }
 
-    if (activeStep === 1 && hasAppIO) {
+    if (activeStep > 0 && (hasAppIO || hasCourtesyContact)) {
       return (
         <ButtonNaked onClick={goToNextStep} color="primary" size="medium" sx={{ mx: 'auto' }}>
           {t('button.not-now', { ns: 'common' })}
@@ -91,6 +94,11 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
       {hasAppIO && (
         <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_2.title')}>
           <IOContactWizard goToNextStep={goToNextStep} />
+        </PnWizardStep>
+      )}
+      {hasCourtesyContact && (
+        <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_3.step-title')}>
+          <EmailSmsContactWizard />
         </PnWizardStep>
       )}
     </PnWizard>
