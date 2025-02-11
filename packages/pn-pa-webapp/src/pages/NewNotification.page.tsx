@@ -16,6 +16,7 @@ import { createNewNotification } from '../redux/newNotification/actions';
 import { resetState, setSenderInfos } from '../redux/newNotification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PaymentMethods from '../components/NewNotification/PaymentMethods';
 
 const SubTitle = () => {
   const { t } = useTranslation(['common', 'notifiche']);
@@ -176,7 +177,7 @@ const NewNotification = () => {
                 ref={childRef}
               />
             )}
-            {/* {activeStep === 3 && IS_PAYMENT_ENABLED && (
+            {activeStep === 3 && IS_PAYMENT_ENABLED && (
               <PaymentMethods
                 onConfirm={createNotification}
                 notification={notification}
@@ -184,7 +185,7 @@ const NewNotification = () => {
                 onPreviousStep={goToPreviousStep}
                 ref={childRef}
               />
-            )} */}
+            )}
 
           </Grid>
         </Grid>
