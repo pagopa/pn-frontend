@@ -14,7 +14,6 @@ import {
   PaymentStatus,
   PaymentsData,
 } from '../../models';
-import { PaymentTpp } from '../../models/NotificationDetail';
 import { formatEurocentToCurrency } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { getPaymentCache, setPaymentCache } from '../../utility/paymentCaching.utility';
@@ -82,6 +81,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const allPaymentsIsPaid = pagoPaF24.every((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED);
   const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
   const hasMoreThenOnePage = paginationData.totalElements > paginationData.size;
+  const hasPaymentTpp = payments.tpp?.iun === iun;
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
@@ -239,20 +239,27 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
           {!allPaymentsIsPaid && (
             <Fragment>
-              <PaymentButtomTpp
-                tpp={payments.tpp}
-                onClick={() =>
-                  onPayTppClick &&
-                  onPayTppClick(
-                    selectedPayment?.pagoPa?.noticeCode,
-                    selectedPayment?.pagoPa?.creditorTaxId,
-                    payments.tpp?.retrievalId
-                  )
-                }
-              />
+              {hasPaymentTpp && (
+                <Button
+                  fullWidth
+                  variant="contained"
+                  data-testid="tpp-pay-button"
+                  onClick={() =>
+                    onPayTppClick &&
+                    onPayTppClick(
+                      selectedPayment?.pagoPa?.noticeCode,
+                      selectedPayment?.pagoPa?.creditorTaxId,
+                      tpp.iun
+                    )
+                  }
+                >
+                  {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit-tpp')}{' '}
+                  {tpp.paymentButton}
+                </Button>
+              )}
               <Button
                 fullWidth
-                variant="contained"
+                variant={hasPaymentTpp ? 'outlined' : 'contained'}
                 data-testid="pay-button"
                 disabled={!selectedPayment?.pagoPa && !loadingPayment}
                 onClick={() =>
@@ -346,14 +353,3 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 };
 
 export default memo(NotificationPaymentRecipient);
-
-const PaymentButtomTpp = ({ tpp, onClick }: { tpp?: PaymentTpp; onClick?: () => void }) => {
-  if (!tpp || !onClick) {
-    return null;
-  }
-  return (
-    <Button fullWidth variant="contained" data-testid="tpp-pay-button" onClick={onClick}>
-      {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit-tpp')} {tpp.paymentButton}
-    </Button>
-  );
-};
