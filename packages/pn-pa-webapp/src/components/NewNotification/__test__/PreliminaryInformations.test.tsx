@@ -201,7 +201,6 @@ describe('PreliminaryInformations component with payment enabled', async () => {
         taxonomyCode: newNotification.taxonomyCode,
         group: newNotificationGroups[1].id,
         notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
-        payment: {},
         documents: [],
         recipients: [],
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
