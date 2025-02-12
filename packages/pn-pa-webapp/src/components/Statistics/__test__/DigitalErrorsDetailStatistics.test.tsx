@@ -104,13 +104,6 @@ describe('DeliveryModeStatistics component tests', () => {
       <DigitalErrorsDetailStatistics {...digitalErrorsEmptyDataMock} />
     );
     expect(container).toHaveTextContent('digital_errors_detail.title');
-    // expect(container).toHaveTextContent('digital_errors_detail.description');
-    // expect(container).toHaveTextContent('digital_errors_detail.delivery_title');
-    // expect(container).toHaveTextContent('digital_errors_detail.delivery_description');
-    // expect(container).toHaveTextContent('digital_errors_detail.pec_title');
-    // expect(container).toHaveTextContent('digital_errors_detail.pec_description');
-    // expect(container).toHaveTextContent('digital_errors_detail.rejected_title');
-    // expect(container).toHaveTextContent('digital_errors_detail.rejected_description');
     expect(container).toHaveTextContent('empty.no_data_found');
 
     const emptyImg = getByTestId('empty-image');
