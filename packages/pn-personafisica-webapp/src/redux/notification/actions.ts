@@ -28,7 +28,7 @@ import {
   BffCheckTPPResponse,
   NotificationReceivedApiFactory,
 } from '../../generated-client/notifications';
-import { PaymentsApiFactory } from '../../generated-client/payments';
+import { BffPaymentTppResponse, PaymentsApiFactory } from '../../generated-client/payments';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { PFEventsType } from '../../models/PFEventsType';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -283,7 +283,7 @@ export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, 
 );
 
 /**
- * TPP - RETRIEVAL ID
+ * TPP
  */
 
 const checkTpp = async (retrievalId: string) => {
@@ -323,6 +323,36 @@ export const checkNotificationTpp = createAsyncThunk<BffCheckTPPResponse, string
 
       // ignore error: notification has not payment tpp
       return {} as BffCheckTPPResponse;
+    }
+  }
+);
+
+export const getReceivedNotificationPaymentTppUrl = createAsyncThunk<
+  BffPaymentTppResponse,
+  { retrievalId: string; noticeCode: string; creditorTaxId: string }
+>(
+  'getReceivedNotificationPaymentTppUrl',
+  async ({ retrievalId, noticeCode, creditorTaxId }, { rejectWithValue }) => {
+    try {
+      const paymentsApiFactory = PaymentsApiFactory(undefined, undefined, apiClient);
+      const iun = store.getState().notificationState.notification.iun;
+      setPaymentCache(
+        {
+          currentPayment: {
+            noticeCode,
+            creditorTaxId,
+          },
+        },
+        iun
+      );
+      const response = await paymentsApiFactory.paymentsTppV1(
+        retrievalId,
+        noticeCode,
+        creditorTaxId
+      );
+      return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
     }
   }
 );

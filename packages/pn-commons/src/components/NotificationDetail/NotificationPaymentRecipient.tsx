@@ -14,13 +14,13 @@ import {
   PaymentStatus,
   PaymentsData,
 } from '../../models';
+import { PaymentTpp } from '../../models/NotificationDetail';
 import { formatEurocentToCurrency } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { getPaymentCache, setPaymentCache } from '../../utility/paymentCaching.utility';
 import CustomPagination from '../Pagination/CustomPagination';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
-import NotificationPaymentRecipientTppButton from './NotificationPaymentRecipientTppButton';
 import NotificationPaymentTitle from './NotificationPaymentTitle';
 
 const FAQ_NOTIFICATION_CANCELLED_REFUND = '/faq#notifica-pagata-rimborso';
@@ -39,6 +39,7 @@ type Props = {
     unwrap: () => Promise<PaymentAttachment>;
   };
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
+  onPayTppClick?: (noticeCode?: string, creditorTaxId?: string, retrievalId?: string) => void;
   handleTrackEvent?: (event: EventPaymentRecipientType, param?: object) => void;
   handleFetchPaymentsInfo: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
 };
@@ -51,6 +52,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   iun,
   getPaymentAttachmentAction,
   onPayClick,
+  onPayTppClick,
   handleTrackEvent,
   handleFetchPaymentsInfo,
 }) => {
@@ -237,7 +239,17 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
           {!allPaymentsIsPaid && (
             <Fragment>
-              <NotificationPaymentRecipientTppButton payments={payments} iun={iun} />
+              <PaymentButtomTpp
+                tpp={payments.tpp}
+                onClick={() =>
+                  onPayTppClick &&
+                  onPayTppClick(
+                    selectedPayment?.pagoPa?.noticeCode,
+                    selectedPayment?.pagoPa?.creditorTaxId,
+                    payments.tpp?.retrievalId
+                  )
+                }
+              />
               <Button
                 fullWidth
                 variant="contained"
@@ -334,3 +346,14 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 };
 
 export default memo(NotificationPaymentRecipient);
+
+const PaymentButtomTpp = ({ tpp, onClick }: { tpp?: PaymentTpp; onClick?: () => void }) => {
+  if (!tpp || !onClick) {
+    return null;
+  }
+  return (
+    <Button fullWidth variant="contained" data-testid="tpp-pay-button" onClick={onClick}>
+      {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit-tpp')} {tpp.paymentButton}
+    </Button>
+  );
+};

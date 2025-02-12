@@ -50,6 +50,7 @@ import {
   getReceivedNotificationDocument,
   getReceivedNotificationPayment,
   getReceivedNotificationPaymentInfo,
+  getReceivedNotificationPaymentTppUrl,
   getReceivedNotificationPaymentUrl,
 } from '../redux/notification/actions';
 import { resetState } from '../redux/notification/reducers';
@@ -272,6 +273,26 @@ const NotificationDetail: React.FC = () => {
         .unwrap()
         .then((res: { checkoutUrl: string }) => {
           window.location.assign(res.checkoutUrl);
+        })
+        .catch(() => undefined);
+    }
+  };
+
+  const onPayTppClick = (noticeCode?: string, creditorTaxId?: string, retrievalId?: string) => {
+    if (noticeCode && creditorTaxId && retrievalId) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT);
+      dispatch(
+        getReceivedNotificationPaymentTppUrl({
+          noticeCode,
+          creditorTaxId,
+          retrievalId,
+        })
+      )
+        .unwrap()
+        .then((res) => {
+          if (res.paymentUrl) {
+            window.location.assign(res.paymentUrl);
+          }
         })
         .catch(() => undefined);
     }
@@ -533,6 +554,7 @@ const NotificationDetail: React.FC = () => {
                         iun={notification.iun}
                         handleTrackEvent={trackEventPaymentRecipient}
                         onPayClick={onPayClick}
+                        onPayTppClick={onPayTppClick}
                         handleFetchPaymentsInfo={reloadPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
