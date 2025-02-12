@@ -32,7 +32,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { NotificationFeePolicy, PaymentModel } from '../../../models/NewNotification';
+import { NotificationFeePolicy } from '../../../models/NewNotification';
 import { NEW_NOTIFICATION_ACTIONS } from '../../../redux/newNotification/actions';
 import PreliminaryInformations from '../PreliminaryInformations';
 
@@ -205,7 +205,6 @@ describe('PreliminaryInformations component with payment enabled', async () => {
         documents: [],
         recipients: [],
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
-        paymentMode: PaymentModel.NOTHING,
         senderDenomination: newNotification.senderDenomination,
         lang: 'it',
         additionalAbstract: '',
@@ -425,11 +424,9 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
         taxonomyCode: newNotification.taxonomyCode,
         group: newNotificationGroups[1].id,
         notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
-        payment: {},
         documents: [],
         recipients: [],
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
-        paymentMode: PaymentModel.NOTHING,
         senderDenomination: newNotification.senderDenomination,
         lang: 'it',
         additionalAbstract: '',

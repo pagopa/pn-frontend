@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { RecipientType } from '@pagopa-pn/pn-commons';
 import { testFormElements, testInput, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { newNotification, newNotificationWithoutPayment } from '../../../__mocks__/NewNotification.mock';
+import { newNotification } from '../../../__mocks__/NewNotification.mock';
 import {
   RenderResult,
   act,
@@ -183,11 +183,11 @@ describe('Recipient Component with payment enabled', async () => {
     expect(backButton).toBeInTheDocument();
   });
 
-  it.only('changes form values and clicks on confirm - two recipients', async () => {
+  it('changes form values and clicks on confirm - two recipients', async () => {
     // render component
     await act(async () => {
       result = render(
-        <Recipient paymentMode={newNotificationWithoutPayment.paymentMode} onConfirm={confirmHandlerMk} />
+        <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
       );
     });
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
