@@ -105,6 +105,6 @@ describe('Routes utility', () => {
   it('getRapidAccessParam returns undefined when param is empty', () => {
     const params = new URLSearchParams({ aar: '' });
     const result = getRapidAccessParam(params);
-    expect(result).toEqual([AppRouteParams.AAR, '']);
+    expect(result).toBeUndefined();
   });
 });
