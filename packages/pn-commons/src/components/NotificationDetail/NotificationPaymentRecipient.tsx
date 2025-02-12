@@ -249,12 +249,12 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                     onPayTppClick(
                       selectedPayment?.pagoPa?.noticeCode,
                       selectedPayment?.pagoPa?.creditorTaxId,
-                      tpp.iun
+                      payments.tpp?.iun
                     )
                   }
                 >
                   {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit-tpp')}{' '}
-                  {tpp.paymentButton}
+                  {payments.tpp?.paymentButton}
                 </Button>
               )}
               <Button
