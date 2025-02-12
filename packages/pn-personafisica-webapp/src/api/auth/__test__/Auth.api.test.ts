@@ -29,7 +29,7 @@ describe('Auth api tests', () => {
     expect(res).toStrictEqual(userResponse);
   });
 
-  it.only('exchangeToken with rapidAccess', async () => {
+  it('exchangeToken with rapidAccess', async () => {
     const spidToken = 'mocked-token';
     const rapidAccess: [AppRouteParams, string] = [AppRouteParams.AAR, 'mocked-qr-code'];
     mock
