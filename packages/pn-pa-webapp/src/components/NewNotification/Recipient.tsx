@@ -22,7 +22,6 @@ import { useAppDispatch } from '../../redux/hooks';
 import { saveRecipients } from '../../redux/newNotification/reducers';
 import {
   denominationLengthAndCharacters,
-  identicalIUV,
   identicalTaxIds,
   requiredStringFieldValidation,
   taxIdDependingOnRecipientType,
@@ -62,7 +61,6 @@ type Props = {
 };
 
 const Recipient: React.FC<Props> = ({
-  paymentMode,
   onConfirm,
   onPreviousStep,
   recipientsData,
@@ -172,20 +170,6 @@ const Recipient: React.FC<Props> = ({
           errors.map((e) => new yup.ValidationError(t(e.messageKey), e.value, e.id))
         );
       })
-      .test('identicalIUV', t('identical-fiscal-codes-error'), (values) => {
-        const errors = identicalIUV(
-          values as Array<NewNotificationRecipient> | undefined,
-          paymentMode
-        );
-        if (errors.length === 0) {
-          return true;
-        }
-        return new yup.ValidationError(
-          errors.map(
-            (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
-          )
-        );
-      }),
   });
 
   const handleAddRecipient = (values: FormRecipients, setFieldValue: any) => {

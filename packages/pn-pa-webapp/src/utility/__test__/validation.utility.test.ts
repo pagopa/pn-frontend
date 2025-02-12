@@ -1,10 +1,9 @@
 import { RecipientType } from '@pagopa-pn/pn-commons';
 
 import { randomString } from '../../__test__/test-utils';
-import { NewNotificationRecipient, PaymentModel } from '../../models/NewNotification';
+import { NewNotificationRecipient } from '../../models/NewNotification';
 import {
   denominationLengthAndCharacters,
-  identicalIUV,
   identicalTaxIds,
   taxIdDependingOnRecipientType,
 } from '../validation.utility';
@@ -80,51 +79,6 @@ describe('test custom validation for recipients', () => {
         messageKey: 'identical-fiscal-codes-error',
         value: { taxId: 'taxId1' },
         id: `recipients[2].taxId`,
-      },
-    ]);
-  });
-
-  it('identicalIUV (no errors)', () => {
-    const result = identicalIUV(
-      [
-        { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-        { creditorTaxId: 'creditorTaxId2', noticeCode: 'noticeCode2' },
-      ] as Array<NewNotificationRecipient>,
-      PaymentModel.PAGO_PA_NOTICE
-    );
-    expect(result).toHaveLength(0);
-  });
-
-  it('identicalIUV (errors)', () => {
-    const result = identicalIUV(
-      [
-        { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-        { creditorTaxId: 'creditorTaxId2', noticeCode: 'noticeCode2' },
-        { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-      ] as Array<NewNotificationRecipient>,
-      PaymentModel.PAGO_PA_NOTICE
-    );
-    expect(result).toHaveLength(4);
-    expect(result).toStrictEqual([
-      {
-        messageKey: 'identical-notice-codes-error',
-        value: { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-        id: `recipients[0].noticeCode`,
-      },
-      {
-        messageKey: '',
-        value: { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-        id: `recipients[0].creditorTaxId`,
-      },
-      {
-        messageKey: 'identical-notice-codes-error',
-        value: { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-        id: `recipients[2].noticeCode`,
-      },
-      {
-        messageKey: '',
-        value: { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-        id: `recipients[2].creditorTaxId`,
       },
     ]);
   });
