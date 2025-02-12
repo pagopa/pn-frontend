@@ -26,7 +26,6 @@ import { LangCode } from '@pagopa/mui-italia';
 import {
   NewNotification,
   NewNotificationLangOther,
-  PaymentModel,
 } from '../../models/NewNotification';
 import { GroupStatus } from '../../models/user';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -87,7 +86,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
       group: notification.group ?? '',
       taxonomyCode: notification.taxonomyCode || '',
       physicalCommunicationType: notification.physicalCommunicationType || '',
-      paymentMode: notification.paymentMode || PaymentModel.NOTHING,
       lang: notification.lang || (additionalLang ? NewNotificationLangOther : 'it'),
       additionalLang: notification.additionalLang || additionalLang || '',
       additionalSubject: notification.additionalSubject || '',
@@ -111,7 +109,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
       .max(1024, tc('too-long-field-error', { maxLength: 1024 }))
       .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
     physicalCommunicationType: yup.string().required(),
-    paymentMode: yup.string().required(),
     group: hasGroups ? yup.string().required() : yup.string(),
     taxonomyCode: yup
       .string()

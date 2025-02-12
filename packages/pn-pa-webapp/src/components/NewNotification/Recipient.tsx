@@ -35,8 +35,6 @@ import PhysicalAddress from './PhysicalAddress';
 const singleRecipient = {
   recipientType: RecipientType.PF,
   taxId: '',
-  creditorTaxId: '',
-  noticeCode: '',
   firstName: '',
   lastName: '',
   type: DigitalDomicileType.PEC,
@@ -89,8 +87,7 @@ const Recipient: React.FC<Props> = ({
         }
       : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
 
-  const buildRecipientValidationObject = () => {
-    const validationObject = {
+  const buildRecipientValidationObject = () => ({
       recipientType: yup.string(),
       // validazione sulla denominazione (firstName + " " + lastName per PF, firstName per PG)
       // la lunghezza non può superare i 80 caratteri
@@ -160,24 +157,7 @@ const Recipient: React.FC<Props> = ({
       municipality: requiredStringFieldValidation(tc, 256),
       province: requiredStringFieldValidation(tc, 256),
       foreignState: requiredStringFieldValidation(tc),
-    };
-
-    if (paymentMode !== PaymentModel.NOTHING) {
-      return {
-        ...validationObject,
-        creditorTaxId: yup
-          .string()
-          .required(tc('required-field'))
-          .matches(dataRegex.pIva, t('fiscal-code-error')),
-        noticeCode: yup
-          .string()
-          .matches(dataRegex.noticeCode, t('notice-code-error'))
-          .required(tc('required-field')),
-      };
-    }
-
-    return validationObject;
-  };
+    });
 
   const validationSchema = yup.object({
     recipients: yup

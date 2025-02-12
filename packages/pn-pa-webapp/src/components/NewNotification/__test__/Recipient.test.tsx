@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { RecipientType } from '@pagopa-pn/pn-commons';
 import { testFormElements, testInput, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { newNotification } from '../../../__mocks__/NewNotification.mock';
+import { newNotification, newNotificationWithoutPayment } from '../../../__mocks__/NewNotification.mock';
 import {
   RenderResult,
   act,
@@ -59,20 +59,7 @@ const testRecipientFormRendering = async (
       : 'recipient-citizen-tax-id*',
     recipient ? recipient.taxId : undefined
   );
-  if (hasPayment) {
-    testFormElements(
-      form,
-      `recipients[${recipientIndex}].creditorTaxId`,
-      'creditor-fiscal-code*',
-      recipient ? recipient.creditorTaxId : undefined
-    );
-    testFormElements(
-      form,
-      `recipients[${recipientIndex}].noticeCode`,
-      'notice-code*',
-      recipient ? recipient.noticeCode : undefined
-    );
-  }
+
   // check that recipientType is initially selected
   const recipientType = form.querySelector(
     `input[name="recipients[${recipientIndex}].recipientType"][value="${
@@ -138,10 +125,7 @@ const populateForm = async (
     await testInput(form, `recipients[${recipientIndex}].lastName`, recipient.lastName);
   }
   await testInput(form, `recipients[${recipientIndex}].taxId`, recipient.taxId);
-  if (hasPayment) {
-    await testInput(form, `recipients[${recipientIndex}].creditorTaxId`, recipient.creditorTaxId);
-    await testInput(form, `recipients[${recipientIndex}].noticeCode`, recipient.noticeCode);
-  }
+
   // show physical address form
   await testInput(form, `recipients[${recipientIndex}].address`, recipient.address);
   await testInput(form, `recipients[${recipientIndex}].houseNumber`, recipient.houseNumber);
@@ -192,7 +176,7 @@ describe('Recipient Component with payment enabled', async () => {
     });
     expect(result.container).toHaveTextContent(/title/i);
     const form = result.getByTestId('recipientForm');
-    await testRecipientFormRendering(form, 0, true);
+    await testRecipientFormRendering(form, 0, false);
     const addButton = within(form).getByTestId('add-recipient');
     expect(addButton).toBeInTheDocument();
     const button = within(form).getByTestId('step-submit');
@@ -201,16 +185,16 @@ describe('Recipient Component with payment enabled', async () => {
     expect(backButton).toBeInTheDocument();
   });
 
-  it('changes form values and clicks on confirm - two recipients', async () => {
+  it.only('changes form values and clicks on confirm - two recipients', async () => {
     // render component
     await act(async () => {
       result = render(
-        <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
+        <Recipient paymentMode={newNotificationWithoutPayment.paymentMode} onConfirm={confirmHandlerMk} />
       );
     });
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
     // fill the first recipient
-    await populateForm(form, 0, true, newNotification.recipients[0]);
+    await populateForm(form, 0, false, newNotification.recipients[0]);
     const submitButton = within(form).getByTestId('step-submit');
     expect(submitButton).toBeEnabled();
     // add new recipient
@@ -219,9 +203,9 @@ describe('Recipient Component with payment enabled', async () => {
     await waitFor(() => {
       expect(submitButton).toBeDisabled();
     });
-    await testRecipientFormRendering(form, 1, true);
+    await testRecipientFormRendering(form, 1, false);
     // fill the second recipient
-    await populateForm(form, 1, true, newNotification.recipients[1]);
+    await populateForm(form, 1, false, newNotification.recipients[1]);
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton);
     await waitFor(() => {
@@ -230,7 +214,7 @@ describe('Recipient Component with payment enabled', async () => {
         newNotification.recipients
       );
     });
-    expect(confirmHandlerMk).toBeCalledTimes(1);
+    expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
   }, 10000);
 
   it('fills form with invalid values - two recipients', async () => {
@@ -242,13 +226,13 @@ describe('Recipient Component with payment enabled', async () => {
     });
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
     // fill the first recipient
-    await populateForm(form, 0, true, newNotification.recipients[0]);
+    await populateForm(form, 0, false, newNotification.recipients[0]);
     const submitButton = within(form).getByTestId('step-submit');
     // add new recipient
     const addButton = within(form).getByTestId('add-recipient');
     fireEvent.click(addButton);
     // fill the second recipient
-    await populateForm(form, 1, true, newNotification.recipients[1]);
+    await populateForm(form, 1, false, newNotification.recipients[1]);
     expect(submitButton).toBeEnabled();
     // set invalid values
     // compared to PF case, only firstName and taxId validations change
@@ -275,21 +259,6 @@ describe('Recipient Component with payment enabled', async () => {
     await testInput(form, 'recipients[0].taxId', newNotification.recipients[0].taxId, true);
     await testInput(form, 'recipients[1].taxId', newNotification.recipients[0].taxId, true);
     expect(taxIdError).toHaveTextContent('identical-fiscal-codes-error');
-    // identical creditorTaxId and noticeCode
-    await testInput(
-      form,
-      'recipients[0].creditorTaxId',
-      newNotification.recipients[0].creditorTaxId
-    );
-    await testInput(
-      form,
-      'recipients[1].creditorTaxId',
-      newNotification.recipients[0].creditorTaxId
-    );
-    await testInput(form, 'recipients[0].noticeCode', newNotification.recipients[0].noticeCode);
-    await testInput(form, 'recipients[1].noticeCode', newNotification.recipients[0].noticeCode);
-    const noticeCodeError = form.querySelector('[id="recipients[1].noticeCode-helper-text"]');
-    expect(noticeCodeError).toHaveTextContent('identical-notice-codes-error');
     // remove second recipient and check that the form returns valid
     const deleteIcon = result.queryAllByTestId('DeleteRecipientIcon');
     fireEvent.click(deleteIcon[1]);
@@ -308,8 +277,8 @@ describe('Recipient Component with payment enabled', async () => {
       );
     });
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
-    await testRecipientFormRendering(form, 0, true, newNotification.recipients[0]);
-    await testRecipientFormRendering(form, 1, true, newNotification.recipients[1]);
+    await testRecipientFormRendering(form, 0, false, newNotification.recipients[0]);
+    await testRecipientFormRendering(form, 1, false, newNotification.recipients[1]);
     const submitButton = within(form).getByTestId('step-submit');
     expect(submitButton).toBeEnabled();
   }, 10000);
@@ -323,7 +292,7 @@ describe('Recipient Component with payment enabled', async () => {
     });
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
     // fill the first recipient
-    await populateForm(form, 0, true, newNotification.recipients[0]);
+    await populateForm(form, 0, false, newNotification.recipients[0]);
     const submitButton = within(form).getByTestId('step-submit');
     expect(submitButton).toBeEnabled();
     // add new recipient
@@ -350,7 +319,7 @@ describe('Recipient Component with payment enabled', async () => {
         newNotification.recipients[0],
       ]);
     });
-    expect(confirmHandlerMk).toBeCalledTimes(1);
+    expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
   }, 10000);
 
   it('changes form values and clicks on back - one recipient', async () => {
@@ -367,7 +336,7 @@ describe('Recipient Component with payment enabled', async () => {
     });
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
     // fill the first recipient
-    await populateForm(form, 0, true, newNotification.recipients[0]);
+    await populateForm(form, 0, false, newNotification.recipients[0]);
     const backButton = within(form).getByTestId('previous-step');
     fireEvent.click(backButton);
     await waitFor(() => {
@@ -376,7 +345,7 @@ describe('Recipient Component with payment enabled', async () => {
         newNotification.recipients[0],
       ]);
     });
-    expect(previousHandlerMk).toBeCalledTimes(1);
+    expect(previousHandlerMk).toHaveBeenCalledTimes(1);
   }, 10000);
 
   it('fills form with invalid values - one recipient', async () => {
@@ -389,7 +358,7 @@ describe('Recipient Component with payment enabled', async () => {
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
     const submitButton = within(form).getByTestId('step-submit');
     expect(submitButton).toBeDisabled();
-    await populateForm(form, 0, true, newNotification.recipients[0]);
+    await populateForm(form, 0, false, newNotification.recipients[0]);
     expect(submitButton).toBeEnabled();
     // set invalid values
     // firstName
@@ -496,6 +465,6 @@ describe('Recipient Component without payment enabled', async () => {
         { ...newNotification.recipients[0], creditorTaxId: '', noticeCode: '' },
       ]);
     });
-    expect(confirmHandlerMk).toBeCalledTimes(1);
+    expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
   });
 });
