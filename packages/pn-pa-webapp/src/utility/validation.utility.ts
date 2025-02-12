@@ -73,3 +73,37 @@ export function identicalTaxIds(
   }
   return errors;
 }
+// TODO: it will be restored in the new UI
+// export function identicalIUV(
+//   values: Array<NewNotificationRecipient> | undefined,
+//   paymentMode: PaymentModel | undefined
+// ): Array<{ messageKey: string; value: NewNotificationRecipient; id: string }> {
+//   const errors: Array<{ messageKey: string; value: NewNotificationRecipient; id: string }> = [];
+//   if (values && paymentMode !== PaymentModel.NOTHING) {
+//     const duplicateIUVs = getDuplicateValuesByKeys(values, ['creditorTaxId', 'noticeCode']);
+//     if (duplicateIUVs.length > 0) {
+//       values.forEach((value: NewNotificationRecipient, i: number) => {
+//         if (
+//           value.creditorTaxId &&
+//           value.noticeCode &&
+//           duplicateIUVs.includes(value.creditorTaxId + value.noticeCode)
+//         ) {
+//           // eslint-disable-next-line functional/immutable-data
+//           errors.push(
+//             {
+//               messageKey: 'identical-notice-codes-error',
+//               value,
+//               id: `recipients[${i}].noticeCode`,
+//             },
+//             {
+//               messageKey: '',
+//               value,
+//               id: `recipients[${i}].creditorTaxId`,
+//             }
+//           );
+//         }
+//       });
+//     }
+//   }
+//   return errors;
+// }
