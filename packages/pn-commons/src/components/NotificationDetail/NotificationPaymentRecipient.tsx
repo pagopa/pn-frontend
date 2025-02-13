@@ -81,7 +81,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const allPaymentsIsPaid = pagoPaF24.every((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED);
   const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
   const hasMoreThenOnePage = paginationData.totalElements > paginationData.size;
-  const hasPaymentTpp = payments.tpp?.iun === iun;
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
@@ -238,82 +237,20 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           )}
 
           {!allPaymentsIsPaid && (
-            <Fragment>
-              {hasPaymentTpp && (
-                <Button
-                  fullWidth
-                  variant="contained"
-                  data-testid="tpp-pay-button"
-                  onClick={() =>
-                    onPayTppClick &&
-                    onPayTppClick(
-                      selectedPayment?.pagoPa?.noticeCode,
-                      selectedPayment?.pagoPa?.creditorTaxId,
-                      payments.tpp?.iun
-                    )
-                  }
-                >
-                  {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit-tpp')}{' '}
-                  {payments.tpp?.paymentButton}
-                </Button>
-              )}
-              <Button
-                fullWidth
-                variant={hasPaymentTpp ? 'outlined' : 'contained'}
-                data-testid="pay-button"
-                disabled={!selectedPayment?.pagoPa && !loadingPayment}
-                onClick={() =>
-                  onPayClick(
-                    selectedPayment?.pagoPa?.noticeCode,
-                    selectedPayment?.pagoPa?.creditorTaxId,
-                    selectedPayment?.pagoPa?.amount
-                  )
-                }
-              >
-                {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit')}
-                &nbsp;
-                {loadingPayment && <CircularProgress size={18} sx={{ ml: 1 }} color="inherit" />}
-                {!loadingPayment && selectedPayment?.pagoPa?.amount
-                  ? formatEurocentToCurrency(selectedPayment.pagoPa?.amount)
-                  : null}
-              </Button>
-              {!loadingPayment && selectedPayment?.pagoPa?.attachment && (
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  data-testid="download-pagoPA-notice-button"
-                  disabled={!selectedPayment.pagoPa}
-                  onClick={() => downloadAttachment(PaymentAttachmentSName.PAGOPA)}
-                >
-                  <Download fontSize="small" sx={{ mr: 1 }} />
-                  {getLocalizedOrDefaultLabel(
-                    'notifications',
-                    'detail.payment.download-pagoPA-notice'
-                  )}
-                </Button>
-              )}
-              {selectedPayment?.f24 ? (
-                <Box key="attachment" data-testid="f24-download">
-                  <NotificationPaymentF24Item
-                    f24Item={selectedPayment?.f24}
-                    getPaymentAttachmentAction={getPaymentAttachmentAction}
-                    isPagoPaAttachment
-                    handleTrackDownloadF24={() =>
-                      handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD)
-                    }
-                    handleTrackDownloadF24Success={() =>
-                      handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_SUCCESS)
-                    }
-                    handleTrackDownloadF24Timeout={() =>
-                      handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
-                    }
-                    timerF24={timerF24}
-                    disableDownload={areOtherDowloading}
-                    handleDownload={setAreOtherDowloading}
-                  />
-                </Box>
-              ) : null}
-            </Fragment>
+            <PaymentButtons
+              payments={payments}
+              iun={iun}
+              onPayTppClick={onPayTppClick}
+              onPayClick={onPayClick}
+              selectedPayment={selectedPayment}
+              loadingPayment={loadingPayment}
+              downloadAttachment={downloadAttachment}
+              getPaymentAttachmentAction={getPaymentAttachmentAction}
+              handleTrackEventFn={handleTrackEventFn}
+              timerF24={timerF24}
+              areOtherDowloading={areOtherDowloading}
+              setAreOtherDowloading={setAreOtherDowloading}
+            />
           )}
         </>
       )}
@@ -353,3 +290,115 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 };
 
 export default memo(NotificationPaymentRecipient);
+
+type PaymentButtonsProps = Pick<
+  Props,
+  'payments' | 'iun' | 'onPayTppClick' | 'onPayClick' | 'getPaymentAttachmentAction' | 'timerF24'
+> & {
+  selectedPayment?: PaymentDetails | { pagoPa: null; f24?: null };
+  loadingPayment: boolean;
+  downloadAttachment: (attachmentName: PaymentAttachmentSName) => void;
+  handleTrackEventFn: (event: EventPaymentRecipientType, param?: object) => void;
+  areOtherDowloading: boolean;
+  setAreOtherDowloading: (value: boolean) => void;
+};
+
+const PaymentButtons = ({
+  payments,
+  iun,
+  onPayTppClick,
+  selectedPayment,
+  onPayClick,
+  loadingPayment,
+  downloadAttachment,
+  getPaymentAttachmentAction,
+  handleTrackEventFn,
+  timerF24,
+  areOtherDowloading,
+  setAreOtherDowloading,
+}: PaymentButtonsProps) => {
+  const hasPaymentTpp = payments.tpp?.iun === iun;
+  return (
+    <Fragment>
+      {hasPaymentTpp && (
+        <Button
+          fullWidth
+          variant="contained"
+          data-testid="tpp-pay-button"
+          disabled={!selectedPayment?.pagoPa}
+          onClick={() =>
+            onPayTppClick &&
+            onPayTppClick(
+              selectedPayment?.pagoPa?.noticeCode,
+              selectedPayment?.pagoPa?.creditorTaxId,
+              payments.tpp?.iun
+            )
+          }
+        >
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit-tpp', undefined, {
+            name: payments.tpp?.paymentButton,
+          })}
+        </Button>
+      )}
+      <Button
+        fullWidth
+        variant={hasPaymentTpp ? 'outlined' : 'contained'}
+        data-testid="pay-button"
+        disabled={!selectedPayment?.pagoPa && !loadingPayment}
+        onClick={() =>
+          onPayClick(
+            selectedPayment?.pagoPa?.noticeCode,
+            selectedPayment?.pagoPa?.creditorTaxId,
+            selectedPayment?.pagoPa?.amount
+          )
+        }
+      >
+        {hasPaymentTpp ? (
+          getLocalizedOrDefaultLabel('notifications', 'detail.payment.pay-with-other-methods')
+        ) : (
+          <>
+            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit')}
+            &nbsp;
+            {loadingPayment && <CircularProgress size={18} sx={{ ml: 1 }} color="inherit" />}
+            {!loadingPayment && selectedPayment?.pagoPa?.amount
+              ? formatEurocentToCurrency(selectedPayment.pagoPa?.amount)
+              : null}
+          </>
+        )}
+      </Button>
+      {!loadingPayment && selectedPayment?.pagoPa?.attachment && (
+        <Button
+          fullWidth
+          variant={hasPaymentTpp ? 'text' : 'outlined'}
+          data-testid="download-pagoPA-notice-button"
+          disabled={!selectedPayment.pagoPa}
+          onClick={() => downloadAttachment(PaymentAttachmentSName.PAGOPA)}
+        >
+          <Download fontSize="small" sx={{ mr: 1 }} />
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-pagoPA-notice')}
+        </Button>
+      )}
+      {selectedPayment?.f24 ? (
+        <Box key="attachment" data-testid="f24-download">
+          <NotificationPaymentF24Item
+            f24Item={selectedPayment?.f24}
+            getPaymentAttachmentAction={getPaymentAttachmentAction}
+            isPagoPaAttachment
+            handleTrackDownloadF24={() =>
+              handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD)
+            }
+            handleTrackDownloadF24Success={() =>
+              handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_SUCCESS)
+            }
+            handleTrackDownloadF24Timeout={() =>
+              handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
+            }
+            timerF24={timerF24}
+            disableDownload={areOtherDowloading}
+            handleDownload={setAreOtherDowloading}
+          />
+        </Box>
+      ) : null}
+    </Fragment>
+  );
+};

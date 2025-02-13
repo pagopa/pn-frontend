@@ -19,6 +19,7 @@ import {
   setPaymentCache,
 } from '@pagopa-pn/pn-commons';
 import { PaymentTpp } from '@pagopa-pn/pn-commons/src/models/NotificationDetail';
+import { initLocalizationForTest } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
@@ -97,6 +98,7 @@ describe('NotificationDetail Page', async () => {
       configurable: true,
       value: { href: '', assign: mockAssignFn },
     });
+    initLocalizationForTest();
   });
 
   afterEach(() => {
