@@ -4,17 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { Stack, Typography } from '@mui/material';
 import { appStateActions } from '@pagopa-pn/pn-commons';
 
-import { PFEventsType } from '../../models/PFEventsType';
-import {
-  AddressType,
-  ChannelType,
-  ContactSource,
-  SaveDigitalAddressParams,
-} from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
 import DigitalContact from './DigitalContact';
@@ -48,15 +41,6 @@ const EmailSmsContactWizard: React.FC = () => {
   const smsValue = defaultSMSAddress?.value ?? '';
 
   const handleSubmit = (channelType: ChannelType, value: string) => {
-    PFEventStrategyFactory.triggerEvent(
-      channelType === ChannelType.EMAIL
-        ? PFEventsType.SEND_ADD_EMAIL_START
-        : PFEventsType.SEND_ADD_SMS_START,
-      {
-        senderId: 'default',
-        source: ContactSource.RECAPITI,
-      }
-    );
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { channelType, value };
     // first check if contact already exists
@@ -68,10 +52,6 @@ const EmailSmsContactWizard: React.FC = () => {
   };
 
   const handleCodeVerification = (channelType: ChannelType, verificationCode?: string) => {
-    if (verificationCode) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION, 'default');
-    }
-
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
       senderId: 'default',
@@ -93,13 +73,6 @@ const EmailSmsContactWizard: React.FC = () => {
           setModalOpen(ModalType.CODE);
           return;
         }
-
-        PFEventStrategyFactory.triggerEvent(
-          channelType === ChannelType.EMAIL
-            ? PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS
-            : PFEventsType.SEND_ADD_SMS_UX_SUCCESS,
-          'default'
-        );
 
         // contact has already been verified
         // show success message
@@ -128,13 +101,13 @@ const EmailSmsContactWizard: React.FC = () => {
   };
 
   return (
-    <Stack useFlexGap data-testid="emailSmsContactWizard">
+    <Stack useFlexGap spacing={2} data-testid="emailSmsContactWizard">
       <Typography fontSize="22px" fontWeight={700} mb={{ xs: 2, lg: 3 }}>
-        {t('legal-contacts.sercq-send-wizard.step_3.title')}
+        {t('legal-contacts.sercq-send-wizard.step_2.title')}
       </Typography>
 
       <Typography fontSize="16px" mb={{ xs: 3, lg: 4 }}>
-        {t('legal-contacts.sercq-send-wizard.step_3.content')}
+        {t('legal-contacts.sercq-send-wizard.step_2.content')}
       </Typography>
 
       {/* EMAIL */}
@@ -183,7 +156,6 @@ const EmailSmsContactWizard: React.FC = () => {
         open={modalOpen === ModalType.CODE}
         onConfirm={(code) => handleCodeVerification(currentAddress.current.channelType, code)}
         onDiscard={handleCancelCode}
-        onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_CODE_ERROR)}
       />
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}

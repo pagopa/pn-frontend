@@ -82,6 +82,7 @@ const DigitalContactManagement: React.FC = () => {
       }
       activeStep={activeStep}
       setActiveStep={setActiveStep}
+      onExit={() => navigate(-1)}
       slots={{
         prevButton: getPreviouButton,
         nextButton:

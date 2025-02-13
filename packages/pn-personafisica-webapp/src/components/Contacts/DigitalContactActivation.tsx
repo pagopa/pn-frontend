@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,7 +30,8 @@ enum ActiveStep {
 }
 
 type ModalType = {
-  step: ActiveStep;
+  open: boolean;
+  step?: ActiveStep;
   exit?: boolean;
 };
 
@@ -97,37 +98,61 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
   const { defaultAPPIOAddress, defaultSMSAddress, defaultEMAILAddress, defaultSERCQ_SENDAddress } =
     useAppSelector(contactsSelectors.selectAddresses);
 
-  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  const [modal, setModal] = useState<ModalType>({ open: false });
   const [activeStep, setActiveStep] = useState(0);
   const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress);
 
-  const [hasAppIO] = useState(
-    defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.DISABLED
+  const showIOStep = useMemo(
+    () => defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.DISABLED,
+    []
   );
-  const [hasCourtesyContact] = useState(!(defaultSMSAddress || defaultEMAILAddress));
+  const showEmailStep = useMemo(() => !(defaultSMSAddress || defaultEMAILAddress), []);
+
+  const hasEmailOrSms = defaultEMAILAddress || defaultSMSAddress;
+
+  const isEmailSmsStep = (activeStep === 1 && !showIOStep) || activeStep === 2;
+
+  const hasCourtesyContact =
+    defaultAPPIOAddress?.value === IOAllowedValues.ENABLED || hasEmailOrSms;
 
   const goToNextStep = () => {
     setActiveStep((step) => step + 1);
   };
 
   const handleConfirmationModalAccept = () => {
-    setModalOpen(null);
+    setModal({ open: false });
   };
 
   const handleConfirmationModalDecline = () => {
-    if (modalOpen?.exit) {
-      setActiveStep(5); // set the current step greater than the number of steps to go to the thankyou page
+    setModal({ open: false });
+    handleSkipOrExit(!!modal.exit);
+  };
+
+  const handleSkipOrExitClick = (exit: boolean) => {
+    if (hasCourtesyContact || activeStep === 0) {
+      handleSkipOrExit(exit);
+    } else {
+      showConfirmationModal(exit);
+    }
+  };
+
+  const handleSkipOrExit = (exit: boolean) => {
+    if (exit) {
+      if (activeStep === 0) {
+        navigate(-1);
+      } else {
+        setActiveStep(3); // set the current step greater than the number of steps to go to the thankyou page
+      }
     } else {
       goToNextStep();
     }
-    setModalOpen(null);
   };
 
-  const handleNotNow = () => {
-    if (activeStep === 1 && hasAppIO) {
-      setModalOpen({ step: ActiveStep.IO });
+  const showConfirmationModal = (exit: boolean) => {
+    if (activeStep === 1 && showIOStep) {
+      setModal({ open: true, step: ActiveStep.IO, exit });
     } else {
-      setModalOpen({ step: ActiveStep.EMAIL });
+      setModal({ open: true, step: ActiveStep.EMAIL, exit });
     }
   };
 
@@ -139,10 +164,22 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
         </ButtonNaked>
       );
     }
-
-    if (activeStep > 0 && (hasAppIO || hasCourtesyContact)) {
+    if (isEmailSmsStep && hasEmailOrSms) {
       return (
-        <ButtonNaked onClick={handleNotNow} color="primary" size="medium" sx={{ mx: 'auto' }}>
+        <Button variant="contained" onClick={goToNextStep} color="primary" size="medium">
+          {t('button.conferma', { ns: 'common' })}
+        </Button>
+      );
+    }
+
+    if (activeStep > 0 && (showIOStep || showEmailStep)) {
+      return (
+        <ButtonNaked
+          onClick={() => handleSkipOrExitClick(false)}
+          color="primary"
+          size="medium"
+          sx={{ mx: 'auto' }}
+        >
           {t('button.not-now', { ns: 'common' })}
         </ButtonNaked>
       );
@@ -164,6 +201,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
         }
         activeStep={activeStep}
         setActiveStep={setActiveStep}
+        onExit={() => handleSkipOrExitClick(true)}
         slots={{
           nextButton: getNextButton,
           prevButton: () => <></>,
@@ -178,34 +216,35 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
             buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
             onClick: () => navigate(-1),
           },
+          buttonContainer: isEmailSmsStep && hasEmailOrSms ? { justifyContent: 'flex-end' } : {},
         }}
       >
         <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_1.title')}>
           <SercqSendContactWizard goToNextStep={goToNextStep} setShowPecWizard={setShowPecWizard} />
         </PnWizardStep>
-        {hasAppIO && (
+        {showIOStep && (
           <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_2.title')}>
             <IOContactWizard goToNextStep={goToNextStep} />
           </PnWizardStep>
         )}
-        {hasCourtesyContact && (
+        {showEmailStep && (
           <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_3.step-title')}>
             <EmailSmsContactWizard />
           </PnWizardStep>
         )}
       </PnWizard>
       <CourtesyContactConfirmationDialog
-        open={!!modalOpen}
+        open={modal.open}
         title={t('courtesy-contacts.confirmation-modal-title')}
         content={
-          modalOpen
-            ? `courtesy-contacts.confirmation-modal-${modalOpen?.step.toLowerCase()}-content`
+          modal.step
+            ? `courtesy-contacts.confirmation-modal-${modal.step.toLowerCase()}-content`
             : ''
         }
         onConfirm={handleConfirmationModalAccept}
         confirmAction={
-          modalOpen
-            ? t(`courtesy-contacts.confirmation-modal-${modalOpen?.step.toLowerCase()}-accept`)
+          modal.step
+            ? t(`courtesy-contacts.confirmation-modal-${modal.step.toLowerCase()}-accept`)
             : ''
         }
         onDiscard={handleConfirmationModalDecline}

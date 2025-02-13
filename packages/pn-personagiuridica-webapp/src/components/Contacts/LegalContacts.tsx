@@ -24,7 +24,7 @@ import SpecialContacts from './SpecialContacts';
 
 const EmptyLegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const navigate = useNavigate;
+  const navigate = useNavigate();
   const isMobile = useIsMobile();
 
   const infoIcons = [LaptopChromebookIcon, SavingsIcon, TouchAppIcon];

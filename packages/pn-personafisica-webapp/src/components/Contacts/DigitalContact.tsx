@@ -23,6 +23,7 @@ type Props = {
   label: string;
   value: string;
   channelType: ChannelType;
+  showLabelOnEdit?: boolean;
   senderId?: string;
   inputProps: { label: string; prefix?: string };
   insertButtonLabel: string;
@@ -38,6 +39,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       label,
       value,
       channelType,
+      showLabelOnEdit = false,
       senderId = 'default',
       inputProps,
       insertButtonLabel,
@@ -182,6 +184,16 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
         data-testid={`${senderId}_${contactType}Contact`}
         style={{ width: isMobile ? '100%' : '50%' }}
       >
+        {showLabelOnEdit && (
+          <Typography
+            id={`${senderId}_${contactType}-label`}
+            variant="body2"
+            mb={1}
+            sx={{ fontWeight: 'bold' }}
+          >
+            {label}
+          </Typography>
+        )}
         {editMode && (
           <>
             <TextField
