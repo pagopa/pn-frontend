@@ -152,6 +152,14 @@ const EmailSmsContactWizard: React.FC = () => {
         onSubmit={(value) => handleSubmit(ChannelType.EMAIL, value)}
         showVerifiedIcon
         showLabelOnEdit
+        slotsProps={{
+          textField: {
+            sx: { flexBasis: { xs: 'unset', lg: '50%' } },
+          },
+          button: {
+            sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
+          },
+        }}
       />
 
       {/* SMS */}
@@ -171,9 +179,26 @@ const EmailSmsContactWizard: React.FC = () => {
           onSubmit={(value) => handleSubmit(ChannelType.SMS, value)}
           showVerifiedIcon
           showLabelOnEdit
+          slotsProps={{
+            textField: {
+              sx: { flexBasis: { xs: 'unset', lg: '50%' } },
+            },
+            button: {
+              sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
+            },
+          }}
         />
       ) : (
-        <SmsContactItem />
+        <SmsContactItem
+          slotsProps={{
+            textField: {
+              sx: { flexBasis: { xs: 'unset', lg: '50%' } },
+            },
+            button: {
+              sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
+            },
+          }}
+        />
       )}
 
       <ContactCodeDialog
