@@ -343,7 +343,9 @@ describe('NewNotification Page without payment enabled in configuration', async 
     // check if toast is in the document
     const snackBar = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(snackBar).toBeInTheDocument();
-
+    expect(snackBar).toHaveTextContent(
+      'new-notification.errors.invalid_parameter_protocol_number_duplicate.title.notifiche'
+    );
     expect(snackBar).toHaveTextContent(
       'new-notification.errors.invalid_parameter_protocol_number_duplicate.message.notifiche'
     );
