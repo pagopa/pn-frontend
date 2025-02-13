@@ -43,8 +43,6 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     firstName: 'Mario',
     lastName: 'Rossi',
     recipientType: RecipientType.PF,
-    creditorTaxId: '12345678910',
-    noticeCode: '123456789123456788',
     type: DigitalDomicileType.PEC,
     digitalDomicile: 'mario.rossi@pec.it',
     address: 'via del corso',
@@ -63,8 +61,6 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     firstName: 'Sara Gallo srl',
     lastName: '',
     recipientType: RecipientType.PG,
-    creditorTaxId: '12345678910',
-    noticeCode: '123456789123456789',
     type: DigitalDomicileType.PEC,
     digitalDomicile: '',
     address: 'via delle cicale',
@@ -155,23 +151,24 @@ const newNotificationF24Standard: NewNotificationDocument = {
   },
 };
 
+export const payments = {
+  [newNotificationRecipients[0].taxId]: {
+    pagoPa: { ...newNotificationPagoPa },
+  },
+  [newNotificationRecipients[1].taxId]: {
+    pagoPa: { ...newNotificationPagoPa },
+    f24: { ...newNotificationF24Standard },
+  },
+};
+
 export const newNotification: NewNotification = {
   abstract: '',
   paProtocolNumber: '12345678910',
   subject: 'Multone esagerato',
   recipients: newNotificationRecipients,
   documents: newNotificationDocuments,
-  payment: {
-    [newNotificationRecipients[0].taxId]: {
-      pagoPa: { ...newNotificationPagoPa },
-    },
-    [newNotificationRecipients[1].taxId]: {
-      pagoPa: { ...newNotificationPagoPa },
-      f24: { ...newNotificationF24Standard },
-    },
-  },
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
-  paymentMode: PaymentModel.PAGO_PA_NOTICE,
+  paymentMode: PaymentModel.NOTHING,
   group: newNotificationGroups[2].id,
   taxonomyCode: '010801N',
   notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,

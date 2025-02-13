@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import { newNotification } from '../../../__mocks__/NewNotification.mock';
+import { newNotification, payments } from '../../../__mocks__/NewNotification.mock';
 import { apiClient, externalClient } from '../../../api/apiClients';
 import { PaymentModel, PaymentObject } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
@@ -173,18 +173,16 @@ describe('New notification redux state tests', () => {
   });
 
   it('Should be able to save payment documents', () => {
-    const action = store.dispatch(
-      setPaymentDocuments({ paymentDocuments: newNotification.payment! })
-    );
+    const action = store.dispatch(setPaymentDocuments({ paymentDocuments: payments }));
     expect(action.type).toBe('newNotificationSlice/setPaymentDocuments');
-    expect(action.payload).toEqual({ paymentDocuments: newNotification.payment! });
+    expect(action.payload).toEqual({ paymentDocuments: payments });
   });
 
   it('Should be able to upload payment document', async () => {
     mock
       .onPost(
         '/bff/v1/notifications/sent/documents/preload',
-        Object.values(newNotification.payment!).reduce((arr, elem) => {
+        Object.values(payments).reduce((arr, elem) => {
           if (elem.pagoPa) {
             arr.push({
               contentType: elem.pagoPa.contentType,
@@ -221,7 +219,7 @@ describe('New notification redux state tests', () => {
         },
       ]);
     const extMock = new MockAdapter(externalClient);
-    for (const payment of Object.values(newNotification.payment!)) {
+    for (const payment of Object.values(payments)) {
       if (payment.pagoPa) {
         extMock.onPost(`https://mocked-url.com`).reply(200, payment.pagoPa.file.data, {
           'x-amz-version-id': 'mocked-versionToken',
@@ -233,12 +231,10 @@ describe('New notification redux state tests', () => {
         });
       }
     }
-    const action = await store.dispatch(
-      uploadNotificationPaymentDocument(newNotification.payment!)
-    );
+    const action = await store.dispatch(uploadNotificationPaymentDocument(payments));
     expect(action.type).toBe('uploadNotificationPaymentDocument/fulfilled');
     const response: { [key: string]: PaymentObject } = {};
-    for (const [key, value] of Object.entries(newNotification.payment!)) {
+    for (const [key, value] of Object.entries(payments)) {
       response[key] = {} as PaymentObject;
       if (value.pagoPa) {
         response[key].pagoPa = {

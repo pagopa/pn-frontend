@@ -22,7 +22,6 @@ import { useAppDispatch } from '../../redux/hooks';
 import { saveRecipients } from '../../redux/newNotification/reducers';
 import {
   denominationLengthAndCharacters,
-  identicalIUV,
   identicalTaxIds,
   requiredStringFieldValidation,
   taxIdDependingOnRecipientType,
@@ -35,8 +34,6 @@ import PhysicalAddress from './PhysicalAddress';
 const singleRecipient = {
   recipientType: RecipientType.PF,
   taxId: '',
-  creditorTaxId: '',
-  noticeCode: '',
   firstName: '',
   lastName: '',
   type: DigitalDomicileType.PEC,
@@ -64,7 +61,6 @@ type Props = {
 };
 
 const Recipient: React.FC<Props> = ({
-  paymentMode,
   onConfirm,
   onPreviousStep,
   recipientsData,
@@ -89,8 +85,7 @@ const Recipient: React.FC<Props> = ({
         }
       : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
 
-  const buildRecipientValidationObject = () => {
-    const validationObject = {
+  const buildRecipientValidationObject = () => ({
       recipientType: yup.string(),
       // validazione sulla denominazione (firstName + " " + lastName per PF, firstName per PG)
       // la lunghezza non può superare i 80 caratteri
@@ -160,24 +155,7 @@ const Recipient: React.FC<Props> = ({
       municipality: requiredStringFieldValidation(tc, 256),
       province: requiredStringFieldValidation(tc, 256),
       foreignState: requiredStringFieldValidation(tc),
-    };
-
-    if (paymentMode !== PaymentModel.NOTHING) {
-      return {
-        ...validationObject,
-        creditorTaxId: yup
-          .string()
-          .required(tc('required-field'))
-          .matches(dataRegex.pIva, t('fiscal-code-error')),
-        noticeCode: yup
-          .string()
-          .matches(dataRegex.noticeCode, t('notice-code-error'))
-          .required(tc('required-field')),
-      };
-    }
-
-    return validationObject;
-  };
+    });
 
   const validationSchema = yup.object({
     recipients: yup
@@ -192,20 +170,6 @@ const Recipient: React.FC<Props> = ({
           errors.map((e) => new yup.ValidationError(t(e.messageKey), e.value, e.id))
         );
       })
-      .test('identicalIUV', t('identical-fiscal-codes-error'), (values) => {
-        const errors = identicalIUV(
-          values as Array<NewNotificationRecipient> | undefined,
-          paymentMode
-        );
-        if (errors.length === 0) {
-          return true;
-        }
-        return new yup.ValidationError(
-          errors.map(
-            (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
-          )
-        );
-      }),
   });
 
   const handleAddRecipient = (values: FormRecipients, setFieldValue: any) => {
@@ -464,33 +428,6 @@ const Recipient: React.FC<Props> = ({
                       />
                     </Grid>
                   </Grid>
-
-                  {paymentMode !== PaymentModel.NOTHING && (
-                    <Grid container columnSpacing={1} rowSpacing={2} marginTop={4}>
-                      <Grid item xs={12} lg={6}>
-                        <FormTextField
-                          keyName={`recipients[${index}].creditorTaxId`}
-                          label={`${t('creditor-fiscal-code')}*`}
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          handleBlur={handleBlur}
-                        />
-                      </Grid>
-                      <Grid item xs={12} lg={6}>
-                        <FormTextField
-                          keyName={`recipients[${index}].noticeCode`}
-                          label={`${t('notice-code')}*`}
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          handleBlur={handleBlur}
-                        />
-                      </Grid>
-                    </Grid>
-                  )}
                 </FormBox>
                 {values.recipients.length < 5 && values.recipients.length - 1 === index && (
                   <Stack mt={2} direction="row" justifyContent="space-between">

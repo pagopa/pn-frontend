@@ -32,7 +32,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { NotificationFeePolicy, PaymentModel } from '../../../models/NewNotification';
+import { NotificationFeePolicy } from '../../../models/NewNotification';
 import { NEW_NOTIFICATION_ACTIONS } from '../../../redux/newNotification/actions';
 import PreliminaryInformations from '../PreliminaryInformations';
 
@@ -64,7 +64,6 @@ vi.mock('../../../services/configuration.service', async () => {
 
 const populateForm = async (
   form: HTMLFormElement,
-  hasPayment: boolean,
   organizationName: string = userResponse.organization.name
 ) => {
   await testInput(form, 'paProtocolNumber', newNotification.paProtocolNumber);
@@ -84,10 +83,6 @@ const populateForm = async (
     1,
     true
   );
-
-  if (hasPayment) {
-    await testRadio(form, 'paymentMethodRadio', ['pagopa-notice', 'f24', 'nothing'], 1, true);
-  }
 };
 
 describe('PreliminaryInformations component with payment enabled', async () => {
@@ -142,7 +137,6 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     testFormElements(form, 'taxonomyCode', 'taxonomy-id*');
     testFormElements(form, 'senderDenomination', 'sender-name*');
     testRadio(form, 'comunicationTypeRadio', ['registered-letter-890', 'simple-registered-letter']);
-    testRadio(form, 'paymentMethodRadio', ['pagopa-notice', 'f24', 'nothing']);
     const button = within(form).getByTestId('step-submit');
     expect(button).toBeDisabled();
   });
@@ -195,7 +189,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
     const button = within(form).getByTestId('step-submit');
     expect(button).toBeDisabled();
-    await populateForm(form, true);
+    await populateForm(form);
     expect(button).toBeEnabled();
     fireEvent.click(button);
     await waitFor(() => {
@@ -211,7 +205,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
         documents: [],
         recipients: [],
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
-        paymentMode: PaymentModel.F24,
+        paymentMode: '',
         senderDenomination: newNotification.senderDenomination,
         lang: 'it',
         additionalAbstract: '',
@@ -219,7 +213,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
         additionalSubject: '',
       });
     });
-    expect(confirmHandlerMk).toBeCalledTimes(1);
+    expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
   });
 
   it('fills form with invalid values', async () => {
@@ -242,7 +236,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
       );
     });
     const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
-    await populateForm(form, true);
+    await populateForm(form);
     // set invalid values
     // paProtocolNumber
     await testInput(form, 'paProtocolNumber', '');
@@ -321,10 +315,6 @@ describe('PreliminaryInformations component with payment enabled', async () => {
       `input[name="physicalCommunicationType"][value="${newNotification.physicalCommunicationType}"]`
     );
     expect(physicalCommunicationType).toBeChecked();
-    const paymentMode = form.querySelector(
-      `input[name="paymentMode"][value="${newNotification.paymentMode}"]`
-    );
-    expect(paymentMode).toBeChecked();
   });
 
   it('errors on api call', async () => {
@@ -397,8 +387,6 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
     });
     expect(result.container).toHaveTextContent(/title/i);
     const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
-    const paymentMethodRadio = within(form).queryAllByTestId('paymentMethodRadio');
-    expect(paymentMethodRadio).toHaveLength(0);
     const button = within(form).getByTestId('step-submit');
     expect(button).toBeDisabled();
   });
@@ -425,7 +413,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
     const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
     const button = within(form).getByTestId('step-submit');
     expect(button).toBeDisabled();
-    await populateForm(form, false);
+    await populateForm(form);
     expect(button).toBeEnabled();
     fireEvent.click(button);
     await waitFor(() => {
@@ -441,7 +429,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
         documents: [],
         recipients: [],
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
-        paymentMode: PaymentModel.NOTHING,
+        paymentMode: '',
         senderDenomination: newNotification.senderDenomination,
         lang: 'it',
         additionalAbstract: '',
@@ -449,7 +437,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
         additionalSubject: '',
       });
     });
-    expect(confirmHandlerMk).toBeCalledTimes(1);
+    expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
   });
 
   it('set senderDenomination longer than 80 characters', async () => {

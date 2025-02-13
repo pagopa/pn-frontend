@@ -1,10 +1,9 @@
 import { RecipientType } from '@pagopa-pn/pn-commons';
 
 import { randomString } from '../../__test__/test-utils';
-import { NewNotificationRecipient, PaymentModel } from '../../models/NewNotification';
+import { NewNotificationRecipient } from '../../models/NewNotification';
 import {
   denominationLengthAndCharacters,
-  identicalIUV,
   identicalTaxIds,
   taxIdDependingOnRecipientType,
 } from '../validation.utility';
@@ -84,6 +83,7 @@ describe('test custom validation for recipients', () => {
     ]);
   });
 
+  /*
   it('identicalIUV (no errors)', () => {
     const result = identicalIUV(
       [
@@ -128,4 +128,5 @@ describe('test custom validation for recipients', () => {
       },
     ]);
   });
+  */
 });

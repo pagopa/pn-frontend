@@ -44,8 +44,6 @@ export interface NewNotificationRecipient {
   idx: number;
   recipientType: RecipientType;
   taxId: string;
-  creditorTaxId: string;
-  noticeCode: string;
   firstName: string;
   lastName: string;
   type: DigitalDomicileType;
