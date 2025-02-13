@@ -94,6 +94,7 @@
       "cancelled-message": "Per l’eventuale rimborso di pagamenti legati a questa notifica, contatta l’ente mittente. Se hai effettuato un pagamento dopo che la notifica è stata annullata, le informazioni qui sotto potrebbero non essere aggiornate.",
       "disclaimer-link": "Scopri di più",
       "f24-download-error": "Il download non è riuscito. Riprova.",
+      "error-payment": "Seleziona un avviso di pagamento",
       "status": {
         "succeded": "Pagato",
         "succeded-tooltip": "Il pagamento è stato inviato correttamente.",
@@ -402,7 +403,7 @@
     "canceled": "Annullata",
     "canceled-tooltip": "L'ente ha annullato l'invio della notifica",
     "canceled-description": "L'ente ha annullato l'invio della notifica.",
-    "returned-to-sender":"Resa al mittente",
+    "returned-to-sender": "Resa al mittente",
     "returned-to-sender-tooltip-monorecipient": "Il destinatario risulta deceduto",
     "returned-to-sender-tooltip-multirecipient": "Tutti i destinatari risultano deceduti",
     "returned-to-sender-description-monorecipient": "Il destinatario risulta deceduto.",

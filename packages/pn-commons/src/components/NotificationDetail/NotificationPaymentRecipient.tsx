@@ -1,7 +1,7 @@
-import React, { Fragment, memo, useEffect, useRef, useState } from 'react';
+import React, { Fragment, memo, useEffect, useState } from 'react';
 
 import { Download } from '@mui/icons-material/';
-import { Alert, Box, Button, CircularProgress, Link, RadioGroup, Typography } from '@mui/material';
+import { Alert, Box, Button, Link, RadioGroup, Typography } from '@mui/material';
 
 import { downloadDocument } from '../../hooks';
 import {
@@ -42,6 +42,13 @@ type Props = {
   handleFetchPaymentsInfo: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
 };
 
+const RenderAlertPayment: React.FC<{ errorOnPayment: boolean }> = ({ errorOnPayment }) =>
+  errorOnPayment && (
+    <Alert severity="error" variant="outlined">
+      {getLocalizedOrDefaultLabel('notifications', 'payment.error-payment')}
+    </Alert>
+  );
+
 const NotificationPaymentRecipient: React.FC<Props> = ({
   payments,
   isCancelled,
@@ -62,7 +69,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   });
   const cancelledNotificationFAQ = `${landingSiteUrl}${FAQ_NOTIFICATION_CANCELLED_REFUND}`;
   const [areOtherDowloading, setAreOtherDowloading] = useState(false);
-
+  const [errorOnPayment, setErrorOnPayment] = useState(false);
   const paginatedPayments = pagoPaF24.slice(
     paginationData.page * paginationData.size,
     (paginationData.page + 1) * paginationData.size
@@ -73,8 +80,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   >({
     pagoPa: null,
   });
-  const [loadingPayment, setLoadingPayment] = useState(false);
-  const loadingPaymentTimeout = useRef<NodeJS.Timeout>();
 
   const allPaymentsIsPaid = pagoPaF24.every((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED);
   const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
@@ -82,22 +87,15 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
-    setLoadingPayment(true);
     setSelectedPayment(
       pagoPaF24.find((item) => item.pagoPa?.noticeCode === radioSelection) ?? { pagoPa: null }
     );
-    // eslint-disable-next-line functional/immutable-data
-    loadingPaymentTimeout.current = setTimeout(() => {
-      setLoadingPayment(false);
-    }, 1000);
+    setErrorOnPayment(false);
   };
 
   const handleDeselectPayment = () => {
-    setLoadingPayment(false);
     setSelectedPayment({ pagoPa: null });
-    if (loadingPaymentTimeout.current) {
-      clearTimeout(loadingPaymentTimeout.current);
-    }
+    setErrorOnPayment(true);
   };
 
   const downloadAttachment = (attachmentName: PaymentAttachmentSName) => {
@@ -125,6 +123,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   };
 
   useEffect(() => {
+    console.log('errorOnPayment :>> ', errorOnPayment);
     const unpaidPayments = pagoPaF24.some((f) => f.pagoPa?.status === PaymentStatus.REQUIRED);
     if (isSinglePayment && unpaidPayments) {
       setSelectedPayment(pagoPaF24[0] ?? { pagoPa: null });
@@ -146,14 +145,18 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     }
   };
 
-  useEffect(
-    () => () => {
-      if (loadingPaymentTimeout.current) {
-        clearTimeout(loadingPaymentTimeout.current);
-      }
-    },
-    []
-  );
+  const handleCheckPaymentSelected = () => {
+    if (selectedPayment.pagoPa) {
+      setErrorOnPayment(false);
+      onPayClick(
+        selectedPayment.pagoPa.noticeCode,
+        selectedPayment.pagoPa.creditorTaxId,
+        selectedPayment.pagoPa.amount
+      );
+    } else {
+      setErrorOnPayment(true);
+    }
+  };
 
   return (
     <Box display="flex" flexDirection="column" gap={2} data-testid="paymentInfoBox">
@@ -233,30 +236,23 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               />
             </Box>
           )}
-
+          <RenderAlertPayment errorOnPayment={errorOnPayment} />
           {!allPaymentsIsPaid && (
             <Fragment>
               <Button
+                color={errorOnPayment ? 'error' : 'primary'}
                 fullWidth
-                variant="contained"
+                variant={errorOnPayment ? 'outlined' : 'contained'}
                 data-testid="pay-button"
-                disabled={!selectedPayment?.pagoPa && !loadingPayment}
-                onClick={() =>
-                  onPayClick(
-                    selectedPayment?.pagoPa?.noticeCode,
-                    selectedPayment?.pagoPa?.creditorTaxId,
-                    selectedPayment?.pagoPa?.amount
-                  )
-                }
+                onClick={handleCheckPaymentSelected}
               >
                 {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit')}
                 &nbsp;
-                {loadingPayment && <CircularProgress size={18} sx={{ ml: 1 }} color="inherit" />}
-                {!loadingPayment && selectedPayment?.pagoPa?.amount
+                {selectedPayment?.pagoPa?.amount
                   ? formatEurocentToCurrency(selectedPayment.pagoPa?.amount)
                   : null}
               </Button>
-              {!loadingPayment && selectedPayment?.pagoPa?.attachment && (
+              {selectedPayment?.pagoPa?.attachment && (
                 <Button
                   fullWidth
                   variant="outlined"
