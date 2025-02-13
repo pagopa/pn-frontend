@@ -1,7 +1,4 @@
 import {
-  DigitalDomicileType,
-  NotificationDetailDocument,
-  NotificationDetailRecipient,
   PhysicalCommunicationType,
   RecipientType,
 } from '@pagopa-pn/pn-commons';
@@ -17,25 +14,9 @@ export enum NotificationFeePolicy {
   DELIVERY_MODE = 'DELIVERY_MODE',
 }
 
-interface BaseNewNotification {
-  notificationFeePolicy: NotificationFeePolicy;
-  idempotenceToken?: string;
-  paProtocolNumber: string;
-  subject: string;
-  abstract?: string;
-  cancelledIun?: string;
-  physicalCommunicationType: PhysicalCommunicationType;
-  senderDenomination: string;
-  senderTaxId?: string;
-  group?: string;
-  taxonomyCode: string;
-}
-
-// New Notification DTO
-export interface NewNotificationDTO extends BaseNewNotification {
-  recipients: Array<NotificationDetailRecipient>;
-  documents: Array<NotificationDetailDocument>;
-  additionalLanguages?: Array<string>;
+// NotificationDigital Domicile Type 
+export enum NewNotificationDigitalAddressType {
+  PEC = 'PEC',
 }
 
 // New Notification
@@ -46,7 +27,7 @@ export interface NewNotificationRecipient {
   taxId: string;
   firstName: string;
   lastName: string;
-  type: DigitalDomicileType;
+  type: NewNotificationDigitalAddressType;
   digitalDomicile: string;
   address: string;
   houseNumber: string;
@@ -76,7 +57,18 @@ export interface NewNotificationDocument {
   };
 }
 
-export interface NewNotification extends BaseNewNotification, NewNotificationBilingualism {
+export interface NewNotification extends NewNotificationBilingualism {
+  notificationFeePolicy: NotificationFeePolicy;
+  idempotenceToken?: string;
+  paProtocolNumber: string;
+  subject: string;
+  abstract?: string;
+  cancelledIun?: string;
+  physicalCommunicationType: PhysicalCommunicationType;
+  senderDenomination: string;
+  senderTaxId: string;
+  group?: string;
+  taxonomyCode: string;
   paymentMode?: PaymentModel;
   recipients: Array<NewNotificationRecipient>;
   documents: Array<NewNotificationDocument>;

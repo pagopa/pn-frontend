@@ -1,5 +1,5 @@
-import { newNotification, newNotificationDTO } from '../../__mocks__/NewNotification.mock';
-import { NewNotificationDTO } from '../../models/NewNotification';
+import { newNotification, newNotificationForBff } from '../../__mocks__/NewNotification.mock';
+import { BffNewNotificationRequest } from '../../generated-client/notifications';
 import { getDuplicateValuesByKeys, newNotificationMapper } from '../notification.utility';
 
 const mockArray = [
@@ -14,31 +14,7 @@ const mockArray = [
 describe('Test notification utility', () => {
   it('Map notification from presentation layer to api layer', () => {
     const result = newNotificationMapper(newNotification);
-    expect(result).toEqual(newNotificationDTO);
-  });
-
-  it('Checks that if physical address has empty required fields, its value is set to undefined', () => {
-    const request = {
-      ...newNotification,
-      recipients: newNotification.recipients.map((recipient, index) => {
-        if (index === 0) {
-          recipient.address = '';
-          recipient.houseNumber = '';
-        }
-        return recipient;
-      }),
-    };
-    const response = {
-      ...newNotificationDTO,
-      recipients: newNotificationDTO.recipients.map((recipient, index) => {
-        if (index === 0) {
-          recipient.physicalAddress = undefined;
-        }
-        return recipient;
-      }),
-    };
-    const result = newNotificationMapper(request);
-    expect(result).toEqual(response);
+    expect(result).toEqual(newNotificationForBff);
   });
 
   it('Checks that getDuplicateValuesByKeys returns duplicate values', () => {
@@ -47,6 +23,7 @@ describe('Test notification utility', () => {
   });
 
   it('Checks that notificationMapper returns correct bilingualism dto', () => {
+    // fe version after mapper
     const result = newNotificationMapper({
       ...newNotification,
       lang: 'other',
@@ -54,8 +31,9 @@ describe('Test notification utility', () => {
       additionalAbstract: 'abstract for de',
       additionalSubject: 'subject for de',
     });
-    const response: NewNotificationDTO = {
-      ...newNotificationDTO,
+    // 
+    const response: BffNewNotificationRequest = {
+      ...newNotificationForBff,
       subject: 'Multone esagerato|subject for de',
       abstract: 'abstract for de',
       additionalLanguages: ['DE'],

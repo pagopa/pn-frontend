@@ -33,6 +33,7 @@ const initialState = {
     paymentMode: '' as PaymentModel,
     notificationFeePolicy: '' as NotificationFeePolicy,
     senderDenomination: '',
+    senderTaxId:''
   } as NewNotification,
   groups: [] as Array<UserGroup>,
   isCompleted: false,
