@@ -56,13 +56,15 @@
     "subtitle": "Inserisci i dati della persona fisica o giuridica a cui vuoi delegare la lettura delle tue notifiche.",
     "form": {
       "personType": "Soggetto giuridico*:",
+      "personType-content-subtitle": "Seleziona la tipologia di soggetto giuridico",
       "naturalPerson": "Persona fisica",
       "legalPerson": "Persona giuridica",
       "firstName": "Nome*",
       "lastName": "Cognome*",
       "fiscalCode": "Codice Fiscale*",
       "businessName": "Ragione Sociale*",
-      "viewFrom": "Potrà visualizzare le notifiche da parte di*:",
+      "viewFrom": "Potrà consultare le notifiche da parte di*:",
+      "viewFrom-content-subtitle": "Seleziona un’opzione",
       "allEntities": "Tutti gli enti",
       "onlySelected": "Solo  enti selezionati",
       "selectEntities": "Seleziona enti*",
@@ -89,7 +91,9 @@
       "businessName": {
         "required": "La ragione sociale è obbligatoria"
       },
-      "entiSelected": { "required": "Seleziona almeno un ente" },
+      "entiSelected": {
+        "required": "Seleziona almeno un ente"
+      },
       "expirationDate": {
         "required": "La data di termine delega è obbligatoria",
         "wrong": "Data errata"

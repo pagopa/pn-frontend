@@ -25,7 +25,7 @@ export default function ConfirmationModal({
       id="confirmation-dialog"
       open={open}
       onClose={handleClose}
-      aria-labelledby="responsive-dialog-title"
+      aria-labelledby="confirmation-dialog-delegations"
       maxWidth="lg"
     >
       <DialogTitle id="confirmation-dialog-delegations">{title}</DialogTitle>
