@@ -6,6 +6,7 @@ import { Alert, Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/mat
 import { PnBreadcrumb, Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import Attachments from '../components/NewNotification/Attachments';
+import PaymentMethods from '../components/NewNotification/PaymentMethods';
 import PreliminaryInformations from '../components/NewNotification/PreliminaryInformations';
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
@@ -16,7 +17,6 @@ import { createNewNotification } from '../redux/newNotification/actions';
 import { resetState, setSenderInfos } from '../redux/newNotification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
-import PaymentMethods from '../components/NewNotification/PaymentMethods';
 
 const SubTitle = () => {
   const { t } = useTranslation(['common', 'notifiche']);
@@ -186,7 +186,6 @@ const NewNotification = () => {
                 ref={childRef}
               />
             )}
-
           </Grid>
         </Grid>
       </Box>

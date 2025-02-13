@@ -151,41 +151,24 @@ const newNotificationF24Standard: NewNotificationDocument = {
   },
 };
 
+export const payments = {
+  [newNotificationRecipients[0].taxId]: {
+    pagoPa: { ...newNotificationPagoPa },
+  },
+  [newNotificationRecipients[1].taxId]: {
+    pagoPa: { ...newNotificationPagoPa },
+    f24: { ...newNotificationF24Standard },
+  },
+};
+
 export const newNotification: NewNotification = {
   abstract: '',
   paProtocolNumber: '12345678910',
   subject: 'Multone esagerato',
   recipients: newNotificationRecipients,
   documents: newNotificationDocuments,
-  payment: {
-    [newNotificationRecipients[0].taxId]: {
-      pagoPa: { ...newNotificationPagoPa },
-    },
-    [newNotificationRecipients[1].taxId]: {
-      pagoPa: { ...newNotificationPagoPa },
-      f24: { ...newNotificationF24Standard },
-    },
-  },
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
-  paymentMode: PaymentModel.PAGO_PA_NOTICE,
-  group: newNotificationGroups[2].id,
-  taxonomyCode: '010801N',
-  notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
-  senderDenomination: userResponse.organization.name,
-  senderTaxId: userResponse.organization.fiscal_code,
-  lang: 'it',
-  additionalLang: '',
-  additionalSubject: '',
-  additionalAbstract: '',
-};
-
-export const newNotificationWithoutPayment: NewNotification = {
-  abstract: '',
-  paProtocolNumber: '12345678910',
-  subject: 'Multone esagerato',
-  recipients: newNotificationRecipients,
-  documents: newNotificationDocuments,
-  physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
+  paymentMode: PaymentModel.NOTHING,
   group: newNotificationGroups[2].id,
   taxonomyCode: '010801N',
   notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,

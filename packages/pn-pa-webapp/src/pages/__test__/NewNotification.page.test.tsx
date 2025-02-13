@@ -12,7 +12,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
-import { newNotification, newNotificationGroups, newNotificationWithoutPayment } from '../../__mocks__/NewNotification.mock';
+import { newNotification, newNotificationGroups } from '../../__mocks__/NewNotification.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
@@ -228,7 +228,7 @@ describe('NewNotification Page without payment enabled in configuration', async 
   });
 
   it('create new notification', async () => {
-    const mappedNotification = newNotificationMapper(newNotificationWithoutPayment);
+    const mappedNotification = newNotificationMapper(newNotification);
 
     const mockResponse = {
       notificationRequestId: 'mocked-notificationRequestId',
@@ -241,7 +241,7 @@ describe('NewNotification Page without payment enabled in configuration', async 
     await act(async () => {
       result = render(<NewNotification />, {
         preloadedState: {
-          newNotificationState: { notification: newNotificationWithoutPayment, groups: [] },
+          newNotificationState: { notification: newNotification, groups: [] },
           userState: { user: userResponse },
         },
       });
@@ -278,7 +278,7 @@ describe('NewNotification Page without payment enabled in configuration', async 
     expect(finalStep).toBeInTheDocument();
   });
 
-  it.only('notification failed for duplicated protocol number', async () => {
+  it('notification failed for duplicated protocol number', async () => {
     const mappedNotification = newNotificationMapper(newNotification);
     const mockResponse = {
       type: 'GENERIC_ERROR',
@@ -306,7 +306,7 @@ describe('NewNotification Page without payment enabled in configuration', async 
       };
       result = render(<Component />, {
         preloadedState: {
-          newNotificationState: { notification: newNotificationWithoutPayment, groups: [] },
+          newNotificationState: { notification: newNotification, groups: [] },
           userState: { user: userResponse },
         },
       });
@@ -339,8 +339,6 @@ describe('NewNotification Page without payment enabled in configuration', async 
     });
     const finalStep = result.queryByTestId('finalStep');
     expect(finalStep).not.toBeInTheDocument();
-
-    console.log('---------------- mock', mappedNotification);
 
     // check if toast is in the document
     const snackBar = await waitFor(() => result.getByTestId('snackBarContainer'));
@@ -461,5 +459,4 @@ describe.skip('NewNotification Page with payment enabled in configuration', () =
     const finalStep = result.getByTestId('finalStep');
     expect(finalStep).toBeInTheDocument();
   });
-
 });
