@@ -44,7 +44,7 @@ type Props = {
 
 const RenderAlertPayment: React.FC<{ errorOnPayment: boolean }> = ({ errorOnPayment }) =>
   errorOnPayment && (
-    <Alert severity="error" variant="outlined">
+    <Alert severity="error" variant="outlined" data-testid="payment-error">
       {getLocalizedOrDefaultLabel('notifications', 'payment.error-payment')}
     </Alert>
   );

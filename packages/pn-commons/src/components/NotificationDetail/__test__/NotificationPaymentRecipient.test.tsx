@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationDTO, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../models';
-import { act, fireEvent, render, within } from '../../../test-utils';
+import { act, fireEvent, render, waitFor, within } from '../../../test-utils';
 import { setPaymentCache } from '../../../utility';
 import {
   getF24Payments,
@@ -57,13 +57,11 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(pagoPABox).toHaveLength(pageLength > 5 ? 5 : pageLength);
     expect(downloadPagoPANotice).not.toBeInTheDocument();
     expect(payButton).toBeInTheDocument();
-    expect(payButton).toBeDisabled();
     expect(f24OnlyBox).toBeInTheDocument();
     expect(paginationBox).toBeInTheDocument();
   });
 
   it('select and unselect payment', async () => {
-    vi.useFakeTimers();
     const { getByTestId, queryAllByTestId, queryByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
@@ -84,14 +82,21 @@ describe('NotificationPaymentRecipient Component', () => {
     const item = queryAllByTestId('pagopa-item')[paymentIndex];
     const radioButton = item.querySelector('[data-testid="radio-button"] input');
     expect(downloadPagoPANotice).not.toBeInTheDocument();
-    expect(payButton).toBeDisabled();
-    // select payment
+
+    // test error payment
+    fireEvent.click(payButton);
+    await waitFor(() => {
+      expect(getByTestId('payment-error')).toBeInTheDocument();
+    });
+
+    // Clicca sul radioButton per correggere l'errore
     fireEvent.click(radioButton!);
+
+    await waitFor(() => {
+      expect(queryByTestId('payment-error')).not.toBeInTheDocument();
+    });
     // after radio button click, there is a timer of 1 second after that the paymeny is enabled
     // wait...
-    act(() => {
-      vi.advanceTimersByTime(1000);
-    });
     downloadPagoPANotice = getByTestId('download-pagoPA-notice-button');
     expect(downloadPagoPANotice).toBeInTheDocument();
     expect(payButton).not.toBeDisabled();
@@ -101,7 +106,6 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(f24Download).toBeInTheDocument();
     // unselect payment
     fireEvent.click(radioButton!);
-    expect(payButton).toBeDisabled();
     expect(downloadPagoPANotice).not.toBeInTheDocument();
     expect(f24Download).not.toBeInTheDocument();
   });
