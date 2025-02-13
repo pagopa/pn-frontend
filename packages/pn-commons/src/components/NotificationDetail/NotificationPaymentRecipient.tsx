@@ -297,25 +297,25 @@ type PaymentButtonsProps = Pick<
 > & {
   selectedPayment?: PaymentDetails | { pagoPa: null; f24?: null };
   loadingPayment: boolean;
-  downloadAttachment: (attachmentName: PaymentAttachmentSName) => void;
-  handleTrackEventFn: (event: EventPaymentRecipientType, param?: object) => void;
   areOtherDowloading: boolean;
   setAreOtherDowloading: (value: boolean) => void;
+  downloadAttachment: (attachmentName: PaymentAttachmentSName) => void;
+  handleTrackEventFn: (event: EventPaymentRecipientType, param?: object) => void;
 };
 
 const PaymentButtons = ({
   payments,
   iun,
-  onPayTppClick,
   selectedPayment,
-  onPayClick,
   loadingPayment,
-  downloadAttachment,
-  getPaymentAttachmentAction,
-  handleTrackEventFn,
   timerF24,
   areOtherDowloading,
   setAreOtherDowloading,
+  onPayTppClick,
+  onPayClick,
+  downloadAttachment,
+  getPaymentAttachmentAction,
+  handleTrackEventFn,
 }: PaymentButtonsProps) => {
   const hasPaymentTpp = payments.tpp?.iun === iun;
   return (
