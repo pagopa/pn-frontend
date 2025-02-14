@@ -1,20 +1,19 @@
 import {
-  DigitalDomicileType,
   PhysicalCommunicationType,
   RecipientType,
 } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotification,
-  NewNotificationDTO,
+  NewNotificationDigitalAddressType,
   NewNotificationDocument,
   NewNotificationRecipient,
   NotificationFeePolicy,
   PaymentModel,
 } from '../models/NewNotification';
 import { UserGroup } from '../models/user';
-import { newNotificationMapper } from '../utility/notification.utility';
 import { userResponse } from './Auth.mock';
+import { BffNewNotificationRequest, NotificationDigitalAddressTypeEnum, NotificationDocument, NotificationRecipientV23 } from '../generated-client/notifications';
 
 export const newNotificationGroups: Array<UserGroup> = [
   {
@@ -43,7 +42,7 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     firstName: 'Mario',
     lastName: 'Rossi',
     recipientType: RecipientType.PF,
-    type: DigitalDomicileType.PEC,
+    type: NewNotificationDigitalAddressType.PEC,
     digitalDomicile: 'mario.rossi@pec.it',
     address: 'via del corso',
     addressDetails: '',
@@ -61,7 +60,7 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     firstName: 'Sara Gallo srl',
     lastName: '',
     recipientType: RecipientType.PG,
-    type: DigitalDomicileType.PEC,
+    type: NewNotificationDigitalAddressType.PEC,
     digitalDomicile: '',
     address: 'via delle cicale',
     addressDetails: '',
@@ -73,6 +72,22 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     foreignState: 'Italia',
   },
 ];
+
+const newNotificationRecipientsForBff: Array<NotificationRecipientV23> = [
+  {
+    taxId: 'MRARSS90P08H501Q',
+    denomination: 'Mario Rossi',
+    recipientType: RecipientType.PF,
+    digitalDomicile: {type: NotificationDigitalAddressTypeEnum.Pec,address: 'mario.rossi@pec.it'},
+    physicalAddress: {address:'via del corso 49', zip: '00122', municipality: 'Roma', province: 'Roma', foreignState: 'Italia'},
+  },
+  {
+    taxId: '12345678901',
+    denomination: 'Sara Gallo srl',
+    recipientType: RecipientType.PG,
+    physicalAddress: {address:'via delle cicale 21', zip: '00035', municipality: 'Anzio', province: 'Roma', foreignState: 'Italia'}
+  },
+]
 
 const newNotificationDocuments: Array<NewNotificationDocument> = [
   {
@@ -107,6 +122,31 @@ const newNotificationDocuments: Array<NewNotificationDocument> = [
         hashBase64: 'mocked-sha256-1',
         hashHex: 'mocked-hashHex-1',
       },
+    },
+    ref: {
+      key: 'mocked-key-1',
+      versionToken: 'mocked-versionToken-1',
+    },
+  },
+];
+
+const newNotificationDocumentsForBff: Array<NotificationDocument> = [
+  {
+    title: 'mocked-name-0',
+    contentType: 'application/pdf',
+    digests: {
+      sha256: 'mocked-sha256-0',
+    },
+    ref: {
+      key: 'mocked-key-0',
+      versionToken: 'mocked-versionToken-0',
+    },
+  },
+  {
+    title: 'mocked-name-1',
+    contentType: 'application/pdf',
+    digests: {
+      sha256: 'mocked-sha256-1',
     },
     ref: {
       key: 'mocked-key-1',
@@ -190,8 +230,21 @@ export const newNotificationEmpty: NewNotification = {
   paymentMode: '' as PaymentModel,
   group: '',
   taxonomyCode: '',
+  senderTaxId:'',
   notificationFeePolicy: '' as NotificationFeePolicy,
   senderDenomination: userResponse.organization.name,
 };
 
-export const newNotificationDTO: NewNotificationDTO = newNotificationMapper(newNotification);
+export const newNotificationForBff: BffNewNotificationRequest = {
+  abstract: '',
+  paProtocolNumber: '12345678910',
+  subject: 'Multone esagerato',
+  recipients: newNotificationRecipientsForBff,
+  documents: newNotificationDocumentsForBff,
+  physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
+  group: newNotificationGroups[2].id,
+  taxonomyCode: '010801N',
+  notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
+  senderDenomination: userResponse.organization.name,
+  senderTaxId: userResponse.organization.fiscal_code,
+};

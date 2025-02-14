@@ -14,8 +14,7 @@ import {
 import { LangLabels } from '@pagopa/mui-italia';
 import userEvent from '@testing-library/user-event';
 
-import { PaymentModel } from '../../../models/NewNotification';
-import { PreliminaryInformationsPayload } from '../../../redux/newNotification/types';
+import { PaymentModel, PreliminaryInformationsPayload } from '../../../models/NewNotification';
 import PreliminaryInformationsLang from '../PreliminaryInformationsLang';
 
 // mock imports

@@ -8,6 +8,7 @@ import {
   NotificationFeePolicy,
   PaymentModel,
   PaymentObject,
+  PreliminaryInformationsPayload,
 } from '../../models/NewNotification';
 import { UserGroup } from '../../models/user';
 import { getConfiguration } from '../../services/configuration.service';
@@ -17,7 +18,6 @@ import {
   uploadNotificationDocument,
   uploadNotificationPaymentDocument,
 } from './actions';
-import { PreliminaryInformationsPayload } from './types';
 
 const initialState = {
   loading: false,
@@ -33,6 +33,7 @@ const initialState = {
     paymentMode: '' as PaymentModel,
     notificationFeePolicy: '' as NotificationFeePolicy,
     senderDenomination: '',
+    senderTaxId:''
   } as NewNotification,
   groups: [] as Array<UserGroup>,
   isCompleted: false,

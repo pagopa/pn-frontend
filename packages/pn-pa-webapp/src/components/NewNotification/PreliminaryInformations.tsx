@@ -26,12 +26,12 @@ import { LangCode } from '@pagopa/mui-italia';
 import {
   NewNotification,
   NewNotificationLangOther,
+  PreliminaryInformationsPayload,
 } from '../../models/NewNotification';
 import { GroupStatus } from '../../models/user';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { NEW_NOTIFICATION_ACTIONS, getUserGroups } from '../../redux/newNotification/actions';
 import { setPreliminaryInformations } from '../../redux/newNotification/reducers';
-import { PreliminaryInformationsPayload } from '../../redux/newNotification/types';
 import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';

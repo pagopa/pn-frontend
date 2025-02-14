@@ -4,30 +4,22 @@ import _ from 'lodash';
 import {
   NotificationDetailDocument,
   NotificationDetailPayment,
-  NotificationDetailRecipient,
   PhysicalAddress,
   RecipientType,
 } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotification,
-  NewNotificationDTO,
   NewNotificationDocument,
   NewNotificationLangOther,
   NewNotificationRecipient,
   PaymentModel,
   PaymentObject,
 } from '../models/NewNotification';
+import { BffNewNotificationRequest, NotificationRecipientV23 } from '../generated-client/notifications';
 
 const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
-  if (
-    recipient.address &&
-    recipient.houseNumber &&
-    recipient.zip &&
-    recipient.municipality &&
-    recipient.province &&
-    recipient.foreignState
-  ) {
+
     const address = {
       address: `${recipient.address} ${recipient.houseNumber}`,
       addressDetails: recipient.addressDetails,
@@ -46,22 +38,14 @@ const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
       }
     });
     return address;
-  }
-  return undefined;
 };
 
 const newNotificationRecipientsMapper = (
   recipients: Array<NewNotificationRecipient>,
   paymentMethod?: PaymentModel
-): Array<NotificationDetailRecipient> =>
+): Array<NotificationRecipientV23> =>
   recipients.map((recipient) => {
-    const digitalDomicile = recipient.digitalDomicile
-      ? {
-          type: recipient.type,
-          address: recipient.digitalDomicile,
-        }
-      : undefined;
-    const parsedRecipient: NotificationDetailRecipient = {
+    const parsedRecipient: NotificationRecipientV23 = {
       denomination:
         recipient.recipientType === RecipientType.PG
           ? recipient.firstName
@@ -70,9 +54,12 @@ const newNotificationRecipientsMapper = (
       taxId: recipient.taxId,
       physicalAddress: checkPhysicalAddress(recipient),
     };
-    if (digitalDomicile) {
+    if (recipient.digitalDomicile) {
       // eslint-disable-next-line functional/immutable-data
-      parsedRecipient.digitalDomicile = digitalDomicile;
+      parsedRecipient.digitalDomicile = {
+        type: recipient.type,
+        address: recipient.digitalDomicile,
+      };
     }
     if (paymentMethod !== PaymentModel.NOTHING) {
       // eslint-disable-next-line functional/immutable-data
@@ -101,9 +88,9 @@ const newNotificationAttachmentsMapper = (
   documents.map((document) => newNotificationDocumentMapper(document));
 
 const newNotificationPaymentDocumentsMapper = (
-  recipients: Array<NotificationDetailRecipient>,
+  recipients: Array<NotificationRecipientV23>,
   paymentDocuments: { [key: string]: PaymentObject }
-): Array<NotificationDetailRecipient> =>
+): Array<NotificationRecipientV23> =>
   recipients.map((r) => {
     const payment: NotificationDetailPayment = {};
     /* eslint-disable functional/immutable-data */
@@ -139,7 +126,7 @@ const newNotificationPaymentDocumentsMapper = (
     return r;
   });
 
-export function newNotificationMapper(newNotification: NewNotification): NewNotificationDTO {
+export function newNotificationMapper(newNotification: NewNotification): BffNewNotificationRequest {
   const clonedNotification = _.omit(_.cloneDeep(newNotification), [
     'paymentMode',
     'payment',
@@ -168,7 +155,7 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
       : undefined;
 
   /* eslint-disable functional/immutable-data */
-  const newNotificationParsed: NewNotificationDTO = {
+  const newNotificationParsed: BffNewNotificationRequest = {
     ...clonedNotification,
     recipients: [],
     documents: [],
