@@ -137,8 +137,12 @@ const getPaymentDocumentsToUpload = (
 ): Array<Promise<UploadDocumentParams>> => {
   const documentsArr: Array<Promise<UploadDocumentParams>> = [];
   /* eslint-disable functional/immutable-data */
-  recipients.map((recipient) => {
-    recipient.payments?.map((payment) => {
+  for (const recipient of recipients) {
+    if (!recipient.payments) {
+      continue;
+    }
+
+    for (const payment of recipient.payments) {
       if (payment.pagoPA && !payment.pagoPA.ref.key && !payment.pagoPA.ref.versionToken) {
         documentsArr.push(createPayloadToUpload(payment.pagoPA));
       }
@@ -146,8 +150,8 @@ const getPaymentDocumentsToUpload = (
       if (payment.f24 && !payment.f24.ref.key && !payment.f24.ref.versionToken) {
         documentsArr.push(createPayloadToUpload(payment.f24));
       }
-    });
-  });
+    }
+  }
   /* eslint-enable functional/immutable-data */
 
   return documentsArr;
@@ -168,8 +172,12 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
       const documentsUploaded = await uploadNotificationDocumentCbk(documentsToUpload);
       const updatedItems = _.cloneDeep(recipients);
 
-      updatedItems.map((items) => {
-        items.payments?.map((payment) => {
+      for (const updatedItem of updatedItems) {
+        if (!updatedItem.payments) {
+          continue;
+        }
+
+        for (const payment of updatedItem.payments) {
           /* eslint-disable functional/immutable-data */
           if (payment.pagoPA && documentsUploaded[payment.pagoPA.id]) {
             payment.pagoPA.ref.key = documentsUploaded[payment.pagoPA.id].key;
@@ -180,8 +188,8 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
             payment.f24.ref.versionToken = documentsUploaded[payment.f24.id].versionToken;
           }
           /* eslint-enable functional/immutable-data */
-        });
-      });
+        }
+      }
 
       return updatedItems;
     } catch (e) {
