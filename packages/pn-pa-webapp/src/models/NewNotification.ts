@@ -2,6 +2,7 @@ import {
   PhysicalCommunicationType,
   RecipientType,
 } from '@pagopa-pn/pn-commons';
+import { NotificationAttachmentBodyRef } from '../generated-client/notifications';
 
 export enum PaymentModel {
   PAGO_PA_NOTICE = 'PAGO_PA_NOTICE',
@@ -115,10 +116,7 @@ export interface UploadPaymentResponse {
 }
 
 export interface UploadDocumentsResponse {
-  [id: string]: {
-    key: string;
-    versionToken: string;
-  };
+  [id: string]: NotificationAttachmentBodyRef;
 }
 
 export const BILINGUALISM_LANGUAGES = ['de', 'sl', 'fr'];
