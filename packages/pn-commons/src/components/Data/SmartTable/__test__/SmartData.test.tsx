@@ -92,7 +92,7 @@ const RenderSmartData: React.FC<{
             <SmartBodyCell
               key={column.id.toString()}
               columnId={column.id}
-              tableProps={column.tableConfiguration}
+              tableProps={{ onClick: column.tableConfiguration.onClick }}
               cardProps={column.cardConfiguration}
               isCardHeader={column.cardConfiguration?.isCardHeader}
               testId="rowCell"
@@ -136,9 +136,22 @@ describe('SmartData', () => {
     });
     const rows = within(table).getAllByTestId('bodyRowDesktop');
     expect(rows).toHaveLength(data.length);
+    rows.forEach((row, index) => {
+      const cells = within(row).getAllByTestId('rowCellDesktop');
+      const current = data[index];
+      cells.forEach((cell, jindex) => {
+        expect(cell).toHaveTextContent(current[smartCfg[jindex].id]);
+        const button = within(cell).queryByRole('button');
+        if (smartCfg[jindex].tableConfiguration.onClick) {
+          expect(button).toBeInTheDocument();
+        } else {
+          expect(button).not.toBeInTheDocument();
+        }
+      });
+    });
   });
 
-  it('interact with table - sort', () => {
+  it('interact with table - sort and click', () => {
     const { getByTestId } = render(<RenderSmartData />);
     const table = getByTestId('containerDesktop');
     expect(table).toBeInTheDocument();
