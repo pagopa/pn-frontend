@@ -52,11 +52,11 @@ const newNotificationPagoPa: NewNotificationDocument = {
   },
 };
 
-const newNotificationF24Standard: NewNotificationDocument = {
+const newNotificationF24: NewNotificationDocument = {
   id: 'mocked-f24standard-id',
   idx: 0,
   name: 'mocked-name',
-  contentType: 'application/pdf',
+  contentType: 'application/json',
   file: {
     data: new File([''], 'mocked-name', { type: 'application/pdf' }),
     sha256: {
@@ -114,7 +114,7 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     payments: [
       {
         pagoPA: { ...newNotificationPagoPa },
-        f24: { ...newNotificationF24Standard },
+        f24: { ...newNotificationF24 },
       },
     ],
   },
@@ -167,7 +167,7 @@ export const payments = {
   },
   [newNotificationRecipients[1].taxId]: {
     pagoPa: { ...newNotificationPagoPa },
-    f24: { ...newNotificationF24Standard },
+    f24: { ...newNotificationF24 },
   },
 };
 
