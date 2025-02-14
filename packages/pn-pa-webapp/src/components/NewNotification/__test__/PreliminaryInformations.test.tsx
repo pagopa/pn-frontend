@@ -35,7 +35,6 @@ import { apiClient } from '../../../api/apiClients';
 import { NotificationFeePolicy } from '../../../models/NewNotification';
 import { NEW_NOTIFICATION_ACTIONS } from '../../../redux/newNotification/actions';
 import PreliminaryInformations from '../PreliminaryInformations';
-import { setSenderInfos } from '../../../redux/newNotification/reducers';
 
 const mockIsPaymentEnabledGetter = vi.fn();
 

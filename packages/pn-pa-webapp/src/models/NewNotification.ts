@@ -87,10 +87,38 @@ export interface PaymentObject {
   f24?: NewNotificationDocument;
 }
 
-export interface NewNotificationResponse {
-  notificationRequestId: string;
+export interface PreliminaryInformationsPayload extends NewNotificationBilingualism {
   paProtocolNumber: string;
-  idempotenceToken: string;
+  subject: string;
+  abstract?: string;
+  physicalCommunicationType: PhysicalCommunicationType;
+  group?: string;
+  paymentMode: PaymentModel;
+  taxonomyCode: string;
+  senderDenomination?: string;
+}
+
+export interface UploadDocumentParams {
+  id: string;
+  key: string;
+  contentType: string;
+  file: Uint8Array | undefined;
+  sha256: string;
+}
+
+export interface UploadPaymentResponse {
+  [key: string]: {
+    pagoPaForm: UploadDocumentsResponse;
+    f24flatRate?: UploadDocumentsResponse;
+    f24standard?: UploadDocumentsResponse;
+  };
+}
+
+export interface UploadDocumentsResponse {
+  [id: string]: {
+    key: string;
+    versionToken: string;
+  };
 }
 
 export const BILINGUALISM_LANGUAGES = ['de', 'sl', 'fr'];
