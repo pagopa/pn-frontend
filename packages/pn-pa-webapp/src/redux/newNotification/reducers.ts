@@ -5,6 +5,7 @@ import {
   NewNotification,
   NewNotificationDocument,
   NewNotificationRecipient,
+  PreliminaryInformationsPayload,
 } from '../../models/NewNotification';
 import { UserGroup } from '../../models/user';
 import { getConfiguration } from '../../services/configuration.service';
@@ -14,7 +15,6 @@ import {
   uploadNotificationDocument,
   uploadNotificationPaymentDocument,
 } from './actions';
-import { PreliminaryInformationsPayload } from './types';
 
 type NewNotificationInitialState = {
   loading: boolean;
@@ -34,8 +34,9 @@ const initialState: NewNotificationInitialState = {
     group: '',
     taxonomyCode: '',
     senderDenomination: '',
+    senderTaxId: '',
   },
-  groups: [],
+  groups: [] as Array<UserGroup>,
   isCompleted: false,
 };
 

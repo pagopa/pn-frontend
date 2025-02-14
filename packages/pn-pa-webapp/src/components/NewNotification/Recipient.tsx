@@ -14,10 +14,10 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { DigitalDomicileType, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
+import { RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { NewNotificationRecipient, PaymentModel } from '../../models/NewNotification';
+import { NewNotificationDigitalAddressType, NewNotificationRecipient, PaymentModel } from '../../models/NewNotification';
 import { useAppDispatch } from '../../redux/hooks';
 import { saveRecipients } from '../../redux/newNotification/reducers';
 import {
@@ -36,7 +36,7 @@ const singleRecipient = {
   taxId: '',
   firstName: '',
   lastName: '',
-  type: DigitalDomicileType.PEC,
+  type: NewNotificationDigitalAddressType.PEC,
   digitalDomicile: '',
   address: '',
   houseNumber: '',

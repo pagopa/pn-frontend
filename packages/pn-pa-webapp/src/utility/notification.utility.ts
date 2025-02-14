@@ -4,14 +4,16 @@ import _ from 'lodash';
 import {
   NotificationDetailDocument,
   NotificationDetailPayment,
-  NotificationDetailRecipient,
   PhysicalAddress,
   RecipientType,
 } from '@pagopa-pn/pn-commons';
 
 import {
+  BffNewNotificationRequest,
+  NotificationRecipientV23,
+} from '../generated-client/notifications';
+import {
   NewNotification,
-  NewNotificationDTO,
   NewNotificationDocument,
   NewNotificationLangOther,
   NewNotificationPayment,
@@ -19,47 +21,31 @@ import {
 } from '../models/NewNotification';
 
 const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
-  if (
-    recipient.address &&
-    recipient.houseNumber &&
-    recipient.zip &&
-    recipient.municipality &&
-    recipient.province &&
-    recipient.foreignState
-  ) {
-    const address = {
-      address: `${recipient.address} ${recipient.houseNumber}`,
-      addressDetails: recipient.addressDetails,
-      zip: recipient.zip,
-      municipality: recipient.municipality,
-      municipalityDetails: recipient.municipalityDetails,
-      province: recipient.province,
-      foreignState: recipient.foreignState,
-    };
+  const address = {
+    address: `${recipient.address} ${recipient.houseNumber}`,
+    addressDetails: recipient.addressDetails,
+    zip: recipient.zip,
+    municipality: recipient.municipality,
+    municipalityDetails: recipient.municipalityDetails,
+    province: recipient.province,
+    foreignState: recipient.foreignState,
+  };
 
-    // clean the object from undefined keys
-    (Object.keys(address) as Array<Exclude<keyof PhysicalAddress, 'at'>>).forEach((key) => {
-      if (!address[key]) {
-        // eslint-disable-next-line functional/immutable-data
-        delete address[key];
-      }
-    });
-    return address;
-  }
-  return undefined;
+  // clean the object from undefined keys
+  (Object.keys(address) as Array<Exclude<keyof PhysicalAddress, 'at'>>).forEach((key) => {
+    if (!address[key]) {
+      // eslint-disable-next-line functional/immutable-data
+      delete address[key];
+    }
+  });
+  return address;
 };
 
 const newNotificationRecipientsMapper = (
   recipients: Array<NewNotificationRecipient>
-): Array<NotificationDetailRecipient> =>
+): Array<NotificationRecipientV23> =>
   recipients.map((recipient) => {
-    const digitalDomicile = recipient.digitalDomicile
-      ? {
-          type: recipient.type,
-          address: recipient.digitalDomicile,
-        }
-      : undefined;
-    const parsedRecipient: NotificationDetailRecipient = {
+    const parsedRecipient: NotificationRecipientV23 = {
       denomination:
         recipient.recipientType === RecipientType.PG
           ? recipient.firstName
@@ -68,9 +54,12 @@ const newNotificationRecipientsMapper = (
       taxId: recipient.taxId,
       physicalAddress: checkPhysicalAddress(recipient),
     };
-    if (digitalDomicile) {
+    if (recipient.digitalDomicile) {
       // eslint-disable-next-line functional/immutable-data
-      parsedRecipient.digitalDomicile = digitalDomicile;
+      parsedRecipient.digitalDomicile = {
+        type: recipient.type,
+        address: recipient.digitalDomicile,
+      };
     }
     if (recipient.payments) {
       // eslint-disable-next-line functional/immutable-data
@@ -129,7 +118,7 @@ const newNotificationPaymentDocumentsMapper = (
     return mappedPayment;
   });
 
-export function newNotificationMapper(newNotification: NewNotification): NewNotificationDTO {
+export function newNotificationMapper(newNotification: NewNotification): BffNewNotificationRequest {
   const clonedNotification = _.omit(_.cloneDeep(newNotification), [
     'additionalAbstract',
     'additionalLang',
@@ -156,7 +145,7 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
       : undefined;
 
   /* eslint-disable functional/immutable-data */
-  const newNotificationParsed: NewNotificationDTO = {
+  const newNotificationParsed: BffNewNotificationRequest = {
     ...clonedNotification,
     recipients: [],
     documents: [],

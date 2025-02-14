@@ -5,7 +5,7 @@ import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { newNotification, payments } from '../../../__mocks__/NewNotification.mock';
 import { apiClient, externalClient } from '../../../api/apiClients';
-import { PaymentModel, PaymentObject } from '../../../models/NewNotification';
+import { PaymentModel, PaymentObject, PreliminaryInformationsPayload } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
 import { newNotificationMapper } from '../../../utility/notification.utility';
 import { store } from '../../store';
@@ -25,7 +25,6 @@ import {
   setPreliminaryInformations,
   setSenderInfos,
 } from '../reducers';
-import { PreliminaryInformationsPayload } from '../types';
 
 const initialState = {
   loading: false,
@@ -38,6 +37,7 @@ const initialState = {
     group: '',
     taxonomyCode: '',
     senderDenomination: '',
+    senderTaxId:''
   },
   groups: [],
   isCompleted: false,

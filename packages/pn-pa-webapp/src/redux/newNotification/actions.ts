@@ -8,17 +8,18 @@ import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { InfoPaApiFactory } from '../../generated-client/info-pa';
 import {
   BffNewNotificationRequest,
+  BffNewNotificationResponse,
   NotificationSentApiFactory,
 } from '../../generated-client/notifications';
 import {
   NewNotification,
   NewNotificationDocument,
   NewNotificationRecipient,
-  NewNotificationResponse,
+  UploadDocumentParams,
+  UploadDocumentsResponse,
 } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
 import { newNotificationMapper } from '../../utility/notification.utility';
-import { UploadDocumentParams, UploadDocumentsResponse } from './types';
 
 export enum NEW_NOTIFICATION_ACTIONS {
   GET_USER_GROUPS = 'getUserGroups',
@@ -198,7 +199,7 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
   }
 );
 
-export const createNewNotification = createAsyncThunk<NewNotificationResponse, NewNotification>(
+export const createNewNotification = createAsyncThunk<BffNewNotificationResponse, NewNotification>(
   NEW_NOTIFICATION_ACTIONS.CREATE_NOTIFICATION,
   async (notification: NewNotification, { rejectWithValue }) => {
     try {
@@ -211,7 +212,7 @@ export const createNewNotification = createAsyncThunk<NewNotificationResponse, N
       const response = await notificationSentApiFactory.newSentNotificationV1(
         mappedNotification as BffNewNotificationRequest
       );
-      return response.data as NewNotificationResponse;
+      return response.data;
     } catch (e) {
       return rejectWithValue(e);
     }
