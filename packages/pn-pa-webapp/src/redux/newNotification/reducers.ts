@@ -98,7 +98,7 @@ const newNotificationSlice = createSlice({
       state.isCompleted = !getConfiguration().IS_PAYMENT_ENABLED;
     });
     builder.addCase(uploadNotificationPaymentDocument.fulfilled, (state, action) => {
-      state.notification.payment = action.payload;
+      state.notification.recipients = action.payload;
       state.isCompleted = true;
     });
     builder.addCase(createNewNotification.rejected, (state) => {

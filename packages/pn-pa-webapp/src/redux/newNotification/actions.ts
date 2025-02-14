@@ -13,8 +13,8 @@ import {
 import {
   NewNotification,
   NewNotificationDocument,
+  NewNotificationRecipient,
   NewNotificationResponse,
-  PaymentObject,
 } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
 import { newNotificationMapper } from '../../utility/notification.utility';
@@ -132,49 +132,57 @@ export const uploadNotificationDocument = createAsyncThunk<
   }
 );
 
-const getPaymentDocumentsToUpload = (items: {
-  [key: string]: PaymentObject;
-}): Array<Promise<UploadDocumentParams>> => {
+const getPaymentDocumentsToUpload = (
+  recipients: Array<NewNotificationRecipient>
+): Array<Promise<UploadDocumentParams>> => {
   const documentsArr: Array<Promise<UploadDocumentParams>> = [];
-  for (const item of Object.values(items)) {
-    /* eslint-disable functional/immutable-data */
-    if (item.pagoPa && !item.pagoPa.ref.key && !item.pagoPa.ref.versionToken) {
-      documentsArr.push(createPayloadToUpload(item.pagoPa));
-    }
-    if (item.f24 && !item.f24.ref.key && !item.f24.ref.versionToken) {
-      documentsArr.push(createPayloadToUpload(item.f24));
-    }
-    /* eslint-enable functional/immutable-data */
-  }
+  /* eslint-disable functional/immutable-data */
+  recipients.map((recipient) => {
+    recipient.payments?.map((payment) => {
+      if (payment.pagoPA && !payment.pagoPA.ref.key && !payment.pagoPA.ref.versionToken) {
+        documentsArr.push(createPayloadToUpload(payment.pagoPA));
+      }
+
+      if (payment.f24 && !payment.f24.ref.key && !payment.f24.ref.versionToken) {
+        documentsArr.push(createPayloadToUpload(payment.f24));
+      }
+    });
+  });
+  /* eslint-enable functional/immutable-data */
+
   return documentsArr;
 };
 
 export const uploadNotificationPaymentDocument = createAsyncThunk<
-  { [key: string]: PaymentObject },
-  { [key: string]: PaymentObject }
+  Array<NewNotificationRecipient>,
+  Array<NewNotificationRecipient>
 >(
   NEW_NOTIFICATION_ACTIONS.UPLOAD_PAYMENT_DOCUMENT,
-  async (items: { [key: string]: PaymentObject }, { rejectWithValue }) => {
+  async (recipients: Array<NewNotificationRecipient>, { rejectWithValue }) => {
     try {
       // before upload, filter out documents already uploaded
-      const documentsToUpload = await Promise.all(getPaymentDocumentsToUpload(items));
+      const documentsToUpload = await Promise.all(getPaymentDocumentsToUpload(recipients));
       if (documentsToUpload.length === 0) {
-        return items;
+        return recipients;
       }
       const documentsUploaded = await uploadNotificationDocumentCbk(documentsToUpload);
-      const updatedItems = _.cloneDeep(items);
-      for (const item of Object.values(updatedItems)) {
-        /* eslint-disable functional/immutable-data */
-        if (item.pagoPa && documentsUploaded[item.pagoPa.id]) {
-          item.pagoPa.ref.key = documentsUploaded[item.pagoPa.id].key;
-          item.pagoPa.ref.versionToken = documentsUploaded[item.pagoPa.id].versionToken;
-        }
-        if (item.f24 && documentsUploaded[item.f24.id]) {
-          item.f24.ref.key = documentsUploaded[item.f24.id].key;
-          item.f24.ref.versionToken = documentsUploaded[item.f24.id].versionToken;
-        }
-        /* eslint-enable functional/immutable-data */
-      }
+      const updatedItems = _.cloneDeep(recipients);
+
+      updatedItems.map((items) => {
+        items.payments?.map((payment) => {
+          /* eslint-disable functional/immutable-data */
+          if (payment.pagoPA && documentsUploaded[payment.pagoPA.id]) {
+            payment.pagoPA.ref.key = documentsUploaded[payment.pagoPA.id].key;
+            payment.pagoPA.ref.versionToken = documentsUploaded[payment.pagoPA.id].versionToken;
+          }
+          if (payment.f24 && documentsUploaded[payment.f24.id]) {
+            payment.f24.ref.key = documentsUploaded[payment.f24.id].key;
+            payment.f24.ref.versionToken = documentsUploaded[payment.f24.id].versionToken;
+          }
+          /* eslint-enable functional/immutable-data */
+        });
+      });
+
       return updatedItems;
     } catch (e) {
       return rejectWithValue(parseError(e));
