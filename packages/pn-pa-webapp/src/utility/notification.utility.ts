@@ -14,9 +14,8 @@ import {
   NewNotificationDTO,
   NewNotificationDocument,
   NewNotificationLangOther,
+  NewNotificationPayment,
   NewNotificationRecipient,
-  PaymentModel,
-  PaymentObject,
 } from '../models/NewNotification';
 
 const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
@@ -51,8 +50,7 @@ const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
 };
 
 const newNotificationRecipientsMapper = (
-  recipients: Array<NewNotificationRecipient>,
-  paymentMethod?: PaymentModel
+  recipients: Array<NewNotificationRecipient>
 ): Array<NotificationDetailRecipient> =>
   recipients.map((recipient) => {
     const digitalDomicile = recipient.digitalDomicile
@@ -74,12 +72,9 @@ const newNotificationRecipientsMapper = (
       // eslint-disable-next-line functional/immutable-data
       parsedRecipient.digitalDomicile = digitalDomicile;
     }
-    if (paymentMethod !== PaymentModel.NOTHING) {
+    if (recipient.payments) {
       // eslint-disable-next-line functional/immutable-data
-      // parsedRecipient.payment = {
-      //   creditorTaxId: recipient.creditorTaxId,
-      //   noticeCode: recipient.noticeCode,
-      // };
+      parsedRecipient.payments = newNotificationPaymentDocumentsMapper(recipient.payments);
     }
     return parsedRecipient;
   });
@@ -101,48 +96,41 @@ const newNotificationAttachmentsMapper = (
   documents.map((document) => newNotificationDocumentMapper(document));
 
 const newNotificationPaymentDocumentsMapper = (
-  recipients: Array<NotificationDetailRecipient>,
-  paymentDocuments: { [key: string]: PaymentObject }
-): Array<NotificationDetailRecipient> =>
-  recipients.map((r) => {
-    const payment: NotificationDetailPayment = {};
+  recipientPayments: Array<NewNotificationPayment>
+): Array<NotificationDetailPayment> =>
+  recipientPayments.map((payment) => {
+    const mappedPayment: NotificationDetailPayment = {};
+
     /* eslint-disable functional/immutable-data */
-    if (
-      paymentDocuments[r.taxId].pagoPa &&
-      paymentDocuments[r.taxId].pagoPa.file.sha256.hashBase64 !== ''
-    ) {
-      payment.pagoPa = {
+    if (payment.pagoPA && payment.pagoPA.file.sha256.hashBase64 !== '') {
+      mappedPayment.pagoPa = {
         creditorTaxId: '',
         noticeCode: '',
-        attachment: newNotificationDocumentMapper(paymentDocuments[r.taxId].pagoPa),
+        attachment: newNotificationDocumentMapper(payment.pagoPA),
         applyCost: false,
       };
     }
-    if (
-      paymentDocuments[r.taxId].f24 &&
-      paymentDocuments[r.taxId].f24?.file.sha256.hashBase64 !== ''
-    ) {
-      payment.f24 = {
-        title: paymentDocuments[r.taxId].f24!.name,
+
+    if (payment.f24 && payment.f24.file.sha256.hashBase64 !== '') {
+      mappedPayment.f24 = {
+        title: payment.f24.name,
         applyCost: true,
         metadataAttachment: {
           digests: {
-            sha256: paymentDocuments[r.taxId].f24!.file.sha256.hashBase64,
+            sha256: payment.f24.file.sha256.hashBase64,
           },
-          contentType: paymentDocuments[r.taxId].f24!.contentType,
-          ref: paymentDocuments[r.taxId].f24!.ref,
+          contentType: payment.f24.contentType,
+          ref: payment.f24.ref,
         },
       };
     }
-    r.payments = [payment];
     /* eslint-enable functional/immutable-data */
-    return r;
+
+    return mappedPayment;
   });
 
 export function newNotificationMapper(newNotification: NewNotification): NewNotificationDTO {
   const clonedNotification = _.omit(_.cloneDeep(newNotification), [
-    'paymentMode',
-    'payment',
     'additionalAbstract',
     'additionalLang',
     'additionalSubject',
@@ -179,20 +167,9 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
   }
 
   // format recipients
-  newNotificationParsed.recipients = newNotificationRecipientsMapper(
-    newNotification.recipients,
-    newNotification.paymentMode
-  );
+  newNotificationParsed.recipients = newNotificationRecipientsMapper(newNotification.recipients);
   // format attachments
   newNotificationParsed.documents = newNotificationAttachmentsMapper(newNotification.documents);
-  // format payments
-  if (newNotification.payment && Object.keys(newNotification.payment).length > 0) {
-    newNotificationParsed.recipients = newNotificationPaymentDocumentsMapper(
-      newNotificationParsed.recipients,
-      newNotification.payment
-    );
-  }
-
   /* eslint-enable functional/immutable-data */
   return newNotificationParsed;
 }

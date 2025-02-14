@@ -10,7 +10,6 @@ import {
   NewNotificationDocument,
   NewNotificationRecipient,
   NotificationFeePolicy,
-  PaymentModel,
 } from '../models/NewNotification';
 import { UserGroup } from '../models/user';
 import { newNotificationMapper } from '../utility/notification.utility';
@@ -35,6 +34,42 @@ export const newNotificationGroups: Array<UserGroup> = [
   },
 ];
 
+const newNotificationPagoPa: NewNotificationDocument = {
+  id: 'mocked-pagopa-id',
+  idx: 0,
+  name: 'mocked-name',
+  contentType: 'application/pdf',
+  file: {
+    data: new File([''], 'mocked-name', { type: 'application/pdf' }),
+    sha256: {
+      hashBase64: 'mocked-pa-sha256',
+      hashHex: '',
+    },
+  },
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+};
+
+const newNotificationF24Standard: NewNotificationDocument = {
+  id: 'mocked-f24standard-id',
+  idx: 0,
+  name: 'mocked-name',
+  contentType: 'application/pdf',
+  file: {
+    data: new File([''], 'mocked-name', { type: 'application/pdf' }),
+    sha256: {
+      hashBase64: 'mocked-f24standard-sha256',
+      hashHex: '',
+    },
+  },
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+};
+
 const newNotificationRecipients: Array<NewNotificationRecipient> = [
   {
     id: 'recipient.0',
@@ -53,6 +88,11 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     municipalityDetails: '',
     province: 'Roma',
     foreignState: 'Italia',
+    payments: [
+      {
+        pagoPA: { ...newNotificationPagoPa },
+      },
+    ],
   },
   {
     id: 'recipient.1',
@@ -71,6 +111,12 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     municipalityDetails: '',
     province: 'Roma',
     foreignState: 'Italia',
+    payments: [
+      {
+        pagoPA: { ...newNotificationPagoPa },
+        f24: { ...newNotificationF24Standard },
+      },
+    ],
   },
 ];
 
@@ -115,42 +161,6 @@ const newNotificationDocuments: Array<NewNotificationDocument> = [
   },
 ];
 
-const newNotificationPagoPa: NewNotificationDocument = {
-  id: 'mocked-pagopa-id',
-  idx: 0,
-  name: 'mocked-name',
-  contentType: 'application/pdf',
-  file: {
-    data: new File([''], 'mocked-name', { type: 'application/pdf' }),
-    sha256: {
-      hashBase64: 'mocked-pa-sha256',
-      hashHex: '',
-    },
-  },
-  ref: {
-    key: '',
-    versionToken: '',
-  },
-};
-
-const newNotificationF24Standard: NewNotificationDocument = {
-  id: 'mocked-f24standard-id',
-  idx: 0,
-  name: 'mocked-name',
-  contentType: 'application/pdf',
-  file: {
-    data: new File([''], 'mocked-name', { type: 'application/pdf' }),
-    sha256: {
-      hashBase64: 'mocked-f24standard-sha256',
-      hashHex: '',
-    },
-  },
-  ref: {
-    key: '',
-    versionToken: '',
-  },
-};
-
 export const payments = {
   [newNotificationRecipients[0].taxId]: {
     pagoPa: { ...newNotificationPagoPa },
@@ -168,7 +178,6 @@ export const newNotification: NewNotification = {
   recipients: newNotificationRecipients,
   documents: newNotificationDocuments,
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
-  paymentMode: PaymentModel.NOTHING,
   group: newNotificationGroups[2].id,
   taxonomyCode: '010801N',
   notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
@@ -185,12 +194,9 @@ export const newNotificationEmpty: NewNotification = {
   subject: '',
   recipients: [],
   documents: [],
-  payment: {},
-  physicalCommunicationType: '' as PhysicalCommunicationType,
-  paymentMode: '' as PaymentModel,
+  physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
   group: '',
   taxonomyCode: '',
-  notificationFeePolicy: '' as NotificationFeePolicy,
   senderDenomination: userResponse.organization.name,
 };
 

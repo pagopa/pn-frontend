@@ -175,7 +175,7 @@ const PaymentMethods: React.FC<Props> = ({
 
   const handlePreviousStep = () => {
     if (onPreviousStep) {
-      dispatch(setPaymentDocuments({ paymentDocuments: formatPaymentDocuments() }));
+      dispatch(setPaymentDocuments({ recipients: notification.recipients }));
       onPreviousStep();
     }
   };
@@ -221,7 +221,7 @@ const PaymentMethods: React.FC<Props> = ({
         // Maybe now the form is empty, but in the previous time the user went back
         // from the payments step the form wasn't empty.
         // Just in case, we clean the payment info from the Redux store
-        dispatch(setPaymentDocuments({ paymentDocuments: {} }));
+        // dispatch(setPaymentDocuments({ paymentDocuments: {} }));
         dispatch(setIsCompleted());
       } else {
         // Beware! -
@@ -283,10 +283,10 @@ const PaymentMethods: React.FC<Props> = ({
 
   useImperativeHandle(forwardedRef, () => ({
     confirm() {
-      dispatch(setPaymentDocuments({ paymentDocuments: formatPaymentDocuments() }));
+      dispatch(setPaymentDocuments({ recipients: notification.recipients }));
     },
   }));
-  
+
   return (
     <form onSubmit={formik.handleSubmit} data-testid="paymentMethodForm">
       <NewNotificationCard

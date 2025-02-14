@@ -17,8 +17,14 @@ export enum NotificationFeePolicy {
   DELIVERY_MODE = 'DELIVERY_MODE',
 }
 
+enum PagoPaIntegrationMode {
+  NONE = 'NONE',
+  SYNC = 'SYNC',
+  ASYNC = 'ASYNC',
+}
+
 interface BaseNewNotification {
-  notificationFeePolicy: NotificationFeePolicy;
+  notificationFeePolicy?: NotificationFeePolicy;
   idempotenceToken?: string;
   paProtocolNumber: string;
   subject: string;
@@ -36,6 +42,11 @@ export interface NewNotificationDTO extends BaseNewNotification {
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
   additionalLanguages?: Array<string>;
+}
+
+export interface NewNotificationPayment {
+  pagoPA?: NewNotificationDocument;
+  f24?: NewNotificationDocument;
 }
 
 // New Notification
@@ -56,6 +67,7 @@ export interface NewNotificationRecipient {
   municipalityDetails?: string;
   province: string;
   foreignState: string;
+  payments?: Array<NewNotificationPayment>;
 }
 
 export interface NewNotificationDocument {
@@ -77,10 +89,11 @@ export interface NewNotificationDocument {
 }
 
 export interface NewNotification extends BaseNewNotification, NewNotificationBilingualism {
-  paymentMode?: PaymentModel;
   recipients: Array<NewNotificationRecipient>;
   documents: Array<NewNotificationDocument>;
-  payment?: { [key: string]: PaymentObject };
+  paFee?: number;
+  vat?: number;
+  pagoPaIntMode?: PagoPaIntegrationMode;
 }
 
 export interface NewNotificationBilingualism {

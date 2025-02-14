@@ -5,9 +5,6 @@ import {
   NewNotification,
   NewNotificationDocument,
   NewNotificationRecipient,
-  NotificationFeePolicy,
-  PaymentModel,
-  PaymentObject,
 } from '../../models/NewNotification';
 import { UserGroup } from '../../models/user';
 import { getConfiguration } from '../../services/configuration.service';
@@ -19,22 +16,26 @@ import {
 } from './actions';
 import { PreliminaryInformationsPayload } from './types';
 
-const initialState = {
+type NewNotificationInitialState = {
+  loading: boolean;
+  notification: NewNotification;
+  groups: Array<UserGroup>;
+  isCompleted: boolean;
+};
+
+const initialState: NewNotificationInitialState = {
   loading: false,
   notification: {
     paProtocolNumber: '',
     subject: '',
     recipients: [],
     documents: [],
-    payment: {},
-    physicalCommunicationType: '' as PhysicalCommunicationType,
+    physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
     group: '',
     taxonomyCode: '',
-    paymentMode: '' as PaymentModel,
-    notificationFeePolicy: '' as NotificationFeePolicy,
     senderDenomination: '',
-  } as NewNotification,
-  groups: [] as Array<UserGroup>,
+  },
+  groups: [],
   isCompleted: false,
 };
 
@@ -54,19 +55,9 @@ const newNotificationSlice = createSlice({
       state.notification.senderTaxId = action.payload.senderTaxId;
     },
     setPreliminaryInformations: (state, action: PayloadAction<PreliminaryInformationsPayload>) => {
-      // TODO: capire la logica di set della fee policy sia corretta
       state.notification = {
         ...state.notification,
         ...action.payload,
-        // PN-1835
-        // in questa fase la notificationFeePolicy viene assegnata di default a FLAT_RATE
-        // Carlotta Dimatteo 10/08/2022
-        notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
-        // reset payment data if payment mode has changed
-        payment:
-          state.notification.paymentMode !== action.payload.paymentMode
-            ? {}
-            : state.notification.payment,
       };
     },
     saveRecipients: (
@@ -86,11 +77,11 @@ const newNotificationSlice = createSlice({
     },
     setPaymentDocuments: (
       state,
-      action: PayloadAction<{ paymentDocuments: { [key: string]: PaymentObject } }>
+      action: PayloadAction<{ recipients: Array<NewNotificationRecipient> }>
     ) => {
       state.notification = {
         ...state.notification,
-        payment: action.payload.paymentDocuments,
+        recipients: action.payload.recipients,
       };
     },
     setIsCompleted: (state) => {

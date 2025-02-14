@@ -34,12 +34,9 @@ const initialState = {
     subject: '',
     recipients: [],
     documents: [],
-    payment: {},
-    physicalCommunicationType: '',
-    paymentMode: '',
+    physicalCommunicationType: 'REGISTERED_LETTER_890',
     group: '',
     taxonomyCode: '',
-    notificationFeePolicy: '',
     senderDenomination: '',
   },
   groups: [],
@@ -173,9 +170,9 @@ describe('New notification redux state tests', () => {
   });
 
   it('Should be able to save payment documents', () => {
-    const action = store.dispatch(setPaymentDocuments({ paymentDocuments: payments }));
+    const action = store.dispatch(setPaymentDocuments({ recipients: newNotification.recipients }));
     expect(action.type).toBe('newNotificationSlice/setPaymentDocuments');
-    expect(action.payload).toEqual({ paymentDocuments: payments });
+    expect(action.payload).toEqual({ recipients: newNotification.recipients });
   });
 
   it('Should be able to upload payment document', async () => {
@@ -272,6 +269,7 @@ describe('New notification redux state tests', () => {
       idempotenceToken: 'mocked-idempotenceToken',
     };
     const mappedNotification = newNotificationMapper(newNotification);
+
     mock.onPost('/bff/v1/notifications/sent', mappedNotification).reply(200, mockResponse);
     const action = await store.dispatch(createNewNotification(newNotification));
     expect(action.type).toBe('createNewNotification/fulfilled');
