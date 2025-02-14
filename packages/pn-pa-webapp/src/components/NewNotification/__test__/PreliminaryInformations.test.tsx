@@ -168,7 +168,7 @@ describe('PreliminaryInformations Component', async () => {
     testFormElements(form, 'group', 'group');
   });
 
-  it.only('changes form values and clicks on confirm', async () => {
+  it('changes form values and clicks on confirm', async () => {
     mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
@@ -213,7 +213,7 @@ describe('PreliminaryInformations Component', async () => {
         additionalAbstract: '',
         additionalLang: '',
         additionalSubject: '',
-        senderTaxId: '00000'
+        senderTaxId: ''
       });
     });
     expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
