@@ -196,7 +196,7 @@ export const createNewNotification = createAsyncThunk<BffNewNotificationResponse
       const response = await notificationSentApiFactory.newSentNotificationV1(
         mappedNotification as BffNewNotificationRequest
       );
-      return response.data as BffNewNotificationResponse;
+      return response.data;
     } catch (e) {
       return rejectWithValue(e);
     }

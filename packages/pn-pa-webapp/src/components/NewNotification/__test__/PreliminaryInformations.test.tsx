@@ -94,10 +94,6 @@ describe('PreliminaryInformations Component', async () => {
     mock = new MockAdapter(apiClient);
   });
 
-  beforeEach(() => {
-    mockIsPaymentEnabledGetter.mockReturnValue(false);
-  });
-
   afterEach(() => {
     mock.reset();
     vi.clearAllMocks();
@@ -179,7 +175,7 @@ describe('PreliminaryInformations Component', async () => {
           preloadedState: {
             userState: {
               user: {
-                organization: { name: 'Comune di PalermoT', fiscal_code: '00000', hasGroup: true },
+                organization: { name: 'Comune di Palermo', fiscal_code: '00000', hasGroup: true },
               },
             },
           },
