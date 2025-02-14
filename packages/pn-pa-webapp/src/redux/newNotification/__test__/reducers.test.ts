@@ -21,7 +21,7 @@ import {
   setAttachments,
   setCancelledIun,
   setIsCompleted,
-  setPaymentDocuments,
+  setPayments,
   setPreliminaryInformations,
   setSenderInfos,
 } from '../reducers';
@@ -170,8 +170,8 @@ describe('New notification redux state tests', () => {
   });
 
   it('Should be able to save payment documents', () => {
-    const action = store.dispatch(setPaymentDocuments({ recipients: newNotification.recipients }));
-    expect(action.type).toBe('newNotificationSlice/setPaymentDocuments');
+    const action = store.dispatch(setPayments({ recipients: newNotification.recipients }));
+    expect(action.type).toBe('newNotificationSlice/setPayments');
     expect(action.payload).toEqual({ recipients: newNotification.recipients });
   });
 

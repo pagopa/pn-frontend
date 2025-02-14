@@ -75,7 +75,7 @@ const newNotificationSlice = createSlice({
     ) => {
       state.notification.documents = action.payload.documents;
     },
-    setPaymentDocuments: (
+    setPayments: (
       state,
       action: PayloadAction<{ recipients: Array<NewNotificationRecipient> }>
     ) => {
@@ -113,7 +113,7 @@ export const {
   setPreliminaryInformations,
   saveRecipients,
   setAttachments,
-  setPaymentDocuments,
+  setPayments,
   resetState,
   setIsCompleted,
 } = newNotificationSlice.actions;
