@@ -1,7 +1,5 @@
-import {
-  PhysicalCommunicationType,
-  RecipientType,
-} from '@pagopa-pn/pn-commons';
+import { PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons';
+
 import { NotificationAttachmentBodyRef } from '../generated-client/notifications';
 
 export enum PaymentModel {
@@ -15,9 +13,57 @@ export enum NotificationFeePolicy {
   DELIVERY_MODE = 'DELIVERY_MODE',
 }
 
-// NotificationDigital Domicile Type 
+// NotificationDigital Domicile Type
 export enum NewNotificationDigitalAddressType {
   PEC = 'PEC',
+}
+
+enum PagoPaIntegrationMode {
+  NONE = 'NONE',
+  SYNC = 'SYNC',
+  ASYNC = 'ASYNC',
+}
+
+export interface NewNotificationDocumentFile {
+  data?: File;
+  sha256: {
+    hashBase64: string;
+    hashHex: string;
+  };
+}
+
+export interface NewNotificationDocumentRef {
+  key: string;
+  versionToken: string;
+}
+
+export interface NewNotificationDocument {
+  id: string;
+  idx: number;
+  contentType: string;
+  name: string;
+  file: NewNotificationDocumentFile;
+  ref: NewNotificationDocumentRef;
+}
+
+export interface NewNotificationPagoPaPayment {
+  id: string;
+  idx: number;
+  contentType: string;
+  creditorTaxId: string;
+  noticeCode: string;
+  applyCost: boolean;
+  file?: NewNotificationDocumentFile;
+  ref?: NewNotificationDocumentRef;
+}
+
+export interface NewNotificationF24Payment extends NewNotificationDocument {
+  applyCost: boolean;
+}
+
+export interface NewNotificationPayment {
+  pagoPa?: NewNotificationPagoPaPayment;
+  f24?: NewNotificationF24Payment;
 }
 
 // New Notification
@@ -38,24 +84,7 @@ export interface NewNotificationRecipient {
   municipalityDetails?: string;
   province: string;
   foreignState: string;
-}
-
-export interface NewNotificationDocument {
-  id: string;
-  idx: number;
-  name: string;
-  contentType: string;
-  file: {
-    data?: File;
-    sha256: {
-      hashBase64: string;
-      hashHex: string;
-    };
-  };
-  ref: {
-    key: string;
-    versionToken: string;
-  };
+  payments?: Array<NewNotificationPayment>;
 }
 
 export interface NewNotification extends NewNotificationBilingualism {
@@ -73,7 +102,9 @@ export interface NewNotification extends NewNotificationBilingualism {
   paymentMode?: PaymentModel;
   recipients: Array<NewNotificationRecipient>;
   documents: Array<NewNotificationDocument>;
-  payment?: { [key: string]: PaymentObject };
+  paFee?: number;
+  vat?: number;
+  pagoPaIntMode?: PagoPaIntegrationMode;
 }
 
 export interface NewNotificationBilingualism {
@@ -101,7 +132,6 @@ export interface PreliminaryInformationsPayload extends NewNotificationBilingual
 
 export interface UploadDocumentParams {
   id: string;
-  key: string;
   contentType: string;
   file: Uint8Array | undefined;
   sha256: string;

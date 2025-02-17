@@ -7,19 +7,20 @@ import { apiClient } from '../../api/apiClients';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { InfoPaApiFactory } from '../../generated-client/info-pa';
 import {
-  BffNewNotificationRequest,
   BffNewNotificationResponse,
   NotificationSentApiFactory,
 } from '../../generated-client/notifications';
 import {
   NewNotification,
   NewNotificationDocument,
-  PaymentObject,
+  NewNotificationF24Payment,
+  NewNotificationPagoPaPayment,
+  NewNotificationRecipient,
   UploadDocumentParams,
   UploadDocumentsResponse,
 } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
-import { newNotificationMapper } from '../../utility/notification.utility';
+import { hasPagoPaDocument, newNotificationMapper } from '../../utility/notification.utility';
 
 export enum NEW_NOTIFICATION_ACTIONS {
   GET_USER_GROUPS = 'getUserGroups',
@@ -44,12 +45,11 @@ export const getUserGroups = createAsyncThunk(
 );
 
 const createPayloadToUpload = async (
-  item: NewNotificationDocument
+  item: NewNotificationDocument | Required<NewNotificationPagoPaPayment> | NewNotificationF24Payment
 ): Promise<UploadDocumentParams> => {
   const unit8Array = await calcUnit8Array(item.file.data);
   return {
     id: item.id,
-    key: item.name,
     contentType: item.contentType,
     file: unit8Array,
     sha256: item.file.sha256.hashBase64,
@@ -133,49 +133,70 @@ export const uploadNotificationDocument = createAsyncThunk<
   }
 );
 
-const getPaymentDocumentsToUpload = (items: {
-  [key: string]: PaymentObject;
-}): Array<Promise<UploadDocumentParams>> => {
+const getPaymentDocumentsToUpload = (
+  recipients: Array<NewNotificationRecipient>
+): Array<Promise<UploadDocumentParams>> => {
   const documentsArr: Array<Promise<UploadDocumentParams>> = [];
-  for (const item of Object.values(items)) {
-    /* eslint-disable functional/immutable-data */
-    if (item.pagoPa && !item.pagoPa.ref.key && !item.pagoPa.ref.versionToken) {
-      documentsArr.push(createPayloadToUpload(item.pagoPa));
+  /* eslint-disable functional/immutable-data */
+  for (const recipient of recipients) {
+    if (!recipient.payments) {
+      continue;
     }
-    if (item.f24 && !item.f24.ref.key && !item.f24.ref.versionToken) {
-      documentsArr.push(createPayloadToUpload(item.f24));
+
+    for (const payment of recipient.payments) {
+      if (
+        payment.pagoPa &&
+        hasPagoPaDocument(payment.pagoPa) &&
+        !payment.pagoPa.ref.key &&
+        !payment.pagoPa.ref.versionToken
+      ) {
+        documentsArr.push(createPayloadToUpload(payment.pagoPa));
+      }
+
+      if (payment.f24 && !payment.f24.ref.key && !payment.f24.ref.versionToken) {
+        documentsArr.push(createPayloadToUpload(payment.f24));
+      }
     }
-    /* eslint-enable functional/immutable-data */
   }
+  /* eslint-enable functional/immutable-data */
+
   return documentsArr;
 };
 
 export const uploadNotificationPaymentDocument = createAsyncThunk<
-  { [key: string]: PaymentObject },
-  { [key: string]: PaymentObject }
+  Array<NewNotificationRecipient>,
+  Array<NewNotificationRecipient>
 >(
   NEW_NOTIFICATION_ACTIONS.UPLOAD_PAYMENT_DOCUMENT,
-  async (items: { [key: string]: PaymentObject }, { rejectWithValue }) => {
+  async (recipients: Array<NewNotificationRecipient>, { rejectWithValue }) => {
     try {
       // before upload, filter out documents already uploaded
-      const documentsToUpload = await Promise.all(getPaymentDocumentsToUpload(items));
+      const documentsToUpload = await Promise.all(getPaymentDocumentsToUpload(recipients));
       if (documentsToUpload.length === 0) {
-        return items;
+        return recipients;
       }
       const documentsUploaded = await uploadNotificationDocumentCbk(documentsToUpload);
-      const updatedItems = _.cloneDeep(items);
-      for (const item of Object.values(updatedItems)) {
-        /* eslint-disable functional/immutable-data */
-        if (item.pagoPa && documentsUploaded[item.pagoPa.id]) {
-          item.pagoPa.ref.key = documentsUploaded[item.pagoPa.id].key;
-          item.pagoPa.ref.versionToken = documentsUploaded[item.pagoPa.id].versionToken;
+      const updatedItems = _.cloneDeep(recipients);
+
+      for (const updatedItem of updatedItems) {
+        if (!updatedItem.payments) {
+          continue;
         }
-        if (item.f24 && documentsUploaded[item.f24.id]) {
-          item.f24.ref.key = documentsUploaded[item.f24.id].key;
-          item.f24.ref.versionToken = documentsUploaded[item.f24.id].versionToken;
+
+        for (const payment of updatedItem.payments) {
+          /* eslint-disable functional/immutable-data */
+          if (payment.pagoPa?.ref && documentsUploaded[payment.pagoPa.id]) {
+            payment.pagoPa.ref.key = documentsUploaded[payment.pagoPa.id].key;
+            payment.pagoPa.ref.versionToken = documentsUploaded[payment.pagoPa.id].versionToken;
+          }
+          if (payment.f24 && documentsUploaded[payment.f24.id]) {
+            payment.f24.ref.key = documentsUploaded[payment.f24.id].key;
+            payment.f24.ref.versionToken = documentsUploaded[payment.f24.id].versionToken;
+          }
+          /* eslint-enable functional/immutable-data */
         }
-        /* eslint-enable functional/immutable-data */
       }
+
       return updatedItems;
     } catch (e) {
       return rejectWithValue(parseError(e));
@@ -193,9 +214,7 @@ export const createNewNotification = createAsyncThunk<BffNewNotificationResponse
         apiClient
       );
       const mappedNotification = newNotificationMapper(notification);
-      const response = await notificationSentApiFactory.newSentNotificationV1(
-        mappedNotification as BffNewNotificationRequest
-      );
+      const response = await notificationSentApiFactory.newSentNotificationV1(mappedNotification);
       return response.data;
     } catch (e) {
       return rejectWithValue(e);

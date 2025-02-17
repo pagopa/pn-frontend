@@ -3,9 +3,14 @@ import MockAdapter from 'axios-mock-adapter';
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import { newNotification, payments } from '../../../__mocks__/NewNotification.mock';
+import {
+  newNotification,
+  newNotificationRecipients,
+  payments,
+} from '../../../__mocks__/NewNotification.mock';
 import { apiClient, externalClient } from '../../../api/apiClients';
-import { PaymentModel, PaymentObject, PreliminaryInformationsPayload } from '../../../models/NewNotification';
+import { NotificationFeePolicy } from '../../../generated-client/notifications';
+import { PaymentModel, PreliminaryInformationsPayload } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
 import { newNotificationMapper } from '../../../utility/notification.utility';
 import { store } from '../../store';
@@ -21,7 +26,7 @@ import {
   setAttachments,
   setCancelledIun,
   setIsCompleted,
-  setPaymentDocuments,
+  setPayments,
   setPreliminaryInformations,
   setSenderInfos,
 } from '../reducers';
@@ -29,18 +34,16 @@ import {
 const initialState = {
   loading: false,
   notification: {
+    notificationFeePolicy: NotificationFeePolicy.FlatRate,
     paProtocolNumber: '',
     subject: '',
     recipients: [],
     documents: [],
-    payment: {},
-    physicalCommunicationType: '',
-    paymentMode: '',
+    physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
     group: '',
     taxonomyCode: '',
-    notificationFeePolicy: '',
     senderDenomination: '',
-    senderTaxId:''
+    senderTaxId: '',
   },
   groups: [],
   isCompleted: false,
@@ -173,9 +176,9 @@ describe('New notification redux state tests', () => {
   });
 
   it('Should be able to save payment documents', () => {
-    const action = store.dispatch(setPaymentDocuments({ paymentDocuments: payments }));
-    expect(action.type).toBe('newNotificationSlice/setPaymentDocuments');
-    expect(action.payload).toEqual({ paymentDocuments: payments });
+    const action = store.dispatch(setPayments({ recipients: newNotification.recipients }));
+    expect(action.type).toBe('newNotificationSlice/setPayments');
+    expect(action.payload).toEqual({ recipients: newNotification.recipients });
   });
 
   it('Should be able to upload payment document', async () => {
@@ -186,7 +189,7 @@ describe('New notification redux state tests', () => {
           if (elem.pagoPa) {
             arr.push({
               contentType: elem.pagoPa.contentType,
-              sha256: elem.pagoPa.file.sha256.hashBase64,
+              sha256: elem.pagoPa.file?.sha256.hashBase64,
             });
           }
           if (elem.f24) {
@@ -221,7 +224,7 @@ describe('New notification redux state tests', () => {
     const extMock = new MockAdapter(externalClient);
     for (const payment of Object.values(payments)) {
       if (payment.pagoPa) {
-        extMock.onPost(`https://mocked-url.com`).reply(200, payment.pagoPa.file.data, {
+        extMock.onPost(`https://mocked-url.com`).reply(200, payment.pagoPa.file?.data, {
           'x-amz-version-id': 'mocked-versionToken',
         });
       }
@@ -231,31 +234,37 @@ describe('New notification redux state tests', () => {
         });
       }
     }
-    const action = await store.dispatch(uploadNotificationPaymentDocument(payments));
+    const action = await store.dispatch(
+      uploadNotificationPaymentDocument(newNotificationRecipients)
+    );
     expect(action.type).toBe('uploadNotificationPaymentDocument/fulfilled');
-    const response: { [key: string]: PaymentObject } = {};
-    for (const [key, value] of Object.entries(payments)) {
-      response[key] = {} as PaymentObject;
-      if (value.pagoPa) {
-        response[key].pagoPa = {
-          ...value.pagoPa,
-          ref: {
-            key: 'mocked-preload-key',
-            versionToken: 'mocked-versionToken',
-          },
-        };
-      }
-      if (value.f24) {
-        response[key].f24 = {
-          ...value.f24,
-          ref: {
-            key: 'mocked-preload-key',
-            versionToken: 'mocked-versionToken',
-          },
-        };
-      }
-    }
-    expect(action.payload).toEqual(response);
+
+    const expectedResponse = newNotificationRecipients.map((recipient) => ({
+      ...recipient,
+      payments: recipient.payments?.map((payment) => ({
+        ...payment,
+        pagoPa: payment.pagoPa
+          ? {
+              ...payment.pagoPa,
+              ref: {
+                key: 'mocked-preload-key',
+                versionToken: 'mocked-versionToken',
+              },
+            }
+          : undefined,
+        f24: payment.f24
+          ? {
+              ...payment.f24,
+              ref: {
+                key: 'mocked-preload-key',
+                versionToken: 'mocked-versionToken',
+              },
+            }
+          : undefined,
+      })),
+    }));
+
+    expect(action.payload).toEqual(expectedResponse);
     extMock.restore();
   });
 
@@ -272,6 +281,7 @@ describe('New notification redux state tests', () => {
       idempotenceToken: 'mocked-idempotenceToken',
     };
     const mappedNotification = newNotificationMapper(newNotification);
+
     mock.onPost('/bff/v1/notifications/sent', mappedNotification).reply(200, mockResponse);
     const action = await store.dispatch(createNewNotification(newNotification));
     expect(action.type).toBe('createNewNotification/fulfilled');
