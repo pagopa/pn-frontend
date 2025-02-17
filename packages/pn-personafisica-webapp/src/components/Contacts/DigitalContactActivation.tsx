@@ -216,7 +216,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
             buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
             onClick: () => navigate(-1),
           },
-          buttonContainer: isEmailSmsStep && hasEmailOrSms ? { justifyContent: 'flex-end' } : {},
+          actions: isEmailSmsStep && hasEmailOrSms ? { justifyContent: 'flex-end' } : {},
         }}
       >
         <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_1.title')}>

@@ -19,8 +19,8 @@ import PnWizardStep, { PnWizardStepProps } from './PnWizardStep';
 import PnWizardStepper from './PnWizardStepper';
 
 type Props = {
-  activeStep?: number;
-  setActiveStep?: (step: number) => void;
+  activeStep: number;
+  setActiveStep: (step: number) => void;
   title: ReactNode;
   children: ReactNode;
   onExit: () => void;
@@ -36,7 +36,7 @@ type Props = {
     prevButton?: Omit<ButtonProps, 'onClick'> & {
       onClick?: (previous: () => void, step: number) => void;
     };
-    buttonContainer?: StackProps;
+    actions?: StackProps;
     container?: Omit<StackProps, 'children'> & { 'data-testid'?: string };
     feedback?: {
       title: string;
@@ -47,8 +47,8 @@ type Props = {
 };
 
 const PnWizard: React.FC<Props> = ({
-  activeStep = 0,
-  setActiveStep = () => {},
+  activeStep,
+  setActiveStep,
   title,
   children,
   onExit,
@@ -141,7 +141,7 @@ const PnWizard: React.FC<Props> = ({
           {childrens[activeStep]}
         </Paper>
 
-        <Stack direction={{ xs: 'column-reverse', md: 'row' }} {...slotsProps?.buttonContainer}>
+        <Stack direction={{ xs: 'column-reverse', md: 'row' }} {...slotsProps?.actions}>
           <PrevButton
             data-testid="prev-button"
             sx={{ mt: { xs: 2, md: 0 } }}
