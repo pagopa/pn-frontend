@@ -102,6 +102,29 @@ describe('PnTable Component', () => {
     });
   });
 
+  it('sorts a column', () => {
+    const { getByRole } = render(<RenderPnTable />);
+    const table = getByRole('table');
+    const tableHead = within(table).getByTestId('table-test.header');
+    const firstColumn = within(tableHead).getAllByTestId('table-test.header.cell')[0];
+    const sortButton = within(firstColumn).getByRole('button');
+    expect(sortButton).toBeInTheDocument();
+    fireEvent.click(sortButton);
+    expect(handleSort).toHaveBeenCalledTimes(1);
+    expect(handleSort).toHaveBeenCalledWith({ order: 'desc', orderBy: 'column-1' });
+  });
+
+  it('click on a column', () => {
+    const { getByRole } = render(<RenderPnTable />);
+    const table = getByRole('table');
+    const tableBody = within(table).getByTestId('table-test.body');
+    const firstRow = within(tableBody).getAllByTestId('table-test.body.row')[0];
+    const tableColumns = within(firstRow).getAllByTestId('table-test.body.row.cell');
+    fireEvent.click(tableColumns[2].querySelectorAll('button')[0]);
+    expect(handleColumnClick).toHaveBeenCalledTimes(1);
+    expect(handleColumnClick).toHaveBeenCalledWith(rows[0], columns[2].id);
+  });
+
   it('render component - multiple PnTableBody', () => {
     expect(() =>
       render(
@@ -130,7 +153,7 @@ describe('PnTable Component', () => {
           </PnTableBody>
         </PnTable>
       )
-    ).toThrowError('PnTable can have only 1 child of type PnTableHeader');
+    ).toThrow('PnTable can have only 1 child of type PnTableHeader');
   });
 
   it('render component - multiple PnTableHeader', () => {
@@ -165,7 +188,7 @@ describe('PnTable Component', () => {
           </PnTableHeader>
         </PnTable>
       )
-    ).toThrowError('PnTable can have only 1 child of type PnTableHeader');
+    ).toThrow('PnTable can have only 1 child of type PnTableHeader');
   });
 
   it('render component - incorrect child', () => {
@@ -188,34 +211,8 @@ describe('PnTable Component', () => {
           <Box>Incorrect child</Box>
         </PnTable>
       )
-    ).toThrowError(
+    ).toThrow(
       'PnTable can have only 1 child of type PnTableHeader and 1 child of type PnTableBody'
     );
-  });
-
-  it('sorts a column', () => {
-    const { getByRole } = render(<RenderPnTable />);
-    const table = getByRole('table');
-    const tableHead = within(table).getByTestId('table-test.header');
-    const firstColumn = within(tableHead).getAllByTestId('table-test.header.cell')[0];
-    const sortButton = within(firstColumn).getByRole('button');
-    expect(sortButton).toBeInTheDocument();
-    fireEvent.click(sortButton);
-    expect(handleSort).toHaveBeenCalledTimes(1);
-    expect(handleSort).toHaveBeenCalledWith({ order: 'desc', orderBy: 'column-1' });
-  });
-
-  it('click on a cell', () => {
-    const { getByRole } = render(<RenderPnTable />);
-
-    const table = getByRole('table');
-    const tableBody = within(table).getByTestId('table-test.body');
-    const thirdRow = within(tableBody).getAllByTestId('table-test.body.row')[2];
-    const thirdCell = within(thirdRow).getAllByTestId('table-test.body.row.cell')[2];
-    const button = within(thirdCell).getByRole('button');
-    fireEvent.click(button);
-
-    expect(handleColumnClick).toHaveBeenCalledTimes(1);
-    expect(handleColumnClick).toHaveBeenCalledWith(rows[2], columns[2].id);
   });
 });

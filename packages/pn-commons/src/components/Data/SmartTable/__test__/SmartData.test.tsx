@@ -159,6 +159,13 @@ describe('SmartData', () => {
     const sortToggle = within(table).getByTestId(`headerCellDesktop.sort.${sortableColumn!.id}`);
     fireEvent.click(sortToggle);
     expect(handleSort).toHaveBeenCalledTimes(1);
+    const clickableColumnIdx = smartCfg.findIndex((cfg) => cfg.tableConfiguration.onClick);
+    const rows = within(table).getAllByTestId('bodyRowDesktop');
+    // we can take the row we want
+    const cells = within(rows[0]).getAllByTestId('rowCellDesktop');
+    const button = within(cells[clickableColumnIdx]).getByRole('button');
+    fireEvent.click(button);
+    expect(handleColumnClick).toHaveBeenCalledTimes(1);
   });
 
   it('no sort available (desktop version)', () => {
@@ -185,6 +192,6 @@ describe('SmartData', () => {
     const action = cardActions[0];
     expect(action).toHaveTextContent('Mocked action');
     fireEvent.click(action);
-    expect(clickActionMockFn).toBeCalledTimes(1);
+    expect(clickActionMockFn).toHaveBeenCalledTimes(1);
   });
 });
