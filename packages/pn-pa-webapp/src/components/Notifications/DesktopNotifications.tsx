@@ -16,8 +16,8 @@ import {
   PnTableHeaderCell,
   Sort,
 } from '@pagopa-pn/pn-commons';
-
 import { NotificationColumnData } from '@pagopa-pn/pn-commons/src/models/Notifications';
+
 import * as routes from '../../navigation/routes.const';
 import FilterNotifications from './FilterNotifications';
 import NotificationsDataSwitch from './NotificationsDataSwitch';
@@ -106,29 +106,29 @@ const DesktopNotifications = ({
     {
       id: 'sentAt',
       label: t('table.date'),
-      cellProps: { width: '9%' },
+      cellProps: { width: '10%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'recipients',
       label: t('table.recipient'),
-      cellProps: { width: '13%' },
+      cellProps: { width: '15%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'subject',
       label: t('table.subject'),
-      cellProps: { width: '20%' },
+      cellProps: { width: '19%' },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      cellProps: { width: '25%' },
+      cellProps: { width: '24%' },
     },
     {
       id: 'group',
       label: t('table.groups'),
-      cellProps: { width: '12%' },
+      cellProps: { width: '8%' },
     },
     {
       id: 'notificationStatus',
@@ -139,7 +139,7 @@ const DesktopNotifications = ({
     {
       id: 'action',
       label: '',
-      cellProps: { width: '3%' },
+      cellProps: { width: '6%' },
       sortable: false,
     },
   ];

@@ -74,24 +74,24 @@ const DesktopNotifications = ({
     {
       id: 'sentAt',
       label: t('table.data'),
-      cellProps: { width: '8%' },
+      cellProps: { width: '10%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'sender',
       label: t('table.mittente'),
-      cellProps: { width: '21%' },
+      cellProps: { width: '19%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
-      cellProps: { width: '21%' },
+      cellProps: { width: '19%' },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      cellProps: { width: '28%' },
+      cellProps: { width: '27%' },
     },
     {
       id: 'notificationStatus',
@@ -102,7 +102,7 @@ const DesktopNotifications = ({
     {
       id: 'action',
       label: '',
-      cellProps: { width: '3%' },
+      cellProps: { width: '6%' },
     },
   ];
 

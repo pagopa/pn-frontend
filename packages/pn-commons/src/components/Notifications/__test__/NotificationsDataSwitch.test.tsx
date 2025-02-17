@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 import { NotificationStatus } from '../../../models';
-import { createMatchMedia, render } from '../../../test-utils';
+import { createMatchMedia, fireEvent, render } from '../../../test-utils';
 import { formatDate, getNotificationStatusInfos } from '../../../utility';
 import NotificationsDataSwitch from '../NotificationsDataSwitch';
 
@@ -99,5 +99,16 @@ describe('NotificationsDataSwitch Component', () => {
     const { container } = render(<NotificationsDataSwitch data={data} type="recipients" />);
     const regexp = new RegExp(`^${data.recipients.join('')}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
+  });
+
+  it('renders component - action', () => {
+    const clickFn = vi.fn();
+    const { getByTestId } = render(
+      <NotificationsDataSwitch data={data} type="action" handleRowClick={clickFn} />
+    );
+    const button = getByTestId('goToNotificationDetail');
+    expect(button).toBeInTheDocument();
+    fireEvent.click(button);
+    expect(clickFn).toHaveBeenCalledTimes(1);
   });
 });

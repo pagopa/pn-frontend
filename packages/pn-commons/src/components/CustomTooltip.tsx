@@ -29,15 +29,6 @@ const CustomTooltip: React.FC<Props> = ({
       setOpen(!open);
     }
   };
-  const tooltipId = `tooltip-${Math.random().toString(36).substr(2, 9)}`;
-
-  const handleFocus = () => {
-    handleTooltipOpen();
-  };
-
-  const handleMouseOver = () => {
-    handleTooltipOpen();
-  };
 
   return (
     <Tooltip
@@ -49,21 +40,13 @@ const CustomTooltip: React.FC<Props> = ({
       disableHoverListener={openOnClick}
       enterTouchDelay={0}
       onOpen={onOpen}
-      aria-live="polite"
-      aria-describedby={open ? tooltipId : undefined}
       {...tooltipProps}
     >
       {openOnClick
         ? cloneElement(children, {
-            onClick: () => handleTooltipOpen(),
-            'aria-describedby': tooltipId,
+            onClick: handleTooltipOpen,
           })
-        : cloneElement(children, {
-            onFocus: handleFocus,
-            onMouseOver: handleMouseOver,
-            'aria-describedby': tooltipId,
-            tabIndex: 0,
-          })}
+        : children}
     </Tooltip>
   );
 };

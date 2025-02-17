@@ -1,3 +1,6 @@
+import { useTranslation } from 'react-i18next';
+
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Box, Typography } from '@mui/material';
 import {
   CustomTagGroup,
@@ -8,10 +11,8 @@ import {
   getNotificationStatusInfos,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, Tag, TagGroup } from '@pagopa/mui-italia';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { NotificationColumnData } from '@pagopa-pn/pn-commons/src/models/Notifications';
-import { useTranslation } from 'react-i18next';
+import { ButtonNaked, Tag, TagGroup } from '@pagopa/mui-italia';
 
 const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data }) => {
   const { label, tooltip, color } = getNotificationStatusInfos(data.notificationStatus, {
@@ -19,56 +20,6 @@ const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data })
   });
   return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
 };
-
-const Recipients: React.FC<{ recipients: Array<string> }> = ({ recipients }) => (
-  <>
-    {recipients.map((recipient) => (
-      <Typography
-        key={recipient}
-        variant="body2"
-        sx={{
-          textOverflow: 'ellipsis',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          color: 'inherit',
-        }}
-      >
-        {recipient}
-      </Typography>
-    ))}
-  </>
-);
-
-const Subject: React.FC<{ subject: string }> = ({ subject }) => (
-  <Box
-    sx={{
-      textOverflow: 'ellipsis',
-      overflow: 'hidden',
-      whiteSpace: 'nowrap',
-      color: 'inherit',
-    }}
-  >
-    {subject}
-  </Box>
-);
-
-const GroupTag: React.FC<{ group: string | undefined; isMobile: boolean }> = ({
-  group,
-  isMobile,
-}) =>
-  group && isMobile ? (
-    <CustomTagGroup visibleItems={1}>
-      <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }}>
-        <Tag value={group} />
-      </Box>
-    </CustomTagGroup>
-  ) : group && !isMobile ? (
-    <TagGroup visibleItems={4}>
-      <Tag value={group} />
-    </TagGroup>
-  ) : (
-    <></>
-  );
 
 const ActionButton: React.FC<{ iun: string; handleRowClick?: (iun: string) => void }> = ({
   iun,
@@ -93,28 +44,67 @@ const NotificationsDataSwitch: React.FC<{
 }> = ({ data, type, handleRowClick }) => {
   const isMobile = useIsMobile();
 
-  const renderContent = () => {
-    switch (type) {
-      case 'sentAt':
-        return <>{formatDate(data.sentAt)}</>;
-      case 'notificationStatus':
-        return <NotificationStatusChip data={data} />;
-      case 'recipients':
-        return <Recipients recipients={data.recipients} />;
-      case 'subject':
-        return <Subject subject={data.subject} />;
-      case 'iun':
-        return <>{data.iun}</>;
-      case 'group':
-        return <GroupTag group={data.group} isMobile={isMobile} />;
-      case 'action':
-        return <ActionButton iun={data.iun} handleRowClick={handleRowClick} />;
-      default:
-        return null;
-    }
-  };
+  if (type === 'sentAt') {
+    return <>{formatDate(data.sentAt)}</>;
+  }
+  if (type === 'notificationStatus') {
+    return <NotificationStatusChip data={data} />;
+  }
+  if (type === 'recipients') {
+    return (
+      <>
+        {data.recipients.map((recipient) => (
+          <Typography key={recipient} variant="body2">
+            {recipient}
+          </Typography>
+        ))}
+      </>
+    );
+  }
+  if (type === 'subject') {
+    return (
+      <Box
+        sx={{
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          color: 'inherit',
+        }}
+      >
+        {data.subject}
+      </Box>
+    );
+  }
+  if (type === 'iun') {
+    return <>{data.iun}</>;
+  }
+  if (type === 'group' && isMobile) {
+    return data.group ? (
+      <CustomTagGroup visibleItems={1}>
+        {[
+          <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={data.id}>
+            <Tag value={data.group} />
+          </Box>,
+        ]}
+      </CustomTagGroup>
+    ) : (
+      <></>
+    );
+  }
+  if (type === 'group' && !isMobile) {
+    return data.group ? (
+      <TagGroup visibleItems={4}>
+        <Tag value={data.group} />
+      </TagGroup>
+    ) : (
+      <></>
+    );
+  }
+  if (type === 'action') {
+    return <ActionButton iun={data.iun} handleRowClick={handleRowClick} />;
+  }
 
-  return <>{renderContent()}</>;
+  return <></>;
 };
 
 export default NotificationsDataSwitch;
