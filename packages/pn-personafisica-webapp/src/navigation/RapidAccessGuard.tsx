@@ -7,9 +7,9 @@ import {
   AppResponse,
   AppResponsePublisher,
   AppRouteParams,
-  appStateActions,
   IllusQuestion,
   LoadingPage,
+  appStateActions,
 } from '@pagopa-pn/pn-commons';
 
 import { NotificationId } from '../models/Notifications';
@@ -44,7 +44,7 @@ function notificationDetailPath(notificationId: NotificationId): string {
 const RapidAccessGuard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation(['notifiche']);
+  const { t } = useTranslation(['common', 'notifiche']);
   const [fetchError, setFetchError] = useState(false);
   const rapidAccess = useRapidAccessParam();
 
@@ -93,8 +93,8 @@ const RapidAccessGuard = () => {
   const handleErrorRetrievalId = () => {
     dispatch(
       appStateActions.addError({
-        title: 'Errore Accesso Rapido',                           // TODO copy
-        message: 'Non è stato possibile recuperare la notifica',  // TODO copy
+        title: t('errors.unhandled.title', { ns: 'common' }),
+        message: t('errors.unhandled.message', { ns: 'common' }),
       })
     );
     return false;
@@ -130,8 +130,8 @@ const RapidAccessGuard = () => {
     return (
       <AccessDenied
         icon={<IllusQuestion />}
-        message={t('from-qrcode.not-found')}
-        subtitle={t('from-qrcode.not-found-subtitle')}
+        message={t('from-qrcode.not-found', { ns: 'notifiche' })}
+        subtitle={t('from-qrcode.not-found-subtitle', { ns: 'notifiche' })}
         isLogged={true}
         goToHomePage={() => navigate(NOTIFICHE, { replace: true })}
         goToLogin={() => {}}
