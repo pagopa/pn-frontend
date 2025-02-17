@@ -8,6 +8,7 @@ import { FileUpload, SectionHeading, useIsMobile } from '@pagopa-pn/pn-commons';
 import {
   NewNotification,
   NewNotificationDocument,
+  NewNotificationPayment,
   PaymentModel,
   PaymentObject,
 } from '../../models/NewNotification';
@@ -88,7 +89,7 @@ const PaymentMethods: React.FC<Props> = ({
     () =>
       notification.recipients.map((recipient) => ({
         ...recipient,
-        payments: recipient.payments && recipient.payments.length > 0 ? recipient.payments : undefined,
+        payments: recipient.payments && recipient.payments.length > 0 ? recipient.payments : {} as NewNotificationPayment,
       })),
     []
   );
