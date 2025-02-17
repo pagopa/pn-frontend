@@ -187,7 +187,7 @@ describe('PreliminaryInformations Component', async () => {
     expect(button).toBeDisabled();
     await populateForm(form);
     expect(button).toBeEnabled();
-    
+
     fireEvent.click(button);
     await waitFor(() => {
       const state = testStore.getState();
@@ -198,17 +198,15 @@ describe('PreliminaryInformations Component', async () => {
         taxonomyCode: newNotification.taxonomyCode,
         group: newNotificationGroups[1].id,
         notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
-        payment: {},
         documents: [],
         recipients: [],
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
-        paymentMode: '',
         senderDenomination: newNotification.senderDenomination,
         lang: 'it',
         additionalAbstract: '',
         additionalLang: '',
         additionalSubject: '',
-        senderTaxId: ''
+        senderTaxId: '',
       });
     });
     expect(confirmHandlerMk).toHaveBeenCalledTimes(1);

@@ -243,9 +243,9 @@ describe('New notification redux state tests', () => {
       ...recipient,
       payments: recipient.payments?.map((payment) => ({
         ...payment,
-        pagoPA: payment.pagoPA
+        pagoPa: payment.pagoPa
           ? {
-              ...payment.pagoPA,
+              ...payment.pagoPa,
               ref: {
                 key: 'mocked-preload-key',
                 versionToken: 'mocked-versionToken',

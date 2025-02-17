@@ -24,14 +24,7 @@ enum PagoPaIntegrationMode {
   ASYNC = 'ASYNC',
 }
 
-interface BaseNewNotificationDocument {
-  id: string;
-  idx: number;
-  name: string;
-  contentType: string;
-}
-
-interface NewNotificationDocumentFile {
+export interface NewNotificationDocumentFile {
   data?: File;
   sha256: {
     hashBase64: string;
@@ -39,17 +32,24 @@ interface NewNotificationDocumentFile {
   };
 }
 
-interface NewNotificationDocumentRef {
+export interface NewNotificationDocumentRef {
   key: string;
   versionToken: string;
 }
 
-export interface NewNotificationDocument extends BaseNewNotificationDocument {
+export interface NewNotificationDocument {
+  id: string;
+  idx: number;
+  contentType: string;
+  name: string;
   file: NewNotificationDocumentFile;
   ref: NewNotificationDocumentRef;
 }
 
-export interface NewNotificationPagoPaPayment extends BaseNewNotificationDocument {
+export interface NewNotificationPagoPaPayment {
+  id: string;
+  idx: number;
+  contentType: string;
   creditorTaxId: string;
   noticeCode: string;
   applyCost: boolean;
@@ -62,7 +62,7 @@ export interface NewNotificationF24Payment extends NewNotificationDocument {
 }
 
 export interface NewNotificationPayment {
-  pagoPA?: NewNotificationPagoPaPayment;
+  pagoPa?: NewNotificationPagoPaPayment;
   f24?: NewNotificationF24Payment;
 }
 
@@ -132,7 +132,6 @@ export interface PreliminaryInformationsPayload extends NewNotificationBilingual
 
 export interface UploadDocumentParams {
   id: string;
-  key: string;
   contentType: string;
   file: Uint8Array | undefined;
   sha256: string;
