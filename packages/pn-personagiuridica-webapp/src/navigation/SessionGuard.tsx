@@ -44,6 +44,7 @@ const manageUnforbiddenError = (e: any) => {
   return true;
 };
 
+
 // Perché ci sono due componenti.
 // Il codice in SessionGuard implementa i steps necessari per determinare se c'è sessione, se è utente abilitato, se è sessione anonima, ecc..
 // D'altra parte, SessionGuardRender implementa la logica di cosa si deve renderizzare,
@@ -56,14 +57,14 @@ const manageUnforbiddenError = (e: any) => {
  */
 const SessionGuardRender = () => {
   const [params] = useSearchParams();
-
   const { IS_INACTIVITY_HANDLER_ENABLED } = getConfiguration();
+
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
   const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession } = useAppSelector(
     (state: RootState) => state.userState
   );
-  const dispatch = useAppDispatch();
+
   const { t } = useTranslation(['common']);
   const { hasApiErrors } = useErrors();
 
@@ -110,7 +111,10 @@ const SessionGuardRender = () => {
     return (
       <InactivityHandler
         inactivityTimer={isAnonymousUser || !IS_INACTIVITY_HANDLER_ENABLED ? 0 : inactivityTimer}
-        onTimerExpired={() => dispatch(logout())}
+        onTimerExpired={() => {
+          sessionStorage.clear();
+          goToLoginPortal();
+        }}
       >
         <Outlet />
       </InactivityHandler>
