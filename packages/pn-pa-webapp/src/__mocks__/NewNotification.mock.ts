@@ -10,6 +10,8 @@ import {
   NewNotification,
   NewNotificationDigitalAddressType,
   NewNotificationDocument,
+  NewNotificationF24Payment,
+  NewNotificationPagoPaPayment,
   NewNotificationRecipient,
   NotificationFeePolicy,
 } from '../models/NewNotification';
@@ -35,11 +37,14 @@ export const newNotificationGroups: Array<UserGroup> = [
   },
 ];
 
-const newNotificationPagoPa: NewNotificationDocument = {
+const newNotificationPagoPa: NewNotificationPagoPaPayment = {
   id: 'mocked-pagopa-id',
   idx: 0,
   name: 'mocked-name',
   contentType: 'application/pdf',
+  creditorTaxId: 'mocked-creditor-taxid',
+  noticeCode: 'mocked-noticecode',
+  applyCost: true,
   file: {
     data: new File([''], 'mocked-name', { type: 'application/pdf' }),
     sha256: {
@@ -53,11 +58,12 @@ const newNotificationPagoPa: NewNotificationDocument = {
   },
 };
 
-const newNotificationF24: NewNotificationDocument = {
+const newNotificationF24: NewNotificationF24Payment = {
   id: 'mocked-f24standard-id',
   idx: 0,
   name: 'mocked-name',
   contentType: 'application/json',
+  applyCost: false,
   file: {
     data: new File([''], 'mocked-name', { type: 'application/pdf' }),
     sha256: {
@@ -71,7 +77,7 @@ const newNotificationF24: NewNotificationDocument = {
   },
 };
 
-const newNotificationRecipients: Array<NewNotificationRecipient> = [
+export const newNotificationRecipients: Array<NewNotificationRecipient> = [
   {
     id: 'recipient.0',
     idx: 0,

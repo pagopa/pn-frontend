@@ -14,12 +14,14 @@ import {
 import {
   NewNotification,
   NewNotificationDocument,
+  NewNotificationF24Payment,
+  NewNotificationPagoPaPayment,
   NewNotificationRecipient,
   UploadDocumentParams,
   UploadDocumentsResponse,
 } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
-import { newNotificationMapper } from '../../utility/notification.utility';
+import { hasPagoPaDocument, newNotificationMapper } from '../../utility/notification.utility';
 
 export enum NEW_NOTIFICATION_ACTIONS {
   GET_USER_GROUPS = 'getUserGroups',
@@ -44,7 +46,7 @@ export const getUserGroups = createAsyncThunk(
 );
 
 const createPayloadToUpload = async (
-  item: NewNotificationDocument
+  item: NewNotificationDocument | Required<NewNotificationPagoPaPayment> | NewNotificationF24Payment
 ): Promise<UploadDocumentParams> => {
   const unit8Array = await calcUnit8Array(item.file.data);
   return {
@@ -144,7 +146,12 @@ const getPaymentDocumentsToUpload = (
     }
 
     for (const payment of recipient.payments) {
-      if (payment.pagoPA && !payment.pagoPA.ref.key && !payment.pagoPA.ref.versionToken) {
+      if (
+        payment.pagoPA &&
+        hasPagoPaDocument(payment.pagoPA) &&
+        !payment.pagoPA.ref.key &&
+        !payment.pagoPA.ref.versionToken
+      ) {
         documentsArr.push(createPayloadToUpload(payment.pagoPA));
       }
 
@@ -180,7 +187,7 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
 
         for (const payment of updatedItem.payments) {
           /* eslint-disable functional/immutable-data */
-          if (payment.pagoPA && documentsUploaded[payment.pagoPA.id]) {
+          if (payment.pagoPA && payment.pagoPA.ref && documentsUploaded[payment.pagoPA.id]) {
             payment.pagoPA.ref.key = documentsUploaded[payment.pagoPA.id].key;
             payment.pagoPA.ref.versionToken = documentsUploaded[payment.pagoPA.id].versionToken;
           }

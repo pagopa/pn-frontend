@@ -15,7 +15,9 @@ import {
 import {
   NewNotification,
   NewNotificationDocument,
+  NewNotificationF24Payment,
   NewNotificationLangOther,
+  NewNotificationPagoPaPayment,
   NewNotificationPayment,
   NewNotificationRecipient,
 } from '../models/NewNotification';
@@ -69,7 +71,10 @@ const newNotificationRecipientsMapper = (
   });
 
 const newNotificationDocumentMapper = (
-  document: NewNotificationDocument
+  document:
+    | NewNotificationDocument
+    | Required<NewNotificationPagoPaPayment>
+    | NewNotificationF24Payment
 ): NotificationDetailDocument => ({
   digests: {
     sha256: document.file.sha256.hashBase64,
@@ -84,6 +89,10 @@ const newNotificationAttachmentsMapper = (
 ): Array<NotificationDetailDocument> =>
   documents.map((document) => newNotificationDocumentMapper(document));
 
+export const hasPagoPaDocument = (
+  document: NewNotificationPagoPaPayment
+): document is Required<NewNotificationPagoPaPayment> => !!document.file && !!document.ref;
+
 const newNotificationPaymentDocumentsMapper = (
   recipientPayments: Array<NewNotificationPayment>
 ): Array<NotificationDetailPayment> =>
@@ -91,19 +100,21 @@ const newNotificationPaymentDocumentsMapper = (
     const mappedPayment: NotificationDetailPayment = {};
 
     /* eslint-disable functional/immutable-data */
-    if (payment.pagoPA && payment.pagoPA.file.sha256.hashBase64 !== '') {
+    if (payment.pagoPA && payment.pagoPA.file?.sha256.hashBase64 !== '') {
       mappedPayment.pagoPa = {
-        creditorTaxId: '',
-        noticeCode: '',
-        attachment: newNotificationDocumentMapper(payment.pagoPA),
-        applyCost: false,
+        creditorTaxId: payment.pagoPA.creditorTaxId,
+        noticeCode: payment.pagoPA.noticeCode,
+        attachment: hasPagoPaDocument(payment.pagoPA)
+          ? newNotificationDocumentMapper(payment.pagoPA)
+          : undefined,
+        applyCost: payment.pagoPA.applyCost,
       };
     }
 
     if (payment.f24 && payment.f24.file.sha256.hashBase64 !== '') {
       mappedPayment.f24 = {
         title: payment.f24.name,
-        applyCost: true,
+        applyCost: payment.f24.applyCost,
         metadataAttachment: {
           digests: {
             sha256: payment.f24.file.sha256.hashBase64,
