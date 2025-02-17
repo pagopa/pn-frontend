@@ -23,7 +23,13 @@ const PnTableBodyCell: React.FC<PnTableBodyCellProps> = ({
       borderBottom: 'none',
     }}
   >
-    {onClick ? <ButtonNaked sx={buttonNakedInheritStyle}>{children}</ButtonNaked> : <>{children}</>}
+    {onClick ? (
+      <ButtonNaked onClick={onClick} sx={buttonNakedInheritStyle}>
+        {children}
+      </ButtonNaked>
+    ) : (
+      <>{children}</>
+    )}
   </TableCell>
 );
 export default PnTableBodyCell;

@@ -205,14 +205,17 @@ describe('PnTable Component', () => {
     expect(handleSort).toHaveBeenCalledWith({ order: 'desc', orderBy: 'column-1' });
   });
 
-  it('click on a column', () => {
+  it('click on a cell', () => {
     const { getByRole } = render(<RenderPnTable />);
+
     const table = getByRole('table');
     const tableBody = within(table).getByTestId('table-test.body');
-    const firstRow = within(tableBody).getAllByTestId('table-test.body.row')[0];
-    const tableColumns = within(firstRow).getAllByTestId('table-test.body.row.cell');
-    fireEvent.click(tableColumns[2].querySelectorAll('button')[0]);
+    const thirdRow = within(tableBody).getAllByTestId('table-test.body.row')[2];
+    const thirdCell = within(thirdRow).getAllByTestId('table-test.body.row.cell')[2];
+    const button = within(thirdCell).getByRole('button');
+    fireEvent.click(button);
+
     expect(handleColumnClick).toHaveBeenCalledTimes(1);
-    expect(handleColumnClick).toHaveBeenCalledWith(rows[0], columns[2].id);
+    expect(handleColumnClick).toHaveBeenCalledWith(rows[2], columns[2].id);
   });
 });

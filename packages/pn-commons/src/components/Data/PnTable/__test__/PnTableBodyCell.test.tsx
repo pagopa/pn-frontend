@@ -23,6 +23,6 @@ describe('PnTableBodyCell', () => {
     );
     const cell = getByTestId('cell');
     fireEvent.click(cell);
-    expect(mockFn).toBeCalledTimes(1);
+    expect(mockFn).toHaveBeenCalledTimes(1);
   });
 });
