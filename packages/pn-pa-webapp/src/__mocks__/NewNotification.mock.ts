@@ -65,7 +65,7 @@ const newNotificationF24: NewNotificationF24Payment = {
   contentType: 'application/json',
   applyCost: false,
   file: {
-    data: new File([''], 'mocked-name', { type: 'application/pdf' }),
+    data: new File([''], 'mocked-name', { type: 'application/json' }),
     sha256: {
       hashBase64: 'mocked-f24standard-sha256',
       hashHex: '',

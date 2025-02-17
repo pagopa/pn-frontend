@@ -39,7 +39,7 @@ const initialState = {
     subject: '',
     recipients: [],
     documents: [],
-    physicalCommunicationType: 'REGISTERED_LETTER_890',
+    physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
     group: '',
     taxonomyCode: '',
     senderDenomination: '',
