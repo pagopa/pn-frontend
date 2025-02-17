@@ -52,13 +52,13 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
     {
       id: 'name',
       label: t('table.name'),
-      cellProps: { width: '30%' },
+      cellProps: { width: '20%' },
       sortable: false,
     },
     {
       id: 'value',
       label: t('table.api-key'),
-      cellProps: { width: '25%' },
+      cellProps: { width: '30%' },
       sortable: false,
     },
     {
@@ -74,13 +74,13 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
     {
       id: 'status',
       label: t('table.status'),
-      cellProps: { width: '10%', align: 'left' },
+      cellProps: { width: '15%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'contextMenu',
       label: '',
-      cellProps: { width: '5%', align: 'left' },
+      cellProps: { width: '5%' },
       sortable: false,
     },
   ];
@@ -88,10 +88,10 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
   return (
     <>
       {apiKeys && apiKeys.length > 0 ? (
-        <PnTable testId="tableApiKeys" ariaTitle={t('table.title')}>
+        <PnTable testId="tableApiKeys" ariaTitle={t('table.title')} slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}>
           <PnTableHeader>
             {columns.map((column) => (
-              <PnTableHeaderCell key={column.id} columnId={column.id} sortable={column.sortable}>
+              <PnTableHeaderCell key={column.id} columnId={column.id} sortable={column.sortable} cellProps={column.cellProps}>
                 {column.label}
               </PnTableHeaderCell>
             ))}

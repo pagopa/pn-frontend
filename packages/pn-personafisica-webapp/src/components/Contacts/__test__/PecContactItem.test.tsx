@@ -64,7 +64,7 @@ describe('PecContactItem component', () => {
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
     const buttons = form!.querySelectorAll('button');
-    expect(buttons[0]).toBeDisabled();
+    expect(buttons[0]).toBeEnabled();
     fireEvent.change(input!, { target: { value: '' } });
     await waitFor(() => expect(input!).toHaveValue(''));
     expect(errorMessage).toBeInTheDocument();
@@ -238,7 +238,7 @@ describe('PecContactItem component', () => {
     await waitFor(() => {
       expect(input).toHaveValue('invalid-pec');
     });
-    expect(saveButton).toBeDisabled();
+    expect(saveButton).toBeEnabled();
     const inputError = container.querySelector('#default_pec-helper-text');
     expect(inputError).toHaveTextContent('legal-contacts.valid-pec');
   });
