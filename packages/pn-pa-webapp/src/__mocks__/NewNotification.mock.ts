@@ -2,9 +2,11 @@ import { PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons'
 
 import {
   BffNewNotificationRequest,
+  F24Payment,
   NotificationDigitalAddressTypeEnum,
   NotificationDocument,
   NotificationRecipientV23,
+  PagoPaPayment,
 } from '../generated-client/notifications';
 import {
   NewNotification,
@@ -40,7 +42,6 @@ export const newNotificationGroups: Array<UserGroup> = [
 const newNotificationPagoPa: NewNotificationPagoPaPayment = {
   id: 'mocked-pagopa-id',
   idx: 0,
-  name: 'mocked-name',
   contentType: 'application/pdf',
   creditorTaxId: 'mocked-creditor-taxid',
   noticeCode: 'mocked-noticecode',
@@ -58,22 +59,53 @@ const newNotificationPagoPa: NewNotificationPagoPaPayment = {
   },
 };
 
+const newNotificationPagoPaForBff: PagoPaPayment = {
+  creditorTaxId: 'mocked-creditor-taxid',
+  noticeCode: 'mocked-noticecode',
+  applyCost: true,
+  attachment: {
+    contentType: 'application/pdf',
+    digests: {
+      sha256: 'mocked-pa-sha256',
+    },
+    ref: {
+      key: '',
+      versionToken: '',
+    },
+  },
+};
+
 const newNotificationF24: NewNotificationF24Payment = {
-  id: 'mocked-f24standard-id',
+  id: 'mocked-f24-id',
   idx: 0,
   name: 'mocked-name',
   contentType: 'application/json',
   applyCost: false,
   file: {
-    data: new File([''], 'mocked-name', { type: 'application/pdf' }),
+    data: new File([''], 'mocked-name', { type: 'application/json' }),
     sha256: {
-      hashBase64: 'mocked-f24standard-sha256',
+      hashBase64: 'mocked-f24-sha256',
       hashHex: '',
     },
   },
   ref: {
     key: '',
     versionToken: '',
+  },
+};
+
+const newNotificationF24ForBff: F24Payment = {
+  title: 'mocked-name',
+  applyCost: false,
+  metadataAttachment: {
+    contentType: 'application/json',
+    digests: {
+      sha256: 'mocked-f24-sha256',
+    },
+    ref: {
+      key: '',
+      versionToken: '',
+    },
   },
 };
 
@@ -97,7 +129,7 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
     foreignState: 'Italia',
     payments: [
       {
-        pagoPA: { ...newNotificationPagoPa },
+        pagoPa: { ...newNotificationPagoPa },
       },
     ],
   },
@@ -120,7 +152,7 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
     foreignState: 'Italia',
     payments: [
       {
-        pagoPA: { ...newNotificationPagoPa },
+        pagoPa: { ...newNotificationPagoPa },
         f24: { ...newNotificationF24 },
       },
     ],
@@ -143,6 +175,11 @@ const newNotificationRecipientsForBff: Array<NotificationRecipientV23> = [
       province: 'Roma',
       foreignState: 'Italia',
     },
+    payments: [
+      {
+        pagoPa: newNotificationPagoPaForBff,
+      },
+    ],
   },
   {
     taxId: '12345678901',
@@ -155,6 +192,12 @@ const newNotificationRecipientsForBff: Array<NotificationRecipientV23> = [
       province: 'Roma',
       foreignState: 'Italia',
     },
+    payments: [
+      {
+        pagoPa: newNotificationPagoPaForBff,
+        f24: newNotificationF24ForBff,
+      },
+    ],
   },
 ];
 

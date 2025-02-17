@@ -7,7 +7,6 @@ import { apiClient } from '../../api/apiClients';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { InfoPaApiFactory } from '../../generated-client/info-pa';
 import {
-  BffNewNotificationRequest,
   BffNewNotificationResponse,
   NotificationSentApiFactory,
 } from '../../generated-client/notifications';
@@ -51,7 +50,6 @@ const createPayloadToUpload = async (
   const unit8Array = await calcUnit8Array(item.file.data);
   return {
     id: item.id,
-    key: item.name,
     contentType: item.contentType,
     file: unit8Array,
     sha256: item.file.sha256.hashBase64,
@@ -147,12 +145,12 @@ const getPaymentDocumentsToUpload = (
 
     for (const payment of recipient.payments) {
       if (
-        payment.pagoPA &&
-        hasPagoPaDocument(payment.pagoPA) &&
-        !payment.pagoPA.ref.key &&
-        !payment.pagoPA.ref.versionToken
+        payment.pagoPa &&
+        hasPagoPaDocument(payment.pagoPa) &&
+        !payment.pagoPa.ref.key &&
+        !payment.pagoPa.ref.versionToken
       ) {
-        documentsArr.push(createPayloadToUpload(payment.pagoPA));
+        documentsArr.push(createPayloadToUpload(payment.pagoPa));
       }
 
       if (payment.f24 && !payment.f24.ref.key && !payment.f24.ref.versionToken) {
@@ -187,9 +185,9 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
 
         for (const payment of updatedItem.payments) {
           /* eslint-disable functional/immutable-data */
-          if (payment.pagoPA && payment.pagoPA.ref && documentsUploaded[payment.pagoPA.id]) {
-            payment.pagoPA.ref.key = documentsUploaded[payment.pagoPA.id].key;
-            payment.pagoPA.ref.versionToken = documentsUploaded[payment.pagoPA.id].versionToken;
+          if (payment.pagoPa?.ref && documentsUploaded[payment.pagoPa.id]) {
+            payment.pagoPa.ref.key = documentsUploaded[payment.pagoPa.id].key;
+            payment.pagoPa.ref.versionToken = documentsUploaded[payment.pagoPa.id].versionToken;
           }
           if (payment.f24 && documentsUploaded[payment.f24.id]) {
             payment.f24.ref.key = documentsUploaded[payment.f24.id].key;
@@ -216,9 +214,7 @@ export const createNewNotification = createAsyncThunk<BffNewNotificationResponse
         apiClient
       );
       const mappedNotification = newNotificationMapper(notification);
-      const response = await notificationSentApiFactory.newSentNotificationV1(
-        mappedNotification as BffNewNotificationRequest
-      );
+      const response = await notificationSentApiFactory.newSentNotificationV1(mappedNotification);
       return response.data;
     } catch (e) {
       return rejectWithValue(e);

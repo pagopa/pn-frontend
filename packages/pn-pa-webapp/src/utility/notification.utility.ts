@@ -1,21 +1,19 @@
 /* eslint-disable functional/no-let */
 import _ from 'lodash';
 
-import {
-  NotificationDetailDocument,
-  NotificationDetailPayment,
-  PhysicalAddress,
-  RecipientType,
-} from '@pagopa-pn/pn-commons';
+import { NotificationDetailDocument, PhysicalAddress, RecipientType } from '@pagopa-pn/pn-commons';
 
 import {
   BffNewNotificationRequest,
+  NotificationDocument,
+  NotificationPaymentItem,
   NotificationRecipientV23,
 } from '../generated-client/notifications';
 import {
   NewNotification,
   NewNotificationDocument,
-  NewNotificationF24Payment,
+  NewNotificationDocumentFile,
+  NewNotificationDocumentRef,
   NewNotificationLangOther,
   NewNotificationPagoPaPayment,
   NewNotificationPayment,
@@ -70,24 +68,29 @@ const newNotificationRecipientsMapper = (
     return parsedRecipient;
   });
 
-const newNotificationDocumentMapper = (
-  document:
-    | NewNotificationDocument
-    | Required<NewNotificationPagoPaPayment>
-    | NewNotificationF24Payment
-): NotificationDetailDocument => ({
+const newNotificationDocumentMapper = (document: {
+  file: NewNotificationDocumentFile;
+  ref: NewNotificationDocumentRef;
+  contentType: string;
+}): NotificationDetailDocument => ({
   digests: {
     sha256: document.file.sha256.hashBase64,
   },
   contentType: document.contentType,
   ref: document.ref,
-  title: document.name,
 });
 
 const newNotificationAttachmentsMapper = (
   documents: Array<NewNotificationDocument>
-): Array<NotificationDetailDocument> =>
-  documents.map((document) => newNotificationDocumentMapper(document));
+): Array<NotificationDocument> =>
+  documents.map((document) => ({
+    ...newNotificationDocumentMapper({
+      file: document.file,
+      ref: document.ref,
+      contentType: document.contentType,
+    }),
+    title: document.name,
+  }));
 
 export const hasPagoPaDocument = (
   document: NewNotificationPagoPaPayment
@@ -95,33 +98,40 @@ export const hasPagoPaDocument = (
 
 const newNotificationPaymentDocumentsMapper = (
   recipientPayments: Array<NewNotificationPayment>
-): Array<NotificationDetailPayment> =>
+): Array<NotificationPaymentItem> =>
   recipientPayments.map((payment) => {
-    const mappedPayment: NotificationDetailPayment = {};
+    const mappedPayment: NotificationPaymentItem = {};
 
     /* eslint-disable functional/immutable-data */
-    if (payment.pagoPA && payment.pagoPA.file?.sha256.hashBase64 !== '') {
+    if (payment.pagoPa) {
       mappedPayment.pagoPa = {
-        creditorTaxId: payment.pagoPA.creditorTaxId,
-        noticeCode: payment.pagoPA.noticeCode,
-        attachment: hasPagoPaDocument(payment.pagoPA)
-          ? newNotificationDocumentMapper(payment.pagoPA)
-          : undefined,
-        applyCost: payment.pagoPA.applyCost,
+        creditorTaxId: payment.pagoPa.creditorTaxId,
+        noticeCode: payment.pagoPa.noticeCode,
+        applyCost: payment.pagoPa.applyCost,
       };
+
+      if (
+        payment.pagoPa.file &&
+        payment.pagoPa.ref &&
+        payment.pagoPa.file?.sha256.hashBase64 !== ''
+      ) {
+        mappedPayment.pagoPa.attachment = newNotificationDocumentMapper({
+          file: payment.pagoPa.file,
+          ref: payment.pagoPa.ref,
+          contentType: payment.pagoPa.contentType,
+        });
+      }
     }
 
     if (payment.f24 && payment.f24.file.sha256.hashBase64 !== '') {
       mappedPayment.f24 = {
         title: payment.f24.name,
         applyCost: payment.f24.applyCost,
-        metadataAttachment: {
-          digests: {
-            sha256: payment.f24.file.sha256.hashBase64,
-          },
-          contentType: payment.f24.contentType,
+        metadataAttachment: newNotificationDocumentMapper({
+          file: payment.f24.file,
           ref: payment.f24.ref,
-        },
+          contentType: payment.f24.contentType,
+        }),
       };
     }
     /* eslint-enable functional/immutable-data */

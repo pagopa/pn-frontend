@@ -39,7 +39,7 @@ const initialState = {
     subject: '',
     recipients: [],
     documents: [],
-    physicalCommunicationType: 'REGISTERED_LETTER_890',
+    physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
     group: '',
     taxonomyCode: '',
     senderDenomination: '',
@@ -243,9 +243,9 @@ describe('New notification redux state tests', () => {
       ...recipient,
       payments: recipient.payments?.map((payment) => ({
         ...payment,
-        pagoPA: payment.pagoPA
+        pagoPa: payment.pagoPa
           ? {
-              ...payment.pagoPA,
+              ...payment.pagoPa,
               ref: {
                 key: 'mocked-preload-key',
                 versionToken: 'mocked-versionToken',
