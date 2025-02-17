@@ -5,6 +5,7 @@ import {
   NewNotification,
   NewNotificationDocument,
   NewNotificationRecipient,
+  NotificationFeePolicy,
   PreliminaryInformationsPayload,
 } from '../../models/NewNotification';
 import { UserGroup } from '../../models/user';
@@ -26,6 +27,7 @@ type NewNotificationInitialState = {
 const initialState: NewNotificationInitialState = {
   loading: false,
   notification: {
+    notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
     paProtocolNumber: '',
     subject: '',
     recipients: [],

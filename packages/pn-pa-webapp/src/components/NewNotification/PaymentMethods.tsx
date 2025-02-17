@@ -238,7 +238,7 @@ const PaymentMethods: React.FC<Props> = ({
         // --------------------------------------
         // Carlos Lombardi, 2023.01.19
         const paymentData = await dispatch(
-          uploadNotificationPaymentDocument(formatPaymentDocuments())
+          uploadNotificationPaymentDocument(notification.recipients)
         );
         const paymentPayload = paymentData.payload as { [key: string]: PaymentObject };
         if (paymentPayload) {

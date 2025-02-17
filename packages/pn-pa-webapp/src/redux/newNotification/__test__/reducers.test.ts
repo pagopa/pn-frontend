@@ -3,9 +3,14 @@ import MockAdapter from 'axios-mock-adapter';
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import { newNotification, payments } from '../../../__mocks__/NewNotification.mock';
+import {
+  newNotification,
+  newNotificationRecipients,
+  payments,
+} from '../../../__mocks__/NewNotification.mock';
 import { apiClient, externalClient } from '../../../api/apiClients';
-import { PaymentModel, PaymentObject, PreliminaryInformationsPayload } from '../../../models/NewNotification';
+import { NotificationFeePolicy } from '../../../generated-client/notifications';
+import { PaymentModel, PreliminaryInformationsPayload } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
 import { newNotificationMapper } from '../../../utility/notification.utility';
 import { store } from '../../store';
@@ -29,6 +34,7 @@ import {
 const initialState = {
   loading: false,
   notification: {
+    notificationFeePolicy: NotificationFeePolicy.FlatRate,
     paProtocolNumber: '',
     subject: '',
     recipients: [],
@@ -37,7 +43,7 @@ const initialState = {
     group: '',
     taxonomyCode: '',
     senderDenomination: '',
-    senderTaxId:''
+    senderTaxId: '',
   },
   groups: [],
   isCompleted: false,
@@ -183,7 +189,7 @@ describe('New notification redux state tests', () => {
           if (elem.pagoPa) {
             arr.push({
               contentType: elem.pagoPa.contentType,
-              sha256: elem.pagoPa.file.sha256.hashBase64,
+              sha256: elem.pagoPa.file?.sha256.hashBase64,
             });
           }
           if (elem.f24) {
@@ -218,7 +224,7 @@ describe('New notification redux state tests', () => {
     const extMock = new MockAdapter(externalClient);
     for (const payment of Object.values(payments)) {
       if (payment.pagoPa) {
-        extMock.onPost(`https://mocked-url.com`).reply(200, payment.pagoPa.file.data, {
+        extMock.onPost(`https://mocked-url.com`).reply(200, payment.pagoPa.file?.data, {
           'x-amz-version-id': 'mocked-versionToken',
         });
       }
@@ -228,31 +234,37 @@ describe('New notification redux state tests', () => {
         });
       }
     }
-    const action = await store.dispatch(uploadNotificationPaymentDocument(payments));
+    const action = await store.dispatch(
+      uploadNotificationPaymentDocument(newNotificationRecipients)
+    );
     expect(action.type).toBe('uploadNotificationPaymentDocument/fulfilled');
-    const response: { [key: string]: PaymentObject } = {};
-    for (const [key, value] of Object.entries(payments)) {
-      response[key] = {} as PaymentObject;
-      if (value.pagoPa) {
-        response[key].pagoPa = {
-          ...value.pagoPa,
-          ref: {
-            key: 'mocked-preload-key',
-            versionToken: 'mocked-versionToken',
-          },
-        };
-      }
-      if (value.f24) {
-        response[key].f24 = {
-          ...value.f24,
-          ref: {
-            key: 'mocked-preload-key',
-            versionToken: 'mocked-versionToken',
-          },
-        };
-      }
-    }
-    expect(action.payload).toEqual(response);
+
+    const expectedResponse = newNotificationRecipients.map((recipient) => ({
+      ...recipient,
+      payments: recipient.payments?.map((payment) => ({
+        ...payment,
+        pagoPA: payment.pagoPA
+          ? {
+              ...payment.pagoPA,
+              ref: {
+                key: 'mocked-preload-key',
+                versionToken: 'mocked-versionToken',
+              },
+            }
+          : undefined,
+        f24: payment.f24
+          ? {
+              ...payment.f24,
+              ref: {
+                key: 'mocked-preload-key',
+                versionToken: 'mocked-versionToken',
+              },
+            }
+          : undefined,
+      })),
+    }));
+
+    expect(action.payload).toEqual(expectedResponse);
     extMock.restore();
   });
 
