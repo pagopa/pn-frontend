@@ -314,7 +314,7 @@ const PaymentMethods: React.FC<Props> = ({
                         fileUploadedHandler(recipient.taxId, 'pagoPa', id, file, sha256)
                       }
                       onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPa')}
-                      fileUploaded={formik.values.find((v) => v && v[recipient.taxId])?.pagoPa}
+                      fileUploaded={formik.values.find((v) => v && v[recipient.taxId])?.pagoPa.}
                     />
                   ) : (
                     <PaymentBox
