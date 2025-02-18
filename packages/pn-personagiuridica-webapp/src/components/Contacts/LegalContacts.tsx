@@ -132,6 +132,9 @@ const LegalContacts = () => {
     )
       .unwrap()
       .then(() => {
+        if (channelType === ChannelType.SERCQ_SEND) {
+          sessionStorage.removeItem('domicileBannerClosed');
+        }
         dispatch(
           appStateActions.addSuccess({
             title: '',

@@ -124,6 +124,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWizar
     dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
       .then(() => {
+        sessionStorage.removeItem('domicileBannerClosed');
         // show success message
         dispatch(
           appStateActions.addSuccess({

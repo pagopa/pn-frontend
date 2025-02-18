@@ -123,10 +123,10 @@ describe('Contacts page', async () => {
 
     const banner = result.getByTestId('PecVerificationAlert');
     expect(banner).toBeInTheDocument();
-    const alertIcon = within(banner).getByTestId('InfoOutlinedIcon');
+    const alertIcon = within(banner).getByTestId('ReportProblemOutlinedIcon');
     expect(alertIcon).toBeInTheDocument();
     expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.title');
-    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.dod-enabled-message');
+    expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.parties-list');
 
     const specialContacts = result.getByTestId('specialContacts');
     expect(specialContacts).toBeInTheDocument();

@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Alert, Box, Link, Stack, Typography } from '@mui/material';
@@ -9,26 +9,72 @@ import LegalContacts from '../components/Contacts/LegalContacts';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
-import { ContactSource } from '../models/contacts';
+import { ChannelType, ContactOperation, ContactSource } from '../models/contacts';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
-import { contactsSelectors } from '../redux/contact/reducers';
+import { contactsSelectors, resetExternalEvent } from '../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
+
+const ValidatingPecBanner: React.FC = () => {
+  const { t } = useTranslation(['recapiti']);
+  const {
+    defaultPECAddress,
+    defaultSERCQ_SENDAddress,
+    specialPECAddresses,
+    specialSERCQ_SENDAddresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
+
+  const isValidatingDefaultPec = defaultPECAddress?.pecValid === false;
+
+  const isDefaultSercqSendActive = !!defaultSERCQ_SENDAddress;
+
+  const validatingSpecialPecList: Array<string> = specialPECAddresses
+    .filter(
+      (pecAddr) =>
+        pecAddr.pecValid === false &&
+        (isDefaultSercqSendActive ||
+          specialSERCQ_SENDAddresses.some((sercqAddr) => sercqAddr.senderId === pecAddr.senderId))
+    )
+    .map((addr) => addr.senderName ?? addr.senderId);
+
+  // eslint-disable-next-line functional/no-let
+  let bannerMessage = '';
+  if (!isValidatingDefaultPec && validatingSpecialPecList.length === 0) {
+    return;
+  }
+  if (isValidatingDefaultPec) {
+    if (isDefaultSercqSendActive) {
+      bannerMessage = 'dod-enabled-message';
+    } else {
+      bannerMessage = 'dod-disabled-message';
+    }
+  } else {
+    bannerMessage = 'parties-list';
+  }
+  return (
+    <Alert data-testid="PecVerificationAlert" severity="warning" sx={{ my: { xs: 2, lg: 4 } }}>
+      <Typography variant="inherit" sx={{ fontWeight: '600' }}>
+        {t('legal-contacts.pec-validation-banner.title')}
+      </Typography>
+      <Typography variant="inherit">
+        {t(`legal-contacts.pec-validation-banner.${bannerMessage}`, {
+          list: validatingSpecialPecList.join(', '),
+        })}
+      </Typography>
+    </Alert>
+  );
+};
 
 const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
-  const {
-    defaultPECAddress,
-    defaultAPPIOAddress,
-    defaultSERCQ_SENDAddress,
-    specialPECAddresses,
-    specialSERCQ_SENDAddresses,
-    addresses,
-  } = useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultAPPIOAddress, addresses } = useAppSelector(contactsSelectors.selectAddresses);
   const { LANDING_SITE_URL } = getConfiguration();
+
+  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
 
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses())
@@ -40,19 +86,6 @@ const Contacts = () => {
         });
       });
   }, []);
-
-  const hasDodEnabledAndValidatingPec =
-    (!defaultPECAddress?.pecValid && defaultSERCQ_SENDAddress) ||
-    specialSERCQ_SENDAddresses.some((sercqAddr) =>
-      specialPECAddresses.some(
-        (pecAddr) => !pecAddr.pecValid && pecAddr.senderId === sercqAddr.senderId
-      )
-    );
-
-  const hasValidatingPecSpecialContact = specialPECAddresses.some((address) => !address.pecValid);
-
-  const verifyingPecAddress =
-    (defaultPECAddress && !defaultPECAddress.pecValid) || hasValidatingPecSpecialContact;
 
   const faqWhatIsAarCompleteLink = useMemo(
     () =>
@@ -91,9 +124,20 @@ const Contacts = () => {
     />
   );
 
-  const bannerMessage = hasDodEnabledAndValidatingPec
-    ? 'legal-contacts.pec-validation-banner.dod-enabled-message'
-    : 'legal-contacts.pec-validation-banner.dod-disabled-message';
+  const goToSection = (section: ChannelType) => {
+    const sectionId = section === ChannelType.EMAIL ? 'emailContactSection' : 'ioContactSection';
+    const titleId = section === ChannelType.EMAIL ? 'default_email' : 'ioContactButton';
+
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById(titleId)?.focus({ preventScroll: true });
+  };
+
+  useEffect(() => {
+    if (externalEvent && externalEvent.operation === ContactOperation.SCROLL) {
+      goToSection(externalEvent.destination);
+      dispatch(resetExternalEvent());
+    }
+  }, [externalEvent]);
 
   return (
     <LoadingPageWrapper isInitialized={true}>
@@ -109,14 +153,7 @@ const Contacts = () => {
           reloadAction={fetchAddresses}
         >
           <DomicileBanner source={ContactSource.RECAPITI} />
-          {verifyingPecAddress && (
-            <Alert data-testid="PecVerificationAlert" severity="info" sx={{ my: { xs: 2, lg: 4 } }}>
-              <Typography variant="inherit" sx={{ fontWeight: '600' }}>
-                {t('legal-contacts.pec-validation-banner.title', { ns: 'recapiti' })}
-              </Typography>
-              <Typography variant="inherit">{t(bannerMessage, { ns: 'recapiti' })}</Typography>
-            </Alert>
-          )}
+          <ValidatingPecBanner />
           <Stack direction="column" spacing={2} mt={2}>
             <LegalContacts />
             <CourtesyContacts />

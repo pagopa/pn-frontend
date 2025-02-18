@@ -387,9 +387,9 @@ const NotificationDetail = () => {
     userHasAdminPermissions &&
     !currentUser.hasGroup &&
     !mandateId &&
-    notification.notificationStatusHistory.findIndex(
+    notification.notificationStatusHistory.some(
       (history) => history.status === NotificationStatus.VIEWED
-    ) > -1;
+    );
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
