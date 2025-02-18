@@ -1,5 +1,4 @@
 import { PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons';
-
 import {
   BffNewNotificationRequest,
   F24Payment,
@@ -16,6 +15,7 @@ import {
   NewNotificationPagoPaPayment,
   NewNotificationRecipient,
   NotificationFeePolicy,
+  PaymentModel,
 } from '../models/NewNotification';
 import { UserGroup } from '../models/user';
 import { userResponse } from './Auth.mock';
@@ -289,6 +289,7 @@ export const newNotification: NewNotification = {
   notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
   senderDenomination: userResponse.organization.name,
   senderTaxId: userResponse.organization.fiscal_code,
+  paymentMode: PaymentModel.F24,
   lang: 'it',
   additionalLang: '',
   additionalSubject: '',

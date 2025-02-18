@@ -223,7 +223,7 @@ const PaymentMethods: React.FC<Props> = ({
               <SectionHeading>
                 {t('payment-models')} {recipient.firstName} {recipient.lastName}
               </SectionHeading>
-              {recipient.payments && recipient.payments.map((payment, index) => 
+              {recipient.payments && recipient.payments.map((_payment, index) => 
               notification.paymentMode === PaymentModel.PAGO_PA_NOTICE ?
               (<PaymentBox
                 key={`${recipient.taxId}-payment-${index}`}
