@@ -123,7 +123,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    console.log('errorOnPayment :>> ', errorOnPayment);
     const unpaidPayments = pagoPaF24.some((f) => f.pagoPa?.status === PaymentStatus.REQUIRED);
     if (isSinglePayment && unpaidPayments) {
       setSelectedPayment(pagoPaF24[0] ?? { pagoPa: null });

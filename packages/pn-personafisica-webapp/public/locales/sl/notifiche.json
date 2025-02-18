@@ -42,6 +42,7 @@
     "payment-table-aria-label": "Podrobnosti o plačilih",
     "date": "Datum pošiljanja",
     "payment-terms": "Plačati do",
+    "menu-aria-label": "Meni dejanj",
     "sender": "Pošiljatelj",
     "recipient": "Prejemnik",
     "cancelled-iun": "Koda IUN je preklicana",

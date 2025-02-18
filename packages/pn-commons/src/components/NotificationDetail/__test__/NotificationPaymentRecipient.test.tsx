@@ -89,7 +89,7 @@ describe('NotificationPaymentRecipient Component', () => {
       expect(getByTestId('payment-error')).toBeInTheDocument();
     });
 
-    // Clicca sul radioButton per correggere l'errore
+    // Click on the radioButton to correct the error
     fireEvent.click(radioButton!);
 
     await waitFor(() => {

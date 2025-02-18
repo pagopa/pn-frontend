@@ -42,6 +42,7 @@
     "payment-table-aria-label": "Détail des paiements",
     "date": "Date d’envoi",
     "payment-terms": "À payer avant le",
+    "menu-aria-label": "Menu actions",
     "sender": "Expéditeur",
     "recipient": "Destinataire",
     "cancelled-iun": "Code IUN annulé",

@@ -59,32 +59,29 @@ const Deleghe = () => {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_REVOKED);
       void dispatch(revokeMandate(id))
         .unwrap()
-        .then(() =>
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_GIVEN, { delegators })
-        )
-        .then(() => {
-          dispatch(
+        .then(
+          () =>
+            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_GIVEN, { delegators }),
+          void dispatch(
             appStateActions.addSuccess({
               title: '',
               message: t('deleghe.revoke-successfully'),
             })
-          );
-        });
+          )
+        );
     } else {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_REJECTED);
       void dispatch(rejectMandate(id))
         .unwrap()
-        .then(() =>
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_HAS_MANDATE, { delegates })
-        )
-        .then(() => {
-          dispatch(
+        .then(
+          () => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_HAS_MANDATE, { delegates }),
+          void dispatch(
             appStateActions.addSuccess({
               title: '',
               message: t('deleghe.reject-successfully'),
             })
-          );
-        });
+          )
+        );
     }
   };
 
