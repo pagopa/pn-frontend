@@ -74,7 +74,7 @@ const testRecipientFormRendering = async (
 
   const physicalForm = within(form).queryByTestId(`physicalAddressForm${recipientIndex}`);
   expect(physicalForm).toBeInTheDocument();
-  
+
   if (recipient) {
     const address = physicalForm?.querySelector(
       `input[name="recipients[${recipientIndex}].address"]`
@@ -157,6 +157,10 @@ const testStringFieldValidation = async (
   return error!;
 };
 
+const recipientsWithoutPayments = newNotification.recipients.map(
+  ({ payments, ...recipient }) => recipient
+);
+
 describe('Recipient Component with payment enabled', async () => {
   const confirmHandlerMk = vi.fn();
   let result: RenderResult;
@@ -209,7 +213,7 @@ describe('Recipient Component with payment enabled', async () => {
     await waitFor(() => {
       const state = testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual(
-        newNotification.recipients
+        recipientsWithoutPayments
       );
     });
     expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
@@ -314,7 +318,7 @@ describe('Recipient Component with payment enabled', async () => {
     await waitFor(() => {
       const state = testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
-        newNotification.recipients[0],
+        recipientsWithoutPayments[0],
       ]);
     });
     expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
@@ -340,7 +344,7 @@ describe('Recipient Component with payment enabled', async () => {
     await waitFor(() => {
       const state = testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
-        newNotification.recipients[0],
+        recipientsWithoutPayments[0],
       ]);
     });
     expect(previousHandlerMk).toHaveBeenCalledTimes(1);
@@ -380,11 +384,13 @@ describe('Recipient Component with payment enabled', async () => {
     expect(taxIdError).toHaveTextContent('fiscal-code-error');
     // digitalDomicile
     await testInput(form, 'recipients[0].digitalDomicile', ' text-with-spaces ');
-    const digitalDomicileError = form.querySelector(`[id="recipients[0].digitalDomicile-helper-text"]`);
+    const digitalDomicileError = form.querySelector(
+      `[id="recipients[0].digitalDomicile-helper-text"]`
+    );
     expect(digitalDomicileError).toHaveTextContent('no-spaces-at-edges');
     await testInput(form, 'recipients[0].digitalDomicile', 'wrong-email-format');
     expect(digitalDomicileError).toHaveTextContent('pec-error');
-    
+
     // address
     await testStringFieldValidation(form, 0, 'address', 1025);
     // houseNumber
@@ -447,7 +453,7 @@ describe('Recipient Component without payment enabled', async () => {
     await waitFor(() => {
       const state = testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
-        { ...newNotification.recipients[0]},
+        recipientsWithoutPayments[0],
       ]);
     });
     expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
