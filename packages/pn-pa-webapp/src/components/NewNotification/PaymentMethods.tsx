@@ -1,5 +1,6 @@
 import { useFormik } from 'formik';
-import { ForwardedRef, Fragment, forwardRef, useImperativeHandle, useMemo } from 'react';
+import _ from 'lodash';
+import { ForwardedRef, Fragment, forwardRef, useImperativeHandle } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Link, Paper, Typography } from '@mui/material';
@@ -7,14 +8,16 @@ import { FileUpload, SectionHeading, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotification,
-  NewNotificationDocument,
+  NewNotificationF24Payment,
+  NewNotificationPagoPaPayment,
   NewNotificationPayment,
   PaymentModel,
   PaymentObject,
 } from '../../models/NewNotification';
-import { useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { uploadNotificationPaymentDocument } from '../../redux/newNotification/actions';
 import { setIsCompleted, setPayments } from '../../redux/newNotification/reducers';
+import { RootState } from '../../redux/store';
 import NewNotificationCard from './NewNotificationCard';
 
 type PaymentBoxProps = {
@@ -26,7 +29,7 @@ type PaymentBoxProps = {
     sha256?: { hashBase64: string; hashHex: string }
   ) => void;
   onRemoveFile: (id: string) => void;
-  fileUploaded?: NewNotificationDocument;
+  fileUploaded?: NewNotificationPagoPaPayment | NewNotificationF24Payment;
 };
 
 const PaymentBox: React.FC<PaymentBoxProps> = ({
@@ -84,18 +87,92 @@ const PaymentMethods: React.FC<Props> = ({
     keyPrefix: 'new-notification.steps.payment-methods',
   });
   const { t: tc } = useTranslation(['common']);
+  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
-  const initialValues = useMemo(
-    () =>
-      notification.recipients.map((recipient) => ({
-        ...recipient,
-        payments:
-          recipient.payments && recipient.payments.length > 0
-            ? recipient.payments
-            : ({} as NewNotificationPayment),
-      })),
-    []
-  );
+  const posDeb = 'pagopa';
+  const newPagopaPaymentDocument = (id: string): NewNotificationPagoPaPayment => ({
+    id,
+    idx: 0,
+    contentType: 'application/pdf',
+    file: emptyFileData,
+    creditorTaxId: organization.fiscal_code,
+    noticeCode: '',
+    applyCost: false,
+    ref: {
+      key: '',
+      versionToken: '',
+    },
+  });
+  const newF24PaymentDocument = (id: string, name: string): NewNotificationF24Payment => ({
+    id,
+    idx: 0,
+    contentType: 'application/pdf',
+    file: emptyFileData,
+    name,
+    applyCost: false,
+    ref: {
+      key: '',
+      versionToken: '',
+    },
+  });
+  const initialValues = notification.recipients.map((recipient) => {
+    const recipientPayments =
+      !_.isNil(recipient.payments) && !_.isEmpty(recipient.payments) ? recipient.payments : [];
+
+    const hasPagoPa = recipientPayments?.some((p) => p.pagoPa);
+    const hasF24 = recipientPayments?.some((p) => p.f24);
+
+    // eslint-disable-next-line functional/no-let, prefer-const
+    let payments: Array<NewNotificationPayment> = recipientPayments;
+
+    switch (posDeb) {
+      case 'pagopa':
+        if (!hasPagoPa) {
+          // eslint-disable-next-line functional/immutable-data
+          payments.push({
+            pagoPa: newPagopaPaymentDocument(`${recipient.taxId}-pagoPaDoc`),
+          });
+        }
+        break;
+      case 'f24':
+        if (!hasF24) {
+          // eslint-disable-next-line functional/immutable-data
+          payments.push({
+            f24: newF24PaymentDocument(`${recipient.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
+          });
+        }
+        break;
+      case 'f24 + pagopa':
+        if (!hasF24 && !hasPagoPa) {
+          // eslint-disable-next-line functional/immutable-data
+          payments.push({
+            pagoPa: newPagopaPaymentDocument(`${recipient.taxId}-pagoPaDoc`),
+            f24: newF24PaymentDocument(`${recipient.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
+          });
+          return;
+        }
+        if (!hasF24) {
+          // eslint-disable-next-line functional/immutable-data
+          payments.push({
+            f24: newF24PaymentDocument(`${recipient.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
+          });
+        }
+        if (!hasPagoPa) {
+          // eslint-disable-next-line functional/immutable-data
+          payments.push({
+            pagoPa: newPagopaPaymentDocument(`${recipient.taxId}-pagoPaDoc`),
+          });
+        }
+        break;
+      default:
+        break;
+    }
+
+    console.log(initialValues);
+    return {
+      [recipient.taxId]: payments,
+    };
+  });
 
   const handlePreviousStep = () => {
     if (onPreviousStep) {
@@ -134,7 +211,7 @@ const PaymentMethods: React.FC<Props> = ({
     return isEmpty;
   };
 
-  const formik = useFormik<{ [key: string]: any }>({
+  const formik = useFormik({
     initialValues,
     validateOnMount: true,
     onSubmit: async (values) => {
@@ -182,7 +259,7 @@ const PaymentMethods: React.FC<Props> = ({
     await formik.setFieldValue(
       id,
       {
-        ...formik.values[taxId][paymentType],
+        ...formik.values.find((v) => v && v[taxId])?.[paymentType],
         file: { data: file, sha256 },
         ref: {
           key: '',
@@ -196,7 +273,7 @@ const PaymentMethods: React.FC<Props> = ({
 
   const removeFileHandler = async (id: string, taxId: string, paymentType: 'pagoPa' | 'f24') => {
     await formik.setFieldValue(id, {
-      ...formik.values[taxId][paymentType],
+      ...formik.values.find((v) => v && v[taxId])?.[paymentType],
       file: emptyFileData,
       ref: {
         key: '',
@@ -237,7 +314,7 @@ const PaymentMethods: React.FC<Props> = ({
                         fileUploadedHandler(recipient.taxId, 'pagoPa', id, file, sha256)
                       }
                       onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPa')}
-                      fileUploaded={formik.values[recipient.taxId]?.pagoPa}
+                      fileUploaded={formik.values.find((v) => v && v[recipient.taxId])?.pagoPa}
                     />
                   ) : (
                     <PaymentBox
