@@ -89,11 +89,14 @@ const PaymentMethods: React.FC<Props> = ({
     () =>
       notification.recipients.map((recipient) => ({
         ...recipient,
-        payments: recipient.payments && recipient.payments.length > 0 ? recipient.payments : {} as NewNotificationPayment,
+        payments:
+          recipient.payments && recipient.payments.length > 0
+            ? recipient.payments
+            : ({} as NewNotificationPayment),
       })),
     []
   );
-  
+
   const handlePreviousStep = () => {
     if (onPreviousStep) {
       dispatch(setPayments({ recipients: notification.recipients }));
@@ -223,32 +226,33 @@ const PaymentMethods: React.FC<Props> = ({
               <SectionHeading>
                 {t('payment-models')} {recipient.firstName} {recipient.lastName}
               </SectionHeading>
-              {recipient.payments && recipient.payments.map((_payment, index) => 
-              notification.paymentMode === PaymentModel.PAGO_PA_NOTICE ?
-              (<PaymentBox
-                key={`${recipient.taxId}-payment-${index}`}
-                id={`${recipient.taxId}.pagoPa`}
-                title={`${t('attach-pagopa-notice')}`}
-                onFileUploaded={(id, file, sha256) =>
-                  fileUploadedHandler(recipient.taxId, 'pagoPa', id, file, sha256)
-                }
-                onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPa')}
-                fileUploaded={formik.values[recipient.taxId]?.pagoPa}
-              />) 
-              :
-              (<PaymentBox
-                id={`${recipient.taxId}.f24`}
-                title={`${t('attach-f24')}`}
-                onFileUploaded={(id, file, sha256) =>
-                  fileUploadedHandler(recipient.taxId, 'f24', id, file, sha256)
-                }
-                onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24')}
-                fileUploaded={formik.values[recipient.taxId]?.f24}
-              />)
-              )}
+              {recipient.payments &&
+                recipient.payments.map((_payment, index) =>
+                  notification.paymentMode === PaymentModel.PAGO_PA_NOTICE ? (
+                    <PaymentBox
+                      key={`${recipient.taxId}-payment-${index}`}
+                      id={`${recipient.taxId}.pagoPa`}
+                      title={`${t('attach-pagopa-notice')}`}
+                      onFileUploaded={(id, file, sha256) =>
+                        fileUploadedHandler(recipient.taxId, 'pagoPa', id, file, sha256)
+                      }
+                      onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPa')}
+                      fileUploaded={formik.values[recipient.taxId]?.pagoPa}
+                    />
+                  ) : (
+                    <PaymentBox
+                      id={`${recipient.taxId}.f24`}
+                      title={`${t('attach-f24')}`}
+                      onFileUploaded={(id, file, sha256) =>
+                        fileUploadedHandler(recipient.taxId, 'f24', id, file, sha256)
+                      }
+                      onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24')}
+                      fileUploaded={formik.values[recipient.taxId]?.f24}
+                    />
+                  )
+                )}
             </Paper>
-        ))
-        }
+          ))}
         {notification.paymentMode === PaymentModel.NOTHING && (
           <Paper sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
             <Trans
