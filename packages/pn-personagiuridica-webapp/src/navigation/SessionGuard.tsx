@@ -128,7 +128,6 @@ const SessionGuardRender = () => {
  */
 const SessionGuard = () => {
   const location = useLocation();
-  const [params] = useSearchParams();
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
   const {
     sessionToken,
@@ -174,7 +173,7 @@ const SessionGuard = () => {
       // ----------------------
       const spidToken = getTokenParam();
       if (spidToken) {
-        const aar = params.get(AppRouteParams.AAR) || undefined;
+        const aar = localStorage.getItem(AppRouteParams.AAR) || undefined;
         AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
         await dispatch(exchangeToken({ spidToken, aar }));
       }
