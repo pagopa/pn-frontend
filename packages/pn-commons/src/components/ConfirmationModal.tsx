@@ -1,61 +1,59 @@
 import * as React from 'react';
 
-import { Button, DialogContentText, DialogTitle } from '@mui/material';
+import { Button, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 type Props = {
   open: boolean;
   title: string;
-  subtitle?: string | JSX.Element;
-  onConfirm?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  onConfirm?: React.MouseEventHandler<HTMLButtonElement>;
   onConfirmLabel?: string;
   onClose: React.MouseEventHandler<HTMLButtonElement> | undefined;
   onCloseLabel?: string;
-  minHeight?: string;
   width?: string;
+  children?: React.ReactNode;
 };
 export default function ConfirmationModal({
   open,
   title,
-  subtitle = '',
   onConfirm,
   onConfirmLabel = 'Riprova',
   onClose,
   onCloseLabel = 'Annulla',
-}: Props) {
+  children,
+}: Readonly<Props>) {
   return (
     <PnDialog
       id="confirmation-dialog"
       open={open}
       onClose={onClose}
-      aria-labelledby="dialog-title"
+      aria-labelledby="confirmation-dialog-title"
+      maxWidth="sm"
       data-testid="confirmationDialog"
     >
-      <DialogTitle id="dialog-title">{title}</DialogTitle>
-      <PnDialogContent>
-        <DialogContentText id="dialog-description">{subtitle}</DialogContentText>
-      </PnDialogContent>
+      <DialogTitle id="confirmation-dialog-title">{title}</DialogTitle>
+      {children && <PnDialogContent>{children}</PnDialogContent>}
       <PnDialogActions>
-        <Button
-          id="dialog-close-button"
-          onClick={onClose}
-          color="primary"
-          variant="outlined"
-          data-testid="dialogAction"
-        >
-          {onCloseLabel}
-        </Button>
         {onConfirm && (
           <Button
-            id="dialog-action-button"
+            id="dialog-confirm-button"
             color="primary"
             variant="contained"
             onClick={onConfirm}
-            data-testid="dialogAction"
+            data-testid="confirmButton"
           >
             {onConfirmLabel}
           </Button>
         )}
+        <Button
+          id="dialog-close-button"
+          color="primary"
+          variant="outlined"
+          onClick={onClose}
+          data-testid="closeButton"
+        >
+          {onCloseLabel}
+        </Button>
       </PnDialogActions>
     </PnDialog>
   );

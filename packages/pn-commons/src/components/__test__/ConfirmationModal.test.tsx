@@ -1,18 +1,14 @@
 import { vi } from 'vitest';
 
-import { fireEvent, render } from '../../../__test__/test-utils';
+import { fireEvent, render } from '../../test-utils';
 import ConfirmationModal from '../ConfirmationModal';
 
 const mockCancelFunction = vi.fn();
 const mockConfirmFunction = vi.fn();
 
 describe('ConfirmationModal Component', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('renders the component', () => {
-    const { getByRole, getAllByTestId } = render(
+    const { getByRole, getByTestId } = render(
       <ConfirmationModal
         title={'Test title'}
         onClose={mockCancelFunction}
@@ -22,17 +18,18 @@ describe('ConfirmationModal Component', () => {
         onConfirmLabel={'Confirm'}
       />
     );
+
     const dialog = getByRole('dialog');
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent(/Test Title/i);
-    const dialogActions = getAllByTestId('dialogAction');
-    expect(dialogActions).toHaveLength(2);
-    expect(dialogActions[1]).toHaveTextContent(/Confirm/i);
-    expect(dialogActions[0]).toHaveTextContent(/Cancel/i);
+    const confirmButton = getByTestId('confirmButton');
+    const closeButton = getByTestId('closeButton');
+    expect(confirmButton).toHaveTextContent(/Confirm/i);
+    expect(closeButton).toHaveTextContent(/Cancel/i);
   });
 
   it('checks that the confirm and cancel functions are executed', () => {
-    const { getAllByTestId } = render(
+    const { getByTestId } = render(
       <ConfirmationModal
         title={'Test title'}
         onClose={mockCancelFunction}
@@ -42,17 +39,17 @@ describe('ConfirmationModal Component', () => {
         onConfirmLabel={'Confirm'}
       />
     );
-    const dialogActions = getAllByTestId('dialogAction');
-    const confirm = dialogActions[1];
-    const cancel = dialogActions[0];
-    fireEvent.click(confirm);
-    expect(mockConfirmFunction).toBeCalledTimes(1);
-    fireEvent.click(cancel);
-    expect(mockCancelFunction).toBeCalledTimes(1);
+
+    const confirmButton = getByTestId('confirmButton');
+    const cancelButton = getByTestId('closeButton');
+    fireEvent.click(confirmButton);
+    expect(mockConfirmFunction).toHaveBeenCalledTimes(1);
+    fireEvent.click(cancelButton);
+    expect(mockCancelFunction).toHaveBeenCalledTimes(1);
   });
 
   it('renders the dialog with default labels', () => {
-    const { getAllByTestId } = render(
+    const { getByTestId } = render(
       <ConfirmationModal
         title={'Test title'}
         onClose={mockCancelFunction}
@@ -60,19 +57,20 @@ describe('ConfirmationModal Component', () => {
         onConfirm={mockConfirmFunction}
       />
     );
-    const dialogActions = getAllByTestId('dialogAction');
-    const confirm = dialogActions[1];
-    const cancel = dialogActions[0];
-    expect(confirm).toHaveTextContent(/Riprova/i);
-    expect(cancel).toHaveTextContent(/Annulla/i);
+
+    const confirmButton = getByTestId('confirmButton');
+    const cancelButton = getByTestId('closeButton');
+    expect(confirmButton).toHaveTextContent(/Riprova/i);
+    expect(cancelButton).toHaveTextContent(/Annulla/i);
   });
 
   it('renders the dialog with no confirm button', () => {
-    const { getAllByTestId } = render(
+    const { getByTestId, queryByTestId } = render(
       <ConfirmationModal title={'Test title'} onClose={mockCancelFunction} open />
     );
-    const dialogActions = getAllByTestId('dialogAction');
-    expect(dialogActions).toHaveLength(1);
-    expect(dialogActions[0]).toHaveTextContent(/Annulla/i);
+    const confirmButton = queryByTestId('confirmButton');
+    const cancelButton = getByTestId('closeButton');
+    expect(confirmButton).not.toBeInTheDocument();
+    expect(cancelButton).toHaveTextContent(/Annulla/i);
   });
 });

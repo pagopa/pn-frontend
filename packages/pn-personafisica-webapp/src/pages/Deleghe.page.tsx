@@ -6,12 +6,12 @@ import {
   AppResponse,
   AppResponsePublisher,
   CodeModal,
+  ConfirmationModal,
   ErrorMessage,
   TitleBox,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import ConfirmationModal from '../components/Deleghe/ConfirmationModal';
 import Delegates from '../components/Deleghe/Delegates';
 import Delegators from '../components/Deleghe/Delegators';
 import MobileDelegates from '../components/Deleghe/MobileDelegates';
@@ -43,8 +43,9 @@ const Deleghe = () => {
     name: acceptName,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
   const [pageReady, setPageReady] = useState(false);
-  const codeModalRef =
-    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
+  const codeModalRef = useRef<{
+    updateError: (error: ErrorMessage, codeNotValid: boolean) => void;
+  }>(null);
 
   const dispatch = useAppDispatch();
 
@@ -154,7 +155,7 @@ const Deleghe = () => {
               : t('deleghe.rejection_question')
           }
           onCloseLabel={t('button.annulla', { ns: 'common' })}
-          handleClose={handleCloseModal}
+          onClose={handleCloseModal}
           onConfirm={handleConfirmClick}
           onConfirmLabel={
             type === 'delegates' ? t('deleghe.confirm_revocation') : t('deleghe.confirm_rejection')

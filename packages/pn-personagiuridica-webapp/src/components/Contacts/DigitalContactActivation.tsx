@@ -2,14 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, DialogContentText, DialogTitle, Typography } from '@mui/material';
-import {
-  PnDialog,
-  PnDialogActions,
-  PnDialogContent,
-  PnWizard,
-  PnWizardStep,
-} from '@pagopa-pn/pn-commons';
+import { Button, DialogContentText, Typography } from '@mui/material';
+import { ConfirmationModal, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import PecContactWizard from '../../components/Contacts/PecContactWizard';
@@ -25,63 +19,6 @@ type Props = {
 type ModalType = {
   open: boolean;
   exit?: boolean;
-};
-
-type DialogProps = {
-  open: boolean;
-  title: string;
-  content: string;
-  onConfirm: () => void;
-  confirmAction: string;
-  onDiscard?: () => void;
-};
-
-const CourtesyContactConfirmationDialog: React.FC<DialogProps> = ({
-  open,
-  title,
-  content,
-  onConfirm,
-  confirmAction,
-  onDiscard,
-}) => {
-  const { t } = useTranslation(['common', 'recapiti']);
-
-  return (
-    <PnDialog
-      open={open}
-      onClose={onDiscard}
-      aria-labelledby="dialog-title"
-      aria-describedby="dialog-description"
-      data-testid="confirmationDialog"
-    >
-      <DialogTitle id="dialog-title">{title}</DialogTitle>
-      <PnDialogContent>
-        <Trans
-          ns={'recapiti'}
-          i18nKey={content}
-          components={[
-            <DialogContentText key="paragraph1" id="dialog-description" color="text.primary" />,
-            <DialogContentText
-              key="paragraph2"
-              id="dialog-description"
-              color="text.primary"
-              mt={2}
-            />,
-          ]}
-        />
-      </PnDialogContent>
-      <PnDialogActions>
-        <Button key="confirm" onClick={onConfirm} variant="contained" data-testid="confirmButton">
-          {confirmAction}
-        </Button>
-        {onDiscard && (
-          <Button key="cancel" onClick={onDiscard} variant="outlined" data-testid="discardButton">
-            {t('button.do-later')}
-          </Button>
-        )}
-      </PnDialogActions>
-    </PnDialog>
-  );
 };
 
 const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) => {
@@ -192,14 +129,28 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
           </PnWizardStep>
         )}
       </PnWizard>
-      <CourtesyContactConfirmationDialog
+      <ConfirmationModal
         open={modal.open}
         title={t('courtesy-contacts.confirmation-modal-title')}
-        content={modal ? `courtesy-contacts.confirmation-modal-content` : ''}
         onConfirm={handleConfirmationModalAccept}
-        confirmAction={t(`courtesy-contacts.confirmation-modal-accept`)}
-        onDiscard={handleConfirmationModalDecline}
-      />
+        onConfirmLabel={t(`courtesy-contacts.confirmation-modal-accept`)}
+        onClose={handleConfirmationModalDecline}
+        onCloseLabel={t('button.do-later', { ns: 'common' })}
+      >
+        <Trans
+          ns={'recapiti'}
+          i18nKey={modal ? `courtesy-contacts.confirmation-modal-content` : ''}
+          components={[
+            <DialogContentText key="paragraph1" id="dialog-description" color="text.primary" />,
+            <DialogContentText
+              key="paragraph2"
+              id="dialog-description"
+              color="text.primary"
+              mt={2}
+            />,
+          ]}
+        />
+      </ConfirmationModal>
     </>
   );
 };
