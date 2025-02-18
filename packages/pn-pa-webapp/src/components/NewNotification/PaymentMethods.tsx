@@ -89,7 +89,6 @@ const PaymentMethods: React.FC<Props> = ({
   const { t: tc } = useTranslation(['common']);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
-  const posDeb = 'pagopa';
   const newPagopaPaymentDocument = (id: string): NewNotificationPagoPaPayment => ({
     id,
     idx: 0,
@@ -115,64 +114,49 @@ const PaymentMethods: React.FC<Props> = ({
       versionToken: '',
     },
   });
-  const initialValues = notification.recipients.map((recipient) => {
+  const initialValues = notification.recipients.reduce((acc, recipient) => {
     const recipientPayments =
       !_.isNil(recipient.payments) && !_.isEmpty(recipient.payments) ? recipient.payments : [];
 
-    const hasPagoPa = recipientPayments?.some((p) => p.pagoPa);
-    const hasF24 = recipientPayments?.some((p) => p.f24);
+    const hasPagoPa = recipientPayments.some((p) => p.pagoPa);
+    const hasF24 = recipientPayments.some((p) => p.f24);
 
-    // eslint-disable-next-line functional/no-let, prefer-const
-    let payments: Array<NewNotificationPayment> = recipientPayments;
+    // eslint-disable-next-line prefer-const, functional/no-let
+    let payments: Array<NewNotificationPayment> = [...recipientPayments];
+    // eslint-disable-next-line prefer-const, functional/no-let
+    let posDeb = 'f24pagopa';
 
-    switch (posDeb) {
-      case 'pagopa':
-        if (!hasPagoPa) {
-          // eslint-disable-next-line functional/immutable-data
-          payments.push({
-            pagoPa: newPagopaPaymentDocument(`${recipient.taxId}-pagoPaDoc`),
-          });
-        }
-        break;
-      case 'f24':
-        if (!hasF24) {
-          // eslint-disable-next-line functional/immutable-data
-          payments.push({
-            f24: newF24PaymentDocument(`${recipient.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
-          });
-        }
-        break;
-      case 'f24 + pagopa':
-        if (!hasF24 && !hasPagoPa) {
-          // eslint-disable-next-line functional/immutable-data
-          payments.push({
-            pagoPa: newPagopaPaymentDocument(`${recipient.taxId}-pagoPaDoc`),
-            f24: newF24PaymentDocument(`${recipient.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
-          });
-          return;
-        }
-        if (!hasF24) {
-          // eslint-disable-next-line functional/immutable-data
-          payments.push({
-            f24: newF24PaymentDocument(`${recipient.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
-          });
-        }
-        if (!hasPagoPa) {
-          // eslint-disable-next-line functional/immutable-data
-          payments.push({
-            pagoPa: newPagopaPaymentDocument(`${recipient.taxId}-pagoPaDoc`),
-          });
-        }
-        break;
-      default:
-        break;
+    /* eslint-disable functional/immutable-data */
+    if (posDeb === 'pagopa' && !hasPagoPa) {
+      payments.push({
+        pagoPa: newPagopaPaymentDocument(`${recipient.taxId}-pagoPaDoc`),
+      });
+    } else if (posDeb === 'f24' && !hasF24) {
+      payments.push({
+        f24: newF24PaymentDocument(`${recipient.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
+      });
+    } else if (posDeb === 'f24 + pagopa') {
+      if (!hasF24 && !hasPagoPa) {
+        payments.push({
+          pagoPa: newPagopaPaymentDocument(`${recipient.taxId}-pagoPaDoc`),
+          f24: newF24PaymentDocument(`${recipient.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
+        });
+      } else if (!hasF24) {
+        payments.push({
+          f24: newF24PaymentDocument(`${recipient.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
+        });
+      } else if (!hasPagoPa) {
+        payments.push({
+          pagoPa: newPagopaPaymentDocument(`${recipient.taxId}-pagoPaDoc`),
+        });
+      }
     }
+    /* eslint-enable functional/immutable-data */
 
-    console.log(initialValues);
-    return {
-      [recipient.taxId]: payments,
-    };
-  });
+    return { ...acc, [recipient.taxId]: payments };
+  }, {});
+
+  console.log(initialValues);
 
   const handlePreviousStep = () => {
     if (onPreviousStep) {
@@ -314,7 +298,9 @@ const PaymentMethods: React.FC<Props> = ({
                         fileUploadedHandler(recipient.taxId, 'pagoPa', id, file, sha256)
                       }
                       onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPa')}
-                      fileUploaded={formik.values.find((v) => v && v[recipient.taxId])?.pagoPa.}
+                      fileUploaded={
+                        formik.values.find((v) => v && v[recipient.taxId])?.pagoPa[0].pagoPa
+                      }
                     />
                   ) : (
                     <PaymentBox
