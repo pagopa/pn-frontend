@@ -36,4 +36,10 @@ export interface User extends BasicUser {
   organization: Organization;
   desired_exp: number;
   hasGroup?: boolean;
+  source?: UserSource;
+}
+
+export interface UserSource {
+  channel: 'WEB';
+  details: 'QR_CODE';
 }

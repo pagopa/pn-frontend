@@ -9,7 +9,7 @@ import { store } from '../redux/store';
 export const mockLogin = async (body: User | string = userResponse): Promise<any> => {
   const mock = new MockAdapter(authClient);
   mock.onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: 'mocked-token' }).reply(200, body);
-  const action = store.dispatch(exchangeToken('mocked-token'));
+  const action = store.dispatch(exchangeToken({ spidToken: 'mocked-token' }));
   mock.reset();
   mock.restore();
   return action;
@@ -23,7 +23,7 @@ export const mockAuthentication = () => {
   beforeAll(() => {
     mock = new MockAdapter(authClient);
     mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(200, userResponse);
-    store.dispatch(exchangeToken('mocked-token'));
+    store.dispatch(exchangeToken({ spidToken: 'mocked-token' }));
   });
 
   afterAll(() => {
@@ -60,4 +60,12 @@ export const userResponse: User = {
     fiscal_code: '12345678910',
   },
   hasGroup: false,
+};
+
+export const userResponseWithSource: User = {
+  ...userResponse,
+  source: {
+    channel: 'WEB',
+    details: 'QR_CODE',
+  }
 };
