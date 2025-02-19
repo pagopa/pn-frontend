@@ -93,7 +93,7 @@ const delegationsSlice = createSlice({
       state.acceptModalState.open = false;
     });
     builder.addCase(revokeMandate.fulfilled, (state, action) => {
-      // state.modalState.open = false;
+      state.modalState.open = false;
       state.delegations.delegates = state.delegations.delegates.filter(
         (delegate) => delegate.mandateId !== action.meta.arg
       );

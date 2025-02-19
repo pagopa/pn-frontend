@@ -67,7 +67,6 @@ const Deleghe = () => {
               message: t('deleghe.revoke-successfully'),
             })
           );
-          dispatch(closeRevocationModal());
         })
         .catch(() => {});
     } else {
