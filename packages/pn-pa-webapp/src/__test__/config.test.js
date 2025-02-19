@@ -42,6 +42,8 @@ describe('config.js behavior', () => {
       'https://selfcare.testnotifichedigitali.it',
       'https://selfcare.prod.notifichedigitali.it',
       'https://otherapp.dev.notifichedigitali.it',
+      'https://selfcare.notifichedigitali-it',
+      'https://selfcare-notifichedigitali.it',
     ];
 
     for (const origin of origins) {
