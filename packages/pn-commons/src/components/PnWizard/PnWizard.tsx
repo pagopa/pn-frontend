@@ -19,8 +19,8 @@ import PnWizardStep, { PnWizardStepProps } from './PnWizardStep';
 import PnWizardStepper from './PnWizardStepper';
 
 type Props = {
-  activeStep?: number;
-  setActiveStep?: (step: number) => void;
+  activeStep: number;
+  setActiveStep: (step: number) => void;
   title: ReactNode;
   children: ReactNode;
   onExit: () => void;
@@ -47,8 +47,8 @@ type Props = {
 };
 
 const PnWizard: React.FC<Props> = ({
-  activeStep = 0,
-  setActiveStep = () => {},
+  activeStep,
+  setActiveStep,
   title,
   children,
   onExit,
