@@ -2,14 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, DialogContentText, DialogTitle, Typography } from '@mui/material';
-import {
-  PnDialog,
-  PnDialogActions,
-  PnDialogContent,
-  PnWizard,
-  PnWizardStep,
-} from '@pagopa-pn/pn-commons';
+import { Button, DialogContentText, Typography } from '@mui/material';
+import { ConfirmationModal, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import PecContactWizard from '../../components/Contacts/PecContactWizard';
@@ -24,64 +18,6 @@ type Props = {
 
 type ModalType = {
   open: boolean;
-  exit?: boolean;
-};
-
-type DialogProps = {
-  open: boolean;
-  title: string;
-  content: string;
-  onConfirm: () => void;
-  confirmAction: string;
-  onDiscard?: () => void;
-};
-
-const CourtesyContactConfirmationDialog: React.FC<DialogProps> = ({
-  open,
-  title,
-  content,
-  onConfirm,
-  confirmAction,
-  onDiscard,
-}) => {
-  const { t } = useTranslation(['common', 'recapiti']);
-
-  return (
-    <PnDialog
-      open={open}
-      onClose={onDiscard}
-      aria-labelledby="dialog-title"
-      aria-describedby="dialog-description"
-      data-testid="confirmationDialog"
-    >
-      <DialogTitle id="dialog-title">{title}</DialogTitle>
-      <PnDialogContent>
-        <Trans
-          ns={'recapiti'}
-          i18nKey={content}
-          components={[
-            <DialogContentText key="paragraph1" id="dialog-description" color="text.primary" />,
-            <DialogContentText
-              key="paragraph2"
-              id="dialog-description"
-              color="text.primary"
-              mt={2}
-            />,
-          ]}
-        />
-      </PnDialogContent>
-      <PnDialogActions>
-        <Button key="confirm" onClick={onConfirm} variant="contained" data-testid="confirmButton">
-          {confirmAction}
-        </Button>
-        {onDiscard && (
-          <Button key="cancel" onClick={onDiscard} variant="outlined" data-testid="discardButton">
-            {t('button.do-later')}
-          </Button>
-        )}
-      </PnDialogActions>
-    </PnDialog>
-  );
 };
 
 const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) => {
@@ -108,23 +44,19 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
   };
 
   const handleConfirmationModalDecline = () => {
-    if (modal.exit) {
-      setActiveStep(2); // set the current step greater than the number of steps to go to the thankyou page
-    } else {
-      goToNextStep();
-    }
     setModal({ open: false });
+    goToNextStep();
   };
 
-  const handleNotNow = () => {
+  const showConfirmationModal = () => {
     setModal({ open: true });
   };
 
   const handleExit = () => {
-    if (activeStep === 1) {
-      handleNotNow();
-    } else {
+    if (activeStep === 0) {
       navigate(-1);
+    } else {
+      showConfirmationModal();
     }
   };
 
@@ -145,7 +77,12 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
     }
 
     return (
-      <ButtonNaked onClick={handleNotNow} color="primary" size="medium" sx={{ mx: 'auto' }}>
+      <ButtonNaked
+        onClick={showConfirmationModal}
+        color="primary"
+        size="medium"
+        sx={{ mx: 'auto' }}
+      >
         {t('button.not-now', { ns: 'common' })}
       </ButtonNaked>
     );
@@ -180,7 +117,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
             buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
             onClick: () => navigate(-1),
           },
-          buttonContainer: hasCourtesyContact ? { justifyContent: 'flex-end' } : {},
+          actions: hasCourtesyContact ? { justifyContent: 'flex-end' } : {},
         }}
       >
         <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_1.title')}>
@@ -192,14 +129,30 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
           </PnWizardStep>
         )}
       </PnWizard>
-      <CourtesyContactConfirmationDialog
+      <ConfirmationModal
         open={modal.open}
         title={t('courtesy-contacts.confirmation-modal-title')}
-        content={modal ? `courtesy-contacts.confirmation-modal-content` : ''}
-        onConfirm={handleConfirmationModalAccept}
-        confirmAction={t(`courtesy-contacts.confirmation-modal-accept`)}
-        onDiscard={handleConfirmationModalDecline}
-      />
+        slotsProps={{
+          closeButton: { onClick: handleConfirmationModalAccept, variant: 'contained' },
+          confirmButton: { onClick: handleConfirmationModalDecline, variant: 'outlined' },
+        }}
+        onCloseLabel={t(`courtesy-contacts.confirmation-modal-accept`)}
+        onConfirmLabel={t('button.do-later', { ns: 'common' })}
+      >
+        <Trans
+          ns={'recapiti'}
+          i18nKey={modal ? `courtesy-contacts.confirmation-modal-content` : ''}
+          components={[
+            <DialogContentText key="paragraph1" id="dialog-description" color="text.primary" />,
+            <DialogContentText
+              key="paragraph2"
+              id="dialog-description"
+              color="text.primary"
+              mt={2}
+            />,
+          ]}
+        />
+      </ConfirmationModal>
     </>
   );
 };

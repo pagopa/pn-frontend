@@ -351,9 +351,9 @@ describe('DelegationsOfTheCompany Component', async () => {
     fireEvent.click(menuItems[0]);
     const dialog = await waitFor(() => getByTestId('confirmationDialog'));
     expect(dialog).toBeInTheDocument();
-    const dialogAction = within(dialog).getAllByTestId('dialogAction');
+    const confirmButton = within(dialog).getByTestId('confirmButton');
     // click on confirm button
-    fireEvent.click(dialogAction[1]);
+    fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain(

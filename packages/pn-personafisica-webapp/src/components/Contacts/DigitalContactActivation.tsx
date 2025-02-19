@@ -2,14 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, DialogContentText, DialogTitle, Typography } from '@mui/material';
-import {
-  PnDialog,
-  PnDialogActions,
-  PnDialogContent,
-  PnWizard,
-  PnWizardStep,
-} from '@pagopa-pn/pn-commons';
+import { Button, DialogContentText, Typography } from '@mui/material';
+import { ConfirmationModal, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import IOContactWizard from '../../components/Contacts/IOContactWizard';
@@ -32,64 +26,6 @@ enum ActiveStep {
 type ModalType = {
   open: boolean;
   step?: ActiveStep;
-  exit?: boolean;
-};
-
-type DialogProps = {
-  open: boolean;
-  title: string;
-  content: string;
-  onConfirm: () => void;
-  confirmAction: string;
-  onDiscard?: () => void;
-};
-
-const CourtesyContactConfirmationDialog: React.FC<DialogProps> = ({
-  open,
-  title,
-  content,
-  onConfirm,
-  confirmAction,
-  onDiscard,
-}) => {
-  const { t } = useTranslation(['common', 'recapiti']);
-
-  return (
-    <PnDialog
-      open={open}
-      onClose={onDiscard}
-      aria-labelledby="dialog-title"
-      aria-describedby="dialog-description"
-      data-testid="confirmationDialog"
-    >
-      <DialogTitle id="dialog-title">{title}</DialogTitle>
-      <PnDialogContent>
-        <Trans
-          ns={'recapiti'}
-          i18nKey={content}
-          components={[
-            <DialogContentText key="paragraph1" id="dialog-description" color="text.primary" />,
-            <DialogContentText
-              key="paragraph2"
-              id="dialog-description"
-              color="text.primary"
-              mt={2}
-            />,
-          ]}
-        />
-      </PnDialogContent>
-      <PnDialogActions>
-        <Button key="confirm" onClick={onConfirm} variant="contained" data-testid="confirmButton">
-          {confirmAction}
-        </Button>
-        {onDiscard && (
-          <Button key="cancel" onClick={onDiscard} variant="outlined" data-testid="discardButton">
-            {t('button.do-later')}
-          </Button>
-        )}
-      </PnDialogActions>
-    </PnDialog>
-  );
 };
 
 const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) => {
@@ -125,34 +61,24 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
 
   const handleConfirmationModalDecline = () => {
     setModal({ open: false });
-    handleSkipOrExit(!!modal.exit);
+    goToNextStep();
   };
 
-  const handleSkipOrExitClick = (exit: boolean) => {
-    if (hasCourtesyContact || activeStep === 0) {
-      handleSkipOrExit(exit);
+  const handleSkipOrExitClick = () => {
+    if (activeStep === 0) {
+      navigate(-1);
+    } else if (hasCourtesyContact) {
+      setActiveStep(3); // set the current step greater than the number of steps to go to the thankyou page
     } else {
-      showConfirmationModal(exit);
+      showConfirmationModal();
     }
   };
 
-  const handleSkipOrExit = (exit: boolean) => {
-    if (exit) {
-      if (activeStep === 0) {
-        navigate(-1);
-      } else {
-        setActiveStep(3); // set the current step greater than the number of steps to go to the thankyou page
-      }
-    } else {
-      goToNextStep();
-    }
-  };
-
-  const showConfirmationModal = (exit: boolean) => {
+  const showConfirmationModal = () => {
     if (activeStep === 1 && showIOStep) {
-      setModal({ open: true, step: ActiveStep.IO, exit });
+      setModal({ open: true, step: ActiveStep.IO });
     } else {
-      setModal({ open: true, step: ActiveStep.EMAIL, exit });
+      setModal({ open: true, step: ActiveStep.EMAIL });
     }
   };
 
@@ -175,7 +101,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
     if (activeStep > 0 && (showIOStep || showEmailStep)) {
       return (
         <ButtonNaked
-          onClick={() => handleSkipOrExitClick(false)}
+          onClick={() => handleSkipOrExitClick()}
           color="primary"
           size="medium"
           sx={{ mx: 'auto' }}
@@ -201,7 +127,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
         }
         activeStep={activeStep}
         setActiveStep={setActiveStep}
-        onExit={() => handleSkipOrExitClick(true)}
+        onExit={() => handleSkipOrExitClick()}
         slots={{
           nextButton: getNextButton,
           prevButton: () => <></>,
@@ -216,7 +142,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
             buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
             onClick: () => navigate(-1),
           },
-          buttonContainer: isEmailSmsStep && hasEmailOrSms ? { justifyContent: 'flex-end' } : {},
+          actions: isEmailSmsStep && hasEmailOrSms ? { justifyContent: 'flex-end' } : {},
         }}
       >
         <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_1.title')}>
@@ -233,22 +159,34 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
           </PnWizardStep>
         )}
       </PnWizard>
-      <CourtesyContactConfirmationDialog
-        open={modal.open}
-        title={t('courtesy-contacts.confirmation-modal-title')}
-        content={
-          modal.step
-            ? `courtesy-contacts.confirmation-modal-${modal.step.toLowerCase()}-content`
-            : ''
-        }
-        onConfirm={handleConfirmationModalAccept}
-        confirmAction={
-          modal.step
-            ? t(`courtesy-contacts.confirmation-modal-${modal.step.toLowerCase()}-accept`)
-            : ''
-        }
-        onDiscard={handleConfirmationModalDecline}
-      />
+      {modal.step && (
+        <ConfirmationModal
+          open={modal.open}
+          title={t('courtesy-contacts.confirmation-modal-title')}
+          slotsProps={{
+            closeButton: { onClick: handleConfirmationModalAccept, variant: 'contained' },
+            confirmButton: { onClick: handleConfirmationModalDecline, variant: 'outlined' },
+          }}
+          onCloseLabel={t(
+            `courtesy-contacts.confirmation-modal-${modal.step.toLowerCase()}-accept`
+          )}
+          onConfirmLabel={t('button.do-later', { ns: 'common' })}
+        >
+          <Trans
+            ns="recapiti"
+            i18nKey={`courtesy-contacts.confirmation-modal-${modal.step.toLowerCase()}-content`}
+            components={[
+              <DialogContentText key="paragraph1" id="dialog-description" color="text.primary" />,
+              <DialogContentText
+                key="paragraph2"
+                id="dialog-description"
+                color="text.primary"
+                mt={2}
+              />,
+            ]}
+          />
+        </ConfirmationModal>
+      )}
     </>
   );
 };

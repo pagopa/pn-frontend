@@ -215,8 +215,8 @@ describe('DelegationElements', async () => {
     const revoke = menu.querySelectorAll('[role="menuitem"]')[1];
     fireEvent.click(revoke);
     const showDialog = await waitFor(() => screen.getByTestId('confirmationDialog'));
-    const revokeButton = within(showDialog).getAllByTestId('dialogAction')[1];
-    fireEvent.click(revokeButton);
+    const confirmButton = within(showDialog).getByTestId('confirmButton');
+    fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain('/bff/v1/mandate/111/revoke');
@@ -239,7 +239,7 @@ describe('DelegationElements', async () => {
     const revoke = menu.querySelectorAll('[role="menuitem"]')[1];
     fireEvent.click(revoke);
     const showDialog = await waitFor(() => screen.getByTestId('confirmationDialog'));
-    const cancelButton = within(showDialog).getAllByTestId('dialogAction')[0];
+    const cancelButton = within(showDialog).getByTestId('closeButton');
     fireEvent.click(cancelButton);
     await waitFor(() => {
       expect(showDialog).not.toBeInTheDocument();
@@ -261,8 +261,8 @@ describe('DelegationElements', async () => {
     const reject = menu.querySelectorAll('[role="menuitem"]')[0];
     fireEvent.click(reject);
     const showDialog = await waitFor(() => screen.getByTestId('confirmationDialog'));
-    const rejectButton = within(showDialog).getAllByTestId('dialogAction')[1];
-    fireEvent.click(rejectButton);
+    const confirmButton = within(showDialog).getByTestId('confirmButton');
+    fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain('/bff/v1/mandate/111/reject');

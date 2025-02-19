@@ -36,7 +36,7 @@ type Props = {
     prevButton?: Omit<ButtonProps, 'onClick'> & {
       onClick?: (previous: () => void, step: number) => void;
     };
-    buttonContainer?: StackProps;
+    actions?: StackProps;
     container?: Omit<StackProps, 'children'> & { 'data-testid'?: string };
     feedback?: {
       title: string;
@@ -141,7 +141,7 @@ const PnWizard: React.FC<Props> = ({
           {childrens[activeStep]}
         </Paper>
 
-        <Stack direction={{ xs: 'column-reverse', md: 'row' }} {...slotsProps?.buttonContainer}>
+        <Stack direction={{ xs: 'column-reverse', md: 'row' }} {...slotsProps?.actions}>
           <PrevButton
             data-testid="prev-button"
             sx={{ mt: { xs: 2, md: 0 } }}
