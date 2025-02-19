@@ -17,25 +17,6 @@ type Props = {
   forwardedRef: ForwardedRef<unknown>;
 };
 
-interface DebtPositionFormValues {
-  recipientDebtPositions: {
-    [taxId: string]: PaymentModel | undefined;
-  };
-}
-
-// const recipients = [
-//   {
-//     taxId: 'xx',
-//     firstName: 'Ale',
-//     lastName: 'Gelmi',
-//   },
-//   {
-//     taxId: 'xxx',
-//     firstName: 'Giorgio',
-//     lastName: 'Troisi',
-//   },
-// ];
-
 const DebtPosition: React.FC<Props> = ({ recipients, onConfirm, onPreviousStep, forwardedRef }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
@@ -43,23 +24,18 @@ const DebtPosition: React.FC<Props> = ({ recipients, onConfirm, onPreviousStep, 
   });
   const { t: tc } = useTranslation(['common']);
 
-  const initialValues = (): DebtPositionFormValues => ({
-    recipientDebtPositions: recipients.reduce(
-      (acc, recipient) => ({
-        ...acc,
-        [recipient.taxId]: undefined,
-      }),
-      {}
-    ),
+  const initialValues = () => ({
+    recipients: recipients.map((recipient) => ({
+      ...recipient,
+      debtPosition: recipient.debtPosition ?? undefined,
+    })),
   });
 
   const validationSchema = yup.object().shape({
-    recipientDebtPositions: yup.object().shape(
-      recipients.reduce((acc, recipient) => {
-        // eslint-disable-next-line functional/immutable-data
-        acc[recipient.taxId] = yup.string().required(tc('required-field'));
-        return acc;
-      }, {} as { [key: string]: yup.StringSchema })
+    recipients: yup.array().of(
+      yup.object().shape({
+        debtPosition: yup.string().required(tc('required-fields')),
+      })
     ),
   });
 
@@ -77,14 +53,9 @@ const DebtPosition: React.FC<Props> = ({ recipients, onConfirm, onPreviousStep, 
     },
   });
 
-  const handleChange = async (event: ChangeEvent<HTMLInputElement>, taxId: string) => {
+  const handleChange = async (event: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value } = event.target;
-
-    if (Object.values(PaymentModel).includes(value as PaymentModel)) {
-      await formik.setFieldValue(`recipientDebtPositions.${taxId}`, value);
-    }
-
-    await formik.setFieldTouched(`recipientDebtPositions.${taxId}`, true, false);
+    await formik.setFieldValue(`recipients.${index}.debtPosition`, value);
   };
 
   useImperativeHandle(forwardedRef, () => ({
@@ -101,7 +72,7 @@ const DebtPosition: React.FC<Props> = ({ recipients, onConfirm, onPreviousStep, 
         previousStepLabel={t('back-to-recipient')}
         previousStepOnClick={onPreviousStep}
       >
-        {recipients.map((recipient) => (
+        {recipients.map((recipient, index) => (
           <Paper key={recipient.taxId} sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
             <Typography variant="h6" fontWeight={700}>
               {recipients.length === 1
@@ -117,9 +88,9 @@ const DebtPosition: React.FC<Props> = ({ recipients, onConfirm, onPreviousStep, 
                 </Typography>
                 <RadioGroup
                   aria-labelledby="comunication-type-label"
-                  name="debtPosition"
-                  value={formik.values.recipientDebtPositions[recipient.taxId] || ''}
-                  onChange={(e) => handleChange(e, recipient.taxId)}
+                  name={`recipients.${index}.debtPosition`}
+                  value={formik.values.recipients[index].debtPosition}
+                  onChange={(e) => handleChange(e, index)}
                   sx={{ mt: 2 }}
                 >
                   <FormControlLabel
