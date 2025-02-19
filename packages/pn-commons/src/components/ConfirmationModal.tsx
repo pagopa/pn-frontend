@@ -1,60 +1,60 @@
 import * as React from 'react';
 
-import { Button, DialogTitle } from '@mui/material';
+import { Button, ButtonProps, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 type Props = {
   open: boolean;
   title: string;
-  onConfirm?: React.MouseEventHandler<HTMLButtonElement>;
+  slotsProps?: {
+    confirmButton?: ButtonProps;
+    closeButton?: ButtonProps;
+  };
   onConfirmLabel?: string;
-  onClose: React.MouseEventHandler<HTMLButtonElement> | undefined;
   onCloseLabel?: string;
-  width?: string;
   children?: React.ReactNode;
 };
-export default function ConfirmationModal({
+
+const ConfirmationModal: React.FC<Props> = ({
   open,
   title,
-  onConfirm,
+  slotsProps,
   onConfirmLabel = 'Riprova',
-  onClose,
   onCloseLabel = 'Annulla',
   children,
-}: Readonly<Props>) {
-  return (
-    <PnDialog
-      id="confirmation-dialog"
-      open={open}
-      onClose={onClose}
-      aria-labelledby="confirmation-dialog-title"
-      maxWidth="sm"
-      data-testid="confirmationDialog"
-    >
-      <DialogTitle id="confirmation-dialog-title">{title}</DialogTitle>
-      {children && <PnDialogContent>{children}</PnDialogContent>}
-      <PnDialogActions>
-        {onConfirm && (
-          <Button
-            id="dialog-confirm-button"
-            color="primary"
-            variant="contained"
-            onClick={onConfirm}
-            data-testid="confirmButton"
-          >
-            {onConfirmLabel}
-          </Button>
-        )}
-        <Button
-          id="dialog-close-button"
-          color="primary"
-          variant="outlined"
-          onClick={onClose}
-          data-testid="closeButton"
-        >
-          {onCloseLabel}
-        </Button>
-      </PnDialogActions>
-    </PnDialog>
-  );
-}
+}: Props) => (
+  <PnDialog
+    id="confirmation-dialog"
+    open={open}
+    onClose={slotsProps?.closeButton?.onClick}
+    aria-labelledby="confirmation-dialog-title"
+    aria-describedby="confirmation-dialog-description"
+    maxWidth="sm"
+    data-testid="confirmationDialog"
+  >
+    <DialogTitle id="confirmation-dialog-title">{title}</DialogTitle>
+    {children && <PnDialogContent>{children}</PnDialogContent>}
+    <PnDialogActions>
+      <Button
+        id="dialog-close-button"
+        color="primary"
+        variant="outlined"
+        data-testid="closeButton"
+        {...slotsProps?.closeButton}
+      >
+        {onCloseLabel}
+      </Button>
+      <Button
+        id="dialog-confirm-button"
+        color="primary"
+        variant="contained"
+        data-testid="confirmButton"
+        {...slotsProps?.confirmButton}
+      >
+        {onConfirmLabel}
+      </Button>
+    </PnDialogActions>
+  </PnDialog>
+);
+
+export default ConfirmationModal;

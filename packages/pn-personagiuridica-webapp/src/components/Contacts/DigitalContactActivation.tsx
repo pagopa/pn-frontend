@@ -18,7 +18,6 @@ type Props = {
 
 type ModalType = {
   open: boolean;
-  exit?: boolean;
 };
 
 const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) => {
@@ -45,23 +44,19 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
   };
 
   const handleConfirmationModalDecline = () => {
-    if (modal.exit) {
-      setActiveStep(2); // set the current step greater than the number of steps to go to the thankyou page
-    } else {
-      goToNextStep();
-    }
     setModal({ open: false });
+    goToNextStep();
   };
 
-  const handleNotNow = () => {
+  const showConfirmationModal = () => {
     setModal({ open: true });
   };
 
   const handleExit = () => {
-    if (activeStep === 1) {
-      handleNotNow();
-    } else {
+    if (activeStep === 0) {
       navigate(-1);
+    } else {
+      showConfirmationModal();
     }
   };
 
@@ -82,7 +77,12 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
     }
 
     return (
-      <ButtonNaked onClick={handleNotNow} color="primary" size="medium" sx={{ mx: 'auto' }}>
+      <ButtonNaked
+        onClick={showConfirmationModal}
+        color="primary"
+        size="medium"
+        sx={{ mx: 'auto' }}
+      >
         {t('button.not-now', { ns: 'common' })}
       </ButtonNaked>
     );
@@ -132,10 +132,12 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
       <ConfirmationModal
         open={modal.open}
         title={t('courtesy-contacts.confirmation-modal-title')}
-        onConfirm={handleConfirmationModalAccept}
-        onConfirmLabel={t(`courtesy-contacts.confirmation-modal-accept`)}
-        onClose={handleConfirmationModalDecline}
-        onCloseLabel={t('button.do-later', { ns: 'common' })}
+        slotsProps={{
+          closeButton: { onClick: handleConfirmationModalAccept, variant: 'contained' },
+          confirmButton: { onClick: handleConfirmationModalDecline, variant: 'outlined' },
+        }}
+        onCloseLabel={t(`courtesy-contacts.confirmation-modal-accept`)}
+        onConfirmLabel={t('button.do-later', { ns: 'common' })}
       >
         <Trans
           ns={'recapiti'}

@@ -155,8 +155,10 @@ const Deleghe = () => {
               : t('deleghe.rejection_question')
           }
           onCloseLabel={t('button.annulla', { ns: 'common' })}
-          onClose={handleCloseModal}
-          onConfirm={handleConfirmClick}
+          slotsProps={{
+            closeButton: { onClick: handleCloseModal },
+            confirmButton: { onClick: handleConfirmClick },
+          }}
           onConfirmLabel={
             type === 'delegates' ? t('deleghe.confirm_revocation') : t('deleghe.confirm_rejection')
           }
