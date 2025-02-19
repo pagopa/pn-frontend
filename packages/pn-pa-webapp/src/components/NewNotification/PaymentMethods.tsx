@@ -49,6 +49,7 @@ const PaymentBox: React.FC<PaymentBoxProps> = ({
         {title}
       </Typography>
       <FileUpload
+        data-testid="fileUploadInput"
         uploadText={
           isMobile ? t('new-notification.drag-doc-mobile') : t('new-notification.drag-doc-pc')
         }
@@ -146,7 +147,6 @@ const PaymentMethods: React.FC<Props> = ({
             });
           }
           /* eslint-enable functional/immutable-data */
-
           return { ...acc, [recipient.taxId]: payments };
         },
         {}
@@ -183,57 +183,6 @@ const PaymentMethods: React.FC<Props> = ({
       return recipient;
     });
   };
-  // notification.recipients.reduce((obj: { [key: string]: PaymentObject }, r) => {
-  //   const formikPagoPa = formik.values[r.taxId].pagoPa;
-  //   const formikF24 = formik.values[r.taxId].f24;
-  //   // I avoid including empty file object into the result
-  //   // hence I check for any file object that it actually points to a file
-  //   // (this is the condition XXX.file.data)
-  //   // and then I don't add the payment info for a recipient if it doesn't include any actual file pointer
-  //   // (this is the Object.keys(paymentsForThisRecipient).length > 0 condition below)
-  //   // ---------------------------------------------
-  //   // Carlos Lombardi, 2023.01.10
-  //   const paymentsForThisRecipient: any = {};
-  //   if (formikPagoPa.file.data) {
-  //     // eslint-disable-next-line functional/immutable-data
-  //     paymentsForThisRecipient.pagoPaForm = {
-  //       ...newPaymentDocument(`${r.taxId}-pagoPaDoc`, t('pagopa-notice')),
-  //       file: {
-  //         data: formikPagoPa.file.data,
-  //         sha256: {
-  //           hashBase64: formikPagoPa.file.sha256.hashBase64,
-  //           hashHex: formikPagoPa.file.sha256.hashHex,
-  //         },
-  //       },
-  //       ref: {
-  //         key: formikPagoPa.ref.key,
-  //         versionToken: formikPagoPa.ref.versionToken,
-  //       },
-  //     };
-  //   }
-  //   if (formikF24?.file.data) {
-  //     // eslint-disable-next-line functional/immutable-data
-  //     paymentsForThisRecipient.f24standard = {
-  //       ...newPaymentDocument(`${r.taxId}-f24standardDoc`, t('f24')),
-  //       file: {
-  //         data: formikF24.file.data,
-  //         sha256: {
-  //           hashBase64: formikF24.file.sha256.hashBase64,
-  //           hashHex: formikF24.file.sha256.hashHex,
-  //         },
-  //       },
-  //       ref: {
-  //         key: formikF24.ref.key,
-  //         versionToken: formikF24.ref.versionToken,
-  //       },
-  //     };
-  //   }
-  //   if (Object.keys(paymentsForThisRecipient).length > 0) {
-  //     // eslint-disable-next-line functional/immutable-data
-  //     obj[r.taxId] = paymentsForThisRecipient;
-  //   }
-  //   return obj;
-  // }, {});
 
   const formik = useFormik({
     initialValues,
@@ -286,8 +235,6 @@ const PaymentMethods: React.FC<Props> = ({
     );
     await formik.setFieldTouched(`${id}.file`, true, true);
   };
-
-  console.log(formik.values);
 
   const removeFileHandler = async (
     id: string,
