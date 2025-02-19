@@ -6,6 +6,7 @@ import {
   NewNotificationDocument,
   NewNotificationRecipient,
   NotificationFeePolicy,
+  PaymentModel,
   PreliminaryInformationsPayload,
 } from '../../models/NewNotification';
 import { UserGroup } from '../../models/user';
@@ -78,6 +79,19 @@ const newNotificationSlice = createSlice({
     ) => {
       state.notification.documents = action.payload.documents;
     },
+    setDebtPosition: (
+      state,
+      action: PayloadAction<{
+        recipientDebtPositions: {
+          [taxId: string]: PaymentModel | undefined;
+        };
+      }>
+    ) => {
+      state.notification.recipients = state.notification.recipients.map((recipient) => ({
+        ...recipient,
+        debtPosition: action.payload.recipientDebtPositions[recipient.taxId],
+      }));
+    },
     setPayments: (
       state,
       action: PayloadAction<{ recipients: Array<NewNotificationRecipient> }>
@@ -119,6 +133,7 @@ export const {
   setPayments,
   resetState,
   setIsCompleted,
+  setDebtPosition,
 } = newNotificationSlice.actions;
 
 export default newNotificationSlice;

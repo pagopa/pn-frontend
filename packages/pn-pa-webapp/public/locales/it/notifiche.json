@@ -485,6 +485,19 @@
         "banner-additional-languages": "Hai scelto di inviare la notifica in più lingue. Ricorda di allegare i documenti in entrambe le lingue selezionate.",
         "file-upload-helper": "Il documento deve essere in formato {{format}} e non deve superare le dimensioni di {{size}}"
       },
+      "debt-position": {
+        "title": "Posizione debitoria",
+        "debt-position": "Posizione debitoria",
+        "debt-position-of": "Posizione debitoria di {{fullName}}",
+        "which-type-of-payments": "Quale tipo di pagamento prevedi?",
+        "back-to-recipient": "Torna a destinatario",
+        "radios": {
+          "pago-pa-notice": "Avviso pagoPA",
+          "f24": "Modello F24",
+          "pago-pa-f24": "Avviso pagoPA + Modello F24",
+          "nothing": "Nessun pagamento"
+        }
+      },
       "payment-methods": {
         "title": "Modelli di pagamento",
         "pagopa-notice": "Avviso pagoPA",

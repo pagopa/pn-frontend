@@ -6,6 +6,7 @@ import { Alert, Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/mat
 import { PnBreadcrumb, Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import Attachments from '../components/NewNotification/Attachments';
+import DebtPosition from '../components/NewNotification/DebtPosition';
 import PaymentMethods from '../components/NewNotification/PaymentMethods';
 import PreliminaryInformations from '../components/NewNotification/PreliminaryInformations';
 import Recipient from '../components/NewNotification/Recipient';
@@ -48,8 +49,10 @@ const NewNotification = () => {
   const childRef = useRef<{ confirm: () => void }>();
 
   if (IS_PAYMENT_ENABLED) {
-    // eslint-disable-next-line functional/immutable-data
-    steps.push(t('new-notification.steps.payment-methods.title', { ns: 'notifiche' }));
+    /* eslint-disable functional/immutable-data */
+    steps.splice(2, 0, t('new-notification.steps.debt-position.title', { ns: 'notifiche' }));
+    steps.splice(3, 0, t('new-notification.steps.payment-methods.title', { ns: 'notifiche' }));
+    /* eslint-enable functional/immutable-data */
   }
 
   const goToNextStep = () => {
@@ -158,22 +161,18 @@ const NewNotification = () => {
             )}
             {activeStep === 1 && (
               <Recipient
-                onConfirm={goToNextStep}
+                onConfirm={IS_PAYMENT_ENABLED ? goToNextStep : () => setActiveStep(4)}
                 onPreviousStep={goToPreviousStep}
                 recipientsData={notification.recipients}
                 paymentMode={notification.paymentMode}
                 ref={childRef}
               />
             )}
-            {activeStep === 2 && (
-              <Attachments
-                onConfirm={IS_PAYMENT_ENABLED ? goToNextStep : createNotification}
+            {activeStep === 2 && IS_PAYMENT_ENABLED && (
+              <DebtPosition
+                recipients={notification.recipients}
+                onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
-                isCompleted={isCompleted}
-                attachmentsData={notification.documents}
-                hasAdditionalLang={
-                  notification.lang === NewNotificationLangOther && !!notification.additionalLang
-                }
                 ref={childRef}
               />
             )}
@@ -183,6 +182,18 @@ const NewNotification = () => {
                 notification={notification}
                 isCompleted={isCompleted}
                 onPreviousStep={goToPreviousStep}
+                ref={childRef}
+              />
+            )}
+            {activeStep === 4 && (
+              <Attachments
+                onConfirm={createNotification}
+                onPreviousStep={goToPreviousStep}
+                isCompleted={isCompleted}
+                attachmentsData={notification.documents}
+                hasAdditionalLang={
+                  notification.lang === NewNotificationLangOther && !!notification.additionalLang
+                }
                 ref={childRef}
               />
             )}
