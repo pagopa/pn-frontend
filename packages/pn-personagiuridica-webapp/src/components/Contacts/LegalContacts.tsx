@@ -67,7 +67,7 @@ const EmptyLegalContacts = () => {
       <Button
         variant="contained"
         fullWidth={isMobile}
-        onClick={() => navigate(`${DIGITAL_DOMICILE_ACTIVATION}`)}
+        onClick={() => navigate(DIGITAL_DOMICILE_ACTIVATION)}
       >
         {t('button.start')}
       </Button>

@@ -1,5 +1,4 @@
 import React, { JSXElementConstructor, ReactElement, ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {
@@ -24,6 +23,7 @@ type Props = {
   setActiveStep: (step: number) => void;
   title: ReactNode;
   children: ReactNode;
+  onExit: () => void;
   slots?: {
     nextButton?: JSXElementConstructor<ButtonProps>;
     prevButton?: JSXElementConstructor<ButtonProps>;
@@ -36,6 +36,7 @@ type Props = {
     prevButton?: Omit<ButtonProps, 'onClick'> & {
       onClick?: (previous: () => void, step: number) => void;
     };
+    actions?: StackProps;
     container?: Omit<StackProps, 'children'> & { 'data-testid'?: string };
     feedback?: {
       title: string;
@@ -50,13 +51,11 @@ const PnWizard: React.FC<Props> = ({
   setActiveStep,
   title,
   children,
+  onExit,
   slots,
   slotsProps,
 }) => {
   checkChildren(children, [{ cmp: PnWizardStep }], 'PnWizard');
-
-  const navigate = useNavigate();
-
   const PrevButton = slots?.prevButton || Button;
   const NextButton = slots?.nextButton || Button;
 
@@ -127,7 +126,7 @@ const PnWizard: React.FC<Props> = ({
           size="medium"
           color="primary"
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate(-1)}
+          onClick={onExit}
         >
           {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
         </ButtonNaked>
@@ -142,7 +141,7 @@ const PnWizard: React.FC<Props> = ({
           {childrens[activeStep]}
         </Paper>
 
-        <Stack direction={{ xs: 'column-reverse', md: 'row' }}>
+        <Stack direction={{ xs: 'column-reverse', md: 'row' }} {...slotsProps?.actions}>
           <PrevButton
             data-testid="prev-button"
             sx={{ mt: { xs: 2, md: 0 } }}

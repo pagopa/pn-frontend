@@ -8,7 +8,15 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
+import {
+  Button,
+  ButtonProps,
+  InputAdornment,
+  Stack,
+  TextField,
+  TextFieldProps,
+  Typography,
+} from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -23,6 +31,11 @@ type Props = {
   label: string;
   value: string;
   channelType: ChannelType;
+  slotsProps?: {
+    textField?: Partial<TextFieldProps>;
+    button?: Partial<ButtonProps>;
+  };
+  showLabelOnEdit?: boolean;
   senderId?: string;
   inputProps: { label: string; prefix?: string };
   insertButtonLabel: string;
@@ -38,6 +51,8 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       label,
       value,
       channelType,
+      slotsProps,
+      showLabelOnEdit = false,
       senderId = 'default',
       inputProps,
       insertButtonLabel,
@@ -148,6 +163,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 formik.touched[`${senderId}_${contactType}`] &&
                 formik.errors[`${senderId}_${contactType}`]
               }
+              {...slotsProps?.textField}
             />
             <Button
               id={`${senderId}_${contactType}-button`}
@@ -157,6 +173,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               data-testid={`${senderId}_${contactType}-button`}
               sx={{ height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '16.67%' } }}
               size="small"
+              {...slotsProps?.button}
             >
               {insertButtonLabel}
             </Button>
@@ -182,6 +199,16 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
         data-testid={`${senderId}_${contactType}Contact`}
         style={{ width: isMobile ? '100%' : '50%' }}
       >
+        {showLabelOnEdit && (
+          <Typography
+            id={`${senderId}_${contactType}-label`}
+            variant="body2"
+            mb={1}
+            sx={{ fontWeight: 'bold' }}
+          >
+            {label}
+          </Typography>
+        )}
         {editMode && (
           <>
             <TextField

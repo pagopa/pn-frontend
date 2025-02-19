@@ -6,6 +6,7 @@ import AppResponseMessage from './AppResponseMessage';
 import { AppStatusRender } from './AppStatus/AppStatusRender';
 import CodeModal from './CodeModal/CodeModal';
 import CollapsedList from './CollapsedList';
+import ConfirmationModal from './ConfirmationModal';
 import CopyToClipboard from './CopyToClipboard';
 import CustomDatePicker from './CustomDatePicker';
 import CustomDropdown from './CustomDropdown';
@@ -86,6 +87,7 @@ export {
   AppResponseMessage,
   AppStatusRender,
   CodeModal,
+  ConfirmationModal,
   CopyToClipboard,
   CustomDatePicker,
   CustomDropdown,

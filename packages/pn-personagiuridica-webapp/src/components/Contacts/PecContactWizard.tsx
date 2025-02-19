@@ -80,6 +80,7 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
         }
         activeStep={activeStep}
         setActiveStep={setActiveStep}
+        onExit={() => navigate(-1)}
         slots={{
           prevButton: () => (
             <ButtonNaked

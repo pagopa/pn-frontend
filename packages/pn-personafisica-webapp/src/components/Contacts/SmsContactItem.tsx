@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Box, Button, Chip, Divider, Typography } from '@mui/material';
+import { Box, Button, ButtonProps, Chip, Divider, TextFieldProps, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -33,11 +33,22 @@ enum ModalType {
   INFORMATIVE = 'informative',
 }
 
-type Props = {
+type SmsElemProps = {
   onCancelInsert?: () => void;
+  slotsProps?: {
+    textField?: Partial<TextFieldProps>;
+    button?: Partial<ButtonProps>;
+  };
 };
 
-const SmsContactElem: React.FC<Props> = ({ onCancelInsert }) => {
+type SmsItemProps = {
+  slotsProps?: {
+    textField?: Partial<TextFieldProps>;
+    button?: Partial<ButtonProps>;
+  };
+};
+
+const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { defaultSERCQ_SENDAddress, defaultPECAddress, defaultSMSAddress, addresses } =
     useAppSelector(contactsSelectors.selectAddresses);
@@ -155,6 +166,7 @@ const SmsContactElem: React.FC<Props> = ({ onCancelInsert }) => {
         insertButtonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
         onSubmit={handleSubmit}
         onCancelInsert={onCancelInsert}
+        slotsProps={slotsProps}
       />
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
@@ -183,7 +195,7 @@ const SmsContactElem: React.FC<Props> = ({ onCancelInsert }) => {
   );
 };
 
-const SmsContactItem: React.FC = () => {
+const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses } = useAppSelector(
@@ -277,7 +289,7 @@ const SmsContactItem: React.FC = () => {
         expanded={isActive}
         data-testid="smsContact"
       >
-        <SmsContactElem />
+        <SmsContactElem slotsProps={slotsProps} />
         <Typography
           mt={2}
           variant="body1"
@@ -307,7 +319,7 @@ const SmsContactItem: React.FC = () => {
       <Divider />
       {insertMode ? (
         <Box mt={3}>
-          <SmsContactElem onCancelInsert={() => setInsertMode(false)} />
+          <SmsContactElem slotsProps={slotsProps} onCancelInsert={() => setInsertMode(false)} />
         </Box>
       ) : (
         <>

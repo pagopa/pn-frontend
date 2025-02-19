@@ -83,7 +83,7 @@ describe('Deleghe page', async () => {
     const revokeDelegate = await waitFor(() => result.getByTestId('menuItem-revokeDelegate'));
     // show confirmation dialog
     fireEvent.click(revokeDelegate);
-    const dialog = await waitFor(() => result.getByTestId('dialog'));
+    const dialog = await waitFor(() => result.getByTestId('confirmationDialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent('deleghe.revocation_question');
     const confirmButton = within(dialog).getByRole('button', {
@@ -124,7 +124,7 @@ describe('Deleghe page', async () => {
     const rejectDelegator = await waitFor(() => result.getByTestId('menuItem-rejectDelegator'));
     // show confirmation dialog
     fireEvent.click(rejectDelegator);
-    const dialog = await waitFor(() => result.getByTestId('dialog'));
+    const dialog = await waitFor(() => result.getByTestId('confirmationDialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent('deleghe.rejection_question');
     const confirmButton = within(dialog).getByRole('button', {
