@@ -14,6 +14,7 @@ type Props = {
   onCloseLabel?: string;
   children?: React.ReactNode;
 };
+
 const ConfirmationModal: React.FC<Props> = ({
   open,
   title,
