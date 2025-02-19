@@ -11,10 +11,12 @@ describe('ConfirmationModal Component', () => {
     const { getByRole, getByTestId } = render(
       <ConfirmationModal
         title={'Test title'}
-        onClose={mockCancelFunction}
+        slotsProps={{
+          closeButton: { onClick: mockCancelFunction },
+          confirmButton: { onClick: mockConfirmFunction },
+        }}
         onCloseLabel={'Cancel'}
         open
-        onConfirm={mockConfirmFunction}
         onConfirmLabel={'Confirm'}
       />
     );
@@ -32,10 +34,12 @@ describe('ConfirmationModal Component', () => {
     const { getByTestId } = render(
       <ConfirmationModal
         title={'Test title'}
-        onClose={mockCancelFunction}
+        slotsProps={{
+          closeButton: { onClick: mockCancelFunction },
+          confirmButton: { onClick: mockConfirmFunction },
+        }}
         onCloseLabel={'Cancel'}
         open
-        onConfirm={mockConfirmFunction}
         onConfirmLabel={'Confirm'}
       />
     );
@@ -52,9 +56,11 @@ describe('ConfirmationModal Component', () => {
     const { getByTestId } = render(
       <ConfirmationModal
         title={'Test title'}
-        onClose={mockCancelFunction}
+        slotsProps={{
+          closeButton: { onClick: mockCancelFunction },
+          confirmButton: { onClick: mockConfirmFunction },
+        }}
         open
-        onConfirm={mockConfirmFunction}
       />
     );
 
@@ -64,13 +70,24 @@ describe('ConfirmationModal Component', () => {
     expect(cancelButton).toHaveTextContent(/Annulla/i);
   });
 
-  it('renders the dialog with no confirm button', () => {
-    const { getByTestId, queryByTestId } = render(
-      <ConfirmationModal title={'Test title'} onClose={mockCancelFunction} open />
+  it('renders the dialog with children', () => {
+    const { getByRole } = render(
+      <ConfirmationModal
+        title={'Test title'}
+        slotsProps={{
+          closeButton: { onClick: mockCancelFunction },
+          confirmButton: { onClick: mockConfirmFunction },
+        }}
+        onCloseLabel={'Cancel'}
+        open
+        onConfirmLabel={'Confirm'}
+      >
+        <p>Test Content</p>
+      </ConfirmationModal>
     );
-    const confirmButton = queryByTestId('confirmButton');
-    const cancelButton = getByTestId('closeButton');
-    expect(confirmButton).not.toBeInTheDocument();
-    expect(cancelButton).toHaveTextContent(/Annulla/i);
+    const dialog = getByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    expect(dialog).toHaveTextContent(/Test Title/i);
+    expect(dialog).toHaveTextContent(/Test Content/i);
   });
 });
