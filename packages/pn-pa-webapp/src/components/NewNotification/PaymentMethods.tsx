@@ -1,22 +1,23 @@
 import { useFormik } from 'formik';
 import _ from 'lodash';
-import { ForwardedRef, Fragment, forwardRef, useImperativeHandle } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { ForwardedRef, Fragment, forwardRef, useImperativeHandle, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { Link, Paper, Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import { FileUpload, SectionHeading, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotification,
+  NewNotificationDocumentFile,
   NewNotificationF24Payment,
   NewNotificationPagoPaPayment,
   NewNotificationPayment,
-  PaymentModel,
+  NewNotificationRecipient,
   PaymentObject,
 } from '../../models/NewNotification';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { uploadNotificationPaymentDocument } from '../../redux/newNotification/actions';
-import { setIsCompleted, setPayments } from '../../redux/newNotification/reducers';
+import { setPayments } from '../../redux/newNotification/reducers';
 import { RootState } from '../../redux/store';
 import NewNotificationCard from './NewNotificationCard';
 
@@ -29,7 +30,7 @@ type PaymentBoxProps = {
     sha256?: { hashBase64: string; hashHex: string }
   ) => void;
   onRemoveFile: (id: string) => void;
-  fileUploaded?: NewNotificationPagoPaPayment | NewNotificationF24Payment;
+  fileUploaded: { file: NewNotificationDocumentFile };
 };
 
 const PaymentBox: React.FC<PaymentBoxProps> = ({
@@ -89,9 +90,9 @@ const PaymentMethods: React.FC<Props> = ({
   const { t: tc } = useTranslation(['common']);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
-  const newPagopaPaymentDocument = (id: string): NewNotificationPagoPaPayment => ({
+  const newPagopaPayment = (id: string, idx: number): NewNotificationPagoPaPayment => ({
     id,
-    idx: 0,
+    idx,
     contentType: 'application/pdf',
     file: emptyFileData,
     creditorTaxId: organization.fiscal_code,
@@ -102,65 +103,60 @@ const PaymentMethods: React.FC<Props> = ({
       versionToken: '',
     },
   });
-  const newF24PaymentDocument = (id: string, name: string): NewNotificationF24Payment => ({
+  const newF24Payment = (id: string, idx: number): NewNotificationF24Payment => ({
     id,
-    idx: 0,
-    contentType: 'application/pdf',
+    idx,
+    contentType: 'application/json',
     file: emptyFileData,
-    name,
+    name: '',
     applyCost: false,
     ref: {
       key: '',
       versionToken: '',
     },
   });
-  const initialValues = notification.recipients.reduce((acc, recipient) => {
-    const recipientPayments =
-      !_.isNil(recipient.payments) && !_.isEmpty(recipient.payments) ? recipient.payments : [];
+  const initialValues = useMemo(
+    () =>
+      notification.recipients.reduce(
+        (acc: { [taxId: string]: Array<NewNotificationPayment> }, recipient) => {
+          const recipientPayments = !_.isNil(recipient.payments) ? recipient.payments : [];
 
-    const hasPagoPa = recipientPayments.some((p) => p.pagoPa);
-    const hasF24 = recipientPayments.some((p) => p.f24);
+          const hasPagoPa = recipientPayments.some((p) => p.pagoPa);
+          const hasF24 = recipientPayments.some((p) => p.f24);
 
-    // eslint-disable-next-line prefer-const, functional/no-let
-    let payments: Array<NewNotificationPayment> = [...recipientPayments];
-    // eslint-disable-next-line prefer-const, functional/no-let
-    let posDeb = 'f24pagopa';
+          // eslint-disable-next-line prefer-const, functional/no-let
+          let payments: Array<NewNotificationPayment> = [...recipientPayments];
+          // eslint-disable-next-line prefer-const, functional/no-let
+          let posDeb = 'f24pagopa';
 
-    /* eslint-disable functional/immutable-data */
-    if (posDeb === 'pagopa' && !hasPagoPa) {
-      payments.push({
-        pagoPa: newPagopaPaymentDocument(`${recipient.taxId}-pagoPaDoc`),
-      });
-    } else if (posDeb === 'f24' && !hasF24) {
-      payments.push({
-        f24: newF24PaymentDocument(`${recipient.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
-      });
-    } else if (posDeb === 'f24 + pagopa') {
-      if (!hasF24 && !hasPagoPa) {
-        payments.push({
-          pagoPa: newPagopaPaymentDocument(`${recipient.taxId}-pagoPaDoc`),
-          f24: newF24PaymentDocument(`${recipient.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
-        });
-      } else if (!hasF24) {
-        payments.push({
-          f24: newF24PaymentDocument(`${recipient.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
-        });
-      } else if (!hasPagoPa) {
-        payments.push({
-          pagoPa: newPagopaPaymentDocument(`${recipient.taxId}-pagoPaDoc`),
-        });
-      }
-    }
-    /* eslint-enable functional/immutable-data */
+          /* eslint-disable functional/immutable-data */
+          if ((posDeb === 'pagopa' || posDeb === 'f24pagopa') && !hasPagoPa) {
+            const lastPaymentIdx = payments[payments.length - 1]?.pagoPa?.idx ?? -1;
+            const newPaymentIdx = lastPaymentIdx + 1;
 
-    return { ...acc, [recipient.taxId]: payments };
-  }, {});
+            payments.push({
+              pagoPa: newPagopaPayment(`${recipient.taxId}-${newPaymentIdx}-pagoPa`, newPaymentIdx),
+            });
+          }
+          if ((posDeb === 'f24' || posDeb === 'f24pagopa') && !hasF24) {
+            const lastPaymentIdx = payments[payments.length - 1]?.f24?.idx ?? -1;
+            const newPaymentIdx = lastPaymentIdx + 1;
+            payments.push({
+              f24: newF24Payment(`${recipient.taxId}-${newPaymentIdx}-f24`, newPaymentIdx),
+            });
+          }
+          /* eslint-enable functional/immutable-data */
 
-  console.log(initialValues);
+          return { ...acc, [recipient.taxId]: payments };
+        },
+        {}
+      ),
+    []
+  );
 
   const handlePreviousStep = () => {
     if (onPreviousStep) {
-      dispatch(setPayments({ recipients: notification.recipients }));
+      dispatch(setPayments({ recipients: formatPayments() }));
       onPreviousStep();
     }
   };
@@ -177,37 +173,74 @@ const PaymentMethods: React.FC<Props> = ({
     }
   };
 
-  const formIsEmpty = (values: any) => {
-    // eslint-disable-next-line functional/no-let
-    let isEmpty = true;
-    notification.recipients.forEach((recipient) => {
-      const currentDocument = values[recipient.taxId];
-      if (currentDocument.pagoPaForm && currentDocument.pagoPaForm.file.name !== '') {
-        isEmpty = false;
-      }
-      if (currentDocument.f24flatRate && currentDocument.f24flatRate.file.name !== '') {
-        isEmpty = false;
-      }
-      if (currentDocument.f24standard && currentDocument.f24standard.file.name !== '') {
-        isEmpty = false;
-      }
+  const formatPayments = (): Array<NewNotificationRecipient> => {
+    const recipients = _.cloneDeep(notification.recipients);
+    return recipients.map((recipient) => {
+      // eslint-disable-next-line functional/immutable-data
+      recipient.payments = formik.values[recipient.taxId].filter(
+        (payment) => payment.pagoPa?.file?.data || payment.f24?.file.data
+      );
+      return recipient;
     });
-    return isEmpty;
   };
+  // notification.recipients.reduce((obj: { [key: string]: PaymentObject }, r) => {
+  //   const formikPagoPa = formik.values[r.taxId].pagoPa;
+  //   const formikF24 = formik.values[r.taxId].f24;
+  //   // I avoid including empty file object into the result
+  //   // hence I check for any file object that it actually points to a file
+  //   // (this is the condition XXX.file.data)
+  //   // and then I don't add the payment info for a recipient if it doesn't include any actual file pointer
+  //   // (this is the Object.keys(paymentsForThisRecipient).length > 0 condition below)
+  //   // ---------------------------------------------
+  //   // Carlos Lombardi, 2023.01.10
+  //   const paymentsForThisRecipient: any = {};
+  //   if (formikPagoPa.file.data) {
+  //     // eslint-disable-next-line functional/immutable-data
+  //     paymentsForThisRecipient.pagoPaForm = {
+  //       ...newPaymentDocument(`${r.taxId}-pagoPaDoc`, t('pagopa-notice')),
+  //       file: {
+  //         data: formikPagoPa.file.data,
+  //         sha256: {
+  //           hashBase64: formikPagoPa.file.sha256.hashBase64,
+  //           hashHex: formikPagoPa.file.sha256.hashHex,
+  //         },
+  //       },
+  //       ref: {
+  //         key: formikPagoPa.ref.key,
+  //         versionToken: formikPagoPa.ref.versionToken,
+  //       },
+  //     };
+  //   }
+  //   if (formikF24?.file.data) {
+  //     // eslint-disable-next-line functional/immutable-data
+  //     paymentsForThisRecipient.f24standard = {
+  //       ...newPaymentDocument(`${r.taxId}-f24standardDoc`, t('f24')),
+  //       file: {
+  //         data: formikF24.file.data,
+  //         sha256: {
+  //           hashBase64: formikF24.file.sha256.hashBase64,
+  //           hashHex: formikF24.file.sha256.hashHex,
+  //         },
+  //       },
+  //       ref: {
+  //         key: formikF24.ref.key,
+  //         versionToken: formikF24.ref.versionToken,
+  //       },
+  //     };
+  //   }
+  //   if (Object.keys(paymentsForThisRecipient).length > 0) {
+  //     // eslint-disable-next-line functional/immutable-data
+  //     obj[r.taxId] = paymentsForThisRecipient;
+  //   }
+  //   return obj;
+  // }, {});
 
   const formik = useFormik({
     initialValues,
     validateOnMount: true,
-    onSubmit: async (values) => {
-      const emptyForm = formIsEmpty(values);
+    onSubmit: async () => {
       if (isCompleted) {
         onConfirm();
-      } else if (emptyForm || notification.paymentMode === PaymentModel.NOTHING) {
-        // Maybe now the form is empty, but in the previous time the user went back
-        // from the payments step the form wasn't empty.
-        // Just in case, we clean the payment info from the Redux store
-        // dispatch(setPayments({ paymentDocuments: {} }));
-        dispatch(setIsCompleted());
       } else {
         // Beware! -
         // Recall that the taxId is the key for the payment document info in the Redux storage.
@@ -222,9 +255,7 @@ const PaymentMethods: React.FC<Props> = ({
         // Please take this note into consideration in case of refactoring of this part.
         // --------------------------------------
         // Carlos Lombardi, 2023.01.19
-        const paymentData = await dispatch(
-          uploadNotificationPaymentDocument(notification.recipients)
-        );
+        const paymentData = await dispatch(uploadNotificationPaymentDocument(formatPayments()));
         const paymentPayload = paymentData.payload as { [key: string]: PaymentObject };
         if (paymentPayload) {
           await updateRefAfterUpload(paymentPayload);
@@ -236,6 +267,7 @@ const PaymentMethods: React.FC<Props> = ({
   const fileUploadedHandler = async (
     taxId: string,
     paymentType: 'pagoPa' | 'f24',
+    index: number,
     id: string,
     file?: File,
     sha256?: { hashBase64: string; hashHex: string }
@@ -243,7 +275,7 @@ const PaymentMethods: React.FC<Props> = ({
     await formik.setFieldValue(
       id,
       {
-        ...formik.values.find((v) => v && v[taxId])?.[paymentType],
+        ...formik.values[taxId][index][paymentType],
         file: { data: file, sha256 },
         ref: {
           key: '',
@@ -255,9 +287,16 @@ const PaymentMethods: React.FC<Props> = ({
     await formik.setFieldTouched(`${id}.file`, true, true);
   };
 
-  const removeFileHandler = async (id: string, taxId: string, paymentType: 'pagoPa' | 'f24') => {
+  console.log(formik.values);
+
+  const removeFileHandler = async (
+    id: string,
+    taxId: string,
+    paymentType: 'pagoPa' | 'f24',
+    index: number
+  ) => {
     await formik.setFieldValue(id, {
-      ...formik.values.find((v) => v && v[taxId])?.[paymentType],
+      ...formik.values[taxId][index][paymentType],
       file: emptyFileData,
       ref: {
         key: '',
@@ -268,7 +307,7 @@ const PaymentMethods: React.FC<Props> = ({
 
   useImperativeHandle(forwardedRef, () => ({
     confirm() {
-      dispatch(setPayments({ recipients: notification.recipients }));
+      dispatch(setPayments({ recipients: formatPayments() }));
     },
   }));
 
@@ -281,77 +320,45 @@ const PaymentMethods: React.FC<Props> = ({
         previousStepLabel={t('back-to-attachments')}
         previousStepOnClick={() => handlePreviousStep()}
       >
-        {notification.paymentMode !== PaymentModel.NOTHING &&
-          notification.recipients.map((recipient) => (
-            <Paper key={recipient.taxId} sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
-              <SectionHeading>
-                {t('payment-models')} {recipient.firstName} {recipient.lastName}
-              </SectionHeading>
-              {recipient.payments &&
-                recipient.payments.map((_payment, index) =>
-                  notification.paymentMode === PaymentModel.PAGO_PA_NOTICE ? (
+        {notification.recipients.map((recipient) => (
+          <Paper key={recipient.taxId} sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
+            <SectionHeading>
+              {t('payment-models')} {recipient.firstName} {recipient.lastName}
+            </SectionHeading>
+            {formik.values[recipient.taxId] &&
+              formik.values[recipient.taxId].map((payment, index) => {
+                if (payment.pagoPa) {
+                  return (
                     <PaymentBox
-                      key={`${recipient.taxId}-payment-${index}`}
-                      id={`${recipient.taxId}.pagoPa`}
+                      key={`${recipient.taxId}-pagoPa-${payment.pagoPa.idx}`}
+                      id={`${recipient.taxId}.${index}.pagoPa`}
                       title={`${t('attach-pagopa-notice')}`}
                       onFileUploaded={(id, file, sha256) =>
-                        fileUploadedHandler(recipient.taxId, 'pagoPa', id, file, sha256)
+                        fileUploadedHandler(recipient.taxId, 'pagoPa', index, id, file, sha256)
                       }
-                      onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPa')}
-                      fileUploaded={
-                        formik.values.find((v) => v && v[recipient.taxId])?.pagoPa[0].pagoPa
-                      }
+                      onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPa', index)}
+                      fileUploaded={payment.pagoPa}
                     />
-                  ) : (
+                  );
+                }
+                if (payment.f24) {
+                  return (
                     <PaymentBox
-                      id={`${recipient.taxId}.f24`}
+                      key={`${recipient.taxId}-f24-${payment.f24.idx}`}
+                      id={`${recipient.taxId}.${index}.f24`}
                       title={`${t('attach-f24')}`}
                       onFileUploaded={(id, file, sha256) =>
-                        fileUploadedHandler(recipient.taxId, 'f24', id, file, sha256)
+                        fileUploadedHandler(recipient.taxId, 'f24', index, id, file, sha256)
                       }
-                      onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24')}
-                      fileUploaded={formik.values[recipient.taxId]?.f24}
+                      onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24', index)}
+                      fileUploaded={payment.f24}
                     />
-                  )
-                )}
-            </Paper>
-          ))}
-        {notification.paymentMode === PaymentModel.NOTHING && (
-          <Paper sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
-            <Trans
-              i18nKey="nothing"
-              components={[
-                <Typography key="pre-link" fontWeight={400} fontSize={16} display="inline" />,
-                <Link
-                  key="go-to-preliminary-infos"
-                  color="primary"
-                  fontWeight={600}
-                  fontSize={16}
-                  onClick={() => onPreviousStep && onPreviousStep(0)}
-                  sx={{ cursor: 'pointer' }}
-                />,
-                <Typography key="post-link" fontWeight={400} fontSize={16} display="inline" />,
-              ]}
-              t={t}
-            >
-              <Typography fontWeight={400} fontSize={16} display="inline">
-                Se questa notifica prevede un pagamento, torna a&nbsp;
-              </Typography>
-              <Link
-                color="primary"
-                fontWeight={600}
-                fontSize={16}
-                onClick={() => onPreviousStep && onPreviousStep(0)}
-                sx={{ cursor: 'pointer' }}
-              >
-                Informazioni preliminari
-              </Link>
-              <Typography fontWeight={400} fontSize={16} display="inline">
-                &nbsp;e seleziona un modello. Poi, torna qui per caricarlo.
-              </Typography>
-            </Trans>
+                  );
+                }
+                return <></>;
+              })}
           </Paper>
-        )}
+        ))}
       </NewNotificationCard>
     </form>
   );

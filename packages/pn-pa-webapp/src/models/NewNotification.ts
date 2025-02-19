@@ -53,8 +53,8 @@ export interface NewNotificationPagoPaPayment {
   creditorTaxId: string;
   noticeCode: string;
   applyCost: boolean;
-  file?: NewNotificationDocumentFile;
-  ref?: NewNotificationDocumentRef;
+  file: NewNotificationDocumentFile;
+  ref: NewNotificationDocumentRef;
 }
 
 export interface NewNotificationF24Payment extends NewNotificationDocument {
