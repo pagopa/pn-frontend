@@ -13,9 +13,9 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
+import { NotificationDetailRouteState } from '../models/NotificationDetail';
 import { NotificationId } from '../models/Notifications';
 import { PFEventsType } from '../models/PFEventsType';
-import { NotificationDetailRouteState } from '../pages/NotificationDetail.page';
 import { useAppDispatch } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,

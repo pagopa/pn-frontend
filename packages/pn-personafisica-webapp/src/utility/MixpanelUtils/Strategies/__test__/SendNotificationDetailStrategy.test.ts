@@ -11,13 +11,13 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { paymentsData, timeline } from '../../../../__mocks__/NotificationDetail.mock';
-import { NotificationData, SendNotificationDetailStrategy } from '../SendNotificationDetailStrategy';
+import { SendNotificationDetailStrategy } from '../SendNotificationDetailStrategy';
 
 describe('Mixpanel - Notification detail Strategy', () => {
   it('should return notification detail event', () => {
     const strategy = new SendNotificationDetailStrategy();
 
-    const notificationData:NotificationData = {
+    const notificationData = {
       downtimeEvents: [
         {
           functionality: KnownFunctionality.NotificationCreate,
