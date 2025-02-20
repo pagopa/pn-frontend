@@ -136,7 +136,7 @@ type Props = {
   forwardedRef: ForwardedRef<unknown>;
   isCompleted: boolean;
   hasAdditionalLang?: boolean;
-  hasDebtPosition: boolean;
+  hasDebtPosition?: boolean;
 };
 
 const emptyFileData = {
@@ -310,7 +310,7 @@ const Attachments: React.FC<Props> = ({
   const handlePreviousStep = () => {
     if (onPreviousStep) {
       storeAttachments(formik.values.documents);
-      return !hasDebtPosition ? onPreviousStep(2) : onPreviousStep();
+      return hasDebtPosition ? onPreviousStep() : onPreviousStep(2);
     }
   };
 
@@ -319,7 +319,7 @@ const Attachments: React.FC<Props> = ({
       return t('back-to-recipient');
     }
 
-    return !hasDebtPosition ? t('back-to-debt-position') : t('back-to-payment-methods');
+    return hasDebtPosition ? t('back-to-payment-methods') : t('back-to-debt-position');
   };
 
   useImperativeHandle(forwardedRef, () => ({

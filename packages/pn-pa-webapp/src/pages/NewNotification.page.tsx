@@ -40,11 +40,26 @@ const NewNotification = () => {
   const { IS_PAYMENT_ENABLED } = useMemo(() => getConfiguration(), []);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'notifiche']);
-  const steps = [
-    t('new-notification.steps.preliminary-informations.title', { ns: 'notifiche' }),
-    t('new-notification.steps.recipient.title', { ns: 'notifiche' }),
-    t('new-notification.steps.attachments.title', { ns: 'notifiche' }),
-  ];
+
+  const steps = useMemo(() => {
+    const baseSteps = [
+      t('new-notification.steps.preliminary-informations.title', { ns: 'notifiche' }),
+      t('new-notification.steps.recipient.title', { ns: 'notifiche' }),
+    ];
+
+    if (IS_PAYMENT_ENABLED) {
+      // eslint-disable-next-line functional/immutable-data
+      baseSteps.push(
+        t('new-notification.steps.debt-position.title', { ns: 'notifiche' }),
+        t('new-notification.steps.payment-methods.title', { ns: 'notifiche' })
+      );
+    }
+
+    // eslint-disable-next-line functional/immutable-data
+    baseSteps.push(t('new-notification.steps.attachments.title', { ns: 'notifiche' }));
+    return baseSteps;
+  }, [t, IS_PAYMENT_ENABLED]);
+
   const hasDebtPosition =
     IS_PAYMENT_ENABLED &&
     notification.recipients.some(
@@ -52,13 +67,6 @@ const NewNotification = () => {
     );
 
   const childRef = useRef<{ confirm: () => void }>();
-
-  if (IS_PAYMENT_ENABLED) {
-    /* eslint-disable functional/immutable-data */
-    steps.splice(2, 0, t('new-notification.steps.debt-position.title', { ns: 'notifiche' }));
-    steps.splice(3, 0, t('new-notification.steps.payment-methods.title', { ns: 'notifiche' }));
-    /* eslint-enable functional/immutable-data */
-  }
 
   const goToNextStep = () => {
     setActiveStep((previousStep) => previousStep + 1);
@@ -94,7 +102,7 @@ const NewNotification = () => {
   };
 
   const isPaymentMethodStepDisabled = (index: number) =>
-    activeStep === 4 && index === 3 && !hasDebtPosition && IS_PAYMENT_ENABLED;
+    IS_PAYMENT_ENABLED && index === 3 && !hasDebtPosition;
 
   const onStepClick = (index: number) =>
     index < activeStep && !isPaymentMethodStepDisabled(index) ? goToPreviousStep(index) : undefined;
@@ -173,7 +181,7 @@ const NewNotification = () => {
             )}
             {activeStep === 1 && (
               <Recipient
-                onConfirm={IS_PAYMENT_ENABLED ? goToNextStep : () => setActiveStep(4)}
+                onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
                 recipientsData={notification.recipients}
                 paymentMode={notification.paymentMode}
@@ -189,16 +197,17 @@ const NewNotification = () => {
                 ref={childRef}
               />
             )}
-            {activeStep === 3 && IS_PAYMENT_ENABLED && (
+            {activeStep === 3 && IS_PAYMENT_ENABLED && hasDebtPosition && (
               <PaymentMethods
-                onConfirm={createNotification}
+                onConfirm={goToNextStep}
                 notification={notification}
                 isCompleted={isCompleted}
                 onPreviousStep={goToPreviousStep}
                 ref={childRef}
               />
             )}
-            {activeStep === 4 && (
+            {((IS_PAYMENT_ENABLED && activeStep === 4) ||
+              (!IS_PAYMENT_ENABLED && activeStep === 2)) && (
               <Attachments
                 onConfirm={createNotification}
                 onPreviousStep={goToPreviousStep}

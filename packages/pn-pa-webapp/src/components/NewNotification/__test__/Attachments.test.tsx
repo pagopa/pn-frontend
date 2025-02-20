@@ -96,7 +96,7 @@ describe('Attachments Component with payment enabled', async () => {
     const buttonSubmit = result.getByTestId('step-submit');
     const buttonPrevious = result.getByTestId('previous-step');
     expect(buttonSubmit).toBeDisabled();
-    expect(buttonSubmit).toHaveTextContent('button.continue');
+    expect(buttonSubmit).toHaveTextContent('button.send');
     expect(buttonPrevious).toBeInTheDocument();
   });
 
@@ -394,11 +394,13 @@ describe('Attachments Component with payment enabled', async () => {
     }
     expect(buttonAddAnotherDoc).not.toBeInTheDocument();
   });
-  
+
   it('should appear info banner with additional languages', async () => {
     // render component
     await act(async () => {
-      result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} hasAdditionalLang={true}/>);
+      result = render(
+        <Attachments isCompleted={false} onConfirm={confirmHandlerMk} hasAdditionalLang={true} />
+      );
     });
     const form = result.container.querySelector('form');
     const banner = within(form!).getByTestId('bannerAdditionalLanguages');
