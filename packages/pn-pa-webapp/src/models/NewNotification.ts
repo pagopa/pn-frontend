@@ -90,7 +90,6 @@ export interface NewNotificationRecipient {
 }
 
 export interface NewNotification extends NewNotificationBilingualism {
-  notificationFeePolicy: NotificationFeePolicy;
   idempotenceToken?: string;
   paProtocolNumber: string;
   subject: string;
@@ -106,6 +105,7 @@ export interface NewNotification extends NewNotificationBilingualism {
   documents: Array<NewNotificationDocument>;
   paFee?: number;
   vat?: number;
+  notificationFeePolicy: NotificationFeePolicy;
   pagoPaIntMode?: PagoPaIntegrationMode;
 }
 

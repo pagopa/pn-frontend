@@ -51,6 +51,7 @@ const NewNotification = () => {
       // eslint-disable-next-line functional/immutable-data
       baseSteps.push(
         t('new-notification.steps.debt-position.title', { ns: 'notifiche' }),
+        t('new-notification.steps.debt-position-detail.title', { ns: 'notifiche' }),
         t('new-notification.steps.payment-methods.title', { ns: 'notifiche' })
       );
     }
@@ -197,7 +198,16 @@ const NewNotification = () => {
                 ref={childRef}
               />
             )}
-            {activeStep === 3 && IS_PAYMENT_ENABLED && hasDebtPosition && (
+            {activeStep === 3 && IS_PAYMENT_ENABLED && (
+              <DebtPosition
+                recipients={notification.recipients}
+                onConfirm={goToNextStep}
+                onPreviousStep={goToPreviousStep}
+                goToLastStep={() => setActiveStep(steps.length - 1)}
+                ref={childRef}
+              />
+            )}
+            {activeStep === 4 && IS_PAYMENT_ENABLED && hasDebtPosition && (
               <PaymentMethods
                 onConfirm={goToNextStep}
                 notification={notification}
@@ -206,7 +216,7 @@ const NewNotification = () => {
                 ref={childRef}
               />
             )}
-            {((IS_PAYMENT_ENABLED && activeStep === 4) ||
+            {((IS_PAYMENT_ENABLED && activeStep === 5) ||
               (!IS_PAYMENT_ENABLED && activeStep === 2)) && (
               <Attachments
                 onConfirm={createNotification}

@@ -481,7 +481,7 @@
         "add-doc": "Aggiungi un documento",
         "add-another-doc": "Aggiungi un altro documento",
         "back-to-recipient": "Torna a Destinatario",
-        "back-to-debt-position": "Torna a Posizione debitoria",
+        "back-to-debt-position": "Torna a Dettaglio posizione debitoria",
         "back-to-payment-methods": "Torna a Dettaglio posizione debitoria",
         "remove-document": "Rimuovi documento",
         "banner-additional-languages": "Hai scelto di inviare la notifica in più lingue. Ricorda di allegare i documenti in entrambe le lingue selezionate.",
@@ -498,6 +498,21 @@
           "f24": "Modello F24",
           "pago-pa-f24": "Avviso pagoPA + Modello F24",
           "nothing": "Nessun pagamento"
+        }
+      },
+      "debt-position-detail": {
+        "title": "Dettaglio osizione debitoria",
+        "debt-position-of": "Posizione debitoria di {{fullName}}",
+        "notification-fee-title": "Costo di notifica",
+        "notification-fee-description": "Scegli il tipo di costo di notifica: puoi scegliere fra quello già incluso nell’atto oppure inserire un costo di notifica personalizzato a carico del destinatario.",
+        "pagopa-int-mode-title": "Tecnologia del pagamento",
+        "pagopa-int-mode-description": "Nella modalità sincrona la posizione debitoria è presso il sistema dell'Ente Creditore (EC), mentre nella modalità asincrona è caricata sul sistema Gestione Posizioni Debitorie (GPD) di pagoPA. Scopri di più",
+        "back-to-debt-position": "Torna a Posizione debitoria",
+        "radios": {
+          "flat-rate": "Incluso nell’atto (forfettario)",
+          "delivery-mode": "A carico del destinatario (puntuale)",
+          "sync": "Sincrona",
+          "async": "Asincrona"
         }
       },
       "payment-methods": {
