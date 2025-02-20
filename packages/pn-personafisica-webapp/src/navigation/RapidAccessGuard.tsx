@@ -12,6 +12,7 @@ import {
   appStateActions,
 } from '@pagopa-pn/pn-commons';
 
+import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { NotificationId } from '../models/Notifications';
 import { PFEventsType } from '../models/PFEventsType';
 import { NotificationDetailRouteState } from '../pages/NotificationDetail.page';
@@ -23,7 +24,6 @@ import {
 } from '../redux/notification/actions';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
-import { useRapidAccessParam } from './navigation.utility';
 import {
   GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH,
   GET_DETTAGLIO_NOTIFICA_PATH,
