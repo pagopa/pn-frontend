@@ -48,8 +48,6 @@ describe('PaymentMethods Component', () => {
   });
 
   it('renders PaymentMethods', () => {
-    console.log('Render result:', result.container.innerHTML); // Debugging
-
     expect(result.container).toHaveTextContent(
       `${newNotification.recipients[0].firstName} ${newNotification.recipients[0].lastName}`
     );
@@ -71,9 +69,6 @@ describe('PaymentMethods Component', () => {
     const buttonPrevious = result.getByTestId('previous-step');
     expect(buttonSubmit).toBeInTheDocument();
     expect(buttonPrevious).toBeInTheDocument();
-    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
-    // vedi flexDirection row-reverse
-    // PN-1843 Carlotta Dimatteo 12/08/2022
     expect(buttonPrevious).toHaveTextContent(/back-to-attachments/i);
   });
 
