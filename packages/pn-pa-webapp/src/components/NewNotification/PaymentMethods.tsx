@@ -268,7 +268,12 @@ const PaymentMethods: React.FC<Props> = ({
         previousStepOnClick={() => handlePreviousStep()}
       >
         {notification.recipients.map((recipient) => (
-          <Paper key={recipient.taxId} sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
+          <Paper
+            key={recipient.taxId}
+            sx={{ padding: '24px', marginTop: '40px' }}
+            elevation={0}
+            data-testid="paymentForRecipient"
+          >
             <SectionHeading>
               {t('payment-models')} {recipient.firstName} {recipient.lastName}
             </SectionHeading>

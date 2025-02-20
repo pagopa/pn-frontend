@@ -153,8 +153,10 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
     payments: [
       {
         pagoPa: { ...newNotificationPagoPa },
-        f24: { ...newNotificationF24 },
       },
+      {
+        f24: { ...newNotificationF24 },
+      }
     ],
   },
 ];

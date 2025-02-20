@@ -66,16 +66,16 @@ describe('PaymentMethods Component', () => {
       `${newNotification.recipients[1].firstName} ${newNotification.recipients[1].lastName}`
     );
     const paymentBoxes = result.queryAllByTestId('paymentBox');
-    expect(paymentBoxes).toHaveLength(3);
-    paymentBoxes.forEach((paymentBox, index) => {
-      expect(paymentBox).toHaveTextContent(
-        index % 2 === 0 ? /attach-pagopa-notice*/i : /attach-f24/i
-      );
-      const fileInput = paymentBox.parentNode?.querySelector('[data-testid="fileUploadInput"]');
+    expect(paymentBoxes).toHaveLength(4);
 
-      console.log('--------------', fileInput);
-      expect(fileInput).toBeInTheDocument();
-    });
+    const paymentForRecipient = result.queryAllByTestId('paymentForRecipient');
+    const firstPayment = paymentForRecipient[0];
+    expect(within(firstPayment).queryAllByTestId('removeDocument')).toHaveLength(1);
+    expect(within(firstPayment).queryAllByTestId('fileInput')).toHaveLength(1);
+
+    const secondPayment = paymentForRecipient[1];
+    expect(within(secondPayment).queryAllByTestId('removeDocument')).toHaveLength(2);
+
     const buttonSubmit = result.getByTestId('step-submit');
     const buttonPrevious = result.getByTestId('previous-step');
     expect(buttonSubmit).toBeInTheDocument();
