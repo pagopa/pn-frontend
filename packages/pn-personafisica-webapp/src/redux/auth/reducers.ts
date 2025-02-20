@@ -10,7 +10,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
-import { User } from '../../models/User';
+import { SourceChannel, User } from '../../models/User';
 import { acceptTosPrivacy, exchangeToken, getTosPrivacyApproval, logout } from './actions';
 
 const userDataMatcher = yup
@@ -25,7 +25,7 @@ const userDataMatcher = yup
     jti: yup.string().matches(dataRegex.lettersNumbersAndDashs),
     source: yup
       .object({
-        channel: yup.string().oneOf(['B2B', 'WEB', 'TPP']), // UserSource.channel
+        channel: yup.string().oneOf(Object.values(SourceChannel)), // UserSource.channel
         details: yup.string(),
         retrievalId: yup.string().matches(/^[ -~]{1,50}$/),
       })

@@ -11,8 +11,14 @@ export interface User extends BasicUser {
   source?: UserSource;
 }
 
+export enum SourceChannel {
+  B2B = 'B2B',
+  WEB = 'WEB',
+  TPP = 'TPP',
+}
+
 export interface UserSource {
-  channel: 'B2B' | 'WEB' | 'TPP';
+  channel: SourceChannel;
   details: string;
   retrievalId: string;
 }
