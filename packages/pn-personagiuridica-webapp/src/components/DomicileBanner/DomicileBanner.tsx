@@ -85,10 +85,11 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
   const { IS_DOD_ENABLED } = getConfiguration();
-  const { defaultPECAddress, defaultSERCQ_SENDAddress, defaultEMAILAddress, defaultSMSAddress } =
-    useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultPECAddress, defaultSERCQ_SENDAddress, courtesyAddresses } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
 
-  const hasCourtesyAddresses = !!(defaultEMAILAddress || defaultSMSAddress);
+  const hasCourtesyAddresses = courtesyAddresses.length > 0;
 
   const domicileBannerData: DomicileBannerData | null = defaultPECAddress
     ? null
@@ -103,12 +104,11 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
     if (destination && operation) {
       if (destination === ChannelType.SERCQ_SEND && operation === ContactOperation.ADD) {
         navigate(routes.DIGITAL_DOMICILE_ACTIVATION);
-        return;
       } else {
-        dispatch(setExternalEvent({ destination, source, operation }));
+        navigate(routes.RECAPITI);
       }
+      dispatch(setExternalEvent({ destination, source, operation }));
     }
-    navigate(routes.RECAPITI);
   };
 
   return open && domicileBannerData ? (

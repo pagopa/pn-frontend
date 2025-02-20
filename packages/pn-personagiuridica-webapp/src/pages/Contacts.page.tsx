@@ -1,69 +1,20 @@
 import { useCallback, useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Alert, Box, Link, Stack, Typography } from '@mui/material';
+import { Box, Link, Stack } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
 import CourtesyContacts from '../components/Contacts/CourtesyContacts';
 import LegalContacts from '../components/Contacts/LegalContacts';
+import ValidatingPecBanner from '../components/Contacts/ValidatingPecBanner';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { ChannelType, ContactOperation, ContactSource } from '../models/contacts';
 import { PROFILE } from '../navigation/routes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
-import { contactsSelectors, resetExternalEvent } from '../redux/contact/reducers';
+import { resetExternalEvent } from '../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-
-const ValidatingPecBanner: React.FC = () => {
-  const { t } = useTranslation(['recapiti']);
-  const {
-    defaultPECAddress,
-    defaultSERCQ_SENDAddress,
-    specialPECAddresses,
-    specialSERCQ_SENDAddresses,
-  } = useAppSelector(contactsSelectors.selectAddresses);
-
-  const isValidatingDefaultPec = defaultPECAddress?.pecValid === false;
-
-  const isDefaultSercqSendActive = !!defaultSERCQ_SENDAddress;
-
-  const validatingSpecialPecList: Array<string> = specialPECAddresses
-    .filter(
-      (pecAddr) =>
-        pecAddr.pecValid === false &&
-        (isDefaultSercqSendActive ||
-          specialSERCQ_SENDAddresses.some((sercqAddr) => sercqAddr.senderId === pecAddr.senderId))
-    )
-    .map((addr) => addr.senderName ?? addr.senderId);
-
-  // eslint-disable-next-line functional/no-let
-  let bannerMessage = '';
-  if (!isValidatingDefaultPec && validatingSpecialPecList.length === 0) {
-    return;
-  }
-  if (isValidatingDefaultPec) {
-    if (isDefaultSercqSendActive) {
-      bannerMessage = 'dod-enabled-message';
-    } else {
-      bannerMessage = 'dod-disabled-message';
-    }
-  } else {
-    bannerMessage = 'parties-list';
-  }
-  return (
-    <Alert data-testid="PecVerificationAlert" severity="warning" sx={{ my: { xs: 2, lg: 4 } }}>
-      <Typography variant="inherit" sx={{ fontWeight: '600' }}>
-        {t('legal-contacts.pec-validation-banner.title')}
-      </Typography>
-      <Typography variant="inherit">
-        {t(`legal-contacts.pec-validation-banner.${bannerMessage}`, {
-          list: validatingSpecialPecList.join(', '),
-        })}
-      </Typography>
-    </Alert>
-  );
-};
 
 const Contacts = () => {
   const { t, i18n } = useTranslation(['recapiti']);

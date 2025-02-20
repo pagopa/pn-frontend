@@ -107,17 +107,15 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
   const { IS_DOD_ENABLED } = getConfiguration();
-  const {
-    defaultPECAddress,
-    defaultSERCQ_SENDAddress,
-    defaultAPPIOAddress,
-    defaultEMAILAddress,
-    defaultSMSAddress,
-  } = useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultPECAddress, defaultSERCQ_SENDAddress, defaultAPPIOAddress, courtesyAddresses } =
+    useAppSelector(contactsSelectors.selectAddresses);
 
   const hasAppIODisabled = defaultAPPIOAddress?.value === IOAllowedValues.DISABLED;
 
-  const hasCourtesyAddresses = !!(defaultEMAILAddress || defaultSMSAddress);
+  const hasCourtesyAddresses = courtesyAddresses.some(
+    (addr) => addr.value !== IOAllowedValues.DISABLED
+  );
+
   const domicileBannerData: DomicileBannerData | null = defaultPECAddress
     ? null
     : getDomicileData(
@@ -137,13 +135,12 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
     if (destination && operation) {
       if (destination === ChannelType.SERCQ_SEND && operation === ContactOperation.ADD) {
         navigate(routes.DIGITAL_DOMICILE_ACTIVATION);
-        return;
       } else {
-        dispatch(setExternalEvent({ destination, source, operation }));
+        navigate(routes.RECAPITI);
       }
+      dispatch(setExternalEvent({ destination, source, operation }));
     }
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, { source });
-    navigate(routes.RECAPITI);
   };
 
   return open && domicileBannerData ? (
