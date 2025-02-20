@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Box, Button, IconButton, Menu as MUIMenu, MenuItem, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
-import { CustomTagGroup, useIsMobile } from '@pagopa-pn/pn-commons';
+import { CustomTagGroup } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -76,7 +76,7 @@ export const Menu = (props: any) => {
         id={`delegation-menu-icon-${props.id}`}
         onClick={handleClick}
         data-testid="delegationMenuIcon"
-        aria-label="Delegation Menu Icon"
+        aria-label={t('deleghe.table.menu-aria-label')}
       >
         <MoreVertIcon fontSize={'small'} />
       </IconButton>
@@ -99,7 +99,6 @@ export const OrganizationsList = (props: {
   visibleItems?: number;
 }) => {
   const { t } = useTranslation(['deleghe']);
-  const isMobile = useIsMobile();
   return (
     <>
       {props.organizations.length === 0 ? (
@@ -107,7 +106,7 @@ export const OrganizationsList = (props: {
           {t('deleghe.table.allNotifications')}
         </Typography>
       ) : (
-        <Box sx={{ minWidth: isMobile ? '' : '35rem', maxWidth: '60rem' }}>
+        <Box>
           <Typography variant={props.textVariant || 'inherit'} mb={2}>
             {t('deleghe.table.notificationsFrom')}
           </Typography>

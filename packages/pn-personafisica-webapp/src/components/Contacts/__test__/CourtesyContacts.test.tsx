@@ -36,14 +36,14 @@ describe('CourtesyContacts Component', async () => {
         name: 'courtesy-contacts.sms-add',
       })
     );
-    expect(phoneButton).toBeDisabled();
+    expect(phoneButton).toBeEnabled();
     expect(emailInput).toHaveValue('');
     const emaileButton = await waitFor(() =>
       within(emailContact).getByRole('button', {
         name: 'courtesy-contacts.email-add',
       })
     );
-    expect(emaileButton).toBeDisabled();
+    expect(emaileButton).toBeEnabled();
   });
 
   it('renders components - contacts', () => {

@@ -57,10 +57,6 @@ const Login = () => {
     });
   };
 
-  if (showIDPS) {
-    return <SpidSelect onBack={() => setShowIDPS(false)} />;
-  }
-
   const changeLanguageHandler = async (langCode: string) => {
     await i18n.changeLanguage(langCode);
   };
@@ -68,6 +64,10 @@ const Login = () => {
   const handleAssistanceClick = () => {
     // eslint-disable-next-line functional/immutable-data
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+  };
+
+  const closeIDPS = () => {
+    setShowIDPS(false);
   };
 
   return (
@@ -165,6 +165,7 @@ const Login = () => {
           </Box>
         </Grid>
       </Grid>
+      <SpidSelect onClose={closeIDPS} show={showIDPS} />
     </Layout>
   );
 };
