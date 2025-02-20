@@ -121,7 +121,6 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
     // initialValues.length - values.length can be only >= 0 because of the slice of pastedCode
     const emptyValues = new Array(initialValues.length - values.length).fill('');
     setCurrentValues(values.concat(emptyValues));
-    focusInput(values.length);
   };
 
   useEffect(() => {
