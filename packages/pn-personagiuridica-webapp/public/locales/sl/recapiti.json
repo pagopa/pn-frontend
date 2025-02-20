@@ -1,8 +1,6 @@
 {
   "title": "Kontaktni podatki",
   "subtitle": "Tukaj lahko navedete in spremenite digitalne kontaktne podatke, na katere {{recipient}} boste prejemali obvestila. Če iščete podatke o podjetju <0>jih najdete tukaj</0>.",
-  "alert-dialog-email": "Če podjetje nima PEC in uporabnik dostopa do obvestila na SEND v roku 5 dni (120 ur) od pošiljanja elektronske pošte, potrdilo o prejemu ne bo poslano s priporočeno pošto.",
-  "alert-dialog-sms": "Če podjetje nima PEC in uporabnik dostopa do obvestila na SEND v roku 5 dni (120 ur) od pošiljanja SMS-a, potrdilo o prejemu ne bo poslano s priporočeno pošto.",
   "insert-code": "Vnesite kodo",
   "legal-contacts": {
     "title": "",
