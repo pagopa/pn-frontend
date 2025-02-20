@@ -25,8 +25,11 @@ export enum GraphColors {
   lightRed = '#FE6666',
   turquoise = '#21CDD1',
   azure = '#00C5CA',
-  pink = '#FFE0E0',
+  pink = '#FB9EAC',
   darkRed = '#761F1F',
+  lightYellow = '#FFE5A3',
+  goldenYellow = '#D9AD3C',
+  oliveBrown = '#614C15',
 }
 
 export enum CxType {

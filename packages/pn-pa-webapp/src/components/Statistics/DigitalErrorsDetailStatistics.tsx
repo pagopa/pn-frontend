@@ -64,25 +64,25 @@ const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
       title: t('digital_errors_detail.virus_detected_title'),
       description: t('digital_errors_detail.virus_detected_description'),
       value: virus_detected_errors,
-      color: GraphColors.turquoise,
+      color: GraphColors.lightYellow,
     },
     {
       title: t('digital_errors_detail.server_pec_comunication_title'),
       description: t('digital_errors_detail.server_pec_comunication_description'),
       value: server_pec_comunication_errors,
-      color: GraphColors.blue,
+      color: GraphColors.gold,
     },
     {
       title: t('digital_errors_detail.sending_pec_title'),
       description: t('digital_errors_detail.sending_pec_description'),
       value: sending_pec_errors,
-      color: GraphColors.darkGreen,
+      color: GraphColors.goldenYellow,
     },
     {
       title: t('digital_errors_detail.malformed_pec_address_title'),
       description: t('digital_errors_detail.malformed_pec_address_description'),
       value: malformed_pec_address_errors,
-      color: GraphColors.navy,
+      color: GraphColors.oliveBrown,
     },
   ];
 
