@@ -12,7 +12,7 @@ export interface User extends BasicUser {
 }
 
 export interface UserSource {
-  channel: string; // TPP o ??? 
+  channel: 'B2B' | 'WEB' | 'TPP';
   details: string;
   retrievalId: string;
 }
