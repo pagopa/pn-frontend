@@ -34,7 +34,7 @@ const DebtPosition: React.FC<Props> = ({ recipients, onConfirm, onPreviousStep, 
   const validationSchema = yup.object().shape({
     recipients: yup.array().of(
       yup.object().shape({
-        debtPosition: yup.string().required(tc('required-fields')),
+        debtPosition: yup.string().required(tc('required-field')),
       })
     ),
   });
