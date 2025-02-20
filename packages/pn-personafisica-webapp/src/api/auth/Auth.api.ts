@@ -1,32 +1,22 @@
 /* eslint-disable functional/immutable-data */
-import { AppRouteParams } from '@pagopa-pn/pn-commons';
-
-import { User } from '../../redux/auth/types';
+import {
+  TokenExchangeBody,
+  TokenExchangeRequest,
+  User,
+  paramsToSourceType,
+} from '../../models/User';
 import { authClient } from '../apiClients';
 import { AUTH_TOKEN_EXCHANGE } from './auth.routes';
-
-interface TokenExchangeBody {
-  authorizationToken: string;
-  retrievalId?: string;
-  aarQRCodeValue?: string;
-}
-
-export interface TokenExchangeRequest {
-  spidToken: string;
-  rapidAccess?: [AppRouteParams, string];
-}
 
 export const AuthApi = {
   exchangeToken: async ({ spidToken, rapidAccess }: TokenExchangeRequest): Promise<User> => {
     const body: TokenExchangeBody = { authorizationToken: spidToken };
     if (rapidAccess) {
       const [param, value] = rapidAccess;
-      if (param === AppRouteParams.AAR) {
-        body.aarQRCodeValue = value;
-      }
-      if (param === AppRouteParams.RETRIEVAL_ID) {
-        body.retrievalId = value;
-      }
+      body.source = {
+        type: paramsToSourceType[param],
+        id: value,
+      };
     }
     const response = await authClient.post<User>(AUTH_TOKEN_EXCHANGE(), body);
     const user: User = {

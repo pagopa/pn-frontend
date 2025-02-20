@@ -13,11 +13,12 @@ import {
   useSessionCheck,
 } from '@pagopa-pn/pn-commons';
 
+import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
-import { goToLoginPortal, useRapidAccessParam } from './navigation.utility';
+import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
 
 enum INITIALIZATION_STEPS {

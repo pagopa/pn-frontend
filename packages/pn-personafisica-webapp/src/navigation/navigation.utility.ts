@@ -1,8 +1,6 @@
-import { useMemo } from 'react';
-import { matchPath, useSearchParams } from 'react-router-dom';
+import { matchPath } from 'react-router-dom';
 
 import { AppRouteParams, EventPageType, sanitizeString } from '@pagopa-pn/pn-commons';
-import { getRapidAccessParam } from '@pagopa-pn/pn-commons/src/utility/routes.utility';
 
 import {
   APP_STATUS,
@@ -60,9 +58,3 @@ export const getCurrentEventTypePage = (location: string): EventPageType | undef
 
   return pageType;
 };
-
-export function useRapidAccessParam() {
-  const [params] = useSearchParams();
-
-  return useMemo(() => getRapidAccessParam(params), [params]);
-}

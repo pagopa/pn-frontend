@@ -37,6 +37,7 @@ import {
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import { NotificationDetailRouteState } from '../models/NotificationDetail';
 import { PFEventsType } from '../models/PFEventsType';
 import { ContactSource } from '../models/contacts';
 import * as routes from '../navigation/routes.const';
@@ -57,13 +58,6 @@ import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
-import { NotificationData } from '../utility/MixpanelUtils/Strategies/SendNotificationDetailStrategy';
-
-// state for the invocations to this component
-// (to include in navigation or Link to the route/s arriving to it)
-export type NotificationDetailRouteState = {
-  source?: AppRouteParams; // indicates whether the user arrived to the notification detail page from the QR code
-};
 
 const NotificationDetail: React.FC = () => {
   const { id, mandateId } = useParams();
@@ -477,7 +471,7 @@ const NotificationDetail: React.FC = () => {
         userPayments,
         source: rapidAccessSource,
         timeline: notification.timeline,
-      } as NotificationData);
+      });
 
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATIONS_COUNT, {
         timeline: notification.timeline,

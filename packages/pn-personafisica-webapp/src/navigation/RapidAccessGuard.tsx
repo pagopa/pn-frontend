@@ -7,14 +7,14 @@ import {
   AppResponse,
   AppResponsePublisher,
   AppRouteParams,
-  appStateActions,
   IllusQuestion,
   LoadingPage,
 } from '@pagopa-pn/pn-commons';
 
+import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
+import { NotificationDetailRouteState } from '../models/NotificationDetail';
 import { NotificationId } from '../models/Notifications';
 import { PFEventsType } from '../models/PFEventsType';
-import { NotificationDetailRouteState } from '../pages/NotificationDetail.page';
 import { useAppDispatch } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
@@ -23,7 +23,6 @@ import {
 } from '../redux/notification/actions';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
-import { useRapidAccessParam } from './navigation.utility';
 import {
   GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH,
   GET_DETTAGLIO_NOTIFICA_PATH,
@@ -44,7 +43,7 @@ function notificationDetailPath(notificationId: NotificationId): string {
 const RapidAccessGuard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation(['notifiche']);
+  const { t } = useTranslation('notifiche');
   const [fetchError, setFetchError] = useState(false);
   const rapidAccess = useRapidAccessParam();
 
@@ -90,34 +89,16 @@ const RapidAccessGuard = () => {
     return true;
   };
 
-  const handleErrorRetrievalId = () => {
-    dispatch(
-      appStateActions.addError({
-        title: 'Errore Accesso Rapido',                           // TODO copy
-        message: 'Non è stato possibile recuperare la notifica',  // TODO copy
-      })
-    );
-    return false;
-  };
-
   useEffect(() => {
     AppResponsePublisher.error.subscribe(
       NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
       handleErrorQrCode
-    );
-    AppResponsePublisher.error.subscribe(
-      NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
-      handleErrorRetrievalId
     );
 
     return () => {
       AppResponsePublisher.error.unsubscribe(
         NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
         handleErrorQrCode
-      );
-      AppResponsePublisher.error.unsubscribe(
-        NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
-        handleErrorRetrievalId
       );
     };
   }, []);

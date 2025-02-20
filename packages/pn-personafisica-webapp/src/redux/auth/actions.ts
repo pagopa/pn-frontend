@@ -2,12 +2,12 @@ import { ConsentType, TosPrivacyConsent, parseError } from '@pagopa-pn/pn-common
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
-import { AuthApi, TokenExchangeRequest } from '../../api/auth/Auth.api';
+import { AuthApi } from '../../api/auth/Auth.api';
 import {
   BffTosPrivacyActionBody,
   UserConsentsApiFactory,
 } from '../../generated-client/tos-privacy';
-import { User } from './types';
+import { TokenExchangeRequest, User } from '../../models/User';
 
 export enum AUTH_ACTIONS {
   GET_TOS_PRIVACY_APPROVAL = 'getTosPrivacyApproval',

@@ -1,9 +1,36 @@
 import { AppRouteParams, storageOpsBuilder } from '@pagopa-pn/pn-commons';
 
-export const STORAGE_RAPID_ACCESS_KEY = 'rapid_access';
+const storageAarOps = storageOpsBuilder<string>(AppRouteParams.AAR, 'string', false);
 
-export const storageRapidAccessOps = storageOpsBuilder<[AppRouteParams, string]>(
-  STORAGE_RAPID_ACCESS_KEY,
-  'object',
+const storageRetrievalIdOps = storageOpsBuilder<string>(
+  AppRouteParams.RETRIEVAL_ID,
+  'string',
   false
 );
+
+export const storageRapidAccessOps = {
+  read: (): [AppRouteParams, string] | undefined => {
+    const aar = storageAarOps.read();
+    if (aar) {
+      return [AppRouteParams.AAR, aar];
+    }
+    const retrievalId = storageRetrievalIdOps.read();
+    if (retrievalId) {
+      return [AppRouteParams.RETRIEVAL_ID, retrievalId];
+    }
+    return undefined;
+  },
+  write: ([key, value]: [AppRouteParams, string]) => {
+    if (key === AppRouteParams.AAR) {
+      storageAarOps.write(value);
+      storageRetrievalIdOps.delete();
+    } else if (key === AppRouteParams.RETRIEVAL_ID) {
+      storageRetrievalIdOps.write(value);
+      storageAarOps.delete();
+    }
+  },
+  delete: () => {
+    storageAarOps.delete();
+    storageRetrievalIdOps.delete();
+  },
+};

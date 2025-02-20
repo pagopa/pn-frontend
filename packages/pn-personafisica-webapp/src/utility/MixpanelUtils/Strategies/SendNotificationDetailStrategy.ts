@@ -16,7 +16,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { appRouteParamToEventSource } from '../../notification.utility';
 
-export type NotificationData = {
+type NotificationData = {
   downtimeEvents: Array<Downtime>;
   mandateId: string | undefined;
   notificationStatus: NotificationStatus;

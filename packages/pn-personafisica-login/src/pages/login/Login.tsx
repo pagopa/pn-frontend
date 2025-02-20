@@ -14,7 +14,7 @@ import {
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
-import { useRapidAccessParam } from '../../navigation/navigation.utility';
+import { useRapidAccessParam } from '../../hooks/useRapidAccessParam';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 import { storageRapidAccessOps } from '../../utility/storage';

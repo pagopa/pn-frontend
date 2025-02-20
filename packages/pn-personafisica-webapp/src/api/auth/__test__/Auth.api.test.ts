@@ -35,7 +35,10 @@ describe('Auth api tests', () => {
     mock
       .onPost(AUTH_TOKEN_EXCHANGE(), {
         authorizationToken: spidToken,
-        aarQRCodeValue: 'mocked-qr-code',
+        source: {
+          type: 'QR',
+          id: 'mocked-qr-code',
+        },
       })
       .reply(200, userResponseWithRetrievalId);
     const res = await AuthApi.exchangeToken({ spidToken, rapidAccess });
