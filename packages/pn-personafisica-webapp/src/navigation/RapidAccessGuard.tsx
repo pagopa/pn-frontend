@@ -9,7 +9,6 @@ import {
   AppRouteParams,
   IllusQuestion,
   LoadingPage,
-  appStateActions,
 } from '@pagopa-pn/pn-commons';
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
@@ -44,7 +43,7 @@ function notificationDetailPath(notificationId: NotificationId): string {
 const RapidAccessGuard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation(['common', 'notifiche']);
+  const { t } = useTranslation('notifiche');
   const [fetchError, setFetchError] = useState(false);
   const rapidAccess = useRapidAccessParam();
 
@@ -90,34 +89,16 @@ const RapidAccessGuard = () => {
     return true;
   };
 
-  const handleErrorRetrievalId = () => {
-    dispatch(
-      appStateActions.addError({
-        title: t('errors.unhandled.title', { ns: 'common' }),
-        message: t('errors.unhandled.message', { ns: 'common' }),
-      })
-    );
-    return false;
-  };
-
   useEffect(() => {
     AppResponsePublisher.error.subscribe(
       NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
       handleErrorQrCode
-    );
-    AppResponsePublisher.error.subscribe(
-      NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
-      handleErrorRetrievalId
     );
 
     return () => {
       AppResponsePublisher.error.unsubscribe(
         NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
         handleErrorQrCode
-      );
-      AppResponsePublisher.error.unsubscribe(
-        NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
-        handleErrorRetrievalId
       );
     };
   }, []);
@@ -130,8 +111,8 @@ const RapidAccessGuard = () => {
     return (
       <AccessDenied
         icon={<IllusQuestion />}
-        message={t('from-qrcode.not-found', { ns: 'notifiche' })}
-        subtitle={t('from-qrcode.not-found-subtitle', { ns: 'notifiche' })}
+        message={t('from-qrcode.not-found')}
+        subtitle={t('from-qrcode.not-found-subtitle')}
         isLogged={true}
         goToHomePage={() => navigate(NOTIFICHE, { replace: true })}
         goToLogin={() => {}}
