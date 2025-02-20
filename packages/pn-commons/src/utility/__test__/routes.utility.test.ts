@@ -107,4 +107,10 @@ describe('Routes utility', () => {
     const result = getRapidAccessParam(params);
     expect(result).toBeUndefined();
   });
+
+  it('getRapidAccessParam returns undefined when parameters is unknown', () => {
+    const params = new URLSearchParams({ unknownParam: 'test-param' });
+    const result = getRapidAccessParam(params);
+    expect(result).toBeUndefined();
+  });
 });
