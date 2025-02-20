@@ -10,8 +10,8 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
+import { User } from '../../models/User';
 import { acceptTosPrivacy, exchangeToken, getTosPrivacyApproval, logout } from './actions';
-import { User } from './types';
 
 const userDataMatcher = yup
   .object({

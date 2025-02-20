@@ -1,27 +1,14 @@
 /* eslint-disable functional/immutable-data */
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
 
-import { User } from '../../redux/auth/types';
+import { TokenExchangeBody, TokenExchangeRequest, User } from '../../models/User';
 import { authClient } from '../apiClients';
 import { AUTH_TOKEN_EXCHANGE } from './auth.routes';
-
-interface TokenExchangeBody {
-  authorizationToken: string;
-  source?: {
-    type: 'TPP' | 'QR';
-    id: string;
-  };
-}
 
 const paramsToSourceType: Record<AppRouteParams, 'TPP' | 'QR'> = {
   [AppRouteParams.AAR]: 'QR',
   [AppRouteParams.RETRIEVAL_ID]: 'TPP',
 };
-
-export interface TokenExchangeRequest {
-  spidToken: string;
-  rapidAccess?: [AppRouteParams, string];
-}
 
 export const AuthApi = {
   exchangeToken: async ({ spidToken, rapidAccess }: TokenExchangeRequest): Promise<User> => {
