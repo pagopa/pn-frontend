@@ -196,9 +196,11 @@ const newNotificationRecipientsForBff: Array<NotificationRecipientV23> = [
     },
     payments: [
       {
-        pagoPa: newNotificationPagoPaForBff,
-        f24: newNotificationF24ForBff,
+        pagoPa: { ...newNotificationPagoPaForBff },
       },
+      {
+        f24: { ...newNotificationF24ForBff },
+      }
     ],
   },
 ];
