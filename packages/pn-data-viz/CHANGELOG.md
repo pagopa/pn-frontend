@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/pagopa/pn-frontend/compare/v2.12.0-RC.1...v2.12.0) (2025-02-18)
+
+**Note:** Version bump only for package @pagopa-pn/pn-data-viz
+
+
+
+
+
+# [2.12.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.12.0-RC.0...v2.12.0-RC.1) (2025-02-05)
+
+**Note:** Version bump only for package @pagopa-pn/pn-data-viz
+
+
+
+
+
+# [2.12.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.11.1...v2.12.0-RC.0) (2025-02-04)
+
+
+### Bug Fixes
+
+* **pn-13213:** aria label for payments and statistics checkboxes ([#1450](https://github.com/pagopa/pn-frontend/issues/1450)) ([0d4d250](https://github.com/pagopa/pn-frontend/commit/0d4d25007aa3c2012c6bd3cba235cc32e8d65be1))
+
+
+
+
+
 ## [2.11.1](https://github.com/pagopa/pn-frontend/compare/v2.11.0...v2.11.1) (2025-01-31)
 
 **Note:** Version bump only for package @pagopa-pn/pn-data-viz

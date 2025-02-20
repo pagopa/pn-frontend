@@ -157,6 +157,7 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
         !isSinglePayment && (
           <Box display="flex" justifyContent="center">
             <Radio
+              aria-label={pagoPAItem.causaleVersamento}
               data-testid="radio-button"
               checked={isSelected}
               value={pagoPAItem.noticeCode}
