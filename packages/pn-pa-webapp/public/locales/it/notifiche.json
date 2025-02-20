@@ -481,6 +481,8 @@
         "add-doc": "Aggiungi un documento",
         "add-another-doc": "Aggiungi un altro documento",
         "back-to-recipient": "Torna a Destinatario",
+        "back-to-debt-position": "Torna a Posizione debitoria",
+        "back-to-payment-methods": "Torna a Dettaglio posizione debitoria",
         "remove-document": "Rimuovi documento",
         "banner-additional-languages": "Hai scelto di inviare la notifica in più lingue. Ricorda di allegare i documenti in entrambe le lingue selezionate.",
         "file-upload-helper": "Il documento deve essere in formato {{format}} e non deve superare le dimensioni di {{size}}"

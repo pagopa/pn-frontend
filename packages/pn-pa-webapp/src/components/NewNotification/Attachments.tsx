@@ -131,11 +131,12 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
 
 type Props = {
   onConfirm: () => void;
-  onPreviousStep?: () => void;
+  onPreviousStep?: (step?: number) => void;
   attachmentsData?: Array<NewNotificationDocument>;
   forwardedRef: ForwardedRef<unknown>;
   isCompleted: boolean;
   hasAdditionalLang?: boolean;
+  hasDebtPosition: boolean;
 };
 
 const emptyFileData = {
@@ -162,6 +163,7 @@ const Attachments: React.FC<Props> = ({
   forwardedRef,
   isCompleted,
   hasAdditionalLang,
+  hasDebtPosition,
 }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
@@ -308,8 +310,16 @@ const Attachments: React.FC<Props> = ({
   const handlePreviousStep = () => {
     if (onPreviousStep) {
       storeAttachments(formik.values.documents);
-      onPreviousStep();
+      return !hasDebtPosition ? onPreviousStep(2) : onPreviousStep();
     }
+  };
+
+  const getPreviousStepLabel = () => {
+    if (!IS_PAYMENT_ENABLED) {
+      return t('back-to-recipient');
+    }
+
+    return !hasDebtPosition ? t('back-to-debt-position') : t('back-to-payment-methods');
   };
 
   useImperativeHandle(forwardedRef, () => ({
@@ -323,8 +333,8 @@ const Attachments: React.FC<Props> = ({
       <NewNotificationCard
         isContinueDisabled={!formik.isValid}
         title={t('attach-for-recipients')}
-        submitLabel={IS_PAYMENT_ENABLED ? tc('button.continue') : tc('button.send')}
-        previousStepLabel={t('back-to-recipient')}
+        submitLabel={tc('button.send')}
+        previousStepLabel={getPreviousStepLabel()}
         previousStepOnClick={() => handlePreviousStep()}
       >
         <Typography variant="body2">

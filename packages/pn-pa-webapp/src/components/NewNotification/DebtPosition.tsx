@@ -14,10 +14,17 @@ type Props = {
   recipients: Array<NewNotificationRecipient>;
   onConfirm: () => void;
   onPreviousStep: () => void;
+  goToLastStep: () => void;
   forwardedRef: ForwardedRef<unknown>;
 };
 
-const DebtPosition: React.FC<Props> = ({ recipients, onConfirm, onPreviousStep, forwardedRef }) => {
+const DebtPosition: React.FC<Props> = ({
+  recipients,
+  onConfirm,
+  onPreviousStep,
+  goToLastStep,
+  forwardedRef,
+}) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.debt-position',
@@ -45,9 +52,14 @@ const DebtPosition: React.FC<Props> = ({ recipients, onConfirm, onPreviousStep, 
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      console.log(values);
       if (formik.isValid) {
         dispatch(setDebtPosition(values));
+        if (
+          values.recipients.every((recipient) => recipient.debtPosition === PaymentModel.NOTHING)
+        ) {
+          goToLastStep();
+          return;
+        }
         onConfirm();
       }
     },

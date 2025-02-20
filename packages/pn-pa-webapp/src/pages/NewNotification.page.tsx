@@ -11,7 +11,7 @@ import PaymentMethods from '../components/NewNotification/PaymentMethods';
 import PreliminaryInformations from '../components/NewNotification/PreliminaryInformations';
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
-import { NewNotificationLangOther } from '../models/NewNotification';
+import { NewNotificationLangOther, PaymentModel } from '../models/NewNotification';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createNewNotification } from '../redux/newNotification/actions';
@@ -45,6 +45,11 @@ const NewNotification = () => {
     t('new-notification.steps.recipient.title', { ns: 'notifiche' }),
     t('new-notification.steps.attachments.title', { ns: 'notifiche' }),
   ];
+  const hasDebtPosition =
+    IS_PAYMENT_ENABLED &&
+    notification.recipients.some(
+      (recipient) => recipient.debtPosition && recipient.debtPosition !== PaymentModel.NOTHING
+    );
 
   const childRef = useRef<{ confirm: () => void }>();
 
@@ -87,6 +92,12 @@ const NewNotification = () => {
         });
     }
   };
+
+  const isPaymentMethodStepDisabled = (index: number) =>
+    activeStep === 4 && index === 3 && !hasDebtPosition && IS_PAYMENT_ENABLED;
+
+  const onStepClick = (index: number) =>
+    index < activeStep && !isPaymentMethodStepDisabled(index) ? goToPreviousStep(index) : undefined;
 
   useEffect(() => {
     createNotification();
@@ -147,9 +158,10 @@ const NewNotification = () => {
                 <Step
                   id={label}
                   key={label}
-                  onClick={() => (index < activeStep ? goToPreviousStep(index) : undefined)}
+                  onClick={() => onStepClick(index)}
                   sx={{ cursor: index < activeStep ? 'pointer' : 'auto' }}
                   data-testid={`step-${index}`}
+                  disabled={isPaymentMethodStepDisabled(index)}
                 >
                   <StepLabel>{label}</StepLabel>
                 </Step>
@@ -173,6 +185,7 @@ const NewNotification = () => {
                 recipients={notification.recipients}
                 onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
+                goToLastStep={() => setActiveStep(steps.length - 1)}
                 ref={childRef}
               />
             )}
@@ -194,6 +207,7 @@ const NewNotification = () => {
                 hasAdditionalLang={
                   notification.lang === NewNotificationLangOther && !!notification.additionalLang
                 }
+                hasDebtPosition={hasDebtPosition}
                 ref={childRef}
               />
             )}
