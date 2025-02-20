@@ -33,7 +33,7 @@ const StatusTooltip = ({
           cursor: 'default',
         }}
         data-testid={`statusChip-${label}`}
-        aria-label={isMobile ? `${label}: ${tooltip}` : undefined}
+        aria-label={`${label}: ${tooltip}`}
       />
     </CustomTooltip>
   );

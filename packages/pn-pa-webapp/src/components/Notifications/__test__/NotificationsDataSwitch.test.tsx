@@ -4,7 +4,7 @@ import { formatDate, getNotificationStatusInfos } from '@pagopa-pn/pn-commons';
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
-import { render } from '../../../__test__/test-utils';
+import { fireEvent, render } from '../../../__test__/test-utils';
 import NotificationsDataSwitch from '../NotificationsDataSwitch';
 
 vi.mock('react-i18next', () => ({
@@ -70,5 +70,16 @@ describe('NotificationsDataSwitch Component', () => {
     const { container } = render(<NotificationsDataSwitch data={data} type="group" />);
     const regexp = new RegExp(`^${data.group}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
+  });
+
+  it('renders component - action', () => {
+    const clickFn = vi.fn();
+    const { getByTestId } = render(
+      <NotificationsDataSwitch data={data} type="action" handleRowClick={clickFn} />
+    );
+    const button = getByTestId('goToNotificationDetail');
+    expect(button).toBeInTheDocument();
+    fireEvent.click(button);
+    expect(clickFn).toHaveBeenCalledTimes(1);
   });
 });
