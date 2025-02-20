@@ -1,14 +1,12 @@
 /* eslint-disable functional/immutable-data */
-import { AppRouteParams } from '@pagopa-pn/pn-commons';
-
-import { TokenExchangeBody, TokenExchangeRequest, User } from '../../models/User';
+import {
+  TokenExchangeBody,
+  TokenExchangeRequest,
+  User,
+  paramsToSourceType,
+} from '../../models/User';
 import { authClient } from '../apiClients';
 import { AUTH_TOKEN_EXCHANGE } from './auth.routes';
-
-const paramsToSourceType: Record<AppRouteParams, 'TPP' | 'QR'> = {
-  [AppRouteParams.AAR]: 'QR',
-  [AppRouteParams.RETRIEVAL_ID]: 'TPP',
-};
 
 export const AuthApi = {
   exchangeToken: async ({ spidToken, rapidAccess }: TokenExchangeRequest): Promise<User> => {

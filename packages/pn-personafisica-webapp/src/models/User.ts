@@ -29,3 +29,8 @@ export interface TokenExchangeRequest {
   spidToken: string;
   rapidAccess?: [AppRouteParams, string];
 }
+
+export const paramsToSourceType: Record<AppRouteParams, 'TPP' | 'QR'> = {
+  [AppRouteParams.AAR]: 'QR',
+  [AppRouteParams.RETRIEVAL_ID]: 'TPP',
+};
