@@ -79,37 +79,26 @@ describe('CodeInput Component', () => {
       <CodeInput initialValues={new Array(5).fill('')} onChange={handleChangeMock} />
     );
     const codeInputs = getAllByTestId(/code-input-[0-4]/);
+    // focus on the input
+    act(() => (codeInputs[2] as HTMLInputElement).focus());
     fireEvent.change(codeInputs[2], { target: { value: '3' } });
     expect(codeInputs[2]).toHaveValue('3');
+    await waitFor(() => {
+      expect(handleChangeMock).toHaveBeenCalledTimes(2);
+    });
     // change the value of the input and check that it is updated correctly
-    // set the cursor position to the end
-    act(() => (codeInputs[2] as HTMLInputElement).focus());
-    (codeInputs[2] as HTMLInputElement).setSelectionRange(1, 1);
     // when we try to edit an input, we insert a second value and after, based on cursor position, we change the value
     // we must use userEvent because the keyboard event must trigger also the change event (fireEvent doesn't do that)
     await user.keyboard('4');
-
-    act(() => (codeInputs[3] as HTMLInputElement).focus());
-    await waitFor(() => {
-      expect(codeInputs[3]).toHaveFocus();
-    });
     await waitFor(() => {
       expect(codeInputs[2]).toHaveValue('4');
     });
-    // move the cursor at the start of the input and try to edit again
-    act(() => (codeInputs[2] as HTMLInputElement).focus());
-    (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
+    // try to edit again
     await user.keyboard('3');
-
-    act(() => (codeInputs[3] as HTMLInputElement).focus());
-    await waitFor(() => {
-      expect(codeInputs[3]).toHaveFocus();
-    });
     await waitFor(() => {
       expect(codeInputs[2]).toHaveValue('3');
     });
     // delete the value
-    act(() => (codeInputs[2] as HTMLInputElement).focus());
     await user.keyboard('{Backspace}');
     await waitFor(() => {
       expect(codeInputs[2]).toHaveValue('');

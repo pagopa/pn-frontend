@@ -12,6 +12,8 @@ import {
 
 import { TextField } from '@mui/material';
 
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+
 type Props = {
   initialValues: Array<string>;
   onChange: (values: Array<string>) => void;
@@ -126,13 +128,15 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
     onChange(currentValues);
   }, [currentValues]);
 
-  const cifre = ['primo', 'secondo', 'terzo', 'quarto', 'ultimo'];
+  const digits = getLocalizedOrDefaultLabel('common', 'code-modal.digits', undefined, {
+    returnObjects: true,
+  });
 
   return (
     <Fragment>
       {initialValues.map((_value, index) => (
         <TextField
-          aria-label={`input numero ${cifre[index]}`}
+          aria-label={`${digits[index]}`}
           data-testid={`codeInput(${index})`}
           autoComplete="off"
           key={index}

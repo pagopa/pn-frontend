@@ -27,8 +27,8 @@ type Props = {
   codeSectionTitle: string;
   codeSectionAdditional?: ReactNode;
   confirmLabel?: string;
-  cancelLabel?: string;
-  cancelCallback?: () => void;
+  cancelLabel: string;
+  cancelCallback: () => void;
   confirmCallback?: (values: Array<string>) => void;
   isReadOnly?: boolean;
   error?: { title: string; message: string; hasError: boolean };
@@ -37,24 +37,6 @@ type Props = {
 type ModalHandle = {
   updateError: (error: ErrorMessage, codeNotValid: boolean) => void;
 };
-
-const RenderCopyToClipboardButton: React.FC<{
-  isReadOnly: boolean;
-  initialValues: Array<string>;
-}> = ({ isReadOnly, initialValues }) =>
-  isReadOnly && (
-    <CopyToClipboardButton
-      id="copy-code-button"
-      data-testid="copyCodeButton"
-      sx={{ mt: 1.5 }}
-      value={initialValues.join('')}
-      tooltipTitle={getLocalizedOrDefaultLabel(
-        'delegations',
-        'deleghe.code_copied',
-        'Codice copiato'
-      )}
-    />
-  );
 
 /**
  * This modal allows the user to input a verification code.
@@ -140,7 +122,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
     return (
       <PnDialog
         open={open}
-        aria-labelledby={code.length ? 'dialog-title' : ''}
+        aria-labelledby="dialog-title"
         aria-describedby="dialog-description"
         data-testid="codeDialog"
         disableEscapeKeyDown
@@ -154,7 +136,6 @@ const CodeModal = forwardRef<ModalHandle, Props>(
           <Typography fontSize={16} fontWeight={600}>
             {codeSectionTitle}
           </Typography>
-          {codeSectionAdditional && <Box sx={{ mt: 2 }}>{codeSectionAdditional}</Box>}
           <Box sx={{ mt: 2 }}>
             <CodeInput
               initialValues={initialValues}
@@ -162,8 +143,17 @@ const CodeModal = forwardRef<ModalHandle, Props>(
               hasError={internalHasError}
               onChange={changeHandler}
             />
+            {isReadOnly && (
+              <CopyToClipboardButton
+                id="copy-code-button"
+                data-testid="copyCodeButton"
+                sx={{ mt: 1.5 }}
+                value={initialValues.join('')}
+                tooltipTitle={getLocalizedOrDefaultLabel('delegations', 'deleghe.code_copied')}
+              />
+            )}
           </Box>
-          <RenderCopyToClipboardButton initialValues={initialValues} isReadOnly={isReadOnly} />
+          {codeSectionAdditional && <Box sx={{ mt: 2 }}>{codeSectionAdditional}</Box>}
           {internalHasError && (
             <Alert id="error-alert" data-testid="errorAlert" severity="error" sx={{ mt: 2 }}>
               <AlertTitle id="codeModalErrorTitle" data-testid="CodeModal error title">
@@ -174,16 +164,14 @@ const CodeModal = forwardRef<ModalHandle, Props>(
           )}
         </PnDialogContent>
         <PnDialogActions>
-          {cancelLabel && cancelCallback && (
-            <Button
-              id="code-cancel-button"
-              variant="outlined"
-              onClick={cancelCallback}
-              data-testid="codeCancelButton"
-            >
-              {cancelLabel}
-            </Button>
-          )}
+          <Button
+            id="code-cancel-button"
+            variant="outlined"
+            onClick={cancelCallback}
+            data-testid="codeCancelButton"
+          >
+            {cancelLabel}
+          </Button>
           {confirmLabel && confirmCallback && (
             <Button
               id="code-confirm-button"
