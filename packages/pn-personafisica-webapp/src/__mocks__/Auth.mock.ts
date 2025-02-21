@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { authClient } from '../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../api/auth/auth.routes';
-import { User } from '../models/User';
+import { SourceChannel, User } from '../models/User';
 import { exchangeToken, logout } from '../redux/auth/actions';
 import { store } from '../redux/store';
 
@@ -52,8 +52,8 @@ export const userResponse: User = {
 export const userResponseWithRetrievalId: User = {
   ...userResponse,
   source: {
-    channel: 'TPP', 
+    channel: SourceChannel.TPP,
     details: 'mock-tpp-id',
     retrievalId: 'mock-retrieval-id',
-  }
+  },
 };

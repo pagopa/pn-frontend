@@ -1,6 +1,7 @@
-import { getRapidAccessParam } from '@pagopa-pn/pn-commons/src/utility/routes.utility';
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
+
+import { getRapidAccessParam } from '@pagopa-pn/pn-commons';
 
 export function useRapidAccessParam() {
   const [params] = useSearchParams();
