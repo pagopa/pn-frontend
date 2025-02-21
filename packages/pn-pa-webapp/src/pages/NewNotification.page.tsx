@@ -7,7 +7,8 @@ import { PnBreadcrumb, Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commo
 
 import Attachments from '../components/NewNotification/Attachments';
 import DebtPosition from '../components/NewNotification/DebtPosition';
-import PaymentMethods from '../components/NewNotification/PaymentMethods';
+import DebtPositionDetail from '../components/NewNotification/DebtPositionDetail';
+// import PaymentMethods from '../components/NewNotification/PaymentMethods';
 import PreliminaryInformations from '../components/NewNotification/PreliminaryInformations';
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
@@ -51,7 +52,8 @@ const NewNotification = () => {
       // eslint-disable-next-line functional/immutable-data
       baseSteps.push(
         t('new-notification.steps.debt-position.title', { ns: 'notifiche' }),
-        t('new-notification.steps.payment-methods.title', { ns: 'notifiche' })
+        t('new-notification.steps.debt-position-detail.title', { ns: 'notifiche' })
+        // t('new-notification.steps.payment-methods.title', { ns: 'notifiche' })
       );
     }
 
@@ -198,11 +200,19 @@ const NewNotification = () => {
               />
             )}
             {activeStep === 3 && IS_PAYMENT_ENABLED && (
-              <PaymentMethods
-                onConfirm={goToNextStep}
+              // <PaymentMethods
+              //   onConfirm={goToNextStep}
+              //   notification={notification}
+              //   isCompleted={isCompleted}
+              //   onPreviousStep={goToPreviousStep}
+              //   ref={childRef}
+              // />
+              <DebtPositionDetail
+                recipients={notification.recipients}
                 notification={notification}
-                isCompleted={isCompleted}
+                onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
+                goToLastStep={() => setActiveStep(steps.length - 1)}
                 ref={childRef}
               />
             )}

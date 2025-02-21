@@ -19,7 +19,6 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { uploadNotificationPaymentDocument } from '../../redux/newNotification/actions';
 import { setPayments } from '../../redux/newNotification/reducers';
 import { RootState } from '../../redux/store';
-import NewNotificationCard from './NewNotificationCard';
 
 type PaymentBoxProps = {
   id: string;
@@ -81,14 +80,12 @@ const PaymentMethods: React.FC<Props> = ({
   notification,
   onConfirm,
   isCompleted,
-  onPreviousStep,
   forwardedRef,
 }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.payment-methods',
   });
-  const { t: tc } = useTranslation(['common']);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
   const newPagopaPayment = (id: string, idx: number): NewNotificationPagoPaPayment => ({
@@ -153,13 +150,6 @@ const PaymentMethods: React.FC<Props> = ({
       ),
     []
   );
-
-  const handlePreviousStep = () => {
-    if (onPreviousStep) {
-      dispatch(setPayments({ recipients: formatPayments() }));
-      onPreviousStep();
-    }
-  };
 
   const updateRefAfterUpload = async (paymentPayload: { [key: string]: PaymentObject }) => {
     // set ref
@@ -260,58 +250,50 @@ const PaymentMethods: React.FC<Props> = ({
 
   return (
     <form onSubmit={formik.handleSubmit} data-testid="paymentMethodForm">
-      <NewNotificationCard
-        noPaper
-        isContinueDisabled={!formik.isValid}
-        submitLabel={tc('button.send')}
-        previousStepLabel={t('back-to-attachments')}
-        previousStepOnClick={() => handlePreviousStep()}
-      >
-        {notification.recipients.map((recipient) => (
-          <Paper
-            key={recipient.taxId}
-            sx={{ padding: '24px', marginTop: '40px' }}
-            elevation={0}
-            data-testid="paymentForRecipient"
-          >
-            <SectionHeading>
-              {t('payment-models')} {recipient.firstName} {recipient.lastName}
-            </SectionHeading>
-            {formik.values[recipient.taxId] &&
-              formik.values[recipient.taxId].map((payment, index) => {
-                if (payment.pagoPa) {
-                  return (
-                    <PaymentBox
-                      key={`${recipient.taxId}-pagoPa-${payment.pagoPa.idx}`}
-                      id={`${recipient.taxId}.${index}.pagoPa`}
-                      title={`${t('attach-pagopa-notice')}`}
-                      onFileUploaded={(id, file, sha256) =>
-                        fileUploadedHandler(recipient.taxId, 'pagoPa', index, id, file, sha256)
-                      }
-                      onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPa', index)}
-                      fileUploaded={payment.pagoPa}
-                    />
-                  );
-                }
-                if (payment.f24) {
-                  return (
-                    <PaymentBox
-                      key={`${recipient.taxId}-f24-${payment.f24.idx}`}
-                      id={`${recipient.taxId}.${index}.f24`}
-                      title={`${t('attach-f24')}`}
-                      onFileUploaded={(id, file, sha256) =>
-                        fileUploadedHandler(recipient.taxId, 'f24', index, id, file, sha256)
-                      }
-                      onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24', index)}
-                      fileUploaded={payment.f24}
-                    />
-                  );
-                }
-                return <></>;
-              })}
-          </Paper>
-        ))}
-      </NewNotificationCard>
+      {notification.recipients.map((recipient) => (
+        <Paper
+          key={recipient.taxId}
+          sx={{ padding: '24px', marginTop: '40px' }}
+          elevation={0}
+          data-testid="paymentForRecipient"
+        >
+          <SectionHeading>
+            {t('payment-models')} {recipient.firstName} {recipient.lastName}
+          </SectionHeading>
+          {formik.values[recipient.taxId] &&
+            formik.values[recipient.taxId].map((payment, index) => {
+              if (payment.pagoPa) {
+                return (
+                  <PaymentBox
+                    key={`${recipient.taxId}-pagoPa-${payment.pagoPa.idx}`}
+                    id={`${recipient.taxId}.${index}.pagoPa`}
+                    title={`${t('attach-pagopa-notice')}`}
+                    onFileUploaded={(id, file, sha256) =>
+                      fileUploadedHandler(recipient.taxId, 'pagoPa', index, id, file, sha256)
+                    }
+                    onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPa', index)}
+                    fileUploaded={payment.pagoPa}
+                  />
+                );
+              }
+              if (payment.f24) {
+                return (
+                  <PaymentBox
+                    key={`${recipient.taxId}-f24-${payment.f24.idx}`}
+                    id={`${recipient.taxId}.${index}.f24`}
+                    title={`${t('attach-f24')}`}
+                    onFileUploaded={(id, file, sha256) =>
+                      fileUploadedHandler(recipient.taxId, 'f24', index, id, file, sha256)
+                    }
+                    onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24', index)}
+                    fileUploaded={payment.f24}
+                  />
+                );
+              }
+              return <></>;
+            })}
+        </Paper>
+      ))}
     </form>
   );
 };

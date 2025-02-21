@@ -319,7 +319,7 @@ const Attachments: React.FC<Props> = ({
       return t('back-to-recipient');
     }
 
-    return hasDebtPosition ? t('back-to-payment-methods') : t('back-to-debt-position');
+    return hasDebtPosition ? t('back-to-debt-position-detail') : t('back-to-debt-position');
   };
 
   useImperativeHandle(forwardedRef, () => ({

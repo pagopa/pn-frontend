@@ -472,7 +472,6 @@
       },
       "attachments": {
         "title": "Documentazione",
-        "title": "Documentazione",
         "max-attachments": "Questi sono i documenti che saranno notificati tramite SEND a tutti i destinatari inseriti. Puoi allegare fino a un massimo di {{maxNumber}} documenti.",
         "attach-for-recipients": "Documenti allegati",
         "act-attachment": "Allega documento",
@@ -483,9 +482,7 @@
         "add-another-doc": "Aggiungi un altro documento",
         "back-to-recipient": "Torna a Destinatario",
         "back-to-debt-position": "Torna a Posizione debitoria",
-        "back-to-payment-methods": "Torna a Dettaglio posizione debitoria",
-        "back-to-debt-position": "Torna a Dettaglio posizione debitoria",
-        "back-to-payment-methods": "Torna a Dettaglio posizione debitoria",
+        "back-to-debt-position-detail": "Torna a Dettaglio posizione debitoria",
         "remove-document": "Rimuovi documento",
         "banner-additional-languages": "Hai scelto di inviare la notifica in più lingue. Ricorda di allegare i documenti in entrambe le lingue selezionate.",
         "file-upload-helper": "Il documento deve essere in formato {{format}} e non deve superare le dimensioni di {{size}}"
@@ -495,9 +492,9 @@
         "debt-position": "Posizione debitoria",
         "debt-position-of": "Posizione debitoria di {{fullName}}",
         "which-type-of-payments": "Quale tipo di pagamento prevedi?",
-        "back-to-recipient": "Torna a destinatario",
+        "back-to-recipient": "Torna a Destinatari",
         "radios": {
-          "pago-pa-notice": "Avviso pagoPA",
+          "pago-pa": "Avviso pagoPA",
           "f24": "Modello F24",
           "pago-pa-f24": "Avviso pagoPA + Modello F24",
           "nothing": "Nessun pagamento"
@@ -520,19 +517,6 @@
           "delivery-mode": "A carico del destinatario (puntuale)",
           "sync": "Sincrona",
           "async": "Asincrona"
-        }
-      },
-      "debt-position": {
-        "title": "Posizione debitoria",
-        "debt-position": "Posizione debitoria",
-        "debt-position-of": "Posizione debitoria di {{fullName}}",
-        "which-type-of-payments": "Quale tipo di pagamento prevedi?",
-        "back-to-recipient": "Torna a destinatario",
-        "radios": {
-          "pago-pa": "Avviso pagoPA",
-          "f24": "Modello F24",
-          "pago-pa-f24": "Avviso pagoPA + Modello F24",
-          "nothing": "Nessun pagamento"
         }
       },
       "payment-methods": {

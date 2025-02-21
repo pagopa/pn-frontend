@@ -21,6 +21,7 @@ import {
   PaymentModel,
 } from '../../models/NewNotification';
 import NewNotificationCard from './NewNotificationCard';
+import PaymentMethods from './PaymentMethods';
 
 type Props = {
   recipients: Array<NewNotificationRecipient>;
@@ -79,7 +80,7 @@ const DebtPositionDetail: React.FC<Props> = ({
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} data-testid="paymentMethodForm">
       <NewNotificationCard
         isContinueDisabled={!formik.isValid}
         noPaper={true}
@@ -160,6 +161,7 @@ const DebtPositionDetail: React.FC<Props> = ({
             </Stack>
           </Box>
         </Paper>
+        <PaymentMethods notification={notification} onConfirm={() => {}} isCompleted={false} />
       </NewNotificationCard>
     </form>
   );
