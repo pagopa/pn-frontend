@@ -373,16 +373,16 @@ const NotificationDetail: React.FC = () => {
     return () => void dispatch(resetState());
   }, []);
 
-  /* if retrievalId is in user token and payment info tpp is not in redux store, fetch it PN-13915 */
+  /* if retrievalId is in user token, get payment info PN-13915 */
   useEffect(() => {
+    if (!checkIfUserHasPayments) {
+      return;
+    }
     if (!currentUser.source?.retrievalId) {
       return;
     }
-    if (currentUser.source?.retrievalId === userPayments.tpp?.retrievalId) {
-      return;
-    }
     void dispatch(checkNotificationTpp(currentUser.source.retrievalId));
-  }, [userPayments, currentUser]);
+  }, [currentUser, checkIfUserHasPayments]);
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {

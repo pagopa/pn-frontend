@@ -18,7 +18,6 @@ import {
   populatePaymentsPagoPaF24,
   setPaymentCache,
 } from '@pagopa-pn/pn-commons';
-import { PaymentTpp } from '@pagopa-pn/pn-commons/src/models/NotificationDetail';
 import { initLocalizationForTest } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
@@ -924,7 +923,7 @@ describe('NotificationDetail Page', async () => {
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
   });
 
-  it('[TPP PAYMENT BUTTON] call check-tpp api with retrievalId in user token and show button', async () => {
+  it('should show pay tpp button after call check-tpp api with retrievalId in user token', async () => {
     const mockRetrievalId = 'retrieval-id';
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock
@@ -955,50 +954,6 @@ describe('NotificationDetail Page', async () => {
     expect(
       mock.history.get.find(({ url }) => url?.includes('bff/v1/notifications/received/check-tpp'))
     ).toBeDefined();
-    const tppPayButton = await waitFor(() => result.getByTestId('tpp-pay-button'));
-    expect(tppPayButton).toBeInTheDocument();
-    expect(tppPayButton).toHaveTextContent('MOCK BANK');
-  });
-
-  it('[TPP PAYMENT BUTTON] show button from redux info', async () => {
-    const mockRetrievalId = 'retrieval-id';
-    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
-
-    await act(async () => {
-      result = render(<NotificationDetail />, {
-        preloadedState: {
-          notificationState: {
-            notification: {
-              notificationStatusHistory: [],
-              currentRecipient: {},
-              timeline: [],
-            },
-            downtimeEvents: [],
-            paymentsData: {
-              tpp: {
-                iun: notificationDTO.iun,
-                retrievalId: mockRetrievalId,
-                paymentButton: 'MOCK BANK',
-              } as PaymentTpp,
-            },
-          },
-          userState: {
-            user: {
-              fiscal_number: notificationDTO.recipients[2].taxId,
-              source: {
-                channel: 'TPP',
-                details: 'mock-tpp-id',
-                retrievalId: mockRetrievalId,
-              },
-            },
-          },
-        },
-      });
-    });
-
-    expect(
-      mock.history.get.find(({ url }) => url?.includes('bff/v1/notifications/received/check-tpp'))
-    ).toBeUndefined();
     const tppPayButton = await waitFor(() => result.getByTestId('tpp-pay-button'));
     expect(tppPayButton).toBeInTheDocument();
     expect(tppPayButton).toHaveTextContent('MOCK BANK');
