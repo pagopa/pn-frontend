@@ -331,7 +331,7 @@ const PaymentButtons = ({
             onPayTppClick(
               selectedPayment?.pagoPa?.noticeCode,
               selectedPayment?.pagoPa?.creditorTaxId,
-              payments.tpp?.iun
+              payments.tpp?.retrievalId
             )
           }
         >

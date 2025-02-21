@@ -456,6 +456,10 @@ describe('NotificationPaymentRecipient Component', () => {
     const payButton = getByTestId('pay-button');
     expect(payButton).toHaveTextContent('detail.payment.pay-with-other-methods');
 
+    const pageSelector = getByTestId('pageSelector');
+    const pageButtons = pageSelector?.querySelectorAll('button');
+    fireEvent.click(pageButtons[1]);
+
     // select payment
     const paymentIndex = paymentsData.pagoPaF24.findIndex(
       (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
@@ -466,6 +470,10 @@ describe('NotificationPaymentRecipient Component', () => {
 
     // click pay
     fireEvent.click(payTppButton);
-    expect(onPayTppClick).toHaveBeenCalled();
+    expect(onPayTppClick).toHaveBeenCalledWith(
+      paymentsData.pagoPaF24[paymentIndex].pagoPa?.noticeCode,
+      paymentsData.pagoPaF24[paymentIndex].pagoPa?.creditorTaxId,
+      tppPayments.tpp?.retrievalId
+    );
   });
 });
