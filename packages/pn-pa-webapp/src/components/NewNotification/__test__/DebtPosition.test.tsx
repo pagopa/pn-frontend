@@ -59,7 +59,7 @@ describe('DebtPosition Component', async () => {
     expect(previousStepMk).toHaveBeenCalledTimes(1);
   });
 
-  it('renders component - empty state (multi recipienta)', async () => {
+  it('renders component - empty state (multi recipients)', async () => {
     // render component
     const { getAllByTestId, getByTestId } = render(
       <DebtPosition
@@ -146,6 +146,56 @@ describe('DebtPosition Component', async () => {
       )
     );
     expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
+  });
+
+  it('choose an option (two recipients) - back button', async () => {
+    // render component
+    const { getAllByTestId, getByTestId } = render(
+      <DebtPosition
+        recipients={recipientsWithoutPayment}
+        onConfirm={confirmHandlerMk}
+        goToLastStep={goToLasStepMk}
+        onPreviousStep={previousStepMk}
+      />,
+      {
+        preloadedState: {
+          newNotificationState: {
+            notification: {
+              ...newNotification,
+              recipients: recipientsWithoutPayment,
+            },
+          },
+        },
+      }
+    );
+    // we wait that the component is correctly rendered
+    const paymentChoiceBoxes = await waitFor(() => getAllByTestId('payments-type-choice'));
+    expect(paymentChoiceBoxes).toHaveLength(recipientsWithoutPayment.length);
+    const buttonPrevious = getByTestId('previous-step');
+    // choose first option for all the recipients
+    for (const paymentChoiceBox of paymentChoiceBoxes) {
+      expect(paymentChoiceBox).toHaveTextContent('debt-position-of');
+      expect(paymentChoiceBox).toHaveTextContent('which-type-of-payments');
+      await testRadio(
+        paymentChoiceBox,
+        'paymentModel',
+        ['radios.pago-pa', 'radios.f24', 'radios.pago-pa-f24', 'radios.nothing'],
+        0,
+        true
+      );
+    }
+    fireEvent.click(buttonPrevious);
+    // check if redux is updated correctly
+    await waitFor(() =>
+      expect(testStore.getState().newNotificationState.notification.recipients).toStrictEqual(
+        recipientsWithoutPayment.map((recipient) => ({
+          ...recipient,
+          debtPosition: PaymentModel.PAGO_PA,
+          payments: [],
+        }))
+      )
+    );
+    expect(previousStepMk).toHaveBeenCalledTimes(1);
   });
 
   it('choose nothing option (multi recipients)', async () => {

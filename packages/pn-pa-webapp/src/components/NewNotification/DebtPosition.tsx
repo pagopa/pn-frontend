@@ -76,9 +76,16 @@ const DebtPosition: React.FC<Props> = ({
     await formik.setFieldValue(`recipients.${index}.debtPosition`, value);
   };
 
+  const handlePreviousStep = () => {
+    if (onPreviousStep) {
+      dispatch(setDebtPosition(formik.values));
+      onPreviousStep();
+    }
+  };
+
   useImperativeHandle(forwardedRef, () => ({
     confirm() {
-      setDebtPosition(formik.values);
+      dispatch(setDebtPosition(formik.values));
     },
   }));
 
@@ -88,7 +95,7 @@ const DebtPosition: React.FC<Props> = ({
         isContinueDisabled={!formik.isValid}
         noPaper={true}
         previousStepLabel={t('back-to-recipient')}
-        previousStepOnClick={onPreviousStep}
+        previousStepOnClick={handlePreviousStep}
       >
         {recipients.map((recipient, index) => (
           <Paper
