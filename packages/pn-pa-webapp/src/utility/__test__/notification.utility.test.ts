@@ -56,8 +56,8 @@ describe('Test notification utility', () => {
     it('should return the same payments if the debt position does not change', () => {
       const result = filterPaymentsByDebtPositionChange(
         recipientPayments,
-        PaymentModel.PAGO_PA_NOTICE,
-        PaymentModel.PAGO_PA_NOTICE
+        PaymentModel.PAGO_PA,
+        PaymentModel.PAGO_PA
       );
       expect(result).toEqual(recipientPayments);
     });
@@ -65,7 +65,7 @@ describe('Test notification utility', () => {
     it('should return all payments when previous debt position is undefined', () => {
       const result = filterPaymentsByDebtPositionChange(
         recipientPayments,
-        PaymentModel.PAGO_PA_NOTICE,
+        PaymentModel.PAGO_PA,
         undefined
       );
       expect(result).toEqual(recipientPayments);
@@ -75,7 +75,7 @@ describe('Test notification utility', () => {
       const result = filterPaymentsByDebtPositionChange(
         recipientPayments,
         PaymentModel.NOTHING,
-        PaymentModel.PAGO_PA_NOTICE
+        PaymentModel.PAGO_PA
       );
       expect(result).toEqual([]);
     });
@@ -88,7 +88,7 @@ describe('Test notification utility', () => {
 
       const result = filterPaymentsByDebtPositionChange(
         recipientPayments,
-        PaymentModel.PAGO_PA_NOTICE,
+        PaymentModel.PAGO_PA,
         PaymentModel.PAGO_PA_F24
       );
       expect(result).toEqual(pagopaPayments);
@@ -112,7 +112,7 @@ describe('Test notification utility', () => {
       const result = filterPaymentsByDebtPositionChange(
         recipientPayments,
         PaymentModel.F24,
-        PaymentModel.PAGO_PA_NOTICE
+        PaymentModel.PAGO_PA
       );
       expect(result).toEqual([]);
     });
@@ -120,7 +120,7 @@ describe('Test notification utility', () => {
     it('should clear all payments when debt position change from F24 to PAGOPA', () => {
       const result = filterPaymentsByDebtPositionChange(
         recipientPayments,
-        PaymentModel.PAGO_PA_NOTICE,
+        PaymentModel.PAGO_PA,
         PaymentModel.F24
       );
       expect(result).toEqual([]);
@@ -129,18 +129,14 @@ describe('Test notification utility', () => {
     it('should return all payments when debt position change from NONE', () => {
       const result = filterPaymentsByDebtPositionChange(
         recipientPayments,
-        PaymentModel.PAGO_PA_NOTICE,
+        PaymentModel.PAGO_PA,
         PaymentModel.NOTHING
       );
       expect(result).toEqual(recipientPayments);
     });
 
     it('should handle empty payments array', () => {
-      const result = filterPaymentsByDebtPositionChange(
-        [],
-        PaymentModel.PAGO_PA_NOTICE,
-        PaymentModel.F24
-      );
+      const result = filterPaymentsByDebtPositionChange([], PaymentModel.PAGO_PA, PaymentModel.F24);
       expect(result).toEqual([]);
     });
   });

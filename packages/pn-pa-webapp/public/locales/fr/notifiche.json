@@ -450,7 +450,6 @@
         "remove-recipient": "Supprimez un destinataire"
       },
       "attachments": {
-        "title": "Annexes",
         "max-attachments": "Vous pouvez télécharger jusqu’à 11 pièces jointes, y compris le document à notifier.",
         "attach-for-recipients": "Annexes",
         "act-attachment": "Joindre l’acte",

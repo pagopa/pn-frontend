@@ -90,7 +90,7 @@ describe('test custom validation for recipients', () => {
         { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
         { creditorTaxId: 'creditorTaxId2', noticeCode: 'noticeCode2' },
       ] as Array<NewNotificationRecipient>,
-      PaymentModel.PAGO_PA_NOTICE
+      PaymentModel.PAGO_PA
     );
     expect(result).toHaveLength(0);
   });
@@ -102,7 +102,7 @@ describe('test custom validation for recipients', () => {
         { creditorTaxId: 'creditorTaxId2', noticeCode: 'noticeCode2' },
         { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
       ] as Array<NewNotificationRecipient>,
-      PaymentModel.PAGO_PA_NOTICE
+      PaymentModel.PAGO_PA
     );
     expect(result).toHaveLength(4);
     expect(result).toStrictEqual([

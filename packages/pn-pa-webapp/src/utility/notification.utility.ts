@@ -225,26 +225,26 @@ const shouldClearPayments = (newMethod: PaymentModel, previousMethod?: PaymentMo
   }
 
   const transitionMap: Record<PaymentModel, Record<PaymentModel, boolean>> = {
-    PAGO_PA_NOTICE: {
-      PAGO_PA_NOTICE: false,
+    PAGO_PA: {
+      PAGO_PA: false,
       F24: true,
       PAGO_PA_F24: false,
       NOTHING: true,
     },
     F24: {
-      PAGO_PA_NOTICE: true,
+      PAGO_PA: true,
       F24: false,
       PAGO_PA_F24: false,
       NOTHING: true,
     },
     PAGO_PA_F24: {
-      PAGO_PA_NOTICE: true, // Remove f24 payments
+      PAGO_PA: true, // Remove f24 payments
       F24: true, // Remove pagopa payments
       PAGO_PA_F24: false,
       NOTHING: true,
     },
     NOTHING: {
-      PAGO_PA_NOTICE: false,
+      PAGO_PA: false,
       F24: false,
       PAGO_PA_F24: false,
       NOTHING: false,
@@ -268,7 +268,7 @@ export const filterPaymentsByDebtPositionChange = (
   }
 
   if (previousDebtPosition === PaymentModel.PAGO_PA_F24) {
-    if (newDebtPosition === PaymentModel.PAGO_PA_NOTICE) {
+    if (newDebtPosition === PaymentModel.PAGO_PA) {
       return payments.reduce((acc, item) => {
         // eslint-disable-next-line functional/immutable-data
         acc.push({ pagoPa: item.pagoPa });

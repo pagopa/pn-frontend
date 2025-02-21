@@ -450,7 +450,6 @@
         "remove-recipient": "Odstrani prejemnika"
       },
       "attachments": {
-        "title": "Priloge",
         "max-attachments": "Naložite lahko do 11 prilog, vključno z dokumentom, ki ga je treba obvestiti.",
         "attach-for-recipients": "Priloge",
         "act-attachment": "Priloži listino",
