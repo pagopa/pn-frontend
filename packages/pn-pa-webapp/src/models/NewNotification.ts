@@ -19,7 +19,7 @@ export enum NewNotificationDigitalAddressType {
   PEC = 'PEC',
 }
 
-enum PagoPaIntegrationMode {
+export enum PagoPaIntegrationMode {
   NONE = 'NONE',
   SYNC = 'SYNC',
   ASYNC = 'ASYNC',

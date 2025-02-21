@@ -69,8 +69,8 @@ type Props = {
   onPreviousStep?: (step?: number) => void;
   isCompleted: boolean;
   forwardedRef: ForwardedRef<unknown>;
+  formik: '';
 };
-
 const emptyFileData = {
   data: undefined,
   sha256: { hashBase64: '', hashHex: '' },

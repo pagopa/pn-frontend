@@ -511,6 +511,7 @@
           "title": "Tecnologia del pagamento",
           "description": "Nella modalità sincrona la posizione debitoria è presso il sistema dell'Ente Creditore (EC), mentre nella modalità asincrona è caricata sul sistema Gestione Posizioni Debitorie (GPD) di pagoPA. <0>Scopri di più</0>"
         },
+        "alert": "Se non hai informazioni certe sull’integrazione pagoPA verifica con il tuo provider tecnologico: in caso di scelta non corretta l’addebito della notifica potrebbe essere errato.",
         "back-to-debt-position": "Torna a Posizione debitoria",
         "radios": {
           "flat-rate": "Incluso nell’atto (forfettario)",

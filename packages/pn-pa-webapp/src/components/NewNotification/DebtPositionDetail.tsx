@@ -4,6 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import {
+  Alert,
   Box,
   FormControlLabel,
   Link,
@@ -18,6 +19,7 @@ import {
   NewNotification,
   NewNotificationRecipient,
   NotificationFeePolicy,
+  PagoPaIntegrationMode,
   PaymentModel,
 } from '../../models/NewNotification';
 import NewNotificationCard from './NewNotificationCard';
@@ -33,7 +35,6 @@ type Props = {
 };
 
 const DebtPositionDetail: React.FC<Props> = ({
-  recipients,
   notification,
   onConfirm,
   onPreviousStep,
@@ -42,16 +43,16 @@ const DebtPositionDetail: React.FC<Props> = ({
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.debt-position-detail',
   });
-  // const { t: tc } = useTranslation(['common']);
 
   const initialValues = () => ({
-    notification,
-    recipients: recipients.map((recipient) => ({
-      ...recipient,
-      debtPosition: recipient.debtPosition ?? undefined,
-    })),
+    notification: {
+      ...notification,
+      notificationFeePolicy: notification.notificationFeePolicy ?? undefined,
+      pagoPaIntMode: notification.pagoPaIntMode ?? undefined,
+    },
   });
 
+  console.log(initialValues);
   const validationSchema = yup.object().shape({
     recipients: yup.array().of(
       yup.object().shape({
@@ -91,14 +92,15 @@ const DebtPositionDetail: React.FC<Props> = ({
           <Typography variant="h6" fontWeight={700}>
             {t('title')}
           </Typography>
+          {/* notificationFee */}
           <Box mt={3} p={3} border={1} borderColor="divider" borderRadius={1}>
             <Stack direction="column">
-              <Typography variant="body2" fontWeight={600}>
+              <Typography id="notificationFee" variant="body2" fontWeight={600}>
                 {t('notification-fee.title')}
               </Typography>
               <Typography variant="caption">{t('notification-fee.description')}</Typography>
               <RadioGroup
-                aria-labelledby="comunication-type-label"
+                aria-labelledby="notificationFee"
                 name={`notification-fee.title`}
                 value={formik.values.notification.notificationFeePolicy}
                 onChange={() => {}}
@@ -119,6 +121,7 @@ const DebtPositionDetail: React.FC<Props> = ({
               </RadioGroup>
             </Stack>
           </Box>
+          {/* pagoPaIntMode */}
           <Box mt={3} p={3} border={1} borderColor="divider" borderRadius={1}>
             <Stack direction="column">
               <Typography variant="body2" fontWeight={600}>
@@ -138,21 +141,24 @@ const DebtPositionDetail: React.FC<Props> = ({
                   ]}
                 />
               </Typography>
+              <Alert severity={'warning'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
+                {t('alert', { ns: 'notifiche' })}
+              </Alert>
               <RadioGroup
                 aria-labelledby="comunication-type-label"
                 name={`pagopa-int-mode.title`}
-                value={formik.values.notification.notificationFeePolicy}
+                value={formik.values.notification.pagoPaIntMode}
                 onChange={() => {}}
                 sx={{ mt: 2 }}
               >
                 <FormControlLabel
-                  value={NotificationFeePolicy.FLAT_RATE}
+                  value={PagoPaIntegrationMode.SYNC}
                   control={<Radio />}
                   label={t('radios.sync')}
                   componentsProps={{ typography: { fontSize: '16px' } }}
                 />
                 <FormControlLabel
-                  value={NotificationFeePolicy.DELIVERY_MODE}
+                  value={PagoPaIntegrationMode.ASYNC}
                   control={<Radio />}
                   label={t('radios.async')}
                   componentsProps={{ typography: { fontSize: '16px' } }}
@@ -161,7 +167,12 @@ const DebtPositionDetail: React.FC<Props> = ({
             </Stack>
           </Box>
         </Paper>
-        <PaymentMethods notification={notification} onConfirm={() => {}} isCompleted={false} />
+        <PaymentMethods
+          notification={notification}
+          onConfirm={() => {}}
+          isCompleted={false}
+          formik={formik}
+        />
       </NewNotificationCard>
     </form>
   );
