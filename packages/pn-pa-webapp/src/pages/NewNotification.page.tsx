@@ -200,19 +200,11 @@ const NewNotification = () => {
               />
             )}
             {activeStep === 3 && IS_PAYMENT_ENABLED && (
-              // <PaymentMethods
-              //   onConfirm={goToNextStep}
-              //   notification={notification}
-              //   isCompleted={isCompleted}
-              //   onPreviousStep={goToPreviousStep}
-              //   ref={childRef}
-              // />
               <DebtPositionDetail
-                recipients={notification.recipients}
                 notification={notification}
                 onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
-                goToLastStep={() => setActiveStep(steps.length - 1)}
+                // isCompleted={isCompleted}
                 ref={childRef}
               />
             )}
