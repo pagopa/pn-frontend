@@ -1,4 +1,4 @@
-import { User } from '../../redux/auth/types';
+import { User } from '../../models/User';
 import { authClient } from '../apiClients';
 import { AUTH_TOKEN_EXCHANGE } from './auth.routes';
 

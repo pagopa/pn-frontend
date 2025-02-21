@@ -25,9 +25,11 @@ import {
 } from '../../../__mocks__/NotificationDetail.mock';
 import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
+import { BffCheckTPPResponse } from '../../../generated-client/notifications';
 import { getDowntimeLegalFact } from '../../appStatus/actions';
 import { store } from '../../store';
 import {
+  exchangeNotificationRetrievalId,
   getDowntimeHistory,
   getReceivedNotification,
   getReceivedNotificationDocument,
@@ -61,6 +63,7 @@ const initialState = {
   paymentsData: {
     pagoPaF24: [],
     f24Only: [],
+    tpp: {},
   },
   downtimeEvents: [],
 };
@@ -438,6 +441,21 @@ describe('Notification detail redux state tests', () => {
     mock.onGet(`/bff/v1/downtime/legal-facts/${mockRequest}`).reply(200, mockResponse);
     const action = await store.dispatch(getDowntimeLegalFact(mockRequest));
     expect(action.type).toBe('getDowntimeLegalFact/fulfilled');
+    expect(action.payload).toEqual(mockResponse);
+  });
+
+  it('Should be able to set paymentsData tpp', async () => {
+    const mockRetrievalId = 'mocked-retrieval-id';
+    const mockResponse: BffCheckTPPResponse = {
+      paymentButton: 'Hype',
+      retrievalId: mockRetrievalId,
+      originId: 'mocked-iun',
+    };
+    mock
+      .onGet(`/bff/v1/notifications/received/check-tpp?retrievalId=${mockRetrievalId}`)
+      .reply(200, mockResponse);
+    const action = await store.dispatch(exchangeNotificationRetrievalId(mockRetrievalId));
+    expect(action.type).toBe('exchangeNotificationRetrievalId/fulfilled');
     expect(action.payload).toEqual(mockResponse);
   });
 });

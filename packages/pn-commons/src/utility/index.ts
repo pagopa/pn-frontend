@@ -61,7 +61,7 @@ import {
   setPaymentsInCache,
 } from './paymentCaching.utility';
 import { parseError } from './redux.utility';
-import { AppRouteParams, compileRoute } from './routes.utility';
+import { AppRouteParams, compileRoute, getRapidAccessParam } from './routes.utility';
 import { searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';
 import { storageOpsBuilder } from './storage.utility';
 import { dataRegex, formatFiscalCode, fromStringToBase64, sanitizeString } from './string.utility';
@@ -158,4 +158,5 @@ export {
   fromStringToBase64,
   IS_DEVELOP,
   APP_VERSION,
+  getRapidAccessParam,
 };

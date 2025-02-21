@@ -16,7 +16,7 @@ import { Tag } from '@pagopa/mui-italia';
 import { AnyAction } from '@reduxjs/toolkit';
 
 import { DelegationColumnData, DelegationStatus } from '../../models/Deleghe';
-import { User } from '../../redux/auth/types';
+import { User } from '../../models/User';
 import {
   acceptMandate,
   rejectMandate,
