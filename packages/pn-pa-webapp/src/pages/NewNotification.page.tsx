@@ -58,7 +58,7 @@ const NewNotification = () => {
     // eslint-disable-next-line functional/immutable-data
     baseSteps.push(t('new-notification.steps.attachments.title', { ns: 'notifiche' }));
     return baseSteps;
-  }, [t, IS_PAYMENT_ENABLED]);
+  }, []);
 
   const hasDebtPosition =
     IS_PAYMENT_ENABLED &&
@@ -197,7 +197,7 @@ const NewNotification = () => {
                 ref={childRef}
               />
             )}
-            {activeStep === 3 && IS_PAYMENT_ENABLED && hasDebtPosition && (
+            {activeStep === 3 && IS_PAYMENT_ENABLED && (
               <PaymentMethods
                 onConfirm={goToNextStep}
                 notification={notification}

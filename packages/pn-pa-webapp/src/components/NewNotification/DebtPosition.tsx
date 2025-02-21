@@ -3,12 +3,22 @@ import React, { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle } fro
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Box, FormControlLabel, Paper, Radio, RadioGroup, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Paper,
+  Radio,
+  RadioGroup,
+  Typography,
+} from '@mui/material';
 
 import { NewNotificationRecipient, PaymentModel } from '../../models/NewNotification';
 import { useAppDispatch } from '../../redux/hooks';
 import { setDebtPosition } from '../../redux/newNotification/reducers';
 import NewNotificationCard from './NewNotificationCard';
+import { FormBoxTitle } from './NewNotificationFormElelements';
 
 type Props = {
   recipients: Array<NewNotificationRecipient>;
@@ -52,16 +62,12 @@ const DebtPosition: React.FC<Props> = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      if (formik.isValid) {
-        dispatch(setDebtPosition(values));
-        if (
-          values.recipients.every((recipient) => recipient.debtPosition === PaymentModel.NOTHING)
-        ) {
-          goToLastStep();
-          return;
-        }
-        onConfirm();
+      dispatch(setDebtPosition(values));
+      if (values.recipients.every((recipient) => recipient.debtPosition === PaymentModel.NOTHING)) {
+        goToLastStep();
+        return;
       }
+      onConfirm();
     },
   });
 
@@ -85,7 +91,12 @@ const DebtPosition: React.FC<Props> = ({
         previousStepOnClick={onPreviousStep}
       >
         {recipients.map((recipient, index) => (
-          <Paper key={recipient.taxId} sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
+          <Paper
+            key={recipient.taxId}
+            sx={{ padding: '24px', marginTop: '40px' }}
+            elevation={0}
+            data-testid="payments-type-choice"
+          >
             <Typography variant="h6" fontWeight={700}>
               {recipients.length === 1
                 ? t('debt-position')
@@ -94,43 +105,47 @@ const DebtPosition: React.FC<Props> = ({
                   })}
             </Typography>
             <Box mt={3} p={3} border={1} borderColor="divider" borderRadius={1}>
-              <Stack direction="column">
-                <Typography fontSize="16px" fontWeight={600}>
-                  {t('which-type-of-payments')}
-                </Typography>
+              <FormControl margin="none" fullWidth>
+                <FormLabel id="payments-type">
+                  <FormBoxTitle text={t('which-type-of-payments')} />
+                </FormLabel>
                 <RadioGroup
-                  aria-labelledby="comunication-type-label"
+                  aria-labelledby="payments-type"
                   name={`recipients.${index}.debtPosition`}
-                  value={formik.values.recipients[index].debtPosition}
+                  value={formik.values.recipients[index].debtPosition ?? ''}
                   onChange={(e) => handleChange(e, index)}
                   sx={{ mt: 2 }}
                 >
                   <FormControlLabel
-                    value={PaymentModel.PAGO_PA_NOTICE}
+                    value={PaymentModel.PAGO_PA}
                     control={<Radio />}
-                    label={t('radios.pago-pa-notice')}
+                    label={t('radios.pago-pa')}
                     componentsProps={{ typography: { fontSize: '16px' } }}
+                    data-testid="paymentModel"
                   />
                   <FormControlLabel
                     value={PaymentModel.F24}
                     control={<Radio />}
                     label={t('radios.f24')}
                     componentsProps={{ typography: { fontSize: '16px' } }}
+                    data-testid="paymentModel"
                   />
                   <FormControlLabel
                     value={PaymentModel.PAGO_PA_F24}
                     control={<Radio />}
                     label={t('radios.pago-pa-f24')}
                     componentsProps={{ typography: { fontSize: '16px' } }}
+                    data-testid="paymentModel"
                   />
                   <FormControlLabel
                     value={PaymentModel.NOTHING}
                     control={<Radio />}
                     label={t('radios.nothing')}
                     componentsProps={{ typography: { fontSize: '16px' } }}
+                    data-testid="paymentModel"
                   />
                 </RadioGroup>
-              </Stack>
+              </FormControl>
             </Box>
           </Paper>
         ))}

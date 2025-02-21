@@ -16,6 +16,7 @@ import {
   NewNotificationPagoPaPayment,
   NewNotificationRecipient,
   NotificationFeePolicy,
+  PaymentModel,
 } from '../models/NewNotification';
 import { UserGroup } from '../models/user';
 import { userResponse } from './Auth.mock';
@@ -132,6 +133,7 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
         pagoPa: { ...newNotificationPagoPa },
       },
     ],
+    debtPosition: PaymentModel.PAGO_PA,
   },
   {
     id: 'recipient.1',
@@ -156,8 +158,9 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
       },
       {
         f24: { ...newNotificationF24 },
-      }
+      },
     ],
+    debtPosition: PaymentModel.PAGO_PA_F24,
   },
 ];
 
@@ -200,7 +203,7 @@ const newNotificationRecipientsForBff: Array<NotificationRecipientV23> = [
       },
       {
         f24: { ...newNotificationF24ForBff },
-      }
+      },
     ],
   },
 ];

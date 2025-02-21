@@ -165,7 +165,7 @@ describe('Attachments Component with payment enabled', async () => {
         },
       ]);
     });
-    expect(confirmHandlerMk).toBeCalledTimes(1);
+    expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
   });
 
   it('fills form with invalid values - one document', async () => {
@@ -230,7 +230,7 @@ describe('Attachments Component with payment enabled', async () => {
         },
       ]);
     });
-    expect(previousHandlerMk).toBeCalledTimes(1);
+    expect(previousHandlerMk).toHaveBeenCalledTimes(1);
   });
 
   it('changes form values and clicks on confirm - two documents', async () => {
@@ -325,7 +325,7 @@ describe('Attachments Component with payment enabled', async () => {
         },
       ]);
     });
-    expect(confirmHandlerMk).toBeCalledTimes(1);
+    expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
   });
 
   it('fills form with invalid values - two documents', async () => {
@@ -441,7 +441,7 @@ describe('Attachments Component without payment enabled', () => {
     expect(buttonSubmit).toBeEnabled();
     fireEvent.click(buttonSubmit);
     await waitFor(() => {
-      expect(confirmHandlerMk).toBeCalledTimes(1);
+      expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
     });
   });
 });
