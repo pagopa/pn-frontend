@@ -7,13 +7,11 @@ import { PnBreadcrumb, Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commo
 
 import Attachments from '../components/NewNotification/Attachments';
 import DebtPosition from '../components/NewNotification/DebtPosition';
-import DebtPositionDetail from '../components/NewNotification/DebtPositionDetail';
-import DebtPosition from '../components/NewNotification/DebtPosition';
 import PaymentMethods from '../components/NewNotification/PaymentMethods';
 import PreliminaryInformations from '../components/NewNotification/PreliminaryInformations';
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
-import { NewNotificationLangOther, PaymentModel, PaymentModel } from '../models/NewNotification';
+import { NewNotificationLangOther, PaymentModel } from '../models/NewNotification';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createNewNotification } from '../redux/newNotification/actions';
@@ -49,16 +47,7 @@ const NewNotification = () => {
       t('new-notification.steps.recipient.title', { ns: 'notifiche' }),
     ];
 
-  const childRef = useRef<{ confirm: () => void }>();
-
-      if (IS_PAYMENT_ENABLED) {
-      // eslint-disable-next-line functional/immutable-data
-      baseSteps.push(
-        t('new-notification.steps.debt-position.title', { ns: 'notifiche' }),
-        t('new-notification.steps.debt-position-detail.title', { ns: 'notifiche' })
-      );
-    }
-
+    if (IS_PAYMENT_ENABLED) {
       // eslint-disable-next-line functional/immutable-data
       baseSteps.push(
         t('new-notification.steps.debt-position.title', { ns: 'notifiche' }),
@@ -111,12 +100,6 @@ const NewNotification = () => {
         });
     }
   };
-
-  const isPaymentMethodStepDisabled = (index: number) =>
-    IS_PAYMENT_ENABLED && index === 3 && !hasDebtPosition;
-
-  const onStepClick = (index: number) =>
-    index < activeStep && !isPaymentMethodStepDisabled(index) ? goToPreviousStep(index) : undefined;
 
   const isPaymentMethodStepDisabled = (index: number) =>
     IS_PAYMENT_ENABLED && index === 3 && !hasDebtPosition;
@@ -184,10 +167,8 @@ const NewNotification = () => {
                   id={label}
                   key={label}
                   onClick={() => onStepClick(index)}
-                  onClick={() => onStepClick(index)}
                   sx={{ cursor: index < activeStep ? 'pointer' : 'auto' }}
                   data-testid={`step-${index}`}
-                  disabled={isPaymentMethodStepDisabled(index)}
                   disabled={isPaymentMethodStepDisabled(index)}
                 >
                   <StepLabel>{label}</StepLabel>
@@ -211,47 +192,17 @@ const NewNotification = () => {
               <DebtPosition
                 recipients={notification.recipients}
                 onConfirm={goToNextStep}
-            {activeStep === 2 && IS_PAYMENT_ENABLED && (
-              <DebtPosition
-                recipients={notification.recipients}
-                onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
-                goToLastStep={() => setActiveStep(steps.length - 1)}
                 goToLastStep={() => setActiveStep(steps.length - 1)}
                 ref={childRef}
               />
             )}
             {activeStep === 3 && IS_PAYMENT_ENABLED && (
-              <DebtPositionDetail
-                recipients={notification.recipients}
-                notification={notification}
-                onConfirm={goToNextStep}
-                onPreviousStep={goToPreviousStep}
-                goToLastStep={() => setActiveStep(steps.length - 1)}
-                ref={childRef}
-              />
-            )}
-            {activeStep === 4 && IS_PAYMENT_ENABLED && hasDebtPosition && (
               <PaymentMethods
                 onConfirm={goToNextStep}
-                onConfirm={goToNextStep}
                 notification={notification}
                 isCompleted={isCompleted}
                 onPreviousStep={goToPreviousStep}
-                ref={childRef}
-              />
-            )}
-            {((IS_PAYMENT_ENABLED && activeStep === 5) ||
-              (!IS_PAYMENT_ENABLED && activeStep === 2)) && (
-              <Attachments
-                onConfirm={createNotification}
-                onPreviousStep={goToPreviousStep}
-                isCompleted={isCompleted}
-                attachmentsData={notification.documents}
-                hasAdditionalLang={
-                  notification.lang === NewNotificationLangOther && !!notification.additionalLang
-                }
-                hasDebtPosition={hasDebtPosition}
                 ref={childRef}
               />
             )}
