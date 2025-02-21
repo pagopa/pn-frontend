@@ -12,7 +12,7 @@ import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { apiClient } from '../api/apiClients';
 import { DelegationStatus } from '../models/Deleghe';
 import { SELFCARE_LOGOUT } from '../navigation/routes.const';
-import { PNRole, PartyRole } from '../redux/auth/types';
+import { PNRole, PartyRole } from '../models/User';
 import { getConfiguration } from '../services/configuration.service';
 import { RenderResult, act, render } from './test-utils';
 

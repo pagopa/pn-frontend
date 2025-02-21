@@ -7,6 +7,7 @@ import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/mat
 import {
   ApiError,
   ApiErrorWrapper,
+  AppRouteParams,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
   LegalFactId,
@@ -36,6 +37,7 @@ import {
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import { NotificationDetailRouteState } from '../models/NotificationDetail';
 import { PFEventsType } from '../models/PFEventsType';
 import { ContactSource } from '../models/contacts';
 import * as routes from '../navigation/routes.const';
@@ -54,12 +56,6 @@ import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
-
-// state for the invocations to this component
-// (to include in navigation or Link to the route/s arriving to it)
-type LocationState = {
-  fromQrCode?: boolean; // indicates whether the user arrived to the notification detail page from the QR code
-};
 
 const NotificationDetail: React.FC = () => {
   const { id, mandateId } = useParams();
@@ -378,8 +374,8 @@ const NotificationDetail: React.FC = () => {
     }
   }, []);
 
-  const fromQrCode = useMemo(
-    () => !!(location.state && (location.state as LocationState).fromQrCode),
+  const rapidAccessSource = useMemo<AppRouteParams | undefined>(
+    () => (location.state as NotificationDetailRouteState)?.source,
     [location]
   );
 
@@ -387,14 +383,14 @@ const NotificationDetail: React.FC = () => {
     const backRoute = mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE;
     return (
       <PnBreadcrumb
-        showBackAction={!fromQrCode}
+        showBackAction={!rapidAccessSource}
         linkRoute={backRoute}
         linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
         currentLocationLabel={`${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}`}
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [fromQrCode, i18n.language]);
+  }, [rapidAccessSource, i18n.language]);
 
   const breadcrumb = (
     <Fragment>
@@ -440,7 +436,7 @@ const NotificationDetail: React.FC = () => {
         notificationStatus: notification.notificationStatus,
         checkIfUserHasPayments,
         userPayments,
-        fromQrCode,
+        source: rapidAccessSource,
         timeline: notification.timeline,
       });
 

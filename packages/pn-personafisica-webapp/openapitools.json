@@ -6,7 +6,7 @@
     "generators": {
       "bff-notifications": {
         "generatorName": "typescript-axios",
-        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/5355801397984dd3c3187e417d49e90c6c4076ae/docs/openapi/api-external-pn-bff-recipient-notifications.yaml",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/54ad754b908f0aa2772768791592135e4539a2b6/docs/openapi/api-external-pn-bff-recipient-notifications.yaml",
         "output": "./src/generated-client/notifications",
         "additionalProperties": {
           "supportsES6": true,

@@ -79,6 +79,8 @@ export type EventNotificationsListType = {
   cancelled_count: number;
 };
 
+export type EventNotificationSource = '3Papp' | 'QRcode' | 'LISTA_NOTIFICHE';
+
 export type EventNotificationDetailType = {
   notification_owner: boolean;
   notification_status: NotificationStatus;
@@ -88,7 +90,7 @@ export type EventNotificationDetailType = {
   count_payment: number;
   contains_f24: 'yes' | 'no';
   first_time_opening: boolean;
-  source: 'QRcode' | 'LISTA_NOTIFICHE';
+  source: EventNotificationSource;
 };
 
 export type EventMandateNotificationsListType = {

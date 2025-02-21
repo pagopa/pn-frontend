@@ -39,7 +39,7 @@ import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrap
 import { ContactSource } from '../models/contacts';
 import * as routes from '../navigation/routes.const';
 import { getDowntimeLegalFact } from '../redux/appStatus/actions';
-import { PNRole } from '../redux/auth/types';
+import { PNRole } from '../models/User';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,

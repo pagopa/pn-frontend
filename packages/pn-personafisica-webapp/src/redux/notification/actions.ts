@@ -25,6 +25,7 @@ import { DowntimeApiFactory } from '../../generated-client/downtime-logs';
 import {
   BffCheckAarRequest,
   BffCheckAarResponse,
+  BffCheckTPPResponse,
   NotificationReceivedApiFactory,
 } from '../../generated-client/notifications';
 import { PaymentsApiFactory } from '../../generated-client/payments';
@@ -43,6 +44,7 @@ export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION_PAYMENT_URL = 'getReceivedNotificationPaymentUrl',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
   EXCHANGE_NOTIFICATION_QR_CODE = 'exchangeNotificationQrCode',
+  EXCHANGE_NOTIFICATION_RETRIEVAL_ID = 'exchangeNotificationRetrievalId',
 }
 
 export const getReceivedNotification = createAsyncThunk<
@@ -262,19 +264,36 @@ export const getDowntimeHistory = createAsyncThunk<DowntimeLogHistory, GetDownti
   }
 );
 
-export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, BffCheckAarRequest>(
+export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, string>(
   NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_QR_CODE,
-  async (params: BffCheckAarRequest, { rejectWithValue }) => {
+  async (aarQrCodeValue: string, { rejectWithValue }) => {
     try {
       const notificationReceivedApiFactory = NotificationReceivedApiFactory(
         undefined,
         undefined,
         apiClient
       );
-      const response = await notificationReceivedApiFactory.checkAarQrCodeV1(params);
+      const request: BffCheckAarRequest = { aarQrCodeValue };
+      const response = await notificationReceivedApiFactory.checkAarQrCodeV1(request);
       return response.data;
     } catch (e: any) {
-      
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+export const exchangeNotificationRetrievalId = createAsyncThunk<BffCheckTPPResponse, string>(
+  NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
+  async (retrievalId: string, { rejectWithValue }) => {
+    try {
+      const notificationReceivedApiFactory = NotificationReceivedApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await notificationReceivedApiFactory.checkTppV1(retrievalId);
+      return response.data;
+    } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
   }

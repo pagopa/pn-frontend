@@ -10,8 +10,8 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
+import { PNRole, PartyRole, User } from '../../models/User';
 import { acceptTosPrivacy, exchangeToken, getTosPrivacyApproval, logout } from './actions';
-import { PNRole, PartyRole, User } from './types';
 
 const roleMatcher = yup.object({
   role: yup.string().oneOf(Object.values(PNRole)),
