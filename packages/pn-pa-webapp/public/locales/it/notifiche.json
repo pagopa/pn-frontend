@@ -471,7 +471,7 @@
         "remove-recipient": "Rimuovi destinatario"
       },
       "attachments": {
-        "title": "Allegati",
+        "title": "Documentazione",
         "max-attachments": "Questi sono i documenti che saranno notificati tramite SEND a tutti i destinatari inseriti. Puoi allegare fino a un massimo di {{maxNumber}} documenti.",
         "attach-for-recipients": "Documenti allegati",
         "act-attachment": "Allega documento",
@@ -501,12 +501,16 @@
         }
       },
       "debt-position-detail": {
-        "title": "Dettaglio osizione debitoria",
+        "title": "Dettaglio posizione debitoria",
         "debt-position-of": "Posizione debitoria di {{fullName}}",
-        "notification-fee-title": "Costo di notifica",
-        "notification-fee-description": "Scegli il tipo di costo di notifica: puoi scegliere fra quello già incluso nell’atto oppure inserire un costo di notifica personalizzato a carico del destinatario.",
-        "pagopa-int-mode-title": "Tecnologia del pagamento",
-        "pagopa-int-mode-description": "Nella modalità sincrona la posizione debitoria è presso il sistema dell'Ente Creditore (EC), mentre nella modalità asincrona è caricata sul sistema Gestione Posizioni Debitorie (GPD) di pagoPA. Scopri di più",
+        "notification-fee": {
+          "title": "Costo di notifica",
+          "description": "Scegli il tipo di costo di notifica: puoi scegliere fra quello già incluso nell’atto oppure inserire un costo di notifica personalizzato a carico del destinatario."
+        },
+        "pagopa-int-mode": {
+          "title": "Tecnologia del pagamento",
+          "description": "Nella modalità sincrona la posizione debitoria è presso il sistema dell'Ente Creditore (EC), mentre nella modalità asincrona è caricata sul sistema Gestione Posizioni Debitorie (GPD) di pagoPA. <0>Scopri di più</0>"
+        },
         "back-to-debt-position": "Torna a Posizione debitoria",
         "radios": {
           "flat-rate": "Incluso nell’atto (forfettario)",
