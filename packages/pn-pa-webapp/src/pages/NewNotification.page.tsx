@@ -6,11 +6,12 @@ import { Alert, Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/mat
 import { PnBreadcrumb, Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import Attachments from '../components/NewNotification/Attachments';
+import DebtPosition from '../components/NewNotification/DebtPosition';
 import PaymentMethods from '../components/NewNotification/PaymentMethods';
 import PreliminaryInformations from '../components/NewNotification/PreliminaryInformations';
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
-import { NewNotificationLangOther } from '../models/NewNotification';
+import { NewNotificationLangOther, PaymentModel } from '../models/NewNotification';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createNewNotification } from '../redux/newNotification/actions';
@@ -39,18 +40,33 @@ const NewNotification = () => {
   const { IS_PAYMENT_ENABLED } = useMemo(() => getConfiguration(), []);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'notifiche']);
-  const steps = [
-    t('new-notification.steps.preliminary-informations.title', { ns: 'notifiche' }),
-    t('new-notification.steps.recipient.title', { ns: 'notifiche' }),
-    t('new-notification.steps.attachments.title', { ns: 'notifiche' }),
-  ];
+
+  const steps = useMemo(() => {
+    const baseSteps = [
+      t('new-notification.steps.preliminary-informations.title', { ns: 'notifiche' }),
+      t('new-notification.steps.recipient.title', { ns: 'notifiche' }),
+    ];
+
+    if (IS_PAYMENT_ENABLED) {
+      // eslint-disable-next-line functional/immutable-data
+      baseSteps.push(
+        t('new-notification.steps.debt-position.title', { ns: 'notifiche' }),
+        t('new-notification.steps.payment-methods.title', { ns: 'notifiche' })
+      );
+    }
+
+    // eslint-disable-next-line functional/immutable-data
+    baseSteps.push(t('new-notification.steps.attachments.title', { ns: 'notifiche' }));
+    return baseSteps;
+  }, []);
+
+  const hasDebtPosition =
+    IS_PAYMENT_ENABLED &&
+    notification.recipients.some(
+      (recipient) => recipient.debtPosition && recipient.debtPosition !== PaymentModel.NOTHING
+    );
 
   const childRef = useRef<{ confirm: () => void }>();
-
-  if (IS_PAYMENT_ENABLED) {
-    // eslint-disable-next-line functional/immutable-data
-    steps.push(t('new-notification.steps.payment-methods.title', { ns: 'notifiche' }));
-  }
 
   const goToNextStep = () => {
     setActiveStep((previousStep) => previousStep + 1);
@@ -84,6 +100,12 @@ const NewNotification = () => {
         });
     }
   };
+
+  const isPaymentMethodStepDisabled = (index: number) =>
+    IS_PAYMENT_ENABLED && index === 3 && !hasDebtPosition;
+
+  const onStepClick = (index: number) =>
+    index < activeStep && !isPaymentMethodStepDisabled(index) ? goToPreviousStep(index) : undefined;
 
   useEffect(() => {
     createNotification();
@@ -144,9 +166,10 @@ const NewNotification = () => {
                 <Step
                   id={label}
                   key={label}
-                  onClick={() => (index < activeStep ? goToPreviousStep(index) : undefined)}
+                  onClick={() => onStepClick(index)}
                   sx={{ cursor: index < activeStep ? 'pointer' : 'auto' }}
                   data-testid={`step-${index}`}
+                  disabled={isPaymentMethodStepDisabled(index)}
                 >
                   <StepLabel>{label}</StepLabel>
                 </Step>
@@ -165,24 +188,35 @@ const NewNotification = () => {
                 ref={childRef}
               />
             )}
-            {activeStep === 2 && (
+            {activeStep === 2 && IS_PAYMENT_ENABLED && (
+              <DebtPosition
+                recipients={notification.recipients}
+                onConfirm={goToNextStep}
+                onPreviousStep={goToPreviousStep}
+                goToLastStep={() => setActiveStep(steps.length - 1)}
+                ref={childRef}
+              />
+            )}
+            {activeStep === 3 && IS_PAYMENT_ENABLED && (
+              <PaymentMethods
+                onConfirm={goToNextStep}
+                notification={notification}
+                isCompleted={isCompleted}
+                onPreviousStep={goToPreviousStep}
+                ref={childRef}
+              />
+            )}
+            {((IS_PAYMENT_ENABLED && activeStep === 4) ||
+              (!IS_PAYMENT_ENABLED && activeStep === 2)) && (
               <Attachments
-                onConfirm={IS_PAYMENT_ENABLED ? goToNextStep : createNotification}
+                onConfirm={createNotification}
                 onPreviousStep={goToPreviousStep}
                 isCompleted={isCompleted}
                 attachmentsData={notification.documents}
                 hasAdditionalLang={
                   notification.lang === NewNotificationLangOther && !!notification.additionalLang
                 }
-                ref={childRef}
-              />
-            )}
-            {activeStep === 3 && IS_PAYMENT_ENABLED && (
-              <PaymentMethods
-                onConfirm={createNotification}
-                notification={notification}
-                isCompleted={isCompleted}
-                onPreviousStep={goToPreviousStep}
+                hasDebtPosition={hasDebtPosition}
                 ref={childRef}
               />
             )}

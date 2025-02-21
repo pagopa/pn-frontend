@@ -25,6 +25,7 @@ import {
   saveRecipients,
   setAttachments,
   setCancelledIun,
+  setDebtPosition,
   setIsCompleted,
   setPayments,
   setPreliminaryInformations,
@@ -108,7 +109,7 @@ describe('New notification redux state tests', () => {
       physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
       group: '',
       taxonomyCode: '010801N',
-      paymentMode: PaymentModel.PAGO_PA_NOTICE,
+      paymentMode: PaymentModel.PAGO_PA,
     };
     const action = store.dispatch(setPreliminaryInformations(preliminaryInformations));
     expect(action.type).toBe('newNotificationSlice/setPreliminaryInformations');
@@ -173,6 +174,44 @@ describe('New notification redux state tests', () => {
       }))
     );
     extMock.restore();
+  });
+
+  it('should be able to set new debt position', () => {
+    const recipients = newNotification.recipients.map((recipient) => ({
+      ...recipient,
+      debtPosition: PaymentModel.PAGO_PA_F24,
+    }));
+
+    const action = store.dispatch(setDebtPosition({ recipients }));
+    expect(action.type).toBe('newNotificationSlice/setDebtPosition');
+    expect(action.payload).toEqual({ recipients });
+    expect(store.getState().newNotificationState.notification.recipients).toEqual(recipients);
+  });
+
+  it('should clear payments when set debt position to NOTHING', () => {
+    store.dispatch(
+      setDebtPosition({
+        recipients: newNotificationRecipients.map((recipient) => ({
+          ...recipient,
+          debtPosition: PaymentModel.PAGO_PA_F24,
+        })),
+      })
+    );
+
+    const updatedRecipients = newNotification.recipients.map((recipient) => ({
+      ...recipient,
+      debtPosition: PaymentModel.NOTHING,
+    }));
+
+    const action = store.dispatch(setDebtPosition({ recipients: updatedRecipients }));
+    expect(action.type).toBe('newNotificationSlice/setDebtPosition');
+    expect(action.payload).toEqual({ recipients: updatedRecipients });
+    expect(store.getState().newNotificationState.notification.recipients).toEqual(
+      updatedRecipients.map((recipient) => ({
+        ...recipient,
+        payments: [],
+      }))
+    );
   });
 
   it('Should be able to save payment documents', () => {

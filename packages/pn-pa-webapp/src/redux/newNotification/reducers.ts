@@ -10,6 +10,7 @@ import {
 } from '../../models/NewNotification';
 import { UserGroup } from '../../models/user';
 import { getConfiguration } from '../../services/configuration.service';
+import { filterPaymentsByDebtPositionChange } from '../../utility/notification.utility';
 import {
   createNewNotification,
   getUserGroups,
@@ -78,6 +79,41 @@ const newNotificationSlice = createSlice({
     ) => {
       state.notification.documents = action.payload.documents;
     },
+    setDebtPosition: (
+      state,
+      action: PayloadAction<{
+        recipients: Array<NewNotificationRecipient>;
+      }>
+    ) => {
+      const { recipients } = action.payload;
+
+      recipients.forEach(({ taxId, debtPosition: newDebtPosition }) => {
+        const currentRecipientIdx = state.notification.recipients.findIndex(
+          (r) => r.taxId === taxId
+        );
+
+        // Skip if recipient not found
+        if (currentRecipientIdx === -1 || !newDebtPosition) {
+          return;
+        }
+
+        const currentRecipient = state.notification.recipients[currentRecipientIdx];
+        const oldDebtPosition = currentRecipient.debtPosition;
+
+        // Update payments
+        const updatedPayments = filterPaymentsByDebtPositionChange(
+          currentRecipient.payments || [],
+          newDebtPosition,
+          oldDebtPosition
+        );
+
+        state.notification.recipients[currentRecipientIdx] = {
+          ...currentRecipient,
+          debtPosition: newDebtPosition,
+          payments: updatedPayments,
+        };
+      });
+    },
     setPayments: (
       state,
       action: PayloadAction<{ recipients: Array<NewNotificationRecipient> }>
@@ -119,6 +155,7 @@ export const {
   setPayments,
   resetState,
   setIsCompleted,
+  setDebtPosition,
 } = newNotificationSlice.actions;
 
 export default newNotificationSlice;

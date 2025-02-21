@@ -3,8 +3,9 @@ import { PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons'
 import { NotificationAttachmentBodyRef } from '../generated-client/notifications';
 
 export enum PaymentModel {
-  PAGO_PA_NOTICE = 'PAGO_PA_NOTICE',
+  PAGO_PA = 'PAGO_PA',
   F24 = 'F24',
+  PAGO_PA_F24 = 'PAGO_PA_F24',
   NOTHING = 'NOTHING',
 }
 
@@ -85,6 +86,7 @@ export interface NewNotificationRecipient {
   province: string;
   foreignState: string;
   payments?: Array<NewNotificationPayment>;
+  debtPosition?: PaymentModel;
 }
 
 export interface NewNotification extends NewNotificationBilingualism {

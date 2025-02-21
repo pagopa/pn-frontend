@@ -18,6 +18,7 @@ import {
   NewNotificationPagoPaPayment,
   NewNotificationPayment,
   NewNotificationRecipient,
+  PaymentModel,
 } from '../models/NewNotification';
 
 const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
@@ -212,4 +213,76 @@ const concatAdditionalContent = (content?: string, additionalContent?: string): 
     return `${content}|${additionalContent}`;
   }
   return content || additionalContent || '';
+};
+
+const shouldClearPayments = (newMethod: PaymentModel, previousMethod?: PaymentModel): boolean => {
+  if (!previousMethod || previousMethod === PaymentModel.NOTHING) {
+    return false;
+  }
+
+  if (newMethod === PaymentModel.NOTHING) {
+    return true;
+  }
+
+  const transitionMap: Record<PaymentModel, Record<PaymentModel, boolean>> = {
+    PAGO_PA: {
+      PAGO_PA: false,
+      F24: true,
+      PAGO_PA_F24: false,
+      NOTHING: true,
+    },
+    F24: {
+      PAGO_PA: true,
+      F24: false,
+      PAGO_PA_F24: false,
+      NOTHING: true,
+    },
+    PAGO_PA_F24: {
+      PAGO_PA: true, // Remove f24 payments
+      F24: true, // Remove pagopa payments
+      PAGO_PA_F24: false,
+      NOTHING: true,
+    },
+    NOTHING: {
+      PAGO_PA: false,
+      F24: false,
+      PAGO_PA_F24: false,
+      NOTHING: false,
+    },
+  };
+
+  return transitionMap[previousMethod]?.[newMethod] ?? false;
+};
+
+export const filterPaymentsByDebtPositionChange = (
+  payments: Array<NewNotificationPayment>,
+  newDebtPosition: PaymentModel,
+  previousDebtPosition?: PaymentModel
+): Array<NewNotificationPayment> => {
+  if (!shouldClearPayments(newDebtPosition, previousDebtPosition)) {
+    return payments;
+  }
+
+  if (newDebtPosition === PaymentModel.NOTHING) {
+    return [];
+  }
+
+  if (previousDebtPosition === PaymentModel.PAGO_PA_F24) {
+    if (newDebtPosition === PaymentModel.PAGO_PA) {
+      return payments.reduce((acc, item) => {
+        // eslint-disable-next-line functional/immutable-data
+        acc.push({ pagoPa: item.pagoPa });
+        return acc;
+      }, [] as Array<NewNotificationPayment>);
+    }
+    if (newDebtPosition === PaymentModel.F24) {
+      return payments.reduce((acc, item) => {
+        // eslint-disable-next-line functional/immutable-data
+        acc.push({ f24: item.f24 });
+        return acc;
+      }, [] as Array<NewNotificationPayment>);
+    }
+  }
+
+  return [];
 };

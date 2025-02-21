@@ -450,7 +450,6 @@
         "remove-recipient": "Remove recipient"
       },
       "attachments": {
-        "title": "Attachments",
         "max-attachments": "You can upload up to 11 attachments, including the document to be notified.",
         "attach-for-recipients": "Attachments",
         "act-attachment": "Attach the deed",

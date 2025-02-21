@@ -450,7 +450,6 @@
         "remove-recipient": "Empfänger entfernen"
       },
       "attachments": {
-        "title": "Anhänge",
         "max-attachments": "Du kannst bis zu 11 Anhänge hochladen, einschließlich des zuzustellenden Bescheids.",
         "attach-for-recipients": "Anhänge",
         "act-attachment": "Urkunde anhängen",

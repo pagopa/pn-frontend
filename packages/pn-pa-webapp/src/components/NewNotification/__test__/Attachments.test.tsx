@@ -96,7 +96,7 @@ describe('Attachments Component with payment enabled', async () => {
     const buttonSubmit = result.getByTestId('step-submit');
     const buttonPrevious = result.getByTestId('previous-step');
     expect(buttonSubmit).toBeDisabled();
-    expect(buttonSubmit).toHaveTextContent('button.continue');
+    expect(buttonSubmit).toHaveTextContent('button.send');
     expect(buttonPrevious).toBeInTheDocument();
   });
 
@@ -165,7 +165,7 @@ describe('Attachments Component with payment enabled', async () => {
         },
       ]);
     });
-    expect(confirmHandlerMk).toBeCalledTimes(1);
+    expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
   });
 
   it('fills form with invalid values - one document', async () => {
@@ -230,7 +230,7 @@ describe('Attachments Component with payment enabled', async () => {
         },
       ]);
     });
-    expect(previousHandlerMk).toBeCalledTimes(1);
+    expect(previousHandlerMk).toHaveBeenCalledTimes(1);
   });
 
   it('changes form values and clicks on confirm - two documents', async () => {
@@ -325,7 +325,7 @@ describe('Attachments Component with payment enabled', async () => {
         },
       ]);
     });
-    expect(confirmHandlerMk).toBeCalledTimes(1);
+    expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
   });
 
   it('fills form with invalid values - two documents', async () => {
@@ -394,11 +394,13 @@ describe('Attachments Component with payment enabled', async () => {
     }
     expect(buttonAddAnotherDoc).not.toBeInTheDocument();
   });
-  
+
   it('should appear info banner with additional languages', async () => {
     // render component
     await act(async () => {
-      result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} hasAdditionalLang={true}/>);
+      result = render(
+        <Attachments isCompleted={false} onConfirm={confirmHandlerMk} hasAdditionalLang={true} />
+      );
     });
     const form = result.container.querySelector('form');
     const banner = within(form!).getByTestId('bannerAdditionalLanguages');
@@ -439,7 +441,7 @@ describe('Attachments Component without payment enabled', () => {
     expect(buttonSubmit).toBeEnabled();
     fireEvent.click(buttonSubmit);
     await waitFor(() => {
-      expect(confirmHandlerMk).toBeCalledTimes(1);
+      expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
     });
   });
 });

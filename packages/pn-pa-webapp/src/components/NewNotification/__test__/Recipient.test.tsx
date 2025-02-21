@@ -158,7 +158,7 @@ const testStringFieldValidation = async (
 };
 
 const recipientsWithoutPayments = newNotification.recipients.map(
-  ({ payments, ...recipient }) => recipient
+  ({ payments, debtPosition, ...recipient }) => recipient
 );
 
 describe('Recipient Component with payment enabled', async () => {
