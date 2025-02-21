@@ -1,13 +1,9 @@
 {
   "title": "Kontaktni podatki",
   "subtitle": "Tukaj lahko upravljate kontaktne podatke, na katere boste prejemali obvestila, ki vam jih pošiljajo organizacije, ki so vključene v SEND.",
-  "alert-dialog-email": "Če nimate PEC in dostopate do obvestila na SEND v roku 5 dni (120 ur) od pošiljanja e-poštnega sporočila, potrdila o prejemu ne boste prejeli po priporočeni pošti.",
-  "alert-dialog-sms": "Če nimate PEC in dostopate do obvestila na SEND v roku 5 dni (120 ur) od pošiljanja SMS sporočila, potrdila o prejemu ne boste prejeli po priporočeni pošti.",
   "insert-code": "Vnesite kodo",
   "legal-contacts": {
     "title": "Uradna dostava",
-    "sub-title": "To je uradni naslov, ki ga izberete za prejemanje pravnih sporočil PA. Če aktivirate uradno dostavo, <strong>boste prejemali obvestila SEND le digitalno</strong>, ne da bi vam bilo treba skrbeti za papirnate dokumente.",
-    "pec-title": "PEC",
     "pec-description": "Ko vam organizacija pošlje sporočilo na SEND, prejmete uradno obvestilo na PEC, ki ste ga izbrali.",
     "link-pec-placeholder": "Vaš PEC",
     "valid-pec": "Naslov PEC ni veljaven",
@@ -45,12 +41,8 @@
         "description": "Obvestila, ki vam jih organizacije pošiljajo prek SEND, bodo vedno dostavljena na vaše digitalno prebivališče in na voljo v vašem rezerviranem območju."
       }
     ],
-    "sercq-send-info-pec-disclaimer": "Če ste med svojimi kontaktnimi podatki že vnesli PEC, ga digitalno prebivališče nadomesti kot uradni naslov za SEND.",
     "sercq-send-info-tos": "S pritiskom na »Aktiviraj« izjavljate, da ste prebrali in se strinjate s <0>Pogoji storitve</0>.",
     "sercq_send-added-successfully": "Digitalno prebivališče je pravilno aktivirano",
-    "sercq-send-enabled": "SEND je vaše digitalno prebivališče",
-    "sercq-send-courtesy-title": "Izberite način prejemanja obvestil",
-    "sercq-send-courtesy-description": "Izberite vljudnostni naslov, na katerega vas lahko obveščamo v realnem času, ko vas na SEND čaka uradno sporočilo.",
     "remove-sercq_send-title": "Ali ste prepričani, da želite onemogočiti digitalno prebivališče pri SEND?",
     "remove-sercq_send-message": "Ne boste več imeli uradnega digitalnega naslova za komunikacijo z javno upravo in lahko se vrnete na prejemanje obvestil v papirnati obliki.",
     "block-remove-digital-domicile-title": "Digitalnega prebivališča ni mogoče deaktivirati",
@@ -73,10 +65,8 @@
   "courtesy-contacts": {
     "email-title": "E-pošta",
     "email-filled-description": "Ko boste prejeli obvestilo, vas bomo na naslov, ki ste ga izbrali, poslali e-poštno sporočilo.",
-    "email-dialog-description": "Ko boste prejeli obvestilo, vas bomo obvestili po e-pošti. ",
     "sms-title": "SMS",
     "sms-description": "Ko boste prejeli obvestilo, vas bomo na številko, ki ste jo izbrali, poslali SMS sporočilo.",
-    "sms-dialog-description": "Ko boste prejeli obvestilo, vas bomo o tem obvestili prek SMS.",
     "link-sms-placeholder": "Vaš mobilni telefon",
     "link-email-placeholder": "Vaš e-poštni naslov",
     "sms-add": "Obvestite me po SMS-u",
@@ -107,7 +97,6 @@
     "sercq_send": "Digitalno prebivališče SEND",
     "link-pec-label": "Vaš PEC",
     "link-sercq-label": "Vaše digitalno prebivališče je SEND",
-    "senders": "Organizacije",
     "contact-to-add": "Kontaktni podatki",
     "contact-to-add-description": "Povežite naslov z določeno organizacijo, da prilagodite sporočila, ki jih prejmete glede na pošiljatelja.",
     "contact-already-exists": "Izbrana organizacija je že povezana s tem naslovom. Če pritisnete »Poveži«, ga bo nadomestil tisti, ki ste ga pravkar navedli.",
@@ -116,10 +105,7 @@
     "card-title": "Prilagojeno",
     "sender": "Organizacija",
     "remove-special-title": "Ali želite izbrisati {{contactValue}}?",
-    "remove-special-description": "Opozorila v zvezi z obvestili povezanih organizacij se ne bodo več pošiljala na ta naslov, temveč na glavnega.",
-    "contacts": "Kontaktni podatki",
-    "legal-association-title": "Potrdite povezavo",
-    "legal-association-description": "Za obvestila, poslana <strong>{{senderName}}</strong> z vašega uradnega naslova, bo <strong>{{newAddress}}</strong> namesto <strong>{{oldAddress}}</strong>."
+    "remove-special-description": "Opozorila v zvezi z obvestili povezanih organizacij se ne bodo več pošiljala na ta naslov, temveč na glavnega."
   },
   "common": {
     "duplicate-contact-title": "Kontaktni podatek je že prisoten",
@@ -140,17 +126,6 @@
       "title": "Koda je potekla",
       "message": "Ustvarite novo in jo vnesite."
     }
-  },
-  "summary-card": {
-    "legal-title": "Uradna",
-    "courtesy-title": "Vljudnostna",
-    "no-address": "Noben kontaktni podatek ni na voljo",
-    "PEC": "PEC",
-    "SMS": "SMS",
-    "EMAIL": "E-pošta",
-    "APPIO": "Aplikacija IO",
-    "SERCQ_SEND": "Digitalno prebivališče",
-    "add-icon-arialabel": "Dodaj"
   },
   "domicile-banner": {
     "no-sercq-send-title": "Nič več papirnatih dokumentov: aktivirajte SEND kot digitalno prebivališče",

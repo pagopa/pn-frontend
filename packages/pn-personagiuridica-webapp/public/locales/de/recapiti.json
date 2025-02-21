@@ -1,8 +1,6 @@
 {
   "title": "Anschriften",
   "subtitle": "Hier können digitale Anschriften angeben und geändert werden, an die Bescheide für {{recipient}} gesendet werden sollen. Wenn du nach Firmendaten suchst, <0>findest du sie hier</0>.",
-  "alert-dialog-email": "Wenn das Unternehmen keine PEC hat und ein Benutzer innerhalb von 5 Tagen (120 Stunden) nach Versand der E-Mail auf die Benachrichtigung auf SEND zugreift, wird die Empfangsbestätigung nicht per Einschreiben gesendet.",
-  "alert-dialog-sms": "Wenn das Unternehmen keine PEC hat und ein Benutzer innerhalb von 5 Tagen (120 Stunden) nach Versand der SMS auf die Benachrichtigung auf SEND zugreift, wird keine Empfangsbestätigung per Einschreiben gesendet.",
   "insert-code": "Code eingeben",
   "legal-contacts": {
     "title": "",

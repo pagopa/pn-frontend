@@ -9,7 +9,7 @@ import SercqSendIODialog from '../SercqSendIODialog';
 
 const discardHandler = vi.fn();
 
-describe('test SercqSendInfoDialog', () => {
+describe('test SercqSendIODialog', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {

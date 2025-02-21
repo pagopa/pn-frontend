@@ -1,13 +1,9 @@
 {
   "title": "Adressen",
   "subtitle": "Hier kannst du die Adressen verwalten, an die du die Zustellungen der SEND beigetretenen Körperschaften erhalten möchtest.",
-  "alert-dialog-email": "Solltest du keine PEC-Adresse haben und die Zustellung innerhalb 5 Tagen (120 Stunden) nach Versand der E-Mail über SEND aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben.",
-  "alert-dialog-sms": "Solltest du keine PEC-Adresse haben und die Zustellung innerhalb 5 Tagen (120 Stunden) nach Versand der SMS über SEND aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben.",
   "insert-code": "Code eingeben",
   "legal-contacts": {
     "title": "Rechtsgültige Adresse",
-    "sub-title": "Dies ist die offizielle Adresse, die du wählst, um rechtsgültige Mitteilungen von der ÖV zu erhalten. Wenn du eine rechtsgültige Adresse aktivierst, <strong>erhältst du die Zustellungen von SEND nur auf digitalem Wege</strong>, ohne dich um Papierdokumente kümmern zu müssen.",
-    "pec-title": "PEC",
     "pec-description": "Wenn eine Körperschaft eine Mitteilung für dich über SEND sendet, erhältst du die offizielle Mitteilung in dem von dir gewählten PEC-Postfach.",
     "link-pec-placeholder": "Deine PEC",
     "valid-pec": "Ungültige PEC-Adresse",
@@ -45,12 +41,8 @@
         "description": "Die Zustellungen, die dir die Körperschaften über SEND senden, werden immer an dein digitales Domizil zugestellt und sind in deinem reservierten Bereich verfügbar."
       }
     ],
-    "sercq-send-info-pec-disclaimer": "Wenn du unter deinen Adressen bereits eine PEC angegeben hast, ersetzt das digitale Domizil diese als rechtsgültige Adresse auf SEND.",
     "sercq-send-info-tos": "Durch Klicken auf „Aktivieren“ erklärst du, die <0>Nutzungsbedingungen des Dienstes</0> gelesen zu haben und diese zu akzeptieren.",
     "sercq_send-added-successfully": "Digitales Domizil erfolgreich aktiviert",
-    "sercq-send-enabled": "SEND ist dein digitales Domizil",
-    "sercq-send-courtesy-title": "Wähle, wie du die Bescheide erhalten möchtest",
-    "sercq-send-courtesy-description": "Wähle eine informelle Adresse aus, an der wir dich in Echtzeit benachrichtigen können, wenn es eine rechtsgültige Mitteilung auf SEND zu lesen gibt.",
     "remove-sercq_send-title": "Möchtest du das digitale Domizil auf SEND wirklich deaktivieren?",
     "remove-sercq_send-message": "Du hast keine rechtsgültige digitale Adresse mehr für die Zustellungen der öffentlichen Verwaltung und kannst wieder Zustellungen in Papierform erhalten.",
     "block-remove-digital-domicile-title": "Das digitale Domizil kann nicht deaktiviert werden",
@@ -73,10 +65,8 @@
   "courtesy-contacts": {
     "email-title": "E-Mail",
     "email-filled-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer E-Mail an die gewählte Adresse.",
-    "email-dialog-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer E-Mail. ",
     "sms-title": "SMS",
     "sms-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer SMS an die gewählte Nummer.",
-    "sms-dialog-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer SMS.",
     "link-sms-placeholder": "Deine Handynummer",
     "link-email-placeholder": "Deine E-Mail-Adresse",
     "sms-add": "Benachrichtige mich per SMS",
@@ -107,7 +97,6 @@
     "sercq_send": "Digitales Domizil SEND",
     "link-pec-label": "Deine PEC",
     "link-sercq-label": "Dein digitales Domizil SEND",
-    "senders": "Körperschaften",
     "contact-to-add": "Adresse",
     "contact-to-add-description": "Verknüpfe eine Adresse mit einer bestimmten Körperschaft, um die Mitteilungen nach Empfänger zu personalisieren.",
     "contact-already-exists": "Die gewählte Körperschaft ist bereits mit dieser Adresse verknüpft. Wenn du „Verknüpfen“ drückst, wird sie durch die hier eingegebene ersetzt.",
@@ -116,10 +105,7 @@
     "card-title": "Personalisiert",
     "sender": "Körperschaft",
     "remove-special-title": "Möchtest du {{contactValue}} entfernen?",
-    "remove-special-description": "Die Benachrichtigungen der Zustellungen der verknüpften Körperschaften werden nicht mehr an diese Adresse geschickt, sondern an die Hauptadresse.",
-    "contacts": "Adressen",
-    "legal-association-title": "Verknüpfung bestätigen",
-    "legal-association-description": "Für die von <strong>{{senderName}}</strong> gesendeten Zustellungen ist deine rechtsgültige Adresse <strong>{{newAddress}}</strong> statt <strong>{{oldAddress}}</strong>."
+    "remove-special-description": "Die Benachrichtigungen der Zustellungen der verknüpften Körperschaften werden nicht mehr an diese Adresse geschickt, sondern an die Hauptadresse."
   },
   "common": {
     "duplicate-contact-title": "Adresse bereits vorhanden",
@@ -140,17 +126,6 @@
       "title": "Code abgelaufen",
       "message": "Einen neuen erstellen und eingeben."
     }
-  },
-  "summary-card": {
-    "legal-title": "Rechtsgültig",
-    "courtesy-title": "Informell",
-    "no-address": "Keine Adresse",
-    "PEC": "PEC",
-    "SMS": "SMS",
-    "EMAIL": "E-Mail",
-    "APPIO": "IO-App",
-    "SERCQ_SEND": "Digitales Domizil",
-    "add-icon-arialabel": "Hinzufügen"
   },
   "domicile-banner": {
     "no-sercq-send-title": "Keine Papierdokumente mehr: aktiviere SEND als digitales Domizil",

@@ -240,7 +240,7 @@ const SpecialContacts: React.FC = () => {
           ns: 'recapiti',
           contactValue:
             currentAddress.current.channelType === ChannelType.SERCQ_SEND
-              ? t(`legal-contacts.sercq-send-title`, {
+              ? t(`legal-contacts.sercq_send-title`, {
                   ns: 'recapiti',
                 })
               : currentAddress.current.value,

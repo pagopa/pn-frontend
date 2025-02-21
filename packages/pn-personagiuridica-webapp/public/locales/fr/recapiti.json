@@ -1,8 +1,6 @@
 {
   "title": "Coordonnées",
   "subtitle": "Ici, vous pouvez indiquer et modifier les coordonnées numériques auxquelles {{recipient}} vous recevrez les notifications. Si vous recherchez les données de l’entreprise <0>vous les trouverez ici</0>.",
-  "alert-dialog-email": "Si la société ne dispose pas d'une adresse PEC et qu’un de ses utilisateurs accède à la notification sur SEND dans les 5 jours (120 heures) suivant l’envoi de l’e-mail, l’accusé de réception ne sera pas envoyé par courrier recommandé.",
-  "alert-dialog-sms": "Si la société ne dispose pas d'une adresse PEC et qu’un de ses utilisateurs accède à la notification sur SEND dans les 5 jours (120 heures) suivant l’envoi du SMS, l’accusé de réception ne sera pas envoyé par courrier recommandé.",
   "insert-code": "Saisissez le code",
   "legal-contacts": {
     "title": "",

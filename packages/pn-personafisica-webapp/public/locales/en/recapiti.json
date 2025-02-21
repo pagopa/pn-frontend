@@ -1,13 +1,9 @@
 {
   "title": "Addresses",
   "subtitle": "Here you can manage addresses and receive the notifications sent to you by institutions registered with SEND.",
-  "alert-dialog-email": "If you do not have a PEC and access the SEND notification within 5 days (120 hours) of sending the email, you will not receive the notification of receipt by registered mail.",
-  "alert-dialog-sms": "If you do not have a PEC and access the SEND notification within 5 days (120 hours) of sending the SMS, you will not receive the notification of receipt by registered mail.",
   "insert-code": "Enter code",
   "legal-contacts": {
     "title": "Legal address",
-    "sub-title": "It is the legal address that you select for receiving legal communications from the PA. If you activate a legal address <strong>you will receive SEND notifications only digitally</strong>, without having to worry about paper documents.",
-    "pec-title": "PEC",
     "pec-description": "When an institution sends a communication for you on SEND, you will receive the official notification at the PEC you selected.",
     "link-pec-placeholder": "Your PEC",
     "valid-pec": "Invalid PEC address",
@@ -45,12 +41,8 @@
         "description": "The notifications that institutions send you via SEND will always be delivered to your Digital Domicile and be available in your reserved area."
       }
     ],
-    "sercq-send-info-pec-disclaimer": "If you entered a PEC among your addresses, the Digital Domicile will replace it as the SEND legal address.",
     "sercq-send-info-tos": "By pressing “Activate” you declare to have read and accepted the <0>Terms of service</0>.",
     "sercq_send-added-successfully": "Digital Domicile activated correctly",
-    "sercq-send-enabled": "SEND is your Digital Domicile",
-    "sercq-send-courtesy-title": "Select how to receive the notifications",
-    "sercq-send-courtesy-description": "Select a courtesy address to which we can inform you in real time when there is a legal communication to read on SEND.",
     "remove-sercq_send-title": "Do you confirm to want to deactivate the Digital Domicile on SEND?",
     "remove-sercq_send-message": "You will no longer have a legal digital address for the communications of the Public Administration and can return to receiving paper copies of the notifications.",
     "block-remove-digital-domicile-title": "It is not possible to deactivate the Digital Domicile",
@@ -73,10 +65,8 @@
   "courtesy-contacts": {
     "email-title": "Email",
     "email-filled-description": "When there is a notification for you, we will inform you with an email to the address you selected.",
-    "email-dialog-description": "When there is a notification for you, we will inform you with an email.",
     "sms-title": "SMS",
     "sms-description": "When there is a notification for you, we will inform you with an SMS to the number you selected.",
-    "sms-dialog-description": "When there is a notification for you, we will inform you with an SMS.",
     "link-sms-placeholder": "Your mobile phone number",
     "link-email-placeholder": "Your email",
     "sms-add": "Notify me via SMS",
@@ -107,7 +97,6 @@
     "sercq_send": "SEND digital domicile",
     "link-pec-label": "Your PEC",
     "link-sercq-label": "Your SEND Digital Domicile",
-    "senders": "Institutions",
     "contact-to-add": "Address",
     "contact-to-add-description": "Associate an address with a specific institution to customize the communications you receive based on the sender.",
     "contact-already-exists": "The selected institution is already associated with this address. If you press \"Associate\", it will be replaced by the one you indicated here.",
@@ -116,10 +105,7 @@
     "card-title": "Customized",
     "sender": "Institution",
     "remove-special-title": "Do you want to delete {{contactValue}}?",
-    "remove-special-description": "The notifications related to the notifications of the associated institutions will no longer be sent to this address, but to the main one.",
-    "contacts": "Addresses",
-    "legal-association-title": "Confirm association",
-    "legal-association-description": "For the notifications sent by <strong>{{senderName}}</strong> your legal address will be <strong>{{newAddress}}</strong> instead of <strong>{{oldAddress}}</strong>."
+    "remove-special-description": "The notifications related to the notifications of the associated institutions will no longer be sent to this address, but to the main one."
   },
   "common": {
     "duplicate-contact-title": "Address already present",
@@ -140,17 +126,6 @@
       "title": "This code has expired",
       "message": "Generate a new one and enter it."
     }
-  },
-  "summary-card": {
-    "legal-title": "Legal",
-    "courtesy-title": "Courtesy",
-    "no-address": "No address",
-    "PEC": "PEC",
-    "SMS": "SMS",
-    "EMAIL": "Email",
-    "APPIO": "IO app",
-    "SERCQ_SEND": "Digital Domicile",
-    "add-icon-arialabel": "Add"
   },
   "domicile-banner": {
     "no-sercq-send-title": "No more paper documents: activate SEND as a Digital Domicile",
