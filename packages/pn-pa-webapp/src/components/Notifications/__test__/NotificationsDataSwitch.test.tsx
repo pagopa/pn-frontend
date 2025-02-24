@@ -1,3 +1,5 @@
+import { vi } from 'vitest';
+
 import { formatDate, getNotificationStatusInfos } from '@pagopa-pn/pn-commons';
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 

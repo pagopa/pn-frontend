@@ -182,6 +182,10 @@
       "title": "Questo campo accetta solo valori numerici",
       "message": "Controlla il codice di verifica e inseriscilo di nuovo"
     },
+    "empty_code": {
+      "title": "Codice assente o incompleto",
+      "message": "Il codice che hai inserito non è completo, inserisci un codice a 5 cifre."
+    },
     "invalid_body": {
       "title": "Errore",
       "message": "C'è stato un errore in fase di invio dei dati ai nostri server. Ricontrolla che i dati inseriti siano corretti e non siano contenuti caratteri speciali e spazi."

@@ -141,7 +141,7 @@ describe('DelegationElements', async () => {
     const codeDialog = await waitFor(() => screen.getByTestId('codeDialog'));
     expect(codeDialog).toBeInTheDocument();
     const codeConfirmButton = within(codeDialog).getByTestId('codeConfirmButton');
-    expect(codeConfirmButton).toBeDisabled();
+    expect(codeConfirmButton).toBeEnabled();
     // fill the code
     const codeInputs = codeDialog.querySelectorAll('input');
     codeInputs.forEach((input, index) => {
