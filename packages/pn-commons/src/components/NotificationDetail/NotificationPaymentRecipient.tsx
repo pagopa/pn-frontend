@@ -14,6 +14,7 @@ import {
   PaymentStatus,
   PaymentsData,
 } from '../../models';
+import { PaymentTpp } from '../../models/NotificationDetail';
 import { formatEurocentToCurrency } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { getPaymentCache, setPaymentCache } from '../../utility/paymentCaching.utility';
@@ -26,6 +27,7 @@ const FAQ_NOTIFICATION_CANCELLED_REFUND = '/faq#notifica-pagata-rimborso';
 
 type Props = {
   payments: PaymentsData;
+  paymentTpp?: PaymentTpp;
   isCancelled: boolean;
   timerF24: number;
   landingSiteUrl: string;
@@ -45,6 +47,7 @@ type Props = {
 
 const NotificationPaymentRecipient: React.FC<Props> = ({
   payments,
+  paymentTpp,
   isCancelled,
   timerF24,
   landingSiteUrl,
@@ -238,7 +241,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
           {!allPaymentsIsPaid && (
             <PaymentButtons
-              payments={payments}
+              paymentTpp={paymentTpp}
               iun={iun}
               onPayTppClick={onPayTppClick}
               onPayClick={onPayClick}
@@ -293,7 +296,7 @@ export default memo(NotificationPaymentRecipient);
 
 type PaymentButtonsProps = Pick<
   Props,
-  'payments' | 'iun' | 'onPayTppClick' | 'onPayClick' | 'getPaymentAttachmentAction' | 'timerF24'
+  'paymentTpp' | 'iun' | 'onPayTppClick' | 'onPayClick' | 'getPaymentAttachmentAction' | 'timerF24'
 > & {
   selectedPayment?: PaymentDetails | { pagoPa: null; f24?: null };
   loadingPayment: boolean;
@@ -304,7 +307,7 @@ type PaymentButtonsProps = Pick<
 };
 
 const PaymentButtons = ({
-  payments,
+  paymentTpp,
   iun,
   selectedPayment,
   loadingPayment,
@@ -317,7 +320,7 @@ const PaymentButtons = ({
   getPaymentAttachmentAction,
   handleTrackEventFn,
 }: PaymentButtonsProps) => {
-  const hasPaymentTpp = payments.tpp?.iun === iun;
+  const hasPaymentTpp = paymentTpp?.iun === iun;
   return (
     <Fragment>
       {hasPaymentTpp && (
@@ -331,12 +334,12 @@ const PaymentButtons = ({
             onPayTppClick(
               selectedPayment?.pagoPa?.noticeCode,
               selectedPayment?.pagoPa?.creditorTaxId,
-              payments.tpp?.retrievalId
+              paymentTpp?.retrievalId
             )
           }
         >
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit-tpp', undefined, {
-            name: payments.tpp?.paymentButton,
+            name: paymentTpp?.paymentButton,
           })}
         </Button>
       )}

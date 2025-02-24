@@ -429,17 +429,15 @@ describe('NotificationPaymentRecipient Component', () => {
 
   it('should show tpp button if payments tpp is present and click onPayTppClick', () => {
     const onPayTppClick = vi.fn();
-    const tppPayments: PaymentsData = {
-      ...paymentsData,
-      tpp: {
-        retrievalId: 'retrievalId',
-        iun,
-        paymentButton: 'paymentButton',
-      },
+    const paymentTpp = {
+      retrievalId: 'retrievalId',
+      iun,
+      paymentButton: 'paymentButton',
     };
     const { getByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
-        payments={tppPayments}
+        payments={paymentsData}
+        paymentTpp={paymentTpp}
         isCancelled={false}
         timerF24={F24TIMER}
         iun={iun}
@@ -473,7 +471,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(onPayTppClick).toHaveBeenCalledWith(
       paymentsData.pagoPaF24[paymentIndex].pagoPa?.noticeCode,
       paymentsData.pagoPaF24[paymentIndex].pagoPa?.creditorTaxId,
-      tppPayments.tpp?.retrievalId
+      paymentTpp.retrievalId
     );
   });
 });

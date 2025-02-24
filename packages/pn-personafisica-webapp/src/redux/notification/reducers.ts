@@ -17,12 +17,10 @@ import {
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
-import { PaymentTpp } from '@pagopa-pn/pn-commons/src/models/NotificationDetail';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import {
-  checkNotificationTpp,
   getDowntimeHistory,
   getReceivedNotification,
   getReceivedNotificationPaymentInfo,
@@ -53,7 +51,6 @@ const initialState = {
   paymentsData: {
     pagoPaF24: [] as Array<PaymentDetails>,
     f24Only: [] as Array<F24PaymentDetails>,
-    tpp: {} as PaymentTpp,
   } as PaymentsData,
   downtimeEvents: [] as Array<Downtime>,
 };
@@ -159,13 +156,6 @@ const notificationSlice = createSlice({
     });
     builder.addCase(getDowntimeHistory.fulfilled, (state, action) => {
       state.downtimeEvents = action.payload.result;
-    });
-    builder.addCase(checkNotificationTpp.fulfilled, (state, action) => {
-      state.paymentsData.tpp = {
-        retrievalId: action.payload.retrievalId,
-        paymentButton: action.payload.paymentButton || '',
-        iun: action.payload.originId || '',
-      };
     });
   },
 });

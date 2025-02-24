@@ -32,7 +32,6 @@ export type PaymentTpp = {
 export type PaymentsData = {
   pagoPaF24: Array<PaymentDetails>;
   f24Only: Array<F24PaymentDetails>;
-  tpp?: PaymentTpp;
 };
 
 export type PagoPAPaymentFullDetails = PagoPAPaymentDetails &

@@ -25,7 +25,6 @@ import { DowntimeApiFactory } from '../../generated-client/downtime-logs';
 import {
   BffCheckAarRequest,
   BffCheckAarResponse,
-  BffCheckTPPResponse,
   NotificationReceivedApiFactory,
 } from '../../generated-client/notifications';
 import { BffPaymentTppResponse, PaymentsApiFactory } from '../../generated-client/payments';
@@ -44,7 +43,6 @@ export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION_PAYMENT_URL = 'getReceivedNotificationPaymentUrl',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
   EXCHANGE_NOTIFICATION_QR_CODE = 'exchangeNotificationQrCode',
-  EXCHANGE_NOTIFICATION_RETRIEVAL_ID = 'exchangeNotificationRetrievalId',
 }
 
 export const getReceivedNotification = createAsyncThunk<
@@ -278,44 +276,6 @@ export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, 
       return response.data;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
-    }
-  }
-);
-
-/**
- * TPP
- */
-
-const checkTpp = async (retrievalId: string) => {
-  const notificationReceivedApiFactory = NotificationReceivedApiFactory(
-    undefined,
-    undefined,
-    apiClient
-  );
-  return await notificationReceivedApiFactory.checkTppV1(retrievalId);
-};
-
-export const exchangeNotificationRetrievalId = createAsyncThunk<BffCheckTPPResponse, string>(
-  NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
-  async (retrievalId: string, { rejectWithValue }) => {
-    try {
-      const response = await checkTpp(retrievalId);
-      return response.data;
-    } catch (e: any) {
-      return rejectWithValue(parseError(e));
-    }
-  }
-);
-
-export const checkNotificationTpp = createAsyncThunk<BffCheckTPPResponse, string>(
-  'checkNotificationTpp',
-  async (retrievalId: string) => {
-    try {
-      const response = await checkTpp(retrievalId);
-      return response.data;
-    } catch (e: any) {
-      // ignore error: notification has not payment tpp
-      return {} as BffCheckTPPResponse;
     }
   }
 );

@@ -6,6 +6,7 @@ import { AddressesApiFactory } from '../../generated-client/digital-addresses';
 import { MandateApiFactory } from '../../generated-client/mandate';
 import { AddressType, DigitalAddress } from '../../models/contacts';
 import { Delegator } from '../delegation/types';
+import { BffCheckTPPResponse, NotificationReceivedApiFactory } from '../../generated-client/notifications';
 
 export enum SIDEMENU_ACTIONS {
   GET_SIDEMENU_INFORMATION = 'getSidemenuInformation',
@@ -35,6 +36,28 @@ export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
         (addr) => addr.addressType === AddressType.COURTESY || addr.codeValid
       ) as Array<DigitalAddress>;
     } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+
+/**
+ * TPP
+ */
+
+export const exchangeNotificationRetrievalId = createAsyncThunk<BffCheckTPPResponse, string>(
+  'exchangeNotificationRetrievalId',
+  async (retrievalId: string, { rejectWithValue }) => {
+    try {
+      const notificationReceivedApiFactory = NotificationReceivedApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const result = await notificationReceivedApiFactory.checkTppV1(retrievalId);
+      return result.data;
+    } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
   }

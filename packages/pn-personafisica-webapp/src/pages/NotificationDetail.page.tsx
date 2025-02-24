@@ -45,7 +45,6 @@ import { getDowntimeLegalFact } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
-  checkNotificationTpp,
   getDowntimeHistory,
   getReceivedNotification,
   getReceivedNotificationDocument,
@@ -55,6 +54,7 @@ import {
   getReceivedNotificationPaymentUrl,
 } from '../redux/notification/actions';
 import { resetState } from '../redux/notification/reducers';
+import { exchangeNotificationRetrievalId } from '../redux/sidemenu/actions';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -92,6 +92,7 @@ const NotificationDetail: React.FC = () => {
   const currentRecipient = notification?.currentRecipient;
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
+  const paymentTpp = useAppSelector((state: RootState) => state.generalInfoState.paymentTpp);
 
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -373,7 +374,7 @@ const NotificationDetail: React.FC = () => {
     return () => void dispatch(resetState());
   }, []);
 
-  /* if retrievalId is in user token, get payment info PN-13915 */
+  /* if retrievalId is in user token and payment info is not in redux, get payment info PN-13915 */
   useEffect(() => {
     if (!checkIfUserHasPayments) {
       return;
@@ -381,7 +382,10 @@ const NotificationDetail: React.FC = () => {
     if (!currentUser.source?.retrievalId) {
       return;
     }
-    void dispatch(checkNotificationTpp(currentUser.source.retrievalId));
+    if (currentUser.source?.retrievalId === paymentTpp.retrievalId) {
+      return;
+    }
+    void dispatch(exchangeNotificationRetrievalId(currentUser.source.retrievalId));
   }, [currentUser, checkIfUserHasPayments]);
 
   /* function which loads relevant information about donwtimes */
@@ -544,6 +548,7 @@ const NotificationDetail: React.FC = () => {
                     >
                       <NotificationPaymentRecipient
                         payments={userPayments}
+                        paymentTpp={paymentTpp}
                         isCancelled={isCancelled.cancelled}
                         iun={notification.iun}
                         handleTrackEvent={trackEventPaymentRecipient}
