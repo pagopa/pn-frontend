@@ -79,6 +79,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
     const { internalHasError, internalErrorTitle, internalErrorMessage } = internalError;
 
     const codeIsValid = code.every((v) => (!isNaN(Number(v)) ? v : false));
+    const codeIsEmpty = code.some((v) => !v);
 
     const changeHandler = useCallback((inputsValues: Array<string>) => {
       setCode(inputsValues);
@@ -107,11 +108,25 @@ const CodeModal = forwardRef<ModalHandle, Props>(
       if (!confirmCallback) {
         return;
       }
-      if (!codeIsValid) {
+      if (codeIsEmpty) {
         setInternalError({
           internalHasError: true,
           internalErrorTitle: getLocalizedOrDefaultLabel('common', `errors.empty_code.title`),
           internalErrorMessage: getLocalizedOrDefaultLabel('common', `errors.empty_code.message`),
+        });
+        return;
+      }
+      if (!codeIsValid) {
+        setInternalError({
+          internalHasError: true,
+          internalErrorTitle: getLocalizedOrDefaultLabel(
+            'common',
+            `errors.invalid_type_code.title`
+          ),
+          internalErrorMessage: getLocalizedOrDefaultLabel(
+            'common',
+            `errors.invalid_type_code.message`
+          ),
         });
         return;
       }

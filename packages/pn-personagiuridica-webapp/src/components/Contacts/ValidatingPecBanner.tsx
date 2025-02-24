@@ -44,6 +44,7 @@ const ValidatingPecBanner: React.FC = () => {
   } else {
     bannerMessage = 'parties-list';
   }
+
   return (
     <Alert data-testid="PecVerificationAlert" severity="warning" sx={{ my: { xs: 2, lg: 4 } }}>
       <Typography variant="inherit" sx={{ fontWeight: '600' }}>
