@@ -1,8 +1,9 @@
+import { PaymentTpp } from '@pagopa-pn/pn-commons/src/models/NotificationDetail';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { acceptMandate, rejectMandate } from '../delegation/actions';
 import { Delegator } from '../delegation/types';
-import { getSidemenuInformation } from './actions';
+import { exchangeNotificationRetrievalId, getSidemenuInformation } from './actions';
 
 /* eslint-disable functional/immutable-data */
 const generalInfoSlice = createSlice({
@@ -11,6 +12,7 @@ const generalInfoSlice = createSlice({
     pendingDelegators: 0,
     delegators: [] as Array<Delegator>,
     domicileBannerOpened: true,
+    paymentTpp: {} as PaymentTpp,
   },
   reducers: {
     closeDomicileBanner: (state) => {
@@ -38,6 +40,13 @@ const generalInfoSlice = createSlice({
       if (startingDelegatorsNum === state.delegators.length && state.pendingDelegators > 0) {
         state.pendingDelegators--; // so we also need to update pendingDelegators state
       }
+    });
+    builder.addCase(exchangeNotificationRetrievalId.fulfilled, (state, action) => {
+      state.paymentTpp = {
+        retrievalId: action.payload.retrievalId,
+        paymentButton: action.payload.paymentButton || '',
+        iun: action.payload.originId || '',
+      };
     });
   },
 });

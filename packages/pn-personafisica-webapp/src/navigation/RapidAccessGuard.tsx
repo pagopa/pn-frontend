@@ -16,11 +16,8 @@ import { NotificationDetailRouteState } from '../models/NotificationDetail';
 import { NotificationId } from '../models/Notifications';
 import { PFEventsType } from '../models/PFEventsType';
 import { useAppDispatch } from '../redux/hooks';
-import {
-  NOTIFICATION_ACTIONS,
-  exchangeNotificationQrCode,
-  exchangeNotificationRetrievalId,
-} from '../redux/notification/actions';
+import { NOTIFICATION_ACTIONS, exchangeNotificationQrCode } from '../redux/notification/actions';
+import { exchangeNotificationRetrievalId } from '../redux/sidemenu/actions';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 import {

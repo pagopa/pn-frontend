@@ -50,9 +50,11 @@ import {
   getReceivedNotificationDocument,
   getReceivedNotificationPayment,
   getReceivedNotificationPaymentInfo,
+  getReceivedNotificationPaymentTppUrl,
   getReceivedNotificationPaymentUrl,
 } from '../redux/notification/actions';
 import { resetState } from '../redux/notification/reducers';
+import { exchangeNotificationRetrievalId } from '../redux/sidemenu/actions';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -90,6 +92,7 @@ const NotificationDetail: React.FC = () => {
   const currentRecipient = notification?.currentRecipient;
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
+  const paymentTpp = useAppSelector((state: RootState) => state.generalInfoState.paymentTpp);
 
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -270,6 +273,26 @@ const NotificationDetail: React.FC = () => {
     }
   };
 
+  const onPayTppClick = (noticeCode?: string, creditorTaxId?: string, retrievalId?: string) => {
+    if (noticeCode && creditorTaxId && retrievalId) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT);
+      dispatch(
+        getReceivedNotificationPaymentTppUrl({
+          noticeCode,
+          creditorTaxId,
+          retrievalId,
+        })
+      )
+        .unwrap()
+        .then((res) => {
+          if (res.paymentUrl) {
+            window.location.assign(res.paymentUrl);
+          }
+        })
+        .catch(() => undefined);
+    }
+  };
+
   const hasNotificationReceivedApiError = hasApiErrors(
     NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION
   );
@@ -350,6 +373,20 @@ const NotificationDetail: React.FC = () => {
     fetchReceivedNotification();
     return () => void dispatch(resetState());
   }, []);
+
+  /* if retrievalId is in user token and payment info is not in redux, get payment info PN-13915 */
+  useEffect(() => {
+    if (!checkIfUserHasPayments) {
+      return;
+    }
+    if (!currentUser.source?.retrievalId) {
+      return;
+    }
+    if (currentUser.source?.retrievalId === paymentTpp.retrievalId) {
+      return;
+    }
+    void dispatch(exchangeNotificationRetrievalId(currentUser.source.retrievalId));
+  }, [currentUser, checkIfUserHasPayments]);
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
@@ -511,10 +548,12 @@ const NotificationDetail: React.FC = () => {
                     >
                       <NotificationPaymentRecipient
                         payments={userPayments}
+                        paymentTpp={paymentTpp}
                         isCancelled={isCancelled.cancelled}
                         iun={notification.iun}
                         handleTrackEvent={trackEventPaymentRecipient}
                         onPayClick={onPayClick}
+                        onPayTppClick={onPayTppClick}
                         handleFetchPaymentsInfo={reloadPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}

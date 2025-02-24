@@ -18,6 +18,7 @@ import {
   populatePaymentsPagoPaF24,
   setPaymentCache,
 } from '@pagopa-pn/pn-commons';
+import { initLocalizationForTest } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
@@ -41,6 +42,7 @@ import {
   within,
 } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
+import { BffCheckTPPResponse } from '../../generated-client/notifications';
 import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
@@ -87,6 +89,7 @@ describe('NotificationDetail Page', async () => {
       configurable: true,
       value: { href: '', assign: mockAssignFn },
     });
+    initLocalizationForTest();
   });
 
   afterEach(() => {
@@ -910,5 +913,41 @@ describe('NotificationDetail Page', async () => {
     const alertRadd = result.getByTestId('raddAlert');
     expect(alertRadd).toBeInTheDocument();
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
+  });
+
+  it('should show pay tpp button after call check-tpp api with retrievalId in user token', async () => {
+    const mockRetrievalId = 'retrieval-id';
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock
+      .onGet(`/bff/v1/notifications/received/check-tpp?retrievalId=${mockRetrievalId}`)
+      .reply(200, {
+        originId: notificationDTO.iun,
+        retrievalId: mockRetrievalId,
+        paymentButton: 'MOCK BANK',
+      } as BffCheckTPPResponse);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: {
+            user: {
+              fiscal_number: notificationDTO.recipients[2].taxId,
+              source: {
+                channel: 'TPP',
+                details: 'mock-tpp-id',
+                retrievalId: mockRetrievalId,
+              },
+            },
+          },
+        },
+      });
+    });
+
+    expect(
+      mock.history.get.find(({ url }) => url?.includes('bff/v1/notifications/received/check-tpp'))
+    ).toBeDefined();
+    const tppPayButton = await waitFor(() => result.getByTestId('tpp-pay-button'));
+    expect(tppPayButton).toBeInTheDocument();
+    expect(tppPayButton).toHaveTextContent('MOCK BANK');
   });
 });
