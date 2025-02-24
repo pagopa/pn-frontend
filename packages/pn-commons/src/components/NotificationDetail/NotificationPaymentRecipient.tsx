@@ -330,8 +330,9 @@ const PaymentButtons = ({
     <>
       {hasPaymentTpp && (
         <Button
+          color={errorOnPayment ? 'error' : 'primary'}
           fullWidth
-          variant="contained"
+          variant={errorOnPayment ? 'outlined' : 'contained'}
           data-testid="tpp-pay-button"
           onClick={() => handleCheckPaymentSelected('tpp')}
         >
