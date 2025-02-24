@@ -4,6 +4,7 @@ import { CircularProgress, Modal } from '@mui/material';
 import { Box } from '@mui/system';
 
 import { appStateSelectors } from '../../redux';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 export function LoadingOverlay() {
   const loading = useSelector(appStateSelectors.selectLoading);
@@ -19,7 +20,12 @@ export function LoadingOverlay() {
           outline: 0,
         }}
       >
-        <CircularProgress id="spinner-loading" role="loadingSpinner" sx={{ color: 'white' }} />
+        <CircularProgress
+          id="spinner-loading"
+          role="loadingSpinner"
+          aria-label={getLocalizedOrDefaultLabel('common', 'loading', 'Caricamento in corso')}
+          sx={{ color: 'white' }}
+        />
       </Box>
     </Modal>
   );
