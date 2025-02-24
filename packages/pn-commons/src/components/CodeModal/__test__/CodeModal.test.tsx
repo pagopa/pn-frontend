@@ -110,7 +110,7 @@ describe('CodeModal Component', () => {
     const button = within(dialog).getByTestId('codeCancelButton');
     fireEvent.click(button);
     await waitFor(() => {
-      expect(cancelButtonMock).toBeCalledTimes(1);
+      expect(cancelButtonMock).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -132,8 +132,8 @@ describe('CodeModal Component', () => {
       expect(button).toBeEnabled();
     });
     fireEvent.click(button);
-    expect(confirmButtonMock).toBeCalledTimes(1);
-    expect(confirmButtonMock).toBeCalledWith(['0', '1', '2', '3', '4']);
+    expect(confirmButtonMock).toHaveBeenCalledTimes(1);
+    expect(confirmButtonMock).toHaveBeenCalledWith(['0', '1', '2', '3', '4']);
   });
 
   it('shows error', () => {
