@@ -1,4 +1,5 @@
 import {
+  AppRouteParams,
   Downtime,
   EventAction,
   EventCategory,
@@ -13,6 +14,7 @@ import {
   TimelineCategory,
   TrackedEvent,
 } from '@pagopa-pn/pn-commons';
+import { appRouteParamToEventSource } from '../../notification.utility';
 
 type NotificationData = {
   downtimeEvents: Array<Downtime>;
@@ -20,7 +22,7 @@ type NotificationData = {
   notificationStatus: NotificationStatus;
   checkIfUserHasPayments: boolean;
   userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> };
-  fromQrCode: boolean;
+  source: AppRouteParams | undefined;
   timeline: Array<INotificationDetailTimeline>;
 };
 
@@ -31,7 +33,7 @@ export class SendNotificationDetailStrategy implements EventStrategy {
     notificationStatus,
     checkIfUserHasPayments,
     userPayments,
-    fromQrCode,
+    source,
     timeline,
   }: NotificationData): TrackedEvent<EventNotificationDetailType> {
     // eslint-disable-next-line functional/no-let
@@ -64,7 +66,7 @@ export class SendNotificationDetailStrategy implements EventStrategy {
         contains_f24: hasF24 ? 'yes' : 'no',
         first_time_opening:
           timeline.findIndex((el) => el.category === TimelineCategory.NOTIFICATION_VIEWED) === -1,
-        source: fromQrCode ? 'QRcode' : 'LISTA_NOTIFICHE',
+        source: appRouteParamToEventSource(source) || 'LISTA_NOTIFICHE',
       },
     };
   }

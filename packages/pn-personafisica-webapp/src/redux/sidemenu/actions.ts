@@ -4,12 +4,17 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { apiClient } from '../../api/apiClients';
 import { AddressesApiFactory } from '../../generated-client/digital-addresses';
 import { MandateApiFactory } from '../../generated-client/mandate';
+import {
+  BffCheckTPPResponse,
+  NotificationReceivedApiFactory,
+} from '../../generated-client/notifications';
 import { AddressType, DigitalAddress } from '../../models/contacts';
 import { Delegator } from '../delegation/types';
 
 export enum SIDEMENU_ACTIONS {
   GET_SIDEMENU_INFORMATION = 'getSidemenuInformation',
   GET_DOMICILE_INFO = 'getDomicileInfo',
+  EXCHANGE_NOTIFICATION_RETRIEVAL_ID = 'exchangeNotificationRetrievalId',
 }
 
 export const getSidemenuInformation = createAsyncThunk<Array<Delegator>>(
@@ -35,6 +40,27 @@ export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
         (addr) => addr.addressType === AddressType.COURTESY || addr.codeValid
       ) as Array<DigitalAddress>;
     } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+/**
+ * TPP
+ */
+
+export const exchangeNotificationRetrievalId = createAsyncThunk<BffCheckTPPResponse, string>(
+  SIDEMENU_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
+  async (retrievalId: string, { rejectWithValue }) => {
+    try {
+      const notificationReceivedApiFactory = NotificationReceivedApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const result = await notificationReceivedApiFactory.checkTppV1(retrievalId);
+      return result.data;
+    } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
   }

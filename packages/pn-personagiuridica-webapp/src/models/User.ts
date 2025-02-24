@@ -36,4 +36,18 @@ export interface User extends BasicUser {
   organization: Organization;
   desired_exp: number;
   hasGroup?: boolean;
+  source?: UserSource;
+}
+
+export interface UserSource {
+  channel: 'WEB';
+  details: string; // 'QR_CODE';
+}
+
+export interface TokenExchangeBody {
+  authorizationToken: string;
+  source?: {
+    type: 'QR';
+    id: string;
+  };
 }

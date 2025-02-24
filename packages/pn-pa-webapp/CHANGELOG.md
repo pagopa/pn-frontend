@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/pagopa/pn-frontend/compare/v2.12.0-RC.1...v2.12.0) (2025-02-18)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+# [2.12.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.12.0-RC.0...v2.12.0-RC.1) (2025-02-05)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+# [2.12.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.11.1...v2.12.0-RC.0) (2025-02-04)
+
+
+### Bug Fixes
+
+* **pn-13210:** manage accessibility when closing modal ([#1451](https://github.com/pagopa/pn-frontend/issues/1451)) ([2b4981b](https://github.com/pagopa/pn-frontend/commit/2b4981bddc8f6651ac47bb2cf371f63e33962959))
+* **pn-13214:** inactivity handler accessibility ([#1454](https://github.com/pagopa/pn-frontend/issues/1454)) ([7af07bd](https://github.com/pagopa/pn-frontend/commit/7af07bdc5861815ae484e0856d17f80ec3ac6096))
+* **pn-13593:** screen reader doesn't read api key value ([#1449](https://github.com/pagopa/pn-frontend/issues/1449)) ([7b11fb7](https://github.com/pagopa/pn-frontend/commit/7b11fb7ceb22d46bfd4dcea6bcbb6e1a2c3f85ae))
+* **pn-13596:** screen reader doesn't read notification status tooltip on mobile ([#1439](https://github.com/pagopa/pn-frontend/issues/1439)) ([b28f472](https://github.com/pagopa/pn-frontend/commit/b28f47258e5bd3cf4d9a2a3c95b86bfb42114ce8))
+
+
+### Features
+
+* **pn-13595:** removed automatic redirect before logout ([#1456](https://github.com/pagopa/pn-frontend/issues/1456)) ([c7d823f](https://github.com/pagopa/pn-frontend/commit/c7d823f72e9e64eeeccfcafebb0b05f4b188959c))
+
+
+
+
+
+## [2.11.1](https://github.com/pagopa/pn-frontend/compare/v2.11.0...v2.11.1) (2025-01-31)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
 # [2.11.0](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.2...v2.11.0) (2025-01-20)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp

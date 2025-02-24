@@ -2,21 +2,25 @@ import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
-import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
+import { getById, queryById, waitFor } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
-import { storageAarOps } from '../../../utility/storage';
+import { storageRapidAccessOps } from '../../../utility/storage';
 import Login from '../Login';
 
 const mockAssign = vi.fn();
-let mockSearchParams = true;
+let mockSearchParamsAar = true;
+let mockSearchParamsRetrievalId = false;
 
 // simulate url params
 function mockCreateMockedSearchParams() {
   const mockedSearchParams = new URLSearchParams();
-  if (mockSearchParams) {
+  if (mockSearchParamsAar) {
     mockedSearchParams.set(AppRouteParams.AAR, 'fake-aar-token');
+  }
+  if (mockSearchParamsRetrievalId) {
+    mockedSearchParams.set(AppRouteParams.RETRIEVAL_ID, 'fake-retrieval_id');
   }
   return mockedSearchParams;
 }
@@ -47,7 +51,7 @@ describe('test login page', () => {
   });
 
   afterEach(() => {
-    storageAarOps.delete();
+    storageRapidAccessOps.delete();
     vi.clearAllMocks();
   });
 
@@ -69,10 +73,10 @@ describe('test login page', () => {
     expect(cieButton).toBeInTheDocument();
     const spidSelect = queryById(container, 'spidSelect');
     expect(spidSelect).not.toBeInTheDocument();
-    expect(storageAarOps.read()).toBe('fake-aar-token');
+    expect(storageRapidAccessOps.read()).toEqual([AppRouteParams.AAR, 'fake-aar-token']);
   });
 
-  it('select spid login', () => {
+  it('select spid login', async () => {
     const { container } = render(
       <BrowserRouter>
         <Login />
@@ -80,7 +84,7 @@ describe('test login page', () => {
     );
     const spidButton = getById(container, 'spidButton');
     fireEvent.click(spidButton!);
-    const spidSelect = getById(container, 'spidSelect');
+    const spidSelect = await waitFor(() => document.querySelector('#spidSelect'));
     expect(spidSelect).toBeInTheDocument();
   });
 
@@ -100,12 +104,22 @@ describe('test login page', () => {
   });
 
   it('not store data in session storage', () => {
-    mockSearchParams = false;
+    mockSearchParamsAar = false;
     render(
       <BrowserRouter>
         <Login />
       </BrowserRouter>
     );
-    expect(storageAarOps.read()).toBeUndefined();
+    expect(storageRapidAccessOps.read()).toBeUndefined();
+  });
+
+  it('store retrievalId in session storage', () => {
+    mockSearchParamsRetrievalId = true;
+    render(
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
+    expect(storageRapidAccessOps.read()).toEqual([AppRouteParams.RETRIEVAL_ID, 'fake-retrieval_id']);
   });
 });

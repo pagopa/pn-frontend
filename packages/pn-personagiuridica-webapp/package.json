@@ -1,7 +1,7 @@
 {
   "name": "@pagopa-pn/pn-personagiuridica-webapp",
   "description": "SEND per la persona giuridica",
-  "version": "2.11.0",
+  "version": "2.12.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -82,7 +82,7 @@
     "@typescript-eslint/parser": "^6.7.3",
     "@vitejs/plugin-basic-ssl": "^1.1.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "@vitest/coverage-v8": "^1.3.1",
+    "@vitest/coverage-v8": "^1.6.1",
     "axios-mock-adapter": "^1.22.0",
     "eslint": "7.11.0",
     "eslint-config-prettier": "^8.10.0",
@@ -95,7 +95,7 @@
     "prettier": "^2.8.8",
     "sonarqube-scanner": "^3.3.0",
     "vite": "^5.1.4",
-    "vitest": "^1.3.1",
+    "vitest": "^1.6.1",
     "vitest-sonar-reporter": "^2.0.0"
   }
 }
