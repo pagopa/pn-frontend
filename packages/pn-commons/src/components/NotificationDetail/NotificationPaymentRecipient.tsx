@@ -333,7 +333,7 @@ const PaymentButtons = ({
           fullWidth
           variant="contained"
           data-testid="tpp-pay-button"
-          onClick={() => () => handleCheckPaymentSelected('tpp')}
+          onClick={() => handleCheckPaymentSelected('tpp')}
         >
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit-tpp', undefined, {
             name: paymentTpp?.paymentButton,
