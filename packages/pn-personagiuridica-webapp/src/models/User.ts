@@ -39,13 +39,15 @@ export interface User extends BasicUser {
   source?: UserSource;
 }
 
-export enum SourceChannel {
-  WEB = 'WEB',
-  // B2B = 'B2B',
-  // TPP = 'TPP',
+export interface UserSource {
+  channel: 'WEB';
+  details: string; // 'QR_CODE';
 }
 
-export interface UserSource {
-  channel: SourceChannel;
-  details: string; // 'QR_CODE';
+export interface TokenExchangeBody {
+  authorizationToken: string;
+  source?: {
+    type: 'QR';
+    id: string;
+  };
 }

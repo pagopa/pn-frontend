@@ -10,7 +10,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
-import { PNRole, PartyRole, SourceChannel, User } from '../../models/User';
+import { PNRole, PartyRole, User } from '../../models/User';
 import { acceptTosPrivacy, exchangeToken, getTosPrivacyApproval, logout } from './actions';
 
 const roleMatcher = yup.object({
@@ -41,7 +41,7 @@ const userDataMatcher = yup
     hasGroup: yup.boolean(),
     source: yup
       .object({
-        channel: yup.string().oneOf(Object.values(SourceChannel)), // UserSource.channel
+        channel: yup.string().oneOf(['WEB']),
         details: yup.string(),
       })
       .optional(),

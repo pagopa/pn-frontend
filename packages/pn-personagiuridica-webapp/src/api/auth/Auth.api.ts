@@ -1,14 +1,6 @@
-import { User } from '../../models/User';
+import { TokenExchangeBody, User } from '../../models/User';
 import { authClient } from '../apiClients';
 import { AUTH_TOKEN_EXCHANGE } from './auth.routes';
-
-interface TokenExchangeBody {
-  authorizationToken: string;
-  source?: {
-    type: 'QR';
-    id: string;
-  };
-}
 
 export const AuthApi = {
   exchangeToken: async (spidToken: string, aar?: string): Promise<User> => {

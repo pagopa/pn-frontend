@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { authClient } from '../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../api/auth/auth.routes';
-import { PNRole, PartyRole, SourceChannel, User } from '../models/User';
+import { PNRole, PartyRole, User } from '../models/User';
 import { exchangeToken, logout } from '../redux/auth/actions';
 import { store } from '../redux/store';
 
@@ -65,7 +65,7 @@ export const userResponse: User = {
 export const userResponseWithSource: User = {
   ...userResponse,
   source: {
-    channel: SourceChannel.WEB,
+    channel: 'WEB',
     details: 'QR_CODE',
   },
 };
