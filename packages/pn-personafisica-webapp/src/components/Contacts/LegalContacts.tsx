@@ -134,6 +134,9 @@ const LegalContacts = () => {
     )
       .unwrap()
       .then(() => {
+        if (channelType === ChannelType.SERCQ_SEND) {
+          sessionStorage.removeItem('domicileBannerClosed');
+        }
         PFEventStrategyFactory.triggerEvent(
           PFEventsType[`SEND_REMOVE_${channelType}_SUCCESS`],
           'default'

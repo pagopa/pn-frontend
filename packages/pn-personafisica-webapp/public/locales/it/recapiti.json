@@ -12,7 +12,8 @@
     "pec-validation-banner": {
       "title": "La PEC è in validazione",
       "dod-enabled-message": "Fino al termine del processo, la Piattaforma SEND rimane attiva come domicilio digitale.",
-      "dod-disabled-message": "Fino al termine del processo non sarà possibile modificare i recapiti a valore legale."
+      "dod-disabled-message": "Fino al termine del processo non sarà possibile modificare i recapiti a valore legale.",
+      "parties-list": "La piattaforma SEND resterà il tuo domicilio digitale per {{list}} fino al completamento della validazione."
     },
     "pec-description": "Quando un ente ti invia una notifica SEND, ricevi l’avviso a valore legale sulla PEC che hai scelto.",
     "link-pec-placeholder": "La tua PEC",

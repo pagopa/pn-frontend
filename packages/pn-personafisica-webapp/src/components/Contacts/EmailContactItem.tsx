@@ -223,6 +223,7 @@ const EmailContactItem: React.FC = () => {
       actions={getActions()}
       expanded={isEmailActive}
       data-testid="emailContact"
+      slotProps={{ Card: { id: 'emailContactSection' } }}
     >
       {!isEmailActive && (
         <Typography variant="body1" fontSize={{ xs: '14px', lg: '16px' }} mb={3}>

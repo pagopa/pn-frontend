@@ -47,7 +47,7 @@ describe('DomicileBanner component', () => {
     const button = getByText('domicile-banner.no-sercq-cta');
     fireEvent.click(button);
     expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.RECAPITI);
+    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DIGITAL_DOMICILE_ACTIVATION);
     expect(testStore.getState().contactsState.event).toStrictEqual({
       destination: ChannelType.SERCQ_SEND,
       source: ContactSource.HOME_NOTIFICHE,

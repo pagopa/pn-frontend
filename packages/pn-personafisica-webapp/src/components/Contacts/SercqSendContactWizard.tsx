@@ -142,6 +142,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWizar
     dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
       .then(() => {
+        sessionStorage.removeItem('domicileBannerClosed');
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS, 'default');
         // show success message
         dispatch(
@@ -150,7 +151,6 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWizar
             message: t(`legal-contacts.sercq_send-added-successfully`, { ns: 'recapiti' }),
           })
         );
-
         goToNextStep && goToNextStep();
       })
       .catch(() => {});

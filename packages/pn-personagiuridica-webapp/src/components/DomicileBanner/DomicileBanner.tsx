@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { Alert, AlertColor, Box, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { AddressType, ChannelType, ContactOperation, ContactSource } from '../../models/contacts';
+import { ChannelType, ContactOperation, ContactSource } from '../../models/contacts';
 import * as routes from '../../navigation/routes.const';
-import { setExternalEvent } from '../../redux/contact/reducers';
+import { contactsSelectors, setExternalEvent } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { closeDomicileBanner } from '../../redux/sidemenu/reducers';
 import { RootState } from '../../redux/store';
@@ -85,35 +85,34 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
   const { IS_DOD_ENABLED } = getConfiguration();
-
-  const digitalAddresses = useAppSelector(
-    (state: RootState) => state.contactsState.digitalAddresses
+  const { defaultPECAddress, defaultSERCQ_SENDAddress, courtesyAddresses } = useAppSelector(
+    contactsSelectors.selectAddresses
   );
 
-  const hasSercqSend = digitalAddresses.find((addr) => addr.channelType === ChannelType.SERCQ_SEND);
-  const hasCourtesyAddresses =
-    digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY).length > 0;
-  const domicileBannerData: DomicileBannerData | null = getDomicileData(
-    source,
-    !!hasSercqSend,
-    hasCourtesyAddresses,
-    IS_DOD_ENABLED
-  );
+  const hasCourtesyAddresses = courtesyAddresses.length > 0;
+
+  const domicileBannerData: DomicileBannerData | null = defaultPECAddress
+    ? null
+    : getDomicileData(source, !!defaultSERCQ_SENDAddress, hasCourtesyAddresses, IS_DOD_ENABLED);
 
   const handleClose = () => {
     dispatch(closeDomicileBanner());
-    // sessionStorage.setItem('domicileBannerClosed', 'true');
+    sessionStorage.setItem('domicileBannerClosed', 'true');
   };
 
   const handleClick = (destination?: ChannelType, operation?: ContactOperation) => {
     if (destination && operation) {
+      if (destination === ChannelType.SERCQ_SEND && operation === ContactOperation.ADD) {
+        navigate(routes.DIGITAL_DOMICILE_ACTIVATION);
+      } else {
+        navigate(routes.RECAPITI);
+      }
       dispatch(setExternalEvent({ destination, source, operation }));
     }
-    navigate(routes.RECAPITI);
   };
 
   return open && domicileBannerData ? (
-    <Box mb={5}>
+    <Box my={4}>
       <Alert
         severity={domicileBannerData.severity}
         variant="outlined"
