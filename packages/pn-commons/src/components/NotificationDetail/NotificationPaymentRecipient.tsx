@@ -42,13 +42,6 @@ type Props = {
   handleFetchPaymentsInfo: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
 };
 
-const RenderAlertPayment: React.FC<{ errorOnPayment: boolean }> = ({ errorOnPayment }) =>
-  errorOnPayment && (
-    <Alert severity="error" variant="outlined" data-testid="payment-error">
-      {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error-payment')}
-    </Alert>
-  );
-
 const NotificationPaymentRecipient: React.FC<Props> = ({
   payments,
   isCancelled,
@@ -224,7 +217,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               ) : null
             )}
           </RadioGroup>
-
           {paginationData.totalElements > paginationData.size && (
             <Box width="full" display="flex" justifyContent="right" data-testid="pagination-box">
               <CustomPagination
@@ -235,7 +227,11 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               />
             </Box>
           )}
-          <RenderAlertPayment errorOnPayment={errorOnPayment} />
+          {errorOnPayment && (
+            <Alert severity="error" variant="outlined" data-testid="payment-error">
+              {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error-payment')}
+            </Alert>
+          )}
           {!allPaymentsIsPaid && (
             <Fragment>
               <Button
