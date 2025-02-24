@@ -18,11 +18,11 @@ export enum AUTH_ACTIONS {
  * Exchange token action between selfcare and pn.
  * If token is valid, user info are set in sessionStorage
  */
-export const exchangeToken = createAsyncThunk<User, string>(
+export const exchangeToken = createAsyncThunk<User, { spidToken: string; aar?: string }>(
   'exchangeToken',
-  async (spidToken, { rejectWithValue }) => {
+  async ({ spidToken, aar }, { rejectWithValue }) => {
     try {
-      return await AuthApi.exchangeToken(spidToken);
+      return await AuthApi.exchangeToken(spidToken, aar);
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
