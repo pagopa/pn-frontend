@@ -25,10 +25,9 @@ import { DowntimeApiFactory } from '../../generated-client/downtime-logs';
 import {
   BffCheckAarRequest,
   BffCheckAarResponse,
-  BffCheckTPPResponse,
   NotificationReceivedApiFactory,
 } from '../../generated-client/notifications';
-import { PaymentsApiFactory } from '../../generated-client/payments';
+import { BffPaymentTppResponse, PaymentsApiFactory } from '../../generated-client/payments';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { PFEventsType } from '../../models/PFEventsType';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -44,7 +43,6 @@ export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION_PAYMENT_URL = 'getReceivedNotificationPaymentUrl',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
   EXCHANGE_NOTIFICATION_QR_CODE = 'exchangeNotificationQrCode',
-  EXCHANGE_NOTIFICATION_RETRIEVAL_ID = 'exchangeNotificationRetrievalId',
 }
 
 export const getReceivedNotification = createAsyncThunk<
@@ -282,16 +280,29 @@ export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, 
   }
 );
 
-export const exchangeNotificationRetrievalId = createAsyncThunk<BffCheckTPPResponse, string>(
-  NOTIFICATION_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
-  async (retrievalId: string, { rejectWithValue }) => {
+export const getReceivedNotificationPaymentTppUrl = createAsyncThunk<
+  BffPaymentTppResponse,
+  { retrievalId: string; noticeCode: string; creditorTaxId: string }
+>(
+  'getReceivedNotificationPaymentTppUrl',
+  async ({ retrievalId, noticeCode, creditorTaxId }, { rejectWithValue }) => {
     try {
-      const notificationReceivedApiFactory = NotificationReceivedApiFactory(
-        undefined,
-        undefined,
-        apiClient
+      const paymentsApiFactory = PaymentsApiFactory(undefined, undefined, apiClient);
+      const iun = store.getState().notificationState.notification.iun;
+      setPaymentCache(
+        {
+          currentPayment: {
+            noticeCode,
+            creditorTaxId,
+          },
+        },
+        iun
       );
-      const response = await notificationReceivedApiFactory.checkTppV1(retrievalId);
+      const response = await paymentsApiFactory.paymentsTppV1(
+        retrievalId,
+        noticeCode,
+        creditorTaxId
+      );
       return response.data;
     } catch (e: any) {
       return rejectWithValue(parseError(e));

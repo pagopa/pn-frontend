@@ -7,14 +7,16 @@ import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { acceptMandate, rejectMandate } from '../../delegation/actions';
 import { store } from '../../store';
-import { getDomicileInfo, getSidemenuInformation } from '../actions';
+import { exchangeNotificationRetrievalId, getDomicileInfo, getSidemenuInformation } from '../actions';
 import { closeDomicileBanner } from '../reducers';
+import { BffCheckTPPResponse } from '../../../generated-client/notifications';
 
 const initialState = {
   pendingDelegators: 0,
   delegators: [],
   digitalAddresses: [],
   domicileBannerOpened: true,
+  paymentTpp: {},
 };
 
 const pendingDelegators = mandatesByDelegate.filter((d) => d.status === 'pending');
@@ -120,5 +122,20 @@ describe('Sidemenu redux state tests', () => {
     const action = await store.dispatch(getDomicileInfo());
     expect(action.type).toBe('getDomicileInfo/fulfilled');
     expect(action.payload).toEqual(digitalAddresses);
+  });
+
+  it('Should be able to set tpp info from retrievalId', async () => {
+    const mockRetrievalId = 'mocked-retrieval-id';
+    const mockResponse: BffCheckTPPResponse = {
+      paymentButton: 'Hype',
+      retrievalId: mockRetrievalId,
+      originId: 'mocked-iun',
+    };
+    mock
+      .onGet(`/bff/v1/notifications/received/check-tpp?retrievalId=${mockRetrievalId}`)
+      .reply(200, mockResponse);
+    const action = await store.dispatch(exchangeNotificationRetrievalId(mockRetrievalId));
+    expect(action.type).toBe('exchangeNotificationRetrievalId/fulfilled');
+    expect(action.payload).toEqual(mockResponse);
   });
 });
