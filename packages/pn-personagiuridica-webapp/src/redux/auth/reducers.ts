@@ -39,6 +39,12 @@ const userDataMatcher = yup
     organization: organizationMatcher,
     desired_exp: yup.number(),
     hasGroup: yup.boolean(),
+    source: yup
+      .object({
+        channel: yup.string().oneOf(['WEB']),
+        details: yup.string(),
+      })
+      .optional(),
   })
   .noUnknown(true);
 
