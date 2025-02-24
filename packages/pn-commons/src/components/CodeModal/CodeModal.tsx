@@ -67,6 +67,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
       error,
     }: Props,
     ref
+    // eslint-disable-next-line sonarjs/cognitive-complexity
   ) => {
     const [code, setCode] = useState(initialValues);
     const [internalError, setInternalError] = useState({
@@ -104,6 +105,14 @@ const CodeModal = forwardRef<ModalHandle, Props>(
 
     const confirmHandler = () => {
       if (!confirmCallback) {
+        return;
+      }
+      if (!codeIsValid) {
+        setInternalError({
+          internalHasError: true,
+          internalErrorTitle: getLocalizedOrDefaultLabel('common', `errors.empty_code.title`),
+          internalErrorMessage: getLocalizedOrDefaultLabel('common', `errors.empty_code.message`),
+        });
         return;
       }
       confirmCallback(code);
@@ -181,10 +190,10 @@ const CodeModal = forwardRef<ModalHandle, Props>(
           {confirmLabel && confirmCallback && (
             <Button
               id="code-confirm-button"
-              variant="contained"
+              variant={internalHasError ? 'outlined' : 'contained'}
+              color={internalHasError ? 'error' : 'primary'}
               data-testid="codeConfirmButton"
               onClick={confirmHandler}
-              disabled={!codeIsValid}
             >
               {confirmLabel}
             </Button>

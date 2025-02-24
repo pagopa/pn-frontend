@@ -40,7 +40,7 @@ describe('AcceptDelegationModal', () => {
     const dialog = screen.getByTestId('codeDialog');
     const codeConfirmButton = within(dialog).getByTestId('codeConfirmButton');
     const codeCancelButton = within(dialog).getByTestId('codeCancelButton');
-    expect(codeConfirmButton).toBeDisabled();
+    expect(codeConfirmButton).toBeEnabled();
     fireEvent.click(codeCancelButton);
     expect(cancelCbk).toHaveBeenCalledTimes(1);
   });
@@ -165,7 +165,7 @@ describe('AcceptDelegationModal', () => {
     );
     let codeDialog = screen.getByTestId('codeDialog');
     const codeConfirmButton = within(codeDialog).getByTestId('codeConfirmButton');
-    expect(codeConfirmButton).toBeDisabled();
+    expect(codeConfirmButton).toBeEnabled();
     const codeInputs = codeDialog.querySelectorAll('input');
     codeInputs.forEach((input, index) => {
       fireEvent.change(input, { target: { value: index.toString() } });
@@ -202,7 +202,7 @@ describe('AcceptDelegationModal', () => {
     );
     const codeDialog = screen.getByTestId('codeDialog');
     const codeConfirmButton = within(codeDialog).getByTestId('codeConfirmButton');
-    expect(codeConfirmButton).toBeDisabled();
+    expect(codeConfirmButton).toBeEnabled();
     const codeInputs = codeDialog.querySelectorAll('input');
     codeInputs.forEach((input, index) => {
       fireEvent.change(input, { target: { value: index.toString() } });
@@ -236,7 +236,7 @@ describe('AcceptDelegationModal', () => {
     );
     const codeDialog = screen.getByTestId('codeDialog');
     const codeConfirmButton = within(codeDialog).getByTestId('codeConfirmButton');
-    expect(codeConfirmButton).toBeDisabled();
+    expect(codeConfirmButton).toBeEnabled();
     const codeInputs = codeDialog.querySelectorAll('input');
     codeInputs.forEach((input, index) => {
       fireEvent.change(input, { target: { value: index.toString() } });
