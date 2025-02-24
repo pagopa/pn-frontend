@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { render } from '../../__test__/test-utils';
-import { PNRole, PartyRole } from '../../redux/auth/types';
+import { PNRole, PartyRole } from '../../models/User';
 import ApiIntegration from '../ApiIntegration.page';
 
 vi.mock('react-i18next', () => ({
