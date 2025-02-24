@@ -26,7 +26,8 @@
     "pagopa-notice": "Avviso pagoPA",
     "paid": "Pagato",
     "f24-attached": "Modelli F24 allegati",
-    "attachments": "allegati"
+    "attachments": "allegati",
+    "f24-dialog-title": "Modelli F24 allegati alla notifica {{iun}}"
   },
   "table": {
     "title": "Tabella delle notifiche",

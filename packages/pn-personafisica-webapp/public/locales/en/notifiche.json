@@ -61,8 +61,6 @@
     "show-less": "See fewer details",
     "cancelled-alert-text": "This notification has been canceled by the sending institution. You can ignore the content.",
     "disclaimer-link": "Discover more",
-    "pending": "Awaiting confirmation",
-    "menu-aria-label": "Actions menu",
     "payment": {
       "title": "Payment",
       "single-payment-subtitle": "The final amount may be different than what is indicated.",
