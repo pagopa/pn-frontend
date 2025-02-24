@@ -6,7 +6,8 @@
     "oggetto": "Oggetto",
     "iun": "Codice IUN",
     "status": "Stato",
-    "show-detail": "Vedi dettaglio"
+    "show-detail": "Vedi dettaglio",
+    "aria-action-table": "Vedi dettaglio notifica con iun : {{iun}}"
   },
   "filters": {
     "iun": "Cerca per Codice IUN",
@@ -104,7 +105,8 @@
         "notice-error": "Si è verificato un problema con questo avviso.",
         "assistence": "Ricaricalo o contatta l’assistenza con il codice errore",
         "duplicated": "Questo avviso è già stato pagato. Lo stato verrà aggiornato a breve."
-      }
+      },
+      "error-payment": "Seleziona un avviso di pagamento"
     },
     "acts_files": {
       "downloadable_acts": "I documenti sono disponibili online per 120 giorni dal perfezionamento della notifica.",
@@ -398,7 +400,7 @@
     "canceled": "Annullata",
     "canceled-tooltip": "L'ente ha annullato l'invio della notifica",
     "canceled-description": "L'ente ha annullato l'invio della notifica.",
-    "returned-to-sender":"Resa al mittente",
+    "returned-to-sender": "Resa al mittente",
     "returned-to-sender-tooltip-monorecipient": "Il destinatario risulta deceduto",
     "returned-to-sender-tooltip-multirecipient": "Tutti i destinatari sono deceduti",
     "returned-to-sender-description-monorecipient": "Il destinatario risulta deceduto.",

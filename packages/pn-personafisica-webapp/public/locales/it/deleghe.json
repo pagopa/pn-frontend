@@ -44,7 +44,9 @@
       "active": "Attiva",
       "pending": "In attesa di conferma",
       "menu-aria-label": "Menù azioni"
-    }
+    },
+    "revoke-successfully": "La delega è stata revocata.",
+    "reject-successfully": "La delega è stata rifiutata."
   },
   "nuovaDelega": {
     "breadcrumb": "Nuova delega",
