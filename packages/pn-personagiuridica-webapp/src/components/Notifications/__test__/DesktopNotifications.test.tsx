@@ -111,8 +111,8 @@ describe('DesktopNotifications Component', () => {
       result = render(<DesktopNotifications notifications={notificationsToFe.resultsPage} />);
     });
     const rows = result!.getAllByTestId('notificationsTable.body.row');
-    const notificationsTableCell = within(rows[0]).getAllByRole('cell');
-    fireEvent.click(notificationsTableCell[0]);
+    const notificationsTableCellArrow = within(rows[0]).getByTestId('goToNotificationDetail');
+    fireEvent.click(notificationsTableCellArrow);
     await waitFor(() => {
       expect(mockNavigateFn).toHaveBeenCalledTimes(1);
       expect(mockNavigateFn).toHaveBeenCalledWith(
@@ -133,8 +133,8 @@ describe('DesktopNotifications Component', () => {
       );
     });
     const rows = result!.getAllByTestId('notificationsTable.body.row');
-    const notificationsTableCell = within(rows[0]).getAllByRole('cell');
-    fireEvent.click(notificationsTableCell[0]);
+    const notificationsTableCellArrow = within(rows[0]).getByTestId('goToNotificationDetail');
+    fireEvent.click(notificationsTableCellArrow);
     await waitFor(() => {
       expect(mockNavigateFn).toHaveBeenCalledTimes(1);
       expect(mockNavigateFn).toHaveBeenCalledWith(

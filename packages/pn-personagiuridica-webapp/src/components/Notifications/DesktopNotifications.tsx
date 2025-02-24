@@ -74,30 +74,35 @@ const DesktopNotifications = ({
     {
       id: 'sentAt',
       label: t('table.data'),
-      cellProps: { width: '11%' },
+      cellProps: { width: '10%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'sender',
       label: t('table.mittente'),
-      cellProps: { width: '13%' },
+      cellProps: { width: '19%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
-      cellProps: { width: '22%' },
+      cellProps: { width: '19%' },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      cellProps: { width: '20%' },
+      cellProps: { width: '27%' },
     },
     {
       id: 'notificationStatus',
       label: t('table.status'),
       cellProps: { width: '18%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
+    },
+    {
+      id: 'action',
+      label: '',
+      cellProps: { width: '6%' },
     },
   ];
 
@@ -121,12 +126,11 @@ const DesktopNotifications = ({
 
   const showFilters = notifications?.length > 0 || filtersApplied;
 
-  // Navigation handlers
-  const handleRowClick = (row: Row<Notification>) => {
-    if (isDelegatedPage && row.mandateId) {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun, row.mandateId));
+  const handleRowClick = (iun: string, mandateId?: string) => {
+    if (isDelegatedPage && mandateId) {
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(iun, mandateId));
     } else {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun));
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun));
     }
   };
 
@@ -134,7 +138,10 @@ const DesktopNotifications = ({
     <>
       <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
       {rows.length ? (
-        <PnTable testId="notificationsTable">
+        <PnTable
+          testId="notificationsTable"
+          slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
+        >
           <PnTableHeader>
             {columns.map((column) => (
               <PnTableHeaderCell
@@ -143,6 +150,7 @@ const DesktopNotifications = ({
                 columnId={column.id}
                 sortable={column.sortable}
                 handleClick={onChangeSorting}
+                cellProps={column.cellProps}
               >
                 {column.label}
               </PnTableHeaderCell>
@@ -154,13 +162,15 @@ const DesktopNotifications = ({
                 {columns.map((column) => (
                   <PnTableBodyCell
                     key={column.id}
-                    onClick={() => handleRowClick(row)}
                     cellProps={{
                       ...column.cellProps,
-                      cursor: 'pointer',
                     }}
                   >
-                    <NotificationsDataSwitch data={row} type={column.id} />
+                    <NotificationsDataSwitch
+                      handleRowClick={handleRowClick}
+                      data={row}
+                      type={column.id}
+                    />
                   </PnTableBodyCell>
                 ))}
               </PnTableBodyRow>

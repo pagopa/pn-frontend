@@ -30,9 +30,11 @@ const ValidatingPecBanner: React.FC = () => {
 
   // eslint-disable-next-line functional/no-let
   let bannerMessage = '';
+
   if (!isValidatingDefaultPec && validatingSpecialPecList.length === 0) {
-    return;
+    return <></>;
   }
+
   if (isValidatingDefaultPec) {
     if (isDefaultSercqSendActive) {
       bannerMessage = 'dod-enabled-message';

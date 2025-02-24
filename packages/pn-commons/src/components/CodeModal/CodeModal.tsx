@@ -27,8 +27,8 @@ type Props = {
   codeSectionTitle: string;
   codeSectionAdditional?: ReactNode;
   confirmLabel?: string;
-  cancelLabel?: string;
-  cancelCallback?: () => void;
+  cancelLabel: string;
+  cancelCallback: () => void;
   confirmCallback?: (values: Array<string>) => void;
   isReadOnly?: boolean;
   error?: { title: string; message: string; hasError: boolean };
@@ -158,11 +158,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
                 data-testid="copyCodeButton"
                 sx={{ mt: 1.5 }}
                 value={initialValues.join('')}
-                tooltipTitle={getLocalizedOrDefaultLabel(
-                  'delegations',
-                  'deleghe.code_copied',
-                  'Codice copiato'
-                )}
+                tooltipTitle={getLocalizedOrDefaultLabel('delegations', 'deleghe.code_copied')}
               />
             )}
           </Box>
@@ -177,16 +173,14 @@ const CodeModal = forwardRef<ModalHandle, Props>(
           )}
         </PnDialogContent>
         <PnDialogActions>
-          {cancelLabel && cancelCallback && (
-            <Button
-              id="code-cancel-button"
-              variant="outlined"
-              onClick={cancelCallback}
-              data-testid="codeCancelButton"
-            >
-              {cancelLabel}
-            </Button>
-          )}
+          <Button
+            id="code-cancel-button"
+            variant="outlined"
+            onClick={cancelCallback}
+            data-testid="codeCancelButton"
+          >
+            {cancelLabel}
+          </Button>
           {confirmLabel && confirmCallback && (
             <Button
               id="code-confirm-button"
