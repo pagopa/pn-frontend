@@ -5,7 +5,6 @@ import {
   AppMessage,
   AppResponseMessage,
   AppRouteParams,
-  LegalFactId,
   NotificationDetail as NotificationDetailModel,
   NotificationDetailOtherDocument,
   NotificationStatus,
@@ -67,7 +66,7 @@ const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number
   const timelineElementDigitalSuccessWorkflow = notification.timeline.filter(
     (t) => t.category === TimelineCategory.NOTIFICATION_VIEWED && t.details.recIndex === recIndex
   )[0];
-  return timelineElementDigitalSuccessWorkflow.legalFactsIds![0] as LegalFactId;
+  return timelineElementDigitalSuccessWorkflow.legalFactsIds![0];
 };
 
 const delegator = mandatesByDelegate.find(
@@ -465,8 +464,8 @@ describe('NotificationDetail Page', async () => {
     const backButton = result.getByTestId('breadcrumb-indietro-button');
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.NOTIFICHE);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE);
   });
 
   it('navigation from QR code - does not include back button', async () => {
@@ -614,8 +613,8 @@ describe('NotificationDetail Page', async () => {
     const backButton = result.getByTestId('breadcrumb-indietro-button');
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(
       routes.GET_NOTIFICHE_DELEGATO_PATH(delegator?.mandateId!)
     );
   });
@@ -677,8 +676,8 @@ describe('NotificationDetail Page', async () => {
     expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
     expect(mock.history.post[1].url).toBe(`/bff/v1/payments/cart`);
     await vi.waitFor(() => {
-      expect(mockAssignFn).toBeCalledTimes(1);
-      expect(mockAssignFn).toBeCalledWith('https://mocked-url.com');
+      expect(mockAssignFn).toHaveBeenCalledTimes(1);
+      expect(mockAssignFn).toHaveBeenCalledWith('https://mocked-url.com');
     });
     vi.useRealTimers();
   });

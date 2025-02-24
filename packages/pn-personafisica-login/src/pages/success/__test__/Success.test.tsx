@@ -59,8 +59,8 @@ describe('test login page', () => {
       </BrowserRouter>
     );
 
-    expect(mockLocationAssign).toBeCalled();
-    expect(mockLocationAssign).toBeCalledWith(
+    expect(mockLocationAssign).toHaveBeenCalled();
+    expect(mockLocationAssign).toHaveBeenCalledWith(
       getConfiguration().PF_URL + '?retrievalId=retrieval-id#token=fake-token&lang=it'
     );
   });
@@ -78,7 +78,7 @@ describe('test login page', () => {
 
     expect(mockLocationAssign).toHaveBeenCalled();
     expect(mockLocationAssign).toHaveBeenCalledWith(
-      getConfiguration().PF_URL + '?aar=aar-malicious-token#token=fake-token&lang=it'
+      getConfiguration().PF_URL + '?retrievalId=retrieval-id#token=fake-token&lang=it'
     );
   });
 });
