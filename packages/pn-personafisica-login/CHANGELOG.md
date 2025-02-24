@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/pagopa/pn-frontend/compare/v2.12.0-RC.1...v2.12.0) (2025-02-18)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [2.12.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.12.0-RC.0...v2.12.0-RC.1) (2025-02-05)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [2.12.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.11.1...v2.12.0-RC.0) (2025-02-04)
+
+
+### Bug Fixes
+
+* **pn-13210:** manage accessibility when closing modal ([#1451](https://github.com/pagopa/pn-frontend/issues/1451)) ([2b4981b](https://github.com/pagopa/pn-frontend/commit/2b4981bddc8f6651ac47bb2cf371f63e33962959))
+* **pn-13211:** Removed redirect when login fails ([#1445](https://github.com/pagopa/pn-frontend/issues/1445)) ([6ff0d2a](https://github.com/pagopa/pn-frontend/commit/6ff0d2aec98f161d5f23e7af49e41c31c7a7dcb7))
+
+
+
+
+
 ## [2.11.1](https://github.com/pagopa/pn-frontend/compare/v2.11.0...v2.11.1) (2025-01-31)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
