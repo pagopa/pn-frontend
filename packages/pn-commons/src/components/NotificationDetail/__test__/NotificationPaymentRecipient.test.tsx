@@ -57,6 +57,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(pagoPABox).toHaveLength(pageLength > 5 ? 5 : pageLength);
     expect(downloadPagoPANotice).not.toBeInTheDocument();
     expect(payButton).toBeInTheDocument();
+    expect(payButton).toBeEnabled();
     expect(f24OnlyBox).toBeInTheDocument();
     expect(paginationBox).toBeInTheDocument();
   });
@@ -99,13 +100,14 @@ describe('NotificationPaymentRecipient Component', () => {
     // wait...
     downloadPagoPANotice = getByTestId('download-pagoPA-notice-button');
     expect(downloadPagoPANotice).toBeInTheDocument();
-    expect(payButton).not.toBeDisabled();
+    expect(payButton).toBeEnabled();
 
     // check f24
     const f24Download = getByTestId('f24-download');
     expect(f24Download).toBeInTheDocument();
     // unselect payment
     fireEvent.click(radioButton!);
+    expect(payButton).toBeEnabled();
     expect(downloadPagoPANotice).not.toBeInTheDocument();
     expect(f24Download).not.toBeInTheDocument();
   });
