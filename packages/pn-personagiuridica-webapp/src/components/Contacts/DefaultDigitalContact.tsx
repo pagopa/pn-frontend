@@ -178,6 +178,7 @@ const DefaultDigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 formik.touched[`default_${contactType}`] && formik.errors[`default_${contactType}`]
               }
               sx={{ mb: 2 }}
+              autoFocus
             />
             <ButtonNaked
               key="saveButton"

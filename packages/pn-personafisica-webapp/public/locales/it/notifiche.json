@@ -107,7 +107,8 @@
         "notice-error": "Si è verificato un problema con questo avviso.",
         "assistence": "Ricaricalo o contatta l’assistenza con il codice errore",
         "duplicated": "Questo avviso è già stato pagato. Lo stato verrà aggiornato a breve."
-      }
+      },
+      "error-payment": "Seleziona un avviso di pagamento"
     },
     "acts_files": {
       "downloadable_acts": "I documenti sono disponibili online per 120 giorni dal perfezionamento della notifica.",
