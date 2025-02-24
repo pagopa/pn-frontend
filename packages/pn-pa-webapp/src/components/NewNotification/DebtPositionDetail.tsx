@@ -29,6 +29,7 @@ import {
 } from '../../models/NewNotification';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { uploadNotificationPaymentDocument } from '../../redux/newNotification/actions';
+import { setPayments } from '../../redux/newNotification/reducers';
 import { RootState } from '../../redux/store';
 import NewNotificationCard from './NewNotificationCard';
 import PaymentMethods from './PaymentMethods';
@@ -83,10 +84,21 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
   const formatPayments = (): Array<NewNotificationRecipient> => {
     const recipients = _.cloneDeep(notification.recipients);
     return recipients.map((recipient) => {
+      const recipientData = formik.values.recipients[recipient.taxId];
+      console.log(recipientData);
+
+      const payments = [
+        ...recipientData.pagoPa
+          // .filter((payment) => payment?.file?.data)
+          .map((payment) => ({ pagoPa: payment })),
+        ...recipientData.f24
+          .filter((payment) => payment?.file?.data)
+          .map((payment) => ({ f24: payment })),
+      ];
+
       // eslint-disable-next-line functional/immutable-data
-      recipient.payments = formik.values.recipients[recipient.taxId].filter(
-        (payment) => payment.pagoPa?.file?.data || payment.f24?.file.data
-      );
+      recipient.payments = payments;
+
       return recipient;
     });
   };
@@ -99,7 +111,15 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
       vat: notification.vat ?? undefined,
       pagoPaIntMode: notification.pagoPaIntMode ?? undefined,
       recipients: notification.recipients.reduce(
-        (acc: { [taxId: string]: Array<NewNotificationPayment> }, recipient) => {
+        (
+          acc: {
+            [taxId: string]: {
+              pagoPa: Array<NewNotificationPagoPaPayment>;
+              f24: Array<NewNotificationF24Payment>;
+            };
+          },
+          recipient
+        ) => {
           const recipientPayments = !_.isNil(recipient.payments) ? recipient.payments : [];
           const debtPosition = recipient.debtPosition;
 
@@ -132,7 +152,21 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
             });
           }
           /* eslint-enable functional/immutable-data */
-          return { ...acc, [recipient.taxId]: payments };
+
+          const pagoPaPayments = payments
+            .filter((p) => p.pagoPa)
+            .map((p) => p.pagoPa as NewNotificationPagoPaPayment);
+          const f24Payments = payments
+            .filter((p) => p.f24)
+            .map((p) => p.f24 as NewNotificationF24Payment);
+
+          return {
+            ...acc,
+            [recipient.taxId]: {
+              pagoPa: pagoPaPayments,
+              f24: f24Payments,
+            },
+          };
         },
         {}
       ),
@@ -145,36 +179,31 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
       .string()
       .oneOf(Object.values(NotificationFeePolicy))
       .required(t('common.required-field')),
-    paFee: yup.number().when('notificationFeePolicy', {
-      is: NotificationFeePolicy.DELIVERY_MODE,
-      then: yup.number().required(t('common.required-field')),
-    }),
-    vat: yup.number().when('notificationFeePolicy', {
-      is: NotificationFeePolicy.DELIVERY_MODE,
-      then: yup.number().required(t('common.required-field')),
-    }),
+    paFee: yup
+      .number()
+      .optional()
+      .when('notificationFeePolicy', {
+        is: NotificationFeePolicy.DELIVERY_MODE,
+        then: yup.number().required(t('common.required-field')),
+      }),
+    vat: yup
+      .number()
+      .optional()
+      .when('notificationFeePolicy', {
+        is: NotificationFeePolicy.DELIVERY_MODE,
+        then: yup.number().required(t('common.required-field')),
+      }),
     // Ritorna errore se: la posizione debitoria contiene è di tipo pagoPa o pagoPaF24
     // e la pagoPaIntMode è NONE
-    pagoPaIntMode: yup
-      .string()
-      .oneOf(Object.values(PagoPaIntegrationMode))
-      .test(
-        'checkRecipientDebtPosition',
-        t('common.required-field'),
-        (value) =>
-          notification.recipients.some(
-            (r) =>
-              r.debtPosition === PaymentModel.PAGO_PA || r.debtPosition === PaymentModel.PAGO_PA_F24
-          ) && value !== PagoPaIntegrationMode.NONE
-      ),
+    pagoPaIntMode: yup.string().oneOf(Object.values(PagoPaIntegrationMode)),
     // pos. deb. PAGOPA: noticeCode e creditorTaxId obbligatori, file opzionale (pagoPaSchema)
     // pos. deb. F24: nome file e file obbligatori (f24Schema)
     // pos. deb. PAGOPA_F24: pagoPaSchema e f24Schema
-    recipients: yup.array().of(
-      yup.object().shape({
-        debtPosition: yup.string().required(t('common.required-field')),
-      })
-    ),
+    // recipients: yup.array().of(
+    //   yup.object().shape({
+    //     debtPosition: yup.string().required(t('common.required-field')),
+    //   })
+    // ),
   });
 
   const updateRefAfterUpload = async (paymentPayload: { [key: string]: PaymentObject }) => {
@@ -203,33 +232,24 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
     validationSchema,
     enableReinitialize: true,
     onSubmit: async () => {
-      // TODO: check if we need the isCompleted
-      // if (isCompleted) {
-      //   onConfirm();
-      // } else {
-      // Beware! -
-      // Recall that the taxId is the key for the payment document info in the Redux storage.
-      // If the user changes the taxId of a recipient and/or deletes a recipient
-      // after having attached payment documents,
-      // the information related to the "old" taxIds is kept in the Redux store
-      // until the user returns to the payment document step.
-      // Fortunately, the formatPaymentDocuments function "sanitizes" the payment document info,
-      // since it includes the information related to current taxIds only.
-      // If the call to formatPaymentDocuments were omitted, then we would probably risk sending
-      // garbage to the API call.
-      // Please take this note into consideration in case of refactoring of this part.
-      // --------------------------------------
-      // Carlos Lombardi, 2023.01.19
+      console.log('FORMAT PAYMENTS', formatPayments());
       const paymentData = await dispatch(uploadNotificationPaymentDocument(formatPayments()));
       const paymentPayload = paymentData.payload as { [key: string]: PaymentObject };
       if (paymentPayload) {
         await updateRefAfterUpload(paymentPayload);
       }
+      // Chiamare setDebtPositionDetail
+      dispatch(setPayments({ recipients: formatPayments() }));
       onConfirm();
     },
-    // },
   });
 
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    await formik.setFieldValue(name, value);
+  };
+
+  // TODO rename SetPayments in setDebtPotisionDetail e passare info radio button
   // useImperativeHandle(forwardedRef, () => ({
   //   confirm() {
   //     dispatch(setPayments({ recipients: formatPayments() }));
@@ -257,9 +277,9 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
               <Typography variant="caption">{t('notification-fee.description')}</Typography>
               <RadioGroup
                 aria-labelledby="notificationFee"
-                name={`notification-fee.title`}
+                name="notificationFeePolicy"
                 value={formik.values.notificationFeePolicy}
-                onChange={() => {}}
+                onChange={(e) => handleChange(e)}
                 sx={{ mt: 2 }}
               >
                 <FormControlLabel
@@ -302,9 +322,9 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
               </Alert>
               <RadioGroup
                 aria-labelledby="comunication-type-label"
-                name={`pagopa-int-mode.title`}
+                name="pagoPaIntMode"
                 value={formik.values.pagoPaIntMode}
-                onChange={() => {}}
+                onChange={(e) => handleChange(e)}
                 sx={{ mt: 2 }}
               >
                 <FormControlLabel
@@ -323,7 +343,12 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
             </Stack>
           </Box>
         </Paper>
-        <PaymentMethods notification={notification} formik={formik} />
+        <PaymentMethods
+          notification={notification}
+          formik={formik}
+          newPagopaPayment={newPagopaPayment}
+          newF24Payment={newF24Payment}
+        />
       </NewNotificationCard>
     </form>
   );

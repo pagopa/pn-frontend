@@ -525,8 +525,11 @@
         "pagopa-notice": "Avviso pagoPA",
         "f24": "F24",
         "payment-models": "Modelli di pagamento per",
-        "attach-pagopa-notice": "Allega Avviso pagoPA",
-        "attach-f24": "Allega Modello F24",
+        "attach-pagopa-notice": "Specifiche Avviso pagoPA",
+        "attach-f24": "Specifiche Modello F24",
+        "add-new-pagopa-notice": "Aggiungi codice di avviso pagoPA",
+        "add-new-f24": "Aggiungi un altro Modello F24",
+        "remove-payment": "Elimina",
         "nothing": "<0>Se questa notifica prevede un pagamento, torna a </0><1>Informazioni preliminari</1><2> e seleziona un modello. Poi, torna qui per caricarlo.</2>",
         "back-to-attachments": "Torna a Allegati"
       },

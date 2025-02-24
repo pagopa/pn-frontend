@@ -2,89 +2,21 @@ import { FormikProps } from 'formik';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Paper, Stack, TextField, Typography } from '@mui/material';
-import { FileUpload, SectionHeading, useIsMobile } from '@pagopa-pn/pn-commons';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Divider, Paper, Stack, Typography } from '@mui/material';
+import { SectionHeading } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import {
   NewNotification,
-  NewNotificationDocumentFile,
-  NewNotificationPayment,
+  NewNotificationF24Payment,
+  NewNotificationPagoPaPayment,
   NotificationFeePolicy,
   PagoPaIntegrationMode,
 } from '../../models/NewNotification';
-
-type PaymentBoxProps = {
-  id: string;
-  title: string;
-  onFileUploaded: (
-    id: string,
-    file?: File,
-    sha256?: { hashBase64: string; hashHex: string }
-  ) => void;
-  onRemoveFile: (id: string) => void;
-  fileUploaded: { file: NewNotificationDocumentFile };
-  senderTaxId: string;
-  noticeCode?: string;
-};
-
-const PaymentBox: React.FC<PaymentBoxProps> = ({
-  id,
-  title,
-  onFileUploaded,
-  onRemoveFile,
-  fileUploaded,
-  senderTaxId,
-  noticeCode,
-}) => {
-  const { t } = useTranslation(['notifiche']);
-  const isMobile = useIsMobile('md');
-
-  return (
-    <Fragment>
-      <Typography fontWeight={600} sx={{ marginTop: '30px' }} data-testid="paymentBox">
-        {title}
-      </Typography>
-      <FileUpload
-        data-testid="fileUploadInput"
-        uploadText={
-          isMobile ? t('new-notification.drag-doc-mobile') : t('new-notification.drag-doc-pc')
-        }
-        accept="application/pdf"
-        onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
-        onRemoveFile={() => onRemoveFile(id)}
-        sx={{ marginTop: '10px' }}
-        calcSha256
-        fileUploaded={fileUploaded}
-        showHashCode={false}
-      />
-      <Stack direction={isMobile ? 'column' : 'row'} spacing={2} sx={{ marginTop: '10px' }}>
-        <TextField
-          id="noticeCode"
-          label="Codice avviso"
-          fullWidth
-          name="noticeCode"
-          value={noticeCode}
-          // onChange={handleChangeTouched}
-          // error={Boolean(formik.errors.senderDenomination)}
-          // helperText={formik.errors.senderDenomination}
-          size="small"
-          margin="normal"
-        />
-        <TextField
-          label="Codice fiscale ente creditore*"
-          fullWidth
-          name="creditorTaxId"
-          value={senderTaxId}
-          // onChange={handleChangeTouched}
-          // error={Boolean(formik.errors.senderDenomination)}
-          // helperText={formik.errors.senderDenomination}
-          size="small"
-          margin="normal"
-        />
-      </Stack>
-    </Fragment>
-  );
-};
+import F24PaymentBox from './F24PaymentBox';
+import PagoPaPaymentBox from './PagoPaPaymentBox';
 
 type FormValues = {
   notificationFeePolicy: NotificationFeePolicy;
@@ -92,20 +24,31 @@ type FormValues = {
   vat: number | undefined;
   pagoPaIntMode: PagoPaIntegrationMode | undefined;
   recipients: {
-    [x: string]: Array<NewNotificationPayment>;
+    [taxId: string]: {
+      pagoPa: Array<NewNotificationPagoPaPayment>;
+      f24: Array<NewNotificationF24Payment>;
+    };
   };
 };
 
 type Props = {
   notification: NewNotification;
   formik: FormikProps<FormValues>;
+  newPagopaPayment: (id: string, idx: number) => NewNotificationPagoPaPayment;
+  newF24Payment: (id: string, idx: number) => NewNotificationF24Payment;
 };
+
 const emptyFileData = {
   data: undefined,
   sha256: { hashBase64: '', hashHex: '' },
 };
 
-const PaymentMethods: React.FC<Props> = ({ notification, formik }) => {
+const PaymentMethods: React.FC<Props> = ({
+  notification,
+  formik,
+  newPagopaPayment,
+  newF24Payment,
+}) => {
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.payment-methods',
   });
@@ -114,14 +57,15 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik }) => {
     taxId: string,
     paymentType: 'pagoPa' | 'f24',
     index: number,
-    id: string,
     file?: File,
     sha256?: { hashBase64: string; hashHex: string }
   ) => {
+    const payment = formik.values.recipients[taxId][paymentType][index];
+
     formik.setFieldValue(
-      id,
+      `recipients.${taxId}.${paymentType}.${index}`,
       {
-        ...formik.values.recipients[taxId][index][paymentType],
+        ...payment,
         file: { data: file, sha256 },
         ref: {
           key: '',
@@ -130,17 +74,14 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik }) => {
       },
       false
     );
-    formik.setFieldTouched(`${id}.file`, true, true);
+    formik.setFieldTouched(`recipients.${taxId}.${paymentType}.${index}.file`, true, true);
   };
 
-  const removeFileHandler = async (
-    id: string,
-    taxId: string,
-    paymentType: 'pagoPa' | 'f24',
-    index: number
-  ) => {
-    formik.setFieldValue(id, {
-      ...formik.values.recipients[taxId][index][paymentType],
+  const removeFileHandler = async (taxId: string, paymentType: 'pagoPa' | 'f24', index: number) => {
+    const payment = formik.values.recipients[taxId][paymentType][index];
+
+    formik.setFieldValue(`recipients.${taxId}.${paymentType}.${index}`, {
+      ...payment,
       file: emptyFileData,
       ref: {
         key: '',
@@ -149,14 +90,46 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik }) => {
     });
   };
 
-  // useImperativeHandle(forwardedRef, () => ({
-  //   confirm() {
-  //     dispatch(setPayments({ recipients: formatPayments() }));
-  //   },
-  // }));
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    taxId: string,
+    paymentType: 'pagoPa' | 'f24',
+    paymentIndex: number
+  ) => {
+    formik.setFieldValue(
+      `recipients.${taxId}.${paymentType}.${paymentIndex}.${event.target.name}`,
+      event.target.value
+    );
+  };
+
+  const handleAddNewPagoPa = (taxId: string) => {
+    const newPayment = newPagopaPayment(taxId, formik.values.recipients[taxId].pagoPa.length);
+    formik.setFieldValue(`recipients.${taxId}.pagoPa`, [
+      ...formik.values.recipients[taxId].pagoPa,
+      newPayment,
+    ]);
+  };
+
+  const handleAddNewF24 = (taxId: string) => {
+    const newPayment = newF24Payment(taxId, formik.values.recipients[taxId].f24.length);
+    formik.setFieldValue(`recipients.${taxId}.f24`, [
+      ...formik.values.recipients[taxId].f24,
+      newPayment,
+    ]);
+  };
+
+  const handleRemovePagoPa = (taxId: string, index: number) => {
+    const pagoPaPayments = formik.values.recipients[taxId].pagoPa.filter((_, i) => i !== index);
+    formik.setFieldValue(`recipients.${taxId}.pagoPa`, pagoPaPayments);
+  };
+
+  const handleRemoveF24 = (taxId: string, index: number) => {
+    const f24Payments = formik.values.recipients[taxId].f24.filter((_, i) => i !== index);
+    formik.setFieldValue(`recipients.${taxId}.f24`, f24Payments);
+  };
 
   return (
-    <form onSubmit={formik.handleSubmit} data-testid="paymentMethodForm">
+    <Fragment>
       {notification.recipients.map((recipient) => (
         <Paper
           key={recipient.taxId}
@@ -167,44 +140,110 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik }) => {
           <SectionHeading>
             {t('payment-models')} {recipient.firstName} {recipient.lastName}
           </SectionHeading>
-          {formik.values.recipients[recipient.taxId] &&
-            formik.values.recipients[recipient.taxId].map((payment, index) => {
-              if (payment.pagoPa) {
-                return (
-                  <PaymentBox
-                    key={`${recipient.taxId}-pagoPa-${payment.pagoPa.idx}`}
+
+          {formik.values.recipients[recipient.taxId].pagoPa.length > 0 && (
+            <Stack
+              spacing={3}
+              mt={3}
+              p={3}
+              border={1}
+              borderColor="divider"
+              borderRadius={1}
+              divider={<Divider />}
+            >
+              <Typography fontSize="16px" fontWeight={600} data-testid="pagoPaPaymentBox">
+                {`${t('attach-pagopa-notice')}`}
+              </Typography>
+              {formik.values.recipients[recipient.taxId].pagoPa.map((pagoPaPayment, index) => (
+                <>
+                  <PagoPaPaymentBox
                     id={`${recipient.taxId}.${index}.pagoPa`}
-                    title={`${t('attach-pagopa-notice')}`}
-                    onFileUploaded={(id, file, sha256) =>
-                      fileUploadedHandler(recipient.taxId, 'pagoPa', index, id, file, sha256)
+                    key={`${recipient.taxId}-pagoPa-${pagoPaPayment.idx}`}
+                    onFileUploaded={(_, file, sha256) =>
+                      fileUploadedHandler(recipient.taxId, 'pagoPa', index, file, sha256)
                     }
-                    onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPa', index)}
-                    fileUploaded={payment.pagoPa}
-                    senderTaxId={payment.pagoPa.creditorTaxId}
-                    noticeCode={payment.pagoPa.noticeCode}
+                    onRemoveFile={() => removeFileHandler(recipient.taxId, 'pagoPa', index)}
+                    fileUploaded={pagoPaPayment}
+                    senderTaxId={pagoPaPayment.creditorTaxId ?? ''}
+                    noticeCode={pagoPaPayment.noticeCode}
+                    handleChange={(event) => handleChange(event, recipient.taxId, 'pagoPa', index)}
                   />
-                );
-              }
-              if (payment.f24) {
-                return (
-                  <PaymentBox
-                    key={`${recipient.taxId}-f24-${payment.f24.idx}`}
+                  {index > 0 && (
+                    <ButtonNaked
+                      color="primary"
+                      startIcon={<DeleteIcon />}
+                      onClick={() => handleRemovePagoPa(recipient.taxId, index)}
+                      sx={{ justifyContent: 'end' }}
+                    >
+                      {t('remove-payment')}
+                    </ButtonNaked>
+                  )}
+                </>
+              ))}
+
+              <ButtonNaked
+                color="primary"
+                startIcon={<AddIcon />}
+                onClick={() => handleAddNewPagoPa(recipient.taxId)}
+                sx={{ justifyContent: 'start' }}
+              >
+                {t('add-new-pagopa-notice')}
+              </ButtonNaked>
+            </Stack>
+          )}
+
+          {formik.values.recipients[recipient.taxId].f24.length > 0 && (
+            <Stack
+              spacing={3}
+              mt={3}
+              p={3}
+              border={1}
+              borderColor="divider"
+              borderRadius={1}
+              divider={<Divider />}
+            >
+              <Typography fontSize="16px" fontWeight={600} data-testid="f24PaymentBox">
+                {t('attach-f24')}
+              </Typography>
+              {formik.values.recipients[recipient.taxId].f24.map((f24Payment, index) => (
+                <>
+                  <F24PaymentBox
                     id={`${recipient.taxId}.${index}.f24`}
-                    title={`${t('attach-f24')}`}
-                    onFileUploaded={(id, file, sha256) =>
-                      fileUploadedHandler(recipient.taxId, 'f24', index, id, file, sha256)
+                    key={`${recipient.taxId}-f24-${f24Payment?.idx}`}
+                    onFileUploaded={(_, file, sha256) =>
+                      fileUploadedHandler(recipient.taxId, 'f24', index, file, sha256)
                     }
-                    onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24', index)}
-                    fileUploaded={payment.f24}
-                    senderTaxId={notification.senderTaxId}
+                    onRemoveFile={() => removeFileHandler(recipient.taxId, 'f24', index)}
+                    fileUploaded={f24Payment}
+                    name={f24Payment?.name ?? ''}
+                    handleChange={(event) => handleChange(event, recipient.taxId, 'f24', index)}
                   />
-                );
-              }
-              return <></>;
-            })}
+                  {index > 0 && (
+                    <ButtonNaked
+                      color="primary"
+                      startIcon={<DeleteIcon />}
+                      onClick={() => handleRemoveF24(recipient.taxId, index)}
+                      sx={{ justifyContent: 'end' }}
+                    >
+                      {t('remove-payment')}
+                    </ButtonNaked>
+                  )}
+                </>
+              ))}
+
+              <ButtonNaked
+                color="primary"
+                startIcon={<AddIcon />}
+                onClick={() => handleAddNewF24(recipient.taxId)}
+                sx={{ justifyContent: 'start' }}
+              >
+                {t('add-new-f24')}
+              </ButtonNaked>
+            </Stack>
+          )}
         </Paper>
       ))}
-    </form>
+    </Fragment>
   );
 };
 
