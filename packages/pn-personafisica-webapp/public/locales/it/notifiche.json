@@ -6,7 +6,8 @@
     "oggetto": "Oggetto",
     "iun": "Codice IUN",
     "status": "Stato",
-    "show-detail": "Vedi dettaglio"
+    "show-detail": "Vedi dettaglio",
+    "aria-action-table": "Vedi dettaglio notifica con iun : {{iun}}"
   },
   "filters": {
     "iun": "Cerca per Codice IUN",
