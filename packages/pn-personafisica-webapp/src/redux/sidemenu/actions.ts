@@ -4,13 +4,17 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { apiClient } from '../../api/apiClients';
 import { AddressesApiFactory } from '../../generated-client/digital-addresses';
 import { MandateApiFactory } from '../../generated-client/mandate';
+import {
+  BffCheckTPPResponse,
+  NotificationReceivedApiFactory,
+} from '../../generated-client/notifications';
 import { AddressType, DigitalAddress } from '../../models/contacts';
 import { Delegator } from '../delegation/types';
-import { BffCheckTPPResponse, NotificationReceivedApiFactory } from '../../generated-client/notifications';
 
 export enum SIDEMENU_ACTIONS {
   GET_SIDEMENU_INFORMATION = 'getSidemenuInformation',
   GET_DOMICILE_INFO = 'getDomicileInfo',
+  EXCHANGE_NOTIFICATION_RETRIEVAL_ID = 'exchangeNotificationRetrievalId',
 }
 
 export const getSidemenuInformation = createAsyncThunk<Array<Delegator>>(
@@ -41,13 +45,12 @@ export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
   }
 );
 
-
 /**
  * TPP
  */
 
 export const exchangeNotificationRetrievalId = createAsyncThunk<BffCheckTPPResponse, string>(
-  'exchangeNotificationRetrievalId',
+  SIDEMENU_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
   async (retrievalId: string, { rejectWithValue }) => {
     try {
       const notificationReceivedApiFactory = NotificationReceivedApiFactory(
