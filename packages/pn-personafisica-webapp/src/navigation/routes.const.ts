@@ -1,5 +1,4 @@
 import {
-  AppRouteParams,
   PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
   TOS_LINK_RELATIVE_PATH as TERMS_OF_SERVICE,
 } from '@pagopa-pn/pn-commons';
@@ -11,7 +10,6 @@ export const PROFILO = '/profilo';
 const NOTIFICA = '/dettaglio';
 export const DETTAGLIO_NOTIFICA = `${NOTIFICHE}/:id${NOTIFICA}`;
 export const DETTAGLIO_NOTIFICA_DELEGATO = `${NOTIFICHE_DELEGATO}/:id${NOTIFICA}`;
-export const DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM = AppRouteParams.AAR;
 export const NUOVA_DELEGA = `${DELEGHE}/nuova`;
 export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${NOTIFICHE}/${id}${NOTIFICA}`;
 export const GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH = (id: string, mandateId: string) =>

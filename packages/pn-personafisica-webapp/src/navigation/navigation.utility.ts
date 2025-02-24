@@ -13,13 +13,13 @@ import {
   RECAPITI,
 } from './routes.const';
 
-export function goToLoginPortal(aarToken?: string | null) {
+export function goToLoginPortal(rapidAccess?: [AppRouteParams, string]) {
   // eslint-disable-next-line functional/no-let
   let urlToRedirect = `${LOGOUT}`;
   // the startsWith check is to prevent xss attacks
-  if (urlToRedirect.startsWith(LOGOUT) && aarToken) {
+  if (urlToRedirect.startsWith(LOGOUT) && rapidAccess) {
     // eslint-disable-next-line functional/immutable-data
-    urlToRedirect += `?${AppRouteParams.AAR}=${sanitizeString(aarToken)}`;
+    urlToRedirect += `?${rapidAccess[0]}=${sanitizeString(rapidAccess[1])}`;
   }
   // the indexOf check is to prevent xss attacks
   if (urlToRedirect.startsWith(LOGOUT)) {

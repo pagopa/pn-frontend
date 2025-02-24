@@ -7,7 +7,7 @@ import {
   BffTosPrivacyActionBody,
   UserConsentsApiFactory,
 } from '../../generated-client/tos-privacy';
-import { User } from './types';
+import { TokenExchangeRequest, User } from '../../models/User';
 
 export enum AUTH_ACTIONS {
   GET_TOS_PRIVACY_APPROVAL = 'getTosPrivacyApproval',
@@ -18,11 +18,11 @@ export enum AUTH_ACTIONS {
  * Exchange token action between selfcare and pn.
  * If token is valid, user info are set in sessionStorage
  */
-export const exchangeToken = createAsyncThunk<User, string>(
+export const exchangeToken = createAsyncThunk<User, TokenExchangeRequest>(
   'exchangeToken',
-  async (spidToken, { rejectWithValue }) => {
+  async (request: TokenExchangeRequest, { rejectWithValue }) => {
     try {
-      return await AuthApi.exchangeToken(spidToken);
+      return await AuthApi.exchangeToken(request);
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
@@ -41,7 +41,6 @@ export const logout = createAsyncThunk<User>('logout', async () => {
     family_name: '',
     fiscal_number: '',
     email: '',
-    mobile_phone: '',
     from_aa: false,
     uid: '',
     level: '',
