@@ -35,24 +35,28 @@ const ConfirmationModal: React.FC<Props> = ({
     <DialogTitle id="confirmation-dialog-title">{title}</DialogTitle>
     {children && <PnDialogContent>{children}</PnDialogContent>}
     <PnDialogActions>
-      <Button
-        id="dialog-close-button"
-        color="primary"
-        variant="outlined"
-        data-testid="closeButton"
-        {...slotsProps?.closeButton}
-      >
-        {onCloseLabel}
-      </Button>
-      <Button
-        id="dialog-confirm-button"
-        color="primary"
-        variant="contained"
-        data-testid="confirmButton"
-        {...slotsProps?.confirmButton}
-      >
-        {onConfirmLabel}
-      </Button>
+      {slotsProps?.closeButton?.onClick && (
+        <Button
+          id="dialog-close-button"
+          color="primary"
+          variant="outlined"
+          data-testid="closeButton"
+          {...slotsProps?.closeButton}
+        >
+          {onCloseLabel}
+        </Button>
+      )}
+      {slotsProps?.confirmButton?.onClick && (
+        <Button
+          id="dialog-confirm-button"
+          color="primary"
+          variant="contained"
+          data-testid="confirmButton"
+          {...slotsProps?.confirmButton}
+        >
+          {onConfirmLabel}
+        </Button>
+      )}
     </PnDialogActions>
   </PnDialog>
 );
