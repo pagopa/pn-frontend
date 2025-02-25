@@ -43,14 +43,6 @@ vi.mock('../../utility/delegation.utility', async () => ({
   generateVCode: () => '34153',
 }));
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
-  }),
-}));
-
 // Get tomorrow date
 const today = new Date();
 const tomorrow = new Date(today);
@@ -183,8 +175,8 @@ describe('NuovaDelega page', async () => {
     });
     const backButton = getByText('nuovaDelega.backToDelegations');
     fireEvent.click(backButton);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(-1);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(-1);
   });
 
   it('fills form with invalid values', async () => {

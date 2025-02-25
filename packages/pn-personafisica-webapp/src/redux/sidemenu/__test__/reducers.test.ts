@@ -1,20 +1,18 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
+import { BffCheckTPPResponse } from '../../../generated-client/notifications';
 import { acceptMandate, rejectMandate } from '../../delegation/actions';
 import { store } from '../../store';
-import { exchangeNotificationRetrievalId, getDomicileInfo, getSidemenuInformation } from '../actions';
+import { exchangeNotificationRetrievalId, getSidemenuInformation } from '../actions';
 import { closeDomicileBanner } from '../reducers';
-import { BffCheckTPPResponse } from '../../../generated-client/notifications';
 
 const initialState = {
   pendingDelegators: 0,
   delegators: [],
-  digitalAddresses: [],
   domicileBannerOpened: true,
   paymentTpp: {},
 };
@@ -115,13 +113,6 @@ describe('Sidemenu redux state tests', () => {
     expect(action.type).toBe('rejectMandate/fulfilled');
     expect(state.delegators.length).toBe(activeDelegators.length - 1);
     expect(state.pendingDelegators).toBe(pendingDelegators.length);
-  });
-
-  it('Should be able to fetch the digital addresses list', async () => {
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
-    const action = await store.dispatch(getDomicileInfo());
-    expect(action.type).toBe('getDomicileInfo/fulfilled');
-    expect(action.payload).toEqual(digitalAddresses);
   });
 
   it('Should be able to set tpp info from retrievalId', async () => {

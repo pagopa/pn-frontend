@@ -27,14 +27,6 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const reduxInitialState = {
   apiKeysState: {
     loading: false,
@@ -118,8 +110,8 @@ describe('ApiKeys Page', async () => {
     const button = result.queryByTestId('generateApiKey');
     fireEvent.click(button!);
     await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(routes.NUOVA_API_KEY);
+      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+      expect(mockNavigateFn).toHaveBeenCalledWith(routes.NUOVA_API_KEY);
     });
   });
 
@@ -163,7 +155,7 @@ describe('ApiKeys Page', async () => {
     const button = itemsPerPageSelector?.querySelector('button');
     fireEvent.click(button!);
     const itemsPerPageList = screen.getAllByRole('menuitem');
-    fireEvent.click(itemsPerPageList[1]!);
+    fireEvent.click(itemsPerPageList[1]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
     });

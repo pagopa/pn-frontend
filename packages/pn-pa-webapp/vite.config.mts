@@ -7,7 +7,7 @@ import react from '@vitejs/plugin-react';
 const vitestConfig = defineVitestConfig({
   test: {
     globals: true,
-    setupFiles: './src/setupTests.ts',
+    setupFiles: './src/setupTests.tsx',
     environment: 'jsdom',
     exclude: configDefaults.exclude,
     reporters: ['vitest-sonar-reporter', 'default'],

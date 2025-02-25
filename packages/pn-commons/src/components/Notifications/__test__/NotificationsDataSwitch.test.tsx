@@ -5,13 +5,6 @@ import { createMatchMedia, fireEvent, render } from '../../../test-utils';
 import { formatDate, getNotificationStatusInfos } from '../../../utility';
 import NotificationsDataSwitch from '../NotificationsDataSwitch';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const data = {
   id: '0',
   iun: 'DAPQ-LWQV-DKQH-202308-A-1',

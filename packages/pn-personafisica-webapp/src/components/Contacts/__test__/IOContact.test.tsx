@@ -2,19 +2,11 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, screen, testStore, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
 import { getConfiguration } from '../../../services/configuration.service';
 import IOContact from '../IOContact';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
 
 const IOAddress = digitalCourtesyAddresses.find((addr) => addr.channelType === ChannelType.IOMSG);
 const assignFn = vi.fn();
@@ -22,7 +14,6 @@ const assignFn = vi.fn();
 describe('IOContact component', async () => {
   let mock: MockAdapter;
   const originalLocation = window.location;
-  const originalNavigator = window.navigator;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -40,18 +31,17 @@ describe('IOContact component', async () => {
   afterAll(() => {
     mock.restore();
     Object.defineProperty(window, 'location', { configurable: true, value: originalLocation });
-    Object.defineProperty(window, 'navigator', { value: originalNavigator });
   });
 
   it('renders component - no contacts', () => {
-    const { getByTestId, getByText, getByRole } = render(<IOContact />);
-    const title = getByTestId('DigitalContactsCardTitle');
+    const { getByTestId, getByRole, getByText } = render(<IOContact />);
+    const title = getByTestId('ioContactTitle');
     expect(title).toHaveTextContent('io-contact.title');
-    const description = getByTestId('DigitalContactsCardDescription');
+    const description = getByTestId('ioContactDescription');
     expect(description).toHaveTextContent('io-contact.description');
-    const text = getByText('io-contact.unavailable');
+    const chip = getByText('status.inactive');
+    expect(chip).toBeInTheDocument();
     const button = getByRole('button', { name: 'io-contact.download' });
-    expect(text).toBeInTheDocument();
     expect(button).toBeInTheDocument();
   });
 
@@ -62,25 +52,24 @@ describe('IOContact component', async () => {
         verificationCode: '00000',
       })
       .reply(204);
-    const { getByTestId, getByText, getByRole } = render(<IOContact />, {
+    const { getByTestId, getByRole, getByText } = render(<IOContact />, {
       preloadedState: { contactsState: { digitalAddresses: [IOAddress] } },
     });
-    getByTestId('DoDisturbOnOutlinedIcon');
-    getByText('io-contact.disabled');
+    const chip = getByText('status.inactive');
+    expect(chip).toBeInTheDocument();
     const enableBtn = getByRole('button', { name: 'io-contact.enable' });
     expect(enableBtn).toBeInTheDocument();
     expect(enableBtn).toBeEnabled();
     // enable IO
     fireEvent.click(enableBtn);
-    /* const disclaimerCheckbox = await waitFor(() => getByTestId('disclaimer-checkbox'));
-    const disclaimerConfirmButton = getByTestId('disclaimer-confirm-button');
-    expect(disclaimerConfirmButton).toHaveTextContent('io-contact.enable-modal.confirm');
-    expect(disclaimerConfirmButton).toBeDisabled();
-    fireEvent.click(disclaimerCheckbox);
+    const informativeDialog = await waitFor(() => getByTestId('informativeDialog'));
+    expect(informativeDialog).toBeInTheDocument();
+    const understandButton = getByTestId('understandButton');
+    expect(understandButton).toBeInTheDocument();
+    fireEvent.click(understandButton);
     await waitFor(() => {
-      expect(disclaimerConfirmButton).toBeEnabled();
+      expect(informativeDialog).not.toBeVisible();
     });
-    fireEvent.click(disclaimerConfirmButton); */
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
@@ -97,29 +86,29 @@ describe('IOContact component', async () => {
 
   it('IO available and enabled', async () => {
     mock.onDelete('/bff/v1/addresses/COURTESY/default/APPIO').reply(200);
-    const { getByTestId, getByText, getByRole } = render(<IOContact />, {
+    const { getByRole, getByText } = render(<IOContact />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [{ ...IOAddress!, value: IOAllowedValues.ENABLED }],
         },
       },
     });
-    getByTestId('VerifiedIcon');
-    getByText('io-contact.enabled');
+    const chip = getByText('status.active');
+    expect(chip).toBeInTheDocument();
+
     const disableBtn = getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
     expect(disableBtn).toBeEnabled();
     // disable IO
     fireEvent.click(disableBtn);
-    /* const disclaimerCheckbox = await waitFor(() => getByTestId('disclaimer-checkbox'));
-    const disclaimerConfirmButton = getByTestId('disclaimer-confirm-button');
-    expect(disclaimerConfirmButton).toHaveTextContent('io-contact.disable-modal.confirm');
-    expect(disclaimerConfirmButton).toBeDisabled();
-    fireEvent.click(disclaimerCheckbox);
+
+    const dialog = await waitFor(() => screen.getByRole('dialog'));
+    const dialogButtons = dialog.querySelectorAll('button');
+    fireEvent.click(dialogButtons[1]);
     await waitFor(() => {
-      expect(disclaimerConfirmButton).toBeEnabled();
+      expect(dialog).not.toBeInTheDocument();
     });
-    fireEvent.click(disclaimerConfirmButton); */
+
     await waitFor(() => {
       expect(mock.history.delete).toHaveLength(1);
     });

@@ -1,17 +1,8 @@
-import { vi } from 'vitest';
-
 import { getF24Payments } from '@pagopa-pn/pn-commons';
 
 import { notificationDTOMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import NotificationPaymentF24 from '../NotificationPaymentF24';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
 
 const f24Payments = getF24Payments(
   notificationDTOMultiRecipient.recipients[0].payments ?? [],

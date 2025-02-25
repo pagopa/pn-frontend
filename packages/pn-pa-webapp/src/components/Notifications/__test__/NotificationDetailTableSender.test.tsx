@@ -8,13 +8,6 @@ import { render } from '../../../__test__/test-utils';
 import { PNRole } from '../../../models/user';
 import NotificationDetailTableSender from '../NotificationDetailTableSender';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const mockCancelHandler = vi.fn();
 
 describe('NotificationDetailTableSender Component', () => {
