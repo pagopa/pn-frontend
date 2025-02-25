@@ -6,13 +6,13 @@ import {
   AppResponse,
   AppResponsePublisher,
   CodeModal,
+  ConfirmationModal,
   ErrorMessage,
   TitleBox,
   appStateActions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import ConfirmationModal from '../components/Deleghe/ConfirmationModal';
 import Delegates from '../components/Deleghe/Delegates';
 import Delegators from '../components/Deleghe/Delegators';
 import MobileDelegates from '../components/Deleghe/MobileDelegates';
@@ -170,8 +170,10 @@ const Deleghe = () => {
               : t('deleghe.rejection_question')
           }
           onCloseLabel={t('button.annulla', { ns: 'common' })}
-          handleClose={handleCloseModal}
-          onConfirm={handleConfirmClick}
+          slotsProps={{
+            closeButton: { onClick: handleCloseModal },
+            confirmButton: { onClick: handleConfirmClick },
+          }}
           onConfirmLabel={
             type === 'delegates' ? t('deleghe.confirm_revocation') : t('deleghe.confirm_rejection')
           }

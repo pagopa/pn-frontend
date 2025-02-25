@@ -11,7 +11,7 @@ import {
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 import { createSlice } from '@reduxjs/toolkit';
 
-import { PNRole, PartyRole, Role } from '../../models/user';
+import { Organization, PNRole, PartyRole, Role, User } from '../../models/user';
 import {
   acceptTosPrivacy,
   exchangeToken,
@@ -22,7 +22,6 @@ import {
   logout,
   setAdditionalLanguages,
 } from './actions';
-import { Organization, User } from './types';
 
 const roleMatcher: yup.SchemaOf<Role> = yup.object({
   role: yup.mixed<PNRole>().required(),

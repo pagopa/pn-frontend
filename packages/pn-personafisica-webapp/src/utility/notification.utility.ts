@@ -1,4 +1,5 @@
-import { NotificationDetail } from '@pagopa-pn/pn-commons';
+import { AppRouteParams, NotificationDetail } from '@pagopa-pn/pn-commons';
+import { EventNotificationSource } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 
 import { NotificationDetailForRecipient } from '../models/NotificationDetail';
 import { Delegator } from '../redux/delegation/types';
@@ -40,3 +41,15 @@ export function parseNotificationDetailForRecipient(
     currentRecipientIndex,
   };
 }
+
+export const appRouteParamToEventSource = (
+  param: AppRouteParams | undefined
+): EventNotificationSource | undefined => {
+  if (param === AppRouteParams.AAR) {
+    return 'QRcode';
+  }
+  if (param === AppRouteParams.RETRIEVAL_ID) {
+    return '3Papp';
+  }
+  return undefined;
+};

@@ -1,4 +1,5 @@
 import {
+  AppRouteParams,
   DowntimeStatus,
   EventAction,
   EventCategory,
@@ -32,7 +33,7 @@ describe('Mixpanel - Notification detail Strategy', () => {
         pagoPaF24: paymentsData.pagoPaF24,
         f24Only: paymentsData.f24Only,
       },
-      fromQrCode: false,
+      source: AppRouteParams.AAR,
       timeline: timeline,
     };
 
@@ -72,7 +73,7 @@ describe('Mixpanel - Notification detail Strategy', () => {
         contains_f24: hasF24 ? 'yes' : 'no',
         first_time_opening:
           timeline.findIndex((el) => el.category === TimelineCategory.NOTIFICATION_VIEWED) === -1,
-        source: notificationData.fromQrCode ? 'QRcode' : 'LISTA_NOTIFICHE',
+        source: 'QRcode',
       },
     });
   });

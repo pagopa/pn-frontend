@@ -33,13 +33,14 @@ import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { PNRole } from './redux/auth/types';
+import { PNRole } from './models/User';
 import { getDigitalAddresses } from './redux/contact/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
+import showLayoutParts from './utility/layout.utility';
 import './utility/onetrust';
 import { goToLoginPortal } from './navigation/navigation.utility';
 
@@ -93,7 +94,16 @@ const ActualApp = () => {
     [loggedUser]
   );
 
-  const isPublicKeyRegistrationPage = pathname.includes(routes.REGISTRA_CHIAVE_PUBBLICA);
+  const [showSideMenu] = useMemo(
+    () =>
+      showLayoutParts(
+        pathname,
+        !!sessionToken,
+        tosConsent && tosConsent.accepted && fetchedTos,
+        privacyConsent && privacyConsent.accepted && fetchedPrivacy
+      ),
+    [pathname, sessionToken, tosConsent, fetchedTos, privacyConsent, fetchedPrivacy]
+  );
 
   const organization = loggedUser.organization;
   const role = loggedUser.organization?.roles ? loggedUser.organization?.roles[0] : null;
@@ -272,16 +282,7 @@ const ActualApp = () => {
         showFooter
         onExitAction={handleUserLogout}
         sideMenu={<SideMenu menuItems={menuItems} selfCareItems={selfcareMenuItems} />}
-        showSideMenu={
-          !!sessionToken &&
-          tosConsent &&
-          tosConsent.accepted &&
-          fetchedTos &&
-          privacyConsent &&
-          privacyConsent.accepted &&
-          fetchedPrivacy &&
-          !isPublicKeyRegistrationPage
-        }
+        showSideMenu={showSideMenu}
         productsList={productsList}
         productId={'0'}
         showHeaderProduct={

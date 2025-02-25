@@ -1,16 +1,8 @@
 import { useRef, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { Card, CardContent, Divider, Stack, Typography } from '@mui/material';
-import {
-  ConsentActionType,
-  ConsentType,
-  SERCQ_SEND_VALUE,
-  TosPrivacyConsent,
-  appStateActions,
-  useIsMobile,
-} from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { SERCQ_SEND_VALUE, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -22,49 +14,31 @@ import {
   SaveDigitalAddressParams,
   Sender,
 } from '../../models/contacts';
-import {
-  acceptSercqSendTosPrivacy,
-  createOrUpdateAddress,
-  deleteAddress,
-  getSercqSendTosPrivacyApproval,
-} from '../../redux/contact/actions';
+import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors, setExternalEvent } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import { isPFEvent } from '../../utility/mixpanel';
-import AddSpecialContactDialog from './AddSpecialContactDialog';
 import CancelVerificationModal from './CancelVerificationModal';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import ExistingContactDialog from './ExistingContactDialog';
-import LegalContactAssociationDialog from './LegalContactAssociationDialog';
 import PecVerificationDialog from './PecVerificationDialog';
-import SercqSendInfoDialog from './SercqSendInfoDialog';
 import SpecialContactItem from './SpecialContactItem';
 
 enum ModalType {
   EXISTING = 'existing',
   CODE = 'code',
   DELETE = 'delete',
-  SPECIAL = 'special',
   VALIDATION = 'validation',
   CANCEL_VALIDATION = 'cancel_validation',
-  CONFIRM_LEGAL_ASSOCIATION = 'confirm_legal_association',
-  INFO = 'info',
 }
-
-type Addresses = {
-  [senderId: string]: Array<DigitalAddress>;
-};
 
 const SpecialContacts: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
-  const isMobile = useIsMobile();
-  const { addresses, specialAddresses, defaultPECAddress } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const { addresses, specialAddresses } = useAppSelector(contactsSelectors.selectAddresses);
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
 
   const currentAddress = useRef<
@@ -74,7 +48,6 @@ const SpecialContacts: React.FC = () => {
     senderId: 'default',
     channelType: ChannelType.PEC,
   });
-  const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
 
   const labelRoot = `legal-contacts`;
   const contactType = currentAddress.current.channelType.toLowerCase();
@@ -93,7 +66,7 @@ const SpecialContacts: React.FC = () => {
     }
   };
 
-  const onConfirm = (
+  const handleEdit = (
     value: string,
     channelType: ChannelType,
     sender: Sender = { senderId: 'default' }
@@ -119,63 +92,8 @@ const SpecialContacts: React.FC = () => {
       setModalOpen(ModalType.EXISTING);
       return;
     }
-    setModalOpen(ModalType.CONFIRM_LEGAL_ASSOCIATION);
-  };
 
-  const handleAssociation = () => {
-    if (currentAddress.current.channelType === ChannelType.SERCQ_SEND) {
-      dispatch(getSercqSendTosPrivacyApproval())
-        .unwrap()
-        .then((consent) => {
-          // eslint-disable-next-line functional/immutable-data
-          tosPrivacy.current = consent;
-          setModalOpen(ModalType.INFO);
-        })
-        .catch(() => {});
-      return;
-    }
     handleCodeVerification();
-  };
-
-  const handleInfoConfirm = () => {
-    if (!tosPrivacy.current) {
-      return;
-    }
-    // first check tos and privacy status
-    const [tos, privacy] = tosPrivacy.current.filter(
-      (consent) =>
-        consent.consentType === ConsentType.TOS_SERCQ ||
-        consent.consentType === ConsentType.DATAPRIVACY_SERCQ
-    );
-    // if tos and privacy are already accepted, proceede with the activation
-    if (tos.accepted && privacy.accepted) {
-      handleCodeVerification();
-      return;
-    }
-    // accept tos and privacy
-    const tosPrivacyBody = [];
-    if (!tos.accepted) {
-      // eslint-disable-next-line functional/immutable-data
-      tosPrivacyBody.push({
-        action: ConsentActionType.ACCEPT,
-        version: tos.consentVersion,
-        type: ConsentType.TOS_SERCQ,
-      });
-    }
-    if (!privacy.accepted) {
-      // eslint-disable-next-line functional/immutable-data
-      tosPrivacyBody.push({
-        action: ConsentActionType.ACCEPT,
-        version: privacy.consentVersion,
-        type: ConsentType.DATAPRIVACY_SERCQ,
-      });
-    }
-    dispatch(acceptSercqSendTosPrivacy(tosPrivacyBody))
-      .unwrap()
-      .then(() => {
-        handleCodeVerification();
-      })
-      .catch(() => {});
   };
 
   const handleCodeVerification = (verificationCode?: string) => {
@@ -297,17 +215,6 @@ const SpecialContacts: React.FC = () => {
     setModalOpen(ModalType.DELETE);
   };
 
-  const handleEdit = (value: string, channelType: ChannelType, sender: Sender) => {
-    // eslint-disable-next-line functional/immutable-data
-    currentAddress.current = {
-      value,
-      senderId: sender.senderId,
-      senderName: sender.senderName,
-      channelType,
-    };
-    setModalOpen(ModalType.SPECIAL);
-  };
-
   const handleCloseModal = () => {
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = {
@@ -328,95 +235,45 @@ const SpecialContacts: React.FC = () => {
     setModalOpen(ModalType.CANCEL_VALIDATION);
   };
 
-  const handleCreateNewAssociation = (sender: Sender) => {
-    // eslint-disable-next-line functional/immutable-data
-    currentAddress.current = {
-      ...currentAddress.current,
-      senderId: sender.senderId,
-      senderName: sender.senderName,
-    };
-
-    setModalOpen(ModalType.SPECIAL);
-  };
-
-  const handleClickAddSpecialContact = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT);
-    setModalOpen(ModalType.SPECIAL);
-  };
-
-  const groupedAddresses: Addresses = specialAddresses.reduce((obj, a) => {
-    if (!obj[a.senderId]) {
-      // eslint-disable-next-line functional/immutable-data
-      obj[a.senderId] = [];
-    }
-    // eslint-disable-next-line functional/immutable-data
-    obj[a.senderId].push(a);
-    return obj;
-  }, {} as Addresses);
+  /**
+   * Case: we have a SERCQ SEND enabled on a sender and we decide to add a PEC for the same sender.
+   * Until when the PEC is not validated, we will have the SERCQ SEND address and the PEC address.
+   * This leads to an error, because on the interface we will show both the addresses.
+   */
+  const uniqueAddresses: Array<DigitalAddress> = specialAddresses.filter(
+    (addr, _, arr) =>
+      arr.findIndex(
+        (el) =>
+          addr.senderId === el.senderId &&
+          addr.channelType !== el.channelType &&
+          el.channelType === ChannelType.PEC &&
+          !el.pecValid
+      ) === -1
+  );
 
   return (
     <>
-      <Typography sx={{ mt: 3 }} variant="body2" fontSize="14px" color="text.secondary">
-        <Trans
-          i18nKey="special-contacts.description"
-          ns="recapiti"
-          components={[
-            <ButtonNaked
-              key="addSpecialContactButton"
-              onClick={handleClickAddSpecialContact}
-              color="primary"
-              data-testid="addSpecialContactButton"
-              sx={{ top: '-2px' }}
-            />,
-          ]}
-        />
-      </Typography>
-      {Object.keys(groupedAddresses).length > 0 && (
-        <Card sx={{ mt: 3 }}>
-          <CardContent data-testid="specialContacts">
-            <Typography variant="body1" fontWeight={700}>
-              {t('special-contacts.card-title', { ns: 'recapiti' })}
-            </Typography>
-            {!isMobile && (
-              <Stack direction="row" spacing={6} mt={3}>
-                <Typography variant="caption" fontWeight={600} sx={{ width: '224px' }}>
-                  {t(`special-contacts.senders`, { ns: 'recapiti' })}
-                </Typography>
-                <Typography variant="caption" fontWeight={600}>
-                  {t('special-contacts.contacts', { ns: 'recapiti' })}
-                </Typography>
-              </Stack>
-            )}
-            <Stack divider={<Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }} />}>
-              {Object.entries(groupedAddresses).map(([senderId, addr], index) => (
-                <SpecialContactItem
-                  index={index}
-                  key={`sender-${senderId}`}
-                  addresses={addr}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
-                  onCancelValidation={handleCancelValidation}
-                  handleCreateNewAssociation={handleCreateNewAssociation}
-                />
-              ))}
-            </Stack>
-          </CardContent>
-        </Card>
-      )}
-      <AddSpecialContactDialog
-        open={modalOpen === ModalType.SPECIAL}
-        value={currentAddress.current.value ?? ''}
-        sender={{
-          senderId: currentAddress.current.senderId,
-          senderName: currentAddress.current.senderName,
-        }}
-        channelType={currentAddress.current.channelType}
-        onDiscard={handleCloseModal}
-        onConfirm={(value: string, channelType: ChannelType, sender: Sender) => {
-          setModalOpen(null);
-          onConfirm(value, channelType, sender);
-        }}
-      />
+      <Card sx={{ mt: 3, backgroundColor: 'grey.50', borderRadius: 0.5 }}>
+        <CardContent data-testid="specialContacts" sx={{ padding: 2 }}>
+          <Typography fontSize="14px" fontWeight={700} mb={3}>
+            {t('special-contacts.card-title', { ns: 'recapiti' })}
+          </Typography>
+          <Stack
+            spacing={3}
+            divider={<Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }} />}
+          >
+            {uniqueAddresses.map((addr) => (
+              <SpecialContactItem
+                key={`sender-${addr.senderId}`}
+                address={addr}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onCancelValidation={handleCancelValidation}
+              />
+            ))}
+          </Stack>
+        </CardContent>
+      </Card>
       <ContactCodeDialog
         value={currentAddress.current.value}
         addressType={AddressType.LEGAL}
@@ -432,7 +289,7 @@ const SpecialContacts: React.FC = () => {
           ns: 'recapiti',
           contactValue:
             currentAddress.current.channelType === ChannelType.SERCQ_SEND
-              ? t(`legal-contacts.sercq-send-title`, {
+              ? t(`legal-contacts.sercq_send-title`, {
                   ns: 'recapiti',
                 })
               : currentAddress.current.value,
@@ -457,27 +314,6 @@ const SpecialContacts: React.FC = () => {
         open={modalOpen === ModalType.CANCEL_VALIDATION}
         senderId={currentAddress.current.senderId}
         handleClose={handleCloseModal}
-      />
-      <LegalContactAssociationDialog
-        open={modalOpen === ModalType.CONFIRM_LEGAL_ASSOCIATION}
-        senderName={currentAddress.current.senderName ?? ''}
-        newAddressValue={
-          currentAddress.current.channelType === ChannelType.PEC
-            ? currentAddress.current.value
-            : t('special-contacts.sercq_send', { ns: 'recapiti' })
-        }
-        oldAddressValue={
-          defaultPECAddress
-            ? defaultPECAddress.value
-            : t('special-contacts.sercq_send', { ns: 'recapiti' })
-        }
-        handleClose={handleCloseModal}
-        handleConfirm={handleAssociation}
-      />
-      <SercqSendInfoDialog
-        open={modalOpen === ModalType.INFO}
-        onDiscard={handleCloseModal}
-        onConfirm={handleInfoConfirm}
       />
     </>
   );

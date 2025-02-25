@@ -7,13 +7,6 @@ import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { fireEvent, render } from '../../../__test__/test-utils';
 import NotificationsDataSwitch from '../NotificationsDataSwitch';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const data = {
   id: '0',
   ...notificationsToFe.resultsPage[0],

@@ -432,4 +432,52 @@ describe('NotificationPaymentRecipient Component', () => {
     fireEvent.click(f24ButtonToCheck);
     expect(getPaymentAttachmentActionMk).toBeCalledTimes(1);
   });
+
+  it('should show tpp button if payments tpp is present and click onPayTppClick', () => {
+    const onPayTppClick = vi.fn();
+    const paymentTpp = {
+      retrievalId: 'retrievalId',
+      iun,
+      paymentButton: 'paymentButton',
+    };
+    const { getByTestId, queryAllByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={paymentsData}
+        paymentTpp={paymentTpp}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        iun={iun}
+        getPaymentAttachmentAction={vi.fn()}
+        onPayClick={() => {}}
+        onPayTppClick={onPayTppClick}
+        handleFetchPaymentsInfo={() => {}}
+        landingSiteUrl=""
+      />
+    );
+    const payTppButton = getByTestId('tpp-pay-button');
+    expect(payTppButton).toBeInTheDocument();
+
+    const payButton = getByTestId('pay-button');
+    expect(payButton).toHaveTextContent('detail.payment.pay-with-other-methods');
+
+    const pageSelector = getByTestId('pageSelector');
+    const pageButtons = pageSelector?.querySelectorAll('button');
+    fireEvent.click(pageButtons[1]);
+
+    // select payment
+    const paymentIndex = paymentsData.pagoPaF24.findIndex(
+      (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
+    );
+    const item = queryAllByTestId('pagopa-item')[paymentIndex];
+    const radioButton = item.querySelector('[data-testid="radio-button"] input');
+    fireEvent.click(radioButton!);
+
+    // click pay
+    fireEvent.click(payTppButton);
+    expect(onPayTppClick).toHaveBeenCalledWith(
+      paymentsData.pagoPaF24[paymentIndex].pagoPa?.noticeCode,
+      paymentsData.pagoPaF24[paymentIndex].pagoPa?.creditorTaxId,
+      paymentTpp.retrievalId
+    );
+  });
 });

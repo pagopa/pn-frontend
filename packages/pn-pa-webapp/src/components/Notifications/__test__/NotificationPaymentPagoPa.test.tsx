@@ -14,13 +14,6 @@ import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import NotificationPaymentPagoPa from '../NotificationPaymentPagoPa';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 vi.mock('@pagopa-pn/pn-commons', async () => {
   const original = await vi.importActual<any>('@pagopa-pn/pn-commons');
   return {
@@ -101,8 +94,8 @@ describe('NotificationPaymentPagoPa Component', async () => {
       expect(mock.history.get[0].url).toBe(
         `/bff/v1/notifications/sent/${iun}/payments/${paymentHistory[0].pagoPa?.recIndex}/${attachmentName}?attachmentIdx=${paymentHistory[0].pagoPa?.attachmentIdx}`
       );
-      expect(downloadDocument).toBeCalledTimes(1);
-      expect(downloadDocument).toBeCalledWith('http://mocked-url.com');
+      expect(downloadDocument).toHaveBeenCalledTimes(1);
+      expect(downloadDocument).toHaveBeenCalledWith('http://mocked-url.com');
     });
   });
 
@@ -119,10 +112,10 @@ describe('NotificationPaymentPagoPa Component', async () => {
       />
     );
     const dowloadButton = getByRole('button');
-    fireEvent.click(dowloadButton!);
+    fireEvent.click(dowloadButton);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(0);
-      expect(downloadDocument).toBeCalledTimes(0);
+      expect(downloadDocument).toHaveBeenCalledTimes(0);
     });
   });
 

@@ -62,38 +62,34 @@ const ContactCodeDialog: React.FC<Props> = ({
 
   return (
     <CodeModal
-      title={open ? t(`${labelRoot}.${contactType}-verify`, { ns: 'recapiti', value }) : ''}
-      subtitle={
-        open ? <Trans i18nKey={`${labelRoot}.${contactType}-verify-descr`} ns="recapiti" /> : ''
-      }
+      title={t(`${labelRoot}.${contactType}-verify`, { ns: 'recapiti', value })}
+      subtitle={<Trans i18nKey={`${labelRoot}.${contactType}-verify-descr`} ns="recapiti" />}
       open={open}
       initialValues={new Array(5).fill('')}
-      codeSectionTitle={open ? t(`insert-code`, { ns: 'recapiti' }) : ''}
+      codeSectionTitle={t(`insert-code`, { ns: 'recapiti' })}
       codeSectionAdditional={
-        open && (
-          <Typography component={Box} variant="body2">
-            <Trans
-              i18nKey={`${labelRoot}.${contactType}-new-code`}
-              ns="recapiti"
-              components={[
-                <ButtonNaked
-                  key="newCodeBtn"
-                  size="medium"
-                  onClick={() => onConfirm()}
-                  color="primary"
-                  sx={{
-                    textDecoration: 'underline',
-                    display: 'inline',
-                    fontWeight: 400,
-                    verticalAlign: 'baseline',
-                  }}
-                  data-testid="newCodeBtn"
-                  component={Typography}
-                />,
-              ]}
-            />
-          </Typography>
-        )
+        <Typography component={Box} variant="body2">
+          <Trans
+            i18nKey={`${labelRoot}.${contactType}-new-code`}
+            ns="recapiti"
+            components={[
+              <ButtonNaked
+                key="newCodeBtn"
+                size="medium"
+                onClick={() => onConfirm()}
+                color="primary"
+                sx={{
+                  textDecoration: 'underline',
+                  display: 'inline',
+                  fontWeight: 400,
+                  verticalAlign: 'baseline',
+                }}
+                data-testid="newCodeBtn"
+                component={Typography}
+              />,
+            ]}
+          />
+        </Typography>
       }
       cancelLabel={t('button.annulla')}
       confirmLabel={t('button.conferma')}

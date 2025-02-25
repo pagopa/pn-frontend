@@ -16,11 +16,15 @@
     "close": "Chiudi",
     "end": "Fine",
     "enable": "Attiva",
+    "manage": "Gestisci",
     "disable": "Disattiva",
+    "start": "Inizia",
     "go-to-home": "Vai alla homepage",
     "go-to-login": "Accedi",
     "not-now": "Non ora",
-    "add": "Aggiungi"
+    "do-later": "Lo farò più tardi",
+    "add": "Aggiungi",
+    "understand": "Ok, ho capito"
   },
   "menu": {
     "notifiche": "Notifiche",
@@ -208,6 +212,12 @@
     "link": "Consulta le traduzioni"
   },
   "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine",
+  "wizard": {
+    "stepper": {
+      "of": "{{currentStep}} di {{totalSteps}}",
+      "activeStep": "Step {{currentStep}}"
+    }
+  },
   "inactivity": {
     "title": "Vuoi davvero uscire da SEND?",
     "body": "La disconnessione è in corso. Se hai cambiato idea premi “Mantieni l’accesso” entro pochi secondi.",
