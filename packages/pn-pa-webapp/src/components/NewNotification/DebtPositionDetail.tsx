@@ -57,6 +57,7 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.debt-position-detail',
   });
+  const { t: tc } = useTranslation(['common']);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
   const dispatch = useAppDispatch();
@@ -185,20 +186,20 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
     notificationFeePolicy: yup
       .string()
       .oneOf(Object.values(NotificationFeePolicy))
-      .required(t('common.required-field')),
+      .required(tc('required-field')),
     paFee: yup
       .number()
       .optional()
       .when('notificationFeePolicy', {
         is: NotificationFeePolicy.DELIVERY_MODE,
-        then: yup.number().required(t('common.required-field')),
+        then: yup.number().required(tc('required-field')),
       }),
     vat: yup
       .number()
       .optional()
       .when('notificationFeePolicy', {
         is: NotificationFeePolicy.DELIVERY_MODE,
-        then: yup.number().required(t('common.required-field')),
+        then: yup.number().required(tc('required-field')),
       }),
     // Ritorna errore se: la posizione debitoria contiene è di tipo pagoPa o pagoPaF24
     // e la pagoPaIntMode è NONE
@@ -266,6 +267,22 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
   //   },
   // }));
 
+  const changeVatHandler = (
+    event: any,
+    values: NewNotification,
+    setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void
+  ) => {
+    const valuesToUpdate: {
+      vat: number;
+    } = {
+      vat: event.currentTarget.value,
+    };
+    setFieldValue(`vat`, {
+      ...values,
+      ...valuesToUpdate,
+    });
+  };
+
   return (
     <form onSubmit={formik.handleSubmit} data-testid="paymentMethodForm">
       <NewNotificationCard
@@ -323,8 +340,9 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
                           formik.touched.notificationFeePolicy &&
                           Boolean(formik.errors.notificationFeePolicy)
                         }
-                        onBlur={() => {}}
-                        onChange={() => {}}
+                        onChange={(event) =>
+                          changeVatHandler(event, notification, formik.setFieldValue)
+                        }
                         InputLabelProps={{
                           style: {
                             overflow: 'hidden',
@@ -376,6 +394,7 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
               </Typography>
               <Typography variant="caption">
                 <Trans
+                  t={t}
                   i18nKey={t('pagopa-int-mode.description')}
                   components={[
                     <Link
