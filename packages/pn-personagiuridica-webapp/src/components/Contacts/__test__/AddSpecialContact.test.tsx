@@ -267,6 +267,55 @@ describe('test AddSpecialContact', () => {
     expect(alreadyExistsAlert).toBeInTheDocument();
   });
 
+  it('show confirmation modal', async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+
+    // render component
+    const { container, getByRole } = render(
+      <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
+      {
+        preloadedState: { contactsState: { digitalAddresses } },
+      }
+    );
+
+    // select sender
+    await testAutocomplete(
+      container,
+      'sender',
+      parties,
+      true,
+      parties.findIndex((p) => p.name === 'Comune di Milano'),
+      true
+    );
+
+    // select PEC addressType
+    await testSelect(
+      container,
+      'channelType',
+      channelTypesItems,
+      channelTypesItems.findIndex((item) => item.value === ChannelType.PEC)
+    );
+
+    const input = getById(container, 's_value');
+    fireEvent.change(input, { target: { value: 'test@test.it' } });
+
+    await waitFor(() => {
+      expect(input).toHaveValue('test@test.it');
+    });
+
+    const confirmButton = getByRole('button', { name: 'conferma' });
+
+    fireEvent.click(confirmButton);
+
+    await waitFor(() => {
+      const dialog = getByRole('dialog');
+      expect(dialog).toBeInTheDocument();
+      const titleEl = getById(dialog, 'confirmation-dialog-title');
+      expect(titleEl).toBeInTheDocument();
+      expect(titleEl).toHaveTextContent('special-contacts.legal-association-title');
+    });
+  });
+
   it('should show all channelType options if PEC is default address and no default SERCQ is present', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
 

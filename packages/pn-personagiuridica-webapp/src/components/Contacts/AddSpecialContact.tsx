@@ -37,10 +37,14 @@ import {
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import ContactCodeDialog from './ContactCodeDialog';
 import ExistingContactDialog from './ExistingContactDialog';
+import LegalContactAssociationDialog, {
+  LegalContactAssociationData,
+} from './LegalContactAssociationDialog';
 
 enum ModalType {
   EXISTING = 'existing',
   CODE = 'code',
+  CONFIRM_LEGAL_ASSOCIATION = 'confirm_legal_association',
 }
 
 enum ErrorBannerType {
@@ -97,7 +101,10 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const parties = useAppSelector((state: RootState) => state.contactsState.parties);
     const addressesData = useAppSelector(contactsSelectors.selectAddresses);
     const { IS_DOD_ENABLED } = getConfiguration();
-    const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+    const [modalOpen, setModalOpen] = useState<{
+      type: ModalType;
+      data?: LegalContactAssociationData;
+    } | null>(null);
     const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
 
     const addressTypes = specialContactsAvailableAddressTypes(addressesData).filter(
@@ -111,9 +118,9 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         (address) => address.senderId === senderId && !address.pecValid
       );
 
-    const isSenderAlreadyAdded = (sender: Party, channelType: ChannelType | string) =>
+    const isSenderAlreadyAdded = (sender: Party, channelType?: ChannelType | string) =>
       addressesData.specialAddresses.some(
-        (a) => a.senderId === sender.id && a.channelType === channelType
+        (a) => a.senderId === sender.id && (!channelType || a.channelType === channelType)
       );
 
     const updateErrorBanner = (sender: Party, channelType: ChannelType) => {
@@ -235,7 +242,27 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     ) => {
       // first check if contact already exists
       if (contactAlreadyExists(addressesData.addresses, value, sender.senderId, channelType)) {
-        setModalOpen(ModalType.EXISTING);
+        setModalOpen({ type: ModalType.EXISTING });
+        return;
+      }
+      // verify if the sender already has a contact associated
+      const oldAddress = addressesData.specialAddresses.find(
+        (addr) => addr.senderId === sender.senderId
+      );
+      if (oldAddress) {
+        setModalOpen({
+          type: ModalType.CONFIRM_LEGAL_ASSOCIATION,
+          data: {
+            sender,
+            oldAddress,
+            newAddress: {
+              ...sender,
+              addressType: AddressType.LEGAL,
+              channelType: formik.values.channelType as ChannelType,
+              value: formik.values.s_value,
+            },
+          },
+        });
         return;
       }
       handleAssociation();
@@ -338,7 +365,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         .then((res) => {
           // contact to verify
           if (!res) {
-            setModalOpen(ModalType.CODE);
+            setModalOpen({ type: ModalType.CODE });
             return;
           }
 
@@ -361,8 +388,14 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
     return (
       <Paper data-testid="addSpecialContact" sx={{ p: { xs: 2, lg: 3 }, mb: 3 }}>
+        <LegalContactAssociationDialog
+          open={modalOpen?.type === ModalType.CONFIRM_LEGAL_ASSOCIATION}
+          data={modalOpen?.data}
+          onCancel={() => setModalOpen(null)}
+          onConfirm={() => handleAssociation()}
+        />
         <ExistingContactDialog
-          open={modalOpen === ModalType.EXISTING}
+          open={modalOpen?.type === ModalType.EXISTING}
           value={formik.values.s_value}
           handleDiscard={() => setModalOpen(null)}
           handleConfirm={() => handleCodeVerification()}
@@ -372,7 +405,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             value={formik.values.s_value}
             addressType={AddressType.LEGAL}
             channelType={formik.values.channelType}
-            open={modalOpen === ModalType.CODE}
+            open={modalOpen?.type === ModalType.CODE}
             onConfirm={(code) => handleCodeVerification(code)}
             onDiscard={() => setModalOpen(null)}
           />
