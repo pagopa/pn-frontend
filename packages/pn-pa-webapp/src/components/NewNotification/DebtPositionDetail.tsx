@@ -36,7 +36,7 @@ import {
 } from '../../models/NewNotification';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { uploadNotificationPaymentDocument } from '../../redux/newNotification/actions';
-import { setPayments } from '../../redux/newNotification/reducers';
+import { setDebtPotisionDetail } from '../../redux/newNotification/reducers';
 import { RootState } from '../../redux/store';
 import NewNotificationCard from './NewNotificationCard';
 import PaymentMethods from './PaymentMethods';
@@ -247,12 +247,20 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
         await updateRefAfterUpload(paymentPayload);
       }
       // Chiamare setDebtPositionDetail
-      dispatch(setPayments({ recipients: formatPayments() }));
+      dispatch(
+        setDebtPotisionDetail({
+          recipients: formatPayments(),
+          vat: formik.values.vat,
+          paFee: formik.values.paFee,
+          notificationFeePolicy: formik.values.notificationFeePolicy,
+          pagoPaIntMode: formik.values.pagoPaIntMode,
+        })
+      );
       onConfirm();
     },
   });
 
-  const IsDeliveryMode =
+  const isDeliveryMode =
     formik.values.notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE;
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -266,23 +274,6 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
   //     dispatch(setPayments({ recipients: formatPayments() }));
   //   },
   // }));
-
-  const changeVatHandler = (
-    event: any,
-    values: NewNotification,
-    setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void
-  ) => {
-    const valuesToUpdate: {
-      vat: number;
-    } = {
-      vat: event.currentTarget.value,
-    };
-    setFieldValue(`vat`, {
-      ...values,
-      ...valuesToUpdate,
-    });
-  };
-
   return (
     <form onSubmit={formik.handleSubmit} data-testid="paymentMethodForm">
       <NewNotificationCard
@@ -324,25 +315,23 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
                   />
                 </RadioGroup>
               </Grid>
-              {IsDeliveryMode && (
+              {isDeliveryMode && (
                 <Grid item lg={6} xs={12}>
                   <Grid container columnSpacing={1} rowSpacing={2}>
                     <Grid item lg={8} xs={12}>
                       <TextField
                         required
                         size="small"
-                        type="number"
                         fullWidth
                         id="paFee"
+                        name="paFee"
                         label={t('notification-fee.paFee')}
-                        value={formik.values.paFee ?? undefined}
+                        value={formik.values.paFee}
                         error={
                           formik.touched.notificationFeePolicy &&
                           Boolean(formik.errors.notificationFeePolicy)
                         }
-                        onChange={(event) =>
-                          changeVatHandler(event, notification, formik.setFieldValue)
-                        }
+                        onChange={handleChange}
                         InputLabelProps={{
                           style: {
                             overflow: 'hidden',
@@ -363,13 +352,13 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
                     <Grid item lg={4} xs={12}>
                       <CustomDropdown
                         id="vat"
+                        name="vat"
                         required
                         label={`${t('notification-fee.vat')}*`}
-                        name="vat"
                         size="small"
                         margin="none"
-                        value={formik.values.vat ?? undefined}
-                        onChange={() => {}}
+                        value={formik.values.vat}
+                        onChange={handleChange}
                         fullWidth
                       >
                         {VAT.map((option) => (
@@ -383,7 +372,7 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
                 </Grid>
               )}
             </Grid>
-            {IsDeliveryMode && (
+            {isDeliveryMode && (
               <Typography variant="caption">{t('notification-fee.disclaimer')}</Typography>
             )}
           </Box>
@@ -395,7 +384,7 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
               <Typography variant="caption">
                 <Trans
                   t={t}
-                  i18nKey={t('pagopa-int-mode.description')}
+                  i18nKey={'pagopa-int-mode.description'}
                   components={[
                     <Link
                       key="learn-more"
@@ -413,7 +402,7 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
                 aria-labelledby="pagopa-int-mode"
                 name="pagoPaIntMode"
                 value={formik.values.pagoPaIntMode}
-                onChange={(e) => handleChange(e)}
+                onChange={handleChange}
                 sx={{ mt: 2 }}
               >
                 <FormControlLabel
