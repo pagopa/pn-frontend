@@ -23,7 +23,7 @@ export function LoadingOverlay() {
         <CircularProgress
           id="spinner-loading"
           role="loadingSpinner"
-          aria-label={getLocalizedOrDefaultLabel('common', 'loading', 'Caricamento in corso')}
+          aria-label={getLocalizedOrDefaultLabel('common', 'loading')}
           sx={{ color: 'white' }}
         />
       </Box>
