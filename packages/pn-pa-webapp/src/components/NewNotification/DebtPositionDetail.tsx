@@ -4,17 +4,23 @@ import { ForwardedRef, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import EuroIcon from '@mui/icons-material/Euro';
 import {
   Alert,
   Box,
   FormControlLabel,
+  Grid,
+  InputAdornment,
   Link,
+  MenuItem,
   Paper,
   Radio,
   RadioGroup,
   Stack,
+  TextField,
   Typography,
 } from '@mui/material';
+import { CustomDropdown } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotification,
@@ -26,6 +32,7 @@ import {
   PagoPaIntegrationMode,
   PaymentModel,
   PaymentObject,
+  VAT,
 } from '../../models/NewNotification';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { uploadNotificationPaymentDocument } from '../../redux/newNotification/actions';
@@ -244,6 +251,9 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
     },
   });
 
+  const IsDeliveryMode =
+    formik.values.notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE;
+
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     await formik.setFieldValue(name, value);
@@ -268,42 +278,102 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
           <Typography variant="h6" fontWeight={700}>
             {t('title')}
           </Typography>
-          {/* notificationFee */}
           <Box mt={3} p={3} border={1} borderColor="divider" borderRadius={1}>
-            <Stack direction="column">
-              <Typography id="notificationFee" variant="body2" fontWeight={600}>
-                {t('notification-fee.title')}
-              </Typography>
-              <Typography variant="caption">{t('notification-fee.description')}</Typography>
-              <RadioGroup
-                aria-labelledby="notificationFee"
-                name="notificationFeePolicy"
-                value={formik.values.notificationFeePolicy}
-                onChange={(e) => handleChange(e)}
-                sx={{ mt: 2 }}
-              >
-                <FormControlLabel
-                  value={NotificationFeePolicy.FLAT_RATE}
-                  control={<Radio />}
-                  label={t('radios.flat-rate')}
-                  componentsProps={{ typography: { fontSize: '16px' } }}
-                />
-                <FormControlLabel
-                  value={NotificationFeePolicy.DELIVERY_MODE}
-                  control={<Radio />}
-                  label={t('radios.delivery-mode')}
-                  componentsProps={{ typography: { fontSize: '16px' } }}
-                />
-              </RadioGroup>
-            </Stack>
+            <Typography id="notificationFee" variant="body2" fontWeight={600}>
+              {t('notification-fee.title')}
+            </Typography>
+            <Typography variant="caption" lineHeight={'1rem'}>
+              {t('notification-fee.description')}
+            </Typography>
+            <Grid container columnSpacing={1} rowSpacing={2} mt={1} mb={2} alignItems={'flex-end'}>
+              <Grid item lg={6} xs={12}>
+                <RadioGroup
+                  aria-labelledby="notificationFee"
+                  name="notificationFeePolicy"
+                  value={formik.values.notificationFeePolicy}
+                  onChange={(e) => handleChange(e)}
+                >
+                  <FormControlLabel
+                    value={NotificationFeePolicy.FLAT_RATE}
+                    control={<Radio />}
+                    label={t('radios.flat-rate')}
+                    componentsProps={{ typography: { fontSize: '16px' } }}
+                  />
+                  <FormControlLabel
+                    value={NotificationFeePolicy.DELIVERY_MODE}
+                    control={<Radio />}
+                    label={t('radios.delivery-mode')}
+                    componentsProps={{ typography: { fontSize: '16px' } }}
+                  />
+                </RadioGroup>
+              </Grid>
+              {IsDeliveryMode && (
+                <Grid item lg={6} xs={12}>
+                  <Grid container columnSpacing={1} rowSpacing={2}>
+                    <Grid item lg={8} xs={12}>
+                      <TextField
+                        required
+                        size="small"
+                        type="number"
+                        fullWidth
+                        id="paFee"
+                        label={t('notification-fee.paFee')}
+                        value={formik.values.paFee ?? undefined}
+                        error={
+                          formik.touched.notificationFeePolicy &&
+                          Boolean(formik.errors.notificationFeePolicy)
+                        }
+                        onBlur={() => {}}
+                        onChange={() => {}}
+                        InputLabelProps={{
+                          style: {
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            maxWidth: '74%',
+                          },
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end" sx={{ width: '21px' }}>
+                              <EuroIcon />
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Grid>
+                    <Grid item lg={4} xs={12}>
+                      <CustomDropdown
+                        id="vat"
+                        required
+                        label={`${t('notification-fee.vat')}*`}
+                        name="vat"
+                        size="small"
+                        margin="none"
+                        value={formik.values.vat ?? undefined}
+                        onChange={() => {}}
+                        fullWidth
+                      >
+                        {VAT.map((option) => (
+                          <MenuItem key={option} value={option}>
+                            {option}%
+                          </MenuItem>
+                        ))}
+                      </CustomDropdown>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              )}
+            </Grid>
+            {IsDeliveryMode && (
+              <Typography variant="caption">{t('notification-fee.disclaimer')}</Typography>
+            )}
           </Box>
-          {/* pagoPaIntMode */}
           <Box mt={3} p={3} border={1} borderColor="divider" borderRadius={1}>
             <Stack direction="column">
-              <Typography variant="body2" fontWeight={600}>
+              <Typography variant="body2" fontWeight={600} mb={1} id="pagopa-int-mode">
                 {t('pagopa-int-mode.title')}
               </Typography>
-              {/* <Typography variant="caption">{t('pagopa-int-mode.description')}</Typography> */}
               <Typography variant="caption">
                 <Trans
                   i18nKey={t('pagopa-int-mode.description')}
@@ -321,7 +391,7 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
                 {t('alert', { ns: 'notifiche' })}
               </Alert>
               <RadioGroup
-                aria-labelledby="comunication-type-label"
+                aria-labelledby="pagopa-int-mode"
                 name="pagoPaIntMode"
                 value={formik.values.pagoPaIntMode}
                 onChange={(e) => handleChange(e)}

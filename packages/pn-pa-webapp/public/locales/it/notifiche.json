@@ -505,7 +505,10 @@
         "debt-position-of": "Posizione debitoria di {{fullName}}",
         "notification-fee": {
           "title": "Costo di notifica",
-          "description": "Scegli il tipo di costo di notifica: puoi scegliere fra quello già incluso nell’atto oppure inserire un costo di notifica personalizzato a carico del destinatario."
+          "description": "Scegli il tipo di costo di notifica: puoi scegliere fra quello già incluso nell’atto oppure inserire un costo di notifica personalizzato a carico del destinatario.",
+          "disclaimer": "L’IVA verrà applicata solo alle notifiche recapitate in modalità cartacea.",
+          "paFee": "Costo della notifica",
+          "vat": "IVA"
         },
         "pagopa-int-mode": {
           "title": "Tecnologia del pagamento",
