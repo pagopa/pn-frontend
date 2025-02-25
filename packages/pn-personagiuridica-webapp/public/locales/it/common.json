@@ -95,6 +95,7 @@
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
   "not-logged": "Accedi a SEND",
   "not-logged-subtitle": "Per vedere e gestire le tue notifiche, accedi con SPID o CIE.",
+  "loading": "Caricamento in corso",
   "not-found": {
     "title": "404: La pagina che stai cercando non esiste",
     "descpription": "Sei qui per errore, prova ad usare la navigazione."

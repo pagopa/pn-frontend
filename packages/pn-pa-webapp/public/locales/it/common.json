@@ -147,6 +147,7 @@
   "too-short-field-error": "Scrivi minimo {{minLength}} caratteri",
   "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine",
   "invalid": "non valido",
+  "loading": "Caricamento in corso",
   "upload-file": {
     "or": "oppure",
     "select-file": "carica il file",

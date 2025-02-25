@@ -7,6 +7,7 @@ import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/mat
 import {
   ApiError,
   ApiErrorWrapper,
+  AppRouteParams,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
   LegalFactId,
@@ -36,6 +37,7 @@ import {
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import { NotificationDetailRouteState } from '../models/NotificationDetail';
 import { PFEventsType } from '../models/PFEventsType';
 import { ContactSource } from '../models/contacts';
 import * as routes from '../navigation/routes.const';
@@ -48,18 +50,14 @@ import {
   getReceivedNotificationDocument,
   getReceivedNotificationPayment,
   getReceivedNotificationPaymentInfo,
+  getReceivedNotificationPaymentTppUrl,
   getReceivedNotificationPaymentUrl,
 } from '../redux/notification/actions';
 import { resetState } from '../redux/notification/reducers';
+import { exchangeNotificationRetrievalId } from '../redux/sidemenu/actions';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
-
-// state for the invocations to this component
-// (to include in navigation or Link to the route/s arriving to it)
-type LocationState = {
-  fromQrCode?: boolean; // indicates whether the user arrived to the notification detail page from the QR code
-};
 
 const NotificationDetail: React.FC = () => {
   const { id, mandateId } = useParams();
@@ -94,6 +92,7 @@ const NotificationDetail: React.FC = () => {
   const currentRecipient = notification?.currentRecipient;
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
+  const paymentTpp = useAppSelector((state: RootState) => state.generalInfoState.paymentTpp);
 
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -274,6 +273,26 @@ const NotificationDetail: React.FC = () => {
     }
   };
 
+  const onPayTppClick = (noticeCode?: string, creditorTaxId?: string, retrievalId?: string) => {
+    if (noticeCode && creditorTaxId && retrievalId) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT);
+      dispatch(
+        getReceivedNotificationPaymentTppUrl({
+          noticeCode,
+          creditorTaxId,
+          retrievalId,
+        })
+      )
+        .unwrap()
+        .then((res) => {
+          if (res.paymentUrl) {
+            window.location.assign(res.paymentUrl);
+          }
+        })
+        .catch(() => undefined);
+    }
+  };
+
   const hasNotificationReceivedApiError = hasApiErrors(
     NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION
   );
@@ -355,6 +374,20 @@ const NotificationDetail: React.FC = () => {
     return () => void dispatch(resetState());
   }, []);
 
+  /* if retrievalId is in user token and payment info is not in redux, get payment info PN-13915 */
+  useEffect(() => {
+    if (!checkIfUserHasPayments) {
+      return;
+    }
+    if (!currentUser.source?.retrievalId) {
+      return;
+    }
+    if (currentUser.source?.retrievalId === paymentTpp.retrievalId) {
+      return;
+    }
+    void dispatch(exchangeNotificationRetrievalId(currentUser.source.retrievalId));
+  }, [currentUser, checkIfUserHasPayments]);
+
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
     const fetchParams: GetDowntimeHistoryParams = {
@@ -378,8 +411,8 @@ const NotificationDetail: React.FC = () => {
     }
   }, []);
 
-  const fromQrCode = useMemo(
-    () => !!(location.state && (location.state as LocationState).fromQrCode),
+  const rapidAccessSource = useMemo<AppRouteParams | undefined>(
+    () => (location.state as NotificationDetailRouteState)?.source,
     [location]
   );
 
@@ -387,14 +420,14 @@ const NotificationDetail: React.FC = () => {
     const backRoute = mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE;
     return (
       <PnBreadcrumb
-        showBackAction={!fromQrCode}
+        showBackAction={!rapidAccessSource}
         linkRoute={backRoute}
         linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
         currentLocationLabel={`${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}`}
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [fromQrCode, i18n.language]);
+  }, [rapidAccessSource, i18n.language]);
 
   const breadcrumb = (
     <Fragment>
@@ -440,7 +473,7 @@ const NotificationDetail: React.FC = () => {
         notificationStatus: notification.notificationStatus,
         checkIfUserHasPayments,
         userPayments,
-        fromQrCode,
+        source: rapidAccessSource,
         timeline: notification.timeline,
       });
 
@@ -515,10 +548,12 @@ const NotificationDetail: React.FC = () => {
                     >
                       <NotificationPaymentRecipient
                         payments={userPayments}
+                        paymentTpp={paymentTpp}
                         isCancelled={isCancelled.cancelled}
                         iun={notification.iun}
                         handleTrackEvent={trackEventPaymentRecipient}
                         onPayClick={onPayClick}
+                        onPayTppClick={onPayTppClick}
                         handleFetchPaymentsInfo={reloadPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}

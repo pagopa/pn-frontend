@@ -33,7 +33,7 @@ import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { PNRole } from './redux/auth/types';
+import { PNRole } from './models/User';
 import { getDigitalAddresses } from './redux/contact/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
@@ -296,16 +296,11 @@ const ActualApp = () => {
         isLogged={!!sessionToken}
         hasTermsOfService={true}
       >
-       <PnDialog open={openModal}
-        >
-          <DialogTitle sx={{ mb: 2 }} >{t("header.logout-message")}</DialogTitle>
+        <PnDialog open={openModal}>
+          <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>
           <PnDialogActions>
-            <Button
-              id="cancelButton"
-              variant="outlined"
-              onClick={() => setOpenModal(false)}
-            >
-              {t("button.annulla")}
+            <Button id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
+              {t('button.annulla')}
             </Button>
             <Button
               variant="contained"
@@ -315,7 +310,7 @@ const ActualApp = () => {
                 setOpenModal(false);
               }}
             >
-              {t("header.logout")}
+              {t('header.logout')}
             </Button>
           </PnDialogActions>
         </PnDialog>

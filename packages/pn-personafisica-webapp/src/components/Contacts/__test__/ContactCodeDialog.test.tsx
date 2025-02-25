@@ -42,7 +42,7 @@ describe('test ContactCodeDialog', () => {
     expect(cancelButton).toBeInTheDocument();
     const confirmButton = within(dialog).getByText('button.conferma');
     expect(confirmButton).toBeInTheDocument();
-    expect(confirmButton).toBeDisabled();
+    expect(confirmButton).toBeEnabled();
   });
 
   it('render component - courtesy address', () => {
@@ -72,7 +72,7 @@ describe('test ContactCodeDialog', () => {
     expect(cancelButton).toBeInTheDocument();
     const confirmButton = within(dialog).getByText('button.conferma');
     expect(confirmButton).toBeInTheDocument();
-    expect(confirmButton).toBeDisabled();
+    expect(confirmButton).toBeEnabled();
   });
 
   it('click on buttons', async () => {

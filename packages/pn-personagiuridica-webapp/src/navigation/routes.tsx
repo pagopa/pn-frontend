@@ -12,7 +12,7 @@ import {
 
 import DelegatesByCompany from '../components/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../components/Deleghe/DelegationsOfTheCompany';
-import { PNRole } from '../redux/auth/types';
+import { PNRole } from '../models/User';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';

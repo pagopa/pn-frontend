@@ -44,7 +44,6 @@ const manageUnforbiddenError = (e: any) => {
   return true;
 };
 
-
 // Perché ci sono due componenti.
 // Il codice in SessionGuard implementa i steps necessari per determinare se c'è sessione, se è utente abilitato, se è sessione anonima, ecc..
 // D'altra parte, SessionGuardRender implementa la logica di cosa si deve renderizzare,
@@ -174,8 +173,9 @@ const SessionGuard = () => {
       // ----------------------
       const spidToken = getTokenParam();
       if (spidToken) {
+        const aar = localStorage.getItem(AppRouteParams.AAR) || undefined;
         AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
-        await dispatch(exchangeToken(spidToken));
+        await dispatch(exchangeToken({ spidToken, aar }));
       }
     };
     void performStep(INITIALIZATION_STEPS.USER_DETERMINATION, doUserDetermination);

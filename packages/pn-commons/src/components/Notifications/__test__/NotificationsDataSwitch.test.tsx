@@ -1,3 +1,5 @@
+import { vi } from 'vitest';
+
 import { NotificationStatus } from '../../../models';
 import { createMatchMedia, fireEvent, render } from '../../../test-utils';
 import { formatDate, getNotificationStatusInfos } from '../../../utility';

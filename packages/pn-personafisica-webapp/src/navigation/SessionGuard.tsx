@@ -1,10 +1,9 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import {
   AppResponsePublisher,
-  AppRouteParams,
   InactivityHandler,
   LoadingPage,
   SessionModal,
@@ -14,6 +13,7 @@ import {
   useSessionCheck,
 } from '@pagopa-pn/pn-commons';
 
+import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -54,7 +54,7 @@ const manageUnforbiddenError = (e: any) => {
  * SessionGuardRender: logica di renderizzazione
  */
 const SessionGuardRender = () => {
-  const [params] = useSearchParams();
+  const rapidAccess = useRapidAccessParam();
   const { IS_INACTIVITY_HANDLER_ENABLED } = getConfiguration();
 
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
@@ -94,8 +94,7 @@ const SessionGuardRender = () => {
         />
       );
     } else if (isAnonymousUser) {
-      const aar = params.get(AppRouteParams.AAR);
-      goToLoginPortal(aar);
+      goToLoginPortal(rapidAccess);
       return <></>;
     }
     return (
@@ -126,6 +125,7 @@ const SessionGuard = () => {
   );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const rapidAccess = useRapidAccessParam();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
   const { hasApiErrors, hasSpecificStatusError } = useErrors();
   const { WORK_IN_PROGRESS } = getConfiguration();
@@ -161,7 +161,7 @@ const SessionGuard = () => {
       const spidToken = getTokenParam();
       if (spidToken) {
         AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
-        await dispatch(exchangeToken(spidToken));
+        await dispatch(exchangeToken({ spidToken, rapidAccess }));
       }
     };
     void performStep(INITIALIZATION_STEPS.USER_DETERMINATION, doUserDetermination);

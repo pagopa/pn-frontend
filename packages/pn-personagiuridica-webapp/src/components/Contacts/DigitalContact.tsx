@@ -235,6 +235,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 formik.errors[`${senderId}_${contactType}`]
               }
               sx={{ mb: 2 }}
+              autoFocus
             />
             <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
               <ButtonNaked

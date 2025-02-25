@@ -10,7 +10,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { getConfiguration } from '../services/configuration.service';
-import AARGuard from './AARGuard';
+import RapidAccessGuard from './RapidAccessGuard';
 import RouteGuard from './RouteGuard';
 import SessionGuard from './SessionGuard';
 import ToSGuard from './ToSGuard';
@@ -48,7 +48,7 @@ function Router() {
           {/* protected routes */}
           <Route path="/" element={<RouteGuard />}>
             <Route path="/" element={<ToSGuard />}>
-              <Route path="/" element={<AARGuard />}>
+              <Route path="/" element={<RapidAccessGuard />}>
                 <Route path={routes.NOTIFICHE} element={<Notifiche />} />
                 <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
                 <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />

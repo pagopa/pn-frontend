@@ -11,7 +11,7 @@ import { errorMock } from '../../../__mocks__/Errors.mock';
 import { apiClient } from '../../../api/apiClients';
 import { store } from '../../store';
 import { acceptTosPrivacy, getTosPrivacyApproval } from '../actions';
-import { PNRole, PartyRole } from '../types';
+import { PNRole, PartyRole } from '../../../models/User';
 
 describe('Auth redux state tests', () => {
   let mock: MockAdapter;
