@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Divider, Paper, Stack, Typography } from '@mui/material';
-import { SectionHeading } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import {
@@ -137,9 +136,9 @@ const PaymentMethods: React.FC<Props> = ({
           elevation={0}
           data-testid="paymentForRecipient"
         >
-          <SectionHeading>
+          <Typography variant="h6" fontWeight={700}>
             {t('payment-models')} {recipient.firstName} {recipient.lastName}
-          </SectionHeading>
+          </Typography>
 
           {formik.values.recipients[recipient.taxId].pagoPa.length > 0 && (
             <Stack

@@ -332,14 +332,6 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
                           Boolean(formik.errors.notificationFeePolicy)
                         }
                         onChange={handleChange}
-                        InputLabelProps={{
-                          style: {
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            maxWidth: '74%',
-                          },
-                        }}
                         InputProps={{
                           endAdornment: (
                             <InputAdornment position="end" sx={{ width: '21px' }}>
