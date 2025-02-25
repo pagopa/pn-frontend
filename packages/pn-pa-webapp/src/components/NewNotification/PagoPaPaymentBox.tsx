@@ -1,10 +1,14 @@
+import { useFormik } from 'formik';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Stack, TextField } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { FormControlLabel, Stack, Switch, TextField } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { NewNotificationDocumentFile } from '../../models/NewNotification';
+import { NewNotificationPagoPaPayment, NotificationFeePolicy } from '../../models/NewNotification';
+import { PaymentMethodsFormValues } from './PaymentMethods';
 
 type PaymentBoxProps = {
   id: string;
@@ -14,23 +18,37 @@ type PaymentBoxProps = {
     sha256?: { hashBase64: string; hashHex: string }
   ) => void;
   onRemoveFile: (id: string) => void;
-  fileUploaded: { file: NewNotificationDocumentFile };
-  senderTaxId: string;
-  noticeCode?: string;
+  pagoPaPayment: NewNotificationPagoPaPayment;
+  notificationFeePolicy: NotificationFeePolicy;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  showDeleteButton: boolean;
+  onDeletePayment: () => void;
+  formik: ReturnType<typeof useFormik<PaymentMethodsFormValues>>;
 };
 
 const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
   id,
   onFileUploaded,
   onRemoveFile,
-  fileUploaded,
-  senderTaxId,
-  noticeCode,
+  pagoPaPayment,
+  notificationFeePolicy,
   handleChange,
+  showDeleteButton,
+  onDeletePayment,
+  formik,
 }) => {
-  const { t } = useTranslation(['notifiche']);
+  const { t } = useTranslation(['notifiche', 'common']);
   const isMobile = useIsMobile('md');
+
+  const { noticeCode, creditorTaxId, applyCost, file } = pagoPaPayment;
+
+  const getError = (fieldId: string) => {
+    if (formik.getFieldMeta(`${id}.${fieldId}`).touched) {
+      return formik.getFieldMeta(`${id}.${fieldId}`).error;
+    }
+
+    return null;
+  };
 
   return (
     <Fragment>
@@ -43,35 +61,68 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
         onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
         onRemoveFile={() => onRemoveFile(id)}
         calcSha256
-        fileUploaded={fileUploaded}
+        fileUploaded={{ file }}
         showHashCode={false}
       />
       <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
         <TextField
           id="noticeCode"
-          label="Codice avviso"
+          label={t('new-notification.steps.payment-methods.pagopa.notice-code')}
           fullWidth
           name="noticeCode"
           value={noticeCode}
           onChange={handleChange}
-          // error={Boolean(formik.errors.senderDenomination)}
-          // helperText={formik.errors.senderDenomination}
+          error={!!getError('noticeCode')}
+          helperText={getError('noticeCode')}
           size="small"
           margin="normal"
         />
         <TextField
           id="creditorTaxId"
-          label="Codice fiscale ente creditore*"
+          label={t('new-notification.steps.payment-methods.pagopa.creditor-taxid')}
           fullWidth
           name="creditorTaxId"
-          value={senderTaxId}
+          value={creditorTaxId}
           onChange={handleChange}
-          // error={Boolean(formik.errors.senderDenomination)}
-          // helperText={formik.errors.senderDenomination}
+          error={!!getError('creditorTaxId')}
+          helperText={getError('creditorTaxId')}
           size="small"
           margin="normal"
         />
       </Stack>
+
+      {(notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE || showDeleteButton) && (
+        <Stack direction={isMobile ? 'column' : 'row'}>
+          {notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
+            <FormControlLabel
+              control={
+                <Switch
+                  id="applyCost"
+                  name="applyCost"
+                  value={applyCost}
+                  onChange={(e) => handleChange(e)}
+                />
+              }
+              label={t('new-notification.steps.payment-methods.pagopa.apply-cost')}
+              componentsProps={{ typography: { fontSize: '16px' } }}
+            />
+          )}
+
+          {showDeleteButton && (
+            <ButtonNaked
+              color="primary"
+              startIcon={<DeleteIcon />}
+              onClick={onDeletePayment}
+              sx={{
+                justifyContent: { xs: 'flex-start', md: 'flex-end' },
+                ml: { xs: 'none', md: 'auto' },
+              }}
+            >
+              {t('button.delete', { ns: 'common' })}
+            </ButtonNaked>
+          )}
+        </Stack>
+      )}
     </Fragment>
   );
 };

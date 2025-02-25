@@ -526,15 +526,21 @@
       "payment-methods": {
         "title": "Modelli di pagamento",
         "pagopa-notice": "Avviso pagoPA",
-        "f24": "F24",
         "payment-models": "Posizione debitoria di",
-        "attach-pagopa-notice": "Specifiche Avviso pagoPA",
-        "attach-f24": "Specifiche Modello F24",
-        "add-new-pagopa-notice": "Aggiungi codice di avviso pagoPA",
-        "add-new-f24": "Aggiungi un altro Modello F24",
-        "remove-payment": "Elimina",
         "nothing": "<0>Se questa notifica prevede un pagamento, torna a </0><1>Informazioni preliminari</1><2> e seleziona un modello. Poi, torna qui per caricarlo.</2>",
-        "back-to-attachments": "Torna a Allegati"
+        "back-to-attachments": "Torna a Allegati",
+        "pagopa": {
+          "attach-pagopa-notice": "Specifiche Avviso pagoPA",
+          "notice-code": "Codice avviso",
+          "creditor-taxid": "Codice fiscale ente creditore",
+          "apply-cost": "Applica costo di notifica",
+          "add-new-pagopa-notice": "Aggiungi codice di avviso pagoPA"
+        },
+        "f24": {
+          "attach-f24": "Specifiche Modello F24",
+          "document-name": "Titolo documento",
+          "add-new-f24": "Aggiungi un altro Modello F24"
+        }
       },
       "sync-feedback": {
         "title": "La notifica è stata creata",

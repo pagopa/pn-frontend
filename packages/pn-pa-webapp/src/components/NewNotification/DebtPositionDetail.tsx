@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import _ from 'lodash';
+import _, { mapValues } from 'lodash';
 import { ForwardedRef, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -207,11 +207,20 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
     // pos. deb. PAGOPA: noticeCode e creditorTaxId obbligatori, file opzionale (pagoPaSchema)
     // pos. deb. F24: nome file e file obbligatori (f24Schema)
     // pos. deb. PAGOPA_F24: pagoPaSchema e f24Schema
-    // recipients: yup.array().of(
-    //   yup.object().shape({
-    //     debtPosition: yup.string().required(t('common.required-field')),
-    //   })
-    // ),
+    recipients: yup.lazy((obj) =>
+      yup.object(
+        mapValues(obj, () =>
+          yup.object({
+            pagoPa: yup.array().of(
+              yup.object({
+                noticeCode: yup.string().required(),
+              })
+            ),
+            f24: yup.array(),
+          })
+        )
+      )
+    ),
   });
 
   const updateRefAfterUpload = async (paymentPayload: { [key: string]: PaymentObject }) => {
