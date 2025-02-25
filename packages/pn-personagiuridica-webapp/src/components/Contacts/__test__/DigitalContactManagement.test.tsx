@@ -52,7 +52,7 @@ describe('DigitalContactManagement', () => {
     expect(container).toHaveTextContent('button.indietro');
   });
 
-  it.only('render the component when SERCQ SEND is enabled', () => {
+  it('render the component when SERCQ SEND is enabled', () => {
     const { container } = render(<DigitalContactManagement />, {
       preloadedState: {
         contactsState: {
