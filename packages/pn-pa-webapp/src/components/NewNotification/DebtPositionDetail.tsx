@@ -1,15 +1,13 @@
 import { useFormik } from 'formik';
 import _, { mapValues } from 'lodash';
-import { ForwardedRef, useMemo } from 'react';
+import { ForwardedRef, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import EuroIcon from '@mui/icons-material/Euro';
 import {
   Alert,
-  Box,
   FormControlLabel,
-  Grid,
   InputAdornment,
   Link,
   MenuItem,
@@ -38,14 +36,16 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { uploadNotificationPaymentDocument } from '../../redux/newNotification/actions';
 import { setDebtPotisionDetail } from '../../redux/newNotification/reducers';
 import { RootState } from '../../redux/store';
+import { getConfiguration } from '../../services/configuration.service';
 import NewNotificationCard from './NewNotificationCard';
+import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 import PaymentMethods from './PaymentMethods';
 
 type Props = {
   notification: NewNotification;
   onConfirm: () => void;
   onPreviousStep: () => void;
-  ref: ForwardedRef<unknown>;
+  forwardedRef: ForwardedRef<unknown>;
 };
 
 const emptyFileData = {
@@ -53,13 +53,25 @@ const emptyFileData = {
   sha256: { hashBase64: '', hashHex: '' },
 };
 
-const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPreviousStep }) => {
+const DebtPositionDetail: React.FC<Props> = ({
+  notification,
+  onConfirm,
+  onPreviousStep,
+  forwardedRef,
+}) => {
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.debt-position-detail',
   });
   const { t: tc } = useTranslation(['common']);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
+  const hasPagoPa = notification.recipients.some(
+    (recipient) =>
+      recipient.debtPosition === PaymentModel.PAGO_PA ||
+      recipient.debtPosition === PaymentModel.PAGO_PA_F24
+  );
+
+  const { PAYMENT_INFO } = getConfiguration();
   const dispatch = useAppDispatch();
 
   const newPagopaPayment = (id: string, idx: number): NewNotificationPagoPaPayment => ({
@@ -224,7 +236,6 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
   });
 
   const updateRefAfterUpload = async (paymentPayload: { [key: string]: PaymentObject }) => {
-    // set ref
     for (const [taxId, payment] of Object.entries(paymentPayload)) {
       if (payment.pagoPa) {
         await formik.setFieldValue(
@@ -255,7 +266,6 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
       if (paymentPayload) {
         await updateRefAfterUpload(paymentPayload);
       }
-      // Chiamare setDebtPositionDetail
       dispatch(
         setDebtPotisionDetail({
           recipients: formatPayments(),
@@ -277,12 +287,20 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
     await formik.setFieldValue(name, value);
   };
 
-  // TODO rename SetPayments in setDebtPotisionDetail e passare info radio button
-  // useImperativeHandle(forwardedRef, () => ({
-  //   confirm() {
-  //     dispatch(setPayments({ recipients: formatPayments() }));
-  //   },
-  // }));
+  useImperativeHandle(forwardedRef, () => ({
+    confirm() {
+      dispatch(
+        setDebtPotisionDetail({
+          recipients: formatPayments(),
+          vat: formik.values.vat,
+          paFee: formik.values.paFee,
+          notificationFeePolicy: formik.values.notificationFeePolicy,
+          pagoPaIntMode: formik.values.pagoPaIntMode,
+        })
+      );
+    },
+  }));
+
   return (
     <form onSubmit={formik.handleSubmit} data-testid="paymentMethodForm">
       <NewNotificationCard
@@ -295,101 +313,87 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
           <Typography variant="h6" fontWeight={700}>
             {t('title')}
           </Typography>
-          <Box mt={3} p={3} border={1} borderColor="divider" borderRadius={1}>
-            <Typography id="notificationFee" variant="body2" fontWeight={600}>
-              {t('notification-fee.title')}
-            </Typography>
-            <Typography variant="caption" lineHeight={'1rem'}>
-              {t('notification-fee.description')}
-            </Typography>
-            <Grid container columnSpacing={1} rowSpacing={2} mt={1} mb={2} alignItems={'flex-end'}>
-              <Grid item lg={6} xs={12}>
-                <RadioGroup
-                  aria-labelledby="notificationFee"
-                  name="notificationFeePolicy"
-                  value={formik.values.notificationFeePolicy}
-                  onChange={(e) => handleChange(e)}
-                >
-                  <FormControlLabel
-                    value={NotificationFeePolicy.FLAT_RATE}
-                    control={<Radio />}
-                    label={t('radios.flat-rate')}
-                    componentsProps={{ typography: { fontSize: '16px' } }}
-                  />
-                  <FormControlLabel
-                    value={NotificationFeePolicy.DELIVERY_MODE}
-                    control={<Radio />}
-                    label={t('radios.delivery-mode')}
-                    componentsProps={{ typography: { fontSize: '16px' } }}
-                  />
-                </RadioGroup>
-              </Grid>
+          <FormBox>
+            <FormBoxTitle text={t('notification-fee.title')} />
+            <FormBoxSubtitle text={t('notification-fee.description')} />
+            <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'end'}>
+              <RadioGroup
+                aria-labelledby="notificationFee"
+                name="notificationFeePolicy"
+                value={formik.values.notificationFeePolicy}
+                onChange={(e) => handleChange(e)}
+              >
+                <FormControlLabel
+                  value={NotificationFeePolicy.FLAT_RATE}
+                  control={<Radio />}
+                  label={t('radios.flat-rate')}
+                  componentsProps={{ typography: { fontSize: '16px' } }}
+                />
+                <FormControlLabel
+                  value={NotificationFeePolicy.DELIVERY_MODE}
+                  control={<Radio />}
+                  label={t('radios.delivery-mode')}
+                  componentsProps={{ typography: { fontSize: '16px' } }}
+                />
+              </RadioGroup>
               {isDeliveryMode && (
-                <Grid item lg={6} xs={12}>
-                  <Grid container columnSpacing={1} rowSpacing={2}>
-                    <Grid item lg={8} xs={12}>
-                      <TextField
-                        required
-                        size="small"
-                        fullWidth
-                        id="paFee"
-                        name="paFee"
-                        label={t('notification-fee.paFee')}
-                        value={formik.values.paFee}
-                        error={
-                          formik.touched.notificationFeePolicy &&
-                          Boolean(formik.errors.notificationFeePolicy)
-                        }
-                        onChange={handleChange}
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end" sx={{ width: '21px' }}>
-                              <EuroIcon />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    </Grid>
-                    <Grid item lg={4} xs={12}>
-                      <CustomDropdown
-                        id="vat"
-                        name="vat"
-                        required
-                        label={`${t('notification-fee.vat')}*`}
-                        size="small"
-                        margin="none"
-                        value={formik.values.vat}
-                        onChange={handleChange}
-                        fullWidth
-                      >
-                        {VAT.map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}%
-                          </MenuItem>
-                        ))}
-                      </CustomDropdown>
-                    </Grid>
-                  </Grid>
-                </Grid>
+                <Stack direction={'row'} justifyContent="space-between">
+                  <TextField
+                    required
+                    size="small"
+                    id="paFee"
+                    name="paFee"
+                    label={t('notification-fee.paFee')}
+                    value={formik.values.paFee}
+                    error={
+                      formik.touched.notificationFeePolicy &&
+                      Boolean(formik.errors.notificationFeePolicy)
+                    }
+                    onChange={handleChange}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end" sx={{ width: '21px' }}>
+                          <EuroIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{ flexBasis: '75%', margin: '0rem 0.8rem' }}
+                  />
+                  <CustomDropdown
+                    id="vat"
+                    name="vat"
+                    required
+                    label={`${t('notification-fee.vat')}*`}
+                    size="small"
+                    value={formik.values.vat}
+                    onChange={handleChange}
+                    sx={{ flexBasis: '25%' }}
+                  >
+                    {VAT.map((option) => (
+                      <MenuItem key={option} value={option}>
+                        {option}%
+                      </MenuItem>
+                    ))}
+                  </CustomDropdown>
+                </Stack>
               )}
-            </Grid>
+            </Stack>
             {isDeliveryMode && (
               <Typography variant="caption">{t('notification-fee.disclaimer')}</Typography>
             )}
-          </Box>
-          <Box mt={3} p={3} border={1} borderColor="divider" borderRadius={1}>
-            <Stack direction="column">
-              <Typography variant="body2" fontWeight={600} mb={1} id="pagopa-int-mode">
-                {t('pagopa-int-mode.title')}
-              </Typography>
-              <Typography variant="caption">
+          </FormBox>
+
+          {hasPagoPa && (
+            <FormBox>
+              <FormBoxTitle text={t('pagopa-int-mode.title')} />
+              <Typography variant="body2" fontSize={'14px'} marginTop={0.5}>
                 <Trans
                   t={t}
                   i18nKey={'pagopa-int-mode.description'}
                   components={[
                     <Link
                       key="learn-more"
-                      href="https://developer.pagopa.it/send/guides/knowledge-base/readme/pagamenti-e-spese-di-notifica/pagamenti-pagopa"
+                      href={PAYMENT_INFO}
                       target="_blank"
                       rel="noopener noreferrer"
                     />,
@@ -419,8 +423,8 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
                   componentsProps={{ typography: { fontSize: '16px' } }}
                 />
               </RadioGroup>
-            </Stack>
-          </Box>
+            </FormBox>
+          )}
         </Paper>
         <PaymentMethods
           notification={notification}
@@ -433,4 +437,7 @@ const DebtPositionDetail: React.FC<Props> = ({ notification, onConfirm, onPrevio
   );
 };
 
-export default DebtPositionDetail;
+// This is a workaorund to prevent cognitive complexity warning
+export default forwardRef((props: Omit<Props, 'forwardedRef'>, ref) => (
+  <DebtPositionDetail {...props} forwardedRef={ref} />
+));

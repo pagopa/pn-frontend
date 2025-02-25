@@ -21,6 +21,7 @@ export interface PaConfiguration {
   IS_STATISTICS_ENABLED: boolean;
   TAXONOMY_SEND_URL: string;
   DOWNTIME_EXAMPLE_LINK: string;
+  PAYMENT_INFO: string;
 }
 
 class PaConfigurationValidator extends Validator<PaConfiguration> {
@@ -45,6 +46,7 @@ class PaConfigurationValidator extends Validator<PaConfiguration> {
     this.ruleFor('IS_STATISTICS_ENABLED').isBoolean();
     this.ruleFor('TAXONOMY_SEND_URL').isString().isRequired();
     this.ruleFor('DOWNTIME_EXAMPLE_LINK').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('PAYMENT_INFO').isString().isRequired();
   }
 }
 

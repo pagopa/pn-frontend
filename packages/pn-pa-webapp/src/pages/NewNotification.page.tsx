@@ -53,7 +53,6 @@ const NewNotification = () => {
       baseSteps.push(
         t('new-notification.steps.debt-position.title', { ns: 'notifiche' }),
         t('new-notification.steps.debt-position-detail.title', { ns: 'notifiche' })
-        // t('new-notification.steps.payment-methods.title', { ns: 'notifiche' })
       );
     }
 
@@ -186,7 +185,6 @@ const NewNotification = () => {
                 onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
                 recipientsData={notification.recipients}
-                paymentMode={notification.paymentMode}
                 ref={childRef}
               />
             )}
@@ -204,7 +202,6 @@ const NewNotification = () => {
                 notification={notification}
                 onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
-                // isCompleted={isCompleted}
                 ref={childRef}
               />
             )}

@@ -100,7 +100,6 @@ export interface NewNotification extends NewNotificationBilingualism {
   senderTaxId: string;
   group?: string;
   taxonomyCode: string;
-  paymentMode?: PaymentModel;
   recipients: Array<NewNotificationRecipient>;
   documents: Array<NewNotificationDocument>;
   paFee?: number;
