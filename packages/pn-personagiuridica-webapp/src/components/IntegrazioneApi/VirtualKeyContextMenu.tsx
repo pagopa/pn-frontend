@@ -66,7 +66,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({
         key.user?.fiscalCode === data.user?.fiscalCode && key.status === VirtualKeyStatus.Blocked
     ) && data.status !== VirtualKeyStatus.Rotated;
 
-  const shoudlShowViewButton = !isUserAdmin || isPersonalKey;
+  const shoudlShowViewButton = isPersonalKey;
 
   const shouldShowDeleteButton = data.status !== VirtualKeyStatus.Enabled;
 
