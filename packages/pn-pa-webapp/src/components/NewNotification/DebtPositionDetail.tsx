@@ -306,6 +306,11 @@ const DebtPositionDetail: React.FC<Props> = ({
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    if (name === 'notificationFeePolicy' && value === NotificationFeePolicy.FLAT_RATE) {
+      await formik.setFieldValue('paFee', '');
+      await formik.setFieldValue('vat', '');
+    }
     await formik.setFieldValue(name, value);
   };
 
@@ -323,12 +328,6 @@ const DebtPositionDetail: React.FC<Props> = ({
     },
   }));
 
-  console.log('---------------------', formik.errors);
-  console.log(
-    notification.recipients.some(
-      (r) => r.debtPosition === PaymentModel.PAGO_PA || r.debtPosition === PaymentModel.PAGO_PA_F24
-    )
-  );
   return (
     <form onSubmit={formik.handleSubmit} data-testid="paymentMethodForm">
       <NewNotificationCard
