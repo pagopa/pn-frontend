@@ -18,7 +18,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { CustomDropdown } from '@pagopa-pn/pn-commons';
+import { CustomDropdown, dataRegex } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotification,
@@ -129,7 +129,7 @@ const DebtPositionDetail: React.FC<Props> = ({
       notificationFeePolicy: notification.notificationFeePolicy ?? undefined,
       paFee: notification.paFee ?? undefined,
       vat: notification.vat ?? undefined,
-      pagoPaIntMode: notification.pagoPaIntMode ?? undefined,
+      pagoPaIntMode: notification.pagoPaIntMode ?? PagoPaIntegrationMode.NONE,
       recipients: notification.recipients.reduce(
         (
           acc: {
@@ -200,25 +200,34 @@ const DebtPositionDetail: React.FC<Props> = ({
       .oneOf(Object.values(NotificationFeePolicy))
       .required(tc('required-field')),
     paFee: yup
-      .number()
+      .string()
       .optional()
       .when('notificationFeePolicy', {
         is: NotificationFeePolicy.DELIVERY_MODE,
-        then: yup.number().required(tc('required-field')),
+        then: yup
+          .string()
+          .required(tc('required-field'))
+          .matches(dataRegex.currency, `${t('notification-fee.pa-fee')} ${tc('invalid')}`),
       }),
     vat: yup
       .number()
       .optional()
       .when('notificationFeePolicy', {
         is: NotificationFeePolicy.DELIVERY_MODE,
-        then: yup.number().required(tc('required-field')),
+        then: yup.number().oneOf(VAT).required(tc('required-field')),
       }),
-    // Ritorna errore se: la posizione debitoria contiene è di tipo pagoPa o pagoPaF24
-    // e la pagoPaIntMode è NONE
-    pagoPaIntMode: yup.string().oneOf(Object.values(PagoPaIntegrationMode)),
-    // pos. deb. PAGOPA: noticeCode e creditorTaxId obbligatori, file opzionale (pagoPaSchema)
-    // pos. deb. F24: nome file e file obbligatori (f24Schema)
-    // pos. deb. PAGOPA_F24: pagoPaSchema e f24Schema
+    pagoPaIntMode: yup
+      .string()
+      .oneOf(Object.values(PagoPaIntegrationMode))
+      .test('checkRecipientDebtPosition', tc('required-field'), (value) => {
+        const hasPagoPaDebtPosition = notification.recipients.some(
+          (r) =>
+            r.debtPosition === PaymentModel.PAGO_PA || r.debtPosition === PaymentModel.PAGO_PA_F24
+        );
+
+        return !(hasPagoPaDebtPosition && value === PagoPaIntegrationMode.NONE);
+      }),
+
     recipients: yup.lazy((obj) =>
       yup.object(
         mapValues(obj, () =>
@@ -301,6 +310,12 @@ const DebtPositionDetail: React.FC<Props> = ({
     },
   }));
 
+  console.log('---------------------', formik.errors);
+  console.log(
+    notification.recipients.some(
+      (r) => r.debtPosition === PaymentModel.PAGO_PA || r.debtPosition === PaymentModel.PAGO_PA_F24
+    )
+  );
   return (
     <form onSubmit={formik.handleSubmit} data-testid="paymentMethodForm">
       <NewNotificationCard
@@ -343,7 +358,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                     size="small"
                     id="paFee"
                     name="paFee"
-                    label={t('notification-fee.paFee')}
+                    label={t('notification-fee.pa-fee')}
                     value={formik.values.paFee}
                     error={
                       formik.touched.notificationFeePolicy &&
