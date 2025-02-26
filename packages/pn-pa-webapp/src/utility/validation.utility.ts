@@ -1,3 +1,4 @@
+import { TFunction } from 'react-i18next';
 import * as yup from 'yup';
 
 import { RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
@@ -73,6 +74,53 @@ export function identicalTaxIds(
   }
   return errors;
 }
+
+export const pagoPaValidationSchema = (t: TFunction, tc: TFunction) =>
+  yup.object().shape({
+    noticeCode: yup
+      .string()
+      .required(tc('required-field'))
+      .matches(dataRegex.noticeCode, `${t('payment-methods.pagopa.notice-code')} ${tc('invalid')}`),
+    creditorTaxId: yup
+      .string()
+      .required(tc('required-field'))
+      .matches(dataRegex.pIva, `${t('payment-methods.pagopa.creditor-taxid')} ${tc('invalid')}`),
+    applyCost: yup.boolean(),
+    file: yup
+      .object({
+        data: yup
+          .mixed()
+          .test('fileType', '', (input) => input === undefined || input instanceof File)
+          .optional(),
+        sha256: yup.object({
+          hashBase64: yup.string(),
+          hashHex: yup.string(),
+        }),
+      })
+      .optional(),
+  });
+
+export const f24ValidationSchema = (tc: TFunction) =>
+  yup.object().shape({
+    name: requiredStringFieldValidation(tc, 512),
+    applyCost: yup.boolean(),
+    file: yup
+      .object()
+      .shape({
+        data: yup
+          .mixed()
+          .test((input) => input instanceof File)
+          .required(),
+        sha256: yup
+          .object({
+            hashBase64: yup.string().required(),
+            hashHex: yup.string().required(),
+          })
+          .required(),
+      })
+      .required(),
+  });
+
 // TODO: it will be restored in the new UI
 // export function identicalIUV(
 //   values: Array<NewNotificationRecipient> | undefined,

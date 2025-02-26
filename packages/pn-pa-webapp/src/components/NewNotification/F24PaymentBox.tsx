@@ -36,6 +36,9 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
   onDeletePayment,
   fieldMeta,
 }) => {
+  const { t: tn } = useTranslation(['notifiche'], {
+    keyPrefix: 'new-notification.steps.debt-position-detail.payment-methods.f24',
+  });
   const { t } = useTranslation(['notifiche', 'common']);
   const isMobile = useIsMobile('md');
 
@@ -67,7 +70,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
 
       <TextField
         id="name"
-        label={t('new-notification.steps.payment-methods.f24.document-name')}
+        label={tn('document-name')}
         fullWidth
         name="name"
         value={name}
@@ -90,7 +93,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
                   onChange={(e) => handleChange(e)}
                 />
               }
-              label={t('new-notification.steps.payment-methods.pagopa.apply-cost')}
+              label={tn('apply-cost')}
               componentsProps={{ typography: { fontSize: '16px' } }}
             />
           )}

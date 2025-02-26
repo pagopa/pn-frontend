@@ -20,7 +20,7 @@ export type PaymentMethodsFormValues = {
   notificationFeePolicy: NotificationFeePolicy;
   paFee: number | undefined;
   vat: number | undefined;
-  pagoPaIntMode: PagoPaIntegrationMode | undefined;
+  pagoPaIntMode: PagoPaIntegrationMode;
   recipients: {
     [taxId: string]: {
       pagoPa: Array<NewNotificationPagoPaPayment>;
@@ -48,7 +48,7 @@ const PaymentMethods: React.FC<Props> = ({
   newF24Payment,
 }) => {
   const { t } = useTranslation(['notifiche'], {
-    keyPrefix: 'new-notification.steps.payment-methods',
+    keyPrefix: 'new-notification.steps.debt-position-detail.payment-methods',
   });
 
   const fileUploadedHandler = async (
@@ -202,7 +202,7 @@ const PaymentMethods: React.FC<Props> = ({
               </Typography>
               {formik.values.recipients[recipient.taxId].f24.map((f24Payment, index) => (
                 <F24PaymentBox
-                  id={`${recipient.taxId}.${index}.f24`}
+                  id={`${recipient.taxId}.f24.${index}`}
                   key={`${recipient.taxId}-f24-${f24Payment?.idx}`}
                   onFileUploaded={(_, file, sha256) =>
                     fileUploadedHandler(recipient.taxId, 'f24', index, file, sha256)

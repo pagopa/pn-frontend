@@ -37,6 +37,7 @@ import { uploadNotificationPaymentDocument } from '../../redux/newNotification/a
 import { setDebtPotisionDetail } from '../../redux/newNotification/reducers';
 import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
+import { f24ValidationSchema, pagoPaValidationSchema } from '../../utility/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
 import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 import PaymentMethods from './PaymentMethods';
@@ -227,30 +228,37 @@ const DebtPositionDetail: React.FC<Props> = ({
 
         return !(hasPagoPaDebtPosition && value === PagoPaIntegrationMode.NONE);
       }),
-
     recipients: yup.lazy((obj) =>
       yup.object(
-        mapValues(obj, () =>
+        mapValues(obj, (_, taxId) =>
           yup.object({
             pagoPa: yup.array().of(
-              yup.object({
-                noticeCode: yup
-                  .string()
-                  .required(tc('required-field'))
-                  .matches(
-                    dataRegex.noticeCode,
-                    `${t('payment-methods.pagopa.notice-code')} ${tc('invalid')}`
-                  ),
-                creditorTaxId: yup
-                  .string()
-                  .required(tc('required-field'))
-                  .matches(
-                    dataRegex.pIva,
-                    `${t('payment-methods.pagopa.notice-code')} ${tc('invalid')}`
-                  ),
+              yup.object().when([], {
+                is: () => {
+                  const debtPosition = notification.recipients.find(
+                    (r) => r.taxId === taxId
+                  )?.debtPosition;
+                  return (
+                    debtPosition === PaymentModel.PAGO_PA ||
+                    debtPosition === PaymentModel.PAGO_PA_F24
+                  );
+                },
+                then: () => pagoPaValidationSchema(t, tc),
               })
             ),
-            f24: yup.array(),
+            f24: yup.array().of(
+              yup.object().when([], {
+                is: () => {
+                  const debtPosition = notification.recipients.find(
+                    (r) => r.taxId === taxId
+                  )?.debtPosition;
+                  return (
+                    debtPosition === PaymentModel.F24 || debtPosition === PaymentModel.PAGO_PA_F24
+                  );
+                },
+                then: () => f24ValidationSchema(tc),
+              })
+            ),
           })
         )
       )

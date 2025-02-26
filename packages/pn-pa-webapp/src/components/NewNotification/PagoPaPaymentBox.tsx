@@ -36,6 +36,9 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
   onDeletePayment,
   fieldMeta,
 }) => {
+  const { t: tn } = useTranslation(['notifiche'], {
+    keyPrefix: 'new-notification.steps.debt-position-detail.payment-methods.pagopa',
+  });
   const { t } = useTranslation(['notifiche', 'common']);
   const isMobile = useIsMobile('md');
 
@@ -66,7 +69,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
         <TextField
           id="noticeCode"
-          label={t('new-notification.steps.payment-methods.pagopa.notice-code')}
+          label={tn('notice-code')}
           fullWidth
           name="noticeCode"
           value={noticeCode}
@@ -75,10 +78,11 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
           helperText={getError('noticeCode')}
           size="small"
           margin="normal"
+          required
         />
         <TextField
           id="creditorTaxId"
-          label={t('new-notification.steps.payment-methods.pagopa.creditor-taxid')}
+          label={tn('creditor-taxid')}
           fullWidth
           name="creditorTaxId"
           value={creditorTaxId}
@@ -87,6 +91,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
           helperText={getError('creditorTaxId')}
           size="small"
           margin="normal"
+          required
         />
       </Stack>
 
@@ -102,7 +107,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
                   onChange={(e) => handleChange(e)}
                 />
               }
-              label={t('new-notification.steps.payment-methods.pagopa.apply-cost')}
+              label={tn('apply-cost')}
               componentsProps={{ typography: { fontSize: '16px' } }}
             />
           )}
