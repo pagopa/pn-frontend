@@ -129,7 +129,7 @@ const newNotificationSlice = createSlice({
         ...state.notification,
         recipients: action.payload.recipients,
         vat: action.payload.vat,
-        paFee: action.payload.paFee,
+        paFee: Number(action.payload.paFee),
         notificationFeePolicy: action.payload.notificationFeePolicy,
         pagoPaIntMode: action.payload.pagoPaIntMode
       };

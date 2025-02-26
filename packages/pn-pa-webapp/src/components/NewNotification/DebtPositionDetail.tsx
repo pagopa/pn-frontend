@@ -127,8 +127,8 @@ const DebtPositionDetail: React.FC<Props> = ({
   const initialValues = useMemo(
     // eslint-disable-next-line sonarjs/cognitive-complexity
     () => ({
-      notificationFeePolicy: notification.notificationFeePolicy ?? undefined,
-      paFee: notification.paFee ?? undefined,
+      notificationFeePolicy: notification.notificationFeePolicy,
+      paFee: notification.paFee || undefined,
       vat: notification.vat ?? undefined,
       pagoPaIntMode: notification.pagoPaIntMode ?? PagoPaIntegrationMode.NONE,
       recipients: notification.recipients.reduce(
@@ -290,7 +290,6 @@ const DebtPositionDetail: React.FC<Props> = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: async () => {
-      console.log('FORMAT PAYMENTS', formatPayments());
       const paymentData = await dispatch(uploadNotificationPaymentDocument(formatPayments()));
       const paymentPayload = paymentData.payload as { [key: string]: PaymentObject };
       if (paymentPayload) {
@@ -317,7 +316,7 @@ const DebtPositionDetail: React.FC<Props> = ({
 
     if (name === 'notificationFeePolicy' && value === NotificationFeePolicy.FLAT_RATE) {
       await formik.setFieldValue('paFee', '');
-      await formik.setFieldValue('vat', '');
+      await formik.setFieldValue('vat', undefined);
     }
     await formik.setFieldValue(name, value);
   };
@@ -380,10 +379,8 @@ const DebtPositionDetail: React.FC<Props> = ({
                     name="paFee"
                     label={t('notification-fee.pa-fee')}
                     value={formik.values.paFee}
-                    error={
-                      formik.touched.notificationFeePolicy &&
-                      Boolean(formik.errors.notificationFeePolicy)
-                    }
+                    error={formik.touched.paFee && Boolean(formik.errors.paFee)}
+                    helperText={formik.touched.paFee && formik.errors.paFee}
                     onChange={handleChange}
                     InputProps={{
                       endAdornment: (
@@ -403,6 +400,8 @@ const DebtPositionDetail: React.FC<Props> = ({
                     value={formik.values.vat}
                     onChange={handleChange}
                     sx={{ flexBasis: '25%' }}
+                    error={formik.touched.vat && Boolean(formik.errors.vat)}
+                    helperText={formik.touched.vat && formik.errors.vat}
                   >
                     {VAT.map((option) => (
                       <MenuItem key={option} value={option}>
