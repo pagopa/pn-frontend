@@ -1,4 +1,4 @@
-import {  Fragment } from 'react';
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
 import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
@@ -16,42 +16,29 @@ const FilterNotificationsFormActions = ({
   cleanFilters,
   isInDialog = false,
   isInitialSearch,
-  // lengthOfNotifications
 }: Props) => {
   const { t } = useTranslation(['common']);
-  /* const [feedbackSubmit, setFeedbackSubmit] = useState(false);
-  const [feedbackCancel, setFeedbackCancel] = useState(false); */
-
-  const handleCancel = () =>{
-   // setFeedbackCancel(true);
-    cleanFilters();
-   /*  setFeedbackSubmit(false);
-    setFeedbackCancel(false); */
-  };
 
   const confirmAction = (
     <Grid item lg="auto" xs={12}>
       <Button
-        // aria-label={feedbackSubmit ? lengthOfNotifications ?`Filtro completato: risultati prodotti ${lengthOfNotifications}, Sei su Filtra pulsante`:'Il filtro non ha prodotto risultati, Sei sul pulsante filtra ': 'Bottone Filtra'}
         id="filter-notifications-button"
         variant="outlined"
         type="submit"
         size="small"
         disabled={isInitialSearch && !filtersApplied}
-        // onClick={()=>setFeedbackSubmit(true)}
       >
         {t('button.filtra')}
       </Button>
-    </Grid> 
+    </Grid>
   );
 
   const cancelAction = (
     <Grid item lg="auto" xs={12}>
       <Button
-        // aria-label={feedbackCancel ? 'Cancellazione Completata, Sei su Cancella filtri pulsante':'Sei su Cancella filtri pulsante'}
         data-testid="cancelButton"
         size="small"
-        onClick={handleCancel}
+        onClick={cleanFilters}
         disabled={!filtersApplied}
       >
         {t('button.annulla filtro')}

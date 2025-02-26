@@ -410,9 +410,6 @@ const DelegationsOfTheCompany = () => {
                   renderOption={renderOption}
                   renderInput={(params) => (
                     <TextField
-                      role="combobox"
-                      aria-autocomplete="list"
-                      aria-expanded="false"
                       {...params}
                       label={t('deleghe.table.group')}
                       placeholder={t('deleghe.table.group')}

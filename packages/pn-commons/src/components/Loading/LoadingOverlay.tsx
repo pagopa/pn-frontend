@@ -9,7 +9,7 @@ export function LoadingOverlay() {
   const loading = useSelector(appStateSelectors.selectLoading);
 
   return (
-    <Modal open={loading} sx={{ outline: 0 }} data-testid="loading-spinner" disableAutoFocus disableRestoreFocus>
+    <Modal open={loading} sx={{ outline: 0 }} data-testid="loading-spinner">
       <Box
         sx={{
           position: 'absolute',

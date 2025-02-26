@@ -59,7 +59,7 @@ const initialValues = (
   };
 };
 
-const FilterNotifications = forwardRef(({ showFilters, currentDelegator, lengthOfNotifications }: Props, ref) => {
+const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const { t } = useTranslation(['common', 'notifiche']);
@@ -186,7 +186,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator, lengthO
       </CustomMobileDialogContent>
     </CustomMobileDialog>
   ) : (
-    <form onSubmit={formik.handleSubmit} data-testid="filter-form" >
+    <form onSubmit={formik.handleSubmit} data-testid="filter-form">
       <Box sx={{ flexGrow: 1, mt: 3 }}>
         <Grid
           container
@@ -207,7 +207,6 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator, lengthO
             cleanFilters={cleanFilters}
             filtersApplied={isFilterApplied(filtersCount)}
             isInitialSearch={isInitialSearch}
-            lengthOfNotifications={lengthOfNotifications}
           />
         </Grid>
       </Box>
