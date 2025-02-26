@@ -1,12 +1,13 @@
+import { FieldMetaProps } from 'formik';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import { TextField } from '@mui/material';
+import { FormControlLabel, Stack, Switch, TextField } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { NewNotificationF24Payment } from '../../models/NewNotification';
+import { NewNotificationF24Payment, NotificationFeePolicy } from '../../models/NewNotification';
 
 type PaymentBoxProps = {
   id: string;
@@ -17,9 +18,11 @@ type PaymentBoxProps = {
   ) => void;
   onRemoveFile: (id: string) => void;
   f24Payment: NewNotificationF24Payment;
+  notificationFeePolicy: NotificationFeePolicy;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   showDeleteButton: boolean;
   onDeletePayment: () => void;
+  fieldMeta: (name: string) => FieldMetaProps<any>;
 };
 
 const F24PaymentBox: React.FC<PaymentBoxProps> = ({
@@ -27,14 +30,24 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
   onFileUploaded,
   onRemoveFile,
   f24Payment,
+  notificationFeePolicy,
   handleChange,
   showDeleteButton,
   onDeletePayment,
+  fieldMeta,
 }) => {
   const { t } = useTranslation(['notifiche', 'common']);
   const isMobile = useIsMobile('md');
 
-  const { name, file } = f24Payment;
+  const { name, applyCost, file } = f24Payment;
+
+  const getError = (fieldId: string) => {
+    if (fieldMeta(`${id}.${fieldId}`).touched) {
+      return fieldMeta(`${id}.${fieldId}`).error;
+    }
+
+    return null;
+  };
 
   return (
     <Fragment>
@@ -54,26 +67,45 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
 
       <TextField
         id="name"
-        label="Titolo documento*"
+        label={t('new-notification.steps.payment-methods.f24.document-name')}
         fullWidth
         name="name"
         value={name}
         onChange={handleChange}
-        // error={Boolean(formik.errors.senderDenomination)}
-        // helperText={formik.errors.senderDenomination}
+        error={!!getError('name')}
+        helperText={getError('name')}
         size="small"
         margin="normal"
       />
 
-      {showDeleteButton && (
-        <ButtonNaked
-          color="primary"
-          startIcon={<DeleteIcon />}
-          onClick={onDeletePayment}
-          sx={{ justifyContent: 'end' }}
-        >
-          {t('button.delete', { ns: 'common' })}
-        </ButtonNaked>
+      {(notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE || showDeleteButton) && (
+        <Stack direction={isMobile ? 'column' : 'row'}>
+          {notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
+            <FormControlLabel
+              control={
+                <Switch
+                  id="applyCost"
+                  name="applyCost"
+                  value={applyCost}
+                  onChange={(e) => handleChange(e)}
+                />
+              }
+              label={t('new-notification.steps.payment-methods.pagopa.apply-cost')}
+              componentsProps={{ typography: { fontSize: '16px' } }}
+            />
+          )}
+
+          {showDeleteButton && (
+            <ButtonNaked
+              color="primary"
+              startIcon={<DeleteIcon />}
+              onClick={onDeletePayment}
+              sx={{ justifyContent: 'end' }}
+            >
+              {t('button.delete', { ns: 'common' })}
+            </ButtonNaked>
+          )}
+        </Stack>
       )}
     </Fragment>
   );

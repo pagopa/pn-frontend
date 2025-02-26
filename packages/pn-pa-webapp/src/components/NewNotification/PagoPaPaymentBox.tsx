@@ -1,4 +1,4 @@
-import { useFormik } from 'formik';
+import { FieldMetaProps } from 'formik';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -8,7 +8,6 @@ import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { NewNotificationPagoPaPayment, NotificationFeePolicy } from '../../models/NewNotification';
-import { PaymentMethodsFormValues } from './PaymentMethods';
 
 type PaymentBoxProps = {
   id: string;
@@ -23,7 +22,7 @@ type PaymentBoxProps = {
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   showDeleteButton: boolean;
   onDeletePayment: () => void;
-  formik: ReturnType<typeof useFormik<PaymentMethodsFormValues>>;
+  fieldMeta: (name: string) => FieldMetaProps<any>;
 };
 
 const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
@@ -35,7 +34,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
   handleChange,
   showDeleteButton,
   onDeletePayment,
-  formik,
+  fieldMeta,
 }) => {
   const { t } = useTranslation(['notifiche', 'common']);
   const isMobile = useIsMobile('md');
@@ -43,8 +42,8 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
   const { noticeCode, creditorTaxId, applyCost, file } = pagoPaPayment;
 
   const getError = (fieldId: string) => {
-    if (formik.getFieldMeta(`${id}.${fieldId}`).touched) {
-      return formik.getFieldMeta(`${id}.${fieldId}`).error;
+    if (fieldMeta(`${id}.${fieldId}`).touched) {
+      return fieldMeta(`${id}.${fieldId}`).error;
     }
 
     return null;

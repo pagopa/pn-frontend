@@ -172,7 +172,7 @@ const PaymentMethods: React.FC<Props> = ({
                   handleChange={(event) => handleChange(event, recipient.taxId, 'pagoPa', index)}
                   showDeleteButton={index > 0}
                   onDeletePayment={() => handleRemovePagoPa(recipient.taxId, index)}
-                  formik={formik}
+                  fieldMeta={(fieldName) => formik.getFieldMeta(fieldName)}
                 />
               ))}
 
@@ -209,9 +209,11 @@ const PaymentMethods: React.FC<Props> = ({
                   }
                   onRemoveFile={() => removeFileHandler(recipient.taxId, 'f24', index)}
                   f24Payment={f24Payment}
+                  notificationFeePolicy={formik.values.notificationFeePolicy}
                   handleChange={(event) => handleChange(event, recipient.taxId, 'f24', index)}
                   showDeleteButton={index > 0}
                   onDeletePayment={() => handleRemoveF24(recipient.taxId, index)}
+                  fieldMeta={(fieldName) => formik.getFieldMeta(fieldName)}
                 />
               ))}
 
