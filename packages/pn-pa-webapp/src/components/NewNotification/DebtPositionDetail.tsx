@@ -234,7 +234,20 @@ const DebtPositionDetail: React.FC<Props> = ({
           yup.object({
             pagoPa: yup.array().of(
               yup.object({
-                noticeCode: yup.string().required(),
+                noticeCode: yup
+                  .string()
+                  .required(tc('required-field'))
+                  .matches(
+                    dataRegex.noticeCode,
+                    `${t('payment-methods.pagopa.notice-code')} ${tc('invalid')}`
+                  ),
+                creditorTaxId: yup
+                  .string()
+                  .required(tc('required-field'))
+                  .matches(
+                    dataRegex.pIva,
+                    `${t('payment-methods.pagopa.notice-code')} ${tc('invalid')}`
+                  ),
               })
             ),
             f24: yup.array(),
