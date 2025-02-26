@@ -7,14 +7,6 @@ import { fireEvent, render, screen, within } from '../../../__test__/test-utils'
 import { AddressType, ChannelType, DigitalAddress, Sender } from '../../../models/contacts';
 import LegalContactAssociationDialog from '../LegalContactAssociationDialog';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
-
 const confirmHandler = vi.fn();
 const cancelHandler = vi.fn();
 
@@ -23,22 +15,19 @@ const sender: Sender = {
   senderName: 'Comune di Milano',
 };
 
-const oldAddress: DigitalAddress = {
-  ...sender,
+const oldAddress: Omit<DigitalAddress, keyof Sender> = {
   addressType: AddressType.LEGAL,
   channelType: ChannelType.PEC,
   value: 'nome.utente@pec-comune-milano.it',
 };
 
-const newAddress: DigitalAddress = {
-  ...sender,
+const newAddress: Omit<DigitalAddress, keyof Sender> = {
   addressType: AddressType.LEGAL,
   channelType: ChannelType.PEC,
   value: 'nome.utente2@pec-comune-milano.it',
 };
 
-const sercqSendAddress: DigitalAddress = {
-  ...sender,
+const sercqSendAddress: Omit<DigitalAddress, keyof Sender> = {
   addressType: AddressType.LEGAL,
   channelType: ChannelType.SERCQ_SEND,
   value: SERCQ_SEND_VALUE,
@@ -54,11 +43,9 @@ describe('LegalContactAssociationDialog Component', () => {
     const { getByTestId } = render(
       <LegalContactAssociationDialog
         open
-        data={{
-          sender,
-          newAddress,
-          oldAddress,
-        }}
+        sender={sender}
+        newAddress={newAddress}
+        oldAddress={oldAddress}
         onCancel={cancelHandler}
         onConfirm={confirmHandler}
       />
@@ -87,11 +74,9 @@ describe('LegalContactAssociationDialog Component', () => {
     const { getByTestId } = render(
       <LegalContactAssociationDialog
         open
-        data={{
-          sender,
-          newAddress: sercqSendAddress,
-          oldAddress,
-        }}
+        sender={sender}
+        newAddress={sercqSendAddress}
+        oldAddress={oldAddress}
         onCancel={cancelHandler}
         onConfirm={confirmHandler}
       />
@@ -120,11 +105,9 @@ describe('LegalContactAssociationDialog Component', () => {
     const { getByTestId } = render(
       <LegalContactAssociationDialog
         open
-        data={{
-          sender,
-          newAddress: oldAddress,
-          oldAddress,
-        }}
+        sender={sender}
+        newAddress={oldAddress}
+        oldAddress={oldAddress}
         onCancel={cancelHandler}
         onConfirm={confirmHandler}
       />
@@ -151,11 +134,9 @@ describe('LegalContactAssociationDialog Component', () => {
     const { getByTestId } = render(
       <LegalContactAssociationDialog
         open
-        data={{
-          sender,
-          newAddress: sercqSendAddress,
-          oldAddress: sercqSendAddress,
-        }}
+        sender={sender}
+        newAddress={sercqSendAddress}
+        oldAddress={sercqSendAddress}
         onCancel={cancelHandler}
         onConfirm={confirmHandler}
       />
