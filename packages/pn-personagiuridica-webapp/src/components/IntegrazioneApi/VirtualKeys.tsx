@@ -152,7 +152,7 @@ const VirtualKeys: React.FC = () => {
 
       {!issuerState.tosAccepted ? (
         <EmptyState sentimentIcon={KnownSentiment.NONE}>
-          {t('virtualKeys.tos-empty-state')}
+          {t('virtualKeys.not-enabled-empty-state')}
         </EmptyState>
       ) : (
         <VirtualKeysTable
