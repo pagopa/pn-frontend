@@ -69,6 +69,7 @@ export const dataRegex = {
   // ------------------------------------
   // Carlos Lombardi, 2023.01.24
   currency: /^\d+(?:[.,]\d+)*$/,
+
 };
 
 /**

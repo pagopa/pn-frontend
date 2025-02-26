@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import _, { mapValues } from 'lodash';
-import { ForwardedRef, forwardRef, useImperativeHandle, useMemo } from 'react';
+import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -201,14 +201,16 @@ const DebtPositionDetail: React.FC<Props> = ({
       .oneOf(Object.values(NotificationFeePolicy))
       .required(tc('required-field')),
     paFee: yup
-      .string()
+      .mixed()
       .optional()
       .when('notificationFeePolicy', {
         is: NotificationFeePolicy.DELIVERY_MODE,
         then: yup
-          .string()
+          .mixed()
           .required(tc('required-field'))
-          .matches(dataRegex.currency, `${t('notification-fee.pa-fee')} ${tc('invalid')}`),
+          .test('is-currency', `${t('notification-fee.pa-fee')} ${tc('invalid')}`, (value) =>
+            dataRegex.currency.test(String(value))
+          ),
       }),
     vat: yup
       .number()
@@ -315,10 +317,18 @@ const DebtPositionDetail: React.FC<Props> = ({
     const { name, value } = e.target;
 
     if (name === 'notificationFeePolicy' && value === NotificationFeePolicy.FLAT_RATE) {
-      await formik.setFieldValue('paFee', '');
+      await formik.setFieldValue('paFee', undefined);
+      await formik.setFieldTouched('paFee', false);
+
       await formik.setFieldValue('vat', undefined);
+      await formik.setFieldTouched('vat', false);
     }
     await formik.setFieldValue(name, value);
+  };
+
+  const handleChangeTouched = async (e: ChangeEvent) => {
+    formik.handleChange(e);
+    await formik.setFieldTouched(e.target.id, true, false);
   };
 
   useImperativeHandle(forwardedRef, () => ({
@@ -381,7 +391,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                     value={formik.values.paFee}
                     error={formik.touched.paFee && Boolean(formik.errors.paFee)}
                     helperText={formik.touched.paFee && formik.errors.paFee}
-                    onChange={handleChange}
+                    onChange={handleChangeTouched}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end" sx={{ width: '21px' }}>
