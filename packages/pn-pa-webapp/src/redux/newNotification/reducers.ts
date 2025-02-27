@@ -10,7 +10,6 @@ import {
   PreliminaryInformationsPayload,
 } from '../../models/NewNotification';
 import { UserGroup } from '../../models/user';
-import { getConfiguration } from '../../services/configuration.service';
 import { filterPaymentsByDebtPositionChange } from '../../utility/notification.utility';
 import {
   createNewNotification,
@@ -145,12 +144,9 @@ const newNotificationSlice = createSlice({
     });
     builder.addCase(uploadNotificationDocument.fulfilled, (state, action) => {
       state.notification.documents = action.payload;
-      // TODO
-      state.isCompleted = !getConfiguration().IS_PAYMENT_ENABLED;
     });
     builder.addCase(uploadNotificationPaymentDocument.fulfilled, (state, action) => {
       state.notification.recipients = action.payload;
-      state.isCompleted = true;
     });
     builder.addCase(createNewNotification.rejected, (state) => {
       state.isCompleted = false;

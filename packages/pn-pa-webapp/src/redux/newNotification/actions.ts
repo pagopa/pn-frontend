@@ -77,7 +77,8 @@ const uploadNotificationDocumentCbk = async (
               items[index].sha256,
               presigneUrl.secret,
               items[index].file as Uint8Array,
-              presigneUrl.httpMethod
+              presigneUrl.httpMethod,
+              items[index].contentType
             )
           );
         }
@@ -176,6 +177,7 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
         return recipients;
       }
       const documentsUploaded = await uploadNotificationDocumentCbk(documentsToUpload);
+      console.log('Documents to upload', documentsToUpload);
       const updatedItems = _.cloneDeep(recipients);
 
       for (const updatedItem of updatedItems) {
@@ -184,12 +186,14 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
         }
 
         for (const payment of updatedItem.payments) {
+          console.log('Payment', payment.f24);
           /* eslint-disable functional/immutable-data */
           if (payment.pagoPa?.ref && documentsUploaded[payment.pagoPa.id]) {
             payment.pagoPa.ref.key = documentsUploaded[payment.pagoPa.id].key;
             payment.pagoPa.ref.versionToken = documentsUploaded[payment.pagoPa.id].versionToken;
           }
           if (payment.f24 && documentsUploaded[payment.f24.id]) {
+            console.log('payment to upload', documentsUploaded[payment.f24.id]);
             payment.f24.ref.key = documentsUploaded[payment.f24.id].key;
             payment.f24.ref.versionToken = documentsUploaded[payment.f24.id].versionToken;
           }

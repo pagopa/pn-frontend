@@ -56,7 +56,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
         uploadText={
           isMobile ? t('new-notification.drag-doc-mobile') : t('new-notification.drag-doc-pc')
         }
-        accept="application/pdf"
+        accept="application/json"
         onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
         onRemoveFile={() => onRemoveFile(id)}
         sx={{ marginTop: '10px' }}
@@ -87,6 +87,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
                   id="applyCost"
                   name="applyCost"
                   value={applyCost}
+                  checked={applyCost}
                   onChange={(e) => handleChange(e)}
                 />
               }

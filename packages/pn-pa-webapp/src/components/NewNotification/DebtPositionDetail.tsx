@@ -29,7 +29,6 @@ import {
   NotificationFeePolicy,
   PagoPaIntegrationMode,
   PaymentModel,
-  PaymentObject,
   VAT,
 } from '../../models/NewNotification';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -305,21 +304,26 @@ const DebtPositionDetail: React.FC<Props> = ({
     ),
   });
 
-  const updateRefAfterUpload = async (paymentPayload: { [key: string]: PaymentObject }) => {
-    for (const [taxId, payment] of Object.entries(paymentPayload)) {
-      if (payment.pagoPa) {
-        await formik.setFieldValue(
-          `recipients.${taxId}.${payment.pagoPa.idx}.pagoPa.ref`,
-          payment.pagoPa.ref,
-          false
-        );
-      }
-      if (payment.f24) {
-        await formik.setFieldValue(
-          `recipients.${taxId}.${payment.pagoPa.idx}.pagoPa.ref`,
-          payment.f24.ref,
-          false
-        );
+  const updateRefAfterUpload = async (paymentPayload: Array<NewNotificationRecipient>) => {
+    for (const recipient of paymentPayload) {
+      const taxId = recipient.taxId;
+      if (recipient.payments) {
+        for (const payment of recipient.payments) {
+          if (payment.pagoPa) {
+            await formik.setFieldValue(
+              `recipients.${taxId}.pagoPa.${payment.pagoPa.idx}.ref`,
+              payment.pagoPa.ref,
+              false
+            );
+          }
+          if (payment.f24) {
+            await formik.setFieldValue(
+              `recipients.${taxId}.f24.${payment.f24.idx}.ref`,
+              payment.f24.ref,
+              false
+            );
+          }
+        }
       }
     }
   };
@@ -331,19 +335,19 @@ const DebtPositionDetail: React.FC<Props> = ({
     enableReinitialize: true,
     onSubmit: async () => {
       const paymentData = await dispatch(uploadNotificationPaymentDocument(formatPayments()));
-      const paymentPayload = paymentData.payload as { [key: string]: PaymentObject };
+      const paymentPayload = paymentData.payload as Array<NewNotificationRecipient>;
       if (paymentPayload) {
         await updateRefAfterUpload(paymentPayload);
       }
-      saveDebtPositionDetail();
+      saveDebtPositionDetail(paymentPayload);
       onConfirm();
     },
   });
 
-  const saveDebtPositionDetail = () => {
+  const saveDebtPositionDetail = (recipients: Array<NewNotificationRecipient>) => {
     dispatch(
       setDebtPotisionDetail({
-        recipients: formatPayments(),
+        recipients,
         vat: formik.values.vat,
         paFee: formik.values.paFee,
         notificationFeePolicy: formik.values.notificationFeePolicy,
@@ -374,17 +378,15 @@ const DebtPositionDetail: React.FC<Props> = ({
   };
 
   const handlePreviousStep = () => {
-    saveDebtPositionDetail();
+    saveDebtPositionDetail(formatPayments());
     onPreviousStep();
   };
 
   useImperativeHandle(forwardedRef, () => ({
     confirm() {
-      saveDebtPositionDetail();
+      saveDebtPositionDetail(formatPayments());
     },
   }));
-
-  console.log('ERRORSSSSS', formik.errors, formik.values);
 
   return (
     <form onSubmit={formik.handleSubmit} data-testid="paymentMethodForm">
