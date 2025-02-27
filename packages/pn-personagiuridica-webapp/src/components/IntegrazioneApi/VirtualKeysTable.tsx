@@ -108,13 +108,7 @@ const VirtualKeysTable: React.FC<Props> = ({
     },
   ];
 
-  if (virtualKeys.items.length === 0 && !issuerIsPresent) {
-    return (
-      <EmptyState sentimentIcon={KnownSentiment.NONE}>
-        {t('virtualKeys.not-enabled-empty-state')}
-      </EmptyState>
-    );
-  } else if (!virtualKeys || virtualKeys.items.length === 0) {
+  if (!virtualKeys || virtualKeys.items.length === 0) {
     return (
       <EmptyState sentimentIcon={KnownSentiment.NONE}>{t('virtualKeys.empty-state')}</EmptyState>
     );
