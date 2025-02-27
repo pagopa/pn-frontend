@@ -438,7 +438,6 @@
         "title": "Destinatari",
         "fiscal-code-error": "Il valore inserito non è corretto",
         "identical-fiscal-codes-error": "C'è già un destinatario con questo Codice Fiscale. Inseriscine uno diverso.",
-        "identical-notice-codes-error": "C'è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
         "notice-code-error": "Inserisci un codice di 18 caratteri numerici",
         "pec-error": "Indirizzo PEC non valido",
         "forbidden-characters-denomination-error": "Hai inserito caratteri non validi",
@@ -522,12 +521,14 @@
           "sync": "Sincrona",
           "async": "Asincrona"
         },
+        "identical-notice-codes-error": "C'è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
         "payment-methods": {
           "title": "Modelli di pagamento",
           "pagopa-notice": "Avviso pagoPA",
           "payment-models": "Posizione debitoria di",
           "nothing": "<0>Se questa notifica prevede un pagamento, torna a </0><1>Informazioni preliminari</1><2> e seleziona un modello. Poi, torna qui per caricarlo.</2>",
           "back-to-attachments": "Torna a Allegati",
+          "apply-cost-installment": "Attenzione: se è prevista la possibilità di un pagamento rateale dovrai applicare il costo di notifica solo ad una rata.",
           "pagopa": {
             "attach-pagopa-notice": "Specifiche Avviso pagoPA",
             "notice-code": "Codice avviso",

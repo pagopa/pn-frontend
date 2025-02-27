@@ -10,24 +10,10 @@ import {
   NewNotification,
   NewNotificationF24Payment,
   NewNotificationPagoPaPayment,
-  NotificationFeePolicy,
-  PagoPaIntegrationMode,
+  PaymentMethodsFormValues,
 } from '../../models/NewNotification';
 import F24PaymentBox from './F24PaymentBox';
 import PagoPaPaymentBox from './PagoPaPaymentBox';
-
-export type PaymentMethodsFormValues = {
-  notificationFeePolicy: NotificationFeePolicy;
-  paFee: number | undefined;
-  vat: number | undefined;
-  pagoPaIntMode: PagoPaIntegrationMode;
-  recipients: {
-    [taxId: string]: {
-      pagoPa: Array<NewNotificationPagoPaPayment>;
-      f24: Array<NewNotificationF24Payment>;
-    };
-  };
-};
 
 type Props = {
   notification: NewNotification;

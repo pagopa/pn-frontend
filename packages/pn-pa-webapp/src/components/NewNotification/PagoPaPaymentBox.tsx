@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import { FormControlLabel, Stack, Switch, TextField } from '@mui/material';
+import { Alert, FormControlLabel, Stack, Switch, TextField } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -36,9 +36,6 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
   onDeletePayment,
   fieldMeta,
 }) => {
-  const { t: tn } = useTranslation(['notifiche'], {
-    keyPrefix: 'new-notification.steps.debt-position-detail.payment-methods.pagopa',
-  });
   const { t } = useTranslation(['notifiche', 'common']);
   const isMobile = useIsMobile('md');
 
@@ -69,7 +66,9 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
         <TextField
           id="noticeCode"
-          label={tn('notice-code')}
+          label={t(
+            'new-notification.steps.debt-position-detail.payment-methods.pagopa.notice-code'
+          )}
           fullWidth
           name="noticeCode"
           value={noticeCode}
@@ -82,7 +81,9 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
         />
         <TextField
           id="creditorTaxId"
-          label={tn('creditor-taxid')}
+          label={t(
+            'new-notification.steps.debt-position-detail.payment-methods.pagopa.creditor-taxid'
+          )}
           fullWidth
           name="creditorTaxId"
           value={creditorTaxId}
@@ -104,10 +105,13 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
                   id="applyCost"
                   name="applyCost"
                   value={applyCost}
+                  checked={applyCost}
                   onChange={(e) => handleChange(e)}
                 />
               }
-              label={tn('apply-cost')}
+              label={t(
+                'new-notification.steps.debt-position-detail.payment-methods.pagopa.apply-cost'
+              )}
               componentsProps={{ typography: { fontSize: '16px' } }}
             />
           )}
@@ -126,6 +130,12 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
             </ButtonNaked>
           )}
         </Stack>
+      )}
+
+      {showDeleteButton && (
+        <Alert severity="warning">
+          {t('new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment')}
+        </Alert>
       )}
     </Fragment>
   );

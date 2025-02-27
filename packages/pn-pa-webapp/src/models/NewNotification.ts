@@ -150,6 +150,21 @@ export interface UploadDocumentsResponse {
   [id: string]: NotificationAttachmentBodyRef;
 }
 
+export type RecipientPaymentsFormValues = {
+  [taxId: string]: {
+    pagoPa: Array<NewNotificationPagoPaPayment>;
+    f24: Array<NewNotificationF24Payment>;
+  };
+};
+
+export type PaymentMethodsFormValues = {
+  notificationFeePolicy: NotificationFeePolicy;
+  paFee: number | undefined;
+  vat: number | undefined;
+  pagoPaIntMode: PagoPaIntegrationMode;
+  recipients: RecipientPaymentsFormValues;
+};
+
 export const BILINGUALISM_LANGUAGES = ['de', 'sl', 'fr'];
 export const NewNotificationLangOther = 'other';
 
