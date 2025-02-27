@@ -243,6 +243,7 @@ describe('NuovaDelega page', async () => {
     const creationPayload = {
       ...createDelegationPayload,
       selectPersonaFisicaOrPersonaGiuridica: RecipientType.PG,
+      codiceFiscale:'01234567890',
       expirationDate: new Date('01/01/2122'),
       verificationCode: '34153',
       enti: [parties[1]],
@@ -260,7 +261,7 @@ describe('NuovaDelega page', async () => {
     );
     const form = container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'ragioneSociale', createDelegationPayload.ragioneSociale);
-    await testInput(form, 'codiceFiscale', createDelegationPayload.codiceFiscale);
+    await testInput(form, 'codiceFiscale', creationPayload.codiceFiscale);
     await testInput(form, 'expirationDate', '01/01/2122');
     // switch to selected entities
     await testRadio(
