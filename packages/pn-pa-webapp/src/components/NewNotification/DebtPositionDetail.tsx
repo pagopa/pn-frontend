@@ -358,9 +358,15 @@ const DebtPositionDetail: React.FC<Props> = ({
             {t('title')}
           </Typography>
           <FormBox>
-            <FormBoxTitle text={t('notification-fee.title')} />
+            <FormBoxTitle id="notificationFee" text={t('notification-fee.title')} />
             <FormBoxSubtitle text={t('notification-fee.description')} />
-            <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'end'}>
+            {/* TODO: CHECK IF ARIA-LIVE IS ENOUGH */}
+            <Stack
+              flexDirection={'row'}
+              justifyContent={'space-between'}
+              alignItems={'end'}
+              aria-live="polite"
+            >
               <RadioGroup
                 aria-labelledby="notificationFee"
                 name="notificationFeePolicy"
@@ -429,7 +435,7 @@ const DebtPositionDetail: React.FC<Props> = ({
 
           {hasPagoPa && (
             <FormBox>
-              <FormBoxTitle text={t('pagopa-int-mode.title')} />
+              <FormBoxTitle id="pagopaIntMode" text={t('pagopa-int-mode.title')} />
               <Typography variant="body2" fontSize={'14px'} marginTop={0.5}>
                 <Trans
                   t={t}
@@ -448,7 +454,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                 {t('alert', { ns: 'notifiche' })}
               </Alert>
               <RadioGroup
-                aria-labelledby="pagopa-int-mode"
+                aria-labelledby="pagopaIntMode"
                 name="pagoPaIntMode"
                 value={formik.values.pagoPaIntMode}
                 onChange={handleChange}

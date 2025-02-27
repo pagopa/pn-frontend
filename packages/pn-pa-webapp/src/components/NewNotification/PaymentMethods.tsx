@@ -154,7 +154,7 @@ const PaymentMethods: React.FC<Props> = ({
               border={1}
               borderColor="divider"
               borderRadius={1}
-              divider={<Divider />}
+              divider={<Divider aria-hidden="true" />}
             >
               <Typography fontSize="16px" fontWeight={600} data-testid="pagoPaPaymentBox">
                 {`${t('pagopa.attach-pagopa-notice')}`}
