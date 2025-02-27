@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
 
 import {
+  NewNotificationF24Payment,
   NewNotificationPagoPaPayment,
   NewNotificationRecipient,
   RecipientPaymentsFormValues,
@@ -174,3 +175,42 @@ export function identicalIUV(
 
   return errors;
 }
+
+export const checkApplyCost = (values: RecipientPaymentsFormValues) => {
+  const errors: Array<{
+    messageKey: string;
+    value: Array<NewNotificationPagoPaPayment> | Array<NewNotificationF24Payment>;
+    id: string;
+  }> = [];
+
+  Object.entries(values).forEach(([recipientId, recipient]) => {
+    const hasPagoPa = recipient.pagoPa && recipient.pagoPa.length > 0;
+    const hasF24 = recipient.f24 && recipient.f24.length > 0;
+
+    if (hasPagoPa) {
+      const hasPagoPaApplyCost = recipient.pagoPa.some((item) => item.applyCost === true);
+      if (!hasPagoPaApplyCost) {
+        // eslint-disable-next-line functional/immutable-data
+        errors.push({
+          messageKey: 'at-least-one-applycost',
+          value: recipient.pagoPa,
+          id: `${recipientId}.pagoPa`,
+        });
+      }
+    }
+
+    if (hasF24) {
+      const hasF24ApplyCost = recipient.f24.some((item) => item.applyCost === true);
+      if (!hasF24ApplyCost) {
+        // eslint-disable-next-line functional/immutable-data
+        errors.push({
+          messageKey: 'at-least-one-applycost',
+          value: recipient.f24,
+          id: `${recipientId}.f24`,
+        });
+      }
+    }
+  });
+
+  return errors;
+};

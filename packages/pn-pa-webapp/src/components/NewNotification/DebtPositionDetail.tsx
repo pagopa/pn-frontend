@@ -38,6 +38,7 @@ import { setDebtPotisionDetail } from '../../redux/newNotification/reducers';
 import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import {
+  checkApplyCost,
   f24ValidationSchema,
   identicalIUV,
   pagoPaValidationSchema,
@@ -280,6 +281,27 @@ const DebtPositionDetail: React.FC<Props> = ({
             )
           );
         })
+        .test(
+          'apply-cost-validation',
+          t('Each payment type must have at least one applyCost set to true'),
+          function (values) {
+            if (this.parent.notificationFeePolicy !== NotificationFeePolicy.DELIVERY_MODE) {
+              return true;
+            }
+
+            const validationErrors = checkApplyCost(values as any);
+
+            if (validationErrors.length === 0) {
+              return true;
+            }
+
+            return new yup.ValidationError(
+              validationErrors.map(
+                (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
+              )
+            );
+          }
+        )
     ),
   });
 
@@ -361,6 +383,8 @@ const DebtPositionDetail: React.FC<Props> = ({
       saveDebtPositionDetail();
     },
   }));
+
+  console.log('ERRORSSSSS', formik.errors, formik.values);
 
   return (
     <form onSubmit={formik.handleSubmit} data-testid="paymentMethodForm">

@@ -522,6 +522,7 @@
           "async": "Asincrona"
         },
         "identical-notice-codes-error": "C'è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
+        "at-least-one-applycost": "Applica i costi di notifica almeno ad un pagamento",
         "payment-methods": {
           "title": "Modelli di pagamento",
           "pagopa-notice": "Avviso pagoPA",
