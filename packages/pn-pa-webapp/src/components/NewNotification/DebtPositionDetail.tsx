@@ -368,6 +368,22 @@ const DebtPositionDetail: React.FC<Props> = ({
 
       await formik.setFieldValue('vat', undefined);
       await formik.setFieldTouched('vat', false);
+      const updatedRecipients = Object.fromEntries(
+        Object.entries(formik.values.recipients).map(([taxId, payments]) => [
+          taxId,
+          {
+            pagoPa: payments.pagoPa.map((payment) => ({
+              ...payment,
+              applyCost: false,
+            })),
+            f24: payments.f24.map((payment) => ({
+              ...payment,
+              applyCost: false,
+            })),
+          },
+        ])
+      );
+      await formik.setFieldValue('recipients', updatedRecipients);
     }
     await formik.setFieldValue(name, value);
   };
