@@ -37,7 +37,12 @@ import { uploadNotificationPaymentDocument } from '../../redux/newNotification/a
 import { setDebtPotisionDetail } from '../../redux/newNotification/reducers';
 import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
-import { f24ValidationSchema, pagoPaValidationSchema } from '../../utility/validation.utility';
+import {
+  checkApplyCost,
+  f24ValidationSchema,
+  identicalIUV,
+  pagoPaValidationSchema,
+} from '../../utility/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
 import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 import PaymentMethods from './PaymentMethods';
@@ -106,8 +111,6 @@ const DebtPositionDetail: React.FC<Props> = ({
     const recipients = _.cloneDeep(notification.recipients);
     return recipients.map((recipient) => {
       const recipientData = formik.values.recipients[recipient.taxId];
-      console.log(recipientData);
-
       const payments = [
         ...recipientData.pagoPa
           // .filter((payment) => payment?.file?.data)
@@ -231,39 +234,74 @@ const DebtPositionDetail: React.FC<Props> = ({
         return !(hasPagoPaDebtPosition && value === PagoPaIntegrationMode.NONE);
       }),
     recipients: yup.lazy((obj) =>
-      yup.object(
-        mapValues(obj, (_, taxId) =>
-          yup.object({
-            pagoPa: yup.array().of(
-              yup.object().when([], {
-                is: () => {
-                  const debtPosition = notification.recipients.find(
-                    (r) => r.taxId === taxId
-                  )?.debtPosition;
-                  return (
-                    debtPosition === PaymentModel.PAGO_PA ||
-                    debtPosition === PaymentModel.PAGO_PA_F24
-                  );
-                },
-                then: () => pagoPaValidationSchema(t, tc),
-              })
-            ),
-            f24: yup.array().of(
-              yup.object().when([], {
-                is: () => {
-                  const debtPosition = notification.recipients.find(
-                    (r) => r.taxId === taxId
-                  )?.debtPosition;
-                  return (
-                    debtPosition === PaymentModel.F24 || debtPosition === PaymentModel.PAGO_PA_F24
-                  );
-                },
-                then: () => f24ValidationSchema(tc),
-              })
-            ),
-          })
+      yup
+        .object(
+          mapValues(obj, (_, taxId) =>
+            yup.object({
+              pagoPa: yup.array().of(
+                yup.object().when([], {
+                  is: () => {
+                    const debtPosition = notification.recipients.find(
+                      (r) => r.taxId === taxId
+                    )?.debtPosition;
+                    return (
+                      debtPosition === PaymentModel.PAGO_PA ||
+                      debtPosition === PaymentModel.PAGO_PA_F24
+                    );
+                  },
+                  then: () => pagoPaValidationSchema(t, tc),
+                })
+              ),
+              f24: yup.array().of(
+                yup.object().when([], {
+                  is: () => {
+                    const debtPosition = notification.recipients.find(
+                      (r) => r.taxId === taxId
+                    )?.debtPosition;
+                    return (
+                      debtPosition === PaymentModel.F24 || debtPosition === PaymentModel.PAGO_PA_F24
+                    );
+                  },
+                  then: () => f24ValidationSchema(tc),
+                })
+              ),
+            })
+          )
         )
-      )
+        .test('identicalIUV', t('identical-notice-codes-error'), function (values) {
+          const errors = identicalIUV(values as any);
+
+          if (errors.length === 0) {
+            return true;
+          }
+
+          return new yup.ValidationError(
+            errors.map(
+              (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
+            )
+          );
+        })
+        .test(
+          'apply-cost-validation',
+          t('Each payment type must have at least one applyCost set to true'),
+          function (values) {
+            if (this.parent.notificationFeePolicy !== NotificationFeePolicy.DELIVERY_MODE) {
+              return true;
+            }
+
+            const validationErrors = checkApplyCost(values as any);
+
+            if (validationErrors.length === 0) {
+              return true;
+            }
+
+            return new yup.ValidationError(
+              validationErrors.map(
+                (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
+              )
+            );
+          }
+        )
     ),
   });
 
@@ -297,18 +335,22 @@ const DebtPositionDetail: React.FC<Props> = ({
       if (paymentPayload) {
         await updateRefAfterUpload(paymentPayload);
       }
-      dispatch(
-        setDebtPotisionDetail({
-          recipients: formatPayments(),
-          vat: formik.values.vat,
-          paFee: formik.values.paFee,
-          notificationFeePolicy: formik.values.notificationFeePolicy,
-          pagoPaIntMode: formik.values.pagoPaIntMode,
-        })
-      );
+      saveDebtPositionDetail();
       onConfirm();
     },
   });
+
+  const saveDebtPositionDetail = () => {
+    dispatch(
+      setDebtPotisionDetail({
+        recipients: formatPayments(),
+        vat: formik.values.vat,
+        paFee: formik.values.paFee,
+        notificationFeePolicy: formik.values.notificationFeePolicy,
+        pagoPaIntMode: formik.values.pagoPaIntMode,
+      })
+    );
+  };
 
   const isDeliveryMode =
     formik.values.notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE;
@@ -331,19 +373,18 @@ const DebtPositionDetail: React.FC<Props> = ({
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
+  const handlePreviousStep = () => {
+    saveDebtPositionDetail();
+    onPreviousStep();
+  };
+
   useImperativeHandle(forwardedRef, () => ({
     confirm() {
-      dispatch(
-        setDebtPotisionDetail({
-          recipients: formatPayments(),
-          vat: formik.values.vat,
-          paFee: formik.values.paFee,
-          notificationFeePolicy: formik.values.notificationFeePolicy,
-          pagoPaIntMode: formik.values.pagoPaIntMode,
-        })
-      );
+      saveDebtPositionDetail();
     },
   }));
+
+  console.log('ERRORSSSSS', formik.errors, formik.values);
 
   return (
     <form onSubmit={formik.handleSubmit} data-testid="paymentMethodForm">
@@ -351,7 +392,7 @@ const DebtPositionDetail: React.FC<Props> = ({
         isContinueDisabled={!formik.isValid}
         noPaper={true}
         previousStepLabel={t('back-to-debt-position')}
-        previousStepOnClick={onPreviousStep}
+        previousStepOnClick={handlePreviousStep}
       >
         <Paper sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
           <Typography variant="h6" fontWeight={700}>

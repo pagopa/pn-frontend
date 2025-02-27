@@ -3,7 +3,12 @@ import * as yup from 'yup';
 
 import { RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationRecipient } from '../models/NewNotification';
+import {
+  NewNotificationF24Payment,
+  NewNotificationPagoPaPayment,
+  NewNotificationRecipient,
+  RecipientPaymentsFormValues,
+} from '../models/NewNotification';
 import { getDuplicateValuesByKeys } from './notification.utility';
 
 export function requiredStringFieldValidation(
@@ -121,37 +126,91 @@ export const f24ValidationSchema = (tc: TFunction) =>
       .required(),
   });
 
-// TODO: it will be restored in the new UI
-// export function identicalIUV(
-//   values: Array<NewNotificationRecipient> | undefined,
-//   paymentMode: PaymentModel | undefined
-// ): Array<{ messageKey: string; value: NewNotificationRecipient; id: string }> {
-//   const errors: Array<{ messageKey: string; value: NewNotificationRecipient; id: string }> = [];
-//   if (values && paymentMode !== PaymentModel.NOTHING) {
-//     const duplicateIUVs = getDuplicateValuesByKeys(values, ['creditorTaxId', 'noticeCode']);
-//     if (duplicateIUVs.length > 0) {
-//       values.forEach((value: NewNotificationRecipient, i: number) => {
-//         if (
-//           value.creditorTaxId &&
-//           value.noticeCode &&
-//           duplicateIUVs.includes(value.creditorTaxId + value.noticeCode)
-//         ) {
-//           // eslint-disable-next-line functional/immutable-data
-//           errors.push(
-//             {
-//               messageKey: 'identical-notice-codes-error',
-//               value,
-//               id: `recipients[${i}].noticeCode`,
-//             },
-//             {
-//               messageKey: '',
-//               value,
-//               id: `recipients[${i}].creditorTaxId`,
-//             }
-//           );
-//         }
-//       });
-//     }
-//   }
-//   return errors;
-// }
+export function identicalIUV(
+  values: RecipientPaymentsFormValues | undefined
+): Array<{ messageKey: string; value: NewNotificationPagoPaPayment; id: string }> {
+  const errors: Array<{ messageKey: string; value: NewNotificationPagoPaPayment; id: string }> = [];
+
+  if (!values) {
+    return errors;
+  }
+
+  const allPagoPaPayments: Array<NewNotificationPagoPaPayment & { taxIdKey: string }> = [];
+
+  Object.entries(values).forEach(([taxIdKey, payments]) => {
+    payments.pagoPa.forEach((payment) => {
+      // eslint-disable-next-line functional/immutable-data
+      allPagoPaPayments.push({ ...payment, taxIdKey });
+    });
+  });
+
+  const duplicateIUVs = getDuplicateValuesByKeys<NewNotificationPagoPaPayment>(allPagoPaPayments, [
+    'creditorTaxId',
+    'noticeCode',
+  ]);
+
+  if (duplicateIUVs.length > 0) {
+    allPagoPaPayments.forEach((payment) => {
+      if (
+        payment.creditorTaxId &&
+        payment.noticeCode &&
+        duplicateIUVs.includes(payment.creditorTaxId + payment.noticeCode)
+      ) {
+        // eslint-disable-next-line functional/immutable-data
+        errors.push(
+          {
+            messageKey: 'identical-notice-codes-error',
+            value: payment,
+            id: `recipients[${payment.taxIdKey}].pagoPa[${payment.idx}].noticeCode`,
+          },
+          {
+            messageKey: '',
+            value: payment,
+            id: `recipients[${payment.taxIdKey}].pagoPa[${payment.idx}].creditorTaxId`,
+          }
+        );
+      }
+    });
+  }
+
+  return errors;
+}
+
+export const checkApplyCost = (values: RecipientPaymentsFormValues) => {
+  const errors: Array<{
+    messageKey: string;
+    value: Array<NewNotificationPagoPaPayment> | Array<NewNotificationF24Payment>;
+    id: string;
+  }> = [];
+
+  Object.entries(values).forEach(([recipientId, recipient]) => {
+    const hasPagoPa = recipient.pagoPa && recipient.pagoPa.length > 0;
+    const hasF24 = recipient.f24 && recipient.f24.length > 0;
+
+    if (hasPagoPa) {
+      const hasPagoPaApplyCost = recipient.pagoPa.some((item) => item.applyCost === true);
+      if (!hasPagoPaApplyCost) {
+        // eslint-disable-next-line functional/immutable-data
+        errors.push({
+          messageKey: 'at-least-one-applycost',
+          value: recipient.pagoPa,
+          id: `${recipientId}.pagoPa`,
+        });
+      }
+    }
+
+    if (hasF24) {
+      const hasF24ApplyCost = recipient.f24.some((item) => item.applyCost === true);
+      if (!hasF24ApplyCost) {
+        // eslint-disable-next-line functional/immutable-data
+        errors.push({
+          messageKey: 'at-least-one-applycost',
+          value: recipient.f24,
+          id: `${recipientId}.f24`,
+        });
+      }
+    }
+  });
+
+  return errors;
+};

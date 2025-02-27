@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import { FormControlLabel, Stack, Switch, TextField } from '@mui/material';
+import { Alert, FormControlLabel, Stack, Switch, TextField } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -36,9 +36,6 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
   onDeletePayment,
   fieldMeta,
 }) => {
-  const { t: tn } = useTranslation(['notifiche'], {
-    keyPrefix: 'new-notification.steps.debt-position-detail.payment-methods.f24',
-  });
   const { t } = useTranslation(['notifiche', 'common']);
   const isMobile = useIsMobile('md');
 
@@ -70,7 +67,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
 
       <TextField
         id="name"
-        label={tn('document-name')}
+        label={t('new-notification.steps.debt-position-detail.payment-methods.f24.document-name')}
         fullWidth
         name="name"
         value={name}
@@ -93,7 +90,9 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
                   onChange={(e) => handleChange(e)}
                 />
               }
-              label={tn('apply-cost')}
+              label={t(
+                'new-notification.steps.debt-position-detail.payment-methods.f24.apply-cost'
+              )}
               componentsProps={{ typography: { fontSize: '16px' } }}
             />
           )}
@@ -109,6 +108,12 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
             </ButtonNaked>
           )}
         </Stack>
+      )}
+
+      {showDeleteButton && (
+        <Alert severity="warning">
+          {t('new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment')}
+        </Alert>
       )}
     </Fragment>
   );

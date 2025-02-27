@@ -117,12 +117,12 @@ const newNotificationSlice = createSlice({
     },
     setDebtPotisionDetail: (
       state,
-      action: PayloadAction<{ 
-        recipients: Array<NewNotificationRecipient>; 
-        vat?: number; 
-        paFee?: number; 
-        notificationFeePolicy: NotificationFeePolicy; 
-        pagoPaIntMode?:PagoPaIntegrationMode;
+      action: PayloadAction<{
+        recipients: Array<NewNotificationRecipient>;
+        vat?: number;
+        paFee?: number;
+        notificationFeePolicy: NotificationFeePolicy;
+        pagoPaIntMode?: PagoPaIntegrationMode;
       }>
     ) => {
       state.notification = {
@@ -131,7 +131,7 @@ const newNotificationSlice = createSlice({
         vat: action.payload.vat,
         paFee: Number(action.payload.paFee),
         notificationFeePolicy: action.payload.notificationFeePolicy,
-        pagoPaIntMode: action.payload.pagoPaIntMode
+        pagoPaIntMode: action.payload.pagoPaIntMode,
       };
     },
     setIsCompleted: (state) => {
@@ -145,6 +145,7 @@ const newNotificationSlice = createSlice({
     });
     builder.addCase(uploadNotificationDocument.fulfilled, (state, action) => {
       state.notification.documents = action.payload;
+      // TODO
       state.isCompleted = !getConfiguration().IS_PAYMENT_ENABLED;
     });
     builder.addCase(uploadNotificationPaymentDocument.fulfilled, (state, action) => {
