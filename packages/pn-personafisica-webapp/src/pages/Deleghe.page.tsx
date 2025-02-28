@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box, Stack } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import {
   AppResponse,
   AppResponsePublisher,
@@ -169,14 +169,23 @@ const Deleghe = () => {
               ? t('deleghe.revocation_question')
               : t('deleghe.rejection_question')
           }
-          onCloseLabel={t('button.annulla', { ns: 'common' })}
-          slotsProps={{
-            closeButton: { onClick: handleCloseModal },
-            confirmButton: { onClick: handleConfirmClick },
+          slots={{
+            confirmButton: Button,
+            closeButton: Button,
           }}
-          onConfirmLabel={
-            type === 'delegates' ? t('deleghe.confirm_revocation') : t('deleghe.confirm_rejection')
-          }
+          slotsProps={{
+            closeButton: {
+              onClick: handleCloseModal,
+              children: t('button.annulla', { ns: 'common' }),
+            },
+            confirmButton: {
+              onClick: handleConfirmClick,
+              children:
+                type === 'delegates'
+                  ? t('deleghe.confirm_revocation')
+                  : t('deleghe.confirm_rejection'),
+            },
+          }}
         />
         <Box mb={8}>
           <TitleBox
