@@ -18,12 +18,9 @@ const FilterNotificationsFormActions = ({
 }: Props) => {
   const { t } = useTranslation(['common']);
 
-
   const handleCancel = () =>{
-    setFeedbackCancel(true);
     cleanFilters();
   };
-
 
   const confirmAction = (
     <Grid item lg="auto" xs={12}>
@@ -33,7 +30,6 @@ const FilterNotificationsFormActions = ({
         type="submit"
         size="small"
         disabled={isInitialSearch && !filtersApplied}
-        onClick={()=>setFeedbackSubmit(true)}
       >
         {t('button.filtra')}
       </Button>
