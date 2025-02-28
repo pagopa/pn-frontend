@@ -197,7 +197,7 @@ const DelegationsOfTheCompany = () => {
   ) => (
     <li {...props} key={option.id}>
       <Checkbox
-        inputProps={{ 'aria-label': option.name, 'aria-live': 'assertive' }}
+        inputProps={{ 'aria-live': 'assertive' }}
         icon={icon}
         checkedIcon={checkedIcon}
         style={{ marginRight: 8 }}

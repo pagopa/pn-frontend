@@ -29,7 +29,6 @@ import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 
 type Props = {
   showFilters: boolean;
-  lengthOfNotifications?: number;
   /** Delegator */
   currentDelegator?: Delegator;
 };

@@ -8,7 +8,6 @@ type Props = {
   isInitialSearch: boolean;
   cleanFilters: () => void;
   isInDialog?: boolean;
-  lengthOfNotifications?: number;
 };
 
 const FilterNotificationsFormActions = ({
