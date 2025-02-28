@@ -210,13 +210,17 @@
     "contact-to-add": "Domicilio Digitale",
     "contact-to-add-description": "Il domicilio digitale personalizzato dove riceverai le notifiche SEND che ti invia un ente specifico",
     "contact-already-exists": "L'ente selezionato è già associato a questo recapito. Se premi “Associa”, verrà sostituito da quello che hai indicato qui.",
-    "validating-pec": "Esiste già un indirizzo PEC in corso di validazione per l'ente selezionato",
+    "validating-pec": "Per l’ente selezionato non è possibile associare il domicilio digitale SEND perchè la PEC è in validazione.",
     "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito.",
     "add-title": "Inserisci l’ente e il recapito da associare",
     "card-title": "PERSONALIZZATI PER ENTE",
     "sender": "Ente",
     "remove-special-title": "Vuoi eliminare {{contactValue}}?",
-    "remove-special-description": "Gli avvisi relativi alle notifiche degli enti associati non saranno più inviati a questo recapito, ma a quello principale."
+    "remove-special-description": "Gli avvisi relativi alle notifiche degli enti associati non saranno più inviati a questo recapito, ma a quello principale.",
+    "legal-association-title": "Conferma modifica recapito",
+    "legal-association-description": "Hai già selezionato in precedenza un recapito a valore legale per <strong>{{senderName}}</strong>. Confermi che per le notifiche inviate da <strong>{{senderName}}</strong> il tuo recapito a valore legale sarà <strong>{{newAddress}}</strong> invece che <strong>{{oldAddress}}</strong>.",
+    "legal-association-title-block": "Recapito già inserito precedentemente",
+    "legal-association-description-block": "Ti comunichiamo che le notifiche inviate da <strong>{{senderName}}</strong> sono già inoltrate al recapito a valore legale <strong>{{oldAddress}}</strong> inserito in precedenza."
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",

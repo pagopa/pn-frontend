@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { JSXElementConstructor } from 'react';
 
 import { Button, ButtonProps, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
@@ -6,55 +6,61 @@ import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-common
 type Props = {
   open: boolean;
   title: string;
+  slots?: {
+    confirmButton: JSXElementConstructor<ButtonProps>;
+    closeButton?: JSXElementConstructor<ButtonProps>;
+  };
   slotsProps?: {
     confirmButton?: ButtonProps;
     closeButton?: ButtonProps;
   };
-  onConfirmLabel?: string;
-  onCloseLabel?: string;
   children?: React.ReactNode;
 };
 
 const ConfirmationModal: React.FC<Props> = ({
   open,
   title,
+  slots,
   slotsProps,
-  onConfirmLabel = 'Riprova',
-  onCloseLabel = 'Annulla',
   children,
-}: Props) => (
-  <PnDialog
-    id="confirmation-dialog"
-    open={open}
-    onClose={slotsProps?.closeButton?.onClick}
-    aria-labelledby="confirmation-dialog-title"
-    aria-describedby="confirmation-dialog-description"
-    maxWidth="sm"
-    data-testid="confirmationDialog"
-  >
-    <DialogTitle id="confirmation-dialog-title">{title}</DialogTitle>
-    {children && <PnDialogContent>{children}</PnDialogContent>}
-    <PnDialogActions>
-      <Button
-        id="dialog-close-button"
-        color="primary"
-        variant="outlined"
-        data-testid="closeButton"
-        {...slotsProps?.closeButton}
-      >
-        {onCloseLabel}
-      </Button>
-      <Button
-        id="dialog-confirm-button"
-        color="primary"
-        variant="contained"
-        data-testid="confirmButton"
-        {...slotsProps?.confirmButton}
-      >
-        {onConfirmLabel}
-      </Button>
-    </PnDialogActions>
-  </PnDialog>
-);
+}: Props) => {
+  const ConfirmButton = slots?.confirmButton || Button;
+  const CloseButton = slots?.closeButton;
+
+  return (
+    <PnDialog
+      id="confirmation-dialog"
+      open={open}
+      onClose={slotsProps?.closeButton?.onClick}
+      aria-labelledby="confirmation-dialog-title"
+      aria-describedby="confirmation-dialog-description"
+      maxWidth="sm"
+      data-testid="confirmationDialog"
+    >
+      <DialogTitle id="confirmation-dialog-title">{title}</DialogTitle>
+      {children && (
+        <PnDialogContent id="confirmation-dialog-description">{children}</PnDialogContent>
+      )}
+      <PnDialogActions>
+        {CloseButton && (
+          <CloseButton
+            id="dialog-close-button"
+            color="primary"
+            variant="outlined"
+            data-testid="closeButton"
+            {...slotsProps?.closeButton}
+          />
+        )}
+        <ConfirmButton
+          id="dialog-confirm-button"
+          color="primary"
+          variant="contained"
+          data-testid="confirmButton"
+          {...slotsProps?.confirmButton}
+        />
+      </PnDialogActions>
+    </PnDialog>
+  );
+};
 
 export default ConfirmationModal;
