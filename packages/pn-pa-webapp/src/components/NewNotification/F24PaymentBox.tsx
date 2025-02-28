@@ -113,7 +113,10 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
               color="primary"
               startIcon={<DeleteIcon />}
               onClick={onDeletePayment}
-              sx={{ justifyContent: 'end' }}
+              sx={{
+                justifyContent: { xs: 'flex-start', md: 'flex-end' },
+                ml: { xs: 'none', md: 'auto' },
+              }}
             >
               {t('button.delete', { ns: 'common' })}
             </ButtonNaked>
