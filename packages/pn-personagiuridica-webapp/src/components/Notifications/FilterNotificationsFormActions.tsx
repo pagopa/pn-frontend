@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
-import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
+import {  CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
 
 type Props = {
   filtersApplied: boolean;
