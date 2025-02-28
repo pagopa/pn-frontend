@@ -1,7 +1,7 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
-import { A11yContainerInvisible, CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
+import {  CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
 
 type Props = {
   filtersApplied: boolean;
@@ -17,8 +17,7 @@ const FilterNotificationsFormActions = ({
   isInitialSearch,
 }: Props) => {
   const { t } = useTranslation(['common']);
-  const [feedbackSubmit, setFeedbackSubmit] = useState(false);
-  const [feedbackCancel, setFeedbackCancel] = useState(false);
+
 
   const handleCancel = () =>{
     setFeedbackCancel(true);
@@ -38,9 +37,6 @@ const FilterNotificationsFormActions = ({
       >
         {t('button.filtra')}
       </Button>
-      {feedbackSubmit && (
-      <A11yContainerInvisible field="Azione completata" ariaLive='assertive' role='alert'></A11yContainerInvisible>
-      )}
     </Grid>
   );
 
@@ -54,7 +50,6 @@ const FilterNotificationsFormActions = ({
       >
         {t('button.annulla filtro')}
       </Button>
-      {feedbackCancel && <A11yContainerInvisible field="Cancellazione Completata" ariaLive='assertive' role='alert'></A11yContainerInvisible>}
     </Grid>
   );
 
