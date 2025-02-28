@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.13.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.12.0...v2.13.0-RC.0) (2025-02-28)
+
+
+### Bug Fixes
+
+* **pn-13257:** tables accessibility ([#1462](https://github.com/pagopa/pn-frontend/issues/1462)) ([81a7208](https://github.com/pagopa/pn-frontend/commit/81a72085f576681e9e2ade91c056fd5d666ff4db))
+* **pn-13388:** improve regex for redirect and robots header ([#1477](https://github.com/pagopa/pn-frontend/issues/1477)) ([4f1a316](https://github.com/pagopa/pn-frontend/commit/4f1a3162e7ae5827f118dd114f4c6b36cc11d895))
+* **pn-13701:** Added aria-label to loading dialog ([#1483](https://github.com/pagopa/pn-frontend/issues/1483)) ([c6b5afb](https://github.com/pagopa/pn-frontend/commit/c6b5afb423937835319fe5bcc3d6c6df94dade61))
+* **pn-13840:** Handle previously unhandled errors on sender dashboard ([#1465](https://github.com/pagopa/pn-frontend/issues/1465)) ([1f1fe43](https://github.com/pagopa/pn-frontend/commit/1f1fe4371aadfe1e6d780b2729664444d75b4ae6))
+* **pn-13840:** updated error graph colors ([#1480](https://github.com/pagopa/pn-frontend/issues/1480)) ([9d9a15d](https://github.com/pagopa/pn-frontend/commit/9d9a15d92d662df2d8d5dce019eced9ad17cd90c))
+* **PN-140001:** enable payment on notification creation ([#1488](https://github.com/pagopa/pn-frontend/issues/1488)) ([d2534c9](https://github.com/pagopa/pn-frontend/commit/d2534c9818ceda6b7f737b06504b8d5339a8d400))
+
+
+### Features
+
+* **pn-13849:** view notification from retrieval Id ([#1466](https://github.com/pagopa/pn-frontend/issues/1466)) ([c2bde20](https://github.com/pagopa/pn-frontend/commit/c2bde205b23a0ee423cf3a339060e7ca09e2cd7d))
+* **pn-13918:** removed old payment fields ([#1464](https://github.com/pagopa/pn-frontend/issues/1464)) ([e8d7377](https://github.com/pagopa/pn-frontend/commit/e8d737700359285640242231c3ba953058ba71a6))
+* **pn-13919:** replace notification dto with model from bff ([#1470](https://github.com/pagopa/pn-frontend/issues/1470)) ([073a078](https://github.com/pagopa/pn-frontend/commit/073a078e5716ed9efea13e108009736e98130005))
+* **pn-13921:** prepared the PaymentMethods.tsx component for the new logic ([#1473](https://github.com/pagopa/pn-frontend/issues/1473)) ([ae1f1ac](https://github.com/pagopa/pn-frontend/commit/ae1f1ac107445dd61662cfe0976e3ac68603fa9b))
+* **pn-13999:** Create debt position step on new notification ([#1478](https://github.com/pagopa/pn-frontend/issues/1478)) ([a4bc00c](https://github.com/pagopa/pn-frontend/commit/a4bc00ccb9c22f1e178618157e8179abcf90b964))
+* **PN-14000) (PN-14001:** Debt position detail - manual notification creation([#1481](https://github.com/pagopa/pn-frontend/issues/1481)) ([9a44a40](https://github.com/pagopa/pn-frontend/commit/9a44a40dbe3d94f40af96d871e911d69cf050517))
+
+
+
+
+
 # [2.12.0](https://github.com/pagopa/pn-frontend/compare/v2.12.0-RC.1...v2.12.0) (2025-02-18)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
