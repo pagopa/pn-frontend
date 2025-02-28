@@ -14,7 +14,7 @@ import {
   waitFor,
   within,
 } from '../../../__test__/test-utils';
-import { NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
+import { NewNotificationRecipient } from '../../../models/NewNotification';
 import Recipient from '../Recipient';
 
 vi.mock('react-i18next', () => ({
@@ -172,9 +172,7 @@ describe('Recipient Component with payment enabled', async () => {
   it('renders component', async () => {
     // render component
     await act(async () => {
-      result = render(
-        <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
-      );
+      result = render(<Recipient onConfirm={confirmHandlerMk} />);
     });
     expect(result.container).toHaveTextContent(/title/i);
     const form = result.getByTestId('recipientForm');
@@ -190,9 +188,7 @@ describe('Recipient Component with payment enabled', async () => {
   it('changes form values and clicks on confirm - two recipients', async () => {
     // render component
     await act(async () => {
-      result = render(
-        <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
-      );
+      result = render(<Recipient onConfirm={confirmHandlerMk} />);
     });
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
     // fill the first recipient
@@ -222,9 +218,7 @@ describe('Recipient Component with payment enabled', async () => {
   it('fills form with invalid values - two recipients', async () => {
     // render component
     await act(async () => {
-      result = render(
-        <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
-      );
+      result = render(<Recipient onConfirm={confirmHandlerMk} />);
     });
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
     // fill the first recipient
@@ -271,11 +265,7 @@ describe('Recipient Component with payment enabled', async () => {
     // render component
     await act(async () => {
       result = render(
-        <Recipient
-          paymentMode={newNotification.paymentMode}
-          onConfirm={confirmHandlerMk}
-          recipientsData={newNotification.recipients}
-        />
+        <Recipient onConfirm={confirmHandlerMk} recipientsData={newNotification.recipients} />
       );
     });
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
@@ -288,9 +278,7 @@ describe('Recipient Component with payment enabled', async () => {
   it('changes form values and clicks on confirm - one recipient', async () => {
     // render component
     await act(async () => {
-      result = render(
-        <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
-      );
+      result = render(<Recipient onConfirm={confirmHandlerMk} />);
     });
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
     // fill the first recipient
@@ -329,11 +317,7 @@ describe('Recipient Component with payment enabled', async () => {
     // render component
     await act(async () => {
       result = render(
-        <Recipient
-          paymentMode={newNotification.paymentMode}
-          onConfirm={confirmHandlerMk}
-          onPreviousStep={previousHandlerMk}
-        />
+        <Recipient onConfirm={confirmHandlerMk} onPreviousStep={previousHandlerMk} />
       );
     });
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
@@ -353,9 +337,7 @@ describe('Recipient Component with payment enabled', async () => {
   it('fills form with invalid values - one recipient', async () => {
     // render component
     await act(async () => {
-      result = render(
-        <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
-      );
+      result = render(<Recipient onConfirm={confirmHandlerMk} />);
     });
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
     const submitButton = within(form).getByTestId('step-submit');
@@ -429,9 +411,7 @@ describe('Recipient Component without payment enabled', async () => {
   it('renders component', async () => {
     // render component
     await act(async () => {
-      result = render(
-        <Recipient paymentMode={PaymentModel.NOTHING} onConfirm={confirmHandlerMk} />
-      );
+      result = render(<Recipient onConfirm={confirmHandlerMk} />);
     });
     const form = result.getByTestId('recipientForm');
     await testRecipientFormRendering(form, 0);
@@ -440,9 +420,7 @@ describe('Recipient Component without payment enabled', async () => {
   it('changes form values and clicks on confirm - one recipient', async () => {
     // render component
     await act(async () => {
-      result = render(
-        <Recipient paymentMode={PaymentModel.NOTHING} onConfirm={confirmHandlerMk} />
-      );
+      result = render(<Recipient onConfirm={confirmHandlerMk} />);
     });
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
     // fill the first recipient

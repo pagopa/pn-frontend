@@ -26,8 +26,8 @@ import {
   setAttachments,
   setCancelledIun,
   setDebtPosition,
+  setDebtPotisionDetail,
   setIsCompleted,
-  setPayments,
   setPreliminaryInformations,
   setSenderInfos,
 } from '../reducers';
@@ -215,9 +215,23 @@ describe('New notification redux state tests', () => {
   });
 
   it('Should be able to save payment documents', () => {
-    const action = store.dispatch(setPayments({ recipients: newNotification.recipients }));
-    expect(action.type).toBe('newNotificationSlice/setPayments');
-    expect(action.payload).toEqual({ recipients: newNotification.recipients });
+    const action = store.dispatch(
+      setDebtPotisionDetail({
+        recipients: newNotification.recipients,
+        paFee: newNotification.paFee,
+        vat: newNotification.vat,
+        notificationFeePolicy: newNotification.notificationFeePolicy,
+        pagoPaIntMode: newNotification.pagoPaIntMode,
+      })
+    );
+    expect(action.type).toBe('newNotificationSlice/setDebtPotisionDetail');
+    expect(action.payload).toEqual({
+      recipients: newNotification.recipients,
+      paFee: newNotification.paFee,
+      vat: newNotification.vat,
+      notificationFeePolicy: newNotification.notificationFeePolicy,
+      pagoPaIntMode: newNotification.pagoPaIntMode,
+    });
   });
 
   it('Should be able to upload payment document', async () => {

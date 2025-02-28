@@ -32,6 +32,7 @@ beforeAll(() => {
     TAXONOMY_SEND_URL: 'https://test.taxonomy.pagopa.it',
     DOWNTIME_EXAMPLE_LINK: 'https://test.downtime.pagopa.it',
     LANDING_SITE_URL: 'https://test.landing.pagopa.it',
+    PAYMENT_INFO: 'https://test.payment.pagopa.it',
   });
   initStore(false);
   initAxiosClients();
