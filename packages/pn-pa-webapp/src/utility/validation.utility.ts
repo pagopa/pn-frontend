@@ -176,40 +176,56 @@ export function identicalIUV(
   return errors;
 }
 
-export const checkApplyCost = (values: RecipientPaymentsFormValues) => {
+const checkPaymentsApplyCost = (
+  recipientId: string,
+  payments: Array<NewNotificationPagoPaPayment> | Array<NewNotificationF24Payment>,
+  paymentType: 'pagoPa' | 'f24',
+  errors: Array<{
+    messageKey: string;
+    value: Array<NewNotificationPagoPaPayment> | Array<NewNotificationF24Payment>;
+    id: string;
+  }>
+) => {
+  if (!payments || payments.length === 0) {
+    return;
+  }
+
+  const hasApplyCost = payments.some((item) => item.applyCost === true);
+
+  if (!hasApplyCost) {
+    payments.forEach((payment, idx) => {
+      if (!payment.applyCost) {
+        // eslint-disable-next-line functional/immutable-data
+        errors.push({
+          messageKey: 'at-least-one-applycost',
+          value: payments,
+          id: `recipients[${recipientId}].${paymentType}[${idx}].applyCost`,
+        });
+      }
+    });
+  }
+};
+
+export const checkApplyCost = (
+  values: RecipientPaymentsFormValues | undefined
+): Array<{
+  messageKey: string;
+  value: Array<NewNotificationPagoPaPayment> | Array<NewNotificationF24Payment>;
+  id: string;
+}> => {
   const errors: Array<{
     messageKey: string;
     value: Array<NewNotificationPagoPaPayment> | Array<NewNotificationF24Payment>;
     id: string;
   }> = [];
 
+  if (!values) {
+    return errors;
+  }
+
   Object.entries(values).forEach(([recipientId, recipient]) => {
-    const hasPagoPa = recipient.pagoPa && recipient.pagoPa.length > 0;
-    const hasF24 = recipient.f24 && recipient.f24.length > 0;
-
-    if (hasPagoPa) {
-      const hasPagoPaApplyCost = recipient.pagoPa.some((item) => item.applyCost === true);
-      if (!hasPagoPaApplyCost) {
-        // eslint-disable-next-line functional/immutable-data
-        errors.push({
-          messageKey: 'at-least-one-applycost',
-          value: recipient.pagoPa,
-          id: `${recipientId}.pagoPa`,
-        });
-      }
-    }
-
-    if (hasF24) {
-      const hasF24ApplyCost = recipient.f24.some((item) => item.applyCost === true);
-      if (!hasF24ApplyCost) {
-        // eslint-disable-next-line functional/immutable-data
-        errors.push({
-          messageKey: 'at-least-one-applycost',
-          value: recipient.f24,
-          id: `${recipientId}.f24`,
-        });
-      }
-    }
+    checkPaymentsApplyCost(recipientId, recipient.pagoPa, 'pagoPa', errors);
+    checkPaymentsApplyCost(recipientId, recipient.f24, 'f24', errors);
   });
 
   return errors;

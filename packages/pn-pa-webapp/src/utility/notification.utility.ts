@@ -95,7 +95,7 @@ const newNotificationAttachmentsMapper = (
 
 export const hasPagoPaDocument = (
   document: NewNotificationPagoPaPayment
-): document is Required<NewNotificationPagoPaPayment> => !!document.file && !!document.ref;
+): document is Required<NewNotificationPagoPaPayment> => !!document.file.data && !!document.ref;
 
 const newNotificationPaymentDocumentsMapper = (
   recipientPayments: Array<NewNotificationPayment>

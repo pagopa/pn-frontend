@@ -280,27 +280,23 @@ const DebtPositionDetail: React.FC<Props> = ({
             )
           );
         })
-        .test(
-          'apply-cost-validation',
-          t('Each payment type must have at least one applyCost set to true'),
-          function (values) {
-            if (this.parent.notificationFeePolicy !== NotificationFeePolicy.DELIVERY_MODE) {
-              return true;
-            }
-
-            const validationErrors = checkApplyCost(values as any);
-
-            if (validationErrors.length === 0) {
-              return true;
-            }
-
-            return new yup.ValidationError(
-              validationErrors.map(
-                (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
-              )
-            );
+        .test('apply-cost-validation', t('at-least-one-applycost'), function (values) {
+          if (this.parent.notificationFeePolicy !== NotificationFeePolicy.DELIVERY_MODE) {
+            return true;
           }
-        )
+
+          const validationErrors = checkApplyCost(values as any);
+
+          if (validationErrors.length === 0) {
+            return true;
+          }
+
+          return new yup.ValidationError(
+            validationErrors.map(
+              (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
+            )
+          );
+        })
     ),
   });
 
@@ -308,17 +304,17 @@ const DebtPositionDetail: React.FC<Props> = ({
     for (const recipient of paymentPayload) {
       const taxId = recipient.taxId;
       if (recipient.payments) {
-        for (const payment of recipient.payments) {
+        for (const [index, payment] of recipient.payments.entries()) {
           if (payment.pagoPa) {
             await formik.setFieldValue(
-              `recipients.${taxId}.pagoPa.${payment.pagoPa.idx}.ref`,
+              `recipients[${taxId}].pagoPa[${index}].ref`,
               payment.pagoPa.ref,
               false
             );
           }
           if (payment.f24) {
             await formik.setFieldValue(
-              `recipients.${taxId}.f24.${payment.f24.idx}.ref`,
+              `recipients[${taxId}].f24[${index}].ref`,
               payment.f24.ref,
               false
             );
@@ -339,6 +335,7 @@ const DebtPositionDetail: React.FC<Props> = ({
       if (paymentPayload) {
         await updateRefAfterUpload(paymentPayload);
       }
+      // TODO capire se usare formatPayments o paymentPayload
       saveDebtPositionDetail(paymentPayload);
       onConfirm();
     },

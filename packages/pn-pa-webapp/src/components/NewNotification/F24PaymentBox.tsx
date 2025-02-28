@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Alert, FormControlLabel, Stack, Switch, TextField } from '@mui/material';
+import { Alert, FormControlLabel, FormHelperText, Stack, Switch, TextField } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -41,7 +41,11 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
 
   const { name, applyCost, file } = f24Payment;
 
-  const getError = (fieldId: string) => {
+  const getError = (fieldId: string, shouldBeTouched = true) => {
+    if (!shouldBeTouched) {
+      return fieldMeta(`${id}.${fieldId}`).error;
+    }
+
     if (fieldMeta(`${id}.${fieldId}`).touched) {
       return fieldMeta(`${id}.${fieldId}`).error;
     }
@@ -81,21 +85,26 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
       {(notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE || showDeleteButton) && (
         <Stack direction={isMobile ? 'column' : 'row'}>
           {notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
-            <FormControlLabel
-              control={
-                <Switch
-                  id="applyCost"
-                  name="applyCost"
-                  value={applyCost}
-                  checked={applyCost}
-                  onChange={(e) => handleChange(e)}
-                />
-              }
-              label={t(
-                'new-notification.steps.debt-position-detail.payment-methods.f24.apply-cost'
+            <Stack>
+              <FormControlLabel
+                control={
+                  <Switch
+                    id="applyCost"
+                    name="applyCost"
+                    value={applyCost}
+                    checked={applyCost}
+                    onChange={(e) => handleChange(e)}
+                  />
+                }
+                label={t(
+                  'new-notification.steps.debt-position-detail.payment-methods.f24.apply-cost'
+                )}
+                componentsProps={{ typography: { fontSize: '16px' } }}
+              />
+              {getError('applyCost', false) && (
+                <FormHelperText error>{getError('applyCost', false)}</FormHelperText>
               )}
-              componentsProps={{ typography: { fontSize: '16px' } }}
-            />
+            </Stack>
           )}
 
           {showDeleteButton && (
