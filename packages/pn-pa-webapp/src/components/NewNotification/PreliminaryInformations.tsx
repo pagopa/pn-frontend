@@ -26,13 +26,12 @@ import { LangCode } from '@pagopa/mui-italia';
 import {
   NewNotification,
   NewNotificationLangOther,
-  PaymentModel,
+  PreliminaryInformationsPayload,
 } from '../../models/NewNotification';
 import { GroupStatus } from '../../models/user';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { NEW_NOTIFICATION_ACTIONS, getUserGroups } from '../../redux/newNotification/actions';
 import { setPreliminaryInformations } from '../../redux/newNotification/reducers';
-import { PreliminaryInformationsPayload } from '../../redux/newNotification/types';
 import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import { requiredStringFieldValidation } from '../../utility/validation.utility';
@@ -78,7 +77,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
 
   const initialValues = useCallback(() => {
     const additionalLang = additionalLanguages?.length > 0 ? additionalLanguages[0] : undefined;
-     
+
     return {
       paProtocolNumber: notification.paProtocolNumber || '',
       subject: notification.subject || '',
@@ -87,7 +86,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
       group: notification.group ?? '',
       taxonomyCode: notification.taxonomyCode || '',
       physicalCommunicationType: notification.physicalCommunicationType || '',
-      paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
       lang: notification.lang || (additionalLang ? NewNotificationLangOther : 'it'),
       additionalLang: notification.additionalLang || additionalLang || '',
       additionalSubject: notification.additionalSubject || '',
@@ -97,11 +95,10 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
 
   const validationSchema = yup.object({
     paProtocolNumber: requiredStringFieldValidation(tc, 256),
-    subject: yup.string()
-     .when('lang',{
+    subject: yup.string().when('lang', {
       is: NewNotificationLangOther,
       then: requiredStringFieldValidation(tc, 66, 10),
-      otherwise: requiredStringFieldValidation(tc, 134, 10)
+      otherwise: requiredStringFieldValidation(tc, 134, 10),
     }),
     senderDenomination: yup
       .string()
@@ -112,7 +109,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
       .max(1024, tc('too-long-field-error', { maxLength: 1024 }))
       .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
     physicalCommunicationType: yup.string().required(),
-    paymentMode: yup.string().required(),
     group: hasGroups ? yup.string().required() : yup.string(),
     taxonomyCode: yup
       .string()
@@ -159,9 +155,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if(value === 'it'){
-      void formik.setValues({...formik.values, additionalLang:'', additionalSubject: ''},false);
-      void formik.setFieldTouched('additionalSubject',false);
+    if (value === 'it') {
+      void formik.setValues({ ...formik.values, additionalLang: '', additionalSubject: '' }, false);
+      void formik.setFieldTouched('additionalSubject', false);
     }
     formik.handleChange(e);
   };
@@ -313,47 +309,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
                 ))}
             </CustomDropdown>
           </FormBox>
-
-          {IS_PAYMENT_ENABLED && (
-            <FormControl margin="normal" fullWidth>
-              <FormLabel id="payment-method-label">
-                <Typography fontWeight={600} fontSize={'16px'}>
-                  {`${t('payment-method')}*`}
-                </Typography>
-              </FormLabel>
-              <RadioGroup
-                aria-labelledby="payment-method-label"
-                name="paymentMode"
-                value={formik.values.paymentMode}
-                onChange={handleChange}
-              >
-                <FormControlLabel
-                  value={PaymentModel.PAGO_PA_NOTICE}
-                  control={<Radio />}
-                  label={t('pagopa-notice')}
-                  data-testid="paymentMethodRadio"
-                />
-                <FormControlLabel
-                  value={PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE}
-                  control={<Radio />}
-                  label={t('pagopa-notice-f24-flatrate')}
-                  data-testid="paymentMethodRadio"
-                />
-                <FormControlLabel
-                  value={PaymentModel.PAGO_PA_NOTICE_F24}
-                  control={<Radio />}
-                  label={t('pagopa-notice-f24')}
-                  data-testid="paymentMethodRadio"
-                />
-                <FormControlLabel
-                  value={PaymentModel.NOTHING}
-                  control={<Radio />}
-                  label={t('nothing')}
-                  data-testid="paymentMethodRadio"
-                />
-              </RadioGroup>
-            </FormControl>
-          )}
         </NewNotificationCard>
       </form>
     </ApiErrorWrapper>

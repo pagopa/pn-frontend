@@ -3,8 +3,7 @@ import { Formik } from 'formik';
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 import { fireEvent, getById, render, testFormElements } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { NewNotificationLangOther, PaymentModel } from '../../../models/NewNotification';
-import { PreliminaryInformationsPayload } from '../../../redux/newNotification/types';
+import { NewNotificationLangOther, PaymentModel, PreliminaryInformationsPayload } from '../../../models/NewNotification';
 import PreliminaryInformationsContent from '../PreliminaryInformationsContent';
 
 describe('PreliminaryInformationsContent', () => {

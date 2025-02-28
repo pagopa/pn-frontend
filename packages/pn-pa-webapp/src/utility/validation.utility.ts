@@ -1,8 +1,14 @@
+import { TFunction } from 'react-i18next';
 import * as yup from 'yup';
 
 import { RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationRecipient, PaymentModel } from '../models/NewNotification';
+import {
+  NewNotificationF24Payment,
+  NewNotificationPagoPaPayment,
+  NewNotificationRecipient,
+  RecipientPaymentsFormValues,
+} from '../models/NewNotification';
 import { getDuplicateValuesByKeys } from './notification.utility';
 
 export function requiredStringFieldValidation(
@@ -74,36 +80,153 @@ export function identicalTaxIds(
   return errors;
 }
 
+export const pagoPaValidationSchema = (t: TFunction, tc: TFunction) =>
+  yup.object().shape({
+    noticeCode: yup
+      .string()
+      .required(tc('required-field'))
+      .matches(dataRegex.noticeCode, `${t('payment-methods.pagopa.notice-code')} ${tc('invalid')}`),
+    creditorTaxId: yup
+      .string()
+      .required(tc('required-field'))
+      .matches(dataRegex.pIva, `${t('payment-methods.pagopa.creditor-taxid')} ${tc('invalid')}`),
+    applyCost: yup.boolean(),
+    file: yup
+      .object({
+        data: yup
+          .mixed()
+          .test('fileType', '', (input) => input === undefined || input instanceof File)
+          .optional(),
+        sha256: yup.object({
+          hashBase64: yup.string(),
+          hashHex: yup.string(),
+        }),
+      })
+      .optional(),
+  });
+
+export const f24ValidationSchema = (tc: TFunction) =>
+  yup.object().shape({
+    name: requiredStringFieldValidation(tc, 512),
+    applyCost: yup.boolean(),
+    file: yup
+      .object()
+      .shape({
+        data: yup
+          .mixed()
+          .test((input) => input instanceof File)
+          .required(),
+        sha256: yup
+          .object({
+            hashBase64: yup.string().required(),
+            hashHex: yup.string().required(),
+          })
+          .required(),
+      })
+      .required(),
+  });
+
 export function identicalIUV(
-  values: Array<NewNotificationRecipient> | undefined,
-  paymentMode: PaymentModel | undefined
-): Array<{ messageKey: string; value: NewNotificationRecipient; id: string }> {
-  const errors: Array<{ messageKey: string; value: NewNotificationRecipient; id: string }> = [];
-  if (values && paymentMode !== PaymentModel.NOTHING) {
-    const duplicateIUVs = getDuplicateValuesByKeys(values, ['creditorTaxId', 'noticeCode']);
-    if (duplicateIUVs.length > 0) {
-      values.forEach((value: NewNotificationRecipient, i: number) => {
-        if (
-          value.creditorTaxId &&
-          value.noticeCode &&
-          duplicateIUVs.includes(value.creditorTaxId + value.noticeCode)
-        ) {
-          // eslint-disable-next-line functional/immutable-data
-          errors.push(
-            {
-              messageKey: 'identical-notice-codes-error',
-              value,
-              id: `recipients[${i}].noticeCode`,
-            },
-            {
-              messageKey: '',
-              value,
-              id: `recipients[${i}].creditorTaxId`,
-            }
-          );
-        }
-      });
-    }
+  values: RecipientPaymentsFormValues | undefined
+): Array<{ messageKey: string; value: NewNotificationPagoPaPayment; id: string }> {
+  const errors: Array<{ messageKey: string; value: NewNotificationPagoPaPayment; id: string }> = [];
+
+  if (!values) {
+    return errors;
   }
+
+  const allPagoPaPayments: Array<NewNotificationPagoPaPayment & { taxIdKey: string }> = [];
+
+  Object.entries(values).forEach(([taxIdKey, payments]) => {
+    payments.pagoPa.forEach((payment) => {
+      // eslint-disable-next-line functional/immutable-data
+      allPagoPaPayments.push({ ...payment, taxIdKey });
+    });
+  });
+
+  const duplicateIUVs = getDuplicateValuesByKeys<NewNotificationPagoPaPayment>(allPagoPaPayments, [
+    'creditorTaxId',
+    'noticeCode',
+  ]);
+
+  if (duplicateIUVs.length > 0) {
+    allPagoPaPayments.forEach((payment) => {
+      if (
+        payment.creditorTaxId &&
+        payment.noticeCode &&
+        duplicateIUVs.includes(payment.creditorTaxId + payment.noticeCode)
+      ) {
+        // eslint-disable-next-line functional/immutable-data
+        errors.push(
+          {
+            messageKey: 'identical-notice-codes-error',
+            value: payment,
+            id: `recipients[${payment.taxIdKey}].pagoPa[${payment.idx}].noticeCode`,
+          },
+          {
+            messageKey: '',
+            value: payment,
+            id: `recipients[${payment.taxIdKey}].pagoPa[${payment.idx}].creditorTaxId`,
+          }
+        );
+      }
+    });
+  }
+
   return errors;
 }
+
+const checkPaymentsApplyCost = (
+  recipientId: string,
+  payments: Array<NewNotificationPagoPaPayment> | Array<NewNotificationF24Payment>,
+  paymentType: 'pagoPa' | 'f24',
+  errors: Array<{
+    messageKey: string;
+    value: Array<NewNotificationPagoPaPayment> | Array<NewNotificationF24Payment>;
+    id: string;
+  }>
+) => {
+  if (!payments || payments.length === 0) {
+    return;
+  }
+
+  const hasApplyCost = payments.some((item) => item.applyCost);
+
+  if (!hasApplyCost) {
+    payments.forEach((payment, idx) => {
+      if (!payment.applyCost) {
+        // eslint-disable-next-line functional/immutable-data
+        errors.push({
+          messageKey: 'at-least-one-applycost',
+          value: payments,
+          id: `recipients[${recipientId}].${paymentType}[${idx}].applyCost`,
+        });
+      }
+    });
+  }
+};
+
+export const checkApplyCost = (
+  values: RecipientPaymentsFormValues | undefined
+): Array<{
+  messageKey: string;
+  value: Array<NewNotificationPagoPaPayment> | Array<NewNotificationF24Payment>;
+  id: string;
+}> => {
+  const errors: Array<{
+    messageKey: string;
+    value: Array<NewNotificationPagoPaPayment> | Array<NewNotificationF24Payment>;
+    id: string;
+  }> = [];
+
+  if (!values) {
+    return errors;
+  }
+
+  Object.entries(values).forEach(([recipientId, recipient]) => {
+    checkPaymentsApplyCost(recipientId, recipient.pagoPa, 'pagoPa', errors);
+    checkPaymentsApplyCost(recipientId, recipient.f24, 'f24', errors);
+  });
+
+  return errors;
+};
