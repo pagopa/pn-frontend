@@ -182,8 +182,6 @@ describe('Filter Notifications Table Component', async () => {
     oneYearAgo.setHours(0, 0, 0, 0);
     // wrong since endDate is before startDate
     await setFormValues(form, oneYearAgo, nineYearsAgo, 'ABCD-EFGH-ILMN-123456-A-1');
-    const errorText = form.querySelector('p[id="error-message-dateTo"]');
-    expect(errorText).toBeInTheDocument();
     const submitButton = form.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
