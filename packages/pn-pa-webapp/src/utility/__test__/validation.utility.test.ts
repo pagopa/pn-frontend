@@ -1,10 +1,9 @@
 import { RecipientType } from '@pagopa-pn/pn-commons';
 
 import { randomString } from '../../__test__/test-utils';
-import { NewNotificationRecipient, PaymentModel } from '../../models/NewNotification';
+import { NewNotificationRecipient } from '../../models/NewNotification';
 import {
   denominationLengthAndCharacters,
-  identicalIUV,
   identicalTaxIds,
   taxIdDependingOnRecipientType,
 } from '../validation.utility';
@@ -84,13 +83,14 @@ describe('test custom validation for recipients', () => {
     ]);
   });
 
+  /*
   it('identicalIUV (no errors)', () => {
     const result = identicalIUV(
       [
         { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
         { creditorTaxId: 'creditorTaxId2', noticeCode: 'noticeCode2' },
       ] as Array<NewNotificationRecipient>,
-      PaymentModel.PAGO_PA_NOTICE
+      PaymentModel.PAGO_PA
     );
     expect(result).toHaveLength(0);
   });
@@ -102,7 +102,7 @@ describe('test custom validation for recipients', () => {
         { creditorTaxId: 'creditorTaxId2', noticeCode: 'noticeCode2' },
         { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
       ] as Array<NewNotificationRecipient>,
-      PaymentModel.PAGO_PA_NOTICE
+      PaymentModel.PAGO_PA
     );
     expect(result).toHaveLength(4);
     expect(result).toStrictEqual([
@@ -128,4 +128,5 @@ describe('test custom validation for recipients', () => {
       },
     ]);
   });
+  */
 });

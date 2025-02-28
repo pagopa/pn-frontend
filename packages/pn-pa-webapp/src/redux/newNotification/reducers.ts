@@ -6,34 +6,39 @@ import {
   NewNotificationDocument,
   NewNotificationRecipient,
   NotificationFeePolicy,
-  PaymentModel,
-  PaymentObject,
+  PagoPaIntegrationMode,
+  PreliminaryInformationsPayload,
 } from '../../models/NewNotification';
 import { UserGroup } from '../../models/user';
-import { getConfiguration } from '../../services/configuration.service';
+import { filterPaymentsByDebtPositionChange } from '../../utility/notification.utility';
 import {
   createNewNotification,
   getUserGroups,
   uploadNotificationDocument,
   uploadNotificationPaymentDocument,
 } from './actions';
-import { PreliminaryInformationsPayload } from './types';
 
-const initialState = {
+type NewNotificationInitialState = {
+  loading: boolean;
+  notification: NewNotification;
+  groups: Array<UserGroup>;
+  isCompleted: boolean;
+};
+
+const initialState: NewNotificationInitialState = {
   loading: false,
   notification: {
+    notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
     paProtocolNumber: '',
     subject: '',
     recipients: [],
     documents: [],
-    payment: {},
-    physicalCommunicationType: '' as PhysicalCommunicationType,
+    physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
     group: '',
     taxonomyCode: '',
-    paymentMode: '' as PaymentModel,
-    notificationFeePolicy: '' as NotificationFeePolicy,
     senderDenomination: '',
-  } as NewNotification,
+    senderTaxId: '',
+  },
   groups: [] as Array<UserGroup>,
   isCompleted: false,
 };
@@ -54,19 +59,9 @@ const newNotificationSlice = createSlice({
       state.notification.senderTaxId = action.payload.senderTaxId;
     },
     setPreliminaryInformations: (state, action: PayloadAction<PreliminaryInformationsPayload>) => {
-      // TODO: capire la logica di set della fee policy sia corretta
       state.notification = {
         ...state.notification,
         ...action.payload,
-        // PN-1835
-        // in questa fase la notificationFeePolicy viene assegnata di default a FLAT_RATE
-        // Carlotta Dimatteo 10/08/2022
-        notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
-        // reset payment data if payment mode has changed
-        payment:
-          state.notification.paymentMode !== action.payload.paymentMode
-            ? {}
-            : state.notification.payment,
       };
     },
     saveRecipients: (
@@ -84,13 +79,58 @@ const newNotificationSlice = createSlice({
     ) => {
       state.notification.documents = action.payload.documents;
     },
-    setPaymentDocuments: (
+    setDebtPosition: (
       state,
-      action: PayloadAction<{ paymentDocuments: { [key: string]: PaymentObject } }>
+      action: PayloadAction<{
+        recipients: Array<NewNotificationRecipient>;
+      }>
+    ) => {
+      const { recipients } = action.payload;
+
+      recipients.forEach(({ taxId, debtPosition: newDebtPosition }) => {
+        const currentRecipientIdx = state.notification.recipients.findIndex(
+          (r) => r.taxId === taxId
+        );
+
+        // Skip if recipient not found
+        if (currentRecipientIdx === -1 || !newDebtPosition) {
+          return;
+        }
+
+        const currentRecipient = state.notification.recipients[currentRecipientIdx];
+        const oldDebtPosition = currentRecipient.debtPosition;
+
+        // Update payments
+        const updatedPayments = filterPaymentsByDebtPositionChange(
+          currentRecipient.payments || [],
+          newDebtPosition,
+          oldDebtPosition
+        );
+
+        state.notification.recipients[currentRecipientIdx] = {
+          ...currentRecipient,
+          debtPosition: newDebtPosition,
+          payments: updatedPayments,
+        };
+      });
+    },
+    setDebtPositionDetail: (
+      state,
+      action: PayloadAction<{
+        recipients: Array<NewNotificationRecipient>;
+        vat?: number;
+        paFee?: number;
+        notificationFeePolicy: NotificationFeePolicy;
+        pagoPaIntMode?: PagoPaIntegrationMode;
+      }>
     ) => {
       state.notification = {
         ...state.notification,
-        payment: action.payload.paymentDocuments,
+        recipients: action.payload.recipients,
+        vat: action.payload.vat,
+        paFee: Number(action.payload.paFee),
+        notificationFeePolicy: action.payload.notificationFeePolicy,
+        pagoPaIntMode: action.payload.pagoPaIntMode,
       };
     },
     setIsCompleted: (state) => {
@@ -104,11 +144,9 @@ const newNotificationSlice = createSlice({
     });
     builder.addCase(uploadNotificationDocument.fulfilled, (state, action) => {
       state.notification.documents = action.payload;
-      state.isCompleted = !getConfiguration().IS_PAYMENT_ENABLED;
     });
     builder.addCase(uploadNotificationPaymentDocument.fulfilled, (state, action) => {
-      state.notification.payment = action.payload;
-      state.isCompleted = true;
+      state.notification.recipients = action.payload;
     });
     builder.addCase(createNewNotification.rejected, (state) => {
       state.isCompleted = false;
@@ -122,9 +160,10 @@ export const {
   setPreliminaryInformations,
   saveRecipients,
   setAttachments,
-  setPaymentDocuments,
+  setDebtPositionDetail,
   resetState,
   setIsCompleted,
+  setDebtPosition,
 } = newNotificationSlice.actions;
 
 export default newNotificationSlice;
