@@ -19,7 +19,7 @@ export enum NewNotificationDigitalAddressType {
   PEC = 'PEC',
 }
 
-enum PagoPaIntegrationMode {
+export enum PagoPaIntegrationMode {
   NONE = 'NONE',
   SYNC = 'SYNC',
   ASYNC = 'ASYNC',
@@ -90,7 +90,6 @@ export interface NewNotificationRecipient {
 }
 
 export interface NewNotification extends NewNotificationBilingualism {
-  notificationFeePolicy: NotificationFeePolicy;
   idempotenceToken?: string;
   paProtocolNumber: string;
   subject: string;
@@ -101,11 +100,11 @@ export interface NewNotification extends NewNotificationBilingualism {
   senderTaxId: string;
   group?: string;
   taxonomyCode: string;
-  paymentMode?: PaymentModel;
   recipients: Array<NewNotificationRecipient>;
   documents: Array<NewNotificationDocument>;
   paFee?: number;
   vat?: number;
+  notificationFeePolicy: NotificationFeePolicy;
   pagoPaIntMode?: PagoPaIntegrationMode;
 }
 
@@ -151,5 +150,22 @@ export interface UploadDocumentsResponse {
   [id: string]: NotificationAttachmentBodyRef;
 }
 
+export type RecipientPaymentsFormValues = {
+  [taxId: string]: {
+    pagoPa: Array<NewNotificationPagoPaPayment>;
+    f24: Array<NewNotificationF24Payment>;
+  };
+};
+
+export type PaymentMethodsFormValues = {
+  notificationFeePolicy: NotificationFeePolicy;
+  paFee: number | undefined;
+  vat: number | undefined;
+  pagoPaIntMode: PagoPaIntegrationMode;
+  recipients: RecipientPaymentsFormValues;
+};
+
 export const BILINGUALISM_LANGUAGES = ['de', 'sl', 'fr'];
 export const NewNotificationLangOther = 'other';
+
+export const VAT = [4, 5, 10, 22];

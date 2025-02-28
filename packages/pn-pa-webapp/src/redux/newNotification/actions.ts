@@ -77,7 +77,8 @@ const uploadNotificationDocumentCbk = async (
               items[index].sha256,
               presigneUrl.secret,
               items[index].file as Uint8Array,
-              presigneUrl.httpMethod
+              presigneUrl.httpMethod,
+              items[index].contentType
             )
           );
         }

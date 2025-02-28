@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
-import { Alert, Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
+import { Alert, Box, Grid, Link, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { PnBreadcrumb, Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import Attachments from '../components/NewNotification/Attachments';
 import DebtPosition from '../components/NewNotification/DebtPosition';
-import PaymentMethods from '../components/NewNotification/PaymentMethods';
+import DebtPositionDetail from '../components/NewNotification/DebtPositionDetail';
+// import PaymentMethods from '../components/NewNotification/PaymentMethods';
 import PreliminaryInformations from '../components/NewNotification/PreliminaryInformations';
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
@@ -21,10 +21,14 @@ import { getConfiguration } from '../services/configuration.service';
 
 const SubTitle = () => {
   const { t } = useTranslation(['common', 'notifiche']);
+  const { DEVELOPER_API_DOCUMENTATION_LINK } = getConfiguration();
   return (
     <>
-      {t('new-notification.subtitle', { ns: 'notifiche' })} {/* PN-2028 */}
-      <Link to={routes.API_KEYS}>{t('menu.api-key')}</Link>
+      {t('new-notification.subtitle', { ns: 'notifiche' })} {/* PN-14000 */}
+      <Link href={DEVELOPER_API_DOCUMENTATION_LINK} target="_blank" data-testid="api-how-it-works">
+        {t('new-notification.how-it-works', { ns: 'notifiche' })}
+      </Link>
+      .
     </>
   );
 };
@@ -51,7 +55,7 @@ const NewNotification = () => {
       // eslint-disable-next-line functional/immutable-data
       baseSteps.push(
         t('new-notification.steps.debt-position.title', { ns: 'notifiche' }),
-        t('new-notification.steps.payment-methods.title', { ns: 'notifiche' })
+        t('new-notification.steps.debt-position-detail.title', { ns: 'notifiche' })
       );
     }
 
@@ -184,7 +188,6 @@ const NewNotification = () => {
                 onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
                 recipientsData={notification.recipients}
-                paymentMode={notification.paymentMode}
                 ref={childRef}
               />
             )}
@@ -198,10 +201,9 @@ const NewNotification = () => {
               />
             )}
             {activeStep === 3 && IS_PAYMENT_ENABLED && (
-              <PaymentMethods
-                onConfirm={goToNextStep}
+              <DebtPositionDetail
                 notification={notification}
-                isCompleted={isCompleted}
+                onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
                 ref={childRef}
               />

@@ -6,6 +6,7 @@ import { vi } from 'vitest';
 import {
   AppMessage,
   AppResponseMessage,
+  Configuration,
   ResponseEventDispatcher,
   errorFactoryManager,
 } from '@pagopa-pn/pn-commons';
@@ -15,6 +16,7 @@ import { newNotification, newNotificationGroups } from '../../__mocks__/NewNotif
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
+import { PaConfiguration } from '../../services/configuration.service';
 import { PAAppErrorFactory } from '../../utility/AppError/PAAppErrorFactory';
 import { newNotificationMapper } from '../../utility/notification.utility';
 import NewNotification from '../NewNotification.page';
@@ -24,6 +26,7 @@ vi.mock('../../services/configuration.service', async () => {
   return {
     ...(await vi.importActual<any>('../../services/configuration.service')),
     getConfiguration: () => ({
+      ...Configuration.get<PaConfiguration>(),
       IS_PAYMENT_ENABLED: mockIsPaymentEnabledGetter(),
     }),
   };
@@ -145,22 +148,12 @@ describe('NewNotification Page without payment enabled in configuration', async 
     expect(mockedPageBefore).not.toBeInTheDocument();
 
     // simulate clicking the link
-    const links = result.getAllByRole('link');
-    expect(links[1]).toHaveTextContent(/menu.api-key/i);
-    expect(links[1]).toHaveAttribute('href', routes.API_KEYS);
-
-    fireEvent.click(links[1]);
-    // prompt must be shown
-    const promptDialog = await waitFor(() => result.getByTestId('promptDialog'));
-    expect(promptDialog).toBeInTheDocument();
-    const confirmExitBtn = within(promptDialog).getByTestId('confirmExitBtn');
-    fireEvent.click(confirmExitBtn);
-
-    // after clicking link - mocked api keys page present
-    await waitFor(() => {
-      const mockedPageAfter = result.queryByTestId('mocked-api-keys-page');
-      expect(mockedPageAfter).toBeInTheDocument();
-    });
+    const link = result.getByTestId('api-how-it-works');
+    expect(link).toHaveTextContent(/new-notification.how-it-works/i);
+    expect(link).toHaveAttribute(
+      'href',
+      Configuration.get<PaConfiguration>().DEVELOPER_API_DOCUMENTATION_LINK
+    );
   });
 
   it('clicks on stepper and navigate', async () => {

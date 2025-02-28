@@ -6,10 +6,10 @@ import {
   NewNotificationDocument,
   NewNotificationRecipient,
   NotificationFeePolicy,
+  PagoPaIntegrationMode,
   PreliminaryInformationsPayload,
 } from '../../models/NewNotification';
 import { UserGroup } from '../../models/user';
-import { getConfiguration } from '../../services/configuration.service';
 import { filterPaymentsByDebtPositionChange } from '../../utility/notification.utility';
 import {
   createNewNotification,
@@ -114,13 +114,23 @@ const newNotificationSlice = createSlice({
         };
       });
     },
-    setPayments: (
+    setDebtPositionDetail: (
       state,
-      action: PayloadAction<{ recipients: Array<NewNotificationRecipient> }>
+      action: PayloadAction<{
+        recipients: Array<NewNotificationRecipient>;
+        vat?: number;
+        paFee?: number;
+        notificationFeePolicy: NotificationFeePolicy;
+        pagoPaIntMode?: PagoPaIntegrationMode;
+      }>
     ) => {
       state.notification = {
         ...state.notification,
         recipients: action.payload.recipients,
+        vat: action.payload.vat,
+        paFee: Number(action.payload.paFee),
+        notificationFeePolicy: action.payload.notificationFeePolicy,
+        pagoPaIntMode: action.payload.pagoPaIntMode,
       };
     },
     setIsCompleted: (state) => {
@@ -134,11 +144,9 @@ const newNotificationSlice = createSlice({
     });
     builder.addCase(uploadNotificationDocument.fulfilled, (state, action) => {
       state.notification.documents = action.payload;
-      state.isCompleted = !getConfiguration().IS_PAYMENT_ENABLED;
     });
     builder.addCase(uploadNotificationPaymentDocument.fulfilled, (state, action) => {
       state.notification.recipients = action.payload;
-      state.isCompleted = true;
     });
     builder.addCase(createNewNotification.rejected, (state) => {
       state.isCompleted = false;
@@ -152,7 +160,7 @@ export const {
   setPreliminaryInformations,
   saveRecipients,
   setAttachments,
-  setPayments,
+  setDebtPositionDetail,
   resetState,
   setIsCompleted,
   setDebtPosition,

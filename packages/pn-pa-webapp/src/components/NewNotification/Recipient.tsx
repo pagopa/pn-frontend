@@ -17,7 +17,10 @@ import {
 import { RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { NewNotificationDigitalAddressType, NewNotificationRecipient, PaymentModel } from '../../models/NewNotification';
+import {
+  NewNotificationDigitalAddressType,
+  NewNotificationRecipient,
+} from '../../models/NewNotification';
 import { useAppDispatch } from '../../redux/hooks';
 import { saveRecipients } from '../../redux/newNotification/reducers';
 import {
@@ -53,7 +56,6 @@ type FormRecipients = {
 };
 
 type Props = {
-  paymentMode: PaymentModel | undefined;
   onConfirm: () => void;
   onPreviousStep?: () => void;
   recipientsData?: Array<NewNotificationRecipient>;
@@ -86,76 +88,76 @@ const Recipient: React.FC<Props> = ({
       : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
 
   const buildRecipientValidationObject = () => ({
-      recipientType: yup.string(),
-      // validazione sulla denominazione (firstName + " " + lastName per PF, firstName per PG)
-      // la lunghezza non può superare i 80 caratteri
-      firstName: requiredStringFieldValidation(tc).test({
+    recipientType: yup.string(),
+    // validazione sulla denominazione (firstName + " " + lastName per PF, firstName per PG)
+    // la lunghezza non può superare i 80 caratteri
+    firstName: requiredStringFieldValidation(tc).test({
+      name: 'denominationLengthAndCharacters',
+      test(value?: string) {
+        const error = denominationLengthAndCharacters(value, this.parent.lastName);
+        if (error) {
+          return this.createError({
+            message:
+              error.messageKey === 'too-long-field-error'
+                ? tc(error.messageKey, error.data)
+                : t(error.messageKey, error.data),
+            path: this.path,
+          });
+        }
+        return true;
+      },
+    }),
+    // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
+    // non viene richiesto
+    lastName: yup.string().when('recipientType', {
+      is: (value: string) => value !== RecipientType.PG,
+      then: requiredStringFieldValidation(tc).test({
         name: 'denominationLengthAndCharacters',
         test(value?: string) {
-          const error = denominationLengthAndCharacters(value, this.parent.lastName);
+          const error = denominationLengthAndCharacters(this.parent.firstName, value as string);
           if (error) {
             return this.createError({
-              message:
-                error.messageKey === 'too-long-field-error'
-                  ? tc(error.messageKey, error.data)
-                  : t(error.messageKey, error.data),
+              message: ' ',
               path: this.path,
             });
           }
           return true;
         },
       }),
-      // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
-      // non viene richiesto
-      lastName: yup.string().when('recipientType', {
-        is: (value: string) => value !== RecipientType.PG,
-        then: requiredStringFieldValidation(tc).test({
-          name: 'denominationLengthAndCharacters',
-          test(value?: string) {
-            const error = denominationLengthAndCharacters(this.parent.firstName, value as string);
-            if (error) {
-              return this.createError({
-                message: ' ',
-                path: this.path,
-              });
-            }
-            return true;
-          },
-        }),
+    }),
+    taxId: yup
+      .string()
+      .required(tc('required-field'))
+      // validazione su CF: deve accettare solo formato a 16 caratteri per PF, e sia 16 sia 11 caratteri per PG
+      .test('taxIdDependingOnRecipientType', t('fiscal-code-error'), function (value) {
+        return taxIdDependingOnRecipientType(value, this.parent.recipientType);
       }),
-      taxId: yup
-        .string()
-        .required(tc('required-field'))
-        // validazione su CF: deve accettare solo formato a 16 caratteri per PF, e sia 16 sia 11 caratteri per PG
-        .test('taxIdDependingOnRecipientType', t('fiscal-code-error'), function (value) {
-          return taxIdDependingOnRecipientType(value, this.parent.recipientType);
-        }),
-      digitalDomicile: yup
-        .string()
-        .max(320, tc('too-long-field-error'))
-        .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges'))
-        .matches(dataRegex.email, t('pec-error')),
-      address: requiredStringFieldValidation(tc, 1024),
-      houseNumber: yup.string().required(tc('required-field')),
-      /*
+    digitalDomicile: yup
+      .string()
+      .max(320, tc('too-long-field-error'))
+      .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges'))
+      .matches(dataRegex.email, t('pec-error')),
+    address: requiredStringFieldValidation(tc, 1024),
+    houseNumber: yup.string().required(tc('required-field')),
+    /*
       addressDetails: yup.string().when('showPhysicalAddress', {
         is: true,
         then: yup.string().required(tc('required-field')),
       }),
       */
-      zip: yup
-        .string()
-        .required(tc('required-field'))
-        .max(12, tc('too-long-field-error', { maxLength: 12 }))
-        .matches(dataRegex.zipCode, `${t('zip')} ${tc('invalid')}`),
-      municipalityDetails: yup
-        .string()
-        .max(256, tc('too-long-field-error', { maxLength: 256 }))
-        .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
-      municipality: requiredStringFieldValidation(tc, 256),
-      province: requiredStringFieldValidation(tc, 256),
-      foreignState: requiredStringFieldValidation(tc),
-    });
+    zip: yup
+      .string()
+      .required(tc('required-field'))
+      .max(12, tc('too-long-field-error', { maxLength: 12 }))
+      .matches(dataRegex.zipCode, `${t('zip')} ${tc('invalid')}`),
+    municipalityDetails: yup
+      .string()
+      .max(256, tc('too-long-field-error', { maxLength: 256 }))
+      .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
+    municipality: requiredStringFieldValidation(tc, 256),
+    province: requiredStringFieldValidation(tc, 256),
+    foreignState: requiredStringFieldValidation(tc),
+  });
 
   const validationSchema = yup.object({
     recipients: yup
@@ -169,7 +171,7 @@ const Recipient: React.FC<Props> = ({
         return new yup.ValidationError(
           errors.map((e) => new yup.ValidationError(t(e.messageKey), e.value, e.id))
         );
-      })
+      }),
   });
 
   const handleAddRecipient = (values: FormRecipients, setFieldValue: any) => {
