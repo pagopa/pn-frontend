@@ -10,7 +10,7 @@
   "ONE_TRUST_PP": "4824a110-316e-42fd-b492-8e2b0513db70",
   "ONE_TRUST_TOS": "083fb982-149c-4241-be09-12ae67d88b66",
   "LANDING_SITE_URL": "https://www.dev.notifichedigitali.it",
-  "IS_PAYMENT_ENABLED": false,
+  "IS_PAYMENT_ENABLED": true,
   "WORK_IN_PROGRESS": false,
   "SELFCARE_SEND_PROD_ID": "prod-pn-dev",
   "IS_MANUAL_SEND_ENABLED": true,
