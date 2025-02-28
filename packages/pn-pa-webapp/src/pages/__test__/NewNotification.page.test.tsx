@@ -1,6 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
 import { createBrowserHistory } from 'history';
-import { ReactNode } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -19,19 +18,6 @@ import * as routes from '../../navigation/routes.const';
 import { PAAppErrorFactory } from '../../utility/AppError/PAAppErrorFactory';
 import { newNotificationMapper } from '../../utility/notification.utility';
 import NewNotification from '../NewNotification.page';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: {},
-  }),
-  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
-    <>
-      {props.i18nKey} {props.components?.map((c) => c)}
-    </>
-  ),
-}));
 
 const mockIsPaymentEnabledGetter = vi.fn();
 vi.mock('../../services/configuration.service', async () => {

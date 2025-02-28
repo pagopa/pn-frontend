@@ -7,13 +7,6 @@ import { render } from '../../../__test__/test-utils';
 import { ApiKeyColumnData } from '../../../models/ApiKeys';
 import ApiKeysDataSwitch from '../ApiKeysDataSwitch';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const data: Row<ApiKeyColumnData> = {
   id: publicKeys.items[0].kid!,
   name: publicKeys.items[0].name,

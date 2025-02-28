@@ -1,6 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { mandatesByDelegate, mandatesByDelegator } from '../../__mocks__/Delegations.mock';
@@ -10,14 +9,6 @@ import DelegatesByCompany from '../../components/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../../components/Deleghe/DelegationsOfTheCompany';
 import * as routes from '../../navigation/routes.const';
 import Deleghe from '../Deleghe.page';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
 
 describe('Deleghe page', async () => {
   let mock: MockAdapter;

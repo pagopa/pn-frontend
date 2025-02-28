@@ -5,13 +5,6 @@ import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import AcceptDelegationModal from '../AcceptDelegationModal';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const confirmCbk = vi.fn();
 const cancelCbk = vi.fn();
 
@@ -47,9 +40,9 @@ describe('AcceptDelegationModal', () => {
     const dialog = screen.getByTestId('codeDialog');
     const codeConfirmButton = within(dialog).getByTestId('codeConfirmButton');
     const codeCancelButton = within(dialog).getByTestId('codeCancelButton');
-    expect(codeConfirmButton).toBeDisabled();
+    expect(codeConfirmButton).toBeEnabled();
     fireEvent.click(codeCancelButton);
-    expect(cancelCbk).toBeCalledTimes(1);
+    expect(cancelCbk).toHaveBeenCalledTimes(1);
   });
 
   it('renders GroupModal - no groups selected', () => {
@@ -114,7 +107,7 @@ describe('AcceptDelegationModal', () => {
     expect(groupConfirmButton).toBeEnabled();
     expect(groupCancelButton).toHaveTextContent('button.annulla');
     fireEvent.click(groupCancelButton);
-    expect(cancelCbk).toBeCalledTimes(1);
+    expect(cancelCbk).toHaveBeenCalledTimes(1);
   });
 
   it('selects groups - groupModal', async () => {
@@ -145,8 +138,8 @@ describe('AcceptDelegationModal', () => {
     await testAutocomplete(dialog, 'groups', groups, true, 1);
     expect(groupConfirmButton).toBeEnabled();
     fireEvent.click(groupConfirmButton);
-    expect(confirmCbk).toBeCalledTimes(1);
-    expect(confirmCbk).toBeCalledWith([], [groups[1]]);
+    expect(confirmCbk).toHaveBeenCalledTimes(1);
+    expect(confirmCbk).toHaveBeenCalledWith([], [groups[1]]);
   });
 
   it('fills the code, go next step and returns back', async () => {
@@ -172,7 +165,7 @@ describe('AcceptDelegationModal', () => {
     );
     let codeDialog = screen.getByTestId('codeDialog');
     const codeConfirmButton = within(codeDialog).getByTestId('codeConfirmButton');
-    expect(codeConfirmButton).toBeDisabled();
+    expect(codeConfirmButton).toBeEnabled();
     const codeInputs = codeDialog.querySelectorAll('input');
     codeInputs.forEach((input, index) => {
       fireEvent.change(input, { target: { value: index.toString() } });
@@ -209,15 +202,15 @@ describe('AcceptDelegationModal', () => {
     );
     const codeDialog = screen.getByTestId('codeDialog');
     const codeConfirmButton = within(codeDialog).getByTestId('codeConfirmButton');
-    expect(codeConfirmButton).toBeDisabled();
+    expect(codeConfirmButton).toBeEnabled();
     const codeInputs = codeDialog.querySelectorAll('input');
     codeInputs.forEach((input, index) => {
       fireEvent.change(input, { target: { value: index.toString() } });
     });
     expect(codeConfirmButton).toBeEnabled();
     fireEvent.click(codeConfirmButton);
-    expect(confirmCbk).toBeCalledTimes(1);
-    expect(confirmCbk).toBeCalledWith(['0', '1', '2', '3', '4'], []);
+    expect(confirmCbk).toHaveBeenCalledTimes(1);
+    expect(confirmCbk).toHaveBeenCalledWith(['0', '1', '2', '3', '4'], []);
   });
 
   it('fills the code, go next step, choose groups and confirm', async () => {
@@ -243,7 +236,7 @@ describe('AcceptDelegationModal', () => {
     );
     const codeDialog = screen.getByTestId('codeDialog');
     const codeConfirmButton = within(codeDialog).getByTestId('codeConfirmButton');
-    expect(codeConfirmButton).toBeDisabled();
+    expect(codeConfirmButton).toBeEnabled();
     const codeInputs = codeDialog.querySelectorAll('input');
     codeInputs.forEach((input, index) => {
       fireEvent.change(input, { target: { value: index.toString() } });
@@ -261,7 +254,7 @@ describe('AcceptDelegationModal', () => {
     await testAutocomplete(groupDialog, 'groups', groups, true, 1);
     const groupConfirmButton = within(groupDialog).getByTestId('groupConfirmButton');
     fireEvent.click(groupConfirmButton);
-    expect(confirmCbk).toBeCalledTimes(1);
-    expect(confirmCbk).toBeCalledWith(['0', '1', '2', '3', '4'], [groups[1]]);
+    expect(confirmCbk).toHaveBeenCalledTimes(1);
+    expect(confirmCbk).toHaveBeenCalledWith(['0', '1', '2', '3', '4'], [groups[1]]);
   });
 });

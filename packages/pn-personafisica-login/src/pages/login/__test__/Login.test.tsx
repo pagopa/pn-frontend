@@ -6,34 +6,26 @@ import { getById, queryById, waitFor } from '@pagopa-pn/pn-commons/src/test-util
 
 import { fireEvent, render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
-import { storageAarOps } from '../../../utility/storage';
+import { storageRapidAccessOps } from '../../../utility/storage';
 import Login from '../Login';
 
 const mockAssign = vi.fn();
-let mockSearchParams = true;
+let mockSearchParamsAar = true;
+let mockSearchParamsRetrievalId = false;
 
 // simulate url params
 function mockCreateMockedSearchParams() {
   const mockedSearchParams = new URLSearchParams();
-  if (mockSearchParams) {
+  if (mockSearchParamsAar) {
     mockedSearchParams.set(AppRouteParams.AAR, 'fake-aar-token');
+  }
+  if (mockSearchParamsRetrievalId) {
+    mockedSearchParams.set(AppRouteParams.RETRIEVAL_ID, 'fake-retrieval_id');
   }
   return mockedSearchParams;
 }
 
 // mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translation hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: {
-      language: 'it',
-      changeLanguage: () => new Promise(() => {}),
-    },
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
-
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual<any>('react-router-dom')),
   useSearchParams: () => [mockCreateMockedSearchParams(), null],
@@ -47,7 +39,7 @@ describe('test login page', () => {
   });
 
   afterEach(() => {
-    storageAarOps.delete();
+    storageRapidAccessOps.delete();
     vi.clearAllMocks();
   });
 
@@ -69,7 +61,7 @@ describe('test login page', () => {
     expect(cieButton).toBeInTheDocument();
     const spidSelect = queryById(container, 'spidSelect');
     expect(spidSelect).not.toBeInTheDocument();
-    expect(storageAarOps.read()).toBe('fake-aar-token');
+    expect(storageRapidAccessOps.read()).toEqual([AppRouteParams.AAR, 'fake-aar-token']);
   });
 
   it('select spid login', async () => {
@@ -79,7 +71,7 @@ describe('test login page', () => {
       </BrowserRouter>
     );
     const spidButton = getById(container, 'spidButton');
-    fireEvent.click(spidButton!);
+    fireEvent.click(spidButton);
     const spidSelect = await waitFor(() => document.querySelector('#spidSelect'));
     expect(spidSelect).toBeInTheDocument();
   });
@@ -92,20 +84,30 @@ describe('test login page', () => {
       </BrowserRouter>
     );
     const cieButton = getById(container, 'cieButton');
-    fireEvent.click(cieButton!);
-    expect(mockAssign).toBeCalledTimes(1);
-    expect(mockAssign).toBeCalledWith(
+    fireEvent.click(cieButton);
+    expect(mockAssign).toHaveBeenCalledTimes(1);
+    expect(mockAssign).toHaveBeenCalledWith(
       `${URL_API_LOGIN}/login?entityID=${SPID_CIE_ENTITY_ID}&authLevel=SpidL2&RelayState=send`
     );
   });
 
   it('not store data in session storage', () => {
-    mockSearchParams = false;
+    mockSearchParamsAar = false;
     render(
       <BrowserRouter>
         <Login />
       </BrowserRouter>
     );
-    expect(storageAarOps.read()).toBeUndefined();
+    expect(storageRapidAccessOps.read()).toBeUndefined();
+  });
+
+  it('store retrievalId in session storage', () => {
+    mockSearchParamsRetrievalId = true;
+    render(
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
+    expect(storageRapidAccessOps.read()).toEqual([AppRouteParams.RETRIEVAL_ID, 'fake-retrieval_id']);
   });
 });
