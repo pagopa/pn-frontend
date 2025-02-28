@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -7,18 +6,6 @@ import { fireEvent, render, screen, within } from '../../../__test__/test-utils'
 import { AddressType, ChannelType } from '../../../models/contacts';
 import ContactCodeDialog from '../ContactCodeDialog';
 import { fillCodeDialog } from './test-utils';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
-    <>
-      {props.i18nKey} {props.components?.map((c) => c)}
-    </>
-  ),
-}));
 
 const discardHandler = vi.fn();
 const confirmHandler = vi.fn();
@@ -55,7 +42,7 @@ describe('test ContactCodeDialog', () => {
     expect(cancelButton).toBeInTheDocument();
     const confirmButton = within(dialog).getByText('button.conferma');
     expect(confirmButton).toBeInTheDocument();
-    expect(confirmButton).toBeDisabled();
+    expect(confirmButton).toBeEnabled();
   });
 
   it('render component - courtesy address', () => {
@@ -85,7 +72,7 @@ describe('test ContactCodeDialog', () => {
     expect(cancelButton).toBeInTheDocument();
     const confirmButton = within(dialog).getByText('button.conferma');
     expect(confirmButton).toBeInTheDocument();
-    expect(confirmButton).toBeDisabled();
+    expect(confirmButton).toBeEnabled();
   });
 
   it('click on buttons', async () => {

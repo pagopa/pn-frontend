@@ -1,24 +1,10 @@
 import { Formik } from 'formik';
-import { vi } from 'vitest';
 
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
-import {
-  fireEvent,
-  getById,
-  render,
-  testFormElements,
-} from '@pagopa-pn/pn-commons/src/test-utils';
+import { fireEvent, getById, render, testFormElements } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { NewNotificationLangOther, PaymentModel, PreliminaryInformationsPayload } from '../../../models/NewNotification';
 import PreliminaryInformationsContent from '../PreliminaryInformationsContent';
-
-// mock imports
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
-  }),
-}));
 
 describe('PreliminaryInformationsContent', () => {
   const initialValues: PreliminaryInformationsPayload = {
@@ -86,7 +72,7 @@ describe('PreliminaryInformationsContent', () => {
         )}
       </Formik>
     );
-    
+
     const subjectInput = getById(result.container, 'subject');
     fireEvent.focus(subjectInput);
 

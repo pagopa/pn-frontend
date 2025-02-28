@@ -115,9 +115,7 @@ const RenderSmartable: React.FC<{
             <SmartBodyCell
               key={column.id.toString()}
               columnId={column.id}
-              tableProps={{
-                onClick: column.tableConfiguration.onClick,
-              }}
+              tableProps={{ onClick: column.tableConfiguration.onClick }}
               cardProps={column.cardConfiguration}
               isCardHeader={column.cardConfiguration?.isCardHeader}
             >
@@ -153,10 +151,10 @@ describe('Smart Table Component', () => {
     const itemsPerPageSelectorBtn = itemsPerPageSelector.querySelector('button');
     fireEvent.click(itemsPerPageSelectorBtn!);
     const itemsPerPageList = getAllByRole('menuitem');
-    fireEvent.click(itemsPerPageList[1]!);
+    fireEvent.click(itemsPerPageList[1]);
     await waitFor(() => {
-      expect(handleChangePagination).toBeCalledTimes(1);
-      expect(handleChangePagination).toBeCalledWith({
+      expect(handleChangePagination).toHaveBeenCalledTimes(1);
+      expect(handleChangePagination).toHaveBeenCalledWith({
         size: 20,
         page: 0,
         totalElements: 100,
@@ -168,8 +166,8 @@ describe('Smart Table Component', () => {
     // the buttons are < 1 2 3 >
     fireEvent.click(pageButtons[2]);
     await waitFor(() => {
-      expect(handleChangePagination).toBeCalledTimes(2);
-      expect(handleChangePagination).toBeCalledWith({
+      expect(handleChangePagination).toHaveBeenCalledTimes(2);
+      expect(handleChangePagination).toHaveBeenCalledWith({
         size: 20,
         page: 1,
         totalElements: 100,
@@ -208,9 +206,7 @@ describe('Smart Table Component', () => {
                   <SmartBodyCell
                     key={column.id.toString()}
                     columnId={column.id}
-                    tableProps={{
-                      onClick: column.tableConfiguration.onClick,
-                    }}
+                    tableProps={{ onClick: column.tableConfiguration.onClick }}
                     cardProps={column.cardConfiguration}
                     isCardHeader={column.cardConfiguration?.isCardHeader}
                   >
@@ -227,9 +223,7 @@ describe('Smart Table Component', () => {
                   <SmartBodyCell
                     key={column.id.toString()}
                     columnId={column.id}
-                    tableProps={{
-                      onClick: column.tableConfiguration.onClick,
-                    }}
+                    tableProps={{ onClick: column.tableConfiguration.onClick }}
                     cardProps={column.cardConfiguration}
                     isCardHeader={column.cardConfiguration?.isCardHeader}
                   >
@@ -241,7 +235,7 @@ describe('Smart Table Component', () => {
           </SmartBody>
         </SmartTable>
       )
-    ).toThrowError('SmartTable can have only 1 child of type SmartBody');
+    ).toThrow('SmartTable can have only 1 child of type SmartBody');
   });
 
   it('render component - multiple SmartHeader', () => {
@@ -272,7 +266,7 @@ describe('Smart Table Component', () => {
           </SmartHeader>
         </SmartTable>
       )
-    ).toThrowError('SmartTable can have only 1 child of type SmartHeader');
+    ).toThrow('SmartTable can have only 1 child of type SmartHeader');
   });
 
   it('render component - multiple SmartFilter', () => {
@@ -314,7 +308,7 @@ describe('Smart Table Component', () => {
           </SmartHeader>
         </SmartTable>
       )
-    ).toThrowError('SmartTable can have only 1 child of type SmartFilter');
+    ).toThrow('SmartTable can have only 1 child of type SmartFilter');
   });
 
   it('render component - incorrect child', () => {
@@ -335,7 +329,7 @@ describe('Smart Table Component', () => {
           <Box>Incorrect child</Box>
         </SmartTable>
       )
-    ).toThrowError(
+    ).toThrow(
       'SmartTable can have only 1 child of type SmartFilter, 1 child of type SmartHeader and 1 child of type SmartBody'
     );
   });

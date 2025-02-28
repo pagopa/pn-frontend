@@ -6,14 +6,6 @@ import { newNotification } from '../../../__mocks__/NewNotification.mock';
 import { RenderResult, act, fireEvent, render, within } from '../../../__test__/test-utils';
 import PaymentMethods from '../PaymentMethods';
 
-// mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const file = new File(['mocked content'], 'Mocked file', { type: 'application/pdf' });
 
 function uploadDocument(elem: HTMLElement) {

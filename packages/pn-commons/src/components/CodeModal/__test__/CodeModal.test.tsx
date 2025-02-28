@@ -110,7 +110,7 @@ describe('CodeModal Component', () => {
     const button = within(dialog).getByTestId('codeCancelButton');
     fireEvent.click(button);
     await waitFor(() => {
-      expect(cancelButtonMock).toBeCalledTimes(1);
+      expect(cancelButtonMock).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -119,7 +119,7 @@ describe('CodeModal Component', () => {
     render(<CodeModalWrapper open />);
     const dialog = screen.getByTestId('codeDialog');
     const button = within(dialog).getByTestId('codeConfirmButton');
-    expect(button).toBeDisabled();
+    expect(button).toBeEnabled();
     const codeInputs = within(dialog).getAllByTestId(/code-input-[0-4]/);
     // fill inputs with values
     codeInputs?.forEach((input, index) => {
@@ -132,8 +132,8 @@ describe('CodeModal Component', () => {
       expect(button).toBeEnabled();
     });
     fireEvent.click(button);
-    expect(confirmButtonMock).toBeCalledTimes(1);
-    expect(confirmButtonMock).toBeCalledWith(['0', '1', '2', '3', '4']);
+    expect(confirmButtonMock).toHaveBeenCalledTimes(1);
+    expect(confirmButtonMock).toHaveBeenCalledWith(['0', '1', '2', '3', '4']);
   });
 
   it('shows error', () => {
@@ -153,6 +153,21 @@ describe('CodeModal Component', () => {
     errorAlert = within(dialog).getByTestId('errorAlert');
     expect(errorAlert).toBeInTheDocument();
     expect(errorAlert).toHaveTextContent('mocked-errorMessage');
+  });
+
+  it('shows error in case of empty or incomplete code', async () => {
+    // render component
+    render(<CodeModalWrapper open />);
+    const dialog = screen.getByTestId('codeDialog');
+    const button = within(dialog).getByTestId('codeConfirmButton');
+
+    let errorAlert = within(dialog).queryByTestId('errorAlert');
+    expect(errorAlert).not.toBeInTheDocument();
+    fireEvent.click(button);
+    errorAlert = within(dialog).queryByTestId('errorAlert');
+    expect(errorAlert).toBeInTheDocument();
+    expect(errorAlert).toHaveTextContent('errors.empty_code.title');
+    expect(errorAlert).toHaveTextContent('errors.empty_code.message');
   });
 
   it('shows error in case of letters as input values', async () => {
@@ -190,6 +205,6 @@ describe('CodeModal Component', () => {
     const codePasted = '123';
     await userEvent.paste(codePasted);
     const button = screen.getByTestId('codeConfirmButton');
-    expect(button).toBeDisabled();
+    expect(button).toBeEnabled();
   });
 });

@@ -20,7 +20,7 @@ import DesktopNotifications from '../components/Notifications/DesktopNotificatio
 import GroupSelector from '../components/Notifications/GroupSelector';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
 import { ContactSource } from '../models/contacts';
-import { PNRole } from '../redux/auth/types';
+import { PNRole } from '../models/User';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';

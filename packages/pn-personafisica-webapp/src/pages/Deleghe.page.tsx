@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box, Stack } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import {
   AppResponse,
   AppResponsePublisher,
   CodeModal,
+  ConfirmationModal,
   ErrorMessage,
   TitleBox,
+  appStateActions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import ConfirmationModal from '../components/Deleghe/ConfirmationModal';
 import Delegates from '../components/Deleghe/Delegates';
 import Delegators from '../components/Deleghe/Delegators';
 import MobileDelegates from '../components/Deleghe/MobileDelegates';
@@ -43,8 +44,9 @@ const Deleghe = () => {
     name: acceptName,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
   const [pageReady, setPageReady] = useState(false);
-  const codeModalRef =
-    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
+  const codeModalRef = useRef<{
+    updateError: (error: ErrorMessage, codeNotValid: boolean) => void;
+  }>(null);
 
   const dispatch = useAppDispatch();
 
@@ -55,18 +57,32 @@ const Deleghe = () => {
   const handleConfirmClick = () => {
     if (type === 'delegates') {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_REVOKED);
-      void dispatch(revokeMandate(id))
+      dispatch(revokeMandate(id))
         .unwrap()
-        .then(() =>
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_GIVEN, { delegators })
-        );
+        .then(() => {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_GIVEN, { delegators });
+          dispatch(
+            appStateActions.addSuccess({
+              title: '',
+              message: t('deleghe.revoke-successfully'),
+            })
+          );
+        })
+        .catch(() => {});
     } else {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_REJECTED);
-      void dispatch(rejectMandate(id))
+      dispatch(rejectMandate(id))
         .unwrap()
-        .then(() =>
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_HAS_MANDATE, { delegates })
-        );
+        .then(() => {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_HAS_MANDATE, { delegates });
+          dispatch(
+            appStateActions.addSuccess({
+              title: '',
+              message: t('deleghe.reject-successfully'),
+            })
+          );
+        })
+        .catch(() => {});
     }
   };
 
@@ -153,12 +169,23 @@ const Deleghe = () => {
               ? t('deleghe.revocation_question')
               : t('deleghe.rejection_question')
           }
-          onCloseLabel={t('button.annulla', { ns: 'common' })}
-          handleClose={handleCloseModal}
-          onConfirm={handleConfirmClick}
-          onConfirmLabel={
-            type === 'delegates' ? t('deleghe.confirm_revocation') : t('deleghe.confirm_rejection')
-          }
+          slots={{
+            confirmButton: Button,
+            closeButton: Button,
+          }}
+          slotsProps={{
+            closeButton: {
+              onClick: handleCloseModal,
+              children: t('button.annulla', { ns: 'common' }),
+            },
+            confirmButton: {
+              onClick: handleConfirmClick,
+              children:
+                type === 'delegates'
+                  ? t('deleghe.confirm_revocation')
+                  : t('deleghe.confirm_rejection'),
+            },
+          }}
         />
         <Box mb={8}>
           <TitleBox

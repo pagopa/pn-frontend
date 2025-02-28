@@ -17,7 +17,6 @@ const CustomTooltip: React.FC<Props> = ({
   onOpen,
   tooltipProps,
 }) => {
-  // tooltip state
   const [open, setOpen] = useState(false);
   const handleTooltipClose = () => {
     if (openOnClick) {

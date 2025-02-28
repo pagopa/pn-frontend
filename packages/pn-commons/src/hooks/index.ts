@@ -10,14 +10,14 @@ import { useTracking } from './useTracking';
 import { useUnload } from './useUnload';
 
 export {
+  downloadDocument,
+  useErrors,
+  useHasPermissions,
+  useIsCancelled,
   useIsMobile,
   useMultiEvent,
-  useUnload,
-  useSessionCheck,
-  useErrors,
-  useTracking,
   useProcess,
-  useHasPermissions,
-  downloadDocument,
-  useIsCancelled,
+  useSessionCheck,
+  useTracking,
+  useUnload,
 };
