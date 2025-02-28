@@ -1,4 +1,4 @@
-import { Configuration, dataRegex, IS_DEVELOP } from '@pagopa-pn/pn-commons';
+import { Configuration, IS_DEVELOP, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
 
 export interface PaConfiguration {
@@ -46,7 +46,7 @@ class PaConfigurationValidator extends Validator<PaConfiguration> {
     this.ruleFor('IS_STATISTICS_ENABLED').isBoolean();
     this.ruleFor('TAXONOMY_SEND_URL').isString().isRequired();
     this.ruleFor('DOWNTIME_EXAMPLE_LINK').isString().isRequired().matches(dataRegex.htmlPageUrl);
-    this.ruleFor('PAYMENT_INFO').isString().isRequired();
+    this.ruleFor('PAYMENT_INFO').isString().isRequired().matches(dataRegex.htmlPageUrl);
   }
 }
 
