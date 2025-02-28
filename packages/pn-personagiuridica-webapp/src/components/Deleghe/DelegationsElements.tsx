@@ -243,12 +243,20 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
       <ConfirmationModal
         open={showConfirmationModal}
         title={titleModal}
-        slotsProps={{
-          closeButton: { onClick: onCloseModal },
-          confirmButton: { onClick: handleConfirmClick },
+        slots={{
+          confirmButton: Button,
+          closeButton: Button,
         }}
-        onConfirmLabel={confirmLabel}
-        onCloseLabel={t('button.annulla', { ns: 'common' })}
+        slotsProps={{
+          closeButton: {
+            onClick: onCloseModal,
+            children: t('button.annulla', { ns: 'common' }),
+          },
+          confirmButton: {
+            onClick: handleConfirmClick,
+            children: confirmLabel,
+          },
+        }}
       >
         <DialogContentText id="confirmation-dialog-description">{subtitleModal}</DialogContentText>
       </ConfirmationModal>

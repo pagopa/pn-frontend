@@ -46,10 +46,12 @@ import { isPFEvent } from '../../utility/mixpanel';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import ContactCodeDialog from './ContactCodeDialog';
 import ExistingContactDialog from './ExistingContactDialog';
+import LegalContactAssociationDialog from './LegalContactAssociationDialog';
 
 enum ModalType {
   EXISTING = 'existing',
   CODE = 'code',
+  CONFIRM_LEGAL_ASSOCIATION = 'confirm_legal_association',
 }
 
 enum ErrorBannerType {
@@ -120,9 +122,9 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         (address) => address.senderId === senderId && !address.pecValid
       );
 
-    const isSenderAlreadyAdded = (sender: Party, channelType: ChannelType | string) =>
+    const isSenderAlreadyAdded = (sender: Party, channelType?: ChannelType | string) =>
       addressesData.specialAddresses.some(
-        (a) => a.senderId === sender.id && a.channelType === channelType
+        (a) => a.senderId === sender.id && (!channelType || a.channelType === channelType)
       );
 
     const updateErrorBanner = (sender: Party, channelType: ChannelType) => {
@@ -219,6 +221,11 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       },
     });
 
+    // verify if the sender already has a contact associated
+    const oldAddress = addressesData.specialAddresses.find(
+      (addr) => addr.senderId === formik.values.sender.id
+    );
+
     const labelRoot = `legal-contacts`;
     const contactType = formik.values.channelType.toLowerCase();
 
@@ -263,8 +270,16 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
           source: ContactSource.RECAPITI,
         });
       }
+      // verify if the sender already has a contact associated
+      const oldAddress = addressesData.specialAddresses.find(
+        (addr) => addr.senderId === sender.senderId
+      );
+      if (oldAddress) {
+        setModalOpen(ModalType.CONFIRM_LEGAL_ASSOCIATION);
+        return;
+      }
 
-      // first check if contact already exists
+      // check if contact already exists
       if (contactAlreadyExists(addressesData.addresses, value, sender.senderId, channelType)) {
         setModalOpen(ModalType.EXISTING);
         return;
@@ -401,6 +416,21 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
     return (
       <Paper data-testid="addSpecialContact" sx={{ p: { xs: 2, lg: 3 }, mb: 3 }}>
+        <LegalContactAssociationDialog
+          open={modalOpen === ModalType.CONFIRM_LEGAL_ASSOCIATION}
+          sender={{
+            senderId: formik.values.sender.id,
+            senderName: formik.values.sender.name,
+          }}
+          oldAddress={oldAddress}
+          newAddress={{
+            addressType: AddressType.LEGAL,
+            channelType: formik.values.channelType as ChannelType,
+            value: formik.values.s_value,
+          }}
+          onCancel={() => setModalOpen(null)}
+          onConfirm={() => handleAssociation()}
+        />
         <ExistingContactDialog
           open={modalOpen === ModalType.EXISTING}
           value={formik.values.s_value}
