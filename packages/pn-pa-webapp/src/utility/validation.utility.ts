@@ -190,7 +190,7 @@ const checkPaymentsApplyCost = (
     return;
   }
 
-  const hasApplyCost = payments.some((item) => item.applyCost === true);
+  const hasApplyCost = payments.some((item) => item.applyCost);
 
   if (!hasApplyCost) {
     payments.forEach((payment, idx) => {

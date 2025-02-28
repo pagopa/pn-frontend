@@ -131,7 +131,7 @@ const DebtPositionDetail: React.FC<Props> = ({
     () => ({
       notificationFeePolicy: notification.notificationFeePolicy,
       paFee: notification.paFee || undefined,
-      vat: notification.vat ?? undefined,
+      vat: notification.vat || undefined,
       pagoPaIntMode: notification.pagoPaIntMode ?? PagoPaIntegrationMode.NONE,
       recipients: notification.recipients.reduce(
         (
@@ -469,9 +469,9 @@ const DebtPositionDetail: React.FC<Props> = ({
                     required
                     label={`${t('notification-fee.vat')}*`}
                     size="small"
-                    value={formik.values.vat}
+                    value={formik.values.vat ?? ''}
                     onChange={handleChange}
-                    sx={{ flexBasis: '25%' }}
+                    sx={{ flexBasis: '30%' }}
                     error={formik.touched.vat && Boolean(formik.errors.vat)}
                     helperText={formik.touched.vat && formik.errors.vat}
                   >

@@ -193,7 +193,7 @@ const PaymentMethods: React.FC<Props> = ({
                 </Typography>
                 {formik.values.recipients[recipient.taxId].f24.map((f24Payment, index) => (
                   <F24PaymentBox
-                    id={`${recipient.taxId}.f24.${index}`}
+                    id={`recipients.${recipient.taxId}.f24.${index}`}
                     key={`${recipient.taxId}-f24-${f24Payment?.idx}`}
                     onFileUploaded={(_, file, sha256) =>
                       fileUploadedHandler(recipient.taxId, 'f24', index, file, sha256)
