@@ -80,6 +80,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
         helperText={getError('name')}
         size="small"
         margin="normal"
+        required
       />
 
       {(notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE || showDeleteButton) && (
