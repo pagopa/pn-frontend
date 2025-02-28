@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Chip, Paper, Stack, Typography } from '@mui/material';
+import { Chip, ChipProps, Paper, Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { ChannelType } from '../../models/contacts';
@@ -58,55 +58,89 @@ const LegalContactManager: React.FC<Props> = ({ setAction }) => {
   const hasSercqSendActive = !!defaultSERCQ_SENDAddress;
   const channelType = hasSercqSendActive ? ChannelType.SERCQ_SEND : ChannelType.PEC;
 
+  const isValidatingPec = defaultPECAddress?.pecValid === false;
+
+  const getConfig = (): {
+    label: string;
+    color: ChipProps['color'];
+    value: string;
+  } => {
+    if (isValidatingPec) {
+      return {
+        label: t('status.pec-validation', { ns: 'recapiti' }),
+        color: 'warning',
+        value: hasSercqSendActive
+          ? t('legal-contacts.digital-domicile-management.sercq_send-active')
+          : '',
+      };
+    } else if (hasSercqSendActive || !!defaultPECAddress) {
+      return {
+        label: t('status.active', { ns: 'recapiti' }),
+        color: 'success',
+        value:
+          defaultPECAddress?.value ??
+          t('legal-contacts.digital-domicile-management.sercq_send-active'),
+      };
+    }
+    return {
+      label: t('status.inactive', { ns: 'recapiti' }),
+      color: 'default',
+      value: '',
+    };
+  };
+
+  const config = getConfig();
+
   return (
     <Stack data-testid="legalContactManager" spacing={2}>
       <Paper sx={{ p: { xs: 2, lg: 3 } }}>
-        <Chip label={t('status.active', { ns: 'recapiti' })} color="success" />
+        <Chip label={config.label} color={config.color} />
         <Typography variant="body1" fontSize="18px" fontWeight={600} mt={2}>
-          {defaultPECAddress?.value ??
-            t('legal-contacts.digital-domicile-management.sercq_send-active')}
+          {config.value}
         </Typography>
       </Paper>
-      <Paper sx={{ p: { xs: 2, lg: 3 } }}>
-        {IS_DOD_ENABLED && (
-          <Typography
-            variant="h6"
-            fontSize={{ xs: '22px', lg: '24px' }}
-            fontWeight={700}
-            mb={2}
-            data-testid="legalContactsTitle"
-          >
-            {t('legal-contacts.digital-domicile-management.choose-action')}
-          </Typography>
-        )}
-        <Stack display="flex" direction={{ xs: 'column', lg: 'row' }} spacing={2}>
+      {config.color === 'success' && (
+        <Paper sx={{ p: { xs: 2, lg: 3 } }}>
           {IS_DOD_ENABLED && (
+            <Typography
+              variant="h6"
+              fontSize={{ xs: '22px', lg: '24px' }}
+              fontWeight={700}
+              mb={2}
+              data-testid="legalContactsTitle"
+            >
+              {t('legal-contacts.digital-domicile-management.choose-action')}
+            </Typography>
+          )}
+          <Stack display="flex" direction={{ xs: 'column', lg: 'row' }} spacing={2}>
+            {IS_DOD_ENABLED && (
+              <DigitalDomicileOption
+                title={t(
+                  `legal-contacts.digital-domicile-management.transfer.title-${channelType.toLowerCase()}`
+                )}
+                content={t(
+                  `legal-contacts.digital-domicile-management.transfer.content-${channelType.toLowerCase()}`
+                )}
+                action={{
+                  text: t(
+                    `legal-contacts.digital-domicile-management.transfer.action-${channelType.toLowerCase()}`
+                  ),
+                  callback: () =>
+                    setAction(DigitalDomicileManagementAction.DIGITAL_DOMICILE_TRANSFER),
+                }}
+              />
+            )}
             <DigitalDomicileOption
-              title={t(
-                `legal-contacts.digital-domicile-management.transfer.title-${channelType.toLowerCase()}`
-              )}
-              content={t(
-                `legal-contacts.digital-domicile-management.transfer.content-${channelType.toLowerCase()}`
-              )}
+              title={t('legal-contacts.digital-domicile-management.special_contacts.title')}
+              content={t('legal-contacts.digital-domicile-management.special_contacts.content')}
               action={{
-                text: t(
-                  `legal-contacts.digital-domicile-management.transfer.action-${channelType.toLowerCase()}`
-                ),
-                callback: () =>
-                  setAction(DigitalDomicileManagementAction.DIGITAL_DOMICILE_TRANSFER),
+                text: t('legal-contacts.digital-domicile-management.special_contacts.action'),
+                callback: () => setAction(DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT),
               }}
             />
-          )}
-          <DigitalDomicileOption
-            title={t('legal-contacts.digital-domicile-management.special_contacts.title')}
-            content={t('legal-contacts.digital-domicile-management.special_contacts.content')}
-            action={{
-              text: t('legal-contacts.digital-domicile-management.special_contacts.action'),
-              callback: () => setAction(DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT),
-            }}
-          />
-        </Stack>
-      </Paper>
+          </Stack>
+        </Paper>
+      )}
     </Stack>
   );
 };

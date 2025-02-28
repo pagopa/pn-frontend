@@ -1,11 +1,17 @@
 import { vi } from 'vitest';
 
-import { digitalAddresses, digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
+import {
+  digitalAddresses,
+  digitalAddressesPecValidation,
+  digitalAddressesSercq,
+} from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render } from '../../../__test__/test-utils';
 import { ChannelType } from '../../../models/contacts';
 import LegalContactManager, { DigitalDomicileManagementAction } from '../LegalContactManager';
 
 const mockSetAction = vi.fn();
+
+const lblPrefix = 'legal-contacts.digital-domicile-management';
 
 describe('LegalContactManager', () => {
   beforeEach(() => {
@@ -26,29 +32,19 @@ describe('LegalContactManager', () => {
     });
 
     expect(container).toHaveTextContent('status.active');
-    expect(container).toHaveTextContent(
-      'legal-contacts.digital-domicile-management.sercq_send-active'
-    );
-    expect(container).toHaveTextContent('legal-contacts.digital-domicile-management.choose-action');
-    expect(container).toHaveTextContent(
-      'legal-contacts.digital-domicile-management.transfer.title-sercq_send'
-    );
-    expect(container).toHaveTextContent(
-      'legal-contacts.digital-domicile-management.transfer.content-sercq_send'
-    );
+    expect(container).toHaveTextContent(`${lblPrefix}.sercq_send-active`);
+    expect(container).toHaveTextContent(`${lblPrefix}.choose-action`);
+    expect(container).toHaveTextContent(`${lblPrefix}.transfer.title-sercq_send`);
+    expect(container).toHaveTextContent(`${lblPrefix}.transfer.content-sercq_send`);
     const transferBtn = getByRole('button', {
-      name: 'legal-contacts.digital-domicile-management.transfer.action-sercq_send',
+      name: `${lblPrefix}.transfer.action-sercq_send`,
     });
     expect(transferBtn).toBeInTheDocument();
 
-    expect(container).toHaveTextContent(
-      'legal-contacts.digital-domicile-management.special_contacts.title'
-    );
-    expect(container).toHaveTextContent(
-      'legal-contacts.digital-domicile-management.special_contacts.content'
-    );
+    expect(container).toHaveTextContent(`${lblPrefix}.special_contacts.title`);
+    expect(container).toHaveTextContent(`${lblPrefix}.special_contacts.content`);
     const specialContactsBtn = getByRole('button', {
-      name: 'legal-contacts.digital-domicile-management.special_contacts.action',
+      name: `${lblPrefix}.special_contacts.action`,
     });
     expect(specialContactsBtn).toBeInTheDocument();
 
@@ -74,26 +70,18 @@ describe('LegalContactManager', () => {
     expect(container).toHaveTextContent('status.active');
     const pecValue = digitalAddresses.find((addr) => addr.channelType === ChannelType.PEC)?.value!;
     expect(container).toHaveTextContent(pecValue);
-    expect(container).toHaveTextContent('legal-contacts.digital-domicile-management.choose-action');
-    expect(container).toHaveTextContent(
-      'legal-contacts.digital-domicile-management.transfer.title-pec'
-    );
-    expect(container).toHaveTextContent(
-      'legal-contacts.digital-domicile-management.transfer.content-pec'
-    );
+    expect(container).toHaveTextContent(`${lblPrefix}.choose-action`);
+    expect(container).toHaveTextContent(`${lblPrefix}.transfer.title-pec`);
+    expect(container).toHaveTextContent(`${lblPrefix}.transfer.content-pec`);
     const transferBtn = getByRole('button', {
-      name: 'legal-contacts.digital-domicile-management.transfer.action-pec',
+      name: `${lblPrefix}.transfer.action-pec`,
     });
     expect(transferBtn).toBeInTheDocument();
 
-    expect(container).toHaveTextContent(
-      'legal-contacts.digital-domicile-management.special_contacts.title'
-    );
-    expect(container).toHaveTextContent(
-      'legal-contacts.digital-domicile-management.special_contacts.content'
-    );
+    expect(container).toHaveTextContent(`${lblPrefix}.special_contacts.title`);
+    expect(container).toHaveTextContent(`${lblPrefix}.special_contacts.content`);
     const specialContactsBtn = getByRole('button', {
-      name: 'legal-contacts.digital-domicile-management.special_contacts.action',
+      name: `${lblPrefix}.special_contacts.action`,
     });
     expect(specialContactsBtn).toBeInTheDocument();
 
@@ -105,5 +93,32 @@ describe('LegalContactManager', () => {
     fireEvent.click(specialContactsBtn);
     expect(mockSetAction).toHaveBeenCalledTimes(2);
     expect(mockSetAction).toHaveBeenCalledWith(DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT);
+  });
+
+  it('render component when PEC is validating', () => {
+    const { container } = render(<LegalContactManager setAction={mockSetAction} />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: digitalAddressesPecValidation(false, false),
+        },
+      },
+    });
+
+    expect(container).toHaveTextContent('status.pec-validation');
+  });
+
+  it('render component when SERCQ SEND is enabled and PEC is validating', () => {
+    const { container } = render(<LegalContactManager setAction={mockSetAction} />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: digitalAddressesPecValidation(true, false),
+        },
+      },
+    });
+
+    expect(container).toHaveTextContent('status.pec-validation');
+    expect(container).toHaveTextContent(
+      'legal-contacts.digital-domicile-management.sercq_send-active'
+    );
   });
 });

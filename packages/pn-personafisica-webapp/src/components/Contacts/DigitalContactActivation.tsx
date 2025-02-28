@@ -163,14 +163,22 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
         <ConfirmationModal
           open={modal.open}
           title={t('courtesy-contacts.confirmation-modal-title')}
-          slotsProps={{
-            closeButton: { onClick: handleConfirmationModalAccept, variant: 'contained' },
-            confirmButton: { onClick: handleConfirmationModalDecline, variant: 'outlined' },
+          slots={{
+            confirmButton: Button,
+            closeButton: Button,
           }}
-          onCloseLabel={t(
-            `courtesy-contacts.confirmation-modal-${modal.step.toLowerCase()}-accept`
-          )}
-          onConfirmLabel={t('button.do-later', { ns: 'common' })}
+          slotsProps={{
+            closeButton: {
+              onClick: handleConfirmationModalAccept,
+              children: t(
+                `courtesy-contacts.confirmation-modal-${modal.step.toLowerCase()}-accept`
+              ),
+            },
+            confirmButton: {
+              onClick: handleConfirmationModalDecline,
+              children: t('button.do-later', { ns: 'common' }),
+            },
+          }}
         >
           <Trans
             ns="recapiti"
