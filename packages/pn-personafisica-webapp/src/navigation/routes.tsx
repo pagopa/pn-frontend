@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import {
   AppNotAccessible,
@@ -10,7 +10,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { getConfiguration } from '../services/configuration.service';
-import AARGuard from './AARGuard';
+import RapidAccessGuard from './RapidAccessGuard';
 import RouteGuard from './RouteGuard';
 import SessionGuard from './SessionGuard';
 import ToSGuard from './ToSGuard';
@@ -27,6 +27,13 @@ const TermsOfServicePage = lazyRetry(() => import('../pages/TermsOfService.page'
 const AppStatus = lazyRetry(() => import('../pages/AppStatus.page'));
 const ParticipatingEntitiesPage = lazyRetry(() => import('../pages/ParticipatingEntities.page'));
 const SupportPage = lazyRetry(() => import('../pages/Support.page'));
+const DigitalContact = lazyRetry(() => import('../pages/DigitalContact.page'));
+const DigitalContactActivation = lazyRetry(
+  () => import('../components/Contacts/DigitalContactActivation')
+);
+const DigitalContactManagement = lazyRetry(
+  () => import('../components/Contacts/DigitalContactManagement')
+);
 
 const handleAssistanceClick = () => {
   /* eslint-disable-next-line functional/immutable-data */
@@ -41,7 +48,7 @@ function Router() {
           {/* protected routes */}
           <Route path="/" element={<RouteGuard />}>
             <Route path="/" element={<ToSGuard />}>
-              <Route path="/" element={<AARGuard />}>
+              <Route path="/" element={<RapidAccessGuard />}>
                 <Route path={routes.NOTIFICHE} element={<Notifiche />} />
                 <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
                 <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
@@ -52,6 +59,17 @@ function Router() {
                 <Route path={routes.PROFILO} element={<Profile />} />
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
                 <Route path={routes.SUPPORT} element={<SupportPage />} />
+                <Route path={routes.DIGITAL_DOMICILE} element={<DigitalContact />}>
+                  <Route
+                    path={routes.DIGITAL_DOMICILE_ACTIVATION}
+                    element={<DigitalContactActivation />}
+                  />
+                  <Route
+                    path={routes.DIGITAL_DOMICILE_MANAGEMENT}
+                    element={<DigitalContactManagement />}
+                  />
+                  <Route element={<Navigate to={routes.RECAPITI} replace />} index />
+                </Route>
               </Route>
             </Route>
             {/* not found - non-logged users will see the common AccessDenied component */}
