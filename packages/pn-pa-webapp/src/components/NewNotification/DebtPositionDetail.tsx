@@ -33,7 +33,7 @@ import {
 } from '../../models/NewNotification';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { uploadNotificationPaymentDocument } from '../../redux/newNotification/actions';
-import { setDebtPotisionDetail } from '../../redux/newNotification/reducers';
+import { setDebtPositionDetail } from '../../redux/newNotification/reducers';
 import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import {
@@ -342,7 +342,7 @@ const DebtPositionDetail: React.FC<Props> = ({
 
   const saveDebtPositionDetail = (recipients: Array<NewNotificationRecipient>) => {
     dispatch(
-      setDebtPotisionDetail({
+      setDebtPositionDetail({
         recipients,
         vat: formik.values.vat,
         paFee: formik.values.paFee,

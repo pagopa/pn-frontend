@@ -114,7 +114,7 @@ const newNotificationSlice = createSlice({
         };
       });
     },
-    setDebtPotisionDetail: (
+    setDebtPositionDetail: (
       state,
       action: PayloadAction<{
         recipients: Array<NewNotificationRecipient>;
@@ -160,7 +160,7 @@ export const {
   setPreliminaryInformations,
   saveRecipients,
   setAttachments,
-  setDebtPotisionDetail,
+  setDebtPositionDetail,
   resetState,
   setIsCompleted,
   setDebtPosition,

@@ -26,7 +26,7 @@ import {
   setAttachments,
   setCancelledIun,
   setDebtPosition,
-  setDebtPotisionDetail,
+  setDebtPositionDetail,
   setIsCompleted,
   setPreliminaryInformations,
   setSenderInfos,
@@ -216,7 +216,7 @@ describe('New notification redux state tests', () => {
 
   it('Should be able to save payment documents', () => {
     const action = store.dispatch(
-      setDebtPotisionDetail({
+      setDebtPositionDetail({
         recipients: newNotification.recipients,
         paFee: newNotification.paFee,
         vat: newNotification.vat,
@@ -224,7 +224,7 @@ describe('New notification redux state tests', () => {
         pagoPaIntMode: newNotification.pagoPaIntMode,
       })
     );
-    expect(action.type).toBe('newNotificationSlice/setDebtPotisionDetail');
+    expect(action.type).toBe('newNotificationSlice/setDebtPositionDetail');
     expect(action.payload).toEqual({
       recipients: newNotification.recipients,
       paFee: newNotification.paFee,
