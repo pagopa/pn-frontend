@@ -88,7 +88,7 @@ describe('Attachments Component with payment enabled', async () => {
     const buttonSubmit = result.getByTestId('step-submit');
     const buttonPrevious = result.getByTestId('previous-step');
     expect(buttonSubmit).toBeDisabled();
-    expect(buttonSubmit).toHaveTextContent('button.continue');
+    expect(buttonSubmit).toHaveTextContent('button.send');
     expect(buttonPrevious).toBeInTheDocument();
   });
 
