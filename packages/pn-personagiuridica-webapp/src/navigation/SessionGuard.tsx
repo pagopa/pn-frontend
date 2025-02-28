@@ -56,14 +56,14 @@ const manageUnforbiddenError = (e: any) => {
  */
 const SessionGuardRender = () => {
   const [params] = useSearchParams();
-
   const { IS_INACTIVITY_HANDLER_ENABLED } = getConfiguration();
+
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
   const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession } = useAppSelector(
     (state: RootState) => state.userState
   );
-  const dispatch = useAppDispatch();
+
   const { t } = useTranslation(['common']);
   const { hasApiErrors } = useErrors();
 
@@ -110,7 +110,10 @@ const SessionGuardRender = () => {
     return (
       <InactivityHandler
         inactivityTimer={isAnonymousUser || !IS_INACTIVITY_HANDLER_ENABLED ? 0 : inactivityTimer}
-        onTimerExpired={() => dispatch(logout())}
+        onTimerExpired={() => {
+          sessionStorage.clear();
+          goToLoginPortal();
+        }}
       >
         <Outlet />
       </InactivityHandler>
@@ -170,8 +173,9 @@ const SessionGuard = () => {
       // ----------------------
       const spidToken = getTokenParam();
       if (spidToken) {
+        const aar = localStorage.getItem(AppRouteParams.AAR) || undefined;
         AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
-        await dispatch(exchangeToken(spidToken));
+        await dispatch(exchangeToken({ spidToken, aar }));
       }
     };
     void performStep(INITIALIZATION_STEPS.USER_DETERMINATION, doUserDetermination);

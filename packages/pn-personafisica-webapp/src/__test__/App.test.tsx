@@ -13,29 +13,7 @@ import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { mandatesByDelegate } from '../__mocks__/Delegations.mock';
 import { apiClient } from '../api/apiClients';
 import { LOGOUT } from '../navigation/routes.const';
-import {
-  RenderResult,
-  act,
-  fireEvent,
-  render,
-  screen,
-  testStore,
-  waitFor,
-  within,
-} from './test-utils';
-
-// mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translation hook can use it without a warning being shown
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: {
-      language: 'it',
-      changeLanguage: () => new Promise(() => {}),
-    },
-  }),
-}));
+import { RenderResult, act, fireEvent, render, screen, waitFor, within } from './test-utils';
 
 vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
 vi.mock('../pages/Profile.page', () => ({ default: () => <div>Profile Page</div> }));
@@ -71,7 +49,6 @@ const reduxInitialState = {
 describe('App', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
-  const original = window.location;
   const mockOpenFn = vi.fn();
   const originalOpen = window.open;
 
@@ -152,18 +129,19 @@ describe('App', async () => {
     await waitFor(() => {
       expect(result.container).toHaveTextContent('Profile Page');
     });
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { href: '', replace: vi.fn() },
-    });
+
     fireEvent.click(userButton!);
     menu = await waitFor(() => screen.getByRole('presentation'));
     menuItems = within(menu).getAllByRole('menuitem');
     fireEvent.click(menuItems[1]);
-    await waitFor(() => {
-      expect(testStore.getState().userState.user.sessionToken).toBe('');
-    });
-    Object.defineProperty(window, 'location', { writable: true, value: original });
+
+    const logoutDialog = await waitFor(() => screen.getByTestId('dialog'));
+    expect(logoutDialog).toBeInTheDocument();
+    const confirmLogoutButton = within(logoutDialog).getByTestId('confirm-button');
+    fireEvent.click(confirmLogoutButton);
+    expect(sessionStorage.getItem('user')).toBeNull();
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}`, '_self');
   });
 
   it('sidemenu not included if error in API call to fetch TOS and Privacy', async () => {

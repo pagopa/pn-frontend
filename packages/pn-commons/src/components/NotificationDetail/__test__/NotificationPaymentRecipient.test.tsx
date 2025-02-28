@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationDTO, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../models';
-import { act, fireEvent, render, within } from '../../../test-utils';
+import { act, fireEvent, render, waitFor, within } from '../../../test-utils';
 import { setPaymentCache } from '../../../utility';
 import {
   getF24Payments,
@@ -57,13 +57,12 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(pagoPABox).toHaveLength(pageLength > 5 ? 5 : pageLength);
     expect(downloadPagoPANotice).not.toBeInTheDocument();
     expect(payButton).toBeInTheDocument();
-    expect(payButton).toBeDisabled();
+    expect(payButton).toBeEnabled();
     expect(f24OnlyBox).toBeInTheDocument();
     expect(paginationBox).toBeInTheDocument();
   });
 
   it('select and unselect payment', async () => {
-    vi.useFakeTimers();
     const { getByTestId, queryAllByTestId, queryByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
@@ -84,24 +83,31 @@ describe('NotificationPaymentRecipient Component', () => {
     const item = queryAllByTestId('pagopa-item')[paymentIndex];
     const radioButton = item.querySelector('[data-testid="radio-button"] input');
     expect(downloadPagoPANotice).not.toBeInTheDocument();
-    expect(payButton).toBeDisabled();
-    // select payment
+
+    // test error payment
+    fireEvent.click(payButton);
+    await waitFor(() => {
+      expect(getByTestId('payment-error')).toBeInTheDocument();
+    });
+
+    // Click on the radioButton to hide the error
     fireEvent.click(radioButton!);
+
+    await waitFor(() => {
+      expect(queryByTestId('payment-error')).not.toBeInTheDocument();
+    });
     // after radio button click, there is a timer of 1 second after that the paymeny is enabled
     // wait...
-    act(() => {
-      vi.advanceTimersByTime(1000);
-    });
     downloadPagoPANotice = getByTestId('download-pagoPA-notice-button');
     expect(downloadPagoPANotice).toBeInTheDocument();
-    expect(payButton).not.toBeDisabled();
+    expect(payButton).toBeEnabled();
 
     // check f24
     const f24Download = getByTestId('f24-download');
     expect(f24Download).toBeInTheDocument();
     // unselect payment
     fireEvent.click(radioButton!);
-    expect(payButton).toBeDisabled();
+    expect(payButton).toBeEnabled();
     expect(downloadPagoPANotice).not.toBeInTheDocument();
     expect(f24Download).not.toBeInTheDocument();
   });
@@ -425,5 +431,53 @@ describe('NotificationPaymentRecipient Component', () => {
     fireEvent.click(f24ButtonToClick);
     fireEvent.click(f24ButtonToCheck);
     expect(getPaymentAttachmentActionMk).toBeCalledTimes(1);
+  });
+
+  it('should show tpp button if payments tpp is present and click onPayTppClick', () => {
+    const onPayTppClick = vi.fn();
+    const paymentTpp = {
+      retrievalId: 'retrievalId',
+      iun,
+      paymentButton: 'paymentButton',
+    };
+    const { getByTestId, queryAllByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={paymentsData}
+        paymentTpp={paymentTpp}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        iun={iun}
+        getPaymentAttachmentAction={vi.fn()}
+        onPayClick={() => {}}
+        onPayTppClick={onPayTppClick}
+        handleFetchPaymentsInfo={() => {}}
+        landingSiteUrl=""
+      />
+    );
+    const payTppButton = getByTestId('tpp-pay-button');
+    expect(payTppButton).toBeInTheDocument();
+
+    const payButton = getByTestId('pay-button');
+    expect(payButton).toHaveTextContent('detail.payment.pay-with-other-methods');
+
+    const pageSelector = getByTestId('pageSelector');
+    const pageButtons = pageSelector?.querySelectorAll('button');
+    fireEvent.click(pageButtons[1]);
+
+    // select payment
+    const paymentIndex = paymentsData.pagoPaF24.findIndex(
+      (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
+    );
+    const item = queryAllByTestId('pagopa-item')[paymentIndex];
+    const radioButton = item.querySelector('[data-testid="radio-button"] input');
+    fireEvent.click(radioButton!);
+
+    // click pay
+    fireEvent.click(payTppButton);
+    expect(onPayTppClick).toHaveBeenCalledWith(
+      paymentsData.pagoPaF24[paymentIndex].pagoPa?.noticeCode,
+      paymentsData.pagoPaF24[paymentIndex].pagoPa?.creditorTaxId,
+      paymentTpp.retrievalId
+    );
   });
 });

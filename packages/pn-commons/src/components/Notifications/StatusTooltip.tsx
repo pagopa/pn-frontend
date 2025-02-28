@@ -3,6 +3,7 @@ import { Fragment, ReactNode } from 'react';
 import { SxProps, TooltipProps } from '@mui/material';
 import Chip from '@mui/material/Chip';
 
+import { useIsMobile } from '../../hooks';
 import CustomTooltip from '../CustomTooltip';
 
 const StatusTooltip = ({
@@ -19,15 +20,20 @@ const StatusTooltip = ({
   chipProps?: SxProps;
 }) => {
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
+  const isMobile = useIsMobile();
 
   return (
     <CustomTooltip openOnClick={false} tooltipContent={tooltipContent} tooltipProps={tooltipProps}>
       <Chip
         id={`status-chip-${label}`}
-        label={label}
+        label={isMobile ? <span aria-hidden="true">{label}</span> : label}
         color={color}
-        sx={{ ...chipProps, cursor: 'default' }}
+        sx={{
+          ...chipProps,
+          cursor: 'default',
+        }}
         data-testid={`statusChip-${label}`}
+        aria-label={`${label}: ${tooltip}`}
       />
     </CustomTooltip>
   );

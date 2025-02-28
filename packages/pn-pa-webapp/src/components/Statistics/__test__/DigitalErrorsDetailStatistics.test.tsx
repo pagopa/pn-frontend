@@ -10,13 +10,6 @@ import DigitalErrorsDetailStatistics from '../DigitalErrorsDetailStatistics';
 
 const mockInput = vi.fn();
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 vi.mock('../AggregateStatistics.tsx', async () => {
   const original = await vi.importActual<any>('../AggregateStatistics.tsx');
   return {
@@ -72,8 +65,6 @@ describe('DeliveryModeStatistics component tests', () => {
     expect(container).toHaveTextContent('digital_errors_detail.delivery_description');
     expect(container).toHaveTextContent('digital_errors_detail.pec_title');
     expect(container).toHaveTextContent('digital_errors_detail.pec_description');
-    expect(container).toHaveTextContent('digital_errors_detail.rejected_title');
-    expect(container).toHaveTextContent('digital_errors_detail.rejected_description');
 
     const graph = getByTestId('Aggregate');
     expect(graph).toBeInTheDocument();
@@ -87,19 +78,13 @@ describe('DeliveryModeStatistics component tests', () => {
           color: GraphColors.lightRed,
         },
         {
-          title: 'digital_errors_detail.rejected_title',
-          description: 'digital_errors_detail.rejected_description',
-          value: digitalErrorsDataMock.data[DigitaErrorTypes.REJECTED].count,
-          color: GraphColors.pink,
-        },
-        {
           title: 'digital_errors_detail.pec_title',
           description: 'digital_errors_detail.pec_description',
           value: digitalErrorsDataMock.data[DigitaErrorTypes.INVALID_PEC].count,
           color: GraphColors.darkRed,
         },
       ],
-      options: { color: [GraphColors.lightRed, GraphColors.pink, GraphColors.darkRed] },
+      options: { color: [GraphColors.lightRed, GraphColors.darkRed] },
       startAngle: 180,
       endAngle: -180,
       radius: ['30%', '90%'],
@@ -112,13 +97,6 @@ describe('DeliveryModeStatistics component tests', () => {
       <DigitalErrorsDetailStatistics {...digitalErrorsEmptyDataMock} />
     );
     expect(container).toHaveTextContent('digital_errors_detail.title');
-    expect(container).toHaveTextContent('digital_errors_detail.description');
-    expect(container).toHaveTextContent('digital_errors_detail.delivery_title');
-    expect(container).toHaveTextContent('digital_errors_detail.delivery_description');
-    expect(container).toHaveTextContent('digital_errors_detail.pec_title');
-    expect(container).toHaveTextContent('digital_errors_detail.pec_description');
-    expect(container).toHaveTextContent('digital_errors_detail.rejected_title');
-    expect(container).toHaveTextContent('digital_errors_detail.rejected_description');
     expect(container).toHaveTextContent('empty.no_data_found');
 
     const emptyImg = getByTestId('empty-image');

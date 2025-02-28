@@ -27,8 +27,8 @@ type Props = {
   codeSectionTitle: string;
   codeSectionAdditional?: ReactNode;
   confirmLabel?: string;
-  cancelLabel?: string;
-  cancelCallback?: () => void;
+  cancelLabel: string;
+  cancelCallback: () => void;
   confirmCallback?: (values: Array<string>) => void;
   isReadOnly?: boolean;
   error?: { title: string; message: string; hasError: boolean };
@@ -67,6 +67,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
       error,
     }: Props,
     ref
+    // eslint-disable-next-line sonarjs/cognitive-complexity
   ) => {
     const [code, setCode] = useState(initialValues);
     const [internalError, setInternalError] = useState({
@@ -78,6 +79,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
     const { internalHasError, internalErrorTitle, internalErrorMessage } = internalError;
 
     const codeIsValid = code.every((v) => (!isNaN(Number(v)) ? v : false));
+    const codeIsEmpty = code.some((v) => !v);
 
     const changeHandler = useCallback((inputsValues: Array<string>) => {
       setCode(inputsValues);
@@ -104,6 +106,28 @@ const CodeModal = forwardRef<ModalHandle, Props>(
 
     const confirmHandler = () => {
       if (!confirmCallback) {
+        return;
+      }
+      if (codeIsEmpty) {
+        setInternalError({
+          internalHasError: true,
+          internalErrorTitle: getLocalizedOrDefaultLabel('common', `errors.empty_code.title`),
+          internalErrorMessage: getLocalizedOrDefaultLabel('common', `errors.empty_code.message`),
+        });
+        return;
+      }
+      if (!codeIsValid) {
+        setInternalError({
+          internalHasError: true,
+          internalErrorTitle: getLocalizedOrDefaultLabel(
+            'common',
+            `errors.invalid_type_code.title`
+          ),
+          internalErrorMessage: getLocalizedOrDefaultLabel(
+            'common',
+            `errors.invalid_type_code.message`
+          ),
+        });
         return;
       }
       confirmCallback(code);
@@ -149,11 +173,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
                 data-testid="copyCodeButton"
                 sx={{ mt: 1.5 }}
                 value={initialValues.join('')}
-                tooltipTitle={getLocalizedOrDefaultLabel(
-                  'delegations',
-                  'deleghe.code_copied',
-                  'Codice copiato'
-                )}
+                tooltipTitle={getLocalizedOrDefaultLabel('delegations', 'deleghe.code_copied')}
               />
             )}
           </Box>
@@ -168,23 +188,21 @@ const CodeModal = forwardRef<ModalHandle, Props>(
           )}
         </PnDialogContent>
         <PnDialogActions>
-          {cancelLabel && cancelCallback && (
-            <Button
-              id="code-cancel-button"
-              variant="outlined"
-              onClick={cancelCallback}
-              data-testid="codeCancelButton"
-            >
-              {cancelLabel}
-            </Button>
-          )}
+          <Button
+            id="code-cancel-button"
+            variant="outlined"
+            onClick={cancelCallback}
+            data-testid="codeCancelButton"
+          >
+            {cancelLabel}
+          </Button>
           {confirmLabel && confirmCallback && (
             <Button
               id="code-confirm-button"
-              variant="contained"
+              variant={internalHasError ? 'outlined' : 'contained'}
+              color={internalHasError ? 'error' : 'primary'}
               data-testid="codeConfirmButton"
               onClick={confirmHandler}
-              disabled={!codeIsValid}
             >
               {confirmLabel}
             </Button>

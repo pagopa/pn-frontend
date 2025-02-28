@@ -42,8 +42,11 @@
       "notificationsFrom": "Notifications from:",
       "allNotifications": "All notifications",
       "active": "Active",
-      "pending": "Awaiting confirmation"
-    }
+      "pending": "Awaiting confirmation",
+      "menu-aria-label": "Actions menu"
+    },
+    "revoke-successfully": "The authority has been revoked.",
+    "reject-successfully": "The authority has been declined."
   },
   "nuovaDelega": {
     "breadcrumb": "New delegate",

@@ -6,6 +6,7 @@ import AppResponseMessage from './AppResponseMessage';
 import { AppStatusRender } from './AppStatus/AppStatusRender';
 import CodeModal from './CodeModal/CodeModal';
 import CollapsedList from './CollapsedList';
+import ConfirmationModal from './ConfirmationModal';
 import CopyToClipboard from './CopyToClipboard';
 import CustomDatePicker from './CustomDatePicker';
 import CustomDropdown from './CustomDropdown';
@@ -44,7 +45,9 @@ import Footer from './Footer/Footer';
 import Header from './Header/Header';
 import { IllusAppIO } from './Illustrations/IllusAppIO';
 import { IllusAppIODialog } from './Illustrations/IllusAppIODialog';
+import { IllusAppIoLogo } from './Illustrations/IllusAppIOLogo';
 import { IllusQuestion } from './Illustrations/IllusQuestion';
+import { IllusSendLogo } from './Illustrations/IllusSendLogo';
 import { IllusStatistics } from './Illustrations/IllusStatistics';
 import InactivityHandler from './InactivityHandler';
 import Layout from './Layout/Layout';
@@ -65,6 +68,9 @@ import PnBreadcrumb from './PnBreadcrumb';
 import PnDialog from './PnDialog/PnDialog';
 import PnDialogActions from './PnDialog/PnDialogActions';
 import PnDialogContent from './PnDialog/PnDialogContent';
+import PnInfoCard from './PnInfoCard';
+import PnWizard from './PnWizard/PnWizard';
+import PnWizardStep from './PnWizard/PnWizardStep';
 import Prompt from './Prompt';
 import SectionHeading from './SectionHeading';
 import SessionModal from './SessionModal';
@@ -83,6 +89,7 @@ export {
   AppResponseMessage,
   AppStatusRender,
   CodeModal,
+  ConfirmationModal,
   CopyToClipboard,
   CustomDatePicker,
   CustomDropdown,
@@ -146,8 +153,13 @@ export {
   PnCardActions,
   PnCard,
   PnCardHeaderItem,
+  PnInfoCard,
   IllusQuestion,
   IllusStatistics,
   IllusAppIO,
   IllusAppIODialog,
+  IllusAppIoLogo,
+  IllusSendLogo,
+  PnWizard,
+  PnWizardStep,
 };

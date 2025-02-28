@@ -3,6 +3,100 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/pagopa/pn-frontend/compare/v2.12.0-RC.1...v2.12.0) (2025-02-18)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.12.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.12.0-RC.0...v2.12.0-RC.1) (2025-02-05)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.12.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.11.1...v2.12.0-RC.0) (2025-02-04)
+
+
+### Bug Fixes
+
+* **pn-13210:** manage accessibility when closing modal ([#1451](https://github.com/pagopa/pn-frontend/issues/1451)) ([2b4981b](https://github.com/pagopa/pn-frontend/commit/2b4981bddc8f6651ac47bb2cf371f63e33962959))
+* **pn-13214:** inactivity handler accessibility ([#1454](https://github.com/pagopa/pn-frontend/issues/1454)) ([7af07bd](https://github.com/pagopa/pn-frontend/commit/7af07bdc5861815ae484e0856d17f80ec3ac6096))
+* **pn-13216:** Added descriptions to radio buttons ([#1444](https://github.com/pagopa/pn-frontend/issues/1444)) ([9fb7b79](https://github.com/pagopa/pn-frontend/commit/9fb7b79a755c6850d9ec2ffbb62aff60ec88e7a1))
+* **pn-13255:** fixed aria attributes on the modal for revoking the delegation ([#1453](https://github.com/pagopa/pn-frontend/issues/1453)) ([cf2bfd9](https://github.com/pagopa/pn-frontend/commit/cf2bfd9844c412aa7f881a833c2fcaae01650355))
+* **pn-13598:** accessibility for the delegation tag group ([#1452](https://github.com/pagopa/pn-frontend/issues/1452)) ([a8626a2](https://github.com/pagopa/pn-frontend/commit/a8626a27ca23f9de030bc0b51d825d685bcee737))
+
+
+### Features
+
+* **pn-13595:** removed automatic redirect before logout ([#1456](https://github.com/pagopa/pn-frontend/issues/1456)) ([c7d823f](https://github.com/pagopa/pn-frontend/commit/c7d823f72e9e64eeeccfcafebb0b05f4b188959c))
+
+
+
+
+
+## [2.11.1](https://github.com/pagopa/pn-frontend/compare/v2.11.0...v2.11.1) (2025-01-31)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.11.0](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.2...v2.11.0) (2025-01-20)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.11.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.1...v2.11.0-RC.2) (2025-01-14)
+
+
+### Bug Fixes
+
+* **pn-13028:** hide actions when public key is removed ([#1441](https://github.com/pagopa/pn-frontend/issues/1441)) ([f1c87d8](https://github.com/pagopa/pn-frontend/commit/f1c87d8a9369541e32b7213c79c6c2387ff8f8fa))
+
+
+
+
+
+# [2.11.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.0...v2.11.0-RC.1) (2025-01-10)
+
+
+### Bug Fixes
+
+* **pn-12958:** default color for disabled chip and fixed creation button visualization ([#1437](https://github.com/pagopa/pn-frontend/issues/1437)) ([4b63fa7](https://github.com/pagopa/pn-frontend/commit/4b63fa79c09cedc869a4a2a4abacd2d09bb3d03f))
+
+
+
+
+
+# [2.11.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0...v2.11.0-RC.0) (2025-01-10)
+
+
+### Bug Fixes
+
+* **pn-12958:** enhanced the visualization of the virtualkey section ([#1403](https://github.com/pagopa/pn-frontend/issues/1403)) ([48e8d55](https://github.com/pagopa/pn-frontend/commit/48e8d5548b12bf98ccc11d689247fb534bc713b6))
+* **pn-12975:** hide menu in virtualKeysTable when no action is available ([#1406](https://github.com/pagopa/pn-frontend/issues/1406)) ([09cacea](https://github.com/pagopa/pn-frontend/commit/09cacea51f287149dd216e1074eaf1e95377c95c))
+* **pn-13269:** Translate AAR label in the notification detail page ([#1420](https://github.com/pagopa/pn-frontend/issues/1420)) ([05ee4f0](https://github.com/pagopa/pn-frontend/commit/05ee4f0cfdeb71779038d04ba83eb13569dbf029))
+* **pn-9848:** Get TraceId from header ([#1176](https://github.com/pagopa/pn-frontend/issues/1176)) ([2e613a7](https://github.com/pagopa/pn-frontend/commit/2e613a722a0e667813a20eac1b12fc6936fa1322))
+
+
+### Features
+
+* **pn-13347:** add new status return to sender to timeline ([#1416](https://github.com/pagopa/pn-frontend/issues/1416)) ([82b17fa](https://github.com/pagopa/pn-frontend/commit/82b17faa6eeef406f9e75033246fd5f5f2a9dbda))
+* **pn-13499:** improve configuration ([#1429](https://github.com/pagopa/pn-frontend/issues/1429)) ([e0956fb](https://github.com/pagopa/pn-frontend/commit/e0956fb6afcce8fd7fcd954105be74ab03e8b140))
+
+
+
+
+
 # [2.10.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0-RC.0...v2.10.0) (2025-01-07)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp

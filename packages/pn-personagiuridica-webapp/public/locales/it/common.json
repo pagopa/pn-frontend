@@ -16,11 +16,15 @@
     "close": "Chiudi",
     "end": "Fine",
     "enable": "Attiva",
+    "manage": "Gestisci",
     "disable": "Disattiva",
+    "start": "Inizia",
     "go-to-home": "Vai alla homepage",
     "go-to-login": "Accedi",
     "not-now": "Non ora",
-    "add": "Aggiungi"
+    "do-later": "Lo farò più tardi",
+    "add": "Aggiungi",
+    "understand": "Ok, ho capito"
   },
   "menu": {
     "notifiche": "Notifiche",
@@ -39,6 +43,7 @@
       "organization-dashboard": "La tua impresa",
       "notification-platform": "SEND - Servizio Notifiche Digitali"
     },
+    "logout-message": "Confermi di voler uscire da SEND?",
     "logout": "Esci",
     "pago-pa-link": "Sito di PagoPA S.p.A."
   },
@@ -90,6 +95,7 @@
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
   "not-logged": "Accedi a SEND",
   "not-logged-subtitle": "Per vedere e gestire le tue notifiche, accedi con SPID o CIE.",
+  "loading": "Caricamento in corso",
   "not-found": {
     "title": "404: La pagina che stai cercando non esiste",
     "descpription": "Sei qui per errore, prova ad usare la navigazione."
@@ -205,5 +211,19 @@
     "message": "Il testo originario di questi documenti è in lingua italiana. In caso di contrasto tra la versione italiana e le traduzioni in altre lingue, prevarranno il significato e le condizioni della lingua italiana.",
     "link": "Consulta le traduzioni"
   },
-  "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine"
+  "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine",
+  "wizard": {
+    "stepper": {
+      "of": "{{currentStep}} di {{totalSteps}}",
+      "activeStep": "Step {{currentStep}}"
+    }
+  },
+  "inactivity": {
+    "title": "Vuoi davvero uscire da SEND?",
+    "body": "La disconnessione è in corso. Se hai cambiato idea premi “Mantieni l’accesso” entro pochi secondi.",
+    "action": "Mantieni l’accesso"
+  },
+  "code-modal": {
+    "digits": ["prima cifra", "seconda cifra", "terza cifra", "quarta cifra", "ultima cifra"]
+  }
 }

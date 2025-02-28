@@ -1,40 +1,18 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
 
-import { getById, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
+import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import {
-  digitalLegalAddresses,
-  digitalLegalAddressesSercq,
-} from '../../../__mocks__/Contacts.mock';
-import {
-  fireEvent,
-  render,
-  screen,
-  testStore,
-  waitFor,
-  within,
-} from '../../../__test__/test-utils';
+import { digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
+import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { AddressType, ChannelType } from '../../../models/contacts';
+import { AddressType } from '../../../models/contacts';
 import PecContactItem from '../PecContactItem';
 import { fillCodeDialog } from './test-utils';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
 
 describe('PecContactItem component', () => {
   let mock: MockAdapter;
   const defaultAddress = digitalLegalAddresses.find(
     (addr) => addr.senderId === 'default' && addr.pecValid
-  );
-  const defaultSercqAddress = digitalLegalAddressesSercq.find(
-    (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SERCQ_SEND
   );
   const VALID_PEC = 'mail@valida.com';
 
@@ -53,8 +31,6 @@ describe('PecContactItem component', () => {
   it('type in an invalid pec', async () => {
     // render component
     const { container } = render(<PecContactItem />);
-    expect(container).toHaveTextContent('legal-contacts.pec-title');
-    expect(container).toHaveTextContent('legal-contacts.pec-description');
     const form = container.querySelector('form');
     const input = form!.querySelector('input[name="default_pec"]');
     // add invalid values
@@ -64,7 +40,7 @@ describe('PecContactItem component', () => {
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
     const buttons = form!.querySelectorAll('button');
-    expect(buttons[0]).toBeDisabled();
+    expect(buttons[0]).toBeEnabled();
     fireEvent.change(input!, { target: { value: '' } });
     await waitFor(() => expect(input!).toHaveValue(''));
     expect(errorMessage).toBeInTheDocument();
@@ -130,7 +106,7 @@ describe('PecContactItem component', () => {
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
-    expect(result.container).toHaveTextContent('legal-contacts.pec-validating');
+    expect(result.container).toHaveTextContent('legal-contacts.cancel-pec-validation');
     // cancel validation
     const cancelValidationBtn = result.getByTestId('cancelValidation');
     fireEvent.click(cancelValidationBtn);
@@ -212,8 +188,6 @@ describe('PecContactItem component', () => {
     expect(pecValue).toHaveTextContent(VALID_PEC);
     const editButton = getById(form!, 'modifyContact-default_pec');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default_pec');
-    expect(deleteButton).toBeInTheDocument();
   });
 
   it('type in an invalid pec while in "edit mode"', async () => {
@@ -231,14 +205,14 @@ describe('PecContactItem component', () => {
     const editButton = getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = container.querySelector('[name="default_pec"]');
-    const saveButton = getByRole('button', { name: 'button.salva' });
+    const saveButton = getByRole('button', { name: 'button.conferma' });
     expect(input).toHaveValue(defaultAddress!.value);
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: 'invalid-pec' } });
     await waitFor(() => {
       expect(input).toHaveValue('invalid-pec');
     });
-    expect(saveButton).toBeDisabled();
+    expect(saveButton).toBeEnabled();
     const inputError = container.querySelector('#default_pec-helper-text');
     expect(inputError).toHaveTextContent('legal-contacts.valid-pec');
   });
@@ -272,7 +246,7 @@ describe('PecContactItem component', () => {
     let editButton = result.getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = result.container.querySelector('[name="default_pec"]');
-    const saveButton = result.getByRole('button', { name: 'button.salva' });
+    const saveButton = result.getByRole('button', { name: 'button.conferma' });
     expect(input).toHaveValue(defaultAddress!.value);
     expect(saveButton).toBeEnabled();
     fireEvent.change(input!, { target: { value: VALID_PEC } });
@@ -314,130 +288,5 @@ describe('PecContactItem component', () => {
     expect(pecValue).toHaveTextContent(VALID_PEC);
     editButton = getById(form!, 'modifyContact-default_pec');
     expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(form!, 'cancelContact-default_pec');
-    expect(deleteButton).toBeInTheDocument();
-  });
-
-  it('remove contact', async () => {
-    mock.onDelete('/bff/v1/addresses/LEGAL/default/PEC').reply(204);
-    // render component
-    const result = render(<PecContactItem />, {
-      preloadedState: {
-        contactsState: {
-          digitalAddresses: [defaultAddress],
-        },
-      },
-    });
-    const buttons = result.container.querySelectorAll('button');
-    // click on cancel
-    fireEvent.click(buttons[1]);
-    let dialog = await waitFor(() => screen.getByRole('dialog'));
-    expect(dialog).toBeInTheDocument();
-    let dialogButtons = dialog.querySelectorAll('button');
-    // cancel remove operation
-    fireEvent.click(dialogButtons[0]);
-    await waitFor(() => {
-      expect(dialog).not.toBeInTheDocument();
-    });
-    // click on confirm
-    fireEvent.click(buttons[1]);
-    dialog = await waitFor(() => screen.getByRole('dialog'));
-    dialogButtons = dialog.querySelectorAll('button');
-    fireEvent.click(dialogButtons[1]);
-    await waitFor(() => {
-      expect(dialog).not.toBeInTheDocument();
-    });
-    await waitFor(() => {
-      expect(mock.history.delete).toHaveLength(1);
-    });
-    await waitFor(() => {
-      expect(
-        testStore
-          .getState()
-          .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
-      ).toStrictEqual([]);
-    });
-    // wait rerendering due to redux changes
-    await waitFor(() => {
-      const input = result.container.querySelector('input[name="default_pec"]');
-      expect(input).toBeInTheDocument();
-      expect(result.container).not.toHaveTextContent('');
-    });
-  });
-
-  it('render component when sercq send is enabled, open dialog and add pec', async () => {
-    mock
-      .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
-        value: VALID_PEC,
-      })
-      .reply(200, {
-        result: 'CODE_VERIFICATION_REQUIRED',
-      });
-    mock
-      .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
-        value: VALID_PEC,
-        verificationCode: '01234',
-      })
-      .reply(204);
-    // render component
-    const result = render(<PecContactItem />, {
-      preloadedState: {
-        contactsState: {
-          digitalAddresses: [defaultSercqAddress],
-        },
-      },
-    });
-    expect(result.container).toHaveTextContent('legal-contacts.sercq-send-pec');
-    const addPecButton = result.getByText('legal-contacts.sercq-send-add-pec');
-    expect(addPecButton).toBeInTheDocument();
-    fireEvent.click(addPecButton);
-    // open modal, fill pec and click on confirm
-    const dialog = await waitFor(() => result.getByTestId('pecValueDialog'));
-    expect(dialog).toBeInTheDocument();
-    await testInput(dialog, `default_modal_pec`, VALID_PEC);
-    const confirmButton = screen.getByText('button.conferma');
-    expect(confirmButton).toBeEnabled();
-    fireEvent.click(confirmButton);
-    await waitFor(() => {
-      expect(mock.history.post).toHaveLength(1);
-      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
-        value: VALID_PEC,
-      });
-    });
-    // inser otp and confirm
-    const codeDialog = await fillCodeDialog(result);
-    await waitFor(() => {
-      expect(mock.history.post).toHaveLength(2);
-      expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
-        value: VALID_PEC,
-        verificationCode: '01234',
-      });
-    });
-    // check that contact has been added
-    await waitFor(() => expect(codeDialog).not.toBeInTheDocument());
-    expect(
-      testStore
-        .getState()
-        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
-    ).toStrictEqual([
-      {
-        ...defaultSercqAddress,
-        pecValid: true,
-        value: VALID_PEC,
-        senderName: undefined,
-        channelType: ChannelType.PEC,
-      },
-    ]);
-    // wait rerendering due to redux changes
-    await waitFor(() => {
-      expect(result.container).not.toHaveTextContent('legal-contacts.sercq-send-pec');
-    });
-    const pecValue = getById(result.container, 'default_pec-typography');
-    expect(pecValue).toBeInTheDocument();
-    expect(pecValue).toHaveTextContent(VALID_PEC);
-    const editButton = getById(result.container, 'modifyContact-default_pec');
-    expect(editButton).toBeInTheDocument();
-    const deleteButton = getById(result.container, 'cancelContact-default_pec');
-    expect(deleteButton).toBeInTheDocument();
   });
 });

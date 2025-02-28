@@ -1,20 +1,20 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
+import { BffCheckTPPResponse } from '../../../generated-client/notifications';
 import { acceptMandate, rejectMandate } from '../../delegation/actions';
 import { store } from '../../store';
-import { getDomicileInfo, getSidemenuInformation } from '../actions';
+import { exchangeNotificationRetrievalId, getSidemenuInformation } from '../actions';
 import { closeDomicileBanner } from '../reducers';
 
 const initialState = {
   pendingDelegators: 0,
   delegators: [],
-  digitalAddresses: [],
   domicileBannerOpened: true,
+  paymentTpp: {},
 };
 
 const pendingDelegators = mandatesByDelegate.filter((d) => d.status === 'pending');
@@ -115,10 +115,18 @@ describe('Sidemenu redux state tests', () => {
     expect(state.pendingDelegators).toBe(pendingDelegators.length);
   });
 
-  it('Should be able to fetch the digital addresses list', async () => {
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
-    const action = await store.dispatch(getDomicileInfo());
-    expect(action.type).toBe('getDomicileInfo/fulfilled');
-    expect(action.payload).toEqual(digitalAddresses);
+  it('Should be able to set tpp info from retrievalId', async () => {
+    const mockRetrievalId = 'mocked-retrieval-id';
+    const mockResponse: BffCheckTPPResponse = {
+      paymentButton: 'Hype',
+      retrievalId: mockRetrievalId,
+      originId: 'mocked-iun',
+    };
+    mock
+      .onGet(`/bff/v1/notifications/received/check-tpp?retrievalId=${mockRetrievalId}`)
+      .reply(200, mockResponse);
+    const action = await store.dispatch(exchangeNotificationRetrievalId(mockRetrievalId));
+    expect(action.type).toBe('exchangeNotificationRetrievalId/fulfilled');
+    expect(action.payload).toEqual(mockResponse);
   });
 });

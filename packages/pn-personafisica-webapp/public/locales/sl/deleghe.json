@@ -42,8 +42,11 @@
       "notificationsFrom": "Obvestila od:",
       "allNotifications": "Vsa obvestila",
       "active": "Aktiviraj",
-      "pending": "Čakanje na potrditev"
-    }
+      "pending": "Čakanje na potrditev",
+      "menu-aria-label": "Meni dejanj"
+    },
+    "revoke-successfully": "Prenos pooblastila je bil preklican.",
+    "reject-successfully": "Prenos pooblastila je bil zavrnjen."
   },
   "nuovaDelega": {
     "breadcrumb": "Nov prenos pooblastila",

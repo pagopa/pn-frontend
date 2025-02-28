@@ -1,5 +1,3 @@
-import { vi } from 'vitest';
-
 import { formatDate, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import {
   createEvent,
@@ -20,13 +18,6 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
-
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
-  }),
-}));
 
 const initialState = {
   startDate: tenYearsAgo,

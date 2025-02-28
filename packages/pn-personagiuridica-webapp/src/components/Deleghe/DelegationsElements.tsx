@@ -2,22 +2,30 @@ import React, { Dispatch, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box, Button, IconButton, Menu as MUIMenu, MenuItem, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  DialogContentText,
+  IconButton,
+  Menu as MUIMenu,
+  MenuItem,
+  Typography,
+} from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import {
   AppResponse,
   AppResponsePublisher,
   CodeModal,
+  ConfirmationModal,
   CustomTagGroup,
   Row,
   appStateActions,
-  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 import { AnyAction } from '@reduxjs/toolkit';
 
 import { DelegationColumnData, DelegationStatus } from '../../models/Deleghe';
-import { User } from '../../redux/auth/types';
+import { User } from '../../models/User';
 import {
   acceptMandate,
   rejectMandate,
@@ -28,7 +36,6 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { ServerResponseErrorCode } from '../../utility/AppError/types';
 import AcceptDelegationModal from './AcceptDelegationModal';
-import ConfirmationModal from './ConfirmationModal';
 
 function handleCustomGenericError(
   responseError: AppResponse,
@@ -236,12 +243,15 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
       <ConfirmationModal
         open={showConfirmationModal}
         title={titleModal}
-        subtitle={subtitleModal}
-        onConfirm={handleConfirmClick}
+        slotsProps={{
+          closeButton: { onClick: onCloseModal },
+          confirmButton: { onClick: handleConfirmClick },
+        }}
         onConfirmLabel={confirmLabel}
-        onClose={onCloseModal}
         onCloseLabel={t('button.annulla', { ns: 'common' })}
-      />
+      >
+        <DialogContentText id="confirmation-dialog-description">{subtitleModal}</DialogContentText>
+      </ConfirmationModal>
       {menuType === 'delegators' &&
         row?.status === DelegationStatus.ACTIVE &&
         groups.length > 0 && (
@@ -294,7 +304,6 @@ export const OrganizationsList: React.FC<OrganizationsListProps> = ({
   visibleItems,
 }) => {
   const { t } = useTranslation(['deleghe']);
-  const isMobile = useIsMobile();
 
   return (
     <>
@@ -303,7 +312,7 @@ export const OrganizationsList: React.FC<OrganizationsListProps> = ({
           {t('deleghe.table.allNotifications')}
         </Typography>
       ) : (
-        <Box sx={{ minWidth: isMobile ? '' : '35rem', maxWidth: '60rem' }}>
+        <Box>
           <Typography variant={textVariant || 'inherit'} mb={2}>
             {t('deleghe.table.notificationsFrom')}
           </Typography>

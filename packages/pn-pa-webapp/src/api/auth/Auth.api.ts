@@ -1,6 +1,6 @@
 import { removeNullProperties } from '@pagopa-pn/pn-commons/src/utility/user.utility';
 
-import { User } from '../../redux/auth/types';
+import { User } from '../../models/user';
 import { authClient } from '../apiClients';
 import { AUTH_TOKEN_EXCHANGE } from './auth.routes';
 

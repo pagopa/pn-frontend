@@ -3,6 +3,86 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/pagopa/pn-frontend/compare/v2.12.0-RC.1...v2.12.0) (2025-02-18)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+# [2.12.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.12.0-RC.0...v2.12.0-RC.1) (2025-02-05)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+# [2.12.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.11.1...v2.12.0-RC.0) (2025-02-04)
+
+
+### Bug Fixes
+
+* **pn-13210:** manage accessibility when closing modal ([#1451](https://github.com/pagopa/pn-frontend/issues/1451)) ([2b4981b](https://github.com/pagopa/pn-frontend/commit/2b4981bddc8f6651ac47bb2cf371f63e33962959))
+* **pn-13214:** inactivity handler accessibility ([#1454](https://github.com/pagopa/pn-frontend/issues/1454)) ([7af07bd](https://github.com/pagopa/pn-frontend/commit/7af07bdc5861815ae484e0856d17f80ec3ac6096))
+* **pn-13593:** screen reader doesn't read api key value ([#1449](https://github.com/pagopa/pn-frontend/issues/1449)) ([7b11fb7](https://github.com/pagopa/pn-frontend/commit/7b11fb7ceb22d46bfd4dcea6bcbb6e1a2c3f85ae))
+* **pn-13596:** screen reader doesn't read notification status tooltip on mobile ([#1439](https://github.com/pagopa/pn-frontend/issues/1439)) ([b28f472](https://github.com/pagopa/pn-frontend/commit/b28f47258e5bd3cf4d9a2a3c95b86bfb42114ce8))
+
+
+### Features
+
+* **pn-13595:** removed automatic redirect before logout ([#1456](https://github.com/pagopa/pn-frontend/issues/1456)) ([c7d823f](https://github.com/pagopa/pn-frontend/commit/c7d823f72e9e64eeeccfcafebb0b05f4b188959c))
+
+
+
+
+
+## [2.11.1](https://github.com/pagopa/pn-frontend/compare/v2.11.0...v2.11.1) (2025-01-31)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+# [2.11.0](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.2...v2.11.0) (2025-01-20)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+# [2.11.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.11.0-RC.0...v2.11.0-RC.1) (2025-01-10)
+
+
+### Features
+
+* **pn-13265:** cache refresh updated for selfcare-PG ([#1413](https://github.com/pagopa/pn-frontend/issues/1413)) ([b5d2292](https://github.com/pagopa/pn-frontend/commit/b5d2292f2c7701f5f21858caf48ea6ed71352543))
+
+
+
+
+
+# [2.11.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0...v2.11.0-RC.0) (2025-01-10)
+
+
+### Bug Fixes
+
+* **pn-13269:** Translate AAR label in the notification detail page ([#1420](https://github.com/pagopa/pn-frontend/issues/1420)) ([05ee4f0](https://github.com/pagopa/pn-frontend/commit/05ee4f0cfdeb71779038d04ba83eb13569dbf029))
+* **pn-9848:** Get TraceId from header ([#1176](https://github.com/pagopa/pn-frontend/issues/1176)) ([2e613a7](https://github.com/pagopa/pn-frontend/commit/2e613a722a0e667813a20eac1b12fc6936fa1322))
+
+
+### Features
+
+* **pn-13347:** add new status return to sender to timeline ([#1416](https://github.com/pagopa/pn-frontend/issues/1416)) ([82b17fa](https://github.com/pagopa/pn-frontend/commit/82b17faa6eeef406f9e75033246fd5f5f2a9dbda))
+* **pn-13499:** improve configuration ([#1429](https://github.com/pagopa/pn-frontend/issues/1429)) ([e0956fb](https://github.com/pagopa/pn-frontend/commit/e0956fb6afcce8fd7fcd954105be74ab03e8b140))
+
+
+
+
+
 # [2.10.0](https://github.com/pagopa/pn-frontend/compare/v2.10.0-RC.0...v2.10.0) (2025-01-07)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp

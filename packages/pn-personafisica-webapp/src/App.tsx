@@ -10,7 +10,7 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Box } from '@mui/material';
+import { Box, Button, DialogTitle } from '@mui/material';
 import {
   APP_VERSION,
   AppMessage,
@@ -18,6 +18,8 @@ import {
   AppResponseError,
   AppResponseMessage,
   Layout,
+  PnDialog,
+  PnDialogActions,
   ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
@@ -30,13 +32,13 @@ import {
 import { ProductEntity } from '@pagopa/mui-italia';
 
 import { PFEventsType } from './models/PFEventsType';
-import { getCurrentEventTypePage } from './navigation/navigation.utility';
+import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { logout } from './redux/auth/actions';
+import { getDigitalAddresses } from './redux/contact/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
+import { getSidemenuInformation } from './redux/sidemenu/actions';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PFAppErrorFactory } from './utility/AppError/PFAppErrorFactory';
@@ -69,6 +71,7 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
     (state: RootState) => state.userState
@@ -79,7 +82,6 @@ const App = () => {
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const path = pathname.split('/');
   const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL } = getConfiguration();
 
   const sessionToken = loggedUser.sessionToken;
@@ -96,12 +98,12 @@ const App = () => {
   const [showHeader, showFooter, showSideMenu, showHeaderProduct, showAssistanceButton] = useMemo(
     () =>
       showLayoutParts(
-        path[1],
+        pathname,
         !!sessionToken,
         tosConsent && tosConsent.accepted && fetchedTos,
         privacyConsent && privacyConsent.accepted && fetchedPrivacy
       ),
-    [path[1], sessionToken, tosConsent, fetchedTos, privacyConsent, fetchedPrivacy]
+    [pathname, sessionToken, tosConsent, fetchedTos, privacyConsent, fetchedPrivacy]
   );
 
   const userActions = useMemo(() => {
@@ -226,7 +228,7 @@ const App = () => {
   });
 
   const handleUserLogout = () => {
-    void dispatch(logout());
+    setOpenModal(true);
   };
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
@@ -260,7 +262,7 @@ const App = () => {
 
   useEffect(() => {
     if (sessionToken !== '') {
-      void dispatch(getDomicileInfo());
+      void dispatch(getDigitalAddresses());
       void dispatch(getSidemenuInformation());
       void dispatch(getCurrentAppStatus());
     }
@@ -302,6 +304,25 @@ const App = () => {
         eventTrackingCallbackRefreshPage={handleEventTrackingCallbackRefreshPage}
         enableAssistanceButton={showAssistanceButton}
       >
+        <PnDialog open={openModal}>
+          <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>
+          <PnDialogActions>
+            <Button id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
+              {t('button.annulla')}
+            </Button>
+            <Button
+              data-testid="confirm-button"
+              variant="contained"
+              onClick={() => {
+                sessionStorage.clear();
+                goToLoginPortal();
+                setOpenModal(false);
+              }}
+            >
+              {t('header.logout')}
+            </Button>
+          </PnDialogActions>
+        </PnDialog>
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
         <AppMessage />
         <AppResponseMessage

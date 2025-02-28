@@ -7,13 +7,6 @@ import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { getApiKeyStatusInfos } from '../../../utility/apikeys.utility';
 import ApiKeyDataSwitch from '../ApiKeyDataSwitch';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const data = mockApiKeysDTO.items[0];
 
 describe('ApiKeyDataSwitch Component', () => {
@@ -31,7 +24,7 @@ describe('ApiKeyDataSwitch Component', () => {
     const { container, getByTestId } = render(
       <ApiKeyDataSwitch handleModalClick={mockClick} data={data} type="value" />
     );
-    const regexp = new RegExp(`^${data.value.substring(0, 10)}...$`, 'ig');
+    const regexp = new RegExp(`^${data.value}`, 'ig');
     expect(container).toHaveTextContent(regexp);
     const clipboard = getByTestId('copyToClipboard');
     expect(clipboard).toBeInTheDocument();
@@ -52,11 +45,11 @@ describe('ApiKeyDataSwitch Component', () => {
     const groupsString =
       data.groups.length > 3
         ? data.groups
-            .map((group) => group.name)
-            .splice(0, 3)
-            .join('') +
-          '\\+' +
-          (data.groups.length - 3).toString()
+          .map((group) => group.name)
+          .splice(0, 3)
+          .join('') +
+        '\\+' +
+        (data.groups.length - 3).toString()
         : data.groups.map((group) => group.name).join('');
     const regexp = new RegExp(`^${groupsString}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
@@ -96,7 +89,7 @@ describe('ApiKeyDataSwitch Component', () => {
     const viewGroupsId = getByTestId('buttonViewGroupsId');
     expect(viewGroupsId).toBeInTheDocument();
     fireEvent.click(viewGroupsId);
-    expect(mockClick).toBeCalledTimes(1);
+    expect(mockClick).toHaveBeenCalledTimes(1);
   });
 
   it('renders component - contextMenu no groups', async () => {

@@ -15,12 +15,16 @@
     "exit": "Esci",
     "close": "Chiudi",
     "enable": "Attiva",
+    "manage": "Gestisci",
     "disable": "Disattiva",
+    "start": "Inizia",
     "continue": "Avanti",
     "go-to-home": "Vai alla homepage",
     "go-to-login": "Accedi",
     "not-now": "Non ora",
-    "add": "Aggiungi"
+    "do-later": "Lo farò più tardi",
+    "add": "Aggiungi",
+    "understand": "Ok, ho capito"
   },
   "menu": {
     "notifiche": "Notifiche",
@@ -31,7 +35,8 @@
   },
   "header": {
     "logout": "Esci",
-    "pago-pa-link": "Sito di PagoPA S.p.A."
+    "pago-pa-link": "Sito di PagoPA S.p.A.",
+    "logout-message": "Confermi di voler uscire da SEND?"
   },
   "tos": {
     "title": "SEND - Servizio Notifiche Digitali",
@@ -136,6 +141,7 @@
   "required-fields": "*Campi obbligatori",
   "required-field": "Campo obbligatorio",
   "too-long-field-error": "Scrivi massimo {{maxLength}} caratteri",
+  "loading": "Caricamento in corso",
   "validation": {
     "search-pattern-length-limit": "ricerca max {{maxLength}} caratteri",
     "invalid-characters-not-inserted": "I caratteri non validi non sono stati inseriti."
@@ -177,6 +183,10 @@
       "title": "Questo campo accetta solo valori numerici",
       "message": "Controlla il codice di verifica e inseriscilo di nuovo"
     },
+    "empty_code": {
+      "title": "Codice assente o incompleto",
+      "message": "Il codice che hai inserito non è completo, inserisci un codice a 5 cifre."
+    },
     "invalid_body": {
       "title": "Errore",
       "message": "C'è stato un errore in fase di invio dei dati ai nostri server. Ricontrolla che i dati inseriti siano corretti e non siano contenuti caratteri speciali e spazi."
@@ -192,5 +202,19 @@
     "message": "Il testo originario di questi documenti è in lingua italiana. In caso di contrasto tra la versione italiana e le traduzioni in altre lingue, prevarranno il significato e le condizioni della lingua italiana.",
     "link": "Consulta le traduzioni"
   },
-  "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine"
+  "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine",
+  "wizard": {
+    "stepper": {
+      "of": "{{currentStep}} di {{totalSteps}}",
+      "activeStep": "Step {{currentStep}}"
+    }
+  },
+  "inactivity": {
+    "title": "Vuoi davvero uscire da SEND?",
+    "body": "La disconnessione è in corso. Se hai cambiato idea premi “Mantieni l’accesso” entro pochi secondi.",
+    "action": "Mantieni l’accesso"
+  },
+  "code-modal": {
+    "digits": ["prima cifra", "seconda cifra", "terza cifra", "quarta cifra", "ultima cifra"]
+  }
 }
