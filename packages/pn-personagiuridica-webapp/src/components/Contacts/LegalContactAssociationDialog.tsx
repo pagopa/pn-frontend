@@ -44,7 +44,7 @@ const LegalContactAssociationDialog: React.FC<Props> = ({
       open={open}
       title={t(`special-contacts.legal-association-title${blockConfirmation}`, { ns: 'recapiti' })}
       slots={{
-        confirmButton: blockConfirmation ? undefined : Button,
+        confirmButton: blockConfirmation ? () => <></> : Button,
         closeButton: Button,
       }}
       slotsProps={{

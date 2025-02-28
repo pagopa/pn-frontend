@@ -1,13 +1,13 @@
 import React, { JSXElementConstructor } from 'react';
 
-import { ButtonProps, DialogTitle } from '@mui/material';
+import { Button, ButtonProps, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 type Props = {
   open: boolean;
   title: string;
   slots?: {
-    confirmButton?: JSXElementConstructor<ButtonProps>;
+    confirmButton: JSXElementConstructor<ButtonProps>;
     closeButton?: JSXElementConstructor<ButtonProps>;
   };
   slotsProps?: {
@@ -24,7 +24,7 @@ const ConfirmationModal: React.FC<Props> = ({
   slotsProps,
   children,
 }: Props) => {
-  const ConfirmButton = slots?.confirmButton;
+  const ConfirmButton = slots?.confirmButton || Button;
   const CloseButton = slots?.closeButton;
 
   return (
@@ -51,15 +51,13 @@ const ConfirmationModal: React.FC<Props> = ({
             {...slotsProps?.closeButton}
           />
         )}
-        {ConfirmButton && (
-          <ConfirmButton
-            id="dialog-confirm-button"
-            color="primary"
-            variant="contained"
-            data-testid="confirmButton"
-            {...slotsProps?.confirmButton}
-          />
-        )}
+        <ConfirmButton
+          id="dialog-confirm-button"
+          color="primary"
+          variant="contained"
+          data-testid="confirmButton"
+          {...slotsProps?.confirmButton}
+        />
       </PnDialogActions>
     </PnDialog>
   );
