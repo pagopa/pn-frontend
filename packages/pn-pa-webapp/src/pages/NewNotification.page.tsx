@@ -25,7 +25,7 @@ const SubTitle = () => {
   return (
     <>
       {t('new-notification.subtitle', { ns: 'notifiche' })} {/* PN-14000 */}
-      <Link href={DEVELOPER_API_DOCUMENTATION_LINK}>
+      <Link href={DEVELOPER_API_DOCUMENTATION_LINK} target="_blank" data-testid="api-how-it-works">
         {t('new-notification.how-it-works', { ns: 'notifiche' })}
       </Link>
       .
