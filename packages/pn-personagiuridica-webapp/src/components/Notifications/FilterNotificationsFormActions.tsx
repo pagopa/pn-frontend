@@ -18,10 +18,6 @@ const FilterNotificationsFormActions = ({
 }: Props) => {
   const { t } = useTranslation(['common']);
 
-  const handleCancel = () =>{
-    cleanFilters();
-  };
-
   const confirmAction = (
     <Grid item lg="auto" xs={12}>
       <Button
@@ -41,7 +37,7 @@ const FilterNotificationsFormActions = ({
       <Button
         data-testid="cancelButton"
         size="small"
-        onClick={handleCancel}
+        onClick={cleanFilters}
         disabled={!filtersApplied}
       >
         {t('button.annulla filtro')}
