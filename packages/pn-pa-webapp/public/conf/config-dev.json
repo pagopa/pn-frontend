@@ -18,5 +18,6 @@
   "IS_STATISTICS_ENABLED": true,
   "TAXONOMY_SEND_URL": "https://docs.pagopa.it/f.a.q.-per-integratori/tassonomia-send",
   "DOWNTIME_EXAMPLE_LINK": "https://www.dev.notifichedigitali.it/static/documents/LegalFactMalfunction.pdf",
-  "PAYMENT_INFO": "https://developer.pagopa.it/send/guides/knowledge-base/readme/pagamenti-e-spese-di-notifica/pagamenti-pagopa"
+  "PAYMENT_INFO": "https://developer.pagopa.it/send/guides/knowledge-base/readme/pagamenti-e-spese-di-notifica/pagamenti-pagopa",
+  "DEVELOPER_API_DOCUMENTATION_LINK": "https://developer.pagopa.it/send/api"
 }

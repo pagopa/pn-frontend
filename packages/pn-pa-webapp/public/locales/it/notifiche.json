@@ -391,7 +391,8 @@
   },
   "new-notification": {
     "title": "Invia una nuova notifica",
-    "subtitle": "Per inviare una notifica, inserisci i dati richiesti e aggiungi i modelli di pagamento. Se devi fare un invio massivo, puoi usare le",
+    "subtitle": "Per inviare una notifica, inserisci i dati richiesti e aggiungi eventualmente una Posizione debitoria. Se devi fare un invio massivo,",
+    "how-it-works": "scopri come funziona",
     "breadcrumb-root": "Notifiche",
     "breadcrumb-leaf": "Nuova notifica",
     "prompt": {

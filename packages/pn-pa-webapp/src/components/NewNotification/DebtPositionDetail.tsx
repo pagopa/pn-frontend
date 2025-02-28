@@ -76,7 +76,7 @@ const DebtPositionDetail: React.FC<Props> = ({
       recipient.debtPosition === PaymentModel.PAGO_PA_F24
   );
 
-  const { PAYMENT_INFO } = getConfiguration();
+  const { PAYMENT_INFO_LINK } = getConfiguration();
   const dispatch = useAppDispatch();
 
   const newPagopaPayment = (id: string, idx: number): NewNotificationPagoPaPayment => ({
@@ -499,7 +499,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                   components={[
                     <Link
                       key="learn-more"
-                      href={PAYMENT_INFO}
+                      href={PAYMENT_INFO_LINK}
                       target="_blank"
                       rel="noopener noreferrer"
                     />,

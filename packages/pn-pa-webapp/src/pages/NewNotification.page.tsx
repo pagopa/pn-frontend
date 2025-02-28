@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
-import { Alert, Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
+import { Alert, Box, Grid, Link, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { PnBreadcrumb, Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import Attachments from '../components/NewNotification/Attachments';
@@ -22,10 +21,14 @@ import { getConfiguration } from '../services/configuration.service';
 
 const SubTitle = () => {
   const { t } = useTranslation(['common', 'notifiche']);
+  const { DEVELOPER_API_DOCUMENTATION_LINK } = getConfiguration();
   return (
     <>
-      {t('new-notification.subtitle', { ns: 'notifiche' })} {/* PN-2028 */}
-      <Link to={routes.API_KEYS}>{t('menu.api-key')}</Link>
+      {t('new-notification.subtitle', { ns: 'notifiche' })} {/* PN-14000 */}
+      <Link href={DEVELOPER_API_DOCUMENTATION_LINK}>
+        {t('new-notification.how-it-works', { ns: 'notifiche' })}
+      </Link>
+      .
     </>
   );
 };
