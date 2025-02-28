@@ -335,7 +335,6 @@ const DebtPositionDetail: React.FC<Props> = ({
       if (paymentPayload) {
         await updateRefAfterUpload(paymentPayload);
       }
-      // TODO capire se usare formatPayments o paymentPayload
       saveDebtPositionDetail(paymentPayload);
       onConfirm();
     },
