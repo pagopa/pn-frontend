@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.13.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.13.0-RC.0...v2.13.0-RC.1) (2025-03-03)
+
+
+### Bug Fixes
+
+* **PN-13257:** add description to button in notifications table ([#1491](https://github.com/pagopa/pn-frontend/issues/1491)) ([5988932](https://github.com/pagopa/pn-frontend/commit/5988932b3ac7c6dbe0f036f43907e448f4c02578))
+
+
+
+
+
 # [2.13.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.12.0...v2.13.0-RC.0) (2025-02-28)
 
 
