@@ -154,7 +154,7 @@ const PaymentMethods: React.FC<Props> = ({
                   <PagoPaPaymentBox
                     id={`recipients.${recipient.taxId}.pagoPa.${index}`}
                     key={`${recipient.taxId}-pagoPa-${pagoPaPayment.idx}`}
-                    onFileUploaded={(_, file, sha256) =>
+                    onFileUploaded={(file, sha256) =>
                       fileUploadedHandler(recipient.taxId, 'pagoPa', index, file, sha256)
                     }
                     onRemoveFile={() => removeFileHandler(recipient.taxId, 'pagoPa', index)}
@@ -195,7 +195,7 @@ const PaymentMethods: React.FC<Props> = ({
                   <F24PaymentBox
                     id={`recipients.${recipient.taxId}.f24.${index}`}
                     key={`${recipient.taxId}-f24-${f24Payment?.idx}`}
-                    onFileUploaded={(_, file, sha256) =>
+                    onFileUploaded={(file, sha256) =>
                       fileUploadedHandler(recipient.taxId, 'f24', index, file, sha256)
                     }
                     onRemoveFile={() => removeFileHandler(recipient.taxId, 'f24', index)}

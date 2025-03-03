@@ -40,7 +40,7 @@ export const newNotificationGroups: Array<UserGroup> = [
   },
 ];
 
-const newNotificationPagoPa: NewNotificationPagoPaPayment = {
+export const newNotificationPagoPa: NewNotificationPagoPaPayment = {
   id: 'mocked-pagopa-id',
   idx: 0,
   contentType: 'application/pdf',
@@ -76,7 +76,7 @@ const newNotificationPagoPaForBff: PagoPaPayment = {
   },
 };
 
-const newNotificationF24: NewNotificationF24Payment = {
+export const newNotificationF24: NewNotificationF24Payment = {
   id: 'mocked-f24-id',
   idx: 0,
   name: 'mocked-name',
