@@ -134,11 +134,20 @@ const PublicKeys: React.FC = () => {
             content={
               <Stack spacing={2}>
                 <ShowCodesInput
-                  value={modal.publicKey?.value || ''}
+                  name="value"
+                  value={modal.publicKey?.value ?? ''}
                   label="publicKeys.personal-key"
                 />
-                <ShowCodesInput value={modal.publicKey?.kid || ''} label="publicKeys.kid" />
-                <ShowCodesInput value={modal.publicKey?.issuer || ''} label="publicKeys.issuer" />
+                <ShowCodesInput
+                  name="kid"
+                  value={modal.publicKey?.kid ?? ''}
+                  label="publicKeys.kid"
+                />
+                <ShowCodesInput
+                  name="issuer"
+                  value={modal.publicKey?.issuer ?? ''}
+                  label="publicKeys.issuer"
+                />
               </Stack>
             }
             closeButtonLabel={t('button.close', { ns: 'common' })}

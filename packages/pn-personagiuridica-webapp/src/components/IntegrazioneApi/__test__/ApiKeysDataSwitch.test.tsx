@@ -2,13 +2,13 @@ import { vi } from 'vitest';
 
 import { Row } from '@pagopa-pn/pn-commons';
 
-import { publicKeys } from '../../../__mocks__/ApiKeys.mock';
+import { publicKeys, virtualKeys } from '../../../__mocks__/ApiKeys.mock';
 import { fireEvent, render } from '../../../__test__/test-utils';
-import { ApiKeyColumnData } from '../../../models/ApiKeys';
+import { ApiKeyColumnData, ExtendedVirtualKeyStatus } from '../../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../../utility/apikeys.utility';
 import ApiKeysDataSwitch from '../ApiKeysDataSwitch';
 
-const data: Row<ApiKeyColumnData> = {
+const dataP: Row<ApiKeyColumnData> = {
   id: publicKeys.items[0].kid!,
   name: publicKeys.items[0].name,
   value: publicKeys.items[0].value,
@@ -18,20 +18,34 @@ const data: Row<ApiKeyColumnData> = {
   menu: '',
 };
 
+const dataV: Row<ApiKeyColumnData> = {
+  id: virtualKeys.items[0].id!,
+  name: virtualKeys.items[0].name,
+  value: virtualKeys.items[0].value,
+  date: virtualKeys.items[0].lastUpdate,
+  status: virtualKeys.items[0].status,
+  user: virtualKeys.items[0].user,
+  menu: '',
+};
+
+const mockClick = vi.fn();
+
 describe('Api Keys Data Switch', () => {
-  const mockClick = vi.fn();
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('renders component - name', () => {
     const { container } = render(
       <ApiKeysDataSwitch
         handleModalClick={mockClick}
         keys={publicKeys}
-        data={data}
+        data={dataP}
         type="name"
         menuType="publicKeys"
       />
     );
-    const regexp = new RegExp(`^${data.name}$`, 'ig');
+    const regexp = new RegExp(`^${dataP.name}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
   });
 
@@ -40,7 +54,7 @@ describe('Api Keys Data Switch', () => {
       <ApiKeysDataSwitch
         handleModalClick={mockClick}
         keys={publicKeys}
-        data={{ ...data, value: undefined }}
+        data={{ ...dataP, value: undefined }}
         menuType="publicKeys"
         type="value"
       />
@@ -55,12 +69,12 @@ describe('Api Keys Data Switch', () => {
       <ApiKeysDataSwitch
         handleModalClick={mockClick}
         keys={publicKeys}
-        data={data}
+        data={dataP}
         menuType="publicKeys"
         type="value"
       />
     );
-    const regexp = new RegExp(`^${data.value}$`, 'ig');
+    const regexp = new RegExp(`^${dataP.value}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
     const clipboard = getByTestId('copyToClipboard');
     expect(clipboard).toBeInTheDocument();
@@ -71,22 +85,22 @@ describe('Api Keys Data Switch', () => {
       <ApiKeysDataSwitch
         handleModalClick={mockClick}
         keys={publicKeys}
-        data={data}
+        data={dataP}
         menuType="publicKeys"
         type="date"
       />
     );
-    const regexp = new RegExp(`^${data.date!}$`, 'ig');
+    const regexp = new RegExp(`^${dataP.date!}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
   });
 
   it('renders component - status', () => {
-    const { label } = getApiKeyStatusInfos(data.status!, data.statusHistory);
+    const { label } = getApiKeyStatusInfos(dataP.status!, dataP.statusHistory);
     const { container } = render(
       <ApiKeysDataSwitch
         handleModalClick={mockClick}
         keys={publicKeys}
-        data={data}
+        data={dataP}
         menuType="publicKeys"
         type="status"
       />
@@ -95,12 +109,48 @@ describe('Api Keys Data Switch', () => {
     expect(container).toHaveTextContent(regexp);
   });
 
-  it('renders component - contextMenu', async () => {
+  it('renders component - status for virtual key with issuer active', () => {
+    const dataEnabledV = { ...dataV, status: ExtendedVirtualKeyStatus.Enabled };
+    const { label } = getApiKeyStatusInfos(dataEnabledV.status);
+    const { container } = render(
+      <ApiKeysDataSwitch
+        handleModalClick={mockClick}
+        keys={virtualKeys}
+        data={dataEnabledV}
+        menuType="virtualKeys"
+        type="status"
+        issuerIsPresent
+        issuerIsActive
+      />
+    );
+    const regexp = new RegExp(`^${label}$`, 'ig');
+    expect(container).toHaveTextContent(regexp);
+  });
+
+  it('renders component - status for virtual key with issuer not active', () => {
+    const dataEnabledV = { ...dataV, status: ExtendedVirtualKeyStatus.Enabled };
+    const { label } = getApiKeyStatusInfos(ExtendedVirtualKeyStatus.Disabled);
+    const { container } = render(
+      <ApiKeysDataSwitch
+        handleModalClick={mockClick}
+        keys={virtualKeys}
+        data={dataEnabledV}
+        menuType="virtualKeys"
+        type="status"
+        issuerIsPresent
+        issuerIsActive={false}
+      />
+    );
+    const regexp = new RegExp(`^${label}$`, 'ig');
+    expect(container).toHaveTextContent(regexp);
+  });
+
+  it('renders component - contextMenu for public keys', async () => {
     const { getByTestId } = render(
       <ApiKeysDataSwitch
         handleModalClick={mockClick}
         keys={publicKeys}
-        data={data}
+        data={dataP}
         menuType="publicKeys"
         type="menu"
       />
@@ -112,5 +162,42 @@ describe('Api Keys Data Switch', () => {
     expect(viewGroupsId).toBeInTheDocument();
     fireEvent.click(viewGroupsId);
     expect(mockClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders component - contextMenu for virtual keys', async () => {
+    const { getByTestId } = render(
+      <ApiKeysDataSwitch
+        handleModalClick={mockClick}
+        keys={virtualKeys}
+        data={dataV}
+        menuType="virtualKeys"
+        type="menu"
+        issuerIsPresent
+      />,
+      { preloadedState: { userState: { user: { fiscal_number: dataV.user?.fiscalCode } } } }
+    );
+    const contextMenu = getByTestId('contextMenuButton');
+    expect(contextMenu).toBeInTheDocument();
+    fireEvent.click(contextMenu);
+    const viewGroupsId = getByTestId('buttonView');
+    expect(viewGroupsId).toBeInTheDocument();
+    fireEvent.click(viewGroupsId);
+    expect(mockClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders component - contextMenu for virtual keys hidden if issuer is not present', async () => {
+    const { queryByTestId } = render(
+      <ApiKeysDataSwitch
+        handleModalClick={mockClick}
+        keys={virtualKeys}
+        data={dataV}
+        menuType="virtualKeys"
+        type="menu"
+        issuerIsPresent={false}
+      />,
+      { preloadedState: { userState: { user: { fiscal_number: dataV.user?.fiscalCode } } } }
+    );
+    const contextMenu = queryByTestId('contextMenuButton');
+    expect(contextMenu).not.toBeInTheDocument();
   });
 });

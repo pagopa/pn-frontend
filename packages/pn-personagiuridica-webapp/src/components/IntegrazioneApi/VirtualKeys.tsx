@@ -18,13 +18,13 @@ import {
   VirtualKeyStatus,
 } from '../../generated-client/pg-apikeys';
 import { ModalApiKeyView } from '../../models/ApiKeys';
+import { PNRole } from '../../models/User';
 import {
   changeVirtualApiKeyStatus,
   createVirtualApiKey,
   deleteVirtualApiKey,
   getVirtualApiKeys,
 } from '../../redux/apikeys/actions';
-import { PNRole } from '../../models/User';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import ApiKeyModal from './ApiKeyModal';
@@ -170,7 +170,8 @@ const VirtualKeys: React.FC = () => {
           content={
             <Stack spacing={2}>
               <ShowCodesInput
-                value={modal.virtualKey?.value || ''}
+                name="value"
+                value={modal.virtualKey?.value ?? ''}
                 label="virtualKeys.personal-key"
               />
             </Stack>

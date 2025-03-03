@@ -40,6 +40,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
