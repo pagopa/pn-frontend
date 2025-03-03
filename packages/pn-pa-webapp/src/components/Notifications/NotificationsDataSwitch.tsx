@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Box, Typography } from '@mui/material';
 import {
   CustomTagGroup,
@@ -28,11 +28,13 @@ const ActionButton: React.FC<{ iun: string; handleRowClick?: (iun: string) => vo
   const { t } = useTranslation(['notifiche']);
   return (
     <ButtonNaked
+      color="primary"
       data-testid="goToNotificationDetail"
       onClick={() => handleRowClick && handleRowClick(iun)}
       aria-label={t('table.aria-action-table', { iun })}
+      endIcon={<ArrowForwardIosIcon />}
     >
-      <ChevronRightIcon color="primary" />
+      {t('table.show-detail')}
     </ButtonNaked>
   );
 };
