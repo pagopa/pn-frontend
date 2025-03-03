@@ -4,14 +4,6 @@ import { fireEvent, render } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import SyncFeedbackApiKey from '../SyncFeedbackApiKey';
 
-// mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const mockNavigateFn = vi.fn();
 
 vi.mock('react-router-dom', async () => ({
@@ -39,7 +31,7 @@ describe('SyncFeedbackApiKey Component', () => {
     const result = render(<SyncFeedbackApiKey />);
     const button = result.container.querySelector('button');
     fireEvent.click(button!);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.API_KEYS);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(routes.API_KEYS);
   });
 });

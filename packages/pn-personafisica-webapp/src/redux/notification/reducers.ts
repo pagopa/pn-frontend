@@ -10,6 +10,7 @@ import {
   PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
+  PaymentsData,
   RecipientType,
   TimelineCategory,
   getF24Payments,
@@ -50,7 +51,7 @@ const initialState = {
   paymentsData: {
     pagoPaF24: [] as Array<PaymentDetails>,
     f24Only: [] as Array<F24PaymentDetails>,
-  },
+  } as PaymentsData,
   downtimeEvents: [] as Array<Downtime>,
 };
 

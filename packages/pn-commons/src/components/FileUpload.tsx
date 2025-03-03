@@ -32,6 +32,7 @@ type Props = {
   calcSha256?: boolean;
   fileUploaded?: { file: { data?: File; sha256?: { hashBase64: string; hashHex: string } } };
   fileSizeLimit?: number;
+  showHashCode?: boolean;
 };
 
 enum UploadStatus {
@@ -165,6 +166,7 @@ const FileUpload = ({
   calcSha256 = false,
   fileUploaded,
   fileSizeLimit = 209715200,
+  showHashCode = true,
 }: Props) => {
   const [fileData, dispatch] = useReducer(reducer, {
     status: UploadStatus.TO_UPLOAD,
@@ -369,7 +371,7 @@ const FileUpload = ({
           </Box>
         )}
       </Box>
-      {fileData.sha256 && (
+      {fileData.sha256 && showHashCode && (
         <Box sx={{ marginTop: '20px' }}>
           <Typography variant="body2" fontWeight={600} fontSize={'16px'} color="text.secondary">
             {getLocalizedOrDefaultLabel('common', 'upload-file.hash-code', 'Codice hash')}

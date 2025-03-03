@@ -18,13 +18,6 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translation hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const Guard = () => (
   <Routes>
     <Route path="/" element={<SessionGuard />}>
@@ -121,8 +114,11 @@ describe('SessionGuard Component', async () => {
     expect(logoutComponent).toBeTruthy();
     const logoutTitleComponent = screen.queryByText('leaving-app.title');
     expect(logoutTitleComponent).toBeNull();
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith({ pathname: routes.NOT_ACCESSIBLE }, { replace: true });
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(
+      { pathname: routes.NOT_ACCESSIBLE },
+      { replace: true }
+    );
   });
 
   // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck

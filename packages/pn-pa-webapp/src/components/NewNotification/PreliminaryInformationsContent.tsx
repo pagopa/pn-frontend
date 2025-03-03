@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { TextField, Typography, useFormControl } from '@mui/material';
 import { LangCode, LangLabels } from '@pagopa/mui-italia';
 
-import { NewNotificationLangOther } from '../../models/NewNotification';
-import { PreliminaryInformationsPayload } from '../../redux/newNotification/types';
+import { NewNotificationLangOther, PreliminaryInformationsPayload } from '../../models/NewNotification';
 import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 
 type SubjectFocusHelperTextProps = {

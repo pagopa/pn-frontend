@@ -14,9 +14,8 @@ import {
   BffTosPrivacyActionBody,
   UserConsentsApiFactory,
 } from '../../generated-client/tos-privacy';
-import { PNRole, PartyRole } from '../../models/user';
+import { PNRole, PartyRole, User } from '../../models/user';
 import { RootState } from '../store';
-import { User } from './types';
 
 export enum AUTH_ACTIONS {
   GET_TOS_PRIVACY_APPROVAL = 'getTosPrivacyApproval',

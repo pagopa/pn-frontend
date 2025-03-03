@@ -6,14 +6,13 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
-  AddressType,
   ChannelType,
   ContactOperation,
   ContactSource,
   IOAllowedValues,
 } from '../../models/contacts';
 import * as routes from '../../navigation/routes.const';
-import { setExternalEvent } from '../../redux/contact/reducers';
+import { contactsSelectors, setExternalEvent } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { closeDomicileBanner } from '../../redux/sidemenu/reducers';
 import { RootState } from '../../redux/store';
@@ -108,43 +107,44 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
   const { IS_DOD_ENABLED } = getConfiguration();
+  const { defaultPECAddress, defaultSERCQ_SENDAddress, defaultAPPIOAddress, courtesyAddresses } =
+    useAppSelector(contactsSelectors.selectAddresses);
 
-  const digitalAddresses = useAppSelector(
-    (state: RootState) => state.generalInfoState.digitalAddresses
+  const hasAppIODisabled = defaultAPPIOAddress?.value === IOAllowedValues.DISABLED;
+
+  const hasCourtesyAddresses = courtesyAddresses.some(
+    (addr) => addr.value !== IOAllowedValues.DISABLED
   );
 
-  const hasSercqSend = digitalAddresses.find((addr) => addr.channelType === ChannelType.SERCQ_SEND);
-  const hasAppIODisabled = digitalAddresses.find(
-    (addr) => addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.DISABLED
-  );
-
-  const hasCourtesyAddresses =
-    digitalAddresses.filter(
-      (addr) => addr.addressType === AddressType.COURTESY && addr.value !== IOAllowedValues.DISABLED
-    ).length > 0;
-  const domicileBannerData: DomicileBannerData | null = getDomicileData(
-    source,
-    !!hasSercqSend,
-    hasCourtesyAddresses,
-    !!hasAppIODisabled,
-    IS_DOD_ENABLED
-  );
+  const domicileBannerData: DomicileBannerData | null = defaultPECAddress
+    ? null
+    : getDomicileData(
+        source,
+        !!defaultSERCQ_SENDAddress,
+        hasCourtesyAddresses,
+        hasAppIODisabled,
+        IS_DOD_ENABLED
+      );
 
   const handleClose = () => {
     dispatch(closeDomicileBanner());
-    // sessionStorage.setItem('domicileBannerClosed', 'true');
+    sessionStorage.setItem('domicileBannerClosed', 'true');
   };
 
   const handleClick = (destination?: ChannelType, operation?: ContactOperation) => {
     if (destination && operation) {
+      if (destination === ChannelType.SERCQ_SEND && operation === ContactOperation.ADD) {
+        navigate(routes.DIGITAL_DOMICILE_ACTIVATION);
+      } else {
+        navigate(routes.RECAPITI);
+      }
       dispatch(setExternalEvent({ destination, source, operation }));
     }
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, { source });
-    navigate(routes.RECAPITI);
   };
 
   return open && domicileBannerData ? (
-    <Box mb={5}>
+    <Box my={4}>
       <Alert
         severity={domicileBannerData.severity}
         variant="outlined"

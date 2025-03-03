@@ -1,15 +1,6 @@
-import { vi } from 'vitest';
-
 import { publicKeys } from '../../__mocks__/ApiKeys.mock';
 import { PublicKeyStatus } from '../../generated-client/pg-apikeys';
 import { TooltipApiKey, getApiKeyStatusInfos } from '../apikeys.utility';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
 
 describe('test apikeys utilities', () => {
   it('getApiKeyStatusInfos Active', () => {

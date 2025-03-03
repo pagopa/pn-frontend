@@ -1,8 +1,6 @@
 {
   "title": "Anschriften",
   "subtitle": "Hier können digitale Anschriften angeben und geändert werden, an die Bescheide für {{recipient}} gesendet werden sollen. Wenn du nach Firmendaten suchst, <0>findest du sie hier</0>.",
-  "alert-dialog-email": "Wenn das Unternehmen keine PEC hat und ein Benutzer innerhalb von 5 Tagen (120 Stunden) nach Versand der E-Mail auf die Benachrichtigung auf SEND zugreift, wird die Empfangsbestätigung nicht per Einschreiben gesendet.",
-  "alert-dialog-sms": "Wenn das Unternehmen keine PEC hat und ein Benutzer innerhalb von 5 Tagen (120 Stunden) nach Versand der SMS auf die Benachrichtigung auf SEND zugreift, wird keine Empfangsbestätigung per Einschreiben gesendet.",
   "insert-code": "Code eingeben",
   "legal-contacts": {
     "title": "",
@@ -28,10 +26,6 @@
     "validation-progress-content": "Wir prüfen, ob die PEC-Adresse gültig ist. Du erhältst innerhalb von 24 Stunden eine E-Mail mit dem Ergebnis."
   },
   "courtesy-contacts": {
-    "title": "",
-    "list": [
-      "Wenn ein Bescheid für das Unternehmen vorliegt, wird eine Nachricht an diese Kontakte gesendet. Zum Lesen des Bescheids und zur Entrichtung eventueller Gebühren musst du dich auf der Plattform anmelden."
-    ],
     "link-sms-placeholder": "Handynummer",
     "link-email-placeholder": "E-Mail-Adresse",
     "sms-add": "Benachrichtige mich per SMS",
@@ -51,11 +45,7 @@
     "remove-email-title": "E-Mail-Adresse entfernen",
     "remove-email-message": "Möchtest du die E-Mail-Adresse {{value}} wirklich entfernen?",
     "remove-sms-title": "Handynummer entfernen",
-    "remove-sms-message": "Möchtest du die Handynummer {{value}} wirklich entfernen?",
-    "block-remove-email-title": "E-Mail-Adresse kann nicht gelöscht werden",
-    "block-remove-email-message": "Dazu müssen zuerst alle E-Mail-Adressen unter „Weitere Anschriften“ gelöscht werden.",
-    "block-remove-sms-title": "Telefonnummer kann nicht gelöscht werden",
-    "block-remove-sms-message": "Dazu müssen zunächst alle Telefonnummern unter „Weitere Anschriften“ gelöscht werden."
+    "remove-sms-message": "Möchtest du die Handynummer {{value}} wirklich entfernen?"
   },
   "special-contacts": {
     "pec": "PEC-Adresse",

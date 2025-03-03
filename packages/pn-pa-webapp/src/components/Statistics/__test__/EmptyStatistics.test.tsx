@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
@@ -6,19 +5,6 @@ import * as routes from '../../../navigation/routes.const';
 import EmptyStatistics from '../EmptyStatistics';
 
 const mockNavigateFn = vi.fn();
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
-  }),
-  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
-    <>
-      {props.i18nKey} {props.components!.map((c) => c)}
-    </>
-  ),
-}));
 
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual<any>('react-router-dom')),
@@ -55,8 +41,8 @@ describe('EmptyStatistics component tests', () => {
     expect(link).toBeInTheDocument();
 
     fireEvent.click(link);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.DASHBOARD);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DASHBOARD);
 
     const emptyImg = getByTestId('empty-image');
     expect(emptyImg).toBeInTheDocument();

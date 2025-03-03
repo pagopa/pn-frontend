@@ -1,6 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { ReactNode } from 'react';
-import { vi } from 'vitest';
 
 import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 
@@ -9,18 +7,6 @@ import { fireEvent, render, screen, waitFor, within } from '../../../__test__/te
 import { apiClient } from '../../../api/apiClients';
 import { DelegationStatus } from '../../../models/Deleghe';
 import DelegationsOfTheCompany from '../DelegationsOfTheCompany';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
-    <>
-      {props.i18nKey} {props.components && props.components!.map((c) => c)}
-    </>
-  ),
-}));
 
 export async function testMultiSelect(
   form: HTMLElement,
@@ -365,9 +351,9 @@ describe('DelegationsOfTheCompany Component', async () => {
     fireEvent.click(menuItems[0]);
     const dialog = await waitFor(() => getByTestId('confirmationDialog'));
     expect(dialog).toBeInTheDocument();
-    const dialogAction = within(dialog).getAllByTestId('dialogAction');
+    const confirmButton = within(dialog).getByTestId('confirmButton');
     // click on confirm button
-    fireEvent.click(dialogAction[1]);
+    fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain(

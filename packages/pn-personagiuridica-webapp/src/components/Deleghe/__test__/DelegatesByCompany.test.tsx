@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import { mandatesByDelegator } from '../../../__mocks__/Delegations.mock';
@@ -9,18 +8,6 @@ import * as routes from '../../../navigation/routes.const';
 import DelegatesByCompany from '../DelegatesByCompany';
 
 const mockNavigateFn = vi.fn();
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
-    <>
-      {props.i18nKey} {props.components!.map((c) => c)}
-    </>
-  ),
-}));
 
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual<any>('react-router-dom')),
@@ -62,8 +49,8 @@ describe('Delegates Component - assuming delegates API works properly', async ()
     // clicks on empty state action
     const button = getByTestId('link-add-delegate');
     fireEvent.click(button);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.NUOVA_DELEGA);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(routes.NUOVA_DELEGA);
   });
 
   it('render table with data', async () => {
@@ -90,8 +77,8 @@ describe('Delegates Component - assuming delegates API works properly', async ()
     const { getByTestId } = render(<DelegatesByCompany />);
     const addButton = getByTestId('addDeleghe');
     fireEvent.click(addButton);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.NUOVA_DELEGA);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(routes.NUOVA_DELEGA);
   });
 
   it('visualize modal code and check code', async () => {
@@ -142,9 +129,9 @@ describe('Delegates Component - assuming delegates API works properly', async ()
     fireEvent.click(menuItems[1]);
     const dialog = await waitFor(() => getByTestId('confirmationDialog'));
     expect(dialog).toBeInTheDocument();
-    const dialogAction = within(dialog).getAllByTestId('dialogAction');
+    const confirmButton = within(dialog).getByTestId('confirmButton');
     // click on confirm button
-    fireEvent.click(dialogAction[1]);
+    fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain(

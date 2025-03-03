@@ -7,15 +7,6 @@ import userEvent from '@testing-library/user-event';
 import { RenderResult, render } from '../../../__test__/test-utils';
 import NotificationSettingsDrawer from '../NotificationSettingsDrawer';
 
-// mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
-  }),
-}));
-
 describe('Notification Settings Drawer', async () => {
   let result: RenderResult;
 

@@ -14,8 +14,7 @@ import {
 import { CustomDropdown } from '@pagopa-pn/pn-commons';
 import { LangCode, LangLabels } from '@pagopa/mui-italia';
 
-import { BILINGUALISM_LANGUAGES, NewNotificationLangOther } from '../../models/NewNotification';
-import { PreliminaryInformationsPayload } from '../../redux/newNotification/types';
+import { BILINGUALISM_LANGUAGES, NewNotificationLangOther, PreliminaryInformationsPayload } from '../../models/NewNotification';
 import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 
 type Props = {

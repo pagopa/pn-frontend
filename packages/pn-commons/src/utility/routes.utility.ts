@@ -71,4 +71,12 @@ export function compileRoute(route: Route) {
 
 export enum AppRouteParams {
   AAR = 'aar',
+  RETRIEVAL_ID = 'retrievalId',
+}
+
+export function getRapidAccessParam(params: URLSearchParams): [AppRouteParams, string] | undefined {
+  const keys = Object.values(AppRouteParams);
+  const key = keys.find((k) => params.has(k));
+  const param = key ? params.get(key) : undefined;
+  return key && param ? [key, param] : undefined;
 }

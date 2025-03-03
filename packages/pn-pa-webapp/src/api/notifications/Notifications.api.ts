@@ -14,12 +14,13 @@ export const NotificationsApi = {
     sha256: string,
     secret: string,
     file: Uint8Array,
-    httpMethod: string
+    httpMethod: string,
+    contentType = 'application/pdf'
   ): Promise<string> => {
     const method = httpMethod.toLowerCase() as 'get' | 'post' | 'put';
     return externalClient[method]<string>(url, file, {
       headers: {
-        'Content-Type': 'application/pdf',
+        'Content-Type': contentType,
         'x-amz-meta-secret': secret,
         'x-amz-checksum-sha256': sha256,
       },

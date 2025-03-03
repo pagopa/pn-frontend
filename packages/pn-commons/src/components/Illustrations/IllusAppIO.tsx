@@ -4,7 +4,7 @@ export const IllusAppIO = ({ title = 'AppIO' }: IllustrationProps) => (
   <Illustration
     name={title}
     viewBox="0 0 297 223"
-    sx={{ width: 400, height: 300, maxWidth: '100%', maxHeight: '100%' }}
+    sx={{ width: 400, height: 200, maxWidth: '100%', maxHeight: '100%' }}
   >
     <path
       d="M0 49.8657C0 38.82 8.95431 29.8657 20 29.8657H137.293C148.338 29.8657 157.293 38.82 157.293 49.8657V222.997H0V49.8657Z"

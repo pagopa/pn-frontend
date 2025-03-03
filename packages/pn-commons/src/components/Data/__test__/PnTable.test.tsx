@@ -110,8 +110,8 @@ describe('PnTable Component', () => {
     const sortButton = within(firstColumn).getByRole('button');
     expect(sortButton).toBeInTheDocument();
     fireEvent.click(sortButton);
-    expect(handleSort).toBeCalledTimes(1);
-    expect(handleSort).toBeCalledWith({ order: 'desc', orderBy: 'column-1' });
+    expect(handleSort).toHaveBeenCalledTimes(1);
+    expect(handleSort).toHaveBeenCalledWith({ order: 'desc', orderBy: 'column-1' });
   });
 
   it('click on a column', () => {
@@ -121,8 +121,8 @@ describe('PnTable Component', () => {
     const firstRow = within(tableBody).getAllByTestId('table-test.body.row')[0];
     const tableColumns = within(firstRow).getAllByTestId('table-test.body.row.cell');
     fireEvent.click(tableColumns[2].querySelectorAll('button')[0]);
-    expect(handleColumnClick).toBeCalledTimes(1);
-    expect(handleColumnClick).toBeCalledWith(rows[0], columns[2].id);
+    expect(handleColumnClick).toHaveBeenCalledTimes(1);
+    expect(handleColumnClick).toHaveBeenCalledWith(rows[0], columns[2].id);
   });
 
   it('render component - multiple PnTableBody', () => {
@@ -153,7 +153,7 @@ describe('PnTable Component', () => {
           </PnTableBody>
         </PnTable>
       )
-    ).toThrowError('PnTable can have only 1 child of type PnTableHeader');
+    ).toThrow('PnTable can have only 1 child of type PnTableHeader');
   });
 
   it('render component - multiple PnTableHeader', () => {
@@ -188,7 +188,7 @@ describe('PnTable Component', () => {
           </PnTableHeader>
         </PnTable>
       )
-    ).toThrowError('PnTable can have only 1 child of type PnTableHeader');
+    ).toThrow('PnTable can have only 1 child of type PnTableHeader');
   });
 
   it('render component - incorrect child', () => {
@@ -211,7 +211,7 @@ describe('PnTable Component', () => {
           <Box>Incorrect child</Box>
         </PnTable>
       )
-    ).toThrowError(
+    ).toThrow(
       'PnTable can have only 1 child of type PnTableHeader and 1 child of type PnTableBody'
     );
   });
