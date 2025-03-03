@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import {
@@ -35,19 +34,6 @@ const mockNavigateFn = vi.fn();
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
-}));
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
-  }),
-  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
-    <>
-      {props.i18nKey} {props.components && props.components!.map((c) => c)}
-    </>
-  ),
 }));
 
 describe('Notifiche Page ', async () => {
@@ -115,7 +101,7 @@ describe('Notifiche Page ', async () => {
     const form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'startDate', formatDate(tenYearsAgo.toISOString()));
     await testInput(form, 'endDate', formatDate(tenYearsAgo.toISOString()));
-    const submitButton = form!.querySelector(`button[type="submit"]`);
+    const submitButton = form.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
@@ -125,7 +111,7 @@ describe('Notifiche Page ', async () => {
     expect(result.container).toHaveTextContent(/empty-state.filtered/);
     // remove filters
     const routeContactsBtn = result.getByTestId('link-remove-filters');
-    fireEvent.click(routeContactsBtn!);
+    fireEvent.click(routeContactsBtn);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[1].url).toContain('/bff/v1/notifications/received');
@@ -153,7 +139,7 @@ describe('Notifiche Page ', async () => {
     const itemsPerPageSelectorBtn = itemsPerPageSelector?.querySelector('button');
     fireEvent.click(itemsPerPageSelectorBtn!);
     const itemsPerPageList = screen.getAllByRole('menuitem');
-    fireEvent.click(itemsPerPageList[1]!);
+    fireEvent.click(itemsPerPageList[1]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/bff/v1/notifications/received');
@@ -178,7 +164,7 @@ describe('Notifiche Page ', async () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
-    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[0].iun);
+    expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[0].iun);
     // change page
     const pageSelector = result.getByTestId('pageSelector');
     const pageButtons = pageSelector?.querySelectorAll('button');
@@ -190,7 +176,7 @@ describe('Notifiche Page ', async () => {
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
-    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
+    expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
 
   it('filter', async () => {
@@ -216,7 +202,7 @@ describe('Notifiche Page ', async () => {
     // filter
     const form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'iunMatch', 'ABCD-EFGH-ILMN-123456-A-1');
-    const submitButton = form!.querySelector(`button[type="submit"]`);
+    const submitButton = form.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
@@ -225,7 +211,7 @@ describe('Notifiche Page ', async () => {
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
-    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
+    expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
 
   it('errors on api', async () => {
@@ -321,7 +307,7 @@ describe('Notifiche Page ', async () => {
     // change group
     const menuButton = result.getByTestId('groupSelectorButton');
     expect(menuButton).toHaveTextContent('Group 1');
-    fireEvent.click(menuButton!);
+    fireEvent.click(menuButton);
     const dropdown = await waitFor(() => screen.getByRole('presentation'));
     expect(dropdown).toBeInTheDocument();
     const menuItems = within(dropdown).getAllByRole('menuitem');

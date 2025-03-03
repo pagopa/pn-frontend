@@ -7,18 +7,6 @@ import App from '../App';
 import { render } from './test-utils';
 
 // mock imports
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translation hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: {
-      language: 'it',
-      changeLanguage: () => new Promise(() => {}),
-    },
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
-
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => vi.fn(),

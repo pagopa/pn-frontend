@@ -359,9 +359,9 @@ const NotificationDetail: React.FC = () => {
 
   const visibleDomicileBanner = () =>
     !mandateId &&
-    notification.notificationStatusHistory.findIndex(
+    notification.notificationStatusHistory.some(
       (history) => history.status === NotificationStatus.VIEWED
-    ) > -1;
+    );
 
   useEffect(() => {
     if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {

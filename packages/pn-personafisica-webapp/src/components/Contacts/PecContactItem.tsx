@@ -1,9 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Divider, Typography } from '@mui/material';
 import { appStateActions } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -12,39 +10,28 @@ import {
   ContactSource,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
-import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
+import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists } from '../../utility/contacts.utility';
 import CancelVerificationModal from './CancelVerificationModal';
 import ContactCodeDialog from './ContactCodeDialog';
-import DefaultDigitalContact from './DefaultDigitalContact';
-import DeleteDialog from './DeleteDialog';
-import DigitalContactsCard from './DigitalContactsCard';
+import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import PecValidationItem from './PecValidationItem';
-import PecValueDialog from './PecValueDialog';
 import PecVerificationDialog from './PecVerificationDialog';
 
 enum ModalType {
   EXISTING = 'existing',
   VALIDATION = 'validation',
   CANCEL_VALIDATION = 'cancel_validation',
-  DELETE = 'delete',
   CODE = 'code',
-  VALUE = 'value',
 }
 
 const PecContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const {
-    defaultPECAddress,
-    specialPECAddresses,
-    specialSERCQ_SENDAddresses,
-    addresses,
-    defaultSERCQ_SENDAddress,
-  } = useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultPECAddress, addresses } = useAppSelector(contactsSelectors.selectAddresses);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
@@ -58,7 +45,6 @@ const PecContactItem: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const currentValue = defaultPECAddress?.value ?? '';
-  const blockDelete = specialPECAddresses.length > 0 || specialSERCQ_SENDAddresses.length > 0;
   const verifyingAddress = defaultPECAddress ? !defaultPECAddress.pecValid : false;
 
   const handleSubmit = (value: string) => {
@@ -138,36 +124,10 @@ const PecContactItem: React.FC = () => {
     currentAddress.current = { value: currentValue };
   };
 
-  const deleteConfirmHandler = () => {
-    setModalOpen(null);
-    dispatch(
-      deleteAddress({
-        addressType: AddressType.LEGAL,
-        senderId: 'default',
-        channelType: ChannelType.PEC,
-      })
-    )
-      .unwrap()
-      .then(() => {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_PEC_SUCCESS, 'default');
-        dispatch(
-          appStateActions.addSuccess({
-            title: '',
-            message: t(`legal-contacts.pec-removed-successfully`, { ns: 'recapiti' }),
-          })
-        );
-      })
-      .catch(() => {});
-  };
-
-  const handlePecAdd = () => {
-    setModalOpen(ModalType.VALUE);
-  };
-
   /*
    * if *some* value has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
-   * (the DefaultDigitalContact component includes the "update" button)
+   * (the DigitalContact component includes the "update" button)
    */
   /*
    * if *no* value has been attached to the contact type,
@@ -175,27 +135,9 @@ const PecContactItem: React.FC = () => {
    * to perform the addition.
    */
   return (
-    <DigitalContactsCard
-      title={
-        defaultSERCQ_SENDAddress && !verifyingAddress
-          ? ''
-          : t('legal-contacts.pec-title', { ns: 'recapiti' })
-      }
-      subtitle={
-        defaultSERCQ_SENDAddress && !verifyingAddress
-          ? ''
-          : t('legal-contacts.pec-description', { ns: 'recapiti' })
-      }
-      sx={{
-        pt: defaultSERCQ_SENDAddress && !verifyingAddress ? 0 : 3,
-        borderTopLeftRadius: defaultSERCQ_SENDAddress ? 0 : 4,
-        borderTopRightRadius: defaultSERCQ_SENDAddress ? 0 : 4,
-        borderBottomLeftRadius: currentValue ? 0 : 4,
-        borderBottomRightRadius: currentValue ? 0 : 4,
-      }}
-    >
-      {!verifyingAddress && !defaultSERCQ_SENDAddress && (
-        <DefaultDigitalContact
+    <>
+      {!verifyingAddress && (
+        <DigitalContact
           label={t('legal-contacts.pec-to-add', { ns: 'recapiti' })}
           value={currentValue}
           channelType={ChannelType.PEC}
@@ -205,26 +147,10 @@ const PecContactItem: React.FC = () => {
           }}
           insertButtonLabel={t('button.attiva')}
           onSubmit={handleSubmit}
-          onDelete={() => {
-            setModalOpen(ModalType.DELETE);
-            // eslint-disable-next-line functional/immutable-data
-            currentAddress.current = { value: currentValue };
-          }}
         />
       )}
       {verifyingAddress && (
         <PecValidationItem senderId="default" onCancelValidation={handleCancelValidation} />
-      )}
-      {!verifyingAddress && defaultSERCQ_SENDAddress && (
-        <>
-          <Divider sx={{ color: 'text.secondary' }} />
-          <Typography mt={2} variant="body2" color="text.secondary">
-            {t('legal-contacts.sercq-send-pec', { ns: 'recapiti' })}
-          </Typography>
-          <ButtonNaked color={'primary'} size="medium" onClick={handlePecAdd}>
-            {t('legal-contacts.sercq-send-add-pec', { ns: 'recapiti' })}
-          </ButtonNaked>
-        </>
       )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
@@ -250,27 +176,7 @@ const PecContactItem: React.FC = () => {
         senderId="default"
         handleClose={() => setModalOpen(null)}
       />
-      <DeleteDialog
-        showModal={modalOpen === ModalType.DELETE}
-        removeModalTitle={t(`legal-contacts.${blockDelete ? 'block-' : ''}remove-pec-title`, {
-          ns: 'recapiti',
-        })}
-        removeModalBody={t(`legal-contacts.${blockDelete ? 'block-' : ''}remove-pec-message`, {
-          value: currentAddress.current.value,
-          ns: 'recapiti',
-        })}
-        handleModalClose={() => setModalOpen(null)}
-        confirmHandler={deleteConfirmHandler}
-        blockDelete={blockDelete}
-      />
-      <PecValueDialog
-        open={modalOpen === ModalType.VALUE}
-        onDiscard={() => setModalOpen(null)}
-        onConfirm={(value) => {
-          handleSubmit(value);
-        }}
-      />
-    </DigitalContactsCard>
+    </>
   );
 };
 

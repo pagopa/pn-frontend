@@ -22,4 +22,7 @@ export const PARTICIPATING_ENTITIES = '/informativa-aderenti';
 export const NOT_ACCESSIBLE = '/non-accessibile';
 export const SUPPORT = '/assistenza';
 export const TERMS_OF_SERVICE_SERCQ_SEND = '/termini-di-servizio/sercq-send';
+export const DIGITAL_DOMICILE = `${RECAPITI}/domicilio-digitale`;
+export const DIGITAL_DOMICILE_ACTIVATION = `${DIGITAL_DOMICILE}/attivazione`;
+export const DIGITAL_DOMICILE_MANAGEMENT = `${DIGITAL_DOMICILE}/gestione`;
 export const LOGOUT = '/auth/logout';
