@@ -1,4 +1,4 @@
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Box, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -22,13 +22,15 @@ const ActionButton: React.FC<{
   handleRowClick?: (iun: string, mandateId?: string) => void;
 }> = ({ mandateId, iun, handleRowClick }) => (
   <ButtonNaked
+    color="primary"
     data-testid="goToNotificationDetail"
     onClick={() => handleRowClick && handleRowClick(iun, mandateId)}
+    endIcon={<ArrowForwardIosIcon />}
     aria-label={getLocalizedOrDefaultLabel('notifications', 'table.aria-action-table', undefined, {
       iun,
     })}
   >
-    <ChevronRightIcon color="primary" />
+    {getLocalizedOrDefaultLabel('notifications', 'table.show-detail')}
   </ButtonNaked>
 );
 

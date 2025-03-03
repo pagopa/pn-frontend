@@ -38,7 +38,7 @@
     "groups": "Gruppi",
     "status": "Stato",
     "show-detail": "Vedi dettaglio",
-    "aria-action-table": "Vedi dettaglio notifica con iun : {{iun}}"
+    "aria-action-table": "Vedi dettaglio notifica con iun: {{iun}}"
   },
   "sort": {
     "title": "Ordina",
