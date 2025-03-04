@@ -72,7 +72,7 @@ const ApiKeysDataSwitch: React.FC<Props> = ({
             data-testid="copyToClipboard"
             disabled={isApiKeyDisactivated(data)}
             tooltipTitle={t('api-key-copied')}
-            value={() => data.value || ''}
+            value={() => data.value ?? ''}
           />
         </Stack>
       );
