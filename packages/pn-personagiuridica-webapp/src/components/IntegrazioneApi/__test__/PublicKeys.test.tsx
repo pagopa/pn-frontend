@@ -59,7 +59,7 @@ describe('Public Keys', () => {
     expect(mockNavigateFn).toHaveBeenCalledWith(`${routes.REGISTRA_CHIAVE_PUBBLICA}`);
   });
 
-  it('render component with public key list and not show button if there is an active key', async () => {
+  it('render component with public key list and not show generate button if there is an active key', async () => {
     const { container, getByTestId, queryByTestId } = render(<PublicKeys />, {
       preloadedState: {
         apiKeysState: {
@@ -75,7 +75,7 @@ describe('Public Keys', () => {
     expect(button).not.toBeInTheDocument();
   });
 
-  it('check view code modal', () => {
+  it('check view code modal', async () => {
     const { getByTestId, getAllByTestId } = render(<PublicKeys />, {
       preloadedState: {
         apiKeysState: {
@@ -95,11 +95,11 @@ describe('Public Keys', () => {
     expect(dialog).toHaveTextContent(/view-title/i);
     expect(dialog).toHaveTextContent(/view-subtitle/i);
     expect(dialog).toHaveTextContent(/publicKeys.personal-key/i);
-    testInput(dialog, 'value', publicKeys.items[0].value!);
+    await testInput(dialog, 'value', publicKeys.items[0].value!);
     expect(dialog).toHaveTextContent(/publicKeys.kid/i);
-    testInput(dialog, 'kid', publicKeys.items[0].kid!);
+    await testInput(dialog, 'kid', publicKeys.items[0].kid!);
     expect(dialog).toHaveTextContent(/publicKeys.issuer/i);
-    testInput(dialog, 'issuer', publicKeys.items[0].issuer!);
+    await testInput(dialog, 'issuer', publicKeys.items[0].issuer!);
     const closeButton = getByTestId('close-modal-button');
     fireEvent.click(closeButton);
 
