@@ -14,6 +14,7 @@ import {
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -33,6 +34,7 @@ const EmailSmsContactWizard: React.FC = () => {
   const { defaultSMSAddress, defaultEMAILAddress, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
+  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
@@ -48,13 +50,14 @@ const EmailSmsContactWizard: React.FC = () => {
   const smsValue = defaultSMSAddress?.value ?? '';
 
   const handleSubmit = (channelType: ChannelType, value: string) => {
+    const source = externalEvent?.source ?? ContactSource.RECAPITI;
     PFEventStrategyFactory.triggerEvent(
       channelType === ChannelType.EMAIL
         ? PFEventsType.SEND_ADD_EMAIL_START
         : PFEventsType.SEND_ADD_SMS_START,
       {
         senderId: 'default',
-        source: ContactSource.RECAPITI,
+        source,
       }
     );
     // eslint-disable-next-line functional/immutable-data
@@ -69,7 +72,12 @@ const EmailSmsContactWizard: React.FC = () => {
 
   const handleCodeVerification = (channelType: ChannelType, verificationCode?: string) => {
     if (verificationCode) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION, 'default');
+      PFEventStrategyFactory.triggerEvent(
+        channelType === ChannelType.EMAIL
+          ? PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION
+          : PFEventsType.SEND_ADD_SMS_UX_CONVERSION,
+        'default'
+      );
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
@@ -208,7 +216,13 @@ const EmailSmsContactWizard: React.FC = () => {
         open={modalOpen === ModalType.CODE}
         onConfirm={(code) => handleCodeVerification(currentAddress.current.channelType, code)}
         onDiscard={handleCancelCode}
-        onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_CODE_ERROR)}
+        onError={() =>
+          PFEventStrategyFactory.triggerEvent(
+            currentAddress.current.channelType === ChannelType.EMAIL
+              ? PFEventsType.SEND_ADD_EMAIL_CODE_ERROR
+              : PFEventsType.SEND_ADD_SMS_CODE_ERROR
+          )
+        }
       />
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}

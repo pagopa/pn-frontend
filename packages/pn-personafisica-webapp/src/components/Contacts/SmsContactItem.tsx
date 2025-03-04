@@ -17,6 +17,7 @@ import {
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -52,6 +53,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps }) 
   const { t } = useTranslation(['common', 'recapiti']);
   const { defaultSERCQ_SENDAddress, defaultPECAddress, defaultSMSAddress, addresses } =
     useAppSelector(contactsSelectors.selectAddresses);
+  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
@@ -69,9 +71,10 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps }) 
   const currentValue = defaultSMSAddress?.value ?? '';
 
   const handleSubmit = (value: string) => {
+    const source = externalEvent?.source ?? ContactSource.RECAPITI;
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_START, {
       senderId: 'default',
-      source: ContactSource.RECAPITI,
+      source,
     });
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { value };

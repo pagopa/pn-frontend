@@ -18,6 +18,7 @@ import {
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { pecValidationSchema } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -33,6 +34,7 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const [openCodeModal, setOpenCodeModal] = useState(false);
 
   const validationSchema = yup.object().shape({
@@ -47,9 +49,10 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
     validateOnMount: true,
     enableReinitialize: true,
     onSubmit: () => {
+      const source = externalEvent?.source ?? ContactSource.RECAPITI;
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, {
         senderId: 'default',
-        source: ContactSource.RECAPITI,
+        source,
       });
       handleCodeVerification();
     },

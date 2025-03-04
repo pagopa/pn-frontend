@@ -84,8 +84,10 @@ const Contacts = () => {
   };
 
   useEffect(() => {
-    if (externalEvent && externalEvent.operation === ContactOperation.SCROLL) {
-      goToSection(externalEvent.destination);
+    if (externalEvent) {
+      if (externalEvent.operation === ContactOperation.SCROLL) {
+        goToSection(externalEvent.destination);
+      }
       dispatch(resetExternalEvent());
     }
   }, [externalEvent]);
