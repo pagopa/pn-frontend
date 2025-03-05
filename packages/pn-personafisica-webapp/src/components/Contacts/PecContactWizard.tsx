@@ -19,6 +19,7 @@ import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { getConfiguration } from '../../services/configuration.service';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { pecValidationSchema } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -36,6 +37,7 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
   const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const [openCodeModal, setOpenCodeModal] = useState(false);
+  const { IS_DOD_ENABLED } = getConfiguration();
 
   const validationSchema = yup.object().shape({
     pec: pecValidationSchema(t),
@@ -105,7 +107,11 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
         slots={{
           prevButton: () => (
             <ButtonNaked
-              onClick={isTransferring ? () => navigate(-1) : () => setShowPecWizard(false)}
+              onClick={
+                isTransferring || !IS_DOD_ENABLED
+                  ? () => navigate(-1)
+                  : () => setShowPecWizard(false)
+              }
               color="primary"
               size="medium"
               data-testid="prev-button"
