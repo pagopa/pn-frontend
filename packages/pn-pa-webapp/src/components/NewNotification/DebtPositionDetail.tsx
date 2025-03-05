@@ -404,12 +404,14 @@ const DebtPositionDetail: React.FC<Props> = ({
                 <FormControlLabel
                   value={NotificationFeePolicy.FLAT_RATE}
                   control={<Radio />}
+                  data-testid="notificationFeePolicy"
                   label={t('radios.flat-rate')}
                   componentsProps={{ typography: { fontSize: '16px' } }}
                 />
                 <FormControlLabel
                   value={NotificationFeePolicy.DELIVERY_MODE}
                   control={<Radio />}
+                  data-testid="notificationFeePolicy"
                   label={t('radios.delivery-mode')}
                   componentsProps={{ typography: { fontSize: '16px' } }}
                 />
@@ -491,12 +493,14 @@ const DebtPositionDetail: React.FC<Props> = ({
                 <FormControlLabel
                   value={PagoPaIntegrationMode.SYNC}
                   control={<Radio />}
+                  data-testid="pagoPaIntMode"
                   label={t('radios.sync')}
                   componentsProps={{ typography: { fontSize: '16px' } }}
                 />
                 <FormControlLabel
                   value={PagoPaIntegrationMode.ASYNC}
                   control={<Radio />}
+                  data-testid="pagoPaIntMode"
                   label={t('radios.async')}
                   componentsProps={{ typography: { fontSize: '16px' } }}
                 />

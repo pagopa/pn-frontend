@@ -162,6 +162,30 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
     ],
     debtPosition: PaymentModel.PAGO_PA_F24,
   },
+  {
+    id: 'recipient.2',
+    idx: 2,
+    taxId: 'MRARSS90P08H501QR',
+    firstName: 'Sara Gallo srl',
+    lastName: '',
+    recipientType: RecipientType.PG,
+    type: NewNotificationDigitalAddressType.PEC,
+    digitalDomicile: '',
+    address: 'via delle cicale',
+    addressDetails: '',
+    houseNumber: '21',
+    zip: '00035',
+    municipality: 'Anzio',
+    municipalityDetails: '',
+    province: 'Roma',
+    foreignState: 'Italia',
+    payments: [
+      {
+        f24: { ...newNotificationF24 },
+      },
+    ],
+    debtPosition: PaymentModel.F24,
+  },
 ];
 
 const newNotificationRecipientsForBff: Array<NotificationRecipientV23> = [
@@ -310,7 +334,7 @@ export const newNotificationEmpty: NewNotification = {
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
   group: '',
   taxonomyCode: '',
-  senderTaxId: '',
+  senderTaxId: userResponse.organization.fiscal_code,
   notificationFeePolicy: '' as NotificationFeePolicy,
   senderDenomination: userResponse.organization.name,
 };
