@@ -11,7 +11,7 @@ type Props = {
     xs?: boolean | GridSize;
   }>;
   sx?: SxProps;
-  loadingFinished: boolean;
+  loadingFinished?: boolean;
 };
 
 const headerHeight = '128px';
