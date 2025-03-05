@@ -36,6 +36,7 @@ import { uploadNotificationPaymentDocument } from '../../redux/newNotification/a
 import { setDebtPositionDetail } from '../../redux/newNotification/reducers';
 import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
+import { newF24Payment, newPagopaPayment } from '../../utility/notification.utility';
 import {
   checkApplyCost,
   f24ValidationSchema,
@@ -51,11 +52,6 @@ type Props = {
   onConfirm: () => void;
   onPreviousStep: () => void;
   forwardedRef: ForwardedRef<unknown>;
-};
-
-const emptyFileData = {
-  data: undefined,
-  sha256: { hashBase64: '', hashHex: '' },
 };
 
 const DebtPositionDetail: React.FC<Props> = ({
@@ -78,33 +74,6 @@ const DebtPositionDetail: React.FC<Props> = ({
 
   const { PAYMENT_INFO_LINK } = getConfiguration();
   const dispatch = useAppDispatch();
-
-  const newPagopaPayment = (id: string, idx: number): NewNotificationPagoPaPayment => ({
-    id,
-    idx,
-    contentType: 'application/pdf',
-    file: emptyFileData,
-    creditorTaxId: organization.fiscal_code,
-    noticeCode: '',
-    applyCost: false,
-    ref: {
-      key: '',
-      versionToken: '',
-    },
-  });
-
-  const newF24Payment = (id: string, idx: number): NewNotificationF24Payment => ({
-    id,
-    idx,
-    contentType: 'application/json',
-    file: emptyFileData,
-    name: '',
-    applyCost: false,
-    ref: {
-      key: '',
-      versionToken: '',
-    },
-  });
 
   const formatPayments = (): Array<NewNotificationRecipient> => {
     const recipients = _.cloneDeep(notification.recipients);
@@ -161,7 +130,11 @@ const DebtPositionDetail: React.FC<Props> = ({
             const newPaymentIdx = lastPaymentIdx + 1;
 
             payments.push({
-              pagoPa: newPagopaPayment(`${recipient.taxId}-${newPaymentIdx}-pagoPa`, newPaymentIdx),
+              pagoPa: newPagopaPayment(
+                `${recipient.taxId}-${newPaymentIdx}-pagoPa`,
+                newPaymentIdx,
+                organization.fiscal_code
+              ),
             });
           }
           if (
@@ -531,12 +504,7 @@ const DebtPositionDetail: React.FC<Props> = ({
             </FormBox>
           )}
         </Paper>
-        <PaymentMethods
-          notification={notification}
-          formik={formik}
-          newPagopaPayment={newPagopaPayment}
-          newF24Payment={newF24Payment}
-        />
+        <PaymentMethods notification={notification} formik={formik} />
       </NewNotificationCard>
     </form>
   );

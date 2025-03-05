@@ -8,19 +8,18 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import {
   NewNotification,
-  NewNotificationF24Payment,
-  NewNotificationPagoPaPayment,
   PaymentMethodsFormValues,
   PaymentModel,
 } from '../../models/NewNotification';
+import { useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
+import { newF24Payment, newPagopaPayment } from '../../utility/notification.utility';
 import F24PaymentBox from './F24PaymentBox';
 import PagoPaPaymentBox from './PagoPaPaymentBox';
 
 type Props = {
   notification: NewNotification;
   formik: ReturnType<typeof useFormik<PaymentMethodsFormValues>>;
-  newPagopaPayment: (id: string, idx: number) => NewNotificationPagoPaPayment;
-  newF24Payment: (id: string, idx: number) => NewNotificationF24Payment;
 };
 
 const emptyFileData = {
@@ -28,15 +27,11 @@ const emptyFileData = {
   sha256: { hashBase64: '', hashHex: '' },
 };
 
-const PaymentMethods: React.FC<Props> = ({
-  notification,
-  formik,
-  newPagopaPayment,
-  newF24Payment,
-}) => {
+const PaymentMethods: React.FC<Props> = ({ notification, formik }) => {
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.debt-position-detail.payment-methods',
   });
+  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
   const fileUploadedHandler = async (
     taxId: string,
@@ -95,7 +90,11 @@ const PaymentMethods: React.FC<Props> = ({
   };
 
   const handleAddNewPagoPa = async (taxId: string) => {
-    const newPayment = newPagopaPayment(taxId, formik.values.recipients[taxId].pagoPa.length);
+    const newPayment = newPagopaPayment(
+      taxId,
+      formik.values.recipients[taxId].pagoPa.length,
+      organization.fiscal_code
+    );
     await formik.setFieldValue(`recipients.${taxId}.pagoPa`, [
       ...formik.values.recipients[taxId].pagoPa,
       newPayment,
@@ -131,7 +130,7 @@ const PaymentMethods: React.FC<Props> = ({
             key={recipient.taxId}
             sx={{ padding: '24px', marginTop: '40px' }}
             elevation={0}
-            data-testid="paymentForRecipient"
+            data-testid={`${recipient.taxId}-payments`}
           >
             <Typography variant="h6" fontWeight={700}>
               {t('payment-models')} {recipient.firstName} {recipient.lastName}
@@ -146,8 +145,9 @@ const PaymentMethods: React.FC<Props> = ({
                 borderColor="divider"
                 borderRadius={1}
                 divider={<Divider aria-hidden="true" />}
+                data-testid={`${recipient.taxId}-pagopa-payment-box`}
               >
-                <Typography fontSize="16px" fontWeight={600} data-testid="pagoPaPaymentBox">
+                <Typography fontSize="16px" fontWeight={600}>
                   {`${t('pagopa.attach-pagopa-notice')}`}
                 </Typography>
                 {formik.values.recipients[recipient.taxId].pagoPa.map((pagoPaPayment, index) => (
@@ -172,6 +172,7 @@ const PaymentMethods: React.FC<Props> = ({
                   startIcon={<AddIcon />}
                   onClick={() => handleAddNewPagoPa(recipient.taxId)}
                   sx={{ justifyContent: 'start' }}
+                  data-testid="add-new-pagopa"
                 >
                   {t('pagopa.add-new-pagopa-notice')}
                 </ButtonNaked>
@@ -187,8 +188,9 @@ const PaymentMethods: React.FC<Props> = ({
                 borderColor="divider"
                 borderRadius={1}
                 divider={<Divider />}
+                data-testid={`${recipient.taxId}-f24-payment-box`}
               >
-                <Typography fontSize="16px" fontWeight={600} data-testid="f24PaymentBox">
+                <Typography fontSize="16px" fontWeight={600}>
                   {t('f24.attach-f24')}
                 </Typography>
                 {formik.values.recipients[recipient.taxId].f24.map((f24Payment, index) => (
@@ -213,6 +215,7 @@ const PaymentMethods: React.FC<Props> = ({
                   startIcon={<AddIcon />}
                   onClick={() => handleAddNewF24(recipient.taxId)}
                   sx={{ justifyContent: 'start' }}
+                  data-testid="add-new-f24"
                 >
                   {t('f24.add-new-f24')}
                 </ButtonNaked>
