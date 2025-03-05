@@ -40,7 +40,7 @@ export const newNotificationGroups: Array<UserGroup> = [
   },
 ];
 
-const newNotificationPagoPa: NewNotificationPagoPaPayment = {
+export const newNotificationPagoPa: NewNotificationPagoPaPayment = {
   id: 'mocked-pagopa-id',
   idx: 0,
   contentType: 'application/pdf',
@@ -76,7 +76,7 @@ const newNotificationPagoPaForBff: PagoPaPayment = {
   },
 };
 
-const newNotificationF24: NewNotificationF24Payment = {
+export const newNotificationF24: NewNotificationF24Payment = {
   id: 'mocked-f24-id',
   idx: 0,
   name: 'mocked-name',
@@ -161,6 +161,30 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
       },
     ],
     debtPosition: PaymentModel.PAGO_PA_F24,
+  },
+  {
+    id: 'recipient.2',
+    idx: 2,
+    taxId: 'MRARSS90P08H501QR',
+    firstName: 'Sara Gallo srl',
+    lastName: '',
+    recipientType: RecipientType.PG,
+    type: NewNotificationDigitalAddressType.PEC,
+    digitalDomicile: '',
+    address: 'via delle cicale',
+    addressDetails: '',
+    houseNumber: '21',
+    zip: '00035',
+    municipality: 'Anzio',
+    municipalityDetails: '',
+    province: 'Roma',
+    foreignState: 'Italia',
+    payments: [
+      {
+        f24: { ...newNotificationF24 },
+      },
+    ],
+    debtPosition: PaymentModel.F24,
   },
 ];
 
@@ -310,7 +334,7 @@ export const newNotificationEmpty: NewNotification = {
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
   group: '',
   taxonomyCode: '',
-  senderTaxId: '',
+  senderTaxId: userResponse.organization.fiscal_code,
   notificationFeePolicy: '' as NotificationFeePolicy,
   senderDenomination: userResponse.organization.name,
 };
