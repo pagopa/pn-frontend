@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import _, { mapValues } from 'lodash';
+import _ from 'lodash';
 import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -109,7 +109,8 @@ const DebtPositionDetail: React.FC<Props> = ({
   const formatPayments = (): Array<NewNotificationRecipient> => {
     const recipients = _.cloneDeep(notification.recipients);
     return recipients.map((recipient) => {
-      const recipientData = formik.values.recipients[recipient.taxId];
+      const recipientIndex = `${recipient.recipientType}-${recipient.taxId}`;
+      const recipientData = formik.values.recipients[recipientIndex];
       const payments = [
         ...recipientData.pagoPa
           // .filter((payment) => payment?.file?.data)
@@ -185,7 +186,7 @@ const DebtPositionDetail: React.FC<Props> = ({
 
           return {
             ...acc,
-            [recipient.taxId]: {
+            [`${recipient.recipientType}-${recipient.taxId}`]: {
               pagoPa: pagoPaPayments,
               f24: f24Payments,
             },
@@ -196,6 +197,35 @@ const DebtPositionDetail: React.FC<Props> = ({
     }),
     []
   );
+
+  const recipientSchema = () => {
+    const recipientSchema: { [key: string]: yup.ObjectSchema<any> } = {};
+    Object.keys(initialValues.recipients).forEach((recipientIndex) => {
+      const taxId = recipientIndex.split('-')[1];
+      const recipient = notification.recipients.find((r) => r.taxId === taxId);
+      const debtPosition = recipient?.debtPosition;
+
+      // eslint-disable-next-line functional/immutable-data
+      recipientSchema[recipientIndex] = yup.object({
+        pagoPa: yup.array().of(
+          yup.object().when([], {
+            is: () =>
+              debtPosition === PaymentModel.PAGO_PA || debtPosition === PaymentModel.PAGO_PA_F24,
+            then: () => pagoPaValidationSchema(t, tc),
+          })
+        ),
+        f24: yup.array().of(
+          yup.object().when([], {
+            is: () =>
+              debtPosition === PaymentModel.F24 || debtPosition === PaymentModel.PAGO_PA_F24,
+            then: () => f24ValidationSchema(tc),
+          })
+        ),
+      });
+    });
+
+    return recipientSchema;
+  };
 
   const validationSchema = yup.object().shape({
     notificationFeePolicy: yup
@@ -232,72 +262,38 @@ const DebtPositionDetail: React.FC<Props> = ({
 
         return !(hasPagoPaDebtPosition && value === PagoPaIntegrationMode.NONE);
       }),
-    recipients: yup.lazy((obj) =>
-      yup
-        .object(
-          mapValues(obj, (_, taxId) =>
-            yup.object({
-              pagoPa: yup.array().of(
-                yup.object().when([], {
-                  is: () => {
-                    const debtPosition = notification.recipients.find(
-                      (r) => r.taxId === taxId
-                    )?.debtPosition;
-                    return (
-                      debtPosition === PaymentModel.PAGO_PA ||
-                      debtPosition === PaymentModel.PAGO_PA_F24
-                    );
-                  },
-                  then: () => pagoPaValidationSchema(t, tc),
-                })
-              ),
-              f24: yup.array().of(
-                yup.object().when([], {
-                  is: () => {
-                    const debtPosition = notification.recipients.find(
-                      (r) => r.taxId === taxId
-                    )?.debtPosition;
-                    return (
-                      debtPosition === PaymentModel.F24 || debtPosition === PaymentModel.PAGO_PA_F24
-                    );
-                  },
-                  then: () => f24ValidationSchema(tc),
-                })
-              ),
-            })
+    recipients: yup
+      .object(recipientSchema())
+      .test('identicalIUV', t('identical-notice-codes-error'), function (values) {
+        const errors = identicalIUV(values as any);
+
+        if (errors.length === 0) {
+          return true;
+        }
+
+        return new yup.ValidationError(
+          errors.map(
+            (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
           )
-        )
-        .test('identicalIUV', t('identical-notice-codes-error'), function (values) {
-          const errors = identicalIUV(values as any);
+        );
+      })
+      .test('applyCostValidation', t('at-least-one-applycost'), function (values) {
+        if (this.parent.notificationFeePolicy !== NotificationFeePolicy.DELIVERY_MODE) {
+          return true;
+        }
 
-          if (errors.length === 0) {
-            return true;
-          }
+        const validationErrors = checkApplyCost(values as any);
 
-          return new yup.ValidationError(
-            errors.map(
-              (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
-            )
-          );
-        })
-        .test('apply-cost-validation', t('at-least-one-applycost'), function (values) {
-          if (this.parent.notificationFeePolicy !== NotificationFeePolicy.DELIVERY_MODE) {
-            return true;
-          }
+        if (validationErrors.length === 0) {
+          return true;
+        }
 
-          const validationErrors = checkApplyCost(values as any);
-
-          if (validationErrors.length === 0) {
-            return true;
-          }
-
-          return new yup.ValidationError(
-            validationErrors.map(
-              (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
-            )
-          );
-        })
-    ),
+        return new yup.ValidationError(
+          validationErrors.map(
+            (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
+          )
+        );
+      }),
   });
 
   const updateRefAfterUpload = async (paymentPayload: Array<NewNotificationRecipient>) => {
