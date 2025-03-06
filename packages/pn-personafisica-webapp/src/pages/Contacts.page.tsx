@@ -27,14 +27,22 @@ const Contacts = () => {
 
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
 
+  const SendYourContactDetailsEvent = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_YOUR_CONTACT_DETAILS, {
+      digitalAddresses: addresses,
+      contactIO: defaultAPPIOAddress,
+    });
+  };
+
+  useEffect(() => {
+    SendYourContactDetailsEvent();
+  }, []);
+
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses())
       .unwrap()
       .then(() => {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_YOUR_CONTACT_DETAILS, {
-          digitalAddresses: addresses,
-          contactIO: defaultAPPIOAddress,
-        });
+        SendYourContactDetailsEvent();
       });
   }, []);
 

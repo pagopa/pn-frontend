@@ -106,7 +106,7 @@ const EmailSmsContactWizard: React.FC = () => {
           channelType === ChannelType.EMAIL
             ? PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS
             : PFEventsType.SEND_ADD_SMS_UX_SUCCESS,
-          'default'
+          { senderId: 'default', fromSercqSend: true }
         );
 
         // contact has already been verified
