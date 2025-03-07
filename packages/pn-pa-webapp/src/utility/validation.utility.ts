@@ -161,12 +161,12 @@ export function identicalIUV(
           {
             messageKey: 'identical-notice-codes-error',
             value: payment,
-            id: `recipients[${payment.taxIdKey}].pagoPa[${payment.idx}].noticeCode`,
+            id: `recipients.${payment.taxIdKey}.pagoPa[${payment.idx}].noticeCode`,
           },
           {
             messageKey: '',
             value: payment,
-            id: `recipients[${payment.taxIdKey}].pagoPa[${payment.idx}].creditorTaxId`,
+            id: `recipients.${payment.taxIdKey}.pagoPa[${payment.idx}].creditorTaxId`,
           }
         );
       }
