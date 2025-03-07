@@ -9,7 +9,6 @@ import {
   payments,
 } from '../../../__mocks__/NewNotification.mock';
 import { apiClient, externalClient } from '../../../api/apiClients';
-import { NotificationFeePolicy } from '../../../generated-client/notifications';
 import { PaymentModel, PreliminaryInformationsPayload } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
 import { newNotificationMapper } from '../../../utility/notification.utility';
@@ -35,7 +34,7 @@ import {
 const initialState = {
   loading: false,
   notification: {
-    notificationFeePolicy: NotificationFeePolicy.FlatRate,
+    notificationFeePolicy: '',
     paProtocolNumber: '',
     subject: '',
     recipients: [],
