@@ -16,6 +16,7 @@ const LoadingPageWrapper = ({
       {!isInitialized && (
         <LoadingPage
           sx={{ position: 'absolute', width: '100%', zIndex: 3, backgroundColor: 'white' }}
+          loadingFinished={loading}
         />
       )}
       {isInitialized && loading && <LoadingOverlay />}
