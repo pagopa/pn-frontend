@@ -1,9 +1,15 @@
 import { RecipientType } from '@pagopa-pn/pn-commons';
 
+import { newNotificationF24, newNotificationPagoPa } from '../../__mocks__/NewNotification.mock';
 import { randomString } from '../../__test__/test-utils';
-import { NewNotificationRecipient } from '../../models/NewNotification';
 import {
+  NewNotificationRecipient,
+  RecipientPaymentsFormValues,
+} from '../../models/NewNotification';
+import {
+  checkApplyCost,
   denominationLengthAndCharacters,
+  identicalIUV,
   identicalTaxIds,
   taxIdDependingOnRecipientType,
 } from '../validation.utility';
@@ -83,50 +89,269 @@ describe('test custom validation for recipients', () => {
     ]);
   });
 
-  /*
   it('identicalIUV (no errors)', () => {
-    const result = identicalIUV(
-      [
-        { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-        { creditorTaxId: 'creditorTaxId2', noticeCode: 'noticeCode2' },
-      ] as Array<NewNotificationRecipient>,
-      PaymentModel.PAGO_PA
-    );
+    const input: RecipientPaymentsFormValues = {
+      taxId1: {
+        pagoPa: [
+          {
+            ...newNotificationPagoPa,
+            creditorTaxId: 'creditorTaxId1',
+            noticeCode: 'noticeCode1',
+          },
+        ],
+        f24: [],
+      },
+      taxId2: {
+        pagoPa: [
+          {
+            ...newNotificationPagoPa,
+            creditorTaxId: 'creditorTaxId2',
+            noticeCode: 'noticeCode2',
+          },
+        ],
+        f24: [],
+      },
+    };
+
+    const result = identicalIUV(input);
     expect(result).toHaveLength(0);
   });
 
-  it('identicalIUV (errors)', () => {
-    const result = identicalIUV(
-      [
-        { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-        { creditorTaxId: 'creditorTaxId2', noticeCode: 'noticeCode2' },
-        { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-      ] as Array<NewNotificationRecipient>,
-      PaymentModel.PAGO_PA
-    );
+  it('identicalIuv (errors)', () => {
+    const input: RecipientPaymentsFormValues = {
+      taxId1: {
+        pagoPa: [
+          {
+            ...newNotificationPagoPa,
+            creditorTaxId: 'creditorTaxId1',
+            noticeCode: 'noticeCode1',
+          },
+        ],
+        f24: [],
+      },
+      taxId2: {
+        pagoPa: [
+          {
+            ...newNotificationPagoPa,
+            creditorTaxId: 'creditorTaxId1',
+            noticeCode: 'noticeCode1',
+          },
+        ],
+        f24: [],
+      },
+    };
+
+    const result = identicalIUV(input);
     expect(result).toHaveLength(4);
     expect(result).toStrictEqual([
       {
         messageKey: 'identical-notice-codes-error',
-        value: { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-        id: `recipients[0].noticeCode`,
+        value: {
+          ...newNotificationPagoPa,
+          creditorTaxId: 'creditorTaxId1',
+          noticeCode: 'noticeCode1',
+          taxIdKey: 'taxId1',
+        },
+        id: 'recipients[taxId1].pagoPa[0].noticeCode',
       },
       {
         messageKey: '',
-        value: { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-        id: `recipients[0].creditorTaxId`,
+        value: {
+          ...newNotificationPagoPa,
+          creditorTaxId: 'creditorTaxId1',
+          noticeCode: 'noticeCode1',
+          taxIdKey: 'taxId1',
+        },
+        id: 'recipients[taxId1].pagoPa[0].creditorTaxId',
       },
       {
         messageKey: 'identical-notice-codes-error',
-        value: { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-        id: `recipients[2].noticeCode`,
+        value: {
+          ...newNotificationPagoPa,
+          creditorTaxId: 'creditorTaxId1',
+          noticeCode: 'noticeCode1',
+          taxIdKey: 'taxId2',
+        },
+        id: 'recipients[taxId2].pagoPa[0].noticeCode',
       },
       {
         messageKey: '',
-        value: { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-        id: `recipients[2].creditorTaxId`,
+        value: {
+          ...newNotificationPagoPa,
+          creditorTaxId: 'creditorTaxId1',
+          noticeCode: 'noticeCode1',
+          taxIdKey: 'taxId2',
+        },
+        id: 'recipients[taxId2].pagoPa[0].creditorTaxId',
       },
     ]);
   });
-  */
+
+  it('checkApplyCost - at least one payment has applyCost = true for pagoPa (no errors)', () => {
+    const input: RecipientPaymentsFormValues = {
+      taxId1: {
+        pagoPa: [
+          {
+            ...newNotificationPagoPa,
+            applyCost: false,
+            idx: 0,
+          },
+          {
+            ...newNotificationPagoPa,
+            applyCost: true,
+            idx: 1,
+          },
+        ],
+        f24: [],
+      },
+    };
+
+    const result = checkApplyCost(input);
+    expect(result).toHaveLength(0);
+  });
+
+  it('checkApplyCost - at least one payment has applyCost = true for f24 (no errors)', () => {
+    const input: RecipientPaymentsFormValues = {
+      taxId1: {
+        pagoPa: [],
+        f24: [
+          {
+            ...newNotificationF24,
+            applyCost: false,
+            idx: 0,
+          },
+          {
+            ...newNotificationF24,
+            applyCost: true,
+            idx: 1,
+          },
+        ],
+      },
+    };
+
+    const result = checkApplyCost(input);
+    expect(result).toHaveLength(0);
+  });
+
+  it('checkApplyCost - empty payments array (no errors)', () => {
+    const input: RecipientPaymentsFormValues = {
+      taxId1: {
+        pagoPa: [],
+        f24: [],
+      },
+    };
+
+    const result = checkApplyCost(input);
+    expect(result).toHaveLength(0);
+  });
+
+  it('checkApplyCost - no payments have applyCost = true for pagoPa (errors)', () => {
+    const input: RecipientPaymentsFormValues = {
+      taxId1: {
+        pagoPa: [
+          {
+            ...newNotificationPagoPa,
+            applyCost: false,
+            idx: 0,
+          },
+          {
+            ...newNotificationPagoPa,
+            applyCost: false,
+            idx: 1,
+          },
+        ],
+        f24: [],
+      },
+    };
+
+    const result = checkApplyCost(input);
+    expect(result).toHaveLength(2);
+    expect(result).toStrictEqual([
+      {
+        messageKey: 'at-least-one-applycost',
+        value: input['taxId1'].pagoPa,
+        id: 'recipients[taxId1].pagoPa[0].applyCost',
+      },
+      {
+        messageKey: 'at-least-one-applycost',
+        value: input['taxId1'].pagoPa,
+        id: 'recipients[taxId1].pagoPa[1].applyCost',
+      },
+    ]);
+  });
+
+  it('checkApplyCost - no payments have applyCost = true for f24 (errors)', () => {
+    const input: RecipientPaymentsFormValues = {
+      taxId1: {
+        pagoPa: [],
+        f24: [
+          {
+            ...newNotificationF24,
+            applyCost: false,
+            idx: 0,
+          },
+          {
+            ...newNotificationF24,
+            applyCost: false,
+            idx: 1,
+          },
+        ],
+      },
+    };
+
+    const result = checkApplyCost(input);
+    expect(result).toHaveLength(2);
+    expect(result).toStrictEqual([
+      {
+        messageKey: 'at-least-one-applycost',
+        value: input['taxId1'].f24,
+        id: 'recipients[taxId1].f24[0].applyCost',
+      },
+      {
+        messageKey: 'at-least-one-applycost',
+        value: input['taxId1'].f24,
+        id: 'recipients[taxId1].f24[1].applyCost',
+      },
+    ]);
+  });
+
+  it('checkApplyCost - multiple recipients with no applyCost payments (errors)', () => {
+    const input: RecipientPaymentsFormValues = {
+      taxId1: {
+        pagoPa: [
+          {
+            ...newNotificationPagoPa,
+            applyCost: false,
+            idx: 0,
+          },
+        ],
+        f24: [],
+      },
+      taxId2: {
+        pagoPa: [],
+        f24: [
+          {
+            ...newNotificationF24,
+            applyCost: false,
+            idx: 0,
+          },
+        ],
+      },
+    };
+
+    const result = checkApplyCost(input);
+    expect(result).toHaveLength(2);
+    expect(result).toStrictEqual([
+      {
+        messageKey: 'at-least-one-applycost',
+        value: input['taxId1'].pagoPa,
+        id: 'recipients[taxId1].pagoPa[0].applyCost',
+      },
+      {
+        messageKey: 'at-least-one-applycost',
+        value: input['taxId2'].f24,
+        id: 'recipients[taxId2].f24[0].applyCost',
+      },
+    ]);
+  });
 });

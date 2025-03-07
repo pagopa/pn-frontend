@@ -11,12 +11,8 @@ import { NewNotificationPagoPaPayment, NotificationFeePolicy } from '../../model
 
 type PaymentBoxProps = {
   id: string;
-  onFileUploaded: (
-    id: string,
-    file?: File,
-    sha256?: { hashBase64: string; hashHex: string }
-  ) => void;
-  onRemoveFile: (id: string) => void;
+  onFileUploaded: (file?: File, sha256?: { hashBase64: string; hashHex: string }) => void;
+  onRemoveFile: () => void;
   pagoPaPayment: NewNotificationPagoPaPayment;
   notificationFeePolicy: NotificationFeePolicy;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -56,13 +52,13 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
   return (
     <Fragment>
       <FileUpload
-        data-testid="fileUploadInput"
+        data-testid="pagopa-file-upload-input"
         uploadText={
           isMobile ? t('new-notification.drag-doc-mobile') : t('new-notification.drag-doc-pc')
         }
         accept="application/pdf"
-        onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
-        onRemoveFile={() => onRemoveFile(id)}
+        onFileUploaded={(file, sha256) => onFileUploaded(file, sha256)}
+        onRemoveFile={() => onRemoveFile()}
         calcSha256
         fileUploaded={{ file }}
         showHashCode={false}
@@ -82,6 +78,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
           size="small"
           margin="normal"
           required
+          data-testid="pagopa-notice-code"
         />
         <TextField
           id="creditorTaxId"
@@ -97,6 +94,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
           size="small"
           margin="normal"
           required
+          data-testid="pagopa-creditor-tax-id"
         />
       </Stack>
 
@@ -112,6 +110,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
                     value={applyCost}
                     checked={applyCost}
                     onChange={(e) => handleChange(e)}
+                    data-testid="pagopa-apply-cost"
                   />
                 }
                 label={t(
@@ -134,6 +133,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
                 justifyContent: { xs: 'flex-start', md: 'flex-end' },
                 ml: { xs: 'none', md: 'auto' },
               }}
+              data-testid="pagopa-delete-button"
             >
               {t('button.delete', { ns: 'common' })}
             </ButtonNaked>
@@ -142,7 +142,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       )}
 
       {showDeleteButton && notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
-        <Alert severity="warning">
+        <Alert severity="warning" data-testid="pagopa-installment-alert">
           {t('new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment')}
         </Alert>
       )}
