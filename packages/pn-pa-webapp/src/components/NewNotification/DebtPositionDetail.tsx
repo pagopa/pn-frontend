@@ -109,8 +109,8 @@ const DebtPositionDetail: React.FC<Props> = ({
   const formatPayments = (): Array<NewNotificationRecipient> => {
     const recipients = _.cloneDeep(notification.recipients);
     return recipients.map((recipient) => {
-      const recipientIndex = `${recipient.recipientType}-${recipient.taxId}`;
-      const recipientData = formik.values.recipients[recipientIndex];
+      const recipientKey = `${recipient.recipientType}-${recipient.taxId}`;
+      const recipientData = formik.values.recipients[recipientKey];
       const payments = [
         ...recipientData.pagoPa
           // .filter((payment) => payment?.file?.data)
@@ -200,13 +200,13 @@ const DebtPositionDetail: React.FC<Props> = ({
 
   const recipientSchema = () => {
     const recipientSchema: { [key: string]: yup.ObjectSchema<any> } = {};
-    Object.keys(initialValues.recipients).forEach((recipientIndex) => {
-      const taxId = recipientIndex.split('-')[1];
+    Object.keys(initialValues.recipients).forEach((recipientKey) => {
+      const taxId = recipientKey.split('-')[1];
       const recipient = notification.recipients.find((r) => r.taxId === taxId);
       const debtPosition = recipient?.debtPosition;
 
       // eslint-disable-next-line functional/immutable-data
-      recipientSchema[recipientIndex] = yup.object({
+      recipientSchema[recipientKey] = yup.object({
         pagoPa: yup.array().of(
           yup.object().when([], {
             is: () =>

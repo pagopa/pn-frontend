@@ -126,10 +126,10 @@ const PaymentMethods: React.FC<Props> = ({
         if (recipient.debtPosition === PaymentModel.NOTHING) {
           return <></>;
         }
-        const recipientIndex = `${recipient.recipientType}-${recipient.taxId}`;
+        const recipientKey = `${recipient.recipientType}-${recipient.taxId}`;
         return (
           <Paper
-            key={recipientIndex}
+            key={recipientKey}
             sx={{ padding: '24px', marginTop: '40px' }}
             elevation={0}
             data-testid="paymentForRecipient"
@@ -138,7 +138,7 @@ const PaymentMethods: React.FC<Props> = ({
               {t('payment-models')} {recipient.firstName} {recipient.lastName}
             </Typography>
 
-            {formik.values.recipients[recipientIndex].pagoPa.length > 0 && (
+            {formik.values.recipients[recipientKey].pagoPa.length > 0 && (
               <Stack
                 spacing={3}
                 mt={3}
@@ -151,19 +151,19 @@ const PaymentMethods: React.FC<Props> = ({
                 <Typography fontSize="16px" fontWeight={600} data-testid="pagoPaPaymentBox">
                   {`${t('pagopa.attach-pagopa-notice')}`}
                 </Typography>
-                {formik.values.recipients[recipientIndex].pagoPa.map((pagoPaPayment, index) => (
+                {formik.values.recipients[recipientKey].pagoPa.map((pagoPaPayment, index) => (
                   <PagoPaPaymentBox
-                    id={`recipients.${recipientIndex}.pagoPa.${index}`}
-                    key={`${recipientIndex}-pagoPa-${pagoPaPayment.idx}`}
+                    id={`recipients.${recipientKey}.pagoPa.${index}`}
+                    key={`${recipientKey}-pagoPa-${pagoPaPayment.idx}`}
                     onFileUploaded={(_, file, sha256) =>
-                      fileUploadedHandler(recipientIndex, 'pagoPa', index, file, sha256)
+                      fileUploadedHandler(recipientKey, 'pagoPa', index, file, sha256)
                     }
-                    onRemoveFile={() => removeFileHandler(recipientIndex, 'pagoPa', index)}
+                    onRemoveFile={() => removeFileHandler(recipientKey, 'pagoPa', index)}
                     pagoPaPayment={pagoPaPayment}
                     notificationFeePolicy={formik.values.notificationFeePolicy}
-                    handleChange={(event) => handleChange(event, recipientIndex, 'pagoPa', index)}
+                    handleChange={(event) => handleChange(event, recipientKey, 'pagoPa', index)}
                     showDeleteButton={index > 0}
-                    onDeletePayment={() => handleRemovePagoPa(recipientIndex, index)}
+                    onDeletePayment={() => handleRemovePagoPa(recipientKey, index)}
                     fieldMeta={(fieldName) => formik.getFieldMeta(fieldName)}
                   />
                 ))}
@@ -171,7 +171,7 @@ const PaymentMethods: React.FC<Props> = ({
                 <ButtonNaked
                   color="primary"
                   startIcon={<AddIcon />}
-                  onClick={() => handleAddNewPagoPa(recipientIndex)}
+                  onClick={() => handleAddNewPagoPa(recipientKey)}
                   sx={{ justifyContent: 'start' }}
                 >
                   {t('pagopa.add-new-pagopa-notice')}
@@ -179,7 +179,7 @@ const PaymentMethods: React.FC<Props> = ({
               </Stack>
             )}
 
-            {formik.values.recipients[recipientIndex].f24.length > 0 && (
+            {formik.values.recipients[recipientKey].f24.length > 0 && (
               <Stack
                 spacing={3}
                 mt={3}
@@ -192,19 +192,19 @@ const PaymentMethods: React.FC<Props> = ({
                 <Typography fontSize="16px" fontWeight={600} data-testid="f24PaymentBox">
                   {t('f24.attach-f24')}
                 </Typography>
-                {formik.values.recipients[recipientIndex].f24.map((f24Payment, index) => (
+                {formik.values.recipients[recipientKey].f24.map((f24Payment, index) => (
                   <F24PaymentBox
-                    id={`recipients.${recipientIndex}.f24.${index}`}
-                    key={`${recipientIndex}-f24-${f24Payment?.idx}`}
+                    id={`recipients.${recipientKey}.f24.${index}`}
+                    key={`${recipientKey}-f24-${f24Payment?.idx}`}
                     onFileUploaded={(_, file, sha256) =>
-                      fileUploadedHandler(recipientIndex, 'f24', index, file, sha256)
+                      fileUploadedHandler(recipientKey, 'f24', index, file, sha256)
                     }
-                    onRemoveFile={() => removeFileHandler(recipientIndex, 'f24', index)}
+                    onRemoveFile={() => removeFileHandler(recipientKey, 'f24', index)}
                     f24Payment={f24Payment}
                     notificationFeePolicy={formik.values.notificationFeePolicy}
-                    handleChange={(event) => handleChange(event, recipientIndex, 'f24', index)}
+                    handleChange={(event) => handleChange(event, recipientKey, 'f24', index)}
                     showDeleteButton={index > 0}
-                    onDeletePayment={() => handleRemoveF24(recipientIndex, index)}
+                    onDeletePayment={() => handleRemoveF24(recipientKey, index)}
                     fieldMeta={(fieldName) => formik.getFieldMeta(fieldName)}
                   />
                 ))}
@@ -212,7 +212,7 @@ const PaymentMethods: React.FC<Props> = ({
                 <ButtonNaked
                   color="primary"
                   startIcon={<AddIcon />}
-                  onClick={() => handleAddNewF24(recipientIndex)}
+                  onClick={() => handleAddNewF24(recipientKey)}
                   sx={{ justifyContent: 'start' }}
                 >
                   {t('f24.add-new-f24')}
