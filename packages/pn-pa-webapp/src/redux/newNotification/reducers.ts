@@ -28,7 +28,7 @@ type NewNotificationInitialState = {
 const initialState: NewNotificationInitialState = {
   loading: false,
   notification: {
-    notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
+    notificationFeePolicy: '' as NotificationFeePolicy,
     paProtocolNumber: '',
     subject: '',
     recipients: [],
