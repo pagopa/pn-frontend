@@ -40,6 +40,7 @@ import { TechScreenViewStrategy } from '../Strategies/TechScreenViewStrategy';
 import { TechStrategy } from '../Strategies/TechStrategy';
 import { UXActionStrategy } from '../Strategies/UXActionStrategy';
 import { UXErrorStrategy } from '../Strategies/UXErrorStrategy';
+import { UXPspActionStrategy } from '../Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from '../Strategies/UXScreenViewStrategy';
 
 describe('Event Strategy Factory', () => {
@@ -220,7 +221,6 @@ describe('Event Strategy Factory', () => {
     const eventTypes = [
       PFEventsType.SEND_DOWNLOAD_ATTACHMENT,
       PFEventsType.SEND_DOWNLOAD_RECEIPT_NOTICE,
-      PFEventsType.SEND_START_PAYMENT,
       PFEventsType.SEND_PAYMENT_DETAIL_REFRESH,
       PFEventsType.SEND_ADD_MANDATE_START,
       PFEventsType.SEND_ADD_MANDATE_BACK,
@@ -240,6 +240,13 @@ describe('Event Strategy Factory', () => {
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXActionStrategy);
+    });
+  });
+
+  it('should return UXPspActionStrategy for UX Psp Action events', () => {
+    const eventTypes = [PFEventsType.SEND_START_PAYMENT];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(UXPspActionStrategy);
     });
   });
 

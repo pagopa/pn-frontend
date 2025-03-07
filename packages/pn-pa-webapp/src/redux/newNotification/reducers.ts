@@ -28,7 +28,7 @@ type NewNotificationInitialState = {
 const initialState: NewNotificationInitialState = {
   loading: false,
   notification: {
-    notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
+    notificationFeePolicy: '' as NotificationFeePolicy,
     paProtocolNumber: '',
     subject: '',
     recipients: [],
@@ -128,7 +128,7 @@ const newNotificationSlice = createSlice({
         ...state.notification,
         recipients: action.payload.recipients,
         vat: action.payload.vat,
-        paFee: Number(action.payload.paFee),
+        paFee: action.payload.paFee && Number(action.payload.paFee),
         notificationFeePolicy: action.payload.notificationFeePolicy,
         pagoPaIntMode: action.payload.pagoPaIntMode,
       };
