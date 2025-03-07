@@ -68,7 +68,7 @@ export const dataRegex = {
   // Cfr. the comment in src/utility/user.utility.ts
   // ------------------------------------
   // Carlos Lombardi, 2023.01.24
-  currency: /^\d+(?:[.,]\d+)*$/,
+  currency: /^\d+(?:[.,]\d{2})*$/,
 };
 
 /**

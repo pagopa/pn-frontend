@@ -10,3 +10,9 @@ export function formatCurrency(currency: number) {
 export function formatEurocentToCurrency(eurocent: number) {
   return formatCurrency(eurocent / 100);
 }
+
+export function formatStringToNumberCurrency(currency?: string): number | undefined {
+
+  return currency ? parseFloat(parseFloat(currency).toFixed(2)) : undefined;
+}
+

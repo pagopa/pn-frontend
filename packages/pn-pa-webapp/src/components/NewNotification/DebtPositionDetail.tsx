@@ -19,6 +19,7 @@ import {
   Typography,
 } from '@mui/material';
 import { CustomDropdown, dataRegex } from '@pagopa-pn/pn-commons';
+import { formatStringToNumberCurrency } from '@pagopa-pn/pn-commons/src/utility/currency.utility';
 
 import {
   NewNotification,
@@ -380,6 +381,9 @@ const DebtPositionDetail: React.FC<Props> = ({
         ])
       );
       await formik.setFieldValue('recipients', updatedRecipients);
+    }
+    if (name === 'paFee') {
+      formatStringToNumberCurrency(value);
     }
     await formik.setFieldValue(name, value);
   };
