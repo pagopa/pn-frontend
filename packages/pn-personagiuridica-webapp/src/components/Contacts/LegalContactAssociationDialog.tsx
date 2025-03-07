@@ -26,7 +26,8 @@ const LegalContactAssociationDialog: React.FC<Props> = ({
   const { t } = useTranslation(['common', 'recapiti']);
 
   const addressAlreadySet =
-    oldAddress?.channelType === newAddress?.channelType && oldAddress?.value === newAddress?.value;
+    oldAddress?.channelType === newAddress?.channelType &&
+    (oldAddress?.value === newAddress?.value || oldAddress?.channelType === ChannelType.SERCQ_SEND);
 
   const newAddressValue =
     newAddress?.channelType === ChannelType.PEC
@@ -37,7 +38,7 @@ const LegalContactAssociationDialog: React.FC<Props> = ({
       ? oldAddress.value
       : t(`special-contacts.${oldAddress?.channelType.toLowerCase()}`, { ns: 'recapiti' });
 
-  const blockConfirmation = addressAlreadySet || newAddress === oldAddress ? '-block' : '';
+  const blockConfirmation = addressAlreadySet ? '-block' : '';
 
   return (
     <ConfirmationModal
@@ -64,8 +65,8 @@ const LegalContactAssociationDialog: React.FC<Props> = ({
         i18nKey={`special-contacts.legal-association-description${blockConfirmation}`}
         values={{
           senderName: sender?.senderName,
-          newAddressValue,
-          oldAddressValue,
+          newAddress: newAddressValue,
+          oldAddress: oldAddressValue,
         }}
       />
     </ConfirmationModal>
