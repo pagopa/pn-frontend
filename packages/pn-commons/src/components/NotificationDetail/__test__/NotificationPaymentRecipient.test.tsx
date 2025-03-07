@@ -477,7 +477,8 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(onPayTppClick).toHaveBeenCalledWith(
       paymentsData.pagoPaF24[paymentIndex].pagoPa?.noticeCode,
       paymentsData.pagoPaF24[paymentIndex].pagoPa?.creditorTaxId,
-      paymentTpp.retrievalId
+      paymentTpp.retrievalId,
+      paymentTpp.paymentButton,
     );
   });
 });
