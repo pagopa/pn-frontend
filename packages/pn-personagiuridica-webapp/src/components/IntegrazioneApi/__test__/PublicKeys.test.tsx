@@ -9,6 +9,7 @@ import { apiClient } from '../../../api/apiClients';
 import {
   ChangeStatusPublicKeyV1StatusEnum,
   PublicKeyStatus,
+  PublicKeysIssuerResponseIssuerStatusEnum,
 } from '../../../generated-client/pg-apikeys';
 import * as routes from '../../../navigation/routes.const';
 import PublicKeys from '../PublicKeys';
@@ -126,6 +127,12 @@ describe('Public Keys', () => {
       preloadedState: {
         apiKeysState: {
           publicKeys: { total: notBlockedKeys.length, items: notBlockedKeys },
+          issuerState: {
+            issuer: {
+              isPresent: true,
+              issuerStatus: PublicKeysIssuerResponseIssuerStatusEnum.Active,
+            },
+          },
         },
       },
     });
@@ -217,6 +224,12 @@ describe('Public Keys', () => {
       preloadedState: {
         apiKeysState: {
           publicKeys,
+          issuerState: {
+            issuer: {
+              isPresent: true,
+              issuerStatus: PublicKeysIssuerResponseIssuerStatusEnum.Inactive,
+            },
+          },
         },
       },
     });

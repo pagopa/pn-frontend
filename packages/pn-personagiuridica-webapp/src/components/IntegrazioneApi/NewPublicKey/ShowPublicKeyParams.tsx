@@ -25,7 +25,6 @@ const ShowPublicKeyParams: React.FC<Props> = ({ params }) => {
     <NewPublicKeyCard
       isContinueDisabled={false}
       title={t('new-public-key.steps.get-returned-parameters.title')}
-      submitLabel={t('button.end', { ns: 'common' })}
       onContinueClick={handleSubmit}
       content={
         <Typography data-testid="content" variant="body1" mt={2} mb={3} sx={{ fontSize: '14px' }}>

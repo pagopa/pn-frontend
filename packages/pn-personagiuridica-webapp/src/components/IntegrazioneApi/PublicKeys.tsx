@@ -63,17 +63,20 @@ const PublicKeys: React.FC = () => {
       return;
     }
     handleCloseModal();
-    void dispatch(
+    dispatch(
       changePublicKeyStatus({ kid: publicKeyId, status: ChangeStatusPublicKeyV1StatusEnum.Block })
-    ).then(() => {
-      dispatch(
-        appStateActions.addSuccess({
-          title: '',
-          message: t('messages.success.public-key-blocked'),
-        })
-      );
-      fetchPublicKeys();
-    });
+    )
+      .unwrap()
+      .then(() => {
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t('messages.success.public-key-blocked'),
+          })
+        );
+        fetchPublicKeys();
+      })
+      .catch(() => {});
   };
 
   const deleteApiKey = (publicKeyId?: string) => {
@@ -81,15 +84,18 @@ const PublicKeys: React.FC = () => {
       return;
     }
     handleCloseModal();
-    void dispatch(deletePublicKey(publicKeyId)).then(() => {
-      dispatch(
-        appStateActions.addSuccess({
-          title: '',
-          message: t('messages.success.public-key-deleted'),
-        })
-      );
-      fetchPublicKeys();
-    });
+    dispatch(deletePublicKey(publicKeyId))
+      .unwrap()
+      .then(() => {
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t('messages.success.public-key-deleted'),
+          })
+        );
+        fetchPublicKeys();
+      })
+      .catch(() => {});
   };
 
   return (

@@ -133,6 +133,7 @@ const VirtualKeys: React.FC = () => {
           mb: 3,
           mt: 8,
         }}
+        data-testid="virtualKeys"
       >
         <Typography variant="h6" sx={{ mb: { xs: 3, lg: 0 } }}>
           {t('virtualKeys.title')}

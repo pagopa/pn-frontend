@@ -11,7 +11,7 @@ describe('Public Keys Table', () => {
     vi.clearAllMocks();
   });
 
-  it('show empty state if issuer is not present', () => {
+  it('show empty state', () => {
     const { container, queryByTestId } = render(
       <VirtualKeysTable
         handleModalClick={mockHandleModalClick}
