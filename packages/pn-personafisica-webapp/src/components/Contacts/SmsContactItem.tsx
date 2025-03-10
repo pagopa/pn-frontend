@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { Box, Button, ButtonProps, Chip, Divider, TextFieldProps, Typography } from '@mui/material';
@@ -14,9 +15,14 @@ import {
   IOAllowedValues,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
+import {
+  DIGITAL_DOMICILE_ACTIVATION,
+  DIGITAL_DOMICILE_MANAGEMENT,
+} from '../../navigation/routes.const';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -52,11 +58,13 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps }) 
   const { t } = useTranslation(['common', 'recapiti']);
   const { defaultSERCQ_SENDAddress, defaultPECAddress, defaultSMSAddress, addresses } =
     useAppSelector(contactsSelectors.selectAddresses);
+  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
   });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  const location = useLocation();
   // currentAddress is needed to store what address we are creating/editing/removing
   // because this variable isn't been used to render, we can use useRef
   const currentAddress = useRef<{ value: string }>({
@@ -68,10 +76,15 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps }) 
 
   const currentValue = defaultSMSAddress?.value ?? '';
 
+  const fromSercqSend = [DIGITAL_DOMICILE_ACTIVATION, DIGITAL_DOMICILE_MANAGEMENT].includes(
+    location.pathname
+  );
+
   const handleSubmit = (value: string) => {
+    const source = externalEvent?.source ?? ContactSource.RECAPITI;
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_START, {
       senderId: 'default',
-      source: ContactSource.RECAPITI,
+      source,
     });
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { value };
@@ -113,7 +126,10 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps }) 
           return;
         }
 
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_SUCCESS, 'default');
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_SUCCESS, {
+          senderId: 'default',
+          fromSercqSend,
+        });
 
         // contact has already been verified
         // show success message

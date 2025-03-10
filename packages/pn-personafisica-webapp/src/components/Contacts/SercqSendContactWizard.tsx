@@ -77,10 +77,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWizar
       .then((consent) => {
         // eslint-disable-next-line functional/immutable-data
         tosPrivacy.current = consent;
-        const source =
-          externalEvent?.destination === ChannelType.SERCQ_SEND
-            ? externalEvent?.source ?? ContactSource.RECAPITI
-            : ContactSource.RECAPITI;
+        const source = externalEvent?.source ?? ContactSource.RECAPITI;
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
           senderId: 'default',
           source,
