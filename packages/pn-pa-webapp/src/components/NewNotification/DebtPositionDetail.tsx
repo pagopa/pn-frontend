@@ -240,10 +240,13 @@ const DebtPositionDetail: React.FC<Props> = ({
         then: yup
           .mixed()
           .required(tc('required-field'))
-          .test('is-currency', `${t('notification-fee.pa-fee')} ${tc('invalid')}`, (value) =>
-            dataRegex.currency.test(String(value))
+          .test(
+            'is-currency',
+            `${t('notification-fee.pa-fee-invalid', { maxValue: 1 })}`,
+            (value) => dataRegex.currency.test(String(value))
           ),
       }),
+
     vat: yup
       .number()
       .optional()
@@ -438,7 +441,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                 />
               </RadioGroup>
               {isDeliveryMode && (
-                <Stack direction={'row'} justifyContent="space-between">
+                <Stack direction={'row'}>
                   <TextField
                     required
                     size="small"

@@ -509,6 +509,7 @@
           "description": "Scegli il tipo di costo di notifica: puoi scegliere fra quello già incluso nell’atto oppure inserire un costo di notifica personalizzato a carico del destinatario.",
           "disclaimer": "L’IVA verrà applicata solo alle notifiche recapitate in modalità cartacea.",
           "pa-fee": "Costo di notifica",
+          "pa-fee-invalid": "Scrivi un valore minore o uguale a {{maxValue}} con massimo 2 decimali",
           "vat": "IVA"
         },
         "pagopa-int-mode": {
