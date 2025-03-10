@@ -19,7 +19,6 @@ import {
   Typography,
 } from '@mui/material';
 import { CustomDropdown, dataRegex } from '@pagopa-pn/pn-commons';
-import { formatStringToNumberCurrency } from '@pagopa-pn/pn-commons/src/utility/currency.utility';
 
 import {
   NewNotification,
@@ -211,10 +210,13 @@ const DebtPositionDetail: React.FC<Props> = ({
         then: yup
           .mixed()
           .required(tc('required-field'))
-          .test('is-currency', `${t('notification-fee.pa-fee')} ${tc('invalid')}`, (value) =>
-            dataRegex.currency.test(String(value))
+          .test(
+            'is-currency',
+            `${t('notification-fee.pa-fee-invalid', { maxValue: 1 })}`,
+            (value) => dataRegex.currency.test(String(value))
           ),
       }),
+
     vat: yup
       .number()
       .optional()
@@ -382,9 +384,6 @@ const DebtPositionDetail: React.FC<Props> = ({
       );
       await formik.setFieldValue('recipients', updatedRecipients);
     }
-    if (name === 'paFee') {
-      formatStringToNumberCurrency(value);
-    }
     await formik.setFieldValue(name, value);
   };
 
@@ -422,8 +421,8 @@ const DebtPositionDetail: React.FC<Props> = ({
             {/* TODO: CHECK IF ARIA-LIVE IS ENOUGH */}
             <Stack
               flexDirection={'row'}
-              justifyContent={'space-between'}
-              alignItems={'end'}
+              // justifyContent={'space-between'}
+              // alignItems={'end'}
               aria-live="polite"
             >
               <RadioGroup
@@ -446,11 +445,12 @@ const DebtPositionDetail: React.FC<Props> = ({
                 />
               </RadioGroup>
               {isDeliveryMode && (
-                <Stack direction={'row'} justifyContent="space-between">
+                <Stack direction={'row'}>
                   <TextField
                     required
                     size="small"
                     id="paFee"
+                    fullWidth
                     name="paFee"
                     label={t('notification-fee.pa-fee')}
                     value={formik.values.paFee}
