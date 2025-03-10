@@ -50,7 +50,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
       return fieldMeta(`${id}.${fieldId}`).error;
     }
 
-    return null;
+    return undefined;
   };
 
   return (
@@ -67,6 +67,9 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
         calcSha256
         fileUploaded={{ file }}
         showHashCode={false}
+        externalError={
+          fieldMeta(`${id}.file`).touched ? getError('file.sha256.hashBase64', false) : undefined
+        }
       />
 
       <TextField
@@ -81,10 +84,11 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
         size="small"
         margin="normal"
         required
+        sx={{ mt: 3 }}
       />
 
       {(notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE || showDeleteButton) && (
-        <Stack direction={isMobile ? 'column' : 'row'}>
+        <Stack direction={isMobile ? 'column' : 'row'} mt={2}>
           {notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
             <Stack>
               <FormControlLabel
@@ -125,7 +129,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
       )}
 
       {showDeleteButton && (
-        <Alert severity="warning">
+        <Alert severity="warning" sx={{ mt: 4 }}>
           {t('new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment')}
         </Alert>
       )}

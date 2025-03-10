@@ -50,7 +50,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       return fieldMeta(`${id}.${fieldId}`).error;
     }
 
-    return null;
+    return undefined;
   };
 
   return (
@@ -66,8 +66,11 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
         calcSha256
         fileUploaded={{ file }}
         showHashCode={false}
+        externalError={
+          fieldMeta(`${id}.file`).touched ? getError('file.sha256.hashBase64', false) : undefined
+        }
       />
-      <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
+      <Stack direction={isMobile ? 'column' : 'row'} spacing={2} mt={3}>
         <TextField
           id="noticeCode"
           label={t(
@@ -101,7 +104,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       </Stack>
 
       {(notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE || showDeleteButton) && (
-        <Stack direction={isMobile ? 'column' : 'row'}>
+        <Stack direction={isMobile ? 'column' : 'row'} mt={2}>
           {notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
             <Stack>
               <FormControlLabel
