@@ -417,8 +417,8 @@ const DebtPositionDetail: React.FC<Props> = ({
             {/* TODO: CHECK IF ARIA-LIVE IS ENOUGH */}
             <Stack
               flexDirection={'row'}
-              // justifyContent={'space-between'}
-              // alignItems={'end'}
+              justifyContent={'space-between'}
+              alignItems={'end'}
               aria-live="polite"
             >
               <RadioGroup
