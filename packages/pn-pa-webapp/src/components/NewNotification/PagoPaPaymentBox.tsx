@@ -67,7 +67,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
         fileUploaded={{ file }}
         showHashCode={false}
         externalError={
-          fieldMeta(`${id}.file`).touched || fieldMeta(`${id}.file`).value
+          fieldMeta(`${id}.file`).touched || fieldMeta(`${id}.file.data`).value
             ? getError('file.sha256.hashBase64', false)
             : undefined
         }
