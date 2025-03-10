@@ -12,21 +12,28 @@ import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { getConfiguration } from '../../services/configuration.service';
 import { pecValidationSchema } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
 
 interface Props {
   isTransferring?: boolean;
   setShowPecWizard: (showPecWizard: boolean) => void;
+  onGoBack?: () => void;
 }
 
-const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecWizard }) => {
+const PecContactWizard: React.FC<Props> = ({
+  isTransferring = false,
+  setShowPecWizard,
+  onGoBack,
+}) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
   const [openCodeModal, setOpenCodeModal] = useState(false);
+  const { IS_DOD_ENABLED } = getConfiguration();
 
   const validationSchema = yup.object().shape({
     pec: pecValidationSchema(t),
@@ -70,6 +77,14 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
       .catch(() => {});
   };
 
+  const handlePreviousBtnClick = () => {
+    if (onGoBack && isTransferring) {
+      onGoBack();
+    } else {
+      return !IS_DOD_ENABLED ? navigate(-1) : setShowPecWizard(false);
+    }
+  };
+
   return (
     <>
       <PnWizard
@@ -84,7 +99,7 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
         slots={{
           prevButton: () => (
             <ButtonNaked
-              onClick={isTransferring ? () => navigate(-1) : () => setShowPecWizard(false)}
+              onClick={handlePreviousBtnClick}
               color="primary"
               size="medium"
               data-testid="prev-button"

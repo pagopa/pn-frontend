@@ -15,7 +15,7 @@ import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-common
 type DialogProps = {
   open: boolean;
   title: string;
-  subtitle: string;
+  subtitle: string | ReactNode;
   content?: string;
   slotProps?: {
     contentProps: TypographyProps;

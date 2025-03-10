@@ -254,7 +254,12 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWizar
       <InformativeDialog
         open={modalOpen === ModalType.DELIVERED}
         title={t('legal-contacts.sercq-send-wizard.step_1.delivered-dialog-title')}
-        subtitle={t('legal-contacts.sercq-send-wizard.step_1.delivered-dialog-description')}
+        subtitle={
+          <Trans
+            i18nKey="legal-contacts.sercq-send-wizard.step_1.delivered-dialog-description"
+            ns="recapiti"
+          />
+        }
         onConfirm={() => setModalOpen(null)}
       />
     </Box>
