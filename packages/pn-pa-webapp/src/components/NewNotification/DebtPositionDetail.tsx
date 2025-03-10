@@ -446,7 +446,6 @@ const DebtPositionDetail: React.FC<Props> = ({
                     required
                     size="small"
                     id="paFee"
-                    fullWidth
                     name="paFee"
                     label={t('notification-fee.pa-fee')}
                     value={formik.values.paFee}

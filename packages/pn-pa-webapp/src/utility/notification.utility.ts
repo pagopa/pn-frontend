@@ -185,8 +185,6 @@ export function newNotificationMapper(newNotification: NewNotification): BffNewN
 
   // format recipients
   newNotificationParsed.recipients = newNotificationRecipientsMapper(newNotification.recipients);
-  // format paFee
-  newNotificationParsed.paFee = newNotificationParsed.paFee ? parseFloat(newNotificationParsed.paFee.toFixed(2)) : undefined;
   // format attachments
   newNotificationParsed.documents = newNotificationAttachmentsMapper(newNotification.documents);
   /* eslint-enable functional/immutable-data */
