@@ -18,6 +18,7 @@ import {
   NewNotificationPagoPaPayment,
   NewNotificationPayment,
   NewNotificationRecipient,
+  NotificationFeePolicy,
   PaymentModel,
 } from '../models/NewNotification';
 
@@ -175,6 +176,10 @@ export function newNotificationMapper(newNotification: NewNotification): BffNewN
 
   if (additionalLanguages) {
     newNotificationParsed.additionalLanguages = additionalLanguages;
+  }
+
+  if (!newNotification.notificationFeePolicy) {
+    newNotificationParsed.notificationFeePolicy = NotificationFeePolicy.FLAT_RATE;
   }
 
   // format recipients
