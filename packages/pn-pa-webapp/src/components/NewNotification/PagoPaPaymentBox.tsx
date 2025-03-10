@@ -145,7 +145,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       )}
 
       {showDeleteButton && notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
-        <Alert severity="warning">
+        <Alert severity="warning" sx={{ mt: 4 }}>
           {t('new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment')}
         </Alert>
       )}
