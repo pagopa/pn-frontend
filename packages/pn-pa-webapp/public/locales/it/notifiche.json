@@ -525,6 +525,7 @@
         },
         "identical-notice-codes-error": "C'è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
         "at-least-one-applycost": "Applica i costi di notifica almeno ad un pagamento",
+        "identical-sha256-error": "Non è possibile caricare due file identici",
         "payment-methods": {
           "title": "Modelli di pagamento",
           "pagopa-notice": "Avviso pagoPA",
