@@ -68,7 +68,9 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
         fileUploaded={{ file }}
         showHashCode={false}
         externalError={
-          fieldMeta(`${id}.file`).touched ? getError('file.sha256.hashBase64', false) : undefined
+          fieldMeta(`${id}.file`).touched || fieldMeta(`${id}.file`).value
+            ? getError('file.sha256.hashBase64', false)
+            : undefined
         }
       />
 

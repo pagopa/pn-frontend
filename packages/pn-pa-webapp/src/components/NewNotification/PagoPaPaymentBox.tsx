@@ -67,7 +67,9 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
         fileUploaded={{ file }}
         showHashCode={false}
         externalError={
-          fieldMeta(`${id}.file`).touched ? getError('file.sha256.hashBase64', false) : undefined
+          fieldMeta(`${id}.file`).touched || fieldMeta(`${id}.file`).value
+            ? getError('file.sha256.hashBase64', false)
+            : undefined
         }
       />
       <Stack direction={isMobile ? 'column' : 'row'} spacing={2} mt={3}>
