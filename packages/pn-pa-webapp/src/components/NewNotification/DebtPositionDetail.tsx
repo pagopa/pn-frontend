@@ -40,7 +40,6 @@ import {
   checkApplyCost,
   f24ValidationSchema,
   identicalIUV,
-  identicalSHA,
   pagoPaValidationSchema,
 } from '../../utility/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
@@ -284,19 +283,6 @@ const DebtPositionDetail: React.FC<Props> = ({
         }
 
         const errors = checkApplyCost(values as any);
-
-        if (errors.length === 0) {
-          return true;
-        }
-
-        return new yup.ValidationError(
-          errors.map(
-            (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
-          )
-        );
-      })
-      .test('checkDuplicatedFile', t('identical-sha256-error'), function (values) {
-        const errors = identicalSHA(values as any);
 
         if (errors.length === 0) {
           return true;
