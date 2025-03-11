@@ -12,6 +12,7 @@ import SercqSendContactWizard from '../../components/Contacts/SercqSendContactWi
 import { IOAllowedValues } from '../../models/contacts';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
+import { getConfiguration } from '../../services/configuration.service';
 import EmailSmsContactWizard from './EmailSmsContactWizard';
 
 type Props = {
@@ -31,12 +32,13 @@ type ModalType = {
 const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
+  const { IS_DOD_ENABLED } = getConfiguration();
   const { defaultAPPIOAddress, defaultSMSAddress, defaultEMAILAddress, defaultSERCQ_SENDAddress } =
     useAppSelector(contactsSelectors.selectAddresses);
 
   const [modal, setModal] = useState<ModalType>({ open: false });
   const [activeStep, setActiveStep] = useState(0);
-  const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress);
+  const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress || !IS_DOD_ENABLED);
 
   const showIOStep = useMemo(
     () => defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.DISABLED,

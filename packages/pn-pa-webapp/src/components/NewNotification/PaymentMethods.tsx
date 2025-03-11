@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import AddIcon from '@mui/icons-material/Add';
-import { Divider, Paper, Stack, Typography } from '@mui/material';
+import { Box, Divider, Paper, Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import {
@@ -46,7 +46,7 @@ const PaymentMethods: React.FC<Props> = ({
     sha256?: { hashBase64: string; hashHex: string }
   ) => {
     const payment = formik.values.recipients[taxId][paymentType][index];
-
+    await formik.setFieldTouched(`recipients.${taxId}.${paymentType}.${index}.file`, true, false);
     await formik.setFieldValue(
       `recipients.${taxId}.${paymentType}.${index}`,
       {
@@ -57,9 +57,8 @@ const PaymentMethods: React.FC<Props> = ({
           versionToken: '',
         },
       },
-      false
+      true
     );
-    await formik.setFieldTouched(`recipients.${taxId}.${paymentType}.${index}.file`, true, true);
   };
 
   const removeFileHandler = async (taxId: string, paymentType: 'pagoPa' | 'f24', index: number) => {
@@ -139,85 +138,73 @@ const PaymentMethods: React.FC<Props> = ({
             </Typography>
 
             {formik.values.recipients[recipientKey].pagoPa.length > 0 && (
-              <Stack
-                spacing={3}
-                mt={3}
-                p={3}
-                border={1}
-                borderColor="divider"
-                borderRadius={1}
-                divider={<Divider aria-hidden="true" />}
-              >
+              <Box mt={3} p={3} border={1} borderColor="divider" borderRadius={1}>
                 <Typography fontSize="16px" fontWeight={600} data-testid="pagoPaPaymentBox">
                   {`${t('pagopa.attach-pagopa-notice')}`}
                 </Typography>
-                {formik.values.recipients[recipientKey].pagoPa.map((pagoPaPayment, index) => (
-                  <PagoPaPaymentBox
-                    id={`recipients.${recipientKey}.pagoPa.${index}`}
-                    key={`${recipientKey}-pagoPa-${pagoPaPayment.idx}`}
-                    onFileUploaded={(_, file, sha256) =>
-                      fileUploadedHandler(recipientKey, 'pagoPa', index, file, sha256)
-                    }
-                    onRemoveFile={() => removeFileHandler(recipientKey, 'pagoPa', index)}
-                    pagoPaPayment={pagoPaPayment}
-                    notificationFeePolicy={formik.values.notificationFeePolicy}
-                    handleChange={(event) => handleChange(event, recipientKey, 'pagoPa', index)}
-                    showDeleteButton={index > 0}
-                    onDeletePayment={() => handleRemovePagoPa(recipientKey, index)}
-                    fieldMeta={(fieldName) => formik.getFieldMeta(fieldName)}
-                  />
-                ))}
+                <Stack mt={3} divider={<Divider sx={{ my: 3 }} />}>
+                  {formik.values.recipients[recipientKey].pagoPa.map((pagoPaPayment, index) => (
+                    <PagoPaPaymentBox
+                      id={`recipients.${recipientKey}.pagoPa.${index}`}
+                      key={`${recipientKey}-pagoPa-${pagoPaPayment.idx}`}
+                      onFileUploaded={(_, file, sha256) =>
+                        fileUploadedHandler(recipientKey, 'pagoPa', index, file, sha256)
+                      }
+                      onRemoveFile={() => removeFileHandler(recipientKey, 'pagoPa', index)}
+                      pagoPaPayment={pagoPaPayment}
+                      notificationFeePolicy={formik.values.notificationFeePolicy}
+                      handleChange={(event) => handleChange(event, recipientKey, 'pagoPa', index)}
+                      showDeleteButton={index > 0}
+                      onDeletePayment={() => handleRemovePagoPa(recipientKey, index)}
+                      fieldMeta={(fieldName) => formik.getFieldMeta(fieldName)}
+                    />
+                  ))}
 
-                <ButtonNaked
-                  color="primary"
-                  startIcon={<AddIcon />}
-                  onClick={() => handleAddNewPagoPa(recipientKey)}
-                  sx={{ justifyContent: 'start' }}
-                >
-                  {t('pagopa.add-new-pagopa-notice')}
-                </ButtonNaked>
-              </Stack>
+                  <ButtonNaked
+                    color="primary"
+                    startIcon={<AddIcon />}
+                    onClick={() => handleAddNewPagoPa(recipientKey)}
+                    sx={{ justifyContent: 'start' }}
+                  >
+                    {t('pagopa.add-new-pagopa-notice')}
+                  </ButtonNaked>
+                </Stack>
+              </Box>
             )}
 
             {formik.values.recipients[recipientKey].f24.length > 0 && (
-              <Stack
-                spacing={3}
-                mt={3}
-                p={3}
-                border={1}
-                borderColor="divider"
-                borderRadius={1}
-                divider={<Divider />}
-              >
+              <Box mt={3} p={3} border={1} borderColor="divider" borderRadius={1}>
                 <Typography fontSize="16px" fontWeight={600} data-testid="f24PaymentBox">
                   {t('f24.attach-f24')}
                 </Typography>
-                {formik.values.recipients[recipientKey].f24.map((f24Payment, index) => (
-                  <F24PaymentBox
-                    id={`recipients.${recipientKey}.f24.${index}`}
-                    key={`${recipientKey}-f24-${f24Payment?.idx}`}
-                    onFileUploaded={(_, file, sha256) =>
-                      fileUploadedHandler(recipientKey, 'f24', index, file, sha256)
-                    }
-                    onRemoveFile={() => removeFileHandler(recipientKey, 'f24', index)}
-                    f24Payment={f24Payment}
-                    notificationFeePolicy={formik.values.notificationFeePolicy}
-                    handleChange={(event) => handleChange(event, recipientKey, 'f24', index)}
-                    showDeleteButton={index > 0}
-                    onDeletePayment={() => handleRemoveF24(recipientKey, index)}
-                    fieldMeta={(fieldName) => formik.getFieldMeta(fieldName)}
-                  />
-                ))}
+                <Stack mt={3} divider={<Divider sx={{ my: 3 }} aria-hidden="true" />}>
+                  {formik.values.recipients[recipientKey].f24.map((f24Payment, index) => (
+                    <F24PaymentBox
+                      id={`recipients.${recipientKey}.f24.${index}`}
+                      key={`${recipientKey}-f24-${f24Payment?.idx}`}
+                      onFileUploaded={(_, file, sha256) =>
+                        fileUploadedHandler(recipientKey, 'f24', index, file, sha256)
+                      }
+                      onRemoveFile={() => removeFileHandler(recipientKey, 'f24', index)}
+                      f24Payment={f24Payment}
+                      notificationFeePolicy={formik.values.notificationFeePolicy}
+                      handleChange={(event) => handleChange(event, recipientKey, 'f24', index)}
+                      showDeleteButton={index > 0}
+                      onDeletePayment={() => handleRemoveF24(recipientKey, index)}
+                      fieldMeta={(fieldName) => formik.getFieldMeta(fieldName)}
+                    />
+                  ))}
 
-                <ButtonNaked
-                  color="primary"
-                  startIcon={<AddIcon />}
-                  onClick={() => handleAddNewF24(recipientKey)}
-                  sx={{ justifyContent: 'start' }}
-                >
-                  {t('f24.add-new-f24')}
-                </ButtonNaked>
-              </Stack>
+                  <ButtonNaked
+                    color="primary"
+                    startIcon={<AddIcon />}
+                    onClick={() => handleAddNewF24(recipientKey)}
+                    sx={{ justifyContent: 'start' }}
+                  >
+                    {t('f24.add-new-f24')}
+                  </ButtonNaked>
+                </Stack>
+              </Box>
             )}
           </Paper>
         );

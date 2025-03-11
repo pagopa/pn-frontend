@@ -50,7 +50,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       return fieldMeta(`${id}.${fieldId}`).error;
     }
 
-    return null;
+    return undefined;
   };
 
   return (
@@ -66,8 +66,13 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
         calcSha256
         fileUploaded={{ file }}
         showHashCode={false}
+        externalError={
+          fieldMeta(`${id}.file`).touched || fieldMeta(`${id}.file.data`).value
+            ? getError('file.sha256.hashBase64', false)
+            : undefined
+        }
       />
-      <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
+      <Stack direction={isMobile ? 'column' : 'row'} spacing={2} mt={3}>
         <TextField
           id="noticeCode"
           label={t(
@@ -101,7 +106,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       </Stack>
 
       {(notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE || showDeleteButton) && (
-        <Stack direction={isMobile ? 'column' : 'row'}>
+        <Stack direction={isMobile ? 'column' : 'row'} mt={2}>
           {notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
             <Stack>
               <FormControlLabel
@@ -142,7 +147,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       )}
 
       {showDeleteButton && notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
-        <Alert severity="warning">
+        <Alert severity="warning" sx={{ mt: 4 }}>
           {t('new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment')}
         </Alert>
       )}
