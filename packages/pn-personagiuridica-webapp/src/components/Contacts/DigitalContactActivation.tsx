@@ -15,13 +15,14 @@ import EmailSmsContactWizard from './EmailSmsContactWizard';
 
 type Props = {
   isTransferring?: boolean;
+  onGoBack?: () => void;
 };
 
 type ModalType = {
   open: boolean;
 };
 
-const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) => {
+const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onGoBack }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const { IS_DOD_ENABLED } = getConfiguration();
@@ -65,7 +66,12 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
   const getNextButton = () => {
     if (activeStep === 0) {
       return (
-        <ButtonNaked onClick={() => navigate(-1)} color="primary" size="medium" sx={{ mx: 'auto' }}>
+        <ButtonNaked
+          onClick={onGoBack ? () => onGoBack() : () => navigate(-1)}
+          color="primary"
+          size="medium"
+          sx={{ mx: 'auto' }}
+        >
           {t('button.annulla', { ns: 'common' })}
         </ButtonNaked>
       );
@@ -91,7 +97,13 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
   };
 
   if (showPecWizard) {
-    return <PecContactWizard setShowPecWizard={setShowPecWizard} isTransferring={isTransferring} />;
+    return (
+      <PecContactWizard
+        setShowPecWizard={setShowPecWizard}
+        isTransferring={isTransferring}
+        onGoBack={onGoBack}
+      />
+    );
   }
 
   return (

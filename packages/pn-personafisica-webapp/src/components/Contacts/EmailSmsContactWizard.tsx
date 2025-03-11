@@ -35,7 +35,11 @@ const EmailSmsContactWizard: React.FC = () => {
     contactsSelectors.selectAddresses
   );
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
-  const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
+  const emailContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
+    toggleEdit: () => {},
+    resetForm: () => Promise.resolve(),
+  });
+  const smsContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
   });
@@ -114,14 +118,17 @@ const EmailSmsContactWizard: React.FC = () => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t(`courtesy-contacts.email-added-successfully`, {
+            message: t(`courtesy-contacts.${channelType.toLowerCase()}-added-successfully`, {
               ns: 'recapiti',
             }),
           })
         );
         setModalOpen(null);
-        if (emailValue || smsValue) {
-          digitalContactRef.current.toggleEdit();
+        if (currentAddress.current.channelType === ChannelType.EMAIL && emailValue) {
+          emailContactRef.current.toggleEdit();
+        }
+        if (currentAddress.current.channelType === ChannelType.SMS && smsValue) {
+          smsContactRef.current.toggleEdit();
         }
       })
       .catch(() => {});
@@ -129,10 +136,13 @@ const EmailSmsContactWizard: React.FC = () => {
 
   const handleCancelCode = async () => {
     setModalOpen(null);
-    if (emailValue || smsValue) {
-      digitalContactRef.current.toggleEdit();
+    if (currentAddress.current.channelType === ChannelType.EMAIL && emailValue) {
+      emailContactRef.current.toggleEdit();
+      await emailContactRef.current.resetForm();
+    } else if (currentAddress.current.channelType === ChannelType.SMS && smsValue) {
+      smsContactRef.current.toggleEdit();
+      await smsContactRef.current.resetForm();
     }
-    await digitalContactRef.current.resetForm();
   };
 
   return (
@@ -150,7 +160,7 @@ const EmailSmsContactWizard: React.FC = () => {
         label={t(`courtesy-contacts.email-to-add`, { ns: 'recapiti' })}
         value={emailValue}
         channelType={ChannelType.EMAIL}
-        ref={digitalContactRef}
+        ref={emailContactRef}
         inputProps={{
           label: t(`courtesy-contacts.link-email-placeholder`, {
             ns: 'recapiti',
@@ -167,6 +177,9 @@ const EmailSmsContactWizard: React.FC = () => {
           button: {
             sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
           },
+          container: {
+            width: '100%',
+          },
         }}
       />
 
@@ -176,7 +189,7 @@ const EmailSmsContactWizard: React.FC = () => {
           label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
           value={smsValue}
           channelType={ChannelType.SMS}
-          ref={digitalContactRef}
+          ref={smsContactRef}
           inputProps={{
             label: t(`courtesy-contacts.link-sms-placeholder`, {
               ns: 'recapiti',
@@ -193,6 +206,9 @@ const EmailSmsContactWizard: React.FC = () => {
             },
             button: {
               sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
+            },
+            container: {
+              width: '100%',
             },
           }}
         />
