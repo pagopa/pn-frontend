@@ -90,12 +90,10 @@ const FilterNotificationsFormBody = ({
           error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
           helperText={
             formikInstance.touched.iunMatch &&
-            formikInstance.errors.iunMatch && (
-              <FormHelperText error aria-live="assertive">
-                {String(formikInstance.errors.iunMatch)}
-              </FormHelperText>
-            )
+            formikInstance.errors.iunMatch &&
+            String(formikInstance.errors.iunMatch)
           }
+          FormHelperTextProps={{ error: true, 'aria-live': 'assertive' }}
           fullWidth
           sx={{ marginBottom: isMobile ? '20px' : '0' }}
           size="small"
@@ -129,12 +127,10 @@ const FilterNotificationsFormBody = ({
                 type: 'text',
                 'data-testid': 'input(start date)',
               },
-              helperText: (
-                <FormHelperText error aria-live="assertive">
-                  {!!formikInstance.errors.startDate &&
-                    t('filters.errors.data_a', { ns: 'notifiche' })}
-                </FormHelperText>
-              ),
+              helperText:
+                !!formikInstance.errors.startDate &&
+                t('filters.errors.data_a', { ns: 'notifiche' }),
+              FormHelperTextProps: { error: true, 'aria-live': 'assertive' },
             },
           }}
           disableFuture={true}
@@ -169,12 +165,9 @@ const FilterNotificationsFormBody = ({
                 type: 'text',
                 'data-testid': 'input(end date)',
               },
-              helperText: (
-                <FormHelperText sx={{ ml: 0 }} error aria-live="assertive">
-                  {!!formikInstance.errors.endDate &&
-                    t('filters.errors.data_a', { ns: 'notifiche' })}
-                </FormHelperText>
-              ),
+              helperText:
+                !!formikInstance.errors.endDate && t('filters.errors.data_a', { ns: 'notifiche' }),
+              FormHelperTextProps: { error: true, 'aria-live': 'assertive', sx: { ml: 0 } },
             },
           }}
           disableFuture={true}

@@ -2,7 +2,7 @@ import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { FormHelperText, Grid, TextField } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
 import {
   CustomDatePicker,
   DATE_FORMAT,
@@ -91,11 +91,10 @@ const FilterNotificationsFormBody = ({
           helperText={
             formikInstance.touched.iunMatch &&
             formikInstance.errors.iunMatch && (
-              <FormHelperText error aria-live="assertive">
-                {String(formikInstance.errors.iunMatch)}
-              </FormHelperText>
+                String(formikInstance.errors.iunMatch)
             )
           }
+          FormHelperTextProps={{ error: true, "aria-live": "assertive" }}
           fullWidth
           sx={{ marginBottom: isMobile ? '20px' : '0' }}
           size="small"
@@ -130,11 +129,10 @@ const FilterNotificationsFormBody = ({
                 'data-testid': 'input(start date)',
               },
               helperText: (
-                <FormHelperText error aria-live="assertive">
-                  {!!formikInstance.errors.startDate &&
-                    t('filters.errors.data_a', { ns: 'notifiche' })}
-                </FormHelperText>
+                  !!formikInstance.errors.startDate &&
+                    t('filters.errors.data_a', { ns: 'notifiche' })
               ),
+              FormHelperTextProps: { error: true, 'aria-live': 'assertive' }
             },
           }}
           disableFuture={true}
@@ -170,11 +168,14 @@ const FilterNotificationsFormBody = ({
                 'data-testid': 'input(end date)',
               },
               helperText: (
-                <FormHelperText sx={{ ml: 0 }} error aria-live="assertive">
-                  {!!formikInstance.errors.endDate &&
-                    t('filters.errors.data_a', { ns: 'notifiche' })}
-                </FormHelperText>
+                  !!formikInstance.errors.endDate &&
+                    t('filters.errors.data_a', { ns: 'notifiche' })
               ),
+              FormHelperTextProps: {
+                error: true,
+                "aria-live": "assertive",
+                sx: { ml: 0 },
+              },
             },
           }}
           disableFuture={true}
