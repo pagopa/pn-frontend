@@ -58,7 +58,9 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
       <FileUpload
         data-testid="fileUploadInput"
         uploadText={
-          isMobile ? t('new-notification.drag-doc-mobile') : t('new-notification.drag-doc-pc')
+          isMobile
+            ? t('new-notification.drag-doc-mobile')
+            : t('new-notification.drag-doc-with-format-pc', { type: '.json' })
         }
         accept="application/json"
         onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
