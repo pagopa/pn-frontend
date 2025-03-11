@@ -90,8 +90,7 @@ const FilterNotificationsFormBody = ({
           error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
           helperText={
             formikInstance.touched.iunMatch &&
-            formikInstance.errors.iunMatch &&
-            String(formikInstance.errors.iunMatch)
+            formikInstance.errors.iunMatch?.toString()
           }
           FormHelperTextProps={{ 'aria-live': 'assertive' }}
           fullWidth
