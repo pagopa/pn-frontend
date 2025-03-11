@@ -90,11 +90,10 @@ const FilterNotificationsFormBody = ({
           error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
           helperText={
             formikInstance.touched.iunMatch &&
-            formikInstance.errors.iunMatch && (
-                String(formikInstance.errors.iunMatch)
-            )
+            formikInstance.errors.iunMatch &&
+            String(formikInstance.errors.iunMatch)
           }
-          FormHelperTextProps={{ error: true, "aria-live": "assertive" }}
+          FormHelperTextProps={{ 'aria-live': 'assertive' }}
           fullWidth
           sx={{ marginBottom: isMobile ? '20px' : '0' }}
           size="small"
@@ -128,11 +127,10 @@ const FilterNotificationsFormBody = ({
                 type: 'text',
                 'data-testid': 'input(start date)',
               },
-              helperText: (
-                  !!formikInstance.errors.startDate &&
-                    t('filters.errors.data_a', { ns: 'notifiche' })
-              ),
-              FormHelperTextProps: { error: true, 'aria-live': 'assertive' }
+              helperText:
+                !!formikInstance.errors.startDate &&
+                t('filters.errors.data_a', { ns: 'notifiche' }),
+              FormHelperTextProps: { 'aria-live': 'assertive' },
             },
           }}
           disableFuture={true}
@@ -167,13 +165,10 @@ const FilterNotificationsFormBody = ({
                 type: 'text',
                 'data-testid': 'input(end date)',
               },
-              helperText: (
-                  !!formikInstance.errors.endDate &&
-                    t('filters.errors.data_a', { ns: 'notifiche' })
-              ),
+              helperText:
+                !!formikInstance.errors.endDate && t('filters.errors.data_a', { ns: 'notifiche' }),
               FormHelperTextProps: {
-                error: true,
-                "aria-live": "assertive",
+                'aria-live': 'assertive',
                 sx: { ml: 0 },
               },
             },
