@@ -27,9 +27,14 @@ import ContactCodeDialog from './ContactCodeDialog';
 interface Props {
   isTransferring?: boolean;
   setShowPecWizard: (showPecWizard: boolean) => void;
+  onGoBack?: () => void;
 }
 
-const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecWizard }) => {
+const PecContactWizard: React.FC<Props> = ({
+  isTransferring = false,
+  setShowPecWizard,
+  onGoBack,
+}) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -93,6 +98,14 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
       .catch(() => {});
   };
 
+  const handlePreviousBtnClick = () => {
+    if (onGoBack && isTransferring) {
+      onGoBack();
+    } else {
+      return !IS_DOD_ENABLED ? navigate(-1) : setShowPecWizard(false);
+    }
+  };
+
   return (
     <>
       <PnWizard
@@ -107,11 +120,7 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
         slots={{
           prevButton: () => (
             <ButtonNaked
-              onClick={
-                isTransferring || !IS_DOD_ENABLED
-                  ? () => navigate(-1)
-                  : () => setShowPecWizard(false)
-              }
+              onClick={handlePreviousBtnClick}
               color="primary"
               size="medium"
               data-testid="prev-button"
