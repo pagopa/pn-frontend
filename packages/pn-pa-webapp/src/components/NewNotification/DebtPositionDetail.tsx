@@ -68,7 +68,7 @@ const DebtPositionDetail: React.FC<Props> = ({
     keyPrefix: 'new-notification.steps.debt-position-detail',
   });
   const { t: tc } = useTranslation(['common']);
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile('sm');
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
   const hasPagoPa = notification.recipients.some(
@@ -416,7 +416,7 @@ const DebtPositionDetail: React.FC<Props> = ({
             <Stack
               flexDirection={isMobile ? 'column' : 'row'}
               justifyContent={'space-between'}
-              alignItems={'end'}
+              alignItems={isMobile ? 'flex-start' : 'flex-end'}
               aria-live="polite"
             >
               <RadioGroup
