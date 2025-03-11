@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import _, { mapValues } from 'lodash';
+import _ from 'lodash';
 import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -18,7 +18,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { CustomDropdown, dataRegex } from '@pagopa-pn/pn-commons';
+import { CustomDropdown, dataRegex, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotification,
@@ -40,6 +40,7 @@ import {
   checkApplyCost,
   f24ValidationSchema,
   identicalIUV,
+  identicalSHA,
   pagoPaValidationSchema,
 } from '../../utility/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
@@ -68,6 +69,7 @@ const DebtPositionDetail: React.FC<Props> = ({
     keyPrefix: 'new-notification.steps.debt-position-detail',
   });
   const { t: tc } = useTranslation(['common']);
+  const isMobile = useIsMobile('sm');
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
   const hasPagoPa = notification.recipients.some(
@@ -79,8 +81,8 @@ const DebtPositionDetail: React.FC<Props> = ({
   const { PAYMENT_INFO_LINK } = getConfiguration();
   const dispatch = useAppDispatch();
 
-  const newPagopaPayment = (id: string, idx: number): NewNotificationPagoPaPayment => ({
-    id,
+  const newPagopaPayment = (taxId: string, idx: number): NewNotificationPagoPaPayment => ({
+    id: `${taxId}-${idx}-pagoPa`,
     idx,
     contentType: 'application/pdf',
     file: emptyFileData,
@@ -93,8 +95,8 @@ const DebtPositionDetail: React.FC<Props> = ({
     },
   });
 
-  const newF24Payment = (id: string, idx: number): NewNotificationF24Payment => ({
-    id,
+  const newF24Payment = (taxId: string, idx: number): NewNotificationF24Payment => ({
+    id: `${taxId}-${idx}-f24`,
     idx,
     contentType: 'application/json',
     file: emptyFileData,
@@ -109,7 +111,8 @@ const DebtPositionDetail: React.FC<Props> = ({
   const formatPayments = (): Array<NewNotificationRecipient> => {
     const recipients = _.cloneDeep(notification.recipients);
     return recipients.map((recipient) => {
-      const recipientData = formik.values.recipients[recipient.taxId];
+      const recipientKey = `${recipient.recipientType}-${recipient.taxId}`;
+      const recipientData = formik.values.recipients[recipientKey];
       const payments = [
         ...recipientData.pagoPa
           // .filter((payment) => payment?.file?.data)
@@ -161,7 +164,7 @@ const DebtPositionDetail: React.FC<Props> = ({
             const newPaymentIdx = lastPaymentIdx + 1;
 
             payments.push({
-              pagoPa: newPagopaPayment(`${recipient.taxId}-${newPaymentIdx}-pagoPa`, newPaymentIdx),
+              pagoPa: newPagopaPayment(recipient.taxId, newPaymentIdx),
             });
           }
           if (
@@ -171,7 +174,7 @@ const DebtPositionDetail: React.FC<Props> = ({
             const lastPaymentIdx = payments[payments.length - 1]?.f24?.idx ?? -1;
             const newPaymentIdx = lastPaymentIdx + 1;
             payments.push({
-              f24: newF24Payment(`${recipient.taxId}-${newPaymentIdx}-f24`, newPaymentIdx),
+              f24: newF24Payment(recipient.taxId, newPaymentIdx),
             });
           }
           /* eslint-enable functional/immutable-data */
@@ -185,7 +188,7 @@ const DebtPositionDetail: React.FC<Props> = ({
 
           return {
             ...acc,
-            [recipient.taxId]: {
+            [`${recipient.recipientType}-${recipient.taxId}`]: {
               pagoPa: pagoPaPayments,
               f24: f24Payments,
             },
@@ -196,6 +199,35 @@ const DebtPositionDetail: React.FC<Props> = ({
     }),
     []
   );
+
+  const recipientSchema = () => {
+    const recipientSchema: { [key: string]: yup.ObjectSchema<any> } = {};
+    Object.keys(initialValues.recipients).forEach((recipientKey) => {
+      const taxId = recipientKey.split('-')[1];
+      const recipient = notification.recipients.find((r) => r.taxId === taxId);
+      const debtPosition = recipient?.debtPosition;
+
+      // eslint-disable-next-line functional/immutable-data
+      recipientSchema[recipientKey] = yup.object({
+        pagoPa: yup.array().of(
+          yup.object().when([], {
+            is: () =>
+              debtPosition === PaymentModel.PAGO_PA || debtPosition === PaymentModel.PAGO_PA_F24,
+            then: () => pagoPaValidationSchema(t, tc),
+          })
+        ),
+        f24: yup.array().of(
+          yup.object().when([], {
+            is: () =>
+              debtPosition === PaymentModel.F24 || debtPosition === PaymentModel.PAGO_PA_F24,
+            then: () => f24ValidationSchema(tc),
+          })
+        ),
+      });
+    });
+
+    return recipientSchema;
+  };
 
   const validationSchema = yup.object().shape({
     notificationFeePolicy: yup
@@ -210,10 +242,13 @@ const DebtPositionDetail: React.FC<Props> = ({
         then: yup
           .mixed()
           .required(tc('required-field'))
-          .test('is-currency', `${t('notification-fee.pa-fee')} ${tc('invalid')}`, (value) =>
-            dataRegex.currency.test(String(value))
+          .test(
+            'is-currency',
+            `${t('notification-fee.pa-fee-invalid', { maxValue: 1 })}`,
+            (value) => dataRegex.currency.test(String(value))
           ),
       }),
+
     vat: yup
       .number()
       .optional()
@@ -232,72 +267,51 @@ const DebtPositionDetail: React.FC<Props> = ({
 
         return !(hasPagoPaDebtPosition && value === PagoPaIntegrationMode.NONE);
       }),
-    recipients: yup.lazy((obj) =>
-      yup
-        .object(
-          mapValues(obj, (_, taxId) =>
-            yup.object({
-              pagoPa: yup.array().of(
-                yup.object().when([], {
-                  is: () => {
-                    const debtPosition = notification.recipients.find(
-                      (r) => r.taxId === taxId
-                    )?.debtPosition;
-                    return (
-                      debtPosition === PaymentModel.PAGO_PA ||
-                      debtPosition === PaymentModel.PAGO_PA_F24
-                    );
-                  },
-                  then: () => pagoPaValidationSchema(t, tc),
-                })
-              ),
-              f24: yup.array().of(
-                yup.object().when([], {
-                  is: () => {
-                    const debtPosition = notification.recipients.find(
-                      (r) => r.taxId === taxId
-                    )?.debtPosition;
-                    return (
-                      debtPosition === PaymentModel.F24 || debtPosition === PaymentModel.PAGO_PA_F24
-                    );
-                  },
-                  then: () => f24ValidationSchema(tc),
-                })
-              ),
-            })
+    recipients: yup
+      .object(recipientSchema())
+      .test('identicalIUV', t('identical-notice-codes-error'), function (values) {
+        const errors = identicalIUV(values as any);
+
+        if (errors.length === 0) {
+          return true;
+        }
+
+        return new yup.ValidationError(
+          errors.map(
+            (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
           )
-        )
-        .test('identicalIUV', t('identical-notice-codes-error'), function (values) {
-          const errors = identicalIUV(values as any);
+        );
+      })
+      .test('applyCostValidation', t('at-least-one-applycost'), function (values) {
+        if (this.parent.notificationFeePolicy !== NotificationFeePolicy.DELIVERY_MODE) {
+          return true;
+        }
 
-          if (errors.length === 0) {
-            return true;
-          }
+        const errors = checkApplyCost(values as any);
 
-          return new yup.ValidationError(
-            errors.map(
-              (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
-            )
-          );
-        })
-        .test('apply-cost-validation', t('at-least-one-applycost'), function (values) {
-          if (this.parent.notificationFeePolicy !== NotificationFeePolicy.DELIVERY_MODE) {
-            return true;
-          }
+        if (errors.length === 0) {
+          return true;
+        }
 
-          const validationErrors = checkApplyCost(values as any);
+        return new yup.ValidationError(
+          errors.map(
+            (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
+          )
+        );
+      })
+      .test('checkDuplicatedFile', t('identical-sha256-error'), function (values) {
+        const errors = identicalSHA(values as any);
 
-          if (validationErrors.length === 0) {
-            return true;
-          }
+        if (errors.length === 0) {
+          return true;
+        }
 
-          return new yup.ValidationError(
-            validationErrors.map(
-              (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
-            )
-          );
-        })
-    ),
+        return new yup.ValidationError(
+          errors.map(
+            (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
+          )
+        );
+      }),
   });
 
   const updateRefAfterUpload = async (paymentPayload: Array<NewNotificationRecipient>) => {
@@ -417,9 +431,9 @@ const DebtPositionDetail: React.FC<Props> = ({
             <FormBoxSubtitle text={t('notification-fee.description')} />
             {/* TODO: CHECK IF ARIA-LIVE IS ENOUGH */}
             <Stack
-              flexDirection={'row'}
+              flexDirection={isMobile ? 'column' : 'row'}
               justifyContent={'space-between'}
-              alignItems={'end'}
+              alignItems={isMobile ? 'flex-start' : 'flex-end'}
               aria-live="polite"
             >
               <RadioGroup
@@ -442,7 +456,11 @@ const DebtPositionDetail: React.FC<Props> = ({
                 />
               </RadioGroup>
               {isDeliveryMode && (
-                <Stack direction={'row'} justifyContent="space-between">
+                <Stack
+                  direction={isMobile ? 'column' : 'row'}
+                  justifyContent={isMobile ? 'flex-start' : 'space-between'}
+                  sx={{ marginTop: '1rem' }}
+                >
                   <TextField
                     required
                     size="small"
@@ -460,7 +478,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                         </InputAdornment>
                       ),
                     }}
-                    sx={{ flexBasis: '75%', margin: '0rem 0.8rem' }}
+                    sx={{ flexBasis: '75%', margin: isMobile ? '1rem auto' : '0rem 0.8rem' }}
                   />
                   <CustomDropdown
                     id="vat"
