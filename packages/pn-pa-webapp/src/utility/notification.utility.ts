@@ -177,10 +177,6 @@ export function newNotificationMapper(newNotification: NewNotification): BffNewN
     documents: [],
   };
 
-  if (!newNotificationParsed.paFee) {
-    delete newNotificationParsed.paFee;
-  }
-
   if (additionalLanguages) {
     newNotificationParsed.additionalLanguages = additionalLanguages;
   }
@@ -194,6 +190,14 @@ export function newNotificationMapper(newNotification: NewNotification): BffNewN
   // format attachments
   newNotificationParsed.documents = newNotificationAttachmentsMapper(newNotification.documents);
   /* eslint-enable functional/immutable-data */
+
+  (Object.keys(newNotificationParsed) as Array<keyof BffNewNotificationRequest>).forEach((key) => {
+    if (!newNotificationParsed[key]) {
+      // eslint-disable-next-line functional/immutable-data
+      delete newNotificationParsed[key];
+    }
+  });
+
   return newNotificationParsed;
 }
 
