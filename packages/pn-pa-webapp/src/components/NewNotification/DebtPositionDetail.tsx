@@ -18,7 +18,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { CustomDropdown, dataRegex } from '@pagopa-pn/pn-commons';
+import { CustomDropdown, dataRegex, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotification,
@@ -69,6 +69,7 @@ const DebtPositionDetail: React.FC<Props> = ({
     keyPrefix: 'new-notification.steps.debt-position-detail',
   });
   const { t: tc } = useTranslation(['common']);
+  const isMobile = useIsMobile('sm');
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
   const hasPagoPa = notification.recipients.some(
@@ -427,9 +428,9 @@ const DebtPositionDetail: React.FC<Props> = ({
             <FormBoxSubtitle text={t('notification-fee.description')} />
             {/* TODO: CHECK IF ARIA-LIVE IS ENOUGH */}
             <Stack
-              flexDirection={'row'}
+              flexDirection={isMobile ? 'column' : 'row'}
               justifyContent={'space-between'}
-              alignItems={'end'}
+              alignItems={isMobile ? 'flex-start' : 'flex-end'}
               aria-live="polite"
             >
               <RadioGroup
@@ -452,7 +453,11 @@ const DebtPositionDetail: React.FC<Props> = ({
                 />
               </RadioGroup>
               {isDeliveryMode && (
-                <Stack direction={'row'} justifyContent="space-between">
+                <Stack
+                  direction={isMobile ? 'column' : 'row'}
+                  justifyContent={isMobile ? 'flex-start' : 'space-between'}
+                  sx={{ marginTop: '1rem' }}
+                >
                   <TextField
                     required
                     size="small"
@@ -470,7 +475,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                         </InputAdornment>
                       ),
                     }}
-                    sx={{ flexBasis: '75%', margin: '0rem 0.8rem' }}
+                    sx={{ flexBasis: '75%', margin: isMobile ? '1rem auto' : '0rem 0.8rem' }}
                   />
                   <CustomDropdown
                     id="vat"

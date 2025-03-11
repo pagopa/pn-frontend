@@ -7,6 +7,7 @@ import {
   NewNotificationRecipient,
   NotificationFeePolicy,
   PagoPaIntegrationMode,
+  PaymentModel,
   PreliminaryInformationsPayload,
 } from '../../models/NewNotification';
 import { UserGroup } from '../../models/user';
@@ -113,6 +114,16 @@ const newNotificationSlice = createSlice({
           payments: updatedPayments,
         };
       });
+
+      if (recipients.every((r) => r.debtPosition === PaymentModel.NOTHING)) {
+        state.notification = {
+          ...state.notification,
+          notificationFeePolicy: '' as NotificationFeePolicy,
+          paFee: undefined,
+          vat: undefined,
+          pagoPaIntMode: undefined,
+        };
+      }
     },
     setDebtPositionDetail: (
       state,

@@ -177,7 +177,7 @@ const PaymentMethods: React.FC<Props> = ({
                 <Typography fontSize="16px" fontWeight={600} data-testid="f24PaymentBox">
                   {t('f24.attach-f24')}
                 </Typography>
-                <Stack mt={3} divider={<Divider sx={{ my: 3 }} />}>
+                <Stack mt={3} divider={<Divider sx={{ my: 3 }} aria-hidden="true" />}>
                   {formik.values.recipients[recipientKey].f24.map((f24Payment, index) => (
                     <F24PaymentBox
                       id={`recipients.${recipientKey}.f24.${index}`}
