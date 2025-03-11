@@ -93,7 +93,7 @@ const FilterNotificationsFormBody = ({
             formikInstance.errors.iunMatch &&
             String(formikInstance.errors.iunMatch)
           }
-          FormHelperTextProps={{ error: true, 'aria-live': 'assertive' }}
+          FormHelperTextProps={{ 'aria-live': 'assertive' }}
           fullWidth
           sx={{ marginBottom: isMobile ? '20px' : '0' }}
           size="small"
@@ -130,7 +130,7 @@ const FilterNotificationsFormBody = ({
               helperText:
                 !!formikInstance.errors.startDate &&
                 t('filters.errors.data_a', { ns: 'notifiche' }),
-              FormHelperTextProps: { error: true, 'aria-live': 'assertive' },
+              FormHelperTextProps: { 'aria-live': 'assertive' },
             },
           }}
           disableFuture={true}
@@ -167,7 +167,7 @@ const FilterNotificationsFormBody = ({
               },
               helperText:
                 !!formikInstance.errors.endDate && t('filters.errors.data_a', { ns: 'notifiche' }),
-              FormHelperTextProps: { error: true, 'aria-live': 'assertive', sx: { ml: 0 } },
+              FormHelperTextProps: { 'aria-live': 'assertive', sx: { ml: 0 } },
             },
           }}
           disableFuture={true}
