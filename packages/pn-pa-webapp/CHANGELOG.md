@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.13.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.13.0-RC.1...v2.13.0-RC.2) (2025-03-11)
+
+
+### Bug Fixes
+
+* **PN-14126:** set empty notificationFeePolicy in initialState ([#1499](https://github.com/pagopa/pn-frontend/issues/1499)) ([bb534f8](https://github.com/pagopa/pn-frontend/commit/bb534f8af89e319a8f2ec0716a87d32fd7b5bf08))
+* **pn-14143:** set maximum 2 decimal to paFee ([#1500](https://github.com/pagopa/pn-frontend/issues/1500)) ([f663bf2](https://github.com/pagopa/pn-frontend/commit/f663bf210f3f80932f5a757cb5ae170f15aaaf43))
+* **PN-14145:** cr ([9b9690f](https://github.com/pagopa/pn-frontend/commit/9b9690f747d74121cdfb3dea66cad48c2ed1d35f))
+* **PN-14145:** fix copy as figma ([81c120d](https://github.com/pagopa/pn-frontend/commit/81c120ddc727f585487798105eba63b93815f367))
+* **PN-14148:** Update formik recipient key to handle numeric CF in NewNotification ([#1497](https://github.com/pagopa/pn-frontend/issues/1497)) ([4c26c72](https://github.com/pagopa/pn-frontend/commit/4c26c7279d1347f6c7e3042d8757e42dace063ad))
+* **PN-14157:** cast paFee only if present ([#1498](https://github.com/pagopa/pn-frontend/issues/1498)) ([4631e0f](https://github.com/pagopa/pn-frontend/commit/4631e0fa0befc99d5c983cb8298f4bb86c6689f2))
+* **PN-14166:** clear payment fields when set debt position to NOTHING ([#1503](https://github.com/pagopa/pn-frontend/issues/1503)) ([9ce71bf](https://github.com/pagopa/pn-frontend/commit/9ce71bfcc432182493844cbc766c6827c7aa5250))
+* **PN-14167:** fix mobile version ([3198925](https://github.com/pagopa/pn-frontend/commit/31989256b23c686748749c5fcaae382ea83b6f23))
+* **PN-14167:** fix tablet version ([a1a343d](https://github.com/pagopa/pn-frontend/commit/a1a343d54053cdd8842b35afa9700b28f995af8c))
+
+
+
+
+
+
 # [2.13.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.13.0-RC.0...v2.13.0-RC.1) (2025-03-03)
 
 

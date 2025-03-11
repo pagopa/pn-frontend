@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.13.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.13.0-RC.1...v2.13.0-RC.2) (2025-03-11)
+
+
+### Bug Fixes
+
+* **pn-14143:** set maximum 2 decimal to paFee ([#1500](https://github.com/pagopa/pn-frontend/issues/1500)) ([f663bf2](https://github.com/pagopa/pn-frontend/commit/f663bf210f3f80932f5a757cb5ae170f15aaaf43))
+
+
+### Features
+
+* **PN-13894:** add new Mixpanel strategy for UX event with psp property ([#1493](https://github.com/pagopa/pn-frontend/issues/1493)) ([a3e777d](https://github.com/pagopa/pn-frontend/commit/a3e777de802bf40d4e6187bc07a926dfae079ddd))
+
+
+
+
+
+
 # [2.13.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.13.0-RC.0...v2.13.0-RC.1) (2025-03-03)
 
 

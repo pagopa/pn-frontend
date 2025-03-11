@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.13.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.13.0-RC.1...v2.13.0-RC.2) (2025-03-11)
+
+
+### Bug Fixes
+
+* **PN-14123:** Fix some bugs on Digital Domicile ([#1504](https://github.com/pagopa/pn-frontend/issues/1504)) ([595520b](https://github.com/pagopa/pn-frontend/commit/595520bf7152ae3b97a21a94b4e6096bc2edfd53))
+* **pn-14143:** set maximum 2 decimal to paFee ([#1500](https://github.com/pagopa/pn-frontend/issues/1500)) ([f663bf2](https://github.com/pagopa/pn-frontend/commit/f663bf210f3f80932f5a757cb5ae170f15aaaf43))
+
+
+
+
+
+
 # [2.13.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.13.0-RC.0...v2.13.0-RC.1) (2025-03-03)
 
 
