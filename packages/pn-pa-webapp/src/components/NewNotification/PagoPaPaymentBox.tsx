@@ -60,7 +60,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
         uploadText={
           isMobile
             ? t('new-notification.drag-doc-mobile')
-            : t('new-notification.drag-payment-doc-pc', { type: '.pdf' })
+            : t('new-notification.drag-doc-with-format-pc', { type: '.pdf' })
         }
         accept="application/pdf"
         onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}

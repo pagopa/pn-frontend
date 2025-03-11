@@ -401,7 +401,7 @@
     },
     "back-to-notifications": "Torna alle notifiche",
     "drag-doc-pc": "Trascina qui il documento",
-    "drag-payment-doc-pc": "Trascina qui il documento in formato {{type}}",
+    "drag-doc-with-format-pc": "Trascina qui il documento in formato {{type}}",
     "drag-doc-mobile": "Carica qui il documento",
     "warning-payment-disabled": "Al momento le notifiche che prevedono un pagamento si possono inviare solo tramite API Key.",
     "steps": {
