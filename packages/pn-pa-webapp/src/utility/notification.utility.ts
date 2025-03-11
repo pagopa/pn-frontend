@@ -170,10 +170,16 @@ export function newNotificationMapper(newNotification: NewNotification): BffNewN
   /* eslint-disable functional/immutable-data */
   const newNotificationParsed: BffNewNotificationRequest = {
     ...clonedNotification,
-    paFee: clonedNotification.paFee ? parseFloat(clonedNotification.paFee.replace(",","."))*100 : undefined,
+    paFee: clonedNotification.paFee
+      ? parseFloat(clonedNotification.paFee.replace(',', '.')) * 100
+      : undefined,
     recipients: [],
     documents: [],
   };
+
+  if (!newNotificationParsed.paFee) {
+    delete newNotificationParsed.paFee;
+  }
 
   if (additionalLanguages) {
     newNotificationParsed.additionalLanguages = additionalLanguages;
