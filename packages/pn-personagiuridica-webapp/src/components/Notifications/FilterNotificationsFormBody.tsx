@@ -2,7 +2,7 @@ import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { FormHelperText, Grid, TextField } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
 import {
   CustomDatePicker,
   DATE_FORMAT,
