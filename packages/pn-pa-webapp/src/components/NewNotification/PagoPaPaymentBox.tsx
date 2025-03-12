@@ -46,7 +46,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       return fieldMeta(`${id}.${fieldId}`).error;
     }
 
-    return null;
+    return undefined;
   };
 
   return (
@@ -54,7 +54,9 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       <FileUpload
         data-testid="pagopa-file-upload-input"
         uploadText={
-          isMobile ? t('new-notification.drag-doc-mobile') : t('new-notification.drag-doc-pc')
+          isMobile
+            ? t('new-notification.drag-doc-mobile')
+            : t('new-notification.drag-doc-with-format-pc', { type: '.pdf' })
         }
         accept="application/pdf"
         onFileUploaded={(file, sha256) => onFileUploaded(file, sha256)}
@@ -62,8 +64,13 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
         calcSha256
         fileUploaded={{ file }}
         showHashCode={false}
+        externalError={
+          fieldMeta(`${id}.file`).touched || fieldMeta(`${id}.file.data`).value
+            ? getError('file.sha256.hashBase64', false)
+            : undefined
+        }
       />
-      <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
+      <Stack direction={isMobile ? 'column' : 'row'} spacing={2} mt={3}>
         <TextField
           id="noticeCode"
           label={t(
@@ -99,7 +106,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       </Stack>
 
       {(notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE || showDeleteButton) && (
-        <Stack direction={isMobile ? 'column' : 'row'}>
+        <Stack direction={isMobile ? 'column' : 'row'} mt={2}>
           {notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
             <Stack>
               <FormControlLabel
@@ -142,7 +149,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       )}
 
       {showDeleteButton && notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
-        <Alert severity="warning" data-testid="pagopa-installment-alert">
+        <Alert severity="warning" sx={{ mt: 4 }} data-testid="pagopa-installment-alert">
           {t('new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment')}
         </Alert>
       )}

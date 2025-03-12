@@ -8,7 +8,6 @@ import {
 } from '../../../__mocks__/NewNotification.mock';
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import { PagoPaIntegrationMode, PaymentMethodsFormValues } from '../../../models/NewNotification';
-import { newF24Payment, newPagopaPayment } from '../../../utility/notification.utility';
 import PaymentMethods from '../PaymentMethods';
 
 // Mock react-i18next
