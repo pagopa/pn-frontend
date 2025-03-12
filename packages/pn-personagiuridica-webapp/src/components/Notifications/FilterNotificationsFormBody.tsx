@@ -88,11 +88,7 @@ const FilterNotificationsFormBody = ({
           label={t('filters.iun', { ns: 'notifiche' })}
           name="iunMatch"
           error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
-          helperText={
-            formikInstance.touched.iunMatch &&
-            formikInstance.errors.iunMatch?.toString()
-          }
-          FormHelperTextProps={{ 'aria-live': 'assertive' }}
+          helperText={formikInstance.touched.iunMatch && formikInstance.errors.iunMatch?.toString()}
           fullWidth
           sx={{ marginBottom: isMobile ? '20px' : '0' }}
           size="small"
@@ -129,7 +125,6 @@ const FilterNotificationsFormBody = ({
               helperText:
                 !!formikInstance.errors.startDate &&
                 t('filters.errors.data_a', { ns: 'notifiche' }),
-              FormHelperTextProps: { 'aria-live': 'assertive' },
             },
           }}
           disableFuture={true}
@@ -166,7 +161,7 @@ const FilterNotificationsFormBody = ({
               },
               helperText:
                 !!formikInstance.errors.endDate && t('filters.errors.data_a', { ns: 'notifiche' }),
-              FormHelperTextProps: { 'aria-live': 'assertive', sx: { ml: 0 } },
+              FormHelperTextProps: { sx: { ml: 0 } },
             },
           }}
           disableFuture={true}
