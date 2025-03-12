@@ -327,6 +327,9 @@ export const payments = {
     pagoPa: { ...newNotificationPagoPa },
     f24: { ...newNotificationF24 },
   },
+  [newNotificationRecipients[2].taxId]: {
+    f24: { ...newNotificationF24 },
+  },
 };
 
 export const newNotification: NewNotification = {

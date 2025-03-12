@@ -22,11 +22,17 @@ const testRecipientFormRendering = async (
   recipientIndex: number,
   recipient?: NewNotificationRecipient
 ) => {
+  let recipientTypeValue = undefined;
+
+  if (recipient) {
+    recipientTypeValue = recipient.recipientType === RecipientType.PF ? 0 : 1;
+  }
+
   await testRadio(
     form,
     `recipientType${recipientIndex}`,
     ['physical-person', 'legal-person'],
-    recipient ? recipientIndex : undefined,
+    recipientTypeValue,
     true
   );
   testFormElements(
@@ -178,27 +184,39 @@ describe('Recipient Component with payment enabled', async () => {
     expect(backButton).toBeInTheDocument();
   });
 
-  it('changes form values and clicks on confirm - two recipients', async () => {
-    // render component
+  it('changes form values and clicks on confirm - multi recipients', async () => {
     await act(async () => {
       result = render(<Recipient onConfirm={confirmHandlerMk} />);
     });
+
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
-    // fill the first recipient
-    await populateForm(form, 0, newNotification.recipients[0]);
     const submitButton = within(form).getByTestId('step-submit');
-    expect(submitButton).toBeEnabled();
-    // add new recipient
     const addButton = within(form).getByTestId('add-recipient');
+
+    // STEP 1: Fill the first recipient form
+    await populateForm(form, 0, newNotification.recipients[0]);
+    expect(submitButton).toBeEnabled();
+
+    // STEP 2: Add and fill second recipient
     fireEvent.click(addButton);
     await waitFor(() => {
       expect(submitButton).toBeDisabled();
     });
     await testRecipientFormRendering(form, 1);
-    // fill the second recipient
     await populateForm(form, 1, newNotification.recipients[1]);
+
+    // STEP 3: Add and fill third recipient
+    fireEvent.click(addButton);
+    await waitFor(() => {
+      expect(submitButton).toBeDisabled();
+    });
+    await testRecipientFormRendering(form, 2);
+    await populateForm(form, 2, newNotification.recipients[2]);
+
+    // STEP 4: Submit form and verify results
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton);
+
     await waitFor(() => {
       const state = testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual(
@@ -206,7 +224,7 @@ describe('Recipient Component with payment enabled', async () => {
       );
     });
     expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
-  }, 10000);
+  }, 20000);
 
   it('fills form with invalid values - two recipients', async () => {
     // render component
@@ -254,7 +272,7 @@ describe('Recipient Component with payment enabled', async () => {
     await waitFor(() => expect(submitButton).toBeEnabled());
   }, 10000);
 
-  it('form initially filled - two recipients', async () => {
+  it('form initially filled - multi recipients', async () => {
     // render component
     await act(async () => {
       result = render(
@@ -264,6 +282,7 @@ describe('Recipient Component with payment enabled', async () => {
     const form = result.getByTestId('recipientForm') as HTMLFormElement;
     await testRecipientFormRendering(form, 0, newNotification.recipients[0]);
     await testRecipientFormRendering(form, 1, newNotification.recipients[1]);
+    await testRecipientFormRendering(form, 2, newNotification.recipients[2]);
     const submitButton = within(form).getByTestId('step-submit');
     expect(submitButton).toBeEnabled();
   }, 10000);

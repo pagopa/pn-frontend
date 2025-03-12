@@ -272,6 +272,12 @@ describe('New notification redux state tests', () => {
           httpMethod: 'POST',
           key: 'mocked-preload-key',
         },
+        {
+          url: 'https://mocked-url.com',
+          secret: 'mocked-secret',
+          httpMethod: 'POST',
+          key: 'mocked-preload-key',
+        },
       ]);
     const extMock = new MockAdapter(externalClient);
     for (const payment of Object.values(payments)) {

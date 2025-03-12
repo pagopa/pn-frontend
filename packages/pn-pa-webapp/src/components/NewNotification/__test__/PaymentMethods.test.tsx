@@ -7,7 +7,11 @@ import {
   newNotificationPagoPa,
 } from '../../../__mocks__/NewNotification.mock';
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
-import { PagoPaIntegrationMode, PaymentMethodsFormValues } from '../../../models/NewNotification';
+import {
+  NewNotificationRecipient,
+  PagoPaIntegrationMode,
+  PaymentMethodsFormValues,
+} from '../../../models/NewNotification';
 import { newF24Payment, newPagopaPayment } from '../../../utility/notification.utility';
 import PaymentMethods from '../PaymentMethods';
 
@@ -18,22 +22,41 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
+const getRecipientKey = (recipient: NewNotificationRecipient) =>
+  `${recipient.recipientType}-${recipient.taxId}`;
+
 const formikValues: PaymentMethodsFormValues = {
   notificationFeePolicy: newNotification.notificationFeePolicy,
   paFee: newNotification.paFee,
   pagoPaIntMode: PagoPaIntegrationMode.ASYNC,
   vat: newNotification.vat,
   recipients: {
-    [newNotification.recipients[0].taxId]: {
+    [getRecipientKey(newNotification.recipients[0])]: {
       pagoPa: [newNotificationPagoPa],
       f24: [],
     },
-    [newNotification.recipients[1].taxId]: {
+    [getRecipientKey(newNotification.recipients[1])]: {
       pagoPa: [newNotificationPagoPa],
+      f24: [newNotificationF24],
+    },
+    [getRecipientKey(newNotification.recipients[2])]: {
+      pagoPa: [],
       f24: [newNotificationF24],
     },
   },
 };
+
+const pagoPaRecipient = newNotification.recipients.find((r) =>
+  r.payments?.some((p) => p.pagoPa)
+) as NewNotificationRecipient;
+
+const f24Recipient = newNotification.recipients.find((r) =>
+  r.payments?.some((p) => p.f24)
+) as NewNotificationRecipient;
+
+const pagoPaRecipientKey = getRecipientKey(pagoPaRecipient);
+
+const f24RecipientKey = getRecipientKey(f24Recipient);
 
 describe('PaymentMethods Component', () => {
   const mockSetFieldValue = vi.fn();
@@ -102,25 +125,24 @@ describe('PaymentMethods Component', () => {
 
   it('should add new PagoPa payment when add button is clicked', () => {
     const { getByTestId } = renderComponent();
-    const firstRecipient = newNotification.recipients[0];
 
-    const firstRecipientPaymentBox = getByTestId(`${firstRecipient.taxId}-payments`);
-    expect(firstRecipientPaymentBox).toBeInTheDocument();
+    const paymentBox = getByTestId(`${pagoPaRecipient.taxId}-payments`);
+    expect(paymentBox).toBeInTheDocument();
 
-    const recipientPagoPaPayment = within(firstRecipientPaymentBox).getAllByTestId(
-      `${firstRecipient.taxId}-pagopa-payment-box`
+    const recipientPagoPaPayment = within(paymentBox).getAllByTestId(
+      `${pagoPaRecipient.taxId}-pagopa-payment-box`
     );
     expect(recipientPagoPaPayment).toHaveLength(1);
 
-    const addPagoPaButton = within(firstRecipientPaymentBox).getByTestId('add-new-pagopa');
+    const addPagoPaButton = within(paymentBox).getByTestId('add-new-pagopa');
     fireEvent.click(addPagoPaButton);
 
     expect(mockSetFieldValue).toHaveBeenCalledTimes(1);
-    expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${firstRecipient.taxId}.pagoPa`, [
-      ...formikValues.recipients[firstRecipient.taxId].pagoPa,
+    expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${pagoPaRecipientKey}.pagoPa`, [
+      ...formikValues.recipients[pagoPaRecipientKey].pagoPa,
       newPagopaPayment(
-        firstRecipient.taxId,
-        formikValues.recipients[firstRecipient.taxId].pagoPa.length,
+        pagoPaRecipientKey,
+        formikValues.recipients[pagoPaRecipientKey].pagoPa.length,
         'mock-fiscal-code'
       ),
     ]);
@@ -129,44 +151,38 @@ describe('PaymentMethods Component', () => {
   it('should add new F24 payment when add button is clicked', () => {
     const { getByTestId } = renderComponent();
 
-    const secondRecipient = newNotification.recipients[1];
+    const paymentBox = getByTestId(`${f24Recipient.taxId}-payments`);
+    expect(paymentBox).toBeInTheDocument();
 
-    const secondRecipientPaymentBox = getByTestId(`${secondRecipient.taxId}-payments`);
-    expect(secondRecipientPaymentBox).toBeInTheDocument();
-
-    const addF24Button = within(secondRecipientPaymentBox).getByTestId('add-new-f24');
+    const addF24Button = within(paymentBox).getByTestId('add-new-f24');
     fireEvent.click(addF24Button);
 
     expect(mockSetFieldValue).toHaveBeenCalledTimes(1);
 
-    expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${secondRecipient.taxId}.f24`, [
-      ...formikValues.recipients[secondRecipient.taxId].f24,
-      newF24Payment(
-        secondRecipient.taxId,
-        formikValues.recipients[secondRecipient.taxId].f24.length
-      ),
+    expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${f24RecipientKey}.f24`, [
+      ...formikValues.recipients[f24RecipientKey].f24,
+      newF24Payment(f24RecipientKey, formikValues.recipients[f24RecipientKey].f24.length),
     ]);
   });
 
-  it('should removea PagoPa payment when delete button is clicked', () => {
+  it('should remove a PagoPa payment when delete button is clicked', () => {
     const { getByTestId } = renderComponent({
       recipients: {
         ...formikValues.recipients,
-        [newNotification.recipients[1].taxId]: {
+        [pagoPaRecipientKey]: {
           pagoPa: [newNotificationPagoPa, { ...newNotificationPagoPa, idx: 1 }],
           f24: [],
         },
       },
     });
 
-    const secondRecipient = newNotification.recipients[1];
-    const secondRecipientPaymentBox = getByTestId(`${secondRecipient.taxId}-payments`);
-    const deleteButtons = within(secondRecipientPaymentBox).getAllByTestId('pagopa-delete-button');
+    const paymentBox = getByTestId(`${pagoPaRecipient.taxId}-payments`);
+    const deleteButtons = within(paymentBox).getAllByTestId('pagopa-delete-button');
     expect(deleteButtons).toHaveLength(1);
     fireEvent.click(deleteButtons[0]);
 
     expect(mockSetFieldValue).toHaveBeenCalledTimes(1);
-    expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${secondRecipient.taxId}.pagoPa`, [
+    expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${pagoPaRecipientKey}.pagoPa`, [
       newNotificationPagoPa,
     ]);
   });
@@ -175,20 +191,19 @@ describe('PaymentMethods Component', () => {
     const { getByTestId } = renderComponent({
       recipients: {
         ...formikValues.recipients,
-        [newNotification.recipients[1].taxId]: {
+        [f24RecipientKey]: {
           pagoPa: [newNotificationPagoPa],
           f24: [newNotificationF24, { ...newNotificationF24, idx: 1 }],
         },
       },
     });
 
-    const secondRecipient = newNotification.recipients[1];
-    const secondRecipientPaymentBox = getByTestId(`${secondRecipient.taxId}-payments`);
-    const deleteButtons = within(secondRecipientPaymentBox).getAllByTestId('f24-delete-button');
+    const paymentBox = getByTestId(`${f24Recipient.taxId}-payments`);
+    const deleteButtons = within(paymentBox).getAllByTestId('f24-delete-button');
     expect(deleteButtons).toHaveLength(1);
     fireEvent.click(deleteButtons[0]);
 
-    expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${secondRecipient.taxId}.f24`, [
+    expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${f24RecipientKey}.f24`, [
       newNotificationF24,
     ]);
   });
@@ -200,27 +215,26 @@ describe('PaymentMethods Component', () => {
     const { getByTestId } = renderComponent({
       recipients: {
         ...formikValues.recipients,
-        [newNotification.recipients[0].taxId]: {
+        [pagoPaRecipientKey]: {
           pagoPa: [newPagopaPayment('1', 1, 'mock-fiscal-code')],
           f24: [],
         },
       },
     });
-    const firstRecipient = newNotification.recipients[0];
 
-    const firstRecipientPaymentBox = getByTestId(`${firstRecipient.taxId}-payments`);
-    expect(firstRecipientPaymentBox).toBeInTheDocument();
+    const paymentBox = getByTestId(`${pagoPaRecipient.taxId}-payments`);
+    expect(paymentBox).toBeInTheDocument();
 
-    const uploadButton = within(firstRecipientPaymentBox).getByTestId('loadFromPc');
+    const uploadButton = within(paymentBox).getByTestId('loadFromPc');
     expect(uploadButton).toBeInTheDocument();
-    const fileInput = within(firstRecipientPaymentBox).getByTestId('fileInput');
+    const fileInput = within(paymentBox).getByTestId('fileInput');
     const input = fileInput?.querySelector('input');
     fireEvent.change(input!, { target: { files: [mockFile] } });
 
     await waitFor(() => {
       expect(mockSetFieldValue).toHaveBeenCalledTimes(1);
       expect(mockSetFieldValue).toHaveBeenCalledWith(
-        `recipients.${firstRecipient.taxId}.pagoPa.0`,
+        `recipients.${pagoPaRecipientKey}.pagoPa.0`,
         {
           ...newPagopaPayment('1', 1, 'mock-fiscal-code'),
           file: { data: mockFile, sha256: mockSha256 },
@@ -229,7 +243,7 @@ describe('PaymentMethods Component', () => {
             versionToken: '',
           },
         },
-        false
+        true
       );
     });
   });
@@ -241,27 +255,26 @@ describe('PaymentMethods Component', () => {
     const { getByTestId } = renderComponent({
       recipients: {
         ...formikValues.recipients,
-        [newNotification.recipients[1].taxId]: {
+        [f24RecipientKey]: {
           pagoPa: [],
           f24: [newF24Payment('1', 1)],
         },
       },
     });
-    const secondRecipient = newNotification.recipients[1];
 
-    const secondRecipientPaymentBox = getByTestId(`${secondRecipient.taxId}-payments`);
-    expect(secondRecipientPaymentBox).toBeInTheDocument();
+    const paymentBox = getByTestId(`${f24Recipient.taxId}-payments`);
+    expect(paymentBox).toBeInTheDocument();
 
-    const uploadButton = within(secondRecipientPaymentBox).getByTestId('loadFromPc');
+    const uploadButton = within(paymentBox).getByTestId('loadFromPc');
     expect(uploadButton).toBeInTheDocument();
-    const fileInput = within(secondRecipientPaymentBox).getByTestId('fileInput');
+    const fileInput = within(paymentBox).getByTestId('fileInput');
     const input = fileInput?.querySelector('input');
     fireEvent.change(input!, { target: { files: [mockFile] } });
 
     await waitFor(() => {
       expect(mockSetFieldValue).toHaveBeenCalledTimes(1);
       expect(mockSetFieldValue).toHaveBeenCalledWith(
-        `recipients.${secondRecipient.taxId}.f24.0`,
+        `recipients.${f24RecipientKey}.f24.0`,
         {
           ...newF24Payment('1', 1),
           file: { data: mockFile, sha256: mockSha256 },
@@ -270,7 +283,7 @@ describe('PaymentMethods Component', () => {
             versionToken: '',
           },
         },
-        false
+        true
       );
     });
   });
@@ -278,15 +291,17 @@ describe('PaymentMethods Component', () => {
   it('should remove file for PagoPa payment', () => {
     const { getByTestId } = renderComponent();
 
-    const firstRecipient = newNotification.recipients[0];
-    const firstRecipientPaymentBox = getByTestId(`${firstRecipient.taxId}-payments`);
+    const paymentBox = getByTestId(`${pagoPaRecipient.taxId}-payments`);
 
-    const removeFile = within(firstRecipientPaymentBox).getByTestId('removeDocument');
+    const pagoPaPayment = within(paymentBox).getByTestId(
+      `${pagoPaRecipient.taxId}-pagopa-payment-box`
+    );
+    const removeFile = within(pagoPaPayment).getByTestId('removeDocument');
     fireEvent.click(removeFile);
 
     expect(mockSetFieldValue).toHaveBeenCalledTimes(1);
-    expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${firstRecipient.taxId}.pagoPa.0`, {
-      ...formikValues.recipients[firstRecipient.taxId].pagoPa[0],
+    expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${pagoPaRecipientKey}.pagoPa.0`, {
+      ...formikValues.recipients[pagoPaRecipientKey].pagoPa[0],
       file: {
         data: undefined,
         sha256: { hashBase64: '', hashHex: '' },
@@ -301,18 +316,15 @@ describe('PaymentMethods Component', () => {
   it('should remove file for F24 payment', () => {
     const { getByTestId } = renderComponent();
 
-    const secondRecipient = newNotification.recipients[1];
-    const secondRecipientPaymentBox = getByTestId(`${secondRecipient.taxId}-payments`);
+    const paymentBox = getByTestId(`${f24Recipient.taxId}-payments`);
 
-    const f24Payment = within(secondRecipientPaymentBox).getByTestId(
-      `${secondRecipient.taxId}-f24-payment-box`
-    );
+    const f24Payment = within(paymentBox).getByTestId(`${f24Recipient.taxId}-f24-payment-box`);
     const removeFile = within(f24Payment).getByTestId('removeDocument');
     fireEvent.click(removeFile);
 
     expect(mockSetFieldValue).toHaveBeenCalledTimes(1);
-    expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${secondRecipient.taxId}.f24.0`, {
-      ...formikValues.recipients[secondRecipient.taxId].f24[0],
+    expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${f24RecipientKey}.f24.0`, {
+      ...formikValues.recipients[f24RecipientKey].f24[0],
       file: {
         data: undefined,
         sha256: { hashBase64: '', hashHex: '' },
