@@ -152,7 +152,7 @@ describe('test custom validation for recipients', () => {
           noticeCode: 'noticeCode1',
           taxIdKey: 'taxId1',
         },
-        id: 'recipients[taxId1].pagoPa[0].noticeCode',
+        id: 'recipients.taxId1.pagoPa[0].noticeCode',
       },
       {
         messageKey: '',
@@ -162,7 +162,7 @@ describe('test custom validation for recipients', () => {
           noticeCode: 'noticeCode1',
           taxIdKey: 'taxId1',
         },
-        id: 'recipients[taxId1].pagoPa[0].creditorTaxId',
+        id: 'recipients.taxId1.pagoPa[0].creditorTaxId',
       },
       {
         messageKey: 'identical-notice-codes-error',
@@ -172,7 +172,7 @@ describe('test custom validation for recipients', () => {
           noticeCode: 'noticeCode1',
           taxIdKey: 'taxId2',
         },
-        id: 'recipients[taxId2].pagoPa[0].noticeCode',
+        id: 'recipients.taxId2.pagoPa[0].noticeCode',
       },
       {
         messageKey: '',
@@ -182,7 +182,7 @@ describe('test custom validation for recipients', () => {
           noticeCode: 'noticeCode1',
           taxIdKey: 'taxId2',
         },
-        id: 'recipients[taxId2].pagoPa[0].creditorTaxId',
+        id: 'recipients.taxId2.pagoPa[0].creditorTaxId',
       },
     ]);
   });

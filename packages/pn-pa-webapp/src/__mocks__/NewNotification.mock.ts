@@ -165,19 +165,19 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
   {
     id: 'recipient.2',
     idx: 2,
-    taxId: 'MRARSS90P08H501QR',
-    firstName: 'Sara Gallo srl',
-    lastName: '',
-    recipientType: RecipientType.PG,
+    taxId: 'LVLDAA85T50G702B',
+    firstName: 'Ada',
+    lastName: 'Lovelace',
+    recipientType: RecipientType.PF,
     type: NewNotificationDigitalAddressType.PEC,
-    digitalDomicile: '',
-    address: 'via delle cicale',
+    digitalDomicile: 'ada@pec.it',
+    address: 'Via Roma',
     addressDetails: '',
-    houseNumber: '21',
-    zip: '00035',
-    municipality: 'Anzio',
+    houseNumber: '2',
+    zip: '90121',
+    municipality: 'Palermo',
     municipalityDetails: '',
-    province: 'Roma',
+    province: 'PA',
     foreignState: 'Italia',
     payments: [
       {
@@ -225,6 +225,27 @@ const newNotificationRecipientsForBff: Array<NotificationRecipientV23> = [
       {
         pagoPa: { ...newNotificationPagoPaForBff },
       },
+      {
+        f24: { ...newNotificationF24ForBff },
+      },
+    ],
+  },
+  {
+    taxId: 'LVLDAA85T50G702B',
+    denomination: 'Ada Lovelace',
+    recipientType: RecipientType.PF,
+    digitalDomicile: {
+      type: NotificationDigitalAddressTypeEnum.Pec,
+      address: 'ada@pec.it',
+    },
+    physicalAddress: {
+      address: 'Via Roma 2',
+      zip: '90121',
+      municipality: 'Palermo',
+      province: 'PA',
+      foreignState: 'Italia',
+    },
+    payments: [
       {
         f24: { ...newNotificationF24ForBff },
       },
