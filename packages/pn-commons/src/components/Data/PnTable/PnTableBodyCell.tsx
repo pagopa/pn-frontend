@@ -1,11 +1,10 @@
-import { TableCell, TableCellProps } from '@mui/material';
+import { SxProps, TableCell } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-
 import { buttonNakedInheritStyle } from '../../../utility';
 
 export type PnTableBodyCellProps = {
   testId?: string;
-  cellProps?: TableCellProps;
+  cellProps?: SxProps;
   onClick?: () => void;
   children: React.ReactNode;
 };
@@ -19,9 +18,8 @@ const PnTableBodyCell: React.FC<PnTableBodyCellProps> = ({
   <TableCell
     scope="col"
     data-testid={testId}
-    {...cellProps}
     sx={{
-      ...cellProps?.sx,
+      ...cellProps!,
       borderBottom: 'none',
     }}
   >

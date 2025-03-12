@@ -13,7 +13,7 @@
     "status": "Stato",
     "show-detail": "Vedi dettaglio",
     "group-selector-title": "Menu selezione gruppo",
-    "aria-action-table": "Vedi dettaglio notifica con iun: {{iun}}"
+    "aria-action-table": "Vedi dettaglio notifica con iun : {{iun}}"
   },
   "filters": {
     "iun": "Cerca per Codice IUN",

@@ -252,7 +252,7 @@ const NotificationDetail: React.FC = () => {
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, { psp: 'pagopa' });
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT);
       dispatch(
         getReceivedNotificationPaymentUrl({
           paymentNotice: {
@@ -273,14 +273,9 @@ const NotificationDetail: React.FC = () => {
     }
   };
 
-  const onPayTppClick = (
-    noticeCode?: string,
-    creditorTaxId?: string,
-    retrievalId?: string,
-    tppName?: string
-  ) => {
+  const onPayTppClick = (noticeCode?: string, creditorTaxId?: string, retrievalId?: string) => {
     if (noticeCode && creditorTaxId && retrievalId) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, { psp: tppName });
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT);
       dispatch(
         getReceivedNotificationPaymentTppUrl({
           noticeCode,

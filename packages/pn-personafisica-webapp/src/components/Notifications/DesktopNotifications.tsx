@@ -102,7 +102,7 @@ const DesktopNotifications = ({
     {
       id: 'sender',
       label: t('table.mittente'),
-      cellProps: { width: '15%' },
+      cellProps: { width: '19%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
@@ -113,18 +113,18 @@ const DesktopNotifications = ({
     {
       id: 'iun',
       label: t('table.iun'),
-      cellProps: { width: '24%' },
+      cellProps: { width: '27%' },
     },
     {
       id: 'notificationStatus',
       label: t('table.status'),
-      cellProps: { width: '17%' },
+      cellProps: { width: '18%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'action',
       label: '',
-      cellProps: { width: '14%', align: 'right' },
+      cellProps: { width: '6%' },
     },
   ];
 

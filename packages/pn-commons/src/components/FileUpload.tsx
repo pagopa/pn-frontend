@@ -33,7 +33,6 @@ type Props = {
   fileUploaded?: { file: { data?: File; sha256?: { hashBase64: string; hashHex: string } } };
   fileSizeLimit?: number;
   showHashCode?: boolean;
-  externalError?: string;
 };
 
 enum UploadStatus {
@@ -103,8 +102,6 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
       return { ...state, status: UploadStatus.TO_UPLOAD, file: null, sha256: '' };
     case 'IS_SENDING':
       return { ...state, status: UploadStatus.SENDING };
-    case 'EXTERNAL_ERROR':
-      return { ...state, error: action.payload };
     default:
       return state;
   }
@@ -170,7 +167,6 @@ const FileUpload = ({
   fileUploaded,
   fileSizeLimit = 209715200,
   showHashCode = true,
-  externalError,
 }: Props) => {
   const [fileData, dispatch] = useReducer(reducer, {
     status: UploadStatus.TO_UPLOAD,
@@ -278,10 +274,6 @@ const FileUpload = ({
       dispatch({ type: 'FILE_PREVIOUSLY_UPLOADED', payload: fileUploaded });
     }
   }, [attachmentExists]);
-
-  useEffect(() => {
-    dispatch({ type: 'EXTERNAL_ERROR', payload: externalError });
-  }, [externalError]);
 
   return (
     <>

@@ -14,7 +14,6 @@ import {
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -34,12 +33,7 @@ const EmailSmsContactWizard: React.FC = () => {
   const { defaultSMSAddress, defaultEMAILAddress, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
-  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
-  const emailContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
-    toggleEdit: () => {},
-    resetForm: () => Promise.resolve(),
-  });
-  const smsContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
+  const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
   });
@@ -54,14 +48,13 @@ const EmailSmsContactWizard: React.FC = () => {
   const smsValue = defaultSMSAddress?.value ?? '';
 
   const handleSubmit = (channelType: ChannelType, value: string) => {
-    const source = externalEvent?.source ?? ContactSource.RECAPITI;
     PFEventStrategyFactory.triggerEvent(
       channelType === ChannelType.EMAIL
         ? PFEventsType.SEND_ADD_EMAIL_START
         : PFEventsType.SEND_ADD_SMS_START,
       {
         senderId: 'default',
-        source,
+        source: ContactSource.RECAPITI,
       }
     );
     // eslint-disable-next-line functional/immutable-data
@@ -76,12 +69,7 @@ const EmailSmsContactWizard: React.FC = () => {
 
   const handleCodeVerification = (channelType: ChannelType, verificationCode?: string) => {
     if (verificationCode) {
-      PFEventStrategyFactory.triggerEvent(
-        channelType === ChannelType.EMAIL
-          ? PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION
-          : PFEventsType.SEND_ADD_SMS_UX_CONVERSION,
-        'default'
-      );
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION, 'default');
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
@@ -110,7 +98,7 @@ const EmailSmsContactWizard: React.FC = () => {
           channelType === ChannelType.EMAIL
             ? PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS
             : PFEventsType.SEND_ADD_SMS_UX_SUCCESS,
-          { senderId: 'default', fromSercqSend: true }
+          'default'
         );
 
         // contact has already been verified
@@ -118,17 +106,14 @@ const EmailSmsContactWizard: React.FC = () => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t(`courtesy-contacts.${channelType.toLowerCase()}-added-successfully`, {
+            message: t(`courtesy-contacts.email-added-successfully`, {
               ns: 'recapiti',
             }),
           })
         );
         setModalOpen(null);
-        if (currentAddress.current.channelType === ChannelType.EMAIL && emailValue) {
-          emailContactRef.current.toggleEdit();
-        }
-        if (currentAddress.current.channelType === ChannelType.SMS && smsValue) {
-          smsContactRef.current.toggleEdit();
+        if (emailValue || smsValue) {
+          digitalContactRef.current.toggleEdit();
         }
       })
       .catch(() => {});
@@ -136,13 +121,10 @@ const EmailSmsContactWizard: React.FC = () => {
 
   const handleCancelCode = async () => {
     setModalOpen(null);
-    if (currentAddress.current.channelType === ChannelType.EMAIL && emailValue) {
-      emailContactRef.current.toggleEdit();
-      await emailContactRef.current.resetForm();
-    } else if (currentAddress.current.channelType === ChannelType.SMS && smsValue) {
-      smsContactRef.current.toggleEdit();
-      await smsContactRef.current.resetForm();
+    if (emailValue || smsValue) {
+      digitalContactRef.current.toggleEdit();
     }
+    await digitalContactRef.current.resetForm();
   };
 
   return (
@@ -160,7 +142,7 @@ const EmailSmsContactWizard: React.FC = () => {
         label={t(`courtesy-contacts.email-to-add`, { ns: 'recapiti' })}
         value={emailValue}
         channelType={ChannelType.EMAIL}
-        ref={emailContactRef}
+        ref={digitalContactRef}
         inputProps={{
           label: t(`courtesy-contacts.link-email-placeholder`, {
             ns: 'recapiti',
@@ -177,9 +159,6 @@ const EmailSmsContactWizard: React.FC = () => {
           button: {
             sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
           },
-          container: {
-            width: '100%',
-          },
         }}
       />
 
@@ -189,7 +168,7 @@ const EmailSmsContactWizard: React.FC = () => {
           label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
           value={smsValue}
           channelType={ChannelType.SMS}
-          ref={smsContactRef}
+          ref={digitalContactRef}
           inputProps={{
             label: t(`courtesy-contacts.link-sms-placeholder`, {
               ns: 'recapiti',
@@ -206,9 +185,6 @@ const EmailSmsContactWizard: React.FC = () => {
             },
             button: {
               sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
-            },
-            container: {
-              width: '100%',
             },
           }}
         />
@@ -232,13 +208,7 @@ const EmailSmsContactWizard: React.FC = () => {
         open={modalOpen === ModalType.CODE}
         onConfirm={(code) => handleCodeVerification(currentAddress.current.channelType, code)}
         onDiscard={handleCancelCode}
-        onError={() =>
-          PFEventStrategyFactory.triggerEvent(
-            currentAddress.current.channelType === ChannelType.EMAIL
-              ? PFEventsType.SEND_ADD_EMAIL_CODE_ERROR
-              : PFEventsType.SEND_ADD_SMS_CODE_ERROR
-          )
-        }
+        onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_CODE_ERROR)}
       />
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}

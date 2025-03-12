@@ -38,7 +38,7 @@
     "groups": "Gruppi",
     "status": "Stato",
     "show-detail": "Vedi dettaglio",
-    "aria-action-table": "Vedi dettaglio notifica con iun: {{iun}}"
+    "aria-action-table": "Vedi dettaglio notifica con iun : {{iun}}"
   },
   "sort": {
     "title": "Ordina",
@@ -401,7 +401,6 @@
     },
     "back-to-notifications": "Torna alle notifiche",
     "drag-doc-pc": "Trascina qui il documento",
-    "drag-doc-with-format-pc": "Trascina qui il documento in formato {{type}}",
     "drag-doc-mobile": "Carica qui il documento",
     "warning-payment-disabled": "Al momento le notifiche che prevedono un pagamento si possono inviare solo tramite API Key.",
     "steps": {
@@ -510,7 +509,6 @@
           "description": "Scegli il tipo di costo di notifica: puoi scegliere fra quello già incluso nell’atto oppure inserire un costo di notifica personalizzato a carico del destinatario.",
           "disclaimer": "L’IVA verrà applicata solo alle notifiche recapitate in modalità cartacea.",
           "pa-fee": "Costo di notifica",
-          "pa-fee-invalid": "Scrivi un valore minore o uguale a {{maxValue}} con massimo 2 decimali",
           "vat": "IVA"
         },
         "pagopa-int-mode": {
@@ -527,7 +525,6 @@
         },
         "identical-notice-codes-error": "C'è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
         "at-least-one-applycost": "Applica i costi di notifica almeno ad un pagamento",
-        "identical-sha256-error": "Non è possibile caricare due file identici",
         "payment-methods": {
           "title": "Modelli di pagamento",
           "pagopa-notice": "Avviso pagoPA",

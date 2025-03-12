@@ -77,7 +77,10 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWizar
       .then((consent) => {
         // eslint-disable-next-line functional/immutable-data
         tosPrivacy.current = consent;
-        const source = externalEvent?.source ?? ContactSource.RECAPITI;
+        const source =
+          externalEvent?.destination === ChannelType.SERCQ_SEND
+            ? externalEvent?.source ?? ContactSource.RECAPITI
+            : ContactSource.RECAPITI;
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
           senderId: 'default',
           source,
@@ -270,12 +273,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWizar
       <InformativeDialog
         open={modalOpen === ModalType.DELIVERED}
         title={t('legal-contacts.sercq-send-wizard.step_1.delivered-dialog-title')}
-        subtitle={
-          <Trans
-            i18nKey="legal-contacts.sercq-send-wizard.step_1.delivered-dialog-description"
-            ns="recapiti"
-          />
-        }
+        subtitle={t('legal-contacts.sercq-send-wizard.step_1.delivered-dialog-description')}
         onConfirm={() => setModalOpen(null)}
       />
     </Box>

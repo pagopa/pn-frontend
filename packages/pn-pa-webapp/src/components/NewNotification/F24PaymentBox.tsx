@@ -46,16 +46,14 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
       return fieldMeta(`${id}.${fieldId}`).error;
     }
 
-    return undefined;
+    return null;
   };
 
   return (
     <Fragment>
       <FileUpload
         uploadText={
-          isMobile
-            ? t('new-notification.drag-doc-mobile')
-            : t('new-notification.drag-doc-with-format-pc', { type: '.json' })
+          isMobile ? t('new-notification.drag-doc-mobile') : t('new-notification.drag-doc-pc')
         }
         accept="application/json"
         onFileUploaded={(file, sha256) => onFileUploaded(file, sha256)}
@@ -64,11 +62,6 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
         calcSha256
         fileUploaded={{ file }}
         showHashCode={false}
-        externalError={
-          fieldMeta(`${id}.file`).touched || fieldMeta(`${id}.file.data`).value
-            ? getError('file.sha256.hashBase64', false)
-            : undefined
-        }
       />
 
       <TextField
@@ -84,11 +77,10 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
         margin="normal"
         required
         data-testid="f24-name"
-        sx={{ mt: 3 }}
       />
 
       {(notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE || showDeleteButton) && (
-        <Stack direction={isMobile ? 'column' : 'row'} mt={2}>
+        <Stack direction={isMobile ? 'column' : 'row'}>
           {notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
             <Stack>
               <FormControlLabel
@@ -131,7 +123,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
       )}
 
       {showDeleteButton && (
-        <Alert severity="warning" sx={{ mt: 4 }} data-testid="f24-installment-alert">
+        <Alert severity="warning" data-testid="f24-installment-alert">
           {t('new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment')}
         </Alert>
       )}

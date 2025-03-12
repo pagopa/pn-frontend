@@ -7,7 +7,6 @@ import {
   NewNotificationRecipient,
   NotificationFeePolicy,
   PagoPaIntegrationMode,
-  PaymentModel,
   PreliminaryInformationsPayload,
 } from '../../models/NewNotification';
 import { UserGroup } from '../../models/user';
@@ -29,7 +28,7 @@ type NewNotificationInitialState = {
 const initialState: NewNotificationInitialState = {
   loading: false,
   notification: {
-    notificationFeePolicy: '' as NotificationFeePolicy,
+    notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
     paProtocolNumber: '',
     subject: '',
     recipients: [],
@@ -114,23 +113,13 @@ const newNotificationSlice = createSlice({
           payments: updatedPayments,
         };
       });
-
-      if (recipients.every((r) => r.debtPosition === PaymentModel.NOTHING)) {
-        state.notification = {
-          ...state.notification,
-          notificationFeePolicy: '' as NotificationFeePolicy,
-          paFee: undefined,
-          vat: undefined,
-          pagoPaIntMode: undefined,
-        };
-      }
     },
     setDebtPositionDetail: (
       state,
       action: PayloadAction<{
         recipients: Array<NewNotificationRecipient>;
         vat?: number;
-        paFee?: string;
+        paFee?: number;
         notificationFeePolicy: NotificationFeePolicy;
         pagoPaIntMode?: PagoPaIntegrationMode;
       }>
@@ -139,7 +128,7 @@ const newNotificationSlice = createSlice({
         ...state.notification,
         recipients: action.payload.recipients,
         vat: action.payload.vat,
-        paFee: action.payload.paFee,
+        paFee: Number(action.payload.paFee),
         notificationFeePolicy: action.payload.notificationFeePolicy,
         pagoPaIntMode: action.payload.pagoPaIntMode,
       };

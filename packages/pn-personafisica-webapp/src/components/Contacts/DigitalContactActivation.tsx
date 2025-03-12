@@ -12,12 +12,10 @@ import SercqSendContactWizard from '../../components/Contacts/SercqSendContactWi
 import { IOAllowedValues } from '../../models/contacts';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
-import { getConfiguration } from '../../services/configuration.service';
 import EmailSmsContactWizard from './EmailSmsContactWizard';
 
 type Props = {
   isTransferring?: boolean;
-  onGoBack?: () => void;
 };
 
 enum ActiveStep {
@@ -30,16 +28,15 @@ type ModalType = {
   step?: ActiveStep;
 };
 
-const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onGoBack }) => {
+const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
-  const { IS_DOD_ENABLED } = getConfiguration();
   const { defaultAPPIOAddress, defaultSMSAddress, defaultEMAILAddress, defaultSERCQ_SENDAddress } =
     useAppSelector(contactsSelectors.selectAddresses);
 
   const [modal, setModal] = useState<ModalType>({ open: false });
   const [activeStep, setActiveStep] = useState(0);
-  const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress || !IS_DOD_ENABLED);
+  const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress);
 
   const showIOStep = useMemo(
     () => defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.DISABLED,
@@ -88,12 +85,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const getNextButton = () => {
     if (activeStep === 0) {
       return (
-        <ButtonNaked
-          onClick={onGoBack ? () => onGoBack() : () => navigate(-1)}
-          color="primary"
-          size="medium"
-          sx={{ mx: 'auto' }}
-        >
+        <ButtonNaked onClick={() => navigate(-1)} color="primary" size="medium" sx={{ mx: 'auto' }}>
           {t('button.annulla', { ns: 'common' })}
         </ButtonNaked>
       );
@@ -123,13 +115,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   };
 
   if (showPecWizard) {
-    return (
-      <PecContactWizard
-        setShowPecWizard={setShowPecWizard}
-        isTransferring={isTransferring}
-        onGoBack={onGoBack}
-      />
-    );
+    return <PecContactWizard setShowPecWizard={setShowPecWizard} isTransferring={isTransferring} />;
   }
   return (
     <>

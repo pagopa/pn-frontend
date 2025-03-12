@@ -102,7 +102,7 @@ export interface NewNotification extends NewNotificationBilingualism {
   taxonomyCode: string;
   recipients: Array<NewNotificationRecipient>;
   documents: Array<NewNotificationDocument>;
-  paFee?: string;
+  paFee?: number;
   vat?: number;
   notificationFeePolicy: NotificationFeePolicy;
   pagoPaIntMode?: PagoPaIntegrationMode;
@@ -159,7 +159,7 @@ export type RecipientPaymentsFormValues = {
 
 export type PaymentMethodsFormValues = {
   notificationFeePolicy: NotificationFeePolicy;
-  paFee: string | undefined;
+  paFee: number | undefined;
   vat: number | undefined;
   pagoPaIntMode: PagoPaIntegrationMode;
   recipients: RecipientPaymentsFormValues;

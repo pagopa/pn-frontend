@@ -18,8 +18,6 @@ import {
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
-import { getConfiguration } from '../../services/configuration.service';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { pecValidationSchema } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -27,22 +25,15 @@ import ContactCodeDialog from './ContactCodeDialog';
 interface Props {
   isTransferring?: boolean;
   setShowPecWizard: (showPecWizard: boolean) => void;
-  onGoBack?: () => void;
 }
 
-const PecContactWizard: React.FC<Props> = ({
-  isTransferring = false,
-  setShowPecWizard,
-  onGoBack,
-}) => {
+const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecWizard }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
-  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const [openCodeModal, setOpenCodeModal] = useState(false);
-  const { IS_DOD_ENABLED } = getConfiguration();
 
   const validationSchema = yup.object().shape({
     pec: pecValidationSchema(t),
@@ -56,10 +47,9 @@ const PecContactWizard: React.FC<Props> = ({
     validateOnMount: true,
     enableReinitialize: true,
     onSubmit: () => {
-      const source = externalEvent?.source ?? ContactSource.RECAPITI;
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, {
         senderId: 'default',
-        source,
+        source: ContactSource.RECAPITI,
       });
       handleCodeVerification();
     },
@@ -98,14 +88,6 @@ const PecContactWizard: React.FC<Props> = ({
       .catch(() => {});
   };
 
-  const handlePreviousBtnClick = () => {
-    if (onGoBack && isTransferring) {
-      onGoBack();
-    } else {
-      return !IS_DOD_ENABLED ? navigate(-1) : setShowPecWizard(false);
-    }
-  };
-
   return (
     <>
       <PnWizard
@@ -120,7 +102,7 @@ const PecContactWizard: React.FC<Props> = ({
         slots={{
           prevButton: () => (
             <ButtonNaked
-              onClick={handlePreviousBtnClick}
+              onClick={isTransferring ? () => navigate(-1) : () => setShowPecWizard(false)}
               color="primary"
               size="medium"
               data-testid="prev-button"
