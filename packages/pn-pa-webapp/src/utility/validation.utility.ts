@@ -7,6 +7,7 @@ import {
   NewNotificationF24Payment,
   NewNotificationPagoPaPayment,
   NewNotificationRecipient,
+  NotificationFeePolicy,
   RecipientPaymentsFormValues,
 } from '../models/NewNotification';
 import { getDuplicateValuesByKeys } from './notification.utility';
@@ -296,4 +297,25 @@ export function identicalSHA(values: RecipientPaymentsFormValues | undefined): A
   }
 
   return errors;
+}
+
+export function validatePaFee(tc:any) {
+  return yup
+        .string()
+        .optional()
+        .when('notificationFeePolicy', {
+          is: NotificationFeePolicy.DELIVERY_MODE,
+          then: yup
+            .string()
+            .required(tc('required-field'))
+        });
+  
+}
+
+export function isCurrency(paFee: string | undefined): { messageKey: string; data?: { [key: string]: number | string } } | undefined {
+
+  if (paFee && !dataRegex.currency.test(String(paFee))) {
+    return { messageKey: 'invalid', data: { maxValue: 1 } };
+  }
+  return undefined;
 }
