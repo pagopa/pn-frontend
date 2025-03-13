@@ -199,16 +199,18 @@ async function testAutocomplete(
 function testFormElements(
   container: HTMLElement,
   elementName: string,
-  label: string,
+  label?: string,
   value?: string | number
 ) {
   const formElement = container.querySelector(
-    `input[id="${elementName}"], input[name="${elementName}"]`
+    `input[id="${elementName}"], input[name="${elementName}"], textarea[name="${elementName}"]`
   );
   expect(formElement).toBeInTheDocument();
-  const formElementLabel = container.querySelector(`label[for="${elementName}"]`);
-  expect(formElementLabel).toBeInTheDocument();
-  expect(formElementLabel).toHaveTextContent(label);
+  if (label) {
+    const formElementLabel = container.querySelector(`label[for="${elementName}"]`);
+    expect(formElementLabel).toBeInTheDocument();
+    expect(formElementLabel).toHaveTextContent(label);
+  }
   if (value !== undefined && value !== null) {
     expect(formElement).toHaveValue(value);
   }
@@ -227,7 +229,9 @@ async function testInput(
   value: string | number,
   blur: boolean = false
 ) {
-  const input = container.querySelector(`input[name="${elementName}"]`);
+  const input = container.querySelector(
+    `input[name="${elementName}"], textarea[name="${elementName}"]`
+  );
   fireEvent.change(input!, { target: { value } });
   await waitFor(() => {
     expect(input).toHaveValue(value);

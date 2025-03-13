@@ -4,15 +4,17 @@ import { InputAdornment, TextField } from '@mui/material';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
 type Props = {
+  name: string;
   value: string;
   label: string;
 };
 
-export const ShowCodesInput: React.FC<Props> = ({ value, label }) => {
+export const ShowCodesInput: React.FC<Props> = ({ name, value, label }) => {
   const { t } = useTranslation(['integrazioneApi']);
 
   return (
     <TextField
+      name={name}
       value={value}
       fullWidth
       label={t(label)}

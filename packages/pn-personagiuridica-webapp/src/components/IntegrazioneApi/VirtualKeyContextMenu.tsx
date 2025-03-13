@@ -40,6 +40,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -66,7 +67,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({
         key.user?.fiscalCode === data.user?.fiscalCode && key.status === VirtualKeyStatus.Blocked
     ) && data.status !== VirtualKeyStatus.Rotated;
 
-  const shoudlShowViewButton = !isUserAdmin || isPersonalKey;
+  const shoudlShowViewButton = isPersonalKey;
 
   const shouldShowDeleteButton = data.status !== VirtualKeyStatus.Enabled;
 

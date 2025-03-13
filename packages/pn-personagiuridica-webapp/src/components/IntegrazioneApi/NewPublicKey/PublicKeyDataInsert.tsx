@@ -5,11 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { Box, Link, TextField, Typography } from '@mui/material';
-import {
-  dataRegex,
-  formatDate,
-  today,
-} from '@pagopa-pn/pn-commons';
+import { dataRegex, formatDate, today } from '@pagopa-pn/pn-commons';
 
 import { BffPublicKeyRequest } from '../../../generated-client/pg-apikeys';
 import * as routes from '../../../navigation/routes.const';
@@ -29,7 +25,7 @@ const PublicKeyDataInsert: React.FC<Props> = ({ onConfirm, duplicateKey, tosAcce
   const { t } = useTranslation(['integrazioneApi', 'common']);
   const navigate = useNavigate();
 
-  const redirectToSLink = () => window.open(routes.TERMS_OF_SERVICE_B2B, "_blank");
+  const redirectToSLink = () => window.open(routes.TERMS_OF_SERVICE_B2B, '_blank');
   const redirectApiKeyLink = () => navigate(routes.INTEGRAZIONE_API);
 
   const initialValues = {
@@ -46,7 +42,10 @@ const PublicKeyDataInsert: React.FC<Props> = ({ onConfirm, duplicateKey, tosAcce
       .string()
       .required(t('required-field', { ns: 'common' }))
       .max(nameMaxLen, t('too-long-field-error', { ns: 'common', maxLength: nameMaxLen }))
-      .matches(dataRegex.publicKeyName, t('messages.error.name-allowed-charset', { allowedCharset: nameAllowedChars })),
+      .matches(
+        dataRegex.publicKeyName,
+        t('messages.error.name-allowed-charset', { allowedCharset: nameAllowedChars })
+      ),
     publicKey: yup
       .string()
       .required(t('required-field', { ns: 'common' }))
@@ -78,7 +77,14 @@ const PublicKeyDataInsert: React.FC<Props> = ({ onConfirm, duplicateKey, tosAcce
       onContinueClick={formik.submitForm}
       submitLabel={t('new-public-key.button.register')}
       content={
-        <Typography component={Box} mt={2} mb={3} data-testid="content" variant="body2" sx={{ fontSize: '14px' }}>
+        <Typography
+          component={Box}
+          mt={2}
+          mb={3}
+          data-testid="content"
+          variant="body2"
+          sx={{ fontSize: '14px' }}
+        >
           <Trans i18nKey="new-public-key.steps.insert-data.content" ns="integrazioneApi" />
         </Typography>
       }
@@ -126,22 +132,22 @@ const PublicKeyDataInsert: React.FC<Props> = ({ onConfirm, duplicateKey, tosAcce
           </Typography>
         </Box>
 
-        {!tosAccepted &&
-        <Typography component={Box} mt={3} sx={{ fontSize: '14px' }}>
-          <Trans
-            i18nKey="new-public-key.steps.insert-data.tos"
-            ns="integrazioneApi"
-            components={[
-              <Link
-                key="tos-link"
-                sx={{ cursor: 'pointer', fontWeight: 'bold', textDecoration: 'none !important' }}
-                onClick={(redirectToSLink)}
-                data-testid="tos-link"
-              />
-            ]}
-          />
-        </Typography>
-        }
+        {!tosAccepted && (
+          <Typography component={Box} mt={3} sx={{ fontSize: '14px' }}>
+            <Trans
+              i18nKey="new-public-key.steps.insert-data.tos"
+              ns="integrazioneApi"
+              components={[
+                <Link
+                  key="tos-link"
+                  sx={{ cursor: 'pointer', fontWeight: 'bold', textDecoration: 'none !important' }}
+                  onClick={redirectToSLink}
+                  data-testid="tos-link"
+                />,
+              ]}
+            />
+          </Typography>
+        )}
       </form>
     </NewPublicKeyCard>
   );
