@@ -316,7 +316,6 @@ export const newNotificationEmpty: NewNotification = {
 };
 
 export const newNotificationForBff: BffNewNotificationRequest = {
-  abstract: '',
   paProtocolNumber: '12345678910',
   subject: 'Multone esagerato',
   recipients: newNotificationRecipientsForBff,
