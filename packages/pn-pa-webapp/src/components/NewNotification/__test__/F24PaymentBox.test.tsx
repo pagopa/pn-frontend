@@ -20,7 +20,7 @@ describe('F24PaymentBox', () => {
     id: 'payment-0',
     onFileUploaded: vi.fn(),
     onRemoveFile: vi.fn(),
-    f24Payment: newNotificationF24,
+    f24Payment: newNotificationF24(0),
     notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
     handleChange: vi.fn(),
     showDeleteButton: false,

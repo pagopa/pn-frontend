@@ -94,7 +94,7 @@ describe('test custom validation for recipients', () => {
       taxId1: {
         pagoPa: [
           {
-            ...newNotificationPagoPa,
+            ...newNotificationPagoPa(0),
             creditorTaxId: 'creditorTaxId1',
             noticeCode: 'noticeCode1',
           },
@@ -104,7 +104,7 @@ describe('test custom validation for recipients', () => {
       taxId2: {
         pagoPa: [
           {
-            ...newNotificationPagoPa,
+            ...newNotificationPagoPa(1),
             creditorTaxId: 'creditorTaxId2',
             noticeCode: 'noticeCode2',
           },
@@ -122,7 +122,7 @@ describe('test custom validation for recipients', () => {
       taxId1: {
         pagoPa: [
           {
-            ...newNotificationPagoPa,
+            ...newNotificationPagoPa(0),
             creditorTaxId: 'creditorTaxId1',
             noticeCode: 'noticeCode1',
           },
@@ -132,7 +132,7 @@ describe('test custom validation for recipients', () => {
       taxId2: {
         pagoPa: [
           {
-            ...newNotificationPagoPa,
+            ...newNotificationPagoPa(1),
             creditorTaxId: 'creditorTaxId1',
             noticeCode: 'noticeCode1',
           },
@@ -147,7 +147,7 @@ describe('test custom validation for recipients', () => {
       {
         messageKey: 'identical-notice-codes-error',
         value: {
-          ...newNotificationPagoPa,
+          ...newNotificationPagoPa(0),
           creditorTaxId: 'creditorTaxId1',
           noticeCode: 'noticeCode1',
           taxIdKey: 'taxId1',
@@ -157,7 +157,7 @@ describe('test custom validation for recipients', () => {
       {
         messageKey: '',
         value: {
-          ...newNotificationPagoPa,
+          ...newNotificationPagoPa(0),
           creditorTaxId: 'creditorTaxId1',
           noticeCode: 'noticeCode1',
           taxIdKey: 'taxId1',
@@ -167,7 +167,7 @@ describe('test custom validation for recipients', () => {
       {
         messageKey: 'identical-notice-codes-error',
         value: {
-          ...newNotificationPagoPa,
+          ...newNotificationPagoPa(1),
           creditorTaxId: 'creditorTaxId1',
           noticeCode: 'noticeCode1',
           taxIdKey: 'taxId2',
@@ -177,7 +177,7 @@ describe('test custom validation for recipients', () => {
       {
         messageKey: '',
         value: {
-          ...newNotificationPagoPa,
+          ...newNotificationPagoPa(1),
           creditorTaxId: 'creditorTaxId1',
           noticeCode: 'noticeCode1',
           taxIdKey: 'taxId2',
@@ -192,12 +192,12 @@ describe('test custom validation for recipients', () => {
       taxId1: {
         pagoPa: [
           {
-            ...newNotificationPagoPa,
+            ...newNotificationPagoPa(0),
             applyCost: false,
             idx: 0,
           },
           {
-            ...newNotificationPagoPa,
+            ...newNotificationPagoPa(1),
             applyCost: true,
             idx: 1,
           },
@@ -216,12 +216,12 @@ describe('test custom validation for recipients', () => {
         pagoPa: [],
         f24: [
           {
-            ...newNotificationF24,
+            ...newNotificationF24(0),
             applyCost: false,
             idx: 0,
           },
           {
-            ...newNotificationF24,
+            ...newNotificationF24(1),
             applyCost: true,
             idx: 1,
           },
@@ -250,12 +250,12 @@ describe('test custom validation for recipients', () => {
       taxId1: {
         pagoPa: [
           {
-            ...newNotificationPagoPa,
+            ...newNotificationPagoPa(0),
             applyCost: false,
             idx: 0,
           },
           {
-            ...newNotificationPagoPa,
+            ...newNotificationPagoPa(1),
             applyCost: false,
             idx: 1,
           },
@@ -286,12 +286,12 @@ describe('test custom validation for recipients', () => {
         pagoPa: [],
         f24: [
           {
-            ...newNotificationF24,
+            ...newNotificationF24(0),
             applyCost: false,
             idx: 0,
           },
           {
-            ...newNotificationF24,
+            ...newNotificationF24(1),
             applyCost: false,
             idx: 1,
           },
@@ -320,7 +320,7 @@ describe('test custom validation for recipients', () => {
       taxId1: {
         pagoPa: [
           {
-            ...newNotificationPagoPa,
+            ...newNotificationPagoPa(0),
             applyCost: false,
             idx: 0,
           },
@@ -331,7 +331,7 @@ describe('test custom validation for recipients', () => {
         pagoPa: [],
         f24: [
           {
-            ...newNotificationF24,
+            ...newNotificationF24(0),
             applyCost: false,
             idx: 0,
           },

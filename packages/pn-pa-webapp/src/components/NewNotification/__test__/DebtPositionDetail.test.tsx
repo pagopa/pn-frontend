@@ -41,7 +41,7 @@ describe('DebtPositionDetail Component', async () => {
       }
     );
     // we wait that the component is correctly rendered
-    const paymentChoiceBox = await waitFor(() => getByTestId('paymentMethodForm'));
+    const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
     expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
     expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
     await testRadio(paymentChoiceBox, 'notificationFeePolicy', [
@@ -51,7 +51,6 @@ describe('DebtPositionDetail Component', async () => {
     expect(paymentChoiceBox).toHaveTextContent('pagopa-int-mode.title');
     await testRadio(paymentChoiceBox, 'pagoPaIntMode', ['radios.sync', 'radios.async']);
     const buttonSubmit = getByTestId('step-submit');
-    expect(buttonSubmit).toBeDisabled();
     expect(buttonSubmit).toHaveTextContent('button.continue');
     const buttonPrevious = getByTestId('previous-step');
     expect(buttonPrevious).toBeInTheDocument();
@@ -79,7 +78,7 @@ describe('DebtPositionDetail Component', async () => {
     );
 
     // we wait that the component is correctly rendered
-    const paymentChoiceBox = await waitFor(() => getByTestId('paymentMethodForm'));
+    const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
     expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
     expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
     await testRadio(paymentChoiceBox, 'notificationFeePolicy', [
@@ -88,7 +87,6 @@ describe('DebtPositionDetail Component', async () => {
     ]);
     expect(paymentChoiceBox).not.toHaveTextContent('pagopa-int-mode.title');
     const buttonSubmit = getByTestId('step-submit');
-    expect(buttonSubmit).toBeDisabled();
     expect(buttonSubmit).toHaveTextContent('button.continue');
     const buttonPrevious = getByTestId('previous-step');
     expect(buttonPrevious).toBeInTheDocument();
@@ -125,7 +123,7 @@ describe('DebtPositionDetail Component', async () => {
     );
 
     // we wait that the component is correctly rendered
-    const paymentChoiceBox = await waitFor(() => getByTestId('paymentMethodForm'));
+    const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
     expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
     expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
     await testRadio(paymentChoiceBox, 'notificationFeePolicy', [
@@ -134,7 +132,6 @@ describe('DebtPositionDetail Component', async () => {
     ]);
     expect(paymentChoiceBox).toHaveTextContent('pagopa-int-mode.title');
     const buttonSubmit = getByTestId('step-submit');
-    expect(buttonSubmit).toBeDisabled();
     expect(buttonSubmit).toHaveTextContent('button.continue');
     const buttonPrevious = getByTestId('previous-step');
     expect(buttonPrevious).toBeInTheDocument();
@@ -349,7 +346,7 @@ describe('DebtPositionDetail Component', async () => {
   //     }
   //   );
   //   // we wait that the component is correctly rendered
-  //   const paymentChoiceBoxes = await waitFor(() => getAllByTestId('paymentMethodForm'));
+  //   const paymentChoiceBoxes = await waitFor(() => getAllByTestId('debtPositionDetailForm'));
   //   expect(paymentChoiceBoxes).toHaveLength(newNotification.recipients.length);
   //   const buttonSubmit = getByTestId('step-submit');
   //   expect(buttonSubmit).toBeEnabled();

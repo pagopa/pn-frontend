@@ -384,7 +384,7 @@ const DebtPositionDetail: React.FC<Props> = ({
   }));
 
   return (
-    <form onSubmit={formik.handleSubmit} data-testid="paymentMethodForm">
+    <form onSubmit={formik.handleSubmit} data-testid="debtPositionDetailForm">
       <NewNotificationCard
         isContinueDisabled={!formik.isValid}
         noPaper={true}
@@ -494,7 +494,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                   ]}
                 />
               </Typography>
-              <Alert severity={'warning'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
+              <Alert severity={'warning'} sx={{ mb: 3, mt: 2 }} data-testid="pagoPaIntModeAlert">
                 {t('alert', { ns: 'notifiche' })}
               </Alert>
               <RadioGroup

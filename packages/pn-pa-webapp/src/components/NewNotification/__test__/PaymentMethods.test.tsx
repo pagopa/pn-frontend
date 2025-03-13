@@ -32,16 +32,16 @@ const formikValues: PaymentMethodsFormValues = {
   vat: newNotification.vat,
   recipients: {
     [getRecipientKey(newNotification.recipients[0])]: {
-      pagoPa: [newNotificationPagoPa],
+      pagoPa: [newNotificationPagoPa(0)],
       f24: [],
     },
     [getRecipientKey(newNotification.recipients[1])]: {
-      pagoPa: [newNotificationPagoPa],
-      f24: [newNotificationF24],
+      pagoPa: [newNotificationPagoPa(1)],
+      f24: [newNotificationF24(1)],
     },
     [getRecipientKey(newNotification.recipients[2])]: {
       pagoPa: [],
-      f24: [newNotificationF24],
+      f24: [newNotificationF24(2)],
     },
   },
 };
@@ -170,7 +170,7 @@ describe('PaymentMethods Component', () => {
       recipients: {
         ...formikValues.recipients,
         [pagoPaRecipientKey]: {
-          pagoPa: [newNotificationPagoPa, { ...newNotificationPagoPa, idx: 1 }],
+          pagoPa: [newNotificationPagoPa(0), { ...newNotificationPagoPa(1), idx: 1 }],
           f24: [],
         },
       },
@@ -183,7 +183,7 @@ describe('PaymentMethods Component', () => {
 
     expect(mockSetFieldValue).toHaveBeenCalledTimes(1);
     expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${pagoPaRecipientKey}.pagoPa`, [
-      newNotificationPagoPa,
+      newNotificationPagoPa(0),
     ]);
   });
 
@@ -192,8 +192,8 @@ describe('PaymentMethods Component', () => {
       recipients: {
         ...formikValues.recipients,
         [f24RecipientKey]: {
-          pagoPa: [newNotificationPagoPa],
-          f24: [newNotificationF24, { ...newNotificationF24, idx: 1 }],
+          pagoPa: [newNotificationPagoPa(0)],
+          f24: [newNotificationF24(0), { ...newNotificationF24(1), idx: 1 }],
         },
       },
     });
@@ -204,7 +204,7 @@ describe('PaymentMethods Component', () => {
     fireEvent.click(deleteButtons[0]);
 
     expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${f24RecipientKey}.f24`, [
-      newNotificationF24,
+      newNotificationF24(0),
     ]);
   });
 

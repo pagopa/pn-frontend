@@ -90,7 +90,7 @@ const DebtPosition: React.FC<Props> = ({
   }));
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} data-testid="debtPositionForm">
       <NewNotificationCard
         isContinueDisabled={!formik.isValid}
         noPaper={true}

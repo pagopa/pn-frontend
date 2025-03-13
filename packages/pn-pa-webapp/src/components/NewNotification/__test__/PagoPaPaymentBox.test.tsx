@@ -20,7 +20,7 @@ describe('PagoPaPaymentBox', () => {
     id: 'payment-0',
     onFileUploaded: vi.fn(),
     onRemoveFile: vi.fn(),
-    pagoPaPayment: newNotificationPagoPa,
+    pagoPaPayment: newNotificationPagoPa(0),
     notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
     handleChange: vi.fn(),
     showDeleteButton: false,
