@@ -41,6 +41,7 @@ const ShowPublicKeyParams: React.FC<Props> = ({ params }) => {
         </InputAdornment>
         <TextField
           id="kid"
+          name="kid"
           value={params?.kid}
           fullWidth
           InputProps={{
@@ -49,7 +50,7 @@ const ShowPublicKeyParams: React.FC<Props> = ({ params }) => {
               <InputAdornment position="end">
                 <CopyToClipboardButton
                   color="primary"
-                  value={() => params?.kid || ''}
+                  value={() => params?.kid ?? ''}
                   tooltipTitle={t('new-public-key.kid-copied')}
                 />
               </InputAdornment>
@@ -65,6 +66,8 @@ const ShowPublicKeyParams: React.FC<Props> = ({ params }) => {
           </InputLabel>
         </InputAdornment>
         <TextField
+          id="issuer"
+          name="issuer"
           value={params?.issuer}
           fullWidth
           InputProps={{
@@ -73,7 +76,7 @@ const ShowPublicKeyParams: React.FC<Props> = ({ params }) => {
               <InputAdornment position="end">
                 <CopyToClipboardButton
                   color="primary"
-                  value={() => params?.issuer || ''}
+                  value={() => params?.issuer ?? ''}
                   tooltipTitle={t('new-public-key.issuer-copied')}
                 />
               </InputAdornment>
