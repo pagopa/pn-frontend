@@ -17,6 +17,7 @@ import {
   Stack,
   TextField,
   Typography,
+  useFormControl,
 } from '@mui/material';
 import { CustomDropdown, useIsMobile } from '@pagopa-pn/pn-commons';
 
@@ -41,7 +42,7 @@ import {
   f24ValidationSchema,
   identicalIUV,
   identicalSHA,
-  isCurrency,
+  isCurrencyAndMaxValue,
   pagoPaValidationSchema,
   validatePaFee,
 } from '../../utility/validation.utility';
@@ -60,6 +61,19 @@ const emptyFileData = {
   data: undefined,
   sha256: { hashBase64: '', hashHex: '' },
 };
+function PaFeeFocusHelperText() {
+  const { t } = useTranslation(['notifiche'], {
+    keyPrefix: 'new-notification.steps.debt-position-detail',
+  });
+  const { focused } = useFormControl() || {};
+
+  return useMemo(() => {
+    if (focused) {
+      return t('notification-fee.pa-fee-validation');
+    }
+    return false;
+  }, [focused]);
+}
 
 const DebtPositionDetail: React.FC<Props> = ({
   notification,
@@ -231,6 +245,20 @@ const DebtPositionDetail: React.FC<Props> = ({
     return recipientSchema;
   };
 
+  const getErrorMessage = (error: {
+    messageKey: string;
+    data?: {
+      [key: string]: number | string;
+    };
+  }) => {
+    if (error.messageKey === 'notification-fee.pa-fee-currency') {
+      return t(error.messageKey, error.data);
+    }
+    if (error.messageKey === 'notification-fee.pa-fee-max-value') {
+      return t(error.messageKey, error.data);
+    }
+    return '';
+  };
   const validationSchema = yup.object().shape({
     notificationFeePolicy: yup
       .string()
@@ -240,11 +268,11 @@ const DebtPositionDetail: React.FC<Props> = ({
     paFee: validatePaFee(tc).test({
       name: 'isCurrency',
       test(value?: string) {
-        const error = isCurrency(value);
+        const error = isCurrencyAndMaxValue(value);
+
         if (error) {
-          console.log('----------', error);
           return this.createError({
-            message: `${t('notification-fee.pa-fee')} ${tc(error.messageKey)}`,
+            message: getErrorMessage(error),
             path: this.path,
           });
         }
@@ -267,7 +295,6 @@ const DebtPositionDetail: React.FC<Props> = ({
           (r) =>
             r.debtPosition === PaymentModel.PAGO_PA || r.debtPosition === PaymentModel.PAGO_PA_F24
         );
-        console.log(formik.touched, formik.errors);
         return !(hasPagoPaDebtPosition && value === PagoPaIntegrationMode.NONE);
       }),
     recipients: yup
@@ -459,12 +486,10 @@ const DebtPositionDetail: React.FC<Props> = ({
                   componentsProps={{ typography: { fontSize: '16px' } }}
                 />
               </RadioGroup>
-              {isDeliveryMode && (
-                <Stack
-                  direction={isMobile ? 'column' : 'row'}
-                  justifyContent={isMobile ? 'flex-start' : 'space-between'}
-                  sx={{ marginTop: '1rem', width: isMobile ? '100%' : '50%' }}
-                >
+            </Stack>
+            {isDeliveryMode && (
+              <>
+                <Stack sx={{ width: isMobile ? '100%' : '50%' }}>
                   <TextField
                     required
                     size="small"
@@ -473,7 +498,9 @@ const DebtPositionDetail: React.FC<Props> = ({
                     label={t('notification-fee.pa-fee')}
                     value={formik.values.paFee}
                     error={formik.touched.paFee && Boolean(formik.errors.paFee)}
-                    helperText={formik.touched.paFee && formik.errors.paFee}
+                    helperText={
+                      (formik.touched.paFee && formik.errors.paFee) || <PaFeeFocusHelperText />
+                    }
                     onChange={handleChangeTouched}
                     InputProps={{
                       endAdornment: (
@@ -484,7 +511,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                     }}
                     sx={{
                       flexBasis: isMobile ? '100%' : '60%',
-                      margin: isMobile ? '1rem 0' : '0rem 0.8rem',
+                      margin: '1rem 0',
                     }}
                   />
                   <CustomDropdown
@@ -506,12 +533,6 @@ const DebtPositionDetail: React.FC<Props> = ({
                     ))}
                   </CustomDropdown>
                 </Stack>
-              )}
-            </Stack>
-            {isDeliveryMode && (
-              <>
-                <Typography variant="caption">{t('notification-fee.pa-fee-format')}</Typography>{' '}
-                <br />
                 <Typography variant="caption">{t('notification-fee.disclaimer')}</Typography>
               </>
             )}

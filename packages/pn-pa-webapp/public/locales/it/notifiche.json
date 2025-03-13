@@ -511,6 +511,9 @@
           "pa-fee-format": "Il costo della notifica deve essere un valore compreso tra 0,01 e 1,00 e deve contenere massimo 2 cifre decimali.",
           "disclaimer": "L’IVA verrà applicata solo alle notifiche recapitate in modalità cartacea.",
           "pa-fee": "Costo di notifica",
+          "pa-fee-validation": "Inserisci un valore compreso tra 0 e 1 e con massimo 2 cifre decimali",
+          "pa-fee-currency": "Inserisci un valore con massimo 2 cifre decimali",
+          "pa-fee-max-value": "Inserisci un valore compreso tra 0 e 1",
           "vat": "IVA"
         },
         "pagopa-int-mode": {
@@ -525,7 +528,7 @@
           "sync": "Sincrona",
           "async": "Asincrona"
         },
-        "identical-notice-codes-error": "C'è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
+        "identical-notice-codes-error": "C'è già un pagamento con questo Codice Avviso. Inseriscine uno diverso.",
         "at-least-one-applycost": "Applica i costi di notifica ad almeno un pagamento.",
         "identical-sha256-error": "Non è possibile caricare lo stesso file più di una volta. Carica un file diverso.",
         "payment-methods": {

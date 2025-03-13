@@ -312,10 +312,13 @@ export function validatePaFee(tc:any) {
   
 }
 
-export function isCurrency(paFee: string | undefined): { messageKey: string; data?: { [key: string]: number | string } } | undefined {
+export function isCurrencyAndMaxValue(paFee: string | undefined): { messageKey: string; data?: { [key: string]: number | string } } | undefined {
 
   if (paFee && !dataRegex.currency.test(String(paFee))) {
-    return { messageKey: 'invalid', data: { maxValue: 1 } };
+    return { messageKey: 'notification-fee.pa-fee-currency'};
+  }
+  if (paFee && !dataRegex.maxOneEuro.test(String(paFee))) {
+    return { messageKey: 'notification-fee.pa-fee-max-value', data: { maxValue: 1 } };
   }
   return undefined;
 }
