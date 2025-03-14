@@ -37,7 +37,8 @@
     "iun": "Codice IUN",
     "groups": "Gruppi",
     "status": "Stato",
-    "show-detail": "Vedi dettaglio"
+    "show-detail": "Vedi dettaglio",
+    "aria-action-table": "Vedi dettaglio notifica con iun: {{iun}}"
   },
   "sort": {
     "title": "Ordina",
@@ -382,7 +383,7 @@
     "canceled": "Annullata",
     "canceled-tooltip": "L'ente ha annullato l'invio della notifica",
     "canceled-description": "L'ente ha annullato l'invio della notifica.",
-    "returned-to-sender":"Resa al mittente",
+    "returned-to-sender": "Resa al mittente",
     "returned-to-sender-tooltip": "Il destinatario risulta deceduto",
     "returned-to-sender-tooltip-multirecipient": "Tutti i destinatari risultano deceduti",
     "returned-to-sender-description": "Il destinatario risulta deceduto.",
@@ -390,7 +391,8 @@
   },
   "new-notification": {
     "title": "Invia una nuova notifica",
-    "subtitle": "Per inviare una notifica, inserisci i dati richiesti e aggiungi i modelli di pagamento. Se devi fare un invio massivo, puoi usare le",
+    "subtitle": "Per inviare una notifica, inserisci i dati richiesti e aggiungi eventualmente una Posizione debitoria. Se devi fare un invio massivo,",
+    "how-it-works": "scopri come funziona",
     "breadcrumb-root": "Notifiche",
     "breadcrumb-leaf": "Nuova notifica",
     "prompt": {
@@ -399,6 +401,7 @@
     },
     "back-to-notifications": "Torna alle notifiche",
     "drag-doc-pc": "Trascina qui il documento",
+    "drag-doc-with-format-pc": "Trascina qui il documento in formato {{type}}",
     "drag-doc-mobile": "Carica qui il documento",
     "warning-payment-disabled": "Al momento le notifiche che prevedono un pagamento si possono inviare solo tramite API Key.",
     "steps": {
@@ -423,8 +426,7 @@
         "simple-registered-letter": "Raccomandata A/R",
         "payment-method": "Modello di pagamento",
         "pagopa-notice": "Avviso pagoPA",
-        "pagopa-notice-f24-flatrate": "Avviso pagoPA e Modello F24 forfettario",
-        "pagopa-notice-f24": "Avviso pagoPA e Modello F24",
+        "f24": "Modello F24",
         "nothing": "Nessuno",
         "notification-language-title": "Lingua di invio",
         "notification-language-subtitle": "La notifica, i documenti e le attestazioni verranno inviati secondo le preferenze di lingua selezionate.",
@@ -439,7 +441,6 @@
         "title": "Destinatari",
         "fiscal-code-error": "Il valore inserito non è corretto",
         "identical-fiscal-codes-error": "C'è già un destinatario con questo Codice Fiscale. Inseriscine uno diverso.",
-        "identical-notice-codes-error": "C'è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
         "notice-code-error": "Inserisci un codice di 18 caratteri numerici",
         "pec-error": "Indirizzo PEC non valido",
         "forbidden-characters-denomination-error": "Hai inserito caratteri non validi",
@@ -472,7 +473,7 @@
         "remove-recipient": "Rimuovi destinatario"
       },
       "attachments": {
-        "title": "Allegati",
+        "title": "Documentazione",
         "max-attachments": "Questi sono i documenti che saranno notificati tramite SEND a tutti i destinatari inseriti. Puoi allegare fino a un massimo di {{maxNumber}} documenti.",
         "attach-for-recipients": "Documenti allegati",
         "act-attachment": "Allega documento",
@@ -482,21 +483,72 @@
         "add-doc": "Aggiungi un documento",
         "add-another-doc": "Aggiungi un altro documento",
         "back-to-recipient": "Torna a Destinatario",
+        "back-to-debt-position": "Torna a Posizione debitoria",
+        "back-to-debt-position-detail": "Torna a Dettaglio posizione debitoria",
         "remove-document": "Rimuovi documento",
         "banner-additional-languages": "Hai scelto di inviare la notifica in più lingue. Ricorda di allegare i documenti in entrambe le lingue selezionate.",
         "file-upload-helper": "Il documento deve essere in formato {{format}} e non deve superare le dimensioni di {{size}}"
       },
-      "payment-methods": {
-        "title": "Modelli di pagamento",
-        "pagopa-notice": "Avviso pagoPA",
-        "pagopa-notice-f24-flatrate": "F24 forfettario",
-        "pagopa-notice-f24": "F24",
-        "payment-models": "Modelli di pagamento per",
-        "attach-pagopa-notice": "Allega Avviso pagoPA",
-        "attach-f24-flatrate": "Allega Modello F24 forfettario",
-        "attach-f24": "Allega Modello F24",
-        "nothing": "<0>Se questa notifica prevede un pagamento, torna a </0><1>Informazioni preliminari</1><2> e seleziona un modello. Poi, torna qui per caricarlo.</2>",
-        "back-to-attachments": "Torna a Allegati"
+      "debt-position": {
+        "title": "Posizione debitoria",
+        "debt-position": "Posizione debitoria",
+        "debt-position-of": "Posizione debitoria di {{fullName}}",
+        "which-type-of-payments": "Quale tipo di pagamento prevedi?",
+        "back-to-recipient": "Torna a Destinatari",
+        "radios": {
+          "pago-pa": "Avviso pagoPA",
+          "f24": "Modello F24",
+          "pago-pa-f24": "Avviso pagoPA + Modello F24",
+          "nothing": "Nessun pagamento"
+        }
+      },
+      "debt-position-detail": {
+        "title": "Dettaglio posizione debitoria",
+        "debt-position-of": "Posizione debitoria di {{fullName}}",
+        "notification-fee": {
+          "title": "Costo di notifica",
+          "description": "Scegli il tipo di costo di notifica: puoi scegliere fra quello già incluso nell’atto oppure inserire un costo di notifica personalizzato a carico del destinatario.",
+          "disclaimer": "L’IVA verrà applicata solo alle notifiche recapitate in modalità cartacea.",
+          "pa-fee": "Costo di notifica",
+          "pa-fee-invalid": "Scrivi un valore minore o uguale a {{maxValue}} con massimo 2 decimali",
+          "vat": "IVA"
+        },
+        "pagopa-int-mode": {
+          "title": "Tecnologia del pagamento",
+          "description": "Nella modalità sincrona la posizione debitoria è presso il sistema dell'Ente Creditore (EC), mentre nella modalità asincrona è caricata sul sistema Gestione Posizioni Debitorie (GPD) di pagoPA. <0>Scopri di più</0>"
+        },
+        "alert": "Se non hai informazioni certe sull’integrazione pagoPA verifica con il tuo provider tecnologico: in caso di scelta non corretta l’addebito della notifica potrebbe essere errato.",
+        "back-to-debt-position": "Torna a Posizione debitoria",
+        "radios": {
+          "flat-rate": "Incluso nell’atto (forfettario)",
+          "delivery-mode": "A carico del destinatario (puntuale)",
+          "sync": "Sincrona",
+          "async": "Asincrona"
+        },
+        "identical-notice-codes-error": "C'è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
+        "at-least-one-applycost": "Applica i costi di notifica almeno ad un pagamento",
+        "identical-sha256-error": "Non è possibile caricare due file identici",
+        "payment-methods": {
+          "title": "Modelli di pagamento",
+          "pagopa-notice": "Avviso pagoPA",
+          "payment-models": "Posizione debitoria di",
+          "nothing": "<0>Se questa notifica prevede un pagamento, torna a </0><1>Informazioni preliminari</1><2> e seleziona un modello. Poi, torna qui per caricarlo.</2>",
+          "back-to-attachments": "Torna a Allegati",
+          "apply-cost-installment": "Attenzione: se è prevista la possibilità di un pagamento rateale dovrai applicare il costo di notifica solo ad una rata.",
+          "pagopa": {
+            "attach-pagopa-notice": "Specifiche Avviso pagoPA",
+            "notice-code": "Codice avviso",
+            "creditor-taxid": "Codice fiscale ente creditore",
+            "apply-cost": "Applica costo di notifica",
+            "add-new-pagopa-notice": "Aggiungi codice di avviso pagoPA"
+          },
+          "f24": {
+            "attach-f24": "Specifiche Modello F24",
+            "document-name": "Titolo documento",
+            "apply-cost": "Applica costo di notifica",
+            "add-new-f24": "Aggiungi un altro Modello F24"
+          }
+        }
       },
       "sync-feedback": {
         "title": "La notifica è stata creata",

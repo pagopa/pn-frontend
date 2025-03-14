@@ -10,8 +10,8 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
+import { SourceChannel, User } from '../../models/User';
 import { acceptTosPrivacy, exchangeToken, getTosPrivacyApproval, logout } from './actions';
-import { User } from './types';
 
 const userDataMatcher = yup
   .object({
@@ -23,13 +23,18 @@ const userDataMatcher = yup
     aud: yup.string().matches(dataRegex.simpleServer),
     iss: yup.string().url(),
     jti: yup.string().matches(dataRegex.lettersNumbersAndDashs),
-    mobile_phone: yup.string().matches(dataRegex.phoneNumber),
+    source: yup
+      .object({
+        channel: yup.string().oneOf(Object.values(SourceChannel)), // UserSource.channel
+        details: yup.string(),
+        retrievalId: yup.string().matches(/^[ -~]{1,50}$/),
+      })
+      .optional(),
   })
   .noUnknown(true);
 
 const noLoggedUserData = {
   ...basicNoLoggedUserData,
-  mobile_phone: '',
   from_aa: false,
   level: '',
   iat: 0,

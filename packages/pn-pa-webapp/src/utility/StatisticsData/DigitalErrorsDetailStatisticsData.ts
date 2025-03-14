@@ -19,7 +19,7 @@ import StatisticsData from './StatisticsData';
  */
 export class DigitalErrorsDetailStatisticsData extends StatisticsData {
   data: IDigitalErrorsDetailStatistics = {
-    [DigitaErrorTypes.INVALID_PEC]: {
+    [DigitaErrorTypes.REJECTED]: {
       count: 0,
       attempts: 0,
     },
@@ -27,7 +27,23 @@ export class DigitalErrorsDetailStatisticsData extends StatisticsData {
       count: 0,
       attempts: 0,
     },
-    [DigitaErrorTypes.REJECTED]: {
+    [DigitaErrorTypes.VIRUS_DETECTED]: {
+      count: 0,
+      attempts: 0,
+    },
+    [DigitaErrorTypes.SERVER_PEC_COMUNICATION]: {
+      count: 0,
+      attempts: 0,
+    },
+    [DigitaErrorTypes.SENDING_PEC]: {
+      count: 0,
+      attempts: 0,
+    },
+    [DigitaErrorTypes.INVALID_PEC]: {
+      count: 0,
+      attempts: 0,
+    },
+    [DigitaErrorTypes.MALFORMED_PEC_ADDRESS]: {
       count: 0,
       attempts: 0,
     },
@@ -50,20 +66,28 @@ export class DigitalErrorsDetailStatisticsData extends StatisticsData {
     return this;
   }
 
+  isDigitalErrorsDetailStatistics(type: string): type is DigitaErrorTypes {
+    return (Object.values(DigitaErrorTypes) as Array<string>).includes(type);
+  }
+
   parseChunk(chunk: NotificationOverview | DigitalNotificationFocus): void {
     // parse only if chunk is a DigitalNotificationFocus
     if ('error_type' in chunk) {
       const type = chunk.error_type;
 
-      this.data[type as keyof IDigitalErrorsDetailStatistics].attempts +=
-        +chunk.failed_attempts_count;
-      this.data[type as keyof IDigitalErrorsDetailStatistics].count += +chunk.notifications_count;
+      if (this.isDigitalErrorsDetailStatistics(type)) {
+        this.data[type].attempts += +chunk.failed_attempts_count;
+        this.data[type].count += +chunk.notifications_count;
+      } else {
+        this.data[DigitaErrorTypes.UNKNOWN].attempts += +chunk.failed_attempts_count;
+        this.data[DigitaErrorTypes.UNKNOWN].count += +chunk.notifications_count;
+      }
     }
   }
 
   resetData(): void {
     this.data = {
-      [DigitaErrorTypes.INVALID_PEC]: {
+      [DigitaErrorTypes.REJECTED]: {
         count: 0,
         attempts: 0,
       },
@@ -71,7 +95,23 @@ export class DigitalErrorsDetailStatisticsData extends StatisticsData {
         count: 0,
         attempts: 0,
       },
-      [DigitaErrorTypes.REJECTED]: {
+      [DigitaErrorTypes.VIRUS_DETECTED]: {
+        count: 0,
+        attempts: 0,
+      },
+      [DigitaErrorTypes.SERVER_PEC_COMUNICATION]: {
+        count: 0,
+        attempts: 0,
+      },
+      [DigitaErrorTypes.SENDING_PEC]: {
+        count: 0,
+        attempts: 0,
+      },
+      [DigitaErrorTypes.INVALID_PEC]: {
+        count: 0,
+        attempts: 0,
+      },
+      [DigitaErrorTypes.MALFORMED_PEC_ADDRESS]: {
         count: 0,
         attempts: 0,
       },

@@ -18,8 +18,8 @@ export const FormBox = ({ testid, children }: { testid?: string; children: React
   </Box>
 );
 
-export const FormBoxTitle = ({ text }: { text: string }) => (
-  <Typography variant="sidenav" fontWeight={600} fontSize={'16px'}>
+export const FormBoxTitle = ({ text, id }: { text: string; id?: string }) => (
+  <Typography id={id} variant="sidenav" fontWeight={600} fontSize={'16px'}>
     {text}
   </Typography>
 );

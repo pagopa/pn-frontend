@@ -25,8 +25,11 @@ export enum GraphColors {
   lightRed = '#FE6666',
   turquoise = '#21CDD1',
   azure = '#00C5CA',
-  pink = '#FFE0E0',
+  pink = '#FB9EAC',
   darkRed = '#761F1F',
+  lightYellow = '#FFE5A3',
+  goldenYellow = '#D9AD3C',
+  oliveBrown = '#614C15',
 }
 
 export enum CxType {
@@ -49,10 +52,14 @@ export enum ResponseStatus { // EXPORT FROM pn-commons/../NotificationDetail.ts?
 }
 
 export enum DigitaErrorTypes {
-  INVALID_PEC = 'ERRORE DOMINIO PEC NON VALIDO',
-  DELIVERY_ERROR = 'ERRORE CONSEGNA',
   REJECTED = 'NON ACCETTAZIONE',
-  UNKNOWN = '-',
+  DELIVERY_ERROR = 'ERRORE CONSEGNA',
+  VIRUS_DETECTED = 'RILEVAZIONE VIRUS',
+  SERVER_PEC_COMUNICATION = 'ERRORE COMUNICAZIONE SERVER PEC',
+  SENDING_PEC = 'ERRORE INVIO PEC',
+  INVALID_PEC = 'ERRORE DOMINIO PEC NON VALIDO',
+  MALFORMED_PEC_ADDRESS = 'ERRORE INDIRIZZO PEC MALFORMATO',
+  UNKNOWN = 'NON DEFINITO',
 }
 
 export enum StatisticsDataTypes {
@@ -161,9 +168,13 @@ export interface IAttemptsCount {
 }
 
 export interface IDigitalErrorsDetailStatistics {
-  [DigitaErrorTypes.INVALID_PEC]: IAttemptsCount;
-  [DigitaErrorTypes.DELIVERY_ERROR]: IAttemptsCount;
   [DigitaErrorTypes.REJECTED]: IAttemptsCount;
+  [DigitaErrorTypes.DELIVERY_ERROR]: IAttemptsCount;
+  [DigitaErrorTypes.VIRUS_DETECTED]: IAttemptsCount;
+  [DigitaErrorTypes.SERVER_PEC_COMUNICATION]: IAttemptsCount;
+  [DigitaErrorTypes.SENDING_PEC]: IAttemptsCount;
+  [DigitaErrorTypes.INVALID_PEC]: IAttemptsCount;
+  [DigitaErrorTypes.MALFORMED_PEC_ADDRESS]: IAttemptsCount;
   [DigitaErrorTypes.UNKNOWN]: IAttemptsCount;
 }
 
@@ -209,7 +220,7 @@ export const SelectedStatisticsFilter = {
 } as const;
 
 export type SelectedStatisticsFilterKeys =
-  typeof SelectedStatisticsFilter[keyof typeof SelectedStatisticsFilter];
+  (typeof SelectedStatisticsFilter)[keyof typeof SelectedStatisticsFilter];
 
 export type StatisticsFilter = {
   selected: SelectedStatisticsFilterKeys | null;

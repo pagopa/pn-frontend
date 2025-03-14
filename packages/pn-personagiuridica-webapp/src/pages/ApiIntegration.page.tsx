@@ -13,7 +13,7 @@ import {
   PublicKeysIssuerResponseIssuerStatusEnum,
 } from '../generated-client/pg-apikeys';
 import { checkPublicKeyIssuer, getPublicKeys, getVirtualApiKeys } from '../redux/apikeys/actions';
-import { PNRole } from '../redux/auth/types';
+import { PNRole } from '../models/User';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 

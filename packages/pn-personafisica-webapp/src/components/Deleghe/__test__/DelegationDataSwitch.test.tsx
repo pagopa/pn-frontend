@@ -1,17 +1,8 @@
-import { vi } from 'vitest';
-
 import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { render } from '../../../__test__/test-utils';
 import delegationToItem from '../../../utility/delegation.utility';
 import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../../utility/status.utility';
 import DelegationDataSwitch from '../DelegationDataSwitch';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
 
 const data = {
   ...delegationToItem(mandatesByDelegate)[0],

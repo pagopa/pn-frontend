@@ -1,60 +1,75 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Button, DialogContentText, DialogTitle } from '@mui/material';
-import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
+import { Button } from '@mui/material';
+import { ConfirmationModal } from '@pagopa-pn/pn-commons';
+
+import { ChannelType, DigitalAddress, Sender } from '../../models/contacts';
 
 type Props = {
   open: boolean;
-  senderName: string;
-  newAddressValue: string;
-  oldAddressValue: string;
-  handleClose: () => void;
-  handleConfirm: () => void;
+  sender?: Sender;
+  oldAddress?: Omit<DigitalAddress, keyof Sender>;
+  newAddress?: Omit<DigitalAddress, keyof Sender>;
+  onConfirm: () => void;
+  onCancel: () => void;
 };
 
 const LegalContactAssociationDialog: React.FC<Props> = ({
   open = false,
-  senderName,
-  newAddressValue,
-  oldAddressValue,
-  handleClose,
-  handleConfirm,
+  sender,
+  oldAddress,
+  newAddress,
+  onConfirm,
+  onCancel,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
 
+  const addressAlreadySet =
+    oldAddress?.channelType === newAddress?.channelType &&
+    (oldAddress?.value === newAddress?.value || oldAddress?.channelType === ChannelType.SERCQ_SEND);
+
+  const newAddressValue =
+    newAddress?.channelType === ChannelType.PEC
+      ? newAddress.value
+      : t(`special-contacts.${newAddress?.channelType.toLowerCase()}`, { ns: 'recapiti' });
+  const oldAddressValue =
+    oldAddress?.channelType === ChannelType.PEC
+      ? oldAddress.value
+      : t(`special-contacts.${oldAddress?.channelType.toLowerCase()}`, { ns: 'recapiti' });
+
+  const blockConfirmation = addressAlreadySet ? '-block' : '';
+
   return (
-    <PnDialog
+    <ConfirmationModal
       open={open}
-      aria-labelledby="dialog-title"
-      aria-describedby="dialog-description"
-      data-testid="legalContactAssociationDialog"
+      title={t(`special-contacts.legal-association-title${blockConfirmation}`, { ns: 'recapiti' })}
+      slots={{
+        confirmButton: blockConfirmation ? () => <></> : Button,
+        closeButton: Button,
+      }}
+      slotsProps={{
+        closeButton: {
+          onClick: onCancel,
+          variant: blockConfirmation ? 'contained' : 'outlined',
+          children: blockConfirmation ? t('button.close') : t('button.annulla'),
+        },
+        confirmButton: {
+          onClick: onConfirm,
+          children: t('button.conferma'),
+        },
+      }}
     >
-      <DialogTitle id="dialog-title">
-        {t('special-contacts.legal-association-title', { ns: 'recapiti' })}
-      </DialogTitle>
-      <PnDialogContent>
-        <DialogContentText id="dialog-description" color="textPrimary">
-          <Trans
-            ns="recapiti"
-            i18nKey="special-contacts.legal-association-description"
-            values={{
-              senderName,
-              newAddress: newAddressValue,
-              oldAddress: oldAddressValue,
-            }}
-          />
-        </DialogContentText>
-      </PnDialogContent>
-      <PnDialogActions>
-        <Button onClick={handleClose} variant="outlined">
-          {t('button.annulla')}
-        </Button>
-        <Button onClick={handleConfirm} variant="contained">
-          {t('button.conferma')}
-        </Button>
-      </PnDialogActions>
-    </PnDialog>
+      <Trans
+        ns="recapiti"
+        i18nKey={`special-contacts.legal-association-description${blockConfirmation}`}
+        values={{
+          senderName: sender?.senderName,
+          newAddress: newAddressValue,
+          oldAddress: oldAddressValue,
+        }}
+      />
+    </ConfirmationModal>
   );
 };
 

@@ -7,7 +7,7 @@ import { Row, useHasPermissions } from '@pagopa-pn/pn-commons';
 
 import { BffVirtualKeysResponse, VirtualKeyStatus } from '../../generated-client/pg-apikeys';
 import { ApiKeyColumnData, ModalApiKeyView } from '../../models/ApiKeys';
-import { PNRole } from '../../redux/auth/types';
+import { PNRole } from '../../models/User';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 

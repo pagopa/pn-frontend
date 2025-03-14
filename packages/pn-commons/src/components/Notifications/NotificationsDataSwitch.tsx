@@ -1,24 +1,44 @@
-import { Typography } from '@mui/material';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Box, Typography } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
 import { Notification, NotificationColumnData, Row } from '../../models';
 import { formatDate, getNotificationStatusInfos } from '../../utility';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import NewNotificationBadge, { isNewNotification } from './NewNotificationBadge';
 import StatusTooltip from './StatusTooltip';
 
-const NotificationStatusChip: React.FC<{
-  data: Row<Notification>;
-}> = ({ data }) => {
+const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data }) => {
   const { label, tooltip, color } = getNotificationStatusInfos(data.notificationStatus, {
     recipients: data.recipients,
   });
   return <StatusTooltip label={label} tooltip={tooltip} color={color} />;
 };
 
+const ActionButton: React.FC<{
+  mandateId?: string;
+  iun: string;
+  handleRowClick?: (iun: string, mandateId?: string) => void;
+}> = ({ mandateId, iun, handleRowClick }) => (
+  <ButtonNaked
+    color="primary"
+    data-testid="goToNotificationDetail"
+    onClick={() => handleRowClick && handleRowClick(iun, mandateId)}
+    endIcon={<ArrowForwardIosIcon />}
+    aria-label={getLocalizedOrDefaultLabel('notifications', 'table.aria-action-table', undefined, {
+      iun,
+    })}
+  >
+    {getLocalizedOrDefaultLabel('notifications', 'table.show-detail')}
+  </ButtonNaked>
+);
+
 const NotificationsDataSwitch: React.FC<{
   data: Row<Notification>;
   type: keyof NotificationColumnData;
-}> = ({ data, type }) => {
+  handleRowClick?: (iun: string, mandateId?: string) => void;
+}> = ({ data, type, handleRowClick }) => {
   const isMobile = useIsMobile();
 
   if (type === 'badge') {
@@ -46,7 +66,18 @@ const NotificationsDataSwitch: React.FC<{
     return <>{data.sender}</>;
   }
   if (type === 'subject') {
-    return <>{data.subject.length > 65 ? data.subject.substring(0, 65) + '...' : data.subject}</>;
+    return (
+      <Box
+        sx={{
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          color: 'inherit',
+        }}
+      >
+        {data.subject}
+      </Box>
+    );
   }
   if (type === 'iun') {
     return <>{data.iun}</>;
@@ -63,6 +94,11 @@ const NotificationsDataSwitch: React.FC<{
           </Typography>
         ))}
       </>
+    );
+  }
+  if (type === 'action') {
+    return (
+      <ActionButton iun={data.iun} mandateId={data?.mandateId} handleRowClick={handleRowClick} />
     );
   }
 

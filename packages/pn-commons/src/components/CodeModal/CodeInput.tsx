@@ -12,6 +12,8 @@ import {
 
 import { TextField } from '@mui/material';
 
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+
 type Props = {
   initialValues: Array<string>;
   onChange: (values: Array<string>) => void;
@@ -68,20 +70,10 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
   };
 
   const keyDownHandler = (event: KeyboardEvent<HTMLDivElement>, index: number) => {
-    if (
-      event.key === 'Enter' ||
-      (event.key === 'Tab' && !event.shiftKey) ||
-      event.key === 'ArrowRight' ||
-      event.key === 'Delete' ||
-      event.key === currentValues[index]
-    ) {
+    if ((event.key === 'Tab' && !event.shiftKey) || event.key === 'ArrowRight') {
       // focus next element
       focusInput(index + 1);
-    } else if (
-      event.key === 'Backspace' ||
-      (event.key === 'Tab' && event.shiftKey) ||
-      event.key === 'ArrowLeft'
-    ) {
+    } else if ((event.key === 'Tab' && event.shiftKey) || event.key === 'ArrowLeft') {
       // focus previous element
       focusInput(index - 1);
     } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
@@ -115,8 +107,6 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
         value = value.charAt(cursorPosition === 1 ? 0 : 1);
       }
       changeInputValue(value, index);
-      // focus next element
-      focusInput(index + 1);
     }
   };
 
@@ -131,17 +121,21 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
     // initialValues.length - values.length can be only >= 0 because of the slice of pastedCode
     const emptyValues = new Array(initialValues.length - values.length).fill('');
     setCurrentValues(values.concat(emptyValues));
-    focusInput(values.length);
   };
 
   useEffect(() => {
     onChange(currentValues);
   }, [currentValues]);
 
+  const digits = getLocalizedOrDefaultLabel('common', 'code-modal.digits', undefined, {
+    returnObjects: true,
+  });
+
   return (
     <Fragment>
       {initialValues.map((_value, index) => (
         <TextField
+          aria-label={`${digits[index]}`}
           data-testid={`codeInput(${index})`}
           autoComplete="off"
           key={index}

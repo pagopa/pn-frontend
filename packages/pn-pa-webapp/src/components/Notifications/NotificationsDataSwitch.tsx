@@ -1,3 +1,6 @@
+import { useTranslation } from 'react-i18next';
+
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Box, Typography } from '@mui/material';
 import {
   CustomTagGroup,
@@ -8,7 +11,8 @@ import {
   getNotificationStatusInfos,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { Tag, TagGroup } from '@pagopa/mui-italia';
+import { NotificationColumnData } from '@pagopa-pn/pn-commons/src/models/Notifications';
+import { ButtonNaked, Tag, TagGroup } from '@pagopa/mui-italia';
 
 const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data }) => {
   const { label, tooltip, color } = getNotificationStatusInfos(data.notificationStatus, {
@@ -17,10 +21,29 @@ const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data })
   return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
 };
 
-const NotificationsDataSwitch: React.FC<{ data: Row<Notification>; type: keyof Notification }> = ({
-  data,
-  type,
+const ActionButton: React.FC<{ iun: string; handleRowClick?: (iun: string) => void }> = ({
+  iun,
+  handleRowClick,
 }) => {
+  const { t } = useTranslation(['notifiche']);
+  return (
+    <ButtonNaked
+      color="primary"
+      data-testid="goToNotificationDetail"
+      onClick={() => handleRowClick && handleRowClick(iun)}
+      aria-label={t('table.aria-action-table', { iun })}
+      endIcon={<ArrowForwardIosIcon />}
+    >
+      {t('table.show-detail')}
+    </ButtonNaked>
+  );
+};
+
+const NotificationsDataSwitch: React.FC<{
+  data: Row<Notification>;
+  type: keyof NotificationColumnData;
+  handleRowClick?: (iun: string) => void;
+}> = ({ data, type, handleRowClick }) => {
   const isMobile = useIsMobile();
 
   if (type === 'sentAt') {
@@ -41,7 +64,18 @@ const NotificationsDataSwitch: React.FC<{ data: Row<Notification>; type: keyof N
     );
   }
   if (type === 'subject') {
-    return <>{data.subject.length > 65 ? data.subject.substring(0, 65) + '...' : data.subject}</>;
+    return (
+      <Box
+        sx={{
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          color: 'inherit',
+        }}
+      >
+        {data.subject}
+      </Box>
+    );
   }
   if (type === 'iun') {
     return <>{data.iun}</>;
@@ -67,6 +101,9 @@ const NotificationsDataSwitch: React.FC<{ data: Row<Notification>; type: keyof N
     ) : (
       <></>
     );
+  }
+  if (type === 'action') {
+    return <ActionButton iun={data.iun} handleRowClick={handleRowClick} />;
   }
 
   return <></>;

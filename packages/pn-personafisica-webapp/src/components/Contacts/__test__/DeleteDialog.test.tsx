@@ -5,13 +5,6 @@ import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
 import { fireEvent, render, screen } from '../../../__test__/test-utils';
 import DeleteDialog from '../DeleteDialog';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const closeHandler = vi.fn();
 const confirmHandler = vi.fn();
 

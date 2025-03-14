@@ -1,3 +1,5 @@
+import { BasicUser } from '@pagopa-pn/pn-commons';
+
 export interface Role {
   role: PNRole;
   partyRole: PartyRole;
@@ -24,4 +26,26 @@ export interface UserGroup {
 export enum PNRole {
   ADMIN = 'admin', // ref amministrativo
   OPERATOR = 'operator', // ref tecnico
+}
+
+export interface User extends BasicUser {
+  organization: Organization;
+  desired_exp: number;
+}
+
+export interface Organization {
+  id: string;
+  roles: Array<Role>;
+  fiscal_code: string; // organization fiscal code
+  groups?: Array<string>;
+  hasGroups?: boolean;
+  name: string;
+  subUnitCode?: string;
+  subUnitType?: string;
+  aooParent?: string;
+  ipaCode?: string;
+  rootParent?: {
+    id?: string;
+    description?: string;
+  };
 }

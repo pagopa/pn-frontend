@@ -42,12 +42,12 @@ import { TechScreenViewStrategy } from './Strategies/TechScreenViewStrategy';
 import { TechStrategy } from './Strategies/TechStrategy';
 import { UXActionStrategy } from './Strategies/UXActionStrategy';
 import { UXErrorStrategy } from './Strategies/UXErrorStrategy';
+import { UXPspActionStrategy } from './Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
 
 const uxActionStrategy = [
   PFEventsType.SEND_DOWNLOAD_ATTACHMENT,
   PFEventsType.SEND_DOWNLOAD_RECEIPT_NOTICE,
-  PFEventsType.SEND_START_PAYMENT,
   PFEventsType.SEND_PAYMENT_DETAIL_REFRESH,
   PFEventsType.SEND_ADD_MANDATE_START,
   PFEventsType.SEND_ADD_MANDATE_BACK,
@@ -66,6 +66,8 @@ const uxActionStrategy = [
   PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE,
   PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT,
 ] as const;
+
+const uxPspActionStrategy = [PFEventsType.SEND_START_PAYMENT] as const;
 
 const sendAddContactWithSourceActionStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_START,
@@ -180,6 +182,10 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
   getStrategy(eventType: PFEventsType): EventStrategy | null {
     if (uxActionStrategy.findIndex((el) => el === eventType) > -1) {
       return new UXActionStrategy();
+    }
+
+    if (uxPspActionStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UXPspActionStrategy();
     }
 
     if (sendAddLegalContactUXSuccessStrategy.findIndex((el) => el === eventType) > -1) {

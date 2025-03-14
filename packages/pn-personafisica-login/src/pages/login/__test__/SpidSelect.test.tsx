@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -11,16 +10,6 @@ import SpidSelect from '../SpidSelect';
 const idps = getIDPS(false, false);
 const mockAssign = vi.fn();
 const backHandler = vi.fn();
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({ t: (str: string) => str }),
-  Trans: (props: { i18nKey: string; children: ReactNode }) => (
-    <>
-      {props.i18nKey} {props.children}
-    </>
-  ),
-}));
 
 describe('test spid select page', () => {
   const original = window.location;
@@ -47,8 +36,8 @@ describe('test spid select page', () => {
     idps.identityProviders.forEach((element, index) => {
       const spidButton = getById(container, `spid-select-${element.entityId}`);
       fireEvent.click(spidButton);
-      expect(mockAssign).toBeCalledTimes(index + 1);
-      expect(mockAssign).toBeCalledWith(
+      expect(mockAssign).toHaveBeenCalledTimes(index + 1);
+      expect(mockAssign).toHaveBeenCalledWith(
         `${URL_API_LOGIN}/login?entityID=${element.entityId}&authLevel=SpidL2&RelayState=send`
       );
     });
@@ -63,10 +52,10 @@ describe('test spid select page', () => {
     const container = document.body;
     const backIcon = getById(document.body, 'backIcon');
     fireEvent.click(backIcon);
-    expect(backHandler).toBeCalledTimes(1);
+    expect(backHandler).toHaveBeenCalledTimes(1);
     const backButton = getById(container, 'backButton');
     fireEvent.click(backButton);
-    expect(backHandler).toBeCalledTimes(2);
+    expect(backHandler).toHaveBeenCalledTimes(2);
   });
 
   it('request spid', () => {

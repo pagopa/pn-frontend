@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -8,7 +7,6 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import {
-  AppRouteParams,
   Layout,
   PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
   useIsMobile,
@@ -16,9 +14,10 @@ import {
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
+import { useRapidAccessParam } from '../../hooks/useRapidAccessParam';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
-import { storageAarOps } from '../../utility/storage';
+import { storageRapidAccessOps } from '../../utility/storage';
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -33,13 +32,12 @@ const Login = () => {
   const [showIDPS, setShowIDPS] = useState(false);
   const { t, i18n } = useTranslation(['login']);
   const isMobile = useIsMobile();
-  const [params] = useSearchParams();
-  const aar = params.get(AppRouteParams.AAR);
+  const rapidAccess = useRapidAccessParam();
   const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL, PF_URL } = getConfiguration();
   const privacyPolicyUrl = `${PF_URL}${PRIVACY_POLICY}`;
 
-  if (aar !== null && aar !== '') {
-    storageAarOps.write(aar);
+  if (rapidAccess) {
+    storageRapidAccessOps.write(rapidAccess);
   }
 
   useEffect(() => {

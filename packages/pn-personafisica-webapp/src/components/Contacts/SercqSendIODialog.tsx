@@ -35,7 +35,6 @@ const SercqSendIODialog: React.FC<Props> = ({ open, onDiscard }) => {
   const dispatch = useAppDispatch();
 
   const sercqSendIoList: Array<string> = t('legal-contacts.sercq-send-io-list', {
-    returnObjects: true,
     defaultValue: [],
     ns: 'recapiti',
   });

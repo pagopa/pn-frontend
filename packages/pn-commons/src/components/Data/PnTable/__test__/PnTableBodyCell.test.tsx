@@ -1,18 +1,17 @@
 import { vi } from 'vitest';
 
-import { disableConsoleLogging, fireEvent, render } from '../../../../test-utils';
+import { disableConsoleLogging, fireEvent, render, within } from '../../../../test-utils';
 import PnTableBodyCell from '../PnTableBodyCell';
 
 describe('PnTableBodyCell', () => {
   disableConsoleLogging('error');
-
   const mockFn = vi.fn();
 
   it('render component', () => {
     const { container, queryByTestId } = render(
-      <PnTableBodyCell>mocke-cell-content</PnTableBodyCell>
+      <PnTableBodyCell>mocked-cell-content</PnTableBodyCell>
     );
-    expect(container).toHaveTextContent(/mocke-cell-content/);
+    expect(container).toHaveTextContent(/mocked-cell-content/);
     const buttons = queryByTestId('cell.button');
     expect(buttons).not.toBeInTheDocument();
   });
@@ -20,11 +19,12 @@ describe('PnTableBodyCell', () => {
   it('click cell event', () => {
     const { getByTestId } = render(
       <PnTableBodyCell testId="cell" onClick={() => mockFn()}>
-        mocke-cell-content
+        mocked-cell-content
       </PnTableBodyCell>
     );
     const cell = getByTestId('cell');
-    fireEvent.click(cell);
-    expect(mockFn).toBeCalledTimes(1);
+    const button = within(cell).getByRole('button');
+    fireEvent.click(button);
+    expect(mockFn).toHaveBeenCalledTimes(1);
   });
 });

@@ -304,8 +304,8 @@
         "analog-failure-delivery": "Dépôt de réception"
       },
       "registered-letter-kind": {
-        "AR": "A/R",
         "890": "890",
+        "AR": "A/R",
         "RIR": "A/R internationale",
         "RS": "simple",
         "RIS": "internationale simple"

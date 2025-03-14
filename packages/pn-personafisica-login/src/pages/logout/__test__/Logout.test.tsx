@@ -1,9 +1,11 @@
 import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
+import { AppRouteParams } from '@pagopa-pn/pn-commons';
+
 import { render } from '../../../__test__/test-utils';
 import { ROUTE_LOGIN } from '../../../navigation/routes.const';
-import { storageAarOps } from '../../../utility/storage';
+import { storageRapidAccessOps } from '../../../utility/storage';
 import Logout from '../Logout';
 
 const mockNavigateFn = vi.fn();
@@ -19,13 +21,13 @@ describe('Logout page', () => {
   });
 
   it('test logout', () => {
-    storageAarOps.write('aar-test');
+    storageRapidAccessOps.write([AppRouteParams.AAR, 'aar-test']);
     render(
       <BrowserRouter>
         <Logout />
       </BrowserRouter>
     );
-    expect(storageAarOps.read()).toBeUndefined();
+    expect(storageRapidAccessOps.read()).toBeUndefined();
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
   });
