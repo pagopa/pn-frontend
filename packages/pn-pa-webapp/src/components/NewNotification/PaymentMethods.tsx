@@ -8,19 +8,18 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import {
   NewNotification,
-  NewNotificationF24Payment,
-  NewNotificationPagoPaPayment,
   PaymentMethodsFormValues,
   PaymentModel,
 } from '../../models/NewNotification';
+import { useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
+import { newF24Payment, newPagopaPayment } from '../../utility/notification.utility';
 import F24PaymentBox from './F24PaymentBox';
 import PagoPaPaymentBox from './PagoPaPaymentBox';
 
 type Props = {
   notification: NewNotification;
   formik: ReturnType<typeof useFormik<PaymentMethodsFormValues>>;
-  newPagopaPayment: (id: string, idx: number) => NewNotificationPagoPaPayment;
-  newF24Payment: (id: string, idx: number) => NewNotificationF24Payment;
 };
 
 const emptyFileData = {
@@ -28,15 +27,11 @@ const emptyFileData = {
   sha256: { hashBase64: '', hashHex: '' },
 };
 
-const PaymentMethods: React.FC<Props> = ({
-  notification,
-  formik,
-  newPagopaPayment,
-  newF24Payment,
-}) => {
+const PaymentMethods: React.FC<Props> = ({ notification, formik }) => {
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.debt-position-detail.payment-methods',
   });
+  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
   const fileUploadedHandler = async (
     taxId: string,
@@ -94,7 +89,11 @@ const PaymentMethods: React.FC<Props> = ({
   };
 
   const handleAddNewPagoPa = async (taxId: string) => {
-    const newPayment = newPagopaPayment(taxId, formik.values.recipients[taxId].pagoPa.length);
+    const newPayment = newPagopaPayment(
+      taxId,
+      formik.values.recipients[taxId].pagoPa.length,
+      organization.fiscal_code
+    );
     await formik.setFieldValue(`recipients.${taxId}.pagoPa`, [
       ...formik.values.recipients[taxId].pagoPa,
       newPayment,
@@ -131,14 +130,21 @@ const PaymentMethods: React.FC<Props> = ({
             key={recipientKey}
             sx={{ padding: '24px', marginTop: '40px' }}
             elevation={0}
-            data-testid="paymentForRecipient"
+            data-testid={`${recipient.taxId}-payments`}
           >
             <Typography variant="h6" fontWeight={700}>
               {t('payment-models')} {recipient.firstName} {recipient.lastName}
             </Typography>
 
             {formik.values.recipients[recipientKey].pagoPa.length > 0 && (
-              <Box mt={3} p={3} border={1} borderColor="divider" borderRadius={1}>
+              <Box
+                mt={3}
+                p={3}
+                border={1}
+                borderColor="divider"
+                borderRadius={1}
+                data-testid={`${recipient.taxId}-pagopa-payment-box`}
+              >
                 <Typography fontSize="16px" fontWeight={600} data-testid="pagoPaPaymentBox">
                   {`${t('pagopa.attach-pagopa-notice')}`}
                 </Typography>
@@ -147,7 +153,7 @@ const PaymentMethods: React.FC<Props> = ({
                     <PagoPaPaymentBox
                       id={`recipients.${recipientKey}.pagoPa.${index}`}
                       key={`${recipientKey}-pagoPa-${pagoPaPayment.idx}`}
-                      onFileUploaded={(_, file, sha256) =>
+                      onFileUploaded={(file, sha256) =>
                         fileUploadedHandler(recipientKey, 'pagoPa', index, file, sha256)
                       }
                       onRemoveFile={() => removeFileHandler(recipientKey, 'pagoPa', index)}
@@ -165,6 +171,7 @@ const PaymentMethods: React.FC<Props> = ({
                     startIcon={<AddIcon />}
                     onClick={() => handleAddNewPagoPa(recipientKey)}
                     sx={{ justifyContent: 'start' }}
+                    data-testid="add-new-pagopa"
                   >
                     {t('pagopa.add-new-pagopa-notice')}
                   </ButtonNaked>
@@ -173,7 +180,14 @@ const PaymentMethods: React.FC<Props> = ({
             )}
 
             {formik.values.recipients[recipientKey].f24.length > 0 && (
-              <Box mt={3} p={3} border={1} borderColor="divider" borderRadius={1}>
+              <Box
+                mt={3}
+                p={3}
+                border={1}
+                borderColor="divider"
+                borderRadius={1}
+                data-testid={`${recipient.taxId}-f24-payment-box`}
+              >
                 <Typography fontSize="16px" fontWeight={600} data-testid="f24PaymentBox">
                   {t('f24.attach-f24')}
                 </Typography>
@@ -182,7 +196,7 @@ const PaymentMethods: React.FC<Props> = ({
                     <F24PaymentBox
                       id={`recipients.${recipientKey}.f24.${index}`}
                       key={`${recipientKey}-f24-${f24Payment?.idx}`}
-                      onFileUploaded={(_, file, sha256) =>
+                      onFileUploaded={(file, sha256) =>
                         fileUploadedHandler(recipientKey, 'f24', index, file, sha256)
                       }
                       onRemoveFile={() => removeFileHandler(recipientKey, 'f24', index)}
@@ -200,6 +214,7 @@ const PaymentMethods: React.FC<Props> = ({
                     startIcon={<AddIcon />}
                     onClick={() => handleAddNewF24(recipientKey)}
                     sx={{ justifyContent: 'start' }}
+                    data-testid="add-new-f24"
                   >
                     {t('f24.add-new-f24')}
                   </ButtonNaked>
