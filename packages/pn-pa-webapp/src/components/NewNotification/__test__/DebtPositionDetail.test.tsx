@@ -1,12 +1,15 @@
+import _ from 'lodash';
 import { vi } from 'vitest';
 
-import { testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
+import { testInput, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
   newNotification,
   newNotificationRecipients,
 } from '../../../__mocks__/NewNotification.mock';
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import { NotificationFeePolicy, PaymentModel } from '../../../models/NewNotification';
+import { newF24Payment, newPagopaPayment } from '../../../utility/notification.utility';
 import DebtPositionDetail from '../DebtPositionDetail';
 
 const confirmHandlerMk = vi.fn();
@@ -17,361 +20,385 @@ describe('DebtPositionDetail Component', async () => {
     vi.clearAllMocks();
   });
 
-  it('renders component - one recipient - debtPosition pagopa only', async () => {
-    const newNotificationWithPagopaOnly = {
-      ...newNotification,
-      recipients: [newNotificationRecipients[0]],
-    };
-    // render component
-    const { getByTestId } = render(
-      <DebtPositionDetail
-        notification={newNotification}
-        onConfirm={confirmHandlerMk}
-        onPreviousStep={previousStepMk}
-      />,
-      {
-        preloadedState: {
-          newNotificationState: {
-            notification: {
-              ...newNotification,
-              recipients: newNotificationWithPagopaOnly,
-            },
-          },
-        },
+  describe('Render Payment Boxes', () => {
+    it('renders component - one recipient - debtPosition pagopa only', async () => {
+      const newNotificationWithPagopaOnly = {
+        ...newNotification,
+        recipients: [newNotificationRecipients[0]],
+      };
+      const recipientTaxId = newNotificationWithPagopaOnly.recipients[0].taxId;
+      // render component
+      const { getByTestId, getAllByTestId, queryAllByTestId } = render(
+        <DebtPositionDetail
+          notification={newNotificationWithPagopaOnly}
+          onConfirm={confirmHandlerMk}
+          onPreviousStep={previousStepMk}
+        />
+      );
+      // we wait that the component is correctly rendered
+      const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
+      expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
+      expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
+      await testRadio(paymentChoiceBox, 'notificationFeePolicy', [
+        'radios.flat-rate',
+        'radios.delivery-mode',
+      ]);
+      expect(paymentChoiceBox).toHaveTextContent('pagopa-int-mode.title');
+      await testRadio(paymentChoiceBox, 'pagoPaIntMode', ['radios.sync', 'radios.async']);
+
+      const paymentsBox = getByTestId(`${recipientTaxId}-payments`);
+      expect(paymentsBox).toBeInTheDocument();
+      const pagoPaPaymentBox = getAllByTestId(`${recipientTaxId}-pagopa-payment-box`);
+      expect(pagoPaPaymentBox).toHaveLength(1);
+      const f24PaymentBox = queryAllByTestId(`${recipientTaxId}-f24-payment-box`);
+      expect(f24PaymentBox).toHaveLength(0);
+
+      const buttonSubmit = getByTestId('step-submit');
+      expect(buttonSubmit).toHaveTextContent('button.continue');
+      const buttonPrevious = getByTestId('previous-step');
+      expect(buttonPrevious).toBeInTheDocument();
+      expect(buttonPrevious).toHaveTextContent('back-to-debt-position');
+      // check the click on prev button
+      fireEvent.click(buttonPrevious);
+      expect(previousStepMk).toHaveBeenCalledTimes(1);
+    });
+
+    it('renders component - one recipient - debtPosition f24 only', async () => {
+      const newNotificationWithF24Only = {
+        ...newNotification,
+        recipients: [newNotificationRecipients[2]],
+      };
+      const recipientTaxId = newNotificationWithF24Only.recipients[0].taxId;
+
+      // render component
+      const { getByTestId, getAllByTestId, queryAllByTestId } = render(
+        <DebtPositionDetail
+          notification={newNotificationWithF24Only}
+          onConfirm={confirmHandlerMk}
+          onPreviousStep={previousStepMk}
+        />
+      );
+
+      // we wait that the component is correctly rendered
+      const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
+      expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
+      expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
+      await testRadio(paymentChoiceBox, 'notificationFeePolicy', [
+        'radios.flat-rate',
+        'radios.delivery-mode',
+      ]);
+      expect(paymentChoiceBox).not.toHaveTextContent('pagopa-int-mode.title');
+
+      const paymentsBox = getByTestId(`${recipientTaxId}-payments`);
+      expect(paymentsBox).toBeInTheDocument();
+      const f24PaymentBox = getAllByTestId(`${recipientTaxId}-f24-payment-box`);
+      expect(f24PaymentBox).toHaveLength(1);
+      const pagoPaPaymentBox = queryAllByTestId(`${recipientTaxId}-pagopa-payment-box`);
+      expect(pagoPaPaymentBox).toHaveLength(0);
+
+      const buttonSubmit = getByTestId('step-submit');
+      expect(buttonSubmit).toHaveTextContent('button.continue');
+      const buttonPrevious = getByTestId('previous-step');
+      expect(buttonPrevious).toBeInTheDocument();
+      expect(buttonPrevious).toHaveTextContent('back-to-debt-position');
+      // check the click on prev button
+      fireEvent.click(buttonPrevious);
+      expect(previousStepMk).toHaveBeenCalledTimes(1);
+    });
+
+    it('renders component - one recipient - debtPosition f24 and pagopa', async () => {
+      const newNotificationWithF24AndPagopa = {
+        ...newNotification,
+        recipients: [newNotificationRecipients[1]],
+      };
+      const recipientTaxId = newNotificationWithF24AndPagopa.recipients[0].taxId;
+
+      // render component
+      const { getByTestId, getAllByTestId } = render(
+        <DebtPositionDetail
+          notification={newNotificationWithF24AndPagopa}
+          onConfirm={confirmHandlerMk}
+          onPreviousStep={previousStepMk}
+        />
+      );
+
+      // we wait that the component is correctly rendered
+      const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
+      expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
+      expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
+      await testRadio(paymentChoiceBox, 'notificationFeePolicy', [
+        'radios.flat-rate',
+        'radios.delivery-mode',
+      ]);
+      expect(paymentChoiceBox).toHaveTextContent('pagopa-int-mode.title');
+
+      const paymentsBox = getByTestId(`${recipientTaxId}-payments`);
+      expect(paymentsBox).toBeInTheDocument();
+      const pagoPaPaymentBox = getAllByTestId(`${recipientTaxId}-pagopa-payment-box`);
+      expect(pagoPaPaymentBox).toHaveLength(1);
+      const f24PaymentBox = getAllByTestId(`${recipientTaxId}-f24-payment-box`);
+      expect(f24PaymentBox).toHaveLength(1);
+
+      const buttonSubmit = getByTestId('step-submit');
+      expect(buttonSubmit).toHaveTextContent('button.continue');
+      const buttonPrevious = getByTestId('previous-step');
+      expect(buttonPrevious).toBeInTheDocument();
+      expect(buttonPrevious).toHaveTextContent('back-to-debt-position');
+      // check the click on prev button
+      fireEvent.click(buttonPrevious);
+      expect(previousStepMk).toHaveBeenCalledTimes(1);
+    });
+
+    it('renders component - multi recipient - debtPosition pagopa only', async () => {
+      const newNotificationWithPagoPaOnly = {
+        ...newNotification,
+        recipients: newNotification.recipients.map((r) => ({
+          ...r,
+          debtPosition: PaymentModel.PAGO_PA,
+          payments: r.payments?.map((_, i) => ({
+            pagoPa: newPagopaPayment(r.taxId, i, '77777777777'),
+            f24: undefined,
+          })),
+        })),
+      };
+      // render component
+      const { getByTestId, getAllByTestId, queryAllByTestId } = render(
+        <DebtPositionDetail
+          notification={newNotificationWithPagoPaOnly}
+          onConfirm={confirmHandlerMk}
+          onPreviousStep={previousStepMk}
+        />
+      );
+      // we wait that the component is correctly rendered
+      const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
+      expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
+      expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
+      await testRadio(paymentChoiceBox, 'notificationFeePolicy', [
+        'radios.flat-rate',
+        'radios.delivery-mode',
+      ]);
+      expect(paymentChoiceBox).toHaveTextContent('pagopa-int-mode.title');
+      await testRadio(paymentChoiceBox, 'pagoPaIntMode', ['radios.sync', 'radios.async']);
+
+      for (const recipient of newNotification.recipients) {
+        const paymentsBox = getByTestId(`${recipient.taxId}-payments`);
+        expect(paymentsBox).toBeInTheDocument();
+        const pagoPaPaymentBox = getAllByTestId(`${recipient.taxId}-pagopa-payment-box`);
+        expect(pagoPaPaymentBox).toHaveLength(1);
+        const f24PaymentBox = queryAllByTestId(`${recipient.taxId}-f24-payment-box`);
+        expect(f24PaymentBox).toHaveLength(0);
       }
-    );
-    // we wait that the component is correctly rendered
-    const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
-    expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
-    expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
-    await testRadio(paymentChoiceBox, 'notificationFeePolicy', [
-      'radios.flat-rate',
-      'radios.delivery-mode',
-    ]);
-    expect(paymentChoiceBox).toHaveTextContent('pagopa-int-mode.title');
-    await testRadio(paymentChoiceBox, 'pagoPaIntMode', ['radios.sync', 'radios.async']);
-    const buttonSubmit = getByTestId('step-submit');
-    expect(buttonSubmit).toHaveTextContent('button.continue');
-    const buttonPrevious = getByTestId('previous-step');
-    expect(buttonPrevious).toBeInTheDocument();
-    expect(buttonPrevious).toHaveTextContent('back-to-debt-position');
-    // check the click on prev button
-    fireEvent.click(buttonPrevious);
-    expect(previousStepMk).toHaveBeenCalledTimes(1);
+    });
 
-    // TO DO: AGGIUNGERE TEST DEL BOX DEI PAGAMENTI
-  });
+    it('renders component - multi recipient - debtPosition f24 only', async () => {
+      const newNotificationWithF24Only = {
+        ...newNotification,
+        recipients: newNotification.recipients.map((r) => ({
+          ...r,
+          debtPosition: PaymentModel.F24,
+          payments: r.payments?.map((_, i) => ({
+            pagoPa: undefined,
+            f24: newF24Payment(r.taxId, i),
+          })),
+        })),
+      };
 
-  it('renders component - one recipient - debtPosition f24 only', async () => {
-    const newNotificationWithF24Only = {
-      ...newNotification,
-      recipients: [newNotificationRecipients[2]],
-    };
+      // render component
+      const { getByTestId, getAllByTestId, queryAllByTestId } = render(
+        <DebtPositionDetail
+          notification={newNotificationWithF24Only}
+          onConfirm={confirmHandlerMk}
+          onPreviousStep={previousStepMk}
+        />
+      );
 
-    // render component
-    const { getByTestId } = render(
-      <DebtPositionDetail
-        notification={newNotificationWithF24Only}
-        onConfirm={confirmHandlerMk}
-        onPreviousStep={previousStepMk}
-      />
-    );
+      // we wait that the component is correctly rendered
+      const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
+      expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
+      expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
+      await testRadio(paymentChoiceBox, 'notificationFeePolicy', [
+        'radios.flat-rate',
+        'radios.delivery-mode',
+      ]);
+      expect(paymentChoiceBox).not.toHaveTextContent('pagopa-int-mode.title');
 
-    // we wait that the component is correctly rendered
-    const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
-    expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
-    expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
-    await testRadio(paymentChoiceBox, 'notificationFeePolicy', [
-      'radios.flat-rate',
-      'radios.delivery-mode',
-    ]);
-    expect(paymentChoiceBox).not.toHaveTextContent('pagopa-int-mode.title');
-    const buttonSubmit = getByTestId('step-submit');
-    expect(buttonSubmit).toHaveTextContent('button.continue');
-    const buttonPrevious = getByTestId('previous-step');
-    expect(buttonPrevious).toBeInTheDocument();
-    expect(buttonPrevious).toHaveTextContent('back-to-debt-position');
-    // check the click on prev button
-    fireEvent.click(buttonPrevious);
-    expect(previousStepMk).toHaveBeenCalledTimes(1);
-
-    // TO DO: AGGIUNGERE TEST DEL BOX DEI PAGAMENTI
-  });
-
-  it('renders component - one recipient - debtPosition f24 and pagopa', async () => {
-    const newNotificationWithF24AndPagopa = {
-      ...newNotification,
-      recipients: [newNotificationRecipients[1]],
-    };
-    // render component
-    const { getByTestId } = render(
-      <DebtPositionDetail
-        notification={newNotification}
-        onConfirm={confirmHandlerMk}
-        onPreviousStep={previousStepMk}
-      />,
-      {
-        preloadedState: {
-          newNotificationState: {
-            notification: {
-              ...newNotification,
-              recipients: newNotificationWithF24AndPagopa,
-            },
-          },
-        },
+      for (const recipient of newNotification.recipients) {
+        const paymentsBox = getByTestId(`${recipient.taxId}-payments`);
+        expect(paymentsBox).toBeInTheDocument();
+        const f24PaymentBox = getAllByTestId(`${recipient.taxId}-f24-payment-box`);
+        expect(f24PaymentBox).toHaveLength(1);
+        const pagoPaPaymentBox = queryAllByTestId(`${recipient.taxId}-pagopa-payment-box`);
+        expect(pagoPaPaymentBox).toHaveLength(0);
       }
-    );
+    });
 
-    // we wait that the component is correctly rendered
-    const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
-    expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
-    expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
-    await testRadio(paymentChoiceBox, 'notificationFeePolicy', [
-      'radios.flat-rate',
-      'radios.delivery-mode',
-    ]);
-    expect(paymentChoiceBox).toHaveTextContent('pagopa-int-mode.title');
-    const buttonSubmit = getByTestId('step-submit');
-    expect(buttonSubmit).toHaveTextContent('button.continue');
-    const buttonPrevious = getByTestId('previous-step');
-    expect(buttonPrevious).toBeInTheDocument();
-    expect(buttonPrevious).toHaveTextContent('back-to-debt-position');
-    // check the click on prev button
-    fireEvent.click(buttonPrevious);
-    expect(previousStepMk).toHaveBeenCalledTimes(1);
+    it('renders component - multi recipient - debtPosition f24 and pagopa', async () => {
+      // render component
+      const { getByTestId, queryAllByTestId } = render(
+        <DebtPositionDetail
+          notification={newNotification}
+          onConfirm={confirmHandlerMk}
+          onPreviousStep={previousStepMk}
+        />
+      );
 
-    // TO DO: AGGIUNGERE TEST DEL BOX DEI PAGAMENTI
+      // we wait that the component is correctly rendered
+      const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
+      expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
+      expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
+      await testRadio(paymentChoiceBox, 'notificationFeePolicy', [
+        'radios.flat-rate',
+        'radios.delivery-mode',
+      ]);
+      expect(paymentChoiceBox).toHaveTextContent('pagopa-int-mode.title');
+
+      for (const recipient of newNotification.recipients) {
+        const paymentsBox = getByTestId(`${recipient.taxId}-payments`);
+        expect(paymentsBox).toBeInTheDocument();
+        const pagoPaPaymentBox = queryAllByTestId(`${recipient.taxId}-pagopa-payment-box`);
+        expect(pagoPaPaymentBox).toHaveLength(
+          recipient.payments?.filter((p) => !!p.pagoPa).length ?? 0
+        );
+        const f24PaymentBox = queryAllByTestId(`${recipient.taxId}-f24-payment-box`);
+        expect(f24PaymentBox).toHaveLength(recipient.payments?.filter((p) => !!p.f24).length ?? 0);
+      }
+    });
   });
-  // it('renders component - empty state (multi recipients)', async () => {
-  //   // render component
-  //   const { getAllByTestId, getByTestId } = render(
-  //     <DebtPositionDetail
-  //       notification={newNotification}
-  //       onConfirm={confirmHandlerMk}
-  //       onPreviousStep={previousStepMk}
-  //     />
-  //   );
-  //   // we wait that the component is correctly rendered
-  //   const paymentChoiceBoxes = await waitFor(() => getAllByTestId('payments-type-choice'));
-  //   expect(paymentChoiceBoxes).toHaveLength(recipientsWithoutPayment.length);
-  //   for (const paymentChoiceBox of paymentChoiceBoxes) {
-  //     expect(paymentChoiceBox).toHaveTextContent('debt-position-of');
-  //     expect(paymentChoiceBox).toHaveTextContent('which-type-of-payments');
-  //     await testRadio(paymentChoiceBox, 'paymentModel', [
-  //       'radios.pago-pa',
-  //       'radios.f24',
-  //       'radios.pago-pa-f24',
-  //       'radios.nothing',
-  //     ]);
-  //   }
-  //   const buttonSubmit = getByTestId('step-submit');
-  //   const buttonPrevious = getByTestId('previous-step');
-  //   expect(buttonSubmit).toBeDisabled();
-  //   expect(buttonSubmit).toHaveTextContent('button.continue');
-  //   expect(buttonPrevious).toBeInTheDocument();
-  //   expect(buttonPrevious).toHaveTextContent('back-to-recipient');
-  // });
 
-  // it('choose an option (two recipients)', async () => {
-  //   // render component
-  //   const { getAllByTestId, getByTestId } = render(
-  //     <DebtPositionDetail
-  //       notification={newNotification}
-  //       onConfirm={confirmHandlerMk}
-  //       onPreviousStep={previousStepMk}
-  //     />,
-  //     {
-  //       preloadedState: {
-  //         newNotificationState: {
-  //           notification: {
-  //             ...newNotification,
-  //             recipients: [recipientsWithoutPayment[0], recipientsWithoutPayment[1]],
-  //           },
-  //         },
-  //       },
-  //     }
-  //   );
-  //   // we wait that the component is correctly rendered
-  //   const paymentChoiceBoxes = await waitFor(() => getAllByTestId('payments-type-choice'));
-  //   expect(paymentChoiceBoxes).toHaveLength(recipientsWithoutPayment.length);
-  //   const buttonSubmit = getByTestId('step-submit');
-  //   expect(buttonSubmit).toBeDisabled();
-  //   // choose an option for the first recipient
-  //   await testRadio(
-  //     paymentChoiceBoxes[0],
-  //     'paymentModel',
-  //     ['radios.pago-pa', 'radios.f24', 'radios.pago-pa-f24', 'radios.nothing'],
-  //     1,
-  //     true
-  //   );
-  //   // to enable the continue button we need that all the recipients have an option selected
-  //   expect(buttonSubmit).toBeDisabled();
-  //   // choose an option for the second recipient
-  //   await testRadio(
-  //     paymentChoiceBoxes[1],
-  //     'paymentModel',
-  //     ['radios.pago-pa', 'radios.f24', 'radios.pago-pa-f24', 'radios.nothing'],
-  //     3,
-  //     true
-  //   );
-  //   expect(buttonSubmit).toBeEnabled();
-  //   fireEvent.click(buttonSubmit);
-  //   // check if redux is updated correctly
-  //   await waitFor(() =>
-  //     expect(testStore.getState().newNotificationState.notification.recipients).toStrictEqual(
-  //       [recipientsWithoutPayment[0], recipientsWithoutPayment[1]].map((recipient, index) => ({
-  //         ...recipient,
-  //         debtPosition: index === 0 ? PaymentModel.F24 : PaymentModel.NOTHING,
-  //         payments: [],
-  //       }))
-  //     )
-  //   );
-  //   expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
-  // });
+  describe('Debt Position Validation', () => {
+    it('should show error if notification cost is greater than 1.00', async () => {
+      const result = render(
+        <DebtPositionDetail
+          notification={newNotification}
+          onConfirm={confirmHandlerMk}
+          onPreviousStep={previousStepMk}
+        />
+      );
 
-  // it('choose an option (two recipients) - back button', async () => {
-  //   // render component
-  //   const { getAllByTestId, getByTestId } = render(
-  //     <DebtPositionDetail
-  //       notification={newNotification}
-  //       onConfirm={confirmHandlerMk}
-  //       onPreviousStep={previousStepMk}
-  //     />,
-  //     {
-  //       preloadedState: {
-  //         newNotificationState: {
-  //           notification: {
-  //             ...newNotification,
-  //             recipients: recipientsWithoutPayment,
-  //           },
-  //         },
-  //       },
-  //     }
-  //   );
-  //   // we wait that the component is correctly rendered
-  //   const paymentChoiceBoxes = await waitFor(() => getAllByTestId('payments-type-choice'));
-  //   expect(paymentChoiceBoxes).toHaveLength(recipientsWithoutPayment.length);
-  //   const buttonPrevious = getByTestId('previous-step');
-  //   // choose first option for all the recipients
-  //   for (const paymentChoiceBox of paymentChoiceBoxes) {
-  //     expect(paymentChoiceBox).toHaveTextContent('debt-position-of');
-  //     expect(paymentChoiceBox).toHaveTextContent('which-type-of-payments');
-  //     await testRadio(
-  //       paymentChoiceBox,
-  //       'paymentModel',
-  //       ['radios.pago-pa', 'radios.f24', 'radios.pago-pa-f24', 'radios.nothing'],
-  //       0,
-  //       true
-  //     );
-  //   }
-  //   fireEvent.click(buttonPrevious);
-  //   // check if redux is updated correctly
-  //   await waitFor(() =>
-  //     expect(testStore.getState().newNotificationState.notification.recipients).toStrictEqual(
-  //       recipientsWithoutPayment.map((recipient) => ({
-  //         ...recipient,
-  //         debtPosition: PaymentModel.PAGO_PA,
-  //         payments: [],
-  //       }))
-  //     )
-  //   );
-  //   expect(previousStepMk).toHaveBeenCalledTimes(1);
-  // });
+      const form = result.container.querySelector('form')!;
+      expect(form).toHaveTextContent('back-to-debt-position');
+      expect(form).toHaveTextContent('notification-fee.title');
+      await testRadio(
+        form,
+        'notificationFeePolicy',
+        ['radios.flat-rate', 'radios.delivery-mode'],
+        1,
+        true
+      );
 
-  // it('choose nothing option (multi recipients)', async () => {
-  //   // render component
-  //   const { getAllByTestId, getByTestId } = render(
-  //     <DebtPositionDetail
-  //       notification={newNotification}
-  //       onConfirm={confirmHandlerMk}
-  //       onPreviousStep={previousStepMk}
-  //     />,
-  //     {
-  //       preloadedState: {
-  //         newNotificationState: {
-  //           notification: {
-  //             ...newNotification,
-  //             recipients: recipientsWithoutPayment,
-  //           },
-  //         },
-  //       },
-  //     }
-  //   );
-  //   // we wait that the component is correctly rendered
-  //   const paymentChoiceBoxes = await waitFor(() => getAllByTestId('payments-type-choice'));
-  //   expect(paymentChoiceBoxes).toHaveLength(recipientsWithoutPayment.length);
-  //   const buttonSubmit = getByTestId('step-submit');
-  //   expect(buttonSubmit).toBeDisabled();
-  //   // choose nothing option for all the recipients
-  //   for (const paymentChoiceBox of paymentChoiceBoxes) {
-  //     expect(paymentChoiceBox).toHaveTextContent('debt-position-of');
-  //     expect(paymentChoiceBox).toHaveTextContent('which-type-of-payments');
-  //     await testRadio(
-  //       paymentChoiceBox,
-  //       'paymentModel',
-  //       ['radios.pago-pa', 'radios.f24', 'radios.pago-pa-f24', 'radios.nothing'],
-  //       3,
-  //       true
-  //     );
-  //   }
-  //   expect(buttonSubmit).toBeEnabled();
-  //   fireEvent.click(buttonSubmit);
-  //   // check if redux is updated correctly
-  //   await waitFor(() =>
-  //     expect(testStore.getState().newNotificationState.notification.recipients).toStrictEqual(
-  //       recipientsWithoutPayment.map((recipient) => ({
-  //         ...recipient,
-  //         debtPosition: PaymentModel.NOTHING,
-  //         payments: [],
-  //       }))
-  //     )
-  //   );
-  //   expect(goToLasStepMk).toHaveBeenCalledTimes(1);
-  // });
+      const notificationPaFee = result.getByTestId('notification-pa-fee');
+      expect(notificationPaFee).toBeInTheDocument();
 
-  // it('initally filled (multi recipients)', async () => {
-  //   // render component
-  //   const { getAllByTestId, getByTestId } = render(
-  //     <DebtPositionDetail
-  //       notification={newNotification}
-  //       onConfirm={confirmHandlerMk}
-  //       onPreviousStep={previousStepMk}
-  //     />,
-  //     {
-  //       preloadedState: {
-  //         newNotificationState: {
-  //           notification: newNotification,
-  //         },
-  //       },
-  //     }
-  //   );
-  //   // we wait that the component is correctly rendered
-  //   const paymentChoiceBoxes = await waitFor(() => getAllByTestId('debtPositionDetailForm'));
-  //   expect(paymentChoiceBoxes).toHaveLength(newNotification.recipients.length);
-  //   const buttonSubmit = getByTestId('step-submit');
-  //   expect(buttonSubmit).toBeEnabled();
-  //   // check that radio buttons are correctly filled
-  //   const radioOptions = ['radios.pago-pa', 'radios.f24', 'radios.pago-pa-f24', 'radios.nothing'];
-  //   let recipientIdx = 0;
-  //   for (const paymentChoiceBox of paymentChoiceBoxes) {
-  //     // get radio value from debtPosition set for the recipient
-  //     const radioSelectedValue = newNotification.recipients[recipientIdx].debtPosition
-  //       ?.toLocaleLowerCase()
-  //       .replace(/_/g, '-');
-  //     const radioSelectedIndex = radioOptions.indexOf(`radios.${radioSelectedValue!}`);
-  //     expect(paymentChoiceBox).toHaveTextContent('debt-position-of');
-  //     expect(paymentChoiceBox).toHaveTextContent('which-type-of-payments');
-  //     await testRadio(paymentChoiceBox, 'paymentModel', radioOptions, radioSelectedIndex);
-  //     recipientIdx++;
-  //   }
-  //   expect(buttonSubmit).toBeEnabled();
-  //   fireEvent.click(buttonSubmit);
-  //   // check if redux is not updated
-  //   await waitFor(() =>
-  //     expect(testStore.getState().newNotificationState.notification.recipients).toStrictEqual(
-  //       newNotification.recipients
-  //     )
-  //   );
-  //   expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
-  // });
+      await testInput(form, 'paFee', '1.50');
+      const error = form.querySelector(`[id="paFee-helper-text"]`);
+      expect(error).toHaveTextContent('pa-fee-invalid');
+
+      await testInput(form, 'paFee', '0.99');
+      expect(form).not.toHaveTextContent('notification-fee.pa-fee-invalid');
+    });
+
+    it('should show error when type 2 identical notice code for the same creditor tax id', async () => {
+      const notificationWithTwoPagoPa = {
+        ...newNotification,
+        recipients: [
+          {
+            ...newNotification.recipients[0],
+            debtPosition: PaymentModel.PAGO_PA,
+            payments: [
+              {
+                pagoPa: newPagopaPayment(newNotification.recipients[0].taxId, 0, '77777777777'),
+              },
+              {
+                pagoPa: newPagopaPayment(newNotification.recipients[0].taxId, 1, '77777777777'),
+              },
+            ],
+          },
+        ],
+      };
+      const recipientTaxId = newNotification.recipients[0].taxId;
+      const recipientType = newNotification.recipients[0].recipientType;
+      const recipientKey = `${recipientType}-${recipientTaxId}`;
+
+      const result = render(
+        <DebtPositionDetail
+          notification={notificationWithTwoPagoPa}
+          onConfirm={confirmHandlerMk}
+          onPreviousStep={previousStepMk}
+        />
+      );
+
+      const paymentsBox = result.getByTestId(`${recipientTaxId}-payments`);
+      expect(paymentsBox).toBeInTheDocument();
+
+      const firstPagoPaBox = result.getByTestId(`recipients.${recipientKey}.pagoPa.0`);
+      const secondPagoPaBox = result.getByTestId(`recipients.${recipientKey}.pagoPa.1`);
+
+      await testInput(firstPagoPaBox, `noticeCode`, '111111111111111111');
+      await testInput(secondPagoPaBox, `noticeCode`, '111111111111111111');
+
+      let firstFieldError = firstPagoPaBox.querySelector(`[id="noticeCode-helper-text"]`);
+      let secondFieldError = secondPagoPaBox.querySelector(`[id="noticeCode-helper-text"]`);
+
+      expect(firstFieldError).toHaveTextContent('identical-notice-codes-error');
+      expect(secondFieldError).toHaveTextContent('identical-notice-codes-error');
+
+      // Change one value in order to clear errors
+      await testInput(firstPagoPaBox, `noticeCode`, '222222222222222222');
+
+      firstFieldError = firstPagoPaBox.querySelector(`[id="noticeCode-helper-text"]`);
+      secondFieldError = secondPagoPaBox.querySelector(`[id="noticeCode-helper-text"]`);
+
+      expect(firstFieldError).not.toBeInTheDocument();
+      expect(secondFieldError).not.toBeInTheDocument();
+    });
+
+    it.only('should show error when notificationFeePolicy is DELIVERY_MODE and no applyCost switch is selected', async () => {
+      const notificationWithFalseApplyCost = {
+        ...newNotification,
+        notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
+        paFee: '0,99',
+        vat: 4,
+        recipients: newNotification.recipients.map((r) => ({
+          ...r,
+          payments: r.payments?.map((p) => ({
+            pagoPa: p.pagoPa ? { ...p.pagoPa, applyCost: false } : undefined,
+            f24: p.f24 ? { ...p.f24, applyCost: false } : undefined,
+          })),
+        })),
+      };
+
+      const result = render(
+        <DebtPositionDetail
+          notification={notificationWithFalseApplyCost}
+          onConfirm={confirmHandlerMk}
+          onPreviousStep={previousStepMk}
+        />
+      );
+
+      // we wait that the component is correctly rendered
+      const paymentChoiceBox = await waitFor(() => result.getByTestId('debtPositionDetailForm'));
+      expect(paymentChoiceBox).toBeInTheDocument();
+
+      for (const recipient of notificationWithFalseApplyCost.recipients) {
+        const recipientKey = `${recipient.recipientType}-${recipient.taxId}`;
+        if (!recipient.payments) continue;
+        let pagoPaIdx = 0;
+        let f24Idx = 0;
+        for (const payment of recipient.payments) {
+          if (!_.isNil(payment.pagoPa)) {
+            const pagoPaPaymentBox = result.getByTestId(
+              `recipients.${recipientKey}.pagoPa.${pagoPaIdx}`
+            );
+            const applyCostError = pagoPaPaymentBox.querySelector(`[id="applyCost-helper-text"]`);
+            expect(applyCostError).toHaveTextContent('at-least-one-applycost');
+          }
+          if (!_.isNil(payment.f24)) {
+            const f24PaymentBox = result.getByTestId(`recipients.${recipientKey}.f24.${f24Idx}`);
+            const applyCostError = f24PaymentBox.querySelector(`[id="applyCost-helper-text"]`);
+            expect(applyCostError).toHaveTextContent('at-least-one-applycost');
+          }
+        }
+      }
+    });
+  });
 });

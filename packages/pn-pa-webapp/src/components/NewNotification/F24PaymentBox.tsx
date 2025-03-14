@@ -1,9 +1,16 @@
 import { FieldMetaProps } from 'formik';
-import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Alert, FormControlLabel, FormHelperText, Stack, Switch, TextField } from '@mui/material';
+import {
+  Alert,
+  Box,
+  FormControlLabel,
+  FormHelperText,
+  Stack,
+  Switch,
+  TextField,
+} from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -50,7 +57,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
   };
 
   return (
-    <Fragment>
+    <Box data-testid={id}>
       <FileUpload
         uploadText={
           isMobile
@@ -108,7 +115,9 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
                 componentsProps={{ typography: { fontSize: '16px' } }}
               />
               {getError('applyCost', false) && (
-                <FormHelperText error>{getError('applyCost', false)}</FormHelperText>
+                <FormHelperText id="applyCost-helper-text" error>
+                  {getError('applyCost', false)}
+                </FormHelperText>
               )}
             </Stack>
           )}
@@ -135,7 +144,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
           {t('new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment')}
         </Alert>
       )}
-    </Fragment>
+    </Box>
   );
 };
 

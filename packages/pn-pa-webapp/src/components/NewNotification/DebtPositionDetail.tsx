@@ -450,6 +450,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                       ),
                     }}
                     sx={{ flexBasis: '75%', margin: isMobile ? '1rem auto' : '0rem 0.8rem' }}
+                    data-testid="notification-pa-fee"
                   />
                   <CustomDropdown
                     id="vat"
@@ -462,6 +463,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                     sx={{ flexBasis: '30%' }}
                     error={formik.touched.vat && Boolean(formik.errors.vat)}
                     helperText={formik.touched.vat && formik.errors.vat}
+                    data-testid="notification-vat"
                   >
                     {VAT.map((option) => (
                       <MenuItem key={option} value={option}>

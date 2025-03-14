@@ -204,26 +204,13 @@ describe('Recipient Component with payment enabled', async () => {
     });
     await testRecipientFormRendering(form, 1);
     await populateForm(form, 1, newNotification.recipients[1]);
-    // expect(submitButton).toBeEnabled();
 
-    // STEP 3: Add and fill third recipient
-    // addButton = within(form).getByTestId('add-recipient');
-    // fireEvent.click(addButton);
-    // await waitFor(() => {
-    //   expect(submitButton).toBeDisabled();
-    // });
-    // await testRecipientFormRendering(form, 2);
-    // await populateForm(form, 2, newNotification.recipients[2]);
-
-    // STEP 4: Submit form and verify results
+    // STEP 3: Submit form and verify results
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton);
 
     await waitFor(() => {
       const state = testStore.getState();
-      // expect(state.newNotificationState.notification.recipients).toStrictEqual(
-      //   recipientsWithoutPayments
-      // );
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
         recipientsWithoutPayments[0],
         recipientsWithoutPayments[1],
