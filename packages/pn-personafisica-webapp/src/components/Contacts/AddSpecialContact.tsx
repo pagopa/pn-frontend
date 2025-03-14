@@ -308,9 +308,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     };
 
     useEffect(() => {
-      if (formik.values.s_value) {
-        return;
-      }
       getParties();
     }, [formik.values.sender.name]);
 

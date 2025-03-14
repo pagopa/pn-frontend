@@ -91,7 +91,10 @@ const PecContactWizard: React.FC<Props> = ({
           setOpenCodeModal(true);
           return;
         }
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_SUCCESS, 'default');
+        PFEventStrategyFactory.triggerEvent(
+          PFEventsType.SEND_ADD_PEC_UX_SUCCESS,
+          res.pecValid && !!defaultSERCQ_SENDAddress
+        );
         setOpenCodeModal(false);
         return isTransferring ? setActiveStep(activeStep + 1) : navigate(-1);
       })

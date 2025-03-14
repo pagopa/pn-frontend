@@ -31,7 +31,9 @@ enum ModalType {
 
 const PecContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultPECAddress, addresses } = useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultPECAddress, defaultSERCQ_SENDAddress, addresses } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
@@ -85,7 +87,10 @@ const PecContactItem: React.FC = () => {
           return;
         }
 
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_SUCCESS, 'default');
+        PFEventStrategyFactory.triggerEvent(
+          PFEventsType.SEND_ADD_PEC_UX_SUCCESS,
+          res.pecValid && !!defaultSERCQ_SENDAddress
+        );
 
         // contact has already been verified
         if (res.pecValid) {

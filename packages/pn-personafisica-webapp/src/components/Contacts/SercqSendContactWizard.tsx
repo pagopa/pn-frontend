@@ -140,7 +140,10 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWizar
       .unwrap()
       .then(() => {
         sessionStorage.removeItem('domicileBannerClosed');
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS, 'default');
+        PFEventStrategyFactory.triggerEvent(
+          PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
+          !!defaultPECAddress
+        );
         // show success message
         dispatch(
           appStateActions.addSuccess({
