@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Stack, Typography } from '@mui/material';
+import { Divider, Stack, Typography } from '@mui/material';
 import { appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -185,33 +185,36 @@ const EmailSmsContactWizard: React.FC = () => {
 
       {/* SMS */}
       {smsValue ? (
-        <DigitalContact
-          label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
-          value={smsValue}
-          channelType={ChannelType.SMS}
-          ref={smsContactRef}
-          inputProps={{
-            label: t(`courtesy-contacts.link-sms-placeholder`, {
-              ns: 'recapiti',
-            }),
-            prefix: internationalPhonePrefix,
-          }}
-          insertButtonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
-          onSubmit={(value) => handleSubmit(ChannelType.SMS, value)}
-          showVerifiedIcon
-          showLabelOnEdit
-          slotsProps={{
-            textField: {
-              sx: { flexBasis: { xs: 'unset', lg: '50%' } },
-            },
-            button: {
-              sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
-            },
-            container: {
-              width: '100%',
-            },
-          }}
-        />
+        <>
+          <Divider sx={{ mt: 1, mb: 3 }} />
+          <DigitalContact
+            label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
+            value={smsValue}
+            channelType={ChannelType.SMS}
+            ref={smsContactRef}
+            inputProps={{
+              label: t(`courtesy-contacts.link-sms-placeholder`, {
+                ns: 'recapiti',
+              }),
+              prefix: internationalPhonePrefix,
+            }}
+            insertButtonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
+            onSubmit={(value) => handleSubmit(ChannelType.SMS, value)}
+            showVerifiedIcon
+            showLabelOnEdit
+            slotsProps={{
+              textField: {
+                sx: { flexBasis: { xs: 'unset', lg: '50%' } },
+              },
+              button: {
+                sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
+              },
+              container: {
+                width: '100%',
+              },
+            }}
+          />
+        </>
       ) : (
         <SmsContactItem
           slotsProps={{

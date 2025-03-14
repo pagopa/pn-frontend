@@ -36,7 +36,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
 
   const showEmailStep = useMemo(() => !(defaultSMSAddress || defaultEMAILAddress), []);
 
-  const hasCourtesyContact = !!(defaultEMAILAddress || defaultSMSAddress);
+  const hasCourtesyContact = defaultEMAILAddress || defaultSMSAddress;
 
   const goToNextStep = () => {
     setActiveStep((step) => step + 1);
@@ -58,6 +58,8 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const handleExit = () => {
     if (activeStep === 0) {
       navigate(-1);
+    } else if (hasCourtesyContact) {
+      goToNextStep();
     } else {
       showConfirmationModal();
     }

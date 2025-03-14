@@ -166,7 +166,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const validationSchema = yup.object({
       sender: yup
         .object({
-          id: yup.string().required(),
+          id: yup.string().required(t('required-field')),
           name: yup
             .string()
             .required(t('required-field'))
@@ -443,8 +443,10 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
               inputValue={formik.values.sender.name}
               onInputChange={(_event, newInputValue, reason) => {
                 if (reason === 'input') {
+                  const senderId =
+                    parties.find((sender) => sender.name === newInputValue)?.id ?? '';
                   void formik.setFieldTouched('sender', true, false);
-                  void formik.setFieldValue('sender', { id: '', name: newInputValue });
+                  void formik.setFieldValue('sender', { id: senderId, name: newInputValue });
                 }
               }}
               filterOptions={(e) => e}
@@ -454,8 +456,14 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                   {...params}
                   name="sender"
                   label={entitySearchLabel}
-                  error={formik.touched.sender && Boolean(formik.errors.sender?.name)}
-                  helperText={formik.touched.sender && formik.errors.sender?.name}
+                  error={
+                    formik.touched.sender &&
+                    Boolean(formik.errors.sender?.name ?? formik.errors.sender?.id)
+                  }
+                  helperText={
+                    formik.touched.sender &&
+                    (formik.errors.sender?.name || formik.errors.sender?.id)
+                  }
                 />
               )}
               sx={{ flexGrow: 1, flexBasis: 0 }}

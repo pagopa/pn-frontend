@@ -28,6 +28,7 @@ enum ActiveStep {
 type ModalType = {
   open: boolean;
   step?: ActiveStep;
+  exit?: boolean;
 };
 
 const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onGoBack }) => {
@@ -58,30 +59,38 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
     setActiveStep((step) => step + 1);
   };
 
+  const goToEnd = () => {
+    setActiveStep(3); // set the current step greater than the number of steps to go to the thankyou page
+  };
+
   const handleConfirmationModalAccept = () => {
     setModal({ open: false });
   };
 
   const handleConfirmationModalDecline = () => {
+    if (modal.exit) {
+      goToEnd();
+    } else {
+      goToNextStep();
+    }
     setModal({ open: false });
-    goToNextStep();
   };
 
-  const handleSkipOrExitClick = () => {
+  const handleSkipOrExitClick = (exit?: boolean) => {
     if (activeStep === 0) {
       navigate(-1);
     } else if (hasCourtesyContact) {
-      setActiveStep(3); // set the current step greater than the number of steps to go to the thankyou page
+      goToEnd();
     } else {
-      showConfirmationModal();
+      showConfirmationModal(exit);
     }
   };
 
-  const showConfirmationModal = () => {
+  const showConfirmationModal = (exit?: boolean) => {
     if (activeStep === 1 && showIOStep) {
-      setModal({ open: true, step: ActiveStep.IO });
+      setModal({ open: true, step: ActiveStep.IO, exit });
     } else {
-      setModal({ open: true, step: ActiveStep.EMAIL });
+      setModal({ open: true, step: ActiveStep.EMAIL, exit });
     }
   };
 
@@ -141,7 +150,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
         }
         activeStep={activeStep}
         setActiveStep={setActiveStep}
-        onExit={() => handleSkipOrExitClick()}
+        onExit={() => handleSkipOrExitClick(true)}
         slots={{
           nextButton: getNextButton,
           prevButton: () => <></>,
