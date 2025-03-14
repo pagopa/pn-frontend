@@ -352,7 +352,7 @@ describe('DebtPositionDetail Component', async () => {
       expect(secondFieldError).not.toBeInTheDocument();
     });
 
-    it.only('should show error when notificationFeePolicy is DELIVERY_MODE and no applyCost switch is selected', async () => {
+    it('should show error when notificationFeePolicy is DELIVERY_MODE and no applyCost switch is selected', async () => {
       const notificationWithFalseApplyCost = {
         ...newNotification,
         notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
