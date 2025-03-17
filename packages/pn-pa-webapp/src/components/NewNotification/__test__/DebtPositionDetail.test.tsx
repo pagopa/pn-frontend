@@ -7,7 +7,7 @@ import {
   newNotification,
   newNotificationRecipients,
 } from '../../../__mocks__/NewNotification.mock';
-import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import { NotificationFeePolicy, PaymentModel } from '../../../models/NewNotification';
 import { newF24Payment, newPagopaPayment } from '../../../utility/notification.utility';
 import DebtPositionDetail from '../DebtPositionDetail';
@@ -16,18 +16,18 @@ const confirmHandlerMk = vi.fn();
 const previousStepMk = vi.fn();
 
 describe('DebtPositionDetail Component', async () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   describe('Render Payment Boxes', () => {
+    afterEach(() => {
+      vi.clearAllMocks();
+    });
+
     it('renders component - one recipient - debtPosition pagopa only', async () => {
       const newNotificationWithPagopaOnly = {
         ...newNotification,
         recipients: [newNotificationRecipients[0]],
       };
       const recipientTaxId = newNotificationWithPagopaOnly.recipients[0].taxId;
-      // render component
+
       const { getByTestId, getAllByTestId, queryAllByTestId } = render(
         <DebtPositionDetail
           notification={newNotificationWithPagopaOnly}
@@ -35,7 +35,7 @@ describe('DebtPositionDetail Component', async () => {
           onPreviousStep={previousStepMk}
         />
       );
-      // we wait that the component is correctly rendered
+
       const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
       expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
       expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
@@ -70,7 +70,6 @@ describe('DebtPositionDetail Component', async () => {
       };
       const recipientTaxId = newNotificationWithF24Only.recipients[0].taxId;
 
-      // render component
       const { getByTestId, getAllByTestId, queryAllByTestId } = render(
         <DebtPositionDetail
           notification={newNotificationWithF24Only}
@@ -79,7 +78,6 @@ describe('DebtPositionDetail Component', async () => {
         />
       );
 
-      // we wait that the component is correctly rendered
       const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
       expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
       expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
@@ -113,7 +111,6 @@ describe('DebtPositionDetail Component', async () => {
       };
       const recipientTaxId = newNotificationWithF24AndPagopa.recipients[0].taxId;
 
-      // render component
       const { getByTestId, getAllByTestId } = render(
         <DebtPositionDetail
           notification={newNotificationWithF24AndPagopa}
@@ -122,7 +119,6 @@ describe('DebtPositionDetail Component', async () => {
         />
       );
 
-      // we wait that the component is correctly rendered
       const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
       expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
       expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
@@ -161,7 +157,7 @@ describe('DebtPositionDetail Component', async () => {
           })),
         })),
       };
-      // render component
+
       const { getByTestId, getAllByTestId, queryAllByTestId } = render(
         <DebtPositionDetail
           notification={newNotificationWithPagoPaOnly}
@@ -169,7 +165,7 @@ describe('DebtPositionDetail Component', async () => {
           onPreviousStep={previousStepMk}
         />
       );
-      // we wait that the component is correctly rendered
+
       const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
       expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
       expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
@@ -203,7 +199,6 @@ describe('DebtPositionDetail Component', async () => {
         })),
       };
 
-      // render component
       const { getByTestId, getAllByTestId, queryAllByTestId } = render(
         <DebtPositionDetail
           notification={newNotificationWithF24Only}
@@ -212,7 +207,6 @@ describe('DebtPositionDetail Component', async () => {
         />
       );
 
-      // we wait that the component is correctly rendered
       const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
       expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
       expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
@@ -233,7 +227,6 @@ describe('DebtPositionDetail Component', async () => {
     });
 
     it('renders component - multi recipient - debtPosition f24 and pagopa', async () => {
-      // render component
       const { getByTestId, queryAllByTestId } = render(
         <DebtPositionDetail
           notification={newNotification}
@@ -242,7 +235,6 @@ describe('DebtPositionDetail Component', async () => {
         />
       );
 
-      // we wait that the component is correctly rendered
       const paymentChoiceBox = await waitFor(() => getByTestId('debtPositionDetailForm'));
       expect(paymentChoiceBox).toHaveTextContent('back-to-debt-position');
       expect(paymentChoiceBox).toHaveTextContent('notification-fee.title');
@@ -265,7 +257,11 @@ describe('DebtPositionDetail Component', async () => {
     });
   });
 
-  describe('Debt Position Validation', () => {
+  describe('Debt Position Validations', () => {
+    afterEach(() => {
+      vi.clearAllMocks();
+    });
+
     it('should show error if notification cost is greater than 1.00', async () => {
       const result = render(
         <DebtPositionDetail
@@ -333,20 +329,20 @@ describe('DebtPositionDetail Component', async () => {
       const firstPagoPaBox = result.getByTestId(`recipients.${recipientKey}.pagoPa.0`);
       const secondPagoPaBox = result.getByTestId(`recipients.${recipientKey}.pagoPa.1`);
 
-      await testInput(firstPagoPaBox, `noticeCode`, '111111111111111111');
-      await testInput(secondPagoPaBox, `noticeCode`, '111111111111111111');
+      await testInput(firstPagoPaBox, 'noticeCode', '111111111111111111');
+      await testInput(secondPagoPaBox, 'noticeCode', '111111111111111111');
 
-      let firstFieldError = firstPagoPaBox.querySelector(`[id="noticeCode-helper-text"]`);
-      let secondFieldError = secondPagoPaBox.querySelector(`[id="noticeCode-helper-text"]`);
+      let firstFieldError = firstPagoPaBox.querySelector('[id="noticeCode-helper-text"]');
+      let secondFieldError = secondPagoPaBox.querySelector('[id="noticeCode-helper-text"]');
 
       expect(firstFieldError).toHaveTextContent('identical-notice-codes-error');
       expect(secondFieldError).toHaveTextContent('identical-notice-codes-error');
 
       // Change one value in order to clear errors
-      await testInput(firstPagoPaBox, `noticeCode`, '222222222222222222');
+      await testInput(firstPagoPaBox, 'noticeCode', '222222222222222222');
 
-      firstFieldError = firstPagoPaBox.querySelector(`[id="noticeCode-helper-text"]`);
-      secondFieldError = secondPagoPaBox.querySelector(`[id="noticeCode-helper-text"]`);
+      firstFieldError = firstPagoPaBox.querySelector('[id="noticeCode-helper-text"]');
+      secondFieldError = secondPagoPaBox.querySelector('[id="noticeCode-helper-text"]');
 
       expect(firstFieldError).not.toBeInTheDocument();
       expect(secondFieldError).not.toBeInTheDocument();
@@ -375,7 +371,6 @@ describe('DebtPositionDetail Component', async () => {
         />
       );
 
-      // we wait that the component is correctly rendered
       const paymentChoiceBox = await waitFor(() => result.getByTestId('debtPositionDetailForm'));
       expect(paymentChoiceBox).toBeInTheDocument();
 
@@ -389,13 +384,84 @@ describe('DebtPositionDetail Component', async () => {
             const pagoPaPaymentBox = result.getByTestId(
               `recipients.${recipientKey}.pagoPa.${pagoPaIdx}`
             );
-            const applyCostError = pagoPaPaymentBox.querySelector(`[id="applyCost-helper-text"]`);
+            const applyCostError = pagoPaPaymentBox.querySelector('[id="applyCost-helper-text"]');
             expect(applyCostError).toHaveTextContent('at-least-one-applycost');
           }
           if (!_.isNil(payment.f24)) {
             const f24PaymentBox = result.getByTestId(`recipients.${recipientKey}.f24.${f24Idx}`);
-            const applyCostError = f24PaymentBox.querySelector(`[id="applyCost-helper-text"]`);
+            const applyCostError = f24PaymentBox.querySelector('[id="applyCost-helper-text"]');
             expect(applyCostError).toHaveTextContent('at-least-one-applycost');
+          }
+        }
+      }
+    });
+
+    it('should show error when upload two identical files', async () => {
+      const notificationWithEmptyFiles = {
+        ...newNotification,
+        recipients: [
+          {
+            ...newNotification.recipients[0],
+            debtPosition: PaymentModel.PAGO_PA,
+            payments: [
+              {
+                pagoPa: newPagopaPayment(newNotification.recipients[0].taxId, 0, '77777777777'),
+              },
+              {
+                pagoPa: newPagopaPayment(newNotification.recipients[0].taxId, 1, '77777777777'),
+              },
+            ],
+          },
+        ],
+      };
+
+      const result = render(
+        <DebtPositionDetail
+          notification={notificationWithEmptyFiles}
+          onConfirm={confirmHandlerMk}
+          onPreviousStep={previousStepMk}
+        />
+      );
+
+      const paymentChoiceBox = await waitFor(() => result.getByTestId('debtPositionDetailForm'));
+      expect(paymentChoiceBox).toBeInTheDocument();
+
+      const recipient = notificationWithEmptyFiles.recipients[0];
+      const recipientKey = `${recipient.recipientType}-${recipient.taxId}`;
+
+      // loop recipients and upload files
+      for (const recipient of notificationWithEmptyFiles.recipients) {
+        if (!recipient.payments) continue;
+        for (const [index, payment] of recipient.payments.entries()) {
+          if (!_.isNil(payment.pagoPa)) {
+            const pagoPaPaymentBox = result.getByTestId(
+              `recipients.${recipientKey}.pagoPa.${index}`
+            );
+            const fileInput = within(pagoPaPaymentBox).getByTestId('fileInput');
+            const input = fileInput?.querySelector('input');
+            const mockFile = new File(['mocked content'], 'mocked-file.pdf', {
+              type: 'application/pdf',
+            });
+            fireEvent.change(input!, { target: { files: [mockFile] } });
+            await waitFor(() => {
+              expect(pagoPaPaymentBox).toHaveTextContent(mockFile.name);
+            });
+          }
+        }
+      }
+
+      // loop recipients and check errors
+      for (const recipient of notificationWithEmptyFiles.recipients) {
+        if (!recipient.payments) continue;
+        for (const [index, payment] of recipient.payments.entries()) {
+          if (!_.isNil(payment.pagoPa)) {
+            const pagoPaPaymentBox = result.getByTestId(
+              `recipients.${recipientKey}.pagoPa.${index}`
+            );
+            await waitFor(() => {
+              const fileUploadError = pagoPaPaymentBox.querySelector('[id="file-upload-error"]');
+              expect(fileUploadError).toHaveTextContent('identical-sha256-error');
+            });
           }
         }
       }

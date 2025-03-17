@@ -43,7 +43,7 @@ export const newNotificationGroups: Array<UserGroup> = [
 
 export const newNotificationPagoPa = (paymentIndex: number): NewNotificationPagoPaPayment => ({
   id: 'mocked-pagopa-id',
-  idx: 0,
+  idx: paymentIndex,
   contentType: 'application/pdf',
   creditorTaxId: '77777777777',
   noticeCode: `30201012446360092${paymentIndex}`,
