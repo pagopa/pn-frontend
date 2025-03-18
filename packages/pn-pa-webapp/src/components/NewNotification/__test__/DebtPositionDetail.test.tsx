@@ -384,12 +384,12 @@ describe('DebtPositionDetail Component', async () => {
             const pagoPaPaymentBox = result.getByTestId(
               `recipients.${recipientKey}.pagoPa.${pagoPaIdx}`
             );
-            const applyCostError = pagoPaPaymentBox.querySelector('[id="applyCost-helper-text"]');
+            const applyCostError = within(pagoPaPaymentBox).getByTestId('applyCost-helper-text');
             expect(applyCostError).toHaveTextContent('at-least-one-applycost');
           }
           if (!_.isNil(payment.f24)) {
             const f24PaymentBox = result.getByTestId(`recipients.${recipientKey}.f24.${f24Idx}`);
-            const applyCostError = f24PaymentBox.querySelector('[id="applyCost-helper-text"]');
+            const applyCostError = within(f24PaymentBox).getByTestId('applyCost-helper-text');
             expect(applyCostError).toHaveTextContent('at-least-one-applycost');
           }
         }

@@ -115,7 +115,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
                 componentsProps={{ typography: { fontSize: '16px' } }}
               />
               {getError('applyCost', false) && (
-                <FormHelperText id="applyCost-helper-text" error>
+                <FormHelperText data-testid="applyCost-helper-text" error>
                   {getError('applyCost', false)}
                 </FormHelperText>
               )}
