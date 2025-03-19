@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import { AppNotAccessible, NotFound } from '@pagopa-pn/pn-commons';
 
@@ -26,6 +26,10 @@ const handleAssistanceClick = () => {
 
 function Router() {
   const { IS_STATISTICS_ENABLED } = getConfiguration();
+  const navigate = useNavigate();
+
+  const navigateToHome = () => navigate(routes.DASHBOARD, { replace: true });
+
   return (
     <Routes>
       <Route path="/" element={<SessionGuard />}>
@@ -55,7 +59,7 @@ function Router() {
           </Route>
           {/* not found - non-logged users will see the common AccessDenied component */}
           <Route path="*" element={<RouteGuard roles={null} />}>
-            <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<NotFound goBackAction={navigateToHome} />} />
           </Route>
         </Route>
       </Route>
@@ -65,7 +69,7 @@ function Router() {
         path={routes.NOT_ACCESSIBLE}
         element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}
       />
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={<NotFound goBackAction={navigateToHome} />} />
     </Routes>
   );
 }
