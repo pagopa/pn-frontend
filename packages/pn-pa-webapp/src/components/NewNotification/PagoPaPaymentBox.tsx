@@ -46,7 +46,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       return fieldMeta(`${id}.${fieldId}`).error;
     }
 
-    if (fieldMeta(`${id}.${fieldId}`).touched) {
+    if (fieldMeta(`${id}.${fieldId}`).touched ||  fieldMeta(`${id}.${fieldId}`).value) {
       return fieldMeta(`${id}.${fieldId}`).error;
     }
 
