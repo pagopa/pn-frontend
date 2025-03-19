@@ -87,11 +87,8 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   };
 
   const showConfirmationModal = (exit?: boolean) => {
-    if (activeStep === 1 && showIOStep) {
-      setModal({ open: true, step: ActiveStep.IO, exit });
-    } else {
-      setModal({ open: true, step: ActiveStep.EMAIL, exit });
-    }
+    const step = activeStep === 1 && showIOStep ? ActiveStep.IO : ActiveStep.EMAIL;
+    setModal({ open: true, step, exit });
   };
 
   const getNextButton = () => {
