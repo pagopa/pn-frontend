@@ -87,6 +87,7 @@ export interface NewNotificationRecipient {
   foreignState: string;
   payments?: Array<NewNotificationPayment>;
   debtPosition?: PaymentModel;
+  showPhysicalAddress?: boolean;
 }
 
 export interface NewNotification extends NewNotificationBilingualism {

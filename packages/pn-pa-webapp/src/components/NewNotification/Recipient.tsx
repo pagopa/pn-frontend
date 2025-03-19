@@ -1,11 +1,19 @@
 import { Form, Formik, FormikErrors, FormikProps } from 'formik';
-import { ForwardedRef, Fragment, forwardRef, useImperativeHandle, useRef } from 'react';
+import {
+  ChangeEvent,
+  ForwardedRef,
+  Fragment,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { Add, Delete } from '@mui/icons-material';
 import {
   Box,
+  Checkbox,
   FormControl,
   FormControlLabel,
   Grid,
@@ -49,6 +57,7 @@ const singleRecipient = {
   municipalityDetails: '',
   province: '',
   foreignState: 'Italia',
+  showPhysicalAddress: false,
 };
 
 type FormRecipients = {
@@ -61,6 +70,14 @@ type Props = {
   recipientsData?: Array<NewNotificationRecipient>;
   forwardedRef: ForwardedRef<unknown>;
 };
+
+function conditionalPhysicalAddress(validation: yup.AnySchema): any {
+  return yup.string().when('showPhysicalAddress', {
+    is: true,
+    then: validation,
+    otherwise: yup.string().nullable().notRequired(),
+  });
+}
 
 const Recipient: React.FC<Props> = ({
   onConfirm,
@@ -137,26 +154,25 @@ const Recipient: React.FC<Props> = ({
       .max(320, tc('too-long-field-error'))
       .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges'))
       .matches(dataRegex.email, t('pec-error')),
-    address: requiredStringFieldValidation(tc, 1024),
-    houseNumber: yup.string().required(tc('required-field')),
-    /*
-      addressDetails: yup.string().when('showPhysicalAddress', {
-        is: true,
-        then: yup.string().required(tc('required-field')),
-      }),
-      */
-    zip: yup
-      .string()
-      .required(tc('required-field'))
-      .max(12, tc('too-long-field-error', { maxLength: 12 }))
-      .matches(dataRegex.zipCode, `${t('zip')} ${tc('invalid')}`),
-    municipalityDetails: yup
-      .string()
-      .max(256, tc('too-long-field-error', { maxLength: 256 }))
-      .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
-    municipality: requiredStringFieldValidation(tc, 256),
-    province: requiredStringFieldValidation(tc, 256),
-    foreignState: requiredStringFieldValidation(tc),
+    address: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 1024)),
+    houseNumber: conditionalPhysicalAddress(yup.string().required(tc('required-field'))),
+    zip: conditionalPhysicalAddress(
+      yup
+        .string()
+        .required(tc('required-field'))
+        .max(12, tc('too-long-field-error', { maxLength: 12 }))
+        .matches(dataRegex.zipCode, `${t('zip')} ${tc('invalid')}`)
+    ),
+    municipalityDetails: conditionalPhysicalAddress(
+      yup
+        .string()
+        .max(256, tc('too-long-field-error', { maxLength: 256 }))
+        .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges'))
+    ),
+    municipality: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 256)),
+    province: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 256)),
+    foreignState: conditionalPhysicalAddress(requiredStringFieldValidation(tc)),
+    showPhysicalAddress: yup.boolean(),
   });
 
   const validationSchema = yup.object({
@@ -248,6 +264,29 @@ const Recipient: React.FC<Props> = ({
       dispatch(saveRecipients(formRef.current ? formRef.current.values : { recipients: [] }));
     },
   }));
+
+  const handlePhysicalAddressChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    oldValue: NewNotificationRecipient,
+    recipientField: string,
+    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+  ) => {
+    setFieldValue(
+      recipientField,
+      {
+        ...oldValue,
+        showPhysicalAddress: event.target.checked,
+        address: '',
+        houseNumber: '',
+        zip: '',
+        municipality: '',
+        municipalityDetails: '',
+        province: '',
+        foreignState: '',
+      },
+      true,
+    );
+  };
 
   return (
     <Formik
@@ -393,24 +432,50 @@ const Recipient: React.FC<Props> = ({
                   </Grid>
 
                   {/* Indirizzo */}
-                  <Box mt={4} mb={3}>
-                    <FormBoxTitle text={t('address')} />
-                  </Box>
-                  <Grid
-                    container
-                    columnSpacing={1}
-                    rowSpacing={2}
-                    data-testid={`physicalAddressForm${index}`}
-                  >
-                    <PhysicalAddress
-                      values={values}
-                      setFieldValue={setFieldValue}
-                      touched={touched}
-                      errors={errors}
-                      recipient={index}
-                      handleBlur={handleBlur}
-                    />
-                  </Grid>
+
+                  <FormControlLabel
+                    id={`recipients[${index}].showPhysicalAddress`}
+                    name={`recipients[${index}].showPhysicalAddress`}
+                    data-testid={`showPhysicalAddress${index}`}
+                    label={`${t('add-physical-domicile')}`}
+                    sx={{ mt: 2 }}
+                    control={
+                      <Checkbox
+                      checked={values.recipients[index].showPhysicalAddress}
+                        onChange={(physicalCheckEvent) =>
+                          handlePhysicalAddressChange(
+                            physicalCheckEvent,
+                            values.recipients[index],
+                            `recipients[${index}]`,
+                            setFieldValue
+                          )
+                        }
+                      />
+                    }
+                  />
+
+                  {values.recipients[index].showPhysicalAddress && (
+                    <>
+                      <Box mt={2} mb={3}>
+                        <FormBoxTitle text={t('address')} />
+                      </Box>
+                      <Grid
+                        container
+                        columnSpacing={1}
+                        rowSpacing={2}
+                        data-testid={`physicalAddressForm${index}`}
+                      >
+                        <PhysicalAddress
+                          values={values}
+                          setFieldValue={setFieldValue}
+                          touched={touched}
+                          errors={errors}
+                          recipient={index}
+                          handleBlur={handleBlur}
+                        />
+                      </Grid>
+                    </>
+                  )}
 
                   {/* Domicilio digitale */}
                   <Box mt={4} mb={2}>
