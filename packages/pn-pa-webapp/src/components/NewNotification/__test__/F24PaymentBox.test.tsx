@@ -31,6 +31,7 @@ describe('F24PaymentBox', () => {
       value: undefined,
       initialTouched: false,
     }),
+    showErrorIfPresent: () => true,
   };
 
   beforeEach(() => {

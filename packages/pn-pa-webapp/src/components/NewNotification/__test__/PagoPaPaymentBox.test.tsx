@@ -31,6 +31,7 @@ describe('PagoPaPaymentBox', () => {
       value: undefined,
       initialTouched: false,
     }),
+    showErrorIfPresent: () => true,
   };
 
   beforeEach(() => {
