@@ -14,6 +14,7 @@ import {
   NewNotificationDocument,
   NewNotificationDocumentFile,
   NewNotificationDocumentRef,
+  NewNotificationF24Payment,
   NewNotificationLangOther,
   NewNotificationPagoPaPayment,
   NewNotificationPayment,
@@ -302,3 +303,39 @@ export const filterPaymentsByDebtPositionChange = (
 
   return [];
 };
+
+const emptyFileData = {
+  data: undefined,
+  sha256: { hashBase64: '', hashHex: '' },
+};
+
+export const newPagopaPayment = (
+  taxId: string,
+  idx: number,
+  creditorTaxId: string
+): NewNotificationPagoPaPayment => ({
+  id: `${taxId}-${idx}-pagoPa`,
+  idx,
+  contentType: 'application/pdf',
+  file: emptyFileData,
+  creditorTaxId,
+  noticeCode: '',
+  applyCost: false,
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+});
+
+export const newF24Payment = (taxId: string, idx: number): NewNotificationF24Payment => ({
+  id: `${taxId}-${idx}-f24`,
+  idx,
+  contentType: 'application/json',
+  file: emptyFileData,
+  name: '',
+  applyCost: false,
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+});
