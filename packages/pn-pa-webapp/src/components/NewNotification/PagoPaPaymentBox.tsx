@@ -23,6 +23,7 @@ type PaymentBoxProps = {
   showDeleteButton: boolean;
   onDeletePayment: () => void;
   fieldMeta: (name: string) => FieldMetaProps<any>;
+  showErrorIfPresent: (field: string) => boolean;
 };
 
 const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
@@ -35,6 +36,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
   showDeleteButton,
   onDeletePayment,
   fieldMeta,
+  showErrorIfPresent,
 }) => {
   const { t } = useTranslation(['notifiche', 'common']);
   const isMobile = useIsMobile('md');
@@ -46,7 +48,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       return fieldMeta(`${id}.${fieldId}`).error;
     }
 
-    if (fieldMeta(`${id}.${fieldId}`).touched ||  fieldMeta(`${id}.${fieldId}`).value) {
+    if (showErrorIfPresent(`${id}.${fieldId}`)) {
       return fieldMeta(`${id}.${fieldId}`).error;
     }
 

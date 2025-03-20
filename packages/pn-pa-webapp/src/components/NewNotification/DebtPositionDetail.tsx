@@ -1,4 +1,4 @@
-import { useFormik } from 'formik';
+import { getIn, useFormik } from 'formik';
 import _ from 'lodash';
 import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -107,6 +107,12 @@ const DebtPositionDetail: React.FC<Props> = ({
       versionToken: '',
     },
   });
+
+  const showErrorIfPresent = (fieldName: string) =>
+    Boolean(
+      getIn(formik.touched, fieldName) ||
+        (_.get(formik.values, fieldName) && String(_.get(formik.values, fieldName)).length > 0)
+    );
 
   const formatPayments = (): Array<NewNotificationRecipient> => {
     const recipients = _.cloneDeep(notification.recipients);
@@ -468,8 +474,8 @@ const DebtPositionDetail: React.FC<Props> = ({
                     name="paFee"
                     label={t('notification-fee.pa-fee')}
                     value={formik.values.paFee}
-                    error={formik.touched.paFee && Boolean(formik.errors.paFee)}
-                    helperText={formik.touched.paFee && formik.errors.paFee}
+                    error={showErrorIfPresent('paFee') && Boolean(formik.errors.paFee)}
+                    helperText={showErrorIfPresent('paFee') && formik.errors.paFee}
                     onChange={handleChangeTouched}
                     InputProps={{
                       endAdornment: (
@@ -489,8 +495,8 @@ const DebtPositionDetail: React.FC<Props> = ({
                     value={formik.values.vat ?? ''}
                     onChange={handleChange}
                     sx={{ flexBasis: '30%' }}
-                    error={formik.touched.vat && Boolean(formik.errors.vat)}
-                    helperText={formik.touched.vat && formik.errors.vat}
+                    error={showErrorIfPresent('vat') && Boolean(formik.errors.vat)}
+                    helperText={showErrorIfPresent('vat') && formik.errors.vat}
                   >
                     {VAT.map((option) => (
                       <MenuItem key={option} value={option}>
@@ -554,6 +560,7 @@ const DebtPositionDetail: React.FC<Props> = ({
           formik={formik}
           newPagopaPayment={newPagopaPayment}
           newF24Payment={newF24Payment}
+          showErrorIfPresent={showErrorIfPresent}
         />
       </NewNotificationCard>
     </form>

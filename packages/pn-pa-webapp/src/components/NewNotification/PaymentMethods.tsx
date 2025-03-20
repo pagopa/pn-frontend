@@ -21,6 +21,7 @@ type Props = {
   formik: ReturnType<typeof useFormik<PaymentMethodsFormValues>>;
   newPagopaPayment: (id: string, idx: number) => NewNotificationPagoPaPayment;
   newF24Payment: (id: string, idx: number) => NewNotificationF24Payment;
+  showErrorIfPresent: (field: string) => boolean;
 };
 
 const emptyFileData = {
@@ -33,6 +34,7 @@ const PaymentMethods: React.FC<Props> = ({
   formik,
   newPagopaPayment,
   newF24Payment,
+  showErrorIfPresent,
 }) => {
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.debt-position-detail.payment-methods',
@@ -157,6 +159,7 @@ const PaymentMethods: React.FC<Props> = ({
                       showDeleteButton={index > 0}
                       onDeletePayment={() => handleRemovePagoPa(recipientKey, index)}
                       fieldMeta={(fieldName) => formik.getFieldMeta(fieldName)}
+                      showErrorIfPresent={showErrorIfPresent}
                     />
                   ))}
 
@@ -192,6 +195,7 @@ const PaymentMethods: React.FC<Props> = ({
                       showDeleteButton={index > 0}
                       onDeletePayment={() => handleRemoveF24(recipientKey, index)}
                       fieldMeta={(fieldName) => formik.getFieldMeta(fieldName)}
+                      showErrorIfPresent={showErrorIfPresent}
                     />
                   ))}
 
