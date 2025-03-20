@@ -50,6 +50,23 @@ describe('Test notification utility', () => {
     expect(result).toEqual(response);
   });
 
+  it('Checks that notificationMapper returns correct recipient physicalAddress', () => {
+    const result = newNotificationMapper({
+      ...newNotification,
+      recipients: newNotification.recipients.map((recipient) => ({
+        ...recipient,
+        showPhysicalAddress: false,
+      })),
+    });
+    expect(result).toEqual({
+      ...newNotificationForBff,
+      recipients: newNotificationForBff.recipients.map((recipient) => ({
+        ...recipient,
+        physicalAddress: undefined,
+      })),
+    });
+  });
+
   describe('Test filter payments by debt position change', () => {
     const recipientPayments = newNotificationRecipients[1].payments ?? [];
 

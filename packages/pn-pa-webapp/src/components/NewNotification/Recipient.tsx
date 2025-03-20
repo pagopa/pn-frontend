@@ -42,13 +42,7 @@ import NewNotificationCard from './NewNotificationCard';
 import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 import PhysicalAddress from './PhysicalAddress';
 
-const singleRecipient = {
-  recipientType: RecipientType.PF,
-  taxId: '',
-  firstName: '',
-  lastName: '',
-  type: NewNotificationDigitalAddressType.PEC,
-  digitalDomicile: '',
+const singlePhysicalAddress = {
   address: '',
   houseNumber: '',
   addressDetails: '',
@@ -57,6 +51,16 @@ const singleRecipient = {
   municipalityDetails: '',
   province: '',
   foreignState: 'Italia',
+};
+
+const singleRecipient: Omit<NewNotificationRecipient, 'id' | 'idx'> = {
+  recipientType: RecipientType.PF,
+  taxId: '',
+  firstName: '',
+  lastName: '',
+  type: NewNotificationDigitalAddressType.PEC,
+  digitalDomicile: '',
+  ...singlePhysicalAddress,
   showPhysicalAddress: false,
 };
 
@@ -155,6 +159,7 @@ const Recipient: React.FC<Props> = ({
       .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges'))
       .matches(dataRegex.email, t('pec-error')),
     address: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 1024)),
+    addressDetails: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 1024)),
     houseNumber: conditionalPhysicalAddress(yup.string().required(tc('required-field'))),
     zip: conditionalPhysicalAddress(
       yup
@@ -275,16 +280,10 @@ const Recipient: React.FC<Props> = ({
       recipientField,
       {
         ...oldValue,
+        ...singlePhysicalAddress,
         showPhysicalAddress: event.target.checked,
-        address: '',
-        houseNumber: '',
-        zip: '',
-        municipality: '',
-        municipalityDetails: '',
-        province: '',
-        foreignState: '',
       },
-      true,
+      true
     );
   };
 
@@ -436,12 +435,12 @@ const Recipient: React.FC<Props> = ({
                   <FormControlLabel
                     id={`recipients[${index}].showPhysicalAddress`}
                     name={`recipients[${index}].showPhysicalAddress`}
-                    data-testid={`showPhysicalAddress${index}`}
+                    data-testid={`recipients[${index}].showPhysicalAddress`}
                     label={`${t('add-physical-domicile')}`}
                     sx={{ mt: 2 }}
                     control={
                       <Checkbox
-                      checked={values.recipients[index].showPhysicalAddress}
+                        checked={values.recipients[index].showPhysicalAddress}
                         onChange={(physicalCheckEvent) =>
                           handlePhysicalAddressChange(
                             physicalCheckEvent,

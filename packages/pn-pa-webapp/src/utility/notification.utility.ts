@@ -7,7 +7,7 @@ import {
   BffNewNotificationRequest,
   NotificationDocument,
   NotificationPaymentItem,
-  NotificationRecipientV23,
+  NotificationRecipientV24,
 } from '../generated-client/notifications';
 import {
   NewNotification,
@@ -45,17 +45,20 @@ const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
 
 const newNotificationRecipientsMapper = (
   recipients: Array<NewNotificationRecipient>
-): Array<NotificationRecipientV23> =>
+): Array<NotificationRecipientV24> =>
   recipients.map((recipient) => {
-    const parsedRecipient: NotificationRecipientV23 = {
+    const parsedRecipient: NotificationRecipientV24 = {
       denomination:
         recipient.recipientType === RecipientType.PG
           ? recipient.firstName
           : `${recipient.firstName} ${recipient.lastName}`,
       recipientType: recipient.recipientType,
       taxId: recipient.taxId,
-      physicalAddress: checkPhysicalAddress(recipient),
     };
+    if (recipient.showPhysicalAddress){
+      // eslint-disable-next-line functional/immutable-data
+      parsedRecipient.physicalAddress = checkPhysicalAddress(recipient);
+    }
     if (recipient.digitalDomicile) {
       // eslint-disable-next-line functional/immutable-data
       parsedRecipient.digitalDomicile = {
