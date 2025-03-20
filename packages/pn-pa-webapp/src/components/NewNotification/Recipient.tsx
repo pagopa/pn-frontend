@@ -1,4 +1,4 @@
-import { Form, Formik, FormikErrors, FormikProps } from 'formik';
+import {  FormikErrors, FormikProps, useFormik } from 'formik';
 import { ForwardedRef, Fragment, forwardRef, useImperativeHandle, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -248,52 +248,44 @@ const Recipient: React.FC<Props> = ({
       dispatch(saveRecipients(formRef.current ? formRef.current.values : { recipients: [] }));
     },
   }));
+  
+  const formik = useFormik({
+    initialValues,
+    enableReinitialize:true,
+    validationSchema,
+    onSubmit: async (values) => handleSubmit(values),
+    validateOnBlur:false,
+    validateOnMount:true,
+    // eslint-disable-next-line functional/immutable-data
+    // innerRef:(form) => (formRef.current = form ?? undefined)
+  });
 
   return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize={true}
-      validationSchema={validationSchema}
-      onSubmit={(values) => handleSubmit(values)}
-      validateOnBlur={false}
-      validateOnMount
-      // eslint-disable-next-line functional/immutable-data
-      innerRef={(form) => (formRef.current = form ?? undefined)}
-    >
-      {({
-        values,
-        setFieldValue,
-        touched,
-        setFieldTouched,
-        handleBlur,
-        errors,
-        isValid /* setValues */,
-      }) => (
-        <Form data-testid="recipientForm">
+        <form onSubmit={formik.handleSubmit} data-testid="recipientForm">
           <NewNotificationCard
             title={t('title')}
-            isContinueDisabled={!isValid}
+            isContinueDisabled={!formik.isValid}
             previousStepLabel={t('back-to-preliminary-informations')}
-            previousStepOnClick={() => handlePreviousStep(values)}
+            previousStepOnClick={() => handlePreviousStep(formik.values)}
           >
             <Typography variant="body2">{tc('required-fields')}</Typography>
-            {values.recipients.map((recipient, index) => (
+            {formik.values.recipients.map((recipient, index) => (
               <Fragment key={recipient.id}>
                 <FormBox testid="RecipientFormBox">
                   {/* Soggetto giuridico */}
                   <Stack direction="row" justifyContent="space-between">
                     <FormBoxTitle text={`${t('legal-entity')}*`} />
-                    {values.recipients.length > 1 && (
+                    {formik.values.recipients.length > 1 && (
                       <ButtonNaked
                         data-testid="DeleteRecipientIcon"
                         aria-label={t('remove-recipient')}
                         onClick={() =>
                           deleteRecipientHandler(
-                            errors,
+                            formik.errors,
                             index,
-                            values,
-                            setFieldTouched,
-                            setFieldValue
+                            formik.values,
+                            formik.setFieldTouched,
+                            formik.setFieldValue
                           )
                         }
                       >
@@ -307,9 +299,9 @@ const Recipient: React.FC<Props> = ({
                         row
                         defaultValue={RecipientType.PF}
                         name={`recipients[${index}].recipientType`}
-                        value={values.recipients[index].recipientType}
+                        value={formik.values.recipients[index].recipientType}
                         onChange={(event) =>
-                          changeRecipientTypeHandler(event, index, values, setFieldValue)
+                          changeRecipientTypeHandler(event, index, formik.values, formik.setFieldValue)
                         }
                       >
                         <FormControlLabel
@@ -338,55 +330,55 @@ const Recipient: React.FC<Props> = ({
                       <FormTextField
                         keyName={`recipients[${index}].taxId`}
                         label={`${t(
-                          values.recipients[index].recipientType === RecipientType.PG
+                          formik.values.recipients[index].recipientType === RecipientType.PG
                             ? 'recipient-organization-tax-id'
                             : 'recipient-citizen-tax-id'
                         )}*`}
-                        values={values}
-                        touched={touched}
-                        errors={errors}
-                        setFieldValue={setFieldValue}
-                        handleBlur={handleBlur}
+                        values={formik.values}
+                        touched={formik.touched}
+                        errors={formik.errors}
+                        setFieldValue={formik.setFieldValue}
+                        handleBlur={formik.handleBlur}
                       />
                     </Grid>
                   </Grid>
                   <Grid container columnSpacing={1} rowSpacing={2}>
-                    {values.recipients[index].recipientType === RecipientType.PF && (
+                    {formik.values.recipients[index].recipientType === RecipientType.PF && (
                       <>
                         <Grid item xs={12} lg={4}>
                           <FormTextField
                             keyName={`recipients[${index}].firstName`}
                             label={`${t('name')}*`}
-                            values={values}
-                            touched={touched}
-                            errors={errors}
-                            setFieldValue={setFieldValue}
-                            handleBlur={handleBlur}
+                            values={formik.values}
+                            touched={formik.touched}
+                            errors={formik.errors}
+                            setFieldValue={formik.setFieldValue}
+                            handleBlur={formik.handleBlur}
                           />
                         </Grid>
                         <Grid item xs={12} lg={4}>
                           <FormTextField
                             keyName={`recipients[${index}].lastName`}
                             label={`${t('surname')}*`}
-                            values={values}
-                            touched={touched}
-                            errors={errors}
-                            setFieldValue={setFieldValue}
-                            handleBlur={handleBlur}
+                            values={formik.values}
+                            touched={formik.touched}
+                            errors={formik.errors}
+                            setFieldValue={formik.setFieldValue}
+                            handleBlur={formik.handleBlur}
                           />
                         </Grid>
                       </>
                     )}
-                    {values.recipients[index].recipientType === RecipientType.PG && (
+                    {formik.values.recipients[index].recipientType === RecipientType.PG && (
                       <Grid item xs={12} lg={8}>
                         <FormTextField
                           keyName={`recipients[${index}].firstName`}
                           label={`${t('business-name')}*`}
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          handleBlur={handleBlur}
+                          values={formik.values}
+                          touched={formik.touched}
+                          errors={formik.errors}
+                          setFieldValue={formik.setFieldValue}
+                          handleBlur={formik.handleBlur}
                         />
                       </Grid>
                     )}
@@ -403,12 +395,12 @@ const Recipient: React.FC<Props> = ({
                     data-testid={`physicalAddressForm${index}`}
                   >
                     <PhysicalAddress
-                      values={values}
-                      setFieldValue={setFieldValue}
-                      touched={touched}
-                      errors={errors}
+                      values={formik.values}
+                      setFieldValue={formik.setFieldValue}
+                      touched={formik.touched}
+                      errors={formik.errors}
                       recipient={index}
-                      handleBlur={handleBlur}
+                      handleBlur={formik.handleBlur}
                     />
                   </Grid>
 
@@ -422,25 +414,25 @@ const Recipient: React.FC<Props> = ({
                       <FormTextField
                         keyName={`recipients[${index}].digitalDomicile`}
                         label={`${t('pec-address')}`}
-                        values={values}
-                        touched={touched}
-                        errors={errors}
-                        setFieldValue={setFieldValue}
-                        handleBlur={handleBlur}
+                        values={formik.values}
+                        touched={formik.touched}
+                        errors={formik.errors}
+                        setFieldValue={formik.setFieldValue}
+                        handleBlur={formik.handleBlur}
                       />
                     </Grid>
                   </Grid>
                 </FormBox>
-                {values.recipients.length < 5 && values.recipients.length - 1 === index && (
+                {formik.values.recipients.length < 5 && formik.values.recipients.length - 1 === index && (
                   <Stack mt={2} direction="row" justifyContent="space-between">
                     <ButtonNaked
                       id="add-recipient"
                       startIcon={<Add />}
                       onClick={() => {
-                        handleAddRecipient(values, setFieldValue);
+                        handleAddRecipient(formik.values, formik.setFieldValue);
                       }}
                       color="primary"
-                      disabled={values.recipients.length >= 5}
+                      disabled={formik.values.recipients.length >= 5}
                       data-testid="add-recipient"
                     >
                       {t('add-recipient')}
@@ -450,9 +442,8 @@ const Recipient: React.FC<Props> = ({
               </Fragment>
             ))}
           </NewNotificationCard>
-        </Form>
-      )}
-    </Formik>
+        </form>
+      
   );
 };
 
