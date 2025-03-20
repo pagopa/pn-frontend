@@ -42,7 +42,7 @@ import NewNotificationCard from './NewNotificationCard';
 import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 import PhysicalAddress from './PhysicalAddress';
 
-const singlePhysicalAddress = {
+const initialPhysicalAddress = {
   address: '',
   houseNumber: '',
   addressDetails: '',
@@ -60,7 +60,7 @@ const singleRecipient: Omit<NewNotificationRecipient, 'id' | 'idx'> = {
   lastName: '',
   type: NewNotificationDigitalAddressType.PEC,
   digitalDomicile: '',
-  ...singlePhysicalAddress,
+  ...initialPhysicalAddress,
   showPhysicalAddress: false,
 };
 
@@ -280,7 +280,7 @@ const Recipient: React.FC<Props> = ({
       recipientField,
       {
         ...oldValue,
-        ...singlePhysicalAddress,
+        ...initialPhysicalAddress,
         showPhysicalAddress: event.target.checked,
       },
       true
