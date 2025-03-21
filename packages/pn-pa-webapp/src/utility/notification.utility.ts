@@ -1,7 +1,7 @@
 /* eslint-disable functional/no-let */
 import _ from 'lodash';
 
-import { NotificationDetailDocument, PhysicalAddress, RecipientType } from '@pagopa-pn/pn-commons';
+import { NotificationDetailDocument, PhysicalAddress, PhysicalAddressLookup, RecipientType } from '@pagopa-pn/pn-commons';
 
 import {
   BffNewNotificationRequest,
@@ -56,7 +56,7 @@ const newNotificationRecipientsMapper = (
       recipientType: recipient.recipientType,
       taxId: recipient.taxId,
     };
-    if (recipient.showPhysicalAddress){
+    if (recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL){
       // eslint-disable-next-line functional/immutable-data
       parsedRecipient.physicalAddress = checkPhysicalAddress(recipient);
     }

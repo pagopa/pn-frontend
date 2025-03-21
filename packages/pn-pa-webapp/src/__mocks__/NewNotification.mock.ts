@@ -1,4 +1,4 @@
-import { PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons';
+import { PhysicalAddressLookup, PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons';
 
 import {
   BffNewNotificationRequest,
@@ -139,7 +139,7 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
       },
     ],
     debtPosition: PaymentModel.PAGO_PA,
-    showPhysicalAddress: true,
+    physicalAddressLookup: PhysicalAddressLookup.MANUAL,
   },
   {
     id: 'recipient.1',
@@ -167,7 +167,7 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
       },
     ],
     debtPosition: PaymentModel.PAGO_PA_F24,
-    showPhysicalAddress: false,
+    physicalAddressLookup: PhysicalAddressLookup.NATIONAL_REGISTRY,
   },
   {
     id: 'recipient.2',
@@ -192,6 +192,7 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
       },
     ],
     debtPosition: PaymentModel.F24,
+    physicalAddressLookup: PhysicalAddressLookup.MANUAL,
   },
 ];
 
@@ -221,7 +222,6 @@ const newNotificationRecipientsForBff: Array<NotificationRecipientV24> = [
     taxId: '12345678901',
     denomination: 'Sara Gallo srl',
     recipientType: RecipientType.PG,
-    physicalAddress: undefined,
     payments: [
       {
         pagoPa: { ...newNotificationPagoPaForBff(1) },

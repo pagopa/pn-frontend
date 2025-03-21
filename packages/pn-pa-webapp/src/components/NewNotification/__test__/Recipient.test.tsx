@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { RecipientType } from '@pagopa-pn/pn-commons';
+import { PhysicalAddressLookup, RecipientType } from '@pagopa-pn/pn-commons';
 import { testFormElements, testInput, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { newNotification } from '../../../__mocks__/NewNotification.mock';
@@ -74,19 +74,20 @@ const testRecipientFormRendering = async (
     expect(digitalForm).toHaveValue(recipient?.digitalDomicile);
   }
 
-  const showPhysicalAddress = within(form).getByTestId(
-    `recipients[${recipientIndex}].showPhysicalAddress`
+  const physicalAddressLabel = within(form).getByTestId(
+    `recipients[${recipientIndex}].physicalAddressLabel`
   );
-  expect(showPhysicalAddress).toHaveTextContent('add-physical-domicile');
+  expect(physicalAddressLabel).toHaveTextContent('address');
+  expect(physicalAddressLabel).toHaveTextContent('address-subtitle');
 
   const physicalForm = within(form).queryByTestId(`physicalAddressForm${recipientIndex}`);
-  if (recipient?.showPhysicalAddress) {
+  if (recipient?.physicalAddressLookup === PhysicalAddressLookup.MANUAL) {
     expect(physicalForm).toBeInTheDocument();
   } else {
     expect(physicalForm).not.toBeInTheDocument();
   }
 
-  if (recipient?.showPhysicalAddress) {
+  if (recipient?.physicalAddressLookup === PhysicalAddressLookup.MANUAL) {
     const address = physicalForm?.querySelector(
       `input[name="recipients[${recipientIndex}].address"]`
     );
@@ -133,10 +134,16 @@ const populateForm = async (
   }
   await testInput(form, `recipients[${recipientIndex}].taxId`, recipient.taxId);
 
+  await testRadio(
+    form,
+    `physicalAddressLookupRadio.${recipientIndex}`,
+    ['address-physical-lookup-radios.national-registry', 'address-physical-lookup-radios.manual'],
+    recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL ? 1 : 0,
+    true
+  );
+
   // show physical address form
-  if (recipient.showPhysicalAddress) {
-    const checkbox = within(form).getByTestId(`recipients[${recipientIndex}].showPhysicalAddress`);
-    fireEvent.click(checkbox);
+  if (recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL) {
     await testInput(form, `recipients[${recipientIndex}].address`, recipient.address);
     await testInput(form, `recipients[${recipientIndex}].houseNumber`, recipient.houseNumber);
     await testInput(form, `recipients[${recipientIndex}].municipality`, recipient.municipality);
@@ -173,12 +180,21 @@ const testStringFieldValidation = async (
 const recipientsWithoutPayments = newNotification.recipients.map(
   ({ payments, debtPosition, ...recipient }) => ({
     ...recipient,
-    address: recipient.showPhysicalAddress ? recipient.address : '',
-    houseNumber: recipient.showPhysicalAddress ? recipient.houseNumber : '',
-    zip: recipient.showPhysicalAddress ? recipient.zip : '',
-    municipality: recipient.showPhysicalAddress ? recipient.municipality : '',
-    province: recipient.showPhysicalAddress ? recipient.province : '',
-    foreignState: recipient.showPhysicalAddress ? recipient.foreignState : 'Italia',
+    address:
+      recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL ? recipient.address : '',
+    houseNumber:
+      recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL ? recipient.houseNumber : '',
+    zip: recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL ? recipient.zip : '',
+    municipality:
+      recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL
+        ? recipient.municipality
+        : '',
+    province:
+      recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL ? recipient.province : '',
+    foreignState:
+      recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL
+        ? recipient.foreignState
+        : 'Italia',
   })
 );
 

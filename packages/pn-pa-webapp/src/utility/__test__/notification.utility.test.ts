@@ -1,3 +1,5 @@
+import { PhysicalAddressLookup } from '@pagopa-pn/pn-commons';
+
 import {
   newNotification,
   newNotificationForBff,
@@ -55,7 +57,7 @@ describe('Test notification utility', () => {
       ...newNotification,
       recipients: newNotification.recipients.map((recipient) => ({
         ...recipient,
-        showPhysicalAddress: false,
+        physicalAddressLookup: PhysicalAddressLookup.NATIONAL_REGISTRY,
       })),
     });
     expect(result).toEqual({
