@@ -20,8 +20,8 @@ export class GenericInvalidParameterPatternAppError extends AppError {
       };
     }
     return {
-      title: this.translateFunction('errors.invalid_parameter.title', 'deleghe'),
-      content: this.translateFunction('errors.invalid_parameter.message', 'deleghe'),
+      title: this.translateFunction('errors.invalid_parameter.title', 'common'),
+      content: this.translateFunction('errors.invalid_parameter.message', 'common'),
     };
   }
 }
