@@ -12,6 +12,7 @@ import * as yup from 'yup';
 
 import { Add, Delete } from '@mui/icons-material';
 import {
+  Alert,
   Box,
   FormControl,
   FormControlLabel,
@@ -318,7 +319,6 @@ const Recipient: React.FC<Props> = ({
             previousStepLabel={t('back-to-preliminary-informations')}
             previousStepOnClick={() => handlePreviousStep(values)}
           >
-            {JSON.stringify(errors)}
             <Typography variant="body2">{tc('required-fields')}</Typography>
             {values.recipients.map((recipient, index) => (
               <Fragment key={recipient.id}>
@@ -446,6 +446,9 @@ const Recipient: React.FC<Props> = ({
                       <FormBoxTitle text={t('address')} />
                       <FormBoxSubtitle text={t('address-subtitle')} />
                     </FormLabel>
+                    <Alert severity="info" sx={{ mb: 2 }}>
+                      {t('address-physical-lookup-info')}
+                    </Alert>
                     <RadioGroup
                       aria-labelledby={`recipients[${index}].physicalAddressLabel`}
                       name={`recipients[${index}].physicalAddressLookup`}
