@@ -12,8 +12,13 @@ import {
   PublicKeyStatus,
   PublicKeysIssuerResponseIssuerStatusEnum,
 } from '../generated-client/pg-apikeys';
-import { checkPublicKeyIssuer, getPublicKeys, getVirtualApiKeys } from '../redux/apikeys/actions';
 import { PNRole } from '../models/User';
+import {
+  checkPublicKeyIssuer,
+  getPublicKeys,
+  getTosPrivacy,
+  getVirtualApiKeys,
+} from '../redux/apikeys/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
@@ -46,24 +51,15 @@ const ApiIntegration: React.FC = () => {
     // isPresent is a boolean that is true when there is a public key (with any state)
     // isStatus is an enumeration and can has value is ACTIVE if there is an active or rotated public key,
     // or INACTIVE otherwise.
-    // This check is to prevent a dobule call to the issuer api when the user is an admin. Without this check, the api stack would be:
-    // - useEffect runs at first rendering -> the issuer api is called
-    // - public key api is called -> the useEffect runs again -> the issuer api is called again
-    // When the user is not an admin, the public key api is never called and so we have only one useEffect run.
-    if (
-      isAdminWithoutGroups &&
-      ((!issuer.isPresent && publicKeys.items.length === 0 && virtualKeys.items.length === 0) ||
-        (issuer.isPresent && issuerIsActive && hasPublicActive) ||
-        (issuer.isPresent && !issuerIsActive && publicKeys.items.length > 0 && !hasPublicActive))
-    ) {
-      return;
-    }
-    void dispatch(checkPublicKeyIssuer());
-  }, [publicKeys, virtualKeys]);
-
-  useEffect(() => {
+    // For admin user we don't need to call the issuer status because we have all the information that we need in the public keys array:
+    // isPresent is true if publicKeys.length > 0
+    // issuerStatus is active if we have at least one Active or Rotated key
+    // tosAccepted can be checked calling the getTosPrivacy action
     if (isAdminWithoutGroups) {
       void dispatch(getPublicKeys({ showPublicKey: true }));
+      void dispatch(getTosPrivacy());
+    } else {
+      void dispatch(checkPublicKeyIssuer());
     }
     void dispatch(getVirtualApiKeys({ showVirtualKey: true }));
   }, []);
