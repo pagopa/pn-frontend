@@ -1,66 +1,54 @@
 /* eslint-disable functional/no-let */
 import _ from 'lodash';
 
-import {
-  NotificationDetailDocument,
-  NotificationDetailRecipient,
-  PhysicalAddress,
-  RecipientType,
-} from '@pagopa-pn/pn-commons';
+import { NotificationDetailDocument, PhysicalAddress, RecipientType } from '@pagopa-pn/pn-commons';
 
 import {
+  BffNewNotificationRequest,
+  NotificationDocument,
+  NotificationPaymentItem,
+  NotificationRecipientV23,
+} from '../generated-client/notifications';
+import {
   NewNotification,
-  NewNotificationDTO,
   NewNotificationDocument,
+  NewNotificationDocumentFile,
+  NewNotificationDocumentRef,
+  NewNotificationF24Payment,
   NewNotificationLangOther,
+  NewNotificationPagoPaPayment,
+  NewNotificationPayment,
   NewNotificationRecipient,
+  NotificationFeePolicy,
   PaymentModel,
-  PaymentObject,
 } from '../models/NewNotification';
 
 const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
-  if (
-    recipient.address &&
-    recipient.houseNumber &&
-    recipient.zip &&
-    recipient.municipality &&
-    recipient.province &&
-    recipient.foreignState
-  ) {
-    const address = {
-      address: `${recipient.address} ${recipient.houseNumber}`,
-      addressDetails: recipient.addressDetails,
-      zip: recipient.zip,
-      municipality: recipient.municipality,
-      municipalityDetails: recipient.municipalityDetails,
-      province: recipient.province,
-      foreignState: recipient.foreignState,
-    };
+  const address = {
+    address: `${recipient.address} ${recipient.houseNumber}`,
+    addressDetails: recipient.addressDetails,
+    zip: recipient.zip,
+    municipality: recipient.municipality,
+    municipalityDetails: recipient.municipalityDetails,
+    province: recipient.province,
+    foreignState: recipient.foreignState,
+  };
 
-    // clean the object from undefined keys
-    (Object.keys(address) as Array<Exclude<keyof PhysicalAddress, 'at'>>).forEach((key) => {
-      if (!address[key]) {
-        // eslint-disable-next-line functional/immutable-data
-        delete address[key];
-      }
-    });
-    return address;
-  }
-  return undefined;
+  // clean the object from undefined keys
+  (Object.keys(address) as Array<Exclude<keyof PhysicalAddress, 'at'>>).forEach((key) => {
+    if (!address[key]) {
+      // eslint-disable-next-line functional/immutable-data
+      delete address[key];
+    }
+  });
+  return address;
 };
 
 const newNotificationRecipientsMapper = (
-  recipients: Array<NewNotificationRecipient>,
-  paymentMethod?: PaymentModel
-): Array<NotificationDetailRecipient> =>
+  recipients: Array<NewNotificationRecipient>
+): Array<NotificationRecipientV23> =>
   recipients.map((recipient) => {
-    const digitalDomicile = recipient.digitalDomicile
-      ? {
-          type: recipient.type,
-          address: recipient.digitalDomicile,
-        }
-      : undefined;
-    const parsedRecipient: NotificationDetailRecipient = {
+    const parsedRecipient: NotificationRecipientV23 = {
       denomination:
         recipient.recipientType === RecipientType.PG
           ? recipient.firstName
@@ -69,86 +57,93 @@ const newNotificationRecipientsMapper = (
       taxId: recipient.taxId,
       physicalAddress: checkPhysicalAddress(recipient),
     };
-    if (digitalDomicile) {
+    if (recipient.digitalDomicile) {
       // eslint-disable-next-line functional/immutable-data
-      parsedRecipient.digitalDomicile = digitalDomicile;
+      parsedRecipient.digitalDomicile = {
+        type: recipient.type,
+        address: recipient.digitalDomicile,
+      };
     }
-    if (paymentMethod !== PaymentModel.NOTHING) {
+    if (recipient.payments) {
       // eslint-disable-next-line functional/immutable-data
-      // parsedRecipient.payment = {
-      //   creditorTaxId: recipient.creditorTaxId,
-      //   noticeCode: recipient.noticeCode,
-      // };
+      parsedRecipient.payments = newNotificationPaymentDocumentsMapper(recipient.payments);
     }
     return parsedRecipient;
   });
 
-const newNotificationDocumentMapper = (
-  document: NewNotificationDocument
-): NotificationDetailDocument => ({
+const newNotificationDocumentMapper = (document: {
+  file: NewNotificationDocumentFile;
+  ref: NewNotificationDocumentRef;
+  contentType: string;
+}): NotificationDetailDocument => ({
   digests: {
     sha256: document.file.sha256.hashBase64,
   },
   contentType: document.contentType,
   ref: document.ref,
-  title: document.name,
 });
 
 const newNotificationAttachmentsMapper = (
   documents: Array<NewNotificationDocument>
-): Array<NotificationDetailDocument> =>
-  documents.map((document) => newNotificationDocumentMapper(document));
+): Array<NotificationDocument> =>
+  documents.map((document) => ({
+    ...newNotificationDocumentMapper({
+      file: document.file,
+      ref: document.ref,
+      contentType: document.contentType,
+    }),
+    title: document.name,
+  }));
+
+export const hasPagoPaDocument = (
+  document: NewNotificationPagoPaPayment
+): document is Required<NewNotificationPagoPaPayment> => !!document.file.data && !!document.ref;
 
 const newNotificationPaymentDocumentsMapper = (
-  recipients: Array<NotificationDetailRecipient>,
-  paymentDocuments: { [key: string]: PaymentObject }
-): Array<NotificationDetailRecipient> =>
-  recipients.map((r) => {
-    const documents: {
-      pagoPaForm?: NotificationDetailDocument;
-      f24flatRate?: NotificationDetailDocument;
-      f24standard?: NotificationDetailDocument;
-    } = {};
+  recipientPayments: Array<NewNotificationPayment>
+): Array<NotificationPaymentItem> =>
+  recipientPayments.map((payment) => {
+    const mappedPayment: NotificationPaymentItem = {};
+
     /* eslint-disable functional/immutable-data */
-    if (
-      paymentDocuments[r.taxId].pagoPaForm &&
-      paymentDocuments[r.taxId].pagoPaForm.file.sha256.hashBase64 !== ''
-    ) {
-      documents.pagoPaForm = newNotificationDocumentMapper(paymentDocuments[r.taxId].pagoPaForm);
+    if (payment.pagoPa) {
+      mappedPayment.pagoPa = {
+        creditorTaxId: payment.pagoPa.creditorTaxId,
+        noticeCode: payment.pagoPa.noticeCode,
+        applyCost: payment.pagoPa.applyCost,
+      };
+
+      if (
+        payment.pagoPa.file &&
+        payment.pagoPa.ref &&
+        payment.pagoPa.file?.sha256.hashBase64 !== ''
+      ) {
+        mappedPayment.pagoPa.attachment = newNotificationDocumentMapper({
+          file: payment.pagoPa.file,
+          ref: payment.pagoPa.ref,
+          contentType: payment.pagoPa.contentType,
+        });
+      }
     }
-    if (
-      paymentDocuments[r.taxId].f24flatRate &&
-      paymentDocuments[r.taxId].f24flatRate?.file.sha256.hashBase64 !== ''
-    ) {
-      documents.f24flatRate = newNotificationDocumentMapper(
-        paymentDocuments[r.taxId].f24flatRate as NewNotificationDocument
-      );
+
+    if (payment.f24 && payment.f24.file.sha256.hashBase64 !== '') {
+      mappedPayment.f24 = {
+        title: payment.f24.name,
+        applyCost: payment.f24.applyCost,
+        metadataAttachment: newNotificationDocumentMapper({
+          file: payment.f24.file,
+          ref: payment.f24.ref,
+          contentType: payment.f24.contentType,
+        }),
+      };
     }
-    if (
-      paymentDocuments[r.taxId].f24standard &&
-      paymentDocuments[r.taxId].f24standard?.file.sha256.hashBase64 !== ''
-    ) {
-      documents.f24standard = newNotificationDocumentMapper(
-        paymentDocuments[r.taxId].f24standard as NewNotificationDocument
-      );
-    }
-    // Con l'introduzione dei multi pagamenti (pn-7336), è necessario apportare delle modifiche anche in fase di creazione
-    // Andrea Cimini - 16/08/2023
-    /*
-    r.payment = {
-      ...documents,
-      creditorTaxId: r.payment ? r.payment.creditorTaxId : '',
-      noticeCode: r.payment?.noticeCode,
-    };
-    */
     /* eslint-enable functional/immutable-data */
-    return r;
+
+    return mappedPayment;
   });
 
-export function newNotificationMapper(newNotification: NewNotification): NewNotificationDTO {
+export function newNotificationMapper(newNotification: NewNotification): BffNewNotificationRequest {
   const clonedNotification = _.omit(_.cloneDeep(newNotification), [
-    'paymentMode',
-    'payment',
     'additionalAbstract',
     'additionalLang',
     'additionalSubject',
@@ -174,8 +169,11 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
       : undefined;
 
   /* eslint-disable functional/immutable-data */
-  const newNotificationParsed: NewNotificationDTO = {
+  const newNotificationParsed: BffNewNotificationRequest = {
     ...clonedNotification,
+    paFee: clonedNotification.paFee
+      ? parseFloat(clonedNotification.paFee.replace(',', '.')) * 100
+      : undefined,
     recipients: [],
     documents: [],
   };
@@ -184,22 +182,23 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
     newNotificationParsed.additionalLanguages = additionalLanguages;
   }
 
-  // format recipients
-  newNotificationParsed.recipients = newNotificationRecipientsMapper(
-    newNotification.recipients,
-    newNotification.paymentMode
-  );
-  // format attachments
-  newNotificationParsed.documents = newNotificationAttachmentsMapper(newNotification.documents);
-  // format payments
-  if (newNotification.payment && Object.keys(newNotification.payment).length > 0) {
-    newNotificationParsed.recipients = newNotificationPaymentDocumentsMapper(
-      newNotificationParsed.recipients,
-      newNotification.payment
-    );
+  if (!newNotification.notificationFeePolicy) {
+    newNotificationParsed.notificationFeePolicy = NotificationFeePolicy.FLAT_RATE;
   }
 
+  // format recipients
+  newNotificationParsed.recipients = newNotificationRecipientsMapper(newNotification.recipients);
+  // format attachments
+  newNotificationParsed.documents = newNotificationAttachmentsMapper(newNotification.documents);
   /* eslint-enable functional/immutable-data */
+
+  (Object.keys(newNotificationParsed) as Array<keyof BffNewNotificationRequest>).forEach((key) => {
+    if (!newNotificationParsed[key]) {
+      // eslint-disable-next-line functional/immutable-data
+      delete newNotificationParsed[key];
+    }
+  });
+
   return newNotificationParsed;
 }
 
@@ -232,3 +231,111 @@ const concatAdditionalContent = (content?: string, additionalContent?: string): 
   }
   return content || additionalContent || '';
 };
+
+const shouldClearPayments = (newMethod: PaymentModel, previousMethod?: PaymentModel): boolean => {
+  if (!previousMethod || previousMethod === PaymentModel.NOTHING) {
+    return false;
+  }
+
+  if (newMethod === PaymentModel.NOTHING) {
+    return true;
+  }
+
+  const transitionMap: Record<PaymentModel, Record<PaymentModel, boolean>> = {
+    PAGO_PA: {
+      PAGO_PA: false,
+      F24: true,
+      PAGO_PA_F24: false,
+      NOTHING: true,
+    },
+    F24: {
+      PAGO_PA: true,
+      F24: false,
+      PAGO_PA_F24: false,
+      NOTHING: true,
+    },
+    PAGO_PA_F24: {
+      PAGO_PA: true, // Remove f24 payments
+      F24: true, // Remove pagopa payments
+      PAGO_PA_F24: false,
+      NOTHING: true,
+    },
+    NOTHING: {
+      PAGO_PA: false,
+      F24: false,
+      PAGO_PA_F24: false,
+      NOTHING: false,
+    },
+  };
+
+  return transitionMap[previousMethod]?.[newMethod] ?? false;
+};
+
+export const filterPaymentsByDebtPositionChange = (
+  payments: Array<NewNotificationPayment>,
+  newDebtPosition: PaymentModel,
+  previousDebtPosition?: PaymentModel
+): Array<NewNotificationPayment> => {
+  if (!shouldClearPayments(newDebtPosition, previousDebtPosition)) {
+    return payments;
+  }
+
+  if (newDebtPosition === PaymentModel.NOTHING) {
+    return [];
+  }
+
+  if (previousDebtPosition === PaymentModel.PAGO_PA_F24) {
+    if (newDebtPosition === PaymentModel.PAGO_PA) {
+      return payments.reduce((acc, item) => {
+        // eslint-disable-next-line functional/immutable-data
+        acc.push({ pagoPa: item.pagoPa });
+        return acc;
+      }, [] as Array<NewNotificationPayment>);
+    }
+    if (newDebtPosition === PaymentModel.F24) {
+      return payments.reduce((acc, item) => {
+        // eslint-disable-next-line functional/immutable-data
+        acc.push({ f24: item.f24 });
+        return acc;
+      }, [] as Array<NewNotificationPayment>);
+    }
+  }
+
+  return [];
+};
+
+const emptyFileData = {
+  data: undefined,
+  sha256: { hashBase64: '', hashHex: '' },
+};
+
+export const newPagopaPayment = (
+  taxId: string,
+  idx: number,
+  creditorTaxId: string
+): NewNotificationPagoPaPayment => ({
+  id: `${taxId}-${idx}-pagoPa`,
+  idx,
+  contentType: 'application/pdf',
+  file: emptyFileData,
+  creditorTaxId,
+  noticeCode: '',
+  applyCost: false,
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+});
+
+export const newF24Payment = (taxId: string, idx: number): NewNotificationF24Payment => ({
+  id: `${taxId}-${idx}-f24`,
+  idx,
+  contentType: 'application/json',
+  file: emptyFileData,
+  name: '',
+  applyCost: false,
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+});

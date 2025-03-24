@@ -3,13 +3,6 @@ import { vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
 import ConfirmCancellationDialog from '../ConfirmCancellationDialog';
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 describe('render dialog', () => {
   const onClose = vi.fn();
   const onConfirm = vi.fn();
@@ -62,10 +55,10 @@ describe('render dialog', () => {
     const cancel = screen.getByTestId('modalCloseBtnId');
 
     fireEvent.click(confirm);
-    expect(onConfirm).toBeCalledTimes(1);
+    expect(onConfirm).toHaveBeenCalledTimes(1);
 
     fireEvent.click(cancel);
-    expect(onClose).toBeCalledTimes(1);
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   it('checks that the confirm and cancel functions are executed with payment', async () => {
@@ -90,12 +83,12 @@ describe('render dialog', () => {
 
     fireEvent.click(confirm);
     await waitFor(() => {
-      expect(onConfirm).toBeCalledTimes(1);
+      expect(onConfirm).toHaveBeenCalledTimes(1);
     });
 
     fireEvent.click(cancel);
     await waitFor(() => {
-      expect(onClose).toBeCalledTimes(1);
+      expect(onClose).toHaveBeenCalledTimes(1);
     });
   });
 });

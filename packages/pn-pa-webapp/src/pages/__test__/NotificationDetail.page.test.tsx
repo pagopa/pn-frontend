@@ -6,7 +6,6 @@ import { vi } from 'vitest';
 import {
   AppMessage,
   AppResponseMessage,
-  LegalFactId,
   NotificationDetail as NotificationDetailModel,
   NotificationDetailOtherDocument,
   NotificationStatus,
@@ -37,20 +36,12 @@ vi.mock('react-router-dom', async () => ({
   useParams: () => ({ id: 'RTRD-UDGU-QTQY-202308-P-1' }),
 }));
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
-  }),
-}));
-
 const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number) => {
   const timelineElementDigitalSuccessWorkflow = notification.timeline.filter(
     (t) =>
       t.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW && t.details.recIndex === recIndex
   )[0];
-  return timelineElementDigitalSuccessWorkflow.legalFactsIds![0] as LegalFactId;
+  return timelineElementDigitalSuccessWorkflow.legalFactsIds![0];
 };
 
 describe('NotificationDetail Page', async () => {
@@ -110,8 +101,9 @@ describe('NotificationDetail Page', async () => {
     let notificationDocumentLength: number;
     const notificationDetailDocuments = result.getAllByTestId('notificationDetailDocuments');
     if (notificationDTOMultiRecipient.otherDocuments) {
-      notificationDocumentLength = notificationDTOMultiRecipient.documents.length;
-      +notificationDTOMultiRecipient.otherDocuments.length;
+      notificationDocumentLength =
+        notificationDTOMultiRecipient.documents.length +
+        notificationDTOMultiRecipient.otherDocuments.length;
     } else {
       notificationDocumentLength = notificationDTOMultiRecipient.documents.length;
     }

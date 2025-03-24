@@ -22,15 +22,6 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: { language: 'it' },
-  }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
-}));
-
 describe('DesktopNotifications Component', () => {
   let result: RenderResult;
 
@@ -112,11 +103,11 @@ describe('DesktopNotifications Component', () => {
       );
     });
     const rows = result!.getAllByTestId('notificationsTable.body.row');
-    const notificationsTableCell = within(rows[0]).getAllByRole('cell');
-    fireEvent.click(notificationsTableCell[0]);
+    const notificationsTableCellArrow = within(rows[0]).getByTestId('goToNotificationDetail');
+    fireEvent.click(notificationsTableCellArrow);
     await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(
+      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+      expect(mockNavigateFn).toHaveBeenCalledWith(
         GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
       );
     });

@@ -18,7 +18,7 @@ import {
 
 import { BffVirtualKeysResponse, VirtualKey } from '../../generated-client/pg-apikeys';
 import { ApiKeyColumnData, ModalApiKeyView } from '../../models/ApiKeys';
-import { PNRole } from '../../redux/auth/types';
+import { PNRole } from '../../models/User';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import ApiKeysDataSwitch from './ApiKeysDataSwitch';
@@ -142,7 +142,7 @@ const VirtualKeysTable: React.FC<Props> = ({
       </SmartHeader>
       <SmartBody>
         {data.map((row, index) => (
-          <SmartBodyRow key={row.id} index={index} testId="publicKeysBodyRow">
+          <SmartBodyRow key={row.id} index={index} testId="virtualKeysBodyRow">
             {virtualKeysColumns.map((column) => (
               <SmartBodyCell
                 key={column.id.toString()}

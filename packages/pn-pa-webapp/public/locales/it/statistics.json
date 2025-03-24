@@ -84,7 +84,15 @@
     "pec_title": "Errore di dominio PEC",
     "pec_description": "La notifica non è stata recapitata per dominio PEC non valido",
     "rejected_title": "Errore d'invio",
-    "rejected_description": "La notifica non è stata accettata per problemi tecnici d'invio"
+    "rejected_description": "La notifica non è stata accettata per problemi tecnici d'invio",
+    "virus_detected_title": "Rilevato virus",
+    "virus_detected_description": "La notifica non è stata recapitata a causa della rilevazione di un virus nella comunicazione o nei suoi allegati",
+    "server_pec_comunication_title": "Errore di comunicazione con il server PEC",
+    "server_pec_comunication_description": "La notifica non è stata recapitata a causa di un errore nella comunicazione con il server di invio PEC",
+    "sending_pec_title": "Errore durante l'invio della PEC",
+    "sending_pec_description": "La notifica non è stata recapitata a causa di un errore tecnico",
+    "malformed_pec_address_title": "Errore di indirizzo PEC",
+    "malformed_pec_address_description": "La notifica non è stata recapitata perchè l’indirizzo PEC è malformato"
   },
   "empty": {
     "no_data_found": "Non ci sono dati a disposizione per l'intervallo di tempo selezionato",

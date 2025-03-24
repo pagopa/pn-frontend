@@ -32,6 +32,8 @@ type Props = {
   calcSha256?: boolean;
   fileUploaded?: { file: { data?: File; sha256?: { hashBase64: string; hashHex: string } } };
   fileSizeLimit?: number;
+  showHashCode?: boolean;
+  externalError?: string;
 };
 
 enum UploadStatus {
@@ -101,6 +103,8 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
       return { ...state, status: UploadStatus.TO_UPLOAD, file: null, sha256: '' };
     case 'IS_SENDING':
       return { ...state, status: UploadStatus.SENDING };
+    case 'EXTERNAL_ERROR':
+      return { ...state, error: action.payload };
     default:
       return state;
   }
@@ -165,6 +169,8 @@ const FileUpload = ({
   calcSha256 = false,
   fileUploaded,
   fileSizeLimit = 209715200,
+  showHashCode = true,
+  externalError,
 }: Props) => {
   const [fileData, dispatch] = useReducer(reducer, {
     status: UploadStatus.TO_UPLOAD,
@@ -273,6 +279,10 @@ const FileUpload = ({
     }
   }, [attachmentExists]);
 
+  useEffect(() => {
+    dispatch({ type: 'EXTERNAL_ERROR', payload: externalError });
+  }, [externalError]);
+
   return (
     <>
       <Box
@@ -369,7 +379,7 @@ const FileUpload = ({
           </Box>
         )}
       </Box>
-      {fileData.sha256 && (
+      {fileData.sha256 && showHashCode && (
         <Box sx={{ marginTop: '20px' }}>
           <Typography variant="body2" fontWeight={600} fontSize={'16px'} color="text.secondary">
             {getLocalizedOrDefaultLabel('common', 'upload-file.hash-code', 'Codice hash')}

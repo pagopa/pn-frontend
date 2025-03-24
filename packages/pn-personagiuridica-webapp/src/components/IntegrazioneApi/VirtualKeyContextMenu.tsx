@@ -7,7 +7,7 @@ import { Row, useHasPermissions } from '@pagopa-pn/pn-commons';
 
 import { BffVirtualKeysResponse, VirtualKeyStatus } from '../../generated-client/pg-apikeys';
 import { ApiKeyColumnData, ModalApiKeyView } from '../../models/ApiKeys';
-import { PNRole } from '../../redux/auth/types';
+import { PNRole } from '../../models/User';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 
@@ -40,6 +40,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -66,7 +67,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({
         key.user?.fiscalCode === data.user?.fiscalCode && key.status === VirtualKeyStatus.Blocked
     ) && data.status !== VirtualKeyStatus.Rotated;
 
-  const shoudlShowViewButton = !isUserAdmin || isPersonalKey;
+  const shoudlShowViewButton = isPersonalKey;
 
   const shouldShowDeleteButton = data.status !== VirtualKeyStatus.Enabled;
 

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-
+import SearchIcon from '@mui/icons-material/Search';
 import PeopleIcon from '@mui/icons-material/People';
 import {
   Box,
@@ -413,6 +413,12 @@ const NuovaDelega = () => {
                                       label={entitySearchLabel(senderInputValue)}
                                       error={Boolean(getError(touched.enti, errors.enti))}
                                       helperText={getError(touched.enti, errors.enti)}
+                                      InputProps={{
+                                     ...params.InputProps,
+                                     endAdornment: (
+                                         <SearchIcon sx={{color:'text.secondary'}}/>
+                                         ),
+                                      }}    
                                     />
                                   )}
                                 />

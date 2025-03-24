@@ -1,12 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
 import { createBrowserHistory } from 'history';
-import { ReactNode } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import {
   AppMessage,
   AppResponseMessage,
+  Configuration,
   ResponseEventDispatcher,
   errorFactoryManager,
 } from '@pagopa-pn/pn-commons';
@@ -16,34 +16,23 @@ import { newNotification, newNotificationGroups } from '../../__mocks__/NewNotif
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
+import { PaConfiguration } from '../../services/configuration.service';
 import { PAAppErrorFactory } from '../../utility/AppError/PAAppErrorFactory';
 import { newNotificationMapper } from '../../utility/notification.utility';
 import NewNotification from '../NewNotification.page';
-
-vi.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-    i18n: {},
-  }),
-  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
-    <>
-      {props.i18nKey} {props.components?.map((c) => c)}
-    </>
-  ),
-}));
 
 const mockIsPaymentEnabledGetter = vi.fn();
 vi.mock('../../services/configuration.service', async () => {
   return {
     ...(await vi.importActual<any>('../../services/configuration.service')),
     getConfiguration: () => ({
+      ...Configuration.get<PaConfiguration>(),
       IS_PAYMENT_ENABLED: mockIsPaymentEnabledGetter(),
     }),
   };
 });
 
-describe('NewNotification Page without payment', async () => {
+describe('NewNotification Page without payment enabled in configuration', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
 
@@ -159,22 +148,12 @@ describe('NewNotification Page without payment', async () => {
     expect(mockedPageBefore).not.toBeInTheDocument();
 
     // simulate clicking the link
-    const links = result.getAllByRole('link');
-    expect(links[1]).toHaveTextContent(/menu.api-key/i);
-    expect(links[1]).toHaveAttribute('href', routes.API_KEYS);
-
-    fireEvent.click(links[1]);
-    // prompt must be shown
-    const promptDialog = await waitFor(() => result.getByTestId('promptDialog'));
-    expect(promptDialog).toBeInTheDocument();
-    const confirmExitBtn = within(promptDialog).getByTestId('confirmExitBtn');
-    fireEvent.click(confirmExitBtn);
-
-    // after clicking link - mocked api keys page present
-    await waitFor(() => {
-      const mockedPageAfter = result.queryByTestId('mocked-api-keys-page');
-      expect(mockedPageAfter).toBeInTheDocument();
-    });
+    const link = result.getByTestId('api-how-it-works');
+    expect(link).toHaveTextContent(/new-notification.how-it-works/i);
+    expect(link).toHaveAttribute(
+      'href',
+      Configuration.get<PaConfiguration>().DEVELOPER_API_DOCUMENTATION_LINK
+    );
   });
 
   it('clicks on stepper and navigate', async () => {
@@ -229,6 +208,7 @@ describe('NewNotification Page without payment', async () => {
 
   it('create new notification', async () => {
     const mappedNotification = newNotificationMapper(newNotification);
+
     const mockResponse = {
       notificationRequestId: 'mocked-notificationRequestId',
       paProtocolNumber: 'mocked-paProtocolNumber',
@@ -266,7 +246,9 @@ describe('NewNotification Page without payment', async () => {
     buttonSubmit = result.getByTestId('step-submit');
     const attachmentsForm = result.getByTestId('attachmentsForm');
     expect(attachmentsForm).toBeInTheDocument();
+
     // FINAL
+    expect(buttonSubmit).toBeEnabled();
     fireEvent.click(buttonSubmit);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
@@ -349,5 +331,124 @@ describe('NewNotification Page without payment', async () => {
   });
 });
 
-// TODO: to be enriched when payment is enabled again
-describe.skip('NewNotification Page with payment', () => {});
+describe('NewNotification Page with payment enabled in configuration', () => {
+  let result: RenderResult;
+  let mock: MockAdapter;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  beforeEach(() => {
+    mockIsPaymentEnabledGetter.mockReturnValue(true);
+    mock.onGet('/bff/v1/pa/groups?status=ACTIVE').reply(200, newNotificationGroups);
+  });
+
+  afterEach(() => {
+    mock.reset();
+    vi.clearAllMocks();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
+  it('renders page', async () => {
+    // render component
+    await act(async () => {
+      result = render(<NewNotification />, {
+        preloadedState: {
+          userState: { user: userResponse },
+        },
+      });
+    });
+    expect(result.getByTestId('titleBox')).toHaveTextContent('new-notification.title');
+    const stepper = result.getByTestId('stepper');
+    expect(stepper).toBeInTheDocument();
+    const preliminaryInformation = result.getByTestId('preliminaryInformationsForm');
+    expect(preliminaryInformation).toBeInTheDocument();
+    const recipientForm = result.queryByTestId('recipientForm');
+    expect(recipientForm).not.toBeInTheDocument();
+    const debtPositionForm = result.queryByTestId('debtPositionForm');
+    expect(debtPositionForm).not.toBeInTheDocument();
+    const debtPositionDetailForm = result.queryByTestId('debtPositionDetailForm');
+    expect(debtPositionDetailForm).not.toBeInTheDocument();
+    const attachmentsForm = result.queryByTestId('attachmentsForm');
+    expect(attachmentsForm).not.toBeInTheDocument();
+    const finalStep = result.queryByTestId('finalStep');
+    expect(finalStep).not.toBeInTheDocument();
+    const alert = result.queryByTestId('alert');
+    expect(alert).not.toBeInTheDocument();
+  });
+
+  it('create new notification', async () => {
+    const mappedNotification = newNotificationMapper(newNotification);
+
+    const mockResponse = {
+      notificationRequestId: 'mocked-notificationRequestId',
+      paProtocolNumber: 'mocked-paProtocolNumber',
+      idempotenceToken: 'mocked-idempotenceToken',
+    };
+    mock.onPost('/bff/v1/notifications/sent', mappedNotification).reply(200, mockResponse);
+    // render component
+    // because all the step are already deeply tested, we can set the new notification already populated
+    await act(async () => {
+      result = render(<NewNotification />, {
+        preloadedState: {
+          newNotificationState: { notification: newNotification, groups: [] },
+          userState: { user: userResponse },
+        },
+      });
+    });
+    // STEP 1
+    let buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
+    expect(buttonSubmit).toBeEnabled();
+    const preliminaryInformation = result.getByTestId('preliminaryInformationsForm');
+    expect(preliminaryInformation).toBeInTheDocument();
+    fireEvent.click(buttonSubmit);
+
+    // STEP 2
+    await waitFor(() => {
+      expect(preliminaryInformation).not.toBeInTheDocument();
+    });
+    buttonSubmit = result.getByTestId('step-submit');
+    const recipientForm = result.getByTestId('recipientForm');
+    expect(recipientForm).toBeInTheDocument();
+    fireEvent.click(buttonSubmit);
+
+    // STEP 3
+    await waitFor(() => {
+      expect(recipientForm).not.toBeInTheDocument();
+    });
+    buttonSubmit = result.getByTestId('step-submit');
+    const debtPositionForm = result.getByTestId('debtPositionForm');
+    expect(debtPositionForm).toBeInTheDocument();
+    fireEvent.click(buttonSubmit);
+
+    // STEP 4
+    await waitFor(() => {
+      expect(debtPositionForm).not.toBeInTheDocument();
+    });
+    buttonSubmit = result.getByTestId('step-submit');
+    const debtPositionDetailForm = result.getByTestId('debtPositionDetailForm');
+    expect(debtPositionDetailForm).toBeInTheDocument();
+    fireEvent.click(buttonSubmit);
+
+    // STEP 5
+    await waitFor(() => {
+      expect(debtPositionDetailForm).not.toBeInTheDocument();
+    });
+    buttonSubmit = result.getByTestId('step-submit');
+    const attachmentsForm = result.getByTestId('attachmentsForm');
+    expect(attachmentsForm).toBeInTheDocument();
+
+    // FINAL
+    expect(buttonSubmit).toBeEnabled();
+    fireEvent.click(buttonSubmit);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+    });
+    const finalStep = result.getByTestId('finalStep');
+    expect(finalStep).toBeInTheDocument();
+  });
+});
