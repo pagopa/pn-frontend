@@ -108,22 +108,6 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik }) => {
     ]);
   };
 
-  // const handleAddNewPayment = async (taxId: string, paymentType: 'pagoPa' | 'f24') => {
-  //   const newPayment =
-  //     paymentType === 'pagoPa'
-  //       ? newPagopaPayment(
-  //           taxId,
-  //           formik.values.recipients[taxId].pagoPa.length,
-  //           organization.fiscal_code
-  //         )
-  //       : newF24Payment(taxId, formik.values.recipients[taxId].f24.length);
-
-  //   await formik.setFieldValue(`recipients.${taxId}.${paymentType}`, [
-  //     ...formik.values.recipients[taxId][paymentType],
-  //     newPayment,
-  //   ]);
-  // };
-
   const handleRemovePayment = async (
     taxId: string,
     paymentType: 'pagoPa' | 'f24',
