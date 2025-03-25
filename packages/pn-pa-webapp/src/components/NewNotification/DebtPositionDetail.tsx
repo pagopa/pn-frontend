@@ -58,10 +58,6 @@ type Props = {
   forwardedRef: ForwardedRef<unknown>;
 };
 
-const emptyFileData = {
-  data: undefined,
-  sha256: { hashBase64: '', hashHex: '' },
-};
 function PaFeeFocusHelperText() {
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.debt-position-detail',
