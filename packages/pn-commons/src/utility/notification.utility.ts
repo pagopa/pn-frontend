@@ -238,7 +238,7 @@ export function getNotificationStatusInfos(
           'Annullamento in corso. Lo stato sarà aggiornato a breve.'
         ),
       };
-      case NotificationStatus.RETURNED_TO_SENDER:
+    case NotificationStatus.RETURNED_TO_SENDER:
       return {
         color: 'warning',
         ...localizeStatus(
@@ -246,7 +246,8 @@ export function getNotificationStatusInfos(
           'Resa al mittente',
           `Il destinatario risulta deceduto.`,
           `Il destinatario risulta deceduto.`,
-          { isMultiRecipient }),
+          { isMultiRecipient }
+        ),
       };
     default:
       return {
@@ -404,7 +405,7 @@ export function getLegalFactLabel(
     return getLocalizedOrDefaultLabel(
       'notifications',
       'detail.timeline.legalfact.analog-failure-delivery',
-      'Deposito di avvenuta ricezione'
+      'Deposito avviso di avvenuta ricezione'
     );
   } else if (
     timelineStep.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW &&
@@ -663,6 +664,6 @@ export const populatePaymentsPagoPaF24 = (
   return paymentDetails;
 };
 
-export const isNotificationDetailOtherDocument = 
-(value: NotificationDetailDocument | NotificationDetailOtherDocument): value is NotificationDetailOtherDocument => 
-  value.documentType === 'AAR';
+export const isNotificationDetailOtherDocument = (
+  value: NotificationDetailDocument | NotificationDetailOtherDocument
+): value is NotificationDetailOtherDocument => value.documentType === 'AAR';
