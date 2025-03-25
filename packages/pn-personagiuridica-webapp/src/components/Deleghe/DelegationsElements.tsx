@@ -241,7 +241,6 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
   return (
     <>
       <ConfirmationModal
-        id="delegation"
         open={showConfirmationModal}
         title={titleModal}
         slots={{

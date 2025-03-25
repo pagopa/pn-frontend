@@ -144,7 +144,6 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
         )}
       </PnWizard>
       <ConfirmationModal
-        id="digital-contact-activation"
         open={modal.open}
         title={t('courtesy-contacts.confirmation-modal-title')}
         slots={{

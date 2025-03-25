@@ -163,7 +163,6 @@ const Deleghe = () => {
           ref={codeModalRef}
         />
         <ConfirmationModal
-          id="delegation"
           open={open}
           title={
             type === 'delegates'

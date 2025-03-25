@@ -51,7 +51,7 @@ describe('ExistingContactDialog Component', () => {
     const titleEl = getById(dialog, 'confirmation-dialog-title');
     expect(titleEl).toBeInTheDocument();
     expect(titleEl).toHaveTextContent('common.duplicate-default-contact-title');
-    const bodyEl = getById(dialog, 'confirmation-dialog-title');
+    const bodyEl = getById(dialog, 'confirmation-dialog-description');
     expect(bodyEl).toBeInTheDocument();
     expect(bodyEl).toHaveTextContent('common.duplicate-default-contact-descr');
     const confirmButton = screen.getByText('button.understand');

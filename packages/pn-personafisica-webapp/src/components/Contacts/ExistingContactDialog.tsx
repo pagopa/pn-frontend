@@ -22,7 +22,6 @@ const ExistingContactDialog: React.FC<Props> = ({
   const { t } = useTranslation();
   return (
     <ConfirmationModal
-      id="existing-contact"
       open={open}
       title={t(`common.duplicate-${isDefault ? 'default-' : ''}contact-title`, {
         value,

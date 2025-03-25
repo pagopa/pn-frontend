@@ -1,12 +1,11 @@
 import React, { JSXElementConstructor } from 'react';
 
-import { Button, ButtonProps, DialogProps, DialogTitle } from '@mui/material';
+import { Button, ButtonProps, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 type Props = {
   open: boolean;
   title: string;
-  id: string;
   slots?: {
     confirmButton: JSXElementConstructor<ButtonProps>;
     closeButton?: JSXElementConstructor<ButtonProps>;
@@ -14,7 +13,6 @@ type Props = {
   slotsProps?: {
     confirmButton?: ButtonProps;
     closeButton?: ButtonProps;
-    container?: Omit<DialogProps, 'id' | 'aria-labelledby' | 'aria-describedby'>;
   };
   children?: React.ReactNode;
 };
@@ -22,7 +20,6 @@ type Props = {
 const ConfirmationModal: React.FC<Props> = ({
   open,
   title,
-  id,
   slots,
   slotsProps,
   children,
@@ -32,18 +29,16 @@ const ConfirmationModal: React.FC<Props> = ({
 
   return (
     <PnDialog
-      id={id}
       open={open}
       onClose={slotsProps?.closeButton?.onClick}
-      {...slotsProps?.container}
-      aria-labelledby={`confirmation-dialog-title`}
-      aria-describedby={`confirmation-dialog-${id}-description`}
+      aria-labelledby="confirmation-dialog-title"
+      aria-describedby="confirmation-dialog-description"
       maxWidth="sm"
-      data-testid={`confirmation-dialog-${id}`}
+      data-testid="confirmationDialog"
     >
-      <DialogTitle id={`confirmation-dialog-title`}>{title}</DialogTitle>
+      <DialogTitle id="confirmation-dialog-title">{title}</DialogTitle>
       {children && (
-        <PnDialogContent id={`confirmation-dialog-${id}-description`}>{children}</PnDialogContent>
+        <PnDialogContent id="confirmation-dialog-description">{children}</PnDialogContent>
       )}
       <PnDialogActions>
         {CloseButton && (
