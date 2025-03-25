@@ -7,8 +7,8 @@ import { useIsMobile } from '@pagopa-pn/pn-commons';
 type Props = {
   children: ReactNode;
   isContinueDisabled: boolean;
-  title?: string;
-  content?: ReactNode;
+  title: string;
+  content: ReactNode;
   submitLabel?: string;
   previousStepLabel?: string;
   onContinueClick: () => void;
@@ -31,7 +31,9 @@ const NewPublicKeyCard: React.FC<Props> = ({
   return (
     <>
       <Paper sx={{ p: 3, mt: 3 }} elevation={0}>
-        {title && <Typography sx={{ fontSize: '1.5rem', fontWeight: 700, m: 0, p: 0 }} data-testid="title">{title}</Typography>}
+        <Typography sx={{ fontSize: '1.5rem', fontWeight: 700, m: 0, p: 0 }} data-testid="title">
+          {title}
+        </Typography>
         {content}
         <Box>{children}</Box>
       </Paper>
