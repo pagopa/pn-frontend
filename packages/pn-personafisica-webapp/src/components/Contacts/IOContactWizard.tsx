@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import { Avatar, Button, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
-import { IllusAppIoLogo, IllusSendLogo } from '@pagopa-pn/pn-commons';
+import { IllusAppIoLogo, IllusSendLogo, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { enableIOAddress } from '../../redux/contact/actions';
@@ -30,6 +30,12 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
       .unwrap()
       .then(() => {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS, true);
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t('courtesy-contacts.io-added-successfully', { ns: 'recapiti' }),
+          })
+        );
         goToNextStep();
       })
       .catch(() => {});

@@ -42,6 +42,7 @@ const LegalContactAssociationDialog: React.FC<Props> = ({
 
   return (
     <ConfirmationModal
+      id="legal-contact-association"
       open={open}
       title={t(`special-contacts.legal-association-title${blockConfirmation}`, { ns: 'recapiti' })}
       slots={{
