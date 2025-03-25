@@ -77,7 +77,7 @@ const DebtPositionDetail: React.FC<Props> = ({
   const { PAYMENT_INFO_LINK } = getConfiguration();
   const dispatch = useAppDispatch();
 
-  const showErrorIfPresent = (fieldName: string) =>
+  const hasFieldError = (fieldName: string) =>
     Boolean(
       getIn(formik.touched, fieldName) ||
         (_.get(formik.values, fieldName) && String(_.get(formik.values, fieldName)).length > 0)
@@ -445,8 +445,8 @@ const DebtPositionDetail: React.FC<Props> = ({
                     name="paFee"
                     label={t('notification-fee.pa-fee')}
                     value={formik.values.paFee}
-                    error={showErrorIfPresent('paFee') && Boolean(formik.errors.paFee)}
-                    helperText={showErrorIfPresent('paFee') && formik.errors.paFee}
+                    error={hasFieldError('paFee') && Boolean(formik.errors.paFee)}
+                    helperText={hasFieldError('paFee') && formik.errors.paFee}
                     onChange={handleChangeTouched}
                     InputProps={{
                       endAdornment: (
@@ -467,8 +467,8 @@ const DebtPositionDetail: React.FC<Props> = ({
                     value={formik.values.vat ?? ''}
                     onChange={handleChange}
                     sx={{ flexBasis: '30%' }}
-                    error={showErrorIfPresent('vat') && Boolean(formik.errors.vat)}
-                    helperText={showErrorIfPresent('vat') && formik.errors.vat}
+                    error={hasFieldError('vat') && Boolean(formik.errors.vat)}
+                    helperText={hasFieldError('vat') && formik.errors.vat}
                     data-testid="notification-vat"
                   >
                     {VAT.map((option) => (
@@ -530,11 +530,7 @@ const DebtPositionDetail: React.FC<Props> = ({
             </FormBox>
           )}
         </Paper>
-        <PaymentMethods
-          notification={notification}
-          formik={formik}
-          showErrorIfPresent={showErrorIfPresent}
-        />
+        <PaymentMethods notification={notification} formik={formik} hasFieldError={hasFieldError} />
       </NewNotificationCard>
     </form>
   );

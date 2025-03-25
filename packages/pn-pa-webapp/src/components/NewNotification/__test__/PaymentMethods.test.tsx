@@ -71,7 +71,7 @@ describe('PaymentMethods Component', () => {
             <PaymentMethods
               formik={formik as ReturnType<typeof useFormik<PaymentMethodsFormValues>>}
               notification={newNotification}
-              showErrorIfPresent={vi.fn()}
+              hasFieldError={vi.fn()}
             />
           );
         }}

@@ -20,7 +20,7 @@ import PagoPaPaymentBox from './PagoPaPaymentBox';
 type Props = {
   notification: NewNotification;
   formik: ReturnType<typeof useFormik<PaymentMethodsFormValues>>;
-  showErrorIfPresent: (field: string) => boolean;
+  hasFieldError: (field: string) => boolean;
 };
 
 const emptyFileData = {
@@ -28,7 +28,7 @@ const emptyFileData = {
   sha256: { hashBase64: '', hashHex: '' },
 };
 
-const PaymentMethods: React.FC<Props> = ({ notification, formik, showErrorIfPresent }) => {
+const PaymentMethods: React.FC<Props> = ({ notification, formik, hasFieldError }) => {
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.debt-position-detail.payment-methods',
   });
@@ -164,7 +164,7 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik, showErrorIfPres
                       showDeleteButton={index > 0}
                       onDeletePayment={() => handleRemovePagoPa(recipientKey, index)}
                       fieldMeta={(fieldName) => formik.getFieldMeta(fieldName)}
-                      showErrorIfPresent={showErrorIfPresent}
+                      hasFieldError={hasFieldError}
                     />
                   ))}
 
@@ -208,7 +208,7 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik, showErrorIfPres
                       showDeleteButton={index > 0}
                       onDeletePayment={() => handleRemoveF24(recipientKey, index)}
                       fieldMeta={(fieldName) => formik.getFieldMeta(fieldName)}
-                      showErrorIfPresent={showErrorIfPresent}
+                      hasFieldError={hasFieldError}
                     />
                   ))}
 
