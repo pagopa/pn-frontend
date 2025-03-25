@@ -81,7 +81,7 @@ describe('PagoPaPaymentBox', () => {
   });
 
   it('should shows warning alert when both showDeleteButton and DELIVERY_MODE are true', () => {
-    const { getByTestId } = render(
+    const { rerender, getByTestId, queryByTestId } = render(
       <Formik initialValues={{}} onSubmit={() => {}}>
         {() => (
           <PagoPaPaymentBox
@@ -94,6 +94,20 @@ describe('PagoPaPaymentBox', () => {
     );
 
     expect(getByTestId('pagopa-installment-alert')).toBeInTheDocument();
+
+    rerender(
+      <Formik initialValues={{}} onSubmit={() => {}}>
+        {() => (
+          <PagoPaPaymentBox
+            {...defaultProps}
+            showDeleteButton={true}
+            notificationFeePolicy={NotificationFeePolicy.FLAT_RATE}
+          />
+        )}
+      </Formik>
+    );
+
+    expect(queryByTestId('pagopa-installment-alert')).not.toBeInTheDocument();
   });
 
   it('should calls onFileUploaded when a file is uploaded', async () => {

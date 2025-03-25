@@ -141,7 +141,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
         </Stack>
       )}
 
-      {showDeleteButton && (
+      {showDeleteButton && notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
         <Alert severity="warning" sx={{ mt: 4 }} data-testid="f24-installment-alert">
           {t('new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment')}
         </Alert>

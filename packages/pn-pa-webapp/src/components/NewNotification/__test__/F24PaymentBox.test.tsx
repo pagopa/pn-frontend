@@ -80,7 +80,7 @@ describe('F24PaymentBox', () => {
   });
 
   it('should shows warning alert when both showDeleteButton and DELIVERY_MODE are true', () => {
-    const { getByTestId } = render(
+    const { rerender, getByTestId, queryByTestId } = render(
       <Formik initialValues={{}} onSubmit={() => {}}>
         {() => (
           <F24PaymentBox
@@ -93,6 +93,20 @@ describe('F24PaymentBox', () => {
     );
 
     expect(getByTestId('f24-installment-alert')).toBeInTheDocument();
+
+    rerender(
+      <Formik initialValues={{}} onSubmit={() => {}}>
+        {() => (
+          <F24PaymentBox
+            {...defaultProps}
+            showDeleteButton={true}
+            notificationFeePolicy={NotificationFeePolicy.FLAT_RATE}
+          />
+        )}
+      </Formik>
+    );
+
+    expect(queryByTestId('f24-installment-alert')).not.toBeInTheDocument();
   });
 
   it('should calls onFileUploaded when a file is uploaded', async () => {
