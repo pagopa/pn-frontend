@@ -190,6 +190,10 @@
     "invalid_body": {
       "title": "Errore",
       "message": "C'è stato un errore in fase di invio dei dati ai nostri server. Ricontrolla che i dati inseriti siano corretti e non siano contenuti caratteri speciali e spazi."
+    },
+    "invalid_parameter": {
+      "title": "Dati non validi",
+      "message": "Uno o più dei dati inseriti non sono validi"
     }
   },
   "badges": {
