@@ -108,14 +108,32 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik }) => {
     ]);
   };
 
-  const handleRemovePagoPa = async (taxId: string, index: number) => {
-    const pagoPaPayments = formik.values.recipients[taxId].pagoPa.filter((_, i) => i !== index);
-    await formik.setFieldValue(`recipients.${taxId}.pagoPa`, pagoPaPayments);
-  };
+  // const handleAddNewPayment = async (taxId: string, paymentType: 'pagoPa' | 'f24') => {
+  //   const newPayment =
+  //     paymentType === 'pagoPa'
+  //       ? newPagopaPayment(
+  //           taxId,
+  //           formik.values.recipients[taxId].pagoPa.length,
+  //           organization.fiscal_code
+  //         )
+  //       : newF24Payment(taxId, formik.values.recipients[taxId].f24.length);
 
-  const handleRemoveF24 = async (taxId: string, index: number) => {
-    const f24Payments = formik.values.recipients[taxId].f24.filter((_, i) => i !== index);
-    await formik.setFieldValue(`recipients.${taxId}.f24`, f24Payments);
+  //   await formik.setFieldValue(`recipients.${taxId}.${paymentType}`, [
+  //     ...formik.values.recipients[taxId][paymentType],
+  //     newPayment,
+  //   ]);
+  // };
+
+  const handleRemovePayment = async (
+    taxId: string,
+    paymentType: 'pagoPa' | 'f24',
+    index: number
+  ) => {
+    const updatedPayments = formik.values.recipients[taxId][paymentType].filter(
+      (_, i) => i !== index
+    );
+    await formik.setFieldTouched(`recipients.${taxId}.${paymentType}.${index}`, false);
+    await formik.setFieldValue(`recipients.${taxId}.${paymentType}`, updatedPayments);
   };
 
   return (
@@ -161,7 +179,7 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik }) => {
                       notificationFeePolicy={formik.values.notificationFeePolicy}
                       handleChange={(event) => handleChange(event, recipientKey, 'pagoPa', index)}
                       showDeleteButton={index > 0}
-                      onDeletePayment={() => handleRemovePagoPa(recipientKey, index)}
+                      onDeletePayment={() => handleRemovePayment(recipientKey, 'pagoPa', index)}
                       fieldMeta={(fieldName) => formik.getFieldMeta(fieldName)}
                     />
                   ))}
@@ -204,7 +222,7 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik }) => {
                       notificationFeePolicy={formik.values.notificationFeePolicy}
                       handleChange={(event) => handleChange(event, recipientKey, 'f24', index)}
                       showDeleteButton={index > 0}
-                      onDeletePayment={() => handleRemoveF24(recipientKey, index)}
+                      onDeletePayment={() => handleRemovePayment(recipientKey, 'f24', index)}
                       fieldMeta={(fieldName) => formik.getFieldMeta(fieldName)}
                     />
                   ))}
