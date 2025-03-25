@@ -144,7 +144,7 @@ const VirtualKeysTable: React.FC<Props> = ({
       </SmartHeader>
       <SmartBody>
         {data.map((row, index) => (
-          <SmartBodyRow key={row.id} index={index} testId="publicKeysBodyRow">
+          <SmartBodyRow key={row.id} index={index} testId="virtualKeysBodyRow">
             {virtualKeysVisibleColumns.map((column) => (
               <SmartBodyCell
                 key={column.id.toString()}
