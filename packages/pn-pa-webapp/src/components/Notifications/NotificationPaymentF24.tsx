@@ -48,7 +48,7 @@ const NotificationPaymentF24: React.FC<Props> = ({ iun, payments }) => {
         </PnDialogActions>
       </PnDialog>
       <Box>
-        <Typography variant="caption" fontWeight={600} color="text.secondary" >
+        <Typography variant="caption" fontWeight={600} color="text.secondary">
           {t('payment.f24-attached')}
         </Typography>
       </Box>
@@ -58,12 +58,12 @@ const NotificationPaymentF24: React.FC<Props> = ({ iun, payments }) => {
           items={payments}
           renderItem={(f24) => (
             <Typography
-              sx={{ overflowWrap:'anywhere' }}
               variant="caption"
               color="text.secondary"
               mr={1}
               key={`${f24.recIndex} - ${f24.attachmentIdx}`}
               data-testid="f24"
+              sx={{ wordBreak: 'break-all' }}
             >
               {f24.title}
             </Typography>
