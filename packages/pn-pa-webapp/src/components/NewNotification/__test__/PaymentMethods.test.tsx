@@ -166,7 +166,7 @@ describe('PaymentMethods Component', () => {
     ]);
   });
 
-  it('should remove a PagoPa payment when delete button is clicked', () => {
+  it('should remove a PagoPa payment when delete button is clicked', async () => {
     const { getByTestId } = renderComponent({
       recipients: {
         ...formikValues.recipients,
@@ -182,13 +182,15 @@ describe('PaymentMethods Component', () => {
     expect(deleteButtons).toHaveLength(1);
     fireEvent.click(deleteButtons[0]);
 
-    expect(mockSetFieldValue).toHaveBeenCalledTimes(1);
-    expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${pagoPaRecipientKey}.pagoPa`, [
-      newNotificationPagoPa(0),
-    ]);
+    await waitFor(() => {
+      expect(mockSetFieldValue).toHaveBeenCalledTimes(1);
+      expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${pagoPaRecipientKey}.pagoPa`, [
+        newNotificationPagoPa(0),
+      ]);
+    });
   });
 
-  it('should remove F24 payment when delete button is clicked', () => {
+  it('should remove F24 payment when delete button is clicked', async () => {
     const { getByTestId } = renderComponent({
       recipients: {
         ...formikValues.recipients,
@@ -204,9 +206,11 @@ describe('PaymentMethods Component', () => {
     expect(deleteButtons).toHaveLength(1);
     fireEvent.click(deleteButtons[0]);
 
-    expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${f24RecipientKey}.f24`, [
-      newNotificationF24(0),
-    ]);
+    await waitFor(() => {
+      expect(mockSetFieldValue).toHaveBeenCalledWith(`recipients.${f24RecipientKey}.f24`, [
+        newNotificationF24(0),
+      ]);
+    });
   });
 
   it('should handle file upload for PagoPa payment', async () => {
