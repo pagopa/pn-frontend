@@ -5,16 +5,16 @@ import {
   UnknownAppError,
 } from '@pagopa-pn/pn-commons';
 
-import { ServerResponseErrorCode } from './types';
+import { DeliveryMandateNotFoundAppError } from './DeliveryMandateNotFoundAppError';
+import { GenericInvalidParameterPatternAppError } from './GenericInvalidParameterPatternAppError';
+import { InvalidBodyAppError } from './InvalidBodyAppError';
 import { MandateAlreadyExistsAppError } from './MandateAlreadyExistsAppError';
 import { MandateDelegateHimselfAppError } from './MandateDelegateHimselfAppError';
 import { MandateInvalidVerificationCodeAppError } from './MandateInvalidVerificationCodeAppError';
 import { MandateNotAcceptableAppError } from './MandateNotAcceptableAppError';
 import { MandateNotFoundAppError } from './MandateNotFoundAppError';
 import { UserAttributesInvalidVerificationCodeAppError } from './UserAttributesInvalidVerificationCodeAppError';
-import { GenericInvalidParameterPatternAppError } from './GenericInvalidParameterPatternAppError';
-import { DeliveryMandateNotFoundAppError } from './DeliveryMandateNotFoundAppError';
-import { InvalidBodyAppError } from './InvalidBodyAppError';
+import { ServerResponseErrorCode } from './types';
 
 export class PFAppErrorFactory extends AppErrorFactory {
   private translateFunction: (path: string, ns: string) => string;
