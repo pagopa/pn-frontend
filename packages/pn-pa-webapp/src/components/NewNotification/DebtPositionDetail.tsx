@@ -1,4 +1,4 @@
-import { useFormik } from 'formik';
+import { getIn, useFormik } from 'formik';
 import _ from 'lodash';
 import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -93,6 +93,12 @@ const DebtPositionDetail: React.FC<Props> = ({
 
   const { PAYMENT_INFO_LINK } = getConfiguration();
   const dispatch = useAppDispatch();
+
+  const hasFieldError = (fieldName: string) =>
+    Boolean(
+      getIn(formik.touched, fieldName) ||
+        (_.get(formik.values, fieldName) && String(_.get(formik.values, fieldName)).length > 0)
+    );
 
   const formatPayments = (): Array<NewNotificationRecipient> => {
     const recipients = _.cloneDeep(notification.recipients);
@@ -469,9 +475,9 @@ const DebtPositionDetail: React.FC<Props> = ({
                     name="paFee"
                     label={t('notification-fee.pa-fee')}
                     value={formik.values.paFee}
-                    error={formik.touched.paFee && Boolean(formik.errors.paFee)}
+                    error={hasFieldError('paFee') && Boolean(formik.errors.paFee)}
                     helperText={
-                      (formik.touched.paFee && formik.errors.paFee) || <PaFeeFocusHelperText />
+                      (hasFieldError('paFee') && formik.errors.paFee) || <PaFeeFocusHelperText />
                     }
                     data-testid="notification-pa-fee"
                     onChange={handleChangeTouched}
@@ -496,8 +502,8 @@ const DebtPositionDetail: React.FC<Props> = ({
                     value={formik.values.vat ?? ''}
                     onChange={handleChange}
                     sx={{ flexBasis: isMobile ? '100%' : '40%' }}
-                    error={formik.touched.vat && Boolean(formik.errors.vat)}
-                    helperText={formik.touched.vat && formik.errors.vat}
+                    error={hasFieldError('vat') && Boolean(formik.errors.vat)}
+                    helperText={hasFieldError('vat') && formik.errors.vat}
                     data-testid="notification-vat"
                   >
                     {VAT.map((option) => (
@@ -557,7 +563,7 @@ const DebtPositionDetail: React.FC<Props> = ({
             </FormBox>
           )}
         </Paper>
-        <PaymentMethods notification={notification} formik={formik} />
+        <PaymentMethods notification={notification} formik={formik} hasFieldError={hasFieldError} />
       </NewNotificationCard>
     </form>
   );
