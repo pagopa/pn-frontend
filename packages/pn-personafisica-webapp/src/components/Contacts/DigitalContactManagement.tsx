@@ -35,7 +35,7 @@ const DigitalContactManagement: React.FC = () => {
         data-testid="prev-button"
         color={'primary'}
         fullWidth
-        sx={{ fontSize: '16px', width: { xs: 'unset', md: 'auto' } }}
+        sx={{ fontSize: '16px', width: { xs: 'unset', md: 'auto' }, mt: { xs: 3, md: 'unset' } }}
         onClick={() => setCurrentAction(DigitalDomicileManagementAction.DEFAULT)}
         variant="naked"
       >
