@@ -56,8 +56,8 @@ describe('ExistingContactDialog Component', () => {
     expect(bodyEl).toHaveTextContent('common.duplicate-default-contact-descr');
     const confirmButton = screen.getByText('button.understand');
     expect(confirmButton).toBeInTheDocument();
-    const cancelButton = screen.getByText('button.annulla');
-    expect(cancelButton).toBeInTheDocument();
+    const cancelButton = screen.queryByText('button.annulla');
+    expect(cancelButton).not.toBeInTheDocument();
   });
 
   it('click on confirm button', () => {
