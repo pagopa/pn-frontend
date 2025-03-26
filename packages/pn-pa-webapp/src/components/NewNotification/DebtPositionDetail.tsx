@@ -17,8 +17,9 @@ import {
   Stack,
   TextField,
   Typography,
+  useFormControl,
 } from '@mui/material';
-import { CustomDropdown, dataRegex, useIsMobile } from '@pagopa-pn/pn-commons';
+import { CustomDropdown, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotification,
@@ -42,7 +43,9 @@ import {
   f24ValidationSchema,
   identicalIUV,
   identicalSHA,
+  isCurrencyAndMaxValue,
   pagoPaValidationSchema,
+  validatePaFee,
 } from '../../utility/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
 import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
@@ -54,6 +57,20 @@ type Props = {
   onPreviousStep: () => void;
   forwardedRef: ForwardedRef<unknown>;
 };
+
+function PaFeeFocusHelperText() {
+  const { t } = useTranslation(['notifiche'], {
+    keyPrefix: 'new-notification.steps.debt-position-detail',
+  });
+  const { focused } = useFormControl() || {};
+
+  return useMemo(() => {
+    if (focused) {
+      return t('notification-fee.pa-fee-validation');
+    }
+    return false;
+  }, [focused]);
+}
 
 const DebtPositionDetail: React.FC<Props> = ({
   notification,
@@ -204,25 +221,40 @@ const DebtPositionDetail: React.FC<Props> = ({
     return recipientSchema;
   };
 
+  const getErrorMessage = (error: {
+    messageKey: string;
+    data?: {
+      [key: string]: number | string;
+    };
+  }) => {
+    if (error.messageKey === 'notification-fee.pa-fee-currency') {
+      return t(error.messageKey, error.data);
+    }
+    if (error.messageKey === 'notification-fee.pa-fee-max-value') {
+      return t(error.messageKey, error.data);
+    }
+    return '';
+  };
   const validationSchema = yup.object().shape({
     notificationFeePolicy: yup
       .string()
       .oneOf(Object.values(NotificationFeePolicy))
       .required(tc('required-field')),
-    paFee: yup
-      .mixed()
-      .optional()
-      .when('notificationFeePolicy', {
-        is: NotificationFeePolicy.DELIVERY_MODE,
-        then: yup
-          .mixed()
-          .required(tc('required-field'))
-          .test(
-            'is-currency',
-            `${t('notification-fee.pa-fee-invalid', { maxValue: 1 })}`,
-            (value) => dataRegex.currency.test(String(value))
-          ),
-      }),
+
+    paFee: validatePaFee(tc).test({
+      name: 'isCurrency',
+      test(value?: string) {
+        const error = isCurrencyAndMaxValue(value);
+
+        if (error) {
+          return this.createError({
+            message: getErrorMessage(error),
+            path: this.path,
+          });
+        }
+        return true;
+      },
+    }),
 
     vat: yup
       .number()
@@ -239,7 +271,6 @@ const DebtPositionDetail: React.FC<Props> = ({
           (r) =>
             r.debtPosition === PaymentModel.PAGO_PA || r.debtPosition === PaymentModel.PAGO_PA_F24
         );
-
         return !(hasPagoPaDebtPosition && value === PagoPaIntegrationMode.NONE);
       }),
     recipients: yup
@@ -410,6 +441,7 @@ const DebtPositionDetail: React.FC<Props> = ({
               justifyContent={'space-between'}
               alignItems={isMobile ? 'flex-start' : 'flex-end'}
               aria-live="polite"
+              mb={1}
             >
               <RadioGroup
                 aria-labelledby="notificationFee"
@@ -432,12 +464,10 @@ const DebtPositionDetail: React.FC<Props> = ({
                   componentsProps={{ typography: { fontSize: '16px' } }}
                 />
               </RadioGroup>
-              {isDeliveryMode && (
-                <Stack
-                  direction={isMobile ? 'column' : 'row'}
-                  justifyContent={isMobile ? 'flex-start' : 'space-between'}
-                  sx={{ marginTop: '1rem' }}
-                >
+            </Stack>
+            {isDeliveryMode && (
+              <>
+                <Stack sx={{ width: isMobile ? '100%' : '50%' }}>
                   <TextField
                     required
                     size="small"
@@ -446,7 +476,10 @@ const DebtPositionDetail: React.FC<Props> = ({
                     label={t('notification-fee.pa-fee')}
                     value={formik.values.paFee}
                     error={hasFieldError('paFee') && Boolean(formik.errors.paFee)}
-                    helperText={hasFieldError('paFee') && formik.errors.paFee}
+                    helperText={
+                      (hasFieldError('paFee') && formik.errors.paFee) || <PaFeeFocusHelperText />
+                    }
+                    data-testid="notification-pa-fee"
                     onChange={handleChangeTouched}
                     InputProps={{
                       endAdornment: (
@@ -455,8 +488,10 @@ const DebtPositionDetail: React.FC<Props> = ({
                         </InputAdornment>
                       ),
                     }}
-                    sx={{ flexBasis: '75%', margin: isMobile ? '1rem auto' : '0rem 0.8rem' }}
-                    data-testid="notification-pa-fee"
+                    sx={{
+                      flexBasis: isMobile ? '100%' : '60%',
+                      margin: '1rem 0',
+                    }}
                   />
                   <CustomDropdown
                     id="vat"
@@ -466,7 +501,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                     size="small"
                     value={formik.values.vat ?? ''}
                     onChange={handleChange}
-                    sx={{ flexBasis: '30%' }}
+                    sx={{ flexBasis: isMobile ? '100%' : '40%' }}
                     error={hasFieldError('vat') && Boolean(formik.errors.vat)}
                     helperText={hasFieldError('vat') && formik.errors.vat}
                     data-testid="notification-vat"
@@ -478,10 +513,8 @@ const DebtPositionDetail: React.FC<Props> = ({
                     ))}
                   </CustomDropdown>
                 </Stack>
-              )}
-            </Stack>
-            {isDeliveryMode && (
-              <Typography variant="caption">{t('notification-fee.disclaimer')}</Typography>
+                <Typography variant="caption">{t('notification-fee.disclaimer')}</Typography>
+              </>
             )}
           </FormBox>
 
