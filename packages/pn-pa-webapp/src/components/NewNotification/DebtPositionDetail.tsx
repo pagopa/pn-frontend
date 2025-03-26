@@ -473,6 +473,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                     helperText={
                       (formik.touched.paFee && formik.errors.paFee) || <PaFeeFocusHelperText />
                     }
+                    data-testid="notification-pa-fee"
                     onChange={handleChangeTouched}
                     InputProps={{
                       endAdornment: (
