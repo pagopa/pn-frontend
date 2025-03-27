@@ -471,8 +471,7 @@
         "address-details": "Note aggiuntive (presso, scala, piano)",
         "add-recipient": "Aggiungi un destinatario",
         "remove-recipient": "Rimuovi destinatario",
-        "address-subtitle": "L'indirizzo può essere inserito automaticamente dai registri nazionale, se si è a conoscenza di un indirizzo specifico aggiornato si consiglia di inserire manualmente l'indirizzo",
-        "address-physical-lookup-info": "La selezione inserimento automatico dai registro nazionali potrebbe ritardare l'invio della notifica al destinatario",
+        "address-subtitle": "Scegli se inserire l'indirizzo automaticamente dai registri nazionali o compilarlo manualmente. L'inserimento automatico dai registri nazionali potrebbe ritardare l'invio della notifica al destinatario.",
         "address-physical-lookup-error": "<0>Servizio VAS attualmente non disponibile</0>Non è al momento possibile richiamare automaticamente l'indirizzo da registro nazionale, l'indirizzo deve essere inserito manualmente",
         "address-physical-lookup-radios": {
           "national-registry": "Inserimento automatico da registro nazionale",
