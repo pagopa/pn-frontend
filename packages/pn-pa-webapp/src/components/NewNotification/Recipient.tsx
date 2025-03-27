@@ -469,7 +469,7 @@ const Recipient: React.FC<Props> = ({
                         )
                       }
                     </FormLabel>
-                    <Alert severity="error">
+                    <Alert severity="error" sx={{ mb: 2 }}>
                       {t('address-physical-lookup-down')}
                     </Alert>
                     {PHYSICAL_ADDRESS_LOOKUP !== PhysicalAddressLookupConfig.OFF && (

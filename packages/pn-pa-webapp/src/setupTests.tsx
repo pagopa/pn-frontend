@@ -12,6 +12,7 @@ import '@testing-library/jest-dom';
 import { initAxiosClients } from './api/apiClients';
 import { initStore } from './redux/store';
 import { PaConfiguration } from './services/configuration.service';
+import { PhysicalAddressLookupConfig } from './models/NewNotification';
 
 beforeAll(() => {
   Configuration.setForTest<PaConfiguration>({
@@ -36,6 +37,7 @@ beforeAll(() => {
     LANDING_SITE_URL: 'https://test.landing.pagopa.it',
     PAYMENT_INFO_LINK: 'https://test.payment.pagopa.it',
     DEVELOPER_API_DOCUMENTATION_LINK: 'https://test.api.pagopa.it',
+    PHYSICAL_ADDRESS_LOOKUP: PhysicalAddressLookupConfig.ON,
   });
   initStore(false);
   initAxiosClients();
