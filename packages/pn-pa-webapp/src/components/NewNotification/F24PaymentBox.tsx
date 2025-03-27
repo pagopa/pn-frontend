@@ -26,6 +26,7 @@ type PaymentBoxProps = {
   showDeleteButton: boolean;
   onDeletePayment: () => void;
   fieldMeta: (name: string) => FieldMetaProps<any>;
+  hasFieldError: (field: string) => boolean;
 };
 
 const F24PaymentBox: React.FC<PaymentBoxProps> = ({
@@ -38,6 +39,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
   showDeleteButton,
   onDeletePayment,
   fieldMeta,
+  hasFieldError,
 }) => {
   const { t } = useTranslation(['notifiche', 'common']);
   const isMobile = useIsMobile('md');
@@ -49,7 +51,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
       return fieldMeta(`${id}.${fieldId}`).error;
     }
 
-    if (fieldMeta(`${id}.${fieldId}`).touched) {
+    if (hasFieldError(`${id}.${fieldId}`)) {
       return fieldMeta(`${id}.${fieldId}`).error;
     }
 
@@ -139,7 +141,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
         </Stack>
       )}
 
-      {showDeleteButton && (
+      {showDeleteButton && notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
         <Alert severity="warning" sx={{ mt: 4 }} data-testid="f24-installment-alert">
           {t('new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment')}
         </Alert>
