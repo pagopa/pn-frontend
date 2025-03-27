@@ -12,6 +12,7 @@ import * as yup from 'yup';
 
 import { Add, Delete } from '@mui/icons-material';
 import {
+  Alert,
   Box,
   FormControl,
   FormControlLabel,
@@ -28,9 +29,11 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import {
   NewNotificationDigitalAddressType,
   NewNotificationRecipient,
+  PhysicalAddressLookupConfig,
 } from '../../models/NewNotification';
 import { useAppDispatch } from '../../redux/hooks';
 import { saveRecipients } from '../../redux/newNotification/reducers';
+import { getConfiguration } from '../../services/configuration.service';
 import {
   denominationLengthAndCharacters,
   identicalTaxIds,
@@ -53,7 +56,9 @@ const initialPhysicalAddress = {
   foreignState: 'Italia',
 };
 
-const singleRecipient: Omit<NewNotificationRecipient, 'id' | 'idx'> = {
+const getInitialRecipient = (
+  config: PhysicalAddressLookupConfig
+): Omit<NewNotificationRecipient, 'id' | 'idx'> => ({
   recipientType: RecipientType.PF,
   taxId: '',
   firstName: '',
@@ -61,8 +66,11 @@ const singleRecipient: Omit<NewNotificationRecipient, 'id' | 'idx'> = {
   type: NewNotificationDigitalAddressType.PEC,
   digitalDomicile: '',
   ...initialPhysicalAddress,
-  physicalAddressLookup: PhysicalAddressLookup.NATIONAL_REGISTRY,
-};
+  physicalAddressLookup:
+    config === PhysicalAddressLookupConfig.ON
+      ? PhysicalAddressLookup.NATIONAL_REGISTRY
+      : PhysicalAddressLookup.MANUAL,
+});
 
 type FormRecipients = {
   recipients: Array<NewNotificationRecipient>;
@@ -89,6 +97,7 @@ const Recipient: React.FC<Props> = ({
   recipientsData,
   forwardedRef,
 }) => {
+  const { PHYSICAL_ADDRESS_LOOKUP } = getConfiguration();
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.recipient',
@@ -106,7 +115,11 @@ const Recipient: React.FC<Props> = ({
             id: `recipient.${index}`,
           })),
         }
-      : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
+      : {
+          recipients: [
+            { ...getInitialRecipient(PHYSICAL_ADDRESS_LOOKUP), idx: 0, id: 'recipient.0' },
+          ],
+        };
 
   const buildRecipientValidationObject = () => ({
     recipientType: yup.string(),
@@ -203,7 +216,11 @@ const Recipient: React.FC<Props> = ({
     const lastRecipientIdx = values.recipients[values.recipients.length - 1].idx;
     setFieldValue('recipients', [
       ...values.recipients,
-      { ...singleRecipient, idx: lastRecipientIdx + 1, id: `recipient.${lastRecipientIdx + 1}` },
+      {
+        ...getInitialRecipient(PHYSICAL_ADDRESS_LOOKUP),
+        idx: lastRecipientIdx + 1,
+        id: `recipient.${lastRecipientIdx + 1}`,
+      },
     ]);
   };
 
@@ -276,14 +293,17 @@ const Recipient: React.FC<Props> = ({
 
   const physicalAddressLookupChange = (
     event: ChangeEvent<HTMLInputElement>,
-    oldValue: NewNotificationRecipient,
+    oldRecipient: NewNotificationRecipient,
     recipientField: string,
     setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
   ) => {
+    if (PHYSICAL_ADDRESS_LOOKUP !== PhysicalAddressLookupConfig.ON) {
+      return;
+    }
     setFieldValue(
       recipientField,
       {
-        ...oldValue,
+        ...oldRecipient,
         ...initialPhysicalAddress,
         physicalAddressLookup: event.target.value,
       },
@@ -443,34 +463,44 @@ const Recipient: React.FC<Props> = ({
                       sx={{ mt: 4 }}
                     >
                       <FormBoxTitle text={t('address')} />
-                      <FormBoxSubtitle text={t('address-subtitle')} />
-                    </FormLabel>
-                    <RadioGroup
-                      aria-labelledby={`recipients[${index}].physicalAddressLabel`}
-                      name={`recipients[${index}].physicalAddressLookup`}
-                      value={values.recipients[index].physicalAddressLookup}
-                      onChange={(e) =>
-                        physicalAddressLookupChange(
-                          e,
-                          values.recipients[index],
-                          `recipients[${index}]`,
-                          setFieldValue
+                      {
+                        PHYSICAL_ADDRESS_LOOKUP !== PhysicalAddressLookupConfig.OFF && (
+                          <FormBoxSubtitle text={t('address-subtitle')} />
                         )
                       }
-                    >
-                      <FormControlLabel
-                        value={PhysicalAddressLookup.NATIONAL_REGISTRY}
-                        control={<Radio />}
-                        label={t('address-physical-lookup-radios.national-registry')}
-                        data-testid={`physicalAddressLookupRadio.${index}`}
-                      />
-                      <FormControlLabel
-                        value={PhysicalAddressLookup.MANUAL}
-                        control={<Radio />}
-                        label={t('address-physical-lookup-radios.manual')}
-                        data-testid={`physicalAddressLookupRadio.${index}`}
-                      />
-                    </RadioGroup>
+                    </FormLabel>
+                    <Alert severity="error">
+                      {t('address-physical-lookup-down')}
+                    </Alert>
+                    {PHYSICAL_ADDRESS_LOOKUP !== PhysicalAddressLookupConfig.OFF && (
+                      <RadioGroup
+                        aria-labelledby={`recipients[${index}].physicalAddressLabel`}
+                        name={`recipients[${index}].physicalAddressLookup`}
+                        value={values.recipients[index].physicalAddressLookup}
+                        onChange={(e) =>
+                          physicalAddressLookupChange(
+                            e,
+                            values.recipients[index],
+                            `recipients[${index}]`,
+                            setFieldValue
+                          )
+                        }
+                      >
+                        <FormControlLabel
+                          disabled={PHYSICAL_ADDRESS_LOOKUP !== PhysicalAddressLookupConfig.ON}
+                          value={PhysicalAddressLookup.NATIONAL_REGISTRY}
+                          control={<Radio />}
+                          label={t('address-physical-lookup-radios.national-registry')}
+                          data-testid={`physicalAddressLookupRadio.${index}`}
+                        />
+                        <FormControlLabel
+                          value={PhysicalAddressLookup.MANUAL}
+                          control={<Radio />}
+                          label={t('address-physical-lookup-radios.manual')}
+                          data-testid={`physicalAddressLookupRadio.${index}`}
+                        />
+                      </RadioGroup>
+                    )}
                   </FormControl>
 
                   {values.recipients[index].physicalAddressLookup ===
