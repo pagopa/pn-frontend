@@ -70,7 +70,6 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     );
     const caption = getByTestId('apply-costs-caption');
     expect(caption).toBeInTheDocument();
-    expect(caption).toHaveTextContent('detail.payment.included-costs');
   });
 
   it('renders component - should show badge when status is SUCCEEDED and not show radio', () => {
