@@ -154,6 +154,10 @@
     "invalid_verification_code": {
       "title": "Il codice è sbagliato",
       "message": "Controllalo e inseriscilo di nuovo"
+    },
+    "fiscal_code": {
+      "title": "Codice fiscale non valido",
+      "message": "Il codice fiscale inserito non è valido"
     }
   }
 }

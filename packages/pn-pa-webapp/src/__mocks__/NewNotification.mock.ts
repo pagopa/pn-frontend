@@ -16,6 +16,7 @@ import {
   NewNotificationPagoPaPayment,
   NewNotificationRecipient,
   NotificationFeePolicy,
+  PagoPaIntegrationMode,
   PaymentModel,
 } from '../models/NewNotification';
 import { UserGroup } from '../models/user';
@@ -40,75 +41,79 @@ export const newNotificationGroups: Array<UserGroup> = [
   },
 ];
 
-const newNotificationPagoPa: NewNotificationPagoPaPayment = {
+export const newNotificationPagoPa = (paymentIndex: number): NewNotificationPagoPaPayment => ({
   id: 'mocked-pagopa-id',
-  idx: 0,
+  idx: paymentIndex,
   contentType: 'application/pdf',
-  creditorTaxId: 'mocked-creditor-taxid',
-  noticeCode: 'mocked-noticecode',
+  creditorTaxId: '77777777777',
+  noticeCode: `30201012446360092${paymentIndex}`,
   applyCost: true,
   file: {
-    data: new File([''], 'mocked-name', { type: 'application/pdf' }),
+    data: new File([`mocked-pagopa-file-${paymentIndex}`], 'mocked-name', {
+      type: 'application/pdf',
+    }),
     sha256: {
-      hashBase64: 'mocked-pa-sha256',
-      hashHex: '',
+      hashBase64: `mocked-pa-sha256-${paymentIndex}`,
+      hashHex: `mocked-pa-sha256-hex-${paymentIndex}`,
     },
   },
   ref: {
-    key: '',
-    versionToken: '',
+    key: `mocked-pagopa-key-${0}`,
+    versionToken: `mocked-pagopa-versionToken-${0}`,
   },
-};
+});
 
-const newNotificationPagoPaForBff: PagoPaPayment = {
-  creditorTaxId: 'mocked-creditor-taxid',
-  noticeCode: 'mocked-noticecode',
+const newNotificationPagoPaForBff = (paymentIndex: number): PagoPaPayment => ({
+  creditorTaxId: '77777777777',
+  noticeCode: `30201012446360092${paymentIndex}`,
   applyCost: true,
   attachment: {
     contentType: 'application/pdf',
     digests: {
-      sha256: 'mocked-pa-sha256',
+      sha256: `mocked-pa-sha256-${paymentIndex}`,
     },
     ref: {
-      key: '',
-      versionToken: '',
+      key: `mocked-pagopa-key-${0}`,
+      versionToken: `mocked-pagopa-versionToken-${0}`,
     },
   },
-};
+});
 
-const newNotificationF24: NewNotificationF24Payment = {
+export const newNotificationF24 = (paymentIndex: number): NewNotificationF24Payment => ({
   id: 'mocked-f24-id',
   idx: 0,
   name: 'mocked-name',
   contentType: 'application/json',
   applyCost: false,
   file: {
-    data: new File([''], 'mocked-name', { type: 'application/json' }),
+    data: new File([`mocked-pagopa-f24-${paymentIndex}`], 'mocked-name', {
+      type: 'application/json',
+    }),
     sha256: {
-      hashBase64: 'mocked-f24-sha256',
-      hashHex: '',
+      hashBase64: `mocked-f24-sha256-${paymentIndex}`,
+      hashHex: `mocked-f24-sha256-hex-${paymentIndex}`,
     },
   },
   ref: {
-    key: '',
-    versionToken: '',
+    key: `mocked-f24-key-${0}`,
+    versionToken: `mocked-f24-versionToken-${0}`,
   },
-};
+});
 
-const newNotificationF24ForBff: F24Payment = {
+const newNotificationF24ForBff = (paymentIndex: number): F24Payment => ({
   title: 'mocked-name',
   applyCost: false,
   metadataAttachment: {
     contentType: 'application/json',
     digests: {
-      sha256: 'mocked-f24-sha256',
+      sha256: `mocked-f24-sha256-${paymentIndex}`,
     },
     ref: {
-      key: '',
-      versionToken: '',
+      key: `mocked-f24-key-${0}`,
+      versionToken: `mocked-f24-versionToken-${0}`,
     },
   },
-};
+});
 
 export const newNotificationRecipients: Array<NewNotificationRecipient> = [
   {
@@ -130,7 +135,7 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
     foreignState: 'Italia',
     payments: [
       {
-        pagoPa: { ...newNotificationPagoPa },
+        pagoPa: { ...newNotificationPagoPa(0) },
       },
     ],
     debtPosition: PaymentModel.PAGO_PA,
@@ -154,13 +159,37 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
     foreignState: 'Italia',
     payments: [
       {
-        pagoPa: { ...newNotificationPagoPa },
+        pagoPa: { ...newNotificationPagoPa(1) },
       },
       {
-        f24: { ...newNotificationF24 },
+        f24: { ...newNotificationF24(1) },
       },
     ],
     debtPosition: PaymentModel.PAGO_PA_F24,
+  },
+  {
+    id: 'recipient.2',
+    idx: 2,
+    taxId: 'LVLDAA85T50G702B',
+    firstName: 'Ada',
+    lastName: 'Lovelace',
+    recipientType: RecipientType.PF,
+    type: NewNotificationDigitalAddressType.PEC,
+    digitalDomicile: 'ada@pec.it',
+    address: 'Via Roma',
+    addressDetails: '',
+    houseNumber: '2',
+    zip: '90121',
+    municipality: 'Palermo',
+    municipalityDetails: '',
+    province: 'PA',
+    foreignState: 'Italia',
+    payments: [
+      {
+        f24: { ...newNotificationF24(2) },
+      },
+    ],
+    debtPosition: PaymentModel.F24,
   },
 ];
 
@@ -182,7 +211,7 @@ const newNotificationRecipientsForBff: Array<NotificationRecipientV23> = [
     },
     payments: [
       {
-        pagoPa: newNotificationPagoPaForBff,
+        pagoPa: newNotificationPagoPaForBff(0),
       },
     ],
   },
@@ -199,10 +228,31 @@ const newNotificationRecipientsForBff: Array<NotificationRecipientV23> = [
     },
     payments: [
       {
-        pagoPa: { ...newNotificationPagoPaForBff },
+        pagoPa: { ...newNotificationPagoPaForBff(1) },
       },
       {
-        f24: { ...newNotificationF24ForBff },
+        f24: { ...newNotificationF24ForBff(1) },
+      },
+    ],
+  },
+  {
+    taxId: 'LVLDAA85T50G702B',
+    denomination: 'Ada Lovelace',
+    recipientType: RecipientType.PF,
+    digitalDomicile: {
+      type: NotificationDigitalAddressTypeEnum.Pec,
+      address: 'ada@pec.it',
+    },
+    physicalAddress: {
+      address: 'Via Roma 2',
+      zip: '90121',
+      municipality: 'Palermo',
+      province: 'PA',
+      foreignState: 'Italia',
+    },
+    payments: [
+      {
+        f24: { ...newNotificationF24ForBff(2) },
       },
     ],
   },
@@ -276,11 +326,14 @@ const newNotificationDocumentsForBff: Array<NotificationDocument> = [
 
 export const payments = {
   [newNotificationRecipients[0].taxId]: {
-    pagoPa: { ...newNotificationPagoPa },
+    pagoPa: { ...newNotificationPagoPa(0) },
   },
   [newNotificationRecipients[1].taxId]: {
-    pagoPa: { ...newNotificationPagoPa },
-    f24: { ...newNotificationF24 },
+    pagoPa: { ...newNotificationPagoPa(1) },
+    f24: { ...newNotificationF24(1) },
+  },
+  [newNotificationRecipients[2].taxId]: {
+    f24: { ...newNotificationF24(2) },
   },
 };
 
@@ -296,6 +349,7 @@ export const newNotification: NewNotification = {
   notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
   senderDenomination: userResponse.organization.name,
   senderTaxId: userResponse.organization.fiscal_code,
+  pagoPaIntMode: PagoPaIntegrationMode.SYNC,
   lang: 'it',
   additionalLang: '',
   additionalSubject: '',
@@ -310,13 +364,12 @@ export const newNotificationEmpty: NewNotification = {
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
   group: '',
   taxonomyCode: '',
-  senderTaxId: '',
+  senderTaxId: userResponse.organization.fiscal_code,
   notificationFeePolicy: '' as NotificationFeePolicy,
   senderDenomination: userResponse.organization.name,
 };
 
 export const newNotificationForBff: BffNewNotificationRequest = {
-  abstract: '',
   paProtocolNumber: '12345678910',
   subject: 'Multone esagerato',
   recipients: newNotificationRecipientsForBff,
@@ -327,4 +380,5 @@ export const newNotificationForBff: BffNewNotificationRequest = {
   notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
   senderDenomination: userResponse.organization.name,
   senderTaxId: userResponse.organization.fiscal_code,
+  pagoPaIntMode: PagoPaIntegrationMode.SYNC,
 };
