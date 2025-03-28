@@ -190,22 +190,9 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
             {getLocalizedOrDefaultLabel('notifications', 'detail.payment.pay-with-f24')}
           </Typography>
         ) : (
-          <>
-            <Typography variant="sidenav" color="text.primary" sx={{ overflowWrap: 'anywhere' }}>
-              {f24Item.title}
-            </Typography>
-            {f24Item.applyCost && (
-              <Typography
-                fontSize="0.625rem"
-                fontWeight="600"
-                lineHeight="0.875rem"
-                color="text.secondary"
-                data-testid="f24-apply-costs-caption"
-              >
-                {getLocalizedOrDefaultLabel('notifications', 'detail.payment.included-costs')}
-              </Typography>
-            )}
-          </>
+          <Typography variant="sidenav" color="text.primary" sx={{ overflowWrap: 'anywhere' }}>
+            {f24Item.title}
+          </Typography>
         )}
         {maxTimeError && (
           <Stack
