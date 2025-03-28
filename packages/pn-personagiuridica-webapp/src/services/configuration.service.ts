@@ -22,6 +22,7 @@ export interface PgConfiguration {
   DOWNTIME_EXAMPLE_LINK: string;
   SELFCARE_BASE_URL: string;
   IS_DOD_ENABLED: boolean;
+  SELFCARE_CDN_URL: string;
 }
 
 class PgConfigurationValidator extends Validator<PgConfiguration> {
@@ -53,6 +54,7 @@ class PgConfigurationValidator extends Validator<PgConfiguration> {
     this.ruleFor('DOWNTIME_EXAMPLE_LINK').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('SELFCARE_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('IS_DOD_ENABLED').isBoolean();
+    this.ruleFor('SELFCARE_CDN_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
   }
 }
 
