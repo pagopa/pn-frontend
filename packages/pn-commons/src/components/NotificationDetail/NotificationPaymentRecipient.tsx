@@ -40,7 +40,12 @@ type Props = {
     unwrap: () => Promise<PaymentAttachment>;
   };
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
-  onPayTppClick?: (noticeCode?: string, creditorTaxId?: string, retrievalId?: string, tppName?: string) => void;
+  onPayTppClick?: (
+    noticeCode?: string,
+    creditorTaxId?: string,
+    retrievalId?: string,
+    tppName?: string
+  ) => void;
   handleTrackEvent?: (event: EventPaymentRecipientType, param?: object) => void;
   handleFetchPaymentsInfo: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
 };
@@ -150,7 +155,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           selectedPayment?.pagoPa?.noticeCode,
           selectedPayment?.pagoPa?.creditorTaxId,
           paymentTpp?.retrievalId,
-          paymentTpp?.paymentButton,
+          paymentTpp?.paymentButton
         );
         return;
       }

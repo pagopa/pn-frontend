@@ -47,7 +47,7 @@ const NotificationPaymentTitle: React.FC<Props> = ({
       );
     }
 
-    if (pagoPaF24.length === 1) {
+    if (pagoPaF24.length === 1 || f24Only.length === 1) {
       return (
         <>
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.single-payment-subtitle')}
