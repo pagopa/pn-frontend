@@ -463,15 +463,19 @@ const Recipient: React.FC<Props> = ({
                       sx={{ mt: 4 }}
                     >
                       <FormBoxTitle text={t('address')} />
-                      {
-                        PHYSICAL_ADDRESS_LOOKUP !== PhysicalAddressLookupConfig.OFF && (
-                          <FormBoxSubtitle text={t('address-subtitle')} />
-                        )
-                      }
+                      {PHYSICAL_ADDRESS_LOOKUP !== PhysicalAddressLookupConfig.OFF && (
+                        <FormBoxSubtitle text={t('address-subtitle')} />
+                      )}
                     </FormLabel>
-                    <Alert severity="error" sx={{ mb: 2 }}>
-                      {t('address-physical-lookup-down')}
-                    </Alert>
+                    {PHYSICAL_ADDRESS_LOOKUP === PhysicalAddressLookupConfig.DOWN && (
+                      <Alert
+                        severity="error"
+                        sx={{ mb: 2 }}
+                        data-testid="alert-physicalAddressLookupDown"
+                      >
+                        {t('address-physical-lookup-down')}
+                      </Alert>
+                    )}
                     {PHYSICAL_ADDRESS_LOOKUP !== PhysicalAddressLookupConfig.OFF && (
                       <RadioGroup
                         aria-labelledby={`recipients[${index}].physicalAddressLabel`}
@@ -487,7 +491,7 @@ const Recipient: React.FC<Props> = ({
                         }
                       >
                         <FormControlLabel
-                          disabled={PHYSICAL_ADDRESS_LOOKUP !== PhysicalAddressLookupConfig.ON}
+                          disabled={PHYSICAL_ADDRESS_LOOKUP === PhysicalAddressLookupConfig.DOWN}
                           value={PhysicalAddressLookup.NATIONAL_REGISTRY}
                           control={<Radio />}
                           label={t('address-physical-lookup-radios.national-registry')}
