@@ -39,6 +39,7 @@ beforeAll(async () => {
     WORK_IN_PROGRESS: false,
     F24_DOWNLOAD_WAIT_TIME: 0,
     DOWNTIME_EXAMPLE_LINK: 'https://www.example.com',
+    SELFCARE_CDN_URL: 'https://cdn.selfcare.pagopa.it',
   });
   initStore(false);
   initAxiosClients();
