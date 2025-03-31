@@ -13,11 +13,13 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
-import { PFLoginEventsType } from '../../models/PFLoginEventsType';
+import sendLogo from '../../assets/send.svg';
 import { useRapidAccessParam } from '../../hooks/useRapidAccessParam';
+import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 import { storageRapidAccessOps } from '../../utility/storage';
+import IOSmartAppBanner from './IoSmartAppBanner';
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -84,14 +86,21 @@ const Login = () => {
         email: undefined,
       }}
       privacyPolicyHref={privacyPolicyUrl}
+      slotsProps={isMobile ? { container: { minHeight: '100dvh' } } : undefined}
+      slots={{
+        preHeader: isMobile ? IOSmartAppBanner : undefined,
+      }}
     >
       <Grid container direction="column" my={isMobile ? 4 : 16} alignItems="center" id="loginPage">
+        <Grid item mb={3}>
+          <img src={sendLogo} alt="" aria-hidden />
+        </Grid>
         <Grid item>
           <Typography
             id="login-mode-page-title"
-            variant="h3"
+            variant="h5"
             component="h1"
-            px={0}
+            px={3}
             color="textPrimary"
             sx={{
               textAlign: 'center',

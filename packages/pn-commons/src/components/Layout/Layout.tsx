@@ -1,7 +1,7 @@
-import { ErrorInfo, ReactNode } from 'react';
+import { ErrorInfo, JSXElementConstructor, ReactNode } from 'react';
 
-import { Stack } from '@mui/material';
-import { Box } from '@mui/system';
+import { BoxProps, Stack } from '@mui/material';
+import { Box, BoxOwnProps } from '@mui/system';
 import { JwtUser, PartyEntity, ProductEntity, UserAction } from '@pagopa/mui-italia';
 
 import ErrorBoundary from '../ErrorBoundary';
@@ -55,6 +55,12 @@ type Props = {
   termsOfServiceHref?: string;
   /** Enable assistance button */
   enableAssistanceButton?: boolean;
+  slots?: {
+    preHeader?: JSXElementConstructor<BoxProps>;
+  };
+  slotsProps?: {
+    container?: Partial<BoxOwnProps>;
+  };
 };
 
 const Layout: React.FC<Props> = ({
@@ -82,66 +88,75 @@ const Layout: React.FC<Props> = ({
   privacyPolicyHref,
   termsOfServiceHref,
   enableAssistanceButton = true,
-}) => (
-  <ErrorBoundary
-    sx={{ height: 'calc(100vh - 5px)' }}
-    eventTrackingCallback={eventTrackingCallbackAppCrash}
-    eventTrackingCallbackRefreshPage={eventTrackingCallbackRefreshPage}
-  >
-    {/* calc fixes the layout discrepancy given by the version box */}
-    <Stack
-      direction="column"
-      sx={{ minHeight: 'calc(100vh - 5px)' }} // 100vh per sticky footer
+  slots,
+  slotsProps,
+}) => {
+  const PreHeader = slots?.preHeader;
+
+  return (
+    <ErrorBoundary
+      sx={{ height: 'calc(100vh - 5px)' }}
+      eventTrackingCallback={eventTrackingCallbackAppCrash}
+      eventTrackingCallbackRefreshPage={eventTrackingCallbackRefreshPage}
     >
-      <>
-        {showHeader && (
-          <Header
-            onExitAction={onExitAction}
-            productsList={productsList}
-            showHeaderProduct={showHeaderProduct}
-            productId={productId}
-            partyId={partyId}
-            partyList={partyList}
-            loggedUser={loggedUser}
-            enableDropdown={enableUserDropdown}
-            userActions={userActions}
-            onAssistanceClick={onAssistanceClick}
-            isLogged={isLogged}
-            enableAssistanceButton={enableAssistanceButton}
-          />
-        )}
-        <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
-          {showSideMenu && (
-            <Box
-              sx={{ width: { lg: 300 }, flexShrink: '0' }}
-              component="nav"
-              data-testid="side-menu"
-            >
-              {sideMenu}
-            </Box>
-          )}
-          <Box
-            sx={{ flexGrow: 1, flexBasis: { xs: 1, lg: 'auto' }, position: 'relative' }}
-            component="main"
-          >
-            <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
-              {children}
-            </ErrorBoundary>
+      {/* calc fixes the layout discrepancy given by the version box */}
+      <Stack
+        direction="column"
+        sx={{ minHeight: 'calc(100vh - 5px)' }} // 100vh per sticky footer
+      >
+        <>
+          <Box flexGrow={1} sx={{ ...slotsProps?.container }}>
+            {PreHeader && <PreHeader />}
+            {showHeader && (
+              <Header
+                onExitAction={onExitAction}
+                productsList={productsList}
+                showHeaderProduct={showHeaderProduct}
+                productId={productId}
+                partyId={partyId}
+                partyList={partyList}
+                loggedUser={loggedUser}
+                enableDropdown={enableUserDropdown}
+                userActions={userActions}
+                onAssistanceClick={onAssistanceClick}
+                isLogged={isLogged}
+                enableAssistanceButton={enableAssistanceButton}
+              />
+            )}
+            <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
+              {showSideMenu && (
+                <Box
+                  sx={{ width: { lg: 300 }, flexShrink: '0' }}
+                  component="nav"
+                  data-testid="side-menu"
+                >
+                  {sideMenu}
+                </Box>
+              )}
+              <Box
+                sx={{ flexGrow: 1, flexBasis: { xs: 1, lg: 'auto' }, position: 'relative' }}
+                component="main"
+              >
+                <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
+                  {children}
+                </ErrorBoundary>
+              </Box>
+            </Stack>
           </Box>
-        </Stack>
-        {showFooter && (
-          <Footer
-            currentLanguage={currentLanguage}
-            onLanguageChanged={onLanguageChanged}
-            loggedUser={loggedUser.id !== ''}
-            hasTermsOfService={hasTermsOfService}
-            privacyPolicyHref={privacyPolicyHref}
-            termsOfServiceHref={termsOfServiceHref}
-          />
-        )}
-      </>
-    </Stack>
-  </ErrorBoundary>
-);
+          {showFooter && (
+            <Footer
+              currentLanguage={currentLanguage}
+              onLanguageChanged={onLanguageChanged}
+              loggedUser={loggedUser.id !== ''}
+              hasTermsOfService={hasTermsOfService}
+              privacyPolicyHref={privacyPolicyHref}
+              termsOfServiceHref={termsOfServiceHref}
+            />
+          )}
+        </>
+      </Stack>
+    </ErrorBoundary>
+  );
+};
 
 export default Layout;
