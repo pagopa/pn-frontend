@@ -50,7 +50,7 @@ export const partyList = [
     id: '1',
     name: 'Party 2',
     productRole: 'Role 2',
-    logoUrl: 'https://mocked-logo-url1.com',
+    logoUrl: 'https://mocked-logo-url2.com',
     parentName: 'Root Party 2',
     entityUrl: 'www.party2.com',
   },
