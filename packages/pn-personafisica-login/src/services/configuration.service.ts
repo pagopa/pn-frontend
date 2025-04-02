@@ -10,6 +10,9 @@ export interface LoginConfiguration {
   SPID_VALIDATOR_ENV_ENABLED?: boolean;
   SPID_CIE_ENTITY_ID: string;
   URL_API_LOGIN: string;
+  APP_IO_SITE: string;
+  APP_IO_ANDROID: string;
+  APP_IO_IOS: string;
 }
 
 class LoginConfigurationValidator extends Validator<LoginConfiguration> {
