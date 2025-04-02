@@ -215,7 +215,8 @@ class RepositoryHelper {
     for (const change of changesToCommit) {
       body += `- Updated ${change.path}\n`;
     }
-    body += "\n## How to test\n\nCheck that tests runs correctly";
+    body +=
+      "\n## How to test\n\n- Run a `sudo yarn generate` command for each package\n\n- Check that tests runs correctly";
     return body;
   }
 
@@ -268,19 +269,16 @@ class RepositoryHelper {
       await this.#updatePullRequest(pullRequest.number, changesToCommit);
       return;
     }
-    core.info(
-      `Creating pull request ${this.#getPullRequestBodyString(changesToCommit)}`
-    );
     try {
       const baseBranchName = core.getInput("ref", { required: true });
-      // await this.#octokit.rest.pulls.create({
-      //   owner: github.context.repo.owner,
-      //   repo: github.context.repo.repo,
-      //   title: "[GitBot] - Update pn-bff dependency",
-      //   body: this.#getPullRequestBodyString(changesToCommit),
-      //   head: branchName,
-      //   base: baseBranchName,
-      // });
+      await this.#octokit.rest.pulls.create({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        title: "[GitBot] - Update pn-bff dependency",
+        body: this.#getPullRequestBodyString(changesToCommit),
+        head: branchName,
+        base: baseBranchName,
+      });
       core.info(`Pull request created`);
     } catch (error) {
       throw new Error(`Error during pull request creation: ${error}`);

@@ -16,15 +16,20 @@ async function run() {
   const fileHelper = new FileHelper(repositoryHelper);
 
   try {
+    const updatedFiles = [];
     const bffVersion = await repositoryHelper.getLastTag("pn-bff");
     const pnFrontendVersion = await repositoryHelper.getLernaVersion();
     const branchName = `${BRANCH_NAME_ROOT}-${pnFrontendVersion}`;
     await repositoryHelper.createBranch(branchName);
 
-    const filePromises = DIRECTORY_TO_UPLOAD.map((directory) =>
-      fileHelper.updateOpenApiToolsFile(branchName, directory, bffVersion)
-    );
-    const updatedFiles = (await Promise.all(filePromises)).flat();
+    for (const directory of DIRECTORY_TO_UPLOAD) {
+      const result = await fileHelper.updateOpenApiToolsFile(
+        branchName,
+        directory,
+        bffVersion
+      );
+      updatedFiles.push(...result);
+    }
 
     await repositoryHelper.commitChanges(branchName, updatedFiles);
     await repositoryHelper.createPullRequest(branchName, updatedFiles);

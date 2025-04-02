@@ -19,6 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: "develop"
           fetch-depth: 0
 
       - name: Setup Git Config
@@ -27,10 +28,10 @@ jobs:
           git config user.email "<>"
 
       - name: Install Packages
-        run: cd .github/workflows/update-bff-dependency && npm install
+        run: cd .github/workflows/actions/update-dependency && npm install
 
       - name: Update BFF Dependency
-        uses: ./.github/workflows/update-bff-dependency
+        uses: ./.github/workflows/actions/update-dependency
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: "develop"

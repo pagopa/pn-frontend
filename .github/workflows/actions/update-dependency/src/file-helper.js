@@ -26,6 +26,7 @@ class FileHelper {
       const generators = parsedContent["generator-cli"].generators;
       for (const [generatorName, generator] of Object.entries(generators)) {
         const inputSpecUrl = generator.inputSpec;
+
         const urlParts = inputSpecUrl.split("/");
         const currentCommitId = urlParts[5];
 
