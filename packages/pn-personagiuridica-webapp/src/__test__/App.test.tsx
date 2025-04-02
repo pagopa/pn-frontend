@@ -11,8 +11,8 @@ import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { apiClient } from '../api/apiClients';
 import { DelegationStatus } from '../models/Deleghe';
-import { SELFCARE_LOGOUT } from '../navigation/routes.const';
 import { PNRole, PartyRole } from '../models/User';
+import { SELFCARE_LOGOUT } from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
 import { RenderResult, act, render } from './test-utils';
 
@@ -104,6 +104,13 @@ describe('App', async () => {
     });
     const header = document.querySelector('header');
     expect(header).toBeInTheDocument();
+    const logo = header?.querySelector('img');
+    const organizationId = reduxInitialState.userState.user.organization.id;
+    expect(logo).toBeInTheDocument();
+    expect(logo).toHaveAttribute(
+      'src',
+      `${getConfiguration().SELFCARE_CDN_URL}/institutions/${organizationId}/logo.png`
+    );
     const footer = document.querySelector('footer');
     expect(footer).toBeInTheDocument();
     const sideMenu = result!.queryByTestId('side-menu');
