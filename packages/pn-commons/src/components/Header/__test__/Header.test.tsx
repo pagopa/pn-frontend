@@ -240,6 +240,9 @@ describe('Header Component', () => {
     const headers = container.querySelectorAll('.MuiContainer-root');
     expect(headers[1]).toHaveTextContent(partyList[0].name);
     expect(headers[1]).toHaveTextContent(partyList[0].productRole);
+    const logo = headers[1].querySelector('img');
+    expect(logo).toBeInTheDocument();
+    expect(logo).toHaveAttribute('src', partyList[0].logoUrl);
     const buttons = headers[1].querySelectorAll('[role="button"]');
     expect(buttons).toHaveLength(1);
   });

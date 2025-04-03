@@ -31,7 +31,7 @@ beforeAll(async () => {
     MIXPANEL_TOKEN: 'DUMMY',
     SELFCARE_BASE_URL: 'https://test.selfcare.pagopa.it',
     DELEGATIONS_TO_PG_ENABLED: true,
-    LANDING_SITE_URL: 'https://www.dev.notifichedigitali.it',
+    LANDING_SITE_URL: 'https://www.notifichedigitali.it',
     IS_DOD_ENABLED: true,
     IS_B2B_ENABLED: true,
     ONE_TRUST_MASSIVI_DRAFT_MODE: false,
@@ -39,6 +39,7 @@ beforeAll(async () => {
     WORK_IN_PROGRESS: false,
     F24_DOWNLOAD_WAIT_TIME: 0,
     DOWNTIME_EXAMPLE_LINK: 'https://www.example.com',
+    SELFCARE_CDN_URL: 'https://cdn.selfcare.pagopa.it',
   });
   initStore(false);
   initAxiosClients();
