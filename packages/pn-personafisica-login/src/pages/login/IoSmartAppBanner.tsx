@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { Avatar, Box, Button, Stack, StackProps, Typography } from '@mui/material';
+import { Avatar, Link, Stack, StackProps, Typography } from '@mui/material';
 import { IllusAppIoLogo, useMobileOS } from '@pagopa-pn/pn-commons';
 
 import { getConfiguration } from '../../services/configuration.service';
@@ -21,17 +21,6 @@ const IOSmartAppBanner: React.FC<StackProps> = (props) => {
     }
   };
 
-  const redirectToIoWebsite = () => window.location.assign(APP_IO_SITE);
-
-  const handleOpenClick = () => {
-    window.location.assign(getActionUrl());
-
-    // fallback, in case of url unregistered schema
-    setTimeout(() => {
-      redirectToIoWebsite();
-    }, 2000);
-  };
-
   return (
     <Stack id="ioSmartAppBanner" direction="row" alignItems="center" p={2} {...props}>
       <Avatar variant="rounded" sx={{ bgcolor: '#0B3EE3', width: '30px', height: '30px' }}>
@@ -45,17 +34,28 @@ const IOSmartAppBanner: React.FC<StackProps> = (props) => {
           {t('ioSmartAppBanner.subtitle')}
         </Typography>
       </Stack>
-      <Box sx={{ ml: 'auto' }}>
-        <Button
-          id="ioSmartAppBannerAction"
-          variant="contained"
-          color="primary"
-          sx={{ height: '30px', width: '100px', borderRadius: '33px' }}
-          onClick={handleOpenClick}
-        >
-          {t('ioSmartAppBanner.cta')}
-        </Button>
-      </Box>
+      {/* <Box sx={{ ml: 'auto' }}> */}
+      <Link
+        ml="auto"
+        href={getActionUrl()}
+        fontWeight={600}
+        fontSize="16px"
+        sx={{
+          cursor: 'pointer',
+          display: 'inline-block',
+          width: '100px',
+          height: '30px',
+          textAlign: 'center',
+          alignContent: 'center',
+          color: 'white',
+          backgroundColor: '#0073E6',
+          padding: '24px 8px',
+          borderRadius: '33px',
+          textDecoration: 'none',
+        }}
+      >
+        {t('ioSmartAppBanner.cta')}
+      </Link>
     </Stack>
   );
 };
