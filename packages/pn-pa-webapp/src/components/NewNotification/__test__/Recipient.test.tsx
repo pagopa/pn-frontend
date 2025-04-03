@@ -1,6 +1,7 @@
 import { vi } from 'vitest';
 
 import { PhysicalAddressLookup, RecipientType } from '@pagopa-pn/pn-commons';
+import { Configuration } from '@pagopa-pn/pn-commons';
 import { testFormElements, testInput, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { newNotification } from '../../../__mocks__/NewNotification.mock';
@@ -14,7 +15,11 @@ import {
   waitFor,
   within,
 } from '../../../__test__/test-utils';
-import { NewNotificationRecipient } from '../../../models/NewNotification';
+import {
+  NewNotificationRecipient,
+  PhysicalAddressLookupConfig,
+} from '../../../models/NewNotification';
+import { PaConfiguration } from '../../../services/configuration.service';
 import Recipient from '../Recipient';
 
 const testRecipientFormRendering = async (
@@ -118,6 +123,8 @@ const populateForm = async (
   recipientIndex: number,
   recipient: NewNotificationRecipient
 ) => {
+  const configPhysicalAddressLookup = Configuration.get<PaConfiguration>().PHYSICAL_ADDRESS_LOOKUP;
+
   // if pg select the right radio button
   if (recipient.recipientType === RecipientType.PG) {
     await testRadio(
@@ -134,16 +141,21 @@ const populateForm = async (
   }
   await testInput(form, `recipients[${recipientIndex}].taxId`, recipient.taxId);
 
-  await testRadio(
-    form,
-    `physicalAddressLookupRadio.${recipientIndex}`,
-    ['address-physical-lookup-radios.national-registry', 'address-physical-lookup-radios.manual'],
-    recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL ? 1 : 0,
-    true
-  );
+  if (configPhysicalAddressLookup !== PhysicalAddressLookupConfig.OFF) {
+    await testRadio(
+      form,
+      `physicalAddressLookupRadio.${recipientIndex}`,
+      ['address-physical-lookup-radios.national-registry', 'address-physical-lookup-radios.manual'],
+      recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL ? 1 : 0,
+      true
+    );
+  }
 
   // show physical address form
-  if (recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL) {
+  if (
+    configPhysicalAddressLookup !== PhysicalAddressLookupConfig.OFF &&
+    recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL
+  ) {
     await testInput(form, `recipients[${recipientIndex}].address`, recipient.address);
     await testInput(form, `recipients[${recipientIndex}].houseNumber`, recipient.houseNumber);
     await testInput(form, `recipients[${recipientIndex}].municipality`, recipient.municipality);
@@ -478,5 +490,52 @@ describe('Recipient Component without payment enabled', async () => {
       ]);
     });
     expect(confirmHandlerMk).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('Feature flag for physical address lookup', async () => {
+  let result: RenderResult;
+
+  it('FF is off', async () => {
+    Configuration.setForTest<PaConfiguration>({
+      ...Configuration.get(),
+      PHYSICAL_ADDRESS_LOOKUP: PhysicalAddressLookupConfig.OFF,
+    });
+
+    await act(async () => {
+      result = render(<Recipient onConfirm={() => {}} />);
+    });
+
+    const form = result.getByTestId('recipientForm') as HTMLFormElement;
+    await populateForm(form, 0, newNotification.recipients[0]);
+
+    const physicalForm = within(form).queryByTestId(`physicalAddressForm0`);
+    expect(physicalForm).toBeInTheDocument();
+
+    const alert = within(form).queryByTestId(`alert-physicalAddressLookupDown`);
+    expect(alert).not.toBeInTheDocument();
+  });
+
+  it('FF is down', async () => {
+    Configuration.setForTest<PaConfiguration>({
+      ...Configuration.get(),
+      PHYSICAL_ADDRESS_LOOKUP: PhysicalAddressLookupConfig.DOWN,
+    });
+
+    await act(async () => {
+      result = render(<Recipient onConfirm={() => {}} />);
+    });
+
+    const form = result.getByTestId('recipientForm') as HTMLFormElement;
+    await populateForm(form, 0, newNotification.recipients[0]);
+
+    const physicalForm = within(form).queryByTestId(`physicalAddressForm0`);
+    expect(physicalForm).toBeInTheDocument();
+
+    const radioNR = within(form).getByLabelText('address-physical-lookup-radios.national-registry');
+    expect(radioNR).toBeDisabled();
+
+    const alert = within(form).getByTestId('alert-physicalAddressLookupDown');
+    expect(alert).toBeInTheDocument();
   });
 });

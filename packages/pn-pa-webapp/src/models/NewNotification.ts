@@ -170,3 +170,9 @@ export const BILINGUALISM_LANGUAGES = ['de', 'sl', 'fr'];
 export const NewNotificationLangOther = 'other';
 
 export const VAT = [4, 5, 10, 22];
+
+export enum PhysicalAddressLookupConfig {
+  ON = 'on',
+  OFF = 'off',
+  DOWN = 'down',
+}
