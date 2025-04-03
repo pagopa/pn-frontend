@@ -9,7 +9,7 @@ type Props = {
   pagoPaF24: Array<PaymentDetails>;
   f24Only: Array<F24PaymentDetails>;
   allPaymentsIsPaid: boolean;
-  hasMoreThenOnePage: boolean;
+  hasMoreThanOnePage: boolean;
 };
 
 const NotificationPaymentTitle: React.FC<Props> = ({
@@ -18,7 +18,7 @@ const NotificationPaymentTitle: React.FC<Props> = ({
   pagoPaF24,
   f24Only,
   allPaymentsIsPaid,
-  hasMoreThenOnePage,
+  hasMoreThanOnePage,
 }) => {
   const FAQ_NOTIFICATION_COSTS = '/faq#costi-di-notifica';
   const notificationCostsFaqLink = `${landingSiteUrl}${FAQ_NOTIFICATION_COSTS}`;
@@ -35,10 +35,8 @@ const NotificationPaymentTitle: React.FC<Props> = ({
       {getLocalizedOrDefaultLabel('notifications', 'detail.payment.how')}
     </Link>
   );
-  console.log('paid ', allPaymentsIsPaid);
-  console.log('more than one ', hasMoreThenOnePage);
 
-  if (f24Only.length === 0 && allPaymentsIsPaid && !hasMoreThenOnePage) {
+  if (f24Only.length === 0 && allPaymentsIsPaid && !hasMoreThanOnePage) {
     return <></>;
   }
   // mixed

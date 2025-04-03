@@ -86,7 +86,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   const allPaymentsIsPaid = pagoPaF24.every((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED);
   const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
-  const hasMoreThenOnePage = paginationData.totalElements > paginationData.size;
+  const hasMoreThanOnePage = paginationData.totalElements > paginationData.size;
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
@@ -198,7 +198,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           pagoPaF24={pagoPaF24}
           f24Only={f24Only}
           allPaymentsIsPaid={allPaymentsIsPaid}
-          hasMoreThenOnePage={hasMoreThenOnePage}
+          hasMoreThanOnePage={hasMoreThanOnePage}
         />
       )}
 

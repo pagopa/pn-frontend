@@ -27,7 +27,7 @@ describe('NotificationPaymentTite component', () => {
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
         allPaymentsIsPaid={false}
-        hasMoreThenOnePage={true}
+        hasMoreThanOnePage={true}
       />
     );
 
@@ -46,7 +46,7 @@ describe('NotificationPaymentTite component', () => {
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
         allPaymentsIsPaid={false}
-        hasMoreThenOnePage={true}
+        hasMoreThanOnePage={true}
       />
     );
 
@@ -65,7 +65,7 @@ describe('NotificationPaymentTite component', () => {
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
         allPaymentsIsPaid={false}
-        hasMoreThenOnePage={true}
+        hasMoreThanOnePage={true}
       />
     );
 
@@ -84,7 +84,7 @@ describe('NotificationPaymentTite component', () => {
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
         allPaymentsIsPaid={false}
-        hasMoreThenOnePage={true}
+        hasMoreThanOnePage={true}
       />
     );
 
@@ -101,7 +101,7 @@ describe('NotificationPaymentTite component', () => {
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
         allPaymentsIsPaid={true}
-        hasMoreThenOnePage={false}
+        hasMoreThanOnePage={false}
       />
     );
 
@@ -116,7 +116,7 @@ describe('NotificationPaymentTite component', () => {
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
         allPaymentsIsPaid={true}
-        hasMoreThenOnePage={true}
+        hasMoreThanOnePage={true}
       />
     );
 
