@@ -377,7 +377,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(pageButtons[2]).toHaveClass('Mui-selected');
   });
 
-  it('should not show subtitle when all payments are paid and has only one page', () => {
+  it('should show subtitle when all payments are paid and has only one page but has f24', () => {
     const paidPayments = {
       pagoPaF24: [
         ...paymentsData.pagoPaF24.map((payment) => ({
@@ -405,7 +405,7 @@ describe('NotificationPaymentRecipient Component', () => {
     );
 
     const subtitle = queryByTestId('notification-payment-recipient-subtitle');
-    expect(subtitle).not.toBeInTheDocument();
+    expect(subtitle).toBeInTheDocument();
   });
 
   it('should disable other button for downloading f24 document when another one is downloading', () => {
