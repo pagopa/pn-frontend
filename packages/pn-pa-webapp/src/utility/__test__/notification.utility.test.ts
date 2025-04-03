@@ -1,3 +1,5 @@
+import { PhysicalAddressLookup } from '@pagopa-pn/pn-commons';
+
 import {
   newNotification,
   newNotificationForBff,
@@ -48,6 +50,23 @@ describe('Test notification utility', () => {
       additionalLanguages: ['DE'],
     };
     expect(result).toEqual(response);
+  });
+
+  it('Checks that notificationMapper returns correct recipient physicalAddress', () => {
+    const result = newNotificationMapper({
+      ...newNotification,
+      recipients: newNotification.recipients.map((recipient) => ({
+        ...recipient,
+        physicalAddressLookup: PhysicalAddressLookup.NATIONAL_REGISTRY,
+      })),
+    });
+    expect(result).toEqual({
+      ...newNotificationForBff,
+      recipients: newNotificationForBff.recipients.map((recipient) => ({
+        ...recipient,
+        physicalAddress: undefined,
+      })),
+    });
   });
 
   describe('Test filter payments by debt position change', () => {

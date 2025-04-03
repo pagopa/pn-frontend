@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { RecipientType } from '@pagopa-pn/pn-commons';
+import { PhysicalAddressLookup, RecipientType } from '@pagopa-pn/pn-commons';
 import { testFormElements, testInput, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { newNotification } from '../../../__mocks__/NewNotification.mock';
@@ -70,11 +70,24 @@ const testRecipientFormRendering = async (
     `input[name="recipients[${recipientIndex}].digitalDomicile"]`
   );
   expect(digitalForm).toBeInTheDocument();
+  if (recipient) {
+    expect(digitalForm).toHaveValue(recipient?.digitalDomicile);
+  }
+
+  const physicalAddressLabel = within(form).getByTestId(
+    `recipients[${recipientIndex}].physicalAddressLabel`
+  );
+  expect(physicalAddressLabel).toHaveTextContent('address');
+  expect(physicalAddressLabel).toHaveTextContent('address-subtitle');
 
   const physicalForm = within(form).queryByTestId(`physicalAddressForm${recipientIndex}`);
-  expect(physicalForm).toBeInTheDocument();
+  if (recipient?.physicalAddressLookup === PhysicalAddressLookup.MANUAL) {
+    expect(physicalForm).toBeInTheDocument();
+  } else {
+    expect(physicalForm).not.toBeInTheDocument();
+  }
 
-  if (recipient) {
+  if (recipient?.physicalAddressLookup === PhysicalAddressLookup.MANUAL) {
     const address = physicalForm?.querySelector(
       `input[name="recipients[${recipientIndex}].address"]`
     );
@@ -97,8 +110,6 @@ const testRecipientFormRendering = async (
       `input[name="recipients[${recipientIndex}].foreignState"]`
     );
     expect(foreignState).toHaveValue(recipient.foreignState);
-
-    expect(digitalForm).toHaveValue(recipient.digitalDomicile);
   }
 };
 
@@ -123,13 +134,23 @@ const populateForm = async (
   }
   await testInput(form, `recipients[${recipientIndex}].taxId`, recipient.taxId);
 
+  await testRadio(
+    form,
+    `physicalAddressLookupRadio.${recipientIndex}`,
+    ['address-physical-lookup-radios.national-registry', 'address-physical-lookup-radios.manual'],
+    recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL ? 1 : 0,
+    true
+  );
+
   // show physical address form
-  await testInput(form, `recipients[${recipientIndex}].address`, recipient.address);
-  await testInput(form, `recipients[${recipientIndex}].houseNumber`, recipient.houseNumber);
-  await testInput(form, `recipients[${recipientIndex}].municipality`, recipient.municipality);
-  await testInput(form, `recipients[${recipientIndex}].zip`, recipient.zip);
-  await testInput(form, `recipients[${recipientIndex}].province`, recipient.province);
-  await testInput(form, `recipients[${recipientIndex}].foreignState`, recipient.foreignState);
+  if (recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL) {
+    await testInput(form, `recipients[${recipientIndex}].address`, recipient.address);
+    await testInput(form, `recipients[${recipientIndex}].houseNumber`, recipient.houseNumber);
+    await testInput(form, `recipients[${recipientIndex}].municipality`, recipient.municipality);
+    await testInput(form, `recipients[${recipientIndex}].zip`, recipient.zip);
+    await testInput(form, `recipients[${recipientIndex}].province`, recipient.province);
+    await testInput(form, `recipients[${recipientIndex}].foreignState`, recipient.foreignState);
+  }
 
   // show digital address form
   await testInput(form, `recipients[${recipientIndex}].digitalDomicile`, recipient.digitalDomicile);
@@ -157,7 +178,24 @@ const testStringFieldValidation = async (
 };
 
 const recipientsWithoutPayments = newNotification.recipients.map(
-  ({ payments, debtPosition, ...recipient }) => recipient
+  ({ payments, debtPosition, ...recipient }) => ({
+    ...recipient,
+    address:
+      recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL ? recipient.address : '',
+    houseNumber:
+      recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL ? recipient.houseNumber : '',
+    zip: recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL ? recipient.zip : '',
+    municipality:
+      recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL
+        ? recipient.municipality
+        : '',
+    province:
+      recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL ? recipient.province : '',
+    foreignState:
+      recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL
+        ? recipient.foreignState
+        : 'Italia',
+  })
 );
 
 describe('Recipient Component with payment enabled', async () => {

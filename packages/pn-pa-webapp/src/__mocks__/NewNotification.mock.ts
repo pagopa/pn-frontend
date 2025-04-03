@@ -1,11 +1,11 @@
-import { PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons';
+import { PhysicalAddressLookup, PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons';
 
 import {
   BffNewNotificationRequest,
   F24Payment,
   NotificationDigitalAddressTypeEnum,
   NotificationDocument,
-  NotificationRecipientV23,
+  NotificationRecipientV24,
   PagoPaPayment,
 } from '../generated-client/notifications';
 import {
@@ -139,6 +139,7 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
       },
     ],
     debtPosition: PaymentModel.PAGO_PA,
+    physicalAddressLookup: PhysicalAddressLookup.MANUAL,
   },
   {
     id: 'recipient.1',
@@ -166,6 +167,7 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
       },
     ],
     debtPosition: PaymentModel.PAGO_PA_F24,
+    physicalAddressLookup: PhysicalAddressLookup.NATIONAL_REGISTRY,
   },
   {
     id: 'recipient.2',
@@ -190,10 +192,11 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
       },
     ],
     debtPosition: PaymentModel.F24,
+    physicalAddressLookup: PhysicalAddressLookup.MANUAL,
   },
 ];
 
-const newNotificationRecipientsForBff: Array<NotificationRecipientV23> = [
+const newNotificationRecipientsForBff: Array<NotificationRecipientV24> = [
   {
     taxId: 'MRARSS90P08H501Q',
     denomination: 'Mario Rossi',
@@ -219,13 +222,6 @@ const newNotificationRecipientsForBff: Array<NotificationRecipientV23> = [
     taxId: '12345678901',
     denomination: 'Sara Gallo srl',
     recipientType: RecipientType.PG,
-    physicalAddress: {
-      address: 'via delle cicale 21',
-      zip: '00035',
-      municipality: 'Anzio',
-      province: 'Roma',
-      foreignState: 'Italia',
-    },
     payments: [
       {
         pagoPa: { ...newNotificationPagoPaForBff(1) },

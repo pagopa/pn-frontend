@@ -1,5 +1,12 @@
 import { Form, Formik, FormikErrors, FormikProps } from 'formik';
-import { ForwardedRef, Fragment, forwardRef, useImperativeHandle, useRef } from 'react';
+import {
+  ChangeEvent,
+  ForwardedRef,
+  Fragment,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -8,13 +15,14 @@ import {
   Box,
   FormControl,
   FormControlLabel,
+  FormLabel,
   Grid,
   Radio,
   RadioGroup,
   Stack,
   Typography,
 } from '@mui/material';
-import { RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
+import { PhysicalAddressLookup, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import {
@@ -34,13 +42,7 @@ import NewNotificationCard from './NewNotificationCard';
 import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 import PhysicalAddress from './PhysicalAddress';
 
-const singleRecipient = {
-  recipientType: RecipientType.PF,
-  taxId: '',
-  firstName: '',
-  lastName: '',
-  type: NewNotificationDigitalAddressType.PEC,
-  digitalDomicile: '',
+const initialPhysicalAddress = {
   address: '',
   houseNumber: '',
   addressDetails: '',
@@ -49,6 +51,17 @@ const singleRecipient = {
   municipalityDetails: '',
   province: '',
   foreignState: 'Italia',
+};
+
+const singleRecipient: Omit<NewNotificationRecipient, 'id' | 'idx'> = {
+  recipientType: RecipientType.PF,
+  taxId: '',
+  firstName: '',
+  lastName: '',
+  type: NewNotificationDigitalAddressType.PEC,
+  digitalDomicile: '',
+  ...initialPhysicalAddress,
+  physicalAddressLookup: PhysicalAddressLookup.NATIONAL_REGISTRY,
 };
 
 type FormRecipients = {
@@ -61,6 +74,14 @@ type Props = {
   recipientsData?: Array<NewNotificationRecipient>;
   forwardedRef: ForwardedRef<unknown>;
 };
+
+function conditionalPhysicalAddress(validation: yup.AnySchema): any {
+  return yup.string().when('physicalAddressLookup', {
+    is: PhysicalAddressLookup.MANUAL,
+    then: validation,
+    otherwise: yup.string().nullable().notRequired(),
+  });
+}
 
 const Recipient: React.FC<Props> = ({
   onConfirm,
@@ -137,26 +158,30 @@ const Recipient: React.FC<Props> = ({
       .max(320, tc('too-long-field-error'))
       .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges'))
       .matches(dataRegex.email, t('pec-error')),
-    address: requiredStringFieldValidation(tc, 1024),
-    houseNumber: yup.string().required(tc('required-field')),
-    /*
-      addressDetails: yup.string().when('showPhysicalAddress', {
-        is: true,
-        then: yup.string().required(tc('required-field')),
-      }),
-      */
-    zip: yup
-      .string()
-      .required(tc('required-field'))
-      .max(12, tc('too-long-field-error', { maxLength: 12 }))
-      .matches(dataRegex.zipCode, `${t('zip')} ${tc('invalid')}`),
-    municipalityDetails: yup
-      .string()
-      .max(256, tc('too-long-field-error', { maxLength: 256 }))
-      .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
-    municipality: requiredStringFieldValidation(tc, 256),
-    province: requiredStringFieldValidation(tc, 256),
-    foreignState: requiredStringFieldValidation(tc),
+    address: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 1024)),
+    addressDetails: conditionalPhysicalAddress(
+      yup.string().max(1024, tc('too-long-field-error', { maxLength: 1024 }))
+    ),
+    houseNumber: conditionalPhysicalAddress(yup.string().required(tc('required-field'))),
+    zip: conditionalPhysicalAddress(
+      yup
+        .string()
+        .required(tc('required-field'))
+        .max(12, tc('too-long-field-error', { maxLength: 12 }))
+        .matches(dataRegex.zipCode, `${t('zip')} ${tc('invalid')}`)
+    ),
+    municipalityDetails: conditionalPhysicalAddress(
+      yup
+        .string()
+        .max(256, tc('too-long-field-error', { maxLength: 256 }))
+        .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges'))
+    ),
+    municipality: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 256)),
+    province: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 256)),
+    foreignState: conditionalPhysicalAddress(requiredStringFieldValidation(tc)),
+    physicalAddressLookup: yup
+      .mixed<PhysicalAddressLookup>()
+      .oneOf(Object.values(PhysicalAddressLookup)),
   });
 
   const validationSchema = yup.object({
@@ -248,6 +273,23 @@ const Recipient: React.FC<Props> = ({
       dispatch(saveRecipients(formRef.current ? formRef.current.values : { recipients: [] }));
     },
   }));
+
+  const physicalAddressLookupChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    oldValue: NewNotificationRecipient,
+    recipientField: string,
+    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+  ) => {
+    setFieldValue(
+      recipientField,
+      {
+        ...oldValue,
+        ...initialPhysicalAddress,
+        physicalAddressLookup: event.target.value,
+      },
+      true
+    );
+  };
 
   return (
     <Formik
@@ -393,25 +435,63 @@ const Recipient: React.FC<Props> = ({
                   </Grid>
 
                   {/* Indirizzo */}
-                  <Box mt={4} mb={3}>
-                    <FormBoxTitle text={t('address')} />
-                  </Box>
-                  <Grid
-                    container
-                    columnSpacing={1}
-                    rowSpacing={2}
-                    data-testid={`physicalAddressForm${index}`}
-                  >
-                    <PhysicalAddress
-                      values={values}
-                      setFieldValue={setFieldValue}
-                      touched={touched}
-                      errors={errors}
-                      recipient={index}
-                      handleBlur={handleBlur}
-                    />
-                  </Grid>
 
+                  <FormControl margin="none" fullWidth>
+                    <FormLabel
+                      id={`recipients[${index}].physicalAddressLabel`}
+                      data-testid={`recipients[${index}].physicalAddressLabel`}
+                      sx={{ mt: 4 }}
+                    >
+                      <FormBoxTitle text={t('address')} />
+                      <FormBoxSubtitle text={t('address-subtitle')} />
+                    </FormLabel>
+                    <RadioGroup
+                      aria-labelledby={`recipients[${index}].physicalAddressLabel`}
+                      name={`recipients[${index}].physicalAddressLookup`}
+                      value={values.recipients[index].physicalAddressLookup}
+                      onChange={(e) =>
+                        physicalAddressLookupChange(
+                          e,
+                          values.recipients[index],
+                          `recipients[${index}]`,
+                          setFieldValue
+                        )
+                      }
+                    >
+                      <FormControlLabel
+                        value={PhysicalAddressLookup.NATIONAL_REGISTRY}
+                        control={<Radio />}
+                        label={t('address-physical-lookup-radios.national-registry')}
+                        data-testid={`physicalAddressLookupRadio.${index}`}
+                      />
+                      <FormControlLabel
+                        value={PhysicalAddressLookup.MANUAL}
+                        control={<Radio />}
+                        label={t('address-physical-lookup-radios.manual')}
+                        data-testid={`physicalAddressLookupRadio.${index}`}
+                      />
+                    </RadioGroup>
+                  </FormControl>
+
+                  {values.recipients[index].physicalAddressLookup ===
+                    PhysicalAddressLookup.MANUAL && (
+                    <Grid
+                      container
+                      columnSpacing={1}
+                      rowSpacing={2}
+                      data-testid={`physicalAddressForm${index}`}
+                      sx={{ mt: 2 }}
+                    >
+                      <PhysicalAddress
+                        values={values}
+                        setFieldValue={setFieldValue}
+                        touched={touched}
+                        errors={errors}
+                        recipient={index}
+                        handleBlur={handleBlur}
+                      />
+                    </Grid>
+                  )}
                   {/* Domicilio digitale */}
                   <Box mt={4} mb={2}>
                     <FormBoxTitle text={t('digital-domicile')} />

@@ -1,4 +1,4 @@
-import { PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons';
+import { PhysicalCommunicationType, RecipientType, PhysicalAddressLookup } from '@pagopa-pn/pn-commons';
 
 import { NotificationAttachmentBodyRef } from '../generated-client/notifications';
 
@@ -87,6 +87,7 @@ export interface NewNotificationRecipient {
   foreignState: string;
   payments?: Array<NewNotificationPayment>;
   debtPosition?: PaymentModel;
+  physicalAddressLookup?: PhysicalAddressLookup;
 }
 
 export interface NewNotification extends NewNotificationBilingualism {

@@ -470,7 +470,13 @@
         "at": "Presso",
         "address-details": "Note aggiuntive (presso, scala, piano)",
         "add-recipient": "Aggiungi un destinatario",
-        "remove-recipient": "Rimuovi destinatario"
+        "remove-recipient": "Rimuovi destinatario",
+        "address-subtitle": "Scegli se inserire l'indirizzo automaticamente dai registri nazionali o compilarlo manualmente. L'inserimento automatico dai registri nazionali potrebbe ritardare l'invio della notifica al destinatario.",
+        "address-physical-lookup-error": "<0>Servizio VAS attualmente non disponibile</0>Non è al momento possibile richiamare automaticamente l'indirizzo da registro nazionale, l'indirizzo deve essere inserito manualmente",
+        "address-physical-lookup-radios": {
+          "national-registry": "Inserimento automatico da registro nazionale",
+          "manual": "Inserimento manuale"
+        }
       },
       "attachments": {
         "title": "Documentazione",
