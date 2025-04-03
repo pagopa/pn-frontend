@@ -39,6 +39,7 @@ const NotificationPaymentTitle: React.FC<Props> = ({
   if (f24Only.length === 0 && allPaymentsIsPaid && !hasMoreThanOnePage) {
     return <></>;
   }
+
   // mixed
   if (pagoPaF24.length > 0 && f24Only.length > 0) {
     return (

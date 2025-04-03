@@ -90,7 +90,7 @@ describe('NotificationPaymentTite component', () => {
 
     expect(container).toHaveTextContent('notifiche - detail.payment.subtitle-f24');
     const faq = queryByTestId('faqNotificationCosts');
-    expect(faq).not.toBeInTheDocument();
+    expect(faq).toBeInTheDocument();
   });
 
   it('should not show title if has only one page and all payments are paid', () => {
@@ -125,5 +125,22 @@ describe('NotificationPaymentTite component', () => {
     );
     const faq = getByTestId('faqNotificationCosts');
     expect(faq).toBeInTheDocument();
+  });
+  
+  it.only('should show title if all payments are paid, has more than one page BUT there are f24Only ', () => {
+    const { container } = render(
+      <NotificationPaymentTitle
+        pagoPaF24={[]}
+        f24Only={paymentsData.f24Only}
+        landingSiteUrl="https://www.mocked-url.com"
+        handleTrackEventFn={() => {}}
+        allPaymentsIsPaid={true}
+        hasMoreThanOnePage={true}
+      />
+    );
+
+    expect(container).toHaveTextContent(
+      'notifiche - detail.payment.subtitle-f24 notifiche - detail.payment.how'
+    );
   });
 });
