@@ -36,7 +36,9 @@ const NotificationPaymentTitle: React.FC<Props> = ({
     </Link>
   );
 
-  if (f24Only.length === 0 && allPaymentsIsPaid && !hasMoreThanOnePage) {
+  const noF24AtAll = f24Only.length === 0 && !pagoPaF24.some((item) => item.f24);
+
+  if (noF24AtAll && allPaymentsIsPaid && !hasMoreThanOnePage) {
     return <></>;
   }
 
