@@ -57,6 +57,7 @@ class PaConfigurationValidator extends Validator<PaConfiguration> {
       .matches(dataRegex.htmlPageUrl);
     this.ruleFor('PHYSICAL_ADDRESS_LOOKUP')
       .isString()
+      .isRequired()
       .isOneOf(Object.values(PhysicalAddressLookupConfig));
   }
 }
