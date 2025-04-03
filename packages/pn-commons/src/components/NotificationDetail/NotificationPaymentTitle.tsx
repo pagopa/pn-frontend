@@ -35,48 +35,57 @@ const NotificationPaymentTitle: React.FC<Props> = ({
       {getLocalizedOrDefaultLabel('notifications', 'detail.payment.how')}
     </Link>
   );
+  console.log('paid ', allPaymentsIsPaid);
+  console.log('more than one ', hasMoreThenOnePage);
 
-  const getLabel = () => {
-    if (pagoPaF24.length > 0 && f24Only.length > 0) {
-      return (
-        <>
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.subtitle-mixed')}
-          &nbsp;
-          {FaqLink}
-        </>
-      );
-    }
+  if (f24Only.length === 0 && allPaymentsIsPaid && !hasMoreThenOnePage) {
+    return <></>;
+  }
+  // mixed
+  if (pagoPaF24.length > 0 && f24Only.length > 0) {
+    return (
+      <Typography variant="body2" data-testid="notification-payment-recipient-subtitle">
+        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.subtitle-mixed')}
+        &nbsp;
+        {FaqLink}
+      </Typography>
+    );
+  }
 
-    if (pagoPaF24.length === 1 || f24Only.length === 1) {
-      return (
-        <>
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.single-payment-subtitle')}
-          &nbsp;
-          {FaqLink}
-        </>
-      );
-    }
+  // single payment
+  if (pagoPaF24.length === 1 || f24Only.length === 1) {
+    return (
+      <Typography variant="body2" data-testid="notification-payment-recipient-subtitle">
+        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.single-payment-subtitle')}
+        &nbsp;
+        {FaqLink}
+      </Typography>
+    );
+  }
 
-    if (pagoPaF24.length > 1) {
-      return (
-        <>
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.subtitle')}
-          &nbsp;
-          {FaqLink}
-        </>
-      );
-    }
+  // mixed multipayment
+  if (pagoPaF24.length > 1) {
+    return (
+      <Typography variant="body2" data-testid="notification-payment-recipient-subtitle">
+        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.subtitle')}
+        &nbsp;
+        {FaqLink}
+      </Typography>
+    );
+  }
 
-    return <>{getLocalizedOrDefaultLabel('notifications', 'detail.payment.subtitle-f24')}</>;
-  };
+  // f24 only multipayment
+  if (f24Only.length > 1) {
+    return (
+      <Typography variant="body2" data-testid="notification-payment-recipient-subtitle">
+        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.subtitle-f24')}
+        &nbsp;
+        {FaqLink}
+      </Typography>
+    );
+  }
 
-  return allPaymentsIsPaid && !hasMoreThenOnePage ? (
-    <></>
-  ) : (
-    <Typography variant="body2" data-testid="notification-payment-recipient-subtitle">
-      {getLabel()}
-    </Typography>
-  );
+  return <></>;
 };
 
 export default NotificationPaymentTitle;
