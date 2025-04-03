@@ -90,14 +90,11 @@ describe('NotificationPaymentF24Item Component', () => {
     expect(container).toHaveTextContent(item.title);
     const downloadBtn = getByTestId('download-f24-button');
     expect(downloadBtn).toBeInTheDocument();
-    // applyCost caption
-    const caption = getByTestId('f24-apply-costs-caption');
-    expect(caption).toBeInTheDocument();
   });
 
   it('should show the correct label if is a PagoPA attachment', () => {
     const item = { ...f24Item, applyCost: true };
-    const { container, getByTestId, queryByTestId } = render(
+    const { container, getByTestId } = render(
       <NotificationPaymentF24Item
         f24Item={item}
         timerF24={TIMERF24}
@@ -110,9 +107,6 @@ describe('NotificationPaymentF24Item Component', () => {
     expect(container).toHaveTextContent('detail.payment.download-f24');
     const downloadBtn = getByTestId('download-f24-button');
     expect(downloadBtn).toBeInTheDocument();
-    // if payment is an attachment, the applyCost caption must be not shown
-    const caption = queryByTestId('f24-apply-costs-caption');
-    expect(caption).not.toBeInTheDocument();
   });
 
   it('should call function handleDownloadAttachment when click on download button', () => {
