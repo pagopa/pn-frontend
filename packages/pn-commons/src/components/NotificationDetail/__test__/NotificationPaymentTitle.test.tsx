@@ -127,7 +127,7 @@ describe('NotificationPaymentTite component', () => {
     expect(faq).toBeInTheDocument();
   });
   
-  it.only('should show title if all payments are paid, has more than one page BUT there are f24Only ', () => {
+  it('should show title if all payments are paid, has more than one page BUT there are f24Only ', () => {
     const { container } = render(
       <NotificationPaymentTitle
         pagoPaF24={[]}
