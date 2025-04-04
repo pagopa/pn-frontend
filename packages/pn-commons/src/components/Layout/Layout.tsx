@@ -1,7 +1,7 @@
 import { ErrorInfo, ReactNode } from 'react';
 
 import { Stack } from '@mui/material';
-import { Box, StackProps } from '@mui/system';
+import { Box, BoxOwnProps, StackProps } from '@mui/system';
 import { JwtUser, PartyEntity, ProductEntity, UserAction } from '@pagopa/mui-italia';
 
 import ErrorBoundary from '../ErrorBoundary';
@@ -57,6 +57,7 @@ type Props = {
   enableAssistanceButton?: boolean;
   slotsProps?: {
     content?: Partial<StackProps>;
+    main?: Partial<BoxOwnProps>;
   };
 };
 
@@ -131,6 +132,7 @@ const Layout: React.FC<Props> = ({
           <Box
             sx={{ flexGrow: 1, flexBasis: { xs: 1, lg: 'auto' }, position: 'relative' }}
             component="main"
+            {...slotsProps?.main}
           >
             <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
               {children}

@@ -88,7 +88,14 @@ const Login = () => {
           email: undefined,
         }}
         privacyPolicyHref={privacyPolicyUrl}
-        slotsProps={isMobile ? { content: { minHeight: 'calc(100dvh - 110px)' } } : undefined}
+        slotsProps={
+          isMobile
+            ? {
+                content: { minHeight: 'calc(100dvh - 110px)' },
+                main: { alignContent: 'center', mt: -6 },
+              }
+            : undefined
+        }
       >
         <Grid
           container

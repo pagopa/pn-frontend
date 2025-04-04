@@ -34,24 +34,19 @@ const IOSmartAppBanner: React.FC<StackProps> = (props) => {
           {t('ioSmartAppBanner.subtitle')}
         </Typography>
       </Stack>
-      {/* <Box sx={{ ml: 'auto' }}> */}
       <Link
         ml="auto"
         href={getActionUrl()}
         fontWeight={600}
         fontSize="16px"
+        px={4}
+        py={2}
+        alignContent="center"
+        borderRadius={4}
+        underline="none"
         sx={{
-          cursor: 'pointer',
-          display: 'inline-block',
-          width: '100px',
-          height: '30px',
-          textAlign: 'center',
-          alignContent: 'center',
           color: 'white',
           backgroundColor: '#0073E6',
-          padding: '24px 8px',
-          borderRadius: '33px',
-          textDecoration: 'none',
         }}
       >
         {t('ioSmartAppBanner.cta')}
