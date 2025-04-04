@@ -10,6 +10,9 @@ export interface LoginConfiguration {
   SPID_VALIDATOR_ENV_ENABLED?: boolean;
   SPID_CIE_ENTITY_ID: string;
   URL_API_LOGIN: string;
+  APP_IO_SITE: string;
+  APP_IO_ANDROID: string;
+  APP_IO_IOS: string;
 }
 
 class LoginConfigurationValidator extends Validator<LoginConfiguration> {
@@ -26,6 +29,9 @@ class LoginConfigurationValidator extends Validator<LoginConfiguration> {
     this.ruleFor('PAGOPA_HELP_EMAIL').isString().isRequired().matches(dataRegex.email);
     this.ruleFor('OT_DOMAIN_ID').isString().isRequired().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('PF_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('APP_IO_SITE').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('APP_IO_ANDROID').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('APP_IO_IOS').isString().isRequired().matches(dataRegex.htmlPageUrl);
   }
 }
 
