@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import {
   AppNotAccessible,
@@ -49,6 +49,9 @@ function Router() {
   const { organization, hasGroup } = useAppSelector((state: RootState) => state.userState.user);
   const currentRoles = organization?.roles ? organization.roles.map((role) => role.role) : [];
   const { IS_B2B_ENABLED } = getConfiguration();
+  const navigate = useNavigate();
+
+  const navigateToHome = () => navigate(routes.NOTIFICHE, { replace: true });
 
   return (
     <Suspense fallback={<LoadingPage />}>
@@ -65,7 +68,7 @@ function Router() {
                       currentRoles={[]}
                       requiredRoles={[]}
                       additionalCondition={!hasGroup}
-                      redirectTo={<NotFound />}
+                      redirectTo={<NotFound goBackAction={navigateToHome} />}
                     >
                       <Notifiche />
                     </PrivateRoute>
@@ -79,7 +82,7 @@ function Router() {
                       currentRoles={[]}
                       requiredRoles={[]}
                       additionalCondition={!hasGroup}
-                      redirectTo={<NotFound />}
+                      redirectTo={<NotFound goBackAction={navigateToHome} />}
                     >
                       <NotificationDetail />
                     </PrivateRoute>
@@ -92,7 +95,7 @@ function Router() {
                     <PrivateRoute
                       currentRoles={currentRoles}
                       requiredRoles={[PNRole.ADMIN]}
-                      redirectTo={<NotFound />}
+                      redirectTo={<NotFound goBackAction={navigateToHome} />}
                     >
                       <Deleghe />
                     </PrivateRoute>
@@ -106,7 +109,7 @@ function Router() {
                         currentRoles={[]}
                         requiredRoles={[]}
                         additionalCondition={!hasGroup}
-                        redirectTo={<NotFound />}
+                        redirectTo={<NotFound goBackAction={navigateToHome} />}
                       >
                         <DelegatesByCompany />
                       </PrivateRoute>
@@ -121,7 +124,7 @@ function Router() {
                     <PrivateRoute
                       currentRoles={currentRoles}
                       requiredRoles={[PNRole.ADMIN]}
-                      redirectTo={<NotFound />}
+                      redirectTo={<NotFound goBackAction={navigateToHome} />}
                       additionalCondition={!hasGroup}
                     >
                       <NuovaDelega />
@@ -135,7 +138,7 @@ function Router() {
                       currentRoles={currentRoles}
                       requiredRoles={[PNRole.ADMIN]}
                       additionalCondition={!hasGroup}
-                      redirectTo={<NotFound />}
+                      redirectTo={<NotFound goBackAction={navigateToHome} />}
                     >
                       <Contacts />
                     </PrivateRoute>
@@ -159,7 +162,7 @@ function Router() {
                       currentRoles={[]}
                       requiredRoles={[]}
                       additionalCondition={IS_B2B_ENABLED}
-                      redirectTo={<NotFound />}
+                      redirectTo={<NotFound goBackAction={navigateToHome} />}
                     >
                       <ApiIntegrationPage />
                     </PrivateRoute>
@@ -174,7 +177,7 @@ function Router() {
                         currentRoles={currentRoles}
                         requiredRoles={[PNRole.ADMIN]}
                         additionalCondition={IS_B2B_ENABLED}
-                        redirectTo={<NotFound />}
+                        redirectTo={<NotFound goBackAction={navigateToHome} />}
                       >
                         <NewPublicKeyPage />
                       </PrivateRoute>
@@ -187,7 +190,7 @@ function Router() {
                         currentRoles={currentRoles}
                         requiredRoles={[PNRole.ADMIN]}
                         additionalCondition={IS_B2B_ENABLED}
-                        redirectTo={<NotFound />}
+                        redirectTo={<NotFound goBackAction={navigateToHome} />}
                       >
                         <NewPublicKeyPage />
                       </PrivateRoute>
@@ -200,7 +203,7 @@ function Router() {
             </Route>
             {/* not found - non-logged users will see the common AccessDenied component */}
             <Route path="*" element={<RouteGuard />}>
-              <Route path="*" element={<NotFound />} />
+              <Route path="*" element={<NotFound goBackAction={navigateToHome} />} />
             </Route>
           </Route>
         </Route>
@@ -218,7 +221,7 @@ function Router() {
           path={routes.NOT_ACCESSIBLE}
           element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}
         />
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<NotFound goBackAction={navigateToHome} />} />
       </Routes>
     </Suspense>
   );
