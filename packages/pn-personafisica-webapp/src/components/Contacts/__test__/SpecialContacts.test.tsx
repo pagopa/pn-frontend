@@ -202,7 +202,7 @@ describe('SpecialContacts Component', async () => {
       expect(mock.history.post).toHaveLength(0);
     });
 
-    const dialog = result.getByTestId('duplicateDialog');
+    const dialog = result.getByTestId('confirmationDialog');
     expect(dialog).toBeInTheDocument();
     const closeButton = within(dialog).getByRole('button', { name: 'button.annulla' });
     fireEvent.click(closeButton);
