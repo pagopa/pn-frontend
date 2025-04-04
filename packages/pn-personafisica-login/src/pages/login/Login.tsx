@@ -92,7 +92,7 @@ const Login = () => {
           isMobile
             ? {
                 content: { minHeight: 'calc(100dvh - 110px)' },
-                main: { alignContent: 'center', mt: -6 },
+                main: { alignContent: 'center' },
               }
             : undefined
         }
