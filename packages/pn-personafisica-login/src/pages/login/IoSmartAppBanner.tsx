@@ -44,10 +44,8 @@ const IOSmartAppBanner: React.FC<StackProps> = (props) => {
         alignContent="center"
         borderRadius={4}
         underline="none"
-        sx={{
-          color: 'white',
-          backgroundColor: '#0073E6',
-        }}
+        bgcolor="primary.main"
+        color="white"
       >
         {t('ioSmartAppBanner.cta')}
       </Link>
