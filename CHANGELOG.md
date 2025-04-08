@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.14.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.14.0-RC.0...v2.14.0-RC.1) (2025-04-08)
+
+
+### Bug Fixes
+
+* **PN-14412:** add Selfcare CDN URLs in Content Security Policy ([#1535](https://github.com/pagopa/pn-frontend/issues/1535)) ([1cda170](https://github.com/pagopa/pn-frontend/commit/1cda170ef0814c196766946a541e855a6e2d373b))
+
+
+
+
+
 # [2.14.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.13.0...v2.14.0-RC.0) (2025-04-07)
 
 
