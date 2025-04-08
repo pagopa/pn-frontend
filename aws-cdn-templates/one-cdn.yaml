@@ -685,10 +685,10 @@ Resources:
                     img-src 'self' \
                     https://assets.cdn.io.italia.it/ \
                     data: \
-                    https://selcucheckoutsa.z6.web.core.windows.net \ 
-                    https://selfcare.pagopa.it \ 
-                    https://selcuweupnpgcheckoutsa.z6.web.core.windows.net \
-                    https://pnpg.selfcare.pagopa.it"
+                    https://selcucheckoutsa.z6.web.core.windows.net/ \ 
+                    https://selfcare.pagopa.it/ \ 
+                    https://selcuweupnpgcheckoutsa.z6.web.core.windows.net/ \
+                    https://pnpg.selfcare.pagopa.it/"
             Override: true
           # add_header X-Content-Type-Options "nosniff";
           ContentTypeOptions:
