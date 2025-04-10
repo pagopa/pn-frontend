@@ -12,6 +12,7 @@ import { digitalAddressesSercq, digitalLegalAddresses } from '../../../__mocks__
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
+import { RECAPITI } from '../../../navigation/routes.const';
 import DigitalContactActivation from '../DigitalContactActivation';
 import { fillCodeDialog } from './test-utils';
 
@@ -53,6 +54,7 @@ describe('DigitalContactActivation', () => {
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
     expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(-1);
   });
 
   it('renders pec contact wizard correctly', () => {
@@ -278,10 +280,11 @@ describe('DigitalContactActivation', () => {
     );
     const feedbackButton = getByTestId('wizard-feedback-button');
     expect(feedbackButton).toHaveTextContent(
-      'legal-contacts.sercq-send-wizard.feedback.back-to-contacts'
+      'legal-contacts.sercq-send-wizard.feedback.go-to-contacts'
     );
     fireEvent.click(feedbackButton);
     expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(RECAPITI);
   });
 
   it('adds an email correctly (verify skip and confirm buttons)', async () => {
@@ -365,10 +368,11 @@ describe('DigitalContactActivation', () => {
     );
     const feedbackButton = result.getByTestId('wizard-feedback-button');
     expect(feedbackButton).toHaveTextContent(
-      'legal-contacts.sercq-send-wizard.feedback.back-to-contacts'
+      'legal-contacts.sercq-send-wizard.feedback.go-to-contacts'
     );
     fireEvent.click(feedbackButton);
     expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(RECAPITI);
   });
 
   it('renders component correctly when transferring', async () => {

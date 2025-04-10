@@ -9,6 +9,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import LegalContactManager, {
   DigitalDomicileManagementAction,
 } from '../../components/Contacts/LegalContactManager';
+import { RECAPITI } from '../../navigation/routes.const';
 import AddSpecialContact, { AddSpecialContactRef } from './AddSpecialContact';
 import DigitalContactActivation from './DigitalContactActivation';
 
@@ -100,8 +101,8 @@ const DigitalContactManagement: React.FC = () => {
         },
         feedback: {
           title: t(`legal-contacts.sercq-send-wizard.feedback.title-transfer`),
-          buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
-          onClick: () => navigate(-1),
+          buttonText: t('legal-contacts.sercq-send-wizard.feedback.go-to-contacts'),
+          onClick: () => navigate(RECAPITI),
         },
       }}
     >
