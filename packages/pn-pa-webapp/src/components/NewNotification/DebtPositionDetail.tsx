@@ -1,4 +1,4 @@
-import { useFormik } from 'formik';
+import { getIn, useFormik } from 'formik';
 import _ from 'lodash';
 import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -36,6 +36,7 @@ import { uploadNotificationPaymentDocument } from '../../redux/newNotification/a
 import { setDebtPositionDetail } from '../../redux/newNotification/reducers';
 import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
+import { newF24Payment, newPagopaPayment } from '../../utility/notification.utility';
 import {
   checkApplyCost,
   f24ValidationSchema,
@@ -52,11 +53,6 @@ type Props = {
   onConfirm: () => void;
   onPreviousStep: () => void;
   forwardedRef: ForwardedRef<unknown>;
-};
-
-const emptyFileData = {
-  data: undefined,
-  sha256: { hashBase64: '', hashHex: '' },
 };
 
 const DebtPositionDetail: React.FC<Props> = ({
@@ -81,32 +77,11 @@ const DebtPositionDetail: React.FC<Props> = ({
   const { PAYMENT_INFO_LINK } = getConfiguration();
   const dispatch = useAppDispatch();
 
-  const newPagopaPayment = (taxId: string, idx: number): NewNotificationPagoPaPayment => ({
-    id: `${taxId}-${idx}-pagoPa`,
-    idx,
-    contentType: 'application/pdf',
-    file: emptyFileData,
-    creditorTaxId: organization.fiscal_code,
-    noticeCode: '',
-    applyCost: false,
-    ref: {
-      key: '',
-      versionToken: '',
-    },
-  });
-
-  const newF24Payment = (taxId: string, idx: number): NewNotificationF24Payment => ({
-    id: `${taxId}-${idx}-f24`,
-    idx,
-    contentType: 'application/json',
-    file: emptyFileData,
-    name: '',
-    applyCost: false,
-    ref: {
-      key: '',
-      versionToken: '',
-    },
-  });
+  const hasFieldError = (fieldName: string) =>
+    Boolean(
+      getIn(formik.touched, fieldName) ||
+        (_.get(formik.values, fieldName) && String(_.get(formik.values, fieldName)).length > 0)
+    );
 
   const formatPayments = (): Array<NewNotificationRecipient> => {
     const recipients = _.cloneDeep(notification.recipients);
@@ -164,7 +139,7 @@ const DebtPositionDetail: React.FC<Props> = ({
             const newPaymentIdx = lastPaymentIdx + 1;
 
             payments.push({
-              pagoPa: newPagopaPayment(recipient.taxId, newPaymentIdx),
+              pagoPa: newPagopaPayment(recipient.taxId, newPaymentIdx, organization.fiscal_code),
             });
           }
           if (
@@ -415,7 +390,7 @@ const DebtPositionDetail: React.FC<Props> = ({
   }));
 
   return (
-    <form onSubmit={formik.handleSubmit} data-testid="paymentMethodForm">
+    <form onSubmit={formik.handleSubmit} data-testid="debtPositionDetailForm">
       <NewNotificationCard
         isContinueDisabled={!formik.isValid}
         noPaper={true}
@@ -445,12 +420,14 @@ const DebtPositionDetail: React.FC<Props> = ({
                 <FormControlLabel
                   value={NotificationFeePolicy.FLAT_RATE}
                   control={<Radio />}
+                  data-testid="notificationFeePolicy"
                   label={t('radios.flat-rate')}
                   componentsProps={{ typography: { fontSize: '16px' } }}
                 />
                 <FormControlLabel
                   value={NotificationFeePolicy.DELIVERY_MODE}
                   control={<Radio />}
+                  data-testid="notificationFeePolicy"
                   label={t('radios.delivery-mode')}
                   componentsProps={{ typography: { fontSize: '16px' } }}
                 />
@@ -468,8 +445,8 @@ const DebtPositionDetail: React.FC<Props> = ({
                     name="paFee"
                     label={t('notification-fee.pa-fee')}
                     value={formik.values.paFee}
-                    error={formik.touched.paFee && Boolean(formik.errors.paFee)}
-                    helperText={formik.touched.paFee && formik.errors.paFee}
+                    error={hasFieldError('paFee') && Boolean(formik.errors.paFee)}
+                    helperText={hasFieldError('paFee') && formik.errors.paFee}
                     onChange={handleChangeTouched}
                     InputProps={{
                       endAdornment: (
@@ -479,6 +456,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                       ),
                     }}
                     sx={{ flexBasis: '75%', margin: isMobile ? '1rem auto' : '0rem 0.8rem' }}
+                    data-testid="notification-pa-fee"
                   />
                   <CustomDropdown
                     id="vat"
@@ -489,8 +467,9 @@ const DebtPositionDetail: React.FC<Props> = ({
                     value={formik.values.vat ?? ''}
                     onChange={handleChange}
                     sx={{ flexBasis: '30%' }}
-                    error={formik.touched.vat && Boolean(formik.errors.vat)}
-                    helperText={formik.touched.vat && formik.errors.vat}
+                    error={hasFieldError('vat') && Boolean(formik.errors.vat)}
+                    helperText={hasFieldError('vat') && formik.errors.vat}
+                    data-testid="notification-vat"
                   >
                     {VAT.map((option) => (
                       <MenuItem key={option} value={option}>
@@ -523,7 +502,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                   ]}
                 />
               </Typography>
-              <Alert severity={'warning'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
+              <Alert severity={'warning'} sx={{ mb: 3, mt: 2 }} data-testid="pagoPaIntModeAlert">
                 {t('alert', { ns: 'notifiche' })}
               </Alert>
               <RadioGroup
@@ -536,12 +515,14 @@ const DebtPositionDetail: React.FC<Props> = ({
                 <FormControlLabel
                   value={PagoPaIntegrationMode.SYNC}
                   control={<Radio />}
+                  data-testid="pagoPaIntMode"
                   label={t('radios.sync')}
                   componentsProps={{ typography: { fontSize: '16px' } }}
                 />
                 <FormControlLabel
                   value={PagoPaIntegrationMode.ASYNC}
                   control={<Radio />}
+                  data-testid="pagoPaIntMode"
                   label={t('radios.async')}
                   componentsProps={{ typography: { fontSize: '16px' } }}
                 />
@@ -549,12 +530,7 @@ const DebtPositionDetail: React.FC<Props> = ({
             </FormBox>
           )}
         </Paper>
-        <PaymentMethods
-          notification={notification}
-          formik={formik}
-          newPagopaPayment={newPagopaPayment}
-          newF24Payment={newF24Payment}
-        />
+        <PaymentMethods notification={notification} formik={formik} hasFieldError={hasFieldError} />
       </NewNotificationCard>
     </form>
   );

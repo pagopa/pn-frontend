@@ -5,14 +5,15 @@ import {
   UnknownAppError,
 } from '@pagopa-pn/pn-commons';
 
-import { ServerResponseErrorCode } from './types';
+import { GenericInvalidParameterPatternAppError } from './GenericInvalidParameterPatternAppError';
+import { InvalidBodyAppError } from './InvalidBodyAppError';
 import { MandateAlreadyExistsAppError } from './MandateAlreadyExistsAppError';
 import { MandateDelegateHimselfAppError } from './MandateDelegateHimselfAppError';
 import { MandateInvalidVerificationCodeAppError } from './MandateInvalidVerificationCodeAppError';
 import { MandateNotAcceptableAppError } from './MandateNotAcceptableAppError';
 import { MandateNotFoundAppError } from './MandateNotFoundAppError';
 import { UserAttributesInvalidVerificationCodeAppError } from './UserAttributesInvalidVerificationCodeAppError';
-import { InvalidBodyAppError } from './InvalidBodyAppError';
+import { ServerResponseErrorCode } from './types';
 
 export class PGAppErrorFactory extends AppErrorFactory {
   private translateFunction: (path: string, ns: string) => string = (path: string) => path;
@@ -42,6 +43,8 @@ export class PGAppErrorFactory extends AppErrorFactory {
       case ServerResponseErrorCode.PN_USERATTRIBUTES_RETRYLIMITVERIFICATIONCODE:
       case ServerResponseErrorCode.PN_USERATTRIBUTES_EXPIREDVERIFICATIONCODE:
         return new UserAttributesInvalidVerificationCodeAppError(error, this.translateFunction);
+      case ServerResponseErrorCode.PN_GENERIC_INVALIDPARAMETER_PATTERN:
+        return new GenericInvalidParameterPatternAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_INVALID_BODY:
         return new InvalidBodyAppError(error, this.translateFunction);
       default:
