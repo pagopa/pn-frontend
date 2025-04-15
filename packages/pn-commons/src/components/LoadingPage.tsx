@@ -11,16 +11,17 @@ type Props = {
     xs?: boolean | GridSize;
   }>;
   sx?: SxProps;
+  loadingFinished?: boolean;
 };
 
 const headerHeight = '128px';
 const footerHeight = '139px';
 const titleHeight = '36px';
 
-const LoadingPage = ({ renderType = 'part', layout, sx }: Props) => {
+const LoadingPage = ({ renderType = 'part', layout, sx, loadingFinished }: Props) => {
   if (renderType === 'whole') {
     return (
-      <Box p={1} height="100vh" sx={sx} data-testid="loading-skeleton">
+      <Box p={1} height="100vh" sx={sx} data-testid="loading-skeleton" aria-live='polite' aria-busy={loadingFinished}>
         <Skeleton
           variant="rectangular"
           width="100%"
@@ -52,7 +53,7 @@ const LoadingPage = ({ renderType = 'part', layout, sx }: Props) => {
   }
 
   const pageLayout = layout ? (
-    <Box height={`calc(100% - ${titleHeight} - 80px)`} data-testid="customContent">
+    <Box height={`calc(100% - ${titleHeight} - 80px)`} data-testid="customContent" >
       <Grid container spacing={2}>
         {layout.map((l) => (
           <Grid item key={l.id} xs={l.xs} xl={l.xl} sm={l.sm} md={l.md} lg={l.lg}>
@@ -71,7 +72,7 @@ const LoadingPage = ({ renderType = 'part', layout, sx }: Props) => {
   );
 
   return (
-    <Box p={2} height="100%" sx={sx} data-testid="loading-skeleton">
+    <Box p={2} height="100%" sx={sx} data-testid="loading-skeleton" aria-live='polite' aria-busy={loadingFinished}>
       <Skeleton
         variant="rectangular"
         height={titleHeight}

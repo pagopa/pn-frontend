@@ -6,5 +6,8 @@
   "PF_URL": "https://cittadini.dev.notifichedigitali.it",
   "PAGOPA_HELP_EMAIL": "destinatari-send@assistenza.pagopa.it",
   "MIXPANEL_TOKEN": "ba1f5101fe34a61bb125cbfe587780d8",
-  "OT_DOMAIN_ID": "29cc1c86-f2ef-494d-8242-9bec8009cd29-test"
+  "OT_DOMAIN_ID": "29cc1c86-f2ef-494d-8242-9bec8009cd29-test",
+  "APP_IO_SITE": "https://io.italia.it/",
+  "APP_IO_ANDROID": "https://play.google.com/store/apps/details?id=it.pagopa.io.app",
+  "APP_IO_IOS": "https://apps.apple.com/it/app/io/id1501681835"
 }

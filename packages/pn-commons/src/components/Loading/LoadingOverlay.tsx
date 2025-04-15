@@ -10,7 +10,13 @@ export function LoadingOverlay() {
   const loading = useSelector(appStateSelectors.selectLoading);
 
   return (
-    <Modal open={loading} sx={{ outline: 0 }} data-testid="loading-spinner">
+    <Modal
+      open={loading}
+      sx={{ outline: 0 }}
+      data-testid="loading-spinner"
+      aria-live="polite"
+      aria-busy={loading}
+    >
       <Box
         sx={{
           position: 'absolute',
