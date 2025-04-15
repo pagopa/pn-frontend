@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.14.0](https://github.com/pagopa/pn-frontend/compare/v2.14.0-RC.1...v2.14.0) (2025-04-10)
+
+**Note:** Version bump only for package @pagopa-pn/pn-data-viz
+
+
+
+
+
+# [2.14.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.14.0-RC.0...v2.14.0-RC.1) (2025-04-08)
+
+**Note:** Version bump only for package @pagopa-pn/pn-data-viz
+
+
+
+
+
+# [2.14.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.13.0...v2.14.0-RC.0) (2025-04-07)
+
+**Note:** Version bump only for package @pagopa-pn/pn-data-viz
+
+
+
+
+
+# [2.13.0](https://github.com/pagopa/pn-frontend/compare/v2.13.0-RC.2...v2.13.0) (2025-03-14)
+
+**Note:** Version bump only for package @pagopa-pn/pn-data-viz
+
+
+
+
+
+# [2.13.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.12.0...v2.13.0-RC.0) (2025-02-28)
+
+
+### Features
+
+* **pn-13918:** removed old payment fields ([#1464](https://github.com/pagopa/pn-frontend/issues/1464)) ([e8d7377](https://github.com/pagopa/pn-frontend/commit/e8d737700359285640242231c3ba953058ba71a6))
+
+
+
+
+
 # [2.12.0](https://github.com/pagopa/pn-frontend/compare/v2.12.0-RC.1...v2.12.0) (2025-02-18)
 
 **Note:** Version bump only for package @pagopa-pn/pn-data-viz

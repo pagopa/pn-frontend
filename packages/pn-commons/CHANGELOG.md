@@ -3,6 +3,101 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.14.0](https://github.com/pagopa/pn-frontend/compare/v2.14.0-RC.1...v2.14.0) (2025-04-10)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.14.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.14.0-RC.0...v2.14.0-RC.1) (2025-04-08)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.14.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.13.0...v2.14.0-RC.0) (2025-04-07)
+
+
+### Bug Fixes
+
+* **PN-14201:** copy of analog failure delivery in timeline when recipient is unreachable ([#1511](https://github.com/pagopa/pn-frontend/issues/1511)) ([89cf083](https://github.com/pagopa/pn-frontend/commit/89cf083f68b0ebea1a84debb271e3db62a21d09f))
+
+
+### Features
+
+* **PN-14412:** add organization logo to header on PG ([#1521](https://github.com/pagopa/pn-frontend/issues/1521)) ([66399fa](https://github.com/pagopa/pn-frontend/commit/66399fab43519e941b6f04ce1d07bab7eb2d4c18))
+
+
+
+
+
+# [2.13.0](https://github.com/pagopa/pn-frontend/compare/v2.13.0-RC.2...v2.13.0) (2025-03-14)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.13.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.13.0-RC.1...v2.13.0-RC.2) (2025-03-11)
+
+
+### Bug Fixes
+
+* **pn-14143:** set maximum 2 decimal to paFee ([#1500](https://github.com/pagopa/pn-frontend/issues/1500)) ([f663bf2](https://github.com/pagopa/pn-frontend/commit/f663bf210f3f80932f5a757cb5ae170f15aaaf43))
+
+
+### Features
+
+* **PN-13894:** add new Mixpanel strategy for UX event with psp property ([#1493](https://github.com/pagopa/pn-frontend/issues/1493)) ([a3e777d](https://github.com/pagopa/pn-frontend/commit/a3e777de802bf40d4e6187bc07a926dfae079ddd))
+
+
+
+
+
+
+# [2.13.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.13.0-RC.0...v2.13.0-RC.1) (2025-03-03)
+
+
+### Bug Fixes
+
+* **PN-13257:** add description to button in notifications table ([#1491](https://github.com/pagopa/pn-frontend/issues/1491)) ([5988932](https://github.com/pagopa/pn-frontend/commit/5988932b3ac7c6dbe0f036f43907e448f4c02578))
+
+
+
+
+
+# [2.13.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.12.0...v2.13.0-RC.0) (2025-02-28)
+
+
+### Bug Fixes
+
+* **pn-13250:** OTP modal accessibility ([#1467](https://github.com/pagopa/pn-frontend/issues/1467)) ([0d0f8ae](https://github.com/pagopa/pn-frontend/commit/0d0f8ae2d8a5eaacf342cc5a594c0203de46f179))
+* **pn-13257:** tables accessibility ([#1462](https://github.com/pagopa/pn-frontend/issues/1462)) ([81a7208](https://github.com/pagopa/pn-frontend/commit/81a72085f576681e9e2ade91c056fd5d666ff4db))
+* **PN-13485:** Fix a11y for filter of notification and delegation ([#1434](https://github.com/pagopa/pn-frontend/issues/1434)) ([0b89e7c](https://github.com/pagopa/pn-frontend/commit/0b89e7c778a2aa020ea22011b9eef61172f4df82))
+* **pn-13588:** Show error when a pyament is not selected and focus on input when edit is clicked ([#1474](https://github.com/pagopa/pn-frontend/issues/1474)) ([6b139b3](https://github.com/pagopa/pn-frontend/commit/6b139b35b417a15eaf30047eaa87367bec2e249e))
+* **pn-13701:** Added aria-label to loading dialog ([#1483](https://github.com/pagopa/pn-frontend/issues/1483)) ([c6b5afb](https://github.com/pagopa/pn-frontend/commit/c6b5afb423937835319fe5bcc3d6c6df94dade61))
+
+
+### Features
+
+* **pn-13436:** Rework LegalContacts component ([#1433](https://github.com/pagopa/pn-frontend/issues/1433)) ([74fe3d3](https://github.com/pagopa/pn-frontend/commit/74fe3d34f52ae599eb140b5f9ccfde730e0e1662))
+* **PN-13439:** show informative dialog on courtesy contact activation ([#1422](https://github.com/pagopa/pn-frontend/issues/1422)) ([6d741b0](https://github.com/pagopa/pn-frontend/commit/6d741b0d5ee64686edf03b64114a5a023a5f7cb5))
+* **pn-13447:** Add EmailSmsContactWizard component ([#1469](https://github.com/pagopa/pn-frontend/issues/1469)) ([7d4593f](https://github.com/pagopa/pn-frontend/commit/7d4593fadd9272f73996b29b86704967bd00181c))
+* **pn-13450:** Digital Domicile Management ([#1446](https://github.com/pagopa/pn-frontend/issues/1446)) ([7721d93](https://github.com/pagopa/pn-frontend/commit/7721d9383d00e54d06b87a3b52af6f489a471674))
+* **pn-13452:** Special Contacts Rework ([#1463](https://github.com/pagopa/pn-frontend/issues/1463)) ([7c3a4c8](https://github.com/pagopa/pn-frontend/commit/7c3a4c814906fbb4e934745be0a540fb07258cc8))
+* **pn-13849:** view notification from retrieval Id ([#1466](https://github.com/pagopa/pn-frontend/issues/1466)) ([c2bde20](https://github.com/pagopa/pn-frontend/commit/c2bde205b23a0ee423cf3a339060e7ca09e2cd7d))
+* **pn-13915:** show custom payment button when user comes from TPP app ([#1468](https://github.com/pagopa/pn-frontend/issues/1468)) ([33ea7b6](https://github.com/pagopa/pn-frontend/commit/33ea7b6dbcdd076d5cdd7fdd2219700acb1107e4))
+* **PN-14000) (PN-14001:** Debt position detail - manual notification creation([#1481](https://github.com/pagopa/pn-frontend/issues/1481)) ([9a44a40](https://github.com/pagopa/pn-frontend/commit/9a44a40dbe3d94f40af96d871e911d69cf050517))
+
+
+
+
+
 # [2.12.0](https://github.com/pagopa/pn-frontend/compare/v2.12.0-RC.1...v2.12.0) (2025-02-18)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons

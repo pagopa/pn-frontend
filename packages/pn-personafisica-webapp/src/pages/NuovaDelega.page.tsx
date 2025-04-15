@@ -128,7 +128,7 @@ const NuovaDelega = () => {
           .matches(dataRegex.fiscalCode, t('nuovaDelega.validation.fiscalCode.wrong')),
         otherwise: yup
           .string()
-          .matches(dataRegex.pIvaAndFiscalCode, t('nuovaDelega.validation.fiscalCode.wrong')),
+          .matches(dataRegex.pIva, t('nuovaDelega.validation.fiscalCode.wrong-pg')),
       }),
     nome: yup.string().when('selectPersonaFisicaOrPersonaGiuridica', {
       is: RecipientType.PF,
@@ -252,7 +252,7 @@ const NuovaDelega = () => {
             <Grid item lg={8} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumbs}
               <Paper sx={{ padding: '24px', marginBottom: '20px' }} elevation={0}>
-                <Typography sx={{ fontWeight: 'bold' }} id='personType'>
+                <Typography sx={{ fontWeight: 'bold' }} id="personType">
                   {t('nuovaDelega.form.personType')}
                 </Typography>
                 <Typography variant="body2" fontSize={'14px'} marginTop={1} marginBottom={1}>
@@ -281,7 +281,7 @@ const NuovaDelega = () => {
                                   event.currentTarget.value
                                 );
                               }}
-                              aria-labelledby='personType'
+                              aria-labelledby="personType"
                             >
                               <FormControlLabel
                                 id="recipient-pf"
@@ -375,7 +375,11 @@ const NuovaDelega = () => {
                         helperText={getError(touched.codiceFiscale, errors.codiceFiscale)}
                         fullWidth
                       />
-                      <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }} id='selectEntities'>
+                      <Typography
+                        fontWeight={'bold'}
+                        sx={{ marginTop: '2rem' }}
+                        id="selectEntities"
+                      >
                         {t('nuovaDelega.form.viewFrom')}
                       </Typography>
                       <Typography variant="body2" fontSize={'14px'} marginTop={1} marginBottom={1}>
@@ -397,7 +401,7 @@ const NuovaDelega = () => {
                                 handleGetAllEntities();
                               }
                             }}
-                            aria-labelledby='selectEntities'
+                            aria-labelledby="selectEntities"
                           >
                             <FormControlLabel
                               id="tutti-gli-enti-selezionati"

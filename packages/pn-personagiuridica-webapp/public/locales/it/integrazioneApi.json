@@ -6,17 +6,17 @@
   "rotate-public-key-button": "Ruota e registra nuova chiave",
   "rotate-virtual-key-button": "Ruota",
   "error-fecth-public-api-keys": "Errore durante il recupero delle chiavi pubbliche",
-  "banner" : {
-        "title":"Integrazione disabilitata",
-        "description-admin": "Le chiavi personali non sono utilizzabili perché l’integrazione è stata disabilitata. Per usarle, registra una chiave pubblica.",
-        "description-operator": "Le chiavi personali non sono utilizzabili perché l’integrazione è stata disabilitata. Per usarle, chiedi a un amministratore di abilitare l’integrazione."
-      },
+  "banner": {
+    "title": "Integrazione disabilitata",
+    "description-admin": "Le chiavi personali non sono utilizzabili perché l’integrazione è stata disabilitata. Per usarle, registra una chiave pubblica.",
+    "description-operator": "Le chiavi personali non sono utilizzabili perché l’integrazione è stata disabilitata. Per usarle, chiedi a un amministratore di abilitare l’integrazione."
+  },
   "status": {
     "enabled": "Attiva",
     "active": "Attiva",
     "blocked": "Bloccata",
     "rotated": "Ruotata",
-    "disabled" : "Disabilitata"
+    "disabled": "Disabilitata"
   },
   "tooltip": {
     "created": "Creata",
@@ -124,7 +124,7 @@
   "virtualKeys": {
     "title": "Chiave personale",
     "new-key-button": "Genera chiave personale",
-    "tos-empty-state": "Per poter creare una chiave personale, un amministratore deve prima abilitare l’integrazione.",
+    "not-enabled-empty-state": "Per poter creare una chiave personale, un amministratore deve prima abilitare l’integrazione.",
     "empty-state": "Non è stata ancora generata nessuna chiave personale per la tua impresa.",
     "default": "Chiave-",
     "table": {
