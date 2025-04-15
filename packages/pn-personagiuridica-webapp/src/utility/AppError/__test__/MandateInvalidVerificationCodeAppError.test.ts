@@ -10,8 +10,8 @@ describe('Test MandateInvalidVerificationCodeAppError', () => {
       {} as ServerResponseError,
       translateFn
     );
-    const messege = appError.getMessage();
-    expect(messege.title).toBe('errors.invalid_verification_code.title deleghe');
-    expect(messege.content).toBe('errors.invalid_verification_code.message deleghe');
+    const message = appError.getMessage();
+    expect(message.title).toBe('errors.invalid_verification_code.title deleghe');
+    expect(message.content).toBe('errors.invalid_verification_code.message deleghe');
   });
 });

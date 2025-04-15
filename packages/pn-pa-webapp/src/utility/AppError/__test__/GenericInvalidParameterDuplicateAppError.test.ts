@@ -10,9 +10,9 @@ describe('Test GenericInvalidParameterDuplicateAppError', () => {
       {} as ServerResponseError,
       translateFn
     );
-    const messege = appError.getMessage();
-    expect(messege.title).toBe('new-notification.errors.invalid_parameter.title notifiche');
-    expect(messege.content).toBe('new-notification.errors.invalid_parameter.message notifiche');
+    const message = appError.getMessage();
+    expect(message.title).toBe('new-notification.errors.invalid_parameter.title notifiche');
+    expect(message.content).toBe('new-notification.errors.invalid_parameter.message notifiche');
   });
 
   it('Should return duplicated protocol number message', () => {
@@ -22,11 +22,11 @@ describe('Test GenericInvalidParameterDuplicateAppError', () => {
       } as ServerResponseError,
       translateFn
     );
-    const messege = appError.getMessage();
-    expect(messege.title).toBe(
+    const message = appError.getMessage();
+    expect(message.title).toBe(
       'new-notification.errors.invalid_parameter_protocol_number_duplicate.title notifiche'
     );
-    expect(messege.content).toBe(
+    expect(message.content).toBe(
       'new-notification.errors.invalid_parameter_protocol_number_duplicate.message notifiche'
     );
   });

@@ -7,8 +7,8 @@ describe('Test MandateDelegateHimselfAppError', () => {
 
   it('Should return delegate himself message', () => {
     const appError = new MandateDelegateHimselfAppError({} as ServerResponseError, translateFn);
-    const messege = appError.getMessage();
-    expect(messege.title).toBe('errors.delegate_himself.title deleghe');
-    expect(messege.content).toBe('errors.delegate_himself.message deleghe');
+    const message = appError.getMessage();
+    expect(message.title).toBe('errors.delegate_himself.title deleghe');
+    expect(message.content).toBe('errors.delegate_himself.message deleghe');
   });
 });

@@ -572,6 +572,10 @@
       "invalid_parameter_taxonomy_code": {
         "title": "Codice tassonomico non valido",
         "message": "Il codice tassonomico inserito non è tra quelli gestiti dalla piattaforma."
+      },
+      "delivery_notification_limit_exceeded": {
+        "title": "Limite raggiunto",
+        "message": "Hai raggiunto il limite di notifiche create in un mese."
       }
     }
   },
