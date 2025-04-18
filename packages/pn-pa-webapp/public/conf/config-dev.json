@@ -9,7 +9,7 @@
   "ONE_TRUST_DRAFT_MODE": true,
   "ONE_TRUST_PP": "4824a110-316e-42fd-b492-8e2b0513db70",
   "ONE_TRUST_TOS": "083fb982-149c-4241-be09-12ae67d88b66",
-  "LANDING_SITE_URL": "https://www.dev.notifichedigitali.it",
+  "LANDING_SITE_URL": "https://www.notifichedigitali.it",
   "IS_PAYMENT_ENABLED": true,
   "WORK_IN_PROGRESS": false,
   "SELFCARE_SEND_PROD_ID": "prod-pn-dev",
@@ -17,7 +17,7 @@
   "API_B2B_LINK": "https://developer.pagopa.it/send/api#/",
   "IS_STATISTICS_ENABLED": true,
   "TAXONOMY_SEND_URL": "https://docs.pagopa.it/f.a.q.-per-integratori/tassonomia-send",
-  "DOWNTIME_EXAMPLE_LINK": "https://www.dev.notifichedigitali.it/static/documents/LegalFactMalfunction.pdf",
+  "DOWNTIME_EXAMPLE_LINK": "https://www.notifichedigitali.it/static/documents/LegalFactMalfunction.pdf",
   "PAYMENT_INFO_LINK": "https://developer.pagopa.it/send/guides/knowledge-base/readme/pagamenti-e-spese-di-notifica/pagamenti-pagopa",
   "DEVELOPER_API_DOCUMENTATION_LINK": "https://developer.pagopa.it/send/api"
 }

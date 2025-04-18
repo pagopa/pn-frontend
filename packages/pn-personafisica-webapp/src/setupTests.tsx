@@ -27,7 +27,7 @@ beforeAll(() => {
     PAGOPA_HELP_EMAIL: 'assistenza@pn.it',
     MIXPANEL_TOKEN: 'DUMMY',
     DELEGATIONS_TO_PG_ENABLED: true,
-    LANDING_SITE_URL: 'https://www.dev.notifichedigitali.it',
+    LANDING_SITE_URL: 'https://www.notifichedigitali.it',
     PAGOPA_HELP_PP: 'https://www.fake-page.it',
     APP_IO_SITE: 'https://www.fake.appio.it',
     APP_IO_ANDROID: 'https://www.fake.android-appio.it',
