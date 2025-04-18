@@ -29,11 +29,7 @@ const NotFound: React.FC<Props> = ({ isLogged = true, goBackAction }) => (
       mt={2}
       data-testid="not-found-title"
     >
-      {getLocalizedOrDefaultLabel(
-        'common',
-        'not-found.title',
-        '404: La pagina che stai cercando non esiste'
-      )}
+      {getLocalizedOrDefaultLabel('common', 'not-found.title', 'Quello che cercavi non è qui.')}
     </Typography>
 
     <Typography
@@ -47,7 +43,7 @@ const NotFound: React.FC<Props> = ({ isLogged = true, goBackAction }) => (
       {getLocalizedOrDefaultLabel(
         'common',
         'not-found.description',
-        'Sei qui per errore, prova ad usare la navigazione.'
+        'La pagina che hai tentato di raggiungere non esiste o non è più disponibile.'
       )}
     </Typography>
 
@@ -58,7 +54,7 @@ const NotFound: React.FC<Props> = ({ isLogged = true, goBackAction }) => (
       data-testid="not-found-back-button"
     >
       {isLogged
-        ? getLocalizedOrDefaultLabel('common', 'button.go-to-home', 'Vai alla homepage')
+        ? getLocalizedOrDefaultLabel('common', 'not-found.back-to-home', 'Torna alla home')
         : getLocalizedOrDefaultLabel('common', 'button.go-to-login', 'Accedi')}
     </Button>
   </Stack>
