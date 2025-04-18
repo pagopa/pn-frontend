@@ -108,7 +108,7 @@
       "feedback": {
         "title-activation": "Hai attivato il tuo domicilio digitale",
         "title-transfer": "Hai aggiornato il tuo domicilio digitale",
-        "back-to-contacts": "Torna ai tuoi recapiti"
+        "go-to-contacts": "Vai ai tuoi recapiti"
       }
     },
     "pec-contact-wizard": {
