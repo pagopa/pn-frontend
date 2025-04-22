@@ -1,12 +1,13 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
-import { Button, DialogContentText, DialogTitle } from '@mui/material';
-import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
+import { Button } from '@mui/material';
+import { ConfirmationModal } from '@pagopa-pn/pn-commons';
 
 type Props = {
   open: boolean;
   value: string;
+  isDefault?: boolean;
   handleDiscard: () => void;
   handleConfirm: () => void;
 };
@@ -14,35 +15,44 @@ type Props = {
 const ExistingContactDialog: React.FC<Props> = ({
   open = false,
   value,
+  isDefault = false,
   handleDiscard,
   handleConfirm,
 }) => {
   const { t } = useTranslation();
   return (
-    <PnDialog
+    <ConfirmationModal
       open={open}
-      onClose={handleDiscard}
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
-      data-testid="duplicateDialog"
+      title={t(`common.duplicate-${isDefault ? 'default-' : ''}contact-title`, {
+        value,
+        ns: 'recapiti',
+      })}
+      slots={{
+        confirmButton: isDefault ? () => <></> : Button,
+        closeButton: Button,
+      }}
+      slotsProps={{
+        closeButton: {
+          onClick: handleDiscard,
+          variant: isDefault ? 'contained' : 'outlined',
+          children: isDefault ? t('button.understand') : t('button.annulla'),
+        },
+        confirmButton: {
+          onClick: handleConfirm,
+          children: t('button.conferma'),
+        },
+      }}
     >
-      <DialogTitle id="dialog-title">
-        {t(`common.duplicate-contact-title`, { value, ns: 'recapiti' })}
-      </DialogTitle>
-      <PnDialogContent>
-        <DialogContentText id="dialog-description">
-          {t(`common.duplicate-contact-descr`, { value, ns: 'recapiti' })}
-        </DialogContentText>
-      </PnDialogContent>
-      <PnDialogActions>
-        <Button onClick={handleDiscard} variant="outlined">
-          {t('button.annulla')}
-        </Button>
-        <Button onClick={handleConfirm} variant="contained">
-          {t('button.conferma')}
-        </Button>
-      </PnDialogActions>
-    </PnDialog>
+      <Trans
+        ns="recapiti"
+        i18nKey={`common.duplicate-${isDefault ? 'default-' : ''}contact-descr`}
+        values={{
+          value,
+        }}
+      />
+    </ConfirmationModal>
   );
 };
 

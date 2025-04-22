@@ -87,8 +87,9 @@
   "not-logged": "Accedi a SEND",
   "not-logged-subtitle": "Per vedere e gestire le tue notifiche, accedi con SPID o CIE.",
   "not-found": {
-    "title": "404: La pagina che stai cercando non esiste",
-    "descpription": "Sei qui per errore, prova ad usare la navigazione."
+    "title": "Quello che cercavi non è qui.",
+    "descpription": "La pagina che hai tentato di raggiungere non esiste o non è più disponibile.",
+    "back-to-home": "Torna alla home"
   },
   "leaving-app": {
     "title": "Stai uscendo da SEND",
