@@ -21,7 +21,7 @@ describe('NotFound Component', () => {
     expect(subHeading).toHaveTextContent('common - not-found.description');
     const goBackAction = getByTestId('not-found-back-button');
     expect(goBackAction).toBeInTheDocument();
-    expect(goBackAction).toHaveTextContent('common - button.go-to-home');
+    expect(goBackAction).toHaveTextContent('common - not-found.back-to-home');
     fireEvent.click(goBackAction);
     expect(goBackFn).toHaveBeenCalledTimes(1);
   });
