@@ -10,6 +10,7 @@ import IOContactWizard from '../../components/Contacts/IOContactWizard';
 import PecContactWizard from '../../components/Contacts/PecContactWizard';
 import SercqSendContactWizard from '../../components/Contacts/SercqSendContactWizard';
 import { IOAllowedValues } from '../../models/contacts';
+import { RECAPITI } from '../../navigation/routes.const';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
@@ -159,8 +160,8 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
                 isTransferring ? 'transfer' : 'activation'
               }`
             ),
-            buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
-            onClick: () => navigate(-1),
+            buttonText: t('legal-contacts.sercq-send-wizard.feedback.go-to-contacts'),
+            onClick: () => navigate(RECAPITI),
           },
           actions: isEmailSmsStep && hasEmailOrSms ? { justifyContent: 'flex-end' } : {},
         }}
