@@ -2715,6 +2715,17 @@
     fp-ts "^2.12.3"
     io-ts "^2.2.18"
 
+"@pagopa/mui-italia@^1.5.3":
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-1.5.3.tgz#b4769851006431b7fc13720c5c33a2cf5082a454"
+  integrity sha512-Dus37jQcbbNLWakyokSgo0uY70sHdNlwAM8E3MP7GEIpK4oxmJnqgiiNMxHsXJRIBHumUb5Ebqt6s3XEQBsTpw==
+  dependencies:
+    "@fontsource/dm-mono" "^4.5.10"
+    "@fontsource/titillium-web" "^4.5.9"
+    clsx "^1.2.1"
+    fp-ts "^2.12.3"
+    io-ts "^2.2.18"
+
 "@parcel/watcher@2.0.4":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@parcel/watcher/-/watcher-2.0.4.tgz#f300fef4cc38008ff4b8c29d92588eced3ce014b"
