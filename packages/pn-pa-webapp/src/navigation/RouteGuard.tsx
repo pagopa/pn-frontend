@@ -1,8 +1,7 @@
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 import { AccessDenied } from '@pagopa-pn/pn-commons';
 
-import { useEffect } from 'react';
 import { PNRole } from '../models/user';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -21,14 +20,7 @@ const RouteGuard = ({ roles }: Props) => {
   const navigate = useNavigate();
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
   const role = useAppSelector((state: RootState) => state.userState.user.organization?.roles[0]);
-  const location = useLocation();
   const userHasRequiredRole = !roles || (role && roles.includes(role.role));
-
-  useEffect(()=>{
-    if(!sessionToken){
-      goToSelfcareLogin();
-    }
-  },[location.pathname]);
 
   if (!sessionToken || !userHasRequiredRole) {
     return (

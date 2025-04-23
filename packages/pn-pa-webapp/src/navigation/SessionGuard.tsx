@@ -56,6 +56,7 @@ const SessionGuardRender = () => {
   );
   const { t } = useTranslation(['common']);
   const { hasApiErrors } = useErrors();
+  const { IS_INACTIVITY_HANDLER_ENABLED } = getConfiguration();
 
   const isAnonymousUser = !isUnauthorizedUser && !sessionToken;
   const hasTosPrivacyApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_PRIVACY_APPROVAL);
@@ -74,20 +75,25 @@ const SessionGuardRender = () => {
     message: isUnauthorizedUser ? messageUnauthorizedUser.message : hasErrorMessage.message,
   };
 
-  const renderIfInitialized = () =>
-    isUnauthorizedUser || hasTosPrivacyApiErrors || isClosedSession ? (
-      <SessionModal
-        open
-        title={goodbyeMessage.title}
-        message={goodbyeMessage.message}
-        handleClose={goToSelfcareLogin}
-        initTimeout
-      />
-    ) : isAnonymousUser || !getConfiguration().IS_INACTIVITY_HANDLER_ENABLED ? (
-      <Outlet />
-    ) : (
+  const renderIfInitialized = () => {
+    if (isUnauthorizedUser || hasTosPrivacyApiErrors || isClosedSession) {
+      return (
+        <SessionModal
+          open
+          title={goodbyeMessage.title}
+          message={goodbyeMessage.message}
+          handleClose={goToSelfcareLogin}
+          initTimeout
+        />
+      );
+    } else if (isAnonymousUser) {
+      goToSelfcareLogin();
+      return <></>;
+    }
+
+    return (
       <InactivityHandler
-        inactivityTimer={inactivityTimer}
+        inactivityTimer={isAnonymousUser || !IS_INACTIVITY_HANDLER_ENABLED ? 0 : inactivityTimer}
         onTimerExpired={() => {
           sessionStorage.clear();
           goToSelfcareLogin();
@@ -96,6 +102,7 @@ const SessionGuardRender = () => {
         <Outlet />
       </InactivityHandler>
     );
+  };
 
   return isInitialized ? renderIfInitialized() : <LoadingPage renderType="whole" />;
 };
