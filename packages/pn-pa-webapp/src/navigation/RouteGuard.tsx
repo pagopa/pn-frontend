@@ -20,6 +20,7 @@ const RouteGuard = ({ roles }: Props) => {
   const navigate = useNavigate();
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
   const role = useAppSelector((state: RootState) => state.userState.user.organization?.roles[0]);
+
   const userHasRequiredRole = !roles || (role && roles.includes(role.role));
 
   if (!sessionToken || !userHasRequiredRole) {

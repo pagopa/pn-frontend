@@ -90,7 +90,6 @@ const SessionGuardRender = () => {
       goToSelfcareLogin();
       return <></>;
     }
-
     return (
       <InactivityHandler
         inactivityTimer={isAnonymousUser || !IS_INACTIVITY_HANDLER_ENABLED ? 0 : inactivityTimer}
