@@ -115,11 +115,11 @@ export const f24ValidationSchema = (tc: TFunction) =>
         data: yup
           .mixed()
           .test((input) => input instanceof File)
-          .required(),
+          .required(tc('required-field')),
         sha256: yup
           .object({
-            hashBase64: yup.string().required(),
-            hashHex: yup.string().required(),
+            hashBase64: yup.string().required(tc('required-field')),
+            hashHex: yup.string().required(tc('required-field')),
           })
           .required(),
       })
@@ -161,12 +161,12 @@ export function identicalIUV(
           {
             messageKey: 'identical-notice-codes-error',
             value: payment,
-            id: `recipients[${payment.taxIdKey}].pagoPa[${payment.idx}].noticeCode`,
+            id: `recipients.${payment.taxIdKey}.pagoPa[${payment.idx}].noticeCode`,
           },
           {
             messageKey: '',
             value: payment,
-            id: `recipients[${payment.taxIdKey}].pagoPa[${payment.idx}].creditorTaxId`,
+            id: `recipients.${payment.taxIdKey}.pagoPa[${payment.idx}].creditorTaxId`,
           }
         );
       }
@@ -230,3 +230,70 @@ export const checkApplyCost = (
 
   return errors;
 };
+
+export function identicalSHA(values: RecipientPaymentsFormValues | undefined): Array<{
+  messageKey: string;
+  value: NewNotificationPagoPaPayment | NewNotificationF24Payment;
+  id: string;
+}> {
+  const errors: Array<{
+    messageKey: string;
+    value: NewNotificationPagoPaPayment | NewNotificationF24Payment;
+    id: string;
+  }> = [];
+
+  if (!values) {
+    return errors;
+  }
+
+  type RecipientPayments = (NewNotificationPagoPaPayment | NewNotificationF24Payment) & {
+    taxIdKey: string;
+    paymentType: 'pagoPa' | 'f24';
+    sha256Hash: string;
+  };
+
+  const allPayments: Array<RecipientPayments> = [];
+
+  Object.entries(values).forEach(([taxIdKey, payments]) => {
+    payments.pagoPa.forEach((payment) => {
+      if (payment.file?.sha256?.hashBase64) {
+        // eslint-disable-next-line functional/immutable-data
+        allPayments.push({
+          ...payment,
+          taxIdKey,
+          paymentType: 'pagoPa',
+          sha256Hash: payment.file.sha256.hashBase64,
+        });
+      }
+    });
+
+    payments.f24.forEach((payment) => {
+      if (payment.file?.sha256?.hashBase64) {
+        // eslint-disable-next-line functional/immutable-data
+        allPayments.push({
+          ...payment,
+          taxIdKey,
+          paymentType: 'f24',
+          sha256Hash: payment.file.sha256.hashBase64,
+        });
+      }
+    });
+  });
+
+  const duplicateSHA = getDuplicateValuesByKeys<RecipientPayments>(allPayments, ['sha256Hash']);
+
+  if (duplicateSHA.length > 0) {
+    allPayments.forEach((payment) => {
+      if (payment.sha256Hash && duplicateSHA.includes(payment.sha256Hash)) {
+        // eslint-disable-next-line functional/immutable-data
+        errors.push({
+          messageKey: 'identical-sha256-error',
+          value: payment,
+          id: `recipients[${payment.taxIdKey}].${payment.paymentType}[${payment.idx}].file.sha256.hashBase64`,
+        });
+      }
+    });
+  }
+
+  return errors;
+}

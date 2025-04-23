@@ -197,7 +197,7 @@ const SpecialContacts: React.FC = () => {
       arr.findIndex(
         (el) =>
           addr.senderId === el.senderId &&
-          addr.channelType !== el.channelType &&
+          (addr.channelType !== el.channelType || addr.value !== el.value) &&
           el.channelType === ChannelType.PEC &&
           !el.pecValid
       ) === -1

@@ -40,7 +40,12 @@ type Props = {
     unwrap: () => Promise<PaymentAttachment>;
   };
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
-  onPayTppClick?: (noticeCode?: string, creditorTaxId?: string, retrievalId?: string) => void;
+  onPayTppClick?: (
+    noticeCode?: string,
+    creditorTaxId?: string,
+    retrievalId?: string,
+    tppName?: string
+  ) => void;
   handleTrackEvent?: (event: EventPaymentRecipientType, param?: object) => void;
   handleFetchPaymentsInfo: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
 };
@@ -81,7 +86,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   const allPaymentsIsPaid = pagoPaF24.every((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED);
   const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
-  const hasMoreThenOnePage = paginationData.totalElements > paginationData.size;
+  const hasMoreThanOnePage = paginationData.totalElements > paginationData.size;
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
@@ -149,7 +154,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         onPayTppClick?.(
           selectedPayment?.pagoPa?.noticeCode,
           selectedPayment?.pagoPa?.creditorTaxId,
-          paymentTpp?.retrievalId
+          paymentTpp?.retrievalId,
+          paymentTpp?.paymentButton
         );
         return;
       }
@@ -192,7 +198,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           pagoPaF24={pagoPaF24}
           f24Only={f24Only}
           allPaymentsIsPaid={allPaymentsIsPaid}
-          hasMoreThenOnePage={hasMoreThenOnePage}
+          hasMoreThanOnePage={hasMoreThanOnePage}
         />
       )}
 

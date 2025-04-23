@@ -9,6 +9,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import LegalContactManager, {
   DigitalDomicileManagementAction,
 } from '../../components/Contacts/LegalContactManager';
+import { RECAPITI } from '../../navigation/routes.const';
 import AddSpecialContact, { AddSpecialContactRef } from './AddSpecialContact';
 import DigitalContactActivation from './DigitalContactActivation';
 
@@ -35,8 +36,8 @@ const DigitalContactManagement: React.FC = () => {
         data-testid="prev-button"
         color={'primary'}
         fullWidth
-        sx={{ fontSize: '16px', width: { xs: 'unset', md: 'auto' } }}
-        onClick={handleSpecialContactDiscard}
+        sx={{ fontSize: '16px', width: { xs: 'unset', md: 'auto' }, mt: { xs: 3, md: 'unset' } }}
+        onClick={() => setCurrentAction(DigitalDomicileManagementAction.DEFAULT)}
         variant="naked"
       >
         {t('button.indietro', { ns: 'common' })}
@@ -52,10 +53,6 @@ const DigitalContactManagement: React.FC = () => {
       </ButtonNaked>
     );
 
-  const handleSpecialContactDiscard = () => {
-    setCurrentAction(DigitalDomicileManagementAction.DEFAULT);
-  };
-
   const handleSpecialContactAdded = () => {
     setActiveStep(1);
   };
@@ -65,7 +62,12 @@ const DigitalContactManagement: React.FC = () => {
   };
 
   if (currentAction === DigitalDomicileManagementAction.DIGITAL_DOMICILE_TRANSFER) {
-    return <DigitalContactActivation isTransferring />;
+    return (
+      <DigitalContactActivation
+        isTransferring
+        onGoBack={() => setCurrentAction(DigitalDomicileManagementAction.DEFAULT)}
+      />
+    );
   }
 
   const title =
@@ -93,14 +95,14 @@ const DigitalContactManagement: React.FC = () => {
       slotsProps={{
         stepContainer: { sx: { p: 0, mb: '20px', mt: 3, background: 'transparent' } },
         nextButton: {
-          onClick: () => handleConfirmClick(),
+          onClick: handleConfirmClick,
           variant: specialContactError ? 'outlined' : 'contained',
           color: specialContactError ? 'error' : 'primary',
         },
         feedback: {
           title: t(`legal-contacts.sercq-send-wizard.feedback.title-transfer`),
-          buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
-          onClick: () => navigate(-1),
+          buttonText: t('legal-contacts.sercq-send-wizard.feedback.go-to-contacts'),
+          onClick: () => navigate(RECAPITI),
         },
       }}
     >

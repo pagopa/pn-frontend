@@ -3,6 +3,7 @@ import { useErrors } from './useErrors';
 import { useHasPermissions } from './useHasPermissions';
 import { useIsCancelled } from './useIsCancelled';
 import { useIsMobile } from './useIsMobile';
+import { useMobileOS } from './useMobileOS';
 import { useMultiEvent } from './useMultiEvent';
 import { useProcess } from './useProcess';
 import { useSessionCheck } from './useSessionCheck';
@@ -15,6 +16,7 @@ export {
   useHasPermissions,
   useIsCancelled,
   useIsMobile,
+  useMobileOS,
   useMultiEvent,
   useProcess,
   useSessionCheck,

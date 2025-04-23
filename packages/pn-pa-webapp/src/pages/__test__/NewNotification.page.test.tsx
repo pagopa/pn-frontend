@@ -331,8 +331,7 @@ describe('NewNotification Page without payment enabled in configuration', async 
   });
 });
 
-// TODO: to be enriched when payment is enabled again
-describe.skip('NewNotification Page with payment enabled in configuration', () => {
+describe('NewNotification Page with payment enabled in configuration', () => {
   let result: RenderResult;
   let mock: MockAdapter;
 
@@ -370,14 +369,16 @@ describe.skip('NewNotification Page with payment enabled in configuration', () =
     expect(preliminaryInformation).toBeInTheDocument();
     const recipientForm = result.queryByTestId('recipientForm');
     expect(recipientForm).not.toBeInTheDocument();
-    const paymentMethodForm = result.queryByTestId('paymentMethodForm');
-    expect(paymentMethodForm).not.toBeInTheDocument();
+    const debtPositionForm = result.queryByTestId('debtPositionForm');
+    expect(debtPositionForm).not.toBeInTheDocument();
+    const debtPositionDetailForm = result.queryByTestId('debtPositionDetailForm');
+    expect(debtPositionDetailForm).not.toBeInTheDocument();
     const attachmentsForm = result.queryByTestId('attachmentsForm');
     expect(attachmentsForm).not.toBeInTheDocument();
     const finalStep = result.queryByTestId('finalStep');
     expect(finalStep).not.toBeInTheDocument();
     const alert = result.queryByTestId('alert');
-    expect(alert).toBeInTheDocument();
+    expect(alert).not.toBeInTheDocument();
   });
 
   it('create new notification', async () => {
@@ -420,12 +421,22 @@ describe.skip('NewNotification Page with payment enabled in configuration', () =
       expect(recipientForm).not.toBeInTheDocument();
     });
     buttonSubmit = result.getByTestId('step-submit');
-    const paymentMethodForm = result.getByTestId('paymentMethodForm');
-    expect(paymentMethodForm).toBeInTheDocument();
+    const debtPositionForm = result.getByTestId('debtPositionForm');
+    expect(debtPositionForm).toBeInTheDocument();
+    fireEvent.click(buttonSubmit);
 
     // STEP 4
     await waitFor(() => {
-      expect(paymentMethodForm).not.toBeInTheDocument();
+      expect(debtPositionForm).not.toBeInTheDocument();
+    });
+    buttonSubmit = result.getByTestId('step-submit');
+    const debtPositionDetailForm = result.getByTestId('debtPositionDetailForm');
+    expect(debtPositionDetailForm).toBeInTheDocument();
+    fireEvent.click(buttonSubmit);
+
+    // STEP 5
+    await waitFor(() => {
+      expect(debtPositionDetailForm).not.toBeInTheDocument();
     });
     buttonSubmit = result.getByTestId('step-submit');
     const attachmentsForm = result.getByTestId('attachmentsForm');

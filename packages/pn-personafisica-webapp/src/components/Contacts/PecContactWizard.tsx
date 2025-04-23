@@ -15,9 +15,12 @@ import {
   ContactSource,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
+import { RECAPITI } from '../../navigation/routes.const';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
+import { getConfiguration } from '../../services/configuration.service';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { pecValidationSchema } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
@@ -25,15 +28,22 @@ import ContactCodeDialog from './ContactCodeDialog';
 interface Props {
   isTransferring?: boolean;
   setShowPecWizard: (showPecWizard: boolean) => void;
+  onGoBack?: () => void;
 }
 
-const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecWizard }) => {
+const PecContactWizard: React.FC<Props> = ({
+  isTransferring = false,
+  setShowPecWizard,
+  onGoBack,
+}) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const [openCodeModal, setOpenCodeModal] = useState(false);
+  const { IS_DOD_ENABLED } = getConfiguration();
 
   const validationSchema = yup.object().shape({
     pec: pecValidationSchema(t),
@@ -47,9 +57,10 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
     validateOnMount: true,
     enableReinitialize: true,
     onSubmit: () => {
+      const source = externalEvent?.source ?? ContactSource.RECAPITI;
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, {
         senderId: 'default',
-        source: ContactSource.RECAPITI,
+        source,
       });
       handleCodeVerification();
     },
@@ -81,11 +92,22 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
           setOpenCodeModal(true);
           return;
         }
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_SUCCESS, 'default');
+        PFEventStrategyFactory.triggerEvent(
+          PFEventsType.SEND_ADD_PEC_UX_SUCCESS,
+          res.pecValid && !!defaultSERCQ_SENDAddress
+        );
         setOpenCodeModal(false);
-        return isTransferring ? setActiveStep(activeStep + 1) : navigate(-1);
+        return isTransferring ? setActiveStep(activeStep + 1) : navigate(RECAPITI);
       })
       .catch(() => {});
+  };
+
+  const handlePreviousBtnClick = () => {
+    if (onGoBack && isTransferring) {
+      onGoBack();
+    } else {
+      return !IS_DOD_ENABLED ? navigate(-1) : setShowPecWizard(false);
+    }
   };
 
   return (
@@ -102,7 +124,7 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
         slots={{
           prevButton: () => (
             <ButtonNaked
-              onClick={isTransferring ? () => navigate(-1) : () => setShowPecWizard(false)}
+              onClick={handlePreviousBtnClick}
               color="primary"
               size="medium"
               data-testid="prev-button"
@@ -126,8 +148,8 @@ const PecContactWizard: React.FC<Props> = ({ isTransferring = false, setShowPecW
                     isTransferring ? 'transfer' : 'activation'
                   }`
                 ),
-                buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
-                onClick: () => navigate(-1),
+                buttonText: t('legal-contacts.sercq-send-wizard.feedback.go-to-contacts'),
+                onClick: () => navigate(RECAPITI),
               }
             : undefined,
         }}

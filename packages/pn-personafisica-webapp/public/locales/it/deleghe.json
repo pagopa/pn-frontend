@@ -81,7 +81,8 @@
     "validation": {
       "fiscalCode": {
         "required": "Il Codice Fiscale è obbligatorio",
-        "wrong": "Il Codice Fiscale inserito non è corretto"
+        "wrong": "Il Codice Fiscale inserito non è corretto",
+        "wrong-pg": "Inserisci solo numeri. Se il Codice Fiscale della persona che vuoi delegare è composto anche da lettere, seleziona “Persona fisica”."
       },
       "name": {
         "required": "Il nome è obbligatorio"
@@ -129,10 +130,6 @@
     "fiscal_code": {
       "title": "Codice fiscale non valido",
       "message": "Il codice fiscale inserito non è valido"
-    },
-    "invalid_parameter": {
-      "title": "Dati non validi",
-      "message": "Uno o più dei dati inseriti non sono validi"
     }
   }
 }

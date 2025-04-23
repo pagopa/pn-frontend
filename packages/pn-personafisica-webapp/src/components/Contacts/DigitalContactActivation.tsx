@@ -10,12 +10,15 @@ import IOContactWizard from '../../components/Contacts/IOContactWizard';
 import PecContactWizard from '../../components/Contacts/PecContactWizard';
 import SercqSendContactWizard from '../../components/Contacts/SercqSendContactWizard';
 import { IOAllowedValues } from '../../models/contacts';
+import { RECAPITI } from '../../navigation/routes.const';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
+import { getConfiguration } from '../../services/configuration.service';
 import EmailSmsContactWizard from './EmailSmsContactWizard';
 
 type Props = {
   isTransferring?: boolean;
+  onGoBack?: () => void;
 };
 
 enum ActiveStep {
@@ -26,17 +29,19 @@ enum ActiveStep {
 type ModalType = {
   open: boolean;
   step?: ActiveStep;
+  exit?: boolean;
 };
 
-const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) => {
+const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onGoBack }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
+  const { IS_DOD_ENABLED } = getConfiguration();
   const { defaultAPPIOAddress, defaultSMSAddress, defaultEMAILAddress, defaultSERCQ_SENDAddress } =
     useAppSelector(contactsSelectors.selectAddresses);
 
   const [modal, setModal] = useState<ModalType>({ open: false });
   const [activeStep, setActiveStep] = useState(0);
-  const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress);
+  const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress || !IS_DOD_ENABLED);
 
   const showIOStep = useMemo(
     () => defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.DISABLED,
@@ -55,37 +60,47 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
     setActiveStep((step) => step + 1);
   };
 
+  const goToEnd = () => {
+    setActiveStep(3); // set the current step greater than the number of steps to go to the thankyou page
+  };
+
   const handleConfirmationModalAccept = () => {
     setModal({ open: false });
   };
 
   const handleConfirmationModalDecline = () => {
+    if (modal.exit) {
+      goToEnd();
+    } else {
+      goToNextStep();
+    }
     setModal({ open: false });
-    goToNextStep();
   };
 
-  const handleSkipOrExitClick = () => {
+  const handleSkipOrExitClick = (exit?: boolean) => {
     if (activeStep === 0) {
       navigate(-1);
     } else if (hasCourtesyContact) {
-      setActiveStep(3); // set the current step greater than the number of steps to go to the thankyou page
+      goToEnd();
     } else {
-      showConfirmationModal();
+      showConfirmationModal(exit);
     }
   };
 
-  const showConfirmationModal = () => {
-    if (activeStep === 1 && showIOStep) {
-      setModal({ open: true, step: ActiveStep.IO });
-    } else {
-      setModal({ open: true, step: ActiveStep.EMAIL });
-    }
+  const showConfirmationModal = (exit?: boolean) => {
+    const step = activeStep === 1 && showIOStep ? ActiveStep.IO : ActiveStep.EMAIL;
+    setModal({ open: true, step, exit });
   };
 
   const getNextButton = () => {
     if (activeStep === 0) {
       return (
-        <ButtonNaked onClick={() => navigate(-1)} color="primary" size="medium" sx={{ mx: 'auto' }}>
+        <ButtonNaked
+          onClick={onGoBack ? () => onGoBack() : () => navigate(-1)}
+          color="primary"
+          size="medium"
+          sx={{ mx: 'auto' }}
+        >
           {t('button.annulla', { ns: 'common' })}
         </ButtonNaked>
       );
@@ -115,7 +130,13 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
   };
 
   if (showPecWizard) {
-    return <PecContactWizard setShowPecWizard={setShowPecWizard} isTransferring={isTransferring} />;
+    return (
+      <PecContactWizard
+        setShowPecWizard={setShowPecWizard}
+        isTransferring={isTransferring}
+        onGoBack={onGoBack}
+      />
+    );
   }
   return (
     <>
@@ -127,7 +148,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
         }
         activeStep={activeStep}
         setActiveStep={setActiveStep}
-        onExit={() => handleSkipOrExitClick()}
+        onExit={() => handleSkipOrExitClick(true)}
         slots={{
           nextButton: getNextButton,
           prevButton: () => <></>,
@@ -139,8 +160,8 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
                 isTransferring ? 'transfer' : 'activation'
               }`
             ),
-            buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
-            onClick: () => navigate(-1),
+            buttonText: t('legal-contacts.sercq-send-wizard.feedback.go-to-contacts'),
+            onClick: () => navigate(RECAPITI),
           },
           actions: isEmailSmsStep && hasEmailOrSms ? { justifyContent: 'flex-end' } : {},
         }}

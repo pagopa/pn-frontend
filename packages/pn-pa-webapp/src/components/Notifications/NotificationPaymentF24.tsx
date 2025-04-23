@@ -63,6 +63,7 @@ const NotificationPaymentF24: React.FC<Props> = ({ iun, payments }) => {
               mr={1}
               key={`${f24.recIndex} - ${f24.attachmentIdx}`}
               data-testid="f24"
+              sx={{ wordBreak: 'break-all' }}
             >
               {f24.title}
             </Typography>

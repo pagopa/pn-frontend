@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.14.0](https://github.com/pagopa/pn-frontend/compare/v2.14.0-RC.1...v2.14.0) (2025-04-10)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [2.14.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.14.0-RC.0...v2.14.0-RC.1) (2025-04-08)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [2.14.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.13.0...v2.14.0-RC.0) (2025-04-07)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [2.13.0](https://github.com/pagopa/pn-frontend/compare/v2.13.0-RC.2...v2.13.0) (2025-03-14)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [2.13.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.12.0...v2.13.0-RC.0) (2025-02-28)
+
+
+### Bug Fixes
+
+* **pn-13388:** improve regex for redirect and robots header ([#1477](https://github.com/pagopa/pn-frontend/issues/1477)) ([4f1a316](https://github.com/pagopa/pn-frontend/commit/4f1a3162e7ae5827f118dd114f4c6b36cc11d895))
+
+
+### Features
+
+* **pn-13849:** view notification from retrieval Id ([#1466](https://github.com/pagopa/pn-frontend/issues/1466)) ([c2bde20](https://github.com/pagopa/pn-frontend/commit/c2bde205b23a0ee423cf3a339060e7ca09e2cd7d))
+* **pn-13849:** view notification from retrieval Id ([#1466](https://github.com/pagopa/pn-frontend/issues/1466)) ([60b18e5](https://github.com/pagopa/pn-frontend/commit/60b18e5fdd9c996e7ace553ea49c96dc4a0d5410))
+
+
+
+
+
 # [2.12.0](https://github.com/pagopa/pn-frontend/compare/v2.12.0-RC.1...v2.12.0) (2025-02-18)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login

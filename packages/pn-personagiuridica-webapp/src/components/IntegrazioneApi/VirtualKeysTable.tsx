@@ -108,6 +108,8 @@ const VirtualKeysTable: React.FC<Props> = ({
     },
   ];
 
+  const virtualKeysVisibleColumns = isUserAdmin ? virtualKeysColumns : virtualKeysColumns.slice(1);
+
   if (!virtualKeys || virtualKeys.items.length === 0) {
     return (
       <EmptyState sentimentIcon={KnownSentiment.NONE}>{t('virtualKeys.empty-state')}</EmptyState>
@@ -117,7 +119,7 @@ const VirtualKeysTable: React.FC<Props> = ({
   return (
     <SmartTable
       data={data}
-      conf={virtualKeysColumns}
+      conf={virtualKeysVisibleColumns}
       sortLabels={{
         title: t('sort.title', { ns: 'notifiche' }),
         optionsTitle: t('sort.options', { ns: 'notifiche' }),
@@ -129,7 +131,7 @@ const VirtualKeysTable: React.FC<Props> = ({
       slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
     >
       <SmartHeader>
-        {virtualKeysColumns.map((column) => (
+        {virtualKeysVisibleColumns.map((column) => (
           <SmartHeaderCell
             key={column.id.toString()}
             columnId={column.id}
@@ -142,8 +144,8 @@ const VirtualKeysTable: React.FC<Props> = ({
       </SmartHeader>
       <SmartBody>
         {data.map((row, index) => (
-          <SmartBodyRow key={row.id} index={index} testId="publicKeysBodyRow">
-            {virtualKeysColumns.map((column) => (
+          <SmartBodyRow key={row.id} index={index} testId="virtualKeysBodyRow">
+            {virtualKeysVisibleColumns.map((column) => (
               <SmartBodyCell
                 key={column.id.toString()}
                 columnId={column.id}

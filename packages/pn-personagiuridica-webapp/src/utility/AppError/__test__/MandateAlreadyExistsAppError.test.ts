@@ -7,8 +7,8 @@ describe('Test MandateAlreadyExistsAppError', () => {
 
   it('Should return already exists message', () => {
     const appError = new MandateAlreadyExistsAppError({} as ServerResponseError, translateFn);
-    const messege = appError.getMessage();
-    expect(messege.title).toBe('errors.already_exists.title deleghe');
-    expect(messege.content).toBe('errors.already_exists.message deleghe');
+    const message = appError.getMessage();
+    expect(message.title).toBe('errors.already_exists.title deleghe');
+    expect(message.content).toBe('errors.already_exists.message deleghe');
   });
 });

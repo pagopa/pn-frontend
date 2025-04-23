@@ -18,13 +18,13 @@ import {
   VirtualKeyStatus,
 } from '../../generated-client/pg-apikeys';
 import { ModalApiKeyView } from '../../models/ApiKeys';
+import { PNRole } from '../../models/User';
 import {
   changeVirtualApiKeyStatus,
   createVirtualApiKey,
   deleteVirtualApiKey,
   getVirtualApiKeys,
 } from '../../redux/apikeys/actions';
-import { PNRole } from '../../models/User';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import ApiKeyModal from './ApiKeyModal';
@@ -133,6 +133,7 @@ const VirtualKeys: React.FC = () => {
           mb: 3,
           mt: 8,
         }}
+        data-testid="virtualKeys"
       >
         <Typography variant="h6" sx={{ mb: { xs: 3, lg: 0 } }}>
           {t('virtualKeys.title')}
@@ -150,9 +151,9 @@ const VirtualKeys: React.FC = () => {
         )}
       </Stack>
 
-      {!issuerState.tosAccepted ? (
+      {!issuerState.tosAccepted || !issuerState.issuer?.isPresent ? (
         <EmptyState sentimentIcon={KnownSentiment.NONE}>
-          {t('virtualKeys.tos-empty-state')}
+          {t('virtualKeys.not-enabled-empty-state')}
         </EmptyState>
       ) : (
         <VirtualKeysTable
@@ -170,7 +171,8 @@ const VirtualKeys: React.FC = () => {
           content={
             <Stack spacing={2}>
               <ShowCodesInput
-                value={modal.virtualKey?.value || ''}
+                name="value"
+                value={modal.virtualKey?.value ?? ''}
                 label="virtualKeys.personal-key"
               />
             </Stack>

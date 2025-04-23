@@ -238,7 +238,7 @@ export function getNotificationStatusInfos(
           'Annullamento in corso. Lo stato sarà aggiornato a breve.'
         ),
       };
-      case NotificationStatus.RETURNED_TO_SENDER:
+    case NotificationStatus.RETURNED_TO_SENDER:
       return {
         color: 'warning',
         ...localizeStatus(
@@ -246,7 +246,8 @@ export function getNotificationStatusInfos(
           'Resa al mittente',
           `Il destinatario risulta deceduto.`,
           `Il destinatario risulta deceduto.`,
-          { isMultiRecipient }),
+          { isMultiRecipient }
+        ),
       };
     default:
       return {
@@ -404,7 +405,7 @@ export function getLegalFactLabel(
     return getLocalizedOrDefaultLabel(
       'notifications',
       'detail.timeline.legalfact.analog-failure-delivery',
-      'Deposito di avvenuta ricezione'
+      'Deposito avviso di avvenuta ricezione'
     );
   } else if (
     timelineStep.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW &&
@@ -586,18 +587,18 @@ export const getPagoPaF24Payments = (
 /**
  * Populate only pagoPA(with eventual f24 associated) payment history array before send notification to fe.
  * @param  {Array<INotificationDetailTimeline>} timeline
- * @param  {Array<PaymentDetails>} pagoPaF24Payemnts
+ * @param  {Array<PaymentDetails>} pagoPaF24Payments
  * @param  {Array<ExtRegistriesPaymentDetails>} checkoutPayments
  * @returns Array<PaymentDetails>
  */
 export const populatePaymentsPagoPaF24 = (
   timeline: Array<INotificationDetailTimeline>,
-  pagoPaF24Payemnts: Array<PaymentDetails> | Array<NotificationDetailPayment>,
+  pagoPaF24Payments: Array<PaymentDetails> | Array<NotificationDetailPayment>,
   checkoutPayments: Array<ExtRegistriesPaymentDetails>
 ): Array<PaymentDetails> => {
   const paymentDetails: Array<PaymentDetails> = [];
 
-  if (!pagoPaF24Payemnts || pagoPaF24Payemnts.length === 0) {
+  if (!pagoPaF24Payments || pagoPaF24Payments.length === 0) {
     return [];
   }
 
@@ -605,7 +606,7 @@ export const populatePaymentsPagoPaF24 = (
   const paymentTimelineStep = timeline.filter((t) => t.category === TimelineCategory.PAYMENT);
 
   // 2. populate payment history array with the informations from timeline and related recipients
-  for (const userPayment of pagoPaF24Payemnts) {
+  for (const userPayment of pagoPaF24Payments) {
     if (!userPayment.pagoPa) {
       continue;
     }
@@ -663,6 +664,6 @@ export const populatePaymentsPagoPaF24 = (
   return paymentDetails;
 };
 
-export const isNotificationDetailOtherDocument = 
-(value: NotificationDetailDocument | NotificationDetailOtherDocument): value is NotificationDetailOtherDocument => 
-  value.documentType === 'AAR';
+export const isNotificationDetailOtherDocument = (
+  value: NotificationDetailDocument | NotificationDetailOtherDocument
+): value is NotificationDetailOtherDocument => value.documentType === 'AAR';

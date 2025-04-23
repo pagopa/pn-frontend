@@ -85,7 +85,7 @@
         "have-pec-description": "In alternativa, puoi usare una PEC come domicilio digitale per le notifiche di SEND.",
         "insert-pec": "Inserisci PEC",
         "delivered-dialog-title": "Valore giuridico della notifica sul domicilio digitale SEND",
-        "delivered-dialog-description": "Se scegli SEND come domicilio digitale e non apri la notifica entro 7 giorni dalla consegna, questa risulterà legalmente recapitata, proprio come accade con le raccomandate cartacee.",
+        "delivered-dialog-description": "Se scegli SEND come domicilio digitale, <strong>dopo 7 giorni dalla consegna</strong> la notifica risulterà legalmente recapitata, anche se non l’hai consultata.",
         "pec-info-alert": "La piattaforma SEND sostituirà la PEC aziendale come tuo domicilio digitale della tua impresa. "
       },
       "step_2": {
@@ -96,7 +96,7 @@
       "feedback": {
         "title-activation": "Hai attivato il tuo domicilio digitale",
         "title-transfer": "Hai aggiornato il domicilio digitale della tua impresa",
-        "back-to-contacts": "Torna ai tuoi recapiti"
+        "go-to-contacts": "Vai ai tuoi recapiti"
       }
     },
     "pec-contact-wizard": {
@@ -193,6 +193,8 @@
   "common": {
     "duplicate-contact-title": "Recapito già presente",
     "duplicate-contact-descr": "Il contatto {{value}} è già presente, vuoi procedere ugualmente?",
+    "duplicate-default-contact-title": "Questo recapito è già usato come domicilio digitale",
+    "duplicate-default-contact-descr": "Il recapito {{value}} è già utilizzato come domicilio digitale principale su SEND.<br />Per personalizzare il domicilio digitale per ente mittente, scegli un recapito diverso.",
     "enti-not-found": "Nessun ente trovato",
     "too-long-field-error": "Scrivi massimo {{maxLength}} caratteri"
   },
@@ -213,7 +215,7 @@
   "domicile-banner": {
     "no-sercq-send-title": "Niente più documenti cartacei: attiva SEND come Domicilio Digitale",
     "no-sercq-send-description": "Scegli la piattaforma SEND come Domicilio Digitale per ricevere le prossime notifiche solo in digitale e leggerle in tempo reale, ovunque tu sia.",
-    "no-sercq-cta": "Attiva",
+    "no-sercq-cta": "Inizia",
     "no-courtesy-title": "Non perderti le comunicazioni importanti",
     "no-courtesy-description": "Senza un recapito di cortesia non possiamo avvisarti quando c’è da leggere una comunicazione a valore legale su SEND.",
     "complete-addresses": "Inserisci una email",

@@ -12,11 +12,12 @@
   "OT_DOMAIN_ID": "8d53193a-e4c2-44e5-9fb7-01f08007d083-test",
   "SELFCARE_BASE_URL": "https://imprese.uat.notifichedigitali.it",
   "PAGOPA_HELP_EMAIL": "destinatari-send@assistenza.pagopa.it",
-  "LANDING_SITE_URL": "https://www.dev.notifichedigitali.it",
+  "LANDING_SITE_URL": "https://www.notifichedigitali.it",
   "DELEGATIONS_TO_PG_ENABLED": true,
   "WORK_IN_PROGRESS": false,
   "F24_DOWNLOAD_WAIT_TIME": 15000,
   "IS_B2B_ENABLED": true,
   "IS_DOD_ENABLED": true,
-  "DOWNTIME_EXAMPLE_LINK": "https://www.dev.notifichedigitali.it/static/documents/LegalFactMalfunction.pdf"
+  "DOWNTIME_EXAMPLE_LINK": "https://www.notifichedigitali.it/static/documents/LegalFactMalfunction.pdf",
+  "SELFCARE_CDN_URL": "https://selcuweupnpgcheckoutsa.z6.web.core.windows.net"
 }

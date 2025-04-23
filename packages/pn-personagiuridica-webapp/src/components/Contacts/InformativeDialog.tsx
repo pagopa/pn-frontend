@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, DialogContentText, DialogTitle, Typography } from '@mui/material';
@@ -6,7 +7,7 @@ import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-common
 type DialogProps = {
   open: boolean;
   title: string;
-  subtitle: string;
+  subtitle: string | ReactNode;
   content?: string;
   onConfirm: () => void;
   onDiscard?: () => void;

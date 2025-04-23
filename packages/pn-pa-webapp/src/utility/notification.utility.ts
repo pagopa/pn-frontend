@@ -14,10 +14,12 @@ import {
   NewNotificationDocument,
   NewNotificationDocumentFile,
   NewNotificationDocumentRef,
+  NewNotificationF24Payment,
   NewNotificationLangOther,
   NewNotificationPagoPaPayment,
   NewNotificationPayment,
   NewNotificationRecipient,
+  NotificationFeePolicy,
   PaymentModel,
 } from '../models/NewNotification';
 
@@ -169,6 +171,9 @@ export function newNotificationMapper(newNotification: NewNotification): BffNewN
   /* eslint-disable functional/immutable-data */
   const newNotificationParsed: BffNewNotificationRequest = {
     ...clonedNotification,
+    paFee: clonedNotification.paFee
+      ? parseFloat(clonedNotification.paFee.replace(',', '.')) * 100
+      : undefined,
     recipients: [],
     documents: [],
   };
@@ -177,11 +182,23 @@ export function newNotificationMapper(newNotification: NewNotification): BffNewN
     newNotificationParsed.additionalLanguages = additionalLanguages;
   }
 
+  if (!newNotification.notificationFeePolicy) {
+    newNotificationParsed.notificationFeePolicy = NotificationFeePolicy.FLAT_RATE;
+  }
+
   // format recipients
   newNotificationParsed.recipients = newNotificationRecipientsMapper(newNotification.recipients);
   // format attachments
   newNotificationParsed.documents = newNotificationAttachmentsMapper(newNotification.documents);
   /* eslint-enable functional/immutable-data */
+
+  (Object.keys(newNotificationParsed) as Array<keyof BffNewNotificationRequest>).forEach((key) => {
+    if (!newNotificationParsed[key]) {
+      // eslint-disable-next-line functional/immutable-data
+      delete newNotificationParsed[key];
+    }
+  });
+
   return newNotificationParsed;
 }
 
@@ -286,3 +303,39 @@ export const filterPaymentsByDebtPositionChange = (
 
   return [];
 };
+
+const emptyFileData = {
+  data: undefined,
+  sha256: { hashBase64: '', hashHex: '' },
+};
+
+export const newPagopaPayment = (
+  taxId: string,
+  idx: number,
+  creditorTaxId: string
+): NewNotificationPagoPaPayment => ({
+  id: `${taxId}-${idx}-pagoPa`,
+  idx,
+  contentType: 'application/pdf',
+  file: emptyFileData,
+  creditorTaxId,
+  noticeCode: '',
+  applyCost: false,
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+});
+
+export const newF24Payment = (taxId: string, idx: number): NewNotificationF24Payment => ({
+  id: `${taxId}-${idx}-f24`,
+  idx,
+  contentType: 'application/json',
+  file: emptyFileData,
+  name: '',
+  applyCost: false,
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+});

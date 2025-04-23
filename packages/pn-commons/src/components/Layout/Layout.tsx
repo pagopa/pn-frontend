@@ -1,7 +1,7 @@
 import { ErrorInfo, ReactNode } from 'react';
 
 import { Stack } from '@mui/material';
-import { Box } from '@mui/system';
+import { Box, BoxOwnProps, StackProps } from '@mui/system';
 import { JwtUser, PartyEntity, ProductEntity, UserAction } from '@pagopa/mui-italia';
 
 import ErrorBoundary from '../ErrorBoundary';
@@ -55,6 +55,10 @@ type Props = {
   termsOfServiceHref?: string;
   /** Enable assistance button */
   enableAssistanceButton?: boolean;
+  slotsProps?: {
+    content?: Partial<StackProps>;
+    main?: Partial<BoxOwnProps>;
+  };
 };
 
 const Layout: React.FC<Props> = ({
@@ -82,6 +86,7 @@ const Layout: React.FC<Props> = ({
   privacyPolicyHref,
   termsOfServiceHref,
   enableAssistanceButton = true,
+  slotsProps,
 }) => (
   <ErrorBoundary
     sx={{ height: 'calc(100vh - 5px)' }}
@@ -110,7 +115,11 @@ const Layout: React.FC<Props> = ({
             enableAssistanceButton={enableAssistanceButton}
           />
         )}
-        <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
+        <Stack
+          direction={{ xs: 'column', lg: 'row' }}
+          sx={{ flexGrow: 1 }}
+          {...slotsProps?.content}
+        >
           {showSideMenu && (
             <Box
               sx={{ width: { lg: 300 }, flexShrink: '0' }}
@@ -123,6 +132,7 @@ const Layout: React.FC<Props> = ({
           <Box
             sx={{ flexGrow: 1, flexBasis: { xs: 1, lg: 'auto' }, position: 'relative' }}
             component="main"
+            {...slotsProps?.main}
           >
             <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
               {children}

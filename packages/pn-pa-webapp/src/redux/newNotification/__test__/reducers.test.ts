@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import _ from 'lodash';
 
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
@@ -9,8 +10,12 @@ import {
   payments,
 } from '../../../__mocks__/NewNotification.mock';
 import { apiClient, externalClient } from '../../../api/apiClients';
-import { NotificationFeePolicy } from '../../../generated-client/notifications';
-import { PaymentModel, PreliminaryInformationsPayload } from '../../../models/NewNotification';
+import {
+  NewNotificationF24Payment,
+  NewNotificationPagoPaPayment,
+  PaymentModel,
+  PreliminaryInformationsPayload,
+} from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
 import { newNotificationMapper } from '../../../utility/notification.utility';
 import { store } from '../../store';
@@ -35,7 +40,7 @@ import {
 const initialState = {
   loading: false,
   notification: {
-    notificationFeePolicy: NotificationFeePolicy.FlatRate,
+    notificationFeePolicy: '',
     paProtocolNumber: '',
     subject: '',
     recipients: [],
@@ -235,6 +240,44 @@ describe('New notification redux state tests', () => {
   });
 
   it('Should be able to upload payment document', async () => {
+    const recipients = _.cloneDeep(newNotificationRecipients);
+    // set all mocked ref key and version token to empty
+    for (const recipient of recipients) {
+      if (recipient.payments) {
+        for (const payment of recipient.payments) {
+          if (payment.pagoPa) {
+            (payment.pagoPa as NewNotificationPagoPaPayment).ref = {
+              key: '',
+              versionToken: '',
+            };
+          }
+
+          if (payment.f24) {
+            (payment.f24 as NewNotificationF24Payment).ref = {
+              key: '',
+              versionToken: '',
+            };
+          }
+        }
+      }
+    }
+
+    for (const taxId in payments) {
+      if (payments[taxId].pagoPa) {
+        (payments[taxId].pagoPa as NewNotificationPagoPaPayment).ref = {
+          key: '',
+          versionToken: '',
+        };
+      }
+
+      if (payments[taxId].f24) {
+        (payments[taxId].f24 as NewNotificationF24Payment).ref = {
+          key: '',
+          versionToken: '',
+        };
+      }
+    }
+
     mock
       .onPost(
         '/bff/v1/notifications/sent/documents/preload',
@@ -273,6 +316,12 @@ describe('New notification redux state tests', () => {
           httpMethod: 'POST',
           key: 'mocked-preload-key',
         },
+        {
+          url: 'https://mocked-url.com',
+          secret: 'mocked-secret',
+          httpMethod: 'POST',
+          key: 'mocked-preload-key',
+        },
       ]);
     const extMock = new MockAdapter(externalClient);
     for (const payment of Object.values(payments)) {
@@ -287,12 +336,10 @@ describe('New notification redux state tests', () => {
         });
       }
     }
-    const action = await store.dispatch(
-      uploadNotificationPaymentDocument(newNotificationRecipients)
-    );
+    const action = await store.dispatch(uploadNotificationPaymentDocument(recipients));
     expect(action.type).toBe('uploadNotificationPaymentDocument/fulfilled');
 
-    const expectedResponse = newNotificationRecipients.map((recipient) => ({
+    const expectedResponse = recipients.map((recipient) => ({
       ...recipient,
       payments: recipient.payments?.map((payment) => ({
         ...payment,

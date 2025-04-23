@@ -5,7 +5,7 @@ import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-common
 
 export type ApiKeyModalProps = {
   title: string;
-  subTitle?: ReactNode;
+  subTitle: ReactNode;
   content?: ReactNode;
   closeButtonLabel: string;
   closeModalHandler: () => void;
@@ -29,18 +29,16 @@ const ApiKeyModal = ({
   hasDeleteButton,
 }: ApiKeyModalProps) => (
   <PnDialog open onClose={closeModalHandler} fullWidth>
-    {title && <DialogTitle>{title}</DialogTitle>}
+    <DialogTitle>{title}</DialogTitle>
     <PnDialogContent>
-      {subTitle && (
-        <Typography
-          id="subtitle-top"
-          data-testid="subtitle-top"
-          variant="body1"
-          sx={{ mb: content ? 2 : 0 }}
-        >
-          {subTitle}
-        </Typography>
-      )}
+      <Typography
+        id="subtitle-top"
+        data-testid="subtitle-top"
+        variant="body1"
+        sx={{ mb: content ? 2 : 0 }}
+      >
+        {subTitle}
+      </Typography>
       {content}
     </PnDialogContent>
     <PnDialogActions>

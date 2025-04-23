@@ -65,9 +65,9 @@
     "disclaimer-link": "Scopri di più",
     "payment": {
       "title": "Pagamento",
-      "single-payment-subtitle": "L'importo finale potrebbe essere diverso da quello indicato.",
-      "subtitle": "In questa notifica ci sono più avvisi di pagamento: seleziona quello che vuoi pagare. Alcuni avvisi includono i costi di notifica.",
-      "subtitle-f24": "Puoi pagare questa notifica tramite F24. Per vedere i dettagli, apri i modelli.",
+      "single-payment-subtitle": "L'importo finale potrebbe essere diverso da quello indicato nell’atto e includere i costi di notifica.",
+      "subtitle": "In questa notifica ci sono più avvisi di pagamento: seleziona quello che vuoi pagare. L'importo finale potrebbe essere diverso da quello indicato nell’atto e includere i costi di notifica.",
+      "subtitle-f24": "Puoi pagare questa notifica tramite F24. Per vedere i dettagli, apri i modelli. L'importo finale potrebbe essere diverso da quello indicato nell’atto e includere i costi di notifica.",
       "subtitle-mixed": "In questa notifica ci sono più possibilità di pagamento: seleziona o scarica ciò che vuoi pagare. Alcuni importi includono i costi di notifica.",
       "how": "Come mai?",
       "f24Models": "Modelli F24",
@@ -307,7 +307,7 @@
         "pec-receipt-not-delivered": "di mancata consegna PEC",
         "paper-receipt-delivered": "di consegna raccomandata",
         "paper-receipt-not-delivered": "di mancata consegna raccomandata",
-        "analog-failure-delivery": "Deposito di avvenuta ricezione"
+        "analog-failure-delivery": "Deposito avviso di avvenuta ricezione"
       },
       "registered-letter-kind": {
         "AR": "A/R",

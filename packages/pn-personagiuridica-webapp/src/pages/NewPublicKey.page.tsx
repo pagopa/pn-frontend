@@ -48,6 +48,7 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
           color="primary"
           startIcon={<ArrowBackIcon />}
           onClick={() => navigate(routes.INTEGRAZIONE_API)}
+          data-testid="exitBtn"
         >
           {t('button.exit', { ns: 'common' })}
         </ButtonNaked>
@@ -104,6 +105,7 @@ const NewPublicKey = () => {
           message: t('messages.error.rotate-invalid-kid'),
         })
       );
+      return;
     }
 
     // retrieve tos and privacy version
@@ -169,6 +171,7 @@ const NewPublicKey = () => {
         return handleAcceptTosError();
       }
     }
+
     const publicKeyAction = kid
       ? dispatch(rotatePublicKey({ kid, body: publicKey }))
       : dispatch(createPublicKey(publicKey));

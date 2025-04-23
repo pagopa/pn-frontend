@@ -8,32 +8,36 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import PecContactWizard from '../../components/Contacts/PecContactWizard';
 import SercqSendContactWizard from '../../components/Contacts/SercqSendContactWizard';
+import { RECAPITI } from '../../navigation/routes.const';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
+import { getConfiguration } from '../../services/configuration.service';
 import EmailSmsContactWizard from './EmailSmsContactWizard';
 
 type Props = {
   isTransferring?: boolean;
+  onGoBack?: () => void;
 };
 
 type ModalType = {
   open: boolean;
 };
 
-const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) => {
+const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onGoBack }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
+  const { IS_DOD_ENABLED } = getConfiguration();
   const { defaultSMSAddress, defaultEMAILAddress, defaultSERCQ_SENDAddress } = useAppSelector(
     contactsSelectors.selectAddresses
   );
 
   const [modal, setModal] = useState<ModalType>({ open: false });
   const [activeStep, setActiveStep] = useState(0);
-  const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress);
+  const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress || !IS_DOD_ENABLED);
 
   const showEmailStep = useMemo(() => !(defaultSMSAddress || defaultEMAILAddress), []);
 
-  const hasCourtesyContact = !!(defaultEMAILAddress || defaultSMSAddress);
+  const hasCourtesyContact = defaultEMAILAddress || defaultSMSAddress;
 
   const goToNextStep = () => {
     setActiveStep((step) => step + 1);
@@ -55,6 +59,8 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
   const handleExit = () => {
     if (activeStep === 0) {
       navigate(-1);
+    } else if (hasCourtesyContact) {
+      goToNextStep();
     } else {
       showConfirmationModal();
     }
@@ -63,7 +69,12 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
   const getNextButton = () => {
     if (activeStep === 0) {
       return (
-        <ButtonNaked onClick={() => navigate(-1)} color="primary" size="medium" sx={{ mx: 'auto' }}>
+        <ButtonNaked
+          onClick={onGoBack ? () => onGoBack() : () => navigate(-1)}
+          color="primary"
+          size="medium"
+          sx={{ mx: 'auto' }}
+        >
           {t('button.annulla', { ns: 'common' })}
         </ButtonNaked>
       );
@@ -89,7 +100,13 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
   };
 
   if (showPecWizard) {
-    return <PecContactWizard setShowPecWizard={setShowPecWizard} isTransferring={isTransferring} />;
+    return (
+      <PecContactWizard
+        setShowPecWizard={setShowPecWizard}
+        isTransferring={isTransferring}
+        onGoBack={onGoBack}
+      />
+    );
   }
 
   return (
@@ -114,8 +131,8 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false }) =
                 isTransferring ? 'transfer' : 'activation'
               }`
             ),
-            buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
-            onClick: () => navigate(-1),
+            buttonText: t('legal-contacts.sercq-send-wizard.feedback.go-to-contacts'),
+            onClick: () => navigate(RECAPITI),
           },
           actions: hasCourtesyContact ? { justifyContent: 'flex-end' } : {},
         }}

@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, forwardRef, useImperativeHandle, useState } from 'react';
+import { CSSProperties, ChangeEvent, forwardRef, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -32,6 +32,7 @@ type Props = {
   value: string;
   channelType: ChannelType;
   slotsProps?: {
+    container?: CSSProperties;
     textField?: Partial<TextFieldProps>;
     button?: Partial<ButtonProps>;
   };
@@ -108,7 +109,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     };
 
     const toggleEdit = () => {
-      setEditMode(!editMode);
+      setEditMode((prevState) => !prevState);
     };
 
     const onCancelEdit = () => {
@@ -197,7 +198,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       <form
         onSubmit={formik.handleSubmit}
         data-testid={`${senderId}_${contactType}Contact`}
-        style={{ width: isMobile ? '100%' : '50%' }}
+        style={{ width: isMobile ? '100%' : '50%', ...slotsProps?.container }}
       >
         {showLabelOnEdit && (
           <Typography

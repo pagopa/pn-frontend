@@ -112,7 +112,7 @@ describe('DebtPosition Component', async () => {
     );
     // we wait that the component is correctly rendered
     const paymentChoiceBoxes = await waitFor(() => getAllByTestId('payments-type-choice'));
-    expect(paymentChoiceBoxes).toHaveLength(recipientsWithoutPayment.length);
+    expect(paymentChoiceBoxes).toHaveLength(2);
     const buttonSubmit = getByTestId('step-submit');
     expect(buttonSubmit).toBeDisabled();
     // choose an option for the first recipient

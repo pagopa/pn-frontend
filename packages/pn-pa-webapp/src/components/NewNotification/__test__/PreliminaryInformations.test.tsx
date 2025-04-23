@@ -31,7 +31,6 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { NotificationFeePolicy } from '../../../models/NewNotification';
 import { NEW_NOTIFICATION_ACTIONS } from '../../../redux/newNotification/actions';
 import PreliminaryInformations from '../PreliminaryInformations';
 
@@ -182,7 +181,7 @@ describe('PreliminaryInformations Component', async () => {
         subject: newNotification.subject,
         taxonomyCode: newNotification.taxonomyCode,
         group: newNotificationGroups[1].id,
-        notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
+        notificationFeePolicy: '',
         documents: [],
         recipients: [],
         physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
