@@ -7,6 +7,7 @@ import { act, render, screen, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
 import { store } from '../../redux/store';
+import { getConfiguration } from '../../services/configuration.service';
 import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
 
@@ -72,8 +73,7 @@ describe('SessionGuard Component', async () => {
     await act(async () => {
       render(<Guard />);
     });
-    const pageComponent = screen.queryByText('Generic Page');
-    expect(pageComponent).toBeTruthy();
+    expect(window.location.href).toBe(getConfiguration().SELFCARE_URL_FE_LOGIN);
   });
 
   // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken
