@@ -20,5 +20,5 @@
   "DOWNTIME_EXAMPLE_LINK": "https://www.dev.notifichedigitali.it/static/documents/LegalFactMalfunction.pdf",
   "PAYMENT_INFO_LINK": "https://developer.pagopa.it/send/guides/knowledge-base/readme/pagamenti-e-spese-di-notifica/pagamenti-pagopa",
   "DEVELOPER_API_DOCUMENTATION_LINK": "https://developer.pagopa.it/send/api",
-  "PHYSICAL_ADDRESS_LOOKUP": "on"
+  "PHYSICAL_ADDRESS_LOOKUP": "down"
 }
