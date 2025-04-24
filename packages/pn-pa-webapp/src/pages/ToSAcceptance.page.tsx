@@ -119,7 +119,6 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
           onConfirm={handleAccept}
           confirmBtnLabel={t('tos.button', 'Accedi')}
         />
-        <Switch />
       </Grid>
     </Grid>
   );
