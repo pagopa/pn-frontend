@@ -46,7 +46,8 @@ const reduxInitialState = {
 describe('App', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
-  const original = window.location;
+  const mockOpenFn = vi.fn();
+  const originalOpen = window.open;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -57,9 +58,9 @@ describe('App', async () => {
         json: () => Promise.resolve([]),
       }) as Promise<Response>;
 
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { hash: '' },
+    Object.defineProperty(window, 'open', {
+      configurable: true,
+      value: mockOpenFn,
     });
   });
 
@@ -70,7 +71,7 @@ describe('App', async () => {
   afterAll(() => {
     mock.restore();
     global.fetch = unmockedFetch;
-    Object.defineProperty(window, 'location', { writable: true, value: original });
+    Object.defineProperty(window, 'open', { configurable: true, value: originalOpen });
   });
 
   it('render component - user not logged in', async () => {
@@ -83,7 +84,8 @@ describe('App', async () => {
     expect(footer).toBeInTheDocument();
     const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-    expect(window.location.href).toBe(getConfiguration().SELFCARE_URL_FE_LOGIN);
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(getConfiguration().SELFCARE_URL_FE_LOGIN, '_self');
   });
 
   it('render component - user logged in', async () => {

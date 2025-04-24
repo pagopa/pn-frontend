@@ -28,14 +28,20 @@ const Guard = () => (
 );
 
 describe('SessionGuard Component', async () => {
-  const original = window.location;
   let mock: MockAdapter;
+  const originalLocation = window.location;
+  const originalOpen = window.open;
+  const mockOpenFn = vi.fn();
 
   beforeAll(() => {
     mock = new MockAdapter(authClient);
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { hash: '' },
+    });
+    Object.defineProperty(window, 'open', {
+      configurable: true,
+      value: mockOpenFn,
     });
   });
 
@@ -46,7 +52,8 @@ describe('SessionGuard Component', async () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'location', { writable: true, value: original });
+    Object.defineProperty(window, 'location', { writable: true, value: originalLocation });
+    Object.defineProperty(window, 'open', { configurable: true, value: originalOpen });
   });
 
   // expected behavior: enters the app, does a navigate, launches sessionCheck, the user is deleted from redux
@@ -73,7 +80,8 @@ describe('SessionGuard Component', async () => {
     await act(async () => {
       render(<Guard />);
     });
-    expect(window.location.href).toBe(getConfiguration().SELFCARE_URL_FE_LOGIN);
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(getConfiguration().SELFCARE_URL_FE_LOGIN, '_self');
   });
 
   // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken
