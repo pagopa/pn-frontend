@@ -2,7 +2,7 @@ import { ReactNode, useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Grid, Link, Switch, Typography } from '@mui/material';
+import { Box, Grid, Link, Typography } from '@mui/material';
 import {
   ConsentActionType,
   ConsentType,
