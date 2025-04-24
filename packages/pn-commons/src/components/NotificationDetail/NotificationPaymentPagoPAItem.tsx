@@ -140,17 +140,6 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
           <Typography variant="h6" color="primary.main" data-testid="payment-amount">
             {formatEurocentToCurrency(pagoPAItem.amount)}
           </Typography>
-          {pagoPAItem.applyCost && (
-            <Typography
-              fontSize="0.625rem"
-              fontWeight="600"
-              lineHeight="0.875rem"
-              color="text.secondary"
-              data-testid="apply-costs-caption"
-            >
-              {getLocalizedOrDefaultLabel('notifications', 'detail.payment.included-costs')}
-            </Typography>
-          )}
         </Box>
       )}
       {pagoPAItem.status === PaymentStatus.REQUIRED ? (

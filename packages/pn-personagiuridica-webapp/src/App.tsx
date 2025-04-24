@@ -30,10 +30,11 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
+import { PNRole } from './models/User';
+import { goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { PNRole } from './models/User';
 import { getDigitalAddresses } from './redux/contact/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
@@ -42,7 +43,6 @@ import { getConfiguration } from './services/configuration.service';
 import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
 import showLayoutParts from './utility/layout.utility';
 import './utility/onetrust';
-import { goToLoginPortal } from './navigation/navigation.utility';
 
 // Cfr. PN-6096
 // --------------------
@@ -68,7 +68,7 @@ const App = () => {
 
 // eslint-disable-next-line complexity
 const ActualApp = () => {
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, IS_B2B_ENABLED } =
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, IS_B2B_ENABLED, SELFCARE_CDN_URL } =
     getConfiguration();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -238,12 +238,7 @@ const ActualApp = () => {
         name: organization?.name,
         // productRole: role?.role,
         productRole: t(`roles.${role?.role}`),
-        logoUrl: undefined,
-        // non posso settare un'icona di MUI perché @pagopa/mui-italia accetta solo string o undefined come logoUrl
-        // ma fortunatamente, se si passa undefined, fa vedere proprio il logo che ci serve
-        // ------------------
-        // Carlos Lombardi, 2022.07.28
-        // logoUrl: <AccountBalanceIcon />
+        logoUrl: `${SELFCARE_CDN_URL}/institutions/${organization?.id}/logo.png`,
       },
     ],
     [role, organization, i18n.language]

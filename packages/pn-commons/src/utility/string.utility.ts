@@ -27,7 +27,7 @@ export const dataRegex = {
   // this for string that have numbers, characters, - and _
   lettersNumbersAndDashs: /^[A-Za-z0-9-_]+$/,
   noSpaceAtEdges: /^[^\s].*[^\s]$|^[^\s]$|^$/,
-  htmlPageUrl: /^(?:http|https):\/\/[A-Za-z0-9.\-/]+$/i,
+  htmlPageUrl: /^(?:http|https):\/\/[a-z0-9.?=\-/]+$/i,
   simpleServer: /^[A-Za-z0-9.\-/]+$/, // the server part of an URL, no protocol, no query params
   token: /^[A-Za-z0-9\-._~+/]+$/, // cfr. https://stackoverflow.com/questions/50031993/what-characters-are-allowed-in-an-oauth2-access-token
   fiscalCode:

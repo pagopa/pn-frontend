@@ -10,7 +10,7 @@
   "ONE_TRUST_TOS_SERCQ_SEND": "cfb44399-cac3-4c41-b225-b7c0372474c9",
   "OT_DOMAIN_ID": "29cc1c86-f2ef-494d-8242-9bec8009cd29-test",
   "PAGOPA_HELP_EMAIL": "destinatari-send@assistenza.pagopa.it",
-  "LANDING_SITE_URL": "https://www.dev.notifichedigitali.it",
+  "LANDING_SITE_URL": "https://www.notifichedigitali.it",
   "DELEGATIONS_TO_PG_ENABLED": true,
   "WORK_IN_PROGRESS": false,
   "F24_DOWNLOAD_WAIT_TIME": 15000,
@@ -19,5 +19,5 @@
   "APP_IO_ANDROID": "https://play.google.com/store/apps/details?id=it.pagopa.io.app",
   "APP_IO_IOS": "https://apps.apple.com/it/app/io/id1501681835",
   "IS_DOD_ENABLED": true,
-  "DOWNTIME_EXAMPLE_LINK": "https://www.dev.notifichedigitali.it/static/documents/LegalFactMalfunction.pdf"
+  "DOWNTIME_EXAMPLE_LINK": "https://www.notifichedigitali.it/static/documents/LegalFactMalfunction.pdf"
 }

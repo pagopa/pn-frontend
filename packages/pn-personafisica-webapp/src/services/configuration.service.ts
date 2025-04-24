@@ -52,7 +52,7 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
     this.ruleFor('F24_DOWNLOAD_WAIT_TIME').isNumber().isRequired();
     this.ruleFor('PAGOPA_HELP_PP').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('APP_IO_SITE').isString().isRequired().matches(dataRegex.htmlPageUrl);
-    this.ruleFor('APP_IO_ANDROID').isString().isRequired();
+    this.ruleFor('APP_IO_ANDROID').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('APP_IO_IOS').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('IS_DOD_ENABLED').isBoolean();
     this.ruleFor('DOWNTIME_EXAMPLE_LINK').isString().isRequired().matches(dataRegex.htmlPageUrl);

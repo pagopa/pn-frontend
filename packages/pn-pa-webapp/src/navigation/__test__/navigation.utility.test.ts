@@ -3,15 +3,15 @@ import { vi } from 'vitest';
 import { getConfiguration } from '../../services/configuration.service';
 import { goToSelfcareLogin } from '../navigation.utility';
 
-const exitFn = vi.fn();
+const mockOpenFn = vi.fn();
 
 describe('Tests notification.utility', () => {
   const original = window.location;
 
   beforeAll(() => {
-    Object.defineProperty(window, 'location', {
+    Object.defineProperty(window, 'open', {
       configurable: true,
-      value: { href: '', assign: exitFn },
+      value: mockOpenFn,
     });
   });
 
@@ -21,6 +21,7 @@ describe('Tests notification.utility', () => {
 
   it('goToSelfcareLogin', () => {
     goToSelfcareLogin();
-    expect(window.location.href).toBe(getConfiguration().SELFCARE_URL_FE_LOGIN);
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(getConfiguration().SELFCARE_URL_FE_LOGIN, '_self');
   });
 });

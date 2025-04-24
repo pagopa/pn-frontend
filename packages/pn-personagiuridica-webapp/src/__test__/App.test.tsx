@@ -11,8 +11,8 @@ import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { apiClient } from '../api/apiClients';
 import { DelegationStatus } from '../models/Deleghe';
-import { SELFCARE_LOGOUT } from '../navigation/routes.const';
 import { PNRole, PartyRole } from '../models/User';
+import { SELFCARE_LOGOUT } from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
 import { RenderResult, act, render } from './test-utils';
 
@@ -46,6 +46,7 @@ const reduxInitialState = {
 
 describe('App', async () => {
   let mock: MockAdapter;
+  let result: RenderResult;
   const mockOpenFn = vi.fn();
   const originalOpen = window.open;
 
@@ -98,12 +99,18 @@ describe('App', async () => {
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
     const header = document.querySelector('header');
     expect(header).toBeInTheDocument();
+    const logo = header?.querySelector('img');
+    const organizationId = reduxInitialState.userState.user.organization.id;
+    expect(logo).toBeInTheDocument();
+    expect(logo).toHaveAttribute(
+      'src',
+      `${getConfiguration().SELFCARE_CDN_URL}/institutions/${organizationId}/logo.png`
+    );
     const footer = document.querySelector('footer');
     expect(footer).toBeInTheDocument();
     const sideMenu = result!.queryByTestId('side-menu');
@@ -117,7 +124,6 @@ describe('App', async () => {
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -132,7 +138,6 @@ describe('App', async () => {
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -149,7 +154,6 @@ describe('App', async () => {
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -167,7 +171,6 @@ describe('App', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, {
         preloadedState: {
@@ -194,7 +197,6 @@ describe('App', async () => {
   it('sidemenu items if user is an operator', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, {
         preloadedState: {
@@ -229,7 +231,6 @@ describe('App', async () => {
   it('sidemenu items if user is a group operator', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, {
         preloadedState: {

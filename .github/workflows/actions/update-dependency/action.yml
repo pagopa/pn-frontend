@@ -1,0 +1,14 @@
+name: "Update BFF dependency"
+description: "Updates the commitId of pn-bff"
+
+inputs:
+  token:
+    description: "GitHub token"
+    required: true
+  ref:
+    description: "Default branch from which to create the pull request"
+    required: true
+
+runs:
+  using: "node20"
+  main: "src/index.js"

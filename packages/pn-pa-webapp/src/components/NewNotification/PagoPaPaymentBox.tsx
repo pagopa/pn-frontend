@@ -127,6 +127,8 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
                     checked={applyCost}
                     onChange={(e) => handleChange(e)}
                     data-testid="pagopa-apply-cost"
+                    sx={{ margin: 2 }}
+                    color={getError('applyCost', false) ? 'error' : 'primary'}
                   />
                 }
                 label={t(

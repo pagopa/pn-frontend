@@ -119,6 +119,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
                 value={accepted}
                 onClick={() => setAccepted(!accepted)}
                 data-testid="tosSwitch"
+                sx={{ margin: 2 }}
               />
               <Typography color="text.secondary" variant="body1">
                 <Trans
