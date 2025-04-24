@@ -44,8 +44,8 @@ import {
   identicalIUV,
   identicalSHA,
   isCurrencyAndMaxValue,
+  paFeeValidationSchema,
   pagoPaValidationSchema,
-  validatePaFee,
 } from '../../utility/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
 import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
@@ -64,12 +64,10 @@ function PaFeeFocusHelperText() {
   });
   const { focused } = useFormControl() || {};
 
-  return useMemo(() => {
-    if (focused) {
-      return t('notification-fee.pa-fee-validation');
-    }
-    return false;
-  }, [focused]);
+  if (focused) {
+    return t('notification-fee.pa-fee-validation');
+  }
+  return false;
 }
 
 const DebtPositionDetail: React.FC<Props> = ({
@@ -227,10 +225,10 @@ const DebtPositionDetail: React.FC<Props> = ({
       [key: string]: number | string;
     };
   }) => {
-    if (error.messageKey === 'notification-fee.pa-fee-currency') {
-      return t(error.messageKey, error.data);
-    }
-    if (error.messageKey === 'notification-fee.pa-fee-max-value') {
+    if (
+      error.messageKey === 'notification-fee.pa-fee-currency' ||
+      error.messageKey === 'notification-fee.pa-fee-max-value'
+    ) {
       return t(error.messageKey, error.data);
     }
     return '';
@@ -241,7 +239,7 @@ const DebtPositionDetail: React.FC<Props> = ({
       .oneOf(Object.values(NotificationFeePolicy))
       .required(tc('required-field')),
 
-    paFee: validatePaFee(tc).test({
+    paFee: paFeeValidationSchema(tc).test({
       name: 'isCurrency',
       test(value?: string) {
         const error = isCurrencyAndMaxValue(value);
