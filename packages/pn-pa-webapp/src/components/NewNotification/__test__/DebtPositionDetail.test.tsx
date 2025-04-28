@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { vi } from 'vitest';
 
-import { testInput, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
+import { getById, testInput, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
   newNotification,
@@ -262,7 +262,7 @@ describe('DebtPositionDetail Component', async () => {
       vi.clearAllMocks();
     });
 
-    it('should show error if notification cost is greater than 1.00', async () => {
+    it('should show error if notification cost is greater than 1.00 or it has more than 2 decimals', async () => {
       const result = render(
         <DebtPositionDetail
           notification={newNotification}
@@ -284,13 +284,22 @@ describe('DebtPositionDetail Component', async () => {
 
       const notificationPaFee = result.getByTestId('notification-pa-fee');
       expect(notificationPaFee).toBeInTheDocument();
+      const paFeeInput = getById(form, 'paFee');
+      fireEvent.focus(paFeeInput);
+
+      expect(notificationPaFee).toHaveTextContent('pa-fee-validation');
 
       await testInput(form, 'paFee', '1.50');
-      const error = form.querySelector(`[id="paFee-helper-text"]`);
-      expect(error).toHaveTextContent('pa-fee-invalid');
+      const errorMaxValue = form.querySelector(`[id="paFee-helper-text"]`);
+      expect(errorMaxValue).toHaveTextContent('pa-fee-max-value');
+
+      await testInput(form, 'paFee', '0,9888');
+      const errorCurrency = form.querySelector(`[id="paFee-helper-text"]`);
+      expect(errorCurrency).toHaveTextContent('pa-fee-currency');
 
       await testInput(form, 'paFee', '0.99');
-      expect(form).not.toHaveTextContent('notification-fee.pa-fee-invalid');
+      expect(form).not.toHaveTextContent('notification-fee.pa-fee-max-value');
+      expect(form).not.toHaveTextContent('notification-fee.pa-fee-currency');
     });
 
     it('should show error when type 2 identical notice code for the same creditor tax id', async () => {
