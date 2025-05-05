@@ -2,7 +2,7 @@ import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { FormHelperText, Grid, TextField } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
 import {
   CustomDatePicker,
   DATE_FORMAT,
@@ -88,14 +88,7 @@ const FilterNotificationsFormBody = ({
           label={t('filters.iun', { ns: 'notifiche' })}
           name="iunMatch"
           error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
-          helperText={
-            formikInstance.touched.iunMatch &&
-            formikInstance.errors.iunMatch && (
-              <FormHelperText error aria-live="assertive">
-                {String(formikInstance.errors.iunMatch)}
-              </FormHelperText>
-            )
-          }
+          helperText={formikInstance.touched.iunMatch && formikInstance.errors.iunMatch?.toString()}
           fullWidth
           sx={{ marginBottom: isMobile ? '20px' : '0' }}
           size="small"
@@ -129,12 +122,9 @@ const FilterNotificationsFormBody = ({
                 type: 'text',
                 'data-testid': 'input(start date)',
               },
-              helperText: (
-                <FormHelperText error aria-live="assertive">
-                  {!!formikInstance.errors.startDate &&
-                    t('filters.errors.data_a', { ns: 'notifiche' })}
-                </FormHelperText>
-              ),
+              helperText:
+                !!formikInstance.errors.startDate &&
+                t('filters.errors.data_a', { ns: 'notifiche' }),
             },
           }}
           disableFuture={true}
@@ -169,12 +159,11 @@ const FilterNotificationsFormBody = ({
                 type: 'text',
                 'data-testid': 'input(end date)',
               },
-              helperText: (
-                <FormHelperText sx={{ ml: 0 }} error aria-live="assertive">
-                  {!!formikInstance.errors.endDate &&
-                    t('filters.errors.data_a', { ns: 'notifiche' })}
-                </FormHelperText>
-              ),
+              helperText:
+                !!formikInstance.errors.endDate && t('filters.errors.data_a', { ns: 'notifiche' }),
+              FormHelperTextProps: {
+                sx: { ml: 0 },
+              },
             },
           }}
           disableFuture={true}
