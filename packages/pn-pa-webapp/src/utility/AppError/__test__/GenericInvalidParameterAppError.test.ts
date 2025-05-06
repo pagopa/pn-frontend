@@ -7,9 +7,9 @@ describe('Test GenericInvalidParameterAppError', () => {
 
   it('Should return invalid parameter message', () => {
     const appError = new GenericInvalidParameterAppError({} as ServerResponseError, translateFn);
-    const messege = appError.getMessage();
-    expect(messege.title).toBe('new-notification.errors.invalid_parameter.title notifiche');
-    expect(messege.content).toBe('new-notification.errors.invalid_parameter.message notifiche');
+    const message = appError.getMessage();
+    expect(message.title).toBe('new-notification.errors.invalid_parameter.title notifiche');
+    expect(message.content).toBe('new-notification.errors.invalid_parameter.message notifiche');
   });
 
   it('Should return invalid fiscal code message', () => {
@@ -17,8 +17,8 @@ describe('Test GenericInvalidParameterAppError', () => {
       { detail: 'Invalid taxId for recipient' } as ServerResponseError,
       translateFn
     );
-    const messege = appError.getMessage();
-    expect(messege.title).toBe('new-notification.errors.fiscal_code.title notifiche');
-    expect(messege.content).toBe('new-notification.errors.fiscal_code.message notifiche');
+    const message = appError.getMessage();
+    expect(message.title).toBe('new-notification.errors.fiscal_code.title notifiche');
+    expect(message.content).toBe('new-notification.errors.fiscal_code.message notifiche');
   });
 });

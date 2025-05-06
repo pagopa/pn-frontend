@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import {
   AppNotAccessible,
@@ -14,7 +14,9 @@ import RapidAccessGuard from './RapidAccessGuard';
 import RouteGuard from './RouteGuard';
 import SessionGuard from './SessionGuard';
 import ToSGuard from './ToSGuard';
+import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
+import { NOTIFICHE } from './routes.const';
 
 const Profile = lazyRetry(() => import('../pages/Profile.page'));
 const Notifiche = lazyRetry(() => import('../pages/Notifiche.page'));
@@ -41,6 +43,8 @@ const handleAssistanceClick = () => {
 };
 
 function Router() {
+  const navigate = useNavigate();
+
   return (
     <Suspense fallback={<LoadingPage />}>
       <Routes>
@@ -74,7 +78,12 @@ function Router() {
             </Route>
             {/* not found - non-logged users will see the common AccessDenied component */}
             <Route path="*" element={<RouteGuard />}>
-              <Route path="*" element={<NotFound />} />
+              <Route
+                path="*"
+                element={
+                  <NotFound isLogged goBackAction={() => navigate(NOTIFICHE, { replace: true })} />
+                }
+              />
             </Route>
           </Route>
         </Route>
@@ -89,7 +98,8 @@ function Router() {
           path={routes.NOT_ACCESSIBLE}
           element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}
         />
-        <Route path="*" element={<NotFound />} />
+        {/* not sure that this is useful */}
+        <Route path="*" element={<NotFound isLogged={false} goBackAction={goToLoginPortal} />} />
       </Routes>
     </Suspense>
   );

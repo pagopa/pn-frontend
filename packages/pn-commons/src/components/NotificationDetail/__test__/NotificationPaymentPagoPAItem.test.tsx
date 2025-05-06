@@ -57,22 +57,6 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     expect(skeleton).not.toBeInTheDocument();
   });
 
-  it('renders component - should show caption if applyCost is true', () => {
-    const { getByTestId } = render(
-      <NotificationPaymentPagoPAItem
-        pagoPAItem={{ ...pagoPAItem, amount: 999, applyCost: true }}
-        loading={false}
-        isSelected={false}
-        handleFetchPaymentsInfo={() => void 0}
-        handleDeselectPayment={() => void 0}
-        isCancelled={false}
-      />
-    );
-    const caption = getByTestId('apply-costs-caption');
-    expect(caption).toBeInTheDocument();
-    expect(caption).toHaveTextContent('detail.payment.included-costs');
-  });
-
   it('renders component - should show badge when status is SUCCEEDED and not show radio', () => {
     const item = { ...pagoPAItem, status: PaymentStatus.SUCCEEDED };
     const { getByTestId, queryByTestId } = render(
@@ -144,6 +128,26 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
+    const amountContainer = getByTestId('payment-amount');
+    expect(amountContainer).toHaveTextContent(
+      formatEurocentToCurrency(amount).replace(/\u00a0/g, ' ')
+    );
+  });
+
+  it('renders component - should show label if costs are included', () => {
+    const amount = 1000;
+    const item = { ...pagoPAItem, amount, applyCost: true };
+    const { container, getByTestId } = render(
+      <NotificationPaymentPagoPAItem
+        pagoPAItem={item}
+        loading={false}
+        isSelected={false}
+        handleFetchPaymentsInfo={() => void 0}
+        handleDeselectPayment={() => void 0}
+        isCancelled={false}
+      />
+    );
+    expect(container).toHaveTextContent('included-costs');
     const amountContainer = getByTestId('payment-amount');
     expect(amountContainer).toHaveTextContent(
       formatEurocentToCurrency(amount).replace(/\u00a0/g, ' ')

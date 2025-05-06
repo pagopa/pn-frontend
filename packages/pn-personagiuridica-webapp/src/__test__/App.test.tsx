@@ -46,6 +46,7 @@ const reduxInitialState = {
 
 describe('App', async () => {
   let mock: MockAdapter;
+  let result: RenderResult;
   const mockOpenFn = vi.fn();
   const originalOpen = window.open;
 
@@ -98,7 +99,6 @@ describe('App', async () => {
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -124,7 +124,6 @@ describe('App', async () => {
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -139,7 +138,6 @@ describe('App', async () => {
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -156,7 +154,6 @@ describe('App', async () => {
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -174,7 +171,6 @@ describe('App', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, {
         preloadedState: {
@@ -201,7 +197,6 @@ describe('App', async () => {
   it('sidemenu items if user is an operator', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, {
         preloadedState: {
@@ -236,7 +231,6 @@ describe('App', async () => {
   it('sidemenu items if user is a group operator', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, {
         preloadedState: {

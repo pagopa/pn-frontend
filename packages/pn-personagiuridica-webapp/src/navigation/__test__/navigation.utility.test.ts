@@ -26,26 +26,10 @@ describe('Tests navigation utility methods', () => {
 
   it('goToLoginPortal', () => {
     goToLoginPortal();
-    expect(mockOpenFn).toBeCalledTimes(1);
-    expect(mockOpenFn).toBeCalledWith(
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(
       `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT}`,
       '_self'
     );
   });
-
-  // it('goToLoginPortal - aar', () => {
-  //   goToLoginPortal('fake-aar-token');
-  //   expect(replaceFn).toBeCalledTimes(1);
-  //   expect(replaceFn).toBeCalledWith(
-  //     `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT}?type=PG&aar=fake-aar-token`
-  //   );
-  // });
-
-  // it('goToLoginPortal - aar', () => {
-  //   goToLoginPortal('<script>malicious code</script>malicious-aar-token');
-  //   expect(replaceFn).toBeCalledTimes(1);
-  //   expect(replaceFn).toBeCalledWith(
-  //     `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT}?type=PG&aar=malicious-aar-token`
-  //   );
-  // });
 });

@@ -108,7 +108,9 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const parties = useAppSelector((state: RootState) => state.contactsState.parties);
     const addressesData = useAppSelector(contactsSelectors.selectAddresses);
     const { IS_DOD_ENABLED } = getConfiguration();
-    const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+    const [modalOpen, setModalOpen] = useState<{ type: ModalType; isDefault?: boolean } | null>(
+      null
+    );
     const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
 
     const addressTypes = specialContactsAvailableAddressTypes(addressesData).filter(
@@ -275,13 +277,16 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         (addr) => addr.senderId === sender.senderId
       );
       if (oldAddress) {
-        setModalOpen(ModalType.CONFIRM_LEGAL_ASSOCIATION);
+        setModalOpen({ type: ModalType.CONFIRM_LEGAL_ASSOCIATION });
         return;
       }
 
       // check if contact already exists
       if (contactAlreadyExists(addressesData.addresses, value, sender.senderId, channelType)) {
-        setModalOpen(ModalType.EXISTING);
+        setModalOpen({
+          type: ModalType.EXISTING,
+          isDefault: addressesData.defaultPECAddress?.value === value,
+        });
         return;
       }
       handleAssociation();
@@ -388,7 +393,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         .then((res) => {
           // contact to verify
           if (!res) {
-            setModalOpen(ModalType.CODE);
+            setModalOpen({ type: ModalType.CODE });
             return;
           }
 
@@ -414,7 +419,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     return (
       <Paper data-testid="addSpecialContact" sx={{ p: { xs: 2, lg: 3 }, mb: 3 }}>
         <LegalContactAssociationDialog
-          open={modalOpen === ModalType.CONFIRM_LEGAL_ASSOCIATION}
+          open={modalOpen?.type === ModalType.CONFIRM_LEGAL_ASSOCIATION}
           sender={{
             senderId: formik.values.sender.id,
             senderName: formik.values.sender.name,
@@ -429,7 +434,8 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
           onConfirm={() => handleAssociation()}
         />
         <ExistingContactDialog
-          open={modalOpen === ModalType.EXISTING}
+          open={modalOpen?.type === ModalType.EXISTING}
+          isDefault={modalOpen?.isDefault}
           value={formik.values.s_value}
           handleDiscard={() => setModalOpen(null)}
           handleConfirm={() => handleCodeVerification()}
@@ -439,7 +445,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             value={formik.values.s_value}
             addressType={AddressType.LEGAL}
             channelType={formik.values.channelType}
-            open={modalOpen === ModalType.CODE}
+            open={modalOpen?.type === ModalType.CODE}
             onConfirm={(code) => handleCodeVerification(code)}
             onDiscard={() => setModalOpen(null)}
             onError={() => sendCodeErrorEvent(formik.values.channelType as ChannelType)}

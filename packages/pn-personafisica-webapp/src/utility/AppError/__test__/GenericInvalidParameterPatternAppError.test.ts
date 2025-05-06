@@ -10,9 +10,9 @@ describe('Test GenericInvalidParameterPatternAppError', () => {
       {} as ServerResponseError,
       translateFn
     );
-    const messege = appError.getMessage();
-    expect(messege.title).toBe('errors.invalid_parameter.title common');
-    expect(messege.content).toBe('errors.invalid_parameter.message common');
+    const message = appError.getMessage();
+    expect(message.title).toBe('errors.invalid_parameter.title common');
+    expect(message.content).toBe('errors.invalid_parameter.message common');
   });
 
   it('Should return invalid fiscal code message', () => {
@@ -20,8 +20,8 @@ describe('Test GenericInvalidParameterPatternAppError', () => {
       { element: 'delegate.fiscalCode' } as ServerResponseError,
       translateFn
     );
-    const messege = appError.getMessage();
-    expect(messege.title).toBe('errors.fiscal_code.title deleghe');
-    expect(messege.content).toBe('errors.fiscal_code.message deleghe');
+    const message = appError.getMessage();
+    expect(message.title).toBe('errors.fiscal_code.title deleghe');
+    expect(message.content).toBe('errors.fiscal_code.message deleghe');
   });
 });
