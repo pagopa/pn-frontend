@@ -134,6 +134,26 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     );
   });
 
+  it('renders component - should show label if costs are included', () => {
+    const amount = 1000;
+    const item = { ...pagoPAItem, amount, applyCost: true };
+    const { container, getByTestId } = render(
+      <NotificationPaymentPagoPAItem
+        pagoPAItem={item}
+        loading={false}
+        isSelected={false}
+        handleFetchPaymentsInfo={() => void 0}
+        handleDeselectPayment={() => void 0}
+        isCancelled={false}
+      />
+    );
+    expect(container).toHaveTextContent('included-costs');
+    const amountContainer = getByTestId('payment-amount');
+    expect(amountContainer).toHaveTextContent(
+      formatEurocentToCurrency(amount).replace(/\u00a0/g, ' ')
+    );
+  });
+
   it('Should call handleDeselectPayment when radio button is selected and is clicked', async () => {
     const item = { ...pagoPAItem, status: PaymentStatus.REQUIRED };
     const handleDeselectPaymentMk = vi.fn();
