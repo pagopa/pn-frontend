@@ -1,15 +1,14 @@
-import { oneMonthAgo, threeMonthsAgo, today } from '@pagopa-pn/pn-commons';
+import { NotificationStatus, oneMonthAgo, threeMonthsAgo, today } from '@pagopa-pn/pn-commons';
 
 import {
-  DeliveryMode,
   DigitaErrorTypes,
-  NotificationStatus,
-  ResponseStatus,
   SelectedStatisticsFilter,
   StatisticsDataTypes,
+  StatisticsDeliveryMode,
   StatisticsFilter,
   StatisticsParsedResponse,
   StatisticsResponse,
+  StatisticsResponseStatus,
 } from '../models/Statistics';
 
 const baseDate = threeMonthsAgo.toISOString();
@@ -26,8 +25,8 @@ export const rawResponseMock: StatisticsResponse = {
       notification_send_date: `${dateYearMonth}-15`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.DELIVERED,
-      notification_type: DeliveryMode.ANALOG,
-      status_digital_delivery: ResponseStatus.UNKNOWN,
+      notification_type: StatisticsDeliveryMode.ANALOG,
+      status_digital_delivery: StatisticsResponseStatus.UNKNOWN,
       notification_delivered: 'SI',
       notification_viewed: 'NO',
       notification_refined: 'NO',
@@ -42,8 +41,8 @@ export const rawResponseMock: StatisticsResponse = {
       notification_send_date: `${dateYearMonth}-15`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.DELIVERED,
-      notification_type: DeliveryMode.ANALOG,
-      status_digital_delivery: ResponseStatus.UNKNOWN,
+      notification_type: StatisticsDeliveryMode.ANALOG,
+      status_digital_delivery: StatisticsResponseStatus.UNKNOWN,
       notification_delivered: 'NO',
       notification_viewed: 'NO',
       notification_refined: 'NO',
@@ -58,8 +57,8 @@ export const rawResponseMock: StatisticsResponse = {
       notification_send_date: `${dateYearMonth}-15`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.DELIVERING,
-      notification_type: DeliveryMode.ANALOG,
-      status_digital_delivery: ResponseStatus.UNKNOWN,
+      notification_type: StatisticsDeliveryMode.ANALOG,
+      status_digital_delivery: StatisticsResponseStatus.UNKNOWN,
       notification_delivered: 'NO',
       notification_viewed: 'NO',
       notification_refined: 'NO',
@@ -74,8 +73,8 @@ export const rawResponseMock: StatisticsResponse = {
       notification_send_date: `${dateYearMonth}-15`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.EFFECTIVE_DATE,
-      notification_type: DeliveryMode.ANALOG,
-      status_digital_delivery: ResponseStatus.UNKNOWN,
+      notification_type: StatisticsDeliveryMode.ANALOG,
+      status_digital_delivery: StatisticsResponseStatus.UNKNOWN,
       notification_delivered: 'SI',
       notification_viewed: 'NO',
       notification_refined: 'SI',
@@ -90,8 +89,8 @@ export const rawResponseMock: StatisticsResponse = {
       notification_send_date: `${dateYearMonth}-15`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.EFFECTIVE_DATE,
-      notification_type: DeliveryMode.ANALOG,
-      status_digital_delivery: ResponseStatus.UNKNOWN,
+      notification_type: StatisticsDeliveryMode.ANALOG,
+      status_digital_delivery: StatisticsResponseStatus.UNKNOWN,
       notification_delivered: 'NO',
       notification_viewed: 'NO',
       notification_refined: 'SI',
@@ -106,8 +105,8 @@ export const rawResponseMock: StatisticsResponse = {
       notification_send_date: `${dateYearMonth}-15`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.VIEWED,
-      notification_type: DeliveryMode.DIGITAL,
-      status_digital_delivery: ResponseStatus.OK,
+      notification_type: StatisticsDeliveryMode.DIGITAL,
+      status_digital_delivery: StatisticsResponseStatus.OK,
       notification_delivered: 'SI',
       notification_viewed: 'SI',
       notification_refined: 'SI',
@@ -122,8 +121,8 @@ export const rawResponseMock: StatisticsResponse = {
       notification_send_date: `${dateYearMonth}-18`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.DELIVERED,
-      notification_type: DeliveryMode.ANALOG,
-      status_digital_delivery: ResponseStatus.UNKNOWN,
+      notification_type: StatisticsDeliveryMode.ANALOG,
+      status_digital_delivery: StatisticsResponseStatus.UNKNOWN,
       notification_delivered: 'SI',
       notification_viewed: 'NO',
       notification_refined: 'NO',
@@ -138,8 +137,8 @@ export const rawResponseMock: StatisticsResponse = {
       notification_send_date: `${dateYearMonth}-18`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.DELIVERING,
-      notification_type: DeliveryMode.ANALOG,
-      status_digital_delivery: ResponseStatus.UNKNOWN,
+      notification_type: StatisticsDeliveryMode.ANALOG,
+      status_digital_delivery: StatisticsResponseStatus.UNKNOWN,
       notification_delivered: 'NO',
       notification_viewed: 'NO',
       notification_refined: 'NO',
@@ -154,8 +153,8 @@ export const rawResponseMock: StatisticsResponse = {
       notification_send_date: `${dateYearMonth}-18`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.EFFECTIVE_DATE,
-      notification_type: DeliveryMode.ANALOG,
-      status_digital_delivery: ResponseStatus.UNKNOWN,
+      notification_type: StatisticsDeliveryMode.ANALOG,
+      status_digital_delivery: StatisticsResponseStatus.UNKNOWN,
       notification_delivered: 'SI',
       notification_viewed: 'NO',
       notification_refined: 'SI',
@@ -170,8 +169,8 @@ export const rawResponseMock: StatisticsResponse = {
       notification_send_date: `${dateYearMonth}-18`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.EFFECTIVE_DATE,
-      notification_type: DeliveryMode.ANALOG,
-      status_digital_delivery: ResponseStatus.UNKNOWN,
+      notification_type: StatisticsDeliveryMode.ANALOG,
+      status_digital_delivery: StatisticsResponseStatus.UNKNOWN,
       notification_delivered: 'NO',
       notification_viewed: 'NO',
       notification_refined: 'SI',
@@ -186,8 +185,8 @@ export const rawResponseMock: StatisticsResponse = {
       notification_send_date: `${dateYearMonth}-18`,
       notification_request_status: NotificationStatus.ACCEPTED,
       notification_status: NotificationStatus.EFFECTIVE_DATE,
-      notification_type: DeliveryMode.DIGITAL,
-      status_digital_delivery: ResponseStatus.OK,
+      notification_type: StatisticsDeliveryMode.DIGITAL,
+      status_digital_delivery: StatisticsResponseStatus.OK,
       notification_delivered: 'SI',
       notification_viewed: 'NO',
       notification_refined: 'SI',
@@ -258,32 +257,33 @@ export const parsedResponseMock: StatisticsParsedResponse = {
       [NotificationStatus.EFFECTIVE_DATE]: 1484,
       [NotificationStatus.CANCELLED]: 0,
       [NotificationStatus.UNREACHABLE]: 0,
+      [NotificationStatus.RETURNED_TO_SENDER]: 0,
     },
     [StatisticsDataTypes.DeliveryModeStatistics]: {
-      [DeliveryMode.ANALOG]: {
+      [StatisticsDeliveryMode.ANALOG]: {
         count: 1591,
         details: [
           { send_date: `${dateYearMonth}-15`, count: 788 },
           { send_date: `${dateYearMonth}-18`, count: 803 },
         ],
       },
-      [DeliveryMode.DIGITAL]: {
+      [StatisticsDeliveryMode.DIGITAL]: {
         count: 211,
         details: [
           { send_date: `${dateYearMonth}-15`, count: 132 },
           { send_date: `${dateYearMonth}-18`, count: 79 },
         ],
       },
-      [DeliveryMode.UNKNOWN]: {
+      [StatisticsDeliveryMode.UNKNOWN]: {
         count: 0,
         details: [],
       },
     },
     [StatisticsDataTypes.DigitalStateStatistics]: {
-      [ResponseStatus.OK]: 211,
-      [ResponseStatus.KO]: 0,
-      [ResponseStatus.PROGRESS]: 0,
-      [ResponseStatus.UNKNOWN]: 0,
+      [StatisticsResponseStatus.OK]: 211,
+      [StatisticsResponseStatus.KO]: 0,
+      [StatisticsResponseStatus.PROGRESS]: 0,
+      [StatisticsResponseStatus.UNKNOWN]: 0,
     },
     [StatisticsDataTypes.DigitalMeanTimeStatistics]: {
       delivered: { count: 211, time: 45.67 },
@@ -322,26 +322,27 @@ export const parsedEmptyResponseMock: StatisticsParsedResponse = {
       [NotificationStatus.EFFECTIVE_DATE]: 0,
       [NotificationStatus.CANCELLED]: 0,
       [NotificationStatus.UNREACHABLE]: 0,
+      [NotificationStatus.RETURNED_TO_SENDER]: 0,
     },
     [StatisticsDataTypes.DeliveryModeStatistics]: {
-      [DeliveryMode.ANALOG]: {
+      [StatisticsDeliveryMode.ANALOG]: {
         count: 0,
         details: [],
       },
-      [DeliveryMode.DIGITAL]: {
+      [StatisticsDeliveryMode.DIGITAL]: {
         count: 0,
         details: [],
       },
-      [DeliveryMode.UNKNOWN]: {
+      [StatisticsDeliveryMode.UNKNOWN]: {
         count: 0,
         details: [],
       },
     },
     [StatisticsDataTypes.DigitalStateStatistics]: {
-      [ResponseStatus.OK]: 0,
-      [ResponseStatus.KO]: 0,
-      [ResponseStatus.PROGRESS]: 0,
-      [ResponseStatus.UNKNOWN]: 0,
+      [StatisticsResponseStatus.OK]: 0,
+      [StatisticsResponseStatus.KO]: 0,
+      [StatisticsResponseStatus.PROGRESS]: 0,
+      [StatisticsResponseStatus.UNKNOWN]: 0,
     },
     [StatisticsDataTypes.DigitalMeanTimeStatistics]: {
       delivered: { count: 0, time: 0 },
@@ -490,10 +491,10 @@ export const digitalStateDataMock = {
 
 export const digitalStateEmptyDataMock = {
   data: {
-    [ResponseStatus.OK]: 0,
-    [ResponseStatus.KO]: 0,
-    [ResponseStatus.PROGRESS]: 0,
-    [ResponseStatus.UNKNOWN]: 0,
+    [StatisticsResponseStatus.OK]: 0,
+    [StatisticsResponseStatus.KO]: 0,
+    [StatisticsResponseStatus.PROGRESS]: 0,
+    [StatisticsResponseStatus.UNKNOWN]: 0,
   },
 };
 
@@ -514,6 +515,7 @@ export const lastStateEmptyDataMock = {
   [NotificationStatus.EFFECTIVE_DATE]: 0,
   [NotificationStatus.CANCELLED]: 0,
   [NotificationStatus.UNREACHABLE]: 0,
+  [NotificationStatus.RETURNED_TO_SENDER]: 0,
 };
 
 export const trendDataMocked = {

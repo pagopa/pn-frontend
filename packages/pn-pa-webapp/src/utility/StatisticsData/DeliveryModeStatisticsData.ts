@@ -1,10 +1,10 @@
 /* eslint-disable functional/immutable-data */
 import {
-  DeliveryMode,
   DigitalNotificationFocus,
   IDeliveryModeStatistics,
   NotificationOverview,
   StatisticsDataTypes,
+  StatisticsDeliveryMode,
   StatisticsResponse,
 } from '../../models/Statistics';
 import StatisticsData from './StatisticsData';
@@ -19,15 +19,15 @@ import StatisticsData from './StatisticsData';
  */
 export class DeliveryModeStatisticsData extends StatisticsData {
   data: IDeliveryModeStatistics = {
-    [DeliveryMode.ANALOG]: {
+    [StatisticsDeliveryMode.ANALOG]: {
       count: 0,
       details: [],
     },
-    [DeliveryMode.DIGITAL]: {
+    [StatisticsDeliveryMode.DIGITAL]: {
       count: 0,
       details: [],
     },
-    [DeliveryMode.UNKNOWN]: {
+    [StatisticsDeliveryMode.UNKNOWN]: {
       count: 0,
       details: [],
     },
@@ -68,15 +68,15 @@ export class DeliveryModeStatisticsData extends StatisticsData {
 
   resetData(): void {
     this.data = {
-      [DeliveryMode.ANALOG]: {
+      [StatisticsDeliveryMode.ANALOG]: {
         count: 0,
         details: [],
       },
-      [DeliveryMode.DIGITAL]: {
+      [StatisticsDeliveryMode.DIGITAL]: {
         count: 0,
         details: [],
       },
-      [DeliveryMode.UNKNOWN]: {
+      [StatisticsDeliveryMode.UNKNOWN]: {
         count: 0,
         details: [],
       },

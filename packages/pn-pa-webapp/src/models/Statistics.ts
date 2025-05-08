@@ -1,16 +1,4 @@
-export enum NotificationStatus {
-  ACCEPTED = 'ACCEPTED',
-  DELIVERING = 'DELIVERING',
-  DELIVERED = 'DELIVERED',
-  VIEWED = 'VIEWED',
-  EFFECTIVE_DATE = 'EFFECTIVE_DATE',
-  UNREACHABLE = 'UNREACHABLE',
-  CANCELLED = 'CANCELLED',
-  REFUSED = 'REFUSED',
-  IN_VALIDATION = 'IN_VALIDATION',
-  PAID = 'PAID',
-  CANCELLATION_IN_PROGRESS = 'CANCELLATION_IN_PROGRESS',
-}
+import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
 export enum GraphColors {
   navy = '#0073E6',
@@ -38,13 +26,13 @@ export enum CxType {
   PG = 'PG',
 }
 
-export enum DeliveryMode { // export from pn-commons/../NotificationDetail.ts???
+export enum StatisticsDeliveryMode {
   DIGITAL = 'DIGITAL',
   ANALOG = 'ANALOGIC',
   UNKNOWN = '-',
 }
 
-export enum ResponseStatus { // EXPORT FROM pn-commons/../NotificationDetail.ts???
+export enum StatisticsResponseStatus {
   OK = 'OK',
   PROGRESS = 'IN_CORSO',
   UNKNOWN = '-',
@@ -73,12 +61,12 @@ export enum StatisticsDataTypes {
 
 export interface NotificationOverview {
   notification_send_date: string;
-  notification_request_status: 'ACCEPTED' | 'REFUSED';
+  notification_request_status: 'ACCEPTED' | 'REFUSED' | '-';
   notification_status: NotificationStatus; // openapi definition does not include the following: IN_VALIDATION, PAID
-  notification_type: DeliveryMode;
-  status_digital_delivery: ResponseStatus;
-  notification_delivered: 'SI' | 'NO';
-  notification_viewed: 'SI' | 'NO';
+  notification_type: StatisticsDeliveryMode;
+  status_digital_delivery: StatisticsResponseStatus;
+  notification_delivered: 'SI' | 'NO' | '-';
+  notification_viewed: 'SI' | 'NO' | '-';
   notification_refined: 'SI' | 'NO';
   attempt_count_per_digital_notification: string | number;
   notifications_count: string | number;
@@ -136,19 +124,20 @@ export interface ILastStateStatistics {
   [NotificationStatus.UNREACHABLE]: number;
   [NotificationStatus.CANCELLED]: number;
   [NotificationStatus.REFUSED]: number;
+  [NotificationStatus.RETURNED_TO_SENDER]: number;
 }
 
 export interface IDeliveryModeStatistics {
-  [DeliveryMode.ANALOG]: IStatisticsTrendData;
-  [DeliveryMode.DIGITAL]: IStatisticsTrendData;
-  [DeliveryMode.UNKNOWN]: IStatisticsTrendData;
+  [StatisticsDeliveryMode.ANALOG]: IStatisticsTrendData;
+  [StatisticsDeliveryMode.DIGITAL]: IStatisticsTrendData;
+  [StatisticsDeliveryMode.UNKNOWN]: IStatisticsTrendData;
 }
 
 export interface IDigitalStateStatistics {
-  [ResponseStatus.OK]: number;
-  [ResponseStatus.KO]: number;
-  [ResponseStatus.PROGRESS]: number;
-  [ResponseStatus.UNKNOWN]: number;
+  [StatisticsResponseStatus.OK]: number;
+  [StatisticsResponseStatus.KO]: number;
+  [StatisticsResponseStatus.PROGRESS]: number;
+  [StatisticsResponseStatus.UNKNOWN]: number;
 }
 
 interface IProcessTimeStatistics {
