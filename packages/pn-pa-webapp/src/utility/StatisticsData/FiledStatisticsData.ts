@@ -1,11 +1,12 @@
 /* eslint-disable functional/immutable-data */
 
 /* eslint-disable functional/no-let */
+import { NotificationStatus } from '@pagopa-pn/pn-commons';
+
 import {
   DigitalNotificationFocus,
   IFiledStatistics,
   NotificationOverview,
-  NotificationStatus,
   StatisticsDataTypes,
   StatisticsResponse,
 } from '../../models/Statistics';
@@ -48,6 +49,9 @@ export class FiledStatisticsData extends StatisticsData {
     // parse only if chunk is a NotificationOverview
     if ('notification_status' in chunk) {
       const status = chunk.notification_request_status;
+      if (status === '-') {
+        return;
+      }
       const send_date = chunk.notification_send_date;
       const count = +chunk.notifications_count;
       this.data[status].count += count;

@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { Paper, SxProps, Typography } from '@mui/material';
 import { PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { DeliveryMode, GraphColors, IDeliveryModeStatistics } from '../../models/Statistics';
+import {
+  GraphColors,
+  IDeliveryModeStatistics,
+  StatisticsDeliveryMode,
+} from '../../models/Statistics';
 import AggregateAndTrendStatistics, { AggregateAndTrendData } from './AggregateAndTrendStatistics';
 
 type Props = {
@@ -21,16 +25,16 @@ const DeliveryModeStatistics: React.FC<Props> = ({
   data: statisticsData,
   sx,
 }) => {
-  const digital = statisticsData[DeliveryMode.DIGITAL];
-  const analog = statisticsData[DeliveryMode.ANALOG];
+  const digital = statisticsData[StatisticsDeliveryMode.DIGITAL];
+  const analog = statisticsData[StatisticsDeliveryMode.ANALOG];
 
   const { t } = useTranslation(['statistics']);
 
   const digitalText = t('delivery_mode.digital');
   const analogText = t('delivery_mode.analog');
 
-  const digitalSum = statisticsData[DeliveryMode.DIGITAL].count;
-  const analogSum = statisticsData[DeliveryMode.ANALOG].count;
+  const digitalSum = statisticsData[StatisticsDeliveryMode.DIGITAL].count;
+  const analogSum = statisticsData[StatisticsDeliveryMode.ANALOG].count;
 
   const data: Array<AggregateAndTrendData> = [
     {

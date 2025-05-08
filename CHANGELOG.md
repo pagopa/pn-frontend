@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.14.0...v2.14.1-RC.0) (2025-05-08)
+
+
+### Bug Fixes
+
+* **pn-14877:** manage RETURNED_TO_SENDER status on statistics page ([#1544](https://github.com/pagopa/pn-frontend/issues/1544)) ([8677d02](https://github.com/pagopa/pn-frontend/commit/8677d020070bda015b8217eaa31a2d5a13eb3511))
+
+
+
+
+
 # [2.14.0](https://github.com/pagopa/pn-frontend/compare/v2.14.0-RC.1...v2.14.0) (2025-04-10)
 
 **Note:** Version bump only for package pn-frontend

@@ -1,8 +1,10 @@
 import { vi } from 'vitest';
 
+import { NotificationStatus } from '@pagopa-pn/pn-commons';
+
 import { filedNotificationsDataMock } from '../../../__mocks__/Statistics.mock';
 import { render } from '../../../__test__/test-utils';
-import { GraphColors, NotificationStatus } from '../../../models/Statistics';
+import { GraphColors } from '../../../models/Statistics';
 import FiledNotificationsStatistics from '../FiledNotificationsStatistics';
 
 const mockInput = vi.fn();

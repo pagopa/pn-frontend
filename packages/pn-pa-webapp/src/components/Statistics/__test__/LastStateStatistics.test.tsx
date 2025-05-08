@@ -1,8 +1,10 @@
 import { vi } from 'vitest';
 
+import { NotificationStatus } from '@pagopa-pn/pn-commons';
+
 import { lastStateDataMock, lastStateEmptyDataMock } from '../../../__mocks__/Statistics.mock';
 import { render } from '../../../__test__/test-utils';
-import { GraphColors, NotificationStatus } from '../../../models/Statistics';
+import { GraphColors } from '../../../models/Statistics';
 import LastStateStatistics from '../LastStateStatistics';
 
 const mockInput = vi.fn();
@@ -84,6 +86,10 @@ describe('DigitalMeanTimeStatistics component tests', () => {
       {
         value: lastStateDataMock[NotificationStatus.UNREACHABLE],
         itemStyle: { color: GraphColors.lightRed },
+      },
+      {
+        value: lastStateDataMock[NotificationStatus.RETURNED_TO_SENDER],
+        itemStyle: { color: GraphColors.pink },
       },
     ]);
   });
