@@ -9,6 +9,7 @@ import { userResponse } from '../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { institutionsDTO, productsDTO } from '../__mocks__/User.mock';
 import { apiClient } from '../api/apiClients';
+import { getConfiguration } from '../services/configuration.service';
 import { RenderResult, act, render } from './test-utils';
 
 vi.mock('../pages/Dashboard.page', () => ({ default: () => <div>Generic Page</div> }));
@@ -45,6 +46,8 @@ const reduxInitialState = {
 describe('App', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
+  const mockOpenFn = vi.fn();
+  const originalOpen = window.open;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -54,6 +57,11 @@ describe('App', async () => {
       Promise.resolve({
         json: () => Promise.resolve([]),
       }) as Promise<Response>;
+
+    Object.defineProperty(window, 'open', {
+      configurable: true,
+      value: mockOpenFn,
+    });
   });
 
   afterEach(() => {
@@ -63,6 +71,7 @@ describe('App', async () => {
   afterAll(() => {
     mock.restore();
     global.fetch = unmockedFetch;
+    Object.defineProperty(window, 'open', { configurable: true, value: originalOpen });
   });
 
   it('render component - user not logged in', async () => {
@@ -75,9 +84,8 @@ describe('App', async () => {
     expect(footer).toBeInTheDocument();
     const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-    expect(result.container).toHaveTextContent(
-      'Non hai le autorizzazioni necessarie per accedere a questa pagina'
-    );
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(getConfiguration().SELFCARE_URL_FE_LOGIN, '_self');
   });
 
   it('render component - user logged in', async () => {

@@ -109,7 +109,28 @@ describe('Public Keys', () => {
       },
     });
 
-    expect(container).toHaveTextContent(/tos-empty-state/i);
+    expect(container).toHaveTextContent(/not-enabled-empty-state/i);
+    const button = queryByTestId('generateVirtualKey');
+    expect(button).not.toBeInTheDocument();
+  });
+
+  it('render component without virtual key list - without issuer', () => {
+    const { container, queryByTestId } = render(<VirtualKeys />, {
+      preloadedState: {
+        apiKeysState: {
+          virtualKeys: { items: [], total: 0 },
+          issuerState: {
+            issuer: {
+              isPresent: false,
+              issuerStatus: PublicKeysIssuerResponseIssuerStatusEnum.Active,
+            },
+            tosAccepted: true,
+          },
+        },
+      },
+    });
+
+    expect(container).toHaveTextContent(/not-enabled-empty-state/i);
     const button = queryByTestId('generateVirtualKey');
     expect(button).not.toBeInTheDocument();
   });

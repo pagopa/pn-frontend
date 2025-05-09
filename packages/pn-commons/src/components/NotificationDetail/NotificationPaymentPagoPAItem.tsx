@@ -140,6 +140,7 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
           <Typography variant="h6" color="primary.main" data-testid="payment-amount">
             {formatEurocentToCurrency(pagoPAItem.amount)}
           </Typography>
+
           {pagoPAItem.applyCost && (
             <Typography
               fontSize="0.625rem"

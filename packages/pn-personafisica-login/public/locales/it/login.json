@@ -1,7 +1,7 @@
 {
   "loginPage": {
-    "title": "Come vuoi accedere?",
-    "description": "Seleziona la modalità che preferisci.",
+    "title": "Accedi a SEND per le tue comunicazioni a valore legale",
+    "description": "Scegli la modalità che preferisci.",
     "loginBox": {
       "title": "Accedi",
       "spidLogin": "Entra con SPID",
@@ -33,5 +33,10 @@
     "pf": "Privato cittadino",
     "pg": "Persona giuridica",
     "button": "Accedi"
+  },
+  "ioSmartAppBanner": {
+    "title": "IO - L'app dei servizi pubblici",
+    "subtitle": "Apri nell'app IO",
+    "cta": "APRI"
   }
 }

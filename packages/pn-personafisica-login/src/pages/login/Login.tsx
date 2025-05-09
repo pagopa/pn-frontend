@@ -13,11 +13,13 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
-import { PFLoginEventsType } from '../../models/PFLoginEventsType';
+import sendLogo from '../../assets/send.svg';
 import { useRapidAccessParam } from '../../hooks/useRapidAccessParam';
+import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 import { storageRapidAccessOps } from '../../utility/storage';
+import IOSmartAppBanner from './IoSmartAppBanner';
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -31,7 +33,7 @@ const LoginButton = styled(Button)(() => ({
 const Login = () => {
   const [showIDPS, setShowIDPS] = useState(false);
   const { t, i18n } = useTranslation(['login']);
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile('md');
   const rapidAccess = useRapidAccessParam();
   const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL, PF_URL } = getConfiguration();
   const privacyPolicyUrl = `${PF_URL}${PRIVACY_POLICY}`;
@@ -71,102 +73,123 @@ const Login = () => {
   };
 
   return (
-    <Layout
-      productsList={[]}
-      onAssistanceClick={handleAssistanceClick}
-      currentLanguage={i18n.language}
-      onLanguageChanged={changeLanguageHandler}
-      showSideMenu={false}
-      loggedUser={{
-        id: '',
-        name: undefined,
-        surname: undefined,
-        email: undefined,
-      }}
-      privacyPolicyHref={privacyPolicyUrl}
-    >
-      <Grid container direction="column" my={isMobile ? 4 : 16} alignItems="center" id="loginPage">
-        <Grid item>
-          <Typography
-            id="login-mode-page-title"
-            variant="h3"
-            component="h1"
-            px={0}
-            color="textPrimary"
-            sx={{
-              textAlign: 'center',
-            }}
-          >
-            {t('loginPage.title')}
-          </Typography>
-          <Typography
-            variant="body1"
-            component="h2"
-            mb={isMobile ? 4 : 7}
-            color="textPrimary"
-            sx={{
-              textAlign: 'center',
-            }}
-          >
-            {t('loginPage.description')}
-          </Typography>
-        </Grid>
-
+    <>
+      {isMobile && <IOSmartAppBanner />}
+      <Layout
+        productsList={[]}
+        onAssistanceClick={handleAssistanceClick}
+        currentLanguage={i18n.language}
+        onLanguageChanged={changeLanguageHandler}
+        showSideMenu={false}
+        loggedUser={{
+          id: '',
+          name: undefined,
+          surname: undefined,
+          email: undefined,
+        }}
+        privacyPolicyHref={privacyPolicyUrl}
+        slotsProps={
+          isMobile
+            ? {
+                content: { minHeight: 'calc(100dvh - 110px)' },
+                main: { alignContent: 'center' },
+              }
+            : undefined
+        }
+      >
         <Grid
-          item
-          sx={{
-            width: {
-              xs: `${(100 / 12) * 10}%`,
-              sm: `${(100 / 12) * 6}%`,
-              md: `${(100 / 12) * 4}%`,
-              lg: `${(100 / 12) * 4}%`,
-              xl: `${(100 / 12) * 3}%`,
-            },
-          }}
+          container
+          direction="column"
+          my={isMobile ? 4 : 16}
+          alignItems="center"
+          id="loginPage"
         >
-          <Box
+          <Grid item mb={3}>
+            <img src={sendLogo} alt="" aria-hidden />
+          </Grid>
+          <Grid item>
+            <Typography
+              id="login-mode-page-title"
+              variant="h5"
+              component="h1"
+              px={3}
+              color="textPrimary"
+              sx={{
+                textAlign: 'center',
+              }}
+            >
+              {t('loginPage.title')}
+            </Typography>
+            <Typography
+              variant="body1"
+              component="h2"
+              mb={isMobile ? 4 : 7}
+              color="textPrimary"
+              sx={{
+                textAlign: 'center',
+              }}
+            >
+              {t('loginPage.description')}
+            </Typography>
+          </Grid>
+
+          <Grid
+            item
             sx={{
-              boxShadow: (theme) => theme.shadows[8],
-              borderRadius: '16px',
-              px: 1,
-              py: 3,
-              backgroundColor: 'white',
-              textAlign: 'center',
+              width: {
+                xs: `${(100 / 12) * 10}%`,
+                sm: `${(100 / 12) * 6}%`,
+                md: `${(100 / 12) * 4}%`,
+                lg: `${(100 / 12) * 4}%`,
+                xl: `${(100 / 12) * 3}%`,
+              },
             }}
           >
-            <LoginButton
-              id="spidButton"
+            <Box
               sx={{
-                borderRadius: '4px',
-                width: '90%',
-                height: '50px',
-                marginBottom: 1,
+                boxShadow: (theme) => theme.shadows[8],
+                borderRadius: '16px',
+                px: 1,
+                py: 3,
+                backgroundColor: 'white',
+                textAlign: 'center',
               }}
-              onClick={() => setShowIDPS(true)}
-              variant="contained"
-              startIcon={<SpidIcon />}
             >
-              {t('loginPage.loginBox.spidLogin')}
-            </LoginButton>
-            <LoginButton
-              id="cieButton"
-              sx={{
-                borderRadius: '4px',
-                width: '90%',
-                height: '50px',
-                marginTop: 1,
-              }}
-              variant="contained"
-              startIcon={<CieIcon />}
-              onClick={() => goCIE()}
-            >
-              {t('loginPage.loginBox.cieLogin')}
-            </LoginButton>
-          </Box>
+              <LoginButton
+                id="spidButton"
+                sx={{
+                  borderRadius: '4px',
+                  width: '90%',
+                  height: '50px',
+                  marginBottom: 1,
+                }}
+                onClick={() => setShowIDPS(true)}
+                variant="contained"
+                startIcon={<SpidIcon />}
+              >
+                {t('loginPage.loginBox.spidLogin')}
+              </LoginButton>
+              <LoginButton
+                id="cieButton"
+                sx={{
+                  borderRadius: '4px',
+                  width: '90%',
+                  height: '50px',
+                  marginTop: 1,
+                }}
+                variant="contained"
+                startIcon={<CieIcon />}
+                onClick={() => goCIE()}
+              >
+                {t('loginPage.loginBox.cieLogin')}
+              </LoginButton>
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
-      <SpidSelect onClose={closeIDPS} show={showIDPS} />
-    </Layout>
+        <SpidSelect onClose={closeIDPS} show={showIDPS} />
+      </Layout>
+    </>
   );
 };
+
 export default Login;
