@@ -45,7 +45,8 @@
     "viewed": "Avvenuto accesso",
     "effective_date": "Perfezionata per\ndecorrenza termini",
     "canceled": "Annullata",
-    "unreachable": "Destinatario\nirreperibile"
+    "unreachable": "Destinatario\nirreperibile",
+    "returned_to_sender": "Resa al mittente"
   },
   "delivery_mode": {
     "title": "Notifiche consegnate per modalità di invio",

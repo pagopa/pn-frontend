@@ -1,9 +1,8 @@
 /* eslint-disable functional/immutable-data */
-import { today, twelveMonthsAgo } from '@pagopa-pn/pn-commons';
+import { NotificationStatus, today, twelveMonthsAgo } from '@pagopa-pn/pn-commons';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import {
-  NotificationStatus,
   SelectedStatisticsFilter,
   StatisticsDataTypes,
   StatisticsFilter,
