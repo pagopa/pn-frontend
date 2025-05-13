@@ -15,6 +15,7 @@ import {
   ContactSource,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
+import { RECAPITI } from '../../navigation/routes.const';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -96,7 +97,7 @@ const PecContactWizard: React.FC<Props> = ({
           res.pecValid && !!defaultSERCQ_SENDAddress
         );
         setOpenCodeModal(false);
-        return isTransferring ? setActiveStep(activeStep + 1) : navigate(-1);
+        return isTransferring ? setActiveStep(activeStep + 1) : navigate(RECAPITI);
       })
       .catch(() => {});
   };
@@ -147,8 +148,8 @@ const PecContactWizard: React.FC<Props> = ({
                     isTransferring ? 'transfer' : 'activation'
                   }`
                 ),
-                buttonText: t('legal-contacts.sercq-send-wizard.feedback.back-to-contacts'),
-                onClick: () => navigate(-1),
+                buttonText: t('legal-contacts.sercq-send-wizard.feedback.go-to-contacts'),
+                onClick: () => navigate(RECAPITI),
               }
             : undefined,
         }}

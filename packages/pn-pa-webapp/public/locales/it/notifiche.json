@@ -508,9 +508,12 @@
         "notification-fee": {
           "title": "Costo di notifica",
           "description": "Scegli il tipo di costo di notifica: puoi scegliere fra quello già incluso nell’atto oppure inserire un costo di notifica personalizzato a carico del destinatario.",
+          "pa-fee-format": "Il costo della notifica deve essere un valore compreso tra 0,01 e 1,00 e deve contenere massimo 2 cifre decimali.",
           "disclaimer": "L’IVA verrà applicata solo alle notifiche recapitate in modalità cartacea.",
           "pa-fee": "Costo di notifica",
-          "pa-fee-invalid": "Scrivi un valore minore o uguale a {{maxValue}} con massimo 2 decimali",
+          "pa-fee-validation": "Inserisci un valore compreso tra 0 e 1 e con massimo 2 cifre decimali",
+          "pa-fee-currency": "Inserisci un valore con massimo 2 cifre decimali",
+          "pa-fee-max-value": "Inserisci un valore compreso tra 0 e 1",
           "vat": "IVA"
         },
         "pagopa-int-mode": {
@@ -525,9 +528,9 @@
           "sync": "Sincrona",
           "async": "Asincrona"
         },
-        "identical-notice-codes-error": "C'è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
-        "at-least-one-applycost": "Applica i costi di notifica almeno ad un pagamento",
-        "identical-sha256-error": "Non è possibile caricare due file identici",
+        "identical-notice-codes-error": "C'è già un pagamento con questo Codice Avviso. Inseriscine uno diverso.",
+        "at-least-one-applycost": "Applica i costi di notifica ad almeno un pagamento.",
+        "identical-sha256-error": "Non è possibile caricare lo stesso file più di una volta. Carica un file diverso.",
         "payment-methods": {
           "title": "Modelli di pagamento",
           "pagopa-notice": "Avviso pagoPA",
@@ -572,6 +575,10 @@
       "invalid_parameter_taxonomy_code": {
         "title": "Codice tassonomico non valido",
         "message": "Il codice tassonomico inserito non è tra quelli gestiti dalla piattaforma."
+      },
+      "delivery_notification_limit_exceeded": {
+        "title": "Hai raggiunto il limite di notifiche",
+        "message": "Al momento non puoi creare nuove notifiche perché hai già raggiunto il numero massimo mensile"
       }
     }
   },
