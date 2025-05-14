@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { deliveryModeDataMock } from '../../../__mocks__/Statistics.mock';
 import { render } from '../../../__test__/test-utils';
-import { DeliveryMode, GraphColors } from '../../../models/Statistics';
+import { GraphColors, StatisticsDeliveryMode } from '../../../models/Statistics';
 import DeliveryModeStatistics from '../DeliveryModeStatistics';
 
 const mockInput = vi.fn();
@@ -65,13 +65,13 @@ describe('DeliveryModeStatistics component tests', () => {
       data: [
         {
           title: 'delivery_mode.digital',
-          total: deliveryModeDataMock.data[DeliveryMode.DIGITAL].count,
-          details: deliveryModeDataMock.data[DeliveryMode.DIGITAL].details,
+          total: deliveryModeDataMock.data[StatisticsDeliveryMode.DIGITAL].count,
+          details: deliveryModeDataMock.data[StatisticsDeliveryMode.DIGITAL].details,
         },
         {
           title: 'delivery_mode.analog',
-          total: deliveryModeDataMock.data[DeliveryMode.ANALOG].count,
-          details: deliveryModeDataMock.data[DeliveryMode.ANALOG].details,
+          total: deliveryModeDataMock.data[StatisticsDeliveryMode.ANALOG].count,
+          details: deliveryModeDataMock.data[StatisticsDeliveryMode.ANALOG].details,
         },
       ],
       options: { color: [GraphColors.blue, GraphColors.turquoise] },
