@@ -4,9 +4,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Paper, SxProps, Typography } from '@mui/material';
+import { NotificationStatus } from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { GraphColors, ILastStateStatistics, NotificationStatus } from '../../models/Statistics';
+import { GraphColors, ILastStateStatistics } from '../../models/Statistics';
 import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
@@ -41,6 +42,10 @@ const LastStateStatistics: React.FC<Props> = (props) => {
     {
       value: props.data[NotificationStatus.UNREACHABLE],
       color: GraphColors.lightRed,
+    },
+    {
+      value: props.data[NotificationStatus.RETURNED_TO_SENDER],
+      color: GraphColors.pink,
     },
   ];
 
@@ -86,6 +91,7 @@ const LastStateStatistics: React.FC<Props> = (props) => {
         t('last_state.effective_date'),
         t('last_state.canceled'),
         t('last_state.unreachable'),
+        t('last_state.returned_to_sender'),
       ],
     },
     yAxis: {

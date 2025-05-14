@@ -109,6 +109,8 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
                     checked={applyCost}
                     onChange={(e) => handleChange(e)}
                     data-testid="f24-apply-cost"
+                    sx={{ margin: 2 }}
+                    color={getError('applyCost', false) ? 'error' : 'primary'}
                   />
                 }
                 label={t(

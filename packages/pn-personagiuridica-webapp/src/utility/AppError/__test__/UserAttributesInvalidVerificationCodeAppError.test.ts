@@ -13,9 +13,9 @@ describe('Test UserAttributesInvalidVerificationCodeAppError', () => {
       } as ServerResponseError,
       translateFn
     );
-    const messege = appError.getMessage();
-    expect(messege.title).toBe('errors.invalid_verification_code.title recapiti');
-    expect(messege.content).toBe('errors.invalid_verification_code.message recapiti');
+    const message = appError.getMessage();
+    expect(message.title).toBe('errors.invalid_verification_code.title recapiti');
+    expect(message.content).toBe('errors.invalid_verification_code.message recapiti');
   });
 
   it('Should return limit is exceeded code message', () => {
@@ -25,9 +25,9 @@ describe('Test UserAttributesInvalidVerificationCodeAppError', () => {
       } as ServerResponseError,
       translateFn
     );
-    const messege = appError.getMessage();
-    expect(messege.title).toBe('errors.retry_limit_code.title recapiti');
-    expect(messege.content).toBe('errors.retry_limit_code.message recapiti');
+    const message = appError.getMessage();
+    expect(message.title).toBe('errors.retry_limit_code.title recapiti');
+    expect(message.content).toBe('errors.retry_limit_code.message recapiti');
   });
 
   it('Should return expired verification code message', () => {
@@ -37,9 +37,9 @@ describe('Test UserAttributesInvalidVerificationCodeAppError', () => {
       } as ServerResponseError,
       translateFn
     );
-    const messege = appError.getMessage();
-    expect(messege.title).toBe('errors.expired_verification_code.title recapiti');
-    expect(messege.content).toBe('errors.expired_verification_code.message recapiti');
+    const message = appError.getMessage();
+    expect(message.title).toBe('errors.expired_verification_code.title recapiti');
+    expect(message.content).toBe('errors.expired_verification_code.message recapiti');
   });
 
   it('Should return unknown code message', () => {
@@ -49,8 +49,8 @@ describe('Test UserAttributesInvalidVerificationCodeAppError', () => {
       } as ServerResponseError,
       translateFn
     );
-    const messege = appError.getMessage();
-    expect(messege.title).toBe('errors.unknown.title common');
-    expect(messege.content).toBe('errors.unknown.message common');
+    const message = appError.getMessage();
+    expect(message.title).toBe('errors.unknown.title common');
+    expect(message.content).toBe('errors.unknown.message common');
   });
 });

@@ -108,7 +108,7 @@
       "feedback": {
         "title-activation": "Hai attivato il tuo domicilio digitale",
         "title-transfer": "Hai aggiornato il tuo domicilio digitale",
-        "back-to-contacts": "Torna ai tuoi recapiti"
+        "go-to-contacts": "Vai ai tuoi recapiti"
       }
     },
     "pec-contact-wizard": {
@@ -225,6 +225,8 @@
   "common": {
     "duplicate-contact-title": "Recapito già presente",
     "duplicate-contact-descr": "Il contatto {{value}} è già presente, vuoi procedere ugualmente?",
+    "duplicate-default-contact-title": "Questo recapito è già usato come domicilio digitale",
+    "duplicate-default-contact-descr": "Il recapito {{value}} è già utilizzato come domicilio digitale principale su SEND.<br />Per personalizzare il domicilio digitale per ente mittente, scegli un recapito diverso.",
     "enti-not-found": "Nessun ente trovato",
     "too-long-field-error": "Scrivi massimo {{maxLength}} caratteri"
   },

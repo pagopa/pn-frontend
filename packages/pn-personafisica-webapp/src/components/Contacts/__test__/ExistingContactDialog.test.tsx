@@ -13,7 +13,7 @@ describe('ExistingContactDialog Component', () => {
     vi.clearAllMocks();
   });
 
-  it('renders component - confirmation modal visible', () => {
+  it('renders component', () => {
     // render component
     render(
       <ExistingContactDialog
@@ -23,17 +23,41 @@ describe('ExistingContactDialog Component', () => {
         handleConfirm={confirmHandler}
       />
     );
-    const dialog = screen.getByTestId('duplicateDialog');
-    const titleEl = getById(dialog, 'dialog-title');
+    const dialog = screen.getByTestId('confirmationDialog');
+    const titleEl = getById(dialog, 'confirmation-dialog-title');
     expect(titleEl).toBeInTheDocument();
     expect(titleEl).toHaveTextContent('common.duplicate-contact-title');
-    const bodyEl = getById(dialog, 'dialog-description');
+    const bodyEl = getById(dialog, 'confirmation-dialog-description');
     expect(bodyEl).toBeInTheDocument();
     expect(bodyEl).toHaveTextContent('common.duplicate-contact-descr');
     const confirmButton = screen.getByText('button.conferma');
     expect(confirmButton).toBeInTheDocument();
     const cancelButton = screen.getByText('button.annulla');
     expect(cancelButton).toBeInTheDocument();
+  });
+
+  it('renders component - Default contact', () => {
+    // render component
+    render(
+      <ExistingContactDialog
+        open
+        isDefault
+        value="value"
+        handleDiscard={closeHandler}
+        handleConfirm={confirmHandler}
+      />
+    );
+    const dialog = screen.getByTestId('confirmationDialog');
+    const titleEl = getById(dialog, 'confirmation-dialog-title');
+    expect(titleEl).toBeInTheDocument();
+    expect(titleEl).toHaveTextContent('common.duplicate-default-contact-title');
+    const bodyEl = getById(dialog, 'confirmation-dialog-description');
+    expect(bodyEl).toBeInTheDocument();
+    expect(bodyEl).toHaveTextContent('common.duplicate-default-contact-descr');
+    const confirmButton = screen.getByText('button.understand');
+    expect(confirmButton).toBeInTheDocument();
+    const cancelButton = screen.queryByText('button.annulla');
+    expect(cancelButton).not.toBeInTheDocument();
   });
 
   it('click on confirm button', () => {
