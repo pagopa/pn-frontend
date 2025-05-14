@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [2.14.1](https://github.com/pagopa/pn-frontend/compare/v2.14.1-RC.0...v2.14.1) (2025-05-12)
+# [2.15.0](https://github.com/pagopa/pn-frontend/compare/v2.15.0-RC.2...v2.15.0) (2025-05-12)
 
 **Note:** Version bump only for package pn-frontend
 
@@ -11,12 +11,40 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [2.14.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.14.0...v2.14.1-RC.0) (2025-05-08)
+# [2.15.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.15.0-RC.1...v2.15.0-RC.2) (2025-05-06)
 
 
 ### Bug Fixes
 
-* **pn-14877:** manage RETURNED_TO_SENDER status on statistics page ([#1544](https://github.com/pagopa/pn-frontend/issues/1544)) ([8677d02](https://github.com/pagopa/pn-frontend/commit/8677d020070bda015b8217eaa31a2d5a13eb3511))
+* **PN-14852:** restore label included-costs ([#1543](https://github.com/pagopa/pn-frontend/issues/1543)) ([ffccbee](https://github.com/pagopa/pn-frontend/commit/ffccbee87735077318c0781b4c5c174e734d18dd))
+
+
+
+
+
+# [2.15.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.15.0-RC.0...v2.15.0-RC.1) (2025-04-28)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+# [2.15.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.14.0...v2.15.0-RC.0) (2025-04-24)
+
+
+### Bug Fixes
+
+* **PN-11782:** Fix loading overlay a11y  ([#1496](https://github.com/pagopa/pn-frontend/issues/1496)) ([e3a89af](https://github.com/pagopa/pn-frontend/commit/e3a89afef372c48245acb08a8d9d7523274d179b))
+* **pn-14012:** Show right copy when no issuer is present ([#1486](https://github.com/pagopa/pn-frontend/issues/1486)) ([ab7a3d0](https://github.com/pagopa/pn-frontend/commit/ab7a3d09b579427b7de0d261eb0893a648ad71bb))
+* **PN-14346, PN-14348:** prevent set PEC address same as default one as special contact and show IO successfully added toast ([#1519](https://github.com/pagopa/pn-frontend/issues/1519)) ([112959b](https://github.com/pagopa/pn-frontend/commit/112959b2d4378f0649494669fc0f6adf2cf22fb3))
+
+
+### Features
+
+* **PN-11783:** rework UI of 404 page ([#1513](https://github.com/pagopa/pn-frontend/issues/1513)) ([806bc0f](https://github.com/pagopa/pn-frontend/commit/806bc0f1828f89333225a42fd4990b754cc6c170))
+* **pn-14082:** Handle PN_DELIVERY_NOTIFICATION_LIMIT_EXCEEDED ([#1537](https://github.com/pagopa/pn-frontend/issues/1537)) ([adb5fd9](https://github.com/pagopa/pn-frontend/commit/adb5fd9b868de3ae164a743d283d2e45678191bb))
+* **PN-14399:** update copy for payment items ([#1520](https://github.com/pagopa/pn-frontend/issues/1520)) ([ed02337](https://github.com/pagopa/pn-frontend/commit/ed02337bac510528a651ed27a2f29f6346b7fec0))
 
 
 
