@@ -1,10 +1,10 @@
 /* eslint-disable functional/immutable-data */
 import {
-  DeliveryMode,
   DigitalNotificationFocus,
   IDigitalMeanTimeStatistics,
   NotificationOverview,
   StatisticsDataTypes,
+  StatisticsDeliveryMode,
   StatisticsResponse,
 } from '../../models/Statistics';
 import StatisticsData from './StatisticsData';
@@ -32,7 +32,7 @@ export class DigitalMeanTimeStatisticsData extends StatisticsData {
     const notifications_overview = rawData.notificationsOverview;
 
     const digital_notifications = notifications_overview.filter(
-      (item) => item.notification_type === DeliveryMode.DIGITAL
+      (item) => item.notification_type === StatisticsDeliveryMode.DIGITAL
     );
 
     digital_notifications.forEach((element) => {
@@ -43,7 +43,10 @@ export class DigitalMeanTimeStatisticsData extends StatisticsData {
 
   parseChunk(chunk: NotificationOverview | DigitalNotificationFocus) {
     // parse only if chunk is a NotificationOverview
-    if ('notification_status' in chunk && chunk.notification_type === DeliveryMode.DIGITAL) {
+    if (
+      'notification_status' in chunk &&
+      chunk.notification_type === StatisticsDeliveryMode.DIGITAL
+    ) {
       const count = +chunk.notifications_count;
       if (chunk.notification_delivered === 'SI') {
         this.data.delivered.count += count;
