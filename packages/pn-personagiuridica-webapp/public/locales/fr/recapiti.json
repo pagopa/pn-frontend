@@ -23,7 +23,8 @@
     "validation-cancel-title": "Voulez-vous annuler la vérification ?",
     "validation-cancel-content": "Si vous annulez la vérification, vous devrez entrer une nouvelle PEC et recommencer le processus.",
     "validation-progress-title": "Merci !",
-    "validation-progress-content": "Nous vérifions que l’adresse PEC est valide. Vous recevrez un e-mail avec le résultat dans les 24 heures."
+    "validation-progress-content": "Nous vérifions que l’adresse PEC est valide. Vous recevrez un e-mail avec le résultat dans les 24 heures.",
+    "disclaimer-message": "Il s’agit de l’adresse principale à laquelle l’entreprise recevra les accusés de réception. En l’insérant, vous ne recevrez plus de recommandations."
   },
   "courtesy-contacts": {
     "link-sms-placeholder": "Numéro de téléphone mobile",

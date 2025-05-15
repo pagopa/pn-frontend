@@ -137,7 +137,8 @@
         "content": "Scegli dove ricevere le notifiche che ti invia un ente specifico.",
         "action": "Personalizza per ente"
       }
-    }
+    },
+    "disclaimer-message": "Questo è l’indirizzo principale che verrà utilizzato per inviarti gli avvisi di avvenuta ricezione in via digitale. Inserendolo, non riceverai più raccomandate cartacee."
   },
   "io-contact": {
     "title": "SEND sull’app IO",

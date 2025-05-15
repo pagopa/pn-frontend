@@ -125,7 +125,8 @@
         "content": "Scegli dove ricevere le notifiche inviate alla tua impresa da un ente specifico.",
         "action": "Personalizza per ente"
       }
-    }
+    },
+    "disclaimer-message": "Questo è l’indirizzo principale a cui l’impresa riceverà gli avvisi di avvenuta ricezione. Inserendolo, non riceverà più raccomandate."
   },
   "courtesy-contacts": {
     "email-title": "Indirizzo email aziendale",

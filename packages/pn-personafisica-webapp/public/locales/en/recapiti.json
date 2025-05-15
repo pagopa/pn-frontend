@@ -49,7 +49,8 @@
     "sercq_send-removed-successfully": "Digital Domicile deactivated correctly",
     "sercq-send-io-title": "Activate SEND on IO",
     "sercq-send-io-description": "Activate SEND - Notifiche Digitali on IO to receive the communications sent directly to your SEND digital domicile <strong>directly in app</strong>.",
-    "sercq-send-io-advantages": "On IO"
+    "sercq-send-io-advantages": "On IO",
+    "disclaimer-message": "This is the primary address that will be used to send you acknowledgement of receipts digitally. By entering it, you will no longer receive registered mail."
   },
   "io-contact": {
     "title": "IO app",

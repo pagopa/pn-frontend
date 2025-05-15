@@ -49,7 +49,8 @@
     "sercq_send-removed-successfully": "Digitales Domizil erfolgreich deaktiviert",
     "sercq-send-io-title": "Aktiviere SEND auf IO",
     "sercq-send-io-description": "Aktiviere SEND - Notifiche Digitali auf IO, um<strong> direkt in der App</strong> die an dein digitales Domizil SEND gesendeten Zustellungen zu erhalten.",
-    "sercq-send-io-advantages": "Auf IO"
+    "sercq-send-io-advantages": "Auf IO",
+    "disclaimer-message": "Dies ist die Hauptadresse für Benachrichtigungen über den digitalen Empfang. Wenn du sie eingibst, erhältst du keine Einschreiben mehr in Papierform."
   },
   "io-contact": {
     "title": "IO-App",

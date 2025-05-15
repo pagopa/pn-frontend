@@ -23,7 +23,8 @@
     "validation-cancel-title": "Überprüfung abbrechen?",
     "validation-cancel-content": "Wird die Überprüfung abgebrochen, muss eine neue PEC-Adresse eingegeben und der Vorgang erneut begonnen werden.",
     "validation-progress-title": "Danke!",
-    "validation-progress-content": "Wir prüfen, ob die PEC-Adresse gültig ist. Du erhältst innerhalb von 24 Stunden eine E-Mail mit dem Ergebnis."
+    "validation-progress-content": "Wir prüfen, ob die PEC-Adresse gültig ist. Du erhältst innerhalb von 24 Stunden eine E-Mail mit dem Ergebnis.",
+    "disclaimer-message": "Dies ist die Hauptanschrift des Unternehmens für die Bestätigung über den Empfang. Wenn sie angegeben wird, erhältst du keine Einschreiben mehr."
   },
   "courtesy-contacts": {
     "link-sms-placeholder": "Handynummer",

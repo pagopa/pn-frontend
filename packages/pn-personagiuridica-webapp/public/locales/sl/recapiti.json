@@ -23,7 +23,8 @@
     "validation-cancel-title": "Želite preklicati preverjanje?",
     "validation-cancel-content": "Če prekličete preverjanje, boste morali vnesti nov PEC in ponovno začeti postopek.",
     "validation-progress-title": "Hvala!",
-    "validation-progress-content": "Preverjamo, če je PEC veljaven. V 24 urah boste prejeli e-poštno sporočilo z rezultatom."
+    "validation-progress-content": "Preverjamo, če je PEC veljaven. V 24 urah boste prejeli e-poštno sporočilo z rezultatom.",
+    "disclaimer-message": "To je glavni naslov, na katerega bo podjetje prejemalo potrdila o prejemu. Če ga vnesete, ne boste več prejemali priporočenih pisem."
   },
   "courtesy-contacts": {
     "link-sms-placeholder": "Mobilni telefon",

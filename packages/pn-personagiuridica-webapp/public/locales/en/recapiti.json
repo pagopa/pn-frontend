@@ -23,7 +23,8 @@
     "validation-cancel-title": "Do you want to cancel the verification?",
     "validation-cancel-content": "If you cancel the verification, you will need to enter a new PEC address and restart the process.",
     "validation-progress-title": "Thank you!",
-    "validation-progress-content": "We are verifying that the PEC address is valid. You will receive an email with the result within 24 hours."
+    "validation-progress-content": "We are verifying that the PEC address is valid. You will receive an email with the result within 24 hours.",
+    "disclaimer-message": "This is the main address at which the company will receive acknowledgment of receipts. By entering it, you will no longer receive registered letters."
   },
   "courtesy-contacts": {
     "link-sms-placeholder": "Mobile phone number",

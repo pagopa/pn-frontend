@@ -7,7 +7,7 @@ import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import SavingsIcon from '@mui/icons-material/Savings';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
-import { Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/material';
+import { Alert, Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType } from '../../models/contacts';
@@ -207,6 +207,11 @@ const LegalContacts = () => {
           {t(`legal-contacts.${channelType.toLowerCase()}-description`, { ns: 'recapiti' })}
         </Typography>
       )}
+      <Alert sx={{ mt: 4 }} severity="info">
+        <Typography component="span" variant="body1" data-testid="legal-contact-disclaimer">
+          {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
+        </Typography>
+      </Alert>
       {showSpecialContactsSection && <SpecialContacts />}
       <DeleteDialog
         showModal={modalOpen}

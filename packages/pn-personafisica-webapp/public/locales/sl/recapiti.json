@@ -49,7 +49,8 @@
     "sercq_send-removed-successfully": "Digitalno prebivališče je pravilno deaktivirano",
     "sercq-send-io-title": "Aktivirajte SEND na IO",
     "sercq-send-io-description": "Aktivirajte SEND - Notifiche Digitali na IO za<strong> prejemanje sporočil, poslanih na vaše digitalno prebivališče SEND neposredno v aplikaciji</strong>.",
-    "sercq-send-io-advantages": "Na IO"
+    "sercq-send-io-advantages": "Na IO",
+    "disclaimer-message": "To je primarni naslov, ki bo uporabljen za digitalno pošiljanje potrdil o prejemu. Če ga vnesete, ne boste več prejemali priporočenih pisem v papirni obliki."
   },
   "io-contact": {
     "title": "Aplikacija IO",
