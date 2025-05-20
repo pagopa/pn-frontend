@@ -2,28 +2,15 @@
 This function removes from error object all those informations that are not used by the application.
 This is needed because redux, when recives an action, does a serializability check and, if the obeject is not serializable, it launchs a warning 
 */
-function extractRootTraceId(input: string | undefined | null): string | undefined {
-  if (!input) {
-    return undefined;
-  }
-
-  // Match "Root=..." and only return its value
-  const match = input.match(/(?:^|;)Root=([^;]+)/);
-  return match?.[1];
-}
-
 export function parseError(e: any) {
   if (e.response) {
     const { data, status, headers } = e.response;
-
-    const headerTraceId = extractRootTraceId(headers?.['x-amzn-trace-id']);
-    const dataTraceId = extractRootTraceId(data?.traceId);
 
     return {
       response: {
         data: {
           ...data,
-          traceId: headerTraceId || dataTraceId || '',
+          traceId: headers?.['x-amzn-trace-id'] || data?.traceId || '',
         },
         status: status || 500,
       },

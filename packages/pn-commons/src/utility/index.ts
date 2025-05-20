@@ -66,6 +66,7 @@ import { searchStringLimitReachedText, useSearchStringChangeInput } from './sear
 import { storageOpsBuilder } from './storage.utility';
 import { dataRegex, formatFiscalCode, fromStringToBase64, sanitizeString } from './string.utility';
 import { buttonNakedInheritStyle } from './styles.utility';
+import { extractRootTraceId } from './support.utility';
 import {
   adaptedTokenExchangeError,
   basicInitialUserData,
@@ -159,4 +160,5 @@ export {
   IS_DEVELOP,
   APP_VERSION,
   getRapidAccessParam,
+  extractRootTraceId,
 };
