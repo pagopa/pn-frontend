@@ -57,6 +57,7 @@ export const appStateSlice = createSlice({
       action: PayloadAction<{
         title: string;
         message: string;
+        permanent: boolean;
         status?: HTTPStatusCode;
         action?: string;
       }>
@@ -64,6 +65,7 @@ export const appStateSlice = createSlice({
       const message = createAppMessage(
         action.payload.title,
         action.payload.message,
+        action.payload.permanent,
         action.payload.status,
         action.payload.action
       );
@@ -85,6 +87,7 @@ export const appStateSlice = createSlice({
       const message = createAppMessage(
         action.payload.title,
         action.payload.message,
+        false,
         action.payload.status
       );
       state.messages.success.push(message);
@@ -103,6 +106,7 @@ export const appStateSlice = createSlice({
       const message = createAppMessage(
         action.payload.title,
         action.payload.message,
+        false,
         action.payload.status
       );
       state.messages.info.push(message);

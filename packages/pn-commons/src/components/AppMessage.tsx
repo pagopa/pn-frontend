@@ -90,7 +90,7 @@ const AppMessage = () => {
           open
           type={currentMessage.type}
           onClose={() => onCloseToast(currentMessage)}
-          closingDelay={5000}
+          closingDelay={currentMessage.message.permanent ? undefined : 5000}
         />
       )}
     </>

@@ -39,6 +39,7 @@ export interface AppResponseError {
   code: string;
   element?: string;
   detail?: string;
+  permanent: boolean;
   message: {
     title: string;
     content: string;

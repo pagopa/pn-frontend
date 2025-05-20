@@ -6,6 +6,7 @@ import { IAppMessage } from '../models';
 export const createAppMessage = (
   title: string,
   message: string,
+  permanent: boolean,
   status?: number,
   action?: string
 ): IAppMessage => {
@@ -13,6 +14,7 @@ export const createAppMessage = (
     id: _.uniqueId(),
     title,
     message,
+    permanent,
     blocking: false,
     toNotify: true,
     status,

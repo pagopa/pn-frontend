@@ -16,11 +16,16 @@ abstract class AppError {
       code: this.code,
       element: this.element,
       detail: this.detail,
+      permanent: this.isPermanent(),
       message: {
         title: this.getMessage().title,
         content: this.getMessage().content,
       },
     };
+  }
+
+  isPermanent(): boolean {
+    return false;
   }
 
   abstract getMessage(): ErrorMessage;

@@ -5,6 +5,8 @@ export type IAppMessage = {
   blocking: boolean;
   /** A description of the error to send when notifying the error */
   message: string;
+  /** Whether the popup should be kept open until its explicit close */
+  permanent: boolean;
   /** A text to show as title of the popup when a not blocking error occurs */
   title: string;
   /** If true, it will notify the error */
