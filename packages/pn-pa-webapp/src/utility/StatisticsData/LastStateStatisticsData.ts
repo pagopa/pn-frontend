@@ -1,9 +1,10 @@
 /* eslint-disable functional/immutable-data */
+import { NotificationStatus } from '@pagopa-pn/pn-commons';
+
 import {
   DigitalNotificationFocus,
   ILastStateStatistics,
   NotificationOverview,
-  NotificationStatus,
   StatisticsDataTypes,
   StatisticsResponse,
 } from '../../models/Statistics';
@@ -27,6 +28,7 @@ export class LastStateStatisticsData extends StatisticsData {
     [NotificationStatus.EFFECTIVE_DATE]: 0,
     [NotificationStatus.CANCELLED]: 0,
     [NotificationStatus.UNREACHABLE]: 0,
+    [NotificationStatus.RETURNED_TO_SENDER]: 0,
   };
 
   public getName(): StatisticsDataTypes {
@@ -61,6 +63,7 @@ export class LastStateStatisticsData extends StatisticsData {
       [NotificationStatus.EFFECTIVE_DATE]: 0,
       [NotificationStatus.CANCELLED]: 0,
       [NotificationStatus.UNREACHABLE]: 0,
+      [NotificationStatus.RETURNED_TO_SENDER]: 0,
     };
   }
 }

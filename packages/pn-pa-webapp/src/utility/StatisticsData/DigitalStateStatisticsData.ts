@@ -1,12 +1,12 @@
 /* eslint-disable functional/immutable-data */
 import {
-  DeliveryMode,
   DigitalNotificationFocus,
   IDigitalStateStatistics,
   NotificationOverview,
-  ResponseStatus,
   StatisticsDataTypes,
+  StatisticsDeliveryMode,
   StatisticsResponse,
+  StatisticsResponseStatus,
 } from '../../models/Statistics';
 import StatisticsData from './StatisticsData';
 
@@ -20,10 +20,10 @@ import StatisticsData from './StatisticsData';
  */
 export class DigitalStateStatisticsData extends StatisticsData {
   data: IDigitalStateStatistics = {
-    [ResponseStatus.OK]: 0,
-    [ResponseStatus.KO]: 0,
-    [ResponseStatus.PROGRESS]: 0,
-    [ResponseStatus.UNKNOWN]: 0,
+    [StatisticsResponseStatus.OK]: 0,
+    [StatisticsResponseStatus.KO]: 0,
+    [StatisticsResponseStatus.PROGRESS]: 0,
+    [StatisticsResponseStatus.UNKNOWN]: 0,
   };
 
   public getName(): StatisticsDataTypes {
@@ -34,7 +34,7 @@ export class DigitalStateStatisticsData extends StatisticsData {
     const notifications_overview = rawData.notificationsOverview;
 
     const digital_notifications = notifications_overview.filter(
-      (item) => item.notification_type === DeliveryMode.DIGITAL
+      (item) => item.notification_type === StatisticsDeliveryMode.DIGITAL
     );
 
     digital_notifications.forEach((element) => {
@@ -45,7 +45,10 @@ export class DigitalStateStatisticsData extends StatisticsData {
 
   parseChunk(chunk: NotificationOverview | DigitalNotificationFocus) {
     // parse only if chunk is a NotificationOverview
-    if ('notification_status' in chunk && chunk.notification_type === DeliveryMode.DIGITAL) {
+    if (
+      'notification_status' in chunk &&
+      chunk.notification_type === StatisticsDeliveryMode.DIGITAL
+    ) {
       const status = chunk.status_digital_delivery;
       const count = +chunk.notifications_count;
 
@@ -55,10 +58,10 @@ export class DigitalStateStatisticsData extends StatisticsData {
 
   resetData(): void {
     this.data = {
-      [ResponseStatus.OK]: 0,
-      [ResponseStatus.KO]: 0,
-      [ResponseStatus.PROGRESS]: 0,
-      [ResponseStatus.UNKNOWN]: 0,
+      [StatisticsResponseStatus.OK]: 0,
+      [StatisticsResponseStatus.KO]: 0,
+      [StatisticsResponseStatus.PROGRESS]: 0,
+      [StatisticsResponseStatus.UNKNOWN]: 0,
     };
   }
 }

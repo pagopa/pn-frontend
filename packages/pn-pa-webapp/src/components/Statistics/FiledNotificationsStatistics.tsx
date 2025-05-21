@@ -3,10 +3,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Grid, Paper, Typography } from '@mui/material';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { NotificationStatus, useIsMobile } from '@pagopa-pn/pn-commons';
 import { PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { GraphColors, IFiledStatistics, NotificationStatus } from '../../models/Statistics';
+import { GraphColors, IFiledStatistics } from '../../models/Statistics';
 import AggregateAndTrendStatistics, { AggregateAndTrendData } from './AggregateAndTrendStatistics';
 
 type Props = {

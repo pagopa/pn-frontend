@@ -472,7 +472,13 @@
         "at": "Presso",
         "address-details": "Note aggiuntive (presso, scala, piano)",
         "add-recipient": "Aggiungi un destinatario",
-        "remove-recipient": "Rimuovi destinatario"
+        "remove-recipient": "Rimuovi destinatario",
+        "address-subtitle": "Scegli se consentire a SEND di inserire automaticamente l'indirizzo dai registri nazionali. L'inserimento automatico potrebbe ritardare l'invio della notifica al destinatario. In alternativa puoi compilare l'indirizzo manualmente.",
+        "address-physical-lookup-down": "Al momento non è possibile richiamare l'indirizzo dai registri nazionali. Inserisci l'indirizzo manualmente.",
+        "address-physical-lookup-radios": {
+          "national-registry": "Inserimento automatico da registro nazionale",
+          "manual": "Inserimento manuale"
+        }
       },
       "attachments": {
         "title": "Documentazione",
