@@ -322,8 +322,8 @@
         "23I": "Ricevuta di consegna",
         "Plico": "Scansione del plico",
         "23L": "Avviso di ricevimento",
-        "CAD": "Il plico della raccomandata che contiene la comunicazione di avvenuto deposito (CAD) è stato dematerializzato.",
-        "ARCAD": "L’avviso di ricevimento della raccomandata che contiene la comunicazione di avvenuto deposito (CAD) è stato dematerializzato.",
+        "CAD": "È disponibile la dematerializzazione della raccomandata che contiene la comunicazione di avvenuto deposito",
+        "ARCAD": "È disponibile la dematerializzazione dell'avviso di ricevimento della raccomandata che contiene la comunicazione di avvenuto deposito",
         "Indagine": "Scansione dell'indagine",
         "generic": "Documento allegato"
       },
