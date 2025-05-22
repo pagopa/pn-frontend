@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [2.14.1](https://github.com/pagopa/pn-frontend/compare/v2.14.1-RC.0...v2.14.1) (2025-05-12)
+# [2.15.0](https://github.com/pagopa/pn-frontend/compare/v2.15.0-RC.2...v2.15.0) (2025-05-12)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
 
@@ -11,12 +11,21 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [2.14.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.14.0...v2.14.1-RC.0) (2025-05-08)
+# [2.15.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.15.0-RC.0...v2.15.0-RC.1) (2025-04-28)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
 
 
-### Bug Fixes
 
-* **pn-14877:** manage RETURNED_TO_SENDER status on statistics page ([#1544](https://github.com/pagopa/pn-frontend/issues/1544)) ([8677d02](https://github.com/pagopa/pn-frontend/commit/8677d020070bda015b8217eaa31a2d5a13eb3511))
+
+
+# [2.15.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.14.0...v2.15.0-RC.0) (2025-04-24)
+
+
+### Features
+
+* **PN-11783:** rework UI of 404 page ([#1513](https://github.com/pagopa/pn-frontend/issues/1513)) ([806bc0f](https://github.com/pagopa/pn-frontend/commit/806bc0f1828f89333225a42fd4990b754cc6c170))
+* **pn-14082:** Handle PN_DELIVERY_NOTIFICATION_LIMIT_EXCEEDED ([#1537](https://github.com/pagopa/pn-frontend/issues/1537)) ([adb5fd9](https://github.com/pagopa/pn-frontend/commit/adb5fd9b868de3ae164a743d283d2e45678191bb))
 
 
 
