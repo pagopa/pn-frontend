@@ -1,4 +1,5 @@
-import { AppError, ServerResponseError } from '@pagopa-pn/pn-commons';
+import { ServerResponseError } from '@pagopa-pn/pn-commons';
+import { AppError } from '@pagopa-pn/pn-commons/src/utility/AppError';
 
 export class InvalidBodyAppError extends AppError {
   private translateFunction: (path: string, ns: string) => string = (path: string) => path;

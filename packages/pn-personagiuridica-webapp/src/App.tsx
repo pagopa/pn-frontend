@@ -21,6 +21,7 @@ import {
   ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
+  addParamToUrl,
   appStateActions,
   errorFactoryManager,
   initLocalization,
@@ -74,6 +75,7 @@ const ActualApp = () => {
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const [openModal, setOpenModal] = useState(false);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
+  const lastError = useAppSelector((state: RootState) => state.appState.lastError);
   const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
     (state: RootState) => state.userState
   );
@@ -249,9 +251,10 @@ const ActualApp = () => {
   };
 
   const handleAssistanceClick = () => {
+    const url = addParamToUrl(`${SELFCARE_BASE_URL}/assistenza`, "data", JSON.stringify(lastError));
     /* eslint-disable-next-line functional/immutable-data */
     window.location.href = sessionToken
-      ? `${SELFCARE_BASE_URL}/assistenza`
+      ? url
       : `mailto:${PAGOPA_HELP_EMAIL}`;
   };
 

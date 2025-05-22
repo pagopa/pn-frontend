@@ -356,6 +356,20 @@
     "help": {
       "goto": "Vai al sito",
       "assistance": "Per problemi tecnici o domande relative a SEND, premi su “Assisistenza” in alto a destra."
+    },
+    "errors": {
+      "delivery_file_info_not_found": {
+        "title": "Documento non trovato",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Documento non trovato",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Documento non trovato",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+      }
     }
   },
   "delegatorTitle": "Le notifiche di {{name}}",

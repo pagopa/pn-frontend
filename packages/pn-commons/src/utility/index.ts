@@ -72,6 +72,7 @@ import {
   basicInitialUserData,
   basicUserDataMatcherContents,
 } from './user.utility';
+import { addParamToUrl } from './navigation.utility';
 
 export {
   getNotificationAllowedStatus,
@@ -161,4 +162,5 @@ export {
   APP_VERSION,
   getRapidAccessParam,
   extractRootTraceId,
+  addParamToUrl
 };

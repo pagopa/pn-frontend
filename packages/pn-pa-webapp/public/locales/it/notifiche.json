@@ -86,6 +86,18 @@
       "generic_error": {
         "title": "",
         "message": "Si è verificato un errore durante l’annullamento. Riprova."
+      },
+      "delivery_file_info_not_found": {
+        "title": "Documento non trovato",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Documento non trovato",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Documento non trovato",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
       }
     },
     "acts": "Documenti allegati",
@@ -579,6 +591,10 @@
       "delivery_notification_limit_exceeded": {
         "title": "Hai raggiunto il limite di notifiche",
         "message": "Al momento non puoi creare nuove notifiche perché hai già raggiunto il numero massimo mensile"
+      },
+      "delivery_invalid_parameter_group": {
+        "title": "Gruppo non valido",
+        "message": "Il gruppo di utenti che hai selezionato non è valido. Seleziona un altro gruppo e riprova. Se vuoi segnalare il problema, contatta l’assistenza e comunica le informazioni errore."
       }
     }
   },

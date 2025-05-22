@@ -4,6 +4,7 @@ import { AppResponse, IAppMessage } from '../../models';
 import { AppResponseOutcome, HTTPStatusCode } from '../../models/AppResponse';
 import { createAppResponseError, createAppResponseSuccess } from '../../utility/AppResponse';
 import { createAppMessage } from '../../utility/message.utility';
+import { extractRootTraceId } from '../../utility';
 
 export interface AppStateState {
   loading: {
@@ -21,6 +22,10 @@ export interface AppStateState {
     response: AppResponse;
   } | null;
   isInitialized: boolean;
+  lastError?: {
+    traceId: string;
+    errorCode: string;
+  };
 }
 
 const initialState: AppStateState = {
@@ -57,18 +62,31 @@ export const appStateSlice = createSlice({
       action: PayloadAction<{
         title: string;
         message: string;
-        permanent: boolean;
+        showTechnicalData: boolean;
         status?: HTTPStatusCode;
         action?: string;
+        traceId: string;
+        errorCode: string;
       }>
     ) {
       const message = createAppMessage(
         action.payload.title,
         action.payload.message,
-        action.payload.permanent,
+        action.payload.showTechnicalData,
         action.payload.status,
-        action.payload.action
+        action.payload.action,
+        extractRootTraceId(action.payload.traceId),
+        action.payload.errorCode
       );
+      if(message.showTechnicalData){
+        state.lastError = {
+          traceId: message.traceId || '',
+          errorCode: message.errorCode || ''
+        };
+      }
+      else {
+        state.lastError = undefined;
+      }
       state.messages.errors.push(message);
     },
     removeError(state, action: PayloadAction<string>) {

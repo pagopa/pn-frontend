@@ -1,6 +1,6 @@
 import { AppError, ServerResponseError } from '@pagopa-pn/pn-commons';
 
-export class GenericInvalidParameterTaxonomyCodeAppError extends AppError {
+export class DeliveryNotificationWithoutPaymentAttachmentAppError extends AppError {
   private readonly translateFunction: (path: string, ns: string) => string = (path: string) => path;
 
   constructor(error: ServerResponseError, translateFunction: (path: string, ns: string) => string) {
@@ -10,9 +10,9 @@ export class GenericInvalidParameterTaxonomyCodeAppError extends AppError {
 
   getMessage() {
     return {
-      title: this.translateFunction('new-notification.errors.invalid_parameter_taxonomy_code.title', 'notifiche'),
+      title: this.translateFunction('detail.errors.delivery_notification_without_payment_attachment.title', 'notifiche'),
       content: this.translateFunction(
-        'new-notification.errors.invalid_parameter_taxonomy_code.message',
+        'detail.errors.delivery_notification_without_payment_attachment.message',
         'notifiche'
       ),
     };

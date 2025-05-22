@@ -29,7 +29,9 @@ const AppResponseMessage = ({ eventTrackingToastErrorMessages }: Props) => {
         appStateActions.addError({
           title: error.message.title,
           message: error.message.content,
-          permanent: error.permanent,
+          showTechnicalData: error.showTechnicalData,
+          traceId: response.traceId || '',
+          errorCode: error.code,
           status,
           action,
         })

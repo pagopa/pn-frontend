@@ -87,10 +87,13 @@ const AppMessage = () => {
           key={currentMessage.message.id}
           title={currentMessage.message.title}
           message={currentMessage.message.message}
+          showTechnicalData={currentMessage.message.showTechnicalData}
+          traceId={currentMessage.message.traceId}
+          errorCode={currentMessage.message.errorCode}
           open
           type={currentMessage.type}
           onClose={() => onCloseToast(currentMessage)}
-          closingDelay={currentMessage.message.permanent ? undefined : 5000}
+          closingDelay={currentMessage.message.showTechnicalData ? undefined : 5000}
         />
       )}
     </>

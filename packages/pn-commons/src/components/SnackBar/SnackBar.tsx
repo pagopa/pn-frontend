@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
-import { Alert, AlertTitle, IconButton, Snackbar } from '@mui/material';
+import { Alert, AlertTitle, Box, IconButton, Snackbar, Typography } from '@mui/material';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { AppResponseOutcome } from '../../models/AppResponse';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import CopyToClipboard from '../CopyToClipboard';
 
 type Props = {
   /** whether the sneakbar should be open or not */
@@ -15,7 +17,10 @@ type Props = {
   title?: React.ReactNode;
   /** message to be shown */
   message: React.ReactNode;
+  showTechnicalData: boolean;
   /** A closing delay: if specified the sneakbar would close itself */
+  traceId?: string;
+  errorCode?: string;
   closingDelay?: number;
   /** onClose action */
   onClose?: () => void;
@@ -28,6 +33,9 @@ const SnackBar: React.FC<Props> = ({
   message,
   open,
   type,
+  showTechnicalData,
+  traceId,
+  errorCode,
   closingDelay,
   onClose,
   variant = 'outlined',
@@ -81,7 +89,8 @@ const SnackBar: React.FC<Props> = ({
                 bottom: '64px',
                 right: isMobile ? '5%' : '64px',
                 zIndex: 100,
-                width: isMobile ? 'calc(100vw - 10%)' : '376px',
+                // width: isMobile ? 'calc(100vw - 10%)' : '376px',
+                width: isMobile ? 'calc(100vw - 5%)' : '450px',
                 '& .MuiAlert-message': {
                   width: '100%',
                 },
@@ -90,6 +99,40 @@ const SnackBar: React.FC<Props> = ({
             >
               {title && <AlertTitle id="alert-api-status">{title}</AlertTitle>}
               {message}
+              {showTechnicalData && (
+                <Box mt={2} sx={{
+                  backgroundColor: '#F2F2F2',
+                  p: 2,
+                  whiteSpace: 'normal',
+                  wordBreak: 'break-word',
+                }}>
+                  <Typography fontSize="16" variant="body1" fontWeight="600" mb={2}>
+                    {getLocalizedOrDefaultLabel(
+                      'common',
+                      'errors.technical-error.title',
+                      'Informazioni errore'
+                    )}
+                  </Typography>
+                  <Box mb={2}>
+                    {errorCode && <Typography variant="body1">
+                      {errorCode}
+                    </Typography>}
+                    {traceId && <Typography variant="body1" fontSize="16px">
+                      {traceId}
+                    </Typography>}
+                  </Box>
+                  <CopyToClipboard
+                    text={getLocalizedOrDefaultLabel(
+                      'common',
+                      'errors.technical-error.copy-to-clipboard',
+                      'Copia informazioni errore'
+                    )}
+                    getValue={() => errorCode + "\n" + traceId}
+                    tooltipMode
+                    textBefore
+                 />
+                </Box>
+              )}
             </Alert>
           </Snackbar>
         </div>
