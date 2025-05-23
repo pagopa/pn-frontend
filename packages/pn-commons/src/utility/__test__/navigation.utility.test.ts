@@ -1,4 +1,4 @@
-import { addParamToUrl } from "../navigation.utility";
+import { addParamToUrl } from '../navigation.utility';
 
 describe('Test addParamToUrl', () => {
   it('adds param to an url having an empty query string', () => {
@@ -18,8 +18,8 @@ describe('Test addParamToUrl', () => {
   });
 
   it('properly encodes paramValue', () => {
-    expect(addParamToUrl('https://www.pagopa.it', 'data', 'encode test!')).toBe(
-      'https://www.pagopa.it?data=encode%20test%21'
+    expect(addParamToUrl('https://www.pagopa.it', 'data', 'encode test?&=')).toBe(
+      'https://www.pagopa.it?data=encode%20test%3F%26%3D'
     );
   });
 });

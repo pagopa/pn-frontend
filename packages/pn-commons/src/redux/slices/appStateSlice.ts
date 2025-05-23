@@ -2,9 +2,9 @@ import { AnyAction, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { AppResponse, IAppMessage } from '../../models';
 import { AppResponseOutcome, HTTPStatusCode } from '../../models/AppResponse';
+import { extractRootTraceId } from '../../utility';
 import { createAppResponseError, createAppResponseSuccess } from '../../utility/AppResponse';
 import { createAppMessage } from '../../utility/message.utility';
-import { extractRootTraceId } from '../../utility';
 
 export interface AppStateState {
   loading: {
@@ -65,8 +65,8 @@ export const appStateSlice = createSlice({
         showTechnicalData: boolean;
         status?: HTTPStatusCode;
         action?: string;
-        traceId: string;
-        errorCode: string;
+        traceId?: string;
+        errorCode?: string;
       }>
     ) {
       const message = createAppMessage(
@@ -78,13 +78,12 @@ export const appStateSlice = createSlice({
         extractRootTraceId(action.payload.traceId),
         action.payload.errorCode
       );
-      if(message.showTechnicalData){
+      if (message.showTechnicalData) {
         state.lastError = {
           traceId: message.traceId || '',
-          errorCode: message.errorCode || ''
+          errorCode: message.errorCode || '',
         };
-      }
-      else {
+      } else {
         state.lastError = undefined;
       }
       state.messages.errors.push(message);

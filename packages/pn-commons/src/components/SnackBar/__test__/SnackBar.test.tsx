@@ -10,6 +10,7 @@ const renderSnackBar = (open: boolean, type: AppResponseOutcome, closingDelay?: 
       open={open}
       message={'SnackBar mocked message'}
       type={type}
+      showTechnicalData={false}
       closingDelay={closingDelay}
     />
   );

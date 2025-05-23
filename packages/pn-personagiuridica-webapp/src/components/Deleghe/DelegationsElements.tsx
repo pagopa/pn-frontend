@@ -48,7 +48,7 @@ function handleCustomGenericError(
     ).map((key) => ServerResponseErrorCode[key]);
     const error = responseError.errors[0];
     if (!managedErrors.includes(error.code as ServerResponseErrorCode)) {
-      dispatch(appStateActions.addError({ title: '', message }));
+      dispatch(appStateActions.addError({ title: '', message, showTechnicalData: false }));
       return false;
     }
     return true;
