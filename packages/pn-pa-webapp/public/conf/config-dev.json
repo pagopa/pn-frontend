@@ -17,7 +17,7 @@
   "API_B2B_LINK": "https://developer.pagopa.it/send/api#/",
   "IS_STATISTICS_ENABLED": true,
   "TAXONOMY_SEND_URL": "https://docs.pagopa.it/f.a.q.-per-integratori/tassonomia-send",
-  "DOWNTIME_EXAMPLE_LINK": "https://d3uwnqvme5tqoz.cloudfront.net/Legal_Fact_Malfunction_fa65558aa3.pdf",
+  "DOWNTIME_EXAMPLE_LINK": "https://d3uwnqvme5tqoz.cloudfront.net/Legal_Fact_Malfunction_11f784e148.pdf",
   "PAYMENT_INFO_LINK": "https://developer.pagopa.it/send/guides/knowledge-base/readme/pagamenti-e-spese-di-notifica/pagamenti-pagopa",
   "DEVELOPER_API_DOCUMENTATION_LINK": "https://developer.pagopa.it/send/api",
   "PHYSICAL_ADDRESS_LOOKUP": "on"
