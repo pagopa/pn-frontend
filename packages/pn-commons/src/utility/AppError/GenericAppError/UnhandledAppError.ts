@@ -4,7 +4,7 @@ import AppError from '../AppError';
 
 export class UnhandledAppError extends AppError {
   constructor(error: ServerResponseError) {
-    super(error);
+    super(error, true);
   }
 
   getMessage() {

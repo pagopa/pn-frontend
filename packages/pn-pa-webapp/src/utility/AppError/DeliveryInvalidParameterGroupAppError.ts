@@ -12,7 +12,7 @@ export class DeliveryInvalidParameterGroupAppError extends AppError {
     return {
       title: this.translateFunction('new-notification.errors.delivery_invalid_parameter_group.title', 'notifiche'),
       content: this.translateFunction(
-        'notification.errors.delivery_invalid_parameter_group.message',
+        'new-notification.errors.delivery_invalid_parameter_group.message',
         'notifiche'
       ),
     };

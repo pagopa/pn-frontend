@@ -85,11 +85,7 @@ const AppMessage = () => {
       {currentMessage && (
         <SnackBar
           key={currentMessage.message.id}
-          title={currentMessage.message.title}
-          message={currentMessage.message.message}
-          showTechnicalData={currentMessage.message.showTechnicalData}
-          traceId={currentMessage.message.traceId}
-          errorCode={currentMessage.message.errorCode}
+          message={currentMessage.message}
           open
           type={currentMessage.type}
           onClose={() => onCloseToast(currentMessage)}

@@ -49,7 +49,7 @@ describe('Creation of AppResponse objects', () => {
             title: expect.stringMatching(/.*/),
             content: expect.stringMatching(/.*/),
           },
-          showTechnicalData: false,
+          showTechnicalData: true,
         },
       ],
     });
