@@ -594,7 +594,7 @@
       },
       "invalid_parameter_taxonomy_code": {
         "title": "Codice tassonomico non valido",
-        "message": "Il codice tassonomico inserito non è tra quelli gestiti dalla piattaforma."
+        "message": "Il codice tassonomico che hai inserito non è valido. Controlla e riprova. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
       },
       "delivery_notification_limit_exceeded": {
         "title": "Hai raggiunto il limite di notifiche",
@@ -602,7 +602,7 @@
       },
       "delivery_invalid_parameter_group": {
         "title": "Gruppo non valido",
-        "message": "Il gruppo di utenti che hai selezionato non è valido. Seleziona un altro gruppo e riprova. Se vuoi segnalare il problema, contatta l’assistenza e comunica le informazioni errore."
+        "message": "Il gruppo di utenti che hai selezionato non è valido. Controlla e riprova. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
       }
     }
   },
