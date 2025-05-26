@@ -14,7 +14,7 @@ const _genericMessage: IAppMessage = {
 
 describe('nessage service', () => {
   it('return generic message', () => {
-    const genericMessage = createAppMessage('mocked-title', 'mocked-message', false);
+    const genericMessage = createAppMessage({title: 'mocked-title', message: 'mocked-message', showTechnicalData: false});
     expect(genericMessage).toEqual(_genericMessage);
   });
 });

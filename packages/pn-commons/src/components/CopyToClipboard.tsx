@@ -11,7 +11,7 @@ type Props = {
   getValue: () => string;
   /** an optional text to be displayed near the "copy to clipboard" icon */
   text?: string;
-  textBefore?: boolean;
+  textPosition?: "start" | "end";
   tooltipMode?: boolean;
   tooltip?: string;
   tooltipBefore?: string;
@@ -21,7 +21,7 @@ type Props = {
 const CopyToClipboard: React.FC<Props> = ({
   getValue,
   text,
-  textBefore,
+  textPosition = "end",
   tooltipMode,
   tooltip = '',
   tooltipBefore = '',
@@ -64,14 +64,14 @@ const CopyToClipboard: React.FC<Props> = ({
       disabled={disabled}
       aria-label={copied ? tooltip : tooltipBefore}
     >
-      {textBefore && text}
+      {textPosition === 'start' && text}
       {copied && (
         <Tooltip arrow={true} title={tooltip} placement="top">
           <CheckIcon fontSize="small" sx={{ m: '5px' }} />
         </Tooltip>
       )}
       {!copied && <ContentCopyIcon fontSize="small" sx={{ m: '5px' }} />}
-      {!textBefore && text}
+      {textPosition === 'end' && text}
     </Button>
   );
 };

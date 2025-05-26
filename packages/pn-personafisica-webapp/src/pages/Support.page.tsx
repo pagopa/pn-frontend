@@ -2,6 +2,8 @@ import { useReducer, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+import * as yup from 'yup';
+
 import { Box, Button, Paper, Stack, TextField, Typography } from '@mui/material';
 import { Prompt, TitleBox } from '@pagopa-pn/pn-commons';
 import { ValidationError } from '@pagopa-pn/pn-validator';
@@ -76,7 +78,22 @@ const SupportPage: React.FC = () => {
   const { t } = useTranslation(['support', 'common']);
   const [params] = useSearchParams();
   const rawData = params.get('data');
-  const data = rawData !== null ? JSON.parse(decodeURIComponent(rawData)) : null;
+  
+  const dataSchema = yup.object({
+    traceId: yup.string().required(),
+    errorCode: yup.string().required(),
+  });
+  // eslint-disable-next-line functional/no-let
+  let data: { traceId: string; errorCode: string } | null = null;
+  if (rawData !== null) {
+    try{
+      const parsed = JSON.parse(decodeURIComponent(rawData));
+      data = dataSchema.validateSync(parsed);
+    } catch(e){
+      console.error('Param "data" is not properly formatted:', e);
+      data = null;
+    };
+  }
   const [formData, formDispatch] = useReducer(reducer, {
     email: {
       value: '',

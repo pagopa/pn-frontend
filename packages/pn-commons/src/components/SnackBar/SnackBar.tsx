@@ -129,7 +129,7 @@ const SnackBar: React.FC<Props> = ({
                     )}
                     getValue={() => errorCode + "\n" + traceId}
                     tooltipMode
-                    textBefore
+                    textPosition='start'
                  />
                 </Box>
               )}

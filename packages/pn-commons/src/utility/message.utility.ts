@@ -3,15 +3,20 @@ import _ from 'lodash';
 
 import { IAppMessage } from '../models';
 
-export const createAppMessage = (
-  title: string,
-  message: string,
-  showTechnicalData: boolean,
-  status?: number,
-  action?: string,
-  traceId?: string,
-  errorCode?: string
-): IAppMessage => {
+export type CreateAppMessageParams = Pick<
+  IAppMessage,
+  'title' | 'message' | 'showTechnicalData' | 'status' | 'action' | 'traceId' | 'errorCode'
+>;
+
+export const createAppMessage = ({
+  title,
+  message,
+  showTechnicalData,
+  status,
+  action,
+  traceId,
+  errorCode,
+}: CreateAppMessageParams): IAppMessage => {
   const e: IAppMessage = {
     id: _.uniqueId(),
     title,

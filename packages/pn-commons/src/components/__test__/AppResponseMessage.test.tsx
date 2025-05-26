@@ -31,15 +31,14 @@ describe('AppResponseMessage Component', () => {
     // check the store
     await waitFor(() => {
       state = testStore.getState().appState;
-      const message = createAppMessage(
-        appErrorResponse.errors![0].message.title,
-        appErrorResponse.errors![0].message.content,
-        false,
-        appErrorResponse.status,
+      const message = createAppMessage({
+        title: appErrorResponse.errors![0].message.title,
+        message: appErrorResponse.errors![0].message.content,
+        showTechnicalData: false,
+        status: appErrorResponse.status,
         action,
-        undefined,
-        ServerResponseErrorCode.BAD_REQUEST_ERROR
-      );
+        errorCode: ServerResponseErrorCode.BAD_REQUEST_ERROR
+      });
       expect(state.messages.errors).toStrictEqual([{ ...message, id: '1' }]);
     });
   });

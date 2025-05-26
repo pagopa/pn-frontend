@@ -69,15 +69,15 @@ export const appStateSlice = createSlice({
         errorCode?: string;
       }>
     ) {
-      const message = createAppMessage(
-        action.payload.title,
-        action.payload.message,
-        action.payload.showTechnicalData,
-        action.payload.status,
-        action.payload.action,
-        extractRootTraceId(action.payload.traceId),
-        action.payload.errorCode
-      );
+      const message = createAppMessage({
+        title: action.payload.title,
+        message: action.payload.message,
+        showTechnicalData: action.payload.showTechnicalData,
+        status: action.payload.status,
+        action: action.payload.action,
+        traceId: extractRootTraceId(action.payload.traceId),
+        errorCode: action.payload.errorCode
+      });
       if (message.showTechnicalData) {
         state.lastError = {
           traceId: message.traceId || '',
@@ -101,12 +101,12 @@ export const appStateSlice = createSlice({
       }
     },
     addSuccess(state, action: PayloadAction<{ title: string; message: string; status?: number }>) {
-      const message = createAppMessage(
-        action.payload.title,
-        action.payload.message,
-        false,
-        action.payload.status
-      );
+      const message = createAppMessage({
+        title: action.payload.title,
+        message: action.payload.message,
+        showTechnicalData: false,
+        status: action.payload.status
+      });
       state.messages.success.push(message);
     },
     removeSuccess(state, action: PayloadAction<string>) {
@@ -120,12 +120,12 @@ export const appStateSlice = createSlice({
         status?: number;
       }>
     ) {
-      const message = createAppMessage(
-        action.payload.title,
-        action.payload.message,
-        false,
-        action.payload.status
-      );
+      const message = createAppMessage({
+        title: action.payload.title,
+        message: action.payload.message,
+        showTechnicalData: false,
+        status: action.payload.status
+      });
       state.messages.info.push(message);
     },
     removeInfo(state, action: PayloadAction<string>) {
