@@ -16,6 +16,7 @@ function errorMessageForAction(action: string): IAppMessage {
     blocking: false,
     message: 'Errore',
     title: 'Errore',
+    showTechnicalData: false,
     toNotify: true,
     action,
     alreadyShown: true,

@@ -5,11 +5,12 @@ This is needed because redux, when recives an action, does a serializability che
 export function parseError(e: any) {
   if (e.response) {
     const { data, status, headers } = e.response;
+
     return {
       response: {
         data: {
           ...data,
-          traceId: data?.traceId || headers?.['x-amzn-trace-id'] || '',
+          traceId: headers?.['x-amzn-trace-id'] || data?.traceId || '',
         },
         status: status || 500,
       },

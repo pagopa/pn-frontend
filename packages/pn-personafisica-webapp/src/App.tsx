@@ -23,6 +23,7 @@ import {
   ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
+  addParamToUrl,
   appStateActions,
   errorFactoryManager,
   initLocalization,
@@ -73,6 +74,7 @@ const App = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
+  const lastError = useAppSelector((state: RootState) => state.appState.lastError);
   const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
     (state: RootState) => state.userState
   );
@@ -210,7 +212,8 @@ const App = () => {
     // if user is logged in, we redirect to support page
     // otherwise, we open the email provider
     if (sessionToken) {
-      navigate(routes.SUPPORT);
+      const url = addParamToUrl(routes.SUPPORT, "data", JSON.stringify(lastError));
+      navigate(url);
       return;
     }
     /* eslint-disable-next-line functional/immutable-data */

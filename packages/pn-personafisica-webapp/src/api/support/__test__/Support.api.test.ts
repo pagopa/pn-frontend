@@ -22,16 +22,36 @@ describe('Support api tests', () => {
     mock.restore();
   });
 
-  it('zendeskAuthorization', async () => {
-    const mail = 'mail@di-prova.it';
+  it('zendeskAuthorization without technical data', async () => {
+    const params = {
+      email: 'mail@di-prova.it',
+    };
     const response = {
       action: 'https://zendesk-url.com',
       jwt: 'zendesk-jwt',
       return_to: 'https://suuport-url.com',
     };
 
-    mock.onPost(ZENDESK_AUTHORIZATION(), { email: mail }).reply(200, response);
-    const res = await SupportApi.zendeskAuthorization(mail);
+    mock.onPost(ZENDESK_AUTHORIZATION(), params).reply(200, response);
+    const res = await SupportApi.zendeskAuthorization(params);
+    expect(res).toStrictEqual(response);
+  });
+
+  it('zendeskAuthorization with technical data', async () => {
+    const params = {
+      email: 'mail@di-prova.it',
+      data: {
+        traceId: 'fake-traceId',
+      },
+    };
+    const response = {
+      action: 'https://zendesk-url.com',
+      jwt: 'zendesk-jwt',
+      return_to: 'https://suuport-url.com',
+    };
+
+    mock.onPost(ZENDESK_AUTHORIZATION(), params).reply(200, response);
+    const res = await SupportApi.zendeskAuthorization(params);
     expect(res).toStrictEqual(response);
   });
 });

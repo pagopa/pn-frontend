@@ -48,7 +48,13 @@ describe('App state slice tests', () => {
   });
 
   it('addError', () => {
-    const payload = { title: 'mocked-title', message: 'mocked-message' };
+    const payload = {
+      title: 'mocked-title',
+      message: 'mocked-message',
+      showTechnicalData: false,
+      traceId: 'Root=trace-id',
+      errorCode: 'error-code',
+    };
     const action = store.dispatch(appStateActions.addError(payload));
     expect(action.type).toBe('appState/addError');
     expect(action.payload).toStrictEqual(payload);
@@ -63,6 +69,9 @@ describe('App state slice tests', () => {
         status: undefined,
         alreadyShown: false,
         action: undefined,
+        showTechnicalData: false,
+        traceId: 'trace-id',
+        errorCode: 'error-code',
       },
     ]);
   });
@@ -76,7 +85,14 @@ describe('App state slice tests', () => {
   });
 
   it('removeErrorsByAction', () => {
-    const payload = { title: 'mocked-title', message: 'mocked-message', action: 'action-name' };
+    const payload = {
+      title: 'mocked-title',
+      message: 'mocked-message',
+      action: 'action-name',
+      showTechnicalData: true,
+      traceId: 'Root=trace-id',
+      errorCode: 'error-code',
+    };
     store.dispatch(appStateActions.addError(payload));
     let state = store.getState().appState;
     expect(state.messages.errors).toEqual([
@@ -89,6 +105,9 @@ describe('App state slice tests', () => {
         status: undefined,
         alreadyShown: false,
         action: 'action-name',
+        showTechnicalData: true,
+        traceId: 'trace-id',
+        errorCode: 'error-code',
       },
     ]);
     const action = store.dispatch(appStateActions.removeErrorsByAction('action-name'));
@@ -98,7 +117,14 @@ describe('App state slice tests', () => {
   });
 
   it('setErrorAsAlreadyShown', () => {
-    const payload = { title: 'mocked-title', message: 'mocked-message', action: 'action-name' };
+    const payload = {
+      title: 'mocked-title',
+      message: 'mocked-message',
+      action: 'action-name',
+      showTechnicalData: false,
+      traceId: 'Root=trace-id',
+      errorCode: 'error-code',
+    };
     store.dispatch(appStateActions.addError(payload));
     let state = store.getState().appState;
     expect(state.messages.errors).toEqual([
@@ -111,6 +137,9 @@ describe('App state slice tests', () => {
         status: undefined,
         alreadyShown: false,
         action: 'action-name',
+        showTechnicalData: false,
+        traceId: 'trace-id',
+        errorCode: 'error-code',
       },
     ]);
     const action = store.dispatch(appStateActions.setErrorAsAlreadyShown('3'));
@@ -126,6 +155,9 @@ describe('App state slice tests', () => {
         status: undefined,
         alreadyShown: true,
         action: 'action-name',
+        showTechnicalData: false,
+        traceId: 'trace-id',
+        errorCode: 'error-code',
       },
     ]);
   });
@@ -146,6 +178,9 @@ describe('App state slice tests', () => {
         status: undefined,
         alreadyShown: false,
         action: undefined,
+        showTechnicalData: false,
+        traceId: undefined,
+        errorCode: undefined,
       },
     ]);
   });
@@ -174,6 +209,9 @@ describe('App state slice tests', () => {
         status: undefined,
         alreadyShown: false,
         action: undefined,
+        showTechnicalData: false,
+        traceId: undefined,
+        errorCode: undefined,
       },
     ]);
   });
@@ -195,7 +233,14 @@ describe('App state slice tests', () => {
   });
 
   it('fulfilled matcher', async () => {
-    const payload = { title: 'mocked-title', message: 'mocked-message', action: 'mockedAction' };
+    const payload = {
+      title: 'mocked-title',
+      message: 'mocked-message',
+      action: 'mockedAction',
+      showTechnicalData: false,
+      traceId: 'trace-id',
+      errorCode: 'error-code',
+    };
     store.dispatch(appStateActions.addError(payload));
     // dispatch async action
     mockedActionResult = 'OK';
@@ -214,7 +259,14 @@ describe('App state slice tests', () => {
   });
 
   it('rejected matcher', async () => {
-    const payload = { title: 'mocked-title', message: 'mocked-message', action: 'mockedAction' };
+    const payload = {
+      title: 'mocked-title',
+      message: 'mocked-message',
+      action: 'mockedAction',
+      showTechnicalData: false,
+      traceId: 'trace-id',
+      errorCode: 'error-code',
+    };
     store.dispatch(appStateActions.addError(payload));
     // dispatch async action
     mockedActionResult = undefined;

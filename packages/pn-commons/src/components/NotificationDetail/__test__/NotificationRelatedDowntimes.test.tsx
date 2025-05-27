@@ -36,6 +36,7 @@ const errors: Array<IAppMessage> = [
     blocking: false,
     message: 'Mocked message',
     title: 'Mocked title',
+    showTechnicalData: false,
     toNotify: true,
     alreadyShown: false,
   },
