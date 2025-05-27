@@ -9,6 +9,7 @@ import {
   lazyRetry,
 } from '@pagopa-pn/pn-commons';
 
+import TestAutocomplete from '../pages/TestAutocomplete.page';
 import { getConfiguration } from '../services/configuration.service';
 import RapidAccessGuard from './RapidAccessGuard';
 import RouteGuard from './RouteGuard';
@@ -74,6 +75,8 @@ function Router() {
                   />
                   <Route element={<Navigate to={routes.RECAPITI} replace />} index />
                 </Route>
+
+                <Route path="test-autocomplete" element={<TestAutocomplete />} />
               </Route>
             </Route>
             {/* not found - non-logged users will see the common AccessDenied component */}
