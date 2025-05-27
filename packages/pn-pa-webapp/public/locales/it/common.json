@@ -181,6 +181,10 @@
     "technical-error": {
       "title": "Informazioni errore",
       "copy-to-clipboard": "Copia informazioni errore"
+    },
+    "invalid_body": {
+      "title": "Errore",
+      "message": "C'è stato un errore in fase di invio dei dati ai nostri server. Ricontrolla che i dati inseriti siano corretti e non siano contenuti caratteri speciali e spazi."
     }
   }
 }

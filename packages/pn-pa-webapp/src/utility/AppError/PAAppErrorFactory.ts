@@ -14,6 +14,7 @@ import { DeliveryFileInfoNotFoundAppError } from './DeliveryFileInfoNotFoundAppE
 import { DeliveryNotificationWithoutPaymentAttachmentAppError } from './DeliveryNotificationWithoutPaymentAttachmentAppError';
 import { DeliveryPushFileNotFoundAppError } from './DeliveryPushFileNotFoundAppError';
 import { DeliveryInvalidParameterGroupAppError } from './DeliveryInvalidParameterGroupAppError';
+import { InvalidBodyAppError } from './InvalidBodyAppError';
 
 export class PAAppErrorFactory extends AppErrorFactory {
   private translateFunction: (path: string, ns: string) => string;
@@ -43,6 +44,8 @@ export class PAAppErrorFactory extends AppErrorFactory {
         return new DeliveryInvalidParameterGroupAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_DELIVERYPUSH_FILE_NOT_FOUND:
         return new DeliveryPushFileNotFoundAppError(error, this.translateFunction);
+      case ServerResponseErrorCode.PN_INVALID_BODY:
+        return new InvalidBodyAppError(error, this.translateFunction);
       default:
         return new UnknownAppError(error);
     }

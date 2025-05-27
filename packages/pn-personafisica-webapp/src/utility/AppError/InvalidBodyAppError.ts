@@ -5,7 +5,7 @@ export class InvalidBodyAppError extends AppError {
   private translateFunction: (path: string, ns: string) => string = (path: string) => path;
 
   constructor(error: ServerResponseError, translateFunction: (path: string, ns: string) => string) {
-    super(error);
+    super(error, true);
     this.translateFunction = translateFunction;
   }
 
