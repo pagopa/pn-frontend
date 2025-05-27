@@ -4,11 +4,13 @@ abstract class AppError {
   protected code: string;
   protected element: string;
   protected detail: string;
+  protected showTechnicalData: boolean;
 
-  constructor(error: ServerResponseError) {
+  constructor(error: ServerResponseError, showTechnicalData = false) {
     this.code = error.code;
     this.element = error.element || '';
     this.detail = error.detail || '';
+    this.showTechnicalData = showTechnicalData;
   }
 
   getResponseError(): AppResponseError {
@@ -16,6 +18,7 @@ abstract class AppError {
       code: this.code,
       element: this.element,
       detail: this.detail,
+      showTechnicalData: this.showTechnicalData,
       message: {
         title: this.getMessage().title,
         content: this.getMessage().content,

@@ -6,6 +6,7 @@ describe('parseError', () => {
       response: {
         data: {
           message: 'An error occurred',
+          traceId: 'custom-trace-id',
         },
         status: 404,
         headers: {
@@ -27,7 +28,7 @@ describe('parseError', () => {
     });
   });
 
-  it('should use traceId from data if present', () => {
+  it('should use traceId from data if not present in headers', () => {
     const error = {
       response: {
         data: {
@@ -35,9 +36,6 @@ describe('parseError', () => {
           traceId: 'custom-trace-id',
         },
         status: 400,
-        headers: {
-          'x-amzn-trace-id': '1-67891233-abcdef1234567890abcdef',
-        },
       },
     };
 

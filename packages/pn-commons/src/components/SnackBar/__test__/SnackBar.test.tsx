@@ -8,8 +8,16 @@ const renderSnackBar = (open: boolean, type: AppResponseOutcome, closingDelay?: 
   render(
     <SnackBar
       open={open}
-      message={'SnackBar mocked message'}
       type={type}
+      message={{
+        id: '',
+        blocking: false,
+        title: '',
+        toNotify: false,
+        alreadyShown: false,
+        message: 'SnackBar mocked message',
+        showTechnicalData: false
+      }}
       closingDelay={closingDelay}
     />
   );

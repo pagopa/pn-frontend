@@ -38,6 +38,9 @@ describe('useErrors', () => {
       action: 'FETCH_DATA_ERROR',
       title: 'mocked-title',
       message: 'mocked-message',
+      showTechnicalData: false,
+      traceId: 'trace-id',
+      errorCode: 'error-code',
     };
     store.dispatch(appStateActions.addError(payload));
 
@@ -50,6 +53,9 @@ describe('useErrors', () => {
       action: 'FETCH_DATA_ERROR',
       title: 'mocked-title',
       message: 'mocked-message',
+      showTechnicalData: false,
+      traceId: 'trace-id',
+      errorCode: 'error-code',
     };
     store.dispatch(appStateActions.addError(payload));
 

@@ -1,6 +1,6 @@
 import { AppError, ServerResponseError } from '@pagopa-pn/pn-commons';
 
-export class InvalidBodyAppError extends AppError {
+export class DeliveryFileInfoNotFoundAppError extends AppError {
   private translateFunction: (path: string, ns: string) => string = (path: string) => path;
 
   constructor(error: ServerResponseError, translateFunction: (path: string, ns: string) => string) {
@@ -10,8 +10,8 @@ export class InvalidBodyAppError extends AppError {
 
   getMessage() {
     return {
-      title: this.translateFunction('errors.invalid_body.title', 'common'),
-      content: this.translateFunction('errors.invalid_body.message', 'common'),
+      title: this.translateFunction('detail.errors.delivery_file_info_not_found.title', 'notifiche'),
+      content: this.translateFunction('detail.errors.delivery_file_info_not_found.message', 'notifiche'),
     };
   }
 }
