@@ -75,8 +75,6 @@ function Router() {
                   />
                   <Route element={<Navigate to={routes.RECAPITI} replace />} index />
                 </Route>
-
-                <Route path="test-autocomplete" element={<TestAutocomplete />} />
               </Route>
             </Route>
             {/* not found - non-logged users will see the common AccessDenied component */}
@@ -101,6 +99,7 @@ function Router() {
           path={routes.NOT_ACCESSIBLE}
           element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}
         />
+        <Route path="test-autocomplete" element={<TestAutocomplete />} />
         {/* not sure that this is useful */}
         <Route path="*" element={<NotFound isLogged={false} goBackAction={goToLoginPortal} />} />
       </Routes>
