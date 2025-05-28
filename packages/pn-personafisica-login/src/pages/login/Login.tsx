@@ -35,8 +35,15 @@ const Login = () => {
   const { t, i18n } = useTranslation(['login']);
   const isMobile = useIsMobile('md');
   const rapidAccess = useRapidAccessParam();
-  const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL, PF_URL } = getConfiguration();
+  const {
+    URL_API_LOGIN,
+    SPID_CIE_ENTITY_ID,
+    PAGOPA_HELP_EMAIL,
+    PF_URL,
+    IS_SMART_APP_BANNER_ENABLED,
+  } = getConfiguration();
   const privacyPolicyUrl = `${PF_URL}${PRIVACY_POLICY}`;
+  const smartBannerHeight = IS_SMART_APP_BANNER_ENABLED ? 66 : 0;
 
   if (rapidAccess) {
     storageRapidAccessOps.write(rapidAccess);
@@ -74,7 +81,7 @@ const Login = () => {
 
   return (
     <>
-      {isMobile && <IOSmartAppBanner />}
+      {isMobile && IS_SMART_APP_BANNER_ENABLED && <IOSmartAppBanner />}
       <Layout
         productsList={[]}
         onAssistanceClick={handleAssistanceClick}
@@ -91,7 +98,7 @@ const Login = () => {
         slotsProps={
           isMobile
             ? {
-                content: { minHeight: 'calc(100dvh - 110px)' },
+                content: { minHeight: `calc(100dvh - 44px - ${smartBannerHeight}px)` },
                 main: { alignContent: 'center' },
               }
             : undefined
