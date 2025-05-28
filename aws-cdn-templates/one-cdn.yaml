@@ -229,7 +229,10 @@ Resources:
           HeadersConfig:
             HeaderBehavior: none
           QueryStringsConfig:
-            QueryStringBehavior: none
+            QueryStringBehavior: whitelist
+            QueryStrings: 
+              - productId
+              - data
 
   # - WebApp CDN
   WebsiteCDN:
