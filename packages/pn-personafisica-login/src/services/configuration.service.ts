@@ -13,6 +13,7 @@ export interface LoginConfiguration {
   APP_IO_SITE: string;
   APP_IO_ANDROID: string;
   APP_IO_IOS: string;
+  IS_SMART_APP_BANNER_ENABLED?: boolean;
 }
 
 class LoginConfigurationValidator extends Validator<LoginConfiguration> {
@@ -32,6 +33,7 @@ class LoginConfigurationValidator extends Validator<LoginConfiguration> {
     this.ruleFor('APP_IO_SITE').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('APP_IO_ANDROID').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('APP_IO_IOS').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('IS_SMART_APP_BANNER_ENABLED').isBoolean();
   }
 }
 
