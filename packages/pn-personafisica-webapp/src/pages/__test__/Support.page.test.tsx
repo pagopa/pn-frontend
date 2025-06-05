@@ -1,6 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import { createBrowserHistory } from 'history';
 import { Route, Routes } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { getById, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
@@ -13,9 +14,11 @@ import SupportPage from '../Support.page';
 describe('Support page', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
+  const originalSubmit = HTMLFormElement.prototype.submit;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    HTMLFormElement.prototype.submit = vi.fn();
   });
 
   afterEach(() => {
@@ -24,6 +27,7 @@ describe('Support page', async () => {
 
   afterAll(() => {
     mock.restore();
+    HTMLFormElement.prototype.submit = originalSubmit;
   });
 
   it('render page', () => {
@@ -121,7 +125,7 @@ describe('Support page', async () => {
     });
   });
 
-  it('submit form', async () => {
+  it('submit form - no "data" param', async () => {
     const mail = 'mail@example.it';
     const response = {
       action: 'https://zendesk-url.com',
@@ -141,6 +145,48 @@ describe('Support page', async () => {
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(mock.history.post[0].url).toBe(ZENDESK_AUTHORIZATION());
+    });
+  });
+
+  it('submit with valid "data" param', async () => {
+    const mockResponse = {
+      action_url: 'https://zendesk.com/submit',
+      jwt: 'mock-jwt-token',
+      return_to: 'https://app.return',
+    };
+
+    const traceId = 'abc123';
+    const errorCode = 'ERR42';
+    const encodedData = encodeURIComponent(JSON.stringify({ traceId, errorCode }));
+
+    mock.onPost(ZENDESK_AUTHORIZATION()).reply((config) => {
+      const body = JSON.parse(config.data);
+      expect(body.email).toBe('mail@example.it');
+      expect(body.data).toEqual({ traceId, errorCode });
+      return [200, mockResponse];
+    });
+
+    const history = createBrowserHistory();
+    history.push(`/support?data=${encodedData}`);
+
+    const { getByTestId } = render(
+      <Routes>
+        <Route path="/support" element={<SupportPage />} />
+      </Routes>
+    );
+
+    const form = getByTestId('supportForm');
+    testInput(form, 'mail', 'mail@example.it');
+    testInput(form, 'confirmMail', 'mail@example.it');
+
+    const continueButton = getByTestId('continueButton');
+    await act(async () => {
+      fireEvent.click(continueButton);
+    });
+
+    // wait for side effect (ZendeskForm gets data)
+    await waitFor(() => {
+      expect(mock.history.post.length).toBe(1);
     });
   });
 });
