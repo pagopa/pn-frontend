@@ -28,7 +28,11 @@ const mockedAction = createAsyncThunk<string, void>(
 );
 
 describe('App state slice tests', () => {
-  const store = createTestStore();
+  let store: ReturnType<typeof createTestStore>;
+
+  beforeEach(() => {
+    store = createTestStore();
+  });
 
   it('Initial state', () => {
     const state = store.getState();
@@ -282,5 +286,58 @@ describe('App state slice tests', () => {
         action: 'mockedAction',
       },
     });
+  });
+
+  it('addError sets lastError when showTechnicalData is true', () => {
+    const payload = {
+      title: 'mocked-title',
+      message: 'mocked-message',
+      showTechnicalData: true,
+      traceId: 'Root=trace-id',
+      errorCode: 'ERR_CODE',
+    };
+    store.dispatch(appStateActions.addError(payload));
+    const state = store.getState().appState;
+
+    expect(state.messages.errors).toHaveLength(1);
+    expect(state.lastError).toEqual({
+      traceId: 'trace-id',
+      errorCode: 'ERR_CODE',
+    });
+  });
+
+  it('addError resets lastError when showTechnicalData is false', () => {
+    // dispatch first error with technical data
+    store.dispatch(
+      appStateActions.addError({
+        title: 'Error 1',
+        message: 'With technical data',
+        showTechnicalData: true,
+        traceId: 'Root=trace-id',
+        errorCode: 'ERR_CODE_ONE',
+      })
+    );
+
+    // verify lastError has been set
+    let state = store.getState().appState;
+    expect(state.lastError).toEqual({
+      traceId: 'trace-id',
+      errorCode: 'ERR_CODE_ONE',
+    });
+
+    // dispatch second error without technical data
+    store.dispatch(
+      appStateActions.addError({
+        title: 'Error 2',
+        message: 'Without technical data',
+        showTechnicalData: false,
+        traceId: 'Root=trace-id',
+        errorCode: 'ERR_CODE_TWO',
+      })
+    );
+
+    // verify lastError has been reset properly
+    state = store.getState().appState;
+    expect(state.lastError).toBeUndefined();
   });
 });
