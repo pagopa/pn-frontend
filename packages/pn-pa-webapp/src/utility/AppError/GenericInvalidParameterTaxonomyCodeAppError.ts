@@ -4,7 +4,7 @@ export class GenericInvalidParameterTaxonomyCodeAppError extends AppError {
   private readonly translateFunction: (path: string, ns: string) => string = (path: string) => path;
 
   constructor(error: ServerResponseError, translateFunction: (path: string, ns: string) => string) {
-    super(error);
+    super(error, true);
     this.translateFunction = translateFunction;
   }
 

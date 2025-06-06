@@ -8,3 +8,10 @@ export interface ZendeskAuthorizationDTO {
   jwt: string;
   return_to: string;
 }
+
+export interface ZendeskAuthorizationRequest {
+  email: string;
+  data?: {
+    traceId: string;
+  };
+}

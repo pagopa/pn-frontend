@@ -74,6 +74,7 @@ import {
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
+  PhysicalAddressLookup,
 } from './NotificationDetail';
 import { NotificationStatus } from './NotificationStatus';
 import {
@@ -120,6 +121,7 @@ export {
   ConsentActionType,
   NotificationDocumentType,
   SERCQ_SEND_VALUE,
+  PhysicalAddressLookup,
 };
 export type {
   AnalogWorkflowDetails,

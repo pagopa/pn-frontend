@@ -7,6 +7,12 @@ export type IAppMessage = {
   message: string;
   /** A text to show as title of the popup when a not blocking error occurs */
   title: string;
+  /** If the message has technical data to be shown */
+  showTechnicalData: boolean;
+  /** It represents the traceId of the request which generated the error */
+  traceId?: string;
+  /** The taxonomy code of the error (if available) */
+  errorCode?: string;
   /** If true, it will notify the error */
   toNotify: boolean;
   /** It represents message http status (if exist) */

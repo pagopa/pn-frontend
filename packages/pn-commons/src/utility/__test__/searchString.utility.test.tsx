@@ -54,6 +54,9 @@ describe('searchString utility', () => {
         status: undefined,
         title: 'common - validation.invalid-characters-not-inserted',
         toNotify: true,
+        showTechnicalData: false,
+        traceId: undefined,
+        errorCode: undefined,
       },
     ]);
   });
