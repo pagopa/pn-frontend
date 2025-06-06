@@ -7,8 +7,9 @@ describe('UnhandledAppError', () => {
     });
 
     expect(unhandledAppError.getMessage()).toStrictEqual({
-      title: 'Errore generico',
-      content: 'Si è verificato un errore. Si prega di riprovare più tardi.',
+      title: 'Si è verificato un errore',
+      content:
+        'Il servizio non è disponibile. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore.',
     });
   });
 });
