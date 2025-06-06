@@ -1,10 +1,14 @@
-import { ComponentPropsWithoutRef, ElementType, useEffect, useState } from 'react';
+import { ComponentPropsWithoutRef, useEffect, useState } from 'react';
 
 import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { Button, Link, SxProps, Theme, Tooltip } from '@mui/material';
+import { Button, SxProps, Theme, Tooltip } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../hooks';
+
+type AllowedSlots = typeof Button | typeof ButtonNaked;
+type AllowedSlotProps = ComponentPropsWithoutRef<AllowedSlots>;
 
 type Props = {
   /** callback used to retrieve the text to be copied */
@@ -16,8 +20,8 @@ type Props = {
   tooltip?: string;
   tooltipBefore?: string;
   disabled?: boolean;
-  slot?: ElementType;
-  slotProps?: ComponentPropsWithoutRef<any>;
+  slot?: AllowedSlots;
+  slotProps?: AllowedSlotProps;
 };
 
 const CopyToClipboard: React.FC<Props> = ({
@@ -63,7 +67,6 @@ const CopyToClipboard: React.FC<Props> = ({
 
   return (
     <SlotComponent
-      component={Link}
       color="primary"
       sx={{ ...alertButtonStyle }}
       onClick={doCopyToClipboard}
