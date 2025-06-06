@@ -1,7 +1,7 @@
 {
   "name": "@pagopa-pn/pn-personagiuridica-webapp",
   "description": "SEND per la persona giuridica",
-  "version": "2.16.0-RC.0",
+  "version": "2.16.0-RC.1",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
