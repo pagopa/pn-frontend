@@ -65,7 +65,18 @@ const SnackBar: React.FC<Props> = ({
   ]);
 
   const action = (
-    <IconButton size="small" aria-label="close" color="inherit" onClick={closeSnackBar}>
+    <IconButton
+      size="small"
+      aria-label="close"
+      color="inherit"
+      onClick={closeSnackBar}
+      sx={{
+        position: 'absolute',
+        top: 8,
+        right: 8,
+        color: '#5C6F82',
+      }}
+    >
       <CloseIcon fontSize="small" />
     </IconButton>
   );
@@ -82,9 +93,9 @@ const SnackBar: React.FC<Props> = ({
     <>
       {openStatus && (
         <div data-testid="snackBarContainer">
-          <Snackbar open={open} action={action}>
+          <Snackbar open={open}>
             <Alert
-              onClose={closeSnackBar}
+              action={action}
               severity={getColor.get(type)}
               sx={{
                 position: 'fixed',
@@ -106,6 +117,7 @@ const SnackBar: React.FC<Props> = ({
                   sx={{
                     backgroundColor: '#F2F2F2',
                     p: 2,
+                    pb: 1,
                     whiteSpace: 'normal',
                     wordBreak: 'break-word',
                   }}
