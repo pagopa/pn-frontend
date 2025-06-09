@@ -23,6 +23,7 @@ beforeAll(async () => {
     APP_IO_SITE: 'https://io.italia.it/',
     APP_IO_ANDROID: 'https://play.google.com/store/apps/details?id=it.pagopa.io.app',
     APP_IO_IOS: 'https://apps.apple.com/it/app/io/id1501681835',
+    IS_SMART_APP_BANNER_ENABLED: true,
   });
   // mock translations
   vi.mock('react-i18next', () => ({
