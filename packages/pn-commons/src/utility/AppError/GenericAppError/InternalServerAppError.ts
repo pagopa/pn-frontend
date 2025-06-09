@@ -12,12 +12,12 @@ export class InternalServerAppError extends AppError {
       title: getLocalizedOrDefaultLabel(
         'common',
         'errors.internal_server.title',
-        'Il servizio non è disponibile'
+        'Si è verificato un errore'
       ),
       content: getLocalizedOrDefaultLabel(
         'common',
         'errors.internal_server.message',
-        'Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.'
+        'Il servizio non è disponibile a causa di un problema tecnico. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore.'
       ),
     };
   }
