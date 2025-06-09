@@ -148,6 +148,10 @@
     "invalid-characters-not-inserted": "I caratteri non validi non sono stati inseriti."
   },
   "errors": {
+    "delivery_mandate_not_found": {
+      "title": "Errore",
+      "message": "Questa delega non è più attiva."
+    },
     "technical-error": {
       "title": "Informazioni errore",
       "copy-to-clipboard": "Copia informazioni errore"
