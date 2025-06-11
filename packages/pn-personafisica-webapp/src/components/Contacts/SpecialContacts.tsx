@@ -35,7 +35,7 @@ enum ModalType {
   CANCEL_VALIDATION = 'cancel_validation',
 }
 
-const SpecialContacts: React.FC = () => {
+const SpecialContacts: React.FC<{ addressType: AddressType }> = ({ addressType }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const { addresses, specialAddresses } = useAppSelector(contactsSelectors.selectAddresses);
@@ -49,7 +49,7 @@ const SpecialContacts: React.FC = () => {
     channelType: ChannelType.PEC,
   });
 
-  const labelRoot = `legal-contacts`;
+  const labelRoot = `${addressType.toLowerCase()}-contacts`;
   const contactType = currentAddress.current.channelType.toLowerCase();
 
   const sendSuccessEvent = (type: ChannelType) => {
@@ -117,7 +117,7 @@ const SpecialContacts: React.FC = () => {
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
-      addressType: AddressType.LEGAL,
+      addressType,
       senderId: currentAddress.current.senderId,
       senderName: currentAddress.current.senderName,
       channelType: currentAddress.current.channelType,
@@ -170,7 +170,7 @@ const SpecialContacts: React.FC = () => {
     setModalOpen(null);
     dispatch(
       deleteAddress({
-        addressType: AddressType.LEGAL,
+        addressType,
         senderId: currentAddress.current.senderId,
         channelType: currentAddress.current.channelType,
       })
@@ -242,6 +242,7 @@ const SpecialContacts: React.FC = () => {
    */
   const uniqueAddresses: Array<DigitalAddress> = specialAddresses.filter(
     (addr, _, arr) =>
+      addr.addressType === addressType &&
       arr.findIndex(
         (el) =>
           addr.senderId === el.senderId &&
@@ -276,7 +277,7 @@ const SpecialContacts: React.FC = () => {
       </Card>
       <ContactCodeDialog
         value={currentAddress.current.value}
-        addressType={AddressType.LEGAL}
+        addressType={addressType}
         channelType={currentAddress.current.channelType}
         open={modalOpen === ModalType.CODE}
         onConfirm={(code) => handleCodeVerification(code)}
