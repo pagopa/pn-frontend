@@ -39,6 +39,7 @@ export interface AppResponseError {
   code: string;
   element?: string;
   detail?: string;
+  showTechnicalData: boolean;
   message: {
     title: string;
     content: string;
@@ -48,6 +49,11 @@ export interface AppResponseError {
 export interface ErrorMessage {
   title: string;
   content: string;
+}
+
+export interface LastError {
+  traceId: string;
+  errorCode: string;
 }
 
 export enum ServerResponseErrorCode {
@@ -63,7 +69,7 @@ export enum ServerResponseErrorCode {
   FORBIDDEN_ERROR = 'FORBIDDEN_ERROR',
   UNAVAILABLE_FOR_LEGAL_REASONS_ERROR = 'UNAVAILABLE_FOR_LEGAL_REASONS_ERROR',
   NOT_FOUND_ERROR = 'NOT_FOUND_ERROR',
-  INTERNAL_SERVER_ERROR = 'SERVER_ERROR',
+  INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
 
   UNHANDLED_ERROR = 'UNHANDLED_ERROR',
   GENERIC_ERROR = 'GENERIC_ERROR',

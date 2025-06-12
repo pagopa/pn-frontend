@@ -22,6 +22,7 @@ const ZendeskForm: React.FC<{ data: ZendeskAuthorizationDTO }> = ({ data }) => {
             appStateActions.addError({
               title: t('messages.generic-title'),
               message: t('messages.generic-message'),
+              showTechnicalData: false,
             })
           );
         }

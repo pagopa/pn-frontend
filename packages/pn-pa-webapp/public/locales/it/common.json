@@ -176,5 +176,15 @@
     "title": "Vuoi davvero uscire da SEND?",
     "body": "La disconnessione è in corso. Se hai cambiato idea premi “Mantieni l’accesso” entro pochi secondi.",
     "action": "Mantieni l’accesso"
+  },
+  "errors": {
+    "technical-error": {
+      "title": "Informazioni errore",
+      "copy-to-clipboard": "Copia informazioni errore"
+    },
+    "invalid_body": {
+      "title": "Errore",
+      "message": "C'è stato un errore in fase di invio dei dati ai nostri server. Ricontrolla che i dati inseriti siano corretti e non siano contenuti caratteri speciali e spazi."
+    }
   }
 }

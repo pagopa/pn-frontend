@@ -288,11 +288,15 @@ const NotificationDetailTimelineStep = ({
                 s.legalFactsIds.map((lf) => (
                   <ButtonNaked
                     fontSize={14}
-                    color='primary'
+                    color="primary"
                     onClick={() => clickHandler(lf)}
                     disabled={disableDownloads}
                     key={lf.key}
                     data-testid="download-legalfact-micro"
+                    sx={{
+                      justifyContent: 'flex-start',
+                      textAlign: 'left',
+                    }}
                   >
                     {getLegalFactLabel(s, lf.category, lf.key || '')}
                   </ButtonNaked>
