@@ -30,7 +30,7 @@
   "empty-state": {
     "filtered": "Non abbiamo trovato risultati: prova con dei filtri diversi. <0>Rimuovi filtri</0>.",
     "delegate": "{{name}} non ha ricevuto nessuna notifica.",
-    "no-notifications": "Non hai ricevuto nessuna notifica. <0>Vai ai tuoi recapiti</0> e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.",
+    "no-notifications": "Non hai ancora ricevuto notifiche. Inserisci un domicilio digitale, uno o più recapiti di cortesia o attiva il servizio <strong>SEND - Notifiche Digitali</strong> sull’app IO nella sezione <strong>I tuoi recapiti</strong>: così, se riceverai una notifica, te lo comunicheremo. <0>Vai ai tuoi recapiti</0>",
     "aria-label-remove-filters": "Rimuovi filtri",
     "aria-label-route-contacts": "Vai ai tuoi recapiti"
   },
