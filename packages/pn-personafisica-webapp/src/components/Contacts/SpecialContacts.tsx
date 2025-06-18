@@ -41,6 +41,8 @@ const SpecialContacts: React.FC = () => {
   const { addresses, specialAddresses } = useAppSelector(contactsSelectors.selectAddresses);
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
 
+  console.log('ciao');
+
   const currentAddress = useRef<
     Pick<DigitalAddress, 'value' | 'senderId' | 'senderName' | 'channelType'>
   >({
