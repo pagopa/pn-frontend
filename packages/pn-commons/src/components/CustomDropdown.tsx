@@ -67,6 +67,7 @@ const CustomDropdown: React.FC<Props> = ({
           error={error}
           helperText={helperText}
           disabled={disabled}
+          required={required}
         >
           {!required && (
             <MenuItem key={emptyItemKey} value={emptyItemValue}>

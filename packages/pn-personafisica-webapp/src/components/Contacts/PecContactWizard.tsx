@@ -1,10 +1,18 @@
 import { useFormik } from 'formik';
 import React, { ChangeEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { Alert, TextField, Typography } from '@mui/material';
+import {
+  Alert,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -47,11 +55,13 @@ const PecContactWizard: React.FC<Props> = ({
 
   const validationSchema = yup.object().shape({
     pec: pecValidationSchema(t),
+    disclaimer: yup.bool().isTrue(t('required-field', { ns: 'common' })),
   });
 
   const formik = useFormik({
     initialValues: {
       pec: '',
+      disclaimer: false,
     },
     validationSchema,
     validateOnMount: true,
@@ -159,7 +169,7 @@ const PecContactWizard: React.FC<Props> = ({
             {t('legal-contacts.pec-contact-wizard.content-title')}
           </Typography>
 
-          <Typography variant="body2" mb={defaultSERCQ_SENDAddress ? { xs: 2, lg: 3 } : 4}>
+          <Typography variant="body2" mb={defaultSERCQ_SENDAddress ? { xs: 2, lg: 3 } : 3}>
             {t('legal-contacts.pec-contact-wizard.content-description')}
           </Typography>
 
@@ -169,14 +179,20 @@ const PecContactWizard: React.FC<Props> = ({
             </Alert>
           )}
 
-          <Typography fontSize="18px" fontWeight={600} mb={2}>
-            {t('legal-contacts.pec-contact-wizard.input-label')}
+          <Typography
+            fontSize="14px"
+            fontWeight={400}
+            mb={2}
+            variant="body2"
+            color="text.secondary"
+          >
+            {t('required-fields', { ns: 'common' })}
           </Typography>
 
           <TextField
             id="pec"
             name="pec"
-            placeholder={t('legal-contacts.pec-contact-wizard.input-placeholder')}
+            label={t('legal-contacts.pec-contact-wizard.input-label')}
             size="small"
             fullWidth
             sx={{ flexBasis: { xs: 'unset', lg: '66.66%' } }}
@@ -185,7 +201,33 @@ const PecContactWizard: React.FC<Props> = ({
             error={formik.touched.pec && Boolean(formik.errors.pec)}
             helperText={formik.touched.pec && formik.errors.pec}
             data-testid="pec-wizard-input"
+            required
           />
+
+          <FormControl>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="disclaimer"
+                  id="disclaimer"
+                  required
+                  onChange={handleChangeTouched}
+                  inputProps={{
+                    'aria-describedby': 'disclaimer-helper-text',
+                    'aria-invalid': formik.touched.disclaimer && Boolean(formik.errors.disclaimer),
+                  }}
+                />
+              }
+              label={<Trans ns="recapiti" i18nKey="legal-contacts.pec-contact-wizard.disclaimer" />}
+              sx={{ mt: 2 }}
+              value={formik.values.disclaimer}
+            />
+            {formik.touched.disclaimer && Boolean(formik.errors.disclaimer) && (
+              <FormHelperText id="disclaimer-helper-text" error>
+                {formik.errors.disclaimer}
+              </FormHelperText>
+            )}
+          </FormControl>
         </PnWizardStep>
       </PnWizard>
 
