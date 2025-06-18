@@ -14,7 +14,11 @@ import {
 import { CustomDropdown } from '@pagopa-pn/pn-commons';
 import { LangCode, LangLabels } from '@pagopa/mui-italia';
 
-import { BILINGUALISM_LANGUAGES, NewNotificationLangOther, PreliminaryInformationsPayload } from '../../models/NewNotification';
+import {
+  BILINGUALISM_LANGUAGES,
+  NewNotificationLangOther,
+  PreliminaryInformationsPayload,
+} from '../../models/NewNotification';
 import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 
 type Props = {
@@ -62,7 +66,7 @@ const PreliminaryInformationsLang = ({ formik, languages, onChange, onChangeTouc
             {formik.values.lang === NewNotificationLangOther && (
               <CustomDropdown
                 id="additionalLang"
-                label={`${t('select-other-language')}*`}
+                label={t('select-other-language')}
                 name="additionalLang"
                 size="small"
                 margin="none"
