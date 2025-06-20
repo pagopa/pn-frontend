@@ -212,7 +212,7 @@ const LegalContacts = () => {
           {t(`legal-contacts.pec-disclaimer`, { ns: 'recapiti' })}
         </Alert>
       )}
-      {showSpecialContactsSection && <SpecialContacts />}
+      {showSpecialContactsSection && <SpecialContacts addressType={AddressType.LEGAL} />}
       <DeleteDialog
         showModal={modalOpen}
         removeModalTitle={t(

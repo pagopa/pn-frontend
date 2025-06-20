@@ -187,7 +187,11 @@
     "legal-association-description": "Hai già selezionato in precedenza un recapito a valore legale per <strong>{{senderName}}</strong>. Confermi che per le notifiche inviate da <strong>{{senderName}}</strong> il tuo recapito a valore legale sarà <strong>{{newAddress}}</strong> invece che <strong>{{oldAddress}}</strong>.",
     "legal-association-title-block": "Recapito già inserito precedentemente",
     "legal-association-description-block": "Ti comunichiamo che le notifiche inviate da <strong>{{senderName}}</strong> sono già inoltrate al recapito a valore legale <strong>{{oldAddress}}</strong> inserito in precedenza.",
-    "pec-disclaimer": "Compilando il campo e premendo <strong>Conferma</strong> accetti che l’indirizzo PEC che hai scelto sia utilizzato da SEND per l’invio delle notifiche di questo specifico ente mittente, in via prioritaria rispetto al  domicilio digitale di piattaforma, a un eventuale domicilio digitale eletto presso lo stesso ente mittente o presente nei pubblici registri"
+    "pec-disclaimer": "Compilando il campo e premendo <strong>Conferma</strong> accetti che l’indirizzo PEC che hai scelto sia utilizzato da SEND per l’invio delle notifiche di questo specifico ente mittente, in via prioritaria rispetto al  domicilio digitale di piattaforma, a un eventuale domicilio digitale eletto presso lo stesso ente mittente o presente nei pubblici registri",
+    "courtesy-banner": {
+      "title": "Funzionalità dismessa",
+      "description": "Non puoi più inserire recapiti di cortesia personalizzati per ente o modificare recapiti già esistenti. Se elimini un recapito personalizzato non potrai più recuperarlo o inserirlo di nuovo. "
+    }
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",

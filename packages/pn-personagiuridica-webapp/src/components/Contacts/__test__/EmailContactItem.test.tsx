@@ -286,4 +286,14 @@ describe('testing EmailContactItem', () => {
       expect(result.container).not.toHaveTextContent('');
     });
   });
+
+  it('show special contact section', () => {
+    const { getAllByTestId } = render(<EmailContactItem />, {
+      preloadedState: { contactsState: { digitalAddresses: digitalCourtesyAddresses } },
+    });
+    const specialContactForms = getAllByTestId(
+      /^[a-zA-Z0-9-]+(?:_emailSpecialContact|_smsSpecialContact)$/
+    );
+    expect(specialContactForms.length).toBeGreaterThan(0);
+  });
 });
