@@ -89,7 +89,8 @@ const LegalContacts = () => {
   const hasPecActive = defaultPECAddress?.value && defaultPECAddress.pecValid === true;
   const hasSercqSendActive = !!defaultSERCQ_SENDAddress;
   const isActive = hasPecActive || (hasSercqSendActive && !isValidatingPec);
-  const showSpecialContactsSection = specialAddresses.length > 0;
+  const showSpecialContactsSection =
+    specialAddresses.filter((addr) => addr.addressType === AddressType.LEGAL).length > 0;
 
   const channelType =
     hasSercqSendActive && !isValidatingPec ? ChannelType.SERCQ_SEND : ChannelType.PEC;
