@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.16.1-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.16.1-RC.0...v2.16.1-RC.1) (2025-06-26)
+
+
+### Bug Fixes
+
+* **pn-14941:** removed period from disclaimer checkbox ([727f996](https://github.com/pagopa/pn-frontend/commit/727f9966ecf1e4591ea9666647212846d0cee502))
+
+
+
+
+
 ## [2.16.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.16.0...v2.16.1-RC.0) (2025-06-26)
 
 
