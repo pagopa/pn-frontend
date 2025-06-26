@@ -42,6 +42,7 @@ describe('Support page', async () => {
     expect(backButton).toBeInTheDocument();
     const continueButton = getByTestId('continueButton');
     expect(continueButton).toBeInTheDocument();
+    expect(continueButton).toHaveTextContent('button.go-on');
     expect(continueButton).toBeDisabled();
   });
 

@@ -186,7 +186,7 @@ const SupportPage: React.FC = () => {
               onClick={handleConfirm}
               data-testid="continueButton"
             >
-              {t('button.continue', { ns: 'common' })}
+              {t('button.go-on', { ns: 'common' })}
             </Button>
             <Button
               variant="outlined"

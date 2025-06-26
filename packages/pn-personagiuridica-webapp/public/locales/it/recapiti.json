@@ -72,8 +72,8 @@
             "description": "La notifica ti viene <0>consegnata</0> in modo sicuro e con valore legale tramite la piattaforma"
           },
           {
-            "title": "Ricevi un aggiornamento in tempo reale",
-            "description": "Puoi riceverlo tramite email o SMS, a seconda dei canali che hai scelto di attivare"
+            "title": "Ricevi un messaggio",
+            "description": "Quando ti arriva una notifica su SEND, ti avvisiamo sui canali che preferisci (email, SMS o app IO)"
           },
           {
             "title": "Accedi alla notifica",
