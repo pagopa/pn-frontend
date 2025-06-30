@@ -10,7 +10,7 @@ import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { institutionsDTO, productsDTO } from '../__mocks__/User.mock';
 import { apiClient } from '../api/apiClients';
 import { getConfiguration } from '../services/configuration.service';
-import { RenderResult, act, fireEvent, getByText, render, screen } from './test-utils';
+import { RenderResult, act, fireEvent, getByText, render, screen, testStore } from './test-utils';
 
 vi.mock('../pages/Dashboard.page', () => ({ default: () => <div>Generic Page</div> }));
 
@@ -66,6 +66,7 @@ describe('App', async () => {
 
   afterEach(() => {
     mock.reset();
+    vi.restoreAllMocks();
   });
 
   afterAll(() => {
@@ -140,9 +141,12 @@ describe('App', async () => {
   });
 
   it.only('render component - user logs out', async () => {
+    const clearSpy = vi.spyOn(Storage.prototype, 'clear');
+
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
+
     const header = result.container.querySelector('header');
     expect(header).toBeInTheDocument();
 
@@ -158,5 +162,9 @@ describe('App', async () => {
 
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
     expect(mockOpenFn).toHaveBeenCalledWith(getConfiguration().SELFCARE_URL_FE_LOGOUT, '_self');
+
+    expect(testStore.getState().userState.user.sessionToken).toEqual('');
+
+    expect(clearSpy).toHaveBeenCalled();
   });
 });
