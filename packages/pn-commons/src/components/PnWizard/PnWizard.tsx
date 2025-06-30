@@ -23,7 +23,7 @@ type Props = {
   setActiveStep: (step: number) => void;
   title: ReactNode;
   children: ReactNode;
-  onExit: () => void;
+  onExit?: () => void;
   slots?: {
     nextButton?: JSXElementConstructor<ButtonProps>;
     prevButton?: JSXElementConstructor<ButtonProps>;
@@ -90,6 +90,7 @@ const PnWizard: React.FC<Props> = ({
   };
 
   if (activeStep >= childrens.length && slotsProps?.feedback) {
+    const feedback = slotsProps?.feedback;
     return (
       <Box
         sx={{ minHeight: '350px', height: '100%', display: 'flex' }}
@@ -103,15 +104,15 @@ const PnWizard: React.FC<Props> = ({
             color="text.primary"
             sx={{ margin: '20px 0 10px 0' }}
           >
-            {slotsProps?.feedback?.title}
+            {feedback.title}
           </Typography>
           <Button
             data-testid="wizard-feedback-button"
             variant="contained"
             sx={{ marginTop: '30px' }}
-            onClick={slotsProps?.feedback?.onClick}
+            onClick={feedback.onClick}
           >
-            {slotsProps?.feedback?.buttonText}
+            {feedback.buttonText}
           </Button>
         </Box>
       </Box>
@@ -121,16 +122,17 @@ const PnWizard: React.FC<Props> = ({
   return (
     <Stack display="flex" alignItems="center" justifyContent="center" {...slotsProps?.container}>
       <Box p={3}>
-        <ButtonNaked
-          type="button"
-          size="medium"
-          color="primary"
-          startIcon={<ArrowBackIcon />}
-          onClick={onExit}
-        >
-          {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
-        </ButtonNaked>
-
+        {onExit && (
+          <ButtonNaked
+            type="button"
+            size="medium"
+            color="primary"
+            startIcon={<ArrowBackIcon />}
+            onClick={onExit}
+          >
+            {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
+          </ButtonNaked>
+        )}
         <Box sx={{ mt: 2, mb: 3 }} data-testid="wizard-title">
           {title}
         </Box>
