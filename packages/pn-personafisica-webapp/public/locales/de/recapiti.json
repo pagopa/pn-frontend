@@ -97,13 +97,11 @@
     "sercq_send": "Digitales Domizil SEND",
     "link-pec-label": "Deine PEC",
     "link-sercq-label": "Dein digitales Domizil SEND",
-    "contact-to-add": "Adresse",
     "contact-to-add-description": "Verknüpfe eine Adresse mit einer bestimmten Körperschaft, um die Mitteilungen nach Empfänger zu personalisieren.",
     "contact-already-exists": "Die gewählte Körperschaft ist bereits mit dieser Adresse verknüpft. Wenn du „Verknüpfen“ drückst, wird sie durch die hier eingegebene ersetzt.",
     "fetch-party-error": "Wir konnten die Daten, die benötigt werden, um eine neue Adresse zu erstellen, nicht wiederherstellen.",
     "modal-title": "Personalisiere die mit einer Körperschaft verknüpfte Adresse",
     "card-title": "Personalisiert",
-    "sender": "Körperschaft",
     "remove-special-title": "Möchtest du {{contactValue}} entfernen?",
     "remove-special-description": "Die Benachrichtigungen der Zustellungen der verknüpften Körperschaften werden nicht mehr an diese Adresse geschickt, sondern an die Hauptadresse."
   },

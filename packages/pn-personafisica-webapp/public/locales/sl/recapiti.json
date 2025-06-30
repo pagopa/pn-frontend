@@ -97,13 +97,11 @@
     "sercq_send": "Digitalno prebivališče SEND",
     "link-pec-label": "Vaš PEC",
     "link-sercq-label": "Vaše digitalno prebivališče je SEND",
-    "contact-to-add": "Kontaktni podatki",
     "contact-to-add-description": "Povežite naslov z določeno organizacijo, da prilagodite sporočila, ki jih prejmete glede na pošiljatelja.",
     "contact-already-exists": "Izbrana organizacija je že povezana s tem naslovom. Če pritisnete »Poveži«, ga bo nadomestil tisti, ki ste ga pravkar navedli.",
     "fetch-party-error": "Podatkov, potrebnih za ustvarjanje novega kontaktnega podatka, ni bilo mogoče pridobiti.",
     "modal-title": "Prilagodite naslov, povezan z organizacijo",
     "card-title": "Prilagojeno",
-    "sender": "Organizacija",
     "remove-special-title": "Ali želite izbrisati {{contactValue}}?",
     "remove-special-description": "Opozorila v zvezi z obvestili povezanih organizacij se ne bodo več pošiljala na ta naslov, temveč na glavnega."
   },
