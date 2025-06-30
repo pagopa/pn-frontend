@@ -24,4 +24,10 @@ describe('Tests notification.utility', () => {
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
     expect(mockOpenFn).toHaveBeenCalledWith(getConfiguration().SELFCARE_URL_FE_LOGIN, '_self');
   });
+  
+  it('goToSelfcareLogout', () => {
+    goToSelfcareLogin();
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(getConfiguration().SELFCARE_URL_FE_LOGOUT, '_self');
+  });
 });
