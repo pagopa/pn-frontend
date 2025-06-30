@@ -140,7 +140,7 @@ describe('App', async () => {
     expect(mock.history.get).toHaveLength(5);
   });
 
-  it.only('render component - user logs out', async () => {
+  it('render component - user logs out', async () => {
     const clearSpy = vi.spyOn(Storage.prototype, 'clear');
 
     await act(async () => {
