@@ -86,6 +86,18 @@
       "generic_error": {
         "title": "",
         "message": "Si è verificato un errore durante l’annullamento. Riprova."
+      },
+      "delivery_file_info_not_found": {
+        "title": "Documento non trovato",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Documento non trovato",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Documento non trovato",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
       }
     },
     "acts": "Documenti allegati",
@@ -302,6 +314,8 @@
         "23I": "Ricevuta di consegna",
         "Plico": "Scansione del plico",
         "23L": "Avviso di ricevimento",
+        "CAD": "È disponibile la dematerializzazione della raccomandata che contiene la comunicazione di avvenuto deposito",
+        "ARCAD": "È disponibile la dematerializzazione dell'avviso di ricevimento della raccomandata che contiene la comunicazione di avvenuto deposito",
         "Indagine": "Scansione dell'indagine",
         "generic": "Documento allegato"
       },
@@ -470,7 +484,13 @@
         "at": "Presso",
         "address-details": "Note aggiuntive (presso, scala, piano)",
         "add-recipient": "Aggiungi un destinatario",
-        "remove-recipient": "Rimuovi destinatario"
+        "remove-recipient": "Rimuovi destinatario",
+        "address-subtitle": "Scegli se consentire a SEND di inserire automaticamente l'indirizzo dai registri nazionali. L'inserimento automatico potrebbe ritardare l'invio della notifica al destinatario. In alternativa puoi compilare l'indirizzo manualmente.",
+        "address-physical-lookup-down": "Al momento non è possibile richiamare l'indirizzo dai registri nazionali. Inserisci l'indirizzo manualmente.",
+        "address-physical-lookup-radios": {
+          "national-registry": "Inserimento automatico da registro nazionale",
+          "manual": "Inserimento manuale"
+        }
       },
       "attachments": {
         "title": "Documentazione",
@@ -508,9 +528,12 @@
         "notification-fee": {
           "title": "Costo di notifica",
           "description": "Scegli il tipo di costo di notifica: puoi scegliere fra quello già incluso nell’atto oppure inserire un costo di notifica personalizzato a carico del destinatario.",
+          "pa-fee-format": "Il costo della notifica deve essere un valore compreso tra 0,01 e 1,00 e deve contenere massimo 2 cifre decimali.",
           "disclaimer": "L’IVA verrà applicata solo alle notifiche recapitate in modalità cartacea.",
           "pa-fee": "Costo di notifica",
-          "pa-fee-invalid": "Scrivi un valore minore o uguale a {{maxValue}} con massimo 2 decimali",
+          "pa-fee-validation": "Inserisci un valore compreso tra 0 e 1 e con massimo 2 cifre decimali",
+          "pa-fee-currency": "Inserisci un valore con massimo 2 cifre decimali",
+          "pa-fee-max-value": "Inserisci un valore compreso tra 0 e 1",
           "vat": "IVA"
         },
         "pagopa-int-mode": {
@@ -525,9 +548,9 @@
           "sync": "Sincrona",
           "async": "Asincrona"
         },
-        "identical-notice-codes-error": "C'è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
-        "at-least-one-applycost": "Applica i costi di notifica almeno ad un pagamento",
-        "identical-sha256-error": "Non è possibile caricare due file identici",
+        "identical-notice-codes-error": "C'è già un pagamento con questo Codice Avviso. Inseriscine uno diverso.",
+        "at-least-one-applycost": "Applica i costi di notifica ad almeno un pagamento.",
+        "identical-sha256-error": "Non è possibile caricare lo stesso file più di una volta. Carica un file diverso.",
         "payment-methods": {
           "title": "Modelli di pagamento",
           "pagopa-notice": "Avviso pagoPA",
@@ -571,11 +594,15 @@
       },
       "invalid_parameter_taxonomy_code": {
         "title": "Codice tassonomico non valido",
-        "message": "Il codice tassonomico inserito non è tra quelli gestiti dalla piattaforma."
+        "message": "Il codice tassonomico che hai inserito non è valido. Controlla e riprova. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
       },
       "delivery_notification_limit_exceeded": {
         "title": "Hai raggiunto il limite di notifiche",
         "message": "Al momento non puoi creare nuove notifiche perché hai già raggiunto il numero massimo mensile"
+      },
+      "delivery_invalid_parameter_group": {
+        "title": "Gruppo non valido",
+        "message": "Il gruppo di utenti che hai selezionato non è valido. Controlla e riprova. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
       }
     }
   },

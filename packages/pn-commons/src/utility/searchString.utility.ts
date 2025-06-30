@@ -63,7 +63,13 @@ export function useSearchStringChangeInput(
           'validation.invalid-characters-not-inserted',
           'caratteri invalidi non inseriti'
         );
-        dispatch(appStateActions.addError({ title: message, message }));
+        dispatch(
+          appStateActions.addError({
+            title: message,
+            message,
+            showTechnicalData: false,
+          })
+        );
       }
     },
     [dispatch]

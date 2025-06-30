@@ -26,6 +26,7 @@ describe('AppError', () => {
         content: 'mock-content',
         title: 'mock-title',
       },
+      showTechnicalData: false,
     });
   });
 

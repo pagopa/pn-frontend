@@ -389,3 +389,8 @@ export interface NotificationDocumentResponse {
   url: string;
   retryAfter?: number;
 }
+
+export enum PhysicalAddressLookup {
+  MANUAL = 'MANUAL',
+  NATIONAL_REGISTRY = 'NATIONAL_REGISTRY',
+}

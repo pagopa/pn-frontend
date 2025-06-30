@@ -20,6 +20,7 @@ import {
   ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
+  addParamToUrl,
   appStateActions,
   errorFactoryManager,
   initLocalization,
@@ -78,6 +79,7 @@ const ActualApp = () => {
   const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID, IS_STATISTICS_ENABLED } = getConfiguration();
   const products = useAppSelector((state: RootState) => state.userState.productsOfInstitution);
   const institutions = useAppSelector((state: RootState) => state.userState.institutions);
+  const lastError = useAppSelector((state: RootState) => state.appState.lastError);
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
 
@@ -207,9 +209,10 @@ const ActualApp = () => {
   };
 
   const handleAssistanceClick = () => {
+    const url = addParamToUrl(`${SELFCARE_BASE_URL}/assistenza?productId=${productId}`, "data", JSON.stringify(lastError));
     /* eslint-disable-next-line functional/immutable-data */
     window.location.href = sessionToken
-      ? `${SELFCARE_BASE_URL}/assistenza?productId=${productId}`
+      ? url
       : `mailto:${configuration.PAGOPA_HELP_EMAIL}`;
   };
 

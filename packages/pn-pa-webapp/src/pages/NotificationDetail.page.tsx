@@ -197,6 +197,7 @@ const NotificationDetail: React.FC = () => {
             message: t(`detail.errors.generic_error.message`, {
               ns: 'notifiche',
             }),
+            showTechnicalData: false,
           })
         );
         return false;

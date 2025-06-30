@@ -16,6 +16,7 @@ describe('AppResponseMessage Component', () => {
       {
         code: ServerResponseErrorCode.BAD_REQUEST_ERROR,
         message: { title: 'Error', content: 'This is a test error message' },
+        showTechnicalData: false,
       },
     ],
   };
@@ -30,12 +31,14 @@ describe('AppResponseMessage Component', () => {
     // check the store
     await waitFor(() => {
       state = testStore.getState().appState;
-      const message = createAppMessage(
-        appErrorResponse.errors![0].message.title,
-        appErrorResponse.errors![0].message.content,
-        appErrorResponse.status,
-        action
-      );
+      const message = createAppMessage({
+        title: appErrorResponse.errors![0].message.title,
+        message: appErrorResponse.errors![0].message.content,
+        showTechnicalData: false,
+        status: appErrorResponse.status,
+        action,
+        errorCode: ServerResponseErrorCode.BAD_REQUEST_ERROR
+      });
       expect(state.messages.errors).toStrictEqual([{ ...message, id: '1' }]);
     });
   });

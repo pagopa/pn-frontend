@@ -103,6 +103,7 @@ const NewPublicKey = () => {
         appStateActions.addError({
           title: '',
           message: t('messages.error.rotate-invalid-kid'),
+          showTechnicalData: false,
         })
       );
       return;
@@ -129,6 +130,7 @@ const NewPublicKey = () => {
       appStateActions.addError({
         title: '',
         message: t('messages.error.no-tos-version'),
+        showTechnicalData: false,
       })
     );
   };
@@ -139,6 +141,7 @@ const NewPublicKey = () => {
       appStateActions.addError({
         title: '',
         message: t('messages.error.accept-tos-failed'),
+        showTechnicalData: false,
       })
     );
   };
