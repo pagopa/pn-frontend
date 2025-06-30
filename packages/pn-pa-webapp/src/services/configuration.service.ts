@@ -1,6 +1,8 @@
 import { Configuration, IS_DEVELOP, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
 
+import { PhysicalAddressLookupConfig } from '../models/NewNotification';
+
 export interface PaConfiguration {
   OT_DOMAIN_ID: string;
   SELFCARE_URL_FE_LOGIN: string;
@@ -23,6 +25,7 @@ export interface PaConfiguration {
   DOWNTIME_EXAMPLE_LINK: string;
   PAYMENT_INFO_LINK: string;
   DEVELOPER_API_DOCUMENTATION_LINK: string;
+  PHYSICAL_ADDRESS_LOOKUP: PhysicalAddressLookupConfig;
 }
 
 class PaConfigurationValidator extends Validator<PaConfiguration> {
@@ -52,6 +55,10 @@ class PaConfigurationValidator extends Validator<PaConfiguration> {
       .isString()
       .isRequired()
       .matches(dataRegex.htmlPageUrl);
+    this.ruleFor('PHYSICAL_ADDRESS_LOOKUP')
+      .isString()
+      .isRequired()
+      .isOneOf(Object.values(PhysicalAddressLookupConfig));
   }
 }
 

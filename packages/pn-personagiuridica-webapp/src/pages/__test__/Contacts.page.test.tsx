@@ -154,6 +154,7 @@ describe('Contacts page', async () => {
         toNotify: true,
         alreadyShown: true,
         action: CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES,
+        showTechnicalData: false,
       },
     ];
 

@@ -156,6 +156,10 @@
     "invalid-characters-not-inserted": "I caratteri non validi non sono stati inseriti."
   },
   "errors": {
+    "technical-error": {
+      "title": "Informazioni errore",
+      "copy-to-clipboard": "Copia informazioni errore"
+    },
     "bad_request": {
       "title": "Errore nell'invio dei dati",
       "message": "Il formato della richiesta non è valido."
