@@ -3,6 +3,75 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.16.1](https://github.com/pagopa/pn-frontend/compare/v2.16.1-RC.1...v2.16.1) (2025-06-27)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+## [2.16.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.16.0...v2.16.1-RC.0) (2025-06-26)
+
+
+### Bug Fixes
+
+* **pn-14941:** fixed pa tests ([3b7dc33](https://github.com/pagopa/pn-frontend/commit/3b7dc33186e443273092fa02ad89544e4ad8701f))
+
+
+
+
+
+# [2.16.0](https://github.com/pagopa/pn-frontend/compare/v2.16.0-RC.1...v2.16.0) (2025-06-12)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+# [2.16.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.15.1...v2.16.0-RC.1) (2025-06-06)
+
+
+
+# [2.16.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.15.0...v2.16.0-RC.0) (2025-05-27)
+
+
+### Bug Fixes
+
+* change wrong centered layout for timeline attachments ([bc4486e](https://github.com/pagopa/pn-frontend/commit/bc4486e1ce920c41f229afb8ac8be126e7ba829e))
+* replace malfunction link ([0ba403a](https://github.com/pagopa/pn-frontend/commit/0ba403a99124eca821c80baf2fdf83f3fec6d2f9))
+
+
+### Features
+
+* add draft copy for CAD/ARCAD in timeline ([49c3756](https://github.com/pagopa/pn-frontend/commit/49c3756a404ff48cc16f49e497aceb355ce830ff))
+* add PN_INVALID_BODY to errors for which technical data should be shown ([9eecd85](https://github.com/pagopa/pn-frontend/commit/9eecd856904c1e3d26f721615b13c00861ee129d))
+* add showTechnicalData attribute to AppError class to differentiate errors for which tech data needs to be shown ([12e034f](https://github.com/pagopa/pn-frontend/commit/12e034f6b95ae1706fbb50ea71ed42479ddfa36a))
+* **pn-14233:** vas physical address lookup ([#1526](https://github.com/pagopa/pn-frontend/issues/1526)) ([20a651c](https://github.com/pagopa/pn-frontend/commit/20a651c8a7461524a322108eb95ccd2aaf06bd42))
+* **PN-14823:** update link to downtime example link and update regex for htmlurl ([eb93ef6](https://github.com/pagopa/pn-frontend/commit/eb93ef6119a5e44475a0f17da358d5f839d7dc8b))
+
+
+
+
+
+# [2.16.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.15.0...v2.16.0-RC.0) (2025-05-27)
+
+
+### Bug Fixes
+
+* change wrong centered layout for timeline attachments ([bc4486e](https://github.com/pagopa/pn-frontend/commit/bc4486e1ce920c41f229afb8ac8be126e7ba829e))
+* replace malfunction link ([0ba403a](https://github.com/pagopa/pn-frontend/commit/0ba403a99124eca821c80baf2fdf83f3fec6d2f9))
+
+
+### Features
+
+* add draft copy for CAD/ARCAD in timeline ([49c3756](https://github.com/pagopa/pn-frontend/commit/49c3756a404ff48cc16f49e497aceb355ce830ff))
+* add PN_INVALID_BODY to errors for which technical data should be shown ([9eecd85](https://github.com/pagopa/pn-frontend/commit/9eecd856904c1e3d26f721615b13c00861ee129d))
+* add showTechnicalData attribute to AppError class to differentiate errors for which tech data needs to be shown ([12e034f](https://github.com/pagopa/pn-frontend/commit/12e034f6b95ae1706fbb50ea71ed42479ddfa36a))
+* **pn-14233:** vas physical address lookup ([#1526](https://github.com/pagopa/pn-frontend/issues/1526)) ([20a651c](https://github.com/pagopa/pn-frontend/commit/20a651c8a7461524a322108eb95ccd2aaf06bd42))
+* **PN-14823:** update link to downtime example link and update regex for htmlurl ([eb93ef6](https://github.com/pagopa/pn-frontend/commit/eb93ef6119a5e44475a0f17da358d5f839d7dc8b))
+
 ## [2.15.1](https://github.com/pagopa/pn-frontend/compare/v2.15.1-RC.0...v2.15.1) (2025-06-04)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp

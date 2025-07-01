@@ -10,6 +10,11 @@ import { GenericInvalidParameterAppError } from './GenericInvalidParameterAppErr
 import { GenericInvalidParameterDuplicateAppError } from './GenericInvalidParameterDuplicateAppError';
 import { GenericInvalidParameterTaxonomyCodeAppError } from './GenericInvalidParameterTaxonomyCodeAppError';
 import { ServerResponseErrorCode } from './types';
+import { DeliveryFileInfoNotFoundAppError } from './DeliveryFileInfoNotFoundAppError';
+import { DeliveryNotificationWithoutPaymentAttachmentAppError } from './DeliveryNotificationWithoutPaymentAttachmentAppError';
+import { DeliveryPushFileNotFoundAppError } from './DeliveryPushFileNotFoundAppError';
+import { DeliveryInvalidParameterGroupAppError } from './DeliveryInvalidParameterGroupAppError';
+import { InvalidBodyAppError } from './InvalidBodyAppError';
 
 export class PAAppErrorFactory extends AppErrorFactory {
   private translateFunction: (path: string, ns: string) => string;
@@ -31,6 +36,16 @@ export class PAAppErrorFactory extends AppErrorFactory {
         return new GenericInvalidParameterTaxonomyCodeAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_DELIVERY_NOTIFICATION_LIMIT_EXCEEDED:
         return new DeliveryNotificationLimitExceededAppError(error, this.translateFunction);
+      case ServerResponseErrorCode.PN_DELIVERY_FILEINFONOTFOUND:
+        return new DeliveryFileInfoNotFoundAppError(error, this.translateFunction);
+      case ServerResponseErrorCode.PN_DELIVERY_NOTIFICATIONWITHOUTPAYMENTATTACHMENT:
+        return new DeliveryNotificationWithoutPaymentAttachmentAppError(error, this.translateFunction);
+      case ServerResponseErrorCode.PN_DELIVERY_INVALIDPARAMETER_GROUP:
+        return new DeliveryInvalidParameterGroupAppError(error, this.translateFunction);
+      case ServerResponseErrorCode.PN_DELIVERYPUSH_FILE_NOT_FOUND:
+        return new DeliveryPushFileNotFoundAppError(error, this.translateFunction);
+      case ServerResponseErrorCode.PN_INVALID_BODY:
+        return new InvalidBodyAppError(error, this.translateFunction);
       default:
         return new UnknownAppError(error);
     }

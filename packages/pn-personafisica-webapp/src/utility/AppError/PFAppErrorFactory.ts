@@ -15,6 +15,9 @@ import { MandateNotAcceptableAppError } from './MandateNotAcceptableAppError';
 import { MandateNotFoundAppError } from './MandateNotFoundAppError';
 import { UserAttributesInvalidVerificationCodeAppError } from './UserAttributesInvalidVerificationCodeAppError';
 import { ServerResponseErrorCode } from './types';
+import { DeliveryFileInfoNotFoundAppError } from './DeliveryFileInfoNotFoundAppError';
+import { DeliveryNotificationWithoutPaymentAttachmentAppError } from './DeliveryNotificationWithoutPaymentAttachmentAppError';
+import { DeliveryPushFileNotFoundAppError } from './DeliveryPushFileNotFoundAppError';
 
 export class PFAppErrorFactory extends AppErrorFactory {
   private translateFunction: (path: string, ns: string) => string;
@@ -50,6 +53,12 @@ export class PFAppErrorFactory extends AppErrorFactory {
         return new DeliveryMandateNotFoundAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_INVALID_BODY:
         return new InvalidBodyAppError(error, this.translateFunction);
+      case ServerResponseErrorCode.PN_DELIVERY_FILEINFONOTFOUND:
+        return new DeliveryFileInfoNotFoundAppError(error, this.translateFunction);
+      case ServerResponseErrorCode.PN_DELIVERY_NOTIFICATIONWITHOUTPAYMENTATTACHMENT:
+        return new DeliveryNotificationWithoutPaymentAttachmentAppError(error, this.translateFunction);
+      case ServerResponseErrorCode.PN_DELIVERYPUSH_FILE_NOT_FOUND:
+        return new DeliveryPushFileNotFoundAppError(error, this.translateFunction);
       default:
         return new UnknownAppError(error);
     }

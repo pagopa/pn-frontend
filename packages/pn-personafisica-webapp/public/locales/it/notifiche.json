@@ -30,7 +30,7 @@
   "empty-state": {
     "filtered": "Non abbiamo trovato risultati: prova con dei filtri diversi. <0>Rimuovi filtri</0>.",
     "delegate": "{{name}} non ha ricevuto nessuna notifica.",
-    "no-notifications": "Non hai ricevuto nessuna notifica. <0>Vai ai tuoi recapiti</0> e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.",
+    "no-notifications": "Non hai ancora ricevuto notifiche. Inserisci un domicilio digitale, uno o più recapiti di cortesia o attiva il servizio <strong>SEND - Notifiche Digitali</strong> sull’app IO nella sezione <strong>I tuoi recapiti</strong>: così, se riceverai una notifica, te lo comunicheremo. <0>Vai ai tuoi recapiti</0>",
     "aria-label-remove-filters": "Rimuovi filtri",
     "aria-label-route-contacts": "Vai ai tuoi recapiti"
   },
@@ -321,6 +321,8 @@
         "23I": "Ricevuta di consegna",
         "Plico": "Scansione del plico",
         "23L": "Avviso di ricevimento",
+        "CAD": "È disponibile la dematerializzazione della raccomandata che contiene la comunicazione di avvenuto deposito",
+        "ARCAD": "È disponibile la dematerializzazione dell'avviso di ricevimento della raccomandata che contiene la comunicazione di avvenuto deposito",
         "Indagine": "Scansione dell'indagine",
         "generic": "Documento allegato"
       },
@@ -355,6 +357,20 @@
     "help": {
       "goto": "Vai al sito",
       "assistance": "Per problemi tecnici o domande relative a SEND, premi su “Assisistenza” in alto a destra."
+    },
+    "errors": {
+      "delivery_file_info_not_found": {
+        "title": "Documento non trovato",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Documento non trovato",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Documento non trovato",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+      }
     }
   },
   "delegatorTitle": "Le notifiche di {{name}}",

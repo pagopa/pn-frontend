@@ -1,6 +1,8 @@
 import { useReducer, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+
+import * as yup from 'yup';
 
 import { Box, Button, Paper, Stack, TextField, Typography } from '@mui/material';
 import { Prompt, TitleBox } from '@pagopa-pn/pn-commons';
@@ -74,6 +76,24 @@ const SupportPPButton: React.FC<{ children?: React.ReactNode }> = ({ children })
 
 const SupportPage: React.FC = () => {
   const { t } = useTranslation(['support', 'common']);
+  const [params] = useSearchParams();
+  const rawData = params.get('data');
+  
+  const dataSchema = yup.object({
+    traceId: yup.string().required(),
+    errorCode: yup.string().required(),
+  });
+  // eslint-disable-next-line functional/no-let
+  let data: { traceId: string; errorCode: string } | null = null;
+  if (rawData !== null) {
+    try{
+      const parsed = JSON.parse(decodeURIComponent(rawData));
+      data = dataSchema.validateSync(parsed);
+    } catch(e){
+      console.error('Param "data" is not properly formatted:', e);
+      data = null;
+    };
+  }
   const [formData, formDispatch] = useReducer(reducer, {
     email: {
       value: '',
@@ -106,7 +126,11 @@ const SupportPage: React.FC = () => {
 
   const handleConfirm = () => {
     if (!formData.errors) {
-      dispatch(zendeskAuthorization(formData.email.value))
+      dispatch(
+        zendeskAuthorization(
+          data ? { email: formData.email.value, data } : { email: formData.email.value }
+        )
+      )
         .unwrap()
         .then((response) => {
           setZendeskAuthData(response);

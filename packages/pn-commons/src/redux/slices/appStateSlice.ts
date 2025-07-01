@@ -2,6 +2,7 @@ import { AnyAction, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { AppResponse, IAppMessage } from '../../models';
 import { AppResponseOutcome, HTTPStatusCode } from '../../models/AppResponse';
+import { extractRootTraceId } from '../../utility';
 import { createAppResponseError, createAppResponseSuccess } from '../../utility/AppResponse';
 import { createAppMessage } from '../../utility/message.utility';
 
@@ -21,6 +22,10 @@ export interface AppStateState {
     response: AppResponse;
   } | null;
   isInitialized: boolean;
+  lastError?: {
+    traceId: string;
+    errorCode: string;
+  };
 }
 
 const initialState: AppStateState = {
@@ -57,16 +62,30 @@ export const appStateSlice = createSlice({
       action: PayloadAction<{
         title: string;
         message: string;
+        showTechnicalData: boolean;
         status?: HTTPStatusCode;
         action?: string;
+        traceId?: string;
+        errorCode?: string;
       }>
     ) {
-      const message = createAppMessage(
-        action.payload.title,
-        action.payload.message,
-        action.payload.status,
-        action.payload.action
-      );
+      const message = createAppMessage({
+        title: action.payload.title,
+        message: action.payload.message,
+        showTechnicalData: action.payload.showTechnicalData,
+        status: action.payload.status,
+        action: action.payload.action,
+        traceId: extractRootTraceId(action.payload.traceId),
+        errorCode: action.payload.errorCode
+      });
+      if (message.showTechnicalData) {
+        state.lastError = {
+          traceId: message.traceId || '',
+          errorCode: message.errorCode || '',
+        };
+      } else {
+        state.lastError = undefined;
+      }
       state.messages.errors.push(message);
     },
     removeError(state, action: PayloadAction<string>) {
@@ -82,11 +101,12 @@ export const appStateSlice = createSlice({
       }
     },
     addSuccess(state, action: PayloadAction<{ title: string; message: string; status?: number }>) {
-      const message = createAppMessage(
-        action.payload.title,
-        action.payload.message,
-        action.payload.status
-      );
+      const message = createAppMessage({
+        title: action.payload.title,
+        message: action.payload.message,
+        showTechnicalData: false,
+        status: action.payload.status
+      });
       state.messages.success.push(message);
     },
     removeSuccess(state, action: PayloadAction<string>) {
@@ -100,11 +120,12 @@ export const appStateSlice = createSlice({
         status?: number;
       }>
     ) {
-      const message = createAppMessage(
-        action.payload.title,
-        action.payload.message,
-        action.payload.status
-      );
+      const message = createAppMessage({
+        title: action.payload.title,
+        message: action.payload.message,
+        showTechnicalData: false,
+        status: action.payload.status
+      });
       state.messages.info.push(message);
     },
     removeInfo(state, action: PayloadAction<string>) {

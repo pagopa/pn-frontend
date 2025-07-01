@@ -66,11 +66,13 @@ import { searchStringLimitReachedText, useSearchStringChangeInput } from './sear
 import { storageOpsBuilder } from './storage.utility';
 import { dataRegex, formatFiscalCode, fromStringToBase64, sanitizeString } from './string.utility';
 import { buttonNakedInheritStyle } from './styles.utility';
+import { extractRootTraceId } from './support.utility';
 import {
   adaptedTokenExchangeError,
   basicInitialUserData,
   basicUserDataMatcherContents,
 } from './user.utility';
+import { addParamToUrl } from './navigation.utility';
 
 export {
   getNotificationAllowedStatus,
@@ -159,4 +161,6 @@ export {
   IS_DEVELOP,
   APP_VERSION,
   getRapidAccessParam,
+  extractRootTraceId,
+  addParamToUrl
 };

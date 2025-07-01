@@ -1,6 +1,6 @@
 {
   "title": "Recapiti",
-  "subtitle": "Gestisci i recapiti digitali su cui ricevere le comunicazioni a valore legale di SEND per <0>la tua impresa</0>.",
+  "subtitle": "Gestisci i recapiti digitali su cui ricevere le comunicazioni a valore legale di SEND e/o i relativi messaggi di cortesia per la <0>tua impresa</0>.",
   "insert-code": "Inserisci codice",
   "status": {
     "active": "Attivo",
@@ -15,6 +15,7 @@
       "dod-disabled-message": "Fino al termine del processo non sarà possibile modificare i recapiti a valore legale.",
       "parties-list": "La piattaforma SEND resterà il tuo domicilio digitale per {{list}} fino al completamento della validazione."
     },
+    "pec-disclaimer": "Questo è l'indirizzo principale che verrà utilizzato per inviare le notifiche dell'impresa in digitale. Inserendolo, l'impresa non riceverà più raccomandate cartacee.",
     "pec-description": "Quando un ente invia alla tua impresa una notifica SEND, viene recapitata in modo sicuro e con valore legale sulla PEC che hai scelto.",
     "link-pec-placeholder": "Indirizzo PEC",
     "valid-pec": "Indirizzo PEC non valido",
@@ -105,8 +106,8 @@
       "content-title": "Inserisci la tua PEC",
       "content-description": "Quando un ente invia una notifica su SEND alla tua impresa, ricevi l’avviso a valore legale sulla PEC che hai scelto. ",
       "input-label": "Indirizzo PEC",
-      "input-placeholder": "La tua PEC",
-      "sercq-info-alert": "La PEC aziendale sostituirà la piattaforma SEND come tuo domicilio digitale. "
+      "sercq-info-alert": "La PEC aziendale sostituirà la piattaforma SEND come tuo domicilio digitale. ",
+      "disclaimer": "Compilando il campo e premendo <strong>Conferma</strong> accetti che l’indirizzo PEC che hai scelto sia utilizzato da SEND per l’invio delle notifiche, in via prioritaria rispetto a un eventuale domicilio digitale eletto presso un ente mittente o presente nei pubblici registri"
     },
     "digital-domicile-management": {
       "title": "Gestisci domicilio digitale",
@@ -172,23 +173,21 @@
     "add-sender": "Ente mittente",
     "pec": "Indirizzo PEC",
     "sercq_send": "Domicilio Digitale SEND",
-    "pec-to-add": "Indirizzo PEC",
-    "link-pec-label": "La tua PEC",
+    "link-pec-label": "Indirizzo PEC",
     "link-sercq-label": "Il tuo Domicilio Digitale SEND",
-    "contact-to-add": "Domicilio Digitale",
     "contact-to-add-description": "Il domicilio digitale personalizzato dove riceverai le notifiche SEND per la tua impresa che ti invia un ente specifico.",
     "contact-already-exists": "L'ente selezionato è già associato a questo recapito. Se premi “Associa”, verrà sostituito da quello che hai indicato qui.",
     "validating-pec": "Per l’ente selezionato non è possibile associare il domicilio digitale SEND perchè la PEC è in validazione.",
     "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito.",
     "add-title": "Inserisci l’ente e il recapito da associare",
     "card-title": "PERSONALIZZATI PER ENTE",
-    "sender": "Ente",
     "remove-special-title": "Vuoi eliminare {{contactValue}}?",
     "remove-special-description": "Gli avvisi relativi alle notifiche degli enti associati non saranno più inviati a questo recapito, ma a quello principale.",
     "legal-association-title": "Conferma modifica recapito",
     "legal-association-description": "Hai già selezionato in precedenza un recapito a valore legale per <strong>{{senderName}}</strong>. Confermi che per le notifiche inviate da <strong>{{senderName}}</strong> il tuo recapito a valore legale sarà <strong>{{newAddress}}</strong> invece che <strong>{{oldAddress}}</strong>.",
     "legal-association-title-block": "Recapito già inserito precedentemente",
-    "legal-association-description-block": "Ti comunichiamo che le notifiche inviate da <strong>{{senderName}}</strong> sono già inoltrate al recapito a valore legale <strong>{{oldAddress}}</strong> inserito in precedenza."
+    "legal-association-description-block": "Ti comunichiamo che le notifiche inviate da <strong>{{senderName}}</strong> sono già inoltrate al recapito a valore legale <strong>{{oldAddress}}</strong> inserito in precedenza.",
+    "pec-disclaimer": "Compilando il campo e premendo <strong>Conferma</strong> accetti che l’indirizzo PEC che hai scelto sia utilizzato da SEND per l’invio delle notifiche di questo specifico ente mittente, in via prioritaria rispetto al  domicilio digitale di piattaforma, a un eventuale domicilio digitale eletto presso lo stesso ente mittente o presente nei pubblici registri"
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",
