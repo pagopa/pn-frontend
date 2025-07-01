@@ -37,7 +37,6 @@ import {
   getAdditionalLanguages,
   getInstitutions,
   getProductsOfInstitution,
-  logout,
 } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
@@ -234,7 +233,7 @@ const ActualApp = () => {
   });
 
   const performLogout = () => {
-    void dispatch(logout());
+    sessionStorage.clear();
     goToSelfcareLogout();
     setOpenModal(false);
   };
@@ -276,11 +275,7 @@ const ActualApp = () => {
             <Button id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
               {t('button.annulla')}
             </Button>
-            <Button
-              data-testid="confirm-button"
-              variant="contained"
-              onClick={performLogout}
-            >
+            <Button data-testid="confirm-button" variant="contained" onClick={performLogout}>
               {t('header.logout')}
             </Button>
           </PnDialogActions>

@@ -10,7 +10,7 @@ import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { institutionsDTO, productsDTO } from '../__mocks__/User.mock';
 import { apiClient } from '../api/apiClients';
 import { getConfiguration } from '../services/configuration.service';
-import { RenderResult, act, fireEvent, getByText, render, screen, testStore } from './test-utils';
+import { RenderResult, act, fireEvent, getByText, render, screen } from './test-utils';
 
 vi.mock('../pages/Dashboard.page', () => ({ default: () => <div>Generic Page</div> }));
 
@@ -162,8 +162,6 @@ describe('App', async () => {
 
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
     expect(mockOpenFn).toHaveBeenCalledWith(getConfiguration().SELFCARE_URL_FE_LOGOUT, '_self');
-
-    expect(testStore.getState().userState.user.sessionToken).toEqual('');
 
     expect(clearSpy).toHaveBeenCalled();
   });
