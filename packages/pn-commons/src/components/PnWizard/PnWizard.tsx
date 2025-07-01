@@ -143,7 +143,11 @@ const PnWizard: React.FC<Props> = ({
           {childrens[activeStep]}
         </Paper>
 
-        <Stack direction={{ xs: 'column-reverse', md: 'row' }} {...slotsProps?.actions}>
+        <Stack
+          direction={{ xs: 'column-reverse', md: 'row' }}
+          justifyContent="space-between"
+          {...slotsProps?.actions}
+        >
           <PrevButton
             data-testid="prev-button"
             sx={{ mt: { xs: 2, md: 0 } }}

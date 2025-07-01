@@ -23,14 +23,12 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const { IS_DOD_ENABLED } = getConfiguration();
-  const { defaultSMSAddress, defaultEMAILAddress, defaultSERCQ_SENDAddress } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
 
   const [activeStep, setActiveStep] = useState(0);
   const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress || !IS_DOD_ENABLED);
 
-  const hasEmailOrSms = !!(defaultEMAILAddress || defaultSMSAddress);
+  // const hasEmailOrSms = !!(defaultEMAILAddress || defaultSMSAddress);
 
   const isEmailSmsStep = activeStep === 1;
 
@@ -120,7 +118,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
           buttonText: t('legal-contacts.sercq-send-wizard.feedback.go-to-contacts'),
           onClick: () => navigate(RECAPITI),
         },
-        actions: isEmailSmsStep && hasEmailOrSms ? { justifyContent: 'flex-end' } : {},
+        // actions: isEmailSmsStep && hasEmailOrSms ? { justifyContent: 'flex-end' } : {},
       }}
     >
       <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_1.title')}>
