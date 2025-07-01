@@ -59,7 +59,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
           color="primary"
           size="medium"
           data-testid="prev-button"
-          sx={{ mt: { xs: 2, lg: 0 } }}
+          sx={isEmailSmsStep ? { mt: { xs: 2, md: 0 } } : { mt: 0 }}
         >
           {t('button.indietro', { ns: 'common' })}
         </ButtonNaked>
@@ -118,7 +118,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
           buttonText: t('legal-contacts.sercq-send-wizard.feedback.go-to-contacts'),
           onClick: () => navigate(RECAPITI),
         },
-        // actions: isEmailSmsStep && hasEmailOrSms ? { justifyContent: 'flex-end' } : {},
+        actions: !isEmailSmsStep ? { justifyContent: 'center' } : {},
       }}
     >
       <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_1.title')}>

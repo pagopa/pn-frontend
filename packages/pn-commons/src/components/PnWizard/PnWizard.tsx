@@ -23,10 +23,10 @@ type Props = {
   setActiveStep: (step: number) => void;
   title: ReactNode;
   children: ReactNode;
-  onExit?: () => void;
   slots?: {
     nextButton?: JSXElementConstructor<ButtonProps>;
     prevButton?: JSXElementConstructor<ButtonProps>;
+    exitButton?: JSXElementConstructor<ButtonProps>;
   };
   slotsProps?: {
     stepContainer?: Partial<PaperProps>;
@@ -36,6 +36,7 @@ type Props = {
     prevButton?: Omit<ButtonProps, 'onClick'> & {
       onClick?: (previous: () => void, step: number) => void;
     };
+    exitButton?: ButtonProps;
     actions?: StackProps;
     container?: Omit<StackProps, 'children'> & { 'data-testid'?: string };
     feedback?: {
@@ -51,13 +52,13 @@ const PnWizard: React.FC<Props> = ({
   setActiveStep,
   title,
   children,
-  onExit,
   slots,
   slotsProps,
 }) => {
   checkChildren(children, [{ cmp: PnWizardStep }], 'PnWizard');
   const PrevButton = slots?.prevButton || Button;
   const NextButton = slots?.nextButton || Button;
+  const ExitButton = slots?.exitButton || ButtonNaked;
 
   const childrens = React.Children.toArray(children);
   const steps = childrens
@@ -122,16 +123,18 @@ const PnWizard: React.FC<Props> = ({
   return (
     <Stack display="flex" alignItems="center" justifyContent="center" {...slotsProps?.container}>
       <Box p={3}>
-        {onExit && (
-          <ButtonNaked
+        {slotsProps?.exitButton && (
+          <ExitButton
+            data-testid="exit-button"
             type="button"
             size="medium"
             color="primary"
             startIcon={<ArrowBackIcon />}
-            onClick={onExit}
+            {...slotsProps.exitButton}
           >
-            {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
-          </ButtonNaked>
+            {slotsProps.exitButton.children ??
+              getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
+          </ExitButton>
         )}
         <Box sx={{ mt: 2, mb: 3 }} data-testid="wizard-title">
           {title}
