@@ -66,6 +66,28 @@ describe('PecContactWizard', () => {
     });
   });
 
+  it('validates PEC input field and shows an error on disclaimer not accepted', async () => {
+    const { container, getByTestId } = render(
+      <PecContactWizard setShowPecWizard={setShowPecWizardMock} />
+    );
+
+    const pecInput = container.querySelector('[name="pec"]');
+    fireEvent.change(pecInput!, { target: { value: VALID_PEC } });
+
+    await waitFor(() => {
+      expect(pecInput).toHaveValue(VALID_PEC);
+    });
+    const confirmButton = getByTestId('next-button');
+    expect(confirmButton).toBeEnabled();
+    fireEvent.click(confirmButton);
+    const errorMessage = await waitFor(() => container.querySelector(`#disclaimer-helper-text`));
+    expect(errorMessage).toBeInTheDocument();
+    fireEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(0);
+    });
+  });
+
   it('should show alert when SERCQ SEND is enabled', async () => {
     const { getByTestId } = render(<PecContactWizard setShowPecWizard={setShowPecWizardMock} />, {
       preloadedState: {
@@ -102,6 +124,9 @@ describe('PecContactWizard', () => {
 
     const pecInput = container.querySelector('[name="pec"]');
     fireEvent.change(pecInput!, { target: { value: VALID_PEC } });
+
+    const disclaimerCheckbox = container.querySelector('[name="disclaimer"]');
+    fireEvent.click(disclaimerCheckbox!);
 
     const nextButton = getByTestId('next-button');
     fireEvent.click(nextButton);
@@ -147,6 +172,9 @@ describe('PecContactWizard', () => {
 
     const pecInput = container.querySelector('[name="pec"]');
     fireEvent.change(pecInput!, { target: { value: VALID_PEC } });
+
+    const disclaimerCheckbox = container.querySelector('[name="disclaimer"]');
+    fireEvent.click(disclaimerCheckbox!);
 
     const nextButton = getByTestId('next-button');
     fireEvent.click(nextButton);

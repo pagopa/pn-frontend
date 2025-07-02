@@ -1,9 +1,19 @@
 import { useFormik } from 'formik';
 import { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Alert, MenuItem, Paper, TextField, Typography } from '@mui/material';
+import {
+  Alert,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  MenuItem,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
 import {
   ApiErrorWrapper,
   ConsentActionType,
@@ -195,12 +205,17 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
           is: ChannelType.SERCQ_SEND,
           then: yup.string().nullable(),
         }),
+      s_disclaimer: yup.bool().when('channelType', {
+        is: ChannelType.PEC,
+        then: yup.bool().isTrue(t('required-field')),
+      }),
     });
 
     const initialValues: {
       sender: { id: string; name: string };
       channelType: ChannelType | '';
       s_value: string;
+      s_disclaimer: boolean;
     } = {
       sender: {
         id: '',
@@ -208,6 +223,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       },
       channelType: mandatoryChannelType,
       s_value: '',
+      s_disclaimer: false,
     };
 
     const formik = useFormik({
@@ -465,8 +481,14 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             {t(`special-contacts.contact-to-add-description`, { ns: 'recapiti' })}
           </Typography>
 
-          <Typography variant="caption-semibold" mb={2} display="block">
-            {t(`special-contacts.sender`, { ns: 'recapiti' })}
+          <Typography
+            variant="body2"
+            mb={2}
+            fontWeight={400}
+            fontSize="14px"
+            color="text.secondary"
+          >
+            {t(`required-fields`)}
           </Typography>
           <ApiErrorWrapper
             apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES}
@@ -507,48 +529,40 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                     formik.touched.sender &&
                     (formik.errors.sender?.name || formik.errors.sender?.id)
                   }
+                  required
                 />
               )}
-              sx={{ flexGrow: 1, flexBasis: 0 }}
+              sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
             />
           </ApiErrorWrapper>
           {!mandatoryChannelType && (
-            <>
-              <Typography variant="caption-semibold" my={2} display="block">
-                {t(`special-contacts.contact-to-add`, { ns: 'recapiti' })}
-              </Typography>
-              <CustomDropdown
-                id="channelType"
-                name="channelType"
-                value={formik.values.channelType}
-                onChange={addressTypeChangeHandler}
-                size="small"
-                sx={{ flexGrow: 1, flexBasis: 0 }}
-                label={t('special-contacts.select-address', { ns: 'recapiti' })}
-                fullWidth
-                error={formik.touched.channelType && Boolean(formik.errors.channelType)}
-                helperText={formik.touched.channelType && formik.errors.channelType}
-              >
-                {addressTypes.map((a) => (
-                  <MenuItem
-                    id={`dropdown-${a.id}`}
-                    key={a.id}
-                    value={a.id}
-                    sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
-                  >
-                    {t(`special-contacts.${a.id.toLowerCase()}`, { ns: 'recapiti' })}
-                  </MenuItem>
-                ))}
-              </CustomDropdown>
-            </>
+            <CustomDropdown
+              id="channelType"
+              name="channelType"
+              value={formik.values.channelType}
+              onChange={addressTypeChangeHandler}
+              size="small"
+              sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
+              label={t('special-contacts.select-address', { ns: 'recapiti' })}
+              fullWidth
+              error={formik.touched.channelType && Boolean(formik.errors.channelType)}
+              helperText={formik.touched.channelType && formik.errors.channelType}
+              required
+            >
+              {addressTypes.map((a) => (
+                <MenuItem
+                  id={`dropdown-${a.id}`}
+                  key={a.id}
+                  value={a.id}
+                  sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
+                >
+                  {t(`special-contacts.${a.id.toLowerCase()}`, { ns: 'recapiti' })}
+                </MenuItem>
+              ))}
+            </CustomDropdown>
           )}
           {formik.values.channelType === ChannelType.PEC && (
             <>
-              <Typography variant="caption-semibold" my={2} display="block">
-                {t(`special-contacts.${formik.values.channelType.toLowerCase()}-to-add`, {
-                  ns: 'recapiti',
-                })}
-              </Typography>
               <TextField
                 size="small"
                 fullWidth
@@ -561,7 +575,33 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                 onChange={handleChangeTouched}
                 error={formik.touched.s_value && Boolean(formik.errors.s_value)}
                 helperText={formik.touched.s_value && formik.errors.s_value}
+                required
               />
+              <FormControl>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="s_disclaimer"
+                      id="s_disclaimer"
+                      required
+                      onChange={handleChangeTouched}
+                      inputProps={{
+                        'aria-describedby': 's_disclaimer-helper-text',
+                        'aria-invalid':
+                          formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer),
+                      }}
+                    />
+                  }
+                  label={<Trans ns="recapiti" i18nKey="special-contacts.pec-disclaimer" />}
+                  sx={{ mt: 2 }}
+                  value={formik.values.s_disclaimer}
+                />
+                {formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer) && (
+                  <FormHelperText id="s_disclaimer-helper-text" error>
+                    {formik.errors.s_disclaimer}
+                  </FormHelperText>
+                )}
+              </FormControl>
             </>
           )}
         </form>

@@ -96,7 +96,7 @@ describe('PreliminaryInformationsLang', () => {
       </Formik>
     );
 
-    expect(result.getByLabelText('select-other-language*')).toBeInTheDocument();
+    expect(getById(result.container, 'additionalLang')).toBeInTheDocument();
   });
 
   it('calls onChangeTouched when additional language is changed', async () => {

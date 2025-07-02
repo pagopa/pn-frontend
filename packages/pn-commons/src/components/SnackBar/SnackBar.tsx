@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
 import { Alert, AlertTitle, Box, IconButton, Snackbar, Typography } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { IAppMessage } from '../../models';
@@ -70,6 +71,12 @@ const SnackBar: React.FC<Props> = ({
       aria-label="close"
       color="inherit"
       onClick={closeSnackBar}
+      sx={{
+        position: 'absolute',
+        top: 8,
+        right: 8,
+        color: '#5C6F82',
+      }}
     >
       <CloseIcon fontSize="small" />
     </IconButton>
@@ -80,16 +87,16 @@ const SnackBar: React.FC<Props> = ({
       return 'calc(100vw - 5%)';
     }
 
-    return showTechnicalData ? '500px' : '376px';
+    return showTechnicalData ? '650px' : '376px';
   };
 
   return (
     <>
       {openStatus && (
         <div data-testid="snackBarContainer">
-          <Snackbar open={openStatus} action={action}>
+          <Snackbar open={open}>
             <Alert
-              onClose={closeSnackBar}
+              action={action}
               severity={getColor.get(type)}
               sx={{
                 position: 'fixed',
@@ -111,6 +118,7 @@ const SnackBar: React.FC<Props> = ({
                   sx={{
                     backgroundColor: '#F2F2F2',
                     p: 2,
+                    pb: 1,
                     whiteSpace: 'normal',
                     wordBreak: 'break-word',
                   }}
@@ -122,10 +130,14 @@ const SnackBar: React.FC<Props> = ({
                       'Informazioni errore'
                     )}
                   </Typography>
-                  <Box mb={2}>
-                    {errorCode && <Typography variant="body1">{errorCode}</Typography>}
+                  <Box>
+                    {errorCode && (
+                      <Typography component="p" variant="monospaced">
+                        {errorCode}
+                      </Typography>
+                    )}
                     {traceId && (
-                      <Typography variant="body1" fontSize="16px">
+                      <Typography component="p" variant="monospaced" fontSize="16px">
                         {traceId}
                       </Typography>
                     )}
@@ -139,6 +151,8 @@ const SnackBar: React.FC<Props> = ({
                     getValue={() => errorCode + '\n' + traceId}
                     tooltipMode
                     textPosition="start"
+                    slot={ButtonNaked}
+                    slotProps={{ size: 'medium', mt: 0 }}
                   />
                 </Box>
               )}
