@@ -3,43 +3,22 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import { Avatar, Button, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
-import { IllusAppIoLogo, IllusSendLogo, appStateActions } from '@pagopa-pn/pn-commons';
-
-import { PFEventsType } from '../../models/PFEventsType';
-import { enableIOAddress } from '../../redux/contact/actions';
-import { useAppDispatch } from '../../redux/hooks';
-import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
+import { IllusAppIoLogo, IllusSendLogo } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 type Props = {
   goToNextStep: () => void;
+  handleConfirmIOActivation: () => void;
+  handleSkipOrExitClick: () => void;
 };
 
-const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
+const IOContactWizard: React.FC<Props> = ({ handleConfirmIOActivation, handleSkipOrExitClick }) => {
   const { t } = useTranslation('recapiti');
-  const dispatch = useAppDispatch();
 
   const sercqSendIoList: Array<string> = t('legal-contacts.sercq-send-wizard.step_2.io-list', {
     defaultValue: [],
     ns: 'recapiti',
   });
-
-  const handleConfirm = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_START);
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
-    dispatch(enableIOAddress())
-      .unwrap()
-      .then(() => {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS, true);
-        dispatch(
-          appStateActions.addSuccess({
-            title: '',
-            message: t('courtesy-contacts.io-added-successfully', { ns: 'recapiti' }),
-          })
-        );
-        goToNextStep();
-      })
-      .catch(() => {});
-  };
 
   return (
     <Stack useFlexGap spacing={2} data-testid="ioContactWizard">
@@ -77,10 +56,9 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
           </ListItem>
         ))}
       </List>
-
       <Button
         variant="contained"
-        onClick={handleConfirm}
+        onClick={handleConfirmIOActivation}
         color="primary"
         fullWidth
         sx={{ mt: 3 }}
@@ -88,6 +66,14 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
       >
         {t('legal-contacts.sercq-send-wizard.step_2.confirm')}
       </Button>
+      <ButtonNaked
+        onClick={handleSkipOrExitClick}
+        color="primary"
+        fullWidth
+        data-testid="confirmButton"
+      >
+        {t('legal-contacts.sercq-send-wizard.step_2.skip-io')}
+      </ButtonNaked>
     </Stack>
   );
 };

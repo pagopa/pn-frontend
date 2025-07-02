@@ -2,18 +2,21 @@ import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, DialogContentText, Typography } from '@mui/material';
-import { ConfirmationModal, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { Button, Typography } from '@mui/material';
+import { ConfirmationModal, PnWizard, PnWizardStep, appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import IOContactWizard from '../../components/Contacts/IOContactWizard';
 import PecContactWizard from '../../components/Contacts/PecContactWizard';
 import SercqSendContactWizard from '../../components/Contacts/SercqSendContactWizard';
+import { PFEventsType } from '../../models/PFEventsType';
 import { IOAllowedValues } from '../../models/contacts';
 import { RECAPITI } from '../../navigation/routes.const';
+import { enableIOAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
-import { useAppSelector } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import EmailSmsContactWizard from './EmailSmsContactWizard';
 
 type Props = {
@@ -55,6 +58,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
 
   const hasCourtesyContact =
     defaultAPPIOAddress?.value === IOAllowedValues.ENABLED || hasEmailOrSms;
+  const dispatch = useAppDispatch();
 
   const goToNextStep = () => {
     setActiveStep((step) => step + 1);
@@ -64,7 +68,26 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
     setActiveStep(3); // set the current step greater than the number of steps to go to the thankyou page
   };
 
+  const handleConfirmIOActivation = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_START);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
+    dispatch(enableIOAddress())
+      .unwrap()
+      .then(() => {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS, true);
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t('courtesy-contacts.io-added-successfully', { ns: 'recapiti' }),
+          })
+        );
+        goToNextStep();
+      })
+      .catch(() => {});
+  };
+
   const handleConfirmationModalAccept = () => {
+    handleConfirmIOActivation();
     setModal({ open: false });
   };
 
@@ -171,7 +194,11 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
         </PnWizardStep>
         {showIOStep && (
           <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_2.title')}>
-            <IOContactWizard goToNextStep={goToNextStep} />
+            <IOContactWizard
+              goToNextStep={goToNextStep}
+              handleConfirmIOActivation={handleConfirmIOActivation}
+              handleSkipOrExitClick={handleSkipOrExitClick}
+            />
           </PnWizardStep>
         )}
         {showEmailStep && (
@@ -183,36 +210,27 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
       {modal.step && (
         <ConfirmationModal
           open={modal.open}
-          title={t('courtesy-contacts.confirmation-modal-title')}
+          title={t('courtesy-contacts.confirmation-modal-io-title')}
           slots={{
             confirmButton: Button,
             closeButton: Button,
           }}
           slotsProps={{
             closeButton: {
+              onClick: handleConfirmationModalDecline,
+              children: t('button.do-later', { ns: 'common' }),
+            },
+            confirmButton: {
               onClick: handleConfirmationModalAccept,
               children: t(
                 `courtesy-contacts.confirmation-modal-${modal.step.toLowerCase()}-accept`
               ),
-            },
-            confirmButton: {
-              onClick: handleConfirmationModalDecline,
-              children: t('button.do-later', { ns: 'common' }),
             },
           }}
         >
           <Trans
             ns="recapiti"
             i18nKey={`courtesy-contacts.confirmation-modal-${modal.step.toLowerCase()}-content`}
-            components={[
-              <DialogContentText key="paragraph1" id="dialog-description" color="text.primary" />,
-              <DialogContentText
-                key="paragraph2"
-                id="dialog-description"
-                color="text.primary"
-                mt={2}
-              />,
-            ]}
           />
         </ConfirmationModal>
       )}
