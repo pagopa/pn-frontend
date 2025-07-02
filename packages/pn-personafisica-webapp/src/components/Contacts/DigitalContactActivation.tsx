@@ -9,14 +9,11 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import IOContactWizard from '../../components/Contacts/IOContactWizard';
 import PecContactWizard from '../../components/Contacts/PecContactWizard';
 import SercqSendContactWizard from '../../components/Contacts/SercqSendContactWizard';
-import { PFEventsType } from '../../models/PFEventsType';
 import { IOAllowedValues } from '../../models/contacts';
 import { RECAPITI } from '../../navigation/routes.const';
-import { enableIOAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
-import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import EmailSmsContactWizard from './EmailSmsContactWizard';
 
 type Props = {
