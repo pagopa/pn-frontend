@@ -34,6 +34,7 @@ import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import {
+  apiLogout,
   getAdditionalLanguages,
   getInstitutions,
   getProductsOfInstitution,
@@ -232,7 +233,9 @@ const ActualApp = () => {
       ),
   });
 
-  const performLogout = () => {
+  const performLogout = async () => {
+    await dispatch(apiLogout(loggedUser.sessionToken));
+
     sessionStorage.clear();
     goToSelfcareLogout();
     setOpenModal(false);
