@@ -22,7 +22,7 @@ describe('PnWizard Component', () => {
   });
 
   it('should not show the exit button', () => {
-    const { queryByRole } = render(
+    const { queryByTestId } = render(
       <PnWizard
         activeStep={0}
         setActiveStep={setActiveStep}
@@ -36,13 +36,13 @@ describe('PnWizard Component', () => {
       </PnWizard>
     );
 
-    const exitButton = queryByRole('button', { name: 'Esci' });
+    const exitButton = queryByTestId('exit-button');
     expect(exitButton).not.toBeInTheDocument();
   });
 
   it('should call the exit callback', () => {
     const onExitMock = vi.fn();
-    const { getByRole } = render(
+    const { getByTestId } = render(
       <PnWizard
         activeStep={0}
         setActiveStep={setActiveStep}
@@ -56,7 +56,7 @@ describe('PnWizard Component', () => {
       </PnWizard>
     );
 
-    const exitButton = getByRole('button', { name: 'Esci' });
+    const exitButton = getByTestId('exit-button');
     fireEvent.click(exitButton);
     expect(onExitMock).toHaveBeenCalledOnce();
   });
