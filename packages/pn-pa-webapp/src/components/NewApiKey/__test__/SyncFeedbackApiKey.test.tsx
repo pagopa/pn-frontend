@@ -17,20 +17,17 @@ describe('SyncFeedbackApiKey Component', () => {
   });
 
   it('renders SyncFeedback', () => {
-    // render component
-    const result = render(<SyncFeedbackApiKey />);
-    expect(result.container).toHaveTextContent('api-key-succesfully-generated');
-    expect(result.container).toHaveTextContent('copy-the-api-key');
-    const button = result.container.querySelector('button');
+    const { getByRole, getByText } = render(<SyncFeedbackApiKey />);
+    expect(getByRole('heading', { name: /api-key-succesfully-generated/i })).toBeInTheDocument();
+    expect(getByText(/copy-the-api-key/i)).toBeInTheDocument();
+    const button = getByRole('button', { name: /go-to-api-keys/i });
     expect(button).toBeInTheDocument();
-    expect(button).toHaveTextContent('go-to-api-keys');
   });
 
   it('navigate to api keys', () => {
-    // render component
-    const result = render(<SyncFeedbackApiKey />);
-    const button = result.container.querySelector('button');
-    fireEvent.click(button!);
+    const { getByRole } = render(<SyncFeedbackApiKey />);
+    const button = getByRole('button', { name: /go-to-api-keys/i });
+    fireEvent.click(button);
     expect(mockNavigateFn).toHaveBeenCalledTimes(1);
     expect(mockNavigateFn).toHaveBeenCalledWith(routes.API_KEYS);
   });
