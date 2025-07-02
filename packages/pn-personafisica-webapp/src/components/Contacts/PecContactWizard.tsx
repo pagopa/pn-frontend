@@ -23,7 +23,7 @@ import {
   ContactSource,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
-import { RECAPITI } from '../../navigation/routes.const';
+import { NOTIFICHE } from '../../navigation/routes.const';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -52,6 +52,11 @@ const PecContactWizard: React.FC<Props> = ({
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const [openCodeModal, setOpenCodeModal] = useState(false);
   const { IS_DOD_ENABLED } = getConfiguration();
+
+  const feedbackTitleLabel = `legal-contacts.sercq-send-wizard.feedback.title-pec-${
+    isTransferring ? 'transfer' : 'activation'
+  }`;
+  const feedbackContentLabel = 'legal-contacts.sercq-send-wizard.feedback.content-pec';
 
   const validationSchema = yup.object().shape({
     pec: pecValidationSchema(t),
@@ -107,7 +112,7 @@ const PecContactWizard: React.FC<Props> = ({
           res.pecValid && !!defaultSERCQ_SENDAddress
         );
         setOpenCodeModal(false);
-        return isTransferring ? setActiveStep(activeStep + 1) : navigate(RECAPITI);
+        return setActiveStep(activeStep + 1);
       })
       .catch(() => {});
   };
@@ -150,17 +155,12 @@ const PecContactWizard: React.FC<Props> = ({
           container: {
             'data-testid': 'pec-contact-wizard',
           },
-          feedback: isTransferring
-            ? {
-                title: t(
-                  `legal-contacts.sercq-send-wizard.feedback.title-${
-                    isTransferring ? 'transfer' : 'activation'
-                  }`
-                ),
-                buttonText: t('legal-contacts.sercq-send-wizard.feedback.go-to-contacts'),
-                onClick: () => navigate(RECAPITI),
-              }
-            : undefined,
+          feedback: {
+            title: t(feedbackTitleLabel),
+            content: t(feedbackContentLabel),
+            buttonText: t('button.understand', { ns: 'common' }),
+            onClick: () => navigate(NOTIFICHE),
+          },
         }}
       >
         <PnWizardStep>

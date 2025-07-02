@@ -2,6 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { ConsentType, SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
+import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
   acceptTosPrivacyConsentBodyMock,
@@ -11,8 +12,9 @@ import { digitalAddressesSercq, digitalLegalAddresses } from '../../../__mocks__
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
-import { RECAPITI } from '../../../navigation/routes.const';
+import { NOTIFICHE } from '../../../navigation/routes.const';
 import DigitalContactActivation from '../DigitalContactActivation';
+import { fillCodeDialog } from './test-utils';
 
 const mockNavigateFn = vi.fn();
 
@@ -22,6 +24,7 @@ vi.mock('react-router-dom', async () => ({
 }));
 
 describe('DigitalContactActivation', () => {
+  const labelPrefix = 'legal-contacts.sercq-send-wizard';
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -42,7 +45,7 @@ describe('DigitalContactActivation', () => {
 
   it('render component', () => {
     const { getByText } = render(<DigitalContactActivation />);
-    const title = getByText('legal-contacts.sercq-send-wizard.title');
+    const title = getByText(`${labelPrefix}.title`);
     expect(title).toBeInTheDocument();
   });
 
@@ -83,7 +86,7 @@ describe('DigitalContactActivation', () => {
     const { getByTestId } = render(<DigitalContactActivation />);
     const stepper = getByTestId('desktopWizardStepper');
     expect(stepper).toBeInTheDocument();
-    const step1Label = within(stepper).getByText('legal-contacts.sercq-send-wizard.step_1.title');
+    const step1Label = within(stepper).getByText(`${labelPrefix}.step_1.title`);
     expect(step1Label).toBeInTheDocument();
     const sercqSendContent = getByTestId('sercqSendContactWizard');
     expect(sercqSendContent).toBeInTheDocument();
@@ -119,7 +122,7 @@ describe('DigitalContactActivation', () => {
     });
     const stepper = getByTestId('desktopWizardStepper');
     expect(stepper).toBeInTheDocument();
-    const step2Label = within(stepper).getByText('legal-contacts.sercq-send-wizard.step_2.title');
+    const step2Label = within(stepper).getByText(`${labelPrefix}.step_2.title`);
     expect(step2Label).toBeInTheDocument();
 
     const activateSercqSendButton = getByTestId('activateButton');
@@ -135,7 +138,7 @@ describe('DigitalContactActivation', () => {
 
   it('does not render the second step label if has no app IO contact', () => {
     const { queryByText } = render(<DigitalContactActivation />);
-    const step2Label = queryByText('legal-contacts.sercq-send-wizard.step_2.title');
+    const step2Label = queryByText(`${labelPrefix}.step_2.title`);
     expect(step2Label).not.toBeInTheDocument();
   });
 
@@ -154,7 +157,7 @@ describe('DigitalContactActivation', () => {
         },
       },
     });
-    const step2Label = queryByText('legal-contacts.sercq-send-wizard.step_2.title');
+    const step2Label = queryByText(`${labelPrefix}.step_2.title`);
     expect(step2Label).not.toBeInTheDocument();
   });
 
@@ -173,9 +176,9 @@ describe('DigitalContactActivation', () => {
         },
       },
     });
-    const step2Label = queryByText('legal-contacts.sercq-send-wizard.step_2.title');
+    const step2Label = queryByText(`${labelPrefix}.step_2.title`);
     expect(step2Label).toBeInTheDocument();
-    const step3Label = queryByText('legal-contacts.sercq-send-wizard.step_3.step-title');
+    const step3Label = queryByText(`${labelPrefix}.step_3.step-title`);
     expect(step3Label).toBeInTheDocument();
   });
 
@@ -194,7 +197,7 @@ describe('DigitalContactActivation', () => {
         },
       },
     });
-    const step3Label = queryByText('legal-contacts.sercq-send-wizard.step_3.step-title');
+    const step3Label = queryByText(`${labelPrefix}.step_3.step-title`);
     expect(step3Label).toBeInTheDocument();
   });
 
@@ -213,7 +216,7 @@ describe('DigitalContactActivation', () => {
         },
       },
     });
-    const step3Label = queryByText('legal-contacts.sercq-send-wizard.step_3.step-title');
+    const step3Label = queryByText(`${labelPrefix}.step_3.step-title`);
     expect(step3Label).toBeInTheDocument();
   });
 
@@ -271,7 +274,7 @@ describe('DigitalContactActivation', () => {
     });
 
     // Email Step
-    getByText('legal-contacts.sercq-send-wizard.step_3.title');
+    getByText(`${labelPrefix}.step_3.title`);
     const mailSkipButton = getByRole('button', { name: 'button.not-now' });
     fireEvent.click(mailSkipButton);
 
@@ -293,16 +296,16 @@ describe('DigitalContactActivation', () => {
     expect(feedbackStep).toBeInTheDocument();
 
     const feedbackTitle = getByTestId('wizard-feedback-title');
-    expect(feedbackTitle).toHaveTextContent(
-      'legal-contacts.sercq-send-wizard.feedback.title-activation'
-    );
+    expect(feedbackTitle).toHaveTextContent(`${labelPrefix}.feedback.title-activation`);
+
+    const feedbackContent = getByTestId('wizard-feedback-content');
+    expect(feedbackContent).toHaveTextContent(`${labelPrefix}.feedback.content-sercq_send`);
+
     const feedbackButton = getByTestId('wizard-feedback-button');
-    expect(feedbackButton).toHaveTextContent(
-      'legal-contacts.sercq-send-wizard.feedback.go-to-contacts'
-    );
+    expect(feedbackButton).toHaveTextContent('button.understand');
     fireEvent.click(feedbackButton);
     expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(RECAPITI);
+    expect(mockNavigateFn).toHaveBeenCalledWith(NOTIFICHE);
   });
 
   it('adds an email correctly', async () => {
@@ -355,28 +358,42 @@ describe('DigitalContactActivation', () => {
     expect(confirmButton).toBeInTheDocument();
     expect(confirmButton).toBeEnabled();
 
-    // // insert new email
-    // const form = result.container.querySelector('form');
-    // const input = form!.querySelector(`[name="default_email"]`);
-    // fireEvent.change(input!, { target: { value: mailValue } });
-    // await waitFor(() => expect(input).toHaveValue(mailValue));
-    // const button = result.getByTestId('default_email-button');
-    // fireEvent.click(button);
+    fireEvent.click(confirmButton);
 
-    // // inser otp and confirm
-    // const dialog = await fillCodeDialog(result);
+    const confirmationDialog = result.getByRole('dialog');
 
-    // // check that contact has been added
-    // await waitFor(() => expect(dialog).not.toBeInTheDocument());
-    // const emailValue = getById(form!, 'default_email-typography');
-    // expect(emailValue).toBeInTheDocument();
-    // expect(emailValue).toHaveTextContent(mailValue);
+    expect(confirmationDialog).toBeInTheDocument();
+    within(confirmationDialog).getByText('courtesy-contacts.confirmation-modal-title');
+    within(confirmationDialog).getByText('courtesy-contacts.confirmation-modal-email-content');
 
-    // confirmButton = result.getByText('button.conferma');
-    // expect(confirmButton).toBeInTheDocument();
+    const dismissButton = result.getByRole('button', { name: 'button.understand' });
 
-    // this test should fail here after enforcing email/sms as mandatory field to continue
-    // verify the confirmation modal is shown and uncomment the commented lines above (happy path)
+    fireEvent.click(dismissButton);
+
+    await waitFor(() => {
+      expect(confirmationDialog).not.toBeInTheDocument();
+    });
+
+    // insert new email
+    const form = result.container.querySelector('form');
+    const input = form!.querySelector(`[name="default_email"]`);
+    fireEvent.change(input!, { target: { value: mailValue } });
+    await waitFor(() => expect(input).toHaveValue(mailValue));
+    const button = result.getByTestId('default_email-button');
+    fireEvent.click(button);
+
+    // inser otp and confirm
+    const dialog = await fillCodeDialog(result);
+
+    // check that contact has been added
+    await waitFor(() => expect(dialog).not.toBeInTheDocument());
+    const emailValue = getById(form!, 'default_email-typography');
+    expect(emailValue).toBeInTheDocument();
+    expect(emailValue).toHaveTextContent(mailValue);
+
+    confirmButton = result.getByText('button.conferma');
+    expect(confirmButton).toBeInTheDocument();
+
     fireEvent.click(confirmButton);
 
     // thankyou page
@@ -384,16 +401,16 @@ describe('DigitalContactActivation', () => {
     expect(feedbackStep).toBeInTheDocument();
 
     const feedbackTitle = result.getByTestId('wizard-feedback-title');
-    expect(feedbackTitle).toHaveTextContent(
-      'legal-contacts.sercq-send-wizard.feedback.title-activation'
-    );
+    expect(feedbackTitle).toHaveTextContent(`${labelPrefix}.feedback.title-sercq_send-activation`);
+
+    const feedbackContent = result.getByTestId('wizard-feedback-content');
+    expect(feedbackContent).toHaveTextContent(`${labelPrefix}.feedback.content-sercq_send`);
+
     const feedbackButton = result.getByTestId('wizard-feedback-button');
-    expect(feedbackButton).toHaveTextContent(
-      'legal-contacts.sercq-send-wizard.feedback.go-to-contacts'
-    );
+    expect(feedbackButton).toHaveTextContent('button.understand');
     fireEvent.click(feedbackButton);
     expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(RECAPITI);
+    expect(mockNavigateFn).toHaveBeenCalledWith(NOTIFICHE);
   });
 
   it('renders component correctly when transferring', async () => {
@@ -439,7 +456,7 @@ describe('DigitalContactActivation', () => {
     expect(pecSection).not.toBeInTheDocument();
 
     const wizardTitle = getByTestId('wizard-title');
-    expect(wizardTitle).toHaveTextContent('legal-contacts.sercq-send-wizard.title-transfer');
+    expect(wizardTitle).toHaveTextContent(`${labelPrefix}.title-transfer`);
 
     const activateSercqSendButton = getByTestId('activateButton');
     fireEvent.click(activateSercqSendButton);
@@ -457,8 +474,16 @@ describe('DigitalContactActivation', () => {
     expect(feedbackStep).toBeInTheDocument();
 
     const feedbackTitle = getByTestId('wizard-feedback-title');
-    expect(feedbackTitle).toHaveTextContent(
-      'legal-contacts.sercq-send-wizard.feedback.title-transfer'
-    );
+    expect(feedbackTitle).toHaveTextContent(`${labelPrefix}.feedback.title-sercq_send-transfer`);
+
+    const feedbackContent = getByTestId('wizard-feedback-content');
+    expect(feedbackContent).toHaveTextContent(`${labelPrefix}.feedback.content-sercq_send`);
+
+    const feedbackButton = getByTestId('wizard-feedback-button');
+    expect(feedbackButton).toHaveTextContent('button.understand');
+    fireEvent.click(feedbackButton);
+
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(NOTIFICHE);
   });
 });

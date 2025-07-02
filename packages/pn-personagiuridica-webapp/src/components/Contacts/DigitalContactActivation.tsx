@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, Typography } from '@mui/material';
-import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { Button, DialogContentText, Typography } from '@mui/material';
+import { ConfirmationModal, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import PecContactWizard from '../../components/Contacts/PecContactWizard';
 import SercqSendContactWizard from '../../components/Contacts/SercqSendContactWizard';
-import { RECAPITI } from '../../navigation/routes.const';
+import { NOTIFICHE } from '../../navigation/routes.const';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
@@ -23,14 +23,30 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const { IS_DOD_ENABLED } = getConfiguration();
-  const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultEMAILAddress, defaultSMSAddress, defaultSERCQ_SENDAddress } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
 
   const [activeStep, setActiveStep] = useState(0);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress || !IS_DOD_ENABLED);
 
-  // const hasEmailOrSms = !!(defaultEMAILAddress || defaultSMSAddress);
+  const hasEmailOrSms = !!(defaultEMAILAddress || defaultSMSAddress);
 
   const isEmailSmsStep = activeStep === 1;
+
+  const feedbackTitleLabel = `legal-contacts.sercq-send-wizard.feedback.title-sercq_send-${
+    isTransferring ? 'transfer' : 'activation'
+  }`;
+  const feedbackContentLabel = 'legal-contacts.sercq-send-wizard.feedback.content-sercq_send';
+
+  const handleConfirmEmailSmsStep = () => {
+    if (hasEmailOrSms) {
+      goToNextStep();
+    } else {
+      setShowConfirmationModal(true);
+    }
+  };
 
   const goToNextStep = () => {
     setActiveStep((step) => step + 1);
@@ -72,7 +88,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
       return (
         <Button
           variant="contained"
-          onClick={goToNextStep}
+          onClick={handleConfirmEmailSmsStep}
           color="primary"
           size="medium"
           sx={{ width: { xs: '100%', md: 'auto' } }}
@@ -110,13 +126,10 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
       }}
       slotsProps={{
         feedback: {
-          title: t(
-            `legal-contacts.sercq-send-wizard.feedback.title-${
-              isTransferring ? 'transfer' : 'activation'
-            }`
-          ),
-          buttonText: t('legal-contacts.sercq-send-wizard.feedback.go-to-contacts'),
-          onClick: () => navigate(RECAPITI),
+          title: t(feedbackTitleLabel),
+          content: t(feedbackContentLabel),
+          buttonText: t('button.understand', { ns: 'common' }),
+          onClick: () => navigate(NOTIFICHE),
         },
         actions: !isEmailSmsStep ? { justifyContent: 'center' } : {},
       }}
@@ -126,6 +139,34 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
       </PnWizardStep>
       <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_2.step-title')}>
         <EmailSmsContactWizard />
+
+        <ConfirmationModal
+          open={showConfirmationModal}
+          title={t('courtesy-contacts.confirmation-modal-title')}
+          slots={{
+            confirmButton: Button,
+          }}
+          slotsProps={{
+            confirmButton: {
+              onClick: () => setShowConfirmationModal(false),
+              children: t('button.understand', { ns: 'common' }),
+            },
+          }}
+        >
+          <Trans
+            ns="recapiti"
+            i18nKey={`courtesy-contacts.confirmation-modal-content`}
+            components={[
+              <DialogContentText key="paragraph1" id="dialog-description" color="text.primary" />,
+              <DialogContentText
+                key="paragraph2"
+                id="dialog-description"
+                color="text.primary"
+                mt={2}
+              />,
+            ]}
+          />
+        </ConfirmationModal>
       </PnWizardStep>
     </PnWizard>
   );
