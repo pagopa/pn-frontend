@@ -198,8 +198,7 @@
     "confirmation-modal-io-title": "Aggiungere i tuoi recapiti è importante!",
     "confirmation-modal-io-content": "Se non colleghi SEND a IO <strong>non riceverai in app un messaggio</strong> quando ricevi una comunicazione a valore legale su SEND.",
     "confirmation-modal-io-accept": "Collega SEND a IO",
-    "confirmation-modal-email-content": "<0>Senza un indirizzo email o un altro recapito non possiamo informarti quando ricevi una comunicazione a valore legale su SEND.</0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>",
-    "confirmation-modal-email-accept": "Inserisci email"
+    "confirmation-modal-email-content": "<0>Senza un indirizzo email o un altro recapito non possiamo informarti quando ricevi una comunicazione a valore legale su SEND.</0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>"
   },
   "special-contacts": {
     "select-address": "Tipologia",
