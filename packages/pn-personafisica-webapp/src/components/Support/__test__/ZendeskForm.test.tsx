@@ -1,23 +1,10 @@
 import { vi } from 'vitest';
 
-import { appStateActions } from '@pagopa-pn/pn-commons';
-
-import { render } from '../../../__test__/test-utils';
+import { render, testStore } from '../../../__test__/test-utils';
 import ZendeskForm from '../ZendeskForm';
-
-// mocks redux dispatch
-const mockDispatch = vi.fn();
-vi.mock('../../../redux/hooks', async () => {
-  const mod = await vi.importActual<typeof import('../../../redux/hooks')>('../../../redux/hooks');
-  return {
-    ...mod,
-    useAppDispatch: () => mockDispatch,
-  };
-});
 
 describe('ZendeskForm', () => {
   beforeEach(() => {
-    mockDispatch.mockClear();
     vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(() => {});
   });
 
@@ -92,12 +79,14 @@ describe('ZendeskForm', () => {
       />
     );
 
-    expect(mockDispatch).toHaveBeenCalledWith(
-      appStateActions.addError({
-        title: 'messages.generic-title',
-        message: 'messages.generic-message',
-        showTechnicalData: false,
-      })
-    );
+    const state = testStore.getState();
+    expect(state.appState.messages.errors).toHaveLength(1);
+    expect(state.appState.messages.errors[0]).toMatchObject({
+      title: 'messages.generic-title',
+      message: 'messages.generic-message',
+      showTechnicalData: false,
+    });
+
+    expect(state.appState.lastError).toBeUndefined();
   });
 });

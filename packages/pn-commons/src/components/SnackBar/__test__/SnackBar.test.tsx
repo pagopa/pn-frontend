@@ -23,11 +23,6 @@ const renderSnackBar = (open: boolean, type: AppResponseOutcome, closingDelay?: 
   );
 
 describe('SnackBar Component', () => {
-  afterEach(() => {
-    vi.clearAllTimers();
-    vi.resetAllMocks();
-  });
-
   it('renders snack bar (closed)', () => {
     const { queryByTestId } = renderSnackBar(false, AppResponseOutcome.INFO);
     const snackBarContainer = queryByTestId('snackBarContainer');

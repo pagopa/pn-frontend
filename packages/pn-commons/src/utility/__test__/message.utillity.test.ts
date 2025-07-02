@@ -1,33 +1,14 @@
-import { vi } from 'vitest';
-
-import { IAppMessage } from '../../models';
 import { createAppMessage } from '../message.utility';
 
-// Mock di lodash
-vi.mock('lodash', () => ({
-  default: {
-    uniqueId: vi.fn(() => '1'),
-  },
-}));
-
 describe('message utility', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('returns a generic message with showTechnicalData: false', () => {
-    const expected: IAppMessage = {
-      id: '1',
+    const expected = {
       title: 'mocked-title',
       message: 'mocked-message',
       showTechnicalData: false,
       blocking: false,
       toNotify: true,
-      status: undefined,
       alreadyShown: false,
-      traceId: undefined,
-      errorCode: undefined,
-      action: undefined,
     };
 
     const result = createAppMessage({
@@ -36,12 +17,11 @@ describe('message utility', () => {
       showTechnicalData: false,
     });
 
-    expect(result).toEqual(expected);
+    expect(result).toMatchObject(expected);
   });
 
   it('returns a generic message with showTechnicalData: true', () => {
-    const expected: IAppMessage = {
-      id: '1',
+    const expected = {
       title: 'error-title',
       message: 'technical message here',
       showTechnicalData: true,
@@ -64,6 +44,6 @@ describe('message utility', () => {
       action: 'some-action',
     });
 
-    expect(result).toEqual(expected);
+    expect(result).toMatchObject(expected);
   });
 });

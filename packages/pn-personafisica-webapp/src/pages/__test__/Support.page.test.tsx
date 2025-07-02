@@ -180,9 +180,8 @@ describe('Support page', async () => {
     testInput(form, 'confirmMail', 'mail@example.it');
 
     const continueButton = getByTestId('continueButton');
-    await act(async () => {
-      fireEvent.click(continueButton);
-    });
+
+    fireEvent.click(continueButton);
 
     // wait for side effect (ZendeskForm gets data)
     await waitFor(() => {
