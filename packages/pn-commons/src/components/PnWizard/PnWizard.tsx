@@ -134,19 +134,16 @@ const PnWizard: React.FC<Props> = ({
   return (
     <Stack display="flex" alignItems="center" justifyContent="center" {...slotsProps?.container}>
       <Box p={3}>
-        {slotsProps?.exitButton && (
-          <ExitButton
-            data-testid="exit-button"
-            type="button"
-            size="medium"
-            color="primary"
-            startIcon={<ArrowBackIcon />}
-            {...slotsProps.exitButton}
-          >
-            {slotsProps.exitButton.children ??
-              getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
-          </ExitButton>
-        )}
+        <ExitButton
+          data-testid="exit-button"
+          type="button"
+          size="medium"
+          color="primary"
+          startIcon={<ArrowBackIcon />}
+          {...slotsProps?.exitButton}
+        >
+          {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
+        </ExitButton>
         <Box sx={{ mt: 2, mb: 3 }} data-testid="wizard-title">
           {title}
         </Box>

@@ -21,9 +21,28 @@ describe('PnWizard Component', () => {
     expect(queryByText('Step 2')).not.toBeInTheDocument();
   });
 
+  it('should not show the exit button', () => {
+    const { queryByTestId } = render(
+      <PnWizard
+        activeStep={0}
+        setActiveStep={setActiveStep}
+        title="Wizard Title"
+        slots={{
+          exitButton: () => <></>,
+        }}
+      >
+        <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
+        <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
+      </PnWizard>
+    );
+
+    const exitButton = queryByTestId('exit-button');
+    expect(exitButton).not.toBeInTheDocument();
+  });
+
   it('should call the exit callback', () => {
     const onExitMock = vi.fn();
-    const { getByRole } = render(
+    const { getByTestId } = render(
       <PnWizard
         activeStep={0}
         setActiveStep={setActiveStep}
@@ -37,7 +56,7 @@ describe('PnWizard Component', () => {
       </PnWizard>
     );
 
-    const exitButton = getByRole('button', { name: 'Esci' });
+    const exitButton = getByTestId('exit-button');
     fireEvent.click(exitButton);
     expect(onExitMock).toHaveBeenCalledOnce();
   });

@@ -126,6 +126,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
       activeStep={activeStep}
       setActiveStep={setActiveStep}
       slots={{
+        exitButton: () => <></>,
         prevButton: getPreviousButton,
         nextButton: getNextButton,
       }}

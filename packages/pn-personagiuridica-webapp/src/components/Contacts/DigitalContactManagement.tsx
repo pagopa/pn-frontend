@@ -84,6 +84,7 @@ const DigitalContactManagement: React.FC = () => {
       activeStep={activeStep}
       setActiveStep={setActiveStep}
       slots={{
+        exitButton: () => <></>,
         prevButton: getPreviouButton,
         nextButton:
           currentAction === DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT

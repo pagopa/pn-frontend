@@ -112,6 +112,7 @@ const PecContactWizard: React.FC<Props> = ({
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         slots={{
+          exitButton: () => <></>,
           prevButton: () => (
             <ButtonNaked
               onClick={handlePreviousBtnClick}
