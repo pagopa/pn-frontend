@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
 import { Alert, AlertTitle, Box, IconButton, Snackbar, Typography } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
+import { IAppMessage } from '../../models';
 import { AppResponseOutcome } from '../../models/AppResponse';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import CopyToClipboard from '../CopyToClipboard';
-import { IAppMessage } from '../../models';
 
 type Props = {
   /** whether the sneakbar should be open or not */
@@ -64,26 +65,37 @@ const SnackBar: React.FC<Props> = ({
   ]);
 
   const action = (
-    <IconButton size="small" aria-label="close" color="inherit" onClick={closeSnackBar}>
+    <IconButton
+      size="small"
+      aria-label="close"
+      color="inherit"
+      onClick={closeSnackBar}
+      sx={{
+        position: 'absolute',
+        top: 8,
+        right: 8,
+        color: '#5C6F82',
+      }}
+    >
       <CloseIcon fontSize="small" />
     </IconButton>
   );
 
   const getWidth = (): string => {
-    if(isMobile){
+    if (isMobile) {
       return 'calc(100vw - 5%)';
-    };
-    
-    return showTechnicalData ? '500px' : '376px';
+    }
+
+    return showTechnicalData ? '650px' : '376px';
   };
 
   return (
     <>
       {openStatus && (
         <div data-testid="snackBarContainer">
-          <Snackbar open={open} action={action}>
+          <Snackbar open={open}>
             <Alert
-              onClose={closeSnackBar}
+              action={action}
               severity={getColor.get(type)}
               sx={{
                 position: 'fixed',
@@ -100,12 +112,16 @@ const SnackBar: React.FC<Props> = ({
               {title && <AlertTitle id="alert-api-status">{title}</AlertTitle>}
               {content}
               {showTechnicalData && (
-                <Box mt={2} sx={{
-                  backgroundColor: '#F2F2F2',
-                  p: 2,
-                  whiteSpace: 'normal',
-                  wordBreak: 'break-word',
-                }}>
+                <Box
+                  mt={2}
+                  sx={{
+                    backgroundColor: '#F2F2F2',
+                    p: 2,
+                    pb: 1,
+                    whiteSpace: 'normal',
+                    wordBreak: 'break-word',
+                  }}
+                >
                   <Typography fontSize="16" variant="body1" fontWeight="600" mb={2}>
                     {getLocalizedOrDefaultLabel(
                       'common',
@@ -113,13 +129,17 @@ const SnackBar: React.FC<Props> = ({
                       'Informazioni errore'
                     )}
                   </Typography>
-                  <Box mb={2}>
-                    {errorCode && <Typography variant="body1">
-                      {errorCode}
-                    </Typography>}
-                    {traceId && <Typography variant="body1" fontSize="16px">
-                      {traceId}
-                    </Typography>}
+                  <Box>
+                    {errorCode && (
+                      <Typography component="p" variant="monospaced">
+                        {errorCode}
+                      </Typography>
+                    )}
+                    {traceId && (
+                      <Typography component="p" variant="monospaced" fontSize="16px">
+                        {traceId}
+                      </Typography>
+                    )}
                   </Box>
                   <CopyToClipboard
                     text={getLocalizedOrDefaultLabel(
@@ -127,10 +147,12 @@ const SnackBar: React.FC<Props> = ({
                       'errors.technical-error.copy-to-clipboard',
                       'Copia informazioni errore'
                     )}
-                    getValue={() => errorCode + "\n" + traceId}
+                    getValue={() => errorCode + '\n' + traceId}
                     tooltipMode
-                    textPosition='start'
-                 />
+                    textPosition="start"
+                    slot={ButtonNaked}
+                    slotProps={{ size: 'medium', mt: 0 }}
+                  />
                 </Box>
               )}
             </Alert>
