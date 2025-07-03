@@ -5,10 +5,6 @@ import ZendeskForm from '../ZendeskForm';
 
 describe('ZendeskForm', () => {
   beforeEach(() => {
-    vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(() => {});
-  });
-
-  afterEach(() => {
     vi.restoreAllMocks();
   });
 
@@ -33,16 +29,7 @@ describe('ZendeskForm', () => {
 
   it('should auto-submit the form if all data is present', () => {
     const submitMock = vi.fn();
-    const createElement = document.createElement.bind(document);
-
-    vi.spyOn(document, 'getElementById').mockImplementation((id: string) => {
-      if (id === 'jwtForm') {
-        const form = createElement('form');
-        form.submit = submitMock;
-        return form;
-      }
-      return null;
-    });
+    vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(submitMock);
 
     render(
       <ZendeskForm
@@ -58,15 +45,8 @@ describe('ZendeskForm', () => {
   });
 
   it('should dispatch error if form.submit throws', () => {
-    vi.spyOn(document, 'getElementById').mockImplementation((id: string) => {
-      if (id === 'jwtForm') {
-        const form = document.createElement('form');
-        form.submit = () => {
-          throw new Error('submit failed');
-        };
-        return form;
-      }
-      return null;
+    vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(() => {
+      throw new Error('submit failed');
     });
 
     render(
