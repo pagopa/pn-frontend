@@ -23,8 +23,6 @@ beforeAll(() => {
     ONE_TRUST_TOS: 'b0da531e-8370-4373-8bd2-61ddc89e7fa6',
     OT_DOMAIN_ID: '29cc1c86-f2ef-494d-8242-9bec8009cd29',
     PAGOPA_HELP_EMAIL: 'assistenza@pn.it',
-    SELFCARE_URL_FE_LOGIN: 'https://test.selfcare.pagopa.it/auth/login',
-    SELFCARE_URL_FE_LOGOUT: 'https://test.selfcare.pagopa.it/auth/logout',
     SELFCARE_BASE_URL: 'https://test.selfcare.pagopa.it',
     SELFCARE_SEND_PROD_ID: 'prod-pn-test',
     IS_PAYMENT_ENABLED: false,

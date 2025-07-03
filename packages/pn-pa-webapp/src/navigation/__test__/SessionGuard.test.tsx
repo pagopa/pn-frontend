@@ -10,6 +10,7 @@ import { store } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
+import { SELFCARE_LOGIN_PATH } from '../navigation.utility';
 
 const mockNavigateFn = vi.fn();
 
@@ -81,7 +82,8 @@ describe('SessionGuard Component', async () => {
       render(<Guard />);
     });
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(getConfiguration().SELFCARE_URL_FE_LOGIN, '_self');
+    const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGIN_PATH}`
+    expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
   });
 
   // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken

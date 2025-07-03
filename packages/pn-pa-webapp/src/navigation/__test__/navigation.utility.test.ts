@@ -1,14 +1,14 @@
 import { vi } from 'vitest';
 
 import { getConfiguration } from '../../services/configuration.service';
-import { goToSelfcareLogin, goToSelfcareLogout } from '../navigation.utility';
+import { goToSelfcareLogin, goToSelfcareLogout, SELFCARE_LOGIN_PATH, SELFCARE_LOGOUT_PATH } from '../navigation.utility';
 
 const mockOpenFn = vi.fn();
 
 describe('Tests notification.utility', () => {
   const original = window.location;
 
-  beforeEach(() => {
+  beforeAll(() => {
     Object.defineProperty(window, 'open', {
       configurable: true,
       value: mockOpenFn,
@@ -19,19 +19,21 @@ describe('Tests notification.utility', () => {
     mockOpenFn.mockClear();
   });
 
-  afterEach((): void => {
+  afterAll((): void => {
     Object.defineProperty(window, 'open', { configurable: true, value: original });
   });
 
   it('goToSelfcareLogin', () => {
     goToSelfcareLogin();
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(getConfiguration().SELFCARE_URL_FE_LOGIN, '_self');
+    const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGIN_PATH}`
+    expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
   });
   
   it('goToSelfcareLogout', () => {
     goToSelfcareLogout();
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(getConfiguration().SELFCARE_URL_FE_LOGOUT, '_self');
+    const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT_PATH}`
+    expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
   });
 });
