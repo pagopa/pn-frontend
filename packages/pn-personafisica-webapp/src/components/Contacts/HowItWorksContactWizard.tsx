@@ -83,10 +83,10 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                         components={[
                           <Link
                             data-testid="deliveredLink"
-                            key="consegnata"
+                            key="delivered"
                             sx={{
                               cursor: 'pointer',
-                              textDecoration: 'none !important',
+                              textDecoration: 'underline',
                             }}
                             onClick={() => setModalOpen(ModalType.DELIVERED)}
                           />,

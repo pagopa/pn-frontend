@@ -69,12 +69,12 @@
         "title": "Come funziona",
         "info-list": [
           {
-            "title": "Un ente ti invia una notifica su SEND",
+            "title": "Un ente invia una notifica SEND per l’impresa",
             "description": "La notifica ti viene <0>consegnata</0> in modo sicuro e con valore legale tramite la piattaforma"
           },
           {
             "title": "Ricevi un messaggio",
-            "description": "Quando ti arriva una notifica su SEND, ti avvisiamo sui canali che preferisci (email, SMS o app IO)"
+            "description": "Quando ti arriva una notifica su SEND, ti avvisiamo sui canali che preferisci (email, SMS)"
           },
           {
             "title": "Accedi alla notifica",

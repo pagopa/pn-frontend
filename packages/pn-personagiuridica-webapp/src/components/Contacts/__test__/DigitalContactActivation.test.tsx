@@ -91,6 +91,19 @@ describe('DigitalContactActivation', () => {
   });
 
   it('does not render the second step label if already has an email address', async () => {
+    // mock.
+    //   onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
+    //     value: SERCQ_SEND_VALUE,
+    //   })
+    //   .reply(204);
+    // mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false, false));
+    // mock
+    //   .onPut(
+    //     '/bff/v2/tos-privacy',
+    //     acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
+    //   )
+    //   .reply(200);
+
     const { getByTestId } = render(<DigitalContactActivation />, {
       preloadedState: {
         contactsState: {
