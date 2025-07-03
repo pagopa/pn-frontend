@@ -1,7 +1,8 @@
 import { vi } from 'vitest';
 
 import { getConfiguration } from '../../services/configuration.service';
-import { goToSelfcareLogin, goToSelfcareLogout, SELFCARE_LOGIN_PATH, SELFCARE_LOGOUT_PATH } from '../navigation.utility';
+import { goToSelfcareLogin, goToSelfcareLogout } from '../navigation.utility';
+import { SELFCARE_LOGIN_PATH, SELFCARE_LOGOUT_PATH } from '../routes.const';
 
 const mockOpenFn = vi.fn();
 

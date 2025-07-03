@@ -10,7 +10,7 @@ import { store } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
-import { SELFCARE_LOGIN_PATH } from '../navigation.utility';
+import { SELFCARE_LOGIN_PATH } from '../routes.const';
 
 const mockNavigateFn = vi.fn();
 

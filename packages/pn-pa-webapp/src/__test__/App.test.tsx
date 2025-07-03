@@ -9,7 +9,7 @@ import { userResponse } from '../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { institutionsDTO, productsDTO } from '../__mocks__/User.mock';
 import { apiClient } from '../api/apiClients';
-import { SELFCARE_LOGIN_PATH, SELFCARE_LOGOUT_PATH } from '../navigation/navigation.utility';
+import { SELFCARE_LOGIN_PATH, SELFCARE_LOGOUT_PATH } from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
 import { RenderResult, act, fireEvent, getByText, render, screen, waitFor } from './test-utils';
 

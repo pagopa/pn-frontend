@@ -1,7 +1,5 @@
 import { getConfiguration } from '../services/configuration.service';
-
-export const SELFCARE_LOGIN_PATH = '/auth/login';
-export const SELFCARE_LOGOUT_PATH = '/auth/logout';
+import { SELFCARE_LOGIN_PATH, SELFCARE_LOGOUT_PATH } from './routes.const';
 
 export function goToSelfcareLogin(): void {
   const { SELFCARE_BASE_URL } = getConfiguration();
