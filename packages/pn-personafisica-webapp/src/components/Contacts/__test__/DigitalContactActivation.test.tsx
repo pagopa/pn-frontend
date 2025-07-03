@@ -1,12 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { ConsentType, SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
-
-import {
-  acceptTosPrivacyConsentBodyMock,
-  sercqSendTosPrivacyConsentMock,
-} from '../../../__mocks__/Consents.mock';
 import { digitalAddressesSercq, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
@@ -90,19 +84,6 @@ describe('DigitalContactActivation', () => {
   });
 
   it('renders the second step label if has appIO and is disabled', async () => {
-    mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
-        value: SERCQ_SEND_VALUE,
-      })
-      .reply(204);
-    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false, false));
-    mock
-      .onPut(
-        '/bff/v2/tos-privacy',
-        acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
-      )
-      .reply(200);
-
     const { getByTestId } = render(<DigitalContactActivation />, {
       preloadedState: {
         contactsState: {
@@ -122,12 +103,8 @@ describe('DigitalContactActivation', () => {
     const step2Label = within(stepper).getByText('legal-contacts.sercq-send-wizard.step_2.title');
     expect(step2Label).toBeInTheDocument();
 
-    const activateSercqSendButton = getByTestId('activateButton');
-    fireEvent.click(activateSercqSendButton);
-
-    await waitFor(() => {
-      expect(mock.history.post.length).toBe(1);
-    });
+    const howItWorksContinueButton = getByTestId('continueButton');
+    fireEvent.click(howItWorksContinueButton);
 
     const ioContactWizard = getByTestId('ioContactWizard');
     expect(ioContactWizard).toBeInTheDocument();
@@ -219,18 +196,19 @@ describe('DigitalContactActivation', () => {
 
   // TODO: fix and restore the following test once IO step has been refactored
   it.skip('shows the confirmation modals trying to skip App IO', async () => {
-    mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
-        value: SERCQ_SEND_VALUE,
-      })
-      .reply(204);
-    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false, false));
-    mock
-      .onPut(
-        '/bff/v2/tos-privacy',
-        acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
-      )
-      .reply(200);
+    // uncomment the following snippet to mock sercq activation api call once the final step is created
+    // mock
+    //   .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
+    //     value: SERCQ_SEND_VALUE,
+    //   })
+    //   .reply(204);
+    // mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false, false));
+    // mock
+    //   .onPut(
+    //     '/bff/v2/tos-privacy',
+    //     acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
+    //   )
+    //   .reply(200);
 
     const { getByRole, getByTestId, getByText } = render(<DigitalContactActivation />, {
       preloadedState: {
@@ -246,12 +224,8 @@ describe('DigitalContactActivation', () => {
         },
       },
     });
-    const activateSercqSendButton = getByTestId('activateButton');
-    fireEvent.click(activateSercqSendButton);
-
-    await waitFor(() => {
-      expect(mock.history.post.length).toBe(1);
-    });
+    const howItWorksContinueButton = getByTestId('continueButton');
+    fireEvent.click(howItWorksContinueButton);
 
     // IO Step
     const ioSkipButton = getByRole('button', { name: 'button.not-now' });
@@ -316,19 +290,19 @@ describe('DigitalContactActivation', () => {
         verificationCode: '01234',
       })
       .reply(204);
-
-    mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
-        value: SERCQ_SEND_VALUE,
-      })
-      .reply(204);
-    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false, false));
-    mock
-      .onPut(
-        '/bff/v2/tos-privacy',
-        acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
-      )
-      .reply(200);
+    // uncomment the following snippet to mock sercq activation api call once the final step is created
+    // mock
+    //   .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
+    //     value: SERCQ_SEND_VALUE,
+    //   })
+    //   .reply(204);
+    // mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false, false));
+    // mock
+    //   .onPut(
+    //     '/bff/v2/tos-privacy',
+    //     acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
+    //   )
+    //   .reply(200);
 
     const result = render(<DigitalContactActivation />, {
       preloadedState: {
@@ -344,12 +318,8 @@ describe('DigitalContactActivation', () => {
         },
       },
     });
-    const activateSercqSendButton = result.getByTestId('activateButton');
-    fireEvent.click(activateSercqSendButton);
-
-    await waitFor(() => {
-      expect(mock.history.post.length).toBe(1);
-    });
+    const howItWorksContinueButton = result.getByTestId('continueButton');
+    fireEvent.click(howItWorksContinueButton);
 
     let confirmButton = result.getByText('button.conferma');
     expect(confirmButton).toBeInTheDocument();
@@ -397,18 +367,19 @@ describe('DigitalContactActivation', () => {
   });
 
   it('renders component correctly when transferring', async () => {
-    mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
-        value: SERCQ_SEND_VALUE,
-      })
-      .reply(204);
-    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false, false));
-    mock
-      .onPut(
-        '/bff/v2/tos-privacy',
-        acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
-      )
-      .reply(200);
+    // uncomment the following snippet to mock sercq activation api call once the final step is created
+    // mock
+    //   .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
+    //     value: SERCQ_SEND_VALUE,
+    //   })
+    //   .reply(204);
+    // mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false, false));
+    // mock
+    //   .onPut(
+    //     '/bff/v2/tos-privacy',
+    //     acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
+    //   )
+    //   .reply(200);
 
     const { getByTestId, queryByTestId, getByText } = render(
       <DigitalContactActivation isTransferring />,
@@ -441,12 +412,8 @@ describe('DigitalContactActivation', () => {
     const wizardTitle = getByTestId('wizard-title');
     expect(wizardTitle).toHaveTextContent('legal-contacts.sercq-send-wizard.title-transfer');
 
-    const activateSercqSendButton = getByTestId('activateButton');
-    fireEvent.click(activateSercqSendButton);
-
-    await waitFor(() => {
-      expect(mock.history.post.length).toBe(1);
-    });
+    const howItWorksContinueButton = getByTestId('continueButton');
+    fireEvent.click(howItWorksContinueButton);
 
     const confirmButton = getByText('button.conferma');
     expect(confirmButton).toBeInTheDocument();
