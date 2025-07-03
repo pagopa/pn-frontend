@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
@@ -12,8 +12,10 @@ import {
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { enableIOAddress } from '../../redux/contact/actions';
-import { useAppDispatch } from '../../redux/hooks';
+import { IOAllowedValues } from '../../models/contacts';
+import { disableIOAddress, enableIOAddress } from '../../redux/contact/actions';
+import { contactsSelectors } from '../../redux/contact/reducers';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 
 type Props = {
@@ -30,6 +32,12 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
   const dispatch = useAppDispatch();
 
   const [modal, setModal] = useState<ModalType>({ open: false });
+  const { defaultAPPIOAddress } = useAppSelector(contactsSelectors.selectAddresses);
+
+  const isIOEnabled = useMemo(
+    () => defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.ENABLED,
+    []
+  );
 
   const sercqSendIoList: Array<string> = t('legal-contacts.sercq-send-wizard.step_2.io-list', {
     defaultValue: [],
@@ -47,6 +55,26 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
           appStateActions.addSuccess({
             title: '',
             message: t('courtesy-contacts.io-added-successfully', { ns: 'recapiti' }),
+          })
+        );
+        goToNextStep();
+        setModal({ open: false });
+      })
+      .catch(() => {});
+  };
+
+  const handleConfirmIODeactivation = () => {
+    setModal({ open: true });
+  };
+
+  const handleIODeactivation = () => {
+    dispatch(disableIOAddress())
+      .unwrap()
+      .then(() => {
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t('courtesy-contacts.io-removed-successfully', { ns: 'recapiti' }),
           })
         );
         goToNextStep();
@@ -104,19 +132,39 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
           ))}
         </List>
 
-        <Button
-          variant="contained"
-          onClick={handleConfirmIOActivation}
-          color="primary"
-          fullWidth
-          sx={{ mt: 3 }}
-          data-testid="confirmButton"
-        >
-          {t('legal-contacts.sercq-send-wizard.step_2.confirm')}
-        </Button>
-        <ButtonNaked onClick={handleSkip} color="primary" fullWidth data-testid="skipButton">
-          {t('legal-contacts.sercq-send-wizard.step_2.skip-io')}
-        </ButtonNaked>
+        {isIOEnabled ? (
+          <>
+            <Button
+              variant="outlined"
+              onClick={handleConfirmIODeactivation}
+              color="primary"
+              fullWidth
+              sx={{ mt: 3 }}
+              data-testid="confirmButton"
+            >
+              {t('legal-contacts.sercq-send-wizard.step_2.disable')}
+            </Button>
+            <ButtonNaked onClick={goToNextStep} color="primary" fullWidth data-testid="skipButton">
+              {t('legal-contacts.sercq-send-wizard.step_2.go-on')}
+            </ButtonNaked>
+          </>
+        ) : (
+          <>
+            <Button
+              variant="contained"
+              onClick={handleConfirmIOActivation}
+              color="primary"
+              fullWidth
+              sx={{ mt: 3 }}
+              data-testid="confirmButton"
+            >
+              {t('legal-contacts.sercq-send-wizard.step_2.confirm')}
+            </Button>
+            <ButtonNaked onClick={handleSkip} color="primary" fullWidth data-testid="skipButton">
+              {t('legal-contacts.sercq-send-wizard.step_2.skip-io')}
+            </ButtonNaked>
+          </>
+        )}
       </Stack>
       <ConfirmationModal
         open={modal.open}
@@ -125,16 +173,29 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
           confirmButton: Button,
           closeButton: Button,
         }}
-        slotsProps={{
-          closeButton: {
-            onClick: handleConfirmationModalDecline,
-            children: t('button.do-later', { ns: 'common' }),
-          },
-          confirmButton: {
-            onClick: handleConfirmIOActivation,
-            children: t(`courtesy-contacts.confirmation-modal-io-accept`),
-          },
-        }}
+        slotsProps={
+          isIOEnabled
+            ? {
+                closeButton: {
+                  onClick: handleIODeactivation,
+                  children: t(`courtesy-contacts.confirmation-deactivation-io-modal`),
+                },
+                confirmButton: {
+                  onClick: handleConfirmationModalDecline,
+                  children: t(`courtesy-contacts.undo-deactivation-io-modal`),
+                },
+              }
+            : {
+                closeButton: {
+                  onClick: handleConfirmationModalDecline,
+                  children: t('button.do-later', { ns: 'common' }),
+                },
+                confirmButton: {
+                  onClick: handleConfirmIOActivation,
+                  children: t(`courtesy-contacts.confirmation-modal-io-accept`),
+                },
+              }
+        }
       >
         <Trans ns="recapiti" i18nKey={`courtesy-contacts.confirmation-modal-io-content`} />
       </ConfirmationModal>
