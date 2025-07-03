@@ -7,16 +7,10 @@ import PnWizardStep from '../PnWizardStep';
 describe('PnWizard Component', () => {
   disableConsoleLogging('error');
   const setActiveStep = vi.fn();
-  const onExitMock = vi.fn();
 
   it('renders PnWizard', () => {
     const { getByTestId, getByText, queryByText } = render(
-      <PnWizard
-        activeStep={0}
-        setActiveStep={setActiveStep}
-        onExit={onExitMock}
-        title="Wizard Title"
-      >
+      <PnWizard activeStep={0} setActiveStep={setActiveStep} title="Wizard Title">
         <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
         <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
       </PnWizard>
@@ -27,32 +21,49 @@ describe('PnWizard Component', () => {
     expect(queryByText('Step 2')).not.toBeInTheDocument();
   });
 
-  it('should call the exit callback', () => {
-    const { getByRole } = render(
+  it('should not show the exit button', () => {
+    const { queryByTestId } = render(
       <PnWizard
         activeStep={0}
         setActiveStep={setActiveStep}
-        onExit={onExitMock}
         title="Wizard Title"
+        slots={{
+          exitButton: () => <></>,
+        }}
       >
         <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
         <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
       </PnWizard>
     );
 
-    const exitButton = getByRole('button', { name: 'Esci' });
+    const exitButton = queryByTestId('exit-button');
+    expect(exitButton).not.toBeInTheDocument();
+  });
+
+  it('should call the exit callback', () => {
+    const onExitMock = vi.fn();
+    const { getByTestId } = render(
+      <PnWizard
+        activeStep={0}
+        setActiveStep={setActiveStep}
+        title="Wizard Title"
+        slotsProps={{
+          exitButton: { onClick: onExitMock },
+        }}
+      >
+        <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
+        <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
+      </PnWizard>
+    );
+
+    const exitButton = getByTestId('exit-button');
     fireEvent.click(exitButton);
     expect(onExitMock).toHaveBeenCalledOnce();
   });
 
   it('should call setActiveStep on step navigation', () => {
     const { getByTestId } = render(
-      <PnWizard
-        activeStep={0}
-        setActiveStep={setActiveStep}
-        onExit={onExitMock}
-        title="Wizard Title"
-      >
+      <PnWizard activeStep={0} setActiveStep={setActiveStep} title="Wizard Title">
         <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
         <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
       </PnWizard>
@@ -72,7 +83,6 @@ describe('PnWizard Component', () => {
       <PnWizard
         activeStep={0}
         setActiveStep={setActiveStep}
-        onExit={onExitMock}
         title="Wizard Title"
         slots={{ nextButton: CustomNextButton }}
       >
@@ -87,16 +97,17 @@ describe('PnWizard Component', () => {
   it('should calls custom onClick passed to slotsProps', () => {
     const customNextClick = vi.fn();
     const customPrevClick = vi.fn();
+    const onExitMock = vi.fn();
 
     const { getByTestId } = render(
       <PnWizard
         activeStep={1}
         setActiveStep={setActiveStep}
-        onExit={onExitMock}
         title="Wizard Title"
         slotsProps={{
           nextButton: { onClick: customNextClick },
           prevButton: { onClick: customPrevClick },
+          exitButton: { onClick: onExitMock },
         }}
       >
         <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
@@ -106,12 +117,16 @@ describe('PnWizard Component', () => {
 
     const nextButton = getByTestId('next-button');
     const prevButton = getByTestId('prev-button');
+    const exitButton = getByTestId('exit-button');
 
     fireEvent.click(nextButton);
     expect(customNextClick).toHaveBeenCalledTimes(1);
 
     fireEvent.click(prevButton);
     expect(customPrevClick).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(exitButton);
+    expect(onExitMock).toHaveBeenCalledTimes(1);
   });
 
   it('should render feedback step', () => {
@@ -119,7 +134,6 @@ describe('PnWizard Component', () => {
       <PnWizard
         activeStep={2}
         setActiveStep={setActiveStep}
-        onExit={onExitMock}
         title="Wizard Title"
         slotsProps={{
           feedback: {
@@ -140,12 +154,7 @@ describe('PnWizard Component', () => {
 
   it('should not render feedback step', () => {
     const { queryByTestId } = render(
-      <PnWizard
-        activeStep={2}
-        setActiveStep={setActiveStep}
-        onExit={onExitMock}
-        title="Wizard Title"
-      >
+      <PnWizard activeStep={2} setActiveStep={setActiveStep} title="Wizard Title">
         <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
         <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
       </PnWizard>
@@ -162,7 +171,6 @@ describe('PnWizard Component', () => {
       <PnWizard
         activeStep={2}
         setActiveStep={setActiveStep}
-        onExit={onExitMock}
         title="Wizard Title"
         slotsProps={{
           feedback: {
@@ -191,12 +199,7 @@ describe('PnWizard Component', () => {
   it('should throw an error if children are not PnWizardStep', () => {
     expect(() =>
       render(
-        <PnWizard
-          activeStep={0}
-          setActiveStep={setActiveStep}
-          onExit={onExitMock}
-          title="Wizard Title"
-        >
+        <PnWizard activeStep={0} setActiveStep={setActiveStep} title="Wizard Title">
           <div>Step 1</div>
         </PnWizard>
       )
