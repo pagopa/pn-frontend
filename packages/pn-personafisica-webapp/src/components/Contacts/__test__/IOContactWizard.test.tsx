@@ -3,6 +3,7 @@ import { vi } from 'vitest';
 
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
+import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
 import IOContactWizard from '../IOContactWizard';
 
 describe('IOContactWizard', () => {
@@ -51,5 +52,41 @@ describe('IOContactWizard', () => {
       expect(mock.history.post).toHaveLength(1);
     });
     expect(goToNextStep).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows the confirmation modals trying to skip App IO', async () => {
+    const { getByTestId, getByRole, getByText } = render(
+      <IOContactWizard goToNextStep={goToNextStep} />,
+      {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: [
+              {
+                addressType: AddressType.COURTESY,
+                senderId: 'default',
+                channelType: ChannelType.IOMSG,
+                value: IOAllowedValues.DISABLED,
+              },
+            ],
+          },
+        },
+      }
+    );
+
+    const ioSkipButton = getByTestId('skipButton');
+    fireEvent.click(ioSkipButton);
+
+    let dialog = await waitFor(() => getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+
+    getByText('courtesy-contacts.confirmation-modal-title');
+    getByText('courtesy-contacts.confirmation-modal-io-content');
+    getByText('courtesy-contacts.confirmation-modal-io-accept');
+    const ioConfirmSkipButton = getByText('button.do-later');
+
+    fireEvent.click(ioConfirmSkipButton);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
   });
 });

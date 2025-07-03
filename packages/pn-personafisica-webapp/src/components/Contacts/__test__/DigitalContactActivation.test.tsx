@@ -8,7 +8,7 @@ import {
   sercqSendTosPrivacyConsentMock,
 } from '../../../__mocks__/Consents.mock';
 import { digitalAddressesSercq, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
 import { RECAPITI } from '../../../navigation/routes.const';
@@ -215,94 +215,6 @@ describe('DigitalContactActivation', () => {
     });
     const step3Label = queryByText('legal-contacts.sercq-send-wizard.step_3.step-title');
     expect(step3Label).toBeInTheDocument();
-  });
-
-  // TODO: fix and restore the following test once IO step has been refactored
-  it.skip('shows the confirmation modals trying to skip App IO', async () => {
-    mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
-        value: SERCQ_SEND_VALUE,
-      })
-      .reply(204);
-    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false, false));
-    mock
-      .onPut(
-        '/bff/v2/tos-privacy',
-        acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
-      )
-      .reply(200);
-
-    const { getByRole, getByTestId, getByText } = render(<DigitalContactActivation />, {
-      preloadedState: {
-        contactsState: {
-          digitalAddresses: [
-            {
-              addressType: AddressType.COURTESY,
-              senderId: 'default',
-              channelType: ChannelType.IOMSG,
-              value: IOAllowedValues.DISABLED,
-            },
-          ],
-        },
-      },
-    });
-    const activateSercqSendButton = getByTestId('activateButton');
-    fireEvent.click(activateSercqSendButton);
-
-    await waitFor(() => {
-      expect(mock.history.post.length).toBe(1);
-    });
-
-    // IO Step
-    const ioSkipButton = getByRole('button', { name: 'button.not-now' });
-    fireEvent.click(ioSkipButton);
-
-    let dialog = await waitFor(() => screen.getByRole('dialog'));
-    expect(dialog).toBeInTheDocument();
-
-    getByText('courtesy-contacts.confirmation-modal-title');
-    getByText('courtesy-contacts.confirmation-modal-io-content');
-    getByText('courtesy-contacts.confirmation-modal-io-accept');
-    const ioConfirmSkipButton = getByText('button.do-later');
-
-    fireEvent.click(ioConfirmSkipButton);
-    await waitFor(() => {
-      expect(dialog).not.toBeInTheDocument();
-    });
-
-    // Email Step
-    getByText('legal-contacts.sercq-send-wizard.step_3.title');
-    const mailSkipButton = getByRole('button', { name: 'button.not-now' });
-    fireEvent.click(mailSkipButton);
-
-    dialog = await waitFor(() => screen.getByRole('dialog'));
-    expect(dialog).toBeInTheDocument();
-
-    getByText('courtesy-contacts.confirmation-modal-title');
-    getByText('courtesy-contacts.confirmation-modal-email-content');
-    getByText('courtesy-contacts.confirmation-modal-email-accept');
-    const mailConfirmSkipButton = getByText('button.do-later');
-
-    fireEvent.click(mailConfirmSkipButton);
-    await waitFor(() => {
-      expect(dialog).not.toBeInTheDocument();
-    });
-
-    // Thank-you page
-    const feedbackStep = getByTestId('wizard-feedback-step');
-    expect(feedbackStep).toBeInTheDocument();
-
-    const feedbackTitle = getByTestId('wizard-feedback-title');
-    expect(feedbackTitle).toHaveTextContent(
-      'legal-contacts.sercq-send-wizard.feedback.title-activation'
-    );
-    const feedbackButton = getByTestId('wizard-feedback-button');
-    expect(feedbackButton).toHaveTextContent(
-      'legal-contacts.sercq-send-wizard.feedback.go-to-contacts'
-    );
-    fireEvent.click(feedbackButton);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(RECAPITI);
   });
 
   it('adds an email correctly', async () => {
