@@ -154,9 +154,6 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
         <ConfirmationModal
           open={showConfirmationModal}
           title={t('courtesy-contacts.confirmation-modal-title')}
-          slots={{
-            confirmButton: Button,
-          }}
           slotsProps={{
             confirmButton: {
               onClick: () => setShowConfirmationModal(false),
@@ -168,13 +165,8 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
             ns="recapiti"
             i18nKey={`courtesy-contacts.confirmation-modal-email-content`}
             components={[
-              <DialogContentText key="paragraph1" id="dialog-description" color="text.primary" />,
-              <DialogContentText
-                key="paragraph2"
-                id="dialog-description"
-                color="text.primary"
-                mt={2}
-              />,
+              <DialogContentText key="paragraph1" color="text.primary" />,
+              <DialogContentText key="paragraph2" color="text.primary" mt={2} />,
             ]}
           />
         </ConfirmationModal>
