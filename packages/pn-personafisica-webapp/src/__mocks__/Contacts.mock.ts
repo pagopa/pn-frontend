@@ -48,6 +48,27 @@ export const digitalAddresses: Array<DigitalAddress> = [
     channelType: ChannelType.IOMSG,
     value: IOAllowedValues.DISABLED,
   },
+  {
+    addressType: AddressType.COURTESY,
+    senderId: 'tribunale-milano',
+    senderName: 'Tribunale di Milano',
+    channelType: ChannelType.EMAIL,
+    value: 'nome.utente@email-tribunale-milano.it',
+  },
+  {
+    addressType: AddressType.COURTESY,
+    senderId: 'tribunale-milano',
+    senderName: 'Tribunale di Milano',
+    channelType: ChannelType.SMS,
+    value: '+393333333334',
+  },
+  {
+    addressType: AddressType.COURTESY,
+    senderId: 'comune-milano',
+    senderName: 'Comune di Milano',
+    channelType: ChannelType.EMAIL,
+    value: 'nome.utente@email-comune-milano.it',
+  },
 ];
 
 export const digitalAddressesSercq: Array<DigitalAddress> = [
@@ -75,18 +96,24 @@ export const digitalLegalAddressesSercq = digitalAddressesSercq.filter(
   (addr) => addr.addressType === AddressType.LEGAL
 );
 
-export const digitalAddressesPecValidation = (sercqEnabled = true, pecValid = false, sender: Party = { id: 'default', name: '' }): Array<DigitalAddress> => {
-  let retVal: Array<DigitalAddress> = [{
-    addressType: AddressType.LEGAL,
-    senderId: sender.id,
-    senderName: sender.name,
-    channelType: ChannelType.PEC,
-    value: 'nome.utente@pec.it',
-    pecValid,
-    codeValid: true,
-  }];
-  
-  if(sercqEnabled){
+export const digitalAddressesPecValidation = (
+  sercqEnabled = true,
+  pecValid = false,
+  sender: Party = { id: 'default', name: '' }
+): Array<DigitalAddress> => {
+  let retVal: Array<DigitalAddress> = [
+    {
+      addressType: AddressType.LEGAL,
+      senderId: sender.id,
+      senderName: sender.name,
+      channelType: ChannelType.PEC,
+      value: 'nome.utente@pec.it',
+      pecValid,
+      codeValid: true,
+    },
+  ];
+
+  if (sercqEnabled) {
     retVal.push({
       addressType: AddressType.LEGAL,
       senderId: sender.id,
@@ -95,6 +122,6 @@ export const digitalAddressesPecValidation = (sercqEnabled = true, pecValid = fa
       value: SERCQ_SEND_VALUE,
       codeValid: true,
     });
-  };
+  }
   return retVal;
 };

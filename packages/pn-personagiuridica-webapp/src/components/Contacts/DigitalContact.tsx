@@ -1,5 +1,12 @@
 import { useFormik } from 'formik';
-import { CSSProperties, ChangeEvent, forwardRef, useImperativeHandle, useState } from 'react';
+import {
+  CSSProperties,
+  ChangeEvent,
+  JSXElementConstructor,
+  forwardRef,
+  useImperativeHandle,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -36,6 +43,9 @@ type Props = {
     textField?: Partial<TextFieldProps>;
     button?: Partial<ButtonProps>;
   };
+  slots?: {
+    editButton?: JSXElementConstructor<ButtonProps>;
+  };
   showLabelOnEdit?: boolean;
   senderId?: string;
   inputProps: { label: string; prefix?: string };
@@ -53,6 +63,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       value,
       channelType,
       slotsProps,
+      slots,
       showLabelOnEdit = false,
       senderId = 'default',
       inputProps,
@@ -68,6 +79,8 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     const isMobile = useIsMobile();
     const [editMode, setEditMode] = useState(false);
     const contactType = channelType.toLowerCase();
+
+    const EidtButton = slots?.editButton || ButtonNaked;
 
     // value contains the prefix
     const contactValue = inputProps.prefix ? value.replace(inputProps.prefix, '') : value;
@@ -301,7 +314,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               textAlign="left"
               spacing={{ xs: 2, lg: 3 }}
             >
-              <ButtonNaked
+              <EidtButton
                 key="editButton"
                 color="primary"
                 onClick={toggleEdit}
@@ -311,7 +324,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 size="medium"
               >
                 {t('button.modifica')}
-              </ButtonNaked>
+              </EidtButton>
               {onDelete && (
                 <ButtonNaked
                   id={`cancelContact-${senderId}_${contactType}`}
