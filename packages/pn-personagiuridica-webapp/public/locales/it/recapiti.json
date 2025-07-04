@@ -166,7 +166,11 @@
     "info-modal-sms-content": "Se non hai il domicilio digitale attivo e non apri la notifica entro 5 giorni dalla ricezione della email, riceverai i documenti in formato cartaceo a casa.",
     "confirmation-modal-title": "Non rischiare di leggere in ritardo le tue notifiche",
     "confirmation-modal-content": "<0>Senza un indirizzo email o un altro recapito non possiamo informarti quando ricevi una comunicazione a valore legale su SEND.</0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>",
-    "confirmation-modal-accept": "Inserisci email"
+    "confirmation-modal-accept": "Inserisci email",
+    "block-remove-email-title": "Non è possibile disattivare la email",
+    "block-remove-email-message": "Per procedere, devi prima rimuovere le email personalizzate per ente.",
+    "block-remove-sms-title": "Non è possibile disattivare il numero di cellulare",
+    "block-remove-sms-message": "Per procedere, devi prima eliminare i numeri di cellulare personalizzati per ente."
   },
   "special-contacts": {
     "select-address": "Tipologia",

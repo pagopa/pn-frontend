@@ -41,7 +41,10 @@ enum ModalType {
   CANCEL_VALIDATION = 'cancel_validation',
 }
 
-const SpecialContacts: React.FC<{ addressType: AddressType }> = ({ addressType }) => {
+const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: ChannelType }> = ({
+  addressType,
+  channelType,
+}) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const { addresses, specialAddresses } = useAppSelector(contactsSelectors.selectAddresses);
@@ -204,6 +207,7 @@ const SpecialContacts: React.FC<{ addressType: AddressType }> = ({ addressType }
   const uniqueAddresses: Array<DigitalAddress> = specialAddresses.filter(
     (addr, _, arr) =>
       addr.addressType === addressType &&
+      (channelType ? addr.channelType === channelType : true) &&
       arr.findIndex(
         (el) =>
           addr.senderId === el.senderId &&
