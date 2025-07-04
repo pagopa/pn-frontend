@@ -13,7 +13,7 @@ import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { mandatesByDelegate } from '../__mocks__/Delegations.mock';
 import { apiClient } from '../api/apiClients';
 import { LOGOUT } from '../navigation/routes.const';
-import { RenderResult, act, fireEvent, render, screen, waitFor, within } from './test-utils';
+import { RenderResult, act, fireEvent, getByText, render, screen, waitFor, within } from './test-utils';
 
 vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
 vi.mock('../pages/Profile.page', () => ({ default: () => <div>Profile Page</div> }));
@@ -219,5 +219,29 @@ describe('App', async () => {
     expect(sideMenuItems).toHaveLength(4);
     const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
     expect(collapsibleMenu).not.toBeInTheDocument();
+  });
+
+   it('render component - user logs out', async () => {
+    const clearSpy = vi.spyOn(Storage.prototype, 'clear');
+
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+
+    const header = result.container.querySelector('header');
+    expect(header).toBeInTheDocument();
+
+    const button = getByText(header!, 'Esci');
+    fireEvent.click(button);
+
+    const modalConfirmButton = await waitFor(() => screen.queryByTestId('confirm-button'));
+    fireEvent.click(modalConfirmButton!);
+
+    await waitFor(() => {
+      expect(mockOpenFn).toHaveBeenCalledTimes(1);
+      const url = `${LOGOUT}`;
+      expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
+      expect(clearSpy).toHaveBeenCalled();
+    });
   });
 });
