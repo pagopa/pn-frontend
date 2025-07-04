@@ -277,7 +277,6 @@ describe('App', async () => {
     fireEvent.click(button);
 
     const modalConfirmButton = await waitFor(() => screen.queryByTestId('confirm-button'));
-    console.log('modalConfirmButton', modalConfirmButton);
     fireEvent.click(modalConfirmButton!);
 
     await waitFor(() => {
