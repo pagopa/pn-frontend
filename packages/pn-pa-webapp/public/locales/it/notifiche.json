@@ -88,16 +88,16 @@
         "message": "Si è verificato un errore durante l’annullamento. Riprova."
       },
       "delivery_file_info_not_found": {
-        "title": "Documento non trovato",
-        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+        "title": "Il documento non è disponibile",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
       },
       "delivery_notification_without_payment_attachment": {
-        "title": "Documento non trovato",
-        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+        "title": "Il documento non è disponibile",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
       },
       "delivery_push_file_not_found": {
-        "title": "Documento non trovato",
-        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+        "title": "Il documento non è disponibile",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
       }
     },
     "acts": "Documenti allegati",
@@ -543,8 +543,8 @@
         "alert": "Se non hai informazioni certe sull’integrazione pagoPA verifica con il tuo provider tecnologico: in caso di scelta non corretta l’addebito della notifica potrebbe essere errato.",
         "back-to-debt-position": "Torna a Posizione debitoria",
         "radios": {
-          "flat-rate": "Incluso nell’atto (forfettario)",
-          "delivery-mode": "A carico del destinatario (puntuale)",
+          "flat-rate": "Incluso nell’atto (forfettario), a carico del destinatario",
+          "delivery-mode": "Non incluso nell’atto (puntuale), a carico del destinatario",
           "sync": "Sincrona",
           "async": "Asincrona"
         },
@@ -593,16 +593,16 @@
         "message": "Il numero di protocollo inserito è già esistente"
       },
       "invalid_parameter_taxonomy_code": {
-        "title": "Codice tassonomico non valido",
-        "message": "Il codice tassonomico che hai inserito non è valido. Controlla e riprova. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+        "title": "Il codice tassonomico non è valido",
+        "message": "Controlla il codice che hai inserito e riprova. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
       },
       "delivery_notification_limit_exceeded": {
         "title": "Hai raggiunto il limite di notifiche",
         "message": "Al momento non puoi creare nuove notifiche perché hai già raggiunto il numero massimo mensile"
       },
       "delivery_invalid_parameter_group": {
-        "title": "Gruppo non valido",
-        "message": "Il gruppo di utenti che hai selezionato non è valido. Controlla e riprova. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+        "title": "Il gruppo utenti non è valido",
+        "message": "Controlla il gruppo che hai selezionato e riprova. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
       }
     }
   },

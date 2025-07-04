@@ -9,11 +9,15 @@ export default class UnknownAppError extends AppError {
 
   getMessage() {
     return {
-      title: getLocalizedOrDefaultLabel('common', 'errors.unknown.title', 'Errore'),
+      title: getLocalizedOrDefaultLabel(
+        'common',
+        'errors.unknown.title',
+        'Si è verificato un errore'
+      ),
       content: getLocalizedOrDefaultLabel(
         'common',
         'errors.unknown.message',
-        'Errore non previsto.'
+        'Il servizio non è disponibile. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore.'
       ),
     };
   }

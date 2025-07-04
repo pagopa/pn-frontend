@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import {
   ConsentType,
   compileOneTrustPath,
+  getSessionLanguage,
   rewriteLinks,
   waitForElement,
 } from '@pagopa-pn/pn-commons';
@@ -27,6 +28,7 @@ const TermsOfServicePage: React.FC<{ type?: ConsentType }> = ({ type }) => {
   let draft = configuration.ONE_TRUST_DRAFT_MODE;
   // eslint-disable-next-line functional/no-let
   let route = routes.TERMS_OF_SERVICE;
+  const lang = getSessionLanguage();
 
   if (type === ConsentType.TOS_SERCQ) {
     tos = configuration.ONE_TRUST_TOS_SERCQ_SEND;
@@ -44,7 +46,7 @@ const TermsOfServicePage: React.FC<{ type?: ConsentType }> = ({ type }) => {
         });
       });
     }
-  }, []);
+  }, [lang]);
 
   return (
     <>
