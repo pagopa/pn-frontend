@@ -41,6 +41,7 @@ type Props = {
     container?: Omit<StackProps, 'children'> & { 'data-testid'?: string };
     feedback?: {
       title: string;
+      content?: ReactNode;
       buttonText: string;
       onClick: () => void;
     };
@@ -97,20 +98,30 @@ const PnWizard: React.FC<Props> = ({
         sx={{ minHeight: '350px', height: '100%', display: 'flex' }}
         data-testid="wizard-feedback-step"
       >
-        <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
+        <Box sx={{ mt: 11, mx: 'auto', textAlign: 'center', width: '80vw' }}>
           <IllusCompleted />
           <Typography
             data-testid="wizard-feedback-title"
             variant="h4"
             color="text.primary"
-            sx={{ margin: '20px 0 10px 0' }}
+            sx={{ mt: 4, mb: 1, mx: '0px auto' }}
           >
             {feedback.title}
           </Typography>
+          <Typography
+            data-testid="wizard-feedback-content"
+            color="text.primary"
+            variant="body2"
+            fontWeight="400"
+            sx={{ mt: 1, mb: 2, mx: '0px auto', fontSize: { xs: '14px', sm: '16px' } }}
+          >
+            {feedback.content}
+          </Typography>
+
           <Button
             data-testid="wizard-feedback-button"
             variant="contained"
-            sx={{ marginTop: '30px' }}
+            sx={{ mt: 2, mb: 11 }}
             onClick={feedback.onClick}
           >
             {feedback.buttonText}

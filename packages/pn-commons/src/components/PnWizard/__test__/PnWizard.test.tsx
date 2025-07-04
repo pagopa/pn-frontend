@@ -138,6 +138,7 @@ describe('PnWizard Component', () => {
         slotsProps={{
           feedback: {
             title: 'Custom title',
+            content: 'Custom content',
             buttonText: 'Custom button text',
             onClick: vi.fn(),
           },
@@ -150,6 +151,9 @@ describe('PnWizard Component', () => {
 
     const feedbackStep = getByTestId('wizard-feedback-step');
     expect(feedbackStep).toBeInTheDocument();
+    expect(feedbackStep).toHaveTextContent('Custom title');
+    expect(feedbackStep).toHaveTextContent('Custom content');
+    expect(feedbackStep).toHaveTextContent('Custom button text');
   });
 
   it('should not render feedback step', () => {
