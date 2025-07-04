@@ -12,4 +12,23 @@ describe('UnhandledAppError', () => {
         'Il servizio non è disponibile. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore.',
     });
   });
+
+  it('getResponseError includes showTechnicalData = true', () => {
+    const unhandledAppError = new UnhandledAppError({
+      code: 'mock-code',
+      element: '',
+      detail: 'mock-detail',
+    });
+
+    expect(unhandledAppError.getResponseError()).toStrictEqual({
+      code: 'mock-code',
+      element: '',
+      detail: 'mock-detail',
+      showTechnicalData: true,
+      message: {
+        title: 'Errore generico',
+        content: 'Si è verificato un errore. Si prega di riprovare più tardi.',
+      },
+    });
+  });
 });

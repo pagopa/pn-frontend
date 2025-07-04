@@ -66,6 +66,7 @@ const SnackBar: React.FC<Props> = ({
 
   const action = (
     <IconButton
+      data-testid="snackBarCloseButton"
       size="small"
       aria-label="close"
       color="inherit"
