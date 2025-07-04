@@ -543,8 +543,8 @@
         "alert": "Se non hai informazioni certe sull’integrazione pagoPA verifica con il tuo provider tecnologico: in caso di scelta non corretta l’addebito della notifica potrebbe essere errato.",
         "back-to-debt-position": "Torna a Posizione debitoria",
         "radios": {
-          "flat-rate": "Incluso nell’atto (forfettario)",
-          "delivery-mode": "A carico del destinatario (puntuale)",
+          "flat-rate": "Incluso nell’atto (forfettario), a carico del destinatario",
+          "delivery-mode": "Non incluso nell’atto (puntuale), a carico del destinatario",
           "sync": "Sincrona",
           "async": "Asincrona"
         },
