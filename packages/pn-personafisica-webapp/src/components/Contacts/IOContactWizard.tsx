@@ -140,7 +140,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
               color="primary"
               fullWidth
               sx={{ mt: 3 }}
-              data-testid="confirmButton"
+              data-testid="disableIOButton"
             >
               {t('legal-contacts.sercq-send-wizard.step_2.disable')}
             </Button>

@@ -89,4 +89,81 @@ describe('IOContactWizard', () => {
       expect(dialog).not.toBeInTheDocument();
     });
   });
+
+  it('shows button to disable IO app is present when IO has been enabled', async () => {
+    const { getByTestId } = render(<IOContactWizard goToNextStep={goToNextStep} />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            {
+              addressType: AddressType.COURTESY,
+              senderId: 'default',
+              channelType: ChannelType.IOMSG,
+              value: IOAllowedValues.ENABLED,
+            },
+          ],
+        },
+      },
+    });
+
+    const disableIOButton = getByTestId('disableIOButton');
+    expect(disableIOButton).toBeInTheDocument();
+  });
+
+  it('shows modal when disableIOButton is clicked', async () => {
+    const { getByTestId, getByRole } = render(<IOContactWizard goToNextStep={goToNextStep} />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            {
+              addressType: AddressType.COURTESY,
+              senderId: 'default',
+              channelType: ChannelType.IOMSG,
+              value: IOAllowedValues.ENABLED,
+            },
+          ],
+        },
+      },
+    });
+
+    const disableIOButton = getByTestId('disableIOButton');
+    fireEvent.click(disableIOButton);
+    let dialog = await waitFor(() => getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+  });
+
+  it('shows modal when disableIOButton is clicked', async () => {
+    const { getByTestId, getByRole, getByText } = render(
+      <IOContactWizard goToNextStep={goToNextStep} />,
+      {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: [
+              {
+                addressType: AddressType.COURTESY,
+                senderId: 'default',
+                channelType: ChannelType.IOMSG,
+                value: IOAllowedValues.ENABLED,
+              },
+            ],
+          },
+        },
+      }
+    );
+
+    const disableIOButton = getByTestId('disableIOButton');
+    fireEvent.click(disableIOButton);
+
+    let dialog = await waitFor(() => getByRole('dialog'));
+    const confirmIOdisable = getByText('courtesy-contacts.confirmation-deactivation-io-modal');
+    fireEvent.click(confirmIOdisable);
+
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+  });
+
+  // check IO is disabled when "scollega" is clicked in modal
+
+  // check IO is still enabled when "mantieni collegato" is clicked in modal
 });
