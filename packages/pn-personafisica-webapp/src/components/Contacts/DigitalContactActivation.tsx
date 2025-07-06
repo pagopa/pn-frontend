@@ -15,6 +15,7 @@ import { useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
 import EmailSmsContactWizard from './EmailSmsContactWizard';
 import HowItWorksContactWizard from './HowItWorksContactWizard';
+import SercqSendContactWizard from './SercqSendContactWizard';
 
 type Props = {
   isTransferring?: boolean;
@@ -39,7 +40,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
 
   // const hasEmailOrSms = !!(defaultEMAILAddress || defaultSMSAddress);
 
-  const isEmailSmsStep = (activeStep === 1 && !showIOStep) || activeStep === 2;
+  const isEmailSmsStep = !showIOStep ? activeStep === 1 : activeStep === 2;
 
   const goToNextStep = () => {
     setActiveStep((step) => step + 1);
@@ -77,7 +78,9 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   };
 
   const getNextButton = () => {
+    console.log(`Step attivo: '${activeStep}'`);
     if (isEmailSmsStep) {
+      console.log('isEmailSmsStep');
       return (
         <Button
           variant="contained"
@@ -91,6 +94,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
       );
     }
 
+    console.log('!isEmailSmsStep');
     return <></>;
   };
 
@@ -140,6 +144,9 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
       )}
       <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_3.step-title')}>
         <EmailSmsContactWizard />
+      </PnWizardStep>
+      <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_4.step-title')}>
+        <SercqSendContactWizard goToNextStep={goToNextStep} />
       </PnWizardStep>
     </PnWizard>
   );

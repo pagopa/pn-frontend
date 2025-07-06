@@ -106,6 +106,28 @@
         "step-title": "Inserisci una email",
         "content": "L’email dove possiamo informarti quando c’è una comunicazione a valore legale per te su SEND."
       },
+      "step_4": {
+        "title": "Stai attivando il tuo domicilio digitale su SEND",
+        "step-title": "Riepilogo",
+        "content": "Le tue comunicazioni a valore legale saranno recapitate a:",
+        "digital-domicile": "Domicilio digitale",
+        "send": "Send",
+        "info-list": [
+          {
+            "title": "Indirizzo email",
+            "description": "Aggiungi email"
+          },
+          {
+            "title": "App IO",
+            "description": "Collega SEND a IO"
+          },
+          {
+            "title": "Numero di cellulare",
+            "description": "Aggiungi numero di cellulare"
+          }
+        ],
+        "disclaimer": "Premendo “Attiva domicilio digitale” dichiari di aver letto la <0>Informativa privacy</0> e di accettare i <1>Termini del servizio</1>"
+      },
       "feedback": {
         "title-activation": "Hai attivato il tuo domicilio digitale",
         "title-transfer": "Hai aggiornato il tuo domicilio digitale",
