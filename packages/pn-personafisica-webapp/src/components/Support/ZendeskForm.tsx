@@ -27,7 +27,7 @@ const ZendeskForm: React.FC<{ data: ZendeskAuthorizationDTO }> = ({ data }) => {
         console.error('ZendeskForm submit failed', e);
       }
     }
-  }, [url, jwt, returnTo, dispatch, t]);
+  }, [url, jwt, returnTo]);
 
   return (
     <form ref={formRef} method="POST" action={url} style={{ display: 'none' }}>

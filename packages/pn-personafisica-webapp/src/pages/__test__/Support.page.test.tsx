@@ -18,7 +18,10 @@ describe('Support page', async () => {
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    HTMLFormElement.prototype.submit = vi.fn();
+    Object.defineProperty(HTMLFormElement.prototype, 'submit', {
+      configurable: true,
+      value: vi.fn(),
+    });
   });
 
   afterEach(() => {
@@ -27,7 +30,10 @@ describe('Support page', async () => {
 
   afterAll(() => {
     mock.restore();
-    HTMLFormElement.prototype.submit = originalSubmit;
+    Object.defineProperty(HTMLFormElement.prototype, 'submit', {
+      configurable: true,
+      value: originalSubmit,
+    });
   });
 
   it('render page', () => {
@@ -115,7 +121,7 @@ describe('Support page', async () => {
     // prompt must be shown
     const promptDialog = await waitFor(() => result.getByTestId('promptDialog'));
     expect(promptDialog).toBeInTheDocument();
-    const confirmExitBtn = within(promptDialog!).getByTestId('confirmExitBtn');
+    const confirmExitBtn = within(promptDialog).getByTestId('confirmExitBtn');
     fireEvent.click(confirmExitBtn);
 
     // after clicking button - mocked dashboard present

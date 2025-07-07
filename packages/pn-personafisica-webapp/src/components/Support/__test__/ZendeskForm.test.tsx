@@ -1,11 +1,32 @@
 import { vi } from 'vitest';
 
+import { disableConsoleLogging } from '@pagopa-pn/pn-commons/src/test-utils';
+
 import { render, testStore } from '../../../__test__/test-utils';
 import ZendeskForm from '../ZendeskForm';
 
 describe('ZendeskForm', () => {
+  const submitMock = vi.fn();
+  const originalSubmit = HTMLFormElement.prototype.submit;
+
+  disableConsoleLogging('error');
+
+  beforeAll(() => {
+    Object.defineProperty(HTMLFormElement.prototype, 'submit', {
+      configurable: true,
+      value: submitMock,
+    });
+  });
+
   beforeEach(() => {
     vi.restoreAllMocks();
+  });
+
+  afterAll(() => {
+    Object.defineProperty(HTMLFormElement.prototype, 'submit', {
+      configurable: true,
+      value: originalSubmit,
+    });
   });
 
   it('should render hidden form inputs correctly', () => {
@@ -28,9 +49,6 @@ describe('ZendeskForm', () => {
   });
 
   it('should auto-submit the form if all data is present', () => {
-    const submitMock = vi.fn();
-    vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(submitMock);
-
     render(
       <ZendeskForm
         data={{
@@ -45,7 +63,7 @@ describe('ZendeskForm', () => {
   });
 
   it('should dispatch error if form.submit throws', () => {
-    vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(() => {
+    submitMock.mockImplementation(() => {
       throw new Error('submit failed');
     });
 
