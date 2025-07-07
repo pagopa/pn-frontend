@@ -16,6 +16,7 @@ import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import InformativeDialog from './InformativeDialog';
 import SmsContactItem from './SmsContactItem';
+import SpecialContacts from './SpecialContacts';
 
 enum ModalType {
   EXISTING = 'existing',
@@ -32,6 +33,7 @@ const EmailContactItem: React.FC = () => {
     defaultPECAddress,
     defaultEMAILAddress,
     defaultSMSAddress,
+    specialAddresses,
     specialEMAILAddresses,
     addresses,
   } = useAppSelector(contactsSelectors.selectAddresses);
@@ -45,6 +47,10 @@ const EmailContactItem: React.FC = () => {
 
   const hasCourtesyAddresses =
     addresses.filter((addr) => addr.addressType === AddressType.COURTESY).length > 0;
+
+  const showSpecialContactsSection = !defaultSMSAddress
+    ? specialAddresses.filter((addr) => addr.addressType === AddressType.COURTESY).length > 0
+    : specialEMAILAddresses.length > 0;
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   // currentAddress is needed to store what address we are creating/editing/removing
@@ -227,6 +233,12 @@ const EmailContactItem: React.FC = () => {
         </Typography>
       )}
       {!defaultSMSAddress && <SmsContactItem />}
+      {showSpecialContactsSection && (
+        <SpecialContacts
+          addressType={AddressType.COURTESY}
+          channelType={!defaultSMSAddress ? undefined : ChannelType.EMAIL}
+        />
+      )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
         value={currentAddress.current.value}
