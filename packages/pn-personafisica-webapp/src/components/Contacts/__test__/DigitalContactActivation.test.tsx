@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { digitalAddressesSercq, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
 import { RECAPITI } from '../../../navigation/routes.const';
