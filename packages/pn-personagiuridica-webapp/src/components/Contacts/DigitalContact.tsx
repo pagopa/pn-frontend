@@ -80,7 +80,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     const [editMode, setEditMode] = useState(false);
     const contactType = channelType.toLowerCase();
 
-    const EidtButton = slots?.editButton || ButtonNaked;
+    const EditButton = slots?.editButton || ButtonNaked;
 
     // value contains the prefix
     const contactValue = inputProps.prefix ? value.replace(inputProps.prefix, '') : value;
@@ -314,7 +314,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               textAlign="left"
               spacing={{ xs: 2, lg: 3 }}
             >
-              <EidtButton
+              <EditButton
                 key="editButton"
                 color="primary"
                 onClick={toggleEdit}
@@ -324,7 +324,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 size="medium"
               >
                 {t('button.modifica')}
-              </EidtButton>
+              </EditButton>
               {onDelete && (
                 <ButtonNaked
                   id={`cancelContact-${senderId}_${contactType}`}
