@@ -54,7 +54,7 @@ describe('IOContactWizard', () => {
     expect(goToNextStep).toHaveBeenCalledTimes(1);
   });
 
-  it('shows the confirmation modals trying to skip App IO', async () => {
+  it('shows the confirmation modals trying to skip App IO activation', async () => {
     const { getByTestId, getByRole, getByText } = render(
       <IOContactWizard goToNextStep={goToNextStep} />,
       {
@@ -90,7 +90,7 @@ describe('IOContactWizard', () => {
     });
   });
 
-  it('shows button to disable IO app is present when IO has been enabled', async () => {
+  it('shows button to disable IO app - IO enabled', async () => {
     const { getByTestId } = render(<IOContactWizard goToNextStep={goToNextStep} />, {
       preloadedState: {
         contactsState: {
@@ -132,7 +132,7 @@ describe('IOContactWizard', () => {
     expect(dialog).toBeInTheDocument();
   });
 
-  it('shows modal when disableIOButton is clicked', async () => {
+  it('disable IO when button is clicked', async () => {
     const { getByTestId, getByRole, getByText } = render(
       <IOContactWizard goToNextStep={goToNextStep} />,
       {
@@ -155,6 +155,15 @@ describe('IOContactWizard', () => {
     fireEvent.click(disableIOButton);
 
     let dialog = await waitFor(() => getByRole('dialog'));
+    const cancelIOdisable = getByText('courtesy-contacts.undo-deactivation-io-modal');
+    fireEvent.click(cancelIOdisable);
+
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+
+    fireEvent.click(disableIOButton);
+    expect(dialog).not.toBeInTheDocument();
     const confirmIOdisable = getByText('courtesy-contacts.confirmation-deactivation-io-modal');
     fireEvent.click(confirmIOdisable);
 
@@ -162,8 +171,4 @@ describe('IOContactWizard', () => {
       expect(dialog).not.toBeInTheDocument();
     });
   });
-
-  // check IO is disabled when "scollega" is clicked in modal
-
-  // check IO is still enabled when "mantieni collegato" is clicked in modal
 });
