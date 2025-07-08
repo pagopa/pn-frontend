@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { Button, Chip, Typography } from '@mui/material';
@@ -173,6 +173,27 @@ const EmailContactItem: React.FC = () => {
     return 'default';
   };
 
+  const getRemoveModalTitle = () => {
+    if (isDigitalDomicileActive) {
+      return t(`courtesy-contacts.remove-email-title-dod-enabled`, {
+        ns: 'recapiti',
+      });
+    }
+    return t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-email-title`, {
+      ns: 'recapiti',
+    });
+  };
+
+  const getRemoveModalMessage = () => {
+    if (isDigitalDomicileActive) {
+      return t(`courtesy-contacts.remove-email-message-dod-enabled`);
+    }
+    return t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-email-message`, {
+      value: currentAddress.current.value,
+      ns: 'recapiti',
+    });
+  };
+
   const getActions = () =>
     isEmailActive
       ? [
@@ -269,13 +290,8 @@ const EmailContactItem: React.FC = () => {
       />
       <DeleteDialog
         showModal={modalOpen === ModalType.DELETE}
-        removeModalTitle={t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-email-title`, {
-          ns: 'recapiti',
-        })}
-        removeModalBody={t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-email-message`, {
-          value: currentAddress.current.value,
-          ns: 'recapiti',
-        })}
+        removeModalTitle={getRemoveModalTitle()}
+        removeModalBody={getRemoveModalMessage()}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
