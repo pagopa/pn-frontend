@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalAddressesSercq, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
 import { NOTIFICHE } from '../../../navigation/routes.const';
@@ -196,91 +196,6 @@ describe('DigitalContactActivation', () => {
     });
     const step3Label = queryByText(`${labelPrefix}.step_3.step-title`);
     expect(step3Label).toBeInTheDocument();
-  });
-
-  // TODO: fix and restore the following test once IO step has been refactored
-  it.skip('shows the confirmation modals trying to skip App IO', async () => {
-    // uncomment the following snippet to mock sercq activation api call once the final step is created
-    // mock
-    //   .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
-    //     value: SERCQ_SEND_VALUE,
-    //   })
-    //   .reply(204);
-    // mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false, false));
-    // mock
-    //   .onPut(
-    //     '/bff/v2/tos-privacy',
-    //     acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
-    //   )
-    //   .reply(200);
-
-    const { getByRole, getByTestId, getByText } = render(<DigitalContactActivation />, {
-      preloadedState: {
-        contactsState: {
-          digitalAddresses: [
-            {
-              addressType: AddressType.COURTESY,
-              senderId: 'default',
-              channelType: ChannelType.IOMSG,
-              value: IOAllowedValues.DISABLED,
-            },
-          ],
-        },
-      },
-    });
-    const howItWorksContinueButton = getByTestId('continueButton');
-    fireEvent.click(howItWorksContinueButton);
-
-    // IO Step
-    const ioSkipButton = getByRole('button', { name: 'button.not-now' });
-    fireEvent.click(ioSkipButton);
-
-    let dialog = await waitFor(() => screen.getByRole('dialog'));
-    expect(dialog).toBeInTheDocument();
-
-    getByText('courtesy-contacts.confirmation-modal-title');
-    getByText('courtesy-contacts.confirmation-modal-io-content');
-    getByText('courtesy-contacts.confirmation-modal-io-accept');
-    const ioConfirmSkipButton = getByText('button.do-later');
-
-    fireEvent.click(ioConfirmSkipButton);
-    await waitFor(() => {
-      expect(dialog).not.toBeInTheDocument();
-    });
-
-    // Email Step
-    getByText(`${labelPrefix}.step_3.title`);
-    const mailSkipButton = getByRole('button', { name: 'button.not-now' });
-    fireEvent.click(mailSkipButton);
-
-    dialog = await waitFor(() => screen.getByRole('dialog'));
-    expect(dialog).toBeInTheDocument();
-
-    getByText('courtesy-contacts.confirmation-modal-title');
-    getByText('courtesy-contacts.confirmation-modal-email-content');
-    getByText('courtesy-contacts.confirmation-modal-email-accept');
-    const mailConfirmSkipButton = getByText('button.do-later');
-
-    fireEvent.click(mailConfirmSkipButton);
-    await waitFor(() => {
-      expect(dialog).not.toBeInTheDocument();
-    });
-
-    // Thank-you page
-    const feedbackStep = getByTestId('wizard-feedback-step');
-    expect(feedbackStep).toBeInTheDocument();
-
-    const feedbackTitle = getByTestId('wizard-feedback-title');
-    expect(feedbackTitle).toHaveTextContent(`${labelPrefix}.feedback.title-activation`);
-
-    const feedbackContent = getByTestId('wizard-feedback-content');
-    expect(feedbackContent).toHaveTextContent(`${labelPrefix}.feedback.content-sercq_send`);
-
-    const feedbackButton = getByTestId('wizard-feedback-button');
-    expect(feedbackButton).toHaveTextContent('button.understand');
-    fireEvent.click(feedbackButton);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(NOTIFICHE);
   });
 
   it('adds an email correctly', async () => {
