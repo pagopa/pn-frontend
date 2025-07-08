@@ -24,8 +24,9 @@ describe('UnknownAppError', () => {
       detail: 'mock-detail',
       showTechnicalData: true,
       message: {
-        title: 'Errore',
-        content: 'Errore non previsto.',
+        title: 'Si è verificato un errore',
+        content:
+          'Il servizio non è disponibile. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore.',
       },
     });
   });
