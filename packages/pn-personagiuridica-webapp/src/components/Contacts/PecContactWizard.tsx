@@ -6,6 +6,7 @@ import * as yup from 'yup';
 
 import {
   Alert,
+  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -101,6 +102,16 @@ const PecContactWizard: React.FC<Props> = ({
     }
   };
 
+  const handleActivePEC = async () => {
+    await formik.submitForm();
+
+    const noErrors = !formik.errors.pec && !formik.errors.disclaimer;
+
+    if (noErrors) {
+      setOpenCodeModal(true);
+    }
+  };
+
   return (
     <>
       <PnWizard
@@ -126,9 +137,6 @@ const PecContactWizard: React.FC<Props> = ({
           ),
         }}
         slotsProps={{
-          nextButton: {
-            onClick: () => formik.submitForm(),
-          },
           container: {
             'data-testid': 'pec-contact-wizard',
           },
@@ -209,6 +217,16 @@ const PecContactWizard: React.FC<Props> = ({
               </FormHelperText>
             )}
           </FormControl>
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            onClick={handleActivePEC}
+            sx={{ mt: 3 }}
+            data-testid="continueButton"
+          >
+            {t('legal-contacts.sercq-send-active-pec-enabled', { ns: 'recapiti' })}
+          </Button>
         </PnWizardStep>
       </PnWizard>
 
