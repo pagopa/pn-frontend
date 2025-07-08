@@ -35,9 +35,9 @@ const DeleteDialog: React.FC<DialogProps> = ({
   const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
 
   const getDeleteModalDODAction = () => {
-    if (isDigitalDomicileActive) {
+    if (isDigitalDomicileActive && channelType) {
       return [
-        <Button id="buttonDisable" key="confirm" onClick={confirmHandler} variant="outlined">
+        <Button id="buttonDisable" key="disable" onClick={confirmHandler} variant="outlined">
           {t(`button.disable-${channelType?.toLowerCase()}`)}
         </Button>,
         <Button key="cancel" onClick={handleModalClose} variant="contained" id="buttonAnnulla">
