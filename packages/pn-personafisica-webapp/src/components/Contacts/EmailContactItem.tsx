@@ -31,7 +31,6 @@ enum ModalType {
   CODE = 'code',
   DELETE = 'delete',
   INFORMATIVE = 'informative',
-  DELIVERED = 'DELIVERED',
 }
 
 const EmailContactItem: React.FC = () => {
