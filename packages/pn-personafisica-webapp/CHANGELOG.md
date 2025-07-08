@@ -3,6 +3,156 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.16.1](https://github.com/pagopa/pn-frontend/compare/v2.16.1-RC.1...v2.16.1) (2025-06-27)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+## [2.16.1-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.16.1-RC.0...v2.16.1-RC.1) (2025-06-26)
+
+
+### Bug Fixes
+
+* **pn-14941:** removed period from disclaimer checkbox ([727f996](https://github.com/pagopa/pn-frontend/commit/727f9966ecf1e4591ea9666647212846d0cee502))
+
+
+
+
+
+## [2.16.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.16.0...v2.16.1-RC.0) (2025-06-26)
+
+
+### Bug Fixes
+
+* **pn-14941:** removed period from disclaimer checkbox ([3e57762](https://github.com/pagopa/pn-frontend/commit/3e5776269b3859e095e70ddcf8e0103480cc9678))
+* **pn-14941:** restored disclaimer on digital domicile ([#1566](https://github.com/pagopa/pn-frontend/issues/1566)) ([1612094](https://github.com/pagopa/pn-frontend/commit/161209414dd064df5a761234e7aca7337b70d23e))
+
+
+
+
+
+# [2.16.0](https://github.com/pagopa/pn-frontend/compare/v2.16.0-RC.1...v2.16.0) (2025-06-12)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+# [2.16.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.15.1...v2.16.0-RC.1) (2025-06-06)
+
+
+
+# [2.16.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.15.0...v2.16.0-RC.0) (2025-05-27)
+
+
+### Bug Fixes
+
+* fix wrong copy for CAD/ARCAD attachments in timeline (PF, PG) ([12707eb](https://github.com/pagopa/pn-frontend/commit/12707eba8d4a59342b25751ea70ec94a9ea7aba4))
+* replace malfunction link ([0ba403a](https://github.com/pagopa/pn-frontend/commit/0ba403a99124eca821c80baf2fdf83f3fec6d2f9))
+
+
+### Features
+
+* add draft copy for CAD/ARCAD in timeline ([49c3756](https://github.com/pagopa/pn-frontend/commit/49c3756a404ff48cc16f49e497aceb355ce830ff))
+* add draft copy for CAD/ARCAD in timeline ([#1547](https://github.com/pagopa/pn-frontend/issues/1547)) ([4f9dcbe](https://github.com/pagopa/pn-frontend/commit/4f9dcbeed3284f6b1d7a1747b745a22092be0ba3))
+* add new optional traceId param into support requests (draft) ([4a446a7](https://github.com/pagopa/pn-frontend/commit/4a446a732866e5e3701704e0be03c27c0b93e52c))
+* add PN_INVALID_BODY to errors for which technical data should be shown ([9eecd85](https://github.com/pagopa/pn-frontend/commit/9eecd856904c1e3d26f721615b13c00861ee129d))
+* add showTechnicalData attribute to AppError class to differentiate errors for which tech data needs to be shown ([12e034f](https://github.com/pagopa/pn-frontend/commit/12e034f6b95ae1706fbb50ea71ed42479ddfa36a))
+* **pn-14233:** vas physical address lookup ([#1526](https://github.com/pagopa/pn-frontend/issues/1526)) ([20a651c](https://github.com/pagopa/pn-frontend/commit/20a651c8a7461524a322108eb95ccd2aaf06bd42))
+* **PN-14823:** update link to downtime example link and update regex for htmlurl ([eb93ef6](https://github.com/pagopa/pn-frontend/commit/eb93ef6119a5e44475a0f17da358d5f839d7dc8b))
+
+
+
+
+
+# [2.16.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.15.0...v2.16.0-RC.0) (2025-05-27)
+
+
+### Bug Fixes
+
+* fix wrong copy for CAD/ARCAD attachments in timeline (PF, PG) ([12707eb](https://github.com/pagopa/pn-frontend/commit/12707eba8d4a59342b25751ea70ec94a9ea7aba4))
+* replace malfunction link ([0ba403a](https://github.com/pagopa/pn-frontend/commit/0ba403a99124eca821c80baf2fdf83f3fec6d2f9))
+
+
+### Features
+
+* add draft copy for CAD/ARCAD in timeline ([49c3756](https://github.com/pagopa/pn-frontend/commit/49c3756a404ff48cc16f49e497aceb355ce830ff))
+* add draft copy for CAD/ARCAD in timeline ([#1547](https://github.com/pagopa/pn-frontend/issues/1547)) ([4f9dcbe](https://github.com/pagopa/pn-frontend/commit/4f9dcbeed3284f6b1d7a1747b745a22092be0ba3))
+* add new optional traceId param into support requests (draft) ([4a446a7](https://github.com/pagopa/pn-frontend/commit/4a446a732866e5e3701704e0be03c27c0b93e52c))
+* add PN_INVALID_BODY to errors for which technical data should be shown ([9eecd85](https://github.com/pagopa/pn-frontend/commit/9eecd856904c1e3d26f721615b13c00861ee129d))
+* add showTechnicalData attribute to AppError class to differentiate errors for which tech data needs to be shown ([12e034f](https://github.com/pagopa/pn-frontend/commit/12e034f6b95ae1706fbb50ea71ed42479ddfa36a))
+* **pn-14233:** vas physical address lookup ([#1526](https://github.com/pagopa/pn-frontend/issues/1526)) ([20a651c](https://github.com/pagopa/pn-frontend/commit/20a651c8a7461524a322108eb95ccd2aaf06bd42))
+* **PN-14823:** update link to downtime example link and update regex for htmlurl ([eb93ef6](https://github.com/pagopa/pn-frontend/commit/eb93ef6119a5e44475a0f17da358d5f839d7dc8b))
+
+## [2.15.1](https://github.com/pagopa/pn-frontend/compare/v2.15.1-RC.0...v2.15.1) (2025-06-04)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+# [2.15.0](https://github.com/pagopa/pn-frontend/compare/v2.15.0-RC.2...v2.15.0) (2025-05-12)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+# [2.15.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.14.0...v2.15.0-RC.0) (2025-04-24)
+
+
+### Bug Fixes
+
+* **PN-14346, PN-14348:** prevent set PEC address same as default one as special contact and show IO successfully added toast ([#1519](https://github.com/pagopa/pn-frontend/issues/1519)) ([112959b](https://github.com/pagopa/pn-frontend/commit/112959b2d4378f0649494669fc0f6adf2cf22fb3))
+
+
+### Features
+
+* **PN-11783:** rework UI of 404 page ([#1513](https://github.com/pagopa/pn-frontend/issues/1513)) ([806bc0f](https://github.com/pagopa/pn-frontend/commit/806bc0f1828f89333225a42fd4990b754cc6c170))
+* **pn-14082:** Handle PN_DELIVERY_NOTIFICATION_LIMIT_EXCEEDED ([#1537](https://github.com/pagopa/pn-frontend/issues/1537)) ([adb5fd9](https://github.com/pagopa/pn-frontend/commit/adb5fd9b868de3ae164a743d283d2e45678191bb))
+* **PN-14399:** update copy for payment items ([#1520](https://github.com/pagopa/pn-frontend/issues/1520)) ([ed02337](https://github.com/pagopa/pn-frontend/commit/ed02337bac510528a651ed27a2f29f6346b7fec0))
+
+
+
+
+
+# [2.14.0](https://github.com/pagopa/pn-frontend/compare/v2.14.0-RC.1...v2.14.0) (2025-04-10)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+# [2.14.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.14.0-RC.0...v2.14.0-RC.1) (2025-04-08)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+# [2.14.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.13.0...v2.14.0-RC.0) (2025-04-07)
+
+
+### Bug Fixes
+
+* **PN-14107, PN-14197, PN-14205:** enhance Mixpanel SEND_HAS_PEC and SEND_HAS_SERCQ_SEND settings ([#1508](https://github.com/pagopa/pn-frontend/issues/1508)) ([212a710](https://github.com/pagopa/pn-frontend/commit/212a710d14dbf380034148c470a65ec5d2033ad1))
+* **PN-14201:** copy of analog failure delivery in timeline when recipient is unreachable ([#1511](https://github.com/pagopa/pn-frontend/issues/1511)) ([89cf083](https://github.com/pagopa/pn-frontend/commit/89cf083f68b0ebea1a84debb271e3db62a21d09f))
+* **PN-14218, PN-14240, PN-14241:** resolved some bugs about Digital Domicile rework ([#1509](https://github.com/pagopa/pn-frontend/issues/1509)) ([a2064b1](https://github.com/pagopa/pn-frontend/commit/a2064b1511fe33fff5d39a5f700c8c177d41ee85))
+* **PN-14319:** add translation for invalid parameter error during SERCQ_SEND enabling ([#1514](https://github.com/pagopa/pn-frontend/issues/1514)) ([7513940](https://github.com/pagopa/pn-frontend/commit/7513940bed028d65524ca958273d80abb924ccd6))
+* **PN-14402:** fix landing site url in config [#1527](https://github.com/pagopa/pn-frontend/issues/1527) ([bced898](https://github.com/pagopa/pn-frontend/commit/bced89804dbbc02b79979409c73ddbf7d7ec2130))
+
+
+
+
+
 # [2.13.0](https://github.com/pagopa/pn-frontend/compare/v2.13.0-RC.2...v2.13.0) (2025-03-14)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp

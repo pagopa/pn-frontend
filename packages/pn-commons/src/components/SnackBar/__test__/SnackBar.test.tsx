@@ -8,8 +8,16 @@ const renderSnackBar = (open: boolean, type: AppResponseOutcome, closingDelay?: 
   render(
     <SnackBar
       open={open}
-      message={'SnackBar mocked message'}
       type={type}
+      message={{
+        id: '',
+        blocking: false,
+        title: '',
+        toNotify: false,
+        alreadyShown: false,
+        message: 'SnackBar mocked message',
+        showTechnicalData: false,
+      }}
       closingDelay={closingDelay}
     />
   );
@@ -50,5 +58,34 @@ describe('SnackBar Component', () => {
     });
     expect(snackBarContainer).not.toBeInTheDocument();
     vi.useRealTimers();
+  });
+
+  it('renders technical details when showTechnicalData is true', () => {
+    const { getByText } = render(
+      <SnackBar
+        open={true}
+        type={AppResponseOutcome.ERROR}
+        message={{
+          id: 'msg1',
+          blocking: false,
+          title: 'Something went wrong',
+          toNotify: false,
+          alreadyShown: false,
+          message: 'A technical error occurred.',
+          showTechnicalData: true,
+          errorCode: 'ERR-500',
+          traceId: 'trace-xyz-123',
+        }}
+      />
+    );
+
+    // Assert main content
+    expect(getByText('Something went wrong')).toBeInTheDocument();
+    expect(getByText('A technical error occurred.')).toBeInTheDocument();
+
+    // Assert technical details section
+    expect(getByText('ERR-500')).toBeInTheDocument();
+    expect(getByText('trace-xyz-123')).toBeInTheDocument();
+    expect(getByText(/Copia informazioni errore/i)).toBeInTheDocument(); // fallback localization
   });
 });

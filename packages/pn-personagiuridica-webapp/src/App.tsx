@@ -21,6 +21,7 @@ import {
   ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
+  addParamToUrl,
   appStateActions,
   errorFactoryManager,
   initLocalization,
@@ -35,6 +36,7 @@ import { goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
+import { apiLogout } from './redux/auth/actions';
 import { getDigitalAddresses } from './redux/contact/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
@@ -74,6 +76,7 @@ const ActualApp = () => {
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const [openModal, setOpenModal] = useState(false);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
+  const lastError = useAppSelector((state: RootState) => state.appState.lastError);
   const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
     (state: RootState) => state.userState
   );
@@ -249,10 +252,9 @@ const ActualApp = () => {
   };
 
   const handleAssistanceClick = () => {
+    const url = addParamToUrl(`${SELFCARE_BASE_URL}/assistenza`, 'data', JSON.stringify(lastError));
     /* eslint-disable-next-line functional/immutable-data */
-    window.location.href = sessionToken
-      ? `${SELFCARE_BASE_URL}/assistenza`
-      : `mailto:${PAGOPA_HELP_EMAIL}`;
+    window.location.href = sessionToken ? url : `mailto:${PAGOPA_HELP_EMAIL}`;
   };
 
   const [clickVersion] = useMultiEvent({
@@ -267,6 +269,14 @@ const ActualApp = () => {
 
   const handleUserLogout = () => {
     setOpenModal(true);
+  };
+
+  const performLogout = async () => {
+    await dispatch(apiLogout(loggedUser.sessionToken));
+
+    sessionStorage.clear();
+    goToLoginPortal();
+    setOpenModal(false);
   };
 
   return (
@@ -297,14 +307,7 @@ const ActualApp = () => {
             <Button id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
               {t('button.annulla')}
             </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                sessionStorage.clear();
-                goToLoginPortal();
-                setOpenModal(false);
-              }}
-            >
+            <Button data-testid="confirm-button" variant="contained" onClick={performLogout}>
               {t('header.logout')}
             </Button>
           </PnDialogActions>

@@ -29,7 +29,6 @@ const ConfirmationModal: React.FC<Props> = ({
 
   return (
     <PnDialog
-      id="confirmation-dialog"
       open={open}
       onClose={slotsProps?.closeButton?.onClick}
       aria-labelledby="confirmation-dialog-title"

@@ -1,16 +1,7 @@
-import { configureStore, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { appStateActions, appStateReducer } from '../appStateSlice';
-
-function createTestStore() {
-  return configureStore({
-    reducer: { appState: appStateReducer },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: false,
-      }),
-  });
-}
+import { createTestStore } from '../../../test-utils';
+import { appStateActions } from '../appStateSlice';
 
 let mockedActionResult: string | undefined;
 const mockedAction = createAsyncThunk<string, void>(
@@ -28,7 +19,11 @@ const mockedAction = createAsyncThunk<string, void>(
 );
 
 describe('App state slice tests', () => {
-  const store = createTestStore();
+  let store: ReturnType<typeof createTestStore>;
+
+  beforeEach(() => {
+    store = createTestStore();
+  });
 
   it('Initial state', () => {
     const state = store.getState();
@@ -48,14 +43,21 @@ describe('App state slice tests', () => {
   });
 
   it('addError', () => {
-    const payload = { title: 'mocked-title', message: 'mocked-message' };
+    const payload = {
+      title: 'mocked-title',
+      message: 'mocked-message',
+      showTechnicalData: false,
+      traceId: 'Root=trace-id',
+      errorCode: 'error-code',
+    };
     const action = store.dispatch(appStateActions.addError(payload));
     expect(action.type).toBe('appState/addError');
     expect(action.payload).toStrictEqual(payload);
     const state = store.getState().appState;
+    const id = state.messages.errors[0].id;
     expect(state.messages.errors).toEqual([
       {
-        id: '1',
+        id,
         title: 'mocked-title',
         message: 'mocked-message',
         blocking: false,
@@ -63,25 +65,48 @@ describe('App state slice tests', () => {
         status: undefined,
         alreadyShown: false,
         action: undefined,
+        showTechnicalData: false,
+        traceId: 'trace-id',
+        errorCode: 'error-code',
       },
     ]);
   });
 
   it('removeError', () => {
-    const action = store.dispatch(appStateActions.removeError('1'));
+    // add error message
+    const payload = {
+      title: 'mocked-title',
+      message: 'mocked-message',
+      showTechnicalData: false,
+      traceId: 'Root=trace-id',
+      errorCode: 'error-code',
+    };
+    store.dispatch(appStateActions.addError(payload));
+
+    // remove the message
+    const id = store.getState().appState.messages.errors[0].id;
+    const action = store.dispatch(appStateActions.removeError(id));
     expect(action.type).toBe('appState/removeError');
-    expect(action.payload).toStrictEqual('1');
+    expect(action.payload).toStrictEqual(id);
     const state = store.getState().appState;
     expect(state.messages.errors).toEqual([]);
   });
 
   it('removeErrorsByAction', () => {
-    const payload = { title: 'mocked-title', message: 'mocked-message', action: 'action-name' };
+    const payload = {
+      title: 'mocked-title',
+      message: 'mocked-message',
+      action: 'action-name',
+      showTechnicalData: true,
+      traceId: 'Root=trace-id',
+      errorCode: 'error-code',
+    };
     store.dispatch(appStateActions.addError(payload));
     let state = store.getState().appState;
+    const id = state.messages.errors[0].id;
     expect(state.messages.errors).toEqual([
       {
-        id: '2',
+        id,
         title: 'mocked-title',
         message: 'mocked-message',
         blocking: false,
@@ -89,6 +114,9 @@ describe('App state slice tests', () => {
         status: undefined,
         alreadyShown: false,
         action: 'action-name',
+        showTechnicalData: true,
+        traceId: 'trace-id',
+        errorCode: 'error-code',
       },
     ]);
     const action = store.dispatch(appStateActions.removeErrorsByAction('action-name'));
@@ -98,12 +126,20 @@ describe('App state slice tests', () => {
   });
 
   it('setErrorAsAlreadyShown', () => {
-    const payload = { title: 'mocked-title', message: 'mocked-message', action: 'action-name' };
+    const payload = {
+      title: 'mocked-title',
+      message: 'mocked-message',
+      action: 'action-name',
+      showTechnicalData: false,
+      traceId: 'Root=trace-id',
+      errorCode: 'error-code',
+    };
     store.dispatch(appStateActions.addError(payload));
     let state = store.getState().appState;
+    const id = state.messages.errors[0].id;
     expect(state.messages.errors).toEqual([
       {
-        id: '3',
+        id,
         title: 'mocked-title',
         message: 'mocked-message',
         blocking: false,
@@ -111,14 +147,17 @@ describe('App state slice tests', () => {
         status: undefined,
         alreadyShown: false,
         action: 'action-name',
+        showTechnicalData: false,
+        traceId: 'trace-id',
+        errorCode: 'error-code',
       },
     ]);
-    const action = store.dispatch(appStateActions.setErrorAsAlreadyShown('3'));
+    const action = store.dispatch(appStateActions.setErrorAsAlreadyShown(id));
     state = store.getState().appState;
     expect(action.type).toBe('appState/setErrorAsAlreadyShown');
     expect(state.messages.errors).toEqual([
       {
-        id: '3',
+        id,
         title: 'mocked-title',
         message: 'mocked-message',
         blocking: false,
@@ -126,6 +165,9 @@ describe('App state slice tests', () => {
         status: undefined,
         alreadyShown: true,
         action: 'action-name',
+        showTechnicalData: false,
+        traceId: 'trace-id',
+        errorCode: 'error-code',
       },
     ]);
   });
@@ -136,9 +178,10 @@ describe('App state slice tests', () => {
     expect(action.type).toBe('appState/addSuccess');
     expect(action.payload).toStrictEqual(payload);
     const state = store.getState().appState;
+    const id = state.messages.success[0].id;
     expect(state.messages.success).toEqual([
       {
-        id: '4',
+        id,
         title: 'mocked-title',
         message: 'mocked-message',
         blocking: false,
@@ -146,14 +189,23 @@ describe('App state slice tests', () => {
         status: undefined,
         alreadyShown: false,
         action: undefined,
+        showTechnicalData: false,
+        traceId: undefined,
+        errorCode: undefined,
       },
     ]);
   });
 
   it('removeSuccess', () => {
-    const action = store.dispatch(appStateActions.removeSuccess('4'));
+    // add success message
+    const payload = { title: 'mocked-title', message: 'mocked-message' };
+    store.dispatch(appStateActions.addSuccess(payload));
+    const id = store.getState().appState.messages.success[0].id;
+
+    //remove the message
+    const action = store.dispatch(appStateActions.removeSuccess(id));
     expect(action.type).toBe('appState/removeSuccess');
-    expect(action.payload).toStrictEqual('4');
+    expect(action.payload).toStrictEqual(id);
     const state = store.getState().appState;
     expect(state.messages.success).toEqual([]);
   });
@@ -164,9 +216,10 @@ describe('App state slice tests', () => {
     expect(action.type).toBe('appState/addInfo');
     expect(action.payload).toStrictEqual(payload);
     const state = store.getState().appState;
+    const id = state.messages.info[0].id;
     expect(state.messages.info).toEqual([
       {
-        id: '5',
+        id,
         title: 'mocked-title',
         message: 'mocked-message',
         blocking: false,
@@ -174,14 +227,22 @@ describe('App state slice tests', () => {
         status: undefined,
         alreadyShown: false,
         action: undefined,
+        showTechnicalData: false,
+        traceId: undefined,
+        errorCode: undefined,
       },
     ]);
   });
 
   it('removeInfo', () => {
-    const action = store.dispatch(appStateActions.removeInfo('5'));
+    // add info message
+    const payload = { title: 'mocked-title', message: 'mocked-message' };
+    store.dispatch(appStateActions.addInfo(payload));
+    const id = store.getState().appState.messages.info[0].id;
+
+    const action = store.dispatch(appStateActions.removeInfo(id));
     expect(action.type).toBe('appState/removeInfo');
-    expect(action.payload).toStrictEqual('5');
+    expect(action.payload).toStrictEqual(id);
     const state = store.getState().appState;
     expect(state.messages.info).toEqual([]);
   });
@@ -195,7 +256,14 @@ describe('App state slice tests', () => {
   });
 
   it('fulfilled matcher', async () => {
-    const payload = { title: 'mocked-title', message: 'mocked-message', action: 'mockedAction' };
+    const payload = {
+      title: 'mocked-title',
+      message: 'mocked-message',
+      action: 'mockedAction',
+      showTechnicalData: false,
+      traceId: 'trace-id',
+      errorCode: 'error-code',
+    };
     store.dispatch(appStateActions.addError(payload));
     // dispatch async action
     mockedActionResult = 'OK';
@@ -214,7 +282,14 @@ describe('App state slice tests', () => {
   });
 
   it('rejected matcher', async () => {
-    const payload = { title: 'mocked-title', message: 'mocked-message', action: 'mockedAction' };
+    const payload = {
+      title: 'mocked-title',
+      message: 'mocked-message',
+      action: 'mockedAction',
+      showTechnicalData: false,
+      traceId: 'trace-id',
+      errorCode: 'error-code',
+    };
     store.dispatch(appStateActions.addError(payload));
     // dispatch async action
     mockedActionResult = undefined;
@@ -230,5 +305,58 @@ describe('App state slice tests', () => {
         action: 'mockedAction',
       },
     });
+  });
+
+  it('addError sets lastError when showTechnicalData is true', () => {
+    const payload = {
+      title: 'mocked-title',
+      message: 'mocked-message',
+      showTechnicalData: true,
+      traceId: 'Root=trace-id',
+      errorCode: 'ERR_CODE',
+    };
+    store.dispatch(appStateActions.addError(payload));
+    const state = store.getState().appState;
+
+    expect(state.messages.errors).toHaveLength(1);
+    expect(state.lastError).toEqual({
+      traceId: 'trace-id',
+      errorCode: 'ERR_CODE',
+    });
+  });
+
+  it('addError resets lastError when showTechnicalData is false', () => {
+    // dispatch first error with technical data
+    store.dispatch(
+      appStateActions.addError({
+        title: 'Error 1',
+        message: 'With technical data',
+        showTechnicalData: true,
+        traceId: 'Root=trace-id',
+        errorCode: 'ERR_CODE_ONE',
+      })
+    );
+
+    // verify lastError has been set
+    let state = store.getState().appState;
+    expect(state.lastError).toEqual({
+      traceId: 'trace-id',
+      errorCode: 'ERR_CODE_ONE',
+    });
+
+    // dispatch second error without technical data
+    store.dispatch(
+      appStateActions.addError({
+        title: 'Error 2',
+        message: 'Without technical data',
+        showTechnicalData: false,
+        traceId: 'Root=trace-id',
+        errorCode: 'ERR_CODE_TWO',
+      })
+    );
+
+    // verify lastError has been reset properly
+    state = store.getState().appState;
+    expect(state.lastError).toBeUndefined();
   });
 });

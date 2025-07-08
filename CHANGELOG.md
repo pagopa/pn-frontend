@@ -3,6 +3,206 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.16.1](https://github.com/pagopa/pn-frontend/compare/v2.16.1-RC.1...v2.16.1) (2025-06-27)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+## [2.16.1-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.16.1-RC.0...v2.16.1-RC.1) (2025-06-26)
+
+
+### Bug Fixes
+
+* **pn-14941:** removed period from disclaimer checkbox ([727f996](https://github.com/pagopa/pn-frontend/commit/727f9966ecf1e4591ea9666647212846d0cee502))
+
+
+
+
+
+## [2.16.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.16.0...v2.16.1-RC.0) (2025-06-26)
+
+
+### Bug Fixes
+
+* **pn-14941:** fixed pa tests ([3b7dc33](https://github.com/pagopa/pn-frontend/commit/3b7dc33186e443273092fa02ad89544e4ad8701f))
+* **pn-14941:** removed period from disclaimer checkbox ([3e57762](https://github.com/pagopa/pn-frontend/commit/3e5776269b3859e095e70ddcf8e0103480cc9678))
+* **pn-14941:** restored disclaimer on digital domicile ([#1566](https://github.com/pagopa/pn-frontend/issues/1566)) ([1612094](https://github.com/pagopa/pn-frontend/commit/161209414dd064df5a761234e7aca7337b70d23e))
+
+
+
+
+
+# [2.16.0](https://github.com/pagopa/pn-frontend/compare/v2.16.0-RC.1...v2.16.0) (2025-06-12)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+# [2.16.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.15.1...v2.16.0-RC.1) (2025-06-06)
+
+
+
+# [2.16.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.15.0...v2.16.0-RC.0) (2025-05-27)
+
+
+### Bug Fixes
+
+* change wrong centered layout for timeline attachments ([bc4486e](https://github.com/pagopa/pn-frontend/commit/bc4486e1ce920c41f229afb8ac8be126e7ba829e))
+* fix wrong copy for CAD/ARCAD attachments in timeline (PF, PG) ([12707eb](https://github.com/pagopa/pn-frontend/commit/12707eba8d4a59342b25751ea70ec94a9ea7aba4))
+* replace malfunction link ([0ba403a](https://github.com/pagopa/pn-frontend/commit/0ba403a99124eca821c80baf2fdf83f3fec6d2f9))
+
+
+### Features
+
+* add draft copy for CAD/ARCAD in timeline ([49c3756](https://github.com/pagopa/pn-frontend/commit/49c3756a404ff48cc16f49e497aceb355ce830ff))
+* add draft copy for CAD/ARCAD in timeline ([#1547](https://github.com/pagopa/pn-frontend/issues/1547)) ([4f9dcbe](https://github.com/pagopa/pn-frontend/commit/4f9dcbeed3284f6b1d7a1747b745a22092be0ba3))
+* add new optional traceId param into support requests (draft) ([4a446a7](https://github.com/pagopa/pn-frontend/commit/4a446a732866e5e3701704e0be03c27c0b93e52c))
+* add PN_INVALID_BODY to errors for which technical data should be shown ([9eecd85](https://github.com/pagopa/pn-frontend/commit/9eecd856904c1e3d26f721615b13c00861ee129d))
+* add showTechnicalData attribute to AppError class to differentiate errors for which tech data needs to be shown ([12e034f](https://github.com/pagopa/pn-frontend/commit/12e034f6b95ae1706fbb50ea71ed42479ddfa36a))
+* add support utility to pn-commons ([2f8b34d](https://github.com/pagopa/pn-frontend/commit/2f8b34de7d3b212773b018275bad7615028f49f9))
+* change AppError to support non auto-closing error messages (draft) ([78d5530](https://github.com/pagopa/pn-frontend/commit/78d5530514f2f322c224c3529b58298fea7f4cad))
+* **pn-14233:** vas physical address lookup ([#1526](https://github.com/pagopa/pn-frontend/issues/1526)) ([20a651c](https://github.com/pagopa/pn-frontend/commit/20a651c8a7461524a322108eb95ccd2aaf06bd42))
+* **PN-14823:** update link to downtime example link and update regex for htmlurl ([eb93ef6](https://github.com/pagopa/pn-frontend/commit/eb93ef6119a5e44475a0f17da358d5f839d7dc8b))
+
+
+
+
+
+# [2.16.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.15.0...v2.16.0-RC.0) (2025-05-27)
+
+
+### Bug Fixes
+
+* change wrong centered layout for timeline attachments ([bc4486e](https://github.com/pagopa/pn-frontend/commit/bc4486e1ce920c41f229afb8ac8be126e7ba829e))
+* fix wrong copy for CAD/ARCAD attachments in timeline (PF, PG) ([12707eb](https://github.com/pagopa/pn-frontend/commit/12707eba8d4a59342b25751ea70ec94a9ea7aba4))
+* replace malfunction link ([0ba403a](https://github.com/pagopa/pn-frontend/commit/0ba403a99124eca821c80baf2fdf83f3fec6d2f9))
+
+
+### Features
+
+* add draft copy for CAD/ARCAD in timeline ([49c3756](https://github.com/pagopa/pn-frontend/commit/49c3756a404ff48cc16f49e497aceb355ce830ff))
+* add draft copy for CAD/ARCAD in timeline ([#1547](https://github.com/pagopa/pn-frontend/issues/1547)) ([4f9dcbe](https://github.com/pagopa/pn-frontend/commit/4f9dcbeed3284f6b1d7a1747b745a22092be0ba3))
+* add new optional traceId param into support requests (draft) ([4a446a7](https://github.com/pagopa/pn-frontend/commit/4a446a732866e5e3701704e0be03c27c0b93e52c))
+* add PN_INVALID_BODY to errors for which technical data should be shown ([9eecd85](https://github.com/pagopa/pn-frontend/commit/9eecd856904c1e3d26f721615b13c00861ee129d))
+* add showTechnicalData attribute to AppError class to differentiate errors for which tech data needs to be shown ([12e034f](https://github.com/pagopa/pn-frontend/commit/12e034f6b95ae1706fbb50ea71ed42479ddfa36a))
+* add support utility to pn-commons ([2f8b34d](https://github.com/pagopa/pn-frontend/commit/2f8b34de7d3b212773b018275bad7615028f49f9))
+* change AppError to support non auto-closing error messages (draft) ([78d5530](https://github.com/pagopa/pn-frontend/commit/78d5530514f2f322c224c3529b58298fea7f4cad))
+* **pn-14233:** vas physical address lookup ([#1526](https://github.com/pagopa/pn-frontend/issues/1526)) ([20a651c](https://github.com/pagopa/pn-frontend/commit/20a651c8a7461524a322108eb95ccd2aaf06bd42))
+* **PN-14823:** update link to downtime example link and update regex for htmlurl ([eb93ef6](https://github.com/pagopa/pn-frontend/commit/eb93ef6119a5e44475a0f17da358d5f839d7dc8b))
+
+## [2.15.1](https://github.com/pagopa/pn-frontend/compare/v2.15.1-RC.0...v2.15.1) (2025-06-04)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+## [2.15.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.15.0...v2.15.1-RC.0) (2025-05-28)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+# [2.15.0](https://github.com/pagopa/pn-frontend/compare/v2.15.0-RC.2...v2.15.0) (2025-05-12)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+# [2.15.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.15.0-RC.1...v2.15.0-RC.2) (2025-05-06)
+
+
+### Bug Fixes
+
+* **PN-14852:** restore label included-costs ([#1543](https://github.com/pagopa/pn-frontend/issues/1543)) ([ffccbee](https://github.com/pagopa/pn-frontend/commit/ffccbee87735077318c0781b4c5c174e734d18dd))
+
+
+
+
+
+# [2.15.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.15.0-RC.0...v2.15.0-RC.1) (2025-04-28)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+# [2.15.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.14.0...v2.15.0-RC.0) (2025-04-24)
+
+
+### Bug Fixes
+
+* **PN-11782:** Fix loading overlay a11y  ([#1496](https://github.com/pagopa/pn-frontend/issues/1496)) ([e3a89af](https://github.com/pagopa/pn-frontend/commit/e3a89afef372c48245acb08a8d9d7523274d179b))
+* **pn-14012:** Show right copy when no issuer is present ([#1486](https://github.com/pagopa/pn-frontend/issues/1486)) ([ab7a3d0](https://github.com/pagopa/pn-frontend/commit/ab7a3d09b579427b7de0d261eb0893a648ad71bb))
+* **PN-14346, PN-14348:** prevent set PEC address same as default one as special contact and show IO successfully added toast ([#1519](https://github.com/pagopa/pn-frontend/issues/1519)) ([112959b](https://github.com/pagopa/pn-frontend/commit/112959b2d4378f0649494669fc0f6adf2cf22fb3))
+
+
+### Features
+
+* **PN-11783:** rework UI of 404 page ([#1513](https://github.com/pagopa/pn-frontend/issues/1513)) ([806bc0f](https://github.com/pagopa/pn-frontend/commit/806bc0f1828f89333225a42fd4990b754cc6c170))
+* **pn-14082:** Handle PN_DELIVERY_NOTIFICATION_LIMIT_EXCEEDED ([#1537](https://github.com/pagopa/pn-frontend/issues/1537)) ([adb5fd9](https://github.com/pagopa/pn-frontend/commit/adb5fd9b868de3ae164a743d283d2e45678191bb))
+* **PN-14399:** update copy for payment items ([#1520](https://github.com/pagopa/pn-frontend/issues/1520)) ([ed02337](https://github.com/pagopa/pn-frontend/commit/ed02337bac510528a651ed27a2f29f6346b7fec0))
+
+
+
+
+
+# [2.14.0](https://github.com/pagopa/pn-frontend/compare/v2.14.0-RC.1...v2.14.0) (2025-04-10)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+# [2.14.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.14.0-RC.0...v2.14.0-RC.1) (2025-04-08)
+
+
+### Bug Fixes
+
+* **PN-14412:** add Selfcare CDN URLs in Content Security Policy ([#1535](https://github.com/pagopa/pn-frontend/issues/1535)) ([1cda170](https://github.com/pagopa/pn-frontend/commit/1cda170ef0814c196766946a541e855a6e2d373b))
+
+
+
+
+
+# [2.14.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.13.0...v2.14.0-RC.0) (2025-04-07)
+
+
+### Bug Fixes
+
+* **PN-13660:** hide name column on VirtualKeyTable for non-admin users (PG) ([#1510](https://github.com/pagopa/pn-frontend/issues/1510)) ([ca01555](https://github.com/pagopa/pn-frontend/commit/ca015558ceb711a32880f44645a4b623ac84a4e0))
+* **PN-14107, PN-14197, PN-14205:** enhance Mixpanel SEND_HAS_PEC and SEND_HAS_SERCQ_SEND settings ([#1508](https://github.com/pagopa/pn-frontend/issues/1508)) ([212a710](https://github.com/pagopa/pn-frontend/commit/212a710d14dbf380034148c470a65ec5d2033ad1))
+* **PN-14201:** copy of analog failure delivery in timeline when recipient is unreachable ([#1511](https://github.com/pagopa/pn-frontend/issues/1511)) ([89cf083](https://github.com/pagopa/pn-frontend/commit/89cf083f68b0ebea1a84debb271e3db62a21d09f))
+* **PN-14217:** Preserve error on DebtPositionDetail and payment boxes when navigate between steps ([#1512](https://github.com/pagopa/pn-frontend/issues/1512)) ([dc9d407](https://github.com/pagopa/pn-frontend/commit/dc9d4074d934038320ef7e1198c13c73457cf89c))
+* **PN-14218, PN-14240, PN-14241:** resolved some bugs about Digital Domicile rework ([#1509](https://github.com/pagopa/pn-frontend/issues/1509)) ([a2064b1](https://github.com/pagopa/pn-frontend/commit/a2064b1511fe33fff5d39a5f700c8c177d41ee85))
+* **PN-14319:** add translation for invalid parameter error during SERCQ_SEND enabling ([#1514](https://github.com/pagopa/pn-frontend/issues/1514)) ([7513940](https://github.com/pagopa/pn-frontend/commit/7513940bed028d65524ca958273d80abb924ccd6))
+* **PN-14326:** hide installment alert on F24 payment box when fee policy is FLAT_RATE ([#1515](https://github.com/pagopa/pn-frontend/issues/1515)) ([ff4580b](https://github.com/pagopa/pn-frontend/commit/ff4580bb85a66a28dcd523c6963ba032f00690ed))
+* **PN-14328:** break text when F24 name is too long ([#1516](https://github.com/pagopa/pn-frontend/issues/1516)) ([95245e8](https://github.com/pagopa/pn-frontend/commit/95245e8f3c5e90ee3eaa33d0cc6c5d8c3c07d3fe))
+* **PN-14402:** fix landing site url in config [#1527](https://github.com/pagopa/pn-frontend/issues/1527) ([bced898](https://github.com/pagopa/pn-frontend/commit/bced89804dbbc02b79979409c73ddbf7d7ec2130))
+
+
+### Features
+
+* **PN-13977:** Tests of notification creation with payment enabled ([#1492](https://github.com/pagopa/pn-frontend/issues/1492)) ([cf12063](https://github.com/pagopa/pn-frontend/commit/cf12063539072538cc1e583425b227e81bec2a9f))
+* **pn-14334:** Add GitHub Action to update pn-bff dependency ([#1524](https://github.com/pagopa/pn-frontend/issues/1524)) ([21a7538](https://github.com/pagopa/pn-frontend/commit/21a7538841dcf4d632cffb81143381fa90366612))
+* **PN-14412:** add organization logo to header on PG ([#1521](https://github.com/pagopa/pn-frontend/issues/1521)) ([66399fa](https://github.com/pagopa/pn-frontend/commit/66399fab43519e941b6f04ce1d07bab7eb2d4c18))
+
+
+
+
+
 # [2.13.0](https://github.com/pagopa/pn-frontend/compare/v2.13.0-RC.2...v2.13.0) (2025-03-14)
 
 **Note:** Version bump only for package pn-frontend

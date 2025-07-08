@@ -26,7 +26,7 @@
     "pago-pa-link": "Sito di PagoPA S.p.A.",
     "reserved-area": "Area Riservata",
     "notification-platform": "SEND - Servizio Notifiche Digitali",
-    "logout-message": "Confermi di voler uscire da SEND?"
+    "logout-message": "Confermi di voler uscire da Area Riservata?"
   },
   "tos": {
     "title": "SEND - Servizio Notifiche Digitali",
@@ -89,8 +89,9 @@
   "not-logged": "Accedi all'Area Riservata",
   "not-logged-subtitle": "Per usare SEND, accedi all'Area Riservata con SPID o CIE. Poi, premi \"Gestisci\" nella card corrispondente.",
   "not-found": {
-    "title": "404: La pagina che stai cercando non esiste",
-    "descpription": "Sei qui per errore, prova ad usare la navigazione."
+    "title": "Quello che cercavi non è qui.",
+    "descpription": "La pagina che hai tentato di raggiungere non esiste o non è più disponibile.",
+    "back-to-home": "Torna alla home"
   },
   "leaving-app": {
     "title": "Stai uscendo da SEND",
@@ -175,5 +176,27 @@
     "title": "Vuoi davvero uscire da SEND?",
     "body": "La disconnessione è in corso. Se hai cambiato idea premi “Mantieni l’accesso” entro pochi secondi.",
     "action": "Mantieni l’accesso"
+  },
+  "errors": {
+    "technical-error": {
+      "title": "Informazioni errore",
+      "copy-to-clipboard": "Copia informazioni errore"
+    },
+    "invalid_body": {
+      "title": "I dati non sono validi",
+      "message": "Si è verificato un errore durante l’invio dei dati. Controlla che siano corretti, senza spazi o caratteri speciali, e riprova. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
+    },
+    "internal_server": {
+      "title": "Si è verificato un errore",
+      "message": "Il servizio non è disponibile a causa di un problema tecnico. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
+    },
+    "unhandled": {
+      "title": "Si è verificato un errore",
+      "message": "Il servizio non è disponibile. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
+    },
+    "unknown": {
+      "title": "Si è verificato un errore",
+      "message": "Il servizio non è disponibile. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
+    }
   }
 }

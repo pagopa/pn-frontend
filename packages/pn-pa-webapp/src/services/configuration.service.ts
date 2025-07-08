@@ -1,9 +1,10 @@
 import { Configuration, IS_DEVELOP, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
 
+import { PhysicalAddressLookupConfig } from '../models/NewNotification';
+
 export interface PaConfiguration {
   OT_DOMAIN_ID: string;
-  SELFCARE_URL_FE_LOGIN: string;
   SELFCARE_BASE_URL: string;
   API_BASE_URL: string;
   LANDING_SITE_URL: string;
@@ -23,13 +24,13 @@ export interface PaConfiguration {
   DOWNTIME_EXAMPLE_LINK: string;
   PAYMENT_INFO_LINK: string;
   DEVELOPER_API_DOCUMENTATION_LINK: string;
+  PHYSICAL_ADDRESS_LOOKUP: PhysicalAddressLookupConfig;
 }
 
 class PaConfigurationValidator extends Validator<PaConfiguration> {
   constructor() {
     super();
     this.ruleFor('OT_DOMAIN_ID').isString().isRequired().matches(dataRegex.token);
-    this.ruleFor('SELFCARE_URL_FE_LOGIN').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('SELFCARE_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('API_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('LANDING_SITE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
@@ -52,6 +53,10 @@ class PaConfigurationValidator extends Validator<PaConfiguration> {
       .isString()
       .isRequired()
       .matches(dataRegex.htmlPageUrl);
+    this.ruleFor('PHYSICAL_ADDRESS_LOOKUP')
+      .isString()
+      .isRequired()
+      .isOneOf(Object.values(PhysicalAddressLookupConfig));
   }
 }
 

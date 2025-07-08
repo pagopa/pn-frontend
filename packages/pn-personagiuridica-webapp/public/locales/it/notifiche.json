@@ -69,9 +69,9 @@
     "disclaimer-link": "Scopri di più",
     "payment": {
       "title": "Pagamento",
-      "single-payment-subtitle": "L'importo finale potrebbe essere diverso da quello indicato.",
-      "subtitle": "In questa notifica ci sono più avvisi di pagamento: seleziona quello che vuoi pagare. Alcuni avvisi includono i costi di notifica.",
-      "subtitle-f24": "Puoi pagare questa notifica tramite F24. Per vedere i dettagli, apri i modelli.",
+      "single-payment-subtitle": "L'importo finale potrebbe essere diverso da quello indicato nell’atto e includere i costi di notifica.",
+      "subtitle": "In questa notifica ci sono più avvisi di pagamento: seleziona quello che vuoi pagare. L'importo finale potrebbe essere diverso da quello indicato nell’atto e includere i costi di notifica.",
+      "subtitle-f24": "Puoi pagare questa notifica tramite F24. Per vedere i dettagli, apri i modelli. L'importo finale potrebbe essere diverso da quello indicato nell’atto e includere i costi di notifica.",
       "subtitle-mixed": "In questa notifica ci sono più possibilità di pagamento: seleziona o scarica ciò che vuoi pagare. Alcuni importi includono i costi di notifica.",
       "how": "Come mai?",
       "f24Models": "Modelli F24",
@@ -322,6 +322,8 @@
         "23I": "Ricevuta di consegna",
         "Plico": "Scansione del plico",
         "23L": "Avviso di ricevimento",
+        "CAD": "È disponibile la dematerializzazione della raccomandata che contiene la comunicazione di avvenuto deposito",
+        "ARCAD": "È disponibile la dematerializzazione dell'avviso di ricevimento della raccomandata che contiene la comunicazione di avvenuto deposito",
         "Indagine": "Scansione dell'indagine",
         "generic": "Documento allegato"
       },
@@ -356,6 +358,20 @@
     "help": {
       "goto": "Vai al sito",
       "assistance": "Per problemi tecnici o domande relative a SEND, premi su “Assisistenza” in alto a destra."
+    },
+    "errors": {
+      "delivery_file_info_not_found": {
+        "title": "Il documento non è disponibile",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Il documento non è disponibile",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Il documento non è disponibile",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
+      }
     }
   },
   "delegatorTitle": "Le notifiche di {{name}}",

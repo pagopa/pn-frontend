@@ -97,13 +97,11 @@
     "sercq_send": "Domicile Numérique SEND",
     "link-pec-label": "Votre PEC",
     "link-sercq-label": "Votre Domicile Numérique SEND",
-    "contact-to-add": "Adresse",
     "contact-to-add-description": "Associez une adresse à un organisme spécifique pour personnaliser les communications que vous recevez en fonction de l’expéditeur.",
     "contact-already-exists": "L’organisme sélectionné est déjà associé à cette adresse. Si vous appuyez sur « Associer », elle sera remplacée par celle que avez indiquer ici.",
     "fetch-party-error": "Nous n’avons pas pu récupérer les données dont nous avions besoin pour créer une nouvelle adresse.",
     "modal-title": "Personnaliser l’adresse associée à un organisme",
     "card-title": "Personnalisées",
-    "sender": "Organisme",
     "remove-special-title": "Vous souhaitez supprimer {{contactValue}}?",
     "remove-special-description": "Les avis sur les notifications des organismes associés ne seront plus envoyés à cette adresse mais à l’adresse principale."
   },

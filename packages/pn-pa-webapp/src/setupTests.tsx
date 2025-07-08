@@ -12,6 +12,7 @@ import '@testing-library/jest-dom';
 import { initAxiosClients } from './api/apiClients';
 import { initStore } from './redux/store';
 import { PaConfiguration } from './services/configuration.service';
+import { PhysicalAddressLookupConfig } from './models/NewNotification';
 
 beforeAll(() => {
   Configuration.setForTest<PaConfiguration>({
@@ -22,7 +23,6 @@ beforeAll(() => {
     ONE_TRUST_TOS: 'b0da531e-8370-4373-8bd2-61ddc89e7fa6',
     OT_DOMAIN_ID: '29cc1c86-f2ef-494d-8242-9bec8009cd29',
     PAGOPA_HELP_EMAIL: 'assistenza@pn.it',
-    SELFCARE_URL_FE_LOGIN: 'https://test.selfcare.pagopa.it/auth/login',
     SELFCARE_BASE_URL: 'https://test.selfcare.pagopa.it',
     SELFCARE_SEND_PROD_ID: 'prod-pn-test',
     IS_PAYMENT_ENABLED: false,
@@ -36,6 +36,7 @@ beforeAll(() => {
     LANDING_SITE_URL: 'https://test.landing.pagopa.it',
     PAYMENT_INFO_LINK: 'https://test.payment.pagopa.it',
     DEVELOPER_API_DOCUMENTATION_LINK: 'https://test.api.pagopa.it',
+    PHYSICAL_ADDRESS_LOOKUP: PhysicalAddressLookupConfig.ON,
   });
   initStore(false);
   initAxiosClients();

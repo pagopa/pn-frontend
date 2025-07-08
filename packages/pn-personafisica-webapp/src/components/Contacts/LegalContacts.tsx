@@ -7,7 +7,7 @@ import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import SavingsIcon from '@mui/icons-material/Savings';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
-import { Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/material';
+import { Alert, Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -91,7 +91,8 @@ const LegalContacts = () => {
   const hasPecActive = defaultPECAddress?.value && defaultPECAddress.pecValid === true;
   const hasSercqSendActive = !!defaultSERCQ_SENDAddress;
   const isActive = hasPecActive || (hasSercqSendActive && !isValidatingPec);
-  const showSpecialContactsSection = specialAddresses.length > 0;
+  const showSpecialContactsSection =
+    specialAddresses.filter((addr) => addr.addressType === AddressType.LEGAL).length > 0;
 
   const channelType =
     hasSercqSendActive && !isValidatingPec ? ChannelType.SERCQ_SEND : ChannelType.PEC;
@@ -212,7 +213,12 @@ const LegalContacts = () => {
           {t(`legal-contacts.${channelType.toLowerCase()}-description`, { ns: 'recapiti' })}
         </Typography>
       )}
-      {showSpecialContactsSection && <SpecialContacts />}
+      {(isValidatingPec || hasPecActive) && (
+        <Alert severity="info" sx={{ mt: 2 }}>
+          {t(`legal-contacts.pec-disclaimer`, { ns: 'recapiti' })}
+        </Alert>
+      )}
+      {showSpecialContactsSection && <SpecialContacts addressType={AddressType.LEGAL} />}
       <DeleteDialog
         showModal={modalOpen}
         removeModalTitle={t(

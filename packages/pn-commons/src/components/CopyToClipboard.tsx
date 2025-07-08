@@ -1,29 +1,39 @@
-import { useEffect, useState } from 'react';
+import { ComponentPropsWithoutRef, useEffect, useState } from 'react';
 
 import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { Button, Link, SxProps, Theme, Tooltip } from '@mui/material';
+import { Button, SxProps, Theme, Tooltip } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../hooks';
+
+type AllowedSlots = typeof Button | typeof ButtonNaked;
+type AllowedSlotProps = ComponentPropsWithoutRef<AllowedSlots>;
 
 type Props = {
   /** callback used to retrieve the text to be copied */
   getValue: () => string;
   /** an optional text to be displayed near the "copy to clipboard" icon */
   text?: string;
+  textPosition?: 'start' | 'end';
   tooltipMode?: boolean;
   tooltip?: string;
   tooltipBefore?: string;
   disabled?: boolean;
+  slot?: AllowedSlots;
+  slotProps?: AllowedSlotProps;
 };
 
 const CopyToClipboard: React.FC<Props> = ({
   getValue,
   text,
+  textPosition = 'end',
   tooltipMode,
   tooltip = '',
   tooltipBefore = '',
   disabled = false,
+  slot,
+  slotProps = {},
 }) => {
   const padding = tooltipMode ? 0 : undefined;
   const alertButtonStyle: SxProps<Theme> = useIsMobile()
@@ -53,23 +63,26 @@ const CopyToClipboard: React.FC<Props> = ({
     }
   };
 
+  const SlotComponent = slot || Button;
+
   return (
-    <Button
-      component={Link}
+    <SlotComponent
       color="primary"
       sx={{ ...alertButtonStyle }}
       onClick={doCopyToClipboard}
       disabled={disabled}
       aria-label={copied ? tooltip : tooltipBefore}
+      {...slotProps}
     >
+      {textPosition === 'start' && text}
       {copied && (
         <Tooltip arrow={true} title={tooltip} placement="top">
           <CheckIcon fontSize="small" sx={{ m: '5px' }} />
         </Tooltip>
       )}
       {!copied && <ContentCopyIcon fontSize="small" sx={{ m: '5px' }} />}
-      {text}
-    </Button>
+      {textPosition === 'end' && text}
+    </SlotComponent>
   );
 };
 

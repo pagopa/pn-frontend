@@ -97,13 +97,11 @@
     "sercq_send": "SEND digital domicile",
     "link-pec-label": "Your PEC",
     "link-sercq-label": "Your SEND Digital Domicile",
-    "contact-to-add": "Address",
     "contact-to-add-description": "Associate an address with a specific institution to customize the communications you receive based on the sender.",
     "contact-already-exists": "The selected institution is already associated with this address. If you press \"Associate\", it will be replaced by the one you indicated here.",
     "fetch-party-error": "We were unable to retrieve the data needed to create a new address.",
     "modal-title": "Customize the address associated with an institution",
     "card-title": "Customized",
-    "sender": "Institution",
     "remove-special-title": "Do you want to delete {{contactValue}}?",
     "remove-special-description": "The notifications related to the notifications of the associated institutions will no longer be sent to this address, but to the main one."
   },

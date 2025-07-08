@@ -76,7 +76,7 @@ describe('NotificationPaymentF24Item Component', () => {
     attachmentIdx?: number | undefined
   ) => store.dispatch(getSentNotificationPayment({ name, attachmentIdx, downloadStatus }));
 
-  it('renders component - should show title of f24Item', () => {
+  it('renders component - should show title and included cost label of f24Item', () => {
     const item = { ...f24Item, applyCost: true };
     const { container, getByTestId } = render(
       <NotificationPaymentF24Item
@@ -88,16 +88,28 @@ describe('NotificationPaymentF24Item Component', () => {
       />
     );
     expect(container).toHaveTextContent(item.title);
+    expect(container).toHaveTextContent('included-costs');
     const downloadBtn = getByTestId('download-f24-button');
     expect(downloadBtn).toBeInTheDocument();
-    // applyCost caption
-    const caption = getByTestId('f24-apply-costs-caption');
-    expect(caption).toBeInTheDocument();
+  });
+
+  it('renders component - should show label if costs are included', () => {
+    const item = { ...f24Item, applyCost: true };
+    const { container } = render(
+      <NotificationPaymentF24Item
+        f24Item={item}
+        timerF24={TIMERF24}
+        getPaymentAttachmentAction={vi.fn()}
+        disableDownload={false}
+        handleDownload={() => {}}
+      />
+    );
+    expect(container).toHaveTextContent('included-costs');
   });
 
   it('should show the correct label if is a PagoPA attachment', () => {
     const item = { ...f24Item, applyCost: true };
-    const { container, getByTestId, queryByTestId } = render(
+    const { container, getByTestId } = render(
       <NotificationPaymentF24Item
         f24Item={item}
         timerF24={TIMERF24}
@@ -110,9 +122,6 @@ describe('NotificationPaymentF24Item Component', () => {
     expect(container).toHaveTextContent('detail.payment.download-f24');
     const downloadBtn = getByTestId('download-f24-button');
     expect(downloadBtn).toBeInTheDocument();
-    // if payment is an attachment, the applyCost caption must be not shown
-    const caption = queryByTestId('f24-apply-costs-caption');
-    expect(caption).not.toBeInTheDocument();
   });
 
   it('should call function handleDownloadAttachment when click on download button', () => {
@@ -136,7 +145,7 @@ describe('NotificationPaymentF24Item Component', () => {
     );
   });
 
-  it('immediatly dowload the attachment', async () => {
+  it('immediatly download the attachment', async () => {
     const item = { ...f24Item, attachmentIdx: 1 };
     const { getByTestId } = render(
       <NotificationPaymentF24Item

@@ -9,7 +9,9 @@ import { userResponse } from '../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { institutionsDTO, productsDTO } from '../__mocks__/User.mock';
 import { apiClient } from '../api/apiClients';
-import { RenderResult, act, render } from './test-utils';
+import { SELFCARE_LOGIN_PATH, SELFCARE_LOGOUT_PATH } from '../navigation/routes.const';
+import { getConfiguration } from '../services/configuration.service';
+import { RenderResult, act, fireEvent, getByText, render, screen, waitFor } from './test-utils';
 
 vi.mock('../pages/Dashboard.page', () => ({ default: () => <div>Generic Page</div> }));
 
@@ -45,6 +47,8 @@ const reduxInitialState = {
 describe('App', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
+  const mockOpenFn = vi.fn();
+  const originalOpen = window.open;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -54,15 +58,22 @@ describe('App', async () => {
       Promise.resolve({
         json: () => Promise.resolve([]),
       }) as Promise<Response>;
+
+    Object.defineProperty(window, 'open', {
+      configurable: true,
+      value: mockOpenFn,
+    });
   });
 
   afterEach(() => {
     mock.reset();
+    vi.restoreAllMocks();
   });
 
   afterAll(() => {
     mock.restore();
     global.fetch = unmockedFetch;
+    Object.defineProperty(window, 'open', { configurable: true, value: originalOpen });
   });
 
   it('render component - user not logged in', async () => {
@@ -75,9 +86,9 @@ describe('App', async () => {
     expect(footer).toBeInTheDocument();
     const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-    expect(result.container).toHaveTextContent(
-      'Non hai le autorizzazioni necessarie per accedere a questa pagina'
-    );
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGIN_PATH}`;
+    expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
   });
 
   it('render component - user logged in', async () => {
@@ -129,5 +140,30 @@ describe('App', async () => {
     expect(tosPage).toBeInTheDocument();
     expect(result.container).not.toHaveTextContent('Generic Page');
     expect(mock.history.get).toHaveLength(5);
+  });
+
+  it('render component - user logs out', async () => {
+    const clearSpy = vi.spyOn(Storage.prototype, 'clear');
+
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+
+    const header = result.container.querySelector('header');
+    expect(header).toBeInTheDocument();
+
+    const button = getByText(header!, 'Esci');
+    fireEvent.click(button);
+
+    const modalConfirmButton = await waitFor(() => screen.queryByTestId('confirm-button'));
+    fireEvent.click(modalConfirmButton!);
+    
+    await waitFor(() => {
+      expect(mockOpenFn).toHaveBeenCalledTimes(1);
+      const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT_PATH}`;
+      expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
+      expect(clearSpy).toHaveBeenCalled();
+    });
+
   });
 });

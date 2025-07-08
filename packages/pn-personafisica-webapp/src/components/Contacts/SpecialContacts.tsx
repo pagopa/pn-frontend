@@ -1,7 +1,16 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Card, CardContent, Divider, Stack, Typography } from '@mui/material';
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Card,
+  CardContent,
+  Divider,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { SERCQ_SEND_VALUE, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -35,7 +44,10 @@ enum ModalType {
   CANCEL_VALIDATION = 'cancel_validation',
 }
 
-const SpecialContacts: React.FC = () => {
+const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: ChannelType }> = ({
+  addressType,
+  channelType,
+}) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const { addresses, specialAddresses } = useAppSelector(contactsSelectors.selectAddresses);
@@ -49,7 +61,7 @@ const SpecialContacts: React.FC = () => {
     channelType: ChannelType.PEC,
   });
 
-  const labelRoot = `legal-contacts`;
+  const labelRoot = `${addressType.toLowerCase()}-contacts`;
   const contactType = currentAddress.current.channelType.toLowerCase();
 
   const sendSuccessEvent = (type: ChannelType) => {
@@ -117,7 +129,7 @@ const SpecialContacts: React.FC = () => {
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
-      addressType: AddressType.LEGAL,
+      addressType,
       senderId: currentAddress.current.senderId,
       senderName: currentAddress.current.senderName,
       channelType: currentAddress.current.channelType,
@@ -170,7 +182,7 @@ const SpecialContacts: React.FC = () => {
     setModalOpen(null);
     dispatch(
       deleteAddress({
-        addressType: AddressType.LEGAL,
+        addressType,
         senderId: currentAddress.current.senderId,
         channelType: currentAddress.current.channelType,
       })
@@ -242,6 +254,8 @@ const SpecialContacts: React.FC = () => {
    */
   const uniqueAddresses: Array<DigitalAddress> = specialAddresses.filter(
     (addr, _, arr) =>
+      addr.addressType === addressType &&
+      (channelType ? addr.channelType === channelType : true) &&
       arr.findIndex(
         (el) =>
           addr.senderId === el.senderId &&
@@ -251,6 +265,20 @@ const SpecialContacts: React.FC = () => {
       ) === -1
   );
 
+  const groupedAddresses = uniqueAddresses.reduce<
+    Array<{ senderId: string; addresses: Array<DigitalAddress> }>
+  >((arr, addr) => {
+    const addrIndex = arr.findIndex((el) => el.senderId === addr.senderId);
+    if (addrIndex === -1) {
+      // eslint-disable-next-line functional/immutable-data
+      arr.push({ senderId: addr.senderId, addresses: [addr] });
+    } else {
+      // eslint-disable-next-line functional/immutable-data
+      arr[addrIndex].addresses.push(addr);
+    }
+    return arr;
+  }, []);
+
   return (
     <>
       <Card sx={{ mt: 3, backgroundColor: 'grey.50', borderRadius: 0.5 }}>
@@ -258,31 +286,50 @@ const SpecialContacts: React.FC = () => {
           <Typography fontSize="14px" fontWeight={700} mb={3}>
             {t('special-contacts.card-title', { ns: 'recapiti' })}
           </Typography>
+          {addressType === AddressType.COURTESY && (
+            <Alert severity="warning" sx={{ mb: 3 }}>
+              <AlertTitle>
+                {t(`special-contacts.courtesy-banner.title`, {
+                  ns: 'recapiti',
+                })}
+              </AlertTitle>
+              {t(`special-contacts.courtesy-banner.description`, {
+                ns: 'recapiti',
+              })}
+            </Alert>
+          )}
           <Stack
             spacing={3}
             divider={<Divider sx={{ backgroundColor: 'white', color: 'text.secondary' }} />}
           >
-            {uniqueAddresses.map((addr) => (
-              <SpecialContactItem
-                key={`sender-${addr.senderId}`}
-                address={addr}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-                onCancelValidation={handleCancelValidation}
-              />
+            {groupedAddresses.map((group) => (
+              <Box key={`sender-${group.senderId}`}>
+                {group.addresses.map((addr, index) => (
+                  <SpecialContactItem
+                    key={`sender-${group.senderId}-${addr.channelType.toLowerCase()}`}
+                    address={addr}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    onCancelValidation={handleCancelValidation}
+                    showSenderName={index === 0}
+                  />
+                ))}
+              </Box>
             ))}
           </Stack>
         </CardContent>
       </Card>
-      <ContactCodeDialog
-        value={currentAddress.current.value}
-        addressType={AddressType.LEGAL}
-        channelType={currentAddress.current.channelType}
-        open={modalOpen === ModalType.CODE}
-        onConfirm={(code) => handleCodeVerification(code)}
-        onDiscard={handleCloseModal}
-        onError={() => sendCodeErrorEvent(currentAddress.current.channelType)}
-      />
+      {addressType === AddressType.LEGAL && (
+        <ContactCodeDialog
+          value={currentAddress.current.value}
+          addressType={addressType}
+          channelType={currentAddress.current.channelType}
+          open={modalOpen === ModalType.CODE}
+          onConfirm={(code) => handleCodeVerification(code)}
+          onDiscard={handleCloseModal}
+          onError={() => sendCodeErrorEvent(currentAddress.current.channelType)}
+        />
+      )}
       <DeleteDialog
         showModal={modalOpen === ModalType.DELETE}
         removeModalTitle={t(`special-contacts.remove-special-title`, {

@@ -7,8 +7,10 @@ import { act, render, screen, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
 import { store } from '../../redux/store';
+import { getConfiguration } from '../../services/configuration.service';
 import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
+import { SELFCARE_LOGIN_PATH } from '../routes.const';
 
 const mockNavigateFn = vi.fn();
 
@@ -27,14 +29,20 @@ const Guard = () => (
 );
 
 describe('SessionGuard Component', async () => {
-  const original = window.location;
   let mock: MockAdapter;
+  const originalLocation = window.location;
+  const originalOpen = window.open;
+  const mockOpenFn = vi.fn();
 
   beforeAll(() => {
     mock = new MockAdapter(authClient);
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { hash: '' },
+    });
+    Object.defineProperty(window, 'open', {
+      configurable: true,
+      value: mockOpenFn,
     });
   });
 
@@ -45,7 +53,8 @@ describe('SessionGuard Component', async () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'location', { writable: true, value: original });
+    Object.defineProperty(window, 'location', { writable: true, value: originalLocation });
+    Object.defineProperty(window, 'open', { configurable: true, value: originalOpen });
   });
 
   // expected behavior: enters the app, does a navigate, launches sessionCheck, the user is deleted from redux
@@ -72,8 +81,9 @@ describe('SessionGuard Component', async () => {
     await act(async () => {
       render(<Guard />);
     });
-    const pageComponent = screen.queryByText('Generic Page');
-    expect(pageComponent).toBeTruthy();
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGIN_PATH}`
+    expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
   });
 
   // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken

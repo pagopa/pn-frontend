@@ -1,17 +1,18 @@
+import { vi } from 'vitest';
+
 import { IAppMessage } from '../../models';
 import { act, render } from '../../test-utils';
 import AppMessage from '../AppMessage';
 
-const errors: Array<IAppMessage> = [
-  {
-    id: 'mocked-id',
-    blocking: false,
-    message: 'Mocked message',
-    title: 'Mocked title',
-    toNotify: true,
-    alreadyShown: false,
-  },
-];
+const baseMessage: IAppMessage = {
+  id: 'mocked-id',
+  blocking: false,
+  message: 'Mocked message',
+  title: 'Mocked title',
+  showTechnicalData: false,
+  toNotify: true,
+  alreadyShown: false,
+};
 
 const success: Array<IAppMessage> = [
   {
@@ -19,6 +20,7 @@ const success: Array<IAppMessage> = [
     blocking: false,
     message: 'Mocked message',
     title: 'Mocked title',
+    showTechnicalData: false,
     toNotify: true,
     alreadyShown: false,
   },
@@ -30,68 +32,129 @@ const info: Array<IAppMessage> = [
     blocking: false,
     message: 'Mocked message',
     title: 'Mocked title',
+    showTechnicalData: false,
     toNotify: true,
     alreadyShown: false,
   },
 ];
 
 describe('AppMessage Component', () => {
-  it('renders toast and dispacthes event on close - error', async () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.runOnlyPendingTimers(); // cleans active timers
+    vi.useRealTimers();
+  });
+
+  it('renders and auto-closes error message after 5s', async () => {
     const { testStore, getByTestId } = render(<AppMessage />, {
       preloadedState: {
         appState: {
           messages: {
-            errors,
+            errors: [baseMessage],
             success: [],
             info: [],
           },
         },
       },
     });
-    const snackBarContainer = getByTestId('snackBarContainer');
-    expect(snackBarContainer).toBeInTheDocument();
-    // wait toast auto closing
-    await act(() => new Promise((t) => setTimeout(t, 6000)));
-    expect(testStore.getState().appState.messages.errors).toStrictEqual([
-      { ...errors[0], alreadyShown: true },
+
+    expect(getByTestId('snackBarContainer')).toBeInTheDocument();
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+
+    expect(testStore.getState().appState.messages.errors).toEqual([
+      { ...baseMessage, alreadyShown: true },
     ]);
-  }, 10000);
+  });
 
-  it('renders toast and dispacthes event on close - success', async () => {
-    const { testStore, getByTestId } = render(<AppMessage />, {
+  it('renders and does NOT auto-close if showTechnicalData is true', async () => {
+    const techMessage = { ...baseMessage, id: 'msg-tech', showTechnicalData: true };
+    const { getByTestId } = render(<AppMessage />, {
       preloadedState: {
         appState: {
           messages: {
-            errors: [],
-            success: success,
+            errors: [techMessage],
+            success: [],
             info: [],
           },
         },
       },
     });
+
+    const snackBar = getByTestId('snackBarContainer');
+    expect(snackBar).toBeInTheDocument();
+
+    await act(async () => {
+      vi.advanceTimersByTime(6000);
+    });
+
+    expect(snackBar).toBeInTheDocument(); // Still shown
+  });
+
+  it('does not enqueue alreadyShown messages', () => {
+    const shownMessage = { ...baseMessage, id: 'msg-shown', alreadyShown: true };
+    const { queryByTestId } = render(<AppMessage />, {
+      preloadedState: {
+        appState: {
+          messages: {
+            errors: [shownMessage],
+            success: [],
+            info: [],
+          },
+        },
+      },
+    });
+
+    expect(queryByTestId('snackBarContainer')).not.toBeInTheDocument();
+  });
+
+  it('renders toast and dispatches event on close - success', async () => {
+    const { testStore, getByTestId } = render(<AppMessage />, {
+      preloadedState: {
+        appState: {
+          messages: {
+            errors: [],
+            success,
+            info: [],
+          },
+        },
+      },
+    });
+
     const snackBarContainer = getByTestId('snackBarContainer');
     expect(snackBarContainer).toBeInTheDocument();
-    // wait toast auto closing
-    await act(() => new Promise((t) => setTimeout(t, 6000)));
-    expect(testStore.getState().appState.messages.success).toStrictEqual([]);
-  }, 10000);
 
-  it('renders toast and dispacthes event on close - info', async () => {
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+
+    expect(testStore.getState().appState.messages.success).toStrictEqual([]);
+  });
+
+  it('renders toast and dispatches event on close - info', async () => {
     const { testStore, getByTestId } = render(<AppMessage />, {
       preloadedState: {
         appState: {
           messages: {
             errors: [],
             success: [],
-            info: info,
+            info,
           },
         },
       },
     });
+
     const snackBarContainer = getByTestId('snackBarContainer');
     expect(snackBarContainer).toBeInTheDocument();
-    // wait toast auto closing
-    await act(() => new Promise((t) => setTimeout(t, 6000)));
+
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+
     expect(testStore.getState().appState.messages.info).toStrictEqual([]);
-  }, 10000);
+  });
 });

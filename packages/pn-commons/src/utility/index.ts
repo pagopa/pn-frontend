@@ -41,7 +41,13 @@ import { filtersApplied, getValidValue, sortArray } from './genericFunctions.uti
 import { IUN_regex, formatIun } from './iun.utility';
 import { lazyRetry } from './lazyRetry.utility';
 import { initLocalization } from './localization.utility';
-import { getLangCode, hashDetectorLookup, setSessionLanguage } from './multilanguage.utility';
+import {
+  getLangCode,
+  getSessionLanguage,
+  hashDetectorLookup,
+  setSessionLanguage,
+} from './multilanguage.utility';
+import { addParamToUrl } from './navigation.utility';
 import {
   getF24Payments,
   getLegalFactLabel,
@@ -66,6 +72,7 @@ import { searchStringLimitReachedText, useSearchStringChangeInput } from './sear
 import { storageOpsBuilder } from './storage.utility';
 import { dataRegex, formatFiscalCode, fromStringToBase64, sanitizeString } from './string.utility';
 import { buttonNakedInheritStyle } from './styles.utility';
+import { extractRootTraceId } from './support.utility';
 import {
   adaptedTokenExchangeError,
   basicInitialUserData,
@@ -149,6 +156,7 @@ export {
   validateLegaFact,
   convertHoursToDays,
   getLangCode,
+  getSessionLanguage,
   setSessionLanguage,
   hashDetectorLookup,
   screenshot,
@@ -159,4 +167,6 @@ export {
   IS_DEVELOP,
   APP_VERSION,
   getRapidAccessParam,
+  extractRootTraceId,
+  addParamToUrl,
 };

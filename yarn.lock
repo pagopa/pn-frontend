@@ -2704,10 +2704,10 @@
     rxjs "7.8.1"
     tslib "2.6.2"
 
-"@pagopa/mui-italia@^1.4.3":
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-1.4.3.tgz#29c2d67e0a24221c6637cf0cb1bca0ffcf9e51d5"
-  integrity sha512-7AW28WXTUQorP3jWZfCRRSwdeEv1EMqpN+P7Ji87h0kMmm71lRCwy+CypvXOYfF6WNkZtN+nRYZTkF5T1SRElw==
+"@pagopa/mui-italia@^1.6.1":
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-1.6.1.tgz#ffeb35bc58ee4702b4d9a7b5e7fe6b1634cd0902"
+  integrity sha512-v3O16kSn4JHDJiNVOHKYklIeVRACKpmxnqrj6o6Y8qtURycVJmiMHAGW7uoNbw2yK1+ymJ+C7MSoZphXijKPFA==
   dependencies:
     "@fontsource/dm-mono" "^4.5.10"
     "@fontsource/titillium-web" "^4.5.9"
@@ -3720,11 +3720,11 @@ axios@^1.0.0:
     proxy-from-env "^1.1.0"
 
 axios@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.0.tgz#f1e5292f26b2fd5c2e66876adc5b06cdbd7d2102"
-  integrity sha512-EZ1DYihju9pwVB+jg67ogm+Tmqc6JmhamRN6I4Zt8DfZu5lbcQGw3ozH9lFejSJgs/ibaef3A9PMXPLeefFGJg==
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.10.0.tgz#af320aee8632eaf2a400b6a1979fa75856f38d54"
+  integrity sha512-/1xYAC4MP/HEG+3duIhFr4ZQXR4sQXOIe+o6sdqzeykGLx6Upp/1p8MHqhINOvGeP7xyNHe7tsiJByc4SSVUxw==
   dependencies:
-    follow-redirects "^1.15.0"
+    follow-redirects "^1.15.6"
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
@@ -9853,9 +9853,9 @@ vite-node@1.6.1:
     vite "^5.0.0"
 
 vite@^5.0.0, vite@^5.1.4:
-  version "5.4.14"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-5.4.14.tgz#ff8255edb02134df180dcfca1916c37a6abe8408"
-  integrity sha512-EK5cY7Q1D8JNhSaPKVK4pwBFvaTmZxEnoKXLG/U9gmdDcihQGNzFlgIvaxezFR4glP1LsuiedwMBqCXH3wZccA==
+  version "5.4.19"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-5.4.19.tgz#20efd060410044b3ed555049418a5e7d1998f959"
+  integrity sha512-qO3aKv3HoQC8QKiNSTuUM1l9o/XX3+c+VTgLHbJWHZGeTPVAg2XwazI9UWzoxjIJCGCV2zU60uqMzjeLZuULqA==
   dependencies:
     esbuild "^0.21.3"
     postcss "^8.4.43"

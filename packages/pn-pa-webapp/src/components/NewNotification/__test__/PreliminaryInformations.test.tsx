@@ -352,7 +352,7 @@ describe('PreliminaryInformations Component', async () => {
       ['Italiano', 'italian-and-other-language'],
       1
     );
-    testFormElements(form, 'additionalLang', 'select-other-language*', 'de');
+    testFormElements(form, 'additionalLang', 'select-other-language', 'de');
   });
 
   it('form initially filled', async () => {

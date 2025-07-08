@@ -97,8 +97,6 @@ describe('test AddSpecialContact', () => {
     expect(title).toBeInTheDocument();
     const description = getByText('special-contacts.contact-to-add-description');
     expect(description).toBeInTheDocument();
-    const senderCaption = getByText('special-contacts.sender');
-    expect(senderCaption).toBeInTheDocument();
     const senderLabel = getById(container, 'sender-label');
     expect(senderLabel).toBeInTheDocument();
     expect(senderLabel).toHaveTextContent('special-contacts.add-sender');
@@ -107,8 +105,6 @@ describe('test AddSpecialContact', () => {
     expect(senderInput).toHaveValue('');
     const senderAutoComplete = getByTestId('sender');
     expect(senderAutoComplete).toBeInTheDocument();
-    const channelTypeCaption = getByText('special-contacts.contact-to-add');
-    expect(channelTypeCaption).toBeInTheDocument();
     const channelTypeLabel = getById(container, 'channelType-label');
     expect(channelTypeLabel).toBeInTheDocument();
     expect(channelTypeLabel).toHaveTextContent('special-contacts.select-address');
@@ -160,7 +156,7 @@ describe('test AddSpecialContact', () => {
     await waitFor(() => {
       expect(input).toHaveValue('invalid value');
     });
-    const errorMessage = getById(result.container, `s_value-helper-text`);
+    let errorMessage = getById(result.container, `s_value-helper-text`);
     expect(errorMessage).toBeInTheDocument();
 
     // fill with valid value
@@ -178,6 +174,21 @@ describe('test AddSpecialContact', () => {
     fireEvent.click(discardButton);
     await waitFor(() => {
       expect(handleContactDiscardMock).toHaveBeenCalledTimes(1);
+    });
+
+    fireEvent.click(confirmButton);
+
+    fireEvent.click(confirmButton);
+
+    const disclaimerCheckbox = result.container.querySelector('[name="s_disclaimer"]');
+
+    // check disclaimer error
+    errorMessage = getById(result.container, `s_disclaimer-helper-text`);
+    expect(errorMessage).toBeInTheDocument();
+
+    fireEvent.click(disclaimerCheckbox!);
+    await waitFor(() => {
+      expect(errorMessage).not.toBeInTheDocument();
     });
 
     fireEvent.click(confirmButton);
@@ -213,7 +224,7 @@ describe('test AddSpecialContact', () => {
 
     expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     // simulate rerendering due to redux changes
-    result.rerender(<SpecialContacts />);
+    result.rerender(<SpecialContacts addressType={AddressType.LEGAL} />);
     await waitFor(() => {
       // contacts list
       const specialContactForms = result.getAllByTestId(
@@ -303,6 +314,9 @@ describe('test AddSpecialContact', () => {
       expect(input).toHaveValue('test@test.it');
     });
 
+    const disclaimerCheckbox = container.querySelector('[name="s_disclaimer"]');
+    fireEvent.click(disclaimerCheckbox!);
+
     const confirmButton = getByRole('button', { name: 'conferma' });
 
     fireEvent.click(confirmButton);
@@ -341,7 +355,7 @@ describe('test AddSpecialContact', () => {
   it('should show PEC input if SERCQ is default address', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
-    const { container, getByTestId, getByText, queryByText } = render(
+    const { container, getByTestId, queryByText } = render(
       <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
       {
         preloadedState: { contactsState: { digitalAddresses: digitalAddressesSercq } },
@@ -362,8 +376,6 @@ describe('test AddSpecialContact', () => {
     const channelTypeLabel = queryById(container, 'channelType-label');
     expect(channelTypeLabel).not.toBeInTheDocument();
 
-    const pecCaption = getByText('special-contacts.pec-to-add');
-    expect(pecCaption).toBeInTheDocument();
     const pecLabel = getById(container, 's_value-label');
     expect(pecLabel).toBeInTheDocument();
     expect(pecLabel).toHaveTextContent('special-contacts.link-pec-label');

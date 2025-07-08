@@ -3,16 +3,18 @@ import { vi } from 'vitest';
 
 import { testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
+import { digitalCourtesyAddresses, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { ChannelType } from '../../../models/contacts';
+import { AddressType, ChannelType } from '../../../models/contacts';
 import SpecialContacts from '../SpecialContacts';
 import { fillCodeDialog } from './test-utils';
 
-const defaultAddress = digitalLegalAddresses.find((addr) => addr.senderId === 'default');
-const specialAddresses = digitalLegalAddresses.filter((addr) => addr.senderId !== 'default');
+const specialLegalAddresses = digitalLegalAddresses.filter((addr) => addr.senderId !== 'default');
+const specialCourtesyAddresses = digitalCourtesyAddresses.filter(
+  (addr) => addr.senderId !== 'default'
+);
 
 describe('SpecialContacts Component', async () => {
   let mock: MockAdapter;
@@ -33,9 +35,12 @@ describe('SpecialContacts Component', async () => {
   it('renders component - with contacts', () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
 
-    const { getAllByTestId, getByTestId } = render(<SpecialContacts />, {
-      preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
-    });
+    const { getAllByTestId, getByTestId } = render(
+      <SpecialContacts addressType={AddressType.LEGAL} />,
+      {
+        preloadedState: { contactsState: { digitalAddresses: specialLegalAddresses } },
+      }
+    );
 
     const specialContactsCard = getByTestId('specialContacts');
     expect(specialContactsCard).toBeInTheDocument();
@@ -45,8 +50,8 @@ describe('SpecialContacts Component', async () => {
     const specialContactForms = getAllByTestId(
       /^[a-zA-Z0-9-]+(?:_pecSpecialContact|_sercq_sendSpecialContact)$/
     );
-    expect(specialContactForms).toHaveLength(specialAddresses.length);
-    specialAddresses.forEach((addr) => {
+    expect(specialContactForms).toHaveLength(specialLegalAddresses.length);
+    specialLegalAddresses.forEach((addr) => {
       const addressItem = getByTestId(
         `${addr.senderId}_${addr.channelType.toLowerCase()}SpecialContact`
       );
@@ -70,21 +75,21 @@ describe('SpecialContacts Component', async () => {
     const pecValue = 'pec-carino@valida.com';
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     mock
-      .onPost(`/bff/v1/addresses/LEGAL/${specialAddresses[0].senderId}/PEC`, {
+      .onPost(`/bff/v1/addresses/LEGAL/${specialLegalAddresses[0].senderId}/PEC`, {
         value: pecValue,
       })
       .replyOnce(200, {
         result: 'CODE_VERIFICATION_REQUIRED',
       });
     mock
-      .onPost(`bff/v1/addresses/LEGAL/${specialAddresses[0].senderId}/PEC`, {
+      .onPost(`bff/v1/addresses/LEGAL/${specialLegalAddresses[0].senderId}/PEC`, {
         value: pecValue,
         verificationCode: '01234',
       })
       .replyOnce(204);
     // render component
-    const result = render(<SpecialContacts />, {
-      preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
+    const result = render(<SpecialContacts addressType={AddressType.LEGAL} />, {
+      preloadedState: { contactsState: { digitalAddresses: specialLegalAddresses } },
     });
     // ATTENTION: the order in the mock is very important
     // change pec
@@ -121,13 +126,12 @@ describe('SpecialContacts Component', async () => {
       expect(dialog).not.toBeInTheDocument();
     });
     const addresses = [
-      defaultAddress,
       {
-        ...specialAddresses[0],
+        ...specialLegalAddresses[0],
         senderName: parties[0].name,
         value: pecValue,
       },
-      ...specialAddresses.slice(1),
+      ...specialLegalAddresses.slice(1),
     ];
     expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     expect(input).not.toBeInTheDocument();
@@ -140,15 +144,17 @@ describe('SpecialContacts Component', async () => {
     });
   });
 
-  it('delete special contact', async () => {
+  it('delete special legal contact', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
-    mock.onDelete(`/bff/v1/addresses/LEGAL/${specialAddresses[0].senderId}/PEC`).reply(200);
+    mock.onDelete(`/bff/v1/addresses/LEGAL/${specialLegalAddresses[0].senderId}/PEC`).reply(200);
     // render component
-    const { getAllByTestId, getByRole } = render(<SpecialContacts />, {
-      preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
-    });
+    const { getAllByTestId, getByRole } = render(
+      <SpecialContacts addressType={AddressType.LEGAL} />,
+      {
+        preloadedState: { contactsState: { digitalAddresses: specialLegalAddresses } },
+      }
+    );
     // ATTENTION: the order in the mock is very important
-    // delete mail
     const specialContactForms = getAllByTestId(/^[a-zA-Z0-9-]+(?:_pecContact|_sercq_sendContact)$/);
     const deleteButton = within(specialContactForms[0]).getByRole('button', {
       name: 'button.elimina',
@@ -164,24 +170,38 @@ describe('SpecialContacts Component', async () => {
       expect(dialogBox).not.toBeVisible();
       expect(mock.history.delete).toHaveLength(1);
     });
-    const addresses = [defaultAddress, ...specialAddresses.slice(1)];
+    const addresses = specialLegalAddresses.slice(1);
     expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     await waitFor(() => {
       // contacts list
       const specialContactForms = getAllByTestId(
         /^[a-zA-Z0-9-]+(?:_pecContact|_sercq_sendContact)$/
       );
-      expect(specialContactForms).toHaveLength(specialAddresses.length - 1);
+      expect(specialContactForms).toHaveLength(specialLegalAddresses.length - 1);
     });
   });
 
   it('should show existing modal when adding a new contact that already exists', async () => {
-    const pecValue = defaultAddress!.value;
+    const pecValue = 'already-exist@pec.it';
 
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     // render component
-    const result = render(<SpecialContacts />, {
-      preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
+    const result = render(<SpecialContacts addressType={AddressType.LEGAL} />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            {
+              addressType: AddressType.LEGAL,
+              value: pecValue,
+              channelType: ChannelType.PEC,
+              pecValid: true,
+              codeValid: true,
+              senderId: 'default',
+            },
+            ...specialLegalAddresses,
+          ],
+        },
+      },
     });
     const specialContactForms = result.getAllByTestId(
       /^[a-zA-Z0-9-]+(?:_pecSpecialContact|_sercq_sendSpecialContact)$/
@@ -191,7 +211,7 @@ describe('SpecialContacts Component', async () => {
     });
     fireEvent.click(editButton);
 
-    await testInput(specialContactForms[1], `${specialAddresses[1].senderId}_pec`, pecValue);
+    await testInput(specialContactForms[1], `${specialLegalAddresses[1].senderId}_pec`, pecValue);
 
     const confirmButton = within(specialContactForms[1]).getByText('button.conferma');
     fireEvent.click(confirmButton);
@@ -200,12 +220,87 @@ describe('SpecialContacts Component', async () => {
       expect(mock.history.post).toHaveLength(0);
     });
 
-    const dialog = result.getByTestId('duplicateDialog');
+    const dialog = result.getByTestId('confirmationDialog');
     expect(dialog).toBeInTheDocument();
     const closeButton = within(dialog).getByRole('button', { name: 'button.annulla' });
     fireEvent.click(closeButton);
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
+    });
+  });
+
+  it('renders component - with courtesy contacts', () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+
+    const { getAllByTestId, getByTestId, getAllByText } = render(
+      <SpecialContacts addressType={AddressType.COURTESY} />,
+      {
+        preloadedState: { contactsState: { digitalAddresses: specialCourtesyAddresses } },
+      }
+    );
+
+    const specialContactsCard = getByTestId('specialContacts');
+    expect(specialContactsCard).toBeInTheDocument();
+    const cardTitle = within(specialContactsCard).getByText('special-contacts.card-title');
+    expect(cardTitle).toBeInTheDocument();
+    // contacts list
+    const specialContactForms = getAllByTestId(
+      /^[a-zA-Z0-9-]+(?:_emailSpecialContact|_smsSpecialContact)$/
+    );
+    expect(specialContactForms).toHaveLength(specialCourtesyAddresses.length);
+    specialCourtesyAddresses.forEach((addr) => {
+      expect(getAllByText(addr.senderName!)).toHaveLength(1);
+      const addressItem = getByTestId(
+        `${addr.senderId}_${addr.channelType.toLowerCase()}SpecialContact`
+      );
+      expect(addressItem).toBeInTheDocument();
+
+      expect(addressItem).toHaveTextContent(addr.value);
+      const editButton = within(addressItem).queryByText('button.modifica');
+      expect(editButton).not.toBeInTheDocument();
+      const deleteButton = within(addressItem).queryByText('button.elimina');
+      expect(deleteButton).toBeInTheDocument();
+    });
+  });
+
+  it('delete special courtesy contact', async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    mock
+      .onDelete(`/bff/v1/addresses/COURTESY/${specialCourtesyAddresses[0].senderId}/EMAIL`)
+      .reply(200);
+    // render component
+    const { getAllByTestId, getByRole } = render(
+      <SpecialContacts addressType={AddressType.COURTESY} />,
+      {
+        preloadedState: { contactsState: { digitalAddresses: specialCourtesyAddresses } },
+      }
+    );
+    // ATTENTION: the order in the mock is very important
+    const specialContactForms = getAllByTestId(
+      /^[a-zA-Z0-9-]+(?:_emailSpecialContact|_smsSpecialContact)$/
+    );
+    const deleteButton = within(specialContactForms[0]).getByRole('button', {
+      name: 'button.elimina',
+    });
+    fireEvent.click(deleteButton);
+    const dialogBox = getByRole('dialog');
+    expect(dialogBox).toBeVisible();
+    const deleteTitle = within(dialogBox).getByText('special-contacts.remove-special-title');
+    expect(deleteTitle).toBeInTheDocument();
+    const confirmButton = within(dialogBox).getByRole('button', { name: 'button.conferma' });
+    fireEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(dialogBox).not.toBeVisible();
+      expect(mock.history.delete).toHaveLength(1);
+    });
+    const addresses = specialCourtesyAddresses.slice(1);
+    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
+    await waitFor(() => {
+      // contacts list
+      const specialContactForms = getAllByTestId(
+        /^[a-zA-Z0-9-]+(?:_emailSpecialContact|_smsSpecialContact)$/
+      );
+      expect(specialContactForms).toHaveLength(specialCourtesyAddresses.length - 1);
     });
   });
 });

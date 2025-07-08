@@ -14,7 +14,7 @@ import { DelegationStatus } from '../models/Deleghe';
 import { PNRole, PartyRole } from '../models/User';
 import { SELFCARE_LOGOUT } from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
-import { RenderResult, act, render } from './test-utils';
+import { RenderResult, act, fireEvent, getByText, render, screen, waitFor } from './test-utils';
 
 vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
 
@@ -46,6 +46,7 @@ const reduxInitialState = {
 
 describe('App', async () => {
   let mock: MockAdapter;
+  let result: RenderResult;
   const mockOpenFn = vi.fn();
   const originalOpen = window.open;
 
@@ -98,7 +99,6 @@ describe('App', async () => {
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -124,7 +124,6 @@ describe('App', async () => {
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -139,7 +138,6 @@ describe('App', async () => {
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -156,7 +154,6 @@ describe('App', async () => {
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -174,7 +171,6 @@ describe('App', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(`/bff/v1/mandate/delegate/count?status=${DelegationStatus.PENDING}`).reply(200, 3);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, {
         preloadedState: {
@@ -201,7 +197,6 @@ describe('App', async () => {
   it('sidemenu items if user is an operator', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, {
         preloadedState: {
@@ -236,7 +231,6 @@ describe('App', async () => {
   it('sidemenu items if user is a group operator', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/downtime/v1/status').reply(200, currentStatusDTO);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, {
         preloadedState: {
@@ -267,5 +261,29 @@ describe('App', async () => {
     expect(sideMenuItems).toHaveLength(5);
     const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
     expect(collapsibleMenu).not.toBeInTheDocument();
+  });
+
+  it('render component - user logs out', async () => {
+    const clearSpy = vi.spyOn(Storage.prototype, 'clear');
+
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+
+    const header = result.container.querySelector('header');
+    expect(header).toBeInTheDocument();
+
+    const button = getByText(header!, 'Esci');
+    fireEvent.click(button);
+
+    const modalConfirmButton = await waitFor(() => screen.queryByTestId('confirm-button'));
+    fireEvent.click(modalConfirmButton!);
+
+    await waitFor(() => {
+      expect(mockOpenFn).toHaveBeenCalledTimes(1);
+      const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT}`;
+      expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
+      expect(clearSpy).toHaveBeenCalled();
+    });
   });
 });

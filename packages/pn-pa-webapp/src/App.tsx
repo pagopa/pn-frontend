@@ -20,6 +20,7 @@ import {
   ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
+  addParamToUrl,
   appStateActions,
   errorFactoryManager,
   initLocalization,
@@ -28,10 +29,12 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { LinkType, ProductEntity } from '@pagopa/mui-italia';
 
+import { goToSelfcareLogout } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import {
+  apiLogout,
   getAdditionalLanguages,
   getInstitutions,
   getProductsOfInstitution,
@@ -42,7 +45,6 @@ import { getConfiguration } from './services/configuration.service';
 import { PAAppErrorFactory } from './utility/AppError/PAAppErrorFactory';
 import './utility/onetrust';
 import { getMenuItems } from './utility/role.utility';
-import { goToSelfcareLogin } from './navigation/navigation.utility';
 
 // Cfr. PN-6096
 // --------------------
@@ -78,6 +80,7 @@ const ActualApp = () => {
   const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID, IS_STATISTICS_ENABLED } = getConfiguration();
   const products = useAppSelector((state: RootState) => state.userState.productsOfInstitution);
   const institutions = useAppSelector((state: RootState) => state.userState.institutions);
+  const lastError = useAppSelector((state: RootState) => state.appState.lastError);
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
 
@@ -91,21 +94,21 @@ const ActualApp = () => {
   const productsList =
     products.length > 0
       ? [
-        reservedArea,
-        ...products.map((product) => ({
-          ...product,
-          productUrl: `${product.productUrl}&lang=${i18n.language}`,
-        })),
-      ]
+          reservedArea,
+          ...products.map((product) => ({
+            ...product,
+            productUrl: `${product.productUrl}&lang=${i18n.language}`,
+          })),
+        ]
       : [
-        reservedArea,
-        {
-          id: '0',
-          title: t('header.notification-platform'),
-          productUrl: '',
-          linkType: 'internal' as LinkType,
-        },
-      ];
+          reservedArea,
+          {
+            id: '0',
+            title: t('header.notification-platform'),
+            productUrl: '',
+            linkType: 'internal' as LinkType,
+          },
+        ];
 
   const productId = products.length > 0 ? SELFCARE_SEND_PROD_ID : '0';
   const institutionsList = institutions.map((institution) => ({
@@ -207,10 +210,13 @@ const ActualApp = () => {
   };
 
   const handleAssistanceClick = () => {
+    const url = addParamToUrl(
+      `${SELFCARE_BASE_URL}/assistenza?productId=${productId}`,
+      'data',
+      JSON.stringify(lastError)
+    );
     /* eslint-disable-next-line functional/immutable-data */
-    window.location.href = sessionToken
-      ? `${SELFCARE_BASE_URL}/assistenza?productId=${productId}`
-      : `mailto:${configuration.PAGOPA_HELP_EMAIL}`;
+    window.location.href = sessionToken ? url : `mailto:${configuration.PAGOPA_HELP_EMAIL}`;
   };
 
   const changeLanguageHandler = async (langCode: string) => {
@@ -226,6 +232,14 @@ const ActualApp = () => {
         })
       ),
   });
+
+  const performLogout = async () => {
+    await dispatch(apiLogout(loggedUser.sessionToken));
+
+    sessionStorage.clear();
+    goToSelfcareLogout();
+    setOpenModal(false);
+  };
 
   return (
     <>
@@ -258,27 +272,14 @@ const ActualApp = () => {
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}
       >
-        <PnDialog open={openModal}
-        >
-          <DialogTitle sx={{ mb: 2 }} >{t("header.logout-message")}</DialogTitle>
+        <PnDialog open={openModal}>
+          <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>
           <PnDialogActions>
-            <Button
-              id="cancelButton"
-              variant="outlined"
-              onClick={() => setOpenModal(false)}
-            >
-              {t("button.annulla")}
+            <Button id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
+              {t('button.annulla')}
             </Button>
-            <Button
-              data-testid='confirm-button'
-              variant="contained"
-              onClick={() => {
-                sessionStorage.clear();
-                goToSelfcareLogin();
-                setOpenModal(false);
-              }}
-            >
-              {t("header.logout")}
+            <Button data-testid="confirm-button" variant="contained" onClick={performLogout}>
+              {t('header.logout')}
             </Button>
           </PnDialogActions>
         </PnDialog>
