@@ -14,13 +14,13 @@ import {
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
 import sendLogo from '../../assets/send.svg';
+import IOSmartAppBanner from '../../components/IoSmartAppBanner';
+import SpidSelect from '../../components/SpidSelect';
 import { useRapidAccessParam } from '../../hooks/useRapidAccessParam';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 import { storageRapidAccessOps } from '../../utility/storage';
-import IOSmartAppBanner from './IoSmartAppBanner';
-import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
   '& .MuiButton-startIcon': {

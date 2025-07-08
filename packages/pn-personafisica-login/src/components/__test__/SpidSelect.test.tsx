@@ -2,9 +2,9 @@ import { vi } from 'vitest';
 
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { fireEvent, render } from '../../../__test__/test-utils';
-import { getConfiguration } from '../../../services/configuration.service';
-import { getIDPS } from '../../../utility/IDPS';
+import { fireEvent, render } from '../../__test__/test-utils';
+import { getConfiguration } from '../../services/configuration.service';
+import { getIDPS } from '../../utility/IDPS';
 import SpidSelect from '../SpidSelect';
 
 const idps = getIDPS(false, false);
