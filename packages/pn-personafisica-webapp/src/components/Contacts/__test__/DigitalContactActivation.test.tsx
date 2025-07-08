@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalAddressesSercq, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, within } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
 import { NOTIFICHE } from '../../../navigation/routes.const';
