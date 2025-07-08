@@ -110,9 +110,12 @@
         "content": "L’email dove possiamo informarti quando c’è una comunicazione a valore legale per te su SEND."
       },
       "feedback": {
-        "title-activation": "Hai attivato il tuo domicilio digitale",
-        "title-transfer": "Hai aggiornato il tuo domicilio digitale",
-        "go-to-contacts": "Vai ai tuoi recapiti"
+        "title-pec-activation": "Hai attivato il tuo domicilio digitale su PEC",
+        "title-pec-transfer": "Hai trasferito il tuo domicilio digitale su PEC",
+        "title-sercq_send-activation": "Hai attivato il tuo domicilio digitale su SEND",
+        "title-sercq_send-transfer": "Hai trasferito il tuo domicilio digitale su SEND",
+        "content-pec": "Riceverai le tue comunicazioni a valore legale al tuo Domicilio digitale su PEC",
+        "content-sercq_send": "Riceverai le tue comunicazioni a valore legale al tuo Domicilio digitale su SEND e un messaggio ai recapiti che hai scelto."
       }
     },
     "pec-contact-wizard": {
