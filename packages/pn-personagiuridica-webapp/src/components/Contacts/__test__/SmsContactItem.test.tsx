@@ -297,4 +297,16 @@ describe('test SmsContactItem', () => {
     expect(result.container).toHaveTextContent('courtesy-contacts.email-sms-updates');
     expect(result.container).toHaveTextContent('courtesy-contacts.email-sms-add');
   });
+
+  it('show special contact section', () => {
+    const { getAllByTestId } = render(<SmsContactItem />, {
+      preloadedState: { contactsState: { digitalAddresses: digitalCourtesyAddresses } },
+    });
+    const specialContactForms = getAllByTestId(/^[a-zA-Z0-9-]+_smsSpecialContact$/);
+    expect(specialContactForms).toHaveLength(
+      digitalCourtesyAddresses.filter(
+        (addr) => addr.channelType === ChannelType.SMS && addr.senderId !== 'default'
+      ).length
+    );
+  });
 });

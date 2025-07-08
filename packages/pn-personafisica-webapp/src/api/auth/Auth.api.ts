@@ -6,7 +6,7 @@ import {
   paramsToSourceType,
 } from '../../models/User';
 import { authClient } from '../apiClients';
-import { AUTH_TOKEN_EXCHANGE } from './auth.routes';
+import { AUTH_LOGOUT, AUTH_TOKEN_EXCHANGE } from './auth.routes';
 
 export const AuthApi = {
   exchangeToken: async ({ spidToken, rapidAccess }: TokenExchangeRequest): Promise<User> => {
@@ -39,4 +39,6 @@ export const AuthApi = {
     }
     return user;
   },
+  logout: (token: string): Promise<void> =>
+    authClient.post(AUTH_LOGOUT(), null, { headers: { Authorization: `Bearer ${token}` } }),
 };
