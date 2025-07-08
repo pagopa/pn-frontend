@@ -184,6 +184,11 @@ const PecContactWizard: React.FC<Props> = ({
             <FormControlLabel
               control={
                 <Checkbox
+                  sx={
+                    formik.touched.disclaimer && formik.errors.disclaimer
+                      ? { color: 'error.dark' }
+                      : { color: 'text.secondary' }
+                  }
                   name="disclaimer"
                   id="disclaimer"
                   required
