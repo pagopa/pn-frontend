@@ -16,6 +16,7 @@ import DeleteDialog from './DeleteDialog';
 import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import InformativeDialog from './InformativeDialog';
+import SpecialContacts from './SpecialContacts';
 
 enum ModalType {
   EXISTING = 'existing',
@@ -177,17 +178,19 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps }) 
 const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
-  const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses, specialSMSAddresses } =
+    useAppSelector(contactsSelectors.selectAddresses);
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const [insertMode, setInsertMode] = useState(false);
 
   const isActive = !!defaultSMSAddress;
+  const blockDelete = specialSMSAddresses.length > 0;
 
   const hasCourtesyAddresses =
     addresses.filter((addr) => addr.addressType === AddressType.COURTESY).length > 0;
+
+  const showSpecialContactsSection = specialSMSAddresses.length > 0;
 
   const deleteConfirmHandler = () => {
     setModalOpen(null);
@@ -275,17 +278,21 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps }) => {
         >
           {t('courtesy-contacts.sms-description', { ns: 'recapiti' })}
         </Typography>
+        {showSpecialContactsSection && (
+          <SpecialContacts addressType={AddressType.COURTESY} channelType={ChannelType.SMS} />
+        )}
         <DeleteDialog
           showModal={modalOpen === ModalType.DELETE}
-          removeModalTitle={t('courtesy-contacts.remove-sms-title', {
+          removeModalTitle={t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-sms-title`, {
             ns: 'recapiti',
           })}
-          removeModalBody={t('courtesy-contacts.remove-sms-message', {
+          removeModalBody={t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-sms-message`, {
             value: defaultSMSAddress.value,
             ns: 'recapiti',
           })}
           handleModalClose={() => setModalOpen(null)}
           confirmHandler={deleteConfirmHandler}
+          blockDelete={blockDelete}
         />
       </PnInfoCard>
     );

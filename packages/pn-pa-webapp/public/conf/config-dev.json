@@ -1,6 +1,5 @@
 {
   "PAGOPA_HELP_EMAIL": "enti-send@assistenza.pagopa.it",
-  "SELFCARE_URL_FE_LOGIN": "https://uat.selfcare.pagopa.it/auth/login",
   "SELFCARE_BASE_URL": "https://uat.selfcare.pagopa.it",
   "API_BASE_URL": "https://webapi.dev.notifichedigitali.it/",
   "IS_INACTIVITY_HANDLER_ENABLED": false,
