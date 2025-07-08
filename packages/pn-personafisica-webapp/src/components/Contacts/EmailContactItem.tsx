@@ -31,6 +31,7 @@ enum ModalType {
   CODE = 'code',
   DELETE = 'delete',
   INFORMATIVE = 'informative',
+  DELIVERED = 'DELIVERED',
 }
 
 const EmailContactItem: React.FC = () => {
@@ -186,7 +187,16 @@ const EmailContactItem: React.FC = () => {
 
   const getRemoveModalMessage = () => {
     if (isDigitalDomicileActive) {
-      return t(`courtesy-contacts.remove-email-message-dod-enabled`);
+      return (
+        <Trans
+          i18nKey={'courtesy-contacts.remove-email-message-dod-enabled'}
+          ns={'recapiti'}
+          components={[
+            <Typography variant="body2" fontSize={'16px'} key={'paragraph1'} sx={{ mb: 2 }} />,
+            <Typography variant="body2" fontSize={'16px'} key={'paragraph2'} />,
+          ]}
+        />
+      );
     }
     return t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-email-message`, {
       value: currentAddress.current.value,
@@ -295,6 +305,7 @@ const EmailContactItem: React.FC = () => {
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete}
+        channelType={ChannelType.EMAIL}
       />
       <InformativeDialog
         open={modalOpen === ModalType.INFORMATIVE}
