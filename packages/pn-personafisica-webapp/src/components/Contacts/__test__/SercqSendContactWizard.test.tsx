@@ -27,12 +27,11 @@ describe('SercqSendContactWizard', () => {
     mock.restore();
   });
 
-  const goToNextStep = vi.fn();
-  const setShowPecWizard = vi.fn();
+  const goToStep = vi.fn();
 
   it('render components', async () => {
     const { getByText, getByTestId } = render(
-      <SercqSendContactWizard goToNextStep={goToNextStep} setShowPecWizard={setShowPecWizard} />
+      <SercqSendContactWizard goToStep={goToStep} showIOStep />
     );
 
     expect(getByText('legal-contacts.sercq-send-wizard.step_1.title')).toBeInTheDocument();
@@ -47,7 +46,7 @@ describe('SercqSendContactWizard', () => {
 
   it('should not show pec section if default pec address is present', async () => {
     const { getByTestId, queryByTestId } = render(
-      <SercqSendContactWizard goToNextStep={goToNextStep} setShowPecWizard={setShowPecWizard} />,
+      <SercqSendContactWizard goToStep={goToStep} showIOStep />,
       {
         preloadedState: {
           contactsState: {
@@ -88,9 +87,7 @@ describe('SercqSendContactWizard', () => {
       )
       .reply(200);
     // render component
-    const { getByTestId } = render(
-      <SercqSendContactWizard goToNextStep={goToNextStep} setShowPecWizard={setShowPecWizard} />
-    );
+    const { getByTestId } = render(<SercqSendContactWizard goToStep={goToStep} showIOStep />);
     const activateButton = getByTestId('activateButton');
     fireEvent.click(activateButton);
 
@@ -103,6 +100,7 @@ describe('SercqSendContactWizard', () => {
       });
     });
 
-    expect(goToNextStep).toHaveBeenCalledTimes(1);
+    expect(goToStep).toHaveBeenCalledTimes(1);
+    expect(goToStep).toHaveBeenCalledWith(4);
   });
 });

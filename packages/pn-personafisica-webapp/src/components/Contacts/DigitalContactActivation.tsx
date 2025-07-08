@@ -22,6 +22,8 @@ type Props = {
   onGoBack?: () => void;
 };
 
+const MAX_STEPS_NUMBER = 4;
+
 const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onGoBack }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
@@ -34,7 +36,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress || !IS_DOD_ENABLED);
 
   const showIOStep = useMemo(
-    () => defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.DISABLED,
+    () => !!(defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.DISABLED),
     []
   );
 
@@ -48,6 +50,13 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
 
   const goToPreviousStep = () => {
     setActiveStep((step) => step - 1);
+  };
+
+  const goToStep = (step: number) => {
+    if (step >= 0 && step <= MAX_STEPS_NUMBER) {
+      return setActiveStep(step);
+    }
+    return goToNextStep();
   };
 
   const getPreviousButton = () => {
@@ -78,9 +87,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   };
 
   const getNextButton = () => {
-    console.log(`Step attivo: '${activeStep}'`);
     if (isEmailSmsStep) {
-      console.log('isEmailSmsStep');
       return (
         <Button
           variant="contained"
@@ -94,7 +101,6 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
       );
     }
 
-    console.log('!isEmailSmsStep');
     return <></>;
   };
 
@@ -146,7 +152,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
         <EmailSmsContactWizard />
       </PnWizardStep>
       <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_4.step-title')}>
-        <SercqSendContactWizard goToNextStep={goToNextStep} />
+        <SercqSendContactWizard showIOStep={showIOStep} goToStep={goToStep} />
       </PnWizardStep>
     </PnWizard>
   );

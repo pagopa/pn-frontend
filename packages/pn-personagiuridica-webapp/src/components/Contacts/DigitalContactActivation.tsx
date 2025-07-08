@@ -13,11 +13,14 @@ import { useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
 import EmailSmsContactWizard from './EmailSmsContactWizard';
 import HowItWorksContactWizard from './HowItWorksContactWizard';
+import SercqSendContactWizard from './SercqSendContactWizard';
 
 type Props = {
   isTransferring?: boolean;
   onGoBack?: () => void;
 };
+
+const MAX_STEPS_NUMBER = 3;
 
 const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onGoBack }) => {
   const { t } = useTranslation(['recapiti', 'common']);
@@ -38,6 +41,13 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
 
   const goToPreviousStep = () => {
     setActiveStep((step) => step - 1);
+  };
+
+  const goToStep = (step: number) => {
+    if (step >= 0 && step <= MAX_STEPS_NUMBER) {
+      return setActiveStep(step);
+    }
+    return goToNextStep();
   };
 
   const getPreviousButton = () => {
@@ -127,6 +137,9 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
       </PnWizardStep>
       <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_2.step-title')}>
         <EmailSmsContactWizard />
+      </PnWizardStep>
+      <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_3.step-title')}>
+        <SercqSendContactWizard goToStep={goToStep} />
       </PnWizardStep>
     </PnWizard>
   );

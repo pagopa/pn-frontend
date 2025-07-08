@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React, { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -34,6 +34,7 @@ import {
   AddressType,
   ChannelType,
   ContactSource,
+  IOAllowedValues,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
 import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../navigation/routes.const';
@@ -45,28 +46,39 @@ import {
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { getConfiguration } from '../../services/configuration.service';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const redirectPrivacyLink = () => window.open(`${PRIVACY_POLICY}`, '_blank');
 const redirectToSLink = () => window.open(`${TERMS_OF_SERVICE_SERCQ_SEND}`, '_blank');
 
-enum ModalType {
-  DELIVERED = 'DELIVERED',
-}
-
 type Props = {
-  goToNextStep?: () => void;
+  goToStep: (step: number) => void;
+  showIOStep?: boolean;
 };
 
-const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
+type ContactRecapData = {
+  title: string;
+  value?: string;
+  cta: {
+    text: string;
+    action: () => void;
+  };
+};
+
+const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
 
   const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
-  const { defaultPECAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultPECAddress, defaultEMAILAddress, defaultAPPIOAddress, defaultSMSAddress } =
+    useAppSelector(contactsSelectors.selectAddresses);
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
-  const { IS_DOD_ENABLED } = getConfiguration();
+
+  const normalizedShowIOStep = showIOStep ?? false;
+
+  const ioStep = normalizedShowIOStep ? 1 : 0;
+  const emailSmsStep = ioStep + 1;
+  const thankYouStep = ioStep + 3;
 
   const validationSchema = yup.object().shape({
     disclaimer: yup.bool().isTrue(t('required-field', { ns: 'common' })),
@@ -85,13 +97,50 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
     },
   });
 
-  const sercqSendContactsList: Array<{ title: string; description: string }> = t(
-    'legal-contacts.sercq-send-wizard.step_4.info-list',
-    {
-      returnObjects: true,
-      defaultValue: [],
-    }
-  );
+  const sercqSendContactsList: Array<{
+    title: string;
+    textDisabled: string;
+    textEnabled?: string;
+  }> = t('legal-contacts.sercq-send-wizard.step_4.contacts-list', {
+    returnObjects: true,
+    defaultValue: [],
+  });
+
+  const getContactsRecapData = (): Array<ContactRecapData> => {
+    const contacts: Array<ContactRecapData | null> = [
+      {
+        title: sercqSendContactsList[0].title,
+        value: defaultEMAILAddress?.value,
+        cta: {
+          text: sercqSendContactsList[0].textDisabled,
+          action: () => goToStep(emailSmsStep),
+        },
+      },
+      normalizedShowIOStep
+        ? {
+            title: sercqSendContactsList[1].title,
+            value:
+              defaultAPPIOAddress?.value === IOAllowedValues.ENABLED
+                ? sercqSendContactsList[1].textEnabled
+                : undefined,
+            cta: {
+              text: sercqSendContactsList[1].textDisabled,
+              action: () => goToStep(ioStep),
+            },
+          }
+        : null,
+      {
+        title: sercqSendContactsList[2].title,
+        value: defaultSMSAddress?.value,
+        cta: {
+          text: sercqSendContactsList[2].textDisabled,
+          action: () => goToStep(emailSmsStep),
+        },
+      },
+    ];
+
+    return contacts.filter((c): c is ContactRecapData => c !== null);
+  };
 
   const handleActivation = () => {
     dispatch(getSercqSendTosPrivacyApproval())
@@ -178,7 +227,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
             message: t(`legal-contacts.sercq_send-added-successfully`, { ns: 'recapiti' }),
           })
         );
-        goToNextStep && goToNextStep();
+        goToStep(thankYouStep);
       })
       .catch(() => {});
   };
@@ -199,42 +248,42 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep }) => {
       </Typography>
       <Divider />
       <Typography variant="body2" fontSize="14px" mt={3} mb={2}>
-        {t('legal-contacts.sercq-send-wizard.step_4.content')}
+        {t('legal-contacts.sercq-send-wizard.step_4.courtesy-content')}
       </Typography>
       <>
-        <List dense sx={{ p: 0 }} data-testid="sercq-send-info-list">
-          {sercqSendContactsList.map((item, index) => (
-            // <ListItem key={index} sx={{ px: 0, py: 1 }} divider>
-            <ListItem alignItems="flex-start" key={index} disableGutters divider>
-              {/* <ListItemText disableTypography> */}
+        <List dense sx={{ p: 0 }} data-testid="sercq-send-contacts-list">
+          {getContactsRecapData().map((item) => (
+            <ListItem key={item.title} sx={{ px: 0, py: 1 }} divider>
               <Stack width="100%">
                 <Typography variant="body1" fontWeight={600}>
                   {item.title}
                 </Typography>
                 <Box display="flex" justifyContent="space-between" alignItems="center">
-                  <Typography variant="body2">
-                    {/* <Trans
-                      i18nKey={item.description}
-                      ns="recapiti"
-                      t={(s: string) => s}
-                      components={[
-                        <Link
-                          key="consegnata"
-                          sx={{
-                            cursor: 'pointer',
-                            textDecoration: 'none !important',
-                          }}
-                          onClick={() => setModalOpen(ModalType.DELIVERED)}
-                        />,
-                      ]}
-                    /> */}
-                  </Typography>
+                  <ListItemText>
+                    {item.value ? (
+                      <Typography variant="body2">{item.value}</Typography>
+                    ) : (
+                      <Link
+                        sx={{
+                          cursor: 'pointer',
+                          textDecoration: 'none !important',
+                          fontWeight: 'bold',
+                        }}
+                        onClick={item.cta.action}
+                      >
+                        {item.cta.text}
+                      </Link>
+                    )}
+                  </ListItemText>
                   <IconButton size="small">
-                    <CheckCircleIcon fontSize="small" htmlColor="green" />
+                    {item.value ? (
+                      <CheckCircleIcon fontSize="small" color="success" />
+                    ) : (
+                      <ErrorIcon fontSize="small" color="warning" />
+                    )}
                   </IconButton>
                 </Box>
               </Stack>
-              {/* </ListItemText> */}
             </ListItem>
           ))}
         </List>

@@ -27,13 +27,10 @@ describe('SercqSendContactWizard', () => {
     mock.restore();
   });
 
-  const goToNextStep = vi.fn();
-  const setShowPecWizard = vi.fn();
+  const goToStep = vi.fn();
 
   it('render components', async () => {
-    const { getByText, getByTestId } = render(
-      <SercqSendContactWizard goToNextStep={goToNextStep} setShowPecWizard={setShowPecWizard} />
-    );
+    const { getByText, getByTestId } = render(<SercqSendContactWizard goToStep={goToStep} />);
 
     expect(getByText('legal-contacts.sercq-send-wizard.step_1.title')).toBeInTheDocument();
     expect(getByTestId('sercq-send-info-list')).toBeInTheDocument();
@@ -46,25 +43,22 @@ describe('SercqSendContactWizard', () => {
   });
 
   it('should not show pec section if default pec address is present', async () => {
-    const { getByTestId, queryByTestId } = render(
-      <SercqSendContactWizard goToNextStep={goToNextStep} setShowPecWizard={setShowPecWizard} />,
-      {
-        preloadedState: {
-          contactsState: {
-            digitalAddresses: [
-              {
-                addressType: AddressType.LEGAL,
-                senderId: 'default',
-                channelType: ChannelType.PEC,
-                value: 'pec@test.it',
-                pecValid: true,
-                codeValid: true,
-              },
-            ],
-          },
+    const { getByTestId, queryByTestId } = render(<SercqSendContactWizard goToStep={goToStep} />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            {
+              addressType: AddressType.LEGAL,
+              senderId: 'default',
+              channelType: ChannelType.PEC,
+              value: 'pec@test.it',
+              pecValid: true,
+              codeValid: true,
+            },
+          ],
         },
-      }
-    );
+      },
+    });
 
     const pecSection = queryByTestId('pec-section');
     expect(pecSection).not.toBeInTheDocument();
@@ -90,9 +84,7 @@ describe('SercqSendContactWizard', () => {
       )
       .reply(200);
     // render component
-    const { getByTestId } = render(
-      <SercqSendContactWizard goToNextStep={goToNextStep} setShowPecWizard={setShowPecWizard} />
-    );
+    const { getByTestId } = render(<SercqSendContactWizard goToStep={goToStep} />);
     const activateButton = getByTestId('activateButton');
     fireEvent.click(activateButton);
 
@@ -105,6 +97,7 @@ describe('SercqSendContactWizard', () => {
       });
     });
 
-    expect(goToNextStep).toHaveBeenCalledTimes(1);
+    expect(goToStep).toHaveBeenCalledTimes(1);
+    expect(goToStep).toHaveBeenCalledWith(3);
   });
 });

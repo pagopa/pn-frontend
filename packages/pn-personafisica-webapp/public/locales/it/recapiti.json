@@ -111,19 +111,21 @@
         "step-title": "Riepilogo",
         "content": "Le tue comunicazioni a valore legale saranno recapitate a:",
         "digital-domicile": "Domicilio digitale",
-        "send": "Send",
-        "info-list": [
+        "send": "SEND",
+        "courtesy-content": "Hai scelto di ricevere un messaggio su:",
+        "contacts-list": [
           {
             "title": "Indirizzo email",
-            "description": "Aggiungi email"
+            "textDisabled": "Aggiungi email"
           },
           {
             "title": "App IO",
-            "description": "Collega SEND a IO"
+            "textDisabled": "Collega SEND a IO",
+            "textEnabled": "Servizio SEND attivato"
           },
           {
             "title": "Numero di cellulare",
-            "description": "Aggiungi numero di cellulare"
+            "textDisabled": "Aggiungi numero di cellulare"
           }
         ],
         "disclaimer": "Premendo “Attiva domicilio digitale” dichiari di aver letto la <0>Informativa privacy</0> e di accettare i <1>Termini del servizio</1>"
