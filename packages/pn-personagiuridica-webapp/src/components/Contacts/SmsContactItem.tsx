@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { Box, Button, ButtonProps, Chip, Divider, TextFieldProps, Typography } from '@mui/material';
@@ -177,9 +177,9 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps }) 
 const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
-  const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const { defaultSERCQ_SENDAddress, defaultSMSAddress, defaultPECAddress, addresses } =
+    useAppSelector(contactsSelectors.selectAddresses);
+  const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const [insertMode, setInsertMode] = useState(false);
@@ -218,6 +218,34 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps }) => {
       return 'warning';
     }
     return 'default';
+  };
+
+  const getRemoveModalTitle = () => {
+    if (isDigitalDomicileActive) {
+      return t(`courtesy-contacts.remove-sms-title-dod-enabled`, {
+        ns: 'recapiti',
+      });
+    }
+    return t('courtesy-contacts.remove-sms-title', { ns: 'recapiti' });
+  };
+
+  const getRemoveModalMessage = () => {
+    if (isDigitalDomicileActive) {
+      return (
+        <Trans
+          i18nKey={'courtesy-contacts.remove-email-message-dod-enabled'}
+          ns={'recapiti'}
+          components={[
+            <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
+            <Typography variant="body2" fontSize={'18px'} key={'paragraph2'} />,
+          ]}
+        />
+      );
+    }
+    return t('courtesy-contacts.remove-sms-message', {
+      value: defaultSMSAddress?.value,
+      ns: 'recapiti',
+    });
   };
 
   const getActions = () =>
@@ -277,13 +305,8 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps }) => {
         </Typography>
         <DeleteDialog
           showModal={modalOpen === ModalType.DELETE}
-          removeModalTitle={t('courtesy-contacts.remove-sms-title', {
-            ns: 'recapiti',
-          })}
-          removeModalBody={t('courtesy-contacts.remove-sms-message', {
-            value: defaultSMSAddress.value,
-            ns: 'recapiti',
-          })}
+          removeModalTitle={getRemoveModalTitle()}
+          removeModalBody={getRemoveModalMessage()}
           handleModalClose={() => setModalOpen(null)}
           confirmHandler={deleteConfirmHandler}
         />

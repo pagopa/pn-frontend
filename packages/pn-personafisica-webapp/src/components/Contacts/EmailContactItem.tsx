@@ -191,8 +191,8 @@ const EmailContactItem: React.FC = () => {
           i18nKey={'courtesy-contacts.remove-email-message-dod-enabled'}
           ns={'recapiti'}
           components={[
-            <Typography variant="body2" fontSize={'16px'} key={'paragraph1'} sx={{ mb: 2 }} />,
-            <Typography variant="body2" fontSize={'16px'} key={'paragraph2'} />,
+            <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
+            <Typography variant="body2" fontSize={'18px'} key={'paragraph2'} />,
           ]}
         />
       );
