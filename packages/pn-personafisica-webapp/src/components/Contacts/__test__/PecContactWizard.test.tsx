@@ -5,11 +5,26 @@ import { digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { ChannelType } from '../../../models/contacts';
+import { NOTIFICHE } from '../../../navigation/routes.const';
 import PecContactWizard from '../PecContactWizard';
 import { fillCodeDialog } from './test-utils';
 
+const mockNavigateFn = vi.fn();
+let setShowPecWizardMock: ReturnType<typeof vi.fn>;
+
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
+  useNavigate: () => mockNavigateFn,
+}));
+
 describe('PecContactWizard', () => {
+  const labelPrefix = 'legal-contacts.sercq-send-wizard.feedback';
   let mock: MockAdapter;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    setShowPecWizardMock = vi.fn();
+  });
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -23,7 +38,6 @@ describe('PecContactWizard', () => {
     mock.restore();
   });
 
-  const setShowPecWizardMock = vi.fn();
   const VALID_PEC = 'test@pec.it';
 
   it('renders the component correctly', () => {
@@ -120,7 +134,7 @@ describe('PecContactWizard', () => {
       .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
 
     const result = render(<PecContactWizard setShowPecWizard={setShowPecWizardMock} />);
-    const { getByTestId, queryByTestId, container } = result;
+    const { getByTestId, getByRole, container } = result;
 
     const pecInput = container.querySelector('[name="pec"]');
     fireEvent.change(pecInput!, { target: { value: VALID_PEC } });
@@ -142,11 +156,19 @@ describe('PecContactWizard', () => {
 
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
 
-    expect(setShowPecWizardMock).toHaveBeenCalledWith(false);
-    expect(setShowPecWizardMock).toHaveBeenCalledTimes(1);
+    const feedbackStep = getByTestId('wizard-feedback-step');
+    expect(feedbackStep).toBeInTheDocument();
 
-    const feedbackStep = queryByTestId('wizard-feedback-step');
-    expect(feedbackStep).not.toBeInTheDocument();
+    const feedbackTitle = getByTestId('wizard-feedback-title');
+    expect(feedbackTitle).toHaveTextContent(`${labelPrefix}.title-pec-activation`);
+    const feedbackContent = getByTestId('wizard-feedback-content');
+    expect(feedbackContent).toHaveTextContent(`${labelPrefix}.content-pec`);
+
+    const feedbackButton = getByRole('button', { name: 'button.understand' });
+
+    fireEvent.click(feedbackButton);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(NOTIFICHE);
   });
 
   it('should render component and feedback step correctly when transferring', async () => {
@@ -168,7 +190,7 @@ describe('PecContactWizard', () => {
     const result = render(
       <PecContactWizard setShowPecWizard={setShowPecWizardMock} isTransferring />
     );
-    const { getByTestId, queryByTestId, container } = result;
+    const { getByRole, getByTestId, queryByTestId, container } = result;
 
     const pecInput = container.querySelector('[name="pec"]');
     fireEvent.change(pecInput!, { target: { value: VALID_PEC } });
@@ -192,5 +214,16 @@ describe('PecContactWizard', () => {
 
     const feedbackStep = queryByTestId('wizard-feedback-step');
     expect(feedbackStep).toBeInTheDocument();
+
+    const feedbackTitle = getByTestId('wizard-feedback-title');
+    expect(feedbackTitle).toHaveTextContent(`${labelPrefix}.title-pec-transfer`);
+    const feedbackContent = getByTestId('wizard-feedback-content');
+    expect(feedbackContent).toHaveTextContent(`${labelPrefix}.content-pec`);
+
+    const feedbackButton = getByRole('button', { name: 'button.understand' });
+
+    fireEvent.click(feedbackButton);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(NOTIFICHE);
   });
 });
