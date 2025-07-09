@@ -293,6 +293,7 @@ export enum DigitalDomicileType {
   APPIO = 'APPIO', // PN-2068
   SMS = 'SMS', // possible type for courtesy message
   SERCQ = 'SERCQ',
+  TPP = 'TPP', // Third Party Payment
 }
 
 export enum RecipientType {

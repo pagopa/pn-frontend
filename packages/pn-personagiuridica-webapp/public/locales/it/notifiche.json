@@ -345,7 +345,8 @@
       "radd": {
         "title": "I documenti sono stati ritirati",
         "description": "Il destinatario o un suo delegato ha ritirato i documenti notificati presso un operatore abilitato alla consegna degli stessi."
-      }
+      },
+      "tpp-type": "un canale digitale di terze parti"
     },
     "downtimes": {
       "title": "DISSERVIZI",
