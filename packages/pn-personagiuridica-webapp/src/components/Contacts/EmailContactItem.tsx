@@ -154,7 +154,7 @@ const EmailContactItem: React.FC = () => {
         ns: 'recapiti',
       });
     }
-    return t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-email-title`, {
+    return t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-email`, {
       ns: 'recapiti',
     });
   };
@@ -163,7 +163,7 @@ const EmailContactItem: React.FC = () => {
     if (isDigitalDomicileActive) {
       return (
         <Trans
-          i18nKey={'courtesy-contacts.remove-email-message-dod-enabled'}
+          i18nKey={'courtesy-contacts.remove-address-message-dod-enabled'}
           ns={'recapiti'}
           components={[
             <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,

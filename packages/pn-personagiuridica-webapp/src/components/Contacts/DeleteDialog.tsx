@@ -27,7 +27,7 @@ const DeleteDialog: React.FC<Props> = ({
   channelType,
   confirmHandler,
 }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['common', 'recapiti']);
   const { defaultSERCQ_SENDAddress, defaultPECAddress } = useAppSelector(
     contactsSelectors.selectAddresses
   );
@@ -37,7 +37,7 @@ const DeleteDialog: React.FC<Props> = ({
     if (isDigitalDomicileActive && channelType) {
       return [
         <Button id="buttonDisable" key="disable" onClick={confirmHandler} variant="outlined">
-          {t(`button.disable-${channelType?.toLowerCase()}`)}
+          {t(`courtesy-contacts.remove-${channelType?.toLowerCase()}`, { ns: 'recapiti' })}
         </Button>,
         <Button key="cancel" onClick={handleModalClose} variant="contained" id="buttonAnnulla">
           {t('button.annulla')}

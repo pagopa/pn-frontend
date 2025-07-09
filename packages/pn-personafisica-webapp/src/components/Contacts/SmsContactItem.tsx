@@ -273,7 +273,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps }) => {
     if (isDigitalDomicileActive) {
       return (
         <Trans
-          i18nKey={'courtesy-contacts.remove-email-message-dod-enabled'}
+          i18nKey={'courtesy-contacts.remove-address-message-dod-enabled'}
           ns={'recapiti'}
           components={[
             <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
