@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React, { ChangeEvent, useRef } from 'react';
+import React, { ChangeEvent, useMemo, useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -13,7 +13,6 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
-  IconButton,
   Link,
   List,
   ListItem,
@@ -74,11 +73,15 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
     useAppSelector(contactsSelectors.selectAddresses);
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
 
+  const isIOInstalled = !!defaultAPPIOAddress;
+
   const normalizedShowIOStep = showIOStep ?? false;
 
   const ioStep = normalizedShowIOStep ? 1 : 0;
   const emailSmsStep = ioStep + 1;
   const thankYouStep = ioStep + 3;
+
+  const labelPrefix = 'legal-contacts.sercq-send-wizard.step_4.contacts-list';
 
   const validationSchema = yup.object().shape({
     disclaimer: yup.bool().isTrue(t('required-field', { ns: 'common' })),
@@ -97,50 +100,47 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
     },
   });
 
-  const sercqSendContactsList: Array<{
-    title: string;
-    textDisabled: string;
-    textEnabled?: string;
-  }> = t('legal-contacts.sercq-send-wizard.step_4.contacts-list', {
-    returnObjects: true,
-    defaultValue: [],
-  });
-
-  const getContactsRecapData = (): Array<ContactRecapData> => {
+  const contactsRecapData: Array<ContactRecapData> = useMemo(() => {
     const contacts: Array<ContactRecapData | null> = [
       {
-        title: sercqSendContactsList[0].title,
+        title: t(`${labelPrefix}.email.title`),
         value: defaultEMAILAddress?.value,
         cta: {
-          text: sercqSendContactsList[0].textDisabled,
+          text: t(`${labelPrefix}.email.textDisabled`),
           action: () => goToStep(emailSmsStep),
         },
       },
-      normalizedShowIOStep
+      isIOInstalled
         ? {
-            title: sercqSendContactsList[1].title,
+            title: t(`${labelPrefix}.io.title`),
             value:
               defaultAPPIOAddress?.value === IOAllowedValues.ENABLED
-                ? sercqSendContactsList[1].textEnabled
+                ? t(`${labelPrefix}.io.textEnabled`)
                 : undefined,
             cta: {
-              text: sercqSendContactsList[1].textDisabled,
+              text: t(`${labelPrefix}.io.textDisabled`),
               action: () => goToStep(ioStep),
             },
           }
         : null,
       {
-        title: sercqSendContactsList[2].title,
+        title: t(`${labelPrefix}.sms.title`),
         value: defaultSMSAddress?.value,
         cta: {
-          text: sercqSendContactsList[2].textDisabled,
+          text: t(`${labelPrefix}.sms.textDisabled`),
           action: () => goToStep(emailSmsStep),
         },
       },
     ];
 
     return contacts.filter((c): c is ContactRecapData => c !== null);
-  };
+  }, [
+    defaultEMAILAddress?.value,
+    defaultAPPIOAddress?.value,
+    defaultSMSAddress?.value,
+    normalizedShowIOStep,
+    t,
+  ]);
 
   const handleActivation = () => {
     dispatch(getSercqSendTosPrivacyApproval())
@@ -250,109 +250,106 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
       <Typography variant="body2" fontSize="14px" mt={3} mb={2}>
         {t('legal-contacts.sercq-send-wizard.step_4.courtesy-content')}
       </Typography>
-      <>
-        <List dense sx={{ p: 0 }} data-testid="sercq-send-contacts-list">
-          {getContactsRecapData().map((item) => (
-            <ListItem key={item.title} sx={{ px: 0, py: 1 }} divider>
-              <Stack width="100%">
-                <Typography variant="body1" fontWeight={600}>
-                  {item.title}
-                </Typography>
-                <Box display="flex" justifyContent="space-between" alignItems="center">
-                  <ListItemText>
-                    {item.value ? (
-                      <Typography variant="body2">{item.value}</Typography>
-                    ) : (
-                      <Link
-                        sx={{
-                          cursor: 'pointer',
-                          textDecoration: 'none !important',
-                          fontWeight: 'bold',
-                        }}
-                        onClick={item.cta.action}
-                      >
-                        {item.cta.text}
-                      </Link>
-                    )}
-                  </ListItemText>
-                  <IconButton size="small">
-                    {item.value ? (
-                      <CheckCircleIcon fontSize="small" color="success" />
-                    ) : (
-                      <ErrorIcon fontSize="small" color="warning" />
-                    )}
-                  </IconButton>
-                </Box>
-              </Stack>
-            </ListItem>
-          ))}
-        </List>
-
-        <FormControl sx={{ my: 3 }}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="disclaimer"
-                id="disclaimer"
-                // required
-                onChange={handleChangeTouched}
-                inputProps={{
-                  'aria-describedby': 'disclaimer-helper-text',
-                  'aria-invalid': formik.touched.disclaimer && Boolean(formik.errors.disclaimer),
-                }}
-              />
-            }
-            label={
-              <Typography fontSize="14px" color="text.secondary">
-                <Trans
-                  i18nKey="legal-contacts.sercq-send-wizard.step_4.disclaimer"
-                  ns="recapiti"
-                  components={[
-                    <Link
-                      key="privacy-policy"
-                      sx={{
-                        cursor: 'pointer',
-                        textDecoration: 'none !important',
-                        fontWeight: 'bold',
-                      }}
-                      onClick={redirectPrivacyLink}
-                      data-testid="tos-link"
-                    />,
-
-                    <Link
-                      key="tos"
-                      sx={{
-                        cursor: 'pointer',
-                        textDecoration: 'none !important',
-                        fontWeight: 'bold',
-                      }}
-                      onClick={redirectToSLink}
-                      data-testid="tos-link"
-                    />,
-                  ]}
-                />
+      <List dense sx={{ p: 0 }} data-testid="sercq-send-contacts-list">
+        {contactsRecapData.map((item) => (
+          <ListItem key={item.title} sx={{ px: 0, py: 1 }} divider>
+            <Stack width="100%">
+              <Typography variant="body1" fontWeight={600}>
+                {item.title}
               </Typography>
-            }
-            sx={{ alignItems: 'center' }}
-            value={formik.values.disclaimer}
-          />
-          {formik.touched.disclaimer && Boolean(formik.errors.disclaimer) && (
-            <FormHelperText id="disclaimer-helper-text" error>
-              {formik.errors.disclaimer}
-            </FormHelperText>
-          )}
-        </FormControl>
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <ListItemText>
+                  {item.value ? (
+                    <Typography variant="body2">{item.value}</Typography>
+                  ) : (
+                    <Link
+                      sx={{
+                        cursor: 'pointer',
+                        textDecoration: 'none !important',
+                        fontWeight: 'bold',
+                      }}
+                      onClick={item.cta.action}
+                      data-testid="backToContactStep"
+                    >
+                      {item.cta.text}
+                    </Link>
+                  )}
+                </ListItemText>
+                {item.value ? (
+                  <CheckCircleIcon fontSize="small" color="success" aria-hidden="true" />
+                ) : (
+                  <ErrorIcon fontSize="small" color="warning" aria-hidden="true" />
+                )}
+              </Box>
+            </Stack>
+          </ListItem>
+        ))}
+      </List>
 
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
-          onClick={() => formik.submitForm()}
-          data-testid="activateButton"
-        >
-          {t('button.enable', { ns: 'common' })}
-        </Button>
-      </>
+      <FormControl sx={{ my: 3 }}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="disclaimer"
+              id="disclaimer"
+              // required
+              onChange={handleChangeTouched}
+              inputProps={{
+                'aria-describedby': 'disclaimer-helper-text',
+                'aria-invalid': formik.touched.disclaimer && Boolean(formik.errors.disclaimer),
+              }}
+            />
+          }
+          label={
+            <Typography fontSize="14px" color="text.secondary">
+              <Trans
+                i18nKey="legal-contacts.sercq-send-wizard.step_4.disclaimer"
+                ns="recapiti"
+                components={[
+                  <Link
+                    key="privacy-policy"
+                    sx={{
+                      cursor: 'pointer',
+                      textDecoration: 'none !important',
+                      fontWeight: 'bold',
+                    }}
+                    onClick={redirectPrivacyLink}
+                    data-testid="tos-link"
+                  />,
+
+                  <Link
+                    key="tos"
+                    sx={{
+                      cursor: 'pointer',
+                      textDecoration: 'none !important',
+                      fontWeight: 'bold',
+                    }}
+                    onClick={redirectToSLink}
+                    data-testid="tos-link"
+                  />,
+                ]}
+              />
+            </Typography>
+          }
+          sx={{ alignItems: 'center' }}
+          value={formik.values.disclaimer}
+        />
+        {formik.touched.disclaimer && Boolean(formik.errors.disclaimer) && (
+          <FormHelperText id="disclaimer-helper-text" error>
+            {formik.errors.disclaimer}
+          </FormHelperText>
+        )}
+      </FormControl>
+
+      <Button
+        fullWidth
+        variant="contained"
+        color="primary"
+        onClick={() => formik.submitForm()}
+        data-testid="activateButton"
+      >
+        {t('legal-contacts.sercq-send-wizard.step_4.enable', { ns: 'recapiti' })}
+      </Button>
     </Box>
   );
 };

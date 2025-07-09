@@ -260,4 +260,39 @@ describe('Contacts redux state tests', () => {
       );
     }
   });
+
+  it('should handle loading state during fetch digital addresses', async () => {
+    const testStore = createMockedStore({
+      contactsState: initialState,
+    });
+
+    mock.onGet('/bff/v1/addresses').reply(() => {
+      // verify loading is true before response
+      const stateBefore = testStore.getState().contactsState;
+      expect(stateBefore.loading).toBe(true);
+      return [200, digitalAddresses];
+    });
+
+    const action = await testStore.dispatch(getDigitalAddresses());
+
+    // after response
+    const stateAfter = testStore.getState().contactsState;
+    expect(stateAfter.loading).toBe(false);
+    expect(stateAfter.digitalAddresses).toEqual(digitalAddresses);
+    expect(action.type).toBe('getDigitalAddresses/fulfilled');
+  });
+
+  it('should reset loading state if fetch fails', async () => {
+    const testStore = createMockedStore({
+      contactsState: initialState,
+    });
+
+    mock.onGet('/bff/v1/addresses').reply(500);
+
+    const action = await testStore.dispatch(getDigitalAddresses());
+
+    const state = testStore.getState().contactsState;
+    expect(state.loading).toBe(false);
+    expect(action.type).toBe('getDigitalAddresses/rejected');
+  });
 });

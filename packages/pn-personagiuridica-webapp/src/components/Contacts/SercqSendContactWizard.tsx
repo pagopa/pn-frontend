@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React, { ChangeEvent, useRef } from 'react';
+import React, { ChangeEvent, useMemo, useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -13,7 +13,6 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
-  IconButton,
   Link,
   List,
   ListItem,
@@ -60,12 +59,14 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
   const dispatch = useAppDispatch();
 
   const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
-  const { defaultPECAddress, defaultEMAILAddress, defaultSMSAddress } = useAppSelector(
+  const { defaultEMAILAddress, defaultSMSAddress } = useAppSelector(
     contactsSelectors.selectAddresses
   );
 
   const emailSmsStep = 1;
   const thankYouStep = 3;
+
+  const labelPrefix = 'legal-contacts.sercq-send-wizard.step_3.contacts-list';
 
   const validationSchema = yup.object().shape({
     disclaimer: yup.bool().isTrue(t('required-field', { ns: 'common' })),
@@ -84,32 +85,27 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
     },
   });
 
-  const sercqSendContactsList: Array<{ title: string; textDisabled: string }> = t(
-    'legal-contacts.sercq-send-wizard.step_3.contacts-list',
-    {
-      returnObjects: true,
-      defaultValue: [],
-    }
+  const contactsRecapData: Array<ContactRecapData> = useMemo(
+    () => [
+      {
+        title: t(`${labelPrefix}.email.title`),
+        value: defaultEMAILAddress?.value,
+        cta: {
+          text: t(`${labelPrefix}.email.textDisabled`),
+          action: () => goToStep(emailSmsStep),
+        },
+      },
+      {
+        title: t(`${labelPrefix}.sms.title`),
+        value: defaultSMSAddress?.value,
+        cta: {
+          text: t(`${labelPrefix}.sms.textDisabled`),
+          action: () => goToStep(emailSmsStep),
+        },
+      },
+    ],
+    [defaultEMAILAddress?.value, defaultSMSAddress?.value, t]
   );
-
-  const getContactsRecapData = (): Array<ContactRecapData> => [
-    {
-      title: sercqSendContactsList[0].title,
-      value: defaultEMAILAddress?.value,
-      cta: {
-        text: sercqSendContactsList[0].textDisabled,
-        action: () => goToStep(emailSmsStep),
-      },
-    },
-    {
-      title: sercqSendContactsList[1].title,
-      value: defaultSMSAddress?.value,
-      cta: {
-        text: sercqSendContactsList[1].textDisabled,
-        action: () => goToStep(emailSmsStep),
-      },
-    },
-  ];
 
   const handleActivation = () => {
     dispatch(getSercqSendTosPrivacyApproval())
@@ -212,7 +208,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
       </Typography>
 
       <List dense sx={{ p: 0 }} data-testid="sercq-send-contacts-list">
-        {getContactsRecapData().map((item) => (
+        {contactsRecapData.map((item) => (
           <ListItem key={item.title} sx={{ px: 0, py: 1 }} divider>
             <Stack width="100%">
               <Typography variant="body1" fontWeight={600}>
@@ -230,18 +226,17 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
                         fontWeight: 'bold',
                       }}
                       onClick={item.cta.action}
+                      data-testid="backToContactStep"
                     >
                       {item.cta.text}
                     </Link>
                   )}
                 </ListItemText>
-                <IconButton size="small">
-                  {item.value ? (
-                    <CheckCircleIcon fontSize="small" color="success" />
-                  ) : (
-                    <ErrorIcon fontSize="small" color="warning" />
-                  )}
-                </IconButton>
+                {item.value ? (
+                  <CheckCircleIcon fontSize="small" color="success" aria-hidden="true" />
+                ) : (
+                  <ErrorIcon fontSize="small" color="warning" aria-hidden="true" />
+                )}
               </Box>
             </Stack>
           </ListItem>
@@ -308,10 +303,9 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
         variant="contained"
         color="primary"
         onClick={() => formik.submitForm()}
-        sx={{ textTransform: 'none', mb: !defaultPECAddress ? 4 : 0 }}
         data-testid="activateButton"
       >
-        {t('button.enable', { ns: 'common' })}
+        {t('legal-contacts.sercq-send-wizard.step_3.enable', { ns: 'recapiti' })}
       </Button>
     </Box>
   );
