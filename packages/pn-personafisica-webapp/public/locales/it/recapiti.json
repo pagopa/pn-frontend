@@ -230,7 +230,7 @@
     "confirmation-modal-io-accept": "Collega SEND a IO",
     "undo-deactivation-io-modal": "Mantieni collegato",
     "confirmation-deactivation-io-modal": "Scollega",
-    "confirmation-modal-email-content": "<0>Senza un indirizzo email o un altro recapito non possiamo informarti quando ricevi una comunicazione a valore legale su SEND.</0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>"
+    "confirmation-modal-email-content": "<0>Senza un indirizzo email o un altro recapito <strong>non ricevi avvisi quando c’è una comunicazione a valore legale per te su SEND.</strong></0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>"
   },
   "special-contacts": {
     "select-address": "Tipologia",
