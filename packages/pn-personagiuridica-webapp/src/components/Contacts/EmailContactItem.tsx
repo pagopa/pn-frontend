@@ -154,9 +154,7 @@ const EmailContactItem: React.FC = () => {
         ns: 'recapiti',
       });
     }
-    return t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-email`, {
-      ns: 'recapiti',
-    });
+    return t(`courtesy-contacts.remove-email`, { ns: 'recapiti' });
   };
 
   const getRemoveModalMessage = () => {
