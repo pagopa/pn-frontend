@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Button, ButtonProps, Chip, Typography } from '@mui/material';
+import { Button, Chip, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
@@ -25,14 +25,7 @@ enum ModalType {
   INFORMATIVE = 'informative',
 }
 
-type Props = {
-  slotsProps?: {
-    nextButton?: ButtonProps;
-    exitButton?: ButtonProps;
-  };
-};
-
-const EmailContactItem: React.FC<Props> = () => {
+const EmailContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const {
     defaultSERCQ_SENDAddress,
@@ -282,7 +275,6 @@ const EmailContactItem: React.FC<Props> = () => {
         removeModalBody={getRemoveModalMessage()}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
-        channelType={ChannelType.EMAIL}
         blockDelete={blockDelete}
         slotsProps={{
           cancelButton: { variant: isDigitalDomicileActive ? 'contained' : 'outlined' },

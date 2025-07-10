@@ -4,15 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { Button, ButtonProps, DialogContentText, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
-import { ChannelType } from '../../models/contacts';
-
 type DialogProps = {
   showModal: boolean;
   handleModalClose: () => void;
   removeModalTitle: string;
   removeModalBody: string | ReactNode;
   blockDelete?: boolean;
-  channelType?: ChannelType;
   confirmHandler: () => void;
   slotsProps?: {
     nextButton?: ButtonProps;
@@ -29,7 +26,7 @@ const DeleteDialog: React.FC<DialogProps> = ({
   confirmHandler,
   slotsProps,
 }) => {
-  const { t } = useTranslation(['common', 'recapiti']);
+  const { t } = useTranslation(['common']);
 
   const deleteModalActions = blockDelete ? (
     <Button id="buttonClose" onClick={handleModalClose} variant="contained">
