@@ -110,7 +110,7 @@
       "content-description": "Quando un ente invia una notifica su SEND alla tua impresa, ricevi la comunicazione a valore legale sulla PEC che hai scelto. ",
       "input-label": "Indirizzo PEC",
       "sercq-info-alert": "La PEC aziendale sostituirà la piattaforma SEND come tuo domicilio digitale. ",
-      "disclaimer": "Compilando il campo e premendo <strong>Attiva domicilio digitale</strong> accetti che l’indirizzo PEC che hai scelto sia utilizzato da SEND per l’invio delle notifiche per l’impresa, in via prioritaria rispetto a un eventuale domicilio digitale eletto presso un ente mittente o presente nei pubblici registri."
+      "disclaimer": "Compilando il campo e premendo <strong>Attiva domicilio digitale</strong> accetti che l’indirizzo PEC che hai scelto sia utilizzato da SEND per l’invio delle notifiche per l’impresa, in via prioritaria rispetto a un eventuale domicilio digitale eletto presso un ente mittente o presente nei pubblici registri"
     },
     "digital-domicile-management": {
       "title": "Gestisci domicilio digitale",
