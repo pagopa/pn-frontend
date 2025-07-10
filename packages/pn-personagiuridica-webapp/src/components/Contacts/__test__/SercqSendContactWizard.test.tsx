@@ -1,11 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { ConsentType, SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
+import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
-  acceptTosPrivacyConsentBodyMock,
+  acceptTosSercqSendBodyMock,
   sercqSendTosPrivacyConsentMock,
 } from '../../../__mocks__/Consents.mock';
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
@@ -177,15 +177,8 @@ describe('SercqSendContactWizard', () => {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
-    mock
-      .onGet(/\/bff\/v1\/pg\/tos-privacy.*/)
-      .reply(200, sercqSendTosPrivacyConsentMock(false, false));
-    mock
-      .onPut(
-        '/bff/v1/pg/tos-privacy',
-        acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
-      )
-      .reply(200);
+    mock.onGet(/\/bff\/v1\/pg\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false));
+    mock.onPut('/bff/v1/pg/tos-privacy', acceptTosSercqSendBodyMock).reply(200);
 
     // render component
     const { container, findByText, getByTestId, queryByText } = render(
