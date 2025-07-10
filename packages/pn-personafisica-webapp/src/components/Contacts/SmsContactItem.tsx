@@ -357,8 +357,8 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps }) => {
             nextButton: {
               variant: isDigitalDomicileActive ? 'outlined' : 'contained',
               children: isDigitalDomicileActive
-                ? "{t(`courtesy-contacts.remove-sms}`, { ns: 'recapiti' })}"
-                : "{t('button.conferma')}",
+                ? t(`courtesy-contacts.remove-sms}`, { ns: 'recapiti' })
+                : t('button.conferma'),
             },
           }}
         />
