@@ -215,7 +215,7 @@ const PecContactWizard: React.FC<Props> = ({
             color="primary"
             onClick={formik.submitForm}
             sx={{ mt: 3 }}
-            data-testid="continueButton"
+            data-testid="next-button"
           >
             {t('legal-contacts.sercq-send-active-pec-enabled', { ns: 'recapiti' })}
           </Button>
