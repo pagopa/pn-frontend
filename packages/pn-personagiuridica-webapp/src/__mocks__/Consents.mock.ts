@@ -31,7 +31,7 @@ export const tosPrivacyConsentMock = (tosAccepted: boolean, privacyAccepted: boo
   privacyConsentMock(privacyAccepted),
 ];
 
-export const sercqSendTosPrivacyConsentMock = (tosAccepted: boolean) => [
+export const sercqSendTosConsentMock = (tosAccepted: boolean) => [
   tosConsentMock(tosAccepted, ConsentType.TOS_SERCQ),
 ];
 

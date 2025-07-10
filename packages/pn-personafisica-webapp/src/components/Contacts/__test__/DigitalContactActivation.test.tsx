@@ -6,7 +6,7 @@ import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
   acceptTosSercqSendBodyMock,
-  sercqSendTosPrivacyConsentMock,
+  sercqSendTosConsentMock,
 } from '../../../__mocks__/Consents.mock';
 import { digitalAddressesSercq, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
@@ -222,7 +222,7 @@ describe('DigitalContactActivation', () => {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
-    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false));
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosConsentMock(false));
     mock.onPut('/bff/v2/tos-privacy', acceptTosSercqSendBodyMock).reply(200);
 
     const result = render(<DigitalContactActivation />, {
@@ -322,7 +322,7 @@ describe('DigitalContactActivation', () => {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
-    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false));
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosConsentMock(false));
     mock.onPut('/bff/v2/tos-privacy', acceptTosSercqSendBodyMock).reply(200);
 
     const { container, getByTestId, queryByTestId, getByText } = render(
