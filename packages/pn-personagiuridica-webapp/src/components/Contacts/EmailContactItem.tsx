@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Button, Chip, Typography } from '@mui/material';
+import { Button, ButtonProps, Chip, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
@@ -25,7 +25,14 @@ enum ModalType {
   INFORMATIVE = 'informative',
 }
 
-const EmailContactItem: React.FC = () => {
+type Props = {
+  slotsProps?: {
+    nextButton?: ButtonProps;
+    exitButton?: ButtonProps;
+  };
+};
+
+const EmailContactItem: React.FC<Props> = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const {
     defaultSERCQ_SENDAddress,
@@ -277,6 +284,15 @@ const EmailContactItem: React.FC = () => {
         confirmHandler={deleteConfirmHandler}
         channelType={ChannelType.EMAIL}
         blockDelete={blockDelete}
+        slotsProps={{
+          cancelButton: { variant: isDigitalDomicileActive ? 'contained' : 'outlined' },
+          nextButton: {
+            variant: isDigitalDomicileActive ? 'outlined' : 'contained',
+            children: isDigitalDomicileActive
+              ? "{t(`courtesy-contacts.remove-${channelType?.toLowerCase()}`, { ns: 'recapiti' })}"
+              : "{t('button.conferma')}",
+          },
+        }}
       />
       <InformativeDialog
         open={modalOpen === ModalType.INFORMATIVE}
