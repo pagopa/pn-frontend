@@ -30,6 +30,8 @@ type SmsElemProps = {
   slotsProps?: {
     textField?: Partial<TextFieldProps>;
     button?: Partial<ButtonProps>;
+    nextButton?: ButtonProps;
+    exitButton?: ButtonProps;
   };
 };
 
@@ -310,6 +312,15 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps }) => {
           handleModalClose={() => setModalOpen(null)}
           channelType={ChannelType.SMS}
           confirmHandler={deleteConfirmHandler}
+          slotsProps={{
+            cancelButton: { variant: isDigitalDomicileActive ? 'contained' : 'outlined' },
+            nextButton: {
+              variant: isDigitalDomicileActive ? 'outlined' : 'contained',
+              children: isDigitalDomicileActive
+                ? "{t(`courtesy-contacts.remove-sms}`, { ns: 'recapiti' })}"
+                : "{t('button.conferma')}",
+            },
+          }}
         />
       </PnInfoCard>
     );

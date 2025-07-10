@@ -315,7 +315,7 @@ const EmailContactItem: React.FC<Props> = () => {
           nextButton: {
             variant: isDigitalDomicileActive ? 'outlined' : 'contained',
             children: isDigitalDomicileActive
-              ? "{t(`courtesy-contacts.remove-${channelType?.toLowerCase()}`, { ns: 'recapiti' })}"
+              ? "{t(`courtesy-contacts.remove-email}`, { ns: 'recapiti' })}"
               : "{t('button.conferma')}",
           },
         }}
