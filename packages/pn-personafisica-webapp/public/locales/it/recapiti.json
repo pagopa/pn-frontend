@@ -65,7 +65,7 @@
     "sercq-send-io-description": "Attiva SEND - Notifiche Digitali su IO per<strong> ricevere direttamente in app</strong> le comunicazioni inviate al tuo Domicilio Digitale SEND.",
     "sercq-send-io-advantages": "Su IO",
     "sercq-send-wizard": {
-      "title": "Attiva domicilio digitale",
+      "title": "Attiva domicilio digitale su SEND",
       "title-transfer": "Trasferisci il domicilio digitale sulla piattaforma SEND",
       "step_1": {
         "title": "Come funziona",
@@ -106,8 +106,33 @@
       },
       "step_3": {
         "title": "La tua mail per ricevere aggiornamenti",
-        "step-title": "Inserisci una email",
+        "step-title": "Inserisci un recapito",
         "content": "L’email dove possiamo informarti quando c’è una comunicazione a valore legale per te su SEND."
+      },
+      "step_4": {
+        "title": "Stai attivando il tuo domicilio digitale su SEND",
+        "step-title": "Riepilogo",
+        "content": "Le tue comunicazioni a valore legale saranno recapitate a:",
+        "digital-domicile": "Domicilio digitale",
+        "send": "SEND",
+        "courtesy-content": "Hai scelto di ricevere un messaggio su:",
+        "contacts-list": {
+          "email": {
+            "title": "Indirizzo email",
+            "textDisabled": "Aggiungi email"
+          },
+          "io": {
+            "title": "App IO",
+            "textDisabled": "Collega SEND a IO",
+            "textEnabled": "Servizio SEND attivato"
+          },
+          "sms": {
+            "title": "Numero di cellulare",
+            "textDisabled": "Aggiungi numero di cellulare"
+          }
+        },
+        "disclaimer": "Premendo “Attiva domicilio digitale” dichiari di aver letto la <0>Informativa privacy</0> e di accettare i <1>Termini del servizio</1>",
+        "enable": "Attiva domicilio digitale"
       },
       "feedback": {
         "title-pec-activation": "Hai attivato il tuo domicilio digitale su PEC",
@@ -205,7 +230,7 @@
     "confirmation-modal-io-accept": "Collega SEND a IO",
     "undo-deactivation-io-modal": "Mantieni collegato",
     "confirmation-deactivation-io-modal": "Scollega",
-    "confirmation-modal-email-content": "<0>Senza un indirizzo email o un altro recapito non possiamo informarti quando ricevi una comunicazione a valore legale su SEND.</0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>"
+    "confirmation-modal-email-content": "<0>Senza un indirizzo email o un altro recapito <strong>non ricevi avvisi quando c’è una comunicazione a valore legale per te su SEND.</strong></0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>"
   },
   "special-contacts": {
     "select-address": "Tipologia",
