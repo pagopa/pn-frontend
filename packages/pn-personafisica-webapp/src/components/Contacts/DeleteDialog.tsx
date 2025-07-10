@@ -1,12 +1,10 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button, DialogContentText, DialogTitle } from '@mui/material';
+import { Button, ButtonProps, DialogContentText, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 import { ChannelType } from '../../models/contacts';
-import { contactsSelectors } from '../../redux/contact/reducers';
-import { useAppSelector } from '../../redux/hooks';
 
 type DialogProps = {
   showModal: boolean;
@@ -16,6 +14,10 @@ type DialogProps = {
   blockDelete?: boolean;
   channelType?: ChannelType;
   confirmHandler: () => void;
+  slotsProps?: {
+    nextButton?: ButtonProps;
+    cancelButton?: ButtonProps;
+  };
 };
 
 const DeleteDialog: React.FC<DialogProps> = ({
@@ -24,44 +26,36 @@ const DeleteDialog: React.FC<DialogProps> = ({
   removeModalTitle,
   removeModalBody,
   blockDelete,
-  channelType,
   confirmHandler,
+  slotsProps,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultSERCQ_SENDAddress, defaultPECAddress } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
-
-  const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
-
-  const getDeleteModalDODAction = () => {
-    if (isDigitalDomicileActive && channelType) {
-      return [
-        <Button id="buttonDisable" key="disable" onClick={confirmHandler} variant="outlined">
-          {t(`courtesy-contacts.remove-${channelType?.toLowerCase()}`, { ns: 'recapiti' })}
-        </Button>,
-        <Button key="cancel" onClick={handleModalClose} variant="contained" id="buttonAnnulla">
-          {t('button.annulla')}
-        </Button>,
-      ];
-    } else {
-      return [
-        <Button key="cancel" onClick={handleModalClose} variant="outlined" id="buttonAnnulla">
-          {t('button.annulla')}
-        </Button>,
-        <Button id="buttonConferma" key="confirm" onClick={confirmHandler} variant="contained">
-          {t('button.conferma')}
-        </Button>,
-      ];
-    }
-  };
 
   const deleteModalActions = blockDelete ? (
     <Button id="buttonClose" onClick={handleModalClose} variant="contained">
       {t('button.understand')}
     </Button>
   ) : (
-    getDeleteModalDODAction()
+    [
+      <Button
+        key="cancel"
+        onClick={handleModalClose}
+        variant="outlined"
+        id="buttonAnnulla"
+        {...slotsProps?.cancelButton}
+      >
+        {t('button.annulla')}
+      </Button>,
+      <Button
+        id="buttonConferma"
+        key="confirm"
+        onClick={confirmHandler}
+        variant="contained"
+        {...slotsProps?.nextButton}
+      >
+        {t('button.conferma')}
+      </Button>,
+    ]
   );
   return (
     <PnDialog
