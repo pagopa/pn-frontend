@@ -138,6 +138,7 @@ const PecContactWizard: React.FC<Props> = ({
         setActiveStep={setActiveStep}
         slots={{
           exitButton: () => <></>,
+          nextButton: () => <></>,
           prevButton: () => (
             <ButtonNaked
               onClick={handlePreviousBtnClick}
@@ -160,6 +161,7 @@ const PecContactWizard: React.FC<Props> = ({
             buttonText: t('button.understand', { ns: 'common' }),
             onClick: () => navigate(NOTIFICHE),
           },
+          actions: { justifyContent: 'center' },
         }}
       >
         <PnWizardStep>
