@@ -27,6 +27,7 @@ import {
   TosPrivacyConsent,
   appStateActions,
 } from '@pagopa-pn/pn-commons';
+import { theme } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -297,6 +298,12 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
               inputProps={{
                 'aria-describedby': 'disclaimer-helper-text',
                 'aria-invalid': formik.touched.disclaimer && Boolean(formik.errors.disclaimer),
+              }}
+              sx={{
+                color:
+                  formik.touched.disclaimer && Boolean(formik.errors.disclaimer)
+                    ? theme.palette.error.dark
+                    : theme.palette.text.secondary,
               }}
             />
           }
