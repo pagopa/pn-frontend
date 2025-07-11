@@ -101,8 +101,7 @@
         ],
         "confirm": "Collega SEND a IO",
         "disable": "Scollega SEND da IO",
-        "skip-io": "Continua senza collegare IO",
-        "go-on": "Continua"
+        "skip-io": "Continua senza collegare IO"
       },
       "step_3": {
         "title": "La tua mail per ricevere aggiornamenti",
@@ -206,8 +205,6 @@
     "confirmation-modal-title": "Aggiungere i tuoi recapiti è importante!",
     "confirmation-modal-io-content": "Se non colleghi SEND a IO <strong>non riceverai in app un messaggio</strong> quando ricevi una comunicazione a valore legale su SEND.",
     "confirmation-modal-io-accept": "Collega SEND a IO",
-    "undo-deactivation-io-modal": "Mantieni collegato",
-    "confirmation-deactivation-io-modal": "Scollega",
     "confirmation-modal-email-content": "<0>Senza un indirizzo email o un altro recapito non possiamo informarti quando ricevi una comunicazione a valore legale su SEND.</0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>"
   },
   "special-contacts": {

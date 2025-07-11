@@ -28,7 +28,7 @@ type ModalType = {
 };
 
 const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
-  const { t } = useTranslation('recapiti');
+  const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
 
   const [modal, setModal] = useState<ModalType>({ open: false });
@@ -96,7 +96,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
     <>
       <Stack useFlexGap spacing={2} data-testid="ioContactWizard">
         <Typography fontSize="22px" fontWeight={700}>
-          {t('legal-contacts.sercq-send-wizard.step_2.title')}
+          {t('legal-contacts.sercq-send-wizard.step_2.title', { ns: 'recapiti' })}
         </Typography>
 
         <Stack
@@ -117,7 +117,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
         </Stack>
 
         <Typography fontSize="16px">
-          {t('legal-contacts.sercq-send-wizard.step_2.content')}
+          {t('legal-contacts.sercq-send-wizard.step_2.content', { ns: 'recapiti' })}
         </Typography>
 
         <List dense sx={{ p: 0, mx: 3, pb: 1, listStyleType: 'square' }}>
@@ -142,10 +142,16 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
               sx={{ mt: 3 }}
               data-testid="disableIOButton"
             >
-              {t('legal-contacts.sercq-send-wizard.step_2.disable')}
+              {t('legal-contacts.sercq-send-wizard.step_2.disable', { ns: 'recapiti' })}
             </Button>
-            <ButtonNaked onClick={goToNextStep} color="primary" fullWidth data-testid="skipButton">
-              {t('legal-contacts.sercq-send-wizard.step_2.go-on')}
+            <ButtonNaked
+              sx={{ fontSize: '16px' }}
+              onClick={goToNextStep}
+              color="primary"
+              fullWidth
+              data-testid="skipButton"
+            >
+              {t('button.continue', { ns: 'common' })}
             </ButtonNaked>
           </>
         ) : (
@@ -158,17 +164,23 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
               sx={{ mt: 3 }}
               data-testid="confirmButton"
             >
-              {t('legal-contacts.sercq-send-wizard.step_2.confirm')}
+              {t('legal-contacts.sercq-send-wizard.step_2.confirm', { ns: 'recapiti' })}
             </Button>
-            <ButtonNaked onClick={handleSkip} color="primary" fullWidth data-testid="skipButton">
-              {t('legal-contacts.sercq-send-wizard.step_2.skip-io')}
+            <ButtonNaked
+              sx={{ fontSize: '16px' }}
+              onClick={handleSkip}
+              color="primary"
+              fullWidth
+              data-testid="skipButton"
+            >
+              {t('legal-contacts.sercq-send-wizard.step_2.skip-io', { ns: 'recapiti' })}
             </ButtonNaked>
           </>
         )}
       </Stack>
       <ConfirmationModal
         open={modal.open}
-        title={t('courtesy-contacts.confirmation-modal-title')}
+        title={t('courtesy-contacts.confirmation-modal-title', { ns: 'recapiti' })}
         slots={{
           confirmButton: Button,
           closeButton: Button,
@@ -178,11 +190,13 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
             ? {
                 closeButton: {
                   onClick: handleIODeactivation,
-                  children: t(`courtesy-contacts.confirmation-deactivation-io-modal`),
+                  children: t(`legal-contacts.sercq-send-wizard.step_2.disable`, {
+                    ns: 'recapiti',
+                  }),
                 },
                 confirmButton: {
                   onClick: handleConfirmationModalDecline,
-                  children: t(`courtesy-contacts.undo-deactivation-io-modal`),
+                  children: t(`button.annulla`, { ns: 'common' }),
                 },
               }
             : {
@@ -192,7 +206,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
                 },
                 confirmButton: {
                   onClick: handleConfirmIOActivation,
-                  children: t(`courtesy-contacts.confirmation-modal-io-accept`),
+                  children: t(`courtesy-contacts.confirmation-modal-io-accept`, { ns: 'recapiti' }),
                 },
               }
         }
