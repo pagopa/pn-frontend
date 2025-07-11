@@ -21,8 +21,8 @@ export enum CONTACT_ACTIONS {
   CREATE_OR_UPDATE_ADDRESS = 'createOrUpdateAddress',
   DELETE_ADDRESS = 'deleteAddress',
   GET_ALL_ACTIVATED_PARTIES = 'getAllActivatedParties',
-  GET_SERCQ_SEND_TOS_PRIVACY_APPROVAL = 'getSercqSendTosPrivacyApproval',
-  ACCEPT_SERCQ_SEND_TOS_PRIVACY = 'acceptSercqSendTosPrivacyApproval',
+  GET_SERCQ_SEND_TOS_APPROVAL = 'getSercqSendTosApproval',
+  ACCEPT_SERCQ_SEND_TOS = 'acceptSercqSendTosApproval',
 }
 
 export const getDigitalAddresses = createAsyncThunk<Array<DigitalAddress>>(
@@ -134,15 +134,12 @@ export const getAllActivatedParties = createAsyncThunk<Array<Party>, FilterParti
 /**
  * Retrieves if the terms of service are already approved
  */
-export const getSercqSendTosPrivacyApproval = createAsyncThunk(
-  CONTACT_ACTIONS.GET_SERCQ_SEND_TOS_PRIVACY_APPROVAL,
+export const getSercqSendTosApproval = createAsyncThunk(
+  CONTACT_ACTIONS.GET_SERCQ_SEND_TOS_APPROVAL,
   async (_, { rejectWithValue }) => {
     try {
       const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);
-      const response = await tosPrivacyFactory.getPgTosPrivacyV1([
-        ConsentType.TOS_SERCQ,
-        ConsentType.DATAPRIVACY_SERCQ,
-      ]);
+      const response = await tosPrivacyFactory.getPgTosPrivacyV1([ConsentType.TOS_SERCQ]);
 
       return response.data as Array<TosPrivacyConsent>;
     } catch (e: any) {
@@ -154,8 +151,8 @@ export const getSercqSendTosPrivacyApproval = createAsyncThunk(
 /**
  * Accepts the terms of service
  */
-export const acceptSercqSendTosPrivacy = createAsyncThunk<void, Array<BffTosPrivacyActionBody>>(
-  CONTACT_ACTIONS.ACCEPT_SERCQ_SEND_TOS_PRIVACY,
+export const acceptSercqSendTos = createAsyncThunk<void, Array<BffTosPrivacyActionBody>>(
+  CONTACT_ACTIONS.ACCEPT_SERCQ_SEND_TOS,
   async (body: Array<BffTosPrivacyActionBody>, { rejectWithValue }) => {
     try {
       const tosPrivacyFactory = UserConsentsApiFactory(undefined, undefined, apiClient);

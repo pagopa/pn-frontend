@@ -37,7 +37,7 @@
     "sercq_send-description": "Quando un ente ti invia una notifica SEND, viene recapitata in modo sicuro e con valore legale tramite la piattaforma stessa.",
     "sercq-send-description-pec-enabled": "Usa SEND come Domicilio Digitale per gestire le tue notifiche SEND in un unico punto, senza preoccuparti più delle raccomandate cartacee e dei costi annessi.",
     "sercq-send-active": "Attiva",
-    "sercq-send-active-pec-enabled": "Attiva Domicilio Digitale",
+    "sercq-send-active-pec-enabled": "Attiva domicilio digitale",
     "sercq-send-info-title": "Attiva SEND come tuo Domicilio Digitale",
     "sercq-send-info-description": "Se attivi il Domicilio Digitale, SEND diventa <strong>il tuo recapito a valore legale</strong> per le comunicazioni della PA.",
     "sercq-send-info-advantages": "Perché è utile?",
@@ -65,7 +65,7 @@
     "sercq-send-io-description": "Attiva SEND - Notifiche Digitali su IO per<strong> ricevere direttamente in app</strong> le comunicazioni inviate al tuo Domicilio Digitale SEND.",
     "sercq-send-io-advantages": "Su IO",
     "sercq-send-wizard": {
-      "title": "Attiva domicilio digitale",
+      "title": "Attiva domicilio digitale su SEND",
       "title-transfer": "Trasferisci il domicilio digitale sulla piattaforma SEND",
       "step_1": {
         "title": "Come funziona",
@@ -105,8 +105,33 @@
       },
       "step_3": {
         "title": "La tua mail per ricevere aggiornamenti",
-        "step-title": "Inserisci una email",
+        "step-title": "Inserisci un recapito",
         "content": "L’email dove possiamo informarti quando c’è una comunicazione a valore legale per te su SEND."
+      },
+      "step_4": {
+        "title": "Stai attivando il tuo domicilio digitale su SEND",
+        "step-title": "Riepilogo",
+        "content": "Le tue comunicazioni a valore legale saranno recapitate a:",
+        "digital-domicile": "Domicilio digitale",
+        "send": "SEND",
+        "courtesy-content": "Hai scelto di ricevere un messaggio su:",
+        "contacts-list": {
+          "email": {
+            "title": "Indirizzo email",
+            "textDisabled": "Aggiungi email"
+          },
+          "io": {
+            "title": "App IO",
+            "textDisabled": "Collega SEND a IO",
+            "textEnabled": "Servizio SEND attivato"
+          },
+          "sms": {
+            "title": "Numero di cellulare",
+            "textDisabled": "Aggiungi numero di cellulare"
+          }
+        },
+        "disclaimer": "Premendo “Attiva domicilio digitale” dichiari di aver letto la <0>Informativa privacy</0> e di accettare i <1>Termini del servizio</1>",
+        "enable": "Attiva domicilio digitale"
       },
       "feedback": {
         "title-pec-activation": "Hai attivato il tuo domicilio digitale su PEC",
@@ -121,10 +146,10 @@
       "title": "Usa una PEC come domicilio digitale",
       "title-transfer": "Trasferisci il domicilio digitale su una PEC",
       "content-title": "Inserisci la tua PEC",
-      "content-description": "Quando un ente ti invia una notifica SEND, ricevi l’avviso a valore legale sulla PEC che hai scelto.",
+      "content-description": "Quando un ente ti invia una notifica SEND, ricevi la comunicazione a valore legale sulla PEC che hai scelto.",
       "input-label": "Indirizzo PEC",
       "sercq-info-alert": "La PEC sostituirà la piattaforma SEND come tuo domicilio digitale.",
-      "disclaimer": "Compilando il campo e premendo <strong>Conferma</strong> accetti che l’indirizzo PEC che hai scelto sia utilizzato da SEND per l’invio delle notifiche, in via prioritaria rispetto a un eventuale domicilio digitale eletto presso un ente mittente o presente nei pubblici registri"
+      "disclaimer": "Compilando il campo e premendo <strong>Attiva domicilio digitale</strong> accetti che l’indirizzo PEC che hai scelto sia utilizzato da SEND per l’invio delle notifiche, in via prioritaria rispetto a un eventuale domicilio digitale eletto presso un ente mittente o presente nei pubblici registri"
     },
     "digital-domicile-management": {
       "title": "Gestisci il tuo domicilio digitale",
@@ -205,7 +230,7 @@
     "confirmation-modal-title": "Aggiungere i tuoi recapiti è importante!",
     "confirmation-modal-io-content": "Se non colleghi SEND a IO <strong>non riceverai in app un messaggio</strong> quando ricevi una comunicazione a valore legale su SEND.",
     "confirmation-modal-io-accept": "Collega SEND a IO",
-    "confirmation-modal-email-content": "<0>Senza un indirizzo email o un altro recapito non possiamo informarti quando ricevi una comunicazione a valore legale su SEND.</0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>"
+    "confirmation-modal-email-content": "<0>Senza un indirizzo email o un altro recapito <strong>non ricevi avvisi quando c’è una comunicazione a valore legale per te su SEND.</strong></0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>"
   },
   "special-contacts": {
     "select-address": "Tipologia",
