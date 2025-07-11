@@ -40,7 +40,6 @@ const EmailContactItem: React.FC = () => {
     defaultPECAddress,
     defaultEMAILAddress,
     defaultSMSAddress,
-    specialEMAILAddresses,
     addresses,
   } = useAppSelector(contactsSelectors.selectAddresses);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
@@ -65,7 +64,6 @@ const EmailContactItem: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const currentValue = defaultEMAILAddress?.value ?? '';
-  const blockDelete = specialEMAILAddresses.length > 0;
 
   const handleSubmit = (value: string) => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_START, {
@@ -195,7 +193,7 @@ const EmailContactItem: React.FC = () => {
         />
       );
     }
-    return t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-email-message`, {
+    return t(`courtesy-contacts.remove-email-message`, {
       value: currentAddress.current.value,
       ns: 'recapiti',
     });
@@ -301,7 +299,6 @@ const EmailContactItem: React.FC = () => {
         removeModalBody={getRemoveModalMessage()}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
-        blockDelete={blockDelete}
         slotsProps={{
           cancelButton: { variant: isDigitalDomicileActive ? 'contained' : 'outlined' },
           nextButton: {

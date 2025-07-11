@@ -21,7 +21,6 @@ describe('DeleteDialog Component', () => {
         handleModalClose={closeHandler}
         removeModalTitle="remove-title"
         removeModalBody="remove-modal-body"
-        blockDelete={false}
         confirmHandler={confirmHandler}
       />
     );
@@ -48,7 +47,6 @@ describe('DeleteDialog Component', () => {
         handleModalClose={closeHandler}
         removeModalTitle="remove-title"
         removeModalBody="remove-modal-body"
-        blockDelete
         confirmHandler={confirmHandler}
       />
     );
@@ -75,7 +73,6 @@ describe('DeleteDialog Component', () => {
         handleModalClose={closeHandler}
         removeModalTitle="remove-title"
         removeModalBody="remove-modal-body"
-        blockDelete={false}
         confirmHandler={confirmHandler}
       />
     );
@@ -96,7 +93,6 @@ describe('DeleteDialog Component', () => {
         handleModalClose={closeHandler}
         removeModalTitle="remove-title"
         removeModalBody="remove-modal-body"
-        blockDelete
         confirmHandler={confirmHandler}
       />
     );

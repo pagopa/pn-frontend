@@ -9,7 +9,6 @@ type DialogProps = {
   handleModalClose: () => void;
   removeModalTitle: string;
   removeModalBody: string | ReactNode;
-  blockDelete?: boolean;
   confirmHandler: () => void;
   slotsProps?: {
     nextButton?: ButtonProps;
@@ -22,38 +21,11 @@ const DeleteDialog: React.FC<DialogProps> = ({
   handleModalClose,
   removeModalTitle,
   removeModalBody,
-  blockDelete,
   confirmHandler,
   slotsProps,
 }) => {
   const { t } = useTranslation(['common']);
 
-  const deleteModalActions = blockDelete ? (
-    <Button id="buttonClose" onClick={handleModalClose} variant="contained">
-      {t('button.understand')}
-    </Button>
-  ) : (
-    [
-      <Button
-        key="cancel"
-        onClick={handleModalClose}
-        variant="outlined"
-        id="buttonAnnulla"
-        {...slotsProps?.cancelButton}
-      >
-        {t('button.annulla')}
-      </Button>,
-      <Button
-        id="buttonConferma"
-        key="confirm"
-        onClick={confirmHandler}
-        variant="contained"
-        {...slotsProps?.nextButton}
-      >
-        {t('button.conferma')}
-      </Button>,
-    ]
-  );
   return (
     <PnDialog
       open={showModal}
@@ -65,7 +37,27 @@ const DeleteDialog: React.FC<DialogProps> = ({
       <PnDialogContent>
         <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
       </PnDialogContent>
-      <PnDialogActions>{deleteModalActions}</PnDialogActions>
+      <PnDialogActions>
+        <Button
+          key="cancel"
+          onClick={handleModalClose}
+          variant="outlined"
+          id="buttonAnnulla"
+          {...slotsProps?.cancelButton}
+        >
+          {t('button.annulla')}
+        </Button>
+        ,
+        <Button
+          id="buttonConferma"
+          key="confirm"
+          onClick={confirmHandler}
+          variant="contained"
+          {...slotsProps?.nextButton}
+        >
+          {t('button.conferma')}
+        </Button>
+      </PnDialogActions>
     </PnDialog>
   );
 };
