@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Box, Button, Chip, Divider, Typography } from '@mui/material';
+import { Button, Chip, Divider, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
@@ -227,12 +227,12 @@ const EmailContactItem: React.FC = () => {
           {t('courtesy-contacts.email-filled-description', { ns: 'recapiti' })}
         </Typography>
       )}
-      {!defaultSMSAddress && smsInsertMode && <Divider sx={{ mt: 3, mb: 3 }} />}
 
       {!defaultSMSAddress && (
-        <Box mt={3}>
+        <>
+          <Divider sx={{ mt: 3, mb: 3 }} />
           <SmsContactItem insertMode={smsInsertMode} setInsertMode={setSmsInsertMode} />
-        </Box>
+        </>
       )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}

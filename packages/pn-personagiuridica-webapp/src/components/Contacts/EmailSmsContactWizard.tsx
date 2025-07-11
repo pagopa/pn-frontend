@@ -155,41 +155,38 @@ const EmailSmsContactWizard: React.FC = () => {
         }}
       />
 
+      <Divider sx={{ mt: 3, mb: 3 }} />
       {/* SMS */}
       {smsValue ? (
-        <>
-          <Divider sx={{ mt: 3, mb: 3 }} />
-          <DigitalContact
-            label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
-            value={smsValue}
-            channelType={ChannelType.SMS}
-            ref={smsContactRef}
-            inputProps={{
-              label: t(`courtesy-contacts.link-sms-placeholder`, {
-                ns: 'recapiti',
-              }),
-              prefix: internationalPhonePrefix,
-            }}
-            insertButtonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
-            onSubmit={(value) => handleSubmit(ChannelType.SMS, value)}
-            showVerifiedIcon
-            showLabel="edit"
-            slotsProps={{
-              textField: {
-                sx: { flexBasis: { xs: 'unset', lg: '50%' } },
-              },
-              button: {
-                sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
-              },
-              container: {
-                width: '100%',
-              },
-            }}
-          />
-        </>
+        <DigitalContact
+          label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
+          value={smsValue}
+          channelType={ChannelType.SMS}
+          ref={smsContactRef}
+          inputProps={{
+            label: t(`courtesy-contacts.link-sms-placeholder`, {
+              ns: 'recapiti',
+            }),
+            prefix: internationalPhonePrefix,
+          }}
+          insertButtonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
+          onSubmit={(value) => handleSubmit(ChannelType.SMS, value)}
+          showVerifiedIcon
+          showLabel="edit"
+          slotsProps={{
+            textField: {
+              sx: { flexBasis: { xs: 'unset', lg: '50%' } },
+            },
+            button: {
+              sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
+            },
+            container: {
+              width: '100%',
+            },
+          }}
+        />
       ) : (
         <>
-          <Divider sx={{ mt: 3, mb: 3 }} />
           {smsInsertMode && (
             <>
               <Typography fontSize="16px" fontWeight={700} mb={2}>
