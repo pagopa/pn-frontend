@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { JSXElementConstructor, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, ButtonProps, DialogContentText, DialogTitle } from '@mui/material';
@@ -10,9 +10,10 @@ type DialogProps = {
   removeModalTitle: string;
   removeModalBody: string | ReactNode;
   confirmHandler: () => void;
+
   slotsProps?: {
-    nextButton?: ButtonProps;
-    cancelButton?: ButtonProps;
+    primaryButton?: ButtonProps;
+    secondaryButton?: ButtonProps;
   };
 };
 
@@ -43,7 +44,7 @@ const DeleteDialog: React.FC<DialogProps> = ({
           onClick={handleModalClose}
           variant="outlined"
           id="buttonAnnulla"
-          {...slotsProps?.cancelButton}
+          {...slotsProps?.secondaryButton}
         >
           {t('button.annulla')}
         </Button>
@@ -53,7 +54,7 @@ const DeleteDialog: React.FC<DialogProps> = ({
           key="confirm"
           onClick={confirmHandler}
           variant="contained"
-          {...slotsProps?.nextButton}
+          {...slotsProps?.primaryButton}
         >
           {t('button.conferma')}
         </Button>

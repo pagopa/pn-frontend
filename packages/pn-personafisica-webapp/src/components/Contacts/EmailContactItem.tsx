@@ -300,12 +300,11 @@ const EmailContactItem: React.FC = () => {
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
         slotsProps={{
-          cancelButton: { variant: isDigitalDomicileActive ? 'contained' : 'outlined' },
-          nextButton: {
-            variant: isDigitalDomicileActive ? 'outlined' : 'contained',
-            children: isDigitalDomicileActive
-              ? t(`courtesy-contacts.remove-email}`, { ns: 'recapiti' })
-              : t('button.conferma'),
+          primaryButton: {
+            onClick: isDigitalDomicileActive ? () => setModalOpen(null) : deleteConfirmHandler,
+          },
+          secondaryButton: {
+            onClick: isDigitalDomicileActive ? deleteConfirmHandler : () => setModalOpen(null),
           },
         }}
       />
