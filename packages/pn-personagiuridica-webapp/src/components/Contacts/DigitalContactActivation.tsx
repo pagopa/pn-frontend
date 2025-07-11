@@ -29,7 +29,6 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const { defaultEMAILAddress, defaultSMSAddress, defaultSERCQ_SENDAddress } = useAppSelector(
     contactsSelectors.selectAddresses
   );
-  const loading = useAppSelector(contactsSelectors.selectLoading);
 
   const [activeStep, setActiveStep] = useState(0);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -111,10 +110,6 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
 
     return <></>;
   };
-
-  if (loading) {
-    return null;
-  }
 
   if (showPecWizard) {
     return (

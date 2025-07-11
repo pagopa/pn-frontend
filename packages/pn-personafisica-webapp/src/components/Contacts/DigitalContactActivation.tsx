@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,18 +30,15 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const { IS_DOD_ENABLED } = getConfiguration();
   const { defaultEMAILAddress, defaultSMSAddress, defaultAPPIOAddress, defaultSERCQ_SENDAddress } =
     useAppSelector(contactsSelectors.selectAddresses);
-  const loading = useAppSelector(contactsSelectors.selectLoading);
 
   const [activeStep, setActiveStep] = useState(0);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress || !IS_DOD_ENABLED);
-  const [showIOStep, setShowIOStep] = useState(false);
 
-  useEffect(() => {
-    if (!loading && defaultAPPIOAddress?.value === IOAllowedValues.DISABLED) {
-      setShowIOStep(true);
-    }
-  }, [loading, defaultAPPIOAddress]);
+  const showIOStep = useMemo(
+    () => defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.DISABLED,
+    []
+  );
 
   const hasEmailOrSms = !!(defaultEMAILAddress || defaultSMSAddress);
 
@@ -119,10 +116,6 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
 
     return <></>;
   };
-
-  if (loading) {
-    return null;
-  }
 
   if (showPecWizard) {
     return (
