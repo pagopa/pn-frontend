@@ -157,7 +157,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
           slotsProps={{
             confirmButton: {
               onClick: () => setShowConfirmationModal(false),
-              children: t('button.understand', { ns: 'common' }),
+              children: t('button.capito', { ns: 'common' }),
             },
           }}
         >

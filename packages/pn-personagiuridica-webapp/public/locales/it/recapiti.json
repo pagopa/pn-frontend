@@ -117,12 +117,12 @@
         "enable": "Attiva domicilio digitale"
       },
       "feedback": {
-        "title-pec-activation": "Hai attivato il domicilio digitale della tua impresa su PEC",
-        "title-pec-transfer": "Hai trasferito il domicilio digitale della tua impresa su PEC",
-        "title-sercq_send-activation": "Hai attivato il domicilio digitale della tua impresa su SEND",
-        "title-sercq_send-transfer": "Hai trasferito il domicilio digitale della tua impresa su SEND",
+        "title-pec-activation": "Hai attivato il domicilio digitale su PEC",
+        "title-pec-transfer": "Hai trasferito il domicilio digitale su PEC",
+        "title-sercq_send-activation": "Hai attivato il domicilio digitale su SEND",
+        "title-sercq_send-transfer": "Hai trasferito il domicilio digitale su SEND",
         "content-pec": "L’impresa riceverà le comunicazioni a valore legale al Domicilio digitale su PEC",
-        "content-sercq_send": "L’impresa riceverà le comunicazioni a valore legale al Domicilio digitale su SEND e un messaggio ai recapiti indicati."
+        "content-sercq_send": "L’impresa riceverà le comunicazioni a valore legale al Domicilio digitale su SEND e un messaggio ai recapiti che hai scelto."
       }
     },
     "pec-contact-wizard": {
@@ -189,8 +189,8 @@
     "info-modal-sms-title": "Avvisi via SMS: come funzionano",
     "info-modal-sms-subtitle": "Quando ci sono nuove notifiche SEND per la tua impresa, riceverai un SMS al numero inserito.",
     "info-modal-sms-content": "Se non hai il domicilio digitale attivo e non apri la notifica entro 5 giorni dalla ricezione della email, riceverai i documenti in formato cartaceo a casa.",
-    "confirmation-modal-title": "Aggiungere i recapiti della tua impresa è importante!",
-    "confirmation-modal-content": "<0>Senza un indirizzo email o un altro recapito <strong>non ricevi avvisi quando c’è una comunicazione a valore legale per la tua impresa su SEND</strong>.</0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>"
+    "confirmation-modal-title": "Aggiungere i recapiti aziendali è importante!",
+    "confirmation-modal-content": "<0>Senza un indirizzo email o un altro recapito, l’impresa <strong>non riceve avvisi quando c’è una comunicazione a valore legale su SEND.</strong></0><1>Ricorda che, se la notifica non viene letta in tempo, l’impresa potrebbe non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>"
   },
   "special-contacts": {
     "select-address": "Tipologia",
