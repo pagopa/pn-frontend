@@ -223,7 +223,14 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
               }
         }
       >
-        <Trans ns="recapiti" i18nKey={`courtesy-contacts.confirmation-modal-io-content`} />
+        <Trans
+          ns="recapiti"
+          i18nKey={
+            isIOEnabled
+              ? `courtesy-contacts.confirmation-modal-disable-io-content`
+              : `courtesy-contacts.confirmation-modal-io-content`
+          }
+        />
       </ConfirmationModal>
     </>
   );
