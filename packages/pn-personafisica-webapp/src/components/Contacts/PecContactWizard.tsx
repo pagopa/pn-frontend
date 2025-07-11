@@ -6,6 +6,7 @@ import * as yup from 'yup';
 
 import {
   Alert,
+  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -137,6 +138,7 @@ const PecContactWizard: React.FC<Props> = ({
         setActiveStep={setActiveStep}
         slots={{
           exitButton: () => <></>,
+          nextButton: () => <></>,
           prevButton: () => (
             <ButtonNaked
               onClick={handlePreviousBtnClick}
@@ -150,9 +152,6 @@ const PecContactWizard: React.FC<Props> = ({
           ),
         }}
         slotsProps={{
-          nextButton: {
-            onClick: () => formik.submitForm(),
-          },
           container: {
             'data-testid': 'pec-contact-wizard',
           },
@@ -162,6 +161,7 @@ const PecContactWizard: React.FC<Props> = ({
             buttonText: t('button.understand', { ns: 'common' }),
             onClick: () => navigate(NOTIFICHE),
           },
+          actions: { justifyContent: 'center' },
         }}
       >
         <PnWizardStep>
@@ -208,6 +208,11 @@ const PecContactWizard: React.FC<Props> = ({
             <FormControlLabel
               control={
                 <Checkbox
+                  sx={
+                    formik.touched.disclaimer && formik.errors.disclaimer
+                      ? { color: 'error.dark' }
+                      : { color: 'text.secondary' }
+                  }
                   name="disclaimer"
                   id="disclaimer"
                   required
@@ -228,6 +233,16 @@ const PecContactWizard: React.FC<Props> = ({
               </FormHelperText>
             )}
           </FormControl>
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            onClick={formik.submitForm}
+            sx={{ mt: 3 }}
+            data-testid="next-button"
+          >
+            {t('legal-contacts.sercq-send-active-pec-enabled', { ns: 'recapiti' })}
+          </Button>
         </PnWizardStep>
       </PnWizard>
 
