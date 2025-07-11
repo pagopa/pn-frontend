@@ -1,5 +1,12 @@
 import { useFormik } from 'formik';
-import { CSSProperties, ChangeEvent, forwardRef, useImperativeHandle, useState } from 'react';
+import {
+  CSSProperties,
+  ChangeEvent,
+  JSXElementConstructor,
+  forwardRef,
+  useImperativeHandle,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -16,6 +23,7 @@ import {
   TextField,
   TextFieldProps,
   Typography,
+  TypographyProps,
 } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -27,18 +35,19 @@ import {
   phoneValidationSchema,
 } from '../../utility/contacts.utility';
 
-export type LabelVisibility = 'always' | 'never' | 'edit' | 'insert';
-
 type Props = {
   label: string;
   value: string;
   channelType: ChannelType;
+  slots?: {
+    label?: JSXElementConstructor<TypographyProps>;
+  };
   slotsProps?: {
     container?: CSSProperties;
     textField?: Partial<TextFieldProps>;
     button?: Partial<ButtonProps>;
   };
-  showLabel?: LabelVisibility;
+  showLabelOnEdit?: boolean;
   senderId?: string;
   inputProps: { label: string; prefix?: string };
   insertButtonLabel: string;
@@ -54,8 +63,9 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       label,
       value,
       channelType,
+      slots,
       slotsProps,
-      showLabel = 'always',
+      showLabelOnEdit = false,
       senderId = 'default',
       inputProps,
       insertButtonLabel,
@@ -65,11 +75,14 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       onCancelInsert,
     },
     ref
+    // eslint-disable-next-line sonarjs/cognitive-complexity
   ) => {
     const { t } = useTranslation(['common', 'recapiti']);
     const isMobile = useIsMobile();
     const [editMode, setEditMode] = useState(false);
     const contactType = channelType.toLowerCase();
+
+    const Label = slots?.label || Typography;
 
     // value contains the prefix
     const contactValue = inputProps.prefix ? value.replace(inputProps.prefix, '') : value;
@@ -133,19 +146,16 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
 
     // INSERT MODE
     if (!value) {
-      const shouldShowLabel = showLabel === 'always' || showLabel === 'insert';
       return (
         <form onSubmit={formik.handleSubmit} data-testid={`${senderId}_${contactType}Contact`}>
-          {shouldShowLabel && (
-            <Typography
-              id={`${senderId}_${contactType}-custom-label`}
-              variant="body2"
-              mb={1}
-              sx={{ fontWeight: 'bold' }}
-            >
-              {label}
-            </Typography>
-          )}
+          <Label
+            id={`${senderId}_${contactType}-custom-label`}
+            variant="body2"
+            mb={1}
+            sx={{ fontWeight: 'bold' }}
+          >
+            {label}
+          </Label>
           <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
             <TextField
               id={`${senderId}_${contactType}`}
@@ -206,15 +216,15 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
         data-testid={`${senderId}_${contactType}Contact`}
         style={{ width: isMobile ? '100%' : '50%', ...slotsProps?.container }}
       >
-        {(showLabel === 'always' || showLabel === 'edit') && (
-          <Typography
+        {showLabelOnEdit && (
+          <Label
             id={`${senderId}_${contactType}-custom-label`}
             variant="body2"
             mb={1}
             sx={{ fontWeight: 'bold' }}
           >
             {label}
-          </Typography>
+          </Label>
         )}
         {editMode && (
           <>

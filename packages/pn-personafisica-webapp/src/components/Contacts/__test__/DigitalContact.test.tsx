@@ -5,7 +5,7 @@ import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { ChannelType } from '../../../models/contacts';
-import DigitalContact, { LabelVisibility } from '../DigitalContact';
+import DigitalContact from '../DigitalContact';
 
 const mockSubmitCbk = vi.fn();
 const mockDeleteCbk = vi.fn();
@@ -20,60 +20,10 @@ describe('DigitalContact Component', () => {
     vi.restoreAllMocks();
   });
 
-  it('renders label based on showLabel prop', () => {
-    const visibilities: LabelVisibility[] = ['always', 'never', 'insert', 'edit'];
-
-    visibilities.forEach((visibility) => {
-      const { container, unmount } = render(
-        <DigitalContact
-          label={`Label ${visibility}`}
-          value=""
-          channelType={ChannelType.PEC}
-          inputProps={{ label: 'Input label' }}
-          insertButtonLabel="Button"
-          onSubmit={mockSubmitCbk}
-          onDelete={mockDeleteCbk}
-          showLabel={visibility}
-        />
-      );
-
-      const label = queryById(container, 'default_pec-custom-label');
-      if (visibility === 'never' || visibility === 'edit') {
-        expect(label).not.toBeInTheDocument();
-      } else {
-        expect(label).toBeInTheDocument();
-        expect(label).toHaveTextContent(`Label ${visibility}`);
-      }
-
-      unmount();
-    });
-  });
-
-  it('renders component - filled with showLabel = "always"', () => {
-    const { container } = render(
-      <DigitalContact
-        label="Mocked label"
-        value="mocked@pec.it"
-        channelType={ChannelType.PEC}
-        inputProps={{ label: 'Input label' }}
-        insertButtonLabel="Button"
-        onSubmit={mockSubmitCbk}
-        onDelete={mockDeleteCbk}
-        showLabel="always"
-      />
-    );
-
-    const label = queryById(container, 'default_pec-custom-label');
-    expect(label).toBeInTheDocument();
-    expect(label).toHaveTextContent('Mocked label');
-    expect(container).toHaveTextContent('mocked@pec.it');
-  });
-
   it('renders component - empty', async () => {
     // render component
     const { container } = render(
       <DigitalContact
-        showLabel="insert"
         label="Mocked label"
         value=""
         channelType={ChannelType.PEC}
@@ -127,6 +77,38 @@ describe('DigitalContact Component', () => {
     await waitFor(() => {
       expect(mockCancelCbk).toHaveBeenCalledTimes(1);
     });
+  });
+
+  it('renders component - custom label', () => {
+    const { container } = render(
+      <DigitalContact
+        label="Mocked label"
+        value=""
+        channelType={ChannelType.PEC}
+        inputProps={{ label: 'Input label' }}
+        insertButtonLabel="Button"
+        onSubmit={mockSubmitCbk}
+        onDelete={mockDeleteCbk}
+        slots={{
+          label: () => (
+            <>
+              <p id="default_pec-custom-label-1">Frist label</p>
+              <p id="default_pec-custom-label-2">Second label</p>
+            </>
+          ),
+        }}
+      />
+    );
+
+    const label_1 = queryById(container, 'default_pec-custom-label-1');
+    expect(label_1).toBeInTheDocument();
+    expect(label_1).toHaveTextContent('Frist label');
+
+    const label_2 = queryById(container, 'default_pec-custom-label-2');
+    expect(label_2).toBeInTheDocument();
+    expect(label_2).toHaveTextContent('Second label');
+
+    expect(container).not.toHaveTextContent('Mocked label');
   });
 
   it('insert value', async () => {
@@ -188,7 +170,6 @@ describe('DigitalContact Component', () => {
     // render component
     const { container } = render(
       <DigitalContact
-        showLabel="never"
         label="Mocked label"
         value="mocked@pec.it"
         channelType={ChannelType.PEC}
@@ -341,23 +322,5 @@ describe('DigitalContact Component', () => {
     const buttons = container.querySelectorAll('button');
     fireEvent.click(buttons[1]);
     expect(mockDeleteCbk).toHaveBeenCalledTimes(1);
-  });
-
-  it('does not render duplicate label elements', () => {
-    const { container } = render(
-      <DigitalContact
-        label="No Duplicates"
-        value=""
-        channelType={ChannelType.PEC}
-        inputProps={{ label: 'Input label' }}
-        insertButtonLabel="Button"
-        onSubmit={mockSubmitCbk}
-        onDelete={mockDeleteCbk}
-        showLabel="always"
-      />
-    );
-
-    const labels = container.querySelectorAll('#default_pec-custom-label');
-    expect(labels.length).toBe(1);
   });
 });

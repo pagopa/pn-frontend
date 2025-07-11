@@ -17,7 +17,6 @@ const defaultAddress = digitalCourtesyAddresses.find(
 
 describe('test SmsContactItem', () => {
   let mock: MockAdapter;
-  const mockSetInsertMode = vi.fn();
   const INPUT_INVALID_PHONE = '33312345';
 
   beforeAll(() => {
@@ -34,16 +33,19 @@ describe('test SmsContactItem', () => {
   });
 
   it('type in an invalid number', async () => {
-    const { container } = render(
-      <SmsContactItem insertMode={true} setInsertMode={mockSetInsertMode} />
-    );
+    // render component
+    const { container, getByRole } = render(<SmsContactItem />);
+
+    const addBtn = getByRole('button', { name: 'courtesy-contacts.email-sms-add' });
+    fireEvent.click(addBtn);
 
     // check label is visible
     const label = container.querySelector('#default_sms-custom-label');
     expect(label).toBeInTheDocument();
     expect(label).toHaveTextContent('courtesy-contacts.sms-to-add');
 
-    const input = container.querySelector(`[name="default_sms"]`);
+    const form = container.querySelector('form');
+    const input = form!.querySelector(`[name="default_sms"]`);
     expect(input).toBeInTheDocument();
 
     // add invalid values
@@ -112,7 +114,9 @@ describe('test SmsContactItem', () => {
       })
       .reply(204);
 
-    const result = render(<SmsContactItem insertMode setInsertMode={mockSetInsertMode} />);
+    const result = render(<SmsContactItem />);
+    const addBtn = result.getByRole('button', { name: 'courtesy-contacts.email-sms-add' });
+    fireEvent.click(addBtn);
 
     // insert new phone
     let form = result.container.querySelector('form');
@@ -141,10 +145,11 @@ describe('test SmsContactItem', () => {
     await waitFor(() => {
       expect(informativeDialog).not.toBeVisible();
     });
-
-    expect(mock.history.post).toHaveLength(1);
-    expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
-      value: internationalPhonePrefix + phoneValue,
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        value: internationalPhonePrefix + phoneValue,
+      });
     });
 
     // inser otp and confirm
@@ -172,6 +177,19 @@ describe('test SmsContactItem', () => {
         value: internationalPhonePrefix + phoneValue,
       },
     ]);
+    // wait rerendering due to redux changes
+    await waitFor(() => {
+      expect(input).not.toBeInTheDocument();
+    });
+    // the component should have been re-rendered, need to take the updated form
+    form = result.container.querySelector('form');
+    const smsValue = getById(form!, 'default_sms-typography');
+    expect(smsValue).toBeInTheDocument();
+    expect(smsValue).toHaveTextContent(internationalPhonePrefix + phoneValue);
+    const editButton = getById(form!, 'modifyContact-default_sms');
+    expect(editButton).toBeInTheDocument();
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
+    expect(disableBtn).toBeInTheDocument();
   });
 
   it('override an existing phone number with a new one', async () => {
@@ -301,35 +319,5 @@ describe('test SmsContactItem', () => {
     });
     expect(result.container).toHaveTextContent('courtesy-contacts.email-sms-updates');
     expect(result.container).toHaveTextContent('courtesy-contacts.email-sms-add');
-  });
-
-  it('exits insert mode when "Cancel" button is clicked', async () => {
-    const { getByRole } = render(<SmsContactItem insertMode setInsertMode={mockSetInsertMode} />);
-
-    const cancelBtn = getByRole('button', { name: 'button.annulla' });
-    fireEvent.click(cancelBtn);
-
-    await waitFor(() => {
-      expect(mockSetInsertMode).toHaveBeenCalledTimes(1);
-      expect(mockSetInsertMode).toHaveBeenCalledWith(false);
-    });
-  });
-
-  it('renders the label when showLabel is set to "always"', () => {
-    const { container } = render(
-      <SmsContactItem insertMode showLabel="always" setInsertMode={vi.fn()} />
-    );
-
-    const label = container.querySelector('#default_sms-custom-label');
-    expect(label).toBeInTheDocument();
-  });
-
-  it('does not render the label when showLabel is set to "never"', () => {
-    const { container } = render(
-      <SmsContactItem insertMode showLabel="never" setInsertMode={vi.fn()} />
-    );
-
-    const label = container.querySelector('#default_sms-custom-label');
-    expect(label).not.toBeInTheDocument();
   });
 });

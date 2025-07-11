@@ -34,7 +34,6 @@ enum ModalType {
 
 const EmailContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const [smsInsertMode, setSmsInsertMode] = useState(false);
   const {
     defaultSERCQ_SENDAddress,
     defaultPECAddress,
@@ -245,7 +244,6 @@ const EmailContactItem: React.FC = () => {
         }}
         insertButtonLabel={t(`courtesy-contacts.email-add`, { ns: 'recapiti' })}
         onSubmit={handleSubmit}
-        showLabel="always"
       />
       {isEmailActive && (
         <Typography variant="body1" fontSize={{ xs: '14px', lg: '16px' }} mt={2}>
@@ -255,7 +253,7 @@ const EmailContactItem: React.FC = () => {
       {!defaultSMSAddress && (
         <>
           <Divider sx={{ mt: 3, mb: 3 }} />
-          <SmsContactItem insertMode={smsInsertMode} setInsertMode={setSmsInsertMode} />
+          <SmsContactItem />
         </>
       )}
       <ExistingContactDialog

@@ -1,9 +1,17 @@
-import { useRef, useState } from 'react';
+import { JSXElementConstructor, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Box, Button, ButtonProps, Chip, TextFieldProps, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  ButtonProps,
+  Chip,
+  TextFieldProps,
+  Typography,
+  TypographyProps,
+} from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -27,7 +35,7 @@ import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyF
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
-import DigitalContact, { LabelVisibility } from './DigitalContact';
+import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import InformativeDialog from './InformativeDialog';
 
@@ -40,28 +48,26 @@ enum ModalType {
 
 type SmsElemProps = {
   onCancelInsert?: () => void;
+  slots?: {
+    label?: JSXElementConstructor<TypographyProps>;
+  };
   slotsProps?: {
     textField?: Partial<TextFieldProps>;
     button?: Partial<ButtonProps>;
   };
-  showLabel?: LabelVisibility;
 };
 
 type SmsItemProps = {
-  insertMode?: boolean;
-  setInsertMode?: (value: boolean) => void;
-  showLabel?: LabelVisibility;
+  slots?: {
+    label?: JSXElementConstructor<TypographyProps>;
+  };
   slotsProps?: {
     textField?: Partial<TextFieldProps>;
     button?: Partial<ButtonProps>;
   };
 };
 
-const SmsContactElem: React.FC<SmsElemProps> = ({
-  onCancelInsert,
-  slotsProps,
-  showLabel = 'always',
-}) => {
+const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, slots }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { defaultSERCQ_SENDAddress, defaultPECAddress, defaultSMSAddress, addresses } =
     useAppSelector(contactsSelectors.selectAddresses);
@@ -189,8 +195,8 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
         insertButtonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
         onSubmit={handleSubmit}
         onCancelInsert={onCancelInsert}
+        slots={slots}
         slotsProps={slotsProps}
-        showLabel={showLabel}
       />
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
@@ -219,12 +225,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
   );
 };
 
-const SmsContactItem: React.FC<SmsItemProps> = ({
-  slotsProps,
-  showLabel = 'always',
-  insertMode,
-  setInsertMode,
-}) => {
+const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses } = useAppSelector(
@@ -232,6 +233,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   );
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  const [insertMode, setInsertMode] = useState(false);
 
   const isActive = !!defaultSMSAddress;
 
@@ -317,7 +319,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
         expanded={isActive}
         data-testid="smsContact"
       >
-        <SmsContactElem slotsProps={slotsProps} showLabel={showLabel} />
+        <SmsContactElem slotsProps={slotsProps} />
         <Typography
           mt={2}
           variant="body1"
@@ -345,13 +347,11 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   return (
     <Box>
       {insertMode ? (
-        <Box mt={3}>
-          <SmsContactElem
-            slotsProps={slotsProps}
-            showLabel={showLabel}
-            onCancelInsert={() => setInsertMode?.(false)}
-          />
-        </Box>
+        <SmsContactElem
+          slotsProps={slotsProps}
+          slots={slots}
+          onCancelInsert={() => setInsertMode(false)}
+        />
       ) : (
         <>
           <Typography variant="body1" fontWeight={600} fontSize="16px" mb={1}>
@@ -360,7 +360,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
           <ButtonNaked
             color="primary"
             sx={{ fontSize: '16px' }}
-            onClick={() => setInsertMode?.(true)}
+            onClick={() => setInsertMode(true)}
           >
             {t('courtesy-contacts.email-sms-add', { ns: 'recapiti' })}
           </ButtonNaked>
