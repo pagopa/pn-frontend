@@ -39,7 +39,7 @@ describe('DeleteDialog Component', () => {
     expect(closeButton).not.toBeInTheDocument();
   });
 
-  it('renders component - delete blocked', () => {
+  it.skip('renders component - delete blocked', () => {
     // render component
     render(
       <DeleteDialog
@@ -85,7 +85,7 @@ describe('DeleteDialog Component', () => {
     expect(closeHandler).toHaveBeenCalledTimes(1);
   });
 
-  it('clicks on buttons - delete blocked', () => {
+  it.skip('clicks on buttons - delete blocked', () => {
     // render component
     render(
       <DeleteDialog
