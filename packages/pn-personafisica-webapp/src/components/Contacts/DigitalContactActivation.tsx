@@ -109,7 +109,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
           size="medium"
           sx={{ width: { xs: '100%', md: 'auto' } }}
         >
-          {t('button.conferma', { ns: 'common' })}
+          {t('button.continue', { ns: 'common' })}
         </Button>
       );
     }

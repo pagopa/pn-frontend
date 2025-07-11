@@ -105,9 +105,11 @@
         "go-on": "Continua"
       },
       "step_3": {
-        "title": "La tua mail per ricevere aggiornamenti",
+        "title": "La tua email per ricevere avvisi sulle notifiche SEND",
         "step-title": "Inserisci un recapito",
-        "content": "L’email dove possiamo informarti quando c’è una comunicazione a valore legale per te su SEND."
+        "content": "L’email dove ti avviseremo quando ricevi una comunicazione a valore legale per te su SEND.",
+        "email-disclaimer": "Se premi <strong>Aggiungi email</strong> salvi questo recapito per ricevere avvisi sulle tue notifiche SEND. Puoi gestirlo nella sezione <strong>Recapiti.</strong>",
+        "sms-disclaimer": "Se premi <strong>Aggiungi numero</strong> salvi questo recapito per ricevere avvisi sulle tue notifiche SEND. Puoi gestirlo nella sezione <strong>Recapiti.</strong>"
       },
       "step_4": {
         "title": "Stai attivando il tuo domicilio digitale su SEND",
@@ -191,14 +193,14 @@
     "email-title": "Il tuo indirizzo email",
     "email-empty-description": "Aggiungi un indirizzo email su cui possiamo avvisarti quando c’è una notifica da leggere su SEND.",
     "email-filled-description": "Quando c’è una notifica per te, ti avvisiamo con una email all’indirizzo che hai scelto.",
-    "email-sms-updates": "Vuoi ricevere gli aggiornamenti via SMS?",
-    "email-sms-add": "Aggiungi un numero di cellulare",
+    "email-sms-updates": "Vuoi ricevere gli avvisi anche via SMS?",
+    "email-sms-add": "Aggiungi numero di cellulare",
     "sms-title": "Il tuo cellulare",
     "sms-description": "Quando c’è una notifica per te, ti avvisiamo con un SMS.",
     "link-sms-placeholder": "Il tuo cellulare",
-    "link-email-placeholder": "La tua email",
-    "sms-add": "Avvisami via SMS",
-    "email-add": "Avvisami via email",
+    "link-email-placeholder": "Indirizzo email",
+    "sms-add": "Aggiungi numero",
+    "email-add": "Aggiungi email",
     "email-verify": "Verifica email {{value}}",
     "email-verify-descr": "Abbiamo inviato un codice all’indirizzo email indicato. Il codice è <strong>valido per 15 minuti</strong>.",
     "sms-verify": "Verifica numero di cellulare {{value}}",
