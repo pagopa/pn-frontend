@@ -79,6 +79,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                       <Trans
                         i18nKey={item.description}
                         ns="recapiti"
+                        t={(s: string) => s}
                         components={[
                           <Link
                             data-testid="deliveredLink"

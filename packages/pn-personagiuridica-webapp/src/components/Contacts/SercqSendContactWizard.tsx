@@ -27,13 +27,14 @@ import {
   TosPrivacyConsent,
   appStateActions,
 } from '@pagopa-pn/pn-commons';
+import { theme } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../navigation/routes.const';
 import {
-  acceptSercqSendTosPrivacy,
+  acceptSercqSendTos,
   createOrUpdateAddress,
-  getSercqSendTosPrivacyApproval,
+  getSercqSendTosApproval,
 } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -58,7 +59,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
 
-  const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
+  const tosConsent = useRef<Array<TosPrivacyConsent>>();
   const { defaultEMAILAddress, defaultSMSAddress } = useAppSelector(
     contactsSelectors.selectAddresses
   );
@@ -108,11 +109,11 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
   );
 
   const handleActivation = () => {
-    dispatch(getSercqSendTosPrivacyApproval())
+    dispatch(getSercqSendTosApproval())
       .unwrap()
       .then((consent) => {
         // eslint-disable-next-line functional/immutable-data
-        tosPrivacy.current = consent;
+        tosConsent.current = consent;
         handleInfoConfirm();
       })
       .catch(() => {});
@@ -124,39 +125,30 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
   };
 
   const handleInfoConfirm = () => {
-    if (!tosPrivacy.current) {
+    if (!tosConsent.current) {
       return;
     }
-    // first check tos and privacy status
-    const [tos, privacy] = tosPrivacy.current.filter(
-      (consent) =>
-        consent.consentType === ConsentType.TOS_SERCQ ||
-        consent.consentType === ConsentType.DATAPRIVACY_SERCQ
+    // first check tos status
+    const [tos] = tosConsent.current.filter(
+      (consent) => consent.consentType === ConsentType.TOS_SERCQ
     );
-    // if tos and privacy are already accepted, proceede with the activation
-    if (tos.accepted && privacy.accepted) {
+    // if tos are already accepted, proceede with the activation
+    if (tos.accepted) {
       activateService();
       return;
     }
-    // accept tos and privacy
-    const tosPrivacyBody = [];
-    if (!tos.accepted) {
-      // eslint-disable-next-line functional/immutable-data
-      tosPrivacyBody.push({
-        action: ConsentActionType.ACCEPT,
-        version: tos.consentVersion,
-        type: ConsentType.TOS_SERCQ,
-      });
-    }
-    if (!privacy.accepted) {
-      // eslint-disable-next-line functional/immutable-data
-      tosPrivacyBody.push({
-        action: ConsentActionType.ACCEPT,
-        version: privacy.consentVersion,
-        type: ConsentType.DATAPRIVACY_SERCQ,
-      });
-    }
-    dispatch(acceptSercqSendTosPrivacy(tosPrivacyBody))
+    // accept tos
+    const tosBody = !tos.accepted
+      ? [
+          {
+            action: ConsentActionType.ACCEPT,
+            version: tos.consentVersion,
+            type: ConsentType.TOS_SERCQ,
+          },
+        ]
+      : [];
+
+    dispatch(acceptSercqSendTos(tosBody))
       .unwrap()
       .then(() => {
         activateService();
@@ -254,6 +246,12 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
               inputProps={{
                 'aria-describedby': 'disclaimer-helper-text',
                 'aria-invalid': formik.touched.disclaimer && Boolean(formik.errors.disclaimer),
+              }}
+              sx={{
+                color:
+                  formik.touched.disclaimer && Boolean(formik.errors.disclaimer)
+                    ? theme.palette.error.dark
+                    : theme.palette.text.secondary,
               }}
             />
           }
