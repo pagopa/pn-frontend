@@ -35,7 +35,7 @@ describe('DigitalContact Component', () => {
         onDelete={mockDeleteCbk}
       />
     );
-    const label = getById(container, 'default_pec-label');
+    const label = getById(container, 'default_pec-custom-label');
     expect(label).toHaveTextContent('Mocked label');
     const input = getById(container, 'default_pec');
     expect(input).toBeInTheDocument();
@@ -77,6 +77,38 @@ describe('DigitalContact Component', () => {
     await waitFor(() => {
       expect(mockCancelCbk).toHaveBeenCalledTimes(1);
     });
+  });
+
+  it('renders component - custom label', () => {
+    const { container } = render(
+      <DigitalContact
+        label="Mocked label"
+        value=""
+        channelType={ChannelType.PEC}
+        inputProps={{ label: 'Input label' }}
+        insertButtonLabel="Button"
+        onSubmit={mockSubmitCbk}
+        onDelete={mockDeleteCbk}
+        slots={{
+          label: () => (
+            <>
+              <p id="default_pec-custom-label-1">Frist label</p>
+              <p id="default_pec-custom-label-2">Second label</p>
+            </>
+          ),
+        }}
+      />
+    );
+
+    const label_1 = queryById(container, 'default_pec-custom-label-1');
+    expect(label_1).toBeInTheDocument();
+    expect(label_1).toHaveTextContent('Frist label');
+
+    const label_2 = queryById(container, 'default_pec-custom-label-2');
+    expect(label_2).toBeInTheDocument();
+    expect(label_2).toHaveTextContent('Second label');
+
+    expect(container).not.toHaveTextContent('Mocked label');
   });
 
   it('insert value', async () => {

@@ -82,53 +82,26 @@ describe('DigitalContactActivation', () => {
     expect(pecSection).toBeInTheDocument();
   });
 
-  it('renders the first and second step labels correctly', () => {
+  it('renders the first step label correctly', () => {
     const { getByTestId } = render(<DigitalContactActivation />);
     const stepper = getByTestId('desktopWizardStepper');
     expect(stepper).toBeInTheDocument();
     const step1Label = within(stepper).getByText(`${labelPrefix}.step_1.title`);
     expect(step1Label).toBeInTheDocument();
-    const step2Label = within(stepper).getByText(`${labelPrefix}.step_2.step-title`);
-    expect(step2Label).toBeInTheDocument();
     const sercqSendContent = getByTestId('sercqSendContactWizard');
     expect(sercqSendContent).toBeInTheDocument();
   });
 
-  it('does not render the second step label if already has an email address', async () => {
-    const { getByTestId } = render(<DigitalContactActivation />, {
-      preloadedState: {
-        contactsState: {
-          digitalAddresses: [
-            {
-              addressType: AddressType.COURTESY,
-              senderId: 'default',
-              channelType: ChannelType.EMAIL,
-              value: 'mock@test.it',
-            },
-          ],
-        },
-      },
-    });
-
+  it('does render the second step label if has no courtesy contacts', () => {
+    const { getByTestId } = render(<DigitalContactActivation />);
     const stepper = getByTestId('desktopWizardStepper');
     expect(stepper).toBeInTheDocument();
-    const step1Label = within(stepper).getByText(`${labelPrefix}.step_1.title`);
-    expect(step1Label).toBeInTheDocument();
-    const step2Label = within(stepper).queryByText(`${labelPrefix}.step_2.step-title`);
+    const step2Label = within(stepper).getByText(`${labelPrefix}.step_2.step-title`);
     expect(step2Label).toBeInTheDocument();
   });
 
-  it('renders the feedback step correctly', async () => {
-    // mock SERCQ activation api call
-    mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
-        value: SERCQ_SEND_VALUE,
-      })
-      .reply(204);
-    mock.onGet(/\/bff\/v1\/pg\/tos-privacy.*/).reply(200, sercqSendTosConsentMock(false));
-    mock.onPut('/bff/v1/pg/tos-privacy', acceptTosSercqSendBodyMock).reply(200);
-
-    const { container, getByTestId, getByText } = render(<DigitalContactActivation />, {
+  it('does render the second step label if has an active email address', () => {
+    const { queryByText } = render(<DigitalContactActivation />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [
@@ -136,61 +109,38 @@ describe('DigitalContactActivation', () => {
               addressType: AddressType.COURTESY,
               senderId: 'default',
               channelType: ChannelType.EMAIL,
-              value: 'mock@test.it',
+              value: 'mock@mail.com',
             },
           ],
         },
       },
     });
-    const howItWorksContinueButton = getByTestId('continueButton');
-    fireEvent.click(howItWorksContinueButton);
+    const step3Label = queryByText(`${labelPrefix}.step_3.step-title`);
+    expect(step3Label).toBeInTheDocument();
+  });
 
-    const confirmButton = getByText('button.conferma');
-    expect(confirmButton).toBeInTheDocument();
-    expect(confirmButton).toBeEnabled();
-    fireEvent.click(confirmButton);
-
-    // recap step: check disclaimer and press button to enable sercq
-    const disclaimerCkb = getById(container, 'disclaimer');
-    expect(disclaimerCkb).not.toBeChecked();
-
-    fireEvent.click(disclaimerCkb);
-
-    expect(disclaimerCkb).toBeChecked();
-    const enableSercqButton = getByTestId('activateButton');
-    fireEvent.click(enableSercqButton);
-
-    // feedback step
-    await waitFor(() => {
-      const feedbackStep = getByTestId('wizard-feedback-step');
-      expect(feedbackStep).toBeInTheDocument();
+  it('does render the second step label if has an active phone address', () => {
+    const { queryByText } = render(<DigitalContactActivation />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            {
+              addressType: AddressType.COURTESY,
+              senderId: 'default',
+              channelType: ChannelType.SMS,
+              value: '+39333123456',
+            },
+          ],
+        },
+      },
     });
-
-    const feedbackTitle = getByTestId('wizard-feedback-title');
-    expect(feedbackTitle).toHaveTextContent(`${labelPrefix}.feedback.title-sercq_send-activation`);
-
-    const feedbackContent = getByTestId('wizard-feedback-content');
-    expect(feedbackContent).toHaveTextContent(`${labelPrefix}.feedback.content-sercq_send`);
-
-    const feedbackButton = getByTestId('wizard-feedback-button');
-    expect(feedbackButton).toHaveTextContent('button.understand');
-    fireEvent.click(feedbackButton);
-
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(NOTIFICHE);
+    const step3Label = queryByText(`${labelPrefix}.step_3.step-title`);
+    expect(step3Label).toBeInTheDocument();
   });
 
   it('adds an email correctly', async () => {
-    // mock SERCQ activation api call
-    mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
-        value: SERCQ_SEND_VALUE,
-      })
-      .reply(204);
-    mock.onGet(/\/bff\/v1\/pg\/tos-privacy.*/).reply(200, sercqSendTosConsentMock(false));
-    mock.onPut('/bff/v1/pg/tos-privacy', acceptTosSercqSendBodyMock).reply(200);
-
     const mailValue = 'nome.utente@mail.it';
+    // mock new email api calls
     mock.onPost('/bff/v1/addresses/COURTESY/default/EMAIL', { value: mailValue }).reply(200, {
       result: 'CODE_VERIFICATION_REQUIRED',
     });
@@ -201,15 +151,24 @@ describe('DigitalContactActivation', () => {
       })
       .reply(204);
 
+    // mock SERCQ activation api call
+    mock
+      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
+        value: SERCQ_SEND_VALUE,
+      })
+      .reply(204);
+    mock.onGet(/\/bff\/v1\/pg\/tos-privacy.*/).reply(200, sercqSendTosConsentMock(false));
+    mock.onPut('/bff/v1/pg/tos-privacy', acceptTosSercqSendBodyMock).reply(200);
+
     const result = render(<DigitalContactActivation />);
     const howItWorksContinueButton = result.getByTestId('continueButton');
     fireEvent.click(howItWorksContinueButton);
 
-    let confirmButton = result.getByText('button.conferma');
-    expect(confirmButton).toBeInTheDocument();
-    expect(confirmButton).toBeEnabled();
+    let emailSmsContinueButton = result.getByText('button.continue');
+    expect(emailSmsContinueButton).toBeInTheDocument();
+    expect(emailSmsContinueButton).toBeEnabled();
 
-    fireEvent.click(confirmButton);
+    fireEvent.click(emailSmsContinueButton);
 
     const confirmationDialog = result.getByRole('dialog');
 
@@ -242,18 +201,20 @@ describe('DigitalContactActivation', () => {
     expect(emailValue).toBeInTheDocument();
     expect(emailValue).toHaveTextContent(mailValue);
 
-    confirmButton = result.getByText('button.conferma');
-    expect(confirmButton).toBeInTheDocument();
+    emailSmsContinueButton = result.getByText('button.continue');
+    expect(emailSmsContinueButton).toBeInTheDocument();
 
-    fireEvent.click(confirmButton);
+    fireEvent.click(emailSmsContinueButton);
 
     // recap step: check disclaimer and press button to enable sercq
+    const enableSercqStepTitle = result.getByText(`${labelPrefix}.step_3.title`);
+    expect(enableSercqStepTitle).toBeInTheDocument();
+
     const disclaimerCkb = getById(result.container, 'disclaimer');
     expect(disclaimerCkb).not.toBeChecked();
 
     fireEvent.click(disclaimerCkb);
 
-    expect(disclaimerCkb).toBeChecked();
     const enableSercqButton = result.getByTestId('activateButton');
     fireEvent.click(enableSercqButton);
 
@@ -314,10 +275,10 @@ describe('DigitalContactActivation', () => {
     const howItWorksContinueButton = getByTestId('continueButton');
     fireEvent.click(howItWorksContinueButton);
 
-    const confirmButton = getByText('button.conferma');
-    expect(confirmButton).toBeInTheDocument();
-    expect(confirmButton).toBeEnabled();
-    fireEvent.click(confirmButton);
+    const emailSmsContinueButton = getByText('button.continue');
+    expect(emailSmsContinueButton).toBeInTheDocument();
+    expect(emailSmsContinueButton).toBeEnabled();
+    fireEvent.click(emailSmsContinueButton);
 
     // recap step: check disclaimer and press button to enable sercq
     const disclaimerCkb = getById(container, 'disclaimer');

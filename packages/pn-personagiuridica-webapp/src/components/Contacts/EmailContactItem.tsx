@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Button, Chip, Typography } from '@mui/material';
+import { Button, Chip, Divider, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
@@ -19,7 +19,6 @@ import SmsContactItem from './SmsContactItem';
 
 enum ModalType {
   EXISTING = 'existing',
-  DISCLAIMER = 'disclaimer',
   CODE = 'code',
   DELETE = 'delete',
   INFORMATIVE = 'informative',
@@ -262,7 +261,13 @@ const EmailContactItem: React.FC = () => {
           {t('courtesy-contacts.email-filled-description', { ns: 'recapiti' })}
         </Typography>
       )}
-      {!defaultSMSAddress && <SmsContactItem />}
+
+      {!defaultSMSAddress && (
+        <>
+          <Divider sx={{ mt: 3, mb: 3 }} />
+          <SmsContactItem />
+        </>
+      )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
         value={currentAddress.current.value}

@@ -242,11 +242,11 @@ describe('DigitalContactActivation', () => {
     const howItWorksContinueButton = result.getByTestId('continueButton');
     fireEvent.click(howItWorksContinueButton);
 
-    let confirmButton = result.getByText('button.conferma');
-    expect(confirmButton).toBeInTheDocument();
-    expect(confirmButton).toBeEnabled();
+    let emailSmsContinueButton = result.getByText('button.continue');
+    expect(emailSmsContinueButton).toBeInTheDocument();
+    expect(emailSmsContinueButton).toBeEnabled();
 
-    fireEvent.click(confirmButton);
+    fireEvent.click(emailSmsContinueButton);
 
     const confirmationDialog = result.getByRole('dialog');
 
@@ -279,10 +279,10 @@ describe('DigitalContactActivation', () => {
     expect(emailValue).toBeInTheDocument();
     expect(emailValue).toHaveTextContent(mailValue);
 
-    confirmButton = result.getByText('button.conferma');
-    expect(confirmButton).toBeInTheDocument();
+    emailSmsContinueButton = result.getByText('button.continue');
+    expect(emailSmsContinueButton).toBeInTheDocument();
 
-    fireEvent.click(confirmButton);
+    fireEvent.click(emailSmsContinueButton);
 
     // recap step: check disclaimer and press button to enable sercq
     const enableSercqStepTitle = result.getByText(`${labelPrefix}.step_4.title`);
@@ -359,10 +359,10 @@ describe('DigitalContactActivation', () => {
     const howItWorksContinueButton = getByTestId('continueButton');
     fireEvent.click(howItWorksContinueButton);
 
-    const confirmButton = getByText('button.conferma');
-    expect(confirmButton).toBeInTheDocument();
-    expect(confirmButton).toBeEnabled();
-    fireEvent.click(confirmButton);
+    const emailSmsContinueButton = getByText('button.continue');
+    expect(emailSmsContinueButton).toBeInTheDocument();
+    expect(emailSmsContinueButton).toBeEnabled();
+    fireEvent.click(emailSmsContinueButton);
 
     // recap step: check disclaimer and press button to enable sercq
     const disclaimerCkb = getById(container, 'disclaimer');
