@@ -8,6 +8,7 @@ import {
   IllusAppIoLogo,
   IllusSendLogo,
   appStateActions,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -33,6 +34,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
 
   const [modal, setModal] = useState<ModalType>({ open: false });
   const { defaultAPPIOAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const isMobile = useIsMobile('sm');
 
   const isIOEnabled = useMemo(
     () => defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.ENABLED,
@@ -189,12 +191,24 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
           isIOEnabled
             ? {
                 closeButton: {
-                  onClick: handleIODeactivation,
-                  children: t(`legal-contacts.sercq-send-wizard.step_2.disable`),
-                },
-                confirmButton: {
                   onClick: handleConfirmationModalDecline,
                   children: t(`button.annulla`, { ns: 'common' }),
+                  variant: 'contained',
+                },
+                confirmButton: {
+                  onClick: handleIODeactivation,
+                  children: t(`legal-contacts.sercq-send-wizard.step_2.disable`),
+                  variant: 'outlined',
+                  sx: { marginBottom: 0 },
+                },
+                actions: {
+                  sx: {
+                    flexDirection: isMobile ? 'column' : 'row-reverse',
+                    justifyContent: isMobile ? 'center' : 'flex-start',
+                    p: isMobile ? 3 : 4,
+                    pt: 0,
+                    gap: 1,
+                  },
                 },
               }
             : {
