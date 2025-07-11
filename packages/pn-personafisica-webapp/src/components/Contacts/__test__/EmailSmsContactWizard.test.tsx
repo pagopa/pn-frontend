@@ -3,59 +3,161 @@ import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 import { fireEvent, render } from '../../../__test__/test-utils';
 import EmailSmsContactWizard from '../EmailSmsContactWizard';
 
+const labelPrefix = 'legal-contacts.sercq-send-wizard.step_3';
+
 describe('EmailSmsContactWizard', () => {
   it('render component', () => {
-    const { container, getByRole, getByText } = render(<EmailSmsContactWizard />);
+    const { getByText } = render(<EmailSmsContactWizard />);
 
-    const title = getByText('legal-contacts.sercq-send-wizard.step_3.title');
-    expect(title).toBeInTheDocument();
-    const content = getByText('legal-contacts.sercq-send-wizard.step_3.content');
-    expect(content).toBeInTheDocument();
+    expect(getByText(`${labelPrefix}.title`)).toBeInTheDocument();
+    expect(getByText(`${labelPrefix}.content`)).toBeInTheDocument();
+    expect(getByText(`${labelPrefix}.email-disclaimer`)).toBeInTheDocument();
+  });
 
-    // Email
-    const emailLabel = getById(container, 'default_email-label');
-    expect(emailLabel).toBeInTheDocument();
-    expect(emailLabel).toHaveTextContent('courtesy-contacts.email-to-add');
+  it('renders email input with no label when value is empty', () => {
+    const { container, getByRole } = render(<EmailSmsContactWizard />);
 
     const emailInput = getById(container, 'default_email');
+    expect(emailInput).toBeInTheDocument();
     expect(emailInput).toHaveValue('');
 
-    const emailButton = getByRole('button', { name: 'courtesy-contacts.email-add' });
+    const emailLabel = container.querySelector('#default_email-custom-label');
+    expect(emailLabel).not.toBeInTheDocument();
+
+    const emailButton = getByRole('button', {
+      name: 'courtesy-contacts.email-add',
+    });
     expect(emailButton).toBeInTheDocument();
+  });
 
-    let smsUpdates = getByText('courtesy-contacts.email-sms-updates');
-    expect(smsUpdates).toBeInTheDocument();
-    let showSmsInputButton = getByRole('button', { name: 'courtesy-contacts.email-sms-add' });
-    expect(showSmsInputButton).toBeInTheDocument();
+  it('renders sms section in collapsed state initially', () => {
+    const { getByRole, getByText } = render(<EmailSmsContactWizard />);
 
-    fireEvent.click(showSmsInputButton);
-    expect(smsUpdates).not.toBeInTheDocument();
-    expect(showSmsInputButton).not.toBeInTheDocument();
+    expect(getByText('courtesy-contacts.email-sms-updates')).toBeInTheDocument();
 
-    // SMS
-    const smsLabel = getById(container, 'default_sms-label');
-    expect(smsLabel).toBeInTheDocument();
-    expect(smsLabel).toHaveTextContent('courtesy-contacts.sms-to-add');
+    const smsAddButtonName = 'courtesy-contacts.email-sms-add';
+    const smsAddButton = getByRole('button', { name: smsAddButtonName });
+    expect(smsAddButton).toBeInTheDocument();
+  });
+
+  it('shows SMS input, label and disclaimer on expand', () => {
+    const { container, getByRole, getByText } = render(<EmailSmsContactWizard />);
+
+    const expandBtn = getByRole('button', {
+      name: 'courtesy-contacts.email-sms-add',
+    });
+    fireEvent.click(expandBtn);
+
+    expect(getByText('courtesy-contacts.sms-to-add')).toBeInTheDocument();
+    expect(getByText(`${labelPrefix}.sms-disclaimer`)).toBeInTheDocument();
 
     const smsInput = getById(container, 'default_sms');
+    expect(smsInput).toBeInTheDocument();
     expect(smsInput).toHaveValue('');
 
-    const smsButton = getByRole('button', { name: 'courtesy-contacts.sms-add' });
-    expect(smsButton).toBeInTheDocument();
-
-    const smsCancelButton = getByRole('button', { name: 'button.annulla' });
-    expect(smsCancelButton).toBeInTheDocument();
-
-    fireEvent.click(smsCancelButton);
-
+    const smsLabel = container.querySelector('#default_sms-custom-label');
     expect(smsLabel).not.toBeInTheDocument();
-    expect(smsInput).not.toBeInTheDocument();
-    expect(smsButton).not.toBeInTheDocument();
-    expect(smsCancelButton).not.toBeInTheDocument();
 
-    smsUpdates = getByText('courtesy-contacts.email-sms-updates');
-    expect(smsUpdates).toBeInTheDocument();
-    showSmsInputButton = getByRole('button', { name: 'courtesy-contacts.email-sms-add' });
-    expect(showSmsInputButton).toBeInTheDocument();
+    // SMS Add button
+    const smsAddButtonName = 'courtesy-contacts.sms-add';
+    const smsAddButton = getByRole('button', { name: smsAddButtonName });
+    expect(smsAddButton).toBeInTheDocument();
+
+    // Cancel button
+    const cancelButtonName = 'button.annulla';
+    const cancelButton = getByRole('button', { name: cancelButtonName });
+    expect(cancelButton).toBeInTheDocument();
+  });
+
+  it('collapses SMS section on cancel', () => {
+    const { getByRole, getByText, queryByRole, queryByTestId } = render(<EmailSmsContactWizard />);
+
+    // Click "Add SMS" button
+    const addSmsButtonName = 'courtesy-contacts.email-sms-add';
+    const addSmsButton = getByRole('button', { name: addSmsButtonName });
+    fireEvent.click(addSmsButton);
+
+    // Click "Cancel" button
+    const cancelButtonName = 'button.annulla';
+    const cancelButton = getByRole('button', { name: cancelButtonName });
+    fireEvent.click(cancelButton);
+
+    expect(queryByTestId('default_sms')).not.toBeInTheDocument();
+
+    // Assert "Add SMS" button is not present
+    const smsAddButtonName = 'courtesy-contacts.sms-add';
+    const smsAddButton = queryByRole('button', { name: smsAddButtonName });
+    expect(smsAddButton).not.toBeInTheDocument();
+
+    // Assert "Cancel" button is not present
+    expect(cancelButton).not.toBeInTheDocument();
+
+    expect(getByText('courtesy-contacts.email-sms-updates')).toBeInTheDocument();
+
+    const smsInsertButtonName = 'courtesy-contacts.email-sms-add';
+    const smsInsertButton = getByRole('button', { name: smsInsertButtonName });
+    expect(smsInsertButton).toBeInTheDocument();
+  });
+
+  it('shows label and hides disclaimer when email has a value', () => {
+    const emailValue = 'test@mail.it';
+
+    const { container, queryByText } = render(<EmailSmsContactWizard />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            {
+              addressType: 'COURTESY',
+              channelType: 'EMAIL',
+              senderId: 'default',
+              value: emailValue,
+            },
+          ],
+        },
+      },
+    });
+
+    const label = container.querySelector('#default_email-custom-label');
+    expect(label).toBeInTheDocument();
+    expect(label).toHaveTextContent('courtesy-contacts.email-to-add');
+
+    const emailReadOnlyField = getById(container, 'default_email-typography');
+    expect(emailReadOnlyField).toBeInTheDocument();
+    expect(emailReadOnlyField).toHaveTextContent(emailValue);
+
+    expect(queryByText(`${labelPrefix}.email-disclaimer`)).not.toBeInTheDocument();
+  });
+
+  it('renders SMS in read-only mode when value exists', () => {
+    const smsValue = '3331234567';
+
+    const { container, queryByRole, queryByText } = render(<EmailSmsContactWizard />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            {
+              addressType: 'COURTESY',
+              channelType: 'SMS',
+              senderId: 'default',
+              value: smsValue,
+            },
+          ],
+        },
+      },
+    });
+
+    const label = container.querySelector('#default_sms-custom-label');
+    expect(label).toBeInTheDocument();
+    expect(label).toHaveTextContent('courtesy-contacts.sms-to-add');
+
+    const smsReadOnlyField = getById(container, 'default_sms-typography');
+    expect(smsReadOnlyField).toBeInTheDocument();
+    expect(smsReadOnlyField).toHaveTextContent(smsValue);
+
+    expect(queryByText(`${labelPrefix}.sms-disclaimer`)).not.toBeInTheDocument();
+
+    const smsInsertButtonName = 'courtesy-contacts.email-sms-add';
+    const smsInsertButton = queryByRole('button', { name: smsInsertButtonName });
+    expect(smsInsertButton).not.toBeInTheDocument();
   });
 });

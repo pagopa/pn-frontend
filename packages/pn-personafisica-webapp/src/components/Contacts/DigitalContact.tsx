@@ -27,6 +27,8 @@ import {
   phoneValidationSchema,
 } from '../../utility/contacts.utility';
 
+export type LabelVisibility = 'always' | 'never' | 'edit' | 'insert';
+
 type Props = {
   label: string;
   value: string;
@@ -36,7 +38,7 @@ type Props = {
     textField?: Partial<TextFieldProps>;
     button?: Partial<ButtonProps>;
   };
-  showLabelOnEdit?: boolean;
+  showLabel?: LabelVisibility;
   senderId?: string;
   inputProps: { label: string; prefix?: string };
   insertButtonLabel: string;
@@ -53,7 +55,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       value,
       channelType,
       slotsProps,
-      showLabelOnEdit = false,
+      showLabel = 'always',
       senderId = 'default',
       inputProps,
       insertButtonLabel,
@@ -131,20 +133,24 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
 
     // INSERT MODE
     if (!value) {
+      const shouldShowLabel = showLabel === 'always' || showLabel === 'insert';
       return (
         <form onSubmit={formik.handleSubmit} data-testid={`${senderId}_${contactType}Contact`}>
-          <Typography
-            id={`${senderId}_${contactType}-label`}
-            variant="body2"
-            mb={1}
-            sx={{ fontWeight: 'bold' }}
-          >
-            {label}
-          </Typography>
+          {shouldShowLabel && (
+            <Typography
+              id={`${senderId}_${contactType}-custom-label`}
+              variant="body2"
+              mb={1}
+              sx={{ fontWeight: 'bold' }}
+            >
+              {label}
+            </Typography>
+          )}
           <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
             <TextField
               id={`${senderId}_${contactType}`}
               name={`${senderId}_${contactType}`}
+              label={inputProps.label}
               placeholder={inputProps.label}
               size="small"
               fullWidth={isMobile}
@@ -200,9 +206,9 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
         data-testid={`${senderId}_${contactType}Contact`}
         style={{ width: isMobile ? '100%' : '50%', ...slotsProps?.container }}
       >
-        {showLabelOnEdit && (
+        {(showLabel === 'always' || showLabel === 'edit') && (
           <Typography
-            id={`${senderId}_${contactType}-label`}
+            id={`${senderId}_${contactType}-custom-label`}
             variant="body2"
             mb={1}
             sx={{ fontWeight: 'bold' }}
@@ -271,7 +277,6 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             direction={{ xs: 'column', lg: 'row' }}
             spacing={{ xs: 2, lg: 3 }}
             alignItems="start"
-            sx={{ mb: 2 }}
           >
             <Stack
               width={{ xs: '100%', lg: 'auto' }}

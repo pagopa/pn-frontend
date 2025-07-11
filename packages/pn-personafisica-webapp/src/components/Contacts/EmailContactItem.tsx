@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Button, Chip, Typography } from '@mui/material';
+import { Box, Button, Chip, Divider, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -27,7 +27,6 @@ import SmsContactItem from './SmsContactItem';
 
 enum ModalType {
   EXISTING = 'existing',
-  DISCLAIMER = 'disclaimer',
   CODE = 'code',
   DELETE = 'delete',
   INFORMATIVE = 'informative',
@@ -35,6 +34,7 @@ enum ModalType {
 
 const EmailContactItem: React.FC = () => {
   const { t } = useTranslation(['common', 'recapiti']);
+  const [smsInsertMode, setSmsInsertMode] = useState(false);
   const {
     defaultSERCQ_SENDAddress,
     defaultPECAddress,
@@ -245,13 +245,20 @@ const EmailContactItem: React.FC = () => {
         }}
         insertButtonLabel={t(`courtesy-contacts.email-add`, { ns: 'recapiti' })}
         onSubmit={handleSubmit}
+        showLabel="always"
       />
       {isEmailActive && (
         <Typography variant="body1" fontSize={{ xs: '14px', lg: '16px' }} mt={2}>
           {t('courtesy-contacts.email-filled-description', { ns: 'recapiti' })}
         </Typography>
       )}
-      {!defaultSMSAddress && <SmsContactItem />}
+      {!defaultSMSAddress && smsInsertMode && <Divider sx={{ mt: 3, mb: 3 }} />}
+
+      {!defaultSMSAddress && (
+        <Box mt={3}>
+          <SmsContactItem insertMode={smsInsertMode} setInsertMode={setSmsInsertMode} />
+        </Box>
+      )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
         value={currentAddress.current.value}

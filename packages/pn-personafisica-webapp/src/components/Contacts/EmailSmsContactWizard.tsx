@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { Divider, Stack, Typography } from '@mui/material';
 import { appStateActions } from '@pagopa-pn/pn-commons';
@@ -31,6 +31,7 @@ const EmailSmsContactWizard: React.FC = () => {
   const { t } = useTranslation('recapiti');
   const dispatch = useAppDispatch();
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  const [smsInsertMode, setSmsInsertMode] = useState(false);
   const { defaultSMSAddress, defaultEMAILAddress, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
@@ -151,9 +152,15 @@ const EmailSmsContactWizard: React.FC = () => {
         {t('legal-contacts.sercq-send-wizard.step_3.title')}
       </Typography>
 
-      <Typography fontSize="16px" mb={{ xs: 3, lg: 4 }}>
+      <Typography fontSize="16px" mb={emailValue ? { xs: 3, lg: 4 } : 1}>
         {t('legal-contacts.sercq-send-wizard.step_3.content')}
       </Typography>
+
+      {!emailValue && (
+        <Typography fontSize="16px" mb={{ xs: 3, lg: 4 }}>
+          <Trans ns="recapiti" i18nKey="legal-contacts.sercq-send-wizard.step_3.email-disclaimer" />
+        </Typography>
+      )}
 
       {/* EMAIL */}
       <DigitalContact
@@ -169,7 +176,7 @@ const EmailSmsContactWizard: React.FC = () => {
         insertButtonLabel={t(`courtesy-contacts.email-add`, { ns: 'recapiti' })}
         onSubmit={(value) => handleSubmit(ChannelType.EMAIL, value)}
         showVerifiedIcon
-        showLabelOnEdit
+        showLabel="edit"
         slotsProps={{
           textField: {
             sx: { flexBasis: { xs: 'unset', lg: '50%' } },
@@ -186,7 +193,7 @@ const EmailSmsContactWizard: React.FC = () => {
       {/* SMS */}
       {smsValue ? (
         <>
-          <Divider sx={{ mt: 1, mb: 3 }} />
+          <Divider sx={{ mt: 3, mb: 3 }} />
           <DigitalContact
             label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
             value={smsValue}
@@ -201,7 +208,7 @@ const EmailSmsContactWizard: React.FC = () => {
             insertButtonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
             onSubmit={(value) => handleSubmit(ChannelType.SMS, value)}
             showVerifiedIcon
-            showLabelOnEdit
+            showLabel="edit"
             slotsProps={{
               textField: {
                 sx: { flexBasis: { xs: 'unset', lg: '50%' } },
@@ -216,16 +223,35 @@ const EmailSmsContactWizard: React.FC = () => {
           />
         </>
       ) : (
-        <SmsContactItem
-          slotsProps={{
-            textField: {
-              sx: { flexBasis: { xs: 'unset', lg: '50%' } },
-            },
-            button: {
-              sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
-            },
-          }}
-        />
+        <>
+          <Divider sx={{ mt: 3, mb: 3 }} />
+          {smsInsertMode && (
+            <>
+              <Typography fontSize="16px" fontWeight={700} mb={2}>
+                {t('courtesy-contacts.sms-to-add', { ns: 'recapiti' })}
+              </Typography>
+              <Typography fontSize="16px">
+                <Trans
+                  ns="recapiti"
+                  i18nKey="legal-contacts.sercq-send-wizard.step_3.sms-disclaimer"
+                />
+              </Typography>
+            </>
+          )}
+          <SmsContactItem
+            insertMode={smsInsertMode}
+            setInsertMode={setSmsInsertMode}
+            showLabel="edit"
+            slotsProps={{
+              textField: {
+                sx: { flexBasis: { xs: 'unset', lg: '50%' } },
+              },
+              button: {
+                sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
+              },
+            }}
+          />
+        </>
       )}
 
       <ContactCodeDialog
