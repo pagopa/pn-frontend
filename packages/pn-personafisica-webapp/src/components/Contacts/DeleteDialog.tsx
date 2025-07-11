@@ -9,8 +9,8 @@ type DialogProps = {
   handleModalClose: () => void;
   removeModalTitle: string;
   removeModalBody: string | ReactNode;
+  blockDelete?: boolean;
   confirmHandler: () => void;
-
   slotsProps?: {
     primaryButton?: ButtonProps;
     secondaryButton?: ButtonProps;
@@ -27,9 +27,37 @@ const DeleteDialog: React.FC<DialogProps> = ({
   removeModalTitle,
   removeModalBody,
   confirmHandler,
+  blockDelete,
   slotsProps,
 }) => {
   const { t } = useTranslation(['common']);
+
+  const deleteModalActions = blockDelete ? (
+    <Button id="buttonClose" onClick={handleModalClose} variant="contained">
+      {t('button.understand')}
+    </Button>
+  ) : (
+    [
+      <Button
+        key="cancel"
+        onClick={handleModalClose}
+        variant="outlined"
+        id="buttonAnnulla"
+        {...slotsProps?.secondaryButton}
+      >
+        {slotsProps?.label?.secondary ?? t('button.annulla')}
+      </Button>,
+      <Button
+        id="buttonConferma"
+        key="confirm"
+        onClick={confirmHandler}
+        variant="contained"
+        {...slotsProps?.primaryButton}
+      >
+        {slotsProps?.label?.primary ?? t('button.conferma')}
+      </Button>,
+    ]
+  );
 
   return (
     <PnDialog
@@ -42,27 +70,7 @@ const DeleteDialog: React.FC<DialogProps> = ({
       <PnDialogContent>
         <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
       </PnDialogContent>
-      <PnDialogActions>
-        <Button
-          key="cancel"
-          onClick={handleModalClose}
-          variant="outlined"
-          id="buttonAnnulla"
-          {...slotsProps?.secondaryButton}
-        >
-          {slotsProps?.label?.secondary ?? t('button.annulla')}
-        </Button>
-        ,
-        <Button
-          id="buttonConferma"
-          key="confirm"
-          onClick={confirmHandler}
-          variant="contained"
-          {...slotsProps?.primaryButton}
-        >
-          {slotsProps?.label?.primary ?? t('button.conferma')}
-        </Button>
-      </PnDialogActions>
+      <PnDialogActions>{deleteModalActions}</PnDialogActions>
     </PnDialog>
   );
 };

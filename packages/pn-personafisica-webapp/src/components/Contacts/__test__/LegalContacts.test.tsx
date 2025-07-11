@@ -48,7 +48,7 @@ describe('LegalContacts Component', async () => {
     Object.defineProperty(window, 'location', { configurable: true, value: originalLocation });
   });
 
-  it.skip('renders component - PEC enabled', async () => {
+  it('renders component - PEC enabled', async () => {
     // render component
     const { container, getByText, getByTestId } = render(<LegalContacts />, {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },

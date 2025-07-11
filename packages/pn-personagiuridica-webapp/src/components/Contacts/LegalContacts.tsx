@@ -234,6 +234,7 @@ const LegalContacts = () => {
         )}
         handleModalClose={() => setModalOpen(false)}
         confirmHandler={deleteConfirmHandler}
+        blockDelete={showSpecialContactsSection}
       />
     </PnInfoCard>
   );

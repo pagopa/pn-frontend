@@ -13,7 +13,7 @@ describe('DeleteDialog Component', () => {
     vi.clearAllMocks();
   });
 
-  it.skip('renders component - delete not blocked', () => {
+  it('renders component - delete not blocked', () => {
     // render component
     render(
       <DeleteDialog
@@ -39,7 +39,7 @@ describe('DeleteDialog Component', () => {
     expect(closeButton).not.toBeInTheDocument();
   });
 
-  it.skip('renders component - delete blocked', () => {
+  it('renders component - delete blocked', () => {
     // render component
     render(
       <DeleteDialog
@@ -85,7 +85,7 @@ describe('DeleteDialog Component', () => {
     expect(closeHandler).toHaveBeenCalledTimes(1);
   });
 
-  it.skip('clicks on buttons - delete blocked', () => {
+  it('clicks on buttons - delete blocked', () => {
     // render component
     render(
       <DeleteDialog

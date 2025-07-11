@@ -54,7 +54,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t('courtesy-contacts.io-added-successfully', { ns: 'recapiti' }),
+            message: t('courtesy-contacts.io-added-successfully'),
           })
         );
         goToNextStep();
@@ -74,7 +74,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t('courtesy-contacts.io-removed-successfully', { ns: 'recapiti' }),
+            message: t('courtesy-contacts.io-removed-successfully'),
           })
         );
         goToNextStep();
@@ -96,7 +96,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
     <>
       <Stack useFlexGap spacing={2} data-testid="ioContactWizard">
         <Typography fontSize="22px" fontWeight={700}>
-          {t('legal-contacts.sercq-send-wizard.step_2.title', { ns: 'recapiti' })}
+          {t('legal-contacts.sercq-send-wizard.step_2.title')}
         </Typography>
 
         <Stack
@@ -117,7 +117,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
         </Stack>
 
         <Typography fontSize="16px">
-          {t('legal-contacts.sercq-send-wizard.step_2.content', { ns: 'recapiti' })}
+          {t('legal-contacts.sercq-send-wizard.step_2.content')}
         </Typography>
 
         <List dense sx={{ p: 0, mx: 3, pb: 1, listStyleType: 'square' }}>
@@ -142,7 +142,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
               sx={{ mt: 3 }}
               data-testid="disableIOButton"
             >
-              {t('legal-contacts.sercq-send-wizard.step_2.disable', { ns: 'recapiti' })}
+              {t('legal-contacts.sercq-send-wizard.step_2.disable')}
             </Button>
             <ButtonNaked
               sx={{ fontSize: '16px' }}
@@ -164,7 +164,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
               sx={{ mt: 3 }}
               data-testid="confirmButton"
             >
-              {t('legal-contacts.sercq-send-wizard.step_2.confirm', { ns: 'recapiti' })}
+              {t('legal-contacts.sercq-send-wizard.step_2.confirm')}
             </Button>
             <ButtonNaked
               sx={{ fontSize: '16px' }}
@@ -173,14 +173,14 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
               fullWidth
               data-testid="skipButton"
             >
-              {t('legal-contacts.sercq-send-wizard.step_2.skip-io', { ns: 'recapiti' })}
+              {t('legal-contacts.sercq-send-wizard.step_2.skip-io')}
             </ButtonNaked>
           </>
         )}
       </Stack>
       <ConfirmationModal
         open={modal.open}
-        title={t('courtesy-contacts.confirmation-modal-title', { ns: 'recapiti' })}
+        title={t('courtesy-contacts.confirmation-modal-title')}
         slots={{
           confirmButton: Button,
           closeButton: Button,
@@ -190,9 +190,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
             ? {
                 closeButton: {
                   onClick: handleIODeactivation,
-                  children: t(`legal-contacts.sercq-send-wizard.step_2.disable`, {
-                    ns: 'recapiti',
-                  }),
+                  children: t(`legal-contacts.sercq-send-wizard.step_2.disable`),
                 },
                 confirmButton: {
                   onClick: handleConfirmationModalDecline,
@@ -206,7 +204,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
                 },
                 confirmButton: {
                   onClick: handleConfirmIOActivation,
-                  children: t(`courtesy-contacts.confirmation-modal-io-accept`, { ns: 'recapiti' }),
+                  children: t(`courtesy-contacts.confirmation-modal-io-accept`),
                 },
               }
         }
