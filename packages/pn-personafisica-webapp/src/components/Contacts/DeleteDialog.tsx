@@ -1,4 +1,4 @@
-import { JSXElementConstructor, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, ButtonProps, DialogContentText, DialogTitle } from '@mui/material';
