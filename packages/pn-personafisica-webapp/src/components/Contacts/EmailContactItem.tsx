@@ -307,8 +307,8 @@ const EmailContactItem: React.FC = () => {
           nextButton: {
             variant: isDigitalDomicileActive ? 'outlined' : 'contained',
             children: isDigitalDomicileActive
-              ? "{t(`courtesy-contacts.remove-email}`, { ns: 'recapiti' })}"
-              : "{t('button.conferma')}",
+              ? t(`courtesy-contacts.remove-email}`, { ns: 'recapiti' })
+              : t('button.conferma'),
           },
         }}
       />
