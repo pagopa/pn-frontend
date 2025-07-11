@@ -7,16 +7,13 @@ const labelPrefix = 'legal-contacts.sercq-send-wizard.step_3';
 
 describe('EmailSmsContactWizard', () => {
   it('render component', () => {
-    const { getByText } = render(<EmailSmsContactWizard />);
+    const { container, getByText, getByRole } = render(<EmailSmsContactWizard />);
 
     expect(getByText(`${labelPrefix}.title`)).toBeInTheDocument();
     expect(getByText(`${labelPrefix}.content`)).toBeInTheDocument();
     expect(getByText(`${labelPrefix}.email-disclaimer`)).toBeInTheDocument();
-  });
 
-  it('renders email input with no label when value is empty', () => {
-    const { container, getByRole } = render(<EmailSmsContactWizard />);
-
+    // Email
     const emailInput = getById(container, 'default_email');
     expect(emailInput).toBeInTheDocument();
     expect(emailInput).toHaveValue('');
@@ -24,20 +21,14 @@ describe('EmailSmsContactWizard', () => {
     const emailLabel = container.querySelector('#default_email-custom-label');
     expect(emailLabel).not.toBeInTheDocument();
 
-    const emailButton = getByRole('button', {
-      name: 'courtesy-contacts.email-add',
-    });
+    const emailButton = getByRole('button', { name: 'courtesy-contacts.email-add' });
     expect(emailButton).toBeInTheDocument();
-  });
 
-  it('renders sms section in collapsed state initially', () => {
-    const { getByRole, getByText } = render(<EmailSmsContactWizard />);
-
-    expect(getByText('courtesy-contacts.email-sms-updates')).toBeInTheDocument();
-
-    const smsAddButtonName = 'courtesy-contacts.email-sms-add';
-    const smsAddButton = getByRole('button', { name: smsAddButtonName });
-    expect(smsAddButton).toBeInTheDocument();
+    // sms section
+    const smsUpdates = getByText('courtesy-contacts.email-sms-updates');
+    expect(smsUpdates).toBeInTheDocument();
+    const showSmsInputButton = getByRole('button', { name: 'courtesy-contacts.email-sms-add' });
+    expect(showSmsInputButton).toBeInTheDocument();
   });
 
   it('shows SMS input, label and disclaimer on expand', () => {

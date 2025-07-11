@@ -148,16 +148,15 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     if (!value) {
       return (
         <form onSubmit={formik.handleSubmit} data-testid={`${senderId}_${contactType}Contact`}>
-          {
-            <Label
-              id={`${senderId}_${contactType}-custom-label`}
-              variant="body2"
-              mb={1}
-              sx={{ fontWeight: 'bold' }}
-            >
-              {label}
-            </Label>
-          }
+          <Label
+            id={`${senderId}_${contactType}-custom-label`}
+            variant="body2"
+            mb={1}
+            sx={{ fontWeight: 'bold' }}
+          >
+            {label}
+          </Label>
+
           <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
             <TextField
               id={`${senderId}_${contactType}`}

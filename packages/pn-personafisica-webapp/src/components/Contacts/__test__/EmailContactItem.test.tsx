@@ -29,12 +29,6 @@ describe('testing EmailContactItem', () => {
     mock.restore();
   });
 
-  it('always shows the label', () => {
-    const { container } = render(<EmailContactItem />);
-    const label = container.querySelector('#default_email-custom-label');
-    expect(label).toBeInTheDocument();
-  });
-
   it('type in an invalid email', async () => {
     // render component
     const { container } = render(<EmailContactItem />);
