@@ -254,7 +254,7 @@ describe('DigitalContactActivation', () => {
     within(confirmationDialog).getByText('courtesy-contacts.confirmation-modal-title');
     within(confirmationDialog).getByText('courtesy-contacts.confirmation-modal-email-content');
 
-    const dismissButton = result.getByRole('button', { name: 'button.understand' });
+    const dismissButton = result.getByRole('button', { name: 'button.capito' });
 
     fireEvent.click(dismissButton);
 
