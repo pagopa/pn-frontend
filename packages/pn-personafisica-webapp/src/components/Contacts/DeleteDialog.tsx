@@ -14,6 +14,10 @@ type DialogProps = {
   slotsProps?: {
     primaryButton?: ButtonProps;
     secondaryButton?: ButtonProps;
+    label?: {
+      primary: string;
+      secondary: string;
+    };
   };
 };
 
@@ -46,7 +50,7 @@ const DeleteDialog: React.FC<DialogProps> = ({
           id="buttonAnnulla"
           {...slotsProps?.secondaryButton}
         >
-          {t('button.annulla')}
+          {slotsProps?.label?.secondary ?? t('button.annulla')}
         </Button>
         ,
         <Button
@@ -56,7 +60,7 @@ const DeleteDialog: React.FC<DialogProps> = ({
           variant="contained"
           {...slotsProps?.primaryButton}
         >
-          {t('button.conferma')}
+          {slotsProps?.label?.primary ?? t('button.conferma')}
         </Button>
       </PnDialogActions>
     </PnDialog>

@@ -10,9 +10,14 @@ type Props = {
   removeModalTitle: string;
   removeModalBody: string | ReactNode;
   confirmHandler: () => void;
+
   slotsProps?: {
-    nextButton?: ButtonProps;
-    cancelButton?: ButtonProps;
+    primaryButton?: ButtonProps;
+    secondaryButton?: ButtonProps;
+    label?: {
+      primary: string;
+      secondary: string;
+    };
   };
 };
 
@@ -43,9 +48,9 @@ const DeleteDialog: React.FC<Props> = ({
           onClick={handleModalClose}
           variant="outlined"
           id="buttonAnnulla"
-          {...slotsProps?.cancelButton}
+          {...slotsProps?.secondaryButton}
         >
-          {t('button.annulla')}
+          {slotsProps?.label?.secondary ?? t('button.annulla')}
         </Button>
         ,
         <Button
@@ -53,9 +58,9 @@ const DeleteDialog: React.FC<Props> = ({
           key="confirm"
           onClick={confirmHandler}
           variant="contained"
-          {...slotsProps?.nextButton}
+          {...slotsProps?.primaryButton}
         >
-          {t('button.conferma')}
+          {slotsProps?.label?.primary ?? t('button.conferma')}
         </Button>
       </PnDialogActions>
     </PnDialog>
