@@ -85,9 +85,9 @@
     "sms-added-successfully": "Mobile number added successfully",
     "email-removed-successfully": "Email address removed successfully",
     "sms-removed-successfully": "Mobile number removed successfully",
-    "remove-email-title": "Remove email",
+    "remove-email": "Remove email",
     "remove-email-message": "Are you sure you want to remove the email address {{value}}?",
-    "remove-sms-title": "Remove mobile",
+    "remove-sms": "Remove mobile",
     "remove-sms-message": "Are you sure you want to remove the mobile number {{value}}?"
   },
   "special-contacts": {

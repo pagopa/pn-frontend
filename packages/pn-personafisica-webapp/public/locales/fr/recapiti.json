@@ -85,9 +85,9 @@
     "sms-added-successfully": "Numéro de téléphone portable ajouté correctement",
     "email-removed-successfully": "Adresse email correctement supprimée",
     "sms-removed-successfully": "Numéro de téléphone portable correctement supprimé",
-    "remove-email-title": "Supprimer l’email",
+    "remove-email": "Supprimer l’email",
     "remove-email-message": "Confirmez-vous vouloir supprimer l’adresse email {{value}}?",
-    "remove-sms-title": "Supprimer le téléphone portable",
+    "remove-sms": "Supprimer le téléphone portable",
     "remove-sms-message": "Confirmez-vous vouloir supprimer le numéro de téléphone portable {{value}} ?"
   },
   "special-contacts": {

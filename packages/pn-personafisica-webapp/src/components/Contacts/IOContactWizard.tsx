@@ -8,6 +8,7 @@ import {
   IllusAppIoLogo,
   IllusSendLogo,
   appStateActions,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -28,11 +29,12 @@ type ModalType = {
 };
 
 const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
-  const { t } = useTranslation('recapiti');
+  const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
 
   const [modal, setModal] = useState<ModalType>({ open: false });
   const { defaultAPPIOAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const isMobile = useIsMobile('sm');
 
   const isIOEnabled = useMemo(
     () => defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.ENABLED,
@@ -54,7 +56,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t('courtesy-contacts.io-added-successfully', { ns: 'recapiti' }),
+            message: t('courtesy-contacts.io-added-successfully'),
           })
         );
         goToNextStep();
@@ -74,7 +76,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t('courtesy-contacts.io-removed-successfully', { ns: 'recapiti' }),
+            message: t('courtesy-contacts.io-removed-successfully'),
           })
         );
         goToNextStep();
@@ -144,8 +146,14 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
             >
               {t('legal-contacts.sercq-send-wizard.step_2.disable')}
             </Button>
-            <ButtonNaked onClick={goToNextStep} color="primary" fullWidth data-testid="skipButton">
-              {t('legal-contacts.sercq-send-wizard.step_2.go-on')}
+            <ButtonNaked
+              sx={{ fontSize: '16px' }}
+              onClick={goToNextStep}
+              color="primary"
+              fullWidth
+              data-testid="skipButton"
+            >
+              {t('button.continue', { ns: 'common' })}
             </ButtonNaked>
           </>
         ) : (
@@ -160,7 +168,13 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
             >
               {t('legal-contacts.sercq-send-wizard.step_2.confirm')}
             </Button>
-            <ButtonNaked onClick={handleSkip} color="primary" fullWidth data-testid="skipButton">
+            <ButtonNaked
+              sx={{ fontSize: '16px' }}
+              onClick={handleSkip}
+              color="primary"
+              fullWidth
+              data-testid="skipButton"
+            >
               {t('legal-contacts.sercq-send-wizard.step_2.skip-io')}
             </ButtonNaked>
           </>
@@ -177,12 +191,24 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
           isIOEnabled
             ? {
                 closeButton: {
-                  onClick: handleIODeactivation,
-                  children: t(`courtesy-contacts.confirmation-deactivation-io-modal`),
+                  onClick: handleConfirmationModalDecline,
+                  children: t(`button.annulla`, { ns: 'common' }),
+                  variant: 'contained',
                 },
                 confirmButton: {
-                  onClick: handleConfirmationModalDecline,
-                  children: t(`courtesy-contacts.undo-deactivation-io-modal`),
+                  onClick: handleIODeactivation,
+                  children: t(`legal-contacts.sercq-send-wizard.step_2.disable`),
+                  variant: 'outlined',
+                  sx: { marginBottom: 0 },
+                },
+                actions: {
+                  sx: {
+                    flexDirection: isMobile ? 'column' : 'row-reverse',
+                    justifyContent: isMobile ? 'center' : 'flex-start',
+                    p: isMobile ? 3 : 4,
+                    pt: 0,
+                    gap: 1,
+                  },
                 },
               }
             : {

@@ -101,8 +101,7 @@
         ],
         "confirm": "Collega SEND a IO",
         "disable": "Scollega SEND da IO",
-        "skip-io": "Continua senza collegare IO",
-        "go-on": "Continua"
+        "skip-io": "Continua senza collegare IO"
       },
       "step_3": {
         "title": "La tua email per ricevere avvisi sulle notifiche SEND",
@@ -217,9 +216,12 @@
     "sms-removed-successfully": "Numero di cellulare rimosso correttamente",
     "io-added-successfully": "Hai attivato il servizio SEND - Notifiche Digitali su IO.",
     "io-removed-successfully": "Hai disattivato il servizio SEND - Notifiche Digitali su IO.",
-    "remove-email-title": "Disattiva email",
+    "remove-email": "Disattiva email",
+    "remove-sms": "Disattiva cellulare",
+    "remove-email-title-dod-enabled": "Vuoi disattivare la tua email?",
+    "remove-sms-title-dod-enabled": "Vuoi disattivare il numero di cellulare?",
     "remove-email-message": "Se confermi, non riceverai più l’email su {{value}} quando c’è una notifica SEND da leggere.",
-    "remove-sms-title": "Disattiva cellulare",
+    "remove-address-message-dod-enabled": "<0>Senza un indirizzo email o un altro recapito <strong>non ricevi avvisi quando c’è una comunicazione a valore legale per te su SEND.</strong></0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>",
     "remove-sms-message": "Se confermi, non riceverai più l’SMS su {{value}} quando c’è una notifica SEND da leggere.",
     "info-modal-email-title": "Avvisi via email: come funzionano",
     "info-modal-email-subtitle": "Quando ci sono nuove notifiche SEND per te, riceverai un avviso all’indirizzo email inserito.",
@@ -231,8 +233,6 @@
     "confirmation-modal-io-content": "Se non colleghi SEND a IO <strong>non riceverai in app un messaggio</strong> quando ricevi una comunicazione a valore legale su SEND.",
     "confirmation-modal-disable-io-content": "Se scolleghi SEND da IO <strong>non riceverai in app un messaggio</strong> quando ricevi una comunicazione a valore legale su SEND.",
     "confirmation-modal-io-accept": "Collega SEND a IO",
-    "undo-deactivation-io-modal": "Mantieni collegato",
-    "confirmation-deactivation-io-modal": "Scollega",
     "confirmation-modal-email-content": "<0>Senza un indirizzo email o un altro recapito <strong>non ricevi avvisi quando c’è una comunicazione a valore legale per te su SEND.</strong></0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>"
   },
   "special-contacts": {

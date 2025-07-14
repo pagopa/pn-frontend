@@ -1,5 +1,5 @@
 import { JSXElementConstructor, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import {
@@ -234,6 +234,34 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
     return 'default';
   };
 
+  const getRemoveModalTitle = () => {
+    if (defaultSERCQ_SENDAddress) {
+      return t(`courtesy-contacts.remove-sms-title-dod-enabled`, {
+        ns: 'recapiti',
+      });
+    }
+    return t('courtesy-contacts.remove-sms-title', { ns: 'recapiti' });
+  };
+
+  const getRemoveModalMessage = () => {
+    if (defaultSERCQ_SENDAddress) {
+      return (
+        <Trans
+          i18nKey={'courtesy-contacts.remove-address-message-dod-enabled'}
+          ns={'recapiti'}
+          components={[
+            <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
+            <Typography variant="body2" fontSize={'18px'} key={'paragraph2'} />,
+          ]}
+        />
+      );
+    }
+    return t('courtesy-contacts.remove-sms-message', {
+      value: defaultSMSAddress?.value,
+      ns: 'recapiti',
+    });
+  };
+
   const getActions = () =>
     isActive
       ? [
@@ -291,15 +319,22 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
         </Typography>
         <DeleteDialog
           showModal={modalOpen === ModalType.DELETE}
-          removeModalTitle={t('courtesy-contacts.remove-sms-title', {
-            ns: 'recapiti',
-          })}
-          removeModalBody={t('courtesy-contacts.remove-sms-message', {
-            value: defaultSMSAddress.value,
-            ns: 'recapiti',
-          })}
+          removeModalTitle={getRemoveModalTitle()}
+          removeModalBody={getRemoveModalMessage()}
           handleModalClose={() => setModalOpen(null)}
           confirmHandler={deleteConfirmHandler}
+          slotsProps={{
+            primaryButton: {
+              onClick: defaultSERCQ_SENDAddress ? () => setModalOpen(null) : deleteConfirmHandler,
+              label: defaultSERCQ_SENDAddress ? t('button.annulla') : undefined,
+            },
+            secondaryButton: {
+              onClick: defaultSERCQ_SENDAddress ? deleteConfirmHandler : () => setModalOpen(null),
+              label: defaultSERCQ_SENDAddress
+                ? t('courtesy-contacts.remove-sms', { ns: 'recapiti' })
+                : undefined,
+            },
+          }}
         />
       </PnInfoCard>
     );
