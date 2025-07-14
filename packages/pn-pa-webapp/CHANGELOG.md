@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.16.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.16.1...v2.16.2-RC.0) (2025-07-14)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+
 ## [2.16.1](https://github.com/pagopa/pn-frontend/compare/v2.16.1-RC.1...v2.16.1) (2025-06-27)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp

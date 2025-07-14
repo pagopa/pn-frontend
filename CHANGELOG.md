@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.16.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.16.1...v2.16.2-RC.0) (2025-07-14)
+
+
+### Bug Fixes
+
+* fix copy SERCQ (PG and PF) ([#1591](https://github.com/pagopa/pn-frontend/issues/1591)) ([c747fbf](https://github.com/pagopa/pn-frontend/commit/c747fbfddd7a2cc2851e2bd53d70fd1031f27978))
+* **pn-15396:** update IO step in SERCQ activation ([#1575](https://github.com/pagopa/pn-frontend/issues/1575)) ([ea6a2c9](https://github.com/pagopa/pn-frontend/commit/ea6a2c9a5b7b4c3c4b94c214629871da684a2c36))
+* **pn-15401:** update email and sms removal flow ([#1579](https://github.com/pagopa/pn-frontend/issues/1579)) ([9245bdd](https://github.com/pagopa/pn-frontend/commit/9245bdd1657b0e76a0a2742e2d5921941eef7484))
+* **pn-15404:** update PEC activation flow ([#1582](https://github.com/pagopa/pn-frontend/issues/1582)) ([4459554](https://github.com/pagopa/pn-frontend/commit/44595547569a9e4ed397a2ebc75edfef79bb4094))
+
+
+### Features
+
+* **pn-15395:** Add Initial page to SERCQ activation/transfer wizard ([#1571](https://github.com/pagopa/pn-frontend/issues/1571)) ([819154a](https://github.com/pagopa/pn-frontend/commit/819154ad73798ede75d2fe635b0217770d7f04f2))
+* **pn-15398:** Rework on SERCQ wizard navigation buttons ([#1573](https://github.com/pagopa/pn-frontend/issues/1573)) ([6e929bf](https://github.com/pagopa/pn-frontend/commit/6e929bfd3f3278a326adefdcd03a9c0d43617b97))
+* **pn-15399:** add email/sms confirmation modal and change feedback step ([#1576](https://github.com/pagopa/pn-frontend/issues/1576)) ([cc4e60e](https://github.com/pagopa/pn-frontend/commit/cc4e60e20c4ad1c0a0d64d8c750302077c29aebf))
+* **pn-15400:** add recap step for SERCQ activation wizard ([#1586](https://github.com/pagopa/pn-frontend/issues/1586)) ([c18c70e](https://github.com/pagopa/pn-frontend/commit/c18c70e3d8a7cc867786e017e3c4bb9d3df5c5c6))
+* **PN-15403:** remove DATAPRIVACY_SERCQ  ([#1587](https://github.com/pagopa/pn-frontend/issues/1587)) ([4892cce](https://github.com/pagopa/pn-frontend/commit/4892cce13671b00794868488894212c9e92c0e75))
+
+
+
+
+
+
 ## [2.16.1](https://github.com/pagopa/pn-frontend/compare/v2.16.1-RC.1...v2.16.1) (2025-06-27)
 
 **Note:** Version bump only for package pn-frontend
