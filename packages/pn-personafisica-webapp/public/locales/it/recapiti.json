@@ -56,7 +56,7 @@
       }
     ],
     "sercq_send-added-successfully": "Domicilio Digitale attivato correttamente",
-    "remove-sercq_send-title": "Confermi di voler disattivare il Domicilio Digitale su SEND?",
+    "remove-sercq_send-title": "Confermi di voler disattivare il Domicilio digitale su SEND?",
     "remove-sercq_send-message": "Non avrai più un recapito digitale a valore legale per le comunicazioni della Pubblica Amministrazione e potresti riceverle su carta.",
     "block-remove-digital-domicile-title": "Non è possibile disattivare il Domicilio Digitale",
     "block-remove-digital-domicile-message": "Per procedere, devi prima disattivare i domicili digitali personalizzati per ente.",

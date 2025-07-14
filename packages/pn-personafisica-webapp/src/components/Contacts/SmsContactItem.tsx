@@ -280,7 +280,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
         ns: 'recapiti',
       });
     }
-    return t('courtesy-contacts.remove-sms-title', { ns: 'recapiti' });
+    return t('courtesy-contacts.remove-sms', { ns: 'recapiti' });
   };
 
   const getRemoveModalMessage = () => {
