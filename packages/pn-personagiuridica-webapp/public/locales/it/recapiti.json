@@ -90,7 +90,7 @@
         "pec-info-alert": "La piattaforma SEND sostituirà la PEC aziendale come tuo domicilio digitale della tua impresa. "
       },
       "step_2": {
-        "title": "La tua mail per ricevere aggiornamenti",
+        "title": "L’email per ricevere avvisi sulle notifiche SEND",
         "step-title": "Inserisci un recapito",
         "content": "L’email aziendale dove avviseremo l’impresa quando c’è una nuova comunicazione a valore legale su SEND.",
         "email-disclaimer": "Se premi <strong>Aggiungi email</strong> salvi questo recapito per ricevere avvisi sulle notifiche SEND per l’impresa. Puoi gestirlo nella sezione <strong>Recapiti.</strong>",
@@ -183,6 +183,8 @@
     "remove-sms": "Disattiva cellulare",
     "remove-email-title-dod-enabled": "Vuoi disattivare l’email aziendale?",
     "remove-sms-title-dod-enabled": "Vuoi disattivare il cellulare aziendale?",
+    "remove-email-button-dod-enabled": "Disattiva email aziendale",
+    "remove-sms-button-dod-enabled": "Disattiva cellulare aziendale",
     "remove-email-message": "Se confermi, non riceverai più l’email su {{value}} quando c’è una notifica SEND da leggere.",
     "remove-address-message-dod-enabled": "<0>Senza un indirizzo email o un altro recapito, l’impresa <strong>non riceve avvisi quando c’è una comunicazione a valore legale su SEND.</strong></0><1>Ricorda che, se la notifica non viene letta in tempo, l’impresa potrebbe non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>",
     "remove-sms-message": "Se confermi, non riceverai più l’SMS su {{value}} quando c’è una notifica SEND da leggere.",
