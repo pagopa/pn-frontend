@@ -146,7 +146,7 @@ const EmailContactItem: React.FC = () => {
   };
 
   const getRemoveModalTitle = () => {
-    if (isDigitalDomicileActive) {
+    if (defaultSERCQ_SENDAddress) {
       return t(`courtesy-contacts.remove-email-title-dod-enabled`, {
         ns: 'recapiti',
       });
@@ -155,7 +155,7 @@ const EmailContactItem: React.FC = () => {
   };
 
   const getRemoveModalMessage = () => {
-    if (isDigitalDomicileActive) {
+    if (defaultSERCQ_SENDAddress) {
       return (
         <Trans
           i18nKey={'courtesy-contacts.remove-address-message-dod-enabled'}
@@ -280,12 +280,12 @@ const EmailContactItem: React.FC = () => {
         confirmHandler={deleteConfirmHandler}
         slotsProps={{
           primaryButton: {
-            onClick: isDigitalDomicileActive ? () => setModalOpen(null) : deleteConfirmHandler,
-            label: isDigitalDomicileActive ? t('button.annulla') : undefined,
+            onClick: defaultSERCQ_SENDAddress ? () => setModalOpen(null) : deleteConfirmHandler,
+            label: defaultSERCQ_SENDAddress ? t('button.annulla') : undefined,
           },
           secondaryButton: {
-            onClick: isDigitalDomicileActive ? deleteConfirmHandler : () => setModalOpen(null),
-            label: isDigitalDomicileActive
+            onClick: defaultSERCQ_SENDAddress ? deleteConfirmHandler : () => setModalOpen(null),
+            label: defaultSERCQ_SENDAddress
               ? t('courtesy-contacts.remove-email', { ns: 'recapiti' })
               : undefined,
           },

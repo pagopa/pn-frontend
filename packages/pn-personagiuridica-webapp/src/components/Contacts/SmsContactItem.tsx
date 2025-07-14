@@ -191,9 +191,9 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, sl
 const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
-  const { defaultSERCQ_SENDAddress, defaultSMSAddress, defaultPECAddress, addresses } =
-    useAppSelector(contactsSelectors.selectAddresses);
-  const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
+  const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const [insertMode, setInsertMode] = useState(false);
@@ -235,7 +235,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
   };
 
   const getRemoveModalTitle = () => {
-    if (isDigitalDomicileActive) {
+    if (defaultSERCQ_SENDAddress) {
       return t(`courtesy-contacts.remove-sms-title-dod-enabled`, {
         ns: 'recapiti',
       });
@@ -244,7 +244,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
   };
 
   const getRemoveModalMessage = () => {
-    if (isDigitalDomicileActive) {
+    if (defaultSERCQ_SENDAddress) {
       return (
         <Trans
           i18nKey={'courtesy-contacts.remove-address-message-dod-enabled'}
@@ -325,12 +325,12 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
           confirmHandler={deleteConfirmHandler}
           slotsProps={{
             primaryButton: {
-              onClick: isDigitalDomicileActive ? () => setModalOpen(null) : deleteConfirmHandler,
-              label: isDigitalDomicileActive ? t('button.annulla') : undefined,
+              onClick: defaultSERCQ_SENDAddress ? () => setModalOpen(null) : deleteConfirmHandler,
+              label: defaultSERCQ_SENDAddress ? t('button.annulla') : undefined,
             },
             secondaryButton: {
-              onClick: isDigitalDomicileActive ? deleteConfirmHandler : () => setModalOpen(null),
-              label: isDigitalDomicileActive
+              onClick: defaultSERCQ_SENDAddress ? deleteConfirmHandler : () => setModalOpen(null),
+              label: defaultSERCQ_SENDAddress
                 ? t('courtesy-contacts.remove-sms', { ns: 'recapiti' })
                 : undefined,
             },
