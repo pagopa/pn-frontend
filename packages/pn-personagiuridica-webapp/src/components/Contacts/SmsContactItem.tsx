@@ -240,7 +240,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
         ns: 'recapiti',
       });
     }
-    return t('courtesy-contacts.remove-sms-title', { ns: 'recapiti' });
+    return t('courtesy-contacts.remove-sms', { ns: 'recapiti' });
   };
 
   const getRemoveModalMessage = () => {
@@ -331,7 +331,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
             secondaryButton: {
               onClick: defaultSERCQ_SENDAddress ? deleteConfirmHandler : () => setModalOpen(null),
               label: defaultSERCQ_SENDAddress
-                ? t('courtesy-contacts.remove-sms', { ns: 'recapiti' })
+                ? t('courtesy-contacts.remove-sms-button-dod-enabled', { ns: 'recapiti' })
                 : undefined,
             },
           }}

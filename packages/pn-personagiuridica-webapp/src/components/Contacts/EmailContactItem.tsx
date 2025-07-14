@@ -286,7 +286,7 @@ const EmailContactItem: React.FC = () => {
           secondaryButton: {
             onClick: defaultSERCQ_SENDAddress ? deleteConfirmHandler : () => setModalOpen(null),
             label: defaultSERCQ_SENDAddress
-              ? t('courtesy-contacts.remove-email', { ns: 'recapiti' })
+              ? t('courtesy-contacts.remove-email-button-dod-enabled', { ns: 'recapiti' })
               : undefined,
           },
         }}
