@@ -8,7 +8,7 @@ import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { institutionsDTO, productsDTO } from '../__mocks__/User.mock';
-import { apiClient } from '../api/apiClients';
+import { apiClient, authClient } from '../api/apiClients';
 import { SELFCARE_LOGIN_PATH, SELFCARE_LOGOUT_PATH } from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
 import { RenderResult, act, fireEvent, getByText, render, screen, waitFor } from './test-utils';
@@ -46,12 +46,14 @@ const reduxInitialState = {
 
 describe('App', async () => {
   let mock: MockAdapter;
+  let mockAuth: MockAdapter;
   let result: RenderResult;
   const mockOpenFn = vi.fn();
   const originalOpen = window.open;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    mockAuth = new MockAdapter(authClient);
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
     global.fetch = () =>
@@ -67,11 +69,13 @@ describe('App', async () => {
 
   afterEach(() => {
     mock.reset();
+    mockAuth.reset();
     vi.restoreAllMocks();
   });
 
   afterAll(() => {
     mock.restore();
+    mockAuth.restore();
     global.fetch = unmockedFetch;
     Object.defineProperty(window, 'open', { configurable: true, value: originalOpen });
   });
@@ -143,6 +147,8 @@ describe('App', async () => {
   });
 
   it('render component - user logs out', async () => {
+    mockAuth.onPost('/logout').reply(200);
+
     const clearSpy = vi.spyOn(Storage.prototype, 'clear');
 
     await act(async () => {
@@ -163,6 +169,7 @@ describe('App', async () => {
       const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT_PATH}`;
       expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
       expect(clearSpy).toHaveBeenCalled();
+      expect(mockAuth.history.post.length).toBe(1);
     });
 
   });
