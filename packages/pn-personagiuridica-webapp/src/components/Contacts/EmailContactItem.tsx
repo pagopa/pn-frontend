@@ -194,16 +194,6 @@ const EmailContactItem: React.FC = () => {
         ]
       : undefined;
 
-  const getLabel = (): { primary: string; secondary: string } | undefined => {
-    if (isDigitalDomicileActive) {
-      return {
-        primary: t('button.annulla'),
-        secondary: t('courtesy-contacts.remove-email', { ns: 'recapiti' }),
-      };
-    }
-    return undefined;
-  };
-
   /*
    * if *some* value (phone number, email address) has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
@@ -291,11 +281,14 @@ const EmailContactItem: React.FC = () => {
         slotsProps={{
           primaryButton: {
             onClick: isDigitalDomicileActive ? () => setModalOpen(null) : deleteConfirmHandler,
+            label: isDigitalDomicileActive ? t('button.annulla') : undefined,
           },
           secondaryButton: {
             onClick: isDigitalDomicileActive ? deleteConfirmHandler : () => setModalOpen(null),
+            label: isDigitalDomicileActive
+              ? t('courtesy-contacts.remove-email', { ns: 'recapiti' })
+              : undefined,
           },
-          label: getLabel(),
         }}
       />
       <InformativeDialog

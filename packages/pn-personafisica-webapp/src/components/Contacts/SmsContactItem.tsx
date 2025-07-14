@@ -321,16 +321,6 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
         ]
       : undefined;
 
-  const getLabel = (): { primary: string; secondary: string } | undefined => {
-    if (isDigitalDomicileActive) {
-      return {
-        primary: t('button.annulla'),
-        secondary: t('courtesy-contacts.remove-sms', { ns: 'recapiti' }),
-      };
-    }
-    return undefined;
-  };
-
   if (isActive) {
     return (
       <PnInfoCard
@@ -376,11 +366,14 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
           slotsProps={{
             primaryButton: {
               onClick: isDigitalDomicileActive ? () => setModalOpen(null) : deleteConfirmHandler,
+              label: isDigitalDomicileActive ? t('button.annulla') : undefined,
             },
             secondaryButton: {
               onClick: isDigitalDomicileActive ? deleteConfirmHandler : () => setModalOpen(null),
+              label: isDigitalDomicileActive
+                ? t('courtesy-contacts.remove-sms', { ns: 'recapiti' })
+                : undefined,
             },
-            label: getLabel(),
           }}
         />
       </PnInfoCard>
