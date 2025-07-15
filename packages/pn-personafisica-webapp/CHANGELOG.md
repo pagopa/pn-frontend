@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.16.2-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.16.2-RC.0...v2.16.2-RC.1) (2025-07-15)
+
+
+### Bug Fixes
+
+* **PN-15722:** restore localization for dod activation ([#1594](https://github.com/pagopa/pn-frontend/issues/1594)) ([b1da581](https://github.com/pagopa/pn-frontend/commit/b1da581961ce93d9ace515f80319d2370c9d54b8))
+
+
+
+
+
 ## [2.16.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.16.1...v2.16.2-RC.0) (2025-07-14)
 
 
