@@ -136,7 +136,7 @@
         "enable": "Attiva domicilio digitale"
       },
       "feedback": {
-        "title-trasfer": "Hai aggiornato il tuo domicilio digitale",
+        "title-transfer": "Hai aggiornato il tuo domicilio digitale",
         "title-pec-activation": "Hai attivato il tuo domicilio digitale su PEC",
         "title-pec-transfer": "Hai trasferito il tuo domicilio digitale su PEC",
         "title-sercq_send-activation": "Hai attivato il tuo domicilio digitale su SEND",
