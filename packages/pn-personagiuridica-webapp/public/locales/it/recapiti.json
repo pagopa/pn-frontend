@@ -117,12 +117,14 @@
         "enable": "Attiva domicilio digitale"
       },
       "feedback": {
+        "title-trasfer": "Hai aggiornato il tuo domicilio digitale",
         "title-pec-activation": "Hai attivato il domicilio digitale su PEC",
         "title-pec-transfer": "Hai trasferito il domicilio digitale su PEC",
         "title-sercq_send-activation": "Hai attivato il domicilio digitale su SEND",
         "title-sercq_send-transfer": "Hai trasferito il domicilio digitale su SEND",
         "content-pec": "L’impresa riceverà le comunicazioni a valore legale al Domicilio digitale su PEC",
-        "content-sercq_send": "L’impresa riceverà le comunicazioni a valore legale al Domicilio digitale su SEND e un messaggio ai recapiti che hai scelto."
+        "content-sercq_send": "L’impresa riceverà le comunicazioni a valore legale al Domicilio digitale su SEND e un messaggio ai recapiti che hai scelto.",
+        "go-to-contacts": "Vai ai tuoi recapiti"
       }
     },
     "pec-contact-wizard": {
