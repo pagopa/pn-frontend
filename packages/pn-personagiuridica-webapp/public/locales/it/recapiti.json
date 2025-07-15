@@ -105,7 +105,7 @@
         "courtesy-content": "Hai scelto di ricevere un messaggio su:",
         "contacts-list": {
           "email": {
-            "title": "Email aziendale",
+            "title": "Indirizzo email",
             "textDisabled": "Aggiungi email"
           },
           "sms": {
@@ -164,7 +164,7 @@
     "sms-title": "Cellulare",
     "sms-description": "Quando c’è una notifica SEND per la tua impresa, ti avvisiamo con un SMS.",
     "link-sms-placeholder": "Cellulare aziendale",
-    "link-email-placeholder": "Email aziendale",
+    "link-email-placeholder": "Indirizzo email",
     "sms-add": "Aggiungi numero",
     "email-add": "Aggiungi email",
     "email-verify": "Verifica email {{value}}",
