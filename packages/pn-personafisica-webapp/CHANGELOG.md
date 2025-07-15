@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.16.2-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.16.2-RC.2...v2.16.2-RC.3) (2025-07-15)
+
+
+### Bug Fixes
+
+* update localization for special contacts ([#1598](https://github.com/pagopa/pn-frontend/issues/1598)) ([78046f7](https://github.com/pagopa/pn-frontend/commit/78046f760f76dea249752cb9873809f97fe4c5b4))
+
+
+
+
+
+
 ## [2.16.2-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.16.2-RC.1...v2.16.2-RC.2) (2025-07-15)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
