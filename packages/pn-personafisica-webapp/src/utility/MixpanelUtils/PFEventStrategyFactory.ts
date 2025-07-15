@@ -46,6 +46,7 @@ import { UXActionStrategy } from './Strategies/UXActionStrategy';
 import { UXErrorStrategy } from './Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from './Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
+import { UXConfirmStrategy } from './Strategies/UxConfirmStrategy';
 import { UxWithCourtesyContactListStrategy } from './Strategies/UxWithCourtesyContactListStrategy';
 
 const uxActionStrategy = [
@@ -74,6 +75,12 @@ const uxActionStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP_BACK,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_CONVERSION,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE_CLOSE,
+  PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO_BACK,
+  PFEventsType.SEND_ADD_SERCQ_SEND_CONTINUE_WITHOUT_IO,
+  PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO_BACK,
+  PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO_CONTINUE,
+  PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO,
+  PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO_NEXT_STEP,
 ] as const;
 
 const uxPspActionStrategy = [PFEventsType.SEND_START_PAYMENT] as const;
@@ -116,6 +123,13 @@ const uxScreenViewStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP,
+  PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO,
+  PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO,
+] as const;
+
+const uxConfirmStrategy = [
+  PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_SUCCESS,
+  PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO_SUCCESS,
 ] as const;
 
 const uxErrorStrategy = [
@@ -157,6 +171,7 @@ const eventStrategy: Record<
     | ArrayToTuple<typeof sendRemoveContactSuccessStrategy>
     | ArrayToTuple<typeof sendAddContactScreenViewStrategy>
     | ArrayToTuple<typeof uxScreenViewStrategy>
+    | ArrayToTuple<typeof uxConfirmStrategy>
     | ArrayToTuple<typeof uxErrorStrategy>
     | ArrayToTuple<typeof techStrategy>
     | ArrayToTuple<typeof uxWithCourtesyContactListStrategy>
@@ -242,6 +257,10 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
 
     if (uxScreenViewStrategy.findIndex((el) => el === eventType) > -1) {
       return new UXScreenViewStrategy();
+    }
+
+    if (uxConfirmStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UXConfirmStrategy();
     }
 
     if (uxErrorStrategy.findIndex((el) => el === eventType) > -1) {

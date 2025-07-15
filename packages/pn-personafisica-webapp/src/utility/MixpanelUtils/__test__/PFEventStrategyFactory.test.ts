@@ -43,6 +43,7 @@ import { UXActionStrategy } from '../Strategies/UXActionStrategy';
 import { UXErrorStrategy } from '../Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from '../Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from '../Strategies/UXScreenViewStrategy';
+import { UXConfirmStrategy } from '../Strategies/UxConfirmStrategy';
 import { UxWithCourtesyContactListStrategy } from '../Strategies/UxWithCourtesyContactListStrategy';
 
 describe('Event Strategy Factory', () => {
@@ -213,9 +214,24 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_MANDATE_DATA_INPUT,
       PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS,
       PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP,
+      PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXScreenViewStrategy);
+    });
+  });
+
+  it('should return UXConfirmStrategy for UX Confirm events', () => {
+    const eventTypes = [
+      PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_SUCCESS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO_SUCCESS,
+    ];
+
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(UXConfirmStrategy);
     });
   });
 
@@ -245,6 +261,12 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP_BACK,
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_CONVERSION,
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE_CLOSE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO_BACK,
+      PFEventsType.SEND_ADD_SERCQ_SEND_CONTINUE_WITHOUT_IO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO_BACK,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO_CONTINUE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO_NEXT_STEP,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXActionStrategy);

@@ -64,6 +64,9 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   };
 
   const goToPreviousStep = () => {
+    if (showIOStep && activeStep === 1) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO_BACK);
+    }
     setActiveStep((step) => step - 1);
   };
 
