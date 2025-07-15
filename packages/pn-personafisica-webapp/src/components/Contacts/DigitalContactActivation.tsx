@@ -8,11 +8,13 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import IOContactWizard from '../../components/Contacts/IOContactWizard';
 import PecContactWizard from '../../components/Contacts/PecContactWizard';
+import { PFEventsType } from '../../models/PFEventsType';
 import { IOAllowedValues } from '../../models/contacts';
 import { NOTIFICHE } from '../../navigation/routes.const';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import EmailSmsContactWizard from './EmailSmsContactWizard';
 import HowItWorksContactWizard from './HowItWorksContactWizard';
 import SercqSendContactWizard from './SercqSendContactWizard';
@@ -72,15 +74,16 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
     return goToNextStep();
   };
 
+  const handleExit = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_CANCEL);
+
+    return onGoBack ? onGoBack() : navigate(-1);
+  };
+
   const getPreviousButton = () => {
     if (activeStep === 0) {
       return (
-        <ButtonNaked
-          onClick={onGoBack ? () => onGoBack() : () => navigate(-1)}
-          color="primary"
-          size="medium"
-          sx={{ mx: 'auto' }}
-        >
+        <ButtonNaked onClick={handleExit} color="primary" size="medium" sx={{ mx: 'auto' }}>
           {t('button.annulla', { ns: 'common' })}
         </ButtonNaked>
       );

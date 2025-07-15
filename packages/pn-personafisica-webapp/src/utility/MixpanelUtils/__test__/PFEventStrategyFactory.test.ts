@@ -1,5 +1,6 @@
 import { PFEventsType } from '../../../models/PFEventsType';
 import PFEventStrategyFactory from '../PFEventStrategyFactory';
+import { KoErrorStrategy } from '../Strategies/KoErrorStrategy';
 import { SendAcceptDelegationStrategy } from '../Strategies/SendAcceptDelegationStrategy';
 import { SendActiveIOUxSuccessStrategy } from '../Strategies/SendActiveIOUxSuccessStrategy';
 import { SendAddAddressStrategy } from '../Strategies/SendAddAddressStrategy';
@@ -9,7 +10,7 @@ import { SendAddCourtesyContactUXSuccessStrategy } from '../Strategies/SendAddCo
 import { SendAddLegalContactUXSuccessStrategy } from '../Strategies/SendAddLegalContactUXSuccessStrategy';
 import { SendAddMandateUXConversionStrategy } from '../Strategies/SendAddMandateUXConversionStrategy';
 import { SendAddMandateUXSuccessStrategy } from '../Strategies/SendAddMandateUXSuccessStrategy';
-import { SendAddSercqSendUxSuccessStrategy } from '../Strategies/SendAddSercqSendUxSuccessStrategy';
+import { SendAddSercqUxSuccessStrategy } from '../Strategies/SendAddSercqUxSuccessStrategy';
 import { SendDisableIOStrategy } from '../Strategies/SendDisableIOStrategy';
 import { SendDownloadCertificateOpposable } from '../Strategies/SendDownloadCertificateOpposable';
 import { SendDownloadResponseStrategy } from '../Strategies/SendDownloadResponse';
@@ -42,6 +43,7 @@ import { UXActionStrategy } from '../Strategies/UXActionStrategy';
 import { UXErrorStrategy } from '../Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from '../Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from '../Strategies/UXScreenViewStrategy';
+import { UxWithCourtesyContactListStrategy } from '../Strategies/UxWithCourtesyContactListStrategy';
 
 describe('Event Strategy Factory', () => {
   const factory = PFEventStrategyFactory;
@@ -165,7 +167,6 @@ describe('Event Strategy Factory', () => {
 
   it('should return sendAddContactWithSourceActionStrategy for add contacts action events', () => {
     const eventTypes = [
-      PFEventsType.SEND_ADD_SERCQ_SEND_START,
       PFEventsType.SEND_ADD_PEC_START,
       PFEventsType.SEND_ADD_EMAIL_START,
       PFEventsType.SEND_ADD_SMS_START,
@@ -211,6 +212,7 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_PROFILE,
       PFEventsType.SEND_ADD_MANDATE_DATA_INPUT,
       PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXScreenViewStrategy);
@@ -237,6 +239,12 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_PAYMENT_LIST_CHANGE_PAGE,
       PFEventsType.SEND_F24_DOWNLOAD,
       PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_CANCEL,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_BACK,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_ACCEPTED,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP_BACK,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_CONVERSION,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE_CLOSE,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXActionStrategy);
@@ -274,10 +282,40 @@ describe('Event Strategy Factory', () => {
     });
   });
 
+  it('should return UxWithCourtesyContactListStrategy for UX Action events with contacts details', () => {
+    const eventTypes = [
+      PFEventsType.SEND_ADD_SERCQ_SEND_INTRO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_START,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(UxWithCourtesyContactListStrategy);
+    });
+  });
+
+  it('should return KoErrorStrategy for KO Events', () => {
+    const eventTypes = [
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_MISSING,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_MANDATORY,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(KoErrorStrategy);
+    });
+  });
+
   it('should return TechScreenViewStrategy for tech screen view events', () => {
     const eventTypes = [PFEventsType.SEND_NOTIFICATION_NOT_ALLOWED];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(TechScreenViewStrategy);
+    });
+  });
+
+  it('should return SendAddSercqUxSuccessStrategy for sercq add ux success events', () => {
+    const eventTypes = [
+      PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(SendAddSercqUxSuccessStrategy);
     });
   });
 
@@ -340,12 +378,6 @@ describe('Event Strategy Factory', () => {
   it('should return SendPaymentsCountStrategy for SEND_PAYMENTS_COUNT event', () => {
     expect(factory.getStrategy(PFEventsType.SEND_PAYMENTS_COUNT)).toBeInstanceOf(
       SendPaymentsCountStrategy
-    );
-  });
-
-  it('should return SendAddSercqSendUxSuccessStrategy for SEND_ADD_SERCQ_SEND_UX_SUCCESS', () => {
-    expect(factory.getStrategy(PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS)).toBeInstanceOf(
-      SendAddSercqSendUxSuccessStrategy
     );
   });
 

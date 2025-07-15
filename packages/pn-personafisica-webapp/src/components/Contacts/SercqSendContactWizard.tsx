@@ -33,7 +33,6 @@ import { PFEventsType } from '../../models/PFEventsType';
 import {
   AddressType,
   ChannelType,
-  ContactSource,
   IOAllowedValues,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
@@ -45,7 +44,6 @@ import {
 } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const redirectPrivacyLink = () => window.open(`${PRIVACY_POLICY}`, '_blank');
@@ -70,9 +68,9 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
   const dispatch = useAppDispatch();
 
   const tosConsent = useRef<Array<TosPrivacyConsent>>();
-  const { defaultPECAddress, defaultEMAILAddress, defaultAPPIOAddress, defaultSMSAddress } =
-    useAppSelector(contactsSelectors.selectAddresses);
-  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
+  const { addresses, defaultEMAILAddress, defaultAPPIOAddress, defaultSMSAddress } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
 
   const isIOInstalled = !!defaultAPPIOAddress;
 
@@ -149,11 +147,6 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
       .then((consent) => {
         // eslint-disable-next-line functional/immutable-data
         tosConsent.current = consent;
-        const source = externalEvent?.source ?? ContactSource.RECAPITI;
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
-          senderId: 'default',
-          source,
-        });
         handleInfoConfirm();
       })
       .catch(() => {});
@@ -209,10 +202,10 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
       .unwrap()
       .then(() => {
         sessionStorage.removeItem('domicileBannerClosed');
-        PFEventStrategyFactory.triggerEvent(
-          PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
-          !!defaultPECAddress
-        );
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS, {
+          sercq_type: ChannelType.SERCQ_SEND,
+          contacts: addresses,
+        });
         // show success message
         dispatch(
           appStateActions.addSuccess({

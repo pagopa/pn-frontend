@@ -1,6 +1,7 @@
 import { EventStrategy, EventStrategyFactory } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
+import { KoErrorStrategy } from './Strategies/KoErrorStrategy';
 import { SendAcceptDelegationStrategy } from './Strategies/SendAcceptDelegationStrategy';
 import { SendActiveIOUxSuccessStrategy } from './Strategies/SendActiveIOUxSuccessStrategy';
 import { SendAddAddressStrategy } from './Strategies/SendAddAddressStrategy';
@@ -10,7 +11,8 @@ import { SendAddCourtesyContactUXSuccessStrategy } from './Strategies/SendAddCou
 import { SendAddLegalContactUXSuccessStrategy } from './Strategies/SendAddLegalContactUXSuccessStrategy';
 import { SendAddMandateUXConversionStrategy } from './Strategies/SendAddMandateUXConversionStrategy';
 import { SendAddMandateUXSuccessStrategy } from './Strategies/SendAddMandateUXSuccessStrategy';
-import { SendAddSercqSendUxSuccessStrategy } from './Strategies/SendAddSercqSendUxSuccessStrategy';
+import { SendAddSercqPecStartActivationStrategy } from './Strategies/SendAddSercqPecStartActivationStrategy';
+import { SendAddSercqUxSuccessStrategy } from './Strategies/SendAddSercqUxSuccessStrategy';
 import { SendDisableIOStrategy } from './Strategies/SendDisableIOStrategy';
 import { SendDownloadCertificateOpposable } from './Strategies/SendDownloadCertificateOpposable';
 import { SendDownloadResponseStrategy } from './Strategies/SendDownloadResponse';
@@ -44,6 +46,7 @@ import { UXActionStrategy } from './Strategies/UXActionStrategy';
 import { UXErrorStrategy } from './Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from './Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
+import { UxWithCourtesyContactListStrategy } from './Strategies/UxWithCourtesyContactListStrategy';
 
 const uxActionStrategy = [
   PFEventsType.SEND_DOWNLOAD_ATTACHMENT,
@@ -65,12 +68,17 @@ const uxActionStrategy = [
   PFEventsType.SEND_F24_DOWNLOAD,
   PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE,
   PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT,
+  PFEventsType.SEND_ADD_SERCQ_SEND_CANCEL,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_BACK,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_ACCEPTED,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP_BACK,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_CONVERSION,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE_CLOSE,
 ] as const;
 
 const uxPspActionStrategy = [PFEventsType.SEND_START_PAYMENT] as const;
 
 const sendAddContactWithSourceActionStrategy = [
-  PFEventsType.SEND_ADD_SERCQ_SEND_START,
   PFEventsType.SEND_ADD_PEC_START,
   PFEventsType.SEND_ADD_EMAIL_START,
   PFEventsType.SEND_ADD_SMS_START,
@@ -81,6 +89,11 @@ const sendAddLegalContactUXSuccessStrategy = [PFEventsType.SEND_ADD_PEC_UX_SUCCE
 const sendAddCourtesyContactUXSuccessStrategy = [
   PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS,
   PFEventsType.SEND_ADD_SMS_UX_SUCCESS,
+] as const;
+
+const sendAddSercqUxSuccessStrategy = [
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS,
+  PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
 ] as const;
 
 const sendRemoveContactSuccessStrategy = [
@@ -100,6 +113,9 @@ const uxScreenViewStrategy = [
   PFEventsType.SEND_PROFILE,
   PFEventsType.SEND_ADD_MANDATE_DATA_INPUT,
   PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS,
+  PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP,
 ] as const;
 
 const uxErrorStrategy = [
@@ -114,6 +130,18 @@ const techStrategy = [
   PFEventsType.SEND_AUTH_SUCCESS,
   PFEventsType.SEND_F24_DOWNLOAD_SUCCESS,
   PFEventsType.SEND_F24_DOWNLOAD_TIMEOUT,
+] as const;
+
+const uxWithCourtesyContactListStrategy = [
+  PFEventsType.SEND_ADD_SERCQ_SEND_INTRO,
+  PFEventsType.SEND_ADD_SERCQ_SEND_START,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,
+] as const;
+
+const koErrorStrategy = [
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_MISSING,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_MANDATORY,
 ] as const;
 
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
@@ -131,6 +159,9 @@ const eventStrategy: Record<
     | ArrayToTuple<typeof uxScreenViewStrategy>
     | ArrayToTuple<typeof uxErrorStrategy>
     | ArrayToTuple<typeof techStrategy>
+    | ArrayToTuple<typeof uxWithCourtesyContactListStrategy>
+    | ArrayToTuple<typeof koErrorStrategy>
+    | ArrayToTuple<typeof sendAddSercqUxSuccessStrategy>
   >,
   EventStrategy
 > = {
@@ -166,9 +197,10 @@ const eventStrategy: Record<
   [PFEventsType.SEND_PAYMENTS_COUNT]: new SendPaymentsCountStrategy(),
   [PFEventsType.SEND_ADD_ADDRESS]: new SendAddAddressStrategy(),
   [PFEventsType.SEND_DELETE_ADDRESS]: new SendRemoveAddressStrategy(),
-  [PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS]: new SendAddSercqSendUxSuccessStrategy(),
   [PFEventsType.SEND_REMOVE_SERCQ_SEND_SUCCESS]: new SendRemoveSercqSendSuccessStrategy(),
   [PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS]: new SendActiveIOUxSuccessStrategy(),
+  [PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START_ACTIVATION]:
+    new SendAddSercqPecStartActivationStrategy(),
 };
 
 const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventStrategy => {
@@ -218,6 +250,18 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
 
     if (techStrategy.findIndex((el) => el === eventType) > -1) {
       return new TechStrategy();
+    }
+
+    if (uxWithCourtesyContactListStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UxWithCourtesyContactListStrategy();
+    }
+
+    if (koErrorStrategy.findIndex((el) => el === eventType) > -1) {
+      return new KoErrorStrategy();
+    }
+
+    if (sendAddSercqUxSuccessStrategy.findIndex((el) => el === eventType) > -1) {
+      return new SendAddSercqUxSuccessStrategy();
     }
 
     if (isInEventStrategyMap(eventType)) {

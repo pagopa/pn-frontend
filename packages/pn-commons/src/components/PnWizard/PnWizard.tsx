@@ -44,6 +44,7 @@ type Props = {
       content?: ReactNode;
       buttonText: string;
       onClick: () => void;
+      dispatchMixpanelEvent?: () => void;
     };
   };
 };
@@ -93,6 +94,9 @@ const PnWizard: React.FC<Props> = ({
 
   if (activeStep >= childrens.length && slotsProps?.feedback) {
     const feedback = slotsProps?.feedback;
+
+    feedback.dispatchMixpanelEvent?.();
+
     return (
       <Box
         sx={{ minHeight: '350px', height: '100%', display: 'flex' }}
