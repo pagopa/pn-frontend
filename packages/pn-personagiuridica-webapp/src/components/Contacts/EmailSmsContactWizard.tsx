@@ -12,11 +12,13 @@ import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/co
 import ContactCodeDialog from './ContactCodeDialog';
 import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
+import InformativeDialog from './InformativeDialog';
 import SmsContactItem from './SmsContactItem';
 
 enum ModalType {
   EXISTING = 'existing',
   CODE = 'code',
+  INFORMATIVE = 'informative',
 }
 
 const SmsLabelWithDisclaimer = () => {
@@ -37,9 +39,13 @@ const EmailSmsContactWizard: React.FC = () => {
   const { t } = useTranslation('recapiti');
   const dispatch = useAppDispatch();
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const { defaultSMSAddress, defaultEMAILAddress, addresses } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const {
+    defaultSMSAddress,
+    defaultEMAILAddress,
+    defaultPECAddress,
+    defaultSERCQ_SENDAddress,
+    addresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
   const emailContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
@@ -55,6 +61,8 @@ const EmailSmsContactWizard: React.FC = () => {
     value: '',
   });
 
+  const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
+
   const emailValue = defaultEMAILAddress?.value ?? '';
   const smsValue = defaultSMSAddress?.value ?? '';
 
@@ -64,6 +72,10 @@ const EmailSmsContactWizard: React.FC = () => {
     // first check if contact already exists
     if (contactAlreadyExists(addresses, value, 'default', channelType)) {
       setModalOpen(ModalType.EXISTING);
+      return;
+    }
+    if (!isDigitalDomicileActive && channelType === ChannelType.EMAIL) {
+      setModalOpen(ModalType.INFORMATIVE);
       return;
     }
     handleCodeVerification(channelType);
@@ -167,6 +179,14 @@ const EmailSmsContactWizard: React.FC = () => {
             width: '100%',
           },
         }}
+      />
+      <InformativeDialog
+        open={modalOpen === ModalType.INFORMATIVE}
+        title={t('courtesy-contacts.info-modal-email-title', { ns: 'recapiti' })}
+        subtitle={t('courtesy-contacts.info-modal-email-subtitle', { ns: 'recapiti' })}
+        content={t('courtesy-contacts.info-modal-email-content', { ns: 'recapiti' })}
+        onConfirm={() => handleCodeVerification(currentAddress.current.channelType)}
+        onDiscard={() => setModalOpen(null)}
       />
 
       <Divider sx={{ mt: 3, mb: 3 }} />
