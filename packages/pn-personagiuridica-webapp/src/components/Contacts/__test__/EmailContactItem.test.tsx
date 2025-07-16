@@ -286,4 +286,44 @@ describe('testing EmailContactItem', () => {
       expect(result.container).not.toHaveTextContent('');
     });
   });
+
+  it('show special contact section - without default sms address', () => {
+    const { getAllByTestId } = render(<EmailContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: digitalCourtesyAddresses.filter(
+            (addr) =>
+              addr.channelType !== ChannelType.SMS ||
+              (addr.channelType === ChannelType.SMS && addr.senderId !== 'default')
+          ),
+        },
+      },
+    });
+    const specialEmailContactForms = getAllByTestId(/^[a-zA-Z0-9-]+_emailSpecialContact$/);
+    expect(specialEmailContactForms).toHaveLength(
+      digitalCourtesyAddresses.filter(
+        (addr) => addr.channelType === ChannelType.EMAIL && addr.senderId !== 'default'
+      ).length
+    );
+    const specialSmsContactForms = getAllByTestId(/^[a-zA-Z0-9-]+_smsSpecialContact$/);
+    expect(specialSmsContactForms).toHaveLength(
+      digitalCourtesyAddresses.filter(
+        (addr) => addr.channelType === ChannelType.SMS && addr.senderId !== 'default'
+      ).length
+    );
+  });
+
+  it('show special contact section - with default sms address', () => {
+    const { getAllByTestId, queryAllByTestId } = render(<EmailContactItem />, {
+      preloadedState: { contactsState: { digitalAddresses: digitalCourtesyAddresses } },
+    });
+    const specialEmailContactForms = getAllByTestId(/^[a-zA-Z0-9-]+_emailSpecialContact$/);
+    expect(specialEmailContactForms).toHaveLength(
+      digitalCourtesyAddresses.filter(
+        (addr) => addr.channelType === ChannelType.EMAIL && addr.senderId !== 'default'
+      ).length
+    );
+    const specialSmsContactForms = queryAllByTestId(/^[a-zA-Z0-9-]+_smsSpecialContact$/);
+    expect(specialSmsContactForms).toHaveLength(0);
+  });
 });

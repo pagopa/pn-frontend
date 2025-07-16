@@ -14,7 +14,7 @@ import { DelegationStatus } from '../models/Deleghe';
 import { PNRole, PartyRole } from '../models/User';
 import { SELFCARE_LOGOUT } from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
-import { RenderResult, act, render } from './test-utils';
+import { RenderResult, act, fireEvent, getByText, render, screen, waitFor } from './test-utils';
 
 vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
 
@@ -261,5 +261,29 @@ describe('App', async () => {
     expect(sideMenuItems).toHaveLength(5);
     const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
     expect(collapsibleMenu).not.toBeInTheDocument();
+  });
+
+  it('render component - user logs out', async () => {
+    const clearSpy = vi.spyOn(Storage.prototype, 'clear');
+
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+
+    const header = result.container.querySelector('header');
+    expect(header).toBeInTheDocument();
+
+    const button = getByText(header!, 'Esci');
+    fireEvent.click(button);
+
+    const modalConfirmButton = await waitFor(() => screen.queryByTestId('confirm-button'));
+    fireEvent.click(modalConfirmButton!);
+
+    await waitFor(() => {
+      expect(mockOpenFn).toHaveBeenCalledTimes(1);
+      const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT}`;
+      expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
+      expect(clearSpy).toHaveBeenCalled();
+    });
   });
 });

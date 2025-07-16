@@ -29,12 +29,21 @@ describe('SpecialContactItem Component', () => {
     codeValid: true,
   };
 
+  const emailAddress = {
+    addressType: AddressType.COURTESY,
+    senderId: 'mocked-senderId',
+    senderName: 'Mocked Sender',
+    channelType: ChannelType.EMAIL,
+    value: 'mocked@email.it',
+  };
+
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
     mock.reset();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -147,5 +156,42 @@ describe('SpecialContactItem Component', () => {
     const buttons = specialContactForms[0].querySelectorAll('button');
     expect(buttons).toHaveLength(1);
     expect(buttons[0]).toHaveTextContent('button.disable');
+  });
+
+  it('renders SpecialContactElem - courtesy address', () => {
+    // render component
+    const { container, getAllByTestId } = render(
+      <SpecialContactItem
+        address={emailAddress}
+        onDelete={deleteHandler}
+        onEdit={editHandler}
+        onCancelValidation={cancelValidationHandler}
+      />
+    );
+
+    expect(container).toHaveTextContent('Mocked Sender');
+    const specialContactForms = getAllByTestId(
+      /^[a-zA-Z0-9\-]+(?:_pecContact|_emailContact|_smsContact)$/
+    );
+    expect(specialContactForms).toHaveLength(1);
+    expect(specialContactForms[0]).toHaveTextContent('mocked@email.it');
+    const emailuttons = specialContactForms[0].querySelectorAll('button');
+    expect(emailuttons).toHaveLength(1);
+    expect(emailuttons[0]).toHaveTextContent('button.elimina');
+  });
+
+  it('renders SpecialContactElem without sender - courtesy address', () => {
+    // render component
+    const { container } = render(
+      <SpecialContactItem
+        address={emailAddress}
+        onDelete={deleteHandler}
+        onEdit={editHandler}
+        onCancelValidation={cancelValidationHandler}
+        showSenderName={false}
+      />
+    );
+
+    expect(container).not.toHaveTextContent('Mocked Sender');
   });
 });

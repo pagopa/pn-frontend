@@ -46,6 +46,7 @@ import { PFAppErrorFactory } from './utility/AppError/PFAppErrorFactory';
 import PFEventStrategyFactory from './utility/MixpanelUtils/PFEventStrategyFactory';
 import showLayoutParts from './utility/layout.utility';
 import './utility/onetrust';
+import { apiLogout } from './redux/auth/actions';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductEntity> = [
@@ -263,6 +264,14 @@ const App = () => {
     });
   };
 
+  const performLogout = async () => {
+    await dispatch(apiLogout(loggedUser.sessionToken));
+
+    sessionStorage.clear();
+    goToLoginPortal();
+    setOpenModal(false);
+  };
+
   useEffect(() => {
     if (sessionToken !== '') {
       void dispatch(getDigitalAddresses());
@@ -316,11 +325,7 @@ const App = () => {
             <Button
               data-testid="confirm-button"
               variant="contained"
-              onClick={() => {
-                sessionStorage.clear();
-                goToLoginPortal();
-                setOpenModal(false);
-              }}
+              onClick={performLogout}
             >
               {t('header.logout')}
             </Button>

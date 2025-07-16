@@ -9,8 +9,9 @@ import { userResponse } from '../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { institutionsDTO, productsDTO } from '../__mocks__/User.mock';
 import { apiClient } from '../api/apiClients';
+import { SELFCARE_LOGIN_PATH, SELFCARE_LOGOUT_PATH } from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
-import { RenderResult, act, render } from './test-utils';
+import { RenderResult, act, fireEvent, getByText, render, screen, waitFor } from './test-utils';
 
 vi.mock('../pages/Dashboard.page', () => ({ default: () => <div>Generic Page</div> }));
 
@@ -66,6 +67,7 @@ describe('App', async () => {
 
   afterEach(() => {
     mock.reset();
+    vi.restoreAllMocks();
   });
 
   afterAll(() => {
@@ -85,7 +87,8 @@ describe('App', async () => {
     const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(getConfiguration().SELFCARE_URL_FE_LOGIN, '_self');
+    const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGIN_PATH}`;
+    expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
   });
 
   it('render component - user logged in', async () => {
@@ -137,5 +140,30 @@ describe('App', async () => {
     expect(tosPage).toBeInTheDocument();
     expect(result.container).not.toHaveTextContent('Generic Page');
     expect(mock.history.get).toHaveLength(5);
+  });
+
+  it('render component - user logs out', async () => {
+    const clearSpy = vi.spyOn(Storage.prototype, 'clear');
+
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+
+    const header = result.container.querySelector('header');
+    expect(header).toBeInTheDocument();
+
+    const button = getByText(header!, 'Esci');
+    fireEvent.click(button);
+
+    const modalConfirmButton = await waitFor(() => screen.queryByTestId('confirm-button'));
+    fireEvent.click(modalConfirmButton!);
+    
+    await waitFor(() => {
+      expect(mockOpenFn).toHaveBeenCalledTimes(1);
+      const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT_PATH}`;
+      expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
+      expect(clearSpy).toHaveBeenCalled();
+    });
+
   });
 });

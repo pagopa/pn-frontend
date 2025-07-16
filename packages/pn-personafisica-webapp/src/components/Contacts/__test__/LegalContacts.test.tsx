@@ -9,8 +9,6 @@ import {
 } from '../../../__mocks__/Contacts.mock';
 import {
   fireEvent,
-  getByRole,
-  queryAllByTestId,
   render,
   screen,
   testStore,
@@ -50,7 +48,7 @@ describe('LegalContacts Component', async () => {
 
   it('renders component - PEC enabled', async () => {
     // render component
-    const { container, getByText, getByTestId } = render(<LegalContacts />, {
+    const { container, getByText, getByTestId, getByRole } = render(<LegalContacts />, {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
     });
 
@@ -68,9 +66,9 @@ describe('LegalContacts Component', async () => {
     const descriptionText = getByText('legal-contacts.pec-description');
     expect(descriptionText).toBeInTheDocument();
 
-    const manageBtn = getByRole(container, 'button', { name: 'button.manage' });
+    const manageBtn = getByRole('button', { name: 'button.manage' });
     expect(manageBtn).toBeInTheDocument();
-    const disableBtn = getByRole(container, 'button', { name: 'button.disable' });
+    const disableBtn = getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
 
     // verify digital domicile could not be disabled
@@ -95,7 +93,7 @@ describe('LegalContacts Component', async () => {
   });
 
   it('renders component - SERCQ enabled', async () => {
-    const { container } = render(<LegalContacts />, {
+    const { container, getByRole, queryAllByTestId } = render(<LegalContacts />, {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddressesSercq } },
     });
 
@@ -104,12 +102,12 @@ describe('LegalContacts Component', async () => {
     expect(container).toHaveTextContent('legal-contacts.sercq_send-title');
     expect(container).toHaveTextContent('legal-contacts.sercq_send-description');
 
-    const manageBtn = getByRole(container, 'button', { name: 'button.manage' });
+    const manageBtn = getByRole('button', { name: 'button.manage' });
     expect(manageBtn).toBeInTheDocument();
-    const disableBtn = getByRole(container, 'button', { name: 'button.disable' });
+    const disableBtn = getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
 
-    const defaultPecContacts = queryAllByTestId(container, `default_pecContact`);
+    const defaultPecContacts = queryAllByTestId(`default_pecContact`);
     expect(defaultPecContacts).toHaveLength(0);
   });
 
@@ -173,7 +171,7 @@ describe('LegalContacts Component', async () => {
     const initialAddresses = digitalAddresses.filter(
       (addr) => addr.addressType !== AddressType.LEGAL || addr.senderId === 'default'
     );
-    const { container, getByTestId, getByText } = render(<LegalContacts />, {
+    const { container, getByTestId, getByText, getByRole } = render(<LegalContacts />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: initialAddresses,
@@ -195,9 +193,9 @@ describe('LegalContacts Component', async () => {
     const descriptionText = getByText('legal-contacts.pec-description');
     expect(descriptionText).toBeInTheDocument();
 
-    const manageBtn = getByRole(container, 'button', { name: 'button.manage' });
+    const manageBtn = getByRole('button', { name: 'button.manage' });
     expect(manageBtn).toBeInTheDocument();
-    const disableBtn = getByRole(container, 'button', { name: 'button.disable' });
+    const disableBtn = getByRole('button', { name: 'button.disable' });
     expect(disableBtn).toBeInTheDocument();
 
     fireEvent.click(disableBtn);

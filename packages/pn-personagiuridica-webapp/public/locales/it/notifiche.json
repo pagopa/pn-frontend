@@ -345,7 +345,8 @@
       "radd": {
         "title": "I documenti sono stati ritirati",
         "description": "Il destinatario o un suo delegato ha ritirato i documenti notificati presso un operatore abilitato alla consegna degli stessi."
-      }
+      },
+      "tpp-type": "un canale digitale di terze parti"
     },
     "downtimes": {
       "title": "DISSERVIZI",
@@ -361,16 +362,16 @@
     },
     "errors": {
       "delivery_file_info_not_found": {
-        "title": "Documento non trovato",
-        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+        "title": "Il documento non è disponibile",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
       },
       "delivery_notification_without_payment_attachment": {
-        "title": "Documento non trovato",
-        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+        "title": "Il documento non è disponibile",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
       },
       "delivery_push_file_not_found": {
-        "title": "Documento non trovato",
-        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete contatta l’assistenza e comunica le informazioni errore."
+        "title": "Il documento non è disponibile",
+        "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
       }
     }
   },

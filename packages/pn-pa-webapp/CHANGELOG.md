@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.17.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.16.1...v2.17.0-RC.0) (2025-07-09)
+
+
+### Bug Fixes
+
+* **PN-15052:** resolve bug not updating content after switching lang on PrivacyPolicy and ToS pages (PA, PF, PG) ([#1564](https://github.com/pagopa/pn-frontend/issues/1564)) ([2f4a494](https://github.com/pagopa/pn-frontend/commit/2f4a4942bcf8d7c6a95b7ad8731b236c05148ca2))
+* **pn-15077:** fix existing tests and add new tests for sending errors to Zendesk ([#1561](https://github.com/pagopa/pn-frontend/issues/1561)) ([e4db5c1](https://github.com/pagopa/pn-frontend/commit/e4db5c10096504df65e3d8434f6e5217ddb71797))
+* **pn-15077:** fix toast layout ([#1562](https://github.com/pagopa/pn-frontend/issues/1562)) ([b292473](https://github.com/pagopa/pn-frontend/commit/b292473b992377e834f02dd85163174065f343c8))
+* **PN-15509:** add TPP available type in courtesy message ([#1583](https://github.com/pagopa/pn-frontend/issues/1583)) ([61fef6a](https://github.com/pagopa/pn-frontend/commit/61fef6a082e31b35e1f3805742c3f260c84b00bf))
+
+
+### Features
+
+* **PN-15325:** [PA] call API /logout and redirect to selfcare login after explicit logout ([#1572](https://github.com/pagopa/pn-frontend/issues/1572)) ([6e54137](https://github.com/pagopa/pn-frontend/commit/6e5413794e2d9a03ad9a8e57921e54840fe37bc5))
+
+
+
+
+
 ## [2.16.1](https://github.com/pagopa/pn-frontend/compare/v2.16.1-RC.1...v2.16.1) (2025-06-27)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp

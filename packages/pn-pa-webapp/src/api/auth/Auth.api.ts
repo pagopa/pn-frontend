@@ -2,7 +2,7 @@ import { removeNullProperties } from '@pagopa-pn/pn-commons/src/utility/user.uti
 
 import { User } from '../../models/user';
 import { authClient } from '../apiClients';
-import { AUTH_TOKEN_EXCHANGE } from './auth.routes';
+import { AUTH_LOGOUT, AUTH_TOKEN_EXCHANGE } from './auth.routes';
 
 export const AuthApi = {
   exchangeToken: (selfCareToken: string): Promise<User> =>
@@ -20,4 +20,6 @@ export const AuthApi = {
           uid: response.data.uid,
         })
       ),
+  logout: (token: string): Promise<void> =>
+    authClient.post(AUTH_LOGOUT(), null, { headers: { Authorization: `Bearer ${token}` } }),
 };

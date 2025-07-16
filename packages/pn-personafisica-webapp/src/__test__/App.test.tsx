@@ -139,9 +139,12 @@ describe('App', async () => {
     expect(logoutDialog).toBeInTheDocument();
     const confirmLogoutButton = within(logoutDialog).getByTestId('confirm-button');
     fireEvent.click(confirmLogoutButton);
-    expect(sessionStorage.getItem('user')).toBeNull();
-    expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}`, '_self');
+
+    await waitFor(() => {
+      expect(sessionStorage.getItem('user')).toBeNull();
+      expect(mockOpenFn).toHaveBeenCalledTimes(1);
+      expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}`, '_self');
+    });
   });
 
   it('sidemenu not included if error in API call to fetch TOS and Privacy', async () => {

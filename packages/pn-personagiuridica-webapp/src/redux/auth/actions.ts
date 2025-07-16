@@ -30,6 +30,20 @@ export const exchangeToken = createAsyncThunk<User, { spidToken: string; aar?: s
 );
 
 /**
+ * Call api logout to invalidate access token.
+ */
+export const apiLogout = createAsyncThunk<void, string>(
+  'apiLogout',
+  async (token) => {
+    try {
+      return await AuthApi.logout(token);
+    } catch (e: any) {
+      console.log('Error during logout', e);
+    }
+  }
+);
+
+/**
  * Logout action
  * Clears sessionStorage, clears state
  */
