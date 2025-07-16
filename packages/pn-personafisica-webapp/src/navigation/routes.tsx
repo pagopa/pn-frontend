@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import {
   AppNotAccessible,
@@ -12,7 +12,7 @@ import {
 import { getConfiguration } from '../services/configuration.service';
 import RapidAccessGuard from './RapidAccessGuard';
 import RouteGuard from './RouteGuard';
-import SessionGuard from './SessionGuard';
+import SessionGuard from './SessionGuard2';
 import ToSGuard from './ToSGuard';
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
@@ -42,6 +42,11 @@ const handleAssistanceClick = () => {
   window.location.href = getConfiguration().LANDING_SITE_URL;
 };
 
+function RedirectToNotifiche() {
+  const location = useLocation();
+  return <Navigate to={`${routes.NOTIFICHE}${location.search}`} replace />;
+}
+
 function Router() {
   const navigate = useNavigate();
 
@@ -49,42 +54,41 @@ function Router() {
     <Suspense fallback={<LoadingPage />}>
       <Routes>
         <Route path="/" element={<SessionGuard />}>
-          {/* protected routes */}
-          <Route path="/" element={<RouteGuard />}>
-            <Route path="/" element={<ToSGuard />}>
-              <Route path="/" element={<RapidAccessGuard />}>
-                <Route path={routes.NOTIFICHE} element={<Notifiche />} />
-                <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
-                <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
-                <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
-                <Route path={routes.DELEGHE} element={<Deleghe />} />
-                <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
-                <Route path={routes.RECAPITI} element={<Contacts />} />
-                <Route path={routes.PROFILO} element={<Profile />} />
-                <Route path={routes.APP_STATUS} element={<AppStatus />} />
-                <Route path={routes.SUPPORT} element={<SupportPage />} />
-                <Route path={routes.DIGITAL_DOMICILE} element={<DigitalContact />}>
-                  <Route
-                    path={routes.DIGITAL_DOMICILE_ACTIVATION}
-                    element={<DigitalContactActivation />}
-                  />
-                  <Route
-                    path={routes.DIGITAL_DOMICILE_MANAGEMENT}
-                    element={<DigitalContactManagement />}
-                  />
-                  <Route element={<Navigate to={routes.RECAPITI} replace />} index />
-                </Route>
+          <Route path="/" element={<ToSGuard />}>
+            <Route path="/" element={<RapidAccessGuard />}>
+              <Route index element={<RedirectToNotifiche />} />
+
+              <Route path={routes.NOTIFICHE} element={<Notifiche />} />
+              <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
+              <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
+              <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
+              <Route path={routes.DELEGHE} element={<Deleghe />} />
+              <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
+              <Route path={routes.RECAPITI} element={<Contacts />} />
+              <Route path={routes.PROFILO} element={<Profile />} />
+              <Route path={routes.APP_STATUS} element={<AppStatus />} />
+              <Route path={routes.SUPPORT} element={<SupportPage />} />
+              <Route path={routes.DIGITAL_DOMICILE} element={<DigitalContact />}>
+                <Route
+                  path={routes.DIGITAL_DOMICILE_ACTIVATION}
+                  element={<DigitalContactActivation />}
+                />
+                <Route
+                  path={routes.DIGITAL_DOMICILE_MANAGEMENT}
+                  element={<DigitalContactManagement />}
+                />
+                <Route element={<Navigate to={routes.RECAPITI} replace />} index />
               </Route>
             </Route>
-            {/* not found - non-logged users will see the common AccessDenied component */}
-            <Route path="*" element={<RouteGuard />}>
-              <Route
-                path="*"
-                element={
-                  <NotFound isLogged goBackAction={() => navigate(NOTIFICHE, { replace: true })} />
-                }
-              />
-            </Route>
+          </Route>
+          {/* not found - non-logged users will see the common AccessDenied component */}
+          <Route path="*" element={<RouteGuard />}>
+            <Route
+              path="*"
+              element={
+                <NotFound isLogged goBackAction={() => navigate(NOTIFICHE, { replace: true })} />
+              }
+            />
           </Route>
         </Route>
         <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />

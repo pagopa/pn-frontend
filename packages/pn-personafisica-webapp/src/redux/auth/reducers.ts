@@ -2,7 +2,6 @@ import * as yup from 'yup';
 
 import {
   ConsentType,
-  adaptedTokenExchangeError,
   basicInitialUserData,
   basicNoLoggedUserData,
   basicUserDataMatcherContents,
@@ -44,8 +43,6 @@ const noLoggedUserData = {
   aud: '',
 } as User;
 
-const emptyUnauthorizedMessage = { title: '', message: '' };
-
 /* eslint-disable functional/immutable-data */
 const userSlice = createSlice({
   name: 'userSlice',
@@ -54,10 +51,6 @@ const userSlice = createSlice({
     user: basicInitialUserData(userDataMatcher, noLoggedUserData),
     fetchedTos: false,
     fetchedPrivacy: false,
-    isUnauthorizedUser: false,
-    messageUnauthorizedUser: emptyUnauthorizedMessage,
-    isClosedSession: false,
-    isForbiddenUser: false,
     tosConsent: {
       accepted: false,
       isFirstAccept: false,
@@ -71,6 +64,9 @@ const userSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(exchangeToken.pending, (state) => {
+      state.loading = true;
+    });
     builder.addCase(exchangeToken.fulfilled, (state, action) => {
       const user = action.payload;
       // validate user from api before setting it in the sessionStorage
@@ -79,26 +75,16 @@ const userSlice = createSlice({
         sessionStorage.setItem('user', JSON.stringify(user));
         state.user = action.payload;
       } catch (e) {
-        state.isUnauthorizedUser = true;
-        state.messageUnauthorizedUser = emptyUnauthorizedMessage;
         console.debug(e);
+      } finally {
+        state.loading = false;
       }
-      state.isClosedSession = false;
-      state.isForbiddenUser = false;
     });
     builder.addCase(exchangeToken.rejected, (state, action) => {
-      const adaptedError = adaptedTokenExchangeError(action.payload);
-      state.isUnauthorizedUser = adaptedError.isUnauthorizedUser;
-      state.messageUnauthorizedUser = adaptedError.isUnauthorizedUser
-        ? adaptedError.response.customMessage
-        : emptyUnauthorizedMessage;
-      state.isClosedSession = false;
-      state.isForbiddenUser = adaptedError.response?.status === 451;
+      state.loading = false;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.user = action.payload;
-      state.isUnauthorizedUser = false;
-      state.isClosedSession = true;
     });
     builder.addCase(getTosPrivacyApproval.fulfilled, (state, action) => {
       const [tosConsent, privacyConsent] = action.payload.filter(
