@@ -47,7 +47,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
   });
 
   const handleConfirmIOActivation = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_UX_CONVERSION);
     dispatch(enableIOAddress())
       .unwrap()
       .then(() => {

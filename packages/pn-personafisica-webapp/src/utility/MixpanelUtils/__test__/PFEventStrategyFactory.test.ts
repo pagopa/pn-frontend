@@ -270,6 +270,7 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO_NEXT_STEP,
       PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO_CONFIRM,
       PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO_BACK,
+      PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_UX_CONVERSION,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXActionStrategy);
