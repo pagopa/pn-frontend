@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.17.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.17.0-RC.0...v2.17.0-RC.1) (2025-07-16)
+
+
+### Bug Fixes
+
+* **pn-15747:** fixed wrong copy when a courtesy contact linked to a sender is deleted ([#1600](https://github.com/pagopa/pn-frontend/issues/1600)) ([bbff98e](https://github.com/pagopa/pn-frontend/commit/bbff98e0064f093dcba6066a45d39944cd12505f))
+
+
+
+
+
 # [2.17.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.16.1...v2.17.0-RC.0) (2025-07-09)
 
 
