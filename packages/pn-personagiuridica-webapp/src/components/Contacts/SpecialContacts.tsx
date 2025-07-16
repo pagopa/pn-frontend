@@ -58,7 +58,7 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
     channelType: ChannelType.PEC,
   });
 
-  const labelRoot = `legal-contacts`;
+  const labelRoot = `${addressType.toLowerCase()}-contacts`;
   const contactType = currentAddress.current.channelType.toLowerCase();
 
   const handleCodeVerification = (verificationCode?: string) => {
