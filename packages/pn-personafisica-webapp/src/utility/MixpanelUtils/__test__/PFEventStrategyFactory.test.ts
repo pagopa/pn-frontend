@@ -218,6 +218,7 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP,
       PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO,
       PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXScreenViewStrategy);
@@ -263,10 +264,12 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE_CLOSE,
       PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO_BACK,
       PFEventsType.SEND_ADD_SERCQ_SEND_CONTINUE_WITHOUT_IO,
-      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO_BACK,
-      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO_CONTINUE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO_CONNECT,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO_DECLINED,
       PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO,
       PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO_NEXT_STEP,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO_CONFIRM,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO_BACK,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXActionStrategy);
