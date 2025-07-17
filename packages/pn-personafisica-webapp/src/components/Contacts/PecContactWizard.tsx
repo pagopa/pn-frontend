@@ -43,7 +43,9 @@ const PecContactWizard: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
-  const { defaultSERCQ_SENDAddress, addresses } = useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultSERCQ_SENDAddress, courtesyAddresses } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
   const [openCodeModal, setOpenCodeModal] = useState(false);
   const { IS_DOD_ENABLED } = getConfiguration();
 
@@ -103,7 +105,7 @@ const PecContactWizard: React.FC<Props> = ({
         }
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS, {
           sercq_type: ChannelType.PEC,
-          contacts: addresses,
+          contacts: courtesyAddresses,
         });
         setOpenCodeModal(false);
         return setActiveStep(activeStep + 1);
@@ -186,12 +188,12 @@ const PecContactWizard: React.FC<Props> = ({
             content: t(feedbackContentLabel),
             buttonText: t('button.understand', { ns: 'common' }),
             onClick: handleCloseFeedbackStep,
-            dispatchMixpanelEvent: () =>
+            onFeedbackShow: () =>
               PFEventStrategyFactory.triggerEvent(
                 PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,
                 {
                   event_type: EventAction.SCREEN_VIEW,
-                  contacts: addresses,
+                  contacts: courtesyAddresses,
                 }
               ),
           },
