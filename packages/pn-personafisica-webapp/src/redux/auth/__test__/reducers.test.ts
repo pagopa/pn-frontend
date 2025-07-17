@@ -46,10 +46,6 @@ describe('Auth redux state tests', () => {
         jti: '',
         aud: '',
       },
-      isClosedSession: false,
-      isUnauthorizedUser: false,
-      messageUnauthorizedUser: { title: '', message: '' },
-      isForbiddenUser: false,
       fetchedTos: false,
       fetchedPrivacy: false,
       tosConsent: {
@@ -62,6 +58,7 @@ describe('Auth redux state tests', () => {
         isFirstAccept: false,
         consentVersion: '',
       },
+      tosPrivacyApiError: false,
     });
   });
 

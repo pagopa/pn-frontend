@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { sub } from 'date-fns';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -37,7 +38,7 @@ describe('SessionGuard Component', async () => {
     mock = new MockAdapter(authClient);
     Object.defineProperty(window, 'location', {
       writable: true,
-      value: { hash: '', pathname: '/' },
+      value: { hash: '', pathname: '/', search: '' },
     });
     Object.defineProperty(window, 'open', {
       configurable: true,
@@ -47,6 +48,9 @@ describe('SessionGuard Component', async () => {
 
   afterEach(() => {
     mock.reset();
+    window.location.hash = '';
+    window.location.pathname = '/';
+    window.location.search = '';
     vi.clearAllMocks();
   });
 
@@ -76,7 +80,7 @@ describe('SessionGuard Component', async () => {
     });
   });
 
-  // expected behavior: enters the app, doesn't navigate, doesn't launch sessionCheck
+  // expected behavior: enters the app, doesn't navigate
   it('no spid token - anonymous access', async () => {
     await act(async () => {
       render(<Guard />);
@@ -105,7 +109,7 @@ describe('SessionGuard Component', async () => {
     expect(logoutTitleComponent).toBeNull();
   });
 
-  // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken
+  // expected behavior: doesn't enter the app, shows the page not_accessible for error 451
   it('exchange token error (451)', async () => {
     window.location.hash = '#token=451_token';
     mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(451, {
@@ -119,17 +123,19 @@ describe('SessionGuard Component', async () => {
     expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
       authorizationToken: '451_token',
     });
-    const logoutComponent = screen.queryByTestId('session-modal');
-    expect(logoutComponent).toBeTruthy();
-    const logoutTitleComponent = screen.queryByText('leaving-app.title');
-    expect(logoutTitleComponent).toBeNull();
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith({ pathname: routes.NOT_ACCESSIBLE }, { replace: true });
+    await waitFor(() => {
+      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+      expect(mockNavigateFn).toHaveBeenCalledWith(
+        { pathname: routes.NOT_ACCESSIBLE },
+        { replace: true }
+      );
+    });
   });
 
-  // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck
+  // expected behavior: enters the app, does a navigate to notifications page, without hash "token" but with search params
   it('user logged in - TOS accepted', async () => {
     window.location.hash = '#token=200_token';
+    window.location.search = '?greet=hola&foo=bar';
     mock
       .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' })
       .reply(200, userResponse);
@@ -145,16 +151,16 @@ describe('SessionGuard Component', async () => {
     });
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(
-      { pathname: routes.NOTIFICHE, search: '' },
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(
+      { pathname: routes.NOTIFICHE, search: '?greet=hola&foo=bar', hash: '' },
       { replace: true }
     );
   });
 
-  // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck
+  // expected behavior: enters the app, does a navigate to notifications page, without hash "token"
   it('reload - session token already present - with hash', async () => {
-    window.location.hash = '#token=200_token&greet=hola';
+    window.location.hash = '#token=200_token&greet=hola&foo=bar';
     window.location.pathname = '/mocked-route';
     mock
       .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' })
@@ -171,26 +177,29 @@ describe('SessionGuard Component', async () => {
     });
     const pageComponent = screen.queryByText('Mocked Page');
     expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(
-      { pathname: location.pathname, search: '', hash: 'greet=hola' },
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(
+      { pathname: location.pathname, search: '', hash: '#greet=hola&foo=bar' },
       { replace: true }
     );
   });
 
-  // expected behavior: enters the app, logout message
+  // expected behavior: enters the app, exp token -> logout message
   it('logout', async () => {
     window.location.hash = '';
     window.location.pathname = '/';
+    const exp = sub(new Date(), { minutes: 5 }).getTime() / 1000;
     const mockReduxState = {
-      userState: { user: userResponse, isClosedSession: true },
+      userState: { user: { ...userResponse, exp } },
     };
     await act(async () => {
       render(<Guard />, { preloadedState: mockReduxState });
     });
-    const logoutComponent = screen.queryByTestId('session-modal');
-    expect(logoutComponent).toBeTruthy();
-    const logoutTitleComponent = screen.queryByText('leaving-app.title');
-    expect(logoutTitleComponent).toBeTruthy();
+    await waitFor(() => {
+      const logoutComponent = screen.queryByTestId('session-modal');
+      expect(logoutComponent).toBeTruthy();
+      const logoutTitleComponent = screen.queryByText('leaving-app.title');
+      expect(logoutTitleComponent).toBeTruthy();
+    });
   });
 });
