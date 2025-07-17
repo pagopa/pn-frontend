@@ -45,7 +45,7 @@ const EmailSmsContactWizard: React.FC = () => {
   const { t } = useTranslation('recapiti');
   const dispatch = useAppDispatch();
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const { defaultSMSAddress, defaultEMAILAddress, addresses } = useAppSelector(
+  const { defaultSMSAddress, defaultEMAILAddress, addresses, courtesyAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
@@ -160,7 +160,7 @@ const EmailSmsContactWizard: React.FC = () => {
     // will be useful for sms event tracking since this function will be re-used
     console.log(channelType);
 
-    if (!value) {
+    if (!value || errors) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_MISSING);
     }
 
@@ -188,7 +188,7 @@ const EmailSmsContactWizard: React.FC = () => {
   useEffect(() => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS, {
       event_type: EventAction.SCREEN_VIEW,
-      contacts: addresses,
+      contacts: courtesyAddresses,
     });
   }, []);
 
@@ -234,14 +234,15 @@ const EmailSmsContactWizard: React.FC = () => {
           container: {
             width: '100%',
           },
-          onEditCallback: (editMode: boolean) => {
-            if (editMode) {
-              PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_CHANGE_EMAIL);
-            }
-          },
-          beforeValidationCallback: (value: string, errors?: string) =>
-            handleTrackValidationEvents(value, ChannelType.EMAIL, errors),
         }}
+        onEditCallback={(editMode: boolean) => {
+          if (editMode) {
+            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_CHANGE_EMAIL);
+          }
+        }}
+        beforeValidationCallback={(value: string, errors?: string) =>
+          handleTrackValidationEvents(value, ChannelType.EMAIL, errors)
+        }
       />
 
       <Divider sx={{ mt: 3, mb: 3 }} />

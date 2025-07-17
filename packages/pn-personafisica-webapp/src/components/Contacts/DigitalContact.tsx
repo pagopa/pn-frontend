@@ -46,8 +46,6 @@ type Props = {
     container?: CSSProperties;
     textField?: Partial<TextFieldProps>;
     button?: Partial<ButtonProps>;
-    onEditCallback?: (editMode: boolean) => void;
-    beforeValidationCallback?: (value: string, errors?: string) => void;
   };
   showLabelOnEdit?: boolean;
   senderId?: string;
@@ -57,6 +55,8 @@ type Props = {
   onSubmit: (value: string) => void;
   onDelete?: () => void;
   onCancelInsert?: () => void;
+  onEditCallback?: (editMode: boolean) => void;
+  beforeValidationCallback?: (value: string, errors?: string) => void;
 };
 
 const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
@@ -75,6 +75,8 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       onSubmit,
       onDelete,
       onCancelInsert,
+      onEditCallback,
+      beforeValidationCallback,
     },
     ref
     // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -128,8 +130,8 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     const toggleEdit = () => {
       setEditMode((prevState) => {
         const newState = !prevState;
-        if (slotsProps?.onEditCallback) {
-          slotsProps.onEditCallback(newState);
+        if (onEditCallback) {
+          onEditCallback(newState);
         }
         return newState;
       });
@@ -153,8 +155,8 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     }));
 
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-      if (slotsProps?.beforeValidationCallback) {
-        slotsProps.beforeValidationCallback(
+      if (beforeValidationCallback) {
+        beforeValidationCallback(
           formik.values[`${senderId}_${contactType}`],
           formik.errors[`${senderId}_${contactType}`]
         );
