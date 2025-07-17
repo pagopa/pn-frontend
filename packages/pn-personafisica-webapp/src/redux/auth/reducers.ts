@@ -61,6 +61,7 @@ const userSlice = createSlice({
       isFirstAccept: false,
       consentVersion: '',
     },
+    tosPrivacyApiError: false,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -97,10 +98,12 @@ const userSlice = createSlice({
       if (privacyConsent) {
         state.privacyConsent = privacyConsent;
       }
+      state.tosPrivacyApiError = false;
       state.fetchedTos = true;
       state.fetchedPrivacy = true;
     });
     builder.addCase(getTosPrivacyApproval.rejected, (state) => {
+      state.tosPrivacyApiError = true;
       state.tosConsent.accepted = false;
       state.tosConsent.isFirstAccept = true;
       state.privacyConsent.accepted = false;
