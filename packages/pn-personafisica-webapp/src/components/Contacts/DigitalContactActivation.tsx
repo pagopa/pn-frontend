@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Button, DialogContentText, Typography } from '@mui/material';
-import { ConfirmationModal, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { ConfirmationModal, EventAction, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import IOContactWizard from '../../components/Contacts/IOContactWizard';
@@ -30,8 +30,13 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const { IS_DOD_ENABLED } = getConfiguration();
-  const { defaultEMAILAddress, defaultSMSAddress, defaultAPPIOAddress, defaultSERCQ_SENDAddress } =
-    useAppSelector(contactsSelectors.selectAddresses);
+  const {
+    addresses,
+    defaultEMAILAddress,
+    defaultSMSAddress,
+    defaultAPPIOAddress,
+    defaultSERCQ_SENDAddress,
+  } = useAppSelector(contactsSelectors.selectAddresses);
 
   const [activeStep, setActiveStep] = useState(0);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -52,11 +57,21 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const feedbackContentLabel = 'legal-contacts.sercq-send-wizard.feedback.content-sercq_send';
 
   const handleConfirmEmailSmsStep = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_CONTINUE, {
+      event_type: EventAction.ACTION,
+      contacts: addresses,
+    });
     if (hasEmailOrSms) {
       goToNextStep();
     } else {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS);
       setShowConfirmationModal(true);
     }
+  };
+
+  const handleCloseConfirmEmailSmsModal = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS_BACK);
+    setShowConfirmationModal(false);
   };
 
   const goToNextStep = () => {
@@ -66,6 +81,9 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const goToPreviousStep = () => {
     if (showIOStep && activeStep === 1) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO_BACK);
+    }
+    if (isEmailSmsStep) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_BACK);
     }
     setActiveStep((step) => step - 1);
   };
@@ -172,7 +190,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
           title={t('courtesy-contacts.confirmation-modal-title')}
           slotsProps={{
             confirmButton: {
-              onClick: () => setShowConfirmationModal(false),
+              onClick: handleCloseConfirmEmailSmsModal,
               children: t('button.understand', { ns: 'common' }),
             },
           }}

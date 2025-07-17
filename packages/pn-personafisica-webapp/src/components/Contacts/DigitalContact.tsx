@@ -46,6 +46,8 @@ type Props = {
     container?: CSSProperties;
     textField?: Partial<TextFieldProps>;
     button?: Partial<ButtonProps>;
+    onEditCallback?: (editMode: boolean) => void;
+    beforeValidationCallback?: (value: string, errors?: string) => void;
   };
   showLabelOnEdit?: boolean;
   senderId?: string;
@@ -124,7 +126,13 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     };
 
     const toggleEdit = () => {
-      setEditMode((prevState) => !prevState);
+      setEditMode((prevState) => {
+        const newState = !prevState;
+        if (slotsProps?.onEditCallback) {
+          slotsProps.onEditCallback(newState);
+        }
+        return newState;
+      });
     };
 
     const onCancelEdit = () => {
@@ -144,10 +152,21 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       },
     }));
 
+    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      if (slotsProps?.beforeValidationCallback) {
+        slotsProps.beforeValidationCallback(
+          formik.values[`${senderId}_${contactType}`],
+          formik.errors[`${senderId}_${contactType}`]
+        );
+      }
+
+      formik.handleSubmit(e);
+    };
+
     // INSERT MODE
     if (!value) {
       return (
-        <form onSubmit={formik.handleSubmit} data-testid={`${senderId}_${contactType}Contact`}>
+        <form onSubmit={handleFormSubmit} data-testid={`${senderId}_${contactType}Contact`}>
           <Label
             id={`${senderId}_${contactType}-custom-label`}
             variant="body2"
@@ -213,7 +232,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     // EDIT MODE
     return (
       <form
-        onSubmit={formik.handleSubmit}
+        onSubmit={handleFormSubmit}
         data-testid={`${senderId}_${contactType}Contact`}
         style={{ width: isMobile ? '100%' : '50%', ...slotsProps?.container }}
       >
