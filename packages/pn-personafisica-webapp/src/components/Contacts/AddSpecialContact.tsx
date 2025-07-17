@@ -129,6 +129,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       null
     );
     const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
+    const isUserSelectingSender = useRef(false);
 
     const addressTypes = specialContactsAvailableAddressTypes(addressesData).filter(
       (addr) => addr.shown && (!IS_DOD_ENABLED ? addr.id !== ChannelType.SERCQ_SEND : true)
@@ -146,19 +147,29 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         (a) => a.senderId === sender.id && (!channelType || a.channelType === channelType)
       );
 
-    const updateErrorBanner = (sender: Party) => {
-      if (isValidatingPecForSender(sender.id)) {
-        setErrorBanner(ErrorBannerType.VALIDATING_PEC);
-        handleError(true);
-        return;
-      }
+    // const updateErrorBanner = (sender: Party) => {
+    //   if (isValidatingPecForSender(sender.id)) {
+    //     setErrorBanner(ErrorBannerType.VALIDATING_PEC);
+    //     handleError(true);
+    //     return;
+    //   }
 
-      if (isSenderAlreadyAdded(sender)) {
+    //   if (isSenderAlreadyAdded(sender)) {
+    //     setErrorBanner(ErrorBannerType.ALREADY_EXISTS);
+    //   } else {
+    //     setErrorBanner(undefined);
+    //   }
+    //   handleError(false);
+    // };
+
+    const updateErrorBanner = (sender: Party) => {
+      if (isSenderAlreadyAdded(sender) && !isValidatingPecForSender(sender.id)) {
         setErrorBanner(ErrorBannerType.ALREADY_EXISTS);
+        handleError(true);
       } else {
         setErrorBanner(undefined);
+        handleError(false);
       }
-      handleError(false);
     };
 
     const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -172,15 +183,50 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       }
     };
 
+    // const senderChangeHandler = async (_: any, newValue: Party | null) => {
+    //   const sender: Party = {
+    //     id: newValue?.id ?? '',
+    //     name: newValue?.name ?? '',
+    //   };
+    //   await formik.setFieldTouched('sender', true, false);
+    //   await formik.setFieldValue('sender', { id: sender.id, name: sender.name });
+
+    //   updateErrorBanner(sender);
+    // };
+
     const senderChangeHandler = async (_: any, newValue: Party | null) => {
+      isUserSelectingSender.current = true;
+
       const sender: Party = {
         id: newValue?.id ?? '',
         name: newValue?.name ?? '',
       };
-      await formik.setFieldTouched('sender', true, false);
-      await formik.setFieldValue('sender', { id: sender.id, name: sender.name });
 
-      updateErrorBanner(sender);
+      await formik.setFieldTouched('sender', true, false);
+      await formik.setFieldValue('sender', sender);
+
+      const isValidating = isValidatingPecForSender(sender.id);
+      const isAlreadyAdded = isSenderAlreadyAdded(sender);
+
+      if (isValidating) {
+        formik.setFieldError(
+          'sender.name',
+          t('special-contacts.validating-pec-error-message', { ns: 'recapiti' })
+        );
+      } else {
+        formik.setFieldError('sender.name', undefined);
+      }
+
+      if (!isValidating && isAlreadyAdded) {
+        setErrorBanner(ErrorBannerType.ALREADY_EXISTS);
+        handleError(true);
+      } else {
+        setErrorBanner(undefined);
+        handleError(false);
+      }
+
+      // eslint-disable-next-line functional/immutable-data
+      isUserSelectingSender.current = false;
     };
 
     const renderOption = (props: any, option: Party) => (
@@ -243,6 +289,33 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         });
       },
     });
+
+    useEffect(() => {
+      const senderId = formik.values.sender.id;
+      if (!senderId || isUserSelectingSender.current) {
+        return;
+      }
+
+      const isValidating = isValidatingPecForSender(senderId);
+      const currentError = formik.errors.sender?.name;
+
+      if (isValidating) {
+        if (
+          currentError !== t('special-contacts.validating-pec-error-message', { ns: 'recapiti' })
+        ) {
+          formik.setFieldError(
+            'sender.name',
+            t('special-contacts.validating-pec-error-message', { ns: 'recapiti' })
+          );
+        }
+      } else {
+        if (
+          currentError === t('special-contacts.validating-pec-error-message', { ns: 'recapiti' })
+        ) {
+          formik.setFieldError('sender.name', undefined);
+        }
+      }
+    }, [formik.values.sender.id, formik.errors.sender?.name, isValidatingPecForSender, t]);
 
     // verify if the sender already has a contact associated
     const oldAddress = addressesData.specialAddresses.find(
@@ -330,15 +403,22 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     }, [formik.values.sender.name]);
 
     useImperativeHandle(ref, () => ({
+      // handleConfirm: async () => {
+      //   if (errorBanner !== ErrorBannerType.VALIDATING_PEC) {
+      //     await formik.submitForm();
+      //   } else {
+      //     await formik.setFieldTouched('sender', true, false);
+      //     formik.setFieldError(
+      //       'sender.name',
+      //       t('special-contacts.validating-pec-error-message', { ns: 'recapiti' })
+      //     );
+      //   }
+      // },
       handleConfirm: async () => {
-        if (errorBanner !== ErrorBannerType.VALIDATING_PEC) {
-          await formik.submitForm();
+        if (isValidatingPecForSender(formik.values.sender.id)) {
+          setErrorBanner(ErrorBannerType.VALIDATING_PEC);
         } else {
-          await formik.setFieldTouched('sender', true, false);
-          formik.setFieldError(
-            'sender.name',
-            t('special-contacts.validating-pec-error-message', { ns: 'recapiti' })
-          );
+          await formik.submitForm();
         }
       },
     }));
