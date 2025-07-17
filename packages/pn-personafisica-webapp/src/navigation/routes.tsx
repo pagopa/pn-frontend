@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import {
   AppNotAccessible,
@@ -12,7 +12,7 @@ import {
 import { getConfiguration } from '../services/configuration.service';
 import RapidAccessGuard from './RapidAccessGuard';
 import RouteGuard from './RouteGuard';
-import SessionGuard from './SessionGuard2';
+import SessionGuard from './SessionGuard';
 import ToSGuard from './ToSGuard';
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
@@ -42,11 +42,6 @@ const handleAssistanceClick = () => {
   window.location.href = getConfiguration().LANDING_SITE_URL;
 };
 
-function RedirectToNotifiche() {
-  const location = useLocation();
-  return <Navigate to={`${routes.NOTIFICHE}${location.search}`} replace />;
-}
-
 function Router() {
   const navigate = useNavigate();
 
@@ -56,8 +51,6 @@ function Router() {
         <Route path="/" element={<SessionGuard />}>
           <Route path="/" element={<ToSGuard />}>
             <Route path="/" element={<RapidAccessGuard />}>
-              <Route index element={<RedirectToNotifiche />} />
-
               <Route path={routes.NOTIFICHE} element={<Notifiche />} />
               <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
               <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />

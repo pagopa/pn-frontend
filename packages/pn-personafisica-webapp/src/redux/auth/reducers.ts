@@ -80,7 +80,7 @@ const userSlice = createSlice({
         state.loading = false;
       }
     });
-    builder.addCase(exchangeToken.rejected, (state, action) => {
+    builder.addCase(exchangeToken.rejected, (state) => {
       state.loading = false;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
