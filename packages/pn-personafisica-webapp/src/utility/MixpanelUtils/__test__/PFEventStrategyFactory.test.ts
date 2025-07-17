@@ -11,6 +11,7 @@ import { SendAddLegalContactUXSuccessStrategy } from '../Strategies/SendAddLegal
 import { SendAddMandateUXConversionStrategy } from '../Strategies/SendAddMandateUXConversionStrategy';
 import { SendAddMandateUXSuccessStrategy } from '../Strategies/SendAddMandateUXSuccessStrategy';
 import { SendAddSercqSendAddEmailStartStrategy } from '../Strategies/SendAddSercqSendAddEmailStartStrategy';
+import { SendAddSercqSendAddSmsStartStrategy } from '../Strategies/SendAddSercqSendAddSmsStartStrategy';
 import { SendAddSercqUxSuccessStrategy } from '../Strategies/SendAddSercqUxSuccessStrategy';
 import { SendDisableIOStrategy } from '../Strategies/SendDisableIOStrategy';
 import { SendDownloadCertificateOpposable } from '../Strategies/SendDownloadCertificateOpposable';
@@ -222,6 +223,7 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO,
       PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS,
       PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_OTP,
+      PFEventsType.SEND_ADD_SERCQ_SEND_SMS_OTP,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXScreenViewStrategy);
@@ -233,6 +235,7 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_SUCCESS,
       PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO_SUCCESS,
       PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_SUCCESS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_SUCCESS,
     ];
 
     eventTypes.forEach((eventType) => {
@@ -283,6 +286,11 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_UX_CONVERSION,
       PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_BACK,
       PFEventsType.SEND_ADD_SERCQ_SEND_CHANGE_EMAIL,
+      PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_CANCEL,
+      PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_BACK,
+      PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_CONVERSION,
+      PFEventsType.SEND_ADD_SERCQ_SEND_CHANGE_SMS,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXActionStrategy);
@@ -339,6 +347,7 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_MISSING,
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_MANDATORY,
       PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_MISSING,
+      PFEventsType.SEND_ADD_SERCQ_SEND_SMS_MISSING,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(KoErrorStrategy);
@@ -439,6 +448,12 @@ describe('Event Strategy Factory', () => {
   it('should return SendAddSercqSendAddEmailStartStrategy for SEND_ADD_SERCQ_SEND_ADD_EMAIL_START event', () => {
     expect(factory.getStrategy(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_START)).toBeInstanceOf(
       SendAddSercqSendAddEmailStartStrategy
+    );
+  });
+
+  it('should return SendAddSercqSendAddSmsStartStrategy for SEND_ADD_SERCQ_SEND_ADD_SMS_START event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_START)).toBeInstanceOf(
+      SendAddSercqSendAddSmsStartStrategy
     );
   });
 

@@ -13,6 +13,7 @@ import { SendAddMandateUXConversionStrategy } from './Strategies/SendAddMandateU
 import { SendAddMandateUXSuccessStrategy } from './Strategies/SendAddMandateUXSuccessStrategy';
 import { SendAddSercqPecStartActivationStrategy } from './Strategies/SendAddSercqPecStartActivationStrategy';
 import { SendAddSercqSendAddEmailStartStrategy } from './Strategies/SendAddSercqSendAddEmailStartStrategy';
+import { SendAddSercqSendAddSmsStartStrategy } from './Strategies/SendAddSercqSendAddSmsStartStrategy';
 import { SendAddSercqUxSuccessStrategy } from './Strategies/SendAddSercqUxSuccessStrategy';
 import { SendDisableIOStrategy } from './Strategies/SendDisableIOStrategy';
 import { SendDownloadCertificateOpposable } from './Strategies/SendDownloadCertificateOpposable';
@@ -93,6 +94,11 @@ const uxActionStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_UX_CONVERSION,
   PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_BACK,
   PFEventsType.SEND_ADD_SERCQ_SEND_CHANGE_EMAIL,
+  PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS,
+  PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_CANCEL,
+  PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_BACK,
+  PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_CONVERSION,
+  PFEventsType.SEND_ADD_SERCQ_SEND_CHANGE_SMS,
 ] as const;
 
 const uxPspActionStrategy = [PFEventsType.SEND_START_PAYMENT] as const;
@@ -140,12 +146,14 @@ const uxScreenViewStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO,
   PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS,
   PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_OTP,
+  PFEventsType.SEND_ADD_SERCQ_SEND_SMS_OTP,
 ] as const;
 
 const uxConfirmStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_SUCCESS,
   PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO_SUCCESS,
   PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_SUCCESS,
+  PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_SUCCESS,
 ] as const;
 
 const uxErrorStrategy = [
@@ -175,6 +183,7 @@ const koErrorStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_MISSING,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_MANDATORY,
   PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_MISSING,
+  PFEventsType.SEND_ADD_SERCQ_SEND_SMS_MISSING,
 ] as const;
 
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
@@ -236,6 +245,7 @@ const eventStrategy: Record<
   [PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START_ACTIVATION]:
     new SendAddSercqPecStartActivationStrategy(),
   [PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_START]: new SendAddSercqSendAddEmailStartStrategy(),
+  [PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_START]: new SendAddSercqSendAddSmsStartStrategy(),
 };
 
 const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventStrategy => {
