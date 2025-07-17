@@ -12,6 +12,7 @@ import { SendAddLegalContactUXSuccessStrategy } from './Strategies/SendAddLegalC
 import { SendAddMandateUXConversionStrategy } from './Strategies/SendAddMandateUXConversionStrategy';
 import { SendAddMandateUXSuccessStrategy } from './Strategies/SendAddMandateUXSuccessStrategy';
 import { SendAddSercqPecStartActivationStrategy } from './Strategies/SendAddSercqPecStartActivationStrategy';
+import { SendAddSercqSendAddEmailStartStrategy } from './Strategies/SendAddSercqSendAddEmailStartStrategy';
 import { SendAddSercqUxSuccessStrategy } from './Strategies/SendAddSercqUxSuccessStrategy';
 import { SendDisableIOStrategy } from './Strategies/SendDisableIOStrategy';
 import { SendDownloadCertificateOpposable } from './Strategies/SendDownloadCertificateOpposable';
@@ -81,9 +82,17 @@ const uxActionStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO_DECLINED,
   PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO,
   PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO_NEXT_STEP,
+  PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO_CONFIRM,
+  PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO_BACK,
+  PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_UX_CONVERSION,
   PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO_DISCONNECT,
   PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO_CANCEL,
   PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_UX_CONVERSION,
+  PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_BACK,
+  PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS_BACK,
+  PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_UX_CONVERSION,
+  PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_BACK,
+  PFEventsType.SEND_ADD_SERCQ_SEND_CHANGE_EMAIL,
 ] as const;
 
 const uxPspActionStrategy = [PFEventsType.SEND_START_PAYMENT] as const;
@@ -129,11 +138,14 @@ const uxScreenViewStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO,
   PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO,
   PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO,
+  PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS,
+  PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_OTP,
 ] as const;
 
 const uxConfirmStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_SUCCESS,
   PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO_SUCCESS,
+  PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_SUCCESS,
 ] as const;
 
 const uxErrorStrategy = [
@@ -155,11 +167,14 @@ const uxWithCourtesyContactListStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_START,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,
+  PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS,
+  PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_CONTINUE,
 ] as const;
 
 const koErrorStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_MISSING,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_MANDATORY,
+  PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_MISSING,
 ] as const;
 
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
@@ -220,6 +235,7 @@ const eventStrategy: Record<
   [PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS]: new SendActiveIOUxSuccessStrategy(),
   [PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START_ACTIVATION]:
     new SendAddSercqPecStartActivationStrategy(),
+  [PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_START]: new SendAddSercqSendAddEmailStartStrategy(),
 };
 
 const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventStrategy => {
