@@ -6,12 +6,13 @@ import {
   LoadingPage,
   SessionModal,
   adaptedTokenExchangeError,
+  useErrors,
   useSessionCheck,
 } from '@pagopa-pn/pn-commons';
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { TokenExchangeRequest } from '../models/User';
-import { exchangeToken } from '../redux/auth/actions';
+import { exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
@@ -27,6 +28,9 @@ const SessionGuard = () => {
   const { WORK_IN_PROGRESS } = getConfiguration();
   const sessionCheck = useSessionCheck(200, () => sessionCheckCallback());
   const { t } = useTranslation(['common']);
+  const { hasSpecificStatusError } = useErrors();
+
+  const hasAnyForbiddenError = hasSpecificStatusError(403);
 
   const [modalData, setModalData] = useState({
     open: false,
@@ -42,6 +46,7 @@ const SessionGuard = () => {
   useEffect(() => {
     if (sessionToken) {
       sessionCheck(exp);
+      redirectToPage();
       return;
     }
     if (tokenRequest) {
@@ -51,20 +56,15 @@ const SessionGuard = () => {
     }
   }, [sessionToken, tokenRequest]);
 
+  useEffect(() => {
+    if (hasAnyForbiddenError) {
+      void dispatch(logout());
+    }
+  }, [hasAnyForbiddenError]);
+
   const performExchangeToken = async (token: TokenExchangeRequest) => {
     try {
       await dispatch(exchangeToken(token)).unwrap();
-
-      // Se sono in home "/" redirect a pagina notifiche; rimuovo solo l'hash param "token"
-      const pathname = location.pathname === '/' ? routes.NOTIFICHE : location.pathname;
-      const hash = new URLSearchParams(location.hash.substring(1));
-      hash.delete('token');
-      const newHash = hash.toString();
-
-      navigate(
-        { pathname, search: location.search, hash: newHash ? `#${newHash}` : '' },
-        { replace: true }
-      );
     } catch (error) {
       const adaptedError = adaptedTokenExchangeError(error);
       if (adaptedError.response.status === 451 || WORK_IN_PROGRESS) {
@@ -85,6 +85,19 @@ const SessionGuard = () => {
       title: t('leaving-app.title'),
       message: t('leaving-app.message'),
     });
+  };
+
+  // Se sono in home "/" redirect a pagina notifiche; rimuovo solo l'hash param "token"
+  const redirectToPage = () => {
+    const pathname = location.pathname === '/' ? routes.NOTIFICHE : location.pathname;
+    const hash = new URLSearchParams(location.hash.substring(1));
+    hash.delete('token'); // TODO rimuovo tutte le hash o solo token? da selfcare arriva anche "lang"
+    const newHash = hash.toString(); 
+
+    navigate(
+      { pathname, search: location.search, hash: newHash ? `#${newHash}` : '' },
+      { replace: true }
+    );
   };
 
   return (

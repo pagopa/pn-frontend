@@ -17,6 +17,7 @@ import {
   AppResponse,
   AppResponseError,
   AppResponseMessage,
+  InactivityHandler,
   Layout,
   PnDialog,
   PnDialogActions,
@@ -37,6 +38,7 @@ import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigatio
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
+import { apiLogout } from './redux/auth/actions';
 import { getDigitalAddresses } from './redux/contact/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
@@ -46,7 +48,6 @@ import { PFAppErrorFactory } from './utility/AppError/PFAppErrorFactory';
 import PFEventStrategyFactory from './utility/MixpanelUtils/PFEventStrategyFactory';
 import showLayoutParts from './utility/layout.utility';
 import './utility/onetrust';
-import { apiLogout } from './redux/auth/actions';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductEntity> = [
@@ -57,6 +58,8 @@ const productsList: Array<ProductEntity> = [
     linkType: 'internal',
   },
 ];
+
+const inactivityTimer = 5 * 60 * 1000;
 
 // Cfr. PN-6096
 // --------------------
@@ -85,7 +88,7 @@ const App = () => {
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL } = getConfiguration();
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, IS_INACTIVITY_HANDLER_ENABLED } = getConfiguration();
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -213,7 +216,7 @@ const App = () => {
     // if user is logged in, we redirect to support page
     // otherwise, we open the email provider
     if (sessionToken) {
-      const url = addParamToUrl(routes.SUPPORT, "data", JSON.stringify(lastError));
+      const url = addParamToUrl(routes.SUPPORT, 'data', JSON.stringify(lastError));
       navigate(url);
       return;
     }
@@ -322,11 +325,7 @@ const App = () => {
             <Button id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
               {t('button.annulla')}
             </Button>
-            <Button
-              data-testid="confirm-button"
-              variant="contained"
-              onClick={performLogout}
-            >
+            <Button data-testid="confirm-button" variant="contained" onClick={performLogout}>
               {t('header.logout')}
             </Button>
           </PnDialogActions>
@@ -339,6 +338,17 @@ const App = () => {
         <Router />
       </Layout>
       <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>
+      {
+        IS_INACTIVITY_HANDLER_ENABLED && (
+          <InactivityHandler
+            inactivityTimer={inactivityTimer}
+            onTimerExpired={() => {
+              sessionStorage.clear();
+              goToLoginPortal();
+            }}
+          />
+        )
+      }
     </>
   );
 };
