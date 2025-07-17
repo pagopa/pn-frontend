@@ -58,6 +58,7 @@ describe('Auth redux state tests', () => {
         isFirstAccept: false,
         consentVersion: '',
       },
+      tosPrivacyApiError: false,
     });
   });
 
