@@ -4,7 +4,7 @@ import { interceptDispatch } from '@pagopa-pn/pn-commons';
 import { AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
 
 import { PFEventsType, eventsActionsMap } from '../models/PFEventsType';
-import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../models/contacts';
+import { ChannelType, DigitalAddress, IOAllowedValues } from '../models/contacts';
 import PFEventStrategyFactory from './MixpanelUtils/PFEventStrategyFactory';
 
 export type MixpanelConcatCourtesyContacts =
@@ -31,7 +31,6 @@ export const concatCourtestyContacts = (
 ): MixpanelConcatCourtesyContacts => {
   const filteredContacts = contacts.filter(
     (contact) =>
-      contact.addressType === AddressType.COURTESY &&
       !(contact.channelType === ChannelType.IOMSG && contact.value === IOAllowedValues.DISABLED)
   );
 

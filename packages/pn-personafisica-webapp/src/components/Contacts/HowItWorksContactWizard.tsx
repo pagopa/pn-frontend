@@ -36,7 +36,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
   const { t } = useTranslation(['recapiti', 'common']);
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const { defaultPECAddress, addresses: contacts } = useAppSelector(
+  const { defaultPECAddress, courtesyAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
   const { IS_DOD_ENABLED } = getConfiguration();
@@ -57,7 +57,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
   const handleNextStep = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
       event_type: EventAction.ACTION,
-      contacts,
+      contacts: courtesyAddresses,
     });
     goToNextStep();
   };
@@ -65,7 +65,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
   const handleShowPecWizard = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START, {
       event_type: EventAction.ACTION,
-      contacts,
+      contacts: courtesyAddresses,
     });
     setShowPecWizard(true);
   };
@@ -73,7 +73,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
   useEffect(() => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_INTRO, {
       event_type: EventAction.SCREEN_VIEW,
-      contacts,
+      contacts: courtesyAddresses,
     });
   }, []);
 

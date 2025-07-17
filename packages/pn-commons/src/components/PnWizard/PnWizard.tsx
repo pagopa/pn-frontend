@@ -44,7 +44,7 @@ type Props = {
       content?: ReactNode;
       buttonText: string;
       onClick: () => void;
-      dispatchMixpanelEvent?: () => void;
+      onFeedbackShow?: () => void;
     };
   };
 };
@@ -95,7 +95,7 @@ const PnWizard: React.FC<Props> = ({
   if (activeStep >= childrens.length && slotsProps?.feedback) {
     const feedback = slotsProps?.feedback;
 
-    feedback.dispatchMixpanelEvent?.();
+    feedback.onFeedbackShow?.();
 
     return (
       <Box

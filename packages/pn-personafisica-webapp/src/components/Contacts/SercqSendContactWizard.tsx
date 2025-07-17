@@ -68,9 +68,8 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
   const dispatch = useAppDispatch();
 
   const tosConsent = useRef<Array<TosPrivacyConsent>>();
-  const { addresses, defaultEMAILAddress, defaultAPPIOAddress, defaultSMSAddress } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const { courtesyAddresses, defaultEMAILAddress, defaultAPPIOAddress, defaultSMSAddress } =
+    useAppSelector(contactsSelectors.selectAddresses);
 
   const isIOInstalled = !!defaultAPPIOAddress;
 
@@ -204,7 +203,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
         sessionStorage.removeItem('domicileBannerClosed');
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS, {
           sercq_type: ChannelType.SERCQ_SEND,
-          contacts: addresses,
+          contacts: courtesyAddresses,
         });
         // show success message
         dispatch(
