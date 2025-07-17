@@ -96,8 +96,8 @@ const DigitalContactManagement: React.FC = () => {
         stepContainer: { sx: { p: 0, mb: '20px', mt: 3, background: 'transparent' } },
         nextButton: {
           onClick: handleConfirmClick,
-          variant: specialContactError ? 'outlined' : 'contained',
-          color: specialContactError ? 'error' : 'primary',
+          // variant: specialContactError ? 'outlined' : 'contained',
+          // color: specialContactError ? 'error' : 'primary',
         },
         feedback: {
           title: t(`legal-contacts.sercq-send-wizard.feedback.title-transfer`),

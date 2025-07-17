@@ -56,12 +56,10 @@ import { isPFEvent } from '../../utility/mixpanel';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import ContactCodeDialog from './ContactCodeDialog';
 import ExistingContactDialog from './ExistingContactDialog';
-import LegalContactAssociationDialog from './LegalContactAssociationDialog';
 
 enum ModalType {
   EXISTING = 'existing',
   CODE = 'code',
-  CONFIRM_LEGAL_ASSOCIATION = 'confirm_legal_association',
 }
 
 enum ErrorBannerType {
@@ -78,23 +76,32 @@ type Props = {
   handleError: (hasError: boolean) => void;
 };
 
-const ErrorBanner: React.FC<{ type: ErrorBannerType | undefined }> = ({ type }) => {
+const ErrorBanner: React.FC<{ type: ErrorBannerType | undefined; contactValue?: string }> = ({
+  type,
+  contactValue,
+}) => {
   const { t } = useTranslation(['recapiti']);
   if (type === ErrorBannerType.ALREADY_EXISTS) {
     return (
-      <Alert severity="warning" sx={{ mt: 2 }} data-testid="alreadyExistsAlert">
-        {t(`special-contacts.contact-already-exists`)}
+      <Alert severity="warning" sx={{ mt: 2 }} data-testid="alreadyExistsAlert" aria-live="polite">
+        <Trans
+          ns="recapiti"
+          i18nKey="special-contacts.contact-already-exists"
+          values={{
+            contactValue,
+          }}
+        />
       </Alert>
     );
   } else if (type === ErrorBannerType.VALIDATING_PEC) {
     return (
       <Alert
-        variant="outlined"
-        severity="error"
+        severity="warning"
         sx={{ mt: 2 }}
         data-testid="validatingPecForSenderAlert"
+        aria-live="assertive"
       >
-        {t(`special-contacts.validating-pec`)}
+        {t(`special-contacts.validating-pec-banner-content`)}
       </Alert>
     );
   }
@@ -139,14 +146,14 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         (a) => a.senderId === sender.id && (!channelType || a.channelType === channelType)
       );
 
-    const updateErrorBanner = (sender: Party, channelType: ChannelType) => {
-      if (channelType === ChannelType.SERCQ_SEND && isValidatingPecForSender(sender.id)) {
+    const updateErrorBanner = (sender: Party) => {
+      if (isValidatingPecForSender(sender.id)) {
         setErrorBanner(ErrorBannerType.VALIDATING_PEC);
         handleError(true);
         return;
       }
 
-      if (channelType === ChannelType.PEC && isSenderAlreadyAdded(sender, channelType)) {
+      if (isSenderAlreadyAdded(sender)) {
         setErrorBanner(ErrorBannerType.ALREADY_EXISTS);
       } else {
         setErrorBanner(undefined);
@@ -158,16 +165,14 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       await formik.setFieldValue('s_value', '');
       await formik.setFieldTouched('s_value', false);
       if (e.target.value) {
-        const channelType = e.target.value as ChannelType;
         const sender = formik.values.sender;
         formik.handleChange(e);
 
-        updateErrorBanner(sender, channelType);
+        updateErrorBanner(sender);
       }
     };
 
     const senderChangeHandler = async (_: any, newValue: Party | null) => {
-      const channelType = formik.values.channelType as ChannelType;
       const sender: Party = {
         id: newValue?.id ?? '',
         name: newValue?.name ?? '',
@@ -175,7 +180,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       await formik.setFieldTouched('sender', true, false);
       await formik.setFieldValue('sender', { id: sender.id, name: sender.name });
 
-      updateErrorBanner(sender, channelType);
+      updateErrorBanner(sender);
     };
 
     const renderOption = (props: any, option: Party) => (
@@ -288,14 +293,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
           source: ContactSource.RECAPITI,
         });
       }
-      // verify if the sender already has a contact associated
-      const oldAddress = addressesData.specialAddresses.find(
-        (addr) => addr.senderId === sender.senderId
-      );
-      if (oldAddress) {
-        setModalOpen({ type: ModalType.CONFIRM_LEGAL_ASSOCIATION });
-        return;
-      }
 
       // check if contact already exists
       if (contactAlreadyExists(addressesData.addresses, value, sender.senderId, channelType)) {
@@ -336,6 +333,12 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       handleConfirm: async () => {
         if (errorBanner !== ErrorBannerType.VALIDATING_PEC) {
           await formik.submitForm();
+        } else {
+          await formik.setFieldTouched('sender', true, false);
+          formik.setFieldError(
+            'sender.name',
+            t('special-contacts.validating-pec-error-message', { ns: 'recapiti' })
+          );
         }
       },
     }));
@@ -434,21 +437,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
     return (
       <Paper data-testid="addSpecialContact" sx={{ p: { xs: 2, lg: 3 }, mb: 3 }}>
-        <LegalContactAssociationDialog
-          open={modalOpen?.type === ModalType.CONFIRM_LEGAL_ASSOCIATION}
-          sender={{
-            senderId: formik.values.sender.id,
-            senderName: formik.values.sender.name,
-          }}
-          oldAddress={oldAddress}
-          newAddress={{
-            addressType: AddressType.LEGAL,
-            channelType: formik.values.channelType as ChannelType,
-            value: formik.values.s_value,
-          }}
-          onCancel={() => setModalOpen(null)}
-          onConfirm={() => handleAssociation()}
-        />
         <ExistingContactDialog
           open={modalOpen?.type === ModalType.EXISTING}
           isDefault={modalOpen?.isDefault}
@@ -605,7 +593,14 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             </>
           )}
         </form>
-        <ErrorBanner type={errorBanner} />
+        <ErrorBanner
+          type={errorBanner}
+          contactValue={
+            oldAddress?.channelType === ChannelType.PEC
+              ? oldAddress.value
+              : t('special-contacts.sercq_send', { ns: 'recapiti' })
+          }
+        />
       </Paper>
     );
   }
