@@ -63,7 +63,7 @@ interface SmsElemProps {
   fromSercqSend?: boolean;
 }
 
-interface SmsItemProps extends Omit<SmsElemProps, 'onCancelInsert' | 'fromSercqSend'> {}
+type SmsItemProps = Omit<SmsElemProps, 'onCancelInsert' | 'fromSercqSend'>;
 
 const SmsContactElem: React.FC<SmsElemProps> = ({
   onCancelInsert,
