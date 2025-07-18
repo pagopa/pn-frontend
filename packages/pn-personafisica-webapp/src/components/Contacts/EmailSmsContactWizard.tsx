@@ -297,12 +297,6 @@ const EmailSmsContactWizard: React.FC = () => {
               sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
             },
           }}
-          onInsertSmsCallback={() =>
-            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS)
-          }
-          onCancelInsertSmsCallback={() =>
-            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_CANCEL)
-          }
           beforeValidationCallback={(value: string, errors?: string) =>
             handleTrackValidationEvents(value, ChannelType.EMAIL, errors)
           }

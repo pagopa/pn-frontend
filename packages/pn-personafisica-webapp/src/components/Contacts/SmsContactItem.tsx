@@ -55,26 +55,22 @@ interface SmsSlotsProps {
   button?: Partial<ButtonProps>;
 }
 
-interface SmsSharedProps {
+interface SmsElemProps {
   slots?: SmsSlots;
   slotsProps?: SmsSlotsProps;
   beforeValidationCallback?: (value: string, errors?: string) => void;
-}
-
-interface SmsElemProps extends SmsSharedProps {
   onCancelInsert?: () => void;
+  fromSercqSend?: boolean;
 }
 
-interface SmsItemProps extends SmsSharedProps {
-  onInsertSmsCallback?: () => void;
-  onCancelInsertSmsCallback?: () => void;
-}
+interface SmsItemProps extends Omit<SmsElemProps, 'onCancelInsert' | 'fromSercqSend'> {}
 
 const SmsContactElem: React.FC<SmsElemProps> = ({
   onCancelInsert,
   slotsProps,
   slots,
   beforeValidationCallback,
+  fromSercqSend = false,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { defaultSERCQ_SENDAddress, defaultPECAddress, defaultSMSAddress, addresses } =
@@ -85,7 +81,6 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
     resetForm: () => Promise.resolve(),
   });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const location = useLocation();
   // currentAddress is needed to store what address we are creating/editing/removing
   // because this variable isn't been used to render, we can use useRef
   const currentAddress = useRef<{ value: string }>({
@@ -96,10 +91,6 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
   const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
 
   const currentValue = defaultSMSAddress?.value ?? '';
-
-  const fromSercqSend = [DIGITAL_DOMICILE_ACTIVATION, DIGITAL_DOMICILE_MANAGEMENT].includes(
-    location.pathname
-  );
 
   const handleSubmit = (value: string) => {
     if (!fromSercqSend) {
@@ -253,12 +244,11 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
 const SmsContactItem: React.FC<SmsItemProps> = ({
   slotsProps,
   slots,
-  onInsertSmsCallback,
-  onCancelInsertSmsCallback,
   beforeValidationCallback,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
+  const location = useLocation();
   const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
@@ -267,6 +257,9 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   const [insertMode, setInsertMode] = useState(false);
 
   const isActive = !!defaultSMSAddress;
+  const fromSercqSend = [DIGITAL_DOMICILE_ACTIVATION, DIGITAL_DOMICILE_MANAGEMENT].includes(
+    location.pathname
+  );
 
   const hasCourtesyAddresses =
     addresses.filter(
@@ -334,15 +327,15 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   };
 
   const handleSetInsertMode = () => {
-    if (onInsertSmsCallback) {
-      onInsertSmsCallback();
+    if (fromSercqSend) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS);
     }
     setInsertMode(true);
   };
 
   const handleCancelInsertMode = () => {
-    if (onCancelInsertSmsCallback) {
-      onCancelInsertSmsCallback();
+    if (fromSercqSend) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_CANCEL);
     }
     setInsertMode(false);
   };
@@ -433,6 +426,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
           slots={slots}
           onCancelInsert={handleCancelInsertMode}
           beforeValidationCallback={beforeValidationCallback}
+          fromSercqSend={fromSercqSend}
         />
       ) : (
         <>
