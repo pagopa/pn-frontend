@@ -165,7 +165,7 @@ const EmailSmsContactWizard: React.FC = () => {
     }
 
     const status = !value ? 'missing' : errors ? 'invalid' : 'valid';
-    const validationKey = channelType === ChannelType.EMAIL ? 'email_validation' : 'sms_validation';
+    const validationKey = `${channelType.toLowerCase()}_validation`;
     const data = { [validationKey]: status };
 
     const eventKey = `SEND_ADD_SERCQ_SEND_ADD_${channelType}_START`;
