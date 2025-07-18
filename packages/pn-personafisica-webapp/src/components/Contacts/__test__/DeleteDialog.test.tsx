@@ -77,6 +77,7 @@ describe('DeleteDialog Component', () => {
         confirmHandler={confirmHandler}
       />
     );
+
     const dialog = screen.getByTestId('dialog');
     const confirmButton = getById(dialog, 'buttonConferma');
     fireEvent.click(confirmButton);

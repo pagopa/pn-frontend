@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Avatar, Link, Stack, StackProps, Typography } from '@mui/material';
 import { IllusAppIoLogo, useMobileOS } from '@pagopa-pn/pn-commons';
 
-import { getConfiguration } from '../../services/configuration.service';
+import { getConfiguration } from '../services/configuration.service';
 
 const IOSmartAppBanner: React.FC<StackProps> = (props) => {
   const { APP_IO_ANDROID, APP_IO_IOS, APP_IO_SITE } = getConfiguration();

@@ -224,7 +224,7 @@ describe('test AddSpecialContact', () => {
 
     expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     // simulate rerendering due to redux changes
-    result.rerender(<SpecialContacts />);
+    result.rerender(<SpecialContacts addressType={AddressType.LEGAL} />);
     await waitFor(() => {
       // contacts list
       const specialContactForms = result.getAllByTestId(

@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
 
-import { compileOneTrustPath, rewriteLinks, waitForElement } from '@pagopa-pn/pn-commons';
+import {
+  compileOneTrustPath,
+  getSessionLanguage,
+  rewriteLinks,
+  waitForElement,
+} from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
@@ -16,6 +21,7 @@ declare const OneTrust: {
 
 const TermsOfServicePage = () => {
   const { ONE_TRUST_TOS, ONE_TRUST_DRAFT_MODE } = getConfiguration();
+  const lang = getSessionLanguage();
 
   useEffect(() => {
     if (ONE_TRUST_TOS) {
@@ -30,7 +36,7 @@ const TermsOfServicePage = () => {
         });
       });
     }
-  }, []);
+  }, [lang]);
 
   return (
     <>
