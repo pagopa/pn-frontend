@@ -11,7 +11,7 @@ import { userResponse } from '../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { mandatesByDelegate } from '../__mocks__/Delegations.mock';
-import { apiClient } from '../api/apiClients';
+import { apiClient, authClient } from '../api/apiClients';
 import { LOGOUT } from '../navigation/routes.const';
 import { RenderResult, act, fireEvent, render, screen, waitFor, within } from './test-utils';
 
@@ -48,12 +48,14 @@ const reduxInitialState = {
 
 describe('App', async () => {
   let mock: MockAdapter;
+  let mockAuth: MockAdapter;
   let result: RenderResult;
   const mockOpenFn = vi.fn();
   const originalOpen = window.open;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    mockAuth = new MockAdapter(authClient);
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
     global.fetch = () =>
@@ -68,11 +70,13 @@ describe('App', async () => {
 
   afterEach(() => {
     mock.reset();
+    mockAuth.reset();
     vi.clearAllMocks();
   });
 
   afterAll(() => {
     mock.restore();
+    mockAuth.restore();
     global.fetch = unmockedFetch;
     Object.defineProperty(window, 'open', { configurable: true, value: originalOpen });
   });
@@ -114,6 +118,8 @@ describe('App', async () => {
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
+    mockAuth.onPost('/logout').reply(200);
+
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -144,6 +150,7 @@ describe('App', async () => {
       expect(sessionStorage.getItem('user')).toBeNull();
       expect(mockOpenFn).toHaveBeenCalledTimes(1);
       expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}`, '_self');
+      expect(mockAuth.history.post.length).toBe(1);
     });
   });
 
