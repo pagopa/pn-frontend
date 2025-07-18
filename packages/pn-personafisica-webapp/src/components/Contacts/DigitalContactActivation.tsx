@@ -36,6 +36,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
     defaultSMSAddress,
     defaultAPPIOAddress,
     defaultSERCQ_SENDAddress,
+    courtesyAddresses,
   } = useAppSelector(contactsSelectors.selectAddresses);
 
   const [activeStep, setActiveStep] = useState(0);
@@ -50,6 +51,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const hasEmailOrSms = !!(defaultEMAILAddress || defaultSMSAddress);
 
   const isEmailSmsStep = !showIOStep ? activeStep === 1 : activeStep === 2;
+  const isRecapStep = activeStep === (showIOStep ? MAX_STEPS_NUMBER - 1 : MAX_STEPS_NUMBER - 2);
 
   const feedbackTitleLabel = `legal-contacts.sercq-send-wizard.feedback.title-sercq_send-${
     isTransferring ? 'transfer' : 'activation'
@@ -85,6 +87,9 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
     if (isEmailSmsStep) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_BACK);
     }
+    if (isRecapStep) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_BACK);
+    }
     setActiveStep((step) => step - 1);
   };
 
@@ -99,6 +104,11 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_CANCEL);
 
     return onGoBack ? onGoBack() : navigate(-1);
+  };
+
+  const handleCloseFeedbackStep = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE_CLOSE);
+    navigate(NOTIFICHE);
   };
 
   const getPreviousButton = () => {
@@ -169,7 +179,12 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
           title: t(feedbackTitleLabel),
           content: t(feedbackContentLabel),
           buttonText: t('button.understand', { ns: 'common' }),
-          onClick: () => navigate(NOTIFICHE),
+          onClick: handleCloseFeedbackStep,
+          onFeedbackShow: () =>
+            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE, {
+              event_type: EventAction.SCREEN_VIEW,
+              contacts: courtesyAddresses,
+            }),
         },
         actions: !isEmailSmsStep ? { justifyContent: 'center' } : {},
       }}
