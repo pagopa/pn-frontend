@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
+import { isPFEvent } from '../../utility/mixpanel';
 import ContactCodeDialog from './ContactCodeDialog';
 import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
@@ -156,17 +157,30 @@ const EmailSmsContactWizard: React.FC = () => {
     channelType: ChannelType,
     errors?: string
   ) => {
-    // keep this log for the moment to avoid unusued variable error
-    // will be useful for sms event tracking since this function will be re-used
-    console.log(channelType);
-
     if (!value || errors) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_MISSING);
+      const eventKey = `SEND_ADD_SERCQ_SEND_${channelType}_MISSING`;
+      if (isPFEvent(eventKey)) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey]);
+      }
     }
 
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_START, {
-      email_validation: !value ? 'missing' : errors ? 'invalid' : 'valid',
-    });
+    const status = !value ? 'missing' : errors ? 'invalid' : 'valid';
+    const validationKey = `${channelType.toLowerCase()}_validation`;
+    const data = { [validationKey]: status };
+
+    const eventKey = `SEND_ADD_SERCQ_SEND_ADD_${channelType}_START`;
+    if (isPFEvent(eventKey)) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], data);
+    }
+  };
+
+  const handleEditCallback = (editMode: boolean, channelType: ChannelType) => {
+    if (editMode) {
+      const eventKey = `SEND_ADD_SERCQ_SEND_CHANGE_${channelType}`;
+      if (isPFEvent(eventKey)) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey]);
+      }
+    }
   };
 
   const handleCancelCode = async () => {
@@ -235,11 +249,7 @@ const EmailSmsContactWizard: React.FC = () => {
             width: '100%',
           },
         }}
-        onEditCallback={(editMode: boolean) => {
-          if (editMode) {
-            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_CHANGE_EMAIL);
-          }
-        }}
+        onEditCallback={(editMode: boolean) => handleEditCallback(editMode, ChannelType.EMAIL)}
         beforeValidationCallback={(value: string, errors?: string) =>
           handleTrackValidationEvents(value, ChannelType.EMAIL, errors)
         }
@@ -274,6 +284,7 @@ const EmailSmsContactWizard: React.FC = () => {
               width: '100%',
             },
           }}
+          onEditCallback={(editMode: boolean) => handleEditCallback(editMode, ChannelType.SMS)}
         />
       ) : (
         <SmsContactItem
@@ -286,6 +297,9 @@ const EmailSmsContactWizard: React.FC = () => {
               sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
             },
           }}
+          beforeValidationCallback={(value: string, errors?: string) =>
+            handleTrackValidationEvents(value, ChannelType.EMAIL, errors)
+          }
         />
       )}
 
