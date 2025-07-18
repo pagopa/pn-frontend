@@ -1,7 +1,7 @@
 {
   "name": "@pagopa-pn/pn-pa-webapp",
   "description": "Backoffice di SEND per la Pubblica Amministrazione",
-  "version": "2.16.2-RC.2",
+  "version": "2.16.2",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",

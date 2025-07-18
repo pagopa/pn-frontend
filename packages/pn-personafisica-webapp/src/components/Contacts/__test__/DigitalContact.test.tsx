@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { vi } from 'vitest';
 
+import { Button } from '@mui/material';
 import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
@@ -322,5 +323,27 @@ describe('DigitalContact Component', () => {
     const buttons = container.querySelectorAll('button');
     fireEvent.click(buttons[1]);
     expect(mockDeleteCbk).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders component with custom edit button', async () => {
+    // render component
+    const { container } = render(
+      <DigitalContact
+        label="Mocked label"
+        value="mocked@pec.it"
+        channelType={ChannelType.PEC}
+        inputProps={{
+          label: 'Mocked input label',
+        }}
+        slots={{
+          editButton: () => <Button>Custom edit button</Button>,
+        }}
+        insertButtonLabel="Button"
+        onSubmit={mockSubmitCbk}
+        onDelete={mockDeleteCbk}
+      />
+    );
+    const buttons = container.querySelectorAll('button');
+    expect(buttons[0]).toHaveTextContent('Custom edit button');
   });
 });

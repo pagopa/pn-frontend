@@ -18,4 +18,25 @@ describe('Test GenericInvalidParameterAppError', () => {
       'new-notification.errors.invalid_parameter_taxonomy_code.message notifiche'
     );
   });
+
+  it('getResponseError includes showTechnicalData = true and message', () => {
+    const serverError = {
+      code: 'mock-code',
+      detail: 'mock-detail',
+      element: 'mock-element',
+    } as ServerResponseError;
+
+    const appError = new GenericInvalidParameterTaxonomyCodeAppError(serverError, translateFn);
+
+    expect(appError.getResponseError()).toStrictEqual({
+      code: 'mock-code',
+      detail: 'mock-detail',
+      element: 'mock-element',
+      showTechnicalData: true,
+      message: {
+        title: 'new-notification.errors.invalid_parameter_taxonomy_code.title notifiche',
+        content: 'new-notification.errors.invalid_parameter_taxonomy_code.message notifiche',
+      },
+    });
+  });
 });

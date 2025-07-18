@@ -10,8 +10,8 @@ export class DeliveryMandateNotFoundAppError extends AppError {
 
   getMessage() {
     return {
-      title: this.translateFunction('errors.delivery_mandate_not_found.title', 'deleghe'),
-      content: this.translateFunction('errors.delivery_mandate_not_found.message', 'deleghe'),
+      title: this.translateFunction('errors.delivery_mandate_not_found.title', 'common'),
+      content: this.translateFunction('errors.delivery_mandate_not_found.message', 'common'),
     };
   }
 }
