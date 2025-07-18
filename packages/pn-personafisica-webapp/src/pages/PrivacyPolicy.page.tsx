@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
 
-import { compileOneTrustPath, rewriteLinks, waitForElement } from '@pagopa-pn/pn-commons';
+import {
+  compileOneTrustPath,
+  getSessionLanguage,
+  rewriteLinks,
+  waitForElement,
+} from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
@@ -19,6 +24,7 @@ const PrivacyPolicyPage: React.FC = () => {
   const pp = configuration.ONE_TRUST_PP;
   const draft = configuration.ONE_TRUST_DRAFT_MODE;
   const route = routes.PRIVACY_POLICY;
+  const lang = getSessionLanguage();
 
   useEffect(() => {
     if (pp) {
@@ -30,7 +36,7 @@ const PrivacyPolicyPage: React.FC = () => {
         });
       });
     }
-  }, []);
+  }, [lang]);
 
   return (
     <>
