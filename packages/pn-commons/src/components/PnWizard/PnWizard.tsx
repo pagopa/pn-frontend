@@ -23,10 +23,10 @@ type Props = {
   setActiveStep: (step: number) => void;
   title: ReactNode;
   children: ReactNode;
-  onExit: () => void;
   slots?: {
     nextButton?: JSXElementConstructor<ButtonProps>;
     prevButton?: JSXElementConstructor<ButtonProps>;
+    exitButton?: JSXElementConstructor<ButtonProps>;
   };
   slotsProps?: {
     stepContainer?: Partial<PaperProps>;
@@ -36,10 +36,12 @@ type Props = {
     prevButton?: Omit<ButtonProps, 'onClick'> & {
       onClick?: (previous: () => void, step: number) => void;
     };
+    exitButton?: ButtonProps;
     actions?: StackProps;
     container?: Omit<StackProps, 'children'> & { 'data-testid'?: string };
     feedback?: {
       title: string;
+      content?: ReactNode;
       buttonText: string;
       onClick: () => void;
     };
@@ -51,13 +53,13 @@ const PnWizard: React.FC<Props> = ({
   setActiveStep,
   title,
   children,
-  onExit,
   slots,
   slotsProps,
 }) => {
   checkChildren(children, [{ cmp: PnWizardStep }], 'PnWizard');
   const PrevButton = slots?.prevButton || Button;
   const NextButton = slots?.nextButton || Button;
+  const ExitButton = slots?.exitButton || ButtonNaked;
 
   const childrens = React.Children.toArray(children);
   const steps = childrens
@@ -90,28 +92,39 @@ const PnWizard: React.FC<Props> = ({
   };
 
   if (activeStep >= childrens.length && slotsProps?.feedback) {
+    const feedback = slotsProps?.feedback;
     return (
       <Box
         sx={{ minHeight: '350px', height: '100%', display: 'flex' }}
         data-testid="wizard-feedback-step"
       >
-        <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
+        <Box sx={{ mt: 11, mx: 'auto', textAlign: 'center', width: '80vw' }}>
           <IllusCompleted />
           <Typography
             data-testid="wizard-feedback-title"
             variant="h4"
             color="text.primary"
-            sx={{ margin: '20px 0 10px 0' }}
+            sx={{ mt: 4, mb: 1, mx: '0px auto' }}
           >
-            {slotsProps?.feedback?.title}
+            {feedback.title}
           </Typography>
+          <Typography
+            data-testid="wizard-feedback-content"
+            color="text.primary"
+            variant="body2"
+            fontWeight="400"
+            sx={{ mt: 1, mb: 2, mx: '0px auto', fontSize: { xs: '14px', sm: '16px' } }}
+          >
+            {feedback.content}
+          </Typography>
+
           <Button
             data-testid="wizard-feedback-button"
             variant="contained"
-            sx={{ marginTop: '30px' }}
-            onClick={slotsProps?.feedback?.onClick}
+            sx={{ mt: 2, mb: 11 }}
+            onClick={feedback.onClick}
           >
-            {slotsProps?.feedback?.buttonText}
+            {feedback.buttonText}
           </Button>
         </Box>
       </Box>
@@ -121,16 +134,16 @@ const PnWizard: React.FC<Props> = ({
   return (
     <Stack display="flex" alignItems="center" justifyContent="center" {...slotsProps?.container}>
       <Box p={3}>
-        <ButtonNaked
+        <ExitButton
+          data-testid="exit-button"
           type="button"
           size="medium"
           color="primary"
           startIcon={<ArrowBackIcon />}
-          onClick={onExit}
+          {...slotsProps?.exitButton}
         >
           {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
-        </ButtonNaked>
-
+        </ExitButton>
         <Box sx={{ mt: 2, mb: 3 }} data-testid="wizard-title">
           {title}
         </Box>
@@ -141,7 +154,11 @@ const PnWizard: React.FC<Props> = ({
           {childrens[activeStep]}
         </Paper>
 
-        <Stack direction={{ xs: 'column-reverse', md: 'row' }} {...slotsProps?.actions}>
+        <Stack
+          direction={{ xs: 'column-reverse', md: 'row' }}
+          justifyContent="space-between"
+          {...slotsProps?.actions}
+        >
           <PrevButton
             data-testid="prev-button"
             sx={{ mt: { xs: 2, md: 0 } }}

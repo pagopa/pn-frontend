@@ -1,6 +1,6 @@
 import React, { JSXElementConstructor } from 'react';
 
-import { Button, ButtonProps, DialogTitle } from '@mui/material';
+import { Button, ButtonProps, DialogActionsProps, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 type Props = {
@@ -13,6 +13,7 @@ type Props = {
   slotsProps?: {
     confirmButton?: ButtonProps;
     closeButton?: ButtonProps;
+    actions?: DialogActionsProps;
   };
   children?: React.ReactNode;
 };
@@ -40,7 +41,7 @@ const ConfirmationModal: React.FC<Props> = ({
       {children && (
         <PnDialogContent id="confirmation-dialog-description">{children}</PnDialogContent>
       )}
-      <PnDialogActions>
+      <PnDialogActions {...slotsProps?.actions}>
         {CloseButton && (
           <CloseButton
             id="dialog-close-button"

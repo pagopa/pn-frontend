@@ -18,7 +18,8 @@
     "manage": "Gestisci",
     "disable": "Disattiva",
     "start": "Inizia",
-    "continue": "Avanti",
+    "continue": "Continua",
+    "go-on": "Avanti",
     "go-to-home": "Vai alla homepage",
     "go-to-login": "Accedi",
     "not-now": "Non ora",
@@ -224,6 +225,12 @@
     "action": "Mantieni l’accesso"
   },
   "code-modal": {
-    "digits": ["prima cifra", "seconda cifra", "terza cifra", "quarta cifra", "ultima cifra"]
+    "digits": [
+      "prima cifra",
+      "seconda cifra",
+      "terza cifra",
+      "quarta cifra",
+      "ultima cifra"
+    ]
   }
 }

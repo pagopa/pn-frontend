@@ -1,11 +1,18 @@
-import React, { useRef, useState } from 'react';
+import { useFormik } from 'formik';
+import React, { ChangeEvent, useMemo, useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import * as yup from 'yup';
 
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
 import {
-  Alert,
   Box,
   Button,
+  Checkbox,
   Divider,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
   Link,
   List,
   ListItem,
@@ -20,63 +27,128 @@ import {
   TosPrivacyConsent,
   appStateActions,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { theme } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
   AddressType,
   ChannelType,
   ContactSource,
+  IOAllowedValues,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
-import { TERMS_OF_SERVICE_SERCQ_SEND } from '../../navigation/routes.const';
+import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../navigation/routes.const';
 import {
-  acceptSercqSendTosPrivacy,
+  acceptSercqSendTos,
   createOrUpdateAddress,
-  getSercqSendTosPrivacyApproval,
+  getSercqSendTosApproval,
 } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { getConfiguration } from '../../services/configuration.service';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
-import InformativeDialog from './InformativeDialog';
 
+const redirectPrivacyLink = () => window.open(`${PRIVACY_POLICY}`, '_blank');
 const redirectToSLink = () => window.open(`${TERMS_OF_SERVICE_SERCQ_SEND}`, '_blank');
 
-enum ModalType {
-  DELIVERED = 'DELIVERED',
-}
-
 type Props = {
-  goToNextStep?: () => void;
-  setShowPecWizard: (showPecWizard: boolean) => void;
+  goToStep: (step: number) => void;
+  showIOStep?: boolean;
 };
 
-const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWizard }) => {
+type ContactRecapData = {
+  title: string;
+  value?: string;
+  cta: {
+    text: string;
+    action: () => void;
+  };
+};
+
+const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
 
-  const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
-  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const { defaultPECAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const tosConsent = useRef<Array<TosPrivacyConsent>>();
+  const { defaultPECAddress, defaultEMAILAddress, defaultAPPIOAddress, defaultSMSAddress } =
+    useAppSelector(contactsSelectors.selectAddresses);
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
-  const { IS_DOD_ENABLED } = getConfiguration();
 
-  const sercqSendInfoList: Array<{ title: string; description: string }> = t(
-    'legal-contacts.sercq-send-wizard.step_1.info-list',
-    {
-      returnObjects: true,
-      defaultValue: [],
-    }
-  );
+  const isIOInstalled = !!defaultAPPIOAddress;
+
+  const normalizedShowIOStep = showIOStep ?? false;
+
+  const ioStep = normalizedShowIOStep ? 1 : 0;
+  const emailSmsStep = ioStep + 1;
+  const thankYouStep = ioStep + 3;
+
+  const labelPrefix = 'legal-contacts.sercq-send-wizard.step_4.contacts-list';
+
+  const validationSchema = yup.object().shape({
+    disclaimer: yup.bool().isTrue(t('required-field', { ns: 'common' })),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      pec: '',
+      disclaimer: false,
+    },
+    validationSchema,
+    validateOnMount: true,
+    enableReinitialize: true,
+    onSubmit: () => {
+      handleActivation();
+    },
+  });
+
+  const contactsRecapData: Array<ContactRecapData> = useMemo(() => {
+    const contacts: Array<ContactRecapData | null> = [
+      {
+        title: t(`${labelPrefix}.email.title`),
+        value: defaultEMAILAddress?.value,
+        cta: {
+          text: t(`${labelPrefix}.email.textDisabled`),
+          action: () => goToStep(emailSmsStep),
+        },
+      },
+      isIOInstalled
+        ? {
+            title: t(`${labelPrefix}.io.title`),
+            value:
+              defaultAPPIOAddress?.value === IOAllowedValues.ENABLED
+                ? t(`${labelPrefix}.io.textEnabled`)
+                : undefined,
+            cta: {
+              text: t(`${labelPrefix}.io.textDisabled`),
+              action: () => goToStep(ioStep),
+            },
+          }
+        : null,
+      {
+        title: t(`${labelPrefix}.sms.title`),
+        value: defaultSMSAddress?.value,
+        cta: {
+          text: t(`${labelPrefix}.sms.textDisabled`),
+          action: () => goToStep(emailSmsStep),
+        },
+      },
+    ];
+
+    return contacts.filter((c): c is ContactRecapData => c !== null);
+  }, [
+    defaultEMAILAddress?.value,
+    defaultAPPIOAddress?.value,
+    defaultSMSAddress?.value,
+    normalizedShowIOStep,
+    t,
+  ]);
 
   const handleActivation = () => {
-    dispatch(getSercqSendTosPrivacyApproval())
+    dispatch(getSercqSendTosApproval())
       .unwrap()
       .then((consent) => {
         // eslint-disable-next-line functional/immutable-data
-        tosPrivacy.current = consent;
+        tosConsent.current = consent;
         const source = externalEvent?.source ?? ContactSource.RECAPITI;
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
           senderId: 'default',
@@ -87,40 +159,37 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWizar
       .catch(() => {});
   };
 
+  const handleChangeTouched = async (e: ChangeEvent) => {
+    formik.handleChange(e);
+    await formik.setFieldTouched(e.target.id, true, false);
+  };
+
   const handleInfoConfirm = () => {
-    if (!tosPrivacy.current) {
+    if (!tosConsent.current) {
       return;
     }
-    // first check tos and privacy status
-    const [tos, privacy] = tosPrivacy.current.filter(
-      (consent) =>
-        consent.consentType === ConsentType.TOS_SERCQ ||
-        consent.consentType === ConsentType.DATAPRIVACY_SERCQ
+    // first check tos status
+    const [tos] = tosConsent.current.filter(
+      (consent) => consent.consentType === ConsentType.TOS_SERCQ
     );
-    // if tos and privacy are already accepted, proceede with the activation
-    if (tos.accepted && privacy.accepted) {
+
+    // if tos are already accepted, proceede with the activation
+    if (tos.accepted) {
       activateService();
       return;
     }
-    // accept tos and privacy
-    const tosPrivacyBody = [];
-    if (!tos.accepted) {
-      // eslint-disable-next-line functional/immutable-data
-      tosPrivacyBody.push({
-        action: ConsentActionType.ACCEPT,
-        version: tos.consentVersion,
-        type: ConsentType.TOS_SERCQ,
-      });
-    }
-    if (!privacy.accepted) {
-      // eslint-disable-next-line functional/immutable-data
-      tosPrivacyBody.push({
-        action: ConsentActionType.ACCEPT,
-        version: privacy.consentVersion,
-        type: ConsentType.DATAPRIVACY_SERCQ,
-      });
-    }
-    dispatch(acceptSercqSendTosPrivacy(tosPrivacyBody))
+
+    const tosBody = !tos.accepted
+      ? [
+          {
+            action: ConsentActionType.ACCEPT,
+            version: tos.consentVersion,
+            type: ConsentType.TOS_SERCQ,
+          },
+        ]
+      : [];
+
+    dispatch(acceptSercqSendTos(tosBody))
       .unwrap()
       .then(() => {
         activateService();
@@ -151,136 +220,135 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWizar
             message: t(`legal-contacts.sercq_send-added-successfully`, { ns: 'recapiti' }),
           })
         );
-        goToNextStep && goToNextStep();
+        goToStep(thankYouStep);
       })
       .catch(() => {});
   };
 
   return (
     <Box data-testid="sercqSendContactWizard">
-      <Typography fontSize="22px" fontWeight={700} mb={3}>
-        {t('legal-contacts.sercq-send-wizard.step_1.title')}
+      <Typography variant="h6" fontWeight={700} mb={1}>
+        {t('legal-contacts.sercq-send-wizard.step_4.title')}
       </Typography>
+      <Typography variant="body2" fontSize="14px" mb={2}>
+        {t('legal-contacts.sercq-send-wizard.step_4.content')}
+      </Typography>
+      <Typography variant="body1" fontSize="18px" fontWeight={600}>
+        {t('legal-contacts.sercq-send-wizard.step_4.digital-domicile')}
+      </Typography>
+      <Typography variant="body2" mb={1}>
+        {t('legal-contacts.sercq-send-wizard.step_4.send')}
+      </Typography>
+      <Divider />
+      <Typography variant="body2" fontSize="14px" mt={3} mb={2}>
+        {t('legal-contacts.sercq-send-wizard.step_4.courtesy-content')}
+      </Typography>
+      <List dense sx={{ p: 0 }} data-testid="sercq-send-contacts-list">
+        {contactsRecapData.map((item) => (
+          <ListItem key={item.title} sx={{ px: 0, py: 1 }} divider>
+            <Stack width="100%">
+              <Typography variant="body1" fontWeight={600}>
+                {item.title}
+              </Typography>
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <ListItemText>
+                  {item.value ? (
+                    <Typography variant="body2">{item.value}</Typography>
+                  ) : (
+                    <Link
+                      sx={{
+                        cursor: 'pointer',
+                        textDecoration: 'none !important',
+                        fontWeight: 'bold',
+                      }}
+                      onClick={item.cta.action}
+                      data-testid="backToContactStep"
+                    >
+                      {item.cta.text}
+                    </Link>
+                  )}
+                </ListItemText>
+                {item.value ? (
+                  <CheckCircleIcon fontSize="small" color="success" aria-hidden="true" />
+                ) : (
+                  <ErrorIcon fontSize="small" color="warning" aria-hidden="true" />
+                )}
+              </Box>
+            </Stack>
+          </ListItem>
+        ))}
+      </List>
 
-      {IS_DOD_ENABLED && (
-        <>
-          <List dense sx={{ p: 0 }} data-testid="sercq-send-info-list">
-            {sercqSendInfoList.map((item, index) => (
-              <Stack key={index} spacing={2} direction="row" alignItems="flex-start">
-                <Box
-                  sx={{
-                    width: '24px',
-                    height: '24px',
-                    borderRadius: '50%',
-                    backgroundColor: '#35C1EC',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Typography variant="caption" fontSize="14px" fontWeight={400} color="white">
-                    {index + 1}
-                  </Typography>
-                </Box>
-                <ListItem key={index} sx={{ px: 0, pt: 0, pb: 3 }}>
-                  <ListItemText disableTypography>
-                    <Typography fontSize="16px" fontWeight={600} mb={1}>
-                      {item.title}
-                    </Typography>
-                    <Typography variant="body2">
-                      <Trans
-                        i18nKey={item.description}
-                        ns="recapiti"
-                        t={(s: string) => s}
-                        components={[
-                          <Link
-                            key="consegnata"
-                            sx={{
-                              cursor: 'pointer',
-                              textDecoration: 'none !important',
-                            }}
-                            onClick={() => setModalOpen(ModalType.DELIVERED)}
-                          />,
-                        ]}
-                      />
-                    </Typography>
-                  </ListItemText>
-                </ListItem>
-              </Stack>
-            ))}
-          </List>
-
-          {defaultPECAddress && (
-            <Alert severity="info" sx={{ mb: 4 }} data-testid="default-pec-info">
-              {t('legal-contacts.sercq-send-wizard.step_1.pec-info-alert')}
-            </Alert>
-          )}
-
-          <Typography fontSize="14px" color="text.secondary" mb={4}>
-            <Trans
-              i18nKey="legal-contacts.sercq-send-wizard.step_1.info-tos"
-              ns="recapiti"
-              components={[
-                <Link
-                  key="tos"
-                  sx={{
-                    cursor: 'pointer',
-                    textDecoration: 'none !important',
-                    fontWeight: 'bold',
-                  }}
-                  onClick={redirectToSLink}
-                  data-testid="tos-link"
-                />,
-              ]}
+      <FormControl sx={{ my: 3 }}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="disclaimer"
+              id="disclaimer"
+              // required
+              onChange={handleChangeTouched}
+              inputProps={{
+                'aria-describedby': 'disclaimer-helper-text',
+                'aria-invalid': formik.touched.disclaimer && Boolean(formik.errors.disclaimer),
+              }}
+              sx={{
+                color:
+                  formik.touched.disclaimer && Boolean(formik.errors.disclaimer)
+                    ? theme.palette.error.dark
+                    : theme.palette.text.secondary,
+              }}
             />
-          </Typography>
+          }
+          label={
+            <Typography fontSize="14px" color="text.secondary">
+              <Trans
+                i18nKey="legal-contacts.sercq-send-wizard.step_4.disclaimer"
+                ns="recapiti"
+                components={[
+                  <Link
+                    key="privacy-policy"
+                    sx={{
+                      cursor: 'pointer',
+                      textDecoration: 'none !important',
+                      fontWeight: 'bold',
+                    }}
+                    onClick={redirectPrivacyLink}
+                    data-testid="tos-link"
+                  />,
 
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={handleActivation}
-            sx={{ textTransform: 'none', mb: !defaultPECAddress ? 4 : 0 }}
-            data-testid="activateButton"
-          >
-            {t('button.enable', { ns: 'common' })}
-          </Button>
+                  <Link
+                    key="tos"
+                    sx={{
+                      cursor: 'pointer',
+                      textDecoration: 'none !important',
+                      fontWeight: 'bold',
+                    }}
+                    onClick={redirectToSLink}
+                    data-testid="tos-link"
+                  />,
+                ]}
+              />
+            </Typography>
+          }
+          sx={{ alignItems: 'center' }}
+          value={formik.values.disclaimer}
+        />
+        {formik.touched.disclaimer && Boolean(formik.errors.disclaimer) && (
+          <FormHelperText id="disclaimer-helper-text" error>
+            {formik.errors.disclaimer}
+          </FormHelperText>
+        )}
+      </FormControl>
 
-          {!defaultPECAddress && (
-            <Divider
-              sx={{ mb: 4, fontSize: '14px', color: 'text.secondary', textTransform: 'capitalize' }}
-            >
-              {t('conjunctions.or', { ns: 'common' })}
-            </Divider>
-          )}
-        </>
-      )}
-
-      {!defaultPECAddress && (
-        <Box data-testid="pec-section">
-          <Typography fontSize="16px" fontWeight={600} mb={0.5}>
-            {t('legal-contacts.sercq-send-wizard.step_1.have-pec')}
-          </Typography>
-          <Typography variant="body2" mb={1}>
-            {t('legal-contacts.sercq-send-wizard.step_1.have-pec-description')}
-          </Typography>
-          <ButtonNaked color="primary" size="medium" onClick={() => setShowPecWizard(true)}>
-            {t('legal-contacts.sercq-send-wizard.step_1.insert-pec')}
-          </ButtonNaked>
-        </Box>
-      )}
-
-      <InformativeDialog
-        open={modalOpen === ModalType.DELIVERED}
-        title={t('legal-contacts.sercq-send-wizard.step_1.delivered-dialog-title')}
-        subtitle={
-          <Trans
-            i18nKey="legal-contacts.sercq-send-wizard.step_1.delivered-dialog-description"
-            ns="recapiti"
-          />
-        }
-        onConfirm={() => setModalOpen(null)}
-      />
+      <Button
+        fullWidth
+        variant="contained"
+        color="primary"
+        onClick={() => formik.submitForm()}
+        data-testid="activateButton"
+      >
+        {t('legal-contacts.sercq-send-wizard.step_4.enable', { ns: 'recapiti' })}
+      </Button>
     </Box>
   );
 };

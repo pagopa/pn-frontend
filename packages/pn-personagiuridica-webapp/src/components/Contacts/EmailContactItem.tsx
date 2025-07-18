@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Button, Chip, Typography } from '@mui/material';
+import { Button, Chip, Divider, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
@@ -19,7 +19,6 @@ import SmsContactItem from './SmsContactItem';
 
 enum ModalType {
   EXISTING = 'existing',
-  DISCLAIMER = 'disclaimer',
   CODE = 'code',
   DELETE = 'delete',
   INFORMATIVE = 'informative',
@@ -32,7 +31,6 @@ const EmailContactItem: React.FC = () => {
     defaultPECAddress,
     defaultEMAILAddress,
     defaultSMSAddress,
-    specialEMAILAddresses,
     addresses,
   } = useAppSelector(contactsSelectors.selectAddresses);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
@@ -55,7 +53,6 @@ const EmailContactItem: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const currentValue = defaultEMAILAddress?.value ?? '';
-  const blockDelete = specialEMAILAddresses.length > 0;
 
   const handleSubmit = (value: string) => {
     // eslint-disable-next-line functional/immutable-data
@@ -148,6 +145,34 @@ const EmailContactItem: React.FC = () => {
     return 'default';
   };
 
+  const getRemoveModalTitle = () => {
+    if (defaultSERCQ_SENDAddress) {
+      return t(`courtesy-contacts.remove-email-title-dod-enabled`, {
+        ns: 'recapiti',
+      });
+    }
+    return t(`courtesy-contacts.remove-email`, { ns: 'recapiti' });
+  };
+
+  const getRemoveModalMessage = () => {
+    if (defaultSERCQ_SENDAddress) {
+      return (
+        <Trans
+          i18nKey={'courtesy-contacts.remove-address-message-dod-enabled'}
+          ns={'recapiti'}
+          components={[
+            <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
+            <Typography variant="body2" fontSize={'18px'} key={'paragraph2'} />,
+          ]}
+        />
+      );
+    }
+    return t(`courtesy-contacts.remove-email-message`, {
+      value: currentAddress.current.value,
+      ns: 'recapiti',
+    });
+  };
+
   const getActions = () =>
     isEmailActive
       ? [
@@ -226,7 +251,13 @@ const EmailContactItem: React.FC = () => {
           {t('courtesy-contacts.email-filled-description', { ns: 'recapiti' })}
         </Typography>
       )}
-      {!defaultSMSAddress && <SmsContactItem />}
+
+      {!defaultSMSAddress && (
+        <>
+          <Divider sx={{ mt: 3, mb: 3 }} />
+          <SmsContactItem />
+        </>
+      )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
         value={currentAddress.current.value}
@@ -243,16 +274,22 @@ const EmailContactItem: React.FC = () => {
       />
       <DeleteDialog
         showModal={modalOpen === ModalType.DELETE}
-        removeModalTitle={t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-email-title`, {
-          ns: 'recapiti',
-        })}
-        removeModalBody={t(`courtesy-contacts.${blockDelete ? 'block-' : ''}remove-email-message`, {
-          value: currentAddress.current.value,
-          ns: 'recapiti',
-        })}
+        removeModalTitle={getRemoveModalTitle()}
+        removeModalBody={getRemoveModalMessage()}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
-        blockDelete={blockDelete}
+        slotsProps={{
+          primaryButton: {
+            onClick: defaultSERCQ_SENDAddress ? () => setModalOpen(null) : deleteConfirmHandler,
+            label: defaultSERCQ_SENDAddress ? t('button.annulla') : undefined,
+          },
+          secondaryButton: {
+            onClick: defaultSERCQ_SENDAddress ? deleteConfirmHandler : () => setModalOpen(null),
+            label: defaultSERCQ_SENDAddress
+              ? t('courtesy-contacts.remove-email-button-dod-enabled', { ns: 'recapiti' })
+              : undefined,
+          },
+        }}
       />
       <InformativeDialog
         open={modalOpen === ModalType.INFORMATIVE}

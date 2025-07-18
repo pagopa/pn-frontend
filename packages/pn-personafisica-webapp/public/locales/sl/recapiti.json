@@ -85,9 +85,9 @@
     "sms-added-successfully": "Številka mobilnega telefona je bila uspešno dodana",
     "email-removed-successfully": "E-poštni naslov je bil uspešno odstranjen",
     "sms-removed-successfully": "Številka mobilnega telefona je bila uspešno odstranjena",
-    "remove-email-title": "Odstrani e-poštni naslov",
+    "remove-email": "Odstrani e-poštni naslov",
     "remove-email-message": "Ali ste prepričani, da želite odstraniti e-poštni naslov {{value}}?",
-    "remove-sms-title": "Odstrani mobilni telefon",
+    "remove-sms": "Odstrani mobilni telefon",
     "remove-sms-message": "Ste prepričani, da želite odstraniti številko mobilnega telefona {{value}}?"
   },
   "special-contacts": {

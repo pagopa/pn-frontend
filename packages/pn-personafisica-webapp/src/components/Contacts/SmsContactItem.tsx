@@ -1,9 +1,17 @@
-import { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { JSXElementConstructor, useRef, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Box, Button, ButtonProps, Chip, Divider, TextFieldProps, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  ButtonProps,
+  Chip,
+  TextFieldProps,
+  Typography,
+  TypographyProps,
+} from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -33,7 +41,6 @@ import InformativeDialog from './InformativeDialog';
 
 enum ModalType {
   EXISTING = 'existing',
-  DISCLAIMER = 'disclaimer',
   CODE = 'code',
   DELETE = 'delete',
   INFORMATIVE = 'informative',
@@ -41,6 +48,9 @@ enum ModalType {
 
 type SmsElemProps = {
   onCancelInsert?: () => void;
+  slots?: {
+    label?: JSXElementConstructor<TypographyProps>;
+  };
   slotsProps?: {
     textField?: Partial<TextFieldProps>;
     button?: Partial<ButtonProps>;
@@ -48,13 +58,16 @@ type SmsElemProps = {
 };
 
 type SmsItemProps = {
+  slots?: {
+    label?: JSXElementConstructor<TypographyProps>;
+  };
   slotsProps?: {
     textField?: Partial<TextFieldProps>;
     button?: Partial<ButtonProps>;
   };
 };
 
-const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps }) => {
+const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, slots }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { defaultSERCQ_SENDAddress, defaultPECAddress, defaultSMSAddress, addresses } =
     useAppSelector(contactsSelectors.selectAddresses);
@@ -182,6 +195,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps }) 
         insertButtonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
         onSubmit={handleSubmit}
         onCancelInsert={onCancelInsert}
+        slots={slots}
         slotsProps={slotsProps}
       />
       <ExistingContactDialog
@@ -211,7 +225,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps }) 
   );
 };
 
-const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps }) => {
+const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses } = useAppSelector(
@@ -258,6 +272,34 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps }) => {
       return 'warning';
     }
     return 'default';
+  };
+
+  const getRemoveModalTitle = () => {
+    if (defaultSERCQ_SENDAddress) {
+      return t(`courtesy-contacts.remove-sms-title-dod-enabled`, {
+        ns: 'recapiti',
+      });
+    }
+    return t('courtesy-contacts.remove-sms', { ns: 'recapiti' });
+  };
+
+  const getRemoveModalMessage = () => {
+    if (defaultSERCQ_SENDAddress) {
+      return (
+        <Trans
+          i18nKey={'courtesy-contacts.remove-address-message-dod-enabled'}
+          ns={'recapiti'}
+          components={[
+            <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
+            <Typography variant="body2" fontSize={'18px'} key={'paragraph2'} />,
+          ]}
+        />
+      );
+    }
+    return t('courtesy-contacts.remove-sms-message', {
+      value: defaultSMSAddress?.value,
+      ns: 'recapiti',
+    });
   };
 
   const getActions = () =>
@@ -317,29 +359,37 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps }) => {
         </Typography>
         <DeleteDialog
           showModal={modalOpen === ModalType.DELETE}
-          removeModalTitle={t('courtesy-contacts.remove-sms-title', {
-            ns: 'recapiti',
-          })}
-          removeModalBody={t('courtesy-contacts.remove-sms-message', {
-            value: defaultSMSAddress.value,
-            ns: 'recapiti',
-          })}
+          removeModalTitle={getRemoveModalTitle()}
+          removeModalBody={getRemoveModalMessage()}
           handleModalClose={() => setModalOpen(null)}
           confirmHandler={deleteConfirmHandler}
+          slotsProps={{
+            primaryButton: {
+              onClick: defaultSERCQ_SENDAddress ? () => setModalOpen(null) : deleteConfirmHandler,
+              label: defaultSERCQ_SENDAddress ? t('button.annulla') : undefined,
+            },
+            secondaryButton: {
+              onClick: defaultSERCQ_SENDAddress ? deleteConfirmHandler : () => setModalOpen(null),
+              label: defaultSERCQ_SENDAddress
+                ? t('courtesy-contacts.remove-sms', { ns: 'recapiti' })
+                : undefined,
+            },
+          }}
         />
       </PnInfoCard>
     );
   }
   return (
-    <Box mt={3}>
-      <Divider />
+    <Box>
       {insertMode ? (
-        <Box mt={3}>
-          <SmsContactElem slotsProps={slotsProps} onCancelInsert={() => setInsertMode(false)} />
-        </Box>
+        <SmsContactElem
+          slotsProps={slotsProps}
+          slots={slots}
+          onCancelInsert={() => setInsertMode(false)}
+        />
       ) : (
         <>
-          <Typography variant="body1" fontWeight={600} fontSize="16px" mt={3} mb={1}>
+          <Typography variant="body1" fontWeight={600} fontSize="16px" mb={1}>
             {t('courtesy-contacts.email-sms-updates', { ns: 'recapiti' })}
           </Typography>
           <ButtonNaked
