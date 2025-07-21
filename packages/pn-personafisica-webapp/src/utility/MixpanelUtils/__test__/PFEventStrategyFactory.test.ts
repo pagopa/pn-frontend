@@ -297,6 +297,7 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SERCQ_SEND_GO_TO_EMAIL,
       PFEventsType.SEND_ADD_SERCQ_SEND_GO_TO_APP_IO,
       PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_ACCEPTED,
+      PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_DISMISSED,
       PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE_CLOSE,
     ];
     eventTypes.forEach((eventType) => {
