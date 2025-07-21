@@ -41,10 +41,8 @@ const SessionGuard = () => {
     message: '',
   });
 
-  const tokenRequest: TokenExchangeRequest | undefined = useMemo(() => {
-    const spidToken = new URLSearchParams(location.hash.substring(1)).get('token'); // https://github.com/remix-run/history/blob/main/docs/api-reference.md#location.hash
-    return spidToken ? { spidToken, rapidAccess } : undefined;
-  }, [location, rapidAccess]);
+  const spidToken = new URLSearchParams(location.hash.substring(1)).get('token'); // https://github.com/remix-run/history/blob/main/docs/api-reference.md#location.hash
+  const tokenRequest = spidToken ? { spidToken, rapidAccess } : undefined;
 
   useEffect(() => {
     if (sessionToken) {
