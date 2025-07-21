@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import {
+  InactivityHandler,
   LoadingPage,
   SessionModal,
   adaptedTokenExchangeError,
@@ -19,13 +20,15 @@ import { getConfiguration } from '../services/configuration.service';
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
 
+const inactivityTimer = 5 * 60 * 1000;
+
 const SessionGuard = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const rapidAccess = useRapidAccessParam();
   const { sessionToken, exp } = useAppSelector((state: RootState) => state.userState.user);
   const navigate = useNavigate();
-  const { WORK_IN_PROGRESS } = getConfiguration();
+  const { WORK_IN_PROGRESS, IS_INACTIVITY_HANDLER_ENABLED } = getConfiguration();
   const sessionCheck = useSessionCheck(200, () => sessionCheckCallback());
   const { t } = useTranslation(['common']);
   const { hasSpecificStatusError } = useErrors();
@@ -92,7 +95,7 @@ const SessionGuard = () => {
     const pathname = location.pathname === '/' ? routes.NOTIFICHE : location.pathname;
     const hash = new URLSearchParams(location.hash.substring(1));
     hash.delete('token'); // TODO rimuovo tutte le hash o solo token? da selfcare arriva anche "lang"
-    const newHash = hash.toString(); 
+    const newHash = hash.toString();
 
     navigate(
       { pathname, search: location.search, hash: newHash ? `#${newHash}` : '' },
@@ -103,7 +106,22 @@ const SessionGuard = () => {
   return (
     <>
       <SessionModal {...modalData} handleClose={() => goToLoginPortal()} initTimeout />
-      {sessionToken ? <Outlet /> : <LoadingPage renderType="whole" />}
+      {sessionToken ? (
+        <>
+          {IS_INACTIVITY_HANDLER_ENABLED && (
+            <InactivityHandler
+              inactivityTimer={inactivityTimer}
+              onTimerExpired={() => {
+                sessionStorage.clear();
+                goToLoginPortal();
+              }}
+            />
+          )}
+          <Outlet />{' '}
+        </>
+      ) : (
+        <LoadingPage renderType="whole" />
+      )}
     </>
   );
 };

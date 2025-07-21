@@ -17,7 +17,6 @@ import {
   AppResponse,
   AppResponseError,
   AppResponseMessage,
-  InactivityHandler,
   Layout,
   PnDialog,
   PnDialogActions,
@@ -59,8 +58,6 @@ const productsList: Array<ProductEntity> = [
   },
 ];
 
-const inactivityTimer = 5 * 60 * 1000;
-
 // Cfr. PN-6096
 // --------------------
 // The i18n initialization must execute before the *first* time anything is actually rendered.
@@ -88,7 +85,7 @@ const App = () => {
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, IS_INACTIVITY_HANDLER_ENABLED } = getConfiguration();
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL } = getConfiguration();
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -338,17 +335,6 @@ const App = () => {
         <Router />
       </Layout>
       <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>
-      {
-        IS_INACTIVITY_HANDLER_ENABLED && (
-          <InactivityHandler
-            inactivityTimer={inactivityTimer}
-            onTimerExpired={() => {
-              sessionStorage.clear();
-              goToLoginPortal();
-            }}
-          />
-        )
-      }
     </>
   );
 };
