@@ -42,9 +42,9 @@
     "valid-sms": "Numéro de téléphone portable invalide",
     "email-added-successfully": "Adresse e-mail ajoutée correctement",
     "sms-added-successfully": "Numéro de téléphone portable ajouté correctement",
-    "remove-email-title": "Supprimer l’e-mail",
+    "remove-email": "Supprimer l’e-mail",
     "remove-email-message": "Confirmez-vous vouloir supprimer l’adresse e-mail {{value}} ?",
-    "remove-sms-title": "Supprimer téléphone portable",
+    "remove-sms": "Supprimer téléphone portable",
     "remove-sms-message": "Confirmez-vous vouloir supprimer le numéro de téléphone portable {{value}} ?"
   },
   "special-contacts": {

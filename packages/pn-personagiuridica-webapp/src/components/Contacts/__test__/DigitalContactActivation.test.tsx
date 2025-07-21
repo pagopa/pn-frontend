@@ -1,18 +1,18 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { ConsentType, SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
+import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
-  acceptTosPrivacyConsentBodyMock,
-  sercqSendTosPrivacyConsentMock,
+  acceptTosSercqSendBodyMock,
+  sercqSendTosConsentMock,
 } from '../../../__mocks__/Consents.mock';
 import { digitalAddressesSercq, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
-import { RECAPITI } from '../../../navigation/routes.const';
+import { NOTIFICHE } from '../../../navigation/routes.const';
 import DigitalContactActivation from '../DigitalContactActivation';
 import { fillCodeDialog } from './test-utils';
 
@@ -24,6 +24,7 @@ vi.mock('react-router-dom', async () => ({
 }));
 
 describe('DigitalContactActivation', () => {
+  const labelPrefix = 'legal-contacts.sercq-send-wizard';
   let mock: MockAdapter;
 
   beforeEach(() => {
@@ -44,7 +45,7 @@ describe('DigitalContactActivation', () => {
 
   it('render component', () => {
     const { getByText } = render(<DigitalContactActivation />);
-    const title = getByText('legal-contacts.sercq-send-wizard.title');
+    const title = getByText(`${labelPrefix}.title`);
     expect(title).toBeInTheDocument();
   });
 
@@ -81,76 +82,26 @@ describe('DigitalContactActivation', () => {
     expect(pecSection).toBeInTheDocument();
   });
 
-  it('renders the first and second step labels correctly', () => {
+  it('renders the first step label correctly', () => {
     const { getByTestId } = render(<DigitalContactActivation />);
     const stepper = getByTestId('desktopWizardStepper');
     expect(stepper).toBeInTheDocument();
-    const step1Label = within(stepper).getByText('legal-contacts.sercq-send-wizard.step_1.title');
+    const step1Label = within(stepper).getByText(`${labelPrefix}.step_1.title`);
     expect(step1Label).toBeInTheDocument();
-    const step2Label = within(stepper).getByText(
-      'legal-contacts.sercq-send-wizard.step_2.step-title'
-    );
-    expect(step2Label).toBeInTheDocument();
     const sercqSendContent = getByTestId('sercqSendContactWizard');
     expect(sercqSendContent).toBeInTheDocument();
   });
 
-  it('does not render the second step label if already has an email address', async () => {
-    mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
-        value: SERCQ_SEND_VALUE,
-      })
-      .reply(204);
-    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosPrivacyConsentMock(false, false));
-    mock
-      .onPut(
-        '/bff/v2/tos-privacy',
-        acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
-      )
-      .reply(200);
-
-    const { getByTestId } = render(<DigitalContactActivation />, {
-      preloadedState: {
-        contactsState: {
-          digitalAddresses: [
-            {
-              addressType: AddressType.COURTESY,
-              senderId: 'default',
-              channelType: ChannelType.EMAIL,
-              value: 'mock@test.it',
-            },
-          ],
-        },
-      },
-    });
-
+  it('does render the second step label if has no courtesy contacts', () => {
+    const { getByTestId } = render(<DigitalContactActivation />);
     const stepper = getByTestId('desktopWizardStepper');
     expect(stepper).toBeInTheDocument();
-    const step1Label = within(stepper).getByText('legal-contacts.sercq-send-wizard.step_1.title');
-    expect(step1Label).toBeInTheDocument();
-    const step2Label = within(stepper).queryByText(
-      'legal-contacts.sercq-send-wizard.step_2.step-title'
-    );
-    expect(step2Label).not.toBeInTheDocument();
+    const step2Label = within(stepper).getByText(`${labelPrefix}.step_2.step-title`);
+    expect(step2Label).toBeInTheDocument();
   });
 
-  it('renders the feedback step correctly', async () => {
-    mock
-      .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
-        value: SERCQ_SEND_VALUE,
-      })
-      .reply(204);
-    mock
-      .onGet(/\/bff\/v1\/pg\/tos-privacy.*/)
-      .reply(200, sercqSendTosPrivacyConsentMock(false, false));
-    mock
-      .onPut(
-        '/bff/v1/pg/tos-privacy',
-        acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
-      )
-      .reply(200);
-
-    const { getByTestId } = render(<DigitalContactActivation />, {
+  it('does render the second step label if has an active email address', () => {
+    const { queryByText } = render(<DigitalContactActivation />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [
@@ -158,37 +109,38 @@ describe('DigitalContactActivation', () => {
               addressType: AddressType.COURTESY,
               senderId: 'default',
               channelType: ChannelType.EMAIL,
-              value: 'mock@test.it',
+              value: 'mock@mail.com',
             },
           ],
         },
       },
     });
-    const activateSercqSendButton = getByTestId('activateButton');
-    fireEvent.click(activateSercqSendButton);
-
-    await waitFor(() => {
-      expect(mock.history.post.length).toBe(1);
-    });
-
-    const feedbackStep = getByTestId('wizard-feedback-step');
-    expect(feedbackStep).toBeInTheDocument();
-
-    const feedbackTitle = getByTestId('wizard-feedback-title');
-    expect(feedbackTitle).toHaveTextContent(
-      'legal-contacts.sercq-send-wizard.feedback.title-activation'
-    );
-    const feedbackButton = getByTestId('wizard-feedback-button');
-    expect(feedbackButton).toHaveTextContent(
-      'legal-contacts.sercq-send-wizard.feedback.go-to-contacts'
-    );
-    fireEvent.click(feedbackButton);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(RECAPITI);
+    const step3Label = queryByText(`${labelPrefix}.step_3.step-title`);
+    expect(step3Label).toBeInTheDocument();
   });
 
-  it('adds an email correctly (verify skip and confirm buttons)', async () => {
+  it('does render the second step label if has an active phone address', () => {
+    const { queryByText } = render(<DigitalContactActivation />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            {
+              addressType: AddressType.COURTESY,
+              senderId: 'default',
+              channelType: ChannelType.SMS,
+              value: '+39333123456',
+            },
+          ],
+        },
+      },
+    });
+    const step3Label = queryByText(`${labelPrefix}.step_3.step-title`);
+    expect(step3Label).toBeInTheDocument();
+  });
+
+  it('adds an email correctly', async () => {
     const mailValue = 'nome.utente@mail.it';
+    // mock new email api calls
     mock.onPost('/bff/v1/addresses/COURTESY/default/EMAIL', { value: mailValue }).reply(200, {
       result: 'CODE_VERIFICATION_REQUIRED',
     });
@@ -199,38 +151,38 @@ describe('DigitalContactActivation', () => {
       })
       .reply(204);
 
+    // mock SERCQ activation api call
     mock
       .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
-    mock
-      .onGet(/\/bff\/v1\/pg\/tos-privacy.*/)
-      .reply(200, sercqSendTosPrivacyConsentMock(false, false));
-    mock
-      .onPut(
-        '/bff/v1/pg/tos-privacy',
-        acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
-      )
-      .reply(200);
+    mock.onGet(/\/bff\/v1\/pg\/tos-privacy.*/).reply(200, sercqSendTosConsentMock(false));
+    mock.onPut('/bff/v1/pg/tos-privacy', acceptTosSercqSendBodyMock).reply(200);
 
     const result = render(<DigitalContactActivation />);
-    const activateSercqSendButton = result.getByTestId('activateButton');
-    fireEvent.click(activateSercqSendButton);
+    const howItWorksContinueButton = result.getByTestId('continueButton');
+    fireEvent.click(howItWorksContinueButton);
+
+    let emailSmsContinueButton = result.getByText('button.continue');
+    expect(emailSmsContinueButton).toBeInTheDocument();
+    expect(emailSmsContinueButton).toBeEnabled();
+
+    fireEvent.click(emailSmsContinueButton);
+
+    const confirmationDialog = result.getByRole('dialog');
+
+    expect(confirmationDialog).toBeInTheDocument();
+    within(confirmationDialog).getByText('courtesy-contacts.confirmation-modal-title');
+    within(confirmationDialog).getByText('courtesy-contacts.confirmation-modal-content');
+
+    const dismissButton = result.getByRole('button', { name: 'button.understand' });
+
+    fireEvent.click(dismissButton);
 
     await waitFor(() => {
-      expect(mock.history.post.length).toBe(1);
+      expect(confirmationDialog).not.toBeInTheDocument();
     });
-
-    const skipButton = result.getByText('button.not-now');
-    expect(skipButton).toBeInTheDocument();
-    expect(result.queryByText('button.conferma')).not.toBeInTheDocument();
-
-    fireEvent.click(skipButton);
-    let dialog = await waitFor(() => result.getByRole('dialog'));
-    expect(dialog).toBeInTheDocument();
-    const skipAbortButton = result.getByText('courtesy-contacts.confirmation-modal-accept');
-    fireEvent.click(skipAbortButton);
 
     // insert new email
     const form = result.container.querySelector('form');
@@ -240,8 +192,15 @@ describe('DigitalContactActivation', () => {
     const button = result.getByTestId('default_email-button');
     fireEvent.click(button);
 
+    // informative dialog
+    await waitFor(() => {
+      expect(result.getByRole('dialog')).toBeInTheDocument();
+    });
+    const infoButton = result.getByRole('button', { name: 'button.understand' });
+    fireEvent.click(infoButton);
+
     // inser otp and confirm
-    dialog = await fillCodeDialog(result);
+    const dialog = await fillCodeDialog(result);
 
     // check that contact has been added
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
@@ -249,50 +208,66 @@ describe('DigitalContactActivation', () => {
     expect(emailValue).toBeInTheDocument();
     expect(emailValue).toHaveTextContent(mailValue);
 
-    const confirmButton = result.getByText('button.conferma');
-    expect(confirmButton).toBeInTheDocument();
-    expect(result.queryByText('button.not-now')).not.toBeInTheDocument();
-    fireEvent.click(confirmButton);
+    emailSmsContinueButton = result.getByText('button.continue');
+    expect(emailSmsContinueButton).toBeInTheDocument();
 
-    // thankyou page
-    const feedbackStep = result.getByTestId('wizard-feedback-step');
-    expect(feedbackStep).toBeInTheDocument();
+    fireEvent.click(emailSmsContinueButton);
+
+    // recap step: check disclaimer and press button to enable sercq
+    const enableSercqStepTitle = result.getByText(`${labelPrefix}.step_3.title`);
+    expect(enableSercqStepTitle).toBeInTheDocument();
+
+    const disclaimerCkb = getById(result.container, 'disclaimer');
+    expect(disclaimerCkb).not.toBeChecked();
+
+    fireEvent.click(disclaimerCkb);
+
+    const enableSercqButton = result.getByTestId('activateButton');
+    fireEvent.click(enableSercqButton);
+
+    // feedback step
+    await waitFor(() => {
+      const feedbackStep = result.getByTestId('wizard-feedback-step');
+      expect(feedbackStep).toBeInTheDocument();
+    });
 
     const feedbackTitle = result.getByTestId('wizard-feedback-title');
-    expect(feedbackTitle).toHaveTextContent(
-      'legal-contacts.sercq-send-wizard.feedback.title-activation'
-    );
+    expect(feedbackTitle).toHaveTextContent(`${labelPrefix}.feedback.title-sercq_send-activation`);
+
+    const feedbackContent = result.getByTestId('wizard-feedback-content');
+    expect(feedbackContent).toHaveTextContent(`${labelPrefix}.feedback.content-sercq_send`);
     const feedbackButton = result.getByTestId('wizard-feedback-button');
-    expect(feedbackButton).toHaveTextContent(
-      'legal-contacts.sercq-send-wizard.feedback.go-to-contacts'
-    );
+    expect(feedbackButton).toHaveTextContent('button.understand');
+
     fireEvent.click(feedbackButton);
     expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(RECAPITI);
+    expect(mockNavigateFn).toHaveBeenCalledWith(NOTIFICHE);
   });
 
   it('renders component correctly when transferring', async () => {
+    /// mock SERCQ activation api call
     mock
       .onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND', {
         value: SERCQ_SEND_VALUE,
       })
       .reply(204);
-    mock
-      .onGet(/\/bff\/v1\/pg\/tos-privacy.*/)
-      .reply(200, sercqSendTosPrivacyConsentMock(false, false));
-    mock
-      .onPut(
-        '/bff/v1/pg/tos-privacy',
-        acceptTosPrivacyConsentBodyMock(ConsentType.TOS_SERCQ, ConsentType.DATAPRIVACY_SERCQ)
-      )
-      .reply(200);
+    mock.onGet(/\/bff\/v1\/pg\/tos-privacy.*/).reply(200, sercqSendTosConsentMock(false));
+    mock.onPut('/bff/v1/pg/tos-privacy', acceptTosSercqSendBodyMock).reply(200);
 
-    const { getByRole, getByTestId, queryByTestId, getByText } = render(
+    const { container, getByTestId, queryByTestId, getByText } = render(
       <DigitalContactActivation isTransferring />,
       {
         preloadedState: {
           contactsState: {
-            digitalAddresses: digitalLegalAddresses,
+            digitalAddresses: [
+              ...digitalLegalAddresses,
+              {
+                addressType: AddressType.COURTESY,
+                senderId: 'default',
+                channelType: ChannelType.EMAIL,
+                value: 'nome.utente@mail.it',
+              },
+            ],
           },
         },
       }
@@ -302,40 +277,36 @@ describe('DigitalContactActivation', () => {
     expect(pecSection).not.toBeInTheDocument();
 
     const wizardTitle = getByTestId('wizard-title');
-    expect(wizardTitle).toHaveTextContent('legal-contacts.sercq-send-wizard.title-transfer');
+    expect(wizardTitle).toHaveTextContent(`${labelPrefix}.title-transfer`);
 
-    const activateSercqSendButton = getByTestId('activateButton');
-    fireEvent.click(activateSercqSendButton);
+    const howItWorksContinueButton = getByTestId('continueButton');
+    fireEvent.click(howItWorksContinueButton);
 
+    const emailSmsContinueButton = getByText('button.continue');
+    expect(emailSmsContinueButton).toBeInTheDocument();
+    expect(emailSmsContinueButton).toBeEnabled();
+    fireEvent.click(emailSmsContinueButton);
+
+    // recap step: check disclaimer and press button to enable sercq
+    const disclaimerCkb = getById(container, 'disclaimer');
+    expect(disclaimerCkb).not.toBeChecked();
+
+    fireEvent.click(disclaimerCkb);
+
+    expect(disclaimerCkb).toBeChecked();
+    const enableSercqButton = getByTestId('activateButton');
+    fireEvent.click(enableSercqButton);
+
+    // feedback step
     await waitFor(() => {
-      expect(mock.history.post.length).toBe(1);
+      const feedbackStep = getByTestId('wizard-feedback-step');
+      expect(feedbackStep).toBeInTheDocument();
     });
-
-    getByText('legal-contacts.sercq-send-wizard.step_2.title');
-    getByText('legal-contacts.sercq-send-wizard.step_2.content');
-    const skipButton = getByText('button.not-now');
-
-    fireEvent.click(skipButton);
-    const dialog = await waitFor(() => getByRole('dialog'));
-    expect(dialog).toBeInTheDocument();
-
-    getByText('courtesy-contacts.confirmation-modal-title');
-    getByText('courtesy-contacts.confirmation-modal-content');
-    getByText('courtesy-contacts.confirmation-modal-accept');
-    const mailConfirmSkipButton = getByText('button.do-later');
-
-    fireEvent.click(mailConfirmSkipButton);
-    await waitFor(() => {
-      expect(dialog).not.toBeInTheDocument();
-    });
-
-    // Thank-you page
-    const feedbackStep = getByTestId('wizard-feedback-step');
-    expect(feedbackStep).toBeInTheDocument();
 
     const feedbackTitle = getByTestId('wizard-feedback-title');
-    expect(feedbackTitle).toHaveTextContent(
-      'legal-contacts.sercq-send-wizard.feedback.title-transfer'
-    );
+    expect(feedbackTitle).toHaveTextContent(`${labelPrefix}.feedback.title-sercq_send-transfer`);
+
+    const feedbackContent = getByTestId('wizard-feedback-content');
+    expect(feedbackContent).toHaveTextContent(`${labelPrefix}.feedback.content-sercq_send`);
   });
 });

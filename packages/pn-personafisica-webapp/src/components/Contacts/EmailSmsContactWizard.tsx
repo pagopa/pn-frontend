@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { Divider, Stack, Typography } from '@mui/material';
 import { appStateActions } from '@pagopa-pn/pn-commons';
@@ -20,20 +20,40 @@ import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/co
 import ContactCodeDialog from './ContactCodeDialog';
 import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
+import InformativeDialog from './InformativeDialog';
 import SmsContactItem from './SmsContactItem';
 
 enum ModalType {
   EXISTING = 'existing',
   CODE = 'code',
+  INFORMATIVE = 'informative',
 }
+
+const SmsLabelWithDisclaimer = () => {
+  const { t } = useTranslation('recapiti');
+  return (
+    <>
+      <Typography fontSize="16px" fontWeight={700} mb={2}>
+        {t('courtesy-contacts.sms-to-add', { ns: 'recapiti' })}
+      </Typography>
+      <Typography fontSize="16px" mb={2}>
+        <Trans ns="recapiti" i18nKey="legal-contacts.sercq-send-wizard.step_3.sms-disclaimer" />
+      </Typography>
+    </>
+  );
+};
 
 const EmailSmsContactWizard: React.FC = () => {
   const { t } = useTranslation('recapiti');
   const dispatch = useAppDispatch();
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const { defaultSMSAddress, defaultEMAILAddress, addresses } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const {
+    defaultSMSAddress,
+    defaultEMAILAddress,
+    defaultPECAddress,
+    defaultSERCQ_SENDAddress,
+    addresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const emailContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
@@ -49,6 +69,8 @@ const EmailSmsContactWizard: React.FC = () => {
     channelType: ChannelType.EMAIL,
     value: '',
   });
+
+  const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
 
   const emailValue = defaultEMAILAddress?.value ?? '';
   const smsValue = defaultSMSAddress?.value ?? '';
@@ -69,6 +91,10 @@ const EmailSmsContactWizard: React.FC = () => {
     // first check if contact already exists
     if (contactAlreadyExists(addresses, value, 'default', channelType)) {
       setModalOpen(ModalType.EXISTING);
+      return;
+    }
+    if (!isDigitalDomicileActive && channelType === ChannelType.EMAIL) {
+      setModalOpen(ModalType.INFORMATIVE);
       return;
     }
     handleCodeVerification(channelType);
@@ -151,9 +177,15 @@ const EmailSmsContactWizard: React.FC = () => {
         {t('legal-contacts.sercq-send-wizard.step_3.title')}
       </Typography>
 
-      <Typography fontSize="16px" mb={{ xs: 3, lg: 4 }}>
+      <Typography fontSize="16px" mb={emailValue ? { xs: 3, lg: 4 } : 1}>
         {t('legal-contacts.sercq-send-wizard.step_3.content')}
       </Typography>
+
+      {!emailValue && (
+        <Typography fontSize="16px" mb={{ xs: 3, lg: 4 }}>
+          <Trans ns="recapiti" i18nKey="legal-contacts.sercq-send-wizard.step_3.email-disclaimer" />
+        </Typography>
+      )}
 
       {/* EMAIL */}
       <DigitalContact
@@ -170,6 +202,7 @@ const EmailSmsContactWizard: React.FC = () => {
         onSubmit={(value) => handleSubmit(ChannelType.EMAIL, value)}
         showVerifiedIcon
         showLabelOnEdit
+        slots={{ label: emailValue ? undefined : () => <></> }}
         slotsProps={{
           textField: {
             sx: { flexBasis: { xs: 'unset', lg: '50%' } },
@@ -182,41 +215,48 @@ const EmailSmsContactWizard: React.FC = () => {
           },
         }}
       />
+      <InformativeDialog
+        open={modalOpen === ModalType.INFORMATIVE}
+        title={t('courtesy-contacts.info-modal-email-title', { ns: 'recapiti' })}
+        subtitle={t('courtesy-contacts.info-modal-email-subtitle', { ns: 'recapiti' })}
+        content={t('courtesy-contacts.info-modal-email-content', { ns: 'recapiti' })}
+        onConfirm={() => handleCodeVerification(currentAddress.current.channelType)}
+        onDiscard={() => setModalOpen(null)}
+      />
 
+      <Divider sx={{ mt: 3, mb: 3 }} />
       {/* SMS */}
       {smsValue ? (
-        <>
-          <Divider sx={{ mt: 1, mb: 3 }} />
-          <DigitalContact
-            label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
-            value={smsValue}
-            channelType={ChannelType.SMS}
-            ref={smsContactRef}
-            inputProps={{
-              label: t(`courtesy-contacts.link-sms-placeholder`, {
-                ns: 'recapiti',
-              }),
-              prefix: internationalPhonePrefix,
-            }}
-            insertButtonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
-            onSubmit={(value) => handleSubmit(ChannelType.SMS, value)}
-            showVerifiedIcon
-            showLabelOnEdit
-            slotsProps={{
-              textField: {
-                sx: { flexBasis: { xs: 'unset', lg: '50%' } },
-              },
-              button: {
-                sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
-              },
-              container: {
-                width: '100%',
-              },
-            }}
-          />
-        </>
+        <DigitalContact
+          label={t(`courtesy-contacts.sms-to-add`, { ns: 'recapiti' })}
+          value={smsValue}
+          channelType={ChannelType.SMS}
+          ref={smsContactRef}
+          inputProps={{
+            label: t(`courtesy-contacts.link-sms-placeholder`, {
+              ns: 'recapiti',
+            }),
+            prefix: internationalPhonePrefix,
+          }}
+          insertButtonLabel={t(`courtesy-contacts.sms-add`, { ns: 'recapiti' })}
+          onSubmit={(value) => handleSubmit(ChannelType.SMS, value)}
+          showVerifiedIcon
+          showLabelOnEdit
+          slotsProps={{
+            textField: {
+              sx: { flexBasis: { xs: 'unset', lg: '50%' } },
+            },
+            button: {
+              sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
+            },
+            container: {
+              width: '100%',
+            },
+          }}
+        />
       ) : (
         <SmsContactItem
+          slots={{ label: SmsLabelWithDisclaimer }}
           slotsProps={{
             textField: {
               sx: { flexBasis: { xs: 'unset', lg: '50%' } },

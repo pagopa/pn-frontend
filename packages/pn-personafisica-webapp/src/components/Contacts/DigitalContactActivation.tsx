@@ -8,91 +8,71 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import IOContactWizard from '../../components/Contacts/IOContactWizard';
 import PecContactWizard from '../../components/Contacts/PecContactWizard';
-import SercqSendContactWizard from '../../components/Contacts/SercqSendContactWizard';
 import { IOAllowedValues } from '../../models/contacts';
-import { RECAPITI } from '../../navigation/routes.const';
+import { NOTIFICHE } from '../../navigation/routes.const';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
 import EmailSmsContactWizard from './EmailSmsContactWizard';
+import HowItWorksContactWizard from './HowItWorksContactWizard';
+import SercqSendContactWizard from './SercqSendContactWizard';
 
 type Props = {
   isTransferring?: boolean;
   onGoBack?: () => void;
 };
 
-enum ActiveStep {
-  IO = 'IO',
-  EMAIL = 'EMAIL',
-}
-
-type ModalType = {
-  open: boolean;
-  step?: ActiveStep;
-  exit?: boolean;
-};
+const MAX_STEPS_NUMBER = 4;
 
 const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onGoBack }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const { IS_DOD_ENABLED } = getConfiguration();
-  const { defaultAPPIOAddress, defaultSMSAddress, defaultEMAILAddress, defaultSERCQ_SENDAddress } =
+  const { defaultEMAILAddress, defaultSMSAddress, defaultAPPIOAddress, defaultSERCQ_SENDAddress } =
     useAppSelector(contactsSelectors.selectAddresses);
 
-  const [modal, setModal] = useState<ModalType>({ open: false });
   const [activeStep, setActiveStep] = useState(0);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress || !IS_DOD_ENABLED);
 
   const showIOStep = useMemo(
     () => defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.DISABLED,
     []
   );
-  const showEmailStep = useMemo(() => !(defaultSMSAddress || defaultEMAILAddress), []);
 
-  const hasEmailOrSms = defaultEMAILAddress || defaultSMSAddress;
+  const hasEmailOrSms = !!(defaultEMAILAddress || defaultSMSAddress);
 
-  const isEmailSmsStep = (activeStep === 1 && !showIOStep) || activeStep === 2;
+  const isEmailSmsStep = !showIOStep ? activeStep === 1 : activeStep === 2;
 
-  const hasCourtesyContact =
-    defaultAPPIOAddress?.value === IOAllowedValues.ENABLED || hasEmailOrSms;
+  const feedbackTitleLabel = `legal-contacts.sercq-send-wizard.feedback.title-sercq_send-${
+    isTransferring ? 'transfer' : 'activation'
+  }`;
+  const feedbackContentLabel = 'legal-contacts.sercq-send-wizard.feedback.content-sercq_send';
+
+  const handleConfirmEmailSmsStep = () => {
+    if (hasEmailOrSms) {
+      goToNextStep();
+    } else {
+      setShowConfirmationModal(true);
+    }
+  };
 
   const goToNextStep = () => {
     setActiveStep((step) => step + 1);
   };
 
-  const goToEnd = () => {
-    setActiveStep(3); // set the current step greater than the number of steps to go to the thankyou page
+  const goToPreviousStep = () => {
+    setActiveStep((step) => step - 1);
   };
 
-  const handleConfirmationModalAccept = () => {
-    setModal({ open: false });
-  };
-
-  const handleConfirmationModalDecline = () => {
-    if (modal.exit) {
-      goToEnd();
-    } else {
-      goToNextStep();
+  const goToStep = (step: number) => {
+    if (step >= 0 && step <= MAX_STEPS_NUMBER) {
+      return setActiveStep(step);
     }
-    setModal({ open: false });
+    return goToNextStep();
   };
 
-  const handleSkipOrExitClick = (exit?: boolean) => {
-    if (activeStep === 0) {
-      navigate(-1);
-    } else if (hasCourtesyContact) {
-      goToEnd();
-    } else {
-      showConfirmationModal(exit);
-    }
-  };
-
-  const showConfirmationModal = (exit?: boolean) => {
-    const step = activeStep === 1 && showIOStep ? ActiveStep.IO : ActiveStep.EMAIL;
-    setModal({ open: true, step, exit });
-  };
-
-  const getNextButton = () => {
+  const getPreviousButton = () => {
     if (activeStep === 0) {
       return (
         <ButtonNaked
@@ -104,29 +84,37 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
           {t('button.annulla', { ns: 'common' })}
         </ButtonNaked>
       );
-    }
-    if (isEmailSmsStep && hasEmailOrSms) {
+    } else {
       return (
-        <Button variant="contained" onClick={goToNextStep} color="primary" size="medium">
-          {t('button.conferma', { ns: 'common' })}
+        <ButtonNaked
+          onClick={goToPreviousStep}
+          color="primary"
+          size="medium"
+          data-testid="prev-button"
+          sx={isEmailSmsStep ? { mt: { xs: 2, md: 0 } } : { mt: 0 }}
+        >
+          {t('button.indietro', { ns: 'common' })}
+        </ButtonNaked>
+      );
+    }
+  };
+
+  const getNextButton = () => {
+    if (isEmailSmsStep) {
+      return (
+        <Button
+          variant="contained"
+          onClick={handleConfirmEmailSmsStep}
+          color="primary"
+          size="medium"
+          sx={{ width: { xs: '100%', md: 'auto' } }}
+        >
+          {t('button.continue', { ns: 'common' })}
         </Button>
       );
     }
 
-    if (activeStep > 0 && (showIOStep || showEmailStep)) {
-      return (
-        <ButtonNaked
-          onClick={() => handleSkipOrExitClick()}
-          color="primary"
-          size="medium"
-          sx={{ mx: 'auto' }}
-        >
-          {t('button.not-now', { ns: 'common' })}
-        </ButtonNaked>
-      );
-    }
-
-    return null;
+    return <></>;
   };
 
   if (showPecWizard) {
@@ -139,84 +127,64 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
     );
   }
   return (
-    <>
-      <PnWizard
-        title={
-          <Typography fontSize="28px" fontWeight={700}>
-            {t(`legal-contacts.sercq-send-wizard.title${isTransferring ? '-transfer' : ''}`)}
-          </Typography>
-        }
-        activeStep={activeStep}
-        setActiveStep={setActiveStep}
-        onExit={() => handleSkipOrExitClick(true)}
-        slots={{
-          nextButton: getNextButton,
-          prevButton: () => <></>,
-        }}
-        slotsProps={{
-          feedback: {
-            title: t(
-              `legal-contacts.sercq-send-wizard.feedback.title-${
-                isTransferring ? 'transfer' : 'activation'
-              }`
-            ),
-            buttonText: t('legal-contacts.sercq-send-wizard.feedback.go-to-contacts'),
-            onClick: () => navigate(RECAPITI),
-          },
-          actions: isEmailSmsStep && hasEmailOrSms ? { justifyContent: 'flex-end' } : {},
-        }}
-      >
-        <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_1.title')}>
-          <SercqSendContactWizard goToNextStep={goToNextStep} setShowPecWizard={setShowPecWizard} />
+    <PnWizard
+      title={
+        <Typography fontSize="28px" fontWeight={700}>
+          {t(`legal-contacts.sercq-send-wizard.title${isTransferring ? '-transfer' : ''}`)}
+        </Typography>
+      }
+      activeStep={activeStep}
+      setActiveStep={setActiveStep}
+      slots={{
+        exitButton: () => <></>,
+        prevButton: getPreviousButton,
+        nextButton: getNextButton,
+      }}
+      slotsProps={{
+        feedback: {
+          title: t(feedbackTitleLabel),
+          content: t(feedbackContentLabel),
+          buttonText: t('button.understand', { ns: 'common' }),
+          onClick: () => navigate(NOTIFICHE),
+        },
+        actions: !isEmailSmsStep ? { justifyContent: 'center' } : {},
+      }}
+    >
+      <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_1.title')}>
+        <HowItWorksContactWizard goToNextStep={goToNextStep} setShowPecWizard={setShowPecWizard} />
+      </PnWizardStep>
+      {showIOStep && (
+        <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_2.title')}>
+          <IOContactWizard goToNextStep={goToNextStep} />
         </PnWizardStep>
-        {showIOStep && (
-          <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_2.title')}>
-            <IOContactWizard goToNextStep={goToNextStep} />
-          </PnWizardStep>
-        )}
-        {showEmailStep && (
-          <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_3.step-title')}>
-            <EmailSmsContactWizard />
-          </PnWizardStep>
-        )}
-      </PnWizard>
-      {modal.step && (
+      )}
+      <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_3.step-title')}>
+        <EmailSmsContactWizard />
+
         <ConfirmationModal
-          open={modal.open}
+          open={showConfirmationModal}
           title={t('courtesy-contacts.confirmation-modal-title')}
-          slots={{
-            confirmButton: Button,
-            closeButton: Button,
-          }}
           slotsProps={{
-            closeButton: {
-              onClick: handleConfirmationModalAccept,
-              children: t(
-                `courtesy-contacts.confirmation-modal-${modal.step.toLowerCase()}-accept`
-              ),
-            },
             confirmButton: {
-              onClick: handleConfirmationModalDecline,
-              children: t('button.do-later', { ns: 'common' }),
+              onClick: () => setShowConfirmationModal(false),
+              children: t('button.understand', { ns: 'common' }),
             },
           }}
         >
           <Trans
             ns="recapiti"
-            i18nKey={`courtesy-contacts.confirmation-modal-${modal.step.toLowerCase()}-content`}
+            i18nKey={`courtesy-contacts.confirmation-modal-email-content`}
             components={[
-              <DialogContentText key="paragraph1" id="dialog-description" color="text.primary" />,
-              <DialogContentText
-                key="paragraph2"
-                id="dialog-description"
-                color="text.primary"
-                mt={2}
-              />,
+              <DialogContentText key="paragraph1" color="text.primary" />,
+              <DialogContentText key="paragraph2" color="text.primary" mt={2} />,
             ]}
           />
         </ConfirmationModal>
-      )}
-    </>
+      </PnWizardStep>
+      <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_4.step-title')}>
+        <SercqSendContactWizard showIOStep={showIOStep} goToStep={goToStep} />
+      </PnWizardStep>
+    </PnWizard>
   );
 };
 
