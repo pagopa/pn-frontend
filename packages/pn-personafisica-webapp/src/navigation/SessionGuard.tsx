@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
@@ -55,7 +55,7 @@ const SessionGuard = () => {
     } else {
       goToLoginPortal(rapidAccess);
     }
-  }, [sessionToken, tokenRequest]);
+  }, [sessionToken, spidToken]);
 
   useEffect(() => {
     if (hasAnyForbiddenError) {
