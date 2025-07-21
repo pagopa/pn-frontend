@@ -72,9 +72,12 @@ const PecContactWizard: React.FC<Props> = ({
     },
   });
 
-  const handleChangeTouched = async (e: ChangeEvent) => {
+  const handleChangeTouched = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.id === 'disclaimer') {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_ACCEPTED);
+      const event = e.target.checked
+        ? PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_ACCEPTED
+        : PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_DISMISSED;
+      PFEventStrategyFactory.triggerEvent(event);
     }
 
     formik.handleChange(e);
