@@ -42,7 +42,6 @@ const SessionGuard = () => {
   });
 
   const spidToken = new URLSearchParams(location.hash.substring(1)).get('token'); // https://github.com/remix-run/history/blob/main/docs/api-reference.md#location.hash
-  const tokenRequest = spidToken ? { spidToken, rapidAccess } : undefined;
 
   useEffect(() => {
     if (sessionToken) {
@@ -50,8 +49,8 @@ const SessionGuard = () => {
       redirectToPage();
       return;
     }
-    if (tokenRequest) {
-      void performExchangeToken(tokenRequest);
+    if (spidToken) {
+      void performExchangeToken({ spidToken, rapidAccess });
     } else {
       goToLoginPortal(rapidAccess);
     }
