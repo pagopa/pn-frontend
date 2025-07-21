@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.17.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.17.0-RC.1...v2.17.0-RC.2) (2025-07-21)
+
+
+### Bug Fixes
+
+* **pn-15729:** add InformativeDialog for email during SERCQ activation wizard (PF and PG) ([#1599](https://github.com/pagopa/pn-frontend/issues/1599)) ([14beb5c](https://github.com/pagopa/pn-frontend/commit/14beb5cf8b3f1c94cde24673087953290c233b25))
+
+
+
+
+
 # [2.17.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.17.0-RC.0...v2.17.0-RC.1) (2025-07-16)
 
 
